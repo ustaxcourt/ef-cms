@@ -1149,8 +1149,16 @@ export const ROLES = {
   privatePractitioner: 'privatePractitioner',
   reportersOffice: 'reportersOffice',
   trialClerk: 'trialclerk',
+  zendesk: 'zendesk',
 } as const;
 export type Role = (typeof ROLES)[keyof typeof ROLES];
+
+export const ACCOUNT_STATUS = {
+  active: 'active',
+  inactive: 'inactive',
+};
+export type AccountStatus =
+  (typeof ACCOUNT_STATUS)[keyof typeof ACCOUNT_STATUS];
 
 // this isn't a real role someone can login with, which is why
 // it's a separate constant.

@@ -13,6 +13,7 @@ import {
   getEmailVerificationToken,
   getNewAccountVerificationCode,
 } from './cypress/helpers/cypressTasks/postgres/postgres-helpers';
+import { changeUserAccountStatus } from './cypress/helpers/cypressTasks/postgres/changeUserAccountStatus';
 import { parsePdf } from './cypress/helpers/cypressTasks/pdf/parsePdf';
 import { overrideIdleTimeouts } from './cypress/local-only/support/idleLogoutHelpers';
 import { unzipFile } from './cypress/helpers/file/unzip-file';
@@ -49,6 +50,15 @@ export default defineConfig({
         },
         getNewAccountVerificationCode({ email }) {
           return getNewAccountVerificationCode({ email });
+        },
+        changeUserAccountStatus({
+          email,
+          accountStatus,
+        }: {
+          email: string;
+          accountStatus: string;
+        }) {
+          return changeUserAccountStatus({ email, accountStatus });
         },
         getUserByEmail(email: string) {
           return getUserByEmail(email);

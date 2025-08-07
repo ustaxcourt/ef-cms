@@ -7,6 +7,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getUsersInSections } from '@web-api/persistence/postgres/users/getUsersInSections';
 import {
+  ACCOUNT_STATUS,
   CASE_SERVICES_SUPERVISOR_SECTION,
   DOCKET_SECTION,
   PETITIONS_SECTION,
@@ -35,6 +36,7 @@ export const getUsersInSectionInteractor = async (
 
   const users = await getUsersInSections({
     sections: sectionsToSearch,
+    accountStatus: ACCOUNT_STATUS.active,
   });
 
   return User.validateRawCollection(users);

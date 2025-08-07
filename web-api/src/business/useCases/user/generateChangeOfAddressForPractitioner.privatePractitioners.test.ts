@@ -18,6 +18,7 @@ jest.mock(
 );
 jest.mock('@web-api/persistence/postgres/users/upsertUsers');
 import {
+  ACCOUNT_STATUS,
   CASE_STATUS_TYPES,
   COUNTRY_TYPES,
   ROLES,
@@ -32,17 +33,19 @@ import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertW
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getDocketNumbersByUser as getDocketNumbersByUserMock } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
+import { RawPractitioner } from '@shared/business/entities/Practitioner';
 
 describe('generateChangeOfAddress', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
   const getDocketNumbersByUser = jest.mocked(getDocketNumbersByUserMock);
   const { docketNumber } = MOCK_CASE;
-  const mockPrivatePractitioner = {
+  const mockPrivatePractitioner: RawPractitioner = {
     admissionsDate: '2019-04-10',
     admissionsStatus: 'Active',
     barNumber: 'PT5432',
-    birthYear: '2011',
+    birthYear: 2011,
+    accountStatus: ACCOUNT_STATUS.active,
     contact: {
       address1: '234 Main St!',
       address2: 'Apartment 4',

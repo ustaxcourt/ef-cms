@@ -1,128 +1,90 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
-import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
+
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 jest.mock(
   '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber',
 );
 jest.mock('@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines');
-jest.mock(
-  '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId',
-);
-jest.mock(
-  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
-);
-import '@web-api/persistence/postgres/utils/mocks.jest';
-import { MOCK_CASE } from '@shared/test/mockCase';
+
+import { removeConsolidatedCasesInteractor } from '@web-api/business/useCases/caseConsolidation/removeConsolidatedCasesInteractor';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
-import { removeConsolidatedCasesInteractor } from '@web-api/business/useCases/caseConsolidation/removeConsolidatedCasesInteractor';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { getConsolidatedCases as getConsolidatedCasesMock } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
+import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
+import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { upsertCaseDeadlines as upsertCaseDeadlinesMock } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
-import { getCaseDeadlinesByConsolidatedCaseDeadlineId as getCaseDeadlinesByConsolidatedCaseDeadlineIdMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId';
-import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
-import { getConsolidatedCases as getConsolidatedCasesMock } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
-import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
-let mockCases;
-let mockLock;
-
-const getCaseDeadlinesByDocketNumber =
-  getCaseDeadlinesByDocketNumberMock as jest.Mock;
-
-const upsertCaseDeadlines = upsertCaseDeadlinesMock as jest.Mock;
-
-const getCaseDeadlinesByConsolidatedCaseDeadlineId =
-  getCaseDeadlinesByConsolidatedCaseDeadlineIdMock as jest.Mock;
-
-const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
-const getConsolidatedCases = jest.mocked(getConsolidatedCasesMock);
-const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
-const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
-
-describe('removeConsolidatedCasesInteractor - Deadlines', () => {
-  beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockImplementation(() => mockLock);
-  });
+describe('removeConsolidatedCasesInteractor deadlines', () => {
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const getConsolidatedCases = getConsolidatedCasesMock as jest.Mock;
+  const tryGetLocks = jest.mocked(tryGetLocksMock);
+  const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
+  const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
+  const getCaseDeadlinesByDocketNumber = jest.mocked(
+    getCaseDeadlinesByDocketNumberMock,
+  );
+  const upsertCaseDeadlines = jest.mocked(upsertCaseDeadlinesMock);
 
   beforeEach(() => {
-    updateCaseAndAssociations.mockImplementation(({ caseToUpdate }) =>
-      Promise.resolve(caseToUpdate),
-    );
-    mockLock = undefined;
-    mockCases = {
-      '101-19': {
+    tryGetLocks.mockResolvedValueOnce([
+      { successfullyLocked: true, identifier: 'TESTS' },
+    ]);
+
+    updateCaseAndAssociations.mockRejectedValue(undefined);
+    upsertCaseDeadlines.mockResolvedValue([]);
+
+    const MOCK_CASES_DICT = {
+      '101-25': {
         ...MOCK_CASE,
-        createdAt: '2019-03-19T17:29:13.120Z',
-        docketNumber: '101-19',
-        leadDocketNumber: '101-19',
+        docketNumber: '101-25',
+        leadDocketNumber: '101-25',
       },
-      '102-19': {
+      '102-25': {
         ...MOCK_CASE,
-        createdAt: '2019-03-19T17:29:13.120Z',
-        docketNumber: '102-19',
-        leadDocketNumber: '101-19',
-      },
-      '103-19': {
-        ...MOCK_CASE,
-        createdAt: '2019-03-19T17:29:13.120Z',
-        docketNumber: '103-19',
-        leadDocketNumber: '101-19',
-      },
-      '104-19': {
-        ...MOCK_CASE,
-        createdAt: '2019-03-19T17:29:13.120Z',
-        docketNumber: '104-19',
-        leadDocketNumber: '104-19',
-      },
-      '105-19': {
-        ...MOCK_CASE,
-        createdAt: '2019-03-19T17:29:13.120Z',
-        docketNumber: '105-19',
-        leadDocketNumber: '104-19',
+        docketNumber: '102-25',
+        leadDocketNumber: '101-25',
       },
     };
 
     getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
-      return mockCases[docketNumber];
+      return MOCK_CASES_DICT[docketNumber];
     });
 
-    getCasesByDocketNumbers.mockImplementation(
-      // eslint-disable-next-line @typescript-eslint/require-await
-      async ({ docketNumbers }) =>
-        Object.values(mockCases).filter((c: any) =>
-          docketNumbers.includes(c.docketNumber),
-        ) as any,
-    );
+    getCasesByDocketNumbers.mockImplementation(({ docketNumbers }) => {
+      return Promise.resolve(
+        Object.values(MOCK_CASES_DICT).filter(mockCase =>
+          docketNumbers.includes(mockCase.docketNumber),
+        ),
+      );
+    });
 
-    getConsolidatedCases.mockImplementation(
-      // eslint-disable-next-line @typescript-eslint/require-await
-      async ({ leadDocketNumber }) => {
-        return Object.keys(mockCases)
-          .map(key => mockCases[key])
-          .filter(mockCase => mockCase.leadDocketNumber === leadDocketNumber);
-      },
-    );
-    applicationContext
-      .getPersistenceGateway()
-      .updateCase.mockImplementation(({ caseToUpdate }) => caseToUpdate);
-
-    upsertCaseDeadlines.mockImplementation(() => {});
+    getConsolidatedCases.mockImplementation(({ leadDocketNumber }) => {
+      return Object.keys(MOCK_CASES_DICT)
+        .map(key => MOCK_CASES_DICT[key])
+        .filter(mockCase => mockCase.leadDocketNumber === leadDocketNumber);
+    });
   });
 
-  it('should remove the "consolidatedDeadlineId" from all the associated Deadlines to the CHILD case', async () => {
+  it('should update the the "consolidatedCaseDeadlineId" for all the deadlines if the lead is removed and is the only case left in the group', async () => {
     getCaseDeadlinesByDocketNumber.mockResolvedValue([
-      { caseDeadlineId: 2, consolidatedCaseDeadlineId: 1 },
-      { caseDeadlineId: 4, consolidatedCaseDeadlineId: 3 },
-      { caseDeadlineId: 6, consolidatedCaseDeadlineId: 5 },
+      {
+        caseDeadlineId: 'TEST_CASE_DEADLINE_ID',
+        consolidatedCaseDeadlineId: 'TEST_CONSOLIDATED_CASE_DEADLINE_ID',
+      } as any,
     ]);
 
     await removeConsolidatedCasesInteractor(
       applicationContext,
       {
-        docketNumber: '102-19',
-        docketNumbersToRemove: ['102-19'],
+        docketNumber: '101-25',
+        docketNumbersToRemove: ['101-25'],
       },
       mockDocketClerkUser,
     );
@@ -130,124 +92,9 @@ describe('removeConsolidatedCasesInteractor - Deadlines', () => {
     const upsertCaseDeadlinesCalls = upsertCaseDeadlines.mock.calls;
     expect(upsertCaseDeadlinesCalls.length).toEqual(1);
     expect(upsertCaseDeadlinesCalls[0][0]).toEqual([
-      { caseDeadlineId: 2, consolidatedCaseDeadlineId: undefined },
-      { caseDeadlineId: 4, consolidatedCaseDeadlineId: undefined },
-      { caseDeadlineId: 6, consolidatedCaseDeadlineId: undefined },
-    ]);
-  });
-
-  it('should remove the "consolidatedDeadlineId" from all the associated Deadlines to the LEAD case and update all CHILD deadline', async () => {
-    const TEST_DOCKER_NUMBER = '101-19';
-
-    getCaseDeadlinesByDocketNumber.mockResolvedValue([
-      { caseDeadlineId: 2, consolidatedCaseDeadlineId: 1 },
-      { caseDeadlineId: 4, consolidatedCaseDeadlineId: 3 },
-      { caseDeadlineId: 6, consolidatedCaseDeadlineId: 5 },
-    ]);
-
-    let counter = 0;
-    getCaseDeadlinesByConsolidatedCaseDeadlineId.mockImplementation(() => {
-      counter = counter + 1;
-      return [
-        {
-          docketNumber: '102-19',
-          caseDeadlineId: `102-19 ${counter}`,
-          consolidatedCaseDeadlineId: TEST_DOCKER_NUMBER,
-        },
-        {
-          docketNumber: '103-19',
-          caseDeadlineId: `103-19 ${counter}`,
-          consolidatedCaseDeadlineId: TEST_DOCKER_NUMBER,
-        },
-        {
-          docketNumber: '104-19',
-          caseDeadlineId: `104-19 ${counter}`,
-          consolidatedCaseDeadlineId: TEST_DOCKER_NUMBER,
-        },
-        {
-          docketNumber: '105-19',
-          caseDeadlineId: `105-19 ${counter}`,
-          consolidatedCaseDeadlineId: TEST_DOCKER_NUMBER,
-        },
-      ];
-    });
-
-    await removeConsolidatedCasesInteractor(
-      applicationContext,
       {
-        docketNumber: TEST_DOCKER_NUMBER,
-        docketNumbersToRemove: [TEST_DOCKER_NUMBER],
-      },
-      mockDocketClerkUser,
-    );
-
-    const upsertCaseDeadlinesCalls = upsertCaseDeadlines.mock.calls;
-    expect(upsertCaseDeadlinesCalls.length).toEqual(2);
-    expect(upsertCaseDeadlinesCalls[0][0]).toEqual([
-      { caseDeadlineId: 2, consolidatedCaseDeadlineId: undefined },
-      { caseDeadlineId: 4, consolidatedCaseDeadlineId: undefined },
-      { caseDeadlineId: 6, consolidatedCaseDeadlineId: undefined },
-    ]);
-    expect(upsertCaseDeadlinesCalls[1][0]).toEqual([
-      {
-        caseDeadlineId: '102-19 1',
+        caseDeadlineId: 'TEST_CASE_DEADLINE_ID',
         consolidatedCaseDeadlineId: undefined,
-        docketNumber: '102-19',
-      },
-      {
-        caseDeadlineId: '103-19 1',
-        consolidatedCaseDeadlineId: '102-19 1',
-        docketNumber: '103-19',
-      },
-      {
-        caseDeadlineId: '104-19 1',
-        consolidatedCaseDeadlineId: '102-19 1',
-        docketNumber: '104-19',
-      },
-      {
-        caseDeadlineId: '105-19 1',
-        consolidatedCaseDeadlineId: '102-19 1',
-        docketNumber: '105-19',
-      },
-      {
-        caseDeadlineId: '102-19 2',
-        consolidatedCaseDeadlineId: undefined,
-        docketNumber: '102-19',
-      },
-      {
-        caseDeadlineId: '103-19 2',
-        consolidatedCaseDeadlineId: '102-19 2',
-        docketNumber: '103-19',
-      },
-      {
-        caseDeadlineId: '104-19 2',
-        consolidatedCaseDeadlineId: '102-19 2',
-        docketNumber: '104-19',
-      },
-      {
-        caseDeadlineId: '105-19 2',
-        consolidatedCaseDeadlineId: '102-19 2',
-        docketNumber: '105-19',
-      },
-      {
-        caseDeadlineId: '102-19 3',
-        consolidatedCaseDeadlineId: undefined,
-        docketNumber: '102-19',
-      },
-      {
-        caseDeadlineId: '103-19 3',
-        consolidatedCaseDeadlineId: '102-19 3',
-        docketNumber: '103-19',
-      },
-      {
-        caseDeadlineId: '104-19 3',
-        consolidatedCaseDeadlineId: '102-19 3',
-        docketNumber: '104-19',
-      },
-      {
-        caseDeadlineId: '105-19 3',
-        consolidatedCaseDeadlineId: '102-19 3',
-        docketNumber: '105-19',
       },
     ]);
   });

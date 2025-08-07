@@ -5,8 +5,7 @@ import {
   type ScriptConfig,
 } from '../../helpers/parseArgsAndEnvVars';
 import { isEmpty } from 'lodash';
-import { RawUser } from '@shared/business/entities/User';
-import { Role, ROLES } from '@shared/business/entities/EntityConstants';
+import { ROLES } from '@shared/business/entities/EntityConstants';
 import { toKyselyNewUserOnCase } from '@web-api/persistence/postgres/cases/userOnCase/mapper';
 import { UserOnCaseAssociation } from '@web-api/persistence/postgres/cases/userOnCase/schema';
 import { getDbReader } from '@web-api/persistence/postgres/database';
@@ -70,10 +69,7 @@ async function main() {
   let casesToIndex = await getCasesToMovePetitioners(offset);
 
   while (!isEmpty(casesToIndex)) {
-    const petitionersToUpsert: (RawUser & {
-      docketNumber: string;
-      actingAsRole: Role;
-    })[] = [];
+    const petitionersToUpsert: UserOnCaseAssociation[] = [];
 
     casesToIndex.forEach(aCase => {
       aCase.petitioners?.forEach(petitioner => {

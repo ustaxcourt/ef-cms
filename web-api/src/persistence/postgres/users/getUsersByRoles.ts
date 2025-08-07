@@ -7,7 +7,7 @@ export const getUsersByRoles = async ({
 }: {
   roles: Role[];
 }): Promise<DbUser[]> => {
-  const users = await getDbReader(async db =>
+  const users = await getDbReader(db =>
     db
       .selectFrom('dwUser')
       .where('role', 'in', roles)

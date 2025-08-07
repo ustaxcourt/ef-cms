@@ -57,9 +57,9 @@ describe('formattedCaseDeadlines', () => {
         displayEditAndDeleteLink: true,
       },
       {
-        displayEditAndDeleteLink: true,
         deadlineDate: oneMonthFromNowISO,
         deadlineDateFormatted: oneMonthFromNowMMDDYY,
+        displayEditAndDeleteLink: true,
       },
     ]);
   });

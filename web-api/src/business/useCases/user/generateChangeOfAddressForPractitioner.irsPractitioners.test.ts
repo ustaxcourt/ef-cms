@@ -20,6 +20,7 @@ jest.mock(
   '@web-api/persistence/postgres/jobs/changeOfAddress/createChangeOfAddressJob',
 );
 import {
+  ACCOUNT_STATUS,
   CASE_STATUS_TYPES,
   COUNTRY_TYPES,
   ROLES,
@@ -43,6 +44,7 @@ describe('generateChangeOfAddress', () => {
     admissionsDate: '2019-04-10',
     admissionsStatus: 'Active',
     barNumber: 'PT5432',
+    accountStatus: ACCOUNT_STATUS.active,
     birthYear: '2011',
     contact: {
       address1: '234 Main St!',

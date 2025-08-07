@@ -15,7 +15,10 @@ import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { RawUser } from '@shared/business/entities/User';
 import { associateUsersWithCasesPending } from '@web-api/persistence/postgres/cases/pendingCases/associateUsersWithCasesPending';
-import { ROLES } from '@shared/business/entities/EntityConstants';
+import {
+  ACCOUNT_STATUS,
+  ROLES,
+} from '@shared/business/entities/EntityConstants';
 import { UserOnCaseAssociation } from '@web-api/persistence/postgres/cases/userOnCase/schema';
 import { BarNumberKysely } from '@web-api/persistence/postgres/users/barNumber/schema';
 import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
@@ -85,7 +88,9 @@ const upsertUsers = async (
   if (!users.length) {
     return;
   }
-  const dbUsers = users.map(toKyselyNewUser);
+  const dbUsers = users.map(u =>
+    toKyselyNewUser({ ...u, accountStatus: ACCOUNT_STATUS.active }),
+  );
 
   // We are specifically not using pgInsertInto because we do not want to trigger openSearch. We do not want to trigger openSearch because not all users have been moved yet.
   await runQuery({

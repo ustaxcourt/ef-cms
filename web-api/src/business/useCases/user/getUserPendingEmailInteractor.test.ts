@@ -1,5 +1,8 @@
 import '@web-api/persistence/postgres/users/mocks.jest';
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
+import {
+  ACCOUNT_STATUS,
+  ROLES,
+} from '../../../../../shared/src/business/entities/EntityConstants';
 import { getUserPendingEmailInteractor } from './getUserPendingEmailInteractor';
 import {
   mockPetitionerUser,
@@ -31,6 +34,7 @@ describe('getUserPendingEmailInteractor', () => {
       pendingEmail: PENDING_EMAIL,
       role: ROLES.petitioner,
       userId: USER_ID,
+      accountStatus: ACCOUNT_STATUS.active,
     } as DbUser);
 
     const result = await getUserPendingEmailInteractor(
@@ -48,6 +52,7 @@ describe('getUserPendingEmailInteractor', () => {
       name: 'Test Petitioner',
       role: ROLES.petitioner,
       userId: USER_ID,
+      accountStatus: ACCOUNT_STATUS.active,
     } as DbUser);
 
     const result = await getUserPendingEmailInteractor(

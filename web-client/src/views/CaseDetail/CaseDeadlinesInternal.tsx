@@ -45,7 +45,10 @@ export const CaseDeadlinesInternal = connect(
               <tbody>
                 {formattedCaseDeadlines.map(item => (
                   <tr key={item.caseDeadlineId} className="case-deadline-row">
-                    <td className="smaller-column">
+                    <td 
+                      className="smaller-column"
+                      data-testid="case-deadline-date"
+                    >
                       {item.deadlineDateFormatted}
                     </td>
                     <td className="overdue smaller-column center-column semi-bold">
