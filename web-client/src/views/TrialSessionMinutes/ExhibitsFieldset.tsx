@@ -178,8 +178,8 @@ export const ExhibitsFieldset = ({
           <div className="grid-row align-items-center margin-bottom-1">
             <Button
               link
-              data-testid="add-exhibit-button"
-              className="padding-0 margin-top-1"
+              data-testid={`add-exhibit-button-${rowIndex}`}
+              className="padding-0 margin-top-1 margin-bottom-1"
               icon="plus"
               type="button"
               onClick={e => {
