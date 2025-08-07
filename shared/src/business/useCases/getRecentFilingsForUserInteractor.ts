@@ -5,9 +5,11 @@ import {
   isAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
 import { getCasesForUserInteractor } from './getCasesForUserInteractor';
-import { calculateISODate } from '../utilities/DateHandler';
-import { search } from '@web-api/persistence/elasticsearch/searchClient';
+import { calculateISODate, calculateDate } from '../utilities/DateHandler';
+import { getDbReader } from '@web-api/database';
+
 import { RecentFiling } from '@shared/business/entities/RecentFiling';
+import { getCaseCaptionMeta } from '../utilities/getCaseCaptionMeta';
 
 export const getRecentFilingsForUserInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -34,63 +36,46 @@ export const getRecentFilingsForUserInteractor = async (
   const sevenDaysAgo = calculateISODate({ howMuch: -7, units: 'days' });
   const today = calculateISODate({ howMuch: 0, units: 'days' });
 
-  const searchQuery = {
-    applicationContext,
-    searchParameters: {
-      body: {
-        _source: [
-          'docketNumber.S',
-          'filingDate.S',
-          'documentTitle.S',
-          'caseCaption.S',
-          'docketEntryId.S',
-          'isFileAttached.BOOL',
-          'eventCode.S',
-          'isStricken.BOOL',
-          'isSealed.BOOL',
-          'sealedTo.S',
-          'servedAt.S',
-        ],
-        query: {
-          bool: {
-            must: [
-              {
-                terms: {
-                  'docketNumber.S': docketNumbers,
-                },
-              },
-              {
-                range: {
-                  'filingDate.S': {
-                    gte: sevenDaysAgo,
-                    lte: today,
-                  },
-                },
-              },
-            ],
-            must_not: [
-              {
-                term: {
-                  'isStricken.BOOL': true,
-                },
-              },
-            ],
-          },
-        },
-        sort: [
-          {
-            'filingDate.S': {
-              order: 'desc' as const,
-            },
-          },
-        ],
-        size: 1000,
-      },
-      index: 'efcms-docket-entry',
-    },
-  };
+  // Query PostgreSQL for recent docket entries with case titles
+  const dbDocketEntries = await getDbReader(reader =>
+    reader
+      .selectFrom('dwDocketEntry as d')
+      .innerJoin('dwCase as c', 'd.docketNumber', 'c.docketNumber')
+      .select([
+        'd.docketEntryId',
+        'd.docketNumber',
+        'd.filingDate',
+        'd.documentTitle',
+        'd.isFileAttached',
+        'd.eventCode',
+        'd.isStricken',
+        'd.isSealed',
+        'd.sealedTo',
+        'd.servedAt',
+        'c.caption',
+      ])
+      .where('d.docketNumber', 'in', docketNumbers)
+      .where('d.filingDate', '>=', calculateDate({ dateString: sevenDaysAgo }))
+      .where('d.filingDate', '<=', calculateDate({ dateString: today }))
+      .where('d.isStricken', 'is not', true)
+      .orderBy('d.filingDate', 'desc')
+      .limit(1000)
+      .execute(),
+  );
 
-  const { results } = await search(searchQuery);
+  const results = dbDocketEntries.map(d => ({
+    docketNumber: d.docketNumber,
+    filingDate: d.filingDate?.toISOString(),
+    documentTitle: d.documentTitle,
+    docketEntryId: d.docketEntryId,
+    isFileAttached: d.isFileAttached ?? undefined,
+    eventCode: d.eventCode,
+    isStricken: d.isStricken ?? undefined,
+    isSealed: d.isSealed ?? undefined,
+    sealedTo: d.sealedTo ?? undefined,
+    servedAt: d.servedAt?.toISOString(),
+    caseCaption: (d as any).caption,
+  }));
 
   // Build case info map for consolidated case handling
   const caseInfoMap = new Map();
@@ -122,7 +107,9 @@ export const getRecentFilingsForUserInteractor = async (
       docketNumber: entry.docketNumber,
       filedDate: entry.filingDate,
       document: entry.documentTitle || 'Document',
-      caseTitle: entry.caseCaption || 'Unknown Case',
+      caseTitle:
+        getCaseCaptionMeta({ caseCaption: entry.caseCaption })?.caseTitle ||
+        'Unknown Case',
       docketEntryId: entry.docketEntryId,
       isFileAttached: entry.isFileAttached,
       eventCode: entry.eventCode,

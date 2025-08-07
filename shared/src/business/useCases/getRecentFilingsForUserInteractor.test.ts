@@ -7,33 +7,33 @@ import {
   PAYMENT_STATUS,
 } from '@shared/business/entities/EntityConstants';
 import { TAssociatedCase } from './getCasesForUserInteractor';
-import { SearchClientResultsType } from '@web-api/persistence/elasticsearch/searchClient';
+import { calculateDate } from '../utilities/DateHandler';
 
 jest.mock('./getCasesForUserInteractor');
-jest.mock('@web-api/persistence/elasticsearch/searchClient');
+jest.mock('@web-api/database');
 
 const mockGetCasesForUserInteractor = require('./getCasesForUserInteractor')
   .getCasesForUserInteractor as jest.MockedFunction<
   typeof import('./getCasesForUserInteractor').getCasesForUserInteractor
 >;
 
-const mockSearch = require('@web-api/persistence/elasticsearch/searchClient')
-  .search as jest.MockedFunction<
-  typeof import('@web-api/persistence/elasticsearch/searchClient').search
+const mockGetDbReader = require('@web-api/database')
+  .getDbReader as jest.MockedFunction<
+  typeof import('@web-api/database').getDbReader
 >;
 
-interface MockSearchResult {
-  docketNumber: string;
-  filingDate: string;
-  documentTitle: string | null;
-  caseCaption: string | null;
+interface MockDbDocketEntry {
   docketEntryId: string;
-  isFileAttached: boolean;
+  docketNumber: string;
+  filingDate: Date;
+  documentTitle: string | null;
+  isFileAttached: boolean | null;
   eventCode: string;
-  isStricken: boolean;
-  isSealed: boolean;
+  isStricken: boolean | null;
+  isSealed: boolean | null;
   sealedTo: string | null;
-  servedAt: string | null;
+  servedAt: Date | null;
+  caption: string | null;
 }
 
 const TEST_DATA = {
@@ -89,36 +89,44 @@ const createMockCase = (
   ...overrides,
 });
 
-const createMockSearchResult = (
-  overrides: Partial<MockSearchResult> = {},
-): MockSearchResult => ({
-  docketNumber: TEST_DATA.DOCKET_NUMBERS.CASE_1,
-  filingDate: TEST_DATA.DATES.MIDDLE,
-  documentTitle: TEST_DATA.DOCUMENTS.PETITION,
-  caseCaption: TEST_DATA.CASE_TITLES.TEST_CASE,
+const createMockDbDocketEntry = (
+  overrides: Partial<MockDbDocketEntry> = {},
+): MockDbDocketEntry => ({
   docketEntryId: TEST_DATA.DOCKET_ENTRY_IDS.ENTRY_1,
+  docketNumber: TEST_DATA.DOCKET_NUMBERS.CASE_1,
+  filingDate: calculateDate({ dateString: TEST_DATA.DATES.MIDDLE }),
+  documentTitle: TEST_DATA.DOCUMENTS.PETITION,
   isFileAttached: true,
   eventCode: TEST_DATA.EVENT_CODES.PETITION,
   isStricken: false,
   isSealed: false,
   sealedTo: null,
-  servedAt: TEST_DATA.SERVED_AT,
+  servedAt: calculateDate({ dateString: TEST_DATA.SERVED_AT }),
+  caption: TEST_DATA.CASE_CAPTION,
   ...overrides,
-});
-
-const createMockSearchResponse = (
-  results: MockSearchResult[],
-): SearchClientResultsType => ({
-  results,
-  total: results.length,
 });
 
 describe('getRecentFilingsForUserInteractor', () => {
   let mockApplicationContext: ServerApplicationContext;
   let mockAuthorizedUser: UnknownAuthUser;
+  let mockDbReader: any;
 
   beforeEach(() => {
     jest.clearAllMocks();
+
+    mockDbReader = {
+      selectFrom: jest.fn().mockReturnThis(),
+      innerJoin: jest.fn().mockReturnThis(),
+      select: jest.fn().mockReturnThis(),
+      where: jest.fn().mockReturnThis(),
+      orderBy: jest.fn().mockReturnThis(),
+      limit: jest.fn().mockReturnThis(),
+      execute: jest.fn().mockResolvedValue([]),
+    };
+
+    mockGetDbReader.mockImplementation(
+      async callback => await callback(mockDbReader),
+    );
 
     mockApplicationContext = {
       getUtilities: jest.fn().mockReturnValue({
@@ -137,8 +145,6 @@ describe('getRecentFilingsForUserInteractor', () => {
       openCaseList: [],
       closedCaseList: [],
     });
-
-    mockSearch.mockResolvedValue(createMockSearchResponse([]));
   });
 
   it('should throw UnauthorizedError for invalid user', async () => {
@@ -161,7 +167,7 @@ describe('getRecentFilingsForUserInteractor', () => {
     );
 
     expect(result).toEqual([]);
-    expect(mockSearch).not.toHaveBeenCalled();
+    expect(mockGetDbReader).not.toHaveBeenCalled();
   });
 
   it('should return empty array when user has cases but no recent filings', async () => {
@@ -175,7 +181,7 @@ describe('getRecentFilingsForUserInteractor', () => {
       closedCaseList: [],
     });
 
-    mockSearch.mockResolvedValue(createMockSearchResponse([]));
+    mockDbReader.execute.mockResolvedValue([]);
 
     const result = await getRecentFilingsForUserInteractor(
       mockApplicationContext,
@@ -183,63 +189,17 @@ describe('getRecentFilingsForUserInteractor', () => {
     );
 
     expect(result).toEqual([]);
-    expect(mockSearch).toHaveBeenCalledWith({
-      applicationContext: mockApplicationContext,
-      searchParameters: {
-        body: {
-          _source: [
-            'docketNumber.S',
-            'filingDate.S',
-            'documentTitle.S',
-            'caseCaption.S',
-            'docketEntryId.S',
-            'isFileAttached.BOOL',
-            'eventCode.S',
-            'isStricken.BOOL',
-            'isSealed.BOOL',
-            'sealedTo.S',
-            'servedAt.S',
-          ],
-          query: {
-            bool: {
-              must: [
-                {
-                  terms: {
-                    'docketNumber.S': [
-                      TEST_DATA.DOCKET_NUMBERS.CASE_1,
-                      TEST_DATA.DOCKET_NUMBERS.CASE_2,
-                    ],
-                  },
-                },
-                {
-                  range: {
-                    'filingDate.S': expect.objectContaining({
-                      gte: expect.any(String),
-                    }),
-                  },
-                },
-              ],
-              must_not: [
-                {
-                  term: {
-                    'isStricken.BOOL': true,
-                  },
-                },
-              ],
-            },
-          },
-          sort: [
-            {
-              'filingDate.S': {
-                order: 'desc',
-              },
-            },
-          ],
-          size: 1000,
-        },
-        index: 'efcms-docket-entry',
-      },
-    });
+    expect(mockGetDbReader).toHaveBeenCalled();
+    expect(mockDbReader.selectFrom).toHaveBeenCalledWith('dwDocketEntry as d');
+    expect(mockDbReader.innerJoin).toHaveBeenCalledWith(
+      'dwCase as c',
+      'd.docketNumber',
+      'c.docketNumber',
+    );
+    expect(mockDbReader.where).toHaveBeenCalledWith('d.docketNumber', 'in', [
+      TEST_DATA.DOCKET_NUMBERS.CASE_1,
+      TEST_DATA.DOCKET_NUMBERS.CASE_2,
+    ]);
   });
 
   it('should return recent filings with case info for regular cases', async () => {
@@ -251,19 +211,19 @@ describe('getRecentFilingsForUserInteractor', () => {
       }),
     ];
 
-    const mockSearchResults: MockSearchResult[] = [
-      createMockSearchResult({
+    const mockDbResults: MockDbDocketEntry[] = [
+      createMockDbDocketEntry({
         docketNumber: TEST_DATA.DOCKET_NUMBERS.CASE_1,
-        filingDate: TEST_DATA.DATES.MIDDLE,
+        filingDate: calculateDate({ dateString: TEST_DATA.DATES.MIDDLE }),
         documentTitle: TEST_DATA.DOCUMENTS.PETITION,
-        caseCaption: TEST_DATA.CASE_TITLES.TEST_CASE,
+        caption: TEST_DATA.CASE_CAPTION,
         docketEntryId: TEST_DATA.DOCKET_ENTRY_IDS.ENTRY_1,
         isFileAttached: true,
         eventCode: TEST_DATA.EVENT_CODES.PETITION,
         isStricken: false,
         isSealed: false,
         sealedTo: null,
-        servedAt: TEST_DATA.SERVED_AT,
+        servedAt: calculateDate({ dateString: TEST_DATA.SERVED_AT }),
       }),
     ];
 
@@ -272,7 +232,7 @@ describe('getRecentFilingsForUserInteractor', () => {
       closedCaseList: [],
     });
 
-    mockSearch.mockResolvedValue(createMockSearchResponse(mockSearchResults));
+    mockDbReader.execute.mockResolvedValue(mockDbResults);
 
     const result = await getRecentFilingsForUserInteractor(
       mockApplicationContext,
@@ -282,16 +242,20 @@ describe('getRecentFilingsForUserInteractor', () => {
     expect(result).toEqual([
       {
         docketNumber: TEST_DATA.DOCKET_NUMBERS.CASE_1,
-        filedDate: TEST_DATA.DATES.MIDDLE,
+        filedDate: calculateDate({
+          dateString: TEST_DATA.DATES.MIDDLE,
+        }).toISOString(),
         document: TEST_DATA.DOCUMENTS.PETITION,
-        caseTitle: TEST_DATA.CASE_TITLES.TEST_CASE,
+        caseTitle: 'Test Case Caption',
         docketEntryId: TEST_DATA.DOCKET_ENTRY_IDS.ENTRY_1,
         isFileAttached: true,
         eventCode: TEST_DATA.EVENT_CODES.PETITION,
         isStricken: false,
         isSealed: false,
-        sealedTo: null,
-        servedAt: TEST_DATA.SERVED_AT,
+        sealedTo: undefined,
+        servedAt: calculateDate({
+          dateString: TEST_DATA.SERVED_AT,
+        }).toISOString(),
         inConsolidatedGroup: undefined,
         isLeadCase: true,
         consolidatedIconTooltipText: undefined,
@@ -310,19 +274,19 @@ describe('getRecentFilingsForUserInteractor', () => {
       }),
     ];
 
-    const mockSearchResults: MockSearchResult[] = [
-      createMockSearchResult({
+    const mockDbResults: MockDbDocketEntry[] = [
+      createMockDbDocketEntry({
         docketNumber: TEST_DATA.DOCKET_NUMBERS.CASE_1,
-        filingDate: TEST_DATA.DATES.MIDDLE,
+        filingDate: calculateDate({ dateString: TEST_DATA.DATES.MIDDLE }),
         documentTitle: TEST_DATA.DOCUMENTS.PETITION,
-        caseCaption: TEST_DATA.CASE_TITLES.TEST_CASE,
+        caption: TEST_DATA.CASE_CAPTION,
         docketEntryId: TEST_DATA.DOCKET_ENTRY_IDS.ENTRY_1,
         isFileAttached: true,
         eventCode: TEST_DATA.EVENT_CODES.PETITION,
         isStricken: false,
         isSealed: false,
         sealedTo: null,
-        servedAt: TEST_DATA.SERVED_AT,
+        servedAt: calculateDate({ dateString: TEST_DATA.SERVED_AT }),
       }),
     ];
 
@@ -331,7 +295,7 @@ describe('getRecentFilingsForUserInteractor', () => {
       closedCaseList: [],
     });
 
-    mockSearch.mockResolvedValue(createMockSearchResponse(mockSearchResults));
+    mockDbReader.execute.mockResolvedValue(mockDbResults);
 
     const result = await getRecentFilingsForUserInteractor(
       mockApplicationContext,
@@ -341,16 +305,20 @@ describe('getRecentFilingsForUserInteractor', () => {
     expect(result).toEqual([
       {
         docketNumber: TEST_DATA.DOCKET_NUMBERS.CASE_1,
-        filedDate: TEST_DATA.DATES.MIDDLE,
+        filedDate: calculateDate({
+          dateString: TEST_DATA.DATES.MIDDLE,
+        }).toISOString(),
         document: TEST_DATA.DOCUMENTS.PETITION,
-        caseTitle: TEST_DATA.CASE_TITLES.TEST_CASE,
+        caseTitle: 'Test Case Caption',
         docketEntryId: TEST_DATA.DOCKET_ENTRY_IDS.ENTRY_1,
         isFileAttached: true,
         eventCode: TEST_DATA.EVENT_CODES.PETITION,
         isStricken: false,
         isSealed: false,
-        sealedTo: null,
-        servedAt: TEST_DATA.SERVED_AT,
+        sealedTo: undefined,
+        servedAt: calculateDate({
+          dateString: TEST_DATA.SERVED_AT,
+        }).toISOString(),
         inConsolidatedGroup: true,
         isLeadCase: true,
         consolidatedIconTooltipText:
@@ -367,19 +335,19 @@ describe('getRecentFilingsForUserInteractor', () => {
       }),
     ];
 
-    const mockSearchResults: MockSearchResult[] = [
-      createMockSearchResult({
+    const mockDbResults: MockDbDocketEntry[] = [
+      createMockDbDocketEntry({
         docketNumber: TEST_DATA.DOCKET_NUMBERS.CASE_2,
-        filingDate: TEST_DATA.DATES.MIDDLE,
+        filingDate: calculateDate({ dateString: TEST_DATA.DATES.MIDDLE }),
         documentTitle: TEST_DATA.DOCUMENTS.ANSWER,
-        caseCaption: TEST_DATA.CASE_TITLES.TEST_CASE,
+        caption: TEST_DATA.CASE_CAPTION,
         docketEntryId: TEST_DATA.DOCKET_ENTRY_IDS.ENTRY_1,
         isFileAttached: true,
         eventCode: TEST_DATA.EVENT_CODES.ANSWER,
         isStricken: false,
         isSealed: false,
         sealedTo: null,
-        servedAt: TEST_DATA.SERVED_AT,
+        servedAt: calculateDate({ dateString: TEST_DATA.SERVED_AT }),
       }),
     ];
 
@@ -388,7 +356,7 @@ describe('getRecentFilingsForUserInteractor', () => {
       closedCaseList: [],
     });
 
-    mockSearch.mockResolvedValue(createMockSearchResponse(mockSearchResults));
+    mockDbReader.execute.mockResolvedValue(mockDbResults);
 
     const result = await getRecentFilingsForUserInteractor(
       mockApplicationContext,
@@ -398,16 +366,20 @@ describe('getRecentFilingsForUserInteractor', () => {
     expect(result).toEqual([
       {
         docketNumber: TEST_DATA.DOCKET_NUMBERS.CASE_2,
-        filedDate: TEST_DATA.DATES.MIDDLE,
+        filedDate: calculateDate({
+          dateString: TEST_DATA.DATES.MIDDLE,
+        }).toISOString(),
         document: TEST_DATA.DOCUMENTS.ANSWER,
-        caseTitle: TEST_DATA.CASE_TITLES.TEST_CASE,
+        caseTitle: 'Test Case Caption',
         docketEntryId: TEST_DATA.DOCKET_ENTRY_IDS.ENTRY_1,
         isFileAttached: true,
         eventCode: TEST_DATA.EVENT_CODES.ANSWER,
         isStricken: false,
         isSealed: false,
-        sealedTo: null,
-        servedAt: TEST_DATA.SERVED_AT,
+        sealedTo: undefined,
+        servedAt: calculateDate({
+          dateString: TEST_DATA.SERVED_AT,
+        }).toISOString(),
         inConsolidatedGroup: TEST_DATA.DOCKET_NUMBERS.CASE_1,
         isLeadCase: false,
         consolidatedIconTooltipText: `Member case in consolidated group led by ${TEST_DATA.DOCKET_NUMBERS.CASE_1}`,
@@ -424,19 +396,19 @@ describe('getRecentFilingsForUserInteractor', () => {
       }),
     ];
 
-    const mockSearchResults: MockSearchResult[] = [
-      createMockSearchResult({
+    const mockDbResults: MockDbDocketEntry[] = [
+      createMockDbDocketEntry({
         docketNumber: TEST_DATA.DOCKET_NUMBERS.CASE_1,
-        filingDate: TEST_DATA.DATES.MIDDLE,
+        filingDate: calculateDate({ dateString: TEST_DATA.DATES.MIDDLE }),
         documentTitle: null,
-        caseCaption: null,
+        caption: '',
         docketEntryId: TEST_DATA.DOCKET_ENTRY_IDS.ENTRY_1,
         isFileAttached: true,
         eventCode: TEST_DATA.EVENT_CODES.PETITION,
         isStricken: false,
         isSealed: false,
         sealedTo: null,
-        servedAt: TEST_DATA.SERVED_AT,
+        servedAt: calculateDate({ dateString: TEST_DATA.SERVED_AT }),
       }),
     ];
 
@@ -445,7 +417,7 @@ describe('getRecentFilingsForUserInteractor', () => {
       closedCaseList: [],
     });
 
-    mockSearch.mockResolvedValue(createMockSearchResponse(mockSearchResults));
+    mockDbReader.execute.mockResolvedValue(mockDbResults);
 
     const result = await getRecentFilingsForUserInteractor(
       mockApplicationContext,
@@ -455,7 +427,9 @@ describe('getRecentFilingsForUserInteractor', () => {
     expect(result).toEqual([
       {
         docketNumber: TEST_DATA.DOCKET_NUMBERS.CASE_1,
-        filedDate: TEST_DATA.DATES.MIDDLE,
+        filedDate: calculateDate({
+          dateString: TEST_DATA.DATES.MIDDLE,
+        }).toISOString(),
         document: 'Document',
         caseTitle: 'Unknown Case',
         docketEntryId: TEST_DATA.DOCKET_ENTRY_IDS.ENTRY_1,
@@ -463,8 +437,10 @@ describe('getRecentFilingsForUserInteractor', () => {
         eventCode: TEST_DATA.EVENT_CODES.PETITION,
         isStricken: false,
         isSealed: false,
-        sealedTo: null,
-        servedAt: TEST_DATA.SERVED_AT,
+        sealedTo: undefined,
+        servedAt: calculateDate({
+          dateString: TEST_DATA.SERVED_AT,
+        }).toISOString(),
         inConsolidatedGroup: undefined,
         isLeadCase: true,
         consolidatedIconTooltipText: undefined,
@@ -481,32 +457,32 @@ describe('getRecentFilingsForUserInteractor', () => {
       createMockCase({ docketNumber: TEST_DATA.DOCKET_NUMBERS.CASE_2 }),
     ];
 
-    const mockSearchResults: MockSearchResult[] = [
-      createMockSearchResult({
+    const mockDbResults: MockDbDocketEntry[] = [
+      createMockDbDocketEntry({
         docketNumber: TEST_DATA.DOCKET_NUMBERS.CASE_1,
-        filingDate: TEST_DATA.DATES.MIDDLE,
+        filingDate: calculateDate({ dateString: TEST_DATA.DATES.MIDDLE }),
         documentTitle: TEST_DATA.DOCUMENTS.PETITION,
-        caseCaption: TEST_DATA.CASE_TITLES.OPEN_CASE,
+        caption: TEST_DATA.CASE_TITLES.OPEN_CASE,
         docketEntryId: TEST_DATA.DOCKET_ENTRY_IDS.ENTRY_1,
         isFileAttached: true,
         eventCode: TEST_DATA.EVENT_CODES.PETITION,
         isStricken: false,
         isSealed: false,
         sealedTo: null,
-        servedAt: TEST_DATA.SERVED_AT,
+        servedAt: calculateDate({ dateString: TEST_DATA.SERVED_AT }),
       }),
-      createMockSearchResult({
+      createMockDbDocketEntry({
         docketNumber: TEST_DATA.DOCKET_NUMBERS.CASE_2,
-        filingDate: TEST_DATA.DATES.EARLY,
+        filingDate: calculateDate({ dateString: TEST_DATA.DATES.EARLY }),
         documentTitle: TEST_DATA.DOCUMENTS.ANSWER,
-        caseCaption: TEST_DATA.CASE_TITLES.CLOSED_CASE,
+        caption: TEST_DATA.CASE_TITLES.CLOSED_CASE,
         docketEntryId: TEST_DATA.DOCKET_ENTRY_IDS.ENTRY_2,
         isFileAttached: true,
         eventCode: TEST_DATA.EVENT_CODES.ANSWER,
         isStricken: false,
         isSealed: false,
         sealedTo: null,
-        servedAt: TEST_DATA.SERVED_AT_EARLY,
+        servedAt: calculateDate({ dateString: TEST_DATA.SERVED_AT_EARLY }),
       }),
     ];
 
@@ -515,7 +491,7 @@ describe('getRecentFilingsForUserInteractor', () => {
       closedCaseList: mockClosedCases,
     });
 
-    mockSearch.mockResolvedValue(createMockSearchResponse(mockSearchResults));
+    mockDbReader.execute.mockResolvedValue(mockDbResults);
 
     const result = await getRecentFilingsForUserInteractor(
       mockApplicationContext,
@@ -536,12 +512,12 @@ describe('getRecentFilingsForUserInteractor', () => {
       }),
     ];
 
-    const mockSearchResults: MockSearchResult[] = [
-      createMockSearchResult({
+    const mockDbResults: MockDbDocketEntry[] = [
+      createMockDbDocketEntry({
         docketNumber: TEST_DATA.DOCKET_NUMBERS.CASE_1,
-        filingDate: TEST_DATA.DATES.MIDDLE,
+        filingDate: calculateDate({ dateString: TEST_DATA.DATES.MIDDLE }),
         documentTitle: TEST_DATA.DOCUMENTS.PETITION,
-        caseCaption: TEST_DATA.CASE_TITLES.TEST_CASE,
+        caption: TEST_DATA.CASE_CAPTION,
         docketEntryId: TEST_DATA.DOCKET_ENTRY_IDS.ENTRY_1,
         isFileAttached: false,
         eventCode: TEST_DATA.EVENT_CODES.PETITION,
@@ -557,7 +533,7 @@ describe('getRecentFilingsForUserInteractor', () => {
       closedCaseList: [],
     });
 
-    mockSearch.mockResolvedValue(createMockSearchResponse(mockSearchResults));
+    mockDbReader.execute.mockResolvedValue(mockDbResults);
 
     const result = await getRecentFilingsForUserInteractor(
       mockApplicationContext,
@@ -567,16 +543,18 @@ describe('getRecentFilingsForUserInteractor', () => {
     expect(result).toEqual([
       {
         docketNumber: TEST_DATA.DOCKET_NUMBERS.CASE_1,
-        filedDate: TEST_DATA.DATES.MIDDLE,
+        filedDate: calculateDate({
+          dateString: TEST_DATA.DATES.MIDDLE,
+        }).toISOString(),
         document: TEST_DATA.DOCUMENTS.PETITION,
-        caseTitle: TEST_DATA.CASE_TITLES.TEST_CASE,
+        caseTitle: 'Test Case Caption',
         docketEntryId: TEST_DATA.DOCKET_ENTRY_IDS.ENTRY_1,
         isFileAttached: false,
         eventCode: TEST_DATA.EVENT_CODES.PETITION,
         isStricken: true,
         isSealed: true,
         sealedTo: TEST_DATA.SEALED_TO,
-        servedAt: null,
+        servedAt: undefined,
         inConsolidatedGroup: undefined,
         isLeadCase: true,
         consolidatedIconTooltipText: undefined,
@@ -593,19 +571,19 @@ describe('getRecentFilingsForUserInteractor', () => {
       }),
     ];
 
-    const mockSearchResults: MockSearchResult[] = [
-      createMockSearchResult({
+    const mockDbResults: MockDbDocketEntry[] = [
+      createMockDbDocketEntry({
         docketNumber: TEST_DATA.DOCKET_NUMBERS.CASE_1,
-        filingDate: TEST_DATA.DATES.MIDDLE,
+        filingDate: calculateDate({ dateString: TEST_DATA.DATES.MIDDLE }),
         documentTitle: TEST_DATA.DOCUMENTS.PETITION,
-        caseCaption: TEST_DATA.CASE_TITLES.TEST_CASE,
+        caption: TEST_DATA.CASE_CAPTION,
         docketEntryId: TEST_DATA.DOCKET_ENTRY_IDS.ENTRY_1,
         isFileAttached: true,
         eventCode: TEST_DATA.EVENT_CODES.PETITION,
         isStricken: false,
         isSealed: false,
         sealedTo: null,
-        servedAt: TEST_DATA.SERVED_AT,
+        servedAt: calculateDate({ dateString: TEST_DATA.SERVED_AT }),
       }),
     ];
 
@@ -614,7 +592,7 @@ describe('getRecentFilingsForUserInteractor', () => {
       closedCaseList: [],
     });
 
-    mockSearch.mockResolvedValue(createMockSearchResponse(mockSearchResults));
+    mockDbReader.execute.mockResolvedValue(mockDbResults);
 
     const result = await getRecentFilingsForUserInteractor(
       mockApplicationContext,
@@ -635,19 +613,19 @@ describe('getRecentFilingsForUserInteractor', () => {
       }),
     ];
 
-    const mockSearchResults: MockSearchResult[] = [
-      createMockSearchResult({
+    const mockDbResults: MockDbDocketEntry[] = [
+      createMockDbDocketEntry({
         docketNumber: TEST_DATA.DOCKET_NUMBERS.CASE_1,
-        filingDate: TEST_DATA.DATES.MIDDLE,
+        filingDate: calculateDate({ dateString: TEST_DATA.DATES.MIDDLE }),
         documentTitle: TEST_DATA.DOCUMENTS.PETITION,
-        caseCaption: TEST_DATA.CASE_TITLES.TEST_CASE,
+        caption: TEST_DATA.CASE_CAPTION,
         docketEntryId: TEST_DATA.DOCKET_ENTRY_IDS.ENTRY_1,
         isFileAttached: true,
         eventCode: TEST_DATA.EVENT_CODES.PETITION,
         isStricken: false,
         isSealed: false,
         sealedTo: null,
-        servedAt: TEST_DATA.SERVED_AT,
+        servedAt: calculateDate({ dateString: TEST_DATA.SERVED_AT }),
       }),
     ];
 
@@ -656,7 +634,7 @@ describe('getRecentFilingsForUserInteractor', () => {
       closedCaseList: [],
     });
 
-    mockSearch.mockResolvedValue(createMockSearchResponse(mockSearchResults));
+    mockDbReader.execute.mockResolvedValue(mockDbResults);
 
     const result = await getRecentFilingsForUserInteractor(
       mockApplicationContext,

@@ -19,9 +19,14 @@ describe('Recent Filings - IRS Practitioner', () => {
     cy.viewport(1200, 800);
     cy.get('[data-testid="header-recent-filings-link"]').click();
 
+    // Wait for the page to load and check for either table rows or empty message
+    cy.get('[data-testid="recent-filings-table"]').should('be.visible');
+
     cy.get('body').then($body => {
-      if ($body.find('[data-testid="recent-filings-table"]').length > 0) {
-        cy.get('[data-testid="recent-filings-table"]').should('be.visible');
+      if (
+        $body.find('[data-testid="recent-filings-table"] tbody tr').length > 0
+      ) {
+        // If there are table rows, test sorting functionality
         cy.get('[data-testid="docketNumber-sortable-button"]')
           .should('be.visible')
           .click();
@@ -36,6 +41,7 @@ describe('Recent Filings - IRS Practitioner', () => {
           .click();
         cy.get('[data-testid="recent-filings-table"]').should('be.visible');
       } else {
+        // If no table rows, check for empty state message
         cy.get('[data-testid="no-recent-filings-message"]').should(
           'be.visible',
         );
