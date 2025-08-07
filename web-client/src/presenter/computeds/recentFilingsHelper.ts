@@ -55,25 +55,6 @@ const isExternalUser = (userRole: Role | undefined | null): boolean => {
   return User.isExternalUser(userRole);
 };
 
-const getDocumentDisplayProperties = (
-  filing: RecentFiling,
-  userRole: Role | undefined | null,
-) => {
-  const canAccess = checkDocumentAccess(filing, userRole);
-  const isExternalUserRole = isExternalUser(userRole);
-
-  const hasFileAttached = Boolean(filing.isFileAttached);
-
-  return {
-    showLinkToDocument: Boolean(canAccess && hasFileAttached),
-    showDocumentViewerLink: Boolean(
-      canAccess && hasFileAttached && !isExternalUserRole,
-    ),
-    showDocumentDescriptionWithoutLink: Boolean(!canAccess && hasFileAttached),
-    showDocumentProcessing: false,
-  };
-};
-
 const SORT_FIELDS = [
   { field: 'docketNumber', label: 'Docket Number' },
   { field: 'filedDate', label: 'Filed Date' },
@@ -99,7 +80,7 @@ const generateSortOptions = () => {
 };
 
 export const recentFilingsHelper = (get: Get) => {
-  const recentFilings = get(state.recentFilings);
+  const recentFilings = get(state.recentFilings) as RecentFiling[];
   const userRole = get(state.user.role);
   const tableSort = get(state.recentFilingsTableSort) || {
     sortField: 'filedDate',
@@ -111,7 +92,10 @@ export const recentFilingsHelper = (get: Get) => {
       sortedRecentFilings: [],
       sortOptions: generateSortOptions(),
       getDocumentDisplayProperties: () => ({
-        ...getDocumentDisplayProperties({} as RecentFiling, userRole || null),
+        showLinkToDocument: false,
+        showDocumentViewerLink: false,
+        showDocumentDescriptionWithoutLink: false,
+        showDocumentProcessing: false,
       }),
     };
   }
@@ -122,7 +106,7 @@ export const recentFilingsHelper = (get: Get) => {
     'document',
     'caseTitle',
   ] as const;
-  const sortField = validSortFields.includes(tableSort.sortField)
+  const sortField = validSortFields.includes(tableSort.sortField as any)
     ? (tableSort.sortField as (typeof validSortFields)[number])
     : 'filedDate';
   const sortOrder = ['asc', 'desc'].includes(tableSort.sortOrder)
@@ -135,17 +119,46 @@ export const recentFilingsHelper = (get: Get) => {
     sortOrder,
   );
 
-  const recentFilingsWithAccess = sortedRecentFilings.map(filing => ({
-    ...filing,
-    canAccess: checkDocumentAccess(filing, userRole),
-    isSealed: filing.isSealed === true,
-    ...getDocumentDisplayProperties(filing, userRole),
-  }));
+  const recentFilingsWithAccess = sortedRecentFilings.map(
+    (filing: RecentFiling) => {
+      const canAccess = checkDocumentAccess(filing, userRole);
+      const isExternalUserRole = isExternalUser(userRole);
+      const hasFileAttached = Boolean(filing.isFileAttached);
+
+      return {
+        ...filing,
+        canAccess,
+        isSealed: filing.isSealed === true,
+        showLinkToDocument: Boolean(canAccess && hasFileAttached),
+        showDocumentViewerLink: Boolean(
+          canAccess && hasFileAttached && !isExternalUserRole,
+        ),
+        showDocumentDescriptionWithoutLink: Boolean(
+          !canAccess && hasFileAttached,
+        ),
+        showDocumentProcessing: false,
+      };
+    },
+  );
 
   return {
     sortedRecentFilings: recentFilingsWithAccess,
     sortOptions: generateSortOptions(),
-    getDocumentDisplayProperties: (filing: RecentFiling) =>
-      getDocumentDisplayProperties(filing, userRole),
+    getDocumentDisplayProperties: (filing: RecentFiling) => {
+      const canAccess = checkDocumentAccess(filing, userRole);
+      const isExternalUserRole = isExternalUser(userRole);
+      const hasFileAttached = Boolean(filing.isFileAttached);
+
+      return {
+        showLinkToDocument: Boolean(canAccess && hasFileAttached),
+        showDocumentViewerLink: Boolean(
+          canAccess && hasFileAttached && !isExternalUserRole,
+        ),
+        showDocumentDescriptionWithoutLink: Boolean(
+          !canAccess && hasFileAttached,
+        ),
+        showDocumentProcessing: false,
+      };
+    },
   };
 };

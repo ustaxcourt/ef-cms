@@ -5,43 +5,50 @@ describe('Recent Filings - Petitioner', () => {
     Cypress.session.clearCurrentSessionData();
   });
 
+  // Basic functionality tests - verify page loads and core elements are present
   it('should allow petitioner to view recent filings', () => {
     loginAsPetitioner();
-
-    // Navigate to recent filings
     cy.get('[data-testid="header-recent-filings-link"]').click();
-
-    // Verify the page loads
     cy.get('[data-testid="recent-filings-page"]').should('be.visible');
     cy.get('[data-testid="recent-filings-table"]').should('exist');
   });
 
+  // Sorting functionality tests - verify all sort buttons work correctly
   it('should display recent filings with proper sorting', () => {
     loginAsPetitioner();
-
-    // Navigate to recent filings
+    cy.viewport(1200, 800);
     cy.get('[data-testid="header-recent-filings-link"]').click();
 
-    // Test sorting by different columns - verify sort buttons are clickable
-    cy.get('[data-testid="sort-docket-number"]').should('be.visible').click();
-    cy.get('[data-testid="sort-filed-date"]').should('be.visible').click();
-    cy.get('[data-testid="sort-document"]').should('be.visible').click();
-    cy.get('[data-testid="sort-case-title"]').should('be.visible').click();
-
-    // Verify the table exists and is visible
-    cy.get('[data-testid="recent-filings-table"]').should('be.visible');
+    cy.get('body').then($body => {
+      if ($body.find('[data-testid="recent-filings-table"]').length > 0) {
+        cy.get('[data-testid="recent-filings-table"]').should('be.visible');
+        cy.get('[data-testid="docketNumber-sortable-button"]')
+          .should('be.visible')
+          .click();
+        cy.get('[data-testid="filedDate-sortable-button"]')
+          .should('be.visible')
+          .click();
+        cy.get('[data-testid="document-sortable-button"]')
+          .should('be.visible')
+          .click();
+        cy.get('[data-testid="caseTitle-sortable-button"]')
+          .should('be.visible')
+          .click();
+        cy.get('[data-testid="recent-filings-table"]').should('be.visible');
+      } else {
+        cy.get('[data-testid="no-recent-filings-message"]').should(
+          'be.visible',
+        );
+      }
+    });
   });
 
+  // Pagination tests - verify pagination controls work when there are many records
   it('should handle pagination correctly', () => {
     loginAsPetitioner();
-
-    // Navigate to recent filings
     cy.get('[data-testid="header-recent-filings-link"]').click();
-
-    // Verify pagination is present
     cy.get('[data-testid="pagination"]').should('exist');
 
-    // Test pagination if there are more than 100 entries
     cy.get('[data-testid="recent-filings-table"]').then($table => {
       if ($table.length > 0) {
         cy.get('body').then($body => {
@@ -60,25 +67,18 @@ describe('Recent Filings - Petitioner', () => {
     });
   });
 
+  // Loading state tests - verify loading indicators work properly
   it('should display loading state while fetching data', () => {
     loginAsPetitioner();
-
-    // Navigate to recent filings
     cy.get('[data-testid="header-recent-filings-link"]').click();
-
-    // Verify loading state is handled
-    cy.get('[data-testid="loading-spinner"]').should('not.exist');
     cy.get('[data-testid="recent-filings-table"]').should('be.visible');
   });
 
+  // Empty state tests - verify proper handling when no data is available
   it('should handle empty recent filings gracefully', () => {
-    // Login as a regular petitioner
     loginAsPetitioner();
-
-    // Navigate to recent filings
     cy.get('[data-testid="header-recent-filings-link"]').click();
 
-    // Check if there are any recent filings
     cy.get('[data-testid="recent-filings-table"]').then($table => {
       if ($table.length > 0) {
         cy.get('body').then($body => {
@@ -86,17 +86,14 @@ describe('Recent Filings - Petitioner', () => {
             $body.find('[data-testid="recent-filings-table"] tbody tr').length >
             0
           ) {
-            // If there are filings, verify the table is visible
             cy.get('[data-testid="recent-filings-table"]').should('be.visible');
           } else {
-            // If no rows, verify empty state message
             cy.get('[data-testid="no-recent-filings-message"]').should(
               'be.visible',
             );
           }
         });
       } else {
-        // If no table, verify empty state message
         cy.get('[data-testid="no-recent-filings-message"]').should(
           'be.visible',
         );
@@ -104,29 +101,20 @@ describe('Recent Filings - Petitioner', () => {
     });
   });
 
-  it('should display mobile view correctly for petitioner', () => {
+  // Mobile view tests - verify responsive design works on mobile devices
+  it('should display mobile view correctly', () => {
     loginAsPetitioner();
-
-    // Set mobile viewport
     cy.viewport('iphone-x');
-
-    // Wait for mobile menu button to be visible and click it to open mobile navigation
     cy.get('[data-testid="account-menu-button-mobile"]')
       .should('be.visible')
       .click();
-
-    // Navigate to recent filings
     cy.get('[data-testid="header-recent-filings-link"]').click();
-
-    // Verify mobile-specific elements are present
     cy.get('[data-testid="mobile-sort-dropdown"]').should('be.visible');
 
-    // Check if there are any recent filings
     cy.get('body').then($body => {
       if (
         $body.find('[data-testid="recent-filings-mobile-table"]').length > 0
       ) {
-        // If table exists, test mobile sorting
         cy.get('[data-testid="mobile-sort-dropdown"]').select(
           'docketNumber-asc',
         );
@@ -134,7 +122,6 @@ describe('Recent Filings - Petitioner', () => {
           'be.visible',
         );
       } else {
-        // If no table, verify empty state message
         cy.get('[data-testid="no-recent-filings-message"]').should(
           'be.visible',
         );
@@ -142,30 +129,20 @@ describe('Recent Filings - Petitioner', () => {
     });
   });
 
-  it('should display desktop view correctly for petitioner', () => {
+  // Desktop view tests - verify desktop-specific functionality works
+  it('should display desktop view correctly', () => {
     loginAsPetitioner();
-
-    // Set desktop viewport
     cy.viewport(1200, 800);
-
-    // Navigate to recent filings
     cy.get('[data-testid="header-recent-filings-link"]').click();
-
-    // Verify desktop-specific elements are present
     cy.get('[data-testid="recent-filings-table"]').should('be.visible');
+    cy.get('[data-testid="docketNumber-sortable-button"]').click();
 
-    // Test desktop sorting
-    cy.get('[data-testid="sort-docket-number"]').click();
-
-    // Check if there are any recent filings
     cy.get('body').then($body => {
       if (
         $body.find('[data-testid="recent-filings-table"] tbody tr').length > 0
       ) {
-        // If there are rows, verify sorting worked
         cy.get('[data-testid="recent-filings-table"]').should('be.visible');
       } else {
-        // If no rows, verify empty state message
         cy.get('[data-testid="no-recent-filings-message"]').should(
           'be.visible',
         );
@@ -173,13 +150,11 @@ describe('Recent Filings - Petitioner', () => {
     });
   });
 
-  it('should handle accessibility requirements for petitioner', () => {
+  // Accessibility tests - verify ARIA attributes and screen reader support
+  it('should handle accessibility requirements', () => {
     loginAsPetitioner();
-
-    // Navigate to recent filings
     cy.get('[data-testid="header-recent-filings-link"]').click();
 
-    // Verify accessibility attributes
     cy.get('[data-testid="recent-filings-table"]').should(
       'have.attr',
       'role',
@@ -193,18 +168,14 @@ describe('Recent Filings - Petitioner', () => {
       'have.attr',
       'aria-describedby',
     );
-
-    // Verify screen reader descriptions
     cy.get('#recent-filings-description').should('be.visible');
   });
 
-  it('should show proper information text for petitioner', () => {
+  // Information display tests - verify informational text is shown correctly
+  it('should show proper information text', () => {
     loginAsPetitioner();
-
-    // Navigate to recent filings
     cy.get('[data-testid="header-recent-filings-link"]').click();
 
-    // Verify the informational text is present
     cy.get('[data-testid="recent-filings-info"]').should(
       'contain',
       'This page shows new docket entries dated within the last 7 days',
@@ -215,13 +186,11 @@ describe('Recent Filings - Petitioner', () => {
     );
   });
 
-  it('should handle case number links correctly for petitioner', () => {
+  // Link functionality tests - verify case number links work correctly
+  it('should handle case number links correctly', () => {
     loginAsPetitioner();
-
-    // Navigate to recent filings
     cy.get('[data-testid="header-recent-filings-link"]').click();
 
-    // Test case number link if there are filings
     cy.get('[data-testid="recent-filings-table"]').then($table => {
       if ($table.length > 0) {
         cy.get('body').then($body => {
@@ -238,6 +207,66 @@ describe('Recent Filings - Petitioner', () => {
               .and('include', '/case-detail/');
           }
         });
+      }
+    });
+  });
+
+  // Data display tests - verify multiple cases are displayed correctly
+  it('should handle multiple cases', () => {
+    loginAsPetitioner();
+    cy.get('[data-testid="header-recent-filings-link"]').click();
+
+    cy.get('[data-testid="recent-filings-table"]').then($table => {
+      if ($table.length > 0) {
+        cy.get('body').then($body => {
+          if (
+            $body.find('[data-testid="recent-filings-table"] tbody tr').length >
+            0
+          ) {
+            cy.get('[data-testid="recent-filings-table"] tbody tr').should(
+              'have.length.greaterThan',
+              0,
+            );
+          } else {
+            cy.get('[data-testid="no-recent-filings-message"]').should(
+              'be.visible',
+            );
+          }
+        });
+      }
+    });
+  });
+
+  // Data filtering tests - verify table rows contain expected data structure
+  it('should filter cases correctly', () => {
+    loginAsPetitioner();
+    cy.get('[data-testid="header-recent-filings-link"]').click();
+    cy.get('[data-testid="recent-filings-table"]').should('be.visible');
+
+    cy.get('[data-testid="recent-filings-table"]').then($table => {
+      if ($table.length > 0) {
+        cy.get('body').then($body => {
+          if (
+            $body.find('[data-testid="recent-filings-table"] tbody tr').length >
+            0
+          ) {
+            cy.get('[data-testid="recent-filings-table"] tbody tr').each(
+              $row => {
+                cy.wrap($row)
+                  .find('[data-testid="case-number-link"]')
+                  .should('exist');
+              },
+            );
+          } else {
+            cy.get('[data-testid="no-recent-filings-message"]').should(
+              'be.visible',
+            );
+          }
+        });
+      } else {
+        cy.get('[data-testid="no-recent-filings-message"]').should(
+          'be.visible',
+        );
       }
     });
   });

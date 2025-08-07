@@ -5,21 +5,15 @@ export const ConsolidatedCaseIcon = ({
   consolidatedIconTooltipText,
   inConsolidatedGroup,
   showLeadCaseIcon,
-  'data-testid': dataTestId,
 }: {
   inConsolidatedGroup: boolean;
   consolidatedIconTooltipText: string | undefined;
   showLeadCaseIcon: boolean;
-  'data-testid'?: string;
 }) => {
   return (
     <>
       {inConsolidatedGroup && (
-        <span
-          className="fa-layers fa-fw"
-          title={consolidatedIconTooltipText}
-          data-testid={dataTestId}
-        >
+        <span className="fa-layers fa-fw" title={consolidatedIconTooltipText}>
           <Icon
             aria-label={consolidatedIconTooltipText}
             className="fa-icon-blue"

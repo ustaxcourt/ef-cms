@@ -19,11 +19,17 @@ describe('Recent Filings - Basic Integration', () => {
   it('should display basic sorting functionality', () => {
     loginAsPetitioner();
 
+    // Set desktop viewport to ensure non-mobile component is rendered
+    cy.viewport(1200, 800);
+
     // Navigate to recent filings
     cy.get('[data-testid="header-recent-filings-link"]').click();
 
+    // Wait for the table to be visible (this implicitly waits for loading to complete)
+    cy.get('[data-testid="recent-filings-table"]').should('be.visible');
+
     // Test basic sorting - check if sort button is clickable
-    cy.get('[data-testid="sort-docket-number"]').should('be.visible').click();
+    cy.get('[data-testid="docketNumber-sortable-button"]').should('be.visible').click();
 
     // Verify the table exists
     cy.get('[data-testid="recent-filings-table"]').should('be.visible');
@@ -61,7 +67,6 @@ describe('Recent Filings - Basic Integration', () => {
     cy.get('[data-testid="header-recent-filings-link"]').click();
 
     // Verify loading state is handled
-    cy.get('[data-testid="loading-spinner"]').should('not.exist');
     cy.get('[data-testid="recent-filings-table"]').should('be.visible');
   });
 

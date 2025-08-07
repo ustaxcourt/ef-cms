@@ -16,7 +16,6 @@ export function SortableHeader({
   tableSort,
   title,
   stateKey,
-  'data-testid': dataTestId,
 }: {
   className?: string;
   onSort: (sort: {
@@ -34,7 +33,6 @@ export function SortableHeader({
   title: string;
   hideOnMobile?: boolean;
   stateKey: string;
-  'data-testid'?: string;
 }) {
   return (
     <th className={hideOnMobile ? 'hide-on-mobile' : ''}>
@@ -43,7 +41,7 @@ export function SortableHeader({
         className={className}
         currentlySortedField={tableSort.sortField}
         currentlySortedOrder={tableSort.sortOrder}
-        data-testid={dataTestId || `${sortField}-sortable-button`}
+        data-testid={`${sortField}-sortable-button`}
         defaultSortOrder={ASCENDING}
         descText={SORT_DESCENDING_TEXT[sortType!]}
         hasRows={true}
