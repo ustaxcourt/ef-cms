@@ -122,6 +122,9 @@ export const ActionsAndFilingsFieldset = ({
             isMulti={false}
             name={`actionsAndFilingsDocumentType-${rowIndex}`}
             options={formOptions[row.renderKey]}
+            tooltip={formOptions[row.renderKey].find(
+              option => option.value === row.documentType,
+            ).label}
             value={formOptions[row.renderKey].filter(
               option => option.value === row.documentType,
             )}
