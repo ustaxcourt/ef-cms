@@ -122,9 +122,9 @@ export const ActionsAndFilingsFieldset = ({
             isMulti={false}
             name={`actionsAndFilingsDocumentType-${rowIndex}`}
             options={formOptions[row.renderKey]}
-            tooltip={formOptions[row.renderKey].find(
+            tooltip={(formOptions[row.renderKey].find(
               option => option.value === row.documentType,
-            ).label}
+            )||{label: '- Select -'}).label}
             value={formOptions[row.renderKey].filter(
               option => option.value === row.documentType,
             )}
@@ -165,8 +165,8 @@ export const ActionsAndFilingsFieldset = ({
     if (DocketEntry.isMotion(row.documentType)) {
       return (
         <div className="grid-row grid-gap-2 align-items-right margin-bottom-1">
-          <div className="grid-col-6"></div>
-          <div className="grid-col-2 margin-left-4">
+          <div className="grid-col-7"></div>
+          <div className="grid-col-2">
             <FormGroup className="margin-bottom-0">
               <div className="usa-checkbox">
                 <input
@@ -178,7 +178,6 @@ export const ActionsAndFilingsFieldset = ({
                   type="checkbox"
                   onBlur={() => onBlurHandler()}
                   onChange={e => {
-                    console.log(row);
                     onChangeHandler({
                       name: 'actionsAndFilings',
                       rowInfo: {
