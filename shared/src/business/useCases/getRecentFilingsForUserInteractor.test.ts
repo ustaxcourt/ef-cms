@@ -683,7 +683,7 @@ describe('getRecentFilingsForUserInteractor', () => {
       mockAuthorizedUser,
     );
 
-    expect(result[0].inConsolidatedGroup).toBe(false);
+    expect(result[0].inConsolidatedGroup).toBeUndefined();
     expect(result[0].isLeadCase).toBe(true);
     expect(result[0].consolidatedIconTooltipText).toBeUndefined();
   });
@@ -727,7 +727,9 @@ describe('getRecentFilingsForUserInteractor', () => {
 
     expect(result[0].inConsolidatedGroup).toBe(TEST_DATA.DOCKET_NUMBERS.CASE_1);
     expect(result[0].isLeadCase).toBe(true);
-    expect(result[0].consolidatedIconTooltipText).toBeUndefined();
+    expect(result[0].consolidatedIconTooltipText).toBe(
+      `Member case in consolidated group led by ${TEST_DATA.DOCKET_NUMBERS.CASE_1}`,
+    );
   });
 
   it('should handle cases with null caseCaption from database', async () => {
@@ -744,7 +746,7 @@ describe('getRecentFilingsForUserInteractor', () => {
         docketNumber: TEST_DATA.DOCKET_NUMBERS.CASE_1,
         filingDate: calculateDate({ dateString: TEST_DATA.DATES.MIDDLE }),
         documentTitle: TEST_DATA.DOCUMENTS.PETITION,
-        caption: null, // Null caption
+        caption: '', // Empty caption
         docketEntryId: TEST_DATA.DOCKET_ENTRY_IDS.ENTRY_1,
         isFileAttached: true,
         eventCode: TEST_DATA.EVENT_CODES.PETITION,
