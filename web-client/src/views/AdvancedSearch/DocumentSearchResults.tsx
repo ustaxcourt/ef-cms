@@ -102,7 +102,7 @@ export const DocumentSearchResults = connect(
               </div>
               <div className="tablet:grid-col-2 float-right text-right text-middle-margin">
                 <FontAwesomeIcon
-                  className="fa-icon-blue icon-spacing-8"
+                  className="fa-icon-blue icon-spacing-4"
                   icon="info-circle"
                 />
                 <b className="text-semibold">Count:</b>{' '}
