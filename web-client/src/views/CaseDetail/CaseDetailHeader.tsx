@@ -2,7 +2,8 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeaderMenu } from './CaseDetailHeaderMenu';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Icon } from '../../ustc-ui/Icon/Icon';
+//import { Icon } from '../../ustc-ui/Icon/Icon';
+import { Icon } from '@dawson-ui/components/Icon';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -220,7 +221,10 @@ export const CaseDetailHeader = connect<
                         </span>
                       )}
                       {caseDetailHeaderHelper.showBlockedTag && (
-                        <span className="margin-left-1 usa-tag red-tag" data-testid="blocked-case-icon">
+                        <span
+                          className="margin-left-1 usa-tag red-tag"
+                          data-testid="blocked-case-icon"
+                        >
                           <FontAwesomeIcon
                             className="margin-right-1"
                             icon="hand-paper"
