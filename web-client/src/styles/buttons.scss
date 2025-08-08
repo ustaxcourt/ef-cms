@@ -115,6 +115,19 @@ button:disabled {
   }
 }
 
+.dawson-button {
+  &.dawson-button--secondary {
+    color: $dawson-blue-primary;
+    background-color: $dawson-greyscale-white;
+  }
+
+  &.dawson-button--destructive {}
+
+  &.dawson-button--tertiary {}
+
+  &.dawson-button--tertiary-destructive {}
+}
+
 table.search-results .ustc-button--unstyled {
   text-align: left;
 }
