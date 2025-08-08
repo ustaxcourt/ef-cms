@@ -347,6 +347,7 @@ import { verifyUserPendingEmailInteractor } from '../../shared/src/proxies/users
 import ImageBlobReduce from 'image-blob-reduce';
 import deepFreeze from 'deep-freeze';
 import { getTrialSessionOpenCasesCountInteractor } from '@shared/proxies/trialSessions/getTrialSessionOpenCasesCountProxy';
+import { getConsolidatedCaseDeadlinesInteractor } from '@shared/proxies/caseDeadline/getConsolidatedCaseDeadlinesProxy';
 import { removePetitionerEmailInteractor } from '@shared/proxies/removePetitionerEmailProxy';
 
 const reduce = ImageBlobReduce({
@@ -436,6 +437,7 @@ const allUseCases = {
   getCalendaredCasesForTrialSessionInteractor,
   getCaseDeadlinesForCaseInteractor,
   getCaseDeadlinesInteractor,
+  getConsolidatedCaseDeadlinesInteractor,
   getCaseExistsInteractor,
   getCaseInteractor,
   getCaseInventoryReportInteractor,
