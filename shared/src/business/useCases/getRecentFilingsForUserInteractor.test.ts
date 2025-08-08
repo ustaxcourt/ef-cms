@@ -1,5 +1,4 @@
 import { getRecentFilingsForUserInteractor } from './getRecentFilingsForUserInteractor';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import {
@@ -150,12 +149,6 @@ describe('getRecentFilingsForUserInteractor', () => {
     mockGetDbReader.mockImplementation(
       async callback => await callback(mockDbReader),
     );
-
-    mockApplicationContext = {
-      getUtilities: jest.fn().mockReturnValue({
-        calculateISODate: jest.fn(),
-      }),
-    } as unknown as ServerApplicationContext;
 
     mockAuthorizedUser = {
       userId: TEST_DATA.USER_ID,
