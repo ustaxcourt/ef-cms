@@ -38,7 +38,7 @@ export const AdvancedSearch = connect(
       sequences.submitPractitionerBarNumberSearchSequence,
     submitPractitionerNameSearchSequence:
       sequences.submitPractitionerNameSearchSequence,
-    user: state.user, // <-- Add this line
+    user: state.user,
   },
   function AdvancedSearch({
     advancedSearchHelper,
@@ -52,7 +52,7 @@ export const AdvancedSearch = connect(
     submitOrderAdvancedSearchSequence,
     submitPractitionerBarNumberSearchSequence,
     submitPractitionerNameSearchSequence,
-    user, // <-- Add this line
+    user,
   }) {
     return (
       <>
@@ -72,7 +72,7 @@ export const AdvancedSearch = connect(
               }}
             >
               <Tab id="tab-case" tabName={searchTabs.CASE} title="Case">
-                <SearchBoilerplateText formTypeText="a case" />
+                <SearchBoilerplateText formTypeText="a case" user={user} />
                 <CaseSearchForm
                   submitAdvancedSearchSequence={
                     submitCaseAdvancedSearchSequence
@@ -104,6 +104,7 @@ export const AdvancedSearch = connect(
                 <SearchBoilerplateText
                   formTypeText="an opinion"
                   isOpinion={true}
+                  user={user}
                 />
                 <OpinionSearchForm
                   submitAdvancedSearchSequence={
@@ -157,7 +158,7 @@ export const AdvancedSearch = connect(
             </div>
             {(!advancedSearchTab || advancedSearchTab === searchTabs.CASE) && (
               <>
-                <SearchBoilerplateText formTypeText="a case" />
+                <SearchBoilerplateText formTypeText="a case" user={user} />
 
                 <CaseSearchForm
                   submitAdvancedSearchSequence={
@@ -185,6 +186,7 @@ export const AdvancedSearch = connect(
                 <SearchBoilerplateText
                   formTypeText="an opinion"
                   isOpinion={true}
+                  user={user}
                 />
                 <OpinionSearchForm
                   submitAdvancedSearchSequence={

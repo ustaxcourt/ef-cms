@@ -1,6 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseTitleOrNameSearchField } from './AdvancedDocumentSearch/CaseTitleOrNameSearchField';
-import { DateRangeSelect } from './AdvancedDocumentSearch/DateRangeSelect';
+// import { DateRangeSelect } from './AdvancedDocumentSearch/DateRangeSelect';
 import { DocketNumberSearchField } from './AdvancedDocumentSearch/DocketNumberSearchField';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { HowToSearch } from './AdvancedDocumentSearch/HowToSearch';
@@ -83,13 +83,14 @@ export const OrderSearchForm = connect(
                   />
                 </div>
                 <div className="margin-top-4">
-                  <DateRangeSelect
+                  {/* <DateRangeSelect
                     searchValue={advancedSearchForm.orderSearch.dateRange}
                     updateSequence={updateAdvancedOrderSearchFormValueSequence}
                     validateSequence={validateOrderSearchSequence}
-                  />
+                  /> */}
                 </div>
 
+                {/* {advancedDocumentSearchHelper.showDateRangePicker && ( */}
                 <div className="margin-top-4">
                   <DateRangePickerComponent
                     endDateErrorText={validationErrors.endDate}
@@ -124,6 +125,7 @@ export const OrderSearchForm = connect(
                     }}
                   />
                 </div>
+                {/* )} */}
               </div>
             </div>
           </Mobile>
@@ -181,17 +183,27 @@ export const OrderSearchForm = connect(
                   </div>
                 </div>
                 <div className="grid-row grid-gap-3 margin-top-2">
-                  <div className="grid-row desktop:grid-col-5 grid-col-12 grid-gap-3 no-flex-wrap">
+                  <div className="grid-row desktop:grid-col-4 grid-col-12 grid-gap-3 no-flex-wrap">
                     <div className="width-card-lg">
                       <JudgeSelect
                         formValue={'advancedSearchForm.orderSearch.judge'}
                         judges={advancedDocumentSearchHelper.formattedJudges}
                       />
                     </div>
+                    {/* <div className="width-card-lg tablet:padding-bottom-5">
+                      <DateRangeSelect
+                        searchValue={advancedSearchForm.orderSearch.dateRange}
+                        updateSequence={
+                          updateAdvancedOrderSearchFormValueSequence
+                        }
+                        validateSequence={validateOrderSearchSequence}
+                      />
+                    </div> */}
                   </div>
 
                   <div className="desktop:grid-col-7 grid-col-12">
                     <div className="grid-gap-3 tablet:margin-top-0 margin-top-4">
+                      {/* {advancedDocumentSearchHelper.showDateRangePicker && ( */}
                       <div className="grid-row no-flex-wrap">
                         <DateRangePickerComponent
                           endDateErrorText={validationErrors.endDate}
@@ -203,8 +215,8 @@ export const OrderSearchForm = connect(
                           endValue={advancedSearchForm.orderSearch.endDate}
                           formGroupCls="margin-bottom-0"
                           rangePickerCls={'grid-row grid-gap'}
-                          maxDate={advancedDocumentSearchHelper.maxDate}
                           startDateErrorText={validationErrors.startDate}
+                          maxDate={advancedDocumentSearchHelper.maxDate}
                           startLabel="Start date"
                           startName="startDate"
                           showDateHint={true}
@@ -226,6 +238,7 @@ export const OrderSearchForm = connect(
                           }}
                         />
                       </div>
+                      {/* )} */}
                     </div>
                   </div>
                 </div>
