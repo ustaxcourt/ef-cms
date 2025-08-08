@@ -152,7 +152,6 @@ describe('deleteCaseDeadlineInteractor - Consolidated Cases', () => {
       {
         caseDeadlineId: TEST_DEADLINE_ID,
         docketNumber: TEST_DOCKET_NUMBER,
-        handlingConsolidatedCases: true,
       },
       mockPetitionsClerkUser,
     );
