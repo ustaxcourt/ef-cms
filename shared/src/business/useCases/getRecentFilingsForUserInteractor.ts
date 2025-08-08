@@ -1,4 +1,3 @@
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import {
   UnknownAuthUser,
@@ -7,12 +6,10 @@ import {
 import { getCasesForUserInteractor } from './getCasesForUserInteractor';
 import { calculateISODate, calculateDate } from '../utilities/DateHandler';
 import { getDbReader } from '@web-api/database';
-
 import { RecentFiling } from '@shared/business/entities/RecentFiling';
 import { getCaseCaptionMeta } from '../utilities/getCaseCaptionMeta';
 
 export const getRecentFilingsForUserInteractor = async (
-  applicationContext: ServerApplicationContext,
   authorizedUser: UnknownAuthUser,
 ): Promise<RecentFiling[]> => {
   if (!isAuthUser(authorizedUser)) {
@@ -21,10 +18,8 @@ export const getRecentFilingsForUserInteractor = async (
     );
   }
 
-  const { openCaseList, closedCaseList } = await getCasesForUserInteractor(
-    applicationContext,
-    authorizedUser,
-  );
+  const { openCaseList, closedCaseList } =
+    await getCasesForUserInteractor(authorizedUser);
 
   const allUserCases = [...openCaseList, ...closedCaseList];
 
