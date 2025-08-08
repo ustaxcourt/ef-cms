@@ -19,11 +19,9 @@ export const deleteCaseDeadline = async (
   {
     caseDeadlineId,
     docketNumber,
-    handlingConsolidatedCases = false,
   }: {
     caseDeadlineId: string;
     docketNumber: string;
-    handlingConsolidatedCases?: boolean;
   },
   authorizedUser: UnknownAuthUser,
 ) => {
@@ -43,6 +41,10 @@ export const deleteCaseDeadline = async (
     docketNumber,
   });
 
+  const HANDLED_CASE_DEADLINE = deadlinesBeforeDelete.find(
+    cd => cd.caseDeadlineId === caseDeadlineId,
+  );
+
   await deleteDeadline({
     caseDeadlineId,
   });
@@ -58,30 +60,35 @@ export const deleteCaseDeadline = async (
   });
 
   const { leadDocketNumber } = caseToUpdate;
-  if (!handlingConsolidatedCases && docketNumber === leadDocketNumber) {
-    const CONSOLIDATED_CASE_DEADLINE =
-      await getCaseDeadlinesByConsolidatedCaseDeadlineId(
-        caseDeadlineId,
-        leadDocketNumber,
+
+  if (!leadDocketNumber)
+    return new Case(result, { authorizedUser }).validate().toRawObject();
+
+  if (
+    !HANDLED_CASE_DEADLINE ||
+    HANDLED_CASE_DEADLINE?.consolidatedCaseDeadlineId
+  )
+    return new Case(result, { authorizedUser }).validate().toRawObject();
+
+  const CONSOLIDATED_CASE_DEADLINE =
+    await getCaseDeadlinesByConsolidatedCaseDeadlineId(caseDeadlineId);
+
+  const DELETE_DEADLINE_TO_CONSOLIDATED_CASES =
+    CONSOLIDATED_CASE_DEADLINE.filter(
+      ({ docketNumber: ccDocketNumber }) => ccDocketNumber !== docketNumber,
+    ).map(({ docketNumber: ccDocketNumber, caseDeadlineId }) => {
+      return deleteCaseDeadline(
+        _applicationContext,
+        {
+          caseDeadlineId,
+          docketNumber: ccDocketNumber,
+        },
+        authorizedUser,
       );
+    });
 
-    const DELETE_DEADLINE_TO_CONSOLIDATED_CASES =
-      CONSOLIDATED_CASE_DEADLINE.filter(
-        ({ docketNumber: ccDocketNumber }) => ccDocketNumber !== docketNumber,
-      ).map(({ docketNumber: ccDocketNumber, caseDeadlineId }) => {
-        return deleteCaseDeadline(
-          _applicationContext,
-          {
-            caseDeadlineId,
-            docketNumber: ccDocketNumber,
-            handlingConsolidatedCases: true,
-          },
-          authorizedUser,
-        );
-      });
+  await Promise.all(DELETE_DEADLINE_TO_CONSOLIDATED_CASES);
 
-    await Promise.all(DELETE_DEADLINE_TO_CONSOLIDATED_CASES);
-  }
   return new Case(result, { authorizedUser }).validate().toRawObject();
 };
 
@@ -110,10 +117,7 @@ export async function getDeleteCaseDeadlineInteractorLockInfo(
   }
 
   const CONSOLIDATED_CASE_DEADLINE =
-    await getCaseDeadlinesByConsolidatedCaseDeadlineId(
-      caseDeadlineId,
-      leadDocketNumber,
-    );
+    await getCaseDeadlinesByConsolidatedCaseDeadlineId(caseDeadlineId);
 
   CONSOLIDATED_CASE_DEADLINE.forEach(({ docketNumber: cdlDocketNumber }) => {
     IDENTIFIERS.push(`case|${cdlDocketNumber}`);
