@@ -2,7 +2,7 @@ import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   DOCKET_SECTION,
   PETITIONS_SECTION,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { MOCK_USERS } from '../../../../../shared/src/test/mockUsers';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
@@ -13,8 +13,9 @@ import {
 import {
   calculateDate,
   createISODateAtStartOfDayEST,
-} from '../../../../../shared/src/business/utilities/DateHandler';
+} from '@shared/business/utilities/DateHandler';
 import { getDocumentQCServedForSection as getDocumentQCServedForSectionMock } from '@web-api/persistence/postgres/workitems/getDocumentQCServedForSection';
+import { getFeatureFlagValues as getFeatureFlagValuesMock } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 import {
   mockDocketClerkUser,
   mockPetitionerUser,
@@ -24,6 +25,9 @@ import {
 describe('getDocumentQCServedForSectionInteractor', () => {
   const getDocumentQCServedForSection =
     getDocumentQCServedForSectionMock as jest.Mock;
+
+  const getFeatureFlagValues = getFeatureFlagValuesMock as jest.Mock;
+
   describe('interactor', () => {
     beforeEach(() => {
       getDocumentQCServedForSection.mockReturnValue([
@@ -161,9 +165,9 @@ describe('getDocumentQCServedForSectionInteractor', () => {
 
     beforeEach(() => {
       mockDaysToRetrieve = 5;
-      applicationContext
-        .getPersistenceGateway()
-        .getConfigurationItemValue.mockImplementation(() => mockDaysToRetrieve);
+      getFeatureFlagValues.mockImplementation(() => [
+        { value: { current: mockDaysToRetrieve } },
+      ]);
     });
 
     it('should get a date that is five days ago', async () => {

@@ -9,21 +9,21 @@ describe('getPetitionDocketEntry', () => {
       authorizedUser: mockDocketClerkUser,
     });
     const result = myCase.getPetitionDocketEntry();
-    expect(result.documentType).toEqual(
+    expect(result?.documentType).toEqual(
       INITIAL_DOCUMENT_TYPES.petition.documentType,
     );
   });
 
   it('should get the petition docket entry from a raw case', () => {
     const result = getPetitionDocketEntry(MOCK_CASE);
-    expect(result.documentType).toEqual(
+    expect(result?.documentType).toEqual(
       INITIAL_DOCUMENT_TYPES.petition.documentType,
     );
   });
 
   it('should not throw an error when raw case does not have docketEntries', () => {
     expect(() =>
-      getPetitionDocketEntry({ ...MOCK_CASE, docketEntries: undefined }),
+      getPetitionDocketEntry({ ...MOCK_CASE, docketEntries: [] }),
     ).not.toThrow();
   });
 });

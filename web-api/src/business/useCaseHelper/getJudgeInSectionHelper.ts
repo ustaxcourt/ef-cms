@@ -1,3 +1,4 @@
+import { getUsersInSections } from '@web-api/persistence/postgres/users/getUsersInSections';
 import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { RawUser, User } from '../../../../shared/src/business/entities/User';
 
@@ -10,16 +11,12 @@ import { RawUser, User } from '../../../../shared/src/business/entities/User';
  * @returns {User} the judge user for the given chambers user
  */
 
-export const getJudgeInSectionHelper = async (
-  applicationContext,
-  { section },
-): Promise<RawUser> => {
-  const rawUsers = await applicationContext
-    .getPersistenceGateway()
-    .getUsersInSection({
-      applicationContext,
-      section,
-    });
+export const getJudgeInSectionHelper = async ({
+  section,
+}): Promise<RawUser> => {
+  const rawUsers = await getUsersInSections({
+    sections: [section],
+  });
 
   const sectionUsers = User.validateRawCollection(rawUsers);
 

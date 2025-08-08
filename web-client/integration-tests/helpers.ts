@@ -157,16 +157,6 @@ export const getConnection = async connectionId => {
   );
 };
 
-export const getUserRecordById = (userId: string) => {
-  return client.get({
-    Key: {
-      pk: `user|${userId}`,
-      sk: `user|${userId}`,
-    },
-    applicationContext,
-  });
-};
-
 export const setOpinionSearchEnabled = (isEnabled, keyPrefix) => {
   return client.put({
     Item: {
@@ -174,45 +164,6 @@ export const setOpinionSearchEnabled = (isEnabled, keyPrefix) => {
       pk: `${keyPrefix}-opinion-search-enabled`,
       sk: `${keyPrefix}-opinion-search-enabled`,
     },
-    applicationContext,
-  });
-};
-
-export const setTerminalUserIps = (ips: string[]) => {
-  return client.put({
-    Item: {
-      ips,
-      pk: 'allowed-terminal-ips',
-      sk: 'allowed-terminal-ips',
-    },
-    applicationContext,
-  });
-};
-
-export const setChiefJudgeNameFlagValue = newJudgeName => {
-  return client.put({
-    Item: {
-      current: newJudgeName,
-      pk: 'chief-judge-name',
-      sk: 'chief-judge-name',
-    },
-    applicationContext,
-  });
-};
-
-export const setJudgeTitle = (judgeUserId, newJudgeTitle) => {
-  return client.update({
-    ExpressionAttributeNames: {
-      '#judgeTitle': 'judgeTitle',
-    },
-    ExpressionAttributeValues: {
-      ':judgeTitle': newJudgeTitle,
-    },
-    Key: {
-      pk: `user|${judgeUserId}`,
-      sk: `user|${judgeUserId}`,
-    },
-    UpdateExpression: 'SET #judgeTitle = :judgeTitle',
     applicationContext,
   });
 };
@@ -989,9 +940,13 @@ export const getPetitionDocumentForCase = caseDetail => {
   return caseDetail.docketEntries.find(doc => doc.documentType === 'Petition');
 };
 
-export const getPetitionWorkItemForCase = caseDetail => {
+export const getPetitionWorkItemInfoForCase = caseDetail => {
   const petitionDocument = getPetitionDocumentForCase(caseDetail);
-  return petitionDocument.workItem;
+  return {
+    workItemId: petitionDocument.workItemId,
+    qcViewed: petitionDocument.qcViewed,
+    qcComplete: petitionDocument.qcComplete,
+  };
 };
 
 export const embedWithLegalIpsumText = (phrase = '') => {

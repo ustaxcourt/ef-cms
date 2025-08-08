@@ -3,9 +3,6 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { formatSealedAddresses } from '@shared/business/utilities/caseFilter';
 import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
-import { settlePromises } from '@web-api/utilities/settlePromises';
-import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
-import { WorkItem } from '@shared/business/entities/WorkItem';
 
 export const getCaseByDocketNumber = async ({
   docketNumber,
@@ -16,12 +13,9 @@ export const getCaseByDocketNumber = async ({
   includeConsolidatedCases?: boolean;
   user?: UnknownAuthUser;
 }): Promise<RawCase> => {
-  const [caseData, workItems] = await settlePromises([
-    getCasesByDocketNumbers({
-      docketNumbers: [docketNumber],
-    }),
-    getWorkItemsByDocketNumber({ docketNumber }),
-  ]);
+  const caseData = await getCasesByDocketNumbers({
+    docketNumbers: [docketNumber],
+  });
 
   const theCase = caseData[0];
 
@@ -43,8 +37,6 @@ export const getCaseByDocketNumber = async ({
     }
   }
 
-  attachWorkItemsToDocketEntries({ theCase, workItems });
-
   return {
     ...theCase,
     consolidatedCases: consolidatedCases.map(
@@ -52,22 +44,3 @@ export const getCaseByDocketNumber = async ({
     ),
   };
 };
-
-// This function is super stupid. We need it because certain spots
-// in the code expect fields from work items on the docket entry.
-function attachWorkItemsToDocketEntries({
-  theCase,
-  workItems,
-}: {
-  theCase: Omit<RawCase, 'consolidatedCases'>;
-  workItems: WorkItem[];
-}) {
-  for (const docketEntry of theCase.docketEntries) {
-    for (const workItem of workItems) {
-      if (workItem.docketEntry.docketEntryId === docketEntry.docketEntryId) {
-        docketEntry.workItem = workItem;
-        break;
-      }
-    }
-  }
-}
