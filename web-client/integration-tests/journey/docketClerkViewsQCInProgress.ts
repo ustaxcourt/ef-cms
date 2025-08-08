@@ -27,8 +27,7 @@ export const docketClerkViewsQCInProgress = (cerebralTest, shouldExist) => {
 
     const inProgressWorkItem = workQueueFormatted.find(
       workItem =>
-        workItem.docketEntry.docketEntryId ===
-        cerebralTest.docketRecordEntry.docketEntryId,
+        workItem.docketEntryId === cerebralTest.docketRecordEntry.docketEntryId,
     );
     if (shouldExist) {
       expect(inProgressWorkItem).toBeDefined();

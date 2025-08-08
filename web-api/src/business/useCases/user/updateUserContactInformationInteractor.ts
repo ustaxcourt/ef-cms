@@ -2,9 +2,8 @@ import {
   AuthUser,
   UnknownAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
-import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { generateChangeOfAddress } from './generateChangeOfAddress';
 import { isArray, isEqual } from 'lodash';
 import {
@@ -12,11 +11,16 @@ import {
   ROLE_PERMISSIONS,
 } from '@shared/authorization/authorizationClientService';
 import { Practitioner } from '@shared/business/entities/Practitioner';
-import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import {
   asyncHandleLockError,
   withLocking,
 } from '@web-api/persistence/postgres/utils/mutex';
+import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
+import { ROLES } from '@shared/business/entities/EntityConstants';
+import { RawUser } from '@shared/business/entities/User';
+import { getUserByIdOnceAllUpdatesComplete } from '@web-api/persistence/postgres/users/getUserByIdOnceAllUpdatesComplete';
+import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
 
 /**
  * updateUserContactInformationHelper
@@ -42,68 +46,66 @@ const updateUserContactInformationHelper = async (
   },
   authorizedUser: AuthUser,
 ) => {
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId });
+  const oldUser = await getUserById({ userId });
+
+  if (!oldUser) {
+    throw new NotFoundError(`User not found with user id ${userId}`);
+  }
 
   const isPractitioner = u => {
-    return (
-      u.entityName === PrivatePractitioner.ENTITY_NAME ||
-      u.entityName === IrsPractitioner.ENTITY_NAME ||
-      u.entityName === Practitioner.ENTITY_NAME
-    );
+    return [
+      ROLES.privatePractitioner,
+      ROLES.irsPractitioner,
+      ROLES.inactivePractitioner,
+    ].includes(u.role);
   };
 
   const isPractitionerUnchanged = u =>
     isPractitioner(u) &&
-    isEqual(user.contact, contactInfo) &&
-    isEqual(user.firmName, firmName);
+    isEqual(oldUser.contact, contactInfo) &&
+    isEqual(oldUser.firmName, firmName);
 
   const isUserUnchanged = u =>
-    !isPractitioner(u) && isEqual(user.contact, contactInfo);
+    !isPractitioner(u) && isEqual(oldUser.contact, contactInfo);
 
-  if (isPractitionerUnchanged(user) || isUserUnchanged(user)) {
+  if (isPractitionerUnchanged(oldUser) || isUserUnchanged(oldUser)) {
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: { action: 'user_contact_initial_update_complete' },
-      userId: user.userId,
+      userId: oldUser.userId,
       clientConnectionId,
     });
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
-      message: { action: 'user_contact_full_update_complete', user },
-      userId: user.userId,
+      message: {
+        action: 'user_contact_full_update_complete',
+        user: oldUser as RawUser,
+      },
+      userId: oldUser.userId,
       clientConnectionId,
     });
     return;
   }
 
-  let userEntity;
-  if (
-    user.entityName === PrivatePractitioner.ENTITY_NAME ||
-    user.entityName === IrsPractitioner.ENTITY_NAME ||
-    user.entityName === Practitioner.ENTITY_NAME
-  ) {
-    userEntity = new Practitioner({
-      ...user,
+  let updatedUserEntity;
+  if (isPractitioner(oldUser)) {
+    updatedUserEntity = new Practitioner({
+      ...oldUser,
       contact: { ...contactInfo },
       isUpdatingInformation: true,
     });
 
-    userEntity.firmName = firmName;
+    updatedUserEntity.firmName = firmName;
   } else {
-    throw new Error(`Unrecognized entityType ${user.entityName}`);
+    throw new Error(`Unrecognized role ${oldUser.role}`);
   }
 
-  await applicationContext.getPersistenceGateway().updateUser({
-    applicationContext,
-    user: userEntity.validate().toRawObject(),
-  });
+  await upsertUsers([updatedUserEntity.validate().toRawObject()]);
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
     message: { action: 'user_contact_initial_update_complete' },
-    userId: user.userId,
+    userId: oldUser.userId,
     clientConnectionId,
   });
 
@@ -111,25 +113,22 @@ const updateUserContactInformationHelper = async (
     applicationContext,
     authorizedUser,
     contactInfo,
-    firmName,
-    user: userEntity.validate().toRawObject(),
+    user: updatedUserEntity.validate().toRawObject(),
+    oldUser: oldUser as RawUser,
     websocketMessagePrefix: 'user',
   });
 
   if (isArray(results) && !results.length) {
-    userEntity.setIsUpdatingInformation(false);
-    await applicationContext.getPersistenceGateway().updateUser({
-      applicationContext,
-      user: userEntity.validate().toRawObject(),
-    });
+    updatedUserEntity.setIsUpdatingInformation(false);
+    await upsertUsers([updatedUserEntity.validate().toRawObject()]);
 
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: {
         action: 'user_contact_full_update_complete',
-        user: userEntity.validate().toRawObject(),
+        user: updatedUserEntity.validate().toRawObject(),
       },
-      userId: user.userId,
+      userId: oldUser.userId,
       clientConnectionId,
     });
   }
@@ -186,19 +185,15 @@ export const updateUserContactInformation = async (
 };
 
 export const determineEntitiesToLock = async (
-  applicationContext: ServerApplicationContext,
+  _: ServerApplicationContext,
   { userId }: { userId: string },
 ) => {
-  await applicationContext
-    .getPersistenceGateway()
-    .getUserByIdOnceAllUpdatesComplete({ applicationContext, userId });
+  await getUserByIdOnceAllUpdatesComplete({ userId });
 
-  const cases = await applicationContext
-    .getPersistenceGateway()
-    .getCasesForUser({ applicationContext, userId });
+  const cases = await getDocketNumbersByUser({ userId });
 
   return {
-    identifiers: cases?.map(item => `case|${item.docketNumber}`),
+    identifiers: cases?.map(docketNumber => `case|${docketNumber}`),
     ttl: 900,
   };
 };
