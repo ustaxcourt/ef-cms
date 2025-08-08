@@ -3,6 +3,7 @@ import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
+import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 jest.mock(
   '@web-api/business/useCases/trialSessions/trialSessionCalendarInteractorUtils',
 );
@@ -27,6 +28,13 @@ import { getEligibleCasesForTrialSession as getEligibleCasesForTrialSessionMock 
 import { upsertCases as upsertCasesMock } from '@web-api/persistence/postgres/cases/upsertCases';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
+import {
+  getCalendaredCasesForTrialSession as getCalendaredCasesForTrialSessionMock,
+  RawCaseAndCaseOrder,
+} from '@web-api/persistence/postgres/trialSessions/getCalendaredCasesForTrialSession';
+import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { updateTrialSession as updateTrialSessionMock } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
+import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 
 describe('setTrialSessionCalendarInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
@@ -36,7 +44,12 @@ describe('setTrialSessionCalendarInteractor', () => {
   const upsertCases = jest.mocked(upsertCasesMock);
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
   const tryGetLocks = jest.mocked(tryGetLocksMock);
-  const MOCK_TRIAL = {
+  const getCalendaredCasesForTrialSession = jest.mocked(
+    getCalendaredCasesForTrialSessionMock,
+  );
+  const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
+  const updateTrialSession = jest.mocked(updateTrialSessionMock);
+  const MOCK_TRIAL: RawTrialSession = {
     chambersPhoneNumber: '1111111',
     joinPhoneNumber: '0987654321',
     judge: {
@@ -52,6 +65,21 @@ describe('setTrialSessionCalendarInteractor', () => {
     term: 'Fall',
     termYear: '2025',
     trialLocation: 'Birmingham, Alabama',
+    trialSessionId: '',
+    isCalendared: false,
+    caseOrder: [
+      {
+        docketNumber: '102-19',
+        addedToSessionAt: '',
+        isManuallyAdded: true,
+        removedFromTrial: false,
+        isHearing: false,
+      },
+    ],
+    hasNottBeenServed: false,
+    sessionScope: 'Location-based',
+    sessionStatus: '',
+    paperServicePdfs: [],
   };
 
   beforeEach(() => {
@@ -59,19 +87,13 @@ describe('setTrialSessionCalendarInteractor', () => {
   });
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockResolvedValue(MOCK_TRIAL);
+    getTrialSessionById.mockResolvedValue(MOCK_TRIAL);
     updateCaseAndAssociations.mockResolvedValue({} as RawCase);
-    applicationContext
-      .getPersistenceGateway()
-      .updateTrialSession.mockImplementation(v => v.trialSessionToUpdate);
+    // updateTrialSession.mockResolvedValue(v => v.trialSessionToUpdate);
   });
 
   it('throws an exception when there is a permissions issue', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getEligibleCasesForTrialSession.mockResolvedValue([MOCK_CASE]);
+    getEligibleCasesForTrialSession.mockResolvedValue([MOCK_CASE]);
 
     await setTrialSessionCalendarInteractor(
       applicationContext,
@@ -89,17 +111,15 @@ describe('setTrialSessionCalendarInteractor', () => {
   });
 
   it('should set a trial session to "calendared" and calendar all cases that have been QCed', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCalendaredCasesForTrialSession.mockResolvedValue([
-        {
-          ...MOCK_CASE,
-          docketNumber: '102-19',
-          qcCompleteForTrial: {
-            '6805d1ab-18d0-43ec-bafb-654e83405416': true,
-          },
+    getCalendaredCasesForTrialSession.mockResolvedValue([
+      {
+        ...MOCK_CASE,
+        docketNumber: '102-19',
+        qcCompleteForTrial: {
+          '6805d1ab-18d0-43ec-bafb-654e83405416': true,
         },
-      ]);
+      },
+    ] as unknown as RawCaseAndCaseOrder[]);
     getEligibleCasesForTrialSession.mockResolvedValue([
       {
         ...MOCK_CASE,
@@ -123,8 +143,7 @@ describe('setTrialSessionCalendarInteractor', () => {
         .calls[0][0].message.action,
     ).toEqual('set_trial_session_calendar_complete');
     expect(
-      applicationContext.getPersistenceGateway().updateTrialSession.mock
-        .calls[0][0].trialSessionToUpdate.isCalendared,
+      updateTrialSession.mock.calls[0][0].trialSessionToUpdate.isCalendared,
     ).toEqual(true);
     expect(upsertCases).toHaveBeenCalledWith(
       expect.arrayContaining([
@@ -141,21 +160,19 @@ describe('setTrialSessionCalendarInteractor', () => {
   });
 
   it('should set a trial session to "calendared" and remove cases from the trial session that have not been QCed', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCalendaredCasesForTrialSession.mockResolvedValue([
-        {
-          ...MOCK_CASE,
-          docketNumber: '102-19',
-          qcCompleteForTrial: {
-            '6805d1ab-18d0-43ec-bafb-654e83405416': false,
-          },
-          trialDate: '2020-08-28T01:49:58.121Z',
-          trialLocation: 'Birmingham, Alabama',
-          trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-          trialTime: '11:00',
+    getCalendaredCasesForTrialSession.mockResolvedValue([
+      {
+        ...MOCK_CASE,
+        docketNumber: '102-19',
+        qcCompleteForTrial: {
+          '6805d1ab-18d0-43ec-bafb-654e83405416': false,
         },
-      ]);
+        trialDate: '2020-08-28T01:49:58.121Z',
+        trialLocation: 'Birmingham, Alabama',
+        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        trialTime: '11:00',
+      },
+    ] as unknown as RawCaseAndCaseOrder[]);
     getEligibleCasesForTrialSession.mockResolvedValue([
       {
         ...MOCK_CASE,
@@ -182,15 +199,12 @@ describe('setTrialSessionCalendarInteractor', () => {
       trialTime: undefined,
     });
     expect(
-      applicationContext.getPersistenceGateway().updateTrialSession.mock
-        .calls[0][0].trialSessionToUpdate.isCalendared,
+      updateTrialSession.mock.calls[0][0].trialSessionToUpdate.isCalendared,
     ).toEqual(true);
   });
 
   it('should call getEligibleCasesForTrialSession with correct limit when no cases have been manually added and QCed', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCalendaredCasesForTrialSession.mockReturnValue([]);
+    getCalendaredCasesForTrialSession.mockResolvedValue([]);
 
     await setTrialSessionCalendarInteractor(
       applicationContext,
@@ -207,17 +221,15 @@ describe('setTrialSessionCalendarInteractor', () => {
   });
 
   it('should call getEligibleCasesForTrialSession with correct limit when 1 case has been manually added and QCed', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCalendaredCasesForTrialSession.mockReturnValue([
-        {
-          ...MOCK_CASE,
-          docketNumber: '102-19',
-          qcCompleteForTrial: {
-            '6805d1ab-18d0-43ec-bafb-654e83405416': true,
-          },
+    getCalendaredCasesForTrialSession.mockResolvedValue([
+      {
+        ...MOCK_CASE,
+        docketNumber: '102-19',
+        qcCompleteForTrial: {
+          '6805d1ab-18d0-43ec-bafb-654e83405416': true,
         },
-      ]);
+      },
+    ] as unknown as RawCaseAndCaseOrder[]);
 
     await setTrialSessionCalendarInteractor(
       applicationContext,
@@ -255,9 +267,7 @@ describe('setTrialSessionCalendarInteractor', () => {
   });
 
   it('should acquire a lock on the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCalendaredCasesForTrialSession.mockResolvedValueOnce([]);
+    getCalendaredCasesForTrialSession.mockResolvedValueOnce([]);
     getEligibleCasesForTrialSession.mockResolvedValueOnce([
       {
         ...MOCK_CASE,
@@ -288,9 +298,7 @@ describe('setTrialSessionCalendarInteractor', () => {
     const regularDocketNumber1 = '103-20';
     const regularDocketNumber2 = '104-20';
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCalendaredCasesForTrialSession.mockReturnValue([]);
+    getCalendaredCasesForTrialSession.mockResolvedValue([]);
 
     getEligibleCasesForTrialSession.mockResolvedValue([
       {

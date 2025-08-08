@@ -3,15 +3,20 @@ import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/get
 import { getTrialSessionById } from './getTrialSessionById';
 import { NotFoundError } from '@web-api/errors/errors';
 
+export type RawCaseAndCaseOrder = Omit<RawCase, 'consolidatedCases'> &
+  TCaseOrder;
+
 export const getCalendaredCasesForTrialSession = async ({
   trialSessionId,
 }: {
   trialSessionId: string;
-}): Promise<(Omit<RawCase, 'consolidatedCases'> & TCaseOrder)[]> => {
-  const trialSession = await getTrialSessionById({trialSessionId});
+}): Promise<RawCaseAndCaseOrder[]> => {
+  const trialSession = await getTrialSessionById({ trialSessionId });
 
   if (!trialSession) {
-    throw new NotFoundError(`Could not find trial session with id ${trialSessionId}`)
+    throw new NotFoundError(
+      `Could not find trial session with id ${trialSessionId}`,
+    );
   }
 
   const { caseOrder } = trialSession;
@@ -37,4 +42,3 @@ export const getCalendaredCasesForTrialSession = async ({
 
   return casesAugmented;
 };
-

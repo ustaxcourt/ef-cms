@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 import { MOCK_CASE, MOCK_CASE_WITH_TRIAL_SESSION } from '@shared/test/mockCase';
 import {
   SESSION_TYPES,
@@ -11,10 +12,15 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { saveCalendarNoteInteractor } from './saveCalendarNoteInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-
-const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+import { createOrUpdateTrialSessionCases as createOrUpdateTrialSessionCasesMock } from '@web-api/persistence/postgres/trialSessions/createOrUpdateTrialSessionCases';
+import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 
 describe('saveCalendarNotes', () => {
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const createOrUpdateTrialSessionCases = jest.mocked(
+    createOrUpdateTrialSessionCasesMock,
+  );
+  const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
   let mockTrialSession;
   let mockCase;
 
@@ -35,9 +41,7 @@ describe('saveCalendarNotes', () => {
 
     mockCase = { ...MOCK_CASE };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockImplementation(() => mockTrialSession);
+    getTrialSessionById.mockImplementation(() => mockTrialSession);
     getCaseByDocketNumber.mockImplementation(() => mockCase);
   });
 
@@ -77,13 +81,8 @@ describe('saveCalendarNotes', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getTrialSessionById,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().getTrialSessionById.mock
-        .calls[0][0],
-    ).toMatchObject({
+    expect(getTrialSessionById).toHaveBeenCalled();
+    expect(getTrialSessionById.mock.calls[0][0]).toMatchObject({
       trialSessionId: MOCK_CASE_WITH_TRIAL_SESSION.trialSessionId,
     });
   });
@@ -113,21 +112,22 @@ describe('saveCalendarNotes', () => {
     );
 
     expect(result.trialSessionId).toEqual(mockTrialSession.trialSessionId);
+    expect(createOrUpdateTrialSessionCases).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().updateTrialSession,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateTrialSession.mock
-        .calls[0][0].trialSessionToUpdate.caseOrder,
+      createOrUpdateTrialSessionCases.mock.calls[0][0].trialSessionCases,
     ).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          calendarNotes: 'this is a calendarNote',
-          docketNumber: mockCase.docketNumber,
+          caseOrder: expect.objectContaining({
+            calendarNotes: 'this is a calendarNote',
+            docketNumber: mockCase.docketNumber,
+          }),
         }),
         expect.objectContaining({
-          calendarNotes: 'this is also not a calendar note',
-          docketNumber: '123-21',
+          caseOrder: expect.objectContaining({
+            calendarNotes: 'this is also not a calendar note',
+            docketNumber: '123-21',
+          }),
         }),
       ]),
     );
@@ -145,9 +145,7 @@ describe('saveCalendarNotes', () => {
     );
 
     expect(getCaseByDocketNumber).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCaseHearing,
-    ).not.toHaveBeenCalled();
+    expect(createOrUpdateTrialSessionCases).not.toHaveBeenCalled();
   });
 
   it('updates the case hearing record if the given trial session is a hearing on the case', async () => {
@@ -183,9 +181,7 @@ describe('saveCalendarNotes', () => {
     );
 
     expect(getCaseByDocketNumber).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCaseHearing,
-    ).toHaveBeenCalled();
+    expect(createOrUpdateTrialSessionCases).toHaveBeenCalled();
   });
 
   it('does not update the case hearing record if that hearing is not on the case', async () => {
@@ -221,8 +217,6 @@ describe('saveCalendarNotes', () => {
     );
 
     expect(getCaseByDocketNumber).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCaseHearing,
-    ).not.toHaveBeenCalled();
+    expect(createOrUpdateTrialSessionCases).not.toHaveBeenCalled();
   });
 });

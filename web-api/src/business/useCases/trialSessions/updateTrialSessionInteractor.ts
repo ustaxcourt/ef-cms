@@ -176,6 +176,7 @@ export const updateTrialSession = async (
   }
 
   if (trialSession.swingSession && trialSession.swingSessionId) {
+    
     await associateSwingTrialSessions(
       {
         swingSessionId: trialSession.swingSessionId,

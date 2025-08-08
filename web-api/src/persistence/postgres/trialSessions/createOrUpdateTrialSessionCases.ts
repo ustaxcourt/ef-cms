@@ -16,8 +16,9 @@ export const createOrUpdateTrialSessionCases = async ({
 }): Promise<void> => {
   if (!trialSessionCases.length) return;
 
+  //If we still want a separate update only function, we could use merge and only update exiting records
   await settlePromises([
-    pgInsertInto({
+    pgInsertInto({ 
       table: 'dwTrialSessionCase',
       values: trialSessionCases.map(TSC =>
         toKyselyNewTrialSessionCase({

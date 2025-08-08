@@ -510,7 +510,7 @@ export class TrialSession extends JoiValidationEntity {
     );
     let caseOrderObject: TCaseOrder | undefined = undefined;
     if (index >= 0) {
-      caseOrderObject = this.caseOrder!.splice(index, 1)[0];
+      caseOrderObject = this.caseOrder!.splice(index, 1)[0]; 
     }
     return caseOrderObject;
   }

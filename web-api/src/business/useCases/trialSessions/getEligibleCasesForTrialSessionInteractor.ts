@@ -5,10 +5,7 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import {
-  TCaseOrder,
-  TrialSession,
-} from '@shared/business/entities/trialSessions/TrialSession';
+import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { TRIAL_SESSION_ELIGIBLE_CASES_BUFFER } from '@shared/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
@@ -33,8 +30,8 @@ export const getEligibleCasesForTrialSessionInteractor = async (
   }
 
   const trialSession = await getTrialSessionById({
-      trialSessionId,
-    });
+    trialSessionId,
+  });
 
   if (!trialSession) {
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
@@ -42,11 +39,11 @@ export const getEligibleCasesForTrialSessionInteractor = async (
 
   // Some manually added cases are considered calendared even when the
   // trial session itself is not considered calendared (see issue #3254).
-  let calendaredCases: (Omit<RawCase, 'consolidatedCases'> & TCaseOrder)[] = [];
+  let calendaredCases: RawCaseAndCaseOrder[] = [];
   if (trialSession.isCalendared === false && trialSession.caseOrder) {
     calendaredCases = await getCalendaredCasesForTrialSession({
-        trialSessionId,
-      });
+      trialSessionId,
+    });
   }
 
   const trialSessionEntity = new TrialSession(trialSession);
