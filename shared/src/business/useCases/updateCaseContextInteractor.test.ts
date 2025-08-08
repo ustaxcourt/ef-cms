@@ -22,7 +22,7 @@ import { updateCaseContextInteractor } from './updateCaseContextInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { deleteCaseDeadline as deleteCaseDeadlineMock } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
 import { upsertCaseDeadlines as upsertCaseDeadlinesMock } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
-import { getCaseDeadlinesByConsolidatedCaseDeadlineIds as getCaseDeadlinesByConsolidatedCaseDeadlineIdMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds';
+import { getCaseDeadlinesByConsolidatedCaseDeadlineIds as getCaseDeadlinesByConsolidatedCaseDeadlineIdsMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds';
 import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
@@ -33,8 +33,8 @@ describe('updateCaseContextInteractor', () => {
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
   const deleteCaseDeadline = jest.mocked(deleteCaseDeadlineMock);
   const upsertCaseDeadlines = jest.mocked(upsertCaseDeadlinesMock);
-  const getCaseDeadlinesByConsolidatedCaseDeadlineId = jest.mocked(
-    getCaseDeadlinesByConsolidatedCaseDeadlineIdMock,
+  const getCaseDeadlinesByConsolidatedCaseDeadlineIds = jest.mocked(
+    getCaseDeadlinesByConsolidatedCaseDeadlineIdsMock,
   );
   const getCaseDeadlinesByDocketNumber = jest.mocked(
     getCaseDeadlinesByDocketNumberMock,
@@ -43,7 +43,7 @@ describe('updateCaseContextInteractor', () => {
   beforeEach(() => {
     getCaseByDocketNumber.mockReturnValue(Promise.resolve(MOCK_CASE));
     upsertCaseDeadlines.mockImplementation(deadlines => deadlines as any);
-    getCaseDeadlinesByConsolidatedCaseDeadlineId.mockResolvedValue([]);
+    getCaseDeadlinesByConsolidatedCaseDeadlineIds.mockResolvedValue([]);
   });
 
   it('should throw an error if the user is unauthorized to update a case', async () => {
@@ -193,7 +193,7 @@ describe('updateCaseContextInteractor', () => {
     ]);
 
     const CHILD_CASE_DEADLINE_ID = 'CHILD_CASE_DEADLINE_ID';
-    getCaseDeadlinesByConsolidatedCaseDeadlineId.mockResolvedValue([
+    getCaseDeadlinesByConsolidatedCaseDeadlineIds.mockResolvedValue([
       {
         caseDeadlineId: CHILD_CASE_DEADLINE_ID,
         consolidatedCaseDeadlineId: 'TEST_CONSOLIDATED_CASE_DEADLINE_ID',

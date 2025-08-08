@@ -2,7 +2,7 @@ import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 jest.mock(
-  '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId',
+  '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds',
 );
 jest.mock('@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline');
 jest.mock('@web-api/persistence/postgres/cases/getCaseByDocketNumber');
@@ -12,7 +12,7 @@ jest.mock(
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getUniqueId } from '@shared/sharedAppContext';
 import { deleteCaseDeadline } from '@web-api/business/useCases/caseDeadline/deleteCaseDeadlineInteractor';
-import { getCaseDeadlinesByConsolidatedCaseDeadlineIds as getCaseDeadlinesByConsolidatedCaseDeadlineIdMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds';
+import { getCaseDeadlinesByConsolidatedCaseDeadlineIds as getCaseDeadlinesByConsolidatedCaseDeadlineIdsMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { deleteCaseDeadline as deleteDeadlineMock } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
@@ -20,8 +20,8 @@ import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/per
 import { updateCaseAutomaticBlock as updateCaseAutomaticBlockMock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
 import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 
-const getCaseDeadlinesByConsolidatedCaseDeadlineId = jest.mocked(
-  getCaseDeadlinesByConsolidatedCaseDeadlineIdMock,
+const getCaseDeadlinesByConsolidatedCaseDeadlineIds = jest.mocked(
+  getCaseDeadlinesByConsolidatedCaseDeadlineIdsMock,
 );
 
 const deleteDeadline = deleteDeadlineMock as jest.Mock;
@@ -47,7 +47,7 @@ describe('deleteCaseDeadlineInteractor - Consolidated Cases', () => {
       getUniqueId(),
     ];
 
-    getCaseDeadlinesByConsolidatedCaseDeadlineId.mockResolvedValue(
+    getCaseDeadlinesByConsolidatedCaseDeadlineIds.mockResolvedValue(
       CONSOLIDATED_CASE_DEADLINE_IDS.map((id, index) => {
         return {
           caseDeadlineId: id,
@@ -85,7 +85,7 @@ describe('deleteCaseDeadlineInteractor - Consolidated Cases', () => {
       getUniqueId(),
     ];
 
-    getCaseDeadlinesByConsolidatedCaseDeadlineId.mockResolvedValue(
+    getCaseDeadlinesByConsolidatedCaseDeadlineIds.mockResolvedValue(
       CONSOLIDATED_CASE_DEADLINE_IDS.map((id, index) => {
         return {
           caseDeadlineId: id,
@@ -132,7 +132,7 @@ describe('deleteCaseDeadlineInteractor - Consolidated Cases', () => {
       getUniqueId(),
     ];
 
-    getCaseDeadlinesByConsolidatedCaseDeadlineId.mockResolvedValue(
+    getCaseDeadlinesByConsolidatedCaseDeadlineIds.mockResolvedValue(
       CONSOLIDATED_CASE_DEADLINE_IDS.map((id, index) => {
         return {
           caseDeadlineId: id,

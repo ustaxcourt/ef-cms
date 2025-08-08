@@ -1,5 +1,5 @@
 jest.mock(
-  '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId',
+  '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds',
 );
 jest.mock('@web-api/persistence/postgres/cases/getCasesByDocketNumbers');
 import { getConsolidatedCaseDeadlinesInteractor } from '@shared/business/useCases/getConsolidatedCaseDeadlinesInteractor';
@@ -8,11 +8,11 @@ import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
-import { getCaseDeadlinesByConsolidatedCaseDeadlineIds as getCaseDeadlinesByConsolidatedCaseDeadlineIdMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds';
+import { getCaseDeadlinesByConsolidatedCaseDeadlineIds as getCaseDeadlinesByConsolidatedCaseDeadlineIdsMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
-const getCaseDeadlinesByConsolidatedCaseDeadlineId =
-  getCaseDeadlinesByConsolidatedCaseDeadlineIdMock as jest.Mock;
+const getCaseDeadlinesByConsolidatedCaseDeadlineIds =
+  getCaseDeadlinesByConsolidatedCaseDeadlineIdsMock as jest.Mock;
 
 const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
 
@@ -31,7 +31,7 @@ describe('getConsolidatedCaseDeadlinesInteractor', () => {
   });
 
   it('should return no items if there are new consolidated case deadlines', async () => {
-    getCaseDeadlinesByConsolidatedCaseDeadlineId.mockResolvedValue([]);
+    getCaseDeadlinesByConsolidatedCaseDeadlineIds.mockResolvedValue([]);
 
     const results = await getConsolidatedCaseDeadlinesInteractor(
       {
@@ -53,7 +53,7 @@ describe('getConsolidatedCaseDeadlinesInteractor', () => {
       '106-25',
     ];
 
-    getCaseDeadlinesByConsolidatedCaseDeadlineId.mockResolvedValue(
+    getCaseDeadlinesByConsolidatedCaseDeadlineIds.mockResolvedValue(
       TEST_DOCKET_NUMBER.map(dn => ({ docketNumber: dn })),
     );
 
