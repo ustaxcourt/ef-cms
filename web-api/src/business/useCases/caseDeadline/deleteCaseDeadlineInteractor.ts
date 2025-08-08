@@ -10,7 +10,7 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { deleteCaseDeadline as deleteDeadline } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { updateCaseAutomaticBlock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
-import { getCaseDeadlinesByConsolidatedCaseDeadlineId } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId';
+import { getCaseDeadlinesByConsolidatedCaseDeadlineIds } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
@@ -71,7 +71,7 @@ export const deleteCaseDeadline = async (
     return new Case(result, { authorizedUser }).validate().toRawObject();
 
   const CONSOLIDATED_CASE_DEADLINE =
-    await getCaseDeadlinesByConsolidatedCaseDeadlineId(caseDeadlineId);
+    await getCaseDeadlinesByConsolidatedCaseDeadlineIds([caseDeadlineId]);
 
   const DELETE_DEADLINE_TO_CONSOLIDATED_CASES =
     CONSOLIDATED_CASE_DEADLINE.filter(
@@ -117,7 +117,7 @@ export async function getDeleteCaseDeadlineInteractorLockInfo(
   }
 
   const CONSOLIDATED_CASE_DEADLINE =
-    await getCaseDeadlinesByConsolidatedCaseDeadlineId(caseDeadlineId);
+    await getCaseDeadlinesByConsolidatedCaseDeadlineIds([caseDeadlineId]);
 
   CONSOLIDATED_CASE_DEADLINE.forEach(({ docketNumber: cdlDocketNumber }) => {
     IDENTIFIERS.push(`case|${cdlDocketNumber}`);

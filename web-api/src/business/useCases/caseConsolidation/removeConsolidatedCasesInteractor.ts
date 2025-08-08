@@ -8,7 +8,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
-import { getCaseDeadlinesByConsolidatedCaseDeadlineId } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId';
+import { getCaseDeadlinesByConsolidatedCaseDeadlineIds } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds';
 import {
   CaseDeadline,
   RawCaseDeadline,
@@ -159,9 +159,8 @@ async function updateConsolidatedCaseDeadlineReferenceId(
     LEAD_DEADLINES.map(async leadCaseDeadline => {
       const { caseDeadlineId: oldLeadCaseDeadlineId } = leadCaseDeadline;
       const CHILD_DEADLINES =
-        await getCaseDeadlinesByConsolidatedCaseDeadlineId(
-          oldLeadCaseDeadlineId,
-          oldLeadDocketNumber,
+        await getCaseDeadlinesByConsolidatedCaseDeadlineIds(
+          [oldLeadCaseDeadlineId],
         );
 
       if (!CHILD_DEADLINES.length) return;

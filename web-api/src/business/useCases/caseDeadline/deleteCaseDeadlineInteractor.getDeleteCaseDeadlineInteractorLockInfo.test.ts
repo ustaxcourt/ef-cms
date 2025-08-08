@@ -8,7 +8,7 @@ jest.mock('@web-api/persistence/postgres/cases/getCaseByDocketNumber');
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getUniqueId } from '@shared/sharedAppContext';
 import { getDeleteCaseDeadlineInteractorLockInfo } from '@web-api/business/useCases/caseDeadline/deleteCaseDeadlineInteractor';
-import { getCaseDeadlinesByConsolidatedCaseDeadlineId as getCaseDeadlinesByConsolidatedCaseDeadlineIdMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId';
+import { getCaseDeadlinesByConsolidatedCaseDeadlineIds as getCaseDeadlinesByConsolidatedCaseDeadlineIdMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 const getCaseDeadlinesByConsolidatedCaseDeadlineId =

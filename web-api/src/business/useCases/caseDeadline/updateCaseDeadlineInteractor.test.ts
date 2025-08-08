@@ -7,7 +7,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
 import { updateCaseDeadlineInteractor } from './updateCaseDeadlineInteractor';
 import { upsertCaseDeadlines as upsertCaseDeadlinesMock } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
-import { getCaseDeadlinesByConsolidatedCaseDeadlineId as getCaseDeadlinesByConsolidatedCaseDeadlineIdMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId';
+import { getCaseDeadlinesByConsolidatedCaseDeadlineIds as getCaseDeadlinesByConsolidatedCaseDeadlineIdMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds';
 
 const upsertCaseDeadlines = upsertCaseDeadlinesMock as jest.Mock;
 const getCaseDeadlinesByConsolidatedCaseDeadlineId =

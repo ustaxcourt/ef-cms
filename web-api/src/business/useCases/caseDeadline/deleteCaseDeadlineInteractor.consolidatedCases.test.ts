@@ -12,7 +12,7 @@ jest.mock(
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getUniqueId } from '@shared/sharedAppContext';
 import { deleteCaseDeadline } from '@web-api/business/useCases/caseDeadline/deleteCaseDeadlineInteractor';
-import { getCaseDeadlinesByConsolidatedCaseDeadlineId as getCaseDeadlinesByConsolidatedCaseDeadlineIdMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId';
+import { getCaseDeadlinesByConsolidatedCaseDeadlineIds as getCaseDeadlinesByConsolidatedCaseDeadlineIdMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { deleteCaseDeadline as deleteDeadlineMock } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
