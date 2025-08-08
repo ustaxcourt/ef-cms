@@ -1,6 +1,6 @@
-import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { UnknownAuthUser } from '../../../../shared/src/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
-import { getRecentFilingsForUserInteractor } from '@shared/business/useCases/getRecentFilingsForUserInteractor';
+import { getRecentFilingsForUserInteractor } from '../../../../shared/src/business/useCases/getRecentFilingsForUserInteractor';
 
 /**
  * used for fetching recent filings for the last 7 days for a particular user
@@ -13,9 +13,6 @@ export const getRecentFilingsForUserLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(event, async ({ applicationContext }) => {
-    return await getRecentFilingsForUserInteractor(
-      applicationContext,
-      authorizedUser,
-    );
+  genericHandler(event, async ({ applicationContext: _applicationContext }) => {
+    return await getRecentFilingsForUserInteractor(authorizedUser);
   });

@@ -131,7 +131,6 @@ const SHARED_MOCK_DB_RESULTS: MockDbDocketEntry[] = [
 ];
 
 describe('getRecentFilingsForUserInteractor', () => {
-  let mockApplicationContext: ServerApplicationContext;
   let mockAuthorizedUser: UnknownAuthUser;
   let mockDbReader: any;
 
@@ -175,7 +174,7 @@ describe('getRecentFilingsForUserInteractor', () => {
     const invalidUser = null as unknown as UnknownAuthUser;
 
     await expect(
-      getRecentFilingsForUserInteractor(mockApplicationContext, invalidUser),
+      getRecentFilingsForUserInteractor(invalidUser),
     ).rejects.toThrow(UnauthorizedError);
   });
 
@@ -185,10 +184,7 @@ describe('getRecentFilingsForUserInteractor', () => {
       closedCaseList: [],
     });
 
-    const result = await getRecentFilingsForUserInteractor(
-      mockApplicationContext,
-      mockAuthorizedUser,
-    );
+    const result = await getRecentFilingsForUserInteractor(mockAuthorizedUser);
 
     expect(result).toEqual([]);
     expect(mockGetDbReader).not.toHaveBeenCalled();
@@ -207,10 +203,7 @@ describe('getRecentFilingsForUserInteractor', () => {
 
     mockDbReader.execute.mockResolvedValue([]);
 
-    const result = await getRecentFilingsForUserInteractor(
-      mockApplicationContext,
-      mockAuthorizedUser,
-    );
+    const result = await getRecentFilingsForUserInteractor(mockAuthorizedUser);
 
     expect(result).toEqual([]);
     expect(mockGetDbReader).toHaveBeenCalled();
@@ -237,10 +230,7 @@ describe('getRecentFilingsForUserInteractor', () => {
 
     mockDbReader.execute.mockResolvedValue(mockDbResults);
 
-    const result = await getRecentFilingsForUserInteractor(
-      mockApplicationContext,
-      mockAuthorizedUser,
-    );
+    const result = await getRecentFilingsForUserInteractor(mockAuthorizedUser);
 
     expect(result).toEqual([
       {
@@ -300,10 +290,7 @@ describe('getRecentFilingsForUserInteractor', () => {
 
     mockDbReader.execute.mockResolvedValue(mockDbResults);
 
-    const result = await getRecentFilingsForUserInteractor(
-      mockApplicationContext,
-      mockAuthorizedUser,
-    );
+    const result = await getRecentFilingsForUserInteractor(mockAuthorizedUser);
 
     expect(result).toEqual([
       {
@@ -361,10 +348,7 @@ describe('getRecentFilingsForUserInteractor', () => {
 
     mockDbReader.execute.mockResolvedValue(mockDbResults);
 
-    const result = await getRecentFilingsForUserInteractor(
-      mockApplicationContext,
-      mockAuthorizedUser,
-    );
+    const result = await getRecentFilingsForUserInteractor(mockAuthorizedUser);
 
     expect(result).toEqual([
       {
@@ -422,10 +406,7 @@ describe('getRecentFilingsForUserInteractor', () => {
 
     mockDbReader.execute.mockResolvedValue(mockDbResults);
 
-    const result = await getRecentFilingsForUserInteractor(
-      mockApplicationContext,
-      mockAuthorizedUser,
-    );
+    const result = await getRecentFilingsForUserInteractor(mockAuthorizedUser);
 
     expect(result).toEqual([
       {
@@ -496,10 +477,7 @@ describe('getRecentFilingsForUserInteractor', () => {
 
     mockDbReader.execute.mockResolvedValue(mockDbResults);
 
-    const result = await getRecentFilingsForUserInteractor(
-      mockApplicationContext,
-      mockAuthorizedUser,
-    );
+    const result = await getRecentFilingsForUserInteractor(mockAuthorizedUser);
 
     expect(result).toHaveLength(2);
     expect(result[0].docketNumber).toBe(TEST_DATA.DOCKET_NUMBERS.CASE_1);
@@ -538,10 +516,7 @@ describe('getRecentFilingsForUserInteractor', () => {
 
     mockDbReader.execute.mockResolvedValue(mockDbResults);
 
-    const result = await getRecentFilingsForUserInteractor(
-      mockApplicationContext,
-      mockAuthorizedUser,
-    );
+    const result = await getRecentFilingsForUserInteractor(mockAuthorizedUser);
 
     expect(result).toEqual([
       {
@@ -597,10 +572,7 @@ describe('getRecentFilingsForUserInteractor', () => {
 
     mockDbReader.execute.mockResolvedValue(mockDbResults);
 
-    const result = await getRecentFilingsForUserInteractor(
-      mockApplicationContext,
-      mockAuthorizedUser,
-    );
+    const result = await getRecentFilingsForUserInteractor(mockAuthorizedUser);
 
     expect(result[0].inConsolidatedGroup).toBeUndefined();
     expect(result[0].isLeadCase).toBe(true);
@@ -637,10 +609,8 @@ describe('getRecentFilingsForUserInteractor', () => {
 
     mockDbReader.execute.mockResolvedValue(mockDbResultsWithMissingInfo);
 
-    const resultWithMissingInfo = await getRecentFilingsForUserInteractor(
-      mockApplicationContext,
-      mockAuthorizedUser,
-    );
+    const resultWithMissingInfo =
+      await getRecentFilingsForUserInteractor(mockAuthorizedUser);
 
     expect(resultWithMissingInfo[0].inConsolidatedGroup).toBe(false);
     expect(resultWithMissingInfo[0].isLeadCase).toBe(true);
@@ -663,10 +633,8 @@ describe('getRecentFilingsForUserInteractor', () => {
 
     mockDbReader.execute.mockResolvedValue(mockDbResults);
 
-    const resultWithEmptyArray = await getRecentFilingsForUserInteractor(
-      mockApplicationContext,
-      mockAuthorizedUser,
-    );
+    const resultWithEmptyArray =
+      await getRecentFilingsForUserInteractor(mockAuthorizedUser);
 
     expect(resultWithEmptyArray[0].inConsolidatedGroup).toBeUndefined();
     expect(resultWithEmptyArray[0].isLeadCase).toBe(true);
@@ -698,10 +666,7 @@ describe('getRecentFilingsForUserInteractor', () => {
 
     mockDbReader.execute.mockResolvedValue(mockDbResults);
 
-    const result = await getRecentFilingsForUserInteractor(
-      mockApplicationContext,
-      mockAuthorizedUser,
-    );
+    const result = await getRecentFilingsForUserInteractor(mockAuthorizedUser);
 
     expect(result[0].docketNumber).toBe('999-99');
     expect(result[0].inConsolidatedGroup).toBe(false);
@@ -741,10 +706,7 @@ describe('getRecentFilingsForUserInteractor', () => {
 
     mockDbReader.execute.mockResolvedValue(mockDbResults);
 
-    const result = await getRecentFilingsForUserInteractor(
-      mockApplicationContext,
-      mockAuthorizedUser,
-    );
+    const result = await getRecentFilingsForUserInteractor(mockAuthorizedUser);
 
     expect(result).toHaveLength(1);
     expect(result[0]).toMatchObject({
