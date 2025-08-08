@@ -68,11 +68,11 @@ const removeConsolidatedCases = async (
   ) {
     const newLeadCase = Case.findLeadCaseForCases(newConsolidatedCases)!;
 
-    // the query contained in this function needs the case table to have the original leadDocketNumber,
-    // and therefore should be run before other updates are made
-    await updateConsolidatedCaseDeadlineReferenceId(
-      leadDocketNumber,
-      newLeadCase.docketNumber,
+    updateCasePromises.push(
+      updateConsolidatedCaseDeadlineReferenceId(
+        leadDocketNumber,
+        newLeadCase.docketNumber,
+      ),
     );
 
     for (const newConsolidatedCaseToUpdate of newConsolidatedCases) {
@@ -159,9 +159,9 @@ async function updateConsolidatedCaseDeadlineReferenceId(
     LEAD_DEADLINES.map(async leadCaseDeadline => {
       const { caseDeadlineId: oldLeadCaseDeadlineId } = leadCaseDeadline;
       const CHILD_DEADLINES =
-        await getCaseDeadlinesByConsolidatedCaseDeadlineIds(
-          [oldLeadCaseDeadlineId],
-        );
+        await getCaseDeadlinesByConsolidatedCaseDeadlineIds([
+          oldLeadCaseDeadlineId,
+        ]);
 
       if (!CHILD_DEADLINES.length) return;
 
