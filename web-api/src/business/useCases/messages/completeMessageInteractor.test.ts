@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/messages/mocks.jest';
+jest.mock('@web-api/persistence/postgres/users/getUserById');
 import {
   CASE_STATUS_TYPES,
   PETITIONS_SECTION,
@@ -14,6 +15,8 @@ import {
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('completeMessageInteractor', () => {
   const mockMessages = [
@@ -54,14 +57,15 @@ describe('completeMessageInteractor', () => {
   ];
   const PARENT_MESSAGE_ID_1 = 'b8ff88da-89fe-46a6-bc37-dc2100c7b2bd';
   const PARENT_MESSAGE_ID_2 = '4782edfe-618b-4315-9619-675403246bce';
+  const getUserById = jest.mocked(getUserByIdMock);
 
   beforeAll(() => {
-    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+    getUserById.mockResolvedValue({
       name: 'Test Petitionsclerk',
       role: ROLES.petitionsClerk,
       section: PETITIONS_SECTION,
       userId: 'b9fcabc8-3c83-4cbf-9f4a-d2ecbdc591e1',
-    });
+    } as DbUser);
     (getMessageThreadByParentId as jest.Mock).mockReturnValue(mockMessages);
     (updateMessage as jest.Mock).mockResolvedValue(mockMessages[1]);
     applicationContext

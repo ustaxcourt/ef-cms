@@ -1197,21 +1197,22 @@ workflows:
           <<: *only-prod
           requires:
             - index-cases
-      - loadtests:
-          <<: *only-prod
-          requires:
-            - disable-reindex-cron
-            - index-docket-entries
-      - smoketests-readonly:
-          <<: *only-prod
-          requires:
-            - disable-reindex-cron
-            - index-docket-entries
+      # - loadtests: # 10495 Post deployment: Uncomment after users to postgres has been deployed
+      #     <<: *only-prod
+      #     requires:
+      #       - disable-reindex-cron
+      #       - index-docket-entries
+      # - smoketests-readonly:
+      #     <<: *only-prod
+      #     requires:
+      #       - disable-reindex-cron
+      #       - index-docket-entries
       - deploy-switch-colors-cron:
           <<: *only-prod
           requires:
-            - loadtests
-            - smoketests-readonly
+            - index-cases # 10495 Post deployment: Uncomment after users to postgres has been deployed
+            # - loadtests
+            # - smoketests-readonly
       - wait-for-switch:
           <<: *only-prod
           type: approval

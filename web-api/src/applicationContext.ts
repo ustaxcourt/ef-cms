@@ -1,4 +1,3 @@
-import * as barNumberGenerator from './persistence/dynamo/users/barNumberGenerator';
 import * as pdfLib from 'pdf-lib';
 import {
   CASE_INVENTORY_PAGE_SIZE,
@@ -50,7 +49,7 @@ import { worker } from '@web-api/gateways/worker/worker';
 import { workerLocal } from '@web-api/gateways/worker/workerLocal';
 import axios from 'axios';
 import pug from 'pug';
-import * as sass from 'sass'
+import * as sass from 'sass';
 import { getEntityByName } from '@web-api/business/getEntityByName';
 import { type SendBulkTemplatedEmailCommandInput } from '@aws-sdk/client-ses';
 import { getMessagingClient } from '@web-api/gateways/message/getMessagingClient';
@@ -58,7 +57,6 @@ import { getMessagingClient } from '@web-api/gateways/message/getMessagingClient
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const createApplicationContext = (appContextUser = {}) => {
   return {
-    barNumberGenerator,
     environment,
     getBatchClient,
     getBounceAlertRecipients: () =>

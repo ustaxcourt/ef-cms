@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
@@ -32,6 +33,10 @@ import { MOCK_CASE_DEADLINE } from '@shared/test/mockCaseDeadline';
 import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
+
+const getUserById = jest.mocked(getUserByIdMock);
 
 describe('fileExternalDocumentInteractor', () => {
   const getCaseDeadlinesByDocketNumber = jest.mocked(
@@ -122,9 +127,7 @@ describe('fileExternalDocumentInteractor', () => {
       userId: '0e97c6b4-d299-44f5-af99-2ce905d520f2',
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(mockIrsPractitionerUser);
+    getUserById.mockResolvedValue(mockIrsPractitionerUser as DbUser);
 
     getCaseByDocketNumber.mockResolvedValue(caseRecord);
     getCasesByDocketNumbers.mockResolvedValue([caseRecord]);

@@ -138,6 +138,7 @@ import { opinionAdvancedSearchLambda } from './lambdas/documents/opinionAdvanced
 import { orderAdvancedSearchLambda } from './lambdas/documents/orderAdvancedSearchLambda';
 import { privatePractitionerCaseAssociationLambda } from './lambdas/cases/privatePractitionerCaseAssociationLambda';
 import { privatePractitionerPendingCaseAssociationLambda } from './lambdas/cases/privatePractitionerPendingCaseAssociationLambda';
+import { regStatusLambda } from '@web-api/lambdas/automations/regStatusLambda';
 import { removeCaseFromTrialLambda } from './lambdas/trialSessions/removeCaseFromTrialLambda';
 import { removeCasePendingItemLambda } from './lambdas/cases/removeCasePendingItemLambda';
 import { removeConsolidatedCasesLambda } from './lambdas/cases/removeConsolidatedCasesLambda';
@@ -208,6 +209,7 @@ import { getTrialSessionOpenCasesCountLambda } from '@web-api/lambdas/trialSessi
 import { getConsolidatedCaseDeadlinesLambda } from '@web-api/lambdas/caseDeadline/getConsolidatedCaseDeadlinesLambda';
 import { removePetitionerEmailLambda } from '@web-api/lambdas/cases/removePetitionerEmailLambda';
 import { getRecentFilingsForUserLambda } from './lambdas/recentFilings/getRecentFilingsForUserLambda';
+import { deactiveUserLambda } from '@web-api/lambdas/automations/deactivateUserLambda';
 
 export const app = express();
 
@@ -1065,7 +1067,6 @@ app.delete(
   );
   app.get('/users-by-role', lambdaWrapper(getAllUsersByRoleLambda));
   app.get('/users', lambdaWrapper(getUserLambda));
-  app.post('/users', lambdaWrapper(createUserLambda)); // NOTE: Only meant for admins and zendesk automations. Not meant for regular application use.
 }
 
 /**
@@ -1093,6 +1094,13 @@ app.delete(
     lambdaWrapper(v2GetReconciliationReportLambda),
   );
 }
+
+/**
+ * ZenDesk Automations
+ */
+app.post('/users', lambdaWrapper(createUserLambda)); // NOTE: These are meant for admins and zendesk automations. Not meant for regular application use.
+app.get('/users/user-summary', lambdaWrapper(regStatusLambda));
+app.post('/users/deactivate', lambdaWrapper(deactiveUserLambda));
 
 /**
  * work-items

@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
@@ -19,8 +20,10 @@ import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { updateCourtIssuedDocketEntryInteractor } from './updateCourtIssuedDocketEntryInteractor';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('updateCourtIssuedDocketEntryInteractor', () => {
   let caseRecord;
@@ -28,6 +31,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
 
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
+  const getUserById = jest.mocked(getUserByIdMock);
   const tryGetLocks = jest.mocked(tryGetLocksMock);
 
   beforeAll(() => {
@@ -60,11 +64,11 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
       ],
     };
 
-    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+    getUserById.mockResolvedValue({
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.petitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
+    } as DbUser);
 
     getCaseByDocketNumber.mockResolvedValue(caseRecord);
   });

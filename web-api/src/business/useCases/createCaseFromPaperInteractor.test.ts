@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
 import {
@@ -21,6 +22,9 @@ import {
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+
+const getUserById = jest.mocked(getUserByIdMock);
 
 jest.mock('@shared/business/utilities/DateHandler', () => {
   const originalModule = jest.requireActual(
@@ -46,12 +50,12 @@ describe('createCaseFromPaperInteractor', () => {
       .getUseCaseHelpers()
       .createCaseAndAssociations.mockResolvedValue(null);
 
-    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+    getUserById.mockReturnValue({
       name: 'Test Petitionsclerk',
       role: ROLES.petitionsClerk,
       section: PETITIONS_SECTION,
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-    });
+    } as any);
 
     applicationContext
       .getPersistenceGateway()
