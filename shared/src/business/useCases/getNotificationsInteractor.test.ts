@@ -515,4 +515,27 @@ describe('getNotificationsInteractor', () => {
 
     expect(result.qcSectionInboxCount).toEqual(1);
   });
+
+  it('should handle null/undefined documentQCSectionInbox gracefully', async () => {
+    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
+      role: ROLES.docketClerk,
+      section: DOCKET_SECTION,
+      userId: mockDocketClerkUser.userId,
+    });
+    
+    // Mock documentQCSectionInbox to return null/undefined
+    getDocumentQCInboxForSection.mockReturnValue(null);
+
+    const result = await getNotificationsInteractor(
+      applicationContext,
+      {
+        judgeId: mockJudgeUser.userId,
+        section: DOCKET_SECTION,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(result.qcSectionInProgressCount).toEqual(0);
+    expect(result.qcSectionInboxCount).toEqual(0);
+  });
 });
