@@ -1,5 +1,11 @@
 import React from 'react';
-export function SearchBoilerplateText({ formTypeText, isOpinion = false }) {
+
+export function SearchBoilerplateText({
+  formTypeText,
+  isOpinion = false,
+  user,
+}) {
+  const isLoggedIn = !!(user && user.userId);
   return (
     <>
       <p className="margin-top-0">
@@ -14,16 +20,20 @@ export function SearchBoilerplateText({ formTypeText, isOpinion = false }) {
         )}
       </p>
       <ul>
-        <li>
-          {' '}
-          If you aren’t affiliated with a case, you will only see limited
-          information about that case.
-        </li>
-        {!isOpinion && (
-          <li>
-            Sealed cases and affiliated documents will not display in search
-            results.
-          </li>
+        {(formTypeText !== 'an order' || !isLoggedIn) && (
+          <>
+            <li>
+              {' '}
+              If you aren’t affiliated with a case, you will only see limited
+              information about that case.
+            </li>
+            {!isOpinion && (
+              <li>
+                Sealed cases and affiliated documents will not display in search
+                results.
+              </li>
+            )}
+          </>
         )}
       </ul>
     </>

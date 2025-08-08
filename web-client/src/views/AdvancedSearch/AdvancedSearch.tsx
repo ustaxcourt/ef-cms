@@ -38,6 +38,7 @@ export const AdvancedSearch = connect(
       sequences.submitPractitionerBarNumberSearchSequence,
     submitPractitionerNameSearchSequence:
       sequences.submitPractitionerNameSearchSequence,
+    user: state.user, // <-- Add this line
   },
   function AdvancedSearch({
     advancedSearchHelper,
@@ -51,6 +52,7 @@ export const AdvancedSearch = connect(
     submitOrderAdvancedSearchSequence,
     submitPractitionerBarNumberSearchSequence,
     submitPractitionerNameSearchSequence,
+    user, // <-- Add this line
   }) {
     return (
       <>
@@ -86,7 +88,7 @@ export const AdvancedSearch = connect(
                 tabName={searchTabs.ORDER}
                 title={'Order'}
               >
-                <SearchBoilerplateText formTypeText="an order" />
+                <SearchBoilerplateText formTypeText="an order" user={user} />
                 <OrderSearchForm
                   submitAdvancedSearchSequence={
                     submitOrderAdvancedSearchSequence

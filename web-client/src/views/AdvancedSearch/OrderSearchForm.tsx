@@ -90,42 +90,40 @@ export const OrderSearchForm = connect(
                   />
                 </div>
 
-                {advancedDocumentSearchHelper.showDateRangePicker && (
-                  <div className="margin-top-4">
-                    <DateRangePickerComponent
-                      endDateErrorText={validationErrors.endDate}
-                      endLabel="End date"
-                      endName="endDate"
-                      endPickerCls={
-                        'desktop:grid-col-6  phone:grid-col-12 desktop:padding-left-2'
-                      }
-                      endValue={advancedSearchForm.orderSearch.endDate}
-                      formGroupCls="margin-bottom-0"
-                      maxDate={advancedDocumentSearchHelper.maxDate}
-                      rangePickerCls={'grid-row grid-gap'}
-                      startDateErrorText={validationErrors.startDate}
-                      startLabel="Start date"
-                      startName="startDate"
-                      showDateHint={true}
-                      startPickerCls={
-                        'desktop:grid-col-6  phone:grid-col-12 padding-right-2'
-                      }
-                      startValue={advancedSearchForm.orderSearch.startDate}
-                      onChangeEnd={e => {
-                        updateAdvancedOrderSearchFormValueSequence({
-                          key: 'endDate',
-                          value: e.target.value,
-                        });
-                      }}
-                      onChangeStart={e => {
-                        updateAdvancedOrderSearchFormValueSequence({
-                          key: 'startDate',
-                          value: e.target.value,
-                        });
-                      }}
-                    />
-                  </div>
-                )}
+                <div className="margin-top-4">
+                  <DateRangePickerComponent
+                    endDateErrorText={validationErrors.endDate}
+                    endLabel="End date"
+                    endName="endDate"
+                    endPickerCls={
+                      'desktop:grid-col-6  phone:grid-col-12 desktop:padding-left-2'
+                    }
+                    endValue={advancedSearchForm.orderSearch.endDate}
+                    formGroupCls="margin-bottom-0"
+                    maxDate={advancedDocumentSearchHelper.maxDate}
+                    rangePickerCls={'grid-row grid-gap'}
+                    startDateErrorText={validationErrors.startDate}
+                    startLabel="Start date"
+                    startName="startDate"
+                    showDateHint={true}
+                    startPickerCls={
+                      'desktop:grid-col-6  phone:grid-col-12 padding-right-2'
+                    }
+                    startValue={advancedSearchForm.orderSearch.startDate}
+                    onChangeEnd={e => {
+                      updateAdvancedOrderSearchFormValueSequence({
+                        key: 'endDate',
+                        value: e.target.value,
+                      });
+                    }}
+                    onChangeStart={e => {
+                      updateAdvancedOrderSearchFormValueSequence({
+                        key: 'startDate',
+                        value: e.target.value,
+                      });
+                    }}
+                  />
+                </div>
               </div>
             </div>
           </Mobile>
@@ -190,57 +188,44 @@ export const OrderSearchForm = connect(
                         judges={advancedDocumentSearchHelper.formattedJudges}
                       />
                     </div>
-                    <div className="width-card-lg tablet:padding-bottom-5">
-                      <DateRangeSelect
-                        searchValue={advancedSearchForm.orderSearch.dateRange}
-                        updateSequence={
-                          updateAdvancedOrderSearchFormValueSequence
-                        }
-                        validateSequence={validateOrderSearchSequence}
-                      />
-                    </div>
                   </div>
 
                   <div className="desktop:grid-col-7 grid-col-12">
                     <div className="grid-gap-3 tablet:margin-top-0 margin-top-4">
-                      {advancedDocumentSearchHelper.showDateRangePicker && (
-                        <div className="grid-row no-flex-wrap">
-                          <DateRangePickerComponent
-                            endDateErrorText={validationErrors.endDate}
-                            endLabel="End date"
-                            endName="endDate"
-                            endPickerCls={
-                              'desktop:grid-col-6  phone:grid-col-12 desktop:padding-left-2'
-                            }
-                            endValue={advancedSearchForm.orderSearch.endDate}
-                            formGroupCls="margin-bottom-0"
-                            rangePickerCls={'grid-row grid-gap'}
-                            startDateErrorText={validationErrors.startDate}
-                            maxDate={advancedDocumentSearchHelper.maxDate}
-                            startLabel="Start date"
-                            startName="startDate"
-                            showDateHint={true}
-                            startPickerCls={
-                              'desktop:grid-col-6  phone:grid-col-12 padding-right-2'
-                            }
-                            startValue={
-                              advancedSearchForm.orderSearch.startDate
-                            }
-                            onChangeEnd={e => {
-                              updateAdvancedOrderSearchFormValueSequence({
-                                key: 'endDate',
-                                value: e.target.value,
-                              });
-                            }}
-                            onChangeStart={e => {
-                              updateAdvancedOrderSearchFormValueSequence({
-                                key: 'startDate',
-                                value: e.target.value,
-                              });
-                            }}
-                          />
-                        </div>
-                      )}
+                      <div className="grid-row no-flex-wrap">
+                        <DateRangePickerComponent
+                          endDateErrorText={validationErrors.endDate}
+                          endLabel="End date"
+                          endName="endDate"
+                          endPickerCls={
+                            'desktop:grid-col-6  phone:grid-col-12 desktop:padding-left-2'
+                          }
+                          endValue={advancedSearchForm.orderSearch.endDate}
+                          formGroupCls="margin-bottom-0"
+                          rangePickerCls={'grid-row grid-gap'}
+                          maxDate={advancedDocumentSearchHelper.maxDate}
+                          startDateErrorText={validationErrors.startDate}
+                          startLabel="Start date"
+                          startName="startDate"
+                          showDateHint={true}
+                          startPickerCls={
+                            'desktop:grid-col-6  phone:grid-col-12 padding-right-2'
+                          }
+                          startValue={advancedSearchForm.orderSearch.startDate}
+                          onChangeEnd={e => {
+                            updateAdvancedOrderSearchFormValueSequence({
+                              key: 'endDate',
+                              value: e.target.value,
+                            });
+                          }}
+                          onChangeStart={e => {
+                            updateAdvancedOrderSearchFormValueSequence({
+                              key: 'startDate',
+                              value: e.target.value,
+                            });
+                          }}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>

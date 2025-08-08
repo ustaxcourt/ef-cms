@@ -100,7 +100,8 @@ export const DocumentSearchResults = connect(
                 <h1 className="margin-top-1">Results</h1>
               </div>
               <div className="tablet:grid-col-2 float-right text-right text-middle-margin">
-                {results.length} match(es) shown
+                <b className="text-semibold">Count:</b>{' '}
+                {results.length.toLocaleString()}
               </div>
             </div>
 

@@ -21,18 +21,18 @@ export const advancedDocumentSearchHelper = (
 
   const {
     ADVANCED_SEARCH_TABS,
-    DATE_RANGE_SEARCH_OPTIONS,
+    // DATE_RANGE_SEARCH_OPTIONS,
     MAX_SEARCH_RESULTS,
   } = applicationContext.getConstants();
 
   const isInternalUser = applicationContext.getUtilities().isInternalUser(role);
 
-  const dateRangeType = get(
-    state.advancedSearchForm[`${advancedSearchTab}Search`].dateRange,
-  );
+  // const dateRangeType = get(
+  //   state.advancedSearchForm[`${advancedSearchTab}Search`].dateRange,
+  // );
 
-  const showDateRangePicker =
-    dateRangeType === DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES;
+  // const showDateRangePicker =
+  //   dateRangeType === DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES;
 
   let documentTypeVerbiage = capitalize(advancedSearchTab);
 
@@ -123,7 +123,7 @@ export const advancedDocumentSearchHelper = (
     formattedJudges,
     isInternalUser,
     manyResults: MAX_SEARCH_RESULTS,
-    showDateRangePicker,
+    // showDateRangePicker,
     showManyResultsMessage,
     maxDate: calculateISODate({
       dateString: applicationContext.getUtilities().createISODateString(),
