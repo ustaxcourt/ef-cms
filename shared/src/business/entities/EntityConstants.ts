@@ -1648,7 +1648,7 @@ export const CASE_INVENTORY_PAGE_SIZE = 100; // number of results returned for e
 export const CASE_INVENTORY_PRINT_REPORT_MAX_SIZE = 20000; // number of results to include in the printed version of the case inventory report
 export const PENDING_REPORT_PAGE_SIZE = 100; // number of results displayed for each page in the pending report
 export const COLD_CASE_REPORT_PAGE_SIZE = 100; // number of results displayed for each page in the cold case report
-export const CASE_DEADLINES_REPORT_PAGE_SIZE = 1; // number of results displayed for each page in the case deadlines report
+export const CASE_DEADLINES_REPORT_PAGE_SIZE = 100; // number of results displayed for each page in the case deadlines report
 
 // TODO: event codes need to be reorganized
 export const ALL_EVENT_CODES = flatten([
@@ -1760,7 +1760,7 @@ export const PENALTY_TYPES = {
 };
 
 export const MAX_ELASTICSEARCH_PAGINATION = 10000;
-export const MAX_SEARCH_CLIENT_RESULTS = 200;
+export const MAX_SEARCH_CLIENT_RESULTS = 10000;
 export const MAX_SEARCH_RESULTS = 10000;
 
 export const ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE = 20;
