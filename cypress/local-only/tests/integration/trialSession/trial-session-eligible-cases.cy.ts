@@ -17,19 +17,7 @@ describe('Trial Session Eligible Cases Journey', () => {
     let trialSessionId: string;
     const createdDocketNumbers: string[] = [];
 
-    // beforeEach(() => {
-    //     cy.intercept('POST', '**/trial-sessions').as('createTrialSession');
-    //     cy.intercept('POST', '**/cases').as('createCase');
-    //     cy.intercept('PUT', '**/cases/*/trial-session').as('assignCaseToTrial');
-    //     cy.intercept('GET', '**/trial-sessions*/*').as('getTrialSessions');
-    //     cy.intercept('GET', '**/trial-sessions*/*/eligible-cases').as(
-    //         'getEligibleCases',
-    //     );
-    //     cy.intercept('PUT', '**/cases/*/calendar').as('calendarCase');
-    // });
-
     it('should create trial session and cases, then verify eligible cases are properly assigned', () => {
-        // Step 1: Create trial session with Small session type
         loginAsPetitionsClerk1();
         createTrialSession({
             trialLocation,
@@ -40,12 +28,8 @@ describe('Trial Session Eligible Cases Journey', () => {
             maxCases: '3',
         }).then(({ trialSessionId: createdTrialSessionId }) => {
             trialSessionId = createdTrialSessionId;
-            // cy.wait('@createTrialSession')
-            //     .its('response.statusCode')
-            //     .should('eq', 201);
         });
 
-        // Step 2: Create Case #1 - Small procedure type, filed date 1/1/2019
         createAndServePaperPetition({
             procedureType: 'Small',
             trialLocation,
@@ -54,16 +38,11 @@ describe('Trial Session Eligible Cases Journey', () => {
         }).then(({ docketNumber }) => {
             createdDocketNumbers.push(docketNumber);
 
-            // cy.wait('@createCase').its('response.statusCode').should('eq', 201);
-
-            // Set case ready for trial
             loginAsDocketClerk();
             goToCase(docketNumber);
             updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
-            // cy.wait('@calendarCase').its('response.statusCode').should('eq', 200);
         });
 
-        // Step 3: Create Case #2 - Small procedure type, filed date 1/2/2019
         createAndServePaperPetition({
             procedureType: 'Small',
             trialLocation,
@@ -72,17 +51,11 @@ describe('Trial Session Eligible Cases Journey', () => {
         }).then(({ docketNumber }) => {
             createdDocketNumbers.push(docketNumber);
 
-            // cy.wait('@createCase').its('response.statusCode').should('eq', 201);
-
-            // Set case ready for trial
             loginAsDocketClerk();
             goToCase(docketNumber);
             updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
-
-            // cy.wait('@calendarCase').its('response.statusCode').should('eq', 200);
         });
 
-        // Step 4: Create Case #3 - Regular procedure type, filed date 1/1/2019
         createAndServePaperPetition({
             procedureType: 'Regular',
             trialLocation,
@@ -90,13 +63,11 @@ describe('Trial Session Eligible Cases Journey', () => {
         }).then(({ docketNumber }) => {
             createdDocketNumbers.push(docketNumber);
 
-            // Set case ready for trial
             loginAsDocketClerk();
             goToCase(docketNumber);
             updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
         });
 
-        // Step 5: Create Case #4 - CDP (L) type, Small procedure type, filed date 5/1/2019
         createAndServePaperPetition({
             procedureType: 'Small',
             trialLocation,
@@ -104,16 +75,12 @@ describe('Trial Session Eligible Cases Journey', () => {
             yearReceived: '2019',
         }).then(({ docketNumber }) => {
             createdDocketNumbers.push(docketNumber);
-            // cy.wait('@createCase').its('response.statusCode').should('eq', 201);
 
-            // Set case ready for trial
             loginAsDocketClerk();
             goToCase(docketNumber);
             updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
-            // cy.wait('@calendarCase').its('response.statusCode').should('eq', 200);
         });
 
-        // Step 6: Create Case #5 - Passport (P) type, Small procedure type, filed date 3/1/2019
         createAndServePaperPetition({
             procedureType: 'Small',
             trialLocation,
@@ -121,25 +88,17 @@ describe('Trial Session Eligible Cases Journey', () => {
             yearReceived: '2019',
         }).then(({ docketNumber }) => {
             createdDocketNumbers.push(docketNumber);
-            // cy.wait('@createCase').its('response.statusCode').should('eq', 201);
 
-            // Set case ready for trial
             loginAsDocketClerk();
             goToCase(docketNumber);
             updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
-            // cy.wait('@calendarCase').its('response.statusCode').should('eq', 200);
         });
 
-        // Step 7: Verify eligible cases are shown for the trial session
         cy.then(() => {
             loginAsPetitionsClerk1();
 
             cy.visit(`/trial-session-detail/${trialSessionId}`);
 
-            // cy.wait('@getTrialSessions').its('response.statusCode').should('eq', 200);
-            // cy.wait('@getEligibleCases').its('response.statusCode').should('eq', 200);
-
-            // Verify the specific cases are eligible (without assuming order)
             cy.get('table#upcoming-sessions').within(() => {
                 cy.get('tr').should('contain', createdDocketNumbers[3]); // Case #4
                 cy.get('tr').should('contain', createdDocketNumbers[4]); // Case #5
@@ -148,43 +107,27 @@ describe('Trial Session Eligible Cases Journey', () => {
             });
         });
 
-        // Step 8: Mark specific eligible cases as QCed
         cy.then(() => {
             loginAsPetitionsClerk1();
 
-            // cy.wait('@getEligibleCases');
-
             cy.visit(`/trial-session-detail/${trialSessionId}`);
-
-            // cy.wait('@getTrialSessions').its('response.statusCode').should('eq', 200);
-            // cy.wait('@getEligibleCases').its('response.statusCode').should('eq', 200);
 
             cy.get('table#upcoming-sessions');
 
-            // Mark Case #4 as QCed
             cy.get(`label[for="qc-complete-${createdDocketNumbers[3]}"]`).click();
             cy.get(`label[for="qc-complete-${createdDocketNumbers[4]}"]`).click();
             cy.get(`label[for="qc-complete-${createdDocketNumbers[0]}"]`).click();
             cy.get(`label[for="qc-complete-${createdDocketNumbers[1]}"]`).click();
         });
 
-        // Step 9: Set calendar for trial session
         cy.then(() => {
             calendarTrialSession(trialSessionId);
             cy.get('[data-testid="success-alert"]').should('exist');
-
-            // cy.wait('@assignCaseToTrial')
-            //     .its('response.statusCode')
-            //     .should('eq', 200);
         });
 
-        // Step 10: Verify cases are assigned to trial session
         cy.then(() => {
             loginAsPetitionsClerk1();
             cy.visit(`/trial-session-detail/${trialSessionId}`);
-
-            // cy.wait('@getTrialSessions').its('response.statusCode').should('eq', 200);
-            // cy.wait('@getEligibleCases').its('response.statusCode').should('eq', 200);
 
             cy.get('table#open-cases').within(() => {
                 cy.get('tr').should('contain', createdDocketNumbers[0]);
@@ -193,11 +136,8 @@ describe('Trial Session Eligible Cases Journey', () => {
             });
         });
 
-        // Step 11: Verify case statuses are updated correctly
         cy.then(() => {
-            // Case #1 - should be calendared
             goToCase(createdDocketNumbers[0]);
-            // cy.wait('@getTrialSessions').its('response.statusCode').should('eq', 200);
             cy.get('[data-testid="case-status"]').should('be.visible');
             cy.get('[data-testid="case-status"]').should(
                 'contain',
