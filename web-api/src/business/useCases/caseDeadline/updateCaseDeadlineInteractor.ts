@@ -26,7 +26,6 @@ export const updateCaseDeadlineInteractor = async (
   const consolidatedCaseDeadlines: RawCaseDeadline[] =
     await getCaseDeadlinesByConsolidatedCaseDeadlineId(
       caseDeadlineToUpdate.caseDeadlineId,
-      caseDeadlineToUpdate.docketNumber,
     );
 
   const updatedConsolidatedCaseDeadlines: RawCaseDeadline[] =
