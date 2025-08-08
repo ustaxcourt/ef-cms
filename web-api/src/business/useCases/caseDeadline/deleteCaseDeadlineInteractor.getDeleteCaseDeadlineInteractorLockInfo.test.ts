@@ -2,17 +2,17 @@ import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 jest.mock(
-  '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId',
+  '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds',
 );
 jest.mock('@web-api/persistence/postgres/cases/getCaseByDocketNumber');
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getUniqueId } from '@shared/sharedAppContext';
 import { getDeleteCaseDeadlineInteractorLockInfo } from '@web-api/business/useCases/caseDeadline/deleteCaseDeadlineInteractor';
-import { getCaseDeadlinesByConsolidatedCaseDeadlineIds as getCaseDeadlinesByConsolidatedCaseDeadlineIdMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds';
+import { getCaseDeadlinesByConsolidatedCaseDeadlineIds as getCaseDeadlinesByConsolidatedCaseDeadlineIdsMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
-const getCaseDeadlinesByConsolidatedCaseDeadlineId =
-  getCaseDeadlinesByConsolidatedCaseDeadlineIdMock as jest.Mock;
+const getCaseDeadlinesByConsolidatedCaseDeadlineIds =
+  getCaseDeadlinesByConsolidatedCaseDeadlineIdsMock as jest.Mock;
 
 const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
 
@@ -25,7 +25,7 @@ describe('deleteCaseDeadlineInteractor - getDeleteCaseDeadlineInteractorLockInfo
       leadDocketNumber: undefined,
     } as RawCase);
 
-    getCaseDeadlinesByConsolidatedCaseDeadlineId.mockReturnValue([
+    getCaseDeadlinesByConsolidatedCaseDeadlineIds.mockReturnValue([
       { docketNumber: TEST_DOCKET_NUMBER },
       { docketNumber: '102-25' },
       { docketNumber: '103-25' },
@@ -49,7 +49,7 @@ describe('deleteCaseDeadlineInteractor - getDeleteCaseDeadlineInteractorLockInfo
       leadDocketNumber: TEST_DOCKET_NUMBER,
     } as RawCase);
 
-    getCaseDeadlinesByConsolidatedCaseDeadlineId.mockReturnValue([]);
+    getCaseDeadlinesByConsolidatedCaseDeadlineIds.mockReturnValue([]);
 
     const { identifiers } = await getDeleteCaseDeadlineInteractorLockInfo(
       applicationContext,
@@ -68,7 +68,7 @@ describe('deleteCaseDeadlineInteractor - getDeleteCaseDeadlineInteractorLockInfo
       leadDocketNumber: TEST_DOCKET_NUMBER,
     } as RawCase);
 
-    getCaseDeadlinesByConsolidatedCaseDeadlineId.mockReturnValue([
+    getCaseDeadlinesByConsolidatedCaseDeadlineIds.mockReturnValue([
       { docketNumber: TEST_DOCKET_NUMBER },
       { docketNumber: '102-25' },
       { docketNumber: '103-25' },
