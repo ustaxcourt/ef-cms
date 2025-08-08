@@ -238,7 +238,7 @@ describe('getRecentFilingsForUserInteractor', () => {
         eventCode: TEST_DATA.EVENT_CODES.PETITION,
         isStricken: false,
         isSealed: false,
-        sealedTo: undefined,
+        sealedTo: null,
         servedAt: calculateDate({
           dateString: TEST_DATA.SERVED_AT,
         }).toISOString(),
@@ -298,7 +298,7 @@ describe('getRecentFilingsForUserInteractor', () => {
         eventCode: TEST_DATA.EVENT_CODES.PETITION,
         isStricken: false,
         isSealed: false,
-        sealedTo: undefined,
+        sealedTo: null,
         servedAt: calculateDate({
           dateString: TEST_DATA.SERVED_AT,
         }).toISOString(),
@@ -356,7 +356,7 @@ describe('getRecentFilingsForUserInteractor', () => {
         eventCode: TEST_DATA.EVENT_CODES.ANSWER,
         isStricken: false,
         isSealed: false,
-        sealedTo: undefined,
+        sealedTo: null,
         servedAt: calculateDate({
           dateString: TEST_DATA.SERVED_AT,
         }).toISOString(),
@@ -414,7 +414,7 @@ describe('getRecentFilingsForUserInteractor', () => {
         eventCode: TEST_DATA.EVENT_CODES.PETITION,
         isStricken: false,
         isSealed: false,
-        sealedTo: undefined,
+        sealedTo: null,
         servedAt: calculateDate({
           dateString: TEST_DATA.SERVED_AT,
         }).toISOString(),

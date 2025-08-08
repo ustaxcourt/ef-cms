@@ -4,11 +4,11 @@ export interface RecentFiling {
   document: string;
   caseTitle: string;
   docketEntryId: string;
-  isFileAttached?: boolean;
+  isFileAttached?: boolean | null;
   eventCode?: string;
-  isStricken?: boolean;
-  isSealed?: boolean;
-  sealedTo?: string;
+  isStricken?: boolean | null;
+  isSealed?: boolean | null;
+  sealedTo?: string | null;
   servedAt?: string;
   inConsolidatedGroup?: boolean;
   isLeadCase?: boolean;
