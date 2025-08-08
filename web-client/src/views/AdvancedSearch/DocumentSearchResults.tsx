@@ -6,6 +6,7 @@ import { Paginator } from '../../ustc-ui/Pagination/Paginator';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import React, { useEffect } from 'react';
 import { SortableColumn } from '../../ustc-ui/Table/SortableColumn';
@@ -100,6 +101,10 @@ export const DocumentSearchResults = connect(
                 <h1 className="margin-top-1">Results</h1>
               </div>
               <div className="tablet:grid-col-2 float-right text-right text-middle-margin">
+                <FontAwesomeIcon
+                  className="fa-icon-blue icon-spacing-8"
+                  icon="info-circle"
+                />
                 <b className="text-semibold">Count:</b>{' '}
                 {results.length.toLocaleString()}
               </div>
