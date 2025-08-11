@@ -704,13 +704,6 @@ jobs:
             echo "export SOURCE_BUCKET=${PROD_DOCUMENTS_BUCKET_NAME}" >> $BASH_ENV
             echo "export DESTINATION_BUCKET=${EFCMS_DOMAIN}-documents-${ENV}-us-east-1" >> $BASH_ENV
       - run:
-          name: 'DELETEME: Waste 2 hours'
-          command: |
-            for i in {1..119}; do
-              echo "Minute ${i}"
-              sleep 60
-            done
-      - run:
           name: Disable Dynamodb Streams
           command: |
             ./scripts/migration/toggle-streams.sh --off
