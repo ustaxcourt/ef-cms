@@ -357,13 +357,9 @@ jobs:
               ./web-api/enable-deploying-dynamo-stream-trigger.sh
             fi
       - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-      - run:
           name: Migrate Practitioner Documents from Dynamo to Postgres
           command: |
-            ./scripts/run-once-scripts/postgres-migration/migrateAllPractitionerDocumentsIntoPostgres.ts
+            DYNAMODB_TABLE_NAME="$DESTINATION_TABLE" ./scripts/run-once-scripts/postgres-migration/migrateAllPractitionerDocumentsIntoPostgres.ts
 
   disable-reindex-cron:
     docker:
