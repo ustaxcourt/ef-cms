@@ -128,9 +128,9 @@ export const DocumentSearchResults = connect(
                         <FontAwesomeIcon
                           className="fa-icon-blue icon-spacing-4"
                           icon="info-circle"
-                          title="Search is limited to 10,000 results."
+                          title={`Search is limited to ${MAX_SEARCH_RESULTS.toLocaleString()} results.`}
                           tabIndex={0}
-                          aria-label="Search is limited to 10,000 results."
+                          aria-label={`Search is limited to ${MAX_SEARCH_RESULTS.toLocaleString()} results.`}
                         />
                       </>
                     )}
@@ -142,8 +142,12 @@ export const DocumentSearchResults = connect(
                   {showModal === 'showCountModalMobile' && (
                     <BaseModal title="CountModal">
                       <div>
+                        <h2>Count: {MAX_SEARCH_RESULTS.toLocaleString()}</h2>
+                        <p>
+                          Search is limited to{' '}
+                          {MAX_SEARCH_RESULTS.toLocaleString()} results.
+                        </p>
                         <Button
-                          className=""
                           icon="times-circle"
                           onClick={event => {
                             event.stopPropagation();
