@@ -851,33 +851,6 @@ jobs:
               NODE_ENV=production ./scripts/reindex/index-docket-entries/index-docket-entries.ts 5
             fi
 
-  users-to-postgres:
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-      - run:
-          name: Move petitioners from dwCase.petitioners to dwUser
-          command: |
-            npx ts-node --transpile-only ./scripts/run-once-scripts/postgres-migration/move-petitioners-out-of-case.ts
-      - run:
-          name: Move users, privatePractitioners, irsPractitioners, pending-case from dynamo to postgres
-          command: |
-            npx ts-node --transpile-only ./scripts/run-once-scripts/postgres-migration/migrate-users-to-postgres.ts
-      - run:
-          name: Update users' account status
-          command: |
-            npx ts-node --transpile-only ./scripts/run-once-scripts/postgres-migration/add-account-status-to-users.ts
-
   cleanup-glue-job:
     docker:
       - image: *efcms-docker-image
@@ -1229,22 +1202,21 @@ workflows:
           <<: *only-prod
           requires:
             - index-cases
-      # - loadtests: # 10495 Post deployment: Uncomment after users to postgres has been deployed
-      #     <<: *only-prod
-      #     requires:
-      #       - disable-reindex-cron
-      #       - index-docket-entries
-      # - smoketests-readonly:
-      #     <<: *only-prod
-      #     requires:
-      #       - disable-reindex-cron
-      #       - index-docket-entries
+      - loadtests:
+          <<: *only-prod
+          requires:
+            - disable-reindex-cron
+            - index-docket-entries
+      - smoketests-readonly:
+          <<: *only-prod
+          requires:
+            - disable-reindex-cron
+            - index-docket-entries
       - deploy-switch-colors-cron:
           <<: *only-prod
           requires:
-            - index-cases # 10495 Post deployment: Uncomment after users to postgres has been deployed
-            # - loadtests
-            # - smoketests-readonly
+            - loadtests
+            - smoketests-readonly
       - wait-for-switch:
           <<: *only-prod
           type: approval
@@ -1339,36 +1311,36 @@ workflows:
   glue-to-dev:
     when: << pipeline.parameters.run_glue_to_dev >>
     jobs:
-#      - delete-existing-data:
-#          <<: *only-dev
-#      - redeploy-environment:
-#          <<: *only-dev
-#          requires:
-#            - delete-existing-data
-#      - wait-for-deployment-workflow:
-#          <<: *only-dev
-#          type: approval
-#          requires:
-#            - redeploy-environment
-#      - initiate-glue-job:
-#          <<: *only-dev
-#          requires:
-#            - wait-for-deployment-workflow
-#      - wait-for-glue-workflow:
-#          <<: *only-dev
-#          type: approval
-#          requires:
-#            - initiate-glue-job
-#      - wait-for-s3-sync-workflow:
-#          <<: *only-dev
-#          type: approval
-#          requires:
-#            - initiate-glue-job
+      - delete-existing-data:
+          <<: *only-dev
+      - redeploy-environment:
+          <<: *only-dev
+          requires:
+            - delete-existing-data
+      - wait-for-deployment-workflow:
+          <<: *only-dev
+          type: approval
+          requires:
+            - redeploy-environment
+      - initiate-glue-job:
+          <<: *only-dev
+          requires:
+            - wait-for-deployment-workflow
+      - wait-for-glue-workflow:
+          <<: *only-dev
+          type: approval
+          requires:
+            - initiate-glue-job
+      - wait-for-s3-sync-workflow:
+          <<: *only-dev
+          type: approval
+          requires:
+            - initiate-glue-job
       - index-glued-data:
           <<: *only-dev
-#          requires:
-#            - wait-for-glue-workflow
-#            - wait-for-s3-sync-workflow
+          requires:
+            - wait-for-glue-workflow
+            - wait-for-s3-sync-workflow
       - wait-for-glued-data-to-index:
           <<: *only-dev
           type: approval
@@ -1382,14 +1354,10 @@ workflows:
           <<: *only-dev
           requires:
             - index-cases
-      - users-to-postgres:
-          <<: *only-dev
-          requires:
-            - index-docket-entries
       - cleanup-glue-job:
           <<: *only-dev
           requires:
-            - users-to-postgres #index-docket-entries
+            - index-docket-entries
 
   glue-to-lower-env:
     when: << pipeline.parameters.run_glue_to_lower_env >>
