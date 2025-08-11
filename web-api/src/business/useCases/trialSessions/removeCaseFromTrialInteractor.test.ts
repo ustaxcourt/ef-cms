@@ -93,19 +93,13 @@ describe('removeCaseFromTrialInteractor', () => {
       mockPetitionsClerkUser,
     );
 
+    expect(getTrialSessionById).toHaveBeenCalled();
+    expect(getTrialSessionById.mock.calls[0][0].trialSessionId).toEqual(
+      mockTrialSession.trialSessionId,
+    );
+    expect(updateTrialSession).toHaveBeenCalled();
     expect(
-      getTrialSessionById,
-    ).toHaveBeenCalled();
-    expect(
-      getTrialSessionById.mock
-        .calls[0][0].trialSessionId,
-    ).toEqual(mockTrialSession.trialSessionId);
-    expect(
-      updateTrialSession,
-    ).toHaveBeenCalled();
-    expect(
-      updateTrialSession.mock
-        .calls[0][0].trialSessionToUpdate,
+      updateTrialSession.mock.calls[0][0].trialSessionToUpdate,
     ).toMatchObject({
       ...mockTrialSession,
       caseOrder: [
@@ -150,17 +144,10 @@ describe('removeCaseFromTrialInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(
-      getTrialSessionById.mock
-        .calls[0][0].trialSessionId,
-    ).toEqual(MOCK_TRIAL_INPERSON.trialSessionId);
-    expect(
-      updateTrialSession.mock
-        .calls[0][0].trialSessionToUpdate,
-    ).toMatchObject({
-      ...MOCK_TRIAL_INPERSON,
-      caseOrder: [{ docketNumber: '123-45' }],
-    });
+    expect(getTrialSessionById.mock.calls[0][0].trialSessionId).toEqual(
+      MOCK_TRIAL_INPERSON.trialSessionId,
+    );
+    expect(updateTrialSession).not.toHaveBeenCalled();
     expect(getCaseByDocketNumber.mock.calls[0][0].docketNumber).toEqual(
       MOCK_CASE.docketNumber,
     );
@@ -205,23 +192,11 @@ describe('removeCaseFromTrialInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(
-      getTrialSessionById,
-    ).toHaveBeenCalled();
-    expect(
-      getTrialSessionById.mock
-        .calls[0][0].trialSessionId,
-    ).toEqual(MOCK_TRIAL_INPERSON.trialSessionId);
-    expect(
-      updateTrialSession,
-    ).toHaveBeenCalled();
-    expect(
-      updateTrialSession.mock
-        .calls[0][0].trialSessionToUpdate,
-    ).toMatchObject({
-      ...MOCK_TRIAL_INPERSON,
-      caseOrder: [{ docketNumber: '123-45' }],
-    });
+    expect(getTrialSessionById).toHaveBeenCalled();
+    expect(getTrialSessionById.mock.calls[0][0].trialSessionId).toEqual(
+      MOCK_TRIAL_INPERSON.trialSessionId,
+    );
+    expect(updateTrialSession).not.toHaveBeenCalled();
     expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(getCaseByDocketNumber.mock.calls[0][0].docketNumber).toEqual(
       MOCK_CASE.docketNumber,

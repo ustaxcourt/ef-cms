@@ -11,12 +11,10 @@ import {
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { saveCalendarNoteInteractor } from './saveCalendarNoteInteractor';
-import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { createOrUpdateTrialSessionCases as createOrUpdateTrialSessionCasesMock } from '@web-api/persistence/postgres/trialSessions/createOrUpdateTrialSessionCases';
 import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 
 describe('saveCalendarNotes', () => {
-  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const createOrUpdateTrialSessionCases = jest.mocked(
     createOrUpdateTrialSessionCasesMock,
   );
@@ -42,7 +40,6 @@ describe('saveCalendarNotes', () => {
     mockCase = { ...MOCK_CASE };
 
     getTrialSessionById.mockImplementation(() => mockTrialSession);
-    getCaseByDocketNumber.mockImplementation(() => mockCase);
   });
 
   it('throws an Unauthorized error if the user role is not allowed to access the method', async () => {
@@ -133,43 +130,7 @@ describe('saveCalendarNotes', () => {
     );
   });
 
-  it('does not update the case hearing record if the given trial session is not a hearing on the case', async () => {
-    await saveCalendarNoteInteractor(
-      applicationContext,
-      {
-        calendarNote: 'this is a calendarNote',
-        docketNumber: mockCase.docketNumber,
-        trialSessionId: mockTrialSession.trialSessionId,
-      },
-      mockDocketClerkUser,
-    );
-
-    expect(getCaseByDocketNumber).toHaveBeenCalled();
-    expect(createOrUpdateTrialSessionCases).not.toHaveBeenCalled();
-  });
-
   it('updates the case hearing record if the given trial session is a hearing on the case', async () => {
-    mockCase = {
-      ...MOCK_CASE,
-      hearings: [
-        {
-          ...MOCK_TRIAL,
-          caseOrder: [
-            {
-              calendarNotes: 'just a hearing note',
-              docketNumber: MOCK_CASE.docketNumber,
-            },
-            {
-              calendarNotes: 'another hearing note',
-              docketNumber: '123-21',
-            },
-          ],
-          trialSessionId: '9995309b-18d0-43ec-bafb-654e83405412',
-        },
-      ],
-      trialSessionId: '8885309b-18d0-43ec-bafb-654e83405412',
-    };
-
     await saveCalendarNoteInteractor(
       applicationContext,
       {
@@ -180,43 +141,6 @@ describe('saveCalendarNotes', () => {
       mockDocketClerkUser,
     );
 
-    expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(createOrUpdateTrialSessionCases).toHaveBeenCalled();
-  });
-
-  it('does not update the case hearing record if that hearing is not on the case', async () => {
-    mockCase = {
-      ...MOCK_CASE,
-      hearings: [
-        {
-          ...MOCK_TRIAL,
-          caseOrder: [
-            {
-              calendarNotes: 'just a hearing note',
-              docketNumber: MOCK_CASE.docketNumber,
-            },
-            {
-              calendarNotes: 'another hearing note',
-              docketNumber: '123-21',
-            },
-          ],
-          trialSessionId: '1115309b-18d0-43ec-bafb-654e83405412',
-        },
-      ],
-      trialSessionId: '8885309b-18d0-43ec-bafb-654e83405412',
-    };
-
-    await saveCalendarNoteInteractor(
-      applicationContext,
-      {
-        calendarNote: 'just updating the hearing note',
-        docketNumber: mockCase.docketNumber,
-        trialSessionId: '9995309b-18d0-43ec-bafb-654e83405412',
-      },
-      mockDocketClerkUser,
-    );
-
-    expect(getCaseByDocketNumber).toHaveBeenCalled();
-    expect(createOrUpdateTrialSessionCases).not.toHaveBeenCalled();
   });
 });

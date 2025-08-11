@@ -16,7 +16,7 @@ import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSe
 describe('Get trial session details', () => {
   const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
 
-  const MOCK_TRIAL_SESSION: Partial< RawTrialSession> = {
+  const MOCK_TRIAL_SESSION: Partial<RawTrialSession> = {
     maxCases: 100,
     proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
     sessionType: SESSION_TYPES.regular,
@@ -43,7 +43,7 @@ describe('Get trial session details', () => {
   it('throws an error if the entity returned from persistence is invalid', async () => {
     getTrialSessionById.mockResolvedValue(
       //@ts-expect-error
-      omit(MOCK_TRIAL_SESSION, 'trialSessionId'),
+      omit(MOCK_TRIAL_SESSION, 'maxCases'),
     );
 
     await expect(
@@ -72,7 +72,9 @@ describe('Get trial session details', () => {
   });
 
   it('correctly returns data from persistence', async () => {
-    getTrialSessionById.mockResolvedValue(MOCK_TRIAL_SESSION as RawTrialSession);
+    getTrialSessionById.mockResolvedValue(
+      MOCK_TRIAL_SESSION as RawTrialSession,
+    );
 
     const result = await getTrialSessionDetailsInteractor(
       {
