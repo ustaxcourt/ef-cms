@@ -12,7 +12,6 @@ import { createUserRecords } from './persistence/dynamo/users/createUserRecords'
 import { deleteDocumentFile } from './persistence/s3/deleteDocumentFile';
 import { deleteMessage } from './persistence/sqs/deleteMessage';
 import { deletePractitionerDocument } from './persistence/dynamo/practitioners/deletePractitionerDocument';
-import { deleteRecord } from './persistence/elasticsearch/deleteRecord';
 import { deleteUserConnection } from '@web-api/persistence/postgres/connections/deleteUserConnection';
 import { deleteUserFromCase } from './persistence/dynamo/cases/deleteUserFromCase';
 import { deleteChangeOfAddressCaseRecord } from '@web-api/persistence/postgres/jobs/changeOfAddress/deleteChangeOfAddressCaseRecord';
@@ -151,7 +150,6 @@ const gatewayMethods = {
   deleteDocumentFile,
   deleteMessage,
   deletePractitionerDocument,
-  deleteRecord,
   deleteUserConnection,
   deleteUserFromCase,
   fetchEventCodesCountForJudges,

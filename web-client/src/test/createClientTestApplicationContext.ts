@@ -43,7 +43,6 @@ import {
 } from '@shared/business/utilities/sortFunctions';
 import { copyPagesAndAppendToTargetPdf } from '@shared/business/utilities/copyPagesAndAppendToTargetPdf';
 import { createMockDocumentClient } from '@shared/business/test/createMockDocumentClient';
-import { deleteRecord } from '@web-api/persistence/elasticsearch/deleteRecord';
 import { filterEmptyStrings } from '@shared/business/utilities/filterEmptyStrings';
 import { formatAttachments } from '@shared/business/utilities/formatAttachments';
 import {
@@ -390,7 +389,6 @@ const createTestApplicationContext = () => {
     deleteDocumentFile: jest.fn(),
     deleteElasticsearchReindexRecord: jest.fn(),
     deleteLock: jest.fn().mockImplementation(() => Promise.resolve(null)),
-    deleteRecord: jest.fn().mockImplementation(deleteRecord),
     fetchPendingItems: jest.fn(),
     getAllWebSocketConnections: jest
       .fn()
