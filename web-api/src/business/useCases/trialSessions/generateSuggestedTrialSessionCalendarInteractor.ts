@@ -24,7 +24,6 @@ import {
   USER_MESSAGE_TYPES,
   UserMessageType,
 } from '@shared/business/entities/EntityConstants';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { createProspectiveTrialSessions } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/createProspectiveTrialSessions';
@@ -59,7 +58,6 @@ export type CalendarGeneratorMessage = {
 };
 
 export const generateSuggestedTrialSessionCalendarInteractor = async (
-  applicationContext: ServerApplicationContext,
   TERM_BUILDER_INFORMATION: RawGenerateSuggestedTermForm,
   authorizedUser: UnknownAuthUser,
 ): Promise<{

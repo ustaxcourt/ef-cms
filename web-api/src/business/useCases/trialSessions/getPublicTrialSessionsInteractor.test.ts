@@ -4,7 +4,6 @@ import {
   SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '@shared/business/entities/EntityConstants';
-import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getPublicTrialSessionsInteractor } from '@web-api/business/useCases/trialSessions/getPublicTrialSessionsInteractor';
 import { getTrialSessions as getTrialSessionsMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessions';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
@@ -17,7 +16,7 @@ describe('getPublicTrialSessionsInteractor', () => {
   });
 
   it('should return open trial sessions', async () => {
-    const result = await getPublicTrialSessionsInteractor(applicationContext);
+    const result = await getPublicTrialSessionsInteractor();
     expect(result.every(session => session.sessionStatus === 'Open')).toBe(
       true,
     );
@@ -42,7 +41,7 @@ const MOCK_TRIAL_SESSIONS: RawTrialSession[] = [
     trialSessionId: '0d943468-bc2e-4631-84e3-b084cf5b1fbb',
     hasNottBeenServed: false,
     sessionScope: 'Location-based',
-    paperServicePdfs: []
+    paperServicePdfs: [],
   },
   {
     caseOrder: [],
@@ -61,7 +60,7 @@ const MOCK_TRIAL_SESSIONS: RawTrialSession[] = [
     trialLocation: 'Standalone Remote',
     trialSessionId: '111ac21b-99f9-4321-98c8-b95db00af96b',
     hasNottBeenServed: false,
-    paperServicePdfs: []
+    paperServicePdfs: [],
   },
   {
     caseOrder: [],
@@ -80,6 +79,6 @@ const MOCK_TRIAL_SESSIONS: RawTrialSession[] = [
     trialSessionId: '149159ca-f4a1-4b2b-bc24-bd1fbe6defdc',
     hasNottBeenServed: false,
     sessionScope: 'Location-based',
-    paperServicePdfs: []
+    paperServicePdfs: [],
   },
 ];

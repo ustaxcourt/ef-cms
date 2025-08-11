@@ -3,7 +3,6 @@ import { JudgeActivityStatisticsRequest } from '@web-api/business/useCases/judge
 import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getTrialSessionsForJudgeActivityReportInteractor } from './getTrialSessionsForJudgeActivityReportInteractor';
 import { judgeUser } from '@shared/test/mockUsers';
 import { mockDocketClerkUser, mockJudgeUser } from '@shared/test/mockAuthUsers';
@@ -129,7 +128,6 @@ describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
   it('should throw an error when user is unauthorized to retrieve the judge activity report', async () => {
     await expect(
       getTrialSessionsForJudgeActivityReportInteractor(
-        applicationContext,
         mockValidRequest,
         mockDocketClerkUser,
       ),
@@ -139,7 +137,6 @@ describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
   it('should throw an error when the search request is not valid', async () => {
     await expect(
       getTrialSessionsForJudgeActivityReportInteractor(
-        applicationContext,
         mockInvalidRequest,
         mockJudgeUser,
       ),
@@ -148,7 +145,6 @@ describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
 
   it('should retrieve all trial sessions from persistence for filtering', async () => {
     await getTrialSessionsForJudgeActivityReportInteractor(
-      applicationContext,
       mockValidRequest,
       mockJudgeUser,
     );
@@ -158,7 +154,6 @@ describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
 
   it('should return for each trial session type, the weighted count of sessions held in the date range for the judge provided', async () => {
     const opinions = await getTrialSessionsForJudgeActivityReportInteractor(
-      applicationContext,
       mockValidRequest,
       mockJudgeUser,
     );
@@ -178,7 +173,6 @@ describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
   it('should return ALL trial session types, the weighted count of sessions held in the date range for all the judges', async () => {
     const request = { ...mockValidRequest, judges: ['Colvin', 'Sotomayor'] };
     const result = await getTrialSessionsForJudgeActivityReportInteractor(
-      applicationContext,
       request,
       mockJudgeUser,
     );
@@ -206,7 +200,6 @@ describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
     getTrialSessions.mockResolvedValue([unassignedTrialSession]);
 
     const result = await getTrialSessionsForJudgeActivityReportInteractor(
-      applicationContext,
       request,
       mockJudgeUser,
     );
@@ -236,7 +229,6 @@ describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
     getTrialSessions.mockResolvedValue([dayAfterTrialSession]);
 
     const result = await getTrialSessionsForJudgeActivityReportInteractor(
-      applicationContext,
       request,
       mockJudgeUser,
     );
@@ -266,7 +258,6 @@ describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
     getTrialSessions.mockResolvedValue([dayAfterTrialSession]);
 
     const result = await getTrialSessionsForJudgeActivityReportInteractor(
-      applicationContext,
       request,
       mockJudgeUser,
     );

@@ -32,11 +32,7 @@ describe('getTrialSessionsForJudgeInteractor', () => {
     );
 
     await expect(
-      getTrialSessionsForJudgeInteractor(
-        applicationContext,
-        JUDGE_ID,
-        mockPetitionerUser,
-      ),
+      getTrialSessionsForJudgeInteractor(JUDGE_ID, mockPetitionerUser),
     ).rejects.toThrow();
   });
 
@@ -52,7 +48,6 @@ describe('getTrialSessionsForJudgeInteractor', () => {
     ]);
 
     const trialSessions = await getTrialSessionsForJudgeInteractor(
-      applicationContext,
       JUDGE_ID,
       mockPetitionsClerkUser,
     );

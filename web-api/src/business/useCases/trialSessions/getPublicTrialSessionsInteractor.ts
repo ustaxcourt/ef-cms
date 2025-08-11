@@ -1,11 +1,10 @@
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { TrialSessionInfoDTO } from '@shared/business/dto/trialSessions/TrialSessionInfoDTO';
 import { getTrialSessions } from '@web-api/persistence/postgres/trialSessions/getTrialSessions';
 
-export const getPublicTrialSessionsInteractor = async (
-  applicationContext: ServerApplicationContext,
-): Promise<TrialSessionInfoDTO[]> => {
+export const getPublicTrialSessionsInteractor = async (): Promise<
+  TrialSessionInfoDTO[]
+> => {
   const trialSessions = await getTrialSessions();
 
   return trialSessions

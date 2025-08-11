@@ -13,7 +13,6 @@ import {
   SESSION_STATUS_TYPES,
   SESSION_TYPES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { sum } from 'lodash';
 import { getTrialSessions } from '@web-api/persistence/postgres/trialSessions/getTrialSessions';
@@ -32,7 +31,6 @@ export type TrialSessionReturnType = {
 };
 
 export const getTrialSessionsForJudgeActivityReportInteractor = async (
-  applicationContext: ServerApplicationContext,
   { endDate, judges, startDate }: JudgeActivityStatisticsRequest,
   authorizedUser: UnknownAuthUser,
 ): Promise<TrialSessionReturnType> => {

@@ -19,7 +19,6 @@ import {
   WASHINGTON_DC_STRING,
   generateSuggestedTrialSessionCalendarInteractor,
 } from '@web-api/business/useCases/trialSessions/generateSuggestedTrialSessionCalendarInteractor';
-import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   mockPetitionsClerkUser,
   mockPrivatePractitionerUser,
@@ -38,7 +37,9 @@ describe('generateSuggestedTrialSessionCalendar', () => {
   beforeAll(() => {
     getSuggestedCalendarCases.mockResolvedValue(mockCases);
 
-    getTrialSessions.mockResolvedValue(mockSpecialSessions as RawTrialSession[]);
+    getTrialSessions.mockResolvedValue(
+      mockSpecialSessions as RawTrialSession[],
+    );
   });
 
   it('should generate a trial term when valid date range is provided and sufficient data is present in the system', async () => {
@@ -49,7 +50,6 @@ describe('generateSuggestedTrialSessionCalendar', () => {
     // Act
     const { bufferArray, message } =
       await generateSuggestedTrialSessionCalendarInteractor(
-        applicationContext,
         {
           termEndDate: mockEndDate,
           termStartDate: mockStartDate,
@@ -101,7 +101,6 @@ describe('generateSuggestedTrialSessionCalendar', () => {
 
     // Act
     await generateSuggestedTrialSessionCalendarInteractor(
-      applicationContext,
       {
         termEndDate: mockEndDate,
         termStartDate: mockStartDate,
@@ -174,7 +173,6 @@ describe('generateSuggestedTrialSessionCalendar', () => {
     // Act and Assert
     await expect(async () => {
       await generateSuggestedTrialSessionCalendarInteractor(
-        applicationContext,
         {
           termEndDate: mockEndDate,
           termStartDate: mockStartDate,
@@ -212,7 +210,6 @@ describe('generateSuggestedTrialSessionCalendar', () => {
     // Act
     const { bufferArray, message } =
       await generateSuggestedTrialSessionCalendarInteractor(
-        applicationContext,
         {
           termEndDate: mockEndDate,
           termStartDate: mockStartDate,

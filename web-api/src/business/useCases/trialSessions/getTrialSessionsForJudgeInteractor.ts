@@ -2,7 +2,6 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { TrialSessionInfoDTO } from '@shared/business/dto/trialSessions/TrialSessionInfoDTO';
 import { UnauthorizedError } from '@web-api/errors/errors';
@@ -16,7 +15,6 @@ import { getTrialSessions } from '@web-api/persistence/postgres/trialSessions/ge
  * @returns {Array<TrialSession>} the trial sessions returned from persistence
  */
 export const getTrialSessionsForJudgeInteractor = async (
-  applicationContext: ServerApplicationContext,
   judgeId: string,
   authorizedUser: UnknownAuthUser,
 ) => {
