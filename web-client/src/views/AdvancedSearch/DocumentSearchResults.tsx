@@ -488,12 +488,10 @@ export const DocumentSearchResults = connect(
                             {result.documentTitle}
                           </Button>
                         </td>
-                        <th>Pages</th>
-                        <td className="divider">
-                          {result.numberOfPagesFormatted}
-                        </td>
                         <th>Judge</th>
-                        <td>{result.formattedJudgeName}</td>
+                        <td className="divider">{result.formattedJudgeName}</td>
+                        <th>Pages</th>
+                        <td>{result.numberOfPagesFormatted}</td>
                       </tr>
                     ))}
                   </tbody>
