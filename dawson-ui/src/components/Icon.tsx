@@ -13,7 +13,6 @@ export const Icon = props => {
   if (iconProps['aria-label']) {
     iconProps['aria-hidden'] = false;
     iconProps.title = iconProps['aria-label'];
-    iconProps.title = `${iconProps.title} from dawson-ui`;
   }
 
   return <FontAwesomeIcon {...iconProps} />;

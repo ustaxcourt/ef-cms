@@ -1,8 +1,9 @@
-import { DEBOUNCE_TIME_MILLISECONDS } from '@shared/business/entities/EntityConstants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { debounce } from 'lodash';
 import React, { useState } from 'react';
 import classNames from 'classnames';
+
+export const DEBOUNCE_TIME_MILLISECONDS = 500;
 
 function getUpdatedOnClick(
   onClick: (...args: any) => any | undefined,
@@ -27,9 +28,13 @@ function getUpdatedOnClick(
   };
 }
 
-type buttonType = 'primary' | 'secondary' | 'destructive' | 'tertiary' | 'tertiary-destructive';
+type buttonType =
+  | 'primary'
+  | 'secondary'
+  | 'destructive'
+  | 'tertiary'
+  | 'tertiary-destructive';
 
-// eslint-disable-next-line complexity
 export const Button = (props: {
   [key: string]: any;
   disableOnClick?: boolean;
