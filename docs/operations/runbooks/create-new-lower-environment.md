@@ -297,84 +297,39 @@ This runbook describes the process of creating a new DAWSON lower environment in
 1. Write feature flags to the deploy table:
    1. `aws-batch-zipper-minimum-count`:
       ```bash
-      aws dynamodb update-item \
-        --region us-east-1 --table-name "efcms-deploy-${ENV}" \
-        --key '{"pk":{"S":"aws-batch-zipper-minimum-count"}, "sk":{"S":"aws-batch-zipper-minimum-count"}}' \
-        --update-expression "SET #current = :current" \
-        --expression-attribute-names '{"#current":"current"}' \
-        --expression-attribute-values '{":current":{"N":"50"}}'
+			scripts/postgres/featureFlags/setup-aws-batch-zipper-minimum-count.ts
       ```
    1. `chief-judge-name`, replacing `<CHIEF JUDGE NAME>` with the current Chief Judge:
       ```bash
-      aws dynamodb update-item \
-        --region us-east-1 --table-name "efcms-deploy-${ENV}" \
-        --key '{"pk":{"S":"chief-judge-name"}, "sk":{"S":"chief-judge-name"}}' \
-        --update-expression "SET #current = :current" \
-        --expression-attribute-names '{"#current":"current"}' \
-        --expression-attribute-values '{":current":{"S":"<CHIEF JUDGE NAME>"}}'
+			scripts/postgres/featureFlags/setup-chief-judge-name-flag.ts
       ```
    1. `clerk-of-court-configuration`, replacing `<CLERK OF COURT NAME>` with the current Clerk of the Court:
       ```bash
-      aws dynamodb update-item \
-        --region us-east-1 --table-name "efcms-deploy-${ENV}" \
-        --key '{"pk":{"S":"clerk-of-court-configuration"}, "sk":{"S":"clerk-of-court-configuration"}}' \
-        --update-expression "SET #current = :current" \
-        --expression-attribute-names '{"#current":"current"}' \
-        --expression-attribute-values '{":current":{"M":{"name":{"S":"<CLERK OF COURT NAME>"},"title": {"S":"Clerk of the Court"}}}}'
+      scripts/postgres/featureFlags/setup-clerk-of-court-config.ts
       ```
    1. `document-visibility-policy-change-date`:
       ```bash
-      aws dynamodb update-item \
-        --region us-east-1 --table-name "efcms-deploy-${ENV}" \
-        --key '{"pk":{"S":"document-visibility-policy-change-date"}, "sk":{"S":"document-visibility-policy-change-date"}}' \
-        --update-expression "SET #current = :current" \
-        --expression-attribute-names '{"#current":"current"}' \
-        --expression-attribute-values '{":current":{"S":"2023-08-01"}}'
+      scripts/postgres/featureFlags/setup-document-visibility-policy-change-date.ts
       ```
    1. `e-consent-fields-enabled-feature-flag`:
       ```bash
-      aws dynamodb update-item \
-        --region us-east-1 --table-name "efcms-deploy-${ENV}" \
-        --key '{"pk":{"S":"e-consent-fields-enabled-feature-flag"}, "sk":{"S":"e-consent-fields-enabled-feature-flag"}}' \
-        --update-expression "SET #current = :current" \
-        --expression-attribute-names '{"#current":"current"}' \
-        --expression-attribute-values '{":current":{"BOOL":true}}'
+      scripts/postgres/featureFlags/setup-e-consent-fields-enabled-feature-flag.ts
       ```
    1. `entity-locking-feature-flag`:
       ```bash
-      aws dynamodb update-item \
-        --region us-east-1 --table-name "efcms-deploy-${ENV}" \
-        --key '{"pk":{"S":"entity-locking-feature-flag"}, "sk":{"S":"entity-locking-feature-flag"}}' \
-        --update-expression "SET #current = :current" \
-        --expression-attribute-names '{"#current":"current"}' \
-        --expression-attribute-values '{":current":{"BOOL":true}}'
+      scripts/postgres/featureFlags/setup-entity-locking-feature-flag.ts
       ```
    1. `maintenance-mode`:
       ```bash
-      aws dynamodb update-item \
-        --region us-east-1 --table-name "efcms-deploy-${ENV}" \
-        --key '{"pk":{"S":"maintenance-mode"}, "sk":{"S":"maintenance-mode"}}' \
-        --update-expression "SET #current = :current" \
-        --expression-attribute-names '{"#current":"current"}' \
-        --expression-attribute-values '{":current":{"BOOL":false}}'
+      scripts/postgres/set-maintenance-mode.ts
       ```
    1. `section-outbox-number-of-days`:
       ```bash
-      aws dynamodb update-item \
-        --region us-east-1 --table-name "efcms-deploy-${ENV}" \
-        --key '{"pk":{"S":"section-outbox-number-of-days"}, "sk":{"S":"section-outbox-number-of-days"}}' \
-        --update-expression "SET #current = :current" \
-        --expression-attribute-names '{"#current":"current"}' \
-        --expression-attribute-values '{":current":{"N":"5"}}'
+      scripts/postgres/featureFlags/setup-section-outbox-retrieval-days.ts
       ```
    1. `use-change-of-address-lambda`:
       ```bash
-      aws dynamodb update-item \
-        --region us-east-1 --table-name "efcms-deploy-${ENV}" \
-        --key '{"pk":{"S":"use-change-of-address-lambda"}, "sk":{"S":"use-change-of-address-lambda"}}' \
-        --update-expression "SET #current = :current" \
-        --expression-attribute-names '{"#current":"current"}' \
-        --expression-attribute-values '{":current":{"BOOL":true}}'
+      scripts/postgres/featureFlags/setup-use-change-of-address-lambda-flag.ts
       ```
 1. ⚖️ If this lower environment is to have prod-like data:
    1. Sync the `documents` bucket:
