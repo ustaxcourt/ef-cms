@@ -3,6 +3,7 @@ import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
+import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
@@ -23,6 +24,7 @@ import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/per
 import { deleteCaseDeadline as deleteCaseDeadlineMock } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
 import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 
 describe('updateCaseContextInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
@@ -33,6 +35,7 @@ describe('updateCaseContextInteractor', () => {
   const getCaseDeadlinesByDocketNumber = jest.mocked(
     getCaseDeadlinesByDocketNumberMock,
   );
+  const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
 
   beforeEach(() => {
     getCaseByDocketNumber.mockReturnValue(Promise.resolve(MOCK_CASE));
@@ -93,9 +96,7 @@ describe('updateCaseContextInteractor', () => {
       Promise.resolve(MOCK_CASE_WITH_TRIAL_SESSION),
     );
 
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockReturnValue(MOCK_TRIAL_REMOTE);
+    getTrialSessionById.mockResolvedValue(MOCK_TRIAL_REMOTE);
 
     const result = await updateCaseContextInteractor(
       applicationContext,
