@@ -451,8 +451,8 @@ export const DocumentSearchResults = connect(
                     <tr>
                       <th aria-label="Docket Number">Docket No.</th>
                       <th>Filed Date</th>
-                      <th>Case Title</th>
                       <th>Order</th>
+                      <th>Case Title</th>
                       <th>Judge</th>
                       <th>Pages</th>
                     </tr>
@@ -467,8 +467,6 @@ export const DocumentSearchResults = connect(
                         </td>
                         <th>Filed Date</th>
                         <td className="divider">{result.formattedFiledDate}</td>
-                        <th>Case Title</th>
-                        <td className="divider">{result.caseTitle}</td>
                         <th>Order</th>
                         <td className="divider">
                           <Button
@@ -488,6 +486,8 @@ export const DocumentSearchResults = connect(
                             {result.documentTitle}
                           </Button>
                         </td>
+                        <th>Case Title</th>
+                        <td className="divider">{result.caseTitle}</td>
                         <th>Judge</th>
                         <td className="divider">{result.formattedJudgeName}</td>
                         <th>Pages</th>
