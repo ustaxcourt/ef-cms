@@ -1339,21 +1339,21 @@ workflows:
   glue-to-dev:
     when: << pipeline.parameters.run_glue_to_dev >>
     jobs:
-      - delete-existing-data:
-          <<: *only-dev
-      - redeploy-environment:
-          <<: *only-dev
-          requires:
-            - delete-existing-data
-      - wait-for-deployment-workflow:
-          <<: *only-dev
-          type: approval
-          requires:
-            - redeploy-environment
+#      - delete-existing-data:
+#          <<: *only-dev
+#      - redeploy-environment:
+#          <<: *only-dev
+#          requires:
+#            - delete-existing-data
+#      - wait-for-deployment-workflow:
+#          <<: *only-dev
+#          type: approval
+#          requires:
+#            - redeploy-environment
       - initiate-glue-job:
           <<: *only-dev
-          requires:
-            - wait-for-deployment-workflow
+#          requires:
+#            - wait-for-deployment-workflow
       - wait-for-glue-workflow:
           <<: *only-dev
           type: approval
