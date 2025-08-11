@@ -86,8 +86,7 @@ describe('updateCaseDeadlineInteractor', () => {
         1,
       );
       expect(getCaseDeadlinesByConsolidatedCaseDeadlineIdCalls[0]).toEqual([
-        mockCaseDeadline.caseDeadlineId,
-        LEAD_DOCKET_NUMBER,
+        [mockCaseDeadline.caseDeadlineId],
       ]);
 
       const upsertCaseDeadlinesCalls = upsertCaseDeadlines.mock.calls;

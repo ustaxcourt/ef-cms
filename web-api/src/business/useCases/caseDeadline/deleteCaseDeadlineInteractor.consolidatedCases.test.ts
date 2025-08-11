@@ -19,6 +19,7 @@ import { deleteCaseDeadline as deleteDeadlineMock } from '@web-api/persistence/p
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAutomaticBlock as updateCaseAutomaticBlockMock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
 import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
+import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 
 const getCaseDeadlinesByConsolidatedCaseDeadlineIds = jest.mocked(
   getCaseDeadlinesByConsolidatedCaseDeadlineIdsMock,
@@ -28,6 +29,9 @@ const deleteDeadline = deleteDeadlineMock as jest.Mock;
 
 const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
 const updateCaseAutomaticBlock = jest.mocked(updateCaseAutomaticBlockMock);
+const getCaseDeadlinesByDocketNumber = jest.mocked(
+  getCaseDeadlinesByDocketNumberMock,
+);
 
 describe('deleteCaseDeadlineInteractor - Consolidated Cases', () => {
   const TEST_DEADLINE_ID = getUniqueId();
@@ -38,6 +42,8 @@ describe('deleteCaseDeadlineInteractor - Consolidated Cases', () => {
       // eslint-disable-next-line @typescript-eslint/require-await
       async params => params.caseEntity,
     );
+
+    getCaseDeadlinesByDocketNumber.mockResolvedValue([]);
   });
 
   it('should only delete one deadline when the case is not the lead case of the Consolidated Group', async () => {
@@ -84,6 +90,10 @@ describe('deleteCaseDeadlineInteractor - Consolidated Cases', () => {
       getUniqueId(),
       getUniqueId(),
     ];
+
+    getCaseDeadlinesByDocketNumber.mockResolvedValue([
+      { caseDeadlineId: TEST_DEADLINE_ID } as any,
+    ]);
 
     getCaseDeadlinesByConsolidatedCaseDeadlineIds.mockResolvedValue(
       CONSOLIDATED_CASE_DEADLINE_IDS.map((id, index) => {
