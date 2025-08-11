@@ -21,6 +21,6 @@ jest.mock(
 );
 
 jest.mock(
-  '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId',
-  () => mockFactory('getCaseDeadlinesByConsolidatedCaseDeadlineId', []),
+  '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds',
+  () => mockFactory('getCaseDeadlinesByConsolidatedCaseDeadlineIds', []),
 );
