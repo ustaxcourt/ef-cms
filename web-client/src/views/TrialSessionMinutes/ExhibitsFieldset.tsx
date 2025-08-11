@@ -52,6 +52,8 @@ export const ExhibitsFieldset = ({
     }
   };
 
+  const exhibitValues = Object.values(exhibitsFormState.exhibits)
+
   useEffect(() => {
     Object.keys(exhibitsFormState.exhibits).forEach(key => {
       adjustHeight(key);
@@ -66,7 +68,25 @@ export const ExhibitsFieldset = ({
         </div>
         <div className="grid-col-7"></div>
       </div>
-      {Object.values(exhibitsFormState.exhibits).map((row, rowIndex) => (
+      {exhibitValues.length === 0 && (
+        <Button
+          link
+          data-testid="add-exhibit-button-empty"
+          className="padding-0 margin-top-1 margin-bottom-1"
+          icon="plus"
+          type="button"
+          onClick={e => {
+            e.preventDefault();
+            addRowHandler({
+              name: 'exhibits',
+              section: MINUTE_SHEET_FORM_SECTION_MAP.exhibitsSection,
+            });
+          }}
+        >
+          Add Exhibit
+        </Button>
+      )}
+      {exhibitValues.map((row, rowIndex) => (
         <div key={row.renderKey}>
           <div className="grid-row grid-gap-2 flex-justify-start align-items-top margin-bottom-1">
             <div className="grid-col-5">

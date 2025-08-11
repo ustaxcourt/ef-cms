@@ -71,6 +71,13 @@ describe('user opens a minute sheet', () => {
     cy.url().should('include', `/trial-session-detail/${ts}`);
   });
   it('should add exhibit under the exhibit button clicked', () => {
+    // remove all exhibits that currently exist
+    cy.get('[data-testid^="remove-exhibit-button-"]').each($el => {
+      cy.wrap($el).click();
+    });
+
+    cy.get('[data-testid="add-exhibit-button-empty"]').click();
+
     // add 2 more rows so there are 3 rows and put values in each exhibit
     cy.get('[data-testid="add-exhibit-button-0"]').click();
     cy.get('[data-testid="add-exhibit-button-0"]').click();
