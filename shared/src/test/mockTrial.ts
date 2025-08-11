@@ -35,7 +35,15 @@ export const MOCK_TRIAL_REMOTE: RawTrialSession = {
 };
 
 export const MOCK_TRIAL_REGULAR: RawTrialSession = {
-  caseOrder: [{ docketNumber: MOCK_CASE.docketNumber }],
+  caseOrder: [
+    {
+      docketNumber: MOCK_CASE.docketNumber,
+      addedToSessionAt: '2018-03-01T21:40:46.415Z',
+      isHearing: false,
+      isManuallyAdded: false,
+      removedFromTrial: false,
+    },
+  ],
   entityName: 'TrialSession',
   hasNottBeenServed: false,
   isCalendared: false,
@@ -60,8 +68,20 @@ export const MOCK_TRIAL_REGULAR: RawTrialSession = {
 export const MOCK_TRIAL_INPERSON: RawTrialSession = {
   address1: '123 Street Lane',
   caseOrder: [
-    { docketNumber: MOCK_CASE.docketNumber },
-    { docketNumber: '123-45' },
+    {
+      docketNumber: MOCK_CASE.docketNumber,
+      addedToSessionAt: '2018-03-01T21:40:46.415Z',
+      isHearing: false,
+      isManuallyAdded: false,
+      removedFromTrial: false,
+    },
+    {
+      docketNumber: '123-45',
+      addedToSessionAt: '2018-03-01T21:40:46.415Z',
+      isHearing: false,
+      isManuallyAdded: false,
+      removedFromTrial: false,
+    },
   ],
   chambersPhoneNumber: '3609087782',
   city: 'Scottsburg',

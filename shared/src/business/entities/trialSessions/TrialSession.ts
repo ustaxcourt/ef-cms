@@ -142,6 +142,7 @@ export class TrialSession extends JoiValidationEntity {
       calendarNotes: caseOrder.calendarNotes,
       disposition: caseOrder.disposition,
       docketNumber: caseOrder.docketNumber,
+      isHearing: caseOrder.isHearing,
       isManuallyAdded: caseOrder.isManuallyAdded,
       removedFromTrial: caseOrder.removedFromTrial,
       removedFromTrialDate: caseOrder.removedFromTrialDate,
@@ -453,7 +454,11 @@ export class TrialSession extends JoiValidationEntity {
     return caseOrderObject;
   }
 
-  manuallyAddCaseToCalendar({ calendarNotes, caseEntity, isHearing }): TCaseOrder {
+  manuallyAddCaseToCalendar({
+    calendarNotes,
+    caseEntity,
+    isHearing,
+  }): TCaseOrder {
     const { docketNumber } = caseEntity;
     const caseOrderObject = {
       addedToSessionAt: createISODateString(),
@@ -461,7 +466,7 @@ export class TrialSession extends JoiValidationEntity {
       docketNumber,
       isManuallyAdded: true,
       removedFromTrial: false,
-      isHearing
+      isHearing,
     };
     this.caseOrder.push(caseOrderObject);
     return caseOrderObject;
@@ -510,7 +515,7 @@ export class TrialSession extends JoiValidationEntity {
     );
     let caseOrderObject: TCaseOrder | undefined = undefined;
     if (index >= 0) {
-      caseOrderObject = this.caseOrder!.splice(index, 1)[0]; 
+      caseOrderObject = this.caseOrder!.splice(index, 1)[0];
     }
     return caseOrderObject;
   }

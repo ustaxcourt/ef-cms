@@ -1,7 +1,6 @@
 import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_TRIAL_INPERSON } from '@shared/test/mockTrial';
-import { TCaseOrder } from '@shared/business/entities/trialSessions/TrialSession';
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { generateTrialCalendarPdfInteractor } from './generateTrialCalendarPdfInteractor';
@@ -9,7 +8,10 @@ import {
   irsPractitionerUser,
   privatePractitionerUser,
 } from '@shared/test/mockUsers';
-import { getCalendaredCasesForTrialSession as getCalendaredCasesForTrialSessionMock } from '@web-api/persistence/postgres/trialSessions/getCalendaredCasesForTrialSession';
+import {
+  getCalendaredCasesForTrialSession as getCalendaredCasesForTrialSessionMock,
+  RawCaseAndCaseOrder,
+} from '@web-api/persistence/postgres/trialSessions/getCalendaredCasesForTrialSession';
 import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 
 describe('generateTrialCalendarPdfInteractor', () => {
@@ -19,7 +21,7 @@ describe('generateTrialCalendarPdfInteractor', () => {
   const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
 
   // deliberately *not* automatically sorted by docket number for test purposes
-  const mockCases: (RawCase & TCaseOrder)[] = [
+  const mockCases: RawCaseAndCaseOrder[] = [
     {
       ...MOCK_CASE,
       calendarNotes: 'this is a test',
@@ -27,46 +29,77 @@ describe('generateTrialCalendarPdfInteractor', () => {
       docketNumberWithSuffix: '102-19W',
       irsPractitioners: [irsPractitionerUser],
       privatePractitioners: [privatePractitionerUser],
+      addedToSessionAt: '2018-03-01T21:40:46.415Z',
+      isHearing: false,
+      isManuallyAdded: false,
+      removedFromTrial: false,
     },
     {
       ...MOCK_CASE,
       docketNumber: '24529-22',
       docketNumberWithSuffix: '24529-22',
       leadDocketNumber: '34189-21',
+      addedToSessionAt: '2018-03-01T21:40:46.415Z',
+      isHearing: false,
+      isManuallyAdded: false,
+      removedFromTrial: false,
     },
     {
       ...MOCK_CASE,
       docketNumber: '8904-22',
       docketNumberWithSuffix: '8904-22',
+      addedToSessionAt: '2018-03-01T21:40:46.415Z',
+      isHearing: false,
+      isManuallyAdded: false,
+      removedFromTrial: false,
     },
     {
       ...MOCK_CASE,
       docketNumber: '18072-22',
       docketNumberWithSuffix: '18072-22',
       leadDocketNumber: '34189-21',
+      addedToSessionAt: '2018-03-01T21:40:46.415Z',
+      isHearing: false,
+      isManuallyAdded: false,
+      removedFromTrial: false,
     },
     {
       ...MOCK_CASE,
       docketNumber: '101-18',
       docketNumberWithSuffix: '101-18',
+      addedToSessionAt: '2018-03-01T21:40:46.415Z',
+      isHearing: false,
+      isManuallyAdded: false,
+      removedFromTrial: false,
     },
     {
       ...MOCK_CASE,
       docketNumber: '123-20',
       docketNumberWithSuffix: '123-20W',
       removedFromTrial: true,
+      addedToSessionAt: '2018-03-01T21:40:46.415Z',
+      isHearing: false,
+      isManuallyAdded: false,
     },
     {
       ...MOCK_CASE,
       docketNumber: '34189-21',
       docketNumberWithSuffix: '34189-21',
       leadDocketNumber: '34189-21',
+      addedToSessionAt: '2018-03-01T21:40:46.415Z',
+      isHearing: false,
+      isManuallyAdded: false,
+      removedFromTrial: false,
     },
     {
       ...MOCK_CASE,
       docketNumber: '555-13',
       docketNumberWithSuffix: '555-13',
       leadDocketNumber: '234-12',
+      addedToSessionAt: '2018-03-01T21:40:46.415Z',
+      isHearing: false,
+      isManuallyAdded: false,
+      removedFromTrial: false,
     },
   ];
 
@@ -101,12 +134,8 @@ describe('generateTrialCalendarPdfInteractor', () => {
       },
     );
 
-    expect(
-      getTrialSessionById,
-    ).toHaveBeenCalled();
-    expect(
-      getCalendaredCasesForTrialSession,
-    ).toHaveBeenCalled();
+    expect(getTrialSessionById).toHaveBeenCalled();
+    expect(getCalendaredCasesForTrialSession).toHaveBeenCalled();
     expect(
       applicationContext.getDocumentGenerators().trialCalendar,
     ).toHaveBeenCalledWith({
