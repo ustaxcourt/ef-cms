@@ -80,7 +80,12 @@ export const deactivateUserInteractor = async (
     );
   }
 
-  const response = successes.join('<br>');
+  const response = [
+    ...usersToUpdate
+      .filter(u => !u.enabled)
+      .map(u => `${u.email} is already disabled`),
+    ...successes,
+  ].join('<br>');
 
   return response;
 };

@@ -214,4 +214,118 @@ describe('deactivateUserInteractor', () => {
 
     expect(getUserGateway().disableUser).toHaveBeenCalled();
   });
+
+  it('should include an "already disabled" line, then the success line for that user (exact HTML)', async () => {
+    const disabledUser = {
+      email: 'disabled@ustaxcourt.gov',
+      role: ROLES.petitionsClerk,
+      status: 'CONFIRMED',
+      userId: 'user-disabled',
+      enabled: false,
+    };
+
+    getUsersWithSimilarEmails.mockResolvedValueOnce([disabledUser]);
+
+    deactivateUser.mockResolvedValueOnce('admissions');
+
+    const result = await deactivateUserInteractor(
+      { email: 'disabled@ustaxcourt.gov' },
+      authorizedUser,
+    );
+
+    expect(getUserGateway().disableUser).toHaveBeenCalledWith({
+      email: 'disabled@ustaxcourt.gov',
+    });
+    expect(deactivateUser).toHaveBeenCalledWith({ userId: 'user-disabled' });
+
+    expect(result).toBe(
+      'disabled@ustaxcourt.gov is already disabled<br>' +
+        'INFO: removed (user-disabled|disabled@ustaxcourt.gov) from admissions',
+    );
+  });
+
+  it('should handle a mix of disabled and enabled, return disabled message first, then both success lines', async () => {
+    const disabledUser = {
+      email: 'enabled+disabled@ustaxcourt.gov',
+      role: ROLES.petitionsClerk,
+      status: 'CONFIRMED',
+      userId: 'user-disabled',
+      enabled: false,
+    };
+    const enabledUser = {
+      email: 'enabled@ustaxcourt.gov',
+      role: ROLES.petitionsClerk,
+      status: 'CONFIRMED',
+      userId: 'user-enabled',
+      enabled: true,
+    };
+
+    getUsersWithSimilarEmails.mockResolvedValueOnce([
+      disabledUser,
+      enabledUser,
+    ]);
+
+    deactivateUser
+      .mockResolvedValueOnce('admissions')
+      .mockResolvedValueOnce('docket');
+
+    const result = await deactivateUserInteractor(
+      { email: 'enabled@ustaxcourt.gov' },
+      authorizedUser,
+    );
+
+    expect(result).toBe(
+      'enabled+disabled@ustaxcourt.gov is already disabled<br>' +
+        'INFO: removed (user-disabled|enabled+disabled@ustaxcourt.gov) from admissions<br>' +
+        'INFO: removed (user-enabled|enabled@ustaxcourt.gov) from docket',
+    );
+  });
+
+  it('should still throw an error on failure even if some users are disabled', async () => {
+    const disabledUser = {
+      email: 'disabled@ustaxcourt.gov',
+      role: ROLES.petitionsClerk,
+      status: 'CONFIRMED',
+      userId: 'user-disabled',
+      enabled: false,
+    };
+
+    getUsersWithSimilarEmails.mockResolvedValueOnce([disabledUser]);
+
+    (getUserGateway().disableUser as jest.Mock).mockRejectedValueOnce(
+      new Error('Cognito down'),
+    );
+
+    await expect(
+      deactivateUserInteractor(
+        { email: 'disabled@ustaxcourt.gov' },
+        authorizedUser,
+      ),
+    ).rejects.toThrow(
+      'One or more deactivations failed:\n' +
+        'ERROR: failed to deactivate (user-disabled|disabled@ustaxcourt.gov): Cognito down',
+    );
+  });
+
+  it('should a simple HTML response when there are no disabled users', async () => {
+    const enabledUser = {
+      email: 'courtuser@ustaxcourt.gov',
+      role: ROLES.docketClerk,
+      status: 'CONFIRMED',
+      userId: 'user-1',
+      enabled: true,
+    };
+
+    getUsersWithSimilarEmails.mockResolvedValueOnce([enabledUser]);
+    (deactivateUser as jest.Mock).mockResolvedValueOnce('docket');
+
+    const result = await deactivateUserInteractor(
+      { email: 'courtuser@ustaxcourt.gov' },
+      authorizedUser,
+    );
+
+    expect(result).toBe(
+      'INFO: removed (user-1|courtuser@ustaxcourt.gov) from docket',
+    );
+  });
 });
