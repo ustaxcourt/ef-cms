@@ -15,7 +15,7 @@ import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/ca
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { getCaseDeadlinesByConsolidatedCaseDeadlineId } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId';
+import { getCaseDeadlinesByConsolidatedCaseDeadlineIds } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds';
 import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
 
 export const updateCaseContext = async (
@@ -117,12 +117,14 @@ export const updateCaseContext = async (
         },
       );
 
-      if (oldCase.docketNumber === oldCase.leadDocketNumber) {
+      if (
+        oldCase.docketNumber === oldCase.leadDocketNumber &&
+        caseDeadlines.length
+      ) {
         const LEAD_CASE_DEADLINES = caseDeadlines.map(cd => cd.caseDeadlineId);
         const CHILDREN_DEADLINES =
-          await getCaseDeadlinesByConsolidatedCaseDeadlineId(
+          await getCaseDeadlinesByConsolidatedCaseDeadlineIds(
             LEAD_CASE_DEADLINES,
-            oldCase.leadDocketNumber,
           );
 
         DEADLINE_TASKS.push(

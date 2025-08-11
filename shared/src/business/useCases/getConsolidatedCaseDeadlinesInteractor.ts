@@ -4,7 +4,7 @@ import {
   isAuthorized,
   ROLE_PERMISSIONS,
 } from '@shared/authorization/authorizationClientService';
-import { getCaseDeadlinesByConsolidatedCaseDeadlineId } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId';
+import { getCaseDeadlinesByConsolidatedCaseDeadlineIds } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 export async function getConsolidatedCaseDeadlinesInteractor(
@@ -19,8 +19,8 @@ export async function getConsolidatedCaseDeadlinesInteractor(
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const DEADLINES = await getCaseDeadlinesByConsolidatedCaseDeadlineId(
-    consolidatedCaseDeadlineId,
+  const DEADLINES = await getCaseDeadlinesByConsolidatedCaseDeadlineIds(
+    [consolidatedCaseDeadlineId],
   );
 
   if (!DEADLINES.length) return [];

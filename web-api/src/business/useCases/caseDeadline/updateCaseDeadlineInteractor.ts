@@ -9,7 +9,7 @@ import {
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
-import { getCaseDeadlinesByConsolidatedCaseDeadlineId } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId';
+import { getCaseDeadlinesByConsolidatedCaseDeadlineIds } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds';
 
 export const updateCaseDeadlineInteractor = async (
   { caseDeadline }: { caseDeadline: CaseDeadline },
@@ -24,10 +24,9 @@ export const updateCaseDeadlineInteractor = async (
     .toRawObject();
 
   const consolidatedCaseDeadlines: RawCaseDeadline[] =
-    await getCaseDeadlinesByConsolidatedCaseDeadlineId(
+    await getCaseDeadlinesByConsolidatedCaseDeadlineIds([
       caseDeadlineToUpdate.caseDeadlineId,
-      caseDeadlineToUpdate.docketNumber,
-    );
+    ]);
 
   const updatedConsolidatedCaseDeadlines: RawCaseDeadline[] =
     consolidatedCaseDeadlines

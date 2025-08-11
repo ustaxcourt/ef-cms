@@ -15,7 +15,7 @@ import { deleteCaseDeadline as deleteCaseDeadlineMock } from '@web-api/persisten
 import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
 import { upsertCaseDeadlines as upsertCaseDeadlinesMock } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
-import { getCaseDeadlinesByConsolidatedCaseDeadlineId as getCaseDeadlinesByConsolidatedCaseDeadlineIdMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId';
+import { getCaseDeadlinesByConsolidatedCaseDeadlineIds as getCaseDeadlinesByConsolidatedCaseDeadlineIdsMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds';
 
 describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
   let mockCaseEntity;
@@ -31,8 +31,8 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
     getCaseDeadlinesByDocketNumberMock,
   );
   const upsertCaseDeadlines = jest.mocked(upsertCaseDeadlinesMock);
-  const getCaseDeadlinesByConsolidatedCaseDeadlineId = jest.mocked(
-    getCaseDeadlinesByConsolidatedCaseDeadlineIdMock,
+  const getCaseDeadlinesByConsolidatedCaseDeadlineIds = jest.mocked(
+    getCaseDeadlinesByConsolidatedCaseDeadlineIdsMock,
   );
 
   beforeEach(() => {
@@ -40,7 +40,7 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
       authorizedUser: mockDocketClerkUser,
     });
     upsertCaseDeadlines.mockImplementation(deadlines => deadlines as any);
-    getCaseDeadlinesByConsolidatedCaseDeadlineId.mockResolvedValue([]);
+    getCaseDeadlinesByConsolidatedCaseDeadlineIds.mockResolvedValue([]);
   });
 
   CASE_DISMISSAL_ORDER_TYPES.forEach(orderEventCode => {
@@ -237,7 +237,7 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
     ]);
 
     const CHILD_CASE_DEADLINE_ID = 'CHILD_CASE_DEADLINE_ID';
-    getCaseDeadlinesByConsolidatedCaseDeadlineId.mockResolvedValue([
+    getCaseDeadlinesByConsolidatedCaseDeadlineIds.mockResolvedValue([
       {
         caseDeadlineId: CHILD_CASE_DEADLINE_ID,
         consolidatedCaseDeadlineId: 'TEST_CONSOLIDATED_CASE_DEADLINE_ID',

@@ -7,7 +7,7 @@ import { TrialSession } from '../../../../../shared/src/business/entities/trialS
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { deleteCaseDeadline } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
 import { settlePromises } from '@web-api/utilities/settlePromises';
-import { getCaseDeadlinesByConsolidatedCaseDeadlineId } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId';
+import { getCaseDeadlinesByConsolidatedCaseDeadlineIds } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds';
 import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
 
 export const closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments =
@@ -38,9 +38,8 @@ export const closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments =
     if (caseEntity.docketNumber === caseEntity.leadDocketNumber) {
       const LEAD_CASE_DEADLINES = caseDeadlines.map(cd => cd.caseDeadlineId);
       const CHILDREN_DEADLINES =
-        await getCaseDeadlinesByConsolidatedCaseDeadlineId(
+        await getCaseDeadlinesByConsolidatedCaseDeadlineIds(
           LEAD_CASE_DEADLINES,
-          caseEntity.leadDocketNumber,
         );
 
       DEADLINE_TASKS.push(
