@@ -229,6 +229,7 @@ import { gotoUploadCourtIssuedDocumentSequence } from './sequences/gotoUploadCou
 import { gotoUserContactEditSequence } from './sequences/gotoUserContactEditSequence';
 import { gotoVerifyEmailSequence } from './sequences/gotoVerifyEmailSequence';
 import { gotoWorkQueueSequence } from './sequences/gotoWorkQueueSequence';
+import { gotoRecentFilingsSequence } from './sequences/gotoRecentFilingsSequence';
 import { handleAppHasUpdatedSequence } from './sequences/handleAppHasUpdatedSequence';
 import { initAppSequence } from '@web-client/presenter/sequences/Init/initAppSequence';
 import { initialState } from '@web-client/presenter/state';
@@ -237,6 +238,7 @@ import { loadDefaultDocketViewerDocumentToDisplaySequence } from './sequences/Do
 import { loadDefaultDraftViewerDocumentToDisplaySequence } from './sequences/DocketEntry/loadDefaultDraftViewerDocumentToDisplaySequence';
 import { loadDefaultViewerCorrespondenceSequence } from './sequences/loadDefaultViewerCorrespondenceSequence';
 import { loadPdfForTabSequence } from './sequences/PDFPreviewTab/loadPdfForTabSequence';
+import { loadRecentFilingsSequence } from './sequences/loadRecentFilingsSequence';
 import { motionOrderResponsePdfPreviewSequence } from './sequences/MotionOrderResponse/motionOrderResponsePdfPreviewSequence';
 import { navigateBackSequence } from './sequences/navigateBackSequence';
 import { navigateToCaseDetailFromPaperServiceSequence } from './sequences/navigateToCaseDetailFromPaperServiceSequence';
@@ -418,6 +420,7 @@ import { setTrialSessionsFiltersSequence } from '@web-client/presenter/sequences
 import { setViewerCorrespondenceToDisplaySequence } from './sequences/setViewerCorrespondenceToDisplaySequence';
 import { setViewerDocumentToDisplaySequence } from './sequences/setViewerDocumentToDisplaySequence';
 import { setViewerDraftDocumentToDisplaySequence } from './sequences/setViewerDraftDocumentToDisplaySequence';
+import { setRecentFilingsTableSortSequence } from './sequences/setRecentFilingsTableSortSequence';
 import { showCalculatePenaltiesModalSequence } from './sequences/showCalculatePenaltiesModalSequence';
 import { showDocketRecordDetailModalSequence } from './sequences/showDocketRecordDetailModalSequence';
 import { showFileUploadErrorModalSequence } from '@web-client/presenter/sequences/showFileUploadErrorModalSequence';
@@ -976,6 +979,7 @@ export const presenterSequences = {
     gotoUserContactEditSequence as unknown as Function,
   gotoVerifyEmailSequence,
   gotoWorkQueueSequence: gotoWorkQueueSequence as unknown as Function,
+  gotoRecentFilingsSequence: gotoRecentFilingsSequence as unknown as Function,
   handleAppHasUpdatedSequence,
   initAppSequence,
   leaveCaseForLaterServiceSequence:
@@ -987,6 +991,7 @@ export const presenterSequences = {
   loadDefaultViewerCorrespondenceSequence:
     loadDefaultViewerCorrespondenceSequence as unknown as Function,
   loadPdfForTabSequence: loadPdfForTabSequence as unknown as Function,
+  loadRecentFilingsSequence: loadRecentFilingsSequence as unknown as Function,
   motionOrderResponsePdfPreviewSequence,
   navigateBackSequence: navigateBackSequence as unknown as Function,
   navigateToCaseDetailFromPaperServiceSequence:
@@ -1272,6 +1277,8 @@ export const presenterSequences = {
   setPetitionTypeSequence,
   setPractitionerClosedCasesPageSequence,
   setPractitionerOpenCasesPageSequence,
+  setRecentFilingsTableSortSequence:
+    setRecentFilingsTableSortSequence as unknown as Function,
   setSelectedAddressOnFormSequence:
     setSelectedAddressOnFormSequence as unknown as Function,
   setSelectedBatchIndexSequence:

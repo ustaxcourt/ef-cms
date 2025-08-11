@@ -1,0 +1,182 @@
+import { recentFilingsHelper as recentFilingsHelperComputed } from './recentFilingsHelper';
+import { runCompute } from '@web-client/presenter/test.cerebral';
+import { withAppContextDecorator } from '../../withAppContext';
+import { RecentFiling } from '@shared/business/entities/RecentFiling';
+import {
+  ROLES,
+  STIN_DOCKET_ENTRY_TYPE,
+} from '@shared/business/entities/EntityConstants';
+
+const recentFilingsHelper = withAppContextDecorator(
+  recentFilingsHelperComputed,
+);
+
+const createFiling = (overrides: Partial<RecentFiling> = {}): RecentFiling => ({
+  docketNumber: '101-20',
+  filedDate: '2024-01-15',
+  document: 'Petition',
+  caseTitle: 'Test Case 1',
+  docketEntryId: '1',
+  isFileAttached: true,
+  ...overrides,
+});
+
+const createTestState = (overrides = {}) => ({
+  recentFilings: [
+    createFiling(),
+    createFiling({
+      docketNumber: '102-20',
+      filedDate: '2024-01-10',
+      document: 'Answer',
+      caseTitle: 'Test Case 2',
+      docketEntryId: '2',
+    }),
+  ],
+  recentFilingsTableSort: { sortField: 'filedDate', sortOrder: 'desc' },
+  user: { role: ROLES.petitioner },
+  ...overrides,
+});
+
+describe('recentFilingsHelper', () => {
+  it('should handle basic functionality and edge cases', () => {
+    // Basic functionality
+    const result = runCompute(recentFilingsHelper, {
+      state: createTestState(),
+    });
+    expect(result.sortedRecentFilings).toHaveLength(2);
+    expect(result.sortedRecentFilings[0].filedDate).toBe('2024-01-15');
+    expect(result.sortOptions).toHaveLength(8);
+
+    // Empty/null handling
+    const emptyResult = runCompute(recentFilingsHelper, {
+      state: createTestState({ recentFilings: [] }),
+    });
+    expect(emptyResult.sortedRecentFilings).toEqual([]);
+
+    // Invalid sort parameters
+    const invalidResult = runCompute(recentFilingsHelper, {
+      state: createTestState({
+        recentFilingsTableSort: {
+          sortField: 'invalidField' as any,
+          sortOrder: 'invalid' as any,
+        },
+      }),
+    });
+    expect(invalidResult.sortedRecentFilings).toHaveLength(2);
+  });
+
+  it('should handle sorting by different fields', () => {
+    const result = runCompute(recentFilingsHelper, {
+      state: createTestState({
+        recentFilingsTableSort: { sortField: 'document', sortOrder: 'asc' },
+      }),
+    });
+    expect(result.sortedRecentFilings[0].document).toBe('Answer');
+    expect(result.sortedRecentFilings[1].document).toBe('Petition');
+  });
+
+  it('should handle document access control for different scenarios', () => {
+    // Normal access
+    const normalResult = runCompute(recentFilingsHelper, {
+      state: createTestState(),
+    });
+    expect(normalResult.sortedRecentFilings[0].canAccess).toBe(true);
+    expect(normalResult.sortedRecentFilings[0].showLinkToDocument).toBe(true);
+
+    // Stricken document
+    const strickenResult = runCompute(recentFilingsHelper, {
+      state: createTestState({
+        recentFilings: [createFiling({ isStricken: true })],
+      }),
+    });
+    expect(strickenResult.sortedRecentFilings[0].canAccess).toBe(false);
+
+    // No file attached
+    const noFileResult = runCompute(recentFilingsHelper, {
+      state: createTestState({
+        recentFilings: [createFiling({ isFileAttached: false })],
+      }),
+    });
+    expect(noFileResult.sortedRecentFilings[0].canAccess).toBe(false);
+
+    // Null role
+    const nullRoleResult = runCompute(recentFilingsHelper, {
+      state: createTestState({ user: { role: null } }),
+    });
+    expect(nullRoleResult.sortedRecentFilings[0].canAccess).toBe(false);
+  });
+
+  it('should handle STIN documents and special cases', () => {
+    const stinFiling = createFiling({
+      eventCode: STIN_DOCKET_ENTRY_TYPE.eventCode,
+      servedAt: '2024-01-15T10:00:00.000Z',
+    });
+
+    // IRS Superuser can access served STIN
+    const irsResult = runCompute(recentFilingsHelper, {
+      state: createTestState({
+        recentFilings: [stinFiling],
+        user: { role: ROLES.irsSuperuser },
+      }),
+    });
+    expect(irsResult.sortedRecentFilings[0].canAccess).toBe(true);
+
+    // Petitioner cannot access STIN
+    const petitionerResult = runCompute(recentFilingsHelper, {
+      state: createTestState({
+        recentFilings: [stinFiling],
+        user: { role: ROLES.petitioner },
+      }),
+    });
+    expect(petitionerResult.sortedRecentFilings[0].canAccess).toBe(false);
+
+    // Internal users can access unserved STIN
+    const unservedStin = createFiling({
+      eventCode: STIN_DOCKET_ENTRY_TYPE.eventCode,
+      servedAt: undefined,
+    });
+    const internalResult = runCompute(recentFilingsHelper, {
+      state: createTestState({
+        recentFilings: [unservedStin],
+        user: { role: ROLES.petitionsClerk },
+      }),
+    });
+    expect(internalResult.sortedRecentFilings[0].canAccess).toBe(true);
+  });
+
+  it('should handle display properties and user types', () => {
+    // External user
+    const externalResult = runCompute(recentFilingsHelper, {
+      state: createTestState({ user: { role: ROLES.petitioner } }),
+    });
+    expect(externalResult.sortedRecentFilings[0].showDocumentViewerLink).toBe(
+      false,
+    );
+
+    // Internal user
+    const internalResult = runCompute(recentFilingsHelper, {
+      state: createTestState({ user: { role: ROLES.petitionsClerk } }),
+    });
+    expect(internalResult.sortedRecentFilings[0].showDocumentViewerLink).toBe(
+      true,
+    );
+
+    // Document description without link
+    const strickenResult = runCompute(recentFilingsHelper, {
+      state: createTestState({
+        recentFilings: [createFiling({ isStricken: true })],
+      }),
+    });
+    expect(
+      strickenResult.sortedRecentFilings[0].showDocumentDescriptionWithoutLink,
+    ).toBe(true);
+
+    // getDocumentDisplayProperties function
+    const result = runCompute(recentFilingsHelper, {
+      state: createTestState(),
+    });
+    const displayProps = result.getDocumentDisplayProperties(createFiling());
+    expect(displayProps).toBeDefined();
+    expect(displayProps.showLinkToDocument).toBeDefined();
+  });
+});

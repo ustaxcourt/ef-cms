@@ -20,6 +20,7 @@ import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { RawMessage } from '@shared/business/entities/Message';
 import { RawUser, UserContact } from '@shared/business/entities/User';
 import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';
+import { RecentFiling } from '@shared/business/entities/RecentFiling';
 import { TrialSessionLocationInfo } from '@shared/business/entities/trialSessions/TrialSession';
 import { TroubleshootingLinkInfo } from '@web-client/presenter/sequences/showFileUploadErrorModalSequence';
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
@@ -136,6 +137,7 @@ import { practitionerSearchFormHelper } from './computeds/practitionerSearchForm
 import { practitionerSearchHelper } from './computeds/AdvancedSearch/practitionerSearchHelper';
 import { printPaperServiceHelper } from './computeds/printPaperServiceHelper';
 import { recentMessagesHelper } from './computeds/recentMessagesHelper';
+import { recentFilingsHelper } from './computeds/recentFilingsHelper';
 import { removeFromTrialSessionModalHelper } from './computeds/removeFromTrialSessionModalHelper';
 import { reportMenuHelper } from './computeds/reportMenuHelper';
 import { reviewSavedPetitionHelper } from './computeds/reviewSavedPetitionHelper';
@@ -497,6 +499,9 @@ export const computeds = {
   >,
   recentMessagesHelper: recentMessagesHelper as unknown as ReturnType<
     typeof recentMessagesHelper
+  >,
+  recentFilingsHelper: recentFilingsHelper as unknown as ReturnType<
+    typeof recentFilingsHelper
   >,
   removeFromTrialSessionModalHelper:
     removeFromTrialSessionModalHelper as unknown as ReturnType<
@@ -931,6 +936,11 @@ export const baseState = {
   workQueue: [] as RawWorkItemWithCaseAndDocketEntryInfo[],
   workQueueToDisplay: { box: 'inbox', queue: 'my', section: '' },
   workitemAllCheckbox: false,
+  recentFilings: [] as RecentFiling[],
+  recentFilingsTableSort: {
+    sortField: 'filedDate',
+    sortOrder: 'desc' as 'asc' | 'desc',
+  },
 };
 
 export const initialState = {
