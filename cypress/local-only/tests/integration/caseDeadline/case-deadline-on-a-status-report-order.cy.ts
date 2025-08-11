@@ -63,7 +63,7 @@ describe('Case Deadline Auto Generation from Status Report Order', () => {
     cy.get('[data-testid="save-draft-button"]').click();
     cy.get('[data-testid="sign-pdf-canvas"]').click();
     cy.get('[data-testid="save-signature-button"]').click();
-    cy.contains('Order updated.').should('exist');
+    cy.get('[data-testid="success-alert"]').contains('Order updated.');
 
     // add docket entry
     loginAsDocketClerk();
@@ -119,7 +119,7 @@ describe('Case Deadline Auto Generation from Status Report Order', () => {
     cy.get('[data-testid="save-draft-button"]').click();
     cy.get('[data-testid="sign-pdf-canvas"]').click();
     cy.get('[data-testid="save-signature-button"]').click();
-    cy.contains('Order updated.').should('exist');
+    cy.get('[data-testid="success-alert"]').contains('Order updated.');
 
     // add docket entry
     loginAsDocketClerk();
@@ -155,7 +155,7 @@ describe('Case Deadline Auto Generation from Status Report Order', () => {
     cy.get('[data-testid="save-draft-button"]').click();
     cy.get('[data-testid="sign-pdf-canvas"]').click();
     cy.get('[data-testid="save-signature-button"]').click();
-    cy.contains('Order updated.').should('exist');
+    cy.get('[data-testid="success-alert"]').contains('Order updated.');
 
     // add docket entry
     loginAsDocketClerk();
