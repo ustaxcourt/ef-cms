@@ -1317,8 +1317,21 @@ workflows:
         - equal: [glue-to-test-schedule, << pipeline.schedule.name >>]
         - << pipeline.parameters.run_glue_to_test >>
     jobs:
+      - delete-existing-data:
+          <<: *only-test
+      - redeploy-environment:
+          <<: *only-test
+          requires:
+            - delete-existing-data
+      - wait-for-deployment-workflow:
+          <<: *only-test
+          type: approval
+          requires:
+            - redeploy-environment
       - initiate-glue-job:
           <<: *only-test
+          requires:
+            - wait-for-deployment-workflow
       - wait-for-glue-workflow:
           <<: *only-test
           type: approval
