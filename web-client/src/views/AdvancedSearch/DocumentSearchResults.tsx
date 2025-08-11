@@ -153,10 +153,11 @@ export const DocumentSearchResults = connect(
         <div aria-live="polite">
           {advancedDocumentSearchHelper.showSearchResults && (
             <>
+              <div className="tablet:grid-col-4 margin-top-4">
+                <h2 className="margin-top-1">Results</h2>
+              </div>
               <div className="grid-row results-header-row align-items-center">
-                <div className="tablet:grid-col-4">
-                  <h1 className="margin-top-1">Results</h1>
-                </div>
+                <div className="tablet:grid-col-4"></div>
                 <Mobile>
                   <div
                     className="margin-bottom-2"
@@ -177,7 +178,7 @@ export const DocumentSearchResults = connect(
                     </select>
                   </div>
                 </Mobile>
-                <div className="tablet:grid-col-4 paginator-center">
+                <div className="tablet:grid-col-4 paginator-center margin-bottom-2">
                   {totalPages > 1 && (
                     <Mobile>
                       <div className="margin-bottom-4">
@@ -208,7 +209,7 @@ export const DocumentSearchResults = connect(
                   )}
                 </div>
                 <NonMobile>
-                  <div className="tablet:grid-col-4 float-right text-right text-middle-margin margin-top-2">
+                  <div className="tablet:grid-col-4  text-right margin-bottom-1">
                     {results.length === MAX_SEARCH_RESULTS && (
                       <>
                         <FontAwesomeIcon
