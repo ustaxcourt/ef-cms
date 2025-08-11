@@ -153,10 +153,11 @@ export const DocumentSearchResults = connect(
         <div aria-live="polite">
           {advancedDocumentSearchHelper.showSearchResults && (
             <>
+              <div className="tablet:grid-col-4 margin-top-2">
+                <h2>Results</h2>
+              </div>
               <div className="grid-row results-header-row align-items-center">
-                <div className="tablet:grid-col-4">
-                  <h1 className="margin-top-1">Results</h1>
-                </div>
+                <div className="tablet:grid-col-4"></div>
                 <Mobile>
                   <div
                     className="margin-bottom-2"
@@ -177,24 +178,9 @@ export const DocumentSearchResults = connect(
                     </select>
                   </div>
                 </Mobile>
-                <div className="tablet:grid-col-4 paginator-center">
-                  {totalPages > 1 && (
-                    <Mobile>
-                      <div className="margin-bottom-4">
-                        <Paginator
-                          currentPageIndex={currentPaginationPage}
-                          totalPages={totalPages}
-                          onPageChange={currentPage => {
-                            setCurrentPaginationPageSequence({
-                              currentPaginationPage: currentPage,
-                            });
-                          }}
-                        />
-                      </div>
-                    </Mobile>
-                  )}
-                  {totalPages > 1 && (
-                    <NonMobile>
+                <NonMobile>
+                  <div className="tablet:grid-col-4 margin-bottom-2">
+                    {totalPages > 1 && (
                       <Paginator
                         currentPageIndex={currentPaginationPage}
                         totalPages={totalPages}
@@ -204,11 +190,10 @@ export const DocumentSearchResults = connect(
                           });
                         }}
                       />
-                    </NonMobile>
-                  )}
-                </div>
-                <NonMobile>
-                  <div className="tablet:grid-col-4 float-right text-right text-middle-margin margin-top-2">
+                    )}
+                  </div>
+
+                  <div className="tablet:grid-col-4  text-right ">
                     {results.length === MAX_SEARCH_RESULTS && (
                       <>
                         <FontAwesomeIcon
@@ -225,6 +210,19 @@ export const DocumentSearchResults = connect(
                   </div>
                 </NonMobile>
                 <Mobile>
+                  {totalPages > 1 && (
+                    <div className="margin-bottom-4 tablet:grid-col">
+                      <Paginator
+                        currentPageIndex={currentPaginationPage}
+                        totalPages={totalPages}
+                        onPageChange={currentPage => {
+                          setCurrentPaginationPageSequence({
+                            currentPaginationPage: currentPage,
+                          });
+                        }}
+                      />
+                    </div>
+                  )}
                   {showModal === 'showCountModalMobile' && (
                     <BaseModal title="CountModal">
                       <div>
