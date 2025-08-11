@@ -3,6 +3,9 @@ import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { createChangeOfAddressJob } from '@web-api/persistence/postgres/jobs/changeOfAddress/createChangeOfAddressJob';
+import { RawUser } from '@shared/business/entities/User';
+import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
 
 export type TUserContact = {
   address1: string;
@@ -31,12 +34,12 @@ export type TUserContact = {
  * @param {string}  providers.websocketMessagePrefix is it the `user` or an `admin` performing this action?
  * @returns {Promise<Case[]>} the cases that were updated
  */
-const generateChangeOfAddressForPractitioner = async ({
+export const generateChangeOfAddress = async ({
   applicationContext,
   authorizedUser,
   bypassDocketEntry = false,
   contactInfo,
-  firmName,
+  oldUser,
   requestUserId,
   updatedEmail,
   updatedName,
@@ -46,7 +49,7 @@ const generateChangeOfAddressForPractitioner = async ({
   applicationContext: ServerApplicationContext;
   bypassDocketEntry?: boolean;
   contactInfo: TUserContact;
-  firmName: string;
+  oldUser: RawUser;
   requestUserId?: string;
   updatedEmail?: string;
   updatedName?: string;
@@ -54,12 +57,9 @@ const generateChangeOfAddressForPractitioner = async ({
   websocketMessagePrefix?: 'user' | 'admin';
   authorizedUser: AuthUser;
 }): Promise<any[] | undefined> => {
-  const associatedUserCases = await applicationContext
-    .getPersistenceGateway()
-    .getCasesForUser({
-      applicationContext,
-      userId: user.userId,
-    });
+  const associatedUserCases = await getDocketNumbersByUser({
+    userId: user.userId,
+  });
 
   if (associatedUserCases.length === 0) {
     return [];
@@ -90,8 +90,8 @@ const generateChangeOfAddressForPractitioner = async ({
 
   const jobId = applicationContext.getUniqueId();
 
-  await applicationContext.getPersistenceGateway().createChangeOfAddressJob({
-    docketNumbers: associatedUserCases.map(caseInfo => caseInfo.docketNumber),
+  await createChangeOfAddressJob({
+    docketNumbers: associatedUserCases,
     jobId,
   });
 
@@ -99,14 +99,14 @@ const generateChangeOfAddressForPractitioner = async ({
 
   if (isChangeOfAddressLambdaEnabled) {
     const sqs: SQSClient = await applicationContext.getMessagingClient();
-    const cmds = associatedUserCases.map(caseInfo => {
+    const cmds = associatedUserCases.map(docketNumber => {
       return new SendMessageCommand({
         MessageBody: JSON.stringify({
           bypassDocketEntry,
           contactInfo,
-          docketNumber: caseInfo.docketNumber,
-          firmName,
+          docketNumber,
           jobId,
+          oldUser,
           requestUser: {
             ...authorizedUser,
             token: undefined,
@@ -123,7 +123,7 @@ const generateChangeOfAddressForPractitioner = async ({
     await settlePromises(cmds.map(cmd => sqs.send(cmd)));
   } else {
     await settlePromises(
-      associatedUserCases.map(async caseInfo => {
+      associatedUserCases.map(async docketNumber => {
         return await applicationContext
           .getUseCaseHelpers()
           .generateChangeOfAddressHelper({
@@ -131,9 +131,9 @@ const generateChangeOfAddressForPractitioner = async ({
             authorizedUser,
             bypassDocketEntry,
             contactInfo,
-            docketNumber: caseInfo.docketNumber,
-            firmName,
+            docketNumber,
             jobId,
+            oldUser,
             requestUserId,
             updatedEmail,
             updatedName,
@@ -144,5 +144,3 @@ const generateChangeOfAddressForPractitioner = async ({
     );
   }
 };
-
-export { generateChangeOfAddressForPractitioner as generateChangeOfAddress };

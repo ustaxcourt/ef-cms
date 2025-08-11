@@ -10,7 +10,6 @@ jest.mock(
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
-
 import {
   CaseDeadline,
   RawCaseDeadline,
@@ -82,7 +81,6 @@ describe('createCaseDeadlineInteractor - Consolidated Cases', () => {
 
     const upsertCaseDeadlinesCalls = (upsertCaseDeadlines as jest.Mock).mock
       .calls;
-    console.log('upsertCaseDeadlinesCalls', upsertCaseDeadlinesCalls);
     expect(upsertCaseDeadlinesCalls.length).toEqual(2);
     expect(upsertCaseDeadlinesCalls[0][0]).toMatchObject([
       {

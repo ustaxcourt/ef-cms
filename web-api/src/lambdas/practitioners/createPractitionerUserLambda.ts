@@ -12,9 +12,8 @@ export const createPractitionerUserLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(event, async ({ applicationContext }) => {
+  genericHandler(event, async () => {
     return await createPractitionerUserInteractor(
-      applicationContext,
       {
         user: JSON.parse(event.body).user,
       },

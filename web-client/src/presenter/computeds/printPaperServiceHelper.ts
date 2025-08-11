@@ -8,6 +8,7 @@ export const printPaperServiceHelper = (get: Get): any => {
     const doc = caseDetail.docketEntries.find(
       d => d.docketEntryId === docketEntryId,
     );
+    // @ts-ignore
     return { documentTitle: doc.documentTitle };
   } else {
     return {};

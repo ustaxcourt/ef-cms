@@ -7,28 +7,19 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
-import { getCaseDeadlinesByConsolidatedCaseDeadlineId } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId';
+import { getCaseDeadlinesByConsolidatedCaseDeadlineIds } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds';
 import {
   CaseDeadline,
   RawCaseDeadline,
 } from '@shared/business/entities/CaseDeadline';
 import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
-import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
-/**
- * removeConsolidatedCases
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.docketNumber the docket number of the case to consolidate
- * @param {Array} providers.docketNumbersToRemove the docket numbers of the cases to remove from consolidation
- * @returns {object} the updated case data
- */
 const removeConsolidatedCases = async (
   _applicationContext: ServerApplicationContext,
   {
@@ -67,6 +58,14 @@ const removeConsolidatedCases = async (
     newConsolidatedCases.length > 1
   ) {
     const newLeadCase = Case.findLeadCaseForCases(newConsolidatedCases)!;
+
+    updateCasePromises.push(
+      updateConsolidatedCaseDeadlineReferenceId(
+        leadDocketNumber,
+        newLeadCase.docketNumber,
+      ),
+    );
+
     for (const newConsolidatedCaseToUpdate of newConsolidatedCases) {
       const caseEntity = new Case(newConsolidatedCaseToUpdate, {
         authorizedUser,
@@ -80,13 +79,6 @@ const removeConsolidatedCases = async (
         }),
       );
     }
-
-    updateCasePromises.push(
-      updateConsolidatedCaseDeadlineReferenceId(
-        leadDocketNumber,
-        newLeadCase.docketNumber,
-      ),
-    );
   } else if (newConsolidatedCases.length == 1) {
     // a case cannot be consolidated with itself
     const caseEntity = new Case(newConsolidatedCases[0], {
@@ -158,10 +150,9 @@ async function updateConsolidatedCaseDeadlineReferenceId(
     LEAD_DEADLINES.map(async leadCaseDeadline => {
       const { caseDeadlineId: oldLeadCaseDeadlineId } = leadCaseDeadline;
       const CHILD_DEADLINES =
-        await getCaseDeadlinesByConsolidatedCaseDeadlineId(
+        await getCaseDeadlinesByConsolidatedCaseDeadlineIds([
           oldLeadCaseDeadlineId,
-          oldLeadDocketNumber,
-        );
+        ]);
 
       if (!CHILD_DEADLINES.length) return;
 
