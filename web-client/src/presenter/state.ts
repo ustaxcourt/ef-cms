@@ -710,7 +710,7 @@ export const baseState = {
   documentsSelectedForDownload: [] as { docketEntryId: string }[],
   documentSearchSort: {
     sortColumn: 'formattedFiledDate',
-    sortDirection: 'asc',
+    sortDirection: 'desc',
   },
   draftDocumentViewerDocketEntryId: null,
   featureFlags: undefined as unknown as { [key: string]: string },

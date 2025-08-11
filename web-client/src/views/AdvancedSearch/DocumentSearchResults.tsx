@@ -1,14 +1,13 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { Icon } from '../../ustc-ui/Icon/Icon';
-// import { WarningNotificationComponent } from '../WarningNotification';
 import { Paginator } from '../../ustc-ui/Pagination/Paginator';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SortableColumn } from '../../ustc-ui/Table/SortableColumn';
 import {
   ASCENDING,
@@ -49,6 +48,12 @@ export const DocumentSearchResults = connect(
   }) {
     const results = advancedDocumentSearchHelper.formattedSearchResults || [];
 
+    // Add local state for mobile dropdown
+    const [mobileSort, setMobileSort] = useState({
+      column: advancedDocumentSearchHelper.sortColumn,
+      direction: advancedDocumentSearchHelper.sortDirection,
+    });
+
     // Calculate total pages based on PAGE_SIZE
     const totalPages = Math.ceil(
       results.length / ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE,
@@ -60,6 +65,17 @@ export const DocumentSearchResults = connect(
         setCurrentPaginationPageSequence({ currentPaginationPage: 0 });
       }
     }, [results.length, currentPaginationPage, totalPages]);
+
+    // Sync dropdown with helper sort state
+    useEffect(() => {
+      setMobileSort({
+        column: advancedDocumentSearchHelper.sortColumn,
+        direction: advancedDocumentSearchHelper.sortDirection,
+      });
+    }, [
+      advancedDocumentSearchHelper.sortColumn,
+      advancedDocumentSearchHelper.sortDirection,
+    ]);
 
     // Slice results for current page
     const pagedResults = results.slice(
@@ -87,42 +103,130 @@ export const DocumentSearchResults = connect(
       setCurrentPaginationPageSequence({ currentPaginationPage: 0 }); // reset page on sort
     };
 
+    // Handle mobile dropdown sort change
+    const handleMobileSortChange = e => {
+      const { value } = e.target;
+      const [column, direction] = value.split('|');
+      setMobileSort({ column, direction });
+      updateDocumentSearchResultsSequence({
+        sortColumn: column,
+        sortDirection: direction,
+      });
+      setCurrentPaginationPageSequence({ currentPaginationPage: 0 });
+    };
+
+    const sortOptions = [
+      {
+        label: 'Sort by Newest',
+        value: 'formattedFiledDate|desc',
+      },
+      {
+        label: 'Sort by Oldest',
+        value: 'formattedFiledDate|asc',
+      },
+      {
+        label: `Sort by Order (ascending)`,
+        value: 'documentTitle|asc',
+      },
+      {
+        label: `Sort by Order (descending)`,
+        value: 'documentTitle|desc',
+      },
+      {
+        label: 'Sort by Case Title (ascending)',
+        value: 'caseTitle|asc',
+      },
+      {
+        label: 'Sort by Case Title (descending)',
+        value: 'caseTitle|desc',
+      },
+      {
+        label: 'Sort by Judge (ascending)',
+        value: 'formattedJudgeName|asc',
+      },
+      {
+        label: 'Sort by Judge (descending)',
+        value: 'formattedJudgeName|desc',
+      },
+      {
+        label: 'Sort by Pages (ascending)',
+        value: 'numberOfPagesFormatted|asc',
+      },
+      {
+        label: 'Sort by Pages (descending)',
+        value: 'numberOfPagesFormatted|desc',
+      },
+      {
+        label: 'Sort by Docket No. (ascending)',
+        value: 'docketNumber|asc',
+      },
+      {
+        label: 'Sort by Docket No. (descending)',
+        value: 'docketNumber|desc',
+      },
+    ];
+
     return (
       <>
         <div aria-live="polite">
           {advancedDocumentSearchHelper.showSearchResults && (
             <>
-              {/* {advancedDocumentSearchHelper.showManyResultsMessage && (
-              <div className="margin-top-4">
-                <WarningNotificationComponent
-                  alertWarning={{
-                    message: 'Refine your search by adding search criteria.',
-                    title: `Displaying the first ${MAX_SEARCH_RESULTS} matches of your search.`,
-                  }}
-                  dismissible={false}
-                  scrollToTop={false}
-                />
-              </div>
-            )} */}
               <div className="grid-row results-header-row align-items-center">
                 <div className="tablet:grid-col-4">
                   <h1 className="margin-top-1">Results</h1>
                 </div>
+                <Mobile>
+                  <div
+                    className="margin-bottom-2"
+                    style={{ maxWidth: '100%', width: '100%' }}
+                  >
+                    <select
+                      id="mobile-sort-dropdown"
+                      className="usa-select"
+                      style={{ width: '100%' }}
+                      value={`${mobileSort.column}|${mobileSort.direction}`}
+                      onChange={handleMobileSortChange}
+                    >
+                      {sortOptions.map(option => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </Mobile>
                 <div className="tablet:grid-col-4 paginator-center">
                   {totalPages > 1 && (
-                    <Paginator
-                      currentPageIndex={currentPaginationPage}
-                      totalPages={totalPages}
-                      onPageChange={currentPage => {
-                        setCurrentPaginationPageSequence({
-                          currentPaginationPage: currentPage,
-                        });
-                      }}
-                    />
+                    <Mobile>
+                      <div className="margin-bottom-4">
+                        <Paginator
+                          currentPageIndex={currentPaginationPage}
+                          totalPages={totalPages}
+                          onPageChange={currentPage => {
+                            setCurrentPaginationPageSequence({
+                              currentPaginationPage: currentPage,
+                            });
+                          }}
+                        />
+                      </div>
+                    </Mobile>
+                  )}
+                  {totalPages > 1 && (
+                    <NonMobile>
+                      <Paginator
+                        currentPageIndex={currentPaginationPage}
+                        totalPages={totalPages}
+                        onPageChange={currentPage => {
+                          setCurrentPaginationPageSequence({
+                            currentPaginationPage: currentPage,
+                          });
+                        }}
+                      />
+                    </NonMobile>
                   )}
                 </div>
                 <NonMobile>
-                  <div className="tablet:grid-col-4 float-right text-right text-middle-margin">
+                  <div className="tablet:grid-col-4 float-right text-right text-middle-margin margin-top-2">
                     {results.length === MAX_SEARCH_RESULTS && (
                       <>
                         <FontAwesomeIcon
@@ -162,7 +266,7 @@ export const DocumentSearchResults = connect(
                     </BaseModal>
                   )}
 
-                  <div className="tablet:grid-col-4 float-right text-right text-middle-margin">
+                  <div className="tablet:grid-col-4 float-right text-right text-middle-margin margin-bottom-2">
                     {results.length === MAX_SEARCH_RESULTS && (
                       <FontAwesomeIcon
                         className="fa-icon-blue icon-spacing-4"
