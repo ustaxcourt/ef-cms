@@ -1350,25 +1350,25 @@ workflows:
 #          type: approval
 #          requires:
 #            - redeploy-environment
-      - initiate-glue-job:
-          <<: *only-dev
+#      - initiate-glue-job:
+#          <<: *only-dev
 #          requires:
 #            - wait-for-deployment-workflow
-      - wait-for-glue-workflow:
-          <<: *only-dev
-          type: approval
-          requires:
-            - initiate-glue-job
-      - wait-for-s3-sync-workflow:
-          <<: *only-dev
-          type: approval
-          requires:
-            - initiate-glue-job
+#      - wait-for-glue-workflow:
+#          <<: *only-dev
+#          type: approval
+#          requires:
+#            - initiate-glue-job
+#      - wait-for-s3-sync-workflow:
+#          <<: *only-dev
+#          type: approval
+#          requires:
+#            - initiate-glue-job
       - index-glued-data:
           <<: *only-dev
-          requires:
-            - wait-for-glue-workflow
-            - wait-for-s3-sync-workflow
+#          requires:
+#            - wait-for-glue-workflow
+#            - wait-for-s3-sync-workflow
       - wait-for-glued-data-to-index:
           <<: *only-dev
           type: approval
