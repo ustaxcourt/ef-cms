@@ -7,7 +7,7 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { SortableColumn } from '../../ustc-ui/Table/SortableColumn';
 import {
   ASCENDING,
@@ -48,12 +48,6 @@ export const DocumentSearchResults = connect(
   }) {
     const results = advancedDocumentSearchHelper.formattedSearchResults || [];
 
-    // Add local state for mobile dropdown
-    const [mobileSort, setMobileSort] = useState({
-      column: advancedDocumentSearchHelper.sortColumn,
-      direction: advancedDocumentSearchHelper.sortDirection,
-    });
-
     // Calculate total pages based on PAGE_SIZE
     const totalPages = Math.ceil(
       results.length / ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE,
@@ -65,17 +59,6 @@ export const DocumentSearchResults = connect(
         setCurrentPaginationPageSequence({ currentPaginationPage: 0 });
       }
     }, [results.length, currentPaginationPage, totalPages]);
-
-    // Sync dropdown with helper sort state
-    useEffect(() => {
-      setMobileSort({
-        column: advancedDocumentSearchHelper.sortColumn,
-        direction: advancedDocumentSearchHelper.sortDirection,
-      });
-    }, [
-      advancedDocumentSearchHelper.sortColumn,
-      advancedDocumentSearchHelper.sortDirection,
-    ]);
 
     // Slice results for current page
     const pagedResults = results.slice(
@@ -107,7 +90,6 @@ export const DocumentSearchResults = connect(
     const handleMobileSortChange = e => {
       const { value } = e.target;
       const [column, direction] = value.split('|');
-      setMobileSort({ column, direction });
       updateDocumentSearchResultsSequence({
         sortColumn: column,
         sortDirection: direction,
@@ -184,7 +166,7 @@ export const DocumentSearchResults = connect(
                       id="mobile-sort-dropdown"
                       className="usa-select"
                       style={{ width: '100%' }}
-                      value={`${mobileSort.column}|${mobileSort.direction}`}
+                      value={`${advancedDocumentSearchHelper.sortColumn}|${advancedDocumentSearchHelper.sortDirection}`}
                       onChange={handleMobileSortChange}
                     >
                       {sortOptions.map(option => (
