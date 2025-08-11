@@ -12,7 +12,7 @@ export const advancedDocumentSearchHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): any => {
-  let paginatedResults = {};
+  let paginatedResults: any = {};
   const { role } = get(state.user);
   const advancedSearchTab = get(state.advancedSearchTab);
   const searchResults = get(state.searchResults[advancedSearchTab]);

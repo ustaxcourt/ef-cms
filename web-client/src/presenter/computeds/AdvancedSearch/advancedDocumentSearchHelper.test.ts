@@ -482,6 +482,63 @@ describe('advancedDocumentSearchHelper', () => {
     ]);
   });
 
+  it('sort by docket number', () => {
+    const result = runCompute(advancedDocumentSearchHelper, {
+      state: {
+        ...getBaseState(globalUser),
+        advancedSearchForm: { currentPage: 1 },
+        advancedSearchTab:
+          applicationContext.getConstants().ADVANCED_SEARCH_TABS.ORDER,
+        documentSearchSort: {
+          sortColumn: 'docketNumber',
+          sortDirection: 'asc',
+        },
+        searchResults: {
+          order: [
+            {
+              caseCaption: 'Test Petitioner, Petitioner',
+              docketNumber: '101-19',
+              docketNumberSuffix: 'Z',
+              docketNumberWithSuffix: '101-19Z',
+              documentContents: 'Test Petitioner, Petitioner',
+              documentTitle: 'Order',
+              documentType: 'Order',
+              eventCode: 'O',
+              filingDate: '2019-03-01T05:00:00.000Z',
+              judge: 'Judge Buch',
+            },
+            {
+              caseCaption: 'Test Petitioner, Petitioner',
+              docketNumber: '103-19',
+              docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.PASSPORT,
+              docketNumberWithSuffix: '102-19P',
+              documentContents: 'Test Petitioner, Petitioner',
+              documentTitle: 'Order for Stuff',
+              documentType: 'OAPF - Order for Amended Petition and Filing Fee',
+              filingDate: '2019-03-01T05:00:00.000Z',
+              judge: 'Cohen',
+            },
+            {
+              caseCaption: 'Test Petitioner, Petitioner',
+              docketNumber: '102-19',
+              docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.PASSPORT,
+              docketNumberWithSuffix: '102-19P',
+              documentContents: 'Test Petitioner, Petitioner',
+              documentTitle: 'Order for Stuff',
+              documentType: 'OAPF - Order for Amended Petition and Filing Fee',
+              filingDate: '2019-03-01T05:00:00.000Z',
+              judge: 'Cohen',
+            },
+          ],
+        },
+      },
+    });
+    const expected = ['101-19', '102-19', '103-19'];
+    expect(result.formattedSearchResults.map(r => r.docketNumber)).toEqual(
+      expected,
+    );
+  });
+
   describe('formatDocumentSearchResultRecord', () => {
     it('sets formattedJudgeName to empty string when the search result is an opinion that does not have a judge', () => {
       const mockResult = {
