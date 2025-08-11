@@ -25,6 +25,7 @@ export const DocumentSearchResults = connect(
     advancedDocumentSearchHelper: state.advancedDocumentSearchHelper,
     isPublic: state.isPublic,
     showModal: state.modal.showModal,
+    currentPaginationPage: state.currentPaginationPage,
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
     showMoreResultsSequence: sequences.showMoreResultsSequence,
@@ -32,8 +33,9 @@ export const DocumentSearchResults = connect(
       sequences.updateDocumentSearchResultsSequence,
     setCurrentPaginationPageSequence:
       sequences.setCurrentPaginationPageSequence,
-    currentPaginationPage: state.currentPaginationPage,
+    openCleanModalSequence: sequences.openCleanModalSequence,
   },
+
   function DocumentSearchResults({
     advancedDocumentSearchHelper,
     isPublic,
@@ -43,6 +45,7 @@ export const DocumentSearchResults = connect(
     setCurrentPaginationPageSequence,
     currentPaginationPage,
     showModal,
+    openCleanModalSequence,
   }) {
     const results = advancedDocumentSearchHelper.formattedSearchResults || [];
 
@@ -83,10 +86,6 @@ export const DocumentSearchResults = connect(
       }
       setCurrentPaginationPageSequence({ currentPaginationPage: 0 }); // reset page on sort
     };
-
-    function onCancelSequence() {
-      throw new Error('Function not implemented.');
-    }
 
     return (
       <>
@@ -148,7 +147,9 @@ export const DocumentSearchResults = connect(
                           icon="times-circle"
                           onClick={event => {
                             event.stopPropagation();
-                            onCancelSequence();
+                            openCleanModalSequence({
+                              showModal: null,
+                            });
                           }}
                         >
                           Close
@@ -162,6 +163,12 @@ export const DocumentSearchResults = connect(
                       <FontAwesomeIcon
                         className="fa-icon-blue icon-spacing-4"
                         icon="info-circle"
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => {
+                          openCleanModalSequence({
+                            showModal: 'showCountModalMobile',
+                          });
+                        }}
                       />
                     )}
                     <b className="text-semibold">Count:</b>{' '}

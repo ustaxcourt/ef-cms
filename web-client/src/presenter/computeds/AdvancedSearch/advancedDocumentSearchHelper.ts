@@ -50,20 +50,11 @@ export const advancedDocumentSearchHelper = (
   }
 
   if (searchResults) {
-    console.log(
-      'advancedDocumentSearchHelper : searchResults: ',
-      searchResults,
-    );
     // formatted;
     paginatedResults = paginationHelper(
       searchResults,
       get(state.advancedSearchForm.currentPage),
       applicationContext.getConstants().MAX_ELASTICSEARCH_PAGINATION,
-    );
-
-    console.log(
-      'advancedDocumentSearchHelper : Paginated results: ',
-      paginatedResults,
     );
 
     paginatedResults.formattedSearchResults =
@@ -72,7 +63,7 @@ export const advancedDocumentSearchHelper = (
           applicationContext,
         }),
       );
-    console.log('Formatted results: ', paginatedResults.formattedSearchResults);
+
     // Sorting logic
     paginatedResults.formattedSearchResults =
       paginatedResults.formattedSearchResults.sort((a, b) => {
@@ -106,14 +97,11 @@ export const advancedDocumentSearchHelper = (
         return 0; // Values are equal
       });
   }
-  console.log(
-    'advancedDocumentSearchHelper : Paginated results after sorting: ',
-    paginatedResults,
-  );
+
   const showManyResultsMessage = !!(
     searchResults && searchResults.length >= MAX_SEARCH_RESULTS
   );
-  //console.log('searchResults: ', searchResults);
+
   return {
     numberOfResults: searchResults?.length,
     ...paginatedResults,
