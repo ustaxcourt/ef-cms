@@ -783,6 +783,11 @@ jobs:
           command: |
             NODE_ENV=production npm run migration:postgres
       - run:
+          name: Restore Postgres User Permissions
+          command: |
+            cd ./scripts/postgres
+            DB_HOST="$POSTGRES_HOST" ./create-rds-users.sh
+      - run:
           name: Enable Dynamodb Streams
           command: |
             ./scripts/migration/toggle-streams.sh --on
@@ -852,6 +857,33 @@ jobs:
             if [ "$MIGRATE_FLAG" == "true" ]; then
               NODE_ENV=production ./scripts/reindex/index-docket-entries/index-docket-entries.ts 5
             fi
+
+  users-to-postgres:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+      - run:
+          name: Move petitioners from dwCase.petitioners to dwUser
+          command: |
+            npx ts-node --transpile-only ./scripts/run-once-scripts/postgres-migration/move-petitioners-out-of-case.ts
+      - run:
+          name: Move users, privatePractitioners, irsPractitioners, pending-case from dynamo to postgres
+          command: |
+            npx ts-node --transpile-only ./scripts/run-once-scripts/postgres-migration/migrate-users-to-postgres.ts
+      - run:
+          name: Update users' account status
+          command: |
+            npx ts-node --transpile-only ./scripts/run-once-scripts/postgres-migration/add-account-status-to-users.ts
 
   cleanup-glue-job:
     docker:
@@ -1023,11 +1055,6 @@ jobs:
           name: Restore Postgres Data
           command: |
             TARGET_ENV="$LOWER_ENV" TARGET_ACCOUNT_ID="$LOWER_ENV_ACCOUNT_ID" ./scripts/postgres/restoreDbFromSource.ts
-      - run:
-          name: Restore Postgres User Permissions
-          command: |
-            cd ./scripts/postgres
-            DB_HOST="$POSTGRES_HOST" ./create-rds-users.sh
 
   finish-glue-job:
     docker:
@@ -1319,8 +1346,21 @@ workflows:
   glue-to-dev:
     when: << pipeline.parameters.run_glue_to_dev >>
     jobs:
+      - delete-existing-data:
+          <<: *only-dev
+      - redeploy-environment:
+          <<: *only-dev
+          requires:
+            - delete-existing-data
+      - wait-for-deployment-workflow:
+          <<: *only-dev
+          type: approval
+          requires:
+            - redeploy-environment
       - initiate-glue-job:
           <<: *only-dev
+          requires:
+            - wait-for-deployment-workflow
       - wait-for-glue-workflow:
           <<: *only-dev
           type: approval
@@ -1336,25 +1376,27 @@ workflows:
           requires:
             - wait-for-glue-workflow
             - wait-for-s3-sync-workflow
-      - index-cases:
-          <<: *only-dev
-          requires:
-            - index-glued-data
-      - index-docket-entries:
-          <<: *only-dev
-          requires:
-            - index-glued-data
       - wait-for-glued-data-to-index:
           <<: *only-dev
           type: approval
           requires:
             - index-glued-data
-      - cleanup-glue-job:
+      - index-cases:
           <<: *only-dev
           requires:
             - wait-for-glued-data-to-index
+      - index-docket-entries:
+          <<: *only-dev
+          requires:
             - index-cases
+      - users-to-postgres:
+          <<: *only-dev
+          requires:
             - index-docket-entries
+      - cleanup-glue-job:
+          <<: *only-dev
+          requires:
+            - users-to-postgres #index-docket-entries
 
   glue-to-lower-env:
     when: << pipeline.parameters.run_glue_to_lower_env >>
