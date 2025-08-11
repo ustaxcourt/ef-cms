@@ -267,176 +267,238 @@ export const DocumentSearchResults = connect(
                 </Mobile>
               </div>
 
-              <table
-                className="usa-table search-results ustc-table responsive-table"
-                data-testid="advanced-document-search-results-table"
-              >
-                <thead>
-                  <tr>
-                    <th>
-                      <SortableColumn
-                        ascText={SORT_ASCENDING_TEXT.string}
-                        currentlySortedField={
-                          advancedDocumentSearchHelper.sortColumn
-                        }
-                        currentlySortedOrder={
-                          advancedDocumentSearchHelper.sortDirection
-                        }
-                        defaultSortOrder={ASCENDING}
-                        descText={SORT_DESCENDING_TEXT.string}
-                        hasRows={true}
-                        sortField="formattedFiledDate"
-                        title="Filed Date"
-                        onClickSequence={() => {
-                          handleSort('formattedFiledDate');
-                        }}
-                      />
-                    </th>
-                    <th aria-hidden="true" className="small-column"></th>
-                    <th>
-                      <SortableColumn
-                        ascText={SORT_ASCENDING_TEXT.string}
-                        currentlySortedField={
-                          advancedDocumentSearchHelper.sortColumn
-                        }
-                        currentlySortedOrder={
-                          advancedDocumentSearchHelper.sortDirection
-                        }
-                        defaultSortOrder={ASCENDING}
-                        descText={SORT_DESCENDING_TEXT.string}
-                        hasRows={true}
-                        sortField="documentTitle"
-                        title={
-                          advancedDocumentSearchHelper.documentTypeVerbiage
-                        }
-                        onClickSequence={() => handleSort('documentTitle')}
-                      />
-                    </th>
-                    <th>
-                      <SortableColumn
-                        ascText={SORT_ASCENDING_TEXT.string}
-                        currentlySortedField={
-                          advancedDocumentSearchHelper.sortColumn
-                        }
-                        currentlySortedOrder={
-                          advancedDocumentSearchHelper.sortDirection
-                        }
-                        defaultSortOrder={ASCENDING}
-                        descText={SORT_DESCENDING_TEXT.string}
-                        hasRows={true}
-                        sortField="caseTitle"
-                        title="Case Title"
-                        onClickSequence={() => handleSort('caseTitle')}
-                      />
-                    </th>
-                    <th>
-                      <SortableColumn
-                        ascText={SORT_ASCENDING_TEXT.string}
-                        currentlySortedField={
-                          advancedDocumentSearchHelper.sortColumn
-                        }
-                        currentlySortedOrder={
-                          advancedDocumentSearchHelper.sortDirection
-                        }
-                        defaultSortOrder={ASCENDING}
-                        descText={SORT_DESCENDING_TEXT.string}
-                        hasRows={true}
-                        sortField="formattedJudgeName"
-                        title="Judge"
-                        onClickSequence={() => handleSort('formattedJudgeName')}
-                      />
-                    </th>
-                    <th>
-                      <SortableColumn
-                        ascText={SORT_ASCENDING_TEXT.date}
-                        currentlySortedField={
-                          advancedDocumentSearchHelper.sortColumn
-                        }
-                        currentlySortedOrder={
-                          advancedDocumentSearchHelper.sortDirection
-                        }
-                        defaultSortOrder={ASCENDING}
-                        descText={SORT_DESCENDING_TEXT.date}
-                        hasRows={true}
-                        sortField="numberOfPagesFormatted"
-                        title="Pages"
-                        onClickSequence={() =>
-                          handleSort('numberOfPagesFormatted')
-                        }
-                      />
-                    </th>
-                    <th>
-                      <SortableColumn
-                        ascText={SORT_ASCENDING_TEXT.string}
-                        currentlySortedField={
-                          advancedDocumentSearchHelper.sortColumn
-                        }
-                        currentlySortedOrder={
-                          advancedDocumentSearchHelper.sortDirection
-                        }
-                        defaultSortOrder={ASCENDING}
-                        descText={SORT_DESCENDING_TEXT.string}
-                        hasRows={true}
-                        sortField="docketNumber"
-                        title="Docket No."
-                        onClickSequence={() => handleSort('docketNumber')}
-                      />
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {pagedResults.map(result => (
-                    <tr
-                      className="search-result"
-                      key={`${result.docketEntryId}-${result.docketNumber}`}
-                    >
-                      <td>{result.formattedFiledDate}</td>
-                      <td aria-hidden="true" className="small-column">
-                        {result.showSealedIcon && (
-                          <Icon
-                            aria-label="sealed"
-                            className="iconSealed"
-                            icon={['fa', 'lock']}
-                            size="1x"
-                          />
-                        )}
-                      </td>
-                      <td>
-                        <Button
-                          link
-                          className="padding-0"
-                          data-testid={`docket-number-link-${result.docketNumber}`}
-                          onClick={() => {
-                            openCaseDocumentDownloadUrlSequence({
-                              docketEntryId: result.docketEntryId,
-                              docketNumber: result.docketNumber,
-                              isPublic,
-                              useSameTab: false,
-                            });
+              <NonMobile>
+                <table
+                  className="usa-table search-results ustc-table responsive-table"
+                  data-testid="advanced-document-search-results-table"
+                >
+                  <thead>
+                    <tr>
+                      <th>
+                        <SortableColumn
+                          ascText={SORT_ASCENDING_TEXT.string}
+                          currentlySortedField={
+                            advancedDocumentSearchHelper.sortColumn
+                          }
+                          currentlySortedOrder={
+                            advancedDocumentSearchHelper.sortDirection
+                          }
+                          defaultSortOrder={ASCENDING}
+                          descText={SORT_DESCENDING_TEXT.string}
+                          hasRows={true}
+                          sortField="formattedFiledDate"
+                          title="Filed Date"
+                          onClickSequence={() => {
+                            handleSort('formattedFiledDate');
                           }}
-                        >
-                          {result.documentTitle}
-                        </Button>
-                      </td>
-                      <td>{result.caseTitle}</td>
-                      <td>{result.formattedJudgeName}</td>
-                      <td>{result.numberOfPagesFormatted}</td>
-                      <td data-testid={`docket-number-${result.docketNumber}`}>
-                        <CaseLink
-                          formattedCase={result}
-                          rel="noreferrer"
-                          target={
-                            advancedDocumentSearchHelper.isInternalUser
-                              ? '_blank'
-                              : ''
+                        />
+                      </th>
+                      <th aria-hidden="true" className="small-column"></th>
+                      <th>
+                        <SortableColumn
+                          ascText={SORT_ASCENDING_TEXT.string}
+                          currentlySortedField={
+                            advancedDocumentSearchHelper.sortColumn
+                          }
+                          currentlySortedOrder={
+                            advancedDocumentSearchHelper.sortDirection
+                          }
+                          defaultSortOrder={ASCENDING}
+                          descText={SORT_DESCENDING_TEXT.string}
+                          hasRows={true}
+                          sortField="documentTitle"
+                          title={
+                            advancedDocumentSearchHelper.documentTypeVerbiage
+                          }
+                          onClickSequence={() => handleSort('documentTitle')}
+                        />
+                      </th>
+                      <th>
+                        <SortableColumn
+                          ascText={SORT_ASCENDING_TEXT.string}
+                          currentlySortedField={
+                            advancedDocumentSearchHelper.sortColumn
+                          }
+                          currentlySortedOrder={
+                            advancedDocumentSearchHelper.sortDirection
+                          }
+                          defaultSortOrder={ASCENDING}
+                          descText={SORT_DESCENDING_TEXT.string}
+                          hasRows={true}
+                          sortField="caseTitle"
+                          title="Case Title"
+                          onClickSequence={() => handleSort('caseTitle')}
+                        />
+                      </th>
+                      <th>
+                        <SortableColumn
+                          ascText={SORT_ASCENDING_TEXT.string}
+                          currentlySortedField={
+                            advancedDocumentSearchHelper.sortColumn
+                          }
+                          currentlySortedOrder={
+                            advancedDocumentSearchHelper.sortDirection
+                          }
+                          defaultSortOrder={ASCENDING}
+                          descText={SORT_DESCENDING_TEXT.string}
+                          hasRows={true}
+                          sortField="formattedJudgeName"
+                          title="Judge"
+                          onClickSequence={() =>
+                            handleSort('formattedJudgeName')
                           }
                         />
-                      </td>
+                      </th>
+                      <th>
+                        <SortableColumn
+                          ascText={SORT_ASCENDING_TEXT.date}
+                          currentlySortedField={
+                            advancedDocumentSearchHelper.sortColumn
+                          }
+                          currentlySortedOrder={
+                            advancedDocumentSearchHelper.sortDirection
+                          }
+                          defaultSortOrder={ASCENDING}
+                          descText={SORT_DESCENDING_TEXT.date}
+                          hasRows={true}
+                          sortField="numberOfPagesFormatted"
+                          title="Pages"
+                          onClickSequence={() =>
+                            handleSort('numberOfPagesFormatted')
+                          }
+                        />
+                      </th>
+                      <th>
+                        <SortableColumn
+                          ascText={SORT_ASCENDING_TEXT.string}
+                          currentlySortedField={
+                            advancedDocumentSearchHelper.sortColumn
+                          }
+                          currentlySortedOrder={
+                            advancedDocumentSearchHelper.sortDirection
+                          }
+                          defaultSortOrder={ASCENDING}
+                          descText={SORT_DESCENDING_TEXT.string}
+                          hasRows={true}
+                          sortField="docketNumber"
+                          title="Docket No."
+                          onClickSequence={() => handleSort('docketNumber')}
+                        />
+                      </th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-
+                  </thead>
+                  <tbody>
+                    {pagedResults.map(result => (
+                      <tr
+                        className="search-result"
+                        key={`${result.docketEntryId}-${result.docketNumber}`}
+                      >
+                        <td>{result.formattedFiledDate}</td>
+                        <td aria-hidden="true" className="small-column">
+                          {result.showSealedIcon && (
+                            <Icon
+                              aria-label="sealed"
+                              className="iconSealed"
+                              icon={['fa', 'lock']}
+                              size="1x"
+                            />
+                          )}
+                        </td>
+                        <td>
+                          <Button
+                            link
+                            className="padding-0"
+                            data-testid={`docket-number-link-${result.docketNumber}`}
+                            onClick={() => {
+                              openCaseDocumentDownloadUrlSequence({
+                                docketEntryId: result.docketEntryId,
+                                docketNumber: result.docketNumber,
+                                isPublic,
+                                useSameTab: false,
+                              });
+                            }}
+                          >
+                            {result.documentTitle}
+                          </Button>
+                        </td>
+                        <td>{result.caseTitle}</td>
+                        <td>{result.formattedJudgeName}</td>
+                        <td>{result.numberOfPagesFormatted}</td>
+                        <td
+                          data-testid={`docket-number-${result.docketNumber}`}
+                        >
+                          <CaseLink
+                            formattedCase={result}
+                            rel="noreferrer"
+                            target={
+                              advancedDocumentSearchHelper.isInternalUser
+                                ? '_blank'
+                                : ''
+                            }
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </NonMobile>
+              <Mobile>
+                <table
+                  aria-label="document search results"
+                  className="usa-table gray-header responsive-table row-only todays-orders-mobile"
+                >
+                  <thead>
+                    <tr>
+                      <th aria-label="Docket Number">Docket No.</th>
+                      <th>Filed Date</th>
+                      <th>Case Title</th>
+                      <th>Order</th>
+                      <th>Pages</th>
+                      <th>Judge</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {pagedResults.map(result => (
+                      <tr
+                        key={`document-search-mobile-${result.docketNumber}-${result.docketEntryId}`}
+                      >
+                        <td className="docket-number-head">
+                          <CaseLink formattedCase={result} />
+                        </td>
+                        <th>Filed Date</th>
+                        <td className="divider">{result.formattedFiledDate}</td>
+                        <th>Case Title</th>
+                        <td className="divider">{result.caseTitle}</td>
+                        <th>Order</th>
+                        <td className="divider">
+                          <Button
+                            link
+                            aria-label={`View PDF: ${result.documentTitle}`}
+                            className="text-left"
+                            overrideMargin={true}
+                            onClick={() => {
+                              openCaseDocumentDownloadUrlSequence({
+                                docketEntryId: result.docketEntryId,
+                                docketNumber: result.docketNumber,
+                                isPublic,
+                                useSameTab: false,
+                              });
+                            }}
+                          >
+                            {result.documentTitle}
+                          </Button>
+                        </td>
+                        <th>Pages</th>
+                        <td className="divider">
+                          {result.numberOfPagesFormatted}
+                        </td>
+                        <th>Judge</th>
+                        <td>{result.formattedJudgeName}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </Mobile>
               {totalPages > 1 && (
                 <Paginator
                   currentPageIndex={currentPaginationPage}
