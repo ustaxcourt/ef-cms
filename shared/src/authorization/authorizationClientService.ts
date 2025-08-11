@@ -175,6 +175,7 @@ const chambersPermissions: RolePermission[] = [
   ROLE_PERMISSIONS.STATUS_REPORT_ORDER,
   ROLE_PERMISSIONS.SEND_RECEIVE_MESSAGES,
   ROLE_PERMISSIONS.MOTION_ORDER_RESPONSE,
+  ROLE_PERMISSIONS.MANAGE_MINUTE_SHEET,
 ];
 
 const docketClerkPermissions: RolePermission[] = [

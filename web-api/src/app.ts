@@ -209,6 +209,7 @@ import { getTrialSessionOpenCasesCountLambda } from '@web-api/lambdas/trialSessi
 import { getConsolidatedCaseDeadlinesLambda } from '@web-api/lambdas/caseDeadline/getConsolidatedCaseDeadlinesLambda';
 import { removePetitionerEmailLambda } from '@web-api/lambdas/cases/removePetitionerEmailLambda';
 import { getRecentFilingsForUserLambda } from './lambdas/recentFilings/getRecentFilingsForUserLambda';
+import { saveMinuteSheetToDraftsLambda } from './lambdas/trialSessionMinutes/saveMinuteSheetToDraftsLambda';
 import { deactiveUserLambda } from '@web-api/lambdas/automations/deactivateUserLambda';
 
 export const app = express();
@@ -912,6 +913,10 @@ app.delete(
   app.post(
     '/trial-sessions/:trialSessionId/case/:docketNumber/minutes',
     lambdaWrapper(generateTrialSessionMinutesPdfLambda),
+  );
+  app.post(
+    '/trial-sessions/:trialSessionId/case/:docketNumber/minutes-draft',
+    lambdaWrapper(saveMinuteSheetToDraftsLambda),
   );
   app.get(
     '/trial-sessions/paper-service-pdf/:fileId',
