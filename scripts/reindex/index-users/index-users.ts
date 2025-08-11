@@ -102,9 +102,9 @@ async function getUserIdIntervals(offsets: number[]) {
   );
   const rows = await getChunkUserIds(offsets);
   // Build intervals from the ids we got
-  const updatedRows: string[] = [''];
+  const updatedRows: string[] = ['__MIN__'];
   updatedRows.push(...rows.map(r => r.userId));
-  updatedRows.push('zzzzzzzz-zzzz-zzzz-zzzz-zzzzzzzzzzzz');
+  updatedRows.push('__MAX__');
 
   const chunkedIds: string[][] = [];
   for (let i = 1; i <= updatedRows.length - 1; i++) {

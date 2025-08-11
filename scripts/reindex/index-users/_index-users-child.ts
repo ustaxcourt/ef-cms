@@ -32,10 +32,14 @@ const scriptConfig: ScriptConfig = {
   },
   requireActiveAwsSession: true,
 };
-const { startUserId, endUserId } = parseArgsAndEnvVars(scriptConfig) as {
+const { startUserId: rawStartUserId, endUserId: rawEndUserId } = parseArgsAndEnvVars(scriptConfig) as {
   startUserId: string;
   endUserId: string;
 };
+const isMin = (v: string) => v === '__MIN__';
+const isMax = (v: string) => v === '__MAX__';
+const startUserId = rawStartUserId;
+const endUserId = rawEndUserId;
 const PAGE_SIZE = 2000;
 
 let totalItems = 0;
@@ -45,7 +49,7 @@ This script is only meant to be kicked off by index-users.ts. It paginates over 
 of users in a userId range to index them.
 */
 async function main() {
-  let currentStartUserId: string | null = startUserId;
+  let currentStartUserId: string | null = isMin(startUserId) ? null : startUserId;
   let usersToIndex = await getUsersToIndex(currentStartUserId);
 
   while (!isEmpty(usersToIndex)) {
@@ -79,7 +83,11 @@ const getUsersToIndex = async (start: string | null) => {
       .select(['userId'])
       .orderBy('userId')
       .where('userId', '>', start ?? '')
-      .where('userId', '<=', endUserId)
+    [isMax(endUserId) ? 'where' : 'where'](
+      'userId',
+      isMax(endUserId) ? '>' : '<=',
+      isMax(endUserId) ? '' : endUserId,
+    )
       .limit(PAGE_SIZE)
       .execute(),
   );

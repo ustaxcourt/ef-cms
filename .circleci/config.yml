@@ -848,6 +848,37 @@ jobs:
               NODE_ENV=production ./scripts/reindex/index-docket-entries/index-docket-entries.ts 5
             fi
 
+  index-users:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+            source $BASH_ENV
+            if [ "$MIGRATE_FLAG" == "true" ]; then
+              DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
+              ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
+                --domain-name "${DESTINATION_DOMAIN}" \
+                --region "us-east-1" \
+                --query 'DomainStatus.Endpoint' \
+                --output text)
+              echo "export ELASTICSEARCH_ENDPOINT=${ELASTICSEARCH_ENDPOINT}" >> $BASH_ENV
+            fi
+      - run:
+          name: Index Users
+          command: |
+            if [ "$MIGRATE_FLAG" == "true" ]; then
+              NODE_ENV=production ./scripts/reindex/index-users/index-users.ts 5
+            fi
+
   cleanup-glue-job:
     docker:
       - image: *efcms-docker-image
@@ -1126,26 +1157,30 @@ workflows:
           <<: *only-deployed-lower-environments
           requires:
             - index-cases
+      - index-users:
+          <<: *only-deployed-lower-environments
+          requires:
+            - index-docket-entries
       - smoketests:
           <<: *only-deployed-lower-environments
           requires:
             - disable-reindex-cron
-            - index-docket-entries
+            - index-users
       - loadtests:
           <<: *only-deployed-lower-environments
           requires:
             - disable-reindex-cron
-            - index-docket-entries
+            - index-users
       - smoketests-readonly:
           <<: *only-deployed-lower-environments
           requires:
             - disable-reindex-cron
-            - index-docket-entries
+            - index-users
       - api-hosted-environment-tests:
           <<: *only-deployed-lower-environments
           requires:
             - disable-reindex-cron
-            - index-docket-entries
+            - index-users
       - switch-colors:
           <<: *only-deployed-lower-environments
           requires:
@@ -1197,6 +1232,10 @@ workflows:
           <<: *only-prod
           requires:
             - index-cases
+      - index-users:
+          <<: *only-prod
+          requires:
+            - index-docket-entries
       # - loadtests: # 10495 Post deployment: Uncomment after users to postgres has been deployed
       #     <<: *only-prod
       #     requires:
@@ -1210,7 +1249,7 @@ workflows:
       - deploy-switch-colors-cron:
           <<: *only-prod
           requires:
-            - index-cases # 10495 Post deployment: Uncomment after users to postgres has been deployed
+            - index-users # 10495 Post deployment: Uncomment after users to postgres has been deployed
             # - loadtests
             # - smoketests-readonly
       - wait-for-switch:
@@ -1299,10 +1338,14 @@ workflows:
           <<: *only-test
           requires:
             - index-cases
-      - cleanup-glue-job:
+      - index-users:
           <<: *only-test
           requires:
             - index-docket-entries
+      - cleanup-glue-job:
+          <<: *only-test
+          requires:
+            - index-users
 
   glue-to-lower-env:
     when: << pipeline.parameters.run_glue_to_lower_env >>
