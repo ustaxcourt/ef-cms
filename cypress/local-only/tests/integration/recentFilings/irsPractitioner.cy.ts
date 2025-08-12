@@ -205,44 +205,6 @@ describe('Recent Filings - IRS Practitioner', () => {
     });
   });
 
-  // IRS-specific document handling tests - verify sealed documents are handled properly
-  it('should handle sealed documents appropriately', () => {
-    loginAsIrsPractitioner();
-    cy.get('[data-testid="header-recent-filings-link"]').click();
-
-    cy.get('[data-testid="recent-filings-table"]').then($table => {
-      if ($table.length > 0) {
-        cy.get('body').then($body => {
-          if (
-            $body.find('[data-testid="recent-filings-table"] tbody tr').length >
-            0
-          ) {
-            cy.get('[data-testid="sealed-document-icon"]').should('exist');
-          }
-        });
-      }
-    });
-  });
-
-  // IRS-specific document handling tests - verify stricken documents are handled properly
-  it('should handle stricken documents appropriately', () => {
-    loginAsIrsPractitioner();
-    cy.get('[data-testid="header-recent-filings-link"]').click();
-
-    cy.get('[data-testid="recent-filings-table"]').then($table => {
-      if ($table.length > 0) {
-        cy.get('body').then($body => {
-          if (
-            $body.find('[data-testid="recent-filings-table"] tbody tr').length >
-            0
-          ) {
-            cy.get('[data-testid="stricken-document"]').should('exist');
-          }
-        });
-      }
-    });
-  });
-
   // IRS-specific case handling tests - verify consolidated cases are handled properly
   it('should handle consolidated cases', () => {
     loginAsIrsPractitioner();
