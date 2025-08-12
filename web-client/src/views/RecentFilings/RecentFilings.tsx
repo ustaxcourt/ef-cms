@@ -75,6 +75,7 @@ export const RecentFilings = connect(
             activePage={activePage}
             pageRecords={pageRecords as RecentFiling[]}
             setActivePage={setActivePage}
+            count={sortedData.length}
             totalPages={totalPages}
             isLoading={waitingForResponse}
           />
@@ -95,6 +96,7 @@ export const RecentFilings = connect(
             activePage={activePage}
             pageRecords={pageRecords as RecentFiling[]}
             setActivePage={setActivePage}
+            count={sortedData.length}
             totalPages={totalPages}
             isLoading={waitingForResponse}
           />
