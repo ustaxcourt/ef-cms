@@ -33,7 +33,7 @@ export const CreateCaseDeadlineModalDialog = connect(
     validateCaseDeadlineSequence,
     validationErrors,
   }) {
-    const { docketNumber, leadDocketNumber, consolidatedCases } = caseDetail;
+    const { consolidatedCases } = caseDetail;
     return (
       <ModalDialog
         cancelLabel="Cancel"
@@ -82,9 +82,7 @@ export const CreateCaseDeadlineModalDialog = connect(
 
           <ConsolidatedCaseGroupInfo
             option="add"
-            docketNumber={docketNumber}
-            leadDocketNumber={leadDocketNumber}
-            consolidatedCases={consolidatedCases}
+            consolidatedCaseDeadlines={consolidatedCases}
           />
         </div>
       </ModalDialog>
