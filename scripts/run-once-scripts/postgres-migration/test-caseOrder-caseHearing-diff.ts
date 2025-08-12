@@ -53,8 +53,9 @@ async function main() {
       }),
     ),
   );
+  console.log('trialSessionCaseOrders.length', trialSessionCaseOrders.length);
+  console.log('caseTrialSessions.length', caseTrialSessions.length);
   console.log(findNonMatching(trialSessionCaseOrders, caseTrialSessions));
-  console.log('Finished moving trial sessions from dynamo to postgres');
 }
 
 async function scanContinuously(params: ScanCommandInput) {
@@ -72,13 +73,11 @@ async function scanContinuously(params: ScanCommandInput) {
       if (record.pk.startsWith('trial-session|')) {
         if (record.sk.startsWith('trial-session|')) {
           if (record.caseOrder) {
-            trialSessionCaseOrders.concat(
-              ...record.caseOrder.map(co => {
-                return {
-                  ...co,
-                  trialSessionId: record.trialSessionId,
-                };
-              }),
+            trialSessionCaseOrders.push(
+              ...record.caseOrder.map(co => ({
+                ...co,
+                trialSessionId: record.trialSessionId,
+              })),
             );
           }
         }
