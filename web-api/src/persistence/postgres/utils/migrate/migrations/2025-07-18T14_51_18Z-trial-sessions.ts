@@ -76,16 +76,19 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('unfinishedCases', 'integer')
     .execute();
 
-
   await db.schema
     .createTable('dwTrialSessionCase')
     .addColumn('docketNumber', 'varchar', col => col.notNull())
     .addColumn('trialSessionId', 'uuid', col => col.notNull())
-    .addColumn('addedToSessionAt', 'timestamptz', col => col.notNull())
+    .addColumn('addedToSessionAt', 'timestamptz')
     .addColumn('calendarNotes', 'varchar')
     .addColumn('disposition', 'varchar')
-    .addColumn('isManuallyAdded', 'boolean', col => col.notNull().defaultTo(false))
-    .addColumn('removedFromTrial', 'boolean', col => col.notNull().defaultTo(false))
+    .addColumn('isManuallyAdded', 'boolean', col =>
+      col.notNull().defaultTo(false),
+    )
+    .addColumn('removedFromTrial', 'boolean', col =>
+      col.notNull().defaultTo(false),
+    )
     .addColumn('removedFromTrialDate', 'timestamptz')
     .addColumn('isHearing', 'boolean', col => col.notNull().defaultTo(false))
     .addPrimaryKeyConstraint('dwTrialSessionCasePk', [

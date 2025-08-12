@@ -82,7 +82,7 @@ export function fromKyselyTrialSession(
     trialSessionId?: string;
     ttl?: string;
   }[],
-  caseOrder: TrialSessionCaseKysely[]
+  caseOrder: TrialSessionCaseKysely[],
 ): RawTrialSession {
   return transformNullToUndefined({
     ...record,
@@ -94,10 +94,11 @@ export function fromKyselyTrialSession(
     sessionScope: record.sessionScope as TrialSessionScope,
     sessionType: record.sessionType as TrialSessionTypes,
     caseOrder: caseOrder?.map(co => fromKyselyTrialSessionCase(co)) || [],
-    paperServicePdfs: paperPdfs?.map(pdf => ({
-      fileId: pdf.fileId,
-      title: pdf.title,
-    })) || [],
+    paperServicePdfs:
+      paperPdfs?.map(pdf => ({
+        fileId: pdf.fileId,
+        title: pdf.title,
+      })) || [],
   });
 }
 
@@ -112,9 +113,11 @@ export function toKyselyNewTrialSessionCase(
     removedFromTrialDate: trialSessionCase.removedFromTrialDate
       ? calculateDate({ dateString: trialSessionCase.removedFromTrialDate })
       : null,
-    addedToSessionAt: calculateDate({
-      dateString: trialSessionCase.addedToSessionAt,
-    }),
+    addedToSessionAt: trialSessionCase.addedToSessionAt
+      ? calculateDate({
+          dateString: trialSessionCase.addedToSessionAt,
+        })
+      : null,
   };
 }
 
@@ -142,12 +145,12 @@ export function fromKyselyNewTrialSessionWorkingCopy(
   });
 }
 
-export function fromKyselyTrialSessionCase (
-  caseOrder: TrialSessionCaseKysely
+export function fromKyselyTrialSessionCase(
+  caseOrder: TrialSessionCaseKysely,
 ): TCaseOrder {
   return transformNullToUndefined({
     ...caseOrder,
-    addedToSessionAt: caseOrder.addedToSessionAt.toISOString(),
-    removedFromTrialDate: caseOrder.removedFromTrialDate?.toISOString()
+    addedToSessionAt: caseOrder.addedToSessionAt?.toISOString(),
+    removedFromTrialDate: caseOrder.removedFromTrialDate?.toISOString(),
   });
 }

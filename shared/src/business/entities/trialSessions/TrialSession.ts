@@ -61,7 +61,7 @@ export type TTrialClerk = {
 };
 
 export type TCaseOrder = {
-  addedToSessionAt: string;
+  addedToSessionAt?: string;
   calendarNotes?: string;
   disposition?: string;
   docketNumber: string;

@@ -132,7 +132,7 @@ export type NewTrialSessionNotificationProcessingKysely =
 const trialSessionCaseTableDefinition = {
   docketNumber: DEFAULT as string,
   trialSessionId: DEFAULT as string,
-  addedToSessionAt: DEFAULT as Date,
+  addedToSessionAt: DEFAULT as Date | null,
   calendarNotes: DEFAULT as string | null,
   disposition: DEFAULT as string | null,
   isManuallyAdded: DEFAULT as boolean,
