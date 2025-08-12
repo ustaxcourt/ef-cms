@@ -82,8 +82,7 @@ export const advancedDocumentSearchHelper = (
           return dateStringsCompared(a.filingDate, b.filingDate) * direction;
         }
 
-        // Try to parse as numbers if both values are numeric
-        if (!isNaN(Number(aValue)) && !isNaN(Number(bValue))) {
+        if (sortColumn === 'numberOfPages') {
           return (Number(aValue) - Number(bValue)) * direction;
         }
 
@@ -92,7 +91,7 @@ export const advancedDocumentSearchHelper = (
         bValue = String(bValue).toLowerCase();
 
         if (aValue < bValue) return -1 * direction;
-        if (aValue > bValue) return 1 * direction;
+        if (aValue > bValue) return direction;
 
         return 0; // Values are equal
       });
