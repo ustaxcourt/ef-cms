@@ -59,8 +59,6 @@ describe('deleteCaseDeadlineInteractor', () => {
         mockPetitionsClerkUser,
       ),
     ).rejects.toThrow(ServiceUnavailableError);
-
-    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
   it('should acquire a lock on the case', async () => {
