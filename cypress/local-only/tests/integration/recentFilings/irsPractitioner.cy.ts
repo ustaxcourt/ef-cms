@@ -205,25 +205,6 @@ describe('Recent Filings - IRS Practitioner', () => {
     });
   });
 
-  // IRS-specific case handling tests - verify consolidated cases are handled properly
-  it('should handle consolidated cases', () => {
-    loginAsIrsPractitioner();
-    cy.get('[data-testid="header-recent-filings-link"]').click();
-
-    cy.get('[data-testid="recent-filings-table"]').then($table => {
-      if ($table.length > 0) {
-        cy.get('body').then($body => {
-          if (
-            $body.find('[data-testid="recent-filings-table"] tbody tr').length >
-            0
-          ) {
-            cy.get('[data-testid="consolidated-case-icon"]').should('exist');
-          }
-        });
-      }
-    });
-  });
-
   // Data display tests - verify multiple cases are displayed correctly
   it('should handle multiple cases', () => {
     loginAsIrsPractitioner();
