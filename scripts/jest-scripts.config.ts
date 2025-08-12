@@ -46,6 +46,8 @@ const config: Config = {
     '!secrets/**',
     '!set-maintenance-mode-locally.ts',
     '!template.ts',
+    '!judge/get-judge-name.ts',
+    '!judge/set-judge-title.ts',
     '!upload-practitioner-application-packages.ts',
     '!user/**',
   ],
