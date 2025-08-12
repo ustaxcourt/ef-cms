@@ -38,7 +38,7 @@ describe('generateSuggestedTrialSessionCalendar', () => {
     getSuggestedCalendarCases.mockResolvedValue(mockCases);
 
     getTrialSessions.mockResolvedValue(
-      mockSpecialSessions as RawTrialSession[],
+      mockSpecialSessions as unknown as RawTrialSession[],
     );
   });
 
