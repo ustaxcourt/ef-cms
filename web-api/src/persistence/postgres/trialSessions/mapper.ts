@@ -121,6 +121,16 @@ export function toKyselyNewTrialSessionCase(
   };
 }
 
+export function fromKyselyTrialSessionCase(
+  caseOrder: TrialSessionCaseKysely,
+): TCaseOrder {
+  return transformNullToUndefined({
+    ...caseOrder,
+    addedToSessionAt: caseOrder.addedToSessionAt?.toISOString(),
+    removedFromTrialDate: caseOrder.removedFromTrialDate?.toISOString(),
+  });
+}
+
 export function toKyselyNewTrialSessionWorkingCopy(
   rawTrialSessionWorkingCopy: RawTrialSessionWorkingCopy,
 ): NewTrialSessionWorkingCopyKysely {
@@ -142,15 +152,5 @@ export function fromKyselyNewTrialSessionWorkingCopy(
     ...trialSessionWorkingCopy,
     sortOrder: (trialSessionWorkingCopy.sortOrder || 'asc') as 'asc' | 'desc',
     sort: trialSessionWorkingCopy.sort || 'docket',
-  });
-}
-
-export function fromKyselyTrialSessionCase(
-  caseOrder: TrialSessionCaseKysely,
-): TCaseOrder {
-  return transformNullToUndefined({
-    ...caseOrder,
-    addedToSessionAt: caseOrder.addedToSessionAt?.toISOString(),
-    removedFromTrialDate: caseOrder.removedFromTrialDate?.toISOString(),
   });
 }
