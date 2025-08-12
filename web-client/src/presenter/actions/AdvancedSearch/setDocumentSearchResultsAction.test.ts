@@ -8,12 +8,6 @@ describe('setDocumentSearchResultsAction', () => {
       modules: {
         presenter,
       },
-      state: {
-        documentSearchSort: {
-          sortColumn: 'formattedFiledDate',
-          sortDirection: 'desc',
-        },
-      },
       props: {
         sortColumn: 'numberOfPages',
         sortDirection: 'asc',
