@@ -30,26 +30,7 @@ if [[ "${NEW_JUDGE_NAME}" == "None" ]]; then
   exit 1
 fi
 
-# update the judge's signature in deploy table
-ITEM=$(cat <<-END
-{
-    "pk": {
-        "S": "chief-judge-name"
-    },
-    "sk":{
-        "S": "chief-judge-name"
-    },
-    "current": {
-        "S": "${NEW_JUDGE_NAME}"
-    }
-}
-END
-)
-
-aws dynamodb put-item \
-    --region "${REGION}" \
-    --table-name "efcms-deploy-${ENV}" \
-    --item "${ITEM}"
+npx ts-node --transpile-only ./scripts/postgres/featureFlags/setup-chief-judge-name-flag.ts "${NEW_JUDGE_NAME}"
 
 # update the old judge's title to now only be Judge
 OLD_JUDGE_NAME=$(aws dynamodb update-item \
