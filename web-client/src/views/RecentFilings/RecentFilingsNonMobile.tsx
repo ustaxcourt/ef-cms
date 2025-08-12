@@ -51,6 +51,7 @@ export const RecentFilingsNonMobile = ({
   activePage,
   pageRecords,
   setActivePage,
+  count,
   totalPages,
   isLoading = false,
 }: {
@@ -64,6 +65,7 @@ export const RecentFilingsNonMobile = ({
   activePage: number;
   pageRecords: RecentFiling[];
   setActivePage: (page: number) => void;
+  count: number;
   totalPages: number;
   isLoading?: boolean;
 }) => {
@@ -113,7 +115,7 @@ export const RecentFilingsNonMobile = ({
 
               <div className="margin-bottom-2 text-right">
                 <strong>Count: </strong>
-                {pageRecords.length || 0}
+                {count}
               </div>
 
               <table
