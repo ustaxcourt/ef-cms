@@ -55,7 +55,7 @@ export const RecentFilings = connect(
     const sortedData =
       recentFilingsHelper?.sortedRecentFilings || recentFilings || [];
 
-    const PAGE_SIZE = 100;
+    const PAGE_SIZE = 1;
     const { activePage, pageRecords, setActivePage, totalPages } =
       useClientSidePaginator(sortedData, PAGE_SIZE);
 
@@ -75,6 +75,7 @@ export const RecentFilings = connect(
             activePage={activePage}
             pageRecords={pageRecords as RecentFiling[]}
             setActivePage={setActivePage}
+            count={sortedData.length}
             totalPages={totalPages}
             isLoading={waitingForResponse}
           />
@@ -95,6 +96,7 @@ export const RecentFilings = connect(
             activePage={activePage}
             pageRecords={pageRecords as RecentFiling[]}
             setActivePage={setActivePage}
+            count={sortedData.length}
             totalPages={totalPages}
             isLoading={waitingForResponse}
           />
