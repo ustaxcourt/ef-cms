@@ -55,7 +55,7 @@ export const RecentFilings = connect(
     const sortedData =
       recentFilingsHelper?.sortedRecentFilings || recentFilings || [];
 
-    const PAGE_SIZE = 1;
+    const PAGE_SIZE = 100;
     const { activePage, pageRecords, setActivePage, totalPages } =
       useClientSidePaginator(sortedData, PAGE_SIZE);
 
