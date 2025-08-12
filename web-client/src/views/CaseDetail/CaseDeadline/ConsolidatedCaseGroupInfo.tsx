@@ -2,21 +2,15 @@ import React from 'react';
 
 export function ConsolidatedCaseGroupInfo({
   option,
-  docketNumber,
-  leadDocketNumber,
-  consolidatedCases,
+  consolidatedCaseDeadlines,
 }: {
   option: 'add' | 'edit' | 'delete';
-  docketNumber: string;
-  leadDocketNumber: string | undefined;
-  consolidatedCases: {
+  consolidatedCaseDeadlines: {
     docketNumber: string;
     caseCaption: string;
   }[];
 }) {
-  const isLeadCase = docketNumber === leadDocketNumber;
-  if (!isLeadCase) return;
-  if (!consolidatedCases.length) return;
+  if (consolidatedCaseDeadlines.length < 2) return;
 
   const TEXT_DICT = {
     add: 'This deadline will be added to all cases in the consolidated group.',
@@ -31,7 +25,7 @@ export function ConsolidatedCaseGroupInfo({
     >
       <h4>This case is part of a consolidated group.</h4>
       <p>{TEXT_DICT[option]}</p>
-      {consolidatedCases.map(({ docketNumber, caseCaption }) => {
+      {consolidatedCaseDeadlines.map(({ docketNumber, caseCaption }) => {
         return (
           <p key={docketNumber}>
             {docketNumber} {caseCaption}
