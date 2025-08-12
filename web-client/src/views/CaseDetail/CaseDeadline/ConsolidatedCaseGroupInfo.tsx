@@ -2,14 +2,19 @@ import React from 'react';
 
 export function ConsolidatedCaseGroupInfo({
   option,
+  docketNumber,
+  leadDocketNumber,
   consolidatedCaseDeadlines,
 }: {
   option: 'add' | 'edit' | 'delete';
+  docketNumber?: string;
+  leadDocketNumber?: string;
   consolidatedCaseDeadlines: {
     docketNumber: string;
     caseCaption: string;
   }[];
 }) {
+  if (leadDocketNumber && leadDocketNumber !== docketNumber) return;
   if (consolidatedCaseDeadlines.length < 2) return;
 
   const TEXT_DICT = {
