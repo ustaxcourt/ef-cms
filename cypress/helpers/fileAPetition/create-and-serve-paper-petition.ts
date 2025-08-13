@@ -9,19 +9,22 @@ export function createAndServePaperPetition(
     trialLocation = 'Birmingham, Alabama',
     yearReceived = '2020',
     includeApwDocument = true,
+    caseType = 'CDP (Lien/Levy)'
   }: Partial<{
     yearReceived: string;
     procedureType: ProcedureType;
     trialLocation: string;
     name: string;
     includeApwDocument: boolean;
+    caseType: string;
   }> = {
-    name: 'rick james ' + Date.now(),
-    procedureType: 'Regular',
-    trialLocation: 'Birmingham, Alabama',
-    yearReceived: '2020',
-    includeApwDocument: true,
-  },
+      name: 'rick james ' + Date.now(),
+      procedureType: 'Regular',
+      trialLocation: 'Birmingham, Alabama',
+      yearReceived: '2020',
+      includeApwDocument: true,
+      caseType: 'CDP (Lien/Levy)'
+    },
 ): Cypress.Chainable<{
   docketNumber: string;
   documentsCreated: {
@@ -68,7 +71,7 @@ export function createAndServePaperPetition(
   cy.get('#order-for-amended-petition').check({ force: true });
 
   cy.get('#tab-irs-notice > .button-text').click();
-  cy.get('[data-testid="case-type-select"]').select('CDP (Lien/Levy)');
+  cy.get('[data-testid="case-type-select"]').select(caseType);
   cy.get('#upload-mode-upload').click();
   cy.get('#uploadMode').check();
   attachFile({
@@ -216,9 +219,9 @@ export function createAndServePaperPetitionMyselfAndSpouse(
     primaryContactName: string;
     secondaryContactName: string;
   }> = {
-    primaryContactName: 'John',
-    secondaryContactName: 'John Spouse',
-  },
+      primaryContactName: 'John',
+      secondaryContactName: 'John Spouse',
+    },
 ): Cypress.Chainable<{
   docketNumber: string;
 }> {

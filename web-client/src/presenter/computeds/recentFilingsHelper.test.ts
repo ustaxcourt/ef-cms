@@ -19,6 +19,8 @@ const createFiling = (overrides: Partial<RecentFiling> = {}): RecentFiling => ({
   caseTitle: 'Test Case 1',
   docketEntryId: '1',
   isFileAttached: true,
+  eventCode: 'P',
+  servedAt: '2024-01-15T10:00:00.000Z',
   ...overrides,
 });
 
@@ -145,7 +147,9 @@ describe('recentFilingsHelper', () => {
         user: { role: ROLES.petitioner },
       }),
     });
-    expect(externalUserPublicResult.sortedRecentFilings[0].canAccess).toBe(true);
+    expect(externalUserPublicResult.sortedRecentFilings[0].canAccess).toBe(
+      true,
+    );
 
     // Internal user can access document sealed to public
     const internalUserPublicResult = runCompute(recentFilingsHelper, {
@@ -154,7 +158,9 @@ describe('recentFilingsHelper', () => {
         user: { role: ROLES.petitionsClerk },
       }),
     });
-    expect(internalUserPublicResult.sortedRecentFilings[0].canAccess).toBe(true);
+    expect(internalUserPublicResult.sortedRecentFilings[0].canAccess).toBe(
+      true,
+    );
   });
 
   it('should handle case-level sealing', () => {
