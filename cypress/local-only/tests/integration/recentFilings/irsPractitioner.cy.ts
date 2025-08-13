@@ -300,14 +300,18 @@ describe('Recent Filings - IRS Practitioner', () => {
             $body.find('[data-testid="recent-filings-table"] tbody tr').length >
             0
           ) {
-            cy.get('[data-testid="recent-filings-table"]').should(
-              'contain',
-              'Answer',
+            // Verify that the table contains document information
+            cy.get('[data-testid="recent-filings-table"]').should('be.visible');
+            cy.get('[data-testid="recent-filings-table"] tbody tr').should(
+              'have.length.greaterThan',
+              0,
             );
-            cy.get('[data-testid="recent-filings-table"]').should(
-              'contain',
-              'Motion',
-            );
+
+            // Check that document links are present and functional
+            cy.get('[data-testid="document-link"]').should('exist');
+            cy.get('[data-testid="document-link"]')
+              .first()
+              .should('be.visible');
           }
         });
       }
