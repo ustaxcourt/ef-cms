@@ -84,7 +84,6 @@ async function createTrialSessionWorkingCopies(trialSessionWorkingCopies) {
 }
 
 async function createCaseTrialSessionFromOrder(caseOrders) {
-  // todo onconflict!!! We don't want to update isHearing if the record already exists
   await getConnection({
     cb: db =>
       db
@@ -93,6 +92,35 @@ async function createCaseTrialSessionFromOrder(caseOrders) {
           caseOrders.map(co => {
             toKyselyNewTrialSessionCase({ ...co, isHearing: false });
           }),
+        )
+        .onConflict(oc =>
+          oc.columns(['docketNumber', 'trialSessionId']).doUpdateSet(eb => ({
+            addedToSessionAt: eb.ref('excluded.addedToSessionAt'),
+            calendarNotes: eb.ref('excluded.calendarNotes'),
+            disposition: eb.ref('excluded.disposition'),
+            isManuallyAdded: eb.ref('excluded.isManuallyAdded'),
+            removedFromTrial: eb.ref('excluded.removedFromTrial'),
+            removedFromTrialDate: eb.ref('excluded.removedFromTrialDate'),
+          })),
+        )
+        .execute(),
+  });
+}
+
+async function createCaseTrialSessionFromHearing(caseHearings) {
+  await getConnection({
+    cb: db =>
+      db
+        .insertInto('dwTrialSessionCase')
+        .values(
+          caseHearings.map(co => {
+            toKyselyNewTrialSessionCase(co);
+          }),
+        )
+        .onConflict(oc =>
+          oc.columns(['docketNumber', 'trialSessionId']).doUpdateSet(eb => ({
+            isHearing: eb.ref('excluded.isHearing'),
+          })),
         )
         .execute(),
   });
@@ -141,7 +169,16 @@ async function scanContinuously(params: ScanCommandInput) {
         );
       }
       if (record.pk.startsWith('case|') && record.sk.startsWith('hearing|')) {
-        caseHearings.push(record);
+        const caseTrialSession = {
+          docketNumber: record.pk.substring(5),
+          trialSessionId: record.trialSessionId,
+        };
+        caseHearings.push({
+          ...caseTrialSession,
+          isHearing: true,
+          isManuallyAdded: false,
+          removedFromTrial: false,
+        });
       }
     }
 
@@ -150,6 +187,7 @@ async function scanContinuously(params: ScanCommandInput) {
       createPaperPdfRecords(trialSessionPaperPdfs),
       createTrialSessionWorkingCopies(trialSessionWorkingCopies),
       createCaseTrialSessionFromOrder(caseOrders),
+      createCaseTrialSessionFromHearing(caseHearings),
     ]);
 
     itemsScanned += items.length;
