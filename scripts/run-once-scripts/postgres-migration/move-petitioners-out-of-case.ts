@@ -93,4 +93,4 @@ async function main() {
   console.log('Done moving petitioners');
 }
 
-main().catch(console.error);
+void main();
