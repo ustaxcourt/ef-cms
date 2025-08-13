@@ -5,6 +5,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 import {
   ROLES,
   STIN_DOCKET_ENTRY_TYPE,
+  DOCKET_ENTRY_SEALED_TO_TYPES,
   Role,
 } from '@shared/business/entities/EntityConstants';
 import { User } from '@shared/business/entities/User';
@@ -19,6 +20,22 @@ const checkDocumentAccess = (
 
   if (filing.isStricken) {
     return false;
+  }
+
+  if (filing.caseIsSealed) {
+    if (User.isInternalUser(userRole)) {
+      return Boolean(filing.isFileAttached);
+    }
+    return Boolean(filing.isFileAttached);
+  }
+
+  if (filing.isSealed && filing.sealedTo) {
+    if (filing.sealedTo === DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL) {
+      return User.isInternalUser(userRole);
+    }
+    if (filing.sealedTo === DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC) {
+      return Boolean(filing.isFileAttached);
+    }
   }
 
   if (filing.eventCode === STIN_DOCKET_ENTRY_TYPE.eventCode) {
@@ -38,6 +55,44 @@ const checkDocumentAccess = (
     }
 
     return false;
+  }
+
+  const isServed = filing.servedAt;
+
+  const unservableEventCodes = [
+    'TCRP',
+    'SPOS',
+    'SPTO',
+    'SPTN',
+    'NTD',
+    'NORP',
+    'NOIP',
+    'NCTL',
+    'NODC',
+  ];
+  const isUnservable =
+    filing.eventCode && unservableEventCodes.includes(filing.eventCode);
+
+  if (!isServed && !isUnservable) {
+    const allowedEventCodes = [
+      'P',
+      'ATP',
+      'DISC',
+      'NOT',
+      'NOTR',
+      'NTD',
+      'SPOS',
+      'SPTO',
+      'TCRP',
+      'NORP',
+      'NOIP',
+      'NCTL',
+      'NODC',
+    ];
+
+    if (!filing.eventCode || !allowedEventCodes.includes(filing.eventCode)) {
+      return false;
+    }
   }
 
   return Boolean(filing.isFileAttached);

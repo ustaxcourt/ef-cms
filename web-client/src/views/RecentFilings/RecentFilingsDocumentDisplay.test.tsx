@@ -1,6 +1,7 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '@web-client/presenter/presenter-mock';
 import { RecentFiling } from '@shared/business/entities/RecentFiling';
+import { DOCKET_ENTRY_SEALED_TO_TYPES } from '@shared/business/entities/EntityConstants';
 
 describe('RecentFilingsDocumentDisplay', () => {
   const mockFiling: RecentFiling = {
@@ -45,6 +46,60 @@ describe('RecentFilingsDocumentDisplay', () => {
     expect(strickenFiling.document).toBe('Petition');
     expect(sealedFiling.isSealed).toBe(true);
     expect(sealedFiling.document).toBe('Petition');
+  });
+
+  it('should handle documents sealed to the public', () => {
+    const sealedToPublicFiling = {
+      ...mockFiling,
+      isSealed: true,
+      sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
+    };
+
+    expect(sealedToPublicFiling.isSealed).toBe(true);
+    expect(sealedToPublicFiling.sealedTo).toBe(
+      DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
+    );
+    expect(sealedToPublicFiling.document).toBe('Petition');
+  });
+
+  it('should handle documents sealed to all parties', () => {
+    const sealedToExternalFiling = {
+      ...mockFiling,
+      isSealed: true,
+      sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL,
+    };
+
+    expect(sealedToExternalFiling.isSealed).toBe(true);
+    expect(sealedToExternalFiling.sealedTo).toBe(
+      DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL,
+    );
+    expect(sealedToExternalFiling.document).toBe('Petition');
+  });
+
+  it('should handle documents in sealed cases', () => {
+    const sealedCaseFiling = {
+      ...mockFiling,
+      caseIsSealed: true,
+    };
+
+    expect(sealedCaseFiling.caseIsSealed).toBe(true);
+    expect(sealedCaseFiling.document).toBe('Petition');
+  });
+
+  it('should handle documents in sealed cases that are also individually sealed', () => {
+    const sealedCaseAndDocumentFiling = {
+      ...mockFiling,
+      caseIsSealed: true,
+      isSealed: true,
+      sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
+    };
+
+    expect(sealedCaseAndDocumentFiling.caseIsSealed).toBe(true);
+    expect(sealedCaseAndDocumentFiling.isSealed).toBe(true);
+    expect(sealedCaseAndDocumentFiling.sealedTo).toBe(
+      DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
+    );
+    expect(sealedCaseAndDocumentFiling.document).toBe('Petition');
   });
 
   it('should handle documents with eventCode when document title is missing', () => {

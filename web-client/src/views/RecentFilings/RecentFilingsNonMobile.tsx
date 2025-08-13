@@ -90,9 +90,10 @@ export const RecentFilingsNonMobile = ({
         <div className="grid-col-12">
           <div className="read-only-text" data-testid="recent-filings-info">
             This page shows new docket entries dated within the last 7 days for
-            any cases for which you are associated. Please consult the docket
-            records for your cases to view all the docket entries. Information
-            on this page is current as of {currentDate}.
+            any case(s) for which you are associated. It is provided for
+            convenience. Please consult the docket records for your cases(s) to
+            view all the docket entries. Information on this page is current as
+            of {currentDate}.
           </div>
           <div id="recent-filings-description" className="sr-only">
             Table showing recent filings with columns for Docket Number, Filed
