@@ -6,7 +6,6 @@ import {
 
 describe('Order Search', () => {
   it('should be able to search for an order by legacy judge', () => {
-    const judgeNameColumnIndex = 4;
     const wantedLegacyJudge = 'Fieri';
 
     navigateToDashboard();
@@ -19,8 +18,8 @@ describe('Order Search', () => {
     //assert that every judge in the search result list is the wanted legacy judge
     cy.get('tr.search-result').each(element => {
       cy.wrap(element).within(() => {
-        cy.get('td')
-          .eq(judgeNameColumnIndex)
+        cy.get('[data-testid="search-result-row-judge-name"]')
+
           .should('have.text', wantedLegacyJudge);
       });
     });
