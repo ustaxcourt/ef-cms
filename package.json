@@ -22,6 +22,7 @@
     "@aws-sdk/client-dynamodb": "3.863.0",
     "@aws-sdk/client-dynamodb-streams": "3.863.0",
     "@aws-sdk/client-glue": "3.863.0",
+    "@aws-sdk/client-sesv2": "3.863.0",
     "@aws-sdk/client-lambda": "3.863.0",
     "@aws-sdk/client-opensearch": "3.863.0",
     "@aws-sdk/client-route-53": "3.863.0",

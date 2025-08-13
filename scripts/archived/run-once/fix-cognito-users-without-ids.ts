@@ -10,9 +10,9 @@ import {
   createApplicationContext,
 } from '@web-api/applicationContext';
 import { type UserType } from '@aws-sdk/client-cognito-identity-provider';
-import { createPetitionerUserRecords } from '@web-api/persistence/dynamo/users/createPetitionerUserRecords';
+// import { createPetitionerUserRecords } from '@web-api/persistence/dynamo/users/createPetitionerUserRecords';
 import { createUserConfirmation } from '@web-api/business/useCaseHelper/auth/createUserConfirmation';
-import { omit } from 'lodash';
+// import { omit } from 'lodash';
 import { usersWithoutUserIds } from './fix-cognito-users-without-ids-constants';
 
 const scriptConfig: ScriptConfig = {
@@ -94,11 +94,11 @@ const setUserAttributes = async ({
       }
 
       if (cognitoUser.UserStatus === 'CONFIRMED') {
-        await createPetitionerUserRecords({
-          applicationContext,
-          user: omit(user, 'userId'),
-          userId: user.userId,
-        });
+        // await createPetitionerUserRecords({
+        //   applicationContext,
+        //   user: omit(user, 'userId'),
+        //   userId: user.userId,
+        // });
         console.log(`Created petitioner entity in Dynamo for ${user.email}.`);
         totals.userEntitiesCreatedInDynamo++;
       }

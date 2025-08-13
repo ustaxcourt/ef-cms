@@ -105,7 +105,7 @@ export const updatePractitionerCase = async ({
   if (!practitionerObject) {
     // if practitioner is not found on the case, function exits early and returns `undefined`.
     applicationContext.logger.error(
-      `Could not find user|${user.userId} barNumber: ${user.barNumber} on ${caseToUpdate.docketNumber}`,
+      `Could not find ${user.userId} barNumber: ${user.barNumber} on ${caseToUpdate.docketNumber}`,
     );
     return;
   }
@@ -142,7 +142,7 @@ const updateCaseEntityAndGenerateChange = async ({
   const petitionerObject = caseEntity.getPetitionerById(user.userId);
   if (!petitionerObject) {
     applicationContext.logger.error(
-      `Could not find user|${user.userId} on ${caseEntity.docketNumber}`,
+      `Could not find ${user.userId} on ${caseEntity.docketNumber}`,
     );
     return;
   }

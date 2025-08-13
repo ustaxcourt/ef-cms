@@ -29,6 +29,14 @@ parameters:
     default: false
     type: boolean
 
+  run_index_once:
+    default: false
+    type: boolean
+
+  index_threads:
+    default: '5'
+    type: string
+
   lower_env:
     default: test
     type: string
@@ -218,9 +226,6 @@ jobs:
           name: 'Deploy - Verify Private Elasticsearch'
           command: |
             npm run verify-private-elasticsearch -- $ENV
-      - run:
-          name: 'Deploy - Pending Color Switch'
-          command: npm run pending-color-switch
 
   docker-image-zipper:
     docker:
@@ -285,7 +290,7 @@ jobs:
       - run:
           name: Run Postgres Migration
           command: |
-            NODE_ENV=production npm run migration:postgres
+            npm run migration:postgres
       - run:
           name: Restore Postgres User Permissions
           command: |
@@ -356,6 +361,18 @@ jobs:
             if [ "$MIGRATE_FLAG" == "true" ]; then
               ./web-api/enable-deploying-dynamo-stream-trigger.sh
             fi
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+      - run:
+          name: Migrate Practitioner Documents from Dynamo to Postgres
+          command: |
+            ./scripts/run-once-scripts/postgres-migration/migrateAllPractitionerDocumentsIntoPostgres.ts
+      - run:
+          name: Migrate Feature Flags from Dynamo to Postgres
+          command: |
+            ./scripts/run-once-scripts/postgres-migration/migrate-feature-flags-dynamo-to-postgres.ts
 
   disable-reindex-cron:
     docker:
@@ -608,6 +625,35 @@ jobs:
               npm run migration:cleanup -- $ENV
             fi
 
+  index-docket-entries-once:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: xlarge
+    environment:
+      THREADS: << pipeline.parameters.index_threads >>
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+            source $BASH_ENV
+            DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
+            ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
+              --domain-name "${DESTINATION_DOMAIN}" \
+              --region "us-east-1" \
+              --query 'DomainStatus.Endpoint' \
+              --output text)
+            echo "export ELASTICSEARCH_ENDPOINT=${ELASTICSEARCH_ENDPOINT}" >> $BASH_ENV
+      - run:
+          name: Index Docket Entries
+          command: |
+            NODE_ENV=production ./scripts/run-once-scripts/postgres-migration/index-docket-entries/index-docket-entries.ts "$THREADS"
+
   ######################## GLUE JOB: Jobs that run in a lower environment ########################
 
   delete-existing-data:
@@ -696,16 +742,6 @@ jobs:
             echo "export SOURCE_BUCKET=${PROD_DOCUMENTS_BUCKET_NAME}" >> $BASH_ENV
             echo "export DESTINATION_BUCKET=${EFCMS_DOMAIN}-documents-${ENV}-us-east-1" >> $BASH_ENV
       - run:
-          name: Disable Wait for Workflow Cron
-          command: |
-            ./scripts/wait-for-workflow/disable-wait-for-workflow-cron.sh
-      - run:
-          name: Destroy Wait for Workflow Lambda
-          command: |
-            export APPROVAL_JOB_NAME=wait-for-deployment-workflow
-            export CIRCLE_PIPELINE_ID=noop
-            npm run destroy:wait-for-workflow-cron -- $ENV
-      - run:
           name: Disable Dynamodb Streams
           command: |
             ./scripts/migration/toggle-streams.sh --off
@@ -778,6 +814,11 @@ jobs:
           command: |
             NODE_ENV=production npm run migration:postgres
       - run:
+          name: Restore Postgres User Permissions
+          command: |
+            cd ./scripts/postgres
+            DB_HOST="$POSTGRES_HOST" ./create-rds-users.sh
+      - run:
           name: Enable Dynamodb Streams
           command: |
             ./scripts/migration/toggle-streams.sh --on
@@ -846,6 +887,63 @@ jobs:
           command: |
             if [ "$MIGRATE_FLAG" == "true" ]; then
               NODE_ENV=production ./scripts/reindex/index-docket-entries/index-docket-entries.ts 5
+            fi
+  users-to-postgres:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+      - run:
+          name: Move petitioners from dwCase.petitioners to dwUser
+          command: |
+            npx ts-node --transpile-only ./scripts/run-once-scripts/postgres-migration/move-petitioners-out-of-case.ts
+      - run:
+          name: Move users, privatePractitioners, irsPractitioners, pending-case from dynamo to postgres
+          command: |
+            npx ts-node --transpile-only ./scripts/run-once-scripts/postgres-migration/migrate-users-to-postgres.ts
+      - run:
+          name: Update users' account status
+          command: |
+            npx ts-node --transpile-only ./scripts/run-once-scripts/postgres-migration/add-account-status-to-users.ts
+
+  index-users:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+            source $BASH_ENV
+            if [ "$MIGRATE_FLAG" == "true" ]; then
+              DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
+              ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
+                --domain-name "${DESTINATION_DOMAIN}" \
+                --region "us-east-1" \
+                --query 'DomainStatus.Endpoint' \
+                --output text)
+              echo "export ELASTICSEARCH_ENDPOINT=${ELASTICSEARCH_ENDPOINT}" >> $BASH_ENV
+            fi
+      - run:
+          name: Index Users
+          command: |
+            if [ "$MIGRATE_FLAG" == "true" ]; then
+              NODE_ENV=production ./scripts/reindex/index-users/index-users.ts 5
             fi
 
   cleanup-glue-job:
@@ -1018,11 +1116,6 @@ jobs:
           name: Restore Postgres Data
           command: |
             TARGET_ENV="$LOWER_ENV" TARGET_ACCOUNT_ID="$LOWER_ENV_ACCOUNT_ID" ./scripts/postgres/restoreDbFromSource.ts
-      - run:
-          name: Restore Postgres User Permissions
-          command: |
-            cd ./scripts/postgres
-            DB_HOST="$POSTGRES_HOST" ./create-rds-users.sh
 
   finish-glue-job:
     docker:
@@ -1126,26 +1219,30 @@ workflows:
           <<: *only-deployed-lower-environments
           requires:
             - index-cases
+      - index-users:
+          <<: *only-deployed-lower-environments
+          requires:
+            - index-docket-entries
       - smoketests:
           <<: *only-deployed-lower-environments
           requires:
             - disable-reindex-cron
-            - index-docket-entries
+            - index-users
       - loadtests:
           <<: *only-deployed-lower-environments
           requires:
             - disable-reindex-cron
-            - index-docket-entries
+            - index-users
       - smoketests-readonly:
           <<: *only-deployed-lower-environments
           requires:
             - disable-reindex-cron
-            - index-docket-entries
+            - index-users
       - api-hosted-environment-tests:
           <<: *only-deployed-lower-environments
           requires:
             - disable-reindex-cron
-            - index-docket-entries
+            - index-users
       - switch-colors:
           <<: *only-deployed-lower-environments
           requires:
@@ -1298,10 +1395,18 @@ workflows:
           <<: *only-test
           requires:
             - index-cases
-      - cleanup-glue-job:
+      - users-to-postgres:
           <<: *only-test
           requires:
             - index-docket-entries
+      - index-users:
+          <<: *only-test
+          requires:
+            - users-to-postgres
+      - cleanup-glue-job:
+          <<: *only-test
+          requires:
+            - index-users #index-docket-entries
 
   glue-to-lower-env:
     when: << pipeline.parameters.run_glue_to_lower_env >>
@@ -1333,6 +1438,12 @@ workflows:
           type: approval
           requires:
             - initiate-s3-sync
+
+  index-once:
+    when: << pipeline.parameters.run_index_once >>
+    jobs:
+      - index-docket-entries-once:
+          <<: *only-deployed-lower-environments
 
   sync-s3-to-lower-env:
     when: << pipeline.parameters.run_sync_s3_to_lower_env >>

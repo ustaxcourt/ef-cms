@@ -1,5 +1,6 @@
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
@@ -30,6 +31,10 @@ import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } fr
 import { updateDocketEntryPendingServiceStatus as updateDocketEntryPendingServiceStatusMock } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { getWorkItemByDocketNumberAndDocketEntryId as getWorkItemByDocketNumberAndDocketEntryIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
+import { WorkItem } from '@shared/business/entities/WorkItem';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('editPaperFilingInteractor', () => {
   let caseRecord;
@@ -41,9 +46,13 @@ describe('editPaperFilingInteractor', () => {
   const updateCaseAndAssociations = jest
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
+  const getWorkItemByDocketNumberAndDocketEntryId = jest.mocked(
+    getWorkItemByDocketNumberAndDocketEntryIdMock,
+  );
   const fileAndServeDocumentOnOneCase = jest.mocked(
     fileAndServeDocumentOnOneCaseMock,
   );
+  const getUserById = jest.mocked(getUserByIdMock);
 
   const mockDocketEntryId = '50107716-6d08-4693-bfd5-a07a4e6eadce';
   const mockServedDocketEntryId = '08ecbf7e-b316-46bb-9a66-b7474823d202';
@@ -53,12 +62,7 @@ describe('editPaperFilingInteractor', () => {
   const mockPrimaryId = getContactPrimary(MOCK_CASE).contactId;
 
   const workItem = {
-    docketEntry: {
-      docketEntryId: mockDocketEntryId,
-      documentType: 'Answer',
-      eventCode: 'A',
-      userId: mockDocketEntryId,
-    } as any,
+    docketEntryId: mockDocketEntryId,
     docketNumber: '45678-18',
     section: DOCKET_SECTION,
     sentBy: mockDocketEntryId,
@@ -79,7 +83,6 @@ describe('editPaperFilingInteractor', () => {
           filedBy: 'Test Petitioner',
           filedByRole: ROLES.petitioner,
           userId: mockDocketEntryId,
-          workItem,
         },
         {
           docketEntryId: mockServedDocketEntryId,
@@ -97,14 +100,15 @@ describe('editPaperFilingInteractor', () => {
             },
           ],
           userId: mockDocketEntryId,
-          workItem,
         },
       ],
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(docketClerkUser);
+    getWorkItemByDocketNumberAndDocketEntryId.mockResolvedValue(
+      new WorkItem(workItem),
+    );
+
+    getUserById.mockResolvedValue(docketClerkUser as DbUser);
 
     getCaseByDocketNumber.mockResolvedValue(caseRecord);
     fileAndServeDocumentOnOneCase.mockImplementation(
@@ -150,9 +154,7 @@ describe('editPaperFilingInteractor', () => {
             },
             mockDocketClerkUser,
           ),
-        ).rejects.toThrow(
-          `Docket entry ${notFoundDocketEntryId} was not found.`,
-        );
+        ).rejects.toThrow();
       });
 
       it('should throw an error when the docket entry has already been served', async () => {

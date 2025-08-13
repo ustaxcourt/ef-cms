@@ -6,15 +6,8 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { createOrEditPractitionerDocument } from '@web-api/persistence/postgres/practitionerDocuments/createOrEditPractitionerDocument';
 
-/**
- * editPractitionerDocumentInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.user the user data
- * @returns {Promise} the promise of the createUser call
- */
 export const editPractitionerDocumentInteractor = async (
   applicationContext: ServerApplicationContext,
   {
@@ -23,7 +16,7 @@ export const editPractitionerDocumentInteractor = async (
   }: {
     barNumber: string;
     documentMetadata: {
-      categoryName;
+      categoryName: string;
       categoryType: string;
       description?: string;
       location?: string;
@@ -53,8 +46,7 @@ export const editPractitionerDocumentInteractor = async (
     { applicationContext },
   );
 
-  await applicationContext.getPersistenceGateway().editPractitionerDocument({
-    applicationContext,
+  await createOrEditPractitionerDocument({
     barNumber,
     practitionerDocument: documentEntity.validate().toRawObject(),
   });

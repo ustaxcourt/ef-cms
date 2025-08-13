@@ -19,3 +19,8 @@ jest.mock(
   '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber',
   () => mockFactory('getCaseDeadlinesByDocketNumber', []),
 );
+
+jest.mock(
+  '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds',
+  () => mockFactory('getCaseDeadlinesByConsolidatedCaseDeadlineIds', []),
+);

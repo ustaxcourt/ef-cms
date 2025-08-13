@@ -14,11 +14,11 @@ export const isWorkItemAlreadyCompletedAction = ({
   const caseDetail = get(state.caseDetail);
   const docketEntryId = get(state.docketEntryId);
 
-  const { workItem } = caseDetail.docketEntries.find(
+  const docketEntry = caseDetail.docketEntries.find(
     entry => entry.docketEntryId === docketEntryId,
   );
 
-  if (workItem?.completedAt) {
+  if (docketEntry?.qcComplete) {
     return path['yes']();
   } else {
     return path['no']();
