@@ -5,7 +5,10 @@ import { state } from '@web-client/presenter/app.cerebral';
 import {
   ROLES,
   STIN_DOCKET_ENTRY_TYPE,
+  DOCKET_ENTRY_SEALED_TO_TYPES,
   Role,
+  ALLOWED_EVENT_CODES,
+  UNSERVABLE_EVENT_CODES,
 } from '@shared/business/entities/EntityConstants';
 import { User } from '@shared/business/entities/User';
 
@@ -19,6 +22,22 @@ const checkDocumentAccess = (
 
   if (filing.isStricken) {
     return false;
+  }
+
+  if (filing.caseIsSealed) {
+    if (User.isInternalUser(userRole)) {
+      return Boolean(filing.isFileAttached);
+    }
+    return Boolean(filing.isFileAttached);
+  }
+
+  if (filing.isSealed && filing.sealedTo) {
+    if (filing.sealedTo === DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL) {
+      return User.isInternalUser(userRole);
+    }
+    if (filing.sealedTo === DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC) {
+      return Boolean(filing.isFileAttached);
+    }
   }
 
   if (filing.eventCode === STIN_DOCKET_ENTRY_TYPE.eventCode) {
@@ -38,6 +57,17 @@ const checkDocumentAccess = (
     }
 
     return false;
+  }
+
+  const isServed = filing.servedAt;
+
+  const isUnservable =
+    filing.eventCode && UNSERVABLE_EVENT_CODES.includes(filing.eventCode);
+
+  if (!isServed && !isUnservable) {
+    if (!filing.eventCode || !ALLOWED_EVENT_CODES.includes(filing.eventCode)) {
+      return false;
+    }
   }
 
   return Boolean(filing.isFileAttached);

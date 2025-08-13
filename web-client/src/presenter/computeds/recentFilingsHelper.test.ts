@@ -5,6 +5,7 @@ import { RecentFiling } from '@shared/business/entities/RecentFiling';
 import {
   ROLES,
   STIN_DOCKET_ENTRY_TYPE,
+  DOCKET_ENTRY_SEALED_TO_TYPES,
 } from '@shared/business/entities/EntityConstants';
 
 const recentFilingsHelper = withAppContextDecorator(
@@ -18,6 +19,8 @@ const createFiling = (overrides: Partial<RecentFiling> = {}): RecentFiling => ({
   caseTitle: 'Test Case 1',
   docketEntryId: '1',
   isFileAttached: true,
+  eventCode: 'P',
+  servedAt: '2024-01-15T10:00:00.000Z',
   ...overrides,
 });
 
@@ -106,6 +109,100 @@ describe('recentFilingsHelper', () => {
     expect(nullRoleResult.sortedRecentFilings[0].canAccess).toBe(false);
   });
 
+  it('should handle sealed documents with different sealedTo types', () => {
+    // Document sealed to external users (all parties)
+    const sealedToExternalFiling = createFiling({
+      isSealed: true,
+      sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL,
+    });
+
+    // External user cannot access document sealed to external
+    const externalUserResult = runCompute(recentFilingsHelper, {
+      state: createTestState({
+        recentFilings: [sealedToExternalFiling],
+        user: { role: ROLES.petitioner },
+      }),
+    });
+    expect(externalUserResult.sortedRecentFilings[0].canAccess).toBe(false);
+
+    // Internal user can access document sealed to external
+    const internalUserResult = runCompute(recentFilingsHelper, {
+      state: createTestState({
+        recentFilings: [sealedToExternalFiling],
+        user: { role: ROLES.petitionsClerk },
+      }),
+    });
+    expect(internalUserResult.sortedRecentFilings[0].canAccess).toBe(true);
+
+    // Document sealed to public
+    const sealedToPublicFiling = createFiling({
+      isSealed: true,
+      sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
+    });
+
+    // External user (petitioner) can access document sealed to public
+    const externalUserPublicResult = runCompute(recentFilingsHelper, {
+      state: createTestState({
+        recentFilings: [sealedToPublicFiling],
+        user: { role: ROLES.petitioner },
+      }),
+    });
+    expect(externalUserPublicResult.sortedRecentFilings[0].canAccess).toBe(
+      true,
+    );
+
+    // Internal user can access document sealed to public
+    const internalUserPublicResult = runCompute(recentFilingsHelper, {
+      state: createTestState({
+        recentFilings: [sealedToPublicFiling],
+        user: { role: ROLES.petitionsClerk },
+      }),
+    });
+    expect(internalUserPublicResult.sortedRecentFilings[0].canAccess).toBe(
+      true,
+    );
+  });
+
+  it('should handle case-level sealing', () => {
+    // Document in a sealed case
+    const sealedCaseFiling = createFiling({
+      caseIsSealed: true,
+    });
+
+    // External user (petitioner) can access documents in sealed cases
+    const externalUserResult = runCompute(recentFilingsHelper, {
+      state: createTestState({
+        recentFilings: [sealedCaseFiling],
+        user: { role: ROLES.petitioner },
+      }),
+    });
+    expect(externalUserResult.sortedRecentFilings[0].canAccess).toBe(true);
+
+    // Internal user can access documents in sealed cases
+    const internalUserResult = runCompute(recentFilingsHelper, {
+      state: createTestState({
+        recentFilings: [sealedCaseFiling],
+        user: { role: ROLES.petitionsClerk },
+      }),
+    });
+    expect(internalUserResult.sortedRecentFilings[0].canAccess).toBe(true);
+
+    // Document in sealed case with no file attached
+    const sealedCaseNoFileFiling = createFiling({
+      caseIsSealed: true,
+      isFileAttached: false,
+    });
+
+    // No access if no file attached, even in sealed case
+    const noFileResult = runCompute(recentFilingsHelper, {
+      state: createTestState({
+        recentFilings: [sealedCaseNoFileFiling],
+        user: { role: ROLES.petitioner },
+      }),
+    });
+    expect(noFileResult.sortedRecentFilings[0].canAccess).toBe(false);
+  });
+
   it('should handle STIN documents and special cases', () => {
     const stinFiling = createFiling({
       eventCode: STIN_DOCKET_ENTRY_TYPE.eventCode,
@@ -142,6 +239,64 @@ describe('recentFilingsHelper', () => {
       }),
     });
     expect(internalResult.sortedRecentFilings[0].canAccess).toBe(true);
+  });
+
+  it('should handle unserved documents based on event codes', () => {
+    // Unserved Order (not allowed for external users)
+    const unservedOrder = createFiling({
+      eventCode: 'O',
+      servedAt: undefined,
+    });
+
+    const orderResult = runCompute(recentFilingsHelper, {
+      state: createTestState({
+        recentFilings: [unservedOrder],
+        user: { role: ROLES.petitioner },
+      }),
+    });
+    expect(orderResult.sortedRecentFilings[0].canAccess).toBe(false);
+
+    // Unserved Petition (allowed for external users)
+    const unservedPetition = createFiling({
+      eventCode: 'P',
+      servedAt: undefined,
+    });
+
+    const petitionResult = runCompute(recentFilingsHelper, {
+      state: createTestState({
+        recentFilings: [unservedPetition],
+        user: { role: ROLES.petitioner },
+      }),
+    });
+    expect(petitionResult.sortedRecentFilings[0].canAccess).toBe(true);
+
+    // Unserved Notice of Attachments (allowed for external users)
+    const unservedNotice = createFiling({
+      eventCode: 'NOT',
+      servedAt: undefined,
+    });
+
+    const noticeResult = runCompute(recentFilingsHelper, {
+      state: createTestState({
+        recentFilings: [unservedNotice],
+        user: { role: ROLES.petitioner },
+      }),
+    });
+    expect(noticeResult.sortedRecentFilings[0].canAccess).toBe(true);
+
+    // Unserved unservable document (always accessible)
+    const unservedUnservable = createFiling({
+      eventCode: 'SPOS',
+      servedAt: undefined,
+    });
+
+    const unservableResult = runCompute(recentFilingsHelper, {
+      state: createTestState({
+        recentFilings: [unservedUnservable],
+        user: { role: ROLES.petitioner },
+      }),
+    });
+    expect(unservableResult.sortedRecentFilings[0].canAccess).toBe(true);
   });
 
   it('should handle display properties and user types', () => {
