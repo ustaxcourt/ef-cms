@@ -55,6 +55,7 @@ export const getRecentFilingsForUserInteractor = async (
       .where('d.filingDate', '>=', calculateDate({ dateString: sevenDaysAgo }))
       .where('d.filingDate', '<=', calculateDate({ dateString: today }))
       .where('d.isStricken', 'is not', true)
+      .where('d.eventCode', '!=', 'NOT')
       .orderBy('d.filingDate', 'desc')
       .limit(1000)
       .execute(),
