@@ -7,6 +7,8 @@ import {
   STIN_DOCKET_ENTRY_TYPE,
   DOCKET_ENTRY_SEALED_TO_TYPES,
   Role,
+  ALLOWED_EVENT_CODES,
+  UNSERVABLE_EVENT_CODES,
 } from '@shared/business/entities/EntityConstants';
 import { User } from '@shared/business/entities/User';
 
@@ -59,38 +61,11 @@ const checkDocumentAccess = (
 
   const isServed = filing.servedAt;
 
-  const unservableEventCodes = [
-    'TCRP',
-    'SPOS',
-    'SPTO',
-    'SPTN',
-    'NTD',
-    'NORP',
-    'NOIP',
-    'NCTL',
-    'NODC',
-  ];
   const isUnservable =
-    filing.eventCode && unservableEventCodes.includes(filing.eventCode);
+    filing.eventCode && UNSERVABLE_EVENT_CODES.includes(filing.eventCode);
 
   if (!isServed && !isUnservable) {
-    const allowedEventCodes = [
-      'P',
-      'ATP',
-      'DISC',
-      'NOT',
-      'NOTR',
-      'NTD',
-      'SPOS',
-      'SPTO',
-      'TCRP',
-      'NORP',
-      'NOIP',
-      'NCTL',
-      'NODC',
-    ];
-
-    if (!filing.eventCode || !allowedEventCodes.includes(filing.eventCode)) {
+    if (!filing.eventCode || !ALLOWED_EVENT_CODES.includes(filing.eventCode)) {
       return false;
     }
   }
