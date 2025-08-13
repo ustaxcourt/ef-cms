@@ -61,8 +61,5 @@ export const orderPublicSearchInteractor = async (
 
   const slicedResults = results.slice(0, MAX_SEARCH_RESULTS);
 
-  return {
-    results: PublicDocumentSearchResult.validateRawCollection(slicedResults),
-    totalCount, // if total count is > 10k, only return 10k results
-  };
+  return PublicDocumentSearchResult.validateRawCollection(slicedResults);
 };

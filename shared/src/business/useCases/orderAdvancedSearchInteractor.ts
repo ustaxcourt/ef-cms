@@ -69,8 +69,5 @@ export const orderAdvancedSearchInteractor = async (
     userRole: authorizedUser.role,
   });
 
-  return {
-    results,
-    totalCount, // if total count is > 10k, only return 10k results
-  };
+  return results;
 };

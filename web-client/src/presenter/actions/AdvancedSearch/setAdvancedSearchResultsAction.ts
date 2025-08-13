@@ -8,5 +8,5 @@ export const setAdvancedSearchResultsAction = ({
   searchResults: { results: any[]; totalCount: number };
 }>) => {
   const tabName = get(state.advancedSearchTab);
-  store.set(state.searchResults[tabName], props.searchResults.results);
+  store.set(state.searchResults[tabName], props.searchResults);
 };
