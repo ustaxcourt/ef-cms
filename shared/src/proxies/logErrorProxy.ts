@@ -10,6 +10,6 @@ export const logErrorInteractor = (
     body: {
       error,
     },
-    endpoint: '/logError/',
+    endpoint: '/logError',
   });
 };

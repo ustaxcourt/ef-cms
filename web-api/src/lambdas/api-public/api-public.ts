@@ -1,4 +1,4 @@
 import { app } from '../../app-public';
-import awsServerlessExpress from '@vendia/serverless-express';
+import { handle } from 'hono/aws-lambda';
 
-export const handler = awsServerlessExpress({ app });
+export const handler = handle(app);

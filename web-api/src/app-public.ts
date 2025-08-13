@@ -1,31 +1,17 @@
 import { applicationContext } from './applicationContext';
-import { expressLogger } from './logger';
+import { requestLogger } from './logger';
 import { get } from './persistence/dynamodbClientService';
 import { getCurrentInvoke } from '@vendia/serverless-express';
-import { json, urlencoded } from 'body-parser';
 import { lambdaWrapper } from './lambdaWrapper';
 import { set } from 'lodash';
-import cors from 'cors';
-import express from 'express';
+import { Hono } from 'hono';
+import { cors } from 'hono/cors';
 
-export const app = express();
+export const app = new Hono();
 
-// This was default in express 4.x. The default changed in express 5.x, so we have to specify it here
-app.set('query parser', 'extended');
+app.use('*', cors());
 
-app.use(cors());
-app.use(json());
-app.use(urlencoded({ extended: true }));
-app.use((req, _res, next) => {
-  if (process.env.NODE_ENV !== 'production') {
-    // we added this to suppress error `Missing x-apigateway-event or x-apigateway-context header(s)` locally
-    // aws-serverless-express/middleware plugin is looking for these headers, which are needed on the lambdas
-    req.headers['x-apigateway-event'] = 'null';
-    req.headers['x-apigateway-context'] = 'null';
-  }
-  return next();
-});
-app.use(async (_req, _res, next) => {
+app.use('*', async (_c, next) => {
   // This code is here so that we have a way to mock out the terminal user
   // via using dynamo locally.  This is only ran locally and on CI/CD which is
   // why we also lazy require some of these packages.  See story 8955 for more info.
@@ -47,9 +33,9 @@ app.use(async (_req, _res, next) => {
       ips.includes('localhost') ? 'true' : 'false',
     );
   }
-  return next();
+  await next();
 });
-app.use((req, res, next) => {
+app.use('*', async (c, next) => {
   /**
    * This environment variable is set to true by default on deployment of the API lambdas
    * to prevent traffic from hitting the deploying color during deployment.
@@ -57,18 +43,17 @@ app.use((req, res, next) => {
    * to prevent traffic to the inactive color.
    */
   const shouldForceRefresh =
-    process.env.DISABLE_HTTP_TRAFFIC === 'true' && !req.headers['x-test-user'];
+    process.env.DISABLE_HTTP_TRAFFIC === 'true' && !c.req.header('x-test-user');
 
   if (shouldForceRefresh) {
-    res.set('X-Force-Refresh', 'true');
-    res.set('Access-Control-Expose-Headers', 'X-Force-Refresh');
-    res.status(500).send('this api is disabled due to a deployment');
-    return;
+    c.header('X-Force-Refresh', 'true');
+    c.header('Access-Control-Expose-Headers', 'X-Force-Refresh');
+    return c.text('this api is disabled due to a deployment', 500);
   }
 
-  next();
+  await next();
 });
-app.use(expressLogger);
+app.use('*', requestLogger);
 
 import { casePublicSearchLambda } from './lambdas/public-api/casePublicSearchLambda';
 import { generatePublicDocketRecordPdfLambda } from './lambdas/public-api/generatePublicDocketRecordPdfLambda';
@@ -91,7 +76,8 @@ import { todaysOrdersLambda } from './lambdas/public-api/todaysOrdersLambda';
 
 /** Case */
 {
-  app.head(
+  app.on(
+    'HEAD',
     '/public-api/cases/:docketNumber',
     lambdaWrapper(getPublicCaseExistsLambda),
   );

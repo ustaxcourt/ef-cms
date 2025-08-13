@@ -23,6 +23,6 @@ export const createMessageInteractor = (
       toSection,
       toUserId,
     },
-    endpoint: '/messages/',
+    endpoint: '/messages',
   });
 };

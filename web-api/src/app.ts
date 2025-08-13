@@ -49,7 +49,7 @@ import { downloadPolicyUrlLambda } from './lambdas/documents/downloadPolicyUrlLa
 import { editPaperFilingLambda } from './lambdas/documents/editPaperFilingLambda';
 import { editPractitionerDocumentLambda } from './lambdas/practitioners/editPractitionerDocumentLambda';
 import { exportPendingReportLambda } from '@web-api/lambdas/pendingItems/exportPendingReportLambda';
-import { expressLogger } from './logger';
+import { requestLogger } from './logger';
 import { fetchPendingItemsLambda } from './lambdas/pendingItems/fetchPendingItemsLambda';
 import { fileAndServeCourtIssuedDocumentLambda } from './lambdas/cases/fileAndServeCourtIssuedDocumentLambda';
 import { fileCorrespondenceDocumentLambda } from './lambdas/correspondence/fileCorrespondenceDocumentLambda';
@@ -202,87 +202,63 @@ import { getReconciliationReportLambda as v2GetReconciliationReportLambda } from
 import { validatePdfLambda } from './lambdas/documents/validatePdfLambda';
 import { verifyPendingCaseForUserLambda } from './lambdas/cases/verifyPendingCaseForUserLambda';
 import { verifyUserPendingEmailLambda } from './lambdas/users/verifyUserPendingEmailLambda';
-import cors from 'cors';
-import express from 'express';
+import { Hono } from 'hono';
+import { cors } from 'hono/cors';
 import { getTrialSessionOpenCasesCountLambda } from '@web-api/lambdas/trialSessions/getTrialSessionOpenCasesCountLambda';
 import { getConsolidatedCaseDeadlinesLambda } from '@web-api/lambdas/caseDeadline/getConsolidatedCaseDeadlinesLambda';
 import { removePetitionerEmailLambda } from '@web-api/lambdas/cases/removePetitionerEmailLambda';
 
-export const app = express();
+export const app = new Hono();
 
-// This was default in express 4.x. The default changed in express 5.x, so we have to specify it here
-app.set('query parser', 'extended');
-
-const allowAccessOriginFunction = (origin, callback) => {
-  //Origin header wasn't provided
-  if (!origin || origin === '') {
-    callback(null, '*');
-    return;
-  }
-
-  //if the backend is running locally or if an official deployed front-end called the backend, parrot out the Origin
-  //this is required for the browser to support receiving and sending cookies
+const allowOrigin = (origin: string | null) => {
+  if (!origin || origin === '') return '*';
   if (
     applicationContext.environment.stage === 'local' ||
-    origin.includes(process.env.EFCMS_DOMAIN)
+    (process.env.EFCMS_DOMAIN && origin.includes(process.env.EFCMS_DOMAIN))
   ) {
-    callback(null, origin);
-    return;
+    return origin;
   }
-
-  //some unknown front-end called us
-  callback(null, '*');
+  return '*';
 };
 
-const defaultCorsOptions = {
-  origin: allowAccessOriginFunction,
-};
+app.use(
+  '/auth/*',
+  cors({ origin: origin => allowOrigin(origin) as string, credentials: true }),
+);
+app.use('*', cors({ origin: origin => allowOrigin(origin) as string }));
 
-const authCorsOptions = {
-  ...defaultCorsOptions,
-  credentials: true,
-};
-
-app.use('/auth', cors(authCorsOptions));
-app.use(cors(defaultCorsOptions));
-app.use(express.json({ limit: '1200kb' }));
-app.use(express.urlencoded({ extended: true }));
-app.use((req, _res, next) => {
-  if (process.env.NODE_ENV !== 'production') {
-    // we added this to suppress error `Missing x-apigateway-event or x-apigateway-context header(s)` locally
-    // aws-serverless-express/middleware plugin is looking for these headers, which are needed on the lambdas
-    req.headers['x-apigateway-event'] = 'null';
-    req.headers['x-apigateway-context'] = 'null';
+// Enforce payload size similar to express.json({ limit: '1200kb' }) using Content-Length
+app.use('*', async (c, next) => {
+  const len = c.req.header('content-length');
+  if (len && parseInt(len) > 1200 * 1024) {
+    return c.text('Payload too large', 413);
   }
-  return next();
+  await next();
 });
-app.use((_req, _res, next) => {
+
+app.use('*', async (_c, next) => {
   if (process.env.NODE_ENV !== 'production') {
-    const currentInvoke = getCurrentInvoke();
-    set(currentInvoke, 'event.requestContext.identity.sourceIp', 'localhost');
+    try {
+      const currentInvoke = getCurrentInvoke();
+      set(currentInvoke, 'event.requestContext.identity.sourceIp', 'localhost');
+    } catch (e) {
+      // ignore outside lambda runtime
+    }
   }
-  next();
+  await next();
 });
-app.use((req, res, next) => {
-  /**
-   * This environment variable is set to true by default on deployment of the API lambdas
-   * to prevent traffic from hitting the deploying color during deployment.
-   * It is also set to true on the newly-passive color at the end of a deployment as we switch colors
-   * to prevent traffic to the inactive color.
-   */
+
+app.use('*', async (c, next) => {
   const shouldForceRefresh =
-    process.env.DISABLE_HTTP_TRAFFIC === 'true' && !req.headers['x-test-user'];
-
+    process.env.DISABLE_HTTP_TRAFFIC === 'true' && !c.req.header('x-test-user');
   if (shouldForceRefresh) {
-    res.set('X-Force-Refresh', 'true');
-    res.set('Access-Control-Expose-Headers', 'X-Force-Refresh');
-    res.status(500).send('this api is disabled due to a deployment');
-    return;
+    c.header('X-Force-Refresh', 'true');
+    c.header('Access-Control-Expose-Headers', 'X-Force-Refresh');
+    return c.text('this api is disabled due to a deployment', 500);
   }
-
-  next();
+  await next();
 });
-app.use(expressLogger);
+app.use('*', requestLogger);
 
 /**
  * Important note: order of routes DOES matter!
@@ -665,7 +641,7 @@ app.use(expressLogger);
     '/cases/generate-petition',
     lambdaWrapper(generatePetitionPdfLambda),
   );
-  app.head('/cases/:docketNumber', lambdaWrapper(getCaseExistsLambda));
+  app.on('HEAD', '/cases/:docketNumber', lambdaWrapper(getCaseExistsLambda));
   app.get('/cases/:docketNumber', lambdaWrapper(getCaseLambda));
   app.get(
     '/cases/:trialCity/eligible-cases',
@@ -1117,16 +1093,22 @@ app.delete(
  * Authentication/Authorization
  */
 {
-  app
-    .route('/auth/login')
-    .delete(lambdaWrapper(deleteAuthCookieLambda))
-    .post(lambdaWrapper(loginLambda));
+  app.delete('/auth/login', lambdaWrapper(deleteAuthCookieLambda));
+  app.post('/auth/login', lambdaWrapper(loginLambda));
   app.post('/auth/refresh', lambdaWrapper(renewIdTokenLambda));
   app.post('/auth/confirm-signup', lambdaWrapper(confirmSignUpLambda));
   app.post('/auth/account/create', lambdaWrapper(signUpUserLambda));
   app.post('/auth/change-password', lambdaWrapper(changePasswordLambda));
   app.post('/auth/forgot-password', lambdaWrapper(forgotPasswordLambda));
 }
+
+app.get('/zach/person', (c) => {
+  // Return a 403
+  return c.json({
+    name: 'Zach',
+    age: 30,
+  });
+});
 
 // This endpoint is used for testing purpose only which exposes the
 // CRON lambda which runs nightly to update cases to be ready for trial.

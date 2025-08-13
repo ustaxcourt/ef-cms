@@ -1,20 +1,20 @@
 import { server as WebSocketServer } from 'websocket';
-import { connectLambda } from './lambdas/notifications/connectLambda';
-import { disconnectLambda } from './lambdas/notifications/disconnectLambda';
 import { app as localApiApp } from './app';
 import { app as localPublicApiApp } from './app-public';
+import { connectLambda } from './lambdas/notifications/connectLambda';
+import { disconnectLambda } from './lambdas/notifications/disconnectLambda';
+import { serve } from '@hono/node-server';
 import { v4 as uuid } from 'uuid';
 import http from 'http';
 
 // ************************ app-local *********************************
 const localApiPort = 4000;
-localApiApp.listen(localApiPort);
+serve({ fetch: localApiApp.fetch, port: localApiPort });
 console.log(`Listening on http://localhost:${localApiPort}`);
 
 // ************************ app-public-local *********************************
 const localPublicApiPort = 4001;
-
-localPublicApiApp.listen(localPublicApiPort);
+serve({ fetch: localPublicApiApp.fetch, port: localPublicApiPort });
 console.log(`Listening on http://localhost:${localPublicApiPort}`);
 
 // ************************ web-sockets-local *********************************

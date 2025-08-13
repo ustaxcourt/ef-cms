@@ -6,7 +6,8 @@ import { DescribeTableCommand, DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Writable } from 'stream';
 import { processStreamRecordsLambda } from './lambdas/streams/processStreamRecordsLambda';
 import DynamoDBReadable from 'dynamodb-streams-readable';
-import express from 'express';
+import { Hono } from 'hono';
+import { serve } from '@hono/node-server';
 
 // ************************ streams-local *********************************
 const config = {
@@ -18,7 +19,7 @@ const config = {
   region: 'us-east-1',
 };
 
-const localStreamsApp = express();
+const localStreamsApp = new Hono();
 const dynamodbClient = new DynamoDBClient(config);
 const dynamodbStreamsClient = new DynamoDBStreams(config);
 const TableName = 'efcms-local';
@@ -29,9 +30,7 @@ let chunks: any[] = [];
  * This endpoint is hit to know when the streams queue is empty.  An empty queue
  * means everything added to dynamo should have been indexed into elasticsearch.
  */
-localStreamsApp.get('/isDone', (_req, res) => {
-  res.send(chunks.length === 0);
-});
+localStreamsApp.get('/isDone', c => c.json(chunks.length === 0));
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
@@ -86,4 +85,5 @@ const processChunks = async () => {
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 processChunks();
 
-localStreamsApp.listen(5005);
+// Start local server on port 5005
+serve({ fetch: localStreamsApp.fetch, port: 5005 });
