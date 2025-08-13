@@ -69,7 +69,7 @@ export const PublicSearch = connect(
               submitPublicOrderAdvancedSearchSequence
             }
           />
-          <DocumentSearchResults />
+          <DocumentSearchResults enableSortingHeaders={true} />
         </>
       );
     }
@@ -83,7 +83,7 @@ export const PublicSearch = connect(
               submitPublicOpinionAdvancedSearchSequence
             }
           />
-          <DocumentSearchResults />
+          <DocumentSearchResults enableSortingHeaders={false} />
         </>
       );
     }

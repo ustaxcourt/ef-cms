@@ -1,11 +1,11 @@
+import { emptyUserState } from '@web-client/presenter/state/userState';
 import React from 'react';
 
 export function SearchBoilerplateText({
   formTypeText,
   isOpinion = false,
-  user,
+  user = { ...emptyUserState },
 }) {
-  const isLoggedIn = !!(user && user.userId);
   return (
     <>
       <p className="margin-top-0">
@@ -20,7 +20,7 @@ export function SearchBoilerplateText({
         )}
       </p>
       <ul>
-        {(formTypeText !== 'an order' || !isLoggedIn) && (
+        {(formTypeText !== 'an order' || !user.userId) && (
           <>
             <li>
               {' '}
