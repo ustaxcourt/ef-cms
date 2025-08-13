@@ -1,5 +1,5 @@
 /* eslint-disable custom-rules-plugin/no-new-dates */
-import { cloneDeep, get } from 'lodash';
+import { get } from 'lodash';
 import { getCurrentInvoke } from '@vendia/serverless-express';
 import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 
@@ -90,66 +90,3 @@ function redactPasswordFields(obj) {
     }
   }
 }
-
-// Backwards-compatible Express-style middleware for tests or legacy usage
-export const expressLogger = (req: any, res: any, next: any) => {
-  const logger = getDawsonLogger();
-  if (process.env.NODE_ENV === 'production') {
-    const requestBody = cloneDeep(req.body);
-
-    if (requestBody) {
-      redactPasswordFields(requestBody);
-    }
-    let currentInvoke: any = {};
-    try {
-      currentInvoke = getCurrentInvoke();
-    } catch (e) {
-      // ignore getCurrentInvoke failures outside lambda
-    }
-    logger.addContext({
-      environment: {
-        color: process.env.CURRENT_COLOR || 'green',
-        stage: process.env.STAGE || 'local',
-      },
-      request: {
-        body: JSON.stringify(requestBody),
-        headers: req.headers,
-        method: req.method,
-        url: req.url,
-      },
-      requestId: {
-        apiGateway: get(currentInvoke, 'event.requestContext.requestId'),
-        applicationLoadBalancer: req.get('x-amzn-trace-id'),
-        lambda: get(currentInvoke, 'context.awsRequestId'),
-      },
-    });
-  }
-
-  logger.info(`Request started: ${req.method} ${req.url}`);
-
-  req.locals = req.locals || {};
-  req.locals.logger = logger;
-  req.locals.startTime = new Date();
-
-  const { end } = res;
-
-  res.end = function (this: any) {
-    // eslint-disable-next-line prefer-rest-params
-    end.apply(this, arguments as any);
-    const responseTimeMs =
-      new Date().getTime() - req.locals.startTime.getTime();
-
-    logger.addContext({
-      response: {
-        responseSize: parseInt(res.get('content-length') ?? '0'),
-        responseTimeMs,
-        statusCode: res.statusCode,
-      },
-    });
-
-    logger.info(`Request ended: ${req.method} ${req.url}`);
-    logger.clearContext();
-  } as any;
-
-  return next();
-};
