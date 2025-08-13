@@ -7,8 +7,52 @@ import {
   STIN_DOCKET_ENTRY_TYPE,
   DOCKET_ENTRY_SEALED_TO_TYPES,
   Role,
+  ALLOWED_EVENT_CODES,
+  UNSERVABLE_EVENT_CODES,
 } from '@shared/business/entities/EntityConstants';
 import { User } from '@shared/business/entities/User';
+
+const checkSealedCaseAccess = (
+  filing: RecentFiling,
+  _userRole: Role | undefined | null,
+) => {
+  return Boolean(filing.isFileAttached);
+};
+
+const checkSealedDocumentAccess = (
+  filing: RecentFiling,
+  userRole: Role | undefined | null,
+) => {
+  if (filing.sealedTo === DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL) {
+    return User.isInternalUser(userRole || undefined);
+  }
+  if (filing.sealedTo === DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC) {
+    return Boolean(filing.isFileAttached);
+  }
+  return false;
+};
+
+const checkStinDocumentAccess = (
+  filing: RecentFiling,
+  userRole: Role | undefined | null,
+) => {
+  if (!filing.isFileAttached) return false;
+
+  const isPetitionsClerk = userRole === ROLES.petitionsClerk;
+  const isCaseServicesSupervisor = userRole === ROLES.caseServicesSupervisor;
+  const isIrsSuperuser = userRole === ROLES.irsSuperuser;
+  const isServed = filing.servedAt;
+
+  if ((isPetitionsClerk || isCaseServicesSupervisor) && !isServed) {
+    return true;
+  }
+
+  if (isIrsSuperuser && isServed) {
+    return true;
+  }
+
+  return false;
+};
 
 const checkDocumentAccess = (
   filing: RecentFiling,
@@ -23,74 +67,23 @@ const checkDocumentAccess = (
   }
 
   if (filing.caseIsSealed) {
-    if (User.isInternalUser(userRole)) {
-      return Boolean(filing.isFileAttached);
-    }
-    return Boolean(filing.isFileAttached);
+    return checkSealedCaseAccess(filing, userRole);
   }
 
   if (filing.isSealed && filing.sealedTo) {
-    if (filing.sealedTo === DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL) {
-      return User.isInternalUser(userRole);
-    }
-    if (filing.sealedTo === DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC) {
-      return Boolean(filing.isFileAttached);
-    }
+    return checkSealedDocumentAccess(filing, userRole);
   }
 
   if (filing.eventCode === STIN_DOCKET_ENTRY_TYPE.eventCode) {
-    if (!filing.isFileAttached) return false;
-
-    const isPetitionsClerk = userRole === ROLES.petitionsClerk;
-    const isCaseServicesSupervisor = userRole === ROLES.caseServicesSupervisor;
-    const isIrsSuperuser = userRole === ROLES.irsSuperuser;
-    const isServed = filing.servedAt;
-
-    if ((isPetitionsClerk || isCaseServicesSupervisor) && !isServed) {
-      return true;
-    }
-
-    if (isIrsSuperuser && isServed) {
-      return true;
-    }
-
-    return false;
+    return checkStinDocumentAccess(filing, userRole);
   }
 
   const isServed = filing.servedAt;
-
-  const unservableEventCodes = [
-    'TCRP',
-    'SPOS',
-    'SPTO',
-    'SPTN',
-    'NTD',
-    'NORP',
-    'NOIP',
-    'NCTL',
-    'NODC',
-  ];
   const isUnservable =
-    filing.eventCode && unservableEventCodes.includes(filing.eventCode);
+    filing.eventCode && UNSERVABLE_EVENT_CODES.includes(filing.eventCode);
 
   if (!isServed && !isUnservable) {
-    const allowedEventCodes = [
-      'P',
-      'ATP',
-      'DISC',
-      'NOT',
-      'NOTR',
-      'NTD',
-      'SPOS',
-      'SPTO',
-      'TCRP',
-      'NORP',
-      'NOIP',
-      'NCTL',
-      'NODC',
-    ];
-
-    if (!filing.eventCode || !allowedEventCodes.includes(filing.eventCode)) {
+    if (!filing.eventCode || !ALLOWED_EVENT_CODES.includes(filing.eventCode)) {
       return false;
     }
   }
