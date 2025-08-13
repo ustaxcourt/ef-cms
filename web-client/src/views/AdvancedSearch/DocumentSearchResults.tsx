@@ -423,7 +423,9 @@ export const DocumentSearchResults = connect(
                           </Button>
                         </td>
                         <td>{result.caseTitle}</td>
-                        <td>{result.formattedJudgeName}</td>
+                        <td data-testid="search-result-row-judge-name">
+                          {result.formattedJudgeName}
+                        </td>
                         <td>{result.numberOfPagesFormatted}</td>
                         <td
                           data-testid={`docket-number-${result.docketNumber}`}
