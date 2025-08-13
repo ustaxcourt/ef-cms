@@ -48,6 +48,9 @@ export const DocumentSearchResults = connect(
   }) {
     const results = advancedDocumentSearchHelper.formattedSearchResults || [];
 
+    // Show search results if there are any
+    advancedDocumentSearchHelper.showSearchResults =
+      results.length > 0 && !advancedDocumentSearchHelper.showNoMatches;
     // Calculate total pages based on PAGE_SIZE
     const totalPages = Math.ceil(
       results.length / ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE,

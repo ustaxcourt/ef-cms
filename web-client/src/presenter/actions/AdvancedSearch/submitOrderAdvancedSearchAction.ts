@@ -14,7 +14,6 @@ export const submitOrderAdvancedSearchAction = async ({
   applicationContext,
   get,
   store,
-  props,
 }: ActionProps) => {
   const searchParams = clone(get(state.advancedSearchForm.orderSearch));
 
@@ -24,7 +23,7 @@ export const submitOrderAdvancedSearchAction = async ({
       searchParams.docketNumber,
     );
   }
-  searchParams.currentPaginationPage = props.currentPaginationPage;
+
   try {
     const searchResults = await applicationContext
       .getUseCases()

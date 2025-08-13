@@ -6,7 +6,7 @@ import {
 
 describe('Order Search', () => {
   it('should be able to search for an order by legacy judge', () => {
-    const judgeNameColumnIndex = 5;
+    const judgeNameColumnIndex = 4;
     const wantedLegacyJudge = 'Fieri';
 
     navigateToDashboard();
