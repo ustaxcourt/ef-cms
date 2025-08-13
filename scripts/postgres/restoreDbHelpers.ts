@@ -1,114 +1,22 @@
-#!/usr/bin/env -S npx ts-node --transpile-only
-
-// This script can copy the contents of one database and overwrite the contents
-// of another in a different account. It must be run from the AWS account that
-// is creating the backup, and it will assume a role in the target account.
-
 import { AssumeRoleCommand, STSClient } from '@aws-sdk/client-sts';
 import { DescribeDBClustersCommand, RDSClient } from '@aws-sdk/client-rds';
-import {
-  type ScriptConfig,
-  parseArgsAndEnvVars,
-} from '../helpers/parseArgsAndEnvVars';
 import { Signer } from '@aws-sdk/rds-signer';
-import { spawn } from 'child_process';
-import { sanitizeDumpFile } from 'scripts/emailReplacer';
+import { runCommand } from '../helpers/runCommand';
 
-const scriptConfig: ScriptConfig = {
-  description:
-    'restoreDbFromSource - Replaces the target database with a dump of the source database',
-  environment: {
-    sourceEnv: 'ENV',
-    targetAccountId: 'TARGET_ACCOUNT_ID',
-    targetEnv: 'TARGET_ENV',
-  },
-  requireActiveAwsSession: true,
-};
-
-async function main() {
-  try {
-    const { sourceEnv, targetAccountId, targetEnv } = parseArgsAndEnvVars(
-      scriptConfig,
-    ) as { sourceEnv: string; targetAccountId: string; targetEnv: string };
-    const targetRoleArn = `arn:aws:iam::${targetAccountId}:role/restore_role_${targetEnv}`;
-
-    const { targetAccessKeyId, targetSecretAccessKey, targetSessionToken } =
-      await getTargetAccountCredentials({ targetRoleArn });
-
-    const sourceRdsClient = new RDSClient({ region: 'us-east-1' });
-    const targetRdsClient = new RDSClient({
-      credentials: {
-        accessKeyId: targetAccessKeyId,
-        accountId: targetAccountId,
-        secretAccessKey: targetSecretAccessKey,
-        sessionToken: targetSessionToken,
-      },
-      region: 'us-east-1',
-    });
-
-    const {
-      dbName: sourceDbname,
-      host: sourceHost,
-      port: sourcePort,
-      username: sourceUsername,
-    } = await describeRDSInstance({
-      environment: sourceEnv,
-      rdsClient: sourceRdsClient,
-      useWriter: false,
-    });
-
-    const {
-      dbName: targetDbname,
-      host: targetHost,
-      port: targetPort,
-      username: targetUsername,
-    } = await describeRDSInstance({
-      environment: targetEnv,
-      rdsClient: targetRdsClient,
-      useWriter: true,
-    });
-
-    const backUpFileName = 'dawson-dump.sql';
-    await createDbBackup({
-      backUpFileName,
-      dbName: sourceDbname,
-      host: sourceHost,
-      port: sourcePort,
-      username: sourceUsername,
-    });
-
-    const sanitizedFileName = `sanitized-${backUpFileName}`;
-    await sanitizeDumpFile(backUpFileName, sanitizedFileName);
-
-    await restoreFromBackup({
-      backUpFileName: sanitizedFileName,
-      dbName: targetDbname,
-      host: targetHost,
-      port: targetPort,
-      targetAccessKeyId,
-      targetAccountId,
-      targetSecretAccessKey,
-      targetSessionToken,
-      username: targetUsername,
-    });
-
-    await removeBackupFiles({ backUpFileName, sanitizedFileName });
-  } catch (error) {
-    console.error('Fatal error running DB restoration:', error);
-    process.exit(1);
-  }
-}
-void main();
-
-async function describeRDSInstance({
+export const describeRDSInstance = async ({
   environment,
   rdsClient,
   useWriter = false,
 }: {
-  rdsClient: RDSClient;
   environment: string;
+  rdsClient: RDSClient;
   useWriter: boolean;
-}) {
+}): Promise<{
+  dbName: string;
+  host: string;
+  port: number;
+  username: string;
+}> => {
   const clusterIdentifier = `${environment}-dawson-cluster`;
   const command = new DescribeDBClustersCommand({
     DBClusterIdentifier: clusterIdentifier,
@@ -136,21 +44,21 @@ async function describeRDSInstance({
     port,
     username,
   };
-}
+};
 
-async function createDbBackup({
+export const createDbBackup = async ({
   backUpFileName,
   dbName,
   host,
   port,
   username,
 }: {
-  host: string;
-  username: string;
-  port: number;
-  dbName: string;
   backUpFileName: string;
-}): Promise<void> {
+  dbName: string;
+  host: string;
+  port: number;
+  username: string;
+}): Promise<void> => {
   const sourceSigner = new Signer({
     hostname: host,
     port,
@@ -160,45 +68,64 @@ async function createDbBackup({
 
   const sourcePassword = await sourceSigner.getAuthToken();
 
-  await new Promise((resolve, reject) => {
-    const result = spawn(
-      'pg_dump',
-      [
-        '--no-privileges',
-        '--no-owner',
-        `--host=${host}`,
-        `--username=${username}`,
-        `--port=${port}`,
-        `--dbname=${dbName}`,
-        `--file=${backUpFileName}`,
-        '--verbose',
-      ],
-      { env: { ...process.env, PGPASSWORD: sourcePassword }, stdio: 'pipe' },
-    );
+  await runCommand(
+    'pg_dump',
+    [
+      '--no-privileges',
+      '--no-owner',
+      `--host=${host}`,
+      `--username=${username}`,
+      `--port=${port}`,
+      `--dbname=${dbName}`,
+      `--file=${backUpFileName}`,
+      '--verbose',
+    ],
+    { ...process.env, PGPASSWORD: sourcePassword },
+  );
+};
 
-    result.stdout.on('data', data => {
-      console.log(data.toString('utf-8'));
-    });
-
-    result.stderr.on('data', data => {
-      console.error(data.toString('utf-8'));
-    });
-
-    result.on('close', code => {
-      if (!code) {
-        console.log(`Successfully created DB backup of ${dbName}`);
-        resolve(undefined);
-      }
-      reject(
-        new Error(
-          `Failed to create DB backup of ${dbName} with exit code: ${code}`,
-        ),
-      );
-    });
+export const createSingleTableBackup = async ({
+  backUpFileName,
+  dbName,
+  host,
+  port,
+  sourceTableName,
+  username,
+}: {
+  backUpFileName: string;
+  dbName: string;
+  host: string;
+  port: number;
+  sourceTableName: string;
+  username: string;
+}): Promise<void> => {
+  const sourceSigner = new Signer({
+    hostname: host,
+    port,
+    region: 'us-east-1',
+    username,
   });
-}
 
-async function restoreFromBackup({
+  const sourcePassword = await sourceSigner.getAuthToken();
+
+  await runCommand(
+    'pg_dump',
+    [
+      '--no-privileges',
+      '--no-owner',
+      `--host=${host}`,
+      `--username=${username}`,
+      `--port=${port}`,
+      `--dbname=${dbName}`,
+      `--table=${sourceTableName}`,
+      `--file=${backUpFileName}`,
+      '--verbose',
+    ],
+    { ...process.env, PGPASSWORD: sourcePassword },
+  );
+};
+
+export const restoreFromBackup = async ({
   backUpFileName,
   dbName,
   host,
@@ -218,7 +145,7 @@ async function restoreFromBackup({
   targetAccountId: string;
   targetSecretAccessKey: string;
   targetSessionToken: string;
-}): Promise<void> {
+}): Promise<void> => {
   const targetSigner = new Signer({
     credentials: {
       accessKeyId: targetAccessKeyId,
@@ -241,54 +168,95 @@ async function restoreFromBackup({
     username,
   });
 
-  await new Promise((resolve, reject) => {
-    const restoreDbResult = spawn(
-      'psql',
-      [
-        `--host=${host}`,
-        `--username=${username}`,
-        `--dbname=${dbName}`,
-        `--port=${port}`,
-        `--file=${backUpFileName}`,
-        '--echo-errors',
-      ],
-      {
-        env: {
-          ...process.env,
-          PGPASSWORD: targetPassword,
-        },
+  await runCommand(
+    'psql',
+    [
+      `--host=${host}`,
+      `--username=${username}`,
+      `--dbname=${dbName}`,
+      `--port=${port}`,
+      `--file=${backUpFileName}`,
+      '--echo-errors',
+    ],
+    {
+      ...process.env,
+      PGPASSWORD: targetPassword,
+    },
+  );
+};
 
-        stdio: 'pipe',
-      },
-    );
-
-    restoreDbResult.stdout.on('data', data => {
-      console.log(data.toString('utf-8'));
-    });
-
-    restoreDbResult.stderr.on('data', data => {
-      console.error(data.toString('utf-8'));
-    });
-
-    restoreDbResult.on('close', code => {
-      if (code) {
-        console.log(
-          `DB ${dbName} may have been restored with errors. Check output for errors. Exit code: ${code}`,
-        );
-        reject(new Error(`DB restore failed with exit code: ${code}`));
-      } else {
-        console.log(`Successfully restored DB ${dbName}`);
-        resolve(undefined);
-      }
-    });
+export const restoreSingleTableFromBackup = async ({
+  backUpFileName,
+  dbName,
+  host,
+  port,
+  targetAccessKeyId,
+  targetAccountId,
+  targetSecretAccessKey,
+  targetSessionToken,
+  targetTableName,
+  username,
+}: {
+  host: string;
+  username: string;
+  port: number;
+  dbName: string;
+  backUpFileName: string;
+  targetAccessKeyId: string;
+  targetAccountId: string;
+  targetSecretAccessKey: string;
+  targetSessionToken: string;
+  targetTableName: string;
+}): Promise<void> => {
+  const targetSigner = new Signer({
+    credentials: {
+      accessKeyId: targetAccessKeyId,
+      accountId: targetAccountId,
+      secretAccessKey: targetSecretAccessKey,
+      sessionToken: targetSessionToken,
+    },
+    hostname: host,
+    port,
+    region: 'us-east-1',
+    username,
   });
-}
+  const targetPassword = await targetSigner.getAuthToken();
 
-async function getTargetAccountCredentials({
+  await dropTargetTable({
+    dbName,
+    host,
+    port,
+    targetPassword,
+    targetTableName,
+    username,
+  });
+
+  await runCommand(
+    'psql',
+    [
+      `--host=${host}`,
+      `--username=${username}`,
+      `--dbname=${dbName}`,
+      `--port=${port}`,
+      `--file=${backUpFileName}`,
+      '--echo-errors',
+    ],
+    {
+      ...process.env,
+      PGPASSWORD: targetPassword,
+    },
+  );
+};
+
+export const getTargetAccountCredentials = async ({
   targetRoleArn,
 }: {
   targetRoleArn: string;
-}) {
+}): Promise<{
+  targetAccessKeyId: string;
+  targetSecretAccessKey: string;
+  targetSessionToken: string;
+}> => {
   const stsClient = new STSClient({ region: 'us-east-1' });
   const command = new AssumeRoleCommand({
     RoleArn: targetRoleArn,
@@ -309,9 +277,9 @@ async function getTargetAccountCredentials({
     targetSecretAccessKey,
     targetSessionToken,
   };
-}
+};
 
-async function dropAllTargetTables({
+export const dropAllTargetTables = async ({
   dbName,
   host,
   port,
@@ -323,18 +291,17 @@ async function dropAllTargetTables({
   port: number;
   dbName: string;
   targetPassword: string;
-}): Promise<void> {
-  await new Promise((resolve, reject) => {
-    // For each table in the target db public schema, we will create a SQL DROP command and then execute it.
-    const dropTableQuery = spawn(
-      'psql',
-      [
-        `--host=${host}`,
-        `--username=${username}`,
-        `--dbname=${dbName}`,
-        `--port=${port}`,
-        '--no-password',
-        `--command=DO $$ DECLARE
+}): Promise<void> => {
+  // For each table in the target db public schema, we will create a SQL DROP command and then execute it.
+  await runCommand(
+    'psql',
+    [
+      `--host=${host}`,
+      `--username=${username}`,
+      `--dbname=${dbName}`,
+      `--port=${port}`,
+      '--no-password',
+      `--command=DO $$ DECLARE
           stmt text;
         BEGIN
           FOR stmt IN
@@ -346,52 +313,47 @@ async function dropAllTargetTables({
           END LOOP;
         END
         $$;`,
-      ],
-      {
-        env: {
-          ...process.env,
-          PGPASSWORD: targetPassword,
-        },
-      },
-    );
+    ],
+    {
+      ...process.env,
+      PGPASSWORD: targetPassword,
+    },
+  );
+};
 
-    dropTableQuery.stdout.on('data', data => {
-      console.log(data.toString('utf-8'));
-    });
-
-    dropTableQuery.stderr.on('data', data => {
-      console.error(data.toString('utf-8'));
-    });
-
-    dropTableQuery.on('close', code => {
-      if (code) {
-        console.log(
-          `Attempted to drop all tables from DB ${dbName}. Check output for errors. Exit code: ${code}`,
-        );
-        reject(new Error(`Failed to drop all tables from DB ${dbName}`));
-      } else {
-        console.log(`Successfully dropped all tables from DB ${dbName}.`);
-        resolve(undefined);
-      }
-    });
-  });
-}
-
-function removeBackupFiles({
-  backUpFileName,
-  sanitizedFileName,
+export const dropTargetTable = async ({
+  dbName,
+  host,
+  port,
+  targetPassword,
+  targetTableName,
+  username,
 }: {
-  backUpFileName: string;
-  sanitizedFileName: string;
-}) {
-  return new Promise(resolve => {
-    spawn('rm', ['-f', backUpFileName, sanitizedFileName], {
-      stdio: 'ignore',
-    }).on('close', () => {
-      console.log(
-        `Removed backup files ${backUpFileName} and ${sanitizedFileName}`,
-      );
-      resolve(undefined);
-    });
-  });
-}
+  dbName: string;
+  host: string;
+  port: number;
+  targetPassword: string;
+  targetTableName: string;
+  username: string;
+}): Promise<void> => {
+  await runCommand(
+    'psql',
+    [
+      `--host=${host}`,
+      `--username=${username}`,
+      `--dbname=${dbName}`,
+      `--port=${port}`,
+      '--no-password',
+      `--command=DROP TABLE IF EXISTS ${targetTableName} CASCADE;`,
+    ],
+    {
+      ...process.env,
+      PGPASSWORD: targetPassword,
+    },
+  );
+};
+
+export const removeFiles = async (backupFiles: string[]): Promise<void> => {
+  await runCommand('rm', ['-f', ...backupFiles]);
+  console.log(`Removed ${backupFiles.join(' ')}`);
+};
