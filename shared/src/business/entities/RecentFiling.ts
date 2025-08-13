@@ -10,6 +10,7 @@ export interface RecentFiling {
   isSealed?: boolean | null;
   sealedTo?: string | null;
   servedAt?: string;
+  caseIsSealed?: boolean | null;
   inConsolidatedGroup?: boolean;
   isLeadCase?: boolean;
   consolidatedIconTooltipText?: string;

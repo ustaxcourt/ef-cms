@@ -95,9 +95,10 @@ export const RecentFilingsMobile = ({
           data-testid="recent-filings-info"
         >
           This page shows new docket entries dated within the last 7 days for
-          any cases for which you are associated. Please consult the docket
-          records for your cases to view all the docket entries. Information on
-          this page is current as of {currentDate}.
+          any case(s) for which you are associated. It is provided for
+          convenience. Please consult the docket records for your cases(s) to
+          view all the docket entries. Information on this page is current as of{' '}
+          {currentDate}.
         </div>
         <div id="recent-filings-mobile-description" className="sr-only">
           Mobile table showing recent filings with rows containing Docket

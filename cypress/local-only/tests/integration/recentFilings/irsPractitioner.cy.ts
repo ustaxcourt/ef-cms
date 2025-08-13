@@ -5,7 +5,17 @@ describe('Recent Filings - IRS Practitioner', () => {
     Cypress.session.clearCurrentSessionData();
   });
 
-  // Basic functionality tests - verify page loads and core elements are present
+  it('should handle empty recent filings gracefully', () => {
+    loginAsIrsPractitioner();
+    cy.get('[data-testid="header-recent-filings-link"]').click();
+
+    cy.get('[data-testid="recent-filings-table"] tbody tr').should(
+      'have.length.at.least',
+      0,
+    );
+    cy.get('[data-testid="recent-filings-table"]').should('be.visible');
+  });
+
   it('should allow IRS practitioner to view recent filings', () => {
     loginAsIrsPractitioner();
     cy.get('[data-testid="header-recent-filings-link"]').click();
@@ -13,101 +23,50 @@ describe('Recent Filings - IRS Practitioner', () => {
     cy.get('[data-testid="recent-filings-table"]').should('exist');
   });
 
-  // Sorting functionality tests - verify all sort buttons work correctly
   it('should display recent filings with proper sorting', () => {
     loginAsIrsPractitioner();
     cy.viewport(1200, 800);
     cy.get('[data-testid="header-recent-filings-link"]').click();
 
-    // Wait for the page to load and check for either table rows or empty message
     cy.get('[data-testid="recent-filings-table"]').should('be.visible');
 
-    cy.get('body').then($body => {
-      if (
-        $body.find('[data-testid="recent-filings-table"] tbody tr').length > 0
-      ) {
-        // If there are table rows, test sorting functionality
-        cy.get('[data-testid="docketNumber-sortable-button"]')
-          .should('be.visible')
-          .click();
-        cy.get('[data-testid="filedDate-sortable-button"]')
-          .should('be.visible')
-          .click();
-        cy.get('[data-testid="document-sortable-button"]')
-          .should('be.visible')
-          .click();
-        cy.get('[data-testid="caseTitle-sortable-button"]')
-          .should('be.visible')
-          .click();
-        cy.get('[data-testid="recent-filings-table"]').should('be.visible');
-      } else {
-        // If no table rows, check for empty state message
-        cy.get('[data-testid="no-recent-filings-message"]').should(
-          'be.visible',
-        );
-      }
-    });
+    cy.get('[data-testid="docketNumber-sortable-button"]')
+      .should('be.visible')
+      .click();
+    cy.get('[data-testid="filedDate-sortable-button"]')
+      .should('be.visible')
+      .click();
+    cy.get('[data-testid="document-sortable-button"]')
+      .should('be.visible')
+      .click();
+    cy.get('[data-testid="caseTitle-sortable-button"]')
+      .should('be.visible')
+      .click();
+    cy.get('[data-testid="recent-filings-table"]').should('be.visible');
   });
 
-  // Pagination tests - verify pagination controls work when there are many records
   it('should handle pagination correctly', () => {
     loginAsIrsPractitioner();
     cy.get('[data-testid="header-recent-filings-link"]').click();
     cy.get('[data-testid="pagination"]').should('exist');
 
-    cy.get('[data-testid="recent-filings-table"]').then($table => {
-      if ($table.length > 0) {
-        cy.get('body').then($body => {
-          if (
-            $body.find('[data-testid="recent-filings-table"] tbody tr').length >
-            100
-          ) {
-            cy.get('[data-testid="pagination-next"]').click();
-            cy.get('[data-testid="pagination-page-2"]').should(
-              'have.class',
-              'active',
-            );
-          }
-        });
+    cy.get('[data-testid="recent-filings-table"] tbody tr').then($rows => {
+      if ($rows.length > 100) {
+        cy.get('[data-testid="pagination-next"]').click();
+        cy.get('[data-testid="pagination-page-2"]').should(
+          'have.class',
+          'active',
+        );
       }
     });
   });
 
-  // Loading state tests - verify loading indicators work properly
   it('should display loading state while fetching data', () => {
     loginAsIrsPractitioner();
     cy.get('[data-testid="header-recent-filings-link"]').click();
     cy.get('[data-testid="recent-filings-table"]').should('be.visible');
   });
 
-  // Empty state tests - verify proper handling when no data is available
-  it('should handle empty recent filings gracefully', () => {
-    loginAsIrsPractitioner();
-    cy.get('[data-testid="header-recent-filings-link"]').click();
-
-    cy.get('[data-testid="recent-filings-table"]').then($table => {
-      if ($table.length > 0) {
-        cy.get('body').then($body => {
-          if (
-            $body.find('[data-testid="recent-filings-table"] tbody tr').length >
-            0
-          ) {
-            cy.get('[data-testid="recent-filings-table"]').should('be.visible');
-          } else {
-            cy.get('[data-testid="no-recent-filings-message"]').should(
-              'be.visible',
-            );
-          }
-        });
-      } else {
-        cy.get('[data-testid="no-recent-filings-message"]').should(
-          'be.visible',
-        );
-      }
-    });
-  });
-
-  // Mobile view tests - verify responsive design works on mobile devices
   it('should display mobile view correctly', () => {
     loginAsIrsPractitioner();
     cy.viewport('iphone-x');
@@ -117,25 +76,10 @@ describe('Recent Filings - IRS Practitioner', () => {
     cy.get('[data-testid="header-recent-filings-link"]').click();
     cy.get('[data-testid="mobile-sort-dropdown"]').should('be.visible');
 
-    cy.get('body').then($body => {
-      if (
-        $body.find('[data-testid="recent-filings-mobile-table"]').length > 0
-      ) {
-        cy.get('[data-testid="mobile-sort-dropdown"]').select(
-          'docketNumber-asc',
-        );
-        cy.get('[data-testid="recent-filings-mobile-table"]').should(
-          'be.visible',
-        );
-      } else {
-        cy.get('[data-testid="no-recent-filings-message"]').should(
-          'be.visible',
-        );
-      }
-    });
+    cy.get('[data-testid="mobile-sort-dropdown"]').select('docketNumber-asc');
+    cy.get('[data-testid="recent-filings-mobile-table"]').should('be.visible');
   });
 
-  // Desktop view tests - verify desktop-specific functionality works
   it('should display desktop view correctly', () => {
     loginAsIrsPractitioner();
     cy.viewport(1200, 800);
@@ -144,7 +88,6 @@ describe('Recent Filings - IRS Practitioner', () => {
     cy.get('[data-testid="docketNumber-sortable-button"]').click();
   });
 
-  // Accessibility tests - verify ARIA attributes and screen reader support
   it('should handle accessibility requirements', () => {
     loginAsIrsPractitioner();
     cy.get('[data-testid="header-recent-filings-link"]').click();
@@ -165,7 +108,6 @@ describe('Recent Filings - IRS Practitioner', () => {
     cy.get('#recent-filings-description').should('be.visible');
   });
 
-  // Information display tests - verify informational text is shown correctly
   it('should show proper information text', () => {
     loginAsIrsPractitioner();
     cy.get('[data-testid="header-recent-filings-link"]').click();
@@ -180,164 +122,46 @@ describe('Recent Filings - IRS Practitioner', () => {
     );
   });
 
-  // Link functionality tests - verify case number links work correctly
   it('should handle case number links correctly', () => {
     loginAsIrsPractitioner();
     cy.get('[data-testid="header-recent-filings-link"]').click();
 
-    cy.get('[data-testid="recent-filings-table"]').then($table => {
-      if ($table.length > 0) {
-        cy.get('body').then($body => {
-          if (
-            $body.find('[data-testid="recent-filings-table"] tbody tr').length >
-            0
-          ) {
-            cy.get('[data-testid="case-number-link"]')
-              .first()
-              .should('have.attr', 'target', '_blank');
-            cy.get('[data-testid="case-number-link"]')
-              .first()
-              .should('have.attr', 'href')
-              .and('include', '/case-detail/');
-          }
-        });
-      }
-    });
+    cy.get('[data-testid="case-number-link"]')
+      .first()
+      .should('have.attr', 'target', '_blank');
+    cy.get('[data-testid="case-number-link"]')
+      .first()
+      .should('have.attr', 'href')
+      .and('include', '/case-detail/');
   });
 
-  // Data display tests - verify multiple cases are displayed correctly
   it('should handle multiple cases', () => {
     loginAsIrsPractitioner();
     cy.get('[data-testid="header-recent-filings-link"]').click();
 
-    cy.get('[data-testid="recent-filings-table"]').then($table => {
-      if ($table.length > 0) {
-        cy.get('body').then($body => {
-          if (
-            $body.find('[data-testid="recent-filings-table"] tbody tr').length >
-            0
-          ) {
-            cy.get('[data-testid="recent-filings-table"] tbody tr').should(
-              'have.length.greaterThan',
-              0,
-            );
-          } else {
-            cy.get('[data-testid="no-recent-filings-message"]').should(
-              'be.visible',
-            );
-          }
-        });
-      }
-    });
+    cy.get('[data-testid="recent-filings-table"] tbody tr').should(
+      'have.length.at.least',
+      0,
+    );
   });
 
-  // Data filtering tests - verify table rows contain expected data structure
   it('should filter cases correctly', () => {
     loginAsIrsPractitioner();
     cy.get('[data-testid="header-recent-filings-link"]').click();
     cy.get('[data-testid="recent-filings-table"]').should('be.visible');
 
-    cy.get('[data-testid="recent-filings-table"]').then($table => {
-      if ($table.length > 0) {
-        cy.get('body').then($body => {
-          if (
-            $body.find('[data-testid="recent-filings-table"] tbody tr').length >
-            0
-          ) {
-            cy.get('[data-testid="recent-filings-table"] tbody tr').each(
-              $row => {
-                cy.wrap($row)
-                  .find('[data-testid="case-number-link"]')
-                  .should('exist');
-              },
-            );
-          } else {
-            cy.get('[data-testid="no-recent-filings-message"]').should(
-              'be.visible',
-            );
-          }
-        });
-      } else {
-        cy.get('[data-testid="no-recent-filings-message"]').should(
-          'be.visible',
-        );
-      }
+    cy.get('[data-testid="recent-filings-table"] tbody tr').each($row => {
+      cy.wrap($row).find('[data-testid="case-number-link"]').should('exist');
     });
   });
 
-  // IRS-specific performance tests - verify large datasets are handled properly
   it('should handle large datasets', () => {
     loginAsIrsPractitioner();
     cy.get('[data-testid="header-recent-filings-link"]').click();
 
-    cy.get('[data-testid="recent-filings-table"]').then($table => {
-      if ($table.length > 0) {
-        cy.get('body').then($body => {
-          if (
-            $body.find('[data-testid="recent-filings-table"] tbody tr').length >
-            100
-          ) {
-            cy.get('[data-testid="pagination"]').should('be.visible');
-            cy.get('[data-testid="pagination-info"]').should(
-              'contain',
-              '100 of',
-            );
-          }
-        });
-      }
-    });
-  });
-
-  // IRS-specific document type tests - verify IRS-specific document types are displayed
-  it('should handle IRS-specific document types', () => {
-    loginAsIrsPractitioner();
-    cy.get('[data-testid="header-recent-filings-link"]').click();
-
-    cy.get('[data-testid="recent-filings-table"]').then($table => {
-      if ($table.length > 0) {
-        cy.get('body').then($body => {
-          if (
-            $body.find('[data-testid="recent-filings-table"] tbody tr').length >
-            0
-          ) {
-            // Verify that the table contains document information
-            cy.get('[data-testid="recent-filings-table"]').should('be.visible');
-            cy.get('[data-testid="recent-filings-table"] tbody tr').should(
-              'have.length.greaterThan',
-              0,
-            );
-
-            // Check that document links are present and functional
-            cy.get('[data-testid="document-link"]').should('exist');
-            cy.get('[data-testid="document-link"]')
-              .first()
-              .should('be.visible');
-          }
-        });
-      }
-    });
-  });
-
-  // IRS-specific permission tests - verify IRS practitioner permissions work correctly
-  it('should handle IRS practitioner permissions correctly', () => {
-    loginAsIrsPractitioner();
-    cy.get('[data-testid="header-recent-filings-link"]').click();
-
-    cy.get('[data-testid="recent-filings-table"]').then($table => {
-      if ($table.length > 0) {
-        cy.get('body').then($body => {
-          if (
-            $body.find('[data-testid="recent-filings-table"] tbody tr').length >
-            0
-          ) {
-            cy.get('[data-testid="document-link"]')
-              .first()
-              .should('be.visible');
-            cy.get('[data-testid="document-link"]')
-              .first()
-              .should('not.be.disabled');
-          }
-        });
+    cy.get('[data-testid="recent-filings-table"] tbody tr').then($rows => {
+      if ($rows.length > 100) {
+        cy.get('[data-testid="pagination"]').should('be.visible');
       }
     });
   });

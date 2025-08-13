@@ -49,6 +49,7 @@ export const getRecentFilingsForUserInteractor = async (
         'd.sealedTo',
         'd.servedAt',
         'c.caption',
+        'c.isSealed as caseIsSealed',
       ])
       .where('d.docketNumber', 'in', docketNumbers)
       .where('d.filingDate', '>=', calculateDate({ dateString: sevenDaysAgo }))
@@ -71,6 +72,7 @@ export const getRecentFilingsForUserInteractor = async (
     sealedTo: d.sealedTo,
     servedAt: d.servedAt?.toISOString(),
     caseCaption: d.caption,
+    caseIsSealed: d.caseIsSealed,
   }));
 
   // Build case info map for consolidated case handling
@@ -121,6 +123,7 @@ export const getRecentFilingsForUserInteractor = async (
       isSealed: entry.isSealed,
       sealedTo: entry.sealedTo,
       servedAt: entry.servedAt,
+      caseIsSealed: entry.caseIsSealed,
       inConsolidatedGroup: caseInfo.inConsolidatedGroup,
       isLeadCase: caseInfo.isLeadCase,
       consolidatedIconTooltipText: caseInfo.consolidatedIconTooltipText,
