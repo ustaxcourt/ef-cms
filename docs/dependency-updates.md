@@ -105,8 +105,6 @@ regex search the entire project for `"~> \d+.\d+.\d+"` and make sure it's to the
 
 - Check through the list of caveats to see if any of the documented issues have been resolved.
 
-- Run [PDF tests](./testing.md) locally.
-
 - Validate updates by deploying, with a [migration](./additional-resources/blue-green-migration.md#manual-migration-steps), to an experimental environment. This helps us verify that the package updates don't affect the migration workflow.
 
 ## Do Not Upgrade
@@ -161,6 +159,10 @@ The major version of this package should match our major version of node. At the
 ### pg
 We encountered failure in integration tests running pg version 8.16.3, so we had to revert back to the previous version 8.16.2 which was more stable.
 
+### TypeScript
+We cannot update TypeScript version beyond v5.8.3 until ts-jest supports it
+
 ## Incrementing the Node Cache Key Version
 
 It's rare to need modify cache key. One reason you may want to do so is if a package fails to install properly, and CircleCI, unaware of the failed installation, stores the corrupted cache. In this case, we will need to increment the cache key version so that CircleCI is forced to reinstall the node dependencies and save them using the new key. To update the cache key, locate `vX-npm` and `vX-cypress` (where X represents the current cache key version) in the config.yml file, and then increment the identified version.
+
