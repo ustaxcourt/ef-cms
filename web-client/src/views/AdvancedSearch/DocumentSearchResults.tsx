@@ -275,7 +275,7 @@ export const DocumentSearchResults = connect(
                 >
                   <thead>
                     <tr>
-                      <th>
+                      <th className="min-width-150">
                         <SortableColumn
                           ascText={SORT_ASCENDING_TEXT.string}
                           currentlySortedField={
@@ -295,7 +295,7 @@ export const DocumentSearchResults = connect(
                         />
                       </th>
                       <th aria-hidden="true" className="small-column"></th>
-                      <th>
+                      <th className="min-width-150">
                         <SortableColumn
                           ascText={SORT_ASCENDING_TEXT.string}
                           currentlySortedField={
@@ -314,7 +314,7 @@ export const DocumentSearchResults = connect(
                           onClickSequence={() => handleSort('documentTitle')}
                         />
                       </th>
-                      <th>
+                      <th className="min-width-150">
                         <SortableColumn
                           ascText={SORT_ASCENDING_TEXT.string}
                           currentlySortedField={
@@ -331,7 +331,7 @@ export const DocumentSearchResults = connect(
                           onClickSequence={() => handleSort('caseTitle')}
                         />
                       </th>
-                      <th>
+                      <th className="min-width-150">
                         <SortableColumn
                           ascText={SORT_ASCENDING_TEXT.string}
                           currentlySortedField={
@@ -350,7 +350,7 @@ export const DocumentSearchResults = connect(
                           }
                         />
                       </th>
-                      <th>
+                      <th className="min-width-150">
                         <SortableColumn
                           ascText={SORT_ASCENDING_TEXT.date}
                           currentlySortedField={
@@ -369,7 +369,7 @@ export const DocumentSearchResults = connect(
                           }
                         />
                       </th>
-                      <th>
+                      <th className="min-width-150">
                         <SortableColumn
                           ascText={SORT_ASCENDING_TEXT.string}
                           currentlySortedField={
