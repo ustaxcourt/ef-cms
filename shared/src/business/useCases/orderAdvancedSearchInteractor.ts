@@ -1,22 +1,15 @@
-import { DocumentSearch } from '../../business/entities/documents/DocumentSearch';
-import { FORMATS, formatNow } from '../../business/utilities/DateHandler';
-// import { InternalDocumentSearchResult } from '../entities/documents/InternalDocumentSearchResult';
-import {
-  // ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE,
-  // MAX_SEARCH_RESULTS,
-  ORDER_EVENT_CODES,
-} from '../entities/EntityConstants';
+import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
+import { ORDER_EVENT_CODES } from '@shared/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { User } from '../entities/User';
-// import { filterCaseSearchResultsNotAccessibleToUser } from '../utilities/caseFilter';
+import { User } from '@shared/business/entities/User';
 import { omit } from 'lodash';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-// import { advancedDocumentSearch } from '@web-api/persistence/elasticsearch/advancedDocumentSearch';
+import { DocumentSearch } from '@shared/business/entities/documents/DocumentSearch';
 
 export const orderAdvancedSearchInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -28,9 +21,6 @@ export const orderAdvancedSearchInteractor = async (
     judge,
     keyword,
     startDate,
-    columnName,
-    direction,
-    // currentPaginationPage,
   }: {
     caseTitleOrPetitioner: string;
     dateRange: string;
@@ -39,23 +29,9 @@ export const orderAdvancedSearchInteractor = async (
     judge: string;
     keyword: string;
     startDate: string;
-    columnName:
-      | 'formattedFiledDate'
-      | 'documentTitle'
-      | 'caseTitle'
-      | 'formattedJudgeName'
-      | 'numberOfPagesFormatted'
-      | 'docketNumber';
-    direction: 'asc' | 'desc';
-    currentPaginationPage: 'number';
   },
   authorizedUser: UnknownAuthUser,
 ) => {
-  columnName = columnName || 'formattedFiledDate';
-  direction = direction || 'asc';
-  console.log('ColumnName: ', columnName);
-  console.log('Direction: ', direction);
-
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ADVANCED_SEARCH)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -72,16 +48,6 @@ export const orderAdvancedSearchInteractor = async (
   });
 
   const rawSearch = orderSearch.validate().toRawObject();
-  const sortingColumnMapping = {
-    formattedFiledDate: 'filingDate',
-    documentTitle: 'documentTitle',
-    caseTitle: 'caseCaption',
-    formattedJudgeName: 'judge',
-    numberOfPagesFormatted: 'numberOfPages',
-    docketNumber: 'docketNumber',
-  };
-
-  // const from = (currentPaginationPage - 1) * ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE;
 
   const { results, totalCount } = await applicationContext
     .getPersistenceGateway()
@@ -91,10 +57,7 @@ export const orderAdvancedSearchInteractor = async (
       omitSealed: false,
       ...rawSearch,
       isExternalUser: User.isExternalUser(authorizedUser.role),
-      sortField: sortingColumnMapping[columnName],
     });
-
-  console.log('OpenSearch Results: ', results.length);
 
   const timestamp = formatNow(FORMATS.LOG_TIMESTAMP);
 
@@ -106,15 +69,8 @@ export const orderAdvancedSearchInteractor = async (
     userRole: authorizedUser.role,
   });
 
-  // const filteredResults = filterCaseSearchResultsNotAccessibleToUser(
-  //   results,
-  //   authorizedUser,
-  // ).slice(from, from + ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE);
-
   return {
     results,
-    // results:
-    // InternalDocumentSearchResult.validateRawCollection(filteredResults),
     totalCount, // if total count is > 10k, only return 10k results
   };
 };
