@@ -44,12 +44,16 @@ export function toKyselyNewTrialSession(
       ? calculateDate({ dateString: rawTrialSession.estimatedEndDate })
       : null,
     irsCalendarAdministrator: rawTrialSession.irsCalendarAdministrator,
-    irsCalendarAdministratorInfo: JSON.stringify(
-      rawTrialSession.irsCalendarAdministratorInfo,
-    ),
+    irsCalendarAdministratorInfoName:
+      rawTrialSession.irsCalendarAdministratorInfo?.name,
+    irsCalendarAdministratorInfoEmail:
+      rawTrialSession.irsCalendarAdministratorInfo?.email,
+    irsCalendarAdministratorInfoPhone:
+      rawTrialSession.irsCalendarAdministratorInfo?.phone,
     isCalendared: rawTrialSession.isCalendared,
     joinPhoneNumber: rawTrialSession.joinPhoneNumber,
-    judge: JSON.stringify(rawTrialSession.judge),
+    judgeName: rawTrialSession?.judge?.name,
+    judgeUserId: rawTrialSession?.judge?.userId,
     maxCases: rawTrialSession.maxCases,
     meetingId: rawTrialSession.meetingId,
     notes: rawTrialSession.notes,
@@ -69,7 +73,8 @@ export function toKyselyNewTrialSession(
     swingSessionId: rawTrialSession.swingSessionId,
     term: rawTrialSession.term,
     termYear: rawTrialSession.termYear,
-    trialClerk: JSON.stringify(rawTrialSession.trialClerk),
+    trialClerkName: rawTrialSession.trialClerk?.name,
+    trialClerkUserId: rawTrialSession.trialClerk?.userId,
     trialLocation: rawTrialSession.trialLocation,
   };
 }
@@ -99,6 +104,24 @@ export function fromKyselyTrialSession(
         fileId: pdf.fileId,
         title: pdf.title,
       })) || [],
+    judge:
+      record.judgeName && record.judgeUserId
+        ? { name: record.judgeName, userId: record.judgeUserId }
+        : undefined,
+    trialClerk:
+      record.trialClerkName && record.trialClerkUserId
+        ? { name: record.trialClerkName, userId: record.trialClerkUserId }
+        : undefined,
+    irsCalendarAdministratorInfo:
+      record.irsCalendarAdministratorInfoEmail &&
+      record.irsCalendarAdministratorInfoName &&
+      record.irsCalendarAdministratorInfoPhone
+        ? {
+            email: record.irsCalendarAdministratorInfoEmail,
+            name: record.irsCalendarAdministratorInfoName,
+            phone: record.irsCalendarAdministratorInfoPhone,
+          }
+        : undefined,
   });
 }
 

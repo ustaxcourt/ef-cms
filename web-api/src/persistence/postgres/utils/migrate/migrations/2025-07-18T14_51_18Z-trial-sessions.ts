@@ -16,10 +16,13 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('hasNottBeenServed', 'boolean')
     .addColumn('estimatedEndDate', 'timestamptz')
     .addColumn('irsCalendarAdministrator', 'varchar')
-    .addColumn('irsCalendarAdministratorInfo', 'jsonb') //COME BACK
+    .addColumn('irsCalendarAdministratorInfoEmail', 'varchar')
+    .addColumn('irsCalendarAdministratorInfoPhone', 'varchar')
+    .addColumn('irsCalendarAdministratorInfoName', 'varchar')
     .addColumn('isCalendared', 'boolean')
     .addColumn('joinPhoneNumber', 'varchar')
-    .addColumn('judge', 'jsonb') //COME BACK
+    .addColumn('judgeName', 'varchar')
+    .addColumn('judgeUserId', 'varchar')
     .addColumn('maxCases', 'integer')
     .addColumn('meetingId', 'varchar')
     .addColumn('notes', 'varchar')
@@ -37,7 +40,8 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('swingSessionId', 'varchar')
     .addColumn('term', 'varchar')
     .addColumn('termYear', 'varchar')
-    .addColumn('trialClerk', 'jsonb') //come back
+    .addColumn('trialClerkName', 'varchar')
+    .addColumn('trialClerkUserId', 'varchar')
     .addColumn('trialLocation', 'varchar')
     .execute();
 
