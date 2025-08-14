@@ -19,23 +19,23 @@ export function SearchBoilerplateText({
           </>
         )}
       </p>
-      <ul>
-        {(formTypeText !== 'an order' || !user.userId) && (
-          <>
+      {/* Only render bullets if not logged in, not an order, not an opinion */}
+      {((formTypeText !== 'an order' && formTypeText !== 'an opinion') ||
+        !user.userId) && (
+        <ul>
+          <li>
+            {' '}
+            If you aren’t affiliated with a case, you will only see limited
+            information about that case.
+          </li>
+          {!isOpinion && (
             <li>
-              {' '}
-              If you aren’t affiliated with a case, you will only see limited
-              information about that case.
+              Sealed cases and affiliated documents will not display in search
+              results.
             </li>
-            {!isOpinion && (
-              <li>
-                Sealed cases and affiliated documents will not display in search
-                results.
-              </li>
-            )}
-          </>
-        )}
-      </ul>
+          )}
+        </ul>
+      )}
     </>
   );
 }
