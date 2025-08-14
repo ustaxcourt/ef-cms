@@ -12,7 +12,6 @@
 - [x] Ensure the hearings are sorted just as there were in the case entity (.sort((a, b) => compareStrings(a.createdAt, b.createdAt));)
 - [ ] Check usages of \_applicationContext for any that should be removed
 - [ ] Determine if we want to add an onConflictIgnore for pgInsertInto (or else maybe a devex ticket?)
-- [ ] Determine whether we need to run ./create-rds-users.sh to add permissions for new table?
 - [ ] Celebrate
 
 # NOTES
