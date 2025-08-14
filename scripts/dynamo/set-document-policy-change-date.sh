@@ -24,6 +24,7 @@ if [[ -z $DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE ]] ; then
 fi
 
 
+# TODO: MIGRATE TO TYPESCRIPT
 ITEM=$(cat <<-END
 {
     "pk": {
