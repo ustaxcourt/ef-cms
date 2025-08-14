@@ -156,7 +156,7 @@ export const DocumentSearchResults = connect(
         <div aria-live="polite">
           {advancedDocumentSearchHelper.showSearchResults && (
             <>
-              <div className="tablet:grid-col-4 margin-top-2">
+              <div className="tablet:grid-col-4 margin-top-3">
                 <h2>Results</h2>
               </div>
               <div className="grid-row results-header-row align-items-center">
@@ -196,7 +196,9 @@ export const DocumentSearchResults = connect(
                     )}
                   </div>
 
-                  <div className="tablet:grid-col-4  text-right ">
+                  <div
+                    className={`tablet:grid-col-4 text-right${totalPages < 2 ? ' padding-bottom-1' : ''}`}
+                  >
                     {results.length === MAX_SEARCH_RESULTS && (
                       <>
                         <FontAwesomeIcon

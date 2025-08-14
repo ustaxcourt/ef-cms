@@ -90,7 +90,6 @@ export const OrderSearchForm = connect(
                   /> */}
                 </div>
 
-                {/* {advancedDocumentSearchHelper.showDateRangePicker && ( */}
                 <div className="margin-top-4">
                   <DateRangePickerComponent
                     endDateErrorText={validationErrors.endDate}
@@ -182,9 +181,9 @@ export const OrderSearchForm = connect(
                     </span>
                   </div>
                 </div>
-                <div className="grid-row grid-gap-3 margin-top-2">
-                  <div className="grid-row desktop:grid-col-4 grid-col-12 grid-gap-3 no-flex-wrap">
-                    <div className="width-card-lg">
+                <div className="grid-row grid-gap-1 margin-top-2">
+                  <div className="grid-row desktop:grid-col-3 grid-col-12 grid-gap-3 no-flex-wrap">
+                    <div className="width-card-lg margin-bottom-4 margin-right-6">
                       <JudgeSelect
                         formValue={'advancedSearchForm.orderSearch.judge'}
                         judges={advancedDocumentSearchHelper.formattedJudges}
@@ -203,7 +202,6 @@ export const OrderSearchForm = connect(
 
                   <div className="desktop:grid-col-7 grid-col-12">
                     <div className="grid-gap-3 tablet:margin-top-0 margin-top-4">
-                      {/* {advancedDocumentSearchHelper.showDateRangePicker && ( */}
                       <div className="grid-row no-flex-wrap">
                         <DateRangePickerComponent
                           endDateErrorText={validationErrors.endDate}
@@ -259,6 +257,10 @@ export const OrderSearchForm = connect(
                 type="submit"
                 onClick={e => {
                   e.preventDefault();
+                  console.log('OrderSearchForm submit:', {
+                    startDate: advancedSearchForm.orderSearch.startDate,
+                    endDate: advancedSearchForm.orderSearch.endDate,
+                  });
                   submitAdvancedSearchSequence();
                 }}
               >
