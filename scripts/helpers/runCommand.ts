@@ -4,14 +4,13 @@ import { trim } from 'lodash';
 export const runCommand = async (
   cmd: string,
   params?: string[],
+  envvars?: { [key: string]: string },
 ): Promise<string> => {
+  const env = envvars ? { ...process.env, ...envvars } : { ...process.env };
   return new Promise((resolve, reject) => {
     let stdout: string;
     let stderr: string;
-    const result = spawn(cmd, params, {
-      env: { ...process.env },
-      stdio: 'pipe',
-    });
+    const result = spawn(cmd, params, { env, stdio: 'pipe' });
     result.stdout.on('data', data => {
       if (!stdout) {
         stdout = data.toString('utf-8');
