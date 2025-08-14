@@ -18,34 +18,25 @@ import {
 import { Mobile, NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
 import { BaseModal } from '@web-client/ustc-ui/Modal/BaseModal';
 
-type DocumentSearchResultsParameters = {
-  enableSortingHeaders: boolean;
-};
-
-const DocumentSearchResultsDeps = {
-  MAX_SEARCH_RESULTS: state.constants.MAX_SEARCH_RESULTS,
-  advancedDocumentSearchHelper: state.advancedDocumentSearchHelper,
-  isPublic: state.isPublic,
-  showModal: state.modal.showModal,
-  currentPaginationPage: state.currentPaginationPage,
-  openCaseDocumentDownloadUrlSequence:
-    sequences.openCaseDocumentDownloadUrlSequence,
-  showMoreResultsSequence: sequences.showMoreResultsSequence,
-  updateDocumentSearchResultsSequence:
-    sequences.updateDocumentSearchResultsSequence,
-  setCurrentPaginationPageSequence: sequences.setCurrentPaginationPageSequence,
-  openCleanModalSequence: sequences.openCleanModalSequence,
-};
-
-export const DocumentSearchResults = connect<
-  DocumentSearchResultsParameters,
-  typeof DocumentSearchResultsDeps
->(
-  DocumentSearchResultsDeps,
+export const DocumentSearchResults = connect(
+  {
+    MAX_SEARCH_RESULTS: state.constants.MAX_SEARCH_RESULTS,
+    advancedDocumentSearchHelper: state.advancedDocumentSearchHelper,
+    isPublic: state.isPublic,
+    showModal: state.modal.showModal,
+    currentPaginationPage: state.currentPaginationPage,
+    openCaseDocumentDownloadUrlSequence:
+      sequences.openCaseDocumentDownloadUrlSequence,
+    showMoreResultsSequence: sequences.showMoreResultsSequence,
+    updateDocumentSearchResultsSequence:
+      sequences.updateDocumentSearchResultsSequence,
+    setCurrentPaginationPageSequence:
+      sequences.setCurrentPaginationPageSequence,
+    openCleanModalSequence: sequences.openCleanModalSequence,
+  },
 
   function DocumentSearchResults({
     advancedDocumentSearchHelper,
-    enableSortingHeaders,
     isPublic,
     MAX_SEARCH_RESULTS,
     openCaseDocumentDownloadUrlSequence,
@@ -171,26 +162,24 @@ export const DocumentSearchResults = connect<
               <div className="grid-row results-header-row align-items-center">
                 <div className="tablet:grid-col-4"></div>
                 <Mobile>
-                  {enableSortingHeaders && (
-                    <div
-                      className="margin-bottom-2"
-                      style={{ maxWidth: '100%', width: '100%' }}
+                  <div
+                    className="margin-bottom-2"
+                    style={{ maxWidth: '100%', width: '100%' }}
+                  >
+                    <select
+                      id="mobile-sort-dropdown"
+                      className="usa-select"
+                      style={{ width: '100%' }}
+                      value={`${advancedDocumentSearchHelper.sortColumn}|${advancedDocumentSearchHelper.sortDirection}`}
+                      onChange={handleMobileSortChange}
                     >
-                      <select
-                        id="mobile-sort-dropdown"
-                        className="usa-select"
-                        style={{ width: '100%' }}
-                        value={`${advancedDocumentSearchHelper.sortColumn}|${advancedDocumentSearchHelper.sortDirection}`}
-                        onChange={handleMobileSortChange}
-                      >
-                        {sortOptions.map(option => (
-                          <option key={option.value} value={option.value}>
-                            {option.label}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  )}
+                      {sortOptions.map(option => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </Mobile>
                 <NonMobile>
                   <div className="tablet:grid-col-4 margin-bottom-2">
@@ -285,133 +274,119 @@ export const DocumentSearchResults = connect<
                   data-testid="advanced-document-search-results-table"
                 >
                   <thead>
-                    {enableSortingHeaders ? (
-                      <tr>
-                        <th className="min-width-150">
-                          <SortableColumn
-                            ascText={SORT_ASCENDING_TEXT.string}
-                            currentlySortedField={
-                              advancedDocumentSearchHelper.sortColumn
-                            }
-                            currentlySortedOrder={
-                              advancedDocumentSearchHelper.sortDirection
-                            }
-                            defaultSortOrder={ASCENDING}
-                            descText={SORT_DESCENDING_TEXT.string}
-                            hasRows={true}
-                            sortField="formattedFiledDate"
-                            title="Filed Date"
-                            onClickSequence={() => {
-                              handleSort('formattedFiledDate');
-                            }}
-                          />
-                        </th>
-                        <th aria-hidden="true" className="small-column"></th>
-                        <th className="min-width-150">
-                          <SortableColumn
-                            ascText={SORT_ASCENDING_TEXT.string}
-                            currentlySortedField={
-                              advancedDocumentSearchHelper.sortColumn
-                            }
-                            currentlySortedOrder={
-                              advancedDocumentSearchHelper.sortDirection
-                            }
-                            defaultSortOrder={ASCENDING}
-                            descText={SORT_DESCENDING_TEXT.string}
-                            hasRows={true}
-                            sortField="documentTitle"
-                            title={
-                              advancedDocumentSearchHelper.documentTypeVerbiage
-                            }
-                            onClickSequence={() => handleSort('documentTitle')}
-                          />
-                        </th>
-                        <th className="min-width-150">
-                          <SortableColumn
-                            ascText={SORT_ASCENDING_TEXT.string}
-                            currentlySortedField={
-                              advancedDocumentSearchHelper.sortColumn
-                            }
-                            currentlySortedOrder={
-                              advancedDocumentSearchHelper.sortDirection
-                            }
-                            defaultSortOrder={ASCENDING}
-                            descText={SORT_DESCENDING_TEXT.string}
-                            hasRows={true}
-                            sortField="caseTitle"
-                            title="Case Title"
-                            onClickSequence={() => handleSort('caseTitle')}
-                          />
-                        </th>
-                        <th className="min-width-150">
-                          <SortableColumn
-                            ascText={SORT_ASCENDING_TEXT.string}
-                            currentlySortedField={
-                              advancedDocumentSearchHelper.sortColumn
-                            }
-                            currentlySortedOrder={
-                              advancedDocumentSearchHelper.sortDirection
-                            }
-                            defaultSortOrder={ASCENDING}
-                            descText={SORT_DESCENDING_TEXT.string}
-                            hasRows={true}
-                            sortField="formattedJudgeName"
-                            title="Judge"
-                            onClickSequence={() =>
-                              handleSort('formattedJudgeName')
-                            }
-                          />
-                        </th>
-                        <th className="min-width-150">
-                          <SortableColumn
-                            ascText={SORT_ASCENDING_TEXT.date}
-                            currentlySortedField={
-                              advancedDocumentSearchHelper.sortColumn
-                            }
-                            currentlySortedOrder={
-                              advancedDocumentSearchHelper.sortDirection
-                            }
-                            defaultSortOrder={ASCENDING}
-                            descText={SORT_DESCENDING_TEXT.date}
-                            hasRows={true}
-                            sortField="numberOfPagesFormatted"
-                            title="Pages"
-                            onClickSequence={() =>
-                              handleSort('numberOfPagesFormatted')
-                            }
-                          />
-                        </th>
-                        <th className="min-width-150">
-                          <SortableColumn
-                            ascText={SORT_ASCENDING_TEXT.string}
-                            currentlySortedField={
-                              advancedDocumentSearchHelper.sortColumn
-                            }
-                            currentlySortedOrder={
-                              advancedDocumentSearchHelper.sortDirection
-                            }
-                            defaultSortOrder={ASCENDING}
-                            descText={SORT_DESCENDING_TEXT.string}
-                            hasRows={true}
-                            sortField="docketNumber"
-                            title="Docket No."
-                            onClickSequence={() => handleSort('docketNumber')}
-                          />
-                        </th>
-                      </tr>
-                    ) : (
-                      <tr>
-                        <th>Filed Date</th>
-                        <th aria-hidden="true" className="small-column"></th>
-                        <th>
-                          {advancedDocumentSearchHelper.documentTypeVerbiage}
-                        </th>
-                        <th>Case Title</th>
-                        <th>Judge</th>
-                        <th>Pages</th>
-                        <th aria-label="docket number">Docket No.</th>
-                      </tr>
-                    )}
+                    <tr>
+                      <th className="min-width-150">
+                        <SortableColumn
+                          ascText={SORT_ASCENDING_TEXT.string}
+                          currentlySortedField={
+                            advancedDocumentSearchHelper.sortColumn
+                          }
+                          currentlySortedOrder={
+                            advancedDocumentSearchHelper.sortDirection
+                          }
+                          defaultSortOrder={ASCENDING}
+                          descText={SORT_DESCENDING_TEXT.string}
+                          hasRows={true}
+                          sortField="formattedFiledDate"
+                          title="Filed Date"
+                          onClickSequence={() => {
+                            handleSort('formattedFiledDate');
+                          }}
+                        />
+                      </th>
+                      <th aria-hidden="true" className="small-column"></th>
+                      <th className="min-width-150">
+                        <SortableColumn
+                          ascText={SORT_ASCENDING_TEXT.string}
+                          currentlySortedField={
+                            advancedDocumentSearchHelper.sortColumn
+                          }
+                          currentlySortedOrder={
+                            advancedDocumentSearchHelper.sortDirection
+                          }
+                          defaultSortOrder={ASCENDING}
+                          descText={SORT_DESCENDING_TEXT.string}
+                          hasRows={true}
+                          sortField="documentTitle"
+                          title={
+                            advancedDocumentSearchHelper.documentTypeVerbiage
+                          }
+                          onClickSequence={() => handleSort('documentTitle')}
+                        />
+                      </th>
+                      <th className="min-width-150">
+                        <SortableColumn
+                          ascText={SORT_ASCENDING_TEXT.string}
+                          currentlySortedField={
+                            advancedDocumentSearchHelper.sortColumn
+                          }
+                          currentlySortedOrder={
+                            advancedDocumentSearchHelper.sortDirection
+                          }
+                          defaultSortOrder={ASCENDING}
+                          descText={SORT_DESCENDING_TEXT.string}
+                          hasRows={true}
+                          sortField="caseTitle"
+                          title="Case Title"
+                          onClickSequence={() => handleSort('caseTitle')}
+                        />
+                      </th>
+                      <th className="min-width-150">
+                        <SortableColumn
+                          ascText={SORT_ASCENDING_TEXT.string}
+                          currentlySortedField={
+                            advancedDocumentSearchHelper.sortColumn
+                          }
+                          currentlySortedOrder={
+                            advancedDocumentSearchHelper.sortDirection
+                          }
+                          defaultSortOrder={ASCENDING}
+                          descText={SORT_DESCENDING_TEXT.string}
+                          hasRows={true}
+                          sortField="formattedJudgeName"
+                          title="Judge"
+                          onClickSequence={() =>
+                            handleSort('formattedJudgeName')
+                          }
+                        />
+                      </th>
+                      <th className="min-width-150">
+                        <SortableColumn
+                          ascText={SORT_ASCENDING_TEXT.date}
+                          currentlySortedField={
+                            advancedDocumentSearchHelper.sortColumn
+                          }
+                          currentlySortedOrder={
+                            advancedDocumentSearchHelper.sortDirection
+                          }
+                          defaultSortOrder={ASCENDING}
+                          descText={SORT_DESCENDING_TEXT.date}
+                          hasRows={true}
+                          sortField="numberOfPagesFormatted"
+                          title="Pages"
+                          onClickSequence={() =>
+                            handleSort('numberOfPagesFormatted')
+                          }
+                        />
+                      </th>
+                      <th className="min-width-150">
+                        <SortableColumn
+                          ascText={SORT_ASCENDING_TEXT.string}
+                          currentlySortedField={
+                            advancedDocumentSearchHelper.sortColumn
+                          }
+                          currentlySortedOrder={
+                            advancedDocumentSearchHelper.sortDirection
+                          }
+                          defaultSortOrder={ASCENDING}
+                          descText={SORT_DESCENDING_TEXT.string}
+                          hasRows={true}
+                          sortField="docketNumber"
+                          title="Docket No."
+                          onClickSequence={() => handleSort('docketNumber')}
+                        />
+                      </th>
+                    </tr>
                   </thead>
                   <tbody>
                     {pagedResults.map(result => (
