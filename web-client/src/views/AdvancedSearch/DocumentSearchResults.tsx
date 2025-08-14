@@ -51,6 +51,7 @@ export const DocumentSearchResults = connect(
     // Show search results if there are any
     advancedDocumentSearchHelper.showSearchResults =
       results.length > 0 && !advancedDocumentSearchHelper.showNoMatches;
+
     // Calculate total pages based on PAGE_SIZE
     const totalPages = Math.ceil(
       results.length / ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE,
@@ -86,9 +87,9 @@ export const DocumentSearchResults = connect(
           sortDirection: 'asc',
         });
       }
-      setCurrentPaginationPageSequence({ currentPaginationPage: 0 }); // reset page on sort
+      // reset page on sort
+      setCurrentPaginationPageSequence({ currentPaginationPage: 0 });
     };
-
     // Handle mobile dropdown sort change
     const handleMobileSortChange = e => {
       const { value } = e.target;
@@ -100,39 +101,24 @@ export const DocumentSearchResults = connect(
       setCurrentPaginationPageSequence({ currentPaginationPage: 0 });
     };
 
+    const isOpinionType =
+      advancedDocumentSearchHelper.documentTypeVerbiage === 'Opinion Type';
+
     const sortOptions = [
+      { label: 'Sort by Newest', value: 'formattedFiledDate|desc' },
+      { label: 'Sort by Oldest', value: 'formattedFiledDate|asc' },
       {
-        label: 'Sort by Newest',
-        value: 'formattedFiledDate|desc',
-      },
-      {
-        label: 'Sort by Oldest',
-        value: 'formattedFiledDate|asc',
-      },
-      {
-        label: `Sort by Order (ascending)`,
+        label: `Sort by ${isOpinionType ? 'Opinion Type' : 'Order'} (ascending)`,
         value: 'documentTitle|asc',
       },
       {
-        label: `Sort by Order (descending)`,
+        label: `Sort by ${isOpinionType ? 'Opinion Type' : 'Order'} (descending)`,
         value: 'documentTitle|desc',
       },
-      {
-        label: 'Sort by Case Title (ascending)',
-        value: 'caseTitle|asc',
-      },
-      {
-        label: 'Sort by Case Title (descending)',
-        value: 'caseTitle|desc',
-      },
-      {
-        label: 'Sort by Judge (ascending)',
-        value: 'formattedJudgeName|asc',
-      },
-      {
-        label: 'Sort by Judge (descending)',
-        value: 'formattedJudgeName|desc',
-      },
+      { label: 'Sort by Case Title (ascending)', value: 'caseTitle|asc' },
+      { label: 'Sort by Case Title (descending)', value: 'caseTitle|desc' },
+      { label: 'Sort by Judge (ascending)', value: 'formattedJudgeName|asc' },
+      { label: 'Sort by Judge (descending)', value: 'formattedJudgeName|desc' },
       {
         label: 'Sort by Pages (ascending)',
         value: 'numberOfPagesFormatted|asc',
@@ -141,14 +127,8 @@ export const DocumentSearchResults = connect(
         label: 'Sort by Pages (descending)',
         value: 'numberOfPagesFormatted|desc',
       },
-      {
-        label: 'Sort by Docket No. (ascending)',
-        value: 'docketNumber|asc',
-      },
-      {
-        label: 'Sort by Docket No. (descending)',
-        value: 'docketNumber|desc',
-      },
+      { label: 'Sort by Docket No. (ascending)', value: 'docketNumber|asc' },
+      { label: 'Sort by Docket No. (descending)', value: 'docketNumber|desc' },
     ];
 
     return (
@@ -159,29 +139,11 @@ export const DocumentSearchResults = connect(
               <div className="tablet:grid-col-4 margin-top-3">
                 <h2>Results</h2>
               </div>
-              <div className="grid-row results-header-row align-items-center">
-                <div className="tablet:grid-col-4"></div>
-                <Mobile>
-                  <div
-                    className="margin-bottom-2"
-                    style={{ maxWidth: '100%', width: '100%' }}
-                  >
-                    <select
-                      id="mobile-sort-dropdown"
-                      className="usa-select"
-                      style={{ width: '100%' }}
-                      value={`${advancedDocumentSearchHelper.sortColumn}|${advancedDocumentSearchHelper.sortDirection}`}
-                      onChange={handleMobileSortChange}
-                    >
-                      {sortOptions.map(option => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </Mobile>
-                <NonMobile>
+
+              <NonMobile>
+                <div className="grid-row results-header-row align-items-center">
+                  <div className="tablet:grid-col-4"></div>
+
                   <div className="tablet:grid-col-4 margin-bottom-2">
                     {totalPages > 1 && (
                       <Paginator
@@ -197,87 +159,29 @@ export const DocumentSearchResults = connect(
                   </div>
 
                   <div
-                    className={`tablet:grid-col-4 text-right${totalPages < 2 ? ' padding-bottom-1' : ''}`}
+                    className={`tablet:grid-col-4 text-right ${totalPages < 2 ? ' padding-bottom-1' : ''}`}
                   >
-                    {results.length === MAX_SEARCH_RESULTS && (
-                      <>
-                        <FontAwesomeIcon
-                          className="fa-icon-blue icon-spacing-4"
-                          icon="info-circle"
-                          title={`Search is limited to ${MAX_SEARCH_RESULTS.toLocaleString()} results.`}
-                          tabIndex={0}
-                          aria-label={`Search is limited to ${MAX_SEARCH_RESULTS.toLocaleString()} results.`}
-                        />
-                      </>
-                    )}
-                    <b className="text-semibold">Count:</b>{' '}
-                    {results.length.toLocaleString()}
-                  </div>
-                </NonMobile>
-                <Mobile>
-                  {totalPages > 1 && (
-                    <div className="margin-bottom-4 tablet:grid-col">
-                      <Paginator
-                        currentPageIndex={currentPaginationPage}
-                        totalPages={totalPages}
-                        onPageChange={currentPage => {
-                          setCurrentPaginationPageSequence({
-                            currentPaginationPage: currentPage,
-                          });
-                        }}
-                      />
-                    </div>
-                  )}
-                  {showModal === 'showCountModalMobile' && (
-                    <BaseModal title="CountModal">
-                      <div>
-                        <h2>Count: {MAX_SEARCH_RESULTS.toLocaleString()}</h2>
-                        <p>
-                          Search is limited to{' '}
-                          {MAX_SEARCH_RESULTS.toLocaleString()} results.
-                        </p>
-                        <Button
-                          icon="times-circle"
-                          onClick={event => {
-                            event.stopPropagation();
-                            openCleanModalSequence({
-                              showModal: null,
-                            });
-                          }}
-                        >
-                          Close
-                        </Button>
-                      </div>
-                    </BaseModal>
-                  )}
-
-                  <div className="tablet:grid-col-4 float-right text-right text-middle-margin margin-bottom-2">
                     {results.length === MAX_SEARCH_RESULTS && (
                       <FontAwesomeIcon
                         className="fa-icon-blue icon-spacing-4"
                         icon="info-circle"
-                        style={{ cursor: 'pointer' }}
-                        onClick={() => {
-                          openCleanModalSequence({
-                            showModal: 'showCountModalMobile',
-                          });
-                        }}
+                        title={`Search is limited to ${MAX_SEARCH_RESULTS.toLocaleString()} results.`}
+                        tabIndex={0}
+                        aria-label={`Search is limited to ${MAX_SEARCH_RESULTS.toLocaleString()} results.`}
                       />
                     )}
                     <b className="text-semibold">Count:</b>{' '}
                     {results.length.toLocaleString()}
                   </div>
-                </Mobile>
-              </div>
+                </div>
 
-              <NonMobile>
                 <table
                   className="usa-table search-results ustc-table responsive-table"
                   data-testid="advanced-document-search-results-table"
                 >
                   <thead>
                     <tr>
-                      <th className="min-width-150">
+                      <th className="text-no-wrap overflow-hidden">
                         <SortableColumn
                           ascText={SORT_ASCENDING_TEXT.string}
                           currentlySortedField={
@@ -297,7 +201,7 @@ export const DocumentSearchResults = connect(
                         />
                       </th>
                       <th aria-hidden="true" className="small-column"></th>
-                      <th className="min-width-150">
+                      <th className="text-no-wrap overflow-hidden">
                         <SortableColumn
                           ascText={SORT_ASCENDING_TEXT.string}
                           currentlySortedField={
@@ -316,7 +220,7 @@ export const DocumentSearchResults = connect(
                           onClickSequence={() => handleSort('documentTitle')}
                         />
                       </th>
-                      <th className="min-width-150">
+                      <th className="text-no-wrap overflow-hidden">
                         <SortableColumn
                           ascText={SORT_ASCENDING_TEXT.string}
                           currentlySortedField={
@@ -333,7 +237,7 @@ export const DocumentSearchResults = connect(
                           onClickSequence={() => handleSort('caseTitle')}
                         />
                       </th>
-                      <th className="min-width-150">
+                      <th className="text-no-wrap overflow-hidden">
                         <SortableColumn
                           ascText={SORT_ASCENDING_TEXT.string}
                           currentlySortedField={
@@ -352,7 +256,7 @@ export const DocumentSearchResults = connect(
                           }
                         />
                       </th>
-                      <th className="min-width-150">
+                      <th className="text-no-wrap overflow-hidden">
                         <SortableColumn
                           ascText={SORT_ASCENDING_TEXT.date}
                           currentlySortedField={
@@ -371,7 +275,7 @@ export const DocumentSearchResults = connect(
                           }
                         />
                       </th>
-                      <th className="min-width-150">
+                      <th className="text-no-wrap overflow-hidden">
                         <SortableColumn
                           ascText={SORT_ASCENDING_TEXT.string}
                           currentlySortedField={
@@ -390,6 +294,7 @@ export const DocumentSearchResults = connect(
                       </th>
                     </tr>
                   </thead>
+
                   <tbody>
                     {pagedResults.map(result => (
                       <tr
@@ -447,7 +352,83 @@ export const DocumentSearchResults = connect(
                   </tbody>
                 </table>
               </NonMobile>
+
               <Mobile>
+                <div className="grid-row results-header-row align-items-center">
+                  <div className="tablet:grid-col-4"></div>
+                  <div
+                    className="margin-bottom-2"
+                    style={{ maxWidth: '100%', width: '100%' }}
+                  >
+                    <select
+                      id="mobile-sort-dropdown"
+                      className="usa-select"
+                      style={{ width: '100%' }}
+                      value={`${advancedDocumentSearchHelper.sortColumn}|${advancedDocumentSearchHelper.sortDirection}`}
+                      onChange={handleMobileSortChange}
+                    >
+                      {sortOptions.map(option => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {totalPages > 1 && (
+                    <div className="margin-bottom-4 tablet:grid-col">
+                      <Paginator
+                        currentPageIndex={currentPaginationPage}
+                        totalPages={totalPages}
+                        onPageChange={currentPage => {
+                          setCurrentPaginationPageSequence({
+                            currentPaginationPage: currentPage,
+                          });
+                        }}
+                      />
+                    </div>
+                  )}
+
+                  {showModal === 'showCountModalMobile' && (
+                    <BaseModal title="CountModal">
+                      <div>
+                        <h2>Count: {MAX_SEARCH_RESULTS.toLocaleString()}</h2>
+                        <p>
+                          Search is limited to{' '}
+                          {MAX_SEARCH_RESULTS.toLocaleString()} results.
+                        </p>
+                        <Button
+                          icon="times-circle"
+                          onClick={event => {
+                            event.stopPropagation();
+                            openCleanModalSequence({
+                              showModal: null,
+                            });
+                          }}
+                        >
+                          Close
+                        </Button>
+                      </div>
+                    </BaseModal>
+                  )}
+
+                  <div className="tablet:grid-col-4 float-right text-right text-middle-margin margin-bottom-2">
+                    {results.length === MAX_SEARCH_RESULTS && (
+                      <FontAwesomeIcon
+                        className="fa-icon-blue icon-spacing-4"
+                        icon="info-circle"
+                        onClick={() => {
+                          openCleanModalSequence({
+                            showModal: 'showCountModalMobile',
+                          });
+                        }}
+                      />
+                    )}
+                    <b className="text-semibold">Count:</b>{' '}
+                    {results.length.toLocaleString()}
+                  </div>
+                </div>
+
                 <table
                   aria-label="document search results"
                   className="usa-table gray-header responsive-table row-only todays-orders-mobile"
@@ -456,12 +437,18 @@ export const DocumentSearchResults = connect(
                     <tr>
                       <th aria-label="Docket Number">Docket No.</th>
                       <th>Filed Date</th>
-                      <th>Order</th>
+                      <th>
+                        {advancedDocumentSearchHelper.documentTypeVerbiage ===
+                        'Opinion Type'
+                          ? 'Opinion Type'
+                          : 'Order'}
+                      </th>
                       <th>Case Title</th>
                       <th>Judge</th>
                       <th>Pages</th>
                     </tr>
                   </thead>
+
                   <tbody>
                     {pagedResults.map(result => (
                       <tr
@@ -472,7 +459,12 @@ export const DocumentSearchResults = connect(
                         </td>
                         <th>Filed Date</th>
                         <td className="divider">{result.formattedFiledDate}</td>
-                        <th>Order</th>
+                        <th>
+                          {advancedDocumentSearchHelper.documentTypeVerbiage ===
+                          'Opinion Type'
+                            ? 'Opinion Type'
+                            : 'Order'}
+                        </th>
                         <td className="divider">
                           <Button
                             link
@@ -501,7 +493,22 @@ export const DocumentSearchResults = connect(
                     ))}
                   </tbody>
                 </table>
+
+                {totalPages > 1 && (
+                  <div className="margin-bottom-4 tablet:grid-col">
+                    <Paginator
+                      currentPageIndex={currentPaginationPage}
+                      totalPages={totalPages}
+                      onPageChange={currentPage => {
+                        setCurrentPaginationPageSequence({
+                          currentPaginationPage: currentPage,
+                        });
+                      }}
+                    />
+                  </div>
+                )}
               </Mobile>
+
               {totalPages > 1 && (
                 <Paginator
                   currentPageIndex={currentPaginationPage}
@@ -515,6 +522,7 @@ export const DocumentSearchResults = connect(
               )}
             </>
           )}
+
           {advancedDocumentSearchHelper.showNoMatches && (
             <div id="no-search-results">
               <h1 className="margin-top-4">No Matches Found</h1>
