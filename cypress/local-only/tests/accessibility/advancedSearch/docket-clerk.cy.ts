@@ -13,7 +13,6 @@ describe('Advanced Search - Docket Clerk Accessibility', () => {
       cy.visit('/search');
       cy.get('[data-testid="order-search-tab"]').click();
       cy.get('[data-testid="keyword-search-input"]').type('meow');
-      cy.get('#date-range').select('customDates');
       cy.get('#startDate-date-start').type('08/03/2001');
       cy.get('[data-testid="submit-order-advanced-search-button"]').click();
       cy.get('[data-testid="advanced-document-search-results-table"]');
