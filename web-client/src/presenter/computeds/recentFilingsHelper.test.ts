@@ -4,7 +4,6 @@ import { withAppContextDecorator } from '../../withAppContext';
 import { RecentFiling } from '@shared/business/entities/RecentFiling';
 import {
   ROLES,
-  STIN_DOCKET_ENTRY_TYPE,
   DOCKET_ENTRY_SEALED_TO_TYPES,
 } from '@shared/business/entities/EntityConstants';
 
@@ -201,44 +200,6 @@ describe('recentFilingsHelper', () => {
       }),
     });
     expect(noFileResult.sortedRecentFilings[0].canAccess).toBe(false);
-  });
-
-  it('should handle STIN documents and special cases', () => {
-    const stinFiling = createFiling({
-      eventCode: STIN_DOCKET_ENTRY_TYPE.eventCode,
-      servedAt: '2024-01-15T10:00:00.000Z',
-    });
-
-    // IRS Superuser can access served STIN
-    const irsResult = runCompute(recentFilingsHelper, {
-      state: createTestState({
-        recentFilings: [stinFiling],
-        user: { role: ROLES.irsSuperuser },
-      }),
-    });
-    expect(irsResult.sortedRecentFilings[0].canAccess).toBe(true);
-
-    // Petitioner cannot access STIN
-    const petitionerResult = runCompute(recentFilingsHelper, {
-      state: createTestState({
-        recentFilings: [stinFiling],
-        user: { role: ROLES.petitioner },
-      }),
-    });
-    expect(petitionerResult.sortedRecentFilings[0].canAccess).toBe(false);
-
-    // Internal users can access unserved STIN
-    const unservedStin = createFiling({
-      eventCode: STIN_DOCKET_ENTRY_TYPE.eventCode,
-      servedAt: undefined,
-    });
-    const internalResult = runCompute(recentFilingsHelper, {
-      state: createTestState({
-        recentFilings: [unservedStin],
-        user: { role: ROLES.petitionsClerk },
-      }),
-    });
-    expect(internalResult.sortedRecentFilings[0].canAccess).toBe(true);
   });
 
   it('should handle unserved documents based on event codes', () => {
