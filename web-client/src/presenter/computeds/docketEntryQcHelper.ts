@@ -2,6 +2,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 export const docketEntryQcHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -16,10 +17,15 @@ export const docketEntryQcHelper = (
 
   let showPaperServiceWarning = false;
 
-  if (CONTACT_CHANGE_DOCUMENT_TYPES.includes(currentDocument.documentType)) {
-    const qcWorkItem = currentDocument.workItem;
+  if (
+    CONTACT_CHANGE_DOCUMENT_TYPES.includes(currentDocument?.documentType || '')
+  ) {
+    const hasWorkItemInfo =
+      currentDocument && DocketEntry.hasWorkItemInfo(currentDocument);
     const qcWorkItemsUntouched =
-      qcWorkItem && !qcWorkItem.isRead && !qcWorkItem.completedAt;
+      hasWorkItemInfo &&
+      !currentDocument.qcViewed &&
+      !currentDocument.qcComplete;
 
     if (qcWorkItemsUntouched) {
       showPaperServiceWarning = true;

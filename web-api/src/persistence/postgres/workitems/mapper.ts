@@ -14,6 +14,7 @@ function pickFields(workItem) {
     completedMessage: workItem.completedMessage,
     createdAt: workItem.createdAt,
     docketEntry: JSON.stringify(workItem.docketEntry),
+    docketEntryId: workItem.docketEntryId,
     docketNumber: workItem.docketNumber,
     inProgress: workItem.inProgress,
     isRead: workItem.isRead,
@@ -26,33 +27,8 @@ function pickFields(workItem) {
   };
 }
 
-function getWorkItemSection({
-  section,
-  documentTitle,
-}: {
-  section: string;
-  documentTitle?: string;
-}) {
-  // We have sections for caseServicesSupervisor and clerkofcourt, but as far as we can tell, they aren't used.
-  // Instead, we need to translate these into either the petitions section or the docket section depending
-  // on the document type.
-  if (!['caseServicesSupervisor', 'clerkofcourt'].includes(section)) {
-    return section;
-  }
-  if (documentTitle?.toLocaleLowerCase() == 'petition') {
-    return 'petitions';
-  }
-  return 'docket';
-}
-
 export function toKyselyNewWorkItem(workItem: RawWorkItem): NewWorkItemKysely {
-  return {
-    ...pickFields(workItem),
-    section: getWorkItemSection({
-      section: workItem.section,
-      documentTitle: workItem.docketEntry?.documentTitle,
-    }),
-  };
+  return pickFields(workItem);
 }
 
 export function workItemEntity(workItem) {
@@ -80,6 +56,7 @@ export function toWorkItemWithCaseInfo(dbWorkItem): WorkItemWithCaseInfo {
     leadDocketNumber: dbWorkItem?.leadDocketNumber || undefined,
     trialDate: dbWorkItem?.trialDate?.toISOString(),
     trialLocation: dbWorkItem?.trialLocation || undefined,
+    docketEntry: dbWorkItem.docketEntry,
   };
   return transformNullToUndefined(workItemWithCaseInfo);
 }

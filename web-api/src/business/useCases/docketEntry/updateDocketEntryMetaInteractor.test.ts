@@ -335,7 +335,8 @@ describe('updateDocketEntryMetaInteractor', () => {
     const updatedDocketEntry = result.docketEntries.find(
       record => record.index === 1,
     );
-    expect(updatedDocketEntry.freeText).toBeUndefined();
+    expect(updatedDocketEntry).toBeDefined();
+    expect(updatedDocketEntry!.freeText).toBeUndefined();
   });
 
   it('should generate a new coversheet for the document if the servedAt field is changed', async () => {
@@ -614,7 +615,7 @@ describe('updateDocketEntryMetaInteractor', () => {
     const updatedDocketEntry = result.docketEntries.find(
       record => record.index === 1,
     );
-    expect(updatedDocketEntry.pending).toBeTruthy();
+    expect(updatedDocketEntry?.pending).toBeTruthy();
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAutomaticBlock,
     ).toHaveBeenCalled();
@@ -638,7 +639,7 @@ describe('updateDocketEntryMetaInteractor', () => {
     const updatedDocketEntry = result.docketEntries.find(
       record => record.index === 1,
     );
-    expect(updatedDocketEntry.previousDocument).toBeDefined();
-    expect(updatedDocketEntry.previousDocument.documentType).toEqual('Order');
+    expect(updatedDocketEntry?.previousDocument).toBeDefined();
+    expect(updatedDocketEntry?.previousDocument?.documentType).toEqual('Order');
   });
 });
