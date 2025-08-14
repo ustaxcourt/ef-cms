@@ -1,36 +1,57 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
-// This script can copy the contents of one database and overwrite the contents
-// of another in a different account. It must be run from the AWS account that
-// is creating the backup, and it will assume a role in the target account.
+// This script will copy the contents of one table in the source database and
+// either:
+//   - overwrite the contents of that same table, or
+//   - create a table with a different name with these contents
+// in the target account. It must be run from the AWS account that is creating
+// the backup, and it will assume a role in the target account.
 
 import { RDSClient } from '@aws-sdk/client-rds';
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
-import { sanitizeDumpFile } from 'scripts/emailReplacer';
 import {
-  createDbBackup,
+  createSingleTableBackup,
   describeRDSInstance,
   getTargetAccountCredentials,
   removeFiles,
-  restoreFromBackup,
+  restoreSingleTableFromBackup,
 } from './restoreDbHelpers';
+import { sanitizeDumpFile } from '../emailReplacer';
+import { runCommand } from '../helpers/runCommand';
 
 const scriptConfig: ScriptConfig = {
   description:
-    'restoreDbFromSource - Replaces the target database with a dump of the source database',
+    'restoreTableFromSource - Replaces the target table with a dump of the source table',
   environment: {
     sourceEnv: 'ENV',
     targetAccountId: 'TARGET_ACCOUNT_ID',
     targetEnv: 'TARGET_ENV',
   },
+  parameters: {
+    newTargetTableName: {
+      position: 1,
+      required: false,
+      type: 'string',
+    },
+    sourceTableName: {
+      position: 0,
+      required: true,
+      type: 'string',
+    },
+  },
   requireActiveAwsSession: true,
 };
-const { sourceEnv, targetAccountId, targetEnv } = parseArgsAndEnvVars(
-  scriptConfig,
-) as { [key: string]: string };
+const {
+  newTargetTableName,
+  sourceEnv,
+  sourceTableName,
+  targetAccountId,
+  targetEnv,
+} = parseArgsAndEnvVars(scriptConfig) as { [key: string]: string };
+const targetTableName = newTargetTableName || sourceTableName;
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
@@ -73,19 +94,31 @@ const { sourceEnv, targetAccountId, targetEnv } = parseArgsAndEnvVars(
       useWriter: true,
     });
 
-    const backUpFileName = 'dawson-dump.sql';
-    await createDbBackup({
+    const backUpFileName = `${sourceTableName}-dump.sql`;
+    await createSingleTableBackup({
       backUpFileName,
       dbName: sourceDbname,
       host: sourceHost,
       port: sourcePort,
+      sourceTableName,
       username: sourceUsername,
     });
+
+    if (sourceTableName !== targetTableName) {
+      const sourceIndexPrefix = sourceTableName.replace('dw', 'idx');
+      const targetIndexPrefix = targetTableName.replace('dw', 'idx');
+      const sedExpression = `s/${sourceTableName}/${targetTableName}/g;s/${sourceIndexPrefix}/${targetIndexPrefix}/g`;
+      console.log('Replacing instances in the dump file', {
+        [sourceTableName]: targetTableName,
+        [sourceIndexPrefix]: targetIndexPrefix,
+      });
+      await runCommand('sed', ['-i', '', sedExpression, backUpFileName]);
+    }
 
     const sanitizedFileName = `sanitized-${backUpFileName}`;
     await sanitizeDumpFile(backUpFileName, sanitizedFileName);
 
-    await restoreFromBackup({
+    await restoreSingleTableFromBackup({
       backUpFileName: sanitizedFileName,
       dbName: targetDbname,
       host: targetHost,
@@ -94,6 +127,7 @@ const { sourceEnv, targetAccountId, targetEnv } = parseArgsAndEnvVars(
       targetAccountId,
       targetSecretAccessKey,
       targetSessionToken,
+      targetTableName,
       username: targetUsername,
     });
 
