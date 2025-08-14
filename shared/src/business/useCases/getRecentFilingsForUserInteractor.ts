@@ -28,11 +28,19 @@ export const getRecentFilingsForUserInteractor = async (
     return [];
   }
 
-  const docketNumbers = allUserCases.map(caseItem => caseItem.docketNumber);
+  const docketNumbers = allUserCases.reduce((acc, caseItem) => {
+    acc.push(caseItem.docketNumber);
+    if (caseItem.consolidatedCases) {
+      caseItem.consolidatedCases.forEach(consolidatedCase => {
+        acc.push(consolidatedCase.docketNumber);
+      });
+    }
+    return acc;
+  }, [] as string[]);
+
   const sevenDaysAgo = calculateISODate({ howMuch: -7, units: 'days' });
   const today = calculateISODate({ howMuch: 0, units: 'days' });
 
-  // Query PostgreSQL for recent docket entries with case titles
   const dbDocketEntries = await getDbReader(reader =>
     reader
       .selectFrom('dwDocketEntry as d')
@@ -48,6 +56,7 @@ export const getRecentFilingsForUserInteractor = async (
         'd.isSealed',
         'd.sealedTo',
         'd.servedAt',
+        'd.isDraft',
         'c.caption',
         'c.isSealed as caseIsSealed',
       ])
@@ -56,6 +65,8 @@ export const getRecentFilingsForUserInteractor = async (
       .where('d.filingDate', '<=', calculateDate({ dateString: today }))
       .where('d.isStricken', 'is not', true)
       .where('d.eventCode', '!=', 'NOT')
+      .where('d.eventCode', '!=', 'STIN')
+      .where('d.isDraft', 'is not', true)
       .orderBy('d.filingDate', 'desc')
       .limit(1000)
       .execute(),
@@ -72,11 +83,11 @@ export const getRecentFilingsForUserInteractor = async (
     isSealed: d.isSealed,
     sealedTo: d.sealedTo,
     servedAt: d.servedAt?.toISOString(),
+    isDraft: d.isDraft,
     caseCaption: d.caption,
     caseIsSealed: d.caseIsSealed,
   }));
 
-  // Build case info map for consolidated case handling
   const caseInfoMap = new Map();
   allUserCases.forEach(caseItem => {
     const hasConsolidatedCases = (caseItem.consolidatedCases?.length || 0) > 0;
@@ -98,6 +109,16 @@ export const getRecentFilingsForUserInteractor = async (
       isLeadCase,
       consolidatedIconTooltipText,
     });
+
+    if (caseItem.consolidatedCases) {
+      caseItem.consolidatedCases.forEach(consolidatedCase => {
+        caseInfoMap.set(consolidatedCase.docketNumber, {
+          inConsolidatedGroup: true,
+          isLeadCase: false,
+          consolidatedIconTooltipText: `Member case in consolidated group led by ${caseItem.docketNumber}`,
+        });
+      });
+    }
   });
 
   return results.map(entry => {

@@ -12,6 +12,16 @@ import { RecentFiling } from '@shared/business/entities/RecentFiling';
 import { BigHeader } from '../BigHeader';
 import { RecentFilingsDocumentDisplay } from './RecentFilingsDocumentDisplay';
 
+const getIndentationClass = (filing: RecentFiling): string => {
+  if (filing.inConsolidatedGroup && !filing.isLeadCase) {
+    return 'margin-x-2';
+  }
+  if (filing.inConsolidatedGroup) {
+    return 'margin-x-1';
+  }
+  return '';
+};
+
 type SortableField = 'docketNumber' | 'filedDate' | 'document' | 'caseTitle';
 type SortOrder = 'asc' | 'desc';
 
@@ -169,24 +179,23 @@ export const RecentFilingsMobile = ({
                   >
                     <td className="docket-number-head">
                       {filing.inConsolidatedGroup && (
-                        <ConsolidatedCaseIcon
-                          consolidatedIconTooltipText={
-                            filing.consolidatedIconTooltipText
-                          }
-                          inConsolidatedGroup={
-                            filing.inConsolidatedGroup || false
-                          }
-                          showLeadCaseIcon={filing.isLeadCase || false}
-                          data-testid="consolidated-case-icon"
-                        />
+                        <span className={getIndentationClass(filing)}>
+                          <ConsolidatedCaseIcon
+                            consolidatedIconTooltipText={
+                              filing.consolidatedIconTooltipText
+                            }
+                            inConsolidatedGroup={
+                              filing.inConsolidatedGroup || false
+                            }
+                            showLeadCaseIcon={filing.isLeadCase || false}
+                            data-testid="consolidated-case-icon"
+                          />
+                        </span>
                       )}
                       <a
                         href={`/case-detail/${filing.docketNumber}`}
                         target="_blank"
                         rel="noreferrer"
-                        className={
-                          filing.inConsolidatedGroup ? 'margin-left-1' : ''
-                        }
                         data-testid="case-number-link"
                       >
                         {filing.docketNumber}
