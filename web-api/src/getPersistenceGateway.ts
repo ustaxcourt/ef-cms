@@ -17,7 +17,6 @@ import { decrementJobCounter } from './persistence/dynamo/trialSessions/decremen
 import { deleteDocumentFile } from './persistence/s3/deleteDocumentFile';
 import { deleteMessage } from './persistence/sqs/deleteMessage';
 import { deletePractitionerDocument } from './persistence/dynamo/practitioners/deletePractitionerDocument';
-import { deleteRecord } from './persistence/elasticsearch/deleteRecord';
 import { deleteTrialSession } from './persistence/dynamo/trialSessions/deleteTrialSession';
 import { deleteTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/deleteTrialSessionWorkingCopy';
 import { deleteUserConnection } from '@web-api/persistence/postgres/connections/deleteUserConnection';
@@ -182,7 +181,6 @@ const gatewayMethods = {
   deleteDocumentFile,
   deleteMessage,
   deletePractitionerDocument,
-  deleteRecord,
   deleteTrialSession,
   deleteTrialSessionWorkingCopy,
   deleteUserConnection,

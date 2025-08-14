@@ -44,7 +44,6 @@ export const messageModalHelper = (
     if (entry.isFileAttached && entry.isOnDocketRecord) {
       entry.title = entry.descriptionDisplay || entry.documentType;
       entry.isAlreadyAttached = computeIsAlreadyAttached(entry);
-
       documents.push(entry);
     }
   }
