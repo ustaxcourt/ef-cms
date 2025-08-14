@@ -28,7 +28,17 @@ export const getRecentFilingsForUserInteractor = async (
     return [];
   }
 
-  const docketNumbers = allUserCases.map(caseItem => caseItem.docketNumber);
+  // Collect all docket numbers including consolidated member cases
+  const docketNumbers = allUserCases.reduce((acc, caseItem) => {
+    acc.push(caseItem.docketNumber);
+    if (caseItem.consolidatedCases) {
+      caseItem.consolidatedCases.forEach(consolidatedCase => {
+        acc.push(consolidatedCase.docketNumber);
+      });
+    }
+    return acc;
+  }, [] as string[]);
+
   const sevenDaysAgo = calculateISODate({ howMuch: -7, units: 'days' });
   const today = calculateISODate({ howMuch: 0, units: 'days' });
 
@@ -48,6 +58,7 @@ export const getRecentFilingsForUserInteractor = async (
         'd.isSealed',
         'd.sealedTo',
         'd.servedAt',
+        'd.isDraft',
         'c.caption',
         'c.isSealed as caseIsSealed',
       ])
@@ -56,6 +67,8 @@ export const getRecentFilingsForUserInteractor = async (
       .where('d.filingDate', '<=', calculateDate({ dateString: today }))
       .where('d.isStricken', 'is not', true)
       .where('d.eventCode', '!=', 'NOT')
+      .where('d.eventCode', '!=', 'STIN')
+      .where('d.isDraft', 'is not', true)
       .orderBy('d.filingDate', 'desc')
       .limit(1000)
       .execute(),
@@ -72,6 +85,7 @@ export const getRecentFilingsForUserInteractor = async (
     isSealed: d.isSealed,
     sealedTo: d.sealedTo,
     servedAt: d.servedAt?.toISOString(),
+    isDraft: d.isDraft,
     caseCaption: d.caption,
     caseIsSealed: d.caseIsSealed,
   }));
@@ -93,11 +107,23 @@ export const getRecentFilingsForUserInteractor = async (
       consolidatedIconTooltipText = `Member case in consolidated group led by ${caseItem.leadDocketNumber}`;
     }
 
+    // Add case info for the lead case
     caseInfoMap.set(caseItem.docketNumber, {
       inConsolidatedGroup,
       isLeadCase,
       consolidatedIconTooltipText,
     });
+
+    // Add case info for all consolidated member cases
+    if (caseItem.consolidatedCases) {
+      caseItem.consolidatedCases.forEach(consolidatedCase => {
+        caseInfoMap.set(consolidatedCase.docketNumber, {
+          inConsolidatedGroup: true,
+          isLeadCase: false,
+          consolidatedIconTooltipText: `Member case in consolidated group led by ${caseItem.docketNumber}`,
+        });
+      });
+    }
   });
 
   return results.map(entry => {

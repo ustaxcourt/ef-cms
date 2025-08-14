@@ -3,21 +3,12 @@ import { RecentFiling } from '@shared/business/entities/RecentFiling';
 import { sortRecentFilings } from '@shared/business/utilities/sortRecentFilings';
 import { state } from '@web-client/presenter/app.cerebral';
 import {
-  ROLES,
-  STIN_DOCKET_ENTRY_TYPE,
   DOCKET_ENTRY_SEALED_TO_TYPES,
   Role,
   ALLOWED_EVENT_CODES,
   UNSERVABLE_EVENT_CODES,
 } from '@shared/business/entities/EntityConstants';
 import { User } from '@shared/business/entities/User';
-
-const checkSealedCaseAccess = (
-  filing: RecentFiling,
-  _userRole: Role | undefined | null,
-) => {
-  return Boolean(filing.isFileAttached);
-};
 
 const checkSealedDocumentAccess = (
   filing: RecentFiling,
@@ -29,28 +20,6 @@ const checkSealedDocumentAccess = (
   if (filing.sealedTo === DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC) {
     return Boolean(filing.isFileAttached);
   }
-  return false;
-};
-
-const checkStinDocumentAccess = (
-  filing: RecentFiling,
-  userRole: Role | undefined | null,
-) => {
-  if (!filing.isFileAttached) return false;
-
-  const isPetitionsClerk = userRole === ROLES.petitionsClerk;
-  const isCaseServicesSupervisor = userRole === ROLES.caseServicesSupervisor;
-  const isIrsSuperuser = userRole === ROLES.irsSuperuser;
-  const isServed = filing.servedAt;
-
-  if ((isPetitionsClerk || isCaseServicesSupervisor) && !isServed) {
-    return true;
-  }
-
-  if (isIrsSuperuser && isServed) {
-    return true;
-  }
-
   return false;
 };
 
@@ -66,16 +35,8 @@ const checkDocumentAccess = (
     return false;
   }
 
-  if (filing.caseIsSealed) {
-    return checkSealedCaseAccess(filing, userRole);
-  }
-
   if (filing.isSealed && filing.sealedTo) {
     return checkSealedDocumentAccess(filing, userRole);
-  }
-
-  if (filing.eventCode === STIN_DOCKET_ENTRY_TYPE.eventCode) {
-    return checkStinDocumentAccess(filing, userRole);
   }
 
   const isServed = filing.servedAt;
