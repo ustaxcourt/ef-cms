@@ -82,13 +82,7 @@ export const OrderSearchForm = connect(
                     judges={advancedDocumentSearchHelper.formattedJudges}
                   />
                 </div>
-                <div className="margin-top-4">
-                  {/* <DateRangeSelect
-                    searchValue={advancedSearchForm.orderSearch.dateRange}
-                    updateSequence={updateAdvancedOrderSearchFormValueSequence}
-                    validateSequence={validateOrderSearchSequence}
-                  /> */}
-                </div>
+                <div className="margin-top-4"></div>
 
                 <div className="margin-top-4">
                   <DateRangePickerComponent
@@ -189,15 +183,6 @@ export const OrderSearchForm = connect(
                         judges={advancedDocumentSearchHelper.formattedJudges}
                       />
                     </div>
-                    {/* <div className="width-card-lg tablet:padding-bottom-5">
-                      <DateRangeSelect
-                        searchValue={advancedSearchForm.orderSearch.dateRange}
-                        updateSequence={
-                          updateAdvancedOrderSearchFormValueSequence
-                        }
-                        validateSequence={validateOrderSearchSequence}
-                      />
-                    </div> */}
                   </div>
 
                   <div className="desktop:grid-col-7 grid-col-12">
@@ -236,7 +221,6 @@ export const OrderSearchForm = connect(
                           }}
                         />
                       </div>
-                      {/* )} */}
                     </div>
                   </div>
                 </div>

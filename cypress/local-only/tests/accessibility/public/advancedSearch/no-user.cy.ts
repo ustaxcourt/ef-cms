@@ -17,17 +17,6 @@ describe('Advanced Search - Accessibility', () => {
   });
 
   describe('Order tab', () => {
-    it('should be free of a11y issues when searching with custom dates', () => {
-      cy.visit('/');
-      cy.get('[data-testid="order-search-tab"]').click();
-      cy.get('#date-range').select('customDates');
-      cy.get('#startDate-date-start').type('08/01/2001');
-      cy.get('#advanced-search-button').click();
-      cy.get('.search-results').should('exist');
-
-      checkA11y();
-    });
-
     it('should be free of a11y issues when searching with no results', () => {
       cy.visit('/');
       cy.get('[data-testid="order-search-tab"]').click();
