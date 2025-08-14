@@ -17,7 +17,7 @@ export type GroupInfoType = {
 export function createAndServeConsolidatedGroup({
   caseStatus = CASE_STATUS_TYPES.generalDocketReadyForTrial,
   leadCaseJudge = '',
-  memeberCaseJudge = '',
+  memberCaseJudge = '',
   procedureType = undefined,
   trialLocation = undefined,
   includeApwDocument = undefined,
@@ -28,7 +28,7 @@ export function createAndServeConsolidatedGroup({
   includeApwDocument?: boolean;
   caseStatus?: CaseStatus;
   leadCaseJudge?: string;
-  memeberCaseJudge?: string;
+  memberCaseJudge?: string;
   procedureType?: ProcedureType;
   trialLocation?: string;
   numberOfMemberCases?: number;
@@ -59,7 +59,7 @@ export function createAndServeConsolidatedGroup({
       }).then(({ docketNumber: memberDocketNumber }) => {
         loginAsDocketClerk1();
         goToCase(memberDocketNumber);
-        updateCaseStatus(caseStatus, memeberCaseJudge);
+        updateCaseStatus(caseStatus, memberCaseJudge);
         addCaseToGroup(leadDocketNumber);
 
         cy.get<GroupInfoType>('@CONSOLIDATED_GROUP_INFO').then(
