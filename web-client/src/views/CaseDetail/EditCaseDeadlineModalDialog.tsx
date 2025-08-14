@@ -11,8 +11,7 @@ import { STATE_KEYS } from '@shared/business/entities/EntityConstants';
 export const EditCaseDeadlineModalDialog = connect(
   {
     DATE_FORMATS: state.constants.DATE_FORMATS,
-    caseDetail: state.caseDetail,
-    consolidatedCases: state[STATE_KEYS.CONSOLIDATED_CASE_DEADLINES],
+    consolidatedCaseDeadlines: state[STATE_KEYS.CONSOLIDATED_CASE_DEADLINES],
     dismissModalSequence: sequences.dismissModalSequence,
     form: state.form,
     formatAndUpdateDateFromDatePickerSequence:
@@ -25,8 +24,7 @@ export const EditCaseDeadlineModalDialog = connect(
   },
   function EditCaseDeadlineModalDialog({
     DATE_FORMATS,
-    caseDetail,
-    consolidatedCases,
+    consolidatedCaseDeadlines,
     dismissModalSequence,
     form,
     formatAndUpdateDateFromDatePickerSequence,
@@ -36,7 +34,6 @@ export const EditCaseDeadlineModalDialog = connect(
     validateCaseDeadlineSequence,
     validationErrors,
   }) {
-    const { docketNumber, leadDocketNumber } = caseDetail;
     return (
       <ModalDialog
         cancelLabel="Cancel"
@@ -85,9 +82,7 @@ export const EditCaseDeadlineModalDialog = connect(
 
           <ConsolidatedCaseGroupInfo
             option="edit"
-            docketNumber={docketNumber}
-            leadDocketNumber={leadDocketNumber}
-            consolidatedCases={consolidatedCases}
+            consolidatedCaseDeadlines={consolidatedCaseDeadlines}
           />
         </div>
       </ModalDialog>
