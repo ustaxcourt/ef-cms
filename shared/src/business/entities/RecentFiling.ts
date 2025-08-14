@@ -14,4 +14,5 @@ export interface RecentFiling {
   inConsolidatedGroup?: boolean;
   isLeadCase?: boolean;
   consolidatedIconTooltipText?: string;
+  isDraft?: boolean;
 }

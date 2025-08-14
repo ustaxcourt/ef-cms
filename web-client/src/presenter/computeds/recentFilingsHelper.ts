@@ -3,14 +3,25 @@ import { RecentFiling } from '@shared/business/entities/RecentFiling';
 import { sortRecentFilings } from '@shared/business/utilities/sortRecentFilings';
 import { state } from '@web-client/presenter/app.cerebral';
 import {
-  ROLES,
-  STIN_DOCKET_ENTRY_TYPE,
   DOCKET_ENTRY_SEALED_TO_TYPES,
   Role,
   ALLOWED_EVENT_CODES,
   UNSERVABLE_EVENT_CODES,
 } from '@shared/business/entities/EntityConstants';
 import { User } from '@shared/business/entities/User';
+
+const checkSealedDocumentAccess = (
+  filing: RecentFiling,
+  userRole: Role | undefined | null,
+) => {
+  if (filing.sealedTo === DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL) {
+    return User.isInternalUser(userRole || undefined);
+  }
+  if (filing.sealedTo === DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC) {
+    return Boolean(filing.isFileAttached);
+  }
+  return false;
+};
 
 const checkDocumentAccess = (
   filing: RecentFiling,
@@ -24,43 +35,11 @@ const checkDocumentAccess = (
     return false;
   }
 
-  if (filing.caseIsSealed) {
-    if (User.isInternalUser(userRole)) {
-      return Boolean(filing.isFileAttached);
-    }
-    return Boolean(filing.isFileAttached);
-  }
-
   if (filing.isSealed && filing.sealedTo) {
-    if (filing.sealedTo === DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL) {
-      return User.isInternalUser(userRole);
-    }
-    if (filing.sealedTo === DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC) {
-      return Boolean(filing.isFileAttached);
-    }
-  }
-
-  if (filing.eventCode === STIN_DOCKET_ENTRY_TYPE.eventCode) {
-    if (!filing.isFileAttached) return false;
-
-    const isPetitionsClerk = userRole === ROLES.petitionsClerk;
-    const isCaseServicesSupervisor = userRole === ROLES.caseServicesSupervisor;
-    const isIrsSuperuser = userRole === ROLES.irsSuperuser;
-    const isServed = filing.servedAt;
-
-    if ((isPetitionsClerk || isCaseServicesSupervisor) && !isServed) {
-      return true;
-    }
-
-    if (isIrsSuperuser && isServed) {
-      return true;
-    }
-
-    return false;
+    return checkSealedDocumentAccess(filing, userRole);
   }
 
   const isServed = filing.servedAt;
-
   const isUnservable =
     filing.eventCode && UNSERVABLE_EVENT_CODES.includes(filing.eventCode);
 
