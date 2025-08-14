@@ -69,7 +69,7 @@ export function toKyselyNewTrialSession(
     swingSessionId: rawTrialSession.swingSessionId,
     term: rawTrialSession.term,
     termYear: rawTrialSession.termYear,
-    trialClerk: rawTrialSession.trialClerk,
+    trialClerk: JSON.stringify(rawTrialSession.trialClerk),
     trialLocation: rawTrialSession.trialLocation,
   };
 }

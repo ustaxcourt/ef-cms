@@ -56,7 +56,7 @@ async function createTrialSessionRecords(trialSessions) {
         .insertInto('dwTrialSession')
         .values(
           trialSessions.map(ts => {
-            toKyselyNewTrialSession(ts);
+            return toKyselyNewTrialSession(ts);
           }),
         )
         .execute(),
@@ -90,7 +90,7 @@ async function createCaseTrialSessionFromOrder(caseOrders) {
         .insertInto('dwTrialSessionCase')
         .values(
           caseOrders.map(co => {
-            toKyselyNewTrialSessionCase({ ...co, isHearing: false });
+            return toKyselyNewTrialSessionCase({ ...co, isHearing: false });
           }),
         )
         .onConflict(oc =>
@@ -114,7 +114,7 @@ async function createCaseTrialSessionFromHearing(caseHearings) {
         .insertInto('dwTrialSessionCase')
         .values(
           caseHearings.map(co => {
-            toKyselyNewTrialSessionCase(co);
+            return toKyselyNewTrialSessionCase(co);
           }),
         )
         .onConflict(oc =>
@@ -158,14 +158,25 @@ async function scanContinuously(params: ScanCommandInput) {
         }
         if (record.sk.startsWith('paper-service-pdf|')) {
           trialSessionPaperPdfs.push({
-            ...record,
+            ttl: record.ttl,
             trialSessionId: record.pk.substring(14),
+            fileId: record.fileId,
+            title: record.title,
           });
         }
       }
       if (record.pk.startsWith('trial-session-working-copy')) {
+        const recordToPush = {
+          trialSessionId: record.trialSessionId,
+          caseMetadata: record.caseMetadata,
+          filters: record.filters,
+          sessionNotes: record.sessionNotes,
+          sort: record.sort,
+          sortOrder: record.sortOrder,
+          userId: record.userId,
+        };
         trialSessionWorkingCopies.push(
-          record as unknown as RawTrialSessionWorkingCopy,
+          recordToPush as unknown as RawTrialSessionWorkingCopy,
         );
       }
       if (record.pk.startsWith('case|') && record.sk.startsWith('hearing|')) {
@@ -183,11 +194,21 @@ async function scanContinuously(params: ScanCommandInput) {
     }
 
     await settlePromises([
-      createTrialSessionRecords(trialSessions),
-      createPaperPdfRecords(trialSessionPaperPdfs),
-      createTrialSessionWorkingCopies(trialSessionWorkingCopies),
-      createCaseTrialSessionFromOrder(caseOrders),
-      createCaseTrialSessionFromHearing(caseHearings),
+      trialSessions.length
+        ? createTrialSessionRecords(trialSessions)
+        : Promise.resolve(),
+      trialSessionPaperPdfs.length
+        ? createPaperPdfRecords(trialSessionPaperPdfs)
+        : Promise.resolve(),
+      trialSessionWorkingCopies.length
+        ? createTrialSessionWorkingCopies(trialSessionWorkingCopies)
+        : Promise.resolve(),
+      caseOrders.length
+        ? createCaseTrialSessionFromOrder(caseOrders)
+        : Promise.resolve(),
+      caseHearings.length
+        ? createCaseTrialSessionFromHearing(caseHearings)
+        : Promise.resolve(),
     ]);
 
     itemsScanned += items.length;
