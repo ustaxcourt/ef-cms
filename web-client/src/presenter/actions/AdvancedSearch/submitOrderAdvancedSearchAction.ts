@@ -1,6 +1,7 @@
 import { clone } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 import { trimDocketNumberSearch } from '../setDocketNumberFromSearchAction';
+import { DATE_RANGE_SEARCH_OPTIONS } from '@shared/business/entities/EntityConstants';
 // import { search } from '@web-api/persistence/elasticsearch/searchClient';
 
 /**
@@ -28,7 +29,13 @@ export const submitOrderAdvancedSearchAction = async ({
     const searchResults = await applicationContext
       .getUseCases()
       .orderAdvancedSearchInteractor(applicationContext, {
-        searchParams,
+        searchParams: {
+          ...searchParams,
+          dateRange:
+            searchParams.startDate || searchParams.endDate
+              ? DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES
+              : DATE_RANGE_SEARCH_OPTIONS.ALL_DATES,
+        },
       });
     return { searchResults }; // Object with a results and totalCount
   } catch (err: any) {

@@ -257,10 +257,6 @@ export const OrderSearchForm = connect(
                 type="submit"
                 onClick={e => {
                   e.preventDefault();
-                  console.log('OrderSearchForm submit:', {
-                    startDate: advancedSearchForm.orderSearch.startDate,
-                    endDate: advancedSearchForm.orderSearch.endDate,
-                  });
                   submitAdvancedSearchSequence();
                 }}
               >
