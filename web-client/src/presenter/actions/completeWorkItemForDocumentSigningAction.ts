@@ -17,9 +17,9 @@ export const completeWorkItemForDocumentSigningAction = async ({
     caseDocument => caseDocument.docketEntryId === originalDocketEntryId,
   );
 
-  if (messageId && document) {
-    const workItemIdToClose = document.workItem.workItemId;
+  const workItemIdToClose = document?.workItemId;
 
+  if (messageId && workItemIdToClose) {
     await applicationContext
       .getUseCases()
       .completeWorkItemInteractor(applicationContext, {

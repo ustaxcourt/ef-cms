@@ -1,8 +1,8 @@
 import '@web-api/persistence/postgres/workitems/mocks.jest';
-import { DOCKET_SECTION } from '../../../../../shared/src/business/entities/EntityConstants';
+import { DOCKET_SECTION } from '@shared/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { WorkItem } from '@shared/business/entities/WorkItem';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getDocumentQCServedForUserInteractor } from './getDocumentQCServedForUserInteractor';
 import { getDocumentQCServedForUser as getDocumentQCServedForUserMock } from '@web-api/persistence/postgres/workitems/getDocumentQCServedForUser';
 import {
@@ -17,38 +17,14 @@ describe('getDocumentQCServedForUserInteractor', () => {
   beforeEach(() => {
     getDocumentQCServedForUser.mockReturnValue([
       new WorkItem({
-        docketEntry: {
-          createdAt: '2019-03-11T21:56:01.625Z',
-          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-          documentType: 'Petition',
-          entityName: 'DocketEntry',
-          eventCode: 'P',
-          filedBy: 'Lewis Dodgson',
-          filingDate: '2019-03-11T21:56:01.625Z',
-          isDraft: false,
-          isOnDocketRecord: true,
-          sentBy: 'petitioner',
-          userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
-        },
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
         docketNumber: '101-18',
         docketNumberSuffix: 'S',
         section: DOCKET_SECTION,
         sentBy: 'docketclerk',
       }),
       new WorkItem({
-        docketEntry: {
-          createdAt: '2019-03-11T21:56:01.625Z',
-          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-          documentType: 'Petition',
-          entityName: 'DocketEntry',
-          eventCode: 'P',
-          filedBy: 'Lewis Dodgson',
-          filingDate: '2019-03-11T21:56:01.625Z',
-          isDraft: false,
-          isOnDocketRecord: true,
-          sentBy: 'petitioner',
-          userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
-        },
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
         docketNumber: '101-18',
         docketNumberSuffix: 'S',
         section: DOCKET_SECTION,
@@ -82,13 +58,11 @@ describe('getDocumentQCServedForUserInteractor', () => {
 
     expect(result).toMatchObject([
       {
-        docketEntry: { sentBy: 'petitioner' },
         docketNumber: '101-18',
         section: DOCKET_SECTION,
         sentBy: 'docketclerk',
       },
       {
-        docketEntry: { sentBy: 'petitioner' },
         docketNumber: '101-18',
         section: DOCKET_SECTION,
         sentBy: 'docketclerk',
@@ -105,14 +79,11 @@ describe('getDocumentQCServedForUserInteractor', () => {
     );
     expect(result).toMatchObject([
       {
-        docketEntry: { sentBy: 'petitioner' },
         docketNumber: '101-18',
-
         section: DOCKET_SECTION,
         sentBy: 'docketclerk',
       },
       {
-        docketEntry: { sentBy: 'petitioner' },
         docketNumber: '101-18',
         section: DOCKET_SECTION,
         sentBy: 'docketclerk',
