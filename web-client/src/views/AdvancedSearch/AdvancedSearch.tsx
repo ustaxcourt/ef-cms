@@ -94,7 +94,7 @@ export const AdvancedSearch = connect(
                     submitOrderAdvancedSearchSequence
                   }
                 />
-                <DocumentSearchResults enableSortingHeaders={true} />
+                <DocumentSearchResults />
               </Tab>
               <Tab
                 data-testid="opinion-search-tab"
@@ -111,7 +111,7 @@ export const AdvancedSearch = connect(
                     submitOpinionAdvancedSearchSequence
                   }
                 />
-                <DocumentSearchResults enableSortingHeaders={false} />
+                <DocumentSearchResults />
               </Tab>
               {advancedSearchHelper.showPractitionerSearch && (
                 <Tab
@@ -178,7 +178,7 @@ export const AdvancedSearch = connect(
                     submitOrderAdvancedSearchSequence
                   }
                 />
-                <DocumentSearchResults enableSortingHeaders={true} />
+                <DocumentSearchResults />
               </>
             )}
             {advancedSearchTab === searchTabs.OPINION && (
@@ -193,7 +193,7 @@ export const AdvancedSearch = connect(
                     submitOpinionAdvancedSearchSequence
                   }
                 />
-                <DocumentSearchResults enableSortingHeaders={false} />
+                <DocumentSearchResults />
               </>
             )}
             {advancedSearchHelper.showPractitionerSearch &&
