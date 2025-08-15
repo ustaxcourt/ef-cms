@@ -35,7 +35,6 @@ import {
 } from './persistence/dynamo/users/getCasesForUser';
 import { getCasesByEmailTotal } from '@web-api/persistence/elasticsearch/getCasesByEmailTotal';
 import { getClientId } from './persistence/cognito/getClientId';
-import { getConfigurationItemValue } from './persistence/dynamo/deployTable/getConfigurationItemValue';
 import { getDeployTableStatus } from './persistence/dynamo/getDeployTableStatus';
 import { getDispatchNotification } from './persistence/postgres/notifications/getDispatchNotification';
 import { getDocketEntriesServedWithinTimeframe } from './persistence/elasticsearch/getDocketEntriesServedWithinTimeframe';
@@ -43,9 +42,8 @@ import { getDocument } from './persistence/s3/getDocument';
 import { getDocumentIdFromSQSMessage } from './persistence/sqs/getDocumentIdFromSQSMessage';
 import { getDownloadPolicyUrl } from './persistence/s3/getDownloadPolicyUrl';
 import { getEligibleCasesForTrialCity } from '@web-api/persistence/postgres/cases/getEligibleCasesForTrialCity';
-import { getFeatureFlagValue } from './persistence/dynamo/deployTable/getFeatureFlagValue';
 import { getInternalUsers } from './persistence/dynamo/users/getInternalUsers';
-import { getMaintenanceMode } from './persistence/dynamo/deployTable/getMaintenanceMode';
+import { getMaintenanceMode } from './persistence/postgres/featureFlag/getMaintenanceMode';
 import { getPractitionerByBarNumber } from './persistence/dynamo/users/getPractitionerByBarNumber';
 import { getPractitionersByName } from './persistence/elasticsearch/getPractitionersByName';
 import { getReconciliationReport } from './persistence/elasticsearch/getReconciliationReport';
@@ -86,7 +84,7 @@ import {
   updateIrsPractitionerOnCase,
   updatePrivatePractitionerOnCase,
 } from './persistence/dynamo/cases/updatePractitionerOnCase';
-import { updateMaintenanceMode } from './persistence/dynamo/deployTable/updateMaintenanceMode';
+import { updateMaintenanceMode } from '@web-api/persistence/postgres/featureFlag/updateMaintenanceMode';
 import { updatePractitionerUser } from './persistence/dynamo/users/updatePractitionerUser';
 import { updateTrialSession } from './persistence/dynamo/trialSessions/updateTrialSession';
 import { updateTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/updateTrialSessionWorkingCopy';
@@ -191,7 +189,6 @@ const gatewayMethods = {
   getCasesByEmailTotal,
   getCasesForUser,
   getClientId,
-  getConfigurationItemValue,
   getDeployTableStatus,
   getDispatchNotification,
   getDocketEntriesServedWithinTimeframe,
@@ -201,7 +198,6 @@ const gatewayMethods = {
   getDownloadPolicyUrl,
   getEligibleCasesForTrialCity,
   getEligibleCasesForTrialSession,
-  getFeatureFlagValue,
   getInternalUsers,
   getMaintenanceMode,
   getPractitionerByBarNumber,

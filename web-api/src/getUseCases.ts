@@ -71,7 +71,7 @@ import { generateStandingPretrialOrderForSmallCaseInteractor } from './business/
 import { generateStandingPretrialOrderInteractor } from './business/useCases/trialSessions/generateStandingPretrialOrderInteractor';
 import { generateTrialCalendarPdfInteractor } from './business/useCases/trialSessions/generateTrialCalendarPdfInteractor';
 import { generateTrialSessionPaperServicePdfInteractor } from './business/useCases/trialSessions/generateTrialSessionPaperServicePdfInteractor';
-import { getAllFeatureFlagsInteractor } from './business/useCases/featureFlag/getAllFeatureFlagsInteractor';
+import { getAllFeatureFlagsInteractor } from '@web-api/business/useCases/featureFlag/getAllFeatureFlagsInteractor';
 import { getAllUsersByRoleInteractor } from '@shared/business/useCases/getAllUsersByRoleInteractor';
 import { getCalendaredCasesForTrialSessionInteractor } from './business/useCases/trialSessions/getCalendaredCasesForTrialSessionInteractor';
 import { getCaseDeadlinesForCaseInteractor } from './business/useCases/caseDeadline/getCaseDeadlinesForCaseInteractor';

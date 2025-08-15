@@ -28,6 +28,10 @@ import {
   DW_DOCKET_ENTRY_COLUMNS,
 } from '@web-api/persistence/postgres/docketEntries/schema';
 import {
+  DW_FEATURE_FLAG_COLUMNS,
+  FeatureFlagTable,
+} from '@web-api/persistence/postgres/featureFlag/schema';
+import {
   MessageTable,
   DW_MESSAGE_COLUMNS,
 } from '@web-api/persistence/postgres/messages/schema';
@@ -74,6 +78,7 @@ interface DatabaseSchemaType {
   dwChangeOfAddress: DatabaseTableMetadata<ChangeOfAddressTable>;
   dwConnection: DatabaseTableMetadata<ConnectionTable>;
   dwDocketEntry: DatabaseTableMetadata<DocketEntryTable>;
+  dwFeatureFlag: DatabaseTableMetadata<FeatureFlagTable>;
   dwDocketEntryWorksheet: DatabaseTableMetadata<DocketEntryWorksheetTable>;
   dwMessage: DatabaseTableMetadata<MessageTable>;
   dwNotification: DatabaseTableMetadata<NotificationTable>;
@@ -133,6 +138,10 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwDocketEntryWorksheet: {
     table: DEFAULT as DocketEntryWorksheetTable,
     columns: DW_DOCKET_ENTRY_WORKSHEET_COLUMNS,
+  },
+  dwFeatureFlag: {
+    table: DEFAULT as FeatureFlagTable,
+    columns: DW_FEATURE_FLAG_COLUMNS,
   },
   dwMessage: {
     table: DEFAULT as MessageTable,

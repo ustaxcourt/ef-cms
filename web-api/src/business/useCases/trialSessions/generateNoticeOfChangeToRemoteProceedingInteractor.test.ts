@@ -5,9 +5,22 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { generateNoticeOfChangeToRemoteProceedingInteractor } from './generateNoticeOfChangeToRemoteProceedingInteractor';
+import { getFeatureFlagValues as getFeatureFlagValuesMock } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 describe('generateNoticeOfChangeToRemoteProceedingInteractor', () => {
+  const getFeatureFlagValues = jest.mocked(getFeatureFlagValuesMock);
+  getFeatureFlagValues.mockResolvedValue([
+    {
+      name: 'clerk-of-court-configuration',
+      value: {
+        current: {
+          name: 'bob',
+          title: 'clerk of court',
+        },
+      },
+    },
+  ]);
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
   const TEST_JUDGE = {
@@ -35,13 +48,6 @@ describe('generateNoticeOfChangeToRemoteProceedingInteractor', () => {
       .getTrialSessionById.mockImplementation(() => ({
         ...mockTrialSessionInformation,
         judge: { name: 'Test Judge' },
-      }));
-
-    applicationContext
-      .getPersistenceGateway()
-      .getConfigurationItemValue.mockImplementation(() => ({
-        name: 'bob',
-        title: 'clerk of court',
       }));
 
     getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {

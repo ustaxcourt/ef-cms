@@ -1,5 +1,5 @@
-import { genericHandler } from '../../genericHandler';
 import { getAllFeatureFlagsInteractor } from '@web-api/business/useCases/featureFlag/getAllFeatureFlagsInteractor';
+import { genericHandler } from '../../genericHandler';
 
 /**
  * gets the value of the provided feature flag
@@ -10,8 +10,11 @@ import { getAllFeatureFlagsInteractor } from '@web-api/business/useCases/feature
 export const getAllFeatureFlagsLambda = event =>
   genericHandler(
     event,
-    ({ applicationContext }) => {
-      return getAllFeatureFlagsInteractor(applicationContext);
+    async ({ applicationContext }) => {
+      const POSTGRES_FEATURE_FLAGS =
+        await getAllFeatureFlagsInteractor(applicationContext);
+
+      return POSTGRES_FEATURE_FLAGS;
     },
     { bypassMaintenanceCheck: true },
   );

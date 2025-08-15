@@ -3,6 +3,7 @@ import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
 );
+jest.mock('../addCoverToPdf');
 jest.mock(
   '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus',
 );
@@ -13,7 +14,6 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { serveExternallyFiledDocumentInteractor } from './serveExternallyFiledDocumentInteractor';
-jest.mock('../addCoverToPdf');
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { docketClerkUser } from '@shared/test/mockUsers';
@@ -49,7 +49,10 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     mockCase = {
       ...MOCK_CASE,
       docketEntries: [
-        { docketEntryId: mockDocketEntryId, documentTitle: 'something cool' },
+        {
+          docketEntryId: mockDocketEntryId,
+          documentTitle: 'something cool',
+        } as RawDocketEntry,
       ],
     };
     getCaseByDocketNumber.mockResolvedValue(mockCase);
@@ -109,7 +112,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         {
           docketEntryId: mockDocketEntryId,
           servedAt: '2018-03-01T05:00:00.000Z',
-        },
+        } as RawDocketEntry,
       ],
     });
 
@@ -134,7 +137,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         {
           docketEntryId: mockDocketEntryId,
           isPendingService: true,
-        },
+        } as RawDocketEntry,
       ],
     });
 
@@ -163,8 +166,8 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         {
           docketEntryId: mockDocketEntryId,
           documentTitle: 'fake title',
-          draftOrderState: 'abc',
-        },
+          draftOrderState: {},
+        } as RawDocketEntry,
       ],
     });
 
@@ -199,7 +202,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
           documentTitle: 'fake title',
           eventCode: 'A',
           filingDate: 'abc',
-        },
+        } as RawDocketEntry,
       ],
     });
 
@@ -230,7 +233,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
           docketEntryId: mockDocketEntryId,
           eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
           filingDate: mockOriginalFilingDate,
-        },
+        } as RawDocketEntry,
       ],
     });
 
@@ -259,7 +262,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
           docketEntryId: mockDocketEntryId,
           documentTitle: 'fake title',
           isDraft: true,
-        },
+        } as RawDocketEntry,
       ],
     });
 
@@ -287,7 +290,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
           docketEntryId: mockDocketEntryId,
           documentTitle: 'fake title',
           isFileAttached: false,
-        },
+        } as RawDocketEntry,
       ],
     });
 
@@ -316,7 +319,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
           docketEntryId: mockDocketEntryId,
           documentTitle: 'fake title',
           isOnDocketRecord: false,
-        },
+        } as RawDocketEntry,
       ],
     });
 
@@ -363,7 +366,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
           docketEntryId: mockDocketEntryId,
           documentTitle: 'fake title',
           processingStatus: 'abc',
-        },
+        } as RawDocketEntry,
       ],
     });
 
@@ -394,7 +397,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
           docketEntryId: mockDocketEntryId,
           documentTitle: 'fake title',
           eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
-        },
+        } as RawDocketEntry,
       ],
     });
 
@@ -424,7 +427,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         {
           docketEntryId: mockDocketEntryId,
           documentTitle: 'Simultaneous doc title',
-        },
+        } as RawDocketEntry,
       ],
     });
 
@@ -454,7 +457,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
           {
             docketEntryId: mockDocketEntryId,
             documentTitle: 'fake title',
-          },
+          } as RawDocketEntry,
         ],
       });
 

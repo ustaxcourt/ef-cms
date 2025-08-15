@@ -49,7 +49,9 @@ export const sealDocketEntryInteractor = async (
 
   docketEntryEntity.sealEntry({ sealedTo: docketEntrySealedTo });
 
-  await upsertDocketEntries([docketEntryEntity.validate().toRawObject()]);
+  const validatedDocketEntry = docketEntryEntity.validate().toRawObject();
 
-  return docketEntryEntity.toRawObject();
+  await upsertDocketEntries([validatedDocketEntry]);
+
+  return validatedDocketEntry;
 };

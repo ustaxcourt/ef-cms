@@ -20,7 +20,7 @@ import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } fr
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 
-const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
 const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
 const tryGetLocks = jest.mocked(tryGetLocksMock);
 
@@ -62,7 +62,10 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   const mockCase = {
     ...MOCK_CASE,
     docketEntries: [
-      { docketEntryId: mockDocketEntryId, isOnDocketRecord: false },
+      {
+        docketEntryId: mockDocketEntryId,
+        isOnDocketRecord: false,
+      } as RawDocketEntry,
     ],
   };
   const mockRequest = {

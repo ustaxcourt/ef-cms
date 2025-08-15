@@ -10,10 +10,8 @@ jest.mock('@shared/sharedAppContext');
 import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
 import {
-  CASE_STATUS_TYPES,
   CONTACT_TYPES,
   COUNTRY_TYPES,
-  DOCKET_NUMBER_SUFFIXES,
   DOCKET_SECTION,
   INITIAL_DOCUMENT_TYPES,
   PARTY_TYPES,
@@ -41,12 +39,16 @@ import {
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { serveCaseToIrsInteractor } from './serveCaseToIrsInteractor';
+import { getFeatureFlagValues as getFeatureFlagValuesMock } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getUniqueId as getUniqueIdMock } from '@shared/sharedAppContext';
+import { RawWorkItem, WorkItem } from '@shared/business/entities/WorkItem';
+import { getWorkItemByDocketNumberAndDocketEntryId as getWorkItemByDocketNumberAndDocketEntryIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 
 describe('serveCaseToIrsInteractor', () => {
+  const getFeatureFlagValues = jest.mocked(getFeatureFlagValuesMock);
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const updateCaseAndAssociations = jest
     .mocked(updateCaseAndAssociationsMock)
@@ -54,39 +56,24 @@ describe('serveCaseToIrsInteractor', () => {
   const getUniqueId = jest
     .mocked(getUniqueIdMock)
     .mockImplementation(() => '7805d1ab-18d0-43ec-bafb-654e83405416');
+  const getWorkItemByDocketNumberAndDocketEntryId = jest.mocked(
+    getWorkItemByDocketNumberAndDocketEntryIdMock,
+  );
   const tryGetLocks = jest.mocked(tryGetLocksMock);
   const clientConnectionId = '6805d1ab-18d0-43ec-bafb-654e83405416';
   const mockParams = {
     clientConnectionId,
     docketNumber: MOCK_CASE.docketNumber,
   };
-  const MOCK_WORK_ITEM = {
-    assigneeId: null,
+  const MOCK_WORK_ITEM: RawWorkItem = {
+    assigneeId: undefined,
     assigneeName: 'IRSBatchSystem',
-    caseStatus: CASE_STATUS_TYPES.new,
     completedAt: '2018-12-27T18:06:02.968Z',
     completedBy: PARTY_TYPES.petitioner,
     completedByUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     createdAt: '2018-12-27T18:06:02.971Z',
-    docketEntry: {
-      createdAt: '2018-12-27T18:06:02.968Z',
-      docketEntryId: 'b6238482-5f0e-48a8-bb8e-da2957074a08',
-      documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
-    },
+    docketEntryId: 'b6238482-5f0e-48a8-bb8e-da2957074a08',
     docketNumber: '101-18',
-    docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-    isInitializeCase: true,
-    messages: [
-      {
-        createdAt: '2018-12-27T18:06:02.968Z',
-        from: PARTY_TYPES.petitioner,
-        fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        message: 'Petition ready for review',
-        messageId: '343f5b21-a3a9-4657-8e2b-df782f920e45',
-        role: ROLES.petitioner,
-        to: null,
-      },
-    ],
     section: DOCKET_SECTION,
     sentBy: 'petitioner',
     updatedAt: '2018-12-27T18:06:02.968Z',
@@ -102,21 +89,11 @@ describe('serveCaseToIrsInteractor', () => {
     };
   };
 
-  beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getConfigurationItemValue.mockResolvedValue({
-        name: 'James Bond',
-        title: 'Clerk of the Court (Interim)',
-      });
-  });
-
   beforeEach(() => {
     mockCase = { ...MOCK_CASE };
-    mockCase.docketEntries[0].workItem = { ...MOCK_WORK_ITEM };
     applicationContext.getPersistenceGateway().updateWorkItem = jest.fn();
 
-    applicationContext.getStorageClient.mockReturnValue({
+    applicationContext.getStorageClient.mockResolvedValue({
       getObject: getObjectMock,
       upload: (_params, cb) => {
         return cb(null, true);
@@ -124,9 +101,24 @@ describe('serveCaseToIrsInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getDownloadPolicyUrl.mockReturnValue({ url: 'www.example.com' });
+      .getDownloadPolicyUrl.mockResolvedValue({ url: 'www.example.com' });
 
     getCaseByDocketNumber.mockImplementation(() => mockCase);
+    getWorkItemByDocketNumberAndDocketEntryId.mockResolvedValue(
+      new WorkItem(MOCK_WORK_ITEM),
+    );
+
+    getFeatureFlagValues.mockResolvedValue([
+      {
+        name: 'entity-locking-feature-flag',
+        value: {
+          current: {
+            name: 'James Bond',
+            title: 'Clerk of the Court (Interim)',
+          },
+        },
+      },
+    ]);
 
     applicationContext
       .getUseCases()
@@ -137,7 +129,7 @@ describe('serveCaseToIrsInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getDocument.mockReturnValue(testPdfDoc);
+      .getDocument.mockResolvedValue(testPdfDoc);
   });
 
   it('should throw unauthorized error when user is unauthorized', async () => {
@@ -1541,6 +1533,15 @@ describe('serveCaseToIrsInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+    getFeatureFlagValues.mockResolvedValue([
+      {
+        name: 'entity-locking-feature-flag',
+        value: {
+          current: true,
+        },
+      },
+    ]);
+
     tryGetLocks.mockResolvedValueOnce([
       { successfullyLocked: false, identifier: 'abc' },
     ]);

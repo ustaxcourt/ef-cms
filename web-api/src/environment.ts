@@ -14,7 +14,7 @@ function getJestDBConnectionError(): string {
     'You should not connect to the Database when running JEST tests',
     'Something was not mocked out',
     'If you are running Integration tests and need a Database connection',
-    'Set the environment variable "NODE_ENV" to "integration"',
+    'Set the environment variable "ENV" to "integration"',
   ].join('\n');
 }
 
@@ -36,7 +36,6 @@ export const environment = {
     process.env.ELASTICSEARCH_ENDPOINT || 'http://localhost:9200',
   emailFromAddress,
   isRunningOnLambda,
-  nodeEnv: process.env.NODE_ENV,
   rds: {
     pool: {
       database: process.env.DATABASE_NAME || 'postgres',

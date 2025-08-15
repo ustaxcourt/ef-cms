@@ -84,7 +84,7 @@ export const CreateCaseDeadlineModalDialog = connect(
             option="add"
             docketNumber={docketNumber}
             leadDocketNumber={leadDocketNumber}
-            consolidatedCases={consolidatedCases}
+            consolidatedCaseDeadlines={consolidatedCases}
           />
         </div>
       </ModalDialog>

@@ -3,7 +3,6 @@
     "sk": "63d7c79e-1313-4969-9bf5-9170af46997c",
     "pk": "58c1f7a3-8062-42f0-a73e-8bd69b419878|workItem"
   },
-  { "sk": "allowed-terminal-ips", "ips": [], "pk": "allowed-terminal-ips" },
   { "sk": "case|101-19", "pk": "case-by-docket-number|101-19" },
   { "sk": "case|101-20", "pk": "case-by-docket-number|101-20" },
   { "sk": "case|102-19", "pk": "case-by-docket-number|102-19" },
@@ -537,19 +536,6 @@
     "email": "privatePractitioner@example.com"
   },
   {
-    "sk": "chief-judge-name",
-    "current": "Maurice B. Foley",
-    "pk": "chief-judge-name"
-  },
-  {
-    "sk": "clerk-of-court-configuration",
-    "current": {
-      "name": "Stephanie A. Servoss",
-      "title": "Clerk of the Court"
-    },
-    "pk": "clerk-of-court-configuration"
-  },
-  {
     "endpoint": "ws://localhost:3011",
     "clientConnectionId": "2bedb457-da8c-45ed-847d-408cddb89c79",
     "sk": "connection|05c1e173-c41b-4044-a856-d4aed6c0a2ea",
@@ -795,11 +781,6 @@
     "pk": "email-undefined"
   },
   {
-    "sk": "entity-locking-feature-flag",
-    "current": true,
-    "pk": "entity-locking-feature-flag"
-  },
-  {
     "sk": "user|c0daa0a7-a66b-4eae-949b-9ae0f8a32e46",
     "pk": "inactivePractitioner|IP1111"
   },
@@ -877,7 +858,6 @@
     "sk": "user|2d9a7229-7d5a-459f-84ad-754504a9f10f",
     "pk": "irsPractitioner|WN7777"
   },
-  { "sk": "maintenance-mode", "current": false, "pk": "maintenance-mode" },
   {
     "sk": "migrationSchema",
     "executed": [
@@ -995,11 +975,6 @@
   {
     "sk": "user|ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "pk": "privatePractitioner|TEST PRIVATE PRACTITIONER"
-  },
-  {
-    "sk": "section-outbox-number-of-days",
-    "current": 7,
-    "pk": "section-outbox-number-of-days"
   },
   {
     "completedAt": "2019-07-12T17:11:27.244Z",
