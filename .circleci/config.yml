@@ -354,10 +354,6 @@ jobs:
               ./web-api/enable-deploying-dynamo-stream-trigger.sh
             fi
       - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-      - run:
           name: Migrate Feature Flags from Dynamo to Postgres
           command: |
             ./scripts/run-once-scripts/postgres-migration/migrate-feature-flags-dynamo-to-postgres.ts
