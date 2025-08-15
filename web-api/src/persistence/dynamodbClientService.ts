@@ -156,20 +156,6 @@ export const get = params => {
     });
 };
 
-export const putInDeployTable = async (
-  applicationContext: IApplicationContext,
-  item: TDynamoRecord,
-): Promise<void> => {
-  await applicationContext
-    .getDocumentClient()
-    .put({
-      Item: item,
-      TableName: getDeployTableName({
-        applicationContext,
-      }),
-    });
-};
-
 export const query = ({
   applicationContext,
   ConsistentRead = false,

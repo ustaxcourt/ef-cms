@@ -10,7 +10,6 @@ import {
   getDeployTableName,
   getTableName,
   put,
-  putInDeployTable,
   query,
   queryFull,
   scan,
@@ -539,29 +538,6 @@ describe('dynamodbClientService', function () {
       expect(mockDynamoClient.send.mock.calls[0][0].input).toEqual(
         new DescribeTableCommand({ TableName: dynamoDbTableName }).input,
       );
-    });
-  });
-
-  describe('putInDeployTable', () => {
-    it('should write an item to the deploy table', async () => {
-      applicationContext.environment.stage = 'local';
-      applicationContext.environment.dynamoDbTableName = dynamoDbTableName;
-
-      const dynamoRecord = {
-        data: {
-          allChecksHealthy: false,
-          timeStamp: 20384938202,
-        },
-        pk: 'healthCheckValue',
-        sk: 'healthCheckValue|us-west-1',
-      };
-
-      await putInDeployTable(applicationContext, dynamoRecord);
-
-      expect(applicationContext.getDocumentClient().put).toHaveBeenCalledWith({
-        Item: dynamoRecord,
-        TableName: dynamoDbTableName,
-      });
     });
   });
 });
