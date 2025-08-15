@@ -45,7 +45,6 @@ import { getDocument } from './persistence/s3/getDocument';
 import { getDocumentIdFromSQSMessage } from './persistence/sqs/getDocumentIdFromSQSMessage';
 import { getDownloadPolicyUrl } from './persistence/s3/getDownloadPolicyUrl';
 import { getEligibleCasesForTrialCity } from '@web-api/persistence/postgres/cases/getEligibleCasesForTrialCity';
-import { getFeatureFlagValue } from './persistence/dynamo/deployTable/getFeatureFlagValue';
 import { getInternalUsers } from './persistence/dynamo/users/getInternalUsers';
 import { getMaintenanceMode } from './persistence/postgres/featureFlag/getMaintenanceMode';
 import { getPractitionerByBarNumber } from './persistence/dynamo/users/getPractitionerByBarNumber';
@@ -207,7 +206,6 @@ const gatewayMethods = {
   getDownloadPolicyUrl,
   getEligibleCasesForTrialCity,
   getEligibleCasesForTrialSession,
-  getFeatureFlagValue,
   getInternalUsers,
   getMaintenanceMode,
   getPractitionerByBarNumber,
