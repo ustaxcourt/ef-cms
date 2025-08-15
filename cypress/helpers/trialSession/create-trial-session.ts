@@ -13,6 +13,7 @@ export function createTrialSession(
     sessionType = SESSION_TYPES.hybrid,
     startDate = '02/02/2099',
     trialLocation = 'Anchorage, Alaska',
+    maxCases = '10',
   }: Partial<{
     trialLocation: string;
     endDate: string;
@@ -20,14 +21,16 @@ export function createTrialSession(
     sessionType: TrialSessionTypes;
     proceedingType: TrialSessionProceedingType;
     judge: string;
+    maxCases: string;
   }> = {
-    endDate: '02/02/2100',
-    judge: 'Carluzzo',
-    proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
-    sessionType: SESSION_TYPES.hybrid,
-    startDate: '02/02/2099',
-    trialLocation: 'Anchorage, Alaska',
-  },
+      endDate: '02/02/2100',
+      judge: 'Carluzzo',
+      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+      sessionType: SESSION_TYPES.hybrid,
+      startDate: '02/02/2099',
+      trialLocation: 'Anchorage, Alaska',
+      maxCases: '10',
+    },
 ): Cypress.Chainable<{
   trialSessionId: string;
 }> {
@@ -37,7 +40,7 @@ export function createTrialSession(
   cy.get('#start-date-picker').type(startDate);
   cy.get('#estimated-end-date-picker').type(endDate);
   cy.get(`[data-testid="session-type-${sessionType}"]`).click();
-  cy.get('[data-testid="trial-session-number-of-cases-allowed"]').type('10');
+  cy.get('[data-testid="trial-session-number-of-cases-allowed"]').type(maxCases);
   cy.get(`[data-testid="${proceedingType}-proceeding-label"]`).click();
   cy.get('[data-testid="trial-session-trial-location"]').select(trialLocation);
   cy.get('[data-testid="trial-session-courthouse-name"]').type('a courthouse');

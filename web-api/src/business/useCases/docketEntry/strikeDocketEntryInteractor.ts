@@ -32,11 +32,11 @@ export const strikeDocketEntryInteractor = async (
 
   const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
-  const docketEntryEntity = caseEntity.getDocketEntryById({
+  const docketEntry = caseEntity.getDocketEntryById({
     docketEntryId,
   });
 
-  if (!docketEntryEntity) {
+  if (!docketEntry) {
     throw new NotFoundError('Docket entry not found');
   }
 
@@ -44,11 +44,13 @@ export const strikeDocketEntryInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  docketEntryEntity.strikeEntry({ name: user.name, userId: user.userId });
+  docketEntry.strikeEntry({ name: user.name, userId: user.userId });
 
-  caseEntity.updateDocketEntry(docketEntryEntity);
+  const validatedDocketEntry = docketEntry.validate().toRawObject();
 
-  await upsertDocketEntries([docketEntryEntity.validate().toRawObject()]);
+  caseEntity.updateDocketEntry(validatedDocketEntry);
+
+  await upsertDocketEntries([validatedDocketEntry]);
 
   return caseEntity.toRawObject();
 };
