@@ -12,6 +12,6 @@ fi
 
 aws ssm put-parameter \
 	--region us-east-1 --name "/DAWSON/${ENV}/migrate" \
-	--value "false" \
-	--type "$TOGGLE" \
+	--value "$TOGGLE" \
+	--type "String" \
 	--overwrite
