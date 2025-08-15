@@ -36,7 +36,6 @@ import {
 } from './persistence/dynamo/users/getCasesForUser';
 import { getCasesByEmailTotal } from '@web-api/persistence/elasticsearch/getCasesByEmailTotal';
 import { getClientId } from './persistence/cognito/getClientId';
-import { getDeployTableStatus } from './persistence/dynamo/getDeployTableStatus';
 import { getDispatchNotification } from './persistence/postgres/notifications/getDispatchNotification';
 import { getDocketEntriesServedWithinTimeframe } from './persistence/elasticsearch/getDocketEntriesServedWithinTimeframe';
 import { getDocument } from './persistence/s3/getDocument';
@@ -193,7 +192,6 @@ const gatewayMethods = {
   getCasesByEmailTotal,
   getCasesForUser,
   getClientId,
-  getDeployTableStatus,
   getDispatchNotification,
   getDocketEntriesServedWithinTimeframe,
   getDocketNumbersByUser,
