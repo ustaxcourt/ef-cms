@@ -170,17 +170,12 @@ export const updateContact = async (
       const workItem = new WorkItem({
         assigneeId: null,
         assigneeName: null,
-        docketEntry: {
-          ...changeOfAddressDocketEntry.toRawObject(),
-          createdAt: changeOfAddressDocketEntry.createdAt,
-        },
+        docketEntryId: changeOfAddressDocketEntry.docketEntryId,
         docketNumber: caseEntity.docketNumber,
         section: DOCKET_SECTION,
         sentBy: authorizedUser.name,
         sentByUserId: authorizedUser.userId,
       });
-
-      changeOfAddressDocketEntry.setWorkItem(workItem);
 
       await upsertWorkItems({
         workItems: [workItem.validate().toRawObject()],
