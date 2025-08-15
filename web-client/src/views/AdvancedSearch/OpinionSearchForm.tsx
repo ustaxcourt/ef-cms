@@ -1,6 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseTitleOrNameSearchField } from './AdvancedDocumentSearch/CaseTitleOrNameSearchField';
-import { DateRangeSelect } from './AdvancedDocumentSearch/DateRangeSelect';
 import { DocketNumberSearchField } from './AdvancedDocumentSearch/DocketNumberSearchField';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { HowToSearch } from './AdvancedDocumentSearch/HowToSearch';
@@ -54,6 +53,7 @@ export const OpinionSearchForm = connect(
                     validateSequence={validateOpinionSearchSequence}
                   />
                 </div>
+
                 <FormGroup
                   className="advanced-search-panel full-width"
                   errorText={validationErrors['object.oxor']}
@@ -85,6 +85,7 @@ export const OpinionSearchForm = connect(
                   />
                 </FormGroup>
               </div>
+
               <div className="grid-row grid-gap-6">
                 <div className="judge-search-row margin-top-4">
                   <JudgeSelect
@@ -92,52 +93,41 @@ export const OpinionSearchForm = connect(
                     judges={advancedDocumentSearchHelper.formattedJudges}
                   />
                 </div>
+
                 <div className="margin-top-4">
-                  <DateRangeSelect
-                    searchValue={advancedSearchForm.opinionSearch.dateRange}
-                    updateSequence={
-                      updateAdvancedOpinionSearchFormValueSequence
+                  <DateRangePickerComponent
+                    endDateErrorText={validationErrors.endDate}
+                    endLabel="End date"
+                    endName="endDate"
+                    endPickerCls={
+                      'desktop:grid-col-6  phone:grid-col-12 desktop:padding-left-2'
                     }
-                    validateSequence={validateOpinionSearchSequence}
+                    endValue={advancedSearchForm.opinionSearch.endDate}
+                    formGroupCls="margin-bottom-0"
+                    maxDate={advancedDocumentSearchHelper.maxDate}
+                    rangePickerCls={'grid-row grid-gap'}
+                    startDateErrorText={validationErrors.startDate}
+                    startLabel="Start date"
+                    startName="startDate"
+                    showDateHint={true}
+                    startPickerCls={
+                      'desktop:grid-col-6  phone:grid-col-12 padding-right-2'
+                    }
+                    startValue={advancedSearchForm.opinionSearch.startDate}
+                    onChangeEnd={e => {
+                      updateAdvancedOpinionSearchFormValueSequence({
+                        key: 'endDate',
+                        value: e.target.value,
+                      });
+                    }}
+                    onChangeStart={e => {
+                      updateAdvancedOpinionSearchFormValueSequence({
+                        key: 'startDate',
+                        value: e.target.value,
+                      });
+                    }}
                   />
                 </div>
-
-                {advancedDocumentSearchHelper.showDateRangePicker && (
-                  <div className="margin-top-4">
-                    <DateRangePickerComponent
-                      endDateErrorText={validationErrors.endDate}
-                      endLabel="End date"
-                      endName="endDate"
-                      endPickerCls={
-                        'desktop:grid-col-6  phone:grid-col-12 desktop:padding-left-2'
-                      }
-                      endValue={advancedSearchForm.opinionSearch.endDate}
-                      formGroupCls="margin-bottom-0"
-                      maxDate={advancedDocumentSearchHelper.maxDate}
-                      rangePickerCls={'grid-row grid-gap'}
-                      startDateErrorText={validationErrors.startDate}
-                      startLabel="Start date"
-                      startName="startDate"
-                      showDateHint={true}
-                      startPickerCls={
-                        'desktop:grid-col-6  phone:grid-col-12 padding-right-2'
-                      }
-                      startValue={advancedSearchForm.opinionSearch.startDate}
-                      onChangeEnd={e => {
-                        updateAdvancedOpinionSearchFormValueSequence({
-                          key: 'endDate',
-                          value: e.target.value,
-                        });
-                      }}
-                      onChangeStart={e => {
-                        updateAdvancedOpinionSearchFormValueSequence({
-                          key: 'startDate',
-                          value: e.target.value,
-                        });
-                      }}
-                    />
-                  </div>
-                )}
 
                 <div className="grid-row grid-gap margin-bottom-2">
                   <legend className="usa-legend" id="include-types-legend">
@@ -178,6 +168,7 @@ export const OpinionSearchForm = connect(
               </div>
             </div>
           </Mobile>
+
           <NonMobile>
             <div className="grid-row no-flex-wrap">
               <div className="blue-container grid-col-9 padding-bottom-0 margin-right-1">
@@ -191,6 +182,7 @@ export const OpinionSearchForm = connect(
                       validateSequence={validateOpinionSearchSequence}
                     />
                   </div>
+
                   <div className="custom-col-5 desktop:grid-col-7 grid-col-12">
                     <FormGroup
                       className={classNames(
@@ -231,65 +223,55 @@ export const OpinionSearchForm = connect(
                     </span>
                   </div>
                 </div>
+
                 <div className="grid-row grid-gap-3 margin-top-2">
-                  <div className="grid-row desktop:grid-col-5 grid-col-12 grid-gap-3 no-flex-wrap">
-                    <div className="width-card-lg">
+                  <div className="grid-row desktop:grid-col-3 grid-col-12 grid-gap-3 no-flex-wrap">
+                    <div className="width-card-lg margin-bottom-4 margin-right-2">
                       <JudgeSelect
                         formValue={'advancedSearchForm.opinionSearch.judge'}
                         judges={advancedDocumentSearchHelper.formattedJudges}
-                      />
-                    </div>
-                    <div className="width-card-lg tablet:padding-bottom-5">
-                      <DateRangeSelect
-                        searchValue={advancedSearchForm.opinionSearch.dateRange}
-                        updateSequence={
-                          updateAdvancedOpinionSearchFormValueSequence
-                        }
-                        validateSequence={validateOpinionSearchSequence}
                       />
                     </div>
                   </div>
 
                   <div className="desktop:grid-col-7 grid-col-12">
                     <div className="grid-gap-3 tablet:margin-top-0 margin-top-4">
-                      {advancedDocumentSearchHelper.showDateRangePicker && (
-                        <div className="grid-row no-flex-wrap">
-                          <DateRangePickerComponent
-                            endDateErrorText={validationErrors.endDate}
-                            endLabel="End date"
-                            endName="endDate"
-                            endPickerCls={
-                              'desktop:grid-col-6  phone:grid-col-12 desktop:padding-left-2'
-                            }
-                            endValue={advancedSearchForm.opinionSearch.endDate}
-                            formGroupCls="margin-bottom-0"
-                            maxDate={advancedDocumentSearchHelper.maxDate}
-                            rangePickerCls={'grid-row grid-gap'}
-                            startDateErrorText={validationErrors.startDate}
-                            startLabel="Start date"
-                            startName="startDate"
-                            showDateHint={true}
-                            startPickerCls={
-                              'desktop:grid-col-6  phone:grid-col-12 padding-right-2'
-                            }
-                            startValue={
-                              advancedSearchForm.opinionSearch.startDate
-                            }
-                            onChangeEnd={e => {
-                              updateAdvancedOpinionSearchFormValueSequence({
-                                key: 'endDate',
-                                value: e.target.value,
-                              });
-                            }}
-                            onChangeStart={e => {
-                              updateAdvancedOpinionSearchFormValueSequence({
-                                key: 'startDate',
-                                value: e.target.value,
-                              });
-                            }}
-                          />
-                        </div>
-                      )}
+                      <div className="grid-row no-flex-wrap">
+                        <DateRangePickerComponent
+                          endDateErrorText={validationErrors.endDate}
+                          endLabel="End date"
+                          endName="endDate"
+                          endPickerCls={
+                            'desktop:grid-col-6 phone:grid-col-12 desktop:padding-left-4'
+                          }
+                          endValue={advancedSearchForm.opinionSearch.endDate}
+                          formGroupCls="margin-bottom-0"
+                          maxDate={advancedDocumentSearchHelper.maxDate}
+                          rangePickerCls={'grid-row grid-gap'}
+                          startDateErrorText={validationErrors.startDate}
+                          startLabel="Start date"
+                          startName="startDate"
+                          showDateHint={true}
+                          startPickerCls={
+                            'desktop:grid-col-6 phone:grid-col-12 padding-right-2 padding-left-2'
+                          }
+                          startValue={
+                            advancedSearchForm.opinionSearch.startDate
+                          }
+                          onChangeEnd={e => {
+                            updateAdvancedOpinionSearchFormValueSequence({
+                              key: 'endDate',
+                              value: e.target.value,
+                            });
+                          }}
+                          onChangeStart={e => {
+                            updateAdvancedOpinionSearchFormValueSequence({
+                              key: 'startDate',
+                              value: e.target.value,
+                            });
+                          }}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>

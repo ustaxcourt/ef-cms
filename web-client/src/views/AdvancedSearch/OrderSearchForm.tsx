@@ -1,6 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseTitleOrNameSearchField } from './AdvancedDocumentSearch/CaseTitleOrNameSearchField';
-// import { DateRangeSelect } from './AdvancedDocumentSearch/DateRangeSelect';
 import { DocketNumberSearchField } from './AdvancedDocumentSearch/DocketNumberSearchField';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { HowToSearch } from './AdvancedDocumentSearch/HowToSearch';
@@ -10,9 +9,9 @@ import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
+import { DateRangePickerComponent } from '@web-client/ustc-ui/DateInput/DateRangePickerComponent';
 import React from 'react';
 import classNames from 'classnames';
-import { DateRangePickerComponent } from '@web-client/ustc-ui/DateInput/DateRangePickerComponent';
 
 export const OrderSearchForm = connect(
   {
@@ -75,6 +74,7 @@ export const OrderSearchForm = connect(
                   />
                 </FormGroup>
               </div>
+
               <div className="grid-row grid-gap-6">
                 <div className="judge-search-row margin-top-4">
                   <JudgeSelect
@@ -82,7 +82,6 @@ export const OrderSearchForm = connect(
                     judges={advancedDocumentSearchHelper.formattedJudges}
                   />
                 </div>
-                <div className="margin-top-4"></div>
 
                 <div className="margin-top-4">
                   <DateRangePickerComponent
@@ -118,7 +117,6 @@ export const OrderSearchForm = connect(
                     }}
                   />
                 </div>
-                {/* )} */}
               </div>
             </div>
           </Mobile>
@@ -175,9 +173,10 @@ export const OrderSearchForm = connect(
                     </span>
                   </div>
                 </div>
+
                 <div className="grid-row grid-gap-1 margin-top-2">
                   <div className="grid-row desktop:grid-col-3 grid-col-12 grid-gap-3 no-flex-wrap">
-                    <div className="width-card-lg margin-bottom-4 margin-right-6">
+                    <div className="width-card-lg margin-bottom-4 margin-right-4">
                       <JudgeSelect
                         formValue={'advancedSearchForm.orderSearch.judge'}
                         judges={advancedDocumentSearchHelper.formattedJudges}
@@ -193,7 +192,7 @@ export const OrderSearchForm = connect(
                           endLabel="End date"
                           endName="endDate"
                           endPickerCls={
-                            'desktop:grid-col-6  phone:grid-col-12 desktop:padding-left-2'
+                            'desktop:grid-col-6 phone:grid-col-12 desktop:padding-left-4'
                           }
                           endValue={advancedSearchForm.orderSearch.endDate}
                           formGroupCls="margin-bottom-0"
@@ -204,7 +203,7 @@ export const OrderSearchForm = connect(
                           startName="startDate"
                           showDateHint={true}
                           startPickerCls={
-                            'desktop:grid-col-6  phone:grid-col-12 padding-right-2'
+                            'desktop:grid-col-6 phone:grid-col-12 padding-right-2 padding-left-2'
                           }
                           startValue={advancedSearchForm.orderSearch.startDate}
                           onChangeEnd={e => {
