@@ -89,15 +89,6 @@ describe('serveCaseToIrsInteractor', () => {
     };
   };
 
-  beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getConfigurationItemValue.mockResolvedValue({
-        name: 'James Bond',
-        title: 'Clerk of the Court (Interim)',
-      });
-  });
-
   beforeEach(() => {
     mockCase = { ...MOCK_CASE };
     applicationContext.getPersistenceGateway().updateWorkItem = jest.fn();

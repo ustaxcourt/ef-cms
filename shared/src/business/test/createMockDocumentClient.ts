@@ -74,11 +74,6 @@ export const createMockDocumentClient = () => {
       });
     }),
     getData: () => mockDynamoRecords,
-    getFromDeployTable: jest.fn().mockImplementation(({ Key: { pk, sk } }) => {
-      return Promise.resolve({
-        Item: cloneDeep(mockDynamoRecords[`${pk} ${sk}`]),
-      });
-    }),
     put: jest.fn().mockImplementation(({ Item }) => {
       mockDynamoRecords[`${Item.pk} ${Item.sk}`] = Item;
       return Promise.resolve(null);

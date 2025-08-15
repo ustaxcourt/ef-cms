@@ -50,13 +50,6 @@ describe('generateNoticeOfChangeToInPersonProceeding', () => {
 
     getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getConfigurationItemValue.mockResolvedValue({
-        name: 'James Bond',
-        title: 'Clerk of the Court (Interim)',
-      });
-
     await generateNoticeOfChangeToInPersonProceeding(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
       trialSessionInformation: mockTrialSessionInformation,

@@ -44,15 +44,6 @@ describe('completeDocketEntryQCInteractor', () => {
   );
   const tryGetLocks = jest.mocked(tryGetLocksMock);
 
-  beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getConfigurationItemValue.mockImplementation(() => ({
-        name: 'bob',
-        title: 'clerk of court',
-      }));
-  });
-
   beforeEach(() => {
     getFeatureFlagValues.mockResolvedValue([
       {

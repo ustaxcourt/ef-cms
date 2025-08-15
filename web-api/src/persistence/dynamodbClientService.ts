@@ -156,26 +156,6 @@ export const get = params => {
     });
 };
 
-/**
- * get
- *
- * @param {object} params the params to get
- * @returns {object} the item that was retrieved
- */
-export const getFromDeployTable = params => {
-  return params.applicationContext
-    .getDocumentClient()
-    .get({
-      TableName: getDeployTableName({
-        applicationContext: params.applicationContext,
-      }),
-      ...params,
-    })
-    .then(res => {
-      return removeAWSGlobalFields(res.Item);
-    });
-};
-
 export const putInDeployTable = async (
   applicationContext: IApplicationContext,
   item: TDynamoRecord,

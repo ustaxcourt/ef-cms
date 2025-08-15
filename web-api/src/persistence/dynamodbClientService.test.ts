@@ -8,7 +8,6 @@ import {
   describeTable,
   get,
   getDeployTableName,
-  getFromDeployTable,
   getTableName,
   put,
   putInDeployTable,
@@ -246,51 +245,6 @@ describe('dynamodbClientService', function () {
     });
   });
 
-  describe('getFromDeployTable', () => {
-    const mockItem = {
-      'aws:rep:updatetime': 'anytime',
-      current: 'foobar',
-      pk: 'foo',
-      sk: 'bar',
-    };
-
-    const mockParams = {
-      applicationContext,
-      pk: mockItem.pk,
-      sk: mockItem.sk,
-    };
-
-    const tableName = getDeployTableName({ applicationContext });
-
-    beforeEach(() => {
-      applicationContext.getDocumentClient({ useMainRegion: true }).get = jest
-        .fn()
-        .mockResolvedValue({ Item: mockItem });
-    });
-
-    it('uses the master region', async () => {
-      await getFromDeployTable(mockParams);
-      expect(applicationContext.getDocumentClient).toHaveBeenCalledWith({
-        useMainRegion: true,
-      });
-    });
-
-    it('gets the deploy table name', async () => {
-      await getFromDeployTable(mockParams);
-
-      expect(
-        applicationContext.getDocumentClient({ useMainRegion: true }).get,
-      ).toHaveBeenCalledWith({ TableName: tableName, ...mockParams });
-    });
-
-    it('removes the AWS Global Fields', async () => {
-      const result = await getFromDeployTable(mockParams);
-      expect(result['aws:rep:updatetime']).toBeUndefined();
-      expect(result['pk']).toEqual(mockItem.pk);
-      expect(result['sk']).toEqual(mockItem.sk);
-      expect(result['current']).toEqual(mockItem.current);
-    });
-  });
   describe('query', () => {
     it('should remove the global aws fields on the object returned', async () => {
       const result = await query({ applicationContext });

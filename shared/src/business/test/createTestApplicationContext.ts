@@ -73,7 +73,6 @@ import { getAllFeatureFlagsInteractor } from '@web-api/business/useCases/feature
 import { getAllWebSocketConnections } from '@web-api/persistence/postgres/connections/getAllWebSocketConnections';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseDocumentsIdsFilteredByDocumentType } from '@shared/business/utilities/getCaseDocumentsIdsFilteredByDocumentType';
-import { getConfigurationItemValue } from '@web-api/persistence/dynamo/deployTable/getConfigurationItemValue';
 import { getConstants } from '@web-client/getConstants';
 import { getCropBox } from '@shared/business/utilities/getCropBox';
 import { getDescriptionDisplay } from '@shared/business/utilities/getDescriptionDisplay';
@@ -443,9 +442,7 @@ export const createTestApplicationContext = () => {
     getCalendaredCasesForTrialSession: jest.fn(),
     getCaseByDocketNumber: jest.fn().mockImplementation(getCaseByDocketNumber),
     getCasesByFilters: jest.fn(),
-    getConfigurationItemValue: jest
-      .fn()
-      .mockImplementation(getConfigurationItemValue),
+
     getDispatchNotification: jest.fn(),
     getDocketNumbersByStatusAndByJudge: jest.fn(),
     getDocument: jest.fn().mockResolvedValue(testPdfDoc),
