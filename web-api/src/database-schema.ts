@@ -63,10 +63,40 @@ import {
   DW_MINUTE_SHEET_COLUMNS,
   MinuteSheetTable,
 } from '@web-api/persistence/postgres/minuteSheets/schema';
+import {
+  DW_PRACTITIONER_DOCUMENT_COLUMNS,
+  PractitionerDocumentTable,
+} from '@web-api/persistence/postgres/practitionerDocuments/schema';
+import {
+  DW_USER_COLUMNS,
+  UserTable,
+} from '@web-api/persistence/postgres/users/schema';
+import {
+  DW_USER_ON_CASE_COLUMNS,
+  UserOnCaseTable,
+} from '@web-api/persistence/postgres/cases/userOnCase/schema';
+import {
+  DW_USER_CONFIRMATION_CODE_COLUMNS,
+  UserConfirmationCodeTable,
+} from '@web-api/persistence/postgres/users/confirmationCodes/schema';
+import {
+  DW_USER_ON_CASE_PENDING_COLUMNS,
+  UserOnCasePendingTable,
+} from '@web-api/persistence/postgres/cases/pendingCases/schema';
+import {
+  indexOpenSearchUser,
+  transformOpenSearchUser,
+} from '../elasticsearch/index-users';
+import { transformOpenSearchUserOnCase } from '../elasticsearch/cases/transformOpenSearchUserOnCase';
+import {
+  BarNumberTable,
+  DW_BAR_NUMBER_COLUMNS,
+} from '@web-api/persistence/postgres/users/barNumber/schema';
 
 const DEFAULT = {};
 
 interface DatabaseSchemaType {
+  dwBarNumber: DatabaseTableMetadata<BarNumberTable>;
   dwCase: DatabaseTableMetadata<CaseTable>;
   dwCaseCorrespondence: DatabaseTableMetadata<CaseCorrespondenceTable>;
   dwCaseDeadline: DatabaseTableMetadata<CaseDeadlineTable>;
@@ -77,10 +107,15 @@ interface DatabaseSchemaType {
   dwFeatureFlag: DatabaseTableMetadata<FeatureFlagTable>;
   dwDocketEntryWorksheet: DatabaseTableMetadata<DocketEntryWorksheetTable>;
   dwMessage: DatabaseTableMetadata<MessageTable>;
-  dwNotification: DatabaseTableMetadata<NotificationTable>;
   dwMinuteSheet: DatabaseTableMetadata<MinuteSheetTable>;
+  dwPractitionerDocuments: DatabaseTableMetadata<PractitionerDocumentTable>;
+  dwNotification: DatabaseTableMetadata<NotificationTable>;
+  dwUser: DatabaseTableMetadata<UserTable>;
   dwResponseString: DatabaseTableMetadata<ResponseStringTable>;
   dwUserCaseNote: DatabaseTableMetadata<UserCaseNoteTable>;
+  dwUserConfirmationCode: DatabaseTableMetadata<UserConfirmationCodeTable>;
+  dwUserOnCase: DatabaseTableMetadata<UserOnCaseTable>;
+  dwUserOnCasePending: DatabaseTableMetadata<UserOnCasePendingTable>;
   dwWorkItem: DatabaseTableMetadata<WorkItemTable>;
 }
 
@@ -98,6 +133,10 @@ type DatabaseTableMetadata<TTable> = {
 };
 
 export const DatabaseSchema: DatabaseSchemaType = {
+  dwBarNumber: {
+    table: DEFAULT as BarNumberTable,
+    columns: DW_BAR_NUMBER_COLUMNS,
+  },
   dwCase: {
     table: DEFAULT as CaseTable,
     columns: DW_CASE_COLUMNS,
@@ -142,13 +181,17 @@ export const DatabaseSchema: DatabaseSchemaType = {
     table: DEFAULT as MessageTable,
     columns: DW_MESSAGE_COLUMNS,
   },
-  dwNotification: {
-    table: DEFAULT as NotificationTable,
-    columns: DW_NOTIFICATION_COLUMNS,
-  },
   dwMinuteSheet: {
     table: DEFAULT as MinuteSheetTable,
     columns: DW_MINUTE_SHEET_COLUMNS,
+  },
+  dwPractitionerDocuments: {
+    table: DEFAULT as PractitionerDocumentTable,
+    columns: DW_PRACTITIONER_DOCUMENT_COLUMNS,
+  },
+  dwNotification: {
+    table: DEFAULT as NotificationTable,
+    columns: DW_NOTIFICATION_COLUMNS,
   },
   dwResponseString: {
     table: DEFAULT as ResponseStringTable,
@@ -161,6 +204,26 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwWorkItem: {
     table: DEFAULT as WorkItemTable,
     columns: DW_WORK_ITEM_COLUMNS,
+  },
+  dwUser: {
+    table: DEFAULT as UserTable,
+    columns: DW_USER_COLUMNS,
+    indexOpenSearchMessage: indexOpenSearchUser,
+    transformOpenSearchMessage: transformOpenSearchUser,
+  },
+  dwUserConfirmationCode: {
+    table: DEFAULT as UserConfirmationCodeTable,
+    columns: DW_USER_CONFIRMATION_CODE_COLUMNS,
+  },
+  dwUserOnCase: {
+    table: DEFAULT as UserOnCaseTable,
+    columns: DW_USER_ON_CASE_COLUMNS,
+    transformOpenSearchMessage: transformOpenSearchUserOnCase,
+    indexOpenSearchMessage: indexOpenSearchCases,
+  },
+  dwUserOnCasePending: {
+    table: DEFAULT as UserOnCasePendingTable,
+    columns: DW_USER_ON_CASE_PENDING_COLUMNS,
   },
 };
 

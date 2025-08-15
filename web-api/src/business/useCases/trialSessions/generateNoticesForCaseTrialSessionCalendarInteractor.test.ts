@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 jest.mock(
@@ -23,9 +24,12 @@ import { generateNoticesForCaseTrialSessionCalendarInteractor } from './generate
 import { shouldAppendClinicLetter } from '@shared/business/utilities/shouldAppendClinicLetter';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const getUserById = jest.mocked(getUserByIdMock);
   const updateCaseAndAssociations = jest
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
@@ -55,9 +59,7 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
       clinicLetterKey,
     });
 
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockResolvedValue(docketClerkUser);
+    getUserById.mockResolvedValue(docketClerkUser as DbUser);
     applicationContext
       .getPersistenceGateway()
       .getDocument.mockResolvedValue(fakeData);

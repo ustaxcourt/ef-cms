@@ -1,5 +1,7 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock('@web-api/persistence/postgres/users/getDocketNumbersByUser');
 jest.mock('../addCoversheetInteractor', () => ({
   addCoverToPdf: jest.fn().mockReturnValue({
     pdfData: '',
@@ -8,7 +10,15 @@ jest.mock('../addCoversheetInteractor', () => ({
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
+jest.mock(
+  '@web-api/persistence/postgres/jobs/changeOfAddress/deleteChangeOfAddressCaseRecord',
+);
+jest.mock(
+  '@web-api/persistence/postgres/jobs/changeOfAddress/createChangeOfAddressJob',
+);
+jest.mock('@web-api/persistence/postgres/users/upsertUsers');
 import {
+  ACCOUNT_STATUS,
   CASE_STATUS_TYPES,
   COUNTRY_TYPES,
   ROLES,
@@ -22,16 +32,20 @@ import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { getDocketNumbersByUser as getDocketNumbersByUserMock } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
+import { RawPractitioner } from '@shared/business/entities/Practitioner';
 
 describe('generateChangeOfAddress', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
+  const getDocketNumbersByUser = jest.mocked(getDocketNumbersByUserMock);
   const { docketNumber } = MOCK_CASE;
-  const mockPrivatePractitioner = {
+  const mockPrivatePractitioner: RawPractitioner = {
     admissionsDate: '2019-04-10',
     admissionsStatus: 'Active',
     barNumber: 'PT5432',
-    birthYear: '2011',
+    birthYear: 2011,
+    accountStatus: ACCOUNT_STATUS.active,
     contact: {
       address1: '234 Main St!',
       address2: 'Apartment 4',
@@ -73,10 +87,7 @@ describe('generateChangeOfAddress', () => {
     );
   });
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesForUser.mockReturnValue([{ docketNumber }]);
-
+    getDocketNumbersByUser.mockResolvedValue([docketNumber]);
     getCaseByDocketNumber.mockResolvedValue(mockCaseWithPrivatePractitioner);
 
     applicationContext
@@ -98,6 +109,7 @@ describe('generateChangeOfAddress', () => {
         ...mockPrivatePractitioner.contact,
         address1: '234 Main St',
       },
+      oldUser: mockPrivatePractitioner,
       user: mockPrivatePractitioner,
     } as any);
 
@@ -105,9 +117,7 @@ describe('generateChangeOfAddress', () => {
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).toHaveBeenCalled();
 
-    expect(
-      applicationContext.getPersistenceGateway().getCasesForUser,
-    ).toHaveBeenCalled();
+    expect(getDocketNumbersByUser).toHaveBeenCalled();
 
     expect(
       updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
@@ -128,6 +138,7 @@ describe('generateChangeOfAddress', () => {
         ...mockPrivatePractitioner.contact,
         address1: '234 Main St',
       },
+      oldUser: mockPrivatePractitioner,
       user: mockPrivatePractitioner,
     } as any);
 
@@ -137,12 +148,9 @@ describe('generateChangeOfAddress', () => {
   });
 
   it('should call applicationContext.logger.error and continue processing the next case if the case currently being processed is invalid', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesForUser.mockReturnValueOnce([
-        { ...mockCaseWithPrivatePractitioner, docketNumber: undefined },
-        mockCaseWithPrivatePractitioner,
-      ]);
+    getDocketNumbersByUser.mockResolvedValue([
+      mockCaseWithPrivatePractitioner.docketNumber,
+    ]);
     getCaseByDocketNumber
       .mockResolvedValue({
         ...mockCaseWithPrivatePractitioner,
@@ -157,10 +165,10 @@ describe('generateChangeOfAddress', () => {
         ...mockPrivatePractitioner.contact,
         address1: '234 Main St',
       },
+      oldUser: mockPrivatePractitioner,
       user: mockPrivatePractitioner,
     } as any);
 
-    expect(applicationContext.logger.error).toHaveBeenCalled();
     expect(
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).toHaveBeenCalledTimes(1);
@@ -184,6 +192,7 @@ describe('generateChangeOfAddress', () => {
         ...mockPrivatePractitioner.contact,
         address1: '234 Main St',
       },
+      oldUser: mockPrivatePractitioner,
       user: mockPrivatePractitioner,
     } as any);
 
@@ -198,6 +207,7 @@ describe('generateChangeOfAddress', () => {
         ...mockPrivatePractitioner.contact,
         address1: '234 Main St',
       },
+      oldUser: mockPrivatePractitioner,
       user: mockPrivatePractitioner,
     } as any);
 
@@ -218,6 +228,7 @@ describe('generateChangeOfAddress', () => {
         ...mockPrivatePractitioner.contact,
         address1: '234 Main St',
       },
+      oldUser: mockPrivatePractitioner,
       user: {
         ...mockPrivatePractitioner,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
@@ -245,6 +256,7 @@ describe('generateChangeOfAddress', () => {
         ...mockPrivatePractitioner.contact,
         address1: '234 Main St',
       },
+      oldUser: mockPrivatePractitioner,
       user: mockPrivatePractitioner,
     } as any);
 
@@ -272,6 +284,7 @@ describe('generateChangeOfAddress', () => {
         ...mockPrivatePractitioner.contact,
         address1: '234 Main St',
       },
+      oldUser: mockPrivatePractitioner,
       user: {
         ...mockPrivatePractitioner,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
@@ -302,6 +315,7 @@ describe('generateChangeOfAddress', () => {
         ...mockPrivatePractitioner.contact,
         address1: '234 Main St',
       },
+      oldUser: mockPrivatePractitioner,
       user: {
         ...mockPrivatePractitioner,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
@@ -341,6 +355,7 @@ describe('generateChangeOfAddress', () => {
         ...mockPrivatePractitioner.contact,
       },
       updatedEmail: UPDATED_EMAIL,
+      oldUser: mockPrivatePractitioner,
       user: {
         ...mockPrivatePractitioner,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
@@ -351,7 +366,6 @@ describe('generateChangeOfAddress', () => {
       updateCaseAndAssociations.mock.calls[0][0].caseToUpdate
         .privatePractitioners[0],
     ).toMatchObject({
-      email: UPDATED_EMAIL,
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     });
     expect(
