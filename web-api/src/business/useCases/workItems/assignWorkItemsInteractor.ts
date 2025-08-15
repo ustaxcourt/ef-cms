@@ -83,7 +83,7 @@ export const assignWorkItemsInteractor = async (
 
   if (!docketEntry) {
     throw new NotFoundError(
-      `Docket entry associated with work ${workItemId} was not found.`,
+      `Docket entry associated with work item ${workItemId} was not found.`,
     );
   }
 
