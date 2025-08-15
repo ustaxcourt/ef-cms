@@ -118,24 +118,6 @@ export const update = ({
 };
 
 /**
- *
- * @param {object} params the params to update
- * @returns {object} the item that was updated
- */
-export const updateToDeployTable = params => {
-  const filteredParams = filterEmptyStrings(params);
-  return params.applicationContext
-    .getDocumentClient()
-    .update({
-      TableName: getDeployTableName({
-        applicationContext: params.applicationContext,
-      }),
-      ...filteredParams,
-    })
-    .then(() => params.Item);
-};
-
-/**
  * updateConsistent
  *
  * @param {object} params the params to update

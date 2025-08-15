@@ -17,7 +17,6 @@ import {
   scan,
   update,
   updateConsistent,
-  updateToDeployTable,
 } from './dynamodbClientService';
 
 describe('dynamodbClientService', function () {
@@ -237,16 +236,6 @@ describe('dynamodbClientService', function () {
       });
 
       expect(result).toEqual(dynamoDbTableName);
-    });
-  });
-
-  describe('updateToDeployTable', () => {
-    it('should return the same Item property passed in in the params', async () => {
-      const result = await updateToDeployTable({
-        Item: MOCK_ITEM,
-        applicationContext,
-      });
-      expect(result).toEqual(MOCK_ITEM);
     });
   });
 
