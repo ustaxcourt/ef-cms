@@ -65,6 +65,9 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
     } as DbUser);
 
     getCaseByDocketNumber.mockResolvedValue(caseRecord);
+  });
+
+  beforeEach(() => {
     getWorkItemByDocketNumberAndDocketEntryId.mockResolvedValue(
       new WorkItem({
         assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
