@@ -1,4 +1,4 @@
-import { getPetitionWorkItemForCase } from '../helpers';
+import { getPetitionWorkItemInfoForCase } from '../helpers';
 
 export const petitionsClerkVerifiesAssignedWorkItem = (
   cerebralTest,
@@ -9,7 +9,7 @@ export const petitionsClerkVerifiesAssignedWorkItem = (
       docketNumber: createdCases[0].docketNumber,
     });
 
-    const { workItemId } = getPetitionWorkItemForCase(
+    const { workItemId } = getPetitionWorkItemInfoForCase(
       cerebralTest.getState('caseDetail'),
     );
 

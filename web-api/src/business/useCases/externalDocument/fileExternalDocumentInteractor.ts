@@ -154,17 +154,13 @@ export const fileExternalDocument = async (
           const workItem = new WorkItem({
             assigneeId: null,
             assigneeName: null,
-            docketEntry: {
-              ...docketEntryEntity.toRawObject(),
-              createdAt: docketEntryEntity.createdAt,
-            },
+            docketEntryId: docketEntryEntity.docketEntryId,
             docketNumber: caseToUpdate.docketNumber,
             section: DOCKET_SECTION,
             sentBy: user.name,
             sentByUserId: user.userId,
           }).validate();
 
-          docketEntryEntity.setWorkItem(workItem);
           workItems.push(workItem);
           caseEntity.addDocketEntry(docketEntryEntity);
 

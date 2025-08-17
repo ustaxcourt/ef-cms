@@ -29,6 +29,8 @@ import {
 import { saveCaseDetailInternalEditInteractor } from './saveCaseDetailInternalEditInteractor';
 import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getWorkItemByDocketNumberAndDocketEntryId as getWorkItemByDocketNumberAndDocketEntryIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
+import { WorkItem } from '@shared/business/entities/WorkItem';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
@@ -36,6 +38,9 @@ import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 describe('saveCaseDetailInternalEditInteractor', () => {
   const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
   const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
+  const getWorkItemByDocketNumberAndDocketEntryId = jest.mocked(
+    getWorkItemByDocketNumberAndDocketEntryIdMock,
+  );
   jest
     .mocked(updateCaseAndAssociations)
     .mockImplementation(({ caseToUpdate }) => caseToUpdate);
@@ -47,13 +52,6 @@ describe('saveCaseDetailInternalEditInteractor', () => {
     docketEntries: [
       {
         ...MOCK_CASE.docketEntries[0],
-        workItem: {
-          docketEntry: MOCK_CASE.docketEntries[0],
-          docketNumber: MOCK_CASE.docketNumber,
-          section: PETITIONS_SECTION,
-          sentBy: 'petitioner',
-          workItemId: '4a57f4fe-991f-4d4b-bca4-be2a3f5bb5f8',
-        },
       },
     ],
   };
@@ -80,6 +78,15 @@ describe('saveCaseDetailInternalEditInteractor', () => {
     } as DbUser);
 
     getCaseByDocketNumber.mockResolvedValue(mockCase);
+    getWorkItemByDocketNumberAndDocketEntryId.mockResolvedValue(
+      new WorkItem({
+        docketEntryId: MOCK_CASE.docketEntries[0].docketEntryId,
+        docketNumber: MOCK_CASE.docketNumber,
+        section: PETITIONS_SECTION,
+        sentBy: 'petitioner',
+        workItemId: '4a57f4fe-991f-4d4b-bca4-be2a3f5bb5f8',
+      }),
+    );
   });
 
   it('should throw an error if caseToUpdate is not passed in', async () => {
@@ -189,7 +196,7 @@ describe('saveCaseDetailInternalEditInteractor', () => {
 
     getCaseByDocketNumber.mockResolvedValue({
       ...mockCase,
-      docketEntries: [...mockCase.docketEntries, mockRQT],
+      docketEntries: [...mockCase.docketEntries, mockRQT as RawDocketEntry],
       isPaper: true,
     });
 

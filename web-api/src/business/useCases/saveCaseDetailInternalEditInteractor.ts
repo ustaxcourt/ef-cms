@@ -16,6 +16,7 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { isEmpty } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
@@ -149,10 +150,25 @@ export const saveCaseDetailInternalEdit = async (
   } else {
     const petitionDocketEntry = caseEntity.getPetitionDocketEntry();
 
-    const initializeCaseWorkItem = petitionDocketEntry.workItem;
+    if (!petitionDocketEntry) {
+      throw new NotFoundError(
+        `Could not find petition docket entry on case ${petitionDocketEntry}`,
+      );
+    }
 
+    const petitionWorkItem = await getWorkItemByDocketNumberAndDocketEntryId({
+      docketNumber,
+      docketEntryId: petitionDocketEntry?.docketEntryId,
+    });
+
+    if (!petitionWorkItem) {
+      throw new NotFoundError(
+        `Could not find work item associated with petition on case ${petitionDocketEntry}`,
+      );
+    }
     const workItemEntity = new WorkItem({
-      ...initializeCaseWorkItem,
+      ...petitionWorkItem,
+      docketEntryId: petitionDocketEntry.docketEntryId,
       assigneeId: user.userId,
       assigneeName: user.name,
       inProgress: true,
