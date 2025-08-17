@@ -33,7 +33,6 @@ describe('Advanced Search - Accessibility', () => {
       cy.visit('/');
       cy.get('[data-testid="opinion-search-tab"]').click();
       cy.get('#keyword-search').type('sunglasses');
-      cy.get('#date-range').select('customDates');
       cy.get('#startDate-date-start').type('08/01/2001');
       cy.get('#advanced-search-button').click();
       cy.get('.search-results').should('exist');
