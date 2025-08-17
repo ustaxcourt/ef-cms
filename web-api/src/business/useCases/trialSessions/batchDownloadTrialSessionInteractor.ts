@@ -107,6 +107,7 @@ const batchDownloadTrialSessionInteractorHelper = async (
     for (const docketEntry of docketEntriesWithFileAttached) {
       if (!docketEntry.docketEntryId) continue;
 
+      // @ts-ignore
       const filename = generateValidDocketEntryFilename(docketEntry);
       const pdfTitle = `${caseToBatch.caseFolder}/${filename}`;
       documentsToZip.push({

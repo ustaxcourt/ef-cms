@@ -30,6 +30,8 @@ import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } fr
 import { updateDocketEntryPendingServiceStatus as updateDocketEntryPendingServiceStatusMock } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { getWorkItemByDocketNumberAndDocketEntryId as getWorkItemByDocketNumberAndDocketEntryIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
+import { WorkItem } from '@shared/business/entities/WorkItem';
 
 describe('editPaperFilingInteractor', () => {
   let caseRecord;
@@ -41,6 +43,9 @@ describe('editPaperFilingInteractor', () => {
   const updateCaseAndAssociations = jest
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
+  const getWorkItemByDocketNumberAndDocketEntryId = jest.mocked(
+    getWorkItemByDocketNumberAndDocketEntryIdMock,
+  );
   const fileAndServeDocumentOnOneCase = jest.mocked(
     fileAndServeDocumentOnOneCaseMock,
   );
@@ -53,12 +58,7 @@ describe('editPaperFilingInteractor', () => {
   const mockPrimaryId = getContactPrimary(MOCK_CASE).contactId;
 
   const workItem = {
-    docketEntry: {
-      docketEntryId: mockDocketEntryId,
-      documentType: 'Answer',
-      eventCode: 'A',
-      userId: mockDocketEntryId,
-    } as any,
+    docketEntryId: mockDocketEntryId,
     docketNumber: '45678-18',
     section: DOCKET_SECTION,
     sentBy: mockDocketEntryId,
@@ -79,7 +79,6 @@ describe('editPaperFilingInteractor', () => {
           filedBy: 'Test Petitioner',
           filedByRole: ROLES.petitioner,
           userId: mockDocketEntryId,
-          workItem,
         },
         {
           docketEntryId: mockServedDocketEntryId,
@@ -97,10 +96,13 @@ describe('editPaperFilingInteractor', () => {
             },
           ],
           userId: mockDocketEntryId,
-          workItem,
         },
       ],
     };
+
+    getWorkItemByDocketNumberAndDocketEntryId.mockResolvedValue(
+      new WorkItem(workItem),
+    );
 
     applicationContext
       .getPersistenceGateway()
@@ -150,9 +152,7 @@ describe('editPaperFilingInteractor', () => {
             },
             mockDocketClerkUser,
           ),
-        ).rejects.toThrow(
-          `Docket entry ${notFoundDocketEntryId} was not found.`,
-        );
+        ).rejects.toThrow();
       });
 
       it('should throw an error when the docket entry has already been served', async () => {

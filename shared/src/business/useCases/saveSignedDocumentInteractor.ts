@@ -1,5 +1,6 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import {
+  ACTION_DOCUMENT_TYPE_OPTIONS,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   SIGNED_DOCUMENT_TYPES,
 } from '@shared/business/entities/EntityConstants';
@@ -94,13 +95,13 @@ export const saveSignedDocumentInteractor = async (
   }
 
   const caseEntity = new Case(caseRecord, { authorizedUser });
-  const originalDocketEntryEntity = caseEntity.docketEntries.find(
-    docketEntry => docketEntry.docketEntryId === originalDocketEntryId,
-  );
+  const originalDocketEntryEntity = caseEntity.getDocketEntryById({
+    docketEntryId: originalDocketEntryId,
+  });
 
   let signedDocketEntryEntity;
   if (
-    originalDocketEntryEntity.documentType === 'Proposed Stipulated Decision'
+    originalDocketEntryEntity?.documentType === ACTION_DOCUMENT_TYPE_OPTIONS.proposedStipulatedDecision
   ) {
     signedDocketEntryEntity = new DocketEntry(
       {
