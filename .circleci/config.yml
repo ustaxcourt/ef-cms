@@ -21,7 +21,15 @@ parameters:
     default: false
     type: boolean
 
+  run_glue_to_dev:
+    default: false
+    type: boolean
+
   run_s3_to_test:
+    default: false
+    type: boolean
+
+  run_s3_to_dev:
     default: false
     type: boolean
 
@@ -174,7 +182,7 @@ jobs:
               echo "skipping…"
               exit 0
             fi
-            if [ "${CIRCLE_BRANCH}" == "test" ]; then
+            if [ "${CIRCLE_BRANCH}" == "test" ] || [ "${CIRCLE_BRANCH}" == "develop" ]; then
               SOURCE_DOMAIN=$(./scripts/elasticsearch/get-source-elasticsearch.sh "${ENV}")
               ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
                 --domain-name "${SOURCE_DOMAIN}" \
@@ -696,16 +704,6 @@ jobs:
             echo "export SOURCE_BUCKET=${PROD_DOCUMENTS_BUCKET_NAME}" >> $BASH_ENV
             echo "export DESTINATION_BUCKET=${EFCMS_DOMAIN}-documents-${ENV}-us-east-1" >> $BASH_ENV
       - run:
-          name: Disable Wait for Workflow Cron
-          command: |
-            ./scripts/wait-for-workflow/disable-wait-for-workflow-cron.sh
-      - run:
-          name: Destroy Wait for Workflow Lambda
-          command: |
-            export APPROVAL_JOB_NAME=wait-for-deployment-workflow
-            export CIRCLE_PIPELINE_ID=noop
-            npm run destroy:wait-for-workflow-cron -- $ENV
-      - run:
           name: Disable Dynamodb Streams
           command: |
             ./scripts/migration/toggle-streams.sh --off
@@ -777,6 +775,11 @@ jobs:
           name: Migrate Postgres Data Schema
           command: |
             NODE_ENV=production npm run migration:postgres
+      - run:
+          name: Restore Postgres User Permissions
+          command: |
+            cd ./scripts/postgres
+            DB_HOST="$POSTGRES_HOST" ./create-rds-users.sh
       - run:
           name: Enable Dynamodb Streams
           command: |
@@ -1049,11 +1052,6 @@ jobs:
           name: Restore Postgres Data
           command: |
             TARGET_ENV="$LOWER_ENV" TARGET_ACCOUNT_ID="$LOWER_ENV_ACCOUNT_ID" ./scripts/postgres/restoreDbFromSource.ts
-      - run:
-          name: Restore Postgres User Permissions
-          command: |
-            cd ./scripts/postgres
-            DB_HOST="$POSTGRES_HOST" ./create-rds-users.sh
 
   finish-glue-job:
     docker:
@@ -1091,6 +1089,13 @@ only-test: &only-test
     branches:
       only:
         - test
+
+only-dev: &only-dev
+  context: efcms-<< pipeline.git.branch >>
+  filters:
+    branches:
+      only:
+        - develop
 
 only-deployed-lower-environments: &only-deployed-lower-environments
   context: efcms-<< pipeline.git.branch >>
@@ -1347,6 +1352,61 @@ workflows:
           requires:
             - index-users
 
+  glue-to-dev:
+    when: << pipeline.parameters.run_glue_to_dev >>
+    jobs:
+      - delete-existing-data:
+          <<: *only-dev
+      - redeploy-environment:
+          <<: *only-dev
+          requires:
+            - delete-existing-data
+      - wait-for-deployment-workflow:
+          <<: *only-dev
+          type: approval
+          requires:
+            - redeploy-environment
+      - initiate-glue-job:
+          <<: *only-dev
+          requires:
+            - wait-for-deployment-workflow
+      - wait-for-glue-workflow:
+          <<: *only-dev
+          type: approval
+          requires:
+            - initiate-glue-job
+      - wait-for-s3-sync-workflow:
+          <<: *only-dev
+          type: approval
+          requires:
+            - initiate-glue-job
+      - index-glued-data:
+          <<: *only-dev
+          requires:
+            - wait-for-glue-workflow
+            - wait-for-s3-sync-workflow
+      - wait-for-glued-data-to-index:
+          <<: *only-dev
+          type: approval
+          requires:
+            - index-glued-data
+      - index-cases:
+          <<: *only-dev
+          requires:
+            - wait-for-glued-data-to-index
+      - index-docket-entries:
+          <<: *only-dev
+          requires:
+            - index-cases
+      - cleanup-glue-job:
+          <<: *only-dev
+          requires:
+            - index-docket-entries
+      - cleanup-glue-job:
+          <<: *only-test
+          requires:
+            - index-users
+
   glue-to-lower-env:
     when: << pipeline.parameters.run_glue_to_lower_env >>
     jobs:
@@ -1366,6 +1426,17 @@ workflows:
           requires:
             - restore-postgres
             - wait-for-glue-job
+
+  s3-to-dev:
+    when: << pipeline.parameters.run_s3_to_dev >>
+    jobs:
+      - initiate-s3-sync:
+          <<: *only-dev
+      - wait-for-s3-sync-workflow:
+          <<: *only-dev
+          type: approval
+          requires:
+            - initiate-s3-sync
 
   s3-to-test:
     when: << pipeline.parameters.run_s3_to_test >>
