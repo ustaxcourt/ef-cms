@@ -7,6 +7,7 @@ import {
 import fs from 'fs';
 import path from 'path';
 import { runCommand } from '../helpers/runCommand';
+import { execSync } from 'child_process';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -14,7 +15,7 @@ const scriptConfig: ScriptConfig = {
     'from the source ECR and tags it to the destination ECR',
   environment: {
     region: 'REGION',
-    targetAccountId: 'TARGET_ACCOUNT_ID',
+    targetAccountId: 'AWS_ACCOUNT_ID',
     targetEnv: 'ENV',
   },
   parameters: {
@@ -103,9 +104,8 @@ const readDockerContainerVersion = ({
     .split(':')[2];
 };
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
-(async () => {
-  const efCmsRoot = path.resolve('__dirname', '../..');
+async function app() {
+  const efCmsRoot = path.resolve(__dirname, '../..');
   const defaultOrg = readDefaultOrg({ efCmsRoot });
 
   const sourceEnv = `${defaultOrg}-${srcEnv}`;
@@ -126,10 +126,29 @@ const readDockerContainerVersion = ({
 
   const tag = destinationTag || readDockerContainerVersion({ efCmsRoot });
 
-  // TODO - figure out how to get a login password for the source ECR without switching to the source account
-  const sourceEcrLoginPassword = '';
+  const envSwitcherCommand = `source scripts/env/set-env.zsh ${sourceEnv} --quiet`;
+  const echoInfoCommand = `echo "{ \\"AWS_ACCESS_KEY_ID\\": \\"$AWS_ACCESS_KEY_ID\\", \\"AWS_SECRET_ACCESS_KEY\\": \\"$AWS_SECRET_ACCESS_KEY\\", \\"AWS_ACCOUNT_ID\\": \\"$AWS_ACCOUNT_ID\\", \\"AWS_REGION\\": \\"$AWS_REGION\\" , \\"AWS_SESSION_TOKEN\\": \\"$AWS_SESSION_TOKEN\\" }"`;
+  const sourceAwsAccessKeyIdString = execSync(
+    `${envSwitcherCommand}; ${echoInfoCommand}`,
+  )
+    .toString()
+    .trim();
+
+  const sourceAwsAccessKeyInfo = JSON.parse(sourceAwsAccessKeyIdString) as {
+    AWS_ACCESS_KEY_ID: string;
+    AWS_SECRET_ACCESS_KEY: string;
+  };
+
+  const sourceEcrLoginPassword = await runCommand(
+    'aws',
+    ['ecr', 'get-login-password', '--region', region],
+    sourceAwsAccessKeyInfo,
+  );
+
   await runCommand('docker', [
     'login',
+    '-u',
+    'AWS',
     '--password',
     sourceEcrLoginPassword,
     `${sourceAccountId}.dkr.ecr.${region}.amazonaws.com`,
@@ -160,6 +179,8 @@ const readDockerContainerVersion = ({
   ]);
   await runCommand('docker', [
     'login',
+    '-u',
+    'AWS',
     '--password',
     targetEcrLoginPassword,
     `${targetAccountId}.dkr.ecr.${region}.amazonaws.com`,
@@ -173,4 +194,6 @@ const readDockerContainerVersion = ({
   console.log(
     `Successfully pulled ${tag} from ${sourceEnv} and tagged it to ${targetEnv}`,
   );
-})();
+}
+
+void app();
