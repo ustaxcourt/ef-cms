@@ -44,10 +44,9 @@ export const OpinionSearchForm = connect(
             </div>
 
             <div className="blue-container">
-              {/* Active Filters header pulled out above the fields */}
               <div className="display-flex flex-row flex-align-end flex-justify-between margin-bottom-2">
-                <h1 className="margin-bottom-0">Active Filters</h1>
-                <p className="margin-left-1 margin-bottom-05 text-right">
+                <h1 className="margin-bottom-0">Apply Filters</h1>
+                <p className="margin-left-1 margin-bottom-05 text-right text-base-dark">
                   (optional)
                 </p>
               </div>
@@ -182,8 +181,8 @@ export const OpinionSearchForm = connect(
             <div className="grid-row no-flex-wrap">
               <div className="blue-container grid-col-9 padding-bottom-0 margin-right-1">
                 <div className="display-flex flex-row flex-align-end flex-justify-between margin-bottom-2">
-                  <h1 className="margin-bottom-0">Active Filters</h1>
-                  <p className="margin-left-1 margin-bottom-05 text-right">
+                  <h1 className="margin-bottom-0">Apply Filters</h1>
+                  <p className="margin-left-1 margin-bottom-05 text-right text-base-dark">
                     (optional)
                   </p>
                 </div>
