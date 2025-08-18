@@ -209,8 +209,6 @@ async function app() {
 
   const targetDockerPushOutput = await runCommand('docker', [
     'push',
-    '--platform',
-    'linux/amd64',
     `${targetAccountId}.dkr.ecr.${region}.amazonaws.com/ef-cms-${region}:${tag}`,
   ]);
   console.log(
