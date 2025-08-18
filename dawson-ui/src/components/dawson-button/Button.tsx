@@ -1,44 +1,77 @@
+import React, { useState, type MouseEvent } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { debounce } from 'lodash';
-import React, { useState } from 'react';
 import classNames from 'classnames';
+import type { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 export const DEBOUNCE_TIME_MILLISECONDS = 500;
 
+type OnClickHandler = (
+  event: MouseEvent<HTMLButtonElement | HTMLAnchorElement>,
+) => void | Promise<void>;
+
 function getUpdatedOnClick(
-  onClick: (...args: any) => any | undefined,
+  onClick: OnClickHandler | undefined,
   disableOnClick: boolean | undefined,
   setDisableButton: React.Dispatch<React.SetStateAction<boolean>>,
-) {
+): OnClickHandler | undefined {
   if (!onClick || !disableOnClick) return onClick;
 
-  const debouncedWrapper = debounce(async (...args) => {
-    const results = onClick(...args);
-    if (!(results instanceof Promise))
-      throw new Error('Convert onClick method to async');
+  const debouncedWrapper = debounce(
+    async (event: MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => {
+      const results = onClick(event);
+      if (!(results instanceof Promise))
+        throw new Error('Convert onClick method to async');
 
-    await results.finally(() => {
-      setDisableButton(false);
-    });
-  }, DEBOUNCE_TIME_MILLISECONDS);
+      await results.finally(() => {
+        setDisableButton(false);
+      });
+    },
+    DEBOUNCE_TIME_MILLISECONDS,
+  );
 
-  return async (...args) => {
+  return async (event: MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => {
     setDisableButton(true);
-    await debouncedWrapper(...args);
+    await debouncedWrapper(event);
   };
 }
 
-type buttonType =
-  | 'primary'
-  | 'secondary'
-  | 'destructive'
-  | 'tertiary'
-  | 'tertiary-destructive';
-
-export const Button = (props: {
-  [key: string]: any;
+interface ButtonProps {
+  href?: string;
+  children?: React.ReactNode;
+  className?: string;
   disableOnClick?: boolean;
-}) => {
+  icon?: IconProp;
+  iconColor?: string;
+  iconRight?: boolean;
+  iconSize?:
+    | '1x'
+    | '2x'
+    | '3x'
+    | '4x'
+    | '5x'
+    | '6x'
+    | '7x'
+    | '8x'
+    | '9x'
+    | '10x';
+  isActive?: boolean;
+  link?: boolean;
+  marginDirection?: 'left' | 'right';
+  noMargin?: boolean;
+  onClick?: OnClickHandler;
+  overrideMargin?: boolean;
+  secondary?: boolean;
+  destructive?: boolean;
+  shouldWrapText?: boolean;
+  tooltip?: string;
+  disabled?: boolean;
+  title?: string;
+  'aria-pressed'?: boolean;
+  [key: string]: unknown;
+}
+
+export const Button = (props: ButtonProps) => {
   const [disableButton, setDisableButton] = useState(false);
 
   const { href } = props;
