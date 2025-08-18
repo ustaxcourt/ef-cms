@@ -1779,8 +1779,10 @@ export const PENALTY_TYPES = {
 };
 
 export const MAX_ELASTICSEARCH_PAGINATION = 10000;
-export const MAX_SEARCH_CLIENT_RESULTS = 200;
-export const MAX_SEARCH_RESULTS = 100;
+export const MAX_SEARCH_CLIENT_RESULTS = 10000;
+export const MAX_SEARCH_RESULTS = 10000;
+
+export const ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE = 20;
 
 export const JUDGE_TITLES = [
   'Judge',

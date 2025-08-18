@@ -677,6 +677,7 @@ export const baseState = {
   createOrderSelectedCases: [] as any[],
   currentJudges: [],
   currentPage: 'Loading',
+  currentPaginationPage: 0,
   trialSessionLocationChangeModalInfo: {
     currentTrialSessionLocation: undefined as
       | TrialSessionLocationInfo
@@ -716,6 +717,10 @@ export const baseState = {
   docketRecordIndex: 0,
   documentToEdit: {} as any,
   documentsSelectedForDownload: [] as { docketEntryId: string }[],
+  documentSearchSort: {
+    sortColumn: 'formattedFiledDate',
+    sortDirection: 'desc',
+  },
   draftDocumentViewerDocketEntryId: null,
   featureFlags: undefined as unknown as { [key: string]: string },
   fileUploadProgress: {
