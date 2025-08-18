@@ -8,7 +8,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
-import { getCaseDeadlinesByConsolidatedCaseDeadlineId } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId';
+import { getCaseDeadlinesByConsolidatedCaseDeadlineIds } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds';
 import {
   CaseDeadline,
   RawCaseDeadline,
@@ -67,6 +67,14 @@ const removeConsolidatedCases = async (
     newConsolidatedCases.length > 1
   ) {
     const newLeadCase = Case.findLeadCaseForCases(newConsolidatedCases)!;
+
+    updateCasePromises.push(
+      updateConsolidatedCaseDeadlineReferenceId(
+        leadDocketNumber,
+        newLeadCase.docketNumber,
+      ),
+    );
+
     for (const newConsolidatedCaseToUpdate of newConsolidatedCases) {
       const caseEntity = new Case(newConsolidatedCaseToUpdate, {
         authorizedUser,
@@ -80,13 +88,6 @@ const removeConsolidatedCases = async (
         }),
       );
     }
-
-    updateCasePromises.push(
-      updateConsolidatedCaseDeadlineReferenceId(
-        leadDocketNumber,
-        newLeadCase.docketNumber,
-      ),
-    );
   } else if (newConsolidatedCases.length == 1) {
     // a case cannot be consolidated with itself
     const caseEntity = new Case(newConsolidatedCases[0], {
@@ -158,10 +159,9 @@ async function updateConsolidatedCaseDeadlineReferenceId(
     LEAD_DEADLINES.map(async leadCaseDeadline => {
       const { caseDeadlineId: oldLeadCaseDeadlineId } = leadCaseDeadline;
       const CHILD_DEADLINES =
-        await getCaseDeadlinesByConsolidatedCaseDeadlineId(
+        await getCaseDeadlinesByConsolidatedCaseDeadlineIds([
           oldLeadCaseDeadlineId,
-          oldLeadDocketNumber,
-        );
+        ]);
 
       if (!CHILD_DEADLINES.length) return;
 

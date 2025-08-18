@@ -2,6 +2,7 @@ import { Case, isLeadCase } from '@shared//business/entities/cases/Case';
 import {
   DOCUMENT_RELATIONSHIPS,
   DOCUMENT_SERVED_MESSAGES,
+  INITIAL_DOCUMENT_TYPES,
   ROLES,
 } from '@shared/business/entities/EntityConstants';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
@@ -113,14 +114,14 @@ export const addPaperFiling = async (
     const workItem = new WorkItem({
       assigneeId: user.userId,
       assigneeName: user.name,
-      docketEntry: {
-        ...docketEntryEntity.toRawObject(),
-        createdAt: docketEntryEntity.createdAt,
-      },
       docketNumber: caseEntity.docketNumber,
+      docketEntryId: docketEntryEntity.docketEntryId,
       inProgress: isSavingForLater,
       isRead: user.role !== ROLES.privatePractitioner,
-      section: user.section,
+      section: WorkItem.getWorkItemSectionFromUserSection({
+        section: user.section,
+        documentTitle: docketEntryEntity.documentTitle,
+      }),
       sentBy: user.name,
       sentBySection: user.section,
       sentByUserId: user.userId,
@@ -138,8 +139,6 @@ export const addPaperFiling = async (
     await saveWorkItemInternal({
       workItem,
     });
-
-    docketEntryEntity.setWorkItem(workItem);
 
     if (isFileAttached) {
       docketEntryEntity.numberOfPages = await applicationContext
@@ -174,7 +173,10 @@ export const addPaperFiling = async (
       docketEntryId,
     });
     const electronicParties =
-      currentDocketEntry.eventCode === 'ATP' ? [] : undefined;
+      currentDocketEntry?.eventCode ===
+      INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode
+        ? []
+        : undefined;
 
     const paperServiceResult = await applicationContext
       .getUseCaseHelpers()
