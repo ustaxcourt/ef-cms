@@ -1,4 +1,8 @@
-import { CASE_STATUS_TYPES, CHIEF_JUDGE, PETITIONS_SECTION } from '@shared/business/entities/EntityConstants';
+import {
+  CASE_STATUS_TYPES,
+  CHIEF_JUDGE,
+  PETITIONS_SECTION,
+} from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { createApplicationContext as applicationContextFactory } from '../../web-api/src/applicationContext';
 import {
@@ -10,6 +14,7 @@ import {
 } from './helpers';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 
 const cerebralTest = setupTest();
 
@@ -55,6 +60,21 @@ describe('verify old served work items do not show up in the outbox', () => {
     workItemId7 = appContext.getUniqueId();
     workItemId8 = appContext.getUniqueId();
 
+    const docketEntry: RawDocketEntry = {
+      docketEntryId: '01174a9a-7ac4-43ff-a163-8ed421f9612d',
+      docketNumber: caseDetail.docketNumber,
+      createdAt: '2019-06-25T15:14:11.924Z',
+      documentType: 'Petition',
+      eventCode: 'O',
+      documentTitle: 'Test',
+      filingDate: '2018-06-26T16:31:17.643Z',
+      isOnDocketRecord: true,
+      filers: [],
+      processingStatus: '',
+      receivedAt: '2018-06-25T16:31:17.643Z',
+      stampData: {},
+    };
+
     workItem8Days = {
       assigneeId: mockUser.userId,
       assigneeName: 'Test petitionsclerk1',
@@ -63,11 +83,7 @@ describe('verify old served work items do not show up in the outbox', () => {
       completedAt: '2019-06-26T16:31:17.643Z',
       completedByUserId: mockUser.userId,
       createdAt: CREATED_8_DAYS_AGO,
-      docketEntry: {
-        createdAt: '2019-06-25T15:14:11.924Z',
-        docketEntryId: '01174a9a-7ac4-43ff-a163-8ed421f9612d',
-        documentType: 'Petition',
-      },
+      docketEntryId: docketEntry.docketEntryId,
       docketNumber: caseDetail.docketNumber,
       docketNumberSuffix: null,
       section: PETITIONS_SECTION,
@@ -92,6 +108,7 @@ describe('verify old served work items do not show up in the outbox', () => {
       workItemId: `${workItemId6}`,
     };
 
+    await upsertDocketEntries([docketEntry]);
     await upsertWorkItems({
       workItems: [workItem8Days, workItem7Days, workItem6Days],
     });

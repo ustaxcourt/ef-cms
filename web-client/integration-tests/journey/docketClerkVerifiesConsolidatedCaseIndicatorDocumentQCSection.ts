@@ -5,7 +5,6 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCSection = (
   cerebralTest,
-  docketNumber,
   { box, queue },
 ) => {
   const formattedWorkQueue = withAppContextDecorator(
@@ -25,8 +24,7 @@ export const docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCSection = (
     });
 
     const foundWorkItem = sectionDocumentQCInbox.find(
-      workItem =>
-        workItem.docketEntry.docketEntryId === cerebralTest.docketEntryId,
+      workItem => workItem.docketEntryId === cerebralTest.docketEntryId,
     );
 
     expect(foundWorkItem).toMatchObject({
