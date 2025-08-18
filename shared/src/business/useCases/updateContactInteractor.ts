@@ -115,6 +115,8 @@ export const updateContact = async (
   ) {
     const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
 
+    const { isAddressSealed } = updatedPetitioner;
+
     const changeOfAddressPdf = await applicationContext
       .getDocumentGenerators()
       .changeOfAddress({
@@ -125,6 +127,7 @@ export const updateContact = async (
           docketNumber: caseEntity.docketNumber,
           docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
           documentType,
+          isAddressSealed,
           name: contactInfo.name,
           newData: contactInfo,
           oldData: oldCaseContact,

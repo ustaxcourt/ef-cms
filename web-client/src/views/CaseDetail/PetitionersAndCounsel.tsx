@@ -62,7 +62,14 @@ export const PetitionersAndCounsel = connect(
                     }}
                     showEmail={false}
                   />
-                  <span className="address-line" data-testid="petitioner-email">
+                  <span
+                    className={classNames({
+                      'margin-left-205': petitioner.isAddressSealed,
+                      'sealed-address': petitioner.isAddressSealed,
+                      'address-line': true,
+                    })}
+                    data-testid="petitioner-email"
+                  >
                     {petitioner.formattedEmail}
                     {petitioner.showEAccessFlag && (
                       <FontAwesomeIcon
@@ -73,6 +80,7 @@ export const PetitionersAndCounsel = connect(
                       />
                     )}
                   </span>
+
                   {petitioner.showRemoveEmailButton && (
                     <Button
                       link
