@@ -356,7 +356,7 @@ describe('advancedDocumentSearchHelper', () => {
         documentContents: 'Test Petitioner, Petitioner',
         documentTitle: 'Order',
         filingDate: '2019-03-01T05:00:00.000Z',
-        formattedFiledDate: '03/01/19',
+        formattedFiledDate: '03/01/2019',
         judge: 'Judge Buch',
       },
       {
@@ -368,7 +368,7 @@ describe('advancedDocumentSearchHelper', () => {
         documentTitle: 'Order for Stuff',
         documentType: 'OAPF - Order for Amended Petition and Filing Fee',
         filingDate: '2019-03-01T05:00:00.000Z',
-        formattedFiledDate: '03/01/19',
+        formattedFiledDate: '03/01/2019',
         judge: 'Cohen',
       },
     ]);
@@ -422,7 +422,7 @@ describe('advancedDocumentSearchHelper', () => {
         documentTitle: 'T.C. Opinion',
         documentType: 'T.C. Opinion',
         filingDate: '2019-03-01T05:00:00.000Z',
-        formattedFiledDate: '03/01/19',
+        formattedFiledDate: '03/01/2019',
         judge: 'Judge Buch',
       },
       {
@@ -434,7 +434,7 @@ describe('advancedDocumentSearchHelper', () => {
         documentTitle: 'Summary Opinion',
         documentType: 'Summary Opinion',
         filingDate: '2019-03-01T05:00:00.000Z',
-        formattedFiledDate: '03/01/19',
+        formattedFiledDate: '03/01/2019',
         judge: 'Cohen',
       },
     ]);
