@@ -208,7 +208,8 @@ import express from 'express';
 import { getTrialSessionOpenCasesCountLambda } from '@web-api/lambdas/trialSessions/getTrialSessionOpenCasesCountLambda';
 import { getConsolidatedCaseDeadlinesLambda } from '@web-api/lambdas/caseDeadline/getConsolidatedCaseDeadlinesLambda';
 import { removePetitionerEmailLambda } from '@web-api/lambdas/cases/removePetitionerEmailLambda';
-import { deactiveUserLambda } from '@web-api/lambdas/automations/deactivateUserLambda';
+import { deactivateUserLambda } from '@web-api/lambdas/automations/deactivateUserLambda';
+import { removeUserPendingEmailLambda } from '@web-api/lambdas/automations/removeUserPendingEmailLambda';
 
 export const app = express();
 
@@ -1095,7 +1096,11 @@ app.delete(
  */
 app.post('/users', lambdaWrapper(createUserLambda)); // NOTE: These are meant for admins and zendesk automations. Not meant for regular application use.
 app.get('/users/user-summary', lambdaWrapper(regStatusLambda));
-app.post('/users/deactivate', lambdaWrapper(deactiveUserLambda));
+app.post('/users/deactivate', lambdaWrapper(deactivateUserLambda));
+app.post(
+  '/users/remove-pending-email',
+  lambdaWrapper(removeUserPendingEmailLambda),
+);
 
 /**
  * work-items
