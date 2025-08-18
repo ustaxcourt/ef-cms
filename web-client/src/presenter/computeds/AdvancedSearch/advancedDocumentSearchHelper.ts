@@ -4,7 +4,10 @@ import { Get } from 'cerebral';
 import { capitalize } from 'lodash';
 import { paginationHelper } from './advancedSearchHelper';
 import { state } from '@web-client/presenter/app.cerebral';
-import { calculateISODate } from '@shared/business/utilities/DateHandler';
+import {
+  calculateISODate,
+  FORMATS,
+} from '@shared/business/utilities/DateHandler';
 import { dateStringsCompared } from '@shared/business/utilities/DateHandler';
 import { Case } from '@shared/business/entities/cases/Case';
 
@@ -136,7 +139,7 @@ export const formatDocumentSearchResultRecord = (
 
   result.formattedFiledDate = applicationContext
     .getUtilities()
-    .formatDateString(result.filingDate, 'MMDDYY');
+    .formatDateString(result.filingDate, FORMATS.MMDDYYYY);
 
   result.caseTitle = applicationContext.getCaseTitle(result.caseCaption || '');
 
