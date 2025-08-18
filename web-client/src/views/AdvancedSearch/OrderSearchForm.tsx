@@ -39,7 +39,15 @@ export const OrderSearchForm = connect(
             <div className="margin-bottom-3">
               <HowToSearch />
             </div>
+
             <div className="blue-container">
+              <div className="display-flex flex-row flex-align-end flex-justify-between margin-bottom-2">
+                <h1 className="margin-bottom-0">Active Filters</h1>
+                <p className="margin-left-1 margin-bottom-05 text-right">
+                  (optional)
+                </p>
+              </div>
+
               <div className="grid-row">
                 <div className="border-bottom-1px border-base-light padding-bottom-3">
                   <KeywordSearchField
@@ -48,6 +56,7 @@ export const OrderSearchForm = connect(
                     validateSequence={validateOrderSearchSequence}
                   />
                 </div>
+
                 <FormGroup
                   className="advanced-search-panel full-width"
                   errorText={validationErrors['object.oxor']}
@@ -61,6 +70,7 @@ export const OrderSearchForm = connect(
                       validateSequence={validateOrderSearchSequence}
                     />
                   </div>
+
                   <div className="width-full margin-bottom-3 padding-right-2">
                     or
                   </div>
@@ -120,9 +130,17 @@ export const OrderSearchForm = connect(
               </div>
             </div>
           </Mobile>
+
           <NonMobile>
             <div className="grid-row no-flex-wrap">
               <div className="blue-container grid-col-9 padding-bottom-0 margin-right-1">
+                <div className="display-flex flex-row flex-align-end flex-justify-between margin-bottom-2">
+                  <h1 className="margin-bottom-0">Active Filters</h1>
+                  <p className="margin-left-1 margin-bottom-05 text-right">
+                    (optional)
+                  </p>
+                </div>
+
                 <div className="grid-row grid-gap-6">
                   <div className="custom-col-7 desktop:grid-col-5 grid-col-12 right-gray-border padding-bottom-2">
                     <KeywordSearchField
@@ -157,7 +175,6 @@ export const OrderSearchForm = connect(
                       <div className="desktop:text-center padding-top-6 desktop:width-full desktop:width-auto desktop:margin-bottom-2 padding-left-2 padding-right-2">
                         or
                       </div>
-
                       <CaseTitleOrNameSearchField
                         searchValue={
                           advancedSearchForm.orderSearch.caseTitleOrPetitioner
@@ -224,6 +241,7 @@ export const OrderSearchForm = connect(
                   </div>
                 </div>
               </div>
+
               <div className="grid-col-3 margin-left-1">
                 <HowToSearch />
               </div>

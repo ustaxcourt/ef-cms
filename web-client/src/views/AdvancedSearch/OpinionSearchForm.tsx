@@ -42,7 +42,16 @@ export const OpinionSearchForm = connect(
             <div className="margin-bottom-3">
               <HowToSearch />
             </div>
+
             <div className="blue-container">
+              {/* Active Filters header pulled out above the fields */}
+              <div className="display-flex flex-row flex-align-end flex-justify-between margin-bottom-2">
+                <h1 className="margin-bottom-0">Active Filters</h1>
+                <p className="margin-left-1 margin-bottom-05 text-right">
+                  (optional)
+                </p>
+              </div>
+
               <div className="grid-row">
                 <div className="border-bottom-1px border-base-light padding-bottom-3">
                   <KeywordSearchField
@@ -172,6 +181,12 @@ export const OpinionSearchForm = connect(
           <NonMobile>
             <div className="grid-row no-flex-wrap">
               <div className="blue-container grid-col-9 padding-bottom-0 margin-right-1">
+                <div className="display-flex flex-row flex-align-end flex-justify-between margin-bottom-2">
+                  <h1 className="margin-bottom-0">Active Filters</h1>
+                  <p className="margin-left-1 margin-bottom-05 text-right">
+                    (optional)
+                  </p>
+                </div>
                 <div className="grid-row grid-gap-6">
                   <div className="custom-col-7 desktop:grid-col-5 grid-col-12 right-gray-border padding-bottom-2">
                     <KeywordSearchField
