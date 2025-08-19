@@ -78,6 +78,10 @@ export const baseState = {
   constants: {} as { [key: string]: any },
   currentPage: 'Interstitial',
   currentPaginationPage: 0,
+  documentSearchSort: {
+    sortColumn: 'formattedFiledDate',
+    sortDirection: 'desc',
+  },
   featureFlags: undefined as unknown as { [key: string]: string },
   form: {} as Record<string, any>,
   header: {
