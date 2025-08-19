@@ -71,13 +71,15 @@ const RenderContact = ({ contact, countryTypes, showContactDetails }) => {
 };
 
 const RecordDescription = ({ entry }) => {
-  let additionalDescription = entry.filingsAndProceedings
+  console.log('RecordDescription: entry =', entry);
+
+  const additionalDescription = entry.filingsAndProceedings
     ? ` ${entry.filingsAndProceedings}`
     : '';
 
-  if (entry.additionalInfo2) {
-    additionalDescription += ` ${entry.additionalInfo2}`;
-  }
+  // if (entry.additionalInfo2) {
+  //   additionalDescription += ` ${entry.additionalInfo2}`;
+  // }
 
   return (
     <>
