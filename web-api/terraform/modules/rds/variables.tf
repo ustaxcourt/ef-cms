@@ -12,7 +12,7 @@ variable "environment" {
 
 variable "engine_version" {
   type    = string
-  default = "15.4"
+  default = "15.10"
 }
 
 variable "delete_protection" {
