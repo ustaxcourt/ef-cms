@@ -12,8 +12,8 @@ RUN apt-get update
 
 RUN apt-get install -y \
   openjdk-17-jre-headless \
-  openjdk-17-jdk-headless \
-  openjdk-17-jre \
+  openjdk-21-jdk-headless \
+  openjdk-21-jre \
   openjdk-17-jdk \
   zip \
   curl \
@@ -25,7 +25,7 @@ RUN apt-get install -y \
   python3 \
   python3-dev \
   python-dev-is-python3 \
-  python3-pip=23.0.1+dfsg-1 \
+  python3-pip \
   jq \
   graphicsmagick \
   ghostscript \
