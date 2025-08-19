@@ -71,10 +71,6 @@ const RenderContact = ({ contact, countryTypes, showContactDetails }) => {
 };
 
 const RecordDescription = ({ entry }) => {
-  const additionalDescription = entry.filingsAndProceedings
-    ? ` ${entry.filingsAndProceedings}`
-    : '';
-
   return (
     <>
       <span
@@ -84,7 +80,6 @@ const RecordDescription = ({ entry }) => {
         )}
       >
         <strong>{entry.descriptionDisplay}</strong>
-        {additionalDescription}
       </span>
       {entry.isStricken && <span> (STRICKEN)</span>}
     </>
