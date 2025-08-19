@@ -1,0 +1,16 @@
+@use '../variables' as *;
+
+.dawson_tag {
+    background: $dawson-greyscale-white;
+    color: $dawson-blue-darker;
+    font-weight: $font-bold;
+    white-space: nowrap;
+    font-size: 14;
+    height: 20px;
+    padding: .3rem .5rem;
+
+    &.danger_tag{
+    background: $dawson-red-darker;
+    color: $dawson-greyscale-white;
+    }
+}

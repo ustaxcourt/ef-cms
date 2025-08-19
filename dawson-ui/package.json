@@ -12,6 +12,7 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
+    "@uswds/uswds": "^3.13.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "tailwind-merge": "^3.3.1",
@@ -32,7 +33,7 @@
     "@storybook/addon-onboarding": "^9.1.1",
     "@storybook/addon-vitest": "^9.1.1",
     "@storybook/react-vite": "^9.1.1",
-    "@tailwindcss/vite": "^4.1.12",
+    "@tailwindcss/vite": "^4.1.11",
     "@types/react": "^19.1.9",
     "@types/react-dom": "^19.1.7",
     "@vitejs/plugin-react": "^4.7.0",
