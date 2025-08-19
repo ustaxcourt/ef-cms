@@ -161,7 +161,7 @@ export const DocumentSearchResults = connect(
                   <div
                     className={`tablet:grid-col-4 text-right ${totalPages < 2 ? ' padding-bottom-1' : ''}`}
                   >
-                    {results.length === MAX_SEARCH_RESULTS && (
+                    {MAX_SEARCH_RESULTS && (
                       <FontAwesomeIcon
                         className="fa-icon-blue icon-spacing-4"
                         icon="info-circle"
@@ -398,7 +398,7 @@ export const DocumentSearchResults = connect(
                           {MAX_SEARCH_RESULTS.toLocaleString()} results.
                         </p>
                         <Button
-                          icon="times-circle"
+                          className="width-full tablet:width-auto"
                           onClick={event => {
                             event.stopPropagation();
                             openCleanModalSequence({
@@ -413,14 +413,23 @@ export const DocumentSearchResults = connect(
                   )}
 
                   <div className="tablet:grid-col-4 float-right text-right text-middle-margin margin-bottom-2">
-                    {results.length === MAX_SEARCH_RESULTS && (
+                    {MAX_SEARCH_RESULTS && (
                       <FontAwesomeIcon
                         className="fa-icon-blue icon-spacing-4"
                         icon="info-circle"
+                        role="button"
+                        tabIndex={0}
                         onClick={() => {
                           openCleanModalSequence({
                             showModal: 'showCountModalMobile',
                           });
+                        }}
+                        onKeyDown={e => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            openCleanModalSequence({
+                              showModal: 'showCountModalMobile',
+                            });
+                          }
                         }}
                       />
                     )}
