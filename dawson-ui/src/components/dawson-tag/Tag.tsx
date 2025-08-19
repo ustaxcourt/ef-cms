@@ -4,7 +4,7 @@ import '../../index.scss';
 import { Icon } from '../Icon';
 import classNames from 'classnames';
 
-type IconTypes = 'none' | 'wrench';
+type IconTypes = 'none' | 'wrench' | 'gavel';
 type ThemeTypes = 'primary' | 'danger';
 
 export const Tag = ({

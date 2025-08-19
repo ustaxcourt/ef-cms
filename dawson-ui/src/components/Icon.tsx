@@ -4,10 +4,15 @@ import {
   type FontAwesomeIconProps,
 } from '@fortawesome/react-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCopy, faLock, faWrench } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCopy,
+  faGavel,
+  faLock,
+  faWrench,
+} from '@fortawesome/free-solid-svg-icons';
 import { cloneDeep } from 'lodash';
 
-library.add(faLock, faWrench, faCopy);
+library.add(faLock, faWrench, faCopy, faGavel);
 
 /**
  * Dawson UI - Icon Component
