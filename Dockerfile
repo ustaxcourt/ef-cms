@@ -1,7 +1,7 @@
 ARG TARGETARCH=amd64
 
-FROM cypress/browsers:node-22.18.0-chrome-139.0.7258.127-1-ff-141.0.3-edge-139.0.3405.86-1
-        
+FROM cypress/browsers:node-22.18.0-chrome-139.0.7258.66-1-ff-141.0.3-edge-138.0.3351.121-1
+     
 
 WORKDIR /home/app
 
@@ -11,10 +11,10 @@ RUN mkdir -p /usr/share/man/man1
 RUN apt-get update
 
 RUN apt-get install -y \
-  openjdk-21-jre-headless \
-  openjdk-21-jdk-headless \
-  openjdk-21-jre \
-  openjdk-21-jdk \
+  openjdk-17-jre-headless \
+  openjdk-17-jdk-headless \
+  openjdk-17-jre \
+  openjdk-17-jdk \
   zip \
   curl \
   wget \
@@ -25,7 +25,7 @@ RUN apt-get install -y \
   python3 \
   python3-dev \
   python-dev-is-python3 \
-  python3-pip \
+  python3-pip=23.0.1+dfsg-1 \
   jq \
   graphicsmagick \
   ghostscript \
