@@ -1,3 +1,4 @@
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { Case } from './Case';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
@@ -16,7 +17,7 @@ describe('addDocketEntry', () => {
         eventCode: 'STIN',
         isOnDocketRecord: true,
         userId: 'petitionsClerk',
-      });
+      } as DocketEntry);
     }).toThrow('STIN documents should not be on the docket record.');
   });
 
@@ -31,7 +32,7 @@ describe('addDocketEntry', () => {
       docketEntryId: '123',
       documentType: 'Answer',
       userId: 'irsPractitioner',
-    });
+    } as DocketEntry);
     expect(caseToVerify.docketEntries.length).toEqual(1);
     expect(caseToVerify.docketEntries[0]).toMatchObject({
       docketEntryId: '123',
@@ -54,7 +55,7 @@ describe('addDocketEntry', () => {
       eventCode: 'STIN',
       isOnDocketRecord: false,
       userId: 'petitionsClerk',
-    });
+    } as DocketEntry);
     expect(caseToVerify.docketEntries.length).toEqual(1);
     expect(caseToVerify.docketEntries[0]).toMatchObject({
       docketEntryId: '123',
