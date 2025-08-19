@@ -1,7 +1,7 @@
 import { externalUserCreatesElectronicCase } from '../../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { goToCase } from '../../../../../helpers/caseDetail/go-to-case';
 import {
-  loginAsDocketClerk1,
+  loginAsBuch,
   loginAsPetitioner,
 } from '../../../../../helpers/authentication/login-as-helpers';
 import { petitionsClerkServesPetition } from '../../../../../helpers/documentQC/petitionsclerk-serves-petition';
@@ -21,7 +21,8 @@ if (!Cypress.env('SMOKETESTS_LOCAL')) {
     });
 
     it('should not ask the user to sign an order in the drafts if already signed it when created', () => {
-      loginAsDocketClerk1();
+      loginAsBuch();
+      // loginAsDocketClerk1();
       cy.get<string>('@DOCKET_NUMBER').then(docketNumber => {
         console.log('docketNumber', docketNumber);
         goToCase(docketNumber);
