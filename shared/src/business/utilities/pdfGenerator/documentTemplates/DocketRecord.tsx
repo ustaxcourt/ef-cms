@@ -77,10 +77,6 @@ const RecordDescription = ({ entry }) => {
     ? ` ${entry.filingsAndProceedings}`
     : '';
 
-  // if (entry.additionalInfo2) {
-  //   additionalDescription += ` ${entry.additionalInfo2}`;
-  // }
-
   return (
     <>
       <span
