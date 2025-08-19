@@ -25,6 +25,13 @@ const scriptConfig: ScriptConfig = {
       short: 't',
       type: 'string',
     },
+    prune: {
+      description:
+        'Prune the local docker registry to remove unused containers, images, volumes, and build artifacts',
+      required: false,
+      short: 'p',
+      type: 'boolean',
+    },
     srcEnv: {
       long: 'source-env',
       required: true,
@@ -43,6 +50,7 @@ const scriptConfig: ScriptConfig = {
 
 const {
   destinationTag,
+  prune,
   region,
   srcAccountId,
   srcEnv,
@@ -50,6 +58,7 @@ const {
   targetEnv,
 } = parseArgsAndEnvVars(scriptConfig) as {
   destinationTag: string;
+  prune: boolean;
   region: string;
   srcAccountId: string;
   srcEnv: string;
@@ -125,6 +134,20 @@ async function app() {
   }
 
   const tag = destinationTag || readDockerContainerVersion({ efCmsRoot });
+
+  if (prune) {
+    const pruneOutput = await runCommand('docker', [
+      'system',
+      'prune',
+      '--all',
+      '--force',
+      '--volumes',
+    ]);
+    console.log(
+      'Pruning local docker registry to remove unused containers, images, volumes, and build artifacts...\n',
+      pruneOutput,
+    );
+  }
 
   console.log(`Retrieving temporary AWS credentials for ${srcEnv}...`);
   const envSwitcherCommand = `. scripts/env/set-env.zsh ${sourceEnv} --quiet`;
