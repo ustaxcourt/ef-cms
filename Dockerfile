@@ -11,10 +11,10 @@ RUN mkdir -p /usr/share/man/man1
 RUN apt-get update
 
 RUN apt-get install -y \
-  openjdk-17-jre-headless \
+  openjdk-21-jre-headless \
   openjdk-21-jdk-headless \
   openjdk-21-jre \
-  openjdk-17-jdk \
+  openjdk-21-jdk \
   zip \
   curl \
   wget \
