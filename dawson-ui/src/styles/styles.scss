@@ -3,16 +3,20 @@
 .dawson_tag {
     background: $dawson-greyscale-white;
     color: $dawson-blue-darker;
-    font-weight: $font-bold;
-    white-space: nowrap;
-    font-size: 14;
     height: 20px;
     padding: .3em .5em;
+    font-weight: $font-bold;
+    font-size: 14px;
+    white-space: nowrap;
     border-radius: .5em;
     font-family: $font-source-sans;
 
-    &.danger_tag{
-    background: $dawson-red-dark;
-    color: $dawson-greyscale-white;
+    @media (max-width: $small-screen) {
+        font-size: 12px;
+    }
+
+    &.danger_tag {
+        background: $dawson-red-dark;
+        color: $dawson-greyscale-white;
     }
 }
