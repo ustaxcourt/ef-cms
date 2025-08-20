@@ -79,7 +79,7 @@ const RecordDescription = ({ entry }) => {
           entry.isStricken && 'stricken-docket-record',
         )}
       >
-        <strong>{entry.descriptionDisplay}</strong>
+        {entry.descriptionDisplay}
       </span>
       {entry.isStricken && <span> (STRICKEN)</span>}
     </>
