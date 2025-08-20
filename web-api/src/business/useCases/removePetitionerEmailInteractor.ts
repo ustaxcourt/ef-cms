@@ -11,9 +11,10 @@ import {
 import { Case } from '@shared/business/entities/cases/Case';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { settlePromises } from '@web-api/utilities/settlePromises';
-import { SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstants';
+import { ROLES, SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstants';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 import { disassociateUsersFromCases } from '@web-api/persistence/postgres/cases/userOnCase/disassociateUsersFromCases';
+import { associateUsersWithCases } from '@web-api/persistence/postgres/cases/userOnCase/associateUsersWithCases';
 
 export const removePetitionerEmailInteractor = async (
   { docketNumber, email }: { docketNumber: string; email: string },
@@ -53,6 +54,14 @@ export const removePetitionerEmailInteractor = async (
 
   await settlePromises([
     upsertCases([caseToUpdate]),
+    associateUsersWithCases([
+      {
+        docketNumber,
+        userId: updatedPetitioner.contactId,
+        actingAsRole: ROLES.petitioner,
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+      },
+    ]),
     disassociateUsersFromCases([
       {
         docketNumber,
