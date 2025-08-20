@@ -17,7 +17,7 @@ export const OpenCases = connect(
       <React.Fragment>
         <div className="text-right">
           <span className="text-semibold">Count: </span>
-          {openCases.length}
+          <span data-testid="open-cases-count" >{openCases.length}</span>
         </div>
         <div className="padding-1"></div>
         <div className="overflow-x-auto overflow-y-hidden">
