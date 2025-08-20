@@ -161,7 +161,7 @@ export const DocumentSearchResults = connect(
                   <div
                     className={`tablet:grid-col-4 text-right ${totalPages < 2 ? ' padding-bottom-1' : ''}`}
                   >
-                    {MAX_SEARCH_RESULTS && (
+                    {results.length === MAX_SEARCH_RESULTS && (
                       <FontAwesomeIcon
                         className="fa-icon-blue icon-spacing-4"
                         icon="info-circle"
@@ -413,7 +413,7 @@ export const DocumentSearchResults = connect(
                   )}
 
                   <div className="tablet:grid-col-4 float-right text-right text-middle-margin margin-bottom-2">
-                    {MAX_SEARCH_RESULTS && (
+                    {results.length === MAX_SEARCH_RESULTS && (
                       <FontAwesomeIcon
                         className="fa-icon-blue icon-spacing-4"
                         icon="info-circle"
