@@ -32,7 +32,7 @@ describe('Court Issued Documents', { scrollBehavior: 'center' }, () => {
       cy.get('[data-testid="print-paper-service-done-button"]').click();
       cy.get('[data-testid="document-viewer-link-O"]').should(
         'have.text',
-        'Order',
+        'Null',
       );
     });
   });
