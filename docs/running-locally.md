@@ -53,6 +53,17 @@ To run a DAWSON development environment, we will need to install the following C
      libpq \
      gh
    ```
+1. Several of the installed packages will output some post-installation steps. Follow those instructions to complete the installation.
+1. ⚠️ Apple Silicon Macs Only ⚠️
+   1. Apple Silicon Macs require some additional software to be installed.  Run the following commands to install and configure the necessary dependencies:
+      ```sh
+      brew install pkg-config cairo pango libpng jpeg giflib librsvg pixman libffi expat zlib
+      brew link libffi --force
+      brew link expat --force
+      brew link zlib --force
+      ```
+   1. This will install `node-canvas` dependencies globally.
+
 ### Graphical User Interface (GUI) software
 
 We will also need to install the following GUI tools:
@@ -64,67 +75,31 @@ We will also need to install the following GUI tools:
 - [Pop](https://pop.com/) - pair programming tool
 - [Slack](https://slack.com/) - team communication tool
 
-
 ## Getting Running
 
 All of the scripts needed to run this project should be outlined in our [package.json](https://github.com/ustaxcourt/ef-cms/blob/staging/package.json#L162).  I recommend looking through this list of scripts because you will be using a lot of them as you advance through learning this application.  But for now, let's just talk about the most important ones.
 
-### M1 Macs - Docker Method
-
-#### Additional Prerequisites
-
-[Docker Desktop](https://www.docker.com/products/docker-desktop/). Ask a team member how to obtain a license if you don't already have one. **If you use Docker Desktop, you need to get a license**. Within Docker, allocate 2+ CPUs, 8+ GB of RAM, and 4+ GB of swap. This will reduce the number of resource-related failures when running the application.
-
-#### Checkout Develop
-
-Make sure you are on the `ustaxcourt/staging` branch before you try to start the services.
-
-#### Starting the Services
-
-You don't need to install any NPM dependencies before running the script:
-
-`npm run start:all:docker`. This script handles NPM dependency installation and starting the API, the client UI, and the public UI.
-
-Once you've started your services locally, you should be able to access them here:
-
-- [http://localhost:1234](http://localhost:1234) (private UI)
-- [http://localhost:5678](http://localhost:5678) (public UI)
-
-Use one of the mock logins documented below to log in to the private UI.
-
-![Mock Login Page](./images/mock-login.png)
-
-If you have unexpected errors with running in Docker, try allocating 2+ CPUs, 8+ GB of RAM, and 4+ GB of swap.
-
-### Apple Silicon Macs - Non-Docker Method
-
-This method does not use Docker, nor does it use Rosetta. It is also the method preferred by other M1, M2, M3, or M4 users on the team.
-
-Follow the instructions for setup as you would for Non Apple Silicon Macs, but **before you run `npm i`**, run the following commands:
-
-```sh
-brew install pkg-config cairo pango libpng jpeg giflib librsvg pixman libffi expat zlib
-brew link libffi --force
-brew link expat --force
-brew link zlib --force
-export PKG_CONFIG_PATH=/opt/homebrew/lib/pkgconfig/
-```
-
-This will install `node-canvas` dependencies globally. As of 12/05/2022, `node-canvas` does not have a package compatible with M1 Macs.
-
-### Non-Apple Silicon Macs
-
-#### Checkout Develop
+### Checkout `staging`
 
 Make sure you are on the `ustaxcourt/staging` branch before you install the npm dependencies or try to start the services.
 
-#### Install the NPM Dependencies
+### Install Node.js via NVM
 
-All applications dependencies are managed via our `package.json` and `package-lock.json` files and are installed using `npm`.  You will first need to install of our dependencies by running the following:
+We use [NVM](https://github.com/nvm-sh/nvm) to manage our Node.js versions. The exact version of Node.js we use is defined in the [.nvmrc](https://github.com/ustaxcourt/ef-cms/blob/staging/.nvmrc) file. The version specified in this file will be used when running `nvm install` and `nvm use` without specifying a version.
 
-`npm install`
+```sh
+nvm install
+nvm use
+nvm alias default "$(cat .nvmrc)"
+```
 
-#### 🏃 Starting the Services
+### Install NPM Dependencies
+
+All application dependencies are managed via our `package.json` and `package-lock.json` files and are installed using `npm`.  You will first need to install of our dependencies by running the following:
+
+`npm ci`
+
+### 🏃 Starting the Services
 
 Once you've installed the dependencies, you should be able to run the npm scripts to start up the API, private UI, and public UI.  We recommend you have three separate terminals open and run each of the following commands in a separate terminal:
 
