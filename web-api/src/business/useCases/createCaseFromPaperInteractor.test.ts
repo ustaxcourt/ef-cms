@@ -23,6 +23,7 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 
 const getUserById = jest.mocked(getUserByIdMock);
 
@@ -196,7 +197,6 @@ describe('createCaseFromPaperInteractor', () => {
       eventCode: 'APW',
       isOnDocketRecord: false,
       isPaper: true,
-      workItem: undefined,
     });
   });
 
@@ -259,7 +259,6 @@ describe('createCaseFromPaperInteractor', () => {
       eventCode: 'DISC',
       isOnDocketRecord: false,
       isPaper: true,
-      workItem: undefined,
     });
   });
 
@@ -317,7 +316,6 @@ describe('createCaseFromPaperInteractor', () => {
       index: 0,
       isOnDocketRecord: false,
       isPaper: true,
-      workItem: undefined,
     });
   });
 
@@ -379,7 +377,6 @@ describe('createCaseFromPaperInteractor', () => {
       eventCode: 'RQT',
       isOnDocketRecord: false,
       isPaper: true,
-      workItem: undefined,
     });
   });
 
@@ -436,7 +433,6 @@ describe('createCaseFromPaperInteractor', () => {
       eventCode: 'ATP',
       isOnDocketRecord: true,
       isPaper: true,
-      workItem: undefined,
     });
   });
 
@@ -563,5 +559,56 @@ describe('createCaseFromPaperInteractor', () => {
     expect(reqForPlaceOfTrialDocketEntry).toBeDefined();
 
     expect(caseFromPaper).toBeDefined();
+  });
+
+  it('should save work items', async () => {
+    await createCaseFromPaperInteractor(
+      applicationContext,
+      {
+        corporateDisclosureFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
+        petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+        petitionMetadata: {
+          caseCaption: 'caseCaption',
+          caseType: CASE_TYPES_MAP.other,
+          contactSecondary: {},
+          filingType: 'Myself',
+          hasIrsNotice: true,
+          irsNoticeDate: date,
+          mailingDate: 'testing',
+          partyType: PARTY_TYPES.petitioner,
+          petitionFile: new File([], 'petitionFile.pdf'),
+          petitionFileSize: 1,
+          petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
+          petitioners: [
+            {
+              address1: '99 South Oak Lane',
+              address2: 'Culpa numquam saepe ',
+              address3: 'Eaque voluptates com',
+              city: 'Dignissimos voluptat',
+              contactType: CONTACT_TYPES.primary,
+              countryType: COUNTRY_TYPES.DOMESTIC,
+              email: 'petitioner1@example.com',
+              name: 'Diana Prince',
+              phone: '+1 (215) 128-6587',
+              postalCode: '69580',
+              state: 'AR',
+            },
+          ],
+          preferredTrialCity: 'Fresno, California',
+          procedureType: 'Small',
+          receivedAt: applicationContext.getUtilities().createISODateString(),
+          requestForPlaceOfTrialFile: new File(
+            [],
+            'requestForPlaceOfTrialFile.pdf',
+          ),
+          requestForPlaceOfTrialFileSize: 1,
+          stinFile: new File([], 'stinFile.pdf'),
+          stinFileSize: 1,
+        },
+        requestForPlaceOfTrialFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
+      } as any,
+      mockPetitionsClerkUser,
+    );
+    expect(upsertWorkItems).toHaveBeenCalled();
   });
 });

@@ -30,7 +30,6 @@ import { upsertCases as upsertCasesMock } from '@web-api/persistence/postgres/ca
 import { removeCaseFromHearing as removeCaseFromHearingMock } from '@web-api/persistence/dynamo/trialSessions/removeCaseFromHearing';
 import { getUniqueId } from '@shared/sharedAppContext';
 import { upsertDocketEntries as upsertDocketEntriesMock } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
-import { MOCK_WORK_ITEM } from '@shared/test/mockWorkItem';
 import { disassociateUsersFromCases as disassociateUsersFromCasesMock } from '@web-api/persistence/postgres/cases/userOnCase/disassociateUsersFromCases';
 import { associateUsersWithCases as associateUsersWithCasesMock } from '@web-api/persistence/postgres/cases/userOnCase/associateUsersWithCases';
 
@@ -264,7 +263,9 @@ describe('updateCaseAndAssociations', () => {
         archivedDocketEntries: MOCK_DOCUMENTS,
         docketEntries: MOCK_DOCUMENTS.map(d => ({
           ...d,
-          workItem: MOCK_WORK_ITEM,
+          workItemId: 'someId',
+          qcComplete: false,
+          qcViewed: false,
         })),
       };
       const caseToUpdate = {
@@ -272,7 +273,9 @@ describe('updateCaseAndAssociations', () => {
         archivedDocketEntries: MOCK_DOCUMENTS,
         docketEntries: MOCK_DOCUMENTS.map(d => ({
           ...d,
-          workItem: undefined,
+          workItemId: 'someOtherId',
+          qcComplete: true,
+          qcViewed: true,
         })),
       };
 

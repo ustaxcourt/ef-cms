@@ -50,7 +50,7 @@ export const CaseDeadlines = connect(
         key: 'filterStartDateState',
         value: caseDeadlineReportHelper.filterStartDate,
       });
-    })
+    }, [])
 
     return (
       <>
@@ -61,7 +61,7 @@ export const CaseDeadlines = connect(
           <div className="title">
             <h1>Deadlines</h1>
           </div>
-          <h2>{caseDeadlineReportHelper.formattedFilterDateHeader}</h2>
+          <h2 data-testid="case-deadline-report-header">{caseDeadlineReportHelper.formattedFilterDateHeader}</h2>
           <div className="grid-row margin-bottom-3">
             <DateRangePickerComponent
               endDateErrorText={validationErrors.endDate}
@@ -168,7 +168,7 @@ export const CaseDeadlines = connect(
                     <th>Judge</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody data-testid="case-deadlines-report-table-body">
                   {caseDeadlineReportHelper.formattedCaseDeadlines.map(row => (
                     <tr key={row.caseDeadlineId}>
                       <td className="smaller-column">
