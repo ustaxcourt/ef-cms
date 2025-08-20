@@ -17,10 +17,8 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { setWorkItemAsReadInteractor } from './setWorkItemAsReadInteractor';
 import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
-import { upsertDocketEntries as upsertDocketEntriesMock } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 
 describe('setWorkItemAsReadInteractor', () => {
-  const upsertDocketEntries = jest.mocked(upsertDocketEntriesMock);
   const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
   const getWorkItemById = getWorkItemByIdMock as jest.Mock;
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
@@ -29,7 +27,7 @@ describe('setWorkItemAsReadInteractor', () => {
     assigneeName: 'bob',
     caseStatus: CASE_STATUS_TYPES.new,
     caseTitle: 'Johnny Joe Jacobson',
-    docketEntry: MOCK_CASE.docketEntries[0],
+    docketEntryId: MOCK_CASE.docketEntries[0].docketEntryId,
     docketNumber: '101-18',
     docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
     section: DOCKET_SECTION,
@@ -38,7 +36,7 @@ describe('setWorkItemAsReadInteractor', () => {
   };
 
   beforeEach(() => {
-    getWorkItemById.mockReturnValue(new WorkItem(mockWorkItem));
+    getWorkItemById.mockResolvedValue(new WorkItem(mockWorkItem));
 
     getCaseByDocketNumber.mockResolvedValue({
       ...MOCK_CASE,
@@ -59,13 +57,8 @@ describe('setWorkItemAsReadInteractor', () => {
     ).rejects.toThrow(UnauthorizedError);
   });
 
-  it('should throw an error when the docket entry is not found on the case', async () => {
-    getWorkItemById.mockReturnValue(
-      new WorkItem({
-        ...mockWorkItem,
-        docketEntry: { docketEntryId: 'ff54c9e8-93c5-4098-ba34-fa6edaa9da91' },
-      }),
-    );
+  it('should throw an error when the work item is not found', async () => {
+    getWorkItemById.mockResolvedValue(undefined);
 
     await expect(
       setWorkItemAsReadInteractor(
@@ -77,22 +70,7 @@ describe('setWorkItemAsReadInteractor', () => {
     ).rejects.toThrow(NotFoundError);
   });
 
-  it('should call upsertDocketEntries with the docket entry work item marked as read', async () => {
-    await setWorkItemAsReadInteractor(
-      {
-        workItemId: mockWorkItem.workItemId,
-      },
-      mockDocketClerkUser,
-    );
-
-    expect(upsertDocketEntries).toHaveBeenCalledWith([
-      expect.objectContaining({
-        workItem: expect.objectContaining({ isRead: true }),
-      }),
-    ]);
-  });
-
-  it('should call saveWorkItem with the work item marked as read', async () => {
+  it('should call upsertWorkItems with the work item marked as read', async () => {
     await setWorkItemAsReadInteractor(
       {
         workItemId: mockWorkItem.workItemId,

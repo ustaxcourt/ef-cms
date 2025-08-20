@@ -123,10 +123,7 @@ export const fileCourtIssuedDocketEntry = async (
       const workItem = new WorkItem({
         assigneeId: null,
         assigneeName: null,
-        docketEntry: {
-          ...docketEntryEntity.toRawObject(),
-          createdAt: docketEntryEntity.createdAt,
-        },
+        docketEntryId: docketEntryEntity.docketEntryId,
         docketNumber: caseEntity.docketNumber,
         inProgress: true,
         section: DOCKET_SECTION,
@@ -137,8 +134,6 @@ export const fileCourtIssuedDocketEntry = async (
       if (isUnservable) {
         workItem.setAsCompleted({ message: 'completed', user });
       }
-
-      docketEntryEntity.setWorkItem(workItem);
 
       const isDocketEntryAlreadyOnCase = !!caseEntity.getDocketEntryById({
         docketEntryId,
@@ -153,7 +148,10 @@ export const fileCourtIssuedDocketEntry = async (
       workItem.assignToUser({
         assigneeId: user.userId,
         assigneeName: user.name,
-        section: user.section,
+        section: WorkItem.getWorkItemSectionFromUserSection({
+          section: user.section,
+          documentTitle: docketEntryEntity.documentTitle,
+        }),
         sentBy: user.name,
         sentBySection: user.section,
         sentByUserId: user.userId,

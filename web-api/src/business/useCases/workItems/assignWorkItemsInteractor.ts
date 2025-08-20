@@ -2,24 +2,16 @@ import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { RawWorkItem, WorkItem } from '@shared/business/entities/WorkItem';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { User } from '../../../../../shared/src/business/entities/User';
+import { User } from '@shared/business/entities/User';
 import { getWorkItemById } from '@web-api/persistence/postgres/workitems/getWorkItemById';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { getDocketEntriesByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumberAndDocketEntryId';
 
-/**
- * getWorkItem
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.assigneeId the id of the user to assign the work item to
- * @param {string} providers.assigneeName the name of the user to assign the work item to
- * @param {string} providers.workItemId the id of the work item to assign
- */
 export const assignWorkItemsInteractor = async (
   _: ServerApplicationContext,
   {
@@ -54,12 +46,10 @@ export const assignWorkItemsInteractor = async (
   });
 
   if (!userBeingAssigned) {
-    throw new NotFoundError(
-      `User not found with user id ${assigneeId}`,
-    );
+    throw new NotFoundError(`User not found with user id ${assigneeId}`);
   }
 
-  let workItemEntity;
+  let workItemEntity: WorkItem | undefined;
   if (!workItem && workItemId) {
     workItemEntity = await getWorkItemById({
       workItemId,
@@ -69,6 +59,23 @@ export const assignWorkItemsInteractor = async (
     }
   } else {
     workItemEntity = new WorkItem(workItem);
+  }
+
+  const docketEntry = (
+    await getDocketEntriesByDocketNumberAndDocketEntryId({
+      docketNumbersAndIds: [
+        {
+          docketNumber: workItemEntity.docketNumber,
+          docketEntryId: workItemEntity.docketEntryId,
+        },
+      ],
+    })
+  ).at(0);
+
+  if (!docketEntry) {
+    throw new NotFoundError(
+      `Docket entry associated with work item ${workItemId} was not found.`,
+    );
   }
 
   const userIsCaseServices = User.isCaseServicesUser({ section: user.section });
@@ -88,7 +95,10 @@ export const assignWorkItemsInteractor = async (
   workItemEntity.assignToUser({
     assigneeId,
     assigneeName,
-    section: sectionToAssignTo,
+    section: WorkItem.getWorkItemSectionFromUserSection({
+      section: sectionToAssignTo,
+      documentTitle: docketEntry.documentTitle,
+    }),
     sentBy: user.name,
     sentBySection: user.section,
     sentByUserId: user.userId,

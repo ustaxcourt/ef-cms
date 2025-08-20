@@ -217,11 +217,7 @@ export class User extends JoiValidationEntity {
     return internalRoles.includes(role);
   }
 
-  static isCaseServicesUser({
-    section,
-  }: {
-    section: string | undefined;
-  }): boolean {
+  static isCaseServicesUser({ section }: { section?: string }): boolean {
     return section === CASE_SERVICES_SUPERVISOR_SECTION;
   }
 
