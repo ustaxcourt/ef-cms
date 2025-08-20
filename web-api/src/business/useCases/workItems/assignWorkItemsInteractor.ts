@@ -9,6 +9,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '@shared/business/entities/User';
 import { getWorkItemById } from '@web-api/persistence/postgres/workitems/getWorkItemById';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { getDocketEntriesByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumberAndDocketEntryId';
 
 /**
  * getWorkItem
@@ -50,7 +51,7 @@ export const assignWorkItemsInteractor = async (
       userId: assigneeId,
     });
 
-  let workItemEntity;
+  let workItemEntity: WorkItem | undefined;
   if (!workItem && workItemId) {
     workItemEntity = await getWorkItemById({
       workItemId,
@@ -60,6 +61,23 @@ export const assignWorkItemsInteractor = async (
     }
   } else {
     workItemEntity = new WorkItem(workItem);
+  }
+
+  const docketEntry = (
+    await getDocketEntriesByDocketNumberAndDocketEntryId({
+      docketNumbersAndIds: [
+        {
+          docketNumber: workItemEntity.docketNumber,
+          docketEntryId: workItemEntity.docketEntryId,
+        },
+      ],
+    })
+  ).at(0);
+
+  if (!docketEntry) {
+    throw new NotFoundError(
+      `Docket entry associated with work item ${workItemId} was not found.`,
+    );
   }
 
   const userIsCaseServices = User.isCaseServicesUser({ section: user.section });
@@ -79,7 +97,10 @@ export const assignWorkItemsInteractor = async (
   workItemEntity.assignToUser({
     assigneeId,
     assigneeName,
-    section: sectionToAssignTo,
+    section: WorkItem.getWorkItemSectionFromUserSection({
+      section: sectionToAssignTo,
+      documentTitle: docketEntry.documentTitle,
+    }),
     sentBy: user.name,
     sentBySection: user.section,
     sentByUserId: user.userId,

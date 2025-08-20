@@ -377,7 +377,7 @@ describe('getWorkQueueFilters', () => {
           docketEntry: {
             isFileAttached: false,
           } as RawDocketEntry,
-          section: CASE_SERVICES_SUPERVISOR_SECTION,
+          section: DOCKET_SECTION,
           workItemId: '1',
         },
         {
@@ -388,7 +388,7 @@ describe('getWorkQueueFilters', () => {
           inProgress: true,
           docketEntryId: 'anId',
           docketEntry: {} as RawDocketEntry,
-          section: CASE_SERVICES_SUPERVISOR_SECTION,
+          section: DOCKET_SECTION,
           workItemId: '2',
         },
         {
@@ -400,7 +400,7 @@ describe('getWorkQueueFilters', () => {
             isFileAttached: true,
           } as RawDocketEntry,
           inProgress: false,
-          section: CASE_SERVICES_SUPERVISOR_SECTION,
+          section: DOCKET_SECTION,
           workItemId: '3',
         },
         {
@@ -414,7 +414,7 @@ describe('getWorkQueueFilters', () => {
             isFileAttached: true,
           } as RawDocketEntry,
           inProgress: false,
-          section: CASE_SERVICES_SUPERVISOR_SECTION,
+          section: DOCKET_SECTION,
           workItemId: '4',
         },
       ];
@@ -439,7 +439,12 @@ describe('getWorkQueueFilters', () => {
       ]);
     });
 
-    [PETITIONS_SECTION, DOCKET_SECTION].forEach(sectionToTest => {
+    (
+      [PETITIONS_SECTION, DOCKET_SECTION] as (
+        | typeof PETITIONS_SECTION
+        | typeof DOCKET_SECTION
+      )[]
+    ).forEach(sectionToTest => {
       it(`returns an object containing a filter map for ${sectionToTest} section work queues and boxes`, () => {
         const sectionWorkItems: WorkItemWithCaseInfo[] = [
           {
