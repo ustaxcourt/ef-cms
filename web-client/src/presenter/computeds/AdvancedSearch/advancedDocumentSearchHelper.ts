@@ -71,8 +71,8 @@ export const advancedDocumentSearchHelper = (
     // Sorting logic
     paginatedResults.formattedSearchResults =
       paginatedResults.formattedSearchResults.sort((a, b) => {
-        let aValue = a[sortColumn] || '';
-        let bValue = b[sortColumn] || '';
+        let aValue = a[sortColumn];
+        let bValue = b[sortColumn];
 
         const direction = sortDirection === 'asc' ? 1 : -1;
 
@@ -87,12 +87,14 @@ export const advancedDocumentSearchHelper = (
         }
 
         if (sortColumn === 'numberOfPages') {
-          return (Number(aValue) - Number(bValue)) * direction;
+          return (Number(aValue ?? 0) - Number(bValue ?? 0)) * direction;
         }
 
-        // Fallback to string comparison
-        aValue = String(aValue).toLowerCase();
-        bValue = String(bValue).toLowerCase();
+        // Fallback to string comparison, guard against undefined/null
+        aValue = aValue == null ? '' : String(aValue);
+        bValue = bValue == null ? '' : String(bValue);
+        aValue = aValue.toLowerCase();
+        bValue = bValue.toLowerCase();
 
         if (aValue < bValue) return -1 * direction;
         if (aValue > bValue) return direction;
