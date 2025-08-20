@@ -161,17 +161,22 @@ export const DocumentSearchResults = connect(
                   <div
                     className={`tablet:grid-col-4 text-right ${totalPages < 2 ? ' padding-bottom-1' : ''}`}
                   >
-                    {MAX_SEARCH_RESULTS && (
+                    {results.length === MAX_SEARCH_RESULTS && (
                       <FontAwesomeIcon
                         className="fa-icon-blue icon-spacing-4"
                         icon="info-circle"
                         title={`Search is limited to ${MAX_SEARCH_RESULTS.toLocaleString()} results.`}
-                        tabIndex={0}
                         aria-label={`Search is limited to ${MAX_SEARCH_RESULTS.toLocaleString()} results.`}
                       />
                     )}
-                    <b className="text-semibold">Count:</b>{' '}
-                    {results.length.toLocaleString()}
+                    <span
+                      className="cursor-default"
+                      title={`Search is limited to ${MAX_SEARCH_RESULTS.toLocaleString()} results.`}
+                      aria-label={`Search is limited to ${MAX_SEARCH_RESULTS.toLocaleString()} results.`}
+                    >
+                      <b className="text-semibold">Count:</b>{' '}
+                      <span>{results.length.toLocaleString()}</span>
+                    </span>
                   </div>
                 </div>
 
@@ -413,7 +418,7 @@ export const DocumentSearchResults = connect(
                   )}
 
                   <div className="tablet:grid-col-4 float-right text-right text-middle-margin margin-bottom-2">
-                    {MAX_SEARCH_RESULTS && (
+                    {results.length === MAX_SEARCH_RESULTS && (
                       <FontAwesomeIcon
                         className="fa-icon-blue icon-spacing-4"
                         icon="info-circle"
