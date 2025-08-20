@@ -34,10 +34,10 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
 
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
+  const getUserById = jest.mocked(getUserByIdMock);
   const getWorkItemByDocketNumberAndDocketEntryId = jest.mocked(
     getWorkItemByDocketNumberAndDocketEntryIdMock,
   );
-  const getUserById = jest.mocked(getUserByIdMock);
   const tryGetLocks = jest.mocked(tryGetLocksMock);
 
   beforeAll(() => {

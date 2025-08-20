@@ -9,8 +9,8 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '@shared/business/entities/User';
 import { getWorkItemById } from '@web-api/persistence/postgres/workitems/getWorkItemById';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
-import { getDocketEntriesByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumberAndDocketEntryId';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { getDocketEntriesByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumberAndDocketEntryId';
 
 /**
  * getWorkItem

@@ -31,10 +31,10 @@ import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } fr
 import { updateDocketEntryPendingServiceStatus as updateDocketEntryPendingServiceStatusMock } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { getWorkItemByDocketNumberAndDocketEntryId as getWorkItemByDocketNumberAndDocketEntryIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
-import { WorkItem } from '@shared/business/entities/WorkItem';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
+import { getWorkItemByDocketNumberAndDocketEntryId as getWorkItemByDocketNumberAndDocketEntryIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
+import { WorkItem } from '@shared/business/entities/WorkItem';
 
 describe('editPaperFilingInteractor', () => {
   let caseRecord;
@@ -104,12 +104,10 @@ describe('editPaperFilingInteractor', () => {
       ],
     };
 
+    getUserById.mockResolvedValue(docketClerkUser as DbUser);
     getWorkItemByDocketNumberAndDocketEntryId.mockResolvedValue(
       new WorkItem(workItem),
     );
-
-    getUserById.mockResolvedValue(docketClerkUser as DbUser);
-
     getCaseByDocketNumber.mockResolvedValue(caseRecord);
     fileAndServeDocumentOnOneCase.mockImplementation(
       ({ caseEntity }) => caseEntity,

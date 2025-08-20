@@ -22,8 +22,8 @@ import {
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
-import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 
 const getUserById = jest.mocked(getUserByIdMock);
 

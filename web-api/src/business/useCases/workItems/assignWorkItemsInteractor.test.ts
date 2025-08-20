@@ -23,9 +23,8 @@ import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/us
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 import { getDocketEntriesByDocketNumberAndDocketEntryId as getDocketEntriesByDocketNumberAndDocketEntryIdMock } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumberAndDocketEntryId';
 
-const getUserById = jest.mocked(getUserByIdMock);
-
 describe('assignWorkItemsInteractor', () => {
+  const getUserById = jest.mocked(getUserByIdMock);
   const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
   const getWorkItemById = getWorkItemByIdMock as jest.Mock;
   const getDocketEntriesByDocketNumberAndDocketEntryId = jest.mocked(
