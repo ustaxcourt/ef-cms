@@ -17,6 +17,7 @@ const config: Config = {
     '!download-all-case-documents.ts',
     '!dynamo/fix-race-condition-served-in-drafts.ts',
     '!dynamo/set-maintenance-mode.ts',
+    '!ecr/**',
     '!elasticsearch/create-temporary-indices.ts',
     '!elasticsearch/docket-entry-search.ts',
     '!elasticsearch/docket-inbox.ts',

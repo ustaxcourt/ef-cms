@@ -68,7 +68,10 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   const mockCase = {
     ...MOCK_CASE,
     docketEntries: [
-      { docketEntryId: mockDocketEntryId, isOnDocketRecord: false },
+      {
+        docketEntryId: mockDocketEntryId,
+        isOnDocketRecord: false,
+      } as RawDocketEntry,
     ],
   };
 
