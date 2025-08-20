@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   git-shallow-clone: guitarrapc/git-shallow-clone@2.8.0
 
-efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.46
+efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.48
 
 parameters:
   run_build_and_deploy:
@@ -365,6 +365,10 @@ jobs:
           name: Setup Env
           command: |
             ./scripts/env/env-for-circle.sh
+      - run:
+          name: Migrate Practitioner Documents from Dynamo to Postgres
+          command: |
+            ./scripts/run-once-scripts/postgres-migration/migrateAllPractitionerDocumentsIntoPostgres.ts
       - run:
           name: Migrate Feature Flags from Dynamo to Postgres
           command: |
@@ -810,6 +814,11 @@ jobs:
           command: |
             NODE_ENV=production npm run migration:postgres
       - run:
+          name: Restore Postgres User Permissions
+          command: |
+            cd ./scripts/postgres
+            DB_HOST="$POSTGRES_HOST" ./create-rds-users.sh
+      - run:
           name: Enable Dynamodb Streams
           command: |
             ./scripts/migration/toggle-streams.sh --on
@@ -878,6 +887,63 @@ jobs:
           command: |
             if [ "$MIGRATE_FLAG" == "true" ]; then
               NODE_ENV=production ./scripts/reindex/index-docket-entries/index-docket-entries.ts 5
+            fi
+  users-to-postgres:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+      - run:
+          name: Move petitioners from dwCase.petitioners to dwUser
+          command: |
+            npx ts-node --transpile-only ./scripts/run-once-scripts/postgres-migration/move-petitioners-out-of-case.ts
+      - run:
+          name: Move users, privatePractitioners, irsPractitioners, pending-case from dynamo to postgres
+          command: |
+            npx ts-node --transpile-only ./scripts/run-once-scripts/postgres-migration/migrate-users-to-postgres.ts
+      - run:
+          name: Update users' account status
+          command: |
+            npx ts-node --transpile-only ./scripts/run-once-scripts/postgres-migration/add-account-status-to-users.ts
+
+  index-users:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+            source $BASH_ENV
+            if [ "$MIGRATE_FLAG" == "true" ]; then
+              DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
+              ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
+                --domain-name "${DESTINATION_DOMAIN}" \
+                --region "us-east-1" \
+                --query 'DomainStatus.Endpoint' \
+                --output text)
+              echo "export ELASTICSEARCH_ENDPOINT=${ELASTICSEARCH_ENDPOINT}" >> $BASH_ENV
+            fi
+      - run:
+          name: Index Users
+          command: |
+            if [ "$MIGRATE_FLAG" == "true" ]; then
+              NODE_ENV=production ./scripts/reindex/index-users/index-users.ts 5
             fi
 
   cleanup-glue-job:
@@ -1050,11 +1116,6 @@ jobs:
           name: Restore Postgres Data
           command: |
             TARGET_ENV="$LOWER_ENV" TARGET_ACCOUNT_ID="$LOWER_ENV_ACCOUNT_ID" ./scripts/postgres/restoreDbFromSource.ts
-      - run:
-          name: Restore Postgres User Permissions
-          command: |
-            cd ./scripts/postgres
-            DB_HOST="$POSTGRES_HOST" ./create-rds-users.sh
 
   finish-glue-job:
     docker:
@@ -1158,26 +1219,30 @@ workflows:
           <<: *only-deployed-lower-environments
           requires:
             - index-cases
+      - index-users:
+          <<: *only-deployed-lower-environments
+          requires:
+            - index-docket-entries
       - smoketests:
           <<: *only-deployed-lower-environments
           requires:
             - disable-reindex-cron
-            - index-docket-entries
+            - index-users
       - loadtests:
           <<: *only-deployed-lower-environments
           requires:
             - disable-reindex-cron
-            - index-docket-entries
+            - index-users
       - smoketests-readonly:
           <<: *only-deployed-lower-environments
           requires:
             - disable-reindex-cron
-            - index-docket-entries
+            - index-users
       - api-hosted-environment-tests:
           <<: *only-deployed-lower-environments
           requires:
             - disable-reindex-cron
-            - index-docket-entries
+            - index-users
       - switch-colors:
           <<: *only-deployed-lower-environments
           requires:
@@ -1287,8 +1352,21 @@ workflows:
         - equal: [glue-to-test-schedule, << pipeline.schedule.name >>]
         - << pipeline.parameters.run_glue_to_test >>
     jobs:
+      - delete-existing-data:
+          <<: *only-test
+      - redeploy-environment:
+          <<: *only-test
+          requires:
+            - delete-existing-data
+      - wait-for-deployment-workflow:
+          <<: *only-test
+          type: approval
+          requires:
+            - redeploy-environment
       - initiate-glue-job:
           <<: *only-test
+          requires:
+            - wait-for-deployment-workflow
       - wait-for-glue-workflow:
           <<: *only-test
           type: approval
@@ -1300,16 +1378,6 @@ workflows:
           requires:
             - initiate-glue-job
       - index-glued-data:
-          <<: *only-test
-          requires:
-            - wait-for-glue-workflow
-            - wait-for-s3-sync-workflow
-      - index-cases:
-          <<: *only-test
-          requires:
-            - wait-for-glue-workflow
-            - wait-for-s3-sync-workflow
-      - index-docket-entries:
           <<: *only-test
           requires:
             - wait-for-glue-workflow
@@ -1327,10 +1395,18 @@ workflows:
           <<: *only-test
           requires:
             - index-cases
-      - cleanup-glue-job:
+      - users-to-postgres:
           <<: *only-test
           requires:
             - index-docket-entries
+      - index-users:
+          <<: *only-test
+          requires:
+            - users-to-postgres
+      - cleanup-glue-job:
+          <<: *only-test
+          requires:
+            - index-users #index-docket-entries
 
   glue-to-lower-env:
     when: << pipeline.parameters.run_glue_to_lower_env >>

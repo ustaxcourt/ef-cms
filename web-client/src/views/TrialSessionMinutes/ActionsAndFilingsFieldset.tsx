@@ -76,7 +76,7 @@ export const ActionsAndFilingsFieldset = ({
   const getFieldsByRow = (row: KeyedActionFilingFormFields, rowIndex) => {
     return (
       <>
-        <div className="grid-col-2">
+        <div className="grid-col-1">
           <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
             <input
               className="usa-input display-inline-block maxw-full"
@@ -112,7 +112,7 @@ export const ActionsAndFilingsFieldset = ({
             'filedBy',
           )}
         </div>
-        <div className="grid-col-2">
+        <div className="grid-col-4">
           <SelectSearch
             aria-label={`actionsAndFilingsDocumentType-label-${rowIndex}`}
             data-testid={`actionsAndFilingsDocumentType-search-${rowIndex}`}
@@ -122,6 +122,9 @@ export const ActionsAndFilingsFieldset = ({
             isMulti={false}
             name={`actionsAndFilingsDocumentType-${rowIndex}`}
             options={formOptions[row.renderKey]}
+            tooltip={(formOptions[row.renderKey].find(
+              option => option.value === row.documentType,
+            )||{label: '- Select -'}).label}
             value={formOptions[row.renderKey].filter(
               option => option.value === row.documentType,
             )}
@@ -162,8 +165,8 @@ export const ActionsAndFilingsFieldset = ({
     if (DocketEntry.isMotion(row.documentType)) {
       return (
         <div className="grid-row grid-gap-2 align-items-right margin-bottom-1">
-          <div className="grid-col-6"></div>
-          <div className="grid-col-2 margin-left-4">
+          <div className="grid-col-7"></div>
+          <div className="grid-col-2">
             <FormGroup className="margin-bottom-0">
               <div className="usa-checkbox">
                 <input
@@ -175,7 +178,6 @@ export const ActionsAndFilingsFieldset = ({
                   type="checkbox"
                   onBlur={() => onBlurHandler()}
                   onChange={e => {
-                    console.log(row);
                     onChangeHandler({
                       name: 'actionsAndFilings',
                       rowInfo: {
@@ -244,9 +246,9 @@ export const ActionsAndFilingsFieldset = ({
     <fieldset className="border-0 padding-0">
       <div className="usa-label">Actions & Filings</div>
       <div className="grid-row grid-gap-2">
-        <div className="grid-col-2 usa-label">Date</div>
+        <div className="grid-col-1 usa-label">Date</div>
         <div className="grid-col-2 usa-label">Filed By</div>
-        <div className="grid-col-2 usa-label">Document Type</div>
+        <div className="grid-col-4 usa-label">Document Type</div>
         <div className="grid-col-2 usa-label">Status</div>
         <div className="grid-col-fill usa-label">Description/Note</div>
       </div>

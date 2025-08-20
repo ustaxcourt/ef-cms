@@ -50,7 +50,6 @@ const createManyAccounts = async (
 
     const user: RawUser = {
       contact: {
-        country: 'United States',
         address1: '234 Main St',
         address2: 'Apartment 4',
         address3: 'Under the stairs',
@@ -211,7 +210,6 @@ const setupPractitioners = async (
         barNumber,
         birthYear: 1950,
         contact: {
-          country: '',
           address1: '234 Main St',
           address2: 'Apartment 4',
           address3: 'Under the stairs',

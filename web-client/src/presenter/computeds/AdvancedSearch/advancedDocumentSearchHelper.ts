@@ -4,16 +4,24 @@ import { Get } from 'cerebral';
 import { capitalize } from 'lodash';
 import { paginationHelper } from './advancedSearchHelper';
 import { state } from '@web-client/presenter/app.cerebral';
-import { calculateISODate } from '@shared/business/utilities/DateHandler';
+import {
+  calculateISODate,
+  FORMATS,
+} from '@shared/business/utilities/DateHandler';
+import { dateStringsCompared } from '@shared/business/utilities/DateHandler';
+import { Case } from '@shared/business/entities/cases/Case';
+import { COURT_ISSUED_EVENTS } from '@shared/business/entities/docketEntry/courtIssuedEventCodes';
 
 export const advancedDocumentSearchHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): any => {
-  let paginatedResults = {};
+  let paginatedResults: any = {};
   const { role } = get(state.user);
   const advancedSearchTab = get(state.advancedSearchTab);
   const searchResults = get(state.searchResults[advancedSearchTab]);
+  const sortColumn = get(state.documentSearchSort.sortColumn);
+  const sortDirection = get(state.documentSearchSort.sortDirection);
 
   const {
     ADVANCED_SEARCH_TABS,
@@ -46,10 +54,11 @@ export const advancedDocumentSearchHelper = (
   }
 
   if (searchResults) {
+    // formatted;
     paginatedResults = paginationHelper(
       searchResults,
       get(state.advancedSearchForm.currentPage),
-      applicationContext.getConstants().CASE_SEARCH_PAGE_SIZE,
+      applicationContext.getConstants().MAX_ELASTICSEARCH_PAGINATION,
     );
 
     paginatedResults.formattedSearchResults =
@@ -58,6 +67,38 @@ export const advancedDocumentSearchHelper = (
           applicationContext,
         }),
       );
+
+    // Sorting logic
+    paginatedResults.formattedSearchResults =
+      paginatedResults.formattedSearchResults.sort((a, b) => {
+        let aValue = a[sortColumn] || '';
+        let bValue = b[sortColumn] || '';
+
+        const direction = sortDirection === 'asc' ? 1 : -1;
+
+        if (sortColumn === 'docketNumber') {
+          // Use custom docket number sorting
+          return Case.docketNumberSort(aValue, bValue) * direction;
+        }
+
+        if (sortColumn === 'formattedFiledDate') {
+          // Use date comparison for filingDate
+          return dateStringsCompared(a.filingDate, b.filingDate) * direction;
+        }
+
+        if (sortColumn === 'numberOfPages') {
+          return (Number(aValue) - Number(bValue)) * direction;
+        }
+
+        // Fallback to string comparison
+        aValue = String(aValue).toLowerCase();
+        bValue = String(bValue).toLowerCase();
+
+        if (aValue < bValue) return -1 * direction;
+        if (aValue > bValue) return direction;
+
+        return 0; // Values are equal
+      });
   }
 
   const showManyResultsMessage = !!(
@@ -67,6 +108,8 @@ export const advancedDocumentSearchHelper = (
   return {
     numberOfResults: searchResults?.length,
     ...paginatedResults,
+    //formattedSearchResults: searchResults,
+    formattedSearchResults: paginatedResults.formattedSearchResults,
     documentTypeVerbiage,
     formattedJudges,
     isInternalUser,
@@ -78,6 +121,8 @@ export const advancedDocumentSearchHelper = (
       howMuch: 0,
       units: 'days',
     }),
+    sortColumn,
+    sortDirection,
   };
 };
 
@@ -93,9 +138,11 @@ export const formatDocumentSearchResultRecord = (
     STANDING_PRETRIAL_EVENT_CODES,
   } = applicationContext.getConstants();
 
+  result.documentType = getDocumentTypeByEventCode(result.eventCode);
+
   result.formattedFiledDate = applicationContext
     .getUtilities()
-    .formatDateString(result.filingDate, 'MMDDYY');
+    .formatDateString(result.filingDate, FORMATS.MMDDYYYY);
 
   result.caseTitle = applicationContext.getCaseTitle(result.caseCaption || '');
 
@@ -128,3 +175,10 @@ export const formatDocumentSearchResultRecord = (
 
   return result;
 };
+
+function getDocumentTypeByEventCode(eventCode: string): string | undefined {
+  const eventInfo = COURT_ISSUED_EVENTS.find(eventInfo => {
+    return eventInfo.eventCode === eventCode;
+  });
+  return eventInfo && eventInfo.documentType;
+}

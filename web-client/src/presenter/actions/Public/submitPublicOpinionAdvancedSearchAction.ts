@@ -2,6 +2,7 @@ import { ClientPublicApplicationContext } from '@web-client/applicationContextPu
 import { clone } from 'lodash';
 import { state } from '@web-client/presenter/app-public.cerebral';
 import { trimDocketNumberSearch } from '../setDocketNumberFromSearchAction';
+import { DATE_RANGE_SEARCH_OPTIONS } from '@shared/business/entities/EntityConstants';
 
 /**
  * submit public opinion advanced search form
@@ -36,6 +37,10 @@ export const submitPublicOpinionAdvancedSearchAction = async ({
         searchParams: {
           ...searchParams,
           opinionTypes,
+          dateRange:
+            searchParams.startDate || searchParams.endDate
+              ? DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES
+              : DATE_RANGE_SEARCH_OPTIONS.ALL_DATES,
         },
       });
 

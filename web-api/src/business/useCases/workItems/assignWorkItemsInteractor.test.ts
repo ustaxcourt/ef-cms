@@ -55,7 +55,9 @@ describe('assignWorkItemsInteractor', () => {
 
     getWorkItemById.mockResolvedValue(new WorkItem(mockWorkItem));
     getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([
-      { documentTitle: 'Something' },
+      {
+        documentTitle: 'Some title',
+      },
     ] as RawDocketEntry[]);
   });
 

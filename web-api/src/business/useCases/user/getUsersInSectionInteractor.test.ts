@@ -118,6 +118,7 @@ describe('Get users in section', () => {
     );
 
     expect(getUsersInSections).toHaveBeenCalledWith({
+      accountStatus: ACCOUNT_STATUS.active,
       sections: [PETITIONS_SECTION, CASE_SERVICES_SUPERVISOR_SECTION],
     });
     expect(section.length).toEqual(2);

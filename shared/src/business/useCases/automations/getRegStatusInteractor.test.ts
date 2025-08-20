@@ -1,4 +1,3 @@
-import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { mockPetitionerUser } from '@shared/test/mockAuthUsers';
 import { ROLES } from '@shared/business/entities/EntityConstants';
 import { getCognito as getCognitoMock } from '@web-api/persistence/cognito/getCognito';
@@ -22,13 +21,16 @@ jest.mock('@aws-sdk/client-sesv2', () => {
     send: mockSend,
   };
 });
-import { send as mockSend } from '@aws-sdk/client-sesv2';
+import * as sesv2 from '@aws-sdk/client-sesv2';
+import type { SESv2Client } from '@aws-sdk/client-sesv2';
 import { MOCK_PRACTITIONER } from '@shared/test/mockUsers';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 import { UserStatusType } from '@aws-sdk/client-cognito-identity-provider';
 jest.mock('@web-api/persistence/cognito/getCognito');
 jest.mock('@web-api/persistence/postgres/users/getDocketNumbersByUser');
 jest.mock('@web-api/persistence/postgres/users/getUserById');
+
+const mockSend = (sesv2 as unknown as SESv2Client).send as jest.Mock;
 
 describe('getRegStatusInteractor', () => {
   const userEmail = 'user@example.com';
@@ -67,20 +69,12 @@ describe('getRegStatusInteractor', () => {
 
   it('throws UnauthorizedError for unauthorized user', async () => {
     await expect(
-      getRegStatusInteractor(
-        applicationContext,
-        { userEmail },
-        mockPetitionerUser,
-      ),
+      getRegStatusInteractor({ userEmail }, mockPetitionerUser),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('returns fully formatted HTML for a valid zendesk user and matching user', async () => {
-    const result = await getRegStatusInteractor(
-      applicationContext,
-      { userEmail },
-      mockZendeskUser,
-    );
+    const result = await getRegStatusInteractor({ userEmail }, mockZendeskUser);
 
     const expectedHtml =
       `Searching for ${userEmail} in DAWSON<br><br>` +
@@ -127,7 +121,6 @@ describe('getRegStatusInteractor', () => {
       });
 
     const result = await getRegStatusInteractor(
-      applicationContext,
       { userEmail: 'user@example.com' },
       mockZendeskUser,
     );
@@ -156,11 +149,7 @@ describe('getRegStatusInteractor', () => {
       send: jest.fn().mockResolvedValue({ Users: [] }),
     });
 
-    const result = await getRegStatusInteractor(
-      applicationContext,
-      { userEmail },
-      mockZendeskUser,
-    );
+    const result = await getRegStatusInteractor({ userEmail }, mockZendeskUser);
 
     expect(result).toBe(
       `Could not find user with Email ${userEmail} in Cognito`,
@@ -181,11 +170,7 @@ describe('getRegStatusInteractor', () => {
       send: jest.fn().mockResolvedValue({ Users: [nonPractitionerUser] }),
     });
 
-    const result = await getRegStatusInteractor(
-      applicationContext,
-      { userEmail },
-      mockZendeskUser,
-    );
+    const result = await getRegStatusInteractor({ userEmail }, mockZendeskUser);
 
     expect(result).not.toContain('Bar Number:');
   });
@@ -200,11 +185,7 @@ describe('getRegStatusInteractor', () => {
       send: jest.fn().mockResolvedValue({ Users: [disabledUser] }),
     });
 
-    const result = await getRegStatusInteractor(
-      applicationContext,
-      { userEmail },
-      mockZendeskUser,
-    );
+    const result = await getRegStatusInteractor({ userEmail }, mockZendeskUser);
 
     expect(result).toContain('❗ User is disabled');
   });
@@ -219,11 +200,7 @@ describe('getRegStatusInteractor', () => {
       send: jest.fn().mockResolvedValue({ Users: [disabledUser] }),
     });
 
-    const result = await getRegStatusInteractor(
-      applicationContext,
-      { userEmail },
-      mockZendeskUser,
-    );
+    const result = await getRegStatusInteractor({ userEmail }, mockZendeskUser);
 
     expect(result).toContain(
       'Current status is UNCONFIRMED; they have not yet verified their email address',
@@ -240,11 +217,7 @@ describe('getRegStatusInteractor', () => {
       send: jest.fn().mockResolvedValue({ Users: [disabledUser] }),
     });
 
-    const result = await getRegStatusInteractor(
-      applicationContext,
-      { userEmail },
-      mockZendeskUser,
-    );
+    const result = await getRegStatusInteractor({ userEmail }, mockZendeskUser);
 
     expect(result).toContain(`Found status: ${UserStatusType.ARCHIVED}`);
   });
@@ -254,11 +227,7 @@ describe('getRegStatusInteractor', () => {
       name: 'NotFoundException',
     });
 
-    const result = await getRegStatusInteractor(
-      applicationContext,
-      { userEmail },
-      mockZendeskUser,
-    );
+    const result = await getRegStatusInteractor({ userEmail }, mockZendeskUser);
 
     expect(result).not.toContain('Suppression');
   });
@@ -272,11 +241,7 @@ describe('getRegStatusInteractor', () => {
       .mockImplementation(() => {});
 
     await expect(
-      getRegStatusInteractor(
-        applicationContext,
-        { userEmail },
-        mockZendeskUser,
-      ),
+      getRegStatusInteractor({ userEmail }, mockZendeskUser),
     ).rejects.toThrow('Unexpected SES failure');
 
     expect(consoleErrorSpy).toHaveBeenCalledWith(

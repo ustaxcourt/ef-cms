@@ -208,6 +208,8 @@ import express from 'express';
 import { getTrialSessionOpenCasesCountLambda } from '@web-api/lambdas/trialSessions/getTrialSessionOpenCasesCountLambda';
 import { getConsolidatedCaseDeadlinesLambda } from '@web-api/lambdas/caseDeadline/getConsolidatedCaseDeadlinesLambda';
 import { removePetitionerEmailLambda } from '@web-api/lambdas/cases/removePetitionerEmailLambda';
+import { getRecentFilingsForUserLambda } from './lambdas/recentFilings/getRecentFilingsForUserLambda';
+import { saveMinuteSheetToDraftsLambda } from './lambdas/trialSessionMinutes/saveMinuteSheetToDraftsLambda';
 import { deactiveUserLambda } from '@web-api/lambdas/automations/deactivateUserLambda';
 
 export const app = express();
@@ -646,6 +648,10 @@ app.use(expressLogger);
 {
   app.get('/cases', lambdaWrapper(getCasesForUserLambda));
   app.get('/cases/search', lambdaWrapper(caseAdvancedSearchLambda));
+  app.get(
+    '/cases/recent-filings',
+    lambdaWrapper(getRecentFilingsForUserLambda),
+  );
   app.post('/cases/paper', lambdaWrapper(createCaseFromPaperLambda));
   app.delete(
     '/cases/:docketNumber/remove-pending/:docketEntryId',
@@ -908,6 +914,10 @@ app.delete(
     '/trial-sessions/:trialSessionId/case/:docketNumber/minutes',
     lambdaWrapper(generateTrialSessionMinutesPdfLambda),
   );
+  app.post(
+    '/trial-sessions/:trialSessionId/case/:docketNumber/minutes-draft',
+    lambdaWrapper(saveMinuteSheetToDraftsLambda),
+  );
   app.get(
     '/trial-sessions/paper-service-pdf/:fileId',
     lambdaWrapper(getPaperServicePdfUrlLambda),
@@ -1094,8 +1104,8 @@ app.delete(
  * ZenDesk Automations
  */
 app.post('/users', lambdaWrapper(createUserLambda)); // NOTE: These are meant for admins and zendesk automations. Not meant for regular application use.
-app.get('/users/userSummary', lambdaWrapper(regStatusLambda)); //10495 update userSummary to user-summary
-app.post('/users/deactivate', lambdaWrapper(deactiveUserLambda))
+app.get('/users/user-summary', lambdaWrapper(regStatusLambda));
+app.post('/users/deactivate', lambdaWrapper(deactiveUserLambda));
 
 /**
  * work-items

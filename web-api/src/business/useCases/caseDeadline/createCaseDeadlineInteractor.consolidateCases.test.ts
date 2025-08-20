@@ -1,6 +1,7 @@
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+
 jest.mock('@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines');
 jest.mock('@web-api/persistence/postgres/cases/getCaseByDocketNumber');
 jest.mock(
@@ -38,9 +39,7 @@ describe('createCaseDeadlineInteractor - Consolidated Cases', () => {
       // eslint-disable-next-line @typescript-eslint/require-await
       async params => params.caseEntity,
     );
-    updateCaseAndAssociations.mockImplementation(({ caseToUpdate }) =>
-      Promise.resolve(caseToUpdate),
-    );
+    updateCaseAndAssociations.mockResolvedValue(MOCK_CASE);
   });
 
   it('should create a case deadline for all the cases in the consolidated group', async () => {

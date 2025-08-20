@@ -44,7 +44,6 @@ import {
 import { copyPagesAndAppendToTargetPdf } from '@shared/business/utilities/copyPagesAndAppendToTargetPdf';
 import { createCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/createCaseAndAssociations';
 import { createMockDocumentClient } from './createMockDocumentClient';
-import { deleteRecord } from '@web-api/persistence/elasticsearch/deleteRecord';
 import { documentUrlTranslator } from '@web-api/utilities/documentUrlTranslator';
 import { filterEmptyStrings } from '@shared/business/utilities/filterEmptyStrings';
 import { formatAttachments } from '@shared/business/utilities/formatAttachments';
@@ -127,7 +126,7 @@ export const createTestApplicationContext = () => {
     getDocument: jest.fn().mockReturnValue({
       promise: Promise.resolve({
         getPage: () => ({
-          cleanup: () => {},
+          cleanup: () => { },
           getViewport: () => ({
             height: 100,
             width: 100,
@@ -429,7 +428,6 @@ export const createTestApplicationContext = () => {
     deleteDocumentFile: jest.fn(),
     deleteElasticsearchReindexRecord: jest.fn(),
     deleteLock: jest.fn().mockImplementation(() => Promise.resolve(null)),
-    deleteRecord: jest.fn().mockImplementation(deleteRecord),
     fetchPendingItems: jest.fn(),
     getAllWebSocketConnections: jest
       .fn()
@@ -488,7 +486,7 @@ export const createTestApplicationContext = () => {
 
   const mockGetMessagingClient = {
     send: jest.fn().mockReturnValue({
-      promise: () => {},
+      promise: () => { },
     }),
   };
 
@@ -537,6 +535,7 @@ export const createTestApplicationContext = () => {
       adminCreateUser: jest.fn(),
       adminUpdateUserAttributes: jest.fn(),
       initiateAuth: jest.fn(),
+      adminDisableUser: jest.fn(),
     }),
     getConstants: jest.fn().mockImplementation(() => {
       return {
@@ -596,7 +595,7 @@ export const createTestApplicationContext = () => {
     getUtilities: mockGetUtilities,
     getWorkerGateway: appContextProxy({
       initialize: jest.fn().mockReturnValue({
-        promise: () => {},
+        promise: () => { },
       }),
     }),
     isFeatureEnabled: jest.fn(),

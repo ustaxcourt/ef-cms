@@ -140,7 +140,8 @@ async function getAllCaseData<T extends OmittableCaseFields[]>({
     existingPrivatePractitioners.push(privatePractitioner);
     caseMap.set(privatePractitioner.docketNumber, {
       ...caseInfo,
-      privatePractitioners: existingPrivatePractitioners,
+      // a privatePractitioner can be on a case as a irsPractitioner, and vice versa, so we hard code the role to prevent validation errors everywhere
+      privatePractitioners: existingPrivatePractitioners.map(p => ({ ...p, role: ROLES.privatePractitioner }))
     });
   });
   irsPractitioners.forEach(irsPractitioner => {
@@ -149,7 +150,8 @@ async function getAllCaseData<T extends OmittableCaseFields[]>({
     existingIrsPractitioners.push(irsPractitioner);
     caseMap.set(irsPractitioner.docketNumber, {
       ...caseInfo,
-      irsPractitioners: existingIrsPractitioners,
+      // a privatePractitioner can be on a case as a irsPractitioner, and vice versa, so we hard code the role to prevent validation errors everywhere
+      irsPractitioners: existingIrsPractitioners.map(p => ({ ...p, role: ROLES.irsPractitioner }))
     });
   });
   caseCorrespondences.forEach(correspondence => {

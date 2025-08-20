@@ -2513,6 +2513,18 @@ button.change-scanner-button {
   width: 100% !important;
 }
 
+@media only screen and (max-width: $medium-screen) {
+  .mobile-header-button {
+    margin-right: 0;
+    margin-left: auto;
+    color: $color-white;
+
+    &:visited {
+      color: $color-white;
+    }
+  }
+}
+
 .service-party {
   display: flex;
   align-items: baseline;
