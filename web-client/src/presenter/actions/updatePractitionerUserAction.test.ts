@@ -2,10 +2,18 @@ import { applicationContextForClient as applicationContext } from '@web-client/t
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { updatePractitionerUserAction } from './updatePractitionerUserAction';
+import { dojPractitionerUser } from '@shared/test/mockUsers';
 
 describe('updatePractitionerUserAction', () => {
   let successMock;
   let errorMock;
+  const testClientConnectionId = 'testId';
+  const testPractitioner = {
+    ...dojPractitionerUser,
+    admissionsStatus: 'Active',
+    name: undefined,
+  };
+  const testBarNumber = 'AB1111';
 
   beforeAll(() => {
     successMock = jest.fn();
@@ -22,7 +30,7 @@ describe('updatePractitionerUserAction', () => {
     applicationContext
       .getUseCases()
       .updatePractitionerUserInteractor.mockReturnValue({
-        barNumber: 'AB1111',
+        barNumber: testBarNumber,
       });
 
     await runAction(updatePractitionerUserAction, {
@@ -30,10 +38,13 @@ describe('updatePractitionerUserAction', () => {
         presenter,
       },
       state: {
+        clientConnectionId: testClientConnectionId,
         form: {
-          barNumber: 'AB1111',
+          ...testPractitioner,
+          barNumber: testBarNumber,
           firstName: 'Joe',
           lastName: 'Exotic',
+          testExtra: 'testExtra',
         },
       },
     });
@@ -44,9 +55,16 @@ describe('updatePractitionerUserAction', () => {
     expect(
       applicationContext.getUseCases().updatePractitionerUserInteractor.mock
         .calls[0][1],
-    ).toMatchObject({
-      barNumber: 'AB1111',
-      user: { firstName: 'Joe', lastName: 'Exotic' },
+    ).toEqual({
+      clientConnectionId: testClientConnectionId,
+      barNumber: testBarNumber,
+      user: {
+        ...testPractitioner,
+        firstName: 'Joe',
+        lastName: 'Exotic',
+        barNumber: testBarNumber,
+        name: 'Joe Exotic',
+      },
     });
     expect(successMock).toHaveBeenCalled();
   });
