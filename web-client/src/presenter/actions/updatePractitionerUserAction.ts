@@ -15,7 +15,9 @@ export const updatePractitionerUserAction = async ({
   path,
 }: ActionProps) => {
   const formState = get(state.form);
-  const user = new Practitioner(formState, { applicationContext });
+  const user = new Practitioner(formState, {
+    applicationContext,
+  }).toRawObject();
   const clientConnectionId = get(state.clientConnectionId);
 
   try {
