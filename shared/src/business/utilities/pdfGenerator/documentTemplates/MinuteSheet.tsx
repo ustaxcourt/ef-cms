@@ -18,15 +18,15 @@ export const MinuteSheet = ({
       <div className="two-column-minute-sheet-section">
         <div className="minute-sheet-field">
           <div>
-            <strong>Docket no(s).</strong>
+            <strong>Case Caption</strong>
           </div>
-          <div>{formattedMinuteSheet.formattedDocketNumbers}</div>
+          <div>{formattedMinuteSheet.caseTitle}</div>
         </div>
         <div className="minute-sheet-field">
           <div>
-            <strong>Case caption</strong>
+            <strong>Docket No(s).</strong>
           </div>
-          <div>{formattedMinuteSheet.caseTitle}</div>
+          <div>{formattedMinuteSheet.formattedDocketNumbers}</div>
         </div>
       </div>
       <hr />
@@ -44,7 +44,7 @@ export const MinuteSheet = ({
           {formattedMinuteSheet.trialClerk && (
             <div className="minute-sheet-field">
               <div>
-                <strong>Trial clerk</strong>
+                <strong>Trial Clerk</strong>
               </div>
               <div>{formattedMinuteSheet.trialClerk}</div>
             </div>
@@ -54,7 +54,7 @@ export const MinuteSheet = ({
           {formattedMinuteSheet.courtReporter && (
             <div className="minute-sheet-field">
               <div>
-                <strong>Court reporter</strong>
+                <strong>Court Reporter</strong>
               </div>
               <div>{formattedMinuteSheet.courtReporter}</div>
             </div>
@@ -62,7 +62,7 @@ export const MinuteSheet = ({
 
           <div className="minute-sheet-field">
             <div>
-              <strong>Remote session</strong>
+              <strong>Remote Session</strong>
             </div>
             <div>{formattedMinuteSheet.remoteSession}</div>
           </div>
@@ -97,7 +97,7 @@ export const MinuteSheet = ({
         {formattedMinuteSheet.notCalled && (
           <div className="minute-sheet-field">
             <div>
-              <strong>Not called</strong>
+              <strong>Not Called</strong>
             </div>
             <div
               dangerouslySetInnerHTML={{
@@ -125,7 +125,7 @@ export const MinuteSheet = ({
         {formattedMinuteSheet.pretrialConference && (
           <div className="minute-sheet-field">
             <div>
-              <strong>Pretrial conference</strong>
+              <strong>Pretrial Conference</strong>
             </div>
             <div
               dangerouslySetInnerHTML={{
@@ -214,7 +214,7 @@ export const MinuteSheet = ({
         {formattedMinuteSheet.statusReportOrdered && (
           <div className="minute-sheet-field">
             <div>
-              <strong>Status Report ordered</strong>
+              <strong>Status Report Ordered</strong>
             </div>
             <div
               dangerouslySetInnerHTML={{
@@ -226,7 +226,7 @@ export const MinuteSheet = ({
         {formattedMinuteSheet.stipulatedDecisionOrdered && (
           <div className="minute-sheet-field">
             <div>
-              <strong>Stipulated Decision ordered</strong>
+              <strong>Stipulated Decision Ordered</strong>
             </div>
             <div
               dangerouslySetInnerHTML={{
@@ -258,7 +258,7 @@ export const MinuteSheet = ({
           <hr />
           <div className="minute-sheet-field">
             <div>
-              <strong>Other actions and filings</strong>
+              <strong>Other Actions and Filings</strong>
             </div>
             {formattedMinuteSheet.actionsAndFilings.map((action, index) => (
               <div
@@ -298,7 +298,7 @@ export const MinuteSheet = ({
             {formattedMinuteSheet.trialBrief.benchOpinionRendered && (
               <div className="minute-sheet-field">
                 <div>
-                  <strong>Bench opinion rendered</strong>
+                  <strong>Bench Opinion Rendered</strong>
                 </div>
                 <div
                   dangerouslySetInnerHTML={{
