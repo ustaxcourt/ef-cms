@@ -4,9 +4,7 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import {
-  getDocumentQCInboxForUser,
-} from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
+import { getDocumentQCInboxForUser } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
 
 export const getDocumentQCInboxForUserInteractor = async (

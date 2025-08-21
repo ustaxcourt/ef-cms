@@ -6,6 +6,7 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { getDocQcSectionForUser } from '@shared/business/utilities/getDocQcSectionForUser';
 import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
+
 export const getWorkQueueFilters = ({
   section,
   user,
