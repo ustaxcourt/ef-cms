@@ -18,7 +18,7 @@ describe('setCaseCaption', () => {
     expect(updatedCase.caseCaption).toEqual('A whole new caption');
   });
 
-  it('should set the case caption on the consolidated case array', () => {
+  it('should set the case caption on a single case in the consolidated case array', () => {
     const updatedCase = new Case(
       {
         ...MOCK_CASE,
