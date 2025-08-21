@@ -78,7 +78,7 @@ export const AddressDisplay = connect<
                 <br />
               </span>
             ))}
-          {contact.additionalName}
+          {!contact.isAddressSealed && contact.additionalName}
           {[contact.secondaryName, contact.inCareOf].map(
             contactName =>
               contactName && (
