@@ -63,6 +63,7 @@ export const serveCourtIssuedDocument = async (
   if (!docketEntryToServe) {
     throw new NotFoundError(`Docket entry ${docketEntryId} was not found.`);
   }
+
   if (docketEntryToServe.servedAt) {
     throw new Error('Docket entry has already been served');
   }
@@ -82,6 +83,7 @@ export const serveCourtIssuedDocument = async (
     .stampDocumentForService({
       applicationContext,
       docketEntryId: docketEntryToServe.docketEntryId,
+      // @ts-ignore
       documentToStamp: docketEntryToServe,
     });
 

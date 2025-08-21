@@ -5,7 +5,7 @@ import '@web-api/persistence/postgres/workitems/mocks.jest';
 import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 jest.mock('@shared/business/entities/CaseDeadline');
 jest.mock('@web-api/persistence/postgres/messages/getMessagesByDocketNumber');
-jest.mock('@web-api/persistence/postgres/messages/updateMessage');
+jest.mock('@web-api/persistence/postgres/messages/upsertMessages');
 jest.mock('@web-api/persistence/dynamo/trialSessions/removeCaseFromHearing');
 jest.mock('@web-api/persistence/dynamo/cases/removePractitionerOnCase');
 jest.mock('@web-api/persistence/dynamo/cases/updatePractitionerOnCase');
@@ -22,7 +22,7 @@ import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } 
 import { getMessagesByDocketNumber as getMessagesByDocketNumberMock } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { updateCaseAndAssociations } from './updateCaseAndAssociations';
-import { updateMessage as updateMessageMock } from '@web-api/persistence/postgres/messages/updateMessage';
+import { upsertMessages as upsertMessagesMock } from '@web-api/persistence/postgres/messages/upsertMessages';
 import { upsertCaseCorrespondences as upsertCaseCorrespondencesMock } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
 import { upsertCaseDeadlines as upsertCaseDeadlinesMock } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
@@ -39,7 +39,6 @@ import {
 } from '@web-api/persistence/dynamo/cases/updatePractitionerOnCase';
 import { getUniqueId } from '@shared/sharedAppContext';
 import { upsertDocketEntries as upsertDocketEntriesMock } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
-import { MOCK_WORK_ITEM } from '@shared/test/mockWorkItem';
 
 describe('updateCaseAndAssociations', () => {
   let validMockCase;
@@ -48,7 +47,7 @@ describe('updateCaseAndAssociations', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const upsertCases = jest.mocked(upsertCasesMock);
   const getMessagesByDocketNumber = getMessagesByDocketNumberMock as jest.Mock;
-  const updateMessage = updateMessageMock as jest.Mock;
+  const upsertMessages = upsertMessagesMock as jest.Mock;
   const upsertCaseDeadlines = upsertCaseDeadlinesMock as jest.Mock;
   const getCaseDeadlinesByDocketNumber =
     getCaseDeadlinesByDocketNumberMock as jest.Mock;
@@ -159,7 +158,7 @@ describe('updateCaseAndAssociations', () => {
     expect(upsertDocketEntries).not.toHaveBeenCalled();
 
     // updateCaseMessages
-    expect(updateMessage).not.toHaveBeenCalled();
+    expect(upsertMessages).not.toHaveBeenCalled();
 
     // updateCorrespondence
     expect(upsertCaseCorrespondences).not.toHaveBeenCalled();
@@ -283,7 +282,9 @@ describe('updateCaseAndAssociations', () => {
         archivedDocketEntries: MOCK_DOCUMENTS,
         docketEntries: MOCK_DOCUMENTS.map(d => ({
           ...d,
-          workItem: MOCK_WORK_ITEM,
+          workItemId: 'someId',
+          qcComplete: false,
+          qcViewed: false,
         })),
       };
       const caseToUpdate = {
@@ -291,7 +292,9 @@ describe('updateCaseAndAssociations', () => {
         archivedDocketEntries: MOCK_DOCUMENTS,
         docketEntries: MOCK_DOCUMENTS.map(d => ({
           ...d,
-          workItem: undefined,
+          workItemId: 'someOtherId',
+          qcComplete: true,
+          qcViewed: true,
         })),
       };
 
@@ -542,7 +545,7 @@ describe('updateCaseAndAssociations', () => {
   describe('user case messages', () => {
     beforeAll(() => {
       const mockMessages = [MOCK_MESSAGE];
-      updateMessage.mockResolvedValue(true);
+      upsertMessages.mockResolvedValue(true);
       getMessagesByDocketNumber.mockResolvedValue(mockMessages);
     });
     it('completes without altering message records if no message updates are necessary', async () => {
@@ -551,7 +554,7 @@ describe('updateCaseAndAssociations', () => {
         caseToUpdate: validMockCase,
       });
       expect(getMessagesByDocketNumber).not.toHaveBeenCalled();
-      expect(updateMessage).not.toHaveBeenCalled();
+      expect(upsertMessages).toHaveBeenCalledWith([]);
     });
 
     it('gets messages and throws validation errors if updates are not valid', async () => {
@@ -568,7 +571,7 @@ describe('updateCaseAndAssociations', () => {
         }),
       ).rejects.toThrow('entity was invalid');
       expect(getMessagesByDocketNumber).toHaveBeenCalled();
-      expect(updateMessage).not.toHaveBeenCalled();
+      expect(upsertMessages).not.toHaveBeenCalled();
     });
 
     it('gets messages and persists them if valid', async () => {
@@ -583,7 +586,7 @@ describe('updateCaseAndAssociations', () => {
         },
       });
       expect(getMessagesByDocketNumberMock).toHaveBeenCalled();
-      expect(updateMessage).toHaveBeenCalled();
+      expect(upsertMessages).toHaveBeenCalled();
     });
   });
 

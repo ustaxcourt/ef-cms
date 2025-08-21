@@ -27,7 +27,7 @@ import {
   mockJudgeUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
-import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
+import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
@@ -346,9 +346,9 @@ describe('fileCourtIssuedOrderInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(updateMessage).toHaveBeenCalled();
+    expect(upsertMessages).toHaveBeenCalled();
     expect(
-      (updateMessage as jest.Mock).mock.calls[0][0].message.attachments,
+      (upsertMessages as jest.Mock).mock.calls[0][0][0].attachments,
     ).toEqual([
       {
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
