@@ -14,6 +14,8 @@ export const updatePractitionerUserAction = async ({
   path,
 }: ActionProps) => {
   const user = get(state.form);
+  delete user.openCaseInfo;
+  delete user.closedCaseInfo;
   const clientConnectionId = get(state.clientConnectionId);
 
   try {
