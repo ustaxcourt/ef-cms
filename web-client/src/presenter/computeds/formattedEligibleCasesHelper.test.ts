@@ -116,14 +116,14 @@ describe('formattedEligibleCasesHelper', () => {
               caseCaption: 'Marky Mark and The Funky Bunch, Petitioners',
               docketNumber: '799-19',
               docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
-              docketNumberWithSuffix: '799-19L',
+              docketNumberWithSuffix: '799-19L', // high priority
             },
             {
               ...MOCK_CASE,
               caseCaption: 'Bob Dylan and the Traveling Wilburys, Petitioners',
               docketNumber: '122-20',
               docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.PASSPORT,
-              docketNumberWithSuffix: '122-20P',
+              docketNumberWithSuffix: '122-20P', // high priority
             },
           ],
         },
@@ -222,7 +222,6 @@ describe('formattedEligibleCasesHelper', () => {
               docketNumber: '104-19',
               docketNumberSuffix: '',
               docketNumberWithSuffix: '104-19',
-              highPriority: true,
             },
           ],
         },
@@ -236,15 +235,14 @@ describe('formattedEligibleCasesHelper', () => {
         isManuallyAdded: true,
       },
       {
-        docketNumber: '104-19',
-        docketNumberSuffix: '',
-        docketNumberWithSuffix: '104-19',
-        highPriority: true,
-      },
-      {
         docketNumber: '101-19',
         docketNumberSuffix: 'L',
         docketNumberWithSuffix: '101-19L',
+      },
+      {
+        docketNumber: '104-19',
+        docketNumberSuffix: '',
+        docketNumberWithSuffix: '104-19',
       },
       {
         docketNumber: '105-19',
@@ -276,7 +274,6 @@ describe('formattedEligibleCasesHelper', () => {
             },
             {
               docketNumber: '107-22',
-              highPriority: true,
             },
             {
               docketNumber: '108-22',
@@ -291,9 +288,6 @@ describe('formattedEligibleCasesHelper', () => {
         docketNumber: '108-22',
       }),
       expect.objectContaining({
-        docketNumber: '107-22',
-      }),
-      expect.objectContaining({
         docketNumber: '103-22',
       }),
       expect.objectContaining({
@@ -304,6 +298,9 @@ describe('formattedEligibleCasesHelper', () => {
       }),
       expect.objectContaining({
         docketNumber: '105-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '107-22',
       }),
     ]);
   });
@@ -338,7 +335,6 @@ describe('formattedEligibleCasesHelper', () => {
               docketNumber: '107-22',
               docketNumberSuffix: 'P',
               docketNumberWithSuffix: '107-22P',
-              highPriority: true,
             },
             {
               docketNumber: '108-22',
@@ -403,7 +399,6 @@ describe('formattedEligibleCasesHelper', () => {
             },
             {
               docketNumber: '107-22',
-              highPriority: true,
             },
             {
               docketNumber: '108-22',
@@ -425,9 +420,6 @@ describe('formattedEligibleCasesHelper', () => {
         docketNumber: '108-22',
       }),
       expect.objectContaining({
-        docketNumber: '107-22',
-      }),
-      expect.objectContaining({
         docketNumber: '103-21',
       }),
       expect.objectContaining({
@@ -441,6 +433,9 @@ describe('formattedEligibleCasesHelper', () => {
       }),
       expect.objectContaining({
         docketNumber: '106-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '107-22',
       }),
       expect.objectContaining({
         docketNumber: '105-23',
@@ -466,7 +461,6 @@ describe('formattedEligibleCasesHelper', () => {
             },
             {
               docketNumber: '107-22',
-              highPriority: true,
             },
             {
               docketNumber: '108-22',
@@ -481,9 +475,6 @@ describe('formattedEligibleCasesHelper', () => {
         docketNumber: '108-22',
       }),
       expect.objectContaining({
-        docketNumber: '107-22',
-      }),
-      expect.objectContaining({
         docketNumber: '104-22',
       }),
       expect.objectContaining({
@@ -491,6 +482,9 @@ describe('formattedEligibleCasesHelper', () => {
       }),
       expect.objectContaining({
         docketNumber: '106-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '107-22',
       }),
     ]);
   });
