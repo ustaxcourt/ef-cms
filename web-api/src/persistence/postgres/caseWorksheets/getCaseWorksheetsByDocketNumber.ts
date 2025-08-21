@@ -1,5 +1,5 @@
 import { CaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
-import { caseWorksheetEntity } from '@web-api/persistence/postgres/caseWorksheets/mapper';
+import { fromKyselyCaseWorksheet } from '@web-api/persistence/postgres/caseWorksheets/mapper';
 import { getDbReader } from '@web-api/database';
 import { isEmpty } from 'lodash';
 
@@ -19,6 +19,6 @@ export const getCaseWorksheetsByDocketNumber = async ({
   );
 
   return caseWorksheets.map(caseWorkSheet =>
-    caseWorksheetEntity(caseWorkSheet),
+    fromKyselyCaseWorksheet(caseWorkSheet),
   );
 };

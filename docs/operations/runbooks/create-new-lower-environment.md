@@ -369,7 +369,7 @@ This runbook describes the process of creating a new DAWSON lower environment in
 1. Deploy the latest docker image to this account's ECR:
    ```bash
    export DESTINATION_TAG=$(grep docker-image: .circleci/config.yml | awk -F':' '{print $3}')
-   ./docker-to-ecr.sh
+   ./scripts/ecr/docker-to-ecr.sh
    ```
 1. Create the `[env]_dawson` postgres user:
    ```bash
