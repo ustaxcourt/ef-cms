@@ -19,6 +19,7 @@ export const STATE_KEYS = {
   DOCKET_RECORD_TABLE_SORT: 'DOCKET_RECORD_TABLE_SORT',
   TERM_BUILDER_INFORMATION: 'TERM_BUILDER_INFORMATION',
   PENDING_REPORT_TABLE_SORT: 'PENDING_REPORT_TABLE_SORT',
+  RECENT_FILINGS_TABLE_SORT: 'RECENT_FILINGS_TABLE_SORT',
   CONSOLIDATED_CASE_DEADLINES: 'CONSOLIDATED_CASE_DEADLINES',
 } as const;
 
@@ -118,6 +119,9 @@ export const ALLOWLIST_FEATURE_FLAGS = {
     key: 'use-change-of-address-lambda',
   },
 };
+
+type FeatureFlags = typeof ALLOWLIST_FEATURE_FLAGS;
+export type FeatureFlagKeys = FeatureFlags[keyof FeatureFlags]['key'];
 
 export const CONFIGURATION_ITEM_KEYS = {
   SECTION_OUTBOX_NUMBER_OF_DAYS: {
@@ -783,6 +787,12 @@ export const SPOS_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
   doc => doc.eventCode === 'SPOS',
 )!;
 
+export const AUTO_GENERATED_STATUS_REPORT_ORDER_DESCRIPTIONS = {
+  statusReport: 'Status Report Due',
+  statusReportStipulatedDecision:
+    'Status Report or Proposed Stipulated Decision Due',
+};
+
 const AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES_WITH_NAMES = {
   orderForFilingFee: {
     content:
@@ -1141,8 +1151,16 @@ export const ROLES = {
   privatePractitioner: 'privatePractitioner',
   reportersOffice: 'reportersOffice',
   trialClerk: 'trialclerk',
+  zendesk: 'zendesk',
 } as const;
 export type Role = (typeof ROLES)[keyof typeof ROLES];
+
+export const ACCOUNT_STATUS = {
+  active: 'active',
+  inactive: 'inactive',
+};
+export type AccountStatus =
+  (typeof ACCOUNT_STATUS)[keyof typeof ACCOUNT_STATUS];
 
 // this isn't a real role someone can login with, which is why
 // it's a separate constant.
@@ -1761,8 +1779,10 @@ export const PENALTY_TYPES = {
 };
 
 export const MAX_ELASTICSEARCH_PAGINATION = 10000;
-export const MAX_SEARCH_CLIENT_RESULTS = 200;
-export const MAX_SEARCH_RESULTS = 100;
+export const MAX_SEARCH_CLIENT_RESULTS = 10000;
+export const MAX_SEARCH_RESULTS = 10000;
+
+export const ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE = 100;
 
 export const JUDGE_TITLES = [
   'Judge',
@@ -2056,3 +2076,19 @@ export const TERM_GENERATOR_DEFAULT_VALUES = {
 } as const;
 
 export const MOBILE_SCREEN_BREAKPOINT = 640;
+
+export const ALLOWED_EVENT_CODES = [
+  'P',
+  'ATP',
+  'DISC',
+  'NOT',
+  'NOTR',
+  'NTD',
+  'SPOS',
+  'SPTO',
+  'TCRP',
+  'NORP',
+  'NOIP',
+  'NCTL',
+  'NODC',
+];

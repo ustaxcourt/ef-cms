@@ -13,9 +13,11 @@ export type OnChangeHandler = ({
 }) => void;
 
 export type AddRowHandler = ({
+  index,
   name,
   section,
 }: {
+  index?: number;
   name: string;
   section: string;
 }) => void;

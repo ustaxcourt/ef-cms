@@ -5,8 +5,23 @@ export const addMinuteSheetFormRowAction = ({ get, props, store }) => {
   const { name, section } = props;
   const rows = get(state.minuteSheetForm[section][name]);
   const newEmptyFormRow = getEmptyFormRowByName(name);
-  rows[newEmptyFormRow.renderKey] = newEmptyFormRow;
-  store.set(state.minuteSheetForm[section][name], rows);
+
+  if (props.name === 'exhibits' && props.index !== undefined) {
+    const newObj = {};
+    const entries = Object.entries(rows);
+
+    for (let i = 0; i < entries.length; i++) {
+      const [key, value] = entries[i];
+      newObj[key] = value;
+      if (i === props.index) {
+        newObj[newEmptyFormRow.renderKey] = newEmptyFormRow;
+      }
+    }
+    store.set(state.minuteSheetForm[section][name], newObj);
+  } else {
+    rows[newEmptyFormRow.renderKey] = newEmptyFormRow;
+    store.set(state.minuteSheetForm[section][name], rows);
+  }
 };
 
 const getEmptyFormRowByName = (name: string) => {

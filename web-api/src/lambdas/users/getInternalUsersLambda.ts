@@ -12,6 +12,6 @@ export const getInternalUsersLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(event, async ({ applicationContext }) => {
-    return await getInternalUsersInteractor(applicationContext, authorizedUser);
+  genericHandler(event, async () => {
+    return await getInternalUsersInteractor(authorizedUser);
   });

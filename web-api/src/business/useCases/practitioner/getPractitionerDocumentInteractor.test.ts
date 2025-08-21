@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/practitionerDocuments/mocks.jest';
 import { PRACTITIONER_DOCUMENT_TYPES_MAP } from '../../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
@@ -6,6 +7,8 @@ import {
   mockAdmissionsClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { getPractitionerDocumentByFileId as getPractitionerDocumentByFileIdMock } from '@web-api/persistence/postgres/practitionerDocuments/getPractitionerDocumentByFileId';
+import { RawPractitionerDocument } from '@shared/business/entities/PractitionerDocument';
 
 describe('getPractitionerDocumentInteractor', () => {
   const barNumber = 'PT4785';
@@ -14,12 +17,12 @@ describe('getPractitionerDocumentInteractor', () => {
     categoryName: PRACTITIONER_DOCUMENT_TYPES_MAP.ADMISSIONS_CERTIFICATE,
     categoryType: PRACTITIONER_DOCUMENT_TYPES_MAP.ADMISSIONS_CERTIFICATE,
     fileName: 'testPdf.pdf',
-  };
-
+  } as RawPractitionerDocument;
+  const getPractitionerDocumentByFileId = jest.mocked(
+    getPractitionerDocumentByFileIdMock,
+  );
   beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getPractitionerDocumentByFileId.mockReturnValue(practitionerDocument);
+    getPractitionerDocumentByFileId.mockResolvedValue(practitionerDocument);
   });
 
   it('should throw an unauthorized error when the user does not have permission to update the practitioner user', async () => {
@@ -45,10 +48,10 @@ describe('getPractitionerDocumentInteractor', () => {
       mockAdmissionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getPractitionerDocumentByFileId
-        .mock.calls[0][0],
-    ).toMatchObject({ barNumber, fileId: practitionerDocumentFileId });
+    expect(getPractitionerDocumentByFileId.mock.calls[0][0]).toMatchObject({
+      barNumber,
+      fileId: practitionerDocumentFileId,
+    });
     expect(results).toMatchObject(practitionerDocument);
   });
 });

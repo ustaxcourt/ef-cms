@@ -31,7 +31,9 @@ import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMet
 import { getDocumentTitleForNoticeOfChange } from '@shared/business/utilities/getDocumentTitleForNoticeOfChange';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { WorkItem } from '@shared/business/entities/WorkItem';
@@ -54,9 +56,13 @@ const completeDocketEntryQC = async (
     selectedSection,
   } = entryMetadata;
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
+
+  if (!user) {
+    throw new NotFoundError(
+      `User not found with user id ${authorizedUser.userId}`,
+    );
+  }
 
   const [caseToUpdate, workItem] = await Promise.all([
     getCaseByDocketNumber({
@@ -154,13 +160,17 @@ const completeDocketEntryQC = async (
 
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
 
-  const { name, title } = await applicationContext
-    .getPersistenceGateway()
-    .getConfigurationItemValue({
-      applicationContext,
-      configurationItemKey:
-        applicationContext.getConstants().CLERK_OF_THE_COURT_CONFIGURATION,
-    });
+  const { CLERK_OF_THE_COURT_CONFIGURATION } =
+    applicationContext.getConstants();
+
+  const [CLERK_OF_THE_COURT_RECORD] = await getFeatureFlagValues([
+    CLERK_OF_THE_COURT_CONFIGURATION,
+  ]);
+
+  const { name, title } = CLERK_OF_THE_COURT_RECORD.value.current as {
+    name: string;
+    title: string;
+  };
 
   const docketChangeInfo = {
     caseCaptionExtension,
