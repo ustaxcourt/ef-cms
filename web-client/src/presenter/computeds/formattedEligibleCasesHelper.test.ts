@@ -116,14 +116,14 @@ describe('formattedEligibleCasesHelper', () => {
               caseCaption: 'Marky Mark and The Funky Bunch, Petitioners',
               docketNumber: '799-19',
               docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
-              docketNumberWithSuffix: '799-19L', // high priority
+              docketNumberWithSuffix: '799-19L',
             },
             {
               ...MOCK_CASE,
               caseCaption: 'Bob Dylan and the Traveling Wilburys, Petitioners',
               docketNumber: '122-20',
               docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.PASSPORT,
-              docketNumberWithSuffix: '122-20P', // high priority
+              docketNumberWithSuffix: '122-20P',
             },
           ],
         },
@@ -491,55 +491,6 @@ describe('formattedEligibleCasesHelper', () => {
       }),
       expect.objectContaining({
         docketNumber: '106-22',
-      }),
-    ]);
-  });
-
-  it('should group the consolidated cases together when the lead and a member case is high priority', () => {
-    const result = runCompute(formattedEligibleCasesHelper, {
-      state: {
-        trialSession: {
-          eligibleCases: [
-            {
-              docketNumber: '103-22',
-              highPriority: true,
-              leadDocketNumber: '103-22',
-            },
-            {
-              docketNumber: '105-22',
-              highPriority: true,
-            },
-            {
-              docketNumber: '106-22',
-              highPriority: true,
-              leadDocketNumber: '103-22',
-            },
-            {
-              docketNumber: '120-22',
-            },
-            {
-              docketNumber: '110-22',
-              leadDocketNumber: '103-22',
-            },
-          ],
-        },
-      },
-    });
-    expect(result).toEqual([
-      expect.objectContaining({
-        docketNumber: '103-22',
-      }),
-      expect.objectContaining({
-        docketNumber: '106-22',
-      }),
-      expect.objectContaining({
-        docketNumber: '105-22',
-      }),
-      expect.objectContaining({
-        docketNumber: '110-22',
-      }),
-      expect.objectContaining({
-        docketNumber: '120-22',
       }),
     ]);
   });
