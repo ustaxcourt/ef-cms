@@ -1,4 +1,6 @@
-import { Selectable, Insertable, Updateable, ColumnType } from 'kysely';
+import { CaseKysely } from '@web-api/persistence/postgres/cases/schema';
+import { NullablePick } from '@web-api/persistence/postgres/utils/typeHelpers';
+import { Selectable, Insertable, ColumnType } from 'kysely';
 
 const DEFAULT = {};
 
@@ -6,11 +8,11 @@ export const messageTableDefinition = {
   attachments: DEFAULT as
     | ColumnType<{ documentId: string }[], string, string>
     | undefined,
-  completedAt: DEFAULT as Date | undefined,
-  completedBy: DEFAULT as string | undefined,
-  completedBySection: DEFAULT as string | undefined,
-  completedByUserId: DEFAULT as string | undefined,
-  completedMessage: DEFAULT as string | undefined,
+  completedAt: DEFAULT as Date | null,
+  completedBy: DEFAULT as string | null,
+  completedBySection: DEFAULT as string | null,
+  completedByUserId: DEFAULT as string | null,
+  completedMessage: DEFAULT as string | null,
   createdAt: DEFAULT as Date,
   docketNumber: DEFAULT as string,
   from: DEFAULT as string,
@@ -36,4 +38,9 @@ export const DW_MESSAGE_COLUMNS = Object.keys(messageTableDefinition) as Array<
 
 export type MessageKysely = Selectable<MessageTable>;
 export type NewMessageKysely = Insertable<MessageTable>;
-export type UpdateMessageKysely = Updateable<MessageTable>;
+
+export type MessageWithAssociatedCaseDataKysely = MessageKysely &
+  NullablePick<
+    CaseKysely,
+    'status' | 'trialDate' | 'completedAt' | 'createdAt' | 'caption'
+  >;
