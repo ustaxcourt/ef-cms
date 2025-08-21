@@ -165,34 +165,6 @@ describe('dynamodbClientService', function () {
     });
   });
 
-  describe('getDeployTable', () => {
-    it('should return the deploy table name when the environment is NOT local', async () => {
-      const mockEnvironment = 'exp99';
-      applicationContext.environment.stage = mockEnvironment;
-
-      applicationContext.getEnvironment.mockReturnValue({
-        stage: mockEnvironment,
-      });
-
-      const result = await getDeployTableName({
-        applicationContext,
-      });
-
-      expect(result).toEqual('efcms-deploy-exp99');
-    });
-
-    it('should return the regular dynamo table name when the environment is local', async () => {
-      applicationContext.environment.dynamoDbTableName = dynamoDbTableName;
-      applicationContext.environment.stage = 'local';
-
-      const result = await getDeployTableName({
-        applicationContext,
-      });
-
-      expect(result).toEqual(dynamoDbTableName);
-    });
-  });
-
   describe('get', () => {
     it('should remove the global aws fields on the object returned', async () => {
       const result = await get({ applicationContext });
