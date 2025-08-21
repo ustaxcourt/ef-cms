@@ -1,4 +1,3 @@
-import * as barNumberGenerator from './persistence/dynamo/users/barNumberGenerator';
 import * as pdfLib from 'pdf-lib';
 import {
   CASE_INVENTORY_PAGE_SIZE,
@@ -58,7 +57,6 @@ import { getMessagingClient } from '@web-api/gateways/message/getMessagingClient
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const createApplicationContext = (appContextUser = {}) => {
   return {
-    barNumberGenerator,
     environment,
     getBatchClient,
     getBounceAlertRecipients: () =>
