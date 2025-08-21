@@ -1,4 +1,4 @@
-import { caseDeadlineEntity } from '@web-api/persistence/postgres/caseDeadlines/mapper';
+import { fromCaseDeadlineKysely } from '@web-api/persistence/postgres/caseDeadlines/mapper';
 import { getDbReader } from '@web-api/database';
 import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 
@@ -18,5 +18,5 @@ export const getCaseDeadlinesByConsolidatedCaseDeadlineIds = async (
       .execute(),
   );
 
-  return RECORDS.map(r => caseDeadlineEntity(r).toRawObject());
+  return RECORDS.map(r => fromCaseDeadlineKysely(r).toRawObject());
 };
