@@ -130,6 +130,7 @@ export const ConfirmModal = connect<ConfirmModalProps, typeof confirmModalDeps>(
             )}
             {!noCancel && (
               <Button
+                data-testid="confirm-modal-cancel-btn"
                 secondary
                 onClick={event => {
                   event.stopPropagation();
