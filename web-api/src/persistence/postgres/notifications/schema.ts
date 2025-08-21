@@ -1,7 +1,7 @@
 const DEFAULT = {};
 
 export const notificationTableDefinition = {
-  id: DEFAULT as number | undefined,
+  id: DEFAULT as number | null,
   topic: DEFAULT as string,
   ttl: DEFAULT as number,
 };
