@@ -5,7 +5,7 @@ import { getDbReader } from '@web-api/database';
 import { NotFoundError } from '@web-api/errors/errors';
 import { purgeDynamoKeys } from '@web-api/persistence/dynamo/helpers/purgeDynamoKeys';
 import { queryFull } from '@web-api/persistence/dynamodbClientService';
-import { caseCorrespondenceEntity } from '@web-api/persistence/postgres/caseCorrespondences/mapper';
+import { fromKyselyCaseCorrespondence } from '@web-api/persistence/postgres/caseCorrespondences/mapper';
 import { CaseCorrespondenceKysely } from '@web-api/persistence/postgres/caseCorrespondences/schema';
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { CaseKysely } from '@web-api/persistence/postgres/cases/schema';
@@ -216,10 +216,10 @@ function convertDbCaseToRawCase(
   const appCase = {
     ...fromKyselyCase(dbCase),
     correspondence: dbCase.correspondence.map(cc =>
-      caseCorrespondenceEntity(cc),
+      fromKyselyCaseCorrespondence(cc),
     ),
     archivedCorrespondences: dbCase.archivedCorrespondences?.map(cc =>
-      caseCorrespondenceEntity(cc),
+      fromKyselyCaseCorrespondence(cc),
     ),
     irsPractitioners: dbCase.irsPractitioners.map(ip => rawUser(ip)),
     privatePractitioners: dbCase.privatePractitioners.map(pp => rawUser(pp)),

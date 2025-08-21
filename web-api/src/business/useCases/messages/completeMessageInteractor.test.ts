@@ -4,9 +4,9 @@ import {
   CASE_STATUS_TYPES,
   PETITIONS_SECTION,
   ROLES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { completeMessageInteractor } from './completeMessageInteractor';
 import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
 import { markMessageThreadRepliedTo } from '@web-api/persistence/postgres/messages/markMessageThreadRepliedTo';
@@ -14,9 +14,9 @@ import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
-import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
+import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
 
 describe('completeMessageInteractor', () => {
   const mockMessages = [
@@ -67,7 +67,7 @@ describe('completeMessageInteractor', () => {
       userId: 'b9fcabc8-3c83-4cbf-9f4a-d2ecbdc591e1',
     } as DbUser);
     (getMessageThreadByParentId as jest.Mock).mockReturnValue(mockMessages);
-    (updateMessage as jest.Mock).mockResolvedValue(mockMessages[1]);
+    (upsertMessages as jest.Mock).mockResolvedValue(mockMessages[1]);
     applicationContext
       .getPersistenceGateway()
       .sendNotificationToUser.mockResolvedValue(null);
@@ -109,23 +109,23 @@ describe('completeMessageInteractor', () => {
       (markMessageThreadRepliedTo as jest.Mock).mock.calls[1][0]
         .parentMessageId,
     ).toEqual(PARENT_MESSAGE_ID_2);
-    expect(updateMessage).toHaveBeenCalledTimes(2);
-    expect((updateMessage as jest.Mock).mock.calls[0][0].message).toMatchObject(
+    expect(upsertMessages).toHaveBeenCalledTimes(2);
+    expect((upsertMessages as jest.Mock).mock.calls[0][0]).toMatchObject([
       {
         completedBy: 'Test Petitionsclerk',
         completedBySection: PETITIONS_SECTION,
         completedByUserId: 'b9fcabc8-3c83-4cbf-9f4a-d2ecbdc591e1',
         isCompleted: true,
       },
-    );
-    expect((updateMessage as jest.Mock).mock.calls[1][0].message).toMatchObject(
+    ]);
+    expect((upsertMessages as jest.Mock).mock.calls[1][0]).toMatchObject([
       {
         completedBy: 'Test Petitionsclerk',
         completedBySection: PETITIONS_SECTION,
         completedByUserId: 'b9fcabc8-3c83-4cbf-9f4a-d2ecbdc591e1',
         isCompleted: true,
       },
-    );
+    ]);
   });
 
   it('should send a success message to the user', async () => {
@@ -151,7 +151,7 @@ describe('completeMessageInteractor', () => {
   });
 
   it('should send an error message to the user', async () => {
-    (updateMessage as jest.Mock).mockRejectedValueOnce(new Error('Bad!'));
+    (upsertMessages as jest.Mock).mockRejectedValueOnce(new Error('Bad!'));
     await completeMessageInteractor(
       applicationContext,
       {
