@@ -89,7 +89,6 @@ import { getEligibleCasesForTrialSessionInteractor } from './business/useCases/t
 import { getHealthCheckInteractor } from './business/useCases/health/getHealthCheckInteractor';
 import { getInboxMessagesForSectionInteractor } from './business/useCases/messages/getInboxMessagesForSectionInteractor';
 import { getInboxMessagesForUserInteractor } from './business/useCases/messages/getInboxMessagesForUserInteractor';
-import { getInternalUsersInteractor } from './business/useCases/user/getInternalUsersInteractor';
 import { getIrsPractitionersBySearchKeyInteractor } from './business/useCases/user/getIrsPractitionersBySearchKeyInteractor';
 import { getJudgeInSectionInteractor } from './business/useCases/user/getJudgeInSectionInteractor';
 import { getJudgesForPublicSearchInteractor } from './business/useCases/public/getJudgesForPublicSearchInteractor';
@@ -286,7 +285,6 @@ const useCases = {
   getHealthCheckInteractor,
   getInboxMessagesForSectionInteractor,
   getInboxMessagesForUserInteractor,
-  getInternalUsersInteractor,
   getIrsPractitionersBySearchKeyInteractor,
   getJudgeInSectionInteractor,
   getJudgesForPublicSearchInteractor,
@@ -397,5 +395,5 @@ export const getUseCases = () => useCases;
 type _IGetUseCases = typeof getUseCases;
 
 declare global {
-  interface IGetUseCases extends _IGetUseCases {}
+  interface IGetUseCases extends _IGetUseCases { }
 }

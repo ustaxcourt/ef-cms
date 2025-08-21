@@ -205,10 +205,17 @@ export const getBriefDetails = (briefDetails: BriefDetailsType) => {
 
 export const getConsolidatedDocketNumbers = (aCase: RawCase): string => {
   if (aCase.consolidatedCases.length === 0) {
-    return aCase.docketNumber;
+    return aCase.docketNumberWithSuffix;
   }
   return aCase.consolidatedCases
-    .map(consolidatedCase => consolidatedCase.docketNumber)
+    .sort((a, b) => {
+      if (aCase.docketNumberWithSuffix === a.docketNumberWithSuffix)
+        return Number.MIN_SAFE_INTEGER;
+      if (aCase.docketNumberWithSuffix === b.docketNumberWithSuffix)
+        return Number.MAX_SAFE_INTEGER;
+      return Case.docketNumberSort(a.docketNumber, b.docketNumber);
+    })
+    .map(consolidatedCase => consolidatedCase.docketNumberWithSuffix)
     .join(', ');
 };
 
