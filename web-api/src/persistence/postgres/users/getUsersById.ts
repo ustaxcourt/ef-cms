@@ -1,5 +1,5 @@
 import { getDbReader } from '@web-api/database';
-import { DbUser, rawUser } from '@web-api/persistence/postgres/users/mapper';
+import { DbUser, fromKyselyUser } from '@web-api/persistence/postgres/users/mapper';
 
 export const getUsersByIds = async ({
   userIds,
@@ -14,5 +14,5 @@ export const getUsersByIds = async ({
       .execute(),
   );
 
-  return users.map(user => rawUser(user));
+  return users.map(user => fromKyselyUser(user));
 };

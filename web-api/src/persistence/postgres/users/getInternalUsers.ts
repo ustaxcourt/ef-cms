@@ -4,7 +4,7 @@ import {
   DOCKET_SECTION,
   PETITIONS_SECTION,
 } from '../../../../../shared/src/business/entities/EntityConstants';
-import { DbUser, rawUser } from '@web-api/persistence/postgres/users/mapper';
+import { DbUser, fromKyselyUser } from '@web-api/persistence/postgres/users/mapper';
 
 export const getInternalUsers = async (): Promise<DbUser[]> => {
   const users = await getDbReader(db =>
@@ -15,5 +15,5 @@ export const getInternalUsers = async (): Promise<DbUser[]> => {
       .execute(),
   );
 
-  return users.map(rawUser);
+  return users.map(fromKyselyUser);
 };
