@@ -83,6 +83,7 @@ describe('changeOfAddress', () => {
               eventCode: 'NCA',
               title: 'Notice of Change of Address',
             },
+            isAddressSealed: false,
             name: 'Test Person',
             newData: {
               ...contactInfo,

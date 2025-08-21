@@ -60,9 +60,10 @@ const createDocketEntryForChange = async ({
     contactName = newData.name;
   }
 
-  const { isAddressSealed } = caseEntity.petitioners.find(
-    petitioner => petitioner.email === newData.email,
-  );
+  const isAddressSealed =
+    caseEntity.petitioners.find(
+      petitioner => petitioner.email === newData.email,
+    )?.isAddressSealed ?? false;
 
   const changeOfAddressPdf = await applicationContext
     .getDocumentGenerators()
