@@ -1,10 +1,10 @@
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { getUserCaseNoteForCases } from '@web-api/persistence/postgres/userCaseNotes/getUserCaseNoteForCases';
+import { getUserCaseNotes } from '@web-api/persistence/postgres/userCaseNotes/getUserCaseNotes';
 
 export const getUserCaseNoteForCasesInteractor = async (
   applicationContext,
@@ -21,7 +21,7 @@ export const getUserCaseNoteForCasesInteractor = async (
       userIdMakingRequest: authorizedUser.userId,
     });
 
-  const caseNotes = await getUserCaseNoteForCases({
+  const caseNotes = await getUserCaseNotes({
     docketNumbers,
     userId,
   });
