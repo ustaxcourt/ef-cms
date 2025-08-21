@@ -1,15 +1,16 @@
 import '@web-api/persistence/postgres/userCaseNotes/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { MOCK_CASE } from '@shared/test/mockCase';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { User } from '@shared/business/entities/User';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getUserCaseNoteInteractor } from './getUserCaseNoteInteractor';
-import { getUserCaseNote as getUserCaseNoteMock } from '@web-api/persistence/postgres/userCaseNotes/getUserCaseNote';
+import { getUserCaseNotes as getUserCaseNotesMock } from '@web-api/persistence/postgres/userCaseNotes/getUserCaseNotes';
 import { mockJudgeUser } from '@shared/test/mockAuthUsers';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { omit } from 'lodash';
-import { DbUser } from '@web-api/persistence/postgres/users/mapper';
+import { UserCaseNote } from '@shared/business/entities/notes/UserCaseNote';
 
 describe('Get case note', () => {
   const MOCK_NOTE = {
@@ -23,11 +24,13 @@ describe('Get case note', () => {
     userId: 'unauthorizedUser',
   } as unknown as UnknownAuthUser;
 
-  const getUserCaseNote = getUserCaseNoteMock as jest.Mock;
   const getUserById = jest.mocked(getUserByIdMock);
+  const getUserCaseNotes = getUserCaseNotesMock as jest.Mock;
 
   it('throws error if user is unauthorized', async () => {
-    getUserCaseNote.mockReturnValue({});
+    getUserById.mockImplementation(() => new User(mockUnauthorizedUser));
+    getUserCaseNotes.mockResolvedValue([{}]);
+
     applicationContext
       .getUseCaseHelpers()
       .getJudgeInSectionHelper.mockReturnValue(null);
@@ -44,8 +47,10 @@ describe('Get case note', () => {
   });
 
   it('throws an error if the entity returned from persistence is invalid', async () => {
-    getUserById.mockResolvedValue(mockJudgeUser as DbUser);
-    getUserCaseNote.mockResolvedValue(omit(MOCK_NOTE, 'userId'));
+    getUserById.mockImplementation(() => new User(mockJudgeUser));
+    getUserCaseNotes.mockResolvedValue([
+      new UserCaseNote(omit(MOCK_NOTE, 'userId')),
+    ]);
     applicationContext
       .getUseCaseHelpers()
       .getJudgeInSectionHelper.mockReturnValue(mockJudgeUser);
@@ -62,8 +67,8 @@ describe('Get case note', () => {
   });
 
   it('correctly returns data from persistence if a judgeUser exists', async () => {
-    getUserById.mockResolvedValue(mockJudgeUser as DbUser);
-    getUserCaseNote.mockResolvedValue(MOCK_NOTE);
+    getUserById.mockImplementation(() => new User(mockJudgeUser));
+    getUserCaseNotes.mockResolvedValue([new UserCaseNote(MOCK_NOTE)]);
     applicationContext
       .getUseCaseHelpers()
       .getJudgeInSectionHelper.mockReturnValue(mockJudgeUser);
@@ -80,8 +85,8 @@ describe('Get case note', () => {
   });
 
   it('correctly returns data from persistence for the current user if a judgeUser does not exist', async () => {
-    getUserById.mockResolvedValue(mockJudgeUser as DbUser);
-    getUserCaseNote.mockResolvedValue(MOCK_NOTE);
+    getUserById.mockImplementation(() => new User(mockJudgeUser));
+    getUserCaseNotes.mockResolvedValue([new UserCaseNote(MOCK_NOTE)]);
     applicationContext
       .getUseCaseHelpers()
       .getJudgeInSectionHelper.mockReturnValue(null);
@@ -101,8 +106,8 @@ describe('Get case note', () => {
   });
 
   it('does not return anything if nothing is returned from persistence', async () => {
-    getUserById.mockResolvedValue(mockJudgeUser as DbUser);
-    getUserCaseNote.mockReturnValue(null);
+    getUserById.mockImplementation(() => new User(mockJudgeUser));
+    getUserCaseNotes.mockReturnValue(null);
     applicationContext
       .getUseCaseHelpers()
       .getJudgeInSectionHelper.mockReturnValue(mockJudgeUser);
