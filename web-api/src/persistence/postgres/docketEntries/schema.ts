@@ -1,4 +1,4 @@
-import { Selectable, Insertable, Updateable, ColumnType } from 'kysely';
+import { Selectable, Insertable, ColumnType } from 'kysely';
 
 const DEFAULT = {};
 
@@ -120,4 +120,3 @@ export const DW_DOCKET_ENTRY_COLUMNS = Object.keys(
 
 export type DocketEntryKysely = Selectable<DocketEntryTable>;
 export type NewDocketEntryKysely = Insertable<DocketEntryTable>;
-export type UpdateDocketEntryKysely = Updateable<DocketEntryTable>;
