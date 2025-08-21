@@ -11,7 +11,6 @@ import {
 } from '@shared/business/utilities/DateHandler';
 import { getDocumentQCServedForSection } from '@web-api/persistence/postgres/workitems/getDocumentQCServedForSection';
 import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
-
 import {
   DOCKET_SECTION,
   PETITIONS_SECTION,
