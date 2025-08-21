@@ -36,7 +36,7 @@ describe('Docket clerk', () => {
         return cy.get('body').then(body => {
           return (
             body.find(`[data-testid="docket-number-${docketNumber}"]`)
-              .length === 2
+              .length === 1
           );
         });
       });
