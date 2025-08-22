@@ -1,13 +1,14 @@
 import '@web-api/persistence/postgres/userCaseNotes/mocks.jest';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { MOCK_CASE } from '@shared/test/mockCase';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { User } from '../../../../../shared/src/business/entities/User';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { User } from '@shared/business/entities/User';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getUserCaseNoteInteractor } from './getUserCaseNoteInteractor';
-import { getUserCaseNote as getUserCaseNoteMock } from '@web-api/persistence/postgres/userCaseNotes/getUserCaseNote';
+import { getUserCaseNotes as getUserCaseNotesMock } from '@web-api/persistence/postgres/userCaseNotes/getUserCaseNotes';
 import { mockJudgeUser } from '@shared/test/mockAuthUsers';
 import { omit } from 'lodash';
+import { UserCaseNote } from '@shared/business/entities/notes/UserCaseNote';
 
 describe('Get case note', () => {
   const MOCK_NOTE = {
@@ -21,13 +22,13 @@ describe('Get case note', () => {
     userId: 'unauthorizedUser',
   } as unknown as UnknownAuthUser;
 
-  const getUserCaseNote = getUserCaseNoteMock as jest.Mock;
+  const getUserCaseNotes = getUserCaseNotesMock as jest.Mock;
 
   it('throws error if user is unauthorized', async () => {
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockImplementation(() => new User(mockUnauthorizedUser));
-    getUserCaseNote.mockReturnValue({});
+    getUserCaseNotes.mockResolvedValue([{}]);
     applicationContext
       .getUseCaseHelpers()
       .getJudgeInSectionHelper.mockReturnValue(null);
@@ -47,7 +48,9 @@ describe('Get case note', () => {
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockImplementation(() => new User(mockJudgeUser));
-    getUserCaseNote.mockResolvedValue(omit(MOCK_NOTE, 'userId'));
+    getUserCaseNotes.mockResolvedValue([
+      new UserCaseNote(omit(MOCK_NOTE, 'userId')),
+    ]);
     applicationContext
       .getUseCaseHelpers()
       .getJudgeInSectionHelper.mockReturnValue(mockJudgeUser);
@@ -67,7 +70,7 @@ describe('Get case note', () => {
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockImplementation(() => new User(mockJudgeUser));
-    getUserCaseNote.mockResolvedValue(MOCK_NOTE);
+    getUserCaseNotes.mockResolvedValue([new UserCaseNote(MOCK_NOTE)]);
     applicationContext
       .getUseCaseHelpers()
       .getJudgeInSectionHelper.mockReturnValue(mockJudgeUser);
@@ -87,7 +90,7 @@ describe('Get case note', () => {
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockImplementation(() => new User(mockJudgeUser));
-    getUserCaseNote.mockResolvedValue(MOCK_NOTE);
+    getUserCaseNotes.mockResolvedValue([new UserCaseNote(MOCK_NOTE)]);
     applicationContext
       .getUseCaseHelpers()
       .getJudgeInSectionHelper.mockReturnValue(null);
@@ -110,7 +113,7 @@ describe('Get case note', () => {
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockImplementation(() => new User(mockJudgeUser));
-    getUserCaseNote.mockReturnValue(null);
+    getUserCaseNotes.mockReturnValue(null);
     applicationContext
       .getUseCaseHelpers()
       .getJudgeInSectionHelper.mockReturnValue(mockJudgeUser);

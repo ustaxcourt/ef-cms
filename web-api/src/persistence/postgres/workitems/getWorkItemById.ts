@@ -1,6 +1,6 @@
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { getDbReader } from '@web-api/database';
-import { workItemEntity } from '@web-api/persistence/postgres/workitems/mapper';
+import { fromKyselyWorkItem } from '@web-api/persistence/postgres/workitems/mapper';
 
 export const getWorkItemById = async ({
   workItemId,
@@ -9,21 +9,13 @@ export const getWorkItemById = async ({
 }): Promise<WorkItem | undefined> => {
   const workItem = await getDbReader(reader =>
     reader
-      .selectFrom('dwWorkItem as w')
-      .leftJoin('dwCase as c', 'c.docketNumber', 'w.docketNumber')
-      .where('w.workItemId', '=', workItemId)
-      .selectAll('w')
-      .select([
-        'c.caption',
-        'c.status',
-        'c.trialDate',
-        'c.trialLocation',
-        'c.leadDocketNumber',
-      ])
+      .selectFrom('dwWorkItem')
+      .where('workItemId', '=', workItemId)
+      .selectAll()
       .executeTakeFirst(),
   );
 
   if (!workItem) return undefined;
 
-  return workItemEntity(workItem);
+  return fromKyselyWorkItem(workItem);
 };
