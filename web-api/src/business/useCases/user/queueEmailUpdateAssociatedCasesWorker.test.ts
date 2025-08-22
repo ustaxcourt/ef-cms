@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 jest.mock('@web-api/persistence/elasticsearch/getCasesByEmailTotal');
 import {
   MAX_ITERATIONS,
@@ -10,21 +11,22 @@ import { mockPetitionerUser } from '@shared/test/mockAuthUsers';
 import { petitionerUser } from '@shared/test/mockUsers';
 import { sleep } from '@shared/tools/helpers';
 import { getCasesByEmailTotal as getCasesByEmailTotalMock } from '@web-api/persistence/elasticsearch/getCasesByEmailTotal';
+import { upsertUsers as upsertUsersMock } from '@web-api/persistence/postgres/users/upsertUsers';
+import { getDocketNumbersByUser as getDocketNumbersByUserMock } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
 
 describe('queueEmailUpdateAssociatedCasesWorker', () => {
   const getCasesByEmailTotal = jest.mocked(getCasesByEmailTotalMock);
   let TEST_USER: RawUser;
   let RESOLVER: Function;
 
+  const upsertUsers = jest.mocked(upsertUsersMock);
+  const getDocketNumbersByUser = jest.mocked(getDocketNumbersByUserMock);
+
   beforeEach(() => {
     TEST_USER = {
       ...petitionerUser,
       isUpdatingInformation: true,
     };
-
-    applicationContext
-      .getPersistenceGateway()
-      .updateUser.mockResolvedValue(null);
 
     applicationContext
       .getUseCases()
@@ -41,9 +43,7 @@ describe('queueEmailUpdateAssociatedCasesWorker', () => {
   });
 
   it('should disable user flag and short circuit if there is no associated cases to user', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getDocketNumbersByUser.mockResolvedValue([]);
+    getDocketNumbersByUser.mockResolvedValue([]);
 
     await queueEmailUpdateAssociatedCasesWorker(
       applicationContext,
@@ -51,12 +51,13 @@ describe('queueEmailUpdateAssociatedCasesWorker', () => {
       mockPetitionerUser,
     );
 
-    const updateUserCalls =
-      applicationContext.getPersistenceGateway().updateUser.mock.calls;
+    const updateUserCalls = upsertUsers.mock.calls;
     expect(updateUserCalls.length).toEqual(1);
-    expect(updateUserCalls[0][0].user).toMatchObject({
-      isUpdatingInformation: false,
-    });
+    expect(updateUserCalls[0][0]).toMatchObject([
+      {
+        isUpdatingInformation: false,
+      },
+    ]);
 
     const queueUpdateAssociatedCasesWorkerCalls =
       applicationContext.getUseCases().queueUpdateAssociatedCasesWorker.mock
@@ -65,10 +66,7 @@ describe('queueEmailUpdateAssociatedCasesWorker', () => {
   });
 
   function assertFunctionCalls(expectedCount: number) {
-    expect(
-      applicationContext.getPersistenceGateway().getDocketNumbersByUser.mock
-        .calls.length,
-    ).toEqual(expectedCount + 1);
+    expect(getDocketNumbersByUser.mock.calls.length).toEqual(expectedCount + 1);
 
     expect(getCasesByEmailTotal.mock.calls.length).toEqual(expectedCount);
   }
@@ -76,9 +74,7 @@ describe('queueEmailUpdateAssociatedCasesWorker', () => {
   it('should call "queueUpdateAssociatedCasesWorker" with user information and wait until all expected cases to update', async () => {
     const TEST_DOCKER_NUMBERS = ['TEST_1', 'TEST_2', 'TEST_3', 'TEST_4'];
     let COMPLETE_FLAG = false;
-    applicationContext
-      .getPersistenceGateway()
-      .getDocketNumbersByUser.mockResolvedValue(TEST_DOCKER_NUMBERS);
+    getDocketNumbersByUser.mockResolvedValue(TEST_DOCKER_NUMBERS);
 
     void queueEmailUpdateAssociatedCasesWorker(
       applicationContext,
@@ -96,13 +92,6 @@ describe('queueEmailUpdateAssociatedCasesWorker', () => {
       expect(queueUpdateAssociatedCasesWorkerCalls[0][2]).toEqual(
         mockPetitionerUser,
       );
-
-      const updateUserCalls =
-        applicationContext.getPersistenceGateway().updateUser.mock.calls;
-      expect(updateUserCalls.length).toEqual(1);
-      expect(updateUserCalls[0][0].user).toMatchObject({
-        isUpdatingInformation: false,
-      });
 
       COMPLETE_FLAG = true;
     });
@@ -128,9 +117,7 @@ describe('queueEmailUpdateAssociatedCasesWorker', () => {
 
     const TEST_DOCKER_NUMBERS = ['TEST_1', 'TEST_2', 'TEST_3', 'TEST_4'];
     let COMPLETE_FLAG = false;
-    applicationContext
-      .getPersistenceGateway()
-      .getDocketNumbersByUser.mockResolvedValue(TEST_DOCKER_NUMBERS);
+    getDocketNumbersByUser.mockResolvedValue(TEST_DOCKER_NUMBERS);
 
     void queueEmailUpdateAssociatedCasesWorker(
       applicationContext,
@@ -154,9 +141,7 @@ describe('queueEmailUpdateAssociatedCasesWorker', () => {
     });
 
     const TEST_DOCKER_NUMBERS = ['TEST_1', 'TEST_2', 'TEST_3', 'TEST_4'];
-    applicationContext
-      .getPersistenceGateway()
-      .getDocketNumbersByUser.mockResolvedValue(TEST_DOCKER_NUMBERS);
+    getDocketNumbersByUser.mockResolvedValue(TEST_DOCKER_NUMBERS);
 
     await queueEmailUpdateAssociatedCasesWorker(
       applicationContext,
@@ -164,11 +149,12 @@ describe('queueEmailUpdateAssociatedCasesWorker', () => {
       mockPetitionerUser,
     );
 
-    const updateUserCalls =
-      applicationContext.getPersistenceGateway().updateUser.mock.calls;
+    const updateUserCalls = upsertUsers.mock.calls;
     expect(updateUserCalls.length).toEqual(1);
-    expect(updateUserCalls[0][0].user).toMatchObject({
-      isUpdatingInformation: false,
-    });
+    expect(updateUserCalls[0][0]).toMatchObject([
+      {
+        isUpdatingInformation: false,
+      },
+    ]);
   });
 });
