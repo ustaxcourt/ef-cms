@@ -107,6 +107,7 @@ export const PetitionersAndCounsel = connect(
                         Petition email address
                       </p>
                       <span
+                        data-testid="petitioner-paper-petition-email"
                         className={classNames(
                           petitioner.isAddressSealed &&
                             'margin-left-205 sealed-address',

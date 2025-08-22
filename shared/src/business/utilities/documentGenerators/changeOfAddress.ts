@@ -39,7 +39,6 @@ export const changeOfAddress = async ({
       title: string;
       eventCode: string;
     };
-    isAddressSealed: boolean;
   };
 }) => {
   const {
@@ -47,21 +46,10 @@ export const changeOfAddress = async ({
     caseTitle,
     docketNumberWithSuffix,
     name,
-    isAddressSealed,
     newData,
     oldData,
   } = content;
   const options = computeChangeOptions(content);
-
-  if (!oldData.email && isAddressSealed) {
-    oldData.email = ``;
-  } else if (oldData.email && isAddressSealed) {
-    oldData.email = 'SEALED BY COURT ORDER';
-  } else if (!oldData.email) {
-    oldData.email = 'No email provided';
-  }
-
-  newData.email = isAddressSealed ? 'SEALED BY COURT ORDER' : newData.email;
 
   const changeOfAddressTemplate = ReactDOM.renderToString(
     React.createElement(ChangeOfAddress, {
