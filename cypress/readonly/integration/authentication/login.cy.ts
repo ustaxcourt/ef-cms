@@ -68,4 +68,9 @@ describe('Given a user without a DAWSON account', () => {
       );
     });
   });
+
+  it('should fail to test CircleCI fail-fast', () => {
+    cy.visit('/login');
+    cy.get('[data-testid="nonexistent-element"]').should('exist'); // This will fail
+  });
 });

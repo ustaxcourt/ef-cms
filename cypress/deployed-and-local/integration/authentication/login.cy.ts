@@ -117,4 +117,9 @@ describe('login', () => {
     cy.get('[data-testid="login-button"]').click();
     cy.get('[data-testid="inbox-tab-content"]').should('exist');
   });
+
+  it('should fail to test CircleCI fail-fast', () => {
+    cy.visit('/login');
+    cy.get('[data-testid="nonexistent-element"]').should('exist'); // This will fail
+  });
 });
