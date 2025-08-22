@@ -509,7 +509,7 @@ export const DocumentSearchResults = connect(
                 </table>
               </Mobile>
 
-              {totalPages > 0 && (
+              {totalPages > 1 && (
                 <Paginator
                   currentPageIndex={currentPaginationPage}
                   totalPages={totalPages}
