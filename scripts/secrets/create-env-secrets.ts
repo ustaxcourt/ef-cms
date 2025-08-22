@@ -129,6 +129,11 @@ const scriptConfig: ScriptConfig = {
       default: false,
       type: 'boolean',
     },
+    zendeskUserEmail: {
+      default: 'ustczendesk@dawson.ustaxcourt.gov',
+      long: 'zendesk-user-email',
+      type: 'string',
+    },
   },
   // can't use requireActiveAwsSession; we haven't deployed the dawson_dev role yet
   requireActiveAwsSession: false,
@@ -155,6 +160,7 @@ const {
   region,
   rumSampleRate,
   update,
+  zendeskUserEmail,
 } = parseArgsAndEnvVars(scriptConfig) as {
   adminUserEmail: string;
   baseDomain: string;
@@ -177,6 +183,7 @@ const {
   region: string;
   rumSampleRate: string;
   update: boolean;
+  zendeskUserEmail: string;
 };
 
 if (env === 'prod') {
@@ -197,6 +204,8 @@ if (env === 'prod') {
     ['uppercase', 'lowercase', 'numbers'],
     42,
   );
+
+  const zendeskUserPassword = makeNewPassword();
 
   const envSecrets = {
     COGNITO_SUFFIX: `${repoSlug}-${env}`,
@@ -224,6 +233,8 @@ if (env === 'prod') {
     RUM_SAMPLE_RATE: rumSampleRate,
     USTC_ADMIN_PASS: adminUserPassword,
     USTC_ADMIN_USER: adminUserEmail,
+    USTC_ZENDESK_USER: zendeskUserEmail,
+    USTC_ZENDESK_PASS: zendeskUserPassword,
   };
 
   const secretsClient = new SecretsManagerClient({ region });

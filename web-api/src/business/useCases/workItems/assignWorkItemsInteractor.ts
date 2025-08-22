@@ -9,6 +9,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '@shared/business/entities/User';
 import { getWorkItemById } from '@web-api/persistence/postgres/workitems/getWorkItemById';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { getDocketEntriesByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumberAndDocketEntryId';
 
 /**
@@ -21,7 +22,7 @@ import { getDocketEntriesByDocketNumberAndDocketEntryId } from '@web-api/persist
  * @param {string} providers.workItemId the id of the work item to assign
  */
 export const assignWorkItemsInteractor = async (
-  applicationContext: ServerApplicationContext,
+  _: ServerApplicationContext,
   {
     assigneeId,
     assigneeName,
@@ -39,17 +40,25 @@ export const assignWorkItemsInteractor = async (
     throw new UnauthorizedError('Unauthorized to assign work item');
   }
 
-  const user = await applicationContext.getPersistenceGateway().getUserById({
-    applicationContext,
+  const user = await getUserById({
     userId: authorizedUser.userId,
   });
 
-  const userBeingAssigned = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({
-      applicationContext,
-      userId: assigneeId,
-    });
+  if (!user) {
+    throw new NotFoundError(
+      `User not found with user id ${authorizedUser.userId}`,
+    );
+  }
+
+  const userBeingAssigned = await getUserById({
+    userId: assigneeId,
+  });
+
+  if (!userBeingAssigned) {
+    throw new NotFoundError(
+      `User not found with user id ${assigneeId}`,
+    );
+  }
 
   let workItemEntity: WorkItem | undefined;
   if (!workItem && workItemId) {

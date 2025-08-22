@@ -1,11 +1,9 @@
-import { ServerApplicationContext } from '@web-api/applicationContext';
+import { environment } from '@web-api/environment';
+import { getCognito } from '@web-api/persistence/cognito/getCognito';
 
-export async function disableUser(
-  applicationContext: ServerApplicationContext,
-  { email }: { email: string },
-): Promise<void> {
-  await applicationContext.getCognito().adminDisableUser({
-    UserPoolId: applicationContext.environment.userPoolId,
+export async function disableUser({ email }: { email: string }): Promise<void> {
+  await getCognito().adminDisableUser({
+    UserPoolId: environment.userPoolId,
     Username: email.toLowerCase(),
   });
 }
