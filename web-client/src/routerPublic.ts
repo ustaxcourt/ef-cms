@@ -96,9 +96,9 @@ const router = {
       });
     });
 
-    route('/dawson-ui-components', () => {
-      setPageTitle('UI Components');
-      return app.getSequence('goToDawsonUIComponentSequence')();
+    route('/dawson-library', () => {
+      setPageTitle('Dawson Library');
+      return app.getSequence('gotoDawsonLibrarySequence')();
     });
 
     route('..', () => {
