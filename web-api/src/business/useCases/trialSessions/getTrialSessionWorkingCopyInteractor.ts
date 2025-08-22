@@ -11,6 +11,7 @@ import { User } from '@shared/business/entities/User';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { getTrialSessionWorkingCopies } from '@web-api/persistence/postgres/trialSessions/getTrialSessionWorkingCopies';
 import { createTrialSessionWorkingCopy } from '@web-api/persistence/postgres/trialSessions/createTrialSessionWorkingCopy';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 /**
  * getTrialSessionWorkingCopyInteractor
@@ -31,16 +32,15 @@ export const getTrialSessionWorkingCopyInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const rawUser = await applicationContext.getPersistenceGateway().getUserById({
-    applicationContext,
-    userId: authorizedUser?.userId || '',
+  const rawUser = await getUserById({
+    userId: authorizedUser.userId,
   });
 
   const userEntity = new User(rawUser);
 
   const judgeUser = await applicationContext
     .getUseCaseHelpers()
-    .getJudgeInSectionHelper(applicationContext, {
+    .getJudgeInSectionHelper({
       section: userEntity.section,
     });
 
@@ -49,9 +49,11 @@ export const getTrialSessionWorkingCopyInteractor = async (
 
   let trialSessionWorkingCopyEntity, validRawTrialSessionWorkingCopyEntity;
 
-  const trialSessionWorkingCopy = (await getTrialSessionWorkingCopies({
-    tsWorkingCopyIds: [{ trialSessionId, userId: chambersUserId }],
-  })).at(0);
+  const trialSessionWorkingCopy = (
+    await getTrialSessionWorkingCopies({
+      tsWorkingCopyIds: [{ trialSessionId, userId: chambersUserId }],
+    })
+  ).at(0);
 
   if (trialSessionWorkingCopy) {
     trialSessionWorkingCopyEntity = new TrialSessionWorkingCopy(
@@ -62,8 +64,8 @@ export const getTrialSessionWorkingCopyInteractor = async (
       .toRawObject();
   } else {
     const trialSessionDetails = await getTrialSessionById({
-        trialSessionId,
-      });
+      trialSessionId,
+    });
 
     if (!trialSessionDetails) {
       throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);

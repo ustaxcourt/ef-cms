@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/trialSessions/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import {
   ROLES,
   SESSION_TYPES,
@@ -18,6 +19,7 @@ import { createTrialSessionWorkingCopy as createTrialSessionWorkingCopyMock } fr
 import { getTrialSessionWorkingCopies as getTrialSessionWorkingCopiesMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionWorkingCopies';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { RawTrialSessionWorkingCopy } from '@shared/business/entities/trialSessions/TrialSessionWorkingCopy';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 
 const MOCK_WORKING_COPY: RawTrialSessionWorkingCopy = {
   sort: 'practitioner',
@@ -42,6 +44,8 @@ const MOCK_WORKING_COPY: RawTrialSessionWorkingCopy = {
     submittedCAV: false,
   },
 };
+
+const getUserById = jest.mocked(getUserByIdMock);
 
 describe('Get trial session working copy', () => {
   let user;
@@ -77,7 +81,7 @@ describe('Get trial session working copy', () => {
       trialLocation: 'Birmingham, Alabama',
     } as RawTrialSession);
 
-    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+    getUserById.mockReturnValue({
       ...user,
       section: 'colvinsChambers',
     });

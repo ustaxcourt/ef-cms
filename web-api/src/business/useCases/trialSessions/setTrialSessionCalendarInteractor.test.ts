@@ -5,7 +5,7 @@ import '@web-api/persistence/postgres/workitems/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
 import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 jest.mock(
-  '@web-api/business/useCases/trialSessions/trialSessionCalendarInteractorUtils',
+  '@web-api/persistence/postgres/caseDeadlines/trialSessionCalendarInteractorUtils.ts',
 );
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',

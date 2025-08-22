@@ -1,6 +1,5 @@
 import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { RawPrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
-import { RawUser } from '@shared/business/entities/User';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const fieldsToOmitBeforePersisting = [
@@ -32,7 +31,6 @@ export type PutRequest = {
 };
 
 export type DocketEntryDynamoRecord = TDynamoRecord<RawDocketEntry>;
-export type UserRecord = TDynamoRecord & RawUser;
 
 export type IrsPractitionerOnCaseRecord = TDynamoRecord<RawIrsPractitioner>;
 

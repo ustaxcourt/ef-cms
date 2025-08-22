@@ -27,8 +27,6 @@ import {
 import { User } from '@shared/business/entities/User';
 import { abbreviateState } from '@shared/business/utilities/abbreviateState';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
-import { bulkDeleteRecords } from '@web-api/persistence/elasticsearch/bulkDeleteRecords';
-import { bulkIndexRecords } from '@web-api/persistence/elasticsearch/bulkIndexRecords';
 import { calculateDaysElapsedSinceLastStatusChange } from '@shared/business/utilities/calculateDaysElapsedSinceLastStatusChange';
 import { calculateDifferenceInDays } from '@shared/business/utilities/DateHandler';
 import { combineTwoPdfs } from '@shared/business/utilities/pdfs/combineTwoPdfs';
@@ -75,7 +73,6 @@ import { getSealedDocketEntryTooltip } from '@shared/business/utilities/getSeale
 import { getSelectedConsolidatedCasesToMultiDocketOn } from '@shared/business/utilities/getSelectedConsolidatedCasesToMultiDocketOn';
 import { getStampBoxCoordinates } from '@shared/business/utilities/getStampBoxCoordinates';
 import { getTextByCount } from '@shared/test/getTextByCount';
-import { getUserById as getUserByIdPersistence } from '@web-api/persistence/dynamo/users/getUserById';
 import { incrementCounter } from '@web-api/persistence/dynamo/helpers/incrementCounter';
 import { removeItem } from '@web-client/persistence/localStorage/removeItem';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
@@ -87,10 +84,8 @@ import { setItem } from '@web-client/persistence/localStorage/setItem';
 import { setNoticesForCalendaredTrialSessionInteractor } from '@shared/proxies/trialSessions/setNoticesForCalendaredTrialSessionProxy';
 import { setupPdfDocument } from '@shared/business/utilities/setupPdfDocument';
 import { unsealDocketEntryInteractor } from '@shared/proxies/editDocketEntry/unsealDocketEntryProxy';
-import { updateUserRecords } from '@web-api/persistence/dynamo/users/createNewPractitionerUser';
 import { uploadDocumentAndMakeSafeInteractor } from '@shared/business/useCases/uploadDocumentAndMakeSafeInteractor';
 import { validatePenaltiesInteractor } from '@shared/business/useCases/validatePenaltiesInteractor';
-import { verifyCaseForUser } from '@web-api/persistence/dynamo/cases/verifyCaseForUser';
 import pug from 'pug';
 import * as sass from 'sass';
 
@@ -332,7 +327,6 @@ const createTestApplicationContext = () => {
   const mockGetUseCaseHelpers = appContextProxy({
     getJudgeInSectionHelper: jest.fn(),
     sendServedPartiesEmails: jest.fn(),
-    updateUserRecords: jest.fn().mockImplementation(updateUserRecords),
   });
 
   const getDocumentGeneratorsReturnMock = {
@@ -383,8 +377,6 @@ const createTestApplicationContext = () => {
   const mockGetPersistenceGateway = appContextProxy({
     acquireLock: jest.fn().mockImplementation(() => Promise.resolve(null)),
     addCaseToHearing: jest.fn(),
-    bulkDeleteRecords: jest.fn().mockImplementation(bulkDeleteRecords),
-    bulkIndexRecords: jest.fn().mockImplementation(bulkIndexRecords),
     createElasticsearchReindexRecord: jest.fn(),
     deleteDocumentFile: jest.fn(),
     deleteElasticsearchReindexRecord: jest.fn(),
@@ -410,7 +402,6 @@ const createTestApplicationContext = () => {
     getReconciliationReport: jest.fn(),
     getRecord: jest.fn(),
     getTrialSessionJobStatusForCase: jest.fn(),
-    getUserById: jest.fn().mockImplementation(getUserByIdPersistence),
     getUserCaseMappingsByDocketNumber: jest.fn().mockReturnValue([]),
     incrementCounter,
     isEmailAvailable: jest.fn(),
@@ -423,7 +414,6 @@ const createTestApplicationContext = () => {
     setTrialSessionJobStatusForCase: jest.fn(),
     updateCaseHearing: jest.fn(),
     uploadPdfFromClient: jest.fn().mockImplementation(() => ''),
-    verifyCaseForUser: jest.fn().mockImplementation(verifyCaseForUser),
   });
 
   const mockGetEmailClient = {

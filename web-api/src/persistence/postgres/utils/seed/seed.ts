@@ -31,6 +31,8 @@ import {
   toKyselyNewTrialSession,
   toKyselyNewTrialSessionWorkingCopy,
 } from '../../trialSessions/mapper';
+import { users } from '@web-api/persistence/postgres/utils/seed/fixtures/users';
+import { usersOnCases } from '@web-api/persistence/postgres/utils/seed/fixtures/usersOnCases';
 
 export const seed = async () => {
   const insertMessages = pgInsertInto({
@@ -75,6 +77,17 @@ export const seed = async () => {
       toKyselyNewTrialSessionWorkingCopy(ts),
     ),
     onConflictColumns: ['trialSessionId', 'userId'],
+  });
+
+  const insertUsers = pgInsertInto({
+    table: 'dwUser',
+    values: users,
+    onConflictColumns: ['userId'],
+  });
+  const insertUserOnCase = pgInsertInto({
+    table: 'dwUserOnCase',
+    values: usersOnCases,
+    onConflictColumns: ['userId', 'docketNumber'],
   });
 
   const insertWorkItem = getDbWriter({
@@ -126,16 +139,18 @@ export const seed = async () => {
   const insertDocketEntries = upsertDocketEntries(validatedDocketEntrySeeds);
 
   await Promise.all([
-    insertMessages,
     insertCaseDeadline,
-    insertCorrespondence,
-    insertCaseWorksheet,
-    insertWorkItem,
     insertCases,
+    insertCaseWorksheet,
+    insertCorrespondence,
     insertDocketEntries,
     insertTrialSession,
     insertTrialSessionCase,
     insertTrialSessionWorkingCopy,
+    insertMessages,
+    insertUsers,
+    insertUserOnCase,
+    insertWorkItem,
   ]);
 };
 

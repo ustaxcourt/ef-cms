@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import '@web-api/persistence/postgres/trialSessions/mocks.jest';
@@ -25,17 +26,22 @@ import { shouldAppendClinicLetter } from '@shared/business/utilities/shouldAppen
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getTrialSessionNotificationProcessing as getTrialSessionNotificationProcessingMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionNotificationProcessing';
-import { updateTrialSessionNotificationProcessing as  updateTrialSessionNotificationProcessingMock} from '@web-api/persistence/postgres/trialSessions/updateTrialSessionNotificationProcessing';
+import { updateTrialSessionNotificationProcessing as updateTrialSessionNotificationProcessingMock } from '@web-api/persistence/postgres/trialSessions/updateTrialSessionNotificationProcessing';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const getUserById = jest.mocked(getUserByIdMock);
   const updateCaseAndAssociations = jest
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
   const getTrialSessionNotificationProcessing = jest.mocked(
     getTrialSessionNotificationProcessingMock,
   );
-  const updateTrialSessionNotificationProcessing = jest.mocked(updateTrialSessionNotificationProcessingMock);
+  const updateTrialSessionNotificationProcessing = jest.mocked(
+    updateTrialSessionNotificationProcessingMock,
+  );
 
   const trialSession = {
     ...MOCK_TRIAL_REGULAR,
@@ -62,9 +68,7 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
       clinicLetterKey,
     });
 
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockResolvedValue(docketClerkUser);
+    getUserById.mockResolvedValue(docketClerkUser as DbUser);
     applicationContext
       .getPersistenceGateway()
       .getDocument.mockResolvedValue(fakeData);
@@ -90,7 +94,7 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
       status: '',
       trialSessionId: 'number',
       caseStatuses: {},
-      unfinishedCases: 10
+      unfinishedCases: 10,
     });
   });
 
@@ -101,7 +105,7 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
       caseStatuses: {
         [docketNumber]: 'processed',
       },
-      unfinishedCases: 10
+      unfinishedCases: 10,
     });
     await generateNoticesForCaseTrialSessionCalendarInteractor(
       applicationContext,
@@ -116,8 +120,9 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
       interactorParamObject,
     );
     expect(
-      updateTrialSessionNotificationProcessing
-        .mock.calls[0][0].caseStatus?.[docketNumber]
+      updateTrialSessionNotificationProcessing.mock.calls[0][0].caseStatus?.[
+        docketNumber
+      ],
     ).toEqual('processing');
   });
 
@@ -126,9 +131,7 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
       applicationContext,
       interactorParamObject,
     );
-    expect(
-      updateTrialSessionNotificationProcessing,
-    ).toHaveBeenCalled(); // check if we decremented counter TODO
+    expect(updateTrialSessionNotificationProcessing).toHaveBeenCalled(); // check if we decremented counter TODO
   });
 
   it('should save a copy of the combined notice of trial issued letter and a clinic letter for pro se petitioners', async () => {
@@ -385,7 +388,7 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
       caseStatuses: {
         [docketNumber]: 'processing',
       },
-      unfinishedCases: 10
+      unfinishedCases: 10,
     });
 
     await generateNoticesForCaseTrialSessionCalendarInteractor(
@@ -401,8 +404,9 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
       applicationContext.getUseCases().generateStandingPretrialOrderInteractor,
     ).toHaveBeenCalled();
     expect(
-      updateTrialSessionNotificationProcessing
-        .mock.calls[1][0].caseStatus?.[docketNumber],
+      updateTrialSessionNotificationProcessing.mock.calls[1][0].caseStatus?.[
+        docketNumber
+      ],
     ).toEqual('processed');
   });
 
