@@ -507,20 +507,6 @@ export const DocumentSearchResults = connect(
                     ))}
                   </tbody>
                 </table>
-
-                {totalPages > 1 && (
-                  <div className="margin-bottom-4 tablet:grid-col">
-                    <Paginator
-                      currentPageIndex={currentPaginationPage}
-                      totalPages={totalPages}
-                      onPageChange={currentPage => {
-                        setCurrentPaginationPageSequence({
-                          currentPaginationPage: currentPage,
-                        });
-                      }}
-                    />
-                  </div>
-                )}
               </Mobile>
 
               {totalPages > 1 && (
