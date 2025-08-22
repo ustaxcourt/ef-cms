@@ -1,7 +1,7 @@
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import { getCasesClosedByJudgeInteractor } from './getCasesClosedByJudgeInteractor';
 import { JudgeActivityStatisticsRequest } from '@web-api/business/useCases/judgeActivityReport/getCountOfCaseDocumentsFiledByJudgesInteractor';
-import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   createEndOfDayISO,
   createStartOfDayISO,
@@ -13,8 +13,11 @@ import {
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { casesClosedResults } from '@web-api/business/useCases/judgeActivityReport/mockCasesClosedResults';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 const getCasesClosedCountByJudge = getCasesClosedCountByJudgeMock as jest.Mock;
+const getUserById = jest.mocked(getUserByIdMock);
 
 describe('getCasesClosedByJudgeInteractor', () => {
   const mockEndDate = '03/21/2020';
@@ -41,10 +44,7 @@ describe('getCasesClosedByJudgeInteractor', () => {
   };
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(judgeUser);
-
+    getUserById.mockResolvedValue(judgeUser as DbUser);
     getCasesClosedCountByJudge.mockResolvedValue(casesClosedResults);
   });
 
