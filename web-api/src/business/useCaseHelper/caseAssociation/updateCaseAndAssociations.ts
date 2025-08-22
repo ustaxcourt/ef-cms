@@ -9,7 +9,6 @@ import { applicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getMessagesByDocketNumber } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
-import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { isEmpty, omit } from 'lodash';
 import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
@@ -27,6 +26,7 @@ import {
   updatePrivatePractitionerOnCase,
 } from '@web-api/persistence/dynamo/cases/updatePractitionerOnCase';
 import { removeCasesFromHearings } from '@web-api/persistence/postgres/trialSessions/removeCasesFromHearings';
+import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
 
 // Because we used to rely on Dynamo, we needed to manually maintain relations in app code.
 // In the future, it would be good to avoid doing so by leveraging SQL more effectively.
@@ -107,13 +107,13 @@ export const updateCaseAndAssociations = async ({
   // Then persist all related case data
   await settlePromises([
     upsertDocketEntries(docketEntries),
-    ...messages.map(message => updateMessage(message)),
+    upsertMessages(messages),
     upsertCaseCorrespondences(correspondences),
     removeCasesFromHearings({
       trialSessionCases: deletedHearings.map(dh => ({
         trialSessionId: dh.trialSessionId,
-        docketNumber: caseToUpdate.docketNumber
-      }))
+        docketNumber: caseToUpdate.docketNumber,
+      })),
     }),
     ...irsPractitionersToDelete.map(practitioner =>
       removeIrsPractitionerOnCase({
@@ -163,10 +163,10 @@ const getDocketEntriesToUpdate = ({
   caseToUpdate: RawCase;
   oldCase: RawCase;
 }) => {
-  // We are not comparing work item changes as we do not save the work item on the docket entry in persistence
+  const fieldsToIgnore = ['workItemId', 'qcViewed', 'qcComplete']; // These are bits of work-item data irrelevant to docket entry persistence
   const { added: addedDocketEntries, updated: updatedDocketEntries } = diff(
-    oldCase.docketEntries.map(d => omit(d, 'workItem')),
-    caseToUpdate.docketEntries.map(d => omit(d, 'workItem')),
+    oldCase.docketEntries.map(d => omit(d, fieldsToIgnore)),
+    caseToUpdate.docketEntries.map(d => omit(d, fieldsToIgnore)),
     'docketEntryId',
   );
 
@@ -174,8 +174,8 @@ const getDocketEntriesToUpdate = ({
     added: addedArchivedDocketEntries,
     updated: updatedArchivedDocketEntries,
   } = diff(
-    oldCase.archivedDocketEntries?.map(d => omit(d, 'workItem')),
-    caseToUpdate.archivedDocketEntries?.map(d => omit(d, 'workItem')),
+    oldCase.archivedDocketEntries?.map(d => omit(d, fieldsToIgnore)),
+    caseToUpdate.archivedDocketEntries?.map(d => omit(d, fieldsToIgnore)),
     'docketEntryId',
   );
 

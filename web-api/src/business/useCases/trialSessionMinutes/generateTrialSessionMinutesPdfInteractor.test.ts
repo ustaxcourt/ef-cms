@@ -1,17 +1,11 @@
 import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
-jest.mock('@web-api/persistence/postgres/minuteSheets/getMinuteSheet');
-jest.mock(
-  '@web-api/business/useCaseHelper/trialSessionMinutes/formatMinuteSheet',
-);
-jest.mock('@shared/business/utilities/documentGenerators/minuteSheet');
 jest.mock('@shared/sharedAppContext');
-jest.mock('@web-api/persistence/s3/uploadDocument');
 jest.mock('@web-api/persistence/s3/getDownloadPolicyUrl');
 jest.mock(
-  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+  '@web-api/business/useCaseHelper/trialSessionMinutes/createAndUploadMinuteSheet',
 );
-import { UnauthorizedError, NotFoundError } from '@web-api/errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { generateTrialSessionMinutesPdfInteractor } from './generateTrialSessionMinutesPdfInteractor';
 import {
   mockTrialClerkUser,
@@ -20,29 +14,19 @@ import {
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
-import { uploadDocument } from '@web-api/persistence/s3/uploadDocument';
-import { minuteSheet as minuteSheetDocumentGenerator } from '@shared/business/utilities/documentGenerators/minuteSheet';
 import { getDownloadPolicyUrl } from '@web-api/persistence/s3/getDownloadPolicyUrl';
-import { getMinuteSheet } from '@web-api/persistence/postgres/minuteSheets/getMinuteSheet';
-import { formatMinuteSheet } from '@web-api/business/useCaseHelper/trialSessionMinutes/formatMinuteSheet';
 import { getUniqueId } from '@shared/sharedAppContext';
-import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { mockMinuteSheet } from '@shared/test/mockMinuteSheet';
-import { mockFormattedMinuteSheet } from '@web-api/business/useCaseHelper/trialSessionMinutes/mockFormattedMinuteSheet';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getTrialSessionById as getTrialSessionsMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { createAndUploadMinuteSheet } from '@web-api/business/useCaseHelper/trialSessionMinutes/createAndUploadMinuteSheet';
 
 describe('generateTrialSessionMinutesPdfInteractor', () => {
   const mockGetCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
   const getTrialSessionById = jest.mocked(getTrialSessionsMock);
-  const mockGetMinuteSheet = getMinuteSheet as jest.Mock;
-  const mockFormatMinuteSheet = formatMinuteSheet as jest.Mock;
-  const mockMinuteSheetDocumentGenerator =
-    minuteSheetDocumentGenerator as jest.Mock;
   const mockGetUniqueId = getUniqueId as jest.Mock;
-  const mockUploadDocument = uploadDocument as jest.Mock;
   const mockGetDownloadPolicyUrl = getDownloadPolicyUrl as jest.Mock;
-  const mockUpdateCaseAndAssociations = updateCaseAndAssociations as jest.Mock;
+  const mockCreateAndUploadMinuteSheet =
+    createAndUploadMinuteSheet as jest.Mock;
   const mockParams = {
     docketNumber: '123-45',
     trialSessionId: 'trial-123',
@@ -52,18 +36,10 @@ describe('generateTrialSessionMinutesPdfInteractor', () => {
     jest.clearAllMocks();
     mockGetCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
     getTrialSessionById.mockResolvedValue(MOCK_TRIAL_REGULAR);
-    mockGetMinuteSheet.mockResolvedValue({
-      ...mockParams,
-      content: mockMinuteSheet,
-    });
-    mockFormatMinuteSheet.mockReturnValue(mockFormattedMinuteSheet);
-    mockMinuteSheetDocumentGenerator.mockResolvedValue(Buffer.from('pdf'));
     mockGetUniqueId.mockReturnValue('unique-id-123');
-    mockUploadDocument.mockResolvedValue(undefined);
     mockGetDownloadPolicyUrl.mockResolvedValue({
       url: 'https://example.com/pdf',
     });
-    mockUpdateCaseAndAssociations.mockResolvedValue(undefined);
   });
 
   it('throws an unauthorized error when user lacks permission', async () => {
@@ -90,18 +66,6 @@ describe('generateTrialSessionMinutesPdfInteractor', () => {
     ).rejects.toThrow('Could not get case');
   });
 
-  it('throws a NotFoundError when minute sheet is not found', async () => {
-    mockGetMinuteSheet.mockResolvedValue(null);
-
-    await expect(
-      generateTrialSessionMinutesPdfInteractor(
-        applicationContext,
-        mockParams,
-        mockTrialClerkUser,
-      ),
-    ).rejects.toThrow(NotFoundError);
-  });
-
   it('successfully generates and processes minute sheet PDF', async () => {
     const result = await generateTrialSessionMinutesPdfInteractor(
       applicationContext,
@@ -116,16 +80,6 @@ describe('generateTrialSessionMinutesPdfInteractor', () => {
     expect(getTrialSessionById).toHaveBeenCalledWith({
       trialSessionId: mockParams.trialSessionId,
     });
-    expect(mockGetMinuteSheet).toHaveBeenCalledWith({
-      docketNumber: mockParams.docketNumber,
-      trialSessionId: mockParams.trialSessionId,
-    });
-    expect(mockFormatMinuteSheet).toHaveBeenCalledWith({
-      aCase: MOCK_CASE,
-      minuteSheet: mockMinuteSheet,
-      trialSession: MOCK_TRIAL_REGULAR,
-    });
-    expect(mockUploadDocument).toHaveBeenCalled();
-    expect(mockUpdateCaseAndAssociations).toHaveBeenCalled();
+    expect(mockCreateAndUploadMinuteSheet).toHaveBeenCalled();
   });
 });

@@ -17,6 +17,8 @@ import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } 
 import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
 import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { updateTrialSession as updateTrialSessionMock } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
+import { upsertCaseDeadlines as upsertCaseDeadlinesMock } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
+import { getCaseDeadlinesByConsolidatedCaseDeadlineIds as getCaseDeadlinesByConsolidatedCaseDeadlineIdsMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds';
 
 describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
   let mockCaseEntity;
@@ -33,11 +35,17 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
   const getCaseDeadlinesByDocketNumber = jest.mocked(
     getCaseDeadlinesByDocketNumberMock,
   );
+  const upsertCaseDeadlines = jest.mocked(upsertCaseDeadlinesMock);
+  const getCaseDeadlinesByConsolidatedCaseDeadlineIds = jest.mocked(
+    getCaseDeadlinesByConsolidatedCaseDeadlineIdsMock,
+  );
 
   beforeEach(() => {
     mockCaseEntity = new Case(MOCK_CASE, {
       authorizedUser: mockDocketClerkUser,
     });
+    upsertCaseDeadlines.mockImplementation(deadlines => deadlines as any);
+    getCaseDeadlinesByConsolidatedCaseDeadlineIds.mockResolvedValue([]);
   });
 
   CASE_DISMISSAL_ORDER_TYPES.forEach(orderEventCode => {
@@ -80,19 +88,15 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
       eventCode,
     });
 
-    expect(
-      getTrialSessionById,
-    ).not.toHaveBeenCalled();
-    expect(
-      updateTrialSession,
-    ).not.toHaveBeenCalled();
+    expect(getTrialSessionById).not.toHaveBeenCalled();
+    expect(updateTrialSession).not.toHaveBeenCalled();
   });
 
   it('should remove the case from the calendar when the trialSession it`s scheduled on is already calendared', async () => {
     getTrialSessionById.mockResolvedValue({
-        ...MOCK_TRIAL_REGULAR,
-        isCalendared: true,
-      });
+      ...MOCK_TRIAL_REGULAR,
+      isCalendared: true,
+    });
 
     await closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments({
       applicationContext,
@@ -111,9 +115,9 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
 
   it('should delete the case from the calendar when the trialSession it`s scheduled on is NOT already calendared', async () => {
     getTrialSessionById.mockResolvedValue({
-        ...MOCK_TRIAL_REGULAR,
-        isCalendared: false,
-      });
+      ...MOCK_TRIAL_REGULAR,
+      isCalendared: false,
+    });
 
     await closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments({
       applicationContext,
@@ -131,11 +135,11 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
 
   it('should not persist the trial session changes when it`s not valid', async () => {
     getTrialSessionById.mockResolvedValue({
-        ...MOCK_TRIAL_REGULAR,
-        isCalendared: true,
-        //@ts-expect-error This is intentionally breaking the type
-        proceedingType: null, // Required on TrialSession entity
-      });
+      ...MOCK_TRIAL_REGULAR,
+      isCalendared: true,
+      //@ts-expect-error This is intentionally breaking the type
+      proceedingType: null, // Required on TrialSession entity
+    });
 
     await expect(
       closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments({
@@ -148,16 +152,14 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
       }),
     ).rejects.toThrow();
 
-    expect(
-      updateTrialSession,
-    ).not.toHaveBeenCalled();
+    expect(updateTrialSession).not.toHaveBeenCalled();
   });
 
   it('should make a call to persist the changes to the trial session when isCalendared is true', async () => {
     getTrialSessionById.mockResolvedValue({
-        ...MOCK_TRIAL_REGULAR,
-        isCalendared: true,
-      });
+      ...MOCK_TRIAL_REGULAR,
+      isCalendared: true,
+    });
 
     await closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments({
       applicationContext,
@@ -168,16 +170,14 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
       eventCode,
     });
 
-    expect(
-      updateTrialSession,
-    ).toHaveBeenCalled();
+    expect(updateTrialSession).toHaveBeenCalled();
   });
 
   it('should delete any case deadlines and automatic block information', async () => {
     getTrialSessionById.mockResolvedValue({
-        ...MOCK_TRIAL_REGULAR,
-        isCalendared: true,
-      });
+      ...MOCK_TRIAL_REGULAR,
+      isCalendared: true,
+    });
 
     getCaseDeadlinesByDocketNumber.mockResolvedValue([
       { caseDeadlineId: '123' } as any,
@@ -206,6 +206,69 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
     expect(deleteCaseDeadline).toHaveBeenCalledWith({
       caseDeadlineId: '123',
     });
+
+    expect(mockCaseEntity.automaticBlocked).toEqual(false);
+    expect(mockCaseEntity.automaticBlockedReason).toBeUndefined();
+    expect(mockCaseEntity.automaticBlockedDate).toBeUndefined();
+  });
+
+  it('should delete any case deadlines, unlink child case deadlines and automatic block information when closing a lead case', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockReturnValue({
+        ...MOCK_TRIAL_REGULAR,
+        isCalendared: true,
+      });
+
+    const LEAD_CASE_DEADLINE_ID = 'LEAD_CASE_DEADLINE_ID';
+    getCaseDeadlinesByDocketNumber.mockResolvedValue([
+      { caseDeadlineId: LEAD_CASE_DEADLINE_ID } as any,
+    ]);
+
+    const CHILD_CASE_DEADLINE_ID = 'CHILD_CASE_DEADLINE_ID';
+    getCaseDeadlinesByConsolidatedCaseDeadlineIds.mockResolvedValue([
+      {
+        caseDeadlineId: CHILD_CASE_DEADLINE_ID,
+        consolidatedCaseDeadlineId: 'TEST_CONSOLIDATED_CASE_DEADLINE_ID',
+      } as any,
+    ]);
+
+    deleteCaseDeadline.mockResolvedValue({} as any);
+
+    mockCaseEntity = new Case(
+      {
+        ...MOCK_CASE,
+        leadDocketNumber: MOCK_CASE.docketNumber,
+        docketEntries: MOCK_DOCUMENTS[0],
+        automaticBlocked: true,
+        automaticBlockedReason: 'something, something',
+        automaticBlockedDate: 'yesterday',
+      },
+      {
+        authorizedUser: mockDocketClerkUser,
+      },
+    );
+
+    await closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments({
+      applicationContext,
+      caseEntity: mockCaseEntity,
+      eventCode,
+    });
+
+    const deleteCaseDeadlineCalls = deleteCaseDeadline.mock.calls;
+    expect(deleteCaseDeadlineCalls.length).toEqual(1);
+    expect(deleteCaseDeadlineCalls[0][0]).toEqual({
+      caseDeadlineId: LEAD_CASE_DEADLINE_ID,
+    });
+
+    const upsertCaseDeadlinesCalls = upsertCaseDeadlines.mock.calls;
+    expect(upsertCaseDeadlinesCalls.length).toEqual(1);
+    expect(upsertCaseDeadlinesCalls[0][0]).toEqual([
+      {
+        caseDeadlineId: CHILD_CASE_DEADLINE_ID,
+        consolidatedCaseDeadlineId: undefined,
+      },
+    ]);
 
     expect(mockCaseEntity.automaticBlocked).toEqual(false);
     expect(mockCaseEntity.automaticBlockedReason).toBeUndefined();

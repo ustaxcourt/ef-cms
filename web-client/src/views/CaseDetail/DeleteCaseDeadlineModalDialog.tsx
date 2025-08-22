@@ -11,17 +11,14 @@ export const DeleteCaseDeadlineModalDialog = connect(
     cancelSequence: sequences.dismissModalSequence,
     confirmSequence: sequences.deleteCaseDeadlineSequence,
     form: state.form,
-    caseDetail: state.caseDetail,
     consolidatedCases: state[STATE_KEYS.CONSOLIDATED_CASE_DEADLINES],
   },
   function DeleteCaseDeadlineModalDialog({
     cancelSequence,
     confirmSequence,
     form,
-    caseDetail,
     consolidatedCases,
   }) {
-    const { docketNumber, leadDocketNumber } = caseDetail;
     return (
       <ModalDialog
         cancelLabel="No, Cancel"
@@ -37,9 +34,7 @@ export const DeleteCaseDeadlineModalDialog = connect(
 
         <ConsolidatedCaseGroupInfo
           option="delete"
-          docketNumber={docketNumber}
-          leadDocketNumber={leadDocketNumber}
-          consolidatedCases={consolidatedCases}
+          consolidatedCaseDeadlines={consolidatedCases}
         />
       </ModalDialog>
     );
