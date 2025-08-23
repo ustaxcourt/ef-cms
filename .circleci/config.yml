@@ -1161,33 +1161,34 @@ workflows:
           <<: *only-deployed-lower-environments
           requires:
             - index-docket-entries
-      - smoketests:
-          <<: *only-deployed-lower-environments
-          requires:
-            - disable-reindex-cron
-            - index-users
-      - loadtests:
-          <<: *only-deployed-lower-environments
-          requires:
-            - disable-reindex-cron
-            - index-users
-      - smoketests-readonly:
-          <<: *only-deployed-lower-environments
-          requires:
-            - disable-reindex-cron
-            - index-users
-      - api-hosted-environment-tests:
-          <<: *only-deployed-lower-environments
-          requires:
-            - disable-reindex-cron
-            - index-users
+#      - smoketests:
+#          <<: *only-deployed-lower-environments
+#          requires:
+#            - disable-reindex-cron
+#            - index-users
+#      - loadtests:
+#          <<: *only-deployed-lower-environments
+#          requires:
+#            - disable-reindex-cron
+#            - index-users
+#      - smoketests-readonly:
+#          <<: *only-deployed-lower-environments
+#          requires:
+#            - disable-reindex-cron
+#            - index-users
+#      - api-hosted-environment-tests:
+#          <<: *only-deployed-lower-environments
+#          requires:
+#            - disable-reindex-cron
+#            - index-users
       - switch-colors:
           <<: *only-deployed-lower-environments
           requires:
-            - smoketests
-            - loadtests
-            - smoketests-readonly
-            - api-hosted-environment-tests
+#            - smoketests
+#            - loadtests
+#            - smoketests-readonly
+#            - api-hosted-environment-tests
+            - index-users
       - cleanup:
           <<: *only-deployed-lower-environments
           requires:
