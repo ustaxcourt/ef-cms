@@ -13,7 +13,7 @@ jest.mock('pg', () => {
   class Pool {
     options = {};
     connect() {
-      return { release() {} };
+      return { release() { } };
     }
   }
   return {
@@ -36,7 +36,7 @@ describe('getConnection', () => {
       .mockReturnValueOnce(1747161078724)
       .mockReturnValue(1747161078724 + 1000 * 60 * 15);
     global.Date.now = dateNowStub;
-    await getConnection({ cb: () => {} });
+    await getConnection({ cb: () => { } });
     let hasResetPassword = false;
 
     // We want all calls to getConnection to wait until after the call to getToken has resolved. hasResetPassword is a proxy for this.
