@@ -4,8 +4,8 @@ import {
   DOCKET_SECTION,
   CASE_STATUS_TYPES,
   CASE_SERVICES_SUPERVISOR_SECTION,
+  Role,
 } from '@shared/business/entities/EntityConstants';
-import { RawUser } from '@shared/business/entities/User';
 import { getWorkQueueFilters } from '@shared/business/utilities/getWorkQueueFilters';
 import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
 
@@ -32,7 +32,6 @@ describe('getWorkQueueFilters', () => {
         role: ROLES.petitionsClerk,
         section: PETITIONS_SECTION,
         userId: '123',
-        name: 'petitioner person',
       },
     });
     expect(filters).toMatchObject({
@@ -193,7 +192,7 @@ describe('getWorkQueueFilters', () => {
   });
 
   describe('filters for petitions clerk', () => {
-    let user: RawUser;
+    let user: { userId: string; section?: string; role: Role };
     let workItems;
 
     beforeAll(() => {
@@ -201,7 +200,6 @@ describe('getWorkQueueFilters', () => {
         role: ROLES.petitionsClerk,
         section: PETITIONS_SECTION,
         userId: '123',
-        name: 'petitionista',
       };
       workItems = [
         {
@@ -356,11 +354,10 @@ describe('getWorkQueueFilters', () => {
   });
 
   describe('filters for case services supervisor', () => {
-    let user: RawUser;
+    let user: { userId: string; section?: string; role: Role };
 
     beforeAll(() => {
       user = {
-        name: 'case services',
         role: ROLES.caseServicesSupervisor,
         section: CASE_SERVICES_SUPERVISOR_SECTION,
         userId: '123',
