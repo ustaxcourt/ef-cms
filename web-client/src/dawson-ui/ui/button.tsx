@@ -1,39 +1,54 @@
-import * as React from "react"
-import { Slot } from "@radix-ui/react-slot"
-import { cva, type VariantProps } from "class-variance-authority"
+import * as React from 'react';
+import { Slot } from '@radix-ui/react-slot';
+import { cva, type VariantProps } from 'class-variance-authority';
 
-import { cn } from "@web-client/lib/utils"
+import { cn } from '@web-client/lib/utils';
 
 const buttonVariants = cva(
-  "tw:cursor-pointer tw:border-none tw:inline-flex tw:items-center tw:justify-center tw:gap-2 tw:whitespace-nowrap tw:rounded-md tw:text-sm tw:font-bold tw:transition-all tw:disabled:pointer-events-none tw:disabled:opacity-50 tw:[&_svg]:pointer-events-none tw:[&_svg:not([class*=size-])]:size-4 tw:shrink-0 tw:[&_svg]:shrink-0 tw:outline-none tw:focus-visible:border-ring tw:focus-visible:ring-ring/50 tw:focus-visible:ring-[3px] tw:aria-invalid:ring-destructive/20 tw:dark:aria-invalid:ring-destructive/40 tw:aria-invalid:border-destructive",
+  cn(
+    'tw:cursor-pointer tw:inline-flex tw:items-center tw:justify-center tw:gap-2 tw:whitespace-nowrap tw:rounded-md tw:text-base tw:font-bold tw:transition-all tw:disabled:pointer-events-none tw:disabled:opacity-50 tw:[&_svg]:pointer-events-none tw:[&_svg:not([class*=size-])]:size-4 tw:shrink-0 tw:[&_svg]:shrink-0 tw:border-none',
+    'tw:focus-visible:ring-[3px] tw:focus-visible:ring-ring  focus-visible:ring-4 tw:focus-visible:border-ring', // focus-visible
+    'tw:aria-invalid:ring-destructive/20 tw:aria-invalid:border-destructive', // aria
+  ),
   {
     variants: {
       variant: {
-        default:
-          "tw:bg-primary tw:text-primary-foreground tw:shadow-xs tw:hover:bg-primary-darker",
-        destructive:
-          "tw:bg-destructive tw:text-white tw:shadow-xs tw:hover:bg-destructive/90 tw:focus-visible:ring-destructive/20 tw:dark:focus-visible:ring-destructive/40 tw:dark:bg-destructive/60",
-        outline:
-          "tw:border tw:bg-background tw:shadow-xs tw:hover:bg-accent tw:hover:text-accent-foreground tw:dark:bg-input/30 tw:dark:border-input tw:dark:hover:bg-input/50",
-        secondary:
-          "tw:bg-secondary tw:text-secondary-foreground tw:shadow-xs tw:hover:bg-secondary/80",
-        ghost:
-          "tw:hover:bg-accent tw:hover:text-accent-foreground tw:dark:hover:bg-accent/50",
-        link: "tw:bg-transparent tw:border-none tw:text-primary tw:underline-offset-4 tw:hover:underline",
+        primary: cn(
+          'tw:bg-primary tw:text-primary-foreground tw:shadow-xs tw:outline-none', // standard
+          'tw:hover:bg-primary-darker', // hover
+          'tw:focus-visible:ring-offset-4', // focus-visible
+        ),
+        destructive: cn(
+          'tw:h-9 tw:bg-destructive tw:text-white tw:shadow-xs  tw:outline-none tw:border-none', // standard
+          'tw:hover:bg-destructive-darker', // hover
+          'tw:focus-visible:ring-offset-4', // focus-visible
+        ),
+        secondary: cn(
+          'tw:h-9 tw:shadow-none tw:bg-background tw:outline-primary tw:outline-2 tw:text-primary', // standard
+          'tw:hover:text-primary-darker tw:hover:outline-primary-darker', // hover
+          'tw:focus-visible:ring-offset-4', // focus-visible
+        ),
+        destructiveTertiary: cn(
+          'tw:bg-transparent tw:text-destructive tw:font-[400] tw:underline tw:underline-offset-4 tw:outline-none ', // standard,
+          'tw:hover:underline tw:hover:text-destructive-darker', // hover
+          'tw:has-[>svg]:p-0, ', // focus-visible
+        ),
+        primaryTertiary: cn(
+          'tw:bg-transparent tw:text-primary tw:font-[400] tw:underline tw:underline-offset-4  tw:outline-none ', // standard
+          'tw:hover:underline tw:hover:text-primary-darker', // hover,
+          'tw:has-[>svg]:px-[4px] tw:has-[>svg]:py-[2px] h-[24px]', // focus-visible
+        ),
       },
       size: {
-        default: "tw:h-9 tw:px-4 tw:py-2 tw:has-[>svg]:px-3",
-        sm: "tw:h-8 tw:rounded-md tw:gap-1.5 tw:px-3 tw:has-[>svg]:px-2.5",
-        lg: "tw:h-10 tw:rounded-md tw:px-6 tw:has-[>svg]:px-4",
-        icon: "tw:size-9",
+        default: 'tw:px-4 tw:py-2',
       },
     },
     defaultVariants: {
-      variant: "default",
-      size: "default",
+      variant: 'primary',
+      size: 'default',
     },
-  }
-)
+  },
+);
 
 function Button({
   className,
@@ -41,11 +56,11 @@ function Button({
   size,
   asChild = false,
   ...props
-}: React.ComponentProps<"button"> &
+}: React.ComponentProps<'button'> &
   VariantProps<typeof buttonVariants> & {
-    asChild?: boolean
+    asChild?: boolean;
   }) {
-  const Comp = asChild ? Slot : "button"
+  const Comp = asChild ? Slot : 'button';
 
   return (
     <Comp
@@ -53,7 +68,7 @@ function Button({
       className={cn(buttonVariants({ variant, size, className }))}
       {...props}
     />
-  )
+  );
 }
 
-export { Button, buttonVariants }
+export { Button, buttonVariants };
