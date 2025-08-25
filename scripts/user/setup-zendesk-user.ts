@@ -47,7 +47,6 @@ const loadSecrets = async (secretsName: string): Promise<any> => {
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const secrets = await loadSecrets(`${env}_deploy`);
-  const zendeskSecrets = await loadSecrets(`${env}/ZendeskDawson`);
 
   const USTC_ZENDESK_USER = 'ustczendesk@dawson.ustaxcourt.gov';
   const arbitraryUserId = getUniqueId();
@@ -97,17 +96,26 @@ const loadSecrets = async (secretsName: string): Promise<any> => {
     }),
   });
 
-  const putZendeskSecretValueCommand = new PutSecretValueCommand({
-    SecretId: `${env}/ZendeskDawson`,
-    SecretString: JSON.stringify({
-      ...zendeskSecrets,
-      USTC_ZENDESK_USER,
-      USTC_ZENDESK_PASS,
-    }),
-  });
-
   await secretsClient.send(putSecretValueCommand);
-  await secretsClient.send(putZendeskSecretValueCommand);
+
+  let zendeskSecrets;
+  try {
+    zendeskSecrets = await loadSecrets(`${env}/ZendeskDawson`);
+  } catch (e) {
+    console.log('No Zendesk secrets found');
+  }
+
+  if (zendeskSecrets) {
+    const putZendeskSecretValueCommand = new PutSecretValueCommand({
+      SecretId: `${env}/ZendeskDawson`,
+      SecretString: JSON.stringify({
+        ...zendeskSecrets,
+        USTC_ZENDESK_USER,
+        USTC_ZENDESK_PASS,
+      }),
+    });
+    await secretsClient.send(putZendeskSecretValueCommand);
+  }
 
   console.log('Done!');
 })();
