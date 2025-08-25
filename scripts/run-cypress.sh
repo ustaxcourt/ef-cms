@@ -18,7 +18,6 @@ Help()
    echo "Syntax: ./scripts/run-cypress.sh [-c|f|h|l|o|p|r|s|t <FILE>]"
    echo "options:"
    echo "c     Run smoketests against the currently deployed color rather than the deploying color. -s or -r should also be used."
-   echo "f     Enable fail-fast mode for smoketests (stops on first failure but preserves artifacts). Should be used with -s or -r."
    echo "h     Print this Help."
    echo "l     Run smoketests against the locally running application. -s or -r should also be used."
    echo "o     Run Cypress with the browser open rather than headless. Note that this option is incompatible with -s."
@@ -42,13 +41,10 @@ BROWSER=edge
 RUN_SPECIFIC_TEST=""
 
 # Get the options
-while getopts ":cfhloprst:" option; do
+while getopts ":chloprst:" option; do
    case $option in
       c) # run against currently deployed color
          CURRENT=true
-         ;;
-      f) # enable fail-fast mode
-         FAIL_FAST=true
          ;;
       h) # display Help
          Help
@@ -82,17 +78,6 @@ while getopts ":cfhloprst:" option; do
          ;;
    esac
 done
-
-# Validate fail-fast option usage
-if [ -n "${FAIL_FAST}" ] && [ -z "${SMOKETESTS}" ]; then
-  echo "Error: Fail-fast mode (-f) can only be used with smoketests (-s or -r option)"
-  exit 1
-fi
-
-# Create results directory for JUnit reporter if using fail-fast mode
-if [ -n "${FAIL_FAST}" ] && [ -n "${SMOKETESTS}" ]; then
-  mkdir -p cypress/results
-fi
 
 if [ -n "${CI}" ]; then
   export CYPRESS_NO_COMMAND_LOG=1 #Disable logging of commands in CI to not leak secrets

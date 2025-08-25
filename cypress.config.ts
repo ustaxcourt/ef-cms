@@ -24,6 +24,7 @@ import { unzipFile } from './cypress/helpers/file/unzip-file';
 import { waitForNoce } from './cypress/helpers/cypressTasks/wait-for-noce';
 import type { Page } from 'puppeteer-core';
 import { retry, setup } from '@cypress/puppeteer';
+import cypressFailFast from 'cypress-fail-fast/plugin.js';
 
 export default defineConfig({
   chromeWebSecurity: false,
@@ -31,7 +32,8 @@ export default defineConfig({
   e2e: {
     baseUrl: 'http://localhost:1234',
     experimentalStudio: true,
-    setupNodeEvents(on) {
+    setupNodeEvents(on, config) {
+      cypressFailFast(on, config);
       on('task', {
         confirmUser({ email }) {
           return confirmUser({ email });
