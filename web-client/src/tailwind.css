@@ -1,0 +1,20 @@
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme) prefix(tw);
+@import "tailwindcss/utilities.css" layer(utilities) prefix(tw);
+
+/* 1. define all theme colors with generic naming here */
+:root {
+  --theme-color-primary-darker: #3b82f6;
+  --theme-text-primary: #1b1b1b
+}
+
+/* 2. use the generic naming in the utilities layer */
+@layer utilities {
+  .tw\:text-primary {
+    color: var(--theme-text-primary);
+  }
+
+  .tw\:bg-accent {
+    background-color: var(--theme-color-primary-darker);
+  }
+}

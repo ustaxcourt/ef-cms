@@ -1,3 +1,4 @@
+import './tailwind.css';
 import './index.scss';
 
 import '../../node_modules/@fortawesome/fontawesome-svg-core/styles.css';
