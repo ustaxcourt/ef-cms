@@ -1,25 +1,22 @@
 import {
   loginAsDocketClerk,
-  loginAsPetitionsClerk1,
+  loginAsPetitioner,
 } from 'cypress/helpers/authentication/login-as-helpers';
+import { updateCaseStatus } from 'cypress/helpers/caseDetail/caseInformation/update-case-status';
 import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
-import { createAndServePaperPetition } from 'cypress/helpers/fileAPetition/create-and-serve-paper-petition';
-import { createTrialSession } from 'cypress/helpers/trialSession/create-trial-session';
+import { externalUserCreatesElectronicCase } from 'cypress/helpers/fileAPetition/petitioner-creates-electronic-case';
 
 describe('Sealed Contact Information', () => {
   before(() => {
-    loginAsPetitionsClerk1();
-    createTrialSession().then(({ trialSessionId }) => {
-      Cypress.env('trialSessionId', trialSessionId);
-      createAndServePaperPetition().then(({ docketNumber }) => {
-        Cypress.env('docketNumber', docketNumber);
-      });
+    loginAsPetitioner();
+    externalUserCreatesElectronicCase().then((docketNumber: string) => {
+      Cypress.env('docketNumber', docketNumber);
     });
   });
   it('displays correct seal information text', () => {
     loginAsDocketClerk();
-    cy.visit(`case-detail/${Cypress.env('docketNumber')}`);
-    cy.get('[data-testid="tab-case-information"]').click();
+    goToCase(Cypress.env('docketNumber'));
+    updateCaseStatus('General Docket - At Issue (Ready for Trial)');
     cy.get('[data-testid="tab-parties"]').click();
     cy.get('[data-testid="edit-petitioner-button"]').click();
     cy.get('[data-testid="seal-address-label"]').contains(
@@ -30,13 +27,15 @@ describe('Sealed Contact Information', () => {
       `Seal The Following Information for`,
     );
     cy.get('[data-testid="seal-address-modal-address-1"]').contains(
-      'some random street',
+      '111 South West St.',
     );
     cy.get(
       '[data-testid="seal-address-modal-address-city-state-zip"]',
-    ).contains('cleveland, TN 33333');
-    cy.get('[data-testid="seal-address-modal-phone"]').contains('n/a');
-    cy.get('[data-testid="seal-address-modal-email"]').contains('Not Provided');
+    ).contains('Orlando, AL 12345');
+    cy.get('[data-testid="seal-address-modal-phone"]').contains('111-111-1111');
+    cy.get('[data-testid="seal-address-modal-email"]').contains(
+      'petitioner1@example.com',
+    );
     cy.get(
       '[data-testid="seal-address-modal-address-petition-email"]',
     ).contains('Not Provided');
