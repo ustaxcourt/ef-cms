@@ -13,9 +13,10 @@ import {
 } from "@web-client/dawson-ui/ui/card"
 
 import React from 'react';
-import { CheckCircle2Icon, Terminal } from 'lucide-react';
+import { CheckCircle2Icon } from 'lucide-react';
 import { Label } from '@web-client/dawson-ui/ui/label';
 import { Input } from '@web-client/dawson-ui/ui/input';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const DawsonLibrary = () => {
   return (
@@ -23,11 +24,14 @@ export const DawsonLibrary = () => {
       <BigHeader text="Dawson Library" />
       <div className="card margin-2 padding-2">
         <h2 className="tw:text-3xl">Button</h2>
-
         <button className="tw:bg-blue-500">
           Test Button with Tailwind
         </button>
-        <Button>Test Button with Shadcn</Button>
+        <Button variant={"default"}><FontAwesomeIcon
+          className="fa:margin-right-1"
+          icon={'search'}
+          size="1x"
+        />Button with Shadcn</Button>
 
         <Tabs defaultValue="account" className="w-[400px]">
           <TabsList>
