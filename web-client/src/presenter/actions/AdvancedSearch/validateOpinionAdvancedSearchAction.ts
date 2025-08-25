@@ -1,5 +1,6 @@
 import { isEmpty } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
+import { DATE_RANGE_SEARCH_OPTIONS } from '@shared/business/entities/EntityConstants';
 
 /**
  * validate opinion advanced search form
@@ -26,6 +27,10 @@ export const validateOpinionAdvancedSearchAction = ({
       opinionSearch: {
         ...opinionSearch,
         opinionTypes,
+        dateRange:
+          opinionSearch.startDate || opinionSearch.endDate
+            ? DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES
+            : DATE_RANGE_SEARCH_OPTIONS.ALL_DATES,
       },
     });
 

@@ -45,8 +45,13 @@ const config: Config = {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
     '^.+\\.html?$': `${__dirname}/htmlLoader.js`, //this is to ignore imported html files
   },
-  transformIgnorePatterns: ['/node_modules/(?!uuid|sinon|aws-sdk-client-mock|export-to-csv)'],
+  transformIgnorePatterns: [
+    '/node_modules/(?!uuid|sinon|aws-sdk-client-mock|export-to-csv)',
+  ],
   verbose: false,
+  setupFilesAfterEnv: [
+    '<rootDir>../web-api/src/persistence/postgres/featureFlag/mocks.jest.ts',
+  ],
 };
 
 export default config;

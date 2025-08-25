@@ -23,6 +23,7 @@ import {
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getFeatureFlagValues as getFeatureFlagValuesMock } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getWorkItemByDocketNumberAndDocketEntryId as getWorkItemByDocketNumberAndDocketEntryIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 import { WorkItem } from '@shared/business/entities/WorkItem';
@@ -34,6 +35,8 @@ const getUserById = jest.mocked(getUserByIdMock);
 
 describe('completeDocketEntryQCInteractor', () => {
   let caseRecord;
+  const getFeatureFlagValues = jest.mocked(getFeatureFlagValuesMock);
+
   const mockPrimaryId = MOCK_CASE.petitioners[0].contactId;
   const mockDocketEntryId = MOCK_CASE.docketEntries[0].docketEntryId;
 
@@ -56,6 +59,17 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   beforeEach(() => {
+    getFeatureFlagValues.mockResolvedValue([
+      {
+        name: 'clerk-of-court-configuration',
+        value: {
+          current: {
+            name: 'bob',
+            title: 'clerk of court',
+          },
+        },
+      },
+    ]);
     const workItem = {
       docketEntryId: mockDocketEntryId,
       docketNumber: '45678-18',
@@ -613,6 +627,15 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('throws the expected error if the lock is already acquired by another process', async () => {
+    getFeatureFlagValues.mockResolvedValue([
+      {
+        name: 'entity-locking-feature-flag',
+        value: {
+          current: true,
+        },
+      },
+    ]);
+
     tryGetLocks.mockResolvedValueOnce([
       { successfullyLocked: false, identifier: 'abc' },
     ]);

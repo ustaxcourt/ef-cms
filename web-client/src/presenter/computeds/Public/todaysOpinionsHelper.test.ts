@@ -70,6 +70,40 @@ describe('todaysOpinionsHelper', () => {
     expect(result.formattedCurrentDate).toEqual(formattedCurrentDate);
   });
 
+  it('should calculate the total count correctly', () => {
+    const result = runCompute(todaysOpinionsHelper, {
+      state: {
+        todaysOpinions: [
+          {
+            caseCaption: 'Sauceboss, Petitioner',
+            docketEntryId: 'document-id-123',
+            docketNumber: '123-20',
+            documentType: 'MOP - Memorandum Opinion',
+            filingDate: '2020-06-11T20:17:10.646Z',
+            judge: 'Roslindis Angelino',
+          },
+          {
+            caseCaption: 'Sauceboss, Petitioner',
+            docketEntryId: 'document-id-123',
+            docketNumber: '123-20',
+            documentType: 'MOP - Memorandum Opinion',
+            filingDate: '2020-06-11T20:17:10.646Z',
+            judge: 'Roslindis Angelino',
+          },
+          {
+            caseCaption: 'Sauceboss, Petitioner',
+            docketEntryId: 'document-id-123',
+            docketNumber: '123-20',
+            documentType: 'MOP - Memorandum Opinion',
+            filingDate: '2020-06-11T20:17:10.646Z',
+            judge: 'Roslindis Angelino',
+          },
+        ],
+      },
+    });
+    expect(result.totalCount).toEqual(3);
+  });
+
   describe('formattedJudgeName', () => {
     it('should be set to opinion.judge when it is defined', () => {
       const result = runCompute(todaysOpinionsHelper, { state });
