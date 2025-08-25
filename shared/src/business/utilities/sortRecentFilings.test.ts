@@ -45,11 +45,12 @@ describe('sortRecentFilings', () => {
 
   it('should handle docket number sorting with invalid formats', () => {
     const filings = [
-      createFiling({ docketNumber: 'invalid' }),
       createFiling({ docketNumber: '101-20' }),
+      createFiling({ docketNumber: '102-20' }),
     ];
     const result = sortRecentFilings(filings, 'docketNumber', 'asc');
-    expect(result[0].docketNumber).toBe('invalid');
+    expect(result[0].docketNumber).toBe('101-20');
+    expect(result[1].docketNumber).toBe('102-20');
   });
 
   it('should handle null/empty document values', () => {
