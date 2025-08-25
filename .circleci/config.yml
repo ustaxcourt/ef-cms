@@ -1397,7 +1397,7 @@ workflows:
           <<: *only-dev
           requires:
             - index-cases
-      - cleanup-glue-job:
+      - index-users:
           <<: *only-dev
           requires:
             - index-docket-entries
