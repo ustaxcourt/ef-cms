@@ -109,10 +109,6 @@ describe('editPaperFilingInteractor', () => {
       new WorkItem(workItem),
     );
 
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(docketClerkUser);
-
     getCaseByDocketNumber.mockResolvedValue(caseRecord);
     fileAndServeDocumentOnOneCase.mockImplementation(
       ({ caseEntity }) => caseEntity,

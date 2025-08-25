@@ -490,7 +490,7 @@ describe('Create a minute sheet, fill out sections of the form, navigate away an
         cy.get('[data-testid="exhibit-status-0"]').select('Admitted');
         cy.get('[data-testid="exhibit-note-0"]').type('First exhibit note');
 
-        cy.get('[data-testid="add-exhibit-button"]').click();
+        cy.get('[data-testid="add-exhibit-button-0"]').click();
         cy.get('[data-testid="exhibit-description-1"]').type('Exhibit B');
         cy.get('[data-testid="exhibit-status-1"]').select('Not admitted');
         cy.get('[data-testid="exhibit-note-1"]').type('Second exhibit note');
@@ -546,7 +546,7 @@ describe('Create a minute sheet, fill out sections of the form, navigate away an
           `/trial-session-detail/${this.trialSessionId}/case/${this.docketNumber}/minutes`,
         ).then(window => {
           cy.stub(window, 'open').as('windowOpen');
-          cy.get('[data-testid="download-pdf-button"]').click();
+          cy.get('[data-testid="preview-pdf-button-top"]').click();
           cy.get('@windowOpen').should('have.been.called');
         });
       });

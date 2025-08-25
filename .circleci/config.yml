@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   git-shallow-clone: guitarrapc/git-shallow-clone@2.8.0
 
-efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.48
+efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.49
 
 parameters:
   run_build_and_deploy:
@@ -1241,22 +1241,21 @@ workflows:
           <<: *only-prod
           requires:
             - index-docket-entries
-      # - loadtests: # 10495 Post deployment: Uncomment after users to postgres has been deployed
-      #     <<: *only-prod
-      #     requires:
-      #       - disable-reindex-cron
-      #       - index-docket-entries
-      # - smoketests-readonly:
-      #     <<: *only-prod
-      #     requires:
-      #       - disable-reindex-cron
-      #       - index-docket-entries
+      - loadtests:
+          <<: *only-prod
+          requires:
+            - disable-reindex-cron
+            - index-users
+      - smoketests-readonly:
+          <<: *only-prod
+          requires:
+            - disable-reindex-cron
+            - index-users
       - deploy-switch-colors-cron:
           <<: *only-prod
           requires:
-            - index-users # 10495 Post deployment: Uncomment after users to postgres has been deployed
-            # - loadtests
-            # - smoketests-readonly
+            - loadtests
+            - smoketests-readonly
       - wait-for-switch:
           <<: *only-prod
           type: approval

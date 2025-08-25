@@ -1,6 +1,6 @@
 import { getDbReader } from '@web-api/database';
 import { Role } from '@shared/business/entities/EntityConstants';
-import { DbUser, rawUser } from '@web-api/persistence/postgres/users/mapper';
+import { DbUser, fromKyselyUser } from '@web-api/persistence/postgres/users/mapper';
 
 export const getUsersByRoles = async ({
   roles,
@@ -15,5 +15,5 @@ export const getUsersByRoles = async ({
       .execute(),
   );
 
-  return users.map(user => rawUser(user));
+  return users.map(user => fromKyselyUser(user));
 };

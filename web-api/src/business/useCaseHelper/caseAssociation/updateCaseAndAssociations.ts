@@ -154,7 +154,6 @@ const getDocketEntriesToUpdate = ({
   caseToUpdate: RawCase;
   oldCase: RawCase;
 }): RawDocketEntry[] => {
-  // We are not comparing work item changes as we do not save the work item on the docket entry in persistence
   const fieldsToIgnore = ['workItemId', 'qcViewed', 'qcComplete']; // These are bits of work-item data irrelevant to docket entry persistence
   const { added: addedDocketEntries, updated: updatedDocketEntries } = diff(
     oldCase.docketEntries.map(d => omit(d, fieldsToIgnore)),

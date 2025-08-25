@@ -23,9 +23,8 @@ import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/us
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 import { getDocketEntriesByDocketNumberAndDocketEntryId as getDocketEntriesByDocketNumberAndDocketEntryIdMock } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumberAndDocketEntryId';
 
-const getUserById = jest.mocked(getUserByIdMock);
-
 describe('assignWorkItemsInteractor', () => {
+  const getUserById = jest.mocked(getUserByIdMock);
   const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
   const getWorkItemById = getWorkItemByIdMock as jest.Mock;
   const getDocketEntriesByDocketNumberAndDocketEntryId = jest.mocked(
@@ -125,10 +124,10 @@ describe('assignWorkItemsInteractor', () => {
   });
 
   it('should assign work item to current petitions clerk user when given work item', async () => {
-    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
+    getUserById.mockResolvedValue({
       ...mockPetitionsClerkUser,
       section: PETITIONS_SECTION,
-    });
+    } as DbUser);
     await assignWorkItemsInteractor(
       applicationContext,
       {
@@ -150,10 +149,10 @@ describe('assignWorkItemsInteractor', () => {
   });
 
   it('should assign work item for a petition docket entry to the petitions section when filed by case services supervisor', async () => {
-    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
+    getUserById.mockResolvedValue({
       ...mockCaseServicesSupervisorUser,
       section: CASE_SERVICES_SUPERVISOR_SECTION,
-    });
+    } as DbUser);
     getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([
       { documentTitle: 'Petition' },
     ] as RawDocketEntry[]);
@@ -178,10 +177,10 @@ describe('assignWorkItemsInteractor', () => {
   });
 
   it('should assign work item for a petition docket entry to the petitions section when filed by clerk of the court', async () => {
-    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
+    getUserById.mockResolvedValue({
       ...mockClerkOfTheCourtUser,
       section: CLERK_OF_COURT_SECTION,
-    });
+    } as DbUser);
     getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([
       { documentTitle: 'Petition' },
     ] as RawDocketEntry[]);
@@ -206,10 +205,10 @@ describe('assignWorkItemsInteractor', () => {
   });
 
   it('should assign work item for a non-petition docket entry to the petitions section when filed by case services supervisor', async () => {
-    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
+    getUserById.mockResolvedValue({
       ...mockCaseServicesSupervisorUser,
       section: CASE_SERVICES_SUPERVISOR_SECTION,
-    });
+    } as DbUser);
     getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([
       { documentTitle: 'Something' },
     ] as RawDocketEntry[]);
@@ -234,10 +233,10 @@ describe('assignWorkItemsInteractor', () => {
   });
 
   it('should assign work item for a non-petition docket entry to the petitions section when filed by clerk of the court', async () => {
-    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
+    getUserById.mockResolvedValue({
       ...mockClerkOfTheCourtUser,
       section: CLERK_OF_COURT_SECTION,
-    });
+    } as DbUser);
     getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([
       { documentTitle: 'Something' },
     ] as RawDocketEntry[]);

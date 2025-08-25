@@ -1,6 +1,6 @@
 import { Role } from '@shared/business/entities/EntityConstants';
 import { getDbReader } from '@web-api/database';
-import { DbUser, rawUser } from '@web-api/persistence/postgres/users/mapper';
+import { DbUser, fromKyselyUser } from '@web-api/persistence/postgres/users/mapper';
 import { sql } from 'kysely';
 
 export const getPractitionersBySearchKey = async ({
@@ -23,5 +23,5 @@ export const getPractitionersBySearchKey = async ({
       .execute(),
   );
 
-  return practitioners.map(rawUser);
+  return practitioners.map(fromKyselyUser);
 };
