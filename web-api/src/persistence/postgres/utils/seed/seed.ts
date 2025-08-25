@@ -14,6 +14,7 @@ import { caseWorksheets } from '@web-api/persistence/postgres/utils/seed/fixture
 import { correspondence } from '@web-api/persistence/postgres/utils/seed/fixtures/correspondence';
 import { messages } from './fixtures/messages';
 import { workItems } from './fixtures/workItems';
+import { featureFlags } from '@web-api/persistence/postgres/utils/seed/fixtures/featureFlags';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 import { getDbWriter } from '@web-api/database';
@@ -96,6 +97,11 @@ export const seed = async () => {
     })),
   );
 
+  const insertFeatureFlags = await pgInsertInto({
+    table: 'dwFeatureFlag',
+    values: featureFlags,
+    onConflictColumns: ['name'],
+  });
   const validatedDocketEntrySeeds = DocketEntry.validateRawCollection(
     docketEntrySeeds,
     {
@@ -111,10 +117,12 @@ export const seed = async () => {
 
   await Promise.all([
     insertCaseDeadline,
+
     insertCases,
     insertCaseWorksheet,
     insertCorrespondence,
     insertDocketEntries,
+    insertFeatureFlags,
     insertMessages,
     insertUsers,
     insertUserOnCase,

@@ -13,11 +13,11 @@ import { UserCaseNote } from '@shared/business/entities/notes/UserCaseNote';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('Get case note', () => {
-  const MOCK_NOTE = {
+  const MOCK_NOTE = new UserCaseNote({
     docketNumber: MOCK_CASE.docketNumber,
     notes: 'something',
     userId: mockJudgeUser.userId,
-  };
+  });
 
   const mockUnauthorizedUser = {
     role: 'unauthorizedRole',
