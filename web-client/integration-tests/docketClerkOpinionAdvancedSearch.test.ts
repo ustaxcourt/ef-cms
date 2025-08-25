@@ -316,7 +316,6 @@ describe('Docket clerk opinion advanced search', () => {
             docketNumberWithSuffix: '313-21',
             documentTitle:
               'Summary Opinion Judge Ashford An opinion for testing',
-            entityName: 'InternalDocumentSearchResult',
             eventCode: 'SOP',
             filingDate: '2021-10-25T18:57:31.742Z',
             isCaseSealed: false,

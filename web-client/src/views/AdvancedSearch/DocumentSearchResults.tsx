@@ -6,8 +6,9 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { SortableColumn } from '../../ustc-ui/Table/SortableColumn';
 import {
   ASCENDING,
@@ -46,6 +47,7 @@ export const DocumentSearchResults = connect(
     showModal,
     openCleanModalSequence,
   }) {
+    const paginatorTop = useRef(null);
     const results = advancedDocumentSearchHelper.formattedSearchResults || [];
 
     // Show search results if there are any
@@ -133,7 +135,7 @@ export const DocumentSearchResults = connect(
 
     return (
       <>
-        <div aria-live="polite">
+        <div ref={paginatorTop} aria-live="polite">
           {advancedDocumentSearchHelper.showSearchResults && (
             <>
               <div className="tablet:grid-col-4 margin-top-3">
@@ -153,6 +155,7 @@ export const DocumentSearchResults = connect(
                           setCurrentPaginationPageSequence({
                             currentPaginationPage: currentPage,
                           });
+                          focusPaginatorTop(paginatorTop);
                         }}
                       />
                     )}
@@ -389,6 +392,7 @@ export const DocumentSearchResults = connect(
                           setCurrentPaginationPageSequence({
                             currentPaginationPage: currentPage,
                           });
+                          focusPaginatorTop(paginatorTop);
                         }}
                       />
                     </div>
@@ -517,6 +521,7 @@ export const DocumentSearchResults = connect(
                     setCurrentPaginationPageSequence({
                       currentPaginationPage: currentPage,
                     });
+                    focusPaginatorTop(paginatorTop);
                   }}
                 />
               )}

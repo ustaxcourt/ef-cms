@@ -77,5 +77,9 @@ export const opinionPublicSearchInteractor = async (
 
   const filteredResults = allResults.slice(0, MAX_SEARCH_RESULTS);
 
-  return PublicDocumentSearchResult.validateRawCollection(filteredResults);
+  return PublicDocumentSearchResult.validateRawCollection(filteredResults).map(
+    publicDocument => {
+      return omit(publicDocument, 'entityName');
+    },
+  );
 };
