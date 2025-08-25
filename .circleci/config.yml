@@ -1236,22 +1236,21 @@ workflows:
           <<: *only-prod
           requires:
             - index-docket-entries
-      # - loadtests: # 10495 Post deployment: Uncomment after users to postgres has been deployed
-      #     <<: *only-prod
-      #     requires:
-      #       - disable-reindex-cron
-      #       - index-docket-entries
-      # - smoketests-readonly:
-      #     <<: *only-prod
-      #     requires:
-      #       - disable-reindex-cron
-      #       - index-docket-entries
+      - loadtests:
+          <<: *only-prod
+          requires:
+            - disable-reindex-cron
+            - index-users
+      - smoketests-readonly:
+          <<: *only-prod
+          requires:
+            - disable-reindex-cron
+            - index-users
       - deploy-switch-colors-cron:
           <<: *only-prod
           requires:
-            - index-users # 10495 Post deployment: Uncomment after users to postgres has been deployed
-            # - loadtests
-            # - smoketests-readonly
+            - loadtests
+            - smoketests-readonly
       - wait-for-switch:
           <<: *only-prod
           type: approval
