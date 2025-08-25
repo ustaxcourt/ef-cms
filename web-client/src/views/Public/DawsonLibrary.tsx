@@ -1,7 +1,12 @@
 import { Button } from '@web-client/dawson-ui/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@web-client/dawson-ui/ui/tabs"
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from '@web-client/dawson-ui/ui/tabs';
 import { BigHeader } from '@web-client/views/BigHeader';
-import { Alert, AlertDescription, AlertTitle } from "@web-client/dawson-ui/ui/alert"
+import { Alert } from '@web-client/dawson-ui/ui/alert';
 import {
   Card,
   CardAction,
@@ -10,10 +15,9 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@web-client/dawson-ui/ui/card"
+} from '@web-client/dawson-ui/ui/card';
 
 import React from 'react';
-import { CheckCircle2Icon } from 'lucide-react';
 import { Label } from '@web-client/dawson-ui/ui/label';
 import { Input } from '@web-client/dawson-ui/ui/input';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -24,21 +28,24 @@ export const DawsonLibrary = () => {
       <BigHeader text="Dawson Library" />
       <div className="card margin-2 padding-2">
         <h2 className="tw:text-3xl">Button</h2>
-        <button className="tw:bg-blue-500">
-          Test Button with Tailwind
-        </button>
-        <Button variant={"default"}><FontAwesomeIcon
-          className="fa:margin-right-1"
-          icon={'search'}
-          size="1x"
-        />Button with Shadcn</Button>
+        <button className="tw:bg-blue-500">Test Button with Tailwind</button>
+        <Button variant={'default'}>
+          <FontAwesomeIcon
+            className="fa:margin-right-1"
+            icon={'search'}
+            size="1x"
+          />
+          Button with Shadcn
+        </Button>
 
         <Tabs defaultValue="account" className="w-[400px]">
           <TabsList>
             <TabsTrigger value="account">Account</TabsTrigger>
             <TabsTrigger value="password">Password</TabsTrigger>
           </TabsList>
-          <TabsContent value="account">Make changes to your account here.</TabsContent>
+          <TabsContent value="account">
+            Make changes to your account here.
+          </TabsContent>
           <TabsContent value="password">Change your password here.</TabsContent>
         </Tabs>
 
@@ -55,7 +62,6 @@ export const DawsonLibrary = () => {
             <p>Card Footer</p>
           </CardFooter>
         </Card>
-
 
         <div className="tw:max-w-2xl tw:mx-auto">
           <Card className="tw:w-full tw:max-w-sm">
@@ -84,7 +90,7 @@ export const DawsonLibrary = () => {
                     <div className="tw:flex tw:items-center">
                       <Label htmlFor="password">Password</Label>
                       <a
-                        href="#"
+                        href="asdf"
                         className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
                       >
                         Forgot your password?
@@ -105,14 +111,33 @@ export const DawsonLibrary = () => {
             </CardFooter>
           </Card>
         </div>
-
-        <Alert>
-          <CheckCircle2Icon />
-          <AlertTitle>Success! Your changes have been saved</AlertTitle>
-          <AlertDescription>
-            This is an alert with icon, title and description.
-          </AlertDescription>
-        </Alert>
+        <div>
+          <h1>Alerts:</h1>
+          <Alert
+            title="this displays when you hover"
+            variant="info"
+            header="This is a header"
+            description="This is a description"
+          ></Alert>
+          <Alert
+            title="this displays when you hover"
+            variant="warning"
+            header="This is a header"
+            description="This is a description"
+          ></Alert>
+          <Alert
+            title="this displays when you hover"
+            variant="error"
+            header="This is a header"
+            description="This is a description"
+          ></Alert>
+          <Alert
+            title="this displays when you hover"
+            variant="success"
+            header="This is a header"
+            description="This is a description"
+          ></Alert>
+        </div>
       </div>
     </>
   );
