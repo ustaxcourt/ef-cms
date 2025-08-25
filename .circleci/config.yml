@@ -1402,7 +1402,7 @@ workflows:
           requires:
             - index-docket-entries
       - cleanup-glue-job:
-          <<: *only-test
+          <<: *only-dev
           requires:
             - index-users
 
