@@ -67,11 +67,5 @@ describe('Given a user without a DAWSON account', () => {
         'The email address or password you entered is invalid',
       );
     });
-    it('should fail immediately to test fail-fast behavior', () => {
-      assert(
-        false,
-        'This test should always fail to verify fail-fast behavior',
-      );
-    });
   });
 });
