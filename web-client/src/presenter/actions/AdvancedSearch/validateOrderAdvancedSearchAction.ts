@@ -1,5 +1,6 @@
 import { isEmpty } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
+import { DATE_RANGE_SEARCH_OPTIONS } from '@shared/business/entities/EntityConstants';
 
 export const validateOrderAdvancedSearchAction = ({
   applicationContext,
@@ -11,7 +12,13 @@ export const validateOrderAdvancedSearchAction = ({
   const errors = applicationContext
     .getUseCases()
     .validateOrderAdvancedSearchInteractor({
-      orderSearch,
+      orderSearch: {
+        ...orderSearch,
+        dateRange:
+          orderSearch.startDate || orderSearch.endDate
+            ? DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES
+            : DATE_RANGE_SEARCH_OPTIONS.ALL_DATES,
+      },
     });
 
   if (isEmpty(errors)) {

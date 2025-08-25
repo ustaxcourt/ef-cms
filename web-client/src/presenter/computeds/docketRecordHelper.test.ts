@@ -224,4 +224,19 @@ describe('docketRecordHelper', () => {
       expect(result.countOfDocumentsForDownload).toEqual(1);
     });
   });
+  describe('docketRecordCount', () => {
+    it('should return the count of docket entries', () => {
+      const result = runCompute(docketRecordHelper, {
+        state: {
+          caseDetail,
+          documentsSelectedForDownload: [petitionDocument],
+          permissions,
+          sessionMetadata,
+        },
+      });
+
+      const EXPECTED_LENGTH = 4;
+      expect(result.docketRecordCount).toEqual(EXPECTED_LENGTH);
+    });
+  });
 });

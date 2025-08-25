@@ -62,17 +62,26 @@ export const PetitionersAndCounsel = connect(
                     }}
                     showEmail={false}
                   />
-                  <span className="address-line" data-testid="petitioner-email">
-                    {petitioner.formattedEmail}
-                    {petitioner.showEAccessFlag && (
-                      <FontAwesomeIcon
-                        aria-label="has e-access"
-                        className="margin-left-05 fa-icon-blue"
-                        icon="flag"
-                        size="1x"
-                      />
-                    )}
-                  </span>
+
+                    <span
+                      className={classNames({
+                        'margin-left-205': petitioner.isAddressSealed,
+                        'sealed-address': petitioner.isAddressSealed,
+                        'address-line': true,
+                      })}
+                      data-testid="petitioner-email"
+                    >
+                      {!petitioner.sealedAndUnavailable && <span>{petitioner.formattedEmail}</span>}
+                      {petitioner.showEAccessFlag && (
+                        <FontAwesomeIcon
+                          aria-label="has e-access"
+                          className="margin-left-05 fa-icon-blue"
+                          icon="flag"
+                          size="1x"
+                        />
+                      )}
+                    </span>
+
                   {petitioner.showRemoveEmailButton && (
                     <Button
                       link
@@ -98,11 +107,13 @@ export const PetitionersAndCounsel = connect(
                         Petition email address
                       </p>
                       <span
+                        data-testid="petitioner-paper-petition-email"
                         className={classNames(
                           petitioner.isAddressSealed &&
                             'margin-left-205 sealed-address',
                           'margin-top-4 word-wrap-break-word',
                         )}
+                        
                       >
                         {petitioner.isAddressSealed && (
                           <span

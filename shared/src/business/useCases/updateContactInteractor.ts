@@ -24,6 +24,10 @@ import { getCaseCaptionMeta } from '../utilities/getCaseCaptionMeta';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import {
+  getNewEmail,
+  getOldEmail,
+} from '@shared/business/utilities/calculateEmail';
 
 /**
  * updateContact
@@ -114,6 +118,11 @@ export const updateContact = async (
     caseEntity.shouldGenerateNoticesForCase()
   ) {
     const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
+
+    const { isAddressSealed } = updatedPetitioner;
+
+    oldCaseContact.email = getOldEmail(oldCaseContact.email, isAddressSealed);
+    contactInfo.email = getNewEmail(contactInfo.email, isAddressSealed);
 
     const changeOfAddressPdf = await applicationContext
       .getDocumentGenerators()

@@ -30,7 +30,6 @@ export const CaseSearchByName = connect(
     usStatesOther: state.constants.US_STATES_OTHER,
     validateCaseAdvancedSearchFormSequence:
       sequences.validateCaseAdvancedSearchFormSequence,
-    validateOrderSearchSequence: sequences.validateOrderSearchSequence,
     validationErrors: state.validationErrors,
   },
   function CaseSearchByName({

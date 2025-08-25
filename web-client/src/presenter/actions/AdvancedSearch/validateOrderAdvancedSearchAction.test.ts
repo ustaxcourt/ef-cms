@@ -28,7 +28,7 @@ describe('validateOrderAdvancedSearchAction', () => {
       modules: {
         presenter,
       },
-      state: { form: {} },
+      state: { advancedSearchForm: { orderSearch: {} } },
     });
 
     expect(
@@ -47,7 +47,7 @@ describe('validateOrderAdvancedSearchAction', () => {
       modules: {
         presenter,
       },
-      state: { form: {} },
+      state: { advancedSearchForm: { orderSearch: {} } },
     });
 
     expect(
