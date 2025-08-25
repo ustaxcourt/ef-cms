@@ -1,15 +1,39 @@
 @layer theme, base, components, utilities;
 @import "tailwindcss/theme.css" layer(theme) prefix(tw);
 @import "tailwindcss/utilities.css" layer(utilities) prefix(tw);
-
 @import "tw-animate-css";
-
 @custom-variant dark (&:is(.dark *));
 
 /* oklch(0.59 0.2 27.6) standard
 oklch(0.49 0.2 28.82) hover */
 
 :root {
+  /* --background: oklch(100% 0 0deg);
+  --foreground: oklch(14.5% 0 0deg);
+  --card: oklch(100% 0 0deg);
+  --card-foreground: oklch(14.5% 0 0deg);
+  --popover: oklch(100% 0 0deg);
+  --popover-foreground: oklch(14.5% 0 0deg);
+  --primary: oklch(48% 0.13 249.12deg);
+  --primary-darker: oklch(39% 0.11 258.24deg);
+  --primary-foreground: oklch(100% 0 0deg);
+  --secondary: oklch(97% 0 0deg);
+  --secondary-foreground: oklch(20.5% 0 0deg);
+  --muted: oklch(97% 0 0deg);
+  --muted-foreground: oklch(55.6% 0 0deg);
+  --accent: oklch(97% 0 0deg);
+  --accent-foreground: oklch(20.5% 0 0deg);
+  --destructive: oklch(57.7% 0.245 27.325deg);
+  --destructive-foreground: oklch(57.7% 0.245 27.325deg);
+  --border: oklch(92.2% 0 0deg);
+  --input: oklch(92.2% 0 0deg);
+  --ring: oklch(70.8% 0 0deg);
+  --chart-1: oklch(64.6% 0.222 41.116deg);
+  --chart-2: oklch(60% 0.118 184.704deg);
+  --chart-3: oklch(39.8% 0.07 227.392deg);
+  --chart-4: oklch(82.8% 0.189 84.429deg);
+  --chart-5: oklch(76.9% 0.188 70.08deg); */
+
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -37,14 +61,22 @@ oklch(0.49 0.2 28.82) hover */
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar: oklch(98.5% 0 0deg);
+  --sidebar-foreground: oklch(14.5% 0 0deg);
+  --sidebar-primary: oklch(20.5% 0 0deg);
+  --sidebar-primary-foreground: oklch(98.5% 0 0deg);
+  --sidebar-accent: oklch(97% 0 0deg);
+  --sidebar-accent-foreground: oklch(20.5% 0 0deg);
+  --sidebar-border: oklch(92.2% 0 0deg);
+  --sidebar-ring: oklch(70.8% 0 0deg);
+  --blue-accent: oklch(72% 0.21 216.9deg);
+  --blue-lightest: oklch(96.26% 0.0161 206.44deg);
+  --yellow-warning: oklch(83.96% 0.162 81.61deg);
+  --yellow-lighter: oklch(96.09% 0.0449 97.55deg);
+  --red-primary: oklch(58.56% 0.1968 27.38deg);
+  --red-error: oklch(92.73% 0.0216 46.98deg);
+  --green: oklch(54.78% 0.1328 147.39deg);
+  --green-success: oklch(95.31% 0.0253 139.84deg);
 }
 
 @theme inline {
@@ -86,6 +118,14 @@ oklch(0.49 0.2 28.82) hover */
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-blue-accent: var(--blue-accent);
+  --color-blue-lightest: var(--blue-lightest);
+  --color-yellow-warning: var(--yellow-warning);
+  --color-yellow-lighter: var(--yellow-lighter);
+  --color-red-primary: var(--red-primary);
+  --color-red-error: var(--red-error);
+  --color-green: var(--green);
+  --color-green-success: var(--green-success);
 }
 
 @layer base {
