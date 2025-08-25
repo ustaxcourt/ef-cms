@@ -3,9 +3,10 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getPractitionersBySearchKey } from '@web-api/persistence/postgres/users/getPractitionersBySearchKey';
+import { ROLES } from '@shared/business/entities/EntityConstants';
 
 /**
  * getIrsPractitionersBySearchKeyInteractor
@@ -16,7 +17,6 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
  * @returns {*} the result
  */
 export const getIrsPractitionersBySearchKeyInteractor = async (
-  applicationContext: ServerApplicationContext,
   { searchKey }: { searchKey: string },
   authorizedUser: UnknownAuthUser,
 ) => {
@@ -25,14 +25,10 @@ export const getIrsPractitionersBySearchKeyInteractor = async (
   ) {
     throw new UnauthorizedError('Unauthorized');
   }
+  const irsPractitioners = await getPractitionersBySearchKey({
+    searchKey,
+    role: ROLES.irsPractitioner,
+  });
 
-  const users = await applicationContext
-    .getPersistenceGateway()
-    .getUsersBySearchKey({
-      applicationContext,
-      searchKey,
-      type: 'irsPractitioner',
-    });
-
-  return IrsPractitioner.validateRawCollection(users);
+  return IrsPractitioner.validateRawCollection(irsPractitioners);
 };

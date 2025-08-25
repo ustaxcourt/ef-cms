@@ -179,7 +179,8 @@ resource "aws_iam_role_policy" "lambda_policy" {
         },
         {
             "Action": [
-                "ses:GetSendStatistics"
+                "ses:GetSendStatistics",
+                "ses:GetSuppressedDestination"
             ],
             "Resource": [
                 "*"
