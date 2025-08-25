@@ -8,6 +8,8 @@ import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertW
 import { updateCaseAutomaticBlock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
 import { closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments } from '@web-api/business/useCaseHelper/docketEntry/closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 
 export const fileAndServeDocumentOnOneCase = async ({
   caseEntity,
@@ -17,7 +19,7 @@ export const fileAndServeDocumentOnOneCase = async ({
   caseHasDeadline = undefined,
 }: {
   caseEntity: any;
-  docketEntryEntity: any;
+  docketEntryEntity: DocketEntry;
   subjectCaseDocketNumber: any;
   user: any;
   caseHasDeadline?: boolean;
@@ -27,23 +29,22 @@ export const fileAndServeDocumentOnOneCase = async ({
   docketEntryEntity.setAsServed(servedParties.all);
 
   const isSubjectCase = subjectCaseDocketNumber === caseEntity.docketNumber;
+  let workItem = await getWorkItemByDocketNumberAndDocketEntryId({
+    docketNumber: caseEntity.docketNumber,
+    docketEntryId: docketEntryEntity.docketEntryId,
+  });
 
-  if (!docketEntryEntity.workItem || !isSubjectCase) {
-    docketEntryEntity.workItem = new WorkItem(
-      {
-        assigneeId: null,
-        assigneeName: null,
-        docketEntry: {
-          ...docketEntryEntity.toRawObject(),
-          createdAt: docketEntryEntity.createdAt,
-        },
-        docketNumber: caseEntity.docketNumber,
-        inProgress: true,
-        section: DOCKET_SECTION,
-        sentBy: user.name,
-        sentByUserId: user.userId,
-      },
-    );
+  if (!workItem || !isSubjectCase) {
+    workItem = new WorkItem({
+      assigneeId: null,
+      assigneeName: null,
+      docketEntryId: docketEntryEntity.docketEntryId,
+      docketNumber: caseEntity.docketNumber,
+      inProgress: true,
+      section: DOCKET_SECTION,
+      sentBy: user.name,
+      sentByUserId: user.userId,
+    });
   }
 
   if (
@@ -54,13 +55,10 @@ export const fileAndServeDocumentOnOneCase = async ({
     caseEntity.addDocketEntry(docketEntryEntity);
   }
 
-  const workItemToUpdate = docketEntryEntity.workItem;
-
   await completeWorkItem({
-    docketEntryEntity,
-    leadDocketNumber: caseEntity.leadDocketNumber,
     user,
-    workItemToUpdate,
+    workItemToUpdate: workItem,
+    docketEntryEntity,
   });
 
   docketEntryEntity.validate();
@@ -91,23 +89,17 @@ export const fileAndServeDocumentOnOneCase = async ({
 };
 
 const completeWorkItem = async ({
-  docketEntryEntity,
-  leadDocketNumber,
   user,
   workItemToUpdate,
+  docketEntryEntity,
 }) => {
-  Object.assign(workItemToUpdate, {
-    docketEntry: {
-      ...docketEntryEntity.validate().toRawObject(),
-    },
-  });
-
-  workItemToUpdate.leadDocketNumber = leadDocketNumber;
-
   workItemToUpdate.assignToUser({
     assigneeId: user.userId,
     assigneeName: user.name,
-    section: user.section,
+    section: WorkItem.getWorkItemSectionFromUserSection({
+      section: user.section,
+      documentTitle: docketEntryEntity.documentTitle,
+    }),
     sentBy: user.name,
     sentBySection: user.section,
     sentByUserId: user.userId,

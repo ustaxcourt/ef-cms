@@ -98,7 +98,6 @@ import { getEligibleCasesForTrialSessionLambda } from './lambdas/trialSessions/g
 import { getGeneratePrintableTrialSessionCopyReportLambda } from './lambdas/trialSessions/getGeneratePrintableTrialSessionCopyReportLambda';
 import { getInboxMessagesForSectionLambda } from './lambdas/messages/getInboxMessagesForSectionLambda';
 import { getInboxMessagesForUserLambda } from './lambdas/messages/getInboxMessagesForUserLambda';
-import { getInternalUsersLambda } from './lambdas/users/getInternalUsersLambda';
 import { getIrsPractitionersBySearchKeyLambda } from './lambdas/users/getIrsPractitionersBySearchKeyLambda';
 import { getJudgeInSectionLambda } from './lambdas/users/getJudgeInSectionLambda';
 import { getMaintenanceModeLambda } from './lambdas/maintenance/getMaintenanceModeLambda';
@@ -209,7 +208,9 @@ import { getTrialSessionOpenCasesCountLambda } from '@web-api/lambdas/trialSessi
 import { getConsolidatedCaseDeadlinesLambda } from '@web-api/lambdas/caseDeadline/getConsolidatedCaseDeadlinesLambda';
 import { removePetitionerEmailLambda } from '@web-api/lambdas/cases/removePetitionerEmailLambda';
 import { getRecentFilingsForUserLambda } from './lambdas/recentFilings/getRecentFilingsForUserLambda';
-import { deactiveUserLambda } from '@web-api/lambdas/automations/deactivateUserLambda';
+import { deactivateUserLambda } from '@web-api/lambdas/automations/deactivateUserLambda';
+import { removeUserPendingEmailLambda } from '@web-api/lambdas/automations/removeUserPendingEmailLambda';
+import { saveMinuteSheetToDraftsLambda } from './lambdas/trialSessionMinutes/saveMinuteSheetToDraftsLambda';
 
 export const app = express();
 
@@ -913,6 +914,10 @@ app.delete(
     '/trial-sessions/:trialSessionId/case/:docketNumber/minutes',
     lambdaWrapper(generateTrialSessionMinutesPdfLambda),
   );
+  app.post(
+    '/trial-sessions/:trialSessionId/case/:docketNumber/minutes-draft',
+    lambdaWrapper(saveMinuteSheetToDraftsLambda),
+  );
   app.get(
     '/trial-sessions/paper-service-pdf/:fileId',
     lambdaWrapper(getPaperServicePdfUrlLambda),
@@ -1017,7 +1022,6 @@ app.delete(
  * users
  */
 {
-  app.get('/users/internal', lambdaWrapper(getInternalUsersLambda));
   app.put(
     '/users/:userId/case/:docketNumber',
     lambdaWrapper(privatePractitionerCaseAssociationLambda),
@@ -1100,7 +1104,11 @@ app.delete(
  */
 app.post('/users', lambdaWrapper(createUserLambda)); // NOTE: These are meant for admins and zendesk automations. Not meant for regular application use.
 app.get('/users/user-summary', lambdaWrapper(regStatusLambda));
-app.post('/users/deactivate', lambdaWrapper(deactiveUserLambda));
+app.post('/users/deactivate', lambdaWrapper(deactivateUserLambda));
+app.post(
+  '/users/remove-pending-email',
+  lambdaWrapper(removeUserPendingEmailLambda),
+);
 
 /**
  * work-items

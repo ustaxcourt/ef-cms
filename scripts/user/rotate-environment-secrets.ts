@@ -58,12 +58,14 @@ const rotateSecrets = async (environmentName: string): Promise<void> => {
     : makeNewPassword();
 
   const USTC_ADMIN_PASS = makeNewPassword();
+  const USTC_ZENDESK_PASS = makeNewPassword();
 
   // for local use only!
   if (!ci || !ci.length) {
     console.log({
       DEFAULT_ACCOUNT_PASS,
       USTC_ADMIN_PASS,
+      USTC_ZENDESK_PASS,
     });
   }
 
@@ -75,40 +77,36 @@ const rotateSecrets = async (environmentName: string): Promise<void> => {
   });
   console.log('✅ USTC_ADMIN_USER Cognito Password updated');
 
-  // for zendesk-compatible environments only
-  if (['prod', 'dev'].includes(env)) {
-    const zendeskSecrets = await loadSecrets(
-      `${environmentName}/ZendeskDawson`,
-    );
-    const USTC_ZENDESK_PASS = makeNewPassword();
+  await cognitoClient.adminSetUserPassword({
+    Password: USTC_ZENDESK_PASS,
+    Permanent: true,
+    UserPoolId,
+    Username: secrets.USTC_ZENDESK_USER,
+  });
+  console.log('✅ USTC_ZENDESK_USER Cognito Password updated');
 
-    // for local use only!
-    if (!ci || !ci.length) {
-      console.log({
-        USTC_ZENDESK_PASS,
-      });
-    }
+  const putSecretValueCommand = new PutSecretValueCommand({
+    SecretId: `${env}_deploy`,
+    SecretString: JSON.stringify({
+      ...secrets,
+      USTC_ZENDESK_PASS,
+      DEFAULT_ACCOUNT_PASS,
+      USTC_ADMIN_PASS,
+    }),
+  });
 
-    await cognitoClient.adminSetUserPassword({
-      Password: USTC_ZENDESK_PASS,
-      Permanent: true,
-      UserPoolId,
-      Username: secrets.USTC_ZENDESK_USER,
-    });
+  await secretsClient.send(putSecretValueCommand);
 
-    console.log('✅ USTC_ZENDESK_USER Cognito Password updated');
+  console.log('✅ Secrets updated');
 
-    const putSecretValueCommand = new PutSecretValueCommand({
-      SecretId: `${env}_deploy`,
-      SecretString: JSON.stringify({
-        ...secrets,
-        USTC_ZENDESK_PASS,
-        DEFAULT_ACCOUNT_PASS,
-        USTC_ADMIN_PASS,
-      }),
-    });
-    await secretsClient.send(putSecretValueCommand);
+  let zendeskSecrets;
+  try {
+    zendeskSecrets = await loadSecrets(`${environmentName}/ZendeskDawson`);
+  } catch (e) {
+    console.log('No Zendesk secrets found');
+  }
 
+  if (zendeskSecrets) {
     const putZendeskSecretValueCommand = new PutSecretValueCommand({
       SecretId: `${environmentName}/ZendeskDawson`,
       SecretString: JSON.stringify({
@@ -119,19 +117,7 @@ const rotateSecrets = async (environmentName: string): Promise<void> => {
     });
     await secretsClient.send(putZendeskSecretValueCommand);
 
-    console.log('✅ Secrets updated');
-  } else {
-    const putSecretValueCommand = new PutSecretValueCommand({
-      SecretId: `${env}_deploy`,
-      SecretString: JSON.stringify({
-        ...secrets,
-        DEFAULT_ACCOUNT_PASS,
-        USTC_ADMIN_PASS,
-      }),
-    });
-
-    await secretsClient.send(putSecretValueCommand);
-    console.log('✅ Secrets updated');
+    console.log('✅ Zendesk secrets updated');
   }
 };
 

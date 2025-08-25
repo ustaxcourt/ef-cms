@@ -5,7 +5,7 @@ import { getDbReader } from '@web-api/database';
 import { NotFoundError } from '@web-api/errors/errors';
 import { purgeDynamoKeys } from '@web-api/persistence/dynamo/helpers/purgeDynamoKeys';
 import { queryFull } from '@web-api/persistence/dynamodbClientService';
-import { caseCorrespondenceEntity } from '@web-api/persistence/postgres/caseCorrespondences/mapper';
+import { fromKyselyCaseCorrespondence } from '@web-api/persistence/postgres/caseCorrespondences/mapper';
 import { CaseCorrespondenceKysely } from '@web-api/persistence/postgres/caseCorrespondences/schema';
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { CaseKysely } from '@web-api/persistence/postgres/cases/schema';
@@ -13,7 +13,7 @@ import { fromKyselyDocketEntry } from '@web-api/persistence/postgres/docketEntri
 import { DocketEntryKysely } from '@web-api/persistence/postgres/docketEntries/schema';
 import { difference, isEmpty, sortBy } from 'lodash';
 import { UserKysely } from '../users/schema';
-import { rawUser } from '../users/mapper';
+import { fromKyselyUser } from '../users/mapper';
 import { UserOnCaseKysely } from '@web-api/persistence/postgres/cases/userOnCase/schema';
 
 export const ALL_OMITTABLE_CASE_FIELDS = [
@@ -216,13 +216,13 @@ function convertDbCaseToRawCase(
   const appCase = {
     ...fromKyselyCase(dbCase),
     correspondence: dbCase.correspondence.map(cc =>
-      caseCorrespondenceEntity(cc),
+      fromKyselyCaseCorrespondence(cc),
     ),
     archivedCorrespondences: dbCase.archivedCorrespondences?.map(cc =>
-      caseCorrespondenceEntity(cc),
+      fromKyselyCaseCorrespondence(cc),
     ),
-    irsPractitioners: dbCase.irsPractitioners.map(ip => rawUser(ip)),
-    privatePractitioners: dbCase.privatePractitioners.map(pp => rawUser(pp)),
+    irsPractitioners: dbCase.irsPractitioners.map(ip => fromKyselyUser(ip)),
+    privatePractitioners: dbCase.privatePractitioners.map(pp => fromKyselyUser(pp)),
     docketEntries: dbCase.docketEntries.map(d => fromKyselyDocketEntry(d)),
     archivedDocketEntries: dbCase.archivedDocketEntries.map(aD =>
       fromKyselyDocketEntry(aD),
