@@ -15,9 +15,10 @@ Help()
    echo "It defaults to running integration tests with a headless browser."
    echo "Adding one or more of the options listed below allows running different tests and/or running them differently."
    echo
-   echo "Syntax: ./scripts/run-cypress.sh [-c|h|l|o|p|r|s|t <FILE>]"
+   echo "Syntax: ./scripts/run-cypress.sh [-c|f|h|l|o|p|r|s|t <FILE>]"
    echo "options:"
    echo "c     Run smoketests against the currently deployed color rather than the deploying color. -s or -r should also be used."
+   echo "f     Enable fail-fast mode for smoketests (stops on first failure but preserves artifacts). Should be used with -s or -r."
    echo "h     Print this Help."
    echo "l     Run smoketests against the locally running application. -s or -r should also be used."
    echo "o     Run Cypress with the browser open rather than headless. Note that this option is incompatible with -s."
@@ -37,14 +38,17 @@ Help()
 INTEGRATION=true
 PORT=1234
 NON_PUBLIC=app-
-BROWSER=chrome
+BROWSER=edge
 RUN_SPECIFIC_TEST=""
 
 # Get the options
-while getopts ":chloprst:" option; do
+while getopts ":cfhloprst:" option; do
    case $option in
       c) # run against currently deployed color
          CURRENT=true
+         ;;
+      f) # enable fail-fast mode
+         FAIL_FAST=true
          ;;
       h) # display Help
          Help
@@ -78,6 +82,17 @@ while getopts ":chloprst:" option; do
          ;;
    esac
 done
+
+# Validate fail-fast option usage
+if [ -n "${FAIL_FAST}" ] && [ -z "${SMOKETESTS}" ]; then
+  echo "Error: Fail-fast mode (-f) can only be used with smoketests (-s or -r option)"
+  exit 1
+fi
+
+# Create results directory for JUnit reporter if using fail-fast mode
+if [ -n "${FAIL_FAST}" ] && [ -n "${SMOKETESTS}" ]; then
+  mkdir -p cypress/results
+fi
 
 if [ -n "${CI}" ]; then
   export CYPRESS_NO_COMMAND_LOG=1 #Disable logging of commands in CI to not leak secrets
@@ -134,10 +149,12 @@ fi
 if [ -n "${OPEN}" ]; then
   ./node_modules/.bin/cypress open --browser "${BROWSER}" -C "${CONFIG_FILE}"
 else
-  if [ -n "${RUN_SPECIFIC_TEST}" ]; then
-    RUN_SPECIFIC_TEST="${RUN_SPECIFIC_TEST// /,}"
-    ./node_modules/.bin/cypress run --browser "${BROWSER}" -C "${CONFIG_FILE}" --spec "${RUN_SPECIFIC_TEST}"
-  else
-    ./node_modules/.bin/cypress run --browser "${BROWSER}" -C "${CONFIG_FILE}"
-  fi
+  CYPRESS_ARGS="--browser ${BROWSER} -C ${CONFIG_FILE}"
+  [ -n "${RUN_SPECIFIC_TEST}" ] && CYPRESS_ARGS="${CYPRESS_ARGS} --spec ${RUN_SPECIFIC_TEST// /,}"
+  [ -n "${FAIL_FAST}" ] && [ -n "${SMOKETESTS}" ] && CYPRESS_ARGS="${CYPRESS_ARGS} --reporter junit --reporter-options mochaFile=cypress/results/results-[hash].xml"
+  
+  ./node_modules/.bin/cypress run "${CYPRESS_ARGS}" || {
+    [ -n "${FAIL_FAST}" ] && [ -n "${SMOKETESTS}" ] && echo "Tests failed in fail-fast mode, but artifacts will be preserved"
+    exit 1
+  }
 fi
