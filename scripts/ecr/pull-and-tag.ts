@@ -66,6 +66,8 @@ const {
   targetEnv: string;
 };
 
+process.env.DOCKER_DEFAULT_PLATFORM = 'linux/amd64';
+
 const readDefaultOrg = ({ efCmsRoot }: { efCmsRoot: string }): string => {
   let defaultOrg = 'ustc';
   const defaultsFile = `${efCmsRoot}/scripts/env/defaults`;
@@ -98,11 +100,10 @@ const readSourceAccountId = ({
 };
 
 const readDockerContainerVersion = ({
-  efCmsRoot,
+  circleCiConfigFile,
 }: {
-  efCmsRoot: string;
+  circleCiConfigFile: string;
 }): string | undefined => {
-  const circleCiConfigFile = `${efCmsRoot}/.circleci/config.yml`;
   if (!fs.existsSync(circleCiConfigFile)) {
     return;
   }
@@ -133,9 +134,19 @@ async function app() {
     );
   }
 
-  const tag = destinationTag || readDockerContainerVersion({ efCmsRoot });
+  const circleCiConfigFile = `${efCmsRoot}/.circleci/config.yml`;
+  const tag =
+    destinationTag || readDockerContainerVersion({ circleCiConfigFile });
+  if (!tag) {
+    throw new Error(
+      `Unable to determine the docker image version from ${circleCiConfigFile}`,
+    );
+  }
 
   if (prune) {
+    console.log(
+      'Pruning local docker registry to remove unused containers, images, volumes, and build artifacts...',
+    );
     const pruneOutput = await runCommand('docker', [
       'system',
       'prune',
@@ -143,10 +154,7 @@ async function app() {
       '--force',
       '--volumes',
     ]);
-    console.log(
-      'Pruning local docker registry to remove unused containers, images, volumes, and build artifacts...\n',
-      pruneOutput,
-    );
+    console.log(pruneOutput);
   }
 
   console.log(`Retrieving temporary AWS credentials for ${srcEnv}...`);
@@ -178,6 +186,7 @@ async function app() {
     sourceAwsAccessKeyInfo,
   );
 
+  console.log(`Logging in to the ${srcEnv} ECR...`);
   const sourceDockerLoginOutput = await runCommand('docker', [
     'login',
     '-u',
@@ -186,33 +195,32 @@ async function app() {
     sourceEcrLoginPassword,
     `${sourceAccountId}.dkr.ecr.${region}.amazonaws.com`,
   ]);
-  console.log(`Logging in to the ${srcEnv} ECR...\n`, sourceDockerLoginOutput);
+  console.log(sourceDockerLoginOutput);
 
+  console.log(`Pulling docker image ${tag} from the ${srcEnv} ECR...`);
   const sourceDockerPullOutput = await runCommand('docker', [
     'pull',
     `${sourceAccountId}.dkr.ecr.${region}.amazonaws.com/ef-cms-${region}:${tag}`,
   ]);
-  console.log(
-    `Pulling docker image ${tag} from the ${srcEnv} ECR...`,
-    sourceDockerPullOutput,
-  );
+  console.log(sourceDockerPullOutput);
 
+  console.log(`Tagging docker image ${tag} locally...`);
   const localDockerTagOuput = await runCommand('docker', [
     'tag',
     `${sourceAccountId}.dkr.ecr.${region}.amazonaws.com/ef-cms-${region}:${tag}`,
     `ef-cms-${region}:${tag}`,
   ]);
-  console.log(`Tagging docker image ${tag} locally...`, localDockerTagOuput);
+  console.log(localDockerTagOuput);
 
+  console.log(
+    `Re-tagging docker image ${tag} so it can be pushed to the ${targetEnv} ECR...`,
+  );
   const targetDockerTagOutput = await runCommand('docker', [
     'tag',
     `ef-cms-${region}:${tag}`,
     `${targetAccountId}.dkr.ecr.${region}.amazonaws.com/ef-cms-${region}:${tag}`,
   ]);
-  console.log(
-    `Re-tagging docker image ${tag} so it can be pushed to the ${targetEnv} ECR...`,
-    targetDockerTagOutput,
-  );
+  console.log(targetDockerTagOutput);
 
   const targetEcrLoginPassword = await runCommand('aws', [
     'ecr',
@@ -230,14 +238,12 @@ async function app() {
   ]);
   console.log(`Logging in to the ${targetEnv} ECR...`, targetDockerLoginOutput);
 
+  console.log(`Pushing docker image ${tag} to the ${targetEnv} ECR...`);
   const targetDockerPushOutput = await runCommand('docker', [
     'push',
     `${targetAccountId}.dkr.ecr.${region}.amazonaws.com/ef-cms-${region}:${tag}`,
   ]);
-  console.log(
-    `Pushing docker image ${tag} to the ${targetEnv} ECR...`,
-    targetDockerPushOutput,
-  );
+  console.log(targetDockerPushOutput);
 
   console.log(
     `Successfully pulled ${tag} from ${srcEnv} and tagged it to ${targetEnv}`,
