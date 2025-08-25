@@ -118,9 +118,12 @@ export async function down(db: Kysely<any>): Promise<void> {
   await db.schema.dropIndex('idx_user_bar_number').execute();
   await db.schema.dropIndex('idx_user_section').execute();
 
-  // Drop tables
-  await db.schema.dropTable('dwUserOnCasePending').execute();
-  await db.schema.dropTable('dwUserConfirmationCode').execute();
-  await db.schema.dropTable('dwUserOnCase').execute();
-  await db.schema.dropTable('dwUser').execute();
+  // Rename tables to preserve data instead of dropping them
+  // eslint-disable-next-line custom-rules-plugin/no-new-dates
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+  await db.schema.alterTable('dwUserOnCasePending').renameTo(`dwUserOnCasePending_rollback_${timestamp}`).execute();
+  await db.schema.alterTable('dwUserConfirmationCode').renameTo(`dwUserConfirmationCode_rollback_${timestamp}`).execute();
+  await db.schema.alterTable('dwUserOnCase').renameTo(`dwUserOnCase_rollback_${timestamp}`).execute();
+  await db.schema.alterTable('dwUser').renameTo(`dwUser_rollback_${timestamp}`).execute();
+  await db.schema.alterTable('dwBarNumber').renameTo(`dwBarNumber_rollback_${timestamp}`).execute();
 }

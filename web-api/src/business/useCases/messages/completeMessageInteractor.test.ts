@@ -14,9 +14,9 @@ import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
-import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
+import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
 
 describe('completeMessageInteractor', () => {
   const mockMessages = [

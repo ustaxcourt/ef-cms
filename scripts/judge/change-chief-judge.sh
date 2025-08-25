@@ -14,8 +14,6 @@
   "NEW_JUDGE_ID"
 
 REGION="us-east-1"
-# look up current table version from SSM
-TABLE_VERSION=$(aws ssm get-parameter --region us-east-1 --name "/DAWSON/${ENV}/source-table-version" --with-decryption --query "Parameter.Value" --output text 2>/dev/null)
 
 # get judge name via postgres (TypeScript script)
 NEW_JUDGE_NAME=$(ENV="${ENV}" REGION="${REGION}" ./scripts/judge/get-judge-name.ts "${NEW_JUDGE_ID}")

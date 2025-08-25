@@ -9,8 +9,8 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
 import { markMessageThreadRepliedTo } from '@web-api/persistence/postgres/messages/markMessageThreadRepliedTo';
 import { orderBy } from 'lodash';
-import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
 
 export const completeMessageInteractor = async (
   applicationContext: ServerApplicationContext,

@@ -98,7 +98,6 @@ import { getEligibleCasesForTrialSessionLambda } from './lambdas/trialSessions/g
 import { getGeneratePrintableTrialSessionCopyReportLambda } from './lambdas/trialSessions/getGeneratePrintableTrialSessionCopyReportLambda';
 import { getInboxMessagesForSectionLambda } from './lambdas/messages/getInboxMessagesForSectionLambda';
 import { getInboxMessagesForUserLambda } from './lambdas/messages/getInboxMessagesForUserLambda';
-import { getInternalUsersLambda } from './lambdas/users/getInternalUsersLambda';
 import { getIrsPractitionersBySearchKeyLambda } from './lambdas/users/getIrsPractitionersBySearchKeyLambda';
 import { getJudgeInSectionLambda } from './lambdas/users/getJudgeInSectionLambda';
 import { getMaintenanceModeLambda } from './lambdas/maintenance/getMaintenanceModeLambda';
@@ -1023,7 +1022,6 @@ app.delete(
  * users
  */
 {
-  app.get('/users/internal', lambdaWrapper(getInternalUsersLambda));
   app.put(
     '/users/:userId/case/:docketNumber',
     lambdaWrapper(privatePractitionerCaseAssociationLambda),
