@@ -9,7 +9,7 @@ ENVIRONMENT=$1
 [ -z "${DESTINATION_TABLE}" ] && echo "You must set DESTINATION_TABLE as an environment variable" && exit 1
 
 STREAM_ARN=$(aws dynamodbstreams list-streams --region us-east-1 --query "Streams[?TableName=='${SOURCE_TABLE}'].StreamArn | [0]" --output text)
-SOURCE_TABLE_VERSION=$(aws ssm get-parameter --region us-east-1 --name "/DAWSON/${ENV}/source-table-version" --with-decryption --query "Parameter.Value" --output text 2>/dev/null)
+SOURCE_TABLE_VERSION=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-deploy-${ENVIRONMENT}" --key '{"pk":{"S":"source-table-version"},"sk":{"S":"source-table-version"}}' | jq -r ".Item.current.S")
 ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain --region us-east-1 --domain-name "efcms-search-${ENVIRONMENT}-${SOURCE_TABLE_VERSION}" --output json | jq -r .DomainStatus.Endpoint)
 
 echo "Running terraform with the following environment configs:"

@@ -125,12 +125,12 @@ EF-CMS currently has both the concept of a deployment at a domain as well as a n
 
 11. Setup the environment's migrate flag:
     ```bash
-    aws ssm put-parameter --region us-east-1 --name "/DAWSON/${ENV}/migrate" --value "true" --type "String" --overwrite
+    aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENVIRONMENT}" --item '{"pk":{"S":"migrate"},"sk":{"S":"migrate"},"current":{"BOOL":true}}'
     ```
 
 12. Setup the environment's current color:
     ```bash
-    aws ssm put-parameter --region us-east-1 --name "/DAWSON/${ENV}/current-color" --value "blue" --type "String" --overwrite
+    aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENVIRONMENT}" --item '{"pk":{"S":"current-color"},"sk":{"S":"current-color"},"current":{"S":"blue"}}'
     ```
 
 13. Setup all database configuration flags:
@@ -139,7 +139,7 @@ EF-CMS currently has both the concept of a deployment at a domain as well as a n
     ```
 14. Setup the environment's source table version:
     ```bash
-    aws ssm put-parameter --region us-east-1 --name "/DAWSON/${ENV}/source-table-version" --value "alpha" --type "String" --overwrite
+    aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENVIRONMENT}" --item '{"pk":{"S":"source-table-version"},"sk":{"S":"source-table-version"},"current":{"S":"alpha"}}'
     ```
 
 15. Setup the environment's destination table version:

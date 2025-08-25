@@ -1,5 +1,4 @@
-import { ServerApplicationContext } from '@web-api/applicationContext';
-import { getSsmParameter } from '@web-api/persistence/ssm/ssmClientService';
+import { getFromDeployTable } from '../../dynamodbClientService';
 
 /**
  * Checks to see if the environment currentColor matches that of the deploy table
@@ -8,11 +7,15 @@ import { getSsmParameter } from '@web-api/persistence/ssm/ssmClientService';
  * @returns {Promise} which resolves to whether or not the current color matches what's in the deploy table
  */
 export const isCurrentColorActive = async (
-  applicationContext: ServerApplicationContext,
+  applicationContext: IApplicationContext,
 ) => {
-  const currentColor = await getSsmParameter({
+  const { current: currentColor } = await getFromDeployTable({
+    Key: {
+      pk: 'current-color',
+      sk: 'current-color',
+    },
     applicationContext,
-    parameterName: 'current-color',
   });
+
   return process.env.CURRENT_COLOR === currentColor;
 };

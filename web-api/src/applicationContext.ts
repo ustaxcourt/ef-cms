@@ -176,9 +176,7 @@ export const createApplicationContext = (appContextUser = {}) => {
       },
     }),
     isAuthorized,
-    getConfigurationGateway: () => ({
-      isCurrentColorActive,
-    }),
+    isCurrentColorActive,
     logger: getDawsonLogger(),
     setTimeout: (callback: Function, timeout) => setTimeout(callback, timeout),
   };
