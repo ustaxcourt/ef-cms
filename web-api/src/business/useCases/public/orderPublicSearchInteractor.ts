@@ -78,5 +78,9 @@ export const orderPublicSearchInteractor = async (
 
   const slicedResults = allResults.slice(0, MAX_SEARCH_RESULTS);
 
-  return PublicDocumentSearchResult.validateRawCollection(slicedResults);
+  return PublicDocumentSearchResult.validateRawCollection(slicedResults).map(
+    publicDocument => {
+      return omit(publicDocument, 'entityName');
+    },
+  );
 };
