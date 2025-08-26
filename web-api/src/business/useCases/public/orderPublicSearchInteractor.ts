@@ -1,11 +1,8 @@
-import { DocumentSearch } from '../../../../../shared/src/business/entities/documents/DocumentSearch';
-import {
-  FORMATS,
-  formatNow,
-} from '../../../../../shared/src/business/utilities/DateHandler';
-import { ORDER_EVENT_CODES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { MAX_SEARCH_RESULTS } from '../../../../../shared/src/business/entities/EntityConstants';
-import { PublicDocumentSearchResult } from '../../../../../shared/src/business/entities/documents/PublicDocumentSearchResult';
+import { DocumentSearch } from '@shared/business/entities/documents/DocumentSearch';
+import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
+import { ORDER_EVENT_CODES } from '@shared/business/entities/EntityConstants';
+import { MAX_SEARCH_RESULTS } from '@shared/business/entities/EntityConstants';
+import { PublicDocumentSearchResult } from '@shared/business/entities/documents/PublicDocumentSearchResult';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { omit } from 'lodash';
 

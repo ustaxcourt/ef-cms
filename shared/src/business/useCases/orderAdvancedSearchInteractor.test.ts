@@ -3,7 +3,7 @@ import {
   MAX_SEARCH_RESULTS,
   ORDER_EVENT_CODES,
   ROLES,
-} from '../entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '../test/createTestApplicationContext';
 import {
   mockPetitionerUser,
@@ -12,68 +12,6 @@ import {
 import { orderAdvancedSearchInteractor } from './orderAdvancedSearchInteractor';
 
 describe('orderAdvancedSearchInteractor', () => {
-  it('fetches two batches of 5000 results when more than 5000 are available', async () => {
-    const batchSize = 5000;
-    const firstBatch = new Array(batchSize).fill({
-      caseCaption: 'Batch1',
-      docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
-      docketNumber: '100-01',
-      documentTitle: 'Order',
-      eventCode: 'ODD',
-      signedJudgeName: 'Judge1',
-    });
-    const secondBatch = new Array(batchSize).fill({
-      caseCaption: 'Batch2',
-      docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e548',
-      docketNumber: '100-02',
-      documentTitle: 'Order',
-      eventCode: 'ODD',
-      signedJudgeName: 'Judge2',
-    });
-
-    let callCount = 0;
-    applicationContext
-      .getPersistenceGateway()
-      .advancedDocumentSearch.mockImplementation(({ from }) => {
-        callCount++;
-        if (from === 0) {
-          return Promise.resolve({
-            results: firstBatch,
-            totalCount: batchSize * 2,
-          });
-        }
-        return Promise.resolve({
-          results: secondBatch,
-          totalCount: batchSize * 2,
-        });
-      });
-
-    const firstHalf = await orderAdvancedSearchInteractor(
-      applicationContext,
-      {
-        keyword: 'keyword',
-        petitionerName: 'test person',
-        from: 0,
-        limit: 5000,
-      } as any,
-      mockPetitionsClerkUser,
-    );
-
-    const secondHalf = await orderAdvancedSearchInteractor(
-      applicationContext,
-      {
-        keyword: 'keyword',
-        petitionerName: 'test person',
-        from: 5000,
-        limit: 5000,
-      } as any,
-      mockPetitionsClerkUser,
-    );
-    const combinedResults = [...firstHalf.results, ...secondHalf.results];
-
-    expect(combinedResults.length).toBe(10000);
-    expect(callCount).toBe(2);
-  });
   beforeEach(() => {
     applicationContext
       .getPersistenceGateway()

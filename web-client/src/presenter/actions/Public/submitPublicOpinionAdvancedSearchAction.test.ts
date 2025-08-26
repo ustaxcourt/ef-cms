@@ -1,10 +1,34 @@
 import { PublicClientState } from '@web-client/presenter/state-public';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { presenter } from '../../presenter-public';
+import { presenter } from '@web-client/presenter/presenter-public';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { submitPublicOpinionAdvancedSearchAction } from './submitPublicOpinionAdvancedSearchAction';
 
 describe('submitPublicOpinionAdvancedSearchAction', () => {
+  it('should call opinionPublicSearchInteractor twice when results exceed batch size', async () => {
+    let callCount = 0;
+    applicationContext
+      .getUseCases()
+      .opinionPublicSearchInteractor.mockImplementation(({ from }) => {
+        callCount++;
+        if (from === 0) {
+          return { results: Array(5000).fill({}), totalCount: 10000 };
+        }
+        return { results: Array(5000).fill({}), totalCount: 10000 };
+      });
+    await runAction(submitPublicOpinionAdvancedSearchAction, {
+      modules: { presenter },
+      state: {
+        advancedSearchForm: {
+          opinionSearch: {
+            keyword: 'keyword',
+            opinionTypes: { TCOP: true, SOP: true },
+          },
+        },
+      },
+    });
+    expect(callCount).toBe(2);
+  });
   beforeEach(() => {
     applicationContext
       .getUseCases()

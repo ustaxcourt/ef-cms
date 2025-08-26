@@ -2,77 +2,15 @@ import {
   DATE_RANGE_SEARCH_OPTIONS,
   MAX_SEARCH_RESULTS,
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
-} from '../../business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '../test/createTestApplicationContext';
 import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
-import { opinionAdvancedSearchInteractor } from './opinionAdvancedSearchInteractor';
+import { opinionAdvancedSearchInteractor } from '@shared/business/useCases/opinionAdvancedSearchInteractor';
 
 describe('opinionAdvancedSearchInteractor', () => {
-  it('fetches two batches of 5000 results when more than 5000 are available', async () => {
-    const batchSize = 5000;
-    const firstBatch = new Array(batchSize).fill({
-      caseCaption: 'Batch1',
-      docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
-      docketNumber: '100-01',
-      documentTitle: 'Opinion',
-      eventCode: 'TCOP',
-      signedJudgeName: 'Judge1',
-    });
-    const secondBatch = new Array(batchSize).fill({
-      caseCaption: 'Batch2',
-      docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e548',
-      docketNumber: '100-02',
-      documentTitle: 'Opinion',
-      eventCode: 'SOP',
-      signedJudgeName: 'Judge2',
-    });
-
-    let callCount = 0;
-    applicationContext
-      .getPersistenceGateway()
-      .advancedDocumentSearch.mockImplementation(({ from }) => {
-        callCount++;
-        if (from === 0) {
-          return Promise.resolve({
-            results: firstBatch,
-            totalCount: batchSize * 2,
-          });
-        }
-        return Promise.resolve({
-          results: secondBatch,
-          totalCount: batchSize * 2,
-        });
-      });
-
-    const firstHalf = await opinionAdvancedSearchInteractor(
-      applicationContext,
-      {
-        keyword: 'keyword',
-        opinionTypes: ['TCOP', 'SOP'],
-        from: 0,
-        limit: 5000,
-      } as any,
-      mockPetitionsClerkUser,
-    );
-
-    const secondHalf = await opinionAdvancedSearchInteractor(
-      applicationContext,
-      {
-        keyword: 'keyword',
-        opinionTypes: ['TCOP', 'SOP'],
-        from: 5000,
-        limit: 5000,
-      } as any,
-      mockPetitionsClerkUser,
-    );
-    const combinedResults = [...firstHalf.results, ...secondHalf.results];
-
-    expect(combinedResults.length).toBe(10000);
-    expect(callCount).toBe(2);
-  });
   beforeEach(() => {
     applicationContext
       .getPersistenceGateway()
@@ -162,7 +100,7 @@ describe('opinionAdvancedSearchInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(results.results.length).toBe(MAX_SEARCH_RESULTS); // Interactor limits results
+    expect(results.results.length).toBe(MAX_SEARCH_RESULTS);
   });
 
   it('searches for documents that are of type opinions', async () => {

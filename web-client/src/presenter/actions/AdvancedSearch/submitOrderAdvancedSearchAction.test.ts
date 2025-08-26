@@ -1,9 +1,33 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { presenter } from '../../presenter-mock';
+import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { submitOrderAdvancedSearchAction } from './submitOrderAdvancedSearchAction';
 
 describe('submitOrderAdvancedSearchAction', () => {
+  it('should call orderAdvancedSearchInteractor twice when results exceed batch size', async () => {
+    let callCount = 0;
+    applicationContext
+      .getUseCases()
+      .orderAdvancedSearchInteractor.mockImplementation(({ from }) => {
+        callCount++;
+        if (from === 0) {
+          return { results: Array(5000).fill({}), totalCount: 10000 };
+        }
+        return { results: Array(5000).fill({}), totalCount: 10000 };
+      });
+    await runAction(submitOrderAdvancedSearchAction, {
+      modules: { presenter },
+      state: {
+        advancedSearchForm: {
+          orderSearch: {
+            keyword: 'keyword',
+            petitionerName: 'test person',
+          },
+        },
+      },
+    });
+    expect(callCount).toBe(2);
+  });
   beforeEach(() => {
     applicationContext
       .getUseCases()

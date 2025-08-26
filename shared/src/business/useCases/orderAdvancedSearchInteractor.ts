@@ -13,8 +13,8 @@ import { User } from '@shared/business/entities/User';
 import { omit } from 'lodash';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { DocumentSearch } from '@shared/business/entities/documents/DocumentSearch';
-import { InternalDocumentSearchResult } from '../entities/documents/InternalDocumentSearchResult';
-import { filterCaseSearchResultsNotAccessibleToUser } from '../utilities/caseFilter';
+import { InternalDocumentSearchResult } from '@shared/business/entities/documents/InternalDocumentSearchResult';
+import { filterCaseSearchResultsNotAccessibleToUser } from '@shared/business/utilities/caseFilter';
 
 export const orderAdvancedSearchInteractor = async (
   applicationContext: ServerApplicationContext,

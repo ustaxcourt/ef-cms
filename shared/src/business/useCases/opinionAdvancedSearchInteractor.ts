@@ -1,15 +1,15 @@
-import { DocumentSearch } from '../../business/entities/documents/DocumentSearch';
-import { FORMATS, formatNow } from '../utilities/DateHandler';
-import { InternalDocumentSearchResult } from '../entities/documents/InternalDocumentSearchResult';
+import { DocumentSearch } from '@shared/business/entities/documents/DocumentSearch';
+import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
+import { InternalDocumentSearchResult } from '@shared/business/entities/documents/InternalDocumentSearchResult';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { omit } from 'lodash';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { MAX_SEARCH_RESULTS } from '../entities/EntityConstants';
+import { MAX_SEARCH_RESULTS } from '@shared/business/entities/EntityConstants';
 
 export const opinionAdvancedSearchInteractor = async (
   applicationContext: ServerApplicationContext,

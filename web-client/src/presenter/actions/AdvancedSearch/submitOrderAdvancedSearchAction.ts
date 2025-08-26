@@ -1,6 +1,6 @@
 import { clone } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
-import { trimDocketNumberSearch } from '../setDocketNumberFromSearchAction';
+import { trimDocketNumberSearch } from '@web-client/presenter/actions/setDocketNumberFromSearchAction';
 import { DATE_RANGE_SEARCH_OPTIONS } from '@shared/business/entities/EntityConstants';
 
 export const submitOrderAdvancedSearchAction = async ({
