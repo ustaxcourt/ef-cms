@@ -98,6 +98,7 @@ USER_POOL_IRS_ID=$(aws cognito-idp list-user-pools \
   echo "export CURRENT_COLOR=$(./scripts/ssm/get-current-color.sh $ENV)"
   echo "export DEPLOYING_COLOR=$(./scripts/ssm/get-deploying-color.sh $ENV)"
   echo "export DESTINATION_TABLE=$(./scripts/ssm/get-destination-table.sh $ENV)"
+  echo "export DYNAMODB_TABLE_NAME=${SOURCE_TABLE}"
   echo "export MIGRATE_FLAG=$(./scripts/migration/get-migrate-flag.sh $ENV)"
   echo "export POSTGRES_HOST=$(./scripts/postgres/get-host.sh -w -h)"
   echo "export SOURCE_ELASTICSEARCH=$(./scripts/elasticsearch/get-source-elasticsearch.sh $ENV)"
