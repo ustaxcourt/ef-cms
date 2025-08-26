@@ -85,10 +85,11 @@ export const DawsonLibrary = () => {
               header
             </AlertHeader>
             <AlertDescription>
-              This is a really long description This is a really long
-              description This is a really long description This is a really
-              long description This is a really long description This is a
-              really long description
+              <ul className="list-inside list-disc text-sm">
+                <li>An example with a list inside of the description</li>
+                <li>Another list item here to demonstrate usage</li>
+                <li>Any markup can go inside a description</li>
+              </ul>
             </AlertDescription>
           </Alert>
           <Alert variant="success">
