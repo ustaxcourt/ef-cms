@@ -3,6 +3,8 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { cn } from '@web-client/lib/utils';
+import { Button } from '@web-client/dawson-ui/ui/button';
+import { CircleXmark } from './icons';
 
 const alertVariants = cva(
   'tw:relative tw:w-full rounded-none tw:border-solid tw:border-0 tw:border-l-8 tw:p-4',
@@ -43,25 +45,26 @@ function Alert({
       <div className="tw:flex">
         <FontAwesomeIcon className="tw:h-6 tw:w-6" icon={iconType[variant]} />
         <div className="tw:relative tw:ml-4">{props.children}</div>
+        <Button variant={'primaryTertiary'}>
+          Close
+          <CircleXmark />
+        </Button>
       </div>
     </div>
   );
 }
 
-function AlertHeader({ className, ...props }: React.ComponentProps<'div'>) {
+function AlertHeader({ className, ...props }: React.ComponentProps<'p'>) {
   return (
     <div
       data-slot="alert-title"
-      className={cn('tw:font-bold tw:text-base tw:mb-3', className)}
+      className={cn('tw:font-bold tw:text-base tw:mb-1', className)}
       {...props}
     />
   );
 }
 
-function AlertDescription({
-  className,
-  ...props
-}: React.ComponentProps<'div'>) {
+function AlertDescription({ className, ...props }: React.ComponentProps<'p'>) {
   return (
     <div
       data-slot="alert-description"

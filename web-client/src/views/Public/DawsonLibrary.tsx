@@ -69,19 +69,29 @@ export const DawsonLibrary = () => {
         </div>
 
         <div>
-          <h1>Alerts:</h1>
-          <Alert title="this displays when you hover" variant="info">
+          <h2>Alerts</h2>
+          <Alert variant="info">
             <AlertHeader>This is a header</AlertHeader>
             <AlertDescription>This is a description</AlertDescription>
           </Alert>
-          <Alert title="this displays when you hover" variant="warning">
+          <Alert variant="warning">
             <AlertDescription>This is a description</AlertDescription>
           </Alert>
-          <Alert title="this displays when you hover" variant="error">
-            <AlertHeader>This is a header</AlertHeader>
-            <AlertDescription>This is a description</AlertDescription>
+          <Alert variant="error">
+            <AlertHeader>
+              This is a really long header This is a really long header This is
+              a really long header This is a really long header This is a really
+              long header This is a really long header This is a really long
+              header
+            </AlertHeader>
+            <AlertDescription>
+              This is a really long description This is a really long
+              description This is a really long description This is a really
+              long description This is a really long description This is a
+              really long description
+            </AlertDescription>
           </Alert>
-          <Alert title="this displays when you hover" variant="success">
+          <Alert variant="success">
             <AlertHeader>This is a header</AlertHeader>
             <AlertDescription>This is a description</AlertDescription>
           </Alert>
