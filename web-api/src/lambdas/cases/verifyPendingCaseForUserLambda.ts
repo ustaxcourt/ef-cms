@@ -8,8 +8,8 @@ import { verifyPendingCaseForUserInteractor } from '@web-api/business/useCases/c
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 export const verifyPendingCaseForUserLambda = event =>
-  genericHandler(event, async ({ applicationContext }) => {
-    return await verifyPendingCaseForUserInteractor(applicationContext, {
+  genericHandler(event, async () => {
+    return await verifyPendingCaseForUserInteractor({
       ...event.pathParameters,
     });
   });

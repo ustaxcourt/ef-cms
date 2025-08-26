@@ -1,6 +1,7 @@
 jest.mock('@shared/tools/helpers');
 jest.mock('@web-api/business/useCaseHelper/service/createChangeItems');
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
@@ -36,6 +37,10 @@ import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/per
 import { generateAndServeDocketEntry as generateAndServeDocketEntryMock } from '@web-api/business/useCaseHelper/service/createChangeItems';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
+
+const getUserById = jest.mocked(getUserByIdMock);
 
 const mockPractitioner = {
   ...validUser,
@@ -103,16 +108,16 @@ describe('updateAssociatedCaseWorker', () => {
     );
 
     expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
-      'Could not find user|3ab77c88-1dd0-4adb-a03c-c466ad72d417 barNumber: RA3333 on 101-18',
+      'Could not find 3ab77c88-1dd0-4adb-a03c-c466ad72d417 barNumber: RA3333 on 101-18',
     );
     expect(updateCaseAndAssociations).not.toHaveBeenCalled();
   });
 
   it('should log an error when the petitioner is not found on one of their cases by userId', async () => {
-    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+    getUserById.mockResolvedValue({
       ...mockPetitioner,
       userId: 'cde00f40-56e8-46c2-94c3-b1155b89a203',
-    });
+    } as DbUser);
 
     await updateAssociatedCaseWorker(
       applicationContext,
@@ -127,7 +132,7 @@ describe('updateAssociatedCaseWorker', () => {
     );
 
     expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
-      'Could not find user|cde00f40-56e8-46c2-94c3-b1155b89a203 on 101-18',
+      'Could not find cde00f40-56e8-46c2-94c3-b1155b89a203 on 101-18',
     );
     expect(updateCaseAndAssociations).not.toHaveBeenCalled();
   });
@@ -257,9 +262,7 @@ describe('updateAssociatedCaseWorker', () => {
 
   describe('generating a docket entry for petitioners', () => {
     beforeEach(() => {
-      applicationContext
-        .getPersistenceGateway()
-        .getUserById.mockReturnValue(mockPetitioner);
+      getUserById.mockResolvedValue(mockPetitioner as DbUser);
     });
 
     it('should call generateAndServeDocketEntry if case is open', async () => {
@@ -385,7 +388,7 @@ describe('updatePetitionerCases', () => {
 
     expect(applicationContext.logger.error).toHaveBeenCalledTimes(1);
     expect(applicationContext.logger.error).toHaveBeenCalledWith(
-      `Could not find user|${mockPetitionerUser2.userId} on ${caseMock.docketNumber}`,
+      `Could not find ${mockPetitionerUser2.userId} on ${caseMock.docketNumber}`,
     );
     expect(updateCaseAndAssociations).not.toHaveBeenCalled();
   });

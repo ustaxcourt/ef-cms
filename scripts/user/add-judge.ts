@@ -1,6 +1,6 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
-import { JudgeTitle } from '@shared/business/entities/EntityConstants';
+import { ACCOUNT_STATUS, JudgeTitle } from '@shared/business/entities/EntityConstants';
 import { RawUser, User } from '@shared/business/entities/User';
 import {
   type ScriptConfig,
@@ -136,6 +136,7 @@ const scriptConfig: ScriptConfig = {
     role,
     section,
     userId: applicationContext.getUniqueId(), // Silly as this will be overwritten, but we need one for validation
+    accountStatus: ACCOUNT_STATUS.active
   };
   const rawUser = new User(dynamoUserInfo).validate().toRawObject();
 

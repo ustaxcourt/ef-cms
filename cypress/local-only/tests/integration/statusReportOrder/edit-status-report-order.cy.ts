@@ -17,7 +17,7 @@ import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
 describe('edit status report order', () => {
   beforeEach(() => {
     loginAsColvin();
-    goToCase(docketNumber)
+    goToCase(docketNumber);
   });
 
   describe('editing a status report order from drafts document view', () => {

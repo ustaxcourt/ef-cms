@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 
 export DOCKER_DEFAULT_PLATFORM=linux/amd64
 
@@ -21,9 +21,19 @@ if [[ -n $MANIFEST ]]; then
   aws ecr put-image --repository-name ef-cms-us-east-1 --image-tag "SNAPSHOT-${DESTINATION_TAG}-${IMAGE_TAG}" --image-manifest "${MANIFEST}" --region us-east-1
 fi
 
-# shellcheck disable=SC2091
-aws ecr get-login-password --region us-east-1 | podman login --username AWS --password-stdin "${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com"
+LOCAL_IMAGE_NAME="ef-cms-us-east-1:${DESTINATION_TAG}"
+LOCAL_IMAGE_EXISTS=$(docker images -q "$LOCAL_IMAGE_NAME" 2> /dev/null)
+BUILD_IMAGE=1
+if [[ -n $LOCAL_IMAGE_EXISTS ]]; then
+  read -p "Image already exists. Do you want to build it again? (y/n): " -n 1 -r
+  echo
 
-podman build --platform=linux/amd64 --no-cache -t "ef-cms-us-east-1:${DESTINATION_TAG}" -f Dockerfile .
-podman tag "ef-cms-us-east-1:${DESTINATION_TAG}" "${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:${DESTINATION_TAG}"
-podman push "${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:${DESTINATION_TAG}"
+  [[ ! $REPLY =~ ^[Yy]$ ]] && BUILD_IMAGE=0
+fi
+[[ "$BUILD_IMAGE" -eq 1 ]] && docker build --platform=linux/amd64 --no-cache -t "$LOCAL_IMAGE_NAME" -f Dockerfile .
+
+# shellcheck disable=SC2091
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com"
+
+docker tag "ef-cms-us-east-1:${DESTINATION_TAG}" "${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:${DESTINATION_TAG}"
+docker push "${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:${DESTINATION_TAG}"
