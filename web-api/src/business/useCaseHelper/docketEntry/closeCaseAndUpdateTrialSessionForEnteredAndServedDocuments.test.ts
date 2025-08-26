@@ -2,13 +2,13 @@ import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import {
   CASE_DISMISSAL_ORDER_TYPES,
   CASE_STATUS_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { ENTERED_AND_SERVED_EVENT_CODES } from '../../../../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { MOCK_TRIAL_REGULAR } from '../../../../../shared/src/test/mockTrial';
-import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+} from '@shared/business/entities/EntityConstants';
+import { Case } from '@shared/business/entities/cases/Case';
+import { ENTERED_AND_SERVED_EVENT_CODES } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
+import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments } from './closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { deleteCaseDeadline as deleteCaseDeadlineMock } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
