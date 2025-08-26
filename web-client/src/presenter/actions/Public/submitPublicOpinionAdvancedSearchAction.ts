@@ -4,14 +4,6 @@ import { state } from '@web-client/presenter/app-public.cerebral';
 import { trimDocketNumberSearch } from '../setDocketNumberFromSearchAction';
 import { DATE_RANGE_SEARCH_OPTIONS } from '@shared/business/entities/EntityConstants';
 
-/**
- * submit public opinion advanced search form
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {Function} providers.get the cerebral get function
- * @param {Function} providers.store the cerebral store
- * @returns {Promise} async action
- */
 export const submitPublicOpinionAdvancedSearchAction = async ({
   applicationContext,
   get,
@@ -30,21 +22,39 @@ export const submitPublicOpinionAdvancedSearchAction = async ({
     opinionType => searchParams.opinionTypes[opinionType] === true,
   );
 
+  const baseParams = {
+    ...searchParams,
+    opinionTypes,
+    dateRange:
+      searchParams.startDate || searchParams.endDate
+        ? DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES
+        : DATE_RANGE_SEARCH_OPTIONS.ALL_DATES,
+  };
+
   try {
-    const searchResults = await applicationContext
+    const firstHalf = await applicationContext
       .getUseCases()
       .opinionPublicSearchInteractor(applicationContext, {
-        searchParams: {
-          ...searchParams,
-          opinionTypes,
-          dateRange:
-            searchParams.startDate || searchParams.endDate
-              ? DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES
-              : DATE_RANGE_SEARCH_OPTIONS.ALL_DATES,
-        },
+        ...baseParams,
+        from: 0,
+        limit: 5000,
       });
 
-    return { searchResults };
+    let combinedResults = [...firstHalf.results];
+
+    if (firstHalf.results.length === 5000) {
+      const secondHalf = await applicationContext
+        .getUseCases()
+        .opinionPublicSearchInteractor(applicationContext, {
+          ...baseParams,
+          from: 5000,
+          limit: 5000,
+        });
+
+      combinedResults = [...combinedResults, ...secondHalf.results];
+    }
+
+    return { searchResults: combinedResults };
   } catch (err: any) {
     if (err.responseCode === 429) {
       store.set(state.alertError, applicationContext.getConstants().ERROR_429);
