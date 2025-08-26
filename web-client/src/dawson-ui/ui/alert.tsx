@@ -31,14 +31,8 @@ const iconType = {
 function Alert({
   className,
   variant,
-  header,
-  description,
   ...props
-}: React.ComponentProps<'div'> &
-  VariantProps<typeof alertVariants> & {
-    header?: string;
-    description: string;
-  }) {
+}: React.ComponentProps<'div'> & VariantProps<typeof alertVariants>) {
   return (
     <div
       data-slot="alert"
@@ -46,34 +40,19 @@ function Alert({
       className={cn(alertVariants({ variant }), className, '')}
       {...props}
     >
-      <div className="tw:flex tw:items-center">
+      <div className="tw:flex">
         <FontAwesomeIcon className="tw:h-6 tw:w-6" icon={iconType[variant]} />
-
-        {header ? (
-          <AlertTitle>{header}</AlertTitle>
-        ) : (
-          <AlertDescription className="tw:ml-4 mt-1.5">
-            {description}
-          </AlertDescription>
-        )}
+        <div className="tw:relative tw:ml-4">{props.children}</div>
       </div>
-      {header && (
-        <AlertDescription className="tw:ml-10 tw:mt-2.5">
-          {description}
-        </AlertDescription>
-      )}
     </div>
   );
 }
 
-function AlertTitle({ className, ...props }: React.ComponentProps<'div'>) {
+function AlertHeader({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="alert-title"
-      className={cn(
-        'tw:font-bold tw:text-base tw:leading-6 tw:mt-1.5 tw:mb-1.5 tw:ml-4',
-        className,
-      )}
+      className={cn('tw:font-bold tw:text-base tw:mb-3', className)}
       {...props}
     />
   );
@@ -86,10 +65,10 @@ function AlertDescription({
   return (
     <div
       data-slot="alert-description"
-      className={cn('tw:font-normal tw:text-base tw:leading-6', className)}
+      className={cn('tw:font-normal tw:text-base', className)}
       {...props}
     />
   );
 }
 
-export { Alert };
+export { Alert, AlertHeader, AlertDescription };

@@ -6,7 +6,11 @@ import {
   TabsTrigger,
 } from '@web-client/dawson-ui/ui/tabs';
 import { BigHeader } from '@web-client/views/BigHeader';
-import { Alert } from '@web-client/dawson-ui/ui/alert';
+import {
+  Alert,
+  AlertDescription,
+  AlertHeader,
+} from '@web-client/dawson-ui/ui/alert';
 import {
   Card,
   CardAction,
@@ -113,30 +117,21 @@ export const DawsonLibrary = () => {
         </div>
         <div>
           <h1>Alerts:</h1>
-          <Alert
-            title="this displays when you hover"
-            variant="info"
-            header="This is a header"
-            description="This is a description"
-          ></Alert>
-          <Alert
-            title="this displays when you hover"
-            variant="warning"
-            header="This is a header"
-            description="This is a description"
-          ></Alert>
-          <Alert
-            title="this displays when you hover"
-            variant="error"
-            header="This is a header"
-            description="This is a description"
-          ></Alert>
-          <Alert
-            title="this displays when you hover"
-            variant="success"
-            header="This is a header"
-            description="This is a description"
-          ></Alert>
+          <Alert title="this displays when you hover" variant="info">
+            <AlertHeader>This is a header</AlertHeader>
+            <AlertDescription>This is a description</AlertDescription>
+          </Alert>
+          <Alert title="this displays when you hover" variant="warning">
+            <AlertDescription>This is a description</AlertDescription>
+          </Alert>
+          <Alert title="this displays when you hover" variant="error">
+            <AlertHeader>This is a header</AlertHeader>
+            <AlertDescription>This is a description</AlertDescription>
+          </Alert>
+          <Alert title="this displays when you hover" variant="success">
+            <AlertHeader>This is a header</AlertHeader>
+            <AlertDescription>This is a description</AlertDescription>
+          </Alert>
         </div>
       </div>
     </>
