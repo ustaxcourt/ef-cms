@@ -27,21 +27,13 @@ import {
 } from './cypress/helpers/cypressTasks/postgres/postgres-helpers';
 import { unzipFile } from './cypress/helpers/file/unzip-file';
 import { waitForNoce } from './cypress/helpers/cypressTasks/wait-for-noce';
-import cypressFailFast from 'cypress-fail-fast/plugin.js';
 
 export default defineConfig({
   chromeWebSecurity: false,
   defaultCommandTimeout: 60000,
-  env: {
-    FAIL_FAST_STRATEGY: 'spec',
-    FAIL_FAST_ENABLED: true,
-    FAIL_FAST_PLUGIN: true,
-    FAIL_FAST_BAIL: 1,
-  },
   e2e: {
     experimentalStudio: true,
-    setupNodeEvents(on, config) {
-      cypressFailFast(on, config);
+    setupNodeEvents(on) {
       on('task', {
         confirmUser({ email }) {
           return confirmUser({ email });
