@@ -92,6 +92,7 @@ USER_POOL_IRS_ID=$(aws cognito-idp list-user-pools \
   --max-results 30 \
   --region us-east-1 \
   --output text)
+SOURCE_TABLE=$(./scripts/ssm/get-source-table.sh "$ENV")
 
 {
   echo "export COGNITO_CLIENT_ID=${COGNITO_CLIENT_ID}"
@@ -102,7 +103,7 @@ USER_POOL_IRS_ID=$(aws cognito-idp list-user-pools \
   echo "export MIGRATE_FLAG=$(./scripts/migration/get-migrate-flag.sh $ENV)"
   echo "export POSTGRES_HOST=$(./scripts/postgres/get-host.sh -w -h)"
   echo "export SOURCE_ELASTICSEARCH=$(./scripts/elasticsearch/get-source-elasticsearch.sh $ENV)"
-  echo "export SOURCE_TABLE=$(./scripts/ssm/get-source-table.sh $ENV)"
+  echo "export SOURCE_TABLE=${SOURCE_TABLE}"
   echo "export STAGE=${ENV}"
   echo "export USER_POOL_ID=${USER_POOL_ID}"
   echo "export USER_POOL_IRS_ID=${USER_POOL_IRS_ID}"
