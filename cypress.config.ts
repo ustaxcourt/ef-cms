@@ -25,15 +25,37 @@ import { waitForNoce } from './cypress/helpers/cypressTasks/wait-for-noce';
 import type { Page } from 'puppeteer-core';
 import { retry, setup } from '@cypress/puppeteer';
 import cypressFailFast from 'cypress-fail-fast/plugin.js';
+import fs from 'fs';
+import path from 'path';
 
 export default defineConfig({
   chromeWebSecurity: false,
   defaultCommandTimeout: 60000,
+  env: {
+    FAIL_FAST_STRATEGY: 'parallel',
+    FAIL_FAST_ENABLED: true,
+    FAIL_FAST_PLUGIN: true,
+    FAIL_FAST_BAIL: 1,
+  },
   e2e: {
     baseUrl: 'http://localhost:1234',
     experimentalStudio: true,
-    setupNodeEvents(on, config) {
-      cypressFailFast(on, config);
+    setupNodeEvents(on, config: Cypress.PluginConfigOptions) {
+      // Flag file for parallel fail-fast communication
+      const isCancelledFlagFile = path.resolve(__dirname, '.run-is-cancelled');
+
+      cypressFailFast(on, config, {
+        parallelCallbacks: {
+          onCancel: () => {
+            // Create flag file when the plugin starts skipping tests
+            fs.writeFileSync(isCancelledFlagFile, '');
+          },
+          isCancelled: () => {
+            // If any other run has created the file, start skipping tests
+            return fs.existsSync(isCancelledFlagFile);
+          },
+        },
+      });
       on('task', {
         confirmUser({ email }) {
           return confirmUser({ email });
@@ -150,7 +172,6 @@ export default defineConfig({
           },
         },
       });
-      return config;
     },
     specPattern: 'cypress/local-only/tests/**/*.cy.ts',
     supportFile: 'cypress/local-only/support/index.ts',
