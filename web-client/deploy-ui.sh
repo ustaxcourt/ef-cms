@@ -16,3 +16,11 @@ aws s3 cp "s3://app-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}/index.html" "s3://app-${D
 # failover
 aws s3 sync dist "s3://app-failover-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}" --delete --cache-control no-cache
 aws s3 cp "s3://app-failover-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}/index.html" "s3://app-failover-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}/index.html" --metadata-directive REPLACE --content-type text/html --cache-control max-age=0
+
+# invalidate cloudfront cache for this color
+DISTRIBUTION_ID=$(aws cloudfront list-distributions --query "DistributionList.Items[?Aliases.Items && contains(Aliases.Items, 'app-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}')].Id | [0]" --output text)
+if [ -z "${DISTRIBUTION_ID}" ] || [ "${DISTRIBUTION_ID}" = "None" ]; then
+  echo "Could not find CloudFront distribution for app-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}"
+  exit 1
+fi
+aws cloudfront create-invalidation --distribution-id "${DISTRIBUTION_ID}" --paths "/*"

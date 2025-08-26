@@ -11,7 +11,7 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   AuthUser,
   UnknownAuthUser,
@@ -21,8 +21,8 @@ import { generateDocketNumber } from '@web-api/persistence/postgres/cases/genera
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
 import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
-import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { CREATE_CASE_LOCK_IDENTIFIER } from '@web-api/business/useCases/createCaseInteractor';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
 
 const addPetitionDocketEntryWithWorkItemToCase = ({
@@ -77,7 +77,7 @@ const createCaseMetadata = async (
     petitionMetadata: CreatedCaseType;
     requestForPlaceOfTrialFileId?: string;
     stinFileId?: string;
-    user: UserRecord;
+    user: RawUser;
   },
   authorizedUser: AuthUser,
 ) => {
@@ -268,7 +268,6 @@ const createCaseMetadata = async (
   }
 
   await applicationContext.getUseCaseHelpers().createCaseAndAssociations({
-    applicationContext,
     authorizedUser,
     caseToCreate: caseToAdd.validate().toRawObject(),
   });
@@ -301,9 +300,11 @@ export const createCaseFromPaperInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
+
+  if (!user) {
+    throw new NotFoundError(`Could not find user ${authorizedUser.userId}`);
+  }
 
   const removeLockFunction = await acquireLock({
     applicationContext,

@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+jest.mock('@web-api/persistence/postgres/users/getUsersInSections');
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_TRIAL_INPERSON } from '@shared/test/mockTrial';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
@@ -8,6 +9,9 @@ import {
 } from './generateNoticeOfChangeToInPersonProceeding';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getFeatureFlagValues as getFeatureFlagValuesMock } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
+import { getUsersInSections as getUsersInSectionsMock } from '@web-api/persistence/postgres/users/getUsersInSections';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
+
 const getFeatureFlagValues = getFeatureFlagValuesMock as jest.Mock;
 getFeatureFlagValues.mockResolvedValue([
   {
@@ -23,6 +27,7 @@ getFeatureFlagValues.mockResolvedValue([
 
 describe('generateNoticeOfChangeToInPersonProceeding', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const getUsersInSections = jest.mocked(getUsersInSectionsMock);
   const mockTrialSessionInformation: GenerateNoticeOfChangeToInPersonTrialInfo =
     {
       address1: MOCK_TRIAL_INPERSON.address1!,
@@ -44,9 +49,7 @@ describe('generateNoticeOfChangeToInPersonProceeding', () => {
   };
 
   it('should call the document generator to generate the NOIP', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUsersInSection.mockReturnValue([mockJudge]);
+    getUsersInSections.mockResolvedValue([mockJudge as DbUser]);
 
     getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
 
