@@ -1,4 +1,5 @@
 import {
+  ACCOUNT_STATUS,
   CASE_SERVICES_SUPERVISOR_SECTION,
   COUNTRY_TYPES,
   DOCKET_SECTION,
@@ -20,6 +21,7 @@ describe('User entity', () => {
       postalCode: '61234',
       state: 'IL',
     },
+    accountStatus: ACCOUNT_STATUS.active,
     email: 'user@example.com',
     entityName: 'User',
     name: 'Saul Goodman',
@@ -44,6 +46,7 @@ describe('User entity', () => {
       name: 'Saul Goodman',
       role: undefined,
       userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
+      accountStatus: ACCOUNT_STATUS.active,
     });
 
     expect(user.role).toBe(ROLES.petitioner);
@@ -117,6 +120,7 @@ describe('User entity', () => {
         name: 'Saul Goodman',
         role: ROLES.petitioner,
         userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
+        accountStatus: ACCOUNT_STATUS.active,
       });
 
       expect(user.isValid()).toBeTruthy();
@@ -128,6 +132,7 @@ describe('User entity', () => {
         name: 'Saul Goodman',
         role: ROLES.floater,
         userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
+        accountStatus: ACCOUNT_STATUS.active,
       });
 
       expect(user.isValid()).toBeTruthy();
@@ -140,6 +145,7 @@ describe('User entity', () => {
         name: 'Saul Goodman',
         role: ROLES.privatePractitioner,
         token: 'abc',
+        accountStatus: ACCOUNT_STATUS.active,
         userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
       });
 
@@ -151,6 +157,7 @@ describe('User entity', () => {
         name: 'Saul Goodman',
         role: ROLES.irsPractitioner,
         userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
+        accountStatus: ACCOUNT_STATUS.active,
       });
 
       expect(user.isValid()).toBeTruthy();
@@ -164,6 +171,7 @@ describe('User entity', () => {
         name: 'Saul Goodman',
         role: ROLES.judge,
         userId: '5488fed1-1129-4ca0-be7a-3ea3998be953',
+        accountStatus: ACCOUNT_STATUS.active,
       });
 
       expect(user.isValid()).toBeTruthy();
@@ -178,6 +186,7 @@ describe('User entity', () => {
           name: 'Saul Goodman',
           role: ROLES.judge,
           userId: '5488fed1-1129-4ca0-be7a-3ea3998be953',
+          accountStatus: ACCOUNT_STATUS.active,
         });
 
         expect(user.isValid()).toBeTruthy();
@@ -192,6 +201,7 @@ describe('User entity', () => {
         name: 'Saul Goodman',
         role: ROLES.judge,
         userId: '5488fed1-1129-4ca0-be7a-3ea3998be953',
+        accountStatus: ACCOUNT_STATUS.active,
       });
 
       expect(user.isValid()).toBeFalsy();
@@ -204,6 +214,7 @@ describe('User entity', () => {
         name: 'Saul Goodman',
         role: ROLES.judge,
         userId: '5488fed1-1129-4ca0-be7a-3ea3998be953',
+        accountStatus: ACCOUNT_STATUS.active,
       });
 
       expect(user.isValid()).toBeFalsy();
@@ -216,6 +227,7 @@ describe('User entity', () => {
         name: 'Saul Goodman',
         role: ROLES.judge,
         userId: '5488fed1-1129-4ca0-be7a-3ea3998be953',
+        accountStatus: ACCOUNT_STATUS.active,
       });
 
       expect(user.isValid()).toBeFalsy();
@@ -228,6 +240,7 @@ describe('User entity', () => {
         name: 'Saul Goodman',
         role: ROLES.legacyJudge,
         userId: '5488fed1-1129-4ca0-be7a-3ea3998be953',
+        accountStatus: ACCOUNT_STATUS.active,
       });
 
       expect(user.isValid()).toBeTruthy();
@@ -240,6 +253,7 @@ describe('User entity', () => {
         pendingEmailVerificationToken: '26dc3fd7-f480-4000-91cc-9fcc565816f1',
         role: ROLES.irsPractitioner,
         userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
+        accountStatus: ACCOUNT_STATUS.active,
       });
 
       expect(user.isValid()).toBeTruthy();
@@ -254,6 +268,7 @@ describe('User entity', () => {
         pendingEmailVerificationToken: 'abc',
         role: ROLES.irsPractitioner,
         userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
+        accountStatus: ACCOUNT_STATUS.active,
       });
 
       expect(user.isValid()).toBeFalsy();
@@ -269,6 +284,7 @@ describe('User entity', () => {
         pendingEmail: 'test@example.com',
         pendingEmailVerificationToken: null,
         role: ROLES.irsPractitioner,
+        accountStatus: ACCOUNT_STATUS.active,
       });
 
       expect(user.isValid()).toBeFalsy();

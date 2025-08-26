@@ -5,10 +5,12 @@ import {
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '../../../../../shared/src/business/entities/User';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
 
 /**
  * updateUserPendingEmailInteractor
@@ -28,9 +30,11 @@ export const updateUserPendingEmailInteractor = async (
     throw new UnauthorizedError('Unauthorized to manage emails.');
   }
 
-  const user: any = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
+
+  if (!user) {
+    throw new NotFoundError(`Could not find user ${authorizedUser.userId}`);
+  }
 
   await updateUserPendingEmail({ applicationContext, pendingEmail, user });
 
@@ -41,10 +45,7 @@ export const updateUserPendingEmailInteractor = async (
     updatedUserRaw = new Practitioner(user).validate().toRawObject();
   }
 
-  await applicationContext.getPersistenceGateway().updateUser({
-    applicationContext,
-    user: updatedUserRaw,
-  });
+  await upsertUsers([updatedUserRaw]);
 
   await applicationContext.getUseCaseHelpers().sendEmailVerificationLink({
     applicationContext,

@@ -1,6 +1,7 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
 import {
   CASE_STATUS_TYPES,
@@ -23,6 +24,9 @@ import {
 } from '@shared/business/entities/cases/Case';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+
+import { associateUsersWithCases as associateUsersWithCasesMock } from '@web-api/persistence/postgres/cases/userOnCase/associateUsersWithCases';
 
 jest.mock('@shared/business/utilities/DateHandler', () => {
   const originalModule = jest.requireActual(
@@ -37,6 +41,9 @@ jest.mock('@shared/business/utilities/DateHandler', () => {
 
 describe('createCaseInteractor', () => {
   let user;
+
+  const associateUsersWithCases = jest.mocked(associateUsersWithCasesMock);
+
   const mockPetitionMetadata = {
     caseType: CASE_TYPES_MAP.other,
     contactPrimary: {
@@ -68,6 +75,7 @@ describe('createCaseInteractor', () => {
   const date = '2020-11-21T20:49:28.192Z';
   const mockCreateIsoDateString = createISODateString as jest.Mock;
   mockCreateIsoDateString.mockReturnValue(date);
+  const getUserById = jest.mocked(getUserByIdMock);
 
   beforeEach(() => {
     user = new User({
@@ -79,9 +87,7 @@ describe('createCaseInteractor', () => {
 
     (generateDocketNumber as jest.Mock).mockResolvedValue('00101-00');
 
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockImplementation(() => user);
+    getUserById.mockImplementation(() => user);
 
     applicationContext
       .getUseCases()
@@ -144,9 +150,7 @@ describe('createCaseInteractor', () => {
         },
       ],
     });
-    expect(
-      applicationContext.getPersistenceGateway().associateUserWithCase,
-    ).toHaveBeenCalled();
+    expect(associateUsersWithCases).toHaveBeenCalled();
     expect(upsertWorkItems).toHaveBeenCalled();
   });
 
@@ -182,9 +186,7 @@ describe('createCaseInteractor', () => {
         },
       ],
     });
-    expect(
-      applicationContext.getPersistenceGateway().associateUserWithCase,
-    ).toHaveBeenCalled();
+    expect(associateUsersWithCases).toHaveBeenCalled();
     expect(upsertWorkItems).toHaveBeenCalled();
   });
 

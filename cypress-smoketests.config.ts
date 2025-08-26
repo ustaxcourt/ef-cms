@@ -16,17 +16,16 @@ import {
   fileExists,
 } from './cypress/local-only/support/database';
 import {
-  expireUserConfirmationCode,
-  getEmailVerificationToken,
-  getNewAccountVerificationCode,
-} from './cypress/helpers/cypressTasks/dynamo/dynamo-helpers';
-import {
   getRawFeatureFlagValue,
   toggleFeatureFlag,
 } from './cypress/helpers/cypressTasks/postgres/featureFlagsCypress';
+import {
+  expireUserConfirmationCode,
+  getEmailVerificationToken,
+  getNewAccountVerificationCode,
+} from './cypress/helpers/cypressTasks/postgres/postgres-helpers';
 import { unzipFile } from './cypress/helpers/file/unzip-file';
 import { waitForNoce } from './cypress/helpers/cypressTasks/wait-for-noce';
-import { waitForPractitionerEmailUpdate } from './cypress/helpers/cypressTasks/wait-for-practitioner-email-update';
 
 export default defineConfig({
   chromeWebSecurity: false,
@@ -121,18 +120,6 @@ export default defineConfig({
         },
         waitForNoce({ docketNumber }: { docketNumber: string }) {
           return waitForNoce({ docketNumber });
-        },
-        waitForPractitionerEmailUpdate({
-          docketNumber,
-          practitionerEmail,
-        }: {
-          docketNumber: string;
-          practitionerEmail: string;
-        }) {
-          return waitForPractitionerEmailUpdate({
-            docketNumber,
-            practitionerEmail,
-          });
         },
       });
     },
