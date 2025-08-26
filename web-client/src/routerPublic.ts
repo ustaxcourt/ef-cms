@@ -96,6 +96,7 @@ const router = {
       });
     });
 
+    // only visible on lower envs
     route('/dawson-library', () => {
       setPageTitle('Dawson Library');
       return app.getSequence('gotoDawsonLibrarySequence')();
