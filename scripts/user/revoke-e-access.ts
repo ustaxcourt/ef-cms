@@ -5,16 +5,17 @@ import {
   type ScriptConfig,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
-import { createApplicationContext } from '@web-api/applicationContext';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getUniqueId } from '@shared/sharedAppContext';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
+import { disassociateUsersFromCases } from '@web-api/persistence/postgres/cases/userOnCase/disassociateUsersFromCases';
+import { ROLES, SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstants';
+import { associateUsersWithCases } from '@web-api/persistence/postgres/cases/userOnCase/associateUsersWithCases';
 
 const scriptConfig: ScriptConfig = {
   description:
     'revoke-e-access - Switches the provided petitioner to paper service in the provided case.',
   environment: {
-    dynamoDbTableName: 'DYNAMODB_TABLE_NAME',
     env: 'ENV',
   },
   parameters: {
@@ -38,8 +39,6 @@ const { docketNumber, userId } = parseArgsAndEnvVars(scriptConfig) as {
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const applicationContext = createApplicationContext({});
-
   const rawCase = await getCaseByDocketNumber({
     docketNumber,
   });
@@ -59,7 +58,8 @@ const { docketNumber, userId } = parseArgsAndEnvVars(scriptConfig) as {
   }
 
   offendingPetitioner.contactId = getUniqueId();
-  offendingPetitioner.serviceIndicator = 'Paper';
+  offendingPetitioner.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_PAPER;
+  offendingPetitioner.hasElectronicAccess = false;
   delete offendingPetitioner.email;
   const caseToUpdate = new Case(rawCase, { authorizedUser: undefined })
     .validate()
@@ -67,9 +67,8 @@ const { docketNumber, userId } = parseArgsAndEnvVars(scriptConfig) as {
 
   await upsertCases([caseToUpdate]);
 
-  await applicationContext
-    .getPersistenceGateway()
-    .deleteUserFromCase({ applicationContext, docketNumber, userId });
+  await disassociateUsersFromCases([{ docketNumber, userId }]);
+  await associateUsersWithCases([{ docketNumber, userId, actingAsRole: ROLES.petitioner }]);
 
   console.log(
     `Electronic access to case ${docketNumber} has been revoked for ${offendingPetitioner.name}.`,

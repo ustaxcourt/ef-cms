@@ -35,13 +35,13 @@ const cognitoClient = new CognitoIdentityProvider({
 
 const isDevelopmentEnvironment = !['prod', 'test'].includes(env);
 
-const loadSecrets = async (environmentName: string): Promise<any> => {
+const loadSecrets = async (secretsName: string): Promise<any> => {
   const getSecretValueCommand = new GetSecretValueCommand({
-    SecretId: `${environmentName}_deploy`,
+    SecretId: secretsName,
   });
   const { SecretString } = await secretsClient.send(getSecretValueCommand);
   if (!SecretString) {
-    throw new Error(`could not load secrets for ${environmentName}_deploy`);
+    throw new Error(`could not load secrets for ${secretsName}`);
   }
   const secrets = JSON.parse(SecretString);
   console.log('✅ Retrieved secrets');
@@ -51,19 +51,21 @@ const loadSecrets = async (environmentName: string): Promise<any> => {
 const rotateSecrets = async (environmentName: string): Promise<void> => {
   console.log(`Rotating secrets for Environment: ${environmentName}\n`);
 
-  const secrets = await loadSecrets(environmentName);
+  const secrets = await loadSecrets(`${environmentName}_deploy`);
 
   const DEFAULT_ACCOUNT_PASS = isDevelopmentEnvironment
     ? 'Testing1234$'
     : makeNewPassword();
 
   const USTC_ADMIN_PASS = makeNewPassword();
+  const USTC_ZENDESK_PASS = makeNewPassword();
 
   // for local use only!
   if (!ci || !ci.length) {
     console.log({
       DEFAULT_ACCOUNT_PASS,
       USTC_ADMIN_PASS,
+      USTC_ZENDESK_PASS,
     });
   }
 
@@ -75,16 +77,48 @@ const rotateSecrets = async (environmentName: string): Promise<void> => {
   });
   console.log('✅ USTC_ADMIN_USER Cognito Password updated');
 
+  await cognitoClient.adminSetUserPassword({
+    Password: USTC_ZENDESK_PASS,
+    Permanent: true,
+    UserPoolId,
+    Username: secrets.USTC_ZENDESK_USER,
+  });
+  console.log('✅ USTC_ZENDESK_USER Cognito Password updated');
+
   const putSecretValueCommand = new PutSecretValueCommand({
     SecretId: `${env}_deploy`,
     SecretString: JSON.stringify({
       ...secrets,
+      USTC_ZENDESK_PASS,
       DEFAULT_ACCOUNT_PASS,
       USTC_ADMIN_PASS,
     }),
   });
+
   await secretsClient.send(putSecretValueCommand);
+
   console.log('✅ Secrets updated');
+
+  let zendeskSecrets;
+  try {
+    zendeskSecrets = await loadSecrets(`${environmentName}/ZendeskDawson`);
+  } catch (e) {
+    console.log('No Zendesk secrets found');
+  }
+
+  if (zendeskSecrets) {
+    const putZendeskSecretValueCommand = new PutSecretValueCommand({
+      SecretId: `${environmentName}/ZendeskDawson`,
+      SecretString: JSON.stringify({
+        ...zendeskSecrets,
+        USTC_ZENDESK_PASS,
+        USTC_ADMIN_PASS,
+      }),
+    });
+    await secretsClient.send(putZendeskSecretValueCommand);
+
+    console.log('✅ Zendesk secrets updated');
+  }
 };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises

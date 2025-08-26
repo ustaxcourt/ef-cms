@@ -53,6 +53,8 @@ import { presenter } from './presenter/presenter-public';
 import App from 'cerebral';
 import React from 'react';
 
+import { faFile } from '@fortawesome/free-solid-svg-icons/faFile';
+
 /**
  * Instantiates the Cerebral app with React
  */
@@ -72,34 +74,35 @@ const appPublic = {
     });
 
     library.add(
-      faExchangeAlt,
-      faFileAltSolid,
-      faLock,
-      faLongArrowAltUp,
-      faLink,
-      faTimes,
-      faPrint,
-      faFilePdf,
-      faSearch,
-      faSync,
-      faLink,
-      faSort,
-      faTimesCircle,
-      faInfoCircle,
+      faArrowAltCircleLeftRegular,
+      faArrowAltCircleLeftSolid,
       faCheckCircle,
+      faChevronUp,
+      faCopy,
+      faCopySolid,
+      faEnvelopeSolid,
+      faExchangeAlt,
       faExclamation,
       faExclamationCircle,
       faExclamationTriangle,
-      faChevronUp,
+      faFileAltSolid,
+      faFilePdf,
+      faFile,
+      faInfoCircle,
+      faLink,
+      faLink,
+      faLock,
       faLongArrowAltDown,
-      faEnvelopeSolid,
+      faLongArrowAltUp,
       faPhone,
+      faPrint,
+      faSearch,
+      faSort,
+      faSync,
+      faTimes,
+      faTimesCircle,
       faTimesCircleRegular,
-      faArrowAltCircleLeftSolid,
-      faArrowAltCircleLeftRegular,
       faUser,
-      faCopy,
-      faCopySolid,
     );
 
     presenter.providers.applicationContext = applicationContext;
