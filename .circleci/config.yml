@@ -395,8 +395,14 @@ jobs:
           command: |
             ./scripts/env/env-for-circle.sh
       - run:
+          name: Clean up fail-fast flag
+          command: ./scripts/cleanup-parallel-flag.sh
+      - run:
           name: 'Cypress Smoke Tests'
           command: find cypress/deployed-and-local/integration -type f -name "*.cy.ts" | circleci tests run --split-by=timings --command 'paste -sd, - | xargs -I {} ./scripts/run-cypress.sh -s -t {}'
+      - run:
+          name: Clean up fail-fast flag
+          command: ./scripts/cleanup-parallel-flag.sh
       - store_artifacts:
           path: /root/project/cypress/deployed-and-local/videos/
 
