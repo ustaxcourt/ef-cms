@@ -150,6 +150,7 @@ export default defineConfig({
           },
         },
       });
+      return config;
     },
     specPattern: 'cypress/local-only/tests/**/*.cy.ts',
     supportFile: 'cypress/local-only/support/index.ts',
