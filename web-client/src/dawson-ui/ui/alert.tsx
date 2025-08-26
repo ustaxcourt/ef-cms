@@ -45,7 +45,7 @@ function Alert({
       <div className="tw:flex">
         <FontAwesomeIcon className="tw:h-6 tw:w-6" icon={iconType[variant]} />
         <div className="tw:relative tw:ml-4">{props.children}</div>
-        <Button variant={'primaryTertiary'}>
+        <Button className='tw:fill-primary tw:self-start tw:ml-auto' variant={'primaryTertiary'}>
           Close
           <CircleXmark />
         </Button>
