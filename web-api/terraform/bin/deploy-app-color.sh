@@ -139,7 +139,5 @@ terraform init -upgrade -backend=true \
  -backend-config=key="$KEY" \
  -backend-config=dynamodb_table="$LOCK_TABLE" \
  -backend-config=region="$REGION"
-# terraform plan -out execution-plan
-# terraform apply -auto-approve execution-plan
-
-terraform import module.api-east-blue.aws_cloudwatch_log_group.api_stage_logs api_stage_logs
+terraform plan -out execution-plan
+terraform apply -auto-approve execution-plan
