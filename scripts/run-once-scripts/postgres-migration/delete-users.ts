@@ -84,6 +84,16 @@ async function scanContinuously(params: ScanCommandInput) {
       const isDocketNumberCounter = record.pk.startsWith('docketNumberCounter');
       const isUserCaseNote =
         record.pk.startsWith('user-case-note') && record.sk.startsWith('user');
+      const isDocketEntry =
+        record.pk.startsWith('case|') && record.sk.startsWith('docket-entry|');
+      const isIpLimiteer = record.pk.startsWith('ip-limiter-document-search');
+      const isChangeOfAddressJob = record.pk.startsWith(
+        'change-of-address-job',
+      );
+      const isOpinionSearch = record.pk.startsWith(
+        'user-limiter-opinion-search',
+      );
+      const isOrderSearch = record.pk.startsWith('user-limiter-order-search');
 
       if (
         isUserRecord ||
@@ -99,7 +109,12 @@ async function scanContinuously(params: ScanCommandInput) {
         isIrsPractitionerUserRecord ||
         isBarNumberCounter ||
         isDocketNumberCounter ||
-        isUserCaseNote
+        isUserCaseNote ||
+        isDocketEntry ||
+        isIpLimiteer ||
+        isChangeOfAddressJob ||
+        isOpinionSearch ||
+        isOrderSearch
       ) {
         deleteRequests.push({
           DeleteRequest: { Key: { pk: record.pk, sk: record.sk } },
