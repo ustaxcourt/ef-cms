@@ -19,8 +19,6 @@ export async function getConsolidatedCaseDeadlinesInteractor(
     throw new UnauthorizedError('Unauthorized');
   }
 
-  if (!consolidatedCaseDeadlineId) return [];
-
   const DEADLINES = await getCaseDeadlinesByConsolidatedCaseDeadlineIds([
     consolidatedCaseDeadlineId,
   ]);
