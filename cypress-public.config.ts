@@ -3,19 +3,12 @@ import { setAllowedTerminalIpAddresses } from './cypress/local-only/support/data
 import { toggleFeatureFlag } from './cypress/helpers/cypressTasks/dynamo/dynamo-helpers';
 import fs from 'fs';
 import path from 'path';
-import cypressFailFast from 'cypress-fail-fast/plugin.js';
 
 export default defineConfig({
   defaultCommandTimeout: 60000,
-  env: {
-    FAIL_FAST_STRATEGY: 'spec',
-    FAIL_FAST_ENABLED: true,
-    FAIL_FAST_BAIL: 1,
-  },
   e2e: {
     baseUrl: 'http://localhost:5678',
-    setupNodeEvents(on, config) {
-      cypressFailFast(on, config);
+    setupNodeEvents(on) {
       on('task', {
         modifyDeployedDateTextFile(deployedDate) {
           fs.writeFileSync(
