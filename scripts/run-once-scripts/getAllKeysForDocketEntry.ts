@@ -39,12 +39,21 @@ async function scanContinuously(params: ScanCommandInput) {
     const items = result.Items ?? [];
 
     for (const record of items as TDynamoRecord[]) {
-      if (record.sk.startsWith('docket-entry|')) {
-        for (const key of Object.keys(record)) {
-          const currentCount = uniqueKeysMap.get(key) || 0;
-          uniqueKeysMap.set(key, currentCount + 1);
-        }
+      if (
+        record.pk.startsWith('lock-complete') ||
+        record.pk.startsWith('trial-session-processing-job') ||
+        record.pk.startsWith('set-notices-for-trial-session-job')
+      ) {
+        continue;
       }
+      const pk = record.pk.split('|')[0];
+      const sk = record.sk.split('|')[0];
+      const identifier = `pk: ${pk}, sk: ${sk}`;
+      const currentCount = uniqueKeysMap.get(identifier);
+      if (!currentCount) {
+        console.log(identifier);
+      }
+      uniqueKeysMap.set(identifier, (currentCount || 0) + 1);
     }
 
     itemsScanned += items.length;
@@ -57,8 +66,5 @@ process.on('SIGINT', () => {
   console.log(uniqueKeysMap);
   process.exit(1);
 });
-main()
-  .then(() => {
-    console.log(uniqueKeysMap);
-  })
-  .catch(console.error);
+
+void main();
