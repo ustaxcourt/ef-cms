@@ -17,7 +17,7 @@ describe('logout', () => {
     cy.get('[data-testid="login-header"]');
     cy.reload();
     cy.get('[data-testid="login-header"]');
-    cy.url().should('contain', '/login');
+    cy.url().should('contain', '/logout');
   });
 
   /*
@@ -48,6 +48,6 @@ describe('logout', () => {
     cy.get('[data-testid="login-header"]');
     cy.reload();
     cy.get('[data-testid="login-header"]');
-    cy.url().should('contain', '/logout');
+    cy.url().should('contain', '/login');
   });
 });
