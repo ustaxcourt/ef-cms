@@ -4,6 +4,7 @@ import {
   formatNow,
 } from '../../../../../shared/src/business/utilities/DateHandler';
 import { ORDER_EVENT_CODES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { MAX_SEARCH_RESULTS } from '../../../../../shared/src/business/entities/EntityConstants';
 import { PublicDocumentSearchResult } from '../../../../../shared/src/business/entities/documents/PublicDocumentSearchResult';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { omit } from 'lodash';
@@ -56,14 +57,15 @@ export const orderPublicSearchInteractor = async (
     });
 
   const timestamp = formatNow(FORMATS.LOG_TIMESTAMP);
+
   applicationContext.logger.info('public order search', {
     ...omit(rawSearch, 'entityName'),
     timestamp,
   });
 
   return {
-    results: PublicDocumentSearchResult.validateRawCollection(results).map(r =>
-      omit(r, 'entityName'),
-    ),
+    results: PublicDocumentSearchResult.validateRawCollection(results)
+      .map(r => omit(r, 'entityName'))
+      .slice(0, MAX_SEARCH_RESULTS),
   };
 };

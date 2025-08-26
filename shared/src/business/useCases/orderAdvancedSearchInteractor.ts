@@ -1,5 +1,8 @@
 import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
-import { ORDER_EVENT_CODES } from '@shared/business/entities/EntityConstants';
+import {
+  MAX_SEARCH_RESULTS,
+  ORDER_EVENT_CODES,
+} from '@shared/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -68,6 +71,7 @@ export const orderAdvancedSearchInteractor = async (
     });
 
   const timestamp = formatNow(FORMATS.LOG_TIMESTAMP);
+
   applicationContext.logger.info('private order search', {
     ...omit(rawSearch, 'entityName'),
     timestamp,
@@ -81,8 +85,8 @@ export const orderAdvancedSearchInteractor = async (
   );
 
   return {
-    results: InternalDocumentSearchResult.validateRawCollection(
-      filteredResults,
-    ).map(r => omit(r, 'entityName')),
+    results: InternalDocumentSearchResult.validateRawCollection(filteredResults)
+      .map(r => omit(r, 'entityName'))
+      .slice(0, MAX_SEARCH_RESULTS),
   };
 };

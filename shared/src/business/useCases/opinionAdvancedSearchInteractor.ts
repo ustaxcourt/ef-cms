@@ -9,6 +9,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { omit } from 'lodash';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { MAX_SEARCH_RESULTS } from '../entities/EntityConstants';
 
 export const opinionAdvancedSearchInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -65,6 +66,7 @@ export const opinionAdvancedSearchInteractor = async (
     });
 
   const timestamp = formatNow(FORMATS.LOG_TIMESTAMP);
+
   applicationContext.logger.info('private opinion search', {
     ...omit(rawSearch, 'entityName'),
     timestamp,
@@ -73,8 +75,8 @@ export const opinionAdvancedSearchInteractor = async (
   });
 
   return {
-    results: InternalDocumentSearchResult.validateRawCollection(results).map(
-      r => omit(r, 'entityName'),
-    ),
+    results: InternalDocumentSearchResult.validateRawCollection(results)
+      .map(r => omit(r, 'entityName'))
+      .slice(0, MAX_SEARCH_RESULTS),
   };
 };

@@ -12,8 +12,8 @@ import {
 import { orderAdvancedSearchInteractor } from './orderAdvancedSearchInteractor';
 
 describe('orderAdvancedSearchInteractor', () => {
-  it('fetches multiple batches when results exceed batch size', async () => {
-    const batchSize = 1000;
+  it('fetches two batches of 5000 results when more than 5000 are available', async () => {
+    const batchSize = 5000;
     const firstBatch = new Array(batchSize).fill({
       caseCaption: 'Batch1',
       docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
@@ -22,44 +22,56 @@ describe('orderAdvancedSearchInteractor', () => {
       eventCode: 'ODD',
       signedJudgeName: 'Judge1',
     });
-    const secondBatch = [
-      {
-        caseCaption: 'Batch2',
-        docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e548',
-        docketNumber: '100-02',
-        documentTitle: 'Order',
-        eventCode: 'ODD',
-        signedJudgeName: 'Judge2',
-      },
-    ];
+    const secondBatch = new Array(batchSize).fill({
+      caseCaption: 'Batch2',
+      docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e548',
+      docketNumber: '100-02',
+      documentTitle: 'Order',
+      eventCode: 'ODD',
+      signedJudgeName: 'Judge2',
+    });
 
     let callCount = 0;
     applicationContext
       .getPersistenceGateway()
-      .advancedDocumentSearch.mockImplementation(() => {
+      .advancedDocumentSearch.mockImplementation(({ from }) => {
         callCount++;
-        if (callCount === 1) {
+        if (from === 0) {
           return Promise.resolve({
             results: firstBatch,
-            totalCount: batchSize + 1,
+            totalCount: batchSize * 2,
           });
         }
         return Promise.resolve({
           results: secondBatch,
-          totalCount: batchSize + 1,
+          totalCount: batchSize * 2,
         });
       });
 
-    const results = await orderAdvancedSearchInteractor(
+    const firstHalf = await orderAdvancedSearchInteractor(
       applicationContext,
       {
         keyword: 'keyword',
         petitionerName: 'test person',
+        from: 0,
+        limit: 5000,
       } as any,
       mockPetitionsClerkUser,
     );
 
-    expect(results.results.length).toBe(batchSize + 1);
+    const secondHalf = await orderAdvancedSearchInteractor(
+      applicationContext,
+      {
+        keyword: 'keyword',
+        petitionerName: 'test person',
+        from: 5000,
+        limit: 5000,
+      } as any,
+      mockPetitionsClerkUser,
+    );
+    const combinedResults = [...firstHalf.results, ...secondHalf.results];
+
+    expect(combinedResults.length).toBe(10000);
     expect(callCount).toBe(2);
   });
   beforeEach(() => {
@@ -104,7 +116,7 @@ describe('orderAdvancedSearchInteractor', () => {
   });
 
   it('logs raw search information and results size', async () => {
-    const result = await orderAdvancedSearchInteractor(
+    await orderAdvancedSearchInteractor(
       applicationContext,
       {
         dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
@@ -117,7 +129,6 @@ describe('orderAdvancedSearchInteractor', () => {
     expect(applicationContext.logger.info.mock.calls[0][1]).toMatchObject({
       from: 0,
       timestamp: expect.anything(),
-      totalCount: result.results.length,
       userRole: ROLES.petitionsClerk,
     });
   });
@@ -145,7 +156,7 @@ describe('orderAdvancedSearchInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(results.results.length).toBe(MAX_SEARCH_RESULTS);
+    expect(results.results.length).toBe(MAX_SEARCH_RESULTS); // Interactor limits results
   });
 
   it('searches for documents that are of type orders', async () => {

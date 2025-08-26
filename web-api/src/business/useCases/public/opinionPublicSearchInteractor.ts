@@ -4,6 +4,7 @@ import {
   formatNow,
 } from '../../../../../shared/src/business/utilities/DateHandler';
 import { PublicDocumentSearchResult } from '../../../../../shared/src/business/entities/documents/PublicDocumentSearchResult';
+import { MAX_SEARCH_RESULTS } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { omit } from 'lodash';
 
@@ -63,8 +64,8 @@ export const opinionPublicSearchInteractor = async (
   });
 
   return {
-    results: PublicDocumentSearchResult.validateRawCollection(results).map(r =>
-      omit(r, 'entityName'),
-    ),
+    results: PublicDocumentSearchResult.validateRawCollection(results)
+      .map(r => omit(r, 'entityName'))
+      .slice(0, MAX_SEARCH_RESULTS),
   };
 };

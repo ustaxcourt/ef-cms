@@ -50,7 +50,62 @@ describe('opinionPublicSearchInteractor', () => {
     expect(searchArgs.omitSealed).toBeUndefined();
   });
 
-  it('returns no more than MAX_SEARCH_RESULTS', async () => {
+  it('fetches two batches of 5000 results when more than 5000 are available', async () => {
+    const batchSize = 5000;
+    const firstBatch = new Array(batchSize).fill({
+      caseCaption: 'Batch1',
+      docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
+      docketNumber: '100-01',
+      documentTitle: 'Opinion',
+      eventCode: 'TCOP',
+      signedJudgeName: 'Judge1',
+    });
+    const secondBatch = new Array(batchSize).fill({
+      caseCaption: 'Batch2',
+      docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e548',
+      docketNumber: '100-02',
+      documentTitle: 'Opinion',
+      eventCode: 'SOP',
+      signedJudgeName: 'Judge2',
+    });
+
+    let callCount = 0;
+    applicationContext
+      .getPersistenceGateway()
+      .advancedDocumentSearch.mockImplementation(({ from }) => {
+        callCount++;
+        if (from === 0) {
+          return Promise.resolve({
+            results: firstBatch,
+            totalCount: batchSize * 2,
+          });
+        }
+        return Promise.resolve({
+          results: secondBatch,
+          totalCount: batchSize * 2,
+        });
+      });
+
+    const firstHalf = await opinionPublicSearchInteractor(applicationContext, {
+      keyword: 'keyword',
+      opinionTypes: ['TCOP', 'SOP'],
+      from: 0,
+      limit: 5000,
+    } as any);
+
+    const secondHalf = await opinionPublicSearchInteractor(applicationContext, {
+      keyword: 'keyword',
+      opinionTypes: ['TCOP', 'SOP'],
+      from: 5000,
+      limit: 5000,
+    } as any);
+    const combinedResults = [...firstHalf.results, ...secondHalf.results];
+
+    expect(combinedResults.length).toBe(10000);
+    expect(callCount).toBe(2);
+  });
+
+  it('should limit results length to MAX_SEARCH_RESULTS', async () => {
     const maxPlusOneResults = new Array(MAX_SEARCH_RESULTS + 1).fill({
       caseCaption: 'Samson Workman, Petitioner',
       docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
@@ -78,7 +133,7 @@ describe('opinionPublicSearchInteractor', () => {
       startDate: '01/01/2001',
     } as any);
 
-    expect(result).toEqual(mockOpinionSearchResult);
+    expect(result.results).toEqual(mockOpinionSearchResult);
   });
 
   it('does NOT filter out opinion results belonging to sealed cases', async () => {
