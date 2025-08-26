@@ -285,4 +285,49 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
     expect(mockCaseEntity.automaticBlockedReason).toBeUndefined();
     expect(mockCaseEntity.automaticBlockedDate).toBeUndefined();
   });
+
+  it('should not call "getCaseDeadlinesByConsolidatedCaseDeadlineIds" if there are no lead deadlines', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockReturnValue({
+        ...MOCK_TRIAL_REGULAR,
+        isCalendared: true,
+      });
+
+    getCaseDeadlinesByDocketNumber.mockResolvedValue([]);
+
+    const CHILD_CASE_DEADLINE_ID = 'CHILD_CASE_DEADLINE_ID';
+    getCaseDeadlinesByConsolidatedCaseDeadlineIds.mockResolvedValue([
+      {
+        caseDeadlineId: CHILD_CASE_DEADLINE_ID,
+        consolidatedCaseDeadlineId: 'TEST_CONSOLIDATED_CASE_DEADLINE_ID',
+      } as any,
+    ]);
+
+    mockCaseEntity = new Case(
+      {
+        ...MOCK_CASE,
+        leadDocketNumber: MOCK_CASE.docketNumber,
+        docketEntries: MOCK_DOCUMENTS[0],
+        automaticBlocked: true,
+        automaticBlockedReason: 'something, something',
+        automaticBlockedDate: 'yesterday',
+      },
+      {
+        authorizedUser: mockDocketClerkUser,
+      },
+    );
+
+    await closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments({
+      applicationContext,
+      caseEntity: mockCaseEntity,
+      eventCode,
+    });
+
+    const getCaseDeadlinesByConsolidatedCaseDeadlineIdsCalls =
+      getCaseDeadlinesByConsolidatedCaseDeadlineIds.mock.calls;
+    expect(getCaseDeadlinesByConsolidatedCaseDeadlineIdsCalls.length).toEqual(
+      0,
+    );
+  });
 });
