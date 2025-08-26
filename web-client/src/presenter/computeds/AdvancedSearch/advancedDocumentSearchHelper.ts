@@ -54,7 +54,6 @@ export const advancedDocumentSearchHelper = (
   }
 
   if (searchResults) {
-    // formatted;
     paginatedResults = paginationHelper(
       searchResults,
       get(state.advancedSearchForm.currentPage),
@@ -110,7 +109,6 @@ export const advancedDocumentSearchHelper = (
   return {
     numberOfResults: searchResults?.length,
     ...paginatedResults,
-    //formattedSearchResults: searchResults,
     formattedSearchResults: paginatedResults.formattedSearchResults,
     documentTypeVerbiage,
     formattedJudges,

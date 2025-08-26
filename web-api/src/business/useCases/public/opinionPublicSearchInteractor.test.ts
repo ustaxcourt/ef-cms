@@ -2,8 +2,8 @@ import {
   DATE_RANGE_SEARCH_OPTIONS,
   MAX_SEARCH_RESULTS,
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+} from '@shared/business/entities/EntityConstants';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { opinionPublicSearchInteractor } from './opinionPublicSearchInteractor';
 
 describe('opinionPublicSearchInteractor', () => {
@@ -41,7 +41,6 @@ describe('opinionPublicSearchInteractor', () => {
       opinionTypes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
       startDate: '01/01/2001',
     } as any);
-
     const searchArgs =
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
         .calls[0][0];
@@ -51,7 +50,7 @@ describe('opinionPublicSearchInteractor', () => {
     expect(searchArgs.omitSealed).toBeUndefined();
   });
 
-  it('returns no more than MAX_SEARCH_RESULTS', async () => {
+  it('should limit results length to MAX_SEARCH_RESULTS', async () => {
     const maxPlusOneResults = new Array(MAX_SEARCH_RESULTS + 1).fill({
       caseCaption: 'Samson Workman, Petitioner',
       docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
@@ -64,14 +63,12 @@ describe('opinionPublicSearchInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .advancedDocumentSearch.mockResolvedValue({ results: maxPlusOneResults });
-
     const results = await opinionPublicSearchInteractor(applicationContext, {
       dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword: 'fish',
       startDate: '01/01/2001',
     } as any);
-
-    expect(results.length).toBe(MAX_SEARCH_RESULTS);
+    expect(results.results.length).toBe(MAX_SEARCH_RESULTS);
   });
 
   it('should return search results based on the supplied opinion keyword', async () => {
@@ -81,7 +78,7 @@ describe('opinionPublicSearchInteractor', () => {
       startDate: '01/01/2001',
     } as any);
 
-    expect(result).toEqual(mockOpinionSearchResult);
+    expect(result.results).toEqual(mockOpinionSearchResult);
   });
 
   it('does NOT filter out opinion results belonging to sealed cases', async () => {
@@ -95,7 +92,7 @@ describe('opinionPublicSearchInteractor', () => {
       startDate: '01/01/2001',
     } as any);
 
-    expect(results.length).toBe(1);
+    expect(results.results.length).toBe(1);
   });
 
   it('should set isOpinionSearch as true', async () => {

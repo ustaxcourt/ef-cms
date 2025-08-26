@@ -1,10 +1,7 @@
-import { DocumentSearch } from '../../../../../shared/src/business/entities/documents/DocumentSearch';
-import {
-  FORMATS,
-  formatNow,
-} from '../../../../../shared/src/business/utilities/DateHandler';
-import { MAX_SEARCH_RESULTS } from '../../../../../shared/src/business/entities/EntityConstants';
-import { PublicDocumentSearchResult } from '../../../../../shared/src/business/entities/documents/PublicDocumentSearchResult';
+import { DocumentSearch } from '@shared/business/entities/documents/DocumentSearch';
+import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
+import { PublicDocumentSearchResult } from '@shared/business/entities/documents/PublicDocumentSearchResult';
+import { MAX_SEARCH_RESULTS } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { omit } from 'lodash';
 
@@ -19,6 +16,8 @@ export const opinionPublicSearchInteractor = async (
     keyword,
     opinionTypes,
     startDate,
+    from = 0,
+    limit = 5000,
   }: {
     caseTitleOrPetitioner: string;
     dateRange: string;
@@ -28,6 +27,8 @@ export const opinionPublicSearchInteractor = async (
     keyword: string;
     opinionTypes: string[];
     startDate: string;
+    from?: number;
+    limit?: number;
   },
 ) => {
   const opinionSearch = new DocumentSearch({
@@ -42,44 +43,26 @@ export const opinionPublicSearchInteractor = async (
 
   const rawSearch = opinionSearch.validate().toRawObject();
 
-  // Fetch results in batches to avoid server errors and safely aggregate up to 10,000
-  const BATCH_SIZE = 1000;
-  let allResults = [];
-  let totalCount = 0;
-  let from = 0;
-
-  do {
-    const { results, totalCount: batchTotal } = await applicationContext
-      .getPersistenceGateway()
-      .advancedDocumentSearch({
-        applicationContext,
-        documentEventCodes: opinionTypes,
-        isOpinionSearch: true,
-        ...rawSearch,
-        from,
-        overrideResultSize: BATCH_SIZE,
-      });
-
-    if (from === 0) totalCount = batchTotal;
-    allResults = allResults.concat(results);
-    from += BATCH_SIZE;
-  } while (
-    allResults.length < totalCount &&
-    allResults.length < MAX_SEARCH_RESULTS
-  );
+  const { results } = await applicationContext
+    .getPersistenceGateway()
+    .advancedDocumentSearch({
+      applicationContext,
+      documentEventCodes: opinionTypes,
+      isOpinionSearch: true,
+      ...rawSearch,
+      from,
+      overrideResultSize: limit,
+    });
 
   const timestamp = formatNow(FORMATS.LOG_TIMESTAMP);
   applicationContext.logger.info('public opinion search', {
     ...omit(rawSearch, 'entityName'),
     timestamp,
-    totalCount,
   });
 
-  const filteredResults = allResults.slice(0, MAX_SEARCH_RESULTS);
-
-  return PublicDocumentSearchResult.validateRawCollection(filteredResults).map(
-    publicDocument => {
-      return omit(publicDocument, 'entityName');
-    },
-  );
+  return {
+    results: PublicDocumentSearchResult.validateRawCollection(results)
+      .map(r => omit(r, 'entityName'))
+      .slice(0, MAX_SEARCH_RESULTS),
+  };
 };
