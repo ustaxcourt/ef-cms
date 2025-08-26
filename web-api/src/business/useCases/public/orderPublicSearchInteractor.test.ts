@@ -82,7 +82,7 @@ describe('orderPublicSearchInteractor', () => {
       startDate: '01/01/2001',
     } as any);
 
-    expect(results.length).toBe(MAX_SEARCH_RESULTS);
+    expect(results.results.length).toBe(MAX_SEARCH_RESULTS);
   });
 
   it('should throw an error when the search results do not validate', async () => {

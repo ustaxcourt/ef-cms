@@ -29,9 +29,11 @@ export const submitOrderAdvancedSearchAction = async ({
     const firstHalf = await applicationContext
       .getUseCases()
       .orderAdvancedSearchInteractor(applicationContext, {
-        ...baseParams,
-        from: 0,
-        limit: 5000,
+        searchParams: {
+          ...baseParams,
+          from: 0,
+          limit: 5000,
+        },
       });
 
     let combinedResults = [...firstHalf.results];
@@ -40,9 +42,11 @@ export const submitOrderAdvancedSearchAction = async ({
       const secondHalf = await applicationContext
         .getUseCases()
         .orderAdvancedSearchInteractor(applicationContext, {
-          ...baseParams,
-          from: 5000,
-          limit: 5000,
+          searchParams: {
+            ...baseParams,
+            from: 5000,
+            limit: 5000,
+          },
         });
 
       combinedResults = [...combinedResults, ...secondHalf.results];

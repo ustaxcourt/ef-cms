@@ -30,9 +30,11 @@ export const submitPublicOrderAdvancedSearchAction = async ({
     const firstHalf = await applicationContext
       .getUseCases()
       .orderPublicSearchInteractor(applicationContext, {
-        ...baseParams,
-        from: 0,
-        limit: 5000,
+        searchParams: {
+          ...baseParams,
+          from: 0,
+          limit: 5000,
+        },
       });
 
     let combinedResults = [...firstHalf.results];

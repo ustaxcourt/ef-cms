@@ -59,7 +59,7 @@ describe('orderAdvancedSearchInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(results.length).toBe(batchSize + 1);
+    expect(results.results.length).toBe(batchSize + 1);
     expect(callCount).toBe(2);
   });
   beforeEach(() => {
@@ -117,7 +117,7 @@ describe('orderAdvancedSearchInteractor', () => {
     expect(applicationContext.logger.info.mock.calls[0][1]).toMatchObject({
       from: 0,
       timestamp: expect.anything(),
-      totalCount: result.length,
+      totalCount: result.results.length,
       userRole: ROLES.petitionsClerk,
     });
   });
@@ -145,7 +145,7 @@ describe('orderAdvancedSearchInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(results.length).toBe(MAX_SEARCH_RESULTS);
+    expect(results.results.length).toBe(MAX_SEARCH_RESULTS);
   });
 
   it('searches for documents that are of type orders', async () => {

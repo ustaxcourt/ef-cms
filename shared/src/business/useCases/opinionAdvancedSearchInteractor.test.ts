@@ -57,8 +57,7 @@ describe('opinionAdvancedSearchInteractor', () => {
       } as any,
       mockPetitionsClerkUser,
     );
-
-    expect(results.length).toBe(batchSize + 1);
+    expect(results.results.length).toBe(batchSize + 1);
     expect(callCount).toBe(2);
   });
   beforeEach(() => {
@@ -152,12 +151,11 @@ describe('opinionAdvancedSearchInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(results.length).toBe(MAX_SEARCH_RESULTS);
+    expect(results.results.length).toBe(MAX_SEARCH_RESULTS);
   });
 
   it('should search for documents that are of type opinions', async () => {
     const keyword = 'keyword';
-
     await opinionAdvancedSearchInteractor(
       applicationContext,
       {
@@ -168,7 +166,6 @@ describe('opinionAdvancedSearchInteractor', () => {
       } as any,
       mockPetitionsClerkUser,
     );
-
     expect(
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
         .calls[0][0],

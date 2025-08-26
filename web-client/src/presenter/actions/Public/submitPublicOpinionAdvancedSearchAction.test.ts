@@ -5,38 +5,36 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 import { submitPublicOpinionAdvancedSearchAction } from './submitPublicOpinionAdvancedSearchAction';
 
 describe('submitPublicOpinionAdvancedSearchAction', () => {
+  beforeEach(() => {
+    applicationContext
+      .getUseCases()
+      .opinionPublicSearchInteractor.mockReturnValue({ results: [] });
+  });
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('gets the public opinion information', async () => {
-    await runAction<{ searchResults: any }, PublicClientState>(
-      submitPublicOpinionAdvancedSearchAction,
-      {
-        modules: {
-          presenter,
-        },
-        state: {
-          advancedSearchForm: {
-            opinionSearch: {
-              keyword: 'a',
-              opinionTypes: {},
-            },
+  it('gets the public opinion information with correct searchParams and filtered opinionTypes', async () => {
+    await runAction(submitPublicOpinionAdvancedSearchAction, {
+      modules: { presenter },
+      state: {
+        advancedSearchForm: {
+          opinionSearch: {
+            keyword: 'a',
+            opinionTypes: { TCOP: true, SOP: false },
           },
         },
       },
-    );
-
+    });
     expect(
       applicationContext.getUseCases().opinionPublicSearchInteractor,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().opinionPublicSearchInteractor.mock
-        .calls[0][1],
+        .calls[0][1].searchParams,
     ).toMatchObject({
-      searchParams: {
-        keyword: 'a',
-      },
+      keyword: 'a',
+      opinionTypes: ['TCOP'],
     });
   });
 
@@ -78,25 +76,12 @@ describe('submitPublicOpinionAdvancedSearchAction', () => {
     applicationContext
       .getUseCases()
       .opinionPublicSearchInteractor.mockImplementation(() => {
-        const e = new Error() as any;
-        e.originalError = {
-          response: {
-            data: {
-              type: 'ip-limiter',
-            },
-          },
-        };
-        e.responseCode = 429;
+        const e = new Error();
+        (e as any).responseCode = 429;
         throw e;
       });
-
-    const { state } = await runAction<
-      { searchResults: any },
-      PublicClientState
-    >(submitPublicOpinionAdvancedSearchAction, {
-      modules: {
-        presenter,
-      },
+    const { state } = await runAction(submitPublicOpinionAdvancedSearchAction, {
+      modules: { presenter },
       state: {
         advancedSearchForm: {
           opinionSearch: {
@@ -107,7 +92,6 @@ describe('submitPublicOpinionAdvancedSearchAction', () => {
         },
       },
     });
-
     expect(state.alertError).toEqual(
       applicationContext.getConstants().ERROR_429,
     );

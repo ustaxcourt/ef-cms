@@ -41,7 +41,6 @@ describe('opinionPublicSearchInteractor', () => {
       opinionTypes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
       startDate: '01/01/2001',
     } as any);
-
     const searchArgs =
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
         .calls[0][0];
@@ -64,14 +63,12 @@ describe('opinionPublicSearchInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .advancedDocumentSearch.mockResolvedValue({ results: maxPlusOneResults });
-
     const results = await opinionPublicSearchInteractor(applicationContext, {
       dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword: 'fish',
       startDate: '01/01/2001',
     } as any);
-
-    expect(results.length).toBe(MAX_SEARCH_RESULTS);
+    expect(results.results.length).toBe(MAX_SEARCH_RESULTS);
   });
 
   it('should return search results based on the supplied opinion keyword', async () => {
@@ -95,7 +92,7 @@ describe('opinionPublicSearchInteractor', () => {
       startDate: '01/01/2001',
     } as any);
 
-    expect(results.length).toBe(1);
+    expect(results.results.length).toBe(1);
   });
 
   it('should set isOpinionSearch as true', async () => {
