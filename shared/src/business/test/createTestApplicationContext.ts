@@ -83,7 +83,6 @@ import { getItem } from '@web-client/persistence/localStorage/getItem';
 import { getSealedDocketEntryTooltip } from '@shared/business/utilities/getSealedDocketEntryTooltip';
 import { getStampBoxCoordinates } from '@shared/business/utilities/getStampBoxCoordinates';
 import { getTextByCount } from '@shared/test/getTextByCount';
-import { getTrialSessionById } from '@web-api/persistence/dynamo/trialSessions/getTrialSessionById';
 import { getUserIdForNote } from '@web-api/business/useCaseHelper/getUserIdForNote';
 import { incrementCounter } from '@web-api/persistence/dynamo/helpers/incrementCounter';
 import { removeCounselFromRemovedPetitioner } from '@web-api/business/useCaseHelper/caseAssociation/removeCounselFromRemovedPetitioner';
@@ -126,7 +125,7 @@ export const createTestApplicationContext = () => {
     getDocument: jest.fn().mockReturnValue({
       promise: Promise.resolve({
         getPage: () => ({
-          cleanup: () => { },
+          cleanup: () => {},
           getViewport: () => ({
             height: 100,
             width: 100,
@@ -369,6 +368,7 @@ export const createTestApplicationContext = () => {
     updateCaseAutomaticBlock: jest
       .fn()
       .mockImplementation(updateCaseAutomaticBlock),
+    associateSwingTrialSessions: jest.fn(),
   });
 
   const getDocumentGeneratorsReturnMock = {
@@ -457,7 +457,6 @@ export const createTestApplicationContext = () => {
     getPractitionerDocuments: jest.fn(),
     getReconciliationReport: jest.fn(),
     getRecord: jest.fn(),
-    getTrialSessionById: jest.fn().mockImplementation(getTrialSessionById),
     getTrialSessionJobStatusForCase: jest.fn(),
     getTrialSessionProcessingStatus: jest.fn(),
     getUserCaseMappingsByDocketNumber: jest.fn().mockReturnValue([]),
@@ -486,7 +485,7 @@ export const createTestApplicationContext = () => {
 
   const mockGetMessagingClient = {
     send: jest.fn().mockReturnValue({
-      promise: () => { },
+      promise: () => {},
     }),
   };
 
@@ -595,7 +594,7 @@ export const createTestApplicationContext = () => {
     getUtilities: mockGetUtilities,
     getWorkerGateway: appContextProxy({
       initialize: jest.fn().mockReturnValue({
-        promise: () => { },
+        promise: () => {},
       }),
     }),
     isFeatureEnabled: jest.fn(),
