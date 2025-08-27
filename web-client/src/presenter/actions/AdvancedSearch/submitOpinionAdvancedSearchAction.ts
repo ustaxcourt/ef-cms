@@ -47,9 +47,11 @@ export const submitOpinionAdvancedSearchAction = async ({
       const secondHalf = await applicationContext
         .getUseCases()
         .opinionAdvancedSearchInteractor(applicationContext, {
-          ...baseParams,
-          from: 5000,
-          limit: 5000,
+          searchParams: {
+            ...baseParams,
+            from: 5000,
+            limit: 5000,
+          },
         });
 
       combinedResults = [...combinedResults, ...secondHalf.results];
