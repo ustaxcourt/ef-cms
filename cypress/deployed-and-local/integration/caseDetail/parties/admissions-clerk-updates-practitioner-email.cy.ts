@@ -36,8 +36,7 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
     cy.get('[data-testid="practitioner-phone-input"]').type(
       faker.phone.number(),
     );
-    cy.get('[data-testid="practitioner-email-input"]').type(practitionerEmail, {
-    });
+    cy.get('[data-testid="practitioner-email-input"]').type(practitionerEmail);
     cy.get('[data-testid="practitioner-confirm-email-input"]').type(
       practitionerEmail,
     );
@@ -53,8 +52,7 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
         cy.get('[data-testid="success-alert"]').contains('Practitioner added.');
         logout();
         cy.visit('/login');
-        cy.get('[data-testid="email-input"]').type(practitionerEmail, {
-        });
+        cy.get('[data-testid="email-input"]').type(practitionerEmail);
         cy.get('[data-testid="password-input"]').type(
           getCypressEnv().defaultAccountPass,
         );
@@ -121,8 +119,7 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
     cy.get('[data-testid="practitioner-phone-input"]').type(
       faker.phone.number(),
     );
-    cy.get('[data-testid="practitioner-email-input"]').type(practitionerEmail, {
-    });
+    cy.get('[data-testid="practitioner-email-input"]').type(practitionerEmail);
     cy.get('[data-testid="practitioner-confirm-email-input"]').type(
       practitionerEmail,
     );
@@ -139,8 +136,7 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
         logout();
 
         cy.visit('/login');
-        cy.get('[data-testid="email-input"]').type(practitionerEmail, {
-        });
+        cy.get('[data-testid="email-input"]').type(practitionerEmail);
         cy.get('[data-testid="password-input"]').type(
           getCypressEnv().defaultAccountPass,
         );

@@ -46,10 +46,8 @@ describe('login', () => {
   */
   it('should give an error alert when the password is incorrect', () => {
     cy.visit('/login');
-    cy.get('[data-testid="email-input"]').type('docketclerk1@example.com', {
-    });
-    cy.get('[data-testid="password-input"]').type('totallyIncorrectPassword', {
-    });
+    cy.get('[data-testid="email-input"]').type('docketclerk1@example.com');
+    cy.get('[data-testid="password-input"]').type('totallyIncorrectPassword');
     cy.get('[data-testid="login-button"]').click();
 
     cy.get('[data-testid="error-alert"]').should(
@@ -70,8 +68,7 @@ describe('login', () => {
     createAndServePaperPetition().then(({ docketNumber }) => {
       loginAsAdmissionsClerk('admissionsclerk1@example.com');
       cy.get('[data-testid="messages-banner"]');
-      cy.get('[data-testid="docket-number-search-input"]').type(docketNumber, {
-      });
+      cy.get('[data-testid="docket-number-search-input"]').type(docketNumber);
       cy.get('[data-testid="search-docket-number"]').click();
       cy.get('[data-testid="tab-case-information"]').click();
       cy.get('[data-testid="tab-parties"]').click();
@@ -113,8 +110,7 @@ describe('login', () => {
 
   it('should log the user in regardless of the casing used in their email address', () => {
     cy.visit('/login');
-    cy.get('[data-testid="email-input"]').type('DoCKetCLERk1@eXaMPLE.Com', {
-    });
+    cy.get('[data-testid="email-input"]').type('DoCKetCLERk1@eXaMPLE.Com');
     cy.get('[data-testid="password-input"]').type(
       getCypressEnv().defaultAccountPass,
     );

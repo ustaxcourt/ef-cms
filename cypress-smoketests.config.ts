@@ -33,8 +33,6 @@ export default defineConfig({
   defaultCommandTimeout: 60000,
   e2e: {
     experimentalStudio: true,
-    // Enable experimental features for better performance
-    experimentalModifyObstructiveThirdPartyCode: true,
     setupNodeEvents(on) {
       on('task', {
         confirmUser({ email }) {
