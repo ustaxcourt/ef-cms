@@ -69,19 +69,30 @@ export const DawsonLibrary = () => {
         </div>
 
         <div>
-          <h1>Alerts:</h1>
-          <Alert title="this displays when you hover" variant="info">
+          <h2>Alerts</h2>
+          <Alert variant="info">
             <AlertHeader>This is a header</AlertHeader>
             <AlertDescription>This is a description</AlertDescription>
           </Alert>
-          <Alert title="this displays when you hover" variant="warning">
+          <Alert variant="warning">
             <AlertDescription>This is a description</AlertDescription>
           </Alert>
-          <Alert title="this displays when you hover" variant="error">
-            <AlertHeader>This is a header</AlertHeader>
-            <AlertDescription>This is a description</AlertDescription>
+          <Alert variant="error">
+            <AlertHeader>
+              This is a really long header This is a really long header This is
+              a really long header This is a really long header This is a really
+              long header This is a really long header This is a really long
+              header
+            </AlertHeader>
+            <AlertDescription>
+              <ul className="list-inside list-disc text-sm">
+                <li>An example with a list inside of the description</li>
+                <li>Another list item here to demonstrate usage</li>
+                <li>Any markup can go inside a description</li>
+              </ul>
+            </AlertDescription>
           </Alert>
-          <Alert title="this displays when you hover" variant="success">
+          <Alert variant="success">
             <AlertHeader>This is a header</AlertHeader>
             <AlertDescription>This is a description</AlertDescription>
           </Alert>

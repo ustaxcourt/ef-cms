@@ -1,8 +1,16 @@
 import * as React from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faInfoCircle,
+  faExclamationTriangle,
+  faExclamationCircle,
+  faCheckCircle,
+} from '@fortawesome/free-solid-svg-icons';
 
 import { cn } from '@web-client/lib/utils';
+import { Button } from '@web-client/dawson-ui/ui/button';
+import { CircleXmark } from './icons';
 
 const alertVariants = cva(
   'tw:relative tw:w-full rounded-none tw:border-solid tw:border-0 tw:border-l-8 tw:p-4',
@@ -22,10 +30,10 @@ const alertVariants = cva(
 );
 
 const iconType = {
-  info: 'info-circle',
-  warning: 'exclamation-triangle',
-  error: 'exclamation-circle',
-  success: 'check-circle',
+  info: faInfoCircle,
+  warning: faExclamationTriangle,
+  error: faExclamationCircle,
+  success: faCheckCircle,
 };
 
 function Alert({
@@ -41,27 +49,34 @@ function Alert({
       {...props}
     >
       <div className="tw:flex">
-        <FontAwesomeIcon className="tw:h-6 tw:w-6" icon={iconType[variant]} />
+        <FontAwesomeIcon
+          className="tw:h-6 tw:w-6"
+          icon={iconType[variant ?? 'info']}
+        />
         <div className="tw:relative tw:ml-4">{props.children}</div>
+        <Button
+          className="tw:fill-primary tw:self-start tw:ml-auto"
+          variant={'primaryTertiary'}
+        >
+          Close
+          <CircleXmark />
+        </Button>
       </div>
     </div>
   );
 }
 
-function AlertHeader({ className, ...props }: React.ComponentProps<'div'>) {
+function AlertHeader({ className, ...props }: React.ComponentProps<'p'>) {
   return (
     <div
       data-slot="alert-title"
-      className={cn('tw:font-bold tw:text-base tw:mb-3', className)}
+      className={cn('tw:font-bold tw:text-base tw:mb-1', className)}
       {...props}
     />
   );
 }
 
-function AlertDescription({
-  className,
-  ...props
-}: React.ComponentProps<'div'>) {
+function AlertDescription({ className, ...props }: React.ComponentProps<'p'>) {
   return (
     <div
       data-slot="alert-description"
