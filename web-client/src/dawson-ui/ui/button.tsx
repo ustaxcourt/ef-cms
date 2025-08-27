@@ -9,6 +9,7 @@ const buttonVariants = cva(
     'tw:cursor-pointer tw:inline-flex tw:items-center tw:justify-center tw:gap-2 tw:whitespace-nowrap tw:rounded-md tw:text-base tw:font-bold tw:transition-all tw:disabled:pointer-events-none tw:disabled:opacity-50 tw:[&_svg]:pointer-events-none tw:[&_svg:not([class*=size-])]:size-4 tw:shrink-0 tw:[&_svg]:shrink-0 tw:border-none',
     'tw:focus-visible:ring-[3px] tw:focus-visible:ring-ring  focus-visible:ring-4 tw:focus-visible:border-ring', // focus-visible
     'tw:aria-invalid:ring-destructive/20 tw:aria-invalid:border-destructive', // aria
+    'tw:w-full tw:xs:w-auto', // small & greater
   ),
   {
     variants: {
