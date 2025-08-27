@@ -168,6 +168,8 @@ import { workQueueHelper } from './computeds/workQueueHelper';
 import { BlockedCaseData } from '@web-api/persistence/postgres/cases/reports/getBlockedCasesForTrialLocation';
 import { RawGenerateSuggestedTermForm } from '@shared/business/entities/trialSessions/GenerateSuggestedTermForm';
 import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
+import { RecentFiling } from '@shared/business/entities/RecentFiling';
+import { recentFilingsHelper } from '@web-client/presenter/computeds/recentFilingsHelper';
 
 const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS } = getConstants();
 
@@ -497,6 +499,9 @@ export const computeds = {
   >,
   recentMessagesHelper: recentMessagesHelper as unknown as ReturnType<
     typeof recentMessagesHelper
+  >,
+  recentFilingsHelper: recentFilingsHelper as unknown as ReturnType<
+    typeof recentFilingsHelper
   >,
   removeFromTrialSessionModalHelper:
     removeFromTrialSessionModalHelper as unknown as ReturnType<
@@ -941,6 +946,7 @@ export const baseState = {
   workQueue: [] as RawWorkItemWithCaseAndDocketEntryInfo[],
   workQueueToDisplay: { box: 'inbox', queue: 'my', section: '' },
   workitemAllCheckbox: false,
+  recentFilings: [] as RecentFiling[],
   recentFilingsTableSort: {
     sortField: 'filedDate',
     sortOrder: 'desc' as 'asc' | 'desc',
