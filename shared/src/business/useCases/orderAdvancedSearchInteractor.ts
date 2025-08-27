@@ -1,20 +1,20 @@
-import { DocumentSearch } from '../../business/entities/documents/DocumentSearch';
-import { FORMATS, formatNow } from '../../business/utilities/DateHandler';
-import { InternalDocumentSearchResult } from '../entities/documents/InternalDocumentSearchResult';
+import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
 import {
   MAX_SEARCH_RESULTS,
   ORDER_EVENT_CODES,
-} from '../entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { User } from '../entities/User';
-import { filterCaseSearchResultsNotAccessibleToUser } from '../utilities/caseFilter';
+import { User } from '@shared/business/entities/User';
 import { omit } from 'lodash';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { DocumentSearch } from '@shared/business/entities/documents/DocumentSearch';
+import { InternalDocumentSearchResult } from '@shared/business/entities/documents/InternalDocumentSearchResult';
+import { filterCaseSearchResultsNotAccessibleToUser } from '@shared/business/utilities/caseFilter';
 
 export const orderAdvancedSearchInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -23,19 +23,21 @@ export const orderAdvancedSearchInteractor = async (
     dateRange,
     docketNumber,
     endDate,
-    from,
     judge,
     keyword,
     startDate,
+    from = 0,
+    limit = 5000,
   }: {
     caseTitleOrPetitioner: string;
     dateRange: string;
     docketNumber: string;
     endDate: string;
-    from: string;
     judge: string;
     keyword: string;
     startDate: string;
+    from?: number;
+    limit?: number;
   },
   authorizedUser: UnknownAuthUser,
 ) => {
@@ -48,7 +50,6 @@ export const orderAdvancedSearchInteractor = async (
     dateRange,
     docketNumber,
     endDate,
-    from,
     judge,
     keyword,
     startDate,
@@ -57,7 +58,7 @@ export const orderAdvancedSearchInteractor = async (
 
   const rawSearch = orderSearch.validate().toRawObject();
 
-  const { results, totalCount } = await applicationContext
+  const { results } = await applicationContext
     .getPersistenceGateway()
     .advancedDocumentSearch({
       applicationContext,
@@ -65,13 +66,15 @@ export const orderAdvancedSearchInteractor = async (
       omitSealed: false,
       ...rawSearch,
       isExternalUser: User.isExternalUser(authorizedUser.role),
+      from,
+      overrideResultSize: limit,
     });
 
   const timestamp = formatNow(FORMATS.LOG_TIMESTAMP);
+
   applicationContext.logger.info('private order search', {
     ...omit(rawSearch, 'entityName'),
     timestamp,
-    totalCount,
     userId: authorizedUser.userId,
     userRole: authorizedUser.role,
   });
@@ -79,7 +82,11 @@ export const orderAdvancedSearchInteractor = async (
   const filteredResults = filterCaseSearchResultsNotAccessibleToUser(
     results,
     authorizedUser,
-  ).slice(0, MAX_SEARCH_RESULTS);
+  );
 
-  return InternalDocumentSearchResult.validateRawCollection(filteredResults);
+  return {
+    results: InternalDocumentSearchResult.validateRawCollection(
+      filteredResults,
+    ).slice(0, MAX_SEARCH_RESULTS),
+  };
 };
