@@ -30,12 +30,14 @@ describe('Petitioner Account Creation', () => {
       cy.get('[data-testid="email-requirement-text"]').should('not.exist');
       cy.get('[data-testid="petitioner-account-creation-email"]').type(
         'NOT VALID EMAIL',
+        { delay: 0 },
       );
       cy.get('[data-testid="petitioner-account-creation-email"]').blur();
       cy.get('[data-testid="email-requirement-text"]').should('be.visible');
       cy.get('[data-testid="petitioner-account-creation-email"]').clear();
       cy.get('[data-testid="petitioner-account-creation-email"]').type(
         TEST_EMAIL,
+        { delay: 0 },
       );
       cy.get('[data-testid="email-requirement-text"]').should('not.exist');
 
@@ -49,6 +51,7 @@ describe('Petitioner Account Creation', () => {
       cy.get('[data-testid="petitioner-account-creation-name"]').clear();
       cy.get('[data-testid="petitioner-account-creation-name"]').type(
         TEST_NAME,
+        { delay: 0 },
       );
       cy.get('[data-testid="name-requirement-text"]').should('not.exist');
 
@@ -59,6 +62,7 @@ describe('Petitioner Account Creation', () => {
       );
       cy.get('[data-testid="petitioner-account-creation-password"]').type(
         VALID_PASSWORD,
+        { delay: 0 },
       );
 
       // confirm
@@ -67,7 +71,7 @@ describe('Petitioner Account Creation', () => {
       );
       cy.get(
         '[data-testid="petitioner-account-creation-confirm-password"]',
-      ).type('JOHN TEST');
+      ).type('JOHN TEST', { delay: 0 });
       cy.get(
         '[data-testid="petitioner-account-creation-confirm-password"]',
       ).blur();
@@ -79,7 +83,7 @@ describe('Petitioner Account Creation', () => {
       ).clear();
       cy.get(
         '[data-testid="petitioner-account-creation-confirm-password"]',
-      ).type(VALID_PASSWORD);
+      ).type(VALID_PASSWORD, { delay: 0 });
       cy.get('[data-testid="confirm-password-requirement-text"]')
         .should('be.visible')
         .and('have.class', 'valid-requirement');
@@ -95,16 +99,19 @@ describe('Petitioner Account Creation', () => {
       cy.visit('/create-account/petitioner');
       cy.get('[data-testid="petitioner-account-creation-email"]').type(
         TEST_EMAIL,
+        { delay: 0 },
       );
       cy.get('[data-testid="petitioner-account-creation-name"]').type(
         TEST_NAME,
+        { delay: 0 },
       );
       cy.get('[data-testid="petitioner-account-creation-password"]').type(
         TEST_PASSWORD,
+        { delay: 0 },
       );
       cy.get(
         '[data-testid="petitioner-account-creation-confirm-password"]',
-      ).type(TEST_PASSWORD);
+      ).type(TEST_PASSWORD, { delay: 0 });
       cy.intercept('POST', '/auth/account/create').as('accountCreationRequest');
 
       // eslint-disable-next-line cypress/unsafe-to-chain-command
@@ -132,9 +139,11 @@ describe('Petitioner Account Creation', () => {
 
       cy.visit('/login');
 
-      cy.get('[data-testid="email-input"]').type(TEST_EMAIL);
+      cy.get('[data-testid="email-input"]').type(TEST_EMAIL, { delay: 0 });
 
-      cy.get('[data-testid="password-input"]').type(TEST_PASSWORD);
+      cy.get('[data-testid="password-input"]').type(TEST_PASSWORD, {
+        delay: 0,
+      });
 
       cy.get('[data-testid="login-button"]').click();
 
@@ -162,7 +171,9 @@ describe('Petitioner Account Creation', () => {
 
       cy.get('[data-testid="email-input"]').type(mixedCaseEmail.toUpperCase());
 
-      cy.get('[data-testid="password-input"]').type(TEST_PASSWORD);
+      cy.get('[data-testid="password-input"]').type(TEST_PASSWORD, {
+        delay: 0,
+      });
 
       cy.get('[data-testid="login-button"]').click();
 

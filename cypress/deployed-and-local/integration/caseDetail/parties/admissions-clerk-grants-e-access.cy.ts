@@ -32,7 +32,9 @@ describe('Admissions Clerk Grants E-Access', () => {
       const petitionerEmail = `${petitionerUsername}@example.com`;
       loginAsAdmissionsClerk('admissionsclerk1@example.com');
       cy.get('[data-testid="messages-banner"]');
-      cy.get('[data-testid="docket-number-search-input"]').type(docketNumber);
+      cy.get('[data-testid="docket-number-search-input"]').type(docketNumber, {
+        delay: 0,
+      });
       cy.get('[data-testid="search-docket-number"]').click();
       cy.get('[data-testid="tab-case-information"]').click();
       cy.get('[data-testid="tab-parties"]').click();
@@ -41,9 +43,11 @@ describe('Admissions Clerk Grants E-Access', () => {
       ).click();
       cy.get('[data-testid="internal-edit-petitioner-email-input"]').type(
         petitionerEmail,
+        { delay: 0 },
       );
       cy.get('[data-testid="internal-confirm-petitioner-email-input"]').type(
         petitionerEmail,
+        { delay: 0 },
       );
       cy.get(
         '[data-testid="submit-edit-petitioner-information-button"]',
@@ -54,11 +58,13 @@ describe('Admissions Clerk Grants E-Access', () => {
       logout();
 
       cy.visit('/login');
-      cy.get('[data-testid="email-input"]').type(petitionerEmail);
-      cy.get('[data-testid="password-input"]').type(password);
+      cy.get('[data-testid="email-input"]').type(petitionerEmail, { delay: 0 });
+      cy.get('[data-testid="password-input"]').type(password, { delay: 0 });
       cy.get('[data-testid="login-button"]').click();
-      cy.get('[data-testid="new-password-input"]').type(password);
-      cy.get('[data-testid="confirm-new-password-input"]').type(password);
+      cy.get('[data-testid="new-password-input"]').type(password, { delay: 0 });
+      cy.get('[data-testid="confirm-new-password-input"]').type(password, {
+        delay: 0,
+      });
       cy.get('[data-testid="change-password-button"]').click();
       cy.get('[data-testid="my-cases-link"]');
       cy.task('waitForNoce', { docketNumber }).then(isNOCECreated => {
@@ -104,7 +110,10 @@ describe('Admissions Clerk Grants E-Access', () => {
         const petitionerEmail = `${petitionerUsername}@example.com`;
         loginAsAdmissionsClerk('admissionsclerk1@example.com');
         cy.get('[data-testid="messages-banner"]');
-        cy.get('[data-testid="docket-number-search-input"]').type(docketNumber);
+        cy.get('[data-testid="docket-number-search-input"]').type(
+          docketNumber,
+          { delay: 0 },
+        );
         cy.get('[data-testid="search-docket-number"]').click();
         cy.get('[data-testid="tab-case-information"]').click();
         cy.get('[data-testid="tab-parties"]').click();
@@ -114,9 +123,11 @@ describe('Admissions Clerk Grants E-Access', () => {
         ).click();
         cy.get('[data-testid="internal-edit-petitioner-email-input"]').type(
           petitionerEmail,
+          { delay: 0 },
         );
         cy.get('[data-testid="internal-confirm-petitioner-email-input"]').type(
           petitionerEmail,
+          { delay: 0 },
         );
         cy.get(
           '[data-testid="submit-edit-petitioner-information-button"]',
@@ -129,11 +140,17 @@ describe('Admissions Clerk Grants E-Access', () => {
         logout();
 
         cy.visit('/login');
-        cy.get('[data-testid="email-input"]').type(petitionerEmail);
-        cy.get('[data-testid="password-input"]').type(password);
+        cy.get('[data-testid="email-input"]').type(petitionerEmail, {
+          delay: 0,
+        });
+        cy.get('[data-testid="password-input"]').type(password, { delay: 0 });
         cy.get('[data-testid="login-button"]').click();
-        cy.get('[data-testid="new-password-input"]').type(password);
-        cy.get('[data-testid="confirm-new-password-input"]').type(password);
+        cy.get('[data-testid="new-password-input"]').type(password, {
+          delay: 0,
+        });
+        cy.get('[data-testid="confirm-new-password-input"]').type(password, {
+          delay: 0,
+        });
         cy.get('[data-testid="change-password-button"]').click();
         cy.get('[data-testid="my-cases-link"]');
         cy.task('waitForNoce', { docketNumber }).then(isNOCECreated => {
@@ -181,25 +198,32 @@ describe('Admissions Clerk Grants E-Access', () => {
     cy.get('[data-testid="search-link"]').click();
     cy.get('[data-testid="practitioner-search-tab"]').click();
     cy.get('[data-testid="add-new-practitioner"]').click();
-    cy.get('[data-testid="first-name-input"]').type('Hyper');
-    cy.get('[data-testid="middle-name-input"]').type('Specific');
-    cy.get('[data-testid="last-name-input"]').type('Name');
-    cy.get('[data-testid="birth-year-input"]').type('1900');
+    cy.get('[data-testid="first-name-input"]').type('Hyper', { delay: 0 });
+    cy.get('[data-testid="middle-name-input"]').type('Specific', { delay: 0 });
+    cy.get('[data-testid="last-name-input"]').type('Name', { delay: 0 });
+    cy.get('[data-testid="birth-year-input"]').type('1900', { delay: 0 });
     cy.get('[data-testid="practitioner-type-Attorney-radio"]').click();
     cy.get('[data-testid="practiceType-Private-radio"]').click();
-    cy.get('[data-testid="contact.address1"]').type('3829 Barington St');
-    cy.get('[data-testid="contact.city"]').type('Chicago');
+    cy.get('[data-testid="contact.address1"]').type('3829 Barington St', {
+      delay: 0,
+    });
+    cy.get('[data-testid="contact.city"]').type('Chicago', { delay: 0 });
     cy.get('[data-testid="contact.state"]').select('IL');
-    cy.get('[data-testid="contact.postalCode"]').type('98456');
-    cy.get('[data-testid="practitioner-phone-input"]').type('5555555555');
-    cy.get('[data-testid="practitioner-email-input"]').type(practitionerEmail);
+    cy.get('[data-testid="contact.postalCode"]').type('98456', { delay: 0 });
+    cy.get('[data-testid="practitioner-phone-input"]').type('5555555555', {
+      delay: 0,
+    });
+    cy.get('[data-testid="practitioner-email-input"]').type(practitionerEmail, {
+      delay: 0,
+    });
     cy.get('[data-testid="practitioner-confirm-email-input"]').type(
       practitionerEmail,
+      { delay: 0 },
     );
     cy.get('[data-testid="practitioner-bar-state-select"]').select('AZ');
     cy.get(
       '.usa-date-picker__wrapper > [data-testid="admissions-date-picker"]',
-    ).type('12/27/1988');
+    ).type('12/27/1988', { delay: 0 });
     cy.intercept('POST', '**/practitioners').as('postPractitioners');
     cy.get('[data-testid="create-practitioner-button"]').click();
     cy.wait('@postPractitioners').then(
@@ -208,7 +232,9 @@ describe('Admissions Clerk Grants E-Access', () => {
         cy.get('[data-testid="success-alert"]').contains('Practitioner added.');
         logout();
         cy.visit('/login');
-        cy.get('[data-testid="email-input"]').type(practitionerEmail);
+        cy.get('[data-testid="email-input"]').type(practitionerEmail, {
+          delay: 0,
+        });
         cy.get('[data-testid="password-input"]').type(
           getCypressEnv().defaultAccountPass,
         );
@@ -226,12 +252,14 @@ describe('Admissions Clerk Grants E-Access', () => {
           cy.get('[data-testid="messages-banner"]');
           cy.get('[data-testid="docket-number-search-input"]').type(
             docketNumber,
+            { delay: 0 },
           );
           cy.get('[data-testid="search-docket-number"]').click();
           cy.get('[data-testid="tab-case-information"]').click();
           cy.get('[data-testid="tab-parties"]').click();
           cy.get('[data-testid="practitioner-search-input"]').type(
             practitionerBarNumber,
+            { delay: 0 },
           );
           cy.get('[data-testid="practitioner-search-submit-button"]').click();
           cy.get('[data-testid="practitioner-representing-0"]').click();
@@ -272,7 +300,9 @@ describe('Admissions Clerk Grants E-Access', () => {
 
       loginAsAdmissionsClerk('admissionsclerk1@example.com');
       cy.get('[data-testid="messages-banner"]');
-      cy.get('[data-testid="docket-number-search-input"]').type(docketNumber);
+      cy.get('[data-testid="docket-number-search-input"]').type(docketNumber, {
+        delay: 0,
+      });
       cy.get('[data-testid="search-docket-number"]').click();
       cy.get('[data-testid="tab-case-information"]').click();
       cy.get('[data-testid="tab-parties"]').click();
@@ -281,9 +311,11 @@ describe('Admissions Clerk Grants E-Access', () => {
       ).click();
       cy.get('[data-testid="internal-edit-petitioner-email-input"]').type(
         petitionerEmail,
+        { delay: 0 },
       );
       cy.get('[data-testid="internal-confirm-petitioner-email-input"]').type(
         petitionerEmail,
+        { delay: 0 },
       );
       cy.get(
         '[data-testid="submit-edit-petitioner-information-button"]',

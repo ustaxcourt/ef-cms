@@ -24,7 +24,7 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
     cy.get('[data-testid="add-new-practitioner"]').click();
     cy.get('[data-testid="first-name-input"]').type(faker.person.firstName());
     cy.get('[data-testid="last-name-input"]').type(faker.person.lastName());
-    cy.get('[data-testid="birth-year-input"]').type('1989');
+    cy.get('[data-testid="birth-year-input"]').type('1989', { delay: 0 });
     cy.get('[data-testid="practitioner-type-Attorney-radio"]').click();
     cy.get('[data-testid="practiceType-Private-radio"]').click();
     cy.get('[data-testid="contact.address1"]').type(
@@ -36,14 +36,17 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
     cy.get('[data-testid="practitioner-phone-input"]').type(
       faker.phone.number(),
     );
-    cy.get('[data-testid="practitioner-email-input"]').type(practitionerEmail);
+    cy.get('[data-testid="practitioner-email-input"]').type(practitionerEmail, {
+      delay: 0,
+    });
     cy.get('[data-testid="practitioner-confirm-email-input"]').type(
       practitionerEmail,
+      { delay: 0 },
     );
     cy.get('[data-testid="practitioner-bar-state-select"]').select('IL');
     cy.get(
       '.usa-date-picker__wrapper > [data-testid="admissions-date-picker"]',
-    ).type('2/21/2008');
+    ).type('2/21/2008', { delay: 0 });
     cy.intercept('POST', '**/practitioners').as('postPractitioners');
     cy.get('[data-testid="create-practitioner-button"]').click();
     cy.wait('@postPractitioners').then(
@@ -52,7 +55,9 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
         cy.get('[data-testid="success-alert"]').contains('Practitioner added.');
         logout();
         cy.visit('/login');
-        cy.get('[data-testid="email-input"]').type(practitionerEmail);
+        cy.get('[data-testid="email-input"]').type(practitionerEmail, {
+          delay: 0,
+        });
         cy.get('[data-testid="password-input"]').type(
           getCypressEnv().defaultAccountPass,
         );
@@ -72,6 +77,7 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
         cy.get('[data-testid="practitioner-search-tab"]').click();
         cy.get('[data-testid="bar-number-search-input"]').type(
           practitionerBarNumber,
+          { delay: 0 },
         );
         cy.get(
           '[data-testid="practitioner-search-by-bar-number-button"]',
@@ -79,9 +85,11 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
         cy.get('[data-testid="edit-practitioner-button"]').click();
         cy.get('[data-testid="practitioner-email-input"]').type(
           practitionerEmail,
+          { delay: 0 },
         );
         cy.get('[data-testid="practitioner-confirm-email-input"]').type(
           practitionerEmail,
+          { delay: 0 },
         );
         cy.get('[data-testid="save-practitioner-updates-button"]').click();
         cy.get('[data-testid="error-alert"]').contains(
@@ -107,7 +115,7 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
     cy.get('[data-testid="add-new-practitioner"]').click();
     cy.get('[data-testid="first-name-input"]').type(faker.person.firstName());
     cy.get('[data-testid="last-name-input"]').type(faker.person.lastName());
-    cy.get('[data-testid="birth-year-input"]').type('1989');
+    cy.get('[data-testid="birth-year-input"]').type('1989', { delay: 0 });
     cy.get('[data-testid="practitioner-type-Attorney-radio"]').click();
     cy.get('[data-testid="practiceType-Private-radio"]').click();
     cy.get('[data-testid="contact.address1"]').type(
@@ -119,14 +127,17 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
     cy.get('[data-testid="practitioner-phone-input"]').type(
       faker.phone.number(),
     );
-    cy.get('[data-testid="practitioner-email-input"]').type(practitionerEmail);
+    cy.get('[data-testid="practitioner-email-input"]').type(practitionerEmail, {
+      delay: 0,
+    });
     cy.get('[data-testid="practitioner-confirm-email-input"]').type(
       practitionerEmail,
+      { delay: 0 },
     );
     cy.get('[data-testid="practitioner-bar-state-select"]').select('IL');
     cy.get(
       '.usa-date-picker__wrapper > [data-testid="admissions-date-picker"]',
-    ).type('2/21/2008');
+    ).type('2/21/2008', { delay: 0 });
     cy.intercept('POST', '**/practitioners').as('postPractitioners');
     cy.get('[data-testid="create-practitioner-button"]').click();
     cy.wait('@postPractitioners').then(
@@ -136,7 +147,9 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
         logout();
 
         cy.visit('/login');
-        cy.get('[data-testid="email-input"]').type(practitionerEmail);
+        cy.get('[data-testid="email-input"]').type(practitionerEmail, {
+          delay: 0,
+        });
         cy.get('[data-testid="password-input"]').type(
           getCypressEnv().defaultAccountPass,
         );
@@ -155,12 +168,14 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
           cy.get('[data-testid="messages-banner"]');
           cy.get('[data-testid="docket-number-search-input"]').type(
             docketNumber,
+            { delay: 0 },
           );
           cy.get('[data-testid="search-docket-number"]').click();
           cy.get('[data-testid="tab-case-information"]').click();
           cy.get('[data-testid="tab-parties"]').click();
           cy.get('[data-testid="practitioner-search-input"]').type(
             practitionerBarNumber,
+            { delay: 0 },
           );
           cy.get('[data-testid="practitioner-search-submit-button"]').click();
           cy.get('[data-testid="practitioner-representing-0"]')
@@ -185,7 +200,6 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
           );
           logout();
 
-
           // new practitioner, can login, is associated to a case
           const updatedPractitionerUserName = `cypress_test_account+${v4()}`;
           const updatedPractitionerEmail = `${updatedPractitionerUserName}@example.com`;
@@ -194,6 +208,7 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
           cy.get('[data-testid="practitioner-search-tab"]').click();
           cy.get('[data-testid="bar-number-search-input"]').type(
             practitionerBarNumber,
+            { delay: 0 },
           );
           cy.get(
             '[data-testid="practitioner-search-by-bar-number-button"]',
@@ -203,9 +218,11 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
             .click();
           cy.get('[data-testid="practitioner-email-input"]').type(
             updatedPractitionerEmail,
+            { delay: 0 },
           );
           cy.get('[data-testid="practitioner-confirm-email-input"]').type(
             updatedPractitionerEmail,
+            { delay: 0 },
           );
           cy.get('[data-testid="save-practitioner-updates-button"]').click();
           cy.get('[data-testid="modal-header"]').contains(

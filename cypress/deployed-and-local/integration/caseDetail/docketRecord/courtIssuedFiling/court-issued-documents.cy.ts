@@ -10,18 +10,18 @@ describe('Court Issued Documents', { scrollBehavior: 'center' }, () => {
     createAndServePaperPetition().then(({ docketNumber }) => {
       loginAsDocketClerk1();
       cy.get('[data-testid="docket-number-search-input"]').clear();
-      cy.get('[data-testid="docket-number-search-input"]').type(docketNumber);
+      cy.get('[data-testid="docket-number-search-input"]').type(docketNumber, { delay: 0 });
       cy.get('[data-testid="search-docket-number"]').click();
 
       cy.get('[data-testid="case-detail-menu-button"]').click();
       cy.get('[data-testid="menu-button-create-order"]').click();
       cy.get('[data-testid="event-code-select"]').select('O');
       cy.get('[data-testid="create-order-document-title"]').clear();
-      cy.get('[data-testid="create-order-document-title"]').type('Order');
+      cy.get('[data-testid="create-order-document-title"]').type('Order', { delay: 0 });
       cy.get('[data-testid="modal-button-confirm"]').click();
       cy.get('[data-testid="create-order-page-title"]');
       cy.get('.ql-editor').click();
-      cy.get('.ql-editor').type('this is a test order');
+      cy.get('.ql-editor').type('this is a test order', { delay: 0 });
       cy.get('[data-testid="save-order-button"]').click();
       cy.get('[data-testid="sign-pdf-canvas"]').click();
       cy.get('[data-testid="save-signature-button"]').click();

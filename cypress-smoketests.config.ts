@@ -33,6 +33,8 @@ export default defineConfig({
   defaultCommandTimeout: 60000,
   e2e: {
     experimentalStudio: true,
+    // Enable experimental features for better performance
+    experimentalModifyObstructiveThirdPartyCode: true,
     setupNodeEvents(on) {
       on('task', {
         confirmUser({ email }) {
@@ -142,9 +144,9 @@ export default defineConfig({
   screenshotOnRunFailure: false,
   screenshotsFolder: 'cypress/deployed-and-local/screenshots',
   video: true,
-  videoCompression: 10,
+  videoCompression: 32, // Increased from 10 for faster video processing
   videosFolder: 'cypress/deployed-and-local/videos',
-  viewportHeight: 900,
-  viewportWidth: 1200,
+  viewportHeight: 768, // Reduced from 900 for faster rendering
+  viewportWidth: 1024, // Reduced from 1200 for faster rendering
   watchForFileChanges: false,
 });

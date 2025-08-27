@@ -189,7 +189,7 @@ describe('Document QC Complete', () => {
 
 function petitionerFilesADocument(docketNumber: string) {
   loginAsPetitioner();
-  cy.get('[data-testid="docket-search-field"]').type(docketNumber);
+  cy.get('[data-testid="docket-search-field"]').type(docketNumber, { delay: 0 });
   cy.get('[data-testid="search-by-docket-number"]').click();
   cy.get('[data-testid="button-file-document"]').click();
   cy.get('[data-testid="ready-to-file"]').click();
@@ -255,8 +255,8 @@ function sendMessages(userId: string, subject: string, section: string) {
   cy.get('[data-testid="menu-button-add-new-message"]').click();
   cy.get('[data-testid="message-to-section"').select(section);
   cy.get('[data-testid="message-to-user-id"]').select(userId);
-  cy.get('[data-testid="message-subject"]').type(subject);
-  cy.get('[data-testid="message-body"]').type('Message');
+  cy.get('[data-testid="message-subject"]').type(subject, { delay: 0 });
+  cy.get('[data-testid="message-body"]').type('Message', { delay: 0 });
   cy.get('[data-testid="modal-confirm"]').click();
   cy.get('[data-testid="loading-overlay"]').should('not.exist');
   cy.get('[data-testid="success-alert"]').should('exist');

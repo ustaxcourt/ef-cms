@@ -23,7 +23,7 @@ describe('Advanced Search', () => {
     createAndServePaperPetition().then(({ docketNumber, name }) => {
       /** Act */
       cy.get('[data-testid="search-link"]').click();
-      cy.get('[data-testid="petitioner-name"]').type(name);
+      cy.get('[data-testid="petitioner-name"]').type(name, { delay: 0 });
       selectTypeaheadInput('case-type-selection', CASE_TYPES_MAP.cdp);
 
       /** Assert */
@@ -43,7 +43,7 @@ describe('Advanced Search', () => {
       /** Act */
       cy.get('[data-testid="search-link"]').click();
       cy.get('[data-testid="practitioner-search-tab"]').click();
-      cy.get('[data-testid="practitioner-name-input"]').type(firstName);
+      cy.get('[data-testid="practitioner-name-input"]').type(firstName, { delay: 0 });
 
       /** Assert */
       retry(() => {
@@ -67,7 +67,7 @@ describe('Advanced Search', () => {
     /** Act */
     cy.get('[data-testid="search-link"]').click();
     cy.get('[data-testid="practitioner-search-tab"]').click();
-    cy.get('[data-testid="practitioner-name-input"]').type('doesNotExist');
+    cy.get('[data-testid="practitioner-name-input"]').type('doesNotExist', { delay: 0 });
 
     /** Assert */
     retry(() => {
@@ -85,7 +85,7 @@ describe('Advanced Search', () => {
       /** Act */
       cy.get('[data-testid="search-link"]').click();
       cy.get('[data-testid="practitioner-search-tab"]').click();
-      cy.get('[data-testid="bar-number-search-input"]').type(barNumber);
+      cy.get('[data-testid="bar-number-search-input"]').type(barNumber, { delay: 0 });
       cy.get(
         '[data-testid="practitioner-search-by-bar-number-button"]',
       ).click();
@@ -109,7 +109,7 @@ describe('Advanced Search', () => {
       const opinionTitle = `${faker.word.adjective()} ${faker.word.noun()}`;
       cy.get('[data-testid="case-detail-menu-button"]').click();
       cy.get('[data-testid="menu-button-upload-pdf"]').click();
-      cy.get('[data-testid="upload-description"]').type(opinionTitle);
+      cy.get('[data-testid="upload-description"]').type(opinionTitle, { delay: 0 });
       attachFile({
         filePath: '../../helpers/file/sample.pdf',
         selector: '[data-testid="primary-document-file"]',
@@ -129,7 +129,7 @@ describe('Advanced Search', () => {
       /** Act */
       cy.get('[data-testid="search-link"]').click();
       cy.get('[data-testid="opinion-search-tab"]').click();
-      cy.get('[data-testid="keyword-search-input"]').type(opinionTitle);
+      cy.get('[data-testid="keyword-search-input"]').type(opinionTitle, { delay: 0 });
       // need to wait for elasticsearch potentially
       retry(() => {
         cy.get('[data-testid="advanced-search-button"]').click();
