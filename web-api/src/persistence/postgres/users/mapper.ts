@@ -36,8 +36,8 @@ function pickUserFields(
     pendingEmailVerificationTokenTimestamp:
       user.pendingEmailVerificationTokenTimestamp
         ? calculateDate({
-            dateString: user.pendingEmailVerificationTokenTimestamp,
-          })
+          dateString: user.pendingEmailVerificationTokenTimestamp,
+        })
         : null,
     role: user.role,
     section: user.section,
@@ -46,8 +46,8 @@ function pickUserFields(
     additionalPhone: rawPractitioner.additionalPhone ?? null,
     admissionsDate: rawPractitioner.admissionsDate
       ? calculateDate({
-          dateString: rawPractitioner.admissionsDate,
-        })
+        dateString: rawPractitioner.admissionsDate,
+      })
       : null,
     admissionsStatus: rawPractitioner.admissionsStatus ?? null,
     barNumber: rawPractitioner.barNumber || null,
@@ -66,7 +66,7 @@ function pickUserFields(
   };
 }
 
-export function rawUser(user: UserKysely) {
+export function fromKyselyUser(user: UserKysely) {
   return transformNullToUndefined({
     ...user,
     admissionsDate: user.admissionsDate

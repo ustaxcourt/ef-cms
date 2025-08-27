@@ -8,12 +8,8 @@ import { getUserGateway } from '@web-api/getUserGateway';
 import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
 import { applicationContext } from '@web-api/applicationContext';
 
-export const upsertPractitioner = async ({
-  user,
-}: {
-  user: Omit<RawUser, 'userId'>;
-}) => {
-  let userId = getUniqueId();
+export const upsertPractitioner = async ({ user }: { user: RawUser }) => {
+  let userId = user.userId || getUniqueId();
   const practitionerRoleTypes: Role[] = [
     ROLES.privatePractitioner,
     ROLES.irsPractitioner,

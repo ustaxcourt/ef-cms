@@ -11,6 +11,7 @@ import { getWorkItemById } from '@web-api/persistence/postgres/workitems/getWork
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getDocketEntriesByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumberAndDocketEntryId';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { getDocketEntriesByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumberAndDocketEntryId';
 
 /**
  * getWorkItem
@@ -83,7 +84,7 @@ export const assignWorkItemsInteractor = async (
 
   if (!docketEntry) {
     throw new NotFoundError(
-      `Docket entry associated with work ${workItemId} was not found.`,
+      `Docket entry associated with work item ${workItemId} was not found.`,
     );
   }
 

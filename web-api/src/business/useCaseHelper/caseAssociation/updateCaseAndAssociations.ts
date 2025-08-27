@@ -30,10 +30,10 @@ import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 import { removeCaseFromHearing } from '@web-api/persistence/dynamo/trialSessions/removeCaseFromHearing';
-import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
 import { associateUsersWithCases } from '@web-api/persistence/postgres/cases/userOnCase/associateUsersWithCases';
 import { disassociateUsersFromCases } from '@web-api/persistence/postgres/cases/userOnCase/disassociateUsersFromCases';
 import { Role, ROLES } from '@shared/business/entities/EntityConstants';
+import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
 
 // Because we used to rely on Dynamo, we needed to manually maintain relations in app code.
 // In the future, it would be good to avoid doing so by leveraging SQL more effectively.
@@ -50,8 +50,8 @@ export const updateCaseAndAssociations = async ({
   const newCaseEntity: Case = caseToUpdate.validate
     ? caseToUpdate
     : new Case(caseToUpdate, {
-        authorizedUser,
-      });
+      authorizedUser,
+    });
 
   const oldCaseEntity = await getCaseByDocketNumber({
     docketNumber: caseToUpdate.docketNumber,
@@ -108,9 +108,9 @@ export const updateCaseAndAssociations = async ({
     }),
     includeCorrespondence
       ? getCorrespondencesToUpdate({
-          caseToUpdate: validNewRawCaseEntity,
-          oldCase: validRawOldCaseEntity,
-        })
+        caseToUpdate: validNewRawCaseEntity,
+        oldCase: validRawOldCaseEntity,
+      })
       : [],
   ]);
 
@@ -155,7 +155,6 @@ const getDocketEntriesToUpdate = ({
   oldCase: RawCase;
 }): RawDocketEntry[] => {
   const fieldsToIgnore = ['workItemId', 'qcViewed', 'qcComplete']; // These are bits of work-item data irrelevant to docket entry persistence
-  // We are not comparing work item changes as we do not save the work item on the docket entry in persistence
   const { added: addedDocketEntries, updated: updatedDocketEntries } = diff(
     oldCase.docketEntries.map(d => omit(d, fieldsToIgnore)),
     caseToUpdate.docketEntries.map(d => omit(d, fieldsToIgnore)),

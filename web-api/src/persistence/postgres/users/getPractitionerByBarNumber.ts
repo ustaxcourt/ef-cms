@@ -1,6 +1,6 @@
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { getDbReader } from '@web-api/database';
-import { rawUser } from './mapper';
+import { fromKyselyUser } from './mapper';
 
 export const getPractitionerByBarNumber = async ({
   barNumber,
@@ -21,5 +21,5 @@ export const getPractitionerByBarNumber = async ({
     return undefined;
   }
 
-  return rawUser(user) as Omit<RawPractitioner, 'serviceIndicator'>;
+  return fromKyselyUser(user) as Omit<RawPractitioner, 'serviceIndicator'>;
 };

@@ -23,9 +23,8 @@ import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/us
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 import { getDocketEntriesByDocketNumberAndDocketEntryId as getDocketEntriesByDocketNumberAndDocketEntryIdMock } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumberAndDocketEntryId';
 
-const getUserById = jest.mocked(getUserByIdMock);
-
 describe('assignWorkItemsInteractor', () => {
+  const getUserById = jest.mocked(getUserByIdMock);
   const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
   const getWorkItemById = getWorkItemByIdMock as jest.Mock;
   const getDocketEntriesByDocketNumberAndDocketEntryId = jest.mocked(
@@ -55,7 +54,9 @@ describe('assignWorkItemsInteractor', () => {
 
     getWorkItemById.mockResolvedValue(new WorkItem(mockWorkItem));
     getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([
-      { documentTitle: 'Something' },
+      {
+        documentTitle: 'Some title',
+      },
     ] as RawDocketEntry[]);
   });
 
@@ -102,10 +103,6 @@ describe('assignWorkItemsInteractor', () => {
   });
 
   it('should assign work item to current docket clerk user when given work item', async () => {
-    getUserById.mockResolvedValue({
-      ...mockDocketClerkUser,
-      section: DOCKET_SECTION,
-    } as DbUser);
     await assignWorkItemsInteractor(
       applicationContext,
       {

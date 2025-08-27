@@ -3,7 +3,7 @@ import {
   AccountStatus,
   ROLES,
 } from '@shared/business/entities/EntityConstants';
-import { DbUser, rawUser } from '@web-api/persistence/postgres/users/mapper';
+import { DbUser, fromKyselyUser } from '@web-api/persistence/postgres/users/mapper';
 
 export const getUsersInSections = async ({
   sections,
@@ -28,5 +28,5 @@ export const getUsersInSections = async ({
     return query.selectAll('u').execute();
   });
 
-  return users.map(user => rawUser(user));
+  return users.map(user => fromKyselyUser(user));
 };

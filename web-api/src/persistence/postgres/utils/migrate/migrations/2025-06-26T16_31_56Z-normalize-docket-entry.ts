@@ -14,7 +14,7 @@ export async function up(db: Kysely<any>): Promise<void> {
   await db
     .updateTable('dwWorkItem')
     .set({
-      docketEntryId: sql<string>`docket_entry->>'docket_entry_id'`,
+      docketEntryId: sql<string>`docket_entry->>'docketEntryId'`,
     })
     .execute();
   await db.schema

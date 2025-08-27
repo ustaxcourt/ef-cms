@@ -12,15 +12,12 @@ import { createTrialSession } from 'cypress/helpers/trialSession/create-trial-se
 import { scheduleTrialSession } from 'cypress/helpers/trialSession/schedule-trial-session';
 
 describe('user opens a minute sheet', () => {
-  let ts: string;
-  let dn: string;
   before(() => {
     loginAsPetitionsClerk1();
-
     createTrialSession().then(({ trialSessionId }) => {
-      ts = trialSessionId;
+      Cypress.env('trialSessionId', trialSessionId);
       createAndServePaperPetition().then(({ docketNumber }) => {
-        dn = docketNumber;
+        Cypress.env('docketNumber', docketNumber);
         loginAsDocketClerk1();
         goToCase(docketNumber);
         updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
@@ -29,14 +26,18 @@ describe('user opens a minute sheet', () => {
       });
     });
   });
+
   beforeEach(() => {
     loginAsColvinChambers();
     cy.get('[data-testid="trial-session-link"]').click();
-    cy.get(`[data-testid="trial-location-link-${ts}"]`).click();
-    cy.get(`[data-testid="minute-sheet-button-${dn}"]`)
+    cy.get(
+      `[data-testid="trial-location-link-${Cypress.env('trialSessionId')}"]`,
+    ).click();
+    cy.get(`[data-testid="minute-sheet-button-${Cypress.env('docketNumber')}"]`)
       .invoke('removeAttr', 'target')
       .click();
   });
+
   it('should preview the minute sheet', () => {
     // opens expected url in new tab
     cy.window().then(win => {
@@ -54,22 +55,28 @@ describe('user opens a minute sheet', () => {
 
     cy.get('[data-testid="preview-pdf-button-top"]').click();
   });
+
   it('should save minute sheet to drafts', () => {
     cy.get('[data-testid="save-to-drafts-button-top"]').click();
     cy.get('[data-testid="success-alert"]').should(
       'contain',
       'Minutes PDF saved to case Drafts.',
     );
-    goToCase(dn);
+    goToCase(Cypress.env('docketNumber'));
     cy.get('[data-testid="tab-drafts"]').click();
     cy.get('button:contains(Minutes)').last().should('exist');
   });
+
   it('should redirect back to trial session if back to trial session button is clicked', () => {
     cy.get('[data-testid="back-to-trial-session-btn"]')
       .invoke('removeAttr', 'target')
       .click();
-    cy.url().should('include', `/trial-session-detail/${ts}`);
+    cy.url().should(
+      'include',
+      `/trial-session-detail/${Cypress.env('trialSessionId')}`,
+    );
   });
+
   it('should add exhibit under the exhibit button clicked', () => {
     // remove all exhibits that currently exist
     cy.get('[data-testid^="remove-exhibit-button-"]').each($el => {

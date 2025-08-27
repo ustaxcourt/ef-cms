@@ -36,7 +36,7 @@ const { userId, judgeTitle } = parseArgsAndEnvVars(scriptConfig) as {
   judgeTitle: JudgeTitle;
 };
 
-if (JUDGE_TITLES.includes(judgeTitle)) {
+if (!JUDGE_TITLES.includes(judgeTitle)) {
   console.error(`Judge title must be valid`);
   process.exit(1);
 }

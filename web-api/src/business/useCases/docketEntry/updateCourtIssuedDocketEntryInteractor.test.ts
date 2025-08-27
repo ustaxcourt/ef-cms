@@ -34,10 +34,10 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
 
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
+  const getUserById = jest.mocked(getUserByIdMock);
   const getWorkItemByDocketNumberAndDocketEntryId = jest.mocked(
     getWorkItemByDocketNumberAndDocketEntryIdMock,
   );
-  const getUserById = jest.mocked(getUserByIdMock);
   const tryGetLocks = jest.mocked(tryGetLocksMock);
 
   beforeAll(() => {
@@ -65,6 +65,9 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
     } as DbUser);
 
     getCaseByDocketNumber.mockResolvedValue(caseRecord);
+  });
+
+  beforeEach(() => {
     getWorkItemByDocketNumberAndDocketEntryId.mockResolvedValue(
       new WorkItem({
         assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',

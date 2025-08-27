@@ -208,21 +208,15 @@ export const getConsolidatedDocketNumbers = (aCase: RawCase): string => {
     return aCase.docketNumberWithSuffix;
   }
   return aCase.consolidatedCases
-    .map(consolidatedCase => consolidatedCase.docketNumberWithSuffix)
     .sort((a, b) => {
-      if (aCase.docketNumberWithSuffix === a) return Number.MIN_SAFE_INTEGER;
-      if (aCase.docketNumberWithSuffix === b) return Number.MAX_SAFE_INTEGER;
-
-      const parsedA = removeTrailingLetters(a);
-      const parsedB = removeTrailingLetters(b);
-
-      return Case.docketNumberSort(parsedA, parsedB);
+      if (aCase.docketNumberWithSuffix === a.docketNumberWithSuffix)
+        return Number.MIN_SAFE_INTEGER;
+      if (aCase.docketNumberWithSuffix === b.docketNumberWithSuffix)
+        return Number.MAX_SAFE_INTEGER;
+      return Case.docketNumberSort(a.docketNumber, b.docketNumber);
     })
+    .map(consolidatedCase => consolidatedCase.docketNumberWithSuffix)
     .join(', ');
-};
-
-const removeTrailingLetters = str => {
-  return str.replace(/^(\d+-\d+)[a-zA-Z]*$/, '$1');
 };
 
 export const formatWitnesses = (

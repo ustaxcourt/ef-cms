@@ -186,15 +186,15 @@ function generateFreeText(documentMetadata: {
   if (eventCode === 'OJR') {
     return [
       orderType === 'statusReport' &&
-        `. Parties by ${formattedDueDate} shall file a status report.`,
+      `. Parties by ${formattedDueDate} shall file a status report.`,
       orderType === 'statusReportStipulatedDecision' &&
-        `. Parties by ${formattedDueDate} shall file a status report or proposed stipulated decision.`,
+      `. Parties by ${formattedDueDate} shall file a status report or proposed stipulated decision.`,
       orderType !== 'statusReportStipulatedDecision' &&
-        orderType !== 'statusReport' &&
-        strickenFromTrialSessions &&
-        '.',
+      orderType !== 'statusReport' &&
       strickenFromTrialSessions &&
-        'Case is stricken from the current trial session.',
+      '.',
+      strickenFromTrialSessions &&
+      'Case is stricken from the current trial session.',
     ]
       .filter(Boolean)
       .join(' ');
@@ -207,13 +207,13 @@ function generateFreeText(documentMetadata: {
       return [
         'Order',
         orderType === 'statusReport' &&
-          `parties by ${formattedDueDate} shall file a status report.`,
+        `parties by ${formattedDueDate} shall file a status report.`,
         orderType === 'statusReportStipulatedDecision' &&
-          `parties by ${formattedDueDate} shall file a status report or proposed stipulated decision.`,
+        `parties by ${formattedDueDate} shall file a status report or proposed stipulated decision.`,
         strickenFromTrialSessions &&
-          'Case is stricken from the current trial session.',
+        'Case is stricken from the current trial session.',
         jurisdiction === 'restoredToGeneralDocket' &&
-          'Case is no longer jurisdiction retained and is restored to the general docket.',
+        'Case is no longer jurisdiction retained and is restored to the general docket.',
       ]
         .filter(Boolean)
         .join(' ');

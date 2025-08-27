@@ -13,7 +13,7 @@ import { fromKyselyDocketEntry } from '@web-api/persistence/postgres/docketEntri
 import { DocketEntryKysely } from '@web-api/persistence/postgres/docketEntries/schema';
 import { difference, isEmpty, sortBy } from 'lodash';
 import { UserKysely } from '../users/schema';
-import { rawUser } from '../users/mapper';
+import { fromKyselyUser } from '../users/mapper';
 import { UserOnCaseKysely } from '@web-api/persistence/postgres/cases/userOnCase/schema';
 
 export const ALL_OMITTABLE_CASE_FIELDS = [
@@ -221,8 +221,8 @@ function convertDbCaseToRawCase(
     archivedCorrespondences: dbCase.archivedCorrespondences?.map(cc =>
       fromKyselyCaseCorrespondence(cc),
     ),
-    irsPractitioners: dbCase.irsPractitioners.map(ip => rawUser(ip)),
-    privatePractitioners: dbCase.privatePractitioners.map(pp => rawUser(pp)),
+    irsPractitioners: dbCase.irsPractitioners.map(ip => fromKyselyUser(ip)),
+    privatePractitioners: dbCase.privatePractitioners.map(pp => fromKyselyUser(pp)),
     docketEntries: dbCase.docketEntries.map(d => fromKyselyDocketEntry(d)),
     archivedDocketEntries: dbCase.archivedDocketEntries.map(aD =>
       fromKyselyDocketEntry(aD),
