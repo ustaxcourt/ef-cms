@@ -1,3 +1,19 @@
+/**
+ * Test suite for the `docketRecord` PDF document generator.
+ *
+ * This test verifies that the `docketRecord` function generates a printable Docket Record PDF
+ * with the provided case details, practitioners, petitioners, and docket entries.
+ * It uses `generateAndVerifyPdfDiff` to ensure the generated PDF matches the expected output.
+ *
+ * The test data includes:
+ * - Case caption and title
+ * - Docket number and suffix
+ * - Petitioner and practitioner details
+ * - A sample docket entry with formatted dates and served status
+ *
+ * @see docketRecord
+ * @see generateAndVerifyPdfDiff
+ */
 import { PARTIES_CODES, PARTY_TYPES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { docketRecord } from './docketRecord';
@@ -74,7 +90,7 @@ describe('docketRecord', () => {
               description: 'Test Description',
               eventCode: 'T',
               filedBy: 'Test Filer',
-              filingsAndProceedings: 'Test Filings And Proceedings',
+              descriptionDisplay: 'Test Filings And Proceedings',
               index: 1,
               isNotServedDocument: false,
               isStatusServed: true,

@@ -19,7 +19,6 @@ export const advancedDocumentSearchHelper = (
   const { role } = get(state.user);
   const advancedSearchTab = get(state.advancedSearchTab);
   const searchResults = get(state.searchResults[advancedSearchTab]);
-  // use per-tab sort state so order/opinion do not share
   const sortStateKey =
     advancedSearchTab ===
     applicationContext.getConstants().ADVANCED_SEARCH_TABS.OPINION

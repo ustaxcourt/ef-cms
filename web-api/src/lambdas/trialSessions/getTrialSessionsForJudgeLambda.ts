@@ -12,9 +12,8 @@ export const getTrialSessionsForJudgeLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(event, async ({ applicationContext }) => {
+  genericHandler(event, async () => {
     return await getTrialSessionsForJudgeInteractor(
-      applicationContext,
       event.pathParameters.judgeId,
       authorizedUser,
     );

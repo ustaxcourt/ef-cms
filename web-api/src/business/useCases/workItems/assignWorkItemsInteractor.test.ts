@@ -103,6 +103,10 @@ describe('assignWorkItemsInteractor', () => {
   });
 
   it('should assign work item to current docket clerk user when given work item', async () => {
+    getUserById.mockResolvedValue({
+      ...mockDocketClerkUser,
+      section: DOCKET_SECTION,
+    } as DbUser);
     await assignWorkItemsInteractor(
       applicationContext,
       {
@@ -232,7 +236,7 @@ describe('assignWorkItemsInteractor', () => {
     ]);
   });
 
-  it  ('should assign work item for a non-petition docket entry to the petitions section when filed by clerk of the court', async () => {
+  it('should assign work item for a non-petition docket entry to the petitions section when filed by clerk of the court', async () => {
     getUserById.mockResolvedValue({
       ...mockClerkOfTheCourtUser,
       section: CLERK_OF_COURT_SECTION,
