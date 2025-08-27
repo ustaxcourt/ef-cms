@@ -63,26 +63,26 @@ export const PetitionersAndCounsel = connect(
                     showEmail={false}
                   />
 
-                  <span
-                    className={classNames({
-                      'margin-left-205': petitioner.isAddressSealed,
-                      'sealed-address': petitioner.isAddressSealed,
-                      'address-line': true,
-                    })}
-                    data-testid="petitioner-email"
-                  >
-                    {!petitioner.sealedAndUnavailable && (
+                  {!petitioner.sealedAndUnavailable && (
+                    <span
+                      className={classNames({
+                        'margin-left-205': petitioner.isAddressSealed,
+                        'sealed-address': petitioner.isAddressSealed,
+                        'address-line': true,
+                      })}
+                      data-testid="petitioner-email"
+                    >
                       <span>{petitioner.formattedEmail}</span>
-                    )}
-                    {petitioner.showEAccessFlag && (
-                      <FontAwesomeIcon
-                        aria-label="has e-access"
-                        className="margin-left-05 fa-icon-blue"
-                        icon="flag"
-                        size="1x"
-                      />
-                    )}
-                  </span>
+                      {petitioner.showEAccessFlag && (
+                        <FontAwesomeIcon
+                          aria-label="has e-access"
+                          className="margin-left-05 fa-icon-blue"
+                          icon="flag"
+                          size="1x"
+                        />
+                      )}
+                    </span>
+                  )}
 
                   {petitioner.showRemoveEmailButton && (
                     <Button
