@@ -47,10 +47,8 @@ describe('login', () => {
   it('should give an error alert when the password is incorrect', () => {
     cy.visit('/login');
     cy.get('[data-testid="email-input"]').type('docketclerk1@example.com', {
-      delay: 0,
     });
     cy.get('[data-testid="password-input"]').type('totallyIncorrectPassword', {
-      delay: 0,
     });
     cy.get('[data-testid="login-button"]').click();
 
@@ -73,7 +71,6 @@ describe('login', () => {
       loginAsAdmissionsClerk('admissionsclerk1@example.com');
       cy.get('[data-testid="messages-banner"]');
       cy.get('[data-testid="docket-number-search-input"]').type(docketNumber, {
-        delay: 0,
       });
       cy.get('[data-testid="search-docket-number"]').click();
       cy.get('[data-testid="tab-case-information"]').click();
@@ -117,7 +114,6 @@ describe('login', () => {
   it('should log the user in regardless of the casing used in their email address', () => {
     cy.visit('/login');
     cy.get('[data-testid="email-input"]').type('DoCKetCLERk1@eXaMPLE.Com', {
-      delay: 0,
     });
     cy.get('[data-testid="password-input"]').type(
       getCypressEnv().defaultAccountPass,

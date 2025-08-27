@@ -33,7 +33,6 @@ describe('Admissions Clerk Grants E-Access', () => {
       loginAsAdmissionsClerk('admissionsclerk1@example.com');
       cy.get('[data-testid="messages-banner"]');
       cy.get('[data-testid="docket-number-search-input"]').type(docketNumber, {
-        delay: 0,
       });
       cy.get('[data-testid="search-docket-number"]').click();
       cy.get('[data-testid="tab-case-information"]').click();
@@ -61,7 +60,6 @@ describe('Admissions Clerk Grants E-Access', () => {
       cy.get('[data-testid="login-button"]').click();
       cy.get('[data-testid="new-password-input"]').type(password);
       cy.get('[data-testid="confirm-new-password-input"]').type(password, {
-        delay: 0,
       });
       cy.get('[data-testid="change-password-button"]').click();
       cy.get('[data-testid="my-cases-link"]');
@@ -136,15 +134,12 @@ describe('Admissions Clerk Grants E-Access', () => {
 
         cy.visit('/login');
         cy.get('[data-testid="email-input"]').type(petitionerEmail, {
-          delay: 0,
         });
         cy.get('[data-testid="password-input"]').type(password);
         cy.get('[data-testid="login-button"]').click();
         cy.get('[data-testid="new-password-input"]').type(password, {
-          delay: 0,
         });
         cy.get('[data-testid="confirm-new-password-input"]').type(password, {
-          delay: 0,
         });
         cy.get('[data-testid="change-password-button"]').click();
         cy.get('[data-testid="my-cases-link"]');
@@ -200,16 +195,13 @@ describe('Admissions Clerk Grants E-Access', () => {
     cy.get('[data-testid="practitioner-type-Attorney-radio"]').click();
     cy.get('[data-testid="practiceType-Private-radio"]').click();
     cy.get('[data-testid="contact.address1"]').type('3829 Barington St', {
-      delay: 0,
     });
     cy.get('[data-testid="contact.city"]').type('Chicago');
     cy.get('[data-testid="contact.state"]').select('IL');
     cy.get('[data-testid="contact.postalCode"]').type('98456');
     cy.get('[data-testid="practitioner-phone-input"]').type('5555555555', {
-      delay: 0,
     });
     cy.get('[data-testid="practitioner-email-input"]').type(practitionerEmail, {
-      delay: 0,
     });
     cy.get('[data-testid="practitioner-confirm-email-input"]').type(
       practitionerEmail,
@@ -227,7 +219,6 @@ describe('Admissions Clerk Grants E-Access', () => {
         logout();
         cy.visit('/login');
         cy.get('[data-testid="email-input"]').type(practitionerEmail, {
-          delay: 0,
         });
         cy.get('[data-testid="password-input"]').type(
           getCypressEnv().defaultAccountPass,
@@ -293,7 +284,6 @@ describe('Admissions Clerk Grants E-Access', () => {
       loginAsAdmissionsClerk('admissionsclerk1@example.com');
       cy.get('[data-testid="messages-banner"]');
       cy.get('[data-testid="docket-number-search-input"]').type(docketNumber, {
-        delay: 0,
       });
       cy.get('[data-testid="search-docket-number"]').click();
       cy.get('[data-testid="tab-case-information"]').click();
