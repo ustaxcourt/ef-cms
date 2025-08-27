@@ -215,9 +215,13 @@ export class Case extends JoiValidationEntity {
     const oldestYear = 65;
 
     const [sequentialNumber, yearFiled] = docketNumber.split('-');
+    const yearSansSuffix = yearFiled.replace(/\D+$/, '');
+
     const sequentialNumberPadded = sequentialNumber.padStart(6, '0');
     const yearFiledAdjusted =
-      parseInt(yearFiled) >= oldestYear ? `19${yearFiled}` : `20${yearFiled}`;
+      parseInt(yearSansSuffix) >= oldestYear
+        ? `19${yearSansSuffix}`
+        : `20${yearSansSuffix}`;
 
     return parseInt(`${yearFiledAdjusted}${sequentialNumberPadded}`);
   }
@@ -474,7 +478,6 @@ export class Case extends JoiValidationEntity {
       .optional()
       .allow(null)
       .description('Damages for the case.'),
-    // docketEntries: 'At least one valid docket entry is required',
     docketEntries: joi
       .array()
       .items(DOCKET_ENTRY_VALIDATION_RULES)
@@ -1550,8 +1553,25 @@ export class Case extends JoiValidationEntity {
    * @returns {Case} the updated case entity
    */
   setCaseCaption(caseCaption) {
+    
     this.caseCaption = caseCaption;
+    
+    // New method to find case in case array and update that caption as well
+    if (this.consolidatedCases && this.consolidatedCases.length > 0) {
+      this.setCaseCaptionInConsolidatedCases();
+    }
+
     return this;
+  }
+
+  setCaseCaptionInConsolidatedCases() {
+
+    const currentCase = this.consolidatedCases.find((c) => c.docketNumber === this.docketNumber);
+
+    if (currentCase) {
+      currentCase.caseCaption = this.caseCaption;
+    }
+
   }
 
   /**

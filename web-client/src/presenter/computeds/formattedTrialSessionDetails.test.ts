@@ -550,7 +550,7 @@ describe('formattedTrialSessionDetails', () => {
     it('should set showAlertForNOTTReminder to true when the alert has not been previously dismissed and start date is within NOTT reminder range', () => {
       mockTrialSession = {
         ...TRIAL_SESSION,
-        dismissedAlertForNOTT: false,
+        dismissedAlertForNott: false,
         isCalendared: true,
         startDate: calculateISODate({ howMuch: 29, units: 'days' }),
       };
@@ -573,7 +573,7 @@ describe('formattedTrialSessionDetails', () => {
     it('should set showAlertForNOTTReminder to false when the alert has been previously dismissed', () => {
       mockTrialSession = {
         ...TRIAL_SESSION,
-        dismissedAlertForNOTT: true,
+        dismissedAlertForNott: true,
         isCalendared: true,
         startDate: calculateISODate({ howMuch: 30, units: 'days' }),
       };
@@ -594,7 +594,7 @@ describe('formattedTrialSessionDetails', () => {
     it('should set showAlertForNOTTReminder to false when start date is within NOTT reminder range', () => {
       mockTrialSession = {
         ...TRIAL_SESSION,
-        dismissedAlertForNOTT: true,
+        dismissedAlertForNott: true,
         isCalendared: true,
         startDate: calculateISODate({ howMuch: 60, units: 'days' }),
       };

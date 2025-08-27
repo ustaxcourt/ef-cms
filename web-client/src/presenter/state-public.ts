@@ -77,6 +77,11 @@ export const baseState = {
   },
   constants: {} as { [key: string]: any },
   currentPage: 'Interstitial',
+  currentPaginationPage: 0,
+  documentSearchSort: {
+    sortColumn: 'formattedFiledDate',
+    sortDirection: 'desc',
+  },
   featureFlags: undefined as unknown as { [key: string]: string },
   form: {} as Record<string, any>,
   header: {
@@ -94,6 +99,7 @@ export const baseState = {
     waitingForResponse: false,
     waitingForResponseRequests: 0,
   },
+
   sessionMetadata: {
     docketRecordFilter: PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
     docketRecordSort: {},

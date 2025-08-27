@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
@@ -25,12 +26,15 @@ import { updateCounselOnCaseInteractor } from './updateCounselOnCaseInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 const updateCaseAndAssociations = jest
   .mocked(updateCaseAndAssociationsMock)
   .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
 const tryGetLocks = jest.mocked(tryGetLocksMock);
+const getUserById = jest.mocked(getUserByIdMock);
 
 describe('updateCounselOnCaseInteractor', () => {
   const mockPrivatePractitioners = [
@@ -86,14 +90,14 @@ describe('updateCounselOnCaseInteractor', () => {
   ];
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockImplementation(({ userId }) => {
-        return mockPrivatePractitioners
-          .concat(mockIrsPractitioners)
-          .concat(mockPetitioners)
-          .find(user => user.userId === userId);
-      });
+    getUserById.mockImplementation(({ userId }) => {
+      const theUser = [
+        ...mockPrivatePractitioners,
+        ...mockIrsPractitioners,
+        ...mockPetitioners,
+      ].find(user => user.userId === userId);
+      return Promise.resolve(theUser as DbUser);
+    });
     getCaseByDocketNumber.mockImplementation(({ docketNumber }) => ({
       caseCaption: 'Caption',
       caseType: CASE_TYPES_MAP.deficiency,

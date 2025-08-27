@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
@@ -18,7 +19,6 @@ import {
   STATUS_REPORT_ORDER_OPTIONS,
 } from '@shared/business/entities/EntityConstants';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { User } from '@shared/business/entities/User';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { fileCourtIssuedOrderInteractor } from './fileCourtIssuedOrderInteractor';
 import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
@@ -27,14 +27,17 @@ import {
   mockJudgeUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
-import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
+import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
 const tryGetLocks = jest.mocked(tryGetLocksMock);
+const getUserById = jest.mocked(getUserByIdMock);
 
 /* eslint-disable max-lines */
 describe('fileCourtIssuedOrderInteractor', () => {
@@ -97,13 +100,11 @@ describe('fileCourtIssuedOrderInteractor', () => {
   };
 
   beforeEach(() => {
-    applicationContext.getPersistenceGateway().getUserById.mockReturnValue(
-      new User({
-        name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-        role: ROLES.petitionsClerk,
-        userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      }),
-    );
+    getUserById.mockResolvedValue({
+      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+      role: ROLES.petitionsClerk,
+      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    } as DbUser);
 
     getCaseByDocketNumber.mockReturnValue(caseRecord);
   });
@@ -346,9 +347,9 @@ describe('fileCourtIssuedOrderInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(updateMessage).toHaveBeenCalled();
+    expect(upsertMessages).toHaveBeenCalled();
     expect(
-      (updateMessage as jest.Mock).mock.calls[0][0].message.attachments,
+      (upsertMessages as jest.Mock).mock.calls[0][0][0].attachments,
     ).toEqual([
       {
         documentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',

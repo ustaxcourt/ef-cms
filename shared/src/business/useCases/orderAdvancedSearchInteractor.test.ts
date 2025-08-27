@@ -3,7 +3,7 @@ import {
   MAX_SEARCH_RESULTS,
   ORDER_EVENT_CODES,
   ROLES,
-} from '../entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '../test/createTestApplicationContext';
 import {
   mockPetitionerUser,
@@ -54,7 +54,7 @@ describe('orderAdvancedSearchInteractor', () => {
   });
 
   it('logs raw search information and results size', async () => {
-    const result = await orderAdvancedSearchInteractor(
+    await orderAdvancedSearchInteractor(
       applicationContext,
       {
         dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
@@ -67,7 +67,6 @@ describe('orderAdvancedSearchInteractor', () => {
     expect(applicationContext.logger.info.mock.calls[0][1]).toMatchObject({
       from: 0,
       timestamp: expect.anything(),
-      totalCount: result.length,
       userRole: ROLES.petitionsClerk,
     });
   });
@@ -95,7 +94,7 @@ describe('orderAdvancedSearchInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(results.length).toBe(MAX_SEARCH_RESULTS);
+    expect(results.results.length).toBe(MAX_SEARCH_RESULTS); // Interactor limits results
   });
 
   it('searches for documents that are of type orders', async () => {

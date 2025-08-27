@@ -82,7 +82,7 @@ describe('validateTrialSessionAction', () => {
     expect(errorStub.mock.calls.length).toEqual(1);
   });
 
-    it('should not return the term and termYear validation errors', async () => {
+  it('should not return the term and termYear validation errors', async () => {
     applicationContext
       .getUseCases()
       .validateTrialSessionInteractor.mockReturnValue({

@@ -5,6 +5,8 @@
 # Usage
 #   ENV=dev ./setup-clerk-of-court-config.sh
 
+# TODO: migrate to typescript
+
 ./check-env-variables.sh \
   "ENV" \
   "AWS_SECRET_ACCESS_KEY" \

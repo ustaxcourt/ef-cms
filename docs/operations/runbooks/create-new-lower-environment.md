@@ -262,52 +262,38 @@ This runbook describes the process of creating a new DAWSON lower environment in
       ```bash
       npm run "deploy:${DEPLOYING_COLOR}" "$ENV"
       ```
-1. Write configuration values to the deploy table:
+1. Write configuration values to AWS SSM:
    1. `current-color`:
       ```bash
-      aws dynamodb update-item \
-        --region us-east-1 --table-name "efcms-deploy-${ENV}" \
-        --key '{"pk":{"S":"current-color"}, "sk":{"S":"current-color"}}' \
-        --update-expression "SET #current = :current" \
-        --expression-attribute-names '{"#current":"current"}' \
-        --expression-attribute-values '{":current":{"S":"blue"}}'
+			aws ssm put-parameter \
+				--region us-east-1 --name "/DAWSON/${ENV}/current-color" \
+				--value "blue" --type "String" --overwrite
       ```
    1. `destination-table-version`:
       ```bash
-      aws dynamodb update-item \
-        --region us-east-1 --table-name "efcms-deploy-${ENV}" \
-        --key '{"pk":{"S":"destination-table-version"}, "sk":{"S":"destination-table-version"}}' \
-        --update-expression "SET #current = :current" \
-        --expression-attribute-names '{"#current":"current"}' \
-        --expression-attribute-values '{":current":{"S":"alpha"}}'
+			aws ssm put-parameter \
+				--region us-east-1 --name "/DAWSON/${ENV}/destination-table-version" \
+				--value "alpha" --type "String" --overwrite
       ```
    1. `migrate`:
       ```bash
-      aws dynamodb update-item \
-        --region us-east-1 --table-name "efcms-deploy-${ENV}" \
-        --key '{"pk":{"S":"migrate"}, "sk":{"S":"migrate"}}' \
-        --update-expression "SET #current = :current" \
-        --expression-attribute-names '{"#current":"current"}' \
-        --expression-attribute-values '{":current":{"BOOL":false}}'
+			aws ssm put-parameter \
+				--region us-east-1 --name "/DAWSON/${ENV}/migrate" \
+				--value "true" --type "String" --overwrite
       ```
    1. `migration-queue-empty`:
       ```bash
-      aws dynamodb update-item \
-        --region us-east-1 --table-name "efcms-deploy-${ENV}" \
-        --key '{"pk":{"S":"migration-queue-empty"}, "sk":{"S":"migration-queue-empty"}}' \
-        --update-expression "SET #current = :current" \
-        --expression-attribute-names '{"#current":"current"}' \
-        --expression-attribute-values '{":current":{"BOOL":true}}'
+			aws ssm put-parameter \
+				--region us-east-1 --name "/DAWSON/${ENV}/migration-queue-empty" \
+				--value "true" --type "String" --overwrite
       ```
    1. `source-table-version`:
       ```bash
-      aws dynamodb update-item \
-        --region us-east-1 --table-name "efcms-deploy-${ENV}" \
-        --key '{"pk":{"S":"source-table-version"}, "sk":{"S":"source-table-version"}}' \
-        --update-expression "SET #current = :current" \
-        --expression-attribute-names '{"#current":"current"}' \
-        --expression-attribute-values '{":current":{"S":"alpha"}}'
+			aws ssm put-parameter \
+				--region us-east-1 --name "/DAWSON/${ENV}/source-table-version" \
+				--value "alpha" --type "String" --overwrite
       ```
+<!-- TODO: UPDATE THIS SECTION TO KNOW HOW TO SAVE IN POSTGRES INSTEAD OF DYNAMO -->
 1. Write feature flags to the deploy table:
    1. `aws-batch-zipper-minimum-count`:
       ```bash
@@ -428,7 +414,7 @@ This runbook describes the process of creating a new DAWSON lower environment in
 1. Deploy the latest docker image to this account's ECR:
    ```bash
    export DESTINATION_TAG=$(grep docker-image: .circleci/config.yml | awk -F':' '{print $3}')
-   ./docker-to-ecr.sh
+   ./scripts/ecr/docker-to-ecr.sh
    ```
 1. Create the `[env]_dawson` postgres user:
    ```bash

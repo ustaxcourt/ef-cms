@@ -15,6 +15,8 @@ import {
   asyncHandleLockError,
   withLocking,
 } from '@web-api/persistence/postgres/utils/mutex';
+import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
+import { getUserByIdOnceAllUpdatesComplete } from '@web-api/persistence/postgres/users/getUserByIdOnceAllUpdatesComplete';
 
 export const TOKEN_EXPIRATION_TIME_HOURS = 24;
 
@@ -27,12 +29,11 @@ export const verifyUserPendingEmail = async (
     throw new UnauthorizedError('Unauthorized to manage emails.');
   }
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserByIdOnceAllUpdatesComplete({
-      applicationContext,
-      userId: authorizedUser.userId,
-    });
+  const user = await getUserByIdOnceAllUpdatesComplete({
+    userId: authorizedUser.userId,
+  });
+
+  console.log('user', user);
 
   if (
     !user.pendingEmailVerificationToken ||
@@ -60,10 +61,10 @@ export const verifyUserPendingEmail = async (
     throw new Error('Email is not available');
   }
 
-  const { updatedUser } = await updateUserPendingEmailRecord(
-    applicationContext,
-    { setIsUpdatingInformation: true, user },
-  );
+  const { updatedUser } = await updateUserPendingEmailRecord({
+    setIsUpdatingInformation: true,
+    user,
+  });
 
   await applicationContext.getUserGateway().updateUser(applicationContext, {
     attributesToUpdate: { email: updatedUser.email },
@@ -95,16 +96,13 @@ export const userTokenHasExpired = (
 
 export const verifyUserPendingEmailInteractor = withLocking(
   verifyUserPendingEmail,
-  async (applicationContext: ServerApplicationContext, _, authorizedUser) => {
+  async (_applicationContext: ServerApplicationContext, _, authorizedUser) => {
     if (!authorizedUser?.userId) {
       throw new Error('No authorized User when attempting to lock');
     }
-    const docketNumbers = await applicationContext
-      .getPersistenceGateway()
-      .getDocketNumbersByUser({
-        applicationContext,
-        userId: authorizedUser.userId,
-      });
+    const docketNumbers = await getDocketNumbersByUser({
+      userId: authorizedUser.userId,
+    });
     const identifiers = docketNumbers.map(dN => `case|${dN}`);
 
     return { identifiers };

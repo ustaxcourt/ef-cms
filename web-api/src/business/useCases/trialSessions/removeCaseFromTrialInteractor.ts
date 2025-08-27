@@ -12,6 +12,10 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { CaseStatus } from '@shared/business/entities/EntityConstants';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { updateTrialSession } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
+import { removeCaseFromTrialSession } from '@web-api/persistence/postgres/trialSessions/removeCaseFromTrialSession';
+import { deleteCasesFromTrialSession } from '@web-api/persistence/postgres/trialSessions/deleteCasesFromTrialSession';
 
 export const removeCaseFromTrial = async (
   applicationContext: ServerApplicationContext,
@@ -36,12 +40,9 @@ export const removeCaseFromTrial = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const trialSession = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById({
-      applicationContext,
-      trialSessionId,
-    });
+  const trialSession = await getTrialSessionById({
+    trialSessionId,
+  });
 
   if (!trialSession) {
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
@@ -50,15 +51,23 @@ export const removeCaseFromTrial = async (
   const trialSessionEntity = new TrialSession(trialSession);
 
   if (trialSessionEntity.isCalendared) {
+    // UPDATE THIS
     trialSessionEntity.removeCaseFromCalendar({ disposition, docketNumber });
+    await removeCaseFromTrialSession({
+      disposition,
+      docketNumber,
+      trialSessionId,
+    });
+    await updateTrialSession({
+      trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+    });
   } else {
     trialSessionEntity.deleteCaseFromCalendar({ docketNumber });
+    await deleteCasesFromTrialSession({
+      docketNumbers: [docketNumber],
+      trialSessionId,
+    });
   }
-
-  await applicationContext.getPersistenceGateway().updateTrialSession({
-    applicationContext,
-    trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
-  });
 
   const myCase = await getCaseByDocketNumber({
     docketNumber,

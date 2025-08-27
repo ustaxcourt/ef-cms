@@ -87,6 +87,16 @@ resource "aws_iam_role_policy" "authorizer_invocation_policy" {
         "dynamodb:GetItem"
       ],
       "Resource": "arn:aws:dynamodb:us-east-1:${data.aws_caller_identity.current.account_id}:table/efcms-deploy-${var.environment}"
+    },
+    {
+      "Sid": "RdsConnect",
+      "Effect": "Allow",
+      "Action": [
+        "rds-db:connect"
+      ],
+      "Resource": [
+        "*"
+      ]
     }
   ]
 }

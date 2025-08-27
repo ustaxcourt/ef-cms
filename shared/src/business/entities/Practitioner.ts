@@ -17,7 +17,7 @@ export class Practitioner extends User {
   public admissionsDate: string;
   public admissionsStatus: string;
   public barNumber: string;
-  public birthYear: string;
+  public birthYear: number;
   public confirmEmail?: string;
   public practiceType: string;
   public firmName?: string;
@@ -199,12 +199,14 @@ export class Practitioner extends User {
     return Practitioner.VALIDATION_RULES as any;
   }
 
-  toRawObject() {
+  toRawObject(removeValidationProperties: boolean = true) {
     const result = super.toRawObject() as any;
 
     // We don't want to persist these values as they are only used for validation
-    result.confirmEmail = undefined;
-    result.updatedEmail = undefined;
+    if (removeValidationProperties) {
+      result.confirmEmail = undefined;
+      result.updatedEmail = undefined;
+    }
 
     return result;
   }

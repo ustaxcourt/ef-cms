@@ -1,15 +1,15 @@
-import { DocumentSearch } from '../../business/entities/documents/DocumentSearch';
-import { FORMATS, formatNow } from '../utilities/DateHandler';
-import { InternalDocumentSearchResult } from '../entities/documents/InternalDocumentSearchResult';
-import { MAX_SEARCH_RESULTS } from '../../business/entities/EntityConstants';
+import { DocumentSearch } from '@shared/business/entities/documents/DocumentSearch';
+import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
+import { InternalDocumentSearchResult } from '@shared/business/entities/documents/InternalDocumentSearchResult';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { omit } from 'lodash';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { MAX_SEARCH_RESULTS } from '@shared/business/entities/EntityConstants';
 
 export const opinionAdvancedSearchInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -22,6 +22,8 @@ export const opinionAdvancedSearchInteractor = async (
     keyword,
     opinionTypes,
     startDate,
+    from = 0,
+    limit = 5000,
   }: {
     caseTitleOrPetitioner: string;
     dateRange: string;
@@ -31,6 +33,8 @@ export const opinionAdvancedSearchInteractor = async (
     keyword: string;
     opinionTypes: string[];
     startDate: string;
+    from?: number;
+    limit?: number;
   },
   authorizedUser: UnknownAuthUser,
 ) => {
@@ -50,25 +54,29 @@ export const opinionAdvancedSearchInteractor = async (
 
   const rawSearch = opinionSearch.validate().toRawObject();
 
-  const { results, totalCount } = await applicationContext
+  const { results } = await applicationContext
     .getPersistenceGateway()
     .advancedDocumentSearch({
       applicationContext,
       documentEventCodes: opinionTypes,
       isOpinionSearch: true,
       ...rawSearch,
+      from,
+      overrideResultSize: limit,
     });
 
   const timestamp = formatNow(FORMATS.LOG_TIMESTAMP);
+
   applicationContext.logger.info('private opinion search', {
     ...omit(rawSearch, 'entityName'),
     timestamp,
-    totalCount,
     userId: authorizedUser.userId,
     userRole: authorizedUser.role,
   });
 
-  const filteredResults = results.slice(0, MAX_SEARCH_RESULTS);
-
-  return InternalDocumentSearchResult.validateRawCollection(filteredResults);
+  return {
+    results: InternalDocumentSearchResult.validateRawCollection(results)
+      .map(r => omit(r, 'entityName'))
+      .slice(0, MAX_SEARCH_RESULTS),
+  };
 };

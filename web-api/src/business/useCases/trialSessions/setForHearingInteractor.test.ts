@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 import { MOCK_CASE, MOCK_CASE_WITH_TRIAL_SESSION } from '@shared/test/mockCase';
 import { MOCK_TRIAL_REMOTE } from '@shared/test/mockTrial';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
@@ -8,20 +9,22 @@ import {
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { setForHearingInteractor } from './setForHearingInteractor';
+import { createOrUpdateTrialSessionCases as createOrUpdateTrialSessionCasesMock } from '@web-api/persistence/postgres/trialSessions/createOrUpdateTrialSessionCases';
+import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 
 describe('setForHearingInteractor', () => {
   let mockTrialSession;
   let mockCase;
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const createOrUpdateTrialSessionCases = jest.mocked(createOrUpdateTrialSessionCasesMock);
+  const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
 
   beforeEach(() => {
     mockTrialSession = MOCK_TRIAL_REMOTE;
 
     mockCase = MOCK_CASE;
 
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockImplementation(() => mockTrialSession);
+    getTrialSessionById.mockImplementation(() => mockTrialSession);
     getCaseByDocketNumber.mockImplementation(() => mockCase);
   });
 
@@ -95,7 +98,7 @@ describe('setForHearingInteractor', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway().addCaseToHearing,
+      createOrUpdateTrialSessionCases,
     ).toHaveBeenCalled();
   });
 
@@ -114,19 +117,15 @@ describe('setForHearingInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().addCaseToHearing,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().addCaseToHearing.mock
-        .calls[0][0],
-    ).toEqual(
+    expect(createOrUpdateTrialSessionCases).toHaveBeenCalled();
+    expect(createOrUpdateTrialSessionCases.mock.calls[0][0]).toEqual(
       expect.objectContaining({
-        applicationContext: expect.anything(),
-        docketNumber: mockCase.docketNumber,
-        trialSession: expect.objectContaining({
-          trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
-        }),
+        trialSessionCases: expect.arrayContaining([
+          expect.objectContaining({
+            docketNumber: mockCase.docketNumber,
+            trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
+          }),
+        ]),
       }),
     );
   });
@@ -147,24 +146,20 @@ describe('setForHearingInteractor', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway().addCaseToHearing,
+      createOrUpdateTrialSessionCases,
     ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().addCaseToHearing.mock
-        .calls[0][0],
-    ).toEqual(
+    expect(createOrUpdateTrialSessionCases.mock.calls[0][0]).toEqual(
       expect.objectContaining({
-        applicationContext: expect.anything(),
-        docketNumber: mockCase.docketNumber,
-        trialSession: expect.objectContaining({
-          caseOrder: expect.arrayContaining([
-            expect.objectContaining({
+        trialSessionCases: expect.arrayContaining([
+          expect.objectContaining({
+            docketNumber: mockCase.docketNumber,
+            trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
+            caseOrder: expect.objectContaining({
               calendarNotes: 'this is a calendarNote',
               docketNumber: mockCase.docketNumber,
             }),
-          ]),
-          trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
-        }),
+          }),
+        ]),
       }),
     );
   });

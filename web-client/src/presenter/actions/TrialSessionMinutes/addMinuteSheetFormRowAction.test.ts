@@ -40,49 +40,21 @@ describe('addMinuteSheetFormRowAction', () => {
     expect(addedRow.renderKey).toBeDefined();
   });
 
-  it('should add a new empty row to exhibits section', async () => {
-    const result = await runAction(addMinuteSheetFormRowAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        name: 'exhibits',
-        section: 'exhibitsSection',
-      },
-      state: {
-        minuteSheetForm: {
-          ...mockMinuteSheetFormState,
-          exhibitsSection: {
-            exhibits: {},
-          },
-        },
-      },
-    });
-
-    const addedRow = Object.values(
-      result.state.minuteSheetForm.exhibitsSection.exhibits,
-    )[0];
-    expect(addedRow).toMatchObject({
-      description: '',
-      note: '',
-      status: '',
-    });
-    expect(addedRow.renderKey).toBeDefined();
-  });
-
-  it('should preserve existing rows when adding a new row', async () => {
-    const existingRow = {
-      description: 'Existing exhibit',
-      note: 'Some note',
+  it('should add a new empty row to exhibits section after the specified index', async () => {
+    const existingRow1 = {
+      description: 'First exhibit',
       renderKey: '123',
-      status: 'pending',
     };
-
+    const existingRow2 = {
+      description: 'Second exhibit',
+      renderKey: '456',
+    };
     const result = await runAction(addMinuteSheetFormRowAction, {
       modules: {
         presenter,
       },
       props: {
+        index: 0, // Insert after the first row
         name: 'exhibits',
         section: 'exhibitsSection',
       },
@@ -91,7 +63,8 @@ describe('addMinuteSheetFormRowAction', () => {
           ...mockMinuteSheetFormState,
           exhibitsSection: {
             exhibits: {
-              '123': existingRow,
+              a: existingRow1,
+              b: existingRow2,
             },
           },
         },
@@ -99,7 +72,15 @@ describe('addMinuteSheetFormRowAction', () => {
     });
 
     const rows = result.state.minuteSheetForm.exhibitsSection.exhibits;
-    expect(Object.keys(rows)).toHaveLength(2);
-    expect(rows['123']).toEqual(existingRow);
+    expect(Object.keys(rows)).toHaveLength(3);
+    const addedRow = Object.values(
+      result.state.minuteSheetForm.exhibitsSection.exhibits,
+    )[1];
+    expect(addedRow).toMatchObject({
+      description: '',
+      note: '',
+      status: '',
+    });
+    expect(addedRow.renderKey).toBeDefined();
   });
 });
