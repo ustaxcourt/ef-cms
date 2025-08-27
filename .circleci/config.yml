@@ -377,7 +377,7 @@ jobs:
             ./scripts/reindex/disable-reindex-cron.sh
 
   smoketests:
-    parallelism: 8
+    parallelism: 9
     docker:
       - image: *efcms-docker-image
         aws_auth:
@@ -396,9 +396,7 @@ jobs:
             ./scripts/env/env-for-circle.sh
       - run:
           name: 'Cypress Smoke Tests'
-          command: |
-            export NODE_OPTIONS="--max-old-space-size=4096"
-            find cypress/deployed-and-local/integration -type f -name "*.cy.ts" | circleci tests run --split-by=timings --command 'paste -sd, - | xargs -I {} ./scripts/run-cypress.sh -s -t {}'
+          command: find cypress/deployed-and-local/integration -type f -name "*.cy.ts" | circleci tests run --split-by=timings --command 'paste -sd, - | xargs -I {} ./scripts/run-cypress.sh -s -t {}'
       - store_artifacts:
           path: /root/project/cypress/deployed-and-local/videos/
 

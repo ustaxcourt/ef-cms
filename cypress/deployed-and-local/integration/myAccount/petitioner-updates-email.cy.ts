@@ -45,11 +45,9 @@ describe('Petitioner Updates e-mail', () => {
     cy.get('[data-testid="change-email-button"]').click();
     cy.get('[data-testid="change-login-email-input"]').type(
       `${newUsername}@example.com`,
-      { delay: 0 },
     );
     cy.get('[data-testid="confirm-change-login-email-input"]').type(
       `${newUsername}@example.com`,
-      { delay: 0 },
     );
     cy.get('[data-testid="save-change-login-email-button"]').click();
     cy.get('[data-testid="modal-button-confirm"]').click();
@@ -132,8 +130,8 @@ describe('Petitioner Updates e-mail', () => {
     // The code below will fail on cognito-local
     if (getCypressEnv().env !== 'local') {
       cy.visit('/login');
-      cy.get('[data-testid="email-input"]').type(email, { delay: 0 });
-      cy.get('[data-testid="password-input"]').type(password, { delay: 0 });
+      cy.get('[data-testid="email-input"]').type(email);
+      cy.get('[data-testid="password-input"]').type(password);
       cy.get('[data-testid="login-button"]').click();
       cy.get('[data-testid="error-alert"]').contains(
         'The email address or password you entered is invalid.',

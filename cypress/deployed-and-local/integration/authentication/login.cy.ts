@@ -28,7 +28,7 @@ describe('login', () => {
       password: getCypressEnv().defaultAccountPass,
     });
     cy.visit('/login');
-    cy.get('[data-testid="email-input"]').type(unconfirmedEmail, { delay: 0 });
+    cy.get('[data-testid="email-input"]').type(unconfirmedEmail);
     cy.get('[data-testid="password-input"]').type(
       getCypressEnv().defaultAccountPass,
     );
@@ -81,11 +81,9 @@ describe('login', () => {
       cy.get('[data-testid="edit-petitioner-button"]').click();
       cy.get('[data-testid="internal-edit-petitioner-email-input"]').type(
         practitionerEmail,
-        { delay: 0 },
       );
       cy.get('[data-testid="internal-confirm-petitioner-email-input"]').type(
         practitionerEmail,
-        { delay: 0 },
       );
       cy.get(
         '[data-testid="submit-edit-petitioner-information-button"]',
@@ -99,7 +97,7 @@ describe('login', () => {
     });
 
     cy.visit('/login');
-    cy.get('[data-testid="email-input"]').type(practitionerEmail, { delay: 0 });
+    cy.get('[data-testid="email-input"]').type(practitionerEmail);
     cy.get('[data-testid="password-input"]').type(
       getCypressEnv().defaultAccountPass,
     );

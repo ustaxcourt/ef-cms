@@ -8,7 +8,7 @@ describe('Public Docket Record', () => {
       cy.get('[data-testid="logout-button-desktop"]').click();
 
       cy.visit(getCypressEnv().publicSiteUrl);
-      cy.get('input#docket-number').type(docketNumber, { delay: 0 });
+      cy.get('input#docket-number').type(docketNumber);
       cy.get('button#docket-search-button').click();
       cy.get('[data-testid="header-public-case-detail"]').contains(
         `Docket Number: ${docketNumber}`,

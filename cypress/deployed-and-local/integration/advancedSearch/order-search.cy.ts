@@ -27,11 +27,11 @@ describe('Docket clerk', () => {
 
       cy.get('[data-testid="search-link"]').click();
       cy.get('[data-testid="order-search-tab"]').click();
-      cy.get('#docket-number').type(docketNumber, { delay: 0 }); // Not sure if we only want to look at docket number
+      cy.get('#docket-number').type(docketNumber); // Not sure if we only want to look at docket number
 
       retry(() => {
         cy.get('[data-testid="keyword-search-input"]').clear();
-        cy.get('[data-testid="keyword-search-input"]').type(uniqueString, { delay: 0 });
+        cy.get('[data-testid="keyword-search-input"]').type(uniqueString);
         cy.get('[data-testid="submit-order-advanced-search-button"]').click();
         return cy.get('body').then(body => {
           return (

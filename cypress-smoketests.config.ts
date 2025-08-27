@@ -144,9 +144,9 @@ export default defineConfig({
   screenshotOnRunFailure: false,
   screenshotsFolder: 'cypress/deployed-and-local/screenshots',
   video: true,
-  videoCompression: 32, // Increased from 10 for faster video processing
+  videoCompression: 10,
   videosFolder: 'cypress/deployed-and-local/videos',
-  viewportHeight: 768, // Reduced from 900 for faster rendering
-  viewportWidth: 1024, // Reduced from 1200 for faster rendering
+  viewportHeight: 900,
+  viewportWidth: 1200,
   watchForFileChanges: false,
 });
