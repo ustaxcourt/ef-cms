@@ -159,8 +159,6 @@ async function updateConsolidatedCaseDeadlineReferenceId(
     LEAD_DEADLINES.map(async leadCaseDeadline => {
       const { caseDeadlineId: oldLeadCaseDeadlineId } = leadCaseDeadline;
 
-      if (!oldLeadCaseDeadlineId) return;
-
       const CHILD_DEADLINES =
         await getCaseDeadlinesByConsolidatedCaseDeadlineIds([
           oldLeadCaseDeadlineId,
