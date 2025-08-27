@@ -1,6 +1,7 @@
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { setDocumentSearchResultsAction } from './setDocumentSearchResultsAction';
+import { ADVANCED_SEARCH_TABS } from '@shared/business/entities/EntityConstants';
 
 describe('setDocumentSearchResultsAction', () => {
   it('updates orderDocumentSearchSort when advancedSearchTab is ORDER', async () => {
@@ -13,10 +14,7 @@ describe('setDocumentSearchResultsAction', () => {
         sortDirection: 'asc',
       },
       state: {
-        advancedSearchTab:
-          presenter.providers.applicationContext.getConstants()
-            .ADVANCED_SEARCH_TABS.ORDER,
-        constants: presenter.providers.applicationContext.getConstants(),
+        advancedSearchTab: ADVANCED_SEARCH_TABS.ORDER,
         orderDocumentSearchSort: {
           sortColumn: 'formattedFiledDate',
           sortDirection: 'desc',
@@ -44,10 +42,7 @@ describe('setDocumentSearchResultsAction', () => {
         sortDirection: 'desc',
       },
       state: {
-        advancedSearchTab:
-          presenter.providers.applicationContext.getConstants()
-            .ADVANCED_SEARCH_TABS.OPINION,
-        constants: presenter.providers.applicationContext.getConstants(),
+        advancedSearchTab: ADVANCED_SEARCH_TABS.OPINION,
         orderDocumentSearchSort: {
           sortColumn: 'formattedFiledDate',
           sortDirection: 'desc',

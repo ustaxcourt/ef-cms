@@ -15,7 +15,7 @@ export const setDocumentSearchResultsAction = ({
     advancedSearchTab === ADVANCED_SEARCH_TABS.OPINION
       ? 'opinionDocumentSearchSort'
       : 'orderDocumentSearchSort';
-      
+
   store.set(state[STATE_KEY].sortColumn, sortColumn);
   store.set(state[STATE_KEY].sortDirection, sortDirection);
 };
