@@ -331,24 +331,6 @@ async function getCaseCorrespondenceByDocketNumber(docketNumbers: string[]) {
 async function getHearings(
   docketNumbers: string[],
 ): Promise<{ docketNumber: string; hearings: TrialSessionKysely[] }[]> {
-  // const hearingsInfo = await getDbReader(reader =>
-  //   reader
-  //     .selectFrom('dwTrialSessionCase as ch')
-  //     .innerJoin(
-  //       'dwTrialSession as ts',
-  //       'ch.trialSessionId',
-  //       'ts.trialSessionId',
-  //     )
-  //     .select(({ fn }) => [
-  //       'ch.docketNumber',
-  //       fn.jsonAgg('ts').as('hearings'), // This IS lying about types
-  //     ])
-  //     .where('ch.docketNumber', 'in', docketNumbers)
-  //     .groupBy('ch.docketNumber')
-  //     .execute(),
-  // );
-
-  // TODO 10493: this is a hack to make the the fromKyselyTrialSession functionality work; rethink this
   const hearingsInfoRaw = await getDbReader(reader =>
     reader
       .selectFrom('dwTrialSessionCase as ch')
