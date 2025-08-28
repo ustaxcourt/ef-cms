@@ -1,5 +1,5 @@
 import './index.scss';
-
+import './tailwind.css'
 import '../../node_modules/@fortawesome/fontawesome-svg-core/styles.css';
 
 import { AppComponent } from './views/AppComponent';
