@@ -18,6 +18,7 @@ import {
   SERVICE_INDICATOR_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import { getUniqueId } from '@shared/sharedAppContext';
+import pLimit from 'p-limit';
 
 const scriptConfig: ScriptConfig = {
   description: 'setup-test-users - Creates test users.',
@@ -38,10 +39,14 @@ if (env === 'prod') {
   process.exit(1);
 }
 
+const CONCURRENCY_LIMIT = 25;
+const limit = pLimit(CONCURRENCY_LIMIT);
+
 const createManyAccounts = async (
   applicationContext: ServerApplicationContext,
   [num, role, section]: [number, Role, string],
 ) => {
+  const accounts: Promise<any>[] = [];
   for (let i = 1; i <= num; i++) {
     const email =
       role === 'chambers'
@@ -67,12 +72,17 @@ const createManyAccounts = async (
       userId: getUniqueId(),
     };
 
-    await createOrUpdateUser(applicationContext, {
-      password,
-      setPasswordAsPermanent: true,
-      user,
-    });
+    accounts.push(
+      limit(() =>
+        createOrUpdateUser(applicationContext, {
+          password,
+          setPasswordAsPermanent: true,
+          user,
+        }),
+      ),
+    );
   }
+  await Promise.allSettled(accounts);
 };
 
 const setupCourtUsers = async (
