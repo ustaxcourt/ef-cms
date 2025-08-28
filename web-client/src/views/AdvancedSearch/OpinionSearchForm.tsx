@@ -342,6 +342,7 @@ export const OpinionSearchForm = connect(
                 className="margin-bottom-0"
                 data-testid="advanced-search-button"
                 id="advanced-search-button"
+                aria-label="Search"
                 type="submit"
                 onClick={e => {
                   e.preventDefault();
