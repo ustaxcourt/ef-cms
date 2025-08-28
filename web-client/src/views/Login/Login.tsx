@@ -1,4 +1,4 @@
-import { Button } from '@web-client/ustc-ui/Button/Button';
+import { Button } from '@web-client/dawson-ui/ui/button';
 import { ErrorNotification } from '@web-client/views/ErrorNotification';
 import { InfoNotificationComponent } from '@web-client/views/InfoNotification';
 import { SuccessNotification } from '@web-client/views/SuccessNotification';
