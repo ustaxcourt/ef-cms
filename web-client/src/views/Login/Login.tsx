@@ -116,10 +116,10 @@ export const Login = connect(
                         Log in
                       </Button>
                     </form>
-                    <div className="button-container">
+                    <div className="button-container flex justify-start">
                       <Button
                         variant={'primaryTertiary'}
-                        className="margin-top-1 display-block"
+                        className="margin-top-1 display-block pl-0 ml-0"
                         data-testid="forgot-password-button"
                         type="button"
                         onClick={() => navigateToForgotPasswordSequence()}
@@ -131,7 +131,7 @@ export const Login = connect(
                       Don&apos;t have an account?{' '}
                       <Button
                         variant={'primaryTertiary'}
-                        className="padding-top-0"
+                        className="padding-top-0 pl-0"
                         type="button"
                         onClick={e => {
                           e.preventDefault();

@@ -18,8 +18,8 @@ const buttonVariants = cva(
           'tw:bg-primary tw:text-primary-foreground tw:shadow-xs tw:outline-none', // standard
           'tw:hover:bg-primary-darker', // hover
           'tw:focus-visible:ring-offset-[4px] tw:focus-visible:ring-[4px]', // focus-visible
-          'tw:active:bg-primary-active',  // active
-          'tw:invalid:bg-primary-invalid' // inactive / invalid
+          'tw:active:bg-primary-active', // active
+          'tw:invalid:bg-primary-invalid', // inactive / invalid
         ),
         destructive: cn(
           'tw:h-9 tw:bg-destructive tw:text-white tw:shadow-xs  tw:outline-none tw:border-none', // standard
@@ -33,7 +33,7 @@ const buttonVariants = cva(
           'tw:hover:text-primary-darker tw:hover:outline-primary-darker', // hover
           'tw:focus-visible:ring-offset-[6px] tw:focus-visible:ring-[4px]', // focus-visible
           'tw:active:text-secondary-active tw:active:outline-secondary-active', // active
-          'tw:invalid:text-secondary-invalid tw:invalid:outline-secondary-invalid' // inactive / invalid
+          'tw:invalid:text-secondary-invalid tw:invalid:outline-secondary-invalid', // inactive / invalid
         ),
         destructiveTertiary: cn(
           'tw:bg-transparent tw:text-destructive tw:font-[400] tw:underline tw:underline-offset-4 tw:outline-none ', // standard,
@@ -46,8 +46,9 @@ const buttonVariants = cva(
           'tw:bg-transparent tw:text-primary tw:font-[400] tw:underline tw:underline-offset-4  tw:outline-none ', // standard
           'tw:hover:underline tw:hover:text-primary-darker', // hover,
           'tw:has-[>svg]:px-[4px] tw:has-[>svg]:py-[2px] h-[24px]', // focus-visible
-          'tw:active:text-primary-active' , // active
+          'tw:active:text-primary-active', // active
           'tw:invalid:text-tertiary-invalid', // active
+          'tw:block tw:ml-0 tw:mr-auto tw:text-left', // left alignment
         ),
       },
       size: {
