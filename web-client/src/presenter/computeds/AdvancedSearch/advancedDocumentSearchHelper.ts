@@ -10,6 +10,7 @@ import {
   dateStringsCompared,
 } from '@shared/business/utilities/DateHandler';
 import { Case } from '@shared/business/entities/cases/Case';
+import { COURT_ISSUED_EVENTS } from '@shared/business/entities/docketEntry/courtIssuedEventCodes';
 
 export const advancedDocumentSearchHelper = (
   get: Get,
