@@ -8,6 +8,7 @@ export class InternalDocumentSearchResult extends JoiValidationEntity {
   public docketNumber: string;
   public docketNumberWithSuffix: string;
   public documentTitle: string;
+  public documentType?: string;
   public eventCode?: string;
   public filingDate?: string;
   public isCaseSealed?: boolean;
@@ -27,6 +28,7 @@ export class InternalDocumentSearchResult extends JoiValidationEntity {
     this.docketNumber = rawProps.docketNumber;
     this.docketNumberWithSuffix = rawProps.docketNumberWithSuffix;
     this.documentTitle = rawProps.documentTitle;
+    this.documentType = rawProps.documentType;
     this.eventCode = rawProps.eventCode;
     this.filingDate = rawProps.filingDate;
     this.isCaseSealed = rawProps.isCaseSealed;
@@ -48,6 +50,7 @@ export class InternalDocumentSearchResult extends JoiValidationEntity {
     docketNumber: JoiValidationConstants.DOCKET_NUMBER.required(),
     docketNumberWithSuffix: JoiValidationConstants.STRING,
     documentTitle: JoiValidationConstants.DOCUMENT_TITLE.required(),
+    documentType: JoiValidationConstants.STRING,
     eventCode: JoiValidationConstants.STRING,
     isCaseSealed: joi.boolean(),
     isDocketEntrySealed: joi.boolean(),
