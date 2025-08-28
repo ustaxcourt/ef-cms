@@ -10,7 +10,6 @@ import {
   createApplicationContext,
 } from '@web-api/applicationContext';
 import { createOrUpdateUser } from '../../shared/admin-tools/user/admin';
-import { environment } from '@web-api/environment';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import {
   ACCOUNT_STATUS,
@@ -19,20 +18,20 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { getUniqueId } from '@shared/sharedAppContext';
 import pLimit from 'p-limit';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 const scriptConfig: ScriptConfig = {
   description: 'setup-test-users - Creates test users.',
   environment: {
-    destinationTable: 'DESTINATION_TABLE',
     env: 'ENV',
     password: 'DEFAULT_ACCOUNT_PASS',
     userPoolId: 'USER_POOL_ID',
   },
   requireActiveAwsSession: true,
 };
-const { destinationTable, env, password } = parseArgsAndEnvVars(
-  scriptConfig,
-) as { [k: string]: string };
+const { env, password } = parseArgsAndEnvVars(scriptConfig) as {
+  [k: string]: string;
+};
 
 if (env === 'prod') {
   console.error('ERROR: attempted to create test users in production');
@@ -41,12 +40,12 @@ if (env === 'prod') {
 
 const CONCURRENCY_LIMIT = 25;
 const limit = pLimit(CONCURRENCY_LIMIT);
+const accounts: Promise<any>[] = [];
 
-const createManyAccounts = async (
+const createManyAccounts = (
   applicationContext: ServerApplicationContext,
   [num, role, section]: [number, Role, string],
 ) => {
-  const accounts: Promise<any>[] = [];
   for (let i = 1; i <= num; i++) {
     const email =
       role === 'chambers'
@@ -82,7 +81,6 @@ const createManyAccounts = async (
       ),
     );
   }
-  await Promise.allSettled(accounts);
 };
 
 const setupCourtUsers = async (
@@ -143,9 +141,7 @@ const setupPractitionerInformationArray = (
   });
 };
 
-const setupPractitioners = async (
-  applicationContext: ServerApplicationContext,
-) => {
+const setupPractitioners = (applicationContext: ServerApplicationContext) => {
   const PRACTICE_TYPES = {
     DOJ: 'DOJ',
     IRS: 'IRS',
@@ -245,18 +241,21 @@ const setupPractitioners = async (
         suffix: '',
       };
 
-      await createOrUpdateUser(applicationContext, {
-        password,
-        setPasswordAsPermanent: true,
-        user,
-      });
+      accounts.push(
+        limit(() =>
+          createOrUpdateUser(applicationContext, {
+            password,
+            setPasswordAsPermanent: true,
+            user,
+          }),
+        ),
+      );
     }
   }
 };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  environment.dynamoDbTableName = destinationTable;
   const applicationContext = createApplicationContext({});
 
   console.log('== Creating Court Users');
@@ -268,5 +267,6 @@ const setupPractitioners = async (
   console.log('== Creating Practitioners');
   await setupPractitioners(applicationContext);
 
+  await settlePromises(accounts);
   console.log('== Done!');
 })();
