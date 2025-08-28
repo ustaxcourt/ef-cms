@@ -116,6 +116,7 @@
   --color-red-error: var(--red-error);
   --color-green: var(--green);
   --color-green-success: var(--green-success);
+  --breakpoint-xs: 30rem;
 }
 
 @layer base {
