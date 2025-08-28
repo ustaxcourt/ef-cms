@@ -4,6 +4,7 @@ import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
 );
+jest.mock('../addCoverToPdf');
 jest.mock(
   '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus',
 );
@@ -14,7 +15,6 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { serveExternallyFiledDocumentInteractor } from './serveExternallyFiledDocumentInteractor';
-jest.mock('../addCoverToPdf');
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { docketClerkUser } from '@shared/test/mockUsers';

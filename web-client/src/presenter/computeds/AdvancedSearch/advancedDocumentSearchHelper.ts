@@ -7,8 +7,8 @@ import { state } from '@web-client/presenter/app.cerebral';
 import {
   calculateISODate,
   FORMATS,
+  dateStringsCompared,
 } from '@shared/business/utilities/DateHandler';
-import { dateStringsCompared } from '@shared/business/utilities/DateHandler';
 import { Case } from '@shared/business/entities/cases/Case';
 
 export const advancedDocumentSearchHelper = (
@@ -143,6 +143,8 @@ export const formatDocumentSearchResultRecord = (
     STANDING_PRETRIAL_EVENT_CODES,
   } = applicationContext.getConstants();
 
+  result.documentType = getDocumentTypeByEventCode(result.eventCode);
+
   result.formattedFiledDate = applicationContext
     .getUtilities()
     .formatDateString(result.filingDate, FORMATS.MMDDYYYY);
@@ -178,3 +180,10 @@ export const formatDocumentSearchResultRecord = (
 
   return result;
 };
+
+function getDocumentTypeByEventCode(eventCode: string): string | undefined {
+  const eventInfo = COURT_ISSUED_EVENTS.find(eventInfo => {
+    return eventInfo.eventCode === eventCode;
+  });
+  return eventInfo && eventInfo.documentType;
+}

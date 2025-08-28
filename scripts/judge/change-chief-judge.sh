@@ -14,13 +14,6 @@
   "NEW_JUDGE_ID"
 
 REGION="us-east-1"
-# look up current table version from deploy table
-TABLE_VERSION=$(aws dynamodb get-item \
-  --table-name "efcms-deploy-${ENV}" \
-  --key '{"pk":{"S":"source-table-version"}, "sk":{"S":"source-table-version"}}' \
-  --output text \
-  --region "${REGION}" \
-  --query 'Item.current.S')
 
 # get judge name via postgres (TypeScript script)
 NEW_JUDGE_NAME=$(ENV="${ENV}" REGION="${REGION}" ./scripts/judge/get-judge-name.ts "${NEW_JUDGE_ID}")

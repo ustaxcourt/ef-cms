@@ -5,6 +5,8 @@
 # Usage
 #   ENV=dev ./setup-redaction-acknowledgement-enabled-flag.sh
 
+# TODO: MIGRATE TO TYPESCRIPT
+
 ./check-env-variables.sh \
   "ENV" \
   "AWS_SECRET_ACCESS_KEY" \

@@ -14,8 +14,9 @@ export const sealInLowerEnvironment = async (
   records,
   authorizedUser: UnknownAuthUser,
 ) => {
-  const isCurrentColorActive =
-    await applicationContext.isCurrentColorActive(applicationContext);
+  const isCurrentColorActive = await applicationContext
+    .getConfigurationGateway()
+    .isCurrentColorActive(applicationContext);
 
   if (!isCurrentColorActive) {
     return records.map(() => {});
