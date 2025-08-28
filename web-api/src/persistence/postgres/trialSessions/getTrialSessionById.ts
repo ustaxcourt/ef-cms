@@ -41,7 +41,7 @@ export const getTrialSessionById = async ({
           .as('caseOrders'),
       ])
       .groupBy(sql<string>`ts.*, ts.trial_session_id`)
-      .where('trialSessionId', '=', trialSessionId)
+      .where('ts.trialSessionId', '=', trialSessionId)
       .executeTakeFirst(),
   );
 
