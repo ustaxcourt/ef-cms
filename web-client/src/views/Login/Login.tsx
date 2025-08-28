@@ -118,9 +118,9 @@ export const Login = connect(
                     </form>
                     <div className="button-container">
                       <Button
+                        variant={'primaryTertiary'}
                         className="margin-top-1 display-block"
                         data-testid="forgot-password-button"
-                        link={true}
                         type="button"
                         onClick={() => navigateToForgotPasswordSequence()}
                       >
@@ -130,8 +130,8 @@ export const Login = connect(
                     <span>
                       Don&apos;t have an account?{' '}
                       <Button
+                        variant={'primaryTertiary'}
                         className="padding-top-0"
-                        link={true}
                         type="button"
                         onClick={e => {
                           e.preventDefault();
