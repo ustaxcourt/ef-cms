@@ -1,34 +1,45 @@
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { getDbReader } from '@web-api/database';
 import { fromKyselyTrialSession } from './mapper';
-import { jsonArrayFrom } from 'kysely/helpers/postgres';
 import { calculateDate } from '@shared/business/utilities/DateHandler';
+import { sql } from 'kysely';
 
 export const getTrialSessions = async (): Promise<RawTrialSession[]> => {
   const dbTrialSessions = await getDbReader(reader =>
     reader
       .selectFrom('dwTrialSession as ts')
-      .selectAll()
-      .select(eb =>
-        jsonArrayFrom(
-          eb
-            .selectFrom('dwTrialSessionPaperPdf as tspdf')
-            .select(['title', 'fileId'])
-            .whereRef('tspdf.trialSessionId', '=', 'ts.trialSessionId'),
-        ).as('pdfs'),
+      .leftJoin(
+        'dwTrialSessionCase as tsc',
+        'ts.trialSessionId',
+        'tsc.trialSessionId',
       )
-      .select(eb =>
-        jsonArrayFrom(
-          eb
-            .selectFrom('dwTrialSessionCase as tsc')
-            .selectAll() // Types WILL lie to us
-            .whereRef('tsc.trialSessionId', '=', 'ts.trialSessionId'),
-        ).as('caseOrders'),
+      .leftJoin(
+        'dwTrialSessionPaperPdf as tspdf',
+        'tspdf.trialSessionId',
+        'ts.trialSessionId',
       )
+      .selectAll('ts')
+      .select(({ fn }) => [
+        fn
+          .coalesce(
+            fn
+              .jsonAgg('tspdf')
+              .filterWhere('tspdf.trialSessionId', 'is not', null),
+            sql.lit('[]'),
+          )
+          .as('pdfs'),
+        fn
+          .coalesce(
+            fn.jsonAgg('tsc').filterWhere('tsc.trialSessionId', 'is not', null),
+            sql.lit('[]'),
+          )
+          .as('caseOrders'),
+      ])
+      .groupBy(sql<string>`ts.*, ts.trial_session_id`)
       .execute(),
   );
 
-  // TODO jsonArrayFrom does not deserialize date strings into date objects.
+  // TODO PG JSON objects do not deserialize date strings into date objects.
   // This is different from selecting them directly in the main query, where they are deserialized into date objects.
   // This is a workaround to set those date strings as the expected objects before the move down stream.
   const deserializedTrialSessions = dbTrialSessions.map(trialSession => ({
@@ -48,6 +59,6 @@ export const getTrialSessions = async (): Promise<RawTrialSession[]> => {
   }));
 
   return deserializedTrialSessions.map(ts =>
-    fromKyselyTrialSession(ts, ts.pdfs, ts.caseOrders),
+    fromKyselyTrialSession(ts, ts.pdfs as any, ts.caseOrders as any),
   );
 };
