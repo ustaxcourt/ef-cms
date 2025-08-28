@@ -717,9 +717,14 @@ export const baseState = {
   docketRecordIndex: 0,
   documentToEdit: {} as any,
   documentsSelectedForDownload: [] as { docketEntryId: string }[],
-  documentSearchSort: {
+  // separate sort state for Order and Opinion advanced search tabs
+  orderDocumentSearchSort: {
     sortColumn: 'formattedFiledDate',
-    sortDirection: 'desc',
+    sortDirection: 'desc' as 'asc' | 'desc',
+  },
+  opinionDocumentSearchSort: {
+    sortColumn: 'formattedFiledDate',
+    sortDirection: 'desc' as 'asc' | 'desc',
   },
   draftDocumentViewerDocketEntryId: null,
   featureFlags: undefined as unknown as { [key: string]: string },

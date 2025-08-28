@@ -61,8 +61,9 @@ export const opinionPublicSearchInteractor = async (
   });
 
   return {
-    results: PublicDocumentSearchResult.validateRawCollection(results)
-      .map(r => omit(r, 'entityName'))
-      .slice(0, MAX_SEARCH_RESULTS),
+    results: PublicDocumentSearchResult.validateRawCollection(results).slice(
+      0,
+      MAX_SEARCH_RESULTS,
+    ),
   };
 };

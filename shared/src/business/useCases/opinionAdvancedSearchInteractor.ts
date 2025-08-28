@@ -75,8 +75,9 @@ export const opinionAdvancedSearchInteractor = async (
   });
 
   return {
-    results: InternalDocumentSearchResult.validateRawCollection(results)
-      .map(r => omit(r, 'entityName'))
-      .slice(0, MAX_SEARCH_RESULTS),
+    results: InternalDocumentSearchResult.validateRawCollection(results).slice(
+      0,
+      MAX_SEARCH_RESULTS,
+    ),
   };
 };

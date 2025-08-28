@@ -7,10 +7,9 @@ import { state } from '@web-client/presenter/app.cerebral';
 import {
   calculateISODate,
   FORMATS,
+  dateStringsCompared,
 } from '@shared/business/utilities/DateHandler';
-import { dateStringsCompared } from '@shared/business/utilities/DateHandler';
 import { Case } from '@shared/business/entities/cases/Case';
-import { COURT_ISSUED_EVENTS } from '@shared/business/entities/docketEntry/courtIssuedEventCodes';
 
 export const advancedDocumentSearchHelper = (
   get: Get,
@@ -20,8 +19,14 @@ export const advancedDocumentSearchHelper = (
   const { role } = get(state.user);
   const advancedSearchTab = get(state.advancedSearchTab);
   const searchResults = get(state.searchResults[advancedSearchTab]);
-  const sortColumn = get(state.documentSearchSort.sortColumn);
-  const sortDirection = get(state.documentSearchSort.sortDirection);
+  // use per-tab sort state so order/opinion do not share
+  const sortStateKey =
+    advancedSearchTab ===
+    applicationContext.getConstants().ADVANCED_SEARCH_TABS.OPINION
+      ? 'opinionDocumentSearchSort'
+      : 'orderDocumentSearchSort';
+  const sortColumn = get(state[sortStateKey].sortColumn);
+  const sortDirection = get(state[sortStateKey].sortDirection);
 
   const {
     ADVANCED_SEARCH_TABS,
@@ -40,8 +45,8 @@ export const advancedDocumentSearchHelper = (
 
   let documentTypeVerbiage = capitalize(advancedSearchTab);
 
-  const formattedJudges = get(state.legacyAndCurrentJudges);
-  formattedJudges.forEach(judge => {
+  const formattedJudges = get(state.legacyAndCurrentJudges) as any[];
+  formattedJudges.forEach((judge: any) => {
     judge.lastName = applicationContext
       .getUtilities()
       .getJudgeLastName(judge.judgeFullName);
@@ -138,8 +143,6 @@ export const formatDocumentSearchResultRecord = (
     STANDING_PRETRIAL_EVENT_CODES,
   } = applicationContext.getConstants();
 
-  result.documentType = getDocumentTypeByEventCode(result.eventCode);
-
   result.formattedFiledDate = applicationContext
     .getUtilities()
     .formatDateString(result.filingDate, FORMATS.MMDDYYYY);
@@ -175,10 +178,3 @@ export const formatDocumentSearchResultRecord = (
 
   return result;
 };
-
-function getDocumentTypeByEventCode(eventCode: string): string | undefined {
-  const eventInfo = COURT_ISSUED_EVENTS.find(eventInfo => {
-    return eventInfo.eventCode === eventCode;
-  });
-  return eventInfo && eventInfo.documentType;
-}

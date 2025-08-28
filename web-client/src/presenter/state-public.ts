@@ -78,9 +78,14 @@ export const baseState = {
   constants: {} as { [key: string]: any },
   currentPage: 'Interstitial',
   currentPaginationPage: 0,
-  documentSearchSort: {
+  // separate sort state for Order and Opinion advanced search tabs
+  orderDocumentSearchSort: {
     sortColumn: 'formattedFiledDate',
-    sortDirection: 'desc',
+    sortDirection: 'desc' as 'asc' | 'desc',
+  },
+  opinionDocumentSearchSort: {
+    sortColumn: 'formattedFiledDate',
+    sortDirection: 'desc' as 'asc' | 'desc',
   },
   featureFlags: undefined as unknown as { [key: string]: string },
   form: {} as Record<string, any>,

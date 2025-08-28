@@ -29,6 +29,14 @@ describe('advancedDocumentSearchHelper', () => {
           role: USER_ROLES.legacyJudge,
         },
       ],
+      orderDocumentSearchSort: {
+        sortColumn: 'formattedFiledDate',
+        sortDirection: 'desc',
+      },
+      opinionDocumentSearchSort: {
+        sortColumn: 'formattedFiledDate',
+        sortDirection: 'desc',
+      },
       permissions: getUserPermissions(user),
       user,
     };
@@ -472,7 +480,7 @@ describe('advancedDocumentSearchHelper', () => {
         advancedSearchForm: { currentPage: 1 },
         advancedSearchTab:
           applicationContext.getConstants().ADVANCED_SEARCH_TABS.ORDER,
-        documentSearchSort: {
+        orderDocumentSearchSort: {
           sortColumn: 'docketNumber',
           sortDirection: 'asc',
         },
@@ -507,7 +515,7 @@ describe('advancedDocumentSearchHelper', () => {
         advancedSearchForm: { currentPage: 1 },
         advancedSearchTab:
           applicationContext.getConstants().ADVANCED_SEARCH_TABS.ORDER,
-        documentSearchSort: {
+        orderDocumentSearchSort: {
           sortColumn: 'formattedFiledDate',
           sortDirection: 'asc',
         },
@@ -549,7 +557,7 @@ describe('advancedDocumentSearchHelper', () => {
         advancedSearchForm: { currentPage: 1 },
         advancedSearchTab:
           applicationContext.getConstants().ADVANCED_SEARCH_TABS.ORDER,
-        documentSearchSort: {
+        orderDocumentSearchSort: {
           sortColumn: 'numberOfPages',
           sortDirection: 'asc',
         },
@@ -587,7 +595,7 @@ describe('advancedDocumentSearchHelper', () => {
         advancedSearchForm: { currentPage: 1 },
         advancedSearchTab:
           applicationContext.getConstants().ADVANCED_SEARCH_TABS.OPINION,
-        documentSearchSort: {
+        opinionDocumentSearchSort: {
           sortColumn: 'judge',
           sortDirection: 'asc',
         },
@@ -617,7 +625,7 @@ describe('advancedDocumentSearchHelper', () => {
         advancedSearchForm: { currentPage: 1 },
         advancedSearchTab:
           applicationContext.getConstants().ADVANCED_SEARCH_TABS.OPINION,
-        documentSearchSort: {
+        opinionDocumentSearchSort: {
           sortColumn: 'judge',
           sortDirection: 'desc',
         },

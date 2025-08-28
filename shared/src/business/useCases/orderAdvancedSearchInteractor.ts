@@ -85,8 +85,8 @@ export const orderAdvancedSearchInteractor = async (
   );
 
   return {
-    results: InternalDocumentSearchResult.validateRawCollection(filteredResults)
-      .map(r => omit(r, 'entityName'))
-      .slice(0, MAX_SEARCH_RESULTS),
+    results: InternalDocumentSearchResult.validateRawCollection(
+      filteredResults,
+    ).slice(0, MAX_SEARCH_RESULTS),
   };
 };
