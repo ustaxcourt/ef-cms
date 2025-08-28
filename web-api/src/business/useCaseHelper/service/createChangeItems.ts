@@ -66,7 +66,8 @@ const createDocketEntryForChange = async ({
 
   const isAddressSealed =
     caseEntity.petitioners.find(
-      petitioner => petitioner.email === newData.email,
+      petitioner =>
+        petitioner.email === newData.email && petitioner.name === newData.name,
     )?.isAddressSealed ?? false;
 
   oldData.email = getOldEmail(oldData.email, isAddressSealed);

@@ -63,6 +63,7 @@ export const PetitionersAndCounsel = connect(
                     showEmail={false}
                   />
 
+                  {!petitioner.sealedAndUnavailable && (
                     <span
                       className={classNames({
                         'margin-left-205': petitioner.isAddressSealed,
@@ -71,7 +72,7 @@ export const PetitionersAndCounsel = connect(
                       })}
                       data-testid="petitioner-email"
                     >
-                      {!petitioner.sealedAndUnavailable && <span>{petitioner.formattedEmail}</span>}
+                      <span>{petitioner.formattedEmail}</span>
                       {petitioner.showEAccessFlag && (
                         <FontAwesomeIcon
                           aria-label="has e-access"
@@ -81,6 +82,7 @@ export const PetitionersAndCounsel = connect(
                         />
                       )}
                     </span>
+                  )}
 
                   {petitioner.showRemoveEmailButton && (
                     <Button
@@ -98,7 +100,13 @@ export const PetitionersAndCounsel = connect(
                       Remove Email
                     </Button>
                   )}
-                  <div data-testid="petitioner-pending-email">
+                  <div
+                    data-testid="petitioner-pending-email"
+                    className={classNames(
+                      petitioner.isAddressSealed &&
+                        'margin-left-205 sealed-address',
+                    )}
+                  >
                     {petitioner.formattedPendingEmail}
                   </div>
                   {petitioner.showPaperPetitionEmail && (
@@ -113,7 +121,6 @@ export const PetitionersAndCounsel = connect(
                             'margin-left-205 sealed-address',
                           'margin-top-4 word-wrap-break-word',
                         )}
-                        
                       >
                         {petitioner.isAddressSealed && (
                           <span
