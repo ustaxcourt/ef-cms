@@ -24,17 +24,22 @@ export const getTrialSessions = async (): Promise<RawTrialSession[]> => {
           .coalesce(
             fn
               .jsonAgg('tspdf')
+              .distinct()
               .filterWhere('tspdf.trialSessionId', 'is not', null),
             sql.lit('[]'),
           )
           .as('pdfs'),
         fn
           .coalesce(
-            fn.jsonAgg('tsc').filterWhere('tsc.trialSessionId', 'is not', null),
+            fn
+              .jsonAgg('tsc')
+              .distinct()
+              .filterWhere('tsc.trialSessionId', 'is not', null),
             sql.lit('[]'),
           )
           .as('caseOrders'),
       ])
+      .orderBy('createdAt', 'desc')
       .groupBy(sql<string>`ts.*, ts.trial_session_id`)
       .execute(),
   );

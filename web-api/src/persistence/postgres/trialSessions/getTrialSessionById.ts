@@ -29,13 +29,17 @@ export const getTrialSessionById = async ({
           .coalesce(
             fn
               .jsonAgg('tspdf')
+              .distinct()
               .filterWhere('tspdf.trialSessionId', 'is not', null),
             sql.lit('[]'),
           )
           .as('pdfs'),
         fn
           .coalesce(
-            fn.jsonAgg('tsc').filterWhere('tsc.trialSessionId', 'is not', null),
+            fn
+              .jsonAgg('tsc')
+              .distinct()
+              .filterWhere('tsc.trialSessionId', 'is not', null),
             sql.lit('[]'),
           )
           .as('caseOrders'),
