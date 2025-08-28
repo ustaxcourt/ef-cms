@@ -23,6 +23,7 @@ describe('opinionPublicSearchInteractor', () => {
       numberOfPages: 1,
       sealedDate: undefined,
       signedJudgeName: 'Maurice B. Foley',
+      entityName: 'PublicDocumentSearchResult',
     },
   ];
 
