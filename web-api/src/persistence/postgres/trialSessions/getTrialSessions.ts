@@ -44,20 +44,21 @@ export const getTrialSessions = async (): Promise<RawTrialSession[]> => {
       .execute(),
   );
 
-  // TODO PG JSON objects do not deserialize date strings into date objects.
+  // PG JSON objects do not deserialize date strings into date objects.
   // This is different from selecting them directly in the main query, where they are deserialized into date objects.
   // This is a workaround to set those date strings as the expected objects before the move down stream.
   const deserializedTrialSessions = dbTrialSessions.map(trialSession => ({
     ...trialSession,
     caseOrders: trialSession.caseOrders.map(caseOrder => ({
       ...caseOrder,
-
-      addedToSessionAt: calculateDate({
-        dateString: caseOrder.addedToSessionAt as unknown as string,
-      }),
+      addedToSessionAt: caseOrder.addedToSessionAt
+        ? calculateDate({
+            dateString: caseOrder.addedToSessionAt,
+          })
+        : null,
       removedFromTrialDate: caseOrder.removedFromTrialDate
         ? calculateDate({
-            dateString: caseOrder.removedFromTrialDate as unknown as string,
+            dateString: caseOrder.removedFromTrialDate,
           })
         : null,
     })),
