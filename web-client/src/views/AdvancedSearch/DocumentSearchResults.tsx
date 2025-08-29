@@ -203,6 +203,7 @@ export const DocumentSearchResults = connect(
                           hasRows={true}
                           sortField="formattedFiledDate"
                           title="Filed Date"
+                          data-testid="sort-button-filed-date"
                           onClickSequence={() => {
                             handleSort('formattedFiledDate');
                           }}
@@ -309,7 +310,9 @@ export const DocumentSearchResults = connect(
                         className="search-result"
                         key={`${result.docketEntryId}-${result.docketNumber}`}
                       >
-                        <td>{result.formattedFiledDate}</td>
+                        <td data-testid="search-result-filed-date-column">
+                          {result.formattedFiledDate}
+                        </td>
                         <td aria-hidden="true" className="small-column">
                           {result.showSealedIcon && (
                             <Icon
