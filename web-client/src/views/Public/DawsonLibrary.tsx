@@ -7,15 +7,16 @@ import {
 } from '@web-client/dawson-ui/ui/alert';
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Tag } from '@web-client/dawson-ui/ui/tag';
 
 export const DawsonLibrary = () => {
   return (
     <>
       <BigHeader text="Dawson Library" />
       <div className="card margin-2 padding-2">
-        <h2>Button</h2>
-
         <div>
+          <h2>Button</h2>
+
           <div className="tw:inline tw:m-2">
             <Button variant={'primary'}>
               <FontAwesomeIcon
@@ -96,6 +97,19 @@ export const DawsonLibrary = () => {
             <AlertHeader>This is a header</AlertHeader>
             <AlertDescription>This is a description</AlertDescription>
           </Alert>
+        </div>
+
+        <div className="tw:mt-4">
+          <h2>Tag</h2>
+
+          <Tag variant="primary">
+            <FontAwesomeIcon
+              className="fa:margin-right-1"
+              icon="gavel"
+              size="1x"
+            />
+            TAG
+          </Tag>
         </div>
       </div>
     </>
