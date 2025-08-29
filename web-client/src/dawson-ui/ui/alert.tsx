@@ -9,11 +9,18 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 import { cn } from '@web-client/lib/utils';
-import { Button } from '@web-client/dawson-ui/ui/button';
-import { CircleXmark } from './icons';
+// import { Button } from '@web-client/dawson-ui/ui/button';
+// import { CircleXmark } from './icons';
 
 const alertVariants = cva(
-  'tw:relative tw:w-full rounded-none tw:border-solid tw:border-0 tw:border-l-8 tw:p-4',
+  cn(
+    'tw:relative rounded-none tw:border-solid tw:border-0',
+    'tw:xs:border-l-8 tw:xs:p-4 tw:border-l-6 tw:p-3',
+    'tw:font-normal tw:xs:text-lg tw:text-base',
+    'tw:[&_ul]:m-0 tw:[&_ul]:-ml-4 tw:[&_ul]:list-disc',
+    'tw:xs:[&_svg]:h-7 tw:xs:[&_svg]:w-7 tw:[&_svg]:h-6 tw:[&_svg]:w-6',
+    'tw:w-full',
+  ),
   {
     variants: {
       variant: {
@@ -49,18 +56,15 @@ function Alert({
       {...props}
     >
       <div className="tw:flex">
-        <FontAwesomeIcon
-          className="tw:h-6 tw:w-6"
-          icon={iconType[variant ?? 'info']}
-        />
-        <div className="tw:relative tw:ml-4">{props.children}</div>
-        <Button
+        <FontAwesomeIcon icon={iconType[variant ?? 'info']} />
+        <div className="tw:relative tw:xs:ml-4 tw:ml-3">{props.children}</div>
+        {/* <Button
           className="tw:fill-primary tw:self-start tw:ml-auto"
           variant={'primaryTertiary'}
         >
           Close
-          <CircleXmark />
-        </Button>
+          <CircleXmark  />
+        </Button> */}
       </div>
     </div>
   );
@@ -70,20 +74,17 @@ function AlertHeader({ className, ...props }: React.ComponentProps<'p'>) {
   return (
     <div
       data-slot="alert-title"
-      className={cn('tw:font-bold tw:text-base tw:mb-1', className)}
+      className={cn(
+        'tw:xs:font-bold tw:font-semibold tw:xs:mb-1 tw:mb-0.5',
+        className,
+      )}
       {...props}
     />
   );
 }
 
 function AlertDescription({ className, ...props }: React.ComponentProps<'p'>) {
-  return (
-    <div
-      data-slot="alert-description"
-      className={cn('tw:font-normal tw:text-base', className)}
-      {...props}
-    />
-  );
+  return <div data-slot="alert-description" {...props} />;
 }
 
 export { Alert, AlertHeader, AlertDescription };
