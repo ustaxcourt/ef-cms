@@ -293,7 +293,6 @@ This runbook describes the process of creating a new DAWSON lower environment in
 				--region us-east-1 --name "/DAWSON/${ENV}/source-table-version" \
 				--value "alpha" --type "String" --overwrite
       ```
-<!-- TODO: UPDATE THIS SECTION TO KNOW HOW TO SAVE IN POSTGRES INSTEAD OF DYNAMO -->
 1. Write feature flags to the deploy table:
    1. `aws-batch-zipper-minimum-count`:
       ```bash
