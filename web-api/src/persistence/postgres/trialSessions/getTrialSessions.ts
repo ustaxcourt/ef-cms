@@ -26,7 +26,7 @@ export const getTrialSessions = async (): Promise<RawTrialSession[]> => {
               .jsonAgg('tspdf')
               .distinct()
               .filterWhere('tspdf.trialSessionId', 'is not', null),
-            sql.lit('[]'),
+            sql`json_build_array()`,
           )
           .as('pdfs'),
         fn
@@ -35,7 +35,7 @@ export const getTrialSessions = async (): Promise<RawTrialSession[]> => {
               .jsonAgg('tsc')
               .distinct()
               .filterWhere('tsc.trialSessionId', 'is not', null),
-            sql.lit('[]'),
+            sql`json_build_array()`,
           )
           .as('caseOrders'),
       ])
