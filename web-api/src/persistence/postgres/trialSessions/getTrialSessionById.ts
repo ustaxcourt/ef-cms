@@ -31,7 +31,7 @@ export const getTrialSessionById = async ({
               .jsonAgg('tspdf')
               .distinct()
               .filterWhere('tspdf.trialSessionId', 'is not', null),
-            sql.lit<Array<never>>([]),
+            sql`json_build_array()`,
           )
           .as('pdfs'),
         fn
@@ -40,7 +40,7 @@ export const getTrialSessionById = async ({
               .jsonAgg('tsc')
               .distinct()
               .filterWhere('tsc.trialSessionId', 'is not', null),
-            sql.lit<Array<never>>([]),
+            sql`json_build_array()`,
           )
           .as('caseOrders'),
       ])
