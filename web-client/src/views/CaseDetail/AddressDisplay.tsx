@@ -40,7 +40,7 @@ export const AddressDisplay = connect<
     showSealAddressLink,
   }) {
     return (
-      <div className={classNames(contact.isAddressSealed && 'margin-left-205')}>
+      <div className={classNames({ 'margin-left-205': contact.isAddressSealed, 'sealed-address': contact.isAddressSealed })}>
         <div className="margin-top-0 position-relative">
           {contact.isAddressSealed && (
             <span
@@ -78,7 +78,7 @@ export const AddressDisplay = connect<
                 <br />
               </span>
             ))}
-          {contact.additionalName}
+          {!contact.isAddressSealed && contact.additionalName}
           {[contact.secondaryName, contact.inCareOf].map(
             contactName =>
               contactName && (
@@ -106,7 +106,7 @@ export const AddressDisplay = connect<
           )}
         </div>
         {contact.sealedAndUnavailable && (
-          <div className="sealed-address">Address sealed</div>
+          <div className="sealed-address">Address, Phone and email sealed</div>
         )}
       </div>
     );

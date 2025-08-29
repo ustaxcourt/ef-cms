@@ -1,10 +1,8 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import { ROLES } from '@shared/business/entities/EntityConstants';
-import { applicationContext } from '@web-api/applicationContext';
 import { getDbReader } from '@web-api/database';
 import { NotFoundError } from '@web-api/errors/errors';
 import { purgeDynamoKeys } from '@web-api/persistence/dynamo/helpers/purgeDynamoKeys';
-import { queryFull } from '@web-api/persistence/dynamodbClientService';
 import { fromKyselyCaseCorrespondence } from '@web-api/persistence/postgres/caseCorrespondences/mapper';
 import { CaseCorrespondenceKysely } from '@web-api/persistence/postgres/caseCorrespondences/schema';
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
@@ -12,6 +10,8 @@ import { CaseKysely } from '@web-api/persistence/postgres/cases/schema';
 import { fromKyselyDocketEntry } from '@web-api/persistence/postgres/docketEntries/mapper';
 import { DocketEntryKysely } from '@web-api/persistence/postgres/docketEntries/schema';
 import { difference, isEmpty, sortBy } from 'lodash';
+import { TrialSessionKysely } from '../trialSessions/schema';
+import { fromKyselyTrialSession } from '@web-api/persistence/postgres/trialSessions/mapper';
 import { UserKysely } from '../users/schema';
 import { fromKyselyUser } from '../users/mapper';
 import { UserOnCaseKysely } from '@web-api/persistence/postgres/cases/userOnCase/schema';
@@ -141,7 +141,10 @@ async function getAllCaseData<T extends OmittableCaseFields[]>({
     caseMap.set(privatePractitioner.docketNumber, {
       ...caseInfo,
       // a privatePractitioner can be on a case as a irsPractitioner, and vice versa, so we hard code the role to prevent validation errors everywhere
-      privatePractitioners: existingPrivatePractitioners.map(p => ({ ...p, role: ROLES.privatePractitioner }))
+      privatePractitioners: existingPrivatePractitioners.map(p => ({
+        ...p,
+        role: ROLES.privatePractitioner,
+      })),
     });
   });
   irsPractitioners.forEach(irsPractitioner => {
@@ -151,7 +154,10 @@ async function getAllCaseData<T extends OmittableCaseFields[]>({
     caseMap.set(irsPractitioner.docketNumber, {
       ...caseInfo,
       // a privatePractitioner can be on a case as a irsPractitioner, and vice versa, so we hard code the role to prevent validation errors everywhere
-      irsPractitioners: existingIrsPractitioners.map(p => ({ ...p, role: ROLES.irsPractitioner }))
+      irsPractitioners: existingIrsPractitioners.map(p => ({
+        ...p,
+        role: ROLES.irsPractitioner,
+      })),
     });
   });
   caseCorrespondences.forEach(correspondence => {
@@ -222,10 +228,15 @@ function convertDbCaseToRawCase(
       fromKyselyCaseCorrespondence(cc),
     ),
     irsPractitioners: dbCase.irsPractitioners.map(ip => fromKyselyUser(ip)),
-    privatePractitioners: dbCase.privatePractitioners.map(pp => fromKyselyUser(pp)),
+    privatePractitioners: dbCase.privatePractitioners.map(pp =>
+      fromKyselyUser(pp),
+    ),
     docketEntries: dbCase.docketEntries.map(d => fromKyselyDocketEntry(d)),
     archivedDocketEntries: dbCase.archivedDocketEntries.map(aD =>
       fromKyselyDocketEntry(aD),
+    ),
+    hearings: dbCase.hearings.map(hi =>
+      fromKyselyTrialSession(hi, hi.pdf, hi.caseOrders),
     ),
   };
 
@@ -257,16 +268,14 @@ async function getIrsPractitioners({
   docketNumbers: string[];
 }) {
   const practitionerInfo = await getDbReader(reader => {
-    return (
-      reader
-        .selectFrom('dwUserOnCase as uoc')
-        .innerJoin('dwUser as u', 'uoc.userId', 'u.userId')
-        .where('uoc.docketNumber', 'in', docketNumbers)
-        .where('uoc.actingAsRole', '=', ROLES.irsPractitioner)
-        .selectAll('uoc')
-        .selectAll('u')
-        .execute()
-    );
+    return reader
+      .selectFrom('dwUserOnCase as uoc')
+      .innerJoin('dwUser as u', 'uoc.userId', 'u.userId')
+      .where('uoc.docketNumber', 'in', docketNumbers)
+      .where('uoc.actingAsRole', '=', ROLES.irsPractitioner)
+      .selectAll('uoc')
+      .selectAll('u')
+      .execute();
   });
 
   return practitionerInfo;
@@ -321,23 +330,55 @@ async function getCaseCorrespondenceByDocketNumber(docketNumbers: string[]) {
 
 async function getHearings(
   docketNumbers: string[],
-): Promise<{ docketNumber: string; hearings: any[] }[]> {
-  const hearingsInfo = await Promise.all(
-    docketNumbers.map(async docketNumber => {
-      const hearings = await queryFull({
-        ExpressionAttributeNames: {
-          '#pk': 'pk',
-          '#sk': 'sk',
-        },
-        ExpressionAttributeValues: {
-          ':pk': `case|${docketNumber}`,
-          ':prefix': 'hearing|',
-        },
-        KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
-        applicationContext,
-      });
-      return { docketNumber, hearings };
-    }),
+): Promise<{ docketNumber: string; hearings: TrialSessionKysely[] }[]> {
+  // const hearingsInfo = await getDbReader(reader =>
+  //   reader
+  //     .selectFrom('dwTrialSessionCase as ch')
+  //     .innerJoin(
+  //       'dwTrialSession as ts',
+  //       'ch.trialSessionId',
+  //       'ts.trialSessionId',
+  //     )
+  //     .select(({ fn }) => [
+  //       'ch.docketNumber',
+  //       fn.jsonAgg('ts').as('hearings'), // This IS lying about types
+  //     ])
+  //     .where('ch.docketNumber', 'in', docketNumbers)
+  //     .groupBy('ch.docketNumber')
+  //     .execute(),
+  // );
+
+  // TODO 10493: this is a hack to make the the fromKyselyTrialSession functionality work; rethink this
+  const hearingsInfoRaw = await getDbReader(reader =>
+    reader
+      .selectFrom('dwTrialSessionCase as ch')
+      .select(['ch.trialSessionId', 'ch.docketNumber'])
+      .innerJoin(
+        'dwTrialSession as ts',
+        'ch.trialSessionId',
+        'ts.trialSessionId',
+      )
+      .selectAll('ts')
+      .where('ch.docketNumber', 'in', docketNumbers)
+      .where('ch.isHearing', 'is', true)
+      .orderBy('ts.createdAt', 'asc')
+      .execute(),
+  );
+  const hearingsInfo = Object.values(
+    hearingsInfoRaw.reduce(
+      (acc, item) => {
+        const { docketNumber, ...rest } = item;
+        if (!acc[docketNumber]) {
+          acc[docketNumber] = { docketNumber, hearings: [] };
+        }
+        acc[docketNumber].hearings.push(rest);
+        return acc;
+      },
+      {} as Record<
+        string,
+        { docketNumber: string; hearings: TrialSessionKysely[] }
+      >,
+    ),
   );
 
   return hearingsInfo;

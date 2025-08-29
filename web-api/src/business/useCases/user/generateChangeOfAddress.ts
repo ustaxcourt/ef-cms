@@ -3,6 +3,7 @@ import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { createChangeOfAddressJob } from '@web-api/persistence/postgres/jobs/changeOfAddress/createChangeOfAddressJob';
 import { RawUser } from '@shared/business/entities/User';
 import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
 
@@ -89,7 +90,7 @@ export const generateChangeOfAddress = async ({
 
   const jobId = applicationContext.getUniqueId();
 
-  await applicationContext.getPersistenceGateway().createChangeOfAddressJob({
+  await createChangeOfAddressJob({
     docketNumbers: associatedUserCases,
     jobId,
   });

@@ -7,6 +7,10 @@ import { TrialSession } from '../../../../../shared/src/business/entities/trialS
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { deleteCaseDeadline } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { updateTrialSession } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
+import { deleteCasesFromTrialSession } from '@web-api/persistence/postgres/trialSessions/deleteCasesFromTrialSession';
+import { removeCaseFromTrialSession } from '@web-api/persistence/postgres/trialSessions/removeCaseFromTrialSession';
 import { getCaseDeadlinesByConsolidatedCaseDeadlineIds } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds';
 import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
 
@@ -35,8 +39,11 @@ export const closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments =
       });
     });
 
-    if (caseEntity.docketNumber === caseEntity.leadDocketNumber) {
-      const LEAD_CASE_DEADLINES = caseDeadlines.map(cd => cd.caseDeadlineId);
+    const LEAD_CASE_DEADLINES = caseDeadlines.map(cd => cd.caseDeadlineId);
+    if (
+      caseEntity.docketNumber === caseEntity.leadDocketNumber &&
+      LEAD_CASE_DEADLINES.length
+    ) {
       const CHILDREN_DEADLINES =
         await getCaseDeadlinesByConsolidatedCaseDeadlineIds(
           LEAD_CASE_DEADLINES,
@@ -58,12 +65,9 @@ export const closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments =
     caseEntity.updateAutomaticBlocked({ hasCaseDeadline: false });
 
     if (caseEntity.trialSessionId) {
-      const trialSession = await applicationContext
-        .getPersistenceGateway()
-        .getTrialSessionById({
-          applicationContext,
-          trialSessionId: caseEntity.trialSessionId,
-        });
+      const trialSession = await getTrialSessionById({
+        trialSessionId: caseEntity.trialSessionId,
+      });
 
       if (!trialSession) {
         throw new NotFoundError(
@@ -78,15 +82,24 @@ export const closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments =
           disposition: 'Status was changed to Closed',
           docketNumber: caseEntity.docketNumber,
         });
+        await removeCaseFromTrialSession({
+          docketNumber: caseEntity.docketNumber,
+          trialSessionId: trialSessionEntity.trialSessionId,
+          disposition: 'Status was changed to Closed',
+        });
+
+        await updateTrialSession({
+          trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+        });
       } else {
         trialSessionEntity.deleteCaseFromCalendar({
           docketNumber: caseEntity.docketNumber,
         });
-      }
 
-      await applicationContext.getPersistenceGateway().updateTrialSession({
-        applicationContext,
-        trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
-      });
+        await deleteCasesFromTrialSession({
+          docketNumbers: [caseEntity.docketNumber],
+          trialSessionId: trialSessionEntity.trialSessionId,
+        });
+      }
     }
   };
