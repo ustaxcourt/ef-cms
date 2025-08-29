@@ -2,6 +2,7 @@
 
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
+import { getDbReader } from '@web-api/database';
 import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 
 const FEATURE_FLAGS_WITH_CURRENT_PROPERTY = [
@@ -19,6 +20,13 @@ const FEATURE_FLAGS_WITH_CURRENT_PROPERTY = [
 const { STAGE, ENV } = process.env;
 
 async function script() {
+  const FEATURE_FLAG_EXISTS_IN_DB = await getDbReader(reader =>
+    reader.selectFrom('dwFeatureFlag').selectAll().execute(),
+  );
+
+  if (FEATURE_FLAG_EXISTS_IN_DB.length)
+    return console.log('Feature Flags already in Postgres DB');
+
   const DYNAMO_CLIENT = new DynamoDBClient({
     region: 'us-east-1',
   });
