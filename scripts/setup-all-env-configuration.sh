@@ -5,17 +5,17 @@
 # Usage
 #   ENV=dev ./setup-all-env-configuration.sh
 
-# TODO: REFACTOR TO TYPESCRIPT
-
 ./check-env-variables.sh \
   "ENV" \
   "AWS_SECRET_ACCESS_KEY" \
   "AWS_ACCESS_KEY_ID"
 
-./scripts/dynamo/setup-terminal-ip-allowlist.sh
-./scripts/dynamo/setup-maintenance-mode-flag.sh
-./scripts/dynamo/setup-section-outbox-retrieval-days.sh
-./scripts/dynamo/setup-add-docket-numbers-to-orders-flag.sh
-./scripts/dynamo/setup-updated-trial-session-types-flag.sh
-./scripts/dynamo/setup-consolidated-cases-group-access-petitioner-flag.sh
-./scripts/dynamo/setup-aws-batch-zipper-minimum-count.sh
+./scripts/postgres/featureFlags/setup-aws-batch-zipper-minimum-count.ts
+./scripts/postgres/featureFlags/setup-chief-judge-name-flag.ts
+./scripts/postgres/featureFlags/setup-clerk-of-court-config.ts
+./scripts/postgres/featureFlags/setup-document-visibility-policy-change-date.ts
+./scripts/postgres/featureFlags/setup-e-consent-fields-enabled-feature-flag.ts
+./scripts/postgres/featureFlags/setup-maintenance-mode-flag.ts
+./scripts/postgres/featureFlags/setup-section-outbox-retrieval-days.ts
+./scripts/postgres/featureFlags/setup-terminal-ip-allowlist.ts
+./scripts/postgres/featureFlags/setup-use-change-of-address-lambda-flag.ts
