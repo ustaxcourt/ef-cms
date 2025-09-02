@@ -77,7 +77,7 @@ describe('Docket clerk opinion advanced search', () => {
     await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
 
     expect(cerebralTest.getState('alertError')).toEqual({
-      messages: ['Start date cannot be in the future. Enter valid start date.'],
+      messages: ['Start date cannot be in the future. Enter a valid date.'],
       scrollToErrorNotification: true,
       title: 'Please correct the following errors on the page:',
     });
