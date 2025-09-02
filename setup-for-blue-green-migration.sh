@@ -39,7 +39,7 @@ echo "source table is currently ${SOURCE_TABLE_VERSION}"
 if [[ "$SOURCE_TABLE_VERSION" == "beta" ]]; then
   echo "setting destination table to alpha"
   NEXT_VERSION="alpha"
-	aws ssm put-parameter --region us-east-1 --name "/DAWSON/${ENV}/destination-table-version" --value "alpha" --type "String" --overwrite
+  aws ssm put-parameter --region us-east-1 --name "/DAWSON/${ENV}/destination-table-version" --value "alpha" --type "String" --overwrite
 else
   echo "setting destination table to beta"
   NEXT_VERSION="beta"
