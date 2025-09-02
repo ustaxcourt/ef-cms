@@ -56,4 +56,44 @@ describe('validateOrderAdvancedSearchAction', () => {
     ).toEqual(1);
     expect(errorStub.mock.calls.length).toEqual(1);
   });
+
+  it('validates advanced order search with invalid dates', async () => {
+    applicationContext
+      .getUseCases()
+      .validateOrderAdvancedSearchInteractor.mockReturnValue({
+        errors: {
+          startDate: 'Enter date in format MM/DD/YYYY.',
+          endDate: 'Enter date in format MM/DD/YYYY.',
+        },
+      });
+
+    await runAction(validateOrderAdvancedSearchAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        advancedSearchForm: {
+          orderSearch: {
+            startDate: 'invalid-date',
+            endDate: 'invalid-date',
+          },
+        },
+      },
+    });
+
+    expect(errorStub).toHaveBeenCalledWith({
+      alertError: {
+        messages: [
+          'Enter date in format MM/DD/YYYY.',
+          'Enter date in format MM/DD/YYYY.',
+        ],
+        title:
+          'Errors were found. Please correct the date range selection and resubmit.',
+      },
+      errors: {
+        startDate: 'Enter date in format MM/DD/YYYY.',
+        endDate: 'Enter date in format MM/DD/YYYY.',
+      },
+    });
+  });
 });
