@@ -20,6 +20,7 @@ export const CSV_HEADERS = [
   'section',
   'isSeniorJudge',
   'judgePhoneNumber',
+  'accountStatus'
 ];
 
 const { DEFAULT_ACCOUNT_PASS } = process.env;

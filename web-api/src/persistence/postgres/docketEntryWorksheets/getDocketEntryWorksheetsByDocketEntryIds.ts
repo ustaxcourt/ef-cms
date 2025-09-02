@@ -1,6 +1,6 @@
 import { RawDocketEntryWorksheet } from '@shared/business/entities/docketEntryWorksheet/DocketEntryWorksheet';
 import { getDbReader } from '@web-api/database';
-import { docketEntryWorksheetEntity } from '@web-api/persistence/postgres/docketEntryWorksheets/mapper';
+import { fromKyselyDocketEntryWorksheet } from '@web-api/persistence/postgres/docketEntryWorksheets/mapper';
 
 export const getDocketEntryWorksheetsByDocketEntryIds = async ({
   docketEntryIds,
@@ -20,6 +20,6 @@ export const getDocketEntryWorksheetsByDocketEntryIds = async ({
   );
 
   return docketEntryWorksheets.map(item =>
-    docketEntryWorksheetEntity(item).toRawObject(),
+    fromKyselyDocketEntryWorksheet(item).toRawObject(),
   );
 };

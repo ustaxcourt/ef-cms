@@ -35,6 +35,15 @@ const config: Config = {
     '!src/lambdas/api/api.ts',
     '!src/lambdas/api-public/api-public.ts',
     '!src/lambdas/migration/utilities/getRecordSize.ts',
+    '!src/persistence/elasticsearch/searchClient/getSearchClient.ts',
+    '!src/**/mocks.jest.ts',
+    '!src/persistence/s3/getStorageClient.ts',
+    '!src/persistence/batch/getBatchClient.ts',
+    '!src/notifications/getNotificationService.ts',
+    '!src/lambdas/**/*',
+    '!src/gateways/openSearch/openSearchGateway.ts',
+    '!src/gateways/message/getMessagingClient.ts',
+    '!src/gateways/lambda/getLambdaClient.ts',
   ],
   coverageDirectory: './coverage',
   coverageProvider: 'babel',
@@ -59,5 +68,4 @@ const config: Config = {
   },
   verbose: false,
 };
-// eslint-disable-next-line import/no-default-export
 export default config;

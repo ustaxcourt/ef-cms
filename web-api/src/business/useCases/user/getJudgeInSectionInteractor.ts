@@ -18,5 +18,5 @@ export const getJudgeInSectionInteractor = async (
 
   return await applicationContext
     .getUseCaseHelpers()
-    .getJudgeInSectionHelper(applicationContext, { section });
+    .getJudgeInSectionHelper({ section });
 };

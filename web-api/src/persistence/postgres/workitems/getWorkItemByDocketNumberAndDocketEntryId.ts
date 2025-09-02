@@ -1,6 +1,6 @@
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { getDbReader } from '@web-api/database';
-import { workItemEntity } from '@web-api/persistence/postgres/workitems/mapper';
+import { fromKyselyWorkItem } from '@web-api/persistence/postgres/workitems/mapper';
 
 export async function getWorkItemByDocketNumberAndDocketEntryId({
   docketNumber,
@@ -20,6 +20,7 @@ export async function getWorkItemByDocketNumberAndDocketEntryId({
         'completedAt',
         'completedBy',
         'completedByUserId',
+        'completedMessage',
         'createdAt',
         'docketEntryId',
         'docketNumber',
@@ -39,5 +40,5 @@ export async function getWorkItemByDocketNumberAndDocketEntryId({
     return undefined;
   }
 
-  return workItemEntity(result);
+  return fromKyselyWorkItem(result);
 }
