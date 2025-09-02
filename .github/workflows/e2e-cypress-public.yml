@@ -6,10 +6,16 @@ on:
 jobs:
   e2e_cypress_public:
     runs-on: ubuntu-latest
-
+    strategy:
+      fail-fast: false
+      matrix:
+        ci_node_total: [3]
+        ci_node_index: [0, 1, 2]
     env:
       CI: true
       CHECK_DEPLOY_DATE_INTERVAL: 5000
+      CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
+      CI_NODE_INDEX: ${{ matrix.ci_node_index }}
     services:
       postgres:
         image: postgres
@@ -53,10 +59,11 @@ jobs:
           npm run start:all:ci >> /tmp/cypress/cypress-output.txt &
           ./wait-until-services.sh
           sleep 5
-          npm run cypress:integration:public
+          export TESTFILES=$(npx ts-node split-tests-cypress.ts public)
+          npm run cypress:integration:file $TESTFILES
       - name: Store Cypress Failure Videos
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: cypress-videos
+          name: cypress-videos-${{ matrix.ci_node_index }}
           path: ${{ github.workspace }}/cypress/local-only/videos
