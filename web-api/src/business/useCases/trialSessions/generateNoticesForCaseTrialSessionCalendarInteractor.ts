@@ -153,17 +153,8 @@ const setNoticeForCase = async ({
 
   const servedParties = aggregatePartiesForService(caseEntity);
 
+  let noticeOfTrialIssuedWithClinicLetter;
   if (isProSe({ caseEntity })) {
-    const proSeChecklistExist = await applicationContext
-      .getPersistenceGateway()
-      .isFileExists({
-        applicationContext,
-        key: PRO_SE_CHECKLIST_PDF_NAME,
-        useTempBucket: false,
-      });
-    if (!proSeChecklistExist) {
-      throw new Error('Pro Se Checklist document does not exist in S3 bucket');
-    }
     const proSeChecklist = await applicationContext
       .getPersistenceGateway()
       .getDocument({
@@ -177,6 +168,7 @@ const setNoticeForCase = async ({
         firstPdf: noticeOfTrialIssued,
         secondPdf: proSeChecklist,
       });
+    noticeOfTrialIssuedWithClinicLetter = noticeOfTrialIssued;
   }
 
   const { appendClinicLetter, clinicLetterKey } =
@@ -205,10 +197,7 @@ const setNoticeForCase = async ({
   }
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    document:
-      noticeOfTrialIssued instanceof Uint8Array
-        ? noticeOfTrialIssued.buffer
-        : noticeOfTrialIssued,
+    document: noticeOfTrialIssued,
     key: newNoticeOfTrialIssuedDocketEntryId,
   });
 
