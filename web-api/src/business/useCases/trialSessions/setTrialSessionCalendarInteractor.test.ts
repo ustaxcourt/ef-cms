@@ -89,7 +89,6 @@ describe('setTrialSessionCalendarInteractor', () => {
   beforeEach(() => {
     getTrialSessionById.mockResolvedValue(MOCK_TRIAL);
     updateCaseAndAssociations.mockResolvedValue({} as RawCase);
-    // updateTrialSession.mockResolvedValue(v => v.trialSessionToUpdate);
   });
 
   it('throws an exception when there is a permissions issue', async () => {

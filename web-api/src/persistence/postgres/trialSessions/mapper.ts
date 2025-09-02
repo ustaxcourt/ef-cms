@@ -22,7 +22,6 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { RawTrialSessionWorkingCopy } from '@shared/business/entities/trialSessions/TrialSessionWorkingCopy';
 
-// Select the relevant RawCase fields from dwCase and map them correctly.
 export function toKyselyNewTrialSession(
   rawTrialSession: Omit<RawTrialSession, 'paperServicePdfs'>,
 ): NewTrialSessionKysely {

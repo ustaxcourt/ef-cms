@@ -131,7 +131,7 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
       applicationContext,
       interactorParamObject,
     );
-    expect(updateTrialSessionNotificationProcessing).toHaveBeenCalled(); // check if we decremented counter TODO
+    expect(updateTrialSessionNotificationProcessing).toHaveBeenCalled();
   });
 
   it('should save a copy of the combined notice of trial issued letter and a clinic letter for pro se petitioners', async () => {
