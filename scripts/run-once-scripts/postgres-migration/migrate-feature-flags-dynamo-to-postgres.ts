@@ -11,7 +11,6 @@ const FEATURE_FLAGS_WITH_CURRENT_PROPERTY = [
   'aws-batch-zipper-minimum-count',
   'chief-judge-name',
   'maintenance-mode',
-  'entity-locking-feature-flag',
   'document-visibility-policy-change-date',
   'e-consent-fields-enabled-feature-flag',
   'use-change-of-address-lambda',

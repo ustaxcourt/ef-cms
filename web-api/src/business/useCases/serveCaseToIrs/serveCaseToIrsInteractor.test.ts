@@ -1533,15 +1533,6 @@ describe('serveCaseToIrsInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    getFeatureFlagValues.mockResolvedValue([
-      {
-        name: 'entity-locking-feature-flag',
-        value: {
-          current: true,
-        },
-      },
-    ]);
-
     tryGetLocks.mockResolvedValueOnce([
       { successfullyLocked: false, identifier: 'abc' },
     ]);
