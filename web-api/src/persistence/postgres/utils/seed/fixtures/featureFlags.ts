@@ -10,10 +10,6 @@ export const featureFlags: FeatureFlagTable[] = [
     value: { current: 'Maurice B. Foley' },
   },
   {
-    name: 'entity-locking-feature-flag',
-    value: { current: true },
-  },
-  {
     name: 'allowed-terminal-ips',
     value: { current: [] },
   },

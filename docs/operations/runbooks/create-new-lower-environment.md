@@ -314,10 +314,6 @@ This runbook describes the process of creating a new DAWSON lower environment in
       ```bash
       scripts/postgres/featureFlags/setup-e-consent-fields-enabled-feature-flag.ts
       ```
-   1. `entity-locking-feature-flag`:
-      ```bash
-      scripts/postgres/featureFlags/setup-entity-locking-feature-flag.ts
-      ```
    1. `maintenance-mode`:
       ```bash
       scripts/postgres/set-maintenance-mode.ts

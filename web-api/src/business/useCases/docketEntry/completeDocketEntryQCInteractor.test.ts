@@ -618,15 +618,6 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('throws the expected error if the lock is already acquired by another process', async () => {
-    getFeatureFlagValues.mockResolvedValue([
-      {
-        name: 'entity-locking-feature-flag',
-        value: {
-          current: true,
-        },
-      },
-    ]);
-
     tryGetLocks.mockResolvedValueOnce([
       { successfullyLocked: false, identifier: 'abc' },
     ]);

@@ -1,6 +1,5 @@
 import * as DateHandler from '@shared/business/utilities/DateHandler';
 import * as pdfLib from 'pdf-lib';
-import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
 import {
   Case,
   canAllowDocumentServiceForCase,
@@ -443,12 +442,6 @@ export const createTestApplicationContext = () => {
       .fn()
       .mockReturnValue({ url: 'http://example.com/' }),
     getElasticsearchReindexRecords: jest.fn(),
-    getFeatureFlagValue: jest.fn().mockImplementation(({ featureFlag }) => {
-      switch (featureFlag) {
-        case ALLOWLIST_FEATURE_FLAGS.ENTITY_LOCKING_FEATURE_FLAG.key:
-          return { current: true };
-      }
-    }),
     getItem: jest.fn().mockImplementation(getItem),
     getMaintenanceMode: jest.fn(),
     getPractitionerDocuments: jest.fn(),

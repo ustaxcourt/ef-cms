@@ -92,7 +92,7 @@ USER_POOL_IRS_ID=$(aws cognito-idp list-user-pools \
   --max-results 30 \
   --region us-east-1 \
   --output text)
-SOURCE_TABLE=$(./scripts/ssm/get-source-table.sh "$ENV")
+SOURCE_TABLE=$(./scripts/ssm/get-source-table.sh $ENV)
 
 {
   echo "export COGNITO_CLIENT_ID=${COGNITO_CLIENT_ID}"

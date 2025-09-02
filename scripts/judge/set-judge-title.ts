@@ -57,7 +57,6 @@ if (!JUDGE_TITLES.includes(judgeTitle)) {
 
   await upsertUsers([userEntity.validate().toRawObject()]);
 
-  // Print the user's short name (used by callers for messages/Cognito display)
+  // Print the user's info (used by callers for messages/Cognito display)
   console.log(JSON.stringify(userEntity));
-  // console.log(userEntity.email);
 })();
