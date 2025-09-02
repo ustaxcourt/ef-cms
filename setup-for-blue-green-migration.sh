@@ -43,7 +43,7 @@ if [[ "$SOURCE_TABLE_VERSION" == "beta" ]]; then
 else
   echo "setting destination table to beta"
   NEXT_VERSION="beta"
-	aws ssm put-parameter --region us-east-1 --name "/DAWSON/${ENV}/destination-table-version" --value "beta" --type "String" --overwrite
+  aws ssm put-parameter --region us-east-1 --name "/DAWSON/${ENV}/destination-table-version" --value "beta" --type "String" --overwrite
 fi
 
 NEXT_TABLE="efcms-${ENV}-${NEXT_VERSION}"
