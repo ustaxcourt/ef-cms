@@ -62,8 +62,8 @@ describe('validateOrderAdvancedSearchAction', () => {
       .getUseCases()
       .validateOrderAdvancedSearchInteractor.mockReturnValue({
         errors: {
-          startDate: 'Start date is invalid',
-          endDate: 'End date is invalid',
+          startDate: 'Enter date in format MM/DD/YYYY.',
+          endDate: 'Enter date in format MM/DD/YYYY.',
         },
       });
 
@@ -82,9 +82,17 @@ describe('validateOrderAdvancedSearchAction', () => {
     });
 
     expect(errorStub).toHaveBeenCalledWith({
+      alertError: {
+        messages: [
+          'Enter date in format MM/DD/YYYY.',
+          'Enter date in format MM/DD/YYYY.',
+        ],
+        title:
+          'Errors were found. Please correct the date range selection and resubmit.',
+      },
       errors: {
-        startDate: 'Start date is invalid',
-        endDate: 'End date is invalid',
+        startDate: 'Enter date in format MM/DD/YYYY.',
+        endDate: 'Enter date in format MM/DD/YYYY.',
       },
     });
   });
