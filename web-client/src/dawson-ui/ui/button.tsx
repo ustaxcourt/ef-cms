@@ -48,7 +48,6 @@ const buttonVariants = cva(
           'tw:has-[>svg]:px-[4px] tw:has-[>svg]:py-[2px] h-[24px]', // focus-visible
           'tw:active:text-primary-active', // active
           'tw:invalid:text-tertiary-invalid', // active
-          'tw:block tw:ml-0 tw:mr-auto tw:text-left', // left alignment
         ),
       },
       size: {
