@@ -56,4 +56,36 @@ describe('validateOrderAdvancedSearchAction', () => {
     ).toEqual(1);
     expect(errorStub.mock.calls.length).toEqual(1);
   });
+
+  it('validates advanced order search with invalid dates', async () => {
+    applicationContext
+      .getUseCases()
+      .validateOrderAdvancedSearchInteractor.mockReturnValue({
+        errors: {
+          startDate: 'Start date is invalid',
+          endDate: 'End date is invalid',
+        },
+      });
+
+    await runAction(validateOrderAdvancedSearchAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        advancedSearchForm: {
+          orderSearch: {
+            startDate: 'invalid-date',
+            endDate: 'invalid-date',
+          },
+        },
+      },
+    });
+
+    expect(errorStub).toHaveBeenCalledWith({
+      errors: {
+        startDate: 'Start date is invalid',
+        endDate: 'End date is invalid',
+      },
+    });
+  });
 });
