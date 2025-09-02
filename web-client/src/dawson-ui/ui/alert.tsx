@@ -14,7 +14,7 @@ import { CircleXmark } from './icons';
 
 const alertVariants = cva(
   cn(
-    'tw:relative rounded-none tw:border-solid tw:border-0',
+    'tw:relative tw:border-solid tw:border-0',
     'tw:xs:border-l-8 tw:xs:p-4 tw:border-l-6 tw:p-3 tw:pt-2.5',
     'tw:font-normal tw:xs:text-lg tw:text-base',
     'tw:[&_ul]:m-0 tw:[&_ul]:-ml-4 tw:[&_ul]:list-disc',
@@ -46,8 +46,12 @@ const iconType = {
 function Alert({
   className,
   variant,
+  closeButtonOnClick,
   ...props
-}: React.ComponentProps<'div'> & VariantProps<typeof alertVariants>) {
+}: React.ComponentProps<'div'> &
+  VariantProps<typeof alertVariants> & {
+    closeButtonOnClick?: () => React.MouseEventHandler<HTMLButtonElement>;
+  }) {
   return (
     <div
       data-slot="alert"
@@ -63,8 +67,9 @@ function Alert({
         <Button
           className="tw:m-0 tw:p-0 tw:gap-3 tw:w-auto tw:fill-primary tw:self-start tw:ml-auto"
           variant={'primaryTertiary'}
+          onClick={closeButtonOnClick}
         >
-          <div className='tw:flex tw:items-center'>
+          <div className="tw:flex tw:items-center">
             <span className="tw:mr-2">Close</span>
             <CircleXmark className={'tw:h-6 tw:w-6'} />
           </div>
