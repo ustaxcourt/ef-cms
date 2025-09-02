@@ -28,5 +28,14 @@ jobs:
         run: |
           docker build --platform=linux/amd64 -t efcms -f Dockerfile .
           docker build --platform=linux/amd64 -t efcms-local -f Dockerfile-local .
-          export TESTFILES=$(npx ts-node split-tests-glob.ts -pdfs ${{ matrix.ci_node_index }} ${{ matrix.ci_node_total }})
-          docker run --platform=linux/amd64 -i --rm -v `pwd`/shared/test-output:/home/app/shared/test-output efcms-local sh -c "npm run test:document-generation $TESTFILES"
+          # Get all PDF test files and split them across parallel jobs
+          export TESTFILES=$(find shared/src/business/utilities/documentGenerators -name "*.test.js" -o -name "*.test.ts" -o -name "*.spec.js" -o -name "*.spec.ts" | sort | awk "NR % ${{ matrix.ci_node_total }} == ${{ matrix.ci_node_index }}")
+          echo "Running tests for job ${{ matrix.ci_node_index }}: $TESTFILES"
+          if [ -n "$TESTFILES" ]; then
+            # Convert file paths to Jest-compatible test name patterns
+            export TESTPATTERNS=$(echo "$TESTFILES" | sed 's|shared/src/business/utilities/documentGenerators/||g' | sed 's|\.test\.js$||g' | sed 's|\.test\.ts$||g' | sed 's|\.spec\.js$||g' | sed 's|\.spec\.ts$||g' | tr '\n' '|' | sed 's/|$//')
+            echo "Test patterns: $TESTPATTERNS"
+            docker run --platform=linux/amd64 -i --rm -v `pwd`/shared/test-output:/home/app/shared/test-output efcms-local sh -c "npm run test:document-generation -- --testNamePattern=\"$TESTPATTERNS\""
+          else
+            echo "No tests assigned to this job"
+          fi

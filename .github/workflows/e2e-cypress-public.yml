@@ -59,8 +59,14 @@ jobs:
           npm run start:all:ci >> /tmp/cypress/cypress-output.txt &
           ./wait-until-services.sh
           sleep 5
-          export TESTFILES=$(npx ts-node split-tests-cypress.ts public)
-          npm run cypress:integration:file $TESTFILES
+          # Get all public test files and split them across parallel jobs
+          export TESTFILES=$(find cypress/local-only/tests -name "*.cy.ts" -path "*/public/*" | sort | awk "NR % ${{ matrix.ci_node_total }} == ${{ matrix.ci_node_index }}")
+          echo "Running tests for job ${{ matrix.ci_node_index }}: $TESTFILES"
+          if [ -n "$TESTFILES" ]; then
+            npm run cypress:integration:file $TESTFILES
+          else
+            echo "No tests assigned to this job"
+          fi
       - name: Store Cypress Failure Videos
         if: always()
         uses: actions/upload-artifact@v4
