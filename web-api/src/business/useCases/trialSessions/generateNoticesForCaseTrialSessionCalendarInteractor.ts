@@ -153,7 +153,6 @@ const setNoticeForCase = async ({
 
   const servedParties = aggregatePartiesForService(caseEntity);
 
-  let noticeOfTrialIssuedWithClinicLetter;
   if (isProSe({ caseEntity })) {
     const proSeChecklist = await applicationContext
       .getPersistenceGateway()
@@ -168,7 +167,6 @@ const setNoticeForCase = async ({
         firstPdf: noticeOfTrialIssued,
         secondPdf: proSeChecklist,
       });
-    noticeOfTrialIssuedWithClinicLetter = noticeOfTrialIssued;
   }
 
   const { appendClinicLetter, clinicLetterKey } =
@@ -180,6 +178,7 @@ const setNoticeForCase = async ({
     });
 
   const newNoticeOfTrialIssuedDocketEntryId = applicationContext.getUniqueId();
+  let noticeOfTrialIssuedWithClinicLetter;
   if (appendClinicLetter) {
     const clinicLetter = await applicationContext
       .getPersistenceGateway()
@@ -188,7 +187,7 @@ const setNoticeForCase = async ({
         key: clinicLetterKey,
         useTempBucket: false,
       });
-    noticeOfTrialIssued = await applicationContext
+    noticeOfTrialIssuedWithClinicLetter = await applicationContext
       .getUtilities()
       .combineTwoPdfs({
         firstPdf: noticeOfTrialIssued,
@@ -197,7 +196,7 @@ const setNoticeForCase = async ({
   }
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    document: noticeOfTrialIssued,
+    document: noticeOfTrialIssuedWithClinicLetter ?? noticeOfTrialIssued,
     key: newNoticeOfTrialIssuedDocketEntryId,
   });
 
