@@ -1,62 +1,20 @@
 import { getCypressEnv } from '../../env/cypressEnvironment';
+import { getUserByEmail } from '../cognito/cognito-helpers';
 import { getDocumentClient } from './getDynamoCypress';
 
-export const toggleFeatureFlag = async ({
-  flag,
-  flagValue,
+export const getEmailVerificationToken = async ({
+  email,
 }: {
-  flag: string;
-  flagValue: any;
-}): Promise<null> => {
-  const dynamoClient = await getDocumentClient();
-  await dynamoClient.update({
-    ExpressionAttributeNames: {
-      '#value': 'current',
-    },
-    ExpressionAttributeValues: {
-      ':value': flagValue,
-    },
+  email: string;
+}): Promise<string> => {
+  const { userId } = await getUserByEmail(email);
+  const result = await getDocumentClient().get({
     Key: {
-      pk: flag,
-      sk: flag,
+      pk: `user|${userId}`,
+      sk: `user|${userId}`,
     },
-    TableName: getCypressEnv().dynamoDbDeployTableName,
-    UpdateExpression: 'SET #value = :value',
+    TableName: getCypressEnv().dynamoDbTableName,
   });
 
-  return null;
-};
-
-export const getFeatureFlagValue = async ({
-  flag,
-}: {
-  flag: string;
-}): Promise<boolean> => {
-  const dynamoClient = await getDocumentClient();
-  const result = await dynamoClient.get({
-    Key: {
-      pk: flag,
-      sk: flag,
-    },
-    TableName: getCypressEnv().dynamoDbDeployTableName,
-  });
-
-  return !!result?.Item?.current;
-};
-
-export const getRawFeatureFlagValue = async ({
-  flag,
-}: {
-  flag: string;
-}): Promise<boolean | undefined> => {
-  const dynamoClient = await getDocumentClient();
-  const result = await dynamoClient.get({
-    Key: {
-      pk: flag,
-      sk: flag,
-    },
-    TableName: getCypressEnv().dynamoDbDeployTableName,
-  });
-
-  return result?.Item?.current || null;
+  return result?.Item?.pendingEmailVerificationToken;
 };

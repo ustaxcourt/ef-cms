@@ -19,7 +19,7 @@ import { getDocumentIdFromSQSMessage } from './persistence/sqs/getDocumentIdFrom
 import { getDownloadPolicyUrl } from './persistence/s3/getDownloadPolicyUrl';
 import { getEligibleCasesForTrialCity } from '@web-api/persistence/postgres/cases/getEligibleCasesForTrialCity';
 import { getFeatureFlagValue } from './persistence/dynamo/deployTable/getFeatureFlagValue';
-import { getMaintenanceMode } from './persistence/dynamo/deployTable/getMaintenanceMode';
+import { getMaintenanceMode } from './persistence/postgres/featureFlag/getMaintenanceMode';
 import { getPractitionerDocumentByFileId } from './persistence/dynamo/practitioners/getPractitionerDocumentByFileId';
 import { getPractitionerDocuments } from './persistence/dynamo/practitioners/getPractitionerDocuments';
 import { getPractitionersByName } from './persistence/elasticsearch/getPractitionersByName';
@@ -37,8 +37,7 @@ import { saveDispatchNotification } from '@web-api/persistence/postgres/notifica
 import { saveDocumentFromLambda } from './persistence/s3/saveDocumentFromLambda';
 import { saveUserConnection } from '@web-api/persistence/postgres/connections/saveUserConnection';
 import { setChangeOfAddressCaseAsDone } from './persistence/postgres/jobs/changeOfAddress/setChangeOfAddressCaseAsDone';
-import { updateMaintenanceMode } from './persistence/dynamo/deployTable/updateMaintenanceMode';
-import { updatePractitionerUser } from './business/useCaseHelper/users/updatePractitionerUser';
+import { updateMaintenanceMode } from '@web-api/persistence/postgres/featureFlag/updateMaintenanceMode';
 import { uploadDocument } from '@web-api/persistence/s3/uploadDocument';
 import { zipDocuments } from './persistence/s3/zipDocuments';
 import { getEligibleCasesForTrialSession } from '@web-api/persistence/postgres/cases/getEligibleCasesForTrialSession';
@@ -90,7 +89,6 @@ const gatewayMethods = {
     saveDocumentFromLambda,
     saveUserConnection,
     updateMaintenanceMode,
-    updatePractitionerUser,
   }),
   // methods below are not known to create or update "entity" records
   advancedDocumentSearch,
@@ -137,5 +135,5 @@ export const getPersistenceGateway = () => gatewayMethods;
 type _IGetPersistenceGateway = typeof getPersistenceGateway;
 
 declare global {
-  interface IGetPersistenceGateway extends _IGetPersistenceGateway {}
+  interface IGetPersistenceGateway extends _IGetPersistenceGateway { }
 }

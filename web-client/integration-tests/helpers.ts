@@ -168,24 +168,19 @@ export const setOpinionSearchEnabled = (isEnabled, keyPrefix) => {
   });
 };
 
-export const setTerminalUserIps = (ips: string[]) => {
-  return client.put({
-    Item: {
-      ips,
-      pk: 'allowed-terminal-ips',
-      sk: 'allowed-terminal-ips',
+export const setJudgeTitle = (judgeUserId, newJudgeTitle) => {
+  return client.update({
+    ExpressionAttributeNames: {
+      '#judgeTitle': 'judgeTitle',
     },
-    applicationContext,
-  });
-};
-
-export const setChiefJudgeNameFlagValue = newJudgeName => {
-  return client.put({
-    Item: {
-      current: newJudgeName,
-      pk: 'chief-judge-name',
-      sk: 'chief-judge-name',
+    ExpressionAttributeValues: {
+      ':judgeTitle': newJudgeTitle,
     },
+    Key: {
+      pk: `user|${judgeUserId}`,
+      sk: `user|${judgeUserId}`,
+    },
+    UpdateExpression: 'SET #judgeTitle = :judgeTitle',
     applicationContext,
   });
 };
@@ -663,7 +658,7 @@ export const setupTest = ({ constantsOverrides = {} } = {}) => {
                 innerHTML: 'something',
               },
             ],
-            querySelector: () => {},
+            querySelector: () => { },
           };
         },
       };
@@ -672,7 +667,7 @@ export const setupTest = ({ constantsOverrides = {} } = {}) => {
       createObjectURL: () => {
         return fakeData;
       },
-      revokeObjectURL: () => {},
+      revokeObjectURL: () => { },
     },
     document: {},
     localStorage: {
@@ -788,7 +783,7 @@ export const gotoRoute = (routes, routeToGoTo) => {
   for (const route of routes) {
     const regex = new RegExp(
       route.route.replace(/\*/g, '([a-z\\-A-Z0-9]+)').replace(/\.\./g, '(.*)') +
-        '$',
+      '$',
     );
     if (routeToGoTo.match(regex)) {
       const match = regex.exec(routeToGoTo);

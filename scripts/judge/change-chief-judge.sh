@@ -14,6 +14,8 @@
   "NEW_JUDGE_ID"
 
 REGION="us-east-1"
+# look up current table version from SSM
+TABLE_VERSION=$(aws ssm get-parameter --region us-east-1 --name "/DAWSON/${ENV}/source-table-version" --with-decryption --query "Parameter.Value" --output text 2>/dev/null)
 
 # get judge name via postgres (TypeScript script)
 NEW_JUDGE_NAME=$(ENV="${ENV}" REGION="${REGION}" ./scripts/judge/get-judge-name.ts "${NEW_JUDGE_ID}")
@@ -23,26 +25,7 @@ if [[ "${NEW_JUDGE_NAME}" == "None" ]]; then
   exit 1
 fi
 
-# update the judge's signature in deploy table
-ITEM=$(cat <<-END
-{
-    "pk": {
-        "S": "chief-judge-name"
-    },
-    "sk":{
-        "S": "chief-judge-name"
-    },
-    "current": {
-        "S": "${NEW_JUDGE_NAME}"
-    }
-}
-END
-)
-
-aws dynamodb put-item \
-    --region "${REGION}" \
-    --table-name "efcms-deploy-${ENV}" \
-    --item "${ITEM}"
+npx ts-node --transpile-only ./scripts/postgres/featureFlags/setup-chief-judge-name-flag.ts "${NEW_JUDGE_NAME}"
 
 # update the old judge's title in Postgres and capture last name for display
 OLD_JUDGE_LAST_NAME=$(ENV="${ENV}" REGION="${REGION}" ./scripts/judge/set-judge-title.ts "${OLD_JUDGE_ID}" "Judge")

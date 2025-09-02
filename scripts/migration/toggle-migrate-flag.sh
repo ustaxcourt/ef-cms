@@ -10,7 +10,8 @@ if [[ -n "$1" ]] && { [[ "$1" == "on" ]] || [[ "$1" == "ON" ]] || [[ "$1" == "-o
     TOGGLE="true"
 fi
 
-aws dynamodb put-item \
-  --region us-east-1 \
-  --table-name "efcms-deploy-${ENV}" \
-  --item "{\"pk\":{\"S\":\"migrate\"},\"sk\":{\"S\":\"migrate\"},\"current\":{\"BOOL\":${TOGGLE}}}"
+aws ssm put-parameter \
+	--region us-east-1 --name "/DAWSON/${ENV}/migrate" \
+	--value "false" \
+	--type "$TOGGLE" \
+	--overwrite

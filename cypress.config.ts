@@ -14,16 +14,15 @@ import {
   getNewAccountVerificationCode,
 } from './cypress/helpers/cypressTasks/postgres/postgres-helpers';
 import { changeUserAccountStatus } from './cypress/helpers/cypressTasks/postgres/changeUserAccountStatus';
-import {
-  getFeatureFlagValue,
-  toggleFeatureFlag,
-} from './cypress/helpers/cypressTasks/dynamo/dynamo-helpers';
 import { parsePdf } from './cypress/helpers/cypressTasks/pdf/parsePdf';
 import { overrideIdleTimeouts } from './cypress/local-only/support/idleLogoutHelpers';
 import { unzipFile } from './cypress/helpers/file/unzip-file';
 import { waitForNoce } from './cypress/helpers/cypressTasks/wait-for-noce';
 import type { Page } from 'puppeteer-core';
 import { retry, setup } from '@cypress/puppeteer';
+import {
+  toggleFeatureFlag,
+} from './cypress/helpers/cypressTasks/postgres/featureFlagsCypress';
 
 export default defineConfig({
   chromeWebSecurity: false,
@@ -50,9 +49,6 @@ export default defineConfig({
         },
         getEmailVerificationToken({ email }) {
           return getEmailVerificationToken({ email });
-        },
-        getFeatureFlagValue({ flag }) {
-          return getFeatureFlagValue({ flag });
         },
         getNewAccountVerificationCode({ email }) {
           return getNewAccountVerificationCode({ email });

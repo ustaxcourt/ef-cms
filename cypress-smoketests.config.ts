@@ -16,15 +16,14 @@ import {
   fileExists,
 } from './cypress/local-only/support/database';
 import {
-  getFeatureFlagValue,
-  getRawFeatureFlagValue,
-  toggleFeatureFlag,
-} from './cypress/helpers/cypressTasks/dynamo/dynamo-helpers';
-import {
   expireUserConfirmationCode,
   getEmailVerificationToken,
   getNewAccountVerificationCode,
 } from './cypress/helpers/cypressTasks/postgres/postgres-helpers';
+import {
+  getRawFeatureFlagValue,
+  toggleFeatureFlag,
+} from './cypress/helpers/cypressTasks/postgres/featureFlagsCypress';
 import { unzipFile } from './cypress/helpers/file/unzip-file';
 import { waitForNoce } from './cypress/helpers/cypressTasks/wait-for-noce';
 
@@ -88,9 +87,6 @@ export default defineConfig({
         },
         getEmailVerificationToken({ email }) {
           return getEmailVerificationToken({ email });
-        },
-        getFeatureFlagValue({ flag }) {
-          return getFeatureFlagValue({ flag });
         },
         getIrsBearerToken({ password, userName }) {
           return getIrsBearerToken({
