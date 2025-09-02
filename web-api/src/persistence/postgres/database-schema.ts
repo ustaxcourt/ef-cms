@@ -95,8 +95,8 @@ import {
   BarNumberTable,
   DW_BAR_NUMBER_COLUMNS,
 } from '@web-api/persistence/postgres/users/barNumber/schema';
-import { indexOpenSearchUser, transformOpenSearchUser } from 'web-api/elasticsearch/index-users';
-import { transformOpenSearchUserOnCase } from 'web-api/elasticsearch/cases/transformOpenSearchUserOnCase';
+import { indexOpenSearchUser, transformOpenSearchUser } from '../../../elasticsearch/index-users';
+import { transformOpenSearchUserOnCase } from '../../../elasticsearch/cases/transformOpenSearchUserOnCase';
 
 const DEFAULT = {};
 
