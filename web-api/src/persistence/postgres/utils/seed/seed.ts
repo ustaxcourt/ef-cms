@@ -17,7 +17,7 @@ import { workItems } from './fixtures/workItems';
 import { featureFlags } from '@web-api/persistence/postgres/utils/seed/fixtures/featureFlags';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
-import { getDbWriter } from '@web-api/database';
+import { getDbWriter } from '@web-api/persistence/postgres/database';
 import { Case } from '@shared/business/entities/cases/Case';
 import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 import { docketEntrySeeds } from '@web-api/persistence/postgres/utils/seed/fixtures/docketEntries';

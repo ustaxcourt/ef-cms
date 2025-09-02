@@ -6,7 +6,7 @@ import {
   parseArgsAndEnvVars,
   type ScriptConfig,
 } from '../../helpers/parseArgsAndEnvVars';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { isEmpty } from 'lodash';
 import { batchDeleteDynamoItems } from './batch-delete-dynamo-items';
 import { environment } from '@web-api/environment';

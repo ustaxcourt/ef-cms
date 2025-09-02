@@ -3,7 +3,7 @@ import {
   CASE_STATUS_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import { calculateDateAtStartOfDayEST } from '@shared/business/utilities/DateHandler';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 
 export const getReadyForTrialCases = async (): Promise<
   { docketNumber: string }[]

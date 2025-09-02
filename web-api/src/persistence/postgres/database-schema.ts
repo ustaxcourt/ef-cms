@@ -1,8 +1,8 @@
 import { OpenSearchSyncMessage } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
-import { indexOpenSearchCases } from '../elasticsearch/cases/indexOpenSearchCases';
-import { transformOpenSearchCases } from '../elasticsearch/cases/transformOpenSearchCases';
-import { transformOpenSearchDocketEntries } from '../elasticsearch/docketEntries/transformOpenSearchDocketEntries';
-import { indexOpenSearchDocketEntries } from '../elasticsearch/docketEntries/indexOpenSearchDocketEntries';
+import { indexOpenSearchCases } from '../../../elasticsearch/cases/indexOpenSearchCases';
+import { transformOpenSearchCases } from '../../../elasticsearch/cases/transformOpenSearchCases';
+import { transformOpenSearchDocketEntries } from '../../../elasticsearch/docketEntries/transformOpenSearchDocketEntries';
+import { indexOpenSearchDocketEntries } from '../../../elasticsearch/docketEntries/indexOpenSearchDocketEntries';
 import {
   DW_USER_CASE_NOTE_COLUMNS,
   UserCaseNoteTable,

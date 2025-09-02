@@ -1,4 +1,4 @@
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { fromKyselyDocketEntry } from '@web-api/persistence/postgres/docketEntries/mapper';
 
 export const getDocketEntriesByDocketNumberAndDocketEntryId = async ({

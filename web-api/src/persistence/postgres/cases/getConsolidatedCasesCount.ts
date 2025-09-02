@@ -1,4 +1,4 @@
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 
 export const getConsolidatedCasesCount = async ({
   leadDocketNumber,

@@ -1,0 +1,15 @@
+A few notes about database connections, which have proved vexing to get right:
+- Kysely generally prefers to work at the pool level with callbacks rather than allowing you to acquire specific connections. This can make dealing with per-connection requirements tricky.
+  - Example: getLockingConnection. We created a whole separate pool with 1 client to guarantee that a pg_advisory_lock is created and removed with the same connection. (Only the connection that acquired the lock can remove it.)
+  - Be careful! This might seem silly--"Re-creating a pool just for locking? That seems like a misuse of a pool!"--but it solves a lot of complicated issues:
+    - Suppose you have one pool altogether. What if your pool only has one connection? Uh-oh: getting a lock now deadlocks your application because you can't do anything--the lock has taken the only connection in the pool.
+    - Suppose you have one pool with multiple clients. What if you call withLocking multiple times? You could run into a similar deadlock.
+    - Suppose you have a separate locking pool and you don't re-create it every time you call getLockingConnection. Potential deadlock for similar reasons.
+- Lifecycle of a connection:
+  - You say, "Execute this query."
+  - The pool connects to the database using the RDS token.
+    - The RDS token has an expiration of 15ish minutes. However, once connected via this token, a connection can last for much longer (hours). This is important to remember.
+  - The query executor acquires this connection, runs the query, and releases the connection back into the pool.
+  - Subsequent queries (on the same Lambda invocation or on a warm Lambda) can acquire this previous connection without having to re-connect to the database via the RDS token.
+- A lot of the logic in databaseConnection.ts is for coordinating concurrent processes. For example, we don't want a Promise.all(someDBStuff, someDBStuff, someDBStuff) to all go out and get a token and re-create a pool; instead, we want one process to do this (whichever one gets to the relevant database connection code first) and all of them to wait on this result.
+- Remember that you are in a Lambda execution context. This matters for things like setTimeout/setInterval. The token refresh logic *will not work* if you try to do it with an interval because the Lambda execution environment will only respect that timeout/interval while it is actively running. As soon as the Lambda invocation ends, the execution environment is frozen, and your interval/timeout with it.
