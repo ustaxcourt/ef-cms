@@ -30,7 +30,7 @@ describe('Trial Session Working Copy', () => {
           '103-20, Reuben Blair/0_Docket Record.pdf',
         ];
 
-        expect(actualFileNames).to.deep.equal(expectedFileNames);
+        expect(actualFileNames).to.have.members(expectedFileNames);
       },
     );
   });
