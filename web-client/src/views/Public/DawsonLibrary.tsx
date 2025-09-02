@@ -102,14 +102,14 @@ export const DawsonLibrary = () => {
         <div className="tw:mt-4">
           <h2>Tag</h2>
 
-          <Tag variant="primary">
-            <FontAwesomeIcon
-              className="fa:margin-right-1"
-              icon="gavel"
-              size="1x"
-            />
-            TAG
-          </Tag>
+          <div className="tw:bg-primary tw:p-5">
+            <Tag variant="primary">TAG</Tag>
+            <br />
+            <Tag variant="primary">TAG</Tag>
+            <br />
+
+            <Tag variant="destructive">TAG</Tag>
+          </div>
         </div>
       </div>
     </>
