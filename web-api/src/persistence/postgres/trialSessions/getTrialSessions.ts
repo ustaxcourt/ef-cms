@@ -1,5 +1,5 @@
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { fromKyselyTrialSession } from './mapper';
 import { calculateDate } from '@shared/business/utilities/DateHandler';
 import { sql } from 'kysely';
@@ -53,13 +53,13 @@ export const getTrialSessions = async (): Promise<RawTrialSession[]> => {
       ...caseOrder,
       addedToSessionAt: caseOrder.addedToSessionAt
         ? calculateDate({
-            dateString: caseOrder.addedToSessionAt,
-          })
+          dateString: caseOrder.addedToSessionAt,
+        })
         : null,
       removedFromTrialDate: caseOrder.removedFromTrialDate
         ? calculateDate({
-            dateString: caseOrder.removedFromTrialDate,
-          })
+          dateString: caseOrder.removedFromTrialDate,
+        })
         : null,
     })),
   }));

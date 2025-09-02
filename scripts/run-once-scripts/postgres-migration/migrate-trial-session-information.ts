@@ -14,8 +14,8 @@ import {
   toKyselyNewTrialSession,
   toKyselyNewTrialSessionCase,
 } from '@web-api/persistence/postgres/trialSessions/mapper';
-import { getConnection } from '@web-api/getConnection';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { getDbWriter } from '@web-api/persistence/postgres/database';
 
 const scriptConfig: ScriptConfig = {
   description: 'Move trial session information from dynamo to postgres ',
@@ -50,7 +50,9 @@ async function main() {
 }
 
 async function createTrialSessionRecords(trialSessions) {
-  await getConnection({
+  await getDbWriter({
+    table: 'dwTrialSession',
+    action: null,
     cb: db =>
       db
         .insertInto('dwTrialSession')
@@ -64,7 +66,9 @@ async function createTrialSessionRecords(trialSessions) {
 }
 
 async function createPaperPdfRecords(trialSessionPaperPdfs) {
-  await getConnection({
+  await getDbWriter({
+    table: 'dwTrialSessionPaperPdf',
+    action: null,
     cb: db =>
       db
         .insertInto('dwTrialSessionPaperPdf')
@@ -74,7 +78,9 @@ async function createPaperPdfRecords(trialSessionPaperPdfs) {
 }
 
 async function createTrialSessionWorkingCopies(trialSessionWorkingCopies) {
-  await getConnection({
+  await getDbWriter({
+    table: 'dwTrialSessionWorkingCopy',
+    action: null,
     cb: db =>
       db
         .insertInto('dwTrialSessionWorkingCopy')
@@ -84,7 +90,9 @@ async function createTrialSessionWorkingCopies(trialSessionWorkingCopies) {
 }
 
 async function createCaseTrialSessionFromOrder(caseOrders) {
-  await getConnection({
+  await getDbWriter({
+    table: 'dwTrialSessionCase',
+    action: null,
     cb: db =>
       db
         .insertInto('dwTrialSessionCase')
@@ -108,7 +116,9 @@ async function createCaseTrialSessionFromOrder(caseOrders) {
 }
 
 async function createCaseTrialSessionFromHearing(caseHearings) {
-  await getConnection({
+  await getDbWriter({
+    table: 'dwTrialSessionCase',
+    action: null,
     cb: db =>
       db
         .insertInto('dwTrialSessionCase')

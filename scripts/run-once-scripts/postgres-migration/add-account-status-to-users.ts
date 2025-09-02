@@ -8,7 +8,7 @@ import {
 import { environment } from '@web-api/environment';
 import { getCognito } from '@web-api/persistence/cognito/getCognito';
 import { ACCOUNT_STATUS } from '@shared/business/entities/EntityConstants';
-import { getConnection } from '@web-api/getConnection';
+import { getDbWriter } from '@web-api/persistence/postgres/database';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -45,13 +45,15 @@ async function main() {
 
     if (userIds.length) {
       // Not using getDbWriter as we do not want to update opensearch currently.
-      await getConnection({
+      await getDbWriter({
         cb: db =>
           db
             .updateTable('dwUser')
             .set('accountStatus', ACCOUNT_STATUS.inactive)
             .where('userId', 'in', userIds)
             .execute(),
+        table: 'dwUser',
+        action: null,
       });
     }
 

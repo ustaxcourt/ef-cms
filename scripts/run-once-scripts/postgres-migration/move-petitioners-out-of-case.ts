@@ -4,10 +4,9 @@ import {
   parseArgsAndEnvVars,
   type ScriptConfig,
 } from '../../helpers/parseArgsAndEnvVars';
-import { getDbReader } from '@web-api/database';
+import { getDbReader, getDbWriter } from '@web-api/persistence/postgres/database';
 import { isEmpty } from 'lodash';
 import { ROLES } from '@shared/business/entities/EntityConstants';
-import { getConnection } from '@web-api/getConnection';
 import { toKyselyNewUserOnCase } from '@web-api/persistence/postgres/cases/userOnCase/mapper';
 import { UserOnCaseAssociation } from '@web-api/persistence/postgres/cases/userOnCase/schema';
 
@@ -45,7 +44,9 @@ const associateUsersWithCases = async (
   const dbUserOnCases = userOnCaseRecords.map(toKyselyNewUserOnCase);
 
   // We are specifically not using pgInsertInto because we do not want to trigger openSearch. We do not want to trigger openSearch because not all users have been moved yet.
-  await getConnection({
+  await getDbWriter({
+    table: 'dwUserOnCase',
+    action: null,
     cb: db =>
       db
         .insertInto('dwUserOnCase')
