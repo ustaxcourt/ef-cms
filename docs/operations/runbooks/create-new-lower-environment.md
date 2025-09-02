@@ -265,9 +265,9 @@ This runbook describes the process of creating a new DAWSON lower environment in
 1. Write configuration values to AWS SSM:
    1. `current-color`:
       ```bash
-			aws ssm put-parameter \
-				--region us-east-1 --name "/DAWSON/${ENV}/current-color" \
-				--value "blue" --type "String" --overwrite
+      aws ssm put-parameter \
+        --region us-east-1 --name "/DAWSON/${ENV}/current-color" \
+        --value "blue" --type "String" --overwrite
       ```
    1. `destination-table-version`:
       ```bash
