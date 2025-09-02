@@ -28,5 +28,5 @@ jobs:
         run: |
           docker build --platform=linux/amd64 -t efcms -f Dockerfile .
           docker build --platform=linux/amd64 -t efcms-local -f Dockerfile-local .
-          export TESTFILES=$(npx ts-node split-tests-glob.ts -pdfs)
+          export TESTFILES=$(npx ts-node split-tests-glob.ts -pdfs ${{ matrix.ci_node_index }} ${{ matrix.ci_node_total }})
           docker run --platform=linux/amd64 -i --rm -v `pwd`/shared/test-output:/home/app/shared/test-output efcms-local sh -c "npm run test:document-generation $TESTFILES"

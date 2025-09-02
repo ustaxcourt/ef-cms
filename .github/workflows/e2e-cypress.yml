@@ -60,7 +60,7 @@ jobs:
           npm run start:all:ci >> /tmp/cypress/cypress-output.txt &
           ./wait-until-services.sh
           sleep 5
-          export TESTFILES=$(npx ts-node split-tests-cypress.ts integration)
+          export TESTFILES=$(npx ts-node split-tests-cypress.ts integration ${{ matrix.ci_node_index }} ${{ matrix.ci_node_total }})
           npm run cypress:integration:file $TESTFILES
       - name: Store Cypress Videos
         if: always()
