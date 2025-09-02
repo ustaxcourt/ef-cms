@@ -11,15 +11,17 @@ import {
 import {
   expireUserConfirmationCode,
   getEmailVerificationToken,
-  getFeatureFlagValue,
   getNewAccountVerificationCode,
+} from './cypress/helpers/cypressTasks/postgres/postgres-helpers';
+import { changeUserAccountStatus } from './cypress/helpers/cypressTasks/postgres/changeUserAccountStatus';
+import {
+  getFeatureFlagValue,
   toggleFeatureFlag,
 } from './cypress/helpers/cypressTasks/dynamo/dynamo-helpers';
 import { parsePdf } from './cypress/helpers/cypressTasks/pdf/parsePdf';
 import { overrideIdleTimeouts } from './cypress/local-only/support/idleLogoutHelpers';
 import { unzipFile } from './cypress/helpers/file/unzip-file';
 import { waitForNoce } from './cypress/helpers/cypressTasks/wait-for-noce';
-import { waitForPractitionerEmailUpdate } from './cypress/helpers/cypressTasks/wait-for-practitioner-email-update';
 import type { Page } from 'puppeteer-core';
 import { retry, setup } from '@cypress/puppeteer';
 
@@ -55,6 +57,15 @@ export default defineConfig({
         getNewAccountVerificationCode({ email }) {
           return getNewAccountVerificationCode({ email });
         },
+        changeUserAccountStatus({
+          email,
+          accountStatus,
+        }: {
+          email: string;
+          accountStatus: string;
+        }) {
+          return changeUserAccountStatus({ email, accountStatus });
+        },
         getUserByEmail(email: string) {
           return getUserByEmail(email);
         },
@@ -73,18 +84,6 @@ export default defineConfig({
         },
         waitForNoce({ docketNumber }: { docketNumber: string }) {
           return waitForNoce({ docketNumber });
-        },
-        waitForPractitionerEmailUpdate({
-          docketNumber,
-          practitionerEmail,
-        }: {
-          docketNumber: string;
-          practitionerEmail: string;
-        }) {
-          return waitForPractitionerEmailUpdate({
-            docketNumber,
-            practitionerEmail,
-          });
         },
       });
       // Setup for puppeteer, which supports multi-tab tests

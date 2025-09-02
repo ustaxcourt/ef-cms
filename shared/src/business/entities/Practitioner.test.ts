@@ -1,4 +1,5 @@
 import {
+  ACCOUNT_STATUS,
   COUNTRY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
@@ -10,10 +11,11 @@ describe('Practitioner', () => {
   let validPractitioner;
 
   const mockPractitioner: RawPractitioner = {
+    accountStatus: ACCOUNT_STATUS.active,
     admissionsDate: '2019-03-01',
     admissionsStatus: 'Active',
     barNumber: 'PT20001',
-    birthYear: '2019',
+    birthYear: 2019,
     contact: {
       address1: '234 Main St',
       address2: 'Apartment 4',
