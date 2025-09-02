@@ -1,6 +1,7 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  PRO_SE_CHECKLIST_PDF_NAME,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
@@ -15,6 +16,7 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { shouldAppendClinicLetter } from '@shared/business/utilities/shouldAppendClinicLetter';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { isProSe } from '@shared/business/utilities/isProSe';
 
 /**
  * serves a notice of trial session and standing pretrial document on electronic
@@ -142,7 +144,7 @@ const setNoticeForCase = async ({
   const caseEntity = new Case(caseRecord, { authorizedUser: undefined });
   const { procedureType } = caseRecord;
 
-  const noticeOfTrialIssued = await applicationContext
+  let noticeOfTrialIssued = await applicationContext
     .getUseCases()
     .generateNoticeOfTrialIssuedInteractor(applicationContext, {
       docketNumber: caseEntity.docketNumber,
@@ -150,6 +152,32 @@ const setNoticeForCase = async ({
     });
 
   const servedParties = aggregatePartiesForService(caseEntity);
+
+  if (isProSe({ caseEntity })) {
+    const proSeChecklistExist = await applicationContext
+      .getPersistenceGateway()
+      .isFileExists({
+        applicationContext,
+        key: PRO_SE_CHECKLIST_PDF_NAME,
+        useTempBucket: false,
+      });
+    if (!proSeChecklistExist) {
+      throw new Error('Pro Se Checklist document does not exist in S3 bucket');
+    }
+    const proSeChecklist = await applicationContext
+      .getPersistenceGateway()
+      .getDocument({
+        applicationContext,
+        key: PRO_SE_CHECKLIST_PDF_NAME,
+        useTempBucket: false,
+      });
+    noticeOfTrialIssued = await applicationContext
+      .getUtilities()
+      .combineTwoPdfs({
+        firstPdf: noticeOfTrialIssued,
+        secondPdf: proSeChecklist,
+      });
+  }
 
   const { appendClinicLetter, clinicLetterKey } =
     await shouldAppendClinicLetter({
@@ -159,34 +187,30 @@ const setNoticeForCase = async ({
       trialSession,
     });
 
-  let clinicLetter;
-  let noticeOfTrialIssuedWithClinicLetter;
   const newNoticeOfTrialIssuedDocketEntryId = applicationContext.getUniqueId();
   if (appendClinicLetter) {
-    clinicLetter = await applicationContext
+    const clinicLetter = await applicationContext
       .getPersistenceGateway()
       .getDocument({
         applicationContext,
         key: clinicLetterKey,
         useTempBucket: false,
       });
-    noticeOfTrialIssuedWithClinicLetter = await applicationContext
+    noticeOfTrialIssued = await applicationContext
       .getUtilities()
       .combineTwoPdfs({
         firstPdf: noticeOfTrialIssued,
         secondPdf: clinicLetter,
       });
-
-    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-      document: noticeOfTrialIssuedWithClinicLetter,
-      key: newNoticeOfTrialIssuedDocketEntryId,
-    });
-  } else {
-    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-      document: noticeOfTrialIssued,
-      key: newNoticeOfTrialIssuedDocketEntryId,
-    });
   }
+
+  await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+    document:
+      noticeOfTrialIssued instanceof Uint8Array
+        ? noticeOfTrialIssued.buffer
+        : noticeOfTrialIssued,
+    key: newNoticeOfTrialIssuedDocketEntryId,
+  });
 
   const trialSessionStartDate = applicationContext
     .getUtilities()
