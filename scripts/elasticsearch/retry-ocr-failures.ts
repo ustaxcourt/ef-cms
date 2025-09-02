@@ -4,14 +4,9 @@ import {
   type ScriptConfig,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
-import {
-  CloudWatchLogsClient,
-  GetQueryResultsCommand,
-  StartQueryCommand,
-  type ResultField,
-} from '@aws-sdk/client-cloudwatch-logs';
+import { type ResultField } from '@aws-sdk/client-cloudwatch-logs';
 import { DateTime } from 'luxon';
-import { sleep } from '@shared/tools/helpers';
+import { performQuery } from '../cloudwatch/perform-query';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -23,11 +18,13 @@ const scriptConfig: ScriptConfig = {
   },
   parameters: {
     endDateISO: {
+      description: 'ISO-8601 timestamp of the end of the timeframe',
       position: 1,
       required: true,
       type: 'string',
     },
     startDateISO: {
+      description: 'ISO-8601 timestamp of the start of the timeframe',
       position: 0,
       required: true,
       type: 'string',
@@ -35,14 +32,14 @@ const scriptConfig: ScriptConfig = {
   },
   requireActiveAwsSession: true,
 };
-const { endDateISO, region, startDateISO } = parseArgsAndEnvVars(
+const { endDateISO, env, region, startDateISO } = parseArgsAndEnvVars(
   scriptConfig,
 ) as {
   endDateISO: string;
+  env: string;
   region: string;
   startDateISO: string;
 };
-// validate the timestamps and bail if necessary
 const start = DateTime.fromISO(startDateISO, { setZone: true });
 const end = DateTime.fromISO(endDateISO, { setZone: true });
 if (!start.isValid || !end.isValid) {
@@ -53,7 +50,6 @@ if (end.toMillis() <= start.toMillis()) {
 }
 
 const findDocketEntryIdsThatFailedOCR = async (): Promise<string[]> => {
-  const cloudwatchClient = new CloudWatchLogsClient({ region });
   const queryString = [
     'fields request.body',
     '| filter @message like /Failed to parse PDF/',
@@ -62,51 +58,17 @@ const findDocketEntryIdsThatFailedOCR = async (): Promise<string[]> => {
     '| limit 10000',
     '| display docketEntryId',
   ].join('\n');
-  const startQuery = await cloudwatchClient.send(
-    new StartQueryCommand({
-      startTime: start.toSeconds(),
-      endTime: end.toSeconds(),
-      logGroupNames: [
-        '/aws/lambda/api_async_prod_blue',
-        '/aws/lambda/api_async_prod_green',
-      ],
-      queryString,
-    }),
-  );
 
-  if (!startQuery.queryId) {
-    throw new Error('Failed to start CloudWatch Logs Insights query');
-  }
-
-  const { queryId } = startQuery;
-  let status: string | undefined;
-  let results: { field: string; value: string }[][] = [];
-  const pollIntervalMs: number = 1500;
-  const maxWaitMs: number = 60000; // 1 minute
-  const deadlineMs: number = DateTime.now().toMillis() + maxWaitMs;
-
-  while (DateTime.now().toMillis() < deadlineMs) {
-    const resp = await cloudwatchClient.send(
-      new GetQueryResultsCommand({ queryId }),
-    );
-    // eslint-disable-next-line prefer-destructuring
-    status = resp.status;
-    if (status === 'Complete') {
-      // @ts-ignore
-      results = resp.results ?? [];
-      break;
-    }
-    if (status === 'Failed' || status === 'Cancelled' || status === 'Timeout') {
-      throw new Error(
-        `Logs Insights query did not complete successfully: ${status}`,
-      );
-    }
-    await sleep(pollIntervalMs);
-  }
-
-  if (status !== 'Complete') {
-    throw new Error('Timed out waiting for Logs Insights query to complete');
-  }
+  const results = await performQuery({
+    endTime: end.toSeconds(),
+    logGroupNames: [
+      `/aws/lambda/api_async_${env}_blue`,
+      `/aws/lambda/api_async_${env}_green`,
+    ],
+    region,
+    queryString,
+    startTime: start.toSeconds(),
+  });
 
   const docketEntryIds = new Set<string>();
   for (const row of results) {
@@ -122,7 +84,6 @@ const findDocketEntryIdsThatFailedOCR = async (): Promise<string[]> => {
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  // find the failures in Cloudwatch
   const docketEntryIds = await findDocketEntryIdsThatFailedOCR();
 
   // TODO: drop the docketEntryIds into the OCR queue
