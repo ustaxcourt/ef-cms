@@ -147,11 +147,9 @@ EF-CMS currently has both the concept of a deployment at a domain as well as a n
 		aws ssm put-parameter --region us-east-1 --name "/DAWSON/${ENV}/destination-table-version" --value "alpha" --type "String" --overwrite
     ```
 
-<!-- TODO: UPDATE -->
-
 16. Set the environment's maintenance-mode flag to **false**:
     ```bash
-		scripts/postgres/set-maintenance-mode.ts "true"
+		scripts/postgres/set-maintenance-mode.ts false
     ```
 
 17. Delete the destination DynamoDB tables from us-east-1. 

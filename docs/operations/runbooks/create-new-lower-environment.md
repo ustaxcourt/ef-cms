@@ -271,36 +271,36 @@ This runbook describes the process of creating a new DAWSON lower environment in
       ```
    1. `destination-table-version`:
       ```bash
-			aws ssm put-parameter \
-				--region us-east-1 --name "/DAWSON/${ENV}/destination-table-version" \
-				--value "alpha" --type "String" --overwrite
+      aws ssm put-parameter \
+         --region us-east-1 --name "/DAWSON/${ENV}/destination-table-version" \
+         --value "alpha" --type "String" --overwrite
       ```
    1. `migrate`:
       ```bash
-			aws ssm put-parameter \
-				--region us-east-1 --name "/DAWSON/${ENV}/migrate" \
-				--value "true" --type "String" --overwrite
+      aws ssm put-parameter \
+         --region us-east-1 --name "/DAWSON/${ENV}/migrate" \
+         --value "true" --type "String" --overwrite
       ```
    1. `migration-queue-empty`:
       ```bash
-			aws ssm put-parameter \
-				--region us-east-1 --name "/DAWSON/${ENV}/migration-queue-empty" \
-				--value "true" --type "String" --overwrite
+      aws ssm put-parameter \
+         --region us-east-1 --name "/DAWSON/${ENV}/migration-queue-empty" \
+         --value "true" --type "String" --overwrite
       ```
    1. `source-table-version`:
       ```bash
-			aws ssm put-parameter \
-				--region us-east-1 --name "/DAWSON/${ENV}/source-table-version" \
-				--value "alpha" --type "String" --overwrite
+      aws ssm put-parameter \
+         --region us-east-1 --name "/DAWSON/${ENV}/source-table-version" \
+         --value "alpha" --type "String" --overwrite
       ```
 1. Write feature flags to the deploy table:
    1. `aws-batch-zipper-minimum-count`:
       ```bash
-			scripts/postgres/featureFlags/setup-aws-batch-zipper-minimum-count.ts
+		scripts/postgres/featureFlags/setup-aws-batch-zipper-minimum-count.ts
       ```
    1. `chief-judge-name`, replacing `<CHIEF JUDGE NAME>` with the current Chief Judge:
       ```bash
-			scripts/postgres/featureFlags/setup-chief-judge-name-flag.ts
+		scripts/postgres/featureFlags/setup-chief-judge-name-flag.ts
       ```
    1. `clerk-of-court-configuration`, replacing `<CLERK OF COURT NAME>` with the current Clerk of the Court:
       ```bash
