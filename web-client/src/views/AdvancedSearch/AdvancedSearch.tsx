@@ -173,6 +173,11 @@ export const AdvancedSearch = connect(
             )}
             {advancedSearchTab === searchTabs.ORDER && (
               <>
+                <SearchBoilerplateText
+                  formTypeText="an order"
+                  isOpinion={false}
+                  user={user}
+                />
                 <OrderSearchForm
                   submitAdvancedSearchSequence={
                     submitOrderAdvancedSearchSequence
