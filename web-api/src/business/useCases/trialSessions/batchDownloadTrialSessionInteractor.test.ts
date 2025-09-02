@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
@@ -6,9 +7,17 @@ import {
   generateValidDocketEntryFilename,
 } from './batchDownloadTrialSessionInteractor';
 import { mockJudgeUser, mockPetitionerUser } from '@shared/test/mockAuthUsers';
+import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { getCalendaredCasesForTrialSession as getCalendaredCasesForTrialSessionMock } from '@web-api/persistence/postgres/trialSessions/getCalendaredCasesForTrialSession';
+import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 
 describe('batchDownloadTrialSessionInteractor', () => {
   let mockCase;
+
+  const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
+  const getCalendaredCasesForTrialSession = jest.mocked(
+    getCalendaredCasesForTrialSessionMock,
+  );
 
   beforeEach(() => {
     mockCase = {
@@ -45,24 +54,20 @@ describe('batchDownloadTrialSessionInteractor', () => {
       },
     ];
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCalendaredCasesForTrialSession.mockReturnValue([
-        {
-          ...mockCase,
-        },
-      ]);
+    getCalendaredCasesForTrialSession.mockResolvedValue([
+      {
+        ...mockCase,
+      },
+    ]);
 
     applicationContext
       .getPersistenceGateway()
       .getDownloadPolicyUrl.mockReturnValue({ url: 'something' });
 
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockReturnValue({
-        startDate: '2019-09-26T12:00:00.000Z',
-        trialLocation: 'Birmingham',
-      });
+    getTrialSessionById.mockResolvedValue({
+      startDate: '2019-09-26T12:00:00.000Z',
+      trialLocation: 'Birmingham',
+    } as RawTrialSession);
 
     applicationContext
       .getUseCases()
@@ -189,9 +194,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
   });
 
   it('throws an unknown error if an error is thrown without a message', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCalendaredCasesForTrialSession.mockRejectedValueOnce(new Error());
+    getCalendaredCasesForTrialSession.mockRejectedValueOnce(new Error());
 
     await batchDownloadTrialSessionInteractor(
       applicationContext,
@@ -219,9 +222,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
 
   it('throws an NotFound error if a case does not exist', async () => {
     const mockTrialSessionId = '100-10';
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockResolvedValue(false);
+    getTrialSessionById.mockResolvedValue(undefined);
 
     await batchDownloadTrialSessionInteractor(
       applicationContext,
@@ -256,27 +257,24 @@ describe('batchDownloadTrialSessionInteractor', () => {
       mockJudgeUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getTrialSessionById,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway()
-        .getCalendaredCasesForTrialSession,
-    ).toHaveBeenCalled();
+    expect(getTrialSessionById).toHaveBeenCalled();
+    expect(getCalendaredCasesForTrialSession).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().zipDocuments,
     ).toHaveBeenCalled();
   });
 
   it('should filter closed cases from batch', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCalendaredCasesForTrialSession.mockReturnValue([
-        {
-          ...MOCK_CASE,
-          status: CASE_STATUS_TYPES.closed,
-        },
-      ]);
+    getCalendaredCasesForTrialSession.mockResolvedValue([
+      {
+        ...MOCK_CASE,
+        status: CASE_STATUS_TYPES.closed,
+        isManuallyAdded: false,
+        addedToSessionAt: '3000-03-01T00:00:00.000Z',
+        removedFromTrial: false,
+        isHearing: false,
+      },
+    ]);
 
     await batchDownloadTrialSessionInteractor(
       applicationContext,
@@ -286,13 +284,8 @@ describe('batchDownloadTrialSessionInteractor', () => {
       mockJudgeUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getTrialSessionById,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway()
-        .getCalendaredCasesForTrialSession,
-    ).toHaveBeenCalled();
+    expect(getTrialSessionById).toHaveBeenCalled();
+    expect(getCalendaredCasesForTrialSession).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().zipDocuments,
     ).toHaveBeenCalledWith(expect.anything(), {
@@ -303,14 +296,16 @@ describe('batchDownloadTrialSessionInteractor', () => {
   });
 
   it('should filter removed cases from batch', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCalendaredCasesForTrialSession.mockReturnValue([
-        {
-          ...MOCK_CASE,
-          removedFromTrial: true,
-        },
-      ]);
+    getCalendaredCasesForTrialSession.mockResolvedValue([
+      {
+        ...MOCK_CASE,
+        removedFromTrial: true,
+        isManuallyAdded: false,
+        addedToSessionAt: '3000-03-01T00:00:00.000Z',
+        removedFromTrialDate: '3000-03-01T00:00:00.000Z',
+        isHearing: false,
+      },
+    ]);
 
     await batchDownloadTrialSessionInteractor(
       applicationContext,
@@ -320,13 +315,8 @@ describe('batchDownloadTrialSessionInteractor', () => {
       mockJudgeUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getTrialSessionById,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway()
-        .getCalendaredCasesForTrialSession,
-    ).toHaveBeenCalled();
+    expect(getTrialSessionById).toHaveBeenCalled();
+    expect(getCalendaredCasesForTrialSession).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().zipDocuments,
     ).toHaveBeenCalledWith(expect.anything(), {

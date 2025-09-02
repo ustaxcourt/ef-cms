@@ -445,13 +445,13 @@ describe('TrialSession entity', () => {
     });
   });
 
-  describe('dismissedAlertForNOTT', () => {
+  describe('dismissedAlertForNott', () => {
     it('should have a default value of false', () => {
       const trialSession = new TrialSession({
         ...MOCK_TRIAL_REGULAR,
       });
 
-      expect(trialSession.dismissedAlertForNOTT).toBe(false);
+      expect(trialSession.dismissedAlertForNott).toBe(false);
     });
   });
 

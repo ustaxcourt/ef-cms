@@ -17,7 +17,6 @@ import {
   PrivatePractitioner,
   RawPrivatePractitioner,
 } from '@shared/business/entities/PrivatePractitioner';
-import { applicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getMessagesByDocketNumber } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
@@ -29,10 +28,10 @@ import diff from 'diff-arrays-of-objects';
 import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
-import { removeCaseFromHearing } from '@web-api/persistence/dynamo/trialSessions/removeCaseFromHearing';
 import { associateUsersWithCases } from '@web-api/persistence/postgres/cases/userOnCase/associateUsersWithCases';
 import { disassociateUsersFromCases } from '@web-api/persistence/postgres/cases/userOnCase/disassociateUsersFromCases';
 import { Role, ROLES } from '@shared/business/entities/EntityConstants';
+import { removeCasesFromHearings } from '@web-api/persistence/postgres/trialSessions/removeCasesFromHearings';
 import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
 
 // Because we used to rely on Dynamo, we needed to manually maintain relations in app code.
@@ -122,13 +121,12 @@ export const updateCaseAndAssociations = async ({
     upsertDocketEntries(docketEntries),
     upsertMessages(messages),
     upsertCaseCorrespondences(correspondences),
-    ...deletedHearings.map(({ trialSessionId }) =>
-      removeCaseFromHearing({
-        applicationContext,
+    removeCasesFromHearings({
+      trialSessionCases: deletedHearings.map(dh => ({
+        trialSessionId: dh.trialSessionId,
         docketNumber: caseToUpdate.docketNumber,
-        trialSessionId,
-      }),
-    ),
+      })),
+    }),
     associateUsersWithCases([
       ...irsPractitionersToUpdate,
       ...privatePractitionersToUpdate,

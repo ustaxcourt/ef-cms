@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
 import {
@@ -7,6 +8,8 @@ import {
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { generateNoticeOfTrialIssuedInteractor } from './generateNoticeOfTrialIssuedInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { getUsersInSections as getUsersInSectionsMock } from '@web-api/persistence/postgres/users/getUsersInSections';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
@@ -19,19 +22,21 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
     name: 'Test Judge',
   };
 
+  const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
+
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockImplementation(() => ({
-        joinPhoneNumber: '3333',
-        judge: { name: 'Test Judge' },
-        meetingId: '1111',
-        password: '2222',
-        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
-        startDate: '2019-08-25T05:00:00.000Z',
-        startTime: '10:00',
-        trialLocation: 'Boise, Idaho',
-      }));
+    getTrialSessionById.mockResolvedValue({
+      joinPhoneNumber: '3333',
+      judge: {
+        name: 'Test Judge',
+      },
+      meetingId: '1111',
+      password: '2222',
+      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+      startDate: '2019-08-25T05:00:00.000Z',
+      startTime: '10:00',
+      trialLocation: 'Boise, Idaho',
+    } as RawTrialSession);
 
     applicationContext
       .getPersistenceGateway()
@@ -72,9 +77,7 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
       trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().getTrialSessionById,
-    ).toHaveBeenCalled();
+    expect(getTrialSessionById).toHaveBeenCalled();
     expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(
       applicationContext.getDocumentGenerators().noticeOfTrialIssued.mock
@@ -112,20 +115,18 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
   });
 
   it('call the noticeOfTrialIssuedInPerson pdf generator with the title and name of the clerk of the court', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockImplementation(() => ({
-        address1: '1111',
-        address2: '2222',
-        city: 'troutville',
-        judge: { name: 'Test Judge' },
-        postalCode: 'Boise, Idaho',
-        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
-        startDate: '2019-08-25T05:00:00.000Z',
-        startTime: '10:00',
-        state: '33333',
-        trialLocation: 'Boise, Idaho',
-      }));
+    getTrialSessionById.mockResolvedValue({
+      address1: '1111',
+      address2: '2222',
+      city: 'troutville',
+      judge: { name: 'Test Judge' },
+      postalCode: 'Boise, Idaho',
+      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+      startDate: '2019-08-25T05:00:00.000Z',
+      startTime: '10:00',
+      state: '33333',
+      trialLocation: 'Boise, Idaho',
+    } as RawTrialSession);
 
     await generateNoticeOfTrialIssuedInteractor(applicationContext, {
       docketNumber: '234-56',
@@ -144,17 +145,15 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
   });
 
   it('should throw an error when the judge for the trial session is not found in persistence', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockImplementation(() => ({
-        joinPhoneNumber: '3333',
-        judge: { name: 'Bob Judge' },
-        meetingId: '1111',
-        password: '2222',
-        startDate: '2019-08-25T05:00:00.000Z',
-        startTime: '10:00',
-        trialLocation: 'Boise, Idaho',
-      }));
+    getTrialSessionById.mockResolvedValue({
+      joinPhoneNumber: '3333',
+      judge: { name: 'Bob Judge' },
+      meetingId: '1111',
+      password: '2222',
+      startDate: '2019-08-25T05:00:00.000Z',
+      startTime: '10:00',
+      trialLocation: 'Boise, Idaho',
+    } as RawTrialSession);
 
     await expect(
       generateNoticeOfTrialIssuedInteractor(applicationContext, {
@@ -170,9 +169,7 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
       trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().getTrialSessionById,
-    ).toHaveBeenCalled();
+    expect(getTrialSessionById).toHaveBeenCalled();
     expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(
       applicationContext.getDocumentGenerators().noticeOfTrialIssued.mock
@@ -185,20 +182,18 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
   });
 
   it('should create notice of trial issued for an in-person session', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockImplementation(() => ({
-        address1: '1111',
-        address2: '2222',
-        city: 'troutville',
-        judge: { name: 'Test Judge' },
-        postalCode: 'Boise, Idaho',
-        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
-        startDate: '2019-08-25T05:00:00.000Z',
-        startTime: '10:00',
-        state: '33333',
-        trialLocation: 'Boise, Idaho',
-      }));
+    getTrialSessionById.mockResolvedValue({
+      address1: '1111',
+      address2: '2222',
+      city: 'troutville',
+      judge: { name: 'Test Judge' },
+      postalCode: 'Boise, Idaho',
+      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+      startDate: '2019-08-25T05:00:00.000Z',
+      startTime: '10:00',
+      state: '33333',
+      trialLocation: 'Boise, Idaho',
+    } as RawTrialSession);
 
     await generateNoticeOfTrialIssuedInteractor(applicationContext, {
       docketNumber: '234-56',

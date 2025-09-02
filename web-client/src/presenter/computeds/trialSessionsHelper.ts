@@ -237,7 +237,7 @@ export const formatTrialSessions = ({
   const trialSessionRows: TrialSessionRow[] = trialSessions.map(
     trialSession => {
       const showAlertForNOTTReminder =
-        !trialSession.dismissedAlertForNOTT &&
+        !trialSession.dismissedAlertForNott &&
         TrialSession.isStartDateWithinNOTTReminderRange({
           isCalendared: trialSession.isCalendared,
           startDate: trialSession.startDate,
