@@ -11,13 +11,14 @@ const scriptConfig: ScriptConfig = {
     'setup-chief-judge-name-flag - Sets the name of Chief Judge name in Feature Flag table',
   parameters: {
     chiefJudgeName: {
+      default: 'Maurice B. Foley',
       position: 0,
       required: false,
       type: 'string',
     },
   },
 };
-const { chiefJudgeName = 'Maurice B. Foley' } = parseArgsAndEnvVars(
+const { chiefJudgeName } = parseArgsAndEnvVars(
   scriptConfig,
 ) as {
   chiefJudgeName: string;
