@@ -1,4 +1,5 @@
-import { Button } from '@web-client/dawson-ui/ui/button';
+import { Button as DawsonUiButton } from '@web-client/dawson-ui/ui/button';
+import { Button } from '@web-client/ustc-ui/Button/Button';
 import { ErrorNotification } from '@web-client/views/ErrorNotification';
 import { InfoNotificationComponent } from '@web-client/views/InfoNotification';
 import { SuccessNotification } from '@web-client/views/SuccessNotification';
@@ -109,38 +110,35 @@ export const Login = connect(
                       >
                         {showPassword ? 'Hide password' : 'Show password'}
                       </button>
-                      <Button
-                        className="usa-button margin-top-3"
-                        data-testid="login-button"
-                      >
-                        Log in
-                      </Button>
+                      <div className="tw:my-4">
+                        <DawsonUiButton data-testid="login-button">
+                          Log in
+                        </DawsonUiButton>
+                      </div>
                     </form>
-                    <div className="button-container flex justify-start">
-                      <Button
+                    <div className="tw:my-4">
+                      <DawsonUiButton
                         variant={'primaryTertiary'}
-                        className="margin-top-1 display-block pl-0 ml-0"
+                        className="tw:m-0 tw:p-0"
                         data-testid="forgot-password-button"
                         type="button"
                         onClick={() => navigateToForgotPasswordSequence()}
                       >
                         Forgot password?
-                      </Button>
+                      </DawsonUiButton>
                     </div>
-                    <span>
-                      Don&apos;t have an account?{' '}
-                      <Button
-                        variant={'primaryTertiary'}
-                        className="padding-top-0 pl-0"
-                        type="button"
-                        onClick={e => {
-                          e.preventDefault();
-                          navigateToCreatePetitionerAccountSequence();
-                        }}
-                      >
-                        Create your account now.
-                      </Button>
-                    </span>
+                    Don&apos;t have an account?{' '}
+                    <Button
+                      link={true}
+                      className="tw:block padding-top-0 pl-0"
+                      type="button"
+                      onClick={e => {
+                        e.preventDefault();
+                        navigateToCreatePetitionerAccountSequence();
+                      }}
+                    >
+                      Create your account now.
+                    </Button>
                   </div>
                 </div>
               </div>

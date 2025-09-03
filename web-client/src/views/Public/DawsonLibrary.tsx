@@ -7,6 +7,7 @@ import {
 } from '@web-client/dawson-ui/ui/alert';
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Tag } from '@web-client/dawson-ui/ui/tag';
 
 export const DawsonLibrary = () => {
   return (
@@ -73,32 +74,79 @@ export const DawsonLibrary = () => {
 
         <div>
           <h2>Alerts</h2>
-          <Alert variant="info">
-            <AlertHeader>This is a header</AlertHeader>
-            <AlertDescription>This is a description</AlertDescription>
-          </Alert>
-          <Alert variant="warning">
-            <AlertDescription>This is a description</AlertDescription>
-          </Alert>
-          <Alert variant="error">
-            <AlertHeader>
-              This is a really long header This is a really long header This is
-              a really long header This is a really long header This is a really
-              long header This is a really long header This is a really long
-              header
-            </AlertHeader>
+          <Alert variant="info" className="tw:mb-4">
+            <AlertHeader>Info Status</AlertHeader>
             <AlertDescription>
-              <ul className="list-inside list-disc text-sm">
-                <li>An example with a list inside of the description</li>
-                <li>Another list item here to demonstrate usage</li>
-                <li>Any markup can go inside a description</li>
+              This is a succinct, helpful message
+            </AlertDescription>
+          </Alert>
+          <Alert variant="warning" className="tw:mb-4">
+            <AlertHeader>Warning Status</AlertHeader>
+            <AlertDescription>
+              This is a succinct, helpful message
+              <ul>
+                <li>This is a succinct, helpful message</li>
               </ul>
             </AlertDescription>
           </Alert>
-          <Alert variant="success">
-            <AlertHeader>This is a header</AlertHeader>
-            <AlertDescription>This is a description</AlertDescription>
+          <Alert variant="error" className="tw:mb-4">
+            <AlertHeader>Error Status</AlertHeader>
+            <AlertDescription>
+              This is a succinct, helpful message
+            </AlertDescription>
           </Alert>
+          <Alert variant="success" className="tw:mb-4">
+            <AlertHeader>Success Status</AlertHeader>
+            <AlertDescription>
+              This is a succinct, helpful message
+            </AlertDescription>
+          </Alert>
+          <Alert variant="info" className="tw:mb-4">
+            <AlertDescription>
+              You’ll need to change your password by April 25, 2020.
+            </AlertDescription>
+          </Alert>
+          <Alert variant="warning" className="tw:mb-4">
+            <AlertDescription>
+              You’ll need to change your password by April 25, 2020.
+            </AlertDescription>
+          </Alert>
+          <Alert variant="error" className="tw:mb-4">
+            <AlertDescription>
+              Sorry, a password needs more than four characters.
+            </AlertDescription>
+          </Alert>
+          <Alert variant="success" className="tw:mb-4">
+            <AlertDescription>
+              You successfully changed your password.
+            </AlertDescription>
+          </Alert>
+        </div>
+
+        <div className="tw:mt-4">
+          <h2>Tag</h2>
+
+          <div className="tw:bg-primary tw:p-5">
+            <Tag
+              variant="primary"
+              className="tw:mr-[10px]"
+              iconProps={{ icon: 'gavel' }}
+            >
+              TAG
+            </Tag>
+
+            <Tag variant="primary" className="tw:mr-[10px]">
+              TAG
+            </Tag>
+
+            <Tag
+              variant="destructive"
+              className="tw:mr-[10px]"
+              iconProps={{ icon: 'gavel' }}
+            >
+              TAG
+            </Tag>
+          </div>
         </div>
       </div>
     </>
