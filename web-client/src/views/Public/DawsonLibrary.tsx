@@ -15,9 +15,10 @@ export const DawsonLibrary = () => {
       <div className="card margin-2 padding-2">
         <h2>Button</h2>
 
-        <div>
-          <div className="tw:inline tw:m-2">
-            <Button variant={'primary'}>
+        <div className="tw:flex tw:flex-col tw:gap-4">
+          {/* First row */}
+          <div className="tw:flex tw:flex-wrap tw:gap-4">
+            <Button variant={'primary'} className="tw:flex-shrink-0">
               <FontAwesomeIcon
                 className="fa:margin-right-1"
                 icon="file"
@@ -25,9 +26,8 @@ export const DawsonLibrary = () => {
               />
               Primary Default
             </Button>
-          </div>
-          <div className="tw:inline tw:m-2">
-            <Button variant={'secondary'}>
+
+            <Button variant={'secondary'} className="tw:flex-shrink-0">
               <FontAwesomeIcon
                 className="fa:margin-right-1"
                 icon="file"
@@ -35,9 +35,8 @@ export const DawsonLibrary = () => {
               />
               Secondary Default
             </Button>
-          </div>
-          <div className="tw:inline tw:m-2">
-            <Button variant={'destructive'}>
+
+            <Button variant={'destructive'} className="tw:flex-shrink-0">
               <FontAwesomeIcon
                 className="fa:margin-right-1"
                 icon="file"
@@ -46,8 +45,10 @@ export const DawsonLibrary = () => {
               Destructive Default
             </Button>
           </div>
-          <div className="tw:inline tw:m-2">
-            <Button variant={'primaryTertiary'}>
+
+          {/* Second row */}
+          <div className="tw:flex tw:flex-wrap tw:gap-4 tw:w-fit">
+            <Button variant={'primaryTertiary'} className="tw:flex-shrink-0">
               <FontAwesomeIcon
                 className="fa:margin-right-1"
                 icon="file"
@@ -55,9 +56,11 @@ export const DawsonLibrary = () => {
               />
               Tertiary Default
             </Button>
-          </div>
-          <div className="tw:inline tw:m-2">
-            <Button variant={'destructiveTertiary'}>
+
+            <Button
+              variant={'destructiveTertiary'}
+              className="tw:flex-shrink-0"
+            >
               <FontAwesomeIcon
                 className="fa:margin-right-1"
                 icon="file"
