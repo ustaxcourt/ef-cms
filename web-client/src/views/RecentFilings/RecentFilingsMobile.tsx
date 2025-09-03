@@ -14,10 +14,10 @@ import { RecentFilingsDocumentDisplay } from './RecentFilingsDocumentDisplay';
 
 const getIndentationClass = (filing: RecentFiling): string => {
   if (filing.inConsolidatedGroup && !filing.isLeadCase) {
-    return 'margin-left-1';
+    return 'margin-x-2';
   }
   if (filing.inConsolidatedGroup) {
-    return 'margin-left-0';
+    return 'margin-x-1';
   }
   return '';
 };
