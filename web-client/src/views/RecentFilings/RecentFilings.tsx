@@ -3,6 +3,7 @@ import {
   FORMATS,
   formatDateString,
   calculateISODate,
+  createISODateString,
 } from '@shared/business/utilities/DateHandler';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -48,7 +49,12 @@ export const RecentFilings = connect(
     const paginatorBottom = useRef<HTMLDivElement>(null);
 
     const currentDate = useMemo(() => {
-      const currentDate = calculateISODate({ howMuch: 0, units: 'days' });
+      const today = createISODateString();
+      const currentDate = calculateISODate({
+        dateString: today,
+        howMuch: 0,
+        units: 'days',
+      });
       return formatDateString(currentDate, FORMATS.MMDDYYYY);
     }, []);
 
