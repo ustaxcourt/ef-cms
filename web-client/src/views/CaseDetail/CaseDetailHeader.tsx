@@ -8,6 +8,7 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
+import { Tag } from '@web-client/dawson-ui/ui/tag';
 
 type CaseDetailHeaderProps = {
   hideActionButtons?: boolean;
@@ -206,28 +207,24 @@ export const CaseDetailHeader = connect<
                         </span>
                       </label>
                       {formattedCaseDetail.associatedJudge && (
-                        <span
+                        <Tag
                           aria-label="associated judge"
-                          className="margin-left-1 usa-tag"
+                          className="margin-left-1"
                           role="note"
+                          iconProps={{ icon: 'gavel' }}
                         >
-                          <FontAwesomeIcon
-                            className="margin-right-05"
-                            icon="gavel"
-                            size="1x"
-                          />
                           {formattedCaseDetail.associatedJudge}
-                        </span>
+                        </Tag>
                       )}
                       {caseDetailHeaderHelper.showBlockedTag && (
-                        <span className="margin-left-1 usa-tag red-tag" data-testid="blocked-case-icon">
-                          <FontAwesomeIcon
-                            className="margin-right-1"
-                            icon="hand-paper"
-                            size="1x"
-                          />
+                        <Tag
+                          className="margin-left-1"
+                          data-testid="blocked-case-icon"
+                          iconProps={{ icon: 'hand-paper' }}
+                          variant="destructive"
+                        >
                           BLOCKED
-                        </span>
+                        </Tag>
                       )}
                     </>
                   )}

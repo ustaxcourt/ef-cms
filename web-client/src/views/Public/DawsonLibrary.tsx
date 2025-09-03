@@ -103,12 +103,25 @@ export const DawsonLibrary = () => {
           <h2>Tag</h2>
 
           <div className="tw:bg-primary tw:p-5">
-            <Tag variant="primary">TAG</Tag>
-            <br />
-            <Tag variant="primary">TAG</Tag>
-            <br />
+            <Tag
+              variant="primary"
+              className="tw:mr-[10px]"
+              iconProps={{ icon: 'gavel' }}
+            >
+              TAG
+            </Tag>
 
-            <Tag variant="destructive">TAG</Tag>
+            <Tag variant="primary" className="tw:mr-[10px]">
+              TAG
+            </Tag>
+
+            <Tag
+              variant="destructive"
+              className="tw:mr-[10px]"
+              iconProps={{ icon: 'gavel' }}
+            >
+              TAG
+            </Tag>
           </div>
         </div>
       </div>
