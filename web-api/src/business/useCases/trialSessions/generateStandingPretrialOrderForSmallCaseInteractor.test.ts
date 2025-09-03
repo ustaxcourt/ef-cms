@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+jest.mock('@web-api/persistence/postgres/users/getUsersInSections');
 import {
   DOCKET_NUMBER_SUFFIXES,
   TRIAL_SESSION_PROCEEDING_TYPES,
@@ -6,9 +7,12 @@ import {
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { generateStandingPretrialOrderForSmallCaseInteractor } from './generateStandingPretrialOrderForSmallCaseInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getUsersInSections as getUsersInSectionsMock } from '@web-api/persistence/postgres/users/getUsersInSections';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('generateStandingPretrialOrderForSmallCaseInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const getUsersInSections = jest.mocked(getUsersInSectionsMock);
 
   const TEST_JUDGE = {
     judgeTitle: 'Judge',
@@ -59,9 +63,7 @@ describe('generateStandingPretrialOrderForSmallCaseInteractor', () => {
         trialLocation: 'Boise, Idaho',
       });
 
-    applicationContext
-      .getPersistenceGateway()
-      .getUsersInSection.mockReturnValue([TEST_JUDGE]);
+    getUsersInSections.mockResolvedValue([TEST_JUDGE as DbUser]);
   });
 
   it('should fetch case and trial information and call the document generator', async () => {

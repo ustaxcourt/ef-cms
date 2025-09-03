@@ -1,4 +1,4 @@
-import { caseDeadlineEntity } from '@web-api/persistence/postgres/caseDeadlines/mapper';
+import { fromCaseDeadlineKysely } from '@web-api/persistence/postgres/caseDeadlines/mapper';
 import { getDbReader } from '@web-api/database';
 
 export const getCaseDeadlinesByDocketNumber = async ({
@@ -21,5 +21,7 @@ export const getCaseDeadlinesByDocketNumber = async ({
       .execute(),
   );
 
-  return caseDeadlines.map(caseDeadline => caseDeadlineEntity(caseDeadline));
+  return caseDeadlines.map(caseDeadline =>
+    fromCaseDeadlineKysely(caseDeadline),
+  );
 };

@@ -5,7 +5,6 @@ import {
   userIsDirectlyAssociated,
 } from '@shared/business/entities/cases/Case';
 import { PaymentStatusTypes } from '@shared/business/entities/EntityConstants';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import {
   UnknownAuthUser,
@@ -14,6 +13,7 @@ import {
 import { compareISODateStrings } from '../utilities/sortFunctions';
 import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
 import { partition, uniqBy } from 'lodash';
+import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 interface UserCaseDTO {
@@ -34,7 +34,6 @@ export type TAssociatedCase = {
 } & UserCaseDTO;
 
 export const getCasesForUserInteractor = async (
-  applicationContext: ServerApplicationContext,
   authorizedUser: UnknownAuthUser,
 ): Promise<{
   openCaseList: TAssociatedCase[];
@@ -46,12 +45,7 @@ export const getCasesForUserInteractor = async (
 
   const { userId } = authorizedUser;
 
-  const docketNumbers = (
-    await applicationContext.getPersistenceGateway().getCasesForUser({
-      applicationContext,
-      userId,
-    })
-  ).map(c => c.docketNumber);
+  const docketNumbers = await getDocketNumbersByUser({ userId });
 
   const allUserCases: TAssociatedCase[] = (
     await getCasesByDocketNumbers({

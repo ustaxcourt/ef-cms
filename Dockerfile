@@ -1,6 +1,6 @@
 ARG TARGETARCH=amd64
 
-FROM cypress/browsers:node-22.18.0-chrome-139.0.7258.66-1-ff-141.0.3-edge-138.0.3351.121-1
+FROM cypress/browsers:node-22.18.0-chrome-139.0.7258.138-1-ff-142.0-edge-139.0.3405.102-1
 
 WORKDIR /home/app
 
@@ -10,21 +10,18 @@ RUN mkdir -p /usr/share/man/man1
 RUN apt-get update
 
 RUN apt-get install -y \
-  openjdk-17-jre-headless \
-  openjdk-17-jdk-headless \
-  openjdk-17-jre \
-  openjdk-17-jdk \
+  openjdk-21-jre-headless \
+  openjdk-21-jdk-headless \
+  openjdk-21-jre \
+  openjdk-21-jdk \
   zip \
   curl \
   wget \
   git \
   less \
-  python-is-python3 \
-  2to3 \
   python3 \
   python3-dev \
-  python-dev-is-python3 \
-  python3-pip=23.0.1+dfsg-1 \
+  python3-pip \
   jq \
   graphicsmagick \
   ghostscript \
@@ -36,13 +33,13 @@ RUN apt-get install -y \
 RUN apt-get install -y build-essential
 RUN apt-get install -y libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
 
-ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.28.5.zip" -o "awscliv2.zip" && \
+ENV JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.28.19.zip" -o "awscliv2.zip" && \
   unzip awscliv2.zip && \
   ./aws/install && \
   rm -rf awscliv2.zip
 
-RUN wget -q -O terraform.zip https://releases.hashicorp.com/terraform/1.12.2/terraform_1.12.2_linux_amd64.zip && \
+RUN wget -q -O terraform.zip https://releases.hashicorp.com/terraform/1.13.1/terraform_1.13.1_linux_amd64.zip && \
   unzip -o terraform.zip terraform && \
   rm terraform.zip && \
   cp terraform /usr/local/bin/

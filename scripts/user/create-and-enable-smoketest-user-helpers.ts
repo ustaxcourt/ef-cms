@@ -7,14 +7,16 @@ import {
 import { environment } from '@web-api/environment';
 import { getDestinationTableInfo } from 'shared/admin-tools/util';
 import { getEnvironmentVariables } from '../helpers/parseArgsAndEnvVars';
+import { ACCOUNT_STATUS } from '@shared/business/entities/EntityConstants';
+import { getUniqueId } from '@shared/sharedAppContext';
 
 const { password } = getEnvironmentVariables({
   password: 'DEFAULT_ACCOUNT_PASS',
 });
 
-const baseUser = {
-  birthYear: '1950',
+const user: RawUser = {
   contact: {
+    country: 'United States',
     address1: '234 Main St',
     address2: 'Apartment 4',
     address3: 'Under the stairs',
@@ -24,19 +26,13 @@ const baseUser = {
     postalCode: '61234',
     state: 'IL',
   },
-  lastName: 'Test',
-  password,
-  practiceType: '',
-  suffix: '',
-};
-
-const user: RawUser = {
-  ...baseUser,
   email: 'testAdmissionsClerk@example.com',
   name: 'Test admissionsclerk',
   role: 'admissionsclerk',
   section: 'admissions',
-} as unknown as RawUser;
+  accountStatus: ACCOUNT_STATUS.active,
+  userId: getUniqueId(),
+};
 
 export const createAndEnableSmoketestUser = async () => {
   const { tableName } = await getDestinationTableInfo();

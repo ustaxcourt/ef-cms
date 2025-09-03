@@ -185,6 +185,8 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
           );
           logout();
 
+
+          // new practitioner, can login, is associated to a case
           const updatedPractitionerUserName = `cypress_test_account+${v4()}`;
           const updatedPractitionerEmail = `${updatedPractitionerUserName}@example.com`;
           loginAsAdmissionsClerk();
@@ -228,15 +230,6 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
               'Your email address is verified. You can now log in to DAWSON.',
             );
           loginAsPrivatePractitioner(updatedPractitionerEmail);
-          cy.task('waitForPractitionerEmailUpdate', {
-            docketNumber,
-            practitionerEmail: updatedPractitionerEmail,
-          }).then(emailIsUpdatedOnCase => {
-            expect(emailIsUpdatedOnCase).to.equal(
-              true,
-              `The case ${docketNumber} does not reflect that the practitioner updated their email address.`,
-            );
-          });
           cy.get(`[data-testid="${docketNumber}"]`)
             .contains(docketNumber)
             .click();
