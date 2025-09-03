@@ -33,6 +33,7 @@ import { getWebSocketConnectionsByUserId } from '@web-api/persistence/postgres/c
 import { incrementCounter } from './persistence/dynamo/helpers/incrementCounter';
 import { isEmailAvailable } from './persistence/cognito/isEmailAvailable';
 import { isFileExists } from './persistence/s3/isFileExists';
+import { updatePractitionerUser } from './business/useCaseHelper/users/updatePractitionerUser';
 import { saveDispatchNotification } from '@web-api/persistence/postgres/notifications/saveDispatchNotification';
 import { saveDocumentFromLambda } from './persistence/s3/saveDocumentFromLambda';
 import { saveUserConnection } from '@web-api/persistence/postgres/connections/saveUserConnection';
@@ -88,6 +89,7 @@ const gatewayMethods = {
     saveDispatchNotification,
     saveDocumentFromLambda,
     saveUserConnection,
+    updatePractitionerUser,
     updateMaintenanceMode,
   }),
   // methods below are not known to create or update "entity" records
