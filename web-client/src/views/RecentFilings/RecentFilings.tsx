@@ -48,8 +48,8 @@ export const RecentFilings = connect(
     const paginatorBottom = useRef<HTMLDivElement>(null);
 
     const currentDate = useMemo(() => {
-      const sevenDaysAgo = calculateISODate({ howMuch: -7, units: 'days' });
-      return formatDateString(sevenDaysAgo, FORMATS.MMDDYYYY);
+      const currentDate = calculateISODate({ howMuch: 0, units: 'days' });
+      return formatDateString(currentDate, FORMATS.MMDDYYYY);
     }, []);
 
     const sortedData =
