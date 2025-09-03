@@ -1,11 +1,13 @@
 import { getDocumentQCServedForSectionInteractor } from '@shared/proxies/workitems/getDocumentQCServedForSectionProxy';
-import { WorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
+import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const getDocumentQCServedForSectionAction = async ({
   applicationContext,
   get,
-}: ActionProps): Promise<{ workItems: WorkItemWithCaseInfo[] }> => {
+}: ActionProps): Promise<{
+  workItems: RawWorkItemWithCaseAndDocketEntryInfo[];
+}> => {
   const selectedSection = get(state.workQueueToDisplay.section);
 
   const user = get(state.user);

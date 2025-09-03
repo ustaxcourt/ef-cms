@@ -17,7 +17,7 @@ export class Practitioner extends User {
   public admissionsDate: string;
   public admissionsStatus: string;
   public barNumber: string;
-  public birthYear: string;
+  public birthYear: number;
   public confirmEmail?: string;
   public practiceType: string;
   public firmName?: string;
@@ -51,7 +51,6 @@ export class Practitioner extends User {
     this.originalBarState = rawUser.originalBarState;
     this.practitionerNotes = rawUser.practitionerNotes;
     this.practitionerType = rawUser.practitionerType;
-    this.section = this.role;
     this.suffix = rawUser.suffix;
     this.serviceIndicator =
       rawUser.serviceIndicator ||
@@ -62,6 +61,7 @@ export class Practitioner extends User {
     } else {
       this.role = ROLES.inactivePractitioner;
     }
+    this.section = this.role;
   }
 
   static ENTITY_NAME = 'Practitioner';

@@ -1,5 +1,8 @@
 import { GetUserResponse } from '@shared/business/useCases/getUserInteractor';
-import { Role } from '@shared/business/entities/EntityConstants';
+import {
+  ACCOUNT_STATUS,
+  Role,
+} from '@shared/business/entities/EntityConstants';
 
 export const emptyUserState: GetUserResponse & {
   email: string;
@@ -10,4 +13,5 @@ export const emptyUserState: GetUserResponse & {
   role: '' as Role,
   section: '',
   userId: '',
+  accountStatus: ACCOUNT_STATUS.active,
 }; // We know that the logged in user has an email otherwise they could not login.

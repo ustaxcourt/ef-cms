@@ -1,9 +1,12 @@
 import { getDbReader } from '@web-api/database';
 import {
+  attachDocketEntriesToWorkItemQC,
   workItemQCQueryBase,
-  WorkItemWithCaseInfo,
 } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
-import { toWorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/mapper';
+import {
+  RawWorkItemWithCaseAndDocketEntryInfo,
+  WorkItemWithCaseInfoKysely,
+} from '@web-api/persistence/postgres/workitems/schema';
 
 export const getDocumentQCServedForUser = async ({
   afterDate,
@@ -11,13 +14,13 @@ export const getDocumentQCServedForUser = async ({
 }: {
   userId: string;
   afterDate: Date;
-}): Promise<WorkItemWithCaseInfo[]> => {
-  const workItems = await getDbReader(reader => {
+}): Promise<RawWorkItemWithCaseAndDocketEntryInfo[]> => {
+  const workItems: WorkItemWithCaseInfoKysely[] = await getDbReader(reader => {
     return workItemQCQueryBase(reader)
       .where('w.assigneeId', '=', userId)
       .where('w.completedAt', '>=', afterDate)
       .execute();
   });
 
-  return workItems.map(toWorkItemWithCaseInfo);
+  return await attachDocketEntriesToWorkItemQC({ workItems });
 };

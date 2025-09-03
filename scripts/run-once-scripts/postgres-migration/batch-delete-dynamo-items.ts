@@ -58,6 +58,7 @@ export async function batchDeleteDynamoItems(
     } catch (error) {
       console.error('Error in batch delete:', error);
     }
+    console.log('Total Items deleted: ', totalItemsDeleted);
   }
   return totalItemsDeleted;
 }
