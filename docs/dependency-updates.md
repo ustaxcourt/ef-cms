@@ -70,7 +70,8 @@ To update Node.js:
 
 Check if there are updates to any the following in the main `Dockerfile`. Changing the `Dockerfile` requires publishing a new ECR image which is used as the docker image in CircleCI.
 
-- `terraform`: check for a newer version on the [Terraform site](https://www.terraform.io/downloads).
+- `terraform`: check for a newer version on the [Terraform site](https://developer.hashicorp.com/terraform/install).
+  - Check for the version number and compare with the current version
   - Change the version of the `terraform.zip` that we retrieve in `./Dockerfile`
   - Change the version in `scripts/verify-terraform-version.sh`
 - `aws-cli`: check for a newer version on [AWS CLI](https://github.com/aws/aws-cli/tags) and use the latest version you can find for 2.x, replace it in the DockerFile

@@ -98,7 +98,6 @@ describe('updateCaseAutomaticBlock', () => {
     const caseEntity = new Case(
       {
         ...MOCK_CASE_WITHOUT_PENDING,
-        highPriority: false,
         trialDate: '2021-03-01T21:40:46.415Z',
         docketEntries: [
           {
