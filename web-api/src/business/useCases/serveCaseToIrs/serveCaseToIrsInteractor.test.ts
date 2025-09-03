@@ -16,6 +16,7 @@ import {
   INITIAL_DOCUMENT_TYPES,
   PARTY_TYPES,
   PAYMENT_STATUS,
+  PRO_SE_CHECKLIST,
   ROLES,
   SERVICE_INDICATOR_TYPES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
@@ -558,6 +559,17 @@ describe('serveCaseToIrsInteractor', () => {
       isPaper: false,
       partyType: PARTY_TYPES.petitionerSpouse,
       preferredTrialCity: null,
+      privatePractitioners: [
+        {
+          barNumber: '123456789',
+          name: 'Test Private Practitioner',
+          practitionerId: '123456789',
+          practitionerType: 'privatePractitioner',
+          representing: [getContactPrimary(MOCK_CASE).contactId],
+          role: 'privatePractitioner',
+          userId: '130c6634-4c3d-4cda-874c-d9a9387e00e2',
+        },
+      ],
       procedureType: 'Regular',
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     };
@@ -658,6 +670,13 @@ describe('serveCaseToIrsInteractor', () => {
       expect(
         applicationContext.getPersistenceGateway().getDocument.mock.calls[0][0],
       ).toMatchObject({
+        key: PRO_SE_CHECKLIST,
+        useTempBucket: false,
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway().getDocument.mock.calls[1][0],
+      ).toMatchObject({
         key: 'clinic-letter-los-angeles-california-regular',
         useTempBucket: false,
       });
@@ -697,11 +716,11 @@ describe('serveCaseToIrsInteractor', () => {
 
       expect(
         applicationContext.getPersistenceGateway().getDocument,
-      ).not.toHaveBeenCalled();
+      ).toHaveBeenCalledTimes(1);
 
       expect(
         applicationContext.getUtilities().combineTwoPdfs,
-      ).not.toHaveBeenCalled();
+      ).toHaveBeenCalledTimes(1);
 
       expect(
         applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
@@ -792,7 +811,7 @@ describe('serveCaseToIrsInteractor', () => {
 
       expect(
         applicationContext.getUtilities().combineTwoPdfs,
-      ).toHaveBeenCalledTimes(3);
+      ).toHaveBeenCalledTimes(5);
 
       const actualPrimaryContactNotr =
         applicationContext.getUtilities().combineTwoPdfs.mock.calls[0][0]
@@ -849,7 +868,7 @@ describe('serveCaseToIrsInteractor', () => {
 
       expect(
         applicationContext.getUtilities().combineTwoPdfs,
-      ).toHaveBeenCalledTimes(2);
+      ).toHaveBeenCalledTimes(3);
     });
 
     it('should append a clinic letter to the one notice of receipt of petition when there are two pro se petitioners at the same addresses', async () => {
@@ -883,7 +902,7 @@ describe('serveCaseToIrsInteractor', () => {
 
       expect(
         applicationContext.getUtilities().combineTwoPdfs,
-      ).toHaveBeenCalledTimes(1);
+      ).toHaveBeenCalledTimes(2);
     });
 
     it('should not append a clinic letter to the one notice of receipt of petition when there are two petitioners at the same addresses with one having representation', async () => {
@@ -929,7 +948,7 @@ describe('serveCaseToIrsInteractor', () => {
 
       expect(
         applicationContext.getUtilities().combineTwoPdfs,
-      ).toHaveBeenCalledTimes(0);
+      ).toHaveBeenCalledTimes(1);
     });
   });
 
