@@ -44,10 +44,10 @@ export async function createUserConfirmation(
     <a href="${verificationLink}">${verificationLink}</a>
   </div>
     <div style="margin-top: 20px;">
-      <span><strong>IMPORTANT:</strong> If you are filing a petition electronically, you must complete the process of filing your petition no later than 11:59 pm Eastern time on the last date to file. Petitions received by the Court after this time may be untimely and your case may be dismissed.</span>
+      <span>If you did not create an account with DAWSON, please contact support at <a href="mailto:${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}">${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}</a>.</span>
     </div>
     <div style="margin-top: 20px;">
-      <span>If you did not create an account with DAWSON, please contact support at <a href="mailto:${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}">${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}</a>.</span>
+      <span><strong>IMPORTANT:</strong> If you are filing a petition electronically, you must complete the process of filing your petition no later than 11:59 pm Eastern time on the last date to file. Petitions received by the Court after this time may be untimely and your case may be dismissed.</span>
     </div>
     <hr style="margin-top: 20px; border-top:1px solid #000000;">
     <div style="margin-top: 20px;">
