@@ -7,8 +7,16 @@ jobs:
   e2e_cypress_smoketests_local:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        ci_node_total: [ 6 ]
+        ci_node_index: [ 0, 1, 2, 3, 4, 5 ]
+
     env:
       CI: true
+      CI_NODE_INDEX: ${{ matrix.ci_node_index}}
+      CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
+
     services:
       postgres:
         image: postgres
