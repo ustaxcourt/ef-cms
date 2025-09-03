@@ -58,9 +58,6 @@ export const efcmsCaseMappings: Record<string, Object> = {
     'hasPendingItems.BOOL': {
       type: 'boolean',
     },
-    'highPriority.BOOL': {
-      type: 'boolean',
-    },
     'irsPractitioners.L.M.email.S': {
       type: 'keyword',
     },
