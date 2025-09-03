@@ -28,7 +28,6 @@ export const getRecentFilingsForUserInteractor = async (
     return [];
   }
 
-  // Collect all docket numbers including consolidated member cases
   const docketNumbers = allUserCases.reduce((acc, caseItem) => {
     acc.push(caseItem.docketNumber);
     if (caseItem.consolidatedCases) {
@@ -42,7 +41,6 @@ export const getRecentFilingsForUserInteractor = async (
   const sevenDaysAgo = calculateISODate({ howMuch: -7, units: 'days' });
   const today = calculateISODate({ howMuch: 0, units: 'days' });
 
-  // Query PostgreSQL for recent docket entries with case titles
   const dbDocketEntries = await getDbReader(reader =>
     reader
       .selectFrom('dwDocketEntry as d')
@@ -90,7 +88,6 @@ export const getRecentFilingsForUserInteractor = async (
     caseIsSealed: d.caseIsSealed,
   }));
 
-  // Build case info map for consolidated case handling
   const caseInfoMap = new Map();
   allUserCases.forEach(caseItem => {
     const hasConsolidatedCases = (caseItem.consolidatedCases?.length || 0) > 0;
@@ -103,18 +100,18 @@ export const getRecentFilingsForUserInteractor = async (
     let consolidatedIconTooltipText: string | undefined;
     if (hasConsolidatedCases) {
       consolidatedIconTooltipText = `Lead case in consolidated group with ${caseItem.consolidatedCases?.length || 0} member cases`;
+
     } else if (caseItem.leadDocketNumber) {
       consolidatedIconTooltipText = `Member case in consolidated group led by ${caseItem.leadDocketNumber}`;
+
     }
 
-    // Add case info for the lead case
     caseInfoMap.set(caseItem.docketNumber, {
       inConsolidatedGroup,
       isLeadCase,
       consolidatedIconTooltipText,
     });
 
-    // Add case info for all consolidated member cases
     if (caseItem.consolidatedCases) {
       caseItem.consolidatedCases.forEach(consolidatedCase => {
         caseInfoMap.set(consolidatedCase.docketNumber, {

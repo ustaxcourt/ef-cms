@@ -245,11 +245,9 @@ describe('getRecentFilingsForUserInteractor', () => {
   });
 
   it('should handle cases with empty consolidated cases array', async () => {
-    const mockCases = [
-      createMockCase({
-        consolidatedCases: [],
-      }),
-    ];
+    const mockCases = [createMockCase({
+      consolidatedCases: [],
+    })];
     const mockDbResults = [createMockDbDocketEntry()];
 
     mockGetCasesForUserInteractor.mockResolvedValue({
@@ -267,11 +265,9 @@ describe('getRecentFilingsForUserInteractor', () => {
 
   it('should handle docket entries with case info not found in map', async () => {
     const mockCases = [createMockCase()];
-    const mockDbResults = [
-      createMockDbDocketEntry({
-        docketNumber: '999-99', // Different from the case
-      }),
-    ];
+    const mockDbResults = [createMockDbDocketEntry({
+      docketNumber: '999-99', // Different from the case
+    })];
 
     mockGetCasesForUserInteractor.mockResolvedValue({
       openCaseList: mockCases,
