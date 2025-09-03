@@ -70,11 +70,10 @@
 
 #### Trial information
 * Displays the current trial status of the case:
-  * Not Scheduled - case is not on any trial session and has not been marked as High Priority
-  * Not Scheduled High Priority - case is marked as High Priority and is on the eligible list for a trial session that has not been set
+  * Not Scheduled - case is not on any trial session
   * Scheduled - case has been manually added to the eligible list for a trial session that has not yet been set
   * Calendared - case is on a trial session that has been set
-  * Blocked from Trial - case has either a manual block, a system-generated block or both and cannot be set for trial or set as high priority
+  * Blocked from Trial - case has either a manual block, a system-generated block or both and cannot be set for trial
 
 ## Notes
 **Case Notes**
