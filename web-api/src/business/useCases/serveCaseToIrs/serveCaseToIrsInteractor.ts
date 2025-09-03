@@ -248,13 +248,6 @@ const generateNoticeOfReceipt = async ({
     !!contactSecondary &&
     !Case.isPetitionerRepresented(caseEntity, contactSecondary.contactId);
 
-  console.log('privatePractitioners', caseEntity.privatePractitioners);
-  console.log('contactPrimary', contactPrimary?.contactId);
-  console.log('contactSecondary', contactSecondary?.contactId);
-
-  console.log('isPrimaryContactProSe', isPrimaryContactProSe);
-  console.log('isSecondaryContactProSe', isSecondaryContactProSe);
-
   if (isPrimaryContactProSe || isSecondaryContactProSe) {
     const proSeChecklist = await applicationContext
       .getPersistenceGateway()
