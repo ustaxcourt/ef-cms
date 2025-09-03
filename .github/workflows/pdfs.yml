@@ -15,6 +15,12 @@ jobs:
       CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
       CI_NODE_INDEX: ${{ matrix.ci_node_index }}
 
+    strategy:
+      fail-fast: false
+      matrix:
+        ci_node_total: [ 3 ]
+        ci_node_index: [ 0, 1, 2 ]
+
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

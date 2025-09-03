@@ -6,11 +6,13 @@ on:
 jobs:
   e2e_cypress_smoketests_local:
     runs-on: ubuntu-latest
+
     strategy:
       fail-fast: false
       matrix:
-        ci_node_total: [10]
-        ci_node_index: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+        ci_node_total: [ 6 ]
+        ci_node_index: [ 0, 1, 2, 3, 4, 5, 6 ]
+
     env:
       CI: true
       CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
