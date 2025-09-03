@@ -199,7 +199,8 @@ export class Practitioner extends User {
     return Practitioner.VALIDATION_RULES as any;
   }
 
-  toRawObject(removeValidationProperties: boolean = true) {
+  toRawObject(options: { removeValidationProperties?: boolean } = {}) {
+    const { removeValidationProperties = true } = options;
     const result = super.toRawObject() as any;
 
     // We don't want to persist these values as they are only used for validation

@@ -17,7 +17,7 @@ export const updatePractitionerUserAction = async ({
   const formState = get(state.form);
   const user = new Practitioner(formState, {
     applicationContext,
-  }).toRawObject(false);
+  }).toRawObject({ removeValidationProperties: false });
   const clientConnectionId = get(state.clientConnectionId);
 
   try {
