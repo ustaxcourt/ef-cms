@@ -6,13 +6,8 @@ jest.mock(
 );
 
 jest.mock(
-  '@web-api/persistence/postgres/userCaseNotes/getUserCaseNote.ts',
-  () => mockFactory('getUserCaseNote'),
-);
-
-jest.mock(
-  '@web-api/persistence/postgres/userCaseNotes/getUserCaseNoteForCases.ts',
-  () => mockFactory('getUserCaseNoteForCases'),
+  '@web-api/persistence/postgres/userCaseNotes/getUserCaseNotes.ts',
+  () => mockFactory('getUserCaseNotes'),
 );
 
 jest.mock(

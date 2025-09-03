@@ -1,6 +1,6 @@
 import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 import {
-  caseDeadlineEntity,
+  fromCaseDeadlineKysely,
   toKyselyNewCaseDeadline,
 } from '@web-api/persistence/postgres/caseDeadlines/mapper';
 import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
@@ -18,5 +18,5 @@ export const upsertCaseDeadlines = async (
     onConflictColumns: ['caseDeadlineId'],
   });
 
-  return caseDeadlines.map(cd => caseDeadlineEntity(cd));
+  return caseDeadlines.map(cd => fromCaseDeadlineKysely(cd));
 };
