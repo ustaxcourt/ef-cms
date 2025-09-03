@@ -1,5 +1,7 @@
-import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
-import { TrialSessionWorkingCopy } from '../../../../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
+import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+import { TrialSessionWorkingCopy } from '@shared/business/entities/trialSessions/TrialSessionWorkingCopy';
+import { createTrialSession } from '@web-api/persistence/postgres/trialSessions/createTrialSession';
+import { createTrialSessionWorkingCopy } from '@web-api/persistence/postgres/trialSessions/createTrialSessionWorkingCopy';
 
 /**
  * createTrialSessionAndWorkingCopy
@@ -10,13 +12,9 @@ import { TrialSessionWorkingCopy } from '../../../../../shared/src/business/enti
  * @returns {object} the created trial session
  */
 export const createTrialSessionAndWorkingCopy = async ({
-  applicationContext,
   trialSessionToAdd,
 }) => {
-  const createdTrialSession = await applicationContext
-    .getPersistenceGateway()
-    .createTrialSession({
-      applicationContext,
+  const createdTrialSession = await createTrialSession({
       trialSession: trialSessionToAdd.validate().toRawObject(),
     });
 
@@ -26,10 +24,7 @@ export const createTrialSessionAndWorkingCopy = async ({
       userId: trialSessionToAdd.judge.userId,
     });
 
-    await applicationContext
-      .getPersistenceGateway()
-      .createTrialSessionWorkingCopy({
-        applicationContext,
+    await createTrialSessionWorkingCopy({
         trialSessionWorkingCopy: trialSessionWorkingCopyEntity
           .validate()
           .toRawObject(),
@@ -42,14 +37,11 @@ export const createTrialSessionAndWorkingCopy = async ({
       userId: trialSessionToAdd.trialClerk.userId,
     });
 
-    await applicationContext
-      .getPersistenceGateway()
-      .createTrialSessionWorkingCopy({
-        applicationContext,
-        trialSessionWorkingCopy: trialSessionWorkingCopyEntity
-          .validate()
-          .toRawObject(),
-      });
+    await createTrialSessionWorkingCopy({
+      trialSessionWorkingCopy: trialSessionWorkingCopyEntity
+        .validate()
+        .toRawObject(),
+    });
   }
 
   return new TrialSession(createdTrialSession).validate().toRawObject();

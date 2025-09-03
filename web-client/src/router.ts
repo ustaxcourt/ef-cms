@@ -1555,6 +1555,11 @@ const router = {
       return app.getSequence('gotoContactSequence')();
     });
 
+    registerRoute('/cases/recent-filings', () => {
+      setPageTitle('Recent Filings');
+      return app.getSequence('gotoRecentFilingsSequence')();
+    });
+
     registerRoute('/maintenance', () => {
       setPageTitle('Maintenance');
       return app.getSequence('gotoMaintenanceSequence')();

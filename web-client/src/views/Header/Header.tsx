@@ -133,19 +133,34 @@ const NavigationItems = (
         </li>
       )}
       {headerHelper.showMyCases && (
-        <li className={classNames('usa-nav__primary-item')}>
-          <a
-            className={classNames(
-              'usa-nav__link',
-              headerHelper.pageIsMyCases && 'usa-current',
-            )}
-            data-testid="my-cases-link"
-            href="/"
-            onClick={() => toggleMobileMenuSequence()}
-          >
-            My Cases
-          </a>
-        </li>
+        <>
+          <li className={classNames('usa-nav__primary-item')}>
+            <a
+              className={classNames(
+                'usa-nav__link',
+                headerHelper.pageIsMyCases && 'usa-current',
+              )}
+              data-testid="my-cases-link"
+              href="/"
+              onClick={() => toggleMobileMenuSequence()}
+            >
+              My Cases
+            </a>
+          </li>
+          <li className={classNames('usa-nav__primary-item')}>
+            <a
+              className={classNames(
+                'usa-nav__link',
+                headerHelper.pageIsRecentFilings && 'usa-current',
+              )}
+              data-testid="header-recent-filings-link"
+              href="/cases/recent-filings"
+              onClick={() => toggleMobileMenuSequence()}
+            >
+              Recent Filings
+            </a>
+          </li>
+        </>
       )}
       {headerHelper.showSearchNavItem && (
         <li className={classNames('usa-nav__primary-item')}>
