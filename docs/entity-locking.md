@@ -216,14 +216,6 @@ await applicationContext.getUseCaseHelpers().acquireLock({
 });
 ```
 
-## Feature Flag
-
-This functionality is currently behind a feature flag. When the feature flag is off, interactors will still create locks on entities and log when they would have encountered a locked or unlocked entity, (i.e., when a race condition may or may not have occurred). The request will always be processed by the interactor.
-
-If the feature flag is enabled, then the system will throw a 504 error and any special handling when a locked entity is encountered. The request will only be processed by the interactor if a lock was acquired on all specified entities.
-
-The key for the feature flag is `entity-locking-feature-flag`, and it is enabled when it is set to `true`. It's disabled when set to `false`.
-
 ## Future considerations
 
 * Throw an error if a `ttl` is set to greater than a certain threshold (15 minutes?)

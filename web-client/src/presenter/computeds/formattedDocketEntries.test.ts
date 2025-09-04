@@ -2,12 +2,12 @@
 
 import {
   ALLOWLIST_FEATURE_FLAGS,
-  DOCKET_ENTRY_SEALED_TO_TYPES,
   DOCKET_RECORD_FILTER_OPTIONS,
+  DOCKET_ENTRY_SEALED_TO_TYPES,
   ROLES,
   STATE_KEYS,
 } from '@shared/business/entities/EntityConstants';
-import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import {
   casePetitioner,
@@ -19,7 +19,7 @@ import {
   formattedDocketEntries as formattedDocketEntriesComputed,
   setupIconsToDisplay,
 } from './formattedDocketEntries';
-import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
+import { getUserPermissions } from '@shared/authorization/getUserPermissions';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
