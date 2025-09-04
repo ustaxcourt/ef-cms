@@ -1,5 +1,6 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
+
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { DynamoDBClient, ScanCommandInput } from '@aws-sdk/client-dynamodb';
 import { environment } from '@web-api/environment';
@@ -47,7 +48,7 @@ async function scanContinuously({ params }: { params: ScanCommandInput }) {
         const jsonData = JSON.stringify(record);
         console.log('json = ', jsonData);
 
-        const barNumber = record.pk.split('|')[1].toLowerCase();
+        const barNumber = record.pk.split('|')[1].toUpperCase();
         const practitionerDocument = {
           practitionerDocumentFileId: record.practitionerDocumentFileId,
           fileName: record.fileName,
