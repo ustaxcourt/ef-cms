@@ -248,39 +248,37 @@ const generateNoticeOfReceipt = async ({
     !!contactSecondary &&
     !Case.isPetitionerRepresented(caseEntity, contactSecondary.contactId);
 
-  const doesProSeChecklistExist = await applicationContext
-    .getPersistenceGateway()
-    .isFileExists({
-      applicationContext,
-      key: PRO_SE_CHECKLIST,
-    });
-
-  if (
-    doesProSeChecklistExist &&
-    (isPrimaryContactProSe || isSecondaryContactProSe)
-  ) {
-    const proSeChecklist = await applicationContext
+  if (isPrimaryContactProSe || isSecondaryContactProSe) {
+    const doesProSeChecklistExist = await applicationContext
       .getPersistenceGateway()
-      .getDocument({
+      .isFileExists({
         applicationContext,
         key: PRO_SE_CHECKLIST,
-        useTempBucket: false,
       });
-    if (isPrimaryContactProSe && primaryContactNotrPdfData) {
-      primaryContactNotrPdfData = await applicationContext
-        .getUtilities()
-        .combineTwoPdfs({
-          firstPdf: primaryContactNotrPdfData,
-          secondPdf: proSeChecklist,
+    if (doesProSeChecklistExist) {
+      const proSeChecklist = await applicationContext
+        .getPersistenceGateway()
+        .getDocument({
+          applicationContext,
+          key: PRO_SE_CHECKLIST,
+          useTempBucket: false,
         });
-    }
-    if (isSecondaryContactProSe && secondaryContactNotrPdfData) {
-      secondaryContactNotrPdfData = await applicationContext
-        .getUtilities()
-        .combineTwoPdfs({
-          firstPdf: secondaryContactNotrPdfData,
-          secondPdf: proSeChecklist,
-        });
+      if (isPrimaryContactProSe && primaryContactNotrPdfData) {
+        primaryContactNotrPdfData = await applicationContext
+          .getUtilities()
+          .combineTwoPdfs({
+            firstPdf: primaryContactNotrPdfData,
+            secondPdf: proSeChecklist,
+          });
+      }
+      if (isSecondaryContactProSe && secondaryContactNotrPdfData) {
+        secondaryContactNotrPdfData = await applicationContext
+          .getUtilities()
+          .combineTwoPdfs({
+            firstPdf: secondaryContactNotrPdfData,
+            secondPdf: proSeChecklist,
+          });
+      }
     }
   }
 

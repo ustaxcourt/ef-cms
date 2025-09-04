@@ -16,7 +16,6 @@ import {
   INITIAL_DOCUMENT_TYPES,
   PARTY_TYPES,
   PAYMENT_STATUS,
-  PRO_SE_CHECKLIST,
   ROLES,
   SERVICE_INDICATOR_TYPES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
@@ -549,11 +548,12 @@ describe('serveCaseToIrsInteractor', () => {
   });
 
   it('should generate the receipt like normal even if a trial city is undefined', async () => {
+    const secondaryContactId = 'f30c6634-4c3d-4cda-874c-d9a9387e00e2';
     mockCase = {
       ...MOCK_CASE,
       contactSecondary: {
         ...getContactPrimary(MOCK_CASE),
-        contactId: 'f30c6634-4c3d-4cda-874c-d9a9387e00e2',
+        contactId: secondaryContactId,
         name: 'Test Petitioner Secondary',
       },
       isPaper: false,
@@ -565,7 +565,10 @@ describe('serveCaseToIrsInteractor', () => {
           name: 'Test Private Practitioner',
           practitionerId: '123456789',
           practitionerType: 'privatePractitioner',
-          representing: [getContactPrimary(MOCK_CASE).contactId],
+          representing: [
+            getContactPrimary(MOCK_CASE).contactId,
+            secondaryContactId,
+          ],
           role: 'privatePractitioner',
           userId: '130c6634-4c3d-4cda-874c-d9a9387e00e2',
         },
@@ -646,7 +649,8 @@ describe('serveCaseToIrsInteractor', () => {
     it('should append a clinic letter to the notice of receipt of petition when one exists for the requested place of trial and petition is pro se', async () => {
       applicationContext
         .getPersistenceGateway()
-        .isFileExists.mockReturnValueOnce(true);
+        .isFileExists.mockResolvedValueOnce(false) // pro se checklist
+        .mockResolvedValueOnce(true); // clinic letter
 
       mockCase = {
         ...MOCK_CASE,
@@ -670,13 +674,6 @@ describe('serveCaseToIrsInteractor', () => {
       expect(
         applicationContext.getPersistenceGateway().getDocument.mock.calls[0][0],
       ).toMatchObject({
-        key: PRO_SE_CHECKLIST,
-        useTempBucket: false,
-      });
-
-      expect(
-        applicationContext.getPersistenceGateway().getDocument.mock.calls[1][0],
-      ).toMatchObject({
         key: 'clinic-letter-los-angeles-california-regular',
         useTempBucket: false,
       });
@@ -693,7 +690,8 @@ describe('serveCaseToIrsInteractor', () => {
     it('should NOT append a clinic letter to the notice of receipt of petition if it does NOT exist and petition is pro se', async () => {
       applicationContext
         .getPersistenceGateway()
-        .isFileExists.mockReturnValueOnce(false);
+        .isFileExists.mockResolvedValueOnce(false) // pro se checklist
+        .mockResolvedValueOnce(false); // clinic letter
 
       mockCase = {
         ...MOCK_CASE,
@@ -716,11 +714,11 @@ describe('serveCaseToIrsInteractor', () => {
 
       expect(
         applicationContext.getPersistenceGateway().getDocument,
-      ).toHaveBeenCalledTimes(1);
+      ).toHaveBeenCalledTimes(0);
 
       expect(
         applicationContext.getUtilities().combineTwoPdfs,
-      ).toHaveBeenCalledTimes(1);
+      ).toHaveBeenCalledTimes(0);
 
       expect(
         applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
@@ -774,7 +772,8 @@ describe('serveCaseToIrsInteractor', () => {
     it('should append a clinic letter to both notice of receipt of petitions when there are two pro se petitioners at different addresses', async () => {
       applicationContext
         .getPersistenceGateway()
-        .isFileExists.mockReturnValueOnce(true);
+        .isFileExists.mockResolvedValueOnce(false) // pro se checklist
+        .mockResolvedValueOnce(true); // clinic letter
 
       const primaryContactNotr = getFakeFile(true, true);
       const secondaryContactNotr = getFakeFile(true);
@@ -811,7 +810,7 @@ describe('serveCaseToIrsInteractor', () => {
 
       expect(
         applicationContext.getUtilities().combineTwoPdfs,
-      ).toHaveBeenCalledTimes(5);
+      ).toHaveBeenCalledTimes(3);
 
       const actualPrimaryContactNotr =
         applicationContext.getUtilities().combineTwoPdfs.mock.calls[0][0]
@@ -827,7 +826,8 @@ describe('serveCaseToIrsInteractor', () => {
     it('should append a clinic letter to one notice of receipt of petition when there are two petitioners at different addresses but one has representation', async () => {
       applicationContext
         .getPersistenceGateway()
-        .isFileExists.mockReturnValueOnce(true);
+        .isFileExists.mockResolvedValueOnce(false) // pro se checklist
+        .mockResolvedValueOnce(true); // clinic letter
 
       const secondaryContactId = 'f30c6634-4c3d-4cda-874c-d9a9387e00e2';
       mockCase = {
@@ -868,13 +868,14 @@ describe('serveCaseToIrsInteractor', () => {
 
       expect(
         applicationContext.getUtilities().combineTwoPdfs,
-      ).toHaveBeenCalledTimes(3);
+      ).toHaveBeenCalledTimes(2);
     });
 
     it('should append a clinic letter to the one notice of receipt of petition when there are two pro se petitioners at the same addresses', async () => {
       applicationContext
         .getPersistenceGateway()
-        .isFileExists.mockReturnValueOnce(true);
+        .isFileExists.mockResolvedValueOnce(false) // pro se checklist
+        .mockResolvedValueOnce(true); // clinic letter
 
       mockCase = {
         ...MOCK_CASE,
@@ -902,7 +903,7 @@ describe('serveCaseToIrsInteractor', () => {
 
       expect(
         applicationContext.getUtilities().combineTwoPdfs,
-      ).toHaveBeenCalledTimes(2);
+      ).toHaveBeenCalledTimes(1);
     });
 
     it('should not append a clinic letter to the one notice of receipt of petition when there are two petitioners at the same addresses with one having representation', async () => {
