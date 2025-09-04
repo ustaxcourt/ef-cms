@@ -31,7 +31,7 @@
   --destructive: oklch(59% 0.2 27.6deg);
   --destructive-darker: oklch(49% 0.2 28.82deg);
   --destructive-foreground: oklch(57.7% 0.245 27.325deg);
-  --destructive-active: oklch(49% 0.2 28.82deg);
+  --destructive-active: oklch(41% 0.16 30.95deg);
   --destructive-invalid: oklab(79% 0 -0.01);
   --border: oklch(92.2% 0 0deg);
   --input: oklch(92.2% 0 0deg);
