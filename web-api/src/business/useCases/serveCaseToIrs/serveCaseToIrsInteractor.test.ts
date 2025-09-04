@@ -122,6 +122,8 @@ describe('serveCaseToIrsInteractor', () => {
           caseEntity.docketEntries.find(d => d.docketEntryId === docketEntryId),
       );
 
+    applicationContext.getPersistenceGateway().isFileExists = jest.fn();
+
     applicationContext
       .getPersistenceGateway()
       .getDocument.mockResolvedValue(testPdfDoc);
@@ -764,8 +766,7 @@ describe('serveCaseToIrsInteractor', () => {
     it('should not append the pro se checklist if the petitioner for the petition is represented by counsel', async () => {
       applicationContext
         .getPersistenceGateway()
-        .isFileExists.mockResolvedValueOnce(true) // pro se checklist
-        .mockResolvedValueOnce(false); // clinic letter
+        .isFileExists.mockResolvedValueOnce(false); // clinic letter
 
       mockCase = {
         ...MOCK_CASE,
@@ -805,8 +806,7 @@ describe('serveCaseToIrsInteractor', () => {
     it('should not append the pro se checklist if the petitioner and spouse of different addresses are represented by counsel', async () => {
       applicationContext
         .getPersistenceGateway()
-        .isFileExists.mockResolvedValueOnce(true) // pro se checklist
-        .mockResolvedValueOnce(false); // clinic letter
+        .isFileExists.mockResolvedValueOnce(false); // clinic letter
 
       const secondaryContactId = 'f30c6634-4c3d-4cda-874c-d9a9387e00e2';
       mockCase = {
@@ -1168,8 +1168,7 @@ describe('serveCaseToIrsInteractor', () => {
     it('should not append a clinic letter to the one notice of receipt of petition when there are two petitioners at the same addresses with one having representation', async () => {
       applicationContext
         .getPersistenceGateway()
-        .isFileExists.mockResolvedValueOnce(false) // pro se checklist
-        .mockResolvedValueOnce(true); // clinic letter
+        .isFileExists.mockResolvedValueOnce(false); // pro se checklist
 
       const secondaryContactId = 'f30c6634-4c3d-4cda-874c-d9a9387e00e2';
       mockCase = {
