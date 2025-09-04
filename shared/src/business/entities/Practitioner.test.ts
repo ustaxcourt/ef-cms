@@ -139,6 +139,16 @@ describe('Practitioner', () => {
     expect(user.role).toEqual(ROLES.irsPractitioner);
   });
 
+  it('should set the section to match the computed role when practiceType changes from Private to IRS and admissionsStatus is Active', () => {
+    const user = new Practitioner({
+      ...mockPractitioner,
+      practiceType: 'IRS',
+    });
+
+    expect(user.role).toEqual(ROLES.irsPractitioner);
+    expect(user.section).toEqual(ROLES.irsPractitioner);
+  });
+
   it('should set the role to "irsPractitioner" when practiceType is "DOJ" and admissionsStatus is Active', () => {
     const user = new Practitioner({
       admissionsStatus: 'Active',
