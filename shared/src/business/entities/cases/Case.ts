@@ -982,7 +982,8 @@ export class Case extends JoiValidationEntity {
   }
 
   //@ts-ignore
-  toRawObject(processPendingItems = true): RawCase {
+  toRawObject(options: { processPendingItems?: boolean } = {}): RawCase {
+    const { processPendingItems = true } = options;
     const result = this.toRawObjectFromJoi();
 
     if (processPendingItems) {
