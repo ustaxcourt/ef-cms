@@ -34,13 +34,6 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
     applicationContext
       .getUseCaseHelpers()
       .saveFileAndGenerateUrl.mockReturnValue(mockPdfUrl);
-
-    applicationContext
-      .getPersistenceGateway()
-      .getConfigurationItemValue.mockResolvedValue({
-        name: 'James Bond',
-        title: 'Clerk of the Court (Interim)',
-      });
   });
 
   it('should throw an error when the user is not authorized', async () => {
@@ -150,10 +143,6 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
       } as any,
       mockDocketClerkUser,
     );
-
-    expect(
-      applicationContext.getPersistenceGateway().getConfigurationItemValue,
-    ).not.toHaveBeenCalled();
 
     expect(
       applicationContext.getDocumentGenerators().order,

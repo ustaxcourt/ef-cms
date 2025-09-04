@@ -395,5 +395,5 @@ export const getUseCases = () => useCases;
 type _IGetUseCases = typeof getUseCases;
 
 declare global {
-  interface IGetUseCases extends _IGetUseCases { }
+  interface IGetUseCases extends _IGetUseCases {}
 }

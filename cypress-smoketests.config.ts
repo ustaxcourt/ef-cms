@@ -19,7 +19,6 @@ import {
   getRawFeatureFlagValue,
   toggleFeatureFlag,
 } from './cypress/helpers/cypressTasks/postgres/featureFlagsCypress';
-
 import {
   expireUserConfirmationCode,
   getEmailVerificationToken,

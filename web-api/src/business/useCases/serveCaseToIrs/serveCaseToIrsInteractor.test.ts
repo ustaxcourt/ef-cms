@@ -90,15 +90,6 @@ describe('serveCaseToIrsInteractor', () => {
     };
   };
 
-  beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getConfigurationItemValue.mockResolvedValue({
-        name: 'James Bond',
-        title: 'Clerk of the Court (Interim)',
-      });
-  });
-
   beforeEach(() => {
     mockCase = { ...MOCK_CASE };
     applicationContext.getPersistenceGateway().updateWorkItem = jest.fn();
@@ -1543,15 +1534,6 @@ describe('serveCaseToIrsInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    getFeatureFlagValues.mockResolvedValue([
-      {
-        name: 'entity-locking-feature-flag',
-        value: {
-          current: true,
-        },
-      },
-    ]);
-
     tryGetLocks.mockResolvedValueOnce([
       { successfullyLocked: false, identifier: 'abc' },
     ]);

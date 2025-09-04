@@ -7,7 +7,6 @@ import { fetchEventCodesCountForJudges } from './persistence/elasticsearch/fetch
 import { getAllWebSocketConnections } from '@web-api/persistence/postgres/connections/getAllWebSocketConnections';
 import { getCasesByEmailTotal } from '@web-api/persistence/elasticsearch/getCasesByEmailTotal';
 import { getClientId } from './persistence/cognito/getClientId';
-import { getConfigurationItemValue } from './persistence/dynamo/deployTable/getConfigurationItemValue';
 import { getDeployTableStatus } from './persistence/dynamo/getDeployTableStatus';
 import { getDispatchNotification } from './persistence/postgres/notifications/getDispatchNotification';
 import { getDocketEntriesServedWithinTimeframe } from './persistence/elasticsearch/getDocketEntriesServedWithinTimeframe';
@@ -15,7 +14,6 @@ import { getDocument } from './persistence/s3/getDocument';
 import { getDocumentIdFromSQSMessage } from './persistence/sqs/getDocumentIdFromSQSMessage';
 import { getDownloadPolicyUrl } from './persistence/s3/getDownloadPolicyUrl';
 import { getEligibleCasesForTrialCity } from '@web-api/persistence/postgres/cases/getEligibleCasesForTrialCity';
-import { getFeatureFlagValue } from './persistence/dynamo/deployTable/getFeatureFlagValue';
 import { getMaintenanceMode } from './persistence/postgres/featureFlag/getMaintenanceMode';
 import { getPractitionersByName } from './persistence/elasticsearch/getPractitionersByName';
 import { getReconciliationReport } from './persistence/elasticsearch/getReconciliationReport';
@@ -95,7 +93,6 @@ const gatewayMethods = {
   getAllWebSocketConnections,
   getCasesByEmailTotal,
   getClientId,
-  getConfigurationItemValue,
   getDeployTableStatus,
   getDispatchNotification,
   getDocketEntriesServedWithinTimeframe,
@@ -104,7 +101,6 @@ const gatewayMethods = {
   getDownloadPolicyUrl,
   getEligibleCasesForTrialCity,
   getEligibleCasesForTrialSession,
-  getFeatureFlagValue,
   getMaintenanceMode,
   getPractitionersByName,
   getReconciliationReport,

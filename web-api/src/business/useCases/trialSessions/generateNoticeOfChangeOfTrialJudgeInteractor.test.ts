@@ -63,13 +63,6 @@ describe('generateNoticeOfChangeOfTrialJudgeInteractor', () => {
     });
 
     applicationContext
-      .getPersistenceGateway()
-      .getConfigurationItemValue.mockResolvedValue({
-        name: 'James Bond',
-        title: 'Clerk of the Court (Interim)',
-      });
-
-    applicationContext
       .getUseCases()
       .generatePdfFromHtmlInteractor.mockImplementation(
         ({ contentHtml }) => contentHtml,

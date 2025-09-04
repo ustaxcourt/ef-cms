@@ -32,8 +32,8 @@ import { getDocumentTitleForNoticeOfChange } from '@shared/business/utilities/ge
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
-import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { WorkItem } from '@shared/business/entities/WorkItem';
