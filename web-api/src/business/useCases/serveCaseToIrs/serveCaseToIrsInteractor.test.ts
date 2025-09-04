@@ -714,11 +714,11 @@ describe('serveCaseToIrsInteractor', () => {
 
       expect(
         applicationContext.getPersistenceGateway().getDocument,
-      ).toHaveBeenCalledTimes(0);
+      ).not.toHaveBeenCalled();
 
       expect(
         applicationContext.getUtilities().combineTwoPdfs,
-      ).toHaveBeenCalledTimes(0);
+      ).not.toHaveBeenCalled();
 
       expect(
         applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
@@ -909,7 +909,8 @@ describe('serveCaseToIrsInteractor', () => {
     it('should not append a clinic letter to the one notice of receipt of petition when there are two petitioners at the same addresses with one having representation', async () => {
       applicationContext
         .getPersistenceGateway()
-        .isFileExists.mockReturnValueOnce(true);
+        .isFileExists.mockResolvedValueOnce(false) // pro se checklist
+        .mockResolvedValueOnce(true); // clinic letter
 
       const secondaryContactId = 'f30c6634-4c3d-4cda-874c-d9a9387e00e2';
       mockCase = {
@@ -949,7 +950,7 @@ describe('serveCaseToIrsInteractor', () => {
 
       expect(
         applicationContext.getUtilities().combineTwoPdfs,
-      ).toHaveBeenCalledTimes(1);
+      ).toHaveBeenCalledTimes(0);
     });
   });
 
