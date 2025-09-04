@@ -1554,8 +1554,24 @@ export class Case extends JoiValidationEntity {
    * @returns {Case} the updated case entity
    */
   setCaseCaption(caseCaption) {
+    
     this.caseCaption = caseCaption;
+    
+    if (this.consolidatedCases && this.consolidatedCases.length > 0) {
+      this.setCaseCaptionInSingleCase();
+    }
+
     return this;
+  }
+
+  setCaseCaptionInSingleCase() {
+
+    const currentCase = this.consolidatedCases.find((c) => c.docketNumber === this.docketNumber);
+
+    if (currentCase) {
+      currentCase.caseCaption = this.caseCaption;
+    }
+
   }
 
   /**
