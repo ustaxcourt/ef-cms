@@ -1,6 +1,9 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
-import { JUDGE_TITLES, JudgeTitle } from '@shared/business/entities/EntityConstants';
+import {
+  JUDGE_TITLES,
+  JudgeTitle,
+} from '@shared/business/entities/EntityConstants';
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
@@ -54,8 +57,6 @@ if (!JUDGE_TITLES.includes(judgeTitle)) {
 
   await upsertUsers([userEntity.validate().toRawObject()]);
 
-  // Print the user's short name (used by callers for messages/Cognito display)
-  console.log(userEntity.name);
+  // Print the user's info (used by callers for messages/Cognito display)
+  console.log(JSON.stringify(userEntity));
 })();
-
-
