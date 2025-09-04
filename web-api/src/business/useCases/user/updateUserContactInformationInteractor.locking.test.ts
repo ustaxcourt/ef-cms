@@ -2,9 +2,6 @@ import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock('@web-api/business/useCases/user/generateChangeOfAddress');
-import { COUNTRY_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { MOCK_PRACTITIONER } from '../../../../../shared/src/test/mockUsers';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
@@ -13,6 +10,9 @@ import {
   updateUserContactInformationInteractor,
 } from './updateUserContactInformationInteractor';
 import { sleep } from '@shared/tools/helpers';
+import { COUNTRY_TYPES } from '@shared/business/entities/EntityConstants';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_PRACTITIONER } from '@shared/test/mockUsers';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { setChangeOfAddressCaseAsDone as setChangeOfAddressCaseAsDoneMock } from '@web-api/persistence/postgres/jobs/changeOfAddress/setChangeOfAddressCaseAsDone';
