@@ -10,6 +10,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
 
@@ -50,12 +51,14 @@ export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
   let titleOfClerk = '';
 
   if (isNoticeEvent) {
-    const { name, title } = await applicationContext
-      .getPersistenceGateway()
-      .getConfigurationItemValue({
-        applicationContext,
-        configurationItemKey: CLERK_OF_THE_COURT_CONFIGURATION,
-      });
+    const [CLERK_OF_THE_COURT_RECORD] = await getFeatureFlagValues([
+      CLERK_OF_THE_COURT_CONFIGURATION,
+    ]);
+
+    const { name, title } = CLERK_OF_THE_COURT_RECORD.value.current as {
+      name: string;
+      title: string;
+    };
     nameOfClerk = name;
     titleOfClerk = title;
   }

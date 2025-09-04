@@ -6,6 +6,19 @@ import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { getFeatureFlagValues as getFeatureFlagValuesMock } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
+const getFeatureFlagValues = getFeatureFlagValuesMock as jest.Mock;
+getFeatureFlagValues.mockResolvedValue([
+  {
+    name: 'clerk-of-court-configuration',
+    value: {
+      current: {
+        name: 'James Bond',
+        title: 'Clerk of the Court (Interim)',
+      },
+    },
+  },
+]);
 
 describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
@@ -21,13 +34,6 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
     applicationContext
       .getUseCaseHelpers()
       .saveFileAndGenerateUrl.mockReturnValue(mockPdfUrl);
-
-    applicationContext
-      .getPersistenceGateway()
-      .getConfigurationItemValue.mockResolvedValue({
-        name: 'James Bond',
-        title: 'Clerk of the Court (Interim)',
-      });
   });
 
   it('should throw an error when the user is not authorized', async () => {
@@ -137,10 +143,6 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
       } as any,
       mockDocketClerkUser,
     );
-
-    expect(
-      applicationContext.getPersistenceGateway().getConfigurationItemValue,
-    ).not.toHaveBeenCalled();
 
     expect(
       applicationContext.getDocumentGenerators().order,

@@ -3,16 +3,16 @@ import {
   FILING_TYPES_DICT,
   PARTY_TYPES,
   ROLES,
-} from '../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import {
   docketClerk1User,
-  petitionerUser,
   petitionsClerkUser,
-} from '../../../../shared/src/test/mockUsers';
+  petitionerUser,
+} from '@shared/test/mockUsers';
 import { internalPetitionPartiesHelper as internalPetitionPartiesHelperComputed } from './internalPetitionPartiesHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
-import { withAppContextDecorator } from '../../withAppContext';
+import { withAppContextDecorator } from '@web-client/withAppContext';
 
 const internalPetitionPartiesHelper = withAppContextDecorator(
   internalPetitionPartiesHelperComputed,
@@ -497,7 +497,6 @@ describe('internalPetitionPartiesHelper', () => {
   });
 
   describe('showSecondaryContactEmailFieldAndConsentBox', () => {
-
     it('should display secondary contact email field when petition is filed by a petitioner updating party type to petitioner and spouse', () => {
       const result = runCompute(internalPetitionPartiesHelper, {
         state: {
