@@ -50,7 +50,7 @@ function Alert({
   ...props
 }: React.ComponentProps<'div'> &
   VariantProps<typeof alertVariants> & {
-    closeButtonOnClick?: () => React.MouseEventHandler<HTMLButtonElement>;
+    closeButtonOnClick?: () => React.MouseEventHandler<HTMLButtonElement> | void;
   }) {
   return (
     <div

@@ -5,7 +5,7 @@ import {
   AlertDescription,
   AlertHeader,
 } from '@web-client/dawson-ui/ui/alert';
-import React from 'react';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Tag } from '@web-client/dawson-ui/ui/tag';
 
@@ -71,57 +71,7 @@ export const DawsonLibrary = () => {
             </Button>
           </div>
         </div>
-
-        <div>
-          <h2>Alerts</h2>
-          <Alert variant="info" className="tw:mb-4">
-            <AlertHeader>Info Status</AlertHeader>
-            <AlertDescription>
-              This is a succinct, helpful message
-            </AlertDescription>
-          </Alert>
-          <Alert variant="warning" className="tw:mb-4">
-            <AlertHeader>Warning Status</AlertHeader>
-            <AlertDescription>
-              This is a succinct, helpful message
-              <ul>
-                <li>This is a succinct, helpful message</li>
-              </ul>
-            </AlertDescription>
-          </Alert>
-          <Alert variant="error" className="tw:mb-4">
-            <AlertHeader>Error Status</AlertHeader>
-            <AlertDescription>
-              This is a succinct, helpful message
-            </AlertDescription>
-          </Alert>
-          <Alert variant="success" className="tw:mb-4">
-            <AlertHeader>Success Status</AlertHeader>
-            <AlertDescription>
-              This is a succinct, helpful message
-            </AlertDescription>
-          </Alert>
-          <Alert variant="info" className="tw:mb-4">
-            <AlertDescription>
-              You’ll need to change your password by April 25, 2020.
-            </AlertDescription>
-          </Alert>
-          <Alert variant="warning" className="tw:mb-4">
-            <AlertDescription>
-              You’ll need to change your password by April 25, 2020.
-            </AlertDescription>
-          </Alert>
-          <Alert variant="error" className="tw:mb-4">
-            <AlertDescription>
-              Sorry, a password needs more than four characters.
-            </AlertDescription>
-          </Alert>
-          <Alert variant="success" className="tw:mb-4">
-            <AlertDescription>
-              You successfully changed your password.
-            </AlertDescription>
-          </Alert>
-        </div>
+        <AlertContainer />
 
         <div className="tw:mt-4">
           <h2>Tag</h2>
@@ -152,3 +102,181 @@ export const DawsonLibrary = () => {
     </>
   );
 };
+
+export function AlertContainer() {
+  const [alert, setAlert] = useState({
+    info: true,
+    warning: true,
+    error: true,
+    success: true,
+  });
+
+  const [staticAlerts, setStaticAlerts] = useState({
+    info: true,
+    warning: true,
+    error: true,
+    success: true,
+  });
+
+  return (
+    <div>
+      <h2>Alerts</h2>
+      {/* Info Alert */}
+      {alert.info ? (
+        <Alert
+          closeButtonOnClick={() => setAlert({ ...alert, info: false })}
+          variant="info"
+          className="tw:mb-4"
+        >
+          <AlertHeader>Info Status</AlertHeader>
+          <AlertDescription>
+            This is a succinct, helpful message
+          </AlertDescription>
+        </Alert>
+      ) : (
+        <Button onClick={() => setAlert({ ...alert, info: true })}>
+          Display Info Alert
+        </Button>
+      )}
+
+      {/* Warning Alert */}
+      {alert.warning ? (
+        <Alert
+          closeButtonOnClick={() => setAlert({ ...alert, warning: false })}
+          variant="warning"
+          className="tw:mb-4"
+        >
+          <AlertHeader>Warning Status</AlertHeader>
+          <AlertDescription>
+            This is a succinct, helpful message
+            <ul>
+              <li>This is a succinct, helpful message</li>
+            </ul>
+          </AlertDescription>
+        </Alert>
+      ) : (
+        <Button onClick={() => setAlert({ ...alert, warning: true })}>
+          Display Warning Alert
+        </Button>
+      )}
+
+      {/* Error Alert */}
+      {alert.error ? (
+        <Alert
+          closeButtonOnClick={() => setAlert({ ...alert, error: false })}
+          variant="error"
+          className="tw:mb-4"
+        >
+          <AlertHeader>Error Status</AlertHeader>
+          <AlertDescription>
+            This is a succinct, helpful message
+          </AlertDescription>
+        </Alert>
+      ) : (
+        <Button onClick={() => setAlert({ ...alert, error: true })}>
+          Display Error Alert
+        </Button>
+      )}
+
+      {/* Success Alert */}
+      {alert.success ? (
+        <Alert
+          closeButtonOnClick={() => setAlert({ ...alert, success: false })}
+          variant="success"
+          className="tw:mb-4"
+        >
+          <AlertHeader>Success Status</AlertHeader>
+          <AlertDescription>
+            This is a succinct, helpful message
+          </AlertDescription>
+        </Alert>
+      ) : (
+        <Button onClick={() => setAlert({ ...alert, success: true })}>
+          Display Success Alert
+        </Button>
+      )}
+
+      {/* Static Alerts (with only descriptions) */}
+      {/* Static Alerts (with only descriptions) */}
+      {staticAlerts.info ? (
+        <Alert
+          closeButtonOnClick={() =>
+            setStaticAlerts({ ...staticAlerts, info: false })
+          }
+          variant="info"
+          className="tw:mb-4"
+        >
+          <AlertDescription>
+            You’ll need to change your password by April 25, 2020.
+          </AlertDescription>
+        </Alert>
+      ) : (
+        <Button
+          onClick={() => setStaticAlerts({ ...staticAlerts, info: true })}
+        >
+          Show Info Static Alert
+        </Button>
+      )}
+
+      {staticAlerts.warning ? (
+        <Alert
+          closeButtonOnClick={() =>
+            setStaticAlerts({ ...staticAlerts, warning: false })
+          }
+          variant="warning"
+          className="tw:mb-4"
+        >
+          <AlertDescription>
+            You’ll need to change your password by April 25, 2020.
+          </AlertDescription>
+        </Alert>
+      ) : (
+        <Button
+          onClick={() => setStaticAlerts({ ...staticAlerts, warning: true })}
+        >
+          Show Warning Static Alert
+        </Button>
+      )}
+
+      {staticAlerts.error ? (
+        <Alert
+          closeButtonOnClick={() =>
+            setStaticAlerts({ ...staticAlerts, error: false })
+          }
+          variant="error"
+          className="tw:mb-4"
+        >
+          <AlertDescription>
+            Sorry, a password needs more than four characters.
+          </AlertDescription>
+        </Alert>
+      ) : (
+        <Button
+          onClick={() => setStaticAlerts({ ...staticAlerts, error: true })}
+        >
+          Show Error Static Alert
+        </Button>
+      )}
+
+      {staticAlerts.success ? (
+        <Alert
+          closeButtonOnClick={() =>
+            setStaticAlerts({ ...staticAlerts, success: false })
+          }
+          variant="success"
+          className="tw:mb-4"
+        >
+          <AlertDescription>
+            You successfully changed your password.
+          </AlertDescription>
+        </Alert>
+      ) : (
+        <Button
+          onClick={() => setStaticAlerts({ ...staticAlerts, success: true })}
+        >
+          Show Success Static Alert
+        </Button>
+      )}
+    </div>
+  );
+}
