@@ -1,7 +1,6 @@
 import { advancedDocumentSearch } from './persistence/elasticsearch/advancedDocumentSearch';
 import { createChangeOfAddressJob } from './persistence/postgres/jobs/changeOfAddress/createChangeOfAddressJob';
 import { deleteDocumentFile } from './persistence/s3/deleteDocumentFile';
-import { deleteMessage } from './persistence/sqs/deleteMessage';
 import { deleteUserConnection } from '@web-api/persistence/postgres/connections/deleteUserConnection';
 import { fetchEventCodesCountForJudges } from './persistence/elasticsearch/fetchEventCodesCountForJudges';
 import { getAllWebSocketConnections } from '@web-api/persistence/postgres/connections/getAllWebSocketConnections';
@@ -123,5 +122,5 @@ export const getPersistenceGateway = () => gatewayMethods;
 type _IGetPersistenceGateway = typeof getPersistenceGateway;
 
 declare global {
-  interface IGetPersistenceGateway extends _IGetPersistenceGateway {}
+  interface IGetPersistenceGateway extends _IGetPersistenceGateway { }
 }
