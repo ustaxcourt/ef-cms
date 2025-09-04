@@ -7,16 +7,9 @@ jobs:
   e2e_cypress_public:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        ci_node_total: [3]
-        ci_node_index: [ 0, 1, 2]
-
     env:
       CI: true
       CHECK_DEPLOY_DATE_INTERVAL: 5000
-      CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
-      CI_NODE_INDEX: ${{ matrix.ci_node_index}}
     services:
       postgres:
         image: postgres
