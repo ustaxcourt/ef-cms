@@ -1,6 +1,6 @@
 ARG TARGETARCH=amd64
 
-FROM cypress/browsers:node-22.18.0-chrome-139.0.7258.138-1-ff-142.0-edge-139.0.3405.102-1
+FROM cypress/browsers:node-22.19.0-chrome-139.0.7258.154-1-ff-142.0.1-edge-139.0.3405.125-1
 
 WORKDIR /home/app
 
@@ -34,7 +34,7 @@ RUN apt-get install -y build-essential
 RUN apt-get install -y libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
 
 ENV JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.28.19.zip" -o "awscliv2.zip" && \
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.28.23.zip" -o "awscliv2.zip" && \
   unzip awscliv2.zip && \
   ./aws/install && \
   rm -rf awscliv2.zip
