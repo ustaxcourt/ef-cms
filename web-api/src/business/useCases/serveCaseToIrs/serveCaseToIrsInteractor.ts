@@ -253,7 +253,17 @@ const generateNoticeOfReceipt = async ({
     !!contactSecondary &&
     !Case.isPetitionerRepresented(caseEntity, contactSecondary.contactId);
 
-  if (isPrimaryContactProSe || isSecondaryContactProSe) {
+  const doesProSeChecklistExist = await applicationContext
+    .getPersistenceGateway()
+    .isFileExists({
+      applicationContext,
+      key: PRO_SE_CHECKLIST,
+    });
+
+  if (
+    doesProSeChecklistExist &&
+    (isPrimaryContactProSe || isSecondaryContactProSe)
+  ) {
     const proSeChecklist = await applicationContext
       .getPersistenceGateway()
       .getDocument({
