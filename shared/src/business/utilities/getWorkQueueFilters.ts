@@ -1,18 +1,18 @@
 import {
   CASE_STATUS_TYPES,
   PETITIONS_SECTION,
+  Role,
   ROLES,
 } from '@shared/business/entities/EntityConstants';
-import { RawUser } from '@shared/business/entities/User';
 import { getDocQcSectionForUser } from '@shared/business/utilities/getDocQcSectionForUser';
-import { WorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
+import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
 
 export const getWorkQueueFilters = ({
   section,
   user,
 }: {
   section?: string;
-  user: RawUser;
+  user: { userId: string; section?: string; role: Role };
 }) => {
   const sectionToDisplay = section || getDocQcSectionForUser(user);
   const isCaseServicesSupervisor = user.role === ROLES.caseServicesSupervisor;
@@ -24,7 +24,7 @@ export const getWorkQueueFilters = ({
 
   return {
     my: {
-      inProgress: (item: WorkItemWithCaseInfo) => {
+      inProgress: (item: RawWorkItemWithCaseAndDocketEntryInfo) => {
         return (
           // DocketClerks
           (item.assigneeId === user.userId &&
@@ -37,7 +37,7 @@ export const getWorkQueueFilters = ({
             item.inProgress)
         );
       },
-      inbox: (item: WorkItemWithCaseInfo) => {
+      inbox: (item: RawWorkItemWithCaseAndDocketEntryInfo) => {
         if (sectionToDisplay === PETITIONS_SECTION) {
           return (
             item.assigneeId === user.userId &&
@@ -56,7 +56,7 @@ export const getWorkQueueFilters = ({
           !item.inProgress
         );
       },
-      outbox: (item: WorkItemWithCaseInfo) => {
+      outbox: (item: RawWorkItemWithCaseAndDocketEntryInfo) => {
         return (
           (canViewPetitionsSection ? !!item.section : true) &&
           item.completedByUserId &&
@@ -66,7 +66,7 @@ export const getWorkQueueFilters = ({
       },
     },
     section: {
-      inProgress: (item: WorkItemWithCaseInfo) => {
+      inProgress: (item: RawWorkItemWithCaseAndDocketEntryInfo) => {
         return (
           // DocketClerks
           (!item.completedAt &&
@@ -77,7 +77,7 @@ export const getWorkQueueFilters = ({
           (canViewPetitionsSection && item.inProgress === true)
         );
       },
-      inbox: (item: WorkItemWithCaseInfo) => {
+      inbox: (item: RawWorkItemWithCaseAndDocketEntryInfo) => {
         if (sectionToDisplay === PETITIONS_SECTION) {
           return (
             !item.completedAt &&
@@ -96,7 +96,7 @@ export const getWorkQueueFilters = ({
           !item.inProgress
         );
       },
-      outbox: (item: WorkItemWithCaseInfo) => {
+      outbox: (item: RawWorkItemWithCaseAndDocketEntryInfo) => {
         return (
           !!item.completedAt &&
           (canViewPetitionsSection ? !!item.section : true)

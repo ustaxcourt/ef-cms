@@ -1,5 +1,5 @@
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
-import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
+import { RawUser } from '@shared/business/entities/User';
 
 type MessageCompletionErrorNotification = {
   action: 'message_completion_error';
@@ -19,7 +19,7 @@ type ContactUpdateCompleteNotification = {
   action:
     | 'user_contact_full_update_complete'
     | 'admin_contact_full_update_complete';
-  user?: RawPractitioner | UserRecord;
+  user?: Omit<RawPractitioner, 'serviceIndicator'> | RawUser;
 };
 
 type ServeDocumentErrorNotification = {

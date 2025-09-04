@@ -215,9 +215,13 @@ export class Case extends JoiValidationEntity {
     const oldestYear = 65;
 
     const [sequentialNumber, yearFiled] = docketNumber.split('-');
+    const yearSansSuffix = yearFiled.replace(/\D+$/, '');
+
     const sequentialNumberPadded = sequentialNumber.padStart(6, '0');
     const yearFiledAdjusted =
-      parseInt(yearFiled) >= oldestYear ? `19${yearFiled}` : `20${yearFiled}`;
+      parseInt(yearSansSuffix) >= oldestYear
+        ? `19${yearSansSuffix}`
+        : `20${yearSansSuffix}`;
 
     return parseInt(`${yearFiledAdjusted}${sequentialNumberPadded}`);
   }
@@ -474,7 +478,6 @@ export class Case extends JoiValidationEntity {
       .optional()
       .allow(null)
       .description('Damages for the case.'),
-    // docketEntries: 'At least one valid docket entry is required',
     docketEntries: joi
       .array()
       .items(DOCKET_ENTRY_VALIDATION_RULES)
@@ -979,7 +982,8 @@ export class Case extends JoiValidationEntity {
   }
 
   //@ts-ignore
-  toRawObject(processPendingItems = true): RawCase {
+  toRawObject(options: { processPendingItems?: boolean } = {}): RawCase {
+    const { processPendingItems = true } = options;
     const result = this.toRawObjectFromJoi();
 
     if (processPendingItems) {

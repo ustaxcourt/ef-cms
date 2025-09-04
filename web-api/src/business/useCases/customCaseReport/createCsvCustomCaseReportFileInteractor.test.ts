@@ -38,7 +38,6 @@ describe('createCsvCustomCaseReportFileInteractor', () => {
     clientConnectionId: 'clientConnectionId',
     endDate: 'endDate',
     filingMethod: 'filingMethod',
-    highPriority: 'highPriority',
     judges: 'judges',
     preferredTrialCities: 'preferredTrialCities',
     procedureType: 'procedureType',

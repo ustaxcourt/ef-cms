@@ -1,13 +1,16 @@
 import '@web-api/persistence/postgres/userCaseNotes/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { UserCaseNote } from '@shared/business/entities/notes/UserCaseNote';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getUserCaseNoteForCasesInteractor } from './getUserCaseNoteForCasesInteractor';
-import { getUserCaseNoteForCases as getUserCaseNoteForCasesMock } from '@web-api/persistence/postgres/userCaseNotes/getUserCaseNoteForCases';
+import { getUserCaseNotes as getUserCaseNoteForCasesMock } from '@web-api/persistence/postgres/userCaseNotes/getUserCaseNotes';
 import { mockJudgeUser } from '@shared/test/mockAuthUsers';
 import { omit } from 'lodash';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('getUserCaseNoteForCasesInteractor', () => {
   let mockCurrentUser: UnknownAuthUser;
@@ -24,14 +27,15 @@ describe('getUserCaseNoteForCasesInteractor', () => {
     section: 'colvinChambers',
   } as UnknownAuthUser;
 
+  const getUserById = jest.mocked(getUserByIdMock);
   const getUserCaseNoteForCases = getUserCaseNoteForCasesMock as jest.Mock;
 
   beforeEach(() => {
     mockCurrentUser = mockJudge;
     mockNote = MOCK_NOTE;
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockImplementation(() => mockCurrentUser);
+    getUserById.mockImplementation(() =>
+      Promise.resolve(mockCurrentUser as DbUser),
+    );
     getUserCaseNoteForCases.mockResolvedValue([new UserCaseNote(mockNote)]);
     applicationContext
       .getUseCaseHelpers()
@@ -88,9 +92,9 @@ describe('getUserCaseNoteForCasesInteractor', () => {
       ...mockJudge,
       userId: userIdToExpect,
     } as UnknownAuthUser;
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockImplementation(() => mockUser);
+    getUserById.mockImplementation(() =>
+      Promise.resolve(mockUser as DbUser),
+    );
     applicationContext
       .getUseCaseHelpers()
       .getJudgeInSectionHelper.mockReturnValue(null);
