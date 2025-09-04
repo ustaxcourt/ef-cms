@@ -22,9 +22,22 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { serveThirtyDayNoticeInteractor } from './serveThirtyDayNoticeInteractor';
 import { testPdfDoc } from '@shared/business/test/getFakeFile';
+import { getFeatureFlagValues as getFeatureFlagValuesMock } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 describe('serveThirtyDayNoticeInteractor', () => {
+  const getFeatureFlagValues = jest.mocked(getFeatureFlagValuesMock);
+  getFeatureFlagValues.mockResolvedValue([
+    {
+      name: 'clerk-of-court-configuration',
+      value: {
+        current: {
+          name: 'bob',
+          title: 'clerk of court',
+        },
+      },
+    },
+  ]);
   const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
 
   let trialSession: RawTrialSession;
@@ -35,13 +48,6 @@ describe('serveThirtyDayNoticeInteractor', () => {
       ...MOCK_TRIAL_INPERSON,
       caseOrder: [{ docketNumber: '101-31' }, { docketNumber: '103-20' }],
     };
-
-    applicationContext
-      .getPersistenceGateway()
-      .getConfigurationItemValue.mockImplementation(() => ({
-        name: 'bob',
-        title: 'clerk of court',
-      }));
 
     applicationContext.getUtilities().formatNow.mockReturnValue('02/23/2023');
   });

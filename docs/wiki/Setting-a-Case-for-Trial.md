@@ -34,15 +34,9 @@ Some fields are optional when creating a trial session but must be fulfilled to 
 * A "Calendar Note" is optional when adding a case. This note displays on the Case Detail > Trial Information card, the Trial Session Detail screen, the Working Copy, and the Printable Trial Session PDF.
 * When the calendar is set for this trial session, this case will be set for trial, and a Notice Setting Case for Trial and a Standing Pre-Trial Order (Regular cases) or Standing Pre-Trial Notice (Small cases) is generated and add to the Docket Record
 
-### Set Case as High Priority for Next Available New Trial Session
-* Used to be called "white carding"
-* User manually sets case as "high priority"
-* If a trial session with status New exists for the requested trial location, case is added with priority to the Eligible List for the next available trial session
-* If no trial session with status New exists for the requested trial location, case will be added to eligible case list when the trial session is created
-
 ### Set Case for Hearing
 * Any case can be set for hearing, regardless of case status, or if there is a "Blocked from Trial" flag on the case
-* Setting a case for hearing is completely separate from setting a case for trial, marking a case as high priority , or blocking a case from trial
+* Setting a case for hearing is completely separate from setting a case for trial or blocking a case from trial
 
 * Cases can only be set for hearing on an Open trial session
 * Adding a case for hearing does not change the case status or the associated judge. The case remains "Calendared" with the trial judge of the first session as the associated judge
@@ -66,14 +60,6 @@ Some fields are optional when creating a trial session but must be fulfilled to 
 * Case status does not change
 * Blocked label no longer displays in header 
 * Trial Information card now displays as Scheduled
- 
-**Docket clerk marks case with tracked items as High Priority** 
-* Deadline remains on case 
-* Tracked item indicator displays 
-* Case is added to the eligible list for the next available trial session 
-* Case status does not change
-* Blocked label no longer displays in header 
-* Trial Information card now displays as High Priority
 
 **Docket clerk adds manual block to case with tracked items** 
 * Trial card shows Blocked from Trial

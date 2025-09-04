@@ -32,6 +32,7 @@ import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMet
 import { getClinicLetterKey } from '@shared/business/utilities/getClinicLetterKey';
 import { random } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
@@ -157,13 +158,17 @@ const generateNoticeOfReceipt = async ({
 
   let accessCode = generateAccessCode();
 
-  const { name, title } = await applicationContext
-    .getPersistenceGateway()
-    .getConfigurationItemValue({
-      applicationContext,
-      configurationItemKey:
-        applicationContext.getConstants().CLERK_OF_THE_COURT_CONFIGURATION,
-    });
+  const { CLERK_OF_THE_COURT_CONFIGURATION } =
+    applicationContext.getConstants();
+
+  const [CLERK_OF_THE_COURT_RECORD] = await getFeatureFlagValues([
+    CLERK_OF_THE_COURT_CONFIGURATION,
+  ]);
+
+  const { name, title } = CLERK_OF_THE_COURT_RECORD.value.current as {
+    name: string;
+    title: string;
+  };
 
   let primaryContactNotrPdfData = await applicationContext
     .getDocumentGenerators()

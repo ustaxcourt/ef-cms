@@ -109,15 +109,15 @@ export const ALLOWLIST_FEATURE_FLAGS = {
   E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG: {
     key: 'e-consent-fields-enabled-feature-flag',
   },
-  ENTITY_LOCKING_FEATURE_FLAG: {
-    key: 'entity-locking-feature-flag',
-  },
   USE_CHANGE_OF_ADDRESS_LAMBDA: {
     disabledMessage:
       'A flag to know when to use the change of address lambda for processing.',
     key: 'use-change-of-address-lambda',
   },
 };
+
+type FeatureFlags = typeof ALLOWLIST_FEATURE_FLAGS;
+export type FeatureFlagKeys = FeatureFlags[keyof FeatureFlags]['key'];
 
 export const CONFIGURATION_ITEM_KEYS = {
   SECTION_OUTBOX_NUMBER_OF_DAYS: {

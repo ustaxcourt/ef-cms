@@ -229,6 +229,40 @@ describe('updateCaseContextInteractor', () => {
     ]);
   });
 
+  it('should not call "getCaseDeadlinesByConsolidatedCaseDeadlineIds" if there are no lead deadlines', async () => {
+    getCaseByDocketNumber.mockReturnValue(
+      Promise.resolve({
+        ...MOCK_CASE,
+        leadDocketNumber: MOCK_CASE.docketNumber,
+      }),
+    );
+
+    getCaseDeadlinesByDocketNumber.mockResolvedValue([]);
+
+    const CHILD_CASE_DEADLINE_ID = 'CHILD_CASE_DEADLINE_ID';
+    getCaseDeadlinesByConsolidatedCaseDeadlineIds.mockResolvedValue([
+      {
+        caseDeadlineId: CHILD_CASE_DEADLINE_ID,
+        consolidatedCaseDeadlineId: 'TEST_CONSOLIDATED_CASE_DEADLINE_ID',
+      } as any,
+    ]);
+
+    await updateCaseContextInteractor(
+      applicationContext,
+      {
+        caseStatus: CASE_STATUS_TYPES.closed,
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    const getCaseDeadlinesByConsolidatedCaseDeadlineIdsCalls =
+      getCaseDeadlinesByConsolidatedCaseDeadlineIds.mock.calls;
+    expect(getCaseDeadlinesByConsolidatedCaseDeadlineIdsCalls.length).toEqual(
+      0,
+    );
+  });
+
   it('should remove automatic block information if case status is closed', async () => {
     getCaseByDocketNumber.mockReturnValue({
       ...MOCK_CASE_WITHOUT_PENDING,

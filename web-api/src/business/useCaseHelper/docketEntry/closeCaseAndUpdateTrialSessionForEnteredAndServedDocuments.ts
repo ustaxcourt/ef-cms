@@ -35,8 +35,11 @@ export const closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments =
       });
     });
 
-    if (caseEntity.docketNumber === caseEntity.leadDocketNumber) {
-      const LEAD_CASE_DEADLINES = caseDeadlines.map(cd => cd.caseDeadlineId);
+    const LEAD_CASE_DEADLINES = caseDeadlines.map(cd => cd.caseDeadlineId);
+    if (
+      caseEntity.docketNumber === caseEntity.leadDocketNumber &&
+      LEAD_CASE_DEADLINES.length
+    ) {
       const CHILDREN_DEADLINES =
         await getCaseDeadlinesByConsolidatedCaseDeadlineIds(
           LEAD_CASE_DEADLINES,
