@@ -296,13 +296,13 @@ This runbook describes the process of creating a new DAWSON lower environment in
 1. Write feature flags to the deploy table:
    1. `aws-batch-zipper-minimum-count`:
       ```bash
-		scripts/postgres/featureFlags/setup-aws-batch-zipper-minimum-count.ts
+      scripts/postgres/featureFlags/setup-aws-batch-zipper-minimum-count.ts
       ```
-   1. `chief-judge-name`, replacing `<CHIEF JUDGE NAME>` with the current Chief Judge:
+   1. `chief-judge-name`:
       ```bash
-		scripts/postgres/featureFlags/setup-chief-judge-name-flag.ts
+      scripts/postgres/featureFlags/setup-chief-judge-name-flag.ts
       ```
-   1. `clerk-of-court-configuration`, replacing `<CLERK OF COURT NAME>` with the current Clerk of the Court:
+   1. `clerk-of-court-configuration`:
       ```bash
       scripts/postgres/featureFlags/setup-clerk-of-court-config.ts
       ```
