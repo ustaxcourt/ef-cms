@@ -23,7 +23,7 @@ import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/ut
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
-const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
 const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
 const tryGetLocks = jest.mocked(tryGetLocksMock);
 const getUserById = jest.mocked(getUserByIdMock);
