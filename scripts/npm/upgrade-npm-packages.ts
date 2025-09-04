@@ -16,6 +16,14 @@ const caveats: string[] = [
   'babel-jest',
   'babel-core',
   'jest',
+  'pdfjs-dist',
+  'pg',
+  'quill',
+  'quill-delta-to-html',
+  'jest-environment-jsdom',
+  '@types/node',
+  'typescript',
+  'websocket',
 ];
 
 // Function to run a shell command and capture output, even if it has a non-zero exit code
