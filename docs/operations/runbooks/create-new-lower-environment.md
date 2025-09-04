@@ -262,133 +262,69 @@ This runbook describes the process of creating a new DAWSON lower environment in
       ```bash
       npm run "deploy:${DEPLOYING_COLOR}" "$ENV"
       ```
-1. Write configuration values to the deploy table:
+1. Write configuration values to AWS SSM:
    1. `current-color`:
       ```bash
-      aws dynamodb update-item \
-        --region us-east-1 --table-name "efcms-deploy-${ENV}" \
-        --key '{"pk":{"S":"current-color"}, "sk":{"S":"current-color"}}' \
-        --update-expression "SET #current = :current" \
-        --expression-attribute-names '{"#current":"current"}' \
-        --expression-attribute-values '{":current":{"S":"blue"}}'
+      aws ssm put-parameter \
+        --region us-east-1 --name "/DAWSON/${ENV}/current-color" \
+        --value "blue" --type "String" --overwrite
       ```
    1. `destination-table-version`:
       ```bash
-      aws dynamodb update-item \
-        --region us-east-1 --table-name "efcms-deploy-${ENV}" \
-        --key '{"pk":{"S":"destination-table-version"}, "sk":{"S":"destination-table-version"}}' \
-        --update-expression "SET #current = :current" \
-        --expression-attribute-names '{"#current":"current"}' \
-        --expression-attribute-values '{":current":{"S":"alpha"}}'
+      aws ssm put-parameter \
+         --region us-east-1 --name "/DAWSON/${ENV}/destination-table-version" \
+         --value "alpha" --type "String" --overwrite
       ```
    1. `migrate`:
       ```bash
-      aws dynamodb update-item \
-        --region us-east-1 --table-name "efcms-deploy-${ENV}" \
-        --key '{"pk":{"S":"migrate"}, "sk":{"S":"migrate"}}' \
-        --update-expression "SET #current = :current" \
-        --expression-attribute-names '{"#current":"current"}' \
-        --expression-attribute-values '{":current":{"BOOL":false}}'
+      aws ssm put-parameter \
+         --region us-east-1 --name "/DAWSON/${ENV}/migrate" \
+         --value "true" --type "String" --overwrite
       ```
    1. `migration-queue-empty`:
       ```bash
-      aws dynamodb update-item \
-        --region us-east-1 --table-name "efcms-deploy-${ENV}" \
-        --key '{"pk":{"S":"migration-queue-empty"}, "sk":{"S":"migration-queue-empty"}}' \
-        --update-expression "SET #current = :current" \
-        --expression-attribute-names '{"#current":"current"}' \
-        --expression-attribute-values '{":current":{"BOOL":true}}'
+      aws ssm put-parameter \
+         --region us-east-1 --name "/DAWSON/${ENV}/migration-queue-empty" \
+         --value "true" --type "String" --overwrite
       ```
    1. `source-table-version`:
       ```bash
-      aws dynamodb update-item \
-        --region us-east-1 --table-name "efcms-deploy-${ENV}" \
-        --key '{"pk":{"S":"source-table-version"}, "sk":{"S":"source-table-version"}}' \
-        --update-expression "SET #current = :current" \
-        --expression-attribute-names '{"#current":"current"}' \
-        --expression-attribute-values '{":current":{"S":"alpha"}}'
+      aws ssm put-parameter \
+         --region us-east-1 --name "/DAWSON/${ENV}/source-table-version" \
+         --value "alpha" --type "String" --overwrite
       ```
 1. Write feature flags to the deploy table:
    1. `aws-batch-zipper-minimum-count`:
       ```bash
-      aws dynamodb update-item \
-        --region us-east-1 --table-name "efcms-deploy-${ENV}" \
-        --key '{"pk":{"S":"aws-batch-zipper-minimum-count"}, "sk":{"S":"aws-batch-zipper-minimum-count"}}' \
-        --update-expression "SET #current = :current" \
-        --expression-attribute-names '{"#current":"current"}' \
-        --expression-attribute-values '{":current":{"N":"50"}}'
+      scripts/postgres/featureFlags/setup-aws-batch-zipper-minimum-count.ts
       ```
-   1. `chief-judge-name`, replacing `<CHIEF JUDGE NAME>` with the current Chief Judge:
+   1. `chief-judge-name`:
       ```bash
-      aws dynamodb update-item \
-        --region us-east-1 --table-name "efcms-deploy-${ENV}" \
-        --key '{"pk":{"S":"chief-judge-name"}, "sk":{"S":"chief-judge-name"}}' \
-        --update-expression "SET #current = :current" \
-        --expression-attribute-names '{"#current":"current"}' \
-        --expression-attribute-values '{":current":{"S":"<CHIEF JUDGE NAME>"}}'
+      scripts/postgres/featureFlags/setup-chief-judge-name-flag.ts
       ```
-   1. `clerk-of-court-configuration`, replacing `<CLERK OF COURT NAME>` with the current Clerk of the Court:
+   1. `clerk-of-court-configuration`:
       ```bash
-      aws dynamodb update-item \
-        --region us-east-1 --table-name "efcms-deploy-${ENV}" \
-        --key '{"pk":{"S":"clerk-of-court-configuration"}, "sk":{"S":"clerk-of-court-configuration"}}' \
-        --update-expression "SET #current = :current" \
-        --expression-attribute-names '{"#current":"current"}' \
-        --expression-attribute-values '{":current":{"M":{"name":{"S":"<CLERK OF COURT NAME>"},"title": {"S":"Clerk of the Court"}}}}'
+      scripts/postgres/featureFlags/setup-clerk-of-court-config.ts
       ```
    1. `document-visibility-policy-change-date`:
       ```bash
-      aws dynamodb update-item \
-        --region us-east-1 --table-name "efcms-deploy-${ENV}" \
-        --key '{"pk":{"S":"document-visibility-policy-change-date"}, "sk":{"S":"document-visibility-policy-change-date"}}' \
-        --update-expression "SET #current = :current" \
-        --expression-attribute-names '{"#current":"current"}' \
-        --expression-attribute-values '{":current":{"S":"2023-08-01"}}'
+      scripts/postgres/featureFlags/setup-document-visibility-policy-change-date.ts
       ```
    1. `e-consent-fields-enabled-feature-flag`:
       ```bash
-      aws dynamodb update-item \
-        --region us-east-1 --table-name "efcms-deploy-${ENV}" \
-        --key '{"pk":{"S":"e-consent-fields-enabled-feature-flag"}, "sk":{"S":"e-consent-fields-enabled-feature-flag"}}' \
-        --update-expression "SET #current = :current" \
-        --expression-attribute-names '{"#current":"current"}' \
-        --expression-attribute-values '{":current":{"BOOL":true}}'
-      ```
-   1. `entity-locking-feature-flag`:
-      ```bash
-      aws dynamodb update-item \
-        --region us-east-1 --table-name "efcms-deploy-${ENV}" \
-        --key '{"pk":{"S":"entity-locking-feature-flag"}, "sk":{"S":"entity-locking-feature-flag"}}' \
-        --update-expression "SET #current = :current" \
-        --expression-attribute-names '{"#current":"current"}' \
-        --expression-attribute-values '{":current":{"BOOL":true}}'
+      scripts/postgres/featureFlags/setup-e-consent-fields-enabled-feature-flag.ts
       ```
    1. `maintenance-mode`:
       ```bash
-      aws dynamodb update-item \
-        --region us-east-1 --table-name "efcms-deploy-${ENV}" \
-        --key '{"pk":{"S":"maintenance-mode"}, "sk":{"S":"maintenance-mode"}}' \
-        --update-expression "SET #current = :current" \
-        --expression-attribute-names '{"#current":"current"}' \
-        --expression-attribute-values '{":current":{"BOOL":false}}'
+      scripts/postgres/set-maintenance-mode.ts
       ```
    1. `section-outbox-number-of-days`:
       ```bash
-      aws dynamodb update-item \
-        --region us-east-1 --table-name "efcms-deploy-${ENV}" \
-        --key '{"pk":{"S":"section-outbox-number-of-days"}, "sk":{"S":"section-outbox-number-of-days"}}' \
-        --update-expression "SET #current = :current" \
-        --expression-attribute-names '{"#current":"current"}' \
-        --expression-attribute-values '{":current":{"N":"5"}}'
+      scripts/postgres/featureFlags/setup-section-outbox-retrieval-days.ts
       ```
    1. `use-change-of-address-lambda`:
       ```bash
-      aws dynamodb update-item \
-        --region us-east-1 --table-name "efcms-deploy-${ENV}" \
-        --key '{"pk":{"S":"use-change-of-address-lambda"}, "sk":{"S":"use-change-of-address-lambda"}}' \
-        --update-expression "SET #current = :current" \
-        --expression-attribute-names '{"#current":"current"}' \
-        --expression-attribute-values '{":current":{"BOOL":true}}'
+      scripts/postgres/featureFlags/setup-use-change-of-address-lambda-flag.ts
       ```
 1. ⚖️ If this lower environment is to have prod-like data:
    1. Sync the `documents` bucket:
