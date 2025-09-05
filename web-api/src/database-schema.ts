@@ -64,6 +64,10 @@ import {
   MinuteSheetTable,
 } from '@web-api/persistence/postgres/minuteSheets/schema';
 import {
+  DW_PRACTITIONER_DOCUMENT_COLUMNS,
+  PractitionerDocumentTable,
+} from '@web-api/persistence/postgres/practitionerDocuments/schema';
+import {
   TrialSessionCaseTable,
   DW_TRIAL_SESSION_CASE_COLUMNS,
   DW_TRIAL_SESSION_COLUMNS,
@@ -75,10 +79,6 @@ import {
   TrialSessionTable,
   TrialSessionWorkingCopyTable,
 } from './persistence/postgres/trialSessions/schema';
-import {
-  DW_PRACTITIONER_DOCUMENT_COLUMNS,
-  PractitionerDocumentTable,
-} from '@web-api/persistence/postgres/practitionerDocuments/schema';
 import {
   DW_USER_COLUMNS,
   UserTable,
