@@ -1,5 +1,5 @@
 import { pathsToModuleNameMapper } from 'ts-jest';
-import tsconfig from '../../../../../tsconfig.json';
+import tsconfig from '../../../../../tsconfig.json' assert { type: 'json' };
 import type { Config } from 'jest';
 
 const config: Config = {

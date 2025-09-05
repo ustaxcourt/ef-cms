@@ -49,6 +49,7 @@
     "./cypress-smoketests-readonly.config.ts",
     "./cypress-smoketests-readonly-public.config.ts",
     "./cypress-public.config.ts",
-     "**/jest.config.ts"
+     "**/jest.config.ts",
+     "./shared/src/business/utilities/documentGenerators/jest_document_generator.config.ts"
   ]
 }
