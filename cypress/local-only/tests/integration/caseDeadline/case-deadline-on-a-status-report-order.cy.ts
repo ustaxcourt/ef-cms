@@ -10,6 +10,7 @@ import {
   loginAsPetitionsClerk1,
 } from 'cypress/helpers/authentication/login-as-helpers';
 import { createStatusReport } from 'cypress/helpers/caseDetail/docketRecord/courtIssuedFiling/create-status-report-order';
+import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
 import { createAndServePaperPetition } from 'cypress/helpers/fileAPetition/create-and-serve-paper-petition';
 import { createAndServeConsolidatedGroup } from 'cypress/helpers/fileAPetition/create-consolidated-case-group';
 import { createTrialSession } from 'cypress/helpers/trialSession/create-trial-session';
@@ -30,31 +31,29 @@ describe('Case Deadline Auto Generation from Status Report Order', () => {
   });
   const editDescriptionText = 'test from alex';
 
-  let docketNumber: string;
-  let leadDocketNumber: string;
-  let memberDocketNumbers: string[];
-
   before(() => {
     loginAsPetitionsClerk1();
 
     // create case, serve petition, and create status report order
     createTrialSession().then(() => {
-      createAndServePaperPetition().then(({ docketNumber: dn }) => {
-        docketNumber = dn;
+      createAndServePaperPetition().then(({ docketNumber }) => {
+        Cypress.env('docketNumber', docketNumber);
         createStatusReport(docketNumber);
       });
     });
 
     // create consolidated case group
     createAndServeConsolidatedGroup({}).then(consolidatedGroupInfo => {
-      ({ leadDocketNumber, memberDocketNumbers } = consolidatedGroupInfo);
+      const { leadDocketNumber, memberDocketNumbers } = consolidatedGroupInfo;
+      Cypress.env('leadDocketNumber', leadDocketNumber);
+      Cypress.env('memberDocketNumbers', memberDocketNumbers);
       createStatusReport(leadDocketNumber);
     });
   });
   it('should generate a deadline when a status report order is filed', () => {
     // create a status report order draft
     loginAsColvin();
-    cy.visit(`/case-detail/${docketNumber}`);
+    goToCase(Cypress.env('docketNumber'));
     cy.get('#tab-document-view').click();
     cy.contains('button span', 'Status Report').closest('button').click();
     cy.get('[data-testid="status-report-order-button"]').click();
@@ -67,10 +66,10 @@ describe('Case Deadline Auto Generation from Status Report Order', () => {
 
     // add docket entry
     loginAsDocketClerk();
-    addDocketEntry(docketNumber);
+    addDocketEntry(Cypress.env('docketNumber'));
 
     // check if case deadline is created
-    cy.visit(`/case-detail/${docketNumber}`);
+    goToCase(Cypress.env('docketNumber'));
     cy.get('[data-testid="tab-tracked-items"]').click();
     cy.get('[data-testid="case-deadline-description"]').should(
       'contain',
@@ -108,7 +107,7 @@ describe('Case Deadline Auto Generation from Status Report Order', () => {
   it('should generate a deadline when a status report or proposed stipulated decision order is filed', () => {
     // create a status report or proposed stipulated decision order draft
     loginAsColvin();
-    cy.visit(`/case-detail/${docketNumber}`);
+    goToCase(Cypress.env('docketNumber'));
     cy.get('#tab-document-view').click();
     cy.contains('button span', 'Status Report').closest('button').click();
     cy.get('[data-testid="status-report-order-button"]').click();
@@ -123,10 +122,10 @@ describe('Case Deadline Auto Generation from Status Report Order', () => {
 
     // add docket entry
     loginAsDocketClerk();
-    addDocketEntry(docketNumber);
+    addDocketEntry(Cypress.env('docketNumber'));
 
     // check if case deadline is created
-    cy.visit(`/case-detail/${docketNumber}`);
+    goToCase(Cypress.env('docketNumber'));
     cy.get('[data-testid="tab-tracked-items"]').click();
     cy.get(`[data-testid="case-deadline-description"]`).should(
       'contain',
@@ -146,7 +145,7 @@ describe('Case Deadline Auto Generation from Status Report Order', () => {
   it('should generate deadline for lead and child cases when a status report order for lead case is filed', () => {
     // create a status report order draft
     loginAsColvin();
-    cy.visit(`/case-detail/${leadDocketNumber}`);
+    goToCase(Cypress.env('leadDocketNumber'));
     cy.get('#tab-document-view').click();
     cy.contains('button span', 'Status Report').closest('button').click();
     cy.get('[data-testid="status-report-order-button"]').click();
@@ -159,10 +158,10 @@ describe('Case Deadline Auto Generation from Status Report Order', () => {
 
     // add docket entry
     loginAsDocketClerk();
-    addDocketEntry(leadDocketNumber);
+    addDocketEntry(Cypress.env('leadDocketNumber'));
 
     // check if case deadline is created
-    cy.visit(`/case-detail/${leadDocketNumber}`);
+    goToCase(Cypress.env('leadDocketNumber'));
     cy.get('[data-testid="tab-tracked-items"]').click();
     cy.get('[data-testid="case-deadline-description"]').should(
       'contain',
@@ -173,8 +172,8 @@ describe('Case Deadline Auto Generation from Status Report Order', () => {
       todayDateFormatted,
     );
 
-    for (const child of memberDocketNumbers) {
-      cy.visit(`/case-detail/${child}`);
+    for (const child of Cypress.env('memberDocketNumbers')) {
+      goToCase(child);
       cy.get('[data-testid="tab-tracked-items"]').click();
       cy.get('[data-testid="case-deadline-description"]').should(
         'contain',
@@ -189,7 +188,7 @@ describe('Case Deadline Auto Generation from Status Report Order', () => {
 });
 
 const addDocketEntry = (docketNumber: string) => {
-  cy.visit(`/case-detail/${docketNumber}`);
+  goToCase(docketNumber);
   cy.get('[data-testid="tab-drafts"]').click();
   getLastDraftOrderElementFromDrafts().click();
   cy.get('[data-testid="add-court-issued-docket-entry-button"]').click();

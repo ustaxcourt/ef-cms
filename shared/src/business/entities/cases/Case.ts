@@ -1557,15 +1557,14 @@ export class Case extends JoiValidationEntity {
     
     this.caseCaption = caseCaption;
     
-    // New method to find case in case array and update that caption as well
     if (this.consolidatedCases && this.consolidatedCases.length > 0) {
-      this.setCaseCaptionInConsolidatedCases();
+      this.setCaseCaptionInSingleCase();
     }
 
     return this;
   }
 
-  setCaseCaptionInConsolidatedCases() {
+  setCaseCaptionInSingleCase() {
 
     const currentCase = this.consolidatedCases.find((c) => c.docketNumber === this.docketNumber);
 
