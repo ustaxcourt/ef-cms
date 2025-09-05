@@ -1,16 +1,14 @@
+import { ACCOUNT_STATUS } from '@shared/business/entities/EntityConstants';
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { Practitioner } from './Practitioner';
 import joi from 'joi';
 
 export class NewPractitioner extends Practitioner {
-  public barNumber?: string;
-  public userId?: string;
-  public name?: string;
-
   constructor(rawUser, options?) {
     super(rawUser, options);
 
     this.entityName = Practitioner.ENTITY_NAME;
+    this.accountStatus = ACCOUNT_STATUS.active;
   }
 
   static VALIDATION_RULES = {

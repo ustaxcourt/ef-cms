@@ -1,11 +1,9 @@
 import { RawMessage } from '@shared/business/entities/Message';
 import { ReplyMessageType } from '@web-api/business/useCases/messages/createMessageInteractor';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { replyToMessage } from './replyToMessageInteractor';
 
 export const forwardMessageInteractor = async (
-  applicationContext: ServerApplicationContext,
   {
     attachments,
     docketNumber,
@@ -18,7 +16,6 @@ export const forwardMessageInteractor = async (
   authorizedUser: UnknownAuthUser,
 ): Promise<RawMessage> => {
   return await replyToMessage(
-    applicationContext,
     {
       attachments,
       docketNumber,

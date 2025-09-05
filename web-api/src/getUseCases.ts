@@ -29,7 +29,6 @@ import { createCaseInteractor } from './business/useCases/createCaseInteractor';
 import { createCourtIssuedOrderPdfFromHtmlInteractor } from './business/useCases/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlInteractor';
 import { createMessageInteractor } from './business/useCases/messages/createMessageInteractor';
 import { createPractitionerDocumentInteractor } from './business/useCases/practitioner/createPractitionerDocumentInteractor';
-import { createPractitionerUserInteractor } from './business/useCases/practitioner/createPractitionerUserInteractor';
 import { createTrialSessionInteractor } from './business/useCases/trialSessions/createTrialSessionInteractor';
 import { deleteCaseDeadlineInteractor } from './business/useCases/caseDeadline/deleteCaseDeadlineInteractor';
 import { deleteCaseNoteInteractor } from './business/useCases/caseNote/deleteCaseNoteInteractor';
@@ -50,7 +49,6 @@ import { fileCourtIssuedDocketEntryInteractor } from './business/useCases/docket
 import { fileCourtIssuedOrderInteractor } from './business/useCases/courtIssuedOrder/fileCourtIssuedOrderInteractor';
 import { fileExternalDocumentInteractor } from '@web-api/business/useCases/externalDocument/fileExternalDocumentInteractor';
 import { forgotPasswordInteractor } from '@web-api/business/useCases/auth/forgotPasswordInteractor';
-import { forwardMessageInteractor } from './business/useCases/messages/forwardMessageInteractor';
 import { generateDocketRecordPdfInteractor } from './business/useCases/generateDocketRecordPdfInteractor';
 import { generateDraftStampOrderInteractor } from '../../shared/src/business/useCases/generateDraftStampOrderInteractor';
 import { generateEntryOfAppearancePdfInteractor } from './business/useCases/caseAssociationRequest/generateEntryOfAppearancePdfInteractor';
@@ -71,8 +69,7 @@ import { generateStandingPretrialOrderForSmallCaseInteractor } from './business/
 import { generateStandingPretrialOrderInteractor } from './business/useCases/trialSessions/generateStandingPretrialOrderInteractor';
 import { generateTrialCalendarPdfInteractor } from './business/useCases/trialSessions/generateTrialCalendarPdfInteractor';
 import { generateTrialSessionPaperServicePdfInteractor } from './business/useCases/trialSessions/generateTrialSessionPaperServicePdfInteractor';
-import { getAllFeatureFlagsInteractor } from './business/useCases/featureFlag/getAllFeatureFlagsInteractor';
-import { getAllUsersByRoleInteractor } from '@shared/business/useCases/getAllUsersByRoleInteractor';
+import { getAllFeatureFlagsInteractor } from '@web-api/business/useCases/featureFlag/getAllFeatureFlagsInteractor';
 import { getCalendaredCasesForTrialSessionInteractor } from './business/useCases/trialSessions/getCalendaredCasesForTrialSessionInteractor';
 import { getCaseDeadlinesForCaseInteractor } from './business/useCases/caseDeadline/getCaseDeadlinesForCaseInteractor';
 import { getCaseDeadlinesInteractor } from '../../shared/src/business/useCases/getCaseDeadlinesInteractor';
@@ -92,7 +89,6 @@ import { getEligibleCasesForTrialSessionInteractor } from './business/useCases/t
 import { getHealthCheckInteractor } from './business/useCases/health/getHealthCheckInteractor';
 import { getInboxMessagesForSectionInteractor } from './business/useCases/messages/getInboxMessagesForSectionInteractor';
 import { getInboxMessagesForUserInteractor } from './business/useCases/messages/getInboxMessagesForUserInteractor';
-import { getInternalUsersInteractor } from './business/useCases/user/getInternalUsersInteractor';
 import { getIrsPractitionersBySearchKeyInteractor } from './business/useCases/user/getIrsPractitionersBySearchKeyInteractor';
 import { getJudgeInSectionInteractor } from './business/useCases/user/getJudgeInSectionInteractor';
 import { getJudgesForPublicSearchInteractor } from './business/useCases/public/getJudgesForPublicSearchInteractor';
@@ -124,10 +120,7 @@ import { getTrialSessionsInteractor } from './business/useCases/trialSessions/ge
 import { getUploadPolicyInteractor } from './business/useCases/document/getUploadPolicyInteractor';
 import { getUserCaseNoteForCasesInteractor } from './business/useCases/caseNote/getUserCaseNoteForCasesInteractor';
 import { getUserCaseNoteInteractor } from './business/useCases/caseNote/getUserCaseNoteInteractor';
-import { getUserInteractor } from '../../shared/src/business/useCases/getUserInteractor';
-import { getUserPendingEmailInteractor } from './business/useCases/user/getUserPendingEmailInteractor';
 import { getUserPendingEmailStatusInteractor } from './business/useCases/user/getUserPendingEmailStatusInteractor';
-import { getUsersInSectionInteractor } from './business/useCases/user/getUsersInSectionInteractor';
 import { getUsersPendingEmailInteractor } from './business/useCases/user/getUsersPendingEmailInteractor';
 import { handleBounceNotificationInteractor } from './business/useCases/email/handleBounceNotificationInteractor';
 import { logErrorInteractor } from '@web-api/business/useCases/logErrorInteractor';
@@ -148,7 +141,6 @@ import { removePdfFromDocketEntryInteractor } from '../../shared/src/business/us
 import { removePetitionerAndUpdateCaptionInteractor } from '../../shared/src/business/useCases/removePetitionerAndUpdateCaptionInteractor';
 import { removeSignatureFromDocumentInteractor } from '../../shared/src/business/useCases/removeSignatureFromDocumentInteractor';
 import { renewIdTokenInteractor } from './business/useCases/auth/renewIdTokenInteractor';
-import { replyToMessageInteractor } from './business/useCases/messages/replyToMessageInteractor';
 import { runTrialSessionPlanningReportInteractor } from './business/useCases/trialSessions/runTrialSessionPlanningReportInteractor';
 import { saveCalendarNoteInteractor } from './business/useCases/trialSessions/saveCalendarNoteInteractor';
 import { saveCaseDetailInternalEditInteractor } from './business/useCases/saveCaseDetailInternalEditInteractor';
@@ -233,7 +225,6 @@ const useCases = {
   createCourtIssuedOrderPdfFromHtmlInteractor,
   createMessageInteractor,
   createPractitionerDocumentInteractor,
-  createPractitionerUserInteractor,
   createTrialSessionInteractor,
   deleteCaseDeadlineInteractor,
   deleteCaseNoteInteractor,
@@ -254,7 +245,6 @@ const useCases = {
   fileCourtIssuedOrderInteractor,
   fileExternalDocumentInteractor,
   forgotPasswordInteractor,
-  forwardMessageInteractor,
   generateDocketRecordPdfInteractor,
   generateDraftStampOrderInteractor,
   generateEntryOfAppearancePdfInteractor,
@@ -276,7 +266,6 @@ const useCases = {
   generateTrialCalendarPdfInteractor,
   generateTrialSessionPaperServicePdfInteractor,
   getAllFeatureFlagsInteractor,
-  getAllUsersByRoleInteractor,
   getCalendaredCasesForTrialSessionInteractor,
   getCaseDeadlinesForCaseInteractor,
   getCaseDeadlinesInteractor,
@@ -296,7 +285,6 @@ const useCases = {
   getHealthCheckInteractor,
   getInboxMessagesForSectionInteractor,
   getInboxMessagesForUserInteractor,
-  getInternalUsersInteractor,
   getIrsPractitionersBySearchKeyInteractor,
   getJudgeInSectionInteractor,
   getJudgesForPublicSearchInteractor,
@@ -328,10 +316,7 @@ const useCases = {
   getUploadPolicyInteractor,
   getUserCaseNoteForCasesInteractor,
   getUserCaseNoteInteractor,
-  getUserInteractor,
-  getUserPendingEmailInteractor,
   getUserPendingEmailStatusInteractor,
-  getUsersInSectionInteractor,
   getUsersPendingEmailInteractor,
   handleBounceNotificationInteractor,
   logErrorInteractor,
@@ -352,7 +337,6 @@ const useCases = {
   removePetitionerAndUpdateCaptionInteractor,
   removeSignatureFromDocumentInteractor,
   renewIdTokenInteractor,
-  replyToMessageInteractor,
   runTrialSessionPlanningReportInteractor,
   saveCalendarNoteInteractor,
   saveCaseDetailInternalEditInteractor,

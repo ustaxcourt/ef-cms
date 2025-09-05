@@ -5,15 +5,16 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 export const deleteCounselFromCase = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   { docketNumber, userId }: { docketNumber: string; userId: string },
   authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
@@ -27,12 +28,13 @@ export const deleteCounselFromCase = async (
     docketNumber,
   });
 
-  const userToDelete = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({
-      applicationContext,
-      userId,
-    });
+  const userToDelete = await getUserById({
+    userId,
+  });
+
+  if (!userToDelete) {
+    throw new NotFoundError(`Could not find user ${userId}`);
+  }
 
   let caseEntity = new Case(caseToUpdate, { authorizedUser });
 
@@ -47,12 +49,6 @@ export const deleteCounselFromCase = async (
   caseEntity = setupServiceIndicatorForUnrepresentedPetitioners(caseEntity);
 
   aggregatePartiesForService(caseEntity);
-
-  await applicationContext.getPersistenceGateway().deleteUserFromCase({
-    applicationContext,
-    docketNumber,
-    userId,
-  });
 
   await updateCaseAndAssociations({
     authorizedUser,

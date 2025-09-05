@@ -4,15 +4,13 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import {
-  getDocumentQCInboxForUser,
-  WorkItemWithCaseInfo,
-} from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
+import { getDocumentQCInboxForUser } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
+import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
 
 export const getDocumentQCInboxForUserInteractor = async (
   { userId }: { userId: string },
   authorizedUser: UnknownAuthUser,
-): Promise<WorkItemWithCaseInfo[]> => {
+): Promise<RawWorkItemWithCaseAndDocketEntryInfo[]> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.WORKITEM)) {
     throw new UnauthorizedError('Unauthorized');
   }

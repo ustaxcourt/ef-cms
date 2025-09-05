@@ -49,14 +49,12 @@ const getFullSortString = (theCase, cases) => {
 
   const isLeadInEligible = !!theCase.leadDocketNumber && !!leadCase;
 
-  let priorityPrefix = 'D';
+  let priorityPrefix = 'C';
 
   if (theCase.isManuallyAdded) {
     priorityPrefix = 'A';
-  } else if (theCase.highPriority) {
-    priorityPrefix = 'B';
   } else if (theCase.isDocketSuffixHighPriority) {
-    priorityPrefix = 'C';
+    priorityPrefix = 'B';
   }
 
   return `${priorityPrefix}_${getSortableDocketNumber(

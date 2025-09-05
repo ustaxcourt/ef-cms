@@ -1315,7 +1315,7 @@ describe('formatMinuteSheet', () => {
         const aCase = {
           ...MOCK_CASE,
           consolidatedCases: [],
-          docketNumber: '123-45',
+          docketNumberWithSuffix: '123-45',
         };
         const result = getConsolidatedDocketNumbers(aCase);
         expect(result).toBe('123-45');
@@ -1325,13 +1325,65 @@ describe('formatMinuteSheet', () => {
         const aCase = {
           ...MOCK_CASE,
           consolidatedCases: [
-            { ...MOCK_CONSOLIDATED_CASE_SUMMARY, docketNumber: '123-45' },
-            { ...MOCK_CONSOLIDATED_CASE_SUMMARY, docketNumber: '234-56' },
+            {
+              ...MOCK_CONSOLIDATED_CASE_SUMMARY,
+              docketNumberWithSuffix: '123-45',
+            },
+            {
+              ...MOCK_CONSOLIDATED_CASE_SUMMARY,
+              docketNumberWithSuffix: '234-56',
+            },
           ],
-          docketNumber: '123-45',
+          docketNumberWithSuffix: '123-45',
         };
         const result = getConsolidatedDocketNumbers(aCase);
         expect(result).toBe('123-45, 234-56');
+      });
+
+      it('should handle consolidated cases with docket numbers with suffixes', () => {
+        const aCase = {
+          ...MOCK_CASE,
+          consolidatedCases: [
+            {
+              ...MOCK_CONSOLIDATED_CASE_SUMMARY,
+              docketNumberWithSuffix: '234-20G',
+            },
+            {
+              ...MOCK_CONSOLIDATED_CASE_SUMMARY,
+              docketNumberWithSuffix: '123-20L',
+            },
+            {
+              ...MOCK_CONSOLIDATED_CASE_SUMMARY,
+              docketNumberWithSuffix: '345-20A',
+            },
+          ],
+          docketNumberWithSuffix: '123-20L',
+        };
+        const result = getConsolidatedDocketNumbers(aCase);
+        expect(result).toBe('123-20L, 234-20G, 345-20A');
+      });
+
+      it('should handle if lead is out of order, display first', () => {
+        const aCase = {
+          ...MOCK_CASE,
+          consolidatedCases: [
+            {
+              ...MOCK_CONSOLIDATED_CASE_SUMMARY,
+              docketNumberWithSuffix: '234-20G',
+            },
+            {
+              ...MOCK_CONSOLIDATED_CASE_SUMMARY,
+              docketNumberWithSuffix: '123-20L',
+            },
+            {
+              ...MOCK_CONSOLIDATED_CASE_SUMMARY,
+              docketNumberWithSuffix: '345-20A',
+            },
+          ],
+          docketNumberWithSuffix: '234-20G',
+        };
+        const result = getConsolidatedDocketNumbers(aCase);
+        expect(result).toBe('234-20G, 123-20L, 345-20A');
       });
     });
 

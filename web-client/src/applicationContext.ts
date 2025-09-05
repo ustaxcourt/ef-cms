@@ -184,7 +184,6 @@ import { getHealthCheckInteractor } from '../../shared/src/proxies/health/getHea
 import { getHttpClient } from '@web-client/providers/httpClient';
 import { getInboxMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getInboxMessagesForSectionProxy';
 import { getInboxMessagesForUserInteractor } from '../../shared/src/proxies/messages/getInboxMessagesForUserProxy';
-import { getInternalUsersInteractor } from '../../shared/src/proxies/users/getInternalUsersProxy';
 import { getIrsPractitionersBySearchKeyInteractor } from '../../shared/src/proxies/users/getIrsPractitionersBySearchKeyProxy';
 import { getIsFeatureEnabled } from '../../shared/src/business/utilities/getIsFeatureEnabled';
 import { getItem } from './persistence/localStorage/getItem';
@@ -454,7 +453,6 @@ const allUseCases = {
   getHealthCheckInteractor,
   getInboxMessagesForSectionInteractor,
   getInboxMessagesForUserInteractor,
-  getInternalUsersInteractor,
   getIrsPractitionersBySearchKeyInteractor,
   getItemInteractor,
   getJudgeInSectionInteractor,

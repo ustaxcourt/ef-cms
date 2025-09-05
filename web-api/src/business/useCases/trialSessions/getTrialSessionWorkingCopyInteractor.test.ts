@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/users/mocks.jest';
 import {
   ROLES,
   SESSION_TYPES,
@@ -12,6 +13,7 @@ import {
   mockTrialClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { omit } from 'lodash';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 
 const MOCK_WORKING_COPY = {
   sort: 'practitioner',
@@ -19,6 +21,8 @@ const MOCK_WORKING_COPY = {
   trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
   userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
 };
+
+const getUserById = jest.mocked(getUserByIdMock)
 
 describe('Get trial session working copy', () => {
   let user;
@@ -48,7 +52,7 @@ describe('Get trial session working copy', () => {
         trialLocation: 'Birmingham, Alabama',
       });
 
-    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+    getUserById.mockReturnValue({
       ...user,
       section: 'colvinsChambers',
     });
@@ -115,7 +119,7 @@ describe('Get trial session working copy', () => {
     };
     applicationContext
       .getPersistenceGateway()
-      .getTrialSessionWorkingCopy.mockImplementation(() => {});
+      .getTrialSessionWorkingCopy.mockImplementation(() => { });
     applicationContext
       .getUseCaseHelpers()
       .getJudgeInSectionHelper.mockReturnValue(null);
@@ -135,7 +139,7 @@ describe('Get trial session working copy', () => {
     user = mockTrialClerkUser;
     applicationContext
       .getUseCaseHelpers()
-      .getJudgeInSectionHelper.mockImplementation(() => {});
+      .getJudgeInSectionHelper.mockImplementation(() => { });
 
     const result = await getTrialSessionWorkingCopyInteractor(
       applicationContext,
