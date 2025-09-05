@@ -20,12 +20,14 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
+import { Mobile, NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
 
 export interface MessageFilterData {
   isSelected: any;
   key: string;
   label: string;
   options: any[];
+  useInlineSelect?: boolean;
 }
 
 type MessageListProps = {
@@ -106,21 +108,49 @@ export const MessageTable = connect<
     // For cases when messages can be completed in the given view
     const getCompleteAllButton = () => {
       return (
-        <div className="desktop:grid-col-4 tablet:grid-col-12 tablet:margin-top-2 text-right">
-          <Button
-            link
-            className="action-button"
-            data-testid="message-batch-mark-as-complete"
-            disabled={!messagesIndividualInboxHelper.isCompletionButtonEnabled}
-            icon="check-circle"
-            id="button-batch-complete"
-            onClick={() => {
-              batchCompleteMessageSequence();
-            }}
-          >
-            Complete
-          </Button>
-        </div>
+        <>
+          <NonMobile>
+            <div className="desktop:padding-right-3 desktop:grid-col-auto tablet:grid-col-12 tablet:margin-top-1 text-right desktop:margin-left-auto">
+              <Button
+                noMargin={true}
+                link
+                className="margin-right-0"
+                data-testid="message-batch-mark-as-complete"
+                disabled={
+                  !messagesIndividualInboxHelper.isCompletionButtonEnabled
+                }
+                icon="check-circle"
+                id="button-batch-complete"
+                onClick={() => {
+                  batchCompleteMessageSequence();
+                }}
+              >
+                Complete
+              </Button>
+            </div>
+          </NonMobile>
+
+          <Mobile>
+            <div className="grid-col-12 tablet:margin-top-1 text-center desktop:margin-left-auto">
+              <Button
+                noMargin={true}
+                link
+                className="action-button margin-left-auto margin-right-auto "
+                data-testid="message-batch-mark-as-complete"
+                disabled={
+                  !messagesIndividualInboxHelper.isCompletionButtonEnabled
+                }
+                icon="check-circle"
+                id="button-batch-complete"
+                onClick={() => {
+                  batchCompleteMessageSequence();
+                }}
+              >
+                Complete
+              </Button>
+            </div>
+          </Mobile>
+        </>
       );
     };
 
@@ -144,8 +174,7 @@ export const MessageTable = connect<
             </div>
           </div>
         )}
-
-        <div className="grid-row grid-gap">
+        <div className="grid-row">
           {messageFilters.length > 0 && (
             <div
               className={
@@ -161,8 +190,25 @@ export const MessageTable = connect<
             </div>
           )}
           {selectable && getCompleteAllButton()}
+          <NonMobile>
+            <div
+              className={`padding-left-0  text-semibold desktop:grid-col-auto tablet:padding-bottom-1 text-right tablet:grid-col-12 ${selectable ? '' : 'margin-left-auto'} ${messageFilters.length ? ' margin-top-auto margin-bottom-auto' : 'margin-bottom-2'} `}
+            >
+              Count:{' '}
+              <span className="text-normal">
+                {messagesIndividualInboxHelper.messagesDisplayedCount}
+              </span>
+            </div>
+          </NonMobile>
+          <Mobile>
+            <div className="text-semibold text-right grid-col-12 margin-bottom-3">
+              Count:{' '}
+              <span className="text-normal">
+                {messagesIndividualInboxHelper.messagesDisplayedCount}
+              </span>
+            </div>
+          </Mobile>
         </div>
-
         <div className="overflow-x-auto overflow-y-hidden" id={id}>
           <table className="usa-table ustc-table subsection">
             <thead>

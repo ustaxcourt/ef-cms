@@ -51,25 +51,30 @@ export const todaysOrdersHelper = (
   const tableSort = get(state.tableSort);
 
   const sortedFormattedOrders = formattedOrders.sort((orderA, orderB) => {
-    if(!tableSort) return 0;
+    if (!tableSort) return 0;
 
     let sortNumber = 0;
-    
+
     const compare1 = tableSort?.sortOrder === DESCENDING ? orderB : orderA;
     const compare2 = tableSort?.sortOrder === DESCENDING ? orderA : orderB;
 
     if (tableSort.sortField === 'docketNumber') {
-      sortNumber = Case.docketNumberSort(compare1.docketNumber, compare2.docketNumber);
-    } else if ( SUPPORTED_SORT_FIELDS_FOR_TODAYS_ORDERS.includes(tableSort.sortField)) {
+      sortNumber = Case.docketNumberSort(
+        compare1.docketNumber,
+        compare2.docketNumber,
+      );
+    } else if (
+      SUPPORTED_SORT_FIELDS_FOR_TODAYS_ORDERS.includes(tableSort.sortField)
+    ) {
       const compare1SortField = compare1[tableSort.sortField] || '';
       const compare2SortField = compare2[tableSort.sortField] || '';
-      
-      sortNumber = compare1SortField.toString()
+
+      sortNumber = compare1SortField
+        .toString()
         .localeCompare(compare2SortField.toString());
     }
     return sortNumber;
   });
-
   const hasResults = sortedFormattedOrders.length > 0;
 
   const showLoadMoreButton = sortedFormattedOrders.length < totalCount;

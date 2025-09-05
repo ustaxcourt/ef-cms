@@ -2,8 +2,8 @@ import {
   DATE_RANGE_SEARCH_OPTIONS,
   MAX_SEARCH_RESULTS,
   ORDER_EVENT_CODES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+} from '@shared/business/entities/EntityConstants';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { orderPublicSearchInteractor } from './orderPublicSearchInteractor';
 
 describe('orderPublicSearchInteractor', () => {
@@ -82,7 +82,7 @@ describe('orderPublicSearchInteractor', () => {
       startDate: '01/01/2001',
     } as any);
 
-    expect(results.length).toBe(MAX_SEARCH_RESULTS);
+    expect(results.results.length).toBe(MAX_SEARCH_RESULTS);
   });
 
   it('should throw an error when the search results do not validate', async () => {

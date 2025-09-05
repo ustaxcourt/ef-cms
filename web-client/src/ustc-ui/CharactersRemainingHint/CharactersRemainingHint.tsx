@@ -3,8 +3,11 @@ import React from 'react';
 export const CharactersRemainingHint = ({
   maxCharacters,
   stringToCount = '',
+}: {
+  maxCharacters: number;
+  stringToCount: string | null | undefined;
 }) => {
-  const charactersRemaining = maxCharacters - stringToCount.length;
+  const charactersRemaining = maxCharacters - (stringToCount || '').length;
 
   return (
     <span
