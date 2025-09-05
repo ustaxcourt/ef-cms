@@ -11,14 +11,14 @@ const tagVariants = cva(
   cn(
     'tw:xs:[&_svg]:h-[12px] tw:xs:[&_svg]:w-[12px] tw:[&_svg]:h-[10px] tw:[&_svg]:w-[10px]',
     'tw:rounded-[.5em] tw:font-bold tw:uppercase text-nowrap',
-    'tw:py-[1px] tw:px-[.5em]',
+    'tw:py-[3px] tw:xs:px-[.8px] tw:px-[.6px]',
     'tw:text-[12px]', //Mobile
     'tw:xs:text-[14px]', //Desktop
   ),
   {
     variants: {
       variant: {
-        primary: cn('tw:bg-white tw:text-primary-darker'),
+        primary: cn('tw:bg-white tw:text-primary-active'),
         destructive: cn('tw:bg-destructive-darker tw:text-white'),
       },
       size: {
