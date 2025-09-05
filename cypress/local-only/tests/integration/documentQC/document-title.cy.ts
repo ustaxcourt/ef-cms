@@ -46,7 +46,7 @@ describe('Document title updates correctly', () => {
 
       // // Get the row that had the exhibit and complete the qc, sending a message
       cy.get(`[data-testid=work-item-${docketNumber}]`)
-        .find('[data-testid=work-item-document-link]')
+        .find(`[data-testid=work-item-document-link-${docketNumber}]`)
         .click();
       cy.get('[data-testid="additional-info-primary-document-form"]').type(
         additionalInfo,
@@ -93,7 +93,7 @@ describe('Document title updates correctly', () => {
       cy.get('[data-testid="document-qc-nav-item"]').click();
       cy.get('[data-testid="switch-to-section-document-qc-button"]').click();
       cy.get(`[data-testid=work-item-${docketNumber}]`)
-        .find('[data-testid=work-item-document-link]')
+        .find(`[data-testid=work-item-document-link-${docketNumber}]`)
         .click();
       cy.get('[data-testid="save-and-finish-document-qc"]').click();
       viewMyOutbox();
