@@ -15,7 +15,7 @@ import { CircleXmark } from './icons';
 const alertVariants = cva(
   cn(
     'tw:relative tw:border-solid tw:border-0',
-    'tw:xs:border-l-8 tw:xs:p-4 tw:border-l-6 tw:p-3 tw:pt-2.5',
+    'tw:xs:border-l-8 tw:xs:p-4 tw:border-l-6 tw:p-3 tw:pt-[14px] tw:xs:pt-[14px]',
     'tw:font-normal tw:xs:text-lg tw:text-sm/4',
     'tw:[&_ul]:m-0 tw:[&_ul]:-ml-4 tw:[&_ul]:list-disc',
     'tw:xs:[&_svg]:h-7 tw:xs:[&_svg]:w-7 tw:[&_svg]:h-5 tw:[&_svg]:w-5',
@@ -60,10 +60,13 @@ function Alert({
       {...props}
     >
       <div className="tw:flex">
-        <div className="tw:flex tw:pt-0.5">
-          <FontAwesomeIcon icon={iconType[variant ?? 'info']} />
-          <div className="tw:relative tw:xs:ml-4 tw:ml-3">{props.children}</div>
+        <div className="tw:pt-[0px] tw:xs:pt-[2px]">
+          <FontAwesomeIcon
+            icon={iconType[variant ?? 'info']}
+            className="tw:!h-[20px] tw:!w-[20px] tw:xs:!h-[24px] tw:xs:!w-[24px]"
+          />
         </div>
+        <div className="tw:relative tw:xs:ml-4 tw:ml-3">{props.children}</div>
         <Button
           className="tw:m-0 tw:p-0 tw:gap-3 tw:w-auto tw:fill-primary tw:self-start tw:ml-auto"
           variant={'primaryTertiary'}
@@ -84,7 +87,7 @@ function AlertHeader({ className, ...props }: React.ComponentProps<'p'>) {
     <div
       data-slot="alert-title"
       className={cn(
-        'tw:xs:font-bold tw:font-bold tw:xs:mb-1 tw:pb-1',
+        'tw:xs:font-bold tw:font-bold tw:xs:mb-1 tw:pb-0',
         className,
       )}
       {...props}

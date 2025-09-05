@@ -48,9 +48,9 @@ const buttonVariants = cva(
         primaryTertiary: cn(
           'tw:px-0 tw:py-0 tw:bg-transparent tw:text-primary tw:font-[400] tw:underline tw:underline-offset-4  tw:outline-none tw:font-normal', // standard
           'tw:hover:underline tw:hover:text-primary-darker', // hover,
-          'tw:focus-visible:ring-offset-[4px]', // focus-visible
+          'tw:focus-visible:ring-offset-[4px] tw:focus-visible:bg-white', // focus-visible
           'tw:active:text-primary-active', // active
-          'tw:invalid:text-tertiary-invalid', // active
+          'tw:invalid:text-tertiary-invalid', // inactive
           'tw:ml-0 tw:mr-auto tw:text-left', // left alignment
         ),
       },
