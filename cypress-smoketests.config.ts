@@ -16,10 +16,9 @@ import {
   fileExists,
 } from './cypress/local-only/support/database';
 import {
-  getFeatureFlagValue,
   getRawFeatureFlagValue,
   toggleFeatureFlag,
-} from './cypress/helpers/cypressTasks/dynamo/dynamo-helpers';
+} from './cypress/helpers/cypressTasks/postgres/featureFlagsCypress';
 import {
   expireUserConfirmationCode,
   getEmailVerificationToken,
@@ -88,9 +87,6 @@ export default defineConfig({
         },
         getEmailVerificationToken({ email }) {
           return getEmailVerificationToken({ email });
-        },
-        getFeatureFlagValue({ flag }) {
-          return getFeatureFlagValue({ flag });
         },
         getIrsBearerToken({ password, userName }) {
           return getIrsBearerToken({

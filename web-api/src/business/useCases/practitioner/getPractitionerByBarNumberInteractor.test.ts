@@ -131,7 +131,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
         practiceType: 'Private',
         practitionerType: 'Attorney',
         role: ROLES.privatePractitioner,
-        section: 'irsPractitioner',
+        section: ROLES.privatePractitioner,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
         suffix: undefined,
         token: undefined,
