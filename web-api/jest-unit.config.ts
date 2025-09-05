@@ -67,5 +67,8 @@ const config: Config = {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
   verbose: false,
+  setupFilesAfterEnv: [
+    '<rootDir>/src/persistence/postgres/featureFlag/mocks.jest.ts',
+  ],
 };
 export default config;
