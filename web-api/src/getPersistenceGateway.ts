@@ -2,6 +2,7 @@ import { advancedDocumentSearch } from './persistence/elasticsearch/advancedDocu
 import { createChangeOfAddressJob } from './persistence/postgres/jobs/changeOfAddress/createChangeOfAddressJob';
 import { deleteDocumentFile } from './persistence/s3/deleteDocumentFile';
 import { deleteMessage } from './persistence/sqs/deleteMessage';
+import { deletePractitionerDocument } from './persistence/postgres/practitionerDocuments/deletePractitionerDocument';
 import { deleteUserConnection } from '@web-api/persistence/postgres/connections/deleteUserConnection';
 import { fetchEventCodesCountForJudges } from './persistence/elasticsearch/fetchEventCodesCountForJudges';
 import { getAllWebSocketConnections } from '@web-api/persistence/postgres/connections/getAllWebSocketConnections';
@@ -87,6 +88,7 @@ const gatewayMethods = {
   createChangeOfAddressJob,
   deleteDocumentFile,
   deleteMessage,
+  deletePractitionerDocument,
   deleteUserConnection,
   fetchEventCodesCountForJudges,
   getAllWebSocketConnections,
