@@ -6,11 +6,11 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { HIGH_PRIORITY_SUFFIXES } from '@shared/business/entities/EntityConstants';
 import {
-  HIGH_PRIORITY_SUFFIXES,
-  TRIAL_SESSION_ELIGIBLE_CASES_BUFFER,
-} from '@shared/business/entities/EntityConstants';
-import { TCaseOrder, TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+  TCaseOrder,
+  TrialSession,
+} from '@shared/business/entities/trialSessions/TrialSession';
 import { isEmpty, flatten, partition, uniq } from 'lodash';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
@@ -43,8 +43,8 @@ export const setTrialSessionCalendarInteractor = async (
     }
 
     const trialSession = await getTrialSessionById({
-        trialSessionId,
-      });
+      trialSessionId,
+    });
 
     if (!trialSession) {
       throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
@@ -57,25 +57,20 @@ export const setTrialSessionCalendarInteractor = async (
     // We will get cases already associated with the trial session as well as cases that are eligible
     const manuallyAddedCases = await getCalendaredCasesForTrialSession({
       trialSessionId,
-      });
+    });
 
     // Manually added cases are already on the caseOrder, so if they have not been QCed we have to remove them
     const [manuallyAddedQcCompleteCases, manuallyAddedQcIncompleteCases] =
-      partition( // TODO Add extra filter here for hearings for data safety
+      partition(
+        // TODO Add extra filter here for hearings for data safety
         manuallyAddedCases,
         manualCase =>
           manualCase.qcCompleteForTrial &&
           manualCase.qcCompleteForTrial[trialSessionId] === true,
       );
 
-    let eligibleCasesLimit =
-      (trialSessionEntity?.maxCases || 0) + TRIAL_SESSION_ELIGIBLE_CASES_BUFFER;
-
-    eligibleCasesLimit -= manuallyAddedQcCompleteCases.length;
-
     const eligibleCases = (
       await getEligibleCasesForTrialSession({
-        limit: eligibleCasesLimit,
         sessionType: trialSessionEntity.getCaseProcedureForTrial(),
         trialCity: trialSessionEntity.trialLocation!,
       })
@@ -139,7 +134,7 @@ export const setTrialSessionCalendarInteractor = async (
     const eligibleCaseEntities = eligibleCases.map(c => {
       const theCase = new Case(c, { authorizedUser });
       theCase.setAsCalendared(trialSessionEntity);
-      caseOrdersToAdd.push( trialSessionEntity.addCaseToCalendar(theCase));
+      caseOrdersToAdd.push(trialSessionEntity.addCaseToCalendar(theCase));
       return theCase.validate().toRawObject();
     });
 
