@@ -6,7 +6,6 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
-import { TRIAL_SESSION_ELIGIBLE_CASES_BUFFER } from '@shared/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
@@ -53,10 +52,6 @@ export const getEligibleCasesForTrialSessionInteractor = async (
   const eligibleCases = await applicationContext
     .getPersistenceGateway()
     .getEligibleCasesForTrialSession({
-      limit:
-        trialSessionEntity.maxCases! +
-        TRIAL_SESSION_ELIGIBLE_CASES_BUFFER -
-        calendaredCases.length,
       sessionType: trialSessionEntity.getCaseProcedureForTrial(),
       trialCity: trialSessionEntity.trialLocation!,
     });
