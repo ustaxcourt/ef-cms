@@ -7,27 +7,27 @@ export function Buttons() {
       <h2>Buttons</h2>
 
       <div>
-        <div className="tw:xs:inline tw:m-2">
+        <div className="tw:xs:inline-block tw:m-4 tw:xs:m-2">
           <Button variant="primary" icon="file">
             Primary Default
           </Button>
         </div>
-        <div className="tw:xs:inline tw:m-2">
+        <div className="tw:xs:inline-block tw:m-4 tw:xs:m-2">
           <Button variant="secondary" icon="file">
             Secondary Default
           </Button>
         </div>
-        <div className="tw:xs:inline tw:m-2">
+        <div className="tw:xs:inline-block tw:m-4 tw:xs:m-2">
           <Button variant="destructive" icon="file">
             Destructive Default
           </Button>
         </div>
-        <div className="tw:xs:inline tw:m-2">
+        <div className="tw:xs:inline-block tw:m-4 tw:xs:m-2">
           <Button variant="primaryTertiary" icon="file">
             Tertiary Default
           </Button>
         </div>
-        <div className="tw:xs:inline tw:m-2">
+        <div className="tw:xs:inline-block tw:m-4 tw:xs:m-2">
           <Button variant="destructiveTertiary" icon="file">
             Tertiary Default
           </Button>

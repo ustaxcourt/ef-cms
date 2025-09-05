@@ -118,8 +118,7 @@ export const Login = connect(
                     </form>
                     <div className="tw:my-4">
                       <DawsonUiButton
-                        variant={'primaryTertiary'}
-                        className="tw:m-0 tw:p-0"
+                        variant="primaryTertiary"
                         data-testid="forgot-password-button"
                         type="button"
                         onClick={() => navigateToForgotPasswordSequence()}
