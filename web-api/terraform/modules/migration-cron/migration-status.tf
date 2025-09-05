@@ -67,17 +67,6 @@ resource "aws_iam_role_policy" "migration_status_policy" {
         "arn:aws:sqs:us-east-1:${data.aws_caller_identity.current.account_id}:migration_segments_dl_queue_${var.environment}"
       ]
     },
-    {
-      "Sid": "DynamoDB",
-      "Effect": "Allow",
-      "Action": [
-        "dynamodb:GetItem",
-        "dynamodb:PutItem"
-      ],
-      "Resource": [
-        "arn:aws:dynamodb:us-east-1:${data.aws_caller_identity.current.account_id}:table/efcms-deploy-${var.environment}"
-      ]
-    },
 		{
       "Action": [
         "ssm:GetParameter",
