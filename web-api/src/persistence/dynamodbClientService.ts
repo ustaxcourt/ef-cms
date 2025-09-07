@@ -118,24 +118,6 @@ export const update = ({
 };
 
 /**
- *
- * @param {object} params the params to update
- * @returns {object} the item that was updated
- */
-export const updateToDeployTable = params => {
-  const filteredParams = filterEmptyStrings(params);
-  return params.applicationContext
-    .getDocumentClient()
-    .update({
-      TableName: getDeployTableName({
-        applicationContext: params.applicationContext,
-      }),
-      ...filteredParams,
-    })
-    .then(() => params.Item);
-};
-
-/**
  * updateConsistent
  *
  * @param {object} params the params to update
@@ -171,40 +153,6 @@ export const get = params => {
     })
     .then(res => {
       return removeAWSGlobalFields(res.Item);
-    });
-};
-
-/**
- * get
- *
- * @param {object} params the params to get
- * @returns {object} the item that was retrieved
- */
-export const getFromDeployTable = params => {
-  return params.applicationContext
-    .getDocumentClient()
-    .get({
-      TableName: getDeployTableName({
-        applicationContext: params.applicationContext,
-      }),
-      ...params,
-    })
-    .then(res => {
-      return removeAWSGlobalFields(res.Item);
-    });
-};
-
-export const putInDeployTable = async (
-  applicationContext: IApplicationContext,
-  item: TDynamoRecord,
-): Promise<void> => {
-  await applicationContext
-    .getDocumentClient()
-    .put({
-      Item: item,
-      TableName: getDeployTableName({
-        applicationContext,
-      }),
     });
 };
 

@@ -2,13 +2,13 @@ import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
+);
 import { AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES } from '@shared/business/entities/EntityConstants';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
 import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
-jest.mock(
-  '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
-);
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { docketClerkUser, judgeUser } from '@shared/test/mockUsers';

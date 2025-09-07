@@ -360,6 +360,7 @@ describe('saveCaseDetailInternalEditInteractor', () => {
 
     expect(result.receivedAt).toEqual(currentCaseDetail.receivedAt);
   });
+
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
     tryGetLocks.mockResolvedValueOnce([
       { successfullyLocked: false, identifier: 'abc' },
