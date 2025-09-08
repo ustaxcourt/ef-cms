@@ -1,4 +1,3 @@
-/** @jest-config-loader ts-node */
 import { pathsToModuleNameMapper } from 'ts-jest';
 import type { Config } from 'jest';
 import fs from 'node:fs';
