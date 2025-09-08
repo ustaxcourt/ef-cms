@@ -1,5 +1,13 @@
 #!/bin/bash -e
 
+# uploads and overwrites files in s3 documents directory for the respective aws environment
+
+# Usage
+#   . scripts/env/set-env.zsh {YOUR ENV HERE}
+# After setting the environment, use one of these commands
+#   zsh scripts/s3/upload-documents-to-s3.sh
+#   bash scripts/s3/upload-documents-to-s3.sh
+
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
