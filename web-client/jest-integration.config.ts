@@ -15,9 +15,12 @@ const config: Config = {
   //   '**/web-client/integration-tests/**/?(*.)+(spec|test).[jt]s?(x)',
   //   '**/web-client/integration-tests-public/**/?(*.)+(spec|test).[jt]s?(x)',
   // ], // Uncomment testMatch to run all integration tests in integration-tests + integration-tests-public
-  moduleNameMapper: pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
+  moduleNameMapper: {
+    ...pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
     prefix: '<rootDir>/../',
   }),
+    '^broadcast-channel$': '<rootDir>/jest.mock-broadcast-channel.ts',
+  },
   testEnvironment: 'node',
   testTimeout: 30000,
   transform: {
