@@ -14,7 +14,7 @@ const config: Config = {
     ...pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
       prefix: '<rootDir>/../../../../../',
     }),
-    uuid: require.resolve('uuid'),
+    '^uuid$': 'uuid',
   },
   testMatch: [
     '**/shared/src/business/utilities/documentGenerators/(*.)+(spec|test).[jt]s',
