@@ -53,14 +53,17 @@ export function Calendar28() {
           </div>
         </div>
 
-        <PopoverContent className="w-auto overflow-hidden p-0" align="start">
+        <PopoverContent
+          className="w-auto h-auto overflow-hidden p-0"
+          align="start"
+        >
           <Calendar
             mode="range"
             defaultMonth={dateRange?.from}
             numberOfMonths={2}
             selected={dateRange}
-            captionLayout="dropdown"
-            showOutsideDays={false}
+            captionLayout="label"
+            showOutsideDays={true}
             onSelect={selectedRange => {
               setDateRange(selectedRange);
               if (
