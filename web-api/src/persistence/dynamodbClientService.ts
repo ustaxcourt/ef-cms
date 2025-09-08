@@ -29,16 +29,6 @@ export const getTableName = ({ applicationContext }): string =>
   (applicationContext.getEnvironment() &&
     applicationContext.getEnvironment().dynamoDbTableName);
 
-export const getDeployTableName = ({ applicationContext }) => {
-  const env =
-    applicationContext.environment || applicationContext.getEnvironment();
-
-  if (env.stage === 'local') {
-    return env.dynamoDbTableName;
-  }
-
-  return `efcms-deploy-${env.stage}`;
-};
 
 export const describeTable = async ({
   applicationContext,
@@ -53,20 +43,7 @@ export const describeTable = async ({
 
   return await dynamoClient.send(describeTableCommand);
 };
-
-export const describeDeployTable = async ({
-  applicationContext,
-}: {
-  applicationContext: IApplicationContext;
-}): Promise<DescribeTableCommandOutput> => {
-  const dynamoClient = applicationContext.getDynamoClient();
-
-  const describeTableCommand: DescribeTableCommand = new DescribeTableCommand({
-    TableName: getDeployTableName({ applicationContext }),
-  });
-
-  return await dynamoClient.send(describeTableCommand);
-};
+//describeDeployTable
 
 export const put = ({
   applicationContext,

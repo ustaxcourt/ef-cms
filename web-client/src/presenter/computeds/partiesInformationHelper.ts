@@ -104,7 +104,7 @@ export const partiesInformationHelper = (
     }
 
     petitioner.formattedPaperPetitionEmail =
-      petitioner.paperPetitionEmail ?? 'Not provided';
+      petitioner.paperPetitionEmail ?? 'Not Provided';
 
     if (petitioner.email) {
       petitioner.formattedEmail = petitioner.email;
