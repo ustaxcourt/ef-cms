@@ -29,7 +29,6 @@ export const getTableName = ({ applicationContext }): string =>
   (applicationContext.getEnvironment() &&
     applicationContext.getEnvironment().dynamoDbTableName);
 
-
 export const describeTable = async ({
   applicationContext,
 }: {
@@ -43,7 +42,6 @@ export const describeTable = async ({
 
   return await dynamoClient.send(describeTableCommand);
 };
-//describeDeployTable
 
 export const put = ({
   applicationContext,
@@ -226,21 +224,19 @@ export const queryFull = async <T>({
   while (hasMoreResults) {
     hasMoreResults = false;
 
-    const subsetResults = await applicationContext
-      .getDocumentClient()
-      .query({
-        ConsistentRead,
-        ExclusiveStartKey: lastKey,
-        ExpressionAttributeNames,
-        ExpressionAttributeValues,
-        FilterExpression,
-        IndexName,
-        KeyConditionExpression,
-        TableName: getTableName({
-          applicationContext,
-        }),
-        ...params,
-      });
+    const subsetResults = await applicationContext.getDocumentClient().query({
+      ConsistentRead,
+      ExclusiveStartKey: lastKey,
+      ExpressionAttributeNames,
+      ExpressionAttributeValues,
+      FilterExpression,
+      IndexName,
+      KeyConditionExpression,
+      TableName: getTableName({
+        applicationContext,
+      }),
+      ...params,
+    });
 
     hasMoreResults = !!subsetResults.LastEvaluatedKey;
     lastKey = subsetResults.LastEvaluatedKey;
@@ -351,8 +347,7 @@ export const batchWrite = async (
   });
   uniqueCommands.forEach(command => filterEmptyStrings(command));
 
-  const documentClient =
-    applicationContext.getDocumentClient();
+  const documentClient = applicationContext.getDocumentClient();
   const chunks = chunk(uniqueCommands, 25);
 
   await Promise.all(
