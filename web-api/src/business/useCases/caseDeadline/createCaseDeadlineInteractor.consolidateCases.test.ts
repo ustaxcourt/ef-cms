@@ -82,7 +82,6 @@ describe('createCaseDeadlineInteractor - Consolidated Cases', () => {
 
     const upsertCaseDeadlinesCalls = (upsertCaseDeadlines as jest.Mock).mock
       .calls;
-
     expect(upsertCaseDeadlinesCalls.length).toEqual(2);
     expect(upsertCaseDeadlinesCalls[0][0]).toMatchObject([
       {
