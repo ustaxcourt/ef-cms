@@ -51,7 +51,6 @@ export const removeCaseFromTrial = async (
   const trialSessionEntity = new TrialSession(trialSession);
 
   if (trialSessionEntity.isCalendared) {
-    // UPDATE THIS
     trialSessionEntity.removeCaseFromCalendar({ disposition, docketNumber });
     await removeCaseFromTrialSession({
       disposition,

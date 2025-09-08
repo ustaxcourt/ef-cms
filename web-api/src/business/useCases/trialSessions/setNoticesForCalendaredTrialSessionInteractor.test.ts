@@ -47,23 +47,12 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
         docketNumber: '103-20',
       },
     ] as unknown as RawCaseAndCaseOrder[]);
+
     getTrialSessionById.mockResolvedValue({
       ...MOCK_TRIAL_REGULAR,
       proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
     });
-    // getTrialSessionNotificationProcessing
-    //   .mockResolvedValueOnce({
-    //     unfinishedCases: 0,
-    //     status: 'processing',
-    //     trialSessionId,
-    //     caseStatuses: {},
-    //   })
-    //   .mockResolvedValueOnce({
-    //     unfinishedCases: 1,
-    //     status: 'processing',
-    //     trialSessionId,
-    //     caseStatuses: {},
-    //   });
+
     applicationContext
       .getPersistenceGateway()
       .isFileExists.mockResolvedValue(true);

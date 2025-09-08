@@ -33,7 +33,9 @@ describe('addCaseToTrialSessionInteractor', () => {
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
   const tryGetLocks = jest.mocked(tryGetLocksMock);
   const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
-  const createOrUpdateTrialSessionCases = jest.mocked(createOrUpdateTrialSessionCasesMock);
+  const createOrUpdateTrialSessionCases = jest.mocked(
+    createOrUpdateTrialSessionCasesMock,
+  );
 
   let mockTrialSession;
   let mockCase;
@@ -163,11 +165,6 @@ describe('addCaseToTrialSessionInteractor', () => {
         },
       ],
     });
-
-    // const caseWithCalendarNotes = updateTrialSession.mock.calls[0][0].trialSessionToUpdate.caseOrder.find(
-    //     c => c.docketNumber === MOCK_CASE.docketNumber,
-    //   );
-    // expect(caseWithCalendarNotes?.calendarNotes).toBe('Test');
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {

@@ -30,8 +30,8 @@ const setNoticesForCalendaredTrialSession = async (
   }
 
   const calendaredCases = await getCalendaredCasesForTrialSession({
-      trialSessionId,
-    });
+    trialSessionId,
+  });
 
   const trialNoticePdfsKeys: string[] = [];
 
@@ -62,8 +62,8 @@ const setNoticesForCalendaredTrialSession = async (
   });
 
   const trialSession = await getTrialSessionById({
-      trialSessionId,
-    });
+    trialSessionId,
+  });
 
   if (!trialSession) {
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
@@ -86,12 +86,12 @@ const setNoticesForCalendaredTrialSession = async (
     return;
   }
 
-  const jobId = trialSessionId; // Do we need!
+  const jobId = trialSessionId;
 
   await createTrialSessionNotificationProcessing({
     trialSessionId,
-    unfinishedCasesCount: calendaredCases.length
-  })
+    unfinishedCasesCount: calendaredCases.length,
+  });
 
   for (const calendaredCase of calendaredCases) {
     await applicationContext
@@ -111,7 +111,7 @@ const setNoticesForCalendaredTrialSession = async (
 
   await updateTrialSessionNotificationProcessing({
     status: 'complete',
-    trialSessionId
+    trialSessionId,
   });
 
   trialSessionEntity.setNoticesIssued();
@@ -169,7 +169,9 @@ const waitForJobToFinish = async ({
   applicationContext: ServerApplicationContext;
   jobId: string;
 }): Promise<void> => {
-  const processingJob = await getTrialSessionNotificationProcessing({trialSessionId: jobId});
+  const processingJob = await getTrialSessionNotificationProcessing({
+    trialSessionId: jobId,
+  });
   if (!processingJob)
     throw new NotFoundError(
       `Could not get notification processing job with id ${jobId}`,
@@ -187,7 +189,9 @@ export const determineEntitiesToLock = async (
   _applicationContext: ServerApplicationContext,
   { trialSessionId }: { trialSessionId: string },
 ) => {
-  const calendaredCases = await getCalendaredCasesForTrialSession({  trialSessionId });
+  const calendaredCases = await getCalendaredCasesForTrialSession({
+    trialSessionId,
+  });
 
   return {
     identifiers: calendaredCases.map(

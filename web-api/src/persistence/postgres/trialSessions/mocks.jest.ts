@@ -1,35 +1,38 @@
 import { mockFactory } from '@shared/test/mockFactory';
 
-// jest.mock('@web-api/persistence/postgres/trialSessions/addCaseToHearing', () =>
-//   mockFactory('addCaseToHearing'),
-// );
-
-jest.mock('@web-api/persistence/postgres/trialSessions/createTrialSession', () =>
-  mockFactory('createTrialSession'),
+jest.mock(
+  '@web-api/persistence/postgres/trialSessions/createTrialSession',
+  () => mockFactory('createTrialSession'),
 );
 
-jest.mock('@web-api/persistence/postgres/trialSessions/createTrialSessionNotificationProcessing', () =>
-  mockFactory('createTrialSessionNotificationProcessing'),
+jest.mock(
+  '@web-api/persistence/postgres/trialSessions/createTrialSessionNotificationProcessing',
+  () => mockFactory('createTrialSessionNotificationProcessing'),
 );
 
-jest.mock('@web-api/persistence/postgres/trialSessions/createTrialSessionWorkingCopy', () =>
-  mockFactory('createTrialSessionWorkingCopy'),
+jest.mock(
+  '@web-api/persistence/postgres/trialSessions/createTrialSessionWorkingCopy',
+  () => mockFactory('createTrialSessionWorkingCopy'),
 );
 
-jest.mock('@web-api/persistence/postgres/trialSessions/deleteTrialSession', () =>
-  mockFactory('deleteTrialSession'),
+jest.mock(
+  '@web-api/persistence/postgres/trialSessions/deleteTrialSession',
+  () => mockFactory('deleteTrialSession'),
 );
 
-jest.mock('@web-api/persistence/postgres/trialSessions/deleteTrialSessionWorkingCopy', () =>
-  mockFactory('deleteTrialSessionWorkingCopy'),
+jest.mock(
+  '@web-api/persistence/postgres/trialSessions/deleteTrialSessionWorkingCopy',
+  () => mockFactory('deleteTrialSessionWorkingCopy'),
 );
 
-jest.mock('@web-api/persistence/postgres/trialSessions/getCalendaredCasesForTrialSession', () =>
-  mockFactory('getCalendaredCasesForTrialSession'),
+jest.mock(
+  '@web-api/persistence/postgres/trialSessions/getCalendaredCasesForTrialSession',
+  () => mockFactory('getCalendaredCasesForTrialSession'),
 );
 
-jest.mock('@web-api/persistence/postgres/trialSessions/getTrialSessionById', () =>
-  mockFactory('getTrialSessionById'),
+jest.mock(
+  '@web-api/persistence/postgres/trialSessions/getTrialSessionById',
+  () => mockFactory('getTrialSessionById'),
 );
 
 jest.mock(
@@ -37,9 +40,8 @@ jest.mock(
   () => mockFactory('getTrialSessionNotificationProcessing'),
 );
 
-jest.mock(
-  '@web-api/persistence/postgres/trialSessions/getTrialSessions',
-  () => mockFactory('getTrialSessions'),
+jest.mock('@web-api/persistence/postgres/trialSessions/getTrialSessions', () =>
+  mockFactory('getTrialSessions'),
 );
 
 jest.mock(
@@ -47,8 +49,9 @@ jest.mock(
   () => mockFactory('getTrialSessionWorkingCopies'),
 );
 
-jest.mock('@web-api/persistence/postgres/trialSessions/removeCaseFromTrialSession', () =>
-  mockFactory('removeCaseFromTrialSession'),
+jest.mock(
+  '@web-api/persistence/postgres/trialSessions/removeCaseFromTrialSession',
+  () => mockFactory('removeCaseFromTrialSession'),
 );
 
 jest.mock(
@@ -56,8 +59,9 @@ jest.mock(
   () => mockFactory('updateTrialSession'),
 );
 
-jest.mock('@web-api/persistence/postgres/trialSessions/updateTrialSessionNotificationProcessing', () =>
-  mockFactory('updateTrialSessionNotificationProcessing'),
+jest.mock(
+  '@web-api/persistence/postgres/trialSessions/updateTrialSessionNotificationProcessing',
+  () => mockFactory('updateTrialSessionNotificationProcessing'),
 );
 
 jest.mock(
