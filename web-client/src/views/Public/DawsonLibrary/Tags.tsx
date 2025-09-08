@@ -22,7 +22,8 @@ export function Tags() {
         <Tag
           variant="destructive"
           className="tw:mr-[10px]"
-          iconProps={{ icon: 'gavel' }}
+          iconProps={{ icon: 'hand-paper' }}
+          data-testid="blocked-case-icon"
         >
           TAG
         </Tag>
