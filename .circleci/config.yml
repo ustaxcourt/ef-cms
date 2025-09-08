@@ -384,7 +384,7 @@ jobs:
             ./scripts/reindex/disable-reindex-cron.sh
 
   smoketests:
-    parallelism: 9
+    parallelism: 6
     docker:
       - image: *efcms-docker-image
         aws_auth:
