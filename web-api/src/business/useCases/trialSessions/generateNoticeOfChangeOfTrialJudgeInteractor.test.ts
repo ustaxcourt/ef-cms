@@ -7,8 +7,21 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { generateNoticeOfChangeOfTrialJudgeInteractor } from './generateNoticeOfChangeOfTrialJudgeInteractor';
+import { getFeatureFlagValues as getFeatureFlagValuesMock } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
+const getFeatureFlagValues = jest.mocked(getFeatureFlagValuesMock);
+getFeatureFlagValues.mockResolvedValue([
+  {
+    name: 'clerk-of-court-configuration',
+    value: {
+      current: {
+        name: 'James Bond',
+        title: 'Clerk of the Court (Interim)',
+      },
+    },
+  },
+]);
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
 describe('generateNoticeOfChangeOfTrialJudgeInteractor', () => {
@@ -48,13 +61,6 @@ describe('generateNoticeOfChangeOfTrialJudgeInteractor', () => {
         };
       }
     });
-
-    applicationContext
-      .getPersistenceGateway()
-      .getConfigurationItemValue.mockResolvedValue({
-        name: 'James Bond',
-        title: 'Clerk of the Court (Interim)',
-      });
 
     applicationContext
       .getUseCases()

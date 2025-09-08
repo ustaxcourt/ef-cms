@@ -21,7 +21,7 @@ describe('toRawObject', () => {
 
   it('does not call own function to update values if flag is set to false after decorated toRawObject', () => {
     const myCase = new Case({}, { authorizedUser: mockDocketClerkUser });
-    const result = myCase.toRawObject(false);
+    const result = myCase.toRawObject({ processPendingItems: false });
 
     expect(Case.prototype.doesHavePendingItems).not.toHaveBeenCalled();
     expect(result.hasPendingItems).toBeFalsy();

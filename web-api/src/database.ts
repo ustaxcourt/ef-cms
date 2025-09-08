@@ -40,7 +40,7 @@ export async function getDbWriter<T>({
 
   let result: any = rawResult;
   if (DatabaseSchema[table].transformOpenSearchMessage) {
-    result = DatabaseSchema[table].transformOpenSearchMessage(rawResult);
+    result = DatabaseSchema[table].transformOpenSearchMessage?.(rawResult);
   }
 
   if (result) {

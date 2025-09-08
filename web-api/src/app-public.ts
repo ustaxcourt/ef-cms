@@ -1,6 +1,4 @@
-import { applicationContext } from './applicationContext';
 import { expressLogger } from './logger';
-import { get } from './persistence/dynamodbClientService';
 import { getCurrentInvoke } from '@vendia/serverless-express';
 import { json, urlencoded } from 'body-parser';
 import { lambdaWrapper } from './lambdaWrapper';
@@ -32,23 +30,26 @@ app.use(async (_req, _res, next) => {
   if (process.env.NODE_ENV !== 'production') {
     const currentInvoke = getCurrentInvoke();
     set(currentInvoke, 'event.requestContext.identity.sourceIp', 'localhost');
-    const allowlist = await get({
-      Key: {
-        pk: 'allowed-terminal-ips',
-        sk: 'allowed-terminal-ips',
-      },
-      applicationContext,
-    });
-    const ips = allowlist?.ips ?? [];
+
+    const [IPS_RECORD] = await getDbReader(reader =>
+      reader
+        .selectFrom('dwFeatureFlag')
+        .select(['value'])
+        .where('name', '=', 'allowed-terminal-ips')
+        .execute(),
+    );
+
+    const IPS = IPS_RECORD ? (IPS_RECORD.value.current as string[]) : [];
 
     set(
       currentInvoke,
       'event.requestContext.authorizer.isTerminalUser',
-      ips.includes('localhost') ? 'true' : 'false',
+      IPS.includes('localhost') ? 'true' : 'false',
     );
   }
   return next();
 });
+
 app.use((req, res, next) => {
   /**
    * This environment variable is set to true by default on deployment of the API lambdas
@@ -68,6 +69,7 @@ app.use((req, res, next) => {
 
   next();
 });
+
 app.use(expressLogger);
 
 import { casePublicSearchLambda } from './lambdas/public-api/casePublicSearchLambda';
@@ -88,6 +90,7 @@ import { opinionPublicSearchLambda } from './lambdas/public-api/opinionPublicSea
 import { orderPublicSearchLambda } from './lambdas/public-api/orderPublicSearchLambda';
 import { todaysOpinionsLambda } from './lambdas/public-api/todaysOpinionsLambda';
 import { todaysOrdersLambda } from './lambdas/public-api/todaysOrdersLambda';
+import { getDbReader } from '@web-api/database';
 
 /** Case */
 {

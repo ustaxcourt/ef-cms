@@ -29,17 +29,6 @@ export const getTableName = ({ applicationContext }): string =>
   (applicationContext.getEnvironment() &&
     applicationContext.getEnvironment().dynamoDbTableName);
 
-export const getDeployTableName = ({ applicationContext }) => {
-  const env =
-    applicationContext.environment || applicationContext.getEnvironment();
-
-  if (env.stage === 'local') {
-    return env.dynamoDbTableName;
-  }
-
-  return `efcms-deploy-${env.stage}`;
-};
-
 export const describeTable = async ({
   applicationContext,
 }: {
@@ -49,20 +38,6 @@ export const describeTable = async ({
 
   const describeTableCommand: DescribeTableCommand = new DescribeTableCommand({
     TableName: getTableName({ applicationContext }),
-  });
-
-  return await dynamoClient.send(describeTableCommand);
-};
-
-export const describeDeployTable = async ({
-  applicationContext,
-}: {
-  applicationContext: IApplicationContext;
-}): Promise<DescribeTableCommandOutput> => {
-  const dynamoClient = applicationContext.getDynamoClient();
-
-  const describeTableCommand: DescribeTableCommand = new DescribeTableCommand({
-    TableName: getDeployTableName({ applicationContext }),
   });
 
   return await dynamoClient.send(describeTableCommand);
@@ -118,24 +93,6 @@ export const update = ({
 };
 
 /**
- *
- * @param {object} params the params to update
- * @returns {object} the item that was updated
- */
-export const updateToDeployTable = params => {
-  const filteredParams = filterEmptyStrings(params);
-  return params.applicationContext
-    .getDocumentClient()
-    .update({
-      TableName: getDeployTableName({
-        applicationContext: params.applicationContext,
-      }),
-      ...filteredParams,
-    })
-    .then(() => params.Item);
-};
-
-/**
  * updateConsistent
  *
  * @param {object} params the params to update
@@ -171,40 +128,6 @@ export const get = params => {
     })
     .then(res => {
       return removeAWSGlobalFields(res.Item);
-    });
-};
-
-/**
- * get
- *
- * @param {object} params the params to get
- * @returns {object} the item that was retrieved
- */
-export const getFromDeployTable = params => {
-  return params.applicationContext
-    .getDocumentClient()
-    .get({
-      TableName: getDeployTableName({
-        applicationContext: params.applicationContext,
-      }),
-      ...params,
-    })
-    .then(res => {
-      return removeAWSGlobalFields(res.Item);
-    });
-};
-
-export const putInDeployTable = async (
-  applicationContext: IApplicationContext,
-  item: TDynamoRecord,
-): Promise<void> => {
-  await applicationContext
-    .getDocumentClient()
-    .put({
-      Item: item,
-      TableName: getDeployTableName({
-        applicationContext,
-      }),
     });
 };
 
@@ -301,21 +224,19 @@ export const queryFull = async <T>({
   while (hasMoreResults) {
     hasMoreResults = false;
 
-    const subsetResults = await applicationContext
-      .getDocumentClient()
-      .query({
-        ConsistentRead,
-        ExclusiveStartKey: lastKey,
-        ExpressionAttributeNames,
-        ExpressionAttributeValues,
-        FilterExpression,
-        IndexName,
-        KeyConditionExpression,
-        TableName: getTableName({
-          applicationContext,
-        }),
-        ...params,
-      });
+    const subsetResults = await applicationContext.getDocumentClient().query({
+      ConsistentRead,
+      ExclusiveStartKey: lastKey,
+      ExpressionAttributeNames,
+      ExpressionAttributeValues,
+      FilterExpression,
+      IndexName,
+      KeyConditionExpression,
+      TableName: getTableName({
+        applicationContext,
+      }),
+      ...params,
+    });
 
     hasMoreResults = !!subsetResults.LastEvaluatedKey;
     lastKey = subsetResults.LastEvaluatedKey;
@@ -426,8 +347,7 @@ export const batchWrite = async (
   });
   uniqueCommands.forEach(command => filterEmptyStrings(command));
 
-  const documentClient =
-    applicationContext.getDocumentClient();
+  const documentClient = applicationContext.getDocumentClient();
   const chunks = chunk(uniqueCommands, 25);
 
   await Promise.all(

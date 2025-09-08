@@ -188,6 +188,7 @@ export const StatusReportOrder = connect(
                             .stipulatedDecision
                         }
                         className="usa-radio__input"
+                        data-testid="order-type-status-report-or-stipulated-decision"
                         id="order-type-or-stipulated-decision"
                         name="orderType"
                         type="radio"
