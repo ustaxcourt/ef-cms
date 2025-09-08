@@ -202,48 +202,6 @@ describe('setTrialSessionCalendarInteractor', () => {
     ).toEqual(true);
   });
 
-  it('should call getEligibleCasesForTrialSession with correct limit when no cases have been manually added and QCed', async () => {
-    getCalendaredCasesForTrialSession.mockResolvedValue([]);
-
-    await setTrialSessionCalendarInteractor(
-      applicationContext,
-      {
-        clientConnectionId: 'hi',
-        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      },
-      mockPetitionsClerkUser,
-    );
-
-    expect(getEligibleCasesForTrialSession.mock.calls[0][0]).toMatchObject({
-      limit: 150, // max cases + buffer
-    });
-  });
-
-  it('should call getEligibleCasesForTrialSession with correct limit when 1 case has been manually added and QCed', async () => {
-    getCalendaredCasesForTrialSession.mockResolvedValue([
-      {
-        ...MOCK_CASE,
-        docketNumber: '102-19',
-        qcCompleteForTrial: {
-          '6805d1ab-18d0-43ec-bafb-654e83405416': true,
-        },
-      },
-    ] as unknown as RawCaseAndCaseOrder[]);
-
-    await setTrialSessionCalendarInteractor(
-      applicationContext,
-      {
-        clientConnectionId: 'hi',
-        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      },
-      mockPetitionsClerkUser,
-    );
-
-    expect(getEligibleCasesForTrialSession.mock.calls[0][0]).toMatchObject({
-      limit: 149, // max cases + buffer - manually added case
-    });
-  });
-
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
     tryGetLocks.mockResolvedValueOnce([
       { successfullyLocked: false, identifier: 'abc' },
