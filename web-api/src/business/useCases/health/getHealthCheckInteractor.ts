@@ -18,7 +18,6 @@ type S3BucketsStatus = {
 
 type DynamoTablesStatus = {
   efcms: boolean;
-  efcmsDeploy: boolean;
 };
 
 export type ApplicationHealth = {
@@ -59,23 +58,6 @@ const getDynamoStatus = async ({
     return false;
   }
 };
-
-const getDeployDynamoStatus = async ({
-  applicationContext,
-}: {
-  applicationContext: ServerApplicationContext;
-}): Promise<boolean> => {
-  try {
-    const deployDynamoStatus = await applicationContext
-      .getPersistenceGateway()
-      .getDeployTableStatus({ applicationContext });
-    return deployDynamoStatus === 'ACTIVE';
-  } catch (e) {
-    applicationContext.logger.error('Dynamo deploy health check failed. ', e);
-    return false;
-  }
-};
-
 
 const checkS3BucketsStatus = async ({
   applicationContext,
@@ -212,7 +194,6 @@ export const getHealthCheckInteractor = async (
   const [
     elasticSearchStatus,
     dynamoStatus,
-    deployDynamoStatus,
     s3BucketStatus,
     cognitoStatus,
     emailServiceStatus,
@@ -221,21 +202,17 @@ export const getHealthCheckInteractor = async (
       applicationContext,
     }),
     getDynamoStatus({ applicationContext }),
-    getDeployDynamoStatus({
-      applicationContext,
-    }),
     getS3BucketStatus({ applicationContext }),
     getCognitoStatus({ applicationContext }),
     getEmailServiceStatus({
       applicationContext,
     }),
   ]);
-  
+
   return {
     cognito: cognitoStatus,
     dynamo: {
       efcms: dynamoStatus,
-      efcmsDeploy: deployDynamoStatus,
     },
     elasticsearch: elasticSearchStatus,
     emailService: emailServiceStatus,
