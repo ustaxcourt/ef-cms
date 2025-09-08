@@ -1,5 +1,6 @@
+/** @jest-config-loader ts-node */
 import { pathsToModuleNameMapper } from 'ts-jest';
-import tsconfig from '../../../../../tsconfig.json' assert { type: 'json' };
+import tsconfig from '../../../../../tsconfig.json';
 import type { Config } from 'jest';
 
 const config: Config = {
