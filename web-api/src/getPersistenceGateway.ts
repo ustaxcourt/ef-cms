@@ -164,5 +164,5 @@ export const getPersistenceGateway = () => gatewayMethods;
 type _IGetPersistenceGateway = typeof getPersistenceGateway;
 
 declare global {
-  interface IGetPersistenceGateway extends _IGetPersistenceGateway {}
+  interface IGetPersistenceGateway extends _IGetPersistenceGateway { }
 }
