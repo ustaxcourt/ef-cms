@@ -4,10 +4,8 @@ import {
   batchDelete,
   batchGet,
   remove as deleteObj,
-  describeDeployTable,
   describeTable,
   get,
-  getDeployTableName,
   getTableName,
   put,
   query,
@@ -131,48 +129,6 @@ describe('dynamodbClientService', function () {
     });
   });
 
-  describe('getDeployTableName', () => {
-    let currentEnvironment;
-    const testEnvironment = {
-      appEndpoint: '',
-      dynamoDbTableName: 'some-table',
-      stage: 'local',
-      tempDocumentsBucketName: 'some-temp-bucket',
-    };
-
-    beforeAll(() => {
-      currentEnvironment = applicationContext.environment;
-      applicationContext.getEnvironment = jest.fn().mockReturnValue({
-        stage: 'other',
-      });
-    });
-
-    beforeEach(() => {
-      applicationContext.environment = testEnvironment;
-    });
-
-    afterAll(() => {
-      applicationContext.environment = currentEnvironment;
-    });
-
-    it('returns environment.dynamoDbTableName if environment.stage is local', () => {
-      const tableName = getDeployTableName({ applicationContext });
-      expect(tableName).toBe('some-table');
-    });
-
-    it('falls back to getEnvironment() if applicationContext.environment is undefined if environment.stage is local', () => {
-      applicationContext.environment = undefined!;
-      const tableName = getDeployTableName({ applicationContext });
-      expect(tableName).toBe('efcms-deploy-other');
-    });
-
-    it('returns the table name based on environment.stage if not local', () => {
-      applicationContext.environment.stage = 'example';
-      const tableName = getDeployTableName({ applicationContext });
-      expect(tableName).toBe('efcms-deploy-example');
-    });
-  });
-
   describe('put', () => {
     it('should return the same Item property passed in in the params', async () => {
       const result = await put({
@@ -206,34 +162,6 @@ describe('dynamodbClientService', function () {
         applicationContext,
       });
       expect(result).toBeUndefined();
-    });
-  });
-
-  describe('getDeployTable', () => {
-    it('should return the deploy table name when the environment is NOT local', async () => {
-      const mockEnvironment = 'exp99';
-      applicationContext.environment.stage = mockEnvironment;
-
-      applicationContext.getEnvironment.mockReturnValue({
-        stage: mockEnvironment,
-      });
-
-      const result = await getDeployTableName({
-        applicationContext,
-      });
-
-      expect(result).toEqual('efcms-deploy-exp99');
-    });
-
-    it('should return the regular dynamo table name when the environment is local', async () => {
-      applicationContext.environment.dynamoDbTableName = dynamoDbTableName;
-      applicationContext.environment.stage = 'local';
-
-      const result = await getDeployTableName({
-        applicationContext,
-      });
-
-      expect(result).toEqual(dynamoDbTableName);
     });
   });
 
@@ -517,21 +445,6 @@ describe('dynamodbClientService', function () {
   describe('describeTable', () => {
     it("should return information on the environment's table", async () => {
       await describeTable({
-        applicationContext,
-      });
-
-      expect(mockDynamoClient.send.mock.calls[0][0].input).toEqual(
-        new DescribeTableCommand({ TableName: dynamoDbTableName }).input,
-      );
-    });
-  });
-
-  describe('describeDeployTable', () => {
-    it("should return information on the environment's table", async () => {
-      applicationContext.environment.stage = 'local';
-      applicationContext.environment.dynamoDbTableName = dynamoDbTableName;
-
-      await describeDeployTable({
         applicationContext,
       });
 
