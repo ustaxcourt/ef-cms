@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-# uploads and overwrites files in s3 documents directory for the respective aws environment
+# uploads or overwrites existing files in s3 documents directory for the respective aws environment
 
 # Usage
 #   . scripts/env/set-env.zsh {YOUR ENV HERE}
