@@ -39,15 +39,27 @@ async function scanContinuously(params: ScanCommandInput) {
     const items = result.Items ?? [];
 
     for (const record of items as TDynamoRecord[]) {
+      let pk: string;
+      let sk: string;
       if (
         record.pk.startsWith('lock-complete') ||
         record.pk.startsWith('trial-session-processing-job') ||
         record.pk.startsWith('set-notices-for-trial-session-job')
       ) {
-        continue;
+        pk = record.pk.startsWith('lock-complete')
+          ? 'lock-complete'
+          : record.pk.startsWith('trial-session-processing-job')
+            ? 'trial-session-processing-job'
+            : 'set-notices-for-trial-session-job';
+        sk = record.sk.startsWith('lock-complete')
+          ? 'lock-complete'
+          : record.sk.startsWith('trial-session-processing-job')
+            ? 'trial-session-processing-job'
+            : 'set-notices-for-trial-session-job';
+      } else {
+        pk = record.pk.split('|')[0];
+        sk = record.sk.split('|')[0];
       }
-      const pk = record.pk.split('|')[0];
-      const sk = record.sk.split('|')[0];
       const identifier = `pk: ${pk}, sk: ${sk}`;
       const currentCount = uniqueKeysMap.get(identifier);
       if (!currentCount) {
