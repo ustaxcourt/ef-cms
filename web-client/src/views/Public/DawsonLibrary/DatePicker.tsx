@@ -1,10 +1,7 @@
 import * as React from 'react';
-import { ChevronDownIcon } from 'lucide-react';
 import { DateRange } from 'react-day-picker';
-
 import { Button } from '@web-client/dawson-ui/ui/button';
 import { Calendar } from '@web-client/dawson-ui/ui/calendar';
-import { Label } from '@web-client/dawson-ui/ui/label';
 import {
   Popover,
   PopoverContent,
@@ -21,40 +18,41 @@ export function Calendar28() {
   );
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="tw:flex tw:flex-col tw:gap-3">
       <Popover open={open} onOpenChange={setOpen}>
-        <div className="flex gap-3">
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="start-date" className="px-1">
-              Date (optional)
-            </Label>
+        <div className="tw:flex tw:gap-3">
+          <div className="tw:flex tw:flex-col tw:gap-2">
+            <h2 className="margin-bottom-0">
+              Date <span className="text-base-dark tw:text-sm">(optional)</span>
+            </h2>
             <PopoverTrigger asChild>
               <Button
                 variant="secondary"
                 id="start-date"
-                className="w-48 justify-between font-normal hover:bg-gray-50 hover:border-gray-300 transition-colors duration-150"
+                className="tw:w-48 tw:font-normal tw:hover:bg-gray-50 tw:hover:border-gray-300 tw:transition-colors tw:duration-150 tw:text-gray-500 tw:text-left"
               >
-                {dateRange?.from
-                  ? dateRange.from.toLocaleDateString('en-US', {
-                      month: 'short',
-                      day: 'numeric',
-                      year: 'numeric',
-                    }) +
-                    ' - ' +
-                    dateRange?.to?.toLocaleDateString('en-US', {
-                      month: 'short',
-                      day: 'numeric',
-                      year: 'numeric',
-                    })
-                  : 'Select date'}
-                <ChevronDownIcon />
+                <span className="tw:text-gray-500">
+                  {dateRange?.from
+                    ? dateRange.from.toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric',
+                      }) +
+                      ' - ' +
+                      dateRange?.to?.toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric',
+                      })
+                    : 'Select Date'}
+                </span>
               </Button>
             </PopoverTrigger>
           </div>
         </div>
 
         <PopoverContent
-          className="w-auto h-auto overflow-hidden p-0"
+          className="tw:w-auto tw:h-auto tw:overflow-hidden tw:p-0"
           align="start"
         >
           <Calendar
@@ -66,13 +64,6 @@ export function Calendar28() {
             showOutsideDays={true}
             onSelect={selectedRange => {
               setDateRange(selectedRange);
-              if (
-                selectedRange?.from &&
-                selectedRange?.to &&
-                selectedRange.from.getTime() !== selectedRange.to.getTime()
-              ) {
-                setOpen(false);
-              }
             }}
             modifiers={{
               hover: date => {

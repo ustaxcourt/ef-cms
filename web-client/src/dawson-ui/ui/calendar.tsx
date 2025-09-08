@@ -26,7 +26,7 @@ function Calendar({
     <DayPicker
       showOutsideDays={showOutsideDays}
       className={cn(
-        'tw:rounded-lg tw:border tw:border-black tw:border-[0.5px] tw:pt-3 tw:px-3 tw:pb-0 tw:[--cell-size:2rem] tw:bg-white tw:[&_.rdp-week]:hover:bg-transparent tw:[&_.rdp-week]:hover:shadow-none tw:[&_.rdp-weekdays]:hover:bg-transparent tw:[&_.rdp-weekday]:hover:bg-transparent tw:[&_.rdp-month]:hover:bg-transparent tw:[&_.rdp-months]:hover:bg-transparent tw:[&_.rdp-table]:hover:bg-transparent tw:[&_.rdp-tbody]:hover:bg-transparent tw:[&_.rdp-thead]:hover:bg-transparent tw:[&_thead]:hover:bg-transparent tw:[&_thead]:hover:shadow-none tw:[&_thead]:hover:border-none tw:[&_thead]:hover:outline-none tw:[&_thead]:hover:ring-0 tw:[&_thead]:hover:ring-offset-0 tw:[&_thead]:hover:ring-inset-0 tw:[&_thead]:hover:ring-opacity-0 tw:[&_tr]:hover:shadow-none tw:[&_tr]:hover:box-shadow-none tw:[&_tr]:hover:!shadow-none tw:[&_tr]:hover:!box-shadow-none tw:[&_tr]:min-h-0',
+        'tw:rounded-lg tw:pt-3 tw:px-3 tw:pb-0 tw:[--cell-size:2rem] tw:bg-white tw:[&_.rdp-week]:hover:bg-transparent tw:[&_.rdp-week]:hover:shadow-none tw:[&_.rdp-weekdays]:hover:bg-transparent tw:[&_.rdp-weekday]:hover:bg-transparent tw:[&_.rdp-month]:hover:bg-transparent tw:[&_.rdp-months]:hover:bg-transparent tw:[&_.rdp-table]:hover:bg-transparent tw:[&_.rdp-tbody]:hover:bg-transparent tw:[&_.rdp-thead]:hover:bg-transparent tw:[&_thead]:hover:bg-transparent tw:[&_thead]:hover:shadow-none tw:[&_thead]:hover:border-none tw:[&_thead]:hover:outline-none tw:[&_thead]:hover:ring-0 tw:[&_thead]:hover:ring-offset-0 tw:[&_thead]:hover:ring-inset-0 tw:[&_thead]:hover:ring-opacity-0 tw:[&_tr]:hover:shadow-none tw:[&_tr]:hover:box-shadow-none tw:[&_tr]:hover:!shadow-none tw:[&_tr]:hover:!box-shadow-none tw:[&_tr]:min-h-0',
         String.raw`rtl:**:[.rdp-button\_next>svg]:rotate-180`,
         String.raw`rtl:**:[.rdp-button\_previous>svg]:rotate-180`,
         className,
@@ -52,11 +52,11 @@ function Calendar({
           defaultClassNames.nav,
         ),
         button_previous: cn(
-          'tw:size-(--cell-size) tw:aria-disabled:opacity-50 tw:p-0 tw:select-none tw:bg-white tw:hover:bg-gray-100 tw:rounded-md tw:transition-colors tw:duration-150 tw:flex tw:items-center tw:justify-center tw:border tw:border-gray-300',
+          'tw:w-7 tw:h-7 tw:aria-disabled:opacity-50 tw:p-0 tw:select-none tw:bg-white tw:hover:bg-gray-100 tw:rounded-md tw:transition-colors tw:duration-150 tw:flex tw:items-center tw:justify-center tw:border tw:border-gray-300 tw:cursor-pointer',
           defaultClassNames.button_previous,
         ),
         button_next: cn(
-          'tw:size-(--cell-size) tw:aria-disabled:opacity-50 tw:p-0 tw:select-none tw:bg-white tw:hover:bg-gray-100 tw:rounded-md tw:transition-colors tw:duration-150 tw:flex tw:items-center tw:justify-center tw:border tw:border-gray-300',
+          'tw:w-7 tw:h-7 tw:aria-disabled:opacity-50 tw:p-0 tw:select-none tw:bg-white tw:hover:bg-gray-100 tw:rounded-md tw:transition-colors tw:duration-150 tw:flex tw:items-center tw:justify-center tw:border tw:border-gray-300 tw:cursor-pointer',
           defaultClassNames.button_next,
         ),
         month_caption: cn(
@@ -76,7 +76,7 @@ function Calendar({
           defaultClassNames.dropdown,
         ),
         caption_label: cn(
-          'tw:select-none tw:font-bold',
+          'tw:select-none tw:font-semibold',
           captionLayout === 'label'
             ? 'tw:text-base'
             : 'tw:rounded-md tw:pl-2 tw:pr-1 tw:flex tw:items-center tw:gap-1 tw:text-sm tw:h-8 tw:[&>svg]:text-muted-foreground tw:[&>svg]:size-3.5',
@@ -143,7 +143,7 @@ function Calendar({
           if (orientation === 'left') {
             return (
               <ChevronLeftIcon
-                className={cn('tw:size-4', className)}
+                className={cn('tw:size-4 tw:text-gray-400', className)}
                 {...props}
               />
             );
@@ -152,7 +152,7 @@ function Calendar({
           if (orientation === 'right') {
             return (
               <ChevronRightIcon
-                className={cn('tw:size-4', className)}
+                className={cn('tw:size-4 tw:text-gray-400', className)}
                 {...props}
               />
             );
@@ -160,7 +160,7 @@ function Calendar({
 
           return (
             <ChevronDownIcon
-              className={cn('tw:size-4', className)}
+              className={cn('tw:size-4 tw:text-gray-400', className)}
               {...props}
             />
           );
