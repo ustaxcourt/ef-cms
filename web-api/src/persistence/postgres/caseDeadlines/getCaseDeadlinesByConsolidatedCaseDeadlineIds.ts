@@ -5,6 +5,7 @@ import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 export const getCaseDeadlinesByConsolidatedCaseDeadlineIds = async (
   consolidatedCaseDeadlineIds: string[],
 ): Promise<RawCaseDeadline[]> => {
+  if (!consolidatedCaseDeadlineIds.length) return [];
   const RECORDS = await getDbReader(reader =>
     reader
       .selectFrom('dwCaseDeadline as cd')
