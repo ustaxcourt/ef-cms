@@ -19,7 +19,6 @@ import { getBulkTrialSessionWorkingCopies } from './persistence/dynamo/trialSess
 import { getCalendaredCasesForTrialSession } from './persistence/dynamo/trialSessions/getCalendaredCasesForTrialSession';
 import { getCasesByEmailTotal } from '@web-api/persistence/elasticsearch/getCasesByEmailTotal';
 import { getClientId } from './persistence/cognito/getClientId';
-import { getDeployTableStatus } from './persistence/dynamo/getDeployTableStatus';
 import { getDispatchNotification } from './persistence/postgres/notifications/getDispatchNotification';
 import { getDocketEntriesServedWithinTimeframe } from './persistence/elasticsearch/getDocketEntriesServedWithinTimeframe';
 import { getDocument } from './persistence/s3/getDocument';
@@ -136,7 +135,6 @@ const gatewayMethods = {
   getCalendaredCasesForTrialSession,
   getCasesByEmailTotal,
   getClientId,
-  getDeployTableStatus,
   getDispatchNotification,
   getDocketEntriesServedWithinTimeframe,
   getDocument,
