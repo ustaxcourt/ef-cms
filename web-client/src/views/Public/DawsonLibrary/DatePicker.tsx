@@ -2,14 +2,14 @@ import * as React from 'react';
 import { ChevronDownIcon } from 'lucide-react';
 import { DateRange } from 'react-day-picker';
 
-import { Button } from '../../../dawson-ui/ui/button';
-import { Calendar } from '../../../dawson-ui/ui/calendar';
-import { Label } from '../../../dawson-ui/ui/label';
+import { Button } from '@web-client/dawson-ui/ui/button';
+import { Calendar } from '@web-client/dawson-ui/ui/calendar';
+import { Label } from '@web-client/dawson-ui/ui/label';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '../../../dawson-ui/ui/popover';
+} from '@web-client/dawson-ui/ui/popover';
 
 export function Calendar28() {
   const [open, setOpen] = React.useState(false);
@@ -63,7 +63,6 @@ export function Calendar28() {
             showOutsideDays={false}
             onSelect={selectedRange => {
               setDateRange(selectedRange);
-              // Only close when both start and end dates are selected AND they are different
               if (
                 selectedRange?.from &&
                 selectedRange?.to &&
