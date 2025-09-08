@@ -2,14 +2,14 @@ import * as React from 'react';
 import { ChevronDownIcon } from 'lucide-react';
 import { DateRange } from 'react-day-picker';
 
-import { Button } from './DatePickerComponents/button';
+import { Button } from '../../../dawson-ui/ui/button';
 import { Calendar } from '../../../dawson-ui/ui/calendar';
-import { Label } from './DatePickerComponents/label';
+import { Label } from '../../../dawson-ui/ui/label';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from './DatePickerComponents/popover';
+} from '../../../dawson-ui/ui/popover';
 
 export function Calendar28() {
   const [open, setOpen] = React.useState(false);
@@ -26,35 +26,27 @@ export function Calendar28() {
         <div className="flex gap-3">
           <div className="flex flex-col gap-2">
             <Label htmlFor="start-date" className="px-1">
-              Start Date
+              Date (optional)
             </Label>
             <PopoverTrigger asChild>
               <Button
-                variant="outline"
+                variant="secondary"
                 id="start-date"
                 className="w-48 justify-between font-normal hover:bg-gray-50 hover:border-gray-300 transition-colors duration-150"
               >
                 {dateRange?.from
-                  ? dateRange.from.toLocaleDateString()
-                  : 'Select start date'}
-                <ChevronDownIcon />
-              </Button>
-            </PopoverTrigger>
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="end-date" className="px-1">
-              End Date
-            </Label>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                id="end-date"
-                className="w-48 justify-between font-normal hover:bg-gray-50 hover:border-gray-300 transition-colors duration-150"
-              >
-                {dateRange?.to
-                  ? dateRange.to.toLocaleDateString()
-                  : 'Select end date'}
+                  ? dateRange.from.toLocaleDateString('en-US', {
+                      month: 'short',
+                      day: 'numeric',
+                      year: 'numeric',
+                    }) +
+                    ' - ' +
+                    dateRange?.to?.toLocaleDateString('en-US', {
+                      month: 'short',
+                      day: 'numeric',
+                      year: 'numeric',
+                    })
+                  : 'Select date'}
                 <ChevronDownIcon />
               </Button>
             </PopoverTrigger>
