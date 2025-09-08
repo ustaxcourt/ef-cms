@@ -7,7 +7,7 @@ import {
   ChevronRightIcon,
 } from 'lucide-react';
 import { DayButton, DayPicker, getDefaultClassNames } from 'react-day-picker';
-
+import '@web-client/dawson-ui/styles/main.css';
 import { cn } from '@web-client/lib/utils';
 import { Button } from '@web-client/dawson-ui/ui/button';
 
@@ -26,7 +26,7 @@ function Calendar({
     <DayPicker
       showOutsideDays={showOutsideDays}
       className={cn(
-        'tw:rounded-lg tw:pt-3 tw:px-3 tw:pb-0 tw:[--cell-size:2rem] tw:bg-white tw:[&_.rdp-week]:hover:bg-transparent tw:[&_.rdp-week]:hover:shadow-none tw:[&_.rdp-weekdays]:hover:bg-transparent tw:[&_.rdp-weekday]:hover:bg-transparent tw:[&_.rdp-month]:hover:bg-transparent tw:[&_.rdp-months]:hover:bg-transparent tw:[&_.rdp-table]:hover:bg-transparent tw:[&_.rdp-tbody]:hover:bg-transparent tw:[&_.rdp-thead]:hover:bg-transparent tw:[&_thead]:hover:bg-transparent tw:[&_thead]:hover:shadow-none tw:[&_thead]:hover:border-none tw:[&_thead]:hover:outline-none tw:[&_thead]:hover:ring-0 tw:[&_thead]:hover:ring-offset-0 tw:[&_thead]:hover:ring-inset-0 tw:[&_thead]:hover:ring-opacity-0 tw:[&_tr]:hover:shadow-none tw:[&_tr]:hover:box-shadow-none tw:[&_tr]:hover:!shadow-none tw:[&_tr]:hover:!box-shadow-none tw:[&_tr]:min-h-0',
+        'tw:rounded-lg tw:pt-3 tw:px-3 tw:pb-3 tw:[--cell-size:2rem] tw:bg-white tw:[&_.rdp-week]:hover:bg-transparent tw:[&_.rdp-week]:hover:shadow-none tw:[&_.rdp-weekdays]:hover:bg-transparent tw:[&_.rdp-weekday]:hover:bg-transparent tw:[&_.rdp-month]:hover:bg-transparent tw:[&_.rdp-months]:hover:bg-transparent tw:[&_.rdp-table]:hover:bg-transparent tw:[&_.rdp-tbody]:hover:bg-transparent tw:[&_.rdp-thead]:hover:bg-transparent tw:[&_thead]:hover:bg-transparent tw:[&_thead]:hover:shadow-none tw:[&_thead]:hover:border-none tw:[&_thead]:hover:outline-none tw:[&_thead]:hover:ring-0 tw:[&_thead]:hover:ring-offset-0 tw:[&_thead]:hover:ring-inset-0 tw:[&_thead]:hover:ring-opacity-0 tw:[&_tr]:hover:shadow-none tw:[&_tr]:hover:box-shadow-none tw:[&_tr]:hover:!shadow-none tw:[&_tr]:hover:!box-shadow-none tw:[&_tr]:min-h-0',
         String.raw`rtl:**:[.rdp-button\_next>svg]:rotate-180`,
         String.raw`rtl:**:[.rdp-button\_previous>svg]:rotate-180`,
         className,
@@ -82,7 +82,7 @@ function Calendar({
             : 'tw:rounded-md tw:pl-2 tw:pr-1 tw:flex tw:items-center tw:gap-1 tw:text-sm tw:h-8 tw:[&>svg]:text-muted-foreground tw:[&>svg]:size-3.5',
           defaultClassNames.caption_label,
         ),
-        table: 'tw:w-full tw:border-collapse',
+        table: 'tw:w-full tw:border-collapse table',
         weekdays: cn('tw:flex', defaultClassNames.weekdays),
         weekday: cn(
           'tw:text-gray-400 tw:rounded-md tw:flex-1 tw:font-semibold tw:text-[0.8rem] tw:select-none',

@@ -1,10 +1,8 @@
 @layer theme, base, components, utilities;
-@import "tailwindcss/theme.css" layer(theme) prefix(tw);
-@import "tailwindcss/utilities.css" layer(utilities) prefix(tw);
-@import "tw-animate-css";
+@import 'tailwindcss/theme.css' layer(theme) prefix(tw);
+@import 'tailwindcss/utilities.css' layer(utilities) prefix(tw);
+@import 'tw-animate-css';
 @custom-variant dark (&:is(.dark *));
-
-
 
 :root {
   --background: oklch(100% 0 0deg);
@@ -126,5 +124,9 @@
 
   body {
     @apply tw:bg-background tw:text-foreground;
+  }
+
+  table {
+    @apply tw:!m-0;
   }
 }
