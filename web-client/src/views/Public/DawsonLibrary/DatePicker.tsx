@@ -8,7 +8,7 @@ import {
   PopoverTrigger,
 } from '@web-client/dawson-ui/ui/popover';
 
-export function Calendar28() {
+export function DateRangePicker() {
   const [open, setOpen] = React.useState(false);
   const [dateRange, setDateRange] = React.useState<DateRange | undefined>(
     undefined,
@@ -28,6 +28,7 @@ export function Calendar28() {
             <PopoverTrigger asChild>
               <Button
                 variant="secondary"
+                icon="file"
                 id="start-date"
                 className="tw:w-48 tw:font-normal tw:hover:bg-gray-50 tw:hover:border-gray-300 tw:transition-colors tw:duration-150 tw:text-gray-500 tw:text-left"
               >

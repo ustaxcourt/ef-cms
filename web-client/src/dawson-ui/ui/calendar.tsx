@@ -85,7 +85,7 @@ function Calendar({
         table: 'tw:w-full tw:border-collapse table',
         weekdays: cn('tw:flex', defaultClassNames.weekdays),
         weekday: cn(
-          'tw:text-gray-400 tw:rounded-md tw:flex-1 tw:font-semibold tw:text-[0.8rem] tw:select-none',
+          'tw:text-gray-400 tw:rounded-md tw:flex-1 tw:font-normal tw:text-[0.8rem] tw:select-none',
           defaultClassNames.weekday,
         ),
         week: cn(
