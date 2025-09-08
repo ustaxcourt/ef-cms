@@ -9,10 +9,11 @@ export function Tags() {
       <div className="tw:bg-primary tw:p-5">
         <Tag
           variant="primary"
+          aria-label="associated judge"
           className="tw:mr-[10px]"
           iconProps={{ icon: 'gavel' }}
         >
-          TAG
+          Tag
         </Tag>
 
         <Tag variant="primary" className="tw:mr-[10px]">
@@ -25,7 +26,7 @@ export function Tags() {
           iconProps={{ icon: 'hand-paper' }}
           data-testid="blocked-case-icon"
         >
-          TAG
+          Blocked
         </Tag>
       </div>
     </div>
