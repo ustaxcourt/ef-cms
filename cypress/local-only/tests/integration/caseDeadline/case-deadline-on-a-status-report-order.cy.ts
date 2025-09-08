@@ -31,149 +31,27 @@ describe('Case Deadline Auto Generation from Status Report Order', () => {
   });
   const editDescriptionText = 'test from alex';
 
-  before(() => {
-    loginAsPetitionsClerk1();
-
-    // create case, serve petition, and create status report order
-    createTrialSession().then(() => {
-      createAndServePaperPetition().then(({ docketNumber }) => {
-        Cypress.env('docketNumber', docketNumber);
-        createStatusReport(docketNumber);
-      });
-    });
-
-    // create consolidated case group
-    createAndServeConsolidatedGroup({}).then(consolidatedGroupInfo => {
-      const { leadDocketNumber, memberDocketNumbers } = consolidatedGroupInfo;
-      Cypress.env('leadDocketNumber', leadDocketNumber);
-      Cypress.env('memberDocketNumbers', memberDocketNumbers);
-      createStatusReport(leadDocketNumber);
-    });
-  });
   it('should generate a deadline when a status report order is filed', () => {
-    // create a status report order draft
-    loginAsColvin();
-    goToCase(Cypress.env('docketNumber'));
-    cy.get('#tab-document-view').click();
-    cy.contains('button span', 'Status Report').closest('button').click();
-    cy.get('[data-testid="status-report-order-button"]').click();
-    cy.get('[data-testid="order-type-status-report"]').check({ force: true });
-    cy.get('#status-report-due-date-picker').type(todayDate);
-    cy.get('[data-testid="save-draft-button"]').click();
-    cy.get('[data-testid="sign-pdf-canvas"]').click();
-    cy.get('[data-testid="save-signature-button"]').click();
-    cy.get('[data-testid="success-alert"]').contains('Order updated.');
+    setupSingleCase().then(({ docketNumber }) => {
+      // create a status report order draft
+      loginAsColvin();
+      goToCase(docketNumber);
+      cy.get('#tab-document-view').click();
+      cy.contains('button span', 'Status Report').closest('button').click();
+      cy.get('[data-testid="status-report-order-button"]').click();
+      cy.get('[data-testid="order-type-status-report"]').check({ force: true });
+      cy.get('#status-report-due-date-picker').type(todayDate);
+      cy.get('[data-testid="save-draft-button"]').click();
+      cy.get('[data-testid="sign-pdf-canvas"]').click();
+      cy.get('[data-testid="save-signature-button"]').click();
+      cy.get('[data-testid="success-alert"]').contains('Order updated.');
 
-    // add docket entry
-    loginAsDocketClerk();
-    addDocketEntry(Cypress.env('docketNumber'));
+      // add docket entry
+      loginAsDocketClerk();
+      addDocketEntry(docketNumber);
 
-    // check if case deadline is created
-    goToCase(Cypress.env('docketNumber'));
-    cy.get('[data-testid="tab-tracked-items"]').click();
-    cy.get('[data-testid="case-deadline-description"]').should(
-      'contain',
-      'Status Report Due',
-    );
-    cy.get('[data-testid="case-deadline-date"]').should(
-      'contain',
-      todayDateFormatted,
-    );
-
-    // check if edit functionality works
-    cy.get('[data-testid="case-deadline-edit-button"]').click();
-    cy.get('#deadline-date-picker').clear();
-    cy.get('#deadline-date-picker').type(futureDate);
-    cy.get('[data-testid="case-deadline-description-input"]').clear();
-    cy.get('[data-testid="case-deadline-description-input"]').type(
-      editDescriptionText,
-    );
-    cy.get('[data-testid="modal-button-confirm"]').click();
-    cy.get('[data-testid="case-deadline-date"]').should(
-      'contain',
-      futureDateFormatted,
-    );
-    cy.get('[data-testid="case-deadline-description"]').should(
-      'contain',
-      editDescriptionText,
-    );
-
-    // delete the case deadline
-    cy.get('[data-testid="delete-case-deadline-button"]').click();
-    cy.get('[data-testid="modal-button-confirm"]').click();
-    cy.get('.case-deadline-row').should('not.exist');
-  });
-
-  it('should generate a deadline when a status report or proposed stipulated decision order is filed', () => {
-    // create a status report or proposed stipulated decision order draft
-    loginAsColvin();
-    goToCase(Cypress.env('docketNumber'));
-    cy.get('#tab-document-view').click();
-    cy.contains('button span', 'Status Report').closest('button').click();
-    cy.get('[data-testid="status-report-order-button"]').click();
-    cy.get(
-      '[data-testid="order-type-status-report-or-stipulated-decision"]',
-    ).check({ force: true });
-    cy.get('#status-report-due-date-picker').type(todayDate);
-    cy.get('[data-testid="save-draft-button"]').click();
-    cy.get('[data-testid="sign-pdf-canvas"]').click();
-    cy.get('[data-testid="save-signature-button"]').click();
-    cy.get('[data-testid="success-alert"]').contains('Order updated.');
-
-    // add docket entry
-    loginAsDocketClerk();
-    addDocketEntry(Cypress.env('docketNumber'));
-
-    // check if case deadline is created
-    goToCase(Cypress.env('docketNumber'));
-    cy.get('[data-testid="tab-tracked-items"]').click();
-    cy.get(`[data-testid="case-deadline-description"]`).should(
-      'contain',
-      'Status Report or Proposed Stipulated Decision Due',
-    );
-    cy.get('[data-testid="case-deadline-date"]').should(
-      'contain',
-      todayDateFormatted,
-    );
-
-    // delete the case deadline
-    cy.get('[data-testid="delete-case-deadline-button"]').click();
-    cy.get('[data-testid="modal-button-confirm"]').click();
-    cy.get('.case-deadline-row').should('not.exist');
-  });
-
-  it('should generate deadline for lead and child cases when a status report order for lead case is filed', () => {
-    // create a status report order draft
-    loginAsColvin();
-    goToCase(Cypress.env('leadDocketNumber'));
-    cy.get('#tab-document-view').click();
-    cy.contains('button span', 'Status Report').closest('button').click();
-    cy.get('[data-testid="status-report-order-button"]').click();
-    cy.get('[data-testid="order-type-status-report"]').check({ force: true });
-    cy.get('#status-report-due-date-picker').type(todayDate);
-    cy.get('[data-testid="save-draft-button"]').click();
-    cy.get('[data-testid="sign-pdf-canvas"]').click();
-    cy.get('[data-testid="save-signature-button"]').click();
-    cy.get('[data-testid="success-alert"]').contains('Order updated.');
-
-    // add docket entry
-    loginAsDocketClerk();
-    addDocketEntry(Cypress.env('leadDocketNumber'));
-
-    // check if case deadline is created
-    goToCase(Cypress.env('leadDocketNumber'));
-    cy.get('[data-testid="tab-tracked-items"]').click();
-    cy.get('[data-testid="case-deadline-description"]').should(
-      'contain',
-      'Status Report Due',
-    );
-    cy.get('[data-testid="case-deadline-date"]').should(
-      'contain',
-      todayDateFormatted,
-    );
-
-    for (const child of Cypress.env('memberDocketNumbers')) {
-      goToCase(child);
+      // check if case deadline is created
+      goToCase(docketNumber);
       cy.get('[data-testid="tab-tracked-items"]').click();
       cy.get('[data-testid="case-deadline-description"]').should(
         'contain',
@@ -183,9 +61,139 @@ describe('Case Deadline Auto Generation from Status Report Order', () => {
         'contain',
         todayDateFormatted,
       );
-    }
+
+      // check if edit functionality works
+      cy.get('[data-testid="case-deadline-edit-button"]').click();
+      cy.get('#deadline-date-picker').clear();
+      cy.get('#deadline-date-picker').type(futureDate);
+      cy.get('[data-testid="case-deadline-description-input"]').clear();
+      cy.get('[data-testid="case-deadline-description-input"]').type(
+        editDescriptionText,
+      );
+      cy.get('[data-testid="modal-button-confirm"]').click();
+      cy.get('[data-testid="case-deadline-date"]').should(
+        'contain',
+        futureDateFormatted,
+      );
+      cy.get('[data-testid="case-deadline-description"]').should(
+        'contain',
+        editDescriptionText,
+      );
+
+      // delete the case deadline
+      cy.get('[data-testid="delete-case-deadline-button"]').click();
+      cy.get('[data-testid="modal-button-confirm"]').click();
+      cy.get('.case-deadline-row').should('not.exist');
+    });
+  });
+
+  it('should generate a deadline when a status report or proposed stipulated decision order is filed', () => {
+    setupSingleCase().then(({ docketNumber }) => {
+      // create a status report or proposed stipulated decision order draft
+      loginAsColvin();
+      goToCase(docketNumber);
+      cy.get('#tab-document-view').click();
+      cy.contains('button span', 'Status Report').closest('button').click();
+      cy.get('[data-testid="status-report-order-button"]').click();
+      cy.get(
+        '[data-testid="order-type-status-report-or-stipulated-decision"]',
+      ).check({ force: true });
+      cy.get('#status-report-due-date-picker').type(todayDate);
+      cy.get('[data-testid="save-draft-button"]').click();
+      cy.get('[data-testid="sign-pdf-canvas"]').click();
+      cy.get('[data-testid="save-signature-button"]').click();
+      cy.get('[data-testid="success-alert"]').contains('Order updated.');
+
+      // add docket entry
+      loginAsDocketClerk();
+      addDocketEntry(docketNumber);
+
+      // check if case deadline is created
+      goToCase(docketNumber);
+      cy.get('[data-testid="tab-tracked-items"]').click();
+      cy.get(`[data-testid="case-deadline-description"]`).should(
+        'contain',
+        'Status Report or Proposed Stipulated Decision Due',
+      );
+      cy.get('[data-testid="case-deadline-date"]').should(
+        'contain',
+        todayDateFormatted,
+      );
+
+      // delete the case deadline
+      cy.get('[data-testid="delete-case-deadline-button"]').click();
+      cy.get('[data-testid="modal-button-confirm"]').click();
+      cy.get('.case-deadline-row').should('not.exist');
+    });
+  });
+
+  it('should generate deadline for lead and child cases when a status report order for lead case is filed', () => {
+    setupConsolidatedGroup().then(({ leadDocketNumber, memberDocketNumbers }) => {
+      // create a status report order draft
+      loginAsColvin();
+      goToCase(leadDocketNumber);
+      cy.get('#tab-document-view').click();
+      cy.contains('button span', 'Status Report').closest('button').click();
+      cy.get('[data-testid="status-report-order-button"]').click();
+      cy.get('[data-testid="order-type-status-report"]').check({ force: true });
+      cy.get('#status-report-due-date-picker').type(todayDate);
+      cy.get('[data-testid="save-draft-button"]').click();
+      cy.get('[data-testid="sign-pdf-canvas"]').click();
+      cy.get('[data-testid="save-signature-button"]').click();
+      cy.get('[data-testid="success-alert"]').contains('Order updated.');
+
+      // add docket entry
+      loginAsDocketClerk();
+      addDocketEntry(leadDocketNumber);
+
+      // check if case deadline is created
+      goToCase(leadDocketNumber);
+      cy.get('[data-testid="tab-tracked-items"]').click();
+      cy.get('[data-testid="case-deadline-description"]').should(
+        'contain',
+        'Status Report Due',
+      );
+      cy.get('[data-testid="case-deadline-date"]').should(
+        'contain',
+        todayDateFormatted,
+      );
+
+      for (const child of memberDocketNumbers) {
+        goToCase(child);
+        cy.get('[data-testid="tab-tracked-items"]').click();
+        cy.get('[data-testid="case-deadline-description"]').should(
+          'contain',
+          'Status Report Due',
+        );
+        cy.get('[data-testid="case-deadline-date"]').should(
+          'contain',
+          todayDateFormatted,
+        );
+      }
+    });
   });
 });
+
+// Helpers to make each test self-contained and avoid shared state
+const setupSingleCase = () => {
+  loginAsPetitionsClerk1();
+  return createTrialSession()
+    .then(() => createAndServePaperPetition())
+    .then(({ docketNumber }) => {
+      createStatusReport(docketNumber);
+      return cy.wrap({ docketNumber });
+    });
+};
+
+const setupConsolidatedGroup = () => {
+  loginAsPetitionsClerk1();
+  return createAndServeConsolidatedGroup({}).then(
+    ({ leadDocketNumber, memberDocketNumbers }) => {
+      createStatusReport(leadDocketNumber);
+      return cy.wrap({ leadDocketNumber, memberDocketNumbers });
+    },
+  );
+};
 
 const addDocketEntry = (docketNumber: string) => {
   goToCase(docketNumber);
