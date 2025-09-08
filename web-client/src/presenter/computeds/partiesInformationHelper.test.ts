@@ -1,22 +1,23 @@
 import {
-  ALLOWLIST_FEATURE_FLAGS,
   CONTACT_TYPES,
+  ALLOWLIST_FEATURE_FLAGS,
   ROLES,
   SERVICE_INDICATOR_TYPES,
   UNIQUE_OTHER_FILER_TYPE,
-} from '../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
+
 import {
   admissionsClerkUser,
   clerkOfCourtUser,
   docketClerkUser,
-  petitionerUser,
   petitionsClerkUser,
-} from '../../../../shared/src/test/mockUsers';
-import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
+  petitionerUser,
+} from '@shared/test/mockUsers';
+import { getUserPermissions } from '@shared/authorization/getUserPermissions';
 import { partiesInformationHelper as partiesInformationHelperComputed } from './partiesInformationHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
-import { withAppContextDecorator } from '../../withAppContext';
+import { withAppContextDecorator } from '@web-client/withAppContext';
 
 describe('partiesInformationHelper', () => {
   const mockEmail = 'test@example.com';

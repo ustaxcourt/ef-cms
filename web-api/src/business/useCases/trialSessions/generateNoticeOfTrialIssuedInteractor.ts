@@ -11,6 +11,7 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
 import { getJudgeWithTitle } from '@shared/business/utilities/getJudgeWithTitle';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 
 export type FormattedTrialInfoType = RawTrialSession & {
   formattedStartDate: string;
@@ -26,8 +27,8 @@ export const generateNoticeOfTrialIssuedInteractor = async (
   }: { docketNumber: string; trialSessionId: string },
 ): Promise<Uint8Array> => {
   const trialSession = await getTrialSessionById({
-      trialSessionId,
-    });
+    trialSessionId,
+  });
 
   if (!trialSession) {
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
@@ -55,14 +56,17 @@ export const generateNoticeOfTrialIssuedInteractor = async (
     judgeUserName: trialSession.judge.name,
   });
 
-  const { name, title } = await applicationContext
-    .getPersistenceGateway()
-    .getConfigurationItemValue({
-      applicationContext,
-      configurationItemKey:
-        applicationContext.getConstants().CLERK_OF_THE_COURT_CONFIGURATION,
-    });
+  const { CLERK_OF_THE_COURT_CONFIGURATION } =
+    applicationContext.getConstants();
 
+  const [CLERK_OF_THE_COURT_RECORD] = await getFeatureFlagValues([
+    CLERK_OF_THE_COURT_CONFIGURATION,
+  ]);
+
+  const { name, title } = CLERK_OF_THE_COURT_RECORD.value.current as {
+    name: string;
+    title: string;
+  };
   const trialInfo: FormattedTrialInfoType = {
     formattedJudge: judgeWithTitle,
     formattedStartDate,

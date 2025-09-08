@@ -63,7 +63,7 @@ const getAllCasesNotInExcludedStatus = async ({
             ],
           },
         },
-        sort: [{ 'sortableDocketNumber.N': 'asc' }],
+        sort: [{ 'pk.S': 'asc' }],
       },
       index: 'efcms-case',
     },
