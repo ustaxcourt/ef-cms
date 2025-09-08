@@ -68,6 +68,7 @@
     "core-js": "3.45.0",
     "cors": "2.8.5",
     "csv-stringify": "6.6.0",
+    "date-fns": "^4.1.0",
     "deep-freeze": "0.0.1",
     "diff-arrays-of-objects": "1.1.9",
     "dom-serializer": "2.0.0",

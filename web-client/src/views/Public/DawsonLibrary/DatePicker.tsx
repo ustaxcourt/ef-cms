@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { calculateDate } from '@shared/business/utilities/DateHandler';
-import { CalendarIcon } from 'lucide-react';
+import { ChevronDownIcon } from 'lucide-react';
+import { DateRange } from 'react-day-picker';
 
 import { Button } from './DatePickerComponents/button';
-import { Calendar } from './DatePickerComponents/calendar';
-import { Input } from './DatePickerComponents/input';
+import { Calendar } from '../../../dawson-ui/ui/calendar';
 import { Label } from './DatePickerComponents/label';
 import {
   Popover,
@@ -12,92 +11,108 @@ import {
   PopoverTrigger,
 } from './DatePickerComponents/popover';
 
-function formatDate(date: Date | undefined) {
-  if (!date) {
-    return '';
-  }
-
-  return date.toLocaleDateString('en-US', {
-    day: '2-digit',
-    month: 'long',
-    year: 'numeric',
-  });
-}
-
-function isValidDate(date: Date | undefined) {
-  if (!date) {
-    return false;
-  }
-  return !isNaN(date.getTime());
-}
-
 export function Calendar28() {
   const [open, setOpen] = React.useState(false);
-  const [date, setDate] = React.useState<Date | undefined>(
-    calculateDate({ dateString: '2025-06-01' }),
+  const [dateRange, setDateRange] = React.useState<DateRange | undefined>(
+    undefined,
   );
-  const [month, setMonth] = React.useState<Date | undefined>(date);
-  const [value, setValue] = React.useState(formatDate(date));
+  const [hoveredDate, setHoveredDate] = React.useState<Date | undefined>(
+    undefined,
+  );
 
   return (
     <div className="flex flex-col gap-3">
-      <Label htmlFor="date" className="px-1">
-        Date
-      </Label>
-      <div className="relative flex gap-2">
-        <Input
-          id="date"
-          value={value}
-          placeholder="June 01, 2025"
-          className="bg-background pr-10"
-          onChange={e => {
-            const parsedDate = calculateDate({ dateString: e.target.value });
-            setValue(e.target.value);
-            if (isValidDate(parsedDate)) {
-              setDate(parsedDate);
-              setMonth(parsedDate);
-            }
-          }}
-          onKeyDown={e => {
-            if (e.key === 'ArrowDown') {
-              e.preventDefault();
-              setOpen(true);
-            }
-          }}
-        />
-        <Popover open={open} onOpenChange={setOpen}>
-          <PopoverTrigger asChild>
-            <Button
-              id="date-picker"
-              variant="ghost"
-              className="absolute top-1/2 right-2 size-6 -translate-y-1/2"
-            >
-              <CalendarIcon className="size-3.5" />
-              <span className="sr-only">Select date</span>
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent
-            className="w-auto overflow-hidden p-0"
-            align="end"
-            alignOffset={-8}
-            sideOffset={10}
-          >
-            <Calendar
-              mode="single"
-              selected={date}
-              captionLayout="dropdown"
-              month={month}
-              onMonthChange={setMonth}
-              onSelect={selectedDate => {
-                setDate(selectedDate);
-                setMonth(selectedDate);
-                setValue(formatDate(selectedDate));
+      <Popover open={open} onOpenChange={setOpen}>
+        <div className="flex gap-3">
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="start-date" className="px-1">
+              Start Date
+            </Label>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                id="start-date"
+                className="w-48 justify-between font-normal hover:bg-gray-50 hover:border-gray-300 transition-colors duration-150"
+              >
+                {dateRange?.from
+                  ? dateRange.from.toLocaleDateString()
+                  : 'Select start date'}
+                <ChevronDownIcon />
+              </Button>
+            </PopoverTrigger>
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="end-date" className="px-1">
+              End Date
+            </Label>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                id="end-date"
+                className="w-48 justify-between font-normal hover:bg-gray-50 hover:border-gray-300 transition-colors duration-150"
+              >
+                {dateRange?.to
+                  ? dateRange.to.toLocaleDateString()
+                  : 'Select end date'}
+                <ChevronDownIcon />
+              </Button>
+            </PopoverTrigger>
+          </div>
+        </div>
+
+        <PopoverContent className="w-auto overflow-hidden p-0" align="start">
+          <Calendar
+            mode="range"
+            defaultMonth={dateRange?.from}
+            numberOfMonths={2}
+            selected={dateRange}
+            captionLayout="dropdown"
+            showOutsideDays={false}
+            onSelect={selectedRange => {
+              setDateRange(selectedRange);
+              // Only close when both start and end dates are selected AND they are different
+              if (
+                selectedRange?.from &&
+                selectedRange?.to &&
+                selectedRange.from.getTime() !== selectedRange.to.getTime()
+              ) {
                 setOpen(false);
-              }}
-            />
-          </PopoverContent>
-        </Popover>
-      </div>
+              }
+            }}
+            modifiers={{
+              hover: date => {
+                if (!hoveredDate || !dateRange?.from || dateRange?.to)
+                  return false;
+
+                const start = dateRange.from;
+                const end = hoveredDate;
+                const from = start < end ? start : end;
+                const to = start < end ? end : start;
+
+                return date >= from && date <= to;
+              },
+            }}
+            modifiersClassNames={{
+              hover: 'tw:bg-gray-200 tw:text-gray-800',
+            }}
+            onDayMouseEnter={day => {
+              if (dateRange?.from && !dateRange?.to) {
+                console.log(
+                  'Hovering over:',
+                  day,
+                  'Start date:',
+                  dateRange.from,
+                );
+                setHoveredDate(day);
+              }
+            }}
+            onDayMouseLeave={() => {
+              setHoveredDate(undefined);
+            }}
+          />
+        </PopoverContent>
+      </Popover>
     </div>
   );
 }
