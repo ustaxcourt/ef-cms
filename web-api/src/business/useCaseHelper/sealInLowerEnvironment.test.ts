@@ -22,7 +22,9 @@ describe('sealInLowerEnvironment', () => {
     getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
     applicationContext.getNotificationGateway().sendNotificationOfSealing =
       jest.fn();
-    applicationContext.isCurrentColorActive = jest.fn().mockReturnValue(true);
+    applicationContext.getConfigurationGateway().isCurrentColorActive = jest
+      .fn()
+      .mockReturnValue(true);
   });
 
   it('should seal the case with the docketNumber provided and return the updated case', async () => {
@@ -52,7 +54,9 @@ describe('sealInLowerEnvironment', () => {
   });
 
   it('should not execute if the current color is not active', async () => {
-    applicationContext.isCurrentColorActive = jest.fn().mockReturnValue(false);
+    applicationContext.getConfigurationGateway().isCurrentColorActive = jest
+      .fn()
+      .mockReturnValue(false);
 
     await sealInLowerEnvironment(
       applicationContext,
