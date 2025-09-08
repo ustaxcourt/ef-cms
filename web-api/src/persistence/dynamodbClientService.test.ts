@@ -8,16 +8,13 @@ import {
   describeTable,
   get,
   getDeployTableName,
-  getFromDeployTable,
   getTableName,
   put,
-  putInDeployTable,
   query,
   queryFull,
   scan,
   update,
   updateConsistent,
-  updateToDeployTable,
 } from './dynamodbClientService';
 
 describe('dynamodbClientService', function () {
@@ -240,16 +237,6 @@ describe('dynamodbClientService', function () {
     });
   });
 
-  describe('updateToDeployTable', () => {
-    it('should return the same Item property passed in in the params', async () => {
-      const result = await updateToDeployTable({
-        Item: MOCK_ITEM,
-        applicationContext,
-      });
-      expect(result).toEqual(MOCK_ITEM);
-    });
-  });
-
   describe('get', () => {
     it('should remove the global aws fields on the object returned', async () => {
       const result = await get({ applicationContext });
@@ -257,51 +244,6 @@ describe('dynamodbClientService', function () {
     });
   });
 
-  describe('getFromDeployTable', () => {
-    const mockItem = {
-      'aws:rep:updatetime': 'anytime',
-      current: 'foobar',
-      pk: 'foo',
-      sk: 'bar',
-    };
-
-    const mockParams = {
-      applicationContext,
-      pk: mockItem.pk,
-      sk: mockItem.sk,
-    };
-
-    const tableName = getDeployTableName({ applicationContext });
-
-    beforeEach(() => {
-      applicationContext.getDocumentClient({ useMainRegion: true }).get = jest
-        .fn()
-        .mockResolvedValue({ Item: mockItem });
-    });
-
-    it('uses the master region', async () => {
-      await getFromDeployTable(mockParams);
-      expect(applicationContext.getDocumentClient).toHaveBeenCalledWith({
-        useMainRegion: true,
-      });
-    });
-
-    it('gets the deploy table name', async () => {
-      await getFromDeployTable(mockParams);
-
-      expect(
-        applicationContext.getDocumentClient({ useMainRegion: true }).get,
-      ).toHaveBeenCalledWith({ TableName: tableName, ...mockParams });
-    });
-
-    it('removes the AWS Global Fields', async () => {
-      const result = await getFromDeployTable(mockParams);
-      expect(result['aws:rep:updatetime']).toBeUndefined();
-      expect(result['pk']).toEqual(mockItem.pk);
-      expect(result['sk']).toEqual(mockItem.sk);
-      expect(result['current']).toEqual(mockItem.current);
-    });
-  });
   describe('query', () => {
     it('should remove the global aws fields on the object returned', async () => {
       const result = await query({ applicationContext });
@@ -596,29 +538,6 @@ describe('dynamodbClientService', function () {
       expect(mockDynamoClient.send.mock.calls[0][0].input).toEqual(
         new DescribeTableCommand({ TableName: dynamoDbTableName }).input,
       );
-    });
-  });
-
-  describe('putInDeployTable', () => {
-    it('should write an item to the deploy table', async () => {
-      applicationContext.environment.stage = 'local';
-      applicationContext.environment.dynamoDbTableName = dynamoDbTableName;
-
-      const dynamoRecord = {
-        data: {
-          allChecksHealthy: false,
-          timeStamp: 20384938202,
-        },
-        pk: 'healthCheckValue',
-        sk: 'healthCheckValue|us-west-1',
-      };
-
-      await putInDeployTable(applicationContext, dynamoRecord);
-
-      expect(applicationContext.getDocumentClient().put).toHaveBeenCalledWith({
-        Item: dynamoRecord,
-        TableName: dynamoDbTableName,
-      });
     });
   });
 });
