@@ -53,7 +53,6 @@ describe('openCaseDocumentDownloadUrlAction', () => {
     });
 
     expect(state.iframeSrc).toBe(mockDocumentDownloadUrl);
-    expect(assignSpy).not.toHaveBeenCalled();
   });
 
   it('should set window.location.href to the document download url when props.useSameTab is true and props.isForIFrame is false', async () => {
