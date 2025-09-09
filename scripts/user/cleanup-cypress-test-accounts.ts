@@ -1,3 +1,5 @@
+#!/usr/bin/env -S npx ts-node --transpile-only
+
 import { CognitoIdentityProvider, ListUsersCommandOutput, UserType } from '@aws-sdk/client-cognito-identity-provider';
 import { Kysely } from 'kysely';
 import type { Database } from '../../web-api/src/database-schema';
