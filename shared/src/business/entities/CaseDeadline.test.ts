@@ -108,5 +108,61 @@ describe('CaseDeadline', () => {
           '"consolidatedCaseDeadlineId" must be a valid GUID',
       });
     });
+
+    // Add these test cases to your existing describe('validation') block
+
+    describe('associatedJudgeId validation', () => {
+      it('should require associatedJudgeId when associatedJudge is not CHIEF_JUDGE', () => {
+        const caseDeadline = new CaseDeadline({
+          associatedJudge: 'Judge Smith', // Not CHIEF_JUDGE
+          // associatedJudgeId: undefined, // Missing required field
+          deadlineDate: '2019-03-01T21:42:29.073Z',
+          description: 'One small step',
+          docketNumber: '123-19',
+        });
+
+        expect(caseDeadline.getFormattedValidationErrors()).toEqual({
+          associatedJudgeId: '"associatedJudgeId" is required',
+        });
+      });
+
+      it('should make associatedJudgeId optional when associatedJudge is CHIEF_JUDGE', () => {
+        const caseDeadline = new CaseDeadline({
+          associatedJudge: 'Chief Judge', // Assuming this matches CHIEF_JUDGE constant
+          // associatedJudgeId: undefined, // Should be optional
+          deadlineDate: '2019-03-01T21:42:29.073Z',
+          description: 'One small step',
+          docketNumber: DOCKET_NUMBER,
+        });
+
+        const errors = caseDeadline.getFormattedValidationErrors();
+        // Should not have associatedJudgeId error
+        expect(errors?.associatedJudgeId).toBeUndefined();
+      });
+
+      it('should be valid when associatedJudge is CHIEF_JUDGE and associatedJudgeId is provided', () => {
+        const caseDeadline = new CaseDeadline({
+          associatedJudge: 'Chief Judge', // Assuming this matches CHIEF_JUDGE constant
+          associatedJudgeId: 'dabbad02-18d0-43ec-bafb-654e83405416', // Optional but provided
+          deadlineDate: '2019-03-01T21:42:29.073Z',
+          description: 'One small step',
+          docketNumber: DOCKET_NUMBER,
+        });
+
+        expect(caseDeadline.getFormattedValidationErrors()).toEqual(null);
+      });
+
+      it('should be valid when associatedJudge is CHIEF_JUDGE and associatedJudgeId is not provided', () => {
+        const caseDeadline = new CaseDeadline({
+          associatedJudge: 'Chief Judge', // Assuming this matches CHIEF_JUDGE constant
+          // associatedJudgeId: undefined, // Optional and not provided
+          deadlineDate: '2019-03-01T21:42:29.073Z',
+          description: 'One small step',
+          docketNumber: DOCKET_NUMBER,
+        });
+
+        expect(caseDeadline.getFormattedValidationErrors()).toEqual(null);
+      });
+    });
   });
 });
