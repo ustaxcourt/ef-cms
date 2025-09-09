@@ -18,39 +18,39 @@ const buttonVariants = cva(
       variant: {
         primary: cn(
           'tw:h-[40px] tw:bg-primary tw:text-primary-foreground tw:shadow-xs tw:outline-none tw:font-bold', // standard
-          'tw:hover:bg-primary-darker', // hover
+          'tw:hover:bg-primary-dark', // hover
           'tw:focus-visible:ring-offset-[4px]', // focus-visible
-          'tw:active:bg-primary-active', // active
-          'tw:invalid:bg-primary-invalid', // inactive / invalid
+          'tw:active:bg-primary-darker', // active
+          'tw:invalid:bg-grey-light', // inactive / invalid
         ),
         destructive: cn(
           'tw:h-[40px] tw:bg-destructive tw:text-white tw:shadow-xs  tw:outline-none tw:border-none tw:font-bold', // standard
-          'tw:hover:bg-destructive-darker', // hover
+          'tw:hover:bg-destructive-dark', // hover
           'tw:focus-visible:ring-offset-4', // focus-visible
-          'tw:active:bg-destructive-active', // active
-          'tw:invalid:bg-destructive-invalid', // invalid
+          'tw:active:bg-destructive-darker', // active
+          'tw:invalid:bg-grey-light', // invalid
         ),
         secondary: cn(
           'tw:h-[40px] tw:shadow-none tw:bg-background tw:border-primary tw:border-2 tw:border-solid tw:text-primary tw:font-bold', // standard
-          'tw:hover:text-primary-darker tw:hover:border-primary-darker', // hover
+          'tw:hover:text-primary-dark tw:hover:border-primary-dark', // hover
           'tw:focus:outline-none tw:focus:border-primary', // focus
           'tw:focus-visible:ring-offset-[4px] tw:focus-visible:border-primary tw:focus-visible:outline-none', // focus-visible
-          'tw:active:text-secondary-active tw:active:border-secondary-active', // active
-          'tw:invalid:text-secondary-invalid tw:invalid:border-secondary-invalid', // inactive / invalid
+          'tw:active:text-primary-darker tw:active:border-primary-darker', // active
+          'tw:invalid:text-grey-light tw:invalid:border-grey-light', // inactive / invalid
         ),
         destructiveTertiary: cn(
           'tw:px-0 tw:py-0 tw:bg-transparent tw:text-destructive tw:font-[400] tw:underline tw:underline-offset-4 tw:outline-none tw:font-normal', // standard,
-          'tw:hover:underline tw:hover:text-destructive-darker', // hover
-          'tw:focus-visible:ring-offset-[4px]', // focus-visible
-          'tw:active:text-tertiary-active', // active
-          'tw:invalid:text-tertiary-invalid', // invalid
+          'tw:hover:underline tw:hover:text-destructive-dark', // hover
+          'tw:focus-visible:ring-offset-[4px] tw:focus-visible:bg-white', // focus-visible
+          'tw:active:text-destructive-darker', // active
+          'tw:invalid:text-grey-light', // invalid
         ),
         primaryTertiary: cn(
           'tw:px-0 tw:py-0 tw:bg-transparent tw:text-primary tw:font-[400] tw:underline tw:underline-offset-4  tw:outline-none tw:font-normal', // standard
-          'tw:hover:underline tw:hover:text-primary-darker', // hover,
+          'tw:hover:underline tw:hover:text-primary-dark', // hover,
           'tw:focus-visible:ring-offset-[4px] tw:focus-visible:bg-white', // focus-visible
-          'tw:active:text-primary-active', // active
-          'tw:invalid:text-tertiary-invalid', // inactive
+          'tw:active:text-primary-darker', // active
+          'tw:invalid:text-grey-light', // inactive
           'tw:ml-0 tw:mr-auto tw:text-left', // left alignment
         ),
       },
@@ -91,6 +91,8 @@ export function Button({
       className={cn(buttonVariants({ variant, className }))}
       {...props}
       role="button"
+      title={props.title}
+      aria-label={props['aria-label']}
     >
       {iconPosition === 'left' && Icon}
       {children}

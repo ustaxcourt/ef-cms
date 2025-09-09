@@ -8,7 +8,12 @@ export function Buttons() {
 
       <div>
         <div className="tw:xs:inline-block tw:m-4 tw:xs:m-2">
-          <Button variant="primary" icon="file">
+          <Button
+            variant="primary"
+            icon="file"
+            aria-label="Primary Default"
+            title="Primary Default"
+          >
             Primary Default
           </Button>
         </div>
