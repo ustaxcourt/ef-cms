@@ -32,6 +32,7 @@ describe('opinionPublicSearchInteractor', () => {
       .getPersistenceGateway()
       .advancedDocumentSearch.mockResolvedValue({
         results: mockOpinionSearchResult,
+        totalCount: mockOpinionSearchResult.length,
       });
   });
 
@@ -63,7 +64,10 @@ describe('opinionPublicSearchInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .advancedDocumentSearch.mockResolvedValue({ results: maxPlusOneResults });
+      .advancedDocumentSearch.mockResolvedValue({
+        results: maxPlusOneResults,
+        totalCount: MAX_SEARCH_RESULTS + 1,
+      });
     const results = await opinionPublicSearchInteractor(applicationContext, {
       dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword: 'fish',
@@ -105,5 +109,12 @@ describe('opinionPublicSearchInteractor', () => {
     ).toMatchObject({
       isOpinionSearch: true,
     });
+  });
+
+  it('returns totalCount reflecting raw matching public opinions', async () => {
+    const response = await opinionPublicSearchInteractor(applicationContext, {
+      keyword: 'fish',
+    } as any);
+    expect(response.totalCount).toBe(1);
   });
 });

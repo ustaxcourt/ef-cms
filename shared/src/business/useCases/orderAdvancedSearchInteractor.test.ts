@@ -83,7 +83,10 @@ describe('orderAdvancedSearchInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .advancedDocumentSearch.mockResolvedValue({ results: maxPlusOneResults });
+      .advancedDocumentSearch.mockResolvedValue({
+        results: maxPlusOneResults,
+        totalCount: MAX_SEARCH_RESULTS + 1,
+      });
 
     const results = await orderAdvancedSearchInteractor(
       applicationContext,
@@ -116,5 +119,14 @@ describe('orderAdvancedSearchInteractor', () => {
     ).toMatchObject({
       documentEventCodes: ORDER_EVENT_CODES,
     });
+  });
+
+  it('returns totalCount reflecting raw matching documents', async () => {
+    const response = await orderAdvancedSearchInteractor(
+      applicationContext,
+      { keyword: 'candy' } as any,
+      mockPetitionsClerkUser,
+    );
+    expect(response.totalCount).toBe(2);
   });
 });

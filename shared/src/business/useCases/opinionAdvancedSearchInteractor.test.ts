@@ -89,7 +89,10 @@ describe('opinionAdvancedSearchInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .advancedDocumentSearch.mockResolvedValue({ results: maxPlusOneResults });
+      .advancedDocumentSearch.mockResolvedValue({
+        results: maxPlusOneResults,
+        totalCount: MAX_SEARCH_RESULTS + 1,
+      });
 
     const results = await opinionAdvancedSearchInteractor(
       applicationContext,
@@ -136,5 +139,17 @@ describe('opinionAdvancedSearchInteractor', () => {
     ).toMatchObject({
       isOpinionSearch: true,
     });
+  });
+
+  it('returns totalCount reflecting raw matching opinions', async () => {
+    const response = await opinionAdvancedSearchInteractor(
+      applicationContext,
+      {
+        keyword: 'candy',
+        opinionTypes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
+      } as any,
+      mockPetitionsClerkUser,
+    );
+    expect(response.totalCount).toBe(2);
   });
 });

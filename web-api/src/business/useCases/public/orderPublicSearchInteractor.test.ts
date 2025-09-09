@@ -29,6 +29,7 @@ describe('orderPublicSearchInteractor', () => {
             signedJudgeName: 'Roslindis Angelino',
           },
         ],
+        totalCount: 2,
       });
   });
 
@@ -74,7 +75,10 @@ describe('orderPublicSearchInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .advancedDocumentSearch.mockResolvedValue({ results: maxPlusOneResults });
+      .advancedDocumentSearch.mockResolvedValue({
+        results: maxPlusOneResults,
+        totalCount: MAX_SEARCH_RESULTS + 1,
+      });
 
     const results = await orderPublicSearchInteractor(applicationContext, {
       dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
@@ -109,5 +113,12 @@ describe('orderPublicSearchInteractor', () => {
         startDate: '01/01/2001',
       } as any),
     ).rejects.toThrow('entity was invalid');
+  });
+
+  it('returns totalCount reflecting raw matching public orders', async () => {
+    const response = await orderPublicSearchInteractor(applicationContext, {
+      keyword: 'fish',
+    } as any);
+    expect(response.totalCount).toBe(2);
   });
 });
