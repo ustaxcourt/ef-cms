@@ -1,6 +1,5 @@
 import {
   DATE_RANGE_SEARCH_OPTIONS,
-  MAX_SEARCH_RESULTS,
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
 } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
@@ -52,8 +51,8 @@ describe('opinionPublicSearchInteractor', () => {
     expect(searchArgs.omitSealed).toBeUndefined();
   });
 
-  it('should limit results length to MAX_SEARCH_RESULTS', async () => {
-    const maxPlusOneResults = new Array(MAX_SEARCH_RESULTS + 1).fill({
+  it('limits results to the default limit (5000) and sets moreResults when more are available', async () => {
+    const overLimit = new Array(5001).fill({
       caseCaption: 'Samson Workman, Petitioner',
       docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
       docketNumber: '103-19',
@@ -65,15 +64,15 @@ describe('opinionPublicSearchInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .advancedDocumentSearch.mockResolvedValue({
-        results: maxPlusOneResults,
-        totalCount: MAX_SEARCH_RESULTS + 1,
+        results: overLimit,
       });
     const results = await opinionPublicSearchInteractor(applicationContext, {
       dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword: 'fish',
       startDate: '01/01/2001',
     } as any);
-    expect(results.results.length).toBe(MAX_SEARCH_RESULTS);
+    expect(results.results.length).toBe(5000);
+    expect(results.moreResults).toBe(true);
   });
 
   it('should return search results based on the supplied opinion keyword', async () => {
@@ -111,10 +110,10 @@ describe('opinionPublicSearchInteractor', () => {
     });
   });
 
-  it('returns totalCount reflecting raw matching public opinions', async () => {
+  it('sets moreResults to false when results are within limit', async () => {
     const response = await opinionPublicSearchInteractor(applicationContext, {
       keyword: 'fish',
     } as any);
-    expect(response.totalCount).toBe(1);
+    expect(response.moreResults).toBe(false);
   });
 });

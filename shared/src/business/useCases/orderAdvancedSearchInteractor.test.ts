@@ -1,6 +1,5 @@
 import {
   DATE_RANGE_SEARCH_OPTIONS,
-  MAX_SEARCH_RESULTS,
   ORDER_EVENT_CODES,
   ROLES,
 } from '@shared/business/entities/EntityConstants';
@@ -71,33 +70,31 @@ describe('orderAdvancedSearchInteractor', () => {
     });
   });
 
-  it('returns no more than MAX_SEARCH_RESULTS', async () => {
-    const maxPlusOneResults = new Array(MAX_SEARCH_RESULTS + 1).fill({
+  it('limits results to the default limit (5000) and indicates moreResults when more are available', async () => {
+    const overLimit = new Array(5001).fill({
       caseCaption: 'Samson Workman, Petitioner',
       docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
       docketNumber: '103-19',
-      documentTitle: 'T.C. Opinion for More Candy',
-      documentType: 'T.C. Opinion',
-      eventCode: 'TCOP',
+      documentTitle: 'Order for More Candy',
+      documentType: 'Order',
+      eventCode: 'ODD',
       signedJudgeName: 'Roslindis Angelino',
     });
     applicationContext
       .getPersistenceGateway()
       .advancedDocumentSearch.mockResolvedValue({
-        results: maxPlusOneResults,
-        totalCount: MAX_SEARCH_RESULTS + 1,
+        results: overLimit,
       });
 
     const results = await orderAdvancedSearchInteractor(
       applicationContext,
       {
         keyword: 'keyword',
-        petitionerName: 'test person',
       } as any,
       mockPetitionsClerkUser,
     );
-
-    expect(results.results.length).toBe(MAX_SEARCH_RESULTS); // Interactor limits results
+    expect(results.results.length).toBe(5000);
+    expect(results.moreResults).toBe(true);
   });
 
   it('searches for documents that are of type orders', async () => {
@@ -121,12 +118,12 @@ describe('orderAdvancedSearchInteractor', () => {
     });
   });
 
-  it('returns totalCount reflecting raw matching documents', async () => {
+  it('sets moreResults to false when number of results is within limit', async () => {
     const response = await orderAdvancedSearchInteractor(
       applicationContext,
       { keyword: 'candy' } as any,
       mockPetitionsClerkUser,
     );
-    expect(response.totalCount).toBe(2);
+    expect(response.moreResults).toBe(false);
   });
 });

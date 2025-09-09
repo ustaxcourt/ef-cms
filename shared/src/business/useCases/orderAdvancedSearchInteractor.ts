@@ -1,7 +1,9 @@
 import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
 import {
+  MAX_FETCH_BATCHES,
   MAX_SEARCH_RESULTS,
   ORDER_EVENT_CODES,
+  RAW_BATCH_SIZE,
 } from '@shared/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
@@ -60,9 +62,6 @@ export const orderAdvancedSearchInteractor = async (
   let nextCursor: any[] | undefined = undefined;
   let rawFetches = 0;
 
-  const RAW_BATCH_SIZE = 1500;
-  const MAX_FETCH_BATCHES = 15;
-
   while (
     accumulated.length < detectionCeiling &&
     rawFetches < MAX_FETCH_BATCHES
@@ -111,14 +110,18 @@ export const orderAdvancedSearchInteractor = async (
     userRole: authorizedUser.role,
   });
 
-  const validatedFiltered = InternalDocumentSearchResult.validateRawCollection(
-    accumulated,
-  ).slice(0, desired);
-  const moreResults = accumulated.length > desired;
-
+  const overFetched = accumulated.length > desired;
+  if (overFetched) {
+    if (accumulated[desired - 1]?.sort) {
+      nextCursor = accumulated[desired - 1].sort;
+    }
+    accumulated.length = desired;
+  }
+  const validatedFiltered =
+    InternalDocumentSearchResult.validateRawCollection(accumulated);
   return {
     results: validatedFiltered,
-    moreResults,
-    nextCursor: moreResults ? nextCursor : undefined,
+    moreResults: overFetched,
+    nextCursor: overFetched ? nextCursor : undefined,
   };
 };

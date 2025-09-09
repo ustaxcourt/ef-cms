@@ -1,6 +1,5 @@
 import {
   DATE_RANGE_SEARCH_OPTIONS,
-  MAX_SEARCH_RESULTS,
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
 } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '../test/createTestApplicationContext';
@@ -77,8 +76,8 @@ describe('opinionAdvancedSearchInteractor', () => {
     });
   });
 
-  it('returns no more than MAX_SEARCH_RESULTS', async () => {
-    const maxPlusOneResults = new Array(MAX_SEARCH_RESULTS + 1).fill({
+  it('limits results to the default limit (5000) and indicates moreResults when more are available', async () => {
+    const overLimit = new Array(5001).fill({
       caseCaption: 'Samson Workman, Petitioner',
       docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
       docketNumber: '103-19',
@@ -90,20 +89,19 @@ describe('opinionAdvancedSearchInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .advancedDocumentSearch.mockResolvedValue({
-        results: maxPlusOneResults,
-        totalCount: MAX_SEARCH_RESULTS + 1,
+        results: overLimit,
       });
 
     const results = await opinionAdvancedSearchInteractor(
       applicationContext,
       {
         keyword: 'keyword',
-        petitionerName: 'test person',
       } as any,
       mockPetitionsClerkUser,
     );
 
-    expect(results.results.length).toBe(MAX_SEARCH_RESULTS);
+    expect(results.results.length).toBe(5000);
+    expect(results.moreResults).toBe(true);
   });
 
   it('searches for documents that are of type opinions', async () => {
@@ -141,7 +139,7 @@ describe('opinionAdvancedSearchInteractor', () => {
     });
   });
 
-  it('returns totalCount reflecting raw matching opinions', async () => {
+  it('sets moreResults to false when number of results is within limit', async () => {
     const response = await opinionAdvancedSearchInteractor(
       applicationContext,
       {
@@ -150,6 +148,6 @@ describe('opinionAdvancedSearchInteractor', () => {
       } as any,
       mockPetitionsClerkUser,
     );
-    expect(response.totalCount).toBe(2);
+    expect(response.moreResults).toBe(false);
   });
 });

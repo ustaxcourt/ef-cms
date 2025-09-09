@@ -9,7 +9,11 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { omit } from 'lodash';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { MAX_SEARCH_RESULTS } from '@shared/business/entities/EntityConstants';
+import {
+  MAX_FETCH_BATCHES,
+  MAX_SEARCH_RESULTS,
+  RAW_BATCH_SIZE,
+} from '@shared/business/entities/EntityConstants';
 
 export const opinionAdvancedSearchInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -63,8 +67,6 @@ export const opinionAdvancedSearchInteractor = async (
   let searchAfter: any[] | undefined = undefined;
   let nextCursor: any[] | undefined = undefined;
   let rawFetches = 0;
-  const RAW_BATCH_SIZE = 1500;
-  const MAX_FETCH_BATCHES = 15;
 
   while (
     accumulated.length < detectionCeiling &&
@@ -106,14 +108,19 @@ export const opinionAdvancedSearchInteractor = async (
     userRole: authorizedUser.role,
   });
 
-  const validated = InternalDocumentSearchResult.validateRawCollection(
-    accumulated,
-  ).slice(0, desired);
-  const moreResults = accumulated.length > desired;
+  const overFetched = accumulated.length > desired;
+  if (overFetched) {
+    if (accumulated[desired - 1]?.sort) {
+      nextCursor = accumulated[desired - 1].sort;
+    }
+    accumulated.length = desired;
+  }
 
+  const validated =
+    InternalDocumentSearchResult.validateRawCollection(accumulated);
   return {
     results: validated,
-    moreResults,
-    nextCursor: moreResults ? nextCursor : undefined,
+    moreResults: overFetched,
+    nextCursor: overFetched ? nextCursor : undefined,
   };
 };
