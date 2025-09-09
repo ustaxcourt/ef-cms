@@ -8,7 +8,7 @@ import { v4 } from 'uuid';
 if (!Cypress.env('SMOKETESTS_LOCAL')) {
   describe('irs superuser integration', () => {
     const password = getCypressEnv().defaultAccountPass;
-    const userName = 'cypress_test_account_irs_super_user@example.com';
+    const userName = `cypress_test_account_irs_super_user_${v4()}@example.com`;
 
     beforeEach(() => {
       Cypress.session.clearCurrentSessionData();
