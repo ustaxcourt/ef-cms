@@ -1,5 +1,39 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
+/**
+ * Cleanup Cypress test accounts
+ *
+ * What it does:
+ * - Deletes Cypress smoketest users from both Postgres and Cognito.
+ * - Postgres: removes records from `dwUser` and `dwUserOnCase` for matching users.
+ * - Cognito: deletes users from the primary pool and IRS pool (if `USER_POOL_IRS_ID` is set).
+ * - Matching is based on email prefix. In Postgres it checks `email` and `pendingEmail` columns.
+ *
+ * Why we use it:
+ * - Smoketests running on AWS create disposable users. This script cleans up those users to
+ *   keep Cognito and Postgres tidy and avoid cluttering subsequent test runs.
+ *
+ * How to run:
+ * - Ensure you have AWS credentials for the target environment.
+ * - Required environment variables:
+ *   - ENV: environment name (script will abort if not set)
+ *   - USER_POOL_IRS_ID: optional; if set, IRS user pool will also be cleaned
+ * - Command:
+ *   npx ts-node --transpile-only ./scripts/user/cleanup-cypress-test-accounts.ts
+ *
+ * Behavior notes:
+ * - The email prefix is hardcoded as `cypress_test_account`.
+ * - Pass 1 (DB-first): find matching users in Postgres (email or pendingEmail ilike prefix%)
+ *   then delete in Cognito (all configured pools) and remove from Postgres.
+ * - Pass 2 (Cognito-first): find remaining matching users in each Cognito pool and delete
+ *   them from Cognito and Postgres.
+ * - Cognito deletes are limited with p-limit (concurrency 30) and include retry/backoff on
+ *   throttling; missing users are ignored.
+ *
+ * Caution:
+ * - This script performs destructive deletes. Verify ENV and target pools before running.
+ */
+
 import { CognitoIdentityProvider, ListUsersCommandOutput, UserType } from '@aws-sdk/client-cognito-identity-provider';
 import pLimit from 'p-limit';
 import { Kysely } from 'kysely';
