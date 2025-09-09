@@ -126,4 +126,113 @@ describe('orderAdvancedSearchInteractor', () => {
     );
     expect(response.moreResults).toBe(false);
   });
+
+  it('accumulates across multiple raw batches, trims sentinel, and sets nextCursor to last kept record', async () => {
+    const makeBatch = (count: number, startIndex: number) =>
+      Array.from({ length: count }).map((_, i) => ({
+        caseCaption: 'Caption',
+        docketEntryId: `00000000-0000-4000-8000-${String(startIndex + i).padStart(12, '0')}`,
+        docketNumber: '123-45',
+        documentTitle: 'Some Order',
+        documentType: 'Order',
+        eventCode: 'ODD',
+        signedJudgeName: 'Judge',
+        sort: [startIndex + i],
+      }));
+
+    applicationContext
+      .getPersistenceGateway()
+      .advancedDocumentSearch.mockReset()
+      .mockResolvedValueOnce({ results: makeBatch(1500, 0) })
+      .mockResolvedValueOnce({ results: makeBatch(1500, 1500) })
+      .mockResolvedValueOnce({ results: makeBatch(1500, 3000) })
+      .mockResolvedValueOnce({ results: makeBatch(501, 4500) });
+
+    const result = await orderAdvancedSearchInteractor(
+      applicationContext,
+      { keyword: 'x' } as any,
+      mockPetitionsClerkUser,
+    );
+    expect(result.results).toHaveLength(5000);
+    expect(result.moreResults).toBe(true);
+    expect(result.nextCursor).toEqual([4999]);
+    expect(
+      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
+        .calls.length,
+    ).toBe(4);
+  });
+
+  it('uses provided cursor as initial searchAfter', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .advancedDocumentSearch.mockReset()
+      .mockResolvedValueOnce({
+        results: [
+          {
+            caseCaption: 'Caption',
+            docketEntryId: '00000000-0000-4000-8000-000000000001',
+            docketNumber: '123-45',
+            documentTitle: 'Order',
+            documentType: 'Order',
+            eventCode: 'ODD',
+            signedJudgeName: 'Judge',
+            sort: [1],
+          },
+        ],
+      })
+      .mockResolvedValueOnce({ results: [] }); // second empty batch so loop exits
+    const cursor = ['c1'];
+    await orderAdvancedSearchInteractor(
+      applicationContext,
+      { cursor, keyword: 'y' } as any,
+      mockPetitionsClerkUser,
+    );
+    expect(
+      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
+        .calls[0][0].searchAfter,
+    ).toBe(cursor);
+  });
+
+  it('returns empty results with moreResults false when gateway returns no rows', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .advancedDocumentSearch.mockReset()
+      .mockResolvedValueOnce({ results: [] });
+
+    const result = await orderAdvancedSearchInteractor(
+      applicationContext,
+      { keyword: 'none' } as any,
+      mockPetitionsClerkUser,
+    );
+    expect(result.results).toHaveLength(0);
+    expect(result.moreResults).toBe(false);
+    expect(result.nextCursor).toBeUndefined();
+  });
+
+  it('throws when a returned order search result fails validation', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .advancedDocumentSearch.mockReset()
+      .mockResolvedValueOnce({
+        results: [
+          {
+            caseCaption: 'Bad Order',
+            docketEntryId: '00000000-0000-4000-8000-000000000199',
+            docketNumber: '321-21',
+            documentTitle: 'Broken Order',
+            documentType: 'Order',
+            eventCode: 'ODD',
+            signedJudgeName: 'Judge',
+            numberOfPages: 'blue', // invalid type
+          },
+        ],
+      });
+    await expect(
+      orderAdvancedSearchInteractor(
+        applicationContext,
+        { keyword: 'bad' } as any,
+        mockPetitionsClerkUser,
+      ),
+    ).rejects.toThrow('entity was invalid');
+  });
 });
