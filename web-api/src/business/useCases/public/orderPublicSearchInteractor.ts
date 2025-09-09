@@ -38,11 +38,12 @@ export const orderPublicSearchInteractor = async (
     judge,
     keyword,
     startDate,
+    from,
   });
 
   const rawSearch = orderSearch.validate().toRawObject();
 
-  const { results } = await applicationContext
+  const { results, totalCount } = await applicationContext
     .getPersistenceGateway()
     .advancedDocumentSearch({
       applicationContext,
@@ -60,10 +61,12 @@ export const orderPublicSearchInteractor = async (
     timestamp,
   });
 
+  const validated = PublicDocumentSearchResult.validateRawCollection(
+    results,
+  ).slice(0, MAX_SEARCH_RESULTS);
+
   return {
-    results: PublicDocumentSearchResult.validateRawCollection(results).slice(
-      0,
-      MAX_SEARCH_RESULTS,
-    ),
+    results: validated,
+    totalCount,
   };
 };

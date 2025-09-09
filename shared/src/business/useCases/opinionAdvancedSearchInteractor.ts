@@ -50,11 +50,12 @@ export const opinionAdvancedSearchInteractor = async (
     judge,
     keyword,
     startDate,
+    from,
   });
 
   const rawSearch = opinionSearch.validate().toRawObject();
 
-  const { results } = await applicationContext
+  const { results, totalCount } = await applicationContext
     .getPersistenceGateway()
     .advancedDocumentSearch({
       applicationContext,
@@ -74,10 +75,12 @@ export const opinionAdvancedSearchInteractor = async (
     userRole: authorizedUser.role,
   });
 
+  const validated = InternalDocumentSearchResult.validateRawCollection(
+    results,
+  ).slice(0, MAX_SEARCH_RESULTS);
+
   return {
-    results: InternalDocumentSearchResult.validateRawCollection(results).slice(
-      0,
-      MAX_SEARCH_RESULTS,
-    ),
+    results: validated,
+    totalCount,
   };
 };

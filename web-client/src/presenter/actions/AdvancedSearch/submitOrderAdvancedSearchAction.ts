@@ -38,7 +38,7 @@ export const submitOrderAdvancedSearchAction = async ({
 
     let combinedResults = [...firstHalf.results];
 
-    if (firstHalf.results.length === 5000) {
+    if (firstHalf.totalCount && firstHalf.totalCount > 5000) {
       const secondHalf = await applicationContext
         .getUseCases()
         .orderAdvancedSearchInteractor(applicationContext, {
