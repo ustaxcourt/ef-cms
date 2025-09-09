@@ -94,6 +94,9 @@ async function scanContinuously(params: ScanCommandInput) {
         'user-limiter-opinion-search',
       );
       const isOrderSearch = record.pk.startsWith('user-limiter-order-search');
+      const isDocumentSearch = record.pk.startsWith('document-search-limiter');
+      const isLockComplete = record.pk.startsWith('lock-complete');
+      const isMigration = record.pk.startsWith('migration');
 
       if (
         isUserRecord ||
@@ -114,7 +117,10 @@ async function scanContinuously(params: ScanCommandInput) {
         isIpLimiteer ||
         isChangeOfAddressJob ||
         isOpinionSearch ||
-        isOrderSearch
+        isOrderSearch ||
+        isDocumentSearch ||
+        isLockComplete ||
+        isMigration
       ) {
         deleteRequests.push({
           DeleteRequest: { Key: { pk: record.pk, sk: record.sk } },
