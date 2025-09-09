@@ -786,7 +786,8 @@ export const SPOS_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
 
 export const AUTO_GENERATED_STATUS_REPORT_ORDER_DESCRIPTIONS = {
   statusReport: 'Status Report Due',
-  statusReportStipulatedDecision: 'Status Report or Proposed Stipulated Decision Due'
+  statusReportStipulatedDecision:
+    'Status Report or Proposed Stipulated Decision Due',
 };
 
 const AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES_WITH_NAMES = {
@@ -2072,3 +2073,21 @@ export const TERM_GENERATOR_DEFAULT_VALUES = {
 } as const;
 
 export const MOBILE_SCREEN_BREAKPOINT = 640;
+
+export const PRO_SE_CHECKLIST = 'pro-se-checklist';
+
+export const ALLOWED_EVENT_CODES = [
+  'P',
+  'ATP',
+  'DISC',
+  'NOT',
+  'NOTR',
+  'NTD',
+  'SPOS',
+  'SPTO',
+  'TCRP',
+  'NORP',
+  'NOIP',
+  'NCTL',
+  'NODC',
+];

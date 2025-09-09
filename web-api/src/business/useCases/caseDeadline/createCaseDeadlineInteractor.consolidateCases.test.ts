@@ -10,7 +10,6 @@ jest.mock(
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
-
 import {
   CaseDeadline,
   RawCaseDeadline,

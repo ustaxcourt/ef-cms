@@ -1,25 +1,13 @@
-import { addCaseToHearing } from './persistence/dynamo/trialSessions/addCaseToHearing';
 import { advancedDocumentSearch } from './persistence/elasticsearch/advancedDocumentSearch';
 import { createChangeOfAddressJob } from './persistence/postgres/jobs/changeOfAddress/createChangeOfAddressJob';
-import { createJobStatus } from './persistence/dynamo/trialSessions/createJobStatus';
-import { createPractitionerDocument } from './persistence/dynamo/practitioners/createPractitionerDocument';
-import { createTrialSession } from './persistence/dynamo/trialSessions/createTrialSession';
-import { createTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/createTrialSessionWorkingCopy';
-import { decrementJobCounter } from './persistence/dynamo/trialSessions/decrementJobCounter';
 import { deleteDocumentFile } from './persistence/s3/deleteDocumentFile';
 import { deleteMessage } from './persistence/sqs/deleteMessage';
-import { deletePractitionerDocument } from './persistence/dynamo/practitioners/deletePractitionerDocument';
-import { deleteTrialSession } from './persistence/dynamo/trialSessions/deleteTrialSession';
-import { deleteTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/deleteTrialSessionWorkingCopy';
+import { deletePractitionerDocument } from './persistence/postgres/practitionerDocuments/deletePractitionerDocument';
 import { deleteUserConnection } from '@web-api/persistence/postgres/connections/deleteUserConnection';
-import { editPractitionerDocument } from './persistence/dynamo/practitioners/editPractitionerDocument';
 import { fetchEventCodesCountForJudges } from './persistence/elasticsearch/fetchEventCodesCountForJudges';
 import { getAllWebSocketConnections } from '@web-api/persistence/postgres/connections/getAllWebSocketConnections';
-import { getBulkTrialSessionWorkingCopies } from './persistence/dynamo/trialSessions/getBulkTrialSessionWorkingCopies';
-import { getCalendaredCasesForTrialSession } from './persistence/dynamo/trialSessions/getCalendaredCasesForTrialSession';
 import { getCasesByEmailTotal } from '@web-api/persistence/elasticsearch/getCasesByEmailTotal';
 import { getClientId } from './persistence/cognito/getClientId';
-import { getDeployTableStatus } from './persistence/dynamo/getDeployTableStatus';
 import { getDispatchNotification } from './persistence/postgres/notifications/getDispatchNotification';
 import { getDocketEntriesServedWithinTimeframe } from './persistence/elasticsearch/getDocketEntriesServedWithinTimeframe';
 import { getDocument } from './persistence/s3/getDocument';
@@ -27,36 +15,23 @@ import { getDocumentIdFromSQSMessage } from './persistence/sqs/getDocumentIdFrom
 import { getDownloadPolicyUrl } from './persistence/s3/getDownloadPolicyUrl';
 import { getEligibleCasesForTrialCity } from '@web-api/persistence/postgres/cases/getEligibleCasesForTrialCity';
 import { getMaintenanceMode } from './persistence/postgres/featureFlag/getMaintenanceMode';
-import { getPractitionerDocumentByFileId } from './persistence/dynamo/practitioners/getPractitionerDocumentByFileId';
-import { getPractitionerDocuments } from './persistence/dynamo/practitioners/getPractitionerDocuments';
 import { getPractitionersByName } from './persistence/elasticsearch/getPractitionersByName';
 import { getReconciliationReport } from './persistence/elasticsearch/getReconciliationReport';
 import { getSesStatus } from './persistence/ses/getSesStatus';
 import { getColdCases } from './persistence/elasticsearch/getColdCases';
 import { getTableStatus } from './persistence/dynamo/getTableStatus';
-import { getTrialSessionById } from './persistence/dynamo/trialSessions/getTrialSessionById';
-import { getTrialSessionJobStatusForCase } from './persistence/dynamo/trialSessions/getTrialSessionJobStatusForCase';
-import { getTrialSessionProcessingStatus } from './persistence/dynamo/trialSessions/getTrialSessionProcessingStatus';
-import { getTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/getTrialSessionWorkingCopy';
-import { getTrialSessions } from './persistence/dynamo/trialSessions/getTrialSessions';
 import { getUploadPolicy } from './persistence/s3/getUploadPolicy';
 import { getUserByIdOnceAllUpdatesComplete } from '@web-api/persistence/postgres/users/getUserByIdOnceAllUpdatesComplete';
 import { getWebSocketConnectionsByUserId } from '@web-api/persistence/postgres/connections/getWebSocketConnectionsByUserId';
 import { incrementCounter } from './persistence/dynamo/helpers/incrementCounter';
 import { isEmailAvailable } from './persistence/cognito/isEmailAvailable';
 import { isFileExists } from './persistence/s3/isFileExists';
-import { removeCaseFromHearing } from './persistence/dynamo/trialSessions/removeCaseFromHearing';
 import { saveDispatchNotification } from '@web-api/persistence/postgres/notifications/saveDispatchNotification';
 import { saveDocumentFromLambda } from './persistence/s3/saveDocumentFromLambda';
 import { saveUserConnection } from '@web-api/persistence/postgres/connections/saveUserConnection';
 import { setChangeOfAddressCaseAsDone } from './persistence/postgres/jobs/changeOfAddress/setChangeOfAddressCaseAsDone';
-import { setTrialSessionJobStatusForCase } from './persistence/dynamo/trialSessions/setTrialSessionJobStatusForCase';
-import { setTrialSessionProcessingStatus } from './persistence/dynamo/trialSessions/setTrialSessionProcessingStatus';
-import { updateCaseHearing } from './persistence/dynamo/trialSessions/updateCaseHearing';
 import { updateMaintenanceMode } from '@web-api/persistence/postgres/featureFlag/updateMaintenanceMode';
 import { updatePractitionerUser } from './business/useCaseHelper/users/updatePractitionerUser';
-import { updateTrialSession } from './persistence/dynamo/trialSessions/updateTrialSession';
-import { updateTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/updateTrialSessionWorkingCopy';
 import { uploadDocument } from '@web-api/persistence/s3/uploadDocument';
 import { zipDocuments } from './persistence/s3/zipDocuments';
 import { getEligibleCasesForTrialSession } from '@web-api/persistence/postgres/cases/getEligibleCasesForTrialSession';
@@ -101,42 +76,24 @@ const isValidatedDecorator = <T>(persistenceGatewayMethods: T): T => {
 
 const gatewayMethods = {
   ...isValidatedDecorator({
-    addCaseToHearing,
-    createJobStatus,
-    createPractitionerDocument,
-    createTrialSession,
-    createTrialSessionWorkingCopy,
-    editPractitionerDocument,
     incrementCounter,
-    removeCaseFromHearing,
     saveDispatchNotification,
     saveDocumentFromLambda,
     saveUserConnection,
-    setTrialSessionJobStatusForCase,
-    setTrialSessionProcessingStatus,
-    updateCaseHearing,
     updateMaintenanceMode,
     updatePractitionerUser,
-    updateTrialSession,
-    updateTrialSessionWorkingCopy,
   }),
   // methods below are not known to create or update "entity" records
   advancedDocumentSearch,
   createChangeOfAddressJob,
-  decrementJobCounter,
   deleteDocumentFile,
   deleteMessage,
   deletePractitionerDocument,
-  deleteTrialSession,
-  deleteTrialSessionWorkingCopy,
   deleteUserConnection,
   fetchEventCodesCountForJudges,
   getAllWebSocketConnections,
-  getBulkTrialSessionWorkingCopyNotes: getBulkTrialSessionWorkingCopies,
-  getCalendaredCasesForTrialSession,
   getCasesByEmailTotal,
   getClientId,
-  getDeployTableStatus,
   getDispatchNotification,
   getDocketEntriesServedWithinTimeframe,
   getDocument,
@@ -145,19 +102,12 @@ const gatewayMethods = {
   getEligibleCasesForTrialCity,
   getEligibleCasesForTrialSession,
   getMaintenanceMode,
-  getPractitionerDocumentByFileId,
-  getPractitionerDocuments,
   getPractitionersByName,
   getReconciliationReport,
   getRequestResults,
   getSesStatus,
   getColdCases,
   getTableStatus,
-  getTrialSessionById,
-  getTrialSessionJobStatusForCase,
-  getTrialSessionProcessingStatus,
-  getTrialSessionWorkingCopy,
-  getTrialSessions,
   getUploadPolicy,
   getUserByIdOnceAllUpdatesComplete,
   getWebSocketConnectionsByUserId,
