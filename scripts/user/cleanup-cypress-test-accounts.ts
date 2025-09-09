@@ -1,6 +1,7 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
 import { CognitoIdentityProvider, ListUsersCommandOutput, UserType } from '@aws-sdk/client-cognito-identity-provider';
+import pLimit from 'p-limit';
 import { Kysely } from 'kysely';
 import type { Database } from '../../web-api/src/database-schema';
 import { getConnection } from '../../web-api/src/getConnection';
@@ -10,100 +11,20 @@ import { getUserPoolId, requireEnvVars } from '../../shared/admin-tools/util';
 // UTILITIES
 // ============================================================================
 
-// Config constants
 const AWS_REGION = 'us-east-1';
 const DEFAULT_EMAIL_PREFIX = 'cypress_test_account';
-const COGNITO_DELETE_RPS = 30;
-const COGNITO_DELETE_INTERVAL_MS = Math.round(1000 / COGNITO_DELETE_RPS); // ~34ms
+const COGNITO_CONCURRENCY = 30; // max in-flight Cognito deletes
 const COGNITO_MAX_RETRIES = 5;
 const COGNITO_BACKOFF_BASE_MS = 100; // base for exponential backoff
 const COGNITO_JITTER_MS = 100; // add jitter to spread retries
-
-type Args = {
-  includeIrs: boolean;
-  emailPrefix: string;
-  dryRun: boolean;
-  help: boolean;
-};
-
-function parseArgs(argv: string[]): Args {
-  const args: Args = {
-    dryRun: false,
-    emailPrefix: DEFAULT_EMAIL_PREFIX,
-    help: false,
-    includeIrs: true,
-  };
-
-  for (let i = 2; i < argv.length; i++) {
-    const token = argv[i];
-    if (token === '--help' || token === '-h') {
-      args.help = true;
-    } else if (token === '--dry-run') {
-      args.dryRun = true;
-    } else if (token === '--no-irs') {
-      args.includeIrs = false;
-    } else if (token === '--prefix') {
-      const next = argv[i + 1];
-      if (!next) throw new Error('Missing value for --prefix');
-      args.emailPrefix = next;
-      i++;
-    } else if (token.startsWith('--prefix=')) {
-      args.emailPrefix = token.split('=')[1] ?? args.emailPrefix;
-    } else if (token === '--include-irs') {
-      args.includeIrs = true;
-    }
-  }
-
-  return args;
-}
-
-function printUsage(): void {
-  console.log('Cleanup Cypress test accounts');
-  console.log('');
-  console.log('Usage:');
-  console.log('  npx ts-node --transpile-only ./scripts/user/cleanup-cypress-test-accounts.ts [options]');
-  console.log('');
-  console.log('Options:');
-  console.log('  --help, -h           Show this help');
-  console.log('  --dry-run            List accounts that would be deleted without deleting');
-  console.log('  --prefix <value>     Email prefix to match (default: cypress_test_account)');
-  console.log('  --no-irs             Skip IRS user pool (default: include IRS if configured)');
-}
 
 function getIrsUserPoolId(): string | undefined {
   const pool = process.env.USER_POOL_IRS_ID;
   return pool && pool.length > 0 ? pool : undefined;
 }
 
-// Smooth rate limiter for Cognito deletes (≈30 req/sec → one op every ~34ms)
-const rateLimitCognitoDelete = (() => {
-  const queue: Array<() => void> = [];
-  let timer: ReturnType<typeof setInterval> | null = null;
-
-  const tick = () => {
-    const next = queue.shift();
-    if (!next) {
-      if (timer) {
-        clearInterval(timer as any);
-        timer = null;
-      }
-      return;
-    }
-    next();
-  };
-
-  return async <T>(fn: () => Promise<T>): Promise<T> =>
-    new Promise<T>((resolve, reject) => {
-      queue.push(() => {
-        fn().then(resolve).catch(reject);
-      });
-      if (!timer) {
-        timer = setInterval(tick, COGNITO_DELETE_INTERVAL_MS);
-        const maybeUnref: any = timer as any;
-        if (maybeUnref && typeof maybeUnref.unref === 'function') maybeUnref.unref();
-      }
-    });
-})();
+// Concurrency limiter for Cognito deletes
+const cognitoDeleteLimit = pLimit(COGNITO_CONCURRENCY);
 
 function sleep(ms: number): Promise<void> {
   return new Promise(res => setTimeout(res, ms));
@@ -159,7 +80,7 @@ async function deleteCognitoUser({
   userPoolId: string;
   email: string;
 }): Promise<void> {
-  await rateLimitCognitoDelete(async () => {
+  await cognitoDeleteLimit(async () => {
     try {
       await cognito.adminDeleteUser({
         UserPoolId: userPoolId,
@@ -221,16 +142,20 @@ async function deleteAllUserRecords(db: Kysely<Database>, userId: string): Promi
 async function listDbUsersByEmailPrefix(
   db: Kysely<Database>,
   emailPrefix: string,
-): Promise<{ email: string; userId: string }[]> {
+): Promise<{ email: string | null; userId: string }[]> {
   const rows = await db
     .selectFrom('dwUser')
     .select(['userId', 'email'])
-    .where('email', 'like', `${emailPrefix}%`)
+    .where(db =>
+      db.or([
+        db('email', 'ilike', `${emailPrefix}%`),
+        db('pendingEmail', 'ilike', `${emailPrefix}%`),
+      ])
+    )
     .execute();
 
   return rows
-    .filter((r): r is { userId: string; email: string } => !!r.email)
-    .map(r => ({ email: r.email.toLowerCase(), userId: r.userId }));
+    .map(r => ({ email: r.email?.toLowerCase() ?? null, userId: r.userId }));
 }
 
 // ============================================================================
@@ -239,9 +164,9 @@ async function listDbUsersByEmailPrefix(
 
 type Pool = { label: string; id: string };
 
-async function buildPools(includeIrs: boolean): Promise<Pool[]> {
+async function buildPools(): Promise<Pool[]> {
   const primaryPoolId = await getUserPoolId();
-  const irsPoolId = includeIrs ? await getIrsUserPoolId() : undefined;
+  const irsPoolId = await getIrsUserPoolId();
   const pools: Pool[] = [{ label: 'primary', id: primaryPoolId }];
   if (irsPoolId) pools.push({ label: 'irs', id: irsPoolId });
   return pools;
@@ -252,13 +177,11 @@ async function runDbFirstCleanup({
   cognito,
   pools,
   emailPrefix,
-  dryRun,
 }: {
   db: Kysely<Database>;
   cognito: CognitoIdentityProvider;
   pools: Pool[];
   emailPrefix: string;
-  dryRun: boolean;
 }): Promise<void> {
   try {
     const dbUsers = await listDbUsersByEmailPrefix(db, emailPrefix);
@@ -269,16 +192,14 @@ async function runDbFirstCleanup({
     }
 
     console.log(`[db] Found ${dbUsers.length} user(s) to delete`);
-    if (dryRun) {
-      dbUsers.forEach(u => console.log(`[dry-run][db] ${u.email} (${u.userId})`));
-      return;
-    }
 
     await Promise.all(
       dbUsers.map(async ({ email, userId }) => {
         for (const pool of pools) {
           try {
-            await deleteCognitoUser({ cognito, email, userPoolId: pool.id });
+            if (email) {
+              await deleteCognitoUser({ cognito, email, userPoolId: pool.id });
+            }
           } catch (e) {
             console.error(`[db][${pool.label}] Failed to delete Cognito user ${email}`, e);
           }
@@ -303,13 +224,11 @@ async function runCognitoCleanupForPool({
   cognito,
   pool,
   emailPrefix,
-  dryRun,
 }: {
   db: Kysely<Database>;
   cognito: CognitoIdentityProvider;
   pool: Pool;
   emailPrefix: string;
-  dryRun: boolean;
 }): Promise<void> {
   try {
     const users = await listUsersByEmailPrefix({
@@ -324,10 +243,6 @@ async function runCognitoCleanupForPool({
     }
 
     console.log(`[${pool.label}] Found ${users.length} user(s) to delete`);
-    if (dryRun) {
-      users.forEach(u => console.log(`[dry-run] ${u.email} (${u.userId})`));
-      return;
-    }
 
     await Promise.all(
       users.map(async ({ email, userId }) => {
@@ -352,16 +267,10 @@ async function runCognitoCleanupForPool({
 }
 
 async function main(): Promise<void> {
-  const args = parseArgs(process.argv);
-  if (args.help) {
-    printUsage();
-    return;
-  }
-
   requireEnvVars(['ENV']);
 
   const cognito = new CognitoIdentityProvider({ region: AWS_REGION });
-  const pools = await buildPools(args.includeIrs);
+  const pools = await buildPools();
 
   // Establish a single DB connection for all deletes
   const db = await getConnection({ cb: r => r });
@@ -370,8 +279,7 @@ async function main(): Promise<void> {
   await runDbFirstCleanup({
     cognito,
     db,
-    dryRun: args.dryRun,
-    emailPrefix: args.emailPrefix,
+    emailPrefix: DEFAULT_EMAIL_PREFIX,
     pools,
   });
 
@@ -380,8 +288,7 @@ async function main(): Promise<void> {
     await runCognitoCleanupForPool({
       cognito,
       db,
-      dryRun: args.dryRun,
-      emailPrefix: args.emailPrefix,
+      emailPrefix: DEFAULT_EMAIL_PREFIX,
       pool,
     });
   }
