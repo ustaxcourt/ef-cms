@@ -1,16 +1,13 @@
 import { advancedDocumentSearch } from './persistence/elasticsearch/advancedDocumentSearch';
 import { createChangeOfAddressJob } from './persistence/postgres/jobs/changeOfAddress/createChangeOfAddressJob';
-import { createPractitionerDocument } from './persistence/dynamo/practitioners/createPractitionerDocument';
 import { deleteDocumentFile } from './persistence/s3/deleteDocumentFile';
 import { deleteMessage } from './persistence/sqs/deleteMessage';
-import { deletePractitionerDocument } from './persistence/dynamo/practitioners/deletePractitionerDocument';
+import { deletePractitionerDocument } from './persistence/postgres/practitionerDocuments/deletePractitionerDocument';
 import { deleteUserConnection } from '@web-api/persistence/postgres/connections/deleteUserConnection';
-import { editPractitionerDocument } from './persistence/dynamo/practitioners/editPractitionerDocument';
 import { fetchEventCodesCountForJudges } from './persistence/elasticsearch/fetchEventCodesCountForJudges';
 import { getAllWebSocketConnections } from '@web-api/persistence/postgres/connections/getAllWebSocketConnections';
 import { getCasesByEmailTotal } from '@web-api/persistence/elasticsearch/getCasesByEmailTotal';
 import { getClientId } from './persistence/cognito/getClientId';
-import { getDeployTableStatus } from './persistence/dynamo/getDeployTableStatus';
 import { getDispatchNotification } from './persistence/postgres/notifications/getDispatchNotification';
 import { getDocketEntriesServedWithinTimeframe } from './persistence/elasticsearch/getDocketEntriesServedWithinTimeframe';
 import { getDocument } from './persistence/s3/getDocument';
@@ -18,8 +15,6 @@ import { getDocumentIdFromSQSMessage } from './persistence/sqs/getDocumentIdFrom
 import { getDownloadPolicyUrl } from './persistence/s3/getDownloadPolicyUrl';
 import { getEligibleCasesForTrialCity } from '@web-api/persistence/postgres/cases/getEligibleCasesForTrialCity';
 import { getMaintenanceMode } from './persistence/postgres/featureFlag/getMaintenanceMode';
-import { getPractitionerDocumentByFileId } from './persistence/dynamo/practitioners/getPractitionerDocumentByFileId';
-import { getPractitionerDocuments } from './persistence/dynamo/practitioners/getPractitionerDocuments';
 import { getPractitionersByName } from './persistence/elasticsearch/getPractitionersByName';
 import { getReconciliationReport } from './persistence/elasticsearch/getReconciliationReport';
 import { getSesStatus } from './persistence/ses/getSesStatus';
@@ -81,8 +76,6 @@ const isValidatedDecorator = <T>(persistenceGatewayMethods: T): T => {
 
 const gatewayMethods = {
   ...isValidatedDecorator({
-    createPractitionerDocument,
-    editPractitionerDocument,
     incrementCounter,
     saveDispatchNotification,
     saveDocumentFromLambda,
@@ -101,7 +94,6 @@ const gatewayMethods = {
   getAllWebSocketConnections,
   getCasesByEmailTotal,
   getClientId,
-  getDeployTableStatus,
   getDispatchNotification,
   getDocketEntriesServedWithinTimeframe,
   getDocument,
@@ -110,8 +102,6 @@ const gatewayMethods = {
   getEligibleCasesForTrialCity,
   getEligibleCasesForTrialSession,
   getMaintenanceMode,
-  getPractitionerDocumentByFileId,
-  getPractitionerDocuments,
   getPractitionersByName,
   getReconciliationReport,
   getRequestResults,
