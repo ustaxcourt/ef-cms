@@ -6,22 +6,39 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 describe('openCaseDocumentDownloadUrlAction', () => {
   const mockDocketNumber = '123-20';
   const mockDocketEntryId = 'df5d81cc-d67b-418d-9626-8ad92c939d83';
-  const mockDocumentDownloadUrl = 'http://example.com';
+  const mockDocumentDownloadUrl = 'http://example.com/abc.pdf';
 
   presenter.providers.applicationContext = applicationContext;
 
+  let hrefSetter: jest.SpyInstance | undefined;
+  let assignSpy: jest.SpyInstance | undefined;
+
   beforeEach(() => {
-    Object.defineProperty(window, 'location', {
-      value: {
-        href: undefined,
-      },
-    });
+    window.history.replaceState({}, '', '/');
 
     applicationContext
       .getUseCases()
       .getDocumentDownloadUrlInteractor.mockResolvedValue({
         url: mockDocumentDownloadUrl,
       });
+
+    const implSymbol = Reflect.ownKeys(window.location).find(
+      k => typeof k === 'symbol',
+    )!;
+
+    hrefSetter = jest
+      .spyOn(
+        Object.getPrototypeOf((window.location as any)[implSymbol]),
+        'href',
+        'set',
+      )
+      .mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    hrefSetter?.mockRestore();
+    assignSpy?.mockRestore();
+    jest.clearAllMocks();
   });
 
   it('should set state.iframeSrc to the document download url when props.useSameTab is false props.isForIFrame is true', async () => {
@@ -36,6 +53,7 @@ describe('openCaseDocumentDownloadUrlAction', () => {
     });
 
     expect(state.iframeSrc).toBe(mockDocumentDownloadUrl);
+    expect(assignSpy).not.toHaveBeenCalled();
   });
 
   it('should set window.location.href to the document download url when props.useSameTab is true and props.isForIFrame is false', async () => {
@@ -48,7 +66,7 @@ describe('openCaseDocumentDownloadUrlAction', () => {
       },
     });
 
-    expect(window.location.href).toBe(mockDocumentDownloadUrl);
+    expect(hrefSetter).toHaveBeenCalledWith(mockDocumentDownloadUrl);
   });
 
   it('should open in a new tab when props.useSameTab and props.isForIFrame are false', async () => {
@@ -63,8 +81,9 @@ describe('openCaseDocumentDownloadUrlAction', () => {
     });
 
     expect(
-      await applicationContext.getUtilities().openUrlInNewTab,
+      applicationContext.getUtilities().openUrlInNewTab,
     ).toHaveBeenCalledWith({ url: mockDocumentDownloadUrl });
+    expect(hrefSetter).not.toHaveBeenCalled();
   });
 
   it('should throw an error when getDocumentDownloadUrlInteractor fails', async () => {
