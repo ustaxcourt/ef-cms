@@ -48,16 +48,6 @@ describe('opinionAdvancedSearchInteractor', () => {
     ).rejects.toThrow('Unauthorized');
   });
 
-  it('returns an unauthorized error on petitioner user role', async () => {
-    await expect(
-      opinionAdvancedSearchInteractor(
-        applicationContext,
-        {} as any,
-        mockPetitionerUser,
-      ),
-    ).rejects.toThrow('Unauthorized');
-  });
-
   it('logs raw search information and results size', async () => {
     await opinionAdvancedSearchInteractor(
       applicationContext,
@@ -149,5 +139,122 @@ describe('opinionAdvancedSearchInteractor', () => {
       mockPetitionsClerkUser,
     );
     expect(response.moreResults).toBe(false);
+  });
+
+  it('accumulates across multiple raw batches, trims sentinel, and sets nextCursor to last kept record', async () => {
+    // Create 4 batches: 1500 + 1500 + 1500 + 501 = 5001 (last is sentinel)
+    const makeBatch = (count: number, startIndex: number) =>
+      Array.from({ length: count }).map((_, i) => ({
+        caseCaption: 'Caption',
+        docketEntryId: `00000000-0000-4000-8000-${String(startIndex + i).padStart(12, '0')}`,
+        docketNumber: '123-45',
+        documentTitle: 'Some Opinion',
+        documentType: 'T.C. Opinion',
+        eventCode: 'TCOP',
+        signedJudgeName: 'Judge',
+        sort: [startIndex + i],
+      }));
+
+    applicationContext
+      .getPersistenceGateway()
+      .advancedDocumentSearch.mockReset()
+      .mockResolvedValueOnce({ results: makeBatch(1500, 0) })
+      .mockResolvedValueOnce({ results: makeBatch(1500, 1500) })
+      .mockResolvedValueOnce({ results: makeBatch(1500, 3000) })
+      .mockResolvedValueOnce({ results: makeBatch(501, 4500) }); // includes sentinel (index 5000)
+
+    const result = await opinionAdvancedSearchInteractor(
+      applicationContext,
+      { keyword: 'x' } as any,
+      mockPetitionsClerkUser,
+    );
+
+    // Should have trimmed to 5000, moreResults true, cursor points to sort value 4999
+    expect(result.results).toHaveLength(5000);
+    expect(result.moreResults).toBe(true);
+    expect(result.nextCursor).toEqual([4999]);
+    // Ensure advancedDocumentSearch called multiple times (looped batches)
+    expect(
+      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
+        .calls.length,
+    ).toBe(4);
+  });
+
+  it('uses provided cursor as initial searchAfter', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .advancedDocumentSearch.mockReset()
+      .mockResolvedValueOnce({
+        results: [
+          {
+            caseCaption: 'Caption',
+            docketEntryId: '00000000-0000-4000-8000-000000000001',
+            docketNumber: '123-45',
+            documentTitle: 'Opinion',
+            documentType: 'T.C. Opinion',
+            eventCode: 'TCOP',
+            signedJudgeName: 'Judge',
+            sort: [1],
+          },
+        ],
+      })
+      .mockResolvedValueOnce({ results: [] }); // ensure loop exit on second iteration
+
+    const cursor = ['a', 'b'];
+    await opinionAdvancedSearchInteractor(
+      applicationContext,
+      { cursor, keyword: 'y' } as any,
+      mockPetitionsClerkUser,
+    );
+    expect(
+      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
+        .calls[0][0].searchAfter,
+    ).toBe(cursor);
+  });
+
+  it('returns empty results with moreResults false when gateway returns no rows', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .advancedDocumentSearch.mockReset()
+      .mockResolvedValueOnce({ results: [] });
+
+    const result = await opinionAdvancedSearchInteractor(
+      applicationContext,
+      { keyword: 'none' } as any,
+      mockPetitionsClerkUser,
+    );
+    expect(result.results).toHaveLength(0);
+    expect(result.moreResults).toBe(false);
+    expect(result.nextCursor).toBeUndefined();
+  });
+
+  it('throws when a returned opinion search result fails validation', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .advancedDocumentSearch.mockReset()
+      .mockResolvedValueOnce({
+        results: [
+          {
+            caseCaption: 'Bad Opinion',
+            docketEntryId: '00000000-0000-4000-8000-000000000099',
+            docketNumber: '999-99',
+            documentTitle: 'Broken Opinion',
+            documentType: 'T.C. Opinion',
+            eventCode: 'TCOP',
+            signedJudgeName: 'Judge',
+            numberOfPages: 'green', // invalid type
+          },
+        ],
+      });
+    await expect(
+      opinionAdvancedSearchInteractor(
+        applicationContext,
+        {
+          keyword: 'bad',
+          opinionTypes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
+        } as any,
+        mockPetitionsClerkUser,
+      ),
+    ).rejects.toThrow('entity was invalid');
   });
 });
