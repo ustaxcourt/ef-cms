@@ -208,7 +208,7 @@ describe('opinionPublicSearchInteractor', () => {
             documentType: 'T.C. Opinion',
             eventCode: 'TCOP',
             signedJudgeName: 'Judge',
-            numberOfPages: 'yellow', // invalid type
+            numberOfPages: 'yellow',
           },
         ],
       });

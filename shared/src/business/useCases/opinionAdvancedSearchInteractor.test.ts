@@ -142,7 +142,6 @@ describe('opinionAdvancedSearchInteractor', () => {
   });
 
   it('accumulates across multiple raw batches, trims sentinel, and sets nextCursor to last kept record', async () => {
-    // Create 4 batches: 1500 + 1500 + 1500 + 501 = 5001 (last is sentinel)
     const makeBatch = (count: number, startIndex: number) =>
       Array.from({ length: count }).map((_, i) => ({
         caseCaption: 'Caption',
@@ -161,7 +160,7 @@ describe('opinionAdvancedSearchInteractor', () => {
       .mockResolvedValueOnce({ results: makeBatch(1500, 0) })
       .mockResolvedValueOnce({ results: makeBatch(1500, 1500) })
       .mockResolvedValueOnce({ results: makeBatch(1500, 3000) })
-      .mockResolvedValueOnce({ results: makeBatch(501, 4500) }); // includes sentinel (index 5000)
+      .mockResolvedValueOnce({ results: makeBatch(501, 4500) });
 
     const result = await opinionAdvancedSearchInteractor(
       applicationContext,
@@ -169,11 +168,9 @@ describe('opinionAdvancedSearchInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    // Should have trimmed to 5000, moreResults true, cursor points to sort value 4999
     expect(result.results).toHaveLength(5000);
     expect(result.moreResults).toBe(true);
     expect(result.nextCursor).toEqual([4999]);
-    // Ensure advancedDocumentSearch called multiple times (looped batches)
     expect(
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
         .calls.length,
@@ -198,7 +195,7 @@ describe('opinionAdvancedSearchInteractor', () => {
           },
         ],
       })
-      .mockResolvedValueOnce({ results: [] }); // ensure loop exit on second iteration
+      .mockResolvedValueOnce({ results: [] });
 
     const cursor = ['a', 'b'];
     await opinionAdvancedSearchInteractor(
@@ -242,7 +239,7 @@ describe('opinionAdvancedSearchInteractor', () => {
             documentType: 'T.C. Opinion',
             eventCode: 'TCOP',
             signedJudgeName: 'Judge',
-            numberOfPages: 'green', // invalid type
+            numberOfPages: 'green',
           },
         ],
       });
