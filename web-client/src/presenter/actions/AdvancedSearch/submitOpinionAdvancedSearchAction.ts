@@ -31,30 +31,28 @@ export const submitOpinionAdvancedSearchAction = async ({
   };
 
   try {
-    const firstHalf = await applicationContext
+    const firstChunk = await applicationContext
       .getUseCases()
       .opinionAdvancedSearchInteractor(applicationContext, {
         searchParams: {
           ...baseParams,
-          from: 0,
           limit: 5000,
         },
       });
 
-    let combinedResults = [...firstHalf.results];
+    let combinedResults = [...firstChunk.results];
 
-  if (firstHalf.totalCount && firstHalf.totalCount > 5000) {
-      const secondHalf = await applicationContext
+    if (firstChunk.moreResults && firstChunk.nextCursor) {
+      const secondChunk = await applicationContext
         .getUseCases()
         .opinionAdvancedSearchInteractor(applicationContext, {
           searchParams: {
             ...baseParams,
-            from: 5000,
             limit: 5000,
+            cursor: firstChunk.nextCursor,
           },
         });
-
-      combinedResults = [...combinedResults, ...secondHalf.results];
+      combinedResults = [...combinedResults, ...secondChunk.results];
     }
 
     return { searchResults: combinedResults };
@@ -62,8 +60,7 @@ export const submitOpinionAdvancedSearchAction = async ({
     if (err.responseCode === 429) {
       store.set(state.alertError, applicationContext.getConstants().ERROR_429);
       return { searchResults: [] };
-    } else {
-      throw err;
     }
+    throw err;
   }
 };

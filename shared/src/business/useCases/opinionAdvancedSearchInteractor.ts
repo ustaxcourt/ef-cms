@@ -24,6 +24,7 @@ export const opinionAdvancedSearchInteractor = async (
     startDate,
     from = 0,
     limit = 5000,
+    cursor,
   }: {
     caseTitleOrPetitioner: string;
     dateRange: string;
@@ -35,6 +36,7 @@ export const opinionAdvancedSearchInteractor = async (
     startDate: string;
     from?: number;
     limit?: number;
+    cursor?: any[];
   },
   authorizedUser: UnknownAuthUser,
 ) => {
@@ -55,19 +57,48 @@ export const opinionAdvancedSearchInteractor = async (
 
   const rawSearch = opinionSearch.validate().toRawObject();
 
-  const { results, totalCount } = await applicationContext
-    .getPersistenceGateway()
-    .advancedDocumentSearch({
-      applicationContext,
-      documentEventCodes: opinionTypes,
-      isOpinionSearch: true,
-      ...rawSearch,
-      from,
-      overrideResultSize: limit,
-    });
+  const detectionCeiling = Math.min(limit + 1, MAX_SEARCH_RESULTS + 1);
+  const desired = Math.min(limit, MAX_SEARCH_RESULTS);
+  const accumulated: any[] = [];
+  let searchAfter: any[] | undefined = undefined;
+  let nextCursor: any[] | undefined = undefined;
+  let rawFetches = 0;
+  const RAW_BATCH_SIZE = 1500;
+  const MAX_FETCH_BATCHES = 15;
+
+  while (
+    accumulated.length < detectionCeiling &&
+    rawFetches < MAX_FETCH_BATCHES
+  ) {
+    const { results: rawResults } = await applicationContext
+      .getPersistenceGateway()
+      .advancedDocumentSearch({
+        applicationContext,
+        documentEventCodes: opinionTypes,
+        isOpinionSearch: true,
+        ...rawSearch,
+        overrideResultSize: RAW_BATCH_SIZE,
+        searchAfter: cursor && rawFetches === 0 ? cursor : searchAfter,
+      });
+    rawFetches++;
+
+    if (rawResults.length === 0) break;
+
+    for (const r of rawResults) {
+      if (accumulated.length >= detectionCeiling) break;
+      accumulated.push(r);
+    }
+
+    const last = rawResults[rawResults.length - 1];
+    if (last && last.sort) {
+      searchAfter = last.sort;
+      nextCursor = last.sort;
+    } else {
+      break;
+    }
+  }
 
   const timestamp = formatNow(FORMATS.LOG_TIMESTAMP);
-
   applicationContext.logger.info('private opinion search', {
     ...omit(rawSearch, 'entityName'),
     timestamp,
@@ -76,11 +107,13 @@ export const opinionAdvancedSearchInteractor = async (
   });
 
   const validated = InternalDocumentSearchResult.validateRawCollection(
-    results,
-  ).slice(0, MAX_SEARCH_RESULTS);
+    accumulated,
+  ).slice(0, desired);
+  const moreResults = accumulated.length > desired;
 
   return {
     results: validated,
-    totalCount,
+    moreResults,
+    nextCursor: moreResults ? nextCursor : undefined,
   };
 };

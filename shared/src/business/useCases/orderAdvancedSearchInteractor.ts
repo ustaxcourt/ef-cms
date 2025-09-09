@@ -18,7 +18,12 @@ import { filterCaseSearchResultsNotAccessibleToUser } from '@shared/business/uti
 
 export const orderAdvancedSearchInteractor = async (
   applicationContext: ServerApplicationContext,
-  {
+  rawParams: any,
+  authorizedUser: UnknownAuthUser,
+) => {
+  const params =
+    rawParams && rawParams.searchParams ? rawParams.searchParams : rawParams;
+  const {
     caseTitleOrPetitioner,
     dateRange,
     docketNumber,
@@ -28,19 +33,8 @@ export const orderAdvancedSearchInteractor = async (
     startDate,
     from = 0,
     limit = 5000,
-  }: {
-    caseTitleOrPetitioner: string;
-    dateRange: string;
-    docketNumber: string;
-    endDate: string;
-    judge: string;
-    keyword: string;
-    startDate: string;
-    from?: number;
-    limit?: number;
-  },
-  authorizedUser: UnknownAuthUser,
-) => {
+    cursor,
+  } = params || {};
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ADVANCED_SEARCH)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -59,17 +53,54 @@ export const orderAdvancedSearchInteractor = async (
 
   const rawSearch = orderSearch.validate().toRawObject();
 
-  const { results, totalCount } = await applicationContext
-    .getPersistenceGateway()
-    .advancedDocumentSearch({
-      applicationContext,
-      documentEventCodes: ORDER_EVENT_CODES,
-      omitSealed: false,
-      ...rawSearch,
-      isExternalUser: User.isExternalUser(authorizedUser.role),
-      from,
-      overrideResultSize: limit,
-    });
+  const detectionCeiling = Math.min(limit + 1, MAX_SEARCH_RESULTS + 1);
+  const desired = Math.min(limit, MAX_SEARCH_RESULTS);
+  const accumulated: any[] = [];
+  let searchAfter: any[] | undefined = undefined;
+  let nextCursor: any[] | undefined = undefined;
+  let rawFetches = 0;
+
+  const RAW_BATCH_SIZE = 1500;
+  const MAX_FETCH_BATCHES = 15;
+
+  while (
+    accumulated.length < detectionCeiling &&
+    rawFetches < MAX_FETCH_BATCHES
+  ) {
+    const { results: rawResults } = await applicationContext
+      .getPersistenceGateway()
+      .advancedDocumentSearch({
+        applicationContext,
+        documentEventCodes: ORDER_EVENT_CODES,
+        omitSealed: false,
+        ...rawSearch,
+        isExternalUser: User.isExternalUser(authorizedUser.role),
+        overrideResultSize: RAW_BATCH_SIZE,
+        searchAfter: cursor && rawFetches === 0 ? cursor : searchAfter,
+      });
+    rawFetches++;
+
+    if (rawResults.length === 0) {
+      break;
+    }
+
+    const filteredBatch = filterCaseSearchResultsNotAccessibleToUser(
+      rawResults,
+      authorizedUser,
+    );
+    for (const r of filteredBatch) {
+      if (accumulated.length >= detectionCeiling) break;
+      accumulated.push(r);
+    }
+
+    const last = rawResults[rawResults.length - 1];
+    if (last && last.sort) {
+      searchAfter = last.sort;
+      nextCursor = last.sort;
+    } else {
+      break;
+    }
+  }
 
   const timestamp = formatNow(FORMATS.LOG_TIMESTAMP);
 
@@ -80,17 +111,14 @@ export const orderAdvancedSearchInteractor = async (
     userRole: authorizedUser.role,
   });
 
-  const filteredResults = filterCaseSearchResultsNotAccessibleToUser(
-    results,
-    authorizedUser,
-  );
-
   const validatedFiltered = InternalDocumentSearchResult.validateRawCollection(
-    filteredResults,
-  ).slice(0, MAX_SEARCH_RESULTS);
+    accumulated,
+  ).slice(0, desired);
+  const moreResults = accumulated.length > desired;
 
   return {
     results: validatedFiltered,
-    totalCount,
+    moreResults,
+    nextCursor: moreResults ? nextCursor : undefined,
   };
 };
