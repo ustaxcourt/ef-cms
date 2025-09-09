@@ -115,9 +115,6 @@ describe('removeSignatureFromDocumentInteractor', () => {
   });
 
     it('throws NotFoundError if docket entry is not found', async () => {
-    // Mock the Case entity to return undefined for getDocketEntryById
-    // const { Case } = require('@shared/business/entities/cases/Case');
-    // Case.prototype.getDocketEntryById = jest.fn().mockReturnValueOnce(undefined);
 
     await expect(
       removeSignatureFromDocumentInteractor(
