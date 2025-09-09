@@ -99,9 +99,9 @@ export const getRecentFilingsForUserInteractor = async (
 
     let consolidatedIconTooltipText: string | undefined;
     if (hasConsolidatedCases) {
-      consolidatedIconTooltipText = `Lead case in consolidated group with ${caseItem.consolidatedCases?.length || 0} member cases`;
+      consolidatedIconTooltipText = 'Lead case';
     } else if (caseItem.leadDocketNumber) {
-      consolidatedIconTooltipText = `Member case in consolidated group led by ${caseItem.leadDocketNumber}`;
+      consolidatedIconTooltipText = 'Consolidated case';
     }
 
     caseInfoMap.set(caseItem.docketNumber, {
@@ -115,7 +115,7 @@ export const getRecentFilingsForUserInteractor = async (
         caseInfoMap.set(consolidatedCase.docketNumber, {
           inConsolidatedGroup: true,
           isLeadCase: false,
-          consolidatedIconTooltipText: `Member case in consolidated group led by ${caseItem.docketNumber}`,
+          consolidatedIconTooltipText: 'Consolidated case',
         });
       });
     }
