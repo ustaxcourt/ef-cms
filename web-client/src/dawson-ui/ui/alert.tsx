@@ -45,12 +45,16 @@ const iconType = {
 
 function Alert({
   className,
+  isDismissible = true,
   variant,
   closeButtonOnClick,
+  children,
   ...props
-}: React.ComponentProps<'div'> &
+}: Omit<React.ComponentProps<'div'>, 'children'> &
   VariantProps<typeof alertVariants> & {
     closeButtonOnClick?: () => React.MouseEventHandler<HTMLButtonElement> | void;
+    isDismissible?: boolean;
+    children?: React.ReactNode;
   }) {
   return (
     <div
@@ -66,17 +70,19 @@ function Alert({
             className="tw:!h-[20px] tw:!w-[20px] tw:xs:!h-[24px] tw:xs:!w-[24px]"
           />
         </div>
-        <div className="tw:relative tw:xs:ml-4 tw:ml-3">{props.children}</div>
-        <Button
-          className="tw:m-0 tw:p-0 tw:gap-3 tw:w-auto tw:fill-primary tw:self-start tw:ml-auto"
-          variant={'primaryTertiary'}
-          onClick={closeButtonOnClick}
-        >
-          <div className="tw:flex tw:items-center">
-            <span className="tw:mr-2 tw:text-sm">Close</span>
-            <CircleXmark className="tw:!h-[20px] tw:!w-[20px] tw:xs:!h-[24px] tw:xs:!w-[24px]" />
-          </div>
-        </Button>
+        <div className="tw:relative tw:xs:ml-4 tw:ml-3">{children}</div>
+        {isDismissible && (
+          <Button
+            className="tw:m-0 tw:p-0 tw:gap-3 tw:w-auto tw:fill-primary tw:self-start tw:ml-auto"
+            variant={'primaryTertiary'}
+            onClick={closeButtonOnClick}
+          >
+            <div className="tw:flex tw:items-center">
+              <span className="tw:mr-2 tw:text-base">Close</span>
+              <CircleXmark className="tw:!h-[20px] tw:!w-[20px] tw:xs:!h-[24px] tw:xs:!w-[24px]" />
+            </div>
+          </Button>
+        )}
       </div>
     </div>
   );
