@@ -6,6 +6,19 @@ import type { Database } from '../../web-api/src/database-schema';
 import { getConnection } from '../../web-api/src/getConnection';
 import { getUserPoolId, requireEnvVars } from '../../shared/admin-tools/util';
 
+// ============================================================================
+// UTILITIES
+// ============================================================================
+
+// Config constants
+const AWS_REGION = 'us-east-1';
+const DEFAULT_EMAIL_PREFIX = 'cypress_test_account';
+const COGNITO_DELETE_RPS = 30;
+const COGNITO_DELETE_INTERVAL_MS = Math.round(1000 / COGNITO_DELETE_RPS); // ~34ms
+const COGNITO_MAX_RETRIES = 5;
+const COGNITO_BACKOFF_BASE_MS = 100; // base for exponential backoff
+const COGNITO_JITTER_MS = 100; // add jitter to spread retries
+
 type Args = {
   includeIrs: boolean;
   emailPrefix: string;
@@ -16,7 +29,7 @@ type Args = {
 function parseArgs(argv: string[]): Args {
   const args: Args = {
     dryRun: false,
-    emailPrefix: 'cypress_test_account',
+    emailPrefix: DEFAULT_EMAIL_PREFIX,
     help: false,
     includeIrs: true,
   };
@@ -61,6 +74,44 @@ function getIrsUserPoolId(): string | undefined {
   const pool = process.env.USER_POOL_IRS_ID;
   return pool && pool.length > 0 ? pool : undefined;
 }
+
+// Smooth rate limiter for Cognito deletes (≈30 req/sec → one op every ~34ms)
+const rateLimitCognitoDelete = (() => {
+  const queue: Array<() => void> = [];
+  let timer: ReturnType<typeof setInterval> | null = null;
+
+  const tick = () => {
+    const next = queue.shift();
+    if (!next) {
+      if (timer) {
+        clearInterval(timer as any);
+        timer = null;
+      }
+      return;
+    }
+    next();
+  };
+
+  return async <T>(fn: () => Promise<T>): Promise<T> =>
+    new Promise<T>((resolve, reject) => {
+      queue.push(() => {
+        fn().then(resolve).catch(reject);
+      });
+      if (!timer) {
+        timer = setInterval(tick, COGNITO_DELETE_INTERVAL_MS);
+        const maybeUnref: any = timer as any;
+        if (maybeUnref && typeof maybeUnref.unref === 'function') maybeUnref.unref();
+      }
+    });
+})();
+
+function sleep(ms: number): Promise<void> {
+  return new Promise(res => setTimeout(res, ms));
+}
+
+// ============================================================================
+// COGNITO
+// ============================================================================
 
 function extractUserInfo(user: UserType): { email: string; userId: string } | null {
   const email = user.Attributes?.find(a => a.Name === 'email')?.Value;
@@ -108,11 +159,52 @@ async function deleteCognitoUser({
   userPoolId: string;
   email: string;
 }): Promise<void> {
-  await cognito.adminDeleteUser({
-    UserPoolId: userPoolId,
-    Username: email.toLowerCase(),
+  await rateLimitCognitoDelete(async () => {
+    try {
+      await cognito.adminDeleteUser({
+        UserPoolId: userPoolId,
+        Username: email.toLowerCase(),
+      });
+    } catch (err: any) {
+      const name = err?.name || err?.__type;
+      // Swallow user not existing
+      if (name === 'UserNotFoundException') {
+        return;
+      }
+      // Handle throttling with retries + jitter
+      if (name === 'TooManyRequestsException' || name === 'LimitExceededException' || name === 'ThrottlingException') {
+        const maxRetries = COGNITO_MAX_RETRIES;
+        let attempt = 0;
+        while (attempt < maxRetries) {
+          attempt++;
+          const base = Math.pow(2, attempt) * COGNITO_BACKOFF_BASE_MS; // 200ms, 400ms, 800ms, ...
+          const jitter = Math.floor(Math.random() * COGNITO_JITTER_MS);
+          await sleep(base + jitter);
+          try {
+            await cognito.adminDeleteUser({
+              UserPoolId: userPoolId,
+              Username: email.toLowerCase(),
+            });
+            return;
+          } catch (e2: any) {
+            const n2 = e2?.name || e2?.__type;
+            if (n2 === 'UserNotFoundException') return;
+            if (!(n2 === 'TooManyRequestsException' || n2 === 'LimitExceededException' || n2 === 'ThrottlingException')) {
+              throw e2;
+            }
+            // else loop and retry
+          }
+        }
+      }
+      // Re-throw others to be handled by caller
+      throw err;
+    }
   });
 }
+
+// ============================================================================
+// POSTGRES
+// ============================================================================
 
 async function deleteAllUserRecords(db: Kysely<Database>, userId: string): Promise<void> {
   const deleteUserRecord = db
@@ -126,6 +218,139 @@ async function deleteAllUserRecords(db: Kysely<Database>, userId: string): Promi
   await Promise.allSettled([deleteUserRecord, deleteUserOnCaseRecords]);
 }
 
+async function listDbUsersByEmailPrefix(
+  db: Kysely<Database>,
+  emailPrefix: string,
+): Promise<{ email: string; userId: string }[]> {
+  const rows = await db
+    .selectFrom('dwUser')
+    .select(['userId', 'email'])
+    .where('email', 'like', `${emailPrefix}%`)
+    .execute();
+
+  return rows
+    .filter((r): r is { userId: string; email: string } => !!r.email)
+    .map(r => ({ email: r.email.toLowerCase(), userId: r.userId }));
+}
+
+// ============================================================================
+// MAIN
+// ============================================================================
+
+type Pool = { label: string; id: string };
+
+async function buildPools(includeIrs: boolean): Promise<Pool[]> {
+  const primaryPoolId = await getUserPoolId();
+  const irsPoolId = includeIrs ? await getIrsUserPoolId() : undefined;
+  const pools: Pool[] = [{ label: 'primary', id: primaryPoolId }];
+  if (irsPoolId) pools.push({ label: 'irs', id: irsPoolId });
+  return pools;
+}
+
+async function runDbFirstCleanup({
+  db,
+  cognito,
+  pools,
+  emailPrefix,
+  dryRun,
+}: {
+  db: Kysely<Database>;
+  cognito: CognitoIdentityProvider;
+  pools: Pool[];
+  emailPrefix: string;
+  dryRun: boolean;
+}): Promise<void> {
+  try {
+    const dbUsers = await listDbUsersByEmailPrefix(db, emailPrefix);
+
+    if (dbUsers.length === 0) {
+      console.log(`[db] No users found with prefix "${emailPrefix}"`);
+      return;
+    }
+
+    console.log(`[db] Found ${dbUsers.length} user(s) to delete`);
+    if (dryRun) {
+      dbUsers.forEach(u => console.log(`[dry-run][db] ${u.email} (${u.userId})`));
+      return;
+    }
+
+    await Promise.all(
+      dbUsers.map(async ({ email, userId }) => {
+        for (const pool of pools) {
+          try {
+            await deleteCognitoUser({ cognito, email, userPoolId: pool.id });
+          } catch (e) {
+            console.error(`[db][${pool.label}] Failed to delete Cognito user ${email}`, e);
+          }
+        }
+
+        try {
+          await deleteAllUserRecords(db, userId);
+        } catch (e) {
+          console.error(`[db] Failed to delete DB records for ${userId}`, e);
+        }
+      }),
+    );
+
+    console.log('[db] Cleanup complete');
+  } catch (err) {
+    console.error('[db] Error during cleanup', err);
+  }
+}
+
+async function runCognitoCleanupForPool({
+  db,
+  cognito,
+  pool,
+  emailPrefix,
+  dryRun,
+}: {
+  db: Kysely<Database>;
+  cognito: CognitoIdentityProvider;
+  pool: Pool;
+  emailPrefix: string;
+  dryRun: boolean;
+}): Promise<void> {
+  try {
+    const users = await listUsersByEmailPrefix({
+      cognito,
+      emailPrefix,
+      userPoolId: pool.id,
+    });
+
+    if (users.length === 0) {
+      console.log(`[${pool.label}] No users found with prefix "${emailPrefix}"`);
+      return;
+    }
+
+    console.log(`[${pool.label}] Found ${users.length} user(s) to delete`);
+    if (dryRun) {
+      users.forEach(u => console.log(`[dry-run] ${u.email} (${u.userId})`));
+      return;
+    }
+
+    await Promise.all(
+      users.map(async ({ email, userId }) => {
+        try {
+          await deleteCognitoUser({ cognito, email, userPoolId: pool.id });
+        } catch (e) {
+          console.error(`[${pool.label}] Failed to delete Cognito user ${email}`, e);
+        }
+
+        try {
+          await deleteAllUserRecords(db, userId);
+        } catch (e) {
+          console.error(`[${pool.label}] Failed to delete DB records for ${userId}`, e);
+        }
+      }),
+    );
+
+    console.log(`[${pool.label}] Cleanup complete`);
+  } catch (err) {
+    console.error(`[${pool.label}] Error during cleanup`, err);
+  }
+}
+
 async function main(): Promise<void> {
   const args = parseArgs(process.argv);
   if (args.help) {
@@ -135,56 +360,30 @@ async function main(): Promise<void> {
 
   requireEnvVars(['ENV']);
 
-  const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
-
-  const primaryPoolId = await getUserPoolId();
-  const irsPoolId = args.includeIrs ? await getIrsUserPoolId() : undefined;
-
-  const pools: { label: string; id: string }[] = [{ label: 'primary', id: primaryPoolId }];
-  if (irsPoolId) pools.push({ label: 'irs', id: irsPoolId });
+  const cognito = new CognitoIdentityProvider({ region: AWS_REGION });
+  const pools = await buildPools(args.includeIrs);
 
   // Establish a single DB connection for all deletes
   const db = await getConnection({ cb: r => r });
 
+  // Pass 1: DB-first - find users by email prefix in Postgres, delete from Cognito and Postgres
+  await runDbFirstCleanup({
+    cognito,
+    db,
+    dryRun: args.dryRun,
+    emailPrefix: args.emailPrefix,
+    pools,
+  });
+
+  // Pass 2: Cognito-driven - find users in each pool and delete remaining
   for (const pool of pools) {
-    try {
-      const users = await listUsersByEmailPrefix({
-        cognito,
-        emailPrefix: args.emailPrefix,
-        userPoolId: pool.id,
-      });
-
-      if (users.length === 0) {
-        console.log(`[${pool.label}] No users found with prefix "${args.emailPrefix}"`);
-        continue;
-      }
-
-      console.log(`[${pool.label}] Found ${users.length} user(s) to delete`);
-      if (args.dryRun) {
-        users.forEach(u => console.log(`[dry-run] ${u.email} (${u.userId})`));
-        continue;
-      }
-
-      await Promise.all(
-        users.map(async ({ email, userId }) => {
-          try {
-            await deleteCognitoUser({ cognito, email, userPoolId: pool.id });
-          } catch (e) {
-            console.error(`[${pool.label}] Failed to delete Cognito user ${email}`, e);
-          }
-
-          try {
-            await deleteAllUserRecords(db, userId);
-          } catch (e) {
-            console.error(`[${pool.label}] Failed to delete DB records for ${userId}`, e);
-          }
-        }),
-      );
-
-      console.log(`[${pool.label}] Cleanup complete`);
-    } catch (err) {
-      console.error(`[${pool.label}] Error during cleanup`, err);
-    }
+    await runCognitoCleanupForPool({
+      cognito,
+      db,
+      dryRun: args.dryRun,
+      emailPrefix: args.emailPrefix,
+      pool,
+    });
   }
 }
 
