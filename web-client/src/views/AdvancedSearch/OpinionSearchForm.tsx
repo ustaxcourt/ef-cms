@@ -8,11 +8,10 @@ import { JudgeSelect } from './AdvancedDocumentSearch/JudgeSelect';
 import { KeywordSearchField } from './AdvancedDocumentSearch/KeywordSearchField';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
-import { DateRangePickerComponent } from '@web-client/ustc-ui/DateInput/DateRangePickerComponent';
+import { ConnectedDateRangePicker } from '@web-client/dawson-ui/ui/ConnectedDateRangePicker';
 
 export const OpinionSearchForm = connect(
   {
@@ -21,6 +20,7 @@ export const OpinionSearchForm = connect(
     advancedDocumentSearchHelper: state.advancedDocumentSearchHelper,
     advancedSearchForm: state.advancedSearchForm,
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
+    submitAdvancedSearchSequence: sequences.submitCaseAdvancedSearchSequence,
     updateAdvancedOpinionSearchFormValueSequence:
       sequences.updateAdvancedOpinionSearchFormValueSequence,
     validateOpinionSearchSequence: sequences.validateOpinionSearchSequence,
@@ -104,12 +104,12 @@ export const OpinionSearchForm = connect(
 
                 {advancedDocumentSearchHelper.showDateRangePicker && (
                   <div className="margin-top-4">
-                    <DateRangePickerComponent
+                    <ConnectedDateRangePicker
                       endDateErrorText={validationErrors.endDate}
                       endLabel="End date"
                       endName="endDate"
                       endPickerCls={
-                        'desktop:grid-col-6  phone:grid-col-12 desktop:padding-left-2'
+                        'desktop:grid-col-12  phone:grid-col-12 desktop:padding-left-2'
                       }
                       endValue={advancedSearchForm.opinionSearch.endDate}
                       formGroupCls="margin-bottom-0"
@@ -120,21 +120,13 @@ export const OpinionSearchForm = connect(
                       startName="startDate"
                       showDateHint={true}
                       startPickerCls={
-                        'desktop:grid-col-6  phone:grid-col-12 padding-right-2'
+                        'desktop:grid-col-12  phone:grid-col-12 padding-right-2'
                       }
                       startValue={advancedSearchForm.opinionSearch.startDate}
-                      onChangeEnd={e => {
-                        updateAdvancedOpinionSearchFormValueSequence({
-                          key: 'endDate',
-                          value: e.target.value,
-                        });
-                      }}
-                      onChangeStart={e => {
-                        updateAdvancedOpinionSearchFormValueSequence({
-                          key: 'startDate',
-                          value: e.target.value,
-                        });
-                      }}
+                      updateSequence={
+                        updateAdvancedOpinionSearchFormValueSequence
+                      }
+                      validateSequence={validateOpinionSearchSequence}
                     />
                   </div>
                 )}
@@ -254,12 +246,12 @@ export const OpinionSearchForm = connect(
                     <div className="grid-gap-3 tablet:margin-top-0 margin-top-4">
                       {advancedDocumentSearchHelper.showDateRangePicker && (
                         <div className="grid-row no-flex-wrap">
-                          <DateRangePickerComponent
+                          <ConnectedDateRangePicker
                             endDateErrorText={validationErrors.endDate}
                             endLabel="End date"
                             endName="endDate"
                             endPickerCls={
-                              'desktop:grid-col-6  phone:grid-col-12 desktop:padding-left-2'
+                              'desktop:grid-col-12  phone:grid-col-12 desktop:padding-left-2'
                             }
                             endValue={advancedSearchForm.opinionSearch.endDate}
                             formGroupCls="margin-bottom-0"
@@ -270,23 +262,15 @@ export const OpinionSearchForm = connect(
                             startName="startDate"
                             showDateHint={true}
                             startPickerCls={
-                              'desktop:grid-col-6  phone:grid-col-12 padding-right-2'
+                              'desktop:grid-col-12  phone:grid-col-12 padding-right-2'
                             }
                             startValue={
                               advancedSearchForm.opinionSearch.startDate
                             }
-                            onChangeEnd={e => {
-                              updateAdvancedOpinionSearchFormValueSequence({
-                                key: 'endDate',
-                                value: e.target.value,
-                              });
-                            }}
-                            onChangeStart={e => {
-                              updateAdvancedOpinionSearchFormValueSequence({
-                                key: 'startDate',
-                                value: e.target.value,
-                              });
-                            }}
+                            updateSequence={
+                              updateAdvancedOpinionSearchFormValueSequence
+                            }
+                            validateSequence={validateOpinionSearchSequence}
                           />
                         </div>
                       )}
