@@ -111,13 +111,19 @@ export const Login = connect(
                         {showPassword ? 'Hide password' : 'Show password'}
                       </button>
                       <div className="tw:my-4">
-                        <DawsonUiButton data-testid="login-button">
+                        <DawsonUiButton
+                          aria-label="Login"
+                          title="Login"
+                          data-testid="login-button"
+                        >
                           Log in
                         </DawsonUiButton>
                       </div>
                     </form>
                     <div className="tw:my-4">
                       <DawsonUiButton
+                        aria-label="Forgot password"
+                        title="Forgot password"
                         variant="primaryTertiary"
                         data-testid="forgot-password-button"
                         type="button"

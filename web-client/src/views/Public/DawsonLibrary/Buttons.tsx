@@ -18,22 +18,42 @@ export function Buttons() {
           </Button>
         </div>
         <div className="tw:xs:inline-block tw:m-4 tw:xs:m-2">
-          <Button variant="secondary" icon="file">
+          <Button
+            variant="secondary"
+            icon="file"
+            aria-label="Secondary Default"
+            title="Secondary Default"
+          >
             Secondary Default
           </Button>
         </div>
         <div className="tw:xs:inline-block tw:m-4 tw:xs:m-2">
-          <Button variant="destructive" icon="file">
+          <Button
+            variant="destructive"
+            icon="file"
+            aria-label="Destructive Default"
+            title="Destructive Default"
+          >
             Destructive Default
           </Button>
         </div>
         <div className="tw:xs:inline-block tw:m-4 tw:xs:m-2">
-          <Button variant="primaryTertiary" icon="file">
+          <Button
+            variant="primaryTertiary"
+            icon="file"
+            aria-label="Primary Tertiary Default"
+            title="Primary Tertiary Default"
+          >
             Tertiary Default
           </Button>
         </div>
         <div className="tw:xs:inline-block tw:m-4 tw:xs:m-2">
-          <Button variant="destructiveTertiary" icon="file">
+          <Button
+            variant="destructiveTertiary"
+            icon="file"
+            aria-label="Destructive Tertiary Default"
+            title="Destructive Tertiary Default"
+          >
             Tertiary Default
           </Button>
         </div>
