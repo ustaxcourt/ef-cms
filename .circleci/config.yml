@@ -384,7 +384,7 @@ jobs:
             ./scripts/reindex/disable-reindex-cron.sh
 
   smoketests:
-    parallelism: 6
+    parallelism: 9
     docker:
       - image: *efcms-docker-image
         aws_auth:
@@ -405,10 +405,60 @@ jobs:
           command: |
             ./scripts/env/env-for-circle.sh
       - run:
-          name: 'Cypress Smoke Tests'
-          command: find cypress/deployed-and-local/integration -type f -name "*.cy.ts" | circleci tests run --split-by=timings --command 'paste -sd, - | xargs -I {} ./scripts/run-cypress.sh -s -t {}'
+          name: 'Cypress Smoke Tests (capture exit code)'
+          command: |
+            set +e
+            find cypress/deployed-and-local/integration -type f -name "*.cy.ts" | circleci tests run --split-by=timings --command 'paste -sd, - | xargs -I {} ./scripts/run-cypress.sh -s -t {}'
+            EXIT_CODE=$?
+            set -e
+            echo ${EXIT_CODE} > /tmp/cypress/smoketests-exit-code-${CIRCLE_NODE_INDEX}.txt
+      - persist_to_workspace:
+          root: /tmp/cypress
+          paths:
+            - smoketests-exit-code-*.txt
       - store_artifacts:
           path: /root/project/cypress/deployed-and-local/videos/
+
+  smoketests-cleanup:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: small
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+      - attach_workspace:
+          at: /tmp/cypress
+      - run:
+          name: Aggregate Smoketest Results
+          command: |
+            AGG_EXIT=0
+            shopt -s nullglob
+            FILES=(/tmp/cypress/smoketests-exit-code-*.txt)
+            if [ ${#FILES[@]} -eq 0 ]; then
+              echo "No smoketest exit code files found; assuming success."
+            else
+              for f in "${FILES[@]}"; do
+                CODE=$(cat "$f")
+                if [ "$CODE" -ne 0 ]; then AGG_EXIT=1; fi
+              done
+            fi
+            echo "$AGG_EXIT" > /tmp/cypress/aggregate-exit-code.txt
+      - run:
+          name: Cleanup Cypress Test Accounts
+          command: |
+            npx ts-node --transpile-only ./scripts/user/cleanup-cypress-test-accounts.ts || true
+      - run:
+          name: Exit with aggregated smoketest status
+          command: |
+            EXIT=$(cat /tmp/cypress/aggregate-exit-code.txt)
+            exit $EXIT
 
   smoketests-readonly:
     docker:
@@ -1176,6 +1226,11 @@ workflows:
           requires:
             - disable-reindex-cron
             - index-users
+            - deploy
+      - smoketests-cleanup:
+          <<: *only-deployed-lower-environments
+          requires:
+            - smoketests
       - loadtests:
           <<: *only-deployed-lower-environments
           requires:
@@ -1194,7 +1249,7 @@ workflows:
       - switch-colors:
           <<: *only-deployed-lower-environments
           requires:
-            - smoketests
+            - smoketests-cleanup
             - loadtests
             - smoketests-readonly
             - api-hosted-environment-tests

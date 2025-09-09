@@ -12,11 +12,6 @@ if (!Cypress.env('SMOKETESTS_LOCAL')) {
 
     beforeEach(() => {
       Cypress.session.clearCurrentSessionData();
-      cy.task('deleteAllIrsCypressTestAccounts');
-    });
-
-    after(() => {
-      cy.task('deleteAllIrsCypressTestAccounts');
     });
 
     it('should let an irs superuser view the reconciliation report and download a STIN', () => {
