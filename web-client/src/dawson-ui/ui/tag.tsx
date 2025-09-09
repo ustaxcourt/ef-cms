@@ -9,7 +9,7 @@ import { omit } from 'lodash';
 
 const tagVariants = cva(
   cn(
-    'tw:rounded-[.5em] tw:font-bold tw:uppercase text-nowrap',
+    'tw:rounded-[.5em] tw:font-bold tw:uppercase tw:text-nowrap',
     'tw:[&_svg]:align-[-1px]',
     //Mobile
     'tw:text-[12px]',
