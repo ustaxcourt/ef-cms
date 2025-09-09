@@ -1,3 +1,4 @@
+import { NotFoundError } from '@web-api/errors/errors';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
@@ -11,6 +12,7 @@ import { removeSignatureFromDocumentInteractor } from './removeSignatureFromDocu
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 describe('removeSignatureFromDocumentInteractor', () => {
+
   let mockCase;
 
   const mockDocketEntryId = 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
@@ -110,5 +112,22 @@ describe('removeSignatureFromDocumentInteractor', () => {
       signedByUserId: undefined,
       signedJudgeName: undefined,
     });
+  });
+
+    it('throws NotFoundError if docket entry is not found', async () => {
+    // Mock the Case entity to return undefined for getDocketEntryById
+    // const { Case } = require('@shared/business/entities/cases/Case');
+    // Case.prototype.getDocketEntryById = jest.fn().mockReturnValueOnce(undefined);
+
+    await expect(
+      removeSignatureFromDocumentInteractor(
+        applicationContext,
+        {
+          docketEntryId: 'non-existent-id',
+          docketNumber: mockCase.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow(NotFoundError);
   });
 });
