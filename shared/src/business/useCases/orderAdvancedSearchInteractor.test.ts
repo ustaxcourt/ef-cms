@@ -180,7 +180,7 @@ describe('orderAdvancedSearchInteractor', () => {
           },
         ],
       })
-      .mockResolvedValueOnce({ results: [] }); // second empty batch so loop exits
+      .mockResolvedValueOnce({ results: [] });
     const cursor = ['c1'];
     await orderAdvancedSearchInteractor(
       applicationContext,
@@ -223,7 +223,7 @@ describe('orderAdvancedSearchInteractor', () => {
             documentType: 'Order',
             eventCode: 'ODD',
             signedJudgeName: 'Judge',
-            numberOfPages: 'blue', // invalid type
+            numberOfPages: 'blue',
           },
         ],
       });
