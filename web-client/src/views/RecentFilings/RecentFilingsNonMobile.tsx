@@ -5,22 +5,14 @@ import {
 import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseIcon';
+import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
 import { SortableHeader } from '@web-client/ustc-ui/Table/SortableHeader';
 import React from 'react';
 import { RecentFiling } from '@shared/business/entities/RecentFiling';
+import { DOCKET_ENTRY_SEALED_TO_TYPES } from '@shared/business/entities/EntityConstants';
 import { BigHeader } from '../BigHeader';
 import { RecentFilingsDocumentDisplay } from './RecentFilingsDocumentDisplay';
-
-const getIndentationClass = (filing: RecentFiling): string => {
-  if (filing.inConsolidatedGroup && !filing.isLeadCase) {
-    return 'margin-x-2';
-  }
-  if (filing.inConsolidatedGroup) {
-    return 'margin-x-1';
-  }
-  return 'margin-x-0';
-};
 
 type SortableField = 'docketNumber' | 'filedDate' | 'document' | 'caseTitle';
 type SortOrder = 'asc' | 'desc';
@@ -137,6 +129,7 @@ export const RecentFilingsNonMobile = ({
               >
                 <thead>
                   <tr>
+                    <th className="width-5"></th>
                     <SortableHeader
                       sortField="docketNumber"
                       sortType="string"
@@ -155,6 +148,7 @@ export const RecentFilingsNonMobile = ({
                       stateKey="recentFilingsTableSort"
                       data-testid="sort-filed-date"
                     />
+                    <th className="width-3 padding-0"></th>
                     <SortableHeader
                       sortField="document"
                       sortType="string"
@@ -180,19 +174,19 @@ export const RecentFilingsNonMobile = ({
                     <tr
                       key={`recent-filings-${filing.docketNumber}-${filing.docketEntryId}`}
                     >
-                      <td>
+                      <td className="width-5 padding-0">
                         {filing.inConsolidatedGroup && (
-                          <span className={getIndentationClass(filing)}>
-                            <ConsolidatedCaseIcon
-                              consolidatedIconTooltipText={
-                                filing.consolidatedIconTooltipText
-                              }
-                              inConsolidatedGroup={filing.inConsolidatedGroup}
-                              showLeadCaseIcon={filing.isLeadCase || false}
-                              data-testid="consolidated-case-icon"
-                            />
-                          </span>
+                          <ConsolidatedCaseIcon
+                            consolidatedIconTooltipText={
+                              filing.consolidatedIconTooltipText
+                            }
+                            inConsolidatedGroup={filing.inConsolidatedGroup}
+                            showLeadCaseIcon={filing.isLeadCase || false}
+                            data-testid="consolidated-case-icon"
+                          />
                         )}
+                      </td>
+                      <td>
                         <a
                           href={`/case-detail/${filing.docketNumber}`}
                           target="_blank"
@@ -204,6 +198,26 @@ export const RecentFilingsNonMobile = ({
                       </td>
                       <td>
                         {formatDateString(filing.filedDate, FORMATS.MMDDYYYY)}
+                      </td>
+                      <td className="width-3 padding-0">
+                        {filing.isSealed && (
+                          <Icon
+                            aria-label={
+                              filing.sealedTo ===
+                              DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC
+                                ? 'Sealed to the public'
+                                : 'Sealed to the public and parties of this case'
+                            }
+                            className="sealed-case-entry"
+                            icon="lock"
+                            title={
+                              filing.sealedTo ===
+                              DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC
+                                ? 'Sealed to the public'
+                                : 'Sealed to the public and parties of this case'
+                            }
+                          />
+                        )}
                       </td>
                       <td>
                         <RecentFilingsDocumentDisplay
