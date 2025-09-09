@@ -1779,6 +1779,9 @@ export const MAX_ELASTICSEARCH_PAGINATION = 10000;
 export const MAX_SEARCH_CLIENT_RESULTS = 10000;
 export const MAX_SEARCH_RESULTS = 10000;
 
+export const RAW_BATCH_SIZE = 1500;
+export const MAX_FETCH_BATCHES = 15;
+
 export const ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE = 100;
 
 export const JUDGE_TITLES = [

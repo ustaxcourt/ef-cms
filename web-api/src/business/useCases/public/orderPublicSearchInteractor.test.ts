@@ -1,6 +1,5 @@
 import {
   DATE_RANGE_SEARCH_OPTIONS,
-  MAX_SEARCH_RESULTS,
   ORDER_EVENT_CODES,
 } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
@@ -63,21 +62,20 @@ describe('orderPublicSearchInteractor', () => {
     });
   });
 
-  it('should limit results length to MAX_SEARCH_RESULTS', async () => {
-    const maxPlusOneResults = new Array(MAX_SEARCH_RESULTS + 1).fill({
+  it('limits results to the default limit (5000) and sets moreResults when more are available', async () => {
+    const overLimit = new Array(5001).fill({
       caseCaption: 'Samson Workman, Petitioner',
       docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
       docketNumber: '103-19',
       documentTitle: 'Order for More Candy',
       documentType: 'Order',
-      eventCode: 'O',
+      eventCode: 'ODD',
       signedJudgeName: 'Roslindis Angelino',
     });
     applicationContext
       .getPersistenceGateway()
       .advancedDocumentSearch.mockResolvedValue({
-        results: maxPlusOneResults,
-        totalCount: MAX_SEARCH_RESULTS + 1,
+        results: overLimit,
       });
 
     const results = await orderPublicSearchInteractor(applicationContext, {
@@ -86,7 +84,8 @@ describe('orderPublicSearchInteractor', () => {
       startDate: '01/01/2001',
     } as any);
 
-    expect(results.results.length).toBe(MAX_SEARCH_RESULTS);
+    expect(results.results.length).toBe(5000);
+    expect(results.moreResults).toBe(true);
   });
 
   it('should throw an error when the search results do not validate', async () => {
@@ -115,10 +114,10 @@ describe('orderPublicSearchInteractor', () => {
     ).rejects.toThrow('entity was invalid');
   });
 
-  it('returns totalCount reflecting raw matching public orders', async () => {
+  it('sets moreResults to false when results are within limit', async () => {
     const response = await orderPublicSearchInteractor(applicationContext, {
       keyword: 'fish',
     } as any);
-    expect(response.totalCount).toBe(2);
+    expect(response.moreResults).toBe(false);
   });
 });
