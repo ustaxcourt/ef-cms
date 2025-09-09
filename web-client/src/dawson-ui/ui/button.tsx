@@ -91,8 +91,6 @@ export function Button({
       className={cn(buttonVariants({ variant, className }))}
       {...props}
       role="button"
-      title={props.title}
-      aria-label={props['aria-label']}
     >
       {iconPosition === 'left' && Icon}
       {children}
