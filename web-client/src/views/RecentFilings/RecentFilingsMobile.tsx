@@ -2,9 +2,11 @@ import {
   formatDateString,
   FORMATS,
 } from '@shared/business/utilities/DateHandler';
+import { DOCKET_ENTRY_SEALED_TO_TYPES } from '@shared/business/entities/EntityConstants';
 import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseIcon';
+import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
@@ -195,6 +197,24 @@ export const RecentFilingsMobile = ({
                     </td>
                     <th>Document</th>
                     <td className="divider">
+                      {filing.isSealed && (
+                        <Icon
+                          aria-label={
+                            filing.sealedTo ===
+                            DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC
+                              ? 'Sealed to the public'
+                              : 'Sealed to the public and parties of this case'
+                          }
+                          className="sealed-case-entry margin-right-1"
+                          icon="lock"
+                          title={
+                            filing.sealedTo ===
+                            DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC
+                              ? 'Sealed to the public'
+                              : 'Sealed to the public and parties of this case'
+                          }
+                        />
+                      )}
                       <RecentFilingsDocumentDisplay
                         filing={filing}
                         displayProperties={recentFilingsHelper.getDocumentDisplayProperties(

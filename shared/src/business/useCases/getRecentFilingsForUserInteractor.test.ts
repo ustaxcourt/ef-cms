@@ -9,17 +9,27 @@ import { TAssociatedCase } from './getCasesForUserInteractor';
 import { calculateDate } from '../utilities/DateHandler';
 
 jest.mock('./getCasesForUserInteractor');
-jest.mock('@web-api/database');
+jest.mock('@web-api/persistence/postgres/cases/getCasesByDocketNumbers');
+jest.mock(
+  '@web-api/persistence/postgres/docketEntries/getRecentFilingsByDocketNumbers',
+);
 
 const mockGetCasesForUserInteractor = require('./getCasesForUserInteractor')
   .getCasesForUserInteractor as jest.MockedFunction<
   typeof import('./getCasesForUserInteractor').getCasesForUserInteractor
 >;
 
-const mockGetDbReader = require('@web-api/database')
-  .getDbReader as jest.MockedFunction<
-  typeof import('@web-api/database').getDbReader
->;
+const mockGetCasesByDocketNumbers =
+  require('@web-api/persistence/postgres/cases/getCasesByDocketNumbers')
+    .getCasesByDocketNumbers as jest.MockedFunction<
+    typeof import('@web-api/persistence/postgres/cases/getCasesByDocketNumbers').getCasesByDocketNumbers
+  >;
+
+const mockGetRecentFilingsByDocketNumbers =
+  require('@web-api/persistence/postgres/docketEntries/getRecentFilingsByDocketNumbers')
+    .getRecentFilingsByDocketNumbers as jest.MockedFunction<
+    typeof import('@web-api/persistence/postgres/docketEntries/getRecentFilingsByDocketNumbers').getRecentFilingsByDocketNumbers
+  >;
 
 const createMockCase = (
   overrides: Partial<TAssociatedCase> = {},
@@ -50,26 +60,23 @@ const createMockDbDocketEntry = (overrides: any = {}) => ({
   ...overrides,
 });
 
+const createMockCaseDetails = (
+  docketNumber: string,
+  userId: string,
+  isUserAssociated: boolean = true,
+) =>
+  ({
+    docketNumber,
+    petitioners: isUserAssociated ? [{ userId }] : [],
+    privatePractitioners: [],
+    irsPractitioners: [],
+  }) as any;
+
 describe('getRecentFilingsForUserInteractor', () => {
   let mockAuthorizedUser: UnknownAuthUser;
-  let mockDbReader: any;
 
   beforeEach(() => {
     jest.clearAllMocks();
-
-    mockDbReader = {
-      selectFrom: jest.fn().mockReturnThis(),
-      innerJoin: jest.fn().mockReturnThis(),
-      select: jest.fn().mockReturnThis(),
-      where: jest.fn().mockReturnThis(),
-      orderBy: jest.fn().mockReturnThis(),
-      limit: jest.fn().mockReturnThis(),
-      execute: jest.fn().mockResolvedValue([]),
-    };
-
-    mockGetDbReader.mockImplementation(
-      async callback => await callback(mockDbReader),
-    );
 
     mockAuthorizedUser = {
       userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
@@ -82,6 +89,9 @@ describe('getRecentFilingsForUserInteractor', () => {
       openCaseList: [],
       closedCaseList: [],
     });
+
+    mockGetCasesByDocketNumbers.mockResolvedValue([]);
+    mockGetRecentFilingsByDocketNumbers.mockResolvedValue([]);
   });
 
   it('should throw UnauthorizedError for invalid user', async () => {
@@ -93,18 +103,22 @@ describe('getRecentFilingsForUserInteractor', () => {
   it('should return empty array when user has no cases', async () => {
     const result = await getRecentFilingsForUserInteractor(mockAuthorizedUser);
     expect(result).toEqual([]);
-    expect(mockGetDbReader).not.toHaveBeenCalled();
+    expect(mockGetRecentFilingsByDocketNumbers).not.toHaveBeenCalled();
   });
 
   it('should return recent filings with case info', async () => {
     const mockCases = [createMockCase()];
     const mockDbResults = [createMockDbDocketEntry()];
+    const mockCaseDetails = [
+      createMockCaseDetails('101-20', mockAuthorizedUser!.userId, true),
+    ];
 
     mockGetCasesForUserInteractor.mockResolvedValue({
       openCaseList: mockCases,
       closedCaseList: [],
     });
-    mockDbReader.execute.mockResolvedValue(mockDbResults);
+    mockGetRecentFilingsByDocketNumbers.mockResolvedValue(mockDbResults);
+    mockGetCasesByDocketNumbers.mockResolvedValue(mockCaseDetails);
 
     const result = await getRecentFilingsForUserInteractor(mockAuthorizedUser);
 
@@ -124,6 +138,7 @@ describe('getRecentFilingsForUserInteractor', () => {
         inConsolidatedGroup: undefined,
         isLeadCase: true,
         consolidatedIconTooltipText: undefined,
+        isRequestingUserAssociated: true,
       },
     ]);
   });
@@ -140,7 +155,7 @@ describe('getRecentFilingsForUserInteractor', () => {
       openCaseList: mockCases,
       closedCaseList: [],
     });
-    mockDbReader.execute.mockResolvedValue(mockDbResults);
+    mockGetRecentFilingsByDocketNumbers.mockResolvedValue(mockDbResults);
 
     const result = await getRecentFilingsForUserInteractor(mockAuthorizedUser);
 
@@ -164,7 +179,7 @@ describe('getRecentFilingsForUserInteractor', () => {
       openCaseList: mockCases,
       closedCaseList: [],
     });
-    mockDbReader.execute.mockResolvedValue(mockDbResults);
+    mockGetRecentFilingsByDocketNumbers.mockResolvedValue(mockDbResults);
 
     const result = await getRecentFilingsForUserInteractor(mockAuthorizedUser);
 
@@ -188,7 +203,7 @@ describe('getRecentFilingsForUserInteractor', () => {
       openCaseList: mockCases,
       closedCaseList: [],
     });
-    mockDbReader.execute.mockResolvedValue(mockDbResults);
+    mockGetRecentFilingsByDocketNumbers.mockResolvedValue(mockDbResults);
 
     const result = await getRecentFilingsForUserInteractor(mockAuthorizedUser);
 
@@ -208,7 +223,7 @@ describe('getRecentFilingsForUserInteractor', () => {
       openCaseList: mockOpenCases,
       closedCaseList: mockClosedCases,
     });
-    mockDbReader.execute.mockResolvedValue(mockDbResults);
+    mockGetRecentFilingsByDocketNumbers.mockResolvedValue(mockDbResults);
 
     const result = await getRecentFilingsForUserInteractor(mockAuthorizedUser);
 
@@ -233,7 +248,7 @@ describe('getRecentFilingsForUserInteractor', () => {
       openCaseList: mockCases,
       closedCaseList: [],
     });
-    mockDbReader.execute.mockResolvedValue(mockDbResults);
+    mockGetRecentFilingsByDocketNumbers.mockResolvedValue(mockDbResults);
 
     const result = await getRecentFilingsForUserInteractor(mockAuthorizedUser);
 
@@ -256,7 +271,7 @@ describe('getRecentFilingsForUserInteractor', () => {
       openCaseList: mockCases,
       closedCaseList: [],
     });
-    mockDbReader.execute.mockResolvedValue(mockDbResults);
+    mockGetRecentFilingsByDocketNumbers.mockResolvedValue(mockDbResults);
 
     const result = await getRecentFilingsForUserInteractor(mockAuthorizedUser);
 
@@ -277,7 +292,7 @@ describe('getRecentFilingsForUserInteractor', () => {
       openCaseList: mockCases,
       closedCaseList: [],
     });
-    mockDbReader.execute.mockResolvedValue(mockDbResults);
+    mockGetRecentFilingsByDocketNumbers.mockResolvedValue(mockDbResults);
 
     const result = await getRecentFilingsForUserInteractor(mockAuthorizedUser);
 
@@ -285,5 +300,25 @@ describe('getRecentFilingsForUserInteractor', () => {
     expect(result[0].inConsolidatedGroup).toBe(false);
     expect(result[0].isLeadCase).toBe(true);
     expect(result[0].consolidatedIconTooltipText).toBeUndefined();
+  });
+
+  it('should set isRequestingUserAssociated to false for consolidated cases where user is not a party', async () => {
+    const mockCases = [createMockCase()];
+    const mockDbResults = [createMockDbDocketEntry()];
+    const mockCaseDetails = [
+      createMockCaseDetails('101-20', 'different-user-id', false),
+    ];
+
+    mockGetCasesForUserInteractor.mockResolvedValue({
+      openCaseList: mockCases,
+      closedCaseList: [],
+    });
+    mockGetRecentFilingsByDocketNumbers.mockResolvedValue(mockDbResults);
+    mockGetCasesByDocketNumbers.mockResolvedValue(mockCaseDetails);
+
+    const result = await getRecentFilingsForUserInteractor(mockAuthorizedUser);
+
+    expect(result[0].docketNumber).toBe('101-20');
+    expect(result[0].isRequestingUserAssociated).toBe(false);
   });
 });

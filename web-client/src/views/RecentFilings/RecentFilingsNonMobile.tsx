@@ -129,7 +129,10 @@ export const RecentFilingsNonMobile = ({
               >
                 <thead>
                   <tr>
-                    <th className="width-5"></th>
+                    <th
+                      aria-label="Icons for consolidated cases and sealed documents"
+                      className="icon-column"
+                    ></th>
                     <SortableHeader
                       sortField="docketNumber"
                       sortType="string"
@@ -148,7 +151,7 @@ export const RecentFilingsNonMobile = ({
                       stateKey="recentFilingsTableSort"
                       data-testid="sort-filed-date"
                     />
-                    <th className="width-3 padding-0"></th>
+                    <th className="width-5"></th>
                     <SortableHeader
                       sortField="document"
                       sortType="string"
@@ -174,7 +177,7 @@ export const RecentFilingsNonMobile = ({
                     <tr
                       key={`recent-filings-${filing.docketNumber}-${filing.docketEntryId}`}
                     >
-                      <td className="width-5 padding-0">
+                      <td className="icon-column">
                         {filing.inConsolidatedGroup && (
                           <ConsolidatedCaseIcon
                             consolidatedIconTooltipText={
@@ -199,7 +202,7 @@ export const RecentFilingsNonMobile = ({
                       <td>
                         {formatDateString(filing.filedDate, FORMATS.MMDDYYYY)}
                       </td>
-                      <td className="width-3 padding-0">
+                      <td className="text-center width-5">
                         {filing.isSealed && (
                           <Icon
                             aria-label={
