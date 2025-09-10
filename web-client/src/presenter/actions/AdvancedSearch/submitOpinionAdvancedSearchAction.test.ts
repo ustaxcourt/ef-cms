@@ -4,17 +4,23 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 import { submitOpinionAdvancedSearchAction } from './submitOpinionAdvancedSearchAction';
 
 describe('submitOpinionAdvancedSearchAction', () => {
-  it('should call opinionAdvancedSearchInteractor twice when results exceed batch size', async () => {
+  it('should call opinionAdvancedSearchInteractor twice when first chunk indicates moreResults', async () => {
     let callCount = 0;
     applicationContext
       .getUseCases()
-      .opinionAdvancedSearchInteractor.mockImplementation(({ from }) => {
-        callCount++;
-        if (from === 0) {
-          return { results: Array(5000).fill({}), totalCount: 10000 };
-        }
-        return { results: Array(5000).fill({}), totalCount: 10000 };
-      });
+      .opinionAdvancedSearchInteractor.mockImplementation(
+        (_ctx, { searchParams }) => {
+          callCount++;
+          if (!searchParams.cursor) {
+            return {
+              results: Array(5000).fill({}),
+              moreResults: true,
+              nextCursor: ['cursor1'],
+            };
+          }
+          return { results: Array(123).fill({}), moreResults: false };
+        },
+      );
     await runAction(submitOpinionAdvancedSearchAction, {
       modules: { presenter },
       state: {
@@ -33,7 +39,10 @@ describe('submitOpinionAdvancedSearchAction', () => {
   beforeEach(() => {
     applicationContext
       .getUseCases()
-      .opinionAdvancedSearchInteractor.mockReturnValue({ results: [] });
+      .opinionAdvancedSearchInteractor.mockReturnValue({
+        results: [],
+        moreResults: false,
+      });
   });
 
   it('should call opinionAdvancedSearchInteractor with the correct searchParams structure and filtered opinionTypes', async () => {
