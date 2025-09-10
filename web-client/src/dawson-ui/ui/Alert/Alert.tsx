@@ -10,7 +10,7 @@ import {
 
 import { cn } from '@web-client/lib/utils';
 import { Button } from '@web-client/dawson-ui/ui/button';
-import { CircleXmark } from './icons';
+import { CircleXmark } from '../icons';
 
 const alertVariants = cva(
   cn(

@@ -7,6 +7,7 @@ import { WarningNotification } from '@web-client/views/WarningNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import { AlertError } from '@web-client/dawson-ui/ui/Alert/AlertError';
 
 export const Login = connect(
   {
@@ -20,6 +21,9 @@ export const Login = connect(
     toggleShowPasswordSequence: sequences.toggleShowPasswordSequence,
     updateAuthenticationFormValueSequence:
       sequences.updateAuthenticationFormValueSequence,
+    alertError: state.alertError,
+    alertHelper: state.alertHelper,
+    dismissAlertSequence: sequences.dismissAlertSequence,
   },
   ({
     alertInfo,
@@ -29,11 +33,22 @@ export const Login = connect(
     submitLoginSequence,
     toggleShowPasswordSequence,
     updateAuthenticationFormValueSequence,
+    alertError,
+    alertHelper,
+    dismissAlertSequence,
   }) => {
     return (
       <>
         <section className="grid-container usa-section">
           <div className="grid-row flex-justify-center">
+            <div className="grid-col-12 desktop:grid-col-4 tablet:grid-col-7 tw:mb-4">
+              <AlertError
+                alertError={alertError}
+                alertHelper={alertHelper}
+                closeButtonOnClick={() => dismissAlertSequence()}
+              />
+            </div>
+
             <div className="grid-col-12 desktop:grid-col-4 tablet:grid-col-7">
               <SuccessNotification isDismissible={false} />
               <WarningNotification isDismissible={false} />
@@ -43,7 +58,9 @@ export const Login = connect(
                   dismissible={false}
                 ></InfoNotificationComponent>
               )}
+
               <ErrorNotification />
+
               <div className="grid-container bg-white padding-y-3 border border-base-lighter login">
                 <div className="display-flex flex-column">
                   <div className="flex-align-center">
