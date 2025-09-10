@@ -38,7 +38,7 @@ describe('change of address', () => {
       cy.get('[data-testid="tab-case-information"]').click();
       cy.get('[data-testid="tab-parties"]').click();
       cy.get(
-        `[data-testid="petitioner-card-${name}] [data-testid="view-counsel-info"]`,
+        `[data-testid="petitioner-card-${name}"] [data-testid="view-counsel-info"]`,
       ).click();
       cy.get('[data-testid="address1-line"]').contains(newAddress);
       cy.get('[data-testid="modal-button-confirm"]').click();
