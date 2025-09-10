@@ -4,9 +4,9 @@ import {
   isAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
 import { getCasesForUserInteractor } from './getCasesForUserInteractor';
-import { calculateISODate, calculateDate } from '../utilities/DateHandler';
-import { getDbReader } from '@web-api/database';
+import { calculateISODate } from '../utilities/DateHandler';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { getRecentFilingsByDocketNumbers } from '@web-api/persistence/postgres/docketEntries/getRecentFilingsByDocketNumbers';
 import { userIsDirectlyAssociated } from '@shared/business/entities/cases/Case';
 
 import { RecentFiling } from '@shared/business/entities/RecentFiling';
@@ -43,36 +43,11 @@ export const getRecentFilingsForUserInteractor = async (
   const sevenDaysAgo = calculateISODate({ howMuch: -7, units: 'days' });
   const today = calculateISODate({ howMuch: 0, units: 'days' });
 
-  const dbDocketEntries = await getDbReader(reader =>
-    reader
-      .selectFrom('dwDocketEntry as d')
-      .innerJoin('dwCase as c', 'd.docketNumber', 'c.docketNumber')
-      .select([
-        'd.docketEntryId',
-        'd.docketNumber',
-        'd.filingDate',
-        'd.documentTitle',
-        'd.isFileAttached',
-        'd.eventCode',
-        'd.isStricken',
-        'd.isSealed',
-        'd.sealedTo',
-        'd.servedAt',
-        'd.isDraft',
-        'c.caption',
-        'c.isSealed as caseIsSealed',
-      ])
-      .where('d.docketNumber', 'in', docketNumbers)
-      .where('d.filingDate', '>=', calculateDate({ dateString: sevenDaysAgo }))
-      .where('d.filingDate', '<=', calculateDate({ dateString: today }))
-      .where('d.isStricken', 'is not', true)
-      .where('d.eventCode', '!=', 'NOT')
-      .where('d.eventCode', '!=', 'STIN')
-      .where('d.isDraft', 'is not', true)
-      .orderBy('d.filingDate', 'desc')
-      .limit(1000)
-      .execute(),
-  );
+  const dbDocketEntries = await getRecentFilingsByDocketNumbers({
+    docketNumbers,
+    startDate: sevenDaysAgo,
+    endDate: today,
+  });
 
   const results = dbDocketEntries.map(d => ({
     docketNumber: d.docketNumber,
