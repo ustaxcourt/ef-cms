@@ -6,6 +6,8 @@ import {
 import { getCasesForUserInteractor } from './getCasesForUserInteractor';
 import { calculateISODate, calculateDate } from '../utilities/DateHandler';
 import { getDbReader } from '@web-api/database';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { userIsDirectlyAssociated } from '@shared/business/entities/cases/Case';
 
 import { RecentFiling } from '@shared/business/entities/RecentFiling';
 import { getCaseCaptionMeta } from '../utilities/getCaseCaptionMeta';
@@ -88,6 +90,18 @@ export const getRecentFilingsForUserInteractor = async (
     caseIsSealed: d.caseIsSealed,
   }));
 
+  // Get case details to check user association for consolidated cases
+  const uniqueDocketNumbers = [...new Set(results.map(r => r.docketNumber))];
+  const caseDetails = await getCasesByDocketNumbers({
+    docketNumbers: uniqueDocketNumbers,
+    excludeFields: ['docketEntries', 'hearings', 'correspondence'],
+  });
+
+  const caseDetailsMap = new Map();
+  caseDetails.forEach(caseDetail => {
+    caseDetailsMap.set(caseDetail.docketNumber, caseDetail);
+  });
+
   const caseInfoMap = new Map();
   allUserCases.forEach(caseItem => {
     const hasConsolidatedCases = (caseItem.consolidatedCases?.length || 0) > 0;
@@ -133,6 +147,15 @@ export const getRecentFilingsForUserInteractor = async (
     });
     const caseTitle = caseCaptionMeta?.caseTitle || 'Unknown Case';
 
+    // Check if user is directly associated with this specific case
+    const caseDetail = caseDetailsMap.get(entry.docketNumber);
+    const isRequestingUserAssociated = caseDetail
+      ? userIsDirectlyAssociated({
+          aCase: caseDetail,
+          userId: authorizedUser.userId,
+        })
+      : true; // Default to true if case details not found (shouldn't happen)
+
     return {
       docketNumber: entry.docketNumber,
       filedDate: entry.filingDate,
@@ -149,6 +172,7 @@ export const getRecentFilingsForUserInteractor = async (
       inConsolidatedGroup: caseInfo.inConsolidatedGroup,
       isLeadCase: caseInfo.isLeadCase,
       consolidatedIconTooltipText: caseInfo.consolidatedIconTooltipText,
+      isRequestingUserAssociated,
     };
   });
 };

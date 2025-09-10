@@ -151,6 +151,7 @@ export const RecentFilingsNonMobile = ({
                       stateKey="recentFilingsTableSort"
                       data-testid="sort-filed-date"
                     />
+                    <th className="width-5"></th>
                     <SortableHeader
                       sortField="document"
                       sortType="string"
@@ -187,6 +188,21 @@ export const RecentFilingsNonMobile = ({
                             data-testid="consolidated-case-icon"
                           />
                         )}
+                      </td>
+                      <td>
+                        <a
+                          href={`/case-detail/${filing.docketNumber}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          data-testid="case-number-link"
+                        >
+                          {filing.docketNumber}
+                        </a>
+                      </td>
+                      <td>
+                        {formatDateString(filing.filedDate, FORMATS.MMDDYYYY)}
+                      </td>
+                      <td className="text-center width-5">
                         {filing.isSealed && (
                           <Icon
                             aria-label={
@@ -205,19 +221,6 @@ export const RecentFilingsNonMobile = ({
                             }
                           />
                         )}
-                      </td>
-                      <td>
-                        <a
-                          href={`/case-detail/${filing.docketNumber}`}
-                          target="_blank"
-                          rel="noreferrer"
-                          data-testid="case-number-link"
-                        >
-                          {filing.docketNumber}
-                        </a>
-                      </td>
-                      <td>
-                        {formatDateString(filing.filedDate, FORMATS.MMDDYYYY)}
                       </td>
                       <td>
                         <RecentFilingsDocumentDisplay
