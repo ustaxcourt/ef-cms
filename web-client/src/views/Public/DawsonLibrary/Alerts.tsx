@@ -2,7 +2,7 @@ import {
   Alert,
   AlertHeader,
   AlertDescription,
-} from '@web-client/dawson-ui/ui/alert';
+} from '@web-client/dawson-ui/ui/Alert/Alert';
 import { Button } from '@web-client/dawson-ui/ui/button';
 
 import React, { useState } from 'react';

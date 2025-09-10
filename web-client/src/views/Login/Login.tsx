@@ -130,7 +130,6 @@ export const Login = connect(
                       <div className="tw:my-4">
                         <DawsonUiButton
                           aria-label="Login"
-                          title="Login"
                           data-testid="login-button"
                         >
                           Log in
@@ -140,10 +139,8 @@ export const Login = connect(
                     <div className="tw:my-4">
                       <DawsonUiButton
                         aria-label="Forgot password"
-                        title="Forgot password"
                         variant="primaryTertiary"
                         data-testid="forgot-password-button"
-                        type="button"
                         onClick={() => navigateToForgotPasswordSequence()}
                       >
                         Forgot password?

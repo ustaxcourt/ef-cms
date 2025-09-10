@@ -8,7 +8,7 @@ export function Buttons() {
 
       <div>
         <div className="tw:xs:inline-block tw:m-4 tw:xs:m-2">
-          <Button variant="primary" icon="file" aria-roledescription="button">
+          <Button variant="primary" icon="file" aria-label="Primary Default">
             Primary Default
           </Button>
         </div>
@@ -34,7 +34,7 @@ export function Buttons() {
           <Button
             variant="primaryTertiary"
             icon="file"
-            aria-roledescription="button"
+            aria-label="Tertiary Default"
           >
             Tertiary Default
           </Button>
@@ -43,7 +43,7 @@ export function Buttons() {
           <Button
             variant="destructiveTertiary"
             icon="file"
-            aria-label="Destructive Tertiary Default"
+            aria-label="Tertiary Default"
           >
             Tertiary Default
           </Button>
