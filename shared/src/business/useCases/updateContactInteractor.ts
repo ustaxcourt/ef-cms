@@ -25,8 +25,8 @@ import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertW
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import {
-  getNewEmail,
-  getOldEmail,
+  formattedNewEmailForChangeOfAddress,
+  formattedOldEmailForChangeOfAddress,
 } from '@shared/business/utilities/calculateEmail';
 
 /**
@@ -121,8 +121,14 @@ export const updateContact = async (
 
     const { isAddressSealed } = updatedPetitioner;
 
-    oldCaseContact.email = getOldEmail(oldCaseContact.email, isAddressSealed);
-    contactInfo.email = getNewEmail(contactInfo.email, isAddressSealed);
+    oldCaseContact.email = formattedOldEmailForChangeOfAddress(
+      oldCaseContact.email,
+      isAddressSealed,
+    );
+    contactInfo.email = formattedNewEmailForChangeOfAddress(
+      contactInfo.email,
+      isAddressSealed,
+    );
 
     const changeOfAddressPdf = await applicationContext
       .getDocumentGenerators()
