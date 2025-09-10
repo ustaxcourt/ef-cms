@@ -225,7 +225,7 @@ jobs:
       - run:
           name: Upgrade Postgres Global Engine
           command: |
-            ./scripts/rds-upgrade-global-engine.sh --target-version 17.5
+            ./scripts/rds-upgrade-global-engine.sh --target-version 17.5 --yes
       - run:
           name: Disengage Maintenance Mode
           command: |
