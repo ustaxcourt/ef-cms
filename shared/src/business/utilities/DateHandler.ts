@@ -705,21 +705,21 @@ export const getWeeksInRange = ({
 }: {
   startDate: string;
   endDate: string;
-}): string[] => {
+}): IsoDateRange[] => {
   let start = DateTime.fromISO(startDate).startOf('week');
   const end = DateTime.fromISO(endDate).startOf('week');
 
-  const weeks: string[] = [];
+  const weeks: IsoDateRange[] = [];
 
   // Loop through each week, adding each Monday to the array
   while (start <= end) {
     const isoStart = start.toISODate();
-    if (isoStart !== null) {
-      weeks.push(isoStart);
+    const isoEnd = start.plus({ days: 5 }).toISODate();
+    if (isoStart !== null && isoEnd !== null) {
+      weeks.push({ start: isoStart, end: isoEnd });
     }
     start = start.plus({ weeks: 1 });
   }
-
   return weeks;
 };
 
