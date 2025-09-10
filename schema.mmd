@@ -1,0 +1,294 @@
+---
+config:
+  theme: base
+  layout: dagre
+  look: neo
+title: EF-CMS Database Schema
+---
+erDiagram
+	direction TB
+	
+	%% EF-CMS Database Schema
+	%% This diagram represents the complete database structure for the Electronic Filing Case Management System
+	%% Key relationships are based on shared keys rather than formal foreign key constraints
+	%% Primary shared keys: docketNumber (Case), userId (User), docketEntryId (Docket Entry), barNumber (Bar Number)
+	dwDocketEntry {
+		string docketEntryId PK "Unique docket entry identifier"  
+		string docketNumber FK "Associated case docket number"  
+		string documentType  "Type of document filed"  
+		date filingDate  "Date document was filed"  
+		string filedBy  "Name of person who filed the document"  
+		string documentTitle  "Title of the document"  
+		string processingStatus  "Current processing status"  
+		string eventCode  "Event code for document type"  
+		boolean isOnDocketRecord  "Document appears on public docket record"  
+		boolean isSealed  "Document is sealed from public view"  
+		boolean isPaper  "Document was filed on paper"  
+		date createdAt  "Entry creation timestamp"  
+		date receivedAt  "Date document was received by court"  
+	}
+	dwUser {
+		string userId PK "Unique user identifier"  
+		string email  "Verified email address of the user"  
+		string name  "Full name of the user"  
+		string role  "User role (Private Practitioner, IRS Practitioner, DOJ Practitioner, Petitioner, Court User)"  
+		string barNumber  "Bar admission number"  
+		string accountStatus  "Account status (Active, Inactive, etc.)"  
+		string firstName  "User's first name"  
+		string lastName  "User's last name"  
+		string middleName  "User's middle name"  
+		string firmName  "Name of law firm or organization"  
+		string practitionerType  "Type of practitioner (Attorney, CPA, etc.)"  
+		string originalBarState  "State where originally admitted to bar"  
+		date admissionsDate  "Date admitted to practice"  
+		string admissionsStatus  "Status of bar admission"  
+		date createdAt  "User account creation timestamp"  
+	}
+	dwUserOnCase {
+		string userId PK "User ID"  
+		string docketNumber PK "Case docket number"  
+		string representing  "Who they represent"  
+		string serviceIndicator  "Service indicator"  
+		string actingAsRole  "Role on case"  
+	}
+	dwUserOnCasePending {
+		string userId PK "User ID"  
+		string docketNumber PK "Case docket number"  
+		string representing  "Who they represent"  
+		string serviceIndicator  "Service indicator"  
+		string actingAsRole  "Role on case"  
+	}
+	dwCaseWorksheet {
+		string docketNumber PK "Associated case docket number"  
+		date finalBriefDueDate  "Due date for final brief"  
+		string primaryIssue  "Primary legal issue in the case"  
+		string statusOfMatter  "Current status of the matter"  
+		string judgeUserId  "User ID of assigned judge"  
+	}
+	dwCaseDeadline {
+		string caseDeadlineId PK "Unique deadline identifier"  
+		string docketNumber FK "Associated case docket number"  
+		date deadlineDate  "Due date for the deadline"  
+		string description  "Description of what is due"  
+		string associatedJudge  "Name of associated judge"  
+		string associatedJudgeId  "User ID of associated judge"  
+		string consolidatedCaseDeadlineId  "ID for consolidated case deadlines"  
+		date createdAt  "Deadline creation timestamp"  
+		number sortableDocketNumber  "Numeric docket number for sorting"  
+	}
+	dwCaseCorrespondence {
+		string correspondenceId PK "Unique correspondence identifier"  
+		string docketNumber FK "Associated case docket number"  
+		string documentTitle  "Title of correspondence document"  
+		string filedBy  "Name of person who filed correspondence"  
+		date filingDate  "Date correspondence was filed"  
+		string userId FK "User ID of person who filed it"  
+		boolean archived  "Correspondence is archived"  
+	}
+	dwDocketEntryWorksheet {
+		string docketEntryId PK "Associated docket entry identifier"  
+		date finalBriefDueDate  "Due date for final brief"  
+		string primaryIssue  "Primary legal issue"  
+		string statusOfMatter  "Current status of the matter"  
+	}
+	dwMinuteSheet {
+		string trialSessionId PK "Trial session ID"  
+		string docketNumber FK "Case docket number"  
+		object content  "Minute sheet content"  
+	}
+	dwWorkItem {
+		string workItemId PK "Unique work item identifier"  
+		string docketNumber FK "Associated case docket number"  
+		string docketEntryId FK "Associated docket entry ID"  
+		string assigneeId FK "User assigned to complete work item"  
+		string assigneeName  "Name of assigned user"  
+		string section  "Court section handling the work item"  
+		string sentBy  "Name of person who sent the work item"  
+		string sentByUserId FK "User ID of sender"  
+		string sentBySection  "Court section that sent the work item"  
+		boolean inProgress  "Work item is currently being processed"  
+		boolean isRead  "Work item has been read by assignee"  
+		date completedAt  "Date work item was completed"  
+		string completedBy  "Name of person who completed the work item"  
+		string completedByUserId FK "User ID of person who completed it"  
+		string completedMessage  "Message explaining completion"  
+		date createdAt  "Work item creation timestamp"  
+		date updatedAt  "Last modification timestamp"  
+	}
+	dwBarNumber {
+		string barNumberId PK "Primary key"  
+		string userId FK "User ID"  
+		string barNumber  "Bar number"  
+		string state  "State"  
+		date admissionDate  "Admission date"  
+		string status  "Status"  
+	}
+	dwUserConfirmationCode {
+		string confirmationCodeId PK "Primary key"  
+		string userId FK "User ID"  
+		string confirmationCode  "Confirmation code"  
+		date expirationDate  "Expiration date"  
+		string status  "Status"  
+	}
+	dwUserCaseNote {
+		string docketNumber PK "Case docket number"  
+		string userId PK "User ID"  
+		string notes  "Note content"  
+	}
+	dwMessage {
+		string messageId PK "Unique message identifier"  
+		string docketNumber FK "Associated case docket number"  
+		string from  "Name of message sender"  
+		string fromSection  "Court section of sender"  
+		string fromUserId FK "User ID of sender"  
+		string to  "Name of message recipient"  
+		string toSection  "Court section of recipient"  
+		string toUserId FK "User ID of recipient"  
+		string subject  "Message subject line"  
+		string message  "Message body content"  
+		object attachments  "Attached documents"  
+		boolean isCompleted  "Message task is completed"  
+		boolean isRead  "Message has been read by recipient"  
+		boolean isRepliedTo  "Message has been replied to"  
+		string parentMessageId  "ID of parent message in thread"  
+		date completedAt  "Date message was completed"  
+		string completedBy  "Name of person who completed message"  
+		string completedBySection  "Section of person who completed it"  
+		string completedByUserId FK "User ID of person who completed it"  
+		string completedMessage  "Completion explanation message"  
+		date createdAt  "Message creation timestamp"  
+	}
+	dwNotification {
+		number id PK "Primary key"  
+		string topic  "Notification topic"  
+		number ttl  "Time to live"  
+	}
+	dwConnection {
+		string connectionId PK "Primary key"  
+		string clientConnectionId  "Client connection ID"  
+		string userId FK "User ID"  
+		string endpoint  "Connection endpoint"  
+		number ttl  "Time to live"  
+	}
+	dwResponseString {
+		string responseString PK "Response string"  
+		string requestId  "Request ID"  
+		string userId FK "User ID"  
+		number ttl  "Time to live"  
+	}
+	dwChangeOfAddress {
+		string changeOfAddressId PK "Primary key"  
+		string userId FK "User ID"  
+		string oldAddress  "Old address"  
+		string newAddress  "New address"  
+		date changeDate  "Change date"  
+		string status  "Status"  
+	}
+	dwCase {
+		string docketNumber PK "Unique case identifier"  
+		string caption  "Case title and party information"  
+		string status  "Current case status (New, General Docket, etc.)"  
+		string caseType  "Type of case (Deficiency, CDP, etc.)"  
+		date receivedAt  "Date case was received by the court"  
+		string associatedJudgeId FK "ID of assigned judge"  
+		string associatedJudge  "Name of assigned judge"  
+		boolean automaticBlocked  "Case automatically blocked by system"  
+		date automaticBlockedDate  "Date case was automatically blocked"  
+		string automaticBlockedReason  "Reason for automatic blocking"  
+		boolean blocked  "Case is currently blocked"  
+		date blockedDate  "Date case was blocked"  
+		string blockedReason  "Reason case was blocked"  
+		string caseNote  "Internal case notes and comments"  
+		object caseStatusHistory  "History of case status changes"  
+		date closedDate  "Date case was closed"  
+		date createdAt  "Case creation timestamp"  
+		number damages  "Amount of damages claimed"  
+		string docketNumberSuffix  "Suffix for consolidated cases"  
+		string filingType  "Method of case filing (electronic/paper)"  
+		boolean hasPendingItems  "Case has pending work items"  
+		boolean hasVerifiedIrsNotice  "IRS notice has been verified"  
+		string initialCaption  "Original case caption before amendments"  
+		string initialDocketNumberSuffix  "Original docket number suffix"  
+		date irsNoticeDate  "Date of IRS notice"  
+		boolean isPaper  "Case filed on paper"  
+		boolean isSealed  "Case is sealed from public view"  
+		string leadDocketNumber  "Lead case in consolidated group"  
+		number litigationCosts  "Litigation costs amount"  
+		string mailingDate  "Date case was mailed"  
+		boolean noticeOfAttachments  "Notice includes attachments"  
+		date noticeOfTrialDate  "Date trial notice was issued"  
+		boolean orderDesignatingPlaceOfTrial  "Order designating trial location"  
+		boolean orderForAmendedPetition  "Order for amended petition"  
+		boolean orderForAmendedPetitionAndFilingFee  "Order for amended petition and filing fee"  
+		boolean orderForCds  "Order for case development status"  
+		boolean orderForFilingFee  "Order for filing fee"  
+		boolean orderForRatification  "Order for ratification"  
+		boolean orderToShowCause  "Order to show cause"  
+		string partyType  "Type of party (Petitioner, Respondent)"  
+		object petitioners  "Petitioner information and details"  
+		date petitionPaymentDate  "Date petition payment was made"  
+		string petitionPaymentMethod  "Method of petition payment"  
+		string petitionPaymentStatus  "Status of petition payment"  
+		date petitionPaymentWaivedDate  "Date payment was waived"  
+		string preferredTrialCity  "Petitioner's preferred trial city"  
+		string procedureType  "Type of procedure (Regular, Small Tax Case)"  
+		object qcCompleteForTrial  "Quality control completion for trial"  
+		date sealedDate  "Date case was sealed"  
+		number sortableDocketNumber  "Numeric docket number for sorting"  
+		object statistics  "Case statistics and metrics"  
+		date trialDate  "Scheduled trial date"  
+		string trialLocation  "Trial location/city"  
+		string trialSessionId FK "Trial session identifier"  
+		string trialTime  "Scheduled trial time"  
+		boolean useSameAsPrimary  "Use same address as primary contact"  
+	}
+	dwFeatureFlag {
+		string name PK "Feature flag name"  
+		object value  "Feature flag value"  
+	}
+	dwPractitionerDocuments {
+		string practitionerDocumentFileId PK "Document file ID"  
+		string barNumber FK "Practitioner bar number"  
+		string categoryName  "Document category"  
+		string categoryType  "Category type"  
+		string description  "Document description"  
+		string fileName  "File name"  
+		string location  "File location"  
+		string uploadDate  "Upload date"  
+	}
+
+	%% Case relationships (docketNumber shared key)
+	dwCase ||--o{ dwDocketEntry : "has"
+	dwCase ||--o{ dwUserOnCase : "involves"
+	dwCase ||--o{ dwUserOnCasePending : "pending_involvement"
+	dwCase ||--|| dwCaseWorksheet : "has_worksheet"
+	dwCase ||--o{ dwCaseDeadline : "has_deadlines"
+	dwCase ||--o{ dwCaseCorrespondence : "has_correspondence"
+	dwCase ||--o{ dwMinuteSheet : "has_minutes"
+	dwCase ||--o{ dwWorkItem : "has_work_items"
+	dwCase ||--o{ dwUserCaseNote : "has_notes"
+	dwCase ||--o{ dwMessage : "has_messages"
+	
+	%% User relationships (userId shared key)
+	dwUser ||--o{ dwUserOnCase : "participates_in"
+	dwUser ||--o{ dwUserOnCasePending : "pending_participation"
+	dwUser ||--o{ dwBarNumber : "has"
+	dwUser ||--o{ dwUserConfirmationCode : "has"
+	dwUser ||--o{ dwUserCaseNote : "creates"
+	dwUser ||--o{ dwMessage : "sends"
+	dwUser ||--o{ dwMessage : "receives"
+	dwUser ||--o{ dwConnection : "has"
+	dwUser ||--o{ dwChangeOfAddress : "requests"
+	dwUser ||--o{ dwWorkItem : "assigned_to"
+	dwUser ||--o{ dwWorkItem : "sent_by"
+	dwUser ||--o{ dwWorkItem : "completed_by"
+	dwUser ||--o{ dwResponseString : "creates"
+	dwUser ||--o{ dwDocketEntry : "signed_by"
+	dwUser ||--o{ dwCaseCorrespondence : "filed_by"
+	
+	%% Docket Entry relationships (docketEntryId shared key)
+	dwDocketEntry ||--|| dwDocketEntryWorksheet : "has_worksheet"
+	dwDocketEntry ||--o{ dwWorkItem : "generates"
+	
+	%% Bar Number relationships (barNumber shared key)
+	dwBarNumber ||--o{ dwPractitionerDocuments : "has_documents"
