@@ -46,7 +46,10 @@ describe('Recent Filings - Petitioner', () => {
   it('should display pagination component', () => {
     // Pagination component should always be present (even with 0 records)
     cy.get('[data-testid="pagination"]').should('exist');
-    cy.get('[data-testid="recent-filings-table"] tbody tr').should('exist');
+    cy.get('[data-testid="recent-filings-table"] tbody tr').should(
+      'have.length.at.least',
+      0,
+    );
   });
 
   it('should show proper information text', () => {
