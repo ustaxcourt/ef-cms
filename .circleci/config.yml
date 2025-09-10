@@ -224,11 +224,17 @@ jobs:
 
   docker-image-zipper:
     docker:
-      - image: *efcms-docker-image
+      - image: cimg/aws:2023.03
     resource_class: xlarge
     steps:
       - git-shallow-clone/checkout
       - npm-install
+      - run:
+          name: Install AWS CLI
+          command: |
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
       - setup_remote_docker:
           version: docker23
       - run:
@@ -378,7 +384,7 @@ jobs:
             ./scripts/reindex/disable-reindex-cron.sh
 
   smoketests:
-    parallelism: 9
+    parallelism: 6
     docker:
       - image: *efcms-docker-image
         aws_auth:
@@ -611,10 +617,6 @@ jobs:
             if [ $MIGRATE_FLAG == true ]; then
               npm run migration:cleanup -- $ENV
             fi
-      - run:
-          name: Cleanup Cypress Test Accounts
-          command: |
-            npm run cleanup:cypress-test-accounts
 
   ######################## GLUE JOB: Jobs that run in a lower environment ########################
 
@@ -1135,60 +1137,56 @@ workflows:
           <<: *only-deployed-lower-environments
           requires:
             - deploy
-      - migrate:
-          <<: *only-deployed-lower-environments
-          requires:
-            - deploy
-      - wait-for-migration:
-          <<: *only-deployed-lower-environments
-          type: approval
-          requires:
-            - migrate
-      - prepare-for-reindex:
-          <<: *only-deployed-lower-environments
-          requires:
-            - wait-for-migration
-      - wait-for-reindex:
-          <<: *only-deployed-lower-environments
-          type: approval
-          requires:
-            - prepare-for-reindex
-      - disable-reindex-cron:
-          <<: *only-deployed-lower-environments
-          requires:
-            - wait-for-reindex
-      - index-cases:
-          <<: *only-deployed-lower-environments
-          requires:
-            - wait-for-reindex
-      - index-docket-entries:
-          <<: *only-deployed-lower-environments
-          requires:
-            - index-cases
-      - index-users:
-          <<: *only-deployed-lower-environments
-          requires:
-            - index-docket-entries
+      # - migrate:
+      #     <<: *only-deployed-lower-environments
+      #     requires:
+      #       - deploy
+      # - wait-for-migration:
+      #     <<: *only-deployed-lower-environments
+      #     type: approval
+      #     requires:
+      #       - migrate
+      # - prepare-for-reindex:
+      #     <<: *only-deployed-lower-environments
+      #     requires:
+      #       - wait-for-migration
+      # - wait-for-reindex:
+      #     <<: *only-deployed-lower-environments
+      #     type: approval
+      #     requires:
+      #       - prepare-for-reindex
+      # - disable-reindex-cron:
+      #     <<: *only-deployed-lower-environments
+      #     requires:
+      #       - wait-for-reindex
+      # - index-cases:
+      #     <<: *only-deployed-lower-environments
+      #     requires:
+      #       - wait-for-reindex
+      # - index-docket-entries:
+      #     <<: *only-deployed-lower-environments
+      #     requires:
+      #       - index-cases
+      # - index-users:
+      #     <<: *only-deployed-lower-environments
+      #     requires:
+      #       - index-docket-entries
       - smoketests:
           <<: *only-deployed-lower-environments
           requires:
-            - disable-reindex-cron
-            - index-users
+            - deploy
       - loadtests:
           <<: *only-deployed-lower-environments
           requires:
-            - disable-reindex-cron
-            - index-users
+            - deploy
       - smoketests-readonly:
           <<: *only-deployed-lower-environments
           requires:
-            - disable-reindex-cron
-            - index-users
+            - deploy
       - api-hosted-environment-tests:
           <<: *only-deployed-lower-environments
           requires:
-            - disable-reindex-cron
-            - index-users
+            - deploy
       - switch-colors:
           <<: *only-deployed-lower-environments
           requires:
