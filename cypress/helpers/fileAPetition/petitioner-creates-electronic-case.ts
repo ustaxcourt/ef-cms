@@ -1,8 +1,9 @@
 import { PROCEDURE_TYPES_MAP } from '../../../shared/src/business/entities/EntityConstants';
 import { attachSamplePdfFile } from '../file/upload-file';
+import { faker } from '@faker-js/faker';
 
 export function externalUserCreatesElectronicCase(
-  primaryFilerName: string = 'John',
+  primaryFilerName: string = faker.person.firstName(),
 ) {
   cy.get('[data-testid="file-a-petition"]').click();
   cy.get('[data-testid="go-to-step-1"]').click();
@@ -52,8 +53,8 @@ export function externalUserCreatesElectronicCase(
 }
 
 export function petitionerCreatesElectronicCaseWithDeceasedSpouse(
-  primaryFilerName: string = 'John',
-  secondaryFilerName: string = 'Sally',
+  primaryFilerName: string = faker.person.firstName(),
+  secondaryFilerName: string = faker.person.firstName(),
 ) {
   cy.get('[data-testid="file-a-petition"]').click();
   cy.get('[data-testid="go-to-step-1"]').click();
@@ -104,8 +105,8 @@ export function petitionerCreatesElectronicCaseWithDeceasedSpouse(
 }
 
 export function petitionerCreatesElectronicCaseWithSpouse(
-  primaryFilerName: string = 'John',
-  secondaryFilerName: string = 'Sally',
+  primaryFilerName: string = faker.person.firstName(),
+  secondaryFilerName: string = faker.person.firstName(),
 ) {
   cy.get('[data-testid="file-a-petition"]').click();
   cy.get('[data-testid="go-to-step-1"]').click();
@@ -156,8 +157,8 @@ export function petitionerCreatesElectronicCaseWithSpouse(
 }
 
 export function externalUserCreatesElectronicCaseWithSpouseDifferentAddress(
-  primaryFilerName: string = 'John',
-  secondaryFilerName: string = 'Sally',
+  primaryFilerName: string = faker.person.firstName(),
+  secondaryFilerName: string = faker.person.firstName(),
 ) {
   cy.get('[data-testid="file-a-petition"]').click();
   cy.get('[data-testid="go-to-step-1"]').click();
