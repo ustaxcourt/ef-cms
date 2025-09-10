@@ -1,12 +1,13 @@
 import { loginAsPetitioner } from '../../../../helpers/authentication/login-as-helpers';
-import { externalUserCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 
 describe('Recent Filings - Basic Integration', () => {
   beforeEach(() => {
     Cypress.session.clearCurrentSessionData();
+    loginAsPetitioner();
   });
 
   it('should handle empty state gracefully', () => {
+    // Use a different petitioner for this test
     loginAsPetitioner('petitioner2@example.com');
 
     cy.get('[data-testid="header-recent-filings-link"]').click();
@@ -18,9 +19,6 @@ describe('Recent Filings - Basic Integration', () => {
   });
 
   it('should allow user to navigate to recent filings', () => {
-    loginAsPetitioner();
-    externalUserCreatesElectronicCase('Test Petitioner');
-
     cy.get('[data-testid="header-recent-filings-link"]').click();
 
     cy.get('[data-testid="recent-filings-page"]').should('be.visible');
@@ -28,9 +26,6 @@ describe('Recent Filings - Basic Integration', () => {
   });
 
   it('should display basic sorting functionality', () => {
-    loginAsPetitioner();
-    externalUserCreatesElectronicCase('Test Petitioner');
-
     cy.viewport(1200, 800);
 
     cy.get('[data-testid="header-recent-filings-link"]').click();
@@ -45,27 +40,18 @@ describe('Recent Filings - Basic Integration', () => {
   });
 
   it('should handle basic pagination', () => {
-    loginAsPetitioner();
-    externalUserCreatesElectronicCase('Test Petitioner');
-
     cy.get('[data-testid="header-recent-filings-link"]').click();
 
     cy.get('[data-testid="pagination"]').should('exist');
   });
 
   it('should display loading state correctly', () => {
-    loginAsPetitioner();
-    externalUserCreatesElectronicCase('Test Petitioner');
-
     cy.get('[data-testid="header-recent-filings-link"]').click();
 
     cy.get('[data-testid="recent-filings-table"]').should('be.visible');
   });
 
   it('should support mobile view', () => {
-    loginAsPetitioner();
-    externalUserCreatesElectronicCase('Test Petitioner');
-
     cy.viewport('iphone-x');
 
     cy.get('[data-testid="header-recent-filings-link"]').click({ force: true });
@@ -74,9 +60,6 @@ describe('Recent Filings - Basic Integration', () => {
   });
 
   it('should support desktop view', () => {
-    loginAsPetitioner();
-    externalUserCreatesElectronicCase('Test Petitioner');
-
     cy.viewport(1200, 800);
 
     cy.get('[data-testid="header-recent-filings-link"]').click();
@@ -85,9 +68,6 @@ describe('Recent Filings - Basic Integration', () => {
   });
 
   it('should meet basic accessibility requirements', () => {
-    loginAsPetitioner();
-    externalUserCreatesElectronicCase('Test Petitioner');
-
     cy.get('[data-testid="header-recent-filings-link"]').click();
 
     cy.get('[data-testid="recent-filings-table"]').should(

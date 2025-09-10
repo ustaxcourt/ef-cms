@@ -165,9 +165,6 @@ export const RecentFilingsDocumentDisplay = ({
         docketNumber={filing.docketNumber}
         onDownloadClick={onDownloadClick}
         showProcessing={displayProperties.showDocumentProcessing}
-        isSealed={isSealed || false}
-        sealedTo={sealedTo}
-        caseIsSealed={caseIsSealed}
         filing={filing}
       />
     );
