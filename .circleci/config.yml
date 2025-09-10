@@ -224,7 +224,7 @@ jobs:
 
   docker-image-zipper:
     docker:
-      - image: cimg/node:22.16.0
+      - image: *efcms-docker-image
     resource_class: xlarge
     steps:
       - git-shallow-clone/checkout
