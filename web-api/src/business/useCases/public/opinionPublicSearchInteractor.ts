@@ -2,9 +2,9 @@ import { DocumentSearch } from '@shared/business/entities/documents/DocumentSear
 import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
 import { PublicDocumentSearchResult } from '@shared/business/entities/documents/PublicDocumentSearchResult';
 import {
-  MAX_FETCH_BATCHES,
+  OPENSEARCH_DOCUMENT_SEARCH_MAX_BATCHES_PER_QUERY,
   MAX_SEARCH_RESULTS,
-  RAW_BATCH_SIZE,
+  OPENSEARCH_DOCUMENT_SEARCH_SINGLE_BATCH_SIZE,
 } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { omit } from 'lodash';
@@ -55,11 +55,12 @@ export const opinionPublicSearchInteractor = async (
   const accumulated: any[] = [];
   let searchAfter: any[] | undefined = undefined;
   let nextCursor: any[] | undefined = undefined;
-  let rawFetches = 0;
+  let opensearchDocumentSearchBatchCount = 0;
 
   while (
     accumulated.length < detectionCeiling &&
-    rawFetches < MAX_FETCH_BATCHES
+    opensearchDocumentSearchBatchCount <
+      OPENSEARCH_DOCUMENT_SEARCH_MAX_BATCHES_PER_QUERY
   ) {
     const { results: rawResults } = await applicationContext
       .getPersistenceGateway()
@@ -68,10 +69,13 @@ export const opinionPublicSearchInteractor = async (
         documentEventCodes: opinionTypes,
         isOpinionSearch: true,
         ...rawSearch,
-        overrideResultSize: RAW_BATCH_SIZE,
-        searchAfter: cursor && rawFetches === 0 ? cursor : searchAfter,
+        overrideResultSize: OPENSEARCH_DOCUMENT_SEARCH_SINGLE_BATCH_SIZE,
+        searchAfter:
+          cursor && opensearchDocumentSearchBatchCount === 0
+            ? cursor
+            : searchAfter,
       });
-    rawFetches++;
+    opensearchDocumentSearchBatchCount++;
     if (rawResults.length === 0) break;
     for (const r of rawResults) {
       if (accumulated.length >= detectionCeiling) break;
