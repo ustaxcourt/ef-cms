@@ -1,3 +1,4 @@
+import { getOpensearchDocumentSearchBatchState } from '../utilities/getOpensearchDocumentSearchBatchState';
 import { DocumentSearch } from '@shared/business/entities/documents/DocumentSearch';
 import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
 import { InternalDocumentSearchResult } from '@shared/business/entities/documents/InternalDocumentSearchResult';
@@ -10,9 +11,9 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { omit } from 'lodash';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import {
-  OPENSEARCH_DOCUMENT_SEARCH_MAX_BATCHES_PER_QUERY,
+  OPEN_SEARCH_MAX_BATCHES_PER_QUERY,
   MAX_SEARCH_RESULTS,
-  OPENSEARCH_DOCUMENT_SEARCH_SINGLE_BATCH_SIZE,
+  OPEN_SEARCH_SINGLE_BATCH_SIZE,
 } from '@shared/business/entities/EntityConstants';
 
 export const opinionAdvancedSearchInteractor = async (
@@ -61,17 +62,19 @@ export const opinionAdvancedSearchInteractor = async (
 
   const rawSearch = opinionSearch.validate().toRawObject();
 
-  const detectionCeiling = Math.min(limit + 1, MAX_SEARCH_RESULTS + 1);
-  const desired = Math.min(limit, MAX_SEARCH_RESULTS);
-  const accumulated: any[] = [];
-  let searchAfter: any[] | undefined = undefined;
+  const {
+    detectionCeiling,
+    desired,
+    accumulated,
+    searchAfter: initialSearchAfter,
+  } = getOpensearchDocumentSearchBatchState(limit, MAX_SEARCH_RESULTS);
+  let searchAfter = initialSearchAfter;
   let nextCursor: any[] | undefined = undefined;
-  let opensearchDocumentSearchBatchCount = 0;
+  let openSearchBatchCount = 0;
 
   while (
     accumulated.length < detectionCeiling &&
-    opensearchDocumentSearchBatchCount <
-      OPENSEARCH_DOCUMENT_SEARCH_MAX_BATCHES_PER_QUERY
+    openSearchBatchCount < OPEN_SEARCH_MAX_BATCHES_PER_QUERY
   ) {
     const { results: rawResults } = await applicationContext
       .getPersistenceGateway()
@@ -80,13 +83,11 @@ export const opinionAdvancedSearchInteractor = async (
         documentEventCodes: opinionTypes,
         isOpinionSearch: true,
         ...rawSearch,
-        overrideResultSize: OPENSEARCH_DOCUMENT_SEARCH_SINGLE_BATCH_SIZE,
+        overrideResultSize: OPEN_SEARCH_SINGLE_BATCH_SIZE,
         searchAfter:
-          cursor && opensearchDocumentSearchBatchCount === 0
-            ? cursor
-            : searchAfter,
+          cursor && openSearchBatchCount === 0 ? cursor : searchAfter,
       });
-    opensearchDocumentSearchBatchCount++;
+    openSearchBatchCount++;
 
     if (rawResults.length === 0) break;
 
