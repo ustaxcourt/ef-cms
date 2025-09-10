@@ -218,6 +218,18 @@ jobs:
           name: 'Deploy - Verify Private Elasticsearch'
           command: |
             npm run verify-private-elasticsearch -- $ENV
+      - run:
+          name: Engage Maintenance Mode
+          command: |
+            npm run maintenance:engage
+      - run:
+          name: Upgrade Postgres Global Engine
+          command: |
+            ./scripts/rds-upgrade-global-engine.sh --target-version 17.5
+      - run:
+          name: Disengage Maintenance Mode
+          command: |
+            npm run maintenance:disengage
 
   docker-image-zipper:
     docker:
