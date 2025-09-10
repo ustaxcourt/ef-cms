@@ -8,7 +8,7 @@ import { v4 } from 'uuid';
 if (!Cypress.env('SMOKETESTS_LOCAL')) {
   describe('irs superuser integration', () => {
     const password = getCypressEnv().defaultAccountPass;
-    const userName = `cypress_test_account_irs_super_user_${v4()}@example.com`;
+    const userName = `cypress_test_account_${v4().substring(0, 8)}@example.com`; // we substring because there is a 64 joi character limit on emails
 
     beforeEach(() => {
       Cypress.session.clearCurrentSessionData();
