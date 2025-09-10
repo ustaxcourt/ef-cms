@@ -112,7 +112,7 @@ describe('appends pro se checklist', () => {
       ).contains(2);
     });
   });
-  it('appends pro se checklist for petitioner and spouse when petition filed by peititions clerk', () => {
+  it('appends pro se checklist for petitioner and spouse when petition filed by petitions clerk', () => {
     createAndServePaperPetitionMyselfAndSpouse().then(({ docketNumber }) => {
       goToCase(docketNumber);
       cy.get(
@@ -120,7 +120,7 @@ describe('appends pro se checklist', () => {
       ).contains(2);
     });
   });
-  it('appends pro se checklist for each petitioner and spouse of different addresses when petition is filed by peitions clerk', () => {
+  it('appends pro se checklist for each petitioner and spouse of different addresses when petition is filed by petitions clerk', () => {
     createAndServePaperPetitionMultipleParties().then(({ docketNumber }) => {
       goToCase(docketNumber);
       cy.get(
