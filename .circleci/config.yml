@@ -1180,7 +1180,6 @@ workflows:
           requires:
             - disable-reindex-cron
             - index-users
-            - deploy
       - loadtests:
           <<: *only-deployed-lower-environments
           requires:
