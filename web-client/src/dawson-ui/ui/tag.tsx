@@ -9,7 +9,7 @@ import { omit } from 'lodash';
 
 const tagVariants = cva(
   cn(
-    'tw:rounded-[.5em] tw:font-bold tw:uppercase tw:text-nowrap',
+    'tw:rounded-[4px] tw:font-bold tw:uppercase tw:text-nowrap',
     'tw:[&_svg]:align-[-1px]',
     //Mobile
     'tw:text-[12px]',
@@ -27,8 +27,8 @@ const tagVariants = cva(
   {
     variants: {
       variant: {
-        primary: cn('tw:bg-white tw:text-primary-active'),
-        destructive: cn('tw:bg-destructive-darker tw:text-white'),
+        primary: cn('tw:bg-white tw:text-primary-darker'),
+        destructive: cn('tw:bg-destructive-dark tw:text-white'),
       },
       size: {
         default: '',
