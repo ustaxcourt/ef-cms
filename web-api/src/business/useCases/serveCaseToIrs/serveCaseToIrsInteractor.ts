@@ -16,6 +16,7 @@ import {
   MINUTE_ENTRIES_MAP,
   PARTIES_CODES,
   PAYMENT_STATUS,
+  PRO_SE_CHECKLIST,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import {
@@ -244,7 +245,6 @@ const generateNoticeOfReceipt = async ({
       });
   }
 
-  let clinicLetter;
   const isPrimaryContactProSe = !Case.isPetitionerRepresented(
     caseEntity,
     contactPrimary.contactId,
@@ -253,6 +253,41 @@ const generateNoticeOfReceipt = async ({
     !!contactSecondary &&
     !Case.isPetitionerRepresented(caseEntity, contactSecondary.contactId);
 
+  if (isPrimaryContactProSe || isSecondaryContactProSe) {
+    const doesProSeChecklistExist = await applicationContext
+      .getPersistenceGateway()
+      .isFileExists({
+        applicationContext,
+        key: PRO_SE_CHECKLIST,
+      });
+    if (doesProSeChecklistExist) {
+      const proSeChecklist = await applicationContext
+        .getPersistenceGateway()
+        .getDocument({
+          applicationContext,
+          key: PRO_SE_CHECKLIST,
+          useTempBucket: false,
+        });
+      if (isPrimaryContactProSe && primaryContactNotrPdfData) {
+        primaryContactNotrPdfData = await applicationContext
+          .getUtilities()
+          .combineTwoPdfs({
+            firstPdf: primaryContactNotrPdfData,
+            secondPdf: proSeChecklist,
+          });
+      }
+      if (isSecondaryContactProSe && secondaryContactNotrPdfData) {
+        secondaryContactNotrPdfData = await applicationContext
+          .getUtilities()
+          .combineTwoPdfs({
+            firstPdf: secondaryContactNotrPdfData,
+            secondPdf: proSeChecklist,
+          });
+      }
+    }
+  }
+
+  let clinicLetter;
   if (
     shouldIncludeClinicLetter(
       preferredTrialCity,
