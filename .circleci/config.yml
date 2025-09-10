@@ -384,7 +384,7 @@ jobs:
             ./scripts/reindex/disable-reindex-cron.sh
 
   smoketests:
-    parallelism: 6
+    parallelism: 9
     docker:
       - image: *efcms-docker-image
         aws_auth:
@@ -617,6 +617,10 @@ jobs:
             if [ $MIGRATE_FLAG == true ]; then
               npm run migration:cleanup -- $ENV
             fi
+      - run:
+          name: Cleanup Cypress Test Accounts
+          command: |
+            npm run cleanup:cypress-test-accounts
 
   ######################## GLUE JOB: Jobs that run in a lower environment ########################
 
