@@ -229,12 +229,6 @@ jobs:
     steps:
       - git-shallow-clone/checkout
       - npm-install
-      - run:
-          name: Install AWS CLI
-          command: |
-            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-            unzip awscliv2.zip
-            sudo ./aws/install
       - setup_remote_docker:
           version: docker23
       - run:
