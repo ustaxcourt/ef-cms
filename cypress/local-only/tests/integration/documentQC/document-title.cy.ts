@@ -14,7 +14,7 @@ describe('Document title updates correctly', () => {
     const primaryFilerName = 'John';
     const additionalInfo = 'This is additional info';
     loginAsPrivatePractitioner();
-    externalUserCreatesElectronicCase().then(docketNumber => {
+    externalUserCreatesElectronicCase(primaryFilerName).then(docketNumber => {
       petitionsClerkServesPetition(docketNumber);
       logout();
 

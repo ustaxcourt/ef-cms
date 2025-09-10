@@ -10,10 +10,11 @@ import { logout } from '../../../helpers/authentication/logout';
 import { petitionsClerkServesPetition } from '../../../helpers/documentQC/petitionsclerk-serves-petition';
 
 describe('change of address', () => {
+  const name = 'John';
   it('changing the address of a private practitioner should generate NCA and update their cases', () => {
     const newAddress = faker.location.streetAddress();
     loginAsPrivatePractitioner('privatePractitioner2@example.com');
-    externalUserCreatesElectronicCase().then(docketNumber => {
+    externalUserCreatesElectronicCase(name).then(docketNumber => {
       logout();
 
       loginAsPetitionsClerk1();
@@ -37,7 +38,7 @@ describe('change of address', () => {
       cy.get('[data-testid="tab-case-information"]').click();
       cy.get('[data-testid="tab-parties"]').click();
       cy.get(
-        '[data-testid="petitioner-card-John"] [data-testid="view-counsel-info"]',
+        `[data-testid="petitioner-card-${name}] [data-testid="view-counsel-info"]`,
       ).click();
       cy.get('[data-testid="address1-line"]').contains(newAddress);
       cy.get('[data-testid="modal-button-confirm"]').click();
@@ -48,7 +49,7 @@ describe('change of address', () => {
       cy.get('[data-testid="tab-case-information"] > .button-text').click();
       cy.get('[data-testid="tab-parties"] > .button-text').click();
       cy.get(
-        '[data-testid="petitioner-card-John"] [data-testid="edit-private-practitioner-counsel"]',
+        `[data-testid="petitioner-card-${name}"] [data-testid="edit-private-practitioner-counsel"]`,
       ).click();
       cy.get('[data-testid="remove-petitioner-counsel-button"]').click();
       cy.get('[data-testid="modal-button-confirm"]').click();
@@ -60,7 +61,7 @@ describe('change of address', () => {
     const newAddress = faker.location.streetAddress();
     const newCountry = faker.location.country();
     loginAsPrivatePractitioner('privatePractitioner2@example.com');
-    externalUserCreatesElectronicCase().then(docketNumber => {
+    externalUserCreatesElectronicCase(name).then(docketNumber => {
       logout();
 
       loginAsPetitionsClerk1();
@@ -86,7 +87,7 @@ describe('change of address', () => {
       cy.get('[data-testid="tab-case-information"]').click();
       cy.get('[data-testid="tab-parties"]').click();
       cy.get(
-        '[data-testid="petitioner-card-John"] [data-testid="view-counsel-info"]',
+        `[data-testid="petitioner-card-${name}"] [data-testid="view-counsel-info"]`,
       ).click();
       cy.get('[data-testid="address1-line"]').contains(newAddress);
       cy.get('[data-testid="contact-country-line"]').contains(newCountry);
@@ -98,7 +99,7 @@ describe('change of address', () => {
       cy.get('[data-testid="tab-case-information"] > .button-text').click();
       cy.get('[data-testid="tab-parties"] > .button-text').click();
       cy.get(
-        '[data-testid="petitioner-card-John"] [data-testid="edit-private-practitioner-counsel"]',
+        `[data-testid="petitioner-card-${name}"] [data-testid="edit-private-practitioner-counsel"]`,
       ).click();
       cy.get('[data-testid="remove-petitioner-counsel-button"]').click();
       cy.get('[data-testid="modal-button-confirm"]').click();
