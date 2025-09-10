@@ -18,12 +18,15 @@ import { v4 as uuidv4 } from 'uuid';
 import fs from 'fs';
 import tiff2pdf from 'tiff2pdf';
 import type { RawPractitioner } from '@shared/business/entities/Practitioner';
+import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
+import { toKyselyNewPractitionerDocument } from '@web-api/persistence/postgres/practitionerDocuments/mapper';
+import { PractitionerDocumentTable } from '@web-api/persistence/postgres/practitionerDocuments/schema';
 
 const scriptConfig: ScriptConfig = {
   description:
     'upload-practitioner-application-packages - Converts files named ' +
     '<bar number>.tif to PDF, uploads them to S3, and inserts ' +
-    'corresponding Document entities into dynamodb.',
+    'corresponding Document entities into postgres.',
   environment: {
     efcmsDomain: 'EFCMS_DOMAIN',
     env: 'ENV',
@@ -35,27 +38,26 @@ const { home } = parseArgsAndEnvVars(scriptConfig) as { home: string };
 
 const INPUT_DIR = `${home}/Documents/upload`;
 const MAX_TRIES = 5;
-const DYNAMODB_CHUNK_SIZE = 25;
+const CHUNK_SIZE = 25;
 
-type putRequestType = { PutRequest: { Item: { [key: string]: string } } };
 type fileType = { fileId: string; fileName: string };
 
 const uploadDir = `${INPUT_DIR}/to-upload`;
 const completedDir = `${INPUT_DIR}/done/uploaded`;
-const ddbEntities: putRequestType[] = [];
+const postgresEntities: PractitionerDocumentTable[] = [];
 const output = {
   completed: {
     conversion: {} as { [key: string]: string },
     uploadToS3: {} as { [key: string]: fileType },
-    writeToDynamoDB: {} as { [key: string]: fileType },
+    writeToPostgres: {} as { [key: string]: fileType },
   },
   failed: {
     conversion: {} as { [key: string]: string },
     practitionerNotFound: [] as string[],
     uploadToS3: {} as { [key: string]: { fileId: string; fileName: string } },
-    writeToDynamoDB: {
-      error: [] as putRequestType[],
-      unprocessed: [] as putRequestType[],
+    writeToPostgres: {
+      error: [] as PractitionerDocumentTable[],
+      unprocessed: [] as PractitionerDocumentTable[],
     },
   },
 };
@@ -191,20 +193,15 @@ const convertAllTifsAndConstructDocumentEntities = async ({
       continue;
     }
     const practitionerDocumentFileId = uuidv4();
-    ddbEntities.push({
-      PutRequest: {
-        Item: {
-          categoryName: 'Application Package',
-          categoryType: 'Application Package',
-          description: 'Imported from Blackstone',
-          entityName: 'Document',
-          fileName,
-          pk: `practitioner|${barNumber.toLowerCase()}`,
-          practitionerDocumentFileId,
-          sk: `document|${practitionerDocumentFileId}`,
-          uploadDate: createISODateString(),
-        },
-      },
+    postgresEntities.push({
+      categoryName: 'Application Package',
+      categoryType: 'Application Package',
+      description: 'Imported from Blackstone',
+      fileName,
+      barNumber: barNumber.toLowerCase(),
+      practitionerDocumentFileId,
+      uploadDate: createISODateString(),
+      location: '',
     });
   }
 };
@@ -269,28 +266,17 @@ const moveLocalFile = async ({
   });
 };
 
-const getBarNumberFromPractitionerDocumentPk = ({
-  pk,
-}: {
-  pk: string;
-}): string => {
-  return pk.replace('practitioner|', '').toUpperCase();
-};
-
 const uploadChunkToS3 = async ({
   applicationContext,
   chunk,
 }: {
   applicationContext: ServerApplicationContext;
-  chunk: putRequestType[];
+  chunk: PractitionerDocumentTable[];
 }): Promise<void> => {
   await Promise.all(
     chunk.map(doc => {
-      const barNumber = getBarNumberFromPractitionerDocumentPk({
-        pk: doc.PutRequest.Item.pk,
-      });
-      const { fileName, practitionerDocumentFileId: fileId } =
-        doc.PutRequest.Item;
+      const barNumber = doc.barNumber.toUpperCase();
+      const { fileName, practitionerDocumentFileId: fileId } = doc;
       return uploadFileAndMoveOriginal({
         applicationContext,
         barNumber,
@@ -301,54 +287,63 @@ const uploadChunkToS3 = async ({
   );
 };
 
-const writeChunkToDynamoDb = async ({
-  applicationContext,
+const writeChunkToPostgres = async ({
   chunk,
 }: {
-  applicationContext: ServerApplicationContext;
-  chunk: putRequestType[];
+  chunk: PractitionerDocumentTable[];
 }): Promise<void> => {
-  const { dynamoDbTableName } = applicationContext.environment;
-  let unprocessedItems: any = { [dynamoDbTableName]: chunk };
-  let tries = 0;
-  while (
-    unprocessedItems &&
-    Object.keys(unprocessedItems).length > 0 &&
-    tries < MAX_TRIES
-  ) {
-    try {
-      const batchWriteParams = { RequestItems: unprocessedItems };
-      const res = await applicationContext
-        .getDocumentClient()
-        .batchWrite(batchWriteParams);
-      unprocessedItems = res.UnprocessedItems;
-    } catch (err) {
-      output.failed.writeToDynamoDB.error.push(...chunk);
-    }
-    tries++;
-  }
-  if (unprocessedItems && dynamoDbTableName in unprocessedItems) {
-    output.failed.writeToDynamoDB.unprocessed.push(
-      ...unprocessedItems[dynamoDbTableName],
-    );
-  }
-  const failedWrites = output.failed.writeToDynamoDB.error.map(
-    doc => doc.PutRequest.Item.practitionerDocumentFileId,
-  );
-  const unprocessedWrites = output.failed.writeToDynamoDB.unprocessed.map(
-    doc => doc.PutRequest.Item.practitionerDocumentFileId,
-  );
+  const failedWrites: string[] = [];
+
   for (const doc of chunk) {
-    const barNumber = getBarNumberFromPractitionerDocumentPk({
-      pk: doc.PutRequest.Item.pk,
-    });
-    const { fileName, practitionerDocumentFileId: fileId } =
-      doc.PutRequest.Item;
-    if (!failedWrites.includes(fileId) && !unprocessedWrites.includes(fileId)) {
-      output.completed.writeToDynamoDB[barNumber] = {
-        fileId,
+    const {
+      fileName,
+      practitionerDocumentFileId,
+      barNumber,
+      categoryName,
+      categoryType,
+      description,
+      uploadDate,
+      location,
+    } = doc;
+
+    const practitionerDocument = {
+      practitionerDocumentFileId,
+      fileName,
+      barNumber,
+      categoryName,
+      categoryType,
+      description,
+      uploadDate,
+      location,
+    };
+
+    try {
+      await pgInsertInto({
+        table: 'dwPractitionerDocuments',
+        values: toKyselyNewPractitionerDocument(
+          practitionerDocument,
+          barNumber,
+        ),
+        onConflictColumns: ['practitionerDocumentFileId'],
+      });
+
+      const barNum = barNumber.toUpperCase();
+      output.completed.writeToPostgres[barNum] = {
+        fileId: practitionerDocumentFileId,
         fileName,
       };
+    } catch (err) {
+      console.error('Failed to insert:', practitionerDocumentFileId, err);
+      failedWrites.push(practitionerDocumentFileId);
+      output.failed.writeToPostgres.error.push(doc);
+    }
+  }
+
+  // Track unprocessed if needed (you could add retry logic here too)
+  for (const doc of chunk) {
+    const fileId = doc.practitionerDocumentFileId;
+    if (failedWrites.includes(fileId)) {
+      output.failed.writeToPostgres.unprocessed.push(doc);
     }
   }
 };
@@ -380,17 +375,17 @@ const outputStatistics = (): void => {
     }`,
   );
   console.log(
-    `Number of documents inserted into DynamoDB: ${
-      Object.keys(output.completed.writeToDynamoDB).length
+    `Number of documents inserted into postgres: ${
+      Object.keys(output.completed.writeToPostgres).length
     }`,
   );
   console.log(
-    'Number of documents that could not be inserted into DynamoDB due to ' +
-      `error: ${output.failed.writeToDynamoDB.error.length}`,
+    'Number of documents that could not be inserted into postgres due to ' +
+      `error: ${output.failed.writeToPostgres.error.length}`,
   );
   console.log(
-    'Number of documents that could not be inserted into DynamoDB due to ' +
-      `exceeding maximum tries: ${output.failed.writeToDynamoDB.unprocessed.length}`,
+    'Number of documents that could not be inserted into postgres due to ' +
+      `exceeding maximum tries: ${output.failed.writeToPostgres.unprocessed.length}`,
   );
   console.log('');
 };
@@ -420,8 +415,8 @@ const batchUploadPractitionerApplicationPackages = async ({
   console.timeEnd('Duration of conversion from .tif to .pdf');
 
   console.time('Duration of file upload and document creation');
-  for (let i = 0; i < ddbEntities.length; i += DYNAMODB_CHUNK_SIZE) {
-    let chunk = ddbEntities.slice(i, i + DYNAMODB_CHUNK_SIZE);
+  for (let i = 0; i < postgresEntities.length; i += CHUNK_SIZE) {
+    let chunk = postgresEntities.slice(i, i + CHUNK_SIZE);
     const chunkItems = `${i + 1}-${i + chunk.length}`;
 
     console.time(`Duration of upload of items ${chunkItems} to S3`);
@@ -430,15 +425,14 @@ const batchUploadPractitionerApplicationPackages = async ({
       f => f.fileId,
     );
     chunk = chunk.filter(
-      doc =>
-        !failedUploads.includes(doc.PutRequest.Item.practitionerDocumentFileId),
+      doc => !failedUploads.includes(doc.practitionerDocumentFileId),
     );
     console.timeEnd(`Duration of upload of items ${chunkItems} to S3`);
 
-    console.time(`Duration of creation of documents ${chunkItems} in dynamodb`);
-    await writeChunkToDynamoDb({ applicationContext, chunk });
+    console.time(`Duration of creation of documents ${chunkItems} in postgres`);
+    await writeChunkToPostgres({ chunk });
     console.timeEnd(
-      `Duration of creation of documents ${chunkItems} in dynamodb`,
+      `Duration of creation of documents ${chunkItems} in postgres`,
     );
   }
   console.timeEnd('Duration of file upload and document creation');
