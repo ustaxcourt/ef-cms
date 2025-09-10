@@ -1,9 +1,7 @@
 import { pathsToModuleNameMapper } from 'ts-jest';
-import type { Config } from 'jest';
+import tsconfig from '../../tsconfig.json';
 
-const tsconfig = require('../../tsconfig.json');
-
-const config: Config = {
+const config = {
   clearMocks: true,
   collectCoverage: false,
   moduleNameMapper: pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {

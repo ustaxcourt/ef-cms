@@ -39,7 +39,7 @@
       "tsconfig-paths/register"
     ]
   },
-  "include": ["./**/*.ts", "./**/*.tsx", "./eslint.config.mjs"],
+  "include": ["./**/*.ts", "./**/*.tsx", "./eslint.config.mjs", "web-api/hostedEnvironmentTests/jest-hosted-environment.js"],
   "exclude": [
     "node_modules",
     "targetBranch",
