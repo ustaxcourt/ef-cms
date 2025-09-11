@@ -6,12 +6,8 @@ import {
   AlertHeader,
 } from '@web-client/dawson-ui/ui/alert';
 import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardAction,
-  CardContent,
+  MainCard,
+  sampleCardContent,
 } from '@web-client/dawson-ui/ui/card';
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -107,16 +103,7 @@ export const DawsonLibrary = () => {
         </div>
         <div>
           <h2>Cards</h2>
-          <Card>
-            <CardHeader>
-              <CardTitle>Card Title</CardTitle>
-              <CardDescription>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</CardDescription>
-              <CardAction>Card Action</CardAction>
-            </CardHeader>
-            <CardContent>
-              <p>Card Content</p>
-            </CardContent>
-          </Card>
+          <MainCard content={sampleCardContent} />
         </div>
       </div>
     </>
