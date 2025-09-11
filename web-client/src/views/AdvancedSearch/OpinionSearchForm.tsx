@@ -45,8 +45,8 @@ export const OpinionSearchForm = connect(
 
             <div className="blue-container">
               <div className="display-flex flex-row flex-align-end flex-justify-between margin-bottom-2">
-                <h1 className="margin-bottom-0">Apply Filters</h1>
-                <p className="margin-left-1 margin-bottom-05 text-right text-base-dark">
+                <h2 className="margin-bottom-0">Apply Filters</h2>
+                <p className="margin-left-1 margin-bottom-0 text-right text-base-dark">
                   (optional)
                 </p>
               </div>
@@ -181,8 +181,8 @@ export const OpinionSearchForm = connect(
             <div className="grid-row no-flex-wrap">
               <div className="blue-container grid-col-9 padding-bottom-0 margin-right-1">
                 <div className="display-flex flex-row flex-align-end flex-justify-between margin-bottom-2">
-                  <h1 className="margin-bottom-0">Apply Filters</h1>
-                  <p className="margin-left-1 margin-bottom-05 text-right text-base-dark">
+                  <h2 className="margin-bottom-0">Apply Filters</h2>
+                  <p className="margin-left-1 margin-bottom-0 text-right text-base-dark">
                     (optional)
                   </p>
                 </div>

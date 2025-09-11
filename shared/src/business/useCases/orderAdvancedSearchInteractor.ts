@@ -1,8 +1,11 @@
 import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
 import {
+  OPEN_SEARCH_MAX_BATCHES_PER_QUERY,
   MAX_SEARCH_RESULTS,
   ORDER_EVENT_CODES,
+  OPEN_SEARCH_SINGLE_BATCH_SIZE,
 } from '@shared/business/entities/EntityConstants';
+import { getOpensearchDocumentSearchBatchState } from '../utilities/getOpensearchDocumentSearchBatchState';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -18,7 +21,12 @@ import { filterCaseSearchResultsNotAccessibleToUser } from '@shared/business/uti
 
 export const orderAdvancedSearchInteractor = async (
   applicationContext: ServerApplicationContext,
-  {
+  rawParams: any,
+  authorizedUser: UnknownAuthUser,
+) => {
+  const params =
+    rawParams && rawParams.searchParams ? rawParams.searchParams : rawParams;
+  const {
     caseTitleOrPetitioner,
     dateRange,
     docketNumber,
@@ -28,19 +36,8 @@ export const orderAdvancedSearchInteractor = async (
     startDate,
     from = 0,
     limit = 5000,
-  }: {
-    caseTitleOrPetitioner: string;
-    dateRange: string;
-    docketNumber: string;
-    endDate: string;
-    judge: string;
-    keyword: string;
-    startDate: string;
-    from?: number;
-    limit?: number;
-  },
-  authorizedUser: UnknownAuthUser,
-) => {
+    cursor,
+  } = params || {};
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ADVANCED_SEARCH)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -53,22 +50,61 @@ export const orderAdvancedSearchInteractor = async (
     judge,
     keyword,
     startDate,
+    from,
     userRole: authorizedUser.role,
   });
 
   const rawSearch = orderSearch.validate().toRawObject();
 
-  const { results } = await applicationContext
-    .getPersistenceGateway()
-    .advancedDocumentSearch({
-      applicationContext,
-      documentEventCodes: ORDER_EVENT_CODES,
-      omitSealed: false,
-      ...rawSearch,
-      isExternalUser: User.isExternalUser(authorizedUser.role),
-      from,
-      overrideResultSize: limit,
-    });
+  const {
+    detectionCeiling,
+    desired,
+    accumulated,
+    searchAfter: initialSearchAfter,
+  } = getOpensearchDocumentSearchBatchState(limit, MAX_SEARCH_RESULTS);
+  let searchAfter = initialSearchAfter;
+  let nextCursor: any[] | undefined = undefined;
+  let openSearchBatchCount = 0;
+
+  while (
+    accumulated.length < detectionCeiling &&
+    openSearchBatchCount < OPEN_SEARCH_MAX_BATCHES_PER_QUERY
+  ) {
+    const { results: rawResults } = await applicationContext
+      .getPersistenceGateway()
+      .advancedDocumentSearch({
+        applicationContext,
+        documentEventCodes: ORDER_EVENT_CODES,
+        omitSealed: false,
+        ...rawSearch,
+        isExternalUser: User.isExternalUser(authorizedUser.role),
+        overrideResultSize: OPEN_SEARCH_SINGLE_BATCH_SIZE,
+        searchAfter:
+          cursor && openSearchBatchCount === 0 ? cursor : searchAfter,
+      });
+    openSearchBatchCount++;
+
+    if (rawResults.length === 0) {
+      break;
+    }
+
+    const filteredBatch = filterCaseSearchResultsNotAccessibleToUser(
+      rawResults,
+      authorizedUser,
+    );
+    for (const r of filteredBatch) {
+      if (accumulated.length >= detectionCeiling) break;
+      accumulated.push(r);
+    }
+
+    const last = rawResults[rawResults.length - 1];
+    if (last && last.sort) {
+      searchAfter = last.sort;
+      nextCursor = last.sort;
+    } else {
+      break;
+    }
+  }
 
   const timestamp = formatNow(FORMATS.LOG_TIMESTAMP);
 
@@ -79,14 +115,18 @@ export const orderAdvancedSearchInteractor = async (
     userRole: authorizedUser.role,
   });
 
-  const filteredResults = filterCaseSearchResultsNotAccessibleToUser(
-    results,
-    authorizedUser,
-  );
-
+  const overFetched = accumulated.length > desired;
+  if (overFetched) {
+    if (accumulated[desired - 1]?.sort) {
+      nextCursor = accumulated[desired - 1].sort;
+    }
+    accumulated.length = desired;
+  }
+  const validatedFiltered =
+    InternalDocumentSearchResult.validateRawCollection(accumulated);
   return {
-    results: InternalDocumentSearchResult.validateRawCollection(
-      filteredResults,
-    ).slice(0, MAX_SEARCH_RESULTS),
+    results: validatedFiltered,
+    moreResults: overFetched,
+    nextCursor: overFetched ? nextCursor : undefined,
   };
 };

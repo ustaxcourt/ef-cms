@@ -139,7 +139,7 @@ export const DocumentSearchResults = connect(
           {advancedDocumentSearchHelper.showSearchResults && (
             <>
               <div className="tablet:grid-col-4 margin-top-3">
-                <h2>Results</h2>
+                <h1>Results</h1>
               </div>
 
               <NonMobile>
