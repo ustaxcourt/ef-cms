@@ -57,6 +57,10 @@ describe('Recent Filings - IRS Practitioner', () => {
   });
 
   it('should display pagination component', () => {
+    // Wait for page to fully load
+    cy.get('[data-testid="recent-filings-page"]').should('be.visible');
+    cy.get('[data-testid="recent-filings-table"]').should('be.visible');
+
     // Pagination component should always be present (even with 0 records)
     cy.get('[data-testid="pagination"]').should('exist');
     cy.get('[data-testid="recent-filings-table"] tbody tr').should('exist');
@@ -76,7 +80,8 @@ describe('Recent Filings - IRS Practitioner', () => {
   it('should display mobile view correctly', () => {
     cy.viewport('iphone-x');
 
-    // Since we're already on the Recent Filings page, just check mobile elements
+    // Wait for the page to fully load and mobile layout to adjust
+    cy.get('[data-testid="recent-filings-page"]').should('be.visible');
     cy.get('[data-testid="mobile-sort-dropdown"]').should('be.visible');
 
     // Test sorting functionality - use force to handle navigation overlay
@@ -84,7 +89,7 @@ describe('Recent Filings - IRS Practitioner', () => {
       force: true,
     });
 
-    // Check if the table exists in mobile view
+    // Wait for sorting to complete and check if the table exists in mobile view
     cy.get('[data-testid="recent-filings-mobile-table"]').should('be.visible');
   });
 

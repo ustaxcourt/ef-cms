@@ -46,6 +46,10 @@ describe('Recent Filings - Private Practitioner', () => {
   it('should display pagination component', () => {
     cy.get('[data-testid="header-recent-filings-link"]').click();
 
+    // Wait for page to fully load
+    cy.get('[data-testid="recent-filings-page"]').should('be.visible');
+    cy.get('[data-testid="recent-filings-table"]').should('be.visible');
+
     // Pagination component should always be present (even with 0 records)
     cy.get('[data-testid="pagination"]').should('exist');
     cy.get('[data-testid="recent-filings-table"] tbody tr').should('exist');
@@ -61,10 +65,18 @@ describe('Recent Filings - Private Practitioner', () => {
     cy.get('[data-testid="account-menu-button-mobile"]')
       .should('be.visible')
       .click();
+
+    // Wait for menu to open and link to be visible
+    cy.get('[data-testid="header-recent-filings-link"]').should('be.visible');
     cy.get('[data-testid="header-recent-filings-link"]').click();
+
+    // Wait for navigation to complete and mobile layout to adjust
+    cy.get('[data-testid="recent-filings-page"]').should('be.visible');
     cy.get('[data-testid="mobile-sort-dropdown"]').should('be.visible');
 
     cy.get('[data-testid="mobile-sort-dropdown"]').select('docketNumber-asc');
+
+    // Wait for sorting to complete and table to be visible
     cy.get('[data-testid="recent-filings-mobile-table"]').should('be.visible');
   });
 
