@@ -71,7 +71,7 @@ export function AlertError({
               </ul>
             </AlertDescription>
           )}
-          {alertHelper.showTitleOnly && <div className="alert-blank-message" />}
+          {alertHelper.showTitleOnly && <div className="tw:h-6" />}
         </Alert>
       )}
     </>

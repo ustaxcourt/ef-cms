@@ -59,7 +59,7 @@ export function AlertSuccess({
           {alertSuccess.linkUrl && (
             <AlertDescription>
               <Button
-                className="padding-0 margin-top-2 ustc-button--mobile-inline"
+                className="tw:p-0 tw:mt-2 ustc-button--mobile-inline"
                 href={alertSuccess.linkUrl}
                 link
                 rel="noopener noreferrer"
@@ -75,4 +75,4 @@ export function AlertSuccess({
   );
 }
 
-AlertSuccess.displayName = 'SuccessNotification';
+AlertSuccess.displayName = 'AlertSuccess';

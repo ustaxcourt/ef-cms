@@ -51,8 +51,8 @@ export function AlertInfo({
       aria-live="polite"
       className={cn(className)}
       closeButtonOnClick={dismissAlertSequence}
-      isDismissible={dismissible}
       data-testid="info-alert"
+      isDismissible={dismissible}
       ref={notificationRef}
       role="alert"
       variant="info"
@@ -62,9 +62,9 @@ export function AlertInfo({
       {alertInfo.message && (
         <AlertDescription>
           <Message
-            message={alertInfo.message}
             inlineLinkText={alertInfo.inlineLinkText}
             inlineLinkUrl={alertInfo.inlineLinkUrl}
+            message={alertInfo.message}
             messageNotBold={messageNotBold}
           />
         </AlertDescription>
@@ -73,9 +73,9 @@ export function AlertInfo({
       {alertInfo.linkUrl && (
         <AlertDescription>
           <Button
-            link
             className="p-0 mt-2"
             href={alertInfo.linkUrl}
+            link
             rel="noopener noreferrer"
             target="_blank"
           >
@@ -88,21 +88,21 @@ export function AlertInfo({
 }
 
 type MessageProps = {
-  message?: string | React.ReactNode;
   inlineLinkText?: string;
   inlineLinkUrl?: string;
+  message?: string | React.ReactNode;
   messageNotBold?: boolean;
 };
 
 function Message({
-  message,
   inlineLinkText,
   inlineLinkUrl,
+  message,
   messageNotBold = false,
 }: MessageProps) {
   if (!inlineLinkText || !inlineLinkUrl || typeof message !== 'string') {
     return (
-      <p className={cn(messageNotBold ? 'font-normal' : 'font-semibold')}>
+      <p className={cn(messageNotBold ? 'tw:font-normal' : 'tw:font-semibold')}>
         {message}
       </p>
     );
@@ -111,13 +111,13 @@ function Message({
   const [beforeLink, afterLink] = message.split(inlineLinkText);
 
   return (
-    <p className={cn(messageNotBold ? 'font-normal' : 'font-semibold')}>
+    <p className={cn(messageNotBold ? 'tw:font-normal' : 'tw:font-semibold')}>
       {beforeLink}
       <a
+        className="tw:text-primary-darker tw:underline"
         href={inlineLinkUrl}
         rel="noreferrer"
         target="_blank"
-        className="text-blue-600 underline"
       >
         {inlineLinkText}
       </a>

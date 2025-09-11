@@ -63,7 +63,7 @@ export function AlertWarning({
 
       {alertWarning.message && (
         <AlertDescription
-          className={cn(messageNotBold && 'font-weight-normal')}
+          className={cn(messageNotBold ? 'tw:font-normal' : 'tw:font-semibold')}
           data-testid="warning-alert-message"
         >
           {alertWarning.message}
@@ -73,9 +73,9 @@ export function AlertWarning({
       {alertWarning.linkUrl && (
         <AlertDescription>
           <Button
-            link
-            className="padding-0 margin-top-2"
+            className="tw:p-0 tw:mt-2"
             href={alertWarning.linkUrl}
+            link
             rel="noopener noreferrer"
             target="_blank"
           >
