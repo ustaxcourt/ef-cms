@@ -39,10 +39,8 @@ const mockCase = {
 };
 const mockAuthUser = mockDocketClerkUser;
 const mockScrapeDocumentContentsMessage = {
-  caseCaption: mockCaseCaption,
   docketEntryId: mockDocketEntryId,
   docketNumber: mockDocketNumber,
-  docketNumberWithSuffix: mockDocketNumberWithSuffix,
 };
 const mockPdfBlob = 'totally real pdf binary blob';
 const mockPdfContents = 'totally real pdf contents';
@@ -174,14 +172,15 @@ describe('scrapeDocumentContentsWorker', () => {
   });
 
   it('only appends the docket number and case caption if both are present', async () => {
-    //no case caption/no docket number
+    // no caseCaption/no docketNumberWithSuffix
+    getCaseByDocketNumber.mockResolvedValueOnce({
+      ...mockCase,
+      caseCaption: undefined,
+      docketNumberWithSuffix: undefined,
+    });
     await scrapeDocumentContentsWorker(
       applicationContext,
-      {
-        ...mockScrapeDocumentContentsMessage,
-        caseCaption: undefined,
-        docketNumberWithSuffix: undefined,
-      },
+      mockScrapeDocumentContentsMessage,
       mockAuthUser,
     );
     const contents = { documentContents: mockPdfContents };
@@ -193,13 +192,14 @@ describe('scrapeDocumentContentsWorker', () => {
       }),
     );
 
-    //no case caption/yes docket number
+    // no caseCaption/yes docketNumberWithSuffix
+    getCaseByDocketNumber.mockResolvedValueOnce({
+      ...mockCase,
+      caseCaption: undefined,
+    });
     await scrapeDocumentContentsWorker(
       applicationContext,
-      {
-        ...mockScrapeDocumentContentsMessage,
-        caseCaption: undefined,
-      },
+      mockScrapeDocumentContentsMessage,
       mockAuthUser,
     );
     expect(
@@ -210,13 +210,14 @@ describe('scrapeDocumentContentsWorker', () => {
       }),
     );
 
-    //yes case caption/no docket number
+    // yes caseCaption/no docketNumberWithSuffix
+    getCaseByDocketNumber.mockResolvedValueOnce({
+      ...mockCase,
+      docketNumberWithSuffix: undefined,
+    });
     await scrapeDocumentContentsWorker(
       applicationContext,
-      {
-        ...mockScrapeDocumentContentsMessage,
-        docketNumberWithSuffix: undefined,
-      },
+      mockScrapeDocumentContentsMessage,
       mockAuthUser,
     );
     expect(
@@ -227,7 +228,7 @@ describe('scrapeDocumentContentsWorker', () => {
       }),
     );
 
-    //yes case caption/yes docket number
+    // yes caseCaption/yes docketNumberWithSuffix
     const compositeContents = {
       documentContents: `${mockPdfContents} ${mockDocketNumberWithSuffix} ${mockCaseCaption}`,
     };

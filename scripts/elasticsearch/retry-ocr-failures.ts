@@ -8,10 +8,8 @@ import {
 } from '../helpers/parseArgsAndEnvVars';
 import { applicationContext } from '@web-api/applicationContext';
 import { performQuery } from '../cloudwatch/perform-query';
-import { search } from '@web-api/persistence/elasticsearch/searchClient';
 import { worker } from '@web-api/gateways/worker/worker';
 import { DateTime } from 'luxon';
-import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
 import {
   MESSAGE_TYPES,
   type WorkerMessage,
@@ -59,10 +57,8 @@ if (end.toMillis() <= start.toMillis()) {
 }
 
 type docketEntryType = {
-  caseCaption?: string;
   docketEntryId: string;
   docketNumber: string;
-  docketNumberWithSuffix?: string;
 };
 
 const findDocketEntriesThatFailedOCR = async (): Promise<docketEntryType[]> => {
@@ -109,54 +105,9 @@ const findDocketEntriesThatFailedOCR = async (): Promise<docketEntryType[]> => {
   return Object.values(docketEntries);
 };
 
-const populateAdditionalFields = async (
-  docketEntries: docketEntryType[],
-): Promise<docketEntryType[]> => {
-  const docketNumbers = docketEntries.map(de => de.docketNumber);
-  const { results }: { results: RawCase[] } = await search({
-    applicationContext,
-    searchParameters: {
-      body: {
-        query: {
-          bool: {
-            must: [
-              {
-                terms: {
-                  'docketNumber.S': docketNumbers,
-                },
-              },
-              {
-                term: {
-                  'entityName.S': 'Case',
-                },
-              },
-            ],
-          },
-        },
-      },
-      index: 'efcms-case',
-      size: MAX_ELASTICSEARCH_PAGINATION,
-    },
-  });
-
-  for (const docketEntry of docketEntries) {
-    const caseEntity = results.find(
-      result => result.docketNumber === docketEntry.docketNumber,
-    );
-    if (caseEntity) {
-      docketEntry.caseCaption = caseEntity.caseCaption;
-      docketEntry.docketNumberWithSuffix = caseEntity.docketNumberWithSuffix;
-    }
-  }
-
-  return docketEntries;
-};
-
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const docketEntriesToScrape = await populateAdditionalFields(
-    await findDocketEntriesThatFailedOCR(),
-  );
+  const docketEntriesToScrape = await findDocketEntriesThatFailedOCR();
   console.log(`Found ${docketEntriesToScrape.length} docket entries to scrape`);
 
   // TODO: can we just use an empty object here?

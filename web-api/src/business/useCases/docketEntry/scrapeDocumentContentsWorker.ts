@@ -18,16 +18,9 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 export const scrapeDocumentContentsWorker = async (
   applicationContext: ServerApplicationContext,
   {
-    caseCaption,
     docketEntryId,
     docketNumber,
-    docketNumberWithSuffix,
-  }: {
-    caseCaption?: string;
-    docketEntryId: string;
-    docketNumber: string;
-    docketNumberWithSuffix?: string;
-  },
+  }: { docketEntryId: string; docketNumber: string },
   authorizedUser: AuthUser,
 ): Promise<void> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.EDIT_ORDER)) {
@@ -79,8 +72,8 @@ export const scrapeDocumentContentsWorker = async (
       applicationContext,
       pdfBuffer: docketEntryPdfData,
     });
-  if (docketNumberWithSuffix && caseCaption) {
-    documentContents = `${documentContents} ${docketNumberWithSuffix} ${caseCaption}`;
+  if (caseRecord.docketNumberWithSuffix && caseRecord.caseCaption) {
+    documentContents = `${documentContents} ${caseRecord.docketNumberWithSuffix} ${caseRecord.caseCaption}`;
   }
   const documentContentsId = applicationContext.getUniqueId();
   const contentToStore = { documentContents };
@@ -108,12 +101,7 @@ export const scrapeDocumentContentsWorker = async (
   );
 
   const indexOpenSearchDocketEntryMessage = {
-    payload: [
-      {
-        docketEntryId,
-        docketNumber,
-      },
-    ],
+    payload: [{ docketEntryId, docketNumber }],
     type: 'dwDocketEntry' as OpenSearchSyncMessageType,
     timestamp: DateTime.now().toMillis().toString(),
     action: OPENSEARCH_SYNC_ACTIONS.UPSERT,
