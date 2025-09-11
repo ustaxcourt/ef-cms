@@ -1,5 +1,5 @@
+import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
-jest.mock('@web-api/persistence/dynamo/trialSessions/getTrialSessionById');
 jest.mock('@shared/sharedAppContext');
 jest.mock('@web-api/persistence/s3/getDownloadPolicyUrl');
 jest.mock(
@@ -14,15 +14,15 @@ import {
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
-import { getTrialSessionById } from '@web-api/persistence/dynamo/trialSessions/getTrialSessionById';
 import { getDownloadPolicyUrl } from '@web-api/persistence/s3/getDownloadPolicyUrl';
 import { getUniqueId } from '@shared/sharedAppContext';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getTrialSessionById as getTrialSessionsMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { createAndUploadMinuteSheet } from '@web-api/business/useCaseHelper/trialSessionMinutes/createAndUploadMinuteSheet';
 
 describe('generateTrialSessionMinutesPdfInteractor', () => {
   const mockGetCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
-  const mockGetTrialSessionById = getTrialSessionById as jest.Mock;
+  const getTrialSessionById = jest.mocked(getTrialSessionsMock);
   const mockGetUniqueId = getUniqueId as jest.Mock;
   const mockGetDownloadPolicyUrl = getDownloadPolicyUrl as jest.Mock;
   const mockCreateAndUploadMinuteSheet =
@@ -35,7 +35,7 @@ describe('generateTrialSessionMinutesPdfInteractor', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     mockGetCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
-    mockGetTrialSessionById.mockResolvedValue(MOCK_TRIAL_REGULAR);
+    getTrialSessionById.mockResolvedValue(MOCK_TRIAL_REGULAR);
     mockGetUniqueId.mockReturnValue('unique-id-123');
     mockGetDownloadPolicyUrl.mockResolvedValue({
       url: 'https://example.com/pdf',
@@ -77,8 +77,7 @@ describe('generateTrialSessionMinutesPdfInteractor', () => {
     expect(mockGetCaseByDocketNumber).toHaveBeenCalledWith({
       docketNumber: mockParams.docketNumber,
     });
-    expect(mockGetTrialSessionById).toHaveBeenCalledWith({
-      applicationContext,
+    expect(getTrialSessionById).toHaveBeenCalledWith({
       trialSessionId: mockParams.trialSessionId,
     });
     expect(mockCreateAndUploadMinuteSheet).toHaveBeenCalled();
