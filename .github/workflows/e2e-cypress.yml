@@ -47,17 +47,17 @@ jobs:
         uses: runforesight/workflow-telemetry-action@v2
         with:
           comment_on_pr: false
-      # - name: Cache Cypress binary
-      #   id: cache-cypress
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: ~/.cache/Cypress
-      #     key: ${{ runner.os }}-cypress-${{ hashFiles('**/package-lock.json') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-cypress-
+      - name: Cache Cypress binary
+        id: cache-cypress
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/Cypress
+          key: ${{ runner.os }}-cypress-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-cypress-
       - name: Restore Cache Dependencies
         id: cache-dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: node_modules
           key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
