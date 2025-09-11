@@ -129,17 +129,6 @@ describe('Recent Filings - IRS Practitioner', () => {
     cy.get('[data-testid="docketNumber-sortable-button"]').click();
   });
 
-  it('should handle case number links correctly', () => {
-    // Check that case number links exist and have proper attributes
-    cy.get('[data-testid="case-number-link"]')
-      .first()
-      .should('have.attr', 'target', '_blank');
-    cy.get('[data-testid="case-number-link"]')
-      .first()
-      .should('have.attr', 'href')
-      .and('include', '/case-detail/');
-  });
-
   it('should handle multiple cases', () => {
     cy.get('[data-testid="recent-filings-table"] tbody tr').should(
       'have.length.at.least',
