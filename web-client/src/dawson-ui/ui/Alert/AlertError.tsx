@@ -1,35 +1,43 @@
 import { Focus } from '@web-client/ustc-ui/Focus/Focus';
 import React, { useEffect, useRef } from 'react';
+import cn from 'classnames';
 import {
   Alert,
   AlertHeader,
   AlertDescription,
 } from '@web-client/dawson-ui/ui/Alert/Alert';
 
+type AlertError = {
+  title?: string;
+  message?: string;
+  scrollToErrorNotification?: boolean;
+};
+
+type AlertHelper = {
+  showErrorAlert?: boolean;
+  showSingleMessage?: boolean;
+  showMultipleMessages?: boolean;
+  showTitleOnly?: boolean;
+  messagesDeduped: string[];
+};
+
+type AlertErrorProps = {
+  alertError?: AlertError;
+  alertHelper: AlertHelper;
+  className: string;
+  closeButtonOnClick?: () => void;
+};
+
 export function AlertError({
   alertError,
   alertHelper,
+  className,
   closeButtonOnClick,
-}: {
-  alertError?: {
-    title?: string;
-    message?: string;
-    scrollToErrorNotification?: boolean;
-  };
-  alertHelper: {
-    showErrorAlert?: boolean;
-    showSingleMessage?: boolean;
-    showMultipleMessages?: boolean;
-    showTitleOnly?: boolean;
-    messagesDeduped: any;
-  };
-  closeButtonOnClick?: () => void;
-}) {
+}: AlertErrorProps) {
   const notificationRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const notification = notificationRef.current;
-    if (notification && alertError?.scrollToErrorNotification) {
+    if (notificationRef.current && alertError?.scrollToErrorNotification) {
       window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
     }
   }, [alertError?.scrollToErrorNotification]);
@@ -39,6 +47,7 @@ export function AlertError({
       {alertError && alertHelper.showErrorAlert && (
         <Alert
           aria-live="polite"
+          className={cn(className)}
           data-testid="error-alert"
           ref={notificationRef}
           role="alert"
@@ -56,13 +65,13 @@ export function AlertError({
           {alertHelper.showMultipleMessages && (
             <AlertDescription>
               <ul>
-                {alertHelper.messagesDeduped.map((message: string) => (
+                {alertHelper.messagesDeduped.map(message => (
                   <li key={message}>{message}</li>
                 ))}
               </ul>
             </AlertDescription>
           )}
-          {alertHelper.showTitleOnly && <div/>}
+          {alertHelper.showTitleOnly && <div className="alert-blank-message" />}
         </Alert>
       )}
     </>

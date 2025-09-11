@@ -8,6 +8,7 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import { AlertError } from '@web-client/dawson-ui/ui/Alert/AlertError';
+import { AlertSuccess } from '@web-client/dawson-ui/ui/Alert/AlertSuccess';
 
 export const Login = connect(
   {
@@ -41,10 +42,13 @@ export const Login = connect(
       <>
         <section className="grid-container usa-section">
           <div className="grid-row flex-justify-center">
-            <div className="grid-col-12 desktop:grid-col-4 tablet:grid-col-7 tw:mb-4">
-            </div>
+            <div className="grid-col-12 desktop:grid-col-4 tablet:grid-col-7 tw:mb-4"></div>
 
             <div className="grid-col-12 desktop:grid-col-4 tablet:grid-col-7">
+              <AlertSuccess
+                dismissAlertSequence={() => dismissAlertSequence}
+                isDismissible={false}
+              />
               <SuccessNotification isDismissible={false} />
               <WarningNotification isDismissible={false} />
               {alertInfo && (
