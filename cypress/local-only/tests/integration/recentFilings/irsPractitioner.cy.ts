@@ -90,8 +90,15 @@ describe('Recent Filings - IRS Practitioner', () => {
 
   it('should display mobile view correctly', () => {
     cy.viewport('iphone-x');
+    cy.get('[data-testid="account-menu-button-mobile"]')
+      .should('be.visible')
+      .click();
 
-    // Wait for the page to fully load and mobile layout to adjust
+    // Wait for menu to open and link to be visible
+    cy.get('[data-testid="header-recent-filings-link"]').should('be.visible');
+    cy.get('[data-testid="header-recent-filings-link"]').click();
+
+    // Wait for navigation to complete and mobile layout to adjust
     cy.get('[data-testid="recent-filings-page"]').should('be.visible');
     cy.get('[data-testid="mobile-sort-dropdown"]').should('be.visible');
 
@@ -101,12 +108,9 @@ describe('Recent Filings - IRS Practitioner', () => {
       'Loading recent filings...',
     );
 
-    // Test sorting functionality - use force to handle navigation overlay
-    cy.get('[data-testid="mobile-sort-dropdown"]').select('docketNumber-asc', {
-      force: true,
-    });
+    cy.get('[data-testid="mobile-sort-dropdown"]').select('docketNumber-asc');
 
-    // Wait for sorting to complete and check if the table exists in mobile view
+    // Wait for sorting to complete and table to be visible
     cy.get('[data-testid="recent-filings-mobile-table"]').should('be.visible');
   });
 

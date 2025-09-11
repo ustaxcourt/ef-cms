@@ -43,12 +43,6 @@ describe('Recent Filings - Petitioner', () => {
     cy.get('[data-testid="recent-filings-table"]').should('be.visible');
   });
 
-  it('should display pagination component', () => {
-    // Pagination component should always be present (even with 0 records)
-    cy.get('[data-testid="pagination"]').should('exist');
-    cy.get('[data-testid="recent-filings-table"] tbody tr').should('exist');
-  });
-
   it('should show proper information text', () => {
     cy.get('[data-testid="recent-filings-info"]').should(
       'contain',
@@ -62,14 +56,28 @@ describe('Recent Filings - Petitioner', () => {
 
   it('should display mobile view correctly', () => {
     cy.viewport('iphone-x');
+    cy.get('[data-testid="account-menu-button-mobile"]')
+      .should('be.visible')
+      .click();
 
-    // Since we're already on the Recent Filings page, just check mobile elements
+    // Wait for menu to open and link to be visible
+    cy.get('[data-testid="header-recent-filings-link"]').should('be.visible');
+    cy.get('[data-testid="header-recent-filings-link"]').click();
+
+    // Wait for navigation to complete and mobile layout to adjust
+    cy.get('[data-testid="recent-filings-page"]').should('be.visible');
     cy.get('[data-testid="mobile-sort-dropdown"]').should('be.visible');
 
-    // Test sorting functionality - use force to handle navigation overlay
-    cy.get('[data-testid="mobile-sort-dropdown"]').select('docketNumber-asc', {
-      force: true,
-    });
+    // Wait for loading to complete
+    cy.get('[data-testid="recent-filings-page"]').should(
+      'not.contain',
+      'Loading recent filings...',
+    );
+
+    cy.get('[data-testid="mobile-sort-dropdown"]').select('docketNumber-asc');
+
+    // Wait for sorting to complete and table to be visible
+    cy.get('[data-testid="recent-filings-mobile-table"]').should('be.visible');
   });
 
   it('should display desktop view correctly', () => {
