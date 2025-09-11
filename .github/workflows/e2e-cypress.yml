@@ -51,7 +51,7 @@ jobs:
         id: cache-cypress
         uses: actions/cache@v3
         with:
-          path: /home/runner/.cache/Cypress
+          path: ~/.cache/Cypress
           key: ${{ runner.os }}-cypress-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-cypress-
