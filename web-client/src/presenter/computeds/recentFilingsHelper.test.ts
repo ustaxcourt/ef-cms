@@ -295,4 +295,15 @@ describe('recentFilingsHelper', () => {
     expect(displayProps).toBeDefined();
     expect(displayProps.showLinkToDocument).toBeDefined();
   });
+
+  it('should not show document links for consolidated cases where user is not associated', () => {
+    const result = runCompute(recentFilingsHelper, {
+      state: createTestState({
+        recentFilings: [createFiling({ isRequestingUserAssociated: false })],
+      }),
+    });
+
+    expect(result.sortedRecentFilings[0].showLinkToDocument).toBe(false);
+    expect(result.sortedRecentFilings[0].showDocumentViewerLink).toBe(false);
+  });
 });
