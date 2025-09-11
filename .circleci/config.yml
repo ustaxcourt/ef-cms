@@ -141,11 +141,19 @@ jobs:
               exit 0
             fi
             ./setup-for-blue-green-migration.sh
+      - run: # TODO: remove this after the rds upgrade
+          name: Engage Maintenance Mode
+          command: |
+            npm run maintenance:engage
       - run:
           no_output_timeout: 20m
           name: 'Deploy - All Color Terraform'
           command: |
             npm run deploy:allColors $ENV
+      - run: # TODO: remove this after the rds upgrade
+          name: Disengage Maintenance Mode
+          command: |
+            npm run maintenance:disengage
       - run:
           no_output_timeout: 20m
           name: 'Deploy - Color Terraform'
@@ -218,18 +226,6 @@ jobs:
           name: 'Deploy - Verify Private Elasticsearch'
           command: |
             npm run verify-private-elasticsearch -- $ENV
-      - run:
-          name: Engage Maintenance Mode
-          command: |
-            npm run maintenance:engage
-      - run:
-          name: Upgrade Postgres Global Engine
-          command: |
-            ./scripts/postgres/rds-upgrade-global-engine.sh --target-version 17.5 --yes
-      - run:
-          name: Disengage Maintenance Mode
-          command: |
-            npm run maintenance:disengage
 
   docker-image-zipper:
     docker:
