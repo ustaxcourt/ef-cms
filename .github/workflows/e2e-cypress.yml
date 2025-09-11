@@ -48,6 +48,7 @@ jobs:
         with:
           comment_on_pr: false
       - name: Cache Cypress binary
+        id: cache-cypress
         uses: actions/cache@v3
         with:
           path: /home/runner/.cache/Cypress
