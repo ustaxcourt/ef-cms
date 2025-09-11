@@ -106,7 +106,7 @@ regex search the entire project for `"~> \d+.\d+.\d+"` and make sure it's to the
 
 - Check through the list of caveats to see if any of the documented issues have been resolved.
 
-- Validate updates by deploying, with a [migration](./additional-resources/blue-green-migration.md#manual-migration-steps), to an experimental environment. This helps us verify that the package updates don't affect the migration workflow.
+- Validate updates by deploying to an experimental environment
 
 ## Do Not Upgrade
 
