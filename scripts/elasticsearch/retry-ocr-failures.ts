@@ -22,6 +22,7 @@ const scriptConfig: ScriptConfig = {
   environment: {
     env: 'ENV',
     region: 'REGION',
+    ustcAdminUser: 'USTC_ADMIN_USER',
   },
   parameters: {
     endDateISO: {
@@ -39,14 +40,14 @@ const scriptConfig: ScriptConfig = {
   },
   requireActiveAwsSession: true,
 };
-const { endDateISO, env, region, startDateISO } = parseArgsAndEnvVars(
-  scriptConfig,
-) as {
-  endDateISO: string;
-  env: string;
-  region: string;
-  startDateISO: string;
-};
+const { endDateISO, env, region, startDateISO, ustcAdminUser } =
+  parseArgsAndEnvVars(scriptConfig) as {
+    endDateISO: string;
+    env: string;
+    region: string;
+    startDateISO: string;
+    ustcAdminUser: string;
+  };
 const start = DateTime.fromISO(startDateISO, { setZone: true });
 const end = DateTime.fromISO(endDateISO, { setZone: true });
 if (!start.isValid || !end.isValid) {
@@ -110,12 +111,11 @@ const findDocketEntriesThatFailedOCR = async (): Promise<docketEntryType[]> => {
   const docketEntriesToScrape = await findDocketEntriesThatFailedOCR();
   console.log(`Found ${docketEntriesToScrape.length} docket entries to scrape`);
 
-  // TODO: can we just use an empty object here?
   const authorizedUser: AuthUser = {
-    email: 'person@hello.com',
-    name: 'ignored',
-    role: 'adc',
-    userId: 'ignored',
+    email: ustcAdminUser,
+    name: ustcAdminUser.split('@')[0],
+    role: 'docketclerk',
+    userId: applicationContext.getUniqueId(),
   };
 
   for (const payload of docketEntriesToScrape) {
@@ -127,8 +127,4 @@ const findDocketEntriesThatFailedOCR = async (): Promise<docketEntryType[]> => {
     await worker(applicationContext, { message });
   }
   console.log(`Sent ${docketEntriesToScrape.length} messages to the queue`);
-
-  // for (const docketEntry of docketEntriesToScrape) {
-  //   console.log(docketEntry);
-  // }
 })();
