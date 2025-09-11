@@ -34,7 +34,8 @@ const getPractitionerDocumentsToDelete = async (offset: number) => {
     reader
       .selectFrom('dwPractitionerDocuments')
       .select(['barNumber', 'practitionerDocumentFileId'])
-      .orderBy(['barNumber', 'practitionerDocumentFileId'])
+      .orderBy('barNumber')
+      .orderBy('practitionerDocumentFileId')
       .limit(practitionerDocumentPageSize)
       .offset(offset)
 
@@ -54,7 +55,7 @@ async function main() {
     const dynamoItemsToDelete = practitionerDocumentsToDelete.map(c => ({
       DeleteRequest: {
         Key: {
-          pk: `practitioner|${c.barNumber}`,
+          pk: `practitioner|${c.barNumber.toLowerCase()}`,
           sk: `document|${c.practitionerDocumentFileId}`,
         },
       },
