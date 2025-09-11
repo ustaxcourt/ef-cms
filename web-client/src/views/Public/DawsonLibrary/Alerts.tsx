@@ -3,6 +3,7 @@ import { AlertError } from '@web-client/dawson-ui/ui/Alert/AlertError';
 import { AlertSuccess } from '@web-client/dawson-ui/ui/Alert/AlertSuccess';
 import React, { useState } from 'react';
 import { AlertWarning } from '@web-client/dawson-ui/ui/Alert/AlertWarning';
+import { AlertInfo } from '@web-client/dawson-ui/ui/Alert/AlertInfo';
 
 export function Alerts() {
   const [alert, setAlert] = useState({
@@ -25,7 +26,7 @@ export function Alerts() {
     scrollToErrorNotification: false,
   };
 
-  const alertHelper: AlertHelper = {
+  const alertHelper = {
     showErrorAlert: true,
     showSingleMessage: true,
     showMultipleMessages: false,
@@ -33,24 +34,33 @@ export function Alerts() {
     messagesDeduped: false,
   };
 
+  const alertInfoProps = {
+    alertInfo: {
+      title: 'Alert Info',
+      linkText: '',
+      linkUrl: '',
+      inlineLinkText: '',
+      inlineLinkUrl: '',
+      message: 'This is a succinct informational message',
+      dismissText: '',
+      dismissIcon: '',
+    },
+    dismissible: true,
+    messageNotBold: true,
+    className: 'tw:mb-4',
+  };
+
   return (
     <div className="tw:my-4">
       <h2>Alerts</h2>
-      {/* Info Alert */}
-      {/* {alert.info ? (
-        <AlertInfo
-          closeButtonOnClick={() => setAlert({ ...alert, info: false })}
-          title="info"
-          className="tw:mb-4"
-        >
-          This is a succinct, helpful message
-        </AlertInfo>
+      Info Alert
+      {alert.info ? (
+        <AlertInfo {...alertInfoProps}></AlertInfo>
       ) : (
         <Button onClick={() => setAlert({ ...alert, info: true })}>
           Display Info Alert
         </Button>
-      )} */}
-
+      )}
       {/* Warning Alert */}
       {alert.warning ? (
         <AlertWarning
@@ -76,7 +86,6 @@ export function Alerts() {
           Display Warning Alert
         </Button>
       )}
-
       {/* Error Alert */}
       {alert.error ? (
         <AlertError
@@ -93,7 +102,6 @@ export function Alerts() {
           Display Error Alert
         </Button>
       )}
-
       {/* Success Alert */}
       {alert.success ? (
         <AlertSuccess
@@ -112,25 +120,25 @@ export function Alerts() {
           Display Success Alert
         </Button>
       )}
-
       {/* Static Alerts (with only descriptions) */}
-      {/* {staticAlerts.info ? (
+      {staticAlerts.info ? (
         <AlertInfo
-          closeButtonOnClick={() =>
+          alertInfo={{
+            message: 'You’ll need to change your password by April 25, 2020.',
+          }}
+          dismissible
+          dismissAlertSequence={() =>
             setStaticAlerts({ ...staticAlerts, info: false })
           }
           className="tw:mb-4"
-        >
-          You’ll need to change your password by April 25, 2020.
-        </AlertInfo>
+        />
       ) : (
         <Button
           onClick={() => setStaticAlerts({ ...staticAlerts, info: true })}
         >
           Show Info Static Alert
         </Button>
-      )} */}
-
+      )}
       {staticAlerts.warning ? (
         <AlertWarning
           dismissAlertSequence={() =>
@@ -150,7 +158,6 @@ export function Alerts() {
           Show Warning Static Alert
         </Button>
       )}
-
       {staticAlerts.error ? (
         <AlertError
           alertError={{
@@ -171,7 +178,6 @@ export function Alerts() {
           Show Error Static Alert
         </Button>
       )}
-
       {staticAlerts.success ? (
         <AlertSuccess
           alertSuccess={{
