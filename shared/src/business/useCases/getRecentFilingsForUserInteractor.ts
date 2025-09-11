@@ -4,8 +4,10 @@ import {
   isAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
 import { getCasesForUserInteractor } from './getCasesForUserInteractor';
-import { calculateISODate, calculateDate } from '../utilities/DateHandler';
-import { getDbReader } from '@web-api/database';
+import { calculateISODate } from '../utilities/DateHandler';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { getRecentFilingsByDocketNumbers } from '@web-api/persistence/postgres/docketEntries/getRecentFilingsByDocketNumbers';
+import { userIsDirectlyAssociated } from '@shared/business/entities/cases/Case';
 
 import { RecentFiling } from '@shared/business/entities/RecentFiling';
 import { getCaseCaptionMeta } from '../utilities/getCaseCaptionMeta';
@@ -41,36 +43,11 @@ export const getRecentFilingsForUserInteractor = async (
   const sevenDaysAgo = calculateISODate({ howMuch: -7, units: 'days' });
   const today = calculateISODate({ howMuch: 0, units: 'days' });
 
-  const dbDocketEntries = await getDbReader(reader =>
-    reader
-      .selectFrom('dwDocketEntry as d')
-      .innerJoin('dwCase as c', 'd.docketNumber', 'c.docketNumber')
-      .select([
-        'd.docketEntryId',
-        'd.docketNumber',
-        'd.filingDate',
-        'd.documentTitle',
-        'd.isFileAttached',
-        'd.eventCode',
-        'd.isStricken',
-        'd.isSealed',
-        'd.sealedTo',
-        'd.servedAt',
-        'd.isDraft',
-        'c.caption',
-        'c.isSealed as caseIsSealed',
-      ])
-      .where('d.docketNumber', 'in', docketNumbers)
-      .where('d.filingDate', '>=', calculateDate({ dateString: sevenDaysAgo }))
-      .where('d.filingDate', '<=', calculateDate({ dateString: today }))
-      .where('d.isStricken', 'is not', true)
-      .where('d.eventCode', '!=', 'NOT')
-      .where('d.eventCode', '!=', 'STIN')
-      .where('d.isDraft', 'is not', true)
-      .orderBy('d.filingDate', 'desc')
-      .limit(1000)
-      .execute(),
-  );
+  const dbDocketEntries = await getRecentFilingsByDocketNumbers({
+    docketNumbers,
+    startDate: sevenDaysAgo,
+    endDate: today,
+  });
 
   const results = dbDocketEntries.map(d => ({
     docketNumber: d.docketNumber,
@@ -88,6 +65,18 @@ export const getRecentFilingsForUserInteractor = async (
     caseIsSealed: d.caseIsSealed,
   }));
 
+  // Get case details to check user association for consolidated cases
+  const uniqueDocketNumbers = [...new Set(results.map(r => r.docketNumber))];
+  const caseDetails = await getCasesByDocketNumbers({
+    docketNumbers: uniqueDocketNumbers,
+    excludeFields: ['docketEntries', 'hearings', 'correspondence'],
+  });
+
+  const caseDetailsMap = new Map();
+  caseDetails.forEach(caseDetail => {
+    caseDetailsMap.set(caseDetail.docketNumber, caseDetail);
+  });
+
   const caseInfoMap = new Map();
   allUserCases.forEach(caseItem => {
     const hasConsolidatedCases = (caseItem.consolidatedCases?.length || 0) > 0;
@@ -99,9 +88,9 @@ export const getRecentFilingsForUserInteractor = async (
 
     let consolidatedIconTooltipText: string | undefined;
     if (hasConsolidatedCases) {
-      consolidatedIconTooltipText = `Lead case in consolidated group with ${caseItem.consolidatedCases?.length || 0} member cases`;
+      consolidatedIconTooltipText = 'Lead case in consolidated group';
     } else if (caseItem.leadDocketNumber) {
-      consolidatedIconTooltipText = `Member case in consolidated group led by ${caseItem.leadDocketNumber}`;
+      consolidatedIconTooltipText = 'Member case in consolidated group';
     }
 
     caseInfoMap.set(caseItem.docketNumber, {
@@ -115,7 +104,7 @@ export const getRecentFilingsForUserInteractor = async (
         caseInfoMap.set(consolidatedCase.docketNumber, {
           inConsolidatedGroup: true,
           isLeadCase: false,
-          consolidatedIconTooltipText: `Member case in consolidated group led by ${caseItem.docketNumber}`,
+          consolidatedIconTooltipText: 'Member case in consolidated group',
         });
       });
     }
@@ -133,6 +122,15 @@ export const getRecentFilingsForUserInteractor = async (
     });
     const caseTitle = caseCaptionMeta?.caseTitle || 'Unknown Case';
 
+    // Check if user is directly associated with this specific case
+    const caseDetail = caseDetailsMap.get(entry.docketNumber);
+    const isRequestingUserAssociated = caseDetail
+      ? userIsDirectlyAssociated({
+          aCase: caseDetail,
+          userId: authorizedUser.userId,
+        })
+      : true; // Default to true if case details not found (shouldn't happen)
+
     return {
       docketNumber: entry.docketNumber,
       filedDate: entry.filingDate,
@@ -149,6 +147,7 @@ export const getRecentFilingsForUserInteractor = async (
       inConsolidatedGroup: caseInfo.inConsolidatedGroup,
       isLeadCase: caseInfo.isLeadCase,
       consolidatedIconTooltipText: caseInfo.consolidatedIconTooltipText,
+      isRequestingUserAssociated,
     };
   });
 };

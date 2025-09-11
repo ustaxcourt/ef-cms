@@ -15,4 +15,5 @@ export interface RecentFiling {
   isLeadCase?: boolean;
   consolidatedIconTooltipText?: string;
   isDraft?: boolean;
+  isRequestingUserAssociated?: boolean;
 }
