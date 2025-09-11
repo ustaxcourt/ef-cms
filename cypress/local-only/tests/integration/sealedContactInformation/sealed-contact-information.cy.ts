@@ -9,13 +9,11 @@ import { externalUserCreatesElectronicCase } from 'cypress/helpers/fileAPetition
 describe('Sealed Contact Information', () => {
   beforeEach(() => {
     loginAsPetitioner();
-    externalUserCreatesElectronicCase().then((docketNumber: string) => {
-      cy.wrap(docketNumber).as('docketNumber');
-    });
+    externalUserCreatesElectronicCase().as('docketNumber');
   });
   it('displays correct seal information text', () => {
     loginAsDocketClerk();
-    cy.get<string>('docketNumber').then(docketNumber => {
+    cy.get<string>('@docketNumber').then(docketNumber => {
       goToCase(docketNumber);
       updateCaseStatus('General Docket - At Issue (Ready for Trial)');
       cy.get('[data-testid="tab-parties"]').click();
