@@ -1,15 +1,17 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
 import { type AuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { type ResultField } from '@aws-sdk/client-cloudwatch-logs';
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
-import { type ResultField } from '@aws-sdk/client-cloudwatch-logs';
 import { applicationContext } from '@web-api/applicationContext';
 import { performQuery } from '../cloudwatch/perform-query';
+import { search } from '@web-api/persistence/elasticsearch/searchClient';
 import { worker } from '@web-api/gateways/worker/worker';
 import { DateTime } from 'luxon';
+import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
 import {
   MESSAGE_TYPES,
   type WorkerMessage,
@@ -63,16 +65,15 @@ type docketEntryType = {
   docketNumberWithSuffix?: string;
 };
 
-const findDocketEntryIdsThatFailedOCR = async (): Promise<
-  docketEntryType[]
-> => {
+const findDocketEntriesThatFailedOCR = async (): Promise<docketEntryType[]> => {
   const queryString = [
     'fields request.body',
     '| filter @message like /Failed to parse PDF/',
     '| parse request.body \'"docketEntryId":"*"\' as docketEntryId',
+    '| parse request.body \'"subjectCaseDocketNumber":"*"\' as docketNumber',
     '| sort @timestamp desc',
     '| limit 10000',
-    '| display docketEntryId',
+    '| display docketEntryId, docketNumber',
   ].join('\n');
 
   const results = await performQuery({
@@ -93,20 +94,14 @@ const findDocketEntryIdsThatFailedOCR = async (): Promise<
       docketNumber: '',
     };
     for (const f of row as ResultField[]) {
-      if (f.field === 'caseCaption' && f.value) {
-        docketEntry.caseCaption = f.value;
-      }
       if (f.field === 'docketEntryId' && f.value) {
         docketEntry.docketEntryId = f.value;
       }
       if (f.field === 'docketNumber' && f.value) {
         docketEntry.docketNumber = f.value;
       }
-      if (f.field === 'docketNumberWithSuffix' && f.value) {
-        docketEntry.docketNumberWithSuffix = f.value;
-      }
     }
-    if (docketEntry.docketEntryId && docketEntry.docketNumber) {
+    if (docketEntry.docketEntryId.length && docketEntry.docketNumber.length) {
       docketEntries[docketEntry.docketEntryId] = docketEntry;
     }
   }
@@ -114,9 +109,55 @@ const findDocketEntryIdsThatFailedOCR = async (): Promise<
   return Object.values(docketEntries);
 };
 
+const populateAdditionalFields = async (
+  docketEntries: docketEntryType[],
+): Promise<docketEntryType[]> => {
+  const docketNumbers = docketEntries.map(de => de.docketNumber);
+  const { results }: { results: RawCase[] } = await search({
+    applicationContext,
+    searchParameters: {
+      body: {
+        query: {
+          bool: {
+            must: [
+              {
+                terms: {
+                  'docketNumber.S': docketNumbers,
+                },
+              },
+              {
+                term: {
+                  'entityName.S': 'Case',
+                },
+              },
+            ],
+          },
+        },
+      },
+      index: 'efcms-case',
+      size: MAX_ELASTICSEARCH_PAGINATION,
+    },
+  });
+
+  for (const docketEntry of docketEntries) {
+    const caseEntity = results.find(
+      result => result.docketNumber === docketEntry.docketNumber,
+    );
+    if (caseEntity) {
+      docketEntry.caseCaption = caseEntity.caseCaption;
+      docketEntry.docketNumberWithSuffix = caseEntity.docketNumberWithSuffix;
+    }
+  }
+
+  return docketEntries;
+};
+
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const docketEntriesToScrape = await findDocketEntryIdsThatFailedOCR();
+  const docketEntriesToScrape = await populateAdditionalFields(
+    await findDocketEntriesThatFailedOCR(),
+  );
+  console.log(`Found ${docketEntriesToScrape.length} docket entries to scrape`);
 
   // TODO: can we just use an empty object here?
   const authorizedUser: AuthUser = {
@@ -134,9 +175,9 @@ const findDocketEntryIdsThatFailedOCR = async (): Promise<
     };
     await worker(applicationContext, { message });
   }
+  console.log(`Sent ${docketEntriesToScrape.length} messages to the queue`);
 
-  console.log(`Found ${docketEntriesToScrape.length} docket entries to scrape`);
-  for (const docketEntry of docketEntriesToScrape) {
-    console.log(docketEntry);
-  }
+  // for (const docketEntry of docketEntriesToScrape) {
+  //   console.log(docketEntry);
+  // }
 })();
