@@ -76,9 +76,7 @@ describe('scrapeDocumentContentsWorker', () => {
   it('throws an error if the case does not exist', async () => {
     const nonExtantDocketNumber = '99999999999999-99';
     getCaseByDocketNumber.mockRejectedValueOnce(
-      new Error(
-        `scrapeDocumentContentsWorker: Case ${nonExtantDocketNumber} not found`,
-      ),
+      new Error(`Cases ${nonExtantDocketNumber} not found`),
     );
     await expect(
       scrapeDocumentContentsWorker(
@@ -89,9 +87,7 @@ describe('scrapeDocumentContentsWorker', () => {
         },
         mockAuthUser,
       ),
-    ).rejects.toThrow(
-      `scrapeDocumentContentsWorker: Case ${nonExtantDocketNumber} not found`,
-    );
+    ).rejects.toThrow(`Cases ${nonExtantDocketNumber} not found`);
   });
 
   it('reads the case from persistence', async () => {

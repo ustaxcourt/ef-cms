@@ -30,11 +30,6 @@ export const scrapeDocumentContentsWorker = async (
   const caseRecord = await getCaseByDocketNumber({
     docketNumber,
   });
-  if (!caseRecord) {
-    const errorMessage = `scrapeDocumentContentsWorker: Case ${docketNumber} not found`;
-    applicationContext.logger.error(errorMessage);
-    throw new Error(errorMessage);
-  }
   applicationContext.logger.info(
     `scrapeDocumentContentsWorker: Retrieved ${docketNumber} case record`,
     { docketNumber },
