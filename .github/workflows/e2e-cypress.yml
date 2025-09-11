@@ -65,6 +65,9 @@ jobs:
       - name: Install Node Dependencies
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
         run: npm ci
+      - name: Install Cypress Binary
+        if: steps.cache-cypress.outputs.cache-hit != 'true'
+        run: npx cypress install
       - name: Setup Postgres
         run: |
           npm run migration:postgres
