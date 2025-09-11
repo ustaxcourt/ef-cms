@@ -23,8 +23,8 @@ type AlertHelper = {
 
 type AlertErrorProps = {
   alertError?: AlertError;
-  alertHelper: AlertHelper;
-  className: string;
+  alertHelper?: AlertHelper;
+  className?: string;
   closeButtonOnClick?: () => void;
 };
 
@@ -44,7 +44,7 @@ export function AlertError({
 
   return (
     <>
-      {alertError && alertHelper.showErrorAlert && (
+      {alertError && alertHelper && alertHelper.showErrorAlert && (
         <Alert
           aria-live="polite"
           className={cn(className)}
