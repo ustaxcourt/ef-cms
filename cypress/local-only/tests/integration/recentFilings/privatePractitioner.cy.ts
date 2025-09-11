@@ -153,14 +153,4 @@ describe('Recent Filings - Private Practitioner', () => {
       0,
     );
   });
-
-  it('should filter cases correctly', () => {
-    cy.get('[data-testid="recent-filings-table"]').should('be.visible');
-
-    // Check that case number links exist (if any rows exist)
-    cy.get('[data-testid="case-number-link"]').should(
-      'have.length.at.least',
-      0,
-    );
-  });
 });

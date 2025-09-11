@@ -190,14 +190,20 @@ export const RecentFilingsNonMobile = ({
                         )}
                       </td>
                       <td>
-                        <a
-                          href={`/case-detail/${filing.docketNumber}`}
-                          target="_blank"
-                          rel="noreferrer"
-                          data-testid="case-number-link"
-                        >
-                          {filing.docketNumber}
-                        </a>
+                        {filing.isRequestingUserAssociated !== false ? (
+                          <a
+                            href={`/case-detail/${filing.docketNumber}`}
+                            target="_blank"
+                            rel="noreferrer"
+                            data-testid="case-number-link"
+                          >
+                            {filing.docketNumber}
+                          </a>
+                        ) : (
+                          <span data-testid="case-number-text">
+                            {filing.docketNumber}
+                          </span>
+                        )}
                       </td>
                       <td>
                         {formatDateString(filing.filedDate, FORMATS.MMDDYYYY)}

@@ -135,13 +135,4 @@ describe('Recent Filings - IRS Practitioner', () => {
       0,
     );
   });
-
-  it('should filter cases correctly', () => {
-    cy.get('[data-testid="recent-filings-table"]').should('be.visible');
-
-    // Check that each row has a case number link
-    cy.get('[data-testid="recent-filings-table"] tbody tr').each($row => {
-      cy.wrap($row).find('[data-testid="case-number-link"]').should('exist');
-    });
-  });
 });
