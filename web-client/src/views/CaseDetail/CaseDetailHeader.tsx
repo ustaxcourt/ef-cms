@@ -184,28 +184,24 @@ export const CaseDetailHeader = connect<
                   {caseDetailHeaderHelper.hidePublicCaseInformation && (
                     <>
                       {formattedCaseDetail.isLeadCase && (
-                        <span
+                        <Tag
                           aria-label={`isLeadCase: ${formattedCaseDetail.isLeadCase}`}
-                          className="usa-tag"
                           id="lead-case-tag"
                           role="note"
                         >
-                          <span aria-hidden="true">Lead case</span>
-                        </span>
+                          Lead case
+                        </Tag>
                       )}
-                      <label
-                        aria-label={`status: ${formattedCaseDetail.status}`}
+                      <Tag
                         className={classNames(
-                          'usa-tag',
                           formattedCaseDetail.isLeadCase ? 'margin-left-1' : '',
                         )}
+                        aria-label={`status: ${formattedCaseDetail.status}`}
                         data-testid="case-status"
-                        htmlFor="case-status"
+                        id="case-status"
                       >
-                        <span aria-hidden="true" id="case-status">
-                          {formattedCaseDetail.status}
-                        </span>
-                      </label>
+                        {formattedCaseDetail.status}
+                      </Tag>
                       {formattedCaseDetail.associatedJudge && (
                         <Tag
                           aria-label="associated judge"
