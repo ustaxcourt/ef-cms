@@ -48,6 +48,10 @@ jobs:
           pattern: coverage-artifacts-*
           merge-multiple: true
           path: coverage
+      - name: Merge Coverage
+        run: |
+          mkdir -p coverage
+          npx nyc merge coverage > coverage/coverage.json
       - name: Process Coverage
         run: npx nyc report --check-coverage --branches 95 --functions 95 --lines 95 --statements 95 --reporter lcov --reporter text --reporter clover -t coverage
       - uses: geekyeggo/delete-artifact@v1
