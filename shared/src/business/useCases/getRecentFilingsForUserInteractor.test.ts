@@ -302,7 +302,7 @@ describe('getRecentFilingsForUserInteractor', () => {
     expect(result[0].consolidatedIconTooltipText).toBeUndefined();
   });
 
-  it('should set isRequestingUserAssociated to false for consolidated cases where user is not a party', async () => {
+  it('should set isRequestingUserAssociated to false for cases where user is not a party', async () => {
     const mockCases = [createMockCase()];
     const mockDbResults = [createMockDbDocketEntry()];
     const mockCaseDetails = [
@@ -318,7 +318,74 @@ describe('getRecentFilingsForUserInteractor', () => {
 
     const result = await getRecentFilingsForUserInteractor(mockAuthorizedUser);
 
+    // Should return the document but mark user as not associated
+    expect(result).toHaveLength(1);
     expect(result[0].docketNumber).toBe('101-20');
     expect(result[0].isRequestingUserAssociated).toBe(false);
+  });
+
+  it('should show documents from consolidated cases but mark non-party cases appropriately', async () => {
+    const mockCases = [
+      createMockCase({
+        consolidatedCases: [createMockCase({ docketNumber: '102-20' })],
+      }),
+    ];
+    const mockDbResults = [
+      createMockDbDocketEntry({ docketNumber: '101-20' }), // User is party to this case
+      createMockDbDocketEntry({ docketNumber: '102-20' }), // User is NOT party to this case
+    ];
+    const mockCaseDetails = [
+      createMockCaseDetails('101-20', mockAuthorizedUser!.userId, true), // User is party
+      createMockCaseDetails('102-20', 'different-user-id', false), // User is NOT party
+    ];
+
+    mockGetCasesForUserInteractor.mockResolvedValue({
+      openCaseList: mockCases,
+      closedCaseList: [],
+    });
+    mockGetRecentFilingsByDocketNumbers.mockResolvedValue(mockDbResults);
+    mockGetCasesByDocketNumbers.mockResolvedValue(mockCaseDetails);
+
+    const result = await getRecentFilingsForUserInteractor(mockAuthorizedUser);
+
+    // Should return both documents but mark association appropriately
+    expect(result).toHaveLength(2);
+
+    const leadCaseResult = result.find(r => r.docketNumber === '101-20');
+    const memberCaseResult = result.find(r => r.docketNumber === '102-20');
+
+    expect(leadCaseResult?.isRequestingUserAssociated).toBe(true);
+    expect(memberCaseResult?.isRequestingUserAssociated).toBe(false);
+  });
+
+  it('should include documents from all cases where user is a party in consolidated group', async () => {
+    const mockCases = [
+      createMockCase({
+        docketNumber: '101-20',
+        consolidatedCases: [createMockCase({ docketNumber: '102-20' })],
+      }),
+    ];
+    const mockDbResults = [
+      createMockDbDocketEntry({ docketNumber: '101-20' }), // User is party to lead case
+      createMockDbDocketEntry({ docketNumber: '102-20' }), // User is also party to member case
+    ];
+    const mockCaseDetails = [
+      createMockCaseDetails('101-20', mockAuthorizedUser!.userId, true), // User is party to lead
+      createMockCaseDetails('102-20', mockAuthorizedUser!.userId, true), // User is party to member
+    ];
+
+    mockGetCasesForUserInteractor.mockResolvedValue({
+      openCaseList: mockCases,
+      closedCaseList: [],
+    });
+    mockGetRecentFilingsByDocketNumbers.mockResolvedValue(mockDbResults);
+    mockGetCasesByDocketNumbers.mockResolvedValue(mockCaseDetails);
+
+    const result = await getRecentFilingsForUserInteractor(mockAuthorizedUser);
+
+    // Should return documents from both cases since user is party to both
+    expect(result).toHaveLength(2);
+    expect(result[0].isRequestingUserAssociated).toBe(true);
+    expect(result[1].isRequestingUserAssociated).toBe(true);
   });
 });
