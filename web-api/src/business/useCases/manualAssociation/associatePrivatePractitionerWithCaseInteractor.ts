@@ -6,6 +6,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { associatePrivatePractitionerToCase } from '../../useCaseHelper/caseAssociation/associatePrivatePractitionerToCase';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 /**
@@ -19,7 +20,7 @@ import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
  * @returns {*} the result
  */
 export const associatePrivatePractitionerWithCase = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   {
     docketNumber,
     representing,
@@ -39,12 +40,9 @@ export const associatePrivatePractitionerWithCase = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId });
+  const user = await getUserById({ userId });
 
   return await associatePrivatePractitionerToCase({
-    applicationContext,
     authorizedUser,
     docketNumber,
     representing,

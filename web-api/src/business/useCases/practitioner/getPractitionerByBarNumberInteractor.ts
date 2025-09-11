@@ -6,6 +6,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getPractitionerByBarNumber } from '@web-api/persistence/postgres/users/getPractitionerByBarNumber';
 
 /**
  * getPractitionerByBarNumberInteractor
@@ -16,7 +17,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
  * @returns {Practitioner} the retrieved practitioner
  */
 export const getPractitionerByBarNumberInteractor = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   { barNumber }: { barNumber: string },
   authorizedUser: UnknownAuthUser,
 ) => {
@@ -28,9 +29,7 @@ export const getPractitionerByBarNumberInteractor = async (
   ) {
     throw new UnauthorizedError('Unauthorized for getting attorney user');
   }
-  const foundPractitioner = await applicationContext
-    .getPersistenceGateway()
-    .getPractitionerByBarNumber({ applicationContext, barNumber });
+  const foundPractitioner = await getPractitionerByBarNumber({ barNumber });
 
   let practitioner;
 

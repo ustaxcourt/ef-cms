@@ -15,6 +15,7 @@ import { WorkItem } from '@shared/business/entities/WorkItem';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { isEmpty } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
@@ -36,9 +37,13 @@ export const saveCaseDetailInternalEdit = async (
     throw new UnauthorizedError('Unauthorized for update case');
   }
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
+
+  if (!user) {
+    throw new NotFoundError(
+      `User not found with user id ${authorizedUser.userId}`,
+    );
+  }
 
   if (!caseToUpdate || docketNumber !== caseToUpdate.docketNumber) {
     throw new UnprocessableEntityError();
@@ -125,7 +130,6 @@ export const saveCaseDetailInternalEdit = async (
     await applicationContext
       .getUseCaseHelpers()
       .removeCounselFromRemovedPetitioner({
-        applicationContext,
         authorizedUser,
         caseEntity: caseEntityWithFormEdits,
         petitionerContactId: originalSecondaryContactId,

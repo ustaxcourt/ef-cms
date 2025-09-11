@@ -14,6 +14,7 @@ import { caseWorksheets } from '@web-api/persistence/postgres/utils/seed/fixture
 import { correspondence } from '@web-api/persistence/postgres/utils/seed/fixtures/correspondence';
 import { messages } from './fixtures/messages';
 import { workItems } from './fixtures/workItems';
+import { featureFlags } from '@web-api/persistence/postgres/utils/seed/fixtures/featureFlags';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 import { getDbWriter } from '@web-api/database';
@@ -22,6 +23,8 @@ import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries
 import { docketEntrySeeds } from '@web-api/persistence/postgres/utils/seed/fixtures/docketEntries';
 import { OPENSEARCH_SYNC_ACTIONS } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { users } from '@web-api/persistence/postgres/utils/seed/fixtures/users';
+import { usersOnCases } from '@web-api/persistence/postgres/utils/seed/fixtures/usersOnCases';
 
 export const seed = async () => {
   const insertMessages = pgInsertInto({
@@ -46,6 +49,17 @@ export const seed = async () => {
     table: 'dwCaseWorksheet',
     values: caseWorksheets,
     onConflictColumns: ['docketNumber'],
+  });
+
+  const insertUsers = pgInsertInto({
+    table: 'dwUser',
+    values: users,
+    onConflictColumns: ['userId'],
+  });
+  const insertUserOnCase = pgInsertInto({
+    table: 'dwUserOnCase',
+    values: usersOnCases,
+    onConflictColumns: ['userId', 'docketNumber'],
   });
 
   const insertWorkItem = getDbWriter({
@@ -83,6 +97,11 @@ export const seed = async () => {
     })),
   );
 
+  const insertFeatureFlags = await pgInsertInto({
+    table: 'dwFeatureFlag',
+    values: featureFlags,
+    onConflictColumns: ['name'],
+  });
   const validatedDocketEntrySeeds = DocketEntry.validateRawCollection(
     docketEntrySeeds,
     {
@@ -97,13 +116,16 @@ export const seed = async () => {
   const insertDocketEntries = upsertDocketEntries(validatedDocketEntrySeeds);
 
   await Promise.all([
-    insertMessages,
     insertCaseDeadline,
-    insertCorrespondence,
-    insertCaseWorksheet,
-    insertWorkItem,
     insertCases,
+    insertCaseWorksheet,
+    insertCorrespondence,
     insertDocketEntries,
+    insertFeatureFlags,
+    insertMessages,
+    insertUsers,
+    insertUserOnCase,
+    insertWorkItem,
   ]);
 };
 

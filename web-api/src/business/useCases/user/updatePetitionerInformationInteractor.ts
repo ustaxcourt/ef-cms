@@ -24,6 +24,7 @@ import { defaults, pick } from 'lodash';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { generateAndServeDocketEntry } from '@web-api/business/useCaseHelper/service/createChangeItems';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 export const getIsUserAuthorized = ({
@@ -265,7 +266,6 @@ export const updatePetitionerInformation = async (
       caseEntity = await applicationContext
         .getUseCaseHelpers()
         .createUserForContact({
-          applicationContext,
           authorizedUser,
           caseEntity,
           contactId: updatedPetitionerData.contactId,
@@ -287,12 +287,15 @@ export const updatePetitionerInformation = async (
       updatedCaseContact.oldEmail = existingPetitionerInfo.email;
       updatedCaseContact.newEmail = updatedPetitionerData.updatedEmail;
 
-      const userToUpdate = await applicationContext
-        .getPersistenceGateway()
-        .getUserById({
-          applicationContext,
-          userId: contactId,
-        });
+      const userToUpdate = await getUserById({
+        userId: contactId,
+      });
+
+      if (!userToUpdate) {
+        throw new NotFoundError(
+          `User not found with user id ${authorizedUser.userId}`,
+        );
+      }
 
       await updateCaseEntityAndGenerateChange({
         applicationContext,

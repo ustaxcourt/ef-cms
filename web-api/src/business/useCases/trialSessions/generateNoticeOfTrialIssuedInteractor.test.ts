@@ -1,15 +1,33 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import {
   DOCKET_NUMBER_SUFFIXES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { generateNoticeOfTrialIssuedInteractor } from './generateNoticeOfTrialIssuedInteractor';
+import { getFeatureFlagValues as getFeatureFlagValuesMock } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-
-const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+import { getUsersInSections as getUsersInSectionsMock } from '@web-api/persistence/postgres/users/getUsersInSections';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('generateNoticeOfTrialIssuedInteractor', () => {
+  const getFeatureFlagValues = jest.mocked(getFeatureFlagValuesMock);
+  getFeatureFlagValues.mockResolvedValue([
+    {
+      name: 'clerk-of-court-configuration',
+      value: {
+        current: {
+          name: 'bob',
+          title: 'clerk of court',
+        },
+      },
+    },
+  ]);
+
+  const getUsersInSections = jest.mocked(getUsersInSectionsMock);
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+
   const TEST_JUDGE = {
     judgeTitle: 'Judge',
     name: 'Test Judge',
@@ -27,13 +45,6 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
         startDate: '2019-08-25T05:00:00.000Z',
         startTime: '10:00',
         trialLocation: 'Boise, Idaho',
-      }));
-
-    applicationContext
-      .getPersistenceGateway()
-      .getConfigurationItemValue.mockImplementation(() => ({
-        name: 'bob',
-        title: 'clerk of court',
       }));
 
     getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
@@ -59,9 +70,7 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
         ({ contentHtml }) => contentHtml,
       );
 
-    applicationContext
-      .getPersistenceGateway()
-      .getUsersInSection.mockReturnValue([TEST_JUDGE]);
+    getUsersInSections.mockResolvedValue([TEST_JUDGE as DbUser]);
   });
 
   it('should generate a template with the case and trial information and call the pdf generator', async () => {

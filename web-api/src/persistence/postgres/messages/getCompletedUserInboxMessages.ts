@@ -1,7 +1,7 @@
 import { Message } from '@shared/business/entities/Message';
 import { calculateDate } from '@shared/business/utilities/DateHandler';
 import { getDbReader } from '@web-api/database';
-import { messageResultEntity } from '@web-api/persistence/postgres/messages/mapper';
+import { fromKyselyMessage } from '@web-api/persistence/postgres/messages/mapper';
 
 export const getCompletedUserInboxMessages = async ({
   userId,
@@ -30,5 +30,5 @@ export const getCompletedUserInboxMessages = async ({
       .execute(),
   );
 
-  return messages.map(message => messageResultEntity(message));
+  return messages.map(message => fromKyselyMessage(message));
 };

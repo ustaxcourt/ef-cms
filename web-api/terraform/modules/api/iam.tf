@@ -82,11 +82,14 @@ resource "aws_iam_role_policy" "authorizer_invocation_policy" {
       "Resource": "arn:aws:logs:*:*:*"
     },
     {
+      "Sid": "RdsConnect",
       "Effect": "Allow",
       "Action": [
-        "dynamodb:GetItem"
+        "rds-db:connect"
       ],
-      "Resource": "arn:aws:dynamodb:us-east-1:${data.aws_caller_identity.current.account_id}:table/efcms-deploy-${var.environment}"
+      "Resource": [
+        "*"
+      ]
     }
   ]
 }

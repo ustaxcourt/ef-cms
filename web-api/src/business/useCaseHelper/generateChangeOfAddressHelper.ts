@@ -14,7 +14,10 @@ import { aggregatePartiesForService } from '@shared/business/utilities/aggregate
 import { clone } from 'lodash';
 import { generateAndServeDocketEntry } from '@web-api/business/useCaseHelper/service/createChangeItems';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { deleteChangeOfAddressCaseRecord } from '@web-api/persistence/postgres/jobs/changeOfAddress/deleteChangeOfAddressCaseRecord';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
+import { RawUser } from '@shared/business/entities/User';
 
 /**
  * generateChangeOfAddressHelper
@@ -30,8 +33,8 @@ export const generateChangeOfAddressHelper = async ({
   bypassDocketEntry,
   contactInfo,
   docketNumber,
-  firmName,
   jobId,
+  oldUser,
   requestUserId,
   updatedEmail,
   updatedName,
@@ -43,10 +46,10 @@ export const generateChangeOfAddressHelper = async ({
   docketNumber: string;
   bypassDocketEntry: boolean;
   contactInfo: TUserContact;
-  firmName: string;
   updatedEmail?: string;
   updatedName?: string;
   jobId: string;
+  oldUser: RawUser;
   user: RawPractitioner;
   requestUserId?: string;
   websocketMessagePrefix: 'user' | 'admin';
@@ -68,21 +71,16 @@ export const generateChangeOfAddressHelper = async ({
 
     if (!practitionerObject) {
       throw new Error(
-        `Could not find user|${user.userId} barNumber: ${user.barNumber} on ${docketNumber}`,
+        `Could not find ${user.userId} barNumber: ${user.barNumber} on ${docketNumber}`,
       );
     }
 
-    const oldData = clone(practitionerObject.contact);
+    const oldData = clone(oldUser.contact);
 
-    // This updates the case by reference!
-    practitionerObject.contact = contactInfo;
-    practitionerObject.firmName = firmName;
-    practitionerObject.name = practitionerName;
-
-    if (!oldData.email && updatedEmail) {
+    if (updatedEmail) {
+      // This updates the case by reference!
       practitionerObject.serviceIndicator =
         SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
-      practitionerObject.email = updatedEmail;
     }
 
     if (!bypassDocketEntry && caseEntity.shouldGenerateNoticesForCase()) {
@@ -124,9 +122,7 @@ export const generateChangeOfAddressHelper = async ({
   const isDoneProcessing = updatedJob.remaining === 0;
 
   if (isDoneProcessing) {
-    await applicationContext
-      .getPersistenceGateway()
-      .deleteChangeOfAddressCaseRecord(jobId);
+    await deleteChangeOfAddressCaseRecord(jobId);
 
     applicationContext.logger.info(
       `"change-of-address-job|${jobId}" job finished`,
@@ -138,10 +134,7 @@ export const generateChangeOfAddressHelper = async ({
         isUpdatingInformation: false,
       });
 
-      await applicationContext.getPersistenceGateway().updateUser({
-        applicationContext,
-        user: userEntity.validate().toRawObject(),
-      });
+      await upsertUsers([userEntity.validate().toRawObject()]);
     }
 
     const CONTACT_UPDATE_COMPLETE_ACTION:
