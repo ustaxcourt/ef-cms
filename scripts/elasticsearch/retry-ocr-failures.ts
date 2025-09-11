@@ -1,12 +1,19 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
+import { type AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
 import { type ResultField } from '@aws-sdk/client-cloudwatch-logs';
-import { DateTime } from 'luxon';
+import { applicationContext } from '@web-api/applicationContext';
 import { performQuery } from '../cloudwatch/perform-query';
+import { worker } from '@web-api/gateways/worker/worker';
+import { DateTime } from 'luxon';
+import {
+  MESSAGE_TYPES,
+  type WorkerMessage,
+} from '@web-api/gateways/worker/workerRouter';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -80,16 +87,32 @@ const findDocketEntryIdsThatFailedOCR = async (): Promise<string[]> => {
   }
 
   return [...docketEntryIds];
+  // TODO: return array of objects containing docketNumber, docketNumberWithSuffix, docketEntryId, and caseCaption
 };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const docketEntryIds = await findDocketEntryIdsThatFailedOCR();
+  const docketEntriesToScrape = await findDocketEntryIdsThatFailedOCR(); // TODO: this should be an array of objects
 
-  // TODO: drop the docketEntryIds into the OCR queue
+  // TODO: can we just use an empty object here?
+  const authorizedUser: AuthUser = {
+    email: 'person@hello.com',
+    name: 'ignored',
+    role: 'adc',
+    userId: 'ignored',
+  };
 
-  console.log(`Found ${docketEntryIds.length} docketEntryIds`);
-  for (const docketEntryId of docketEntryIds) {
-    console.log(docketEntryId);
+  for (const payload of docketEntriesToScrape) {
+    const message: WorkerMessage = {
+      authorizedUser,
+      payload,
+      type: MESSAGE_TYPES.SCRAPE_DOCUMENT_CONTENTS,
+    };
+    await worker(applicationContext, { message });
+  }
+
+  console.log(`Found ${docketEntriesToScrape.length} docket entries to scrape`);
+  for (const docketEntry of docketEntriesToScrape) {
+    console.log(docketEntry);
   }
 })();
