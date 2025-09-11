@@ -2086,3 +2086,5 @@ export const ALLOWED_EVENT_CODES = [
   'NCTL',
   'NODC',
 ];
+export const PRO_SE_CHECKLIST = 'pro-se-checklist';
+
