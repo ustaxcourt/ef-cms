@@ -66,9 +66,10 @@ jobs:
       - name: Install Node Dependencies - Cache Miss Install
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
         id: cache-miss-install
+        continue-on-error: true
         run: npm i
       - name: Install Node Dependencies - Fallback Clean Install
-        if: steps.cache-miss-install.outputs.outcome != 'success' && steps.cache-dependencies.outputs.cache-hit != 'true'
+        if: steps.cache-dependencies.outputs.cache-hit != 'true' && steps.cache-miss-install.outcome != 'success'
         run: npm ci
       - name: Install Cypress Binary
         # if: steps.cache-cypress.outputs.cache-hit != 'true'
