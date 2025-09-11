@@ -13,8 +13,8 @@ jest.mock('@web-api/persistence/postgres/users/createBarNumber');
 jest.mock('@shared/sharedAppContext');
 
 describe('createPractitionerUser', () => {
-  const mockGetUniqueId = getUniqueId as jest.Mock;
-  const mockCreateBarNumber = createBarNumber as jest.Mock;
+  const mockGetUniqueId = jest.mocked(getUniqueId);
+  const mockCreateBarNumber = jest.mocked(createBarNumber);
 
   const sampleUser = {
     firstName: 'Alice',
