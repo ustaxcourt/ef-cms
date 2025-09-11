@@ -42,8 +42,6 @@ export const Login = connect(
       <>
         <section className="grid-container usa-section">
           <div className="grid-row flex-justify-center">
-            <div className="grid-col-12 desktop:grid-col-4 tablet:grid-col-7 tw:mb-4"></div>
-
             <div className="grid-col-12 desktop:grid-col-4 tablet:grid-col-7">
               <AlertSuccess
                 dismissAlertSequence={() => dismissAlertSequence}
@@ -57,12 +55,15 @@ export const Login = connect(
                   dismissible={false}
                 ></InfoNotificationComponent>
               )}
-              <AlertError
-                alertError={alertError}
-                alertHelper={alertHelper}
-                closeButtonOnClick={() => dismissAlertSequence()}
-              />
-              {/*<ErrorNotification />*/}
+
+              <div className="tw:mb-4">
+                <AlertError
+                  alertError={alertError}
+                  alertHelper={alertHelper}
+                  closeButtonOnClick={() => dismissAlertSequence()}
+                />
+                {/*<ErrorNotification />*/}
+              </div>
 
               <div className="grid-container bg-white padding-y-3 border border-base-lighter login">
                 <div className="display-flex flex-column">
