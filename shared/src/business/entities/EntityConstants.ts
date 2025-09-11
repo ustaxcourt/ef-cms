@@ -2076,3 +2076,21 @@ export const TERM_GENERATOR_DEFAULT_VALUES = {
 } as const;
 
 export const MOBILE_SCREEN_BREAKPOINT = 640;
+
+export const PRO_SE_CHECKLIST = 'pro-se-checklist';
+
+export const ALLOWED_EVENT_CODES = [
+  'P',
+  'ATP',
+  'DISC',
+  'NOT',
+  'NOTR',
+  'NTD',
+  'SPOS',
+  'SPTO',
+  'TCRP',
+  'NORP',
+  'NOIP',
+  'NCTL',
+  'NODC',
+];

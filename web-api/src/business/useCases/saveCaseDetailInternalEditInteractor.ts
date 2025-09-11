@@ -160,7 +160,7 @@ export const saveCaseDetailInternalEdit = async (
       docketNumber,
       docketEntryId: petitionDocketEntry?.docketEntryId,
     });
-    
+
     if (!petitionWorkItem) {
       throw new NotFoundError(
         `Could not find work item associated with petition on case ${petitionDocketEntry}`,

@@ -15,11 +15,14 @@ import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/ca
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { updateTrialSession } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
+import { removeCaseFromTrialSession } from '@web-api/persistence/postgres/trialSessions/removeCaseFromTrialSession';
 import { getCaseDeadlinesByConsolidatedCaseDeadlineIds } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds';
 import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
 
-export const updateCaseContext = async (
-  applicationContext: ServerApplicationContext,
+const updateCaseContext = async (
+  _applicationContext: ServerApplicationContext,
   {
     caseCaption,
     caseStatus,
@@ -73,12 +76,9 @@ export const updateCaseContext = async (
         );
       }
 
-      const trialSession = await applicationContext
-        .getPersistenceGateway()
-        .getTrialSessionById({
-          applicationContext,
-          trialSessionId: oldCase.trialSessionId,
-        });
+      const trialSession = await getTrialSessionById({
+        trialSessionId: oldCase.trialSessionId,
+      });
 
       if (!trialSession) {
         throw new NotFoundError(
@@ -93,8 +93,13 @@ export const updateCaseContext = async (
         docketNumber: oldCase.docketNumber,
       });
 
-      await applicationContext.getPersistenceGateway().updateTrialSession({
-        applicationContext,
+      await removeCaseFromTrialSession({
+        disposition,
+        docketNumber: oldCase.docketNumber,
+        trialSessionId: trialSessionEntity.trialSessionId,
+      });
+
+      await updateTrialSession({
         trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
       });
 
