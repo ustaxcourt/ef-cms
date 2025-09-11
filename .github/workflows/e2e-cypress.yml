@@ -47,14 +47,14 @@ jobs:
         uses: runforesight/workflow-telemetry-action@v2
         with:
           comment_on_pr: false
-      - name: Cache Cypress binary
-        id: cache-cypress
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/Cypress
-          key: ${{ runner.os }}-cypress-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-cypress-
+      # - name: Cache Cypress binary
+      #   id: cache-cypress
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: ~/.cache/Cypress
+      #     key: ${{ runner.os }}-cypress-${{ hashFiles('**/package-lock.json') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-cypress-
       - name: Restore Cache Dependencies
         id: cache-dependencies
         uses: actions/cache@v4
@@ -72,7 +72,7 @@ jobs:
         if: steps.cache-dependencies.outputs.cache-hit != 'true' && steps.cache-miss-install.outcome != 'success'
         run: npm ci
       - name: Install Cypress Binary
-        if: steps.cache-cypress.outputs.cache-hit != 'true'
+        # if: steps.cache-cypress.outputs.cache-hit != 'true'
         run: npx cypress install
       - name: Setup Postgres
         run: |
