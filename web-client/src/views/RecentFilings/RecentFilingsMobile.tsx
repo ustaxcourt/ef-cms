@@ -2,25 +2,17 @@ import {
   formatDateString,
   FORMATS,
 } from '@shared/business/utilities/DateHandler';
+import { DOCKET_ENTRY_SEALED_TO_TYPES } from '@shared/business/entities/EntityConstants';
 import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseIcon';
+import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { RecentFiling } from '@shared/business/entities/RecentFiling';
 import { BigHeader } from '../BigHeader';
 import { RecentFilingsDocumentDisplay } from './RecentFilingsDocumentDisplay';
-
-const getIndentationClass = (filing: RecentFiling): string => {
-  if (filing.inConsolidatedGroup && !filing.isLeadCase) {
-    return 'margin-x-2';
-  }
-  if (filing.inConsolidatedGroup) {
-    return 'margin-x-1';
-  }
-  return '';
-};
 
 type SortableField = 'docketNumber' | 'filedDate' | 'document' | 'caseTitle';
 type SortOrder = 'asc' | 'desc';
@@ -179,27 +171,31 @@ export const RecentFilingsMobile = ({
                   >
                     <td className="docket-number-head">
                       {filing.inConsolidatedGroup && (
-                        <span className={getIndentationClass(filing)}>
-                          <ConsolidatedCaseIcon
-                            consolidatedIconTooltipText={
-                              filing.consolidatedIconTooltipText
-                            }
-                            inConsolidatedGroup={
-                              filing.inConsolidatedGroup || false
-                            }
-                            showLeadCaseIcon={filing.isLeadCase || false}
-                            data-testid="consolidated-case-icon"
-                          />
+                        <ConsolidatedCaseIcon
+                          consolidatedIconTooltipText={
+                            filing.consolidatedIconTooltipText
+                          }
+                          inConsolidatedGroup={
+                            filing.inConsolidatedGroup || false
+                          }
+                          showLeadCaseIcon={filing.isLeadCase || false}
+                          data-testid="consolidated-case-icon"
+                        />
+                      )}
+                      {filing.isRequestingUserAssociated !== false ? (
+                        <a
+                          href={`/case-detail/${filing.docketNumber}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          data-testid="case-number-link"
+                        >
+                          {filing.docketNumber}
+                        </a>
+                      ) : (
+                        <span data-testid="case-number-text">
+                          {filing.docketNumber}
                         </span>
                       )}
-                      <a
-                        href={`/case-detail/${filing.docketNumber}`}
-                        target="_blank"
-                        rel="noreferrer"
-                        data-testid="case-number-link"
-                      >
-                        {filing.docketNumber}
-                      </a>
                     </td>
                     <th>Filed Date</th>
                     <td className="divider">
@@ -207,6 +203,24 @@ export const RecentFilingsMobile = ({
                     </td>
                     <th>Document</th>
                     <td className="divider">
+                      {filing.isSealed && (
+                        <Icon
+                          aria-label={
+                            filing.sealedTo ===
+                            DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC
+                              ? 'Sealed to the public'
+                              : 'Sealed to the public and parties of this case'
+                          }
+                          className="sealed-case-entry margin-right-1"
+                          icon="lock"
+                          title={
+                            filing.sealedTo ===
+                            DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC
+                              ? 'Sealed to the public'
+                              : 'Sealed to the public and parties of this case'
+                          }
+                        />
+                      )}
                       <RecentFilingsDocumentDisplay
                         filing={filing}
                         displayProperties={recentFilingsHelper.getDocumentDisplayProperties(

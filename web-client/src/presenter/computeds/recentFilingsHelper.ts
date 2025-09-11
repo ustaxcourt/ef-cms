@@ -133,14 +133,15 @@ export const recentFilingsHelper = (get: Get) => {
       const canAccess = checkDocumentAccess(filing, userRole);
       const isExternalUserRole = isExternalUser(userRole);
       const hasFileAttached = Boolean(filing.isFileAttached);
+      const isUserAssociated = filing.isRequestingUserAssociated !== false;
 
       return {
         ...filing,
         canAccess,
         isSealed: filing.isSealed === true,
-        showLinkToDocument: Boolean(canAccess && hasFileAttached),
+        showLinkToDocument: Boolean(canAccess && hasFileAttached && isUserAssociated),
         showDocumentViewerLink: Boolean(
-          canAccess && hasFileAttached && !isExternalUserRole,
+          canAccess && hasFileAttached && !isExternalUserRole && isUserAssociated,
         ),
         showDocumentDescriptionWithoutLink: Boolean(
           !canAccess && hasFileAttached,
@@ -157,11 +158,12 @@ export const recentFilingsHelper = (get: Get) => {
       const canAccess = checkDocumentAccess(filing, userRole);
       const isExternalUserRole = isExternalUser(userRole);
       const hasFileAttached = Boolean(filing.isFileAttached);
+      const isUserAssociated = filing.isRequestingUserAssociated !== false;
 
       return {
-        showLinkToDocument: Boolean(canAccess && hasFileAttached),
+        showLinkToDocument: Boolean(canAccess && hasFileAttached && isUserAssociated),
         showDocumentViewerLink: Boolean(
-          canAccess && hasFileAttached && !isExternalUserRole,
+          canAccess && hasFileAttached && !isExternalUserRole && isUserAssociated,
         ),
         showDocumentDescriptionWithoutLink: Boolean(
           !canAccess && hasFileAttached,
