@@ -1,8 +1,8 @@
 import {
-  AlertError, AlertInfo, AlertSuccess, AlertWarning
+  AlertInfo, AlertSuccess, AlertWarning
 } from '@web-client/dawson-ui/ui/Alert/Alert';
-import { Button } from '@web-client/dawson-ui/ui/button';
-
+import {Button } from '@web-client/dawson-ui/ui/button';
+import { AlertError } from '@web-client/dawson-ui/ui/Alert/AlertError';
 import React, { useState } from 'react';
 
 export function Alerts() {
@@ -20,6 +20,18 @@ export function Alerts() {
     success: true,
   });
 
+  const alertError = {
+    title: 'Error Alert',
+    message: 'This is a succinct, helpful message',
+    scrollToErrorNotification: false
+  };
+  const alertHelper = {
+    showErrorAlert: true,
+    showSingleMessage: true,
+    showMultipleMessages: false,
+    showTitleOnly: false,
+    messagesDeduped: false
+  };
   return (
     <div className="tw:my-4">
       <h2>Alerts</h2>
@@ -61,10 +73,9 @@ export function Alerts() {
         <AlertError
           closeButtonOnClick={() => setAlert({ ...alert, error: false })}
           className="tw:mb-4"
-          header='Error Status'
-        >
-            This is a succinct, helpful message
-        </AlertError>
+          alertError={alertError}
+          alertHelper={alertHelper}
+        />
       ) : (
         <Button onClick={() => setAlert({ ...alert, error: true })}>
           Display Error Alert

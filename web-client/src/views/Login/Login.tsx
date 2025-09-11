@@ -1,6 +1,6 @@
 import { Button as DawsonUiButton } from '@web-client/dawson-ui/ui/button';
 import { Button } from '@web-client/ustc-ui/Button/Button';
-import { ErrorNotification } from '@web-client/views/ErrorNotification';
+// import { ErrorNotification } from '@web-client/views/ErrorNotification';
 import { InfoNotificationComponent } from '@web-client/views/InfoNotification';
 import { SuccessNotification } from '@web-client/views/SuccessNotification';
 import { WarningNotification } from '@web-client/views/WarningNotification';
@@ -42,11 +42,6 @@ export const Login = connect(
         <section className="grid-container usa-section">
           <div className="grid-row flex-justify-center">
             <div className="grid-col-12 desktop:grid-col-4 tablet:grid-col-7 tw:mb-4">
-              <AlertError
-                alertError={alertError}
-                alertHelper={alertHelper}
-                closeButtonOnClick={() => dismissAlertSequence()}
-              />
             </div>
 
             <div className="grid-col-12 desktop:grid-col-4 tablet:grid-col-7">
@@ -58,8 +53,12 @@ export const Login = connect(
                   dismissible={false}
                 ></InfoNotificationComponent>
               )}
-
-              <ErrorNotification />
+              <AlertError
+                alertError={alertError}
+                alertHelper={alertHelper}
+                closeButtonOnClick={() => dismissAlertSequence()}
+              />
+              {/*<ErrorNotification />*/}
 
               <div className="grid-container bg-white padding-y-3 border border-base-lighter login">
                 <div className="display-flex flex-column">

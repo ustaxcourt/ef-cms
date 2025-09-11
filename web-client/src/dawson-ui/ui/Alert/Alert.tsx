@@ -119,9 +119,8 @@ function withAlert(defaultProps) {
   return EnhancedComponent;
 }
 
-const AlertError = withAlert({ variant: 'error' });
 const AlertInfo = withAlert({ variant: 'info' });
 const AlertSuccess = withAlert({ variant: 'success' });
 const AlertWarning = withAlert({ variant: 'warning' });
 
-export { AlertError, AlertInfo, AlertSuccess, AlertWarning };
+export { AlertInfo, AlertSuccess, AlertWarning, Alert, AlertHeader, AlertDescription };
