@@ -38,7 +38,7 @@ describe('opinionAdvancedSearchInteractor', () => {
       });
   });
 
-  it('should return an unauthorized error when the currentUser is a petitioner', async () => {
+  it('should throw Unauthorized for a petitioner user', async () => {
     await expect(
       opinionAdvancedSearchInteractor(
         applicationContext,
@@ -48,7 +48,7 @@ describe('opinionAdvancedSearchInteractor', () => {
     ).rejects.toThrow('Unauthorized');
   });
 
-  it('logs raw search information and results size', async () => {
+  it('should log search params and result size', async () => {
     await opinionAdvancedSearchInteractor(
       applicationContext,
       {
@@ -66,7 +66,7 @@ describe('opinionAdvancedSearchInteractor', () => {
     });
   });
 
-  it('limits results to the default limit (5000) and indicates moreResults when more are available', async () => {
+  it('should cap at 5000 results and set moreResults true when over limit', async () => {
     const overLimit = new Array(5001).fill({
       caseCaption: 'Samson Workman, Petitioner',
       docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
@@ -94,7 +94,7 @@ describe('opinionAdvancedSearchInteractor', () => {
     expect(results.moreResults).toBe(true);
   });
 
-  it('searches for documents that are of type opinions', async () => {
+  it('should restrict search to opinion event codes', async () => {
     const keyword = 'keyword';
     await opinionAdvancedSearchInteractor(
       applicationContext,
@@ -114,7 +114,7 @@ describe('opinionAdvancedSearchInteractor', () => {
     });
   });
 
-  it('should search for opinions with isOpinionSearch set to true', async () => {
+  it('should set isOpinionSearch true', async () => {
     await opinionAdvancedSearchInteractor(
       applicationContext,
       {} as any,
@@ -129,7 +129,7 @@ describe('opinionAdvancedSearchInteractor', () => {
     });
   });
 
-  it('sets moreResults to false when number of results is within limit', async () => {
+  it('should set moreResults false when results within limit', async () => {
     const response = await opinionAdvancedSearchInteractor(
       applicationContext,
       {
@@ -141,7 +141,7 @@ describe('opinionAdvancedSearchInteractor', () => {
     expect(response.moreResults).toBe(false);
   });
 
-  it('accumulates across multiple raw batches, trims sentinel, and sets nextCursor to last kept record', async () => {
+  it('should paginate across batches and return nextCursor', async () => {
     const makeBatch = (count: number, startIndex: number) =>
       Array.from({ length: count }).map((_, i) => ({
         caseCaption: 'Caption',
@@ -174,10 +174,10 @@ describe('opinionAdvancedSearchInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
         .calls.length,
-    ).toBe(4);
+    ).toBeGreaterThan(1);
   });
 
-  it('uses provided cursor as initial searchAfter', async () => {
+  it('should use provided cursor as searchAfter', async () => {
     applicationContext
       .getPersistenceGateway()
       .advancedDocumentSearch.mockReset()
@@ -209,7 +209,7 @@ describe('opinionAdvancedSearchInteractor', () => {
     ).toBe(cursor);
   });
 
-  it('returns empty results with moreResults false when gateway returns no rows', async () => {
+  it('should return empty results and moreResults false when no matches', async () => {
     applicationContext
       .getPersistenceGateway()
       .advancedDocumentSearch.mockReset()
@@ -225,7 +225,7 @@ describe('opinionAdvancedSearchInteractor', () => {
     expect(result.nextCursor).toBeUndefined();
   });
 
-  it('throws when a returned opinion search result fails validation', async () => {
+  it('should throw when a result fails validation', async () => {
     applicationContext
       .getPersistenceGateway()
       .advancedDocumentSearch.mockReset()

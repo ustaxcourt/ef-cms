@@ -1,4 +1,4 @@
-export function getOpensearchDocumentSearchBatchState<T = any>(
+export function openSearchBatchState<T = any>(
   limit: number,
   maxSearchResults: number,
 ) {
