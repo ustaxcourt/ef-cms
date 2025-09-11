@@ -46,8 +46,20 @@ describe('Recent Filings - Private Practitioner', () => {
   it('should display pagination component', () => {
     cy.get('[data-testid="header-recent-filings-link"]').click();
 
+    // Wait for page to fully load and data to be processed
+    cy.get('[data-testid="recent-filings-page"]').should('be.visible');
+    cy.get('[data-testid="recent-filings-table"]').should('be.visible');
+
+    // Wait for loading to complete (no spinner)
+    cy.get('[data-testid="recent-filings-page"]').should(
+      'not.contain',
+      'Loading recent filings...',
+    );
+
     // Pagination component should always be present (even with 0 records)
     cy.get('[data-testid="pagination"]').should('exist');
+
+    // Table rows may or may not exist depending on data - use flexible assertion
     cy.get('[data-testid="recent-filings-table"] tbody tr').should(
       'have.length.at.least',
       0,
@@ -64,10 +76,24 @@ describe('Recent Filings - Private Practitioner', () => {
     cy.get('[data-testid="account-menu-button-mobile"]')
       .should('be.visible')
       .click();
+
+    // Wait for menu to open and link to be visible
+    cy.get('[data-testid="header-recent-filings-link"]').should('be.visible');
     cy.get('[data-testid="header-recent-filings-link"]').click();
+
+    // Wait for navigation to complete and mobile layout to adjust
+    cy.get('[data-testid="recent-filings-page"]').should('be.visible');
     cy.get('[data-testid="mobile-sort-dropdown"]').should('be.visible');
 
+    // Wait for loading to complete
+    cy.get('[data-testid="recent-filings-page"]').should(
+      'not.contain',
+      'Loading recent filings...',
+    );
+
     cy.get('[data-testid="mobile-sort-dropdown"]').select('docketNumber-asc');
+
+    // Wait for sorting to complete and table to be visible
     cy.get('[data-testid="recent-filings-mobile-table"]').should('be.visible');
   });
 
