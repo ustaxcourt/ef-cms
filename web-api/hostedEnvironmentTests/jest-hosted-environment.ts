@@ -3,7 +3,7 @@ import type { Config } from 'jest';
 import fs from 'node:fs';
 import path from 'node:path';
 
-const tsconfigPath = path.join(process.cwd(), 'tsconfig.json');
+const tsconfigPath = path.resolve(process.cwd(), './tsconfig.json');
 const tsconfig = JSON.parse(fs.readFileSync(tsconfigPath, 'utf8'));
 
 const config: Config = {
