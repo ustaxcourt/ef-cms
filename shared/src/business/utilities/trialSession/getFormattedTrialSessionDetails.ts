@@ -186,7 +186,7 @@ export const getFormattedTrialSessionDetails = ({
   currentUser: UnknownAuthUser;
   trialSession: TrialSessionState;
 }): FormattedTrialSessionDetailsType => {
-  const allCases = trialSession.calendaredCases.map(caseItem =>
+  const allCases = (trialSession.calendaredCases || []).map(caseItem =>
     formatCaseForTrialSession({
       applicationContext,
       caseItem,
