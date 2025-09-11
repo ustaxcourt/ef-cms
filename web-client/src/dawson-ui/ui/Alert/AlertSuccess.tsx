@@ -7,7 +7,7 @@ import {
   AlertDescription,
 } from '@web-client/dawson-ui/ui/Alert/Alert';
 
-type SuccessNotificationProps = {
+type AlertSuccessProps = {
   alertSuccess?: AlertSuccess;
   className?: string;
   dismissAlertSequence?: () => void;
@@ -29,7 +29,7 @@ export function AlertSuccess({
   className,
   dismissAlertSequence,
   isDismissible = true,
-}: SuccessNotificationProps) {
+}: AlertSuccessProps) {
   const notificationRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {

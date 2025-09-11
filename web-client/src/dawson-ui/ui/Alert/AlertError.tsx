@@ -78,4 +78,4 @@ export function AlertError({
   );
 }
 
-AlertError.displayName = 'ErrorNotification';
+AlertError.displayName = 'AlertError';
