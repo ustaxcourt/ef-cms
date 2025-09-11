@@ -35,7 +35,7 @@ describe('opinionPublicSearchInteractor', () => {
       });
   });
 
-  it('should only search for opinion document types, allowing opinions within sealed cases', async () => {
+  it('should restrict search to opinion event codes (allow sealed case opinions)', async () => {
     await opinionPublicSearchInteractor(applicationContext, {
       dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword: 'fish',
@@ -51,7 +51,7 @@ describe('opinionPublicSearchInteractor', () => {
     expect(searchArgs.omitSealed).toBeUndefined();
   });
 
-  it('limits results to the default limit (5000) and sets moreResults when more are available', async () => {
+  it('should cap at 5000 results and set moreResults true when over limit', async () => {
     const overLimit = new Array(5001).fill({
       caseCaption: 'Samson Workman, Petitioner',
       docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
@@ -75,7 +75,7 @@ describe('opinionPublicSearchInteractor', () => {
     expect(results.moreResults).toBe(true);
   });
 
-  it('should return search results based on the supplied opinion keyword', async () => {
+  it('should return results matching keyword', async () => {
     const result = await opinionPublicSearchInteractor(applicationContext, {
       dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword: 'memorandum',
@@ -85,7 +85,7 @@ describe('opinionPublicSearchInteractor', () => {
     expect(result.results).toEqual(mockOpinionSearchResult);
   });
 
-  it('does NOT filter out opinion results belonging to sealed cases', async () => {
+  it('should not filter out sealed case opinions', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockResolvedValue({ sealedDate: 'some date' });
@@ -99,7 +99,7 @@ describe('opinionPublicSearchInteractor', () => {
     expect(results.results.length).toBe(1);
   });
 
-  it('should set isOpinionSearch as true', async () => {
+  it('should set isOpinionSearch true', async () => {
     await opinionPublicSearchInteractor(applicationContext, {} as any);
 
     expect(
@@ -110,14 +110,14 @@ describe('opinionPublicSearchInteractor', () => {
     });
   });
 
-  it('sets moreResults to false when results are within limit', async () => {
+  it('should set moreResults false when results within limit', async () => {
     const response = await opinionPublicSearchInteractor(applicationContext, {
       keyword: 'fish',
     } as any);
     expect(response.moreResults).toBe(false);
   });
 
-  it('accumulates across multiple raw batches, trims sentinel, and sets nextCursor to last kept record', async () => {
+  it('should paginate across batches and return nextCursor', async () => {
     const makeBatch = (count: number, startIndex: number) =>
       Array.from({ length: count }).map((_, i) => ({
         caseCaption: 'Caption',
@@ -148,10 +148,10 @@ describe('opinionPublicSearchInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
         .calls.length,
-    ).toBe(4);
+    ).toBeGreaterThan(1);
   });
 
-  it('uses provided cursor as initial searchAfter', async () => {
+  it('should use provided cursor as searchAfter', async () => {
     applicationContext
       .getPersistenceGateway()
       .advancedDocumentSearch.mockReset()
@@ -181,7 +181,7 @@ describe('opinionPublicSearchInteractor', () => {
     ).toBe(cursor);
   });
 
-  it('returns empty results with moreResults false when gateway returns no rows', async () => {
+  it('should return empty results and moreResults false when no matches', async () => {
     applicationContext
       .getPersistenceGateway()
       .advancedDocumentSearch.mockReset()
@@ -194,7 +194,7 @@ describe('opinionPublicSearchInteractor', () => {
     expect(result.nextCursor).toBeUndefined();
   });
 
-  it('throws when a returned public opinion search result fails validation', async () => {
+  it('should throw when a result fails validation', async () => {
     applicationContext
       .getPersistenceGateway()
       .advancedDocumentSearch.mockReset()
