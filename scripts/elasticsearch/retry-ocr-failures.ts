@@ -56,7 +56,16 @@ if (end.toMillis() <= start.toMillis()) {
   throw new Error('endDateISO must be after startDateISO');
 }
 
-const findDocketEntryIdsThatFailedOCR = async (): Promise<string[]> => {
+type docketEntryType = {
+  caseCaption?: string;
+  docketEntryId: string;
+  docketNumber: string;
+  docketNumberWithSuffix?: string;
+};
+
+const findDocketEntryIdsThatFailedOCR = async (): Promise<
+  docketEntryType[]
+> => {
   const queryString = [
     'fields request.body',
     '| filter @message like /Failed to parse PDF/',
@@ -77,22 +86,37 @@ const findDocketEntryIdsThatFailedOCR = async (): Promise<string[]> => {
     startTime: start.toSeconds(),
   });
 
-  const docketEntryIds = new Set<string>();
+  const docketEntries: { [k: string]: docketEntryType } = {};
   for (const row of results) {
+    const docketEntry: docketEntryType = {
+      docketEntryId: '',
+      docketNumber: '',
+    };
     for (const f of row as ResultField[]) {
-      if (f.field === 'docketEntryId' && f.value) {
-        docketEntryIds.add(f.value);
+      if (f.field === 'caseCaption' && f.value) {
+        docketEntry.caseCaption = f.value;
       }
+      if (f.field === 'docketEntryId' && f.value) {
+        docketEntry.docketEntryId = f.value;
+      }
+      if (f.field === 'docketNumber' && f.value) {
+        docketEntry.docketNumber = f.value;
+      }
+      if (f.field === 'docketNumberWithSuffix' && f.value) {
+        docketEntry.docketNumberWithSuffix = f.value;
+      }
+    }
+    if (docketEntry.docketEntryId && docketEntry.docketNumber) {
+      docketEntries[docketEntry.docketEntryId] = docketEntry;
     }
   }
 
-  return [...docketEntryIds];
-  // TODO: return array of objects containing docketNumber, docketNumberWithSuffix, docketEntryId, and caseCaption
+  return Object.values(docketEntries);
 };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const docketEntriesToScrape = await findDocketEntryIdsThatFailedOCR(); // TODO: this should be an array of objects
+  const docketEntriesToScrape = await findDocketEntryIdsThatFailedOCR();
 
   // TODO: can we just use an empty object here?
   const authorizedUser: AuthUser = {
