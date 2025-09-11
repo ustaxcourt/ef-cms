@@ -72,7 +72,7 @@ jobs:
         if: steps.cache-dependencies.outputs.cache-hit != 'true' && steps.cache-miss-install.outcome != 'success'
         run: npm ci
       - name: Install Cypress Binary
-        # if: steps.cache-cypress.outputs.cache-hit != 'true'
+        if: steps.cache-cypress.outputs.cache-hit != 'true'
         run: npx cypress install
       - name: Setup Postgres
         run: |
