@@ -105,22 +105,4 @@ function AlertDescription({ className, ...props }: React.ComponentProps<'p'>) {
   return <div data-slot="alert-description" {...props} />;
 }
 
-function withAlert(defaultProps) {
-  const EnhancedComponent = (props) => {
-    return <Alert
-      {...defaultProps} {...props}
-    >
-      {props.header && <AlertHeader>{props.header}</AlertHeader> }
-      <AlertDescription>{props.description && props.description}</AlertDescription>
-      {props.children}
-    </Alert>
-  };
-  EnhancedComponent.displayName = `WithAlert(${defaultProps.variant})`;
-  return EnhancedComponent;
-}
-
-const AlertInfo = withAlert({ variant: 'info' });
-const AlertSuccess = withAlert({ variant: 'success' });
-const AlertWarning = withAlert({ variant: 'warning' });
-
-export { AlertInfo, AlertSuccess, AlertWarning, Alert, AlertHeader, AlertDescription };
+export { Alert, AlertHeader, AlertDescription };

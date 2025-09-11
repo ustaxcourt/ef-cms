@@ -1,8 +1,8 @@
-import { AlertInfo, AlertWarning } from '@web-client/dawson-ui/ui/Alert/Alert';
 import { Button } from '@web-client/dawson-ui/ui/button';
 import { AlertError } from '@web-client/dawson-ui/ui/Alert/AlertError';
 import { AlertSuccess } from '@web-client/dawson-ui/ui/Alert/AlertSuccess';
 import React, { useState } from 'react';
+import { AlertWarning } from '@web-client/dawson-ui/ui/Alert/AlertWarning';
 
 export function Alerts() {
   const [alert, setAlert] = useState({
@@ -24,18 +24,20 @@ export function Alerts() {
     message: 'This is a succinct, helpful message',
     scrollToErrorNotification: false,
   };
-  const alertHelper = {
+
+  const alertHelper: AlertHelper = {
     showErrorAlert: true,
     showSingleMessage: true,
     showMultipleMessages: false,
     showTitleOnly: false,
     messagesDeduped: false,
   };
+
   return (
     <div className="tw:my-4">
       <h2>Alerts</h2>
       {/* Info Alert */}
-      {alert.info ? (
+      {/* {alert.info ? (
         <AlertInfo
           closeButtonOnClick={() => setAlert({ ...alert, info: false })}
           title="info"
@@ -47,22 +49,30 @@ export function Alerts() {
         <Button onClick={() => setAlert({ ...alert, info: true })}>
           Display Info Alert
         </Button>
-      )}
+      )} */}
 
       {/* Warning Alert */}
       {alert.warning ? (
         <AlertWarning
-          closeButtonOnClick={() => setAlert({ ...alert, warning: false })}
+          dismissAlertSequence={() => setAlert({ ...alert, warning: false })}
           className="tw:mb-4"
-          header="Warning Status"
-        >
-          This is a succinct, helpful message
-          <ul>
-            <li>This is a succinct, helpful message</li>
-          </ul>
-        </AlertWarning>
+          alertWarning={{
+            title: 'Warning Status',
+            message: (
+              <>
+                This is a succinct, helpful message
+                <ul>
+                  <li>This is a succinct, helpful message</li>
+                </ul>
+              </>
+            ),
+          }}
+        />
       ) : (
-        <Button onClick={() => setAlert({ ...alert, warning: true })}>
+        <Button
+          className="tw:mb-4 tw:mr-4"
+          onClick={() => setAlert({ ...alert, warning: true })}
+        >
           Display Warning Alert
         </Button>
       )}
@@ -76,7 +86,10 @@ export function Alerts() {
           alertHelper={alertHelper}
         />
       ) : (
-        <Button onClick={() => setAlert({ ...alert, error: true })}>
+        <Button
+          onClick={() => setAlert({ ...alert, error: true })}
+          className="tw:mb-4 tw:mr-4"
+        >
           Display Error Alert
         </Button>
       )}
@@ -92,13 +105,16 @@ export function Alerts() {
           className="tw:mb-4"
         ></AlertSuccess>
       ) : (
-        <Button onClick={() => setAlert({ ...alert, success: true })}>
+        <Button
+          onClick={() => setAlert({ ...alert, success: true })}
+          className="tw:mb-4 tw:mr-4"
+        >
           Display Success Alert
         </Button>
       )}
 
       {/* Static Alerts (with only descriptions) */}
-      {staticAlerts.info ? (
+      {/* {staticAlerts.info ? (
         <AlertInfo
           closeButtonOnClick={() =>
             setStaticAlerts({ ...staticAlerts, info: false })
@@ -113,21 +129,23 @@ export function Alerts() {
         >
           Show Info Static Alert
         </Button>
-      )}
+      )} */}
 
       {staticAlerts.warning ? (
         <AlertWarning
-          closeButtonOnClick={() =>
+          dismissAlertSequence={() =>
             setStaticAlerts({ ...staticAlerts, warning: false })
           }
-          variant="warning"
           className="tw:mb-4"
-        >
-          You’ll need to change your password by April 25, 2020.
-        </AlertWarning>
+          alertWarning={{
+            title: 'Warning Status',
+            message: 'You’ll need to change your password by April 25, 2020.',
+          }}
+        />
       ) : (
         <Button
           onClick={() => setStaticAlerts({ ...staticAlerts, warning: true })}
+          className="tw:mb-4 tw:mr-4"
         >
           Show Warning Static Alert
         </Button>
@@ -148,6 +166,7 @@ export function Alerts() {
       ) : (
         <Button
           onClick={() => setStaticAlerts({ ...staticAlerts, error: true })}
+          className="tw:mb-4 tw:mr-4"
         >
           Show Error Static Alert
         </Button>
@@ -155,17 +174,19 @@ export function Alerts() {
 
       {staticAlerts.success ? (
         <AlertSuccess
-          closeButtonOnClick={() =>
+          alertSuccess={{
+            title: 'Success Status',
+            message: 'This is a succinct, helpful message',
+          }}
+          dismissAlertSequence={() =>
             setStaticAlerts({ ...staticAlerts, success: false })
           }
-          variant="success"
           className="tw:mb-4"
-        >
-          You successfully changed your password.
-        </AlertSuccess>
+        />
       ) : (
         <Button
           onClick={() => setStaticAlerts({ ...staticAlerts, success: true })}
+          className="tw:mb-4 tw:mr-4"
         >
           Show Success Static Alert
         </Button>

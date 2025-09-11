@@ -53,7 +53,7 @@ export function AlertWarning({
       isDismissible={isDismissible}
       ref={notificationRef}
       role="alert"
-      variant="info"
+      variant="warning"
     >
       {alertWarning.title && (
         <AlertHeader data-testid="warning-alert-title">
