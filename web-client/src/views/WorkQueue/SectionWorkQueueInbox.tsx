@@ -188,7 +188,7 @@ function SectionWorkQueueTableRow({
             <a
               className="case-link"
               href={item.editLink}
-              data-testid="work-item-document-link"
+              data-testid={`work-item-document-link-${item.docketNumber}`}
             >
               {item.docketEntry.descriptionDisplay}
             </a>
