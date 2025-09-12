@@ -3,83 +3,98 @@ import { Slot } from '@radix-ui/react-slot';
 import { cva, type VariantProps } from 'class-variance-authority';
 
 import { cn } from '@web-client/lib/utils';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 const buttonVariants = cva(
   cn(
-    'tw:cursor-pointer tw:inline-flex tw:items-center tw:justify-center tw:gap-2 tw:whitespace-nowrap tw:rounded-md tw:text-base tw:font-bold tw:transition-all tw:disabled:pointer-events-none tw:disabled:opacity-50 tw:[&_svg]:pointer-events-none tw:[&_svg:not([class*=size-])]:size-4 tw:shrink-0 tw:[&_svg]:shrink-0 tw:border-none',
-    'tw:focus-visible:ring-[3px] tw:focus-visible:ring-ring  focus-visible:ring-4 tw:focus-visible:border-ring', // focus-visible
+    'tw:text-[16px] tw:xs:text-[18px] tw:cursor-pointer tw:inline-flex tw:items-center tw:justify-center tw:whitespace-nowrap tw:rounded-md tw:text-base tw:transition-all tw:disabled:pointer-events-none tw:disabled:opacity-50 tw:[&_svg]:pointer-events-none tw:[&_svg:not([class*=size-])]:size-4 tw:shrink-0 tw:[&_svg]:shrink-0 tw:border-none',
+    'tw:focus-visible:ring-[4px] tw:focus-visible:ring-ring', // focus-visible
     'tw:aria-invalid:ring-destructive/20 tw:aria-invalid:border-destructive', // aria
-    'tw:w-full tw:xs:w-auto', // small & greater
+    'tw:w-full tw:xs:w-auto tw:px-4 tw:py-2', // small & greater
   ),
   {
     variants: {
       variant: {
         primary: cn(
-          'tw:bg-primary tw:text-primary-foreground tw:shadow-xs tw:outline-none', // standard
-          'tw:hover:bg-primary-darker', // hover
-          'tw:focus-visible:ring-offset-[4px] tw:focus-visible:ring-[4px]', // focus-visible
-          'tw:active:bg-primary-active',  // active
-          'tw:invalid:bg-primary-invalid' // inactive / invalid
+          'tw:h-[40px] tw:bg-primary tw:text-primary-foreground tw:shadow-xs tw:outline-none tw:font-bold', // standard
+          'tw:hover:bg-primary-dark', // hover
+          'tw:focus-visible:ring-offset-[4px]', // focus-visible
+          'tw:active:bg-primary-darker', // active
+          'tw:invalid:bg-grey-light', // inactive / invalid
         ),
         destructive: cn(
-          'tw:h-9 tw:bg-destructive tw:text-white tw:shadow-xs  tw:outline-none tw:border-none', // standard
-          'tw:hover:bg-destructive-darker', // hover
+          'tw:h-[40px] tw:bg-destructive tw:text-white tw:shadow-xs  tw:outline-none tw:border-none tw:font-bold', // standard
+          'tw:hover:bg-destructive-dark', // hover
           'tw:focus-visible:ring-offset-4', // focus-visible
-          'tw:active:bg-destructive-active', // active
-          'tw:invalid:bg-destructive-invalid', // invalid
+          'tw:active:bg-destructive-darker', // active
+          'tw:invalid:bg-grey-light', // invalid
         ),
         secondary: cn(
-          'tw:h-9 tw:shadow-none tw:bg-background tw:outline-primary tw:outline-2 tw:text-primary', // standard
-          'tw:hover:text-primary-darker tw:hover:outline-primary-darker', // hover
-          'tw:focus-visible:ring-offset-[6px] tw:focus-visible:ring-[4px]', // focus-visible
-          'tw:active:text-secondary-active tw:active:outline-secondary-active', // active
-          'tw:invalid:text-secondary-invalid tw:invalid:outline-secondary-invalid' // inactive / invalid
+          'tw:h-[40px] tw:shadow-none tw:bg-background tw:border-primary tw:border-2 tw:border-solid tw:text-primary tw:font-bold', // standard
+          'tw:hover:text-primary-dark tw:hover:border-primary-dark', // hover
+          'tw:focus:outline-none tw:focus:border-primary', // focus
+          'tw:focus-visible:ring-offset-[4px] tw:focus-visible:border-primary tw:focus-visible:outline-none', // focus-visible
+          'tw:active:text-primary-darker tw:active:border-primary-darker', // active
+          'tw:invalid:text-grey-light tw:invalid:border-grey-light', // inactive / invalid
         ),
         destructiveTertiary: cn(
-          'tw:bg-transparent tw:text-destructive tw:font-[400] tw:underline tw:underline-offset-4 tw:outline-none ', // standard,
-          'tw:hover:underline tw:hover:text-destructive-darker', // hover
-          'tw:has-[>svg]:p-0 tw:focus-visible:ring-offset-[3px]', // focus-visible
-          'tw:active:text-tertiary-active', // active
-          'tw:invalid:text-tertiary-invalid', // invalid
+          'tw:px-0 tw:py-0 tw:bg-transparent tw:text-destructive tw:font-[400] tw:underline tw:underline-offset-4 tw:outline-none tw:font-normal', // standard,
+          'tw:hover:underline tw:hover:text-destructive-dark', // hover
+          'tw:focus-visible:ring-offset-[4px] tw:focus-visible:bg-white', // focus-visible
+          'tw:active:text-destructive-darker', // active
+          'tw:invalid:text-grey-light', // invalid
         ),
         primaryTertiary: cn(
-          'tw:bg-transparent tw:text-primary tw:font-[400] tw:underline tw:underline-offset-4  tw:outline-none ', // standard
-          'tw:hover:underline tw:hover:text-primary-darker', // hover,
-          'tw:has-[>svg]:px-[4px] tw:has-[>svg]:py-[2px] h-[24px]', // focus-visible
-          'tw:active:text-primary-active' , // active
-          'tw:invalid:text-tertiary-invalid', // active
+          'tw:px-0 tw:py-0 tw:bg-transparent tw:text-primary tw:font-[400] tw:underline tw:underline-offset-4  tw:outline-none tw:font-normal', // standard
+          'tw:hover:underline tw:hover:text-primary-dark', // hover,
+          'tw:focus-visible:ring-offset-[4px] tw:focus-visible:bg-white', // focus-visible
+          'tw:active:text-primary-darker', // active
+          'tw:invalid:text-grey-light', // inactive
+          'tw:ml-0 tw:mr-auto tw:text-left', // left alignment
         ),
-      },
-      size: {
-        default: 'tw:px-4 tw:py-2',
       },
     },
     defaultVariants: {
       variant: 'primary',
-      size: 'default',
     },
   },
 );
-
-function Button({
+export function Button({
   className,
   variant,
-  size,
+  iconPosition = 'left',
   asChild = false,
+  icon,
+  children,
   ...props
 }: React.ComponentProps<'button'> &
   VariantProps<typeof buttonVariants> & {
     asChild?: boolean;
+    icon?: IconProp;
+    iconPosition?: 'left' | 'right';
   }) {
   const Comp = asChild ? Slot : 'button';
+
+  const Icon = icon ? (
+    <FontAwesomeIcon
+      className={`${iconPosition === 'left' ? 'tw:mr-[8px]' : 'tw:flex-row-reverse tw:ml-[8px]'} tw:xs:!w-[18px] tw:!w-[16px] tw:xs:!h-[18px] tw:!h-[16px]`}
+      icon={icon}
+      role="img"
+      aria-label={'icon'}
+    />
+  ) : null;
 
   return (
     <Comp
       data-slot="button"
-      className={cn(buttonVariants({ variant, size, className }))}
+      className={cn(buttonVariants({ variant, className }))}
       {...props}
-    />
+      role="button"
+    >
+      {iconPosition === 'left' && Icon}
+      {children}
+      {iconPosition === 'right' && Icon}
+    </Comp>
   );
 }
-
-export { Button, buttonVariants };

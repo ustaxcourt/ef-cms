@@ -1,11 +1,8 @@
 import {
   ALLOWLIST_FEATURE_FLAGS,
   ROLES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import {
-  Case,
-  isSealedCase,
-} from '../../../../../shared/src/business/entities/cases/Case';
+} from '@shared/business/entities/EntityConstants';
+import { Case, isSealedCase } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { ServerApplicationContext } from '@web-api/applicationContext';

@@ -78,6 +78,9 @@ resource "aws_cognito_user_pool" "pool" {
         <div style="margin-top: 20px;">
           <span>If you did not request an account with DAWSON, contact <a href="mailto:dawson.support@ustaxcourt.gov">dawson.support@ustaxcourt.gov</a>.</span>
         </div>
+        <div style="margin-top: 20px;">
+          <span><strong>IMPORTANT:</strong> If you are filing a petition electronically, you must complete the process of filing your petition no later than <strong>11:59 pm Eastern time</strong> on the last date to file. Petitions received by the Court after this time may be untimely and your case may be dismissed.</span>
+        </div>
         <hr style="border-top:1px solid #000000;">
         <div style="margin-top: 20px;">
           <span>This is an automated email. We are unable to respond to any messages sent to this email address.</span>
@@ -260,6 +263,9 @@ resource "aws_cognito_user_pool" "irs_pool" {
 
         <div style="margin-top: 20px;">
           <span>If you did not request an account with DAWSON, contact <a href="mailto:dawson.support@ustaxcourt.gov">dawson.support@ustaxcourt.gov</a>.</span>
+        </div>
+        <div style="margin-top: 20px;">
+          <span><strong>IMPORTANT:</strong> If you are filing a petition electronically, you must complete the process of filing your petition no later than <strong>11:59 pm Eastern time</strong> on the last date to file. Petitions received by the Court after this time may be untimely and your case may be dismissed.</span>
         </div>
         <hr style="border-top:1px solid #000000;">
         <div style="margin-top: 20px;">

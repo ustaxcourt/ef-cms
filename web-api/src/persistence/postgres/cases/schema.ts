@@ -29,8 +29,6 @@ export const caseTableDefinition = {
   filingType: DEFAULT as string | null,
   hasPendingItems: DEFAULT as boolean | null,
   hasVerifiedIrsNotice: DEFAULT as boolean | null,
-  highPriority: DEFAULT as boolean | null,
-  highPriorityReason: DEFAULT as string | null,
   initialCaption: DEFAULT as string | null,
   initialDocketNumberSuffix: DEFAULT as string | null,
   irsNoticeDate: DEFAULT as Date | null,
@@ -56,9 +54,11 @@ export const caseTableDefinition = {
   petitionPaymentWaivedDate: DEFAULT as Date | null,
   preferredTrialCity: DEFAULT as string | null,
   procedureType: DEFAULT as string,
-  qcCompleteForTrial: DEFAULT as
-    | ColumnType<{ trialSessionId: string }, string, string>
-    | null,
+  qcCompleteForTrial: DEFAULT as ColumnType<
+    { trialSessionId: string },
+    string,
+    string
+  > | null,
   receivedAt: DEFAULT as Date,
   sealedDate: DEFAULT as Date | null,
   sortableDocketNumber: 0 as number,

@@ -54,6 +54,8 @@ import App from 'cerebral';
 import React from 'react';
 
 import { faFile } from '@fortawesome/free-solid-svg-icons/faFile';
+import { faGavel } from '@fortawesome/free-solid-svg-icons/faGavel';
+import { faHandPaper } from '@fortawesome/free-solid-svg-icons';
 
 /**
  * Instantiates the Cerebral app with React
@@ -103,6 +105,8 @@ const appPublic = {
       faTimesCircle,
       faTimesCircleRegular,
       faUser,
+      faGavel,
+      faHandPaper,
     );
 
     presenter.providers.applicationContext = applicationContext;

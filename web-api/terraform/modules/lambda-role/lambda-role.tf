@@ -157,17 +157,6 @@ resource "aws_iam_role_policy" "lambda_policy" {
         },
         {
             "Action": [
-                "dynamodb:GetItem",
-                "dynamodb:Query",
-                "dynamodb:DescribeTable",
-                "dynamodb:UpdateItem",
-                "dynamodb:PutItem"
-            ],
-            "Resource": "arn:aws:dynamodb:us-east-1:${data.aws_caller_identity.current.account_id}:table/efcms-deploy-${var.environment}",
-            "Effect": "Allow"
-        },
-        {
-            "Action": [
                 "ses:SendBulkTemplatedEmail",
                 "ses:SendEmail"
             ],
@@ -233,6 +222,16 @@ resource "aws_iam_role_policy" "lambda_policy" {
             "Resource": [
                 "arn:aws:sqs:us-east-1:${data.aws_caller_identity.current.account_id}:*",
                 "arn:aws:sqs:us-west-1:${data.aws_caller_identity.current.account_id}:*"
+            ],
+            "Effect": "Allow"
+        },
+        {
+            "Action": [
+            "ssm:GetParameter",
+            "ssm:PutParameter"
+            ],
+            "Resource": [
+            "arn:aws:ssm:us-east-1:${data.aws_caller_identity.current.account_id}:parameter/DAWSON/${var.environment}/*"
             ],
             "Effect": "Allow"
         }
