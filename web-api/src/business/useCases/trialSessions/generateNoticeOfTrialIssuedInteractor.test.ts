@@ -14,11 +14,6 @@ import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSe
 import { getUsersInSections as getUsersInSectionsMock } from '@web-api/persistence/postgres/users/getUsersInSections';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
-<<<<<<< HEAD
-const getUsersInSections = jest.mocked(getUsersInSectionsMock);
-
-=======
->>>>>>> staging
 describe('generateNoticeOfTrialIssuedInteractor', () => {
   const getFeatureFlagValues = jest.mocked(getFeatureFlagValuesMock);
   getFeatureFlagValues.mockResolvedValue([

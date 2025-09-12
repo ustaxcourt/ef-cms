@@ -8,15 +8,9 @@ import {
   GenerateNoticeOfChangeToInPersonTrialInfo,
 } from './generateNoticeOfChangeToInPersonProceeding';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-<<<<<<< HEAD
 import { getUsersInSections as getUsersInSectionsMock } from '@web-api/persistence/postgres/users/getUsersInSections';
-import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 import { getFeatureFlagValues as getFeatureFlagValuesMock } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
-=======
-import { getFeatureFlagValues as getFeatureFlagValuesMock } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
-import { getUsersInSections as getUsersInSectionsMock } from '@web-api/persistence/postgres/users/getUsersInSections';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
->>>>>>> staging
 
 const getFeatureFlagValues = getFeatureFlagValuesMock as jest.Mock;
 getFeatureFlagValues.mockResolvedValue([
