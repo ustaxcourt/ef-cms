@@ -153,11 +153,19 @@ jobs:
               exit 0
             fi
             ./setup-for-blue-green-migration.sh
+      - run: # TODO: remove this after the rds upgrade
+          name: Engage Maintenance Mode
+          command: |
+            npm run maintenance:engage
       - run:
           no_output_timeout: 20m
           name: 'Deploy - All Color Terraform'
           command: |
             npm run deploy:allColors $ENV
+      - run: # TODO: remove this after the rds upgrade
+          name: Disengage Maintenance Mode
+          command: |
+            npm run maintenance:disengage
       - run:
           no_output_timeout: 20m
           name: 'Deploy - Color Terraform'
