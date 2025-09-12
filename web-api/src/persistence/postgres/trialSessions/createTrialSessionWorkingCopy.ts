@@ -14,6 +14,7 @@ export const createTrialSessionWorkingCopy = async ({
     await pgInsertInto({
       table: 'dwTrialSessionWorkingCopy',
       values: [toKyselyNewTrialSessionWorkingCopy(trialSessionWorkingCopy)],
+      onConflictColumns: ['trialSessionId', 'userId'],
     })
   ).at(0);
 
