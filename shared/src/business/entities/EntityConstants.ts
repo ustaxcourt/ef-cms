@@ -2069,3 +2069,5 @@ export const TERM_GENERATOR_DEFAULT_VALUES = {
 } as const;
 
 export const MOBILE_SCREEN_BREAKPOINT = 640;
+
+export const PRO_SE_CHECKLIST = 'pro-se-checklist';

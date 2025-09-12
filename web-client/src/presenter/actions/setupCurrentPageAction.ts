@@ -7,25 +7,26 @@ import { state } from '@web-client/presenter/app.cerebral';
  */
 export const setupCurrentPageAction =
   page =>
-  /**
-   * sets the state.currentPage based on the scoped page
-   * @param {object} providers the providers object
-   * @param {object} providers.store the cerebral store used for setting the state.currentPage
-   */
-  async ({ applicationContext, get, store }: ActionProps) => {
-    if (!get(state.featureFlags)) {
-      try {
-        const featureFlags = await applicationContext
-          .getUseCases()
-          .getAllFeatureFlagsInteractor(applicationContext);
-        store.set(state.featureFlags, featureFlags);
-      } catch (err) {
-        page = 'ErrorView500';
+    /**
+     * sets the state.currentPage based on the scoped page
+     * @param {object} providers the providers object
+     * @param {object} providers.store the cerebral store used for setting the state.currentPage
+     */
+    async ({ applicationContext, get, store }: ActionProps) => {
+      const isMaintenanceMode = get(state.maintenanceMode);
+      if (!get(state.featureFlags) && !isMaintenanceMode) {
+        try {
+          const featureFlags = await applicationContext
+            .getUseCases()
+            .getAllFeatureFlagsInteractor(applicationContext);
+          store.set(state.featureFlags, featureFlags);
+        } catch (err) {
+          page = 'ErrorView500';
+        }
       }
-    }
 
-    store.set(state.currentPage, page);
-    await new Promise(resolve => {
-      setTimeout(resolve, 0);
-    });
-  };
+      store.set(state.currentPage, page);
+      await new Promise(resolve => {
+        setTimeout(resolve, 0);
+      });
+    };
