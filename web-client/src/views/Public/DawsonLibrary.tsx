@@ -7,6 +7,7 @@ import {
 } from '@web-client/dawson-ui/ui/alert';
 import {
   MainCard,
+  RoleCard,
   sampleCardContent,
 } from '@web-client/dawson-ui/ui/card';
 import React from 'react';
@@ -104,6 +105,7 @@ export const DawsonLibrary = () => {
         <div>
           <h2>Cards</h2>
           <MainCard content={sampleCardContent} />
+          <RoleCard name='Name' role='Role'/>
         </div>
       </div>
     </>
