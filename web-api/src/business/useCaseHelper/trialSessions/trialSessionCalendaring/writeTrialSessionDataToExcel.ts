@@ -308,6 +308,11 @@ const getCellStyle = (
       break;
     default:
       if (cell.value && typeof cell.value === 'string') {
+        fill = {
+          fgColor: { argb: headerGrayColor },
+          pattern: 'solid',
+          type: 'pattern',
+        };
         if (isValidISODate(cell._column._key)) {
           const week = weeksRange.find(r => r.start === cell._column._key);
           if (!week) {
@@ -330,12 +335,6 @@ const getCellStyle = (
             };
             font = { color: { argb: whiteColor } };
           }
-        } else {
-          fill = {
-            fgColor: { argb: headerGrayColor },
-            pattern: 'solid',
-            type: 'pattern',
-          };
         }
       }
       break;
