@@ -1,41 +1,74 @@
-import { PublicClientState } from '@web-client/presenter/state-public';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { presenter } from '../../presenter-public';
+import { presenter } from '@web-client/presenter/presenter-public';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { submitPublicOrderAdvancedSearchAction } from './submitPublicOrderAdvancedSearchAction';
 
 describe('submitPublicOrderAdvancedSearchAction', () => {
+  it('should call orderPublicSearchInteractor twice when first chunk indicates moreResults', async () => {
+    let callCount = 0;
+    applicationContext
+      .getUseCases()
+      .orderPublicSearchInteractor.mockImplementation(
+        (_ctx, { searchParams }) => {
+          callCount++;
+          if (!searchParams.cursor) {
+            return {
+              results: Array(5000).fill({}),
+              moreResults: true,
+              nextCursor: ['c1'],
+            };
+          }
+          return { results: Array(45).fill({}), moreResults: false };
+        },
+      );
+    await runAction(submitPublicOrderAdvancedSearchAction, {
+      modules: { presenter },
+      state: {
+        advancedSearchForm: {
+          orderSearch: {
+            keyword: 'keyword',
+          },
+        },
+      },
+    });
+    expect(callCount).toBe(2);
+  });
+  beforeEach(() => {
+    applicationContext
+      .getUseCases()
+      .orderPublicSearchInteractor.mockReturnValue({
+        results: [],
+        moreResults: false,
+      });
+  });
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('gets the public order information', async () => {
-    await runAction<{ searchResults: any }, PublicClientState>(
-      submitPublicOrderAdvancedSearchAction,
-      {
-        modules: {
-          presenter,
-        },
-        state: {
-          advancedSearchForm: {
-            orderSearch: {
-              keyword: 'a',
-            },
+  it('gets the public order information with correct searchParams', async () => {
+    await runAction(submitPublicOrderAdvancedSearchAction, {
+      modules: { presenter },
+      state: {
+        advancedSearchForm: {
+          orderSearch: {
+            keyword: 'a',
+            startDate: '2020-01-01',
+            endDate: '2020-12-31',
           },
         },
       },
-    );
-
+    });
     expect(
       applicationContext.getUseCases().orderPublicSearchInteractor,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().orderPublicSearchInteractor.mock
-        .calls[0][1],
+        .calls[0][1].searchParams,
     ).toMatchObject({
-      searchParams: {
-        keyword: 'a',
-      },
+      keyword: 'a',
+      startDate: '2020-01-01',
+      endDate: '2020-12-31',
+      dateRange: expect.any(String),
     });
   });
 
@@ -74,24 +107,11 @@ describe('submitPublicOrderAdvancedSearchAction', () => {
       .getUseCases()
       .orderPublicSearchInteractor.mockImplementation(() => {
         const e = new Error();
-        e.originalError = {
-          response: {
-            data: {
-              type: 'ip-limiter',
-            },
-          },
-        };
-        e.responseCode = 429;
+        (e as any).responseCode = 429;
         throw e;
       });
-
-    const { state } = await runAction<
-      { searchResults: any },
-      PublicClientState
-    >(submitPublicOrderAdvancedSearchAction, {
-      modules: {
-        presenter,
-      },
+    const { state } = await runAction(submitPublicOrderAdvancedSearchAction, {
+      modules: { presenter },
       state: {
         advancedSearchForm: {
           orderSearch: {
@@ -101,7 +121,6 @@ describe('submitPublicOrderAdvancedSearchAction', () => {
         },
       },
     });
-
     expect(state.alertError).toEqual(
       applicationContext.getConstants().ERROR_429,
     );

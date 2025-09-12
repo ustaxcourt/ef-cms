@@ -2,15 +2,8 @@ import { ClientPublicApplicationContext } from '@web-client/applicationContextPu
 import { clone } from 'lodash';
 import { state } from '@web-client/presenter/app-public.cerebral';
 import { trimDocketNumberSearch } from '../setDocketNumberFromSearchAction';
+import { DATE_RANGE_SEARCH_OPTIONS } from '@shared/business/entities/EntityConstants';
 
-/**
- * submit public opinion advanced search form
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {Function} providers.get the cerebral get function
- * @param {Function} providers.store the cerebral store
- * @returns {Promise} async action
- */
 export const submitPublicOpinionAdvancedSearchAction = async ({
   applicationContext,
   get,
@@ -29,23 +22,46 @@ export const submitPublicOpinionAdvancedSearchAction = async ({
     opinionType => searchParams.opinionTypes[opinionType] === true,
   );
 
+  const baseParams = {
+    ...searchParams,
+    opinionTypes,
+    dateRange:
+      searchParams.startDate || searchParams.endDate
+        ? DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES
+        : DATE_RANGE_SEARCH_OPTIONS.ALL_DATES,
+  };
+
   try {
-    const searchResults = await applicationContext
+    const firstChunk = await applicationContext
       .getUseCases()
       .opinionPublicSearchInteractor(applicationContext, {
         searchParams: {
-          ...searchParams,
-          opinionTypes,
+          ...baseParams,
+          limit: 5000,
         },
       });
 
-    return { searchResults };
+    let combinedResults = [...firstChunk.results];
+
+    if (firstChunk.moreResults && firstChunk.nextCursor) {
+      const secondChunk = await applicationContext
+        .getUseCases()
+        .opinionPublicSearchInteractor(applicationContext, {
+          searchParams: {
+            ...baseParams,
+            limit: 5000,
+            cursor: firstChunk.nextCursor,
+          },
+        });
+      combinedResults = [...combinedResults, ...secondChunk.results];
+    }
+
+    return { searchResults: combinedResults };
   } catch (err: any) {
     if (err.responseCode === 429) {
       store.set(state.alertError, applicationContext.getConstants().ERROR_429);
       return { searchResults: [] };
-    } else {
-      throw err;
     }
+    throw err;
   }
 };

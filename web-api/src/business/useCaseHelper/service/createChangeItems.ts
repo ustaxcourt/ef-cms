@@ -12,6 +12,10 @@ import { addCoverToPdf } from '../../useCases/addCoverToPdf';
 import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { Case } from '@shared/business/entities/cases/Case';
+import {
+  getNewEmail,
+  getOldEmail,
+} from '@shared/business/utilities/calculateEmail';
 
 /**
  * This function isolates task of generating the Docket Entry
@@ -59,6 +63,15 @@ const createDocketEntryForChange = async ({
     changeOfAddressPdfName = changeOfAddressPdfName + ` (${user.barNumber})`;
     contactName = newData.name;
   }
+
+  const isAddressSealed =
+    caseEntity.petitioners.find(
+      petitioner =>
+        petitioner.email === newData.email && petitioner.name === newData.name,
+    )?.isAddressSealed ?? false;
+
+  oldData.email = getOldEmail(oldData.email, isAddressSealed);
+  newData.email = getNewEmail(newData.email, isAddressSealed);
 
   const changeOfAddressPdf = await applicationContext
     .getDocumentGenerators()

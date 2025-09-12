@@ -77,6 +77,16 @@ export const baseState = {
   },
   constants: {} as { [key: string]: any },
   currentPage: 'Interstitial',
+  currentPaginationPage: 0,
+  // separate sort state for Order and Opinion advanced search tabs
+  orderDocumentSearchSort: {
+    sortColumn: 'formattedFiledDate',
+    sortDirection: 'desc' as 'asc' | 'desc',
+  },
+  opinionDocumentSearchSort: {
+    sortColumn: 'formattedFiledDate',
+    sortDirection: 'desc' as 'asc' | 'desc',
+  },
   featureFlags: undefined as unknown as { [key: string]: string },
   form: {} as Record<string, any>,
   header: {
@@ -94,6 +104,7 @@ export const baseState = {
     waitingForResponse: false,
     waitingForResponseRequests: 0,
   },
+
   sessionMetadata: {
     docketRecordFilter: PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
     docketRecordSort: {},

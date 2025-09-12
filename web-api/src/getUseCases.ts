@@ -122,6 +122,7 @@ import { getUserCaseNoteForCasesInteractor } from './business/useCases/caseNote/
 import { getUserCaseNoteInteractor } from './business/useCases/caseNote/getUserCaseNoteInteractor';
 import { getUserPendingEmailStatusInteractor } from './business/useCases/user/getUserPendingEmailStatusInteractor';
 import { getUsersPendingEmailInteractor } from './business/useCases/user/getUsersPendingEmailInteractor';
+import { getRecentFilingsForUserInteractor } from '@shared/business/useCases/getRecentFilingsForUserInteractor';
 import { handleBounceNotificationInteractor } from './business/useCases/email/handleBounceNotificationInteractor';
 import { logErrorInteractor } from '@web-api/business/useCases/logErrorInteractor';
 import { loginInteractor } from '@web-api/business/useCases/auth/loginInteractor';
@@ -131,7 +132,6 @@ import { opinionAdvancedSearchInteractor } from '../../shared/src/business/useCa
 import { opinionPublicSearchInteractor } from './business/useCases/public/opinionPublicSearchInteractor';
 import { orderAdvancedSearchInteractor } from '../../shared/src/business/useCases/orderAdvancedSearchInteractor';
 import { orderPublicSearchInteractor } from './business/useCases/public/orderPublicSearchInteractor';
-import { processStreamRecordsInteractor } from './business/useCases/processStreamRecords/processStreamRecordsInteractor';
 import { queueEmailUpdateAssociatedCasesWorker } from '@web-api/business/useCases/user/queueEmailUpdateAssociatedCasesWorker';
 import { queueUpdateAssociatedCasesWorker } from './business/useCases/user/queueUpdateAssociatedCasesWorker';
 import { removeCaseFromTrialInteractor } from './business/useCases/trialSessions/removeCaseFromTrialInteractor';
@@ -319,6 +319,7 @@ const useCases = {
   getUserCaseNoteInteractor,
   getUserPendingEmailStatusInteractor,
   getUsersPendingEmailInteractor,
+  getRecentFilingsForUserInteractor,
   handleBounceNotificationInteractor,
   logErrorInteractor,
   loginInteractor,
@@ -328,7 +329,6 @@ const useCases = {
   opinionPublicSearchInteractor,
   orderAdvancedSearchInteractor,
   orderPublicSearchInteractor,
-  processStreamRecordsInteractor,
   queueEmailUpdateAssociatedCasesWorker,
   queueUpdateAssociatedCasesWorker,
   removeCaseFromTrialInteractor,

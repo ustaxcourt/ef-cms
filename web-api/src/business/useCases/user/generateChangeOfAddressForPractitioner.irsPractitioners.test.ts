@@ -13,6 +13,12 @@ jest.mock('../addCoversheetInteractor', () => ({
     pdfData: '',
   }),
 }));
+jest.mock(
+  '@web-api/persistence/postgres/jobs/changeOfAddress/deleteChangeOfAddressCaseRecord',
+);
+jest.mock(
+  '@web-api/persistence/postgres/jobs/changeOfAddress/createChangeOfAddressJob',
+);
 import {
   ACCOUNT_STATUS,
   CASE_STATUS_TYPES,
@@ -27,12 +33,6 @@ import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getDocketNumbersByUser as getDocketNumbersByUserMock } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
-
-jest.mock('../addCoversheetInteractor', () => ({
-  addCoverToPdf: jest.fn().mockReturnValue({
-    pdfData: '',
-  }),
-}));
 
 describe('generateChangeOfAddress', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;

@@ -716,7 +716,7 @@ describe('trialSessionsHelper', () => {
       });
 
       it('should show an alertMessage for NOTT reminders when the user has not dismissed the alert and the start day is within the reminder range', () => {
-        trialSession1.dismissedAlertForNOTT = false;
+        trialSession1.dismissedAlertForNott = false;
         trialSession1.isCalendared = true;
         trialSession1.startDate = calculateISODate({
           howMuch: 29,
