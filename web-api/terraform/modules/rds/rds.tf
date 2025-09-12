@@ -4,9 +4,9 @@ resource "aws_rds_global_cluster" "global_cluster" {
   engine_version            = var.engine_version
   storage_encrypted         = true
   deletion_protection       = var.delete_protection
+
   lifecycle {
     prevent_destroy = true
-    ignore_changes  = [engine_version]
   }
 }
 
