@@ -120,8 +120,6 @@ describe('strikeDocketEntryInteractor', () => {
     const docketEntry = caseToUpdate.getDocketEntryById({
       docketEntryId: docketNumberId,
     });
-    console.log(caseToUpdate);
-    console.log(docketEntry);
     expect(docketEntry).toMatchObject({
       strickenAt: expect.anything(),
     });
