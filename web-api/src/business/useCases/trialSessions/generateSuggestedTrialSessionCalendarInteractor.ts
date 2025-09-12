@@ -143,14 +143,6 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
 
   const holidays = getHolidaysInDateRange(termStartDate, termEndDate);
 
-  // console.log('input', {
-  //   caseCountsAndSessionsByCity,
-  //   holidays,
-  //   incorrectSizeRegularCases,
-  //   userMessages,
-  //   weeks: weeksToLoop,
-  // });
-
   const bufferArray = await writeTrialSessionDataToExcel({
     caseCountsAndSessionsByCity,
     holidays,

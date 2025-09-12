@@ -35,7 +35,7 @@ export const runCreateTermAction = async ({
       hybridCaseMinimumQuantity,
       hybridCaseMaxQuantity,
     });
-  console.log('message', message);
+
   switch (message.type) {
     case USER_MESSAGE_TYPES.error:
       return path.error({
