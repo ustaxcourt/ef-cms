@@ -1,18 +1,12 @@
 import { type AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { type ServerApplicationContext } from '@web-api/applicationContext';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { indexOpenSearchDocketEntries } from '../../../../elasticsearch/docketEntries/indexOpenSearchDocketEntries';
 import {
   isAuthorized,
   ROLE_PERMISSIONS,
 } from '@shared/authorization/authorizationClientService';
 import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 import { Case } from '@shared/business/entities/cases/Case';
-import { DateTime } from 'luxon';
-import {
-  OPENSEARCH_SYNC_ACTIONS,
-  type OpenSearchSyncMessageType,
-} from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
 export const scrapeDocumentContentsWorker = async (
@@ -47,7 +41,7 @@ export const scrapeDocumentContentsWorker = async (
   }
   applicationContext.logger.info(
     `scrapeDocumentContentsWorker: Found docket entry ${docketEntryId}`,
-    { docketEntry: docketEntryEntity.toRawObject() },
+    { existingDocumentContentsId: docketEntryEntity.documentContentsId },
   );
 
   const docketEntryPdfData = await applicationContext
@@ -92,20 +86,6 @@ export const scrapeDocumentContentsWorker = async (
   await upsertDocketEntries([validatedDocketEntry]);
   applicationContext.logger.info(
     `scrapeDocumentContentsWorker: Updated docket entry ${docketEntryId}`,
-    { docketEntry: validatedDocketEntry },
-  );
-
-  const indexOpenSearchDocketEntryMessage = {
-    payload: [{ docketEntryId, docketNumber }],
-    type: 'dwDocketEntry' as OpenSearchSyncMessageType,
-    timestamp: DateTime.now().toMillis().toString(),
-    action: OPENSEARCH_SYNC_ACTIONS.UPSERT,
-  };
-  await indexOpenSearchDocketEntries({
-    message: indexOpenSearchDocketEntryMessage,
-  });
-  applicationContext.logger.info(
-    `scrapeDocumentContentsWorker: Indexed docket entry ${docketEntryId} in OpenSearch`,
-    { docketEntryId },
+    { documentContentsId: validatedDocketEntry.documentContentsId },
   );
 };

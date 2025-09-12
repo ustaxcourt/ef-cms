@@ -128,20 +128,24 @@ export const recentFilingsHelper = (get: Get) => {
     sortOrder,
   );
 
-  const recentFilingsWithAccess = sortedRecentFilings.map(
+  // Filter out cases where the user is not associated
+  const associatedRecentFilings = sortedRecentFilings.filter(
+    (filing: RecentFiling) => filing.isRequestingUserAssociated !== false,
+  );
+
+  const recentFilingsWithAccess = associatedRecentFilings.map(
     (filing: RecentFiling) => {
       const canAccess = checkDocumentAccess(filing, userRole);
       const isExternalUserRole = isExternalUser(userRole);
       const hasFileAttached = Boolean(filing.isFileAttached);
-      const isUserAssociated = filing.isRequestingUserAssociated !== false;
 
       return {
         ...filing,
         canAccess,
         isSealed: filing.isSealed === true,
-        showLinkToDocument: Boolean(canAccess && hasFileAttached && isUserAssociated),
+        showLinkToDocument: Boolean(canAccess && hasFileAttached),
         showDocumentViewerLink: Boolean(
-          canAccess && hasFileAttached && !isExternalUserRole && isUserAssociated,
+          canAccess && hasFileAttached && !isExternalUserRole,
         ),
         showDocumentDescriptionWithoutLink: Boolean(
           !canAccess && hasFileAttached,
@@ -158,12 +162,11 @@ export const recentFilingsHelper = (get: Get) => {
       const canAccess = checkDocumentAccess(filing, userRole);
       const isExternalUserRole = isExternalUser(userRole);
       const hasFileAttached = Boolean(filing.isFileAttached);
-      const isUserAssociated = filing.isRequestingUserAssociated !== false;
 
       return {
-        showLinkToDocument: Boolean(canAccess && hasFileAttached && isUserAssociated),
+        showLinkToDocument: Boolean(canAccess && hasFileAttached),
         showDocumentViewerLink: Boolean(
-          canAccess && hasFileAttached && !isExternalUserRole && isUserAssociated,
+          canAccess && hasFileAttached && !isExternalUserRole,
         ),
         showDocumentDescriptionWithoutLink: Boolean(
           !canAccess && hasFileAttached,
