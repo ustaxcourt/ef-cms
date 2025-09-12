@@ -15,13 +15,13 @@ import {
   SORT_ASCENDING_TEXT,
   SORT_DESCENDING_TEXT,
   ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE,
+  MAX_SEARCH_RESULTS,
 } from '@shared/business/entities/EntityConstants';
 import { Mobile, NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
 import { BaseModal } from '@web-client/ustc-ui/Modal/BaseModal';
 
 export const DocumentSearchResults = connect(
   {
-    MAX_SEARCH_RESULTS: state.constants.MAX_SEARCH_RESULTS,
     advancedDocumentSearchHelper: state.advancedDocumentSearchHelper,
     isPublic: state.isPublic,
     showModal: state.modal.showModal,
@@ -39,7 +39,6 @@ export const DocumentSearchResults = connect(
   function DocumentSearchResults({
     advancedDocumentSearchHelper,
     isPublic,
-    MAX_SEARCH_RESULTS,
     openCaseDocumentDownloadUrlSequence,
     updateDocumentSearchResultsSequence,
     setCurrentPaginationPageSequence,

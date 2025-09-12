@@ -5,23 +5,12 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 import { submitPublicOpinionAdvancedSearchAction } from './submitPublicOpinionAdvancedSearchAction';
 
 describe('submitPublicOpinionAdvancedSearchAction', () => {
-  it('should call opinionPublicSearchInteractor twice when first chunk indicates moreResults', async () => {
-    let callCount = 0;
+  it('should call opinionPublicSearchInteractor only once', async () => {
     applicationContext
       .getUseCases()
-      .opinionPublicSearchInteractor.mockImplementation(
-        (_ctx, { searchParams }) => {
-          callCount++;
-          if (!searchParams.cursor) {
-            return {
-              results: Array(5000).fill({}),
-              moreResults: true,
-              nextCursor: ['c1'],
-            };
-          }
-          return { results: Array(12).fill({}), moreResults: false };
-        },
-      );
+      .opinionPublicSearchInteractor.mockReturnValue({
+        results: Array(5000).fill({}),
+      });
     await runAction(submitPublicOpinionAdvancedSearchAction, {
       modules: { presenter },
       state: {
@@ -33,14 +22,16 @@ describe('submitPublicOpinionAdvancedSearchAction', () => {
         },
       },
     });
-    expect(callCount).toBe(2);
+    expect(
+      applicationContext.getUseCases().opinionPublicSearchInteractor.mock.calls
+        .length,
+    ).toBe(1);
   });
   beforeEach(() => {
     applicationContext
       .getUseCases()
       .opinionPublicSearchInteractor.mockReturnValue({
         results: [],
-        moreResults: false,
       });
   });
   beforeAll(() => {

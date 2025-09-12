@@ -6,7 +6,6 @@ import {
 import { DocumentSearch } from '@shared/business/entities/documents/DocumentSearch';
 import { PublicDocumentSearchResult } from '@shared/business/entities/documents/PublicDocumentSearchResult';
 import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
-import { openSearchBatchState } from '@shared/business/utilities/getOpenSearchBatchState';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const orderPublicSearchInteractor = async (
@@ -19,9 +18,7 @@ export const orderPublicSearchInteractor = async (
     judge,
     keyword,
     startDate,
-    from = 0,
     limit = 5000,
-    cursor,
   }: {
     caseTitleOrPetitioner: string;
     dateRange: string;
@@ -30,9 +27,7 @@ export const orderPublicSearchInteractor = async (
     judge: string;
     keyword: string;
     startDate: string;
-    from?: number;
     limit?: number;
-    cursor?: any[];
   },
 ) => {
   const orderSearch = new DocumentSearch({
@@ -43,21 +38,17 @@ export const orderPublicSearchInteractor = async (
     judge,
     keyword,
     startDate,
-    from,
+    from: 0,
   });
 
   const rawSearch = orderSearch.validate().toRawObject();
 
-  const { detectionCeiling, desired, accumulated } = openSearchBatchState(
-    limit,
-    MAX_SEARCH_RESULTS,
-  );
-  let nextCursor: any[] | undefined = undefined;
-  let searchAfter: any[] | undefined = cursor;
-  let lastRawOfBatch: any | undefined;
+  const accessible: any[] = [];
+  let searchAfter: any[] | undefined = undefined;
+  const maxCeiling = Math.min(MAX_SEARCH_RESULTS, limit);
 
-  while (accumulated.length < detectionCeiling) {
-    const sizeNeeded = detectionCeiling - accumulated.length;
+  while (accessible.length < limit) {
+    const sizeNeeded = limit - accessible.length;
     const { results: rawBatch } = await applicationContext
       .getPersistenceGateway()
       .advancedDocumentSearch({
@@ -68,40 +59,35 @@ export const orderPublicSearchInteractor = async (
         overrideResultSize: sizeNeeded,
         searchAfter,
       });
+
     if (rawBatch.length === 0) break;
+
     for (const r of rawBatch) {
-      if (accumulated.length >= detectionCeiling) break;
-      accumulated.push(r);
+      if (accessible.length >= limit) break;
+      accessible.push(r);
     }
-    lastRawOfBatch = rawBatch[rawBatch.length - 1];
-    if (lastRawOfBatch && lastRawOfBatch.sort) {
-      searchAfter = lastRawOfBatch.sort;
+
+    const lastRaw = rawBatch[rawBatch.length - 1];
+
+    if (lastRaw && lastRaw.sort) {
+      searchAfter = lastRaw.sort;
     } else {
       break;
     }
-  }
-
-  const moreResults = accumulated.length > desired;
-  if (moreResults) {
-    if (accumulated[desired - 1]?.sort) {
-      nextCursor = accumulated[desired - 1].sort;
-    }
+    if (accessible.length >= maxCeiling) break;
   }
 
   const timestamp = formatNow(FORMATS.LOG_TIMESTAMP);
+
   applicationContext.logger.info('public order search', {
     ...omit(rawSearch, 'entityName'),
     timestamp,
   });
 
-  const resultsPage = accumulated.slice(0, desired);
-
   const validated =
-    PublicDocumentSearchResult.validateRawCollection(resultsPage);
+    PublicDocumentSearchResult.validateRawCollection(accessible);
 
   return {
     results: validated,
-    moreResults,
-    nextCursor: moreResults ? nextCursor : undefined,
   };
 };
