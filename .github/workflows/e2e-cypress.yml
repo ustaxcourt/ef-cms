@@ -70,7 +70,7 @@ jobs:
         # if: steps.cache-cypress.outputs.cache-hit != 'true'
         run: npx cypress install
       - name: Install Puppeteer
-        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        if: steps.cache-dependencies.outputs.cache-hit == 'true'
         run: npx puppeteer browsers install chrome
       - name: Setup Postgres
         run: |
