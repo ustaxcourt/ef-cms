@@ -161,9 +161,7 @@ describe('getRecentFilingsForUserInteractor', () => {
 
     expect(result[0].inConsolidatedGroup).toBe(true);
     expect(result[0].isLeadCase).toBe(true);
-    expect(result[0].consolidatedIconTooltipText).toContain(
-      'Lead case in consolidated group',
-    );
+    expect(result[0].consolidatedIconTooltipText).toContain('Lead case');
   });
 
   it('should handle member cases in consolidated groups', async () => {
@@ -186,7 +184,7 @@ describe('getRecentFilingsForUserInteractor', () => {
     expect(result[0].inConsolidatedGroup).toBe('101-20');
     expect(result[0].isLeadCase).toBe(false);
     expect(result[0].consolidatedIconTooltipText).toContain(
-      'Member case in consolidated group',
+      'Consolidated case',
     );
   });
 
