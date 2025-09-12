@@ -68,13 +68,12 @@ export const orderPublicSearchInteractor = async (
     }
 
     const lastRaw = rawBatch[rawBatch.length - 1];
-    
+
     if (lastRaw && lastRaw.sort) {
       searchAfter = lastRaw.sort;
     } else {
       break;
     }
-    if (rawBatch.length < sizeNeeded) break;
     if (accessible.length >= maxCeiling) break;
   }
 
