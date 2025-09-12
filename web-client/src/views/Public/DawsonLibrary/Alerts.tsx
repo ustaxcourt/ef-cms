@@ -126,7 +126,7 @@ export function Alerts() {
           alertInfo={{
             message: 'You’ll need to change your password by April 25, 2020.',
           }}
-          dismissible
+          isDismissible
           dismissAlertSequence={() =>
             setStaticAlerts({ ...staticAlerts, info: false })
           }

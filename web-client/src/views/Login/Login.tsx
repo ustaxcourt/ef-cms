@@ -2,13 +2,14 @@ import { Button as DawsonUiButton } from '@web-client/dawson-ui/ui/button';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 // import { ErrorNotification } from '@web-client/views/ErrorNotification';
 import { InfoNotificationComponent } from '@web-client/views/InfoNotification';
-import { SuccessNotification } from '@web-client/views/SuccessNotification';
-import { WarningNotification } from '@web-client/views/WarningNotification';
+// import { SuccessNotification } from '@web-client/views/SuccessNotification';
+// import { WarningNotification } from '@web-client/views/WarningNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import { AlertError } from '@web-client/dawson-ui/ui/Alert/AlertError';
 import { AlertSuccess } from '@web-client/dawson-ui/ui/Alert/AlertSuccess';
+import { AlertWarning } from '@web-client/dawson-ui/ui/Alert/AlertWarning';
 
 export const Login = connect(
   {
@@ -44,11 +45,17 @@ export const Login = connect(
           <div className="grid-row flex-justify-center">
             <div className="grid-col-12 desktop:grid-col-4 tablet:grid-col-7">
               <AlertSuccess
+                alertSuccess={alertInfo}
                 dismissAlertSequence={() => dismissAlertSequence}
                 isDismissible={false}
               />
-              <SuccessNotification isDismissible={false} />
-              <WarningNotification isDismissible={false} />
+              {/*<SuccessNotification isDismissible={false} />*/}
+              <AlertWarning
+                alertWarning={alertInfo}
+                isDismissible={true}
+                dismissAlertSequence={() => dismissAlertSequence()}
+              />
+              {/*<WarningNotification isDismissible={false} />*/}
               {alertInfo && (
                 <InfoNotificationComponent
                   alertInfo={alertInfo}

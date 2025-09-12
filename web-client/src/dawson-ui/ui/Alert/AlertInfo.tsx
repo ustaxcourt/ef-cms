@@ -20,7 +20,7 @@ export type AlertInfoType = {
 
 export type AlertInfoProps = {
   alertInfo?: AlertInfoType;
-  dismissible?: boolean;
+  isDismissible?: boolean;
   dismissAlertSequence?: () => void;
   messageNotBold?: boolean;
   className?: string;
@@ -30,7 +30,7 @@ export type AlertInfoProps = {
 
 export function AlertInfo({
   alertInfo,
-  dismissible = true,
+  isDismissible = true,
   dismissAlertSequence,
   messageNotBold = false,
   className,
@@ -52,7 +52,7 @@ export function AlertInfo({
       className={cn(className)}
       closeButtonOnClick={dismissAlertSequence}
       data-testid="info-alert"
-      isDismissible={dismissible}
+      isDismissible={isDismissible}
       ref={notificationRef}
       role="alert"
       variant="info"
