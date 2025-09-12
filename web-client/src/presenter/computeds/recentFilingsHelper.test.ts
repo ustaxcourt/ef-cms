@@ -296,14 +296,34 @@ describe('recentFilingsHelper', () => {
     expect(displayProps.showLinkToDocument).toBeDefined();
   });
 
-  it('should not show document links for consolidated cases where user is not associated', () => {
+  it('should filter out cases where user is not associated', () => {
     const result = runCompute(recentFilingsHelper, {
       state: createTestState({
-        recentFilings: [createFiling({ isRequestingUserAssociated: false })],
+        recentFilings: [
+          createFiling({
+            docketNumber: '101-20',
+            filedDate: '2024-01-15',
+            isRequestingUserAssociated: true,
+          }),
+          createFiling({
+            docketNumber: '102-20',
+            filedDate: '2024-01-12',
+            isRequestingUserAssociated: false,
+          }),
+          createFiling({
+            docketNumber: '103-20',
+            filedDate: '2024-01-18',
+            isRequestingUserAssociated: true,
+          }),
+        ],
       }),
     });
 
-    expect(result.sortedRecentFilings[0].showLinkToDocument).toBe(false);
-    expect(result.sortedRecentFilings[0].showDocumentViewerLink).toBe(false);
+    // Should only show cases where user is associated
+    expect(result.sortedRecentFilings).toHaveLength(2);
+    expect(result.sortedRecentFilings.map(f => f.docketNumber)).toEqual([
+      '103-20',
+      '101-20',
+    ]);
   });
 });
