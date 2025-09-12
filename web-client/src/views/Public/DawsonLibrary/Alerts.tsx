@@ -31,7 +31,7 @@ export function Alerts() {
     showSingleMessage: true,
     showMultipleMessages: false,
     showTitleOnly: false,
-    messagesDeduped: false,
+    messagesDeduped: [],
   };
 
   const alertInfoProps = {

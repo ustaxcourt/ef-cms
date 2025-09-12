@@ -19,7 +19,7 @@ const alertVariants = cva(
     'tw:font-normal tw:xs:text-lg tw:text-sm/4',
     'tw:[&_ul]:m-0 tw:[&_ul]:-ml-4 tw:[&_ul]:list-disc',
     'tw:xs:[&_svg]:h-7 tw:xs:[&_svg]:w-7 tw:[&_svg]:h-6 tw:[&_svg]:w-6',
-    'tw:w-full',
+    'tw:xs:w-[740px] tw:w-full',
   ),
   {
     variants: {
@@ -44,17 +44,17 @@ const iconType = {
 };
 
 function Alert({
+  children,
   className,
+  closeButtonOnClick,
   isDismissible = true,
   variant,
-  closeButtonOnClick,
-  children,
   ...props
 }: Omit<React.ComponentProps<'div'>, 'children'> &
   VariantProps<typeof alertVariants> & {
+    children?: React.ReactNode;
     closeButtonOnClick?: () => React.MouseEventHandler<HTMLButtonElement> | void;
     isDismissible?: boolean;
-    children?: React.ReactNode;
   }) {
   return (
     <div
@@ -91,11 +91,12 @@ function Alert({
 function AlertHeader({ className, ...props }: React.ComponentProps<'p'>) {
   return (
     <div
-      data-slot="alert-title"
       className={cn(
         'tw:xs:font-bold tw:font-bold tw:xs:mb-1 tw:pb-0',
         className,
       )}
+      data-slot="alert-title"
+      data-testid="alert-header"
       {...props}
     />
   );

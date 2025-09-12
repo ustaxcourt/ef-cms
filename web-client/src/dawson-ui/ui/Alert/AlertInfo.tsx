@@ -102,7 +102,12 @@ function Message({
 }: MessageProps) {
   if (!inlineLinkText || !inlineLinkUrl || typeof message !== 'string') {
     return (
-      <p className={cn(messageNotBold ? 'tw:font-normal' : 'tw:font-semibold')}>
+      <p
+        className={cn(
+          messageNotBold ? 'tw:font-normal' : 'tw:font-semibold',
+          'tw:xs:mt-1 tw:xs:mb-1 tw:mr-1 tw:mt-0 tw:mb-0',
+        )}
+      >
         {message}
       </p>
     );
@@ -111,7 +116,12 @@ function Message({
   const [beforeLink, afterLink] = message.split(inlineLinkText);
 
   return (
-    <p className={cn(messageNotBold ? 'tw:font-normal' : 'tw:font-semibold')}>
+    <p
+      className={cn(
+        messageNotBold ? 'tw:font-normal' : 'tw:font-semibold',
+        'tw:xs:mt-1 tw:xs:mb-1 tw:mr-1 tw:mt-0 tw:mb-0',
+      )}
+    >
       {beforeLink}
       <a
         className="tw:text-primary-darker tw:underline"
