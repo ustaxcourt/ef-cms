@@ -146,6 +146,7 @@ import { saveCalendarNoteInteractor } from './business/useCases/trialSessions/sa
 import { saveCaseDetailInternalEditInteractor } from './business/useCases/saveCaseDetailInternalEditInteractor';
 import { saveCaseNoteInteractor } from './business/useCases/caseNote/saveCaseNoteInteractor';
 import { saveSignedDocumentInteractor } from '../../shared/src/business/useCases/saveSignedDocumentInteractor';
+import { scrapeDocumentContentsWorker } from '@web-api/business/useCases/docketEntry/scrapeDocumentContentsWorker';
 import { sealCaseContactAddressInteractor } from '../../shared/src/business/useCases/sealCaseContactAddressInteractor';
 import { sealCaseInteractor } from '../../shared/src/business/useCases/sealCaseInteractor';
 import { sealDocketEntryInteractor } from './business/useCases/docketEntry/sealDocketEntryInteractor';
@@ -342,6 +343,7 @@ const useCases = {
   saveCaseDetailInternalEditInteractor,
   saveCaseNoteInteractor,
   saveSignedDocumentInteractor,
+  scrapeDocumentContentsWorker,
   sealCaseContactAddressInteractor,
   sealCaseInteractor,
   sealDocketEntryInteractor,
@@ -395,5 +397,5 @@ export const getUseCases = () => useCases;
 type _IGetUseCases = typeof getUseCases;
 
 declare global {
-  interface IGetUseCases extends _IGetUseCases { }
+  interface IGetUseCases extends _IGetUseCases {}
 }

@@ -32,15 +32,6 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
     orderForFilingFee,
   } = SYSTEM_GENERATED_DOCUMENT_TYPES;
 
-  beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getConfigurationItemValue.mockResolvedValue({
-        name: 'James Bond',
-        title: 'Clerk of the Court (Interim)',
-      });
-  });
-
   it('should add a draft docket entry for a system generated order', async () => {
     const newDocketEntriesFromNewCaseCount =
       caseEntity.docketEntries.length + 1;

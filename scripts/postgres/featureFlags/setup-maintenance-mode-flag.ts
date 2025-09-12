@@ -2,14 +2,14 @@
 
 import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 
-async function setupEntityLockingFeatureFlag() {
-  const VALUE = true;
+async function setupMaintenanceMode() {
+  const VALUE = false;
 
   await pgInsertInto({
     table: 'dwFeatureFlag',
     values: [
       {
-        name: 'e-consent-fields-enabled-feature-flag',
+        name: 'maintenance-mode',
         value: { current: VALUE },
       },
     ],
@@ -17,4 +17,4 @@ async function setupEntityLockingFeatureFlag() {
   });
 }
 
-void setupEntityLockingFeatureFlag();
+void setupMaintenanceMode();

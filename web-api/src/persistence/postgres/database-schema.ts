@@ -64,6 +64,7 @@ import {
   MinuteSheetTable,
 } from '@web-api/persistence/postgres/minuteSheets/schema';
 import {
+<<<<<<< HEAD:web-api/src/persistence/postgres/database-schema.ts
   TrialSessionCaseTable,
   DW_TRIAL_SESSION_CASE_COLUMNS,
   DW_TRIAL_SESSION_COLUMNS,
@@ -75,6 +76,11 @@ import {
   TrialSessionTable,
   TrialSessionWorkingCopyTable,
 } from '@web-api/persistence/postgres/trialSessions/schema';
+=======
+  DW_PRACTITIONER_DOCUMENT_COLUMNS,
+  PractitionerDocumentTable,
+} from '@web-api/persistence/postgres/practitionerDocuments/schema';
+>>>>>>> staging:web-api/src/database-schema.ts
 import {
   DW_USER_COLUMNS,
   UserTable,
@@ -114,6 +120,7 @@ interface DatabaseSchemaType {
   dwDocketEntryWorksheet: DatabaseTableMetadata<DocketEntryWorksheetTable>;
   dwMessage: DatabaseTableMetadata<MessageTable>;
   dwMinuteSheet: DatabaseTableMetadata<MinuteSheetTable>;
+  dwPractitionerDocuments: DatabaseTableMetadata<PractitionerDocumentTable>;
   dwNotification: DatabaseTableMetadata<NotificationTable>;
   dwUser: DatabaseTableMetadata<UserTable>;
   dwResponseString: DatabaseTableMetadata<ResponseStringTable>;
@@ -201,6 +208,10 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwMinuteSheet: {
     table: DEFAULT as MinuteSheetTable,
     columns: DW_MINUTE_SHEET_COLUMNS,
+  },
+  dwPractitionerDocuments: {
+    table: DEFAULT as PractitionerDocumentTable,
+    columns: DW_PRACTITIONER_DOCUMENT_COLUMNS,
   },
   dwResponseString: {
     table: DEFAULT as ResponseStringTable,

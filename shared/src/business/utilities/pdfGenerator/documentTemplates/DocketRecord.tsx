@@ -71,14 +71,6 @@ const RenderContact = ({ contact, countryTypes, showContactDetails }) => {
 };
 
 const RecordDescription = ({ entry }) => {
-  let additionalDescription = entry.filingsAndProceedings
-    ? ` ${entry.filingsAndProceedings}`
-    : '';
-
-  if (entry.additionalInfo2) {
-    additionalDescription += ` ${entry.additionalInfo2}`;
-  }
-
   return (
     <>
       <span
@@ -87,8 +79,7 @@ const RecordDescription = ({ entry }) => {
           entry.isStricken && 'stricken-docket-record',
         )}
       >
-        <strong>{entry.descriptionDisplay}</strong>
-        {additionalDescription}
+        {entry.descriptionDisplay}
       </span>
       {entry.isStricken && <span> (STRICKEN)</span>}
     </>

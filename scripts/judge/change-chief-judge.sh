@@ -3,10 +3,10 @@
 # Run this script to change an old chief judge to a judge, and promote a new judge to a chief judge
 
 # example usage:
-#   NEW_JUDGE_ID=09002e6e-3f16-49d3-ab24-b5ef32f07deb \
-#   OLD_JUDGE_ID=264a92d5-f9f2-4a61-b0c7-f6619c6dfbbc \
-#   ENV=exp1 \
-#   ./scripts/change-chief-judge.sh
+  # NEW_JUDGE_ID=06b6fb09-889f-427d-9d45-b99023f6539b \
+  # OLD_JUDGE_ID=ca8a384a-6875-4ae5-ac60-dcb76a120495 \
+  # ENV=test \
+  # ./scripts/judge/change-chief-judge.sh
 
 ./check-env-variables.sh \
   "ENV" \
@@ -14,8 +14,6 @@
   "NEW_JUDGE_ID"
 
 REGION="us-east-1"
-# look up current table version from SSM
-TABLE_VERSION=$(aws ssm get-parameter --region us-east-1 --name "/DAWSON/${ENV}/source-table-version" --with-decryption --query "Parameter.Value" --output text 2>/dev/null)
 
 # get judge name via postgres (TypeScript script)
 NEW_JUDGE_NAME=$(ENV="${ENV}" REGION="${REGION}" ./scripts/judge/get-judge-name.ts "${NEW_JUDGE_ID}")
@@ -28,24 +26,29 @@ fi
 npx ts-node --transpile-only ./scripts/postgres/featureFlags/setup-chief-judge-name-flag.ts "${NEW_JUDGE_NAME}"
 
 # update the old judge's title in Postgres and capture last name for display
-OLD_JUDGE_LAST_NAME=$(ENV="${ENV}" REGION="${REGION}" ./scripts/judge/set-judge-title.ts "${OLD_JUDGE_ID}" "Judge")
+OLD_JUDGE_JSON=$(ENV="${ENV}" REGION="${REGION}" ./scripts/judge/set-judge-title.ts "${OLD_JUDGE_ID}" "Judge")
+OLD_JUDGE_LAST_NAME=$(echo "${OLD_JUDGE_JSON}" | jq -r '.name')
+OLD_JUDGE_EMAIL=$(echo "${OLD_JUDGE_JSON}" | jq -r '.email')
 echo "Updating judge with last name: ${OLD_JUDGE_LAST_NAME} to Judge"
 
 # update the new judge's title in Postgres and capture last name for display
-NEW_JUDGE_LAST_NAME=$(ENV="${ENV}" REGION="${REGION}" ./scripts/judge/set-judge-title.ts "${NEW_JUDGE_ID}" "Chief Judge")
+NEW_JUDGE_JSON=$(ENV="${ENV}" REGION="${REGION}" ./scripts/judge/set-judge-title.ts "${NEW_JUDGE_ID}" "Chief Judge")
+NEW_JUDGE_LAST_NAME=$(echo "${NEW_JUDGE_JSON}" | jq -r '.name')
+NEW_JUDGE_EMAIL=$(echo "${NEW_JUDGE_JSON}" | jq -r '.email')
 echo "Updating judge with last name: ${NEW_JUDGE_LAST_NAME} to Chief Judge"
 
 # update the judge's names in cognito
 USER_POOL_ID=$(aws cognito-idp list-user-pools --query "UserPools[?Name == 'efcms-${ENV}'].Id | [0]" --max-results 30 --region "${REGION}" --output text)
 
+# will not work on lower envs (emails are sanitized during glue job; email differs in cognito vs persistence)
 aws cognito-idp admin-update-user-attributes \
     --user-pool-id "${USER_POOL_ID}" \
     --region "${REGION}" \
-    --username "${OLD_JUDGE_ID}" \
+    --username "${OLD_JUDGE_EMAIL}" \
     --user-attributes "Name=name,Value=\"Judge ${OLD_JUDGE_LAST_NAME}\""
 
 aws cognito-idp admin-update-user-attributes \
     --user-pool-id "${USER_POOL_ID}" \
     --region "${REGION}" \
-    --username "${NEW_JUDGE_ID}" \
+    --username "${NEW_JUDGE_EMAIL}" \
     --user-attributes "Name=name,Value=\"Chief Judge ${NEW_JUDGE_LAST_NAME}\""

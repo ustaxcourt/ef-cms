@@ -168,23 +168,6 @@ export const setOpinionSearchEnabled = (isEnabled, keyPrefix) => {
   });
 };
 
-export const setJudgeTitle = (judgeUserId, newJudgeTitle) => {
-  return client.update({
-    ExpressionAttributeNames: {
-      '#judgeTitle': 'judgeTitle',
-    },
-    ExpressionAttributeValues: {
-      ':judgeTitle': newJudgeTitle,
-    },
-    Key: {
-      pk: `user|${judgeUserId}`,
-      sk: `user|${judgeUserId}`,
-    },
-    UpdateExpression: 'SET #judgeTitle = :judgeTitle',
-    applicationContext,
-  });
-};
-
 export const setOrderSearchEnabled = async (isEnabled, keyPrefix) => {
   return await setFeatureFlag(isEnabled, `${keyPrefix}-order-search-enabled`);
 };

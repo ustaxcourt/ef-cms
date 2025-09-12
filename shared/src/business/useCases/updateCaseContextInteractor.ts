@@ -122,11 +122,12 @@ const updateCaseContext = async (
         },
       );
 
+      const LEAD_CASE_DEADLINES = caseDeadlines.map(cd => cd.caseDeadlineId);
       if (
         oldCase.docketNumber === oldCase.leadDocketNumber &&
-        caseDeadlines.length
+        caseDeadlines.length &&
+        LEAD_CASE_DEADLINES.length
       ) {
-        const LEAD_CASE_DEADLINES = caseDeadlines.map(cd => cd.caseDeadlineId);
         const CHILDREN_DEADLINES =
           await getCaseDeadlinesByConsolidatedCaseDeadlineIds(
             LEAD_CASE_DEADLINES,

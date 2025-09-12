@@ -8,9 +8,15 @@ import {
   GenerateNoticeOfChangeToInPersonTrialInfo,
 } from './generateNoticeOfChangeToInPersonProceeding';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+<<<<<<< HEAD
 import { getUsersInSections as getUsersInSectionsMock } from '@web-api/persistence/postgres/users/getUsersInSections';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 import { getFeatureFlagValues as getFeatureFlagValuesMock } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
+=======
+import { getFeatureFlagValues as getFeatureFlagValuesMock } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
+import { getUsersInSections as getUsersInSectionsMock } from '@web-api/persistence/postgres/users/getUsersInSections';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
+>>>>>>> staging
 
 const getFeatureFlagValues = getFeatureFlagValuesMock as jest.Mock;
 getFeatureFlagValues.mockResolvedValue([
@@ -52,13 +58,6 @@ describe('generateNoticeOfChangeToInPersonProceeding', () => {
     getUsersInSections.mockResolvedValue([mockJudge as DbUser]);
 
     getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
-
-    applicationContext
-      .getPersistenceGateway()
-      .getConfigurationItemValue.mockResolvedValue({
-        name: 'James Bond',
-        title: 'Clerk of the Court (Interim)',
-      });
 
     await generateNoticeOfChangeToInPersonProceeding(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,

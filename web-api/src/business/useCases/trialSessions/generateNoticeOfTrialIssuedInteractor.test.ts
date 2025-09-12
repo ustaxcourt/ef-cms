@@ -14,8 +14,11 @@ import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSe
 import { getUsersInSections as getUsersInSectionsMock } from '@web-api/persistence/postgres/users/getUsersInSections';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
+<<<<<<< HEAD
 const getUsersInSections = jest.mocked(getUsersInSectionsMock);
 
+=======
+>>>>>>> staging
 describe('generateNoticeOfTrialIssuedInteractor', () => {
   const getFeatureFlagValues = jest.mocked(getFeatureFlagValuesMock);
   getFeatureFlagValues.mockResolvedValue([
@@ -29,6 +32,8 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
       },
     },
   ]);
+
+  const getUsersInSections = jest.mocked(getUsersInSectionsMock);
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
   const TEST_JUDGE = {
@@ -51,13 +56,6 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
       startTime: '10:00',
       trialLocation: 'Boise, Idaho',
     } as RawTrialSession);
-
-    applicationContext
-      .getPersistenceGateway()
-      .getConfigurationItemValue.mockImplementation(() => ({
-        name: 'bob',
-        title: 'clerk of court',
-      }));
 
     getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
       if (docketNumber === '123-45') {

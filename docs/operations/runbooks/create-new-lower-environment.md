@@ -265,45 +265,44 @@ This runbook describes the process of creating a new DAWSON lower environment in
 1. Write configuration values to AWS SSM:
    1. `current-color`:
       ```bash
-			aws ssm put-parameter \
-				--region us-east-1 --name "/DAWSON/${ENV}/current-color" \
-				--value "blue" --type "String" --overwrite
+      aws ssm put-parameter \
+        --region us-east-1 --name "/DAWSON/${ENV}/current-color" \
+        --value "blue" --type "String" --overwrite
       ```
    1. `destination-table-version`:
       ```bash
-			aws ssm put-parameter \
-				--region us-east-1 --name "/DAWSON/${ENV}/destination-table-version" \
-				--value "alpha" --type "String" --overwrite
+      aws ssm put-parameter \
+         --region us-east-1 --name "/DAWSON/${ENV}/destination-table-version" \
+         --value "alpha" --type "String" --overwrite
       ```
    1. `migrate`:
       ```bash
-			aws ssm put-parameter \
-				--region us-east-1 --name "/DAWSON/${ENV}/migrate" \
-				--value "true" --type "String" --overwrite
+      aws ssm put-parameter \
+         --region us-east-1 --name "/DAWSON/${ENV}/migrate" \
+         --value "true" --type "String" --overwrite
       ```
    1. `migration-queue-empty`:
       ```bash
-			aws ssm put-parameter \
-				--region us-east-1 --name "/DAWSON/${ENV}/migration-queue-empty" \
-				--value "true" --type "String" --overwrite
+      aws ssm put-parameter \
+         --region us-east-1 --name "/DAWSON/${ENV}/migration-queue-empty" \
+         --value "true" --type "String" --overwrite
       ```
    1. `source-table-version`:
       ```bash
-			aws ssm put-parameter \
-				--region us-east-1 --name "/DAWSON/${ENV}/source-table-version" \
-				--value "alpha" --type "String" --overwrite
+      aws ssm put-parameter \
+         --region us-east-1 --name "/DAWSON/${ENV}/source-table-version" \
+         --value "alpha" --type "String" --overwrite
       ```
-<!-- TODO: UPDATE THIS SECTION TO KNOW HOW TO SAVE IN POSTGRES INSTEAD OF DYNAMO -->
 1. Write feature flags to the deploy table:
    1. `aws-batch-zipper-minimum-count`:
       ```bash
-			scripts/postgres/featureFlags/setup-aws-batch-zipper-minimum-count.ts
+      scripts/postgres/featureFlags/setup-aws-batch-zipper-minimum-count.ts
       ```
-   1. `chief-judge-name`, replacing `<CHIEF JUDGE NAME>` with the current Chief Judge:
+   1. `chief-judge-name`:
       ```bash
-			scripts/postgres/featureFlags/setup-chief-judge-name-flag.ts
+      scripts/postgres/featureFlags/setup-chief-judge-name-flag.ts
       ```
-   1. `clerk-of-court-configuration`, replacing `<CLERK OF COURT NAME>` with the current Clerk of the Court:
+   1. `clerk-of-court-configuration`:
       ```bash
       scripts/postgres/featureFlags/setup-clerk-of-court-config.ts
       ```
@@ -314,10 +313,6 @@ This runbook describes the process of creating a new DAWSON lower environment in
    1. `e-consent-fields-enabled-feature-flag`:
       ```bash
       scripts/postgres/featureFlags/setup-e-consent-fields-enabled-feature-flag.ts
-      ```
-   1. `entity-locking-feature-flag`:
-      ```bash
-      scripts/postgres/featureFlags/setup-entity-locking-feature-flag.ts
       ```
    1. `maintenance-mode`:
       ```bash

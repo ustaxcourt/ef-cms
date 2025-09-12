@@ -146,10 +146,6 @@ export const seed = async () => {
 
   await Promise.all([
     insertCaseDeadline,
-    insertCorrespondence,
-    insertCaseWorksheet,
-    insertWorkItem,
-    insertFeatureFlags,
     insertCases,
     insertCaseWorksheet,
     insertCorrespondence,
@@ -157,6 +153,7 @@ export const seed = async () => {
     insertTrialSession,
     insertTrialSessionCase,
     insertTrialSessionWorkingCopy,
+    insertFeatureFlags,
     insertMessages,
     insertUsers,
     insertUserOnCase,

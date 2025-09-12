@@ -53,13 +53,6 @@ describe('generateNoticeOfChangeToRemoteProceedingInteractor', () => {
         judge: { name: 'Test Judge' },
       }));
 
-    applicationContext
-      .getPersistenceGateway()
-      .getConfigurationItemValue.mockImplementation(() => ({
-        name: 'bob',
-        title: 'clerk of court',
-      }));
-
     getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
       if (docketNumber === '123-45') {
         return {

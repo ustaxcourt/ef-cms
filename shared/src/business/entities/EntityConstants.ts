@@ -109,9 +109,6 @@ export const ALLOWLIST_FEATURE_FLAGS = {
   E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG: {
     key: 'e-consent-fields-enabled-feature-flag',
   },
-  ENTITY_LOCKING_FEATURE_FLAG: {
-    key: 'entity-locking-feature-flag',
-  },
   USE_CHANGE_OF_ADDRESS_LAMBDA: {
     disabledMessage:
       'A flag to know when to use the change of address lambda for processing.',
@@ -785,6 +782,11 @@ export const SPTO_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
 export const SPOS_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
   doc => doc.eventCode === 'SPOS',
 )!;
+
+export const AUTO_GENERATED_STATUS_REPORT_ORDER_DESCRIPTIONS = {
+  statusReport: 'Status Report Due',
+  statusReportStipulatedDecision: 'Status Report or Proposed Stipulated Decision Due'
+};
 
 const AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES_WITH_NAMES = {
   orderForFilingFee: {
@@ -2067,3 +2069,5 @@ export const TERM_GENERATOR_DEFAULT_VALUES = {
 } as const;
 
 export const MOBILE_SCREEN_BREAKPOINT = 640;
+
+export const PRO_SE_CHECKLIST = 'pro-se-checklist';

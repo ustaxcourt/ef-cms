@@ -55,13 +55,6 @@ describe('serveThirtyDayNoticeInteractor', () => {
       caseOrder: [{ docketNumber: '101-31' }, { docketNumber: '103-20' }] as TCaseOrder[],
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getConfigurationItemValue.mockImplementation(() => ({
-        name: 'bob',
-        title: 'clerk of court',
-      }));
-
     applicationContext.getUtilities().formatNow.mockReturnValue('02/23/2023');
   });
 
