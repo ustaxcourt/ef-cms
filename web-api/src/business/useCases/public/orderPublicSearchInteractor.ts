@@ -1,15 +1,13 @@
-import { getOpensearchDocumentSearchBatchState } from '@shared/business/utilities/getOpensearchDocumentSearchBatchState';
-import { DocumentSearch } from '@shared/business/entities/documents/DocumentSearch';
-import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
+import { omit } from 'lodash';
 import {
-  OPEN_SEARCH_MAX_BATCHES_PER_QUERY,
   MAX_SEARCH_RESULTS,
   ORDER_EVENT_CODES,
-  OPEN_SEARCH_SINGLE_BATCH_SIZE,
 } from '@shared/business/entities/EntityConstants';
+import { DocumentSearch } from '@shared/business/entities/documents/DocumentSearch';
 import { PublicDocumentSearchResult } from '@shared/business/entities/documents/PublicDocumentSearchResult';
+import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
+import { openSearchBatchState } from '@shared/business/utilities/getOpenSearchBatchState';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { omit } from 'lodash';
 
 export const orderPublicSearchInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -50,43 +48,43 @@ export const orderPublicSearchInteractor = async (
 
   const rawSearch = orderSearch.validate().toRawObject();
 
-  const {
-    detectionCeiling,
-    desired,
-    accumulated,
-    searchAfter: initialSearchAfter,
-  } = getOpensearchDocumentSearchBatchState(limit, MAX_SEARCH_RESULTS);
-  let searchAfter = initialSearchAfter;
+  const { detectionCeiling, desired, accumulated } = openSearchBatchState(
+    limit,
+    MAX_SEARCH_RESULTS,
+  );
   let nextCursor: any[] | undefined = undefined;
-  let openSearchBatchCount = 0;
+  let searchAfter: any[] | undefined = cursor;
+  let lastRawOfBatch: any | undefined;
 
-  while (
-    accumulated.length < detectionCeiling &&
-    openSearchBatchCount < OPEN_SEARCH_MAX_BATCHES_PER_QUERY
-  ) {
-    const { results: rawResults } = await applicationContext
+  while (accumulated.length < detectionCeiling) {
+    const sizeNeeded = detectionCeiling - accumulated.length;
+    const { results: rawBatch } = await applicationContext
       .getPersistenceGateway()
       .advancedDocumentSearch({
         applicationContext,
         documentEventCodes: ORDER_EVENT_CODES,
         omitSealed: true,
         ...rawSearch,
-        overrideResultSize: OPEN_SEARCH_SINGLE_BATCH_SIZE,
-        searchAfter:
-          cursor && openSearchBatchCount === 0 ? cursor : searchAfter,
+        overrideResultSize: sizeNeeded,
+        searchAfter,
       });
-    openSearchBatchCount++;
-    if (rawResults.length === 0) break;
-    for (const r of rawResults) {
+    if (rawBatch.length === 0) break;
+    for (const r of rawBatch) {
       if (accumulated.length >= detectionCeiling) break;
       accumulated.push(r);
     }
-    const last = rawResults[rawResults.length - 1];
-    if (last && last.sort) {
-      searchAfter = last.sort;
-      nextCursor = last.sort;
+    lastRawOfBatch = rawBatch[rawBatch.length - 1];
+    if (lastRawOfBatch && lastRawOfBatch.sort) {
+      searchAfter = lastRawOfBatch.sort;
     } else {
       break;
+    }
+  }
+
+  const moreResults = accumulated.length > desired;
+  if (moreResults) {
+    if (accumulated[desired - 1]?.sort) {
+      nextCursor = accumulated[desired - 1].sort;
     }
   }
 
@@ -96,18 +94,14 @@ export const orderPublicSearchInteractor = async (
     timestamp,
   });
 
-  const overFetched = accumulated.length > desired;
-  if (overFetched) {
-    if (accumulated[desired - 1]?.sort) {
-      nextCursor = accumulated[desired - 1].sort;
-    }
-    accumulated.length = desired;
-  }
+  const resultsPage = accumulated.slice(0, desired);
+
   const validated =
-    PublicDocumentSearchResult.validateRawCollection(accumulated);
+    PublicDocumentSearchResult.validateRawCollection(resultsPage);
+
   return {
     results: validated,
-    moreResults: overFetched,
-    nextCursor: overFetched ? nextCursor : undefined,
+    moreResults,
+    nextCursor: moreResults ? nextCursor : undefined,
   };
 };
