@@ -1,15 +1,11 @@
 jest.mock('@web-api/persistence/postgres/cases/getCaseByDocketNumber');
 jest.mock('@web-api/persistence/postgres/docketEntries/upsertDocketEntries');
-jest.mock(
-  '../../../../elasticsearch/docketEntries/indexOpenSearchDocketEntries',
-);
 import { Case } from '@shared/business/entities/cases/Case';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { docketClerkUser } from '@shared/test/mockUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { indexOpenSearchDocketEntries as indexOpenSearchDocketEntriesMock } from '../../../../elasticsearch/docketEntries/indexOpenSearchDocketEntries';
 import {
   mockDocketClerkUser,
   mockPetitionerUser,
@@ -48,9 +44,6 @@ const mockPdfContents = 'totally real pdf contents';
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 const upsertDocketEntries = upsertDocketEntriesMock as jest.Mock;
 upsertDocketEntries.mockImplementation(jest.fn());
-const indexOpenSearchDocketEntries =
-  indexOpenSearchDocketEntriesMock as jest.Mock;
-indexOpenSearchDocketEntries.mockImplementation(jest.fn());
 
 describe('scrapeDocumentContentsWorker', () => {
   beforeEach(() => {
@@ -257,24 +250,12 @@ describe('scrapeDocumentContentsWorker', () => {
     ]);
   });
 
-  it('indexes the document contents in opensearch', async () => {
+  it('logs pertinent information', async () => {
     await scrapeDocumentContentsWorker(
       applicationContext,
       mockScrapeDocumentContentsMessage,
       mockAuthUser,
     );
-    expect(indexOpenSearchDocketEntries).toHaveBeenCalledWith(
-      expect.objectContaining({
-        message: expect.objectContaining({
-          payload: [
-            {
-              docketEntryId: mockDocketEntryId,
-              docketNumber: mockDocketNumber,
-            },
-          ],
-        }),
-      }),
-    );
-    expect(applicationContext.logger.info).toHaveBeenCalledTimes(7);
+    expect(applicationContext.logger.info).toHaveBeenCalledTimes(6);
   });
 });
