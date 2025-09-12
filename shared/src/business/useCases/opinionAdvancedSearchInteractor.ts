@@ -84,7 +84,6 @@ export const opinionAdvancedSearchInteractor = async (
     } else {
       break;
     }
-    if (rawBatch.length < sizeNeeded) break;
     if (accessible.length >= maxCeiling) break;
   }
 

@@ -73,7 +73,6 @@ export const opinionPublicSearchInteractor = async (
     } else {
       break;
     }
-    if (rawBatch.length < sizeNeeded) break;
     if (accessible.length >= maxCeiling) break;
   }
 
