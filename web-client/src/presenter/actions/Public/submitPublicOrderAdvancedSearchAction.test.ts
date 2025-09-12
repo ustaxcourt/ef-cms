@@ -4,23 +4,12 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 import { submitPublicOrderAdvancedSearchAction } from './submitPublicOrderAdvancedSearchAction';
 
 describe('submitPublicOrderAdvancedSearchAction', () => {
-  it('should call orderPublicSearchInteractor twice when first chunk indicates moreResults', async () => {
-    let callCount = 0;
+  it('should call orderPublicSearchInteractor only once', async () => {
     applicationContext
       .getUseCases()
-      .orderPublicSearchInteractor.mockImplementation(
-        (_ctx, { searchParams }) => {
-          callCount++;
-          if (!searchParams.cursor) {
-            return {
-              results: Array(5000).fill({}),
-              moreResults: true,
-              nextCursor: ['c1'],
-            };
-          }
-          return { results: Array(45).fill({}), moreResults: false };
-        },
-      );
+      .orderPublicSearchInteractor.mockReturnValue({
+        results: Array(5000).fill({}),
+      });
     await runAction(submitPublicOrderAdvancedSearchAction, {
       modules: { presenter },
       state: {
@@ -31,14 +20,16 @@ describe('submitPublicOrderAdvancedSearchAction', () => {
         },
       },
     });
-    expect(callCount).toBe(2);
+    expect(
+      applicationContext.getUseCases().orderPublicSearchInteractor.mock.calls
+        .length,
+    ).toBe(1);
   });
   beforeEach(() => {
     applicationContext
       .getUseCases()
       .orderPublicSearchInteractor.mockReturnValue({
         results: [],
-        moreResults: false,
       });
   });
   beforeAll(() => {
