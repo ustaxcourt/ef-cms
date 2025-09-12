@@ -9,27 +9,14 @@ import { TAssociatedCase } from './getCasesForUserInteractor';
 import { calculateDate } from '../utilities/DateHandler';
 
 jest.mock('./getCasesForUserInteractor');
-jest.mock('@web-api/persistence/postgres/cases/getCasesByDocketNumbers');
-jest.mock(
-  '@web-api/persistence/postgres/docketEntries/getRecentFilingsByDocketNumbers',
-);
 
 const mockGetCasesForUserInteractor = require('./getCasesForUserInteractor')
   .getCasesForUserInteractor as jest.MockedFunction<
   typeof import('./getCasesForUserInteractor').getCasesForUserInteractor
 >;
 
-const mockGetCasesByDocketNumbers =
-  require('@web-api/persistence/postgres/cases/getCasesByDocketNumbers')
-    .getCasesByDocketNumbers as jest.MockedFunction<
-    typeof import('@web-api/persistence/postgres/cases/getCasesByDocketNumbers').getCasesByDocketNumbers
-  >;
-
-const mockGetRecentFilingsByDocketNumbers =
-  require('@web-api/persistence/postgres/docketEntries/getRecentFilingsByDocketNumbers')
-    .getRecentFilingsByDocketNumbers as jest.MockedFunction<
-    typeof import('@web-api/persistence/postgres/docketEntries/getRecentFilingsByDocketNumbers').getRecentFilingsByDocketNumbers
-  >;
+const mockGetCasesByDocketNumbers = jest.fn();
+const mockGetRecentFilingsByDocketNumbers = jest.fn();
 
 const createMockCase = (
   overrides: Partial<TAssociatedCase> = {},
@@ -74,6 +61,7 @@ const createMockCaseDetails = (
 
 describe('getRecentFilingsForUserInteractor', () => {
   let mockAuthorizedUser: UnknownAuthUser;
+  let mockApplicationContext: any;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -84,6 +72,13 @@ describe('getRecentFilingsForUserInteractor', () => {
       role: ROLES.petitioner,
       email: 'test@example.com',
     } as UnknownAuthUser;
+
+    mockApplicationContext = {
+      getPersistenceGateway: () => ({
+        getCasesByDocketNumbers: mockGetCasesByDocketNumbers,
+        getRecentFilingsByDocketNumbers: mockGetRecentFilingsByDocketNumbers,
+      }),
+    };
 
     mockGetCasesForUserInteractor.mockResolvedValue({
       openCaseList: [],
@@ -96,12 +91,15 @@ describe('getRecentFilingsForUserInteractor', () => {
 
   it('should throw UnauthorizedError for invalid user', async () => {
     await expect(
-      getRecentFilingsForUserInteractor(null as any),
+      getRecentFilingsForUserInteractor(mockApplicationContext, null as any),
     ).rejects.toThrow(UnauthorizedError);
   });
 
   it('should return empty array when user has no cases', async () => {
-    const result = await getRecentFilingsForUserInteractor(mockAuthorizedUser);
+    const result = await getRecentFilingsForUserInteractor(
+      mockApplicationContext,
+      mockAuthorizedUser,
+    );
     expect(result).toEqual([]);
     expect(mockGetRecentFilingsByDocketNumbers).not.toHaveBeenCalled();
   });
@@ -120,7 +118,10 @@ describe('getRecentFilingsForUserInteractor', () => {
     mockGetRecentFilingsByDocketNumbers.mockResolvedValue(mockDbResults);
     mockGetCasesByDocketNumbers.mockResolvedValue(mockCaseDetails);
 
-    const result = await getRecentFilingsForUserInteractor(mockAuthorizedUser);
+    const result = await getRecentFilingsForUserInteractor(
+      mockApplicationContext,
+      mockAuthorizedUser,
+    );
 
     expect(result).toEqual([
       {
@@ -157,7 +158,10 @@ describe('getRecentFilingsForUserInteractor', () => {
     });
     mockGetRecentFilingsByDocketNumbers.mockResolvedValue(mockDbResults);
 
-    const result = await getRecentFilingsForUserInteractor(mockAuthorizedUser);
+    const result = await getRecentFilingsForUserInteractor(
+      mockApplicationContext,
+      mockAuthorizedUser,
+    );
 
     expect(result[0].inConsolidatedGroup).toBe(true);
     expect(result[0].isLeadCase).toBe(true);
@@ -181,7 +185,10 @@ describe('getRecentFilingsForUserInteractor', () => {
     });
     mockGetRecentFilingsByDocketNumbers.mockResolvedValue(mockDbResults);
 
-    const result = await getRecentFilingsForUserInteractor(mockAuthorizedUser);
+    const result = await getRecentFilingsForUserInteractor(
+      mockApplicationContext,
+      mockAuthorizedUser,
+    );
 
     expect(result[0].inConsolidatedGroup).toBe('101-20');
     expect(result[0].isLeadCase).toBe(false);
@@ -205,7 +212,10 @@ describe('getRecentFilingsForUserInteractor', () => {
     });
     mockGetRecentFilingsByDocketNumbers.mockResolvedValue(mockDbResults);
 
-    const result = await getRecentFilingsForUserInteractor(mockAuthorizedUser);
+    const result = await getRecentFilingsForUserInteractor(
+      mockApplicationContext,
+      mockAuthorizedUser,
+    );
 
     expect(result[0].document).toBe('Document');
     expect(result[0].caseTitle).toBe('Unknown Case');
@@ -225,7 +235,10 @@ describe('getRecentFilingsForUserInteractor', () => {
     });
     mockGetRecentFilingsByDocketNumbers.mockResolvedValue(mockDbResults);
 
-    const result = await getRecentFilingsForUserInteractor(mockAuthorizedUser);
+    const result = await getRecentFilingsForUserInteractor(
+      mockApplicationContext,
+      mockAuthorizedUser,
+    );
 
     expect(result).toHaveLength(2);
     expect(result[0].docketNumber).toBe('101-20');
@@ -250,7 +263,10 @@ describe('getRecentFilingsForUserInteractor', () => {
     });
     mockGetRecentFilingsByDocketNumbers.mockResolvedValue(mockDbResults);
 
-    const result = await getRecentFilingsForUserInteractor(mockAuthorizedUser);
+    const result = await getRecentFilingsForUserInteractor(
+      mockApplicationContext,
+      mockAuthorizedUser,
+    );
 
     expect(result[0].isFileAttached).toBe(false);
     expect(result[0].isStricken).toBe(true);
@@ -273,7 +289,10 @@ describe('getRecentFilingsForUserInteractor', () => {
     });
     mockGetRecentFilingsByDocketNumbers.mockResolvedValue(mockDbResults);
 
-    const result = await getRecentFilingsForUserInteractor(mockAuthorizedUser);
+    const result = await getRecentFilingsForUserInteractor(
+      mockApplicationContext,
+      mockAuthorizedUser,
+    );
 
     expect(result[0].inConsolidatedGroup).toBeUndefined();
     expect(result[0].isLeadCase).toBe(true);
@@ -294,7 +313,10 @@ describe('getRecentFilingsForUserInteractor', () => {
     });
     mockGetRecentFilingsByDocketNumbers.mockResolvedValue(mockDbResults);
 
-    const result = await getRecentFilingsForUserInteractor(mockAuthorizedUser);
+    const result = await getRecentFilingsForUserInteractor(
+      mockApplicationContext,
+      mockAuthorizedUser,
+    );
 
     expect(result[0].docketNumber).toBe('999-99');
     expect(result[0].inConsolidatedGroup).toBe(false);
@@ -316,7 +338,10 @@ describe('getRecentFilingsForUserInteractor', () => {
     mockGetRecentFilingsByDocketNumbers.mockResolvedValue(mockDbResults);
     mockGetCasesByDocketNumbers.mockResolvedValue(mockCaseDetails);
 
-    const result = await getRecentFilingsForUserInteractor(mockAuthorizedUser);
+    const result = await getRecentFilingsForUserInteractor(
+      mockApplicationContext,
+      mockAuthorizedUser,
+    );
 
     // Should return the document but mark user as not associated
     expect(result).toHaveLength(1);
@@ -346,7 +371,10 @@ describe('getRecentFilingsForUserInteractor', () => {
     mockGetRecentFilingsByDocketNumbers.mockResolvedValue(mockDbResults);
     mockGetCasesByDocketNumbers.mockResolvedValue(mockCaseDetails);
 
-    const result = await getRecentFilingsForUserInteractor(mockAuthorizedUser);
+    const result = await getRecentFilingsForUserInteractor(
+      mockApplicationContext,
+      mockAuthorizedUser,
+    );
 
     // Should return both documents but mark association appropriately
     expect(result).toHaveLength(2);
@@ -381,7 +409,10 @@ describe('getRecentFilingsForUserInteractor', () => {
     mockGetRecentFilingsByDocketNumbers.mockResolvedValue(mockDbResults);
     mockGetCasesByDocketNumbers.mockResolvedValue(mockCaseDetails);
 
-    const result = await getRecentFilingsForUserInteractor(mockAuthorizedUser);
+    const result = await getRecentFilingsForUserInteractor(
+      mockApplicationContext,
+      mockAuthorizedUser,
+    );
 
     // Should return documents from both cases since user is party to both
     expect(result).toHaveLength(2);

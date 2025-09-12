@@ -5,14 +5,13 @@ import {
 } from '@shared/business/entities/authUser/AuthUser';
 import { getCasesForUserInteractor } from './getCasesForUserInteractor';
 import { calculateISODate } from '../utilities/DateHandler';
-import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
-import { getRecentFilingsByDocketNumbers } from '@web-api/persistence/postgres/docketEntries/getRecentFilingsByDocketNumbers';
 import { userIsDirectlyAssociated } from '@shared/business/entities/cases/Case';
 
 import { RecentFiling } from '@shared/business/entities/RecentFiling';
 import { getCaseCaptionMeta } from '../utilities/getCaseCaptionMeta';
 
 export const getRecentFilingsForUserInteractor = async (
+  applicationContext: any,
   authorizedUser: UnknownAuthUser,
 ): Promise<RecentFiling[]> => {
   if (!isAuthUser(authorizedUser)) {
@@ -43,11 +42,13 @@ export const getRecentFilingsForUserInteractor = async (
   const sevenDaysAgo = calculateISODate({ howMuch: -7, units: 'days' });
   const today = calculateISODate({ howMuch: 0, units: 'days' });
 
-  const dbDocketEntries = await getRecentFilingsByDocketNumbers({
-    docketNumbers,
-    startDate: sevenDaysAgo,
-    endDate: today,
-  });
+  const dbDocketEntries = await applicationContext
+    .getPersistenceGateway()
+    .getRecentFilingsByDocketNumbers({
+      docketNumbers,
+      startDate: sevenDaysAgo,
+      endDate: today,
+    });
 
   const results = dbDocketEntries.map(d => ({
     docketNumber: d.docketNumber,
@@ -67,10 +68,12 @@ export const getRecentFilingsForUserInteractor = async (
 
   // Get case details to check user association for consolidated cases
   const uniqueDocketNumbers = [...new Set(results.map(r => r.docketNumber))];
-  const caseDetails = await getCasesByDocketNumbers({
-    docketNumbers: uniqueDocketNumbers,
-    excludeFields: ['docketEntries', 'hearings', 'correspondence'],
-  });
+  const caseDetails = await applicationContext
+    .getPersistenceGateway()
+    .getCasesByDocketNumbers({
+      docketNumbers: uniqueDocketNumbers,
+      excludeFields: ['docketEntries', 'hearings', 'correspondence'],
+    });
 
   const caseDetailsMap = new Map();
   caseDetails.forEach(caseDetail => {
