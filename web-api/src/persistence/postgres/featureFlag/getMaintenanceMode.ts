@@ -10,5 +10,8 @@ export function getMaintenanceMode(): Promise<
       const MAINTENANCE_RECORD = POSTGRES_RECORDS[0];
       return MAINTENANCE_RECORD.value;
     })
-    .catch(() => undefined);
+    .catch(() => {
+      // if we can't connect to postgres, we assume maintence mode on due to critical issues
+      return { current: true };
+    });
 }

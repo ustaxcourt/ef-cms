@@ -127,6 +127,8 @@ describe('serveCaseToIrsInteractor', () => {
           caseEntity.docketEntries.find(d => d.docketEntryId === docketEntryId),
       );
 
+    applicationContext.getPersistenceGateway().isFileExists = jest.fn();
+
     applicationContext
       .getPersistenceGateway()
       .getDocument.mockResolvedValue(testPdfDoc);
@@ -553,16 +555,31 @@ describe('serveCaseToIrsInteractor', () => {
   });
 
   it('should generate the receipt like normal even if a trial city is undefined', async () => {
+    const secondaryContactId = 'f30c6634-4c3d-4cda-874c-d9a9387e00e2';
     mockCase = {
       ...MOCK_CASE,
       contactSecondary: {
         ...getContactPrimary(MOCK_CASE),
-        contactId: 'f30c6634-4c3d-4cda-874c-d9a9387e00e2',
+        contactId: secondaryContactId,
         name: 'Test Petitioner Secondary',
       },
       isPaper: false,
       partyType: PARTY_TYPES.petitionerSpouse,
       preferredTrialCity: null,
+      privatePractitioners: [
+        {
+          barNumber: '123456789',
+          name: 'Test Private Practitioner',
+          practitionerId: '123456789',
+          practitionerType: 'privatePractitioner',
+          representing: [
+            getContactPrimary(MOCK_CASE).contactId,
+            secondaryContactId,
+          ],
+          role: 'privatePractitioner',
+          userId: '130c6634-4c3d-4cda-874c-d9a9387e00e2',
+        },
+      ],
       procedureType: 'Regular',
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     };
@@ -635,11 +652,269 @@ describe('serveCaseToIrsInteractor', () => {
     );
   });
 
+  describe('pro se checklist', () => {
+    it('should append the pro se checklist if the petitioner is pro se', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .isFileExists.mockResolvedValueOnce(true) // pro se checklist
+        .mockResolvedValueOnce(false); // clinic letter
+      mockCase = {
+        ...MOCK_CASE,
+        isPaper: false,
+        partyType: PARTY_TYPES.petitioner,
+        preferredTrialCity: 'Los Angeles, California',
+        procedureType: 'Regular',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+      };
+
+      await serveCaseToIrsInteractor(
+        applicationContext,
+        mockParams,
+        mockPetitionsClerkUser,
+      );
+
+      expect(
+        applicationContext.getPersistenceGateway().getDocument,
+      ).toHaveBeenCalledTimes(1);
+      expect(
+        applicationContext.getUtilities().combineTwoPdfs,
+      ).toHaveBeenCalledTimes(1);
+      expect(
+        applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
+      ).toHaveBeenCalledTimes(1);
+    });
+    it('should append the pro se checklist each for the petitioner and spouse with different addresses if they are pro se', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .isFileExists.mockResolvedValueOnce(true) // pro se checklist
+        .mockResolvedValueOnce(false); // clinic letter
+      const primaryContactNotr = getFakeFile(true, true);
+      const secondaryContactNotr = getFakeFile(true);
+
+      applicationContext
+        .getDocumentGenerators()
+        .noticeOfReceiptOfPetition.mockReturnValueOnce(primaryContactNotr);
+
+      mockCase = {
+        ...MOCK_CASE,
+        contactSecondary: {
+          ...getContactPrimary(MOCK_CASE),
+          address1: '123 A Different Street',
+          contactId: 'f30c6634-4c3d-4cda-874c-d9a9387e00e2',
+          contactSecondary: CONTACT_TYPES.secondary,
+          name: 'Test Petitioner Secondary',
+        },
+        isPaper: false,
+        partyType: PARTY_TYPES.petitionerSpouse,
+        preferredTrialCity: 'Los Angeles, California',
+        procedureType: 'Regular',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+      };
+      await serveCaseToIrsInteractor(
+        applicationContext,
+        mockParams,
+        mockPetitionsClerkUser,
+      );
+
+      expect(
+        applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
+      ).toHaveBeenCalledTimes(2);
+
+      expect(
+        applicationContext.getUtilities().combineTwoPdfs,
+      ).toHaveBeenCalledTimes(3);
+
+      const actualPrimaryContactNotr =
+        applicationContext.getUtilities().combineTwoPdfs.mock.calls[0][0]
+          .firstPdf;
+      expect(actualPrimaryContactNotr).toEqual(primaryContactNotr);
+
+      const actualSecondaryContactNotr =
+        applicationContext.getUtilities().combineTwoPdfs.mock.calls[1][0]
+          .firstPdf;
+      expect(actualSecondaryContactNotr).toEqual(secondaryContactNotr);
+    });
+    it('should append the pro se checklist once if the petitioner and spouse have the same address and are pro se', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .isFileExists.mockResolvedValueOnce(true) // pro se checklist
+        .mockResolvedValueOnce(false); // clinic letter
+
+      mockCase = {
+        ...MOCK_CASE,
+        contactSecondary: {
+          ...getContactPrimary(MOCK_CASE),
+          contactId: 'f30c6634-4c3d-4cda-874c-d9a9387e00e2',
+          name: 'Test Petitioner Secondary',
+        },
+        isPaper: false,
+        partyType: PARTY_TYPES.petitionerSpouse,
+        preferredTrialCity: 'Los Angeles, California',
+        procedureType: 'Regular',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+      };
+
+      await serveCaseToIrsInteractor(
+        applicationContext,
+        mockParams,
+        mockPetitionsClerkUser,
+      );
+
+      expect(
+        applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
+      ).toHaveBeenCalledTimes(1);
+
+      expect(
+        applicationContext.getUtilities().combineTwoPdfs,
+      ).toHaveBeenCalledTimes(1);
+    });
+    it('should not append the pro se checklist if the petitioner for the petition is represented by counsel', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .isFileExists.mockResolvedValueOnce(false); // clinic letter
+
+      mockCase = {
+        ...MOCK_CASE,
+        isPaper: false,
+        partyType: PARTY_TYPES.petitioner,
+        preferredTrialCity: 'Los Angeles, California',
+        privatePractitioners: [
+          {
+            barNumber: '123456789',
+            name: 'Test Private Practitioner',
+            practitionerId: '123456789',
+            practitionerType: 'privatePractitioner',
+            representing: [getContactPrimary(MOCK_CASE).contactId],
+            role: 'privatePractitioner',
+            userId: '130c6634-4c3d-4cda-874c-d9a9387e00e2',
+          },
+        ],
+        procedureType: 'Regular',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+      };
+
+      await serveCaseToIrsInteractor(
+        applicationContext,
+        mockParams,
+        mockPetitionsClerkUser,
+      );
+      expect(
+        applicationContext.getPersistenceGateway().isFileExists,
+      ).not.toHaveBeenCalled();
+      expect(
+        applicationContext.getUtilities().combineTwoPdfs,
+      ).not.toHaveBeenCalled();
+      expect(
+        applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
+      ).toHaveBeenCalledTimes(1);
+    });
+    it('should not append the pro se checklist if the petitioner and spouse of different addresses are represented by counsel', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .isFileExists.mockResolvedValueOnce(false); // clinic letter
+
+      const secondaryContactId = 'f30c6634-4c3d-4cda-874c-d9a9387e00e2';
+      mockCase = {
+        ...MOCK_CASE,
+        contactSecondary: {
+          ...getContactPrimary(MOCK_CASE),
+          address1: '123 A Different Street',
+          contactId: secondaryContactId,
+          contactSecondary: CONTACT_TYPES.secondary,
+          name: 'Test Petitioner Secondary',
+        },
+        isPaper: false,
+        partyType: PARTY_TYPES.petitionerSpouse,
+        preferredTrialCity: null,
+        privatePractitioners: [
+          {
+            barNumber: '123456789',
+            name: 'Test Private Practitioner',
+            practitionerId: '123456789',
+            practitionerType: 'privatePractitioner',
+            representing: [
+              getContactPrimary(MOCK_CASE).contactId,
+              secondaryContactId,
+            ],
+            role: 'privatePractitioner',
+            userId: '130c6634-4c3d-4cda-874c-d9a9387e00e2',
+          },
+        ],
+        procedureType: 'Regular',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+      };
+
+      await serveCaseToIrsInteractor(
+        applicationContext,
+        mockParams,
+        mockPetitionsClerkUser,
+      );
+
+      expect(
+        applicationContext.getPersistenceGateway().isFileExists,
+      ).not.toHaveBeenCalled();
+      expect(
+        applicationContext.getUtilities().combineTwoPdfs,
+      ).toHaveBeenCalledTimes(1);
+      expect(
+        applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
+      ).toHaveBeenCalledTimes(2);
+    });
+    it('should append the pro se checklist to only petitioner 2 when petitioner 1 is represented by counsel and petitioner 2 is pro se', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .isFileExists.mockResolvedValueOnce(true) // pro se checklist
+        .mockResolvedValueOnce(false); // clinic letter
+
+      const secondaryContactId = 'f30c6634-4c3d-4cda-874c-d9a9387e00e2';
+      mockCase = {
+        ...MOCK_CASE,
+        contactSecondary: {
+          ...getContactPrimary(MOCK_CASE),
+          address1: '123 A Different Street',
+          contactId: secondaryContactId,
+          contactSecondary: CONTACT_TYPES.secondary,
+          name: 'Test Petitioner Secondary',
+        },
+        isPaper: false,
+        partyType: PARTY_TYPES.petitionerSpouse,
+        preferredTrialCity: null,
+        privatePractitioners: [
+          {
+            barNumber: '123456789',
+            name: 'Test Private Practitioner',
+            practitionerId: '123456789',
+            practitionerType: 'privatePractitioner',
+            representing: [getContactPrimary(MOCK_CASE).contactId],
+            role: 'privatePractitioner',
+            userId: '130c6634-4c3d-4cda-874c-d9a9387e00e2',
+          },
+        ],
+        procedureType: 'Regular',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+      };
+
+      await serveCaseToIrsInteractor(
+        applicationContext,
+        mockParams,
+        mockPetitionsClerkUser,
+      );
+
+      expect(
+        applicationContext.getUtilities().combineTwoPdfs,
+      ).toHaveBeenCalledTimes(2);
+      expect(
+        applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
+      ).toHaveBeenCalledTimes(2);
+    });
+  });
+
   describe('clinic letters', () => {
     it('should append a clinic letter to the notice of receipt of petition when one exists for the requested place of trial and petition is pro se', async () => {
       applicationContext
         .getPersistenceGateway()
-        .isFileExists.mockReturnValueOnce(true);
+        .isFileExists.mockResolvedValueOnce(false) // pro se checklist
+        .mockResolvedValueOnce(true); // clinic letter
 
       mockCase = {
         ...MOCK_CASE,
@@ -679,7 +954,8 @@ describe('serveCaseToIrsInteractor', () => {
     it('should NOT append a clinic letter to the notice of receipt of petition if it does NOT exist and petition is pro se', async () => {
       applicationContext
         .getPersistenceGateway()
-        .isFileExists.mockReturnValueOnce(false);
+        .isFileExists.mockResolvedValueOnce(false) // pro se checklist
+        .mockResolvedValueOnce(false); // clinic letter
 
       mockCase = {
         ...MOCK_CASE,
@@ -760,7 +1036,8 @@ describe('serveCaseToIrsInteractor', () => {
     it('should append a clinic letter to both notice of receipt of petitions when there are two pro se petitioners at different addresses', async () => {
       applicationContext
         .getPersistenceGateway()
-        .isFileExists.mockReturnValueOnce(true);
+        .isFileExists.mockResolvedValueOnce(false) // pro se checklist
+        .mockResolvedValueOnce(true); // clinic letter
 
       const primaryContactNotr = getFakeFile(true, true);
       const secondaryContactNotr = getFakeFile(true);
@@ -813,7 +1090,8 @@ describe('serveCaseToIrsInteractor', () => {
     it('should append a clinic letter to one notice of receipt of petition when there are two petitioners at different addresses but one has representation', async () => {
       applicationContext
         .getPersistenceGateway()
-        .isFileExists.mockReturnValueOnce(true);
+        .isFileExists.mockResolvedValueOnce(false) // pro se checklist
+        .mockResolvedValueOnce(true); // clinic letter
 
       const secondaryContactId = 'f30c6634-4c3d-4cda-874c-d9a9387e00e2';
       mockCase = {
@@ -860,7 +1138,8 @@ describe('serveCaseToIrsInteractor', () => {
     it('should append a clinic letter to the one notice of receipt of petition when there are two pro se petitioners at the same addresses', async () => {
       applicationContext
         .getPersistenceGateway()
-        .isFileExists.mockReturnValueOnce(true);
+        .isFileExists.mockResolvedValueOnce(false) // pro se checklist
+        .mockResolvedValueOnce(true); // clinic letter
 
       mockCase = {
         ...MOCK_CASE,
@@ -894,7 +1173,7 @@ describe('serveCaseToIrsInteractor', () => {
     it('should not append a clinic letter to the one notice of receipt of petition when there are two petitioners at the same addresses with one having representation', async () => {
       applicationContext
         .getPersistenceGateway()
-        .isFileExists.mockReturnValueOnce(true);
+        .isFileExists.mockResolvedValueOnce(false); // pro se checklist
 
       const secondaryContactId = 'f30c6634-4c3d-4cda-874c-d9a9387e00e2';
       mockCase = {

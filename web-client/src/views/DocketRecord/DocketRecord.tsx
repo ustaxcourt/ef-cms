@@ -250,7 +250,7 @@ export const DocketRecord = connect(
                         </td>
                         <td
                           className="hide-on-mobile number-of-pages"
-                          data-testid="docket-entry-numberOfPages"
+                          data-testid={`docket-entry-numberOfPages-${entry.docketNumber}`}
                         >
                           {entry.numberOfPages}
                         </td>
