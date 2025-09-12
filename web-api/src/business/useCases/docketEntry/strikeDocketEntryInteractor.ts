@@ -49,6 +49,8 @@ export const strikeDocketEntryInteractor = async (
 
   docketEntry.strikeEntry({ name: user.name, userId: user.userId });
 
+  docketEntry.pending = false;
+
   const validatedDocketEntry = docketEntry.validate().toRawObject();
 
   caseEntity.updateDocketEntry(validatedDocketEntry);
