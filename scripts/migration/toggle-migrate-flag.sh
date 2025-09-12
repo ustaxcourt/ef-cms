@@ -11,7 +11,8 @@ if [[ -n "$1" ]] && { [[ "$1" == "on" ]] || [[ "$1" == "ON" ]] || [[ "$1" == "-o
 fi
 
 aws ssm put-parameter \
-	--region us-east-1 --name "/DAWSON/${ENV}/migrate" \
-	--value "$TOGGLE" \
-	--type "String" \
-	--overwrite
+  --region us-east-1 \
+  --name "/DAWSON/${ENV}/migrate" \
+  --value "$TOGGLE" \
+  --type "String" \
+  --overwrite
