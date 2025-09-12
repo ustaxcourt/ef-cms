@@ -6,8 +6,9 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { applicationContext } from '@web-api/applicationContext';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 export const strikeDocketEntryInteractor = async (
   {
@@ -29,7 +30,7 @@ export const strikeDocketEntryInteractor = async (
     docketNumber,
   });
 
-  const caseEntity = new Case(caseToUpdate, { authorizedUser });
+  let caseEntity = new Case(caseToUpdate, { authorizedUser });
 
   const docketEntry = caseEntity.getDocketEntryById({
     docketEntryId,
@@ -48,14 +49,20 @@ export const strikeDocketEntryInteractor = async (
   }
 
   docketEntry.strikeEntry({ name: user.name, userId: user.userId });
-
   docketEntry.pending = false;
-
   const validatedDocketEntry = docketEntry.validate().toRawObject();
-
   caseEntity.updateDocketEntry(validatedDocketEntry);
 
-  await upsertDocketEntries([validatedDocketEntry]);
+  caseEntity = await applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAutomaticBlock({
+      caseEntity,
+    });
+
+  await updateCaseAndAssociations({
+    authorizedUser,
+    caseToUpdate: caseEntity,
+  });
 
   return caseEntity.toRawObject();
 };
