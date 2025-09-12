@@ -7,8 +7,6 @@ resource "aws_rds_global_cluster" "global_cluster" {
 
   lifecycle {
     prevent_destroy = true
-    # TODO: remove this after the rds upgrade
-    # ignore_changes = [engine_version]
   }
 }
 
