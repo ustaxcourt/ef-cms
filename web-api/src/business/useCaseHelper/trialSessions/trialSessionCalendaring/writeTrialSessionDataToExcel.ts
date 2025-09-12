@@ -12,6 +12,7 @@ import {
 } from '@shared/business/utilities/DateHandler';
 import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
 import { Holiday } from '@18f/us-federal-holidays';
+import ExcelJS from 'exceljs';
 
 type ColumnObject = { header: string; key: string; width?: number };
 
@@ -53,10 +54,7 @@ export const writeTrialSessionDataToExcel = async ({
     weeksStartDates,
   });
 
-  console.log(weeksRange);
-
   worksheet.columns = getColumns({ weeksStartDates });
-  // console.log('worksheet.columns', worksheet.columns);
 
   for (const cityStateString in rowsByCity) {
     const populatedRow = populateRow({
@@ -69,7 +67,6 @@ export const writeTrialSessionDataToExcel = async ({
 
   worksheet.eachRow(row => {
     row.eachCell({ includeEmpty: true }, cell => {
-      // console.log('cell', cell);
       const { alignment, border, fill, font } = getCellStyle(
         cell,
         holidays,
@@ -260,7 +257,7 @@ const populateRow = ({
 const getCellStyle = (
   cell,
   holidays,
-  weeksRange,
+  weeksRange: IsoDateRange[],
 ): { border: object; fill: ExcelJS.Fill; font: object; alignment: object } => {
   const border = {
     bottom: { style: 'thin' },
@@ -311,13 +308,13 @@ const getCellStyle = (
       break;
     default:
       if (cell.value && typeof cell.value === 'string') {
-        // console.log(cell._column._key);
         if (isValidISODate(cell._column._key)) {
-          // console.log(weeksRange);
-          const [start, end] = weeksRange.find(
-            r => r.start === cell._column._key,
-          );
-          // console.log('start,end', start, end);
+          const week = weeksRange.find(r => r.start === cell._column._key);
+          if (!week) {
+            throw new Error('Could not find week');
+          }
+          const { start, end } = week;
+
           const hasHoliday = holidays.some(holiday =>
             isDateWithinGivenInterval({
               date: holiday.dateString,
