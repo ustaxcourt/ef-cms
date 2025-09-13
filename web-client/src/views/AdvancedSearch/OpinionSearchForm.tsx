@@ -351,7 +351,6 @@ export const OpinionSearchForm = connect(
                 type="submit"
                 onClick={e => {
                   e.preventDefault();
-                  // Reset pagination to first page when a new search is submitted
                   setCurrentPaginationPageSequence({
                     advancedSearchTab,
                     currentPaginationPage: 0,
