@@ -17,7 +17,10 @@ export const OrderSearchForm = connect(
   {
     advancedDocumentSearchHelper: state.advancedDocumentSearchHelper,
     advancedSearchForm: state.advancedSearchForm,
+    advancedSearchTab: state.advancedSearchTab,
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
+    setCurrentPaginationPageSequence:
+      sequences.setCurrentPaginationPageSequence,
     updateAdvancedOrderSearchFormValueSequence:
       sequences.updateAdvancedOrderSearchFormValueSequence,
     validateOrderSearchSequence: sequences.validateOrderSearchSequence,
@@ -26,7 +29,9 @@ export const OrderSearchForm = connect(
   function OrderSearchForm({
     advancedDocumentSearchHelper,
     advancedSearchForm,
+    advancedSearchTab,
     clearAdvancedSearchFormSequence,
+    setCurrentPaginationPageSequence,
     submitAdvancedSearchSequence,
     updateAdvancedOrderSearchFormValueSequence,
     validateOrderSearchSequence,
@@ -258,6 +263,11 @@ export const OrderSearchForm = connect(
                 type="submit"
                 onClick={e => {
                   e.preventDefault();
+                  // Reset pagination to first page when a new search is submitted
+                  setCurrentPaginationPageSequence({
+                    advancedSearchTab,
+                    currentPaginationPage: 0,
+                  });
                   submitAdvancedSearchSequence();
                 }}
               >

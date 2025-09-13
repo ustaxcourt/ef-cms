@@ -672,7 +672,8 @@ export const baseState = {
   createOrderSelectedCases: [] as any[],
   currentJudges: [],
   currentPage: 'Loading',
-  currentPaginationPage: 0,
+  orderCurrentPaginationPage: 0,
+  opinionCurrentPaginationPage: 0,
   trialSessionLocationChangeModalInfo: {
     currentTrialSessionLocation: undefined as
       | TrialSessionLocationInfo
@@ -712,7 +713,6 @@ export const baseState = {
   docketRecordIndex: 0,
   documentToEdit: {} as any,
   documentsSelectedForDownload: [] as { docketEntryId: string }[],
-  // separate sort state for Order and Opinion advanced search tabs
   orderDocumentSearchSort: {
     sortColumn: 'formattedFiledDate',
     sortDirection: 'desc' as 'asc' | 'desc',
