@@ -27,6 +27,7 @@ const config: Config = {
     '!elasticsearch/ready-cluster-for-migration.ts',
     '!elasticsearch/reindex.ts',
     '!elasticsearch/retry-ocr-failures.ts',
+    '!elasticsearch/scrape-practitioner-briefs.ts',
     '!email/**',
     '!generate-uuid.ts',
     '!glue/**',
