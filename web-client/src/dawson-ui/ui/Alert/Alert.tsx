@@ -19,7 +19,7 @@ const alertVariants = cva(
     'tw:font-normal tw:xs:text-lg tw:text-sm/4',
     'tw:[&_ul]:m-0 tw:[&_ul]:-ml-4 tw:[&_ul]:list-disc',
     'tw:xs:[&_svg]:h-7 tw:xs:[&_svg]:w-7 tw:[&_svg]:h-6 tw:[&_svg]:w-6',
-    'tw:xs:w-[740px] tw:w-full',
+    'tw:xs:max-w-[740px] tw:w-full',
   ),
   {
     variants: {
