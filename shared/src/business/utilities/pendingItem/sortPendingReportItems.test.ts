@@ -2,6 +2,12 @@ import { PendingItemFormatted } from '@shared/business/utilities/formatPendingIt
 import { sortPendingReportItems } from '@shared/business/utilities/pendingItem/sortPendingReportItems';
 
 describe('sortPendingReportItems', () => {
+  it('should sort if pending items is not given', () => {
+    const SORT_FIELD = 'testProp';
+    const SORT_ORDER = 'asc' as const;
+    const results = sortPendingReportItems(undefined, SORT_FIELD, SORT_ORDER);
+    expect(results).toEqual([]);
+  });
   it('should sort the pending items by the provided sort field and order, asc', () => {
     const SORT_FIELD = 'testProp';
     const SORT_ORDER = 'asc' as const;
@@ -310,6 +316,38 @@ describe('sortPendingReportItems', () => {
       },
       {
         testProp: 'C',
+      },
+    ]);
+  });
+
+  it('should sort strings if they are the same', () => {
+    const SORT_FIELD = 'testProp';
+    const SORT_ORDER = 'asc' as const;
+    const PENDING_ITEMS: PendingItemFormatted[] = [
+      {
+        testProp: 'a',
+        receivedAt: '2020-12-01T04:00:00.000Z',
+      } as unknown as PendingItemFormatted,
+      {
+        testProp: 'a',
+        receivedAt: '2020-11-10T04:00:00.000Z',
+      } as unknown as PendingItemFormatted,
+    ];
+
+    const results = sortPendingReportItems(
+      PENDING_ITEMS,
+      SORT_FIELD,
+      SORT_ORDER,
+    );
+
+    expect(results).toEqual([
+      {
+        testProp: 'a',
+        receivedAt: '2020-11-10T04:00:00.000Z',
+      },
+      {
+        testProp: 'a',
+        receivedAt: '2020-12-01T04:00:00.000Z',
       },
     ]);
   });
