@@ -4,7 +4,7 @@ import {
   isAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
 import { getCasesForUserInteractor } from './getCasesForUserInteractor';
-import { calculateISODate } from '../utilities/DateHandler';
+import { calculateISODate, createEndOfDayISO } from '../utilities/DateHandler';
 import { userIsDirectlyAssociated } from '@shared/business/entities/cases/Case';
 
 import { RecentFiling } from '@shared/business/entities/RecentFiling';
@@ -40,14 +40,14 @@ export const getRecentFilingsForUserInteractor = async (
   }, [] as string[]);
 
   const sevenDaysAgo = calculateISODate({ howMuch: -7, units: 'days' });
-  const today = calculateISODate({ howMuch: 0, units: 'days' });
+  const endOfToday = createEndOfDayISO();
 
   const dbDocketEntries = await applicationContext
     .getPersistenceGateway()
     .getRecentFilingsByDocketNumbers({
       docketNumbers,
       startDate: sevenDaysAgo,
-      endDate: today,
+      endDate: endOfToday,
     });
 
   const results = dbDocketEntries.map(d => ({
