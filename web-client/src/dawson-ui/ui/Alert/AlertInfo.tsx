@@ -22,7 +22,6 @@ export type AlertInfoProps = {
   alertInfo?: AlertInfoType;
   isDismissible?: boolean;
   dismissAlertSequence?: () => void;
-  messageNotBold?: boolean;
   className?: string;
   scrollToTop?: boolean;
   iconRight?: boolean;
@@ -32,7 +31,6 @@ export function AlertInfo({
   alertInfo,
   isDismissible = true,
   dismissAlertSequence,
-  messageNotBold = false,
   className,
   scrollToTop = true,
 }: AlertInfoProps) {
@@ -65,7 +63,6 @@ export function AlertInfo({
             inlineLinkText={alertInfo.inlineLinkText}
             inlineLinkUrl={alertInfo.inlineLinkUrl}
             message={alertInfo.message}
-            messageNotBold={messageNotBold}
           />
         </AlertDescription>
       )}
@@ -91,21 +88,14 @@ type MessageProps = {
   inlineLinkText?: string;
   inlineLinkUrl?: string;
   message?: string | React.ReactNode;
-  messageNotBold?: boolean;
 };
 
-function Message({
-  inlineLinkText,
-  inlineLinkUrl,
-  message,
-  messageNotBold = false,
-}: MessageProps) {
+function Message({ inlineLinkText, inlineLinkUrl, message }: MessageProps) {
   if (!inlineLinkText || !inlineLinkUrl || typeof message !== 'string') {
     return (
       <p
         className={cn(
-          messageNotBold ? 'tw:font-normal' : 'tw:font-semibold',
-          'tw:xs:mt-1 tw:xs:mb-1 tw:mr-1 tw:mt-0 tw:mb-0',
+          'tw:font-normal tw:xs:mt-1 tw:xs:mb-1 tw:mr-1 tw:mt-0 tw:mb-0',
         )}
       >
         {message}
@@ -118,8 +108,7 @@ function Message({
   return (
     <p
       className={cn(
-        messageNotBold ? 'tw:font-normal' : 'tw:font-semibold',
-        'tw:xs:mt-1 tw:xs:mb-1 tw:mr-1 tw:mt-0 tw:mb-0',
+        'tw:font-normal tw:xs:mt-1 tw:xs:mb-1 tw:mr-1 tw:mt-0 tw:mb-0',
       )}
     >
       {beforeLink}
