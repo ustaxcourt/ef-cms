@@ -37,7 +37,7 @@ Help()
 INTEGRATION=true
 PORT=1234
 NON_PUBLIC=app-
-BROWSER=chrome
+BROWSER=edge
 RUN_SPECIFIC_TEST=""
 
 # Get the options
