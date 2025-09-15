@@ -54,6 +54,23 @@ describe('getFormattedTrialSessionDetails.compareCasesByDocketNumber', () => {
 });
 
 describe('getFormattedTrialSessionDetails.compareCasesByDocketNumberFactory', () => {
+  it('handle if all cases is not given', () => {
+    const result = compareCasesByDocketNumberFactory({ allCases: undefined })(
+      {
+        docketNumber: '101-19',
+        docketNumberSuffix: '',
+        docketNumberWithSuffix: '101-19',
+        isDocketSuffixHighPriority: false,
+      },
+      {
+        docketNumber: '102-19',
+        docketNumberSuffix: 'P',
+        docketNumberWithSuffix: '102-19P',
+        isDocketSuffixHighPriority: true,
+      },
+    );
+    expect(result).toBe(-1);
+  });
   it('101-19 should come before 102-19', () => {
     const result = compareCasesByDocketNumberFactory({
       allCases: [],
