@@ -26,7 +26,7 @@ export const submitOrderAdvancedSearchAction = async ({
   };
 
   try {
-    const firstChunk = await applicationContext
+    const orderSearch = await applicationContext
       .getUseCases()
       .orderAdvancedSearchInteractor(applicationContext, {
         searchParams: {
@@ -34,23 +34,7 @@ export const submitOrderAdvancedSearchAction = async ({
           limit: 5000,
         },
       });
-
-    let combinedResults = [...firstChunk.results];
-
-    if (firstChunk.moreResults && firstChunk.nextCursor) {
-      const secondChunk = await applicationContext
-        .getUseCases()
-        .orderAdvancedSearchInteractor(applicationContext, {
-          searchParams: {
-            ...baseParams,
-            limit: 5000,
-            cursor: firstChunk.nextCursor,
-          },
-        });
-      combinedResults = [...combinedResults, ...secondChunk.results];
-    }
-
-    return { searchResults: combinedResults };
+    return { searchResults: orderSearch.results };
   } catch (err: any) {
     if (err.responseCode === 429) {
       store.set(state.alertError, applicationContext.getConstants().ERROR_429);

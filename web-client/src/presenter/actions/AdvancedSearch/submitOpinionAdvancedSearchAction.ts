@@ -31,7 +31,7 @@ export const submitOpinionAdvancedSearchAction = async ({
   };
 
   try {
-    const firstChunk = await applicationContext
+    const opinionSearch = await applicationContext
       .getUseCases()
       .opinionAdvancedSearchInteractor(applicationContext, {
         searchParams: {
@@ -39,23 +39,7 @@ export const submitOpinionAdvancedSearchAction = async ({
           limit: 5000,
         },
       });
-
-    let combinedResults = [...firstChunk.results];
-
-    if (firstChunk.moreResults && firstChunk.nextCursor) {
-      const secondChunk = await applicationContext
-        .getUseCases()
-        .opinionAdvancedSearchInteractor(applicationContext, {
-          searchParams: {
-            ...baseParams,
-            limit: 5000,
-            cursor: firstChunk.nextCursor,
-          },
-        });
-      combinedResults = [...combinedResults, ...secondChunk.results];
-    }
-
-    return { searchResults: combinedResults };
+    return { searchResults: opinionSearch.results };
   } catch (err: any) {
     if (err.responseCode === 429) {
       store.set(state.alertError, applicationContext.getConstants().ERROR_429);

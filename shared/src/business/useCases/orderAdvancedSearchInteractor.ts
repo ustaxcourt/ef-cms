@@ -4,8 +4,8 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import {
-  MAX_SEARCH_RESULTS,
   ORDER_EVENT_CODES,
+  MAX_SEARCH_RESULTS,
 } from '@shared/business/entities/EntityConstants';
 import { User } from '@shared/business/entities/User';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
@@ -13,7 +13,6 @@ import { DocumentSearch } from '@shared/business/entities/documents/DocumentSear
 import { InternalDocumentSearchResult } from '@shared/business/entities/documents/InternalDocumentSearchResult';
 import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
 import { filterCaseSearchResultsNotAccessibleToUser } from '@shared/business/utilities/caseFilter';
-import { openSearchBatchState } from '@shared/business/utilities/getOpenSearchBatchState';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 
@@ -32,9 +31,7 @@ export const orderAdvancedSearchInteractor = async (
     judge,
     keyword,
     startDate,
-    from = 0,
     limit = 5000,
-    cursor,
   } = params || {};
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ADVANCED_SEARCH)) {
@@ -49,21 +46,18 @@ export const orderAdvancedSearchInteractor = async (
     judge,
     keyword,
     startDate,
-    from,
+    from: 0,
     userRole: authorizedUser.role,
   });
 
   const rawSearch = orderSearch.validate().toRawObject();
-  const { detectionCeiling, desired, accumulated } = openSearchBatchState(
-    limit,
-    MAX_SEARCH_RESULTS,
-  );
-  let nextCursor: any[] | undefined = undefined;
-  let searchAfter: any[] | undefined = cursor;
-  let lastRawOfBatch: any | undefined;
 
-  while (accumulated.length < detectionCeiling) {
-    const sizeNeeded = detectionCeiling - accumulated.length;
+  const accessible: any[] = [];
+  let searchAfter: any[] | undefined = undefined;
+  const maxCeiling = Math.min(MAX_SEARCH_RESULTS, limit);
+
+  while (accessible.length < limit) {
+    const sizeNeeded = limit - accessible.length;
     const { results: rawBatch } = await applicationContext
       .getPersistenceGateway()
       .advancedDocumentSearch({
@@ -76,9 +70,7 @@ export const orderAdvancedSearchInteractor = async (
         searchAfter,
       });
 
-    if (rawBatch.length === 0) {
-      break;
-    }
+    if (rawBatch.length === 0) break;
 
     const filteredBatch = filterCaseSearchResultsNotAccessibleToUser(
       rawBatch,
@@ -86,22 +78,18 @@ export const orderAdvancedSearchInteractor = async (
     );
 
     for (const r of filteredBatch) {
-      if (accumulated.length >= detectionCeiling) break;
-      accumulated.push(r);
+      if (accessible.length >= limit) break;
+      accessible.push(r);
     }
 
-    lastRawOfBatch = rawBatch[rawBatch.length - 1];
+    const lastRaw = rawBatch[rawBatch.length - 1];
 
-    if (lastRawOfBatch && lastRawOfBatch.sort) {
-      searchAfter = lastRawOfBatch.sort;
+    if (lastRaw && lastRaw.sort) {
+      searchAfter = lastRaw.sort;
     } else {
       break;
     }
-  }
-
-  const moreResults = accumulated.length > desired;
-  if (moreResults && accumulated[desired - 1]?.sort) {
-    nextCursor = accumulated[desired - 1].sort;
+    if (accessible.length >= maxCeiling) break;
   }
 
   const timestamp = formatNow(FORMATS.LOG_TIMESTAMP);
@@ -113,14 +101,10 @@ export const orderAdvancedSearchInteractor = async (
     userRole: authorizedUser.role,
   });
 
-  const resultsPage = accumulated.slice(0, desired);
-
   const validated =
-    InternalDocumentSearchResult.validateRawCollection(resultsPage);
+    InternalDocumentSearchResult.validateRawCollection(accessible);
 
   return {
     results: validated,
-    moreResults,
-    nextCursor: moreResults ? nextCursor : undefined,
   };
 };

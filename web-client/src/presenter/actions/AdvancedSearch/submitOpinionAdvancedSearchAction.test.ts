@@ -4,23 +4,12 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 import { submitOpinionAdvancedSearchAction } from './submitOpinionAdvancedSearchAction';
 
 describe('submitOpinionAdvancedSearchAction', () => {
-  it('should call opinionAdvancedSearchInteractor twice when first chunk indicates moreResults', async () => {
-    let callCount = 0;
+  it('should call opinionAdvancedSearchInteractor once from the action (batching internal, not in action)', async () => {
     applicationContext
       .getUseCases()
-      .opinionAdvancedSearchInteractor.mockImplementation(
-        (_ctx, { searchParams }) => {
-          callCount++;
-          if (!searchParams.cursor) {
-            return {
-              results: Array(5000).fill({}),
-              moreResults: true,
-              nextCursor: ['cursor1'],
-            };
-          }
-          return { results: Array(123).fill({}), moreResults: false };
-        },
-      );
+      .opinionAdvancedSearchInteractor.mockReturnValue({
+        results: Array(5000).fill({}),
+      });
     await runAction(submitOpinionAdvancedSearchAction, {
       modules: { presenter },
       state: {
@@ -32,7 +21,10 @@ describe('submitOpinionAdvancedSearchAction', () => {
         },
       },
     });
-    expect(callCount).toBe(2);
+    expect(
+      applicationContext.getUseCases().opinionAdvancedSearchInteractor.mock
+        .calls.length,
+    ).toBe(1);
   });
   presenter.providers.applicationContext = applicationContext;
 
@@ -41,7 +33,6 @@ describe('submitOpinionAdvancedSearchAction', () => {
       .getUseCases()
       .opinionAdvancedSearchInteractor.mockReturnValue({
         results: [],
-        moreResults: false,
       });
   });
 
