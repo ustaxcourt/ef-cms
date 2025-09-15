@@ -1,4 +1,8 @@
 import { state } from '@web-client/presenter/app.cerebral';
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+import { FormattedTrialSessionCase } from '@shared/business/utilities/trialSession/getFormattedTrialSessionDetails';
+import { TRIAL_SESSION_ELIGIBLE_CASES_BUFFER } from '@shared/business/entities/EntityConstants';
 
 export const groupKeySymbol = Symbol('group');
 
@@ -75,9 +79,6 @@ export const compareTrialSessionEligibleCases = eligibleCases => {
   };
 };
 
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
-import { FormattedTrialSessionCase } from '@shared/business/utilities/trialSession/getFormattedTrialSessionDetails';
 export const formattedEligibleCasesHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -87,6 +88,9 @@ export const formattedEligibleCasesHelper = (
     applicationContext.getUtilities();
 
   const eligibleCases = get(state.trialSession.eligibleCases) ?? [];
+  const { maxCases, caseOrder } = get(state.trialSession);
+  const caseLimit =
+    maxCases! + (TRIAL_SESSION_ELIGIBLE_CASES_BUFFER - caseOrder.length);
 
   const filter = get(
     state.screenMetadata.eligibleCasesFilter.hybridSessionFilter,
@@ -126,7 +130,8 @@ export const formattedEligibleCasesHelper = (
       } else {
         return true;
       }
-    });
+    })
+    .splice(0, caseLimit); //10493: consider removing limit entirely
 
   return sortedCases;
 };

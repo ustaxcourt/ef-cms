@@ -8,7 +8,7 @@ describe('deleteCalendarNoteSequence', () => {
   const mockTrialSessionId = '4e544995-92a9-45e4-af0a-149dd9c24458';
 
   const caseOrderItemWithoutNote = {
-    calendarNote: null,
+    calendarNote: undefined,
     docketNumber: mockDocketNumber,
   };
 
@@ -47,7 +47,9 @@ describe('deleteCalendarNoteSequence', () => {
 
     expect(cerebralTest.getState('trialSessions')).toEqual([
       {
-        caseOrder: [{ calendarNote: null, docketNumber: mockDocketNumber }],
+        caseOrder: [
+          { calendarNote: undefined, docketNumber: mockDocketNumber },
+        ],
         trialSessionId: mockTrialSessionId,
       },
     ]);

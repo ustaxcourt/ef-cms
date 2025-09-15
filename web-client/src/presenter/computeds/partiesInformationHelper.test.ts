@@ -375,7 +375,7 @@ describe('partiesInformationHelper', () => {
       });
 
       expect(result.formattedPetitioners[0].formattedPaperPetitionEmail).toBe(
-        'Not provided',
+        'Not Provided',
       );
     });
 
