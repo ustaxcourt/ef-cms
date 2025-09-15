@@ -785,7 +785,8 @@ export const SPOS_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
 
 export const AUTO_GENERATED_STATUS_REPORT_ORDER_DESCRIPTIONS = {
   statusReport: 'Status Report Due',
-  statusReportStipulatedDecision: 'Status Report or Proposed Stipulated Decision Due'
+  statusReportStipulatedDecision:
+    'Status Report or Proposed Stipulated Decision Due',
 };
 
 const AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES_WITH_NAMES = {
@@ -922,7 +923,7 @@ export const SYSTEM_AND_INTERNAL_DOCUMENT_TYPES = [
   })),
   ...INTERNAL_DOCUMENTS_ARRAY.map(doc => ({
     ...doc,
-    label: doc.documentTitle,
+    label: doc.documentType,
     value: doc.eventCode,
   })),
 ];

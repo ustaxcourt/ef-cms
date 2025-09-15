@@ -415,7 +415,7 @@ export const EXTERNAL_FILING_EVENTS: AllExternalFilingEvents = {
       ordinalField: '',
     },
     {
-      documentTitle: 'Expert Report',
+      documentTitle: 'Report',
       documentType: 'Expert Report',
       category: 'Miscellaneous',
       eventCode: 'RTP',
