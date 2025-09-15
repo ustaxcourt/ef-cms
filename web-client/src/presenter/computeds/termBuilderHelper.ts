@@ -30,5 +30,5 @@ export const termBuilderHelper = (get: Get): any => {
       };
     },
   );
-  return { holidaysInDateRange, formattedHolidaysInDateRange };
+  return { formattedHolidaysInDateRange };
 };
