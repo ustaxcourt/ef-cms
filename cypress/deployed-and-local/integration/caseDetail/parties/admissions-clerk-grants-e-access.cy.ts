@@ -13,7 +13,6 @@ import {
 describe('Admissions Clerk Grants E-Access', () => {
   const password = getCypressEnv().defaultAccountPass;
 
-
   beforeEach(() => {
     Cypress.session.clearCurrentSessionData();
   });
