@@ -275,3 +275,5 @@ export function DateRangePicker({
     </div>
   );
 }
+
+DateRangePicker.displayName = 'DateRangePicker';

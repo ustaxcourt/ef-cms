@@ -56,7 +56,8 @@ export class CaseSearch extends JoiValidationEntity {
         'date.min': 'End date cannot be prior to start date.',
       }),
     petitionerName: JoiValidationConstants.STRING.max(500)
-      .required()
+      .allow('')
+      .optional()
       .messages({ '*': 'Enter a name' }),
     petitionerState: JoiValidationConstants.STRING.valid(
       ...Object.keys(US_STATES),

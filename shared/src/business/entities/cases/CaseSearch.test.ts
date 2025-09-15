@@ -17,12 +17,14 @@ describe('Case Search entity', () => {
     expect(validationErrors).toBeNull();
   });
 
-  it('should fail validation when a petitioner name is not provided', () => {
-    const caseSearch = new CaseSearch({});
+  it('should pass validation when a petitioner name is not provided but dates are provided', () => {
+    const caseSearch = new CaseSearch({
+      startDate: '06/01/2000',
+    });
 
     const validationErrors = caseSearch.getFormattedValidationErrors();
 
-    expect(validationErrors!.petitionerName).toEqual('Enter a name');
+    expect(validationErrors).toBeNull();
   });
 
   it('should be valid when only a start date is provided (without an end date)', () => {
@@ -40,6 +42,17 @@ describe('Case Search entity', () => {
     const caseSearch = new CaseSearch({
       endDate: '06/01/2000',
       petitionerName: 'Solomon Grundy',
+    });
+
+    const validationErrors = caseSearch.getFormattedValidationErrors();
+
+    expect(validationErrors).toBeNull();
+  });
+
+  it('should be valid when only dates are provided (without petitioner name)', () => {
+    const caseSearch = new CaseSearch({
+      startDate: '06/01/2000',
+      endDate: '06/30/2000',
     });
 
     const validationErrors = caseSearch.getFormattedValidationErrors();
