@@ -534,8 +534,8 @@ export const INTERNAL_FILING_EVENTS: AllInteralFilingEvents = {
       ordinalField: '',
     },
     {
-      documentTitle: 'Expert Report',
-      documentType: 'Expert Report',
+      documentTitle: 'Report',  // fix
+      documentType: 'Report',
       category: 'Miscellaneous',
       eventCode: 'RTP',
       scenario: 'Standard',
