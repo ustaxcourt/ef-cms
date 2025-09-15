@@ -9,7 +9,7 @@ import {
   handle,
 } from './middleware/apiGatewayHelper';
 import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
-import { getMaintenanceMode } from '@web-api/persistence/postgres/featureFlag/getMaintenanceMode';
+import { getMaintenanceMode } from '@web-api/persistence/postgres/featureFlag/g';
 import { getEntityByName } from '@web-api/business/getEntityByName';
 
 export const dataSecurityFilter = (

@@ -3,7 +3,7 @@ import '@web-api/persistence/postgres/workitems/mocks.jest';
 jest.mock('@web-api/persistence/postgres/featureFlag/getMaintenanceMode');
 import { MOCK_CASE_WITH_TRIAL_SESSION } from '../../../../shared/src/test/mockCase';
 import { getCaseLambda } from './getCaseLambda';
-import { getMaintenanceMode as getMaintenanceModeMock } from '@web-api/persistence/postgres/featureFlag/getMaintenanceMode';
+import { getMaintenanceMode as getMaintenanceModeMock } from '@web-api/persistence/postgres/featureFlag/g';
 import {
   mockDocketClerkUser,
   mockPetitionerUser,

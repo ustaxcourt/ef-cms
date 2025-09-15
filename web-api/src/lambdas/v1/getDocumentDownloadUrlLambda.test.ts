@@ -10,7 +10,7 @@ import { MOCK_PETITION } from '@shared/test/mockDocketEntry';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getDocumentDownloadUrlLambda } from './getDocumentDownloadUrlLambda';
 import { getDownloadPolicyUrl as getDownloadPolicyUrlMock } from '@web-api/persistence/s3/getDownloadPolicyUrl';
-import { getMaintenanceMode as getMaintenanceModeMock } from '@web-api/persistence/postgres/featureFlag/getMaintenanceMode';
+import { getMaintenanceMode as getMaintenanceModeMock } from '@web-api/persistence/postgres/featureFlag/g';
 import {
   mockDocketClerkUser,
   mockPetitionerUser,
@@ -44,9 +44,8 @@ describe('getDocumentDownloadUrlLambda', () => {
     getMaintenanceMode.mockResolvedValue({ current: false });
     getDownloadPolicyUrl.mockImplementation(({ key, useTempBucket }) => {
       return Promise.resolve({
-        url: `https://example.com/download-policy-url/${
-          useTempBucket ? 'temp-' : ''
-        }bucket/item/${key}`,
+        url: `https://example.com/download-policy-url/${useTempBucket ? 'temp-' : ''
+          }bucket/item/${key}`,
       });
     });
   });

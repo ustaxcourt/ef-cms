@@ -23,7 +23,7 @@ import { getDocument } from './persistence/s3/getDocument';
 import { getDocumentIdFromSQSMessage } from './persistence/sqs/getDocumentIdFromSQSMessage';
 import { getDownloadPolicyUrl } from './persistence/s3/getDownloadPolicyUrl';
 import { getEligibleCasesForTrialCity } from '@web-api/persistence/postgres/cases/getEligibleCasesForTrialCity';
-import { getMaintenanceMode } from './persistence/postgres/featureFlag/getMaintenanceMode';
+import { getMaintenanceMode } from './persistence/postgres/featureFlag/g';
 import { getPractitionersByName } from './persistence/elasticsearch/getPractitionersByName';
 import { getReconciliationReport } from './persistence/elasticsearch/getReconciliationReport';
 import { getSesStatus } from './persistence/ses/getSesStatus';

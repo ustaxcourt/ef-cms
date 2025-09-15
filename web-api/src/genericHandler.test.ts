@@ -20,7 +20,7 @@ import {
 } from './genericHandler';
 import { getEntityByName as getEntityByNameMock } from '@web-api/business/getEntityByName';
 import { getDawsonLogger as getLoggerMock } from '@web-api/utilities/logger/getDawsonLogger';
-import { getMaintenanceMode as getMaintenanceModeMock } from '@web-api/persistence/postgres/featureFlag/getMaintenanceMode';
+import { getMaintenanceMode as getMaintenanceModeMock } from '@web-api/persistence/postgres/featureFlag/g';
 import {
   mockAdcUser,
   mockDocketClerkUser,
@@ -267,4 +267,3 @@ describe('genericHandler', () => {
     });
   });
 });
-  
