@@ -3,7 +3,7 @@ import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/
 export function getMaintenanceMode(): Promise<
   { current: boolean } | undefined
 > {
-  if (process.env.MAINTENCE_MODE === 'true') {
+  if (process.env.MAINTENANCE_MODE === 'true') {
     return Promise.resolve({ current: true });
   }
 
