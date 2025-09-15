@@ -4,7 +4,10 @@ import ExcelJS from 'exceljs';
 import mockCaseCountsAndSessionsByCity from '@shared/test/mockCaseCountsAndSessionsByCity.json';
 import mockIncorrectSizeRegularCases from '@shared/test/mockIncorrectlySizedCases.json';
 import path from 'path';
-import { IsoDateRange } from '@shared/business/utilities/DateHandler';
+import {
+  calculateDate,
+  IsoDateRange,
+} from '@shared/business/utilities/DateHandler';
 import { Holiday } from '@18f/us-federal-holidays';
 
 const mockUserMessages = [
@@ -30,7 +33,13 @@ const mockWeeks: IsoDateRange[] = [
   { start: '2025-03-31', end: '2025-04-05' },
 ];
 
-const mockHolidays: Holiday[] = [];
+const mockHolidays: Holiday[] = [
+  {
+    name: "New Year's Day",
+    dateString: '2025-01-01',
+    date: calculateDate({ dateString: '2025-01-01' }),
+  },
+];
 
 describe('writeTrialSessionDataToExcel', () => {
   it('generates an XLSX file that matches the expected fixture', async () => {

@@ -314,12 +314,8 @@ const getCellStyle = (
           type: 'pattern',
         };
         if (isValidISODate(cell._column._key)) {
-          const week = weeksRange.find(r => r.start === cell._column._key);
-          if (!week) {
-            throw new Error('Could not find week');
-          }
+          const week = weeksRange.find(r => r.start === cell._column._key)!;
           const { start, end } = week;
-
           const hasHoliday = holidays.some(holiday =>
             isDateWithinGivenInterval({
               date: holiday.dateString,
