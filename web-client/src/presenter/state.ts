@@ -153,6 +153,7 @@ import { statisticsFormHelper } from './computeds/statisticsFormHelper';
 import { statisticsHelper } from './computeds/statisticsHelper';
 import { statusReportOrderHelper } from './computeds/statusReportOrderHelper';
 import { templateHelper } from './computeds/templateHelper';
+import { termBuilderHelper } from './computeds/termBuilderHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
 import { trialLocationHelper } from '@web-client/presenter/computeds/trialLocationHelper';
 import { trialSessionDetailsHelper } from './computeds/trialSessionDetailsHelper';
@@ -547,6 +548,9 @@ export const computeds = {
   >,
   templateHelper: templateHelper as unknown as ReturnType<
     typeof templateHelper
+  >,
+  termBuilderHelper: termBuilderHelper as unknown as ReturnType<
+    typeof termBuilderHelper
   >,
   trialCitiesHelper: trialCitiesHelper as unknown as ReturnType<
     typeof trialCitiesHelper

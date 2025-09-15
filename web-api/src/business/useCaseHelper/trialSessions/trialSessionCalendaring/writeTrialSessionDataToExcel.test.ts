@@ -4,6 +4,8 @@ import ExcelJS from 'exceljs';
 import mockCaseCountsAndSessionsByCity from '@shared/test/mockCaseCountsAndSessionsByCity.json';
 import mockIncorrectSizeRegularCases from '@shared/test/mockIncorrectlySizedCases.json';
 import path from 'path';
+import { IsoDateRange } from '@shared/business/utilities/DateHandler';
+import { Holiday } from '@18f/us-federal-holidays';
 
 const mockUserMessages = [
   'More than two special trial sessions per week: Washington, District of Columbia 2/10. \n',
@@ -11,22 +13,24 @@ const mockUserMessages = [
   'More special sessions than maximum allowed per location scheduled: Atlanta, Georgia. \n',
 ];
 
-const mockWeeks = [
-  '2024-12-30',
-  '2025-01-06',
-  '2025-01-13',
-  '2025-01-20',
-  '2025-01-27',
-  '2025-02-03',
-  '2025-02-10',
-  '2025-02-17',
-  '2025-02-24',
-  '2025-03-03',
-  '2025-03-10',
-  '2025-03-17',
-  '2025-03-24',
-  '2025-03-31',
+const mockWeeks: IsoDateRange[] = [
+  { start: '2024-12-30', end: '2025-01-04' },
+  { start: '2025-01-06', end: '2025-01-11' },
+  { start: '2025-01-13', end: '2025-01-18' },
+  { start: '2025-01-20', end: '2025-01-25' },
+  { start: '2025-01-27', end: '2025-02-01' },
+  { start: '2025-02-03', end: '2025-02-08' },
+  { start: '2025-02-10', end: '2025-02-15' },
+  { start: '2025-02-17', end: '2025-02-22' },
+  { start: '2025-02-24', end: '2025-03-01' },
+  { start: '2025-03-03', end: '2025-03-08' },
+  { start: '2025-03-10', end: '2025-03-15' },
+  { start: '2025-03-17', end: '2025-03-22' },
+  { start: '2025-03-24', end: '2025-03-29' },
+  { start: '2025-03-31', end: '2025-04-05' },
 ];
+
+const mockHolidays: Holiday[] = [];
 
 describe('writeTrialSessionDataToExcel', () => {
   it('generates an XLSX file that matches the expected fixture', async () => {
@@ -49,9 +53,10 @@ describe('writeTrialSessionDataToExcel', () => {
     const buffer = await writeTrialSessionDataToExcel({
       caseCountsAndSessionsByCity:
         mockCaseCountsAndSessionsByCity as CaseCountsAndSessionsByCity,
+      holidays: mockHolidays,
       incorrectSizeRegularCases: mockIncorrectSizeRegularCases,
       userMessages: mockUserMessages,
-      weeks: mockWeeks,
+      weeksRange: mockWeeks,
     });
 
     const actualWorkbook = new ExcelJS.Workbook();
@@ -92,14 +97,15 @@ describe('writeTrialSessionDataToExcel', () => {
     } as CaseCountsAndSessionsByCity;
     const incorrectSizeRegularCases = [];
     const userMessages = [];
-    const weeks = ['01/01'];
+    const weeksRange: IsoDateRange[] = [{ start: '01/01', end: '01/05' }];
 
     // Act
     const buffer = await writeTrialSessionDataToExcel({
       caseCountsAndSessionsByCity,
+      holidays: mockHolidays,
       incorrectSizeRegularCases,
       userMessages,
-      weeks,
+      weeksRange,
     });
 
     const actualWorkbook = new ExcelJS.Workbook();
