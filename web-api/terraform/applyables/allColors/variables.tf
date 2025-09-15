@@ -90,5 +90,5 @@ variable "rum_sample_rate" {
 
 variable "engine_version" {
   type    = string
-  default = "15.13"
+  default = "15.4"
 }
