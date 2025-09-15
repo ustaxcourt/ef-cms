@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { Button, buttonVariant } from '@web-client/dawson-ui/ui/button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button } from '@web-client/dawson-ui/ui/button';
 
 import { cn } from '@web-client/lib/utils';
 
@@ -93,14 +92,9 @@ function CardFooter({ className, ...props }: React.ComponentProps<'div'>) {
 function MainCard({ content }: React.ComponentProps<'div'>) {
   return (
     <Card>
-      <CardHeader className={cn('tw:border-b tw:pb-4')}>
+      <CardHeader className={cn("tw:border-b tw:pb-4")}>
         <CardTitle>Card</CardTitle>
-        <Button variant={'primaryTertiary'}>
-          <FontAwesomeIcon
-            className="fa:margin-right-1"
-            icon="file"
-            size="1x"
-          />
+        <Button variant="primaryTertiary" icon="file" aria-label="Primary Default">
           Tertiary Default
         </Button>
       </CardHeader>
@@ -108,7 +102,7 @@ function MainCard({ content }: React.ComponentProps<'div'>) {
       <CardFooter>
         <Button
           variant={'primary'}
-          className={cn('tw:align-self: flex-start tw:w-full')}
+          // className={cn('tw:align-self: flex-start tw:w-full')}
         >
           Primary Default
         </Button>
@@ -143,12 +137,9 @@ function FieldRow({
   return (
     <div
       className={cn(
-        // gutters + grid
         'tw:px-5 md:tw:px-8 tw:py-2',
         'tw:grid tw:gap-y-2 tw:gap-x-4',
-        // mobile: 1 col; desktop: label | value | (optional) action
         'md:tw:grid-cols-[12rem_1fr_auto]',
-        // subtle row divider
         'tw:border-b last:tw:border-b-0',
         className,
       )}
@@ -157,7 +148,6 @@ function FieldRow({
       <div
         className={cn(
           'tw:px-4 tw:py-2', // half the distance as left/right gutters
-          // stretch label down the row height on desktop
           variant,
         )}
       >
