@@ -144,16 +144,16 @@ jobs:
       - run: # TODO: remove this after the rds upgrade
           name: Engage Maintenance Mode
           command: |
-            npm run maintenance:engage
+            ./scripts/enable-maintence-mode-current-color.sh
       - run:
           no_output_timeout: 20m
           name: 'Deploy - All Color Terraform'
           command: |
             npm run deploy:allColors $ENV
       - run: # TODO: remove this after the rds upgrade
-          name: Disengage Maintenance Mode
+          name: Engage Maintenance Mode
           command: |
-            npm run maintenance:disengage
+            ./scripts/disable-maintence-mode-current-color.sh
       - run:
           no_output_timeout: 20m
           name: 'Deploy - Color Terraform'
