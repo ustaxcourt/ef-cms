@@ -10,7 +10,6 @@ import { PETITION_TYPES } from '@shared/business/entities/EntityConstants';
 import { PetitionInformation } from './PetitionInformation';
 import { PetitionerInformation } from './PetitionerInformation';
 import { STINInformation } from './STINInformation';
-// import { WarningNotificationComponent } from '@web-client/views/WarningNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -51,6 +50,7 @@ export const FilePetitionStep6 = connect(
               }}
               isDismissible={false}
               scrollToTop={false}
+              className="tw:mb-4"
             />
             <div className="padding-x-0">
               <div>

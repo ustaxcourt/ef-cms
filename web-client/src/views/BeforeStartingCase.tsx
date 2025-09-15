@@ -3,10 +3,8 @@ import {
   AccordionItem,
 } from '@web-client/ustc-ui/Accordion/Accordion';
 import { Button } from '../ustc-ui/Button/Button';
-// import { InfoNotificationComponent } from '@web-client/views/InfoNotification';
 import { InlineLink } from '@web-client/ustc-ui/InlineLink/InlineLink';
 import { ROLES } from '../../../shared/src/business/entities/EntityConstants';
-// import { WarningNotificationComponent } from '@web-client/views/WarningNotification';
 import { AlertWarning } from '@web-client/dawson-ui/ui/Alert/AlertWarning';
 import { AlertInfo } from '@web-client/dawson-ui/ui/Alert/AlertInfo';
 import { connect } from '@web-client/presenter/shared.cerebral';

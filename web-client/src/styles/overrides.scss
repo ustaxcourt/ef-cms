@@ -151,6 +151,7 @@ option:first-child {
 }
 
 .usa-alert--warning {
+  border-left-color: #ffbe2e !important; // make sure tailwind doesn't conflict
   font-weight: 600;
 
   &::before {
@@ -159,6 +160,7 @@ option:first-child {
 }
 
 .usa-alert--success {
+  border-left-color: #00a91c !important; // make sure tailwind doesn't conflict
   background-color: $color-success;
   font-weight: 600;
 
@@ -168,6 +170,7 @@ option:first-child {
 }
 
 .usa-alert--info {
+  border-left-color: #00bde3 !important; // make sure tailwind doesn't conflict
   background-color: color($theme-color-base-lightest);
 
   &::before {
@@ -176,6 +179,7 @@ option:first-child {
 }
 
 .usa-alert--error {
+  border-left-color: #d54309 !important; // make sure tailwind doesn't conflict
   background-color: color($theme-color-secondary-lighter);
 
   &::before {
