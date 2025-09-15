@@ -152,7 +152,7 @@ select {
   margin: 0;
 
   &:hover:not(:disabled) {
-    border: 1px solid color(#{$theme-color-primary});
+    border: 1px solid color(#{$theme-color-primary}) !important; // make sure tailwind doesn't conflict
     box-shadow: inset 0 0 0 1px color(#{$theme-color-primary});
     cursor: pointer;
   }
@@ -172,7 +172,7 @@ select {
   appearance: none;
 
   &:disabled {
-    border-color: color(#{$theme-color-base-light});
+    border-color: color(#{$theme-color-base-light}) !important; // make sure tailwind doesn't conflict;
     background-color: color(#{$theme-color-base-lighter});
     color: color(#{$theme-color-base-light});
   }
@@ -226,7 +226,7 @@ select {
     + .usa-select,
     + .usa-range {
       &:not(:disabled) {
-        border: 1px solid color(#{$theme-color-base});
+        border: 1px solid color(#{$theme-color-base}) !important; // make sure tailwind doesn't conflict;
         box-shadow: 0 0 0 0 transparent;
       }
     }
@@ -237,7 +237,7 @@ select {
   + .usa-select,
   + .usa-range {
     &:not(:disabled) {
-      border: 1px solid color(#{$theme-color-base});
+      border: 1px solid color(#{$theme-color-base}) !important; // make sure tailwind doesn't conflict;
       box-shadow: 0 0 0 0 transparent;
     }
   }
@@ -247,7 +247,7 @@ select {
 .usa-textarea,
 .usa-select,
 .usa-range {
-  border: 1px solid color(#{$theme-color-base});
+  border: 1px solid color(#{$theme-color-base}) !important; // make sure tailwind doesn't conflict;
 }
 
 .usa-input.unset-width {
@@ -565,11 +565,11 @@ label.ustc-upload {
     box-sizing: border-box;
     padding-top: 4px;
     padding-bottom: 4px;
-    border: 1px solid color(#{$theme-color-base});
+    border: 1px solid color(#{$theme-color-base}) !important; // make sure tailwind doesn't conflict;
     border-radius: 0;
 
     &:hover {
-      border: 1px solid color(#{$theme-color-primary});
+      border: 1px solid color(#{$theme-color-primary}) !important; // make sure tailwind doesn't conflict;
       box-shadow: 0 0 0 1px color(#{$theme-color-primary});
       cursor: pointer;
     }
@@ -769,7 +769,7 @@ label.ustc-upload {
   position: relative;
   max-width: 31.25rem;
   padding-left: 1rem;
-  border-left: 0.25rem solid #0050d8;
+  border-left: 0.25rem solid #0050d8 !important; // make sure tailwind doesn't conflict
   margin-top: 0;
   margin-bottom: 35px;
   margin-left: -1.25rem;

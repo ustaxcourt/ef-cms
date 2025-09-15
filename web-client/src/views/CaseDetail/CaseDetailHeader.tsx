@@ -156,7 +156,7 @@ export const CaseDetailHeader = connect<
           <div className="grid-container">
             <div className="display-flex flex-row flex-justify">
               <div className="tablet:grid-col-10">
-                <div className="margin-bottom-1">
+                <div className="margin-bottom-1 line-height-mono-4">
                   <h1
                     className="heading-2 captioned docket-number-header"
                     data-testid="docket-number-header"
@@ -188,14 +188,13 @@ export const CaseDetailHeader = connect<
                           aria-label={`isLeadCase: ${formattedCaseDetail.isLeadCase}`}
                           id="lead-case-tag"
                           role="note"
+                          className="margin-right-1"
                         >
                           Lead case
                         </Tag>
                       )}
                       <Tag
-                        className={classNames(
-                          formattedCaseDetail.isLeadCase ? 'margin-left-1' : '',
-                        )}
+                        className="margin-right-1"
                         aria-label={`status: ${formattedCaseDetail.status}`}
                         data-testid="case-status"
                         id="case-status"
@@ -205,7 +204,7 @@ export const CaseDetailHeader = connect<
                       {formattedCaseDetail.associatedJudge && (
                         <Tag
                           aria-label="associated judge"
-                          className="margin-left-1"
+                          className="margin-right-1"
                           role="note"
                           iconProps={{ icon: 'gavel' }}
                         >
@@ -214,7 +213,7 @@ export const CaseDetailHeader = connect<
                       )}
                       {caseDetailHeaderHelper.showBlockedTag && (
                         <Tag
-                          className="margin-left-1"
+                          className="margin-right-1"
                           data-testid="blocked-case-icon"
                           iconProps={{ icon: 'hand-paper' }}
                           variant="destructive"
