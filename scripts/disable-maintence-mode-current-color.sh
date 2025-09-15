@@ -8,6 +8,6 @@
 
 CURRENT_COLOR=$(./scripts/ssm/get-current-color.sh "$ENV")
 
-web-api/terraform/bin/edit-lambda-environment.sh -l "api_${ENV}_${CURRENT_COLOR}" -k MAINTENANCE_MODE -v true
-web-api/terraform/bin/edit-lambda-environment.sh -l "api_async_${ENV}_${CURRENT_COLOR}" -k MAINTENANCE_MODE -v true
-web-api/terraform/bin/edit-lambda-environment.sh -l "api_public_${ENV}_${CURRENT_COLOR}" -k MAINTENANCE_MODE -v true
+web-api/terraform/bin/edit-lambda-environment.sh -l "api_${ENV}_${CURRENT_COLOR}" -k MAINTENANCE_MODE -v false
+web-api/terraform/bin/edit-lambda-environment.sh -l "api_async_${ENV}_${CURRENT_COLOR}" -k MAINTENANCE_MODE -v false
+web-api/terraform/bin/edit-lambda-environment.sh -l "api_public_${ENV}_${CURRENT_COLOR}" -k MAINTENANCE_MODE -v false
