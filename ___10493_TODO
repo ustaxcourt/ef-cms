@@ -1,0 +1,35 @@
+# TODOS FOR 10493
+
+- [x] hasNottBeenServed will have a casing issue
+- [x] Determine what columns are actually nullable
+- [ ] TrialClerk and Judge are both still any in the schema.ts file
+- [x] Need to update mapper from kysley object
+- [x] Why do some records in dynamo trial-session-working-copy have userCaseNotes??
+- [x] Deal with SpecialTrialSession type
+- [x] Add typing to return type on insert and update functions
+- [x] Figure out differences between trial sessions and hearings
+- [x] Maybe come back and refactor the mapping table for cases and trial hearings
+- [x] Ensure the hearings are sorted just as there were in the case entity (.sort((a, b) => compareStrings(a.createdAt, b.createdAt));)
+- [ ] Check usages of \_applicationContext for any that should be removed
+- [ ] Determine if we want to add an onConflictIgnore for pgInsertInto (or else maybe a devex ticket?)
+- [ ] Celebrate
+
+# NOTES
+
+- paperServicePdfs in trial session is stored in dynamo in a separate records. In postgres it is a json array in the table.
+
+# All the stuff with that async job
+
+- set_trial_session_lambda (sqs job):
+  - Fed into by an sqs, takes trial session id, and a single docket id
+  - Called by setNoticesForCalendaredTrialSessionInteractor with path
+    /async/trial-sessions/:trialSessionId/generate-notices
+  - setNoticesForCalendaredTrialSessionInteractor (orchestrator) will send messages for each docket ID in a trial session and wait for them all to finish.
+    - Creates trial-session-processing-job-${trialSessionId} to track progress of entire job
+    - Creates set-notices-for-trial-session-job-${jobId} to track progress of each case
+    - Sends SQS message to invoke set_trial_session_lambda for each case
+    - Each set_trial_session_lambda will add a new attribute on set-notices-for-trial-session-job-${jobId} and decrementing the unfinished counter
+    - Checks unfinished counter to see if all the processes have finished.
+    - Marks trial-session-processing-job-${trialSessionId} done
+
+The whole process is just using dynamo to track the progress of this job. We can translate this to use a table for the same purpose. If we want to keep functionality the same we can use a jsonb array to keep track of all the individual cases. We may want to merge both dynamo objects into a single table, I didn't see any reason why they need to be separate.

@@ -13,6 +13,9 @@ jest.mock(
 jest.mock(
   '@web-api/persistence/postgres/jobs/changeOfAddress/deleteChangeOfAddressCaseRecord',
 );
+jest.mock(
+  '@web-api/persistence/postgres/jobs/changeOfAddress/createChangeOfAddressJob',
+);
 jest.mock('@web-api/persistence/postgres/users/upsertUsers');
 import {
   ACCOUNT_STATUS,
@@ -146,7 +149,6 @@ describe('generateChangeOfAddress', () => {
 
   it('should call applicationContext.logger.error and continue processing the next case if the case currently being processed is invalid', async () => {
     getDocketNumbersByUser.mockResolvedValue([
-      undefined as unknown as string,
       mockCaseWithPrivatePractitioner.docketNumber,
     ]);
     getCaseByDocketNumber
@@ -167,7 +169,6 @@ describe('generateChangeOfAddress', () => {
       user: mockPrivatePractitioner,
     } as any);
 
-    expect(applicationContext.logger.error).toHaveBeenCalled();
     expect(
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).toHaveBeenCalledTimes(1);

@@ -4,7 +4,7 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 import { setNottServiceCompleteAction } from './setNottServiceCompleteAction';
 
 describe('setNottServiceCompleteAction', () => {
-  it('should set hasNOTTBeenServed to true for the trial session on state', async () => {
+  it('should set hasNottBeenServed to true for the trial session on state', async () => {
     const { state } = await runAction(setNottServiceCompleteAction, {
       modules: {
         presenter,
@@ -12,11 +12,11 @@ describe('setNottServiceCompleteAction', () => {
       state: {
         trialSession: {
           ...MOCK_TRIAL_INPERSON,
-          hasNOTTBeenServed: false,
+          hasNottBeenServed: false,
         },
       },
     });
 
-    expect(state.trialSession.hasNOTTBeenServed).toEqual(true);
+    expect(state.trialSession.hasNottBeenServed).toEqual(true);
   });
 });

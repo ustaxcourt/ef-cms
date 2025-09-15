@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   git-shallow-clone: guitarrapc/git-shallow-clone@2.8.0
 
-efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.50
+efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.52
 
 parameters:
   run_build_and_deploy:
@@ -29,6 +29,14 @@ parameters:
     default: false
     type: boolean
 
+  run_index_once:
+    default: false
+    type: boolean
+
+  index_threads:
+    default: '5'
+    type: string
+
   lower_env:
     default: test
     type: string
@@ -52,6 +60,10 @@ parameters:
   destination_bucket:
     default: ''
     type: string
+
+  run_trial_session_migration:
+    default: false
+    type: boolean
 
 commands:
   npm-and-cypress-install:
@@ -353,10 +365,6 @@ jobs:
             if [ "$MIGRATE_FLAG" == "true" ]; then
               ./web-api/enable-deploying-dynamo-stream-trigger.sh
             fi
-      - run:
-          name: Migrate Feature Flags from Dynamo to Postgres
-          command: |
-            ./scripts/run-once-scripts/postgres-migration/migrate-feature-flags-dynamo-to-postgres.ts
 
   disable-reindex-cron:
     docker:
@@ -609,6 +617,66 @@ jobs:
               npm run migration:cleanup -- $ENV
             fi
 
+  index-docket-entries-once:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: xlarge
+    environment:
+      THREADS: << pipeline.parameters.index_threads >>
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+            source $BASH_ENV
+            DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
+            ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
+              --domain-name "${DESTINATION_DOMAIN}" \
+              --region "us-east-1" \
+              --query 'DomainStatus.Endpoint' \
+              --output text)
+            echo "export ELASTICSEARCH_ENDPOINT=${ELASTICSEARCH_ENDPOINT}" >> $BASH_ENV
+      - run:
+          name: Index Docket Entries
+          command: |
+            NODE_ENV=production ./scripts/run-once-scripts/postgres-migration/index-docket-entries/index-docket-entries.ts "$THREADS"
+
+  migrate-trial-sessions:
+    parameters:
+      run_trial_session_migration:
+        type: boolean
+        default: false
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: large
+    steps:
+      - run: echo "migrate-trial-sessions starting"
+      - when:
+          condition: << parameters.run_trial_session_migration >>
+          steps:
+            - git-shallow-clone/checkout
+            - npm-install
+            - run:
+                name: Setup Env
+                command: ./scripts/env/env-for-circle.sh
+            - run:
+                name: Engage Maintenance Mode
+                command: npm run maintenance:engage
+            - run:
+                name: Migrate Trial Sessions
+                command: npx ts-node --transpile-only ./scripts/run-once-scripts/postgres-migration/migrate-trial-session-information.ts
+            - run:
+                name: Disengage Maintenance Mode
+                command: npm run maintenance:disengage
+
   ######################## GLUE JOB: Jobs that run in a lower environment ########################
 
   delete-existing-data:
@@ -697,16 +765,6 @@ jobs:
             echo "export SOURCE_BUCKET=${PROD_DOCUMENTS_BUCKET_NAME}" >> $BASH_ENV
             echo "export DESTINATION_BUCKET=${EFCMS_DOMAIN}-documents-${ENV}-us-east-1" >> $BASH_ENV
       - run:
-          name: Disable Wait for Workflow Cron
-          command: |
-            ./scripts/wait-for-workflow/disable-wait-for-workflow-cron.sh
-      - run:
-          name: Destroy Wait for Workflow Lambda
-          command: |
-            export APPROVAL_JOB_NAME=wait-for-deployment-workflow
-            export CIRCLE_PIPELINE_ID=noop
-            npm run destroy:wait-for-workflow-cron -- $ENV
-      - run:
           name: Disable Dynamodb Streams
           command: |
             ./scripts/migration/toggle-streams.sh --off
@@ -779,6 +837,11 @@ jobs:
           command: |
             NODE_ENV=production npm run migration:postgres
       - run:
+          name: Restore Postgres User Permissions
+          command: |
+            cd ./scripts/postgres
+            DB_HOST="$POSTGRES_HOST" ./create-rds-users.sh
+      - run:
           name: Enable Dynamodb Streams
           command: |
             ./scripts/migration/toggle-streams.sh --on
@@ -848,6 +911,32 @@ jobs:
             if [ "$MIGRATE_FLAG" == "true" ]; then
               NODE_ENV=production ./scripts/reindex/index-docket-entries/index-docket-entries.ts 5
             fi
+  users-to-postgres:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+      - run:
+          name: Move petitioners from dwCase.petitioners to dwUser
+          command: |
+            npx ts-node --transpile-only ./scripts/run-once-scripts/postgres-migration/move-petitioners-out-of-case.ts
+      - run:
+          name: Move users, privatePractitioners, irsPractitioners, pending-case from dynamo to postgres
+          command: |
+            npx ts-node --transpile-only ./scripts/run-once-scripts/postgres-migration/migrate-users-to-postgres.ts
+      - run:
+          name: Update users' account status
+          command: |
+            npx ts-node --transpile-only ./scripts/run-once-scripts/postgres-migration/add-account-status-to-users.ts
 
   index-users:
     docker:
@@ -1050,11 +1139,6 @@ jobs:
           name: Restore Postgres Data
           command: |
             TARGET_ENV="$LOWER_ENV" TARGET_ACCOUNT_ID="$LOWER_ENV_ACCOUNT_ID" ./scripts/postgres/restoreDbFromSource.ts
-      - run:
-          name: Restore Postgres User Permissions
-          command: |
-            cd ./scripts/postgres
-            DB_HOST="$POSTGRES_HOST" ./create-rds-users.sh
 
   finish-glue-job:
     docker:
@@ -1182,13 +1266,18 @@ workflows:
           requires:
             - disable-reindex-cron
             - index-users
-      - switch-colors:
+      - migrate-trial-sessions:
           <<: *only-deployed-lower-environments
+          run_trial_session_migration: << pipeline.parameters.run_trial_session_migration >>
           requires:
             - smoketests
             - loadtests
             - smoketests-readonly
             - api-hosted-environment-tests
+      - switch-colors:
+          <<: *only-deployed-lower-environments
+          requires:
+            - migrate-trial-sessions
       - cleanup:
           <<: *only-deployed-lower-environments
           requires:
@@ -1338,14 +1427,18 @@ workflows:
           <<: *only-test
           requires:
             - index-cases
-      - index-users:
+      - users-to-postgres:
           <<: *only-test
           requires:
             - index-docket-entries
+      - index-users:
+          <<: *only-test
+          requires:
+            - users-to-postgres
       - cleanup-glue-job:
           <<: *only-test
           requires:
-            - index-users
+            - index-users #index-docket-entries
 
   glue-to-lower-env:
     when: << pipeline.parameters.run_glue_to_lower_env >>
@@ -1377,6 +1470,12 @@ workflows:
           type: approval
           requires:
             - initiate-s3-sync
+
+  index-once:
+    when: << pipeline.parameters.run_index_once >>
+    jobs:
+      - index-docket-entries-once:
+          <<: *only-deployed-lower-environments
 
   sync-s3-to-lower-env:
     when: << pipeline.parameters.run_sync_s3_to_lower_env >>

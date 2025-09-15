@@ -1939,7 +1939,7 @@ export const MOCK_COMPLEX_CASE = {
       createdAt: '2018-10-22T00:00:00.000-04:00',
       docketEntryId: '49caa019-0f5e-4ed6-b7bd-234a2e1e9303',
       documentTitle: 'BY STEP TURN SOMEONE REALIZE',
-      documentType: 'Report',
+      documentType: 'Expert Report',
       entityName: 'DocketEntry',
       eventCode: 'RTP',
       filedBy: 'Resp.',

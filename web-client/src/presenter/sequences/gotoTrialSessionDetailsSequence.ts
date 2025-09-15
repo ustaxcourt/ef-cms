@@ -15,6 +15,8 @@ import { setTrialSessionIdAction } from '../actions/TrialSession/setTrialSession
 import { setUsersByKeyAction } from '../actions/setUsersByKeyAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
+import { checkNewTrialAccessAction } from '../actions/TrialSession/checkNewTrialAccessAction';
+import { navigateToTrialSessionsAction } from '../actions/TrialSession/navigateToTrialSessionsAction';
 
 export const gotoTrialSessionDetailsSequence =
   startWebSocketConnectionSequenceDecorator([
@@ -22,25 +24,34 @@ export const gotoTrialSessionDetailsSequence =
     setDefaultTrialSessionDetailsTabAction,
     clearErrorAlertsAction,
     setTrialSessionIdAction,
-    parallel([
-      [
-        getTrialSessionDetailsAction,
-        setTrialSessionDetailsAction,
-        isTrialSessionCalendaredAction,
-        {
-          no: [
-            getEligibleCasesForTrialSessionAction,
-            setEligibleCasesOnTrialSessionAction,
-            mergeCaseOrderIntoEligibleCasesAction,
-          ],
-          yes: [
-            getCalendaredCasesForTrialSessionAction,
-            setCalendaredCasesOnTrialSessionAction,
-            mergeCaseOrderIntoCalendaredCasesAction,
-          ],
-        },
+    getTrialSessionDetailsAction,
+    checkNewTrialAccessAction,
+    {
+      noAccess: [
+        navigateToTrialSessionsAction,
       ],
-      [getUsersInSectionAction({}), setUsersByKeyAction('sectionUsers')],
-    ]),
-    setupCurrentPageAction('TrialSessionDetails'),
+      yesAccess: [
+        parallel([
+          [
+            setTrialSessionDetailsAction,
+            isTrialSessionCalendaredAction,
+            {
+              no: [
+                getEligibleCasesForTrialSessionAction,
+                setEligibleCasesOnTrialSessionAction,
+                mergeCaseOrderIntoEligibleCasesAction,
+              ],
+              yes: [
+                getCalendaredCasesForTrialSessionAction,
+                setCalendaredCasesOnTrialSessionAction,
+                mergeCaseOrderIntoCalendaredCasesAction,
+              ],
+            },
+          ],
+          [getUsersInSectionAction({}), setUsersByKeyAction('sectionUsers')],
+        ]),
+        setupCurrentPageAction('TrialSessionDetails'),
+      ],
+    },
+    
   ]) as unknown as (props: { trialSessionId?: string }) => void;

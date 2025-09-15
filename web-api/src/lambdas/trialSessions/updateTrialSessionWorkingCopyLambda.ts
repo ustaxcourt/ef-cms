@@ -12,9 +12,8 @@ export const updateTrialSessionWorkingCopyLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(event, async ({ applicationContext }) => {
+  genericHandler(event, async () => {
     return await updateTrialSessionWorkingCopyInteractor(
-      applicationContext,
       {
         trialSessionWorkingCopyToUpdate: JSON.parse(event.body),
       },
