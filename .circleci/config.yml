@@ -135,6 +135,9 @@ jobs:
     environment:
       DEPLOY_EMPTY_PERSISTENCE: << pipeline.parameters.run_build_and_deploy_minimal >>
     steps:
+      - setup_remote_docker:
+          version: docker23
+          docker_layer_caching: true
       - git-shallow-clone/checkout
       - npm-install
       - run:
@@ -263,6 +266,9 @@ jobs:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     resource_class: medium+
     steps:
+      - setup_remote_docker:
+          version: docker23
+          docker_layer_caching: true
       - git-shallow-clone/checkout
       - npm-install
       - run:
@@ -386,7 +392,7 @@ jobs:
             ./scripts/reindex/disable-reindex-cron.sh
 
   smoketests:
-    parallelism: 6
+    parallelism: 9
     docker:
       - image: *efcms-docker-image
         aws_auth:
@@ -394,6 +400,9 @@ jobs:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     resource_class: large
     steps:
+      - setup_remote_docker:
+          version: docker23
+          docker_layer_caching: true
       - git-shallow-clone/checkout
       - npm-and-cypress-install
       - run:
@@ -616,6 +625,10 @@ jobs:
             if [ $MIGRATE_FLAG == true ]; then
               npm run migration:cleanup -- $ENV
             fi
+      - run:
+          name: Cleanup Cypress Test Accounts
+          command: |
+            npm run cleanup:cypress-test-accounts
 
   index-docket-entries-once:
     docker:
