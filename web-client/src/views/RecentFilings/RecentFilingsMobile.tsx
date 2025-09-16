@@ -171,25 +171,41 @@ export const RecentFilingsMobile = ({
                   >
                     <td className="docket-number-head">
                       {filing.inConsolidatedGroup && (
-                        <ConsolidatedCaseIcon
-                          consolidatedIconTooltipText={
-                            filing.consolidatedIconTooltipText
+                        <span
+                          className={
+                            filing.isLeadCase
+                              ? 'margin-right-2'
+                              : 'margin-left-205'
                           }
-                          inConsolidatedGroup={
-                            filing.inConsolidatedGroup || false
-                          }
-                          showLeadCaseIcon={filing.isLeadCase || false}
-                          data-testid="consolidated-case-icon"
-                        />
+                        >
+                          <ConsolidatedCaseIcon
+                            consolidatedIconTooltipText={
+                              filing.consolidatedIconTooltipText
+                            }
+                            inConsolidatedGroup={
+                              filing.inConsolidatedGroup || false
+                            }
+                            showLeadCaseIcon={filing.isLeadCase || false}
+                            data-testid="consolidated-case-icon"
+                          />
+                        </span>
                       )}
-                      <a
-                        href={`/case-detail/${filing.docketNumber}`}
-                        target="_blank"
-                        rel="noreferrer"
-                        data-testid="case-number-link"
+                      <span
+                        className={
+                          filing.inConsolidatedGroup && !filing.isLeadCase
+                            ? 'margin-left-205'
+                            : ''
+                        }
                       >
-                        {filing.docketNumber}
-                      </a>
+                        <a
+                          href={`/case-detail/${filing.docketNumber}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          data-testid="case-number-link"
+                        >
+                          {filing.docketNumber}
+                        </a>
+                      </span>
                     </td>
                     <th>Filed Date</th>
                     <td className="divider">
