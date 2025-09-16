@@ -217,6 +217,20 @@ describe('getFormattedTrialSessionDetails', () => {
         formattedStartTime: '12:00 pm',
       });
     });
+
+    it('formats trial session start time if in military time at time 20:00', () => {
+      const result = getFormattedTrialSessionDetails({
+        applicationContext,
+        currentUser: mockTrialClerkUser,
+        trialSession: {
+          ...TRIAL_SESSION,
+          startTime: '20:00',
+        },
+      });
+      expect(result).toMatchObject({
+        formattedStartTime: '8:00 pm',
+      });
+    });
   });
 
   describe('formats trial session estimated end date', () => {
