@@ -20,12 +20,6 @@ export function Alerts() {
     success: true,
   });
 
-  const alertError = {
-    title: 'Error Alert',
-    message: 'This is a succinct, helpful message',
-    scrollToErrorNotification: false,
-  };
-
   const alertHelper = {
     showErrorAlert: true,
     showSingleMessage: true,
@@ -34,27 +28,17 @@ export function Alerts() {
     messagesDeduped: [],
   };
 
-  const alertInfoProps = {
-    alertInfo: {
-      title: 'Alert Info',
-      linkText: '',
-      linkUrl: '',
-      inlineLinkText: '',
-      inlineLinkUrl: '',
-      message: 'This is a succinct informational message',
-      dismissText: '',
-      dismissIcon: '',
-    },
-    dismissible: true,
-    messageNotBold: true,
-    className: 'tw:mb-4',
-  };
-
   return (
     <div className="tw:my-4">
       <h2>Alerts</h2>
       {alert.info ? (
-        <AlertInfo {...alertInfoProps}></AlertInfo>
+        <AlertInfo
+          alertInfo={{
+            title: 'Info Status',
+            message: 'This is a succinct, helpful message',
+          }}
+          className="tw:mb-4"
+        ></AlertInfo>
       ) : (
         <Button onClick={() => setAlert({ ...alert, info: true })}>
           Display Info Alert
@@ -90,7 +74,12 @@ export function Alerts() {
         <AlertError
           closeButtonOnClick={() => setAlert({ ...alert, error: false })}
           className="tw:mb-4"
-          alertError={alertError}
+          alertError={{
+            title: 'Error Status',
+            message:
+              'This is a very succinct, & helpful message. I love how helpful this message is its the very best',
+            scrollToErrorNotification: false,
+          }}
           alertHelper={alertHelper}
         />
       ) : (
@@ -105,8 +94,8 @@ export function Alerts() {
       {alert.success ? (
         <AlertSuccess
           alertSuccess={{
-            title: 'Success Status',
-            message: 'This is a succinct, helpful message',
+            title: 'Success Status when I need success and here is the success',
+            message: 'This is a succinct, helpful message!!!!!!!!!!!!!',
           }}
           dismissAlertSequence={() => setAlert({ ...alert, success: false })}
           className="tw:mb-4"
@@ -123,7 +112,7 @@ export function Alerts() {
       {staticAlerts.info ? (
         <AlertInfo
           alertInfo={{
-            message: 'You’ll need to change your password by April 25, 2020.',
+            message: 'This is a succinct, helpful message.',
           }}
           isDismissible
           dismissAlertSequence={() =>
@@ -145,7 +134,7 @@ export function Alerts() {
           }
           className="tw:mb-4"
           alertWarning={{
-            message: 'You’ll need to change your password by April 25, 2020.',
+            message: 'This is a succinct, helpful algae.',
           }}
         />
       ) : (
@@ -159,7 +148,7 @@ export function Alerts() {
       {staticAlerts.error ? (
         <AlertError
           alertError={{
-            message: 'Sorry, a password needs more than four characters.',
+            message: 'This is a succinct, helpful message.',
           }}
           alertHelper={alertHelper}
           closeButtonOnClick={() =>
@@ -178,7 +167,7 @@ export function Alerts() {
       {staticAlerts.success ? (
         <AlertSuccess
           alertSuccess={{
-            message: 'This is a succinct, helpful message',
+            message: 'This is a succinct, helpful message.',
           }}
           dismissAlertSequence={() =>
             setStaticAlerts({ ...staticAlerts, success: false })

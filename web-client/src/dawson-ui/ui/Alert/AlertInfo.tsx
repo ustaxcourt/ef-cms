@@ -60,6 +60,7 @@ export function AlertInfo({
       {alertInfo.message && (
         <AlertDescription>
           <Message
+            additionalClassname="tw:xs:mb-1 tw:mr-1 tw:mt-0 tw:mb-0"
             inlineLinkText={alertInfo.inlineLinkText}
             inlineLinkUrl={alertInfo.inlineLinkUrl}
             message={alertInfo.message}
@@ -85,32 +86,26 @@ export function AlertInfo({
 }
 
 type MessageProps = {
+  additionalClassname?: string;
   inlineLinkText?: string;
   inlineLinkUrl?: string;
   message?: string | React.ReactNode;
 };
 
-function Message({ inlineLinkText, inlineLinkUrl, message }: MessageProps) {
+function Message({
+  additionalClassname,
+  inlineLinkText,
+  inlineLinkUrl,
+  message,
+}: MessageProps) {
   if (!inlineLinkText || !inlineLinkUrl || typeof message !== 'string') {
-    return (
-      <p
-        className={cn(
-          'tw:font-normal tw:xs:mt-1 tw:xs:mb-1 tw:mr-1 tw:mt-0 tw:mb-0',
-        )}
-      >
-        {message}
-      </p>
-    );
+    return <p className={additionalClassname}>{message}</p>;
   }
 
   const [beforeLink, afterLink] = message.split(inlineLinkText);
 
   return (
-    <p
-      className={cn(
-        'tw:font-normal tw:xs:mt-1 tw:xs:mb-1 tw:mr-1 tw:mt-0 tw:mb-0',
-      )}
-    >
+    <p className={additionalClassname}>
       {beforeLink}
       <a
         className="tw:text-primary-darker tw:underline"

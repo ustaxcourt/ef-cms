@@ -60,9 +60,7 @@ export function AlertError({
             </Focus>
           )}
           {alertHelper.showSingleMessage && (
-            <AlertDescription className="tw:text-sm/4 tw:xs:mt-1 tw:xs:mb-1 tw:mt-0 tw:mb-0 tw:mr-2">
-              {alertError.message}
-            </AlertDescription>
+            <AlertDescription>{alertError.message}</AlertDescription>
           )}
           {alertHelper.showMultipleMessages && (
             <AlertDescription>

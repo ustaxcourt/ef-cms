@@ -16,7 +16,7 @@ const alertVariants = cva(
   cn(
     'tw:relative tw:border-solid tw:border-0',
     'tw:xs:border-l-8 tw:xs:p-4 tw:border-l-6 tw:p-3 tw:pt-[12px] tw:xs:pt-[14px]',
-    'tw:font-normal tw:xs:text-lg tw:text-sm/4',
+    'tw:font-normal tw:xs:text-lg tw:text-base/4',
     'tw:[&_ul]:m-0 tw:[&_ul]:-ml-4 tw:[&_ul]:list-disc',
     'tw:xs:[&_svg]:h-7 tw:xs:[&_svg]:w-7 tw:[&_svg]:h-6 tw:[&_svg]:w-6',
     'tw:xs:max-w-[740px] tw:w-full',
@@ -60,7 +60,7 @@ function Alert({
     <div
       data-slot="alert"
       role="alert"
-      className={cn(alertVariants({ variant }), className, '')}
+      className={cn(alertVariants({ variant }), className)}
       {...props}
     >
       <div className="tw:flex">
@@ -88,13 +88,10 @@ function Alert({
   );
 }
 
-function AlertHeader({ className, ...props }: React.ComponentProps<'p'>) {
+function AlertHeader({ ...props }: React.ComponentProps<'p'>) {
   return (
     <div
-      className={cn(
-        'tw:xs:font-bold tw:font-bold tw:xs:mb-1 tw:pb-0',
-        className,
-      )}
+      className="tw:text-base/5 tw:font-bold tw:xs:mb-1 tw:mb-1 tw:pb-0"
       data-slot="alert-title"
       data-testid="alert-header"
       {...props}
@@ -102,8 +99,10 @@ function AlertHeader({ className, ...props }: React.ComponentProps<'p'>) {
   );
 }
 
-function AlertDescription({ className, ...props }: React.ComponentProps<'p'>) {
-  return <div data-slot="alert-description" {...props} />;
+function AlertDescription({ ...props }: React.ComponentProps<'p'>) {
+  return (
+    <div className="tw:text-base/5" data-slot="alert-description" {...props} />
+  );
 }
 
 export { Alert, AlertHeader, AlertDescription };

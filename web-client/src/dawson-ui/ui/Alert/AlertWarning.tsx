@@ -61,10 +61,7 @@ export function AlertWarning({
       )}
 
       {alertWarning.message && (
-        <AlertDescription
-          className={cn(className, 'tw:font-normal')}
-          data-testid="warning-alert-message"
-        >
+        <AlertDescription data-testid="warning-alert-message">
           {alertWarning.message}
         </AlertDescription>
       )}
@@ -72,7 +69,7 @@ export function AlertWarning({
       {alertWarning.linkUrl && (
         <AlertDescription>
           <Button
-            className="tw:p-0 tw:mt-2"
+            className=""
             href={alertWarning.linkUrl}
             link
             rel="noopener noreferrer"
