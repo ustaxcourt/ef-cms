@@ -171,7 +171,7 @@ export const RecentFilingsMobile = ({
                   >
                     <td className="docket-number-head">
                       {filing.inConsolidatedGroup && (
-                        <span className={'margin-right-1'}>
+                        <span className="margin-right-1">
                           <ConsolidatedCaseIcon
                             consolidatedIconTooltipText={
                               filing.consolidatedIconTooltipText
