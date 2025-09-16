@@ -10,9 +10,6 @@ describe('login', () => {
     Cypress.session.clearCurrentSessionData();
   });
 
-  after(() => {
-    cy.task('deleteAllCypressTestAccounts');
-  });
 
   /*
       Given a user with a DAWSON account
