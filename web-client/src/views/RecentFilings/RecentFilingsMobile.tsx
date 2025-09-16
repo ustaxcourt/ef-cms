@@ -175,7 +175,7 @@ export const RecentFilingsMobile = ({
                           className={
                             filing.isLeadCase
                               ? 'margin-right-2'
-                              : 'margin-left-105 margin-right-2'
+                              : 'margin-left-205'
                           }
                         >
                           <ConsolidatedCaseIcon
@@ -190,14 +190,22 @@ export const RecentFilingsMobile = ({
                           />
                         </span>
                       )}
-                      <a
-                        href={`/case-detail/${filing.docketNumber}`}
-                        target="_blank"
-                        rel="noreferrer"
-                        data-testid="case-number-link"
+                      <span
+                        className={
+                          filing.inConsolidatedGroup && !filing.isLeadCase
+                            ? 'margin-left-205'
+                            : ''
+                        }
                       >
-                        {filing.docketNumber}
-                      </a>
+                        <a
+                          href={`/case-detail/${filing.docketNumber}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          data-testid="case-number-link"
+                        >
+                          {filing.docketNumber}
+                        </a>
+                      </span>
                     </td>
                     <th>Filed Date</th>
                     <td className="divider">
