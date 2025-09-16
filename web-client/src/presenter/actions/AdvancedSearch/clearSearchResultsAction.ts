@@ -1,12 +1,8 @@
+import { ADVANCED_SEARCH_TABS } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const clearSearchResultsAction = ({
-  applicationContext,
-  get,
-  store,
-}: ActionProps) => {
+export const clearSearchResultsAction = ({ get, store }: ActionProps) => {
   const tabName = get(state.advancedSearchTab);
-  const { ADVANCED_SEARCH_TABS } = applicationContext.getConstants();
 
   if (tabName) {
     store.unset(state.searchResults[tabName]);
@@ -14,9 +10,7 @@ export const clearSearchResultsAction = ({
     store.unset(state.searchResults);
   }
 
-  if (tabName === ADVANCED_SEARCH_TABS.CASE) {
-    store.set(state.advancedSearchForm.currentPage, 1);
-  }
+  store.set(state.advancedSearchForm.currentPage, 1);
 
   if (tabName === ADVANCED_SEARCH_TABS.ORDER) {
     store.set(state.orderDocumentSearchSort.sortColumn, 'formattedFiledDate');
