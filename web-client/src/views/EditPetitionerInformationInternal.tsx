@@ -214,8 +214,8 @@ export const EditPetitionerInformationInternal = connect(
                       });
                     }}
                   />
-                  <label className="usa-checkbox__label" htmlFor="seal-address">
-                    Seal address
+                  <label className="usa-checkbox__label" htmlFor="seal-address" data-testid="seal-address-label">
+                    Seal contact information
                   </label>
                 </div>
               </FormGroup>

@@ -3,8 +3,9 @@ import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import joi from 'joi';
 
+export type TrialSessionWorkingCopyCaseMetadata = { [docketNumber: string]: { trialStatus: string } };
 export class TrialSessionWorkingCopy extends JoiValidationEntity {
-  public caseMetadata: { [docketNumber: string]: { trialStatus: string } };
+  public caseMetadata: TrialSessionWorkingCopyCaseMetadata;
   public filters: {
     basisReached: boolean;
     continued: boolean;
@@ -21,7 +22,7 @@ export class TrialSessionWorkingCopy extends JoiValidationEntity {
     statusUnassigned: boolean;
     submittedCAV: boolean;
   };
-  public sessionNotes: string;
+  public sessionNotes?: string;
   public sort: string;
   public sortOrder: 'asc' | 'desc';
   public trialSessionId: string;
@@ -48,8 +49,8 @@ export class TrialSessionWorkingCopy extends JoiValidationEntity {
       submittedCAV: true,
     };
     this.sessionNotes = rawSession.sessionNotes;
-    this.sort = rawSession.sort;
-    this.sortOrder = rawSession.sortOrder;
+    this.sort = rawSession.sort || 'docket';
+    this.sortOrder = rawSession.sortOrder || 'asc';
     this.trialSessionId = rawSession.trialSessionId;
     this.userId = rawSession.userId;
   }

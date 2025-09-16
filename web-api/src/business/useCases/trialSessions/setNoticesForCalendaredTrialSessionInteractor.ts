@@ -10,6 +10,12 @@ import {
   asyncHandleLockError,
   withLocking,
 } from '@web-api/persistence/postgres/utils/mutex';
+import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { getCalendaredCasesForTrialSession } from '@web-api/persistence/postgres/trialSessions/getCalendaredCasesForTrialSession';
+import { updateTrialSession } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
+import { createTrialSessionNotificationProcessing } from '@web-api/persistence/postgres/trialSessions/createTrialSessionNotificationProcessing';
+import { updateTrialSessionNotificationProcessing } from '@web-api/persistence/postgres/trialSessions/updateTrialSessionNotificationProcessing';
+import { getTrialSessionNotificationProcessing } from '@web-api/persistence/postgres/trialSessions/getTrialSessionNotificationProcessing';
 
 const setNoticesForCalendaredTrialSession = async (
   applicationContext: ServerApplicationContext,
@@ -23,12 +29,9 @@ const setNoticesForCalendaredTrialSession = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const calendaredCases = await applicationContext
-    .getPersistenceGateway()
-    .getCalendaredCasesForTrialSession({
-      applicationContext,
-      trialSessionId,
-    });
+  const calendaredCases = await getCalendaredCasesForTrialSession({
+    trialSessionId,
+  });
 
   const trialNoticePdfsKeys: string[] = [];
 
@@ -58,12 +61,9 @@ const setNoticesForCalendaredTrialSession = async (
     userId: authorizedUser.userId,
   });
 
-  const trialSession = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById({
-      applicationContext,
-      trialSessionId,
-    });
+  const trialSession = await getTrialSessionById({
+    trialSessionId,
+  });
 
   if (!trialSession) {
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
@@ -71,12 +71,9 @@ const setNoticesForCalendaredTrialSession = async (
 
   const trialSessionEntity = new TrialSession(trialSession);
 
-  const trialSessionProcessingStatus = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionProcessingStatus({
-      applicationContext,
-      trialSessionId,
-    });
+  const trialSessionProcessingStatus = (
+    await getTrialSessionNotificationProcessing({ trialSessionId })
+  )?.status;
 
   if (
     trialSessionProcessingStatus &&
@@ -91,20 +88,9 @@ const setNoticesForCalendaredTrialSession = async (
 
   const jobId = trialSessionId;
 
-  await applicationContext
-    .getPersistenceGateway()
-    .setTrialSessionProcessingStatus({
-      applicationContext,
-      trialSessionId,
-      trialSessionStatus: 'processing',
-    });
-
-  await applicationContext.getPersistenceGateway().createJobStatus({
-    applicationContext,
-    docketNumbers: calendaredCases.map(
-      calendaredCase => calendaredCase.docketNumber,
-    ),
-    jobId,
+  await createTrialSessionNotificationProcessing({
+    trialSessionId,
+    unfinishedCasesCount: calendaredCases.length,
   });
 
   for (const calendaredCase of calendaredCases) {
@@ -123,18 +109,14 @@ const setNoticesForCalendaredTrialSession = async (
 
   await waitForJobToFinish({ applicationContext, jobId });
 
-  await applicationContext
-    .getPersistenceGateway()
-    .setTrialSessionProcessingStatus({
-      applicationContext,
-      trialSessionId,
-      trialSessionStatus: 'complete',
-    });
+  await updateTrialSessionNotificationProcessing({
+    status: 'complete',
+    trialSessionId,
+  });
 
   trialSessionEntity.setNoticesIssued();
 
-  await applicationContext.getPersistenceGateway().updateTrialSession({
-    applicationContext,
+  await updateTrialSession({
     trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
   });
 
@@ -187,13 +169,15 @@ const waitForJobToFinish = async ({
   applicationContext: ServerApplicationContext;
   jobId: string;
 }): Promise<void> => {
-  const { unfinishedCases } = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionJobStatusForCase({
-      applicationContext,
-      jobId,
-    });
-  if (unfinishedCases === 0) {
+  const processingJob = await getTrialSessionNotificationProcessing({
+    trialSessionId: jobId,
+  });
+  if (!processingJob)
+    throw new NotFoundError(
+      `Could not get notification processing job with id ${jobId}`,
+    );
+
+  if (processingJob.unfinishedCases <= 0) {
     return;
   }
 
@@ -202,12 +186,12 @@ const waitForJobToFinish = async ({
 };
 
 export const determineEntitiesToLock = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   { trialSessionId }: { trialSessionId: string },
 ) => {
-  const calendaredCases = await applicationContext
-    .getPersistenceGateway()
-    .getCalendaredCasesForTrialSession({ applicationContext, trialSessionId });
+  const calendaredCases = await getCalendaredCasesForTrialSession({
+    trialSessionId,
+  });
 
   return {
     identifiers: calendaredCases.map(

@@ -15,9 +15,6 @@ describe('Petitioner Account Creation', () => {
     Cypress.session.clearCurrentSessionData();
   });
 
-  after(() => {
-    cy.task('deleteAllCypressTestAccounts');
-  });
 
   describe('Form Validation', () => {
     const TEST_EMAIL = `cypress_test_account+validations_${GUID}@example.com`;

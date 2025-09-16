@@ -3,11 +3,6 @@ export type SpecialTrialSession = {
   trialSessionId: string;
 };
 
-export type SpecialTrialSessionKey = {
-  pk: string;
-  sk: string;
-};
-
 export type TrialSessionWorkingCopyNotes = {
   sessionNotes: string;
   trialSessionId: string;
