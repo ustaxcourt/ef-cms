@@ -47,7 +47,7 @@ const config: Config = {
     '!reports/**',
     '!run-once-scripts/**',
     '!secrets/**',
-    '!send-maintenance-mode-notifications-locally.ts.ts',
+    '!send-maintenance-mode-notifications-locally.ts',
     '!template.ts',
     '!judge/get-judge-name.ts',
     '!judge/set-judge-title.ts',
