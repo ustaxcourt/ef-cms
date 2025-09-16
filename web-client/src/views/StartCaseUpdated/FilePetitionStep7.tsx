@@ -4,7 +4,6 @@ import {
 } from '@web-client/ustc-ui/Accordion/Accordion';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { InlineLink } from '@web-client/ustc-ui/InlineLink/InlineLink';
-// import { SuccessNotification } from '@web-client/views/SuccessNotification';
 import { AlertSuccess } from '@web-client/dawson-ui/ui/Alert/AlertSuccess';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -23,7 +22,6 @@ export const FilePetitionStep7 = connect(
     return (
       <>
         <AlertSuccess alertSuccess={alertSuccess} isDismissible={false} />
-        {/*<SuccessNotification isDismissible={false} />*/}
         <div className="petitioner-flow-text">
           Once the Petition is processed by the Court, you will be able to
           submit documents.
