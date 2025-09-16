@@ -126,6 +126,7 @@
     "build:public": "USTC_ENV=prod PUBLIC_SITE_URL=$PUBLIC_SITE_URL node esbuild.public.config.mjs",
     "clean:public": "rm -rf dist-public/",
     "clean": "./reset-dependencies.sh CLEAN_ONLY",
+    "cleanup:cypress-test-accounts": "./scripts/user/cleanup-cypress-test-accounts.ts",
     "cypress:integration": "./scripts/run-cypress.sh",
     "cypress:integration:file": "./scripts/run-cypress.sh -t",
     "cypress:integration:open": "./scripts/run-cypress.sh -o",
@@ -328,6 +329,7 @@
     "lint-staged-shellcheck": "0.1.2",
     "livereload": "0.10.3",
     "nodemon": "3.1.10",
+    "p-limit": "7.1.1",
     "pdf2pic": "3.2.0",
     "pixelmatch": "7.1.0",
     "pngjs": "7.0.0",
@@ -352,6 +354,7 @@
     "ts-jest": "29.4.1",
     "ts-node": "10.9.2",
     "tsconfig-paths": "4.2.0",
+    "p-queue": "6.6.2",
     "typescript": "5.8.3",
     "typescript-eslint": "8.42.0"
   }
