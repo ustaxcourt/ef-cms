@@ -24,7 +24,6 @@ import {
   USER_MESSAGE_TYPES,
   UserMessageType,
 } from '@shared/business/entities/EntityConstants';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { createProspectiveTrialSessions } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/createProspectiveTrialSessions';
@@ -40,6 +39,8 @@ import {
 import { sortObjectByKey } from '@shared/tools/helpers';
 import { writeTrialSessionDataToExcel } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/writeTrialSessionDataToExcel';
 import { RawGenerateSuggestedTermForm } from '@shared/business/entities/trialSessions/GenerateSuggestedTermForm';
+import { getHolidaysInDateRange } from '@shared/business/utilities/getHolidaysInDateRange';
+import { getTrialSessions } from '@web-api/persistence/postgres/trialSessions/getTrialSessions';
 
 export const WASHINGTON_DC_STRING = 'Washington, District of Columbia';
 export const WASHINGTON_DC_NORTH_STRING =
@@ -58,7 +59,6 @@ export type CalendarGeneratorMessage = {
 };
 
 export const generateSuggestedTrialSessionCalendarInteractor = async (
-  applicationContext: ServerApplicationContext,
   TERM_BUILDER_INFORMATION: RawGenerateSuggestedTermForm,
   authorizedUser: UnknownAuthUser,
 ): Promise<{
@@ -75,9 +75,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   const { termEndDate, termStartDate, ...calendaringConfig } =
     TERM_BUILDER_INFORMATION;
 
-  const sessions = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessions({ applicationContext });
+  const sessions = await getTrialSessions();
 
   const specialSessions = getSpecialSessionsInTerm({
     sessions,
@@ -140,11 +138,14 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     return a.localeCompare(b);
   });
 
+  const holidays = getHolidaysInDateRange(termStartDate, termEndDate);
+
   const bufferArray = await writeTrialSessionDataToExcel({
     caseCountsAndSessionsByCity,
+    holidays,
     incorrectSizeRegularCases,
     userMessages,
-    weeks: weeksToLoop,
+    weeksRange: weeksToLoop,
   });
 
   return {

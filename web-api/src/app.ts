@@ -207,9 +207,10 @@ import express from 'express';
 import { getTrialSessionOpenCasesCountLambda } from '@web-api/lambdas/trialSessions/getTrialSessionOpenCasesCountLambda';
 import { getConsolidatedCaseDeadlinesLambda } from '@web-api/lambdas/caseDeadline/getConsolidatedCaseDeadlinesLambda';
 import { removePetitionerEmailLambda } from '@web-api/lambdas/cases/removePetitionerEmailLambda';
+import { getRecentFilingsForUserLambda } from './lambdas/recentFilings/getRecentFilingsForUserLambda';
+import { saveMinuteSheetToDraftsLambda } from './lambdas/trialSessionMinutes/saveMinuteSheetToDraftsLambda';
 import { deactivateUserLambda } from '@web-api/lambdas/automations/deactivateUserLambda';
 import { removeUserPendingEmailLambda } from '@web-api/lambdas/automations/removeUserPendingEmailLambda';
-import { saveMinuteSheetToDraftsLambda } from './lambdas/trialSessionMinutes/saveMinuteSheetToDraftsLambda';
 
 export const app = express();
 
@@ -647,6 +648,10 @@ app.use(expressLogger);
 {
   app.get('/cases', lambdaWrapper(getCasesForUserLambda));
   app.get('/cases/search', lambdaWrapper(caseAdvancedSearchLambda));
+  app.get(
+    '/cases/recent-filings',
+    lambdaWrapper(getRecentFilingsForUserLambda),
+  );
   app.post('/cases/paper', lambdaWrapper(createCaseFromPaperLambda));
   app.delete(
     '/cases/:docketNumber/remove-pending/:docketEntryId',

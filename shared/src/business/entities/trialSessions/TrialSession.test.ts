@@ -1,6 +1,7 @@
 import { FORMATS, prepareDateFromString } from '../../utilities/DateHandler';
 import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
 import {
+  SESSION_STATUS_TYPES,
   SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
   TRIAL_SESSION_SCOPE_TYPES,
@@ -9,6 +10,38 @@ import { TrialSession } from './TrialSession';
 
 describe('TrialSession entity', () => {
   describe('isValid', () => {
+    it('should expect trial clerk when trial clerk is on the raw session', () => {
+      const mockTrialClerk = {
+        name: 'Test Trial Clerk',
+        userId: '3d9fa032-ad00-475a-9183-8aa0229a31eb',
+      };
+
+      const trialSession = new TrialSession({
+        ...MOCK_TRIAL_REGULAR,
+        trialClerk: mockTrialClerk,
+      });
+
+      expect(trialSession.trialClerk).toEqual(mockTrialClerk);
+    });
+
+    it('should return true when calling isClosed when SESSION_STATUS_TYPES.closed', () => {
+      const result = new TrialSession({
+        ...MOCK_TRIAL_REGULAR,
+        sessionStatus: SESSION_STATUS_TYPES.closed,
+      }).isClosed();
+
+      expect(result).toBe(true);
+    });
+
+    it('should return false when calling isClosed when sessionStatus is not SESSION_STATUS_TYPES.closed', () => {
+      const result = new TrialSession({
+        ...MOCK_TRIAL_REGULAR,
+        sessionStatus: SESSION_STATUS_TYPES.new,
+      }).isClosed();
+
+      expect(result).toBe(false);
+    });
+
     it('should be true when a valid trial session is provided', () => {
       const trialSession = new TrialSession(MOCK_TRIAL_REGULAR);
 
@@ -445,13 +478,13 @@ describe('TrialSession entity', () => {
     });
   });
 
-  describe('dismissedAlertForNOTT', () => {
+  describe('dismissedAlertForNott', () => {
     it('should have a default value of false', () => {
       const trialSession = new TrialSession({
         ...MOCK_TRIAL_REGULAR,
       });
 
-      expect(trialSession.dismissedAlertForNOTT).toBe(false);
+      expect(trialSession.dismissedAlertForNott).toBe(false);
     });
   });
 

@@ -10,6 +10,7 @@ import {
 } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/constraints';
 import {
   FORMATS,
+  IsoDateRange,
   createDateAtStartOfWeekEST,
   createISODateString,
 } from '@shared/business/utilities/DateHandler';
@@ -41,7 +42,7 @@ export const generateCalendar = ({
 }: {
   specialSessions: RawTrialSession[];
   caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity;
-  weeksToLoop: string[];
+  weeksToLoop: IsoDateRange[];
   constraints: Constraint[];
   calendaringConfig: CalendaringConfig;
 }): {
@@ -124,7 +125,7 @@ export const generateCalendar = ({
     });
 
   for (const currentWeek of weeksToLoop) {
-    const weekOfString = currentWeek;
+    const weekOfString = currentWeek.start;
     for (const city in caseCountsAndSessionsByCity) {
       for (const prospectiveSession of caseCountsAndSessionsByCity[city]
         .prospectiveSessions) {
@@ -167,15 +168,19 @@ const reserveWeekAfterSpecialSession = ({
   session,
   weeksToLoop,
 }: {
-  weeksToLoop: string[];
+  weeksToLoop: IsoDateRange[];
   calendarState: CalendarState;
   session: ScheduledTrialSession;
 }): void => {
-  const nextWeekOfString = weeksToLoop[weeksToLoop.indexOf(session.weekOf) + 1];
+  const nextWeek =
+    weeksToLoop[
+      weeksToLoop.findIndex(week => week.start === session.weekOf) + 1
+    ];
+  if (!nextWeek) return;
 
-  if (!calendarState.reservedWeekOfLocationIntersection[nextWeekOfString])
-    calendarState.reservedWeekOfLocationIntersection[nextWeekOfString] = [];
-  calendarState.reservedWeekOfLocationIntersection[nextWeekOfString].push(
+  if (!calendarState.reservedWeekOfLocationIntersection[nextWeek.start])
+    calendarState.reservedWeekOfLocationIntersection[nextWeek.start] = [];
+  calendarState.reservedWeekOfLocationIntersection[nextWeek.start].push(
     session.trialLocation,
   );
 };
@@ -251,7 +256,7 @@ const decrementRemainingCaseCounters = (
   }
 };
 
-const setupCalendarState = (weeksToLoop: string[]): CalendarState => {
+const setupCalendarState = (weeksToLoop: IsoDateRange[]): CalendarState => {
   const calendarState: CalendarState = {
     reservedWeekOfLocationIntersection: {},
     sessionCountPerCity: {},
@@ -261,8 +266,8 @@ const setupCalendarState = (weeksToLoop: string[]): CalendarState => {
 
   // Initialize session counts
   weeksToLoop.forEach(week => {
-    calendarState.sessionCountPerWeek[week] = 0;
-    calendarState.sessionScheduledPerCityPerWeek[week] = new Set();
+    calendarState.sessionCountPerWeek[week.start] = 0;
+    calendarState.sessionScheduledPerCityPerWeek[week.start] = new Set();
   });
 
   TRIAL_CITY_STRINGS.forEach(cityStringKey => {
@@ -314,7 +319,7 @@ const addSpecialScheduledTrialSession = ({
   weeksToLoop,
 }: {
   scheduledTrialSession: ScheduledTrialSession;
-  weeksToLoop: string[];
+  weeksToLoop: IsoDateRange[];
   calendarState: CalendarState;
   caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity;
 }) => {

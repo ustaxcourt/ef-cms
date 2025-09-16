@@ -10,7 +10,7 @@ import { setTrialSessionsPageAction } from '@web-client/presenter/actions/TrialS
 describe('setTrialSessionsPageAction', () => {
   it('should set trial sessions', async () => {
     const trialSession = {
-      dismissedAlertForNOTT: false,
+      dismissedAlertForNott: false,
       estimatedEndDate: null,
       isCalendared: true,
       judge: {

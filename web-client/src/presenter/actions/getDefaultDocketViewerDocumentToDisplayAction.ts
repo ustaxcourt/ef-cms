@@ -40,6 +40,7 @@ export const getDefaultDocketViewerDocumentToDisplayAction = ({
     }
   }
 
+
   return {
     viewerDocumentToDisplay,
   };
