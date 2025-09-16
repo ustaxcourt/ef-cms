@@ -163,6 +163,9 @@ We encountered failure in integration tests running pg version 8.16.3, so we had
 ### TypeScript
 We cannot update TypeScript version beyond v5.8.3 until ts-jest supports it
 
+### p-queue
+There are a few scripts that depend on p-queue v6.6.2.  Upgrading this past version 6 will cause issues related to module imports.  It might be good to verify if the scripts using p-queue are still in use and if not, we could just remove p-queue and those scripts.
+
 ## Incrementing the Node Cache Key Version
 
 It's rare to need modify cache key. One reason you may want to do so is if a package fails to install properly, and CircleCI, unaware of the failed installation, stores the corrupted cache. In this case, we will need to increment the cache key version so that CircleCI is forced to reinstall the node dependencies and save them using the new key. To update the cache key, locate `vX-npm` and `vX-cypress` (where X represents the current cache key version) in the config.yml file, and then increment the identified version.
