@@ -424,9 +424,10 @@ jobs:
           name: 'Switch Colors'
           command: npm run switch-colors
       - run: 
-          name: Force Disengage Maintenance Mode
+          name: Disengage Maintenance Mode on Current Color
           command: |
-            ./scripts/disable-maintence-mode-current-color.sh
+            # will not send out notifications if already disengaged
+            npm run maintenance:disengage
 
   backup-source-dynamo-table:
     docker:
