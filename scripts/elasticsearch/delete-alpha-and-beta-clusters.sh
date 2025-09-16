@@ -14,10 +14,7 @@ source ./scripts/helpers/opensearch-domain-exists.sh
 VERSIONS="alpha beta"
 
 for ver in $VERSIONS; do
-  DYNAMODB_TABLE="efcms-${ENV}-${ver}"
   OPENSEARCH_DOMAIN="efcms-search-${ENV}-${ver}"
-
-  ./scripts/dynamo/delete-dynamo-table.sh "$DYNAMODB_TABLE"
 
   EXISTS=$(check_opensearch_domain_exists "$OPENSEARCH_DOMAIN")
   if [[ "$EXISTS" == "1" ]]; then
