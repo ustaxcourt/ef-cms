@@ -20,9 +20,8 @@ export type AlertInfoType = {
 
 export type AlertInfoProps = {
   alertInfo?: AlertInfoType;
-  dismissible?: boolean;
+  isDismissible?: boolean;
   dismissAlertSequence?: () => void;
-  messageNotBold?: boolean;
   className?: string;
   scrollToTop?: boolean;
   iconRight?: boolean;
@@ -30,9 +29,8 @@ export type AlertInfoProps = {
 
 export function AlertInfo({
   alertInfo,
-  dismissible = true,
+  isDismissible = true,
   dismissAlertSequence,
-  messageNotBold = false,
   className,
   scrollToTop = true,
 }: AlertInfoProps) {
@@ -52,7 +50,7 @@ export function AlertInfo({
       className={cn(className)}
       closeButtonOnClick={dismissAlertSequence}
       data-testid="info-alert"
-      isDismissible={dismissible}
+      isDismissible={isDismissible}
       ref={notificationRef}
       role="alert"
       variant="info"
@@ -65,7 +63,6 @@ export function AlertInfo({
             inlineLinkText={alertInfo.inlineLinkText}
             inlineLinkUrl={alertInfo.inlineLinkUrl}
             message={alertInfo.message}
-            messageNotBold={messageNotBold}
           />
         </AlertDescription>
       )}
@@ -91,18 +88,16 @@ type MessageProps = {
   inlineLinkText?: string;
   inlineLinkUrl?: string;
   message?: string | React.ReactNode;
-  messageNotBold?: boolean;
 };
 
-function Message({
-  inlineLinkText,
-  inlineLinkUrl,
-  message,
-  messageNotBold = false,
-}: MessageProps) {
+function Message({ inlineLinkText, inlineLinkUrl, message }: MessageProps) {
   if (!inlineLinkText || !inlineLinkUrl || typeof message !== 'string') {
     return (
-      <p className={cn(messageNotBold ? 'tw:font-normal' : 'tw:font-semibold')}>
+      <p
+        className={cn(
+          'tw:font-normal tw:xs:mt-1 tw:xs:mb-1 tw:mr-1 tw:mt-0 tw:mb-0',
+        )}
+      >
         {message}
       </p>
     );
@@ -111,7 +106,11 @@ function Message({
   const [beforeLink, afterLink] = message.split(inlineLinkText);
 
   return (
-    <p className={cn(messageNotBold ? 'tw:font-normal' : 'tw:font-semibold')}>
+    <p
+      className={cn(
+        'tw:font-normal tw:xs:mt-1 tw:xs:mb-1 tw:mr-1 tw:mt-0 tw:mb-0',
+      )}
+    >
       {beforeLink}
       <a
         className="tw:text-primary-darker tw:underline"

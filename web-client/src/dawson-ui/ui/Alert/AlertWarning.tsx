@@ -31,7 +31,6 @@ export function AlertWarning({
   className,
   dismissAlertSequence,
   isDismissible = true,
-  messageNotBold = false,
   scrollToTop = true,
 }: AlertWarningProps) {
   const notificationRef = useRef<HTMLDivElement | null>(null);
@@ -63,7 +62,7 @@ export function AlertWarning({
 
       {alertWarning.message && (
         <AlertDescription
-          className={cn(messageNotBold ? 'tw:font-normal' : 'tw:font-semibold')}
+          className={cn(className, 'tw:font-normal')}
           data-testid="warning-alert-message"
         >
           {alertWarning.message}

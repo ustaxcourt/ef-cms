@@ -31,7 +31,7 @@ export function Alerts() {
     showSingleMessage: true,
     showMultipleMessages: false,
     showTitleOnly: false,
-    messagesDeduped: false,
+    messagesDeduped: [],
   };
 
   const alertInfoProps = {
@@ -53,7 +53,6 @@ export function Alerts() {
   return (
     <div className="tw:my-4">
       <h2>Alerts</h2>
-      Info Alert
       {alert.info ? (
         <AlertInfo {...alertInfoProps}></AlertInfo>
       ) : (
@@ -126,7 +125,7 @@ export function Alerts() {
           alertInfo={{
             message: 'You’ll need to change your password by April 25, 2020.',
           }}
-          dismissible
+          isDismissible
           dismissAlertSequence={() =>
             setStaticAlerts({ ...staticAlerts, info: false })
           }
@@ -146,7 +145,6 @@ export function Alerts() {
           }
           className="tw:mb-4"
           alertWarning={{
-            title: 'Warning Status',
             message: 'You’ll need to change your password by April 25, 2020.',
           }}
         />
@@ -161,7 +159,6 @@ export function Alerts() {
       {staticAlerts.error ? (
         <AlertError
           alertError={{
-            ...alertError,
             message: 'Sorry, a password needs more than four characters.',
           }}
           alertHelper={alertHelper}
@@ -181,7 +178,6 @@ export function Alerts() {
       {staticAlerts.success ? (
         <AlertSuccess
           alertSuccess={{
-            title: 'Success Status',
             message: 'This is a succinct, helpful message',
           }}
           dismissAlertSequence={() =>
