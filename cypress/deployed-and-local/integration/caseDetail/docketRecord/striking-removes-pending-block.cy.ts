@@ -78,6 +78,9 @@ describe('Striking removes pending items', () => {
       cy.get('[data-testid="tab-action"]').click();
       cy.get('[data-testid="strike-entry"]').click();
       cy.get('[data-testid="modal-button-confirm"]').click();
+
+      cy.get('[data-testid="edit-APW"]'); // Wait for page to be fully loaded before next assert
+      cy.get('[data-testid="blocked-case-icon"]').should('not.exist'); // Assert case is not blocked
     });
   });
 });
