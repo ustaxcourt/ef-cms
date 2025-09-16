@@ -39,7 +39,7 @@ export function loginAsPrivatePractitioner(
 }
 
 export function loginAsIrsPractitioner(
-  irsPractitionerUser:string = 'irsPractitioner@example.com',
+  irsPractitionerUser: string = 'irsPractitioner@example.com',
 ) {
   login({ email: irsPractitionerUser });
   cy.get('[data-testid="advanced-search-link"]').should('exist');
@@ -105,6 +105,11 @@ export function loginAsGeneral() {
 
 export function loginAsColvin() {
   login({ email: 'judgecolvin@example.com' });
+  cy.get('h1:contains("Trial Sessions")').should('exist');
+}
+
+export function loginAsBuch() {
+  login({ email: 'judgebuch@example.com' });
   cy.get('h1:contains("Trial Sessions")').should('exist');
 }
 
