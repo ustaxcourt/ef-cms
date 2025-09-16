@@ -53,6 +53,10 @@ parameters:
     default: ''
     type: string
 
+  run_expand_contract_migration:
+    default: false
+    type: boolean
+
 commands:
   npm-and-cypress-install:
     steps:
@@ -283,6 +287,12 @@ jobs:
           name: Run Postgres Migration
           command: |
             npm run migration:postgres
+      - when:
+          condition: << pipeline.parameters.run_expand_contract_migration >>
+          steps:
+            - run:
+                name: Run Postgres Expand Migration
+                command: npm run migration:postgres:expand
       - run:
           name: Restore Postgres User Permissions
           command: |
@@ -608,6 +618,12 @@ jobs:
             if [ $MIGRATE_FLAG == true ]; then
               npm run migration:cleanup -- $ENV
             fi
+      - when:
+          condition: << pipeline.parameters.run_expand_contract_migration >>
+          steps:
+            - run:
+                name: Run Postgres Expand Migration
+                command: npm run migration:postgres:contract
 
   ######################## GLUE JOB: Jobs that run in a lower environment ########################
 
