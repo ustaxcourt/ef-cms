@@ -10,21 +10,21 @@ export function SearchBoilerplateText({
   isOpinion = false,
   user = { ...emptyUserState },
 }) {
-  const practitionerRoles = [
+  const practitionerRoles = new Set([
     ROLES.privatePractitioner,
     ROLES.irsPractitioner,
     ROLES.inactivePractitioner,
-  ];
+  ]);
 
-  const practitionerTypes = [
+  const practitionerTypes = new Set([
     PRACTICE_TYPE.Private,
     PRACTICE_TYPE.IRS,
     PRACTICE_TYPE.DOJ,
-  ];
+  ]);
 
   const isPractitionerUser =
-    practitionerRoles.includes((user as any)?.role) ||
-    practitionerTypes.includes((user as any)?.practiceType);
+    practitionerRoles.has((user as any)?.role) ||
+    practitionerTypes.has((user as any)?.practiceType);
 
   const showBullets =
     isPractitionerUser ||
