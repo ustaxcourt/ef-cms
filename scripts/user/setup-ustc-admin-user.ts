@@ -46,11 +46,11 @@ const cognitoClient = new CognitoIdentityProvider({
       },
       {
         Name: 'custom:role',
-        Value: 'zendesk',
+        Value: 'admin',
       },
       {
         Name: 'name',
-        Value: 'zendesk',
+        Value: 'admin',
       },
     ],
     UserPoolId,
