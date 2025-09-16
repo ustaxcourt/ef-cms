@@ -19,7 +19,10 @@ export const OpinionSearchForm = connect(
       state.constants.ADVANCED_SEARCH_OPINION_TYPES_LIST,
     advancedDocumentSearchHelper: state.advancedDocumentSearchHelper,
     advancedSearchForm: state.advancedSearchForm,
+    advancedSearchTab: state.advancedSearchTab,
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
+    setCurrentPaginationPageSequence:
+      sequences.setCurrentPaginationPageSequence,
     updateAdvancedOpinionSearchFormValueSequence:
       sequences.updateAdvancedOpinionSearchFormValueSequence,
     validateOpinionSearchSequence: sequences.validateOpinionSearchSequence,
@@ -29,7 +32,9 @@ export const OpinionSearchForm = connect(
     ADVANCED_SEARCH_OPINION_TYPES_LIST,
     advancedDocumentSearchHelper,
     advancedSearchForm,
+    advancedSearchTab,
     clearAdvancedSearchFormSequence,
+    setCurrentPaginationPageSequence,
     submitAdvancedSearchSequence,
     updateAdvancedOpinionSearchFormValueSequence,
     validateOpinionSearchSequence,
@@ -346,6 +351,10 @@ export const OpinionSearchForm = connect(
                 type="submit"
                 onClick={e => {
                   e.preventDefault();
+                  setCurrentPaginationPageSequence({
+                    advancedSearchTab,
+                    currentPaginationPage: 0,
+                  });
                   submitAdvancedSearchSequence();
                 }}
               >
