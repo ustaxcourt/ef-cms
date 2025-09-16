@@ -171,13 +171,7 @@ export const RecentFilingsMobile = ({
                   >
                     <td className="docket-number-head">
                       {filing.inConsolidatedGroup && (
-                        <span
-                          className={
-                            filing.isLeadCase
-                              ? 'margin-right-2'
-                              : 'margin-left-205'
-                          }
-                        >
+                        <span className="margin-right-1">
                           <ConsolidatedCaseIcon
                             consolidatedIconTooltipText={
                               filing.consolidatedIconTooltipText
@@ -190,22 +184,14 @@ export const RecentFilingsMobile = ({
                           />
                         </span>
                       )}
-                      <span
-                        className={
-                          filing.inConsolidatedGroup && !filing.isLeadCase
-                            ? 'margin-left-205'
-                            : ''
-                        }
+                      <a
+                        href={`/case-detail/${filing.docketNumber}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        data-testid="case-number-link"
                       >
-                        <a
-                          href={`/case-detail/${filing.docketNumber}`}
-                          target="_blank"
-                          rel="noreferrer"
-                          data-testid="case-number-link"
-                        >
-                          {filing.docketNumber}
-                        </a>
-                      </span>
+                        {filing.docketNumber}
+                      </a>
                     </td>
                     <th>Filed Date</th>
                     <td className="divider">
