@@ -424,27 +424,6 @@ jobs:
           name: 'Switch Colors'
           command: npm run switch-colors
 
-  backup-source-dynamo-table:
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: small
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-      - run:
-          name: Backup Source DynamoDB table
-          command: |
-            if [ $MIGRATE_FLAG == true ]; then
-              npm run backup:dynamo-table -- $SOURCE_TABLE
-            fi
-
   cleanup:
     docker:
       - image: *efcms-docker-image
@@ -467,6 +446,18 @@ jobs:
           name: Delete Source Elasticsearch Indices After Reindex
           command: |
             ./web-api/delete-unaliased-elasticsearch-indices.sh $ENV
+      - run:
+          name: Delete Source ElasticSearch cluster
+          command: |
+            if [ $MIGRATE_FLAG == true ]; then
+              npm run delete:elasticsearch-cluster -- $SOURCE_ELASTICSEARCH
+            fi
+      - run:
+          name: Cleanup Deploy Table After Migration
+          command: |
+            if [ $MIGRATE_FLAG == true ]; then
+              npm run migration:cleanup -- $ENV
+            fi
       - run:
           name: Cleanup Cypress Test Accounts
           command: |
@@ -505,7 +496,7 @@ jobs:
       - run:
           name: 'Delete OpenSearch alpha/beta clusters'
           command: |
-            ./scripts/elasticsearch/delete-alpha-and-beta-blusters.sh
+            ./scripts/elasticsearch/delete-alpha-and-beta-clusters.sh
       - run:
           no_output_timeout: 20m
           name: 'Recreate the alpha OpenSearch cluster'
