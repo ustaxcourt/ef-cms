@@ -77,8 +77,8 @@ export const baseState = {
   },
   constants: {} as { [key: string]: any },
   currentPage: 'Interstitial',
-  currentPaginationPage: 0,
-  // separate sort state for Order and Opinion advanced search tabs
+  orderCurrentPaginationPage: 0,
+  opinionCurrentPaginationPage: 0,
   orderDocumentSearchSort: {
     sortColumn: 'formattedFiledDate',
     sortDirection: 'desc' as 'asc' | 'desc',
