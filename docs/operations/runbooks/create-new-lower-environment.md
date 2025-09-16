@@ -350,6 +350,10 @@ This runbook describes the process of creating a new DAWSON lower environment in
    ```bash
    . scripts/env/set-env.zsh "ustc-${ENV}"
    ```
+1. Create the USTC admin user:
+   ```bash
+   scripts/user/setup-ustc-admin-user.ts
+   ```
 1. Merge `origin/staging` into the branch that corresponds to this lower environment:
    ```bash
    git checkout experimental9
