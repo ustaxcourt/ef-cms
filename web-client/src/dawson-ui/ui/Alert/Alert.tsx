@@ -16,7 +16,7 @@ const alertVariants = cva(
   cn(
     'tw:relative tw:border-solid tw:border-0',
     'tw:xs:border-l-8 tw:xs:p-4 tw:border-l-6 tw:p-3 tw:pt-[12px] tw:xs:pt-[14px]',
-    'tw:font-normal tw:xs:text-lg tw:text-base/4',
+    'tw:font-normal tw:xs:text-base tw:text-base/4',
     'tw:[&_ul]:m-0 tw:[&_ul]:-ml-4 tw:[&_ul]:list-disc',
     'tw:xs:[&_svg]:h-7 tw:xs:[&_svg]:w-7 tw:[&_svg]:h-6 tw:[&_svg]:w-6',
     'tw:xs:max-w-[740px] tw:w-full',
@@ -94,7 +94,7 @@ function AlertHeader({
       <div
         className={cn(
           title ? 'tw:font-bold' : '',
-          'tw:text-base/5 tw:xs:text-lg/7 tw:xs:mb-1 tw:mb-1 tw:pb-0',
+          'tw:text-sm/4.5 tw:xs:text-base/7 tw:xs:mb-1 tw:mb-1 tw:pb-0',
         )}
         data-slot="alert-title"
         data-testid="alert-header"
@@ -107,7 +107,7 @@ function AlertHeader({
           onClick={closeButtonOnClick}
         >
           <div className="tw:flex tw:hover:text-primary-dark tw:active:text-primary-darker tw:active:fill-primary-darker tw:hover:fill-primary-dark">
-            <span className="tw:mr-2 tw:text-base/4.5 tw:xs:text-lg/5.5">
+            <span className="tw:mr-2 tw:text-sm/4.5 tw:xs:text-base/5.5">
               Close
             </span>
             <CircleXmark className="tw:!h-[20px] tw:!w-[20px] tw:xs:!h-[24px] tw:xs:!w-[24px]" />
@@ -121,7 +121,7 @@ function AlertHeader({
 function AlertDescription({ ...props }: React.ComponentProps<'p'>) {
   return (
     <div
-      className="tw:text-base/5 tw:xs:text-lg/6.5 tw:ml-12"
+      className="tw:text-sm/4.5 tw:xs:text-base/6.5 tw:ml-11"
       data-slot="alert-description"
       {...props}
     />
