@@ -47,6 +47,7 @@ export function AlertWarning({
 
   const warningProps = {
     closeButtonOnClick: dismissAlertSequence,
+    isDismissible,
     title: alertWarning.title,
     variant: 'warning',
   };

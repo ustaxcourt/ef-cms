@@ -68,12 +68,14 @@ function Alert({
 }
 type AlertHeaderType = {
   closeButtonOnClick?: () => React.MouseEventHandler<HTMLButtonElement> | void;
+  isDismissible?: boolean;
   title?: string;
   variant: string;
 };
 
 function AlertHeader({
   closeButtonOnClick,
+  isDismissible = true,
   title,
   variant,
   ...props
@@ -95,18 +97,20 @@ function AlertHeader({
         data-testid="alert-header"
         {...props}
       ></div>
-      <Button
-        className="tw:m-0 tw:p-0 tw:gap-3 tw:w-auto tw:fill-primary tw:self-start tw:ml-auto"
-        variant={'primaryTertiary'}
-        onClick={closeButtonOnClick}
-      >
-        <div className="tw:flex">
-          <span className="tw:mr-2 tw:text-base/4.5 tw:xs:text-lg/5.5">
-            Close
-          </span>
-          <CircleXmark className="tw:!h-[20px] tw:!w-[20px] tw:xs:!h-[24px] tw:xs:!w-[24px]" />
-        </div>
-      </Button>
+      {isDismissible && (
+        <Button
+          className="tw:m-0 tw:p-0 tw:gap-3 tw:w-auto tw:fill-primary tw:self-start tw:ml-auto"
+          variant={'primaryTertiary'}
+          onClick={closeButtonOnClick}
+        >
+          <div className="tw:flex">
+            <span className="tw:mr-2 tw:text-base/4.5 tw:xs:text-lg/5.5">
+              Close
+            </span>
+            <CircleXmark className="tw:!h-[20px] tw:!w-[20px] tw:xs:!h-[24px] tw:xs:!w-[24px]" />
+          </div>
+        </Button>
+      )}
     </div>
   );
 }
@@ -114,7 +118,7 @@ function AlertHeader({
 function AlertDescription({ ...props }: React.ComponentProps<'p'>) {
   return (
     <div
-      className="tw:text-base/5 tw:xs:text-lg/6.5 tw:ml-11"
+      className="tw:text-base/5 tw:xs:text-lg/6.5 tw:ml-12"
       data-slot="alert-description"
       {...props}
     />

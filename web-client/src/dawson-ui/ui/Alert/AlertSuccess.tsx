@@ -42,6 +42,7 @@ export function AlertSuccess({
 
   const successProps = {
     closeButtonOnClick: dismissAlertSequence,
+    isDismissible,
     title: alertSuccess?.title,
     variant: 'success',
   };

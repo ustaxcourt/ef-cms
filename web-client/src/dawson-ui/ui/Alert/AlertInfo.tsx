@@ -48,6 +48,7 @@ export function AlertInfo({
 
   const infoProps = {
     closeButtonOnClick: dismissAlertSequence,
+    isDismissible,
     title: alertInfo.title,
     variant: 'info',
   };
