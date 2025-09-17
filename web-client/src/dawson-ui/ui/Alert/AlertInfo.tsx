@@ -71,7 +71,7 @@ export function AlertInfo({
       {alertInfo.message && (
         <AlertMessage {...infoProps}>
           <Message
-            additionalClassname="tw:xs:mb-1 tw:mr-1 tw:mt-0 tw:mb-0"
+            additionalClassname="tw:xs:mb-1 tw:mr-1 tw:mt-0 tw:mb-0 tw:text-sm/5 tw:xs:text-base/7"
             inlineLinkText={alertInfo.inlineLinkText}
             inlineLinkUrl={alertInfo.inlineLinkUrl}
             message={alertInfo.message}

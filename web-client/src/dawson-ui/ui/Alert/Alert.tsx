@@ -15,8 +15,8 @@ import { CircleXmark } from '../icons';
 const alertVariants = cva(
   cn(
     'tw:relative tw:border-solid tw:border-0',
-    'tw:xs:border-l-8 tw:xs:p-4 tw:border-l-6 tw:p-3 tw:pt-[12px] tw:xs:pt-[14px]',
-    'tw:font-normal tw:xs:text-base tw:text-base/4',
+    'tw:xs:border-l-8 tw:xs:p-4 tw:border-l-6 tw:p-3',
+    'tw:font-normal tw:xs:text-base tw:text-sm/4',
     'tw:[&_ul]:m-0 tw:[&_ul]:-ml-4 tw:[&_ul]:list-disc',
     'tw:xs:[&_svg]:h-7 tw:xs:[&_svg]:w-7 tw:[&_svg]:h-6 tw:[&_svg]:w-6',
     'tw:xs:max-w-[740px] tw:w-full',
@@ -93,8 +93,10 @@ function AlertHeader({
       </div>
       <div
         className={cn(
-          title ? 'tw:font-bold' : '',
-          'tw:text-sm/4.5 tw:xs:text-base/7 tw:xs:mb-1 tw:mb-1 tw:pb-0',
+          title
+            ? 'tw:font-bold tw:text-sm/4 tw:xs:text-base/6'
+            : 'tw:text-sm/5 tw:xs:text-base/7',
+          'tw:xs:mb-1 tw:mb-1 tw:pb-0',
         )}
         data-slot="alert-title"
         data-testid="alert-header"
