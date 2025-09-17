@@ -85,10 +85,10 @@ function AlertHeader({
 }: React.ComponentProps<'p'> & AlertHeaderType) {
   return (
     <div className="tw:flex">
-      <div className="tw:pt-[0px] tw:xs:pt-[2px] tw:ml-3 tw:mr-3">
+      <div className="tw:pt-[0px] tw:xs:pt-[2px] tw:mr-3 tw:!h-[20px] tw:!w-[20px] tw:xs:!h-[24px] tw:xs:!w-[24px]">
         <FontAwesomeIcon
           icon={iconType[variant ?? 'info']}
-          className="tw:!h-[20px] tw:!w-[20px] tw:xs:!h-[24px] tw:xs:!w-[24px]"
+          className="tw:!h-[20px] tw:!w-[20px] "
         />
       </div>
       <div
@@ -96,7 +96,7 @@ function AlertHeader({
           title
             ? 'tw:font-bold tw:text-sm/4 tw:xs:text-base/6'
             : 'tw:text-sm/5 tw:xs:text-base/7',
-          'tw:xs:mb-1 tw:mb-1 tw:pb-0',
+          'tw:pb-0',
         )}
         data-slot="alert-title"
         data-testid="alert-header"
@@ -108,10 +108,8 @@ function AlertHeader({
           variant={'primaryTertiary'}
           onClick={closeButtonOnClick}
         >
-          <div className="tw:flex tw:hover:text-primary-dark tw:active:text-primary-darker tw:active:fill-primary-darker tw:hover:fill-primary-dark">
-            <span className="tw:mr-2 tw:text-sm/4.5 tw:xs:text-base/5.5">
-              Close
-            </span>
+          <div className="tw:flex tw:text-sm/4.5 tw:xs:text-base/5.5 tw:hover:text-primary-dark tw:active:text-primary-darker tw:active:fill-primary-darker tw:hover:fill-primary-dark">
+            <span className="tw:ml-2 tw:mr-2 tw:xs:ml-3 tw:xs:mr-3">Close</span>
             <CircleXmark className="tw:!h-[20px] tw:!w-[20px] tw:xs:!h-[24px] tw:xs:!w-[24px]" />
           </div>
         </Button>
@@ -123,7 +121,7 @@ function AlertHeader({
 function AlertDescription({ ...props }: React.ComponentProps<'p'>) {
   return (
     <div
-      className="tw:text-sm/4.5 tw:xs:text-base/6.5 tw:ml-11"
+      className="tw:text-sm tw:xs:text-base/5 tw:ml-8 tw:xs:ml-9"
       data-slot="alert-description"
       {...props}
     />
