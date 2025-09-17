@@ -118,10 +118,6 @@ export function fromKyselyDocketEntry<T extends object>(record: T) {
     ) => value.toISOString(),
     date: (value: typeof dwDocketEntrySchema.date, _: Partial<DocketEntry>) =>
       value?.toISOString(),
-    documentType: (
-      value: typeof dwDocketEntrySchema.documentTypeUpdated,
-      _: Partial<DocketEntry>,
-    ) => value,
     filingDate: (
       value: typeof dwDocketEntrySchema.filingDate,
       _: Partial<DocketEntry>,
@@ -152,8 +148,12 @@ export function fromKyselyDocketEntry<T extends object>(record: T) {
     ) => value?.toISOString(),
   } as const;
 
+  const keyRenameMap = {
+    documentTypeUpdated: 'documentType',
+  } as const;
+
   return new DatabaseToAppCodeMapper({
-    keyRenameMap: {},
+    keyRenameMap,
     transformMap,
   }).transform(record);
 }
