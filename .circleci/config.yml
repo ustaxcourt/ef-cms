@@ -460,6 +460,12 @@ jobs:
           name: Setup Env
           command: |
             ./scripts/env/env-for-circle.sh
+      - when:
+          condition: << pipeline.parameters.run_expand_contract_migration >>
+          steps:
+            - run:
+                name: Run Postgres Expand Migration
+                command: npm run migration:postgres:contract
       - run:
           name: Setup Elasticsearch Aliases
           command: |
@@ -484,12 +490,6 @@ jobs:
           name: Cleanup Cypress Test Accounts
           command: |
             npm run cleanup:cypress-test-accounts
-      - when:
-          condition: << pipeline.parameters.run_expand_contract_migration >>
-          steps:
-            - run:
-                name: Run Postgres Expand Migration
-                command: npm run migration:postgres:contract
 
   index-docket-entries-once:
     docker:
