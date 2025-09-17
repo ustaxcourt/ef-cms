@@ -578,6 +578,12 @@ jobs:
           name: Setup Env
           command: |
             ./scripts/env/env-for-circle.sh
+      - when:
+          condition: << pipeline.parameters.run_expand_contract_migration >>
+          steps:
+            - run:
+                name: Run Postgres Expand Migration
+                command: npm run migration:postgres:contract
       - run:
           name: Destroy Migration Infrastructure
           command: |
@@ -618,12 +624,6 @@ jobs:
             if [ $MIGRATE_FLAG == true ]; then
               npm run migration:cleanup -- $ENV
             fi
-      - when:
-          condition: << pipeline.parameters.run_expand_contract_migration >>
-          steps:
-            - run:
-                name: Run Postgres Expand Migration
-                command: npm run migration:postgres:contract
 
   ######################## GLUE JOB: Jobs that run in a lower environment ########################
 
