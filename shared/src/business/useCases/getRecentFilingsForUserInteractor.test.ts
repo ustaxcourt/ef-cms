@@ -6,7 +6,6 @@ import {
   PAYMENT_STATUS,
 } from '@shared/business/entities/EntityConstants';
 import { TAssociatedCase } from './getCasesForUserInteractor';
-import { calculateDate } from '../utilities/DateHandler';
 
 jest.mock('./getCasesForUserInteractor');
 
@@ -35,15 +34,22 @@ const createMockCase = (
 const createMockDbDocketEntry = (overrides: any = {}) => ({
   docketEntryId: 'entry-1',
   docketNumber: '101-20',
-  filingDate: calculateDate({ dateString: '2024-01-15' }),
+  filingDate: '2024-01-15T05:00:00.000Z', // ISO string format
   documentTitle: 'Petition',
   isFileAttached: true,
   eventCode: 'P',
   isStricken: false,
   isSealed: false,
   sealedTo: null,
-  servedAt: calculateDate({ dateString: '2024-01-15T10:00:00Z' }),
-  caption: 'Test Case Caption',
+  servedAt: '2024-01-15T10:00:00.000Z', // ISO string format
+  isDraft: false,
+  caseCaption: 'Test Case Caption', // Changed from 'caption' to 'caseCaption'
+  caseIsSealed: false,
+  caseDetails: createMockCaseDetails(
+    '101-20',
+    '02323349-87fe-4d29-91fe-8dd6916d2fda',
+    true,
+  ),
   ...overrides,
 });
 
@@ -136,6 +142,7 @@ describe('getRecentFilingsForUserInteractor', () => {
         isSealed: false,
         sealedTo: null,
         servedAt: expect.any(String),
+        caseIsSealed: false,
         inConsolidatedGroup: undefined,
         isLeadCase: true,
         consolidatedIconTooltipText: undefined,
@@ -200,7 +207,7 @@ describe('getRecentFilingsForUserInteractor', () => {
     const mockDbResults = [
       createMockDbDocketEntry({
         documentTitle: null,
-        caption: '',
+        caseCaption: '',
       }),
     ];
 
@@ -270,7 +277,7 @@ describe('getRecentFilingsForUserInteractor', () => {
     expect(result[0].isStricken).toBe(true);
     expect(result[0].isSealed).toBe(true);
     expect(result[0].sealedTo).toBe('public');
-    expect(result[0].servedAt).toBeUndefined();
+    expect(result[0].servedAt).toBeNull();
   });
 
   it('should handle cases with empty consolidated cases array', async () => {
@@ -324,9 +331,14 @@ describe('getRecentFilingsForUserInteractor', () => {
 
   it('should set isRequestingUserAssociated to false for cases where user is not a party', async () => {
     const mockCases = [createMockCase()];
-    const mockDbResults = [createMockDbDocketEntry()];
-    const mockCaseDetails = [
-      createMockCaseDetails('101-20', 'different-user-id', false),
+    const mockDbResults = [
+      createMockDbDocketEntry({
+        caseDetails: createMockCaseDetails(
+          '101-20',
+          'different-user-id',
+          false,
+        ),
+      }),
     ];
 
     mockGetCasesForUserInteractor.mockResolvedValue({
@@ -334,7 +346,6 @@ describe('getRecentFilingsForUserInteractor', () => {
       closedCaseList: [],
     });
     mockGetRecentFilingsByDocketNumbers.mockResolvedValue(mockDbResults);
-    mockGetCasesByDocketNumbers.mockResolvedValue(mockCaseDetails);
 
     const result = await getRecentFilingsForUserInteractor(
       mockApplicationContext,
@@ -354,12 +365,22 @@ describe('getRecentFilingsForUserInteractor', () => {
       }),
     ];
     const mockDbResults = [
-      createMockDbDocketEntry({ docketNumber: '101-20' }), // User is party to this case
-      createMockDbDocketEntry({ docketNumber: '102-20' }), // User is NOT party to this case
-    ];
-    const mockCaseDetails = [
-      createMockCaseDetails('101-20', mockAuthorizedUser!.userId, true), // User is party
-      createMockCaseDetails('102-20', 'different-user-id', false), // User is NOT party
+      createMockDbDocketEntry({
+        docketNumber: '101-20',
+        caseDetails: createMockCaseDetails(
+          '101-20',
+          mockAuthorizedUser!.userId,
+          true,
+        ), // User is party
+      }),
+      createMockDbDocketEntry({
+        docketNumber: '102-20',
+        caseDetails: createMockCaseDetails(
+          '102-20',
+          'different-user-id',
+          false,
+        ), // User is NOT party
+      }),
     ];
 
     mockGetCasesForUserInteractor.mockResolvedValue({
@@ -367,7 +388,6 @@ describe('getRecentFilingsForUserInteractor', () => {
       closedCaseList: [],
     });
     mockGetRecentFilingsByDocketNumbers.mockResolvedValue(mockDbResults);
-    mockGetCasesByDocketNumbers.mockResolvedValue(mockCaseDetails);
 
     const result = await getRecentFilingsForUserInteractor(
       mockApplicationContext,
@@ -392,12 +412,22 @@ describe('getRecentFilingsForUserInteractor', () => {
       }),
     ];
     const mockDbResults = [
-      createMockDbDocketEntry({ docketNumber: '101-20' }), // User is party to lead case
-      createMockDbDocketEntry({ docketNumber: '102-20' }), // User is also party to member case
-    ];
-    const mockCaseDetails = [
-      createMockCaseDetails('101-20', mockAuthorizedUser!.userId, true), // User is party to lead
-      createMockCaseDetails('102-20', mockAuthorizedUser!.userId, true), // User is party to member
+      createMockDbDocketEntry({
+        docketNumber: '101-20',
+        caseDetails: createMockCaseDetails(
+          '101-20',
+          mockAuthorizedUser!.userId,
+          true,
+        ), // User is party to lead
+      }),
+      createMockDbDocketEntry({
+        docketNumber: '102-20',
+        caseDetails: createMockCaseDetails(
+          '102-20',
+          mockAuthorizedUser!.userId,
+          true,
+        ), // User is party to member
+      }),
     ];
 
     mockGetCasesForUserInteractor.mockResolvedValue({
@@ -405,7 +435,6 @@ describe('getRecentFilingsForUserInteractor', () => {
       closedCaseList: [],
     });
     mockGetRecentFilingsByDocketNumbers.mockResolvedValue(mockDbResults);
-    mockGetCasesByDocketNumbers.mockResolvedValue(mockCaseDetails);
 
     const result = await getRecentFilingsForUserInteractor(
       mockApplicationContext,
