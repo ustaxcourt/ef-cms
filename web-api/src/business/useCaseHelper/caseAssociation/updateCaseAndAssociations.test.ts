@@ -3,13 +3,14 @@ import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import '@web-api/persistence/postgres/docketEntries/mocks.jest';
+import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 jest.mock('@shared/business/entities/CaseDeadline');
 jest.mock('@web-api/persistence/postgres/messages/getMessagesByDocketNumber');
 jest.mock('@web-api/persistence/postgres/messages/upsertMessages');
-jest.mock('@web-api/persistence/dynamo/trialSessions/removeCaseFromHearing');
 jest.mock(
   '@web-api/persistence/postgres/cases/userOnCase/disassociateUsersFromCases',
 );
+import { removeCasesFromHearings as removeCasesFromHearingsMock } from '@web-api/persistence/postgres/trialSessions/removeCasesFromHearings';
 import { Case } from '@shared/business/entities/cases/Case';
 import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { CASE_TYPES_MAP } from '@shared/business/entities/EntityConstants';
@@ -27,7 +28,6 @@ import { upsertCaseDeadlines as upsertCaseDeadlinesMock } from '@web-api/persist
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { MOCK_MESSAGE } from '@shared/test/mockMessage';
 import { upsertCases as upsertCasesMock } from '@web-api/persistence/postgres/cases/upsertCases';
-import { removeCaseFromHearing as removeCaseFromHearingMock } from '@web-api/persistence/dynamo/trialSessions/removeCaseFromHearing';
 import { getUniqueId } from '@shared/sharedAppContext';
 import { upsertDocketEntries as upsertDocketEntriesMock } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 import { disassociateUsersFromCases as disassociateUsersFromCasesMock } from '@web-api/persistence/postgres/cases/userOnCase/disassociateUsersFromCases';
@@ -41,6 +41,7 @@ describe('updateCaseAndAssociations', () => {
   );
   const associateUsersWithCases = jest.mocked(associateUsersWithCasesMock);
   const upsertDocketEntries = jest.mocked(upsertDocketEntriesMock);
+  const removeCasesFromHearings = jest.mocked(removeCasesFromHearingsMock);
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const upsertCases = jest.mocked(upsertCasesMock);
   const getMessagesByDocketNumber = getMessagesByDocketNumberMock as jest.Mock;
@@ -49,7 +50,6 @@ describe('updateCaseAndAssociations', () => {
   const getCaseDeadlinesByDocketNumber =
     getCaseDeadlinesByDocketNumberMock as jest.Mock;
   const upsertCaseCorrespondences = upsertCaseCorrespondencesMock as jest.Mock;
-  const removeCaseFromHearing = jest.mocked(removeCaseFromHearingMock);
 
   beforeAll(() => {
     validMockCase = new Case(
@@ -149,7 +149,7 @@ describe('updateCaseAndAssociations', () => {
     expect(upsertCaseCorrespondences).not.toHaveBeenCalled();
 
     // updateHearings
-    expect(removeCaseFromHearing).not.toHaveBeenCalled();
+    expect(removeCasesFromHearings).not.toHaveBeenCalled();
 
     // users
     expect(associateUsersWithCases).not.toHaveBeenCalled();
@@ -191,11 +191,13 @@ describe('updateCaseAndAssociations', () => {
     });
 
     expect(upsertCases.mock.calls[0][0]).toMatchObject([caseToUpdate]);
-    expect(removeCaseFromHearing).toHaveBeenCalledTimes(2);
-    expect(removeCaseFromHearing.mock.calls).toMatchObject([
-      [{ docketNumber, trialSessionId: trialSessionIds[1] }],
-      [{ docketNumber, trialSessionId: trialSessionIds[2] }],
-    ]);
+    expect(removeCasesFromHearings).toHaveBeenCalled();
+    expect(removeCasesFromHearings.mock.calls[0][0]).toMatchObject({
+      trialSessionCases: [
+        { docketNumber, trialSessionId: trialSessionIds[1] },
+        { docketNumber, trialSessionId: trialSessionIds[2] },
+      ],
+    });
   });
 
   describe('docket entries', () => {

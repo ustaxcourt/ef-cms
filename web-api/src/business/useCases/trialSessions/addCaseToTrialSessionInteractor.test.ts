@@ -3,6 +3,7 @@ import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
+import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
@@ -22,6 +23,8 @@ import {
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
+import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { createOrUpdateTrialSessionCases as createOrUpdateTrialSessionCasesMock } from '@web-api/persistence/postgres/trialSessions/createOrUpdateTrialSessionCases';
 
 describe('addCaseToTrialSessionInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
@@ -29,14 +32,16 @@ describe('addCaseToTrialSessionInteractor', () => {
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
   const tryGetLocks = jest.mocked(tryGetLocksMock);
+  const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
+  const createOrUpdateTrialSessionCases = jest.mocked(
+    createOrUpdateTrialSessionCasesMock,
+  );
 
   let mockTrialSession;
   let mockCase;
 
   beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockImplementation(() => mockTrialSession);
+    getTrialSessionById.mockImplementation(() => mockTrialSession);
     getCaseByDocketNumber.mockImplementation(() => mockCase);
   });
 
@@ -142,12 +147,24 @@ describe('addCaseToTrialSessionInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    const caseWithCalendarNotes = applicationContext
-      .getPersistenceGateway()
-      .updateTrialSession.mock.calls[0][0].trialSessionToUpdate.caseOrder.find(
-        c => c.docketNumber === MOCK_CASE.docketNumber,
-      );
-    expect(caseWithCalendarNotes.calendarNotes).toBe('Test');
+    expect(createOrUpdateTrialSessionCases).toHaveBeenCalled();
+    const calledBody = createOrUpdateTrialSessionCases.mock.calls[0][0];
+    expect(calledBody).toMatchObject({
+      trialSessionCases: [
+        {
+          caseOrder: {
+            calendarNotes: 'Test',
+            docketNumber: '101-18',
+            isHearing: false,
+            isManuallyAdded: true,
+            removedFromTrial: false,
+          },
+          docketNumber: '101-18',
+          isHearing: false,
+          trialSessionId: '48287e71-3754-4017-850d-476a663d1a8e',
+        },
+      ],
+    });
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {

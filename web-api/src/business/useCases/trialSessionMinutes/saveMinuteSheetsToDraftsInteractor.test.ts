@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getUniqueId } from '@shared/sharedAppContext';
 import {
@@ -8,14 +9,13 @@ import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
 import { saveMinuteSheetToDraftsInteractor } from '@web-api/business/useCases/trialSessionMinutes/saveMinuteSheetToDraftsInteractor';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { getTrialSessionById } from '@web-api/persistence/dynamo/trialSessions/getTrialSessionById';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { createAndUploadMinuteSheet } from '@web-api/business/useCaseHelper/trialSessionMinutes/createAndUploadMinuteSheet';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { Case } from '@shared/business/entities/cases/Case';
+import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 
 jest.mock('@web-api/persistence/postgres/cases/getCaseByDocketNumber');
-jest.mock('@web-api/persistence/dynamo/trialSessions/getTrialSessionById');
 jest.mock('@shared/sharedAppContext');
 jest.mock(
   '@web-api/business/useCaseHelper/trialSessionMinutes/createAndUploadMinuteSheet',
@@ -75,7 +75,6 @@ describe('saveMinuteSheetToDraftsInteractor', () => {
       docketNumber: mockParams.docketNumber,
     });
     expect(mockGetTrialSessionById).toHaveBeenCalledWith({
-      applicationContext,
       trialSessionId: mockParams.trialSessionId,
     });
     expect(mockCreateAndUploadMinuteSheet).toHaveBeenCalledWith(
