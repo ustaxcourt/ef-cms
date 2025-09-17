@@ -2,4 +2,7 @@ import { setCurrentPaginationPageAction } from '../actions/setCurrentPaginationP
 
 export const setCurrentPaginationPageSequence = [
   setCurrentPaginationPageAction,
-] as unknown as (props: { currentPaginationPage: number }) => void;
+] as unknown as (props: {
+  currentPaginationPage: number;
+  advancedSearchTab: string;
+}) => void;

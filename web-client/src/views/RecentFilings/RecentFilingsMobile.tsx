@@ -98,8 +98,8 @@ export const RecentFilingsMobile = ({
         >
           This page shows new docket entries dated within the last 7 days for
           any case(s) for which you are associated. It is provided for
-          convenience. Please consult the docket records for your cases(s) to
-          view all the docket entries. Information on this page is current as of{' '}
+          convenience. Please consult the docket record for your case(s) to view
+          all the docket entries. Information on this page is current as of{' '}
           {currentDate}.
         </div>
         <div id="recent-filings-mobile-description" className="sr-only">

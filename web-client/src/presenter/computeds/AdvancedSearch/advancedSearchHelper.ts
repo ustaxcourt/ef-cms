@@ -3,9 +3,9 @@ import { Get } from 'cerebral';
 import {
   CASE_SEARCH_PAGE_SIZE,
   COUNTRY_TYPES,
-  MAX_SEARCH_RESULTS,
+  MAX_CASE_SEARCH_RESULTS,
   US_STATES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const formatSearchResultRecord = (
@@ -68,11 +68,12 @@ export const advancedSearchHelper = (
       paginatedResults.formattedSearchResults = paginatedResults.searchResults;
     }
 
-    const showManyResultsMessage = searchResults.length >= MAX_SEARCH_RESULTS;
+    const showManyResultsMessage =
+      searchResults.length >= MAX_CASE_SEARCH_RESULTS;
 
     Object.assign(result, {
       ...paginatedResults,
-      manyResults: MAX_SEARCH_RESULTS,
+      manyResults: MAX_CASE_SEARCH_RESULTS,
       showManyResultsMessage,
     });
   }

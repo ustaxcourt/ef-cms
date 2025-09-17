@@ -5,9 +5,13 @@ import {
 } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/getDataForCalendaring';
 import {
   FORMATS,
+  IsoDateRange,
   formatDateString,
+  isDateWithinGivenInterval,
+  isValidISODate,
 } from '@shared/business/utilities/DateHandler';
 import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
+import { Holiday } from '@18f/us-federal-holidays';
 import ExcelJS from 'exceljs';
 
 type ColumnObject = { header: string; key: string; width?: number };
@@ -26,15 +30,18 @@ const headerGrayColor = 'ffdcdee0';
 
 export const writeTrialSessionDataToExcel = async ({
   caseCountsAndSessionsByCity,
+  holidays,
   incorrectSizeRegularCases,
   userMessages,
-  weeks,
+  weeksRange,
 }: {
-  weeks: string[];
   caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity;
+  holidays: Holiday[];
   incorrectSizeRegularCases: EligibleCase[];
   userMessages: string[];
+  weeksRange: IsoDateRange[];
 }) => {
+  const weeksStartDates = weeksRange.map(w => w.start);
   const workbook = new ExcelJS.Workbook();
   const worksheetOptions = { properties: { outlineLevelCol: 2 } };
   const worksheet = workbook.addWorksheet(
@@ -42,9 +49,12 @@ export const writeTrialSessionDataToExcel = async ({
     worksheetOptions,
   );
 
-  const rowsByCity = getRowsByCity({ caseCountsAndSessionsByCity, weeks });
+  const rowsByCity = getRowsByCity({
+    caseCountsAndSessionsByCity,
+    weeksStartDates,
+  });
 
-  worksheet.columns = getColumns({ weeks });
+  worksheet.columns = getColumns({ weeksStartDates });
 
   for (const cityStateString in rowsByCity) {
     const populatedRow = populateRow({
@@ -57,7 +67,11 @@ export const writeTrialSessionDataToExcel = async ({
 
   worksheet.eachRow(row => {
     row.eachCell({ includeEmpty: true }, cell => {
-      const { alignment, border, fill, font } = getCellStyle(cell.value);
+      const { alignment, border, fill, font } = getCellStyle(
+        cell,
+        holidays,
+        weeksRange,
+      );
       cell.alignment = alignment;
       cell.border = border;
       cell.fill = fill;
@@ -67,7 +81,7 @@ export const writeTrialSessionDataToExcel = async ({
 
   worksheet.insertRow(1, [null, 'Week Of']);
 
-  const emptyCounterRow = weeks.reduce((acc, week) => {
+  const emptyCounterRow = weeksStartDates.reduce((acc, week) => {
     acc[week] = 0;
     return acc;
   }, {});
@@ -144,13 +158,13 @@ export const writeTrialSessionDataToExcel = async ({
 
 const getRowsByCity = ({
   caseCountsAndSessionsByCity,
-  weeks,
+  weeksStartDates,
 }: {
   caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity;
-  weeks: string[];
+  weeksStartDates: string[];
 }): Record<string, object> => {
   const rowsByCity = {};
-  const allWeekOfSlots = weeks.reduce((acc, weekOfString) => {
+  const allWeekOfSlots = weeksStartDates.reduce((acc, weekOfString) => {
     acc[weekOfString] = '';
     return acc;
   }, {});
@@ -171,7 +185,11 @@ const getRowsByCity = ({
   return rowsByCity;
 };
 
-const getColumns = ({ weeks }: { weeks: string[] }): ColumnObject[] => {
+const getColumns = ({
+  weeksStartDates,
+}: {
+  weeksStartDates: string[];
+}): ColumnObject[] => {
   let columns: ColumnObject[] = [
     {
       header: 'City',
@@ -180,7 +198,7 @@ const getColumns = ({ weeks }: { weeks: string[] }): ColumnObject[] => {
     },
   ];
 
-  for (const week of weeks) {
+  for (const week of weeksStartDates) {
     columns.push({
       header: formatDateString(week, FORMATS.MD),
       key: week,
@@ -237,7 +255,9 @@ const populateRow = ({
 };
 
 const getCellStyle = (
-  cellValue,
+  cell,
+  holidays,
+  weeksRange: IsoDateRange[],
 ): { border: object; fill: ExcelJS.Fill; font: object; alignment: object } => {
   const border = {
     bottom: { style: 'thin' },
@@ -249,7 +269,7 @@ const getCellStyle = (
   let font = { color: { argb: blackColor } };
   const alignment = { horizontal: 'left', vertical: 'middle' };
 
-  switch (cellValue) {
+  switch (cell.value) {
     case SESSION_TYPES.hybrid:
       fill = {
         fgColor: { argb: hybridYellowColor },
@@ -287,15 +307,39 @@ const getCellStyle = (
       font = { color: { argb: whiteColor } };
       break;
     default:
-      if (cellValue && typeof cellValue === 'string') {
+      if (cell.value && typeof cell.value === 'string') {
         fill = {
           fgColor: { argb: headerGrayColor },
           pattern: 'solid',
           type: 'pattern',
         };
+        if (isValidISODate(cell._column._key)) {
+          const week = weeksRange.find(r => r.start === cell._column._key);
+          if (!week) {
+            throw new Error('Could not find week');
+          }
+          const { start, end } = week;
+
+          const hasHoliday = holidays.some(holiday =>
+            isDateWithinGivenInterval({
+              date: holiday.dateString,
+              intervalEndDate: end,
+              intervalStartDate: start,
+            }),
+          );
+          if (hasHoliday) {
+            fill = {
+              fgColor: { argb: blackColor },
+              pattern: 'solid',
+              type: 'pattern',
+            };
+            font = { color: { argb: whiteColor } };
+          }
+        }
       }
       break;
   }
+
   return { alignment, border, fill, font };
 };
 

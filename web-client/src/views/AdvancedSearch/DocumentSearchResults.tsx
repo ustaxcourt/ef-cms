@@ -25,7 +25,9 @@ export const DocumentSearchResults = connect(
     advancedDocumentSearchHelper: state.advancedDocumentSearchHelper,
     isPublic: state.isPublic,
     showModal: state.modal.showModal,
-    currentPaginationPage: state.currentPaginationPage,
+    orderCurrentPaginationPage: state.orderCurrentPaginationPage,
+    opinionCurrentPaginationPage: state.opinionCurrentPaginationPage,
+    advancedSearchTab: state.advancedSearchTab,
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
     showMoreResultsSequence: sequences.showMoreResultsSequence,
@@ -42,12 +44,19 @@ export const DocumentSearchResults = connect(
     openCaseDocumentDownloadUrlSequence,
     updateDocumentSearchResultsSequence,
     setCurrentPaginationPageSequence,
-    currentPaginationPage,
+    orderCurrentPaginationPage,
+    opinionCurrentPaginationPage,
+    advancedSearchTab,
     showModal,
     openCleanModalSequence,
   }) {
     const paginatorTop = useRef(null);
     const results = advancedDocumentSearchHelper.formattedSearchResults || [];
+
+    const isOpinionTab = advancedSearchTab === 'opinion';
+    const currentPaginationPage = isOpinionTab
+      ? opinionCurrentPaginationPage
+      : orderCurrentPaginationPage;
 
     // Show search results if there are any
     advancedDocumentSearchHelper.showSearchResults =
@@ -61,7 +70,10 @@ export const DocumentSearchResults = connect(
     // If results change and current page is out of range, reset page to 0
     useEffect(() => {
       if (currentPaginationPage >= totalPages && totalPages > 0) {
-        setCurrentPaginationPageSequence({ currentPaginationPage: 0 });
+        setCurrentPaginationPageSequence({
+          currentPaginationPage: 0,
+          advancedSearchTab,
+        });
       }
     }, [results.length, currentPaginationPage, totalPages]);
 
@@ -89,7 +101,10 @@ export const DocumentSearchResults = connect(
         });
       }
       // reset page on sort
-      setCurrentPaginationPageSequence({ currentPaginationPage: 0 });
+      setCurrentPaginationPageSequence({
+        currentPaginationPage: 0,
+        advancedSearchTab,
+      });
     };
     // Handle mobile dropdown sort change
     const handleMobileSortChange = e => {
@@ -99,7 +114,10 @@ export const DocumentSearchResults = connect(
         sortColumn: column,
         sortDirection: direction,
       });
-      setCurrentPaginationPageSequence({ currentPaginationPage: 0 });
+      setCurrentPaginationPageSequence({
+        currentPaginationPage: 0,
+        advancedSearchTab,
+      });
     };
 
     const isOpinionType =
@@ -153,6 +171,7 @@ export const DocumentSearchResults = connect(
                         onPageChange={currentPage => {
                           setCurrentPaginationPageSequence({
                             currentPaginationPage: currentPage,
+                            advancedSearchTab,
                           });
                           focusPaginatorTop(paginatorTop);
                         }}
@@ -393,6 +412,7 @@ export const DocumentSearchResults = connect(
                         onPageChange={currentPage => {
                           setCurrentPaginationPageSequence({
                             currentPaginationPage: currentPage,
+                            advancedSearchTab,
                           });
                           focusPaginatorTop(paginatorTop);
                         }}
@@ -522,6 +542,7 @@ export const DocumentSearchResults = connect(
                   onPageChange={currentPage => {
                     setCurrentPaginationPageSequence({
                       currentPaginationPage: currentPage,
+                      advancedSearchTab,
                     });
                     focusPaginatorTop(paginatorTop);
                   }}

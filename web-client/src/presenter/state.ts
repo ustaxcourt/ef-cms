@@ -153,6 +153,7 @@ import { statisticsFormHelper } from './computeds/statisticsFormHelper';
 import { statisticsHelper } from './computeds/statisticsHelper';
 import { statusReportOrderHelper } from './computeds/statusReportOrderHelper';
 import { templateHelper } from './computeds/templateHelper';
+import { termBuilderHelper } from './computeds/termBuilderHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
 import { trialLocationHelper } from '@web-client/presenter/computeds/trialLocationHelper';
 import { trialSessionDetailsHelper } from './computeds/trialSessionDetailsHelper';
@@ -548,6 +549,9 @@ export const computeds = {
   templateHelper: templateHelper as unknown as ReturnType<
     typeof templateHelper
   >,
+  termBuilderHelper: termBuilderHelper as unknown as ReturnType<
+    typeof termBuilderHelper
+  >,
   trialCitiesHelper: trialCitiesHelper as unknown as ReturnType<
     typeof trialCitiesHelper
   >,
@@ -677,7 +681,8 @@ export const baseState = {
   createOrderSelectedCases: [] as any[],
   currentJudges: [],
   currentPage: 'Loading',
-  currentPaginationPage: 0,
+  orderCurrentPaginationPage: 0,
+  opinionCurrentPaginationPage: 0,
   trialSessionLocationChangeModalInfo: {
     currentTrialSessionLocation: undefined as
       | TrialSessionLocationInfo
@@ -717,7 +722,6 @@ export const baseState = {
   docketRecordIndex: 0,
   documentToEdit: {} as any,
   documentsSelectedForDownload: [] as { docketEntryId: string }[],
-  // separate sort state for Order and Opinion advanced search tabs
   orderDocumentSearchSort: {
     sortColumn: 'formattedFiledDate',
     sortDirection: 'desc' as 'asc' | 'desc',
