@@ -14,7 +14,7 @@ async function migrateToLatest(migrationType: string) {
         db: writer,
         provider: new FileMigrationProvider({
           fs,
-          migrationFolder: path.join(__dirname, 'expandContractMigrations'),
+          migrationFolder: path.join(__dirname, 'migrations'),
           path,
         }),
         allowUnorderedMigrations: true,
