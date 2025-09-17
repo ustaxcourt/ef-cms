@@ -24,10 +24,13 @@ const alertVariants = cva(
   {
     variants: {
       variant: {
-        info: 'tw:bg-blue-lightest tw:border-blue-accent ',
-        warning: 'tw:bg-yellow-lighter tw:border-yellow-warning',
-        error: 'tw:bg-red-error tw:border-red-primary',
-        success: 'tw:bg-green-success tw:border-green',
+        info: 'tw:[&_button]:focus-visible:bg-blue-lightest tw:[&_button]:focus-visible:ring-offset-blue-lightest tw:bg-blue-lightest tw:border-blue-accent',
+        warning:
+          'tw:[&_button]:focus-visible:bg-yellow-lighter tw:[&_button]:focus-visible:ring-offset-yellow-lighter tw:bg-yellow-lighter tw:border-yellow-warning',
+        error:
+          'tw:[&_button]:focus-visible:bg-red-error tw:[&_button]:focus-visible:ring-offset-red-error tw:bg-red-error tw:border-red-primary',
+        success:
+          'tw:[&_button]:focus-visible:bg-green-success tw:[&_button]:focus-visible:ring-offset-green-success tw:bg-green-success tw:border-green',
       },
     },
     defaultVariants: {
@@ -103,7 +106,7 @@ function AlertHeader({
           variant={'primaryTertiary'}
           onClick={closeButtonOnClick}
         >
-          <div className="tw:flex">
+          <div className="tw:flex tw:hover:text-primary-dark tw:active:text-primary-darker tw:active:fill-primary-darker tw:hover:fill-primary-dark">
             <span className="tw:mr-2 tw:text-base/4.5 tw:xs:text-lg/5.5">
               Close
             </span>
