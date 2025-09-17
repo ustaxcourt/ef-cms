@@ -43,6 +43,14 @@ export function AlertWarning({
 
   if (!alertWarning) return null;
 
+  const AlertMessage = alertWarning?.title ? AlertDescription : AlertHeader;
+
+  const warningProps = {
+    closeButtonOnClick: dismissAlertSequence,
+    title: alertWarning.title,
+    variant: 'warning',
+  };
+
   return (
     <Alert
       aria-live="polite"
@@ -55,19 +63,19 @@ export function AlertWarning({
       variant="warning"
     >
       {alertWarning.title && (
-        <AlertHeader data-testid="warning-alert-title">
+        <AlertHeader data-testid="warning-alert-title" {...warningProps}>
           {alertWarning.title}
         </AlertHeader>
       )}
 
       {alertWarning.message && (
-        <AlertDescription data-testid="warning-alert-message">
+        <AlertMessage data-testid="warning-alert-message" {...warningProps}>
           {alertWarning.message}
-        </AlertDescription>
+        </AlertMessage>
       )}
 
       {alertWarning.linkUrl && (
-        <AlertDescription>
+        <AlertMessage data-testid="warning-alert-message" {...warningProps}>
           <Button
             className=""
             href={alertWarning.linkUrl}
@@ -77,7 +85,7 @@ export function AlertWarning({
           >
             {alertWarning.linkText || alertWarning.linkUrl}
           </Button>
-        </AlertDescription>
+        </AlertMessage>
       )}
     </Alert>
   );

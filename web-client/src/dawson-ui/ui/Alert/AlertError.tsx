@@ -42,6 +42,13 @@ export function AlertError({
     }
   }, [alertError?.scrollToErrorNotification]);
 
+  const AlertMessage = alertError?.title ? AlertDescription : AlertHeader;
+  const errorProps = {
+    closeButtonOnClick,
+    title: alertError?.title,
+    variant: 'error',
+  };
+
   return (
     <>
       {alertError && alertHelper && alertHelper.showErrorAlert && (
@@ -52,24 +59,23 @@ export function AlertError({
           ref={notificationRef}
           role="alert"
           variant="error"
-          closeButtonOnClick={closeButtonOnClick}
         >
           {alertError.title && (
             <Focus>
-              <AlertHeader>{alertError.title}</AlertHeader>
+              <AlertHeader {...errorProps}>{alertError.title}</AlertHeader>
             </Focus>
           )}
           {alertHelper.showSingleMessage && (
-            <AlertDescription>{alertError.message}</AlertDescription>
+            <AlertMessage {...errorProps}>{alertError.message}</AlertMessage>
           )}
           {alertHelper.showMultipleMessages && (
-            <AlertDescription>
+            <AlertMessage {...errorProps}>
               <ul>
                 {alertHelper.messagesDeduped.map(message => (
                   <li key={message}>{message}</li>
                 ))}
               </ul>
-            </AlertDescription>
+            </AlertMessage>
           )}
           {alertHelper.showTitleOnly && <div className="tw:h-6" />}
         </Alert>

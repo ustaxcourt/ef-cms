@@ -38,6 +38,14 @@ export function AlertSuccess({
     }
   }, [alertSuccess]);
 
+  const AlertMessage = alertSuccess?.title ? AlertDescription : AlertHeader;
+
+  const successProps = {
+    closeButtonOnClick: dismissAlertSequence,
+    title: alertSuccess?.title,
+    variant: 'success',
+  };
+
   return (
     <>
       {alertSuccess && (
@@ -53,11 +61,11 @@ export function AlertSuccess({
           variant="success"
         >
           {alertSuccess.title && (
-            <AlertHeader>{alertSuccess.title}</AlertHeader>
+            <AlertHeader {...successProps}>{alertSuccess.title}</AlertHeader>
           )}
-          <AlertDescription>{alertSuccess.message}</AlertDescription>
+          <AlertMessage {...successProps}>{alertSuccess.message}</AlertMessage>
           {alertSuccess.linkUrl && (
-            <AlertDescription>
+            <AlertMessage {...successProps}>
               <Button
                 className="tw:p-0 tw:mt-2 ustc-button--mobile-inline"
                 href={alertSuccess.linkUrl}
@@ -67,7 +75,7 @@ export function AlertSuccess({
               >
                 {alertSuccess.linkText || alertSuccess.linkUrl}
               </Button>
-            </AlertDescription>
+            </AlertMessage>
           )}
         </Alert>
       )}

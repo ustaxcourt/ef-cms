@@ -47,7 +47,6 @@ function Alert({
   children,
   className,
   closeButtonOnClick,
-  isDismissible = true,
   variant,
   ...props
 }: Omit<React.ComponentProps<'div'>, 'children'> &
@@ -63,45 +62,62 @@ function Alert({
       className={cn(alertVariants({ variant }), className)}
       {...props}
     >
-      <div className="tw:flex">
-        <div className="tw:pt-[0px] tw:xs:pt-[2px]">
-          <FontAwesomeIcon
-            icon={iconType[variant ?? 'info']}
-            className="tw:!h-[20px] tw:!w-[20px] tw:xs:!h-[24px] tw:xs:!w-[24px]"
-          />
-        </div>
-        <div className="tw:relative tw:xs:ml-4 tw:ml-3">{children}</div>
-        {isDismissible && (
-          <Button
-            className="tw:m-0 tw:p-0 tw:gap-3 tw:w-auto tw:fill-primary tw:self-start tw:ml-auto"
-            variant={'primaryTertiary'}
-            onClick={closeButtonOnClick}
-          >
-            <div className="tw:flex tw:items-center">
-              <span className="tw:mr-2 tw:text-base">Close</span>
-              <CircleXmark className="tw:!h-[20px] tw:!w-[20px] tw:xs:!h-[24px] tw:xs:!w-[24px]" />
-            </div>
-          </Button>
-        )}
-      </div>
+      <div className="tw:relative">{children}</div>
     </div>
   );
 }
+type AlertHeaderType = {
+  closeButtonOnClick?: () => React.MouseEventHandler<HTMLButtonElement> | void;
+  title?: string;
+  variant: string;
+};
 
-function AlertHeader({ ...props }: React.ComponentProps<'p'>) {
+function AlertHeader({
+  closeButtonOnClick,
+  title,
+  variant,
+  ...props
+}: React.ComponentProps<'p'> & AlertHeaderType) {
   return (
-    <div
-      className="tw:text-base/5 tw:font-bold tw:xs:mb-1 tw:mb-1 tw:pb-0"
-      data-slot="alert-title"
-      data-testid="alert-header"
-      {...props}
-    />
+    <div className="tw:flex">
+      <div className="tw:pt-[0px] tw:xs:pt-[2px] tw:ml-3 tw:mr-3">
+        <FontAwesomeIcon
+          icon={iconType[variant ?? 'info']}
+          className="tw:!h-[20px] tw:!w-[20px] tw:xs:!h-[24px] tw:xs:!w-[24px]"
+        />
+      </div>
+      <div
+        className={cn(
+          title ? 'tw:font-bold' : '',
+          'tw:text-base/5 tw:xs:text-lg/7 tw:xs:mb-1 tw:mb-1 tw:pb-0',
+        )}
+        data-slot="alert-title"
+        data-testid="alert-header"
+        {...props}
+      ></div>
+      <Button
+        className="tw:m-0 tw:p-0 tw:gap-3 tw:w-auto tw:fill-primary tw:self-start tw:ml-auto"
+        variant={'primaryTertiary'}
+        onClick={closeButtonOnClick}
+      >
+        <div className="tw:flex">
+          <span className="tw:mr-2 tw:text-base/4.5 tw:xs:text-lg/5.5">
+            Close
+          </span>
+          <CircleXmark className="tw:!h-[20px] tw:!w-[20px] tw:xs:!h-[24px] tw:xs:!w-[24px]" />
+        </div>
+      </Button>
+    </div>
   );
 }
 
 function AlertDescription({ ...props }: React.ComponentProps<'p'>) {
   return (
-    <div className="tw:text-base/5" data-slot="alert-description" {...props} />
+    <div
+      className="tw:text-base/5 tw:xs:text-lg/6.5 tw:ml-11"
+      data-slot="alert-description"
+      {...props}
+    />
   );
 }
 

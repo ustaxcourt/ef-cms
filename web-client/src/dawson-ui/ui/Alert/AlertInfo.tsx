@@ -44,6 +44,14 @@ export function AlertInfo({
 
   if (!alertInfo) return null;
 
+  const AlertMessage = alertInfo?.title ? AlertDescription : AlertHeader;
+
+  const infoProps = {
+    closeButtonOnClick: dismissAlertSequence,
+    title: alertInfo.title,
+    variant: 'info',
+  };
+
   return (
     <Alert
       aria-live="polite"
@@ -55,21 +63,23 @@ export function AlertInfo({
       role="alert"
       variant="info"
     >
-      {alertInfo.title && <AlertHeader>{alertInfo.title}</AlertHeader>}
+      {alertInfo.title && (
+        <AlertHeader {...infoProps}>{alertInfo.title}</AlertHeader>
+      )}
 
       {alertInfo.message && (
-        <AlertDescription>
+        <AlertMessage {...infoProps}>
           <Message
             additionalClassname="tw:xs:mb-1 tw:mr-1 tw:mt-0 tw:mb-0"
             inlineLinkText={alertInfo.inlineLinkText}
             inlineLinkUrl={alertInfo.inlineLinkUrl}
             message={alertInfo.message}
           />
-        </AlertDescription>
+        </AlertMessage>
       )}
 
       {alertInfo.linkUrl && (
-        <AlertDescription>
+        <AlertMessage {...infoProps}>
           <Button
             className="p-0 mt-2"
             href={alertInfo.linkUrl}
@@ -79,7 +89,7 @@ export function AlertInfo({
           >
             {alertInfo.linkText || alertInfo.linkUrl}
           </Button>
-        </AlertDescription>
+        </AlertMessage>
       )}
     </Alert>
   );
