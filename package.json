@@ -204,6 +204,8 @@
     "migration:postgres": "npx ts-node --transpile-only ./web-api/src/persistence/postgres/utils/migrate/migrate.ts",
     "migration:rollback:postgres": "npx ts-node --transpile-only ./web-api/src/persistence/postgres/utils/migrate/rollback.ts",
     "migration:generate:postgres": "npx ts-node --transpile-only ./web-api/src/persistence/postgres/utils/migrate/generateMigration.ts",
+    "migration:postgres:expand": "npx ts-node --transpile-only ./web-api/src/persistence/postgres/utils/migrate/migrateExpandContract.ts expand",
+    "migration:postgres:contract": "npx ts-node --transpile-only ./web-api/src/persistence/postgres/utils/migrate/migrateExpandContract.ts contract",
     "postinstall": "husky install",
     "print:success": "echo 'Build successful. You can access the site at http://localhost:1234'",
     "reindex:elasticsearch": "./reindex-elasticsearch.sh",

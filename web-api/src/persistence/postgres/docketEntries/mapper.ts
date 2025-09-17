@@ -30,7 +30,7 @@ export function toKyselyNewDocketEntry(
     documentContentsId: docketEntry.documentContentsId ?? null,
     documentIdBeforeSignature: docketEntry.documentIdBeforeSignature ?? null,
     documentTitle: docketEntry.documentTitle,
-    documentType: docketEntry.documentType ?? null,
+    documentTypeUpdated: docketEntry.documentType ?? null,
     draftOrderState: docketEntry.draftOrderState
       ? JSON.stringify(docketEntry.draftOrderState)
       : null,
@@ -118,6 +118,10 @@ export function fromKyselyDocketEntry<T extends object>(record: T) {
     ) => value.toISOString(),
     date: (value: typeof dwDocketEntrySchema.date, _: Partial<DocketEntry>) =>
       value?.toISOString(),
+    documentType: (
+      value: typeof dwDocketEntrySchema.documentTypeUpdated,
+      _: Partial<DocketEntry>,
+    ) => value,
     filingDate: (
       value: typeof dwDocketEntrySchema.filingDate,
       _: Partial<DocketEntry>,
