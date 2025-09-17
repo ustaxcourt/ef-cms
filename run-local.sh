@@ -12,10 +12,10 @@ fi
 
 if [[ -z "$CI" ]]; then
   echo "Stopping postgres in case it's already running"
-  $DOCKER_COMPOSE -f $(pwd)/web-api/src/persistence/postgres/docker-compose.yml down --volumes || true
+  $DOCKER_COMPOSE -f "$(pwd)/web-api/src/persistence/postgres/docker-compose.yml" down --volumes || true
 
   echo "Starting postgres"
-  $DOCKER_COMPOSE -f $(pwd)/web-api/src/persistence/postgres/docker-compose.yml up -d || { echo "Failed to start Postgres containers"; exit 1; }
+  $DOCKER_COMPOSE -f "$(pwd)/web-api/src/persistence/postgres/docker-compose.yml" up -d || { echo "Failed to start Postgres containers"; exit 1; }
 
   echo "Stopping dynamodb in case it's already running"
   pkill -f DynamoDBLocal
@@ -62,6 +62,12 @@ else
 fi
 
 npm run migration:postgres
+
+if [[ $RUN_EXPAND_CONTRACT = true ]]; then
+  npm run migration:postgres:expand
+  npm run migration:postgres:contract
+fi
+
 npm run seed:postgres
 
 echo "Seeding cognito-local users"

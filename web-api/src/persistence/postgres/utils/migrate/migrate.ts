@@ -16,22 +16,32 @@ async function migrateToLatest() {
         allowUnorderedMigrations: true,
       });
 
-      const { error, results } = await migrator.migrateToLatest();
+      const migrations = await migrator.getMigrations();
+      for (const migration of migrations) {
+        if (
+          !migration.name.includes(`.expand`) &&
+          !migration.name.includes(`.contract`) &&
+          migration.executedAt === undefined
+        ) {
+          const { error, results } = await migrator.migrateTo(migration.name);
+          results?.forEach(it => {
+            if (it.status === 'Success') {
+              console.log(
+                `migration "${it.migrationName}" was executed successfully`,
+              );
+            } else if (it.status === 'Error') {
+              console.error(
+                `failed to execute migration "${it.migrationName}"`,
+              );
+            }
+          });
 
-      results?.forEach(it => {
-        if (it.status === 'Success') {
-          console.log(
-            `migration "${it.migrationName}" was executed successfully`,
-          );
-        } else if (it.status === 'Error') {
-          console.error(`failed to execute migration "${it.migrationName}"`);
+          if (error) {
+            console.error('failed to migrate');
+            console.error(error);
+            process.exit(1);
+          }
         }
-      });
-
-      if (error) {
-        console.error('failed to migrate');
-        console.error(error);
-        process.exit(1);
       }
 
       await writer.destroy();

@@ -3,7 +3,9 @@ import { Kysely } from 'kysely';
 export async function up(db: Kysely<any>): Promise<void> {
   await db.schema
     .alterTable('dwDocketEntry')
-    .addColumn('documentTypeUpdated', 'varchar');
+    .addColumn('documentTypeUpdated', 'varchar')
+    .execute();
+
   await db
     .updateTable('dwDocketEntry')
     .set(eb => ({
@@ -18,5 +20,8 @@ export async function up(db: Kysely<any>): Promise<void> {
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
-  await db.schema.alterTable('dwDocketEntry').dropColumn('documentTypeUpdated');
+  await db.schema
+    .alterTable('dwDocketEntry')
+    .dropColumn('documentTypeUpdated')
+    .execute();
 }
