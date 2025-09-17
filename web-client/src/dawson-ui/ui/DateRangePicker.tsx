@@ -150,26 +150,23 @@ export function DateRangePicker({
     <div className={`tw:flex tw:flex-col tw:gap-3 ${className || ''}`}>
       <Popover open={open} onOpenChange={setOpen}>
         <div className={`tw:flex tw:gap-3 ${rangePickerCls || ''}`}>
-          {/* Start Date Picker */}
+          {/* Single Date Range Picker */}
           <div
             className={`tw:flex tw:flex-col tw:gap-2 ${startPickerCls || ''}`}
           >
-            <Label htmlFor={startName} className="tw:px-1">
+            <Label htmlFor={startName} className="margin-bottom-0">
               {startLabel}
               {showDateHint && (
-                <span className="tw:text-sm tw:text-gray-500">
-                  {' '}
-                  (MM/DD/YYYY)
-                </span>
+                <span className="text-base-dark tw:text-sm"> (MM/DD/YYYY)</span>
               )}
             </Label>
             <PopoverTrigger asChild>
               <Button
                 variant="secondary"
                 id={startName}
-                className="tw:w-full md:tw:w-[20rem] lg:tw:w-[24rem] tw:justify-start tw:font-normal tw:hover:bg-gray-50 tw:hover:border-gray-300 tw:transition-colors tw:duration-150 tw:text-left tw:min-h-[2.5rem]"
+                className="tw:w-48 tw:font-normal tw:hover:bg-gray-50 tw:hover:border-gray-300 tw:transition-colors tw:duration-150 tw:text-gray-500 tw:text-left"
               >
-                <span className="tw:text-gray-700">{getDisplayText()}</span>
+                <span className="tw:text-gray-500">{getDisplayText()}</span>
               </Button>
             </PopoverTrigger>
             {(startDateErrorText || endDateErrorText) && (
