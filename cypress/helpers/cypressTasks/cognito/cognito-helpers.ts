@@ -244,7 +244,7 @@ export async function getIrsBearerToken({
   if (!associateResult.SecretCode) {
     throw new Error('Could not generate Secret Code');
   }
-  const { otp } = TOTP.generate(associateResult.SecretCode);
+  const { otp } = await TOTP.generate(associateResult.SecretCode);
   const verifyTokenResult = await getCognito().verifySoftwareToken({
     Session: associateResult.Session,
     UserCode: otp,
