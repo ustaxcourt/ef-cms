@@ -9,7 +9,7 @@ function Card({ className, ...props }: React.ComponentProps<'div'>) {
       data-slot="card"
       className={cn(
         'tw:bg-card tw:text-card-foreground tw:flex',
-        'tw:flex-col tw:gap-6',
+        'tw:flex-col',
         'tw:border tw:py-6 tw:shadow-sm',
         'tw:px-8 tw:my-8',
         className,
@@ -88,29 +88,34 @@ function CardFooter({ className, ...props }: React.ComponentProps<'div'>) {
     />
   );
 }
+interface MainCardProps {
+  content: string;
+  children?: React.ReactNode;
+  caseDetail?: object;
+}
 
-function MainCard({ content }: React.ComponentProps<'div'>) {
+function MainCard({ content, children }: MainCardProps) {
   return (
     <Card>
-      <CardHeader className={cn("tw:border-b tw:pb-4")}>
+      <CardHeader className={cn('tw:border-b tw:pb-4')}>
         <CardTitle>Card</CardTitle>
-        <Button variant="primaryTertiary" icon="file" aria-label="Primary Default">
+        <Button
+          variant="primaryTertiary"
+          icon="file"
+          aria-label="Primary Default"
+        >
           Tertiary Default
         </Button>
       </CardHeader>
       <CardContent>{content}</CardContent>
+      {children}
       <CardFooter>
-        <Button
-          variant={'primary'}
-          // className={cn('tw:align-self: flex-start tw:w-full')}
-        >
-          Primary Default
-        </Button>
+        <Button variant={'primary'}>Primary Default</Button>
       </CardFooter>
     </Card>
   );
 }
-
+// TODO: Refactor
 function FieldRow({
   label,
   children,
@@ -119,9 +124,8 @@ function FieldRow({
   className,
 }: {
   label: string;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   action?: React.ReactNode;
-  /** "default" | "primary" | "muted" */
   labelVariant?: 'default' | 'primary' | 'muted';
   className?: string;
 }) {
@@ -137,22 +141,14 @@ function FieldRow({
   return (
     <div
       className={cn(
-        'tw:px-5 md:tw:px-8 tw:py-2',
+        'tw:px-5 md:tw:px-8 tw:py-4',
         'tw:grid tw:gap-y-2 tw:gap-x-4',
         'md:tw:grid-cols-[12rem_1fr_auto]',
-        'tw:border-b last:tw:border-b-0',
         className,
       )}
     >
       {/* Label */}
-      <div
-        className={cn(
-          'tw:px-4 tw:py-2', // half the distance as left/right gutters
-          variant,
-        )}
-      >
-        {label}
-      </div>
+      <div className={cn('tw:px-4 tw:py-4', variant)}>{label}</div>
 
       {/* Value */}
       <div className="tw:py-2">{children}</div>
@@ -167,22 +163,35 @@ function FieldRow({
 
 interface RoleCardProps {
   children: React.ReactNode;
+  editSequence?: () => void;
   name: string;
-  role: string;
   content?: string; // Optional if not always required
+  counsel?: { name: string; description: string }; // Optional if not always required
+  role: string;
+  service_preference?: string; // Optional if not always required
+  email?: string; // Optional if not always required
 }
-function RoleCard({ children, name, role }: RoleCardProps) {
+function RoleCard({
+  children,
+  name,
+  role,
+  counsel,
+  service_preference,
+  email,
+  content,
+  editSequence,
+}: RoleCardProps) {
   return (
     <Card>
       <CardHeader className="tw:px-5 md:tw:px-8 tw:pb-4">
-        <CardTitle>{name + ' - Under Construction'}</CardTitle>
+        <CardTitle className="tw:mt-2">
+          {name + ' - Under Construction'}
+        </CardTitle>
       </CardHeader>
-      <CardContent className="tw:px-0 tw:pb-8">
+      <CardContent>
         {/* Role stripe row (blue) directly under the title */}
-        <FieldRow label={role} labelVariant="primary">
-          {role}
-        </FieldRow>
-
+        <FieldRow label={role} labelVariant="primary" />
+        {content}
         {/* Any additional rows/fields go here */}
         {children}
       </CardContent>
@@ -192,6 +201,9 @@ function RoleCard({ children, name, role }: RoleCardProps) {
 
 const sampleCardContent = `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
                           eiusmod tempor incididunt ut labore et dolore magna aliqua.`;
+
+const sampleEmail = `someEmail@server.com`;
+const sampleServicePreference = `In Person`;
 
 export {
   Card,
@@ -204,4 +216,6 @@ export {
   MainCard,
   RoleCard,
   sampleCardContent,
+  sampleEmail,
+  sampleServicePreference,
 };
