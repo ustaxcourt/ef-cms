@@ -18,14 +18,21 @@ jobs:
           comment_on_pr: false
       - name: Restore Cache Dependencies
         id: cache-dependencies
-        uses: actions/cache@v4
+        uses: actions/cache/restore@v4
         with:
           path: node_modules
           key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install Node Dependencies - Cache Miss Install
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        id: npm-clean-install
         run: npm ci
       - name: Lint
         run: npm run lint
       - name: Shellcheck
         run: ./run-shellcheck.sh
+      - name: Save Cache Dependencies
+        if: steps.npm-clean-install.outcome == 'success'
+        uses: actions/cache/save@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
