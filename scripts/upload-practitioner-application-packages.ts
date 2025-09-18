@@ -198,7 +198,7 @@ const convertAllTifsAndConstructDocumentEntities = async ({
       categoryType: 'Application Package',
       description: 'Imported from Blackstone',
       fileName,
-      barNumber: barNumber.toLowerCase(),
+      barNumber,
       practitionerDocumentFileId,
       uploadDate: createISODateString(),
       location: '',
