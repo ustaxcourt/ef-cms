@@ -7,12 +7,11 @@ import {
   FORMATS,
   IsoDateRange,
   formatDateString,
-  isDateWithinGivenInterval,
   isValidISODate,
 } from '@shared/business/utilities/DateHandler';
 import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
-import { Holiday } from '@18f/us-federal-holidays';
 import ExcelJS from 'exceljs';
+import { getHolidaysInDateRange } from '@shared/business/utilities/getHolidaysInDateRange';
 
 type ColumnObject = { header: string; key: string; width?: number };
 
@@ -30,18 +29,20 @@ const headerGrayColor = 'ffdcdee0';
 
 export const writeTrialSessionDataToExcel = async ({
   caseCountsAndSessionsByCity,
-  holidays,
   incorrectSizeRegularCases,
   userMessages,
   weeksRange,
 }: {
   caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity;
-  holidays: Holiday[];
   incorrectSizeRegularCases: EligibleCase[];
   userMessages: string[];
-  weeksRange: IsoDateRange[];
+  weeksRange: {
+    ranges: IsoDateRange[];
+    termEndDate: string;
+    termStartDate: string;
+  };
 }) => {
-  const weeksStartDates = weeksRange.map(w => w.start);
+  const weeksStartDates = weeksRange.ranges.map(w => w.start);
   const workbook = new ExcelJS.Workbook();
   const worksheetOptions = { properties: { outlineLevelCol: 2 } };
   const worksheet = workbook.addWorksheet(
@@ -68,11 +69,7 @@ export const writeTrialSessionDataToExcel = async ({
 
   worksheet.eachRow(row => {
     row.eachCell({ includeEmpty: true }, cell => {
-      const { alignment, border, fill, font } = getCellStyle(
-        cell,
-        holidays,
-        weeksRange,
-      );
+      const { alignment, border, fill, font } = getCellStyle(cell, weeksRange);
       cell.alignment = alignment;
       cell.border = border;
       cell.fill = fill;
@@ -257,8 +254,11 @@ const populateRow = ({
 
 const getCellStyle = (
   cell,
-  holidays,
-  weeksRange: IsoDateRange[],
+  weeksRange: {
+    ranges: IsoDateRange[];
+    termEndDate: string;
+    termStartDate: string;
+  },
 ): { border: object; fill: ExcelJS.Fill; font: object; alignment: object } => {
   const border = {
     bottom: { style: 'thin' },
@@ -316,21 +316,14 @@ const getCellStyle = (
         };
         if (isValidISODate(cell._column._key)) {
           console.log('after checking if valid iso date', cell._column._key);
-          const week = weeksRange.find(r => r.start === cell._column._key)!;
-          const { start, end } = week;
-          console.log('holidays', holidays);
-          const hasHoliday = holidays.some(holiday => {
-            console.log('input', {
-              date: holiday.dateString,
-              intervalEndDate: end,
-              intervalStartDate: start,
-            });
-            return isDateWithinGivenInterval({
-              date: holiday.dateString,
-              intervalEndDate: end,
-              intervalStartDate: start,
-            });
-          });
+          const week = weeksRange.ranges.find(
+            r => r.start === cell._column._key,
+          )!;
+          let { start, end } = week;
+          if (start < weeksRange.termStartDate)
+            start = weeksRange.termStartDate;
+          if (end > weeksRange.termEndDate) end = weeksRange.termEndDate;
+          const hasHoliday = getHolidaysInDateRange(start, end).length > 0;
           if (hasHoliday) {
             fill = {
               fgColor: { argb: blackColor },

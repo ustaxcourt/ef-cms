@@ -715,7 +715,7 @@ export const getWeeksInRange = ({
   // Loop through each week, adding each Monday to the array
   while (start <= end) {
     const isoStart = start.toISODate();
-    const isoEnd = start.plus({ days: 5 }).toISODate();
+    const isoEnd = start.plus({ days: 4 }).toISODate();
     if (isoStart !== null && isoEnd !== null) {
       weeks.push({ start: isoStart, end: isoEnd });
     }

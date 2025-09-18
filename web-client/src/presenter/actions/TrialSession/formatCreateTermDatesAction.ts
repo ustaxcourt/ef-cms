@@ -12,6 +12,7 @@ export const formatCreateTermDatesAction = ({
 
   const { termStartDate, termEndDate } = TERM_BUILDER_INFORMATION;
 
+  console.log('inside the format action', { termStartDate, termEndDate });
   const termStartDateISO = applicationContext
     .getUtilities()
     .createISODateString(termStartDate, FORMATS.MMDDYYYY);
