@@ -121,7 +121,7 @@ function AlertHeader({
 function AlertDescription({ ...props }: React.ComponentProps<'p'>) {
   return (
     <div
-      className="tw:text-sm/5 tw:mt-1 tw:ml-8 tw:xs:ml-10 tw:xs:text-base/5 tw:xs:mt-3"
+      className="tw:text-sm/5 tw:mt-1 tw:ml-8 tw:xs:ml-9 tw:xs:text-base/5 tw:xs:mt-3"
       data-slot="alert-description"
       {...props}
     />
