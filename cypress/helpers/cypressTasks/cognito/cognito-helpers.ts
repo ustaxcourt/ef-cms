@@ -7,8 +7,6 @@ import { getCognito } from './getCognitoCypress';
 import { getCypressEnv } from '../../env/cypressEnvironment';
 import { deleteAllUserRecords } from '../postgres/postgres-helpers';
 
-export const DEFAULT_FORGOT_PASSWORD_CODE = '385030';
-
 export const confirmUser = async ({ email }: { email: string }) => {
   const userPoolId = await getUserPoolId();
   const clientId = await getClientId(userPoolId);
