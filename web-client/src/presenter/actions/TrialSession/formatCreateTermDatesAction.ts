@@ -1,5 +1,5 @@
 import { STATE_KEYS } from '@shared/business/entities/EntityConstants';
-import { createStartOfDayISOUtc } from '@shared/business/utilities/DateHandler';
+import { createEndOfDayISOUtc, createStartOfDayISOUtc } from '@shared/business/utilities/DateHandler';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const formatCreateTermDatesAction = ({ get }: ActionProps) => {
@@ -9,11 +9,8 @@ export const formatCreateTermDatesAction = ({ get }: ActionProps) => {
 
   const { termStartDate, termEndDate } = TERM_BUILDER_INFORMATION;
 
-  console.log('inside the format action', { termStartDate, termEndDate });
-  let [month, day, year] = termStartDate.split('/');
-  const termStartDateISO = createStartOfDayISOUtc({ month, day, year });
-  [month, day, year] = termEndDate.split('/');
-  const termEndDateISO = createStartOfDayISOUtc({ month, day, year });
+  const termStartDateISO = createStartOfDayISOUtc(termStartDate);
+  const termEndDateISO = createEndOfDayISOUtc(termEndDate);
 
   return {
     ...TERM_BUILDER_INFORMATION,

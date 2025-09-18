@@ -223,13 +223,13 @@ export const createEndOfDayISO = (params?: {
 }): string => {
   const dateObject = params
     ? DateTime.fromObject(
-        {
-          day: Number(params.day),
-          month: Number(params.month),
-          year: Number(params.year),
-        },
-        { zone: USTC_TZ },
-      )
+      {
+        day: Number(params.day),
+        month: Number(params.month),
+        year: Number(params.year),
+      },
+      { zone: USTC_TZ },
+    )
     : DateTime.now().setZone(USTC_TZ);
 
   return dateObject.endOf('day').setZone('utc').toISO();
@@ -242,35 +242,31 @@ export const createStartOfDayISO = (params?: {
 }): string => {
   const dateObject = params
     ? DateTime.fromObject(
-        {
-          day: Number(params.day),
-          month: Number(params.month),
-          year: Number(params.year),
-        },
-        { zone: USTC_TZ },
-      )
+      {
+        day: Number(params.day),
+        month: Number(params.month),
+        year: Number(params.year),
+      },
+      { zone: USTC_TZ },
+    )
     : DateTime.now().setZone(USTC_TZ);
 
   return dateObject.startOf('day').setZone('utc').toISO();
 };
 
-export const createStartOfDayISOUtc = (params?: {
-  day: string | number;
-  month: string | number;
-  year: string | number;
-}): string => {
-  const dateObject = params
-    ? DateTime.fromObject(
-        {
-          day: Number(params.day),
-          month: Number(params.month),
-          year: Number(params.year),
-        },
-        { zone: USTC_TZ },
-      )
-    : DateTime.now().setZone(USTC_TZ);
+// expects a date string like 09/18/2025
+export const createStartOfDayISOUtc = (dateString: string): string => {
+  return DateTime.fromFormat(dateString, FORMATS.MMDDYYYY, {
+    zone: 'utc',
+  }).startOf('day').toISO()!;
+};
 
-  return dateObject.setZone('utc').startOf('day').toISO();
+
+// expects a date string like 09/18/2025
+export const createEndOfDayISOUtc = (dateString: string): string => {
+  return DateTime.fromFormat(dateString, FORMATS.MMDDYYYY, {
+    zone: 'utc',
+  }).endOf('day').toISO()!;
 };
 
 /**
