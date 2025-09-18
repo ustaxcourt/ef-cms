@@ -19,8 +19,6 @@
 #     ./scripts/disengage-maintenance-mode.sh
 #   npm run maintenance:disengage
 
-
-
 ./check-env-variables.sh \
   "ENV" \
   "AWS_ACCOUNT_ID" \
