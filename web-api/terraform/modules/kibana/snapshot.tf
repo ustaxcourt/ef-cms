@@ -12,6 +12,9 @@ resource "opensearch_snapshot_repository" "archived-logs" {
     region   = "us-east-1"
     role_arn = aws_iam_role.es_s3_snapshot_access_role.arn
   }
+  depends_on = [
+    resource.aws_opensearch_domain.efcms-search
+  ]
 }
 
 resource "aws_iam_role" "es_s3_snapshot_access_role" {
