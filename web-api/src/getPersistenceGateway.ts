@@ -48,7 +48,6 @@ import { setChangeOfAddressCaseAsDone } from './persistence/postgres/jobs/change
 import { setTrialSessionJobStatusForCase } from './persistence/dynamo/trialSessions/setTrialSessionJobStatusForCase';
 import { setTrialSessionProcessingStatus } from './persistence/dynamo/trialSessions/setTrialSessionProcessingStatus';
 import { updateCaseHearing } from './persistence/dynamo/trialSessions/updateCaseHearing';
-import { updateMaintenanceMode } from '@web-api/persistence/postgres/featureFlag/updateMaintenanceMode';
 import { updatePractitionerUser } from './business/useCaseHelper/users/updatePractitionerUser';
 import { updateTrialSession } from './persistence/dynamo/trialSessions/updateTrialSession';
 import { updateTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/updateTrialSessionWorkingCopy';
@@ -110,7 +109,6 @@ const gatewayMethods = {
     setTrialSessionJobStatusForCase,
     setTrialSessionProcessingStatus,
     updateCaseHearing,
-    updateMaintenanceMode,
     updatePractitionerUser,
     updateTrialSession,
     updateTrialSessionWorkingCopy,
