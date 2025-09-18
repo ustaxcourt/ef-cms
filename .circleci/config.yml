@@ -136,10 +136,6 @@ jobs:
           name: Build Docker Image
           command: |
             cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
-      - run: # TODO: remove this after the rds upgrade
-          name: Engage Maintenance Mode
-          command: |
-            npm run maintenance:engage
       - run:
           no_output_timeout: 20m
           name: 'Deploy - All Color Terraform'
