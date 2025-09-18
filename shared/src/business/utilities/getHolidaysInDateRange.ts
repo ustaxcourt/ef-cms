@@ -1,8 +1,5 @@
 import fedHolidays from '@18f/us-federal-holidays';
-import {
-  calculateDateAtStartOfDayEST,
-  isStringISOFormatted,
-} from './DateHandler';
+import { isStringISOFormatted } from './DateHandler';
 
 export const getHolidaysInDateRange = (
   startDate: string,
@@ -22,8 +19,11 @@ export const getHolidaysInDateRange = (
   // const end = calculateDate({
   //   dateString: endDate,
   // });
-  const start = calculateDateAtStartOfDayEST({ dateString: startDate });
-  const end = calculateDateAtStartOfDayEST({ dateString: endDate });
+  // const start = calculateDateAtStartOfDayEST({ dateString: startDate });
+  // const end = calculateDateAtStartOfDayEST({ dateString: endDate });
+
+  const start = new Date(startDate);
+  const end = new Date(endDate);
 
   console.log('start', start);
   console.log('end', end);
