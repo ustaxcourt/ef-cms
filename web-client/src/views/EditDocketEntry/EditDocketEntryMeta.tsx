@@ -8,6 +8,7 @@ import { EditDocketEntryMetaTabAction } from './EditDocketEntryMetaTabAction';
 import { EditDocketEntryMetaTabService } from './EditDocketEntryMetaTabService';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
+import { Hint } from '../../ustc-ui/Hint/Hint';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -23,6 +24,9 @@ export const EditDocketEntryMeta = connect(
     showModal: state.modal.showModal,
     submitEditDocketEntryMetaSequence:
       sequences.submitEditDocketEntryMetaSequence,
+    caseDetail: state.caseDetail,
+    formattedCaseDetail: state.formattedCaseDetail,
+    form: state.form,
   },
   function EditDocketEntryMeta({
     closeModalAndReturnToCaseDetailSequence,
@@ -30,7 +34,20 @@ export const EditDocketEntryMeta = connect(
     formCancelToggleCancelSequence,
     showModal,
     submitEditDocketEntryMetaSequence,
+    caseDetail,
+    formattedCaseDetail,
+    form,
   }) {
+    const isMemberCase = !!(
+      caseDetail &&
+      caseDetail.leadDocketNumber &&
+      caseDetail.leadDocketNumber !== caseDetail.docketNumber
+    );
+    const isLeadCase = !!(
+      caseDetail &&
+      caseDetail.leadDocketNumber &&
+      caseDetail.leadDocketNumber === caseDetail.docketNumber
+    );
     return (
       <>
         <CaseDetailHeader />
@@ -51,6 +68,41 @@ export const EditDocketEntryMeta = connect(
           </div>
           <div className="grid-row grid-gap">
             <div className="grid-col-5 DocumentDetail">
+              {isLeadCase &&
+                formattedCaseDetail?.consolidatedCases &&
+                formattedCaseDetail.consolidatedCases.length > 1 && (
+                  <Hint fullWidth>
+                    <p
+                      className="text-bold margin-top-0"
+                      style={{ fontSize: '21px' }}
+                    >
+                      Edits to Document Info will also be edited for:
+                    </p>
+                    <ul className="usa-list">
+                      {formattedCaseDetail.consolidatedCases
+                        .filter(c => c.docketNumber !== caseDetail.docketNumber)
+                        .map(c => (
+                          <li key={c.docketNumber}>
+                            {c.docketNumber}{' '}
+                            {c.caseTitle ||
+                              c.caseCaption ||
+                              form?.documentTitle ||
+                              form?.eventCode}
+                          </li>
+                        ))}
+                    </ul>
+                    <p>
+                      Service and Action edits will only apply to this case.
+                    </p>
+                  </Hint>
+                )}
+              {isMemberCase && (
+                <Hint fullWidth>
+                  Edits to Document Info can only be done from the{' '}
+                  <strong>lead case</strong> in a consolidated group. This is a
+                  member case.
+                </Hint>
+              )}
               <Tabs
                 boxed
                 bind="editDocketEntryMetaTab"
@@ -103,7 +155,7 @@ export const EditDocketEntryMeta = connect(
                 </Button>
               </div>
             </div>
-            <div className="grid-col-7">{/* TODO: File preview */}</div>
+            <div className="grid-col-7"></div>
           </div>
         </section>
         {showModal === 'FormCancelModalDialog' && (

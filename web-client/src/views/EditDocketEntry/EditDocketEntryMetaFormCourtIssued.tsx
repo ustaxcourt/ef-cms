@@ -13,6 +13,7 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
     DATE_FORMATS: state.constants.DATE_FORMATS,
     addCourtIssuedDocketEntryHelper: state.addCourtIssuedDocketEntryHelper,
     form: state.form,
+    caseDetail: state.caseDetail,
     formatAndUpdateDateFromDatePickerSequence:
       sequences.formatAndUpdateDateFromDatePickerSequence,
     updateCourtIssuedDocketEntryFormValueSequence:
@@ -26,12 +27,18 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
     addCourtIssuedDocketEntryHelper,
     DATE_FORMATS,
     form,
+    caseDetail,
     formatAndUpdateDateFromDatePickerSequence,
     updateCourtIssuedDocketEntryFormValueSequence,
     validateCourtIssuedDocketEntrySequence,
     validateDocumentSequence,
     validationErrors,
   }) {
+    const isMemberCase = !!(
+      caseDetail &&
+      caseDetail.leadDocketNumber &&
+      caseDetail.leadDocketNumber !== caseDetail.docketNumber
+    );
     return (
       <div className="blue-container">
         <DateSelector
@@ -47,6 +54,7 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
             });
             validateDocumentSequence();
           }}
+          disabled={isMemberCase}
         />
 
         <FormGroup errorText={validationErrors.documentType}>
@@ -89,6 +97,7 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
                   value: inputText,
                 });
               }}
+              isDisabled={isMemberCase}
             />
           )}
           {!addCourtIssuedDocketEntryHelper.showDocumentTypeDropdown && (

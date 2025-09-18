@@ -78,6 +78,95 @@ export const addCoversheetInteractor = async (
     useInitialData,
   });
 
+  // If this is a member case in a consolidated group, avoid regenerating and
+  // re-saving the PDF. The stored document for the shared `docketEntryId`
+  // should be considered canonical and created/updated by the lead case only.
+  const isMemberCase =
+    caseEntity.leadDocketNumber && caseEntity.leadDocketNumber !== docketNumber;
+
+  if (isMemberCase) {
+    // If caller attempted to replace the coversheet from a member case, disallow it
+    // and instruct to perform replacement on the lead case.
+    if (replaceCoversheet) {
+      throw new Error(
+        'Coversheet replacement for multidocketed filings must be performed on the lead case',
+      );
+    }
+
+    // Use the existing PDF data (we loaded it above) to determine the number of pages
+    // and then update the docket entries across consolidated cases without re-saving.
+    const { PDFDocument } = await applicationContext.getPdfLib();
+    const existingPdfDoc = await PDFDocument.load(pdfData);
+    const existingNumberOfPages = existingPdfDoc.getPageCount();
+
+    // use the existing numberOfPages from the stored document
+    const pagesToUse = existingNumberOfPages;
+
+    let docketNumbersToUpdate = [docketNumber];
+
+    if (consolidatedCases) {
+      docketNumbersToUpdate = consolidatedCases
+        .filter(consolidatedCase => consolidatedCase.documentNumber)
+        .map(({ docketNumber: caseDocketNumber }) => caseDocketNumber);
+    }
+
+    const casesToUpdate = await getCasesByDocketNumbers({
+      docketNumbers: docketNumbersToUpdate,
+    });
+
+    const updatedDocketEntries = casesToUpdate
+      .map(caseRecord => {
+        const consolidatedCaseEntity =
+          caseRecord.docketNumber === docketNumber
+            ? caseEntity
+            : new Case(caseRecord, {
+                authorizedUser,
+              });
+
+        const consolidatedCaseDocketEntry =
+          consolidatedCaseEntity!.getDocketEntryById({
+            docketEntryId,
+          });
+
+        if (consolidatedCaseDocketEntry) {
+          const isSimultaneousDocType =
+            SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(
+              consolidatedCaseDocketEntry.eventCode,
+            ) ||
+            consolidatedCaseDocketEntry.documentTitle?.includes('Simultaneous');
+
+          const consolidatedCaseDocketEntryEntity = new DocketEntry(
+            consolidatedCaseDocketEntry,
+            { authorizedUser },
+          );
+
+          if (
+            !isSimultaneousDocType ||
+            (isSimultaneousDocType &&
+              caseEntity &&
+              caseRecord.docketNumber === docketNumber)
+          ) {
+            consolidatedCaseDocketEntryEntity.setAsProcessingStatusAsCompleted();
+          }
+
+          consolidatedCaseDocketEntryEntity.setNumberOfPages(pagesToUse);
+
+          const updateConsolidatedDocketEntry =
+            consolidatedCaseDocketEntryEntity.validate().toRawObject();
+
+          return updateConsolidatedDocketEntry;
+        }
+      })
+      .filter(docketEntry => docketEntry !== undefined);
+
+    await upsertDocketEntries(updatedDocketEntries);
+
+    return updatedDocketEntries.find(
+      entry => entry.docketNumber === docketNumber,
+    );
+  }
+
+  // Lead case path: save the generated PDF and propagate updates
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     document: newPdfData,
     key: docketEntryId,

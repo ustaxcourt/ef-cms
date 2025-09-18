@@ -6,19 +6,32 @@ import classNames from 'classnames';
 
 export const FilingPartiesForm = connect(
   {
-    caseDetail: state.formattedCaseDetail,
+    caseDetail: state.caseDetail,
+    formattedCaseDetail: state.formattedCaseDetail,
     filingPartiesFormHelper: state.filingPartiesFormHelper,
     form: state.form,
     validationErrors: state.validationErrors,
   },
   function FilingPartiesForm({
     caseDetail,
+    formattedCaseDetail,
     filingPartiesFormHelper,
     form,
+    validationErrors,
     updateSequence,
     validateSequence,
-    validationErrors,
   }) {
+    const petitioners =
+      (formattedCaseDetail && formattedCaseDetail.petitioners) ||
+      (caseDetail && caseDetail.petitioners) ||
+      [];
+
+    const isMemberCase = !!(
+      caseDetail &&
+      caseDetail.leadDocketNumber &&
+      caseDetail.leadDocketNumber !== caseDetail.docketNumber
+    );
+
     return (
       <>
         {filingPartiesFormHelper.isServed ? (
@@ -32,6 +45,7 @@ export const FilingPartiesForm = connect(
               id="filed-by"
               name="filedBy"
               value={form.filedBy || ''}
+              disabled={isMemberCase}
               onChange={e => {
                 updateSequence({
                   key: e.target.name,
@@ -56,7 +70,7 @@ export const FilingPartiesForm = connect(
               </legend>
               {filingPartiesFormHelper.showFilingPartiesAsCheckboxes ? (
                 <>
-                  {caseDetail.petitioners.map(petitioner => (
+                  {petitioners.map(petitioner => (
                     <div className="usa-checkbox" key={petitioner.contactId}>
                       <input
                         checked={
@@ -68,6 +82,7 @@ export const FilingPartiesForm = connect(
                         id={`filing-${petitioner.contactId}`}
                         name={`filersMap.${petitioner.contactId}`}
                         type="checkbox"
+                        disabled={isMemberCase}
                         onChange={e => {
                           updateSequence({
                             key: e.target.name,
@@ -81,7 +96,11 @@ export const FilingPartiesForm = connect(
                         data-testid="filed-by-option"
                         htmlFor={`filing-${petitioner.contactId}`}
                       >
-                        {petitioner.displayName}
+                        {petitioner.displayName ||
+                          petitioner.name ||
+                          petitioner.firstName ||
+                          petitioner.lastName ||
+                          petitioner.contactId}
                       </label>
                     </div>
                   ))}
@@ -92,6 +111,7 @@ export const FilingPartiesForm = connect(
                       id="party-irs-practitioner"
                       name="partyIrsPractitioner"
                       type="checkbox"
+                      disabled={isMemberCase}
                       onChange={e => {
                         updateSequence({
                           key: e.target.name,
@@ -114,6 +134,7 @@ export const FilingPartiesForm = connect(
                       id="has-other-filing-party"
                       name="hasOtherFilingParty"
                       type="checkbox"
+                      disabled={isMemberCase}
                       onChange={e => {
                         updateSequence({
                           key: e.target.name,
@@ -147,6 +168,7 @@ export const FilingPartiesForm = connect(
                           name="otherFilingParty"
                           type="text"
                           value={form.otherFilingParty || ''}
+                          disabled={isMemberCase}
                           onBlur={() => validateSequence()}
                           onChange={e => {
                             updateSequence({
@@ -164,6 +186,7 @@ export const FilingPartiesForm = connect(
                   className="usa-input usa-input-inline"
                   name="otherFilingParty"
                   value={form.otherFilingParty || ''}
+                  disabled={isMemberCase}
                   onChange={e => {
                     updateSequence({
                       key: e.target.name,

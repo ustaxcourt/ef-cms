@@ -34,6 +34,7 @@ import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertW
 import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
+import { getDocketEntriesByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumberAndDocketEntryId';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { WorkItem } from '@shared/business/entities/WorkItem';
@@ -154,6 +155,37 @@ const completeDocketEntryQC = async (
     updatedDocketEntry,
   });
 
+  // Determine whether this docket entry is multidocketed across consolidated cases
+  const consolidatedDocketNumbers = (caseEntity.consolidatedCases || [])
+    .map(c => c.docketNumber)
+    .filter(Boolean);
+
+  const docketNumbersToCheck = Array.from(
+    new Set([caseEntity.docketNumber, ...consolidatedDocketNumbers]),
+  );
+
+  const docketEntriesAcrossCases =
+    docketNumbersToCheck && docketNumbersToCheck.length > 0
+      ? await getDocketEntriesByDocketNumberAndDocketEntryId({
+          docketNumbersAndIds: docketNumbersToCheck.map(dn => ({
+            docketNumber: dn,
+            docketEntryId,
+          })),
+        })
+      : [];
+
+  const isMultiDocketed = (docketEntriesAcrossCases || []).length > 1;
+
+  // If this entry is multidocketed, only the lead case may complete QC
+  if (
+    isMultiDocketed &&
+    caseEntity.leadDocketNumber !== caseEntity.docketNumber
+  ) {
+    throw new InvalidRequest(
+      'QC for multidocketed documents must be completed on the lead case',
+    );
+  }
+
   const needsNoticeOfDocketChange =
     updatedDocketEntry.filedBy !== currentDocketEntry.filedBy ||
     updatedDocumentTitle !== currentDocumentTitle;
@@ -226,9 +258,83 @@ const completeDocketEntryQC = async (
     workItems: [workItem.validate().toRawObject()],
   });
 
+  // If multi-docketed and we're the lead case, propagate QC completion to member cases
+  if (
+    isMultiDocketed &&
+    caseEntity.leadDocketNumber === caseEntity.docketNumber
+  ) {
+    const memberWorkItemsToUpsert: any[] = [];
+
+    for (const de of docketEntriesAcrossCases) {
+      if (de.docketNumber === caseEntity.docketNumber) continue; // skip lead
+
+      try {
+        const memberCaseRaw = await getCaseByDocketNumber({
+          docketNumber: de.docketNumber,
+        });
+
+        if (!memberCaseRaw) continue;
+
+        const memberCaseEntity = new Case(memberCaseRaw, { authorizedUser });
+        const memberDocketEntry = memberCaseEntity.getDocketEntryById({
+          docketEntryId,
+        });
+
+        if (!memberDocketEntry) continue;
+
+        // mark member docket entry as QC complete and processing complete
+        memberDocketEntry.qcComplete = true;
+        memberDocketEntry.processingStatus =
+          DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
+
+        memberCaseEntity.updateDocketEntry(memberDocketEntry);
+
+        // attempt to complete any work item associated with the member case's docket entry
+        const memberWorkItem = await getWorkItemByDocketNumberAndDocketEntryId({
+          docketNumber: memberCaseEntity.docketNumber,
+          docketEntryId,
+        });
+
+        if (memberWorkItem && !memberWorkItem.isCompleted()) {
+          memberWorkItem.setAsCompleted({ message: 'completed', user });
+          memberWorkItem.assignToUser({
+            assigneeId: user.userId,
+            assigneeName: user.name,
+            section: WorkItem.getWorkItemSectionFromUserSection({
+              section: user.section || '',
+              documentTitle: memberDocketEntry.documentTitle,
+            }),
+            sentBy: user.name,
+            sentBySection: user.section,
+            sentByUserId: user.userId,
+          });
+
+          memberWorkItemsToUpsert.push(memberWorkItem.validate().toRawObject());
+        }
+
+        // persist member case changes
+        await updateCaseAndAssociations({
+          authorizedUser,
+          caseToUpdate: memberCaseEntity,
+        });
+      } catch (err) {
+        // don't fail the whole flow if a member case update fails; continue to next
+        // but log error if logging helper exists
+        applicationContext.logger?.error(
+          `Failed to update member case for docketEntryId ${docketEntryId} on case ${de.docketNumber}: ${err}`,
+        );
+      }
+    }
+
+    if (memberWorkItemsToUpsert.length > 0) {
+      await upsertWorkItems({ workItems: memberWorkItemsToUpsert });
+    }
+  }
+
   const servedParties = aggregatePartiesForService(caseEntity);
   let paperServicePdfUrl;
   let paperServiceDocumentTitle;
+  let paperServiceParties = servedParties.paper;
 
   if (
     overridePaperServiceAddress ||
@@ -278,76 +384,259 @@ const completeDocketEntryQC = async (
       paperServiceDocumentTitle = updatedDocketEntry.documentTitle;
     }
   } else if (needsNoticeOfDocketChange) {
-    const noticeDocketEntryId = await generateNoticeOfDocketChangePdf({
-      applicationContext,
-      authorizedUser,
-      // @ts-ignore
-      docketChangeInfo,
-    });
+    const paperServiceResults: any[] = [];
 
-    const noticeUpdatedDocketEntry = new DocketEntry(
-      {
-        ...SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange,
-        docketEntryId: noticeDocketEntryId,
-        documentTitle: replaceBracketed(
-          SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange.documentTitle,
-          // @ts-ignore
-          docketChangeInfo.docketEntryIndex,
-        ),
-        isFileAttached: true,
-        isOnDocketRecord: true,
-        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-      },
-      { authorizedUser, petitioners: caseToUpdate.petitioners },
-    );
+    // If multi-docketed, generate a notice for each case that contains the docketEntryId
+    if (isMultiDocketed) {
+      for (const de of docketEntriesAcrossCases) {
+        try {
+          const memberCaseRaw = await getCaseByDocketNumber({
+            docketNumber: de.docketNumber,
+          });
 
-    noticeUpdatedDocketEntry.setFiledBy(user);
+          if (!memberCaseRaw) continue;
 
-    noticeUpdatedDocketEntry.numberOfPages = await applicationContext
-      .getUseCaseHelpers()
-      .countPagesInDocument({
+          const memberCaseEntity =
+            memberCaseRaw.docketNumber === caseEntity.docketNumber
+              ? caseEntity
+              : new Case(memberCaseRaw, { authorizedUser });
+
+          const memberDocketEntry = memberCaseEntity.getDocketEntryById({
+            docketEntryId,
+          });
+
+          if (!memberDocketEntry) continue;
+
+          const { index: memberDocketEntryIndex } = memberDocketEntry;
+
+          const {
+            caseCaptionExtension: memberCaseCaptionExtension,
+            caseTitle: memberCaseTitle,
+          } = getCaseCaptionMeta(memberCaseEntity);
+
+          const memberDocketChangeInfo = {
+            caseCaptionExtension: memberCaseCaptionExtension,
+            caseTitle: memberCaseTitle,
+            docketEntryIndex: memberDocketEntryIndex,
+            docketNumber: Case.getDocketNumberWithSuffix({
+              docketNumber: memberCaseRaw.docketNumber,
+              docketNumberSuffix: memberCaseRaw.docketNumberSuffix,
+            }),
+            filingParties: {
+              after: updatedDocketEntry.filedBy,
+              before: currentDocketEntry.filedBy,
+            },
+            filingsAndProceedings: {
+              after: getDocumentTitleForNoticeOfChange({
+                applicationContext,
+                docketEntry: updatedDocketEntry,
+              }),
+              before: getDocumentTitleForNoticeOfChange({
+                applicationContext,
+                docketEntry: currentDocketEntry,
+              }),
+            },
+            nameOfClerk: name,
+            titleOfClerk: title,
+          };
+
+          const noticeDocketEntryId = await generateNoticeOfDocketChangePdf({
+            applicationContext,
+            authorizedUser,
+            // @ts-ignore
+            docketChangeInfo: memberDocketChangeInfo,
+          });
+
+          const memberNoticeUpdatedDocketEntry = new DocketEntry(
+            {
+              ...SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange,
+              docketEntryId: noticeDocketEntryId,
+              documentTitle: replaceBracketed(
+                SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange
+                  .documentTitle,
+                // @ts-ignore
+                memberDocketChangeInfo.docketEntryIndex,
+              ),
+              isFileAttached: true,
+              isOnDocketRecord: true,
+              processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+            },
+            { authorizedUser, petitioners: memberCaseRaw.petitioners },
+          );
+
+          memberNoticeUpdatedDocketEntry.setFiledBy(user);
+
+          memberNoticeUpdatedDocketEntry.numberOfPages =
+            await applicationContext.getUseCaseHelpers().countPagesInDocument({
+              applicationContext,
+              docketEntryId: memberNoticeUpdatedDocketEntry.docketEntryId,
+            });
+
+          const memberServedParties =
+            aggregatePartiesForService(memberCaseEntity);
+
+          memberNoticeUpdatedDocketEntry.setAsServed(memberServedParties.all);
+
+          memberCaseEntity.addDocketEntry(memberNoticeUpdatedDocketEntry);
+
+          const serviceStampDate = formatDateString(
+            memberNoticeUpdatedDocketEntry.servedAt!,
+            FORMATS.MMDDYY,
+          );
+
+          const pdfData = await applicationContext
+            .getPersistenceGateway()
+            .getDocument({
+              applicationContext,
+              key: memberNoticeUpdatedDocketEntry.docketEntryId,
+            });
+
+          const newPdfData = await addServedStampToDocument({
+            applicationContext,
+            pdfData,
+            serviceStampText: `Served ${serviceStampDate}`,
+          });
+
+          await applicationContext
+            .getPersistenceGateway()
+            .saveDocumentFromLambda({
+              document: newPdfData,
+              key: memberNoticeUpdatedDocketEntry.docketEntryId,
+            });
+
+          const paperServiceResult = await applicationContext
+            .getUseCaseHelpers()
+            .serveDocumentAndGetPaperServicePdf({
+              applicationContext,
+              caseEntities: [memberCaseEntity],
+              docketEntryId: memberNoticeUpdatedDocketEntry.docketEntryId,
+            });
+
+          if (memberServedParties.paper.length > 0) {
+            paperServiceResults.push({
+              docketNumber: memberCaseEntity.docketNumber,
+              pdfUrl: paperServiceResult && paperServiceResult.pdfUrl,
+              documentTitle: memberNoticeUpdatedDocketEntry.documentTitle,
+              parties: memberServedParties.paper,
+            });
+          }
+        } catch (err) {
+          applicationContext.logger?.error(
+            `Failed to generate NODC for docketEntryId ${docketEntryId} on case ${de.docketNumber}: ${err}`,
+          );
+        }
+      }
+    } else {
+      const noticeDocketEntryId = await generateNoticeOfDocketChangePdf({
         applicationContext,
-        docketEntryId: noticeUpdatedDocketEntry.docketEntryId,
+        authorizedUser,
+        // @ts-ignore
+        docketChangeInfo,
       });
 
-    noticeUpdatedDocketEntry.setAsServed(servedParties.all);
+      const noticeUpdatedDocketEntry = new DocketEntry(
+        {
+          ...SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange,
+          docketEntryId: noticeDocketEntryId,
+          documentTitle: replaceBracketed(
+            SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange.documentTitle,
+            // @ts-ignore
+            docketChangeInfo.docketEntryIndex,
+          ),
+          isFileAttached: true,
+          isOnDocketRecord: true,
+          processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+        },
+        { authorizedUser, petitioners: caseToUpdate.petitioners },
+      );
 
-    caseEntity.addDocketEntry(noticeUpdatedDocketEntry);
+      noticeUpdatedDocketEntry.setFiledBy(user);
 
-    const serviceStampDate = formatDateString(
-      noticeUpdatedDocketEntry.servedAt!,
-      FORMATS.MMDDYY,
-    );
+      noticeUpdatedDocketEntry.numberOfPages = await applicationContext
+        .getUseCaseHelpers()
+        .countPagesInDocument({
+          applicationContext,
+          docketEntryId: noticeUpdatedDocketEntry.docketEntryId,
+        });
 
-    const pdfData = await applicationContext
-      .getPersistenceGateway()
-      .getDocument({
+      noticeUpdatedDocketEntry.setAsServed(servedParties.all);
+
+      caseEntity.addDocketEntry(noticeUpdatedDocketEntry);
+
+      const serviceStampDate = formatDateString(
+        noticeUpdatedDocketEntry.servedAt!,
+        FORMATS.MMDDYY,
+      );
+
+      const pdfData = await applicationContext
+        .getPersistenceGateway()
+        .getDocument({
+          applicationContext,
+          key: noticeUpdatedDocketEntry.docketEntryId,
+        });
+
+      const newPdfData = await addServedStampToDocument({
         applicationContext,
+        pdfData,
+        serviceStampText: `Served ${serviceStampDate}`,
+      });
+
+      await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+        document: newPdfData,
         key: noticeUpdatedDocketEntry.docketEntryId,
       });
 
-    const newPdfData = await addServedStampToDocument({
-      applicationContext,
-      pdfData,
-      serviceStampText: `Served ${serviceStampDate}`,
-    });
+      const paperServiceResult = await applicationContext
+        .getUseCaseHelpers()
+        .serveDocumentAndGetPaperServicePdf({
+          applicationContext,
+          caseEntities: [caseEntity],
+          docketEntryId: noticeUpdatedDocketEntry.docketEntryId,
+        });
 
-    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-      document: newPdfData,
-      key: noticeUpdatedDocketEntry.docketEntryId,
-    });
+      if (servedParties.paper.length > 0) {
+        paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
+        paperServiceDocumentTitle = noticeUpdatedDocketEntry.documentTitle;
+      }
+    }
 
-    const paperServiceResult = await applicationContext
-      .getUseCaseHelpers()
-      .serveDocumentAndGetPaperServicePdf({
-        applicationContext,
-        caseEntities: [caseEntity],
-        docketEntryId: noticeUpdatedDocketEntry.docketEntryId,
-      });
+    // aggregate paperServiceParties across cases
+    if (
+      Array.isArray(docketEntriesAcrossCases) &&
+      docketEntriesAcrossCases.length
+    ) {
+      const aggregatedPaperParties: any[] = [];
+      for (const de of docketEntriesAcrossCases) {
+        try {
+          const memberCaseRaw = await getCaseByDocketNumber({
+            docketNumber: de.docketNumber,
+          });
+          if (!memberCaseRaw) continue;
+          const memberCaseEntity = new Case(memberCaseRaw, { authorizedUser });
+          const memberServedParties =
+            aggregatePartiesForService(memberCaseEntity);
+          aggregatedPaperParties.push(...memberServedParties.paper);
+        } catch (err) {
+          applicationContext.logger?.error(
+            `Failed to aggregate paper parties for docketEntryId ${docketEntryId} on case ${de.docketNumber}: ${err}`,
+          );
+        }
+      }
 
-    if (servedParties.paper.length > 0) {
-      paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
-      paperServiceDocumentTitle = noticeUpdatedDocketEntry.documentTitle;
+      // set paperServiceParties to aggregated list if not empty
+      if (aggregatedPaperParties.length > 0) {
+        // remove duplicates by name
+        paperServiceParties = Array.from(
+          new Map(aggregatedPaperParties.map(p => [p.name, p])).values(),
+        );
+      }
+      // include detailed results as an additional return field
+      paperServicePdfUrl = paperServiceResults.length
+        ? paperServiceResults[0].pdfUrl
+        : paperServicePdfUrl;
+      paperServiceDocumentTitle = paperServiceResults.length
+        ? paperServiceResults[0].documentTitle
+        : paperServiceDocumentTitle;
     }
   }
 
@@ -370,7 +659,7 @@ const completeDocketEntryQC = async (
   return {
     caseDetail: caseEntity.toRawObject(),
     paperServiceDocumentTitle,
-    paperServiceParties: servedParties.paper,
+    paperServiceParties,
     paperServicePdfUrl,
   };
 };

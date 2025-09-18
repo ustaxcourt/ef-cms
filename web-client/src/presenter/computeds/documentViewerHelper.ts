@@ -92,8 +92,14 @@ export const documentViewerHelper = (
       d => d.eventCode === STIPULATED_DECISION_EVENT_CODE && !d.archived,
     );
 
+  const isLeadCase =
+    !caseDetail.leadDocketNumber ||
+    caseDetail.leadDocketNumber === caseDetail.docketNumber;
+
   const showCompleteQcButton =
-    permissions.EDIT_DOCKET_ENTRY && formattedDocumentToDisplay.qcNeeded;
+    permissions.EDIT_DOCKET_ENTRY &&
+    formattedDocumentToDisplay.qcNeeded &&
+    isLeadCase;
 
   const showApplyStampButton =
     permissions.STAMP_MOTION &&

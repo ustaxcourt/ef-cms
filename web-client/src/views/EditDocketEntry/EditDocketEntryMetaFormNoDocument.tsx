@@ -9,6 +9,7 @@ export const EditDocketEntryMetaFormNoDocument = connect(
   {
     DATE_FORMATS: state.constants.DATE_FORMATS,
     form: state.form,
+    caseDetail: state.caseDetail,
     formatAndUpdateDateFromDatePickerSequence:
       sequences.formatAndUpdateDateFromDatePickerSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
@@ -18,11 +19,17 @@ export const EditDocketEntryMetaFormNoDocument = connect(
   function EditDocketEntryMetaFormNoDocument({
     DATE_FORMATS,
     form,
+    caseDetail,
     formatAndUpdateDateFromDatePickerSequence,
     updateFormValueSequence,
     validateDocumentSequence,
     validationErrors,
   }) {
+    const isMemberCase = !!(
+      caseDetail &&
+      caseDetail.leadDocketNumber &&
+      caseDetail.leadDocketNumber !== caseDetail.docketNumber
+    );
     return (
       <div className="blue-container">
         <DateSelector
@@ -38,6 +45,7 @@ export const EditDocketEntryMetaFormNoDocument = connect(
             });
             validateDocumentSequence();
           }}
+          disabled={isMemberCase}
         />
 
         <FormGroup errorText={validationErrors.documentTitle}>
@@ -55,6 +63,7 @@ export const EditDocketEntryMetaFormNoDocument = connect(
             name="documentTitle"
             type="text"
             value={form.documentTitle || ''}
+            disabled={isMemberCase}
             onChange={e => {
               updateFormValueSequence({
                 key: e.target.name,

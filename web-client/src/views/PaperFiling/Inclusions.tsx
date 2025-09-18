@@ -13,7 +13,8 @@ export const Inclusions = connect(
     formatAndUpdateDateFromDatePickerSequence:
       sequences.formatAndUpdateDateFromDatePickerSequence,
     marginClass: props.marginClass,
-    updateSequence: sequences[props.updateSequence],
+    updateSequence: sequences[props.updateSequence as any],
+    caseDetail: state.caseDetail,
     validateDocketEntrySequence: sequences.validateDocketEntrySequence,
     validationErrors: state.validationErrors,
   },
@@ -25,7 +26,13 @@ export const Inclusions = connect(
     updateSequence,
     validateDocketEntrySequence,
     validationErrors,
+    caseDetail,
   }) {
+    const isMemberCase = !!(
+      caseDetail &&
+      caseDetail.leadDocketNumber &&
+      caseDetail.leadDocketNumber !== caseDetail.docketNumber
+    );
     return (
       <div className={classNames('usa-form-group', marginClass)}>
         <fieldset className={classNames('usa-fieldset', marginClass)}>
@@ -39,6 +46,7 @@ export const Inclusions = connect(
               id="attachments"
               name="attachments"
               type="checkbox"
+              disabled={isMemberCase}
               onChange={e => {
                 updateSequence({
                   key: e.target.name,
@@ -58,6 +66,7 @@ export const Inclusions = connect(
               id="certificate-of-service"
               name="certificateOfService"
               type="checkbox"
+              disabled={isMemberCase}
               onChange={e => {
                 updateSequence({
                   key: e.target.name,
@@ -89,6 +98,7 @@ export const Inclusions = connect(
                   });
                   validateDocketEntrySequence();
                 }}
+                disabled={isMemberCase}
               />
             )}
           </div>

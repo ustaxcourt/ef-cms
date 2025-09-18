@@ -17,6 +17,7 @@ export const EditDocketEntryMetaFormDocument = connect(
     constants: state.constants,
     editDocketEntryMetaHelper: state.editDocketEntryMetaHelper,
     form: state.form,
+    caseDetail: state.caseDetail,
     formatAndUpdateDateFromDatePickerSequence:
       sequences.formatAndUpdateDateFromDatePickerSequence,
     internalTypesHelper: state.internalTypesHelper,
@@ -29,12 +30,19 @@ export const EditDocketEntryMetaFormDocument = connect(
     constants,
     editDocketEntryMetaHelper,
     form,
+    caseDetail,
     formatAndUpdateDateFromDatePickerSequence,
     internalTypesHelper,
     updateDocketEntryMetaDocumentFormValueSequence,
     validateDocumentSequence,
     validationErrors,
   }) {
+    const isMemberCase = !!(
+      caseDetail &&
+      caseDetail.leadDocketNumber &&
+      caseDetail.leadDocketNumber !== caseDetail.docketNumber
+    );
+
     return (
       <div className="blue-container">
         <FormGroup errorText={validationErrors.lodged}>
@@ -49,6 +57,7 @@ export const EditDocketEntryMetaFormDocument = connect(
                   name="lodged"
                   type="radio"
                   value={option}
+                  disabled={isMemberCase}
                   onChange={e => {
                     updateDocketEntryMetaDocumentFormValueSequence({
                       key: e.target.name,
@@ -80,6 +89,7 @@ export const EditDocketEntryMetaFormDocument = connect(
             });
             validateDocumentSequence();
           }}
+          disabled={isMemberCase}
         />
         <FormGroup errorText={validationErrors.eventCode}>
           <label
@@ -114,6 +124,7 @@ export const EditDocketEntryMetaFormDocument = connect(
                 value: inputText,
               });
             }}
+            isDisabled={isMemberCase}
           />
         </FormGroup>
         {editDocketEntryMetaHelper.primary.showSecondaryDocumentForm && (
@@ -159,6 +170,7 @@ export const EditDocketEntryMetaFormDocument = connect(
                   value: inputText,
                 });
               }}
+              isDisabled={isMemberCase}
             />
           </FormGroup>
         )}
@@ -187,6 +199,7 @@ export const EditDocketEntryMetaFormDocument = connect(
             id="additional-info"
             name="additionalInfo"
             value={form.additionalInfo || ''}
+            disabled={isMemberCase}
             onBlur={() => {
               validateDocumentSequence();
             }}
@@ -206,6 +219,7 @@ export const EditDocketEntryMetaFormDocument = connect(
               id="add-to-coversheet"
               name="addToCoversheet"
               type="checkbox"
+              disabled={isMemberCase}
               onChange={e => {
                 updateDocketEntryMetaDocumentFormValueSequence({
                   key: e.target.name,
@@ -234,6 +248,7 @@ export const EditDocketEntryMetaFormDocument = connect(
             id="additional-info2"
             name="additionalInfo2"
             value={form.additionalInfo2 || ''}
+            disabled={isMemberCase}
             onBlur={() => {
               validateDocumentSequence();
             }}
@@ -268,6 +283,7 @@ export const EditDocketEntryMetaFormDocument = connect(
                     name="objections"
                     type="radio"
                     value={option}
+                    disabled={isMemberCase}
                     onChange={e => {
                       updateDocketEntryMetaDocumentFormValueSequence({
                         key: e.target.name,
@@ -298,6 +314,7 @@ export const EditDocketEntryMetaFormDocument = connect(
                 id="pending"
                 name="pending"
                 type="checkbox"
+                disabled={isMemberCase}
                 onChange={e => {
                   updateDocketEntryMetaDocumentFormValueSequence({
                     key: e.target.name,
