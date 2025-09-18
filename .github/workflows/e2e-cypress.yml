@@ -57,7 +57,7 @@ jobs:
         id: cache-cypress
         uses: actions/cache@v4
         with:
-          path: .cache/Cypress
+          path: /home/runner/.cache/Cypress
           key: ${{ runner.os }}-cypress-${{ hashFiles('**/package-lock.json') }}
       - name: Restore Cache Dependencies
         id: cache-dependencies
@@ -68,9 +68,9 @@ jobs:
       - name: Install Node Dependencies - Cache Miss Install
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
         run: npm ci
-      # - name: Install Cypress Binary
-      #   if: steps.cache-cypress.outputs.cache-hit != 'true'
-      #   run: npx cypress install
+      - name: Install Cypress Binary
+        if: steps.cache-cypress.outputs.cache-hit != 'true'
+        run: npx cypress install
       - name: Install Puppeteer
         if: steps.cache-puppeteer.outputs.cache-hit != 'true'
         run: npx puppeteer browsers install chrome
