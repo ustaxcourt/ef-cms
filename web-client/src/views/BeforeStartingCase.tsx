@@ -159,6 +159,7 @@ export const BeforeStartingCase = connect(
             <span className="placeholder" />
           </div>
           <AlertInfo
+            className="tw:mb-4"
             alertInfo={{
               message: `Do not include any additional documents (such as tax returns) with ${isPetitioner ? 'your' : 'the'} Petition, except for any IRS Notices, the Statement of Taxpayer Identification Number and the Corporate Disclosure Statement (if filing for a business). Documents that might be evidence can be submitted at a later time.`,
             }}

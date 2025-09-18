@@ -95,7 +95,7 @@ function AlertHeader({
         className={cn(
           title
             ? 'tw:font-bold tw:text-sm/4 tw:xs:text-base/6'
-            : 'tw:text-sm/5 tw:xs:text-base/7',
+            : 'tw:text-sm/5 tw:xs:text-base/6',
           'tw:pb-0',
         )}
         data-slot="alert-title"
@@ -121,7 +121,7 @@ function AlertHeader({
 function AlertDescription({ ...props }: React.ComponentProps<'p'>) {
   return (
     <div
-      className="tw:text-sm tw:xs:text-base/5 tw:ml-8 tw:xs:ml-9"
+      className="tw:text-sm/5 tw:mt-1 tw:ml-8 tw:xs:ml-10 tw:xs:text-base/5 tw:xs:mt-3"
       data-slot="alert-description"
       {...props}
     />
