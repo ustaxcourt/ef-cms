@@ -254,6 +254,25 @@ export const createStartOfDayISO = (params?: {
   return dateObject.startOf('day').setZone('utc').toISO();
 };
 
+export const createStartOfDayISOUtc = (params?: {
+  day: string | number;
+  month: string | number;
+  year: string | number;
+}): string => {
+  const dateObject = params
+    ? DateTime.fromObject(
+        {
+          day: Number(params.day),
+          month: Number(params.month),
+          year: Number(params.year),
+        },
+        { zone: USTC_TZ },
+      )
+    : DateTime.now().setZone(USTC_TZ);
+
+  return dateObject.setZone('utc').startOf('day').toISO();
+};
+
 /**
  * @param {object} options the date options containing year, month, day
  * @returns {string} a formatted ISO date string
