@@ -73,6 +73,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   }
 
   const cases = await getSuggestedCalendarCases();
+  console.log('TERM_BUILDER_INFORMATION', TERM_BUILDER_INFORMATION);
   const { termEndDate, termStartDate, ...calendaringConfig } =
     TERM_BUILDER_INFORMATION;
 
@@ -107,6 +108,8 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     endDate: termEndDate,
     startDate: termStartDate,
   });
+
+  console.log('weekstoloop', weeksToLoop);
 
   const constraints = [
     washingtonDcSpecialConstraint,

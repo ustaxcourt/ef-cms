@@ -54,6 +54,7 @@ export const writeTrialSessionDataToExcel = async ({
     weeksStartDates,
   });
 
+  console.log('weekstart dates', weeksStartDates);
   worksheet.columns = getColumns({ weeksStartDates });
 
   for (const cityStateString in rowsByCity) {
@@ -314,8 +315,10 @@ const getCellStyle = (
           type: 'pattern',
         };
         if (isValidISODate(cell._column._key)) {
+          console.log('after checking if valid iso date', cell._column._key);
           const week = weeksRange.find(r => r.start === cell._column._key)!;
           const { start, end } = week;
+          console.log('holidays', holidays);
           const hasHoliday = holidays.some(holiday =>
             isDateWithinGivenInterval({
               date: holiday.dateString,

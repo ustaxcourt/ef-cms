@@ -6,6 +6,9 @@ export const getHolidaysInDateRange = (
   endDate: string,
   options = { shiftSaturdayHolidays: false, shiftSundayHolidays: false },
 ) => {
+  console.log('getHolidaysInDateRange termStartDate', startDate);
+  console.log('getHolidaysInDateRange termEndDate', endDate);
+
   if (!isStringISOFormatted(startDate) || !isStringISOFormatted(endDate)) {
     throw new Error('start date or end date are not ISO dates');
   }
@@ -17,5 +20,7 @@ export const getHolidaysInDateRange = (
     dateString: endDate,
   });
 
+  console.log('start', start);
+  console.log('end', end);
   return fedHolidays.inRange(start, end, options);
 };
