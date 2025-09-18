@@ -319,13 +319,18 @@ const getCellStyle = (
           const week = weeksRange.find(r => r.start === cell._column._key)!;
           const { start, end } = week;
           console.log('holidays', holidays);
-          const hasHoliday = holidays.some(holiday =>
-            isDateWithinGivenInterval({
+          const hasHoliday = holidays.some(holiday => {
+            console.log('input', {
               date: holiday.dateString,
               intervalEndDate: end,
               intervalStartDate: start,
-            }),
-          );
+            });
+            return isDateWithinGivenInterval({
+              date: holiday.dateString,
+              intervalEndDate: end,
+              intervalStartDate: start,
+            });
+          });
           if (hasHoliday) {
             fill = {
               fgColor: { argb: blackColor },
