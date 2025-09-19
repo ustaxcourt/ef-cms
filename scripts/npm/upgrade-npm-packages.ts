@@ -17,7 +17,6 @@ const caveats: string[] = [
   'babel-core',
   'jest',
   'pdfjs-dist',
-  'pg',
   'quill',
   'quill-delta-to-html',
   'jest-environment-jsdom',

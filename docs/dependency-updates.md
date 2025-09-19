@@ -157,9 +157,6 @@ On June 26 2025, newer versions of babel-core and jest core also started to caus
 ### @types/node
 The major version of this package should match our major version of node. At the moment that we are using node v22.16.0 so we should use a package that starts with 22.
 
-### pg
-We encountered failure in integration tests running pg version 8.16.3, so we had to revert back to the previous version 8.16.2 which was more stable.
-
 ### TypeScript
 We cannot update TypeScript version beyond v5.8.3 until ts-jest supports it
 
