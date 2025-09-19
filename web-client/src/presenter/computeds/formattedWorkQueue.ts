@@ -52,7 +52,6 @@ export const formattedWorkQueue = (
     );
   }
 
-  // First filter the work items according to queue/filter settings
   let filtered = filterWorkItems({
     assignmentFilterValue,
     authorizedUser,
@@ -61,9 +60,6 @@ export const formattedWorkQueue = (
     workQueueToDisplay,
   });
 
-  // If we're rendering the Section QC inbox, group consolidated member-case
-  // work items together under their lead case so a single row shows all
-  // member docket links/icons while using the lead case fields as primary.
   if (
     workQueueToDisplay.queue === 'section' &&
     workQueueToDisplay.box === 'inbox'
@@ -75,15 +71,12 @@ export const formattedWorkQueue = (
       grouped.get(key)!.push(wi);
     }
 
-    // Build a list where each group yields one representative work item
     filtered = Array.from(grouped.values()).map(group => {
       if (group.length === 1) return group[0];
 
-      // Prefer the lead case work item as representative when present
       const leadWorkItem = group.find(w => isLeadCase(w));
       const representative = leadWorkItem || group[0];
 
-      // Attach groupedCases metadata for rendering member links/icons
       const groupedCases = group.map(g => ({
         docketNumber: g.docketNumber,
         docketNumberWithSuffix: (g as any).docketNumberWithSuffix,

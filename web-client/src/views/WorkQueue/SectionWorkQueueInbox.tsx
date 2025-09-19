@@ -116,6 +116,34 @@ function SectionWorkQueueTableRow({
   showFiledByColumn: boolean;
   showSelectColumn: boolean;
 }) {
+  const getCombinedSortedCases = () => {
+    if (!item.groupedCases) return [] as any[];
+    const rest = (item.groupedCases as any[]).filter(
+      c => c.docketNumber !== item.docketNumber,
+    );
+    const combined = [
+      {
+        docketNumber: item.docketNumber,
+        docketNumberWithSuffix: (item as any).docketNumberWithSuffix,
+        inLeadCase: item.inLeadCase,
+      },
+      ...rest,
+    ];
+    const parseDn = (dn: string) => {
+      const [n, y] = (dn || '').split('-');
+      const ni = parseInt(n, 10);
+      return { n: isNaN(ni) ? Number.MAX_SAFE_INTEGER : ni, y: y || '' };
+    };
+    combined.sort((a: any, b: any) => {
+      if (a.inLeadCase && !b.inLeadCase) return -1;
+      if (!a.inLeadCase && b.inLeadCase) return 1;
+      const ap = parseDn(a.docketNumber);
+      const bp = parseDn(b.docketNumber);
+      if (ap.n !== bp.n) return ap.n - bp.n;
+      return ap.y.localeCompare(bp.y);
+    });
+    return combined;
+  };
   return (
     <tbody>
       <tr data-testid={`work-item-${item.docketNumber}`}>
@@ -147,35 +175,45 @@ function SectionWorkQueueTableRow({
           </td>
         )}
         <td className="consolidated-case-column">
-          <ConsolidatedCaseIcon
-            consolidatedIconTooltipText={item.consolidatedIconTooltipText}
-            inConsolidatedGroup={item.inConsolidatedGroup}
-            showLeadCaseIcon={item.inLeadCase}
-          />
+          {item.groupedCases ? (
+            <div className="consolidated-icons-stack" aria-hidden="true">
+              <ConsolidatedCaseIcon
+                consolidatedIconTooltipText={item.consolidatedIconTooltipText}
+                inConsolidatedGroup={item.inConsolidatedGroup}
+                showLeadCaseIcon={item.inLeadCase}
+              />
+              {item.groupedCases
+                .filter((c: any) => c.docketNumber !== item.docketNumber)
+                .map((c: any) => (
+                  <ConsolidatedCaseIcon
+                    key={`icon-${c.docketNumber}`}
+                    consolidatedIconTooltipText={
+                      c.inLeadCase ? 'Lead case' : 'Consolidated case'
+                    }
+                    inConsolidatedGroup={true}
+                    showLeadCaseIcon={c.inLeadCase}
+                  />
+                ))}
+            </div>
+          ) : (
+            <ConsolidatedCaseIcon
+              consolidatedIconTooltipText={item.consolidatedIconTooltipText}
+              inConsolidatedGroup={item.inConsolidatedGroup}
+              showLeadCaseIcon={item.inLeadCase}
+            />
+          )}
         </td>
 
         <td className="message-queue-row">
-          {/* If groupedCases exists, render the lead case fields but show member case links/icons inline */}
+          {/* If groupedCases exists, render a single combined list of docket links (lead + members) */}
           {item.groupedCases ? (
             <div className="grouped-cases-row">
-              <div className="lead-case-link">
-                <CaseLink formattedCase={item} />
-              </div>
               <div className="member-case-links">
-                {item.groupedCases
-                  .filter((c: any) => c.docketNumber !== item.docketNumber)
-                  .map((c: any) => (
-                    <span key={c.docketNumber} className="member-case-inline">
-                      <ConsolidatedCaseIcon
-                        consolidatedIconTooltipText={
-                          c.inLeadCase ? 'Lead case' : 'Consolidated case'
-                        }
-                        inConsolidatedGroup={true}
-                        showLeadCaseIcon={c.inLeadCase}
-                      />
-                      <CaseLink formattedCase={c} />
-                    </span>
-                  ))}
+                {getCombinedSortedCases().map((c: any) => (
+                  <div key={c.docketNumber} className="member-case-line">
+                    <CaseLink formattedCase={c} />
+                  </div>
+                ))}
               </div>
             </div>
           ) : (
