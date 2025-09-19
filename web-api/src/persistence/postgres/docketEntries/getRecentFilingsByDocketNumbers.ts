@@ -112,19 +112,7 @@ export const getRecentFilingsByDocketNumbers = async ({
 
   // Combine the data with case details
   return dbDocketEntries.map(d => ({
-    docketEntryId: d.docketEntryId,
-    docketNumber: d.docketNumber,
-    filingDate: d.filingDate.toISOString(),
-    documentTitle: d.documentTitle,
-    isFileAttached: d.isFileAttached,
-    eventCode: d.eventCode,
-    isStricken: d.isStricken,
-    isSealed: d.isSealed,
-    sealedTo: d.sealedTo,
-    servedAt: d.servedAt?.toISOString(),
-    isDraft: d.isDraft,
-    caseCaption: d.caption,
-    caseIsSealed: d.caseIsSealed,
+    ...d,
     caseDetails: caseDetailsMap.get(d.docketNumber),
   }));
 };
