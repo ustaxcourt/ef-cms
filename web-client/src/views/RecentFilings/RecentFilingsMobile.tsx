@@ -10,7 +10,7 @@ import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
-import { RecentFiling } from '@shared/business/entities/RecentFiling';
+import { RecentFiling } from '@shared/business/useCases/getRecentFilingsForUserInteractor';
 import { BigHeader } from '../BigHeader';
 import { RecentFilingsDocumentDisplay } from './RecentFilingsDocumentDisplay';
 

@@ -1,5 +1,5 @@
 import { sortRecentFilings } from './sortRecentFilings';
-import { RecentFiling } from '@shared/business/entities/RecentFiling';
+import { RecentFiling } from '@shared/business/useCases/getRecentFilingsForUserInteractor';
 
 const createFiling = (overrides: Partial<RecentFiling> = {}): RecentFiling => ({
   docketNumber: '101-20',

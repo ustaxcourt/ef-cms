@@ -7,8 +7,27 @@ import { getCasesForUserInteractor } from './getCasesForUserInteractor';
 import { calculateISODate, createEndOfDayISO } from '../utilities/DateHandler';
 import { userIsDirectlyAssociated } from '@shared/business/entities/cases/Case';
 
-import { RecentFiling } from '@shared/business/entities/RecentFiling';
 import { getCaseCaptionMeta } from '../utilities/getCaseCaptionMeta';
+
+export interface RecentFiling {
+  docketNumber: string;
+  filedDate: string;
+  document: string;
+  caseTitle: string;
+  docketEntryId: string;
+  isFileAttached?: boolean | null;
+  eventCode?: string;
+  isStricken?: boolean | null;
+  isSealed?: boolean | null;
+  sealedTo?: string | null;
+  servedAt?: string;
+  caseIsSealed?: boolean | null;
+  inConsolidatedGroup?: boolean;
+  isLeadCase?: boolean;
+  consolidatedIconTooltipText?: string;
+  isDraft?: boolean;
+  isRequestingUserAssociated?: boolean;
+}
 
 export const getRecentFilingsForUserInteractor = async (
   applicationContext: any,
