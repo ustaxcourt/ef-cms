@@ -13,6 +13,9 @@ export const getRecentFilingsForUserLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(event, async ({ applicationContext: _applicationContext }) => {
-    return await getRecentFilingsForUserInteractor(authorizedUser);
+  genericHandler(event, async ({ applicationContext }) => {
+    return await getRecentFilingsForUserInteractor(
+      applicationContext,
+      authorizedUser,
+    );
   });

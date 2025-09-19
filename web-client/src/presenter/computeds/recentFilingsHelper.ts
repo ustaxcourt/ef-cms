@@ -1,5 +1,5 @@
 import { Get } from 'cerebral';
-import { RecentFiling } from '@shared/business/entities/RecentFiling';
+import { RecentFiling } from '@shared/business/useCases/getRecentFilingsForUserInteractor';
 import { sortRecentFilings } from '@shared/business/utilities/sortRecentFilings';
 import { state } from '@web-client/presenter/app.cerebral';
 import {

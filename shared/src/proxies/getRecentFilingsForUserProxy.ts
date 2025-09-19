@@ -1,5 +1,5 @@
 import { get } from './requests';
-import { RecentFiling } from '@shared/business/entities/RecentFiling';
+import { RecentFiling } from '@shared/business/useCases/getRecentFilingsForUserInteractor';
 
 export const getRecentFilingsForUserInteractor = (
   applicationContext,

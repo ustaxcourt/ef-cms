@@ -5,14 +5,32 @@ import {
 } from '@shared/business/entities/authUser/AuthUser';
 import { getCasesForUserInteractor } from './getCasesForUserInteractor';
 import { calculateISODate, createEndOfDayISO } from '../utilities/DateHandler';
-import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
-import { getRecentFilingsByDocketNumbers } from '@web-api/persistence/postgres/docketEntries/getRecentFilingsByDocketNumbers';
 import { userIsDirectlyAssociated } from '@shared/business/entities/cases/Case';
 
-import { RecentFiling } from '@shared/business/entities/RecentFiling';
 import { getCaseCaptionMeta } from '../utilities/getCaseCaptionMeta';
 
+export interface RecentFiling {
+  docketNumber: string;
+  filedDate: string;
+  document: string;
+  caseTitle: string;
+  docketEntryId: string;
+  isFileAttached?: boolean | null;
+  eventCode?: string;
+  isStricken?: boolean | null;
+  isSealed?: boolean | null;
+  sealedTo?: string | null;
+  servedAt?: string;
+  caseIsSealed?: boolean | null;
+  inConsolidatedGroup?: boolean;
+  isLeadCase?: boolean;
+  consolidatedIconTooltipText?: string;
+  isDraft?: boolean;
+  isRequestingUserAssociated?: boolean;
+}
+
 export const getRecentFilingsForUserInteractor = async (
+  applicationContext: any,
   authorizedUser: UnknownAuthUser,
 ): Promise<RecentFiling[]> => {
   if (!isAuthUser(authorizedUser)) {
@@ -43,15 +61,18 @@ export const getRecentFilingsForUserInteractor = async (
   const sevenDaysAgo = calculateISODate({ howMuch: -7, units: 'days' });
   const endOfToday = createEndOfDayISO();
 
-  const dbDocketEntries = await getRecentFilingsByDocketNumbers({
-    docketNumbers,
-    startDate: sevenDaysAgo,
-    endDate: endOfToday,
-  });
+  const recentFilingsWithUserAssociation = await applicationContext
+    .getPersistenceGateway()
+    .getRecentFilingsByDocketNumbers({
+      docketNumbers,
+      startDate: sevenDaysAgo,
+      endDate: endOfToday,
+      includeCaseDetails: true,
+    });
 
-  const results = dbDocketEntries.map(d => ({
+  const results = recentFilingsWithUserAssociation.map(d => ({
     docketNumber: d.docketNumber,
-    filingDate: d.filingDate?.toISOString(),
+    filingDate: d.filingDate,
     documentTitle: d.documentTitle,
     docketEntryId: d.docketEntryId,
     isFileAttached: d.isFileAttached,
@@ -59,23 +80,12 @@ export const getRecentFilingsForUserInteractor = async (
     isStricken: d.isStricken,
     isSealed: d.isSealed,
     sealedTo: d.sealedTo,
-    servedAt: d.servedAt?.toISOString(),
+    servedAt: d.servedAt,
     isDraft: d.isDraft,
-    caseCaption: d.caption,
+    caseCaption: d.caseCaption,
     caseIsSealed: d.caseIsSealed,
+    caseDetails: d.caseDetails,
   }));
-
-  // Get case details to check user association for consolidated cases
-  const uniqueDocketNumbers = [...new Set(results.map(r => r.docketNumber))];
-  const caseDetails = await getCasesByDocketNumbers({
-    docketNumbers: uniqueDocketNumbers,
-    excludeFields: ['docketEntries', 'hearings', 'correspondence'],
-  });
-
-  const caseDetailsMap = new Map();
-  caseDetails.forEach(caseDetail => {
-    caseDetailsMap.set(caseDetail.docketNumber, caseDetail);
-  });
 
   const caseInfoMap = new Map();
   allUserCases.forEach(caseItem => {
@@ -123,10 +133,9 @@ export const getRecentFilingsForUserInteractor = async (
     const caseTitle = caseCaptionMeta?.caseTitle || 'Unknown Case';
 
     // Check if user is directly associated with this specific case
-    const caseDetail = caseDetailsMap.get(entry.docketNumber);
-    const isRequestingUserAssociated = caseDetail
+    const isRequestingUserAssociated = entry.caseDetails
       ? userIsDirectlyAssociated({
-          aCase: caseDetail,
+          aCase: entry.caseDetails,
           userId: authorizedUser.userId,
         })
       : true; // Default to true if case details not found (shouldn't happen)
