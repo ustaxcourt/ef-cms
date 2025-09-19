@@ -28,10 +28,6 @@ jobs:
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
         id: npm-clean-install
         run: npm ci
-      # - name: Install Puppeteer
-      #   if: steps.cache-dependencies.outputs.cache-hit == 'true'
-      #   id: install-puppeteer
-      #   run: npx puppeteer browsers install chrome
       - name: API
         run: npm run test:api
       - name: Save Cache Dependencies
@@ -41,4 +37,5 @@ jobs:
           path: |
             node_modules
             .cache/puppeteer
+            /home/runner/.cache/Cypress
           key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
