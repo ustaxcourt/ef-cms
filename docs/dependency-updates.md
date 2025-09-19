@@ -91,7 +91,7 @@ To publish a new ECR docker image:
 
   > Refer to [ci-cd.md](ci-cd.md#docker) for more info on this as needed
 
-### 3. Update Terraform AWS provider 
+### 3. Update Terraform AWS provider
 
 Check if there is an update to the Terraform AWS provider and update all of the following files to use the [latest version](https://registry.terraform.io/providers/hashicorp/aws/latest) of the provider.
 
@@ -103,7 +103,7 @@ regex search the entire project for `"~> \d+.\d+.\d+"` and make sure it's to the
 	> version = "~>~ <LATEST_VERSION>"
 
 
-  ### 4. Update Terraform OpenSearch provider 
+### 4. Update Terraform OpenSearch provider 
 
 Check if there is an update to the Terraform OpenSearch provider and update all of the following files to use the [latest version](https://registry.terraform.io/providers/opensearch-project/opensearch/latest) of the provider.
 
@@ -116,7 +116,7 @@ regex search the entire project for `"~> \d+.\d+.\d+"` and make sure it's to the
 
 ### 5. Update OpenSearch 
 
-Check to see if there is an updated verison of Opensearch available. [latest version](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/what-is.html#choosing-version)
+Check to see if there is an updated verison of Opensearch available and update to the [latest version](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/what-is.html#choosing-version).
 
 - Set the value of the `ES_ENGINE_VERSION` secret in the `[env]_deploy` secrets in Secrets Manager using `scripts/secrets/update-secret.ts`
 
@@ -195,4 +195,3 @@ There are a few scripts that depend on p-queue v6.6.2.  Upgrading this past vers
 ## Incrementing the Node Cache Key Version
 
 It's rare to need modify cache key. One reason you may want to do so is if a package fails to install properly, and CircleCI, unaware of the failed installation, stores the corrupted cache. In this case, we will need to increment the cache key version so that CircleCI is forced to reinstall the node dependencies and save them using the new key. To update the cache key, locate `vX-npm` and `vX-cypress` (where X represents the current cache key version) in the config.yml file, and then increment the identified version.
-
