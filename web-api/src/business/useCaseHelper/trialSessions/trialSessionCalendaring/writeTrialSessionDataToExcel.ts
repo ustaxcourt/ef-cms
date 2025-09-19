@@ -10,6 +10,7 @@ import {
   isValidISODate,
 } from '@shared/business/utilities/DateHandler';
 import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
+import { Holiday } from '@18f/us-federal-holidays';
 import ExcelJS from 'exceljs';
 import { getHolidaysInDateRange } from '@shared/business/utilities/getHolidaysInDateRange';
 

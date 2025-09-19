@@ -19,7 +19,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-       version = "~>6.12.0"
+      version = "~>6.12.0"
     }
   }
 }
@@ -106,6 +106,7 @@ module "rds" {
   max_capacity             = var.rds_max_capacity
   delete_protection        = true
   restoring_aws_account_id = var.restoring_aws_account_id
+  engine_version           = var.engine_version
 
   providers = {
     aws           = aws.us-east-1
