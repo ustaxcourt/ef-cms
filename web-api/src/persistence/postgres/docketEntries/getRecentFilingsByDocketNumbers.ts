@@ -56,7 +56,7 @@ export const getRecentFilingsByDocketNumbers = async ({
   }
 
   // Get recent filings from docket entries
-  const dbDocketEntries = await getDbReader(reader =>
+  const rawDbDocketEntries = await getDbReader(reader =>
     reader
       .selectFrom('dwDocketEntry as d')
       .innerJoin('dwCase as c', 'd.docketNumber', 'c.docketNumber')
@@ -86,6 +86,7 @@ export const getRecentFilingsByDocketNumbers = async ({
       .limit(MAX_RECENT_FILINGS)
       .execute(),
   );
+  const dbDocketEntries = rawDbDocketEntries.map(d => fromKyselyDocketEntry(d));
 
   // If case details are not needed, return raw data
   if (!includeCaseDetails) {
