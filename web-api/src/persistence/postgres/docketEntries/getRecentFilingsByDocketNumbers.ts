@@ -1,23 +1,24 @@
 import { getDbReader } from '@web-api/database';
 import { calculateDate } from '@shared/business/utilities/DateHandler';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { fromKyselyDocketEntry } from './mapper';
 
 const MAX_RECENT_FILINGS = 1000;
 
 export interface RecentFilingDbResult {
   docketEntryId: string;
   docketNumber: string;
-  filingDate: Date;
+  filingDate: string;
   documentTitle: string;
-  isFileAttached: boolean | null;
+  isFileAttached: boolean | undefined;
   eventCode: string;
-  isStricken: boolean | null;
-  isSealed: boolean | null;
-  sealedTo: string | null;
-  servedAt: Date | null;
-  isDraft: boolean | null;
+  isStricken: boolean | undefined;
+  isSealed: boolean | undefined;
+  sealedTo: string | undefined;
+  servedAt: string | undefined;
+  isDraft: boolean | undefined;
   caption: string;
-  caseIsSealed: boolean | null;
+  caseIsSealed: boolean | undefined;
 }
 
 export interface RecentFilingWithCaseDetails {
@@ -25,15 +26,15 @@ export interface RecentFilingWithCaseDetails {
   docketNumber: string;
   filingDate: string;
   documentTitle: string;
-  isFileAttached: boolean | null;
+  isFileAttached: boolean | undefined;
   eventCode: string;
-  isStricken: boolean | null;
-  isSealed: boolean | null;
-  sealedTo: string | null;
+  isStricken: boolean | undefined;
+  isSealed: boolean | undefined;
+  sealedTo: string | undefined;
   servedAt?: string;
-  isDraft: boolean | null;
+  isDraft: boolean | undefined;
   caseCaption: string;
-  caseIsSealed: boolean | null;
+  caseIsSealed: boolean | undefined;
   caseDetails?: Omit<
     RawCase,
     'consolidatedCases' | 'docketEntries' | 'hearings' | 'correspondence'
