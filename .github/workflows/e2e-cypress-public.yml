@@ -3,6 +3,10 @@ name: E2E Cypress Public
 on:
   pull_request:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: true
+
 jobs:
   e2e_cypress_public:
     runs-on: ubuntu-latest
