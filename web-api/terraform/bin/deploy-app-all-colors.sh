@@ -22,7 +22,7 @@ fi
 [ -z "${ES_INSTANCE_TYPE}" ] && echo "You must have ES_INSTANCE_TYPE set in your environment" && exit 1
 [ -z "${ES_VOLUME_SIZE}" ] && echo "You must have ES_VOLUME_SIZE set in your environment" && exit 1
 [ -z "${MIGRATE_FLAG}" ] && echo "You must have MIGRATE_FLAG set in your environment" && exit 1
-[ -z "${ENGINE_VERSION}" ] && echo "You must have ENGINE_VERSION set in your environment" && exit 1
+[ -z "${RDS_ENGINE_VERSION}" ] && echo "You must have RDS_ENGINE_VERSION set in your environment" && exit 1
 
 echo "Running terraform with the following environment configs:"
 echo "  - CIRCLE_BRANCH=${CIRCLE_BRANCH}"
@@ -36,7 +36,7 @@ echo "  - ES_VOLUME_SIZE=${ES_VOLUME_SIZE}"
 echo "  - MIGRATE_FLAG=${MIGRATE_FLAG}"
 echo "  - PROD_ENV_ACCOUNT_ID=${PROD_ENV_ACCOUNT_ID}"
 echo "  - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL}"
-echo "  - ENGINE_VERSION=${ENGINE_VERSION}"
+echo "  - RDS_ENGINE_VERSION=${RDS_ENGINE_VERSION}"
 
 ../../../../scripts/verify-terraform-version.sh
 
@@ -109,7 +109,7 @@ export TF_VAR_postgres_master_username="${POSTGRES_MASTER_USERNAME}"
 export TF_VAR_postgres_master_password="${POSTGRES_MASTER_PASSWORD}"
 export TF_VAR_restoring_aws_account_id=$PROD_ENV_ACCOUNT_ID
 export TF_VAR_rum_sample_rate=$RUM_SAMPLE_RATE
-export TF_VAR_engine_version=$ENGINE_VERSION
+export TF_VAR_rds_engine_version="$RDS_ENGINE_VERSION"
 
 if [[ -n "${RDS_MIN_CAPACITY}" ]]
 then
@@ -125,7 +125,6 @@ if [[ -n "${CW_VIEWER_PROTOCOL_POLICY}" ]]
 then
   export TF_VAR_viewer_protocol_policy=$CW_VIEWER_PROTOCOL_POLICY
 fi
-
 
 terraform init -upgrade -backend=true \
  -backend-config=bucket="$BUCKET" \

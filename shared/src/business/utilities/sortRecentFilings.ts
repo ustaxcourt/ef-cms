@@ -1,5 +1,5 @@
 import { Case } from '@shared/business/entities/cases/Case';
-import { RecentFiling } from '@shared/business/entities/RecentFiling';
+import { RecentFiling } from '@shared/business/useCases/getRecentFilingsForUserInteractor';
 
 type SortableField = keyof Pick<
   RecentFiling,

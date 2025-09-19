@@ -1,6 +1,7 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
+import { MAX_DOCUMENT_SEARCH_RESULTS } from '@shared/business/entities/EntityConstants';
 import { submitOpinionAdvancedSearchAction } from './submitOpinionAdvancedSearchAction';
 
 describe('submitOpinionAdvancedSearchAction', () => {
@@ -8,7 +9,7 @@ describe('submitOpinionAdvancedSearchAction', () => {
     applicationContext
       .getUseCases()
       .opinionAdvancedSearchInteractor.mockReturnValue({
-        results: Array(5000).fill({}),
+        results: Array(MAX_DOCUMENT_SEARCH_RESULTS).fill({}),
       });
     await runAction(submitOpinionAdvancedSearchAction, {
       modules: { presenter },

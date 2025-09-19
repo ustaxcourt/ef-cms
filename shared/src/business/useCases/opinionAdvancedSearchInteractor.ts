@@ -6,7 +6,7 @@ import {
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { DocumentSearch } from '@shared/business/entities/documents/DocumentSearch';
 import { InternalDocumentSearchResult } from '@shared/business/entities/documents/InternalDocumentSearchResult';
-import { MAX_SEARCH_RESULTS } from '@shared/business/entities/EntityConstants';
+import { MAX_DOCUMENT_SEARCH_RESULTS } from '@shared/business/entities/EntityConstants';
 import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
@@ -22,7 +22,7 @@ export const opinionAdvancedSearchInteractor = async (
     keyword,
     opinionTypes,
     startDate,
-    limit = 5000,
+    limit = MAX_DOCUMENT_SEARCH_RESULTS,
   }: {
     caseTitleOrPetitioner: string;
     dateRange: string;
@@ -55,7 +55,7 @@ export const opinionAdvancedSearchInteractor = async (
 
   const accessible: any[] = [];
   let searchAfter: any[] | undefined = undefined;
-  const maxCeiling = Math.min(MAX_SEARCH_RESULTS, limit);
+  const maxCeiling = Math.min(MAX_DOCUMENT_SEARCH_RESULTS, limit);
 
   while (accessible.length < limit) {
     const sizeNeeded = limit - accessible.length;
