@@ -440,11 +440,12 @@ const parseAndTransformValues = (
       | undefined = paramConfig.default;
     if (
       'position' in paramConfig &&
-      typeof paramConfig.position !== 'undefined'
+      typeof paramConfig.position !== 'undefined' &&
+      positionals[paramConfig.position] !== undefined
     ) {
       value = positionals[paramConfig.position];
     } else {
-      if (longName in values) {
+      if (longName in values && values[longName] !== undefined) {
         value = values[longName];
       }
     }
