@@ -1,19 +1,23 @@
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TCaseOrder } from '@shared/business/entities/trialSessions/TrialSession';
-import { get } from '../../dynamodbClientService';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { getTrialSessionById } from './getTrialSessionById';
+import { NotFoundError } from '@web-api/errors/errors';
+
+export type RawCaseAndCaseOrder = Omit<RawCase, 'consolidatedCases'> &
+  TCaseOrder;
 
 export const getCalendaredCasesForTrialSession = async ({
-  applicationContext,
   trialSessionId,
 }: {
-  applicationContext: ServerApplicationContext;
   trialSessionId: string;
-}): Promise<(Omit<RawCase, 'consolidatedCases'> & TCaseOrder)[]> => {
-  const trialSession = await getTrialSessionInfo(
-    trialSessionId,
-    applicationContext,
-  );
+}): Promise<RawCaseAndCaseOrder[]> => {
+  const trialSession = await getTrialSessionById({ trialSessionId });
+
+  if (!trialSession) {
+    throw new NotFoundError(
+      `Could not find trial session with id ${trialSessionId}`,
+    );
+  }
 
   const { caseOrder } = trialSession;
   const docketNumbers = caseOrder.map(co => co.docketNumber);
@@ -38,17 +42,3 @@ export const getCalendaredCasesForTrialSession = async ({
 
   return casesAugmented;
 };
-
-async function getTrialSessionInfo(
-  trialSessionId: string,
-  applicationContext: ServerApplicationContext,
-) {
-  const trialSession = await get({
-    Key: {
-      pk: `trial-session|${trialSessionId}`,
-      sk: `trial-session|${trialSessionId}`,
-    },
-    applicationContext,
-  });
-  return trialSession;
-}
