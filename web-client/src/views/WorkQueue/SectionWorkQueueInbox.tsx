@@ -155,7 +155,32 @@ function SectionWorkQueueTableRow({
         </td>
 
         <td className="message-queue-row">
-          <CaseLink formattedCase={item} />
+          {/* If groupedCases exists, render the lead case fields but show member case links/icons inline */}
+          {item.groupedCases ? (
+            <div className="grouped-cases-row">
+              <div className="lead-case-link">
+                <CaseLink formattedCase={item} />
+              </div>
+              <div className="member-case-links">
+                {item.groupedCases
+                  .filter((c: any) => c.docketNumber !== item.docketNumber)
+                  .map((c: any) => (
+                    <span key={c.docketNumber} className="member-case-inline">
+                      <ConsolidatedCaseIcon
+                        consolidatedIconTooltipText={
+                          c.inLeadCase ? 'Lead case' : 'Consolidated case'
+                        }
+                        inConsolidatedGroup={true}
+                        showLeadCaseIcon={c.inLeadCase}
+                      />
+                      <CaseLink formattedCase={c} />
+                    </span>
+                  ))}
+              </div>
+            </div>
+          ) : (
+            <CaseLink formattedCase={item} />
+          )}
         </td>
         <td className="message-queue-row">
           <span className="no-wrap">{item.received}</span>

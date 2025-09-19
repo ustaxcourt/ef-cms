@@ -52,13 +52,52 @@ export const formattedWorkQueue = (
     );
   }
 
-  let workQueue: FormattedWorkItemWithCaseInfo[] = filterWorkItems({
+  // First filter the work items according to queue/filter settings
+  let filtered = filterWorkItems({
     assignmentFilterValue,
     authorizedUser,
     section,
     workItems,
     workQueueToDisplay,
-  })
+  });
+
+  // If we're rendering the Section QC inbox, group consolidated member-case
+  // work items together under their lead case so a single row shows all
+  // member docket links/icons while using the lead case fields as primary.
+  if (
+    workQueueToDisplay.queue === 'section' &&
+    workQueueToDisplay.box === 'inbox'
+  ) {
+    const grouped = new Map<string, RawWorkItemWithCaseAndDocketEntryInfo[]>();
+    for (const wi of filtered) {
+      const key = wi.leadDocketNumber || wi.docketNumber;
+      if (!grouped.has(key)) grouped.set(key, []);
+      grouped.get(key)!.push(wi);
+    }
+
+    // Build a list where each group yields one representative work item
+    filtered = Array.from(grouped.values()).map(group => {
+      if (group.length === 1) return group[0];
+
+      // Prefer the lead case work item as representative when present
+      const leadWorkItem = group.find(w => isLeadCase(w));
+      const representative = leadWorkItem || group[0];
+
+      // Attach groupedCases metadata for rendering member links/icons
+      const groupedCases = group.map(g => ({
+        docketNumber: g.docketNumber,
+        docketNumberWithSuffix: (g as any).docketNumberWithSuffix,
+        inLeadCase: isLeadCase(g),
+      }));
+
+      return {
+        ...representative,
+        groupedCases,
+      } as RawWorkItemWithCaseAndDocketEntryInfo & { groupedCases?: any[] };
+    });
+  }
+
+  let workQueue: FormattedWorkItemWithCaseInfo[] = filtered
     .map(workItem =>
       formatWorkItem({
         isSelected: selectedWorkItemIds.includes(workItem.workItemId),
@@ -108,8 +147,8 @@ export const formattedWorkQueue = (
   const sortDirection =
     sortDirections[workQueueToDisplay.queue][workQueueToDisplay.box];
 
-  let highPriorityField = [];
-  let highPriorityDirection = [];
+  let highPriorityField: any[] = [];
+  let highPriorityDirection: any[] = [];
   if (workQueueToDisplay.box == 'inbox') {
     const caseStatusSortRank = {
       [STATUS_TYPES.submitted]: 1,
@@ -155,8 +194,8 @@ export const workQueueItemsAreEqual = (first, second) => {
  */
 export const formatDateIfToday = (
   date,
-  now = null,
-  yesterday = null,
+  now: any = null,
+  yesterday: any = null,
 ): string => {
   const then = formatDateString(date, 'MMDDYY');
   now = now || formatNow('MMDDYY');
@@ -506,4 +545,5 @@ export type FormattedWorkItemWithCaseInfo =
     showUnassignedIcon: boolean;
     showUnreadIndicators: boolean;
     showUnreadStatusIcon: boolean;
+    groupedCases?: any[];
   };
