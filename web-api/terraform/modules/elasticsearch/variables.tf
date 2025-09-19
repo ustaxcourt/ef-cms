@@ -21,3 +21,7 @@ variable "es_volume_size" {
 variable "alert_sns_topic_arn" {
   type = string
 }
+
+variable "es_engine_version" {
+  type = string
+}

@@ -36,7 +36,7 @@ CONFIG
 
 resource "aws_opensearch_domain" "efcms-search" {
   domain_name           = var.domain_name
-  engine_version        = "OpenSearch_2.11"
+  engine_version        = var.es_engine_version
 
   depends_on = [
     aws_cloudwatch_log_resource_policy.allow_elasticsearch_to_write_logs

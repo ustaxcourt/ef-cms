@@ -37,6 +37,7 @@ module "ef-cms_apis" {
   dns_domain                      = var.dns_domain
   email_dmarc_policy              = var.email_dmarc_policy
   environment                     = var.environment
+  es_engine_version               = var.es_engine_version
   es_instance_count               = var.es_instance_count
   es_instance_type                = var.es_instance_type
   es_volume_size                  = var.es_volume_size
