@@ -3,10 +3,13 @@ import { Practitioner, RawPractitioner } from '../entities/Practitioner';
 import { getUniqueId } from '@shared/sharedAppContext';
 import { ACCOUNT_STATUS } from '@shared/business/entities/EntityConstants';
 
+type PractitionerInput = Omit<RawPractitioner, 'barNumber'> &
+  Partial<Pick<RawPractitioner, 'barNumber'>>;
+
 export const createPractitionerUser = async ({
   user,
 }: {
-  user: RawPractitioner;
+  user: PractitionerInput;
 }): Promise<RawPractitioner> => {
   const barNumber =
     user.barNumber ||

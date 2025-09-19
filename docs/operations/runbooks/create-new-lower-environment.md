@@ -314,10 +314,6 @@ This runbook describes the process of creating a new DAWSON lower environment in
       ```bash
       scripts/postgres/featureFlags/setup-e-consent-fields-enabled-feature-flag.ts
       ```
-   1. `maintenance-mode`:
-      ```bash
-      scripts/postgres/set-maintenance-mode.ts
-      ```
    1. `section-outbox-number-of-days`:
       ```bash
       scripts/postgres/featureFlags/setup-section-outbox-retrieval-days.ts
@@ -353,6 +349,10 @@ This runbook describes the process of creating a new DAWSON lower environment in
 1. Become a `dawson_developer`:
    ```bash
    . scripts/env/set-env.zsh "ustc-${ENV}"
+   ```
+1. Create the USTC admin user:
+   ```bash
+   scripts/user/setup-ustc-admin-user.ts
    ```
 1. Merge `origin/staging` into the branch that corresponds to this lower environment:
    ```bash
