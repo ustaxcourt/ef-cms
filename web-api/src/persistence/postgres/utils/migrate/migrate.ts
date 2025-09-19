@@ -1,16 +1,37 @@
 import * as path from 'path';
 import { FileMigrationProvider, Migrator } from 'kysely';
 import { promises as fs } from 'fs';
-import { getDbWriter } from '../../../../database';
+import { getDbWriter } from '@web-api/database';
 
-async function migrateToLatest() {
+const migrationsDirectory = path.join(__dirname, 'migrations');
+const deprecatedMigrationsDirectory = path.join(
+  __dirname,
+  'migrations',
+  'deprecated',
+);
+
+async function pruneDeprecatedMigrations(db: any) {
+  const files = await fs.readdir(deprecatedMigrationsDirectory);
+
+  const names = files.map(f => path.basename(f, '.ts'));
+
+  if (names.length === 0) return;
+
+  await db.deleteFrom('kysely_migration').where('name', 'in', names).execute();
+
+  console.log(`Pruned ${names.length} deprecated migration record(s):`, names);
+}
+
+async function migrateToLatest(migrationType = 'expand') {
   await getDbWriter({
     cb: async writer => {
+      await pruneDeprecatedMigrations(writer);
+
       const migrator = new Migrator({
         db: writer,
         provider: new FileMigrationProvider({
           fs,
-          migrationFolder: path.join(__dirname, 'migrations'),
+          migrationFolder: migrationsDirectory,
           path,
         }),
         allowUnorderedMigrations: true,
@@ -18,11 +39,13 @@ async function migrateToLatest() {
 
       const migrations = await migrator.getMigrations();
       for (const migration of migrations) {
-        if (
-          !migration.name.includes(`.expand`) &&
-          !migration.name.includes(`.contract`) &&
-          migration.executedAt === undefined
-        ) {
+        const isContractMigration = migration.name.includes('.contract');
+        const shouldRunMigration =
+          migrationType === 'contract'
+            ? isContractMigration
+            : !isContractMigration;
+
+        if (shouldRunMigration && migration.executedAt === undefined) {
           const { error, results } = await migrator.migrateTo(migration.name);
           results?.forEach(it => {
             if (it.status === 'Success') {
@@ -51,9 +74,11 @@ async function migrateToLatest() {
   });
 }
 
-migrateToLatest()
+migrateToLatest(process.argv[2])
   .then(() => {
-    console.log('Postgres migration completed Successfully!');
+    console.log(
+      `Postgres ${process.argv[2] && process.argv[2] + ' '}migration completed successfully!`,
+    );
     process.exit(0);
   })
   .catch(err => {

@@ -62,11 +62,7 @@ else
 fi
 
 npm run migration:postgres
-
-if [[ $RUN_EXPAND_CONTRACT = true ]]; then
-  npm run migration:postgres:expand
-  npm run migration:postgres:contract
-fi
+npm run migration:postgres:contract
 
 npm run seed:postgres
 
