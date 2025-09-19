@@ -70,23 +70,6 @@ export const getRecentFilingsForUserInteractor = async (
       includeCaseDetails: true,
     });
 
-  const results = recentFilingsWithUserAssociation.map(d => ({
-    docketNumber: d.docketNumber,
-    filingDate: d.filingDate,
-    documentTitle: d.documentTitle,
-    docketEntryId: d.docketEntryId,
-    isFileAttached: d.isFileAttached,
-    eventCode: d.eventCode,
-    isStricken: d.isStricken,
-    isSealed: d.isSealed,
-    sealedTo: d.sealedTo,
-    servedAt: d.servedAt,
-    isDraft: d.isDraft,
-    caseCaption: d.caseCaption,
-    caseIsSealed: d.caseIsSealed,
-    caseDetails: d.caseDetails,
-  }));
-
   const caseInfoMap = new Map();
   allUserCases.forEach(caseItem => {
     const hasConsolidatedCases = (caseItem.consolidatedCases?.length || 0) > 0;
@@ -120,7 +103,7 @@ export const getRecentFilingsForUserInteractor = async (
     }
   });
 
-  return results.map(entry => {
+  return recentFilingsWithUserAssociation.map(entry => {
     const caseInfo = caseInfoMap.get(entry.docketNumber) || {
       inConsolidatedGroup: false,
       isLeadCase: true,
@@ -128,7 +111,7 @@ export const getRecentFilingsForUserInteractor = async (
     };
     const documentTitle = entry.documentTitle || 'Document';
     const caseCaptionMeta = getCaseCaptionMeta({
-      caseCaption: entry.caseCaption,
+      caseCaption: entry.caption,
     });
     const caseTitle = caseCaptionMeta?.caseTitle || 'Unknown Case';
 
