@@ -254,6 +254,24 @@ export const createStartOfDayISO = (params?: {
   return dateObject.startOf('day').setZone('utc').toISO();
 };
 
+// expects a date string like 2025-09-18
+export const createStartOfDayISOUtc = (dateString: string): string => {
+  return DateTime.fromFormat(dateString, FORMATS.YYYYMMDD, {
+    zone: 'utc',
+  })
+    .startOf('day')
+    .toISO()!;
+};
+
+// expects a date string like 2025-09-18
+export const createEndOfDayISOUtc = (dateString: string): string => {
+  return DateTime.fromFormat(dateString, FORMATS.YYYYMMDD, {
+    zone: 'utc',
+  })
+    .endOf('day')
+    .toISO()!;
+};
+
 /**
  * @param {object} options the date options containing year, month, day
  * @returns {string} a formatted ISO date string
@@ -602,7 +620,6 @@ export const getBusinessDateInFuture = ({
 };
 
 type IsoDateString = string;
-// Dates are between-exclusive
 export const isDateWithinGivenInterval = ({
   date = createISODateString(),
   intervalEndDate,
@@ -715,7 +732,7 @@ export const getWeeksInRange = ({
   // Loop through each week, adding each Monday to the array
   while (start <= end) {
     const isoStart = start.toISODate();
-    const isoEnd = start.plus({ days: 5 }).toISODate();
+    const isoEnd = start.plus({ days: 4 }).toISODate();
     if (isoStart !== null && isoEnd !== null) {
       weeks.push({ start: isoStart, end: isoEnd });
     }

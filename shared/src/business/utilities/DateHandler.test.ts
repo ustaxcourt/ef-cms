@@ -1028,11 +1028,11 @@ describe('DateHandler', () => {
       const weeks = getWeeksInRange({ startDate: start, endDate: end });
 
       expect(weeks).toEqual([
-        { start: '2023-01-02', end: '2023-01-07' },
-        { start: '2023-01-09', end: '2023-01-14' },
-        { start: '2023-01-16', end: '2023-01-21' },
-        { start: '2023-01-23', end: '2023-01-28' },
-        { start: '2023-01-30', end: '2023-02-04' },
+        { start: '2023-01-02', end: '2023-01-06' },
+        { start: '2023-01-09', end: '2023-01-13' },
+        { start: '2023-01-16', end: '2023-01-20' },
+        { start: '2023-01-23', end: '2023-01-27' },
+        { start: '2023-01-30', end: '2023-02-03' },
       ]);
     });
 
