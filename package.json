@@ -298,7 +298,7 @@
     "autoprefixer": "10.4.21",
     "aws-sdk-client-mock": "4.1.0",
     "axe-core": "4.10.3",
-    "babel-jest": "29.7.0",
+    "babel-jest": "30.0.0",
     "babel-plugin-cerebral": "1.0.2",
     "cognito-local": "5.1.0",
     "crypto-browserify": "3.12.1",
@@ -355,7 +355,7 @@
     "ts-node": "10.9.2",
     "tsconfig-paths": "4.2.0",
     "p-queue": "6.6.2",
-    "typescript": "5.9.2",
+    "typescript": "5.8.3",
     "typescript-eslint": "8.44.0"
   }
 }
