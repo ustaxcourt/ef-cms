@@ -73,16 +73,16 @@ export const EditDocketEntryMeta = connect(
                 formattedCaseDetail.consolidatedCases.length > 1 && (
                   <Hint fullWidth>
                     <p
-                      className="text-bold margin-top-0"
+                      className="text-bold margin-top-0 margin-bottom-0"
                       style={{ fontSize: '21px' }}
                     >
                       Edits to Document Info will also be edited for:
                     </p>
-                    <ul className="usa-list">
+                    <ul className="usa-list padding-top-0 padding-bottom-0 margin-top-1 margin-bottom-1">
                       {formattedCaseDetail.consolidatedCases
                         .filter(c => c.docketNumber !== caseDetail.docketNumber)
                         .map(c => (
-                          <li key={c.docketNumber}>
+                          <li key={c.docketNumber} className="margin-bottom-0">
                             {c.docketNumber}{' '}
                             {c.caseTitle ||
                               c.caseCaption ||
@@ -91,7 +91,7 @@ export const EditDocketEntryMeta = connect(
                           </li>
                         ))}
                     </ul>
-                    <p>
+                    <p className="margin-bottom-0 margin-top-0">
                       Service and Action edits will only apply to this case.
                     </p>
                   </Hint>

@@ -5,6 +5,7 @@ import { DocumentDisplayIframe } from './DocumentDisplayIframe';
 import { ErrorNotification } from './ErrorNotification';
 import { FormCancelModalDialog } from './FormCancelModalDialog';
 import { PrimaryDocumentForm } from './EditDocketEntry/PrimaryDocumentForm';
+import { Hint } from '../ustc-ui/Hint/Hint';
 import { SuccessNotification } from './SuccessNotification';
 import { WorkItemAlreadyCompletedModal } from './DocketEntryQc/WorkItemAlreadyCompletedModal';
 import { connect } from '@web-client/presenter/shared.cerebral';
@@ -16,6 +17,7 @@ import { InfoNotificationComponent } from './InfoNotification';
 export const DocketEntryQc = connect(
   {
     caseDetail: state.caseDetail,
+    formattedCaseDetail: state.formattedCaseDetail,
     closeModalAndNavigateBackSequence:
       sequences.closeModalAndNavigateBackSequence,
     completeDocketEntryQCAndSendMessageSequence:
@@ -39,11 +41,18 @@ export const DocketEntryQc = connect(
     formCancelToggleCancelSequence,
     openCompleteAndSendMessageModalSequence,
     showModal,
+    formattedCaseDetail,
   }) {
     const isMemberCase = Boolean(
       caseDetail?.leadDocketNumber &&
         caseDetail?.leadDocketNumber !== caseDetail?.docketNumber,
     );
+
+    const isLeadCase = Boolean(
+      caseDetail?.leadDocketNumber &&
+        caseDetail?.leadDocketNumber === caseDetail?.docketNumber,
+    );
+
     return (
       <>
         <CaseDetailHeader />
@@ -89,8 +98,51 @@ export const DocketEntryQc = connect(
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
               <div className="grid-col-5">
-                <PrimaryDocumentForm />
+                {isLeadCase &&
+                  formattedCaseDetail?.consolidatedCases &&
+                  formattedCaseDetail.consolidatedCases.length > 1 && (
+                    <Hint fullWidth>
+                      <p
+                        className="text-bold margin-top-0 margin-bottom-0"
+                        style={{ fontSize: '21px' }}
+                      >
+                        This document will also be QC&apos;d for:
+                      </p>
+                      <ul className="usa-list padding-top-0 padding-bottom-0 margin-top-1 margin-bottom-1">
+                        {formattedCaseDetail.consolidatedCases
+                          .filter(
+                            c => c.docketNumber !== caseDetail.docketNumber,
+                          )
+                          .map(c => (
+                            <li
+                              key={c.docketNumber}
+                              className="margin-bottom-0"
+                            >
+                              {c.docketNumber}{' '}
+                              {c.caseTitle ||
+                                c.caseCaption ||
+                                docketEntryQcHelper?.formattedDocketEntry
+                                  ?.documentTitle ||
+                                docketEntryQcHelper?.formattedDocketEntry
+                                  ?.eventCode}
+                            </li>
+                          ))}
+                      </ul>
+                      <p className="margin-bottom-0 margin-top-0">
+                        If a Notice of Docket Change is generated, it will be
+                        filed in all cases in the group.
+                      </p>
+                    </Hint>
+                  )}
+                {isMemberCase && (
+                  <Hint fullWidth>
+                    Edits to Document Info can only be done from the{' '}
+                    <strong>lead case</strong> in a consolidated group. This is
+                    a member case.
+                  </Hint>
+                )}
 
+                <PrimaryDocumentForm />
                 <div className="margin-top-5 button-container">
                   <Button
                     disableOnClick
