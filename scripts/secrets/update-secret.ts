@@ -39,6 +39,18 @@ const { env, key, region, value } = parseArgsAndEnvVars(scriptConfig) as {
   value: string;
 };
 
+const alphabetizeObjectProps = (obj: Record<string, any>) => {
+  return Object.keys(obj)
+    .sort()
+    .reduce(
+      (acc, key) => {
+        acc[key] = obj[key];
+        return acc;
+      },
+      {} as Record<string, any>,
+    );
+};
+
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const secretsClient = new SecretsManagerClient({ region });
@@ -48,14 +60,14 @@ const { env, key, region, value } = parseArgsAndEnvVars(scriptConfig) as {
   if (!SecretString) {
     throw new Error(`Secret ${SecretId} not found`);
   }
-  const secrets = JSON.parse(SecretString);
   const trimmedKey = key.trim().replace(' ', '_').toUpperCase();
+  const secrets = {
+    ...JSON.parse(SecretString),
+    [trimmedKey]: value,
+  };
   const putSecretValueCommand = new PutSecretValueCommand({
     SecretId,
-    SecretString: JSON.stringify({
-      ...secrets,
-      [trimmedKey]: value,
-    }),
+    SecretString: JSON.stringify(alphabetizeObjectProps(secrets)),
   });
   await secretsClient.send(putSecretValueCommand);
   console.log(`Updated secret ${SecretId} with "${key}": "${value}"`);
