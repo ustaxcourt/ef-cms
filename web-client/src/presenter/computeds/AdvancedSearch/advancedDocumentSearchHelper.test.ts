@@ -50,7 +50,7 @@ describe('advancedDocumentSearchHelper', () => {
         return {
           ...applicationContext.getConstants(),
           CASE_SEARCH_PAGE_SIZE: pageSizeOverride,
-          MAX_SEARCH_RESULTS: manyResultsOverride,
+          MAX_DOCUMENT_SEARCH_RESULTS: manyResultsOverride,
         };
       },
     },

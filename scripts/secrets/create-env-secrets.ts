@@ -108,6 +108,11 @@ const scriptConfig: ScriptConfig = {
       required: true,
       type: 'string',
     },
+    rdsEngineVersion: {
+      default: '17.5',
+      long: 'rds-engine-version',
+      type: 'string',
+    },
     rdsMaxCapacity: {
       default: '1',
       long: 'rds-max-capacity',
@@ -161,6 +166,7 @@ const {
   postgresOriginalUsername,
   prodAccountId,
   prodDocumentsBucket,
+  rdsEngineVersion,
   rdsMaxCapacity,
   rdsMinCapacity,
   region,
@@ -185,6 +191,7 @@ const {
   postgresOriginalUsername: string;
   prodAccountId: string;
   prodDocumentsBucket: string;
+  rdsEngineVersion: string;
   rdsMaxCapacity: string;
   rdsMinCapacity: string;
   region: string;
@@ -236,6 +243,7 @@ if (env === 'prod') {
     POSTGRES_USER: `${env}_dawson`,
     PROD_DOCUMENTS_BUCKET_NAME: prodDocumentsBucket,
     PROD_ENV_ACCOUNT_ID: prodAccountId,
+    RDS_ENGINE_VERSION: rdsEngineVersion,
     RDS_MAX_CAPACITY: rdsMaxCapacity,
     RDS_MIN_CAPACITY: rdsMinCapacity,
     RUM_SAMPLE_RATE: rumSampleRate,

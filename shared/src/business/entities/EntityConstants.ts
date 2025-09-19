@@ -1778,7 +1778,7 @@ export const PENALTY_TYPES = {
 export const MAX_ELASTICSEARCH_PAGINATION = 10000;
 export const MAX_SEARCH_CLIENT_RESULTS = 200;
 export const MAX_CASE_SEARCH_RESULTS = 100;
-export const MAX_SEARCH_RESULTS = 5000;
+export const MAX_DOCUMENT_SEARCH_RESULTS = 5000;
 export const ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE = 100;
 
 export const JUDGE_TITLES = [
@@ -2074,8 +2074,6 @@ export const TERM_GENERATOR_DEFAULT_VALUES = {
 
 export const MOBILE_SCREEN_BREAKPOINT = 640;
 
-export const PRO_SE_CHECKLIST = 'pro-se-checklist';
-
 export const ALLOWED_EVENT_CODES = [
   'P',
   'ATP',
@@ -2091,3 +2089,4 @@ export const ALLOWED_EVENT_CODES = [
   'NCTL',
   'NODC',
 ];
+export const PRO_SE_CHECKLIST = 'pro-se-checklist';

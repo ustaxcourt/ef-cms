@@ -107,7 +107,7 @@ module "rds" {
   max_capacity             = var.rds_max_capacity
   delete_protection        = true
   restoring_aws_account_id = var.restoring_aws_account_id
-  engine_version           = var.engine_version
+  engine_version           = var.rds_engine_version
 
   providers = {
     aws           = aws.us-east-1

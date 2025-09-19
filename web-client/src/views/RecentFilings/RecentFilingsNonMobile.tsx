@@ -9,7 +9,7 @@ import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
 import { SortableHeader } from '@web-client/ustc-ui/Table/SortableHeader';
 import React from 'react';
-import { RecentFiling } from '@shared/business/entities/RecentFiling';
+import { RecentFiling } from '@shared/business/useCases/getRecentFilingsForUserInteractor';
 import { DOCKET_ENTRY_SEALED_TO_TYPES } from '@shared/business/entities/EntityConstants';
 import { BigHeader } from '../BigHeader';
 import { RecentFilingsDocumentDisplay } from './RecentFilingsDocumentDisplay';
