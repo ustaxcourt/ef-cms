@@ -20,21 +20,25 @@ jobs:
         id: cache-dependencies
         uses: actions/cache/restore@v4
         with:
-          path: node_modules
+          path: |
+            node_modules
+            .cache/puppeteer
           key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install Node Dependencies - Cache Miss Install
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
         id: npm-clean-install
         run: npm ci
-      - name: Install Puppeteer
-        if: steps.cache-dependencies.outputs.cache-hit == 'true'
-        id: install-puppeteer
-        run: npx puppeteer browsers install chrome
+      # - name: Install Puppeteer
+      #   if: steps.cache-dependencies.outputs.cache-hit == 'true'
+      #   id: install-puppeteer
+      #   run: npx puppeteer browsers install chrome
       - name: API
         run: npm run test:api
       - name: Save Cache Dependencies
         if: steps.npm-clean-install.outcome == 'success'
         uses: actions/cache/save@v4
         with:
-          path: node_modules
+          path: |
+            node_modules
+            .cache/puppeteer
           key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}

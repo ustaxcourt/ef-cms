@@ -52,7 +52,9 @@ jobs:
         id: cache-dependencies
         uses: actions/cache/restore@v4
         with:
-          path: node_modules
+          path: |
+            node_modules
+            .cache/puppeteer
           key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Restore Cache Cypress binary
         if: steps.cache-dependencies.outputs.cache-hit == 'true'
@@ -70,10 +72,10 @@ jobs:
         if: steps.cache-dependencies.outputs.cache-hit == 'true' && steps.cache-cypress.outputs.cache-hit != 'true'
         id: install-cypress-binary
         run: npx cypress install
-      - name: Install Puppeteer
-        if: steps.cache-dependencies.outputs.cache-hit == 'true'
-        id: install-puppeteer
-        run: npx puppeteer browsers install chrome
+      # - name: Install Puppeteer
+      #   if: steps.cache-dependencies.outputs.cache-hit == 'true'
+      #   id: install-puppeteer
+      #   run: npx puppeteer browsers install chrome
 
       - name: Setup Postgres
         run: |
@@ -98,7 +100,9 @@ jobs:
         if: steps.npm-clean-install.outcome == 'success'
         uses: actions/cache/save@v4
         with:
-          path: node_modules
+          path: |
+            node_modules
+            .cache/puppeteer
           key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Save Cache Cypress binary
         if: steps.npm-clean-install.outcome == 'success' || steps.install-cypress-binary.outcome == 'success'
