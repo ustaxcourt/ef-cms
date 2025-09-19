@@ -8,10 +8,6 @@ export const sendMaintenanceNotificationsInteractor = async (
     .getPersistenceGateway()
     .getAllWebSocketConnections();
 
-  await applicationContext
-    .getPersistenceGateway()
-    .updateMaintenanceMode(maintenanceMode);
-
   const maintenanceModeMessage = maintenanceMode
     ? 'maintenance_mode_engaged'
     : 'maintenance_mode_disengaged';

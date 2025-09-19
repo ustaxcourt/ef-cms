@@ -10,8 +10,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ci_node_total: [6]
-        ci_node_index: [0, 1, 2, 3, 4, 5]
+        ci_node_total: [9]
+        ci_node_index: [0, 1, 2, 3, 4, 5, 6, 7, 8]
     env:
       CI: true
       CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
@@ -47,8 +47,28 @@ jobs:
         uses: runforesight/workflow-telemetry-action@v2
         with:
           comment_on_pr: false
-      - name: Install Node Dependencies
+      - name: Cache Puppeteer Binary
+        id: cache-puppeteer
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/puppeteer
+          key: ${{ runner.os }}-puppeteer-${{ hashFiles('**/package-lock.json') }}
+      - name: Restore Cache Dependencies
+        id: cache-dependencies
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-modules-
+      - name: Install Node Dependencies - Cache Miss Install
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
         run: npm ci
+      - name: Install Cypress Binary
+        run: npx cypress install
+      - name: Install Puppeteer
+        if: steps.cache-puppeteer.outputs.cache-hit != 'true'
+        run: npx puppeteer browsers install chrome
       - name: Setup Postgres
         run: |
           npm run migration:postgres
