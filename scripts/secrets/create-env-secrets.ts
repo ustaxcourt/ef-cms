@@ -38,7 +38,7 @@ const scriptConfig: ScriptConfig = {
     },
     esEngineVersion: {
       default: 'OpenSearch_2.19',
-      long: 'es-engine-version',
+      long: 'opensearch-engine-version',
       type: 'string',
     },
     emailDmarcPolicy: {

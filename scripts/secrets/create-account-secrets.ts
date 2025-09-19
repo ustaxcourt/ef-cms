@@ -35,7 +35,7 @@ const scriptConfig: ScriptConfig = {
     },
     esLogsEngineVersion: {
       default: 'OpenSearch_2.19',
-      long: 'es-logs-engine-version',
+      long: 'opensearch-logs-engine-version',
       type: 'string',
     },
     externalTrustedRoleArn: {
