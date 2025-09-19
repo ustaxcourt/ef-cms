@@ -176,9 +176,9 @@ const completeDocketEntryQC = async (
 
   const isMultiDocketed = (docketEntriesAcrossCases || []).length > 1;
 
-  // If this entry is multidocketed, only the lead case may complete QC
   if (
     isMultiDocketed &&
+    caseEntity.leadDocketNumber &&
     caseEntity.leadDocketNumber !== caseEntity.docketNumber
   ) {
     throw new InvalidRequest(

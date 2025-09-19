@@ -8,7 +8,7 @@ import {
   AuthUser,
   UnknownAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
-import { capitalize, cloneDeep, orderBy } from 'lodash';
+import { capitalize, cloneDeep, orderBy, uniqBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 import {
   CASE_STATUS_TYPES,
@@ -64,30 +64,49 @@ export const formattedWorkQueue = (
     workQueueToDisplay.queue === 'section' &&
     workQueueToDisplay.box === 'inbox'
   ) {
-    const grouped = new Map<string, RawWorkItemWithCaseAndDocketEntryInfo[]>();
+    const consolidated: RawWorkItemWithCaseAndDocketEntryInfo[] = [];
+    const solo: RawWorkItemWithCaseAndDocketEntryInfo[] = [];
     for (const wi of filtered) {
-      const key = wi.leadDocketNumber || wi.docketNumber;
-      if (!grouped.has(key)) grouped.set(key, []);
-      grouped.get(key)!.push(wi);
+      if (wi.leadDocketNumber) {
+        consolidated.push(wi);
+      } else {
+        solo.push(wi);
+      }
     }
 
-    filtered = Array.from(grouped.values()).map(group => {
-      if (group.length === 1) return group[0];
+    // Group consolidated work items by lead docket number
+    const byLead = new Map<string, RawWorkItemWithCaseAndDocketEntryInfo[]>();
+    for (const wi of consolidated) {
+      const key = wi.leadDocketNumber!;
+      if (!byLead.has(key)) byLead.set(key, []);
+      byLead.get(key)!.push(wi);
+    }
 
-      const leadWorkItem = group.find(w => isLeadCase(w));
-      const representative = leadWorkItem || group[0];
+    const consolidatedResult: Array<
+      RawWorkItemWithCaseAndDocketEntryInfo & { groupedCases?: any[] }
+    > = [];
 
-      const groupedCases = group.map(g => ({
+    for (const group of byLead.values()) {
+      const leadItems = group.filter(w => isLeadCase(w));
+
+      const groupedCases = uniqBy(group, g => g.docketNumber).map(g => ({
         docketNumber: g.docketNumber,
         docketNumberWithSuffix: (g as any).docketNumberWithSuffix,
         inLeadCase: isLeadCase(g),
       }));
 
-      return {
-        ...representative,
-        groupedCases,
-      } as RawWorkItemWithCaseAndDocketEntryInfo & { groupedCases?: any[] };
-    });
+      if (leadItems.length > 0) {
+        for (const li of leadItems) {
+          consolidatedResult.push({ ...li, groupedCases });
+        }
+      } else {
+        for (const member of group) {
+          consolidatedResult.push({ ...member, groupedCases });
+        }
+      }
+    }
+
+    filtered = [...solo, ...consolidatedResult];
   }
 
   let workQueue: FormattedWorkItemWithCaseInfo[] = filtered

@@ -205,7 +205,6 @@ function SectionWorkQueueTableRow({
         </td>
 
         <td className="message-queue-row">
-          {/* If groupedCases exists, render a single combined list of docket links (lead + members) */}
           {item.groupedCases ? (
             <div className="grouped-cases-row">
               <div className="member-case-links">

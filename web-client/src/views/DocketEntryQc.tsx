@@ -15,6 +15,7 @@ import { InfoNotificationComponent } from './InfoNotification';
 
 export const DocketEntryQc = connect(
   {
+    caseDetail: state.caseDetail,
     closeModalAndNavigateBackSequence:
       sequences.closeModalAndNavigateBackSequence,
     completeDocketEntryQCAndSendMessageSequence:
@@ -29,6 +30,7 @@ export const DocketEntryQc = connect(
     showModal: state.modal.showModal,
   },
   function DocketEntryQc({
+    caseDetail,
     closeModalAndNavigateBackSequence,
     completeDocketEntryQCAndSendMessageSequence,
     completeDocketEntryQCSequence,
@@ -38,6 +40,10 @@ export const DocketEntryQc = connect(
     openCompleteAndSendMessageModalSequence,
     showModal,
   }) {
+    const isMemberCase = Boolean(
+      caseDetail?.leadDocketNumber &&
+        caseDetail?.leadDocketNumber !== caseDetail?.docketNumber,
+    );
     return (
       <>
         <CaseDetailHeader />
@@ -90,6 +96,7 @@ export const DocketEntryQc = connect(
                     disableOnClick
                     id="save-and-finish"
                     data-testid="save-and-finish-document-qc"
+                    disabled={isMemberCase}
                     type="submit"
                     onClick={async () => {
                       await completeDocketEntryQCSequence();
@@ -101,6 +108,7 @@ export const DocketEntryQc = connect(
                     disableOnClick
                     secondary
                     id="save-and-add-supporting"
+                    disabled={isMemberCase}
                     onClick={async () => {
                       await openCompleteAndSendMessageModalSequence();
                     }}

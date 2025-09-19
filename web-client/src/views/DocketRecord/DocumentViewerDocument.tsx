@@ -53,6 +53,10 @@ export const DocumentViewerDocument = connect(
     showModal,
     viewerDocumentToDisplay,
   }) {
+    const isMemberCase = Boolean(
+      caseDetail?.leadDocketNumber &&
+        caseDetail?.leadDocketNumber !== caseDetail?.docketNumber,
+    );
     return (
       <div
         className={classNames(
@@ -158,7 +162,7 @@ export const DocumentViewerDocument = connect(
                 </Button>
               )}
 
-              {documentViewerHelper.showCompleteQcButton && (
+              {documentViewerHelper.showCompleteQcButton && !isMemberCase && (
                 <Button
                   link
                   icon="star"
@@ -209,9 +213,12 @@ export const DocumentViewerDocument = connect(
                   onClick={() => {
                     navigateToStatusReportOrderSequence({
                       path: documentViewerLinksHelper.statusReportOrderFromCaseDetailsLink,
-                      statusReportFilingDate:
-                        viewerDocumentToDisplay.filingDate,
-                      statusReportIndex: viewerDocumentToDisplay.index,
+                      statusReportFilingDate: String(
+                        viewerDocumentToDisplay.filingDate || '',
+                      ),
+                      statusReportIndex: Number(
+                        viewerDocumentToDisplay.index ?? 0,
+                      ),
                     });
                   }}
                 >
