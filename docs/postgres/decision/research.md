@@ -131,7 +131,7 @@
 
 - RDS will automatically create nightly snapshots of data and handle the data retention policy for us
 - will handle upgrades for us automatically
-- does these through maintence windows
+- does these through maintenance windows
 
 ## b.) ORM & Query Builder Investigation
 

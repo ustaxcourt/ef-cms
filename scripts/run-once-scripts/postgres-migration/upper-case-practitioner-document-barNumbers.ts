@@ -24,7 +24,7 @@ async function main() {
       writer
         .updateTable('dwPractitionerDocuments')
         .set({ barNumber: sql`UPPER("bar_number")` })
-        .where(sql<SqlBool>`regexp_like("bar_number", '^[a-z]{2}[0-9]{4}$')`)
+        .where(sql<SqlBool>`regexp_like("bar_number", '^[a-z]{2}[0-9]+$')`)
         .execute(),
     table: 'dwPractitionerDocuments',
     action: null,
