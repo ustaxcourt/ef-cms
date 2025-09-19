@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { FileMigrationProvider, Migrator } from 'kysely';
+import { FileMigrationProvider, Kysely, Migrator, sql } from 'kysely';
 import { promises as fs } from 'fs';
 import { getDbWriter } from '@web-api/database';
 
@@ -10,14 +10,28 @@ const deprecatedMigrationsDirectory = path.join(
   'deprecated',
 );
 
-async function pruneDeprecatedMigrations(db: any) {
+async function migrationTableExists(db: Kysely<any>) {
+  const res = await sql<{ exists: boolean }>`
+    select to_regclass('kysely_migration') is not null as exists
+  `.execute(db);
+  return res.rows[0]?.exists === true;
+}
+
+async function pruneDeprecatedMigrations(db: Kysely<any>) {
+  if (!(await migrationTableExists(db))) {
+    console.log(
+      'No migration table found, exiting prune deprecated migrations',
+    );
+    return;
+  }
+
   const files = await fs.readdir(deprecatedMigrationsDirectory);
 
   const names = files.map(f => path.basename(f, '.ts'));
 
   if (names.length === 0) return;
 
-  await db.deleteFrom('kysely_migration').where('name', 'in', names).execute();
+  await db.deleteFrom('kyselyMigration').where('name', 'in', names).execute();
 
   console.log(`Pruned ${names.length} deprecated migration record(s):`, names);
 }
@@ -77,7 +91,7 @@ async function migrateToLatest(migrationType = 'expand') {
 migrateToLatest(process.argv[2])
   .then(() => {
     console.log(
-      `Postgres ${process.argv[2] && process.argv[2] + ' '}migration completed successfully!`,
+      `Postgres ${process.argv[2] ? process.argv[2] + ' ' : ''}migration completed successfully!`,
     );
     process.exit(0);
   })
