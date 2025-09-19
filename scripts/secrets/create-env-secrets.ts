@@ -36,7 +36,7 @@ const scriptConfig: ScriptConfig = {
       long: 'dynamsoft-product-keys',
       type: 'string',
     },
-    esEngineVersion: {
+    opensearchEngineVersion: {
       default: 'OpenSearch_2.19',
       long: 'opensearch-engine-version',
       type: 'string',
@@ -152,7 +152,7 @@ const {
   enableEmail,
   enableHealthChecks,
   env,
-  esEngineVersion,
+  opensearchLogsEngineVersion,
   generateSecureDefaultAccountPassword,
   irsSuperuserEmail,
   opensearchInstanceCount,
@@ -176,7 +176,7 @@ const {
   enableEmail: boolean;
   enableHealthChecks: boolean;
   env: string;
-  esEngineVersion: string;
+  opensearchLogsEngineVersion: string;
   generateSecureDefaultAccountPassword: boolean;
   irsSuperuserEmail: string;
   opensearchInstanceCount: number;
@@ -224,7 +224,7 @@ if (env === 'prod') {
     EMAIL_DMARC_POLICY: emailDmarcPolicy,
     ENABLE_HEALTH_CHECKS: enableHealthChecks ? 1 : 0,
     ENV: env,
-    ES_ENGINE_VERSION: esEngineVersion,
+    ES_ENGINE_VERSION: opensearchLogsEngineVersion,
     ES_INSTANCE_COUNT: opensearchInstanceCount,
     ES_INSTANCE_TYPE: opensearchInstanceType,
     ES_VOLUME_SIZE: opensearchVolumeSize,
