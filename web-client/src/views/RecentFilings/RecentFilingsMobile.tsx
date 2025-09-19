@@ -171,16 +171,18 @@ export const RecentFilingsMobile = ({
                   >
                     <td className="docket-number-head">
                       {filing.inConsolidatedGroup && (
-                        <ConsolidatedCaseIcon
-                          consolidatedIconTooltipText={
-                            filing.consolidatedIconTooltipText
-                          }
-                          inConsolidatedGroup={
-                            filing.inConsolidatedGroup || false
-                          }
-                          showLeadCaseIcon={filing.isLeadCase || false}
-                          data-testid="consolidated-case-icon"
-                        />
+                        <span className="margin-right-1">
+                          <ConsolidatedCaseIcon
+                            consolidatedIconTooltipText={
+                              filing.consolidatedIconTooltipText
+                            }
+                            inConsolidatedGroup={
+                              filing.inConsolidatedGroup || false
+                            }
+                            showLeadCaseIcon={filing.isLeadCase || false}
+                            data-testid="consolidated-case-icon"
+                          />
+                        </span>
                       )}
                       <a
                         href={`/case-detail/${filing.docketNumber}`}
