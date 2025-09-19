@@ -2,14 +2,8 @@ import { ClientPublicApplicationContext } from '@web-client/applicationContextPu
 import { clone } from 'lodash';
 import { state } from '@web-client/presenter/app-public.cerebral';
 import { trimDocketNumberSearch } from '../setDocketNumberFromSearchAction';
+import { DATE_RANGE_SEARCH_OPTIONS } from '@shared/business/entities/EntityConstants';
 
-/**
- * submit advanced search form
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {Function} providers.get the cerebral get function
- * @returns {Promise} async action
- */
 export const submitPublicOrderAdvancedSearchAction = async ({
   applicationContext,
   get,
@@ -24,19 +18,30 @@ export const submitPublicOrderAdvancedSearchAction = async ({
     );
   }
 
+  const baseParams = {
+    ...searchParams,
+    dateRange:
+      searchParams.startDate || searchParams.endDate
+        ? DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES
+        : DATE_RANGE_SEARCH_OPTIONS.ALL_DATES,
+  };
+
   try {
-    const searchResults = await applicationContext
+    const firstChunk = await applicationContext
       .getUseCases()
       .orderPublicSearchInteractor(applicationContext, {
-        searchParams,
+        searchParams: {
+          ...baseParams,
+          limit: 5000,
+        },
       });
-    return { searchResults };
+
+    return { searchResults: firstChunk.results };
   } catch (err: any) {
     if (err.responseCode === 429) {
       store.set(state.alertError, applicationContext.getConstants().ERROR_429);
       return { searchResults: [] };
-    } else {
-      throw err;
     }
+    throw err;
   }
 };

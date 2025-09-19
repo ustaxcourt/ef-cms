@@ -15,7 +15,6 @@ export const termBuilderHelper = (get: Get): any => {
   if (!termState) {
     throw Error('Could not get term state');
   }
-
   let { termStartDate, termEndDate } = termState;
 
   termStartDate = formatDateString(

@@ -620,6 +620,7 @@ export const getBusinessDateInFuture = ({
 };
 
 type IsoDateString = string;
+// Dates are between-exclusive
 export const isDateWithinGivenInterval = ({
   date = createISODateString(),
   intervalEndDate,

@@ -5,6 +5,7 @@ import mockCaseCountsAndSessionsByCity from '@shared/test/mockCaseCountsAndSessi
 import mockIncorrectSizeRegularCases from '@shared/test/mockIncorrectlySizedCases.json';
 import path from 'path';
 import { IsoDateRange } from '@shared/business/utilities/DateHandler';
+import { Holiday } from '@18f/us-federal-holidays';
 
 const mockUserMessages = [
   'More than two special trial sessions per week: Washington, District of Columbia 2/10. \n',
@@ -37,6 +38,8 @@ const mockWeeks: {
   ],
 };
 
+const mockHolidays: Holiday[] = [];
+
 describe('writeTrialSessionDataToExcel', () => {
   it('generates an XLSX file that matches the expected fixture', async () => {
     // Arrange
@@ -58,6 +61,7 @@ describe('writeTrialSessionDataToExcel', () => {
     const buffer = await writeTrialSessionDataToExcel({
       caseCountsAndSessionsByCity:
         mockCaseCountsAndSessionsByCity as CaseCountsAndSessionsByCity,
+      holidays: mockHolidays,
       incorrectSizeRegularCases: mockIncorrectSizeRegularCases,
       userMessages: mockUserMessages,
       weeksRange: mockWeeks,
@@ -114,6 +118,7 @@ describe('writeTrialSessionDataToExcel', () => {
     // Act
     const buffer = await writeTrialSessionDataToExcel({
       caseCountsAndSessionsByCity,
+      holidays: mockHolidays,
       incorrectSizeRegularCases,
       userMessages,
       weeksRange,
