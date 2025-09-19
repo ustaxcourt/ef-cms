@@ -786,7 +786,8 @@ export const SPOS_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
 
 export const AUTO_GENERATED_STATUS_REPORT_ORDER_DESCRIPTIONS = {
   statusReport: 'Status Report Due',
-  statusReportStipulatedDecision: 'Status Report or Proposed Stipulated Decision Due'
+  statusReportStipulatedDecision:
+    'Status Report or Proposed Stipulated Decision Due',
 };
 
 const AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES_WITH_NAMES = {
@@ -1776,7 +1777,9 @@ export const PENALTY_TYPES = {
 
 export const MAX_ELASTICSEARCH_PAGINATION = 10000;
 export const MAX_SEARCH_CLIENT_RESULTS = 200;
-export const MAX_SEARCH_RESULTS = 100;
+export const MAX_CASE_SEARCH_RESULTS = 100;
+export const MAX_DOCUMENT_SEARCH_RESULTS = 5000;
+export const ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE = 100;
 
 export const JUDGE_TITLES = [
   'Judge',
