@@ -9,8 +9,6 @@ export const getPractitionerDocumentByFileId = async ({
   barNumber: string;
   fileId: string;
 }): Promise<RawPractitionerDocument> => {
-  barNumber = barNumber.toLowerCase();
-
   const practitionerDocument = await getDbReader(reader =>
     reader
       .selectFrom('dwPractitionerDocuments as p')

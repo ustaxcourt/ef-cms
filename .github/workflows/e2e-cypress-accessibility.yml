@@ -4,7 +4,7 @@ on:
   pull_request:
 
 jobs:
-  e2e_cypress:
+  e2e_cypress_accessibility:
     runs-on: ubuntu-latest
 
     strategy:
