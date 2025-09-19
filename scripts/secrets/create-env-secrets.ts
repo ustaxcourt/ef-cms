@@ -36,11 +36,6 @@ const scriptConfig: ScriptConfig = {
       long: 'dynamsoft-product-keys',
       type: 'string',
     },
-    opensearchEngineVersion: {
-      default: 'OpenSearch_2.19',
-      long: 'opensearch-engine-version',
-      type: 'string',
-    },
     emailDmarcPolicy: {
       long: 'email-dmarc-policy',
       required: true,
@@ -72,6 +67,11 @@ const scriptConfig: ScriptConfig = {
     },
     irsSuperuserEmail: {
       long: 'irs-superuser-email',
+      type: 'string',
+    },
+    opensearchEngineVersion: {
+      default: 'OpenSearch_2.19',
+      long: 'opensearch-engine-version',
       type: 'string',
     },
     opensearchInstanceCount: {
@@ -152,9 +152,9 @@ const {
   enableEmail,
   enableHealthChecks,
   env,
-  opensearchLogsEngineVersion,
   generateSecureDefaultAccountPassword,
   irsSuperuserEmail,
+  opensearchEngineVersion,
   opensearchInstanceCount,
   opensearchInstanceType,
   opensearchVolumeSize,
@@ -176,9 +176,9 @@ const {
   enableEmail: boolean;
   enableHealthChecks: boolean;
   env: string;
-  opensearchLogsEngineVersion: string;
   generateSecureDefaultAccountPassword: boolean;
   irsSuperuserEmail: string;
+  opensearchEngineVersion: string;
   opensearchInstanceCount: number;
   opensearchInstanceType: string;
   opensearchVolumeSize: number;
@@ -224,7 +224,7 @@ if (env === 'prod') {
     EMAIL_DMARC_POLICY: emailDmarcPolicy,
     ENABLE_HEALTH_CHECKS: enableHealthChecks ? 1 : 0,
     ENV: env,
-    ES_ENGINE_VERSION: opensearchLogsEngineVersion,
+    ES_ENGINE_VERSION: opensearchEngineVersion,
     ES_INSTANCE_COUNT: opensearchInstanceCount,
     ES_INSTANCE_TYPE: opensearchInstanceType,
     ES_VOLUME_SIZE: opensearchVolumeSize,

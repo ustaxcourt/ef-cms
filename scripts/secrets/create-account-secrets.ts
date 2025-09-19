@@ -33,11 +33,6 @@ const scriptConfig: ScriptConfig = {
       required: true,
       type: 'string',
     },
-    opensearchLogsEngineVersion: {
-      default: 'OpenSearch_2.19',
-      long: 'opensearch-logs-engine-version',
-      type: 'string',
-    },
     externalTrustedRoleArn: {
       description:
         'ARN of an external role that is allowed to assume the dawson_dev role in this account',
@@ -48,6 +43,11 @@ const scriptConfig: ScriptConfig = {
       default: '30',
       long: 'log-expiration-days',
       transform: 'number',
+      type: 'string',
+    },
+    opensearchLogsEngineVersion: {
+      default: 'OpenSearch_2.19',
+      long: 'opensearch-logs-engine-version',
       type: 'string',
     },
     opensearchLogsInstanceCount: {
@@ -82,9 +82,9 @@ const scriptConfig: ScriptConfig = {
 const {
   baseDomain,
   env,
-  opensearchLogsEngineVersion,
   externalTrustedRoleArn,
   logExpirationDays,
+  opensearchLogsEngineVersion,
   opensearchLogsInstanceCount,
   opensearchLogsInstanceType,
   opensearchLogsVolumeSize,
@@ -93,9 +93,9 @@ const {
 } = parseArgsAndEnvVars(scriptConfig) as {
   baseDomain: string;
   env: string;
-  opensearchLogsEngineVersion: string;
   externalTrustedRoleArn: string;
   logExpirationDays: number;
+  opensearchLogsEngineVersion: string;
   opensearchLogsInstanceCount: number;
   opensearchLogsInstanceType: string;
   opensearchLogsVolumeSize: number;
