@@ -30,7 +30,6 @@ import { saveDispatchNotification } from '@web-api/persistence/postgres/notifica
 import { saveDocumentFromLambda } from './persistence/s3/saveDocumentFromLambda';
 import { saveUserConnection } from '@web-api/persistence/postgres/connections/saveUserConnection';
 import { setChangeOfAddressCaseAsDone } from './persistence/postgres/jobs/changeOfAddress/setChangeOfAddressCaseAsDone';
-import { updateMaintenanceMode } from '@web-api/persistence/postgres/featureFlag/updateMaintenanceMode';
 import { updatePractitionerUser } from './business/useCaseHelper/users/updatePractitionerUser';
 import { uploadDocument } from '@web-api/persistence/s3/uploadDocument';
 import { zipDocuments } from './persistence/s3/zipDocuments';
@@ -80,7 +79,6 @@ const gatewayMethods = {
     saveDispatchNotification,
     saveDocumentFromLambda,
     saveUserConnection,
-    updateMaintenanceMode,
     updatePractitionerUser,
   }),
   // methods below are not known to create or update "entity" records
