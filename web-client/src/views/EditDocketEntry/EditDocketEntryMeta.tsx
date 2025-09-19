@@ -141,6 +141,7 @@ export const EditDocketEntryMeta = connect(
                   onClick={() => {
                     submitEditDocketEntryMetaSequence();
                   }}
+                  data-testid="save-edit-docket-entry-meta"
                 >
                   Save
                 </Button>

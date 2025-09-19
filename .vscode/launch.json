@@ -2,6 +2,40 @@
   "version": "1.0.0",
   "configurations": [
     {
+      "name": "Launch Edge",
+      "request": "launch",
+      "type": "msedge",
+      "url": "http://localhost:1234",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "name": "npm Start API",
+      "request": "launch",
+      "runtimeArgs": ["run-script", "start:api"],
+      "runtimeExecutable": "npm",
+      "skipFiles": ["<node_internals>/**"],
+      "type": "node",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "npm Start Client",
+      "request": "launch",
+      "runtimeArgs": ["run-script", "start:client"],
+      "runtimeExecutable": "npm",
+      "skipFiles": ["<node_internals>/**"],
+      "type": "node",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "npm Start Public",
+      "request": "launch",
+      "runtimeArgs": ["run-script", "start:public"],
+      "runtimeExecutable": "npm",
+      "skipFiles": ["<node_internals>/**"],
+      "type": "node",
+      "console": "integratedTerminal"
+    },
+    {
       "type": "node",
       "request": "launch",
       "name": "Jest: unit test current file",
@@ -57,6 +91,17 @@
       "windows": {
         "program": "${workspaceFolder}/node_modules/jest/bin/jest"
       }
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Run All",
+      "configurations": [
+        "npm Start API",
+        "npm Start Client",
+        "npm Start Public",
+        "Launch Edge"
+      ]
     }
   ]
 }
