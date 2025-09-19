@@ -21,6 +21,8 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: node_modules
+            .cache/puppeteer
+            /home/runner/.cache/Cypress
           key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install Node Dependencies - Cache Miss Install
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
