@@ -223,13 +223,13 @@ export const createEndOfDayISO = (params?: {
 }): string => {
   const dateObject = params
     ? DateTime.fromObject(
-      {
-        day: Number(params.day),
-        month: Number(params.month),
-        year: Number(params.year),
-      },
-      { zone: USTC_TZ },
-    )
+        {
+          day: Number(params.day),
+          month: Number(params.month),
+          year: Number(params.year),
+        },
+        { zone: USTC_TZ },
+      )
     : DateTime.now().setZone(USTC_TZ);
 
   return dateObject.endOf('day').setZone('utc').toISO();
@@ -242,31 +242,34 @@ export const createStartOfDayISO = (params?: {
 }): string => {
   const dateObject = params
     ? DateTime.fromObject(
-      {
-        day: Number(params.day),
-        month: Number(params.month),
-        year: Number(params.year),
-      },
-      { zone: USTC_TZ },
-    )
+        {
+          day: Number(params.day),
+          month: Number(params.month),
+          year: Number(params.year),
+        },
+        { zone: USTC_TZ },
+      )
     : DateTime.now().setZone(USTC_TZ);
 
   return dateObject.startOf('day').setZone('utc').toISO();
 };
 
-// expects a date string like 09/18/2025
+// expects a date string like 2025-09-18
 export const createStartOfDayISOUtc = (dateString: string): string => {
-  return DateTime.fromFormat(dateString, FORMATS.MMDDYYYY, {
+  return DateTime.fromFormat(dateString, FORMATS.YYYYMMDD, {
     zone: 'utc',
-  }).startOf('day').toISO()!;
+  })
+    .startOf('day')
+    .toISO()!;
 };
 
-
-// expects a date string like 09/18/2025
+// expects a date string like 2025-09-18
 export const createEndOfDayISOUtc = (dateString: string): string => {
-  return DateTime.fromFormat(dateString, FORMATS.MMDDYYYY, {
+  return DateTime.fromFormat(dateString, FORMATS.YYYYMMDD, {
     zone: 'utc',
-  }).endOf('day').toISO()!;
+  })
+    .endOf('day')
+    .toISO()!;
 };
 
 /**
@@ -617,7 +620,6 @@ export const getBusinessDateInFuture = ({
 };
 
 type IsoDateString = string;
-// Dates are between-exclusive
 export const isDateWithinGivenInterval = ({
   date = createISODateString(),
   intervalEndDate,

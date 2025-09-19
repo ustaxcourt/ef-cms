@@ -208,7 +208,7 @@ export default tseslint.config(
       'custom-rules-plugin': customRulesPlugin,
     },
     rules: {
-      'custom-rules-plugin/no-new-dates': 'off', // Turned off - was 'error'
+      'custom-rules-plugin/no-new-dates': 'error',
     },
   },
 );

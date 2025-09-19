@@ -2,8 +2,7 @@ import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import { STATE_KEYS } from '@shared/business/entities/EntityConstants';
 import {
-  createEndOfDayISOUtc,
-  createStartOfDayISOUtc,
+  createISODateString,
   formatDateString,
   FORMATS,
 } from '@shared/business/utilities/DateHandler';
@@ -17,11 +16,20 @@ export const termBuilderHelper = (get: Get): any => {
     throw Error('Could not get term state');
   }
 
-  const { termStartDate, termEndDate } = termState;
+  let { termStartDate, termEndDate } = termState;
+
+  termStartDate = formatDateString(
+    createISODateString(termStartDate, FORMATS.MMDDYYYY),
+    FORMATS.YYYYMMDD,
+  );
+  termEndDate = formatDateString(
+    createISODateString(termEndDate, FORMATS.MMDDYYYY),
+    FORMATS.YYYYMMDD,
+  );
 
   const holidaysInDateRange = getHolidaysInDateRange(
-    createStartOfDayISOUtc(termStartDate),
-    createEndOfDayISOUtc(termEndDate),
+    termStartDate,
+    termEndDate,
   );
   const formattedHolidaysInDateRange = holidaysInDateRange.map(
     (holiday: Holiday) => {
