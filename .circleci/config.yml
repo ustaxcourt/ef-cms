@@ -145,6 +145,10 @@ jobs:
           command: |
             cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
       - run:
+          name: Engage Maintenance Mode
+          command: |
+            npm run maintenance:engage
+      - run:
           no_output_timeout: 20m
           name: 'Deploy - All Color Terraform'
           command: |
