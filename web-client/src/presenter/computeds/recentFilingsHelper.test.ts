@@ -1,7 +1,7 @@
 import { recentFilingsHelper as recentFilingsHelperComputed } from './recentFilingsHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
-import { RecentFiling } from '@shared/business/entities/RecentFiling';
+import { RecentFiling } from '@shared/business/useCases/getRecentFilingsForUserInteractor';
 import {
   ROLES,
   DOCKET_ENTRY_SEALED_TO_TYPES,

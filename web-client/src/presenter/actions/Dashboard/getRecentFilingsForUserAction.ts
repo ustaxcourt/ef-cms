@@ -1,5 +1,5 @@
 import { getRecentFilingsForUserInteractor } from '@shared/proxies/getRecentFilingsForUserProxy';
-import { RecentFiling } from '@shared/business/entities/RecentFiling';
+import { RecentFiling } from '@shared/business/useCases/getRecentFilingsForUserInteractor';
 
 export const getRecentFilingsForUserAction = async ({
   applicationContext,

@@ -4,4 +4,4 @@ import { setRecentFilingsAction } from '../actions/setRecentFilingsAction';
 export const loadRecentFilingsSequence = [
   getRecentFilingsForUserAction,
   setRecentFilingsAction,
-]; 
+];

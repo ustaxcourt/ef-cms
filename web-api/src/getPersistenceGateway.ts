@@ -34,7 +34,9 @@ import { updatePractitionerUser } from './business/useCaseHelper/users/updatePra
 import { uploadDocument } from '@web-api/persistence/s3/uploadDocument';
 import { zipDocuments } from './persistence/s3/zipDocuments';
 import { getEligibleCasesForTrialSession } from '@web-api/persistence/postgres/cases/getEligibleCasesForTrialSession';
+import { getRecentFilingsByDocketNumbers } from '@web-api/persistence/postgres/docketEntries/getRecentFilingsByDocketNumbers';
 import { getRequestResults } from '@web-api/persistence/postgres/polling/getRequestResults';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 const isValidatedDecorator = <T>(persistenceGatewayMethods: T): T => {
   /**
@@ -100,8 +102,10 @@ const gatewayMethods = {
   getEligibleCasesForTrialCity,
   getEligibleCasesForTrialSession,
   getMaintenanceMode,
+  getRecentFilingsByDocketNumbers,
   getPractitionersByName,
   getReconciliationReport,
+  getCasesByDocketNumbers,
   getRequestResults,
   getSesStatus,
   getColdCases,

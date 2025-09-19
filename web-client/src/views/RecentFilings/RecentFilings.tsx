@@ -12,7 +12,7 @@ import { useClientSidePaginator } from '@web-client/utilities/useClientSidePagin
 import { Mobile, NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
 import { RecentFilingsNonMobile } from './RecentFilingsNonMobile';
 import { RecentFilingsMobile } from './RecentFilingsMobile';
-import { RecentFiling } from '@shared/business/entities/RecentFiling';
+import { RecentFiling } from '@shared/business/useCases/getRecentFilingsForUserInteractor';
 
 type RecentFilingsProps = {
   recentFilingsTableSort: any;
