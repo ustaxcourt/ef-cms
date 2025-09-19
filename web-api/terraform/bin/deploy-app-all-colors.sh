@@ -22,6 +22,7 @@ fi
 [ -z "${ES_INSTANCE_TYPE}" ] && echo "You must have ES_INSTANCE_TYPE set in your environment" && exit 1
 [ -z "${ES_VOLUME_SIZE}" ] && echo "You must have ES_VOLUME_SIZE set in your environment" && exit 1
 [ -z "${MIGRATE_FLAG}" ] && echo "You must have MIGRATE_FLAG set in your environment" && exit 1
+[ -z "${ES_ENGINE_VERSION}" ] && echo "You must have ES_ENGINE_VERSION set in your environment" && exit 1
 
 echo "Running terraform with the following environment configs:"
 echo "  - CIRCLE_BRANCH=${CIRCLE_BRANCH}"
@@ -35,6 +36,7 @@ echo "  - ES_VOLUME_SIZE=${ES_VOLUME_SIZE}"
 echo "  - MIGRATE_FLAG=${MIGRATE_FLAG}"
 echo "  - PROD_ENV_ACCOUNT_ID=${PROD_ENV_ACCOUNT_ID}"
 echo "  - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL}"
+echo "  - ES_ENGINE_VERSION=${ES_ENGINE_VERSION}"
 
 ../../../../scripts/verify-terraform-version.sh
 
