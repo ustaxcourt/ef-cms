@@ -5,7 +5,7 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import {
   ORDER_EVENT_CODES,
-  MAX_SEARCH_RESULTS,
+  MAX_DOCUMENT_SEARCH_RESULTS,
 } from '@shared/business/entities/EntityConstants';
 import { User } from '@shared/business/entities/User';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
@@ -31,7 +31,7 @@ export const orderAdvancedSearchInteractor = async (
     judge,
     keyword,
     startDate,
-    limit = 5000,
+    limit = MAX_DOCUMENT_SEARCH_RESULTS,
   } = params || {};
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ADVANCED_SEARCH)) {
@@ -54,7 +54,7 @@ export const orderAdvancedSearchInteractor = async (
 
   const accessible: any[] = [];
   let searchAfter: any[] | undefined = undefined;
-  const maxCeiling = Math.min(MAX_SEARCH_RESULTS, limit);
+  const maxCeiling = Math.min(MAX_DOCUMENT_SEARCH_RESULTS, limit);
 
   while (accessible.length < limit) {
     const sizeNeeded = limit - accessible.length;

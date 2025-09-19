@@ -31,7 +31,7 @@ export const advancedDocumentSearchHelper = (
   const {
     ADVANCED_SEARCH_TABS,
     DATE_RANGE_SEARCH_OPTIONS,
-    MAX_SEARCH_RESULTS,
+    MAX_DOCUMENT_SEARCH_RESULTS,
   } = applicationContext.getConstants();
 
   const isInternalUser = applicationContext.getUtilities().isInternalUser(role);
@@ -108,7 +108,7 @@ export const advancedDocumentSearchHelper = (
   }
 
   const showManyResultsMessage = !!(
-    searchResults && searchResults.length >= MAX_SEARCH_RESULTS
+    searchResults && searchResults.length >= MAX_DOCUMENT_SEARCH_RESULTS
   );
 
   return {
@@ -118,7 +118,7 @@ export const advancedDocumentSearchHelper = (
     documentTypeVerbiage,
     formattedJudges,
     isInternalUser,
-    manyResults: MAX_SEARCH_RESULTS,
+    manyResults: MAX_DOCUMENT_SEARCH_RESULTS,
     showDateRangePicker,
     showManyResultsMessage,
     maxDate: calculateISODate({

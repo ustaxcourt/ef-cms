@@ -1,5 +1,6 @@
 import {
   DATE_RANGE_SEARCH_OPTIONS,
+  MAX_DOCUMENT_SEARCH_RESULTS,
   ORDER_EVENT_CODES,
 } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
@@ -63,7 +64,7 @@ describe('orderPublicSearchInteractor', () => {
   });
 
   it('should cap at 5000 results when over limit', async () => {
-    const overLimit = new Array(5001).fill({
+    const overLimit = new Array(MAX_DOCUMENT_SEARCH_RESULTS + 1).fill({
       caseCaption: 'Samson Workman, Petitioner',
       docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
       docketNumber: '103-19',
