@@ -15,6 +15,7 @@ export const advancedDocumentSearch = async ({
   documentEventCodes,
   endDate,
   from = 0,
+  searchAfter,
   isExternalUser,
   isOpinionSearch = false,
   judge,
@@ -30,6 +31,7 @@ export const advancedDocumentSearch = async ({
   documentEventCodes: string[];
   endDate?: string;
   from?: number;
+  searchAfter?: any[];
   isExternalUser?: boolean;
   isOpinionSearch?: boolean;
   judge?: string;
@@ -187,20 +189,31 @@ export const advancedDocumentSearch = async ({
     });
   }
 
-  const documentQuery = {
-    body: {
-      _source: sourceFields,
-      from,
-      query: {
-        bool: {
-          filter: documentFilter,
-          must: documentMust,
-          must_not: documentMustNot,
-        },
+  const primarySort = getSortQuery(sortField);
+  const tieBreaker = { 'docketEntryId.S': 'asc' };
+  const fullSort = [...primarySort, tieBreaker];
+
+  const body: any = {
+    _source: sourceFields,
+    query: {
+      bool: {
+        filter: documentFilter,
+        must: documentMust,
+        must_not: documentMustNot,
       },
-      size: overrideResultSize || MAX_SEARCH_CLIENT_RESULTS,
-      sort: getSortQuery(sortField),
     },
+    size: overrideResultSize || MAX_SEARCH_CLIENT_RESULTS,
+    sort: fullSort,
+  };
+
+  if (searchAfter && Array.isArray(searchAfter)) {
+    body.search_after = searchAfter;
+  } else if (!searchAfter) {
+    body.from = from;
+  }
+
+  const documentQuery = {
+    body,
     index: 'efcms-docket-entry',
   };
 

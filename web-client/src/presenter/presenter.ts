@@ -388,6 +388,7 @@ import { setCaseDetailPrimaryTabSequence } from './sequences/setCaseDetailPrimar
 import { setCaseTypeToDisplaySequence } from './sequences/setCaseTypeToDisplaySequence';
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
 import { setCurrentPageIndexSequence } from './sequences/setCurrentPageIndexSequence';
+import { setCurrentPaginationPageSequence } from './sequences/setCurrentPaginationPageSequence';
 import { setCurrentTabSequence } from '@web-client/presenter/sequences/setCurrentTabSequence';
 import { setCustomCaseReportFiltersSequence } from './sequences/setCustomCaseReportFiltersSequence';
 import { setDocumentForPreviewSequence } from './sequences/setDocumentForPreviewSequence';
@@ -627,6 +628,7 @@ import { gotoTrialSessionTermBuilderSequence } from '@web-client/presenter/seque
 import { asyncServiceUnavailablrHandlerSequence } from '@web-client/presenter/sequences/asyncServiceUnavailablrHandlerSequence';
 import { showRemovePetitionerEmailModalSequence } from '@web-client/presenter/sequences/showRemovePetitionerEmailModalSequence';
 import { removePetitionerEmailSequence } from '@web-client/presenter/sequences/removePetitionerEmailSequence';
+import { updateDocumentSearchResultsSequence } from './sequences/updateDocumentSearchResultsSequence';
 import { saveMinuteSheetToDraftsSequence } from './sequences/TrialSessionMinutes/saveMinuteSheetToDraftsSequence';
 
 export const presenterSequences = {
@@ -1246,6 +1248,9 @@ export const presenterSequences = {
   setCurrentPageIndexSequence:
     setCurrentPageIndexSequence as unknown as Function,
   setCurrentTabSequence,
+  setCurrentPaginationPageSequence:
+    setCurrentPaginationPageSequence as unknown as Function,
+
   setCustomCaseReportFiltersSequence,
   setDocumentForPreviewSequence:
     setDocumentForPreviewSequence as unknown as Function,
@@ -1470,6 +1475,8 @@ export const presenterSequences = {
     updateDocketEntryWorksheetSequence as unknown as Function,
   updateDocketNumberSearchFormSequence:
     updateDocketNumberSearchFormSequence as unknown as Function,
+  updateDocumentSearchResultsSequence:
+    updateDocumentSearchResultsSequence as unknown as Function,
   updateFileDocumentWizardFormValueSequence:
     updateFileDocumentWizardFormValueSequence as unknown as Function,
   updateFilePetitionSequence,

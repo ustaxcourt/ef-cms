@@ -1,43 +1,21 @@
-import { navigateToDashboard } from 'cypress/local-only/support/pages/maintenance';
+import { loginAsDocketClerk1 } from '../../../helpers/authentication/login-as-helpers';
 import {
-  enterDocumentKeywordForAdvancedSearch,
-  enterDocumentDocketNumber,
   searchForDocuments,
-  unselectOpinionTypesExceptBench,
   searchForOrderByJudge,
 } from 'cypress/local-only/support/pages/public/advanced-search';
 import {
   getColumnTextFields,
   sortFiledDateColumnAsc,
-} from '../../../../../helpers/advancedSearch/column-sort-text-field';
+} from '../../../helpers/advancedSearch/column-sort-text-field';
 
-describe('Opinion Search', () => {
-  it('should display results when a keyword and docketNumberWithSuffix is provided', () => {
-    navigateToDashboard();
-    cy.get('[data-testid="opinion-search-tab"]').click();
-    enterDocumentKeywordForAdvancedSearch('opinion');
-    enterDocumentDocketNumber('124-20L');
-    searchForDocuments();
-    cy.get('table.search-results');
-  });
-
-  it('should display results with a judge name', () => {
-    navigateToDashboard();
-    cy.get('[data-testid="opinion-search-tab"]').click();
-    enterDocumentDocketNumber('107-19');
-
-    unselectOpinionTypesExceptBench();
-    searchForDocuments();
-
-    cy.get('table.search-results');
-    cy.contains('td', 'Foley');
-  });
-
+describe('Docket clerk - Opinion Search', () => {
   it('should sort by descending filed date and reverse it correctly', () => {
+    loginAsDocketClerk1();
+
     const judgeName = 'Foley';
 
-    navigateToDashboard();
-    cy.get('[data-testid="opinion-search-tab"]').click();
+    cy.get('[data-testid="search-link"]').click();
+    cy.get('[data-testid="order-search-tab"]').click();
     searchForOrderByJudge(judgeName);
     searchForDocuments();
 
