@@ -170,3 +170,12 @@ There are a few scripts that depend on p-queue v6.6.2.  Upgrading this past vers
 
 It's rare to need modify cache key. One reason you may want to do so is if a package fails to install properly, and CircleCI, unaware of the failed installation, stores the corrupted cache. In this case, we will need to increment the cache key version so that CircleCI is forced to reinstall the node dependencies and save them using the new key. To update the cache key, locate `vX-npm` and `vX-cypress` (where X represents the current cache key version) in the config.yml file, and then increment the identified version.
 
+## uuid
+9/17/25 keeping it 11.1.0. The next version 12.0.0 and above no longer supports CommonJS
+
+https://www.npmjs.com/package/uuid?activeTab=readme
+
+
+Quote from site
+
+"Starting with uuid@12 CommonJS is no longer supported. See implications and motivation for details."
