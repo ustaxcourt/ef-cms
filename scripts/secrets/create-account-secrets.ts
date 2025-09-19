@@ -33,7 +33,7 @@ const scriptConfig: ScriptConfig = {
       required: true,
       type: 'string',
     },
-    esLogsEngineVersion: {
+    opensearchLogsEngineVersion: {
       default: 'OpenSearch_2.19',
       long: 'opensearch-logs-engine-version',
       type: 'string',
@@ -82,7 +82,7 @@ const scriptConfig: ScriptConfig = {
 const {
   baseDomain,
   env,
-  esLogsEngineVersion,
+  opensearchLogsEngineVersion,
   externalTrustedRoleArn,
   logExpirationDays,
   opensearchLogsInstanceCount,
@@ -93,7 +93,7 @@ const {
 } = parseArgsAndEnvVars(scriptConfig) as {
   baseDomain: string;
   env: string;
-  esLogsEngineVersion: string;
+  opensearchLogsEngineVersion: string;
   externalTrustedRoleArn: string;
   logExpirationDays: number;
   opensearchLogsInstanceCount: number;
@@ -127,7 +127,7 @@ if (env === 'prod') {
     // eslint-disable-next-line no-useless-escape
     DAWSON_DEV_TRUSTED_ROLE_ARNS: `[\\\"${dawsonDevTrustedRoleArns.join('\\\",\\\"')}\\\"]`,
     EFCMS_DOMAIN: `${env}.${repoName}.${baseDomain}`,
-    ES_LOGS_ENGINE_VERSION: esLogsEngineVersion,
+    ES_LOGS_ENGINE_VERSION: opensearchLogsEngineVersion,
     ES_LOGS_EBS_VOLUME_SIZE_GB: opensearchLogsVolumeSize,
     ES_LOGS_INSTANCE_COUNT: opensearchLogsInstanceCount,
     ES_LOGS_INSTANCE_TYPE: opensearchLogsInstanceType,
