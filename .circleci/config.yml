@@ -21,7 +21,15 @@ parameters:
     default: false
     type: boolean
 
+  run_glue_to_dev:
+    default: false
+    type: boolean
+
   run_s3_to_test:
+    default: false
+    type: boolean
+
+  run_s3_to_dev:
     default: false
     type: boolean
 
@@ -169,7 +177,7 @@ jobs:
               echo "skipping…"
               exit 0
             fi
-            if [ "${CIRCLE_BRANCH}" == "test" ]; then
+            if [ "${CIRCLE_BRANCH}" == "test" ] || [ "${CIRCLE_BRANCH}" == "develop" ]; then
               SOURCE_DOMAIN=$(./scripts/elasticsearch/get-source-elasticsearch.sh "${ENV}")
               ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
                 --domain-name "${SOURCE_DOMAIN}" \
@@ -818,6 +826,13 @@ only-test: &only-test
       only:
         - test
 
+only-dev: &only-dev
+  context: efcms-<< pipeline.git.branch >>
+  filters:
+    branches:
+      only:
+        - develop
+
 only-deployed-lower-environments: &only-deployed-lower-environments
   context: efcms-<< pipeline.git.branch >>
   filters:
@@ -984,11 +999,59 @@ workflows:
           requires:
             - index-users
 
+  glue-to-dev:
+    when: << pipeline.parameters.run_glue_to_dev >>
+    jobs:
+      - initiate-glue-job:
+          <<: *only-dev
+      - wait-for-glue-workflow:
+          <<: *only-dev
+          type: approval
+          requires:
+            - initiate-glue-job
+      - wait-for-s3-sync-workflow:
+          <<: *only-dev
+          type: approval
+          requires:
+            - initiate-glue-job
+      - migrate-restored-postgres-data:
+          <<: *only-dev
+          requires:
+            - wait-for-glue-workflow
+            - wait-for-s3-sync-workflow
+      - index-cases:
+          <<: *only-dev
+          requires:
+            - migrate-restored-postgres-data
+      - index-docket-entries:
+          <<: *only-dev
+          requires:
+            - index-cases
+      - index-users:
+          <<: *only-dev
+          requires:
+            - index-docket-entries
+      - cleanup-glue-job:
+          <<: *only-dev
+          requires:
+            - index-users
+
   glue-to-lower-env:
     when: << pipeline.parameters.run_glue_to_lower_env >>
     jobs:
       - restore-postgres:
           <<: *only-prod
+
+  s3-to-dev:
+    when: << pipeline.parameters.run_s3_to_dev >>
+    jobs:
+      - initiate-s3-sync:
+          <<: *only-dev
+      - wait-for-s3-sync-workflow:
+          <<: *only-dev
+          type: approval
+          requires:
+            - initiate-s3-sync
 
   s3-to-test:
     when: << pipeline.parameters.run_s3_to_test >>
