@@ -354,7 +354,7 @@
     "ts-jest": "29.4.1",
     "ts-node": "10.9.2",
     "tsconfig-paths": "4.2.0",
-    "p-queue": "8.1.1",
+    "p-queue": "6.6.2",
     "typescript": "5.8.3",
     "typescript-eslint": "8.44.0"
   }
