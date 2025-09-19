@@ -39,7 +39,6 @@ import {
 import { sortObjectByKey } from '@shared/tools/helpers';
 import { writeTrialSessionDataToExcel } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/writeTrialSessionDataToExcel';
 import { RawGenerateSuggestedTermForm } from '@shared/business/entities/trialSessions/GenerateSuggestedTermForm';
-import { getHolidaysInDateRange } from '@shared/business/utilities/getHolidaysInDateRange';
 import { getTrialSessions } from '@web-api/persistence/postgres/trialSessions/getTrialSessions';
 
 export const WASHINGTON_DC_STRING = 'Washington, District of Columbia';
@@ -142,11 +141,8 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     return a.localeCompare(b);
   });
 
-  const holidays = getHolidaysInDateRange(termStartDate, termEndDate);
-
   const bufferArray = await writeTrialSessionDataToExcel({
     caseCountsAndSessionsByCity,
-    holidays,
     incorrectSizeRegularCases,
     userMessages,
     weeksRange: weeksToLoop,
