@@ -26,15 +26,8 @@ jobs:
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
         id: npm-clean-install
         run: npm ci
-      - name: Cache Puppeteer Binary
-        if: steps.cache-dependencies.outputs.cache-hit == 'true'
-        id: cache-puppeteer
-        uses: actions/cache/restore@v4
-        with:
-          path: .cache/puppeteer
-          key: ${{ runner.os }}-puppeteer-${{ hashFiles('**/package-lock.json') }}
       - name: Install Puppeteer
-        if: steps.cache-dependencies.outputs.cache-hit == 'true' && steps.cache-puppeteer.outputs.cache-hit != 'true'
+        if: steps.cache-dependencies.outputs.cache-hit == 'true'
         id: install-puppeteer
         run: npx puppeteer browsers install chrome
       - name: API
@@ -45,9 +38,3 @@ jobs:
         with:
           path: node_modules
           key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-      - name: Save Puppeteer Dependencies
-        if: steps.npm-clean-install.outcome == 'success' || steps.install-puppeteer.outcome == 'success'
-        uses: actions/cache/save@v4
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-puppeteer-${{ hashFiles('**/package-lock.json') }}
