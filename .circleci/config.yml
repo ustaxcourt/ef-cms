@@ -53,10 +53,6 @@ parameters:
     default: ''
     type: string
 
-  run_expand_contract_migration:
-    default: false
-    type: boolean
-
 commands:
   npm-and-cypress-install:
     steps:
@@ -263,12 +259,6 @@ jobs:
           name: Run Postgres Migration
           command: |
             npm run migration:postgres
-      - when:
-          condition: << pipeline.parameters.run_expand_contract_migration >>
-          steps:
-            - run:
-                name: Run Postgres Expand Migration
-                command: npm run migration:postgres:expand
       - run:
           name: Restore Postgres User Permissions
           command: |
@@ -448,12 +438,9 @@ jobs:
           name: Setup Env
           command: |
             ./scripts/env/env-for-circle.sh
-      - when:
-          condition: << pipeline.parameters.run_expand_contract_migration >>
-          steps:
-            - run:
-                name: Run Postgres Expand Migration
-                command: npm run migration:postgres:contract
+      - run:
+          name: Run Postgres Contract Migration
+          command: npm run migration:postgres:contract
       - run:
           name: Setup Elasticsearch Aliases
           command: |
@@ -581,7 +568,8 @@ jobs:
       - run:
           name: Migrate Postgres Data Schema
           command: |
-            NODE_ENV=production npm run migration:postgres
+            npm run migration:postgres
+            npm run migration:postgres:contract
       - run:
           name: Restore Postgres User Permissions
           command: |
