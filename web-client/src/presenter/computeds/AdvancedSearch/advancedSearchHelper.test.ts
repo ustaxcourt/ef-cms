@@ -217,7 +217,8 @@ describe('advancedSearchHelper', () => {
   });
 
   it('shows warning of maximum search results if threshold is reached', () => {
-    const actualMax = applicationContext.getConstants().MAX_SEARCH_RESULTS;
+    const actualMax =
+      applicationContext.getConstants().MAX_DOCUMENT_SEARCH_RESULTS;
     const resultsAtThreshold = Array.from({ length: actualMax }, (_, i) => ({
       docketNumber: `${i + 1}-19`,
       petitioners: [mockPetitionerOne],
