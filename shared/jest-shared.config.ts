@@ -23,7 +23,6 @@ const config: Config = {
     '!src/business/entities/trialSessions/SpecialTrialSessions.ts',
     '!src/business/utilities/trialSessionPlanningReport/trialSessionPlanningReportDataTypes.ts',
     '!src/business/entities/trialSessionMinutes/MinuteSheet.ts',
-    '!src/business/entities/RecentFiling.ts',
   ],
   coverageDirectory: './coverage',
   coverageProvider: 'babel',
