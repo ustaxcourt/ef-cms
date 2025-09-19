@@ -88,7 +88,7 @@ variable "rum_sample_rate" {
   type = number
 }
 
-variable "engine_version" {
+variable "rds_engine_version" {
   type    = string
-  default = "15.13"
+  default = "15.4"
 }
