@@ -37,7 +37,7 @@ const scriptConfig: ScriptConfig = {
       type: 'string',
     },
     esEngineVersion: {
-      default: '7.10',
+      default: 'OpenSearch_2.19',
       long: 'es-engine-version',
       type: 'string',
     },

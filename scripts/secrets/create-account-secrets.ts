@@ -34,7 +34,7 @@ const scriptConfig: ScriptConfig = {
       type: 'string',
     },
     esLogsEngineVersion: {
-      default: '7.10',
+      default: 'OpenSearch_2.19',
       long: 'es-logs-engine-version',
       type: 'string',
     },
