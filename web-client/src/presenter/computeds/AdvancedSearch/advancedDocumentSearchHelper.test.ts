@@ -1,8 +1,4 @@
-import { ADVANCED_SEARCH_TABS } from '../../../../../shared/src/business/entities/EntityConstants';
-import {
-  advancedDocumentSearchHelper as advancedDocumentSearchHelperComputed,
-  formatDocumentSearchResultRecord,
-} from './advancedDocumentSearchHelper';
+import { advancedDocumentSearchHelper as advancedDocumentSearchHelperComputed } from './advancedDocumentSearchHelper';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getUserPermissions } from '../../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from '@web-client/presenter/test.cerebral';
@@ -12,14 +8,8 @@ describe('advancedDocumentSearchHelper', () => {
   const pageSizeOverride = 5;
   const manyResultsOverride = 4;
 
-  const {
-    BENCH_OPINION_EVENT_CODE,
-    DATE_RANGE_SEARCH_OPTIONS,
-    DOCKET_NUMBER_SUFFIXES,
-    GENERIC_ORDER_EVENT_CODE,
-    OPINION_EVENT_CODES_WITH_BENCH_OPINION,
-    USER_ROLES,
-  } = applicationContext.getConstants();
+  const { DATE_RANGE_SEARCH_OPTIONS, DOCKET_NUMBER_SUFFIXES, USER_ROLES } =
+    applicationContext.getConstants();
 
   const globalUser = {
     role: USER_ROLES.docketClerk,
@@ -39,6 +29,14 @@ describe('advancedDocumentSearchHelper', () => {
           role: USER_ROLES.legacyJudge,
         },
       ],
+      orderDocumentSearchSort: {
+        sortColumn: 'formattedFiledDate',
+        sortDirection: 'desc',
+      },
+      opinionDocumentSearchSort: {
+        sortColumn: 'formattedFiledDate',
+        sortDirection: 'desc',
+      },
       permissions: getUserPermissions(user),
       user,
     };
@@ -52,7 +50,7 @@ describe('advancedDocumentSearchHelper', () => {
         return {
           ...applicationContext.getConstants(),
           CASE_SEARCH_PAGE_SIZE: pageSizeOverride,
-          MAX_SEARCH_RESULTS: manyResultsOverride,
+          MAX_DOCUMENT_SEARCH_RESULTS: manyResultsOverride,
         };
       },
     },
@@ -334,8 +332,6 @@ describe('advancedDocumentSearchHelper', () => {
               docketNumberSuffix: 'Z',
               docketNumberWithSuffix: '101-19Z',
               documentContents: 'Test Petitioner, Petitioner',
-              documentTitle: 'Order',
-              documentType: 'Order',
               eventCode: 'O',
               filingDate: '2019-03-01T05:00:00.000Z',
               judge: 'Judge Buch',
@@ -346,8 +342,6 @@ describe('advancedDocumentSearchHelper', () => {
               docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.PASSPORT,
               docketNumberWithSuffix: '102-19P',
               documentContents: 'Test Petitioner, Petitioner',
-              documentTitle: 'Order for Stuff',
-              documentType: 'OAPF - Order for Amended Petition and Filing Fee',
               filingDate: '2019-03-01T05:00:00.000Z',
               judge: 'Cohen',
             },
@@ -364,9 +358,8 @@ describe('advancedDocumentSearchHelper', () => {
         docketNumberSuffix: 'Z',
         docketNumberWithSuffix: '101-19Z',
         documentContents: 'Test Petitioner, Petitioner',
-        documentTitle: 'Order',
         filingDate: '2019-03-01T05:00:00.000Z',
-        formattedFiledDate: '03/01/19',
+        formattedFiledDate: '03/01/2019',
         judge: 'Judge Buch',
       },
       {
@@ -375,10 +368,8 @@ describe('advancedDocumentSearchHelper', () => {
         docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.PASSPORT,
         docketNumberWithSuffix: '102-19P',
         documentContents: 'Test Petitioner, Petitioner',
-        documentTitle: 'Order for Stuff',
-        documentType: 'OAPF - Order for Amended Petition and Filing Fee',
         filingDate: '2019-03-01T05:00:00.000Z',
-        formattedFiledDate: '03/01/19',
+        formattedFiledDate: '03/01/2019',
         judge: 'Cohen',
       },
     ]);
@@ -432,7 +423,7 @@ describe('advancedDocumentSearchHelper', () => {
         documentTitle: 'T.C. Opinion',
         documentType: 'T.C. Opinion',
         filingDate: '2019-03-01T05:00:00.000Z',
-        formattedFiledDate: '03/01/19',
+        formattedFiledDate: '03/01/2019',
         judge: 'Judge Buch',
       },
       {
@@ -444,7 +435,7 @@ describe('advancedDocumentSearchHelper', () => {
         documentTitle: 'Summary Opinion',
         documentType: 'Summary Opinion',
         filingDate: '2019-03-01T05:00:00.000Z',
-        formattedFiledDate: '03/01/19',
+        formattedFiledDate: '03/01/2019',
         judge: 'Cohen',
       },
     ]);
@@ -482,141 +473,178 @@ describe('advancedDocumentSearchHelper', () => {
     ]);
   });
 
-  describe('formatDocumentSearchResultRecord', () => {
-    it('sets formattedJudgeName to empty string when the search result is an opinion that does not have a judge', () => {
-      const mockResult = {
-        eventCode: OPINION_EVENT_CODES_WITH_BENCH_OPINION[0],
-      };
-
-      const result = formatDocumentSearchResultRecord(mockResult, '', {
-        applicationContext,
-      });
-
-      expect(result.formattedJudgeName).toEqual('');
-    });
-
-    it('sets formattedJudgeName to the judge last name when the search result is an opinion that has a judge', () => {
-      const mockJudgeName = 'Michael G. Scott';
-      const mockResult = {
-        eventCode: OPINION_EVENT_CODES_WITH_BENCH_OPINION[0],
-        judge: mockJudgeName,
-      };
-
-      const result = formatDocumentSearchResultRecord(mockResult, '', {
-        applicationContext,
-      });
-
-      expect(result.formattedJudgeName).toEqual('Scott');
-    });
-
-    it('sets formattedJudgeName to signedJudgeName when the search result is a bench opinion', () => {
-      const mockJudgeName = 'Michael G. Scott';
-      const mockResult = {
-        eventCode: BENCH_OPINION_EVENT_CODE,
-        signedJudgeName: mockJudgeName,
-      };
-
-      const result = formatDocumentSearchResultRecord(mockResult, '', {
-        applicationContext,
-      });
-
-      expect(result.formattedJudgeName).toEqual('Scott');
-    });
-
-    it('sets formattedJudgeName to an empty string when the search result is an order that does NOT have a signedJudgeName', () => {
-      const mockResult = {
-        eventCode: GENERIC_ORDER_EVENT_CODE,
-        signedJudgeName: undefined,
-      };
-
-      const result = formatDocumentSearchResultRecord(mockResult, '', {
-        applicationContext,
-      });
-
-      expect(result.formattedJudgeName).toEqual('');
-    });
-
-    it('sets formattedJudgeName to the judge last name when the search result is an order that has a signedJudgeName', () => {
-      const mockJudgeName = 'Michael G. Scott';
-      const mockResult = {
-        eventCode: GENERIC_ORDER_EVENT_CODE,
-        signedJudgeName: mockJudgeName,
-      };
-
-      const result = formatDocumentSearchResultRecord(mockResult, '', {
-        applicationContext,
-      });
-
-      expect(result.formattedJudgeName).toEqual('Scott');
-    });
-
-    it('sets formattedJudgeName to the judge field when the eventCode is SPOS', () => {
-      const mockJudgeName = 'Scott';
-      const mockResult = {
-        eventCode: 'SPOS',
-        judge: mockJudgeName,
-      };
-
-      const result = formatDocumentSearchResultRecord(mockResult, '', {
-        applicationContext,
-      });
-
-      expect(result.formattedJudgeName).toEqual(mockJudgeName);
-    });
-
-    it('sets formattedJudgeName to the judge field when the eventCode is SPTO', () => {
-      const mockJudgeName = 'Scott';
-      const mockResult = {
-        eventCode: 'SPTO',
-        judge: mockJudgeName,
-      };
-
-      const result = formatDocumentSearchResultRecord(mockResult, '', {
-        applicationContext,
-      });
-
-      expect(result.formattedJudgeName).toEqual(mockJudgeName);
-    });
-
-    it('sets numberOfPagesFormatted to n/a if numberOfPages is undefined', () => {
-      const result = formatDocumentSearchResultRecord(
-        {
-          numberOfPages: undefined,
+  it('sort by docket number', () => {
+    const result = runCompute(advancedDocumentSearchHelper, {
+      state: {
+        ...getBaseState(globalUser),
+        advancedSearchForm: { currentPage: 1 },
+        advancedSearchTab:
+          applicationContext.getConstants().ADVANCED_SEARCH_TABS.ORDER,
+        orderDocumentSearchSort: {
+          sortColumn: 'docketNumber',
+          sortDirection: 'asc',
         },
-        '',
-        {
-          applicationContext,
+        searchResults: {
+          order: [
+            {
+              docketNumber: '101-19',
+              docketNumberWithSuffix: '101-19Z',
+            },
+            {
+              docketNumber: '103-19',
+              docketNumberWithSuffix: '102-19P',
+            },
+            {
+              docketNumber: '102-19',
+              docketNumberWithSuffix: '102-19P',
+            },
+          ],
         },
-      );
-      expect(result.numberOfPagesFormatted).toEqual('n/a');
+      },
     });
+    const expected = ['101-19', '102-19', '103-19'];
+    expect(result.formattedSearchResults.map(r => r.docketNumber)).toEqual(
+      expected,
+    );
+  });
 
-    it('sets numberOfPagesFormatted to 0 if numberOfPages is 0', () => {
-      const result = formatDocumentSearchResultRecord(
-        {
-          numberOfPages: 0,
+  it('sort by formattedFiledDate string', () => {
+    const result = runCompute(advancedDocumentSearchHelper, {
+      state: {
+        ...getBaseState(globalUser),
+        advancedSearchForm: { currentPage: 1 },
+        advancedSearchTab:
+          applicationContext.getConstants().ADVANCED_SEARCH_TABS.ORDER,
+        orderDocumentSearchSort: {
+          sortColumn: 'formattedFiledDate',
+          sortDirection: 'asc',
         },
-        '',
-        {
-          applicationContext,
+        searchResults: {
+          order: [
+            {
+              docketNumber: '101-19',
+              docketNumberWithSuffix: '101-19Z',
+              filingDate: '2019-03-01T05:00:00.000Z',
+            },
+            {
+              docketNumber: '103-19',
+              docketNumberWithSuffix: '102-19P',
+              filingDate: '2019-04-01T05:00:00.000Z',
+            },
+            {
+              docketNumber: '102-19',
+              docketNumberWithSuffix: '102-19P',
+              filingDate: '2019-02-01T05:00:00.000Z',
+            },
+          ],
         },
-      );
-
-      expect(result.numberOfPagesFormatted).toEqual(0);
+      },
     });
+    const expected = [
+      '2019-02-01T05:00:00.000Z',
+      '2019-03-01T05:00:00.000Z',
+      '2019-04-01T05:00:00.000Z',
+    ];
+    expect(result.formattedSearchResults.map(r => r.filingDate)).toEqual(
+      expected,
+    );
+  });
 
-    it('should show the seal icon if the case is sealed', () => {
-      const result = formatDocumentSearchResultRecord(
-        {
-          isCaseSealed: true,
+  it('sort by numberOfPages', () => {
+    const result = runCompute(advancedDocumentSearchHelper, {
+      state: {
+        ...getBaseState(globalUser),
+        advancedSearchForm: { currentPage: 1 },
+        advancedSearchTab:
+          applicationContext.getConstants().ADVANCED_SEARCH_TABS.ORDER,
+        orderDocumentSearchSort: {
+          sortColumn: 'numberOfPages',
+          sortDirection: 'asc',
         },
-        ADVANCED_SEARCH_TABS.ORDER,
-        {
-          applicationContext,
+        searchResults: {
+          order: [
+            {
+              docketNumber: '101-19',
+              docketNumberWithSuffix: '101-19Z',
+              numberOfPages: 3,
+            },
+            {
+              docketNumber: '101-19',
+              docketNumberWithSuffix: '101-19Z',
+              numberOfPages: 2,
+            },
+            {
+              docketNumber: '101-19',
+              docketNumberWithSuffix: '101-19Z',
+              numberOfPages: 5,
+            },
+          ],
         },
-      );
-
-      expect(result.showSealedIcon).toBe(true);
+      },
     });
+    const expected = [2, 3, 5];
+    expect(result.formattedSearchResults.map(r => r.numberOfPages)).toEqual(
+      expected,
+    );
+  });
+
+  it('sort by judge asc', () => {
+    const result = runCompute(advancedDocumentSearchHelper, {
+      state: {
+        ...getBaseState(globalUser),
+        advancedSearchForm: { currentPage: 1 },
+        advancedSearchTab:
+          applicationContext.getConstants().ADVANCED_SEARCH_TABS.OPINION,
+        opinionDocumentSearchSort: {
+          sortColumn: 'judge',
+          sortDirection: 'asc',
+        },
+        searchResults: {
+          opinion: [
+            {
+              judge: 'Cohen',
+            },
+            {
+              judge: 'Buch',
+            },
+            {
+              judge: 'Aardvark',
+            },
+          ],
+        },
+      },
+    });
+    const expected = ['Aardvark', 'Buch', 'Cohen'];
+    expect(result.formattedSearchResults.map(r => r.judge)).toEqual(expected);
+  });
+
+  it('sort by judge desc', () => {
+    const result = runCompute(advancedDocumentSearchHelper, {
+      state: {
+        ...getBaseState(globalUser),
+        advancedSearchForm: { currentPage: 1 },
+        advancedSearchTab:
+          applicationContext.getConstants().ADVANCED_SEARCH_TABS.OPINION,
+        opinionDocumentSearchSort: {
+          sortColumn: 'judge',
+          sortDirection: 'desc',
+        },
+        searchResults: {
+          opinion: [
+            {
+              judge: 'Buch',
+            },
+            {
+              judge: 'Cohen',
+            },
+            {
+              judge: 'Aardvark',
+            },
+          ],
+        },
+      },
+    });
+    const expected = ['Cohen', 'Buch', 'Aardvark'];
+    expect(result.formattedSearchResults.map(r => r.judge)).toEqual(expected);
   });
 });
