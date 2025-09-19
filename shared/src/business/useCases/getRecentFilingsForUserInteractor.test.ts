@@ -43,7 +43,7 @@ const createMockDbDocketEntry = (overrides: any = {}) => ({
   sealedTo: null,
   servedAt: '2024-01-15T10:00:00.000Z', // ISO string format
   isDraft: false,
-  caseCaption: 'Test Case Caption', // Changed from 'caption' to 'caseCaption'
+  caption: 'Test Case Caption', // Database returns 'caption', not 'caseCaption'
   caseIsSealed: false,
   caseDetails: createMockCaseDetails(
     '101-20',
@@ -207,7 +207,7 @@ describe('getRecentFilingsForUserInteractor', () => {
     const mockDbResults = [
       createMockDbDocketEntry({
         documentTitle: null,
-        caseCaption: '',
+        caption: '',
       }),
     ];
 
