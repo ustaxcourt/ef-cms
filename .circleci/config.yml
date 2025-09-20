@@ -277,6 +277,10 @@ jobs:
           command: |
             cd ./scripts/postgres
             DB_HOST="$POSTGRES_HOST" ./create-rds-users.sh
+      - run:
+          name: Migrate Trial Sessions
+          command: |
+            ./scripts/run-once-scripts/postgres-migration/migrate-trial-session-information.ts
 
   smoketests:
     parallelism: 9
