@@ -12,7 +12,6 @@ variable "environment" {
 
 variable "engine_version" {
   type    = string
-  default = "15.4"
 }
 
 variable "delete_protection" {
