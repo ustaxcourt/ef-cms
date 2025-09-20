@@ -10,7 +10,7 @@ describe('dismissThirtyDayAlertFromTrialSessionAction', () => {
   const mockState = {
     formattedTrialSessionDetails: {
       ...MOCK_TRIAL_REGULAR,
-      dismissedAlertForNOTT: false,
+      dismissedAlertForNott: false,
     },
   };
 
@@ -29,7 +29,7 @@ describe('dismissThirtyDayAlertFromTrialSessionAction', () => {
       );
   });
 
-  it('should update the trial session from state after setting dismissedAlertForNOTT to true', async () => {
+  it('should update the trial session from state after setting dismissedAlertForNott to true', async () => {
     await runAction(dismissThirtyDayAlertFromTrialSessionAction, {
       modules: {
         presenter,

@@ -137,6 +137,20 @@ jobs:
           command: |
             cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
       - run:
+          name: Engage maintenance mode if we are upgrading or downgrading the RDS engine version
+          command: |
+            CURRENT_RDS_ENGINE_VERSION=$(aws rds describe-db-instances \
+              --db-instance-identifier "${ENV}-dawson-cluster" \
+              --query 'DBInstances[0].EngineVersion' \
+              --region us-east-1 --output text)
+            if [ -n "$CURRENT_RDS_ENGINE_VERSION" ] && [ "$CURRENT_RDS_ENGINE_VERSION" != "$RDS_ENGINE_VERSION" ]; then
+              npm run maintenance:engage
+              # NOTE: the lack of a companion "disengage" is intentional!
+              # maintenance mode is color-specific so when we switch colors it'll be off
+            else
+              echo "skipping…"
+            fi
+      - run:
           no_output_timeout: 20m
           name: 'Deploy - All Color Terraform'
           command: |
@@ -264,6 +278,10 @@ jobs:
           command: |
             cd ./scripts/postgres
             DB_HOST="$POSTGRES_HOST" ./create-rds-users.sh
+      - run:
+          name: Migrate Trial Sessions
+          command: |
+            ./scripts/run-once-scripts/postgres-migration/migrate-trial-session-information.ts
 
   smoketests:
     parallelism: 9

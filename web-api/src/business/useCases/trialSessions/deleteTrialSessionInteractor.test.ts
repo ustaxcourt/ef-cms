@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
@@ -18,17 +19,22 @@ import {
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
+import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { deleteTrialSessionWorkingCopy as deleteTrialSessionWorkingCopyMock } from '@web-api/persistence/postgres/trialSessions/deleteTrialSessionWorkingCopy';
+import { deleteTrialSession as deleteTrialSessionMock} from '@web-api/persistence/postgres/trialSessions/deleteTrialSession';
 
 describe('deleteTrialSessionInteractor', () => {
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
   const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
   const tryGetLocks = jest.mocked(tryGetLocksMock);
+  const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
+  const deleteTrialSessionWorkingCopy = jest.mocked(deleteTrialSessionWorkingCopyMock);
+  const deleteTrialSession = jest.mocked(deleteTrialSessionMock);
+
   let mockTrialSession;
 
   beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockImplementation(() => mockTrialSession);
+    getTrialSessionById.mockImplementation(() => mockTrialSession);
   });
 
   beforeEach(() => {
@@ -116,10 +122,10 @@ describe('deleteTrialSessionInteractor', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway().deleteTrialSessionWorkingCopy,
+      deleteTrialSessionWorkingCopy,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().deleteTrialSession,
+      deleteTrialSession,
     ).toHaveBeenCalled();
     expect(updateCaseAndAssociations).toHaveBeenCalled();
   });
@@ -142,7 +148,7 @@ describe('deleteTrialSessionInteractor', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway().deleteTrialSessionWorkingCopy,
+      deleteTrialSessionWorkingCopy,
     ).not.toHaveBeenCalled();
   });
 

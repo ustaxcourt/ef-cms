@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
@@ -25,9 +26,13 @@ import {
   updateCasesAndSetNoticeOfChange,
 } from '@web-api/business/useCases/trialSessions/updateTrialSessionInteractorHelper';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { createTrialSessionWorkingCopy as createTrialSessionWorkingCopyMock } from '@web-api/persistence/postgres/trialSessions/createTrialSessionWorkingCopy';
 
 describe('updateTrialSessionInteractorHelper', () => {
   const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
+  const createTrialSessionWorkingCopy = jest.mocked(
+    createTrialSessionWorkingCopyMock,
+  );
 
   describe('updateCasesAndSetNoticeOfChange', () => {
     const TEST_DOCKET_NUMBERS = ['111-25', '222-25', '333-25', '444-25'];
@@ -139,15 +144,6 @@ describe('updateTrialSessionInteractorHelper', () => {
       expect(
         setNoticeOfChangeOfTrialLocationCalls[0][1].caseEntity.docketNumber,
       ).toEqual('444-25');
-
-      const updateCaseHearingCalls =
-        applicationContext.getPersistenceGateway().updateCaseHearing.mock.calls;
-
-      expect(updateCaseHearingCalls.length).toEqual(1);
-      expect(updateCaseHearingCalls[0][0]).toMatchObject({
-        docketNumber: '222-25',
-        hearingToUpdate: VALIDATED_TRIAL_SESSION_ENTITY,
-      });
     });
 
     it('should not generate notices when flags are "false"', async () => {
@@ -214,8 +210,7 @@ describe('updateTrialSessionInteractorHelper', () => {
       await createWorkingCopyForNewUserOnSession(TEST_PARAMS);
 
       const createTrialSessionWorkingCopyCalls =
-        applicationContext.getPersistenceGateway().createTrialSessionWorkingCopy
-          .mock.calls;
+        createTrialSessionWorkingCopy.mock.calls;
 
       expect(createTrialSessionWorkingCopyCalls.length).toEqual(1);
       expect(

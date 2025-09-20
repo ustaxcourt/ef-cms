@@ -9,8 +9,6 @@ export const createOrEditPractitionerDocument = async ({
   barNumber: string;
   practitionerDocument: RawPractitionerDocument;
 }) => {
-  barNumber = barNumber.toLowerCase();
-
   await pgInsertInto({
     table: 'dwPractitionerDocuments',
     values: toKyselyNewPractitionerDocument(practitionerDocument, barNumber),
