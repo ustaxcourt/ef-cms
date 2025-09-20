@@ -143,10 +143,7 @@ jobs:
       - run:
           name: Engage maintenance mode if we are upgrading or downgrading the RDS engine version
           command: |
-            CURRENT_RDS_ENGINE_VERSION=$(aws rds describe-db-instances \
-              --db-instance-identifier "${ENV}-dawson-cluster" \
-              --query 'DBInstances[0].EngineVersion' \
-              --region us-east-1 --output text)
+            CURRENT_RDS_ENGINE_VERSION=$(aws rds describe-db-clusters --db-cluster-identifier "${ENV}-dawson-cluster" --query "DBClusters[0].EngineVersion" --region us-east-1 --output text)
             if [ -n "$CURRENT_RDS_ENGINE_VERSION" ] && [ "$CURRENT_RDS_ENGINE_VERSION" != "$RDS_ENGINE_VERSION" ]; then
               npm run maintenance:engage
               # NOTE: the lack of a companion "disengage" is intentional!
