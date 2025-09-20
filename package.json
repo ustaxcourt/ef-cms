@@ -276,7 +276,7 @@
     "@aws-sdk/client-sts": "3.890.0",
     "@aws-sdk/client-wafv2": "3.890.0",
     "@babel/cli": "7.28.3",
-    "@babel/core": "7.28.3",
+    "@babel/core": "7.28.4",
     "@babel/preset-env": "7.28.3",
     "@babel/preset-react": "7.27.1",
     "@babel/preset-typescript": "7.27.1",
