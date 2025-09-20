@@ -6,17 +6,22 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { HIGH_PRIORITY_SUFFIXES } from '@shared/business/entities/EntityConstants';
 import {
-  HIGH_PRIORITY_SUFFIXES,
-  TRIAL_SESSION_ELIGIBLE_CASES_BUFFER,
-} from '@shared/business/entities/EntityConstants';
-import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+  TCaseOrder,
+  TrialSession,
+} from '@shared/business/entities/trialSessions/TrialSession';
 import { isEmpty, flatten, partition, uniq } from 'lodash';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 import { updateDeadlinesForCasesToCalendar } from '@web-api/persistence/postgres/caseDeadlines/trialSessionCalendarInteractorUtils';
 import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
 import { getEligibleCasesForTrialSession } from '@web-api/persistence/postgres/cases/getEligibleCasesForTrialSession';
+import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { getCalendaredCasesForTrialSession } from '@web-api/persistence/postgres/trialSessions/getCalendaredCasesForTrialSession';
+import { updateTrialSession } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
+import { createOrUpdateTrialSessionCases } from '@web-api/persistence/postgres/trialSessions/createOrUpdateTrialSessionCases';
+import { deleteCasesFromTrialSession } from '@web-api/persistence/postgres/trialSessions/deleteCasesFromTrialSession';
 
 export const setTrialSessionCalendarInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -37,12 +42,9 @@ export const setTrialSessionCalendarInteractor = async (
       throw new UnauthorizedError('Unauthorized');
     }
 
-    const trialSession = await applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById({
-        applicationContext,
-        trialSessionId,
-      });
+    const trialSession = await getTrialSessionById({
+      trialSessionId,
+    });
 
     if (!trialSession) {
       throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
@@ -53,30 +55,22 @@ export const setTrialSessionCalendarInteractor = async (
     trialSessionEntity.validate();
 
     // We will get cases already associated with the trial session as well as cases that are eligible
-    const manuallyAddedCases = await applicationContext
-      .getPersistenceGateway()
-      .getCalendaredCasesForTrialSession({
-        applicationContext,
-        trialSessionId,
-      });
+    const manuallyAddedCases = await getCalendaredCasesForTrialSession({
+      trialSessionId,
+    });
 
     // Manually added cases are already on the caseOrder, so if they have not been QCed we have to remove them
     const [manuallyAddedQcCompleteCases, manuallyAddedQcIncompleteCases] =
       partition(
+        // TODO Add extra filter here for hearings for data safety
         manuallyAddedCases,
         manualCase =>
           manualCase.qcCompleteForTrial &&
           manualCase.qcCompleteForTrial[trialSessionId] === true,
       );
 
-    let eligibleCasesLimit =
-      (trialSessionEntity?.maxCases || 0) + TRIAL_SESSION_ELIGIBLE_CASES_BUFFER;
-
-    eligibleCasesLimit -= manuallyAddedQcCompleteCases.length;
-
     const eligibleCases = (
       await getEligibleCasesForTrialSession({
-        limit: eligibleCasesLimit,
         sessionType: trialSessionEntity.getCaseProcedureForTrial(),
         trialCity: trialSessionEntity.trialLocation!,
       })
@@ -134,10 +128,13 @@ export const setTrialSessionCalendarInteractor = async (
         return theCase.validate().toRawObject();
       });
 
+    const caseOrdersToAdd: TCaseOrder[] = [];
+    const caseOrdersToDelete: TCaseOrder[] = [];
+
     const eligibleCaseEntities = eligibleCases.map(c => {
       const theCase = new Case(c, { authorizedUser });
       theCase.setAsCalendared(trialSessionEntity);
-      trialSessionEntity.addCaseToCalendar(theCase);
+      caseOrdersToAdd.push(trialSessionEntity.addCaseToCalendar(theCase));
       return theCase.validate().toRawObject();
     });
 
@@ -145,9 +142,11 @@ export const setTrialSessionCalendarInteractor = async (
       manuallyAddedQcIncompleteCases.map(c => {
         const theCase = new Case(c, { authorizedUser });
         theCase.removeFromTrialWithAssociatedJudge();
-        trialSessionEntity.deleteCaseFromCalendar({
-          docketNumber: theCase.docketNumber,
-        });
+        caseOrdersToDelete.push(
+          trialSessionEntity.deleteCaseFromCalendar({
+            docketNumber: theCase.docketNumber,
+          })!,
+        );
         return theCase.validate().toRawObject();
       });
 
@@ -163,6 +162,18 @@ export const setTrialSessionCalendarInteractor = async (
 
     const updatesToPersist: Promise<any>[] = [
       upsertCases([...caseEntitiesToCalendar, ...caseEntitiesToNotCalendar]),
+      createOrUpdateTrialSessionCases({
+        trialSessionCases: caseOrdersToAdd.map(TCO => ({
+          caseOrder: TCO,
+          trialSessionId,
+          docketNumber: TCO.docketNumber,
+          isHearing: false,
+        })),
+      }),
+      deleteCasesFromTrialSession({
+        trialSessionId,
+        docketNumbers: caseOrdersToDelete.map(CO => CO.docketNumber),
+      }),
     ];
 
     if (!isEmpty(caseEntitiesToCalendar)) {
@@ -180,8 +191,7 @@ export const setTrialSessionCalendarInteractor = async (
     await settlePromises(updatesToPersist);
 
     // Persist the update to the trial session itself
-    await applicationContext.getPersistenceGateway().updateTrialSession({
-      applicationContext,
+    await updateTrialSession({
       trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
     });
 

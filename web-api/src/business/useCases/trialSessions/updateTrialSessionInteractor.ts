@@ -20,16 +20,16 @@ import {
   updateCasesAndSetNoticeOfChange,
 } from '@web-api/business/useCases/trialSessions/updateTrialSessionInteractorHelper';
 import { shouldGenerateNoticeOfChangeTrialLocation } from '@shared/business/utilities/trialSession/shouldGenerateNoticeOfChangeTrialLocation';
-import { getTrialSessionById } from '@web-api/persistence/dynamo/trialSessions/getTrialSessionById';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { saveFileAndGenerateUrl } from '@web-api/business/useCaseHelper/saveFileAndGenerateUrl';
 import { associateSwingTrialSessions } from '@web-api/business/useCaseHelper/trialSessions/associateSwingTrialSessions';
 import { sendNotificationToUser } from '@web-api/notifications/sendNotificationToUser';
-import { updateTrialSession as updateTrialSessionPersistence } from '@web-api/persistence/dynamo/trialSessions/updateTrialSession';
+import { updateTrialSession as updateTrialSessionPersistence } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
 import {
   asyncHandleLockError,
   withLocking,
 } from '@web-api/persistence/postgres/utils/mutex';
+import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 
 type UpdateTrialSessionParams = {
   trialSession: RawTrialSession;
@@ -46,7 +46,6 @@ export const updateTrialSession = async (
   }
 
   const currentTrialSession = (await getTrialSessionById({
-    applicationContext,
     trialSessionId: trialSession.trialSessionId!,
   }))!;
 
@@ -62,7 +61,7 @@ export const updateTrialSession = async (
     city: trialSession.city,
     courtReporter: trialSession.courtReporter,
     courthouseName: trialSession.courthouseName,
-    dismissedAlertForNOTT: trialSession.dismissedAlertForNOTT,
+    dismissedAlertForNott: trialSession.dismissedAlertForNott,
     estimatedEndDate: trialSession.estimatedEndDate,
     irsCalendarAdministrator: trialSession.irsCalendarAdministrator,
     irsCalendarAdministratorInfo: trialSession.irsCalendarAdministratorInfo,
@@ -98,7 +97,6 @@ export const updateTrialSession = async (
 
   if (createWorkingCopyForNewJudge) {
     await createWorkingCopyForNewUserOnSession({
-      applicationContext,
       trialSessionId: updatedTrialSessionEntity.trialSessionId,
       userId: updatedTrialSessionEntity.judge?.userId,
     });
@@ -112,7 +110,6 @@ export const updateTrialSession = async (
 
   if (createWorkingCopyForNewTrialClerk) {
     await createWorkingCopyForNewUserOnSession({
-      applicationContext,
       trialSessionId: updatedTrialSessionEntity.trialSessionId,
       userId: updatedTrialSessionEntity.trialClerk?.userId,
     });
@@ -179,8 +176,8 @@ export const updateTrialSession = async (
   }
 
   if (trialSession.swingSession && trialSession.swingSessionId) {
+    
     await associateSwingTrialSessions(
-      applicationContext,
       {
         swingSessionId: trialSession.swingSessionId,
         trialSessionEntity: updatedTrialSessionEntity,
@@ -190,7 +187,6 @@ export const updateTrialSession = async (
   }
 
   await updateTrialSessionPersistence({
-    applicationContext,
     trialSessionToUpdate: updatedTrialSessionEntity.validate().toRawObject(),
   });
 
@@ -209,13 +205,10 @@ export const updateTrialSession = async (
 };
 
 export const determineEntitiesToLock = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   { trialSession }: { trialSession: TrialSession },
 ) => {
-  const currentTrialSession = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById({
-      applicationContext,
+  const currentTrialSession = await getTrialSessionById({
       trialSessionId: trialSession.trialSessionId || '',
     });
 

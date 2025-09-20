@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 jest.mock('@web-api/persistence/postgres/users/getUsersInSections');
 import {
@@ -7,11 +8,14 @@ import {
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { generateStandingPretrialOrderForSmallCaseInteractor } from './generateStandingPretrialOrderForSmallCaseInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { getUsersInSections as getUsersInSectionsMock } from '@web-api/persistence/postgres/users/getUsersInSections';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('generateStandingPretrialOrderForSmallCaseInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
   const getUsersInSections = jest.mocked(getUsersInSectionsMock);
 
   const TEST_JUDGE = {
@@ -51,17 +55,15 @@ describe('generateStandingPretrialOrderForSmallCaseInteractor', () => {
       }
     });
 
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockReturnValue({
-        joinPhoneNumber: '3333',
-        judge: { name: 'Test Judge' },
-        meetingId: '1111',
-        password: '2222',
-        startDate: '2019-08-25T05:00:00.000Z',
-        startTime: '10:00',
-        trialLocation: 'Boise, Idaho',
-      });
+    getTrialSessionById.mockResolvedValue({
+      joinPhoneNumber: '3333',
+      judge: { name: 'Test Judge' },
+      meetingId: '1111',
+      password: '2222',
+      startDate: '2019-08-25T05:00:00.000Z',
+      startTime: '10:00',
+      trialLocation: 'Boise, Idaho',
+    } as RawTrialSession);
 
     getUsersInSections.mockResolvedValue([TEST_JUDGE as DbUser]);
   });
@@ -75,9 +77,7 @@ describe('generateStandingPretrialOrderForSmallCaseInteractor', () => {
       },
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getTrialSessionById,
-    ).toHaveBeenCalled();
+    expect(getTrialSessionById).toHaveBeenCalled();
     expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(
       applicationContext.getDocumentGenerators()
@@ -133,18 +133,16 @@ describe('generateStandingPretrialOrderForSmallCaseInteractor', () => {
   });
 
   it('should send formattedTrialLocation with Remote Proceedings text when proceedingType is remote', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockReturnValue({
-        joinPhoneNumber: '3333',
-        judge: { name: 'Test Judge' },
-        meetingId: '1111',
-        password: '2222',
-        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
-        startDate: '2019-08-25T05:00:00.000Z',
-        startTime: '10:00',
-        trialLocation: 'Boise, Idaho',
-      });
+    getTrialSessionById.mockResolvedValue({
+      joinPhoneNumber: '3333',
+      judge: { name: 'Test Judge' },
+      meetingId: '1111',
+      password: '2222',
+      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+      startDate: '2019-08-25T05:00:00.000Z',
+      startTime: '10:00',
+      trialLocation: 'Boise, Idaho',
+    } as RawTrialSession);
 
     await generateStandingPretrialOrderForSmallCaseInteractor(
       applicationContext,

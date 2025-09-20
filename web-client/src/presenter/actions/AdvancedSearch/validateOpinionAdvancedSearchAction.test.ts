@@ -98,6 +98,53 @@ describe('validateOpinionAdvancedSearchAction', () => {
     expect(
       applicationContext.getUseCases().validateOpinionAdvancedSearchInteractor
         .mock.calls[0][0].opinionSearch,
-    ).toMatchObject({ opinionTypes: ['Cucumber', 'Mango'] });
+    ).toMatchObject({
+      opinionTypes: {
+        Avocado: false,
+        Banana: false,
+        Cucumber: true,
+        Mango: true,
+      },
+    });
+  });
+
+  it('validates advanced opinion search with invalid dates', async () => {
+    applicationContext
+      .getUseCases()
+      .validateOpinionAdvancedSearchInteractor.mockReturnValue({
+        errors: {
+          startDate: 'Enter date in format MM/DD/YYYY.',
+          endDate: 'Enter date in format MM/DD/YYYY.',
+        },
+      });
+
+    await runAction(validateOpinionAdvancedSearchAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        advancedSearchForm: {
+          opinionSearch: {
+            startDate: 'invalid-date',
+            endDate: 'invalid-date',
+          },
+        },
+      },
+    });
+
+    expect(errorStub).toHaveBeenCalledWith({
+      alertError: {
+        messages: [
+          'Enter date in format MM/DD/YYYY.',
+          'Enter date in format MM/DD/YYYY.',
+        ],
+        title:
+          'Errors were found. Please correct the date range selection and resubmit.',
+      },
+      errors: {
+        startDate: 'Enter date in format MM/DD/YYYY.',
+        endDate: 'Enter date in format MM/DD/YYYY.',
+      },
+    });
   });
 });

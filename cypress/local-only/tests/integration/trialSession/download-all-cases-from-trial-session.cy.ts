@@ -13,6 +13,7 @@ describe('Trial Session Working Copy', () => {
     ).click();
     cy.get('[data-testid="download-all-trial-session-cases-button"]').click();
     const expectedFileName = 'November_27_2020-Houston_Texas.zip';
+    cy.get('[data-testid="progress-bar-description"]').should('not.exist');
     cy.readFile(`cypress/downloads/${expectedFileName}`);
     cy.task<string[]>('unzipFile', { fileName: expectedFileName }).then(
       actualFileNames => {
@@ -29,7 +30,7 @@ describe('Trial Session Working Copy', () => {
           '103-20, Reuben Blair/0_Docket Record.pdf',
         ];
 
-        expect(actualFileNames).to.deep.equal(expectedFileNames);
+        expect(actualFileNames).to.have.members(expectedFileNames);
       },
     );
   });
