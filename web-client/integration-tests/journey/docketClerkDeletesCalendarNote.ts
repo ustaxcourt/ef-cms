@@ -35,7 +35,7 @@ export const docketClerkDeletesCalendarNote = cerebralTest => {
       state: cerebralTest.getState(),
     });
 
-    expect(caseDetail.trialSessionNotes).toBe(null);
-    cerebralTest.calendarNote = null;
+    expect(caseDetail.trialSessionNotes).toBe(undefined);
+    cerebralTest.calendarNote = undefined;
   });
 };

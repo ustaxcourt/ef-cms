@@ -7,8 +7,6 @@ export const deletePractitionerDocument = async ({
   barNumber: string;
   practitionerDocumentFileId: string;
 }) => {
-  barNumber = barNumber.toLowerCase();
-
   await pgDeleteFrom({
     table: 'dwPractitionerDocuments',
     where: cb =>
