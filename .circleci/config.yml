@@ -53,10 +53,6 @@ parameters:
     default: ''
     type: string
 
-  run_trial_session_migration:
-    default: false
-    type: boolean
-
 commands:
   npm-and-cypress-install:
     steps:
@@ -281,6 +277,10 @@ jobs:
           command: |
             cd ./scripts/postgres
             DB_HOST="$POSTGRES_HOST" ./create-rds-users.sh
+      - run:
+          name: Migrate Trial Sessions
+          command: |
+            ./scripts/run-once-scripts/postgres-migration/migrate-trial-session-information.ts
 
   smoketests:
     parallelism: 9
@@ -479,37 +479,6 @@ jobs:
           name: Cleanup Cypress Test Accounts
           command: |
             npm run cleanup:cypress-test-accounts
-
-  migrate-trial-sessions:
-    parameters:
-      run_trial_session_migration:
-        type: boolean
-        default: false
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: large
-    steps:
-      - run: echo "migrate-trial-sessions starting"
-      - when:
-          condition: << parameters.run_trial_session_migration >>
-          steps:
-            - git-shallow-clone/checkout
-            - npm-install
-            - run:
-                name: Setup Env
-                command: ./scripts/env/env-for-circle.sh
-            - run:
-                name: Engage Maintenance Mode
-                command: npm run maintenance:engage
-            - run:
-                name: Migrate Trial Sessions
-                command: npx ts-node --transpile-only ./scripts/run-once-scripts/postgres-migration/migrate-trial-session-information.ts
-            - run:
-                name: Disengage Maintenance Mode
-                command: npm run maintenance:disengage
 
   ######################## GLUE JOB: Jobs that run in a lower environment ########################
 
@@ -921,18 +890,13 @@ workflows:
           <<: *only-deployed-lower-environments
           requires:
             - migrate
-      - migrate-trial-sessions:
+      - switch-colors:
           <<: *only-deployed-lower-environments
-          run_trial_session_migration: << pipeline.parameters.run_trial_session_migration >>
           requires:
             - smoketests
             - loadtests
             - smoketests-readonly
             - api-hosted-environment-tests
-      - switch-colors:
-          <<: *only-deployed-lower-environments
-          requires:
-            - migrate-trial-sessions
       - cleanup:
           <<: *only-deployed-lower-environments
           requires:
