@@ -3,7 +3,7 @@ jest.mock('@web-api/persistence/elasticsearch/caseAdvancedSearch');
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import {
   CASE_TYPES_MAP,
-  MAX_SEARCH_RESULTS,
+  MAX_CASE_SEARCH_RESULTS,
 } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { caseAdvancedSearchInteractor } from './caseAdvancedSearchInteractor';
@@ -166,8 +166,8 @@ describe('caseAdvancedSearchInteractor', () => {
     expect(results).toEqual([]);
   });
 
-  it('returns no more than MAX_SEARCH_RESULTS', async () => {
-    const maxPlusOneResults = new Array(MAX_SEARCH_RESULTS + 1).fill({
+  it('returns no more than MAX_CASE_SEARCH_RESULTS', async () => {
+    const maxPlusOneResults = new Array(MAX_CASE_SEARCH_RESULTS + 1).fill({
       docketNumber: '101-20',
       petitioners: [],
       userId: '28e908f6-edf0-4289-9372-5b8fe8d2265c',
@@ -183,7 +183,7 @@ describe('caseAdvancedSearchInteractor', () => {
       mockIrsPractitionerUser,
     );
 
-    expect(results.length).toBe(MAX_SEARCH_RESULTS);
+    expect(results.length).toBe(MAX_CASE_SEARCH_RESULTS);
   });
 
   it('returns results if practitioner is associated', async () => {

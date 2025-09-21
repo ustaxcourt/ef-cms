@@ -147,18 +147,13 @@ EF-CMS currently has both the concept of a deployment at a domain as well as a n
 		aws ssm put-parameter --region us-east-1 --name "/DAWSON/${ENV}/destination-table-version" --value "alpha" --type "String" --overwrite
     ```
 
-16. Set the environment's maintenance-mode flag to **false**:
-    ```bash
-		scripts/postgres/set-maintenance-mode.ts false
-    ```
+16. Delete the destination DynamoDB tables from us-east-1. 
 
-17. Delete the destination DynamoDB tables from us-east-1. 
+17. Delete the destination ElasticSearch cluster from us-east-1.
 
-18. Delete the destination ElasticSearch cluster from us-east-1.
+18. Rerun the circle deploy from step 10.
 
-19. Rerun the circle deploy from step 10.
-
-20. If the environment is a test environment, setup test users and judges so smoketests will pass:
+19. If the environment is a test environment, setup test users and judges so smoketests will pass:
     ```bash
     ./scripts/user/setup-test-users.ts
     ```
