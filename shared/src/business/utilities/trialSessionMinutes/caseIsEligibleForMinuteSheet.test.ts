@@ -9,6 +9,10 @@ describe('caseIsEligibleForMinuteSheet', () => {
       ...MOCK_CASE,
       leadDocketNumber: undefined,
       docketNumber: '123-45',
+      addedToSessionAt: '2018-03-01T21:40:46.415Z',
+      isHearing: false,
+      isManuallyAdded: false,
+      removedFromTrial: false,
     };
     const mockTrialSession = {
       ...MOCK_TRIAL_REGULAR,
@@ -27,6 +31,10 @@ describe('caseIsEligibleForMinuteSheet', () => {
       ...MOCK_CASE,
       leadDocketNumber: undefined,
       docketNumber: '123-45',
+      addedToSessionAt: '2018-03-01T21:40:46.415Z',
+      isHearing: false,
+      isManuallyAdded: false,
+      removedFromTrial: false,
     };
     const mockTrialSession = {
       ...MOCK_TRIAL_REGULAR,
@@ -40,12 +48,19 @@ describe('caseIsEligibleForMinuteSheet', () => {
   });
 
   it('should return false when trial session is not calendared', () => {
+    const mockCase = {
+      ...MOCK_CASE,
+      addedToSessionAt: '2018-03-01T21:40:46.415Z',
+      isHearing: false,
+      isManuallyAdded: false,
+      removedFromTrial: false,
+    };
     const mockTrialSession = {
       ...MOCK_TRIAL_REGULAR,
       isCalendared: false,
     };
 
-    const result = caseIsEligibleForMinuteSheet(MOCK_CASE, mockTrialSession);
+    const result = caseIsEligibleForMinuteSheet(mockCase, mockTrialSession);
 
     expect(result).toBe(false);
   });
@@ -55,6 +70,10 @@ describe('caseIsEligibleForMinuteSheet', () => {
       ...MOCK_CASE,
       status: CASE_STATUS_TYPES.closed,
       docketNumber: '123-45',
+      addedToSessionAt: '2018-03-01T21:40:46.415Z',
+      isHearing: false,
+      isManuallyAdded: false,
+      removedFromTrial: false,
     };
     const mockTrialSession = {
       ...MOCK_TRIAL_REGULAR,
@@ -71,6 +90,10 @@ describe('caseIsEligibleForMinuteSheet', () => {
       ...MOCK_CASE,
       docketNumber: '123-45',
       leadDocketNumber: '123-44',
+      addedToSessionAt: '2018-03-01T21:40:46.415Z',
+      isHearing: false,
+      isManuallyAdded: false,
+      removedFromTrial: false,
     };
     const mockTrialSession = {
       ...MOCK_TRIAL_REGULAR,
@@ -87,6 +110,10 @@ describe('caseIsEligibleForMinuteSheet', () => {
       ...MOCK_CASE,
       docketNumber: '123-45',
       leadDocketNumber: '123-45',
+      addedToSessionAt: '2018-03-01T21:40:46.415Z',
+      isHearing: false,
+      isManuallyAdded: false,
+      removedFromTrial: false,
     };
     const mockTrialSession = {
       ...MOCK_TRIAL_REGULAR,
@@ -102,6 +129,10 @@ describe('caseIsEligibleForMinuteSheet', () => {
     const mockCase = {
       ...MOCK_CASE,
       removedFromTrialDate: '2020-01-01',
+      addedToSessionAt: '2018-03-01T21:40:46.415Z',
+      isHearing: false,
+      isManuallyAdded: false,
+      removedFromTrial: true,
     };
     const mockTrialSession = {
       ...MOCK_TRIAL_REGULAR,
@@ -119,6 +150,10 @@ describe('caseIsEligibleForMinuteSheet', () => {
     const mockCase = {
       ...MOCK_CASE,
       removedFromTrialDate: '2020-02-02',
+      addedToSessionAt: '2018-03-01T21:40:46.415Z',
+      isHearing: false,
+      isManuallyAdded: false,
+      removedFromTrial: true,
     };
     const mockTrialSession = {
       ...MOCK_TRIAL_REGULAR,

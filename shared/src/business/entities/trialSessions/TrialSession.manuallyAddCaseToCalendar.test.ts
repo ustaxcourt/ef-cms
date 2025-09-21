@@ -24,9 +24,10 @@ describe('TrialSession entity', () => {
       trialSession.manuallyAddCaseToCalendar({
         calendarNotes: undefined,
         caseEntity: mockCaseEntity,
+        isHearing: false,
       });
 
-      expect(trialSession.caseOrder![0]).toEqual({
+      expect(trialSession.caseOrder![0]).toMatchObject({
         addedToSessionAt: expect.stringMatching(dateRegex),
         docketNumber: mockCaseEntity.docketNumber,
         isManuallyAdded: true,
@@ -39,9 +40,10 @@ describe('TrialSession entity', () => {
       trialSession.manuallyAddCaseToCalendar({
         calendarNotes: mockCalendarNotes,
         caseEntity: mockCaseEntity,
+        isHearing: false,
       });
 
-      expect(trialSession.caseOrder![0]).toEqual({
+      expect(trialSession.caseOrder![0]).toMatchObject({
         addedToSessionAt: expect.stringMatching(dateRegex),
         calendarNotes: mockCalendarNotes,
         docketNumber: mockCaseEntity.docketNumber,

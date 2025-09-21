@@ -3,10 +3,9 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
-import { applicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCasesInTrialSession } from '@web-api/business/useCases/trialSessions/updateTrialSessionInteractorHelper';
-import { getTrialSessionById } from '@web-api/persistence/dynamo/trialSessions/getTrialSessionById';
+import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 
 export const getTrialSessionAssociatedCasesCountInteractor = async (
   { trialSessionId }: { trialSessionId: string },
@@ -20,7 +19,6 @@ export const getTrialSessionAssociatedCasesCountInteractor = async (
   }
 
   const TRIAL_SESSION = await getTrialSessionById({
-    applicationContext,
     trialSessionId,
   });
 

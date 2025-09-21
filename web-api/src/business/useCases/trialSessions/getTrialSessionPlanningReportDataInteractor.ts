@@ -19,6 +19,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { capitalize, invert } from 'lodash';
 import { getEligibleCasesCount } from '@web-api/persistence/postgres/cases/getEligibleCasesCount';
 import { getBlockedCasesCount } from '@web-api/persistence/postgres/cases/reports/getBlockedCasesCount';
+import { getTrialSessions } from '@web-api/persistence/postgres/trialSessions/getTrialSessions';
 
 export const getTrialSessionPlanningReportDataInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -72,9 +73,7 @@ const getTrialSessionPlanningReportData = async ({
   });
 
   const allTrialSessions = (
-    await applicationContext
-      .getPersistenceGateway()
-      .getTrialSessions({ applicationContext })
+    await getTrialSessions()
   ).filter(ts => ts.isCalendared);
 
   const filteredTrialSessions = allTrialSessions.filter(session =>
