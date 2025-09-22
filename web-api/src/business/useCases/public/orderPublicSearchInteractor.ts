@@ -1,6 +1,6 @@
 import { omit } from 'lodash';
 import {
-  MAX_SEARCH_RESULTS,
+  MAX_DOCUMENT_SEARCH_RESULTS,
   ORDER_EVENT_CODES,
 } from '@shared/business/entities/EntityConstants';
 import { DocumentSearch } from '@shared/business/entities/documents/DocumentSearch';
@@ -18,7 +18,7 @@ export const orderPublicSearchInteractor = async (
     judge,
     keyword,
     startDate,
-    limit = 5000,
+    limit = MAX_DOCUMENT_SEARCH_RESULTS,
   }: {
     caseTitleOrPetitioner: string;
     dateRange: string;
@@ -45,7 +45,7 @@ export const orderPublicSearchInteractor = async (
 
   const accessible: any[] = [];
   let searchAfter: any[] | undefined = undefined;
-  const maxCeiling = Math.min(MAX_SEARCH_RESULTS, limit);
+  const maxCeiling = Math.min(MAX_DOCUMENT_SEARCH_RESULTS, limit);
 
   while (accessible.length < limit) {
     const sizeNeeded = limit - accessible.length;

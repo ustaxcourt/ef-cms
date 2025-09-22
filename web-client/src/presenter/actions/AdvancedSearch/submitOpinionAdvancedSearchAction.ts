@@ -1,7 +1,10 @@
 import { clone } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 import { trimDocketNumberSearch } from '../setDocketNumberFromSearchAction';
-import { DATE_RANGE_SEARCH_OPTIONS } from '@shared/business/entities/EntityConstants';
+import {
+  DATE_RANGE_SEARCH_OPTIONS,
+  MAX_DOCUMENT_SEARCH_RESULTS,
+} from '@shared/business/entities/EntityConstants';
 
 export const submitOpinionAdvancedSearchAction = async ({
   applicationContext,
@@ -36,7 +39,7 @@ export const submitOpinionAdvancedSearchAction = async ({
       .opinionAdvancedSearchInteractor(applicationContext, {
         searchParams: {
           ...baseParams,
-          limit: 5000,
+          limit: MAX_DOCUMENT_SEARCH_RESULTS,
         },
       });
     return { searchResults: opinionSearch.results };

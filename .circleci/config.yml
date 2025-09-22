@@ -29,10 +29,6 @@ parameters:
     default: false
     type: boolean
 
-  run_index_once:
-    default: false
-    type: boolean
-
   index_threads:
     default: '5'
     type: string
@@ -60,10 +56,6 @@ parameters:
   destination_bucket:
     default: ''
     type: string
-
-  run_trial_session_migration:
-    default: false
-    type: boolean
 
 commands:
   npm-and-cypress-install:
@@ -148,6 +140,17 @@ jobs:
           name: Build Docker Image
           command: |
             cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
+      - run:
+          name: Engage maintenance mode if we are upgrading or downgrading the RDS engine version
+          command: |
+            CURRENT_RDS_ENGINE_VERSION=$(aws rds describe-db-clusters --db-cluster-identifier "${ENV}-dawson-cluster" --query "DBClusters[0].EngineVersion" --region us-east-1 --output text)
+            if [ -n "$CURRENT_RDS_ENGINE_VERSION" ] && [ "$CURRENT_RDS_ENGINE_VERSION" != "$RDS_ENGINE_VERSION" ]; then
+              npm run maintenance:engage
+              # NOTE: the lack of a companion "disengage" is intentional!
+              # maintenance mode is color-specific so when we switch colors it'll be off
+            else
+              echo "skipping…"
+            fi
       - run:
           no_output_timeout: 20m
           name: 'Deploy - All Color Terraform'
@@ -475,66 +478,6 @@ jobs:
           command: |
             npm run cleanup:cypress-test-accounts
 
-  index-docket-entries-once:
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: xlarge
-    environment:
-      THREADS: << pipeline.parameters.index_threads >>
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-            source $BASH_ENV
-            DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
-            ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
-              --domain-name "${DESTINATION_DOMAIN}" \
-              --region "us-east-1" \
-              --query 'DomainStatus.Endpoint' \
-              --output text)
-            echo "export ELASTICSEARCH_ENDPOINT=${ELASTICSEARCH_ENDPOINT}" >> $BASH_ENV
-      - run:
-          name: Index Docket Entries
-          command: |
-            NODE_ENV=production ./scripts/run-once-scripts/postgres-migration/index-docket-entries/index-docket-entries.ts "$THREADS"
-
-  migrate-trial-sessions:
-    parameters:
-      run_trial_session_migration:
-        type: boolean
-        default: false
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: large
-    steps:
-      - run: echo "migrate-trial-sessions starting"
-      - when:
-          condition: << parameters.run_trial_session_migration >>
-          steps:
-            - git-shallow-clone/checkout
-            - npm-install
-            - run:
-                name: Setup Env
-                command: ./scripts/env/env-for-circle.sh
-            - run:
-                name: Engage Maintenance Mode
-                command: npm run maintenance:engage
-            - run:
-                name: Migrate Trial Sessions
-                command: npx ts-node --transpile-only ./scripts/run-once-scripts/postgres-migration/migrate-trial-session-information.ts
-            - run:
-                name: Disengage Maintenance Mode
-                command: npm run maintenance:disengage
-
   ######################## GLUE JOB: Jobs that run in a lower environment ########################
 
   initiate-glue-job:
@@ -709,32 +652,6 @@ jobs:
             if [ "$MIGRATE_FLAG" == "true" ]; then
               NODE_ENV=production ./scripts/reindex/index-docket-entries/index-docket-entries.ts 5
             fi
-  users-to-postgres:
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-      - run:
-          name: Move petitioners from dwCase.petitioners to dwUser
-          command: |
-            npx ts-node --transpile-only ./scripts/run-once-scripts/postgres-migration/move-petitioners-out-of-case.ts
-      - run:
-          name: Move users, privatePractitioners, irsPractitioners, pending-case from dynamo to postgres
-          command: |
-            npx ts-node --transpile-only ./scripts/run-once-scripts/postgres-migration/migrate-users-to-postgres.ts
-      - run:
-          name: Update users' account status
-          command: |
-            npx ts-node --transpile-only ./scripts/run-once-scripts/postgres-migration/add-account-status-to-users.ts
 
   index-users:
     docker:
@@ -971,18 +888,13 @@ workflows:
           <<: *only-deployed-lower-environments
           requires:
             - migrate
-      - migrate-trial-sessions:
+      - switch-colors:
           <<: *only-deployed-lower-environments
-          run_trial_session_migration: << pipeline.parameters.run_trial_session_migration >>
           requires:
             - smoketests
             - loadtests
             - smoketests-readonly
             - api-hosted-environment-tests
-      - switch-colors:
-          <<: *only-deployed-lower-environments
-          requires:
-            - migrate-trial-sessions
       - cleanup:
           <<: *only-deployed-lower-environments
           requires:
@@ -1103,12 +1015,6 @@ workflows:
           type: approval
           requires:
             - initiate-s3-sync
-
-  index-once:
-    when: << pipeline.parameters.run_index_once >>
-    jobs:
-      - index-docket-entries-once:
-          <<: *only-deployed-lower-environments
 
   sync-s3-to-lower-env:
     when: << pipeline.parameters.run_sync_s3_to_lower_env >>

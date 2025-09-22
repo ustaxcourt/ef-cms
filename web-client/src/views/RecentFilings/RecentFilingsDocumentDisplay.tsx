@@ -1,6 +1,6 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import React from 'react';
-import { RecentFiling } from '@shared/business/entities/RecentFiling';
+import { RecentFiling } from '@shared/business/useCases/getRecentFilingsForUserInteractor';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 type RecentFilingsDocumentDisplayProps = {

@@ -15,7 +15,7 @@ import {
   SORT_ASCENDING_TEXT,
   SORT_DESCENDING_TEXT,
   ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE,
-  MAX_SEARCH_RESULTS,
+  MAX_DOCUMENT_SEARCH_RESULTS,
 } from '@shared/business/entities/EntityConstants';
 import { Mobile, NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
 import { BaseModal } from '@web-client/ustc-ui/Modal/BaseModal';
@@ -182,18 +182,18 @@ export const DocumentSearchResults = connect(
                   <div
                     className={`tablet:grid-col-4 text-right ${totalPages < 2 ? ' padding-bottom-1' : ''}`}
                   >
-                    {results.length === MAX_SEARCH_RESULTS && (
+                    {results.length === MAX_DOCUMENT_SEARCH_RESULTS && (
                       <FontAwesomeIcon
                         className="fa-icon-blue icon-spacing-4"
                         icon="info-circle"
-                        title={`Search is limited to ${MAX_SEARCH_RESULTS.toLocaleString()} results.`}
-                        aria-label={`Search is limited to ${MAX_SEARCH_RESULTS.toLocaleString()} results.`}
+                        title={`Search is limited to ${MAX_DOCUMENT_SEARCH_RESULTS.toLocaleString()} results.`}
+                        aria-label={`Search is limited to ${MAX_DOCUMENT_SEARCH_RESULTS.toLocaleString()} results.`}
                       />
                     )}
                     <span
                       className="cursor-default"
-                      title={`Search is limited to ${MAX_SEARCH_RESULTS.toLocaleString()} results.`}
-                      aria-label={`Search is limited to ${MAX_SEARCH_RESULTS.toLocaleString()} results.`}
+                      title={`Search is limited to ${MAX_DOCUMENT_SEARCH_RESULTS.toLocaleString()} results.`}
+                      aria-label={`Search is limited to ${MAX_DOCUMENT_SEARCH_RESULTS.toLocaleString()} results.`}
                     >
                       <b className="text-semibold">Count:</b>{' '}
                       <span>{results.length.toLocaleString()}</span>
@@ -423,10 +423,13 @@ export const DocumentSearchResults = connect(
                   {showModal === 'showCountModalMobile' && (
                     <BaseModal title="CountModal">
                       <div>
-                        <h2>Count: {MAX_SEARCH_RESULTS.toLocaleString()}</h2>
+                        <h2>
+                          Count: {MAX_DOCUMENT_SEARCH_RESULTS.toLocaleString()}
+                        </h2>
                         <p>
                           Search is limited to{' '}
-                          {MAX_SEARCH_RESULTS.toLocaleString()} results.
+                          {MAX_DOCUMENT_SEARCH_RESULTS.toLocaleString()}{' '}
+                          results.
                         </p>
                         <Button
                           className="width-full tablet:width-auto"
@@ -444,7 +447,7 @@ export const DocumentSearchResults = connect(
                   )}
 
                   <div className="tablet:grid-col-4 float-right text-right text-middle-margin margin-bottom-2">
-                    {results.length === MAX_SEARCH_RESULTS && (
+                    {results.length === MAX_DOCUMENT_SEARCH_RESULTS && (
                       <FontAwesomeIcon
                         className="fa-icon-blue icon-spacing-4"
                         icon="info-circle"
