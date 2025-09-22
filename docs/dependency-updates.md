@@ -169,7 +169,7 @@ We cannot update TypeScript version beyond v5.8.3 until ts-jest supports it
 ### p-queue
 There are a few scripts that depend on p-queue v6.6.2.  Upgrading this past version 6 will cause issues related to module imports.  It might be good to verify if the scripts using p-queue are still in use and if not, we could just remove p-queue and those scripts.
 
-- On September 19th, 2025, tried to updAte to 8.1.1. Errors were thrown on Github Action checks to address imports. A potential fix could be to update our build configuration to properly handle ES modules or maybe use dynamic imports as a workaround? 
+- On September 19th, 2025, tried to updAte to 8.1.1. Errors were thrown on Github Action checks to address imports. A potential fix could be to update our build configuration to properly handle ES modules or maybe use dynamic imports as a workaround? Refer to this PR. https://github.com/ustaxcourt/ef-cms/pull/9164 
 
 ## Incrementing the Node Cache Key Version
 
