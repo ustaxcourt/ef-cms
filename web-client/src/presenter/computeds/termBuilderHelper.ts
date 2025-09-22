@@ -16,11 +16,20 @@ export const termBuilderHelper = (get: Get): any => {
     throw Error('Could not get term state');
   }
 
-  const { termStartDate, termEndDate } = termState;
+  let { termStartDate, termEndDate } = termState;
+
+  termStartDate = formatDateString(
+    createISODateString(termStartDate, FORMATS.MMDDYYYY),
+    FORMATS.YYYYMMDD,
+  );
+  termEndDate = formatDateString(
+    createISODateString(termEndDate, FORMATS.MMDDYYYY),
+    FORMATS.YYYYMMDD,
+  );
 
   const holidaysInDateRange = getHolidaysInDateRange(
-    createISODateString(termStartDate, FORMATS.MMDDYYYY),
-    createISODateString(termEndDate, FORMATS.MMDDYYYY),
+    termStartDate,
+    termEndDate,
   );
   const formattedHolidaysInDateRange = holidaysInDateRange.map(
     (holiday: Holiday) => {
@@ -30,5 +39,5 @@ export const termBuilderHelper = (get: Get): any => {
       };
     },
   );
-  return {formattedHolidaysInDateRange };
+  return { formattedHolidaysInDateRange };
 };
