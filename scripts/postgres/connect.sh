@@ -18,7 +18,9 @@ GENERATE_TOKEN_PARAMS=("--quiet")
 
 for param in "$@"; do
   { [[ "$param" == "--rw" ]] || [[ "$param" == "-w" ]]; } && GENERATE_TOKEN_PARAMS+=("--rw")
-  { [[ "$param" == "--yes" ]] || [[ "$param" == "-y" ]]; } && CHECK_ENV_PARAMS+=("--yes")
+  { [[ "$param" == "--quiet" ]] || [[ "$param" == "-q" ]]; } && CHECK_ENV_PARAMS+=("--quiet") && shush=1
+  { [[ "$param" == "--yes" ]] || [[ "$param" == "-y" ]]; } && CHECK_ENV_PARAMS+=("--yes" "--quiet")
+  { [[ "$param" =~ ^--command= ]] || [[ "$param" =~ ^-c= ]]; } && COMMAND="${param#*=}"
   { [[ "$param" =~ ^--file= ]] || [[ "$param" =~ ^-f= ]]; } && SQL_FILE="${param#*=}"
 done
 
@@ -37,7 +39,9 @@ source "./scripts/postgres/generate-token.sh" "${GENERATE_TOKEN_PARAMS[@]}"
 } && echo "Unable to generate IAM token" && exit 1
 
 PSQL_PARAMS=("-h" "$DB_HOST" "-U" "$DB_USER" "-d" "$DB_NAME")
+[[ -n "$COMMAND" ]] && PSQL_PARAMS+=("-c" "$COMMAND")
+[[ "$shush" -eq 1 ]] && PSQL_PARAMS+=("--no-align" "--quiet" "--tuples-only")
 [[ -n "$SQL_FILE" ]] && PSQL_PARAMS+=("-f" "$SQL_FILE")
 
-echo "psql" "${PSQL_PARAMS[@]}"
+[[ "$shush" -eq 0 ]] && echo "psql" "${PSQL_PARAMS[@]}"
 PGPASSWORD="$DB_TOKEN" psql "${PSQL_PARAMS[@]}"
