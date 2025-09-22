@@ -80,7 +80,6 @@ export const getRecentFilingsByDocketNumbers = async ({
       .where('d.filingDate', '>=', calculateDate({ dateString: startDate }))
       .where('d.filingDate', '<=', calculateDate({ dateString: endDate }))
       .where('d.isStricken', 'is not', true)
-      .where('d.eventCode', '!=', 'NOT')
       .where('d.eventCode', '!=', 'STIN')
       .where('d.isDraft', 'is not', true)
       .orderBy('d.filingDate', 'desc')
