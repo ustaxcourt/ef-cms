@@ -222,7 +222,7 @@ describe('publicTrialSessionsHelper', () => {
       const TEST_PROCEEDING_TYPE = 'TEST_PROCEEDING_TYPE';
       const TEST_TRIAL_SESSIONS: TrialSessionInfoDTO[] = [
         createTrialSessionObject({ proceedingType: TEST_PROCEEDING_TYPE }),
-        createTrialSessionObject({ essionType: SESSION_TYPES.small }),
+        createTrialSessionObject({ sessionType: SESSION_TYPES.small }),
         createTrialSessionObject({ trialLocation: 'Mobile, Alabama' }),
         createTrialSessionObject({
           judge: {

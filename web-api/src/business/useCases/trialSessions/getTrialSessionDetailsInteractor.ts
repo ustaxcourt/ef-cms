@@ -7,11 +7,10 @@ import {
   RawTrialSession,
   TrialSession,
 } from '@shared/business/entities/trialSessions/TrialSession';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 
 export const getTrialSessionDetailsInteractor = async (
-  applicationContext: ServerApplicationContext,
   { trialSessionId }: { trialSessionId: string },
   authorizedUser: UnknownAuthUser,
 ): Promise<RawTrialSession> => {
@@ -19,10 +18,7 @@ export const getTrialSessionDetailsInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const trialSessionDetails = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById({
-      applicationContext,
+  const trialSessionDetails = await getTrialSessionById({
       trialSessionId,
     });
 

@@ -195,39 +195,18 @@ resource "aws_iam_policy" "ci_cd_policy" {
       "Sid": "RdsConnect",
       "Effect": "Allow",
       "Action": [
-        "rds-db:connect"
+        "rds-db:connect",
+        "rds:DescribeDBEngineVersions"
       ],
       "Resource": [
         "*"
       ]
     },
     {
-      "Sid": "DynamoGranular",
+      "Sid": "DynamoNoLongerGranular",
       "Effect": "Allow",
       "Action": [
-        "dynamodb:Scan",
-        "dynamodb:BatchWriteItem",
-        "dynamodb:PutItem",
-        "dynamodb:DeleteItem",
-        "dynamodb:CreateTable",
-        "dynamodb:DescribeTable",
-        "dynamodb:DeleteTableReplica",
-        "dynamodb:GetItem",
-        "dynamodb:Query",
-        "dynamodb:BatchGetItem",
-        "dynamodb:UpdateTable",
-        "dynamodb:UpdateTimeToLive",
-        "dynamodb:CreateGlobalTable",
-        "dynamodb:DescribeContinuousBackups",
-        "dynamodb:DescribeGlobalTable",
-        "dynamodb:DescribeLimits",
-        "dynamodb:DescribeStream",
-        "dynamodb:GetRecords",
-        "dynamodb:GetShardIterator",
-        "dynamodb:UpdateItem",
-        "dynamodb:ListStreams",
-        "dynamodb:UpdateGlobalTable",
-        "dynamodb:CreateTableReplica"
+        "dynamodb:*"
       ],
       "Resource": [
         "arn:aws:dynamodb::${data.aws_caller_identity.current.account_id}:global-table/efcms-*",
