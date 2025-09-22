@@ -16,7 +16,7 @@ const alertVariants = cva(
   cn(
     'tw:relative tw:border-solid tw:border-0',
     'tw:xs:border-l-8 tw:xs:p-4 tw:border-l-6 tw:p-3',
-    'tw:font-normal tw:xs:text-base tw:text-sm/4',
+    'tw:font-normal tw:xs:text-lg tw:text-base/4',
     'tw:[&_ul]:m-0 tw:[&_ul]:-ml-4 tw:[&_ul]:list-disc',
     'tw:xs:[&_svg]:h-7 tw:xs:[&_svg]:w-7 tw:[&_svg]:h-6 tw:[&_svg]:w-6',
     'tw:xs:max-w-[740px] tw:w-full',
@@ -84,19 +84,19 @@ function AlertHeader({
   ...props
 }: React.ComponentProps<'p'> & AlertHeaderType) {
   return (
-    <div className="tw:flex">
-      <div className="tw:pt-[0px] tw:xs:pt-[2px] tw:mr-3 tw:!h-[20px] tw:!w-[20px] tw:xs:!h-[24px] tw:xs:!w-[24px]">
+    <div className="tw:flex tw:xs:!h-[24px]">
+      <div className="tw:xs:text-2xl/6 tw:!h-[20px] tw:!w-[20px] tw:xs:!h-[24px] tw:xs:!w-[24px]">
         <FontAwesomeIcon
           icon={iconType[variant ?? 'info']}
-          className="tw:!h-[20px] tw:!w-[20px] "
+          className="tw:!h-[20px] tw:!w-[20px] tw:xs:!h-[24px] tw:xs:!w-[24px]"
         />
       </div>
       <div
         className={cn(
           title
-            ? 'tw:font-bold tw:text-sm/4 tw:xs:text-base/6'
-            : 'tw:text-sm/5 tw:xs:text-base/6',
-          'tw:pb-0',
+            ? 'tw:font-bold tw:text-base/5 tw:xs:text-lg/6'
+            : 'tw:text-base',
+          'tw:pb-0 tw:ml-3',
         )}
         data-slot="alert-title"
         data-testid="alert-header"
@@ -104,13 +104,13 @@ function AlertHeader({
       ></div>
       {isDismissible && (
         <Button
-          className="tw:m-0 tw:p-0 tw:gap-3 tw:w-auto tw:fill-primary tw:self-start tw:ml-auto"
+          className="tw:m-0 tw:p-0 tw:gap-3 tw:w-auto tw:fill-primary tw:self-start tw:ml-auto tw:xs:mt-0.75"
           variant={'primaryTertiary'}
           onClick={closeButtonOnClick}
         >
-          <div className="tw:flex tw:text-sm/4.5 tw:xs:text-base/5.5 tw:hover:text-primary-dark tw:active:text-primary-darker tw:active:fill-primary-darker tw:hover:fill-primary-dark">
-            <span className="tw:ml-2 tw:mr-2 tw:xs:ml-3 tw:xs:mr-3">Close</span>
-            <CircleXmark className="tw:!h-[20px] tw:!w-[20px] tw:xs:!h-[24px] tw:xs:!w-[24px]" />
+          <div className="tw:flex tw:text-sm tw:xs:text-base/4 tw:hover:text-primary-dark tw:active:text-primary-darker tw:active:fill-primary-darker tw:hover:fill-primary-dark">
+            <span className="tw:ml-2 tw:mr-2 tw:xs:ml-3 tw:xs:mt-0.5">Close</span>
+            <CircleXmark className="tw:!h-[14px] tw:!w-[14px] tw:xs:!h-[16px] tw:xs:!w-[16px] tw:xs:mt-0.5 tw:xs:mb-0.5 tw:mt-1" />
           </div>
         </Button>
       )}
@@ -121,7 +121,7 @@ function AlertHeader({
 function AlertDescription({ ...props }: React.ComponentProps<'p'>) {
   return (
     <div
-      className="tw:text-sm/5 tw:mt-1 tw:ml-8 tw:xs:ml-9 tw:xs:text-base/5 tw:xs:mt-3"
+      className="tw:text-base tw:xs:text-lg/6 tw:ml-8 tw:xs:ml-9 tw:xs:mt-1"
       data-slot="alert-description"
       {...props}
     />
