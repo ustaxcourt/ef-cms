@@ -676,6 +676,8 @@ export const baseState = {
   createOrderSelectedCases: [] as any[],
   currentJudges: [],
   currentPage: 'Loading',
+  orderCurrentPaginationPage: 0,
+  opinionCurrentPaginationPage: 0,
   trialSessionLocationChangeModalInfo: {
     currentTrialSessionLocation: undefined as
       | TrialSessionLocationInfo
@@ -715,6 +717,14 @@ export const baseState = {
   docketRecordIndex: 0,
   documentToEdit: {} as any,
   documentsSelectedForDownload: [] as { docketEntryId: string }[],
+  orderDocumentSearchSort: {
+    sortColumn: 'formattedFiledDate',
+    sortDirection: 'desc' as 'asc' | 'desc',
+  },
+  opinionDocumentSearchSort: {
+    sortColumn: 'formattedFiledDate',
+    sortDirection: 'desc' as 'asc' | 'desc',
+  },
   draftDocumentViewerDocketEntryId: null,
   featureFlags: undefined as unknown as { [key: string]: string },
   fileUploadProgress: {
@@ -935,6 +945,10 @@ export const baseState = {
   workQueue: [] as RawWorkItemWithCaseAndDocketEntryInfo[],
   workQueueToDisplay: { box: 'inbox', queue: 'my', section: '' },
   workitemAllCheckbox: false,
+  recentFilingsTableSort: {
+    sortField: 'filedDate',
+    sortOrder: 'desc' as 'asc' | 'desc',
+  },
 };
 
 export const initialState = {
