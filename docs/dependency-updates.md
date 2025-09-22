@@ -116,7 +116,13 @@ regex search the entire project for `"~> \d+.\d+.\d+"` and make sure it's to the
 
 ### 5. Update OpenSearch 
 
-Check to see if there is an updated verison of Opensearch available and update to the [latest version](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/what-is.html#choosing-version).
+Check to see if there is an updated version of OpenSearch available:
+
+```
+aws opensearch list-versions
+```
+
+If an update is available, follow these steps to update OpenSearch to the [latest version](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/what-is.html#choosing-version):
 
 - Set the value of the `ES_ENGINE_VERSION` secret in the `[env]_deploy` secrets in Secrets Manager using `scripts/secrets/update-secret.ts`
 
