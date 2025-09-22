@@ -104,7 +104,7 @@ function AlertHeader({
       ></div>
       {isDismissible && (
         <Button
-          className="tw:m-0 tw:p-0 tw:gap-3 tw:w-auto tw:fill-primary tw:self-start tw:ml-auto tw:xs:mt-0.75"
+          className="tw:m-0 tw:p-0 tw:gap-3 tw:w-auto tw:fill-primary tw:self-start tw:ml-auto"
           variant={'primaryTertiary'}
           onClick={closeButtonOnClick}
         >
