@@ -11,8 +11,8 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getUniqueId } from '@shared/sharedAppContext';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { getTrialSessionById } from '@web-api/persistence/dynamo/trialSessions/getTrialSessionById';
 import { createAndUploadMinuteSheet } from '@web-api/business/useCaseHelper/trialSessionMinutes/createAndUploadMinuteSheet';
+import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 
 export const saveMinuteSheetToDraftsInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -28,7 +28,6 @@ export const saveMinuteSheetToDraftsInteractor = async (
   });
 
   const trialSession = await getTrialSessionById({
-    applicationContext,
     trialSessionId,
   });
 

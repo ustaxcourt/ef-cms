@@ -6,6 +6,7 @@ import { type RawTrialSession } from '@shared/business/entities/trialSessions/Tr
 import { type ServerApplicationContext } from '@web-api/applicationContext';
 import { generateCsv } from '../helpers/generate-csv';
 import { pick } from 'lodash';
+import { getTrialSessions } from '@web-api/persistence/postgres/trialSessions/getTrialSessions';
 
 let trialSessionsCache: RawTrialSession[] = [];
 
@@ -29,32 +30,22 @@ export const getUniqueValues = ({
   return uniqueValues;
 };
 
-const getTrialSessions = async ({
-  applicationContext,
-}: {
-  applicationContext: ServerApplicationContext;
-}): Promise<RawTrialSession[]> => {
+const getTrialSessionsCache = async (): Promise<RawTrialSession[]> => {
   if (trialSessionsCache.length === 0) {
-    trialSessionsCache = await applicationContext
-      .getPersistenceGateway()
-      .getTrialSessions({
-        applicationContext,
-      });
+    trialSessionsCache = await getTrialSessions();
   }
 
   return trialSessionsCache;
 };
 
 const getTrialSessionsInTimeframe = async ({
-  applicationContext,
   end,
   start,
 }: {
-  applicationContext: ServerApplicationContext;
   end: string;
   start: string;
 }): Promise<RawTrialSession[]> => {
-  const trialSessions = await getTrialSessions({ applicationContext });
+  const trialSessions = await getTrialSessionsCache();
   const yearSessions = trialSessions.filter(
     session =>
       session.startDate &&
@@ -133,7 +124,6 @@ const outputTrialSessionsStats = ({
 };
 
 export const trialSessionsReport = async ({
-  applicationContext,
   end,
   filename,
   start,
@@ -146,7 +136,6 @@ export const trialSessionsReport = async ({
   stats: boolean;
 }): Promise<void> => {
   const trialSessions = await getTrialSessionsInTimeframe({
-    applicationContext,
     end,
     start,
   });

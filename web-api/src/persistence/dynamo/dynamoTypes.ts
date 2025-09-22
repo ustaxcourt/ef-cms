@@ -1,8 +1,3 @@
-import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
-import { RawPrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
-import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
-import { trialSessionFieldsToOmitBeforePersisting } from '@web-api/persistence/dynamo/trialSessions/updateTrialSession';
-
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const fieldsToOmitBeforePersisting = [
   'archivedCorrespondences',
@@ -34,24 +29,9 @@ export type PutRequest = {
 
 export type DocketEntryDynamoRecord = TDynamoRecord<RawDocketEntry>;
 
-export type IrsPractitionerOnCaseRecord = TDynamoRecord<RawIrsPractitioner>;
-
-export type PrivatePractitionerOnCaseRecord =
-  TDynamoRecord<RawPrivatePractitioner>;
-
 export type CaseRecord = TDynamoRecord<
   Omit<RawCase, CaseFieldsToOmitBeforePersisting>
 >;
-
-type TrialSessionFieldsToOmitBeforePersisting =
-  (typeof trialSessionFieldsToOmitBeforePersisting)[number];
-export type TrialSessionRecord = TDynamoRecord<
-  Omit<RawTrialSession, TrialSessionFieldsToOmitBeforePersisting>
->;
-export type TrialSessionPaperPdfRecord = TDynamoRecord<{
-  fileId: string;
-  title: string;
-}>;
 
 export type AccountConfirmationRecord = TDynamoRecord<{
   userId: string;
