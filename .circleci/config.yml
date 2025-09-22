@@ -278,7 +278,7 @@ jobs:
       - run:
           name: Migrate Trial Sessions
           command: |
-            NUM_TRIAL_SESSIONS=$(.scripts/postgres/connect.sh --quiet --yes \
+            NUM_TRIAL_SESSIONS=$(./scripts/postgres/connect.sh --quiet --yes \
               --command="SELECT COUNT(*) FROM dw_trial_session;")
             if [[ "$NUM_TRIAL_SESSIONS" -ne 0 ]]; then
               echo "Already migrated trial sessions"
