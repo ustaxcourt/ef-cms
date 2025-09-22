@@ -8,6 +8,9 @@ import { TrialSession } from '@shared/business/entities/trialSessions/TrialSessi
 import { TrialSessionWorkingCopy } from '@shared/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '@shared/business/entities/User';
+import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { getTrialSessionWorkingCopies } from '@web-api/persistence/postgres/trialSessions/getTrialSessionWorkingCopies';
+import { createTrialSessionWorkingCopy } from '@web-api/persistence/postgres/trialSessions/createTrialSessionWorkingCopy';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 /**
@@ -46,13 +49,11 @@ export const getTrialSessionWorkingCopyInteractor = async (
 
   let trialSessionWorkingCopyEntity, validRawTrialSessionWorkingCopyEntity;
 
-  const trialSessionWorkingCopy = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionWorkingCopy({
-      applicationContext,
-      trialSessionId,
-      userId: chambersUserId,
-    });
+  const trialSessionWorkingCopy = (
+    await getTrialSessionWorkingCopies({
+      tsWorkingCopyIds: [{ trialSessionId, userId: chambersUserId }],
+    })
+  ).at(0);
 
   if (trialSessionWorkingCopy) {
     trialSessionWorkingCopyEntity = new TrialSessionWorkingCopy(
@@ -62,12 +63,9 @@ export const getTrialSessionWorkingCopyInteractor = async (
       .validate()
       .toRawObject();
   } else {
-    const trialSessionDetails = await applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById({
-        applicationContext,
-        trialSessionId,
-      });
+    const trialSessionDetails = await getTrialSessionById({
+      trialSessionId,
+    });
 
     if (!trialSessionDetails) {
       throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
@@ -90,12 +88,9 @@ export const getTrialSessionWorkingCopyInteractor = async (
       validRawTrialSessionWorkingCopyEntity = trialSessionWorkingCopyEntity
         .validate()
         .toRawObject();
-      await applicationContext
-        .getPersistenceGateway()
-        .createTrialSessionWorkingCopy({
-          applicationContext,
-          trialSessionWorkingCopy: validRawTrialSessionWorkingCopyEntity,
-        });
+      await createTrialSessionWorkingCopy({
+        trialSessionWorkingCopy: validRawTrialSessionWorkingCopyEntity,
+      });
     } else {
       throw new NotFoundError('Trial session working copy not found');
     }
