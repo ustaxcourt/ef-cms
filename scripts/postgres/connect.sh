@@ -3,13 +3,16 @@
 # Generates a temporary auth token for the given environment's RDS cluster and initiates a connection with psql
 
 # Parameters
+#   --quiet           Suppresses output (except SQL command results)
 #   --rw              Connects to the cluster's writeable endpoint
 #   --yes             Presumes prior confirmation when checking environment variables
+#   --command=SQL     Passes the provided SQL command into psql with -c
 #   --file=file.sql   Passes the provided file path into psql with -f
 
 # Usage examples
 #   ./scripts/postgres/connect.sh --yes
 #   DB_USER="${ENV}_dawson" ./scripts/postgres/connect.sh --rw --file=./scripts/postgres/backup.sql
+#
 
 ( ! command -v psql > /dev/null ) && echo "psql must be installed on your machine." && exit 1
 
@@ -17,8 +20,8 @@ CHECK_ENV_PARAMS=("ENV" "AWS_ACCESS_KEY_ID" "AWS_SECRET_ACCESS_KEY")
 GENERATE_TOKEN_PARAMS=("--quiet")
 
 for param in "$@"; do
-  { [[ "$param" == "--rw" ]] || [[ "$param" == "-w" ]]; } && GENERATE_TOKEN_PARAMS+=("--rw")
   { [[ "$param" == "--quiet" ]] || [[ "$param" == "-q" ]]; } && CHECK_ENV_PARAMS+=("--quiet") && shush=1
+  { [[ "$param" == "--rw" ]] || [[ "$param" == "-w" ]]; } && GENERATE_TOKEN_PARAMS+=("--rw")
   { [[ "$param" == "--yes" ]] || [[ "$param" == "-y" ]]; } && CHECK_ENV_PARAMS+=("--yes" "--quiet")
   { [[ "$param" =~ ^--command= ]] || [[ "$param" =~ ^-c= ]]; } && COMMAND="${param#*=}"
   { [[ "$param" =~ ^--file= ]] || [[ "$param" =~ ^-f= ]]; } && SQL_FILE="${param#*=}"
