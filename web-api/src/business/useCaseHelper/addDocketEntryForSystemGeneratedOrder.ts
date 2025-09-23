@@ -71,6 +71,7 @@ export const addDocketEntryForSystemGeneratedOrder = async ({
       caseCaptionExtension,
       caseTitle,
       docketNumberWithSuffix,
+      addedDocketNumbers: [],
       nameOfClerk,
       orderContent: systemGeneratedDocument.content,
       orderTitle: systemGeneratedDocument.documentTitle.toUpperCase(),
