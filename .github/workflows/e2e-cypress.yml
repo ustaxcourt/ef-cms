@@ -3,6 +3,10 @@ name: E2E Cypress
 on:
   pull_request:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: true
+
 jobs:
   e2e_cypress:
     runs-on: ubuntu-latest
@@ -47,28 +51,20 @@ jobs:
         uses: runforesight/workflow-telemetry-action@v2
         with:
           comment_on_pr: false
-      - name: Cache Puppeteer Binary
-        id: cache-puppeteer
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/puppeteer
-          key: ${{ runner.os }}-puppeteer-${{ hashFiles('**/package-lock.json') }}
+
       - name: Restore Cache Dependencies
         id: cache-dependencies
-        uses: actions/cache@v4
+        uses: actions/cache/restore@v4
         with:
-          path: node_modules
+          path: |
+            node_modules
+            .cache/puppeteer
+            /home/runner/.cache/Cypress
           key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-modules-
       - name: Install Node Dependencies - Cache Miss Install
         if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        id: npm-clean-install
         run: npm ci
-      - name: Install Cypress Binary
-        run: npx cypress install
-      - name: Install Puppeteer
-        if: steps.cache-puppeteer.outputs.cache-hit != 'true'
-        run: npx puppeteer browsers install chrome
       - name: Setup Postgres
         run: |
           npm run migration:postgres
@@ -88,3 +84,12 @@ jobs:
         with:
           name: cypress-videos-${{ matrix.ci_node_index }}
           path: ${{ github.workspace }}/cypress/local-only/videos
+      - name: Save Cache Dependencies
+        if: steps.npm-clean-install.outcome == 'success'
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            node_modules
+            .cache/puppeteer
+            /home/runner/.cache/Cypress
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}

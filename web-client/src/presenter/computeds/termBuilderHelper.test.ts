@@ -2,12 +2,11 @@ import { termBuilderHelper } from './termBuilderHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { STATE_KEYS } from '@shared/business/entities/EntityConstants';
 
-
 jest.mock('@shared/business/utilities/getHolidaysInDateRange', () => ({
   getHolidaysInDateRange: jest.fn(() => [
-    { 
-      name: 'New Year\'s Day', 
-      dateString: '2025-01-01', 
+    {
+      name: "New Year's Day",
+      dateString: '2025-01-01',
       date: '2025-01-01',
     },
   ]),
@@ -30,10 +29,10 @@ describe('termBuilderHelper', () => {
   });
 
   it('throws if term state is missing', () => {
-    expect(() => 
+    expect(() =>
       runCompute(termBuilderHelper, {
         state: {},
-      })
+      }),
     ).toThrow('Could not get term state');
   });
 });

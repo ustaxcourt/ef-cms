@@ -102,7 +102,39 @@ regex search the entire project for `"~> \d+.\d+.\d+"` and make sure it's to the
 
 	> version = "~>~ <LATEST_VERSION>"
 
-### 4. Wrap up
+
+### 4. Update Terraform OpenSearch provider 
+
+Check if there is an update to the Terraform OpenSearch provider and update all of the following files to use the [latest version](https://registry.terraform.io/providers/opensearch-project/opensearch/latest) of the provider.
+
+regex search the entire project for `"~> \d+.\d+.\d+"` and make sure it's to the latest version.  For example, some of these files have the providers defined:
+
+  - `web-api/terraform/applyables/account-specific/account-specific.tf`
+  - `web-api/terraform/modules/kibana/providers.tf`
+
+	> version = "~>~ <LATEST_VERSION>"
+
+### 5. Update OpenSearch 
+
+Check to see if there is an updated version of OpenSearch available:
+
+```
+aws opensearch list-versions
+```
+
+If an update is available, follow these steps to update OpenSearch to the [latest version](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/what-is.html#choosing-version):
+
+- Set the value of the `ES_ENGINE_VERSION` secret in the `[env]_deploy` secrets in Secrets Manager using `scripts/secrets/update-secret.ts`
+
+- Set the value of the `ES_LOGS_ENGINE_VERSION` secret in the `account_deploy` secrets in Secrets Manager using `scripts/secrets/update-secret.ts`
+
+- Run an account-specific terraform deployment using `deploy:account-specific`. Verify cluster is still functional while upgrade is being performed and after by running queries in kibana.
+
+- Run deployment. Verify cluster is still functional while upgrade is being performed and after by running search smoketests against current color.
+ 
+- Add these manual steps in the dependency updates pr
+
+### 6. Wrap up
 
 - Check through the list of caveats to see if any of the documented issues have been resolved.
 
@@ -157,9 +189,6 @@ On June 26 2025, newer versions of babel-core and jest core also started to caus
 ### @types/node
 The major version of this package should match our major version of node. At the moment that we are using node v22.16.0 so we should use a package that starts with 22.
 
-### pg
-We encountered failure in integration tests running pg version 8.16.3, so we had to revert back to the previous version 8.16.2 which was more stable.
-
 ### TypeScript
 We cannot update TypeScript version beyond v5.8.3 until ts-jest supports it
 
@@ -170,3 +199,12 @@ There are a few scripts that depend on p-queue v6.6.2.  Upgrading this past vers
 
 It's rare to need modify cache key. One reason you may want to do so is if a package fails to install properly, and CircleCI, unaware of the failed installation, stores the corrupted cache. In this case, we will need to increment the cache key version so that CircleCI is forced to reinstall the node dependencies and save them using the new key. To update the cache key, locate `vX-npm` and `vX-cypress` (where X represents the current cache key version) in the config.yml file, and then increment the identified version.
 
+## uuid
+9/17/25 keeping it 11.1.0. The next version 12.0.0 and above no longer supports CommonJS
+
+https://www.npmjs.com/package/uuid?activeTab=readme
+
+
+Quote from site
+
+"Starting with uuid@12 CommonJS is no longer supported. See implications and motivation for details."
