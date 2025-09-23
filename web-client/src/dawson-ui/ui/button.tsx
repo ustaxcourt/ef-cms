@@ -39,14 +39,14 @@ const buttonVariants = cva(
           'tw:invalid:text-grey-light tw:invalid:border-grey-light', // inactive / invalid
         ),
         destructiveTertiary: cn(
-          'tw:px-0 tw:py-0 tw:bg-transparent tw:text-destructive tw:font-[400] tw:underline tw:underline-offset-4 tw:outline-none tw:font-normal', // standard,
+          'tw:px-0 tw:py-0 tw:bg-transparent tw:text-destructive tw:font-[400] tw:underline tw:outline-none tw:font-normal', // standard,
           'tw:hover:underline tw:hover:text-destructive-dark', // hover
           'tw:focus-visible:ring-offset-[4px] tw:focus-visible:bg-white', // focus-visible
           'tw:active:text-destructive-darker', // active
           'tw:invalid:text-grey-light', // invalid
         ),
         primaryTertiary: cn(
-          'tw:px-0 tw:py-0 tw:bg-transparent tw:text-primary tw:font-[400] tw:underline tw:underline-offset-4  tw:outline-none tw:font-normal', // standard
+          'tw:px-0 tw:py-0 tw:bg-transparent tw:text-primary tw:font-[400] tw:underline tw:outline-none tw:font-normal', // standard
           'tw:hover:underline tw:hover:text-primary-dark', // hover,
           'tw:focus-visible:ring-offset-[4px] tw:focus-visible:bg-white', // focus-visible
           'tw:active:text-primary-darker', // active
