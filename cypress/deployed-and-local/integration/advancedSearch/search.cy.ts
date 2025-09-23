@@ -99,7 +99,7 @@ describe('Advanced Search', () => {
     });
   });
 
-  it.only('should find matching results when the user searches for an order by keyword', () => {
+  it('should find matching results when the user searches for an order by keyword', () => {
     /** Arrange */
     loginAsPetitionsClerk1();
     createAndServePaperPetition().then(({ docketNumber }) => {
@@ -116,11 +116,9 @@ describe('Advanced Search', () => {
       // Use the order title as the docket entry description so it will be indexed
       cy.get('body')
         .find('[data-testid="judge-select"]')
-        .then($el => {
-          if ($el.length) {
-            cy.wrap($el.first()).select('Ashford');
-          }
-        });
+        .should('exist')
+        .first()
+        .select('Ashford');
 
       // Save the docket entry
       cy.get('[data-testid="serve-to-parties-btn"]').click();
