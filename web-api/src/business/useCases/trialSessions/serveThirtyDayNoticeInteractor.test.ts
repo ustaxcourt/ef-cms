@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
@@ -11,7 +12,7 @@ import {
 import { InvalidRequest, UnauthorizedError } from '@web-api/errors/errors';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_TRIAL_INPERSON } from '@shared/test/mockTrial';
-import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+import { RawTrialSession, TCaseOrder } from '@shared/business/entities/trialSessions/TrialSession';
 import { SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstants';
 import { ThirtyDayNoticeOfTrialRequiredInfo } from '@shared/business/utilities/pdfGenerator/documentTemplates/ThirtyDayNoticeOfTrial';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
@@ -24,6 +25,8 @@ import { serveThirtyDayNoticeInteractor } from './serveThirtyDayNoticeInteractor
 import { testPdfDoc } from '@shared/business/test/getFakeFile';
 import { getFeatureFlagValues as getFeatureFlagValuesMock } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { updateTrialSession as updateTrialSessionMock } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
 
 describe('serveThirtyDayNoticeInteractor', () => {
   const getFeatureFlagValues = jest.mocked(getFeatureFlagValuesMock);
@@ -39,6 +42,9 @@ describe('serveThirtyDayNoticeInteractor', () => {
     },
   ]);
   const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
+  const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
+  const updateTrialSession = jest.mocked(updateTrialSessionMock);
+
 
   let trialSession: RawTrialSession;
   const TEST_CLIENT_CONNECTION_ID = 'TEST_CLIENT_CONNECTION_ID';
@@ -46,16 +52,14 @@ describe('serveThirtyDayNoticeInteractor', () => {
   beforeEach(() => {
     trialSession = {
       ...MOCK_TRIAL_INPERSON,
-      caseOrder: [{ docketNumber: '101-31' }, { docketNumber: '103-20' }],
+      caseOrder: [{ docketNumber: '101-31' }, { docketNumber: '103-20' }] as TCaseOrder[],
     };
 
     applicationContext.getUtilities().formatNow.mockReturnValue('02/23/2023');
   });
 
   it('should throw an unauthorized error when the user is not authorized to serve 30 day notices', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockResolvedValueOnce(trialSession);
+    getTrialSessionById.mockResolvedValueOnce(trialSession);
 
     await expect(
       serveThirtyDayNoticeInteractor(
@@ -70,9 +74,7 @@ describe('serveThirtyDayNoticeInteractor', () => {
   });
 
   it('should throw an invalid request error when no trial session id is provided', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockResolvedValue(trialSession);
+    getTrialSessionById.mockResolvedValue(trialSession);
 
     await expect(
       serveThirtyDayNoticeInteractor(
@@ -95,9 +97,7 @@ describe('serveThirtyDayNoticeInteractor', () => {
     beforeEach(() => {
       mockCase = cloneDeep(MOCK_CASE);
 
-      applicationContext
-        .getPersistenceGateway()
-        .getTrialSessionById.mockResolvedValue(trialSession);
+      getTrialSessionById.mockResolvedValue(trialSession);
 
       getCasesByDocketNumbers.mockResolvedValue([mockCase]);
 
@@ -247,9 +247,8 @@ describe('serveThirtyDayNoticeInteractor', () => {
         fileNamePrefix: 'paper-service-pdf/',
       });
       expect(
-        applicationContext.getPersistenceGateway().updateTrialSession,
+        updateTrialSession,
       ).toHaveBeenCalledWith({
-        applicationContext: expect.anything(),
         trialSessionToUpdate: expect.objectContaining({
           paperServicePdfs: [
             {
@@ -383,7 +382,7 @@ describe('serveThirtyDayNoticeInteractor', () => {
           docketNumber: caseWithProSePetitioner2.docketNumber,
           removedFromTrial: undefined, // Has not been explicitly removed from trial
         },
-      ];
+      ] as TCaseOrder[];
 
       await serveThirtyDayNoticeInteractor(
         applicationContext,

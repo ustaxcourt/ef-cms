@@ -55,9 +55,7 @@ export const assignWorkItemsInteractor = async (
   });
 
   if (!userBeingAssigned) {
-    throw new NotFoundError(
-      `User not found with user id ${assigneeId}`,
-    );
+    throw new NotFoundError(`User not found with user id ${assigneeId}`);
   }
 
   let workItemEntity: WorkItem | undefined;

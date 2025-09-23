@@ -238,7 +238,7 @@ describe('file motion response order', function () {
         });
         createAndServePaperPetition({
           yearReceived: '2025',
-        }).then(({ docketNumber }) => {
+        }).then(function ({ docketNumber }) {
           loginAsCaseServicesSupervisor();
           cy.visit(`/case-detail/${docketNumber}`);
           createAndServePaperFiling({
@@ -249,12 +249,7 @@ describe('file motion response order', function () {
           cy.get('[data-testid="add-to-trial-session-btn"]').click();
           cy.get('#show-all-locations-true').click({ force: true });
 
-          cy.get('[data-testid="trial-session-select"] option')
-            .eq(1)
-            .then($option => {
-              const value: string = $option.val() as string;
-              cy.get('[data-testid="trial-session-select"]').select(value);
-            });
+          cy.get('[data-testid="trial-session-select"]').select(this.trialSessionId)
 
           cy.contains('Add Case').click();
 

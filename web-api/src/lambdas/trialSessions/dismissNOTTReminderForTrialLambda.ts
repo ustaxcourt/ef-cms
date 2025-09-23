@@ -11,9 +11,8 @@ export const dismissNOTTReminderForTrialLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(event, async ({ applicationContext }) => {
+  genericHandler(event, async () => {
     return await dismissNOTTReminderForTrialInteractor(
-      applicationContext,
       {
         ...JSON.parse(event.body),
       },

@@ -6,14 +6,13 @@ const formattedCaseDetail = withAppContextDecorator(
   formattedCaseDetailComputed,
 );
 
-export const docketClerkRemovesCaseFromHearing = cerebralTest => {
+export const docketClerkRemovesCaseFromHearing = (cerebralTest, index = 1) => {
   return it('Docket clerk removes case from hearing', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
     });
-
     await cerebralTest.runSequence('openRemoveFromTrialSessionModalSequence', {
-      trialSessionId: cerebralTest.createdTrialSessions[1],
+      trialSessionId: cerebralTest.createdTrialSessions[index],
     });
     await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'disposition',
@@ -29,7 +28,7 @@ export const docketClerkRemovesCaseFromHearing = cerebralTest => {
     expect(formattedCase.hearings).not.toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          trialSessionId: cerebralTest.createdTrialSessions[1],
+          trialSessionId: cerebralTest.createdTrialSessions[index],
         }),
       ]),
     );

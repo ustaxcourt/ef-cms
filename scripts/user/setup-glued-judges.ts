@@ -1,19 +1,13 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
-import { AwsSigv4Signer } from '@opensearch-project/opensearch/aws-v3';
-import { Client } from '@opensearch-project/opensearch';
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
-import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
-import {
-  SearchClientResultsType,
-  formatResults,
-} from '@web-api/persistence/elasticsearch/searchClient';
-import { defaultProvider } from '@aws-sdk/credential-provider-node';
+import { getDbReader } from '@web-api/database';
 import { pgDeleteFrom } from '@web-api/persistence/postgres/utils/operation/pgDeleteFrom';
+import { RawUser } from '@shared/business/entities/User';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -21,26 +15,14 @@ const scriptConfig: ScriptConfig = {
   environment: {
     Password: 'DEFAULT_ACCOUNT_PASS',
     UserPoolId: 'USER_POOL_ID',
-    elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
-    env: 'ENV',
   },
   requireActiveAwsSession: true,
 };
-const { elasticsearchEndpoint, Password, UserPoolId } = parseArgsAndEnvVars(
-  scriptConfig,
-) as { [k: string]: string };
+const { Password, UserPoolId } = parseArgsAndEnvVars(scriptConfig) as {
+  [k: string]: string;
+};
 
 const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
-const esClient = new Client({
-  ...AwsSigv4Signer({
-    getCredentials: () => {
-      const credentialsProvider = defaultProvider();
-      return credentialsProvider();
-    },
-    region: 'us-east-1',
-  }),
-  node: `https://${elasticsearchEndpoint}:443`,
-});
 
 const createOrUpdateCognitoUser = async ({
   email,
@@ -65,8 +47,8 @@ const createOrUpdateCognitoUser = async ({
     });
 
     userExists = true;
-  } catch (err) {
-    console.error(`ERROR checking for cognito user for ${name}:`, err);
+  } catch (_err) {
+    console.log(`No cognito user found for ${name}:`);
   }
 
   if (!userExists) {
@@ -138,33 +120,23 @@ const getJudgeUsersByName = async (): Promise<{
     section: string;
   };
 }> => {
-  const queryResults = await esClient.search({
-    body: {
-      from: 0,
-      query: {
-        bool: {
-          filter: [
-            {
-              terms: {
-                'role.S': ['judge', 'legacyJudge'],
-              },
-            },
-          ],
-        },
-      },
-      size: MAX_ELASTICSEARCH_PAGINATION,
-    },
-    index: 'efcms-user',
-  });
-  const { results }: SearchClientResultsType = formatResults(queryResults.body);
+  const results = await getDbReader(reader =>
+    reader
+      .selectFrom('dwUser')
+      .select(['email', 'judgeTitle', 'name', 'role', 'section', 'userId'])
+      .orderBy('name')
+      .where('role', 'in', ['judge', 'legacyJudge'])
+      .limit(1000)
+      .execute(),
+  );
 
   const judgeUsers = {};
-  for (const judge of results) {
-    const emailDomain = judge.email.split('@')[1];
+  for (const judge of results as RawUser[]) {
+    const emailDomain = judge.email!.split('@')[1];
     if (!(judge.name in judgeUsers)) {
       judgeUsers[judge.name] = {
         email: `${
-          judge.judgeTitle.indexOf('Special Trial') !== -1 ? 'st' : ''
+          judge.judgeTitle!.indexOf('Special Trial') !== -1 ? 'st' : ''
         }judge.${judge.name.toLowerCase()}@example.com`,
         name: `${judge.judgeTitle} ${judge.name}`,
         role: judge.role,
