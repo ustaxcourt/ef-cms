@@ -416,7 +416,7 @@ export const EXTERNAL_FILING_EVENTS: AllExternalFilingEvents = {
     },
     {
       documentTitle: 'Report',
-      documentType: 'Report',
+      documentType: 'Expert Report',
       category: 'Miscellaneous',
       eventCode: 'RTP',
       scenario: 'Standard',

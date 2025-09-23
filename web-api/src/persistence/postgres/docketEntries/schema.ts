@@ -20,7 +20,7 @@ export const docketEntryTableDefinition = {
   documentContentsId: DEFAULT as string | null,
   documentIdBeforeSignature: DEFAULT as string | null,
   documentTitle: DEFAULT as string,
-  documentType: DEFAULT as string | null,
+  documentTypeUpdated: DEFAULT as string | null,
   draftOrderState: DEFAULT as ColumnType<
     Record<string, any>,
     string,

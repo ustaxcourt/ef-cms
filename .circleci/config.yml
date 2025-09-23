@@ -464,6 +464,9 @@ jobs:
           command: |
             ./scripts/env/env-for-circle.sh
       - run:
+          name: Run Postgres Contract Migration
+          command: npm run migration:postgres:contract
+      - run:
           name: Setup Elasticsearch Aliases
           command: |
             npx ts-node --transpile-only ./web-api/elasticsearch/elasticsearch-alias-settings.ts
@@ -590,7 +593,8 @@ jobs:
       - run:
           name: Migrate Postgres Data Schema
           command: |
-            NODE_ENV=production npm run migration:postgres
+            npm run migration:postgres
+            npm run migration:postgres:contract
       - run:
           name: Restore Postgres User Permissions
           command: |
