@@ -60,6 +60,8 @@ async function migrateToLatest(migrationType = 'expand') {
             : !isContractMigration;
 
         if (shouldRunMigration && migration.executedAt === undefined) {
+          console.log(`About to run "${migration.name}" migration`);
+
           const { error, results } = await migrator.migrateTo(migration.name);
           results?.forEach(it => {
             if (it.status === 'Success') {
