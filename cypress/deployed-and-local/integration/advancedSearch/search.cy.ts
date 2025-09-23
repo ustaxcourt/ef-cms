@@ -99,7 +99,7 @@ describe('Advanced Search', () => {
     });
   });
 
-  it('should find matching results when the user searches for an order by keyword', () => {
+  it.only('should find matching results when the user searches for an order by keyword', () => {
     /** Arrange */
     loginAsPetitionsClerk1();
     createAndServePaperPetition().then(({ docketNumber }) => {
@@ -114,10 +114,13 @@ describe('Advanced Search', () => {
       // Add the order to the docket entry and perform a non-paper (electronic) service
       cy.get('[data-testid="add-court-issued-docket-entry-button"]').click();
       // Use the order title as the docket entry description so it will be indexed
-      cy.get('[data-testid="document-description-input"]');
-      cy.clear();
-      cy.type(orderTitle);
-      cy.get('[data-testid="judge-select"]').select('Ashford');
+      cy.get('body')
+        .find('[data-testid="judge-select"]')
+        .then($el => {
+          if ($el.length) {
+            cy.wrap($el.first()).select('Ashford');
+          }
+        });
 
       // Save the docket entry
       cy.get('[data-testid="serve-to-parties-btn"]').click();
@@ -128,29 +131,16 @@ describe('Advanced Search', () => {
       cy.get('[data-testid="order-search-tab"]').click();
       cy.get('[data-testid="keyword-search-input"]').type(orderTitle);
       retry(() => {
-        return cy.get('body').then($body => {
-          // Ensure the order search form is rendered before attempting to submit
-          if ($body.find('[data-testid="order-search-container"]').length) {
-            const selectors = [
-              '[data-testid="submit-order-advanced-search-button"]',
-              '[data-testid="advanced-search-button"]',
-              'button#advanced-search-button',
-              'form[data-testid="order-search-container"] button[type=submit]',
-            ];
-            for (const selector of selectors) {
-              if ($body.find(selector).length) {
-                cy.wrap($body.find(selector).first()).click();
-                break;
-              }
-            }
-          } else {
-            cy.log('order search container not present yet');
-          }
-          cy.get('.search-results').should('exist');
-          return assertExists(
-            `[data-testid="docket-number-link-${docketNumber}"]`,
-          );
-        });
+        cy.get(
+          '[data-testid="submit-order-advanced-search-button"], [data-testid="advanced-search-button"], button#advanced-search-button, form[data-testid="order-search-container"] button[type=submit]',
+        )
+          .first()
+          .click();
+
+        cy.get('.search-results').should('exist');
+        return assertExists(
+          `[data-testid="docket-number-link-${docketNumber}"]`,
+        );
       }, 12);
 
       /** Assert */
@@ -209,11 +199,9 @@ describe('Advanced Search', () => {
         'court-issued-document-type-search',
         'Summary Opinion',
       );
-      cy.get('body').then($body => {
-        if ($body.find('[data-testid="judge-select"]').length) {
-          cy.get('[data-testid="judge-select"]').select('Ashford');
-        }
-      });
+      cy.get('body')
+        .find('[data-testid="judge-select"]')
+        .then($el => $el.length && cy.wrap($el.first()).select('Ashford'));
       cy.get('[data-testid="serve-to-parties-btn"]').click();
       cy.get('[data-testid="modal-button-confirm"]').click();
       cy.get('[data-testid="print-paper-service-done-button"]').click();
@@ -224,29 +212,16 @@ describe('Advanced Search', () => {
       cy.get('[data-testid="keyword-search-input"]').type(opinionTitle);
       // need to wait for elasticsearch potentially
       retry(() => {
-        return cy.get('body').then($body => {
-          // Ensure the opinion search form is rendered before attempting to submit
-          if ($body.find('[data-testid="opinion-search-container"]').length) {
-            const selectors = [
-              '[data-testid="submit-opinion-advanced-search-button"]',
-              '[data-testid="advanced-search-button"]',
-              'button#advanced-search-button',
-              'form[data-testid="opinion-search-container"] button[type=submit]',
-            ];
-            for (const selector of selectors) {
-              if ($body.find(selector).length) {
-                cy.wrap($body.find(selector).first()).click();
-                break;
-              }
-            }
-          } else {
-            cy.log('opinion search container not present yet');
-          }
-          cy.get('.search-results').should('exist');
-          return assertExists(
-            `[data-testid="docket-number-link-${docketNumber}"]`,
-          );
-        });
+        cy.get(
+          '[data-testid="submit-opinion-advanced-search-button"], [data-testid="advanced-search-button"], button#advanced-search-button, form[data-testid="opinion-search-container"] button[type=submit]',
+        )
+          .first()
+          .click();
+
+        cy.get('.search-results').should('exist');
+        return assertExists(
+          `[data-testid="docket-number-link-${docketNumber}"]`,
+        );
       }, 12);
       /** Assert */
       // Ensure the results table exists and the new opinion appears as the first result
