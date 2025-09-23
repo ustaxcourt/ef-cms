@@ -116,13 +116,13 @@ regex search the entire project for `"~> \d+.\d+.\d+"` and make sure it's to the
 
 ### 5. Update OpenSearch 
 
-Check to see if there is an updated version of OpenSearch available: 
+Check to see if there is an updated version of OpenSearch available.
 
-- Run `./scripts/env/set-env.zsh` for aws access key.
+- Run `./scripts/env/set-env.zsh` for AWS access key, then use it to list the available versions:
 
-- ```aws opensearch list-versions```
+  > aws opensearch list-versions
 
-If an update is available, follow these steps to update OpenSearch to the [latest version]:
+If an update is available, follow these steps to update OpenSearch to the latest version:
 
 - Set the value of the `ES_ENGINE_VERSION` secret in the `[env]_deploy` secrets in Secrets Manager using `scripts/secrets/update-secret.ts`
 
@@ -132,7 +132,7 @@ If an update is available, follow these steps to update OpenSearch to the [lates
 
 - Run deployment. Verify cluster is still functional while upgrade is being performed and after by running search smoketests against current color.
  
-- Add these manual steps in the dependency updates pr
+- If the upgrade was successful, add these manual steps in the dependency updates pull request. See [PR #9189](https://github.com/ustaxcourt/ef-cms/pull/9189) for an example.
 
 ### 6. Wrap up
 
