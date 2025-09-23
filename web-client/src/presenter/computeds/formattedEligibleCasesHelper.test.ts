@@ -85,6 +85,7 @@ describe('formattedEligibleCasesHelper', () => {
     termYear: '2019',
     trialClerk: { name: 'Test Trial Clerk' },
     trialLocation: 'Hartford, Connecticut',
+    maxCases: 50,
   };
 
   const formattedEligibleCasesHelper = withAppContextDecorator(
@@ -165,6 +166,7 @@ describe('formattedEligibleCasesHelper', () => {
     const result = runCompute(formattedEligibleCasesHelper, {
       state: {
         trialSession: {
+          ...TRIAL_SESSION,
           eligibleCases: [
             {
               docketNumber: '102-19',
@@ -201,6 +203,7 @@ describe('formattedEligibleCasesHelper', () => {
     const result = runCompute(formattedEligibleCasesHelper, {
       state: {
         trialSession: {
+          ...TRIAL_SESSION,
           eligibleCases: [
             {
               docketNumber: '105-19',
@@ -256,6 +259,7 @@ describe('formattedEligibleCasesHelper', () => {
     const result = runCompute(formattedEligibleCasesHelper, {
       state: {
         trialSession: {
+          ...TRIAL_SESSION,
           eligibleCases: [
             {
               docketNumber: '103-22',
@@ -309,6 +313,7 @@ describe('formattedEligibleCasesHelper', () => {
     const result = runCompute(formattedEligibleCasesHelper, {
       state: {
         trialSession: {
+          ...TRIAL_SESSION,
           eligibleCases: [
             {
               docketNumber: '106-22',
@@ -372,6 +377,7 @@ describe('formattedEligibleCasesHelper', () => {
     const result = runCompute(formattedEligibleCasesHelper, {
       state: {
         trialSession: {
+          ...TRIAL_SESSION,
           eligibleCases: [
             {
               docketNumber: '105-21',
@@ -447,6 +453,7 @@ describe('formattedEligibleCasesHelper', () => {
     const result = runCompute(formattedEligibleCasesHelper, {
       state: {
         trialSession: {
+          ...TRIAL_SESSION,
           eligibleCases: [
             {
               docketNumber: '106-22',
@@ -493,6 +500,7 @@ describe('formattedEligibleCasesHelper', () => {
     const result = runCompute(formattedEligibleCasesHelper, {
       state: {
         trialSession: {
+          ...TRIAL_SESSION,
           eligibleCases: [
             {
               docketNumber: '103-22',
@@ -534,6 +542,7 @@ describe('formattedEligibleCasesHelper', () => {
     const result = runCompute(formattedEligibleCasesHelper, {
       state: {
         trialSession: {
+          ...TRIAL_SESSION,
           eligibleCases: [
             {
               docketNumber: '103-22',
@@ -575,6 +584,7 @@ describe('formattedEligibleCasesHelper', () => {
     const result = runCompute(formattedEligibleCasesHelper, {
       state: {
         trialSession: {
+          ...TRIAL_SESSION,
           eligibleCases: [
             {
               docketNumber: '104-22',
@@ -648,6 +658,7 @@ describe('formattedEligibleCasesHelper', () => {
     const result = runCompute(formattedEligibleCasesHelper, {
       state: {
         trialSession: {
+          ...TRIAL_SESSION,
           eligibleCases: [
             {
               docketNumber: '30535-15',
@@ -697,6 +708,7 @@ describe('formattedEligibleCasesHelper', () => {
           },
         },
         trialSession: {
+          ...TRIAL_SESSION,
           eligibleCases: MOCK_ELIGIBLE_CASES,
         },
       },
@@ -714,6 +726,7 @@ describe('formattedEligibleCasesHelper', () => {
           },
         },
         trialSession: {
+          ...TRIAL_SESSION,
           eligibleCases: MOCK_ELIGIBLE_CASES,
         },
       },
@@ -741,6 +754,7 @@ describe('formattedEligibleCasesHelper', () => {
           },
         },
         trialSession: {
+          ...TRIAL_SESSION,
           eligibleCases: MOCK_ELIGIBLE_CASES,
         },
       },
