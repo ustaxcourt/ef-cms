@@ -30,7 +30,7 @@ export function toKyselyNewDocketEntry(
     documentContentsId: docketEntry.documentContentsId ?? null,
     documentIdBeforeSignature: docketEntry.documentIdBeforeSignature ?? null,
     documentTitle: docketEntry.documentTitle,
-    documentTypeUpdated: docketEntry.documentType ?? null,
+    documentType: docketEntry.documentType ?? null,
     draftOrderState: docketEntry.draftOrderState
       ? JSON.stringify(docketEntry.draftOrderState)
       : null,
@@ -148,9 +148,7 @@ export function fromKyselyDocketEntry<T extends object>(record: T) {
     ) => value?.toISOString(),
   } as const;
 
-  const keyRenameMap = {
-    documentTypeUpdated: 'documentType',
-  } as const;
+  const keyRenameMap = {} as const;
 
   return new DatabaseToAppCodeMapper({
     keyRenameMap,
