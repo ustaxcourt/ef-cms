@@ -102,7 +102,39 @@ regex search the entire project for `"~> \d+.\d+.\d+"` and make sure it's to the
 
 	> version = "~>~ <LATEST_VERSION>"
 
-### 4. Wrap up
+
+### 4. Update Terraform OpenSearch provider 
+
+Check if there is an update to the Terraform OpenSearch provider and update all of the following files to use the [latest version](https://registry.terraform.io/providers/opensearch-project/opensearch/latest) of the provider.
+
+regex search the entire project for `"~> \d+.\d+.\d+"` and make sure it's to the latest version.  For example, some of these files have the providers defined:
+
+  - `web-api/terraform/applyables/account-specific/account-specific.tf`
+  - `web-api/terraform/modules/kibana/providers.tf`
+
+	> version = "~>~ <LATEST_VERSION>"
+
+### 5. Update OpenSearch 
+
+Check to see if there is an updated version of OpenSearch available:
+
+```
+aws opensearch list-versions
+```
+
+If an update is available, follow these steps to update OpenSearch to the [latest version](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/what-is.html#choosing-version):
+
+- Set the value of the `ES_ENGINE_VERSION` secret in the `[env]_deploy` secrets in Secrets Manager using `scripts/secrets/update-secret.ts`
+
+- Set the value of the `ES_LOGS_ENGINE_VERSION` secret in the `account_deploy` secrets in Secrets Manager using `scripts/secrets/update-secret.ts`
+
+- Run an account-specific terraform deployment using `deploy:account-specific`. Verify cluster is still functional while upgrade is being performed and after by running queries in kibana.
+
+- Run deployment. Verify cluster is still functional while upgrade is being performed and after by running search smoketests against current color.
+ 
+- Add these manual steps in the dependency updates pr
+
+### 6. Wrap up
 
 - Check through the list of caveats to see if any of the documented issues have been resolved.
 

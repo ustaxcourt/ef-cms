@@ -23,6 +23,7 @@ fi
 [ -z "${ES_VOLUME_SIZE}" ] && echo "You must have ES_VOLUME_SIZE set in your environment" && exit 1
 [ -z "${MIGRATE_FLAG}" ] && echo "You must have MIGRATE_FLAG set in your environment" && exit 1
 [ -z "${RDS_ENGINE_VERSION}" ] && echo "You must have RDS_ENGINE_VERSION set in your environment" && exit 1
+[ -z "${ES_ENGINE_VERSION}" ] && echo "You must have ES_ENGINE_VERSION set in your environment" && exit 1
 
 echo "Running terraform with the following environment configs:"
 echo "  - CIRCLE_BRANCH=${CIRCLE_BRANCH}"
@@ -37,6 +38,7 @@ echo "  - MIGRATE_FLAG=${MIGRATE_FLAG}"
 echo "  - PROD_ENV_ACCOUNT_ID=${PROD_ENV_ACCOUNT_ID}"
 echo "  - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL}"
 echo "  - RDS_ENGINE_VERSION=${RDS_ENGINE_VERSION}"
+echo "  - ES_ENGINE_VERSION=${ES_ENGINE_VERSION}"
 
 ../../../../scripts/verify-terraform-version.sh
 
@@ -110,6 +112,7 @@ export TF_VAR_postgres_master_password="${POSTGRES_MASTER_PASSWORD}"
 export TF_VAR_restoring_aws_account_id=$PROD_ENV_ACCOUNT_ID
 export TF_VAR_rum_sample_rate=$RUM_SAMPLE_RATE
 export TF_VAR_rds_engine_version="$RDS_ENGINE_VERSION"
+export TF_VAR_es_engine_version="$ES_ENGINE_VERSION"
 
 if [[ -n "${RDS_MIN_CAPACITY}" ]]
 then

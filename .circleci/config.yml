@@ -29,6 +29,10 @@ parameters:
     default: false
     type: boolean
 
+  index_threads:
+    default: '5'
+    type: string
+
   lower_env:
     default: test
     type: string
