@@ -829,6 +829,7 @@ jobs:
             if [[ -z "$LOWER_ENV" ]] || [[ -z "$LOWER_ENV_ACCOUNT_ID" ]]; then
               echo "Error: no lower environment was provided"
               exit 1
+            fi
 
       - run:
           name: Restore Postgres Data
