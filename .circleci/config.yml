@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   git-shallow-clone: guitarrapc/git-shallow-clone@2.8.0
 
-efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.52
+efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.53
 
 parameters:
   run_build_and_deploy:
@@ -139,10 +139,7 @@ jobs:
       - run:
           name: Engage maintenance mode if we are upgrading or downgrading the RDS engine version
           command: |
-            CURRENT_RDS_ENGINE_VERSION=$(aws rds describe-db-instances \
-              --db-instance-identifier "${ENV}-dawson-cluster" \
-              --query 'DBInstances[0].EngineVersion' \
-              --region us-east-1 --output text)
+            CURRENT_RDS_ENGINE_VERSION=$(aws rds describe-db-clusters --db-cluster-identifier "${ENV}-dawson-cluster" --query "DBClusters[0].EngineVersion" --region us-east-1 --output text)
             if [ -n "$CURRENT_RDS_ENGINE_VERSION" ] && [ "$CURRENT_RDS_ENGINE_VERSION" != "$RDS_ENGINE_VERSION" ]; then
               npm run maintenance:engage
               # NOTE: the lack of a companion "disengage" is intentional!
@@ -281,6 +278,12 @@ jobs:
       - run:
           name: Migrate Trial Sessions
           command: |
+            NUM_TRIAL_SESSIONS=$(./scripts/postgres/connect.sh --quiet --yes \
+              --command="SELECT COUNT(*) FROM dw_trial_session;")
+            if [[ "$NUM_TRIAL_SESSIONS" -ne 0 ]]; then
+              echo "Already migrated trial sessions"
+              exit 0
+            fi
             ./scripts/run-once-scripts/postgres-migration/migrate-trial-session-information.ts
 
   smoketests:
