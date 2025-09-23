@@ -1,5 +1,11 @@
 import { isEmpty } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
+import { DATE_RANGE_SEARCH_OPTIONS } from '@shared/business/entities/EntityConstants';
+import { OpinionSearchValidation } from '@shared/business/entities/opinionSearch/OpinionSearchValidation';
+import {
+  createISODateString,
+  FORMATS,
+} from '@shared/business/utilities/DateHandler';
 
 /**
  * validate opinion advanced search form
@@ -16,30 +22,50 @@ export const validateOpinionAdvancedSearchAction = ({
 }: ActionProps) => {
   const opinionSearch = get(state.advancedSearchForm.opinionSearch);
 
-  const opinionTypes = Object.keys(opinionSearch.opinionTypes).filter(
-    opinionType => opinionSearch.opinionTypes[opinionType] === true,
-  );
+  const formattedStartDate = opinionSearch.startDate
+    ? createISODateString(opinionSearch.startDate, FORMATS.MMDDYYYY)
+    : undefined;
+  const formattedEndDate = opinionSearch.endDate
+    ? createISODateString(opinionSearch.endDate, FORMATS.MMDDYYYY)
+    : undefined;
 
-  const errors = applicationContext
+  const errors = new OpinionSearchValidation({
+    startDate: formattedStartDate,
+    endDate: formattedEndDate,
+  }).getFormattedValidationErrors();
+
+  if (errors) {
+    return path.error({
+      alertError: {
+        messages: Object.values(errors),
+        title:
+          'Errors were found. Please correct the date range selection and resubmit.',
+      },
+      errors,
+    });
+  }
+
+  const opinionSearchErrors = applicationContext
     .getUseCases()
     .validateOpinionAdvancedSearchInteractor({
       opinionSearch: {
         ...opinionSearch,
-        opinionTypes,
+        dateRange:
+          opinionSearch.startDate || opinionSearch.endDate
+            ? DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES
+            : DATE_RANGE_SEARCH_OPTIONS.ALL_DATES,
       },
     });
 
-  const isValid = isEmpty(errors);
-
-  if (isValid) {
+  if (isEmpty(opinionSearchErrors)) {
     return path.success();
   } else {
     return path.error({
       alertError: {
-        messages: Object.values(errors),
+        messages: Object.values(opinionSearchErrors),
         title: 'Please correct the following errors:',
       },
-      errors,
+      errors: opinionSearchErrors,
     });
   }
 };
