@@ -10,12 +10,14 @@ import React from 'react';
 
 export const SectionWorkQueue = connect(
   {
+    formattedWorkQueue: state.formattedWorkQueue,
     navigateToPathSequence: sequences.navigateToPathSequence,
     queue: state.workQueueToDisplay.queue,
     section: state.workQueueToDisplay.section,
     workQueueHelper: state.workQueueHelper,
   },
   function SectionWorkQueue({
+    formattedWorkQueue,
     navigateToPathSequence,
     queue,
     section,
@@ -40,7 +42,8 @@ export const SectionWorkQueue = connect(
         <Tab
           data-testid="section-inbox-tab"
           tabName="inbox"
-          title={`Inbox (${workQueueHelper.sectionInboxCount})`}
+          // title={`Inbox (${workQueueHelper.sectionInboxCount})`}
+          title={`Inbox (${formattedWorkQueue.length})`}
         >
           <div id="section-inbox-tab-content">
             <SectionWorkQueueInbox />
