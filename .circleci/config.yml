@@ -267,6 +267,7 @@ jobs:
           command: |
             ./scripts/env/env-for-circle.sh
       - run:
+          no_output_timeout: 30m
           name: Run Postgres Migration
           command: |
             npm run migration:postgres
@@ -587,6 +588,7 @@ jobs:
             export CIRCLE_PIPELINE_ID=noop
             npm run destroy:wait-for-workflow-cron -- $ENV
       - run:
+          no_output_timeout: 30m
           name: Migrate Postgres Data Schema
           command: |
             npm run migration:postgres
