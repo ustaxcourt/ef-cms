@@ -924,7 +924,7 @@ export const SYSTEM_AND_INTERNAL_DOCUMENT_TYPES = [
   })),
   ...INTERNAL_DOCUMENTS_ARRAY.map(doc => ({
     ...doc,
-    label: doc.documentTitle,
+    label: doc.documentType,
     value: doc.eventCode,
   })),
 ];
