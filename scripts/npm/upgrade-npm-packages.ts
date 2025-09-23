@@ -13,8 +13,6 @@ const caveats: string[] = [
   'puppeteer',
   'puppeteer-core',
   '@sparticuz/chromium',
-  'babel-jest',
-  'babel-core',
   'jest',
   'pdfjs-dist',
   'quill',
