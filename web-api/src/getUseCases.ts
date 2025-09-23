@@ -122,6 +122,7 @@ import { getUserCaseNoteForCasesInteractor } from './business/useCases/caseNote/
 import { getUserCaseNoteInteractor } from './business/useCases/caseNote/getUserCaseNoteInteractor';
 import { getUserPendingEmailStatusInteractor } from './business/useCases/user/getUserPendingEmailStatusInteractor';
 import { getUsersPendingEmailInteractor } from './business/useCases/user/getUsersPendingEmailInteractor';
+import { getRecentFilingsForUserInteractor } from '@shared/business/useCases/getRecentFilingsForUserInteractor';
 import { handleBounceNotificationInteractor } from './business/useCases/email/handleBounceNotificationInteractor';
 import { logErrorInteractor } from '@web-api/business/useCases/logErrorInteractor';
 import { loginInteractor } from '@web-api/business/useCases/auth/loginInteractor';
@@ -319,6 +320,7 @@ const useCases = {
   getUserCaseNoteInteractor,
   getUserPendingEmailStatusInteractor,
   getUsersPendingEmailInteractor,
+  getRecentFilingsForUserInteractor,
   handleBounceNotificationInteractor,
   logErrorInteractor,
   loginInteractor,
