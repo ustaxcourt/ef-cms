@@ -11,6 +11,8 @@ import {
 import { applicationContext } from '@web-client/applicationContext';
 
 interface DateRangePickerProps {
+  mode?: 'single' | 'multiple' | 'range';
+  numMonths?: number;
   startValue?: string;
   endValue?: string;
   startLabel?: string | React.ReactNode;
@@ -38,9 +40,11 @@ interface DateRangePickerProps {
 }
 
 export function DateRangePicker({
+  mode,
+  numMonths,
   startValue,
   endValue,
-  startLabel = 'Start date',
+  startLabel,
   endLabel: _endLabel = 'End date',
   startName = 'startDate',
   endName = 'endDate',
@@ -64,12 +68,19 @@ export function DateRangePicker({
   parentModalHasMounted: _parentModalHasMounted = false,
 }: Readonly<DateRangePickerProps>) {
   const [open, setOpen] = React.useState(false);
-  const [dateRange, setDateRange] = React.useState<DateRange | undefined>(
-    undefined,
-  );
+  const [dateRange, setDateRange] = React.useState<
+    DateRange | Date | undefined
+  >(undefined);
   const [_hoveredDate, _setHoveredDate] = React.useState<Date | undefined>(
     undefined,
   );
+
+  // Set default number of months shown based on mode
+  if (mode === 'range') {
+    numMonths = 2;
+  } else {
+    numMonths = 1;
+  }
 
   // Helper function to parse MM/DD/YYYY without timezone conversion
   const parseDateSimple = (dateString: string) => {
@@ -87,22 +98,31 @@ export function DateRangePicker({
     return undefined;
   };
 
-  // Convert string dates to Date objects for the calendar
+  // Convert string dates to Date objects for the calendar. Always call hooks.
   React.useEffect(() => {
-    if (startValue && endValue) {
-      setDateRange({
-        from: parseDateSimple(startValue),
-        to: parseDateSimple(endValue),
-      });
-    } else if (startValue) {
-      setDateRange({
-        from: parseDateSimple(startValue),
-        to: undefined,
-      });
+    if (mode === 'range') {
+      if (startValue && endValue) {
+        setDateRange({
+          from: parseDateSimple(startValue),
+          to: parseDateSimple(endValue),
+        });
+      } else if (startValue) {
+        setDateRange({
+          from: parseDateSimple(startValue),
+          to: undefined,
+        });
+      } else {
+        setDateRange(undefined);
+      }
     } else {
-      setDateRange(undefined);
+      // single mode - map startValue to a Date if present, otherwise undefined
+      if (startValue) {
+        setDateRange(parseDateSimple(startValue));
+      } else {
+        setDateRange(undefined);
+      }
     }
-  }, [startValue, endValue]);
+  }, [startValue, endValue, mode]);
 
   const createChangeEvent = (name: string, value: string) =>
     ({
@@ -129,23 +149,63 @@ export function DateRangePicker({
     });
   };
 
+  const hasRangeFrom = (r: DateRange | Date | undefined) => {
+    return Boolean(r && 'from' in (r as any) && (r as DateRange).from);
+  };
+
   const getDisplayText = () => {
-    if (startValue && endValue) {
-      return `${formatDateForDisplay(startValue)} - ${formatDateForDisplay(endValue)}`;
-    } else if (startValue) {
-      return `${formatDateForDisplay(startValue)} - Click to select different end date`;
+    // Prefer internal state when available
+    if (mode === 'range') {
+      if (hasRangeFrom(dateRange)) {
+        const { from, to } = dateRange as DateRange;
+        if (from && to) {
+          return `${from.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} - ${to.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
+        }
+        if (from) {
+          return `${from.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} - Click to select different end date`;
+        }
+      }
+
+      // Fallback to props
+      if (startValue && endValue) {
+        return `${formatDateForDisplay(startValue)} - ${formatDateForDisplay(endValue)}`;
+      } else if (startValue) {
+        return `${formatDateForDisplay(startValue)} - Click to select different end date`;
+      }
+      return 'Click to select start date';
     }
-    return 'Click to select start date';
+
+    // single mode: prefer dateRange if it's a Date
+    if (dateRange && !(dateRange as any).from) {
+      const d = dateRange as Date;
+      return d.toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+      });
+    }
+
+    if (startValue) {
+      return `${formatDateForDisplay(startValue)}`;
+    }
+
+    return 'Click to select date';
   };
 
   const getInstructionText = () => {
-    if (!startValue) {
-      return 'Click a date to select start date';
+    if (mode === 'range') {
+      if (!startValue) {
+        return 'Click a date to select start date';
+      }
+      if (!endValue) {
+        return 'Click a different date to select end date (must be after start date)';
+      }
+      return 'Date range selected';
     }
-    if (!endValue) {
-      return 'Click a different date to select end date (must be after start date)';
-    }
-    return 'Date range selected';
+
+    // single mode
+    if (!startValue) return 'Click a date to select a date';
+    return 'Date selected';
   };
 
   return (
@@ -205,38 +265,61 @@ export function DateRangePicker({
             )}
           </div>
           <Calendar
-            mode="range"
-            defaultMonth={dateRange?.from}
-            numberOfMonths={2}
-            selected={dateRange}
+            mode={(mode || 'range') as 'single' | 'multiple' | 'range'}
+            // required is expected by some DayPicker prop variants (satisfy union types)
+            required={false}
+            defaultMonth={
+              // For range mode, defaultMonth should be the range.from if available, otherwise undefined
+              mode === 'range'
+                ? dateRange && 'from' in (dateRange as any)
+                  ? (dateRange as DateRange).from
+                  : undefined
+                : (dateRange as Date | undefined)
+            }
+            numberOfMonths={numMonths}
+            selected={dateRange as any}
             captionLayout="label"
             showOutsideDays={true}
             className="tw:bg-white"
-            onSelect={selectedRange => {
-              if (!selectedRange) return;
+            onSelect={selected => {
+              if (!selected) return;
 
-              // If we have both from and to, it's a complete selection
-              if (selectedRange.from && selectedRange.to) {
-                // Only set as complete range if they are different dates
-                if (
-                  selectedRange.from.getTime() !== selectedRange.to.getTime()
-                ) {
-                  setDateRange(selectedRange);
-                  onChangeStart?.(
-                    createChangeEvent(
-                      startName,
-                      formatDateForForm(selectedRange.from),
-                    ),
-                  );
-                  onChangeEnd?.(
-                    createChangeEvent(
-                      endName,
-                      formatDateForForm(selectedRange.to),
-                    ),
-                  );
-                  setOpen(false);
-                } else {
-                  // Same date selected - treat as start date only and clear end date
+              if (mode === 'range') {
+                const selectedRange = selected as DateRange;
+                // If we have both from and to, it's a complete selection
+                if (selectedRange.from && selectedRange.to) {
+                  // Only set as complete range if they are different dates
+                  if (
+                    selectedRange.from.getTime() !== selectedRange.to.getTime()
+                  ) {
+                    setDateRange(selectedRange);
+                    onChangeStart?.(
+                      createChangeEvent(
+                        startName,
+                        formatDateForForm(selectedRange.from),
+                      ),
+                    );
+                    onChangeEnd?.(
+                      createChangeEvent(
+                        endName,
+                        formatDateForForm(selectedRange.to),
+                      ),
+                    );
+                    setOpen(false);
+                  } else {
+                    // Same date selected - treat as start date only and clear end date
+                    setDateRange({ from: selectedRange.from, to: undefined });
+                    onChangeStart?.(
+                      createChangeEvent(
+                        startName,
+                        formatDateForForm(selectedRange.from),
+                      ),
+                    );
+                    onChangeEnd?.(createChangeEvent(endName, ''));
+                  }
+                }
+                // If we only have from, it's the start date selection
+                else if (selectedRange.from && !selectedRange.to) {
                   setDateRange({ from: selectedRange.from, to: undefined });
                   onChangeStart?.(
                     createChangeEvent(
@@ -244,20 +327,19 @@ export function DateRangePicker({
                       formatDateForForm(selectedRange.from),
                     ),
                   );
+                  // Clear end date when selecting a new start date
                   onChangeEnd?.(createChangeEvent(endName, ''));
                 }
-              }
-              // If we only have from, it's the start date selection
-              else if (selectedRange.from && !selectedRange.to) {
-                setDateRange({ from: selectedRange.from, to: undefined });
+              } else {
+                // single mode: `selected` will be a Date
+                const selectedDate = selected as Date;
+                setDateRange(selectedDate);
                 onChangeStart?.(
-                  createChangeEvent(
-                    startName,
-                    formatDateForForm(selectedRange.from),
-                  ),
+                  createChangeEvent(startName, formatDateForForm(selectedDate)),
                 );
-                // Clear end date when selecting a new start date
+                // Clear end date in single mode
                 onChangeEnd?.(createChangeEvent(endName, ''));
+                setOpen(false);
               }
             }}
             disabled={[
