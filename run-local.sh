@@ -31,7 +31,7 @@ if [[ -z "$CI" ]]; then
   $DOCKER_COMPOSE -f "$(pwd)/web-api/elasticsearch/docker-compose.yml" up -d || { echo "Failed to start OpenSearch containers"; exit 1; }
   
   echo "OpenSearch is running"
-    ESEARCH_PID=$!
+
   URL=http://localhost:9200/ ./wait-until.sh
 
   echo "Stopping s3rver in case it's already running"
@@ -72,13 +72,15 @@ npx ts-node .cognito/seedCognitoLocal.ts --transpile-only
 echo "Starting cognito-local"
 CODE="385030" npx cognito-local &
 COGNITO_PID=$!
-
+ 
 npm run dev:api-local
 
+# This code is unreachable unless the api process exits on its own cleanly
 if [[ -z "$CI" ]]; then
-  echo "Stopping dynamodb, opensearch, and s3rver"
+  echo "Stopping postgres, dynamodb, opensearch, cognito, and s3rver"
+  $DOCKER_COMPOSE -f "$(pwd)/web-api/src/persistence/postgres/docker-compose.yml" down --volumes 
   pkill -P "$DYNAMO_PID"
-  pkill -P "$ESEARCH_PID"
+  $DOCKER_COMPOSE -f "$(pwd)/web-api/elasticsearch/docker-compose.yml" down --volumes
   pkill -P "$S3RVER_PID"
   pkill -P "$COGNITO_PID"
 fi
