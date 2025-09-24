@@ -39,6 +39,7 @@ import { redirectToDashboardSequence } from '@web-client/presenter/sequences/red
 import { redirectToLoginSequence } from '@web-client/presenter/sequences/Public/redirectToLoginSequence';
 import { resetPublicTrialSessionsDataSequence } from '@web-client/presenter/sequences/resetPublicTrialSessionsDataSequence';
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
+import { setCurrentPaginationPageSequence } from './sequences/setCurrentPaginationPageSequence';
 import { showMaintenancePageDecorator } from './utilities/showMaintenancePageDecorator';
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
 import { sortTableSequence } from '@web-client/presenter/sequences/sortTableSequence';
@@ -58,6 +59,7 @@ import { updateAdvancedOrderSearchFormValueSequence } from './sequences/updateAd
 import { updateAdvancedSearchFormValueSequence } from './sequences/updateAdvancedSearchFormValueSequence';
 import { updateCaseAdvancedSearchByNameFormValueSequence } from './sequences/updateCaseAdvancedSearchByNameFormValueSequence';
 import { updateDocketNumberSearchFormSequence } from './sequences/updateDocketNumberSearchFormSequence';
+import { updateDocumentSearchResultsSequence } from './sequences/updateDocumentSearchResultsSequence';
 import { updateFormValueSequence } from './sequences/updateFormValueSequence';
 import { updateSessionMetadataSequence } from './sequences/updateSessionMetadataSequence';
 import { validateCaseAdvancedSearchFormSequence } from './sequences/validateCaseAdvancedSearchFormSequence';
@@ -66,6 +68,7 @@ import { validateOpinionSearchSequence } from './sequences/validateOpinionSearch
 import { validateOrderSearchSequence } from './sequences/validateOrderSearchSequence';
 import { validatePractitionerSearchByBarNumberFormSequence } from '@web-client/presenter/sequences/validatePractitionerSearchByBarNumberFormSequence';
 import { validatePractitionerSearchByNameFormSequence } from '@web-client/presenter/sequences/validatePractitionerSearchByNameFormSequence';
+import { openCleanModalSequence } from './sequences/openCleanModalSequence';
 
 export const presenterSequences = {
   advancedSearchTabChangeSequence,
@@ -110,11 +113,13 @@ export const presenterSequences = {
   openAppMaintenanceModalSequence,
   openAppUpdatedModalSequence,
   openCaseDocumentDownloadUrlSequence,
+  openCleanModalSequence,
   persistFormsOnReloadSequence,
   redirectToCreatePetitionerAccountSequence,
   redirectToDashboardSequence,
   redirectToLoginSequence,
   resetPublicTrialSessionsDataSequence,
+  setCurrentPaginationPageSequence,
   showMoreResultsSequence,
   sortTableSequence,
   submitLoginSequence,
@@ -133,6 +138,7 @@ export const presenterSequences = {
   updateAdvancedSearchFormValueSequence,
   updateCaseAdvancedSearchByNameFormValueSequence,
   updateDocketNumberSearchFormSequence,
+  updateDocumentSearchResultsSequence,
   updateFormValueSequence,
   updateSessionMetadataSequence,
   validateCaseAdvancedSearchFormSequence,

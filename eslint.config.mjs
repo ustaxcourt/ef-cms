@@ -102,7 +102,7 @@ export default tseslint.config(
         ecmaVersion: 2020,
         sourceType: 'module',
         projectService: {
-          allowDefaultProject: ['*.js', '*.mjs', '*.ts'],
+          allowDefaultProject: ['*.js', '*.mjs'],
         },
         tsconfigRootDir: import.meta.dirname,
         ecmaFeatures: {

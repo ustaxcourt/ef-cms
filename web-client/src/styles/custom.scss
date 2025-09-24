@@ -173,12 +173,12 @@ hr {
 }
 
 .word-wrap-break-word {
-  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 address {
   p {
-    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 }
 
@@ -2488,6 +2488,18 @@ button.change-scanner-button {
     max-width: 2.5rem;
     margin-right: 5px !important;
     margin-left: 5px !important;
+  }
+}
+
+@media only screen and (max-width: $medium-screen) {
+  .mobile-header-button {
+    margin-right: 0;
+    margin-left: auto;
+    color: $color-white;
+
+    &:visited {
+      color: $color-white;
+    }
   }
 }
 

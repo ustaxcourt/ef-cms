@@ -16,6 +16,7 @@ export const docketClerkAddsCaseToHearing = (
       docketNumber: cerebralTest.docketNumber,
     });
 
+
     await cerebralTest.runSequence('openSetForHearingModalSequence');
 
     await cerebralTest.runSequence('updateModalValueSequence', {
