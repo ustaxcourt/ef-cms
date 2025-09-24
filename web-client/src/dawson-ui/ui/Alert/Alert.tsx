@@ -84,7 +84,7 @@ function AlertHeader({
   ...props
 }: React.ComponentProps<'p'> & AlertHeaderType) {
   return (
-    <div className="tw:flex tw:xs:!h-[24px]">
+    <div className="tw:flex">
       <div className="tw:xs:text-2xl/6 tw:!h-[20px] tw:!w-[20px] tw:xs:!h-[24px] tw:xs:!w-[24px]">
         <FontAwesomeIcon
           icon={iconType[variant ?? 'info']}
@@ -95,8 +95,8 @@ function AlertHeader({
         className={cn(
           title
             ? 'tw:font-bold tw:text-base/5 tw:xs:text-lg/6'
-            : 'tw:text-base',
-          'tw:pb-0 tw:ml-3',
+            : 'tw:text-base/5 tw:xs:text-lg/6',
+          'tw:pb-0 tw:ml-4',
         )}
         data-slot="alert-title"
         data-testid="alert-header"
@@ -121,7 +121,7 @@ function AlertHeader({
 function AlertDescription({ ...props }: React.ComponentProps<'p'>) {
   return (
     <div
-      className="tw:text-base tw:xs:text-lg/6 tw:ml-8 tw:xs:ml-9 tw:xs:mt-1"
+      className="tw:mt-1.5 tw:xs:mt-2 tw:text-base/5 tw:xs:text-lg/6 tw:ml-9 tw:xs:ml-10 tw:xs:mt-1"
       data-slot="alert-description"
       {...props}
     />
