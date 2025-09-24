@@ -1,5 +1,5 @@
-import { get } from '../requests';
 import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
+import { get } from '../requests';
 
 export const getDocumentQCInboxForUserInteractor = (
   applicationContext,

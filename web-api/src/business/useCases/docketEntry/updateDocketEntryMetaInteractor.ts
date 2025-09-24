@@ -124,15 +124,15 @@ export const updateDocketEntryMeta = async (
     originalDocketEntry.certificateOfService !==
     docketEntryMeta.certificateOfService;
 
-  const shouldGenerateCoversheet = shouldGenerateCoversheetForDocketEntry({
-    certificateOfServiceUpdated,
-    documentTitleUpdated,
-    entryRequiresCoverSheet,
-    filingDateUpdated,
-    originalDocketEntry,
-    servedAtUpdated,
-    shouldAddNewCoverSheet,
-  });
+    const shouldGenerateCoversheet = shouldGenerateCoversheetForDocketEntry({
+      certificateOfServiceUpdated,
+      documentTitleUpdated,
+      entryRequiresCoverSheet,
+      filingDateUpdated,
+      originalDocketEntry,
+      servedAtUpdated,
+      shouldAddNewCoverSheet,
+    });
 
   const docketEntryEntity = new DocketEntry(
     {
