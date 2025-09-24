@@ -110,6 +110,8 @@ export const docketEntryTableDefinition = {
   taxYear: DEFAULT as string | null,
   trialLocation: DEFAULT as string | null,
   userId: DEFAULT as string | null,
+  orderDocketEntityId: DEFAULT as string | null,
+  motionDisposition: DEFAULT as string | null,
 };
 
 export type DocketEntryTable = typeof docketEntryTableDefinition;

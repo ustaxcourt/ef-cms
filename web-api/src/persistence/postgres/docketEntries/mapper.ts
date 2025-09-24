@@ -100,6 +100,8 @@ export function toKyselyNewDocketEntry(
     taxYear: docketEntry.taxYear ?? null,
     trialLocation: docketEntry.trialLocation ?? null,
     userId: docketEntry.userId ?? null,
+    orderDocketEntityId: docketEntry.orderDocketEntityId ?? null,
+    motionDisposition: docketEntry.motionDisposition ?? null,
   };
 }
 
