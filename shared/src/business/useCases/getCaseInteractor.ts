@@ -9,7 +9,6 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
 import { ROLES } from '@shared/business/entities/EntityConstants';
 
-
 export const getCaseInteractor = async (
   { docketNumber }: { docketNumber: string },
   authorizedUser: UnknownAuthUser,
@@ -49,13 +48,17 @@ export const getCaseInteractor = async (
   );
   const docketEntriesWithUIInfo = theCase.docketEntries.map(docketEntry => {
     const workItem = workItemByDocketEntryId.get(docketEntry.docketEntryId);
-
     docketEntry.servedParties?.forEach(party => {
-      if (!(authorizedUser.role === ROLES.docketClerk || authorizedUser.role === ROLES.admissionsClerk)) {
-        party.email = undefined
+      if (
+        !(
+          authorizedUser.role === ROLES.docketClerk ||
+          authorizedUser.role === ROLES.admissionsClerk
+        )
+      ) {
+        party.email = undefined;
       }
       return party;
-    })
+    });
 
     return {
       ...docketEntry,
