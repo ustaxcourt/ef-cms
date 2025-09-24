@@ -23,11 +23,6 @@ services:
     ports:
       - 9200:9200 # REST API
       - 9600:9600 # Performance Analyzer
-    networks:
-      - opensearch-net # All of the containers will join the same Docker bridge network
 
 volumes:
   opensearch-data:
-
-networks:
-  opensearch-net:
