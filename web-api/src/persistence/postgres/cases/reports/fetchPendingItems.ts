@@ -57,8 +57,7 @@ export const fetchPendingItems = async ({
         'c.trialDate',
         'c.trialLocation',
         'd.docketEntryId',
-        // 8764: will need to be reverted to documentType
-        'd.documentTypeUpdated',
+        'd.documentType',
         'd.documentTitle',
         'd.receivedAt',
       ])
