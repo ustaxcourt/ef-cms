@@ -1,15 +1,16 @@
 import { MOCK_TRIAL_REGULAR, MOCK_TRIAL_REMOTE } from '@shared/test/mockTrial';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 import {
   getUniqueValues,
   trialSessionsReport,
 } from './trial-sessions-report-helpers';
 import fs from 'fs';
+import { getTrialSessions as getTrialSessionsMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessions';
 
 jest.spyOn(fs, 'existsSync').mockReturnValue(false);
 const unlink = jest.spyOn(fs, 'unlinkSync').mockImplementation(jest.fn());
 const append = jest.spyOn(fs, 'appendFileSync').mockImplementation(jest.fn());
-
 describe('getUniqueValues', () => {
   it('counts instances of each unique value for a given key in an array of objects', () => {
     const arrayOfObjects = [
@@ -73,11 +74,10 @@ describe('trialSessionsReport', () => {
   const end = '2021-01-01T05:00:00Z';
   const filename = '/tmp/2020-trial-sessions.csv';
   const mockTrialSessions = [MOCK_TRIAL_REMOTE, MOCK_TRIAL_REGULAR];
+  const getTrialSessions = jest.mocked(getTrialSessionsMock);
 
   beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessions.mockReturnValue(Promise.resolve(mockTrialSessions));
+    getTrialSessions.mockResolvedValue(mockTrialSessions);
     jest.spyOn(console, 'log').mockImplementation(() => {});
   });
 
@@ -89,9 +89,7 @@ describe('trialSessionsReport', () => {
       start,
       stats: false,
     });
-    expect(
-      applicationContext.getPersistenceGateway().getTrialSessions,
-    ).toHaveBeenCalled();
+    expect(getTrialSessions).toHaveBeenCalled();
     expect(unlink).not.toHaveBeenCalled();
     expect(append).toHaveBeenCalled();
   });
@@ -104,8 +102,6 @@ describe('trialSessionsReport', () => {
       start,
       stats: true,
     });
-    expect(
-      applicationContext.getPersistenceGateway().getTrialSessions,
-    ).not.toHaveBeenCalled(); // because the results were cached
+    expect(getTrialSessions).not.toHaveBeenCalled(); // because the results were cached
   });
 });
