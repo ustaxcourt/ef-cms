@@ -131,6 +131,10 @@ If an update is available, follow these steps to update OpenSearch to the latest
 - Run an account-specific terraform deployment using `deploy:account-specific`. Verify cluster is still functional while upgrade is being performed and after by running queries in kibana.
 
 - Run deployment. Verify cluster is still functional while upgrade is being performed and after by running search smoketests against current color.
+
+- Set the value of the `image` property in `web-api/elasticsearch/docker-compose.yml` to correspond to the new version number, then run the api locally to verify:
+
+  > npm run start:api
  
 - If the upgrade was successful, add these manual steps in the dependency updates pull request. See [PR #9189](https://github.com/ustaxcourt/ef-cms/pull/9189) for an example.
 
