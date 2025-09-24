@@ -65,11 +65,15 @@ export const getDocumentQCInboxForUserAction = async ({
       if (g.groupedCases) byLead.set(g.leadDocketNumber, g.groupedCases);
     }
 
-    for (const wi of workItems) {
-      if (wi.leadDocketNumber && byLead.has(wi.leadDocketNumber)) {
-        wi.groupedCases = byLead.get(wi.leadDocketNumber);
-      }
-    }
+    const workItemsWithGroups = workItems.map(wi => ({
+      ...wi,
+      groupedCases:
+        wi.leadDocketNumber && byLead.has(wi.leadDocketNumber)
+          ? byLead.get(wi.leadDocketNumber)
+          : undefined,
+    }));
+
+    return { workItems: workItemsWithGroups };
   }
 
   return { workItems };

@@ -176,16 +176,9 @@ export const updateDocketEntryMeta = async (
     caseEntity.updateDocketEntry(docketEntryEntity);
   }
 
-  // If this case is the lead of a consolidated group, propagate editable
-  // fields to the member cases' corresponding docket entries so edits made
-  // on the lead case are reflected across the consolidated cases.
   const { consolidatedCases } = caseEntity;
 
   if (consolidatedCases && consolidatedCases.length > 0) {
-    // Only a subset of editable fields (Document Info) should be
-    // propagated from the lead case to member cases. Service and Action
-    // related fields (servedAt, serviceDate, servedPartiesCode, action,
-    // etc.) must remain case-specific and should NOT be propagated.
     const DOCUMENT_INFO_FIELDS = [
       'addToCoversheet',
       'additionalInfo',
@@ -211,13 +204,11 @@ export const updateDocketEntryMeta = async (
       'docketNumbers',
       'objections',
     ];
-    // Build list of docket numbers to update (including the lead)
     const docketNumbersToUpdate = consolidatedCases
       .filter(({ docketNumber }) => docketNumber)
       .map(({ docketNumber }) => docketNumber)
       .concat(caseEntity.docketNumber);
 
-    // Fetch the current case records for those docket numbers
     const casesToUpdate = await getCasesByDocketNumbers({
       docketNumbers: Array.from(new Set(docketNumbersToUpdate)),
     });
@@ -236,9 +227,6 @@ export const updateDocketEntryMeta = async (
           });
 
         if (consolidatedCaseDocketEntry) {
-          // Build an object containing only the Document Info fields that
-          // should be propagated to member cases. This ensures Service and
-          // Action tab changes remain local to the case being edited.
           const propagationFields: any = {};
           DOCUMENT_INFO_FIELDS.forEach(field => {
             if (Object.prototype.hasOwnProperty.call(editableFields, field)) {
@@ -246,8 +234,6 @@ export const updateDocketEntryMeta = async (
             }
           });
 
-          // Create a DocketEntry entity merging the original member entry
-          // with only the allowed propagation fields from the lead update.
           const merged = new DocketEntry(
             {
               ...consolidatedCaseDocketEntry,
@@ -256,10 +242,6 @@ export const updateDocketEntryMeta = async (
             { authorizedUser, petitioners: consolidatedCaseEntity.petitioners },
           );
 
-          // Maintain processing status/page counts only when appropriate;
-          // if the lead case update set numberOfPages or processing status,
-          // prefer the lead's values (editableFields may not contain pages).
-          // Prefer the lead case's docket entry numberOfPages when present
           if (docketEntryEntity && docketEntryEntity.numberOfPages) {
             merged.setNumberOfPages(docketEntryEntity.numberOfPages);
           }
