@@ -66,14 +66,14 @@ table,
 
   td.docket-number-head {
     padding: 16px;
-    border-top: 3px solid color($theme-color-base-darkest) !important; // make sure tailwind doesn't conflict
-    border-bottom: 2px solid color($theme-color-base-light) !important; // make sure tailwind doesn't conflict
+    border-top: 3px solid color($theme-color-base-darkest);
+    border-bottom: 2px solid color($theme-color-base-light);
     background-color: color($theme-color-base-lighter);
     font-weight: bold;
   }
 
   td.divider {
-    border-bottom: 2px solid color($theme-color-base-light) !important; // make sure tailwind doesn't conflict
+    border-bottom: 2px solid color($theme-color-base-light);
   }
 }
 
@@ -110,7 +110,7 @@ table,
       border: none;
 
       &.total-subsection {
-        border-top: 2px solid color($theme-color-base-lighter) !important; // make sure tailwind doesn't conflict
+        border-top: 2px solid color($theme-color-base-lighter);
       }
     }
 
@@ -129,7 +129,7 @@ table,
     }
 
     .sortActive {
-      border-bottom: 3px solid color($theme-color-primary) !important; // make sure tailwind doesn't conflict
+      border-bottom: 3px solid color($theme-color-primary);
     }
 
     &.small {
@@ -269,7 +269,7 @@ table,
   }
 
   tr {
-    border-top: 1px solid color($theme-color-base-lighter) !important; // make sure tailwind doesn't conflict
+    border-top: 1px solid color($theme-color-base-lighter);
 
     &.notes-row {
       td {
@@ -309,9 +309,9 @@ table,
 
   width: 100%;
   border-top: none;
-  border-right: 1px solid color($theme-color-base-lighter) !important; // make sure tailwind doesn't conflict
-  border-bottom: 1px solid color($theme-color-base-lighter) !important; // make sure tailwind doesn't conflict
-  border-left: 1px solid color($theme-color-base-lighter) !important; // make sure tailwind doesn't conflict
+  border-right: 1px solid color($theme-color-base-lighter);
+  border-bottom: 1px solid color($theme-color-base-lighter);
+  border-left: 1px solid color($theme-color-base-lighter);
 
   /* big screens */
   @media only screen and (min-width: $medium-screen) {
@@ -423,7 +423,7 @@ table,
 
 table.small-case-qualifications-table {
   tr {
-    border: 1px solid color($theme-color-base-light) !important; // make sure tailwind doesn't conflict
+    border: 1px solid color($theme-color-base-light);
 
     td:first-child {
       font-weight: $font-semibold;
@@ -442,7 +442,7 @@ table.small-case-qualifications-table {
 table.dashboard {
   thead {
     min-height: 50px;
-    border-bottom: 1px solid color($theme-color-base-lighter) !important; // make sure tailwind doesn't conflict
+    border-bottom: 1px solid color($theme-color-base-lighter);
 
     th {
       padding: 0.5rem 1rem;
@@ -453,7 +453,7 @@ table.dashboard {
   }
 
   tr {
-    border-bottom: 1px solid color($theme-color-base-lighter) !important; // make sure tailwind doesn't conflict
+    border-bottom: 1px solid color($theme-color-base-lighter);
   }
 
   td {
@@ -468,7 +468,7 @@ table.dashboard {
 
   /* only medium up */
   @media only screen and (min-width: $medium-screen) {
-    border: 1px solid color($theme-color-base-lighter) !important; // make sure tailwind doesn't conflict
+    border: 1px solid color($theme-color-base-lighter);
   }
 
   /* small only */
@@ -525,7 +525,7 @@ table.row-border-only {
 
   thead tr,
   tbody tr {
-    border: 1px solid color($theme-color-base-lighter) !important; // make sure tailwind doesn't conflict
+    border: 1px solid color($theme-color-base-lighter);
   }
 }
 
@@ -603,7 +603,7 @@ table.case-list tbody tr:nth-child(even) td {
     }
 
     .responsive-title {
-      border-bottom: 1px solid color($theme-color-base-light) !important; // make sure tailwind doesn't conflict
+      border-bottom: 1px solid color($theme-color-base-light);
       background: color($theme-color-base-lightest);
       font-weight: $font-bold;
     }
@@ -681,7 +681,7 @@ table.case-list tbody tr:nth-child(even) td {
 .grid-header {
   min-height: 50px;
   align-items: center;
-  border-bottom: 1px solid color($theme-color-base-lighter) !important; // make sure tailwind doesn't conflict
+  border-bottom: 1px solid color($theme-color-base-lighter);
   background-color: color($theme-color-base-lightest);
   font-weight: $font-semibold;
 }

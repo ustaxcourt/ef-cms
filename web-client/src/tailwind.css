@@ -1,4 +1,4 @@
-@layer theme, base, components, utilities;
+@layer theme, components, utilities;
 @import "tailwindcss/theme.css" layer(theme) prefix(tw);
 @import "tailwindcss/utilities.css" layer(utilities) prefix(tw);
 @import "tw-animate-css";
@@ -108,6 +108,7 @@
   --breakpoint-xs: 30rem;
 }
 
+/* 
 @layer base {
   * {
     @apply tw:border-border tw:outline-ring/50;
@@ -116,4 +117,4 @@
   body {
     @apply tw:bg-background tw:text-foreground;
   }
-}
+} */

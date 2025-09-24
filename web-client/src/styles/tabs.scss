@@ -25,7 +25,7 @@
 
   ul.ustc-ui-tabs {
     padding-left: 0;
-    border-bottom: 1px solid color($theme-color-base-lighter) !important; // make sure tailwind doesn't conflict
+    border-bottom: 1px solid color($theme-color-base-lighter);
     margin-top: 0;
     margin-bottom: 2.5rem;
     line-height: 2;
@@ -52,7 +52,7 @@
         }
 
         &:hover {
-          border-bottom: 3px solid color($theme-color-primary-darker) !important; // make sure tailwind doesn't conflict
+          border-bottom: 3px solid color($theme-color-primary-darker);
           background-color: none;
           color: color($theme-color-primary-darker);
         }
@@ -60,7 +60,7 @@
 
       &.active {
         button {
-          border-bottom: 3px solid color($theme-color-primary) !important; // make sure tailwind doesn't conflict
+          border-bottom: 3px solid color($theme-color-primary);
           color: color($theme-color-base-darkest);
 
           &:hover {
@@ -95,8 +95,8 @@
         margin: 0;
 
         li {
-          border-right: 1px solid color($theme-color-base-lighter) !important; // make sure tailwind doesn't conflict
-          border-bottom: 1px solid color($theme-color-base-lighter) !important; // make sure tailwind doesn't conflict
+          border-right: 1px solid color($theme-color-base-lighter);
+          border-bottom: 1px solid color($theme-color-base-lighter);
           margin-right: 0;
           text-align: center;
 
@@ -122,7 +122,7 @@
 
               .button-text {
                 padding-bottom: 0;
-                border-bottom: 1px solid color($theme-color-primary-darker) !important; // make sure tailwind doesn't conflict
+                border-bottom: 1px solid color($theme-color-primary-darker);
               }
             }
           }
@@ -138,12 +138,12 @@
 
               &:hover {
                 .button-text {
-                  border-bottom: 3px solid color($theme-color-primary) !important; // make sure tailwind doesn't conflict
+                  border-bottom: 3px solid color($theme-color-primary);
                 }
               }
 
               .button-text {
-                border-bottom: 3px solid color($theme-color-primary) !important; // make sure tailwind doesn't conflict
+                border-bottom: 3px solid color($theme-color-primary);
               }
             }
           }
@@ -160,14 +160,14 @@
         background-color: color($theme-color-primary);
 
         li {
-          border-right: 1px solid color($theme-color-base-lighter) !important; // make sure tailwind doesn't conflict
+          border-right: 1px solid color($theme-color-base-lighter);
           border-bottom: none;
           margin-right: 0;
           background-color: color($theme-color-primary);
           text-align: center;
 
           &:first-child {
-            border-left: 1px solid color($theme-color-base-lighter) !important; // make sure tailwind doesn't conflict
+            border-left: 1px solid color($theme-color-base-lighter);
           }
 
           button {
@@ -208,12 +208,12 @@
 
                 .button-text {
                   padding-bottom: 0;
-                  border-bottom: 3px solid color($theme-color-primary-darker) !important; // make sure tailwind doesn't conflict
+                  border-bottom: 3px solid color($theme-color-primary-darker);
                 }
               }
 
               .button-text {
-                border-bottom: 3px solid color($theme-color-primary) !important; // make sure tailwind doesn't conflict
+                border-bottom: 3px solid color($theme-color-primary);
               }
             }
           }
