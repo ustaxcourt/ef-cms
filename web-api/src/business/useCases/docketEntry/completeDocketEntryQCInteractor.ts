@@ -155,7 +155,6 @@ const completeDocketEntryQC = async (
     updatedDocketEntry,
   });
 
-  // Determine whether this docket entry is multidocketed across consolidated cases
   const consolidatedDocketNumbers = (caseEntity.consolidatedCases || [])
     .map(c => c.docketNumber)
     .filter(Boolean);
@@ -207,7 +206,7 @@ const completeDocketEntryQC = async (
   const docketChangeInfo = {
     caseCaptionExtension,
     caseTitle,
-    docketEntryIndex: docketRecordIndexUpdated,
+    docketEntryIndex: String(docketRecordIndexUpdated),
     docketNumber: Case.getDocketNumberWithSuffix({
       docketNumber: caseToUpdate.docketNumber,
       docketNumberSuffix: caseToUpdate.docketNumberSuffix,
@@ -258,7 +257,6 @@ const completeDocketEntryQC = async (
     workItems: [workItem.validate().toRawObject()],
   });
 
-  // If multi-docketed and we're the lead case, propagate QC completion to member cases
   if (
     isMultiDocketed &&
     caseEntity.leadDocketNumber === caseEntity.docketNumber
@@ -266,7 +264,7 @@ const completeDocketEntryQC = async (
     const memberWorkItemsToUpsert: any[] = [];
 
     for (const de of docketEntriesAcrossCases) {
-      if (de.docketNumber === caseEntity.docketNumber) continue; // skip lead
+      if (de.docketNumber === caseEntity.docketNumber) continue;
 
       try {
         const memberCaseRaw = await getCaseByDocketNumber({
@@ -282,14 +280,23 @@ const completeDocketEntryQC = async (
 
         if (!memberDocketEntry) continue;
 
-        // mark member docket entry as QC complete and processing complete
-        memberDocketEntry.qcComplete = true;
-        memberDocketEntry.processingStatus =
+        const updatedMemberDocketEntry = new DocketEntry(
+          {
+            ...memberDocketEntry,
+            ...editableFields,
+            documentTitle: editableFields.documentTitle,
+            editState: '{}',
+            relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
+          },
+          { authorizedUser, petitioners: memberCaseRaw.petitioners },
+        ).validate();
+
+        updatedMemberDocketEntry.qcComplete = true;
+        updatedMemberDocketEntry.processingStatus =
           DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
 
-        memberCaseEntity.updateDocketEntry(memberDocketEntry);
+        memberCaseEntity.updateDocketEntry(updatedMemberDocketEntry);
 
-        // attempt to complete any work item associated with the member case's docket entry
         const memberWorkItem = await getWorkItemByDocketNumberAndDocketEntryId({
           docketNumber: memberCaseEntity.docketNumber,
           docketEntryId,
@@ -312,14 +319,11 @@ const completeDocketEntryQC = async (
           memberWorkItemsToUpsert.push(memberWorkItem.validate().toRawObject());
         }
 
-        // persist member case changes
         await updateCaseAndAssociations({
           authorizedUser,
           caseToUpdate: memberCaseEntity,
         });
       } catch (err) {
-        // don't fail the whole flow if a member case update fails; continue to next
-        // but log error if logging helper exists
         applicationContext.logger?.error(
           `Failed to update member case for docketEntryId ${docketEntryId} on case ${de.docketNumber}: ${err}`,
         );
@@ -367,7 +371,7 @@ const completeDocketEntryQC = async (
       const paperServicePdfId = applicationContext.getUniqueId();
 
       await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-        document: paperServicePdfData,
+        document: Buffer.from(paperServicePdfData).buffer,
         key: paperServicePdfId,
         useTempBucket: true,
       });
@@ -386,7 +390,6 @@ const completeDocketEntryQC = async (
   } else if (needsNoticeOfDocketChange) {
     const paperServiceResults: any[] = [];
 
-    // If multi-docketed, generate a notice for each case that contains the docketEntryId
     if (isMultiDocketed) {
       for (const de of docketEntriesAcrossCases) {
         try {
@@ -414,26 +417,32 @@ const completeDocketEntryQC = async (
             caseTitle: memberCaseTitle,
           } = getCaseCaptionMeta(memberCaseEntity);
 
+          const memberCurrentDocketEntry = memberDocketEntry;
+
+          const memberUpdatedDocketEntry =
+            memberCaseEntity.getDocketEntryById({ docketEntryId }) ||
+            memberDocketEntry;
+
           const memberDocketChangeInfo = {
             caseCaptionExtension: memberCaseCaptionExtension,
             caseTitle: memberCaseTitle,
-            docketEntryIndex: memberDocketEntryIndex,
+            docketEntryIndex: String(memberDocketEntryIndex),
             docketNumber: Case.getDocketNumberWithSuffix({
               docketNumber: memberCaseRaw.docketNumber,
               docketNumberSuffix: memberCaseRaw.docketNumberSuffix,
             }),
             filingParties: {
-              after: updatedDocketEntry.filedBy,
-              before: currentDocketEntry.filedBy,
+              after: memberUpdatedDocketEntry.filedBy,
+              before: memberCurrentDocketEntry.filedBy,
             },
             filingsAndProceedings: {
               after: getDocumentTitleForNoticeOfChange({
                 applicationContext,
-                docketEntry: updatedDocketEntry,
+                docketEntry: memberUpdatedDocketEntry,
               }),
               before: getDocumentTitleForNoticeOfChange({
                 applicationContext,
-                docketEntry: currentDocketEntry,
+                docketEntry: memberCurrentDocketEntry,
               }),
             },
             nameOfClerk: name,
@@ -443,7 +452,6 @@ const completeDocketEntryQC = async (
           const noticeDocketEntryId = await generateNoticeOfDocketChangePdf({
             applicationContext,
             authorizedUser,
-            // @ts-ignore
             docketChangeInfo: memberDocketChangeInfo,
           });
 
@@ -454,7 +462,6 @@ const completeDocketEntryQC = async (
               documentTitle: replaceBracketed(
                 SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange
                   .documentTitle,
-                // @ts-ignore
                 memberDocketChangeInfo.docketEntryIndex,
               ),
               isFileAttached: true,
@@ -500,9 +507,15 @@ const completeDocketEntryQC = async (
           await applicationContext
             .getPersistenceGateway()
             .saveDocumentFromLambda({
-              document: newPdfData,
+              document: Buffer.from(newPdfData).buffer,
               key: memberNoticeUpdatedDocketEntry.docketEntryId,
             });
+
+          // persist member case changes (including the newly added NODC)
+          await updateCaseAndAssociations({
+            authorizedUser,
+            caseToUpdate: memberCaseEntity,
+          });
 
           const paperServiceResult = await applicationContext
             .getUseCaseHelpers()
@@ -530,7 +543,6 @@ const completeDocketEntryQC = async (
       const noticeDocketEntryId = await generateNoticeOfDocketChangePdf({
         applicationContext,
         authorizedUser,
-        // @ts-ignore
         docketChangeInfo,
       });
 
@@ -540,7 +552,6 @@ const completeDocketEntryQC = async (
           docketEntryId: noticeDocketEntryId,
           documentTitle: replaceBracketed(
             SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange.documentTitle,
-            // @ts-ignore
             docketChangeInfo.docketEntryIndex,
           ),
           isFileAttached: true,
@@ -582,7 +593,7 @@ const completeDocketEntryQC = async (
       });
 
       await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-        document: newPdfData,
+        document: Buffer.from(newPdfData).buffer,
         key: noticeUpdatedDocketEntry.docketEntryId,
       });
 
@@ -600,7 +611,6 @@ const completeDocketEntryQC = async (
       }
     }
 
-    // aggregate paperServiceParties across cases
     if (
       Array.isArray(docketEntriesAcrossCases) &&
       docketEntriesAcrossCases.length
@@ -623,14 +633,11 @@ const completeDocketEntryQC = async (
         }
       }
 
-      // set paperServiceParties to aggregated list if not empty
       if (aggregatedPaperParties.length > 0) {
-        // remove duplicates by name
         paperServiceParties = Array.from(
           new Map(aggregatedPaperParties.map(p => [p.name, p])).values(),
         );
       }
-      // include detailed results as an additional return field
       paperServicePdfUrl = paperServiceResults.length
         ? paperServiceResults[0].pdfUrl
         : paperServicePdfUrl;
