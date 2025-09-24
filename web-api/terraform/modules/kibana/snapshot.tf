@@ -6,12 +6,16 @@ provider "opensearch" {
 
 resource "opensearch_snapshot_repository" "archived-logs" {
   name = "archived-logs"
-  type = "s3"
+  type = "s3" 
   settings = {
     bucket   = aws_s3_bucket.ustc_log_snapshots_bucket.bucket
     region   = "us-east-1"
     role_arn = aws_iam_role.es_s3_snapshot_access_role.arn
   }
+
+  depends_on = [
+    aws_opensearch_domain.efcms-logs
+  ]
 }
 
 resource "aws_iam_role" "es_s3_snapshot_access_role" {
