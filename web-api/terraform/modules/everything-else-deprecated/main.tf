@@ -27,6 +27,7 @@ module "elasticsearch_alpha" {
 
   count = var.should_es_alpha_exist ? 1 : 0
 
+  es_engine_version   = var.es_engine_version
   environment         = var.environment
   domain_name         = "efcms-search-${var.environment}-alpha"
   es_instance_count   = var.es_instance_count
@@ -46,6 +47,7 @@ module "elasticsearch_beta" {
 
   count = var.should_es_beta_exist ? 1 : 0
 
+  es_engine_version   = var.es_engine_version
   environment         = var.environment
   domain_name         = "efcms-search-${var.environment}-beta"
   es_instance_count   = var.es_instance_count
