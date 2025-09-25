@@ -14,6 +14,7 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import { InfoNotificationComponent } from '../InfoNotification';
 
 export const EditDocketEntryMeta = connect(
   {
@@ -97,11 +98,19 @@ export const EditDocketEntryMeta = connect(
                   </Hint>
                 )}
               {isMemberCase && (
-                <Hint fullWidth>
-                  Edits to Document Info can only be done from the{' '}
-                  <strong>lead case</strong> in a consolidated group. This is a
-                  member case.
-                </Hint>
+                <InfoNotificationComponent
+                  alertInfo={{
+                    message: (
+                      <>
+                        Edits to Document Info can only be done from the{' '}
+                        <strong>lead case</strong> in a consolidated group. This
+                        is a member case.
+                      </>
+                    ),
+                  }}
+                  dismissible={false}
+                  scrollToTop={false}
+                />
               )}
               <Tabs
                 boxed
