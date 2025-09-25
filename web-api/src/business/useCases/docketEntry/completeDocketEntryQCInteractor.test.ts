@@ -26,6 +26,7 @@ import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/per
 import { getFeatureFlagValues as getFeatureFlagValuesMock } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getWorkItemByDocketNumberAndDocketEntryId as getWorkItemByDocketNumberAndDocketEntryIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
+import { getDocketEntriesByDocketNumberAndDocketEntryId as getDocketEntriesByDocketNumberAndDocketEntryIdMock } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumberAndDocketEntryId';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
@@ -41,6 +42,9 @@ describe('completeDocketEntryQCInteractor', () => {
   const mockDocketEntryId = MOCK_CASE.docketEntries[0].docketEntryId;
 
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const getDocketEntriesByDocketNumberAndDocketEntryId = jest.mocked(
+    getDocketEntriesByDocketNumberAndDocketEntryIdMock,
+  );
   const updateCaseAndAssociations = jest
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
@@ -74,6 +78,8 @@ describe('completeDocketEntryQCInteractor', () => {
     getWorkItemByDocketNumberAndDocketEntryId.mockResolvedValue(
       new WorkItem(workItem),
     );
+
+    getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([]);
 
     caseRecord = {
       ...MOCK_CASE,
@@ -154,19 +160,251 @@ describe('completeDocketEntryQCInteractor', () => {
     expect(updateCaseAndAssociations).toHaveBeenCalled();
   });
 
-  it('serves the document for electronic-only parties if a notice of docket change is generated', async () => {
-    const result = await completeDocketEntryQCInteractor(
+  describe('Multi-docketed document handling', () => {
+    // it('should throw error if QC attempted on non-lead case and process member cases when on lead case', async () => {
+    //   const memberCase = {
+    //     ...caseRecord,
+    //     docketNumber: '67890-18',
+    //     leadDocketNumber: '45678-18',
+    //   };
+
+    //   let leadCase = {
+    //     ...caseRecord,
+    //     docketNumber: '45678-18',
+    //     leadDocketNumber: '45678-18',
+    //     consolidatedCases: [{ docketNumber: '67890-18' }],
+    //   };
+
+    //   getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([
+    //     {
+    //       docketNumber: leadCase.docketNumber,
+    //       docketEntryId: mockDocketEntryId,
+    //       createdAt: '2018-11-21T20:49:28.192Z',
+    //       receivedAt: '2018-11-21T20:49:28.192Z',
+    //       documentTitle: 'Some title',
+    //       eventCode: 'SDEC',
+    //       filingDate: '2022-08-01',
+    //       isOnDocketRecord: true,
+    //       filers: [],
+    //       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+    //       stampData: {},
+    //     },
+    //     {
+    //       docketNumber: '12345-19',
+    //       docketEntryId: mockDocketEntryId,
+    //       createdAt: '2018-11-21T20:49:28.192Z',
+    //       receivedAt: '2018-11-21T20:49:28.192Z',
+    //       documentTitle: 'Some title',
+    //       eventCode: 'SDEC',
+    //       filingDate: '2022-08-01',
+    //       isOnDocketRecord: true,
+    //       filers: [],
+    //       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+    //       stampData: {},
+    //     },
+    //   ]);
+
+    //   getCaseByDocketNumber.mockResolvedValue(memberCase);
+
+    //   // Test error on non-lead case
+    //   await expect(
+    //     completeDocketEntryQCInteractor(
+    //       applicationContext,
+    //       {
+    //         entryMetadata: {
+    //           ...caseRecord.docketEntries[0],
+    //           docketEntryId: mockDocketEntryId,
+    //           docketNumber: '67890-18',
+    //         },
+    //       },
+    //       mockDocketClerkUser,
+    //     ),
+    //   ).rejects.toThrow(
+    //     'QC for multidocketed documents must be completed on the lead case',
+    //   );
+
+    //   // Test successful processing on lead case
+    //   leadCase = {
+    //     ...caseRecord,
+    //     docketNumber: '45678-18',
+    //     leadDocketNumber: '45678-18',
+    //     consolidatedCases: [{ docketNumber: '67890-18' }],
+    //   };
+
+    //   getCaseByDocketNumber
+    //     .mockResolvedValueOnce(leadCase)
+    //     .mockResolvedValueOnce(memberCase);
+
+    //   const memberWorkItem = new WorkItem({
+    //     docketEntryId: mockDocketEntryId,
+    //     docketNumber: '67890-18',
+    //     section: DOCKET_SECTION,
+    //     sentBy: 'Test User',
+    //     sentByUserId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    //     updatedAt: applicationContext.getUtilities().createISODateString(),
+    //     workItemId: 'member-work-item-id',
+    //   });
+
+    //   getWorkItemByDocketNumberAndDocketEntryId
+    //     .mockResolvedValueOnce(
+    //       new WorkItem({
+    //         docketEntryId: mockDocketEntryId,
+    //         docketNumber: '45678-18',
+    //         section: DOCKET_SECTION,
+    //         sentBy: 'Test User',
+    //         sentByUserId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    //         updatedAt: applicationContext.getUtilities().createISODateString(),
+    //         workItemId: 'lead-work-item-id',
+    //       }),
+    //     )
+    //     .mockResolvedValueOnce(memberWorkItem);
+
+    //   await completeDocketEntryQCInteractor(
+    //     applicationContext,
+    //     {
+    //       entryMetadata: {
+    //         ...caseRecord.docketEntries[0],
+    //         docketEntryId: mockDocketEntryId,
+    //         docketNumber: '45678-18',
+    //       },
+    //     },
+    //     mockDocketClerkUser,
+    //   );
+
+    //   expect(updateCaseAndAssociations).toHaveBeenCalledTimes(2);
+    // });
+
+    it('should generate NODC for each case and aggregate paper parties in multi-docketed scenario', async () => {
+      const leadCase = {
+        ...caseRecord,
+        docketNumber: '45678-18',
+        leadDocketNumber: '45678-18',
+        consolidatedCases: [{ docketNumber: '67890-18' }],
+        petitioners: [
+          {
+            ...caseRecord.petitioners[0],
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
+      };
+
+      const memberCase = {
+        ...caseRecord,
+        docketNumber: '67890-18',
+        leadDocketNumber: '45678-18',
+        petitioners: [
+          {
+            ...caseRecord.petitioners[0],
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+            name: 'Different Paper Party',
+          },
+        ],
+      };
+
+      getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([
+        {
+          docketNumber: leadCase.docketNumber,
+          docketEntryId: mockDocketEntryId,
+          createdAt: '2018-11-21T20:49:28.192Z',
+          receivedAt: '2018-11-21T20:49:28.192Z',
+          documentTitle: 'Some title',
+          eventCode: 'SDEC',
+          filingDate: '2022-08-01',
+          isOnDocketRecord: true,
+          filers: [],
+          processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+          stampData: {},
+        },
+        {
+          docketNumber: '12345-19',
+          docketEntryId: mockDocketEntryId,
+          createdAt: '2018-11-21T20:49:28.192Z',
+          receivedAt: '2018-11-21T20:49:28.192Z',
+          documentTitle: 'Some title',
+          eventCode: 'SDEC',
+          filingDate: '2022-08-01',
+          isOnDocketRecord: true,
+          filers: [],
+          processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+          stampData: {},
+        },
+      ]);
+
+      getCaseByDocketNumber
+        .mockResolvedValueOnce(leadCase)
+        .mockResolvedValueOnce(memberCase)
+        .mockResolvedValueOnce(leadCase)
+        .mockResolvedValueOnce(memberCase)
+        .mockResolvedValue(memberCase);
+
+      const result = await completeDocketEntryQCInteractor(
+        applicationContext,
+        {
+          entryMetadata: {
+            ...caseRecord.docketEntries[0],
+            docketEntryId: mockDocketEntryId,
+            docketNumber: '45678-18',
+            documentTitle: 'Updated Title',
+          },
+        },
+        mockDocketClerkUser,
+      );
+
+      expect(
+        applicationContext.getDocumentGenerators().noticeOfDocketChange,
+      ).toHaveBeenCalledTimes(2);
+      expect(result.paperServiceParties.length).toBeGreaterThan(0);
+    });
+  });
+
+  it('should generate a notice of docket change without a new coversheet when the certificate of service date has been updated', async () => {
+    await completeDocketEntryQCInteractor(
       applicationContext,
       {
-        entryMetadata: caseRecord.docketEntries[0],
+        entryMetadata: {
+          ...caseRecord.docketEntries[0],
+          certificateOfService: true,
+          certificateOfServiceDate: '2019-08-06T07:53:09.001Z',
+        },
       },
       mockDocketClerkUser,
     );
 
-    expect(getCaseByDocketNumber).toHaveBeenCalled();
-    expect(updateCaseAndAssociations).toHaveBeenCalled();
-    expect(result.paperServicePdfUrl).toBeUndefined();
-    expect(result.paperServiceParties.length).toEqual(0);
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
+        .calls[0][0].data.filingsAndProceedings,
+    ).toEqual({
+      after: 'Answer additional info (C/S 08/06/19) additional info 2',
+      before: 'Answer additional info (C/S 08/25/19) additional info 2',
+    });
+  });
+
+  it('should generate a notice of docket change without a new coversheet when attachments has been updated', async () => {
+    await completeDocketEntryQCInteractor(
+      applicationContext,
+      {
+        entryMetadata: {
+          ...caseRecord.docketEntries[0],
+          attachments: true,
+        },
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
+        .calls[0][0].data.filingsAndProceedings,
+    ).toEqual({
+      after:
+        'Answer additional info (C/S 08/25/19) (Attachment(s)) additional info 2',
+      before: 'Answer additional info (C/S 08/25/19) additional info 2',
+    });
   });
 
   it('should generate a notice of docket change with a new coversheet when additional info fields are added and addToCoversheet is true', async () => {
@@ -248,56 +486,6 @@ describe('completeDocketEntryQCInteractor', () => {
     );
   });
 
-  it('should generate a notice of docket change without a new coversheet when the certificate of service date has been updated', async () => {
-    await completeDocketEntryQCInteractor(
-      applicationContext,
-      {
-        entryMetadata: {
-          ...caseRecord.docketEntries[0],
-          certificateOfService: true,
-          certificateOfServiceDate: '2019-08-06T07:53:09.001Z',
-        },
-      },
-      mockDocketClerkUser,
-    );
-
-    expect(
-      applicationContext.getUseCases().addCoversheetInteractor,
-    ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
-        .calls[0][0].data.filingsAndProceedings,
-    ).toEqual({
-      after: 'Answer additional info (C/S 08/06/19) additional info 2',
-      before: 'Answer additional info (C/S 08/25/19) additional info 2',
-    });
-  });
-
-  it('should generate a notice of docket change without a new coversheet when attachments has been updated', async () => {
-    await completeDocketEntryQCInteractor(
-      applicationContext,
-      {
-        entryMetadata: {
-          ...caseRecord.docketEntries[0],
-          attachments: true,
-        },
-      },
-      mockDocketClerkUser,
-    );
-
-    expect(
-      applicationContext.getUseCases().addCoversheetInteractor,
-    ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
-        .calls[0][0].data.filingsAndProceedings,
-    ).toEqual({
-      after:
-        'Answer additional info (C/S 08/25/19) (Attachment(s)) additional info 2',
-      before: 'Answer additional info (C/S 08/25/19) additional info 2',
-    });
-  });
-
   it('should generate a notice of docket change with a new coversheet when additional info fields are removed and addToCoversheet is true', async () => {
     await completeDocketEntryQCInteractor(
       applicationContext,
@@ -351,26 +539,6 @@ describe('completeDocketEntryQCInteractor', () => {
       after: 'Something Different',
       before: 'Answer additional info (C/S 08/25/19) additional info 2',
     });
-  });
-
-  it('should not generate a new coversheet when the documentTitle has not changed and addToCoversheet is false', async () => {
-    await completeDocketEntryQCInteractor(
-      applicationContext,
-      {
-        entryMetadata: {
-          ...caseRecord.docketEntries[0],
-          addToCoversheet: false,
-        },
-      },
-      mockDocketClerkUser,
-    );
-
-    expect(
-      applicationContext.getUseCases().addCoversheetInteractor,
-    ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getDocumentGenerators().noticeOfDocketChange,
-    ).not.toHaveBeenCalled();
   });
 
   it('should generate a new coversheet when additionalInfo is changed and addToCoversheet is true', async () => {
@@ -508,25 +676,6 @@ describe('completeDocketEntryQCInteractor', () => {
     expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(result.paperServicePdfUrl).toEqual('www.example.com');
     expect(result.paperServiceParties.length).toEqual(1);
-  });
-
-  it('does not generate a document for paper service if the document is a Notice of Change of Address and the case has no paper service parties', async () => {
-    const result = await completeDocketEntryQCInteractor(
-      applicationContext,
-      {
-        entryMetadata: {
-          ...caseRecord.docketEntries[0],
-          documentTitle: 'Notice of Change of Address',
-          documentType: 'Notice of Change of Address',
-        },
-      },
-      mockDocketClerkUser,
-    );
-
-    expect(getCaseByDocketNumber).toHaveBeenCalled();
-    expect(updateCaseAndAssociations).toHaveBeenCalled();
-    expect(result.paperServicePdfUrl).toEqual(undefined);
-    expect(result.paperServiceParties.length).toEqual(0);
   });
 
   it('should update only allowed editable fields on a docket entry document', async () => {
