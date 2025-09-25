@@ -161,144 +161,18 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   describe('Multi-docketed document handling', () => {
-    // it('should throw error if QC attempted on non-lead case and process member cases when on lead case', async () => {
-    //   const memberCase = {
-    //     ...caseRecord,
-    //     docketNumber: '67890-18',
-    //     leadDocketNumber: '45678-18',
-    //   };
-
-    //   let leadCase = {
-    //     ...caseRecord,
-    //     docketNumber: '45678-18',
-    //     leadDocketNumber: '45678-18',
-    //     consolidatedCases: [{ docketNumber: '67890-18' }],
-    //   };
-
-    //   getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([
-    //     {
-    //       docketNumber: leadCase.docketNumber,
-    //       docketEntryId: mockDocketEntryId,
-    //       createdAt: '2018-11-21T20:49:28.192Z',
-    //       receivedAt: '2018-11-21T20:49:28.192Z',
-    //       documentTitle: 'Some title',
-    //       eventCode: 'SDEC',
-    //       filingDate: '2022-08-01',
-    //       isOnDocketRecord: true,
-    //       filers: [],
-    //       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-    //       stampData: {},
-    //     },
-    //     {
-    //       docketNumber: '12345-19',
-    //       docketEntryId: mockDocketEntryId,
-    //       createdAt: '2018-11-21T20:49:28.192Z',
-    //       receivedAt: '2018-11-21T20:49:28.192Z',
-    //       documentTitle: 'Some title',
-    //       eventCode: 'SDEC',
-    //       filingDate: '2022-08-01',
-    //       isOnDocketRecord: true,
-    //       filers: [],
-    //       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-    //       stampData: {},
-    //     },
-    //   ]);
-
-    //   getCaseByDocketNumber.mockResolvedValue(memberCase);
-
-    //   // Test error on non-lead case
-    //   await expect(
-    //     completeDocketEntryQCInteractor(
-    //       applicationContext,
-    //       {
-    //         entryMetadata: {
-    //           ...caseRecord.docketEntries[0],
-    //           docketEntryId: mockDocketEntryId,
-    //           docketNumber: '67890-18',
-    //         },
-    //       },
-    //       mockDocketClerkUser,
-    //     ),
-    //   ).rejects.toThrow(
-    //     'QC for multidocketed documents must be completed on the lead case',
-    //   );
-
-    //   // Test successful processing on lead case
-    //   leadCase = {
-    //     ...caseRecord,
-    //     docketNumber: '45678-18',
-    //     leadDocketNumber: '45678-18',
-    //     consolidatedCases: [{ docketNumber: '67890-18' }],
-    //   };
-
-    //   getCaseByDocketNumber
-    //     .mockResolvedValueOnce(leadCase)
-    //     .mockResolvedValueOnce(memberCase);
-
-    //   const memberWorkItem = new WorkItem({
-    //     docketEntryId: mockDocketEntryId,
-    //     docketNumber: '67890-18',
-    //     section: DOCKET_SECTION,
-    //     sentBy: 'Test User',
-    //     sentByUserId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    //     updatedAt: applicationContext.getUtilities().createISODateString(),
-    //     workItemId: 'member-work-item-id',
-    //   });
-
-    //   getWorkItemByDocketNumberAndDocketEntryId
-    //     .mockResolvedValueOnce(
-    //       new WorkItem({
-    //         docketEntryId: mockDocketEntryId,
-    //         docketNumber: '45678-18',
-    //         section: DOCKET_SECTION,
-    //         sentBy: 'Test User',
-    //         sentByUserId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    //         updatedAt: applicationContext.getUtilities().createISODateString(),
-    //         workItemId: 'lead-work-item-id',
-    //       }),
-    //     )
-    //     .mockResolvedValueOnce(memberWorkItem);
-
-    //   await completeDocketEntryQCInteractor(
-    //     applicationContext,
-    //     {
-    //       entryMetadata: {
-    //         ...caseRecord.docketEntries[0],
-    //         docketEntryId: mockDocketEntryId,
-    //         docketNumber: '45678-18',
-    //       },
-    //     },
-    //     mockDocketClerkUser,
-    //   );
-
-    //   expect(updateCaseAndAssociations).toHaveBeenCalledTimes(2);
-    // });
-
-    it('should generate NODC for each case and aggregate paper parties in multi-docketed scenario', async () => {
-      const leadCase = {
-        ...caseRecord,
-        docketNumber: '45678-18',
-        leadDocketNumber: '45678-18',
-        consolidatedCases: [{ docketNumber: '67890-18' }],
-        petitioners: [
-          {
-            ...caseRecord.petitioners[0],
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-          },
-        ],
-      };
-
+    it('should throw error if QC attempted on non-lead case and process member cases when on lead case', async () => {
       const memberCase = {
         ...caseRecord,
         docketNumber: '67890-18',
         leadDocketNumber: '45678-18',
-        petitioners: [
-          {
-            ...caseRecord.petitioners[0],
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-            name: 'Different Paper Party',
-          },
-        ],
+      };
+
+      let leadCase = {
+        ...caseRecord,
+        docketNumber: '45678-18',
+        leadDocketNumber: '45678-18',
+        consolidatedCases: [{ docketNumber: '67890-18' }],
       };
 
       getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([
@@ -330,30 +204,74 @@ describe('completeDocketEntryQCInteractor', () => {
         },
       ]);
 
+      getCaseByDocketNumber.mockResolvedValue(memberCase);
+
+      // Test error on non-lead case
+      await expect(
+        completeDocketEntryQCInteractor(
+          applicationContext,
+          {
+            entryMetadata: {
+              ...caseRecord.docketEntries[0],
+              docketEntryId: mockDocketEntryId,
+              docketNumber: '67890-18',
+            },
+          },
+          mockDocketClerkUser,
+        ),
+      ).rejects.toThrow(
+        'QC for multidocketed documents must be completed on the lead case',
+      );
+
+      // Test successful processing on lead case
+      leadCase = {
+        ...caseRecord,
+        docketNumber: '45678-18',
+        leadDocketNumber: '45678-18',
+        consolidatedCases: [{ docketNumber: '67890-18' }],
+      };
+
       getCaseByDocketNumber
         .mockResolvedValueOnce(leadCase)
-        .mockResolvedValueOnce(memberCase)
-        .mockResolvedValueOnce(leadCase)
-        .mockResolvedValueOnce(memberCase)
-        .mockResolvedValue(memberCase);
+        .mockResolvedValueOnce(memberCase);
 
-      const result = await completeDocketEntryQCInteractor(
+      const memberWorkItem = new WorkItem({
+        docketEntryId: mockDocketEntryId,
+        docketNumber: '67890-18',
+        section: DOCKET_SECTION,
+        sentBy: 'Test User',
+        sentByUserId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        updatedAt: applicationContext.getUtilities().createISODateString(),
+        workItemId: '9de27a7d-7c6b-434b-803b-7655f82d5e07',
+      });
+
+      getWorkItemByDocketNumberAndDocketEntryId
+        .mockResolvedValueOnce(
+          new WorkItem({
+            docketEntryId: mockDocketEntryId,
+            docketNumber: '45678-18',
+            section: DOCKET_SECTION,
+            sentBy: 'Test User',
+            sentByUserId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+            updatedAt: applicationContext.getUtilities().createISODateString(),
+            workItemId: '9de27a7d-7c6b-434b-803b-7655f82d5e07',
+          }),
+        )
+        .mockResolvedValueOnce(memberWorkItem);
+
+      await completeDocketEntryQCInteractor(
         applicationContext,
         {
           entryMetadata: {
             ...caseRecord.docketEntries[0],
             docketEntryId: mockDocketEntryId,
             docketNumber: '45678-18',
-            documentTitle: 'Updated Title',
           },
         },
         mockDocketClerkUser,
       );
 
-      expect(
-        applicationContext.getDocumentGenerators().noticeOfDocketChange,
-      ).toHaveBeenCalledTimes(2);
-      expect(result.paperServiceParties.length).toBeGreaterThan(0);
+      expect(updateCaseAndAssociations).toHaveBeenCalledTimes(2);
     });
   });
 
