@@ -8,13 +8,12 @@ import { EditDocketEntryMetaTabAction } from './EditDocketEntryMetaTabAction';
 import { EditDocketEntryMetaTabService } from './EditDocketEntryMetaTabService';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
-import { Hint } from '../../ustc-ui/Hint/Hint';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
+import { InfoNotificationComponent } from '../InfoNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
-import { InfoNotificationComponent } from '../InfoNotification';
 
 export const EditDocketEntryMeta = connect(
   {
@@ -72,30 +71,39 @@ export const EditDocketEntryMeta = connect(
               {isLeadCase &&
                 formattedCaseDetail?.consolidatedCases &&
                 formattedCaseDetail.consolidatedCases.length > 1 && (
-                  <Hint fullWidth>
-                    <p
-                      className="text-bold margin-top-0 margin-bottom-0"
-                      style={{ fontSize: '21px' }}
-                    >
-                      Edits to Document Info will also be edited for:
-                    </p>
-                    <ul className="usa-list padding-top-0 padding-bottom-0 margin-top-1 margin-bottom-1">
-                      {formattedCaseDetail.consolidatedCases
-                        .filter(c => c.docketNumber !== caseDetail.docketNumber)
-                        .map(c => (
-                          <li key={c.docketNumber} className="margin-bottom-0">
-                            {c.docketNumber}{' '}
-                            {c.caseTitle ||
-                              c.caseCaption ||
-                              form?.documentTitle ||
-                              form?.eventCode}
-                          </li>
-                        ))}
-                    </ul>
-                    <p className="margin-bottom-0 margin-top-0">
-                      Service and Action edits will only apply to this case.
-                    </p>
-                  </Hint>
+                  <InfoNotificationComponent
+                    alertInfo={{
+                      message: (
+                        <div>
+                          <b>Edits to Document Info will also be edited for:</b>
+                          <ul className="usa-list padding-top-0 padding-bottom-0 margin-top-1 margin-bottom-1">
+                            {formattedCaseDetail.consolidatedCases
+                              .filter(
+                                c => c.docketNumber !== caseDetail.docketNumber,
+                              )
+                              .map(c => (
+                                <li
+                                  key={c.docketNumber}
+                                  className="margin-bottom-0"
+                                >
+                                  {c.docketNumber}{' '}
+                                  {c.caseTitle ||
+                                    c.caseCaption ||
+                                    form?.documentTitle ||
+                                    form?.eventCode}
+                                </li>
+                              ))}
+                          </ul>
+                          <p className="margin-bottom-0 margin-top-0">
+                            Service and Action edits will only apply to this
+                            case.
+                          </p>
+                        </div>
+                      ),
+                    }}
+                    dismissible={false}
+                    scrollToTop={false}
+                  />
                 )}
               {isMemberCase && (
                 <InfoNotificationComponent
