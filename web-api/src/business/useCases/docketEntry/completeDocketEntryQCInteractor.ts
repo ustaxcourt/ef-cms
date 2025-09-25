@@ -1,14 +1,12 @@
 import {
   CONTACT_CHANGE_DOCUMENT_TYPES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
-  DOCUMENT_RELATIONSHIPS,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import { Case } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import {
   FORMATS,
-  dateStringsCompared,
   formatDateString,
 } from '@shared/business/utilities/DateHandler';
 import {
@@ -29,6 +27,12 @@ import { generateNoticeOfDocketChangePdf } from '@web-api/business/useCaseHelper
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
 import { getDocumentTitleForNoticeOfChange } from '@shared/business/utilities/getDocumentTitleForNoticeOfChange';
+import {
+  getOriginalNoticeValues,
+  buildUpdatedPrimaryDocketEntry,
+  needsNewCoversheet,
+  OriginalNoticeValues,
+} from '@web-api/business/useCaseHelper/docketEntry/noticeOfDocketChangeHelpers';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
@@ -57,7 +61,9 @@ const completeDocketEntryQC = async (
     selectedSection,
   } = entryMetadata;
 
-  const user = await getUserById({ userId: authorizedUser.userId });
+  const { userId } = authorizedUser;
+
+  const user = await getUserById({ userId });
 
   if (!user) {
     throw new NotFoundError(
@@ -128,31 +134,27 @@ const completeDocketEntryQC = async (
     serviceDate: entryMetadata.serviceDate,
   };
 
-  const updatedDocketEntry = new DocketEntry(
-    {
-      ...currentDocketEntry,
-      ...editableFields,
-      documentTitle: editableFields.documentTitle,
-      editState: '{}',
-      relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
-    },
-    { authorizedUser, petitioners: caseToUpdate.petitioners },
-  ).validate();
-
-  const updatedDocumentTitle = getDocumentTitleForNoticeOfChange({
-    applicationContext,
-    docketEntry: updatedDocketEntry,
-  });
-
-  const currentDocumentTitle = getDocumentTitleForNoticeOfChange({
+  const leadOriginalNoticeValues = getOriginalNoticeValues({
     applicationContext,
     docketEntry: currentDocketEntry,
+  });
+
+  const updatedPrimaryDocketEntry = buildUpdatedPrimaryDocketEntry({
+    authorizedUser,
+    docketEntry: currentDocketEntry,
+    editableFields,
+    petitioners: caseToUpdate.petitioners,
+  });
+
+  const updatedPrimaryDocumentTitle = getDocumentTitleForNoticeOfChange({
+    applicationContext,
+    docketEntry: updatedPrimaryDocketEntry,
   });
 
   const isNewCoverSheetNeeded = needsNewCoversheet({
     applicationContext,
     currentDocketEntry,
-    updatedDocketEntry,
+    updatedDocketEntry: updatedPrimaryDocketEntry,
   });
 
   const consolidatedDocketNumbers = (caseEntity.consolidatedCases || [])
@@ -173,6 +175,23 @@ const completeDocketEntryQC = async (
         })
       : [];
 
+  const originalNoticeValuesByDocketNumber = new Map<
+    string,
+    OriginalNoticeValues
+  >();
+
+  for (const rawMemberEntry of docketEntriesAcrossCases || []) {
+    if (rawMemberEntry.docketNumber === caseEntity.docketNumber) continue;
+
+    originalNoticeValuesByDocketNumber.set(
+      rawMemberEntry.docketNumber,
+      getOriginalNoticeValues({
+        applicationContext,
+        docketEntry: rawMemberEntry,
+      }),
+    );
+  }
+
   const isMultiDocketed = (docketEntriesAcrossCases || []).length > 1;
 
   if (
@@ -186,8 +205,9 @@ const completeDocketEntryQC = async (
   }
 
   const needsNoticeOfDocketChange =
-    updatedDocketEntry.filedBy !== currentDocketEntry.filedBy ||
-    updatedDocumentTitle !== currentDocumentTitle;
+    updatedPrimaryDocketEntry.filedBy !== leadOriginalNoticeValues.filedBy ||
+    updatedPrimaryDocumentTitle !==
+      leadOriginalNoticeValues.documentTitleForNotice;
 
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
 
@@ -212,18 +232,23 @@ const completeDocketEntryQC = async (
       docketNumberSuffix: caseToUpdate.docketNumberSuffix,
     }),
     filingParties: {
-      after: updatedDocketEntry.filedBy,
-      before: currentDocketEntry.filedBy,
+      after: updatedPrimaryDocketEntry.filedBy,
+      before: leadOriginalNoticeValues.filedBy,
     },
     filingsAndProceedings: {
-      after: updatedDocumentTitle,
-      before: currentDocumentTitle,
+      after: updatedPrimaryDocumentTitle,
+      before: leadOriginalNoticeValues.documentTitleForNotice,
     },
     nameOfClerk: name,
     titleOfClerk: title,
   };
 
-  caseEntity.updateDocketEntry(updatedDocketEntry);
+  originalNoticeValuesByDocketNumber.set(
+    caseEntity.docketNumber,
+    leadOriginalNoticeValues,
+  );
+
+  caseEntity.updateDocketEntry(updatedPrimaryDocketEntry);
 
   caseEntity = await applicationContext
     .getUseCaseHelpers()
@@ -246,7 +271,7 @@ const completeDocketEntryQC = async (
     assigneeName: user.name,
     section: WorkItem.getWorkItemSectionFromUserSection({
       section: sectionToAssignTo,
-      documentTitle: updatedDocketEntry.documentTitle,
+      documentTitle: updatedPrimaryDocketEntry.documentTitle,
     }),
     sentBy: user.name,
     sentBySection: user.section,
@@ -280,16 +305,12 @@ const completeDocketEntryQC = async (
 
         if (!memberDocketEntry) continue;
 
-        const updatedMemberDocketEntry = new DocketEntry(
-          {
-            ...memberDocketEntry,
-            ...editableFields,
-            documentTitle: editableFields.documentTitle,
-            editState: '{}',
-            relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
-          },
-          { authorizedUser, petitioners: memberCaseRaw.petitioners },
-        ).validate();
+        const updatedMemberDocketEntry = buildUpdatedPrimaryDocketEntry({
+          authorizedUser,
+          docketEntry: memberDocketEntry,
+          editableFields,
+          petitioners: memberCaseRaw.petitioners,
+        });
 
         updatedMemberDocketEntry.qcComplete = true;
         updatedMemberDocketEntry.processingStatus =
@@ -342,14 +363,16 @@ const completeDocketEntryQC = async (
 
   if (
     overridePaperServiceAddress ||
-    CONTACT_CHANGE_DOCUMENT_TYPES.includes(updatedDocketEntry.documentType!)
+    CONTACT_CHANGE_DOCUMENT_TYPES.includes(
+      updatedPrimaryDocketEntry.documentType!,
+    )
   ) {
     if (servedParties.paper.length > 0) {
       const pdfData = await applicationContext
         .getPersistenceGateway()
         .getDocument({
           applicationContext,
-          key: updatedDocketEntry.docketEntryId,
+          key: updatedPrimaryDocketEntry.docketEntryId,
         });
 
       const noticeDoc = await PDFDocument.load(pdfData);
@@ -385,7 +408,7 @@ const completeDocketEntryQC = async (
         });
 
       paperServicePdfUrl = url;
-      paperServiceDocumentTitle = updatedDocketEntry.documentTitle;
+      paperServiceDocumentTitle = updatedPrimaryDocketEntry.documentTitle;
     }
   } else if (needsNoticeOfDocketChange) {
     const paperServiceResults: any[] = [];
@@ -410,6 +433,20 @@ const completeDocketEntryQC = async (
 
           if (!memberDocketEntry) continue;
 
+          const originalMemberNoticeValues =
+            originalNoticeValuesByDocketNumber.get(
+              memberCaseEntity.docketNumber,
+            );
+
+          const originalMemberFiledBy =
+            originalMemberNoticeValues?.filedBy ?? memberDocketEntry.filedBy;
+          const originalMemberDocumentTitleForNotice =
+            originalMemberNoticeValues?.documentTitleForNotice ??
+            getDocumentTitleForNoticeOfChange({
+              applicationContext,
+              docketEntry: memberDocketEntry,
+            });
+
           const { index: memberDocketEntryIndex } = memberDocketEntry;
 
           const {
@@ -417,11 +454,20 @@ const completeDocketEntryQC = async (
             caseTitle: memberCaseTitle,
           } = getCaseCaptionMeta(memberCaseEntity);
 
-          const memberCurrentDocketEntry = memberDocketEntry;
+          const memberUpdatedDocketEntry = buildUpdatedPrimaryDocketEntry({
+            authorizedUser,
+            docketEntry: memberDocketEntry,
+            editableFields,
+            petitioners: memberCaseRaw.petitioners,
+          });
 
-          const memberUpdatedDocketEntry =
-            memberCaseEntity.getDocketEntryById({ docketEntryId }) ||
-            memberDocketEntry;
+          memberCaseEntity.updateDocketEntry(memberUpdatedDocketEntry);
+
+          const updatedMemberDocumentTitleForNotice =
+            getDocumentTitleForNoticeOfChange({
+              applicationContext,
+              docketEntry: memberUpdatedDocketEntry,
+            });
 
           const memberDocketChangeInfo = {
             caseCaptionExtension: memberCaseCaptionExtension,
@@ -432,22 +478,26 @@ const completeDocketEntryQC = async (
               docketNumberSuffix: memberCaseRaw.docketNumberSuffix,
             }),
             filingParties: {
-              after: memberUpdatedDocketEntry.filedBy,
-              before: memberCurrentDocketEntry.filedBy,
+              after: String(memberUpdatedDocketEntry.filedBy || ''),
+              before: String(originalMemberFiledBy || ''),
             },
             filingsAndProceedings: {
-              after: getDocumentTitleForNoticeOfChange({
-                applicationContext,
-                docketEntry: memberUpdatedDocketEntry,
-              }),
-              before: getDocumentTitleForNoticeOfChange({
-                applicationContext,
-                docketEntry: memberCurrentDocketEntry,
-              }),
+              after: String(updatedMemberDocumentTitleForNotice || ''),
+              before: String(originalMemberDocumentTitleForNotice || ''),
             },
             nameOfClerk: name,
             titleOfClerk: title,
           };
+
+          const memberHasDiff =
+            memberDocketChangeInfo.filingParties.after !==
+              memberDocketChangeInfo.filingParties.before ||
+            memberDocketChangeInfo.filingsAndProceedings.after !==
+              memberDocketChangeInfo.filingsAndProceedings.before;
+
+          if (!memberHasDiff) {
+            continue;
+          }
 
           const noticeDocketEntryId = await generateNoticeOfDocketChangePdf({
             applicationContext,
@@ -511,7 +561,6 @@ const completeDocketEntryQC = async (
               key: memberNoticeUpdatedDocketEntry.docketEntryId,
             });
 
-          // persist member case changes (including the newly added NODC)
           await updateCaseAndAssociations({
             authorizedUser,
             caseToUpdate: memberCaseEntity,
@@ -678,29 +727,3 @@ export const completeDocketEntryQCInteractor = withLocking(
   }),
   new InvalidRequest('The document is currently being updated'),
 );
-
-export const needsNewCoversheet = ({
-  applicationContext,
-  currentDocketEntry,
-  updatedDocketEntry,
-}) => {
-  const receivedAtUpdated =
-    dateStringsCompared(
-      currentDocketEntry.receivedAt,
-      updatedDocketEntry.receivedAt,
-    ) !== 0;
-  const certificateOfServiceUpdated =
-    currentDocketEntry.certificateOfService !==
-    updatedDocketEntry.certificateOfService;
-  const documentTitleUpdated =
-    applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo({
-      docketEntry: currentDocketEntry,
-    }) !==
-    applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo({
-      docketEntry: updatedDocketEntry,
-    });
-
-  return (
-    receivedAtUpdated || certificateOfServiceUpdated || documentTitleUpdated
-  );
-};
