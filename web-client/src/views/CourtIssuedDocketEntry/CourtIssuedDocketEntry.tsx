@@ -154,6 +154,37 @@ export const CourtIssuedDocketEntry = connect(
 
                 {form.eventCode && <CourtIssuedNonstandardForm />}
 
+                {form.documentType === 'Order' && (
+                  <FormGroup errorText={validationErrors.attachments}>
+                    <fieldset className="usa-fieldset">
+                      {/* <legend className="usa-legend"></legend> */}
+                      <div className="usa-checkbox">
+                        <input
+                          checked={form.attachments}
+                          className="usa-checkbox__input"
+                          id="disposition-order"
+                          name="disposition-order"
+                          type="checkbox"
+                          onChange={e => {
+                            updateCourtIssuedDocketEntryFormValueSequence({
+                              // TODO (#8546): Connect this to form state
+                              key: e.target.name,
+                              value: e.target.checked,
+                            });
+                            validateCourtIssuedDocketEntrySequence();
+                          }}
+                        />
+                        <label
+                          className="usa-checkbox__label"
+                          htmlFor="disposition-order"
+                        >
+                          This order acts on atleast one motion
+                        </label>
+                      </div>
+                    </fieldset>
+                  </FormGroup>
+                )}
+
                 {addCourtIssuedDocketEntryHelper.showAttachmentAndServiceFields && (
                   <FormGroup errorText={validationErrors.attachments}>
                     <fieldset className="usa-fieldset">
@@ -266,7 +297,7 @@ export const CourtIssuedDocketEntry = connect(
                   />
                 )}
               </div>
-
+              {/* TODO (#8546): Entry point */}
               <section className="usa-section DocumentDetail">
                 <div className="margin-top-5 button-container">
                   {addCourtIssuedDocketEntryHelper.showSaveAndServeButton && (
