@@ -41,3 +41,7 @@ variable "log_snapshot_bucket_name" {
 variable "lower_env_restore_roles" {
   type = set(string)
 }
+
+variable "es_logs_engine_version" {
+  type = string
+}
