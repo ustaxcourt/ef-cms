@@ -1,5 +1,5 @@
 #!/bin/bash
-# Used for running the API and necessary services (dynamo, s3, elasticsearch) locally
+# Used for running the API and necessary services (dynamo, s3, opensearch) locally
 
 # Determine the docker compose invocation.
 if command -v docker-compose &> /dev/null; then
@@ -12,10 +12,10 @@ fi
 
 if [[ -z "$CI" ]]; then
   echo "Stopping postgres in case it's already running"
-  $DOCKER_COMPOSE -f $(pwd)/web-api/src/persistence/postgres/docker-compose.yml down --volumes || true
+  $DOCKER_COMPOSE -f "$(pwd)/web-api/src/persistence/postgres/docker-compose.yml" down --volumes || true
 
   echo "Starting postgres"
-  $DOCKER_COMPOSE -f $(pwd)/web-api/src/persistence/postgres/docker-compose.yml up -d || { echo "Failed to start Postgres containers"; exit 1; }
+  $DOCKER_COMPOSE -f "$(pwd)/web-api/src/persistence/postgres/docker-compose.yml" up -d || { echo "Failed to start Postgres containers"; exit 1; }
 
   echo "Stopping dynamodb in case it's already running"
   pkill -f DynamoDBLocal
@@ -24,12 +24,14 @@ if [[ -z "$CI" ]]; then
   ./web-api/start-dynamo.sh &
   DYNAMO_PID=$!
 
-  echo "Stopping elasticsearch in case it's already running"
-  pkill -f elasticsearch
+  echo "Stopping opensearch in case it's already running"
+  $DOCKER_COMPOSE -f "$(pwd)/web-api/elasticsearch/docker-compose.yml" down --volumes || true
 
-  echo "Starting elasticsearch"
-  ./web-api/start-elasticsearch.sh &
-  ESEARCH_PID=$!
+  echo "Starting opensearch"
+  $DOCKER_COMPOSE -f "$(pwd)/web-api/elasticsearch/docker-compose.yml" up -d || { echo "Failed to start OpenSearch containers"; exit 1; }
+  
+  echo "OpenSearch is running"
+
   URL=http://localhost:9200/ ./wait-until.sh
 
   echo "Stopping s3rver in case it's already running"
@@ -38,8 +40,8 @@ fi
 
 npm run build:assets
 
-echo "Seeding elasticsearch"
-npm run seed:elasticsearch
+  echo "Seeding opensearch"
+npm run seed:opensearch
 
 echo "Starting s3rver"
 rm -rf ./web-api/storage/s3/*
@@ -70,13 +72,15 @@ npx ts-node .cognito/seedCognitoLocal.ts --transpile-only
 echo "Starting cognito-local"
 CODE="385030" npx cognito-local &
 COGNITO_PID=$!
-
+ 
 npm run dev:api-local
 
+# This code is unreachable unless the api process exits on its own cleanly
 if [[ -z "$CI" ]]; then
-  echo "Stopping dynamodb, elasticsearch, and s3rver"
+  echo "Stopping postgres, dynamodb, opensearch, cognito, and s3rver"
+  $DOCKER_COMPOSE -f "$(pwd)/web-api/src/persistence/postgres/docker-compose.yml" down --volumes 
   pkill -P "$DYNAMO_PID"
-  pkill -P "$ESEARCH_PID"
+  $DOCKER_COMPOSE -f "$(pwd)/web-api/elasticsearch/docker-compose.yml" down --volumes
   pkill -P "$S3RVER_PID"
   pkill -P "$COGNITO_PID"
 fi
