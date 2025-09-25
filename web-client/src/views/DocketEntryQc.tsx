@@ -5,7 +5,6 @@ import { DocumentDisplayIframe } from './DocumentDisplayIframe';
 import { ErrorNotification } from './ErrorNotification';
 import { FormCancelModalDialog } from './FormCancelModalDialog';
 import { PrimaryDocumentForm } from './EditDocketEntry/PrimaryDocumentForm';
-import { Hint } from '../ustc-ui/Hint/Hint';
 import { SuccessNotification } from './SuccessNotification';
 import { WorkItemAlreadyCompletedModal } from './DocketEntryQc/WorkItemAlreadyCompletedModal';
 import { connect } from '@web-client/presenter/shared.cerebral';
@@ -53,6 +52,14 @@ export const DocketEntryQc = connect(
         caseDetail?.leadDocketNumber === caseDetail?.docketNumber,
     );
 
+    const mappedMemberedCases = () =>
+      formattedCaseDetail.consolidatedCases
+        .filter(
+          (c: { docketNumber: string }) =>
+            c.docketNumber !== caseDetail.docketNumber,
+        )
+        .map(c => c.docketNumber);
+
     return (
       <>
         <CaseDetailHeader />
@@ -98,50 +105,43 @@ export const DocketEntryQc = connect(
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
               <div className="grid-col-5">
-                {isLeadCase &&
-                  formattedCaseDetail?.consolidatedCases &&
-                  formattedCaseDetail.consolidatedCases.length > 1 && (
-                    <Hint fullWidth>
-                      <p
-                        className="text-bold margin-top-0 margin-bottom-0"
-                        style={{ fontSize: '21px' }}
-                      >
-                        This document will also be QC&apos;d for:
-                      </p>
-                      <ul className="usa-list padding-top-0 padding-bottom-0 margin-top-1 margin-bottom-1">
-                        {formattedCaseDetail.consolidatedCases
-                          .filter(
-                            c => c.docketNumber !== caseDetail.docketNumber,
-                          )
-                          .map(c => (
-                            <li
-                              key={c.docketNumber}
-                              className="margin-bottom-0"
-                            >
-                              {c.docketNumber}{' '}
-                              {c.caseTitle ||
-                                c.caseCaption ||
-                                docketEntryQcHelper?.formattedDocketEntry
-                                  ?.documentTitle ||
-                                docketEntryQcHelper?.formattedDocketEntry
-                                  ?.eventCode}
-                            </li>
-                          ))}
-                      </ul>
-                      <p className="margin-bottom-0 margin-top-0">
-                        If a Notice of Docket Change is generated, it will be
-                        filed in all cases in the group.
-                      </p>
-                    </Hint>
-                  )}
-                {isMemberCase && (
-                  <Hint fullWidth>
-                    Edits to Document Info can only be done from the{' '}
-                    <strong>lead case</strong> in a consolidated group. This is
-                    a member case.
-                  </Hint>
-                )}
-
+                <div>
+                  {isLeadCase &&
+                    formattedCaseDetail?.consolidatedCases &&
+                    formattedCaseDetail.consolidatedCases.length > 1 && (
+                      <InfoNotificationComponent
+                        alertInfo={{
+                          message: (
+                            <div>
+                              <b>
+                                This document will also be QC&apos;d for all
+                                consolidated cases.
+                              </b>
+                              <ul className="margin-top-0 margin-bottom-0">
+                                {mappedMemberedCases().map(docketNumber => (
+                                  <li key={docketNumber}>
+                                    {docketNumber} -{' '}
+                                    {formattedCaseDetail.consolidatedCases
+                                      .find(
+                                        c => c.docketNumber === docketNumber,
+                                      )
+                                      ?.petitioners.map(p => p.name)
+                                      .join(', ')}
+                                  </li>
+                                ))}
+                              </ul>
+                              <p className="margin-bottom-0 margin-top-0">
+                                If a Notice of Docket Change is generated, it
+                                will be filed in all cases in the group.
+                              </p>
+                            </div>
+                          ),
+                        }}
+                        dismissible={false}
+                        scrollToTop={false}
+                      />
+                    )}
+                </div>
                 <PrimaryDocumentForm />
                 <div className="margin-top-5 button-container">
                   <Button
