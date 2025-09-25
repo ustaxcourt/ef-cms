@@ -45,7 +45,9 @@ export const getOriginalNoticeValues = ({
         }
       }
     } catch (err) {
-      // ignore malformed editState data
+      applicationContext.logger.error(
+        'Failed to parse docketEntry.editState for notice of docket change',
+      );
     }
   }
 
