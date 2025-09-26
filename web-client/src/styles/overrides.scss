@@ -433,3 +433,12 @@ td.message-select-control {
     padding-bottom: 0;
   }
 }
+
+.DocumentDetail {
+  .usa-alert.usa-alert--info.usa-alert-info-message-only {
+    .usa-alert__body {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+  }
+}

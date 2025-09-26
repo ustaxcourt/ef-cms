@@ -109,11 +109,11 @@ export const EditDocketEntryMeta = connect(
                 <InfoNotificationComponent
                   alertInfo={{
                     message: (
-                      <>
+                      <div className="margin-top-1 margin-bottom-1">
                         Edits to Document Info can only be done from the{' '}
                         <strong>lead case</strong> in a consolidated group. This
                         is a member case.
-                      </>
+                      </div>
                     ),
                   }}
                   dismissible={false}
