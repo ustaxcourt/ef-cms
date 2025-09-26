@@ -94,9 +94,9 @@ function AlertHeader({
       <div
         className={cn(
           title
-            ? 'tw:font-bold tw:text-base/5 tw:xs:text-lg/6'
-            : 'tw:text-base/5 tw:xs:text-lg/6',
-          'tw:pb-0 tw:ml-4',
+            ? 'tw:font-bold'
+            : '',
+          'tw:pb-0 tw:xs:ml-4 tw:ml-3 tw:xs:mr-4 tw:mr-3 tw:text-base/5 tw:xs:text-lg/6',
         )}
         data-slot="alert-title"
         data-testid="alert-header"
@@ -104,13 +104,13 @@ function AlertHeader({
       ></div>
       {isDismissible && (
         <Button
-          className="tw:m-0 tw:p-0 tw:gap-3 tw:w-auto tw:fill-primary tw:self-start tw:ml-auto"
+          className="tw:m-0 tw:p-0 tw:gap-3 tw:w-auto tw:fill-primary tw:self-start tw:ml-auto tw:mt-0.5 tw:mr-3 tw:rounded-sm"
           variant={'primaryTertiary'}
           onClick={closeButtonOnClick}
         >
-          <div className="tw:flex tw:text-sm tw:xs:text-base/4 tw:hover:text-primary-dark tw:active:text-primary-darker tw:active:fill-primary-darker tw:hover:fill-primary-dark">
-            <span className="tw:ml-2 tw:mr-2 tw:xs:ml-3 tw:xs:mt-0.5">Close</span>
-            <CircleXmark className="tw:!h-[14px] tw:!w-[14px] tw:xs:!h-[16px] tw:xs:!w-[16px] tw:xs:mt-0.5 tw:xs:mb-0.5 tw:mt-1" />
+          <div className="tw:flex tw:items-center tw:text-sm/3 tw:xs:text-base/4 tw:hover:text-primary-dark tw:active:text-primary-darker">
+            <span className="">Close</span>
+            <CircleXmark className="tw:!h-[14px] tw:!w-[14px] tw:xs:!h-[16px] tw:xs:!w-[16px] tw:ml-2"/>
           </div>
         </Button>
       )}
@@ -121,7 +121,7 @@ function AlertHeader({
 function AlertDescription({ ...props }: React.ComponentProps<'p'>) {
   return (
     <div
-      className="tw:mt-1.5 tw:xs:mt-2 tw:text-base/5 tw:xs:text-lg/6 tw:ml-9 tw:xs:ml-10"
+      className="tw:xs:mt-2 tw:text-base/5 tw:xs:text-lg/6 tw:ml-8 tw:xs:ml-10 tw:pt-2 tw:xs:pt-1"
       data-slot="alert-description"
       {...props}
     />
