@@ -41,7 +41,7 @@ describe('Petitions Clerk creates a paper case which should have a clinic letter
     receivedAtFormatted: '01/01/01',
     shouldShowIrsNoticeDate: false,
   });
-  docketClerkVerifiesPetitionReceiptLength(cerebralTest, 1);
+  docketClerkVerifiesPetitionReceiptLength(cerebralTest, 2);
 
   // creating pro se petition with preferredTrialCity and procedureType that DOES have a corresponding clinic letter
   petitionsClerkCreatesNewCaseFromPaper(cerebralTest, fakeFile, {
@@ -56,7 +56,7 @@ describe('Petitions Clerk creates a paper case which should have a clinic letter
     receivedAtFormatted: '01/01/01',
     shouldShowIrsNoticeDate: false,
   });
-  docketClerkVerifiesPetitionReceiptLength(cerebralTest, 2);
+  docketClerkVerifiesPetitionReceiptLength(cerebralTest, 3);
 
   describe('Create and sets a trial session with Regular session type for Los Angeles, California', () => {
     loginAs(cerebralTest, 'docketclerk@example.com');

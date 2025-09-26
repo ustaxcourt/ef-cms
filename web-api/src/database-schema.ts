@@ -28,6 +28,10 @@ import {
   DW_DOCKET_ENTRY_COLUMNS,
 } from '@web-api/persistence/postgres/docketEntries/schema';
 import {
+  DW_FEATURE_FLAG_COLUMNS,
+  FeatureFlagTable,
+} from '@web-api/persistence/postgres/featureFlag/schema';
+import {
   MessageTable,
   DW_MESSAGE_COLUMNS,
 } from '@web-api/persistence/postgres/messages/schema';
@@ -59,6 +63,22 @@ import {
   DW_MINUTE_SHEET_COLUMNS,
   MinuteSheetTable,
 } from '@web-api/persistence/postgres/minuteSheets/schema';
+import {
+  TrialSessionCaseTable,
+  DW_TRIAL_SESSION_CASE_COLUMNS,
+  DW_TRIAL_SESSION_COLUMNS,
+  DW_TRIAL_SESSION_NOTIFICATION_PROCESSING,
+  DW_TRIAL_SESSION_PAPER_PDF_COLUMNS,
+  DW_TRIAL_SESSION_WORKING_COPY_COLUMNS,
+  TrialSessionNotificationProcessingTable,
+  TrialSessionPaperPdfTable,
+  TrialSessionTable,
+  TrialSessionWorkingCopyTable,
+} from './persistence/postgres/trialSessions/schema';
+import {
+  DW_PRACTITIONER_DOCUMENT_COLUMNS,
+  PractitionerDocumentTable,
+} from '@web-api/persistence/postgres/practitionerDocuments/schema';
 import {
   DW_USER_COLUMNS,
   UserTable,
@@ -92,16 +112,23 @@ interface DatabaseSchemaType {
   dwCase: DatabaseTableMetadata<CaseTable>;
   dwCaseCorrespondence: DatabaseTableMetadata<CaseCorrespondenceTable>;
   dwCaseDeadline: DatabaseTableMetadata<CaseDeadlineTable>;
+  dwTrialSessionCase: DatabaseTableMetadata<TrialSessionCaseTable>;
   dwCaseWorksheet: DatabaseTableMetadata<CaseWorksheetTable>;
   dwChangeOfAddress: DatabaseTableMetadata<ChangeOfAddressTable>;
   dwConnection: DatabaseTableMetadata<ConnectionTable>;
   dwDocketEntry: DatabaseTableMetadata<DocketEntryTable>;
+  dwFeatureFlag: DatabaseTableMetadata<FeatureFlagTable>;
   dwDocketEntryWorksheet: DatabaseTableMetadata<DocketEntryWorksheetTable>;
   dwMessage: DatabaseTableMetadata<MessageTable>;
   dwMinuteSheet: DatabaseTableMetadata<MinuteSheetTable>;
+  dwPractitionerDocuments: DatabaseTableMetadata<PractitionerDocumentTable>;
   dwNotification: DatabaseTableMetadata<NotificationTable>;
   dwUser: DatabaseTableMetadata<UserTable>;
   dwResponseString: DatabaseTableMetadata<ResponseStringTable>;
+  dwTrialSession: DatabaseTableMetadata<TrialSessionTable>;
+  dwTrialSessionNotificationProcessing: DatabaseTableMetadata<TrialSessionNotificationProcessingTable>;
+  dwTrialSessionPaperPdf: DatabaseTableMetadata<TrialSessionPaperPdfTable>;
+  dwTrialSessionWorkingCopy: DatabaseTableMetadata<TrialSessionWorkingCopyTable>;
   dwUserCaseNote: DatabaseTableMetadata<UserCaseNoteTable>;
   dwUserConfirmationCode: DatabaseTableMetadata<UserConfirmationCodeTable>;
   dwUserOnCase: DatabaseTableMetadata<UserOnCaseTable>;
@@ -141,6 +168,10 @@ export const DatabaseSchema: DatabaseSchemaType = {
     table: DEFAULT as CaseDeadlineTable,
     columns: DW_CASE_DEADLINE_COLUMNS,
   },
+  dwTrialSessionCase: {
+    table: DEFAULT as TrialSessionCaseTable,
+    columns: DW_TRIAL_SESSION_CASE_COLUMNS,
+  },
   dwCaseWorksheet: {
     table: DEFAULT as CaseWorksheetTable,
     columns: DW_CASE_WORKSHEET_COLUMNS,
@@ -163,6 +194,10 @@ export const DatabaseSchema: DatabaseSchemaType = {
     table: DEFAULT as DocketEntryWorksheetTable,
     columns: DW_DOCKET_ENTRY_WORKSHEET_COLUMNS,
   },
+  dwFeatureFlag: {
+    table: DEFAULT as FeatureFlagTable,
+    columns: DW_FEATURE_FLAG_COLUMNS,
+  },
   dwMessage: {
     table: DEFAULT as MessageTable,
     columns: DW_MESSAGE_COLUMNS,
@@ -175,9 +210,29 @@ export const DatabaseSchema: DatabaseSchemaType = {
     table: DEFAULT as MinuteSheetTable,
     columns: DW_MINUTE_SHEET_COLUMNS,
   },
+  dwPractitionerDocuments: {
+    table: DEFAULT as PractitionerDocumentTable,
+    columns: DW_PRACTITIONER_DOCUMENT_COLUMNS,
+  },
   dwResponseString: {
     table: DEFAULT as ResponseStringTable,
     columns: DW_RESPONSE_STRING_COLUMNS,
+  },
+  dwTrialSession: {
+    table: DEFAULT as TrialSessionTable,
+    columns: DW_TRIAL_SESSION_COLUMNS,
+  },
+  dwTrialSessionNotificationProcessing: {
+    table: DEFAULT as TrialSessionNotificationProcessingTable,
+    columns: DW_TRIAL_SESSION_NOTIFICATION_PROCESSING,
+  },
+  dwTrialSessionPaperPdf: {
+    table: DEFAULT as TrialSessionPaperPdfTable,
+    columns: DW_TRIAL_SESSION_PAPER_PDF_COLUMNS,
+  },
+  dwTrialSessionWorkingCopy: {
+    table: DEFAULT as TrialSessionWorkingCopyTable,
+    columns: DW_TRIAL_SESSION_WORKING_COPY_COLUMNS,
   },
   dwUserCaseNote: {
     table: DEFAULT as UserCaseNoteTable,

@@ -153,7 +153,7 @@ describe('trialSessionDetailsHelper', () => {
           permissions: { TRIAL_SESSION_QC_COMPLETE: true },
           trialSession: {
             ...MOCK_TRIAL_INPERSON,
-            hasNOTTBeenServed: true,
+            hasNottBeenServed: true,
           },
         },
       });
@@ -167,7 +167,7 @@ describe('trialSessionDetailsHelper', () => {
           permissions: { TRIAL_SESSION_QC_COMPLETE: true },
           trialSession: {
             ...MOCK_TRIAL_INPERSON,
-            hasNOTTBeenServed: false,
+            hasNottBeenServed: false,
           },
         },
       });

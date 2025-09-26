@@ -13,9 +13,16 @@ const caveats: string[] = [
   'puppeteer',
   'puppeteer-core',
   '@sparticuz/chromium',
-  'babel-jest',
-  'babel-core',
   'jest',
+  'pdfjs-dist',
+  'quill',
+  'quill-delta-to-html',
+  'jest-environment-jsdom',
+  '@types/node',
+  'typescript',
+  'websocket',
+  'p-queue',
+  'dwt',
 ];
 
 // Function to run a shell command and capture output, even if it has a non-zero exit code

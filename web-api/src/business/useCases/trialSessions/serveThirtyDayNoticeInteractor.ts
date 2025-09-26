@@ -28,7 +28,10 @@ import {
   asyncHandleLockError,
   withLocking,
 } from '@web-api/persistence/postgres/utils/mutex';
+import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { updateTrialSession } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
 
 export const serveThirtyDayNotice = async (
   applicationContext: ServerApplicationContext,
@@ -49,18 +52,19 @@ export const serveThirtyDayNotice = async (
     throw new InvalidRequest('No trial Session Id provided');
   }
 
-  const { name, title } = await applicationContext
-    .getPersistenceGateway()
-    .getConfigurationItemValue({
-      applicationContext,
-      configurationItemKey:
-        applicationContext.getConstants().CLERK_OF_THE_COURT_CONFIGURATION,
-    });
+  const { CLERK_OF_THE_COURT_CONFIGURATION } =
+    applicationContext.getConstants();
 
-  const trialSession = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById({
-      applicationContext,
+  const [CLERK_OF_THE_COURT_RECORD] = await getFeatureFlagValues([
+    CLERK_OF_THE_COURT_CONFIGURATION,
+  ]);
+
+  const { name, title } = CLERK_OF_THE_COURT_RECORD.value.current as {
+    name: string;
+    title: string;
+  };
+
+  const trialSession = await getTrialSessionById({
       trialSessionId,
     });
 
@@ -264,10 +268,9 @@ export const serveThirtyDayNotice = async (
     );
   }
 
-  trialSessionEntity.hasNOTTBeenServed = true;
+  trialSessionEntity.hasNottBeenServed = true;
 
-  await applicationContext.getPersistenceGateway().updateTrialSession({
-    applicationContext,
+  await updateTrialSession({
     trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
   });
 
@@ -285,17 +288,14 @@ export const serveThirtyDayNotice = async (
 };
 
 export const determineEntitiesToLock = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   {
     trialSessionId,
   }: {
     trialSessionId: string;
   },
 ) => {
-  const currentTrialSession = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById({
-      applicationContext,
+  const currentTrialSession = await getTrialSessionById({
       trialSessionId,
     });
 

@@ -69,7 +69,7 @@ import { generateStandingPretrialOrderForSmallCaseInteractor } from './business/
 import { generateStandingPretrialOrderInteractor } from './business/useCases/trialSessions/generateStandingPretrialOrderInteractor';
 import { generateTrialCalendarPdfInteractor } from './business/useCases/trialSessions/generateTrialCalendarPdfInteractor';
 import { generateTrialSessionPaperServicePdfInteractor } from './business/useCases/trialSessions/generateTrialSessionPaperServicePdfInteractor';
-import { getAllFeatureFlagsInteractor } from './business/useCases/featureFlag/getAllFeatureFlagsInteractor';
+import { getAllFeatureFlagsInteractor } from '@web-api/business/useCases/featureFlag/getAllFeatureFlagsInteractor';
 import { getCalendaredCasesForTrialSessionInteractor } from './business/useCases/trialSessions/getCalendaredCasesForTrialSessionInteractor';
 import { getCaseDeadlinesForCaseInteractor } from './business/useCases/caseDeadline/getCaseDeadlinesForCaseInteractor';
 import { getCaseDeadlinesInteractor } from '../../shared/src/business/useCases/getCaseDeadlinesInteractor';
@@ -122,6 +122,7 @@ import { getUserCaseNoteForCasesInteractor } from './business/useCases/caseNote/
 import { getUserCaseNoteInteractor } from './business/useCases/caseNote/getUserCaseNoteInteractor';
 import { getUserPendingEmailStatusInteractor } from './business/useCases/user/getUserPendingEmailStatusInteractor';
 import { getUsersPendingEmailInteractor } from './business/useCases/user/getUsersPendingEmailInteractor';
+import { getRecentFilingsForUserInteractor } from '@shared/business/useCases/getRecentFilingsForUserInteractor';
 import { handleBounceNotificationInteractor } from './business/useCases/email/handleBounceNotificationInteractor';
 import { logErrorInteractor } from '@web-api/business/useCases/logErrorInteractor';
 import { loginInteractor } from '@web-api/business/useCases/auth/loginInteractor';
@@ -146,6 +147,7 @@ import { saveCalendarNoteInteractor } from './business/useCases/trialSessions/sa
 import { saveCaseDetailInternalEditInteractor } from './business/useCases/saveCaseDetailInternalEditInteractor';
 import { saveCaseNoteInteractor } from './business/useCases/caseNote/saveCaseNoteInteractor';
 import { saveSignedDocumentInteractor } from '../../shared/src/business/useCases/saveSignedDocumentInteractor';
+import { scrapeDocumentContentsWorker } from '@web-api/business/useCases/docketEntry/scrapeDocumentContentsWorker';
 import { sealCaseContactAddressInteractor } from '../../shared/src/business/useCases/sealCaseContactAddressInteractor';
 import { sealCaseInteractor } from '../../shared/src/business/useCases/sealCaseInteractor';
 import { sealDocketEntryInteractor } from './business/useCases/docketEntry/sealDocketEntryInteractor';
@@ -318,6 +320,7 @@ const useCases = {
   getUserCaseNoteInteractor,
   getUserPendingEmailStatusInteractor,
   getUsersPendingEmailInteractor,
+  getRecentFilingsForUserInteractor,
   handleBounceNotificationInteractor,
   logErrorInteractor,
   loginInteractor,
@@ -342,6 +345,7 @@ const useCases = {
   saveCaseDetailInternalEditInteractor,
   saveCaseNoteInteractor,
   saveSignedDocumentInteractor,
+  scrapeDocumentContentsWorker,
   sealCaseContactAddressInteractor,
   sealCaseInteractor,
   sealDocketEntryInteractor,
@@ -395,5 +399,5 @@ export const getUseCases = () => useCases;
 type _IGetUseCases = typeof getUseCases;
 
 declare global {
-  interface IGetUseCases extends _IGetUseCases { }
+  interface IGetUseCases extends _IGetUseCases {}
 }

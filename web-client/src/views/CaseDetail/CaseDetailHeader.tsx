@@ -156,7 +156,7 @@ export const CaseDetailHeader = connect<
           <div className="grid-container">
             <div className="display-flex flex-row flex-justify">
               <div className="tablet:grid-col-10">
-                <div className="margin-bottom-1">
+                <div className="margin-bottom-1 line-height-mono-4">
                   <h1
                     className="heading-2 captioned docket-number-header"
                     data-testid="docket-number-header"
@@ -184,32 +184,27 @@ export const CaseDetailHeader = connect<
                   {caseDetailHeaderHelper.hidePublicCaseInformation && (
                     <>
                       {formattedCaseDetail.isLeadCase && (
-                        <span
+                        <Tag
                           aria-label={`isLeadCase: ${formattedCaseDetail.isLeadCase}`}
-                          className="usa-tag"
                           id="lead-case-tag"
                           role="note"
+                          className="margin-right-1"
                         >
-                          <span aria-hidden="true">Lead case</span>
-                        </span>
+                          Lead case
+                        </Tag>
                       )}
-                      <label
+                      <Tag
+                        className="margin-right-1"
                         aria-label={`status: ${formattedCaseDetail.status}`}
-                        className={classNames(
-                          'usa-tag',
-                          formattedCaseDetail.isLeadCase ? 'margin-left-1' : '',
-                        )}
                         data-testid="case-status"
-                        htmlFor="case-status"
+                        id="case-status"
                       >
-                        <span aria-hidden="true" id="case-status">
-                          {formattedCaseDetail.status}
-                        </span>
-                      </label>
+                        {formattedCaseDetail.status}
+                      </Tag>
                       {formattedCaseDetail.associatedJudge && (
                         <Tag
                           aria-label="associated judge"
-                          className="margin-left-1"
+                          className="margin-right-1"
                           role="note"
                           iconProps={{ icon: 'gavel' }}
                         >
@@ -218,7 +213,7 @@ export const CaseDetailHeader = connect<
                       )}
                       {caseDetailHeaderHelper.showBlockedTag && (
                         <Tag
-                          className="margin-left-1"
+                          className="margin-right-1"
                           data-testid="blocked-case-icon"
                           iconProps={{ icon: 'hand-paper' }}
                           variant="destructive"

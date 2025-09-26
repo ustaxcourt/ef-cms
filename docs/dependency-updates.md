@@ -70,7 +70,8 @@ To update Node.js:
 
 Check if there are updates to any the following in the main `Dockerfile`. Changing the `Dockerfile` requires publishing a new ECR image which is used as the docker image in CircleCI.
 
-- `terraform`: check for a newer version on the [Terraform site](https://www.terraform.io/downloads).
+- `terraform`: check for a newer version on the [Terraform site](https://developer.hashicorp.com/terraform/install).
+  - Check for the version number and compare with the current version
   - Change the version of the `terraform.zip` that we retrieve in `./Dockerfile`
   - Change the version in `scripts/verify-terraform-version.sh`
 - `aws-cli`: check for a newer version on [AWS CLI](https://github.com/aws/aws-cli/tags) and use the latest version you can find for 2.x, replace it in the DockerFile
@@ -105,7 +106,7 @@ regex search the entire project for `"~> \d+.\d+.\d+"` and make sure it's to the
 
 - Check through the list of caveats to see if any of the documented issues have been resolved.
 
-- Validate updates by deploying, with a [migration](./additional-resources/blue-green-migration.md#manual-migration-steps), to an experimental environment. This helps us verify that the package updates don't affect the migration workflow.
+- Validate updates by deploying to an experimental environment
 
 ## Do Not Upgrade
 
@@ -120,6 +121,10 @@ regex search the entire project for `"~> \d+.\d+.\d+"` and make sure it's to the
 ## Caveats
 
 Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Try to update these items but please be aware of the issue that's documented and ensure it's been resolved.
+
+### DWT 
+
+- Minor versions of DWT _should_ be updated, but require that Court IT update the Windows clients in concert with our app. Do not update without coordinating.
 
 ### puppeteer and @sparticuz/chromium
 
@@ -145,24 +150,37 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 - As of [this release](https://github.com/mozilla/pdf.js/releases/tag/v5.1.91), and I think [this PR](https://github.com/mozilla/pdf.js/pull/19689), pdfjs seems to expect certain browser-side API functionality when loaded. This causes issues with our Cypress tests. The best way to fix this is worth investigating further. Perhaps we could polyfill, or even consider creating an issue in the pdfjs repo.
 
-### babel-jest, babel-core, jest
+### babel-jest, babel-core
 Tried to update to 30.0.0-beta.3 from 29.7.0 on Friday, June 06, 2025, we weren't able to update it because it conflicts with ts-jest 29.3.4.
 On June 26 2025, newer versions of babel-core and jest core also started to cause issues with ts-jest. Once ts-jest is updated these issues should all clear up.
 
-### jest-environment-jsdom
-This dependency was causing problems with specific unit tests that were using Object.defineProperty. 
-We should tackle this issue either in a dedicated ticket or in a future dependency update but for now (6/30/25) we left it.
+- On September 19th, 2025, babel-jest was successfully updated to 30.0.0 from 29.7.0.
+
+- On September 19th, 2025, babel/core was successfully updated to 7.28..4 from 7.28.3, had some issues with Github Actions checks running all the way through, but Github still gave the commit a check. Refer to this PR for more info. https://github.com/ustaxcourt/ef-cms/pull/9164
 
 ### @types/node
 The major version of this package should match our major version of node. At the moment that we are using node v22.16.0 so we should use a package that starts with 22.
 
-### pg
-We encountered failure in integration tests running pg version 8.16.3, so we had to revert back to the previous version 8.16.2 which was more stable.
-
 ### TypeScript
 We cannot update TypeScript version beyond v5.8.3 until ts-jest supports it
+
+- On September 19th, 2025, tried to update to 5.9.2, the highest non-beta version but we would need to address the Typescript issues. I ran out of time to do so. Refer to this PR. https://github.com/ustaxcourt/ef-cms/pull/9164 
+
+### p-queue
+There are a few scripts that depend on p-queue v6.6.2.  Upgrading this past version 6 will cause issues related to module imports.  It might be good to verify if the scripts using p-queue are still in use and if not, we could just remove p-queue and those scripts.
+
+- On September 19th, 2025, tried to updAte to 8.1.1. Errors were thrown on Github Action checks to address imports. A potential fix could be to update our build configuration to properly handle ES modules or maybe use dynamic imports as a workaround? Refer to this PR. https://github.com/ustaxcourt/ef-cms/pull/9164 
 
 ## Incrementing the Node Cache Key Version
 
 It's rare to need modify cache key. One reason you may want to do so is if a package fails to install properly, and CircleCI, unaware of the failed installation, stores the corrupted cache. In this case, we will need to increment the cache key version so that CircleCI is forced to reinstall the node dependencies and save them using the new key. To update the cache key, locate `vX-npm` and `vX-cypress` (where X represents the current cache key version) in the config.yml file, and then increment the identified version.
 
+## uuid
+9/17/25 keeping it 11.1.0. The next version 12.0.0 and above no longer supports CommonJS
+
+https://www.npmjs.com/package/uuid?activeTab=readme
+
+
+Quote from site
+
+"Starting with uuid@12 CommonJS is no longer supported. See implications and motivation for details."

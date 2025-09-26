@@ -7,28 +7,44 @@ export function Buttons() {
       <h2>Buttons</h2>
 
       <div>
-        <div className="tw:xs:inline tw:m-2">
-          <Button variant="primary" icon="file">
+        <div className="tw:xs:inline-block tw:m-4 tw:xs:m-2">
+          <Button variant="primary" icon="file" aria-label="Primary Default">
             Primary Default
           </Button>
         </div>
-        <div className="tw:xs:inline tw:m-2">
-          <Button variant="secondary" icon="file">
+        <div className="tw:xs:inline-block tw:m-4 tw:xs:m-2">
+          <Button
+            variant="secondary"
+            icon="file"
+            aria-label="Secondary Default"
+          >
             Secondary Default
           </Button>
         </div>
-        <div className="tw:xs:inline tw:m-2">
-          <Button variant="destructive" icon="file">
+        <div className="tw:xs:inline-block tw:m-4 tw:xs:m-2">
+          <Button
+            variant="destructive"
+            icon="file"
+            aria-label="Destructive Default"
+          >
             Destructive Default
           </Button>
         </div>
-        <div className="tw:xs:inline tw:m-2">
-          <Button variant="primaryTertiary" icon="file">
+        <div className="tw:xs:inline-block tw:m-4 tw:xs:m-2">
+          <Button
+            variant="primaryTertiary"
+            icon="file"
+            aria-label="Tertiary Default"
+          >
             Tertiary Default
           </Button>
         </div>
-        <div className="tw:xs:inline tw:m-2">
-          <Button variant="destructiveTertiary" icon="file">
+        <div className="tw:xs:inline-block tw:m-4 tw:xs:m-2">
+          <Button
+            variant="destructiveTertiary"
+            icon="file"
+            aria-label="Tertiary Default"
+          >
             Tertiary Default
           </Button>
         </div>

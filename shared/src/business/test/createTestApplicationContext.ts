@@ -1,6 +1,5 @@
 import * as DateHandler from '@shared/business/utilities/DateHandler';
 import * as pdfLib from 'pdf-lib';
-import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
 import {
   Case,
   canAllowDocumentServiceForCase,
@@ -71,7 +70,6 @@ import { getAllFeatureFlagsInteractor } from '@web-api/business/useCases/feature
 import { getAllWebSocketConnections } from '@web-api/persistence/postgres/connections/getAllWebSocketConnections';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseDocumentsIdsFilteredByDocumentType } from '@shared/business/utilities/getCaseDocumentsIdsFilteredByDocumentType';
-import { getConfigurationItemValue } from '@web-api/persistence/dynamo/deployTable/getConfigurationItemValue';
 import { getConstants } from '@web-client/getConstants';
 import { getCropBox } from '@shared/business/utilities/getCropBox';
 import { getDescriptionDisplay } from '@shared/business/utilities/getDescriptionDisplay';
@@ -83,7 +81,6 @@ import { getItem } from '@web-client/persistence/localStorage/getItem';
 import { getSealedDocketEntryTooltip } from '@shared/business/utilities/getSealedDocketEntryTooltip';
 import { getStampBoxCoordinates } from '@shared/business/utilities/getStampBoxCoordinates';
 import { getTextByCount } from '@shared/test/getTextByCount';
-import { getTrialSessionById } from '@web-api/persistence/dynamo/trialSessions/getTrialSessionById';
 import { getUserIdForNote } from '@web-api/business/useCaseHelper/getUserIdForNote';
 import { incrementCounter } from '@web-api/persistence/dynamo/helpers/incrementCounter';
 import { removeCounselFromRemovedPetitioner } from '@web-api/business/useCaseHelper/caseAssociation/removeCounselFromRemovedPetitioner';
@@ -126,7 +123,7 @@ export const createTestApplicationContext = () => {
     getDocument: jest.fn().mockReturnValue({
       promise: Promise.resolve({
         getPage: () => ({
-          cleanup: () => { },
+          cleanup: () => {},
           getViewport: () => ({
             height: 100,
             width: 100,
@@ -369,6 +366,7 @@ export const createTestApplicationContext = () => {
     updateCaseAutomaticBlock: jest
       .fn()
       .mockImplementation(updateCaseAutomaticBlock),
+    associateSwingTrialSessions: jest.fn(),
   });
 
   const getDocumentGeneratorsReturnMock = {
@@ -435,9 +433,7 @@ export const createTestApplicationContext = () => {
     getCalendaredCasesForTrialSession: jest.fn(),
     getCaseByDocketNumber: jest.fn().mockImplementation(getCaseByDocketNumber),
     getCasesByFilters: jest.fn(),
-    getConfigurationItemValue: jest
-      .fn()
-      .mockImplementation(getConfigurationItemValue),
+
     getDispatchNotification: jest.fn(),
     getDocketNumbersByStatusAndByJudge: jest.fn(),
     getDocument: jest.fn().mockResolvedValue(testPdfDoc),
@@ -446,18 +442,11 @@ export const createTestApplicationContext = () => {
       .fn()
       .mockReturnValue({ url: 'http://example.com/' }),
     getElasticsearchReindexRecords: jest.fn(),
-    getFeatureFlagValue: jest.fn().mockImplementation(({ featureFlag }) => {
-      switch (featureFlag) {
-        case ALLOWLIST_FEATURE_FLAGS.ENTITY_LOCKING_FEATURE_FLAG.key:
-          return { current: true };
-      }
-    }),
     getItem: jest.fn().mockImplementation(getItem),
     getMaintenanceMode: jest.fn(),
     getPractitionerDocuments: jest.fn(),
     getReconciliationReport: jest.fn(),
     getRecord: jest.fn(),
-    getTrialSessionById: jest.fn().mockImplementation(getTrialSessionById),
     getTrialSessionJobStatusForCase: jest.fn(),
     getTrialSessionProcessingStatus: jest.fn(),
     getUserCaseMappingsByDocketNumber: jest.fn().mockReturnValue([]),
@@ -486,7 +475,7 @@ export const createTestApplicationContext = () => {
 
   const mockGetMessagingClient = {
     send: jest.fn().mockReturnValue({
-      promise: () => { },
+      promise: () => {},
     }),
   };
 
@@ -591,10 +580,11 @@ export const createTestApplicationContext = () => {
     getUseCaseHelpers: mockGetUseCaseHelpers,
     getUseCases: mockGetUseCases,
     getUserGateway: appContextProxy({}),
+    getConfigurationGateway: appContextProxy({}),
     getUtilities: mockGetUtilities,
     getWorkerGateway: appContextProxy({
       initialize: jest.fn().mockReturnValue({
-        promise: () => { },
+        promise: () => {},
       }),
     }),
     isFeatureEnabled: jest.fn(),

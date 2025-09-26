@@ -16,6 +16,7 @@ import {
   MINUTE_ENTRIES_MAP,
   PARTIES_CODES,
   PAYMENT_STATUS,
+  PRO_SE_CHECKLIST,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import {
@@ -31,6 +32,7 @@ import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMet
 import { getClinicLetterKey } from '@shared/business/utilities/getClinicLetterKey';
 import { random } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
@@ -156,13 +158,17 @@ const generateNoticeOfReceipt = async ({
 
   let accessCode = generateAccessCode();
 
-  const { name, title } = await applicationContext
-    .getPersistenceGateway()
-    .getConfigurationItemValue({
-      applicationContext,
-      configurationItemKey:
-        applicationContext.getConstants().CLERK_OF_THE_COURT_CONFIGURATION,
-    });
+  const { CLERK_OF_THE_COURT_CONFIGURATION } =
+    applicationContext.getConstants();
+
+  const [CLERK_OF_THE_COURT_RECORD] = await getFeatureFlagValues([
+    CLERK_OF_THE_COURT_CONFIGURATION,
+  ]);
+
+  const { name, title } = CLERK_OF_THE_COURT_RECORD.value.current as {
+    name: string;
+    title: string;
+  };
 
   let primaryContactNotrPdfData = await applicationContext
     .getDocumentGenerators()
@@ -239,7 +245,6 @@ const generateNoticeOfReceipt = async ({
       });
   }
 
-  let clinicLetter;
   const isPrimaryContactProSe = !Case.isPetitionerRepresented(
     caseEntity,
     contactPrimary.contactId,
@@ -248,6 +253,41 @@ const generateNoticeOfReceipt = async ({
     !!contactSecondary &&
     !Case.isPetitionerRepresented(caseEntity, contactSecondary.contactId);
 
+  if (isPrimaryContactProSe || isSecondaryContactProSe) {
+    const doesProSeChecklistExist = await applicationContext
+      .getPersistenceGateway()
+      .isFileExists({
+        applicationContext,
+        key: PRO_SE_CHECKLIST,
+      });
+    if (doesProSeChecklistExist) {
+      const proSeChecklist = await applicationContext
+        .getPersistenceGateway()
+        .getDocument({
+          applicationContext,
+          key: PRO_SE_CHECKLIST,
+          useTempBucket: false,
+        });
+      if (isPrimaryContactProSe && primaryContactNotrPdfData) {
+        primaryContactNotrPdfData = await applicationContext
+          .getUtilities()
+          .combineTwoPdfs({
+            firstPdf: primaryContactNotrPdfData,
+            secondPdf: proSeChecklist,
+          });
+      }
+      if (isSecondaryContactProSe && secondaryContactNotrPdfData) {
+        secondaryContactNotrPdfData = await applicationContext
+          .getUtilities()
+          .combineTwoPdfs({
+            firstPdf: secondaryContactNotrPdfData,
+            secondPdf: proSeChecklist,
+          });
+      }
+    }
+  }
+
+  let clinicLetter;
   if (
     shouldIncludeClinicLetter(
       preferredTrialCity,
