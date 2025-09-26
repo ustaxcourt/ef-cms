@@ -99,10 +99,14 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     citiesFromLastTwoTerms,
   }));
 
-  const weeksToLoop = getWeeksInRange({
-    endDate: termEndDate,
-    startDate: termStartDate,
-  });
+  const weeksToLoop = {
+    ranges: getWeeksInRange({
+      endDate: termEndDate,
+      startDate: termStartDate,
+    }),
+    termEndDate,
+    termStartDate,
+  };
 
   const constraints = [
     washingtonDcSpecialConstraint,
@@ -118,7 +122,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     caseCountsAndSessionsByCity,
     constraints,
     specialSessions,
-    weeksToLoop,
+    weeksToLoop: weeksToLoop.ranges,
   }));
 
   if (calendarIsEmpty(caseCountsAndSessionsByCity)) {
@@ -141,7 +145,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     caseCountsAndSessionsByCity,
     incorrectSizeRegularCases,
     userMessages,
-    weeks: weeksToLoop,
+    weeksRange: weeksToLoop,
   });
 
   return {
