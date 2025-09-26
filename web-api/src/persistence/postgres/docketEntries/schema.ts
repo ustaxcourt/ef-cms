@@ -110,8 +110,6 @@ export const docketEntryTableDefinition = {
   taxYear: DEFAULT as string | null,
   trialLocation: DEFAULT as string | null,
   userId: DEFAULT as string | null,
-  orderDocketEntityId: DEFAULT as string | null,
-  motionDisposition: DEFAULT as string | null,
 };
 
 export type DocketEntryTable = typeof docketEntryTableDefinition;
@@ -122,3 +120,25 @@ export const DW_DOCKET_ENTRY_COLUMNS = Object.keys(
 
 export type DocketEntryKysely = Selectable<DocketEntryTable>;
 export type NewDocketEntryKysely = Insertable<DocketEntryTable>;
+
+///////////////////////////////////
+
+export const docketEntryOrderMotionTableDefinition = {
+  orderDocketEntryId: DEFAULT as string,
+  orderDocketNumber: DEFAULT as string,
+  motionDocketEntryId: DEFAULT as string,
+  motionDocketNumber: DEFAULT as string,
+  disposition: DEFAULT as string,
+  served: DEFAULT as boolean,
+};
+
+export type DocketEntryOrderMotionTable =
+  typeof docketEntryOrderMotionTableDefinition;
+export const DW_DOCKET_ENTRY_ORDER_MOTION_COLUMNS = Object.keys(
+  docketEntryOrderMotionTableDefinition,
+) as Array<keyof DocketEntryOrderMotionTable>;
+
+export type DocketEntryOrderMotionKysely =
+  Selectable<DocketEntryOrderMotionTable>;
+export type NewDocketEntryOrderMotionKysely =
+  Insertable<DocketEntryOrderMotionTable>;

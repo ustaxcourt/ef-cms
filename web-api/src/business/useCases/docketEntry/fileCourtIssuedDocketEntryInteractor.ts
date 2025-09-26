@@ -17,6 +17,7 @@ import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/get
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { upsertDocketEntryOrderMotions } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntryOrderMotion';
 
 /**
  *
@@ -33,7 +34,7 @@ export const fileCourtIssuedDocketEntry = async (
     subjectDocketNumber,
   }: {
     docketNumbers: string[];
-    documentMeta: any;
+    documentMeta: any; // TODO: Add better typing to this function & proxy?
     subjectDocketNumber: string;
   },
   authorizedUser: UnknownAuthUser,
@@ -180,6 +181,19 @@ export const fileCourtIssuedDocketEntry = async (
       return settlePromises(saveItems);
     }),
   );
+
+  if (documentMeta.isOrder && documentMeta.affectedMotions) {
+    await upsertDocketEntryOrderMotions({
+      orderDocketEntry: subjectDocketEntry,
+      // name not final
+      motionDocketEntries: documentMeta.affectedMotions.map(entry => ({
+        docketEntryId: entry.docketEntryid,
+        docketNumber: entry.docketNumber,
+        disposition: entry.disposition,
+      })),
+      served: false,
+    });
+  }
 
   const rawSubjectCase = await getCaseByDocketNumber({
     docketNumber: subjectDocketNumber,

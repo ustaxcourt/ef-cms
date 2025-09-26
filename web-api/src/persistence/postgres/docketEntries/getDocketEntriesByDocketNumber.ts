@@ -8,9 +8,16 @@ export const getDocketEntriesByDocketNumber = async ({
 }): Promise<RawDocketEntry[]> => {
   const dbDocketEntries = await getDbReader(reader =>
     reader
-      .selectFrom('dwDocketEntry')
+      .selectFrom('dwDocketEntry as de')
+      .leftJoin('dwDocketEntryOrderMotion as deom', join =>
+        join
+          .onRef('de.docketEntryId', '=', 'deom.motionDocketEntryId')
+          .onRef('de.docketNumber', '=', 'deom.motionDocketNumber'),
+      )
       .where('docketNumber', '=', docketNumber)
-      .selectAll()
+      .selectAll('de')
+      .select('deom.disposition as motionDisposition')
+      .select('deom.orderDocketEntryId')
       .execute(),
   );
 

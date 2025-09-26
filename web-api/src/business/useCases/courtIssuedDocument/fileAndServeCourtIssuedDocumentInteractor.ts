@@ -256,6 +256,8 @@ export const fileAndServeCourtIssuedDocument = async (
       }),
     );
 
+    // TODO (#8546): Update docket entries here
+
     serviceResults = await applicationContext
       .getUseCaseHelpers()
       .serveDocumentAndGetPaperServicePdf({

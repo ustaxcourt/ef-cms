@@ -187,7 +187,7 @@ export class DocketEntry extends JoiValidationEntity {
   public strickenBy?: string;
   public strickenByUserId?: string;
   public orderDocketEntityId?: string;
-  public motionDisposition?: 'GRANTED' | 'DENTIED' | 'PARTIAL';
+  public motionDisposition?: string; // 'GRANTED' | 'DENTIED' | 'PARTIAL';
 
   // These are optional fields set solely for the UI in certain cases.
   public qcComplete?: boolean;

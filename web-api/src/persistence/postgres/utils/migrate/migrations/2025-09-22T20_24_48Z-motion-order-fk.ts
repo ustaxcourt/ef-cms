@@ -2,16 +2,21 @@ import { Kysely } from 'kysely';
 
 export async function up(db: Kysely<any>): Promise<void> {
   await db.schema
-    .alterTable('dwDocketEntry')
-    .addColumn('orderDocketEntityId', 'varchar')
-    .addColumn('motionDisposition', 'varchar')
+    .createTable('dwDocketEntryOrderMotion')
+    .addColumn('orderDocketEntryId', 'uuid')
+    .addColumn('orderDocketNumber', 'varchar') // Is this needed?
+    .addColumn('motionDocketEntryId', 'uuid')
+    .addColumn('motionDocketNumber', 'varchar')
+    .addColumn('disposition', 'varchar')
+    .addColumn('served', 'boolean')
+    .addPrimaryKeyConstraint('dwDocketEntryOrderMotionPK', [
+      'orderDocketEntryId',
+      'motionDocketEntryId',
+      'motionDocketNumber',
+    ])
     .execute();
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
-  await db.schema
-    .alterTable('dwDocketEntry')
-    .dropColumn('orderDocketEntityId')
-    .dropColumn('motionDisposition')
-    .execute();
+  await db.schema.dropTable('dwDocketEntryOrderMotion');
 }
