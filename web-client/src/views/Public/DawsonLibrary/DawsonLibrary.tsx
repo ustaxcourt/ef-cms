@@ -15,8 +15,15 @@ export const DawsonLibrary = () => {
         <Tags />
         <h2>Date Picker</h2>
         <div className="tw:flex tw:gap-4">
-          <DateRangePicker startLabel={'Date Range'} mode={'range'} />
-          <DateRangePicker startLabel={'Single Date'} mode={'single'} />
+          <DateRangePicker
+            startLabel={'Date Range'}
+            mode={'range'}
+            allowFutureDates={false}
+          />
+          <DateRangePicker
+            startLabel={'Single Date (optional)'}
+            mode={'single'}
+          />
         </div>
       </div>
     </>

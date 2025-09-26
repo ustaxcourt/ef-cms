@@ -37,6 +37,7 @@ interface DateRangePickerProps {
   formGroupEndCls?: string;
   omitFormGroupClass?: boolean;
   parentModalHasMounted?: boolean;
+  allowFutureDates?: boolean;
 }
 
 export function DateRangePicker({
@@ -66,6 +67,7 @@ export function DateRangePicker({
   formGroupEndCls: _formGroupEndCls,
   omitFormGroupClass: _omitFormGroupClass = false,
   parentModalHasMounted: _parentModalHasMounted = false,
+  allowFutureDates: _allowFutureDates = false,
 }: Readonly<DateRangePickerProps>) {
   const [open, setOpen] = React.useState(false);
   const [dateRange, setDateRange] = React.useState<
@@ -342,17 +344,24 @@ export function DateRangePicker({
                 setOpen(false);
               }
             }}
-            disabled={[
-              // Disable future dates (after today)
-              {
-                after: applicationContext
-                  .getUtilities()
-                  .prepareDateFromString(
-                    applicationContext.getUtilities().createISODateString(),
-                  )
-                  .toJSDate(),
-              },
-            ]}
+            /* If allowFutureDates is true, don't disable dates after today. */
+            disabled={
+              !_allowFutureDates
+                ? [
+                    {
+                      // Disable future dates (after today)
+                      after: applicationContext
+                        .getUtilities()
+                        .prepareDateFromString(
+                          applicationContext
+                            .getUtilities()
+                            .createISODateString(),
+                        )
+                        .toJSDate(),
+                    },
+                  ]
+                : undefined
+            }
           />
         </PopoverContent>
       </Popover>
