@@ -93,16 +93,61 @@ To publish a new ECR docker image:
 
 ### 3. Update Terraform AWS provider
 
-Check if there is an update to the Terraform AWS provider and update all of the following files to use the [latest version](https://registry.terraform.io/providers/hashicorp/aws/latest) of the provider.
+Check if there is an update to the Terraform AWS provider and update our `.tf` files to use the [latest version](https://registry.terraform.io/providers/hashicorp/aws/latest) of the provider.
 
-regex search the entire project for `"~> \d+.\d+.\d+"` and make sure it's to the latest version.  For example, some of these files have the providers defined:
+regex search the entire project for `"~> \d+.\d+.\d+"` and make sure it's set to the latest version.  For example, some of these files have the AWS provider defined:
 
   - `./shared/admin-tools/glue/glue_migrations/main.tf`
   - `./shared/admin-tools/glue/remote_role/main.tf`
 
 	> version = "~>~ <LATEST_VERSION>"
 
-### 4. Wrap up
+
+### 4. Update Terraform OpenSearch provider 
+
+Check if there is an update to the Terraform OpenSearch provider and update our `.tf` files to use the [latest version](https://registry.terraform.io/providers/opensearch-project/opensearch/latest) of the provider.
+
+Search the entire project for `source  = "opensearch-project/opensearch"` and make sure it's set to the latest version.  For example, these files have the OpenSearch provider defined:
+
+  - `web-api/terraform/applyables/account-specific/account-specific.tf`
+  - `web-api/terraform/modules/kibana/providers.tf`
+
+	> version = "<LATEST_VERSION>"
+
+### 5. Update OpenSearch 
+
+Check to see if there is an updated version of OpenSearch available.
+
+- Run `./scripts/env/set-env.zsh` for a fresh AWS access key, then use it to list the available versions:
+
+   > aws opensearch list-versions
+
+If an update is available, we'll need to update OpenSearch locally, in github actions, and in deployed environments.
+
+- Update OpenSearch to the latest version in a deployed environment:
+
+   - Set the value of the `ES_ENGINE_VERSION` secret in the `[env]_deploy` secrets in Secrets Manager using `scripts/secrets/update-secret.ts`
+
+   - Set the value of the `ES_LOGS_ENGINE_VERSION` secret in the `account_deploy` secrets in Secrets Manager using `scripts/secrets/update-secret.ts`
+
+   - Run an account-specific terraform deployment using `deploy:account-specific`. Verify cluster is still functional while upgrade is being performed and after by running queries in kibana.
+
+   - Run deployment. Verify cluster is still functional while upgrade is being performed and after by running search smoketests against current color.
+
+   - Describe the manual steps in the dependency updates pull request. See [PR #9189](https://github.com/ustaxcourt/ef-cms/pull/9189) for an example.
+
+- Update OpenSearch to the latest version locally: 
+
+   - Set the value of the `image` property in `web-api/elasticsearch/docker-compose.yml` to correspond to the new version number, then run the api locally to verify:
+
+      > npm run start:api
+
+- Update OpenSearch to the latest version in github actions:
+
+   - Search the project for `opensearch-version:` and make sure it's set to the latest version. For example, some of the files in the `.github/workflows` directory will need to be updated.
+
+
+### 6. Wrap up
 
 - Check through the list of caveats to see if any of the documented issues have been resolved.
 
@@ -154,19 +199,33 @@ Below is a list of dependencies that are locked down due to known issues with se
 Tried to update to 30.0.0-beta.3 from 29.7.0 on Friday, June 06, 2025, we weren't able to update it because it conflicts with ts-jest 29.3.4.
 On June 26 2025, newer versions of babel-core and jest core also started to cause issues with ts-jest. Once ts-jest is updated these issues should all clear up.
 
+- On September 19th, 2025, babel-jest was successfully updated to 30.0.0 from 29.7.0.
+
+- On September 19th, 2025, babel/core was successfully updated to 7.28..4 from 7.28.3, had some issues with Github Actions checks running all the way through, but Github still gave the commit a check. Refer to this PR for more info. https://github.com/ustaxcourt/ef-cms/pull/9164
+
 ### @types/node
 The major version of this package should match our major version of node. At the moment that we are using node v22.16.0 so we should use a package that starts with 22.
-
-### pg
-We encountered failure in integration tests running pg version 8.16.3, so we had to revert back to the previous version 8.16.2 which was more stable.
 
 ### TypeScript
 We cannot update TypeScript version beyond v5.8.3 until ts-jest supports it
 
+- On September 19th, 2025, tried to update to 5.9.2, the highest non-beta version but we would need to address the Typescript issues. I ran out of time to do so. Refer to this PR. https://github.com/ustaxcourt/ef-cms/pull/9164 
+
 ### p-queue
 There are a few scripts that depend on p-queue v6.6.2.  Upgrading this past version 6 will cause issues related to module imports.  It might be good to verify if the scripts using p-queue are still in use and if not, we could just remove p-queue and those scripts.
+
+- On September 19th, 2025, tried to updAte to 8.1.1. Errors were thrown on Github Action checks to address imports. A potential fix could be to update our build configuration to properly handle ES modules or maybe use dynamic imports as a workaround? Refer to this PR. https://github.com/ustaxcourt/ef-cms/pull/9164 
 
 ## Incrementing the Node Cache Key Version
 
 It's rare to need modify cache key. One reason you may want to do so is if a package fails to install properly, and CircleCI, unaware of the failed installation, stores the corrupted cache. In this case, we will need to increment the cache key version so that CircleCI is forced to reinstall the node dependencies and save them using the new key. To update the cache key, locate `vX-npm` and `vX-cypress` (where X represents the current cache key version) in the config.yml file, and then increment the identified version.
 
+## uuid
+9/17/25 keeping it 11.1.0. The next version 12.0.0 and above no longer supports CommonJS
+
+https://www.npmjs.com/package/uuid?activeTab=readme
+
+
+Quote from site
+
+"Starting with uuid@12 CommonJS is no longer supported. See implications and motivation for details."

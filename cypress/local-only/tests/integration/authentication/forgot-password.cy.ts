@@ -1,4 +1,4 @@
-import { DEFAULT_FORGOT_PASSWORD_CODE } from '../../../../helpers/cypressTasks/cognito/cognito-helpers';
+import { DEFAULT_FORGOT_PASSWORD_CODE } from '../../../../helpers/constants/forgot-password';
 import { createAPetitioner } from '../../../../helpers/accountCreation/create-a-petitioner';
 import { createAndServePaperPetition } from '../../../../helpers/fileAPetition/create-and-serve-paper-petition';
 import { faker } from '@faker-js/faker';
