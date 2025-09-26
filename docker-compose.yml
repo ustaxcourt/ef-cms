@@ -85,11 +85,10 @@ services:
     depends_on:
       - dynamodb-local
 
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
+  opensearch-node:
+    image: opensearchproject/opensearch:2.19.0
     volumes:
-      - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,z
-      - elasticsearch:/usr/share/elasticsearch/data:z
+      - opensearch-data:/usr/share/opensearch/data
     ports:
       - '9200:9200'
     environment:
@@ -98,4 +97,4 @@ services:
 
 volumes:
   node_modules:
-  elasticsearch:
+  opensearch-data:

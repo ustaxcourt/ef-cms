@@ -343,6 +343,7 @@ async function getHearings(
       .selectAll('ts')
       .where('ch.docketNumber', 'in', docketNumbers)
       .where('ch.isHearing', 'is', true)
+      .where('ch.removedFromTrial', 'is', false)
       .orderBy('ts.createdAt', 'asc')
       .execute(),
   );

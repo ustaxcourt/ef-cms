@@ -40,6 +40,7 @@ if [ "${exitCode}" != 0 ]; then
 fi
 
 npm run migration:postgres
+npm run migration:postgres:contract
 npm run seed:postgres
 
 if [[ -z "${RUN_DIR}" ]]; then

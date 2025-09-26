@@ -924,7 +924,7 @@ export const SYSTEM_AND_INTERNAL_DOCUMENT_TYPES = [
   })),
   ...INTERNAL_DOCUMENTS_ARRAY.map(doc => ({
     ...doc,
-    label: doc.documentTitle,
+    label: doc.documentType,
     value: doc.eventCode,
   })),
 ];
@@ -2074,4 +2074,20 @@ export const TERM_GENERATOR_DEFAULT_VALUES = {
 
 export const MOBILE_SCREEN_BREAKPOINT = 640;
 
+export const ALLOWED_EVENT_CODES = [
+  'P',
+  'ATP',
+  'DISC',
+  'NOT',
+  'NOTR',
+  'NTD',
+  'SPOS',
+  'SPTO',
+  'TCRP',
+  'NORP',
+  'NOIP',
+  'NCTL',
+  'NODC',
+];
 export const PRO_SE_CHECKLIST = 'pro-se-checklist';
+
