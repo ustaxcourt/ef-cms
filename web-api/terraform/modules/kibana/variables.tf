@@ -33,3 +33,7 @@ variable "number_of_days_to_keep_info_logs" {
 variable "log_snapshot_bucket_name" {
   type = string
 }
+
+variable "es_logs_engine_version" {
+  type = string
+}
