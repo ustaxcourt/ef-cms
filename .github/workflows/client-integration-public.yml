@@ -1,4 +1,4 @@
-name: Node.js Client Integration Tests
+name: Node.js Public Client Integration Tests
 
 on:
   pull_request:
