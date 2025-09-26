@@ -9,6 +9,7 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
+import { InfoNotificationComponent } from '../InfoNotification';
 
 export const DocumentViewerDocument = connect(
   {
@@ -83,6 +84,19 @@ export const DocumentViewerDocument = connect(
                 Sealed in Blackstone
               </div>
             )}
+
+            <InfoNotificationComponent
+              alertInfo={{
+                message: (
+                  <>
+                    The document can only be served from the <b>lead case</b> in
+                    a consolidated group. This is a member case.
+                  </>
+                ),
+              }}
+              dismissible={false}
+              scrollToTop={false}
+            />
 
             <h3>
               {documentViewerHelper.description}{' '}
