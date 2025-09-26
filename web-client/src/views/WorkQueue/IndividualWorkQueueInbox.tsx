@@ -7,7 +7,6 @@ import React from 'react';
 
 export const IndividualWorkQueueInbox = connect(
   {
-    FROM_PAGES: state.constants.FROM_PAGES,
     formattedWorkQueue: state.formattedWorkQueue,
     workQueueHelper: state.workQueueHelper,
   },

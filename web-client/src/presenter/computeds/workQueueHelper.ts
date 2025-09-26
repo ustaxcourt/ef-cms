@@ -22,6 +22,7 @@ export const workQueueHelper = (
   sectionInboxCount: number;
   sentTitle: string;
   showAssignedToColumn: boolean;
+  outboxRenderedRowCount: number;
   showCaseStatusColumn: boolean;
   showDocketClerkFilter: boolean;
   showEditDocketEntry: boolean;
@@ -88,6 +89,28 @@ export const workQueueHelper = (
 
   const outboxFiledByColumnLabel = userIsPetitionsClerk ? 'Processed' : 'Filed';
 
+  const formattedWorkQueue = get(state.formattedWorkQueue) as any[];
+  let outboxRenderedRowCount = 0;
+  if (Array.isArray(formattedWorkQueue) && formattedWorkQueue.length > 0) {
+    const byLead = new Map<string, Set<string>>();
+    for (const item of formattedWorkQueue) {
+      const lead = item.leadDocketNumber || item.docketNumber || '';
+      const docTitle =
+        (item.docketEntry &&
+          (item.docketEntry.descriptionDisplay ||
+            item.docketEntry.documentType)) ||
+        '';
+      if (!byLead.has(lead)) {
+        byLead.set(lead, new Set());
+      }
+      byLead.get(lead)!.add(docTitle);
+    }
+
+    for (const docSet of byLead.values()) {
+      outboxRenderedRowCount += docSet.size;
+    }
+  }
+
   const showStartPetitionButton = permissions.START_PAPER_CASE;
   const userIsAllowed =
     userIsDocketClerk || userIsPetitionsClerk || isCaseServicesSupervisor;
@@ -140,5 +163,6 @@ export const workQueueHelper = (
     showStartPetitionButton,
     showSwitchToMyDocQCLink,
     workQueueTitle,
+    outboxRenderedRowCount,
   };
 };

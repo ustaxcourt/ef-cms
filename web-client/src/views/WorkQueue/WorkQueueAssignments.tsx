@@ -104,7 +104,8 @@ export const WorkQueueAssignments = connect<
               )}
             </div>
             <div className="push-right margin-top-4">
-              <b>Count:</b> {formattedWorkQueue.length}
+              <b className="text-semibold">Count:</b>{' '}
+              {formattedWorkQueue.length}
             </div>
           </>
         ) : (
