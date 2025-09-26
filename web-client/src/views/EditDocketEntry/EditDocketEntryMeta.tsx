@@ -74,7 +74,7 @@ export const EditDocketEntryMeta = connect(
                   <InfoNotificationComponent
                     alertInfo={{
                       message: (
-                        <div>
+                        <div className="margin-top-2 margin-bottom-2">
                           <b>Edits to Document Info will also be edited for:</b>
                           <ul className="usa-list padding-top-0 padding-bottom-0 margin-top-1 margin-bottom-1">
                             {formattedCaseDetail.consolidatedCases
