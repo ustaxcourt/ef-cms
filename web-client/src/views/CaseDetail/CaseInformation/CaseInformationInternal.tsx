@@ -216,6 +216,7 @@ export const CaseInformationInternal = connect(
                         aria-label="set hearing for trial sessions"
                         className="margin-right-0 margin-top-1 padding-0 float-right"
                         icon="plus-circle"
+                        data-testid="set-for-hearing-button"
                         onClick={() => {
                           openSetForHearingModalSequence();
                         }}
