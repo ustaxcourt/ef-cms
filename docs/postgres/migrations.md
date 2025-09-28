@@ -22,6 +22,7 @@ To learn more about Kysely migrations and syntax, see [here](https://kysely.dev/
 
 ```
 npm run migration:postgres
+npm run migration:postgres:contract
 ```
 
 ## Rolling Back Latest Migration on Local
