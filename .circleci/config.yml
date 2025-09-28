@@ -53,6 +53,10 @@ parameters:
     default: ''
     type: string
 
+  force_all_migrations:
+    default: false
+    type: boolean
+
 commands:
   npm-and-cypress-install:
     steps:
@@ -271,6 +275,13 @@ jobs:
           name: Run Postgres Migration
           command: |
             npm run migration:postgres
+      - when:
+          condition: << pipeline.parameters.force_all_migrations >>
+          no_output_timeout: 30m
+          steps:
+            - run:
+                name: Run Postgres Deprecated Migration
+                command: npm run migration:postgres:deprecated
       - run:
           name: Restore Postgres User Permissions
           command: |

@@ -31,9 +31,16 @@ async function pruneDeprecatedMigrations(db: Kysely<any>) {
 
   if (names.length === 0) return;
 
-  await db.deleteFrom('kyselyMigration').where('name', 'in', names).execute();
+  const deletedMigrations = await db
+    .deleteFrom('kyselyMigration')
+    .where('name', 'in', names)
+    .returning('name')
+    .execute();
 
-  console.log(`Pruned ${names.length} deprecated migration record(s):`, names);
+  console.log(
+    `Pruned ${deletedMigrations.length} deprecated migration record(s):`,
+    deletedMigrations,
+  );
 }
 
 async function migrateToLatest(migrationType = 'expand') {
@@ -60,8 +67,6 @@ async function migrateToLatest(migrationType = 'expand') {
             : !isContractMigration;
 
         if (shouldRunMigration && migration.executedAt === undefined) {
-          console.log(`About to run "${migration.name}" migration`);
-
           const { error, results } = await migrator.migrateTo(migration.name);
           results?.forEach(it => {
             if (it.status === 'Success') {
