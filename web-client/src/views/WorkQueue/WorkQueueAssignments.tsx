@@ -105,9 +105,7 @@ export const WorkQueueAssignments = connect<
             </div>
             <div className="push-right margin-top-4">
               <b className="text-semibold">Count:</b>{' '}
-              {workQueueHelper.currentBoxView === 'outbox'
-                ? workQueueHelper.outboxRenderedRowCount || 0
-                : formattedWorkQueue.length}
+              {formattedWorkQueue.length}
             </div>
           </>
         ) : (

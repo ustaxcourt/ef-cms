@@ -3,6 +3,8 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import { capitalize } from 'lodash';
+import { getWorkQueueFilters } from '@shared/business/utilities/getWorkQueueFilters';
+import { isLeadCase } from '@shared/business/entities/cases/Case';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const workQueueHelper = (
@@ -55,7 +57,7 @@ export const workQueueHelper = (
   const showIndividualWorkQueue = workQueueToDisplay.queue === 'my';
   const individualInboxCount = get(state.individualInboxCount);
   const individualInProgressCount = get(state.individualInProgressCount);
-  const sectionInboxCount = get(state.sectionInboxCount);
+  const stateSectionInboxCount = get(state.sectionInboxCount);
   const sectionInProgressCount = get(state.sectionInProgressCount);
   const userIsChambers = user.role === USER_ROLES.chambers;
   const userIsPetitionsClerk = user.role === USER_ROLES.petitionsClerk;
@@ -124,6 +126,83 @@ export const workQueueHelper = (
 
   const showSwitchToMyDocQCLink =
     !isCaseServicesSupervisor && showSectionWorkQueue && showMyQueueToggle;
+
+  let sectionInboxCount = stateSectionInboxCount;
+  if (workQueueToDisplay.queue === 'section') {
+    try {
+      const workItems = get(state.workQueue) as any[];
+      const filters = getWorkQueueFilters({ section: selectedSection, user });
+      const composedFilter = filters['section']['inbox'];
+      let filteredInbox = (workItems || []).filter(composedFilter);
+
+      const anyPreGrouped = filteredInbox.some(
+        (wi: any) =>
+          Array.isArray(wi.groupedCases) && wi.groupedCases.length > 0,
+      );
+
+      if (anyPreGrouped) {
+        const groups = new Map<string, any[]>();
+        for (const wi of filteredInbox as any[]) {
+          if (wi.leadDocketNumber && wi.groupedCases?.length) {
+            groups.set(wi.leadDocketNumber, wi.groupedCases);
+          }
+        }
+        filteredInbox = (filteredInbox as any[]).map(wi => {
+          if (wi.leadDocketNumber && groups.has(wi.leadDocketNumber)) {
+            return { ...wi, groupedCases: groups.get(wi.leadDocketNumber) };
+          }
+          return wi;
+        });
+        sectionInboxCount = filteredInbox.length;
+      } else {
+        const consolidated: any[] = [];
+        const solo: any[] = [];
+        for (const wi of filteredInbox) {
+          if (wi.leadDocketNumber) {
+            consolidated.push(wi);
+          } else {
+            solo.push(wi);
+          }
+        }
+
+        const byLead = new Map<string, any[]>();
+        for (const wi of consolidated) {
+          const key = wi.leadDocketNumber!;
+          if (!byLead.has(key)) byLead.set(key, []);
+          byLead.get(key)!.push(wi);
+        }
+
+        const consolidatedResult: any[] = [];
+
+        for (const group of byLead.values()) {
+          const leadItems = group.filter((w: any) => isLeadCase(w));
+
+          const groupedCases = Array.from(
+            new Map(group.map((g: any) => [g.docketNumber, g])).values(),
+          ).map((g: any) => ({
+            docketNumber: g.docketNumber,
+            docketNumberWithSuffix: g.docketNumberWithSuffix,
+            inLeadCase: isLeadCase(g),
+          }));
+
+          if (leadItems.length > 0) {
+            for (const li of leadItems) {
+              consolidatedResult.push({ ...li, groupedCases });
+            }
+          } else {
+            for (const member of group) {
+              consolidatedResult.push({ ...member, groupedCases });
+            }
+          }
+        }
+
+        sectionInboxCount = solo.length + consolidatedResult.length;
+      }
+    } catch (e) {
+      // fallback to server-provided count on error
+      sectionInboxCount = stateSectionInboxCount;
+    }
+  }
 
   return {
     currentBoxView: workQueueToDisplay.box,
