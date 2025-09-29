@@ -53,6 +53,10 @@ parameters:
     default: ''
     type: string
 
+  force_all_migrations:
+    default: false
+    type: boolean
+
 commands:
   npm-and-cypress-install:
     steps:
@@ -255,7 +259,7 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
+    resource_class: xlarge
     steps:
       - setup_remote_docker:
           version: docker23
@@ -267,9 +271,17 @@ jobs:
           command: |
             ./scripts/env/env-for-circle.sh
       - run:
+          no_output_timeout: 30m
           name: Run Postgres Migration
           command: |
             npm run migration:postgres
+      - when:
+          condition: << pipeline.parameters.force_all_migrations >>
+          no_output_timeout: 30m
+          steps:
+            - run:
+                name: Run Postgres Deprecated Migration
+                command: npm run migration:postgres:deprecated
       - run:
           name: Restore Postgres User Permissions
           command: |
@@ -451,7 +463,7 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium
+    resource_class: medium+
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -459,6 +471,9 @@ jobs:
           name: Setup Env
           command: |
             ./scripts/env/env-for-circle.sh
+      - run:
+          name: Run Postgres Contract Migration
+          command: npm run migration:postgres:contract
       - run:
           name: Setup Elasticsearch Aliases
           command: |
@@ -584,9 +599,11 @@ jobs:
             export CIRCLE_PIPELINE_ID=noop
             npm run destroy:wait-for-workflow-cron -- $ENV
       - run:
+          no_output_timeout: 30m
           name: Migrate Postgres Data Schema
           command: |
-            NODE_ENV=production npm run migration:postgres
+            npm run migration:postgres
+            npm run migration:postgres:contract
       - run:
           name: Restore Postgres User Permissions
           command: |
@@ -603,7 +620,7 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
+    resource_class: xlarge
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -634,7 +651,7 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
+    resource_class: xlarge
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -665,7 +682,7 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
+    resource_class: xlarge
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -726,7 +743,7 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
+    resource_class: xlarge
     environment:
       REFERRER: << pipeline.parameters.referrer >>
       SOURCE_BUCKET: << pipeline.parameters.source_bucket >>

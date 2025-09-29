@@ -69,6 +69,11 @@ const scriptConfig: ScriptConfig = {
       long: 'irs-superuser-email',
       type: 'string',
     },
+    opensearchEngineVersion: {
+      default: 'OpenSearch_2.19',
+      long: 'opensearch-engine-version',
+      type: 'string',
+    },
     opensearchInstanceCount: {
       default: '1',
       long: 'opensearch-instance-count',
@@ -154,6 +159,7 @@ const {
   env,
   generateSecureDefaultAccountPassword,
   irsSuperuserEmail,
+  opensearchEngineVersion,
   opensearchInstanceCount,
   opensearchInstanceType,
   opensearchVolumeSize,
@@ -178,6 +184,7 @@ const {
   env: string;
   generateSecureDefaultAccountPassword: boolean;
   irsSuperuserEmail: string;
+  opensearchEngineVersion: string;
   opensearchInstanceCount: number;
   opensearchInstanceType: string;
   opensearchVolumeSize: number;
@@ -224,6 +231,7 @@ if (env === 'prod') {
     EMAIL_DMARC_POLICY: emailDmarcPolicy,
     ENABLE_HEALTH_CHECKS: enableHealthChecks ? 1 : 0,
     ENV: env,
+    ES_ENGINE_VERSION: opensearchEngineVersion,
     ES_INSTANCE_COUNT: opensearchInstanceCount,
     ES_INSTANCE_TYPE: opensearchInstanceType,
     ES_VOLUME_SIZE: opensearchVolumeSize,

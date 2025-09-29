@@ -45,7 +45,7 @@ jobs:
       - name: Setup OpenSearch
         uses: ankane/setup-opensearch@v1
         with:
-          opensearch-version: 2.11
+          opensearch-version: 2.19
       - name: Setup DynamoDB Local
         uses: codyseibert/dynamodb-action@v4.1.0
         with:
@@ -72,6 +72,7 @@ jobs:
       - name: Setup Postgres
         run: |
           npm run migration:postgres
+          npm run migration:postgres:contract
           npm run seed:postgres
       - name: Web Client - Integration Tests
         run: |

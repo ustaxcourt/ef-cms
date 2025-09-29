@@ -14,6 +14,7 @@ import React from 'react';
 
 type TermBuilderViewProps = {};
 const TermBuilderViewDeps = {
+  termBuilderHelper: state.termBuilderHelper,
   termBuilderInformation: state[STATE_KEYS.TERM_BUILDER_INFORMATION],
   submitCreateTermFormSequence: sequences.submitCreateTermFormSequence,
   updateFormValueSequence: sequences.updateFormValueSequence,
@@ -25,6 +26,7 @@ export const TermBuilderView = connect<
 >(
   TermBuilderViewDeps,
   function TermBuilderView({
+    termBuilderHelper,
     termBuilderInformation,
     submitCreateTermFormSequence,
     updateFormValueSequence,
@@ -147,6 +149,37 @@ export const TermBuilderView = connect<
                 If multiple case types are eligible, the larger set will be
                 scheduled first.
               </p>
+            </AccordionItem>
+          </Accordion>
+          <Accordion>
+            <AccordionItem
+              title="Federal holidays"
+              contentClassName="term-builder-form"
+            >
+              <p className="margin-bottom-0">
+                If a federal holiday falls on a weekday in the date range
+                selected, the column header for that week will be marked with a
+                black background.
+              </p>
+              <p className="margin-top-0">
+                If a federal holiday falls on a weekend, the previous and/or
+                following week will NOT be marked.
+              </p>
+              <p className="text-bold margin-bottom-0">
+                Holidays in the selected date range:
+              </p>
+              {termBuilderHelper.formattedHolidaysInDateRange.map(
+                (holiday, i) => {
+                  return (
+                    <p
+                      className="margin-top-0 margin-bottom-0"
+                      key={`holiday-${i}`}
+                    >
+                      {holiday.date} - {holiday.name}
+                    </p>
+                  );
+                },
+              )}
             </AccordionItem>
           </Accordion>
 
