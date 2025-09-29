@@ -21,12 +21,8 @@ export const SectionWorkQueue = connect(
     section,
     workQueueHelper,
   }) {
-    const isOutbox = workQueueHelper.currentBoxView === 'outbox';
     const inboxCountForTitle = workQueueHelper.sectionInboxCount;
     const inProgressCountForTitle = workQueueHelper.sectionInProgressCount;
-    const outboxCountForTitle = isOutbox
-      ? workQueueHelper.outboxRenderedRowCount || 0
-      : undefined;
 
     return (
       <Tabs
@@ -68,11 +64,7 @@ export const SectionWorkQueue = connect(
           <Tab
             id="section-sent-tab"
             tabName="outbox"
-            title={`${workQueueHelper.sentTitle}${
-              outboxCountForTitle !== undefined
-                ? ` (${outboxCountForTitle})`
-                : ''
-            }`}
+            title={`${workQueueHelper.sentTitle}`}
           >
             <div id="section-sent-tab-content">
               <SectionWorkQueueOutbox />
