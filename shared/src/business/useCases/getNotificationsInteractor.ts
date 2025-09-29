@@ -90,17 +90,28 @@ export const getNotificationsInteractor = async (
     },
   );
 
-  const qcIndividualInProgressCount = documentQCIndividualInbox.filter(
+  const isConsolidatedMember = (item: any) =>
+    !!item.leadDocketNumber && item.leadDocketNumber !== item.docketNumber;
+
+  const documentQCIndividualInboxFiltered = documentQCIndividualInbox.filter(
+    item => !isConsolidatedMember(item),
+  );
+
+  const documentQCSectionInboxFiltered = documentQCSectionInbox?.filter(
+    item => !isConsolidatedMember(item),
+  );
+
+  const qcIndividualInProgressCount = documentQCIndividualInboxFiltered.filter(
     filters['my']['inProgress'],
   ).length;
-  const qcIndividualInboxCount = documentQCIndividualInbox.filter(
+  const qcIndividualInboxCount = documentQCIndividualInboxFiltered.filter(
     filters['my']['inbox'],
   ).length;
 
-  const qcSectionInProgressCount = documentQCSectionInbox?.filter(
+  const qcSectionInProgressCount = documentQCSectionInboxFiltered?.filter(
     filters['section']['inProgress'],
   ).length;
-  const qcSectionInboxCount = documentQCSectionInbox?.filter(
+  const qcSectionInboxCount = documentQCSectionInboxFiltered?.filter(
     filters['section']['inbox'],
   ).length;
 

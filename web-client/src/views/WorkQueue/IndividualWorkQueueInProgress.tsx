@@ -17,7 +17,7 @@ export const IndividualWorkQueueInProgress = connect(
       <React.Fragment>
         <div className="text-right">
           <span className="text-semibold">Count: </span>
-          {workQueueHelper.individualInProgressCount}
+          {formattedWorkQueue.length}
         </div>
         <div className="padding-1"></div>
         <table
