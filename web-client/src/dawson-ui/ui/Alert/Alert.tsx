@@ -109,8 +109,8 @@ function AlertHeader({
           onClick={closeButtonOnClick}
         >
           <div className="tw:flex tw:items-center tw:text-sm/3 tw:xs:text-base/4 tw:hover:text-primary-dark tw:active:text-primary-darker">
-            <span className="">Close</span>
-            <CircleXmark className="tw:!h-[14px] tw:!w-[14px] tw:xs:!h-[16px] tw:xs:!w-[16px] tw:ml-2"/>
+            <span className="tw:mr-2">Close</span>
+            <CircleXmark className="tw:!h-[14px] tw:!w-[14px] tw:xs:!h-[16px] tw:xs:!w-[16px]"/>
           </div>
         </Button>
       )}
@@ -121,7 +121,7 @@ function AlertHeader({
 function AlertDescription({ ...props }: React.ComponentProps<'p'>) {
   return (
     <div
-      className="tw:xs:mt-2 tw:text-base/5 tw:xs:text-lg/6 tw:ml-8 tw:xs:ml-10 tw:pt-2 tw:xs:pt-1"
+      className="tw:xs:mt-2.5 tw:text-base/5 tw:xs:text-lg/6 tw:ml-8 tw:xs:ml-10 tw:pt-0.5 tw:xs:pt-0"
       data-slot="alert-description"
       {...props}
     />
