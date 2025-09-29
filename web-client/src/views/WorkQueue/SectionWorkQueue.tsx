@@ -10,19 +10,24 @@ import React from 'react';
 
 export const SectionWorkQueue = connect(
   {
-    formattedWorkQueue: state.formattedWorkQueue,
     navigateToPathSequence: sequences.navigateToPathSequence,
     queue: state.workQueueToDisplay.queue,
     section: state.workQueueToDisplay.section,
     workQueueHelper: state.workQueueHelper,
   },
   function SectionWorkQueue({
-    formattedWorkQueue,
     navigateToPathSequence,
     queue,
     section,
     workQueueHelper,
   }) {
+    const isOutbox = workQueueHelper.currentBoxView === 'outbox';
+    const inboxCountForTitle = workQueueHelper.sectionInboxCount;
+    const inProgressCountForTitle = workQueueHelper.sectionInProgressCount;
+    const outboxCountForTitle = isOutbox
+      ? workQueueHelper.outboxRenderedRowCount || 0
+      : undefined;
+
     return (
       <Tabs
         bind="workQueueToDisplay.box"
@@ -42,8 +47,7 @@ export const SectionWorkQueue = connect(
         <Tab
           data-testid="section-inbox-tab"
           tabName="inbox"
-          // title={`Inbox (${workQueueHelper.sectionInboxCount})`}
-          title={`Inbox (${formattedWorkQueue.length})`}
+          title={`Inbox (${inboxCountForTitle})`}
         >
           <div id="section-inbox-tab-content">
             <SectionWorkQueueInbox />
@@ -53,7 +57,7 @@ export const SectionWorkQueue = connect(
           <Tab
             id="section-in-progress-tab"
             tabName="inProgress"
-            title={`In Progress (${workQueueHelper.sectionInProgressCount})`}
+            title={`In Progress (${inProgressCountForTitle})`}
           >
             <div id="section-in-progress-tab-content">
               <SectionWorkQueueInProgress />
@@ -64,7 +68,11 @@ export const SectionWorkQueue = connect(
           <Tab
             id="section-sent-tab"
             tabName="outbox"
-            title={workQueueHelper.sentTitle}
+            title={`${workQueueHelper.sentTitle}${
+              outboxCountForTitle !== undefined
+                ? ` (${outboxCountForTitle})`
+                : ''
+            }`}
           >
             <div id="section-sent-tab-content">
               <SectionWorkQueueOutbox />
