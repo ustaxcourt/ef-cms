@@ -16,10 +16,14 @@ import { padStart } from 'lodash';
 import sanitize from 'sanitize-filename';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { getCalendaredCasesForTrialSession } from '@web-api/persistence/postgres/trialSessions/getCalendaredCasesForTrialSession';
+import { displayFakeProgressBarUntilBatchBootsUp } from './displayFakeProgressBarUntilBatchBootsUp';
 
 export const batchDownloadTrialSessionInteractor = async (
   applicationContext: ServerApplicationContext,
-  { trialSessionId }: { trialSessionId: string },
+  {
+    trialSessionId,
+    clientConnectionId,
+  }: { trialSessionId: string; clientConnectionId: string },
   authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
   try {
@@ -27,6 +31,7 @@ export const batchDownloadTrialSessionInteractor = async (
       applicationContext,
       {
         trialSessionId,
+        clientConnectionId,
       },
       authorizedUser,
     );
@@ -53,7 +58,10 @@ export const batchDownloadTrialSessionInteractor = async (
 
 const batchDownloadTrialSessionInteractorHelper = async (
   applicationContext: ServerApplicationContext,
-  { trialSessionId }: { trialSessionId: string },
+  {
+    trialSessionId,
+    clientConnectionId,
+  }: { trialSessionId: string; clientConnectionId: string },
   authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
   if (
@@ -63,16 +71,16 @@ const batchDownloadTrialSessionInteractorHelper = async (
   }
 
   const trialSessionDetails = await getTrialSessionById({
-      trialSessionId,
-    });
+    trialSessionId,
+  });
 
   if (!trialSessionDetails) {
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
   }
 
   const allSessionCases = await getCalendaredCasesForTrialSession({
-      trialSessionId,
-    });
+    trialSessionId,
+  });
 
   const batchableSessionCases = allSessionCases
     .filter(
@@ -190,6 +198,40 @@ const batchDownloadTrialSessionInteractorHelper = async (
   )
     .replace(/\s/g, '_')
     .replace(/,/g, '');
+
+  const useAwsBatchMechanism = applicationContext.environment.stage !== 'local';
+
+  try {
+    if (useAwsBatchMechanism) {
+      const UUID = applicationContext.getUniqueId();
+      await applicationContext.getPersistenceGateway().uploadDocument({
+        applicationContext,
+        pdfData: JSON.stringify(documentsToZip),
+        pdfName: UUID,
+        useTempBucket: true,
+      });
+
+      await applicationContext
+        .getDispatchers()
+        .sendZipperBatchJob(
+          applicationContext,
+          UUID,
+          zipName,
+          clientConnectionId,
+          authorizedUser.userId,
+        );
+
+      await displayFakeProgressBarUntilBatchBootsUp(
+        applicationContext,
+        clientConnectionId,
+        authorizedUser,
+      );
+
+      return;
+    }
+  } catch (error) {
+    throw new Error(`Error starting AWS batch job: ${error}`);
+  }
 
   await applicationContext
     .getPersistenceGateway()

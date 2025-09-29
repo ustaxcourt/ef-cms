@@ -1,6 +1,5 @@
 import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
 import {
-  AuthUser,
   isAuthUser,
   UnknownAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
@@ -15,6 +14,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { generateValidDocketEntryFilename } from '@web-api/business/useCases/trialSessions/batchDownloadTrialSessionInteractor';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { displayFakeProgressBarUntilBatchBootsUp } from '../trialSessions/displayFakeProgressBarUntilBatchBootsUp';
 
 export type DownloadDocketEntryRequestType = {
   documentsSelectedForDownload: string[];
@@ -167,6 +167,7 @@ const batchDownloadDocketEntriesHelper = async (
         authorizedUser.userId,
       );
 
+    //continue here
     await displayFakeProgressBarUntilBatchBootsUp(
       applicationContext,
       clientConnectionId,
@@ -226,24 +227,3 @@ const batchDownloadDocketEntriesHelper = async (
     userId: authorizedUser.userId,
   });
 };
-
-async function displayFakeProgressBarUntilBatchBootsUp(
-  applicationContext: ServerApplicationContext,
-  clientConnectionId: string,
-  authorizedUser: AuthUser,
-) {
-  const FAKE_NUMBER = 45;
-  for (let index = 0; index < FAKE_NUMBER; index++) {
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      clientConnectionId,
-      message: {
-        action: 'aws_batch_download_progress',
-        filesCompleted: index,
-        totalFiles: FAKE_NUMBER,
-      },
-      userId: authorizedUser.userId,
-    });
-    await new Promise(resolve => setTimeout(() => resolve(null), 1000));
-  }
-}
