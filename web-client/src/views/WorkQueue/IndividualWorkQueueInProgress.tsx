@@ -15,6 +15,11 @@ export const IndividualWorkQueueInProgress = connect(
   }) {
     return (
       <React.Fragment>
+        <div className="text-right">
+          <span className="text-semibold">Count: </span>
+          {workQueueHelper.individualInProgressCount}
+        </div>
+        <div className="padding-1"></div>
         <table
           aria-describedby="tab-my-queue"
           className="usa-table ustc-table subsection"
