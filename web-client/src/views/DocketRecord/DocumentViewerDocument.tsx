@@ -85,18 +85,23 @@ export const DocumentViewerDocument = connect(
               </div>
             )}
 
-            <InfoNotificationComponent
-              alertInfo={{
-                message: (
-                  <>
-                    The document can only be served from the <b>lead case</b> in
-                    a consolidated group. This is a member case.
-                  </>
-                ),
-              }}
-              dismissible={false}
-              scrollToTop={false}
-            />
+            {!(
+              !caseDetail?.leadDocketNumber ||
+              caseDetail?.leadDocketNumber === caseDetail?.docketNumber
+            ) && (
+              <InfoNotificationComponent
+                alertInfo={{
+                  message: (
+                    <>
+                      The document can only be served from the <b>lead case</b>{' '}
+                      in a consolidated group. This is a member case.
+                    </>
+                  ),
+                }}
+                dismissible={false}
+                scrollToTop={false}
+              />
+            )}
 
             <h3>
               {documentViewerHelper.description}{' '}
