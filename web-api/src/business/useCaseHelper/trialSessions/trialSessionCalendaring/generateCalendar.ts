@@ -12,6 +12,7 @@ import {
   FORMATS,
   createDateAtStartOfWeekEST,
   createISODateString,
+  getWeeksInRange,
 } from '@shared/business/utilities/DateHandler';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import {
@@ -70,56 +71,59 @@ export const generateCalendar = ({
       );
     })
     .forEach(specialSession => {
-      const sessionWeekOf = createDateAtStartOfWeekEST(
-        specialSession.startDate,
-        FORMATS.YYYYMMDD,
-      );
+      // Get all weeks that should be blocked for this special session
+      const weeksToBlock = getWeeksToBlockForSpecialSession(specialSession);
 
-      const scheduledTrialSession: ScheduledTrialSession = {
-        sessionType: SESSION_TYPES.special,
-        trialLocation: getTrialLocationForSpecialSession({
+      // Process each week that needs to be blocked
+      weeksToBlock.forEach(weekToBlock => {
+        const scheduledTrialSession: ScheduledTrialSession = {
+          sessionType: SESSION_TYPES.special,
+          trialLocation: getTrialLocationForSpecialSession({
+            calendarState,
+            calendaringConfig,
+            originalLocation: specialSession.trialLocation!,
+            sessionWeekOf: weekToBlock,
+          }),
+          weekOf: weekToBlock,
+        };
+
+        const messages = checkConstraints({
           calendarState,
           calendaringConfig,
-          originalLocation: specialSession.trialLocation!,
-          sessionWeekOf,
-        }),
-        weekOf: sessionWeekOf,
-      };
+          constraints,
+          scheduledTrialSession,
+        }).filter(r => {
+          return typeof r === 'string';
+        });
 
-      const messages = checkConstraints({
-        calendarState,
-        calendaringConfig,
-        constraints,
-        scheduledTrialSession,
-      }).filter(r => {
-        return typeof r === 'string';
-      });
+        /**
+         * Any given item in the messages array represents an ignored constraint.
+         * For business reasons, not all constraints trigger a formatting change
+         * in the resulting spreadsheet: therefore, only two specific categories
+         * of ignored constraints will cause the session to have ignoresConstraints
+         * set to true.
+         */
+        messages.forEach(message => {
+          if (
+            message.startsWith(
+              'More than one special trial per week scheduled:',
+            ) ||
+            message.startsWith('More than two special trial sessions per week:')
+          ) {
+            scheduledTrialSession.ignoresConstraints = true;
+          }
+        });
 
-      /**
-       * Any given item in the messages array represents an ignored constraint.
-       * For business reasons, not all constraints trigger a formatting change
-       * in the resulting spreadsheet: therefore, only two specific categories
-       * of ignored constraints will cause the session to have ignoresConstraints
-       * set to true.
-       */
-      messages.forEach(message => {
-        if (
-          message.startsWith(
-            'More than one special trial per week scheduled:',
-          ) ||
-          message.startsWith('More than two special trial sessions per week:')
-        ) {
-          scheduledTrialSession.ignoresConstraints = true;
-        }
-      });
+        userMessages.push(...messages);
 
-      userMessages.push(...messages);
-
-      addSpecialScheduledTrialSession({
-        calendarState,
-        caseCountsAndSessionsByCity,
-        scheduledTrialSession,
-        weeksToLoop,
+        addSpecialScheduledTrialSession({
+          calendarState,
+          caseCountsAndSessionsByCity,
+          scheduledTrialSession,
+          weeksToLoop,
+          weekToBlock,
+          weeksToBlock,
+        });
       });
     });
 
@@ -312,22 +316,30 @@ const addSpecialScheduledTrialSession = ({
   caseCountsAndSessionsByCity,
   scheduledTrialSession,
   weeksToLoop,
+  weekToBlock,
+  weeksToBlock,
 }: {
   scheduledTrialSession: ScheduledTrialSession;
   weeksToLoop: string[];
   calendarState: CalendarState;
   caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity;
+  weekToBlock: string;
+  weeksToBlock: string[];
 }) => {
   addScheduledTrialSession({
     calendarState,
     caseCountsAndSessionsByCity,
     scheduledTrialSession,
   });
-  reserveWeekAfterSpecialSession({
-    calendarState,
-    session: scheduledTrialSession,
-    weeksToLoop,
-  });
+
+  const isLastWeek = weekToBlock === weeksToBlock[weeksToBlock.length - 1];
+  if (isLastWeek) {
+    reserveWeekAfterSpecialSession({
+      calendarState,
+      session: scheduledTrialSession,
+      weeksToLoop,
+    });
+  }
 };
 
 const addNonSpecialTrialSession = ({
@@ -364,4 +376,22 @@ const addNonSpecialTrialSession = ({
       prospectiveSession.trialLocation
     ].prospectiveSessions.splice(index, 1);
   }
+};
+
+const getWeeksToBlockForSpecialSession = (
+  specialSession: RawTrialSession,
+): string[] => {
+  const startWeek = createDateAtStartOfWeekEST(
+    specialSession.startDate,
+    FORMATS.YYYYMMDD,
+  );
+
+  if (!specialSession.estimatedEndDate) {
+    return [startWeek];
+  }
+
+  return getWeeksInRange({
+    startDate: specialSession.startDate,
+    endDate: specialSession.estimatedEndDate,
+  });
 };
