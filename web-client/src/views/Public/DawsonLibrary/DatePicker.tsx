@@ -38,6 +38,7 @@ interface DateRangePickerProps {
   omitFormGroupClass?: boolean;
   parentModalHasMounted?: boolean;
   allowFutureDates?: boolean;
+  vertical?: boolean;
 }
 
 export function DateRangePicker({
@@ -53,7 +54,7 @@ export function DateRangePicker({
   endDateErrorText,
   maxDate: _maxDate,
   minDate: _minDate,
-  showDateHint = false,
+  showDateHint = true,
   onChangeStart,
   onChangeEnd,
   onBlurStart: _onBlurStart,
@@ -68,6 +69,7 @@ export function DateRangePicker({
   omitFormGroupClass: _omitFormGroupClass = false,
   parentModalHasMounted: _parentModalHasMounted = false,
   allowFutureDates: _allowFutureDates = false,
+  vertical = true,
 }: Readonly<DateRangePickerProps>) {
   const [open, setOpen] = React.useState(false);
   const [dateRange, setDateRange] = React.useState<
@@ -211,31 +213,63 @@ export function DateRangePicker({
   };
 
   return (
-    <div className={`tw:flex tw:flex-col tw:gap-3 ${className || ''}`}>
+    <div
+      className={
+        vertical
+          ? `tw:flex tw:flex-col tw:gap-3 ${className || ''}`
+          : `tw:flex tw:100 tw:flex-col tw:gap-3 ${className || ''}`
+      }
+    >
       <Popover open={open} onOpenChange={setOpen}>
         <div className={`tw:flex tw:gap-3 ${rangePickerCls || ''}`}>
           {/* Start Date Picker */}
           <div
             className={`tw:flex tw:flex-col tw:gap-2 ${startPickerCls || ''}`}
           >
-            <Label htmlFor={startName} className="tw:px-1">
-              {startLabel}
-              {showDateHint && (
-                <span className="tw:text-sm tw:text-gray-500">
-                  {' '}
-                  (MM/DD/YYYY)
-                </span>
-              )}
-            </Label>
-            <PopoverTrigger asChild>
-              <Button
-                variant="secondary"
-                id={startName}
-                className="tw:w-full md:tw:w-[20rem] lg:tw:w-[24rem] tw:justify-start tw:font-normal tw:hover:bg-gray-50 tw:hover:border-gray-300 tw:transition-colors tw:duration-150 tw:text-left tw:min-h-[2.5rem]"
-              >
-                <span className="tw:text-gray-700">{getDisplayText()}</span>
-              </Button>
-            </PopoverTrigger>
+            {vertical ? (
+              <>
+                <Label htmlFor={startName} className="tw:block tw:px-1">
+                  {startLabel}
+                  {showDateHint && (
+                    <span className="tw:block tw:text-sm tw:text-gray-500">
+                      {' '}
+                      (MM/DD/YYYY)
+                    </span>
+                  )}
+                </Label>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="secondary"
+                    id={startName}
+                    className="tw:w-full md:tw:w-[20rem] lg:tw:w-[24rem] tw:justify-start tw:font-normal tw:hover:bg-gray-50 tw:hover:border-gray-300 tw:transition-colors tw:duration-150 tw:text-left tw:min-h-[2.5rem]"
+                  >
+                    <span className="tw:text-gray-700">{getDisplayText()}</span>
+                  </Button>
+                </PopoverTrigger>
+              </>
+            ) : (
+              <div className="tw:flex tw:items-start tw:gap-2">
+                <div className="tw:flex tw:flex-col tw:gap-0.5">
+                  <Label htmlFor={startName} className="tw:px-1">
+                    {startLabel}
+                  </Label>
+                  {showDateHint && (
+                    <span className="tw:block tw:text-sm tw:text-gray-500 tw:px-1">
+                      (MM/DD/YYYY)
+                    </span>
+                  )}
+                </div>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="secondary"
+                    id={startName}
+                    className="tw:w-full md:tw:w-[20rem] lg:tw:w-[24rem] tw:justify-start tw:font-normal tw:hover:bg-gray-50 tw:hover:border-gray-300 tw:transition-colors tw:duration-150 tw:text-left tw:min-h-[2.5rem]"
+                  >
+                    <span className="tw:text-gray-700">{getDisplayText()}</span>
+                  </Button>
+                </PopoverTrigger>
+              </div>
+            )}
             {(startDateErrorText || endDateErrorText) && (
               <span className="tw:text-red-500 tw:text-sm">
                 {startDateErrorText || endDateErrorText}

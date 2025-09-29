@@ -24,6 +24,11 @@ export const DawsonLibrary = () => {
             startLabel={'Single Date (optional)'}
             mode={'single'}
           />
+          <DateRangePicker
+            startLabel={'Single Date (optional)'}
+            mode={'single'}
+            vertical={false}
+          />
         </div>
       </div>
     </>
