@@ -5,6 +5,7 @@ import { ConfirmInitiateSaveModal } from '../ConfirmInitiateSaveModal';
 import { ConfirmInitiateServiceModal } from '../ConfirmInitiateServiceModal';
 import { CourtIssuedNonstandardForm } from './CourtIssuedNonstandardForm';
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { DocumentDisplayIframe } from '../DocumentDisplayIframe';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
@@ -153,17 +154,16 @@ export const CourtIssuedDocketEntry = connect(
                 </FormGroup>
 
                 {form.eventCode && <CourtIssuedNonstandardForm />}
-
-                {form.documentType === 'Order' && (
+                {DocketEntry.isOrder(form.eventCode) && (
                   <FormGroup errorText={validationErrors.attachments}>
                     <fieldset className="usa-fieldset">
                       {/* <legend className="usa-legend"></legend> */}
                       <div className="usa-checkbox">
                         <input
-                          checked={form.attachments}
+                          checked={form.dispositionOrder || false}
                           className="usa-checkbox__input"
-                          id="disposition-order"
-                          name="disposition-order"
+                          id="dispositionOrder"
+                          name="dispositionOrder"
                           type="checkbox"
                           onChange={e => {
                             updateCourtIssuedDocketEntryFormValueSequence({
@@ -176,9 +176,9 @@ export const CourtIssuedDocketEntry = connect(
                         />
                         <label
                           className="usa-checkbox__label"
-                          htmlFor="disposition-order"
+                          htmlFor="dispositionOrder"
                         >
-                          This order acts on atleast one motion
+                          This order acts on at least one motion
                         </label>
                       </div>
                     </fieldset>

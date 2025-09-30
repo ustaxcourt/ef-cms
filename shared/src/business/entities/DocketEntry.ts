@@ -586,8 +586,9 @@ export class DocketEntry extends JoiValidationEntity {
   static isOpinion(eventCode: string): boolean {
     return OPINION_EVENT_CODES_WITH_BENCH_OPINION.includes(eventCode);
   }
-
+  // TODO (#8546): remove console.log after investigation
   static isOrder(eventCode: string): boolean {
+    console.log(`isOrder check for eventCode ${eventCode}`);
     return ORDER_EVENT_CODES.includes(eventCode);
   }
 

@@ -418,7 +418,6 @@ export const ADVANCED_SEARCH_OPINION_TYPES_LIST = [
     label: 'Bench Opinion (Order of Service of Transcript)',
   },
 ];
-
 export const ORDER_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(
   d => d.isOrder && d.eventCode !== BENCH_OPINION_EVENT_CODE,
 ).map(pickEventCode);

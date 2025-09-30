@@ -10,6 +10,7 @@ export const setFormValueAction = ({
   key: string;
   value: any;
 }>) => {
+  console.log('setFormValueAction', { props });
   const { allowEmptyString, index, key, root, value } = props;
   const stateRoot = root || 'form';
 
@@ -22,4 +23,5 @@ export const setFormValueAction = ({
   }
 
   store.set(state[stateRoot][key], value);
+  console.log(`setFormValueAction complete`, { stateRoot, key, value });
 };
