@@ -514,12 +514,12 @@ describe('generateCalendar', () => {
       startDate,
     });
 
-    const weeksToLoop = getWeeksInRange({
+    const additionalWeeks = getWeeksInRange({
       startDate,
       endDate: estimatedEndDate,
     });
 
-    const allWeeksToLoop = [...mockWeeksToLoop, ...weeksToLoop];
+    const allWeeksToLoop = [...mockWeeksToLoop, ...additionalWeeks];
 
     const mockSpecialTrialSession = {
       ...mockTrialSession,

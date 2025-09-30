@@ -72,18 +72,19 @@ export const generateCalendar = ({
       );
     })
     .forEach(specialSession => {
-      const weeksToBlock = getWeeksToBlockForSpecialSession(specialSession);
+      const weeksToSchedule =
+        getWeeksToScheduleForSpecialSession(specialSession);
 
-      weeksToBlock.forEach(weekToBlock => {
+      weeksToSchedule.forEach(currentWeek => {
         const scheduledTrialSession: ScheduledTrialSession = {
           sessionType: SESSION_TYPES.special,
           trialLocation: getTrialLocationForSpecialSession({
             calendarState,
             calendaringConfig,
             originalLocation: specialSession.trialLocation!,
-            sessionWeekOf: weekToBlock,
+            sessionWeekOf: currentWeek,
           }),
-          weekOf: weekToBlock,
+          weekOf: currentWeek,
         };
 
         const messages = checkConstraints({
@@ -120,8 +121,8 @@ export const generateCalendar = ({
           caseCountsAndSessionsByCity,
           scheduledTrialSession,
           weeksToLoop,
-          weekToBlock,
-          weeksToBlock,
+          currentWeek,
+          allWeeks: weeksToSchedule,
         });
       });
     });
@@ -319,15 +320,15 @@ const addSpecialScheduledTrialSession = ({
   caseCountsAndSessionsByCity,
   scheduledTrialSession,
   weeksToLoop,
-  weekToBlock,
-  weeksToBlock,
+  currentWeek,
+  allWeeks,
 }: {
   scheduledTrialSession: ScheduledTrialSession;
   weeksToLoop: IsoDateRange[];
   calendarState: CalendarState;
   caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity;
-  weekToBlock: string;
-  weeksToBlock: string[];
+  currentWeek: string;
+  allWeeks: string[];
 }) => {
   addScheduledTrialSession({
     calendarState,
@@ -335,7 +336,7 @@ const addSpecialScheduledTrialSession = ({
     scheduledTrialSession,
   });
 
-  const isLastWeek = weekToBlock === weeksToBlock[weeksToBlock.length - 1];
+  const isLastWeek = currentWeek === allWeeks[allWeeks.length - 1];
   if (isLastWeek) {
     reserveWeekAfterSpecialSession({
       calendarState,
@@ -381,7 +382,7 @@ const addNonSpecialTrialSession = ({
   }
 };
 
-const getWeeksToBlockForSpecialSession = (
+const getWeeksToScheduleForSpecialSession = (
   specialSession: RawTrialSession,
 ): string[] => {
   const startWeek = createDateAtStartOfWeekEST(
@@ -393,8 +394,10 @@ const getWeeksToBlockForSpecialSession = (
     return [startWeek];
   }
 
-  return getWeeksInRange({
+  const weekRanges = getWeeksInRange({
     startDate: specialSession.startDate,
     endDate: specialSession.estimatedEndDate,
-  }).map(week => week.start);
+  });
+
+  return weekRanges.map(week => week.start);
 };
