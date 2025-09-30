@@ -504,7 +504,10 @@ describe('generateCalendar', () => {
     const mockCaseCountsAndSessionsByCity =
       getMockCaseCountsAndSessionsByCity();
 
-    const startDate = createISODateString(mockWeekString, FORMATS.YYYYMMDD);
+    const startDate = createISODateString(
+      mockWeekStringStart,
+      FORMATS.YYYYMMDD,
+    );
     const estimatedEndDate = getBusinessDateInFuture({
       numberOfDays: 14,
       outputFormat: FORMATS.YYYYMMDD,
