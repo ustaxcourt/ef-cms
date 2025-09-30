@@ -4,6 +4,7 @@ import { WorkQueueAssignments } from './WorkQueueAssignments';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import { Case } from '@shared/business/entities/cases/Case';
 
 interface ConsolidatedWorkItem {
   key: string;
@@ -95,6 +96,10 @@ export const SectionWorkQueueOutbox = connect(
               memberCasesUnique.push(c);
             }
           });
+
+          memberCasesUnique.sort((a: any, b: any) => {
+            return Case.docketNumberSort(a.docketNumber, b.docketNumber);
+          })
 
           return {
             key: `${group.lead}-${docGroup.key}`,
@@ -194,20 +199,6 @@ export const SectionWorkQueueOutbox = connect(
                     <div className="grouped-cases-row">
                       <div className="member-case-links">
                         {workItem.memberCasesUnique
-                          .sort((a: any, b: any) => {
-                            if (a.inLeadCase && !b.inLeadCase) return -1;
-                            if (!a.inLeadCase && b.inLeadCase) return 1;
-                            const [an, ay] = (a.docketNumber || '').split('-');
-                            const [bn, by] = (b.docketNumber || '').split('-');
-                            const ani = parseInt(an, 10);
-                            const bni = parseInt(bn, 10);
-                            if (ani !== bni)
-                              return (
-                                (isNaN(ani) ? Number.MAX_SAFE_INTEGER : ani) -
-                                (isNaN(bni) ? Number.MAX_SAFE_INTEGER : bni)
-                              );
-                            return (ay || '').localeCompare(by || '');
-                          })
                           .map((c: any) => (
                             <div
                               key={c.docketNumber}

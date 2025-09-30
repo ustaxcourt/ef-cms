@@ -8,6 +8,7 @@ import React from 'react';
 
 type WorkQueueAssignmentsProps = {
   users: RawUser[];
+  count: number;
 };
 
 const workQueueAssignmentsDeps = {
@@ -32,6 +33,7 @@ export const WorkQueueAssignments = connect<
     selectedWorkItemsLength,
     users,
     workQueueHelper,
+    count,
   }) {
     return (
       <React.Fragment>
@@ -105,9 +107,7 @@ export const WorkQueueAssignments = connect<
             </div>
             <div className="push-right margin-top-4">
               <b className="text-semibold">Count:</b>{' '}
-              {workQueueHelper.currentBoxView === 'outbox'
-                ? workQueueHelper.outboxRenderedRowCount || 0
-                : formattedWorkQueue.length}
+              {count !== undefined ? count : formattedWorkQueue.length}
             </div>
           </>
         ) : (

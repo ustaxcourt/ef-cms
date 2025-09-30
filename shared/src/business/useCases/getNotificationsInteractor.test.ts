@@ -146,7 +146,6 @@ describe('getNotificationsInteractor', () => {
       qcIndividualInboxCount: 1,
       qcSectionInProgressCount: 1,
       qcSectionInboxCount: 3,
-      qcUnreadCount: 0,
       unreadMessageCount: 0,
       userInboxCount: 1,
       userSectionCount: 2,
@@ -188,21 +187,6 @@ describe('getNotificationsInteractor', () => {
     expect(result.userSectionCount).toEqual(2);
   });
 
-  it('returns an accurate unread count for legacy items marked complete', async () => {
-    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
-      role: ROLES.docketClerk,
-      section: DOCKET_SECTION,
-      userId: mockDocketClerkUser.userId,
-    });
-
-    const result = await getNotificationsInteractor(
-      applicationContext,
-      { judgeId: '123456', section: DOCKET_SECTION },
-      mockDocketClerkUser,
-    );
-
-    expect(result.qcUnreadCount).toEqual(1);
-  });
 
   it('returns the qcIndividualInProgressCount for qc individual items with isFileAttached true and a judgeId supplied', async () => {
     applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({

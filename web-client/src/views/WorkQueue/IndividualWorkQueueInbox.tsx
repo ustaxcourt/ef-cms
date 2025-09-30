@@ -39,10 +39,10 @@ export const IndividualWorkQueueInbox = connect(
               <th>Case Status</th>
             </tr>
           </thead>
-          {formattedWorkQueue.map(item => {
-            return (
-              <tbody key={item.workItemId}>
-                <tr>
+          <tbody >
+            {formattedWorkQueue.map(item => {
+              return (
+                <tr key={item.workItemId}>
                   <td className="consolidated-case-column">
                     {item.groupedCases ? (
                       <div
@@ -88,35 +88,7 @@ export const IndividualWorkQueueInbox = connect(
                     {item.groupedCases ? (
                       <div className="grouped-cases-row">
                         <div className="member-case-links">
-                          {[
-                            {
-                              docketNumber: item.docketNumber,
-                              docketNumberWithSuffix: (item as any)
-                                .docketNumberWithSuffix,
-                              inLeadCase: item.inLeadCase,
-                            },
-                            ...item.groupedCases.filter(
-                              (c: any) => c.docketNumber !== item.docketNumber,
-                            ),
-                          ]
-                            .sort((a: any, b: any) => {
-                              if (a.inLeadCase && !b.inLeadCase) return -1;
-                              if (!a.inLeadCase && b.inLeadCase) return 1;
-                              const [an, ay] = (a.docketNumber || '').split(
-                                '-',
-                              );
-                              const [bn, by] = (b.docketNumber || '').split(
-                                '-',
-                              );
-                              const ani = parseInt(an, 10);
-                              const bni = parseInt(bn, 10);
-                              if (ani !== bni)
-                                return (
-                                  (isNaN(ani) ? Number.MAX_SAFE_INTEGER : ani) -
-                                  (isNaN(bni) ? Number.MAX_SAFE_INTEGER : bni)
-                                );
-                              return (ay || '').localeCompare(by || '');
-                            })
+                          {item.groupedCases
                             .map((c: any) => (
                               <div
                                 key={c.docketNumber}
@@ -177,9 +149,9 @@ export const IndividualWorkQueueInbox = connect(
                     {item.formattedCaseStatus}
                   </td>
                 </tr>
-              </tbody>
-            );
-          })}
+              );
+            })}
+          </tbody>
         </table>
         {formattedWorkQueue.length === 0 && <p>There are no documents.</p>}
       </React.Fragment>
