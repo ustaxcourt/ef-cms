@@ -42,11 +42,8 @@ export const SectionWorkQueueOutbox = connect(
 
         // Group items by document title
         group.items.forEach((it: any) => {
-          const docTitle =
-            (it.docketEntry && it.docketEntry.descriptionDisplay) ||
-            (it.docketEntry && it.docketEntry.documentType) ||
-            'Document';
-          const key = docTitle;
+          const docketEntryId = it.docketEntry && it.docketEntry.docketEntryId;
+          const key = docketEntryId || 'unknown';
           if (!docGroups[key]) {
             docGroups[key] = { key, items: [it] };
           } else {

@@ -64,17 +64,17 @@ export const IndividualWorkQueueOutbox = connect(
 
               const memberCases = leaderWithGrouped
                 ? [
-                    {
-                      docketNumber: leadItemForIcons.docketNumber,
-                      docketNumberWithSuffix:
-                        leadItemForIcons.docketNumberWithSuffix,
-                      inLeadCase: leadItemForIcons.inLeadCase,
-                    },
-                    ...leadItemForIcons.groupedCases.filter(
-                      (c: any) =>
-                        c.docketNumber !== leadItemForIcons.docketNumber,
-                    ),
-                  ]
+                  {
+                    docketNumber: leadItemForIcons.docketNumber,
+                    docketNumberWithSuffix:
+                      leadItemForIcons.docketNumberWithSuffix,
+                    inLeadCase: leadItemForIcons.inLeadCase,
+                  },
+                  ...leadItemForIcons.groupedCases.filter(
+                    (c: any) =>
+                      c.docketNumber !== leadItemForIcons.docketNumber,
+                  ),
+                ]
                 : group.items;
 
               const memberCasesUnique: any[] = [];
@@ -90,11 +90,8 @@ export const IndividualWorkQueueOutbox = connect(
               const docGroups: Record<string, { key: string; items: any[] }> =
                 {};
               group.items.forEach((it: any) => {
-                const docTitle =
-                  (it.docketEntry && it.docketEntry.descriptionDisplay) ||
-                  (it.docketEntry && it.docketEntry.documentType) ||
-                  'Document';
-                const key = docTitle;
+                const docketEntryId = it.docketEntry && it.docketEntry.docketEntryId;
+                const key = docketEntryId || 'unknown';
                 if (!docGroups[key]) {
                   docGroups[key] = { key, items: [it] };
                 } else {
@@ -123,17 +120,17 @@ export const IndividualWorkQueueOutbox = connect(
                 const memberCasesForDoc =
                   leadItemForIcons && leadItemForIcons.groupedCases
                     ? [
-                        {
-                          docketNumber: leadItemForIcons.docketNumber,
-                          docketNumberWithSuffix:
-                            leadItemForIcons.docketNumberWithSuffix,
-                          inLeadCase: leadItemForIcons.inLeadCase,
-                        },
-                        ...leadItemForIcons.groupedCases.filter(
-                          (c: any) =>
-                            c.docketNumber !== leadItemForIcons.docketNumber,
-                        ),
-                      ]
+                      {
+                        docketNumber: leadItemForIcons.docketNumber,
+                        docketNumberWithSuffix:
+                          leadItemForIcons.docketNumberWithSuffix,
+                        inLeadCase: leadItemForIcons.inLeadCase,
+                      },
+                      ...leadItemForIcons.groupedCases.filter(
+                        (c: any) =>
+                          c.docketNumber !== leadItemForIcons.docketNumber,
+                      ),
+                    ]
                     : docGroup.items;
 
                 const memberCasesUniqueForDoc: any[] = [];
@@ -217,7 +214,6 @@ export const IndividualWorkQueueOutbox = connect(
                               {memberCasesUniqueForDoc
                                 .sort((a: any, b: any) => {
                                   if (a.inLeadCase && !b.inLeadCase) return -1;
-                                  if (!a.inLeadCase && b.inLeadCase) return 1;
                                   const [an, ay] = (a.docketNumber || '').split(
                                     '-',
                                   );
