@@ -19,6 +19,7 @@ import {
   FORMATS,
   createISODateString,
   createDateAtStartOfWeekEST,
+  getWeeksInRange,
 } from '@shared/business/utilities/DateHandler';
 
 const mockRegularCityString = TRIAL_CITY_STRINGS[TRIAL_CITY_STRINGS.length - 1];
@@ -498,11 +499,25 @@ describe('generateCalendar', () => {
     const mockCaseCountsAndSessionsByCity =
       getMockCaseCountsAndSessionsByCity();
 
+    const startDate = createISODateString(mockWeekString, FORMATS.YYYYMMDD);
+    const estimatedEndDate = getBusinessDateInFuture({
+      numberOfDays: 14,
+      outputFormat: FORMATS.YYYYMMDD,
+      startDate,
+    });
+
+    const weeksToLoop = getWeeksInRange({
+      startDate,
+      endDate: estimatedEndDate,
+    });
+
+    const allWeeksToLoop = [...mockWeeksToLoop, ...weeksToLoop];
+
     const mockSpecialTrialSession = {
       ...mockTrialSession,
       sessionType: SESSION_TYPES.special,
       trialLocation: mockRegularCityString,
-      estimatedEndDate: createISODateString(mockWeekString),
+      estimatedEndDate,
     };
 
     const { caseCountsAndSessionsByCity } = generateCalendar({
@@ -510,12 +525,12 @@ describe('generateCalendar', () => {
       caseCountsAndSessionsByCity: mockCaseCountsAndSessionsByCity,
       constraints: [createMockConstraint(true)],
       specialSessions: [mockSpecialTrialSession],
-      weeksToLoop: mockWeeksToLoop,
+      weeksToLoop: allWeeksToLoop,
     });
 
     expect(
       caseCountsAndSessionsByCity[mockRegularCityString].scheduledSessions
         .length,
-    ).toEqual(1);
+    ).toBeGreaterThan(1);
   });
 });
