@@ -12,11 +12,6 @@ export const batchDownloadTrialSessionInteractor = (
   applicationContext,
   { trialSessionId, clientConnectionId },
 ) => {
-  console.log(
-    'batchDownloadTrialSessionProxy',
-    trialSessionId,
-    clientConnectionId,
-  );
   return get({
     applicationContext,
     params: { clientConnectionId },

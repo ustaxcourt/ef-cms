@@ -14,8 +14,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { generateValidDocketEntryFilename } from '@web-api/business/useCases/trialSessions/batchDownloadTrialSessionInteractor';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-// import { displayFakeProgressBarUntilBatchBootsUp } from '../trialSessions/displayFakeProgressBarUntilBatchBootsUp';
-import { pollAWSBatchProgress } from '@web-api/dispatchers/batch/sendZipperBatchJob';
+import { pollAWSBatchProgress } from '@web-api/dispatchers/batch/pollAWSBatchProgress';
 
 export type DownloadDocketEntryRequestType = {
   documentsSelectedForDownload: string[];
@@ -181,12 +180,6 @@ const batchDownloadDocketEntriesHelper = async (
         authorizedUser.userId,
       );
 
-    // do polling until the batch job is complete, then send notification that it is ready
-    // await displayFakeProgressBarUntilBatchBootsUp(
-    //   applicationContext,
-    //   clientConnectionId,
-    //   authorizedUser,
-    // );
     await pollAWSBatchProgress({
       applicationContext,
       jobId: response.jobId as string,

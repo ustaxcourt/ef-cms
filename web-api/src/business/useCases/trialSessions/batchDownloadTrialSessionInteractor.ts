@@ -16,9 +16,8 @@ import { padStart } from 'lodash';
 import sanitize from 'sanitize-filename';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { getCalendaredCasesForTrialSession } from '@web-api/persistence/postgres/trialSessions/getCalendaredCasesForTrialSession';
-// import { displayFakeProgressBarUntilBatchBootsUp } from './displayFakeProgressBarUntilBatchBootsUp';
-import { pollAWSBatchProgress } from '@web-api/dispatchers/batch/sendZipperBatchJob';
 import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
+import { pollAWSBatchProgress } from '@web-api/dispatchers/batch/pollAWSBatchProgress';
 
 export const batchDownloadTrialSessionInteractor = async (
   applicationContext: ServerApplicationContext,
