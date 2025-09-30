@@ -16,7 +16,8 @@ import { padStart } from 'lodash';
 import sanitize from 'sanitize-filename';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { getCalendaredCasesForTrialSession } from '@web-api/persistence/postgres/trialSessions/getCalendaredCasesForTrialSession';
-import { displayFakeProgressBarUntilBatchBootsUp } from './displayFakeProgressBarUntilBatchBootsUp';
+// import { displayFakeProgressBarUntilBatchBootsUp } from './displayFakeProgressBarUntilBatchBootsUp';
+import { pollAWSBatchProgress } from '@web-api/dispatchers/batch/sendZipperBatchJob';
 
 export const batchDownloadTrialSessionInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -211,7 +212,7 @@ const batchDownloadTrialSessionInteractorHelper = async (
         useTempBucket: true,
       });
 
-      await applicationContext
+      const response = await applicationContext
         .getDispatchers()
         .sendZipperBatchJob(
           applicationContext,
@@ -221,11 +222,17 @@ const batchDownloadTrialSessionInteractorHelper = async (
           authorizedUser.userId,
         );
 
-      await displayFakeProgressBarUntilBatchBootsUp(
+      // await displayFakeProgressBarUntilBatchBootsUp(
+      //   applicationContext,
+      //   clientConnectionId,
+      //   authorizedUser,
+      // );
+
+      await pollAWSBatchProgress({
         applicationContext,
-        clientConnectionId,
-        authorizedUser,
-      );
+        jobId: response.jobId as string,
+        onProgress,
+      });
 
       return;
     }
