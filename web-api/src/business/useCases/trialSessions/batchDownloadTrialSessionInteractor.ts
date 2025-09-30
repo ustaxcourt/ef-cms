@@ -208,8 +208,6 @@ const batchDownloadTrialSessionInteractorHelper = async (
   const awsBatchMinimumCount =
     featureFlags[ALLOWLIST_FEATURE_FLAGS.AWS_BATCH_ZIPPER_MINIMUM_COUNT.key];
 
-  console.log('awsBatchMinimumCount', awsBatchMinimumCount);
-
   const useAwsBatchMechanism =
     applicationContext.environment.stage !== 'local' &&
     !!awsBatchMinimumCount &&
