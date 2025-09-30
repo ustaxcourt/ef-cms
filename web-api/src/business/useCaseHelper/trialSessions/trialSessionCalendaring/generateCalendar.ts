@@ -393,10 +393,8 @@ const getWeeksToBlockForSpecialSession = (
     return [startWeek];
   }
 
-  const weeks = getWeeksInRange({
+  return getWeeksInRange({
     startDate: specialSession.startDate,
     endDate: specialSession.estimatedEndDate,
   });
-
-  return weeks;
 };
