@@ -14,7 +14,8 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { generateValidDocketEntryFilename } from '@web-api/business/useCases/trialSessions/batchDownloadTrialSessionInteractor';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { displayFakeProgressBarUntilBatchBootsUp } from '../trialSessions/displayFakeProgressBarUntilBatchBootsUp';
+// import { displayFakeProgressBarUntilBatchBootsUp } from '../trialSessions/displayFakeProgressBarUntilBatchBootsUp';
+import { pollAWSBatchProgress } from '@web-api/dispatchers/batch/sendZipperBatchJob';
 
 export type DownloadDocketEntryRequestType = {
   documentsSelectedForDownload: string[];
@@ -148,6 +149,19 @@ const batchDownloadDocketEntriesHelper = async (
     !!awsBatchMinimumCount &&
     documentsToZip.length > awsBatchMinimumCount;
 
+  const onProgress = async (progressData: ProgressData) => {
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      clientConnectionId,
+      message: {
+        action: 'batch_download_progress',
+        filesCompleted: progressData.filesCompleted,
+        totalFiles: progressData.totalFiles,
+      },
+      userId: authorizedUser.userId,
+    });
+  };
+
   if (useAwsBatchMechanism) {
     const UUID = applicationContext.getUniqueId();
     await applicationContext.getPersistenceGateway().uploadDocument({
@@ -157,7 +171,7 @@ const batchDownloadDocketEntriesHelper = async (
       useTempBucket: true,
     });
 
-    await applicationContext
+    const response = await applicationContext
       .getDispatchers()
       .sendZipperBatchJob(
         applicationContext,
@@ -167,12 +181,17 @@ const batchDownloadDocketEntriesHelper = async (
         authorizedUser.userId,
       );
 
-    //continue here
-    await displayFakeProgressBarUntilBatchBootsUp(
+    // do polling until the batch job is complete, then send notification that it is ready
+    // await displayFakeProgressBarUntilBatchBootsUp(
+    //   applicationContext,
+    //   clientConnectionId,
+    //   authorizedUser,
+    // );
+    await pollAWSBatchProgress({
       applicationContext,
-      clientConnectionId,
-      authorizedUser,
-    );
+      jobId: response.jobId as string,
+      onProgress,
+    });
 
     return;
   }
@@ -187,19 +206,6 @@ const batchDownloadDocketEntriesHelper = async (
     },
     userId: authorizedUser.userId,
   });
-
-  const onProgress = async (progressData: ProgressData) => {
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      clientConnectionId,
-      message: {
-        action: 'batch_download_progress',
-        filesCompleted: progressData.filesCompleted,
-        totalFiles: progressData.totalFiles,
-      },
-      userId: authorizedUser.userId,
-    });
-  };
 
   await applicationContext
     .getPersistenceGateway()
