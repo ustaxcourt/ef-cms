@@ -10,6 +10,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 import { InfoNotificationComponent } from '../InfoNotification';
+import { SIMULTANEOUS_DOCUMENT_EVENT_CODES } from '@shared/business/entities/EntityConstants';
 
 export const DocumentViewerDocument = connect(
   {
@@ -58,6 +59,14 @@ export const DocumentViewerDocument = connect(
       caseDetail?.leadDocketNumber &&
         caseDetail?.leadDocketNumber !== caseDetail?.docketNumber,
     );
+    const isSimultaneousDocType = Boolean(
+      viewerDocumentToDisplay &&
+        ((viewerDocumentToDisplay.eventCode &&
+          SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(
+            viewerDocumentToDisplay.eventCode,
+          )) ||
+          viewerDocumentToDisplay.documentTitle?.includes('Simultaneous')),
+    );
     return (
       <div
         className={classNames(
@@ -93,7 +102,7 @@ export const DocumentViewerDocument = connect(
                 alertInfo={{
                   message: (
                     <>
-                      The document can only be served from the <b>lead case</b>{' '}
+                      This document can only be served from the <b>lead case</b>{' '}
                       in a consolidated group. This is a member case.
                     </>
                   ),
@@ -142,22 +151,24 @@ export const DocumentViewerDocument = connect(
                 </Button>
               )}
 
-              {documentViewerHelper.showServePaperFiledDocumentButton && (
-                <Button
-                  link
-                  data-testid="serve-paper-filed-document"
-                  icon="paper-plane"
-                  iconColor="white"
-                  onClick={() => {
-                    openConfirmServePaperFiledDocumentSequence({
-                      docketEntryId: viewerDocumentToDisplay.docketEntryId,
-                      redirectUrl: documentViewerLinksHelper.documentViewerLink,
-                    });
-                  }}
-                >
-                  Serve
-                </Button>
-              )}
+              {documentViewerHelper.showServePaperFiledDocumentButton &&
+                !(isSimultaneousDocType && isMemberCase) && (
+                  <Button
+                    link
+                    data-testid="serve-paper-filed-document"
+                    icon="paper-plane"
+                    iconColor="white"
+                    onClick={() => {
+                      openConfirmServePaperFiledDocumentSequence({
+                        docketEntryId: viewerDocumentToDisplay.docketEntryId,
+                        redirectUrl:
+                          documentViewerLinksHelper.documentViewerLink,
+                      });
+                    }}
+                  >
+                    Serve
+                  </Button>
+                )}
 
               {documentViewerHelper.showServePetitionButton && (
                 <Button

@@ -2,7 +2,6 @@ import { ConsolidatedCasesCheckboxes } from './ConsolidatedCasesCheckboxes';
 import { Hint } from '../ustc-ui/Hint/Hint';
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -11,17 +10,20 @@ export const ConfirmInitiateServiceModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
     confirmInitiateServiceModalHelper: state.confirmInitiateServiceModalHelper,
-    confirmSequence: props.confirmSequence,
-    documentTitle: props.documentTitle,
+    additionalServedCases:
+      state.confirmInitiateServiceModalHelper.additionalServedCases,
     waitingForResponse: state.progressIndicator.waitingForResponse,
   },
-  function ConfirmInitiateServiceModal({
-    cancelSequence,
-    confirmInitiateServiceModalHelper,
-    confirmSequence,
-    documentTitle,
-    waitingForResponse,
-  }) {
+  function ConfirmInitiateServiceModal(props: any) {
+    const {
+      cancelSequence,
+      confirmInitiateServiceModalHelper,
+      waitingForResponse,
+      additionalServedCases,
+    } = props;
+
+    const confirmSequence = props.confirmSequence as any;
+    const documentTitle = props.documentTitle as any;
     let isSubmitDebounced = false;
 
     const debounceSubmit = timeout => {
@@ -52,6 +54,18 @@ export const ConfirmInitiateServiceModal = connect(
         <p className="margin-top-0 margin-bottom-2">
           <strong>{documentTitle}</strong>
         </p>
+        {additionalServedCases && additionalServedCases.length > 0 && (
+          <div className="margin-bottom-2">
+            <div>This document will also be served for:</div>
+            <ul className="padding-left-2">
+              {additionalServedCases.map(c => (
+                <li key={c.docketNumber}>
+                  {c.docketNumber} - {c.petitioners}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
         {confirmInitiateServiceModalHelper.showPaperAlert && (
           <Hint fullWidth className="block">
             <div className="margin-bottom-1">

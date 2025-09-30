@@ -98,7 +98,27 @@ export const serveExternallyFiledDocument = async (
     ) || originalSubjectDocketEntry.documentTitle?.includes('Simultaneous');
 
   if (subjectCaseIsSimultaneousDocType) {
-    docketNumbers = [subjectCaseDocketNumber];
+    if (
+      subjectCaseEntity.leadDocketNumber &&
+      subjectCaseEntity.leadDocketNumber !== subjectCaseEntity.docketNumber
+    ) {
+      const { leadDocketNumber } = subjectCaseEntity;
+      const leadCase = await getCaseByDocketNumber({
+        docketNumber: leadDocketNumber,
+      });
+
+      subjectCaseDocketNumber = leadDocketNumber;
+      docketNumbers = [
+        leadDocketNumber,
+        ...(leadCase.consolidatedCases || []).map(c => c.docketNumber),
+      ];
+    } else {
+      subjectCaseDocketNumber = subjectCase.docketNumber;
+      docketNumbers = [
+        subjectCaseDocketNumber,
+        ...(subjectCase.consolidatedCases || []).map(c => c.docketNumber),
+      ];
+    }
   } else {
     docketNumbers = [subjectCaseDocketNumber, ...docketNumbers];
   }

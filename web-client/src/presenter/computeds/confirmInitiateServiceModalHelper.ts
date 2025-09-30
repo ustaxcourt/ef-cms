@@ -50,6 +50,22 @@ export const confirmInitiateServiceModalHelper = (
     }
   }
 
+  let additionalServedCases: { docketNumber: string; petitioners: string }[] =
+    [];
+  if (
+    SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(eventCode) ||
+    documentTitle?.includes('Simultaneous')
+  ) {
+    if (Array.isArray(formattedCaseDetail.consolidatedCases)) {
+      additionalServedCases = formattedCaseDetail.consolidatedCases
+        .filter((c: any) => c.docketNumber !== formattedCaseDetail.docketNumber)
+        .map((c: any) => ({
+          docketNumber: c.docketNumber,
+          petitioners: (c.petitioners || []).map(p => p.name).join(', '),
+        }));
+    }
+  }
+
   const confirmationText = showConsolidatedCasesForService
     ? 'The following document will be served on all parties in selected cases:'
     : 'The following document will be served on all parties:';
@@ -132,6 +148,7 @@ export const confirmInitiateServiceModalHelper = (
     contactsNeedingPaperService,
     showConsolidatedCasesForService,
     showPaperAlert: contactsNeedingPaperService.length > 0,
+    additionalServedCases,
   };
 };
 
