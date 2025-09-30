@@ -54,16 +54,20 @@ async function main() {
           .where('documentType', 'is', null)
           .where('isDraft', 'is', false)
           .where('eventCode', '=', eventCode)
-          .execute();
+          .executeTakeFirst();
 
-        console.log('res', res);
+        const updatedForCode = Number(res?.numUpdatedRows ?? 0n);
 
-        const rowCount =
-          (res as unknown as { numUpdatedRows?: bigint | number })
-            ?.numUpdatedRows ?? 0;
-        totalUpdated += Number(rowCount);
+        if (updatedForCode > 0) {
+          console.log(
+            `eventCode=${eventCode} → "${documentType}": updated ${updatedForCode}`,
+          );
+        }
+
+        totalUpdated += updatedForCode;
       }
 
+      console.log(`TOTAL updated: ${totalUpdated}`);
       return { totalUpdated };
     });
     console.log('trxResult', trxResult);
