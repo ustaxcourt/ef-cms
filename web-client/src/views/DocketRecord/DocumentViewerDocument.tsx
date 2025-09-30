@@ -35,10 +35,12 @@ export const DocumentViewerDocument = connect(
     serveCourtIssuedDocumentSequence:
       sequences.serveCourtIssuedDocumentSequence,
     servePaperFiledDocumentSequence: sequences.servePaperFiledDocumentSequence,
+    user: state.user,
     showModal: state.modal.showModal,
     viewerDocumentToDisplay: state.viewerDocumentToDisplay,
   },
   function DocumentViewerDocument({
+    user,
     caseDetail,
     confirmWorkItemAlreadyCompleteSequence,
     documentViewerHelper,
@@ -67,6 +69,32 @@ export const DocumentViewerDocument = connect(
           )) ||
           viewerDocumentToDisplay.documentTitle?.includes('Simultaneous')),
     );
+
+    const canUserSeeLeadCaseBanner = () => {
+      const allowedRoles = [
+        'caseservicessupervisor',
+        'petitionsclerk',
+        'clerkofcourt',
+        'docketclerk',
+      ];
+      return user?.role && allowedRoles.includes(user.role.toLowerCase());
+    };
+
+    const isDocumentUnserved = () => {
+      return (
+        documentViewerHelper.showNotServed || !documentViewerHelper.servedLabel
+      );
+    };
+
+    const shouldShowLeadCaseBanner = () => {
+      return (
+        isMemberCase &&
+        isSimultaneousDocType &&
+        isDocumentUnserved() &&
+        canUserSeeLeadCaseBanner()
+      );
+    };
+
     return (
       <div
         className={classNames(
@@ -94,10 +122,7 @@ export const DocumentViewerDocument = connect(
               </div>
             )}
 
-            {!(
-              !caseDetail?.leadDocketNumber ||
-              caseDetail?.leadDocketNumber === caseDetail?.docketNumber
-            ) && (
+            {shouldShowLeadCaseBanner() && (
               <InfoNotificationComponent
                 alertInfo={{
                   message: (

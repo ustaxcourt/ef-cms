@@ -1,4 +1,4 @@
-import { Case, isLeadCase } from '@shared//business/entities/cases/Case';
+import { Case, isLeadCase } from '@shared/business/entities/cases/Case';
 import {
   DOCUMENT_RELATIONSHIPS,
   DOCUMENT_SERVED_MESSAGES,
