@@ -15,11 +15,21 @@ export const getDocumentQCInboxForUserAction = async ({
     },
   );
 
+  const workItemsNeedingGroups = workItems.filter(wi => {
+    if (!wi.leadDocketNumber) return false;
+
+    const hasLeadWorkItem = workItems.some(
+      other =>
+        other.docketEntryId === wi.docketEntryId &&
+        other.docketNumber === wi.leadDocketNumber,
+    );
+
+    return hasLeadWorkItem;
+  });
+
   const leadDocketNumbers = Array.from(
     new Set(
-      workItems
-        .filter(wi => !!wi.leadDocketNumber)
-        .map(wi => wi.leadDocketNumber!) as string[],
+      workItemsNeedingGroups.map(wi => wi.leadDocketNumber!) as string[],
     ),
   );
 
@@ -65,13 +75,19 @@ export const getDocumentQCInboxForUserAction = async ({
       if (g.groupedCases) byLead.set(g.leadDocketNumber, g.groupedCases);
     }
 
-    const workItemsWithGroups = workItems.map(wi => ({
-      ...wi,
-      groupedCases:
-        wi.leadDocketNumber && byLead.has(wi.leadDocketNumber)
-          ? byLead.get(wi.leadDocketNumber)
-          : undefined,
-    }));
+    const workItemsWithGroups = workItems.map(wi => {
+      const needsGroups = workItemsNeedingGroups.some(
+        needsGroup => needsGroup.workItemId === wi.workItemId,
+      );
+
+      return {
+        ...wi,
+        groupedCases:
+          needsGroups && wi.leadDocketNumber && byLead.has(wi.leadDocketNumber)
+            ? byLead.get(wi.leadDocketNumber)
+            : undefined,
+      };
+    });
 
     return { workItems: workItemsWithGroups };
   }

@@ -65,68 +65,56 @@ export const formattedWorkQueue = (
       workQueueToDisplay.queue === 'my') &&
     workQueueToDisplay.box === 'inbox'
   ) {
-    const anyPreGrouped = filtered.some(
-      (wi: any) =>
-        Array.isArray((wi as any).groupedCases) &&
-        (wi as any).groupedCases.length > 0,
-    );
-    if (anyPreGrouped) {
-      const groups = new Map<string, any[]>();
-      for (const wi of filtered as any[]) {
-        if (wi.leadDocketNumber && wi.groupedCases?.length) {
-          groups.set(wi.leadDocketNumber, wi.groupedCases);
-        }
-      }
-      filtered = (filtered as any[]).map(wi => {
-        if (wi.leadDocketNumber && groups.has(wi.leadDocketNumber)) {
-          return { ...wi, groupedCases: groups.get(wi.leadDocketNumber) };
-        }
-        return wi;
-      });
-    } else {
-      const consolidated: RawWorkItemWithCaseAndDocketEntryInfo[] = [];
-      const solo: RawWorkItemWithCaseAndDocketEntryInfo[] = [];
-      for (const wi of filtered) {
-        if (wi.leadDocketNumber) {
-          consolidated.push(wi);
-        } else {
-          solo.push(wi);
-        }
-      }
+    const consolidated: RawWorkItemWithCaseAndDocketEntryInfo[] = [];
+    const solo: RawWorkItemWithCaseAndDocketEntryInfo[] = [];
 
-      const byLead = new Map<string, RawWorkItemWithCaseAndDocketEntryInfo[]>();
-      for (const wi of consolidated) {
-        const key = wi.leadDocketNumber!;
-        if (!byLead.has(key)) byLead.set(key, []);
-        byLead.get(key)!.push(wi);
-      }
-
-      const consolidatedResult: Array<
-        RawWorkItemWithCaseAndDocketEntryInfo & { groupedCases?: any[] }
-      > = [];
-
-      for (const group of byLead.values()) {
-        const leadItems = group.filter(w => isLeadCase(w));
-
-        const groupedCases = uniqBy(group, g => g.docketNumber).map(g => ({
-          docketNumber: g.docketNumber,
-          docketNumberWithSuffix: (g as any).docketNumberWithSuffix,
-          inLeadCase: isLeadCase(g),
-        }));
-
-        if (leadItems.length > 0) {
-          for (const li of leadItems) {
-            consolidatedResult.push({ ...li, groupedCases });
-          }
-        } else {
-          for (const member of group) {
-            consolidatedResult.push({ ...member, groupedCases });
-          }
-        }
-      }
-
-      filtered = [...solo, ...consolidatedResult];
+    const docketEntryIdGroups = new Map<string, RawWorkItemWithCaseAndDocketEntryInfo[]>();
+    for (const wi of filtered) {
+      const key = wi.docketEntryId;
+      if (!docketEntryIdGroups.has(key)) docketEntryIdGroups.set(key, []);
+      docketEntryIdGroups.get(key)!.push(wi);
     }
+
+    for (const group of docketEntryIdGroups.values()) {
+      if (group.length === 1) {
+        solo.push(group[0]);
+      } else {
+        consolidated.push(...group);
+      }
+    }
+
+    const byLead = new Map<string, RawWorkItemWithCaseAndDocketEntryInfo[]>();
+    for (const wi of consolidated) {
+      const key = wi.leadDocketNumber!;
+      if (!byLead.has(key)) byLead.set(key, []);
+      byLead.get(key)!.push(wi);
+    }
+
+    const consolidatedResult: Array<
+      RawWorkItemWithCaseAndDocketEntryInfo & { groupedCases?: any[] }
+    > = [];
+
+    for (const group of byLead.values()) {
+      const leadItems = group.filter(w => isLeadCase(w));
+
+      const groupedCases = uniqBy(group, g => g.docketNumber).map(g => ({
+        docketNumber: g.docketNumber,
+        docketNumberWithSuffix: (g as any).docketNumberWithSuffix,
+        inLeadCase: isLeadCase(g),
+      }));
+
+      if (leadItems.length > 0) {
+        for (const li of leadItems) {
+          consolidatedResult.push({ ...li, groupedCases });
+        }
+      } else {
+        for (const member of group) {
+          consolidatedResult.push({ ...member, groupedCases });
+        }
+      }
+    }
+
+    filtered = [...solo, ...consolidatedResult];
   }
 
   let workQueue: FormattedWorkItemWithCaseInfo[] = filtered
