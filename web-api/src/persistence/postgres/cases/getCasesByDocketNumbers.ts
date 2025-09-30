@@ -284,8 +284,18 @@ async function getIrsPractitioners({
 async function getDocketEntries(docketNumbers: string[]) {
   const dbDocketEntries = await getDbReader(reader =>
     reader
-      .selectFrom('dwDocketEntry')
+      .selectFrom('dwDocketEntry as de')
       .where('docketNumber', 'in', docketNumbers)
+      .leftJoin('dwDocketEntryOrderMotion as deom', join =>
+        join
+          .onRef('de.docketEntryId', '=', eb =>
+            eb.cast('deom.motionDocketEntryId', 'varchar'),
+          )
+          .onRef('de.docketNumber', '=', 'deom.motionDocketNumber'),
+      )
+      .selectAll('de')
+      .select('deom.disposition as motionDisposition')
+      .select('deom.orderDocketEntryId')
       .selectAll()
       .execute(),
   );
@@ -309,8 +319,18 @@ export async function getDocketEntriesOnCases(
 ): Promise<DocketEntryKysely[]> {
   return getDbReader(reader =>
     reader
-      .selectFrom('dwDocketEntry')
+      .selectFrom('dwDocketEntry as de')
       .where('docketNumber', 'in', docketNumbers)
+      .leftJoin('dwDocketEntryOrderMotion as deom', join =>
+        join
+          .onRef('de.docketEntryId', '=', eb =>
+            eb.cast('deom.motionDocketEntryId', 'varchar'),
+          )
+          .onRef('de.docketNumber', '=', 'deom.motionDocketNumber'),
+      )
+      .selectAll('de')
+      .select('deom.disposition as motionDisposition')
+      .select('deom.orderDocketEntryId')
       .selectAll()
       .execute(),
   );

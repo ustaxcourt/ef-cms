@@ -29,6 +29,7 @@ import {
   RawCaseDeadline,
 } from '@shared/business/entities/CaseDeadline';
 import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
+import { upsertDocketEntryOrderMotions } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntryOrderMotion';
 // TODO (#8546): May want to alter this as well
 export const fileAndServeCourtIssuedDocument = async (
   applicationContext: ServerApplicationContext,
@@ -257,6 +258,18 @@ export const fileAndServeCourtIssuedDocument = async (
     );
 
     // TODO (#8546): Update docket entries here
+    if (form.isOrder && form.affectedMotions) {
+      await upsertDocketEntryOrderMotions({
+        orderDocketEntry: docketEntryToServe,
+        // name not final
+        motionDocketEntries: form.affectedMotions.map(entry => ({
+          docketEntryId: entry.docketEntryid,
+          docketNumber: entry.docketNumber,
+          disposition: entry.disposition,
+        })),
+        served: true,
+      });
+    }
 
     serviceResults = await applicationContext
       .getUseCaseHelpers()
