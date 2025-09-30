@@ -6,31 +6,24 @@ import classNames from 'classnames';
 
 export const FilingPartiesForm = connect(
   {
-    caseDetail: state.caseDetail,
     formattedCaseDetail: state.formattedCaseDetail,
     filingPartiesFormHelper: state.filingPartiesFormHelper,
     form: state.form,
     validationErrors: state.validationErrors,
   },
   function FilingPartiesForm({
-    caseDetail,
     formattedCaseDetail,
     filingPartiesFormHelper,
     form,
     validationErrors,
     updateSequence,
     validateSequence,
+    isMemberCase,
   }) {
     const petitioners =
       (formattedCaseDetail && formattedCaseDetail.petitioners) ||
       (caseDetail && caseDetail.petitioners) ||
       [];
-
-    const isMemberCase = !!(
-      caseDetail &&
-      caseDetail.leadDocketNumber &&
-      caseDetail.leadDocketNumber !== caseDetail.docketNumber
-    );
 
     return (
       <>
@@ -168,8 +161,8 @@ export const FilingPartiesForm = connect(
                           name="otherFilingParty"
                           type="text"
                           value={form.otherFilingParty || ''}
-                          disabled={isMemberCase}
                           onBlur={() => validateSequence()}
+                          disabled={isMemberCase}
                           onChange={e => {
                             updateSequence({
                               key: e.target.name,

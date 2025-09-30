@@ -14,7 +14,6 @@ export const Inclusions = connect(
       sequences.formatAndUpdateDateFromDatePickerSequence,
     marginClass: props.marginClass,
     updateSequence: sequences[props.updateSequence as any],
-    caseDetail: state.caseDetail,
     validateDocketEntrySequence: sequences.validateDocketEntrySequence,
     validationErrors: state.validationErrors,
   },
@@ -26,13 +25,8 @@ export const Inclusions = connect(
     updateSequence,
     validateDocketEntrySequence,
     validationErrors,
-    caseDetail,
+    isMemberCase,
   }) {
-    const isMemberCase = !!(
-      caseDetail &&
-      caseDetail.leadDocketNumber &&
-      caseDetail.leadDocketNumber !== caseDetail.docketNumber
-    );
     return (
       <div className={classNames('usa-form-group', marginClass)}>
         <fieldset className={classNames('usa-fieldset', marginClass)}>

@@ -261,11 +261,15 @@ export const EditDocketEntryMetaFormDocument = connect(
           />
         </FormGroup>
         <FormGroup>
-          <Inclusions updateSequence="updateDocketEntryMetaDocumentFormValueSequence" />
+          <Inclusions
+            updateSequence="updateDocketEntryMetaDocumentFormValueSequence"
+            isMemberCase={isMemberCase}
+          />
         </FormGroup>
         <FilingPartiesForm
           updateSequence={updateDocketEntryMetaDocumentFormValueSequence}
           validateSequence={validateDocumentSequence}
+          isMemberCase={isMemberCase}
         />
         {editDocketEntryMetaHelper.showObjection && (
           <FormGroup errorText={validationErrors.objections}>
