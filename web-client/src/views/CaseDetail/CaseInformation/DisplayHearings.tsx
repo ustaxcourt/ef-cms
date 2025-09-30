@@ -37,6 +37,7 @@ export const DisplayHearings = connect(
           {caseDetailHelper.showAddRemoveFromHearingButtons && (
             <td>
               <DropdownMenu
+                id={`hearing-edit-menu-${hearing.trialSessionId}`}
                 menuItems={[
                   {
                     click: () => {
@@ -55,6 +56,7 @@ export const DisplayHearings = connect(
                       });
                     },
                     label: 'Remove from Hearing',
+                    id: `remove-hearing-button-${hearing.trialSessionId}`,
                   },
                 ]}
                 menuState={`caseInformationHearingsEdit-${hearing.trialSessionId}`}

@@ -1,4 +1,4 @@
-name: Node.js Client Integration Tests
+name: Node.js Public Client Integration Tests
 
 on:
   pull_request:
@@ -72,6 +72,7 @@ jobs:
       - name: Setup Postgres
         run: |
           npm run migration:postgres
+          npm run migration:postgres:contract
           npm run seed:postgres
       - name: Web Client - Integration Tests Public
         run: |
