@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "node20",
     "allowJs": false,
     "noImplicitAny": false,
     "removeComments": true,
