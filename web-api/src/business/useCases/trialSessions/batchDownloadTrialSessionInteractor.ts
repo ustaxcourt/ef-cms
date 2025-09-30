@@ -18,6 +18,7 @@ import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions
 import { getCalendaredCasesForTrialSession } from '@web-api/persistence/postgres/trialSessions/getCalendaredCasesForTrialSession';
 // import { displayFakeProgressBarUntilBatchBootsUp } from './displayFakeProgressBarUntilBatchBootsUp';
 import { pollAWSBatchProgress } from '@web-api/dispatchers/batch/sendZipperBatchJob';
+import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
 
 export const batchDownloadTrialSessionInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -200,7 +201,19 @@ const batchDownloadTrialSessionInteractorHelper = async (
     .replace(/\s/g, '_')
     .replace(/,/g, '');
 
-  const useAwsBatchMechanism = applicationContext.environment.stage !== 'local';
+  const featureFlags = await applicationContext
+    .getUseCases()
+    .getAllFeatureFlagsInteractor(applicationContext, true);
+
+  const awsBatchMinimumCount =
+    featureFlags[ALLOWLIST_FEATURE_FLAGS.AWS_BATCH_ZIPPER_MINIMUM_COUNT.key];
+
+  console.log('awsBatchMinimumCount', awsBatchMinimumCount);
+
+  const useAwsBatchMechanism =
+    applicationContext.environment.stage !== 'local' &&
+    !!awsBatchMinimumCount &&
+    documentsToZip.length > awsBatchMinimumCount;
 
   try {
     if (useAwsBatchMechanism) {
@@ -221,12 +234,6 @@ const batchDownloadTrialSessionInteractorHelper = async (
           clientConnectionId,
           authorizedUser.userId,
         );
-
-      // await displayFakeProgressBarUntilBatchBootsUp(
-      //   applicationContext,
-      //   clientConnectionId,
-      //   authorizedUser,
-      // );
 
       await pollAWSBatchProgress({
         applicationContext,
