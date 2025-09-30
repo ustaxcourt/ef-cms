@@ -17,8 +17,6 @@ export const batchDownloadTrialSessionAction = async ({
   const clientConnectionId = get(state.clientConnectionId);
   const { trialSessionId } = get(state.trialSession);
 
-  console.log('clinetConnectionId', clientConnectionId);
-
   try {
     await applicationContext
       .getUseCases()
