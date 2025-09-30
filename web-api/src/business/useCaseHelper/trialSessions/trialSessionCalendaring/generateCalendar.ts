@@ -71,10 +71,8 @@ export const generateCalendar = ({
       );
     })
     .forEach(specialSession => {
-      // Get all weeks that should be blocked for this special session
       const weeksToBlock = getWeeksToBlockForSpecialSession(specialSession);
 
-      // Process each week that needs to be blocked
       weeksToBlock.forEach(weekToBlock => {
         const scheduledTrialSession: ScheduledTrialSession = {
           sessionType: SESSION_TYPES.special,
@@ -390,8 +388,10 @@ const getWeeksToBlockForSpecialSession = (
     return [startWeek];
   }
 
-  return getWeeksInRange({
+  const weeks = getWeeksInRange({
     startDate: specialSession.startDate,
     endDate: specialSession.estimatedEndDate,
   });
+
+  return weeks;
 };

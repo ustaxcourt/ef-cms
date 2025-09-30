@@ -492,4 +492,30 @@ describe('generateCalendar', () => {
         .scheduledSessions[0].trialLocation,
     ).toEqual(WASHINGTON_DC_SOUTH_STRING);
   });
+
+  it('Extend Special Sessions When End Date Present', () => {
+    const mockCalendaringConfig = getMockCalendaringConfig();
+    const mockCaseCountsAndSessionsByCity =
+      getMockCaseCountsAndSessionsByCity();
+
+    const mockSpecialTrialSession = {
+      ...mockTrialSession,
+      sessionType: SESSION_TYPES.special,
+      trialLocation: mockRegularCityString,
+      estimatedEndDate: createISODateString(mockWeekString),
+    };
+
+    const { caseCountsAndSessionsByCity } = generateCalendar({
+      calendaringConfig: mockCalendaringConfig,
+      caseCountsAndSessionsByCity: mockCaseCountsAndSessionsByCity,
+      constraints: [createMockConstraint(true)],
+      specialSessions: [mockSpecialTrialSession],
+      weeksToLoop: mockWeeksToLoop,
+    });
+
+    expect(
+      caseCountsAndSessionsByCity[mockRegularCityString].scheduledSessions
+        .length,
+    ).toEqual(1);
+  });
 });
