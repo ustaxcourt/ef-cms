@@ -1004,8 +1004,11 @@ workflows:
           <<: *only-test
           requires:
             - wait-for-glue-workflow
-            - wait-for-s3-sync-workflow
       - index-cases:
+          <<: *only-test
+          requires:
+            - migrate-restored-postgres-data
+      - index-users:
           <<: *only-test
           requires:
             - migrate-restored-postgres-data
@@ -1013,14 +1016,12 @@ workflows:
           <<: *only-test
           requires:
             - index-cases
-      - index-users:
-          <<: *only-test
-          requires:
-            - index-docket-entries
+            - index-users
       - cleanup-glue-job:
           <<: *only-test
           requires:
-            - index-users
+            - wait-for-s3-sync-workflow
+            - index-docket-entries
 
   glue-to-lower-env:
     when: << pipeline.parameters.run_glue_to_lower_env >>
