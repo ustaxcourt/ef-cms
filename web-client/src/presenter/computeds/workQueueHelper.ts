@@ -40,6 +40,7 @@ export const workQueueHelper = (
   showSendToBar: boolean;
   showStartPetitionButton: boolean;
   showSwitchToMyDocQCLink: boolean;
+  outboxRenderedRowCount: number;
   workQueueTitle: string;
 } => {
   const user = get(state.user);
@@ -102,6 +103,42 @@ export const workQueueHelper = (
   const showSwitchToMyDocQCLink =
     !isCaseServicesSupervisor && showSectionWorkQueue && showMyQueueToggle;
 
+  let outboxRenderedRowCount = 0;
+  try {
+    if (showOutbox) {
+      const formattedWorkQueue = get(state.formattedWorkQueue) || [];
+      outboxRenderedRowCount = formattedWorkQueue
+        .reduce((acc: any[], item: any) => {
+          const lead = item.leadDocketNumber || item.docketNumber;
+          const existing = acc.find(group => group.lead === lead);
+          if (existing) {
+            existing.items.push(item);
+          } else {
+            acc.push({ lead, items: [item] });
+          }
+          return acc;
+        }, [])
+        .reduce((rowAcc, group) => {
+          const docGroups: Record<string, any> = {};
+          group.items.forEach((it: any) => {
+            const docTitle =
+              (it.docketEntry && it.docketEntry.descriptionDisplay) ||
+              (it.docketEntry && it.docketEntry.documentType) ||
+              'Document';
+            const key = docTitle;
+            if (!docGroups[key]) {
+              docGroups[key] = { key, items: [it] };
+            } else {
+              docGroups[key].items.push(it);
+            }
+          });
+          return rowAcc + Object.keys(docGroups).length;
+        }, 0);
+    }
+  } catch (e) {
+    outboxRenderedRowCount = 0;
+  }
+
   return {
     currentBoxView: workQueueToDisplay.box,
     documentQCNavigationPath,
@@ -140,5 +177,6 @@ export const workQueueHelper = (
     showStartPetitionButton,
     showSwitchToMyDocQCLink,
     workQueueTitle,
+    outboxRenderedRowCount,
   };
 };
