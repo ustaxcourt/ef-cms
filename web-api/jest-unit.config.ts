@@ -61,7 +61,7 @@ const config: Config = {
     ...pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
       prefix: '<rootDir>/../',
     }),
-    uuid: require.resolve('uuid'),
+    '^uuid$': 'uuid',
   },
   testEnvironment: 'node',
   testPathIgnorePatterns: ['hostedEnvironmentTests'],

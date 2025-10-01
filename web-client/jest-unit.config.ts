@@ -1,6 +1,7 @@
 import { pathsToModuleNameMapper } from 'ts-jest';
 import type { Config } from 'jest';
 import { loadTsConfig } from '../utils/load-tsconfig.mjs';
+import path from 'node:path';
 
 const tsconfig = loadTsConfig('tsconfig.json');
 
@@ -38,16 +39,21 @@ const config: Config = {
     ...pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
       prefix: '<rootDir>/../',
     }),
-    uuid: require.resolve('uuid'),
+    '^uuid$': 'uuid',
   },
   setupFiles: ['core-js'],
-  testEnvironment: `${__dirname}/../web-client/JsdomWithTextEncoderEnvironment.ts`,
+  testEnvironment: path.resolve(
+    process.cwd(),
+    'web-client/JsdomWithTextEncoderEnvironment.ts',
+  ),
   // testMatch: ['**/web-client/src/**/?(*.)+(spec|test).[jt]s?(x)'], // Uncomment to run all local web-client unit tests.
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
-    '^.+\\.html?$': `${__dirname}/htmlLoader.js`, //this is to ignore imported html files
+    '^.+\\.html?$': `${process.cwd()}/htmlLoader.js`, //this is to ignore imported html files
   },
-  transformIgnorePatterns: ['/node_modules/(?!uuid|sinon|aws-sdk-client-mock|export-to-csv)'],
+  transformIgnorePatterns: [
+    '/node_modules/(?!uuid|sinon|aws-sdk-client-mock|export-to-csv)',
+  ],
   verbose: false,
   setupFilesAfterEnv: [
     '<rootDir>../web-api/src/persistence/postgres/featureFlag/mocks.jest.ts',
