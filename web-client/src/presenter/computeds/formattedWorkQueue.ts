@@ -68,7 +68,10 @@ export const formattedWorkQueue = (
     const consolidated: RawWorkItemWithCaseAndDocketEntryInfo[] = [];
     const solo: RawWorkItemWithCaseAndDocketEntryInfo[] = [];
 
-    const docketEntryIdGroups = new Map<string, RawWorkItemWithCaseAndDocketEntryInfo[]>();
+    const docketEntryIdGroups = new Map<
+      string,
+      RawWorkItemWithCaseAndDocketEntryInfo[]
+    >();
     for (const wi of filtered) {
       const key = wi.docketEntryId;
       if (!docketEntryIdGroups.has(key)) docketEntryIdGroups.set(key, []);
