@@ -154,20 +154,20 @@ export const CourtIssuedDocketEntry = connect(
                 </FormGroup>
 
                 {form.eventCode && <CourtIssuedNonstandardForm />}
+
                 {DocketEntry.isOrder(form.eventCode) && (
                   <FormGroup errorText={validationErrors.attachments}>
                     <fieldset className="usa-fieldset">
                       {/* <legend className="usa-legend"></legend> */}
                       <div className="usa-checkbox">
                         <input
-                          checked={form.dispositionOrder || false}
+                          checked={form.dispositionOrder || false} // false if undefined
                           className="usa-checkbox__input"
                           id="dispositionOrder"
                           name="dispositionOrder"
                           type="checkbox"
                           onChange={e => {
                             updateCourtIssuedDocketEntryFormValueSequence({
-                              // TODO (#8546): Connect this to form state
                               key: e.target.name,
                               value: e.target.checked,
                             });
@@ -182,6 +182,88 @@ export const CourtIssuedDocketEntry = connect(
                         </label>
                       </div>
                     </fieldset>
+                  </FormGroup>
+                )}
+                {/* TODO (#8546): Fix this */}
+                {form.dispositionOrder && (
+                  <FormGroup errorText={validationErrors.dispositionOrder}>
+                    <label
+                      className="usa-label"
+                      htmlFor="related-motion"
+                      id="related-motion-label"
+                    >
+                      What motion is being acted on?
+                    </label>
+                    <SelectSearch
+                      className="usa-label"
+                      aria-labelledby="related-motion-label"
+                      data-testid="related-motion-type-search"
+                      id="related-motion"
+                      isClearable={true}
+                      name="relatedMotion"
+                      options={addCourtIssuedDocketEntryHelper.relatedMotions}
+                      value={form.relatedMotion}
+                      onChange={inputValue => {
+                        // TODO (#8546): Refactor this to return eligable docket entries (motions)
+                        [
+                          'documentType',
+                          'documentTitle',
+                          'eventCode',
+                          'scenario',
+                        ].forEach(key =>
+                          updateCourtIssuedDocketEntryFormValueSequence({
+                            key,
+                            value: inputValue ? inputValue[key] : '',
+                          }),
+                        );
+                        validateCourtIssuedDocketEntrySequence();
+                      }}
+                      onInputChange={inputText => {
+                        updateCourtIssuedDocketEntryFormValueSequence({
+                          key: 'relatedMotionSearchText',
+                          value: inputText,
+                        });
+                      }}
+                    />
+                    <label
+                      className="usa-label"
+                      htmlFor="related-motion-disposition"
+                      id="related-motion-disposition-label"
+                    >
+                      What action is being taken?
+                    </label>
+                    <SelectSearch
+                      aria-labelledby="related-motion-disposition-label"
+                      data-testid="related-motion-disposition-type-search"
+                      id="related-motion-disposition"
+                      isClearable={true}
+                      name="relatedMotionDisposition"
+                      options={
+                        addCourtIssuedDocketEntryHelper.relatedMotionDispositions
+                      }
+                      value={form.relatedMotionDisposition}
+                      onChange={inputValue => {
+                        // TODO (#8546): Refactor this to return eligable docket entries (motions)
+                        [
+                          'documentType',
+                          'documentTitle',
+                          'eventCode',
+                          'scenario',
+                        ].forEach(key =>
+                          updateCourtIssuedDocketEntryFormValueSequence({
+                            key,
+                            value: inputValue ? inputValue[key] : '',
+                          }),
+                        );
+                        validateCourtIssuedDocketEntrySequence();
+                      }}
+                      onInputChange={inputText => {
+                        updateCourtIssuedDocketEntryFormValueSequence({
+                          key: 'relatedMotionSearchText',
+                          value: inputText,
+                        });
+                      }}
+                    />
                   </FormGroup>
                 )}
 
