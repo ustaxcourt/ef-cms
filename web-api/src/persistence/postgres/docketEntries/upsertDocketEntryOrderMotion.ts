@@ -10,7 +10,7 @@ export const upsertDocketEntryOrderMotions = async ({
   motionDocketEntries: {
     docketEntryId: string;
     docketNumber: string;
-    dispostion: string;
+    disposition: string;
   }[];
   served: boolean;
 }) => {
@@ -20,7 +20,7 @@ export const upsertDocketEntryOrderMotions = async ({
       orderDocketNumber: orderDocketEntry.docketNumber,
       motionDocketEntryId: entry.docketEntryId,
       motionDocketNumber: entry.docketNumber,
-      disposition: entry.dispostion,
+      disposition: entry.disposition,
       served,
     }),
   );

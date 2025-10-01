@@ -19,6 +19,30 @@ import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { upsertDocketEntryOrderMotions } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntryOrderMotion';
 
+export type FileCourtIssueDocketEntryForm = {
+  docketEntryId: string;
+  attachments: any[];
+  date: string;
+  docketNumber: string;
+  generatedDocumentTitle: string;
+  documentType: string;
+  eventCode: string;
+  filingDate: string;
+  freeText: string;
+  judge: string;
+  scenario: string;
+  serviceStamp: string;
+  trialLocation: string;
+  isOrder: boolean;
+  affectedMotions: {
+    docketEntryid: string;
+    docketNumber: string;
+    disposition: string;
+  }[];
+  orderType: string; //Used in fileAndServe function, but not file and serve functions
+  docketNumbers: string; //Used in fileAndServe function, but not file and serve functions
+};
+
 /**
  *
  * @param {object} applicationContext the application context
@@ -34,7 +58,7 @@ export const fileCourtIssuedDocketEntry = async (
     subjectDocketNumber,
   }: {
     docketNumbers: string[];
-    documentMeta: any; // TODO: Add better typing to this function & proxy?
+    documentMeta: FileCourtIssueDocketEntryForm; // TODO: Add better typing to this function & proxy?
     subjectDocketNumber: string;
   },
   authorizedUser: UnknownAuthUser,

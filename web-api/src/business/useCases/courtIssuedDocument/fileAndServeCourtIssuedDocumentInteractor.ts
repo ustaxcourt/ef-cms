@@ -30,6 +30,7 @@ import {
 } from '@shared/business/entities/CaseDeadline';
 import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
 import { upsertDocketEntryOrderMotions } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntryOrderMotion';
+import { FileCourtIssueDocketEntryForm } from '@web-api/business/useCases/docketEntry/fileCourtIssuedDocketEntryInteractor';
 // TODO (#8546): May want to alter this as well
 export const fileAndServeCourtIssuedDocument = async (
   applicationContext: ServerApplicationContext,
@@ -43,7 +44,7 @@ export const fileAndServeCourtIssuedDocument = async (
     clientConnectionId: string;
     docketEntryId: string;
     docketNumbers: string[];
-    form: any;
+    form: FileCourtIssueDocketEntryForm;
     subjectCaseDocketNumber: string;
   },
   authorizedUser: UnknownAuthUser,
