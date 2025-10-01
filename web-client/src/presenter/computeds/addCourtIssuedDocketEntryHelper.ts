@@ -35,6 +35,9 @@ export const addCourtIssuedDocketEntryHelper = (
     .getFormattedPartiesNameAndTitle({ petitioners: caseDetail.petitioners });
 
   const relatedMotionDispositions = Object.values(MOTION_DISPOSITIONS);
+  const relatedMotions = caseDetail.docketEntries.filter(
+    d => DocketEntry.isMotion(d.eventCode) && !d.isStricken && !d.isDraft,
+  );
 
   const serviceParties = [
     ...petitioners,
@@ -80,6 +83,7 @@ export const addCourtIssuedDocketEntryHelper = (
   return {
     documentTypes,
     formattedDocumentTitle,
+    relatedMotions,
     relatedMotionDispositions,
     serviceParties,
     showAttachmentAndServiceFields,

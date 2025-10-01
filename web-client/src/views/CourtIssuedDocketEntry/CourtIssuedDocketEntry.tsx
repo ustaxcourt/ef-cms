@@ -156,7 +156,7 @@ export const CourtIssuedDocketEntry = connect(
                 {form.eventCode && <CourtIssuedNonstandardForm />}
 
                 {DocketEntry.isOrder(form.eventCode) && (
-                  <FormGroup errorText={validationErrors.attachments}>
+                  <FormGroup errorText={validationErrors.dispositionOrder}>
                     <fieldset className="usa-fieldset">
                       {/* <legend className="usa-legend"></legend> */}
                       <div className="usa-checkbox">
@@ -205,17 +205,12 @@ export const CourtIssuedDocketEntry = connect(
                       value={form.relatedMotion}
                       onChange={inputValue => {
                         // TODO (#8546): Refactor this to return eligable docket entries (motions)
-                        [
-                          'documentType',
-                          'documentTitle',
-                          'eventCode',
-                          'scenario',
-                        ].forEach(key =>
-                          updateCourtIssuedDocketEntryFormValueSequence({
-                            key,
-                            value: inputValue ? inputValue[key] : '',
-                          }),
+                        console.log(
+                          `related motions to pick from`,
+                          addCourtIssuedDocketEntryHelper.relatedMotions,
                         );
+                        console.log(`inputValue`, inputValue);
+
                         validateCourtIssuedDocketEntrySequence();
                       }}
                       onInputChange={inputText => {
