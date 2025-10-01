@@ -530,6 +530,19 @@ jobs:
           command: |
             ./scripts/circleci/setup-ssm-for-glue-job.sh
       - run:
+          name: Kick off the sync-s3-to-lower-env workflow
+          command: |
+            curl --request POST \
+              --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
+              --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
+              --header "content-type: application/json" \
+              --data "{\"branch\":\"${CIRCLE_BRANCH}\", \"parameters\":{ \
+                \"run_build_and_deploy\":false, \
+                \"run_sync_s3_to_lower_env\":true, \
+                \"referrer\":\"${CIRCLE_WORKFLOW_ID}\", \
+                \"source_bucket\":\"${SOURCE_BUCKET}\", \
+                \"destination_bucket\":\"${DESTINATION_BUCKET}\"}}"
+      - run:
           name: 'Delete OpenSearch alpha/beta clusters'
           command: |
             ./scripts/elasticsearch/delete-alpha-and-beta-clusters.sh
@@ -568,19 +581,6 @@ jobs:
           name: Enable Wait for Workflow Cron
           command: |
             ./scripts/wait-for-workflow/enable-wait-for-workflow-cron.sh
-      - run:
-          name: Kick off the sync-s3-to-lower-env workflow
-          command: |
-            curl --request POST \
-              --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
-              --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
-              --header "content-type: application/json" \
-              --data "{\"branch\":\"${CIRCLE_BRANCH}\", \"parameters\":{ \
-                \"run_build_and_deploy\":false, \
-                \"run_sync_s3_to_lower_env\":true, \
-                \"referrer\":\"${CIRCLE_WORKFLOW_ID}\", \
-                \"source_bucket\":\"${SOURCE_BUCKET}\", \
-                \"destination_bucket\":\"${DESTINATION_BUCKET}\"}}"
 
   migrate-restored-postgres-data:
     docker:
