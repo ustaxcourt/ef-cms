@@ -1,6 +1,7 @@
 import { pathsToModuleNameMapper } from 'ts-jest';
 import type { Config } from 'jest';
 import { loadTsConfig } from '../utils/load-tsconfig.mjs';
+import path from 'node:path';
 
 const tsconfig = loadTsConfig('tsconfig.json');
 
@@ -38,12 +39,17 @@ const config: Config = {
     '^uuid$': 'uuid',
   },
   setupFiles: ['core-js'],
-  testEnvironment: `${process.cwd()}/../web-client/JsdomWithTextEncoderEnvironment.ts`,
+  testEnvironment: path.resolve(
+    process.cwd(),
+    'web-client/JsdomWithTextEncoderEnvironment.ts',
+  ),
   testPathIgnorePatterns: ['src/business/utilities/documentGenerators'],
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
-  transformIgnorePatterns: ['/node_modules/(?!uuid|sinon|aws-sdk-client-mock|export-to-csv)'],
+  transformIgnorePatterns: [
+    '/node_modules/(?!uuid|sinon|aws-sdk-client-mock|export-to-csv)',
+  ],
   // After a jest runner uses X% of total system memory, recreate the runner.
   verbose: false,
   workerIdleMemoryLimit: '20%',
