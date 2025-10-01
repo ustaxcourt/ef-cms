@@ -1,6 +1,7 @@
 import { pathsToModuleNameMapper } from 'ts-jest';
 import type { Config } from 'jest';
-const loadTsConfig = require('../utils/load-tsconfig.cjs');
+import { loadTsConfig } from '../utils/load-tsconfig.mjs';
+
 const tsconfig = loadTsConfig('tsconfig.json');
 
 const config: Config = {

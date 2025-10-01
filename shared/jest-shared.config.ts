@@ -1,6 +1,7 @@
 import { pathsToModuleNameMapper } from 'ts-jest';
 import type { Config } from 'jest';
-const loadTsConfig = require('../utils/load-tsconfig.cjs');
+import { loadTsConfig } from '../utils/load-tsconfig.mjs';
+
 const tsconfig = loadTsConfig('tsconfig.json');
 
 const config: Config = {
@@ -34,7 +35,7 @@ const config: Config = {
     ...pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
       prefix: '<rootDir>/../',
     }),
-    uuid: require.resolve('uuid'),
+    '^uuid$': 'uuid',
   },
   setupFiles: ['core-js'],
   testEnvironment: `${__dirname}/../web-client/JsdomWithTextEncoderEnvironment.ts`,
