@@ -21,6 +21,12 @@ export const setViewerDocumentToDisplayAction = async ({
   if (viewerDocumentToDisplay) {
     store.set(state.docketEntryId, viewerDocumentToDisplay.docketEntryId);
 
+    const isFiledAcrossAllCases = await applicationContext
+      .getUseCases()
+      .getIsFiledAcrossAllCasesInteractor(applicationContext, {
+        docketEntryId: viewerDocumentToDisplay.docketEntryId,
+      });
+
     const { url } = await applicationContext
       .getUseCases()
       .getDocumentDownloadUrlInteractor(applicationContext, {
@@ -30,5 +36,7 @@ export const setViewerDocumentToDisplayAction = async ({
       });
 
     store.set(state.iframeSrc, url);
+    // TODO: probably don't store it directly top level on state
+    store.set(state.isFiledAcrossAllCases, isFiledAcrossAllCases);
   }
 };

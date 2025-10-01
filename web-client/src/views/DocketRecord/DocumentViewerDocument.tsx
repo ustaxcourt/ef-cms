@@ -10,7 +10,6 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 import { InfoNotificationComponent } from '../InfoNotification';
-import { SIMULTANEOUS_DOCUMENT_EVENT_CODES } from '@shared/business/entities/EntityConstants';
 
 export const DocumentViewerDocument = connect(
   {
@@ -35,12 +34,10 @@ export const DocumentViewerDocument = connect(
     serveCourtIssuedDocumentSequence:
       sequences.serveCourtIssuedDocumentSequence,
     servePaperFiledDocumentSequence: sequences.servePaperFiledDocumentSequence,
-    user: state.user,
     showModal: state.modal.showModal,
     viewerDocumentToDisplay: state.viewerDocumentToDisplay,
   },
   function DocumentViewerDocument({
-    user,
     caseDetail,
     confirmWorkItemAlreadyCompleteSequence,
     documentViewerHelper,
@@ -57,43 +54,6 @@ export const DocumentViewerDocument = connect(
     showModal,
     viewerDocumentToDisplay,
   }) {
-    const isMemberCase = Boolean(
-      caseDetail?.leadDocketNumber &&
-        caseDetail?.leadDocketNumber !== caseDetail?.docketNumber,
-    );
-    const isSimultaneousDocType = Boolean(
-      viewerDocumentToDisplay &&
-        ((viewerDocumentToDisplay.eventCode &&
-          SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(
-            viewerDocumentToDisplay.eventCode,
-          )) ||
-          viewerDocumentToDisplay.documentTitle?.includes('Simultaneous')),
-    );
-
-    const canUserSeeLeadCaseBanner = () => {
-      const allowedRoles = [
-        'caseservicessupervisor',
-        'petitionsclerk',
-        'clerkofcourt',
-        'docketclerk',
-      ];
-      return user?.role && allowedRoles.includes(user.role.toLowerCase());
-    };
-
-    const isDocumentUnserved = () => {
-      return (
-        documentViewerHelper.showNotServed || !documentViewerHelper.servedLabel
-      );
-    };
-
-    const shouldShowLeadCaseBanner = () => {
-      return (
-        isMemberCase &&
-        isSimultaneousDocType &&
-        isDocumentUnserved() &&
-        canUserSeeLeadCaseBanner()
-      );
-    };
 
     return (
       <div
@@ -122,7 +82,7 @@ export const DocumentViewerDocument = connect(
               </div>
             )}
 
-            {shouldShowLeadCaseBanner() && (
+            {documentViewerHelper.showLeadCaseBanner && (
               <InfoNotificationComponent
                 alertInfo={{
                   message: (
@@ -177,7 +137,7 @@ export const DocumentViewerDocument = connect(
               )}
 
               {documentViewerHelper.showServePaperFiledDocumentButton &&
-                !(isSimultaneousDocType && isMemberCase) && (
+                (
                   <Button
                     link
                     data-testid="serve-paper-filed-document"
@@ -217,7 +177,7 @@ export const DocumentViewerDocument = connect(
                 </Button>
               )}
 
-              {documentViewerHelper.showCompleteQcButton && !isMemberCase && (
+              {documentViewerHelper.showCompleteQcButton && (
                 <Button
                   link
                   icon="star"

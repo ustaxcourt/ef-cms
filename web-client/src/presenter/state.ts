@@ -624,6 +624,7 @@ export const baseState = {
   alertInfo: undefined,
   alertSuccess: undefined,
   alertWarning: undefined,
+  isFiledAcrossAllCases: false,
   allJudges: [],
   archiveDraftDocument: {
     docketEntryId: null,
