@@ -49,7 +49,7 @@ const config: Config = {
   // testMatch: ['**/web-client/src/**/?(*.)+(spec|test).[jt]s?(x)'], // Uncomment to run all local web-client unit tests.
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
-    '^.+\\.html?$': `${process.cwd()}/htmlLoader.js`, //this is to ignore imported html files
+    '^.+\\.html?$': path.resolve(process.cwd(), 'web-client/htmlLoader.js'), //this is to ignore imported html files
   },
   transformIgnorePatterns: [
     '/node_modules/(?!uuid|sinon|aws-sdk-client-mock|export-to-csv)',
