@@ -3,6 +3,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import {
+  NOT_PROVIDED,
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } from '@shared/business/entities/EntityConstants';
@@ -104,7 +105,7 @@ export const partiesInformationHelper = (
     }
 
     petitioner.formattedPaperPetitionEmail =
-      petitioner.paperPetitionEmail ?? 'Not provided';
+      petitioner.paperPetitionEmail ?? NOT_PROVIDED;
 
     if (petitioner.email) {
       petitioner.formattedEmail = petitioner.email;
