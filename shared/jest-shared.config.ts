@@ -38,7 +38,7 @@ const config: Config = {
     '^uuid$': 'uuid',
   },
   setupFiles: ['core-js'],
-  testEnvironment: `${__dirname}/../web-client/JsdomWithTextEncoderEnvironment.ts`,
+  testEnvironment: `${process.cwd()}/../web-client/JsdomWithTextEncoderEnvironment.ts`,
   testPathIgnorePatterns: ['src/business/utilities/documentGenerators'],
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
