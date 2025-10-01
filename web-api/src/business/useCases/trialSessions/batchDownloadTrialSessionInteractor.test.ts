@@ -116,6 +116,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
       applicationContext,
       {
         trialSessionId: '123',
+        clientConnectionId: 'abc-123',
       },
       mockJudgeUser,
     );
@@ -155,6 +156,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
       applicationContext,
       {
         trialSessionId: '123',
+        clientConnectionId: 'abc-123',
       },
       mockJudgeUser,
     );
@@ -173,6 +175,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
       applicationContext,
       {
         trialSessionId: '123',
+        clientConnectionId: 'abc-123',
       },
       mockPetitionerUser,
     );
@@ -200,6 +203,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
       applicationContext,
       {
         trialSessionId: '123',
+        clientConnectionId: 'abc-123',
       },
       mockJudgeUser,
     );
@@ -228,6 +232,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
       applicationContext,
       {
         trialSessionId: mockTrialSessionId,
+        clientConnectionId: 'abc-123',
       },
       mockJudgeUser,
     );
@@ -253,6 +258,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
       applicationContext,
       {
         trialSessionId: '123',
+        clientConnectionId: 'abc-123',
       },
       mockJudgeUser,
     );
@@ -280,6 +286,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
       applicationContext,
       {
         trialSessionId: '123',
+        clientConnectionId: 'abc-123',
       },
       mockJudgeUser,
     );
@@ -311,6 +318,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
       applicationContext,
       {
         trialSessionId: '123',
+        clientConnectionId: 'abc-123',
       },
       mockJudgeUser,
     );
