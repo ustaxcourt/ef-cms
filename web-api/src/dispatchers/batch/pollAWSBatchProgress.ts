@@ -5,7 +5,6 @@ import {
 } from '@aws-sdk/client-cloudwatch-logs';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { ProgressData } from '@web-api/persistence/s3/zipDocuments';
-import { parseProgressFromLog } from './parseProgressFromLog';
 
 interface PingCloudWatchParams {
   applicationContext: ServerApplicationContext;
@@ -92,4 +91,23 @@ export const pollAWSBatchProgress = async ({
 
     await new Promise(resolve => setTimeout(resolve, pollInterval));
   }
+};
+
+const parseProgressFromLog = (message?: string): ProgressData | null => {
+  if (!message) return null;
+
+  try {
+    if (message.includes('PROGRESS:')) {
+      const jsonStr = message.substring(message.indexOf('{'));
+      const json = JSON.parse(jsonStr);
+      return {
+        filesCompleted: json.currentFile,
+        totalFiles: json.totalFiles,
+      };
+    }
+  } catch (e) {
+    throw new Error(`Error parsing progress log: ${e}`);
+  }
+
+  return null;
 };
