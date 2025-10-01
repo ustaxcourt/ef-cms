@@ -539,6 +539,14 @@ jobs:
           command: |
             npm run deploy:allColors $ENV
       - run:
+          name: Setup OpenSearch Index Settings and Mappings
+          command: |
+            ./web-api/setup-elasticsearch-index.sh $ENV
+      - run:
+          name: Setup OpenSearch Aliases
+          command: |
+            npx ts-node --transpile-only ./web-api/elasticsearch/elasticsearch-alias-settings.ts
+      - run:
           name: Kick off the glue-to-lower-env workflow
           command: |
             CIRCLE_PIPELINE_ID=$(curl --request POST \
