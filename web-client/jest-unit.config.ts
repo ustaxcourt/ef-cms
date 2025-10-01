@@ -1,13 +1,6 @@
 import { pathsToModuleNameMapper } from 'ts-jest';
-//import tsconfig from '../tsconfig.json';
+import tsconfig from '../tsconfig.json';
 import type { Config } from 'jest';
-
-import fs from 'node:fs';
-import path from 'node:path';
-const __dirname = import.meta.dirname;
-
-const tsconfigPath = path.resolve(process.cwd(), './tsconfig.json');
-const tsconfig = JSON.parse(fs.readFileSync(tsconfigPath, 'utf8'));
 
 const config: Config = {
   clearMocks: true,
@@ -43,7 +36,7 @@ const config: Config = {
     ...pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
       prefix: '<rootDir>/../',
     }),
-    '^uuid$': 'uuid',
+    uuid: require.resolve('uuid'),
   },
   setupFiles: ['core-js'],
   testEnvironment: `${__dirname}/../web-client/JsdomWithTextEncoderEnvironment.ts`,
