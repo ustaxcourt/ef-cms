@@ -44,6 +44,7 @@ export const CourtIssuedDocketEntry = connect(
     validateCourtIssuedDocketEntrySequence:
       sequences.validateCourtIssuedDocketEntrySequence,
     validationErrors: state.validationErrors,
+    docketNumber: state.caseDetail.docketNumber,
   },
   function CourtIssuedDocketEntry({
     addCourtIssuedDocketEntryHelper,
@@ -60,6 +61,7 @@ export const CourtIssuedDocketEntry = connect(
     updateCourtIssuedDocketEntryFormValueSequence,
     validateCourtIssuedDocketEntrySequence,
     validationErrors,
+    docketNumber,
   }) {
     return (
       <>
@@ -205,12 +207,19 @@ export const CourtIssuedDocketEntry = connect(
                       value={form.relatedMotion}
                       onChange={inputValue => {
                         // TODO (#8546): Refactor this to return eligable docket entries (motions)
-                        console.log(
-                          `related motions to pick from`,
-                          addCourtIssuedDocketEntryHelper.relatedMotions,
-                        );
                         console.log(`inputValue`, inputValue);
-
+                        if (!form.affectedMotions) form.affectedMotions = {};
+                        form.affectedMotions[docketNumber] = Object.assign(
+                          form.affectedMotions[docketNumber] ?? {},
+                          {
+                            docketEntryid: inputValue.value.docketEntryId,
+                            docketNumber: inputValue.value.docketNumber,
+                          },
+                        );
+                        console.log(
+                          'Form.AffectedMotions',
+                          form.affectedMotions,
+                        );
                         validateCourtIssuedDocketEntrySequence();
                       }}
                       onInputChange={inputText => {
@@ -239,16 +248,15 @@ export const CourtIssuedDocketEntry = connect(
                       value={form.relatedMotionDisposition}
                       onChange={inputValue => {
                         // TODO (#8546): Refactor this to return eligable docket entries (motions)
-                        [
-                          'documentType',
-                          'documentTitle',
-                          'eventCode',
-                          'scenario',
-                        ].forEach(key =>
-                          updateCourtIssuedDocketEntryFormValueSequence({
-                            key,
-                            value: inputValue ? inputValue[key] : '',
-                          }),
+                        if (!form.affectedMotions) form.affectedMotions = {};
+                        console.log(`disposition value`, inputValue);
+                        form.affectedMotions[docketNumber] = Object.assign(
+                          form.affectedMotions[docketNumber] ?? {},
+                          { disposition: inputValue.value },
+                        );
+                        console.log(
+                          'Form.AffectedMotions',
+                          form.affectedMotions,
                         );
                         validateCourtIssuedDocketEntrySequence();
                       }}

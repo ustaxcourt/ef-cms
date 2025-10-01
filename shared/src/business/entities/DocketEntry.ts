@@ -186,7 +186,7 @@ export class DocketEntry extends JoiValidationEntity {
   public signedJudgeName?: string;
   public strickenBy?: string;
   public strickenByUserId?: string;
-  public orderDocketEntityId?: string;
+  public orderDocketEntryId?: string;
   public motionDisposition?: string; // 'GRANTED' | 'DENTIED' | 'PARTIAL';
 
   // These are optional fields set solely for the UI in certain cases.
@@ -277,6 +277,8 @@ export class DocketEntry extends JoiValidationEntity {
     this.strickenAt = rawDocketEntry.strickenAt;
     this.supportingDocument = rawDocketEntry.supportingDocument;
     this.trialLocation = rawDocketEntry.trialLocation;
+    this.orderDocketEntryId = rawDocketEntry.orderDocketEntryId;
+    this.motionDisposition = rawDocketEntry.motionDisposition;
     // only share the userId with an external user if it is the logged in user
     if (authorizedUser?.userId === rawDocketEntry.userId) {
       this.userId = rawDocketEntry.userId;
@@ -586,7 +588,7 @@ export class DocketEntry extends JoiValidationEntity {
   static isOpinion(eventCode: string): boolean {
     return OPINION_EVENT_CODES_WITH_BENCH_OPINION.includes(eventCode);
   }
-  
+
   static isOrder(eventCode: string): boolean {
     return ORDER_EVENT_CODES.includes(eventCode);
   }

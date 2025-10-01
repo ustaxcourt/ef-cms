@@ -35,10 +35,12 @@ export type FileCourtIssueDocketEntryForm = {
   trialLocation: string;
   isOrder: boolean;
   affectedMotions: {
-    docketEntryid: string;
-    docketNumber: string;
-    disposition: string;
-  }[];
+    [docketNumber: string]: {
+      docketEntryid: string;
+      docketNumber: string;
+      disposition: string;
+    };
+  };
   orderType: string; //Used in fileAndServe function, but not file and serve functions
   docketNumbers: string; //Used in fileAndServe function, but not file and serve functions
 };
@@ -210,11 +212,13 @@ export const fileCourtIssuedDocketEntry = async (
     await upsertDocketEntryOrderMotions({
       orderDocketEntry: subjectDocketEntry,
       // name not final
-      motionDocketEntries: documentMeta.affectedMotions.map(entry => ({
-        docketEntryId: entry.docketEntryid,
-        docketNumber: entry.docketNumber,
-        disposition: entry.disposition,
-      })),
+      motionDocketEntries: Object.values(documentMeta.affectedMotions).map(
+        entry => ({
+          docketEntryId: entry.docketEntryid,
+          docketNumber: entry.docketNumber,
+          disposition: entry.disposition,
+        }),
+      ),
       served: false,
     });
   }

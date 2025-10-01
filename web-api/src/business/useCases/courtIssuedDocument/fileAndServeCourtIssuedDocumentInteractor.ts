@@ -263,7 +263,7 @@ export const fileAndServeCourtIssuedDocument = async (
       await upsertDocketEntryOrderMotions({
         orderDocketEntry: docketEntryToServe,
         // name not final
-        motionDocketEntries: form.affectedMotions.map(entry => ({
+        motionDocketEntries: Object.values(form.affectedMotions).map(entry => ({
           docketEntryId: entry.docketEntryid,
           docketNumber: entry.docketNumber,
           disposition: entry.disposition,

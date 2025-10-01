@@ -34,10 +34,17 @@ export const addCourtIssuedDocketEntryHelper = (
     .getUtilities()
     .getFormattedPartiesNameAndTitle({ petitioners: caseDetail.petitioners });
 
-  const relatedMotionDispositions = Object.values(MOTION_DISPOSITIONS);
-  const relatedMotions = caseDetail.docketEntries.filter(
-    d => DocketEntry.isMotion(d.eventCode) && !d.isStricken && !d.isDraft,
+  const relatedMotionDispositions = Object.values(MOTION_DISPOSITIONS).map(
+    d => ({ label: d, value: d }),
   );
+  const relatedMotions = caseDetail.docketEntries
+    .filter(
+      d => DocketEntry.isMotion(d.eventCode) && !d.isStricken && !d.isDraft,
+    )
+    .map((m: RawDocketEntry) => ({
+      label: `${m.index} - ${m.documentTitle}`,
+      value: m,
+    }));
 
   const serviceParties = [
     ...petitioners,
