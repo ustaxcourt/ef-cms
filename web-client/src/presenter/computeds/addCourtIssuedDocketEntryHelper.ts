@@ -10,6 +10,7 @@ export const addCourtIssuedDocketEntryHelper = (
 ): any => {
   const {
     COURT_ISSUED_EVENT_CODES,
+    MOTION_DISPOSITIONS,
     SYSTEM_GENERATED_DOCUMENT_TYPES,
     USER_ROLES,
   } = applicationContext.getConstants();
@@ -32,6 +33,8 @@ export const addCourtIssuedDocketEntryHelper = (
   const petitioners = applicationContext
     .getUtilities()
     .getFormattedPartiesNameAndTitle({ petitioners: caseDetail.petitioners });
+
+  const relatedMotionDispositions = Object.values(MOTION_DISPOSITIONS);
 
   const serviceParties = [
     ...petitioners,
@@ -77,6 +80,7 @@ export const addCourtIssuedDocketEntryHelper = (
   return {
     documentTypes,
     formattedDocumentTitle,
+    relatedMotionDispositions,
     serviceParties,
     showAttachmentAndServiceFields,
     showDocumentTypeDropdown,

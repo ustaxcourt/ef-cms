@@ -23,5 +23,4 @@ export const setFormValueAction = ({
   }
 
   store.set(state[stateRoot][key], value);
-  console.log(`setFormValueAction complete`, { stateRoot, key, value });
 };

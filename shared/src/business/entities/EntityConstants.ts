@@ -86,7 +86,11 @@ export const JURISDICTIONAL_OPTIONS = {
   undersigned: 'Jurisdiction is retained by the undersigned',
 };
 
-export const MOTION_DISPOSITIONS = { DENIED: 'Denied', GRANTED: 'Granted' };
+export const MOTION_DISPOSITIONS = {
+  DENIED: 'Denied',
+  GRANTED: 'Granted',
+  GRANTED_IN_PART: 'Granted in Part',
+};
 
 export const STRICKEN_FROM_TRIAL_SESSION_MESSAGE =
   'This case is stricken from the trial session';
@@ -2089,4 +2093,3 @@ export const ALLOWED_EVENT_CODES = [
   'NODC',
 ];
 export const PRO_SE_CHECKLIST = 'pro-se-checklist';
-
