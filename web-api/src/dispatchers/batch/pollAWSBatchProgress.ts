@@ -48,6 +48,12 @@ export const pollAWSBatchProgress = async ({
     const { status } = job;
     applicationContext.logger.info(`Job ${jobId} is currently ${status}`);
 
+    // If status is STARTING, logStreamName is not yet available, so wait and try again
+    if (status === 'STARTING') {
+      await new Promise(resolve => setTimeout(resolve, pollInterval));
+      continue;
+    }
+
     if (!logStreamName && job.container?.logStreamName) {
       logStreamName = job.container?.logStreamName ?? logStreamName;
     }
@@ -75,7 +81,9 @@ export const pollAWSBatchProgress = async ({
           nextToken = logEvents.nextForwardToken;
         }
       } catch (error) {
-        throw new Error(`Error reading logs: ${error}`);
+        applicationContext.logger.info(
+          `Job ${jobId}: Error reading logs: ${error}`,
+        );
       }
     }
 
