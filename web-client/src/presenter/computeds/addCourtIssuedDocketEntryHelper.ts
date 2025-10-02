@@ -37,9 +37,13 @@ export const addCourtIssuedDocketEntryHelper = (
   const relatedMotionDispositions = Object.values(MOTION_DISPOSITIONS).map(
     d => ({ label: d, value: d }),
   );
-  const relatedMotions = caseDetail.docketEntries
+  const caseMotions = caseDetail.docketEntries
     .filter(
-      d => DocketEntry.isMotion(d.eventCode) && !d.isStricken && !d.isDraft,
+      d =>
+        DocketEntry.isMotion(d.eventCode) &&
+        !d.isStricken &&
+        !d.isDraft &&
+        !d.motionDisposition,
     )
     .map((m: RawDocketEntry) => ({
       label: `${m.index} - ${m.documentTitle}`,
@@ -90,7 +94,7 @@ export const addCourtIssuedDocketEntryHelper = (
   return {
     documentTypes,
     formattedDocumentTitle,
-    relatedMotions,
+    caseMotions,
     relatedMotionDispositions,
     serviceParties,
     showAttachmentAndServiceFields,

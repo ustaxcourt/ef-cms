@@ -203,11 +203,10 @@ export const CourtIssuedDocketEntry = connect(
                       id="related-motion"
                       isClearable={true}
                       name="relatedMotion"
-                      options={addCourtIssuedDocketEntryHelper.relatedMotions}
+                      options={addCourtIssuedDocketEntryHelper.caseMotions}
                       value={form.relatedMotion}
                       onChange={inputValue => {
                         // TODO (#8546): Refactor this to return eligable docket entries (motions)
-                        console.log(`inputValue`, inputValue);
                         if (!form.affectedMotions) form.affectedMotions = {};
                         form.affectedMotions[docketNumber] = Object.assign(
                           form.affectedMotions[docketNumber] ?? {},
@@ -224,7 +223,7 @@ export const CourtIssuedDocketEntry = connect(
                       }}
                       onInputChange={inputText => {
                         updateCourtIssuedDocketEntryFormValueSequence({
-                          key: 'relatedMotionSearchText',
+                          key: 'caseMotionsearchText',
                           value: inputText,
                         });
                       }}
@@ -262,7 +261,7 @@ export const CourtIssuedDocketEntry = connect(
                       }}
                       onInputChange={inputText => {
                         updateCourtIssuedDocketEntryFormValueSequence({
-                          key: 'relatedMotionSearchText',
+                          key: 'caseMotionSearchText',
                           value: inputText,
                         });
                       }}

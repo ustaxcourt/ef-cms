@@ -50,7 +50,7 @@ export const computeIsNotServedDocument = ({ formattedEntry }) => {
       !DocketEntry.isMinuteEntry(formattedEntry))
   );
 };
-
+// TODO (#8546): update disposed motions here
 export const formatDocketEntry = (applicationContext, docketEntry) => {
   const formattedEntry = cloneDeep(docketEntry);
 
@@ -150,10 +150,11 @@ export const formatDocketEntry = (applicationContext, docketEntry) => {
 
   return formattedEntry;
 };
-
+// TODO (#8546): update disposed motions here
 export const getFilingsAndProceedings = formattedDocketEntry => {
   //filings and proceedings string
   //(C/S 04/17/2019) (Exhibit(s)) (Attachment(s)) (Objection) (Lodged)
+  // TODO (#8546): create separate hyperlink here for disposed motions
   const filingsAndProceedingsArray = [
     `${
       formattedDocketEntry.certificateOfService
@@ -169,6 +170,7 @@ export const getFilingsAndProceedings = formattedDocketEntry => {
           : ''
     }`,
     `${formattedDocketEntry.lodged ? '(Lodged)' : ''}`,
+    `${formattedDocketEntry.motionDisposition ? `--- ${formattedDocketEntry.motionDisposition}` : ''}`,
   ];
 
   return filingsAndProceedingsArray.filter(item => item !== '').join(' ');
