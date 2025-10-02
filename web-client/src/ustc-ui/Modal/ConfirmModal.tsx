@@ -82,7 +82,7 @@ export const ConfirmModal = connect<ConfirmModalProps, typeof confirmModalDeps>(
                 noCloseBtn ? 'mobile-lg:grid-col-12' : 'mobile-lg:grid-col-9',
               )}
             >
-              <h3 className="modal-header__title" tabIndex={-1}>
+              <h3 className="modal-header__title" data-testid="confirm-modal-header" tabIndex={-1}>
                 {headerIcon && (
                   <FontAwesomeIcon
                     className={headerIconClassName}
@@ -96,6 +96,7 @@ export const ConfirmModal = connect<ConfirmModalProps, typeof confirmModalDeps>(
             {!noCloseBtn && (
               <div className="mobile-lg:grid-col-3">
                 <Button
+                data-testid="confirm-modal-close-btn"
                   iconRight
                   link
                   className="text-no-underline hide-on-mobile float-right margin-right-0 padding-top-0"
@@ -129,6 +130,7 @@ export const ConfirmModal = connect<ConfirmModalProps, typeof confirmModalDeps>(
             )}
             {!noCancel && (
               <Button
+                data-testid="confirm-modal-cancel-btn"
                 secondary
                 onClick={event => {
                   event.stopPropagation();
