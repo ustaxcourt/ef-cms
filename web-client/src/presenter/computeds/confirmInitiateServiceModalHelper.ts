@@ -29,12 +29,11 @@ export const confirmInitiateServiceModalHelper = (
   const isFiledAcrossAllCases = get(state.isFiledAcrossAllCases);
 
   const isOnMessageDetailPage = get(state.currentPage) === 'MessageDetail';
-  let { documentTitle, eventCode, isPaper } = form;
+  let { documentTitle, eventCode } = form;
   if (!eventCode) {
-    ({ documentTitle, eventCode, isPaper } =
-      formattedCaseDetail.docketEntries.find(
-        doc => doc.docketEntryId === docketEntryId,
-      ));
+    ({ documentTitle, eventCode } = formattedCaseDetail.docketEntries.find(
+      doc => doc.docketEntryId === docketEntryId,
+    ));
   }
 
   let showConsolidatedCasesForService =
@@ -47,9 +46,7 @@ export const confirmInitiateServiceModalHelper = (
       SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(eventCode) ||
       documentTitle?.includes('Simultaneous')
     ) {
-      if (isPaper) {
-        showConsolidatedCasesForService = false;
-      }
+      showConsolidatedCasesForService = false;
     }
   }
 
