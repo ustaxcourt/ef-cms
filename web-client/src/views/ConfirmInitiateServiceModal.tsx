@@ -1,5 +1,5 @@
 import { ConsolidatedCasesCheckboxes } from './ConsolidatedCasesCheckboxes';
-import { Hint } from '../ustc-ui/Hint/Hint';
+import { InfoNotificationComponent } from './InfoNotification';
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -67,19 +67,27 @@ export const ConfirmInitiateServiceModal = connect(
           </div>
         )}
         {confirmInitiateServiceModalHelper.showPaperAlert && (
-          <Hint fullWidth className="block">
-            <div className="margin-bottom-1">
-              This {confirmInitiateServiceModalHelper.caseOrGroup} has parties
-              receiving paper service:
-            </div>
-            {confirmInitiateServiceModalHelper.contactsNeedingPaperService.map(
-              contact => (
-                <div className="margin-bottom-1" key={contact.name}>
-                  {contact.name}
-                </div>
+          <InfoNotificationComponent
+            alertInfo={{
+              message: (
+                <>
+                  <div className="margin-bottom-1">
+                    This {confirmInitiateServiceModalHelper.caseOrGroup} has
+                    parties receiving paper service:
+                  </div>
+                  {confirmInitiateServiceModalHelper.contactsNeedingPaperService.map(
+                    contact => (
+                      <div className="margin-bottom-1" key={contact.name}>
+                        {contact.name}
+                      </div>
+                    ),
+                  )}
+                </>
               ),
-            )}
-          </Hint>
+            }}
+            dismissible={false}
+            scrollToTop={false}
+          />
         )}
         {confirmInitiateServiceModalHelper.showConsolidatedCasesForService && (
           <ConsolidatedCasesCheckboxes />
