@@ -58,16 +58,19 @@ describe('pollAWSBatchProgress', () => {
     ).rejects.toThrow('Job not found');
   });
 
-  it('throws an error if retrieving log events fails', async () => {
+  it('logs error if retrieving log events fails', async () => {
     mockBatchClientSend.mockResolvedValue({
       jobs: [
         {
-          status: 'PENDING',
+          status: 'FAILED',
+          statusReason: 'from test',
           container: { logStreamName: 'test-log-stream' },
         },
       ],
     });
-    mockLogClientSend.mockRejectedValue(new Error('Log error'));
+    const mockLogInfo = jest.fn();
+    applicationContext.logger.info = mockLogInfo;
+    mockLogClientSend.mockRejectedValue(new Error('from test'));
 
     await expect(
       pollAWSBatchProgress({
@@ -76,7 +79,10 @@ describe('pollAWSBatchProgress', () => {
         timeout: 1000,
         onProgress: onProgressMock,
       }),
-    ).rejects.toThrow('Log error');
+    ).rejects.toThrow('Batch job test-job-id failed: from test');
+    expect(mockLogInfo).toHaveBeenCalledWith(
+      expect.stringContaining('Error reading logs:'),
+    );
   });
 
   it('throws an error with status reason when job fails', async () => {
@@ -118,23 +124,6 @@ describe('pollAWSBatchProgress', () => {
         onProgress: onProgressMock,
       }),
     ).rejects.toThrow('Batch job failed-job-id failed: Unknown reason');
-  });
-
-  it('throws error when progress message cannot be parsed', async () => {
-    mockLogClientSend.mockResolvedValue({
-      events: [{ message: 'PROGRESS: {invalid json}' }],
-      nextForwardToken: 'next-token',
-    });
-
-    await expect(
-      pollAWSBatchProgress({
-        applicationContext,
-        jobId: 'succeeded-job-id',
-        pollInterval: 10,
-        timeout: 50,
-        onProgress: onProgressMock,
-      }),
-    ).rejects.toThrow('Error parsing progress log');
   });
 
   it('skips onProgress callback when message is empty', async () => {

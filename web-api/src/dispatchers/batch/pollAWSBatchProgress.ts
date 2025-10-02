@@ -73,7 +73,7 @@ export const pollAWSBatchProgress = async ({
         if (logEvents.events && logEvents.events.length > 0) {
           // Parse progress from log messages
           for (const event of logEvents.events) {
-            const progress = parseProgressFromLog(event.message); //
+            const progress = parseProgressFromLog(event.message);
             if (progress) {
               await onProgress(progress);
             }
@@ -103,17 +103,12 @@ export const pollAWSBatchProgress = async ({
 
 const parseProgressFromLog = (message?: string): ProgressData | undefined => {
   if (!message) return;
-
-  try {
-    if (message.includes('PROGRESS:')) {
-      const jsonStr = message.substring(message.indexOf('{'));
-      const json = JSON.parse(jsonStr);
-      return {
-        filesCompleted: json.currentFile,
-        totalFiles: json.totalFiles,
-      };
-    }
-  } catch (e) {
-    throw new Error(`Error parsing progress log: ${e}`);
+  if (message.includes('PROGRESS:')) {
+    const jsonStr = message.substring(message.indexOf('{'));
+    const json = JSON.parse(jsonStr);
+    return {
+      filesCompleted: json.currentFile,
+      totalFiles: json.totalFiles,
+    };
   }
 };
