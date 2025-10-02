@@ -1,34 +1,204 @@
-import { pollAWSBatchProgress } from './pollAWSBatchProgress';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+
+const mockLogClientSend = jest.fn();
+const mockBatchClientSend = jest.fn();
+
+jest.mock('@aws-sdk/client-cloudwatch-logs', () => ({
+  CloudWatchLogsClient: jest.fn(() => ({
+    send: mockLogClientSend,
+  })),
+  GetLogEventsCommand: jest.fn(),
+}));
+
+import { pollAWSBatchProgress } from './pollAWSBatchProgress';
 
 describe('pollAWSBatchProgress', () => {
   const onProgressMock = jest.fn();
-  const getBatchClientSendMock = jest.fn();
 
   beforeEach(() => {
     jest.clearAllMocks();
+
     applicationContext.getBatchClient = jest.fn().mockReturnValue({
-      send: getBatchClientSendMock,
+      send: mockBatchClientSend,
+    });
+    mockLogClientSend.mockResolvedValue({
+      events: [{ message: 'PROGRESS: {"currentFile": 1, "totalFiles": 2}' }],
+      nextForwardToken: 'next-token',
+    });
+    mockBatchClientSend.mockResolvedValue({
+      jobs: [
+        {
+          status: 'SUCCEEDED',
+          container: { logStreamName: 'test-log-stream' },
+        },
+      ],
     });
   });
 
-  it('throws a timeout error', async () => {
-    try {
-      await pollAWSBatchProgress({
+  it('throws a timeout error when timeout is exceeded', async () => {
+    await expect(
+      pollAWSBatchProgress({
         applicationContext,
         jobId: 'non-existent-job-id',
-        timeout: -1, // Set a very short timeout for testing
+        timeout: -1,
         onProgress: onProgressMock,
-      });
-
-      //should fail if it gets here
-      throw new Error('Test failed');
-    } catch (e) {
-      // expect(e).toEqual(
-      //   new Error('Batch job non-existent-job-id timed out after -1ms'),
-      // );
-    }
+      }),
+    ).rejects.toThrow('Batch job non-existent-job-id timed out after -1ms');
   });
 
-  it('polls job status and calls onProgress', async () => {});
+  it('throws an error if the job is not found', async () => {
+    mockBatchClientSend.mockResolvedValue({ jobs: [] });
+
+    await expect(
+      pollAWSBatchProgress({
+        applicationContext,
+        jobId: 'non-existent-job-id',
+        onProgress: onProgressMock,
+      }),
+    ).rejects.toThrow('Job not found');
+  });
+
+  it('throws an error if retrieving log events fails', async () => {
+    mockBatchClientSend.mockResolvedValue({
+      jobs: [
+        {
+          status: 'PENDING',
+          container: { logStreamName: 'test-log-stream' },
+        },
+      ],
+    });
+    mockLogClientSend.mockRejectedValue(new Error('Log error'));
+
+    await expect(
+      pollAWSBatchProgress({
+        applicationContext,
+        jobId: 'test-job-id',
+        timeout: 1000,
+        onProgress: onProgressMock,
+      }),
+    ).rejects.toThrow('Log error');
+  });
+
+  it('throws an error with status reason when job fails', async () => {
+    mockBatchClientSend.mockResolvedValue({
+      jobs: [
+        {
+          status: 'FAILED',
+          statusReason: 'from test',
+          container: { logStreamName: 'test-log-stream' },
+        },
+      ],
+    });
+
+    await expect(
+      pollAWSBatchProgress({
+        applicationContext,
+        jobId: 'failed-job-id',
+        timeout: 1000,
+        onProgress: onProgressMock,
+      }),
+    ).rejects.toThrow('Batch job failed-job-id failed: from test');
+  });
+
+  it('throws an error with unknown reason when job fails without statusReason', async () => {
+    mockBatchClientSend.mockResolvedValue({
+      jobs: [
+        {
+          status: 'FAILED',
+          container: { logStreamName: 'test-log-stream' },
+        },
+      ],
+    });
+
+    await expect(
+      pollAWSBatchProgress({
+        applicationContext,
+        jobId: 'failed-job-id',
+        timeout: 1000,
+        onProgress: onProgressMock,
+      }),
+    ).rejects.toThrow('Batch job failed-job-id failed: Unknown reason');
+  });
+
+  it('throws error when progress message cannot be parsed', async () => {
+    mockLogClientSend.mockResolvedValue({
+      events: [{ message: 'PROGRESS: {invalid json}' }],
+      nextForwardToken: 'next-token',
+    });
+
+    await expect(
+      pollAWSBatchProgress({
+        applicationContext,
+        jobId: 'succeeded-job-id',
+        pollInterval: 10,
+        timeout: 50,
+        onProgress: onProgressMock,
+      }),
+    ).rejects.toThrow('Error parsing progress log');
+  });
+
+  it('skips onProgress callback when message is empty', async () => {
+    mockLogClientSend.mockResolvedValue({
+      events: [{ message: '' }],
+      nextForwardToken: 'next-token',
+    });
+
+    const job = await pollAWSBatchProgress({
+      applicationContext,
+      jobId: 'succeeded-job-id',
+      pollInterval: 10,
+      timeout: 50,
+      onProgress: onProgressMock,
+    });
+
+    expect(onProgressMock).not.toHaveBeenCalled();
+    expect(job.status).toBe('SUCCEEDED');
+  });
+
+  it('calls onProgress callback with parsed progress data', async () => {
+    const job = await pollAWSBatchProgress({
+      applicationContext,
+      jobId: 'succeeded-job-id',
+      pollInterval: 10,
+      timeout: 50,
+      onProgress: onProgressMock,
+    });
+
+    expect(onProgressMock).toHaveBeenCalledWith({
+      filesCompleted: 1,
+      totalFiles: 2,
+    });
+    expect(job.status).toBe('SUCCEEDED');
+  });
+
+  it('polls job status until SUCCEEDED and returns job', async () => {
+    mockBatchClientSend
+      .mockResolvedValueOnce({
+        jobs: [
+          {
+            status: 'PENDING',
+            container: { logStreamName: 'test-log-stream' },
+          },
+        ],
+      })
+      .mockResolvedValueOnce({
+        jobs: [
+          {
+            status: 'SUCCEEDED',
+            container: { logStreamName: 'test-log-stream' },
+          },
+        ],
+      });
+
+    const job = await pollAWSBatchProgress({
+      applicationContext,
+      jobId: 'succeeded-job-id',
+      pollInterval: 10,
+      timeout: 50,
+      onProgress: onProgressMock,
+    });
+
+    expect(onProgressMock).toHaveBeenCalledTimes(2);
+    expect(job.status).toBe('SUCCEEDED');
+  });
 });

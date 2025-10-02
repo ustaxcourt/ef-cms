@@ -93,8 +93,8 @@ export const pollAWSBatchProgress = async ({
   }
 };
 
-const parseProgressFromLog = (message?: string): ProgressData | null => {
-  if (!message) return null;
+const parseProgressFromLog = (message?: string): ProgressData | undefined => {
+  if (!message) return;
 
   try {
     if (message.includes('PROGRESS:')) {
@@ -108,6 +108,4 @@ const parseProgressFromLog = (message?: string): ProgressData | null => {
   } catch (e) {
     throw new Error(`Error parsing progress log: ${e}`);
   }
-
-  return null;
 };
