@@ -171,6 +171,7 @@ import { workQueueHelper } from './computeds/workQueueHelper';
 import { BlockedCaseData } from '@web-api/persistence/postgres/cases/reports/getBlockedCasesForTrialLocation';
 import { RawGenerateSuggestedTermForm } from '@shared/business/entities/trialSessions/GenerateSuggestedTermForm';
 import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
+import { consolidateWorkQueueItemsOutboxHelper } from './computeds/consolidateWorkQueueItemsOutboxHelper';
 
 const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS } = getConstants();
 
@@ -599,6 +600,10 @@ export const computeds = {
   workQueueHelper: workQueueHelper as unknown as ReturnType<
     typeof workQueueHelper
   >,
+  consolidateWorkQueueItemsOutboxHelper:
+    consolidateWorkQueueItemsOutboxHelper as unknown as ReturnType<
+      typeof consolidateWorkQueueItemsOutboxHelper
+    >,
 };
 
 export const baseState = {
