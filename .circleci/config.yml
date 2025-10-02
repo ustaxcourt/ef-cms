@@ -37,6 +37,10 @@ parameters:
     default: ''
     type: string
 
+  sync_early:
+    default: false
+    type: boolean
+
   run_sync_s3_to_lower_env:
     default: false
     type: boolean
@@ -508,6 +512,8 @@ jobs:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     resource_class: medium+
+    environment:
+      SYNC_EARLY: << pipeline.parameters.sync_early >>
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -529,6 +535,23 @@ jobs:
           name: Setup SSM for a glue job
           command: |
             ./scripts/circleci/setup-ssm-for-glue-job.sh
+      - run:
+          name: Kick off the sync-s3-to-lower-env workflow if syncing early
+          command: |
+            if [ "$SYNC_EARLY" != "true" ]; then
+              echo "skipping…"
+              exit 0
+            fi
+            curl --request POST \
+              --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
+              --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
+              --header "content-type: application/json" \
+              --data "{\"branch\":\"${CIRCLE_BRANCH}\", \"parameters\":{ \
+                \"run_build_and_deploy\":false, \
+                \"run_sync_s3_to_lower_env\":true, \
+                \"referrer\":\"${CIRCLE_WORKFLOW_ID}\", \
+                \"source_bucket\":\"${SOURCE_BUCKET}\", \
+                \"destination_bucket\":\"${DESTINATION_BUCKET}\"}}"
       - run:
           name: 'Delete OpenSearch alpha/beta clusters'
           command: |
@@ -569,8 +592,12 @@ jobs:
           command: |
             ./scripts/wait-for-workflow/enable-wait-for-workflow-cron.sh
       - run:
-          name: Kick off the sync-s3-to-lower-env workflow
+          name: Kick off the sync-s3-to-lower-env workflow if not syncing early
           command: |
+            if [ "$SYNC_EARLY" == "true" ]; then
+              echo "skipping…"
+              exit 0
+            fi
             curl --request POST \
               --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
               --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
@@ -653,37 +680,6 @@ jobs:
               NODE_ENV=production ./scripts/reindex/index-cases/index-cases.ts 5
             fi
 
-  index-docket-entries:
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: xlarge
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-            source $BASH_ENV
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
-              ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
-                --domain-name "${DESTINATION_DOMAIN}" \
-                --region "us-east-1" \
-                --query 'DomainStatus.Endpoint' \
-                --output text)
-              echo "export ELASTICSEARCH_ENDPOINT=${ELASTICSEARCH_ENDPOINT}" >> $BASH_ENV
-            fi
-      - run:
-          name: Index Docket Entries
-          command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              NODE_ENV=production ./scripts/reindex/index-docket-entries/index-docket-entries.ts 5
-            fi
-
   index-users:
     docker:
       - image: *efcms-docker-image
@@ -715,6 +711,37 @@ jobs:
               NODE_ENV=production ./scripts/reindex/index-users/index-users.ts 5
             fi
 
+  index-docket-entries:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: xlarge
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+            source $BASH_ENV
+            if [ "$MIGRATE_FLAG" == "true" ]; then
+              DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
+              ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
+                --domain-name "${DESTINATION_DOMAIN}" \
+                --region "us-east-1" \
+                --query 'DomainStatus.Endpoint' \
+                --output text)
+              echo "export ELASTICSEARCH_ENDPOINT=${ELASTICSEARCH_ENDPOINT}" >> $BASH_ENV
+            fi
+      - run:
+          name: Index Docket Entries
+          command: |
+            if [ "$MIGRATE_FLAG" == "true" ]; then
+              NODE_ENV=production ./scripts/reindex/index-docket-entries/index-docket-entries.ts 5
+            fi
+
   cleanup-glue-job:
     docker:
       - image: *efcms-docker-image
@@ -743,7 +770,7 @@ jobs:
               --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
               --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
               --header "content-type: application/json" \
-              --data "{\"branch\":\"${CIRCLE_BRANCH}\"" | jq -r '.id')
+              --data "{\"branch\":\"${CIRCLE_BRANCH}\"}" | jq -r '.id')
 
   sync-s3-buckets-with-timeout:
     docker:
@@ -998,12 +1025,12 @@ workflows:
     jobs:
       - initiate-glue-job:
           <<: *only-test
-      - wait-for-glue-workflow:
+      - wait-for-s3-sync-workflow:
           <<: *only-test
           type: approval
           requires:
             - initiate-glue-job
-      - wait-for-s3-sync-workflow:
+      - wait-for-glue-workflow:
           <<: *only-test
           type: approval
           requires:
@@ -1019,16 +1046,15 @@ workflows:
       - index-users:
           <<: *only-test
           requires:
-            - migrate-restored-postgres-data
+            - index-cases
       - index-docket-entries:
           <<: *only-test
           requires:
-            - index-cases
+            - wait-for-s3-sync-workflow
             - index-users
       - cleanup-glue-job:
           <<: *only-test
           requires:
-            - wait-for-s3-sync-workflow
             - index-docket-entries
 
   glue-to-lower-env:
