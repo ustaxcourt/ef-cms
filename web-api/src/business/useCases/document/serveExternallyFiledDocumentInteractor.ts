@@ -29,11 +29,13 @@ export const serveExternallyFiledDocument = async (
     clientConnectionId,
     docketEntryId,
     docketNumbers,
+    isFiledAcrossAllCases,
     subjectCaseDocketNumber,
   }: {
     clientConnectionId: string;
     docketEntryId: string;
     docketNumbers: string[];
+    isFiledAcrossAllCases?: boolean;
     subjectCaseDocketNumber: string;
   },
   authorizedUser: UnknownAuthUser,
@@ -97,8 +99,7 @@ export const serveExternallyFiledDocument = async (
       originalSubjectDocketEntry.eventCode,
     ) || originalSubjectDocketEntry.documentTitle?.includes('Simultaneous');
 
-  if (subjectCaseIsSimultaneousDocType) {
-    // TODO: 8477 - figure out how to prevent multi docket serving for sim documents when not on lead case?
+  if (subjectCaseIsSimultaneousDocType && isFiledAcrossAllCases) {
     if (
       subjectCaseEntity.leadDocketNumber &&
       subjectCaseEntity.leadDocketNumber !== subjectCaseEntity.docketNumber

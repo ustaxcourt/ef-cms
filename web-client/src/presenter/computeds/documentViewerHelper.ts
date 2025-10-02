@@ -5,7 +5,10 @@ import { getShowNotServedForDocument } from './getShowNotServedForDocument';
 import { state } from '@web-client/presenter/app.cerebral';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
-import { ORDER_RESPONSE_DOCUMENTS_ALLOWLIST, SIMULTANEOUS_DOCUMENT_EVENT_CODES } from '@shared/business/entities/EntityConstants';
+import {
+  ORDER_RESPONSE_DOCUMENTS_ALLOWLIST,
+  SIMULTANEOUS_DOCUMENT_EVENT_CODES,
+} from '@shared/business/entities/EntityConstants';
 
 export const documentViewerHelper = (
   get: Get,
@@ -57,14 +60,13 @@ export const documentViewerHelper = (
     draftDocuments: formattedCaseDetail.draftDocuments,
   });
 
-
   const isSimultaneousDocType = Boolean(
     viewerDocumentToDisplay &&
-    ((viewerDocumentToDisplay.eventCode &&
-      SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(
-        viewerDocumentToDisplay.eventCode,
-      )) ||
-      viewerDocumentToDisplay.documentTitle?.includes('Simultaneous')),
+      ((viewerDocumentToDisplay.eventCode &&
+        SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(
+          viewerDocumentToDisplay.eventCode,
+        )) ||
+        viewerDocumentToDisplay.documentTitle?.includes('Simultaneous')),
   );
 
   const isCourtIssuedDocument = COURT_ISSUED_EVENT_CODES.map(
@@ -83,7 +85,6 @@ export const documentViewerHelper = (
     !formattedDocumentToDisplay.isPetition &&
     permissions.SERVE_DOCUMENT;
 
-
   const showServePetitionButton =
     showNotServed &&
     formattedDocumentToDisplay.isPetition &&
@@ -91,7 +92,7 @@ export const documentViewerHelper = (
 
   const showSignStipulatedDecisionButton =
     formattedDocumentToDisplay.eventCode ===
-    PROPOSED_STIPULATED_DECISION_EVENT_CODE &&
+      PROPOSED_STIPULATED_DECISION_EVENT_CODE &&
     DocketEntry.isServed(formattedDocumentToDisplay) &&
     !formattedCaseDetail.docketEntries.find(
       d => d.eventCode === STIPULATED_DECISION_EVENT_CODE && !d.archived,
@@ -103,13 +104,18 @@ export const documentViewerHelper = (
 
   const isMemberCase = Boolean(
     caseDetail?.leadDocketNumber &&
-    caseDetail?.leadDocketNumber !== caseDetail?.docketNumber,
+      caseDetail?.leadDocketNumber !== caseDetail?.docketNumber,
   );
+
+  const isDocumentUnserved = () => {
+    return showNotServed || !servedLabel;
+  };
 
   const showCompleteQcButton =
     permissions.EDIT_DOCKET_ENTRY &&
     formattedDocumentToDisplay.qcNeeded &&
-    isLeadCase && !isMemberCase;
+    isLeadCase &&
+    !isMemberCase;
 
   const showApplyStampButton =
     permissions.STAMP_MOTION &&
@@ -127,31 +133,25 @@ export const documentViewerHelper = (
     !isCourtIssuedDocument &&
     !formattedDocumentToDisplay.isPetition &&
     permissions.SERVE_DOCUMENT &&
-    (
-      // If not a simultaneous doc, use normal logic
-      !isSimultaneousDocType ||
+    // If not a simultaneous doc, use normal logic
+    (!isSimultaneousDocType ||
       // If simultaneous doc on lead case, show serve button
       (isSimultaneousDocType && isLeadCase) ||
       // If simultaneous doc on member case and NOT filed across group, show serve button
-      (isSimultaneousDocType && isMemberCase && !isFiledAcrossAllCases)
-    );
+      (isSimultaneousDocType && isMemberCase && !isFiledAcrossAllCases));
 
-  const isDocumentUnserved = () => {
-    return (
-      showNotServed || !servedLabel
-    );
-  };
+  const showLeadCaseBanner =
+    isMemberCase &&
+    isSimultaneousDocType &&
+    isFiledAcrossAllCases &&
+    isDocumentUnserved() &&
+    permissions.SERVE_DOCUMENT;
 
   const showStatusReportOrderButton =
     permissions.STATUS_REPORT_ORDER &&
     STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST.includes(
       formattedDocumentToDisplay.eventCode,
     );
-
-  const showLeadCaseBanner = isMemberCase &&
-    isSimultaneousDocType &&
-    isDocumentUnserved() &&
-    permissions.SERVE_DOCUMENT;
 
   return {
     description: formattedDocumentToDisplay.descriptionDisplay,
