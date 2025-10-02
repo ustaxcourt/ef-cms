@@ -26,6 +26,7 @@ export const confirmInitiateServiceModalHelper = (
   const docketEntryId = get(state.docketEntryId);
   const formattedCaseDetail = get(state.formattedCaseDetail);
   const form = get(state.form);
+  const isFiledAcrossAllCases = get(state.isFiledAcrossAllCases);
 
   const isOnMessageDetailPage = get(state.currentPage) === 'MessageDetail';
   let { documentTitle, eventCode, isPaper } = form;
@@ -54,8 +55,9 @@ export const confirmInitiateServiceModalHelper = (
   let additionalServedCases: { docketNumber: string; petitioners: string }[] =
     [];
   if (
-    SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(eventCode) ||
-    documentTitle?.includes('Simultaneous')
+    isFiledAcrossAllCases !== false &&
+    (SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(eventCode) ||
+      documentTitle?.includes('Simultaneous'))
   ) {
     if (Array.isArray(formattedCaseDetail.consolidatedCases)) {
       additionalServedCases = formattedCaseDetail.consolidatedCases
@@ -69,7 +71,9 @@ export const confirmInitiateServiceModalHelper = (
 
   const confirmationText = showConsolidatedCasesForService
     ? 'The following document will be served on all parties in selected cases:'
-    : 'The following document will be served on all parties:';
+    : isFiledAcrossAllCases === false
+      ? 'The following document will be served on this case:'
+      : 'The following document will be served on all parties:';
 
   let parties;
   if (showConsolidatedCasesForService) {
