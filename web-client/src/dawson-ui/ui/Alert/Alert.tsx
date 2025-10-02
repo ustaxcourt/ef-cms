@@ -104,11 +104,11 @@ function AlertHeader({
       ></div>
       {isDismissible && (
         <Button
-          className="tw:m-0 tw:p-0 tw:gap-3 tw:w-auto tw:fill-primary tw:self-start tw:ml-auto tw:mt-0.5 tw:mr-3 tw:rounded-sm"
+          className="tw:m-0 tw:p-0 tw:gap-3 tw:w-auto tw:fill-primary tw:self-start tw:ml-auto tw:mt-0.5 tw:rounded-sm"
           variant={'primaryTertiary'}
           onClick={closeButtonOnClick}
         >
-          <div className="tw:flex tw:items-center tw:text-sm/3 tw:xs:text-base/4 tw:hover:text-primary-dark tw:active:text-primary-darker">
+          <div className="tw:flex tw:items-center tw:text-sm/3 tw:xs:text-base/4 tw:hover:text-primary-dark tw:active:text-primary-darker tw:active:fill-primary-darker tw:hover:fill-primary-dark">
             <span className="tw:mr-2">Close</span>
             <CircleXmark className="tw:!h-[14px] tw:!w-[14px] tw:xs:!h-[16px] tw:xs:!w-[16px]"/>
           </div>
