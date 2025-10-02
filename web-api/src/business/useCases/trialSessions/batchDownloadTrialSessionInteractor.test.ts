@@ -1,15 +1,22 @@
 import '@web-api/persistence/postgres/trialSessions/mocks.jest';
-import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
+import {
+  ALLOWLIST_FEATURE_FLAGS,
+  CASE_STATUS_TYPES,
+} from '@shared/business/entities/EntityConstants';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   batchDownloadTrialSessionInteractor,
+  batchDownloadTrialSessionInteractorHelper,
   generateValidDocketEntryFilename,
 } from './batchDownloadTrialSessionInteractor';
 import { mockJudgeUser, mockPetitionerUser } from '@shared/test/mockAuthUsers';
 import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { getCalendaredCasesForTrialSession as getCalendaredCasesForTrialSessionMock } from '@web-api/persistence/postgres/trialSessions/getCalendaredCasesForTrialSession';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+
+jest.mock('@web-api/dispatchers/batch/pollAWSBatchProgress');
+import { pollAWSBatchProgress as mockPollAWSBatchProgress } from '@web-api/dispatchers/batch/pollAWSBatchProgress';
 
 describe('batchDownloadTrialSessionInteractor', () => {
   let mockCase;
@@ -18,6 +25,10 @@ describe('batchDownloadTrialSessionInteractor', () => {
   const getCalendaredCasesForTrialSession = jest.mocked(
     getCalendaredCasesForTrialSessionMock,
   );
+
+  const mockSendNotificationToUser = jest.fn();
+
+  const pollAWSBatchProgress = jest.mocked(mockPollAWSBatchProgress);
 
   beforeEach(() => {
     mockCase = {
@@ -78,6 +89,15 @@ describe('batchDownloadTrialSessionInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .isFileExists.mockResolvedValue(true);
+  });
+
+  beforeAll(() => {
+    applicationContext.getNotificationGateway().sendNotificationToUser =
+      mockSendNotificationToUser;
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   describe('file name generation', () => {
@@ -332,5 +352,77 @@ describe('batchDownloadTrialSessionInteractor', () => {
       onProgress: expect.anything(),
       outputZipName: 'September_26_2019-Birmingham.zip',
     });
+  });
+
+  it('should test batchDownloadTrialSessionInteractorHelper', async () => {
+    pollAWSBatchProgress.mockImplementation(async ({ onProgress }) => {
+      // Simulate progress by calling onProgress callback
+      if (onProgress) {
+        await onProgress({ totalFiles: 1, filesCompleted: 1 });
+        await onProgress({ totalFiles: 1, filesCompleted: 1 });
+      }
+      // Return a completed job status
+      return {
+        jobName: 'testjob',
+        jobId: 'jobid',
+        jobQueue: '1234',
+        startedAt: 0,
+        jobDefinition: 'testjobdef',
+        status: 'SUCCEEDED',
+      };
+    });
+
+    applicationContext
+      .getUseCases()
+      .getAllFeatureFlagsInteractor.mockResolvedValueOnce({
+        [ALLOWLIST_FEATURE_FLAGS.AWS_BATCH_ZIPPER_MINIMUM_COUNT.key]: 2,
+      });
+
+    applicationContext.environment.stage = 'not-local';
+
+    applicationContext.getPersistenceGateway().uploadDocument = jest.fn();
+
+    applicationContext.getDispatchers().sendZipperBatchJob = jest
+      .fn()
+      .mockResolvedValue({ jobId: '123' });
+
+    applicationContext.getPersistenceGateway().zipDocuments = jest.fn();
+
+    await batchDownloadTrialSessionInteractorHelper(
+      applicationContext,
+      { trialSessionId: 'test-123', clientConnectionId: 'abc-123' },
+      mockJudgeUser,
+    );
+
+    expect(mockSendNotificationToUser).toHaveBeenCalledTimes(5);
+
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser,
+    ).toHaveBeenCalled();
+  });
+  it('should throw an error if AWS batch job fails to start', async () => {
+    applicationContext
+      .getUseCases()
+      .getAllFeatureFlagsInteractor.mockResolvedValueOnce({
+        [ALLOWLIST_FEATURE_FLAGS.AWS_BATCH_ZIPPER_MINIMUM_COUNT.key]: 2,
+      });
+
+    applicationContext.environment.stage = 'not-local';
+
+    applicationContext.getPersistenceGateway().uploadDocument = jest.fn();
+
+    const err = 'AWS batch job failed to start';
+
+    applicationContext.getDispatchers().sendZipperBatchJob = jest
+      .fn()
+      .mockRejectedValue(new Error(err));
+
+    await expect(
+      batchDownloadTrialSessionInteractorHelper(
+        applicationContext,
+        { trialSessionId: 'test-123', clientConnectionId: 'abc-123' },
+        mockJudgeUser,
+      ),
+    ).rejects.toThrow(`Error starting AWS batch job: Error: ${err}`);
   });
 });

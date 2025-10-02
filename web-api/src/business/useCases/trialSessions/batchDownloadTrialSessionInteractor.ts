@@ -57,7 +57,7 @@ export const batchDownloadTrialSessionInteractor = async (
   }
 };
 
-const batchDownloadTrialSessionInteractorHelper = async (
+export const batchDownloadTrialSessionInteractorHelper = async (
   applicationContext: ServerApplicationContext,
   {
     trialSessionId,
