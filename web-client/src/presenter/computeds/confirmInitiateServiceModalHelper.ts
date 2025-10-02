@@ -47,8 +47,9 @@ export const confirmInitiateServiceModalHelper = (
       SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(eventCode) ||
       documentTitle?.includes('Simultaneous')
     ) {
-      showConsolidatedCasesForService =
-        showConsolidatedCasesForService && isPaper;
+      if (isPaper) {
+        showConsolidatedCasesForService = false;
+      }
     }
   }
 
