@@ -188,13 +188,13 @@ export const CaseDetailHeader = connect<
                           aria-label={`isLeadCase: ${formattedCaseDetail.isLeadCase}`}
                           id="lead-case-tag"
                           role="note"
-                          className="margin-right-1"
+                          className="margin-right-1 text-tbottom"
                         >
                           Lead case
                         </Tag>
                       )}
                       <Tag
-                        className="margin-right-1"
+                        className="margin-right-1 text-tbottom"
                         aria-label={`status: ${formattedCaseDetail.status}`}
                         data-testid="case-status"
                         id="case-status"
@@ -204,7 +204,7 @@ export const CaseDetailHeader = connect<
                       {formattedCaseDetail.associatedJudge && (
                         <Tag
                           aria-label="associated judge"
-                          className="margin-right-1"
+                          className="margin-right-1 text-tbottom"
                           role="note"
                           iconProps={{ icon: 'gavel' }}
                         >
@@ -213,7 +213,7 @@ export const CaseDetailHeader = connect<
                       )}
                       {caseDetailHeaderHelper.showBlockedTag && (
                         <Tag
-                          className="margin-right-1"
+                          className="margin-right-1 text-tbottom"
                           data-testid="blocked-case-icon"
                           iconProps={{ icon: 'hand-paper' }}
                           variant="destructive"
