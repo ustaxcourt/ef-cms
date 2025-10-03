@@ -15,7 +15,7 @@ import { CircleXmark } from '../icons';
 const alertVariants = cva(
   cn(
     'tw:relative tw:border-solid tw:border-0',
-    'tw:xs:border-l-8 tw:xs:p-3 tw:border-l-6 tw:p-2',
+    'tw:xs:border-l-8 tw:xs:p-[16px] tw:xs:pb-[10px] tw:border-l-6 tw:p-[12px] tw:pb-[8px]',
     'tw:font-normal tw:xs:text-lg tw:text-base/4',
     'tw:[&_ul]:m-0 tw:[&_ul]:-ml-4 tw:[&_ul]:list-disc',
     'tw:xs:[&_svg]:h-7 tw:xs:[&_svg]:w-7 tw:[&_svg]:h-6 tw:[&_svg]:w-6',
@@ -93,9 +93,7 @@ function AlertHeader({
       </div>
       <div
         className={cn(
-          title
-            ? 'tw:font-bold'
-            : '',
+          title ? 'tw:font-bold' : '',
           'tw:pb-0 tw:xs:ml-4 tw:ml-3 tw:xs:mr-4 tw:mr-3 tw:text-base/5 tw:xs:text-lg/6',
         )}
         data-slot="alert-title"
@@ -104,13 +102,13 @@ function AlertHeader({
       ></div>
       {isDismissible && (
         <Button
-          className="tw:m-0 tw:p-0 tw:gap-3 tw:w-auto tw:fill-primary tw:self-start tw:ml-auto tw:mt-0.5 tw:rounded-sm"
+          className="tw:m-0 tw:p-0 tw:gap-3 tw:w-auto tw:fill-primary tw:self-start tw:ml-auto tw:rounded-sm tw:items-center tw:mt-auto tw:mb-auto"
           variant={'primaryTertiary'}
           onClick={closeButtonOnClick}
         >
-          <div className="tw:flex tw:items-center tw:text-sm/3 tw:xs:text-base/4 tw:hover:text-primary-dark tw:active:text-primary-darker tw:active:fill-primary-darker tw:hover:fill-primary-dark tw:xs:mt-1.25">
+          <div className="tw:flex tw:items-center tw:text-sm/3 tw:xs:text-base/4 tw:hover:text-primary-dark tw:active:text-primary-darker tw:active:fill-primary-darker tw:hover:fill-primary-dark">
             <span className="tw:mr-2">Close</span>
-            <CircleXmark className="tw:!h-[14px] tw:!w-[14px] tw:xs:!h-[16px] tw:xs:!w-[16px]"/>
+            <CircleXmark className="tw:!h-[14px] tw:!w-[14px] tw:xs:!h-[16px] tw:xs:!w-[16px]" />
           </div>
         </Button>
       )}
@@ -121,7 +119,7 @@ function AlertHeader({
 function AlertDescription({ ...props }: React.ComponentProps<'p'>) {
   return (
     <div
-      className="tw:xs:mt-2.5 tw:text-base/3.5 tw:xs:text-lg/6 tw:ml-8 tw:xs:ml-10 tw:pt-2 tw:xs:pt-0"
+      className="tw:xs:mt-[8px] tw:text-base/3.5 tw:xs:text-lg/6 tw:ml-8 tw:xs:ml-10 tw:pt-2 tw:xs:pt-0"
       data-slot="alert-description"
       {...props}
     />
