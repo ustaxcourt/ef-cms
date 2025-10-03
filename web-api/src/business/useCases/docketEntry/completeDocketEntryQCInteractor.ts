@@ -412,6 +412,10 @@ const completeDocketEntryQC = async (
     }
   } else if (needsNoticeOfDocketChange) {
     const paperServiceResults: any[] = [];
+    const caseSpecificNotices: Array<{
+      caseEntity: Case;
+      docketEntryId: string;
+    }> = []; // Track case-specific NODCs
 
     if (isMultiDocketed) {
       for (const de of docketEntriesAcrossCases) {
@@ -566,18 +570,14 @@ const completeDocketEntryQC = async (
             caseToUpdate: memberCaseEntity,
           });
 
-          const paperServiceResult = await applicationContext
-            .getUseCaseHelpers()
-            .serveDocumentAndGetPaperServicePdf({
-              applicationContext,
-              caseEntities: [memberCaseEntity],
+          // Collect case-specific NODC info for consolidated paper service PDF generation
+          if (memberServedParties.paper.length > 0) {
+            caseSpecificNotices.push({
+              caseEntity: memberCaseEntity,
               docketEntryId: memberNoticeUpdatedDocketEntry.docketEntryId,
             });
-
-          if (memberServedParties.paper.length > 0) {
             paperServiceResults.push({
               docketNumber: memberCaseEntity.docketNumber,
-              pdfUrl: paperServiceResult && paperServiceResult.pdfUrl,
               documentTitle: memberNoticeUpdatedDocketEntry.documentTitle,
               parties: memberServedParties.paper,
             });
@@ -586,6 +586,26 @@ const completeDocketEntryQC = async (
           applicationContext.logger?.error(
             `Failed to generate NODC for docketEntryId ${docketEntryId} on case ${de.docketNumber}: ${err}`,
           );
+        }
+      }
+
+      // Generate ONE consolidated paper service PDF with all case-specific NODCs
+      if (caseSpecificNotices.length > 0) {
+        const consolidatedPaperServiceResult = await applicationContext
+          .getUseCaseHelpers()
+          .serveDocumentAndGetPaperServicePdf({
+            applicationContext,
+            caseEntities: caseSpecificNotices.map(n => n.caseEntity),
+            docketEntryId: caseSpecificNotices[0].docketEntryId, // Fallback for backward compatibility
+            caseSpecificDocketEntries: caseSpecificNotices, // Pass case-specific NODCs
+          });
+
+        if (consolidatedPaperServiceResult) {
+          paperServicePdfUrl = consolidatedPaperServiceResult.pdfUrl;
+          paperServiceDocumentTitle =
+            paperServiceResults.length > 0
+              ? paperServiceResults[0].documentTitle
+              : undefined;
         }
       }
     } else {
@@ -687,12 +707,6 @@ const completeDocketEntryQC = async (
           new Map(aggregatedPaperParties.map(p => [p.name, p])).values(),
         );
       }
-      paperServicePdfUrl = paperServiceResults.length
-        ? paperServiceResults[0].pdfUrl
-        : paperServicePdfUrl;
-      paperServiceDocumentTitle = paperServiceResults.length
-        ? paperServiceResults[0].documentTitle
-        : paperServiceDocumentTitle;
     }
   }
 

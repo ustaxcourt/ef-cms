@@ -7,12 +7,17 @@ export const serveDocumentAndGetPaperServicePdf = async ({
   applicationContext,
   caseEntities,
   docketEntryId,
+  caseSpecificDocketEntries,
   electronicParties,
   stampedPdf,
 }: {
   applicationContext: ServerApplicationContext;
   caseEntities: Case[];
   docketEntryId: string;
+  caseSpecificDocketEntries?: Array<{
+    caseEntity: Case;
+    docketEntryId: string;
+  }>; // For consolidated NODCs
   stampedPdf?: any;
   electronicParties?: { email: string; name: string }[];
 }): Promise<{ pdfUrl: string } | undefined> => {
@@ -22,40 +27,77 @@ export const serveDocumentAndGetPaperServicePdf = async ({
 
   const newPdfDoc = await PDFDocument.create();
 
-  for (const caseEntity of caseEntities) {
-    const servedParties = aggregatePartiesForService(caseEntity);
-    if (electronicParties) servedParties.electronic = electronicParties;
-
-    await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-      applicationContext,
+  if (caseSpecificDocketEntries && caseSpecificDocketEntries.length > 0) {
+    for (const {
       caseEntity,
-      docketEntryId,
-      servedParties,
-    });
+      docketEntryId: caseSpecificDocketEntryId,
+    } of caseSpecificDocketEntries) {
+      const servedParties = aggregatePartiesForService(caseEntity);
+      if (electronicParties) servedParties.electronic = electronicParties;
 
-    if (servedParties.paper.length > 0) {
-      if (!originalPdfDoc) {
-        if (stampedPdf) {
-          originalPdfDoc = await PDFDocument.load(stampedPdf);
-        } else {
-          const pdfData = await applicationContext
-            .getPersistenceGateway()
-            .getDocument({
-              applicationContext,
-              key: docketEntryId,
-            });
-          originalPdfDoc = await PDFDocument.load(pdfData);
-        }
+      await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+        applicationContext,
+        caseEntity,
+        docketEntryId: caseSpecificDocketEntryId,
+        servedParties,
+      });
+
+      if (servedParties.paper.length > 0) {
+        const pdfData = await applicationContext
+          .getPersistenceGateway()
+          .getDocument({
+            applicationContext,
+            key: caseSpecificDocketEntryId,
+          });
+        const caseSpecificNoticeDoc = await PDFDocument.load(pdfData);
+
+        await applicationContext
+          .getUseCaseHelpers()
+          .appendPaperServiceAddressPageToPdf({
+            applicationContext,
+            caseEntity,
+            newPdfDoc,
+            noticeDoc: caseSpecificNoticeDoc,
+            servedParties,
+          });
       }
-      await applicationContext
-        .getUseCaseHelpers()
-        .appendPaperServiceAddressPageToPdf({
-          applicationContext,
-          caseEntity,
-          newPdfDoc,
-          noticeDoc: originalPdfDoc,
-          servedParties,
-        });
+    }
+  } else {
+    for (const caseEntity of caseEntities) {
+      const servedParties = aggregatePartiesForService(caseEntity);
+      if (electronicParties) servedParties.electronic = electronicParties;
+
+      await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+        applicationContext,
+        caseEntity,
+        docketEntryId,
+        servedParties,
+      });
+
+      if (servedParties.paper.length > 0) {
+        if (!originalPdfDoc) {
+          if (stampedPdf) {
+            originalPdfDoc = await PDFDocument.load(stampedPdf);
+          } else {
+            const pdfData = await applicationContext
+              .getPersistenceGateway()
+              .getDocument({
+                applicationContext,
+                key: docketEntryId,
+              });
+            originalPdfDoc = await PDFDocument.load(pdfData);
+          }
+        }
+        await applicationContext
+          .getUseCaseHelpers()
+          .appendPaperServiceAddressPageToPdf({
+            applicationContext,
+            caseEntity,
+            newPdfDoc,
+            noticeDoc: originalPdfDoc,
+            servedParties,
+          });
+      }
     }
   }
 
