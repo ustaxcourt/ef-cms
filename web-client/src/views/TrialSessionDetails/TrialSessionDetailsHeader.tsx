@@ -20,7 +20,7 @@ export const TrialSessionDetailsHeader = ({
             <h1 tabIndex={-1}>{formattedTrialSessionDetails.trialLocation}</h1>
             {formattedTrialSessionDetails.formattedTerm &&
               formattedTrialSessionDetails.sessionStatus && (
-                <Tag>
+                <Tag className="text-super">
                   <span aria-hidden="true">
                     {formattedTrialSessionDetails.formattedTerm}:{' '}
                     {formattedTrialSessionDetails.sessionStatus}
