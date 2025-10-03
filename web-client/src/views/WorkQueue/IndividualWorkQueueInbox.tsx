@@ -2,6 +2,7 @@ import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { Icon } from '../../ustc-ui/Icon/Icon';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { connect } from '@web-client/presenter/shared.cerebral';
+import { sortMemberCases } from '@web-client/presenter/computeds/consolidateWorkQueueItemsOutboxHelper';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
@@ -39,7 +40,7 @@ export const IndividualWorkQueueInbox = connect(
               <th>Case Status</th>
             </tr>
           </thead>
-          <tbody >
+          <tbody>
             {formattedWorkQueue.map(item => {
               return (
                 <tr key={item.workItemId}>
@@ -56,7 +57,7 @@ export const IndividualWorkQueueInbox = connect(
                           inConsolidatedGroup={item.inConsolidatedGroup}
                           showLeadCaseIcon={item.inLeadCase}
                         />
-                        {item.groupedCases
+                        {sortMemberCases(item.groupedCases)
                           .filter(
                             (c: any) => c.docketNumber !== item.docketNumber,
                           )
@@ -88,15 +89,14 @@ export const IndividualWorkQueueInbox = connect(
                     {item.groupedCases ? (
                       <div className="grouped-cases-row">
                         <div className="member-case-links">
-                          {item.groupedCases
-                            .map((c: any) => (
-                              <div
-                                key={c.docketNumber}
-                                className="member-case-line"
-                              >
-                                <CaseLink formattedCase={c} />
-                              </div>
-                            ))}
+                          {sortMemberCases(item.groupedCases).map((c: any) => (
+                            <div
+                              key={c.docketNumber}
+                              className="member-case-line"
+                            >
+                              <CaseLink formattedCase={c} />
+                            </div>
+                          ))}
                         </div>
                       </div>
                     ) : (

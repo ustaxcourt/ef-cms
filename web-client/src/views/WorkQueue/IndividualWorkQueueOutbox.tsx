@@ -71,7 +71,8 @@ export const IndividualWorkQueueOutbox = connect(
                             workItem.leadItemForIcons.docketNumber
                           }
                         />
-                        {workItem.memberCasesUnique
+                        {outboxHelper
+                          .sortMemberCases(workItem.memberCasesUnique)
                           .filter(
                             c =>
                               c.docketNumber !==

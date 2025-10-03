@@ -4,10 +4,10 @@ import { Icon } from '../../ustc-ui/Icon/Icon';
 import { WorkQueueAssignments } from './WorkQueueAssignments';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
+import { sortMemberCases } from '@web-client/presenter/computeds/consolidateWorkQueueItemsOutboxHelper';
 import { state } from '@web-client/presenter/app.cerebral';
 import { FormattedWorkItemWithCaseInfo } from '../../presenter/computeds/formattedWorkQueue';
 import React from 'react';
-import { Case } from '@shared/business/entities/cases/Case';
 
 const SectionWorkQueueTable = connect(
   {
@@ -156,7 +156,7 @@ function SectionWorkQueueTableRow({
               inConsolidatedGroup={item.inConsolidatedGroup}
               showLeadCaseIcon={item.inLeadCase}
             />
-            {item.groupedCases
+            {sortMemberCases(item.groupedCases)
               .filter((c: any) => c.docketNumber !== item.docketNumber)
               .map((c: any) => (
                 <ConsolidatedCaseIcon
@@ -182,9 +182,7 @@ function SectionWorkQueueTableRow({
         {item.groupedCases ? (
           <div className="grouped-cases-row">
             <div className="member-case-links">
-              {item.groupedCases.sort((a: any, b: any) => {
-                return Case.docketNumberSort(a.docketNumber, b.docketNumber);
-              }).map((c: any) => (
+              {sortMemberCases(item.groupedCases).map((c: any) => (
                 <div key={c.docketNumber} className="member-case-line">
                   <CaseLink formattedCase={c} />
                 </div>
