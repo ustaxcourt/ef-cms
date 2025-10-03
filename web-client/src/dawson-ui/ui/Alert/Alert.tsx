@@ -10,7 +10,6 @@ import {
 
 import { cn } from '@web-client/lib/utils';
 import { Button } from '@web-client/dawson-ui/ui/button';
-import { CircleXmark } from '../icons';
 
 const alertVariants = cva(
   cn(
@@ -103,14 +102,10 @@ function AlertHeader({
       {isDismissible && (
         <div className="tw:ml-auto">
           <Button
-            className="tw:m-0 tw:p-0 tw:gap-[12px] tw:w-auto tw:fill-primary tw:self-start tw:ml-auto tw:rounded-sm tw:items-center tw:mt-auto tw:mb-auto"
-            variant={'primaryTertiary'}
-            onClick={closeButtonOnClick}
-          >
-            <div className="tw:flex tw:items-center tw:text-[14px] tw:leading-[12px] tw:xs:text-[16px] tw:hover:text-primary-dark tw:active:text-primary-darker tw:active:fill-primary-darker tw:hover:fill-primary-dark tw:xs:leading-[24px]">
-              <span className="tw:mr-[8px]">Close</span>
-              <CircleXmark className="tw:!h-[14px] tw:!w-[14px] tw:xs:!h-[16px] tw:xs:!w-[16px]" />
-            </div>
+            variant="terminatorButton"
+            aria-label="Terminator Button"
+            >
+            Close
           </Button>
         </div>
       )}

@@ -5,13 +5,14 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@web-client/lib/utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { CircleXmark } from './icons';
 
 const buttonVariants = cva(
   cn(
-    'tw:text-[16px] tw:xs:text-[18px] tw:cursor-pointer tw:inline-flex tw:items-center tw:justify-center tw:whitespace-nowrap tw:rounded-md tw:text-base tw:transition-all tw:disabled:pointer-events-none tw:disabled:opacity-50 tw:[&_svg]:pointer-events-none tw:[&_svg:not([class*=size-])]:size-4 tw:shrink-0 tw:[&_svg]:shrink-0 tw:border-none',
+    'tw:text-[16px] tw:xs:text-[18px] tw:cursor-pointer tw:inline-flex tw:items-center tw:justify-center tw:whitespace-nowrap tw:rounded-[6px] tw:text-base tw:transition-all tw:disabled:pointer-events-none tw:disabled:opacity-50 tw:[&_svg]:pointer-events-none tw:[&_svg:not([class*=size-])]:size-4 tw:shrink-0 tw:[&_svg]:shrink-0 tw:border-none',
     'tw:focus-visible:ring-[4px] tw:focus-visible:ring-ring', // focus-visible
     'tw:aria-invalid:ring-destructive/20 tw:aria-invalid:border-destructive', // aria
-    'tw:w-full tw:xs:w-auto tw:px-4 tw:py-2', // small & greater
+    'tw:w-full tw:xs:w-auto tw:px-[16px] tw:py-[8px]', // small & greater
   ),
   {
     variants: {
@@ -26,12 +27,12 @@ const buttonVariants = cva(
         destructive: cn(
           'tw:h-[40px] tw:bg-destructive tw:text-white tw:shadow-xs  tw:outline-none tw:border-none tw:font-bold', // standard
           'tw:hover:bg-destructive-dark', // hover
-          'tw:focus-visible:ring-offset-4', // focus-visible
+          'tw:focus-visible:ring-offset-[4px]', // focus-visible
           'tw:active:bg-destructive-darker', // active
           'tw:invalid:bg-grey-light', // invalid
         ),
         secondary: cn(
-          'tw:h-[40px] tw:shadow-none tw:bg-background tw:border-primary tw:border-2 tw:border-solid tw:text-primary tw:font-bold', // standard
+          'tw:h-[40px] tw:shadow-none tw:bg-background tw:border-primary tw:border-[2px] tw:border-solid tw:text-primary tw:font-bold', // standard
           'tw:hover:text-primary-dark tw:hover:border-primary-dark', // hover
           'tw:focus:outline-none tw:focus:border-primary', // focus
           'tw:focus-visible:ring-offset-[4px] tw:focus-visible:border-primary tw:focus-visible:outline-none', // focus-visible
@@ -53,6 +54,17 @@ const buttonVariants = cva(
           'tw:invalid:text-grey-light', // inactive
           'tw:ml-0 tw:mr-auto tw:text-left', // left alignment
         ),
+        terminatorButton: cn(
+          'tw:text-[16px] tw:xs:text-[18px] tw:inline-flex tw:cursor-pointer tw:whitespace-nowrap tw:w-auto tw:xs:w-auto',
+          'tw:m-0 tw:p-0 tw:gap-[12px] tw:bg-transparent tw:text-primary tw:fill-primary tw:text-left tw:font-normal tw:underline tw:border-none tw:outline-none',
+          'tw:rounded-[2px] tw:self-start tw:ml-auto tw:mt-auto tw:mb-auto tw:transition-all tw:shrink-0', // standard          
+          'tw:hover:underline tw:hover:text-primary-dark', // Hover state
+          'tw:active:text-primary-darker', // Active state
+          'tw:focus-visible:ring-[4px] tw:focus-visible:ring-ring tw:focus-visible:ring-offset-[4px] tw:focus-visible:bg-white', // Focus visible state
+          'tw:disabled:pointer-events-none tw:disabled:opacity-50', // Disabled state         
+          'tw:invalid:text-grey-light tw:aria-invalid:ring-destructive/20 tw:aria-invalid:border-destructive', // Invalid state
+          'tw:[&_svg]:pointer-events-none tw:[&_svg]:shrink-0 tw:[&_svg:not([class*=size-])]:size-4' // SVG/Icon styles
+        )
       },
     },
     defaultVariants: {
@@ -60,6 +72,7 @@ const buttonVariants = cva(
     },
   },
 );
+
 export function Button({
   className,
   variant,
@@ -92,9 +105,18 @@ export function Button({
       {...props}
       role="button"
     >
-      {iconPosition === 'left' && Icon}
-      {children}
-      {iconPosition === 'right' && Icon}
+      {variant === "terminatorButton" ? (
+        <div className="tw:flex tw:items-center tw:text-[14px]/3 tw:xs:text-[16px]/4 tw:hover:text-primary-dark tw:active:text-primary-darker tw:fill-primary tw:active:fill-primary-darker tw:hover:fill-primary-darker">
+          <span className="tw:mr-[8px]">{children}</span>
+          <CircleXmark className="tw:!h-[14px] tw:!w-[14px] tw:xs:!h-[16px] tw:xs:!w-[16px]"/>
+        </div>
+      ) : (
+        <>
+          {iconPosition === 'left' && Icon}
+          {children}
+          {iconPosition === 'right' && Icon}
+        </>
+      )}
     </Comp>
   );
 }
