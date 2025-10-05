@@ -2091,3 +2091,4 @@ export const ALLOWED_EVENT_CODES = [
 ];
 export const PRO_SE_CHECKLIST = 'pro-se-checklist';
 
+export const NOT_PROVIDED = 'Not Provided';

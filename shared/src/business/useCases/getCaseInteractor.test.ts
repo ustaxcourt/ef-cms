@@ -28,6 +28,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { getWorkItemsByDocketNumber as getWorkItemsByDocketNumberMock } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { docketClerk1User } from '@shared/test/mockUsers';
+import { MOCK_ANSWER_2 } from '@shared/test/mockDocketEntry';
 
 describe('getCaseInteractor', () => {
   const irsPractitionerId = '6cf19fba-18c6-467a-9ea6-7a14e42add2f';
@@ -614,5 +615,24 @@ describe('getCaseInteractor', () => {
         });
       }
     });
+  });
+  it('should not return email address in servedParties user is not docketClerk or admissionsClerk', async () => {
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      docketEntries: [MOCK_ANSWER_2],
+    });
+
+    const result = await getCaseInteractor(
+      {
+        docketNumber: '000123-19S',
+      },
+      mockPetitionsClerkUser,
+    );
+
+    for (const docketEntry of result.docketEntries) {
+      for (const party of docketEntry.servedParties!) {
+        expect(party.email).not.toBeDefined();
+      }
+    }
   });
 });
