@@ -148,6 +148,12 @@ export const formatDocketEntry = (applicationContext, docketEntry) => {
     formattedEntry.eventCode = 'MISCL';
   }
 
+  if (formattedEntry.isSealed) {
+    formattedEntry.sealedToTooltip = applicationContext.getUtilities().getSealedDocketEntryTooltip(applicationContext, formattedEntry);
+  } else if (formattedEntry.isLegacySealed) {
+    formattedEntry.sealedToTooltip = "Sealed in Blackstone";
+  }
+
   return formattedEntry;
 };
 
