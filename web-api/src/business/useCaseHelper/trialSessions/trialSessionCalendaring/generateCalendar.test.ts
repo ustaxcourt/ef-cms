@@ -24,21 +24,51 @@ import {
 const mockRegularCityString = TRIAL_CITY_STRINGS[TRIAL_CITY_STRINGS.length - 1];
 const mockSpecialCityString = TRIAL_CITY_STRINGS[0];
 
-const mockBusinessDate = getBusinessDateInFuture({
+const mockBusinessDateStart = getBusinessDateInFuture({
   numberOfDays: 30,
   outputFormat: FORMATS.YYYYMMDD,
   startDate: createISODateString(),
 });
 
-const mockWeekString = createDateAtStartOfWeekEST(
-  mockBusinessDate,
+const mockBusinessDateEnd = getBusinessDateInFuture({
+  numberOfDays: 35,
+  outputFormat: FORMATS.YYYYMMDD,
+  startDate: createISODateString(),
+});
+
+const mockWeekStringStart = createDateAtStartOfWeekEST(
+  mockBusinessDateStart,
   FORMATS.YYYYMMDD,
 );
 
-const mockWeeksToLoop = [mockWeekString];
+const mockWeekStringEnd = createDateAtStartOfWeekEST(
+  mockBusinessDateEnd,
+  FORMATS.YYYYMMDD,
+);
+
+const mockWeek = { start: mockWeekStringStart, end: mockWeekStringEnd };
+
+const mockSecondWeekStart = getBusinessDateInFuture({
+  numberOfDays: 37,
+  outputFormat: FORMATS.YYYYMMDD,
+  startDate: createISODateString(),
+});
+
+const mockSecondWeekEnd = getBusinessDateInFuture({
+  numberOfDays: 42,
+  outputFormat: FORMATS.YYYYMMDD,
+  startDate: createISODateString(),
+});
+
+const mockSecondWeek = {
+  start: mockSecondWeekStart,
+  end: mockSecondWeekEnd,
+};
+
+const mockWeeksToLoop = [mockWeek];
 const mockTrialSession: RawTrialSession = {
   ...MOCK_TRIAL_INPERSON,
-  startDate: createISODateString(mockWeekString, FORMATS.YYYYMMDD),
+  startDate: createISODateString(mockWeek.start, FORMATS.YYYYMMDD),
 };
 const mockErrorMessage = 'Mocked error';
 
@@ -203,11 +233,7 @@ describe('generateCalendar', () => {
     });
 
     const mockCityNotVisitedLastTwoTerms = 'mock city, usa';
-    const mockSecondWeek = getBusinessDateInFuture({
-      numberOfDays: 37,
-      outputFormat: FORMATS.YYYYMMDD,
-      startDate: createISODateString(),
-    });
+
     const mockProspectiveRegularTrialSessionNotVisitedLastTwoTerms = {
       cityWasNotVisitedInLastTwoTerms: true,
       sessionType: SESSION_TYPES.regular,
@@ -268,11 +294,6 @@ describe('generateCalendar', () => {
 
       remainingSmallCases: 0,
     });
-    const mockSecondWeek = getBusinessDateInFuture({
-      numberOfDays: 37,
-      outputFormat: FORMATS.YYYYMMDD,
-      startDate: createISODateString(),
-    });
 
     // Act
     const { caseCountsAndSessionsByCity } = generateCalendar({
@@ -317,11 +338,6 @@ describe('generateCalendar', () => {
       },
       mockSpecialCityString,
     );
-    const mockSecondWeek = getBusinessDateInFuture({
-      numberOfDays: 37,
-      outputFormat: FORMATS.YYYYMMDD,
-      startDate: createISODateString(),
-    });
 
     // Act
     const { caseCountsAndSessionsByCity } = generateCalendar({
@@ -352,11 +368,6 @@ describe('generateCalendar', () => {
       prospectiveSessions: [mockProspectiveRegularTrialSession],
       remainingRegularCases: 1,
       remainingSmallCases: 1,
-    });
-    const mockSecondWeek = getBusinessDateInFuture({
-      numberOfDays: 37,
-      outputFormat: FORMATS.YYYYMMDD,
-      startDate: createISODateString(),
     });
 
     // Act
@@ -395,12 +406,6 @@ describe('generateCalendar', () => {
       prospectiveSessions: [mockProspectiveHybridTrialSession],
       remainingRegularCases: 10,
       remainingSmallCases: 3,
-    });
-
-    const mockSecondWeek = getBusinessDateInFuture({
-      numberOfDays: 37,
-      outputFormat: FORMATS.YYYYMMDD,
-      startDate: createISODateString(),
     });
 
     // Act

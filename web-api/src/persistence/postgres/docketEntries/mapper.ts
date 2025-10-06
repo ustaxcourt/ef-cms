@@ -148,8 +148,10 @@ export function fromKyselyDocketEntry<T extends object>(record: T) {
     ) => value?.toISOString(),
   } as const;
 
+  const keyRenameMap = {} as const;
+
   return new DatabaseToAppCodeMapper({
-    keyRenameMap: {},
+    keyRenameMap,
     transformMap,
   }).transform(record);
 }

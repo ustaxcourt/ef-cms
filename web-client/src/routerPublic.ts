@@ -98,6 +98,11 @@ const router = {
 
     // only visible on lower envs
     route('/dawson-library', () => {
+      if (process.env.ENV === 'prod') {
+        return app.getSequence('notFoundErrorSequence')({
+          error: {},
+        });
+      }
       setPageTitle('Dawson Library');
       return app.getSequence('gotoDawsonLibrarySequence')();
     });

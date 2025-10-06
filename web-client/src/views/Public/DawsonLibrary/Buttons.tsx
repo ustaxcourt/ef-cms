@@ -48,6 +48,14 @@ export function Buttons() {
             Tertiary Default
           </Button>
         </div>
+        <div className="tw:xs:inline-block tw:m-4 tw:xs:m-2">
+          <Button
+            variant="terminatorButton"
+            aria-label="Terminator Button"
+          >
+            Close
+          </Button>
+        </div>
       </div>
     </div>
   );
