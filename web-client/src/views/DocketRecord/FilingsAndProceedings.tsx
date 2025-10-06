@@ -49,7 +49,6 @@ export const FilingsAndProceedings = connect<
     openCaseDocumentDownloadUrlSequence,
     showDocketRecordDetailModalSequence,
   }) {
-    // TODO (#8546): Add separate hyperlinks for related motions and orders
     const renderDocumentLink = () => {
       return (
         <>
@@ -148,25 +147,28 @@ export const FilingsAndProceedings = connect<
               {entry.descriptionDisplay}
             </Button>
             {entry.motionDisposition && (
-              <Button
-                link
-                className={classNames(
-                  'text-right',
-                  entry.isStricken && 'stricken-docket-record', // NOTE (#8546): This may be unnecessary
-                  'view-pdf-link',
-                )}
-                arial-label={`View PDF for: ${entry.orderDocketEntryIndex}`}
-                onClick={() =>
-                  changeTabAndSetViewerDocumentToDisplaySequence({
-                    docketRecordTab: 'documentView',
-                    viewerDocumentToDisplay: {
-                      docketEntryId: entry.orderDocketEntryId,
-                    },
-                  })
-                }
-              >
-                See Order: #{entry.orderDocketEntryIndex}
-              </Button>
+              <>
+                <span> --- </span>
+                <Button
+                  link
+                  className={classNames(
+                    'text-right',
+                    entry.isStricken && 'stricken-docket-record', // NOTE (#8546): This may be unnecessary
+                    'view-pdf-link',
+                  )}
+                  arial-label={`View PDF for: ${entry.orderDocketEntryIndex}`}
+                  onClick={() =>
+                    changeTabAndSetViewerDocumentToDisplaySequence({
+                      docketRecordTab: 'documentView',
+                      viewerDocumentToDisplay: {
+                        docketEntryId: entry.orderDocketEntryId,
+                      },
+                    })
+                  }
+                >
+                  {entry.motionDisposition} #{entry.orderDocketEntryIndex}
+                </Button>
+              </>
             )}
           </>
         )}
