@@ -95,6 +95,16 @@ export const getShowSealDocketRecordEntry = ({ applicationContext, entry }) => {
   return !docketEntryIsOpinion;
 };
 
+const getMotionDispositionOrderIndex = (
+  motionEntry: RawDocketEntry,
+  rawCase: RawCase,
+) => {
+  const relatedOrderIndex = rawCase.docketEntries.findIndex(
+    de => de.docketEntryId === motionEntry.orderDocketEntryId,
+  );
+  return relatedOrderIndex;
+};
+
 export const getFormattedDocketEntry = ({
   applicationContext,
   docketNumber,
@@ -111,11 +121,20 @@ export const getFormattedDocketEntry = ({
   const { DOCKET_ENTRY_SEALED_TO_TYPES, DOCUMENT_PROCESSING_STATUS_OPTIONS } =
     applicationContext.getConstants();
 
+  const hasMotionDisposition = !!entry.motionDisposition;
+
   const formattedResult = {
     numberOfPages: 0,
     ...entry,
     createdAtFormatted: entry.createdAtFormatted,
   };
+
+  if (hasMotionDisposition) {
+    formattedResult.orderDocketEntryIndex = getMotionDispositionOrderIndex(
+      entry,
+      rawCase,
+    );
+  }
 
   if (!isExternalUser) {
     formattedResult.showLoadingIcon =
