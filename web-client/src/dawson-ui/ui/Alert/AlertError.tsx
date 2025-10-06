@@ -55,12 +55,13 @@ export function AlertError({
         <Alert
           aria-live="polite"
           className={cn(className)}
-          data-testid="error-alert"
+          data-testid="error-alert" // TODO: replace id where it is implemented
           ref={notificationRef}
           role="alert"
           variant="error"
         >
           {alertError.title && (
+            // TODO: remove the focus component
             <Focus>
               <AlertHeader {...errorProps}>{alertError.title}</AlertHeader>
             </Focus>

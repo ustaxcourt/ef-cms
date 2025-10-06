@@ -30,13 +30,9 @@ const tagVariants = cva(
         primary: cn('tw:bg-white tw:text-primary-darker'),
         destructive: cn('tw:bg-destructive-dark tw:text-white'),
       },
-      size: {
-        default: '',
-      },
     },
     defaultVariants: {
       variant: 'primary',
-      size: 'default',
     },
   },
 );

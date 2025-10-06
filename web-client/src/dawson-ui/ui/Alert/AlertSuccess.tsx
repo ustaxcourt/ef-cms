@@ -55,7 +55,7 @@ export function AlertSuccess({
           className={cn(className)}
           closeButtonOnClick={dismissAlertSequence}
           data-metadata={`${alertSuccess.metaData}`}
-          data-testid="success-alert"
+          data-testid="success-alert" // TODO: replace id where it is implemented
           isDismissible={isDismissible}
           ref={notificationRef}
           role="alert"

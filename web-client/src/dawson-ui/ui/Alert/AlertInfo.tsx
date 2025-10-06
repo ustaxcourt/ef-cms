@@ -58,7 +58,7 @@ export function AlertInfo({
       aria-live="polite"
       className={cn(className)}
       closeButtonOnClick={dismissAlertSequence}
-      data-testid="info-alert"
+      data-testid="info-alert" // TODO: replace id where it is implemented
       isDismissible={isDismissible}
       ref={notificationRef}
       role="alert"
