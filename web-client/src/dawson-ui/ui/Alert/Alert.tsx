@@ -16,7 +16,7 @@ const alertVariants = cva(
     'tw:relative tw:border-solid tw:border-0 tw:border-l-[6px] tw:p-[12px] tw:font-normal tw:text-[16px] tw:leading-[20px]',
     'tw:[&_ul]:m-0 tw:[&_ul]:-ml-[16px] tw:[&_ul]:list-disc',
     'tw:[&_svg]:h-[24px] tw:[&_svg]:w-[24px]',
-    'tw:xs:border-l-[8px] tw:xs:p-[14px] tw:xs:text-[18px] tw:xs:leading-[24px]',
+    'tw:xs:border-l-[8px] tw:xs:p-[16px] tw:xs:text-[18px] tw:xs:leading-[24px]',
     'tw:xs:[&_svg]:h-[28px] tw:xs:[&_svg]:w-[28px]',
     'tw:xs:max-w-[740px] tw:w-full',
   ),
@@ -101,10 +101,7 @@ function AlertHeader({
       ></div>
       {isDismissible && (
         <div className="tw:ml-auto">
-          <Button
-            variant="terminatorButton"
-            aria-label="Terminator Button"
-            >
+          <Button variant="terminatorButton" aria-label="Terminator Button">
             Close
           </Button>
         </div>
