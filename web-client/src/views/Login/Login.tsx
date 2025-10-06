@@ -1,11 +1,12 @@
+import { Button as DawsonUiButton } from '@web-client/dawson-ui/ui/button';
 import { Button } from '@web-client/ustc-ui/Button/Button';
-import { ErrorNotification } from '@web-client/views/ErrorNotification';
 import { InfoNotificationComponent } from '@web-client/views/InfoNotification';
 import { SuccessNotification } from '@web-client/views/SuccessNotification';
 import { WarningNotification } from '@web-client/views/WarningNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import { AlertError } from '@web-client/dawson-ui/ui/Alert/AlertError';
 
 export const Login = connect(
   {
@@ -19,6 +20,9 @@ export const Login = connect(
     toggleShowPasswordSequence: sequences.toggleShowPasswordSequence,
     updateAuthenticationFormValueSequence:
       sequences.updateAuthenticationFormValueSequence,
+    alertError: state.alertError,
+    alertHelper: state.alertHelper,
+    dismissAlertSequence: sequences.dismissAlertSequence,
   },
   ({
     alertInfo,
@@ -28,6 +32,9 @@ export const Login = connect(
     submitLoginSequence,
     toggleShowPasswordSequence,
     updateAuthenticationFormValueSequence,
+    alertError,
+    alertHelper,
+    dismissAlertSequence,
   }) => {
     return (
       <>
@@ -42,7 +49,15 @@ export const Login = connect(
                   dismissible={false}
                 ></InfoNotificationComponent>
               )}
-              <ErrorNotification />
+
+              <div className="tw:mb-4">
+                <AlertError
+                  alertError={alertError}
+                  alertHelper={alertHelper}
+                  closeButtonOnClick={() => dismissAlertSequence()}
+                />
+              </div>
+
               <div className="grid-container bg-white padding-y-3 border border-base-lighter login">
                 <div className="display-flex flex-column">
                   <div className="flex-align-center">
@@ -109,38 +124,37 @@ export const Login = connect(
                       >
                         {showPassword ? 'Hide password' : 'Show password'}
                       </button>
-                      <Button
-                        className="usa-button margin-top-3"
-                        data-testid="login-button"
-                      >
-                        Log in
-                      </Button>
+                      <div className="tw:my-4">
+                        <DawsonUiButton
+                          aria-label="Login"
+                          data-testid="login-button"
+                        >
+                          Log in
+                        </DawsonUiButton>
+                      </div>
                     </form>
-                    <div className="button-container">
-                      <Button
-                        className="margin-top-1 display-block"
+                    <div className="tw:my-4">
+                      <DawsonUiButton
+                        aria-label="Forgot password"
+                        variant="primaryTertiary"
                         data-testid="forgot-password-button"
-                        link={true}
-                        type="button"
                         onClick={() => navigateToForgotPasswordSequence()}
                       >
                         Forgot password?
-                      </Button>
+                      </DawsonUiButton>
                     </div>
-                    <span>
-                      Don&apos;t have an account?{' '}
-                      <Button
-                        className="padding-top-0"
-                        link={true}
-                        type="button"
-                        onClick={e => {
-                          e.preventDefault();
-                          navigateToCreatePetitionerAccountSequence();
-                        }}
-                      >
-                        Create your account now.
-                      </Button>
-                    </span>
+                    Don&apos;t have an account?{' '}
+                    <Button
+                      link={true}
+                      className="tw:block padding-top-0 pl-0"
+                      type="button"
+                      onClick={e => {
+                        e.preventDefault();
+                        navigateToCreatePetitionerAccountSequence();
+                      }}
+                    >
+                      Create your account now.
+                    </Button>
                   </div>
                 </div>
               </div>
