@@ -170,7 +170,6 @@ export const getFilingsAndProceedings = formattedDocketEntry => {
           : ''
     }`,
     `${formattedDocketEntry.lodged ? '(Lodged)' : ''}`,
-    `${formattedDocketEntry.motionDisposition ? `--- ${formattedDocketEntry.motionDisposition}` : ''}`,
   ];
 
   return filingsAndProceedingsArray.filter(item => item !== '').join(' ');

@@ -99,10 +99,19 @@ const getMotionDispositionOrderIndex = (
   motionEntry: RawDocketEntry,
   rawCase: RawCase,
 ) => {
-  const relatedOrderIndex = rawCase.docketEntries.findIndex(
-    de => de.docketEntryId === motionEntry.orderDocketEntryId,
+  const relatedOrder = rawCase.docketEntries.find(
+    entry => entry.docketEntryId === motionEntry.orderDocketEntryId,
   );
-  return relatedOrderIndex;
+
+  if (!relatedOrder) {
+    throw new Error(
+      `Related order not found for motion with id ${motionEntry.docketEntryId} and orderDocketEntryId ${motionEntry.orderDocketEntryId} and title ${
+        motionEntry.documentTitle
+      }`,
+    );
+  }
+
+  return relatedOrder.index;
 };
 
 export const getFormattedDocketEntry = ({

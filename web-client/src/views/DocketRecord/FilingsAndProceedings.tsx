@@ -149,25 +149,28 @@ export const FilingsAndProceedings = connect<
               {entry.descriptionDisplay}
             </Button>
             {entry.motionDisposition && (
-              <Button
-                link
-                className={classNames(
-                  'text-right',
-                  entry.isStricken && 'stricken-docket-record', // NOTE (#8546): This may be unnecessary
-                  'view-pdf-link',
-                )}
-                arial-label={`View PDF for: ${entry.orderDocketEntryIndex}`}
-                onClick={() =>
-                  changeTabAndSetViewerDocumentToDisplaySequence({
-                    docketRecordTab: 'documentView',
-                    viewerDocumentToDisplay: {
-                      docketEntryId: entry.orderDocketEntryId,
-                    },
-                  })
-                }
-              >
-                #{entry.orderDocketEntryIndex}
-              </Button>
+              <>
+                <span> --- </span>
+                <Button
+                  link
+                  className={classNames(
+                    'text-right',
+                    entry.isStricken && 'stricken-docket-record', // NOTE (#8546): This may be unnecessary
+                    'view-pdf-link',
+                  )}
+                  arial-label={`View PDF for: ${entry.orderDocketEntryIndex}`}
+                  onClick={() =>
+                    changeTabAndSetViewerDocumentToDisplaySequence({
+                      docketRecordTab: 'documentView',
+                      viewerDocumentToDisplay: {
+                        docketEntryId: entry.orderDocketEntryId,
+                      },
+                    })
+                  }
+                >
+                  {entry.motionDisposition} #{entry.orderDocketEntryIndex}
+                </Button>
+              </>
             )}
           </>
         )}
