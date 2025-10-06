@@ -173,12 +173,12 @@ hr {
 }
 
 .word-wrap-break-word {
-  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 address {
   p {
-    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 }
 
