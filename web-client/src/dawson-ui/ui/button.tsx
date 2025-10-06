@@ -24,7 +24,7 @@ const buttonVariants = cva(
     'tw:focus-visible:ring-[4px] tw:focus-visible:ring-offset-[4px] tw:focus-visible:ring-ring tw:focus-visible:outline-none', // focus-visible
     'tw:aria-invalid:ring-destructive/20 tw:aria-invalid:border-destructive', // aria
     'tw:w-full tw:xs:w-auto tw:px-[16px] tw:py-[8px]', // small & greater
-    'tw:invalid:text-grey-light', // invalid
+    'tw:invalid:text-grey-light tw:invalid:fill-grey-light', // invalid
   ),
   {
     variants: {
