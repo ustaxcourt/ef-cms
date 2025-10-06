@@ -229,3 +229,6 @@ https://www.npmjs.com/package/uuid?activeTab=readme
 Quote from site
 
 "Starting with uuid@12 CommonJS is no longer supported. See implications and motivation for details."
+
+## typescript
+When I tried updating Typescript last week, it enforced more type errors in many files. To proceed with an upgrade, you'll need to make some changes to the files in question

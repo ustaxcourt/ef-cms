@@ -1,6 +1,8 @@
 import { pathsToModuleNameMapper } from 'ts-jest';
-import tsconfig from '../tsconfig.json';
 import type { Config } from 'jest';
+import { loadTsConfig } from '../utils/load-tsconfig.mjs';
+
+const tsconfig = loadTsConfig('tsconfig.json');
 
 const config: Config = {
   clearMocks: true,
@@ -17,8 +19,8 @@ const config: Config = {
   // ], // Uncomment testMatch to run all integration tests in integration-tests + integration-tests-public
   moduleNameMapper: {
     ...pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
-    prefix: '<rootDir>/../',
-  }),
+      prefix: '<rootDir>/../',
+    }),
     '^broadcast-channel$': '<rootDir>/jest.mock-broadcast-channel.ts',
   },
   testEnvironment: 'node',
