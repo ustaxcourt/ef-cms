@@ -39,6 +39,7 @@ export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
     });
   } else if (formattedResult.qcNeeded) {
     iconsToDisplay.push({
+      className: 'fa-icon-red',
       icon: ['fa', 'star'],
       title: 'Is untouched',
     });

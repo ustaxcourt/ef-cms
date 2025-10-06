@@ -1044,6 +1044,7 @@ describe('formattedDocketEntries', () => {
 
       expect(result).toEqual([
         {
+          className: 'fa-icon-red',
           icon: ['fa', 'star'],
           title: 'Is untouched',
         },
