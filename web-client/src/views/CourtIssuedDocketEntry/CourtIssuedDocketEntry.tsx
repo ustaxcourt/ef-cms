@@ -172,10 +172,15 @@ export const CourtIssuedDocketEntry = connect(
                               key: e.target.name,
                               value: e.target.checked,
                             });
-                            if (!form.affectedMotions) {
+                            if (e.target.checked) {
                               updateCourtIssuedDocketEntryFormValueSequence({
                                 key: 'affectedMotions',
                                 value: [{}],
+                              });
+                            } else {
+                              updateCourtIssuedDocketEntryFormValueSequence({
+                                key: 'affectedMotions',
+                                value: undefined,
                               });
                             }
                             validateCourtIssuedDocketEntrySequence();
@@ -200,7 +205,7 @@ export const CourtIssuedDocketEntry = connect(
                         return (
                           <FormGroup
                             errorText={validationErrors.dispositionOrder}
-                            key={i}
+                            key={motion}
                           >
                             <label
                               className="usa-label"
@@ -213,31 +218,31 @@ export const CourtIssuedDocketEntry = connect(
                               className="usa-label"
                               aria-labelledby="related-motion-label"
                               data-testid="related-motion-type-search"
-                              id="related-motion"
+                              id="docketEntryid"
                               isClearable={true}
-                              name="relatedMotion"
+                              name="docketEntryid"
                               options={
                                 addCourtIssuedDocketEntryHelper.caseMotions
                               }
-                              value={motion.relatedMotion}
-                              onChange={inputValue => {
+                              // value={motion.docketEntryid}
+                              onChange={(inputValue: any) => {
                                 // TODO (#8546): Refactor this to return eligable docket entries (motions)
-                                form.affectedMotions[i] = Object.assign(
-                                  form.affectedMotions[i],
-                                  {
-                                    docketEntryid:
-                                      inputValue.value.docketEntryId,
-                                    docketNumber: inputValue.value.docketNumber,
-                                  },
-                                );
+                                updateCourtIssuedDocketEntryFormValueSequence({
+                                  key: 'affectedMotions',
+                                  index: i,
+                                  value: Object.assign(
+                                    form.affectedMotions[i],
+                                    {
+                                      docketEntryid:
+                                        inputValue.value.docketEntryId,
+                                      docketNumber:
+                                        inputValue.value.docketNumber,
+                                    },
+                                  ),
+                                });
+
                                 validateCourtIssuedDocketEntrySequence();
                               }}
-                              // onInputChange={inputText => {
-                              //   updateCourtIssuedDocketEntryFormValueSequence({
-                              //     key: 'caseMotionsearchText',
-                              //     value: inputText,
-                              //   });
-                              // }}
                             />
                             <label
                               className="usa-label"
@@ -255,8 +260,8 @@ export const CourtIssuedDocketEntry = connect(
                               options={
                                 addCourtIssuedDocketEntryHelper.relatedMotionDispositions
                               }
-                              value={motion.relatedMotionDisposition}
-                              onChange={inputValue => {
+                              // value={motion.disposition}
+                              onChange={(inputValue: any) => {
                                 // TODO (#8546): Refactor this to return eligable docket entries (motions)
                                 updateCourtIssuedDocketEntryFormValueSequence({
                                   key: 'affectedMotions',
@@ -271,16 +276,11 @@ export const CourtIssuedDocketEntry = connect(
 
                                 validateCourtIssuedDocketEntrySequence();
                               }}
-                              // onInputChange={inputText => {
-                              //   updateCourtIssuedDocketEntryFormValueSequence({
-                              //     key: 'caseMotionSearchText',
-                              //     value: inputText,
-                              //   });
-                              // }}
                             />
 
                             <Button
                               link
+                              icon="minus-circle"
                               onClick={() => {
                                 const motions = [...form.affectedMotions];
                                 _.pullAt(motions, i);
@@ -292,12 +292,15 @@ export const CourtIssuedDocketEntry = connect(
                             >
                               Remove Motion
                             </Button>
+
+                            {form.affectedMotions.length > 1 && <hr></hr>}
                           </FormGroup>
                         );
                       })}
 
                       <Button
                         link
+                        icon="plus-circle"
                         onClick={() => {
                           updateCourtIssuedDocketEntryFormValueSequence({
                             key: 'affectedMotions',
