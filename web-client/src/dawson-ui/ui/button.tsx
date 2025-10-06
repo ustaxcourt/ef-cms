@@ -8,14 +8,15 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { CircleXmark } from './icons';
 
 const tertiaryBaseStyles = cn(
-  'tw:px-0 tw:py-0 tw:bg-transparent tw:font-[400] tw:underline',
-  'tw:focus-visible:bg-white',
+  'tw:px-0 tw:py-0 tw:bg-transparent tw:font-[400] tw:underline', // standard
+  'tw:focus-visible:bg-white', // focus-visible
 );
 
 const primaryColors = cn(
-  'tw:text-primary tw:fill-primary', // base
+  'tw:text-primary tw:fill-primary', // standard
   'tw:hover:text-primary-dark tw:hover:fill-primary-dark', // hover
   'tw:active:text-primary-darker tw:active:fill-primary-darker', // active
+  'tw:invalid:text-grey-light tw:invalid:fill-grey-light', // invalid
 );
 
 const buttonVariants = cva(
@@ -24,32 +25,35 @@ const buttonVariants = cva(
     'tw:focus-visible:ring-[4px] tw:focus-visible:ring-offset-[4px] tw:focus-visible:ring-ring tw:focus-visible:outline-none', // focus-visible
     'tw:aria-invalid:ring-destructive/20 tw:aria-invalid:border-destructive', // aria
     'tw:w-full tw:xs:w-auto tw:px-[16px] tw:py-[8px]', // small & greater
-    'tw:invalid:text-grey-light tw:invalid:fill-grey-light', // invalid
   ),
   {
     variants: {
       variant: {
         primary: cn(
           'tw:h-[40px] tw:bg-primary tw:text-primary-foreground tw:shadow-xs tw:font-bold', // standard
+          'tw:hover:bg-primary-dark', // hover
           'tw:active:bg-primary-darker', // active
+          'tw:invalid:bg-grey-light', // invalid
         ),
         destructive: cn(
           'tw:h-[40px] tw:bg-destructive tw:text-white tw:shadow-xs tw:font-bold', // standard
           'tw:hover:bg-destructive-dark', // hover
           'tw:active:bg-destructive-darker', // active
+          'tw:invalid:bg-grey-light', // invalid
         ),
         secondary: cn(
           primaryColors,
           'tw:h-[40px] tw:shadow-none tw:bg-background tw:border-primary tw:border-[2px] tw:border-solid tw:font-bold', // standard
           'tw:hover:border-primary-dark', // hover
-          'tw:focus-visible:border-primary', // focus-visible
           'tw:active:border-primary-darker', // active
+          'tw:invalid:border-grey-light', // invalid
         ),
         destructiveTertiary: cn(
           'tw:px-0 tw:py-0 tw:bg-transparent tw:text-destructive tw:fill-destructive tw:font-[400] tw:underline', // standard,
           'tw:hover:text-destructive-dark', // hover
           'tw:focus-visible:bg-white', // focus-visible
           'tw:active:text-destructive-darker', // active
+          'tw:invalid:text-grey-light tw:invalid:fill-grey-light', // invalid
         ),
         primaryTertiary: cn(tertiaryBaseStyles, primaryColors),
         terminatorButton: cn(
