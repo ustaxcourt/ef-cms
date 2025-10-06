@@ -23,6 +23,7 @@ export const PaperServiceConfirmModal = connect(
         noCancel
         className="paper-service-confirm-modal"
         confirmLabel="Print Now"
+        disableTooltip={true}
         title="Paper service is required for the following document:"
         onCancelSequence={clearModalSequence}
         onConfirmSequence={navigateToPrintPaperServiceSequence}

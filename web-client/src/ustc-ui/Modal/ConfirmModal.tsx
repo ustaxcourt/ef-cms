@@ -13,6 +13,7 @@ type ConfirmModalProps = {
   className?: string;
   confirmLabel?: string;
   deleteLabel?: string;
+  disableTooltip?: boolean;
   hasErrorState?: boolean;
   headerIcon?: IconProp;
   headerIconClassName?: string;
@@ -40,6 +41,7 @@ export const ConfirmModal = connect<ConfirmModalProps, typeof confirmModalDeps>(
     className,
     confirmLabel = 'Ok',
     deleteLabel = 'Delete',
+    disableTooltip = false,
     hasErrorState = false,
     headerIcon,
     headerIconClassName = '',
@@ -73,7 +75,7 @@ export const ConfirmModal = connect<ConfirmModalProps, typeof confirmModalDeps>(
     return (
       <BaseModal
         className={classNames(className, hasErrorState && 'modal-error')}
-        title={title}
+        {...(!disableTooltip && { title })}
       >
         <div className={classNames('modal-header grid-container padding-x-0')}>
           <div className="grid-row">
@@ -82,7 +84,11 @@ export const ConfirmModal = connect<ConfirmModalProps, typeof confirmModalDeps>(
                 noCloseBtn ? 'mobile-lg:grid-col-12' : 'mobile-lg:grid-col-9',
               )}
             >
-              <h3 className="modal-header__title" data-testid="confirm-modal-header" tabIndex={-1}>
+              <h3
+                className="modal-header__title"
+                data-testid="confirm-modal-header"
+                tabIndex={-1}
+              >
                 {headerIcon && (
                   <FontAwesomeIcon
                     className={headerIconClassName}
@@ -96,7 +102,7 @@ export const ConfirmModal = connect<ConfirmModalProps, typeof confirmModalDeps>(
             {!noCloseBtn && (
               <div className="mobile-lg:grid-col-3">
                 <Button
-                data-testid="confirm-modal-close-btn"
+                  data-testid="confirm-modal-close-btn"
                   iconRight
                   link
                   className="text-no-underline hide-on-mobile float-right margin-right-0 padding-top-0"
