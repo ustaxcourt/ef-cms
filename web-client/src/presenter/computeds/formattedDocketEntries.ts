@@ -95,6 +95,16 @@ export const getShowSealDocketRecordEntry = ({ applicationContext, entry }) => {
   return !docketEntryIsOpinion;
 };
 
+const getMotionDispositionOrderIndex = (
+  motionEntry: RawDocketEntry,
+  rawCase: RawCase,
+) => {
+  const relatedOrderIndex = rawCase.docketEntries.findIndex(
+    de => de.docketEntryId === motionEntry.orderDocketEntryId,
+  );
+  return relatedOrderIndex;
+};
+
 export const getFormattedDocketEntry = ({
   applicationContext,
   docketNumber,
@@ -104,6 +114,8 @@ export const getFormattedDocketEntry = ({
   user,
   visibilityPolicyDateFormatted,
 }) => {
+  const hasMotionDisposition = !!entry.motionDisposition;
+
   const isExternalUser = applicationContext
     .getUtilities()
     .isExternalUser(user.role);
@@ -116,6 +128,13 @@ export const getFormattedDocketEntry = ({
     ...entry,
     createdAtFormatted: entry.createdAtFormatted,
   };
+
+  if (hasMotionDisposition) {
+    formattedResult.orderDocketEntryIndex = getMotionDispositionOrderIndex(
+      entry,
+      rawCase,
+    );
+  }
 
   if (!isExternalUser) {
     formattedResult.showLoadingIcon =
@@ -137,7 +156,7 @@ export const getFormattedDocketEntry = ({
   if (entry.documentTitle) {
     formattedResult.descriptionDisplay = applicationContext
       .getUtilities()
-      .getDescriptionDisplay(entry);
+      .getDescriptionDisplay(entry); // TODO (#8546): add orderinfo to disposed motion
   }
 
   formattedResult.showDocumentProcessing =
@@ -158,6 +177,7 @@ export const getFormattedDocketEntry = ({
 
   formattedResult.showDocumentViewerLink = !isExternalUser && showDocumentLinks;
 
+  // TODO (#8546): add split link here for motions with dispositions
   formattedResult.showLinkToDocument = isExternalUser && showDocumentLinks;
 
   formattedResult.showEditDocketRecordEntry = getShowEditDocketRecordEntry({
@@ -191,7 +211,6 @@ export const getFormattedDocketEntry = ({
   formattedResult.toolTipText = !formattedResult.isFileAttached
     ? 'No Document View'
     : undefined;
-
   return formattedResult;
 };
 

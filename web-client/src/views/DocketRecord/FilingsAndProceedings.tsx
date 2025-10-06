@@ -12,6 +12,9 @@ type FilingsAndProceedingsProps = {
     descriptionDisplay: string;
     isStricken: boolean;
     docketEntryId: string;
+    motionDisposition?: string;
+    orderDocketEntryId?: string;
+    orderDocketEntryIndex?: number;
     showDocumentProcessing: boolean;
     showLinkToDocument: boolean;
     showDocumentViewerLink: boolean;
@@ -46,9 +49,8 @@ export const FilingsAndProceedings = connect<
     openCaseDocumentDownloadUrlSequence,
     showDocketRecordDetailModalSequence,
   }) {
+    // TODO (#8546): Add separate hyperlinks for related motions and orders
     const renderDocumentLink = () => {
-      console.log('Rendering document link for:', entry);
-      console.log('Case detail:', caseDetail);
       return (
         <>
           <NonMobile>
@@ -145,6 +147,27 @@ export const FilingsAndProceedings = connect<
               )}
               {entry.descriptionDisplay}
             </Button>
+            {entry.motionDisposition && (
+              <Button
+                link
+                className={classNames(
+                  'text-right',
+                  entry.isStricken && 'stricken-docket-record', // NOTE (#8546): This may be unnecessary
+                  'view-pdf-link',
+                )}
+                arial-label={`View PDF for: ${entry.orderDocketEntryIndex}`}
+                onClick={() =>
+                  changeTabAndSetViewerDocumentToDisplaySequence({
+                    docketRecordTab: 'documentView',
+                    viewerDocumentToDisplay: {
+                      docketEntryId: entry.orderDocketEntryId,
+                    },
+                  })
+                }
+              >
+                See Order: #{entry.orderDocketEntryIndex}
+              </Button>
+            )}
           </>
         )}
 

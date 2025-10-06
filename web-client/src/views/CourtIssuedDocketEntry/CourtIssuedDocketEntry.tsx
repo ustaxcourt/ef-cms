@@ -294,21 +294,57 @@ export const CourtIssuedDocketEntry = connect(
                             </Button>
                           </FormGroup>
                         );
-                      })}
-
-                      <Button
-                        link
-                        onClick={() => {
-                          updateCourtIssuedDocketEntryFormValueSequence({
-                            key: 'affectedMotions',
-                            value: [...form.affectedMotions, {}],
-                          });
-                        }}
-                      >
-                        Add new motion
-                      </Button>
-                    </div>
-                  )}
+                        console.log(
+                          'Form.AffectedMotions',
+                          form.affectedMotions,
+                        );
+                        validateCourtIssuedDocketEntrySequence();
+                      }}
+                      onInputChange={inputText => {
+                        updateCourtIssuedDocketEntryFormValueSequence({
+                          key: 'caseMotionsearchText',
+                          value: inputText,
+                        });
+                      }}
+                    />
+                    <label
+                      className="usa-label"
+                      htmlFor="related-motion-disposition"
+                      id="related-motion-disposition-label"
+                    >
+                      What action is being taken?
+                    </label>
+                    <SelectSearch
+                      aria-labelledby="related-motion-disposition-label"
+                      data-testid="related-motion-disposition-type-search"
+                      id="related-motion-disposition"
+                      isClearable={true}
+                      name="relatedMotionDisposition"
+                      options={
+                        addCourtIssuedDocketEntryHelper.relatedMotionDispositions
+                      }
+                      value={form.relatedMotionDisposition}
+                      onChange={inputValue => {
+                        if (!form.affectedMotions) form.affectedMotions = {};
+                        form.affectedMotions[docketNumber] = Object.assign(
+                          form.affectedMotions[docketNumber] ?? {},
+                          { disposition: inputValue.value },
+                        );
+                        console.log(
+                          'Form.AffectedMotions',
+                          form.affectedMotions,
+                        );
+                        validateCourtIssuedDocketEntrySequence();
+                      }}
+                      onInputChange={inputText => {
+                        updateCourtIssuedDocketEntryFormValueSequence({
+                          key: 'caseMotionSearchText',
+                          value: inputText,
+                        });
+                      }}
+                    />
+                  </FormGroup>
+                )}
 
                 {addCourtIssuedDocketEntryHelper.showAttachmentAndServiceFields && (
                   <FormGroup errorText={validationErrors.attachments}>
