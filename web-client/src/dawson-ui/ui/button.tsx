@@ -57,14 +57,14 @@ const buttonVariants = cva(
         terminatorButton: cn(
           'tw:text-[16px] tw:xs:text-[18px] tw:inline-flex tw:cursor-pointer tw:whitespace-nowrap tw:w-auto tw:xs:w-auto',
           'tw:m-0 tw:p-0 tw:gap-[12px] tw:bg-transparent tw:text-primary tw:fill-primary tw:text-left tw:font-normal tw:underline tw:border-none tw:outline-none',
-          'tw:rounded-[2px] tw:self-start tw:ml-auto tw:mt-auto tw:mb-auto tw:transition-all tw:shrink-0', // standard          
-          'tw:hover:underline tw:hover:text-primary-dark', // Hover state
-          'tw:active:text-primary-darker', // Active state
+          'tw:rounded-[2px] tw:self-start tw:ml-auto tw:mt-auto tw:mb-auto tw:transition-all tw:shrink-0', // standard
+          'tw:hover:text-primary-dark tw:hover:fill-primary-dark', // Hover state
+          'tw:active:text-primary-darker tw:active:fill-primary-darker', // Active state
           'tw:focus-visible:ring-[4px] tw:focus-visible:ring-ring tw:focus-visible:ring-offset-[4px] tw:focus-visible:bg-white', // Focus visible state
-          'tw:disabled:pointer-events-none tw:disabled:opacity-50', // Disabled state         
+          'tw:disabled:pointer-events-none tw:disabled:opacity-50', // Disabled state
           'tw:invalid:text-grey-light tw:aria-invalid:ring-destructive/20 tw:aria-invalid:border-destructive', // Invalid state
-          'tw:[&_svg]:pointer-events-none tw:[&_svg]:shrink-0 tw:[&_svg:not([class*=size-])]:size-4' // SVG/Icon styles
-        )
+          'tw:[&_svg]:pointer-events-none tw:[&_svg]:shrink-0 tw:[&_svg:not([class*=size-])]:size-4', // SVG/Icon styles
+        ),
       },
     },
     defaultVariants: {
@@ -105,10 +105,10 @@ export function Button({
       {...props}
       role="button"
     >
-      {variant === "terminatorButton" ? (
-        <div className="tw:flex tw:items-center tw:text-[14px]/3 tw:xs:text-[16px]/4 tw:hover:text-primary-dark tw:active:text-primary-darker tw:fill-primary tw:active:fill-primary-darker tw:hover:fill-primary-darker">
+      {variant === 'terminatorButton' ? (
+        <div className="tw:flex tw:items-center">
           <span className="tw:mr-[8px]">{children}</span>
-          <CircleXmark className="tw:!h-[14px] tw:!w-[14px] tw:xs:!h-[16px] tw:xs:!w-[16px]"/>
+          <CircleXmark className="tw:!h-[14px] tw:!w-[14px] tw:xs:!h-[16px] tw:xs:!w-[16px]" />
         </div>
       ) : (
         <>
