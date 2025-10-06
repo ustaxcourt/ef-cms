@@ -19,11 +19,17 @@ export const FilingPartiesForm = connect(
     updateSequence,
     validateSequence,
     isMemberCase,
+  }: {
+    formattedCaseDetail;
+    filingPartiesFormHelper;
+    form;
+    validationErrors;
+    updateSequence?;
+    validateSequence?;
+    isMemberCase?: boolean;
   }) {
     const petitioners =
-      (formattedCaseDetail && formattedCaseDetail.petitioners) ||
-      (caseDetail && caseDetail.petitioners) ||
-      [];
+      (formattedCaseDetail && formattedCaseDetail.petitioners) || [];
 
     return (
       <>

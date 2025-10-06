@@ -26,6 +26,15 @@ export const Inclusions = connect(
     validateDocketEntrySequence,
     validationErrors,
     isMemberCase,
+  }: {
+    DATE_FORMATS;
+    form;
+    formatAndUpdateDateFromDatePickerSequence;
+    marginClass;
+    updateSequence;
+    validateDocketEntrySequence;
+    validationErrors;
+    isMemberCase?: boolean;
   }) {
     return (
       <div className={classNames('usa-form-group', marginClass)}>
