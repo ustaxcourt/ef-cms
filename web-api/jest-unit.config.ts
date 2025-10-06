@@ -1,6 +1,8 @@
 import { pathsToModuleNameMapper } from 'ts-jest';
-import tsconfig from '../tsconfig.json';
 import type { Config } from 'jest';
+import { loadTsConfig } from '../utils/load-tsconfig.mjs';
+
+const tsconfig = loadTsConfig('tsconfig.json');
 
 const config: Config = {
   clearMocks: true,
@@ -59,7 +61,7 @@ const config: Config = {
     ...pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
       prefix: '<rootDir>/../',
     }),
-    uuid: require.resolve('uuid'),
+    '^uuid$': 'uuid',
   },
   testEnvironment: 'node',
   testPathIgnorePatterns: ['hostedEnvironmentTests'],
