@@ -1,5 +1,5 @@
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
-import { Hint } from '../../ustc-ui/Hint/Hint';
+import { InfoNotificationComponent } from '../InfoNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -31,18 +31,26 @@ export const PaperServiceConfirmModal = connect(
 
         <p className="text-semibold">{documentTitle}</p>
 
-        <Hint fullWidth className="block">
-          <div className="margin-bottom-1">
-            This case has parties receiving paper service:
-          </div>
-          {confirmInitiateServiceModalHelper.contactsNeedingPaperService.map(
-            contact => (
-              <div className="margin-bottom-1" key={contact.name}>
-                {contact.name}
-              </div>
+        <InfoNotificationComponent
+          alertInfo={{
+            message: (
+              <>
+                <div className="margin-bottom-1">
+                  This case has parties receiving paper service:
+                </div>
+                {confirmInitiateServiceModalHelper.contactsNeedingPaperService.map(
+                  contact => (
+                    <div className="margin-bottom-1" key={contact.name}>
+                      {contact.name}
+                    </div>
+                  ),
+                )}
+              </>
             ),
-          )}
-        </Hint>
+          }}
+          dismissible={false}
+          scrollToTop={false}
+        />
       </ConfirmModal>
     );
   },
