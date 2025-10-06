@@ -40,6 +40,10 @@ export const unsealDocketEntryInteractor = async (
     })
   )[0];
 
+  if (!docketEntry) {
+    throw new NotFoundError('Docket entry not found');
+  }
+
   const workItem = await getWorkItemByDocketNumberAndDocketEntryId({
     docketEntryId,
     docketNumber,
@@ -54,10 +58,6 @@ export const unsealDocketEntryInteractor = async (
     },
     { authorizedUser },
   );
-
-  if (!docketEntryEntity) {
-    throw new NotFoundError('Docket entry not found');
-  }
 
   docketEntryEntity.unsealEntry();
 
