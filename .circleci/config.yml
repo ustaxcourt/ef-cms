@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   git-shallow-clone: guitarrapc/git-shallow-clone@2.8.0
 
-efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.53
+efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.54
 
 parameters:
   run_build_and_deploy:
@@ -37,6 +37,10 @@ parameters:
     default: ''
     type: string
 
+  sync_early:
+    default: false
+    type: boolean
+
   run_sync_s3_to_lower_env:
     default: false
     type: boolean
@@ -52,6 +56,10 @@ parameters:
   destination_bucket:
     default: ''
     type: string
+
+  force_all_migrations:
+    default: false
+    type: boolean
 
 commands:
   npm-and-cypress-install:
@@ -227,7 +235,7 @@ jobs:
 
   docker-image-zipper:
     docker:
-      - image: cimg/node:22.16.0
+      - image: cimg/node:22.20.0
     resource_class: xlarge
     steps:
       - git-shallow-clone/checkout
@@ -255,7 +263,7 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
+    resource_class: xlarge
     steps:
       - setup_remote_docker:
           version: docker23
@@ -267,9 +275,17 @@ jobs:
           command: |
             ./scripts/env/env-for-circle.sh
       - run:
+          no_output_timeout: 30m
           name: Run Postgres Migration
           command: |
             npm run migration:postgres
+      - when:
+          condition: << pipeline.parameters.force_all_migrations >>
+          no_output_timeout: 30m
+          steps:
+            - run:
+                name: Run Postgres Deprecated Migration
+                command: npm run migration:postgres:deprecated
       - run:
           name: Restore Postgres User Permissions
           command: |
@@ -451,7 +467,7 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium
+    resource_class: medium+
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -459,6 +475,9 @@ jobs:
           name: Setup Env
           command: |
             ./scripts/env/env-for-circle.sh
+      - run:
+          name: Run Postgres Contract Migration
+          command: npm run migration:postgres:contract
       - run:
           name: Setup Elasticsearch Aliases
           command: |
@@ -493,6 +512,8 @@ jobs:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     resource_class: medium+
+    environment:
+      SYNC_EARLY: << pipeline.parameters.sync_early >>
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -515,6 +536,23 @@ jobs:
           command: |
             ./scripts/circleci/setup-ssm-for-glue-job.sh
       - run:
+          name: Kick off the sync-s3-to-lower-env workflow if syncing early
+          command: |
+            if [ "$SYNC_EARLY" != "true" ]; then
+              echo "skipping…"
+              exit 0
+            fi
+            curl --request POST \
+              --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
+              --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
+              --header "content-type: application/json" \
+              --data "{\"branch\":\"${CIRCLE_BRANCH}\", \"parameters\":{ \
+                \"run_build_and_deploy\":false, \
+                \"run_sync_s3_to_lower_env\":true, \
+                \"referrer\":\"${CIRCLE_WORKFLOW_ID}\", \
+                \"source_bucket\":\"${SOURCE_BUCKET}\", \
+                \"destination_bucket\":\"${DESTINATION_BUCKET}\"}}"
+      - run:
           name: 'Delete OpenSearch alpha/beta clusters'
           command: |
             ./scripts/elasticsearch/delete-alpha-and-beta-clusters.sh
@@ -523,6 +561,14 @@ jobs:
           name: 'Recreate the alpha OpenSearch cluster'
           command: |
             npm run deploy:allColors $ENV
+      - run:
+          name: Setup OpenSearch Index Settings and Mappings
+          command: |
+            ./web-api/setup-elasticsearch-index.sh $ENV
+      - run:
+          name: Setup OpenSearch Aliases
+          command: |
+            npx ts-node --transpile-only ./web-api/elasticsearch/elasticsearch-alias-settings.ts
       - run:
           name: Kick off the glue-to-lower-env workflow
           command: |
@@ -546,8 +592,12 @@ jobs:
           command: |
             ./scripts/wait-for-workflow/enable-wait-for-workflow-cron.sh
       - run:
-          name: Kick off the sync-s3-to-lower-env workflow
+          name: Kick off the sync-s3-to-lower-env workflow if not syncing early
           command: |
+            if [ "$SYNC_EARLY" == "true" ]; then
+              echo "skipping…"
+              exit 0
+            fi
             curl --request POST \
               --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
               --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
@@ -584,9 +634,11 @@ jobs:
             export CIRCLE_PIPELINE_ID=noop
             npm run destroy:wait-for-workflow-cron -- $ENV
       - run:
+          no_output_timeout: 30m
           name: Migrate Postgres Data Schema
           command: |
-            NODE_ENV=production npm run migration:postgres
+            npm run migration:postgres
+            npm run migration:postgres:contract
       - run:
           name: Restore Postgres User Permissions
           command: |
@@ -603,7 +655,7 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
+    resource_class: xlarge
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -628,44 +680,13 @@ jobs:
               NODE_ENV=production ./scripts/reindex/index-cases/index-cases.ts 5
             fi
 
-  index-docket-entries:
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-            source $BASH_ENV
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
-              ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
-                --domain-name "${DESTINATION_DOMAIN}" \
-                --region "us-east-1" \
-                --query 'DomainStatus.Endpoint' \
-                --output text)
-              echo "export ELASTICSEARCH_ENDPOINT=${ELASTICSEARCH_ENDPOINT}" >> $BASH_ENV
-            fi
-      - run:
-          name: Index Docket Entries
-          command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              NODE_ENV=production ./scripts/reindex/index-docket-entries/index-docket-entries.ts 5
-            fi
-
   index-users:
     docker:
       - image: *efcms-docker-image
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
+    resource_class: xlarge
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -688,6 +709,37 @@ jobs:
           command: |
             if [ "$MIGRATE_FLAG" == "true" ]; then
               NODE_ENV=production ./scripts/reindex/index-users/index-users.ts 5
+            fi
+
+  index-docket-entries:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: xlarge
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+            source $BASH_ENV
+            if [ "$MIGRATE_FLAG" == "true" ]; then
+              DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
+              ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
+                --domain-name "${DESTINATION_DOMAIN}" \
+                --region "us-east-1" \
+                --query 'DomainStatus.Endpoint' \
+                --output text)
+              echo "export ELASTICSEARCH_ENDPOINT=${ELASTICSEARCH_ENDPOINT}" >> $BASH_ENV
+            fi
+      - run:
+          name: Index Docket Entries
+          command: |
+            if [ "$MIGRATE_FLAG" == "true" ]; then
+              NODE_ENV=production ./scripts/reindex/index-docket-entries/index-docket-entries.ts 5
             fi
 
   cleanup-glue-job:
@@ -718,7 +770,7 @@ jobs:
               --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
               --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
               --header "content-type: application/json" \
-              --data "{\"branch\":\"${CIRCLE_BRANCH}\"" | jq -r '.id')
+              --data "{\"branch\":\"${CIRCLE_BRANCH}\"}" | jq -r '.id')
 
   sync-s3-buckets-with-timeout:
     docker:
@@ -726,7 +778,7 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
+    resource_class: xlarge
     environment:
       REFERRER: << pipeline.parameters.referrer >>
       SOURCE_BUCKET: << pipeline.parameters.source_bucket >>
@@ -973,12 +1025,12 @@ workflows:
     jobs:
       - initiate-glue-job:
           <<: *only-test
-      - wait-for-glue-workflow:
+      - wait-for-s3-sync-workflow:
           <<: *only-test
           type: approval
           requires:
             - initiate-glue-job
-      - wait-for-s3-sync-workflow:
+      - wait-for-glue-workflow:
           <<: *only-test
           type: approval
           requires:
@@ -987,23 +1039,23 @@ workflows:
           <<: *only-test
           requires:
             - wait-for-glue-workflow
-            - wait-for-s3-sync-workflow
       - index-cases:
           <<: *only-test
           requires:
             - migrate-restored-postgres-data
-      - index-docket-entries:
-          <<: *only-test
-          requires:
-            - index-cases
       - index-users:
           <<: *only-test
           requires:
-            - index-docket-entries
+            - index-cases
+      - index-docket-entries:
+          <<: *only-test
+          requires:
+            - wait-for-s3-sync-workflow
+            - index-users
       - cleanup-glue-job:
           <<: *only-test
           requires:
-            - index-users
+            - index-docket-entries
 
   glue-to-lower-env:
     when: << pipeline.parameters.run_glue_to_lower_env >>

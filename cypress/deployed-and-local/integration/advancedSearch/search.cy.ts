@@ -12,6 +12,7 @@ import {
 import { selectTypeaheadInput } from '../../../helpers/components/typeAhead/select-typeahead-input';
 import { CASE_TYPES_MAP } from '@shared/business/entities/EntityConstants';
 import { v4 } from 'uuid';
+import { createOrderAndDecision } from '../../../helpers/caseDetail/docketRecord/courtIssuedFiling/create-order-and-decision';
 
 describe('Advanced Search', () => {
   beforeEach(() => {
@@ -39,7 +40,7 @@ describe('Advanced Search', () => {
     /** Arrange */
     loginAsAdmissionsClerk();
     const firstName = `${faker.person.firstName()}-${v4()}`;
-    createAPractitioner({firstName}).then(({ barNumber }) => {
+    createAPractitioner({ firstName }).then(({ barNumber }) => {
       /** Act */
       cy.get('[data-testid="search-link"]').click();
       cy.get('[data-testid="practitioner-search-tab"]').click();
@@ -98,6 +99,81 @@ describe('Advanced Search', () => {
     });
   });
 
+  it('should find matching results when the user searches for an order by keyword', () => {
+    /** Arrange */
+    loginAsPetitionsClerk1();
+    createAndServePaperPetition().then(({ docketNumber }) => {
+      loginAsDocketClerk1();
+
+      goToCase(docketNumber);
+
+      const orderTitle = `${faker.word.adjective()} ${faker.word.noun()}`;
+
+      createOrderAndDecision(orderTitle);
+
+      // Add the order to the docket entry and perform a non-paper (electronic) service
+      cy.get('[data-testid="add-court-issued-docket-entry-button"]').click();
+      // Use the order title as the docket entry description so it will be indexed
+      cy.get('body')
+        .find('[data-testid="judge-select"]')
+        .should('exist')
+        .first()
+        .select('Ashford');
+
+      // Save the docket entry
+      cy.get('[data-testid="serve-to-parties-btn"]').click();
+      cy.get('[data-testid="modal-button-confirm"]').click();
+
+      /** Act */
+      cy.get('[data-testid="search-link"]').click();
+      cy.get('[data-testid="order-search-tab"]').click();
+      cy.get('[data-testid="keyword-search-input"]').type(orderTitle);
+      retry(() => {
+        cy.get(
+          '[data-testid="submit-order-advanced-search-button"], [data-testid="advanced-search-button"], button#advanced-search-button, form[data-testid="order-search-container"] button[type=submit]',
+        )
+          .first()
+          .click();
+
+        cy.get('.search-results').should('exist');
+        return assertExists(
+          `[data-testid="docket-number-link-${docketNumber}"]`,
+        );
+      }, 12);
+
+      /** Assert */
+      // Ensure the results table exists and the new order appears as the first result
+      cy.get('[data-testid="advanced-document-search-results-table"]').should(
+        'exist',
+      );
+      cy.get(
+        'table[data-testid="advanced-document-search-results-table"] tbody tr',
+      )
+        .first()
+        .within(() => {
+          cy.get(`[data-testid="docket-number-link-${docketNumber}"]`).should(
+            'exist',
+          );
+        });
+
+      /** Act */
+      // Click the Filed Date header to toggle sorting
+      cy.get('[data-testid="sort-button-filed-date"]').click();
+
+      /** Assert */
+      // After sorting, ensure the created order is present in the first row
+      cy.get(
+        'table[data-testid="advanced-document-search-results-table"] tbody tr',
+      )
+        .first()
+        .within(() => {
+          cy.get(`[data-testid="docket-number-link-${docketNumber}"]`).should(
+            'exist',
+          );
+        });
+    });
+  });
+
   it('should find matching results when the user searches for an opinion by keyword', () => {
     /** Arrange */
     loginAsPetitionsClerk1();
@@ -121,7 +197,9 @@ describe('Advanced Search', () => {
         'court-issued-document-type-search',
         'Summary Opinion',
       );
-      cy.get('[data-testid="judge-select"]').select('Ashford');
+      cy.get('body')
+        .find('[data-testid="judge-select"]')
+        .then($el => $el.length && cy.wrap($el.first()).select('Ashford'));
       cy.get('[data-testid="serve-to-parties-btn"]').click();
       cy.get('[data-testid="modal-button-confirm"]').click();
       cy.get('[data-testid="print-paper-service-done-button"]').click();
@@ -132,16 +210,47 @@ describe('Advanced Search', () => {
       cy.get('[data-testid="keyword-search-input"]').type(opinionTitle);
       // need to wait for elasticsearch potentially
       retry(() => {
-        cy.get('[data-testid="advanced-search-button"]').click();
+        cy.get(
+          '[data-testid="submit-opinion-advanced-search-button"], [data-testid="advanced-search-button"], button#advanced-search-button, form[data-testid="opinion-search-container"] button[type=submit]',
+        )
+          .first()
+          .click();
+
         cy.get('.search-results').should('exist');
-        return cy.get('body').then(body => {
-          /** Assert */
-          return (
-            body.find(`[data-testid="docket-number-link-${docketNumber}"]`)
-              .length > 0
+        return assertExists(
+          `[data-testid="docket-number-link-${docketNumber}"]`,
+        );
+      }, 12);
+      /** Assert */
+      // Ensure the results table exists and the new opinion appears as the first result
+      cy.get('[data-testid="advanced-document-search-results-table"]').should(
+        'exist',
+      );
+      cy.get(
+        'table[data-testid="advanced-document-search-results-table"] tbody tr',
+      )
+        .first()
+        .within(() => {
+          cy.get(`[data-testid="docket-number-link-${docketNumber}"]`).should(
+            'exist',
           );
         });
-      });
+
+      /** Act */
+      // Click the Filed Date header to toggle sorting
+      cy.get('[data-testid="sort-button-filed-date"]').click();
+
+      /** Assert */
+      // After sorting, ensure the created opinion is present in the first row
+      cy.get(
+        'table[data-testid="advanced-document-search-results-table"] tbody tr',
+      )
+        .first()
+        .within(() => {
+          cy.get(`[data-testid="docket-number-link-${docketNumber}"]`).should(
+            'exist',
+          );
+        });
     });
   });
 });
