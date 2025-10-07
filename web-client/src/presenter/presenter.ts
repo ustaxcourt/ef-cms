@@ -582,6 +582,7 @@ import { validateAddPractitionerSequence } from './sequences/validateAddPractiti
 import { validateAddPrivatePractitionerSequence } from './sequences/CaseAssociation/validateAddPrivatePractitionerSequence';
 import { validateAddToTrialSessionSequence } from './sequences/validateAddToTrialSessionSequence';
 import { validateBlockFromTrialSequence } from './sequences/validateBlockFromTrialSequence';
+import { validateEditRemoteStatusSequence } from './sequences/validateEditRemoteStatusSequence';
 import { validateCaseAdvancedSearchFormSequence } from './sequences/validateCaseAdvancedSearchFormSequence';
 import { validateCaseAssociationRequestSequence } from './sequences/validateCaseAssociationRequestSequence';
 import { validateCaseDeadlineSequence } from './sequences/validateCaseDeadlineSequence';
@@ -1568,6 +1569,8 @@ export const presenterSequences = {
     validateAddToTrialSessionSequence as unknown as Function,
   validateBlockFromTrialSequence:
     validateBlockFromTrialSequence as unknown as Function,
+  validateEditRemoteStatusSequence:
+    validateEditRemoteStatusSequence as unknown as Function,
   validateCaseAdvancedSearchFormSequence:
     validateCaseAdvancedSearchFormSequence as unknown as Function,
   validateCaseAssociationRequestSequence:

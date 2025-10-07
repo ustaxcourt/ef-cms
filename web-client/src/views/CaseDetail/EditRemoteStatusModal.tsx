@@ -11,7 +11,7 @@ export const EditRemoteStatusModal = connect(
     confirmSequence: sequences.blockCaseFromTrialSequence,
     modal: state.modal,
     updateModalValueSequence: sequences.updateModalValueSequence,
-    validateBlockFromTrialSequence: sequences.validateBlockFromTrialSequence,
+    validateEditRemoteStatusSequence: sequences.validateEditRemoteStatusSequence,
     validationErrors: state.validationErrors,
   },
   function EditRemoteStatusModal({
@@ -19,7 +19,7 @@ export const EditRemoteStatusModal = connect(
     confirmSequence,
     modal,
     updateModalValueSequence,
-    validateBlockFromTrialSequence,
+    validateEditRemoteStatusSequence,
     validationErrors,
   }) {
     return (
@@ -52,7 +52,7 @@ export const EditRemoteStatusModal = connect(
                     key: e.target.name,
                     value: e.target.value,
                   });
-                  validateBlockFromTrialSequence();
+                  validateEditRemoteStatusSequence();
                 }}
               />
             </fieldset>
