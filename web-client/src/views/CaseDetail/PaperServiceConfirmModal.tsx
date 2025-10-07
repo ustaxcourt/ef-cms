@@ -79,22 +79,20 @@ export const PaperServiceConfirmModal = connect(
             dismissible={false}
             scrollToTop={false}
           />
+          <div>
+            <Button
+              data-testid="confirm-modal-close-btn"
+              link
+              className="text-no-underline float-right"
+              onClick={event => {
+                event.stopPropagation();
+                clearModalSequence();
+              }}
+            >
+              Close
+            </Button>
+          </div>
         </ConfirmModal>
-        <div className="mobile-lg:grid-col-3">
-          <Button
-            data-testid="confirm-modal-close-btn"
-            iconRight
-            link
-            className="text-no-underline hide-on-mobile float-right margin-right-0 padding-top-0"
-            icon="times-circle"
-            onClick={event => {
-              event.stopPropagation();
-              onCancelSequence = { clearModalSequence };
-            }}
-          >
-            Close
-          </Button>
-        </div>
       </div>
     );
   },
