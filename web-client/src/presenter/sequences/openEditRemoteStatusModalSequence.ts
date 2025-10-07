@@ -7,5 +7,5 @@ export const openEditRemoteStatusModalSequence = [
   stopShowValidationAction,
   clearModalAction,
   clearAlertsAction,
-  setShowModalFactoryAction('BlockFromTrialModal'),
+  setShowModalFactoryAction('EditRemoteStatusModal'),
 ];

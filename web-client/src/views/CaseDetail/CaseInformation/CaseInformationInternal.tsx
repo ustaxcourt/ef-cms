@@ -11,7 +11,6 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
-import { openEditRemoteStatusModalSequence } from '@web-client/presenter/sequences/openEditRemoteStatusModalSequence';
 
 export const CaseInformationInternal = connect(
   {
@@ -50,6 +49,7 @@ export const CaseInformationInternal = connect(
     openAddEditHearingNoteModalSequence,
     openAddToTrialModalSequence,
     openBlockFromTrialModalSequence,
+    openEditRemoteStatusModalSequence,
     openCleanModalSequence,
     openRemoveFromTrialSessionModalSequence,
     openSetForHearingModalSequence,
