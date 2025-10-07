@@ -4,6 +4,7 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '@shared/business/entities/EntityConstants';
 import React from 'react';
+import { Button } from '@web-client/ustc-ui/Button/Button';
 
 export const PaperServiceConfirmModal = connect(
   {
@@ -22,54 +23,79 @@ export const PaperServiceConfirmModal = connect(
     navigateToPrintPaperServiceSequence,
   }) {
     return (
-      <ConfirmModal
-        noCancel
-        className="paper-service-confirm-modal"
-        confirmLabel="Print Now"
-        disableTooltip={true}
-        title="Paper Service Required"
-        onCancelSequence={clearModalSequence}
-        onConfirmSequence={navigateToPrintPaperServiceSequence}
-      >
-        <p>The following document was served on all cases:</p>
+      <div>
+        <ConfirmModal
+          noCancel
+          className="paper-service-confirm-modal"
+          confirmLabel="Print Now"
+          disableTooltip={true}
+          title="Paper Service Required"
+          onCancelSequence={clearModalSequence}
+          onConfirmSequence={navigateToPrintPaperServiceSequence}
+        >
+          <span>
+            <p>The following document was served on all cases:</p>
+          </span>
 
-        <p className="text-semibold">
-          {documentTitle.includes('Notice for Docket Change')
-            ? SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange.documentType
-            : documentTitle}
-        </p>
+          <div>
+            <p className="text-semibold">
+              {documentTitle.includes('Notice of Docket Change')
+                ? SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange
+                    .documentType
+                : documentTitle}
+            </p>
+          </div>
 
-        <ul>
-          {formattedCaseDetail.consolidatedCases.map(
-            (c: { docketNumber: string; caseCaption: string }) => (
-              <li key={c.docketNumber}>
-                <span>{c.docketNumber}</span> - {c.caseCaption}
-              </li>
-            ),
-          )}
-        </ul>
+          <ul>
+            {formattedCaseDetail.consolidatedCases.map(
+              (c: { docketNumber: string; caseTitle: string }) => (
+                <li key={c.docketNumber}>
+                  <span>{c.docketNumber}</span> - {c.caseTitle}
+                </li>
+              ),
+            )}
+          </ul>
 
-        <InfoNotificationComponent
-          alertInfo={{
-            message: (
-              <>
-                <div>
-                  <strong>Paper service is required for these parties:</strong>
-                </div>
-                {confirmInitiateServiceModalHelper.paperPartiesConsolidated.map(
-                  contact => (
-                    <div key={`${contact.docketNumber}-${contact.name}`}>
-                      {contact.docketNumber} - {contact.name}
-                    </div>
-                  ),
-                )}
-              </>
-            ),
-          }}
-          dismissible={false}
-          scrollToTop={false}
-        />
-      </ConfirmModal>
+          <InfoNotificationComponent
+            alertInfo={{
+              message: (
+                <>
+                  <div>
+                    <strong>
+                      Paper service is required for these parties:
+                    </strong>
+                  </div>
+                  {confirmInitiateServiceModalHelper.paperPartiesConsolidated.map(
+                    contact => (
+                      <div key={`${contact.docketNumber}-${contact.name}`}>
+                        {contact.docketNumber} - {contact.name},{' '}
+                        {contact.contactType}
+                      </div>
+                    ),
+                  )}
+                </>
+              ),
+            }}
+            dismissible={false}
+            scrollToTop={false}
+          />
+        </ConfirmModal>
+        <div className="mobile-lg:grid-col-3">
+          <Button
+            data-testid="confirm-modal-close-btn"
+            iconRight
+            link
+            className="text-no-underline hide-on-mobile float-right margin-right-0 padding-top-0"
+            icon="times-circle"
+            onClick={event => {
+              event.stopPropagation();
+              onCancelSequence = { clearModalSequence };
+            }}
+          >
+            Close
+          </Button>
+        </div>
+      </div>
     );
   },
 );

@@ -177,6 +177,7 @@ const getPaperPartiesConsolidated = formattedCaseDetail => {
     contactId?: string;
     userId?: string;
     name: string;
+    contactType?: string;
     serviceIndicator: string;
     docketNumber: string;
   }> = [];
