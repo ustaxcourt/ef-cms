@@ -45,7 +45,7 @@ export const Tag = ({
   children,
   variant,
   iconProps,
-  ...props
+  ...props // TODO: remove ...props, add className
 }: React.ComponentProps<'span'> &
   VariantProps<typeof tagVariants> &
   TagProps) => {
