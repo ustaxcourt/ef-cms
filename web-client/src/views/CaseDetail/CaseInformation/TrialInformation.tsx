@@ -47,6 +47,7 @@ export const TrialInformation = connect(
       props.openAddEditCalendarNoteModalSequence,
     openAddToTrialModalSequence: props.openAddToTrialModalSequence,
     openBlockFromTrialModalSequence: props.openBlockFromTrialModalSequence,
+    openEditRemoteStatusModalSequence: props.openEditRemoteStatusModalSequence,
     openRemoveFromTrialSessionModalSequence:
       props.openRemoveFromTrialSessionModalSequence,
     openUnblockFromTrialModalSequence: props.openUnblockFromTrialModalSequence,
@@ -57,6 +58,7 @@ export const TrialInformation = connect(
     openAddEditCalendarNoteModalSequence,
     openAddToTrialModalSequence,
     openBlockFromTrialModalSequence,
+    openEditRemoteStatusModalSequence,
     openRemoveFromTrialSessionModalSequence,
     openUnblockFromTrialModalSequence,
     trialSessionJudge,
@@ -262,6 +264,19 @@ export const TrialInformation = connect(
             </div>
           </>
         )}
+        <div className="margin-bottom-1">
+          <Button
+            link
+            data-testid="edit-remote-status"
+            icon="edit"
+            id="edit-remote-status-button"
+            onClick={() => {
+              openEditRemoteStatusModalSequence();
+            }}
+          >
+            Edit Remote Status
+          </Button>
+        </div>
       </>
     );
   },

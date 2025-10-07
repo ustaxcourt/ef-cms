@@ -272,6 +272,7 @@ import { openAddToTrialModalSequence } from './sequences/openAddToTrialModalSequ
 import { openAppMaintenanceModalSequence } from './sequences/openAppMaintenanceModalSequence';
 import { openAppUpdatedModalSequence } from './sequences/openAppUpdatedModalSequence';
 import { openBlockFromTrialModalSequence } from './sequences/openBlockFromTrialModalSequence';
+import { openEditRemoteStatusModalSequence } from './sequences/openEditRemoteStatusModalSequence';
 import { openCancelDraftDocumentModalSequence } from './sequences/openCancelDraftDocumentModalSequence';
 import { openCaseDocumentDownloadUrlSequence } from './sequences/openCaseDocumentDownloadUrlSequence';
 import { openCaseInNewTabSequence } from './sequences/openCaseInNewTabSequence';
@@ -1050,6 +1051,8 @@ export const presenterSequences = {
   openAppUpdatedModalSequence,
   openBlockFromTrialModalSequence:
     openBlockFromTrialModalSequence as unknown as Function,
+  openEditRemoteStatusModalSequence:
+    openEditRemoteStatusModalSequence as unknown as Function,
   openCancelDraftDocumentModalSequence:
     openCancelDraftDocumentModalSequence as unknown as Function,
   openCaseDocumentDownloadUrlSequence:
