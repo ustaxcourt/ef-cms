@@ -2,6 +2,7 @@ import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
 import { InfoNotificationComponent } from '../InfoNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
+import { noticeOfDocketChange } from '@shared/src/business/entities/EntityConstants.ts';
 import React from 'react';
 
 export const PaperServiceConfirmModal = connect(
@@ -34,7 +35,7 @@ export const PaperServiceConfirmModal = connect(
 
         <p className="text-semibold">
           {documentTitle.includes('Notice for Docket Change')
-            ? documentTitle.split(' for ')[0]
+            ? noticeOfDocketChange.documentType
             : documentTitle}
         </p>
 
