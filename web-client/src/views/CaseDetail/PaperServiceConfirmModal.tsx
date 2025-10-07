@@ -32,7 +32,11 @@ export const PaperServiceConfirmModal = connect(
       >
         <p>The following document was served on all cases:</p>
 
-        <p className="text-semibold">{documentTitle.split(' for ')[0]}</p>
+        <p className="text-semibold">
+          {documentTitle.includes('Notice for Docket Change')
+            ? documentTitle.split(' for ')[0]
+            : documentTitle}
+        </p>
 
         <ul>
           {formattedCaseDetail.consolidatedCases.map(
