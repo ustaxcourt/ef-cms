@@ -26,6 +26,7 @@ type AlertErrorProps = {
   alertHelper?: AlertHelper;
   className?: string;
   closeButtonOnClick?: () => void;
+  isDismissible?: boolean;
 };
 
 export function AlertError({
@@ -33,6 +34,7 @@ export function AlertError({
   alertHelper,
   className,
   closeButtonOnClick,
+  isDismissible,
 }: AlertErrorProps) {
   const notificationRef = useRef<HTMLDivElement | null>(null);
 
@@ -47,6 +49,7 @@ export function AlertError({
     closeButtonOnClick,
     title: alertError?.title,
     variant: 'error',
+    isDismissible,
   };
 
   return (
