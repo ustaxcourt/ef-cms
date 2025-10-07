@@ -1,5 +1,7 @@
 import React from 'react';
 import { TextField, TextArea } from '@web-client/dawson-ui/ui/input';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 
 export function Inputs() {
   return (
@@ -7,7 +9,6 @@ export function Inputs() {
       <h2>Text Input </h2>
     <div className="tw:p-6">
       <div className="tw:grid tw:grid-cols-3 tw:gap-6">
-        {/* First Text Field */}
         <div>
           <TextField
             label="Field Label"
@@ -16,7 +17,6 @@ export function Inputs() {
           />
         </div>
 
-        {/* Text Area */}
         <div>
           <TextArea
             label="Field Label"
@@ -25,21 +25,21 @@ export function Inputs() {
           />
         </div>
 
-        {/* Last Text Field - Horizontal */}
         <div className="tw:flex tw:items-start tw:gap-4">
           <div className="tw:flex tw:flex-col">
-            <div className="tw:flex tw:items-center tw:text-base tw:font-bold tw:text-gray-900">
+                        <div className="tw:flex tw:items-center tw:text-lg tw:font-semibold tw:text-gray-900">
               <span>Field Label</span>
-              <button
-                type="button"
+              <FontAwesomeIcon 
+                icon={faQuestionCircle} 
+                size="sm" 
                 className="tw:ml-1 tw:text-blue-600"
                 title="Help text"
-              >
-                <i className="fa-regular fa-circle-question tw:text-sm" />
-              </button>
-              <span className="tw:text-gray-500 tw:ml-1 tw:font-normal">(optional)</span>
+                role="img"
+                aria-label="Help text"
+              />
+              <span className="tw:text-gray-500 tw:ml-1 tw:font-normal tw:text-base">(optional)</span>
             </div>
-            <div className="tw:text-sm tw:text-gray-500">Help text</div>
+                            <div className="tw:text-base tw:text-gray-500">Help text</div>
           </div>
           <div className="tw:flex-1">
             <TextField

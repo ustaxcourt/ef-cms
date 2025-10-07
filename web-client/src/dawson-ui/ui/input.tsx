@@ -1,5 +1,7 @@
 import * as React from "react"
 import { cn } from "@web-client/lib/utils"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
 
 interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: string;
@@ -19,28 +21,28 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
     const inputId = React.useId();
     
     return (
-      <div className="tw:flex tw:flex-col tw:gap-1.5">
+      <div className="tw:flex tw:flex-col">
         {label && (
-          <div>
-            <div className="tw:flex tw:flex-col tw:gap-0">
-              <div className="tw:flex tw:items-center tw:text-base tw:font-bold tw:text-gray-900">
+          <div className="tw:mb-4">
+            <div className="tw:flex tw:flex-col tw:gap-4">
+              <div className="tw:flex tw:items-center tw:text-lg tw:font-semibold tw:text-gray-900">
                 <span>{label}</span>
                 {helpText && (
-                  <button
-                    type="button"
+                  <FontAwesomeIcon 
+                    icon={faQuestionCircle} 
+                    size="sm" 
                     className="tw:ml-1 tw:text-blue-600"
-                    aria-label={helpText}
                     title={helpText}
-                  >
-                    <i className="fa-regular fa-circle-question tw:text-sm" />
-                  </button>
+                    role="img"
+                    aria-label={helpText}
+                  />
                 )}
                 {!props.required && (
-                  <span className="tw:text-gray-500 tw:ml-1 tw:font-normal">(optional)</span>
+                  <span className="tw:text-gray-500 tw:ml-1 tw:font-normal tw:text-base">(optional)</span>
                 )}
               </div>
               {helpText && (
-                <div className="tw:text-sm tw:text-gray-500">
+                <div className="tw:text-base tw:text-gray-500">
                   {helpText}
                 </div>
               )}
@@ -56,7 +58,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
           className={cn(
             // Base styles
             "tw:block tw:w-full tw:rounded-md tw:border tw:border-gray-300 tw:bg-white",
-            "tw:px-3 tw:py-2 tw:text-sm tw:outline-none tw:cursor-text",
+            "tw:px-3 tw:h-9 tw:text-sm tw:outline-none tw:cursor-text",
             
             // States
             "tw:placeholder:text-gray-400",
@@ -75,7 +77,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
         
         {error && (
           <div className="tw:flex tw:items-center tw:gap-2 tw:text-red-500 tw:text-sm">
-            <i className="fa-regular fa-circle-exclamation" />
+            <FontAwesomeIcon icon={faQuestionCircle} size="sm" />
             <span>{error}</span>
           </div>
         )}
@@ -89,28 +91,28 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
     const textareaId = React.useId();
     
     return (
-      <div className="tw:flex tw:flex-col tw:gap-1.5">
+      <div className="tw:flex tw:flex-col">
         {label && (
-          <div>
-            <div className="tw:flex tw:flex-col tw:gap-0">
-              <div className="tw:flex tw:items-center tw:text-base tw:font-bold tw:text-gray-900">
+          <div className="tw:mb-4">
+            <div className="tw:flex tw:flex-col tw:gap-4">
+              <div className="tw:flex tw:items-center tw:text-lg tw:font-semibold tw:text-gray-900">
                 <span>{label}</span>
                 {helpText && (
-                  <button
-                    type="button"
+                  <FontAwesomeIcon 
+                    icon={faQuestionCircle} 
+                    size="sm" 
                     className="tw:ml-1 tw:text-blue-600"
-                    aria-label={helpText}
                     title={helpText}
-                  >
-                    <i className="fa-regular fa-circle-question tw:text-sm" />
-                  </button>
+                    role="img"
+                    aria-label={helpText}
+                  />
                 )}
                 {!props.required && (
-                  <span className="tw:text-gray-500 tw:ml-1 tw:font-normal">(optional)</span>
+                  <span className="tw:text-gray-500 tw:ml-1 tw:font-normal tw:text-base">(optional)</span>
                 )}
               </div>
               {helpText && (
-                <div className="tw:text-sm tw:text-gray-500">
+                <div className="tw:text-base tw:text-gray-500">
                   {helpText}
                 </div>
               )}
@@ -126,7 +128,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
             // Base styles
             "tw:block tw:w-full tw:rounded-tl-md tw:rounded-tr-md tw:rounded-bl-md tw:border tw:border-gray-300 tw:bg-white",
             "tw:px-3 tw:py-2 tw:text-sm tw:outline-none tw:cursor-text",
-            "tw:min-h-[80px] tw:resize-y",
+            "tw:min-h-[100px] tw:resize-y",
             
             // States
             "tw:placeholder:text-gray-400",
@@ -141,7 +143,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
         
         {error && (
           <div className="tw:flex tw:items-center tw:gap-2 tw:text-red-500 tw:text-sm">
-            <i className="fa-regular fa-circle-exclamation" />
+            <FontAwesomeIcon icon={faQuestionCircle} size="sm" />
             <span>{error}</span>
           </div>
         )}
