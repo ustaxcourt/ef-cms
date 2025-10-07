@@ -1,3 +1,4 @@
+import { Tag } from '@web-client/dawson-ui/ui/tag';
 import React from 'react';
 
 export const TrialSessionDetailsHeader = ({
@@ -19,12 +20,12 @@ export const TrialSessionDetailsHeader = ({
             <h1 tabIndex={-1}>{formattedTrialSessionDetails.trialLocation}</h1>
             {formattedTrialSessionDetails.formattedTerm &&
               formattedTrialSessionDetails.sessionStatus && (
-                <span className="usa-tag">
+                <Tag className="text-super">
                   <span aria-hidden="true">
                     {formattedTrialSessionDetails.formattedTerm}:{' '}
                     {formattedTrialSessionDetails.sessionStatus}
                   </span>
-                </span>
+                </Tag>
               )}
           </div>
           <p className="margin-y-0" id="case-title">
