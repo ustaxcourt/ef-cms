@@ -6,13 +6,15 @@ import React from 'react';
 
 export const PaperServiceConfirmModal = connect(
   {
-    clearModalSequence: sequences.clearModalSequence,
-    confirmInitiateServiceModalHelper: state.confirmInitiateServiceModalHelper,
+    formattedCaseDetail: state.formattedCaseDetail,
     documentTitle: state.form.documentTitle,
+    confirmInitiateServiceModalHelper: state.confirmInitiateServiceModalHelper,
+    clearModalSequence: sequences.clearModalSequence,
     navigateToPrintPaperServiceSequence:
       sequences.navigateToPrintPaperServiceSequence,
   },
   function PaperServiceConfirmModal({
+    formattedCaseDetail,
     clearModalSequence,
     confirmInitiateServiceModalHelper,
     documentTitle,
@@ -24,25 +26,35 @@ export const PaperServiceConfirmModal = connect(
         className="paper-service-confirm-modal"
         confirmLabel="Print Now"
         disableTooltip={true}
-        title="Paper service is required for the following document:"
+        title="Paper Service Required"
         onCancelSequence={clearModalSequence}
         onConfirmSequence={navigateToPrintPaperServiceSequence}
       >
-        <p>The following document will be served on all parties:</p>
+        <p>The following document was served on all cases:</p>
 
-        <p className="text-semibold">{documentTitle}</p>
+        <p className="text-semibold">{documentTitle.split(' for ')[0]}</p>
+
+        <ul>
+          {formattedCaseDetail.consolidatedCases.map(
+            (c: { docketNumber: string; caseCaption: string }) => (
+              <li key={c.docketNumber}>
+                <span>{c.docketNumber}</span> - {c.caseCaption}
+              </li>
+            ),
+          )}
+        </ul>
 
         <InfoNotificationComponent
           alertInfo={{
             message: (
               <>
-                <div className="margin-bottom-1">
-                  This case has parties receiving paper service:
+                <div>
+                  <strong>Paper service is required for these parties:</strong>
                 </div>
-                {confirmInitiateServiceModalHelper.contactsNeedingPaperService.map(
+                {confirmInitiateServiceModalHelper.paperPartiesConsolidated.map(
                   contact => (
-                    <div className="margin-bottom-1" key={contact.name}>
-                      {contact.name}
+                    <div key={`${contact.docketNumber}-${contact.name}`}>
+                      {contact.docketNumber} - {contact.name}
                     </div>
                   ),
                 )}
