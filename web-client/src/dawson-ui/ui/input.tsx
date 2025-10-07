@@ -152,7 +152,131 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
   }
 );
 
+const MobileTextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
+  ({ className, type = "text", error, label, helpText, hideLabel, ...props }, ref) => {
+    const inputId = React.useId();
+    
+    return (
+      <div className="tw:flex tw:flex-col">
+        {label && (
+          <div className="tw:mb-3">
+            <div className="tw:flex tw:flex-col tw:gap-3">
+              <div className="tw:flex tw:items-center tw:text-base tw:font-semibold tw:text-gray-900">
+                <span>{label}</span>
+                {helpText && (
+                  <FontAwesomeIcon 
+                    icon={faQuestionCircle} 
+                    size="sm" 
+                    className="tw:ml-1 tw:text-blue-600"
+                    title={helpText}
+                    role="img"
+                    aria-label={helpText}
+                  />
+                )}
+                {!props.required && (
+                  <span className="tw:text-gray-500 tw:ml-1 tw:font-normal tw:text-base">(optional)</span>
+                )}
+              </div>
+              {helpText && (
+                <div className="tw:text-base tw:text-gray-500">
+                  {helpText}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+        
+        <input
+          id={inputId}
+          ref={ref}
+          type={type}
+          aria-invalid={!!error}
+          className={cn(
+            // Base styles
+            "tw:block tw:w-full tw:rounded-md tw:border tw:border-gray-300 tw:bg-white",
+            "tw:px-3 tw:h-8 tw:text-sm tw:outline-none tw:cursor-text",
+            
+            // States
+            "tw:placeholder:text-gray-400",
+            "tw:focus:border-blue-500 tw:focus:ring-2 tw:focus:ring-blue-500/20",
+            
+            // Error state
+            error && "tw:border-red-300 tw:focus:border-red-500 tw:focus:ring-red-500/20",
+            
+            // Disabled state
+            "tw:disabled:cursor-not-allowed tw:disabled:bg-gray-50 tw:disabled:text-gray-500",
+            
+            className
+          )}
+          {...props}
+        />
+      </div>
+    );
+  }
+);
+
+const MobileTextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
+  ({ className, error, label, helpText, ...props }, ref) => {
+    const textareaId = React.useId();
+    
+    return (
+      <div className="tw:flex tw:flex-col">
+        {label && (
+          <div className="tw:mb-3">
+            <div className="tw:flex tw:flex-col tw:gap-3">
+              <div className="tw:flex tw:items-center tw:text-base tw:font-semibold tw:text-gray-900">
+                <span>{label}</span>
+                {helpText && (
+                  <FontAwesomeIcon 
+                    icon={faQuestionCircle} 
+                    size="sm" 
+                    className="tw:ml-1 tw:text-blue-600"
+                    title={helpText}
+                    role="img"
+                    aria-label={helpText}
+                  />
+                )}
+                {!props.required && (
+                  <span className="tw:text-gray-500 tw:ml-1 tw:font-normal tw:text-base">(optional)</span>
+                )}
+              </div>
+              {helpText && (
+                <div className="tw:text-base tw:text-gray-500">
+                  {helpText}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+        
+        <textarea
+          id={textareaId}
+          ref={ref}
+          aria-invalid={!!error}
+          className={cn(
+            // Base styles
+            "tw:block tw:w-full tw:rounded-tl-md tw:rounded-tr-md tw:rounded-bl-md tw:border tw:border-gray-300 tw:bg-white",
+            "tw:px-3 tw:py-2 tw:text-sm tw:outline-none tw:cursor-text",
+            "tw:min-h-[100px] tw:resize-y",
+            
+            // States
+            "tw:placeholder:text-gray-400",
+            "tw:focus:border-blue-500 tw:focus:ring-2 tw:focus:ring-blue-500/20",
+            error && "tw:border-red-300 tw:focus:border-red-500 tw:focus:ring-red-500/20",
+            "tw:disabled:cursor-not-allowed tw:disabled:bg-gray-50 tw:disabled:text-gray-500",
+            
+            className
+          )}
+          {...props}
+        />
+      </div>
+    );
+  }
+);
+
 TextField.displayName = "TextField";
 TextArea.displayName = "TextArea";
+MobileTextField.displayName = "MobileTextField";
+MobileTextArea.displayName = "MobileTextArea";
 
-export { TextField, TextArea };
+export { TextField, TextArea, MobileTextField, MobileTextArea };
