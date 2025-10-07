@@ -162,6 +162,7 @@ const batchDownloadDocketEntriesHelper = async (
   };
 
   if (useAwsBatchMechanism) {
+    applicationContext.logger.info('Starting batch job');
     const UUID = applicationContext.getUniqueId();
     await applicationContext.getPersistenceGateway().uploadDocument({
       applicationContext,
