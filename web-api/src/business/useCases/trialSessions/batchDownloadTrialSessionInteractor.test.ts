@@ -208,6 +208,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
       applicationContext.getNotificationGateway().sendNotificationToUser,
     ).toHaveBeenCalledWith({
       applicationContext: expect.anything(),
+      clientConnectionId: expect.anything(),
       message: {
         action: 'batch_download_error',
         error: expect.anything(),
@@ -236,6 +237,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
       applicationContext.getNotificationGateway().sendNotificationToUser,
     ).toHaveBeenCalledWith({
       applicationContext: expect.anything(),
+      clientConnectionId: expect.anything(),
       message: {
         action: 'batch_download_error',
         error: expect.anything(),
@@ -265,6 +267,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
       applicationContext.getNotificationGateway().sendNotificationToUser,
     ).toHaveBeenCalledWith({
       applicationContext: expect.anything(),
+      clientConnectionId: expect.anything(),
       message: {
         action: 'batch_download_error',
         error: expect.anything(),
