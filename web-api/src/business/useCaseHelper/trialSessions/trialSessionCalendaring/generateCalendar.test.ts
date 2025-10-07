@@ -19,6 +19,7 @@ import {
   FORMATS,
   createISODateString,
   createDateAtStartOfWeekEST,
+  getWeeksInRange,
 } from '@shared/business/utilities/DateHandler';
 
 const mockRegularCityString = TRIAL_CITY_STRINGS[TRIAL_CITY_STRINGS.length - 1];
@@ -496,5 +497,48 @@ describe('generateCalendar', () => {
       caseCountsAndSessionsByCity[WASHINGTON_DC_SOUTH_STRING]
         .scheduledSessions[0].trialLocation,
     ).toEqual(WASHINGTON_DC_SOUTH_STRING);
+  });
+
+  it('Extend Special Sessions When End Date Present', () => {
+    const mockCalendaringConfig = getMockCalendaringConfig();
+    const mockCaseCountsAndSessionsByCity =
+      getMockCaseCountsAndSessionsByCity();
+
+    const startDate = createISODateString(
+      mockWeekStringStart,
+      FORMATS.YYYYMMDD,
+    );
+    const estimatedEndDate = getBusinessDateInFuture({
+      numberOfDays: 14,
+      outputFormat: FORMATS.YYYYMMDD,
+      startDate,
+    });
+
+    const additionalWeeks = getWeeksInRange({
+      startDate,
+      endDate: estimatedEndDate,
+    });
+
+    const allWeeksToLoop = [...mockWeeksToLoop, ...additionalWeeks];
+
+    const mockSpecialTrialSession = {
+      ...mockTrialSession,
+      sessionType: SESSION_TYPES.special,
+      trialLocation: mockRegularCityString,
+      estimatedEndDate,
+    };
+
+    const { caseCountsAndSessionsByCity } = generateCalendar({
+      calendaringConfig: mockCalendaringConfig,
+      caseCountsAndSessionsByCity: mockCaseCountsAndSessionsByCity,
+      constraints: [createMockConstraint(true)],
+      specialSessions: [mockSpecialTrialSession],
+      weeksToLoop: allWeeksToLoop,
+    });
+
+    expect(
+      caseCountsAndSessionsByCity[mockRegularCityString].scheduledSessions
+        .length,
+    ).toBeGreaterThan(1);
   });
 });

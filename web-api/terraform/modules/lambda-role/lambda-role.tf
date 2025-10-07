@@ -35,7 +35,8 @@ resource "aws_iam_role_policy" "lambda_policy" {
                 "logs:CreateLogGroup",
                 "logs:CreateLogStream",
                 "logs:PutLogEvents",
-                "logs:DescribeLogStreams"
+                "logs:DescribeLogStreams",
+                "logs:GetLogEvents"
             ],
             "Resource": [
                 "arn:aws:logs:*:*:*"
@@ -53,7 +54,8 @@ resource "aws_iam_role_policy" "lambda_policy" {
         },
         {
             "Action": [
-                "batch:SubmitJob"
+                "batch:SubmitJob",
+                "batch:DescribeJobs"
             ],
             "Resource": [
                 "*"
