@@ -220,6 +220,7 @@ export const batchDownloadTrialSessionInteractorHelper = async (
 
   try {
     if (useAwsBatchMechanism) {
+      applicationContext.logger.info('Starting batch job');
       const UUID = applicationContext.getUniqueId();
       await applicationContext.getPersistenceGateway().uploadDocument({
         applicationContext,
