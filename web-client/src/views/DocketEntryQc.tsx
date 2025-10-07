@@ -17,6 +17,7 @@ export const DocketEntryQc = connect(
   {
     caseDetail: state.caseDetail,
     formattedCaseDetail: state.formattedCaseDetail,
+    isFiledAcrossAllCases: state.isFiledAcrossAllCases,
     closeModalAndNavigateBackSequence:
       sequences.closeModalAndNavigateBackSequence,
     completeDocketEntryQCAndSendMessageSequence:
@@ -41,6 +42,7 @@ export const DocketEntryQc = connect(
     openCompleteAndSendMessageModalSequence,
     showModal,
     formattedCaseDetail,
+    isFiledAcrossAllCases,
   }) {
     const isMemberCase = Boolean(
       caseDetail?.leadDocketNumber &&
@@ -148,7 +150,7 @@ export const DocketEntryQc = connect(
                     disableOnClick
                     id="save-and-finish"
                     data-testid="save-and-finish-document-qc"
-                    disabled={isMemberCase}
+                    disabled={isMemberCase && isFiledAcrossAllCases}
                     type="submit"
                     onClick={async () => {
                       await completeDocketEntryQCSequence();
@@ -160,7 +162,7 @@ export const DocketEntryQc = connect(
                     disableOnClick
                     secondary
                     id="save-and-add-supporting"
-                    disabled={isMemberCase}
+                    disabled={isMemberCase && isFiledAcrossAllCases}
                     onClick={async () => {
                       await openCompleteAndSendMessageModalSequence();
                     }}

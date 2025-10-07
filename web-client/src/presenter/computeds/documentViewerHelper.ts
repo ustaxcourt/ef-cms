@@ -114,8 +114,7 @@ export const documentViewerHelper = (
   const showCompleteQcButton =
     permissions.EDIT_DOCKET_ENTRY &&
     formattedDocumentToDisplay.qcNeeded &&
-    isLeadCase &&
-    !isMemberCase;
+    (isLeadCase || (isMemberCase && !isFiledAcrossAllCases));
 
   const showApplyStampButton =
     permissions.STAMP_MOTION &&
