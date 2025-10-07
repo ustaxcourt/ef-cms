@@ -30,16 +30,6 @@ export const getDocumentQCInboxForUserAction = async ({
   );
 
   if (leadDocketNumbers.length > 0) {
-    const sampleWorkItemWithConsolidation = workItems.find(
-      wi => wi.consolidatedCases,
-    );
-    if (sampleWorkItemWithConsolidation) {
-      console.log(
-        `[DEBUG] Sample consolidated data:`,
-        sampleWorkItemWithConsolidation.consolidatedCases,
-      );
-    }
-
     const workItemsWithGroups = workItems.map(wi => {
       const needsGroups = workItemsNeedingGroups.some(
         needsGroup => needsGroup.workItemId === wi.workItemId,
