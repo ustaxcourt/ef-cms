@@ -4,11 +4,12 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 
 export const EditRemoteStatusModal = connect(
   {
     cancelSequence: sequences.clearModalSequence,
-    confirmSequence: sequences.blockCaseFromTrialSequence,
+    confirmSequence: sequences.editRemoteStatusSequence,
     modal: state.modal,
     updateModalValueSequence: sequences.updateModalValueSequence,
     validateEditRemoteStatusSequence: sequences.validateEditRemoteStatusSequence,
@@ -19,14 +20,15 @@ export const EditRemoteStatusModal = connect(
     confirmSequence,
     modal,
     updateModalValueSequence,
-    validateEditRemoteStatusSequence,
     validationErrors,
   }) {
+
+    const dateGranted = 'MM/DD/YYYY';
     return (
       <ModalDialog
         cancelLabel="Cancel"
         cancelSequence={cancelSequence}
-        confirmLabel="Block Case"
+        confirmLabel="Save"
         confirmSequence={confirmSequence}
         title="Edit Remote Status"
       >
@@ -36,23 +38,17 @@ export const EditRemoteStatusModal = connect(
           </div>
 
           <FormGroup errorText={validationErrors.reason}>
-            <fieldset className="usa-fieldset margin-bottom-0">
-              <legend className="display-block" id="year-filed-legend">
-                Why are you blocking this case?
-              </legend>
-              <textarea
-                aria-label="edit remote status"
-                className="usa-textarea textarea-resize-vertical"
-                id="reason"
-                maxLength={120}
-                name="reason"
-                value={modal.reason}
+            <fieldset className="usa-fieldset">
+              <p className="display-block" id="year-filed-legend">
+                <b>Date granted:</b> {dateGranted}
+              </p>
+              <DateSelector
+                defaultValue={modal.dateGranted ? modal.selectDate : 'Select date'}
+                formGroupClassNames={''}
+                id="date-granted-motr"
                 onChange={e => {
-                  updateModalValueSequence({
-                    key: e.target.name,
-                    value: e.target.value,
-                  });
-                  validateEditRemoteStatusSequence();
+                  updateModalValueSequence({key: "date-granted", value: e.target.value});
+                  // validateEditRemoteTrialModalSequence()
                 }}
               />
             </fieldset>

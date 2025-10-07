@@ -35,6 +35,7 @@ import { batchDownloadErrorSequence } from './sequences/batchDownloadErrorSequen
 import { batchDownloadReadySequence } from './sequences/batchDownloadReadySequence';
 import { batchDownloadTrialSessionSequence } from './sequences/batchDownloadTrialSessionSequence';
 import { blockCaseFromTrialSequence } from './sequences/blockCaseFromTrialSequence';
+import { editRemoteStatusSequence } from './sequences/editRemoteStatusSequence';
 import { broadcastLogoutSequence } from './sequences/broadcastLogoutSequence';
 import { calculatePenaltiesSequence } from './sequences/calculatePenaltiesSequence';
 import { canEditContactInformationSequence } from './sequences/canEditContactInformationSequence';
@@ -679,6 +680,7 @@ export const presenterSequences = {
   batchDownloadTrialSessionSequence:
     batchDownloadTrialSessionSequence as unknown as Function,
   blockCaseFromTrialSequence: blockCaseFromTrialSequence as unknown as Function,
+  editRemoteStatusSequence: editRemoteStatusSequence as unknown as Function,
   broadcastLogoutSequence: broadcastLogoutSequence as unknown as Function,
   calculatePenaltiesSequence: calculatePenaltiesSequence as unknown as Function,
   canEditContactInformationSequence:
