@@ -60,7 +60,7 @@ export const ConfirmInitiateServiceModal = connect(
             <ul className="padding-left-2">
               {additionalServedCases.map(c => (
                 <li key={c.docketNumber}>
-                  {c.docketNumber} - {c.petitioners}
+                  {c.docketNumber} - {c.caseTitle}
                 </li>
               ))}
             </ul>

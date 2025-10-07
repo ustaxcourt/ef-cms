@@ -123,12 +123,11 @@ export const DocketEntryQc = connect(
                                 {mappedMemberedCases().map(docketNumber => (
                                   <li key={docketNumber}>
                                     {docketNumber} -{' '}
-                                    {formattedCaseDetail.consolidatedCases
-                                      .find(
+                                    {
+                                      formattedCaseDetail.consolidatedCases.find(
                                         c => c.docketNumber === docketNumber,
-                                      )
-                                      ?.petitioners.map(p => p.name)
-                                      .join(', ')}
+                                      )?.caseTitle
+                                    }
                                   </li>
                                 ))}
                               </ul>

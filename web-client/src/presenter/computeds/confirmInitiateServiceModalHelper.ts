@@ -52,8 +52,7 @@ export const confirmInitiateServiceModalHelper = (
     }
   }
 
-  let additionalServedCases: { docketNumber: string; petitioners: string }[] =
-    [];
+  let additionalServedCases: { docketNumber: string; caseTitle: string }[] = [];
   if (
     isFiledAcrossAllCases !== false &&
     (SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(eventCode) ||
@@ -64,7 +63,7 @@ export const confirmInitiateServiceModalHelper = (
         .filter((c: any) => c.docketNumber !== formattedCaseDetail.docketNumber)
         .map((c: any) => ({
           docketNumber: c.docketNumber,
-          petitioners: (c.petitioners || []).map(p => p.name).join(', '),
+          caseTitle: c.caseTitle,
         }));
     }
   }
