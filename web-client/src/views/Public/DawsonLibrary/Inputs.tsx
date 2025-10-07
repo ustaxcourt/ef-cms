@@ -14,6 +14,7 @@ export function Inputs() {
             label="Field Label"
             helpText="Help text"
             placeholder="Enter text here"
+            className="tw:w-[380px]"
           />
         </div>
 
@@ -60,6 +61,7 @@ export function Inputs() {
             label="Field Label"
             helpText="Help text"
             placeholder="Enter text here"
+            className="tw:w-[380px]"
           />
         </div>
 
