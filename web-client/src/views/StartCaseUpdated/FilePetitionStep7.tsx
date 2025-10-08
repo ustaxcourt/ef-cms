@@ -17,7 +17,6 @@ export const FilePetitionStep7 = connect(
   },
   function FilePetitionStep7({ alertSuccess, filePetitionHelper }) {
     const { isPetitioner } = filePetitionHelper;
-    console.log(alertSuccess);
 
     return (
       <>

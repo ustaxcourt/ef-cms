@@ -107,14 +107,3 @@
   --color-grey-light: var(--grey-light);
   --breakpoint-xs: 30rem;
 }
-
-/* 
-@layer base {
-  * {
-    @apply tw:border-border tw:outline-ring/50;
-  }
-
-  body {
-    @apply tw:bg-background tw:text-foreground;
-  }
-} */

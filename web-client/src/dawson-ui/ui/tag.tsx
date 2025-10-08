@@ -30,13 +30,9 @@ const tagVariants = cva(
         primary: cn('tw:bg-white tw:text-primary-darker'),
         destructive: cn('tw:bg-destructive-dark tw:text-white'),
       },
-      size: {
-        default: '',
-      },
     },
     defaultVariants: {
       variant: 'primary',
-      size: 'default',
     },
   },
 );
@@ -49,7 +45,7 @@ export const Tag = ({
   children,
   variant,
   iconProps,
-  ...props
+  ...props // TODO: remove ...props, add className
 }: React.ComponentProps<'span'> &
   VariantProps<typeof tagVariants> &
   TagProps) => {
