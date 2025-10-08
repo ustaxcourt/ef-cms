@@ -271,6 +271,7 @@ import { openAddIrsPractitionerModalSequence } from './sequences/openAddIrsPract
 import { openAddPrivatePractitionerModalSequence } from './sequences/openAddPrivatePractitionerModalSequence';
 import { openAddToTrialModalSequence } from './sequences/openAddToTrialModalSequence';
 import { openAppMaintenanceModalSequence } from './sequences/openAppMaintenanceModalSequence';
+import { openEditRemoteTrialModalSequence } from './sequences/openEditRemoteTrialModalSequence';
 import { openAppUpdatedModalSequence } from './sequences/openAppUpdatedModalSequence';
 import { openBlockFromTrialModalSequence } from './sequences/openBlockFromTrialModalSequence';
 import { openEditRemoteStatusModalSequence } from './sequences/openEditRemoteStatusModalSequence';
@@ -466,6 +467,7 @@ import { submitEditContactSequence } from './sequences/submitEditContactSequence
 import { submitEditDeficiencyStatisticSequence } from './sequences/submitEditDeficiencyStatisticSequence';
 import { submitEditDocketEntryMetaSequence } from './sequences/submitEditDocketEntryMetaSequence';
 import { submitEditOrderTitleModalSequence } from './sequences/submitEditOrderTitleModalSequence';
+import { submitEditRemoteTrialModalSequence } from './sequences/submitEditRemoteTrialModalSequence';
 import { submitEditOtherStatisticsSequence } from './sequences/submitEditOtherStatisticsSequence';
 import { submitEditPetitionerCounselSequence } from './sequences/submitEditPetitionerCounselSequence';
 import { submitEditPetitionerSequence } from './sequences/submitEditPetitionerSequence';
@@ -601,6 +603,7 @@ import { validateDocketEntrySequence } from './sequences/validateDocketEntrySequ
 import { validateDocketEntryWorksheetSequence } from '@web-client/presenter/sequences/validateDocketEntryWorksheetSequence';
 import { validateDocumentSequence } from './sequences/validateDocumentSequence';
 import { validateEditPetitionerCounselSequence } from './sequences/CaseAssociation/validateEditPetitionerCounselSequence';
+import { validateEditRemoteTrialModalSequence } from './sequences/validateEditRemoteTrialModalSequence';
 import { validateEditRespondentCounselSequence } from './sequences/CaseAssociation/validateEditRespondentCounselSequence';
 import { validateExternalDocumentInformationSequence } from './sequences/validateExternalDocumentInformationSequence';
 import { validateFilePetitionStep2Sequence } from '@web-client/presenter/sequences/validateFilePetitionStep2Sequence';
@@ -1051,6 +1054,8 @@ export const presenterSequences = {
     openAddToTrialModalSequence as unknown as Function,
   openAppMaintenanceModalSequence:
     openAppMaintenanceModalSequence as unknown as Function,
+  openEditRemoteTrialModalSequence:
+    openEditRemoteTrialModalSequence as unknown as Function,
   openAppUpdatedModalSequence,
   openBlockFromTrialModalSequence:
     openBlockFromTrialModalSequence as unknown as Function,
@@ -1375,6 +1380,8 @@ export const presenterSequences = {
     submitEditDocketEntryMetaSequence as unknown as Function,
   submitEditOrderTitleModalSequence:
     submitEditOrderTitleModalSequence as unknown as Function,
+  submitEditRemoteTrialModalSequence:
+    submitEditRemoteTrialModalSequence as unknown as Function,
   submitEditOtherStatisticsSequence:
     submitEditOtherStatisticsSequence as unknown as Function,
   submitEditPetitionerCounselSequence:
@@ -1603,6 +1610,8 @@ export const presenterSequences = {
   validateDocumentSequence: validateDocumentSequence as unknown as Function,
   validateEditPetitionerCounselSequence:
     validateEditPetitionerCounselSequence as unknown as Function,
+  validateEditRemoteTrialModalSequence:
+    validateEditRemoteTrialModalSequence as unknown as Function,
   validateEditRespondentCounselSequence:
     validateEditRespondentCounselSequence as unknown as Function,
   validateExternalDocumentInformationSequence:

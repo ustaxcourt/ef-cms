@@ -12,7 +12,10 @@ export const EditRemoteStatusModal = connect(
     confirmSequence: sequences.editRemoteStatusSequence,
     modal: state.modal,
     updateModalValueSequence: sequences.updateModalValueSequence,
-    validateEditRemoteStatusSequence: sequences.validateEditRemoteStatusSequence,
+    validateEditRemoteStatusSequence:
+      sequences.validateEditRemoteStatusSequence,
+    validateEditRemoteTrialModalSequence:
+      sequences.validateEditRemoteTrialModalSequence,
     validationErrors: state.validationErrors,
   },
   function EditRemoteStatusModal({
@@ -20,10 +23,9 @@ export const EditRemoteStatusModal = connect(
     confirmSequence,
     modal,
     updateModalValueSequence,
+    validateEditRemoteTrialModalSequence,
     validationErrors,
   }) {
-
-    const dateGranted = 'MM/DD/YYYY';
     return (
       <ModalDialog
         cancelLabel="Cancel"
@@ -34,24 +36,27 @@ export const EditRemoteStatusModal = connect(
       >
         <div className="margin-bottom-4">
           <div className="margin-bottom-2">
-            By putting in a date, you are indicating that the Motion to Proceed Remotely was granted.{' '}
+            By putting in a date, you are indicating that the Motion to Proceed
+            Remotely was granted.{' '}
           </div>
 
-          <FormGroup errorText={validationErrors.reason}>
-            <fieldset className="usa-fieldset">
-              <p className="display-block" id="year-filed-legend">
-                <b>Date granted:</b> {dateGranted}
-              </p>
+          <FormGroup errorText={validationErrors.remoteTrialGrantedDate}>
+            <div className="edit-remote-trial-date-picker">
               <DateSelector
-                defaultValue={modal.dateGranted ? modal.selectDate : 'Select date'}
-                formGroupClassNames={''}
-                id="date-granted-motr"
+                defaultValue={modal.remoteTrialGrantedDate}
+                id="remote-trial-granted-date"
+                label="Date granted: MM/DD/YYYY"
+                placeHolderText="Select Date"
+                data-testid="remote-trial-granted-date"
                 onChange={e => {
-                  updateModalValueSequence({key: "date-granted", value: e.target.value});
-                  // validateEditRemoteTrialModalSequence()
+                  updateModalValueSequence({
+                    key: 'remoteTrialGrantedDate',
+                    value: e.target.value,
+                  });
+                  validateEditRemoteTrialModalSequence();
                 }}
               />
-            </fieldset>
+            </div>
           </FormGroup>
         </div>
       </ModalDialog>
