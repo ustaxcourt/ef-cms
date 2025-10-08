@@ -87,9 +87,9 @@ export const JURISDICTIONAL_OPTIONS = {
 };
 
 export const MOTION_DISPOSITIONS = {
-  DENIED: 'Denied',
-  GRANTED: 'Granted',
-  GRANTED_IN_PART: 'Granted in Part',
+  DENIED: 'DENIED',
+  GRANTED: 'GRANTED',
+  GRANTED_IN_PART: 'GRANTED IN PART',
 };
 
 export const STRICKEN_FROM_TRIAL_SESSION_MESSAGE =
