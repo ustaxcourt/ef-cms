@@ -48,16 +48,16 @@ export const ConfirmInitiateServiceModal = connect(
         disableSubmit={waitingForResponse || isSubmitDebounced}
         title="Are You Ready to Initiate Service?"
       >
-        <p className="margin-bottom-1">
+        <p className="margin-0">
           {confirmInitiateServiceModalHelper.confirmationText}
         </p>
         <p className="margin-top-0 margin-bottom-2">
           <strong>{documentTitle}</strong>
         </p>
         {additionalServedCases && additionalServedCases.length > 0 && (
-          <div className="margin-bottom-2">
+          <div>
             <div>This document will also be served for:</div>
-            <ul className="padding-left-2">
+            <ul className="padding-left-3 margin-top-1">
               {additionalServedCases.map(c => (
                 <li key={c.docketNumber}>
                   {c.docketNumber} - {c.caseTitle}
@@ -66,19 +66,21 @@ export const ConfirmInitiateServiceModal = connect(
             </ul>
           </div>
         )}
-        {confirmInitiateServiceModalHelper.showPaperAlert && (
+        {confirmInitiateServiceModalHelper.paperPartiesConsolidated && (
           <InfoNotificationComponent
             alertInfo={{
               message: (
                 <>
-                  <div className="margin-bottom-1">
-                    This {confirmInitiateServiceModalHelper.caseOrGroup} has
-                    parties receiving paper service:
+                  <div>
+                    <strong>
+                      Paper service is required for these parties:
+                    </strong>
                   </div>
-                  {confirmInitiateServiceModalHelper.contactsNeedingPaperService.map(
+                  {confirmInitiateServiceModalHelper.paperPartiesConsolidated.map(
                     contact => (
-                      <div className="margin-bottom-1" key={contact.name}>
-                        {contact.name}
+                      <div key={`${contact.docketNumber}-${contact.name}`}>
+                        {contact.docketNumber} - {contact.name},{' '}
+                        {contact.contactType}
                       </div>
                     ),
                   )}

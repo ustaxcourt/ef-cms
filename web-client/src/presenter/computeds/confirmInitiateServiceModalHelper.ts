@@ -144,7 +144,7 @@ export const confirmInitiateServiceModalHelper = (
   }
 
   const paperPartiesConsolidated =
-    getPaperPartiesConsolidated(formattedCaseDetail) || [];
+    getPaperPartiesConsolidated(formattedCaseDetail);
 
   return {
     caseOrGroup,
@@ -153,7 +153,10 @@ export const confirmInitiateServiceModalHelper = (
     showConsolidatedCasesForService,
     showPaperAlert: contactsNeedingPaperService.length > 0,
     additionalServedCases,
-    paperPartiesConsolidated,
+    paperPartiesConsolidated:
+      paperPartiesConsolidated.length > 0
+        ? paperPartiesConsolidated
+        : undefined,
   };
 };
 

@@ -4,7 +4,6 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '@shared/business/entities/EntityConstants';
 import React from 'react';
-import { Button } from '@web-client/ustc-ui/Button/Button';
 
 export const PaperServiceConfirmModal = connect(
   {
@@ -25,28 +24,27 @@ export const PaperServiceConfirmModal = connect(
     return (
       <div>
         <ConfirmModal
-          noCancel
           className="paper-service-confirm-modal"
           confirmLabel="Print Now"
+          cancelLabel="Close"
+          useLinkForCancel={true}
           disableTooltip={true}
           title="Paper Service Required"
           onCancelSequence={clearModalSequence}
           onConfirmSequence={navigateToPrintPaperServiceSequence}
         >
-          <span>
-            <p>The following document was served on all cases:</p>
-          </span>
+          <p className="margin-0">
+            The following document was served on all cases:
+          </p>
 
-          <div>
-            <p className="text-semibold">
-              {documentTitle.includes('Notice of Docket Change')
-                ? SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange
-                    .documentType
-                : documentTitle}
-            </p>
-          </div>
+          <p className="margin-0 text-bold">
+            {documentTitle.includes('Notice of Docket Change')
+              ? SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange
+                  .documentType
+              : documentTitle}
+          </p>
 
-          <ul>
+          <ul className="margin-0 padding-left-3">
             {formattedCaseDetail.consolidatedCases.map(
               (c: { docketNumber: string; caseTitle: string }) => (
                 <li key={c.docketNumber}>
@@ -56,42 +54,31 @@ export const PaperServiceConfirmModal = connect(
             )}
           </ul>
 
-          <InfoNotificationComponent
-            alertInfo={{
-              message: (
-                <>
-                  <div>
-                    <strong>
-                      Paper service is required for these parties:
-                    </strong>
-                  </div>
-                  {confirmInitiateServiceModalHelper.paperPartiesConsolidated.map(
-                    contact => (
-                      <div key={`${contact.docketNumber}-${contact.name}`}>
-                        {contact.docketNumber} - {contact.name},{' '}
-                        {contact.contactType}
-                      </div>
-                    ),
-                  )}
-                </>
-              ),
-            }}
-            dismissible={false}
-            scrollToTop={false}
-          />
-          <div>
-            <Button
-              data-testid="confirm-modal-close-btn"
-              link
-              className="text-no-underline float-right"
-              onClick={event => {
-                event.stopPropagation();
-                clearModalSequence();
+          {confirmInitiateServiceModalHelper.paperPartiesConsolidated && (
+            <InfoNotificationComponent
+              alertInfo={{
+                message: (
+                  <>
+                    <div>
+                      <strong>
+                        Paper service is required for these parties:
+                      </strong>
+                    </div>
+                    {confirmInitiateServiceModalHelper.paperPartiesConsolidated.map(
+                      contact => (
+                        <div key={`${contact.docketNumber}-${contact.name}`}>
+                          {contact.docketNumber} - {contact.name},{' '}
+                          {contact.contactType}
+                        </div>
+                      ),
+                    )}
+                  </>
+                ),
               }}
-            >
-              Close
-            </Button>
-          </div>
+              dismissible={false}
+              scrollToTop={false}
+            />
+          )}
         </ConfirmModal>
       </div>
     );

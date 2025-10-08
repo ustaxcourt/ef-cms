@@ -27,6 +27,7 @@ type ConfirmModalProps = {
   showDelete?: boolean;
   showModalWhen?: string;
   title: string;
+  useLinkForCancel?: boolean;
 };
 
 const confirmModalDeps = {
@@ -38,6 +39,7 @@ export const ConfirmModal = connect<ConfirmModalProps, typeof confirmModalDeps>(
   confirmModalDeps,
   function ConfirmModal({
     cancelLabel = 'Cancel',
+    useLinkForCancel = false,
     children,
     className,
     confirmLabel = 'Ok',
@@ -139,6 +141,11 @@ export const ConfirmModal = connect<ConfirmModalProps, typeof confirmModalDeps>(
               <Button
                 data-testid="confirm-modal-cancel-btn"
                 secondary
+                link={useLinkForCancel}
+                className={classNames(
+                  useLinkForCancel ? 'text-no-underline' : '',
+                )}
+                id="cancel"
                 onClick={event => {
                   event.stopPropagation();
                   onCancelSequence();

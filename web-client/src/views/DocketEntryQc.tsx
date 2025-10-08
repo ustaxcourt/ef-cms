@@ -119,7 +119,7 @@ export const DocketEntryQc = connect(
                                 This document will also be QC&apos;d for all
                                 consolidated cases.
                               </b>
-                              <ul className="margin-top-0 margin-bottom-0">
+                              <ul className="margin-top-0 margin-bottom-0 padding-left-3">
                                 {mappedMemberedCases().map(docketNumber => (
                                   <li key={docketNumber}>
                                     {docketNumber} -{' '}
