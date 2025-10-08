@@ -38,7 +38,7 @@ export const PaperServiceConfirmModal = connect(
           </p>
 
           <p className="margin-0 text-bold">
-            {documentTitle.includes('Notice of Docket Change')
+            {documentTitle?.includes('Notice of Docket Change')
               ? SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange
                   .documentType
               : documentTitle}
