@@ -24,6 +24,7 @@ import {
   createISODateString,
   createDateAtStartOfWeekEST,
   getWeeksInRange,
+  IsoDateRange,
 } from '@shared/business/utilities/DateHandler';
 
 const mockRegularCityString = TRIAL_CITY_STRINGS[TRIAL_CITY_STRINGS.length - 1];
@@ -514,83 +515,106 @@ describe('generateCalendar', () => {
     ).toBeGreaterThan(1);
   });
 
-  it('should show how extending the length of special sessions impacts the calendaring of existing and subsequent trial sessions', () => {
-    const startDate = createISODateString(
-      mockWeekStringStart,
-      FORMATS.YYYYMMDD,
-    );
-    const estimatedEndDate = getBusinessDateInFuture({
-      numberOfDays: 21,
-      outputFormat: FORMATS.YYYYMMDD,
-      startDate,
-    });
-    const weeksInRange = getWeeksInRange({
-      startDate,
-      endDate: estimatedEndDate,
-    });
+  describe('extended calendar special sessions impacts on the calendaring of existing and subsequent trial sessions', () => {
+    let startDate: string;
+    let estimatedEndDate: string;
+    let weeksInRange: IsoDateRange[];
+    let extendedSpecialSession: any;
+    let mockCaseCountsAndSessionsByCity: any;
+    let caseCountsAndSessionsByCity: any;
 
-    const extendedSpecialSession = {
-      ...mockTrialSession,
-      sessionType: SESSION_TYPES.special,
-      trialLocation: mockRegularCityString,
-      estimatedEndDate,
-    };
+    beforeEach(() => {
+       startDate = createISODateString(
+        mockWeekStringStart,
+        FORMATS.YYYYMMDD,
+      );
 
-    const mockCaseCountsAndSessionsByCity = {
-      [mockRegularCityString]: {
-        initialRegularCases: 10,
-        initialSmallCases: 0,
-        prospectiveSessions: [
-          {
-            cityWasNotVisitedInLastTwoTerms: false,
-            sessionType: SESSION_TYPES.regular,
-            trialLocation: mockRegularCityString,
-          },
+       estimatedEndDate = getBusinessDateInFuture({
+        numberOfDays: 21,
+        outputFormat: FORMATS.YYYYMMDD,
+        startDate,
+      });
+       weeksInRange = getWeeksInRange({
+        startDate,
+        endDate: estimatedEndDate,
+      });
+       extendedSpecialSession = {
+        ...mockTrialSession,
+        sessionType: SESSION_TYPES.special,
+        trialLocation: mockRegularCityString,
+        estimatedEndDate,
+      };
+       mockCaseCountsAndSessionsByCity = {
+        [mockRegularCityString]: {
+          initialRegularCases: 10,
+          initialSmallCases: 0,
+          prospectiveSessions: [
+            {
+              cityWasNotVisitedInLastTwoTerms: false,
+              sessionType: SESSION_TYPES.regular,
+              trialLocation: mockRegularCityString,
+            },
+          ],
+          remainingRegularCases: 10,
+          remainingSmallCases: 0,
+          scheduledSessions: [],
+        },
+        [mockSpecialCityString]: {
+          initialRegularCases: 10,
+          initialSmallCases: 0,
+          prospectiveSessions: [
+            {
+              cityWasNotVisitedInLastTwoTerms: false,
+              sessionType: SESSION_TYPES.regular,
+              trialLocation: mockSpecialCityString,
+            },
+          ],
+          remainingRegularCases: 10,
+          remainingSmallCases: 0,
+          scheduledSessions: [],
+        },
+      };
+      ({caseCountsAndSessionsByCity} = generateCalendar({
+        calendaringConfig: getMockCalendaringConfig(),
+        caseCountsAndSessionsByCity: mockCaseCountsAndSessionsByCity,
+        constraints: [
+          reservedWeekOfAtLocationConstraint,
+          oneSessionPerLocationPerWeekConstraint,
         ],
-        remainingRegularCases: 10,
-        remainingSmallCases: 0,
-        scheduledSessions: [],
-      },
-      [mockSpecialCityString]: {
-        initialRegularCases: 10,
-        initialSmallCases: 0,
-        prospectiveSessions: [
-          {
-            cityWasNotVisitedInLastTwoTerms: false,
-            sessionType: SESSION_TYPES.regular,
-            trialLocation: mockSpecialCityString,
-          },
-        ],
-        remainingRegularCases: 10,
-        remainingSmallCases: 0,
-        scheduledSessions: [],
-      },
-    };
+        specialSessions: [extendedSpecialSession],
+        weeksToLoop: weeksInRange,
+      }));
+    })
 
-    const { caseCountsAndSessionsByCity } = generateCalendar({
-      calendaringConfig: getMockCalendaringConfig(),
-      caseCountsAndSessionsByCity: mockCaseCountsAndSessionsByCity,
-      constraints: [
-        reservedWeekOfAtLocationConstraint,
-        oneSessionPerLocationPerWeekConstraint,
-      ],
-      specialSessions: [extendedSpecialSession],
-      weeksToLoop: weeksInRange,
+    it('should expect the special session to span multiple weeks', () => {
+      const blockedLocation = caseCountsAndSessionsByCity[mockRegularCityString];
+
+      expect(blockedLocation.scheduledSessions.length).toBeGreaterThan(3);
     });
 
-    const blockedLocation = caseCountsAndSessionsByCity[mockRegularCityString];
-    const unblockedLocation =
-      caseCountsAndSessionsByCity[mockSpecialCityString];
+    it('should expect all sessions to be special sessions', () => {
+      const blockedLocation = caseCountsAndSessionsByCity[mockRegularCityString];
 
-    expect(blockedLocation.scheduledSessions.length).toBeGreaterThan(3);
-    expect(
-      blockedLocation.scheduledSessions.every(
-        s => s.sessionType === SESSION_TYPES.special,
-      ),
-    ).toBe(true);
-    expect(blockedLocation.prospectiveSessions.length).toEqual(1);
-    expect(unblockedLocation.scheduledSessions[0].sessionType).toEqual(
-      SESSION_TYPES.regular,
-    );
-  });
+      expect(
+        blockedLocation.scheduledSessions.every(
+          s => s.sessionType === SESSION_TYPES.special,
+        ),
+      ).toBe(true);
+    });
+
+    it('should expect a cool down period after special session', () => {
+      const blockedLocation = caseCountsAndSessionsByCity[mockRegularCityString];
+
+      expect(blockedLocation.prospectiveSessions.length).toEqual(1);
+    });
+
+    it('should expect the special session to work', () => {
+      const unblockedLocation =
+        caseCountsAndSessionsByCity[mockSpecialCityString];
+
+      expect(unblockedLocation.scheduledSessions[0].sessionType).toEqual(
+        SESSION_TYPES.regular,
+      );
+    });
+  })
 });
