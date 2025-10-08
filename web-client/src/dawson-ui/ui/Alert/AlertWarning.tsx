@@ -57,19 +57,21 @@ export function AlertWarning({
       aria-live="polite"
       className={cn(className)}
       closeButtonOnClick={dismissAlertSequence}
-      data-testid="warning-alert"
+      data-testid="warning-alert" // TODO: replace id where it is implemented
       isDismissible={isDismissible}
       ref={notificationRef}
       role="alert"
       variant="warning"
     >
       {alertWarning.title && (
+        // TODO: replace id where it is implemented
         <AlertHeader data-testid="warning-alert-title" {...warningProps}>
           {alertWarning.title}
         </AlertHeader>
       )}
 
       {alertWarning.message && (
+        // TODO: replace id where it is implemented
         <AlertMessage data-testid="warning-alert-message" {...warningProps}>
           {alertWarning.message}
         </AlertMessage>
@@ -78,7 +80,6 @@ export function AlertWarning({
       {alertWarning.linkUrl && (
         <AlertMessage data-testid="warning-alert-message" {...warningProps}>
           <Button
-            className=""
             href={alertWarning.linkUrl}
             link
             rel="noopener noreferrer"

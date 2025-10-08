@@ -51,9 +51,8 @@ function Alert({
   closeButtonOnClick,
   variant,
   ...props
-}: Omit<React.ComponentProps<'div'>, 'children'> &
+}: React.ComponentProps<'div'> &
   VariantProps<typeof alertVariants> & {
-    children?: React.ReactNode;
     closeButtonOnClick?: () => React.MouseEventHandler<HTMLButtonElement> | void;
     isDismissible?: boolean;
   }) {
