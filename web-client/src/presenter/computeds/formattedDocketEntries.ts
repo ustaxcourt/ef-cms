@@ -34,6 +34,7 @@ export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
     });
   } else if (formattedResult.isInProgress) {
     iconsToDisplay.push({
+      className: 'fa-icon-gold',
       icon: ['fas', 'thumbtack'],
       title: 'In progress',
     });
