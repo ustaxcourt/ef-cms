@@ -209,16 +209,24 @@ export const fileCourtIssuedDocketEntry = async (
   );
 
   if (documentMeta.isOrder && documentMeta.affectedMotions) {
+    const docketEntryOrderMotions = casesToUpdate.flatMap(caseToUpdate => {
+      return Object.values(documentMeta.affectedMotions)
+        .filter(motion => {
+          return caseToUpdate.docketEntries.find(
+            docketEntry => docketEntry.docketEntryId === motion.docketEntryid,
+          );
+        })
+        .map(motion => ({
+          docketEntryId: motion.docketEntryid,
+          docketNumber: caseToUpdate.docketNumber,
+          disposition: motion.disposition,
+        }));
+    });
+
     await upsertDocketEntryOrderMotions({
       orderDocketEntry: subjectDocketEntry,
       // name not final
-      motionDocketEntries: Object.values(documentMeta.affectedMotions).map(
-        entry => ({
-          docketEntryId: entry.docketEntryid,
-          docketNumber: entry.docketNumber,
-          disposition: entry.disposition,
-        }),
-      ),
+      motionDocketEntries: docketEntryOrderMotions,
       served: false,
     });
   }
