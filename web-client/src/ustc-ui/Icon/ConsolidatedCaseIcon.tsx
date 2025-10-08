@@ -15,9 +15,11 @@ export const ConsolidatedCaseIcon = ({
       {inConsolidatedGroup && (
         <span className="fa-layers fa-fw" title={consolidatedIconTooltipText}>
           <Icon
-            aria-label={consolidatedIconTooltipText}
             className="fa-icon-blue"
-            icon="copy"
+            data-prefix="fas"
+            data-icon="calendar-plus"
+            role="img"
+            aria-label="Manually added indicator"
           />
           {showLeadCaseIcon && (
             <span aria-hidden={true} className="fa-inverse lead-case-icon-text">
