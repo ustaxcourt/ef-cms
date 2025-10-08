@@ -1,6 +1,10 @@
 import { CalendaringConfig } from './createProspectiveTrialSessions';
 import { CaseCountsAndSessionsByCity } from './getDataForCalendaring';
-import { Constraint } from './constraints';
+import {
+  Constraint,
+  oneSessionPerLocationPerWeekConstraint,
+  reservedWeekOfAtLocationConstraint,
+} from './constraints';
 import { MOCK_TRIAL_INPERSON } from '@shared/test/mockTrial';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import {
@@ -116,7 +120,6 @@ const createMockConstraint = (
 
 describe('generateCalendar', () => {
   it('should schedule a special session when it meets all constraints', () => {
-    
     const mockCalendaringConfig = getMockCalendaringConfig();
     const mockCaseCountsAndSessionsByCity =
       getMockCaseCountsAndSessionsByCity();
@@ -337,7 +340,6 @@ describe('generateCalendar', () => {
   });
 
   it('should handle case counts for hybrid sessions', () => {
-    
     const mockProspectiveRegularTrialSession = {
       cityWasNotVisitedInLastTwoTerms: false,
       sessionType: SESSION_TYPES.hybrid,
@@ -463,7 +465,6 @@ describe('generateCalendar', () => {
       weeksToLoop: mockWeeksToLoop,
     });
 
-    
     expect(
       caseCountsAndSessionsByCity[WASHINGTON_DC_SOUTH_STRING]
         .scheduledSessions[0].trialLocation,
@@ -514,58 +515,82 @@ describe('generateCalendar', () => {
   });
 
   it('should show how extending the length of special sessions impacts the calendaring of existing and subsequent trial sessions', () => {
-    const mockCalendaringConfig = getMockCalendaringConfig();
-    const mockCaseCountsAndSessionsByCity =
-      getMockCaseCountsAndSessionsByCity();
-    const mockSpecialTrialSession = {
-      ...mockTrialSession,
-      sessionType: SESSION_TYPES.special,
-      trialLocation: mockRegularCityString,
-    };
-
-    generateCalendar({
-      calendaringConfig: mockCalendaringConfig,
-      caseCountsAndSessionsByCity: mockCaseCountsAndSessionsByCity,
-      constraints: [createMockConstraint(true)],
-      specialSessions: [mockSpecialTrialSession],
-      weeksToLoop: mockWeeksToLoop,
-    });
-
     const startDate = createISODateString(
       mockWeekStringStart,
       FORMATS.YYYYMMDD,
     );
     const estimatedEndDate = getBusinessDateInFuture({
-      numberOfDays: 14,
+      numberOfDays: 21,
       outputFormat: FORMATS.YYYYMMDD,
       startDate,
     });
-
-    const additionalWeeks = getWeeksInRange({
+    const weeksInRange = getWeeksInRange({
       startDate,
       endDate: estimatedEndDate,
     });
 
-    const allWeeksToLoop = [...mockWeeksToLoop, ...additionalWeeks];
-
-    const mockSpecialTrialSessionExtend = {
+    const extendedSpecialSession = {
       ...mockTrialSession,
       sessionType: SESSION_TYPES.special,
       trialLocation: mockRegularCityString,
       estimatedEndDate,
     };
 
+    const mockCaseCountsAndSessionsByCity = {
+      [mockRegularCityString]: {
+        initialRegularCases: 10,
+        initialSmallCases: 0,
+        prospectiveSessions: [
+          {
+            cityWasNotVisitedInLastTwoTerms: false,
+            sessionType: SESSION_TYPES.regular,
+            trialLocation: mockRegularCityString,
+          },
+        ],
+        remainingRegularCases: 10,
+        remainingSmallCases: 0,
+        scheduledSessions: [],
+      },
+      [mockSpecialCityString]: {
+        initialRegularCases: 10,
+        initialSmallCases: 0,
+        prospectiveSessions: [
+          {
+            cityWasNotVisitedInLastTwoTerms: false,
+            sessionType: SESSION_TYPES.regular,
+            trialLocation: mockSpecialCityString,
+          },
+        ],
+        remainingRegularCases: 10,
+        remainingSmallCases: 0,
+        scheduledSessions: [],
+      },
+    };
+
     const { caseCountsAndSessionsByCity } = generateCalendar({
-      calendaringConfig: mockCalendaringConfig,
+      calendaringConfig: getMockCalendaringConfig(),
       caseCountsAndSessionsByCity: mockCaseCountsAndSessionsByCity,
-      constraints: [createMockConstraint(true)],
-      specialSessions: [mockSpecialTrialSessionExtend],
-      weeksToLoop: allWeeksToLoop,
+      constraints: [
+        reservedWeekOfAtLocationConstraint,
+        oneSessionPerLocationPerWeekConstraint,
+      ],
+      specialSessions: [extendedSpecialSession],
+      weeksToLoop: weeksInRange,
     });
 
+    const blockedLocation = caseCountsAndSessionsByCity[mockRegularCityString];
+    const unblockedLocation =
+      caseCountsAndSessionsByCity[mockSpecialCityString];
+
+    expect(blockedLocation.scheduledSessions.length).toBeGreaterThan(3);
     expect(
-      caseCountsAndSessionsByCity[mockRegularCityString].scheduledSessions
-        .length,
-    ).toBeGreaterThan(1);
+      blockedLocation.scheduledSessions.every(
+        s => s.sessionType === SESSION_TYPES.special,
+      ),
+    ).toBe(true);
+    expect(blockedLocation.prospectiveSessions.length).toEqual(1);
+    expect(unblockedLocation.scheduledSessions[0].sessionType).toEqual(
+      SESSION_TYPES.regular,
+    );
   });
 });
