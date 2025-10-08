@@ -198,6 +198,7 @@ export const updateDocketEntryMeta = async (
       'otherFilingParty',
       'otherIteration',
       'partyIrsPractitioner',
+      'pending',
       'previousDocument',
       'secondaryDocument',
       'trialLocation',
