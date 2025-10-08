@@ -26,6 +26,8 @@ To run a DAWSON development environment, we will need to install the following C
 - [OAthToolkit](https://oath-toolkit.codeberg.page/) - command-line tools for OAuth 2.0
 - [LibPQ](https://www.postgresql.org/docs/current/libpq.html) - command-line interface for PostgreSQL
 - [GH](https://cli.github.com/) - command-line interface for GitHub
+- [Docker](https://docs.docker.com/get-started/) - Docker is an open platform for developing, shipping, and running applications.
+- [Docker Compose](https://docs.docker.com/compose/) - Docker Compose is a tool for defining and running multi-container applications.
 
 **Homebrew**
 
@@ -35,6 +37,34 @@ To run a DAWSON development environment, we will need to install the following C
    ```bash
    brew --version
    ```
+
+### Container Runtime Setup (For Docker)
+
+Instead of installing Docker Desktop, we recommend using a more streamlined approach with **Colima** as the container runtime. This method is lightweight and avoids the need for Docker Desktop. Follow these steps:
+
+1. Install Colima using Homebrew:
+   ```bash
+   brew install colima
+   ```
+1. Start Colima:
+   ```bash
+   colima start
+   ```
+1. Install Docker and Docker Compose:
+   ```bash
+   brew install docker docker-compose
+   ```
+1. Ensure that the Docker CLI is properly configured in your shell. Add the   following to your ~/.zshrc or ~/.bashrc file if necessary:
+   ```bash
+   export PATH="/usr/local/bin:$PATH"
+   ```
+1. Verify that Docker is working:
+   ```bash
+   docker --version
+   docker-compose --version
+   ```
+
+This approach provides a lightweight alternative to Docker Desktop while maintaining full compatibility with Docker and Docker Compose.
 
 **Other CLI tools**
 
