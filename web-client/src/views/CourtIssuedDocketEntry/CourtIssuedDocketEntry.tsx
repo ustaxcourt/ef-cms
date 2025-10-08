@@ -281,6 +281,7 @@ export const CourtIssuedDocketEntry = connect(
                             <Button
                               link
                               icon="minus-circle"
+                              className="red-warning"
                               onClick={() => {
                                 const motions = [...form.affectedMotions];
                                 _.pullAt(motions, i);
