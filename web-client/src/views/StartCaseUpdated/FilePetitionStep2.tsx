@@ -5,7 +5,7 @@ import { InlineLink } from '@web-client/ustc-ui/InlineLink/InlineLink';
 import { PETITION_TYPES } from '@shared/business/entities/EntityConstants';
 import { RedactionAcknowledgement } from '@web-client/views/StartCaseUpdated/RedactionAcknowledgement';
 import { StateDrivenFileInput } from '@web-client/views/FileDocument/StateDrivenFileInput';
-import { WarningNotificationComponent } from '@web-client/views/WarningNotification';
+import { AlertWarning } from '@web-client/dawson-ui/ui/Alert/AlertWarning';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -85,11 +85,11 @@ export const FilePetitionStep2 = connect(
           <AutoGeneratePetitionForm />
         ) : (
           <div>
-            <WarningNotificationComponent
+            <AlertWarning
               alertWarning={{
                 message: `Do not include personal information (such as Social Security Numbers, Taxpayer Identification Numbers, Employer Identification Numbers, birthdates, names of minor children, or financial account information) in ${isPetitioner ? 'your' : 'the'} Petition or any other filing with the Court except in the Statement of Taxpayer Identification Number.`,
               }}
-              dismissible={false}
+              isDismissible={false}
               scrollToTop={false}
             />
             <div>

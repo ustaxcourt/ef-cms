@@ -3,10 +3,10 @@ import {
   AccordionItem,
 } from '@web-client/ustc-ui/Accordion/Accordion';
 import { Button } from '../ustc-ui/Button/Button';
-import { InfoNotificationComponent } from '@web-client/views/InfoNotification';
 import { InlineLink } from '@web-client/ustc-ui/InlineLink/InlineLink';
 import { ROLES } from '../../../shared/src/business/entities/EntityConstants';
-import { WarningNotificationComponent } from '@web-client/views/WarningNotification';
+import { AlertWarning } from '@web-client/dawson-ui/ui/Alert/AlertWarning';
+import { AlertInfo } from '@web-client/dawson-ui/ui/Alert/AlertInfo';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -48,11 +48,11 @@ export const BeforeStartingCase = connect(
         </div>
         <section className="usa-section grid-container">
           <h2>How to Create a Case</h2>
-          <WarningNotificationComponent
+          <AlertWarning
             alertWarning={{
               message: `Do not include personal information (such as Social Security Numbers, Taxpayer Identification Numbers, Employer Identification Numbers, birthdates, names of minor children, or financial account information) in ${isPetitioner ? 'your' : 'the'} Petition or any other filing with the Court except in the Statement of Taxpayer Identification Number.`,
             }}
-            dismissible={false}
+            isDismissible={false}
             scrollToTop={false}
           />
           <div className="petitioner-flow-text">
@@ -158,11 +158,12 @@ export const BeforeStartingCase = connect(
             </span>
             <span className="placeholder" />
           </div>
-          <InfoNotificationComponent
+          <AlertInfo
+            className="tw:mb-4"
             alertInfo={{
               message: `Do not include any additional documents (such as tax returns) with ${isPetitioner ? 'your' : 'the'} Petition, except for any IRS Notices, the Statement of Taxpayer Identification Number and the Corporate Disclosure Statement (if filing for a business). Documents that might be evidence can be submitted at a later time.`,
             }}
-            dismissible={false}
+            isDismissible={false}
             scrollToTop={false}
           />
           <div>
