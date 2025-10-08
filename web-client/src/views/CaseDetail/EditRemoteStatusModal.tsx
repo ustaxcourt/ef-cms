@@ -31,6 +31,7 @@ export const EditRemoteStatusModal = connect(
         cancelLabel="Cancel"
         cancelSequence={cancelSequence}
         confirmLabel="Save"
+        clearLabel="Clear date"
         confirmSequence={confirmSequence}
         title="Edit Remote Status"
       >
@@ -39,7 +40,6 @@ export const EditRemoteStatusModal = connect(
             By putting in a date, you are indicating that the Motion to Proceed
             Remotely was granted.{' '}
           </div>
-
           <FormGroup errorText={validationErrors.remoteTrialGrantedDate}>
             <div className="edit-remote-trial-date-picker">
               <DateSelector
