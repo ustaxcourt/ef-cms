@@ -169,6 +169,7 @@ export const MOCK_ANSWER_2: RawDocketEntry = {
   servedAt: '2019-08-25T05:00:00.000Z',
   servedParties: [
     {
+      email: 'bernardlowe@example.com',
       name: 'Bernard Lowe',
     },
     {

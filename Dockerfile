@@ -1,6 +1,6 @@
 ARG TARGETARCH=amd64
 
-FROM cypress/browsers:node-22.19.0-chrome-140.0.7339.127-1-ff-142.0.1-edge-140.0.3485.54-1
+FROM cypress/browsers:node-22.20.0-chrome-140.0.7339.207-1-ff-143.0.1-edge-140.0.3485.81-1
 
 WORKDIR /home/app
 
