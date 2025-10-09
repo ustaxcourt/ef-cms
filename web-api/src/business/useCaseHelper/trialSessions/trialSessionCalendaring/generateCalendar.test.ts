@@ -597,7 +597,7 @@ describe('generateCalendar', () => {
 
       expect(
         blockedLocation.scheduledSessions.every(
-          s => s.sessionType === SESSION_TYPES.special,
+          session => session.sessionType === SESSION_TYPES.special,
         ),
       ).toBe(true);
     });
