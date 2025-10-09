@@ -161,7 +161,7 @@ If an update is available, we'll need to update OpenSearch locally, in github ac
 
 ### @fortawesome
 
-- fortawesome packages are locked down to pre-6.x.x to maintain consistency of icon styling until there is usability feedback and research that determines we should change them. This includes `@fortawesome/free-solid-svg-icons`, `@fortawesome/free-regular-svg-icons`, and `@fortawesome/fontawesome-svg-core`.
+- fortawesome packages are locked down to 7.1.0 to maintain consistency of icon styling. This includes `@fortawesome/free-solid-svg-icons`, `@fortawesome/free-regular-svg-icons`, and `@fortawesome/fontawesome-svg-core`. `@fortawesome/react-fontawesome` is locked to 3.1.0
 
 ## Caveats
 
