@@ -15,7 +15,6 @@ export const updateRemoteTrialPermissionAction = async ({
   const modalState = get(state.modal);
   let { remoteTrialGrantedDate } = modalState;
 
-  // Format the date to ISO if it exists
   if (remoteTrialGrantedDate && remoteTrialGrantedDate.trim() !== '') {
     const FORMATS = applicationContext.getConstants().DATE_FORMATS;
 
@@ -31,7 +30,6 @@ export const updateRemoteTrialPermissionAction = async ({
       .createISODateString(remoteTrialGrantedDate, inputFormat);
   }
 
-  // If there's a date, it means granted; if no date, it means not granted
   const hasDate = Boolean(
     remoteTrialGrantedDate && remoteTrialGrantedDate.trim() !== '',
   );

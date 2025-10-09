@@ -12,18 +12,55 @@ export const editRemoteStatusAction = async ({
   get,
 }: ActionProps) => {
   const docketNumber = get(state.caseDetail.docketNumber);
-  const reason = get(state.modal.reason);
+  const modalState = get(state.modal);
+  let { remoteTrialGrantedDate } = modalState;
+
+  if (remoteTrialGrantedDate && remoteTrialGrantedDate.trim() !== '') {
+    const { DATE_FORMATS } = applicationContext.getConstants();
+    const isValidDate = applicationContext
+      .getUtilities()
+      .isValidDateString(remoteTrialGrantedDate, [
+        DATE_FORMATS.MMDDYYYY,
+        DATE_FORMATS.MDYYYY,
+      ]);
+
+    if (!isValidDate) {
+      throw new Error('Invalid format');
+    }
+
+    const inputFormat = applicationContext
+      .getUtilities()
+      .getDateFormat(remoteTrialGrantedDate, [
+        DATE_FORMATS.MMDDYYYY,
+        DATE_FORMATS.MDYYYY,
+      ]);
+
+    remoteTrialGrantedDate = applicationContext
+      .getUtilities()
+      .createISODateString(remoteTrialGrantedDate, inputFormat);
+  }
+
+  const hasDate = Boolean(
+    remoteTrialGrantedDate && remoteTrialGrantedDate.trim() !== '',
+  );
+
+  const currentCase = get(state.caseDetail);
+  const caseDetails = {
+    ...currentCase,
+    remoteTrialGranted: hasDate,
+    remoteTrialGrantedDate: hasDate ? remoteTrialGrantedDate : null,
+  };
 
   const caseDetail = await applicationContext
     .getUseCases()
-    .blockCaseFromTrialInteractor(applicationContext, {
+    .updateCaseDetailsInteractor(applicationContext, {
+      caseDetails,
       docketNumber,
-      reason,
     });
 
   return {
     alertSuccess: {
-      message: 'Case blocked from being set for trial.',
+      message: 'Successfully updated motion to proceed remotely date.',
     },
     caseDetail,
   };

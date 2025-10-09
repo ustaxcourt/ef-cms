@@ -1,3 +1,5 @@
+import { state } from '@web-client/presenter/app.cerebral';
+
 /**
  * Validates the remote trial permission modal data
  * @param {object} providers the providers object
@@ -5,8 +7,26 @@
  * @param {object} providers.path the cerebral path which contains the next path in the sequence
  * @returns {object} the next path based on if validation was successful or error
  */
-export const validateRemoteTrialPermissionAction = ({ path }) => {
-  // No validation needed since the date is optional
-  // If there's a date, it means granted; if no date, it means not granted
+export const validateRemoteTrialPermissionAction = ({
+  applicationContext,
+  get,
+  path,
+}) => {
+  const remoteTrialGrantedDate = get(state.modal.remoteTrialGrantedDate);
+  if (!remoteTrialGrantedDate) {
+    return path.success();
+  }
+  const { DATE_FORMATS } = applicationContext.getConstants();
+  const isValidDate = applicationContext
+    .getUtilities()
+    .isValidDateString(remoteTrialGrantedDate, [
+      DATE_FORMATS.MMDDYYYY,
+      DATE_FORMATS.MDYYYY,
+    ]);
+  if (!isValidDate) {
+    return path.error({
+      error: { remoteTrialGrantedDate: 'Format date as MM/DD/YYYY' },
+    });
+  }
   return path.success();
 };

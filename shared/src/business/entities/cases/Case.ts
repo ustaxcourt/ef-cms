@@ -98,6 +98,8 @@ export class Case extends JoiValidationEntity {
   public orderForCds?: boolean;
   public orderForRatification?: boolean;
   public orderToShowCause?: boolean;
+  public remoteTrialGranted?: boolean;
+  public remoteTrialGrantedDate?: string;
   public petitioners: TPetitioner[];
   public caseCaption: string;
   public caseType: CaseType;
@@ -1554,9 +1556,8 @@ export class Case extends JoiValidationEntity {
    * @returns {Case} the updated case entity
    */
   setCaseCaption(caseCaption) {
-    
     this.caseCaption = caseCaption;
-    
+
     if (this.consolidatedCases && this.consolidatedCases.length > 0) {
       this.setCaseCaptionInSingleCase();
     }
@@ -1565,13 +1566,13 @@ export class Case extends JoiValidationEntity {
   }
 
   setCaseCaptionInSingleCase() {
-
-    const currentCase = this.consolidatedCases.find((c) => c.docketNumber === this.docketNumber);
+    const currentCase = this.consolidatedCases.find(
+      c => c.docketNumber === this.docketNumber,
+    );
 
     if (currentCase) {
       currentCase.caseCaption = this.caseCaption;
     }
-
   }
 
   /**
