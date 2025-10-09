@@ -29,7 +29,7 @@ export function Inputs() {
 
           <div className="max-xs:tw:w-full tw:flex tw:items-start tw:gap-4 max-xs:tw:flex-col">
             <div className="tw:flex tw:flex-col">
-              <div className="tw:flex tw:items-center tw:text-lg max-xs:tw:text-[16px] tw:font-semibold tw:text-gray-900">
+              <div className="tw:flex tw:items-center !tw:text-[18px] max-xs:!tw:text-[16px] tw:font-semibold tw:text-gray-900">
                 <span>Field Label</span>
                 <FontAwesomeIcon 
                   icon={faQuestionCircle} 
@@ -39,7 +39,7 @@ export function Inputs() {
                   role="img"
                   aria-label="Help text"
                 />
-                <span className="tw:text-gray-500 tw:ml-1 tw:font-normal tw:text-base">(optional)</span>
+                <span className="tw:text-gray-500 tw:ml-1 tw:font-normal tw:text-[16px]">(optional)</span>
               </div>
               <div className="tw:text-base tw:text-gray-500">Help text</div>
             </div>

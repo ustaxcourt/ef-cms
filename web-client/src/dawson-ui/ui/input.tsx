@@ -25,7 +25,11 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
         {label && (
           <div className="tw:mb-4">
             <div className="tw:flex tw:flex-col tw:gap-4">
-              <div className="tw:flex tw:items-center tw:text-lg tw:font-semibold tw:text-gray-900">
+              <div className={cn(
+                "tw:flex tw:items-center tw:font-semibold tw:text-gray-900",
+                "!tw:text-[18px]",
+                "max-xs:!tw:text-[16px]"
+              )}>
                 <span>{label}</span>
                 {helpText && (
                   <FontAwesomeIcon 
@@ -95,7 +99,11 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
         {label && (
           <div className="tw:mb-4">
             <div className="tw:flex tw:flex-col tw:gap-4">
-              <div className="tw:flex tw:items-center tw:text-lg tw:font-semibold tw:text-gray-900">
+              <div className={cn(
+                "tw:flex tw:items-center tw:font-semibold tw:text-gray-900",
+                "!tw:text-[18px]",
+                "max-xs:!tw:text-[16px]"
+              )}>
                 <span>{label}</span>
                 {helpText && (
                   <FontAwesomeIcon 
