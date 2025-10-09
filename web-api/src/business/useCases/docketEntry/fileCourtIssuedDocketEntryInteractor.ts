@@ -68,11 +68,6 @@ export const fileCourtIssuedDocketEntry = async (
   const hasPermission =
     isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY) ||
     isAuthorized(authorizedUser, ROLE_PERMISSIONS.CREATE_ORDER_DOCKET_ENTRY);
-  // TODO (#8546): rm log statments
-  console.log('Inside of fileCourtIssuedDocketEntry!!!!');
-  console.log('docketNumbers:', docketNumbers);
-  console.log('subjectDocketNumber:', subjectDocketNumber);
-  console.log('documentMeta:', documentMeta);
 
   if (!hasPermission) {
     throw new UnauthorizedError('Unauthorized');

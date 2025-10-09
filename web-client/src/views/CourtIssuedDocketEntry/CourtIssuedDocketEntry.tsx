@@ -426,7 +426,6 @@ export const CourtIssuedDocketEntry = connect(
                   />
                 )}
               </div>
-              {/* TODO (#8546): Entry point */}
               <section className="usa-section DocumentDetail">
                 <div className="margin-top-5 button-container">
                   {addCourtIssuedDocketEntryHelper.showSaveAndServeButton && (

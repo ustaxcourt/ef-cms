@@ -368,7 +368,6 @@ const router = {
         });
       }),
     );
-    // TODO (#8546): distinguish court-issue
     registerRoute(
       '/case-detail/*/documents/*/edit-court-issued..',
       ifHasAccess({ app }, (docketNumber, docketEntryId) => {
@@ -780,7 +779,6 @@ const router = {
       }),
     );
 
-    // TODO (#8546): orders come through here
     registerRoute(
       '/case-detail/*/documents/*/add-court-issued-docket-entry',
       ifHasAccess({ app }, (docketNumber, docketEntryId) => {
@@ -793,7 +791,6 @@ const router = {
         });
       }),
     );
-    // TODO (#8546): orders come through here
     registerRoute(
       '/case-detail/*/documents/*/add-court-issued-docket-entry/*',
       ifHasAccess({ app }, (docketNumber, docketEntryId, parentMessageId) => {

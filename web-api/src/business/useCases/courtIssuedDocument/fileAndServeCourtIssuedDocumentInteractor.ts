@@ -31,7 +31,6 @@ import {
 import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
 import { upsertDocketEntryOrderMotions } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntryOrderMotion';
 import { FileCourtIssueDocketEntryForm } from '@web-api/business/useCases/docketEntry/fileCourtIssuedDocketEntryInteractor';
-// TODO (#8546): May want to alter this as well
 export const fileAndServeCourtIssuedDocument = async (
   applicationContext: ServerApplicationContext,
   {
@@ -56,8 +55,6 @@ export const fileAndServeCourtIssuedDocument = async (
         ROLE_PERMISSIONS.CREATE_ORDER_DOCKET_ENTRY,
       )) &&
     isAuthorized(authorizedUser, ROLE_PERMISSIONS.SERVE_DOCUMENT);
-  // TODO (#8546): Remove log statements
-  console.log('Inside of fileAndServeCourtIssuedDocument!!!!');
 
   if (!hasPermission) {
     throw new UnauthorizedError('Unauthorized');
@@ -73,10 +70,6 @@ export const fileAndServeCourtIssuedDocument = async (
     docketNumber: subjectCaseDocketNumber,
   });
 
-  console.log(`!!!!!!!!!!!!!!!!!!!!!!`);
-  console.log('subjectCase:', subjectCase);
-  console.log(`Other docket numbers: ${docketNumbers.join(', ')}`);
-  console.log(`!!!!!!!!!!!!!!!!!!!!!!`);
 
   const subjectCaseEntity = new Case(subjectCase, { authorizedUser });
 

@@ -14,7 +14,6 @@ import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
 
-// TODO (#8546): point of interest - this interactor is using a document generator
 export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
   applicationContext: ServerApplicationContext,
   {
@@ -42,11 +41,6 @@ export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
   const caseDetail = await getCaseByDocketNumber({
     docketNumber,
   });
-  // TODO (#8546): rm log statments
-  console.log(
-    'caseDetail in createCourtIssuedOrderPdfFromHtmlInteractor:',
-    caseDetail,
-  );
 
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
   const { docketNumberWithSuffix } = caseDetail;
