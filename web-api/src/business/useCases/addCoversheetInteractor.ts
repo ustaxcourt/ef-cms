@@ -78,28 +78,20 @@ export const addCoversheetInteractor = async (
     useInitialData,
   });
 
-  // If this is a member case in a consolidated group, avoid regenerating and
-  // re-saving the PDF. The stored document for the shared `docketEntryId`
-  // should be considered canonical and created/updated by the lead case only.
   const isMemberCase =
     caseEntity.leadDocketNumber && caseEntity.leadDocketNumber !== docketNumber;
 
   if (isMemberCase) {
-    // If caller attempted to replace the coversheet from a member case, disallow it
-    // and instruct to perform replacement on the lead case.
     if (replaceCoversheet) {
       throw new Error(
         'Coversheet replacement for multidocketed filings must be performed on the lead case',
       );
     }
 
-    // Use the existing PDF data (we loaded it above) to determine the number of pages
-    // and then update the docket entries across consolidated cases without re-saving.
     const { PDFDocument } = await applicationContext.getPdfLib();
     const existingPdfDoc = await PDFDocument.load(pdfData);
     const existingNumberOfPages = existingPdfDoc.getPageCount();
 
-    // use the existing numberOfPages from the stored document
     const pagesToUse = existingNumberOfPages;
 
     let docketNumbersToUpdate = [docketNumber];
@@ -166,7 +158,6 @@ export const addCoversheetInteractor = async (
     );
   }
 
-  // Lead case path: save the generated PDF and propagate updates
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     document: newPdfData,
     key: docketEntryId,

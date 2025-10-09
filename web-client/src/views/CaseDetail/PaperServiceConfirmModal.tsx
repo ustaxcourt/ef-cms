@@ -1,5 +1,5 @@
-import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
-import { InfoNotificationComponent } from '../InfoNotification';
+import { ConfirmModal } from '@web-client/ustc-ui/Modal/ConfirmModal';
+import { InfoNotificationComponent } from '@web-client/views/InfoNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '@shared/business/entities/EntityConstants';

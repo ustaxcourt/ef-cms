@@ -65,14 +65,12 @@ export const attachDocketEntriesToWorkItemQC = async ({
     entryByCompositeKey.set(key, entry);
   }
 
-  // Get consolidated case information for workItems that have leadDocketNumber
   const consolidatedCaseData = await getConsolidatedCaseData({ workItems });
 
   const workItemsWithDocketEntries = workItems.map(w => {
     const key = `${w.docketNumber}|${w.docketEntryId}`;
     const docketEntry = entryByCompositeKey.get(key);
 
-    // Add consolidated case information if available
     const consolidatedInfo = w.leadDocketNumber
       ? consolidatedCaseData.get(w.leadDocketNumber)
       : undefined;

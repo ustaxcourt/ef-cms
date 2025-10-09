@@ -32,7 +32,7 @@ import {
   buildUpdatedPrimaryDocketEntry,
   needsNewCoversheet,
   OriginalNoticeValues,
-} from '@web-api/business/useCaseHelper/docketEntry/noticeOfDocketChangeHelpers';
+} from '@web-api/business/useCaseHelper/docketEntry/noticeOfDocketChangeHelper';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';

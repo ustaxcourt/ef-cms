@@ -187,7 +187,6 @@ describe('getNotificationsInteractor', () => {
     expect(result.userSectionCount).toEqual(2);
   });
 
-
   it('returns the qcIndividualInProgressCount for qc individual items with isFileAttached true and a judgeId supplied', async () => {
     applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
       role: ROLES.docketClerk,
@@ -441,6 +440,7 @@ describe('getNotificationsInteractor', () => {
 
     expect(getDocumentQCInboxForSection.mock.calls[0][0]).toMatchObject({
       judgeId: mockJudgeUser.userId,
+      section: DOCKET_SECTION,
     });
   });
 
@@ -459,6 +459,22 @@ describe('getNotificationsInteractor', () => {
 
     expect(getDocumentQCInboxForSection.mock.calls[0][0]).toMatchObject({
       judgeId: undefined,
+      section: DOCKET_SECTION,
+    });
+  });
+
+  it('should fetch the qc section items with judgeId as null when user is ADC', async () => {
+    getDocumentQCInboxForSection.mockReturnValue([]);
+
+    await getNotificationsInteractor(
+      applicationContext,
+      { judgeId: mockJudgeUser.userId, section: DOCKET_SECTION },
+      mockAdcUser,
+    );
+
+    expect(getDocumentQCInboxForSection.mock.calls[0][0]).toMatchObject({
+      judgeId: null,
+      section: DOCKET_SECTION,
     });
   });
 
@@ -494,7 +510,7 @@ describe('getNotificationsInteractor', () => {
       SELECTED_SECTION,
     );
     expect(getDocumentQCInboxForSection.mock.calls[0][0].section).toEqual(
-      SELECTED_SECTION,
+      PETITIONS_SECTION,
     );
 
     expect(result.qcSectionInboxCount).toEqual(1);

@@ -36,7 +36,6 @@ export const setViewerDocumentToDisplayAction = async ({
       });
 
     store.set(state.iframeSrc, url);
-    // TODO: probably don't store it directly top level on state
     store.set(state.isFiledAcrossAllCases, isFiledAcrossAllCases);
   }
 };

@@ -2,7 +2,7 @@ import {
   applicationContext,
   ClientApplicationContext,
 } from '@web-client/applicationContext';
-import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { Get } from 'cerebral';
 import {
   AuthUser,

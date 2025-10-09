@@ -1,17 +1,8 @@
 export const switchErrorActionFactory =
   (errorMap: object) =>
   ({ path, props }) => {
-    let responseData = '';
-    try {
-      const data = props?.error?.originalError?.response?.data;
-      responseData =
-        typeof data === 'string' ? data : JSON.stringify(data || '');
-    } catch (e) {
-      responseData = '';
-    }
-
     for (const [errorString, pathKey] of Object.entries(errorMap)) {
-      if (responseData.includes(errorString)) {
+      if (props.error.originalError.response.data.includes(errorString)) {
         return path[pathKey]();
       }
     }

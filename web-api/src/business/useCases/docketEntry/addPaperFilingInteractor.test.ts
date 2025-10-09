@@ -31,8 +31,10 @@ import { MOCK_CASE_DEADLINE } from '@shared/test/mockCaseDeadline';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 const getUserById = jest.mocked(getUserByIdMock);
+const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
 
 describe('addPaperFilingInteractor', () => {
   const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
@@ -66,6 +68,7 @@ describe('addPaperFilingInteractor', () => {
     getUserById.mockResolvedValue(docketClerkUser as DbUser);
 
     getCasesByDocketNumbers.mockResolvedValue([mockCase]);
+    getCaseByDocketNumber.mockResolvedValue(mockCase);
   });
 
   it('should throw an error when the user is not authorized to add a paper filing', async () => {

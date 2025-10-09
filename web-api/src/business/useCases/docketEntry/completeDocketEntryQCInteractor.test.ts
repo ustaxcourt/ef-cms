@@ -122,7 +122,7 @@ describe('completeDocketEntryQCInteractor', () => {
 
     applicationContext
       .getUseCaseHelpers()
-      .serveDocumentAndGetPaperServicePdf.mockReturnValue({
+      .serveDocumentAndGetPaperServicePdf.mockResolvedValue({
         pdfUrl: 'www.example.com',
       });
   });

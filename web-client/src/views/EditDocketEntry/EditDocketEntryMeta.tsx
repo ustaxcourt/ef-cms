@@ -1,15 +1,15 @@
-import { Button } from '../../ustc-ui/Button/Button';
-import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
+import { Button } from '@web-client/ustc-ui/Button/Button';
+import { CaseDetailHeader } from '@web-client/views/CaseDetail/CaseDetailHeader';
 import { EditDocketEntryMetaDocketEntryPreview } from './EditDocketEntryMetaDocketEntryPreview';
 import { EditDocketEntryMetaFormCourtIssued } from './EditDocketEntryMetaFormCourtIssued';
 import { EditDocketEntryMetaFormDocument } from './EditDocketEntryMetaFormDocument';
 import { EditDocketEntryMetaFormNoDocument } from './EditDocketEntryMetaFormNoDocument';
 import { EditDocketEntryMetaTabAction } from './EditDocketEntryMetaTabAction';
 import { EditDocketEntryMetaTabService } from './EditDocketEntryMetaTabService';
-import { ErrorNotification } from '../ErrorNotification';
-import { FormCancelModalDialog } from '../FormCancelModalDialog';
-import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
-import { InfoNotificationComponent } from '../InfoNotification';
+import { ErrorNotification } from '@web-client/views/ErrorNotification';
+import { FormCancelModalDialog } from '@web-client/views/FormCancelModalDialog';
+import { Tab, Tabs } from '@web-client/ustc-ui/Tabs/Tabs';
+import { InfoNotificationComponent } from '@web-client/views/InfoNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -27,6 +27,7 @@ export const EditDocketEntryMeta = connect(
     caseDetail: state.caseDetail,
     formattedCaseDetail: state.formattedCaseDetail,
     form: state.form,
+    isFiledAcrossAllCases: state.isFiledAcrossAllCases,
   },
   function EditDocketEntryMeta({
     closeModalAndReturnToCaseDetailSequence,
@@ -37,11 +38,13 @@ export const EditDocketEntryMeta = connect(
     caseDetail,
     formattedCaseDetail,
     form,
+    isFiledAcrossAllCases,
   }) {
     const isMemberCase = !!(
       caseDetail &&
       caseDetail.leadDocketNumber &&
-      caseDetail.leadDocketNumber !== caseDetail.docketNumber
+      caseDetail.leadDocketNumber !== caseDetail.docketNumber &&
+      isFiledAcrossAllCases
     );
     const isLeadCase = !!(
       caseDetail &&

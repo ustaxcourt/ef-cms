@@ -1,4 +1,3 @@
-/* eslint-disable complexity */
 import { Get } from 'cerebral';
 import { uniqBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';

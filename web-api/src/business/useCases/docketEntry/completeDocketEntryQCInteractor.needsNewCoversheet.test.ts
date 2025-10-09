@@ -1,5 +1,5 @@
-import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { needsNewCoversheet } from './completeDocketEntryQCInteractor';
 
 describe('completeDocketEntryQCInteractor needsNewCoversheet', () => {

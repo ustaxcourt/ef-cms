@@ -1,6 +1,6 @@
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { aggregatePartiesForService } from '../../../../shared/src/business/utilities/aggregatePartiesForService';
+import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { saveFileAndGenerateUrl } from './saveFileAndGenerateUrl';
 
 export const serveDocumentAndGetPaperServicePdf = async ({
@@ -17,7 +17,7 @@ export const serveDocumentAndGetPaperServicePdf = async ({
   caseSpecificDocketEntries?: Array<{
     caseEntity: Case;
     docketEntryId: string;
-  }>; // For consolidated NODCs
+  }>; 
   stampedPdf?: any;
   electronicParties?: { email: string; name: string }[];
 }): Promise<{ pdfUrl: string } | undefined> => {
@@ -105,7 +105,7 @@ export const serveDocumentAndGetPaperServicePdf = async ({
     const paperServicePdfData = await newPdfDoc.save();
     const { url } = await saveFileAndGenerateUrl({
       applicationContext,
-      file: paperServicePdfData,
+      file: paperServicePdfData.buffer,
       useTempBucket: true,
     });
 

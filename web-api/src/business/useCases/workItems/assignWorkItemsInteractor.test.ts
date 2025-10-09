@@ -22,6 +22,7 @@ import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/pos
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 import { getDocketEntriesByDocketNumberAndDocketEntryId as getDocketEntriesByDocketNumberAndDocketEntryIdMock } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumberAndDocketEntryId';
+import { getWorkItemsByDocketNumber as getWorkItemsByDocketNumberMock } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
 
 describe('assignWorkItemsInteractor', () => {
   const getUserById = jest.mocked(getUserByIdMock);
@@ -29,6 +30,9 @@ describe('assignWorkItemsInteractor', () => {
   const getWorkItemById = getWorkItemByIdMock as jest.Mock;
   const getDocketEntriesByDocketNumberAndDocketEntryId = jest.mocked(
     getDocketEntriesByDocketNumberAndDocketEntryIdMock,
+  );
+  const getWorkItemsByDocketNumber = jest.mocked(
+    getWorkItemsByDocketNumberMock,
   );
 
   const options = { assigneeId: 'ss', assigneeName: 'ss', workItemId: '' };
@@ -103,6 +107,16 @@ describe('assignWorkItemsInteractor', () => {
   });
 
   it('should assign work item to current docket clerk user when given work item', async () => {
+    getUserById
+      .mockResolvedValueOnce({
+        ...mockDocketClerkUser,
+        section: DOCKET_SECTION,
+      } as DbUser)
+      .mockResolvedValueOnce({
+        ...mockDocketClerkUser,
+        section: DOCKET_SECTION,
+      } as DbUser);
+
     await assignWorkItemsInteractor(
       applicationContext,
       {
@@ -124,10 +138,16 @@ describe('assignWorkItemsInteractor', () => {
   });
 
   it('should assign work item to current petitions clerk user when given work item', async () => {
-    getUserById.mockResolvedValue({
-      ...mockPetitionsClerkUser,
-      section: PETITIONS_SECTION,
-    } as DbUser);
+    getUserById
+      .mockResolvedValueOnce({
+        ...mockPetitionsClerkUser,
+        section: PETITIONS_SECTION,
+      } as DbUser)
+      .mockResolvedValueOnce({
+        ...mockPetitionsClerkUser,
+        section: PETITIONS_SECTION,
+      } as DbUser);
+
     await assignWorkItemsInteractor(
       applicationContext,
       {
@@ -149,10 +169,16 @@ describe('assignWorkItemsInteractor', () => {
   });
 
   it('should assign work item for a petition docket entry to the petitions section when filed by case services supervisor', async () => {
-    getUserById.mockResolvedValue({
-      ...mockCaseServicesSupervisorUser,
-      section: CASE_SERVICES_SUPERVISOR_SECTION,
-    } as DbUser);
+    getUserById
+      .mockResolvedValueOnce({
+        ...mockCaseServicesSupervisorUser,
+        section: CASE_SERVICES_SUPERVISOR_SECTION,
+      } as DbUser)
+      .mockResolvedValueOnce({
+        ...mockCaseServicesSupervisorUser,
+        section: CASE_SERVICES_SUPERVISOR_SECTION,
+      } as DbUser);
+
     getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([
       { documentTitle: 'Petition' },
     ] as RawDocketEntry[]);
@@ -177,10 +203,16 @@ describe('assignWorkItemsInteractor', () => {
   });
 
   it('should assign work item for a petition docket entry to the petitions section when filed by clerk of the court', async () => {
-    getUserById.mockResolvedValue({
-      ...mockClerkOfTheCourtUser,
-      section: CLERK_OF_COURT_SECTION,
-    } as DbUser);
+    getUserById
+      .mockResolvedValueOnce({
+        ...mockClerkOfTheCourtUser,
+        section: CLERK_OF_COURT_SECTION,
+      } as DbUser)
+      .mockResolvedValueOnce({
+        ...mockClerkOfTheCourtUser,
+        section: CLERK_OF_COURT_SECTION,
+      } as DbUser);
+
     getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([
       { documentTitle: 'Petition' },
     ] as RawDocketEntry[]);
@@ -205,10 +237,16 @@ describe('assignWorkItemsInteractor', () => {
   });
 
   it('should assign work item for a non-petition docket entry to the petitions section when filed by case services supervisor', async () => {
-    getUserById.mockResolvedValue({
-      ...mockCaseServicesSupervisorUser,
-      section: CASE_SERVICES_SUPERVISOR_SECTION,
-    } as DbUser);
+    getUserById
+      .mockResolvedValueOnce({
+        ...mockCaseServicesSupervisorUser,
+        section: CASE_SERVICES_SUPERVISOR_SECTION,
+      } as DbUser)
+      .mockResolvedValueOnce({
+        ...mockCaseServicesSupervisorUser,
+        section: CASE_SERVICES_SUPERVISOR_SECTION,
+      } as DbUser);
+
     getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([
       { documentTitle: 'Something' },
     ] as RawDocketEntry[]);
@@ -232,11 +270,17 @@ describe('assignWorkItemsInteractor', () => {
     ]);
   });
 
-  it  ('should assign work item for a non-petition docket entry to the petitions section when filed by clerk of the court', async () => {
-    getUserById.mockResolvedValue({
-      ...mockClerkOfTheCourtUser,
-      section: CLERK_OF_COURT_SECTION,
-    } as DbUser);
+  it('should assign work item for a non-petition docket entry to the petitions section when filed by clerk of the court', async () => {
+    getUserById
+      .mockResolvedValueOnce({
+        ...mockClerkOfTheCourtUser,
+        section: CLERK_OF_COURT_SECTION,
+      } as DbUser)
+      .mockResolvedValueOnce({
+        ...mockClerkOfTheCourtUser,
+        section: CLERK_OF_COURT_SECTION,
+      } as DbUser);
+
     getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([
       { documentTitle: 'Something' },
     ] as RawDocketEntry[]);
@@ -284,6 +328,157 @@ describe('assignWorkItemsInteractor', () => {
         sentBy: caseServicesSupervisorUser.name,
         sentBySection: caseServicesSupervisorUser.section,
         sentByUserId: caseServicesSupervisorUser.userId,
+      },
+    ]);
+  });
+
+  it('should assign work items for all member cases in a consolidated group when the lead case work item is assigned', async () => {
+    const leadDocketNumber = '101-18';
+    const memberDocketNumber1 = '102-18';
+    const memberDocketNumber2 = '103-18';
+    const sharedDocketEntryId = 'b6238482-5f0e-48a8-bb8e-da2957074a08';
+
+    const leadWorkItem: RawWorkItem = {
+      ...mockWorkItem,
+      docketNumber: leadDocketNumber,
+      leadDocketNumber: leadDocketNumber,
+      docketEntryId: sharedDocketEntryId,
+    };
+
+    const memberWorkItem1 = new WorkItem({
+      assigneeId: '03b74100-10ac-45f1-865d-b063978cac9c',
+      assigneeName: 'bob',
+      createdAt: '2018-12-27T18:06:02.971Z',
+      docketEntryId: sharedDocketEntryId,
+      docketNumber: memberDocketNumber1,
+      leadDocketNumber: leadDocketNumber,
+      section: DOCKET_SECTION,
+      sentBy: 'irsPractitioner',
+      updatedAt: '2018-12-27T18:06:02.968Z',
+      workItemId: 'a1b74100-10ac-45f1-865d-b063978cac9c',
+    });
+
+    const memberWorkItem2 = new WorkItem({
+      assigneeId: '03b74100-10ac-45f1-865d-b063978cac9c',
+      assigneeName: 'bob',
+      createdAt: '2018-12-27T18:06:02.971Z',
+      docketEntryId: sharedDocketEntryId,
+      docketNumber: memberDocketNumber2,
+      leadDocketNumber: leadDocketNumber,
+      section: DOCKET_SECTION,
+      sentBy: 'irsPractitioner',
+      updatedAt: '2018-12-27T18:06:02.968Z',
+      workItemId: 'b2b74100-10ac-45f1-865d-b063978cac9c',
+    });
+
+    getWorkItemsByDocketNumber.mockResolvedValue([
+      memberWorkItem1,
+      memberWorkItem2,
+      new WorkItem({
+        ...mockWorkItem,
+        docketNumber: memberDocketNumber1,
+        docketEntryId: 'c3b74100-10ac-45f1-865d-b063978cac9c',
+        workItemId: 'd4b74100-10ac-45f1-865d-b063978cac9c',
+      }),
+    ]);
+
+    getUserById
+      .mockResolvedValueOnce({
+        ...mockDocketClerkUser,
+        section: DOCKET_SECTION,
+      } as DbUser)
+      .mockResolvedValueOnce({
+        ...mockDocketClerkUser,
+        section: DOCKET_SECTION,
+      } as DbUser);
+
+    await assignWorkItemsInteractor(
+      applicationContext,
+      {
+        assigneeId: mockDocketClerkUser.userId,
+        assigneeName: 'Ted Docket',
+        workItem: leadWorkItem,
+        workItemId: undefined,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(getWorkItemsByDocketNumber).toHaveBeenCalledWith({
+      docketNumber: leadDocketNumber,
+    });
+
+    expect(upsertWorkItems.mock.calls[0][0].workItems).toHaveLength(3);
+
+    expect(upsertWorkItems.mock.calls[0][0].workItems).toMatchObject([
+      {
+        docketNumber: leadDocketNumber,
+        assigneeId: mockDocketClerkUser.userId,
+        assigneeName: 'Ted Docket',
+        section: DOCKET_SECTION,
+        sentBy: mockDocketClerkUser.name,
+        sentBySection: DOCKET_SECTION,
+        sentByUserId: mockDocketClerkUser.userId,
+      },
+      {
+        docketNumber: memberDocketNumber1,
+        assigneeId: mockDocketClerkUser.userId,
+        assigneeName: 'Ted Docket',
+        section: DOCKET_SECTION,
+        sentBy: mockDocketClerkUser.name,
+        sentBySection: DOCKET_SECTION,
+        sentByUserId: mockDocketClerkUser.userId,
+      },
+      {
+        docketNumber: memberDocketNumber2,
+        assigneeId: mockDocketClerkUser.userId,
+        assigneeName: 'Ted Docket',
+        section: DOCKET_SECTION,
+        sentBy: mockDocketClerkUser.name,
+        sentBySection: DOCKET_SECTION,
+        sentByUserId: mockDocketClerkUser.userId,
+      },
+    ]);
+  });
+
+  it('should not assign member work items when the work item is not the lead case', async () => {
+    const leadDocketNumber = '101-18';
+    const memberDocketNumber = '102-18';
+
+    const memberWorkItem: RawWorkItem = {
+      ...mockWorkItem,
+      docketNumber: memberDocketNumber,
+      leadDocketNumber: leadDocketNumber,
+    };
+
+    getUserById
+      .mockResolvedValueOnce({
+        ...mockDocketClerkUser,
+        section: DOCKET_SECTION,
+      } as DbUser)
+      .mockResolvedValueOnce({
+        ...mockDocketClerkUser,
+        section: DOCKET_SECTION,
+      } as DbUser);
+
+    await assignWorkItemsInteractor(
+      applicationContext,
+      {
+        assigneeId: mockDocketClerkUser.userId,
+        assigneeName: 'Ted Docket',
+        workItem: memberWorkItem,
+        workItemId: undefined,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(getWorkItemsByDocketNumber).not.toHaveBeenCalled();
+
+    expect(upsertWorkItems.mock.calls[0][0].workItems).toHaveLength(1);
+    expect(upsertWorkItems.mock.calls[0][0].workItems).toMatchObject([
+      {
+        docketNumber: memberDocketNumber,
+        assigneeId: mockDocketClerkUser.userId,
+        assigneeName: 'Ted Docket',
       },
     ]);
   });

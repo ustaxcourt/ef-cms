@@ -10,6 +10,7 @@ export const EditDocketEntryMetaFormNoDocument = connect(
     DATE_FORMATS: state.constants.DATE_FORMATS,
     form: state.form,
     caseDetail: state.caseDetail,
+    isFiledAcrossAllCases: state.isFiledAcrossAllCases,
     formatAndUpdateDateFromDatePickerSequence:
       sequences.formatAndUpdateDateFromDatePickerSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
@@ -20,6 +21,7 @@ export const EditDocketEntryMetaFormNoDocument = connect(
     DATE_FORMATS,
     form,
     caseDetail,
+    isFiledAcrossAllCases,
     formatAndUpdateDateFromDatePickerSequence,
     updateFormValueSequence,
     validateDocumentSequence,
@@ -28,7 +30,8 @@ export const EditDocketEntryMetaFormNoDocument = connect(
     const isMemberCase = !!(
       caseDetail &&
       caseDetail.leadDocketNumber &&
-      caseDetail.leadDocketNumber !== caseDetail.docketNumber
+      caseDetail.leadDocketNumber !== caseDetail.docketNumber &&
+      isFiledAcrossAllCases
     );
     return (
       <div className="blue-container">

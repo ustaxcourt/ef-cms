@@ -1,7 +1,7 @@
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getDocketEntriesById } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesById';
@@ -24,14 +24,24 @@ export const getIsFiledAcrossAllCasesInteractor = async (
 
   const firstEntry = docketEntries[0];
 
-  const theCase = await getCaseByDocketNumber({ docketNumber: firstEntry.docketNumber });
+  const theCase = await getCaseByDocketNumber({
+    docketNumber: firstEntry.docketNumber,
+  });
 
   if (theCase.leadDocketNumber) {
-    const docketNumbersFromEntries = docketEntries.map(entry => entry.docketNumber);
+    const docketNumbersFromEntries = docketEntries.map(
+      entry => entry.docketNumber,
+    );
 
     const allCasesInGroup = await getConsolidatedCases({
       leadDocketNumber: theCase.leadDocketNumber,
-      excludeFields: ['docketEntries', 'correspondence', 'hearings', 'privatePractitioners', 'irsPractitioners']
+      excludeFields: [
+        'docketEntries',
+        'correspondence',
+        'hearings',
+        'privatePractitioners',
+        'irsPractitioners',
+      ],
     });
 
     const allDocketNumbersInGroup = allCasesInGroup.map(c => c.docketNumber);
@@ -39,10 +49,9 @@ export const getIsFiledAcrossAllCasesInteractor = async (
     const docketNumbersFromEntriesSet = new Set(docketNumbersFromEntries);
     const allDocketNumbersInGroupSet = new Set(allDocketNumbersInGroup);
 
-    return [...allDocketNumbersInGroupSet]
-      .every(
-        docketNumber => docketNumbersFromEntriesSet.has(docketNumber)
-      );
+    return [...allDocketNumbersInGroupSet].every(docketNumber =>
+      docketNumbersFromEntriesSet.has(docketNumber),
+    );
   } else {
     return true;
   }

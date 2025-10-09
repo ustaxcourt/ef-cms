@@ -1,15 +1,15 @@
 /* eslint-disable complexity */
-import { Button } from '../../ustc-ui/Button/Button';
-import { ConfirmInitiateServiceModal } from '../ConfirmInitiateServiceModal';
-import { Icon } from '../../ustc-ui/Icon/Icon';
-import { PdfViewer } from '../../ustc-ui/PdfPreview/PdfViewer';
-import { WorkItemAlreadyCompletedModal } from '../DocketEntryQc/WorkItemAlreadyCompletedModal';
+import { Button } from '@web-client/ustc-ui/Button/Button';
+import { ConfirmInitiateServiceModal } from '@web-client/views/ConfirmInitiateServiceModal';
+import { Icon } from '@web-client/ustc-ui/Icon/Icon';
+import { PdfViewer } from '@web-client/ustc-ui/PdfPreview/PdfViewer';
+import { WorkItemAlreadyCompletedModal } from '@web-client/views/DocketEntryQc/WorkItemAlreadyCompletedModal';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
+import { InfoNotificationComponent } from '@web-client/views/InfoNotification';
 import React from 'react';
 import classNames from 'classnames';
-import { InfoNotificationComponent } from '../InfoNotification';
 
 export const DocumentViewerDocument = connect(
   {
@@ -54,7 +54,6 @@ export const DocumentViewerDocument = connect(
     showModal,
     viewerDocumentToDisplay,
   }) {
-
     return (
       <div
         className={classNames(
@@ -136,24 +135,22 @@ export const DocumentViewerDocument = connect(
                 </Button>
               )}
 
-              {documentViewerHelper.showServePaperFiledDocumentButton &&
-                (
-                  <Button
-                    link
-                    data-testid="serve-paper-filed-document"
-                    icon="paper-plane"
-                    iconColor="white"
-                    onClick={() => {
-                      openConfirmServePaperFiledDocumentSequence({
-                        docketEntryId: viewerDocumentToDisplay.docketEntryId,
-                        redirectUrl:
-                          documentViewerLinksHelper.documentViewerLink,
-                      });
-                    }}
-                  >
-                    Serve
-                  </Button>
-                )}
+              {documentViewerHelper.showServePaperFiledDocumentButton && (
+                <Button
+                  link
+                  data-testid="serve-paper-filed-document"
+                  icon="paper-plane"
+                  iconColor="white"
+                  onClick={() => {
+                    openConfirmServePaperFiledDocumentSequence({
+                      docketEntryId: viewerDocumentToDisplay.docketEntryId,
+                      redirectUrl: documentViewerLinksHelper.documentViewerLink,
+                    });
+                  }}
+                >
+                  Serve
+                </Button>
+              )}
 
               {documentViewerHelper.showServePetitionButton && (
                 <Button

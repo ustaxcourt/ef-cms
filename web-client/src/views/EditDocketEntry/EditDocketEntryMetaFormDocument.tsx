@@ -21,6 +21,7 @@ export const EditDocketEntryMetaFormDocument = connect(
     formatAndUpdateDateFromDatePickerSequence:
       sequences.formatAndUpdateDateFromDatePickerSequence,
     internalTypesHelper: state.internalTypesHelper,
+    isFiledAcrossAllCases: state.isFiledAcrossAllCases,
     updateDocketEntryMetaDocumentFormValueSequence:
       sequences.updateDocketEntryMetaDocumentFormValueSequence,
     validateDocumentSequence: sequences.validateDocumentSequence,
@@ -31,6 +32,7 @@ export const EditDocketEntryMetaFormDocument = connect(
     editDocketEntryMetaHelper,
     form,
     caseDetail,
+    isFiledAcrossAllCases,
     formatAndUpdateDateFromDatePickerSequence,
     internalTypesHelper,
     updateDocketEntryMetaDocumentFormValueSequence,
@@ -40,7 +42,8 @@ export const EditDocketEntryMetaFormDocument = connect(
     const isMemberCase = !!(
       caseDetail &&
       caseDetail.leadDocketNumber &&
-      caseDetail.leadDocketNumber !== caseDetail.docketNumber
+      caseDetail.leadDocketNumber !== caseDetail.docketNumber &&
+      isFiledAcrossAllCases
     );
 
     return (

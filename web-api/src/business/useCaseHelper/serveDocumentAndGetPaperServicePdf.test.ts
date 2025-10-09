@@ -1,13 +1,10 @@
-import {
-  Case,
-  getContactPrimary,
-} from '../../../../shared/src/business/entities/cases/Case';
+import { Case, getContactPrimary } from '@shared/business/entities/cases/Case';
 import {
   MOCK_CASE,
   MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-} from '../../../../shared/src/test/mockCase';
-import { SERVICE_INDICATOR_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+} from '@shared/test/mockCase';
+import { SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstants';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { serveDocumentAndGetPaperServicePdf } from './serveDocumentAndGetPaperServicePdf';
 
@@ -228,5 +225,145 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails.mock
         .calls[0][0].servedParties.electronic,
     ).toEqual([]);
+  });
+
+  it('should use caseSpecificDocketEntries when provided and serve each case with its specific docket entry', async () => {
+    const firstCaseEntity = new Case(
+      {
+        ...MOCK_CASE,
+        petitioners: [
+          {
+            ...getContactPrimary(MOCK_CASE),
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+          },
+        ],
+      },
+      { authorizedUser: mockDocketClerkUser },
+    );
+
+    const secondCaseEntity = new Case(
+      {
+        ...MOCK_CASE,
+        docketNumber: '102-20',
+        petitioners: [
+          {
+            ...getContactPrimary(MOCK_CASE),
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+          },
+        ],
+      },
+      { authorizedUser: mockDocketClerkUser },
+    );
+
+    const caseSpecificDocketEntryId1 = 'docket-entry-1';
+    const caseSpecificDocketEntryId2 = 'docket-entry-2';
+
+    await serveDocumentAndGetPaperServicePdf({
+      applicationContext,
+      caseEntities: [firstCaseEntity, secondCaseEntity],
+      caseSpecificDocketEntries: [
+        {
+          caseEntity: firstCaseEntity,
+          docketEntryId: caseSpecificDocketEntryId1,
+        },
+        {
+          caseEntity: secondCaseEntity,
+          docketEntryId: caseSpecificDocketEntryId2,
+        },
+      ],
+      docketEntryId: mockDocketEntryId,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+    ).toHaveBeenCalledTimes(2);
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails.mock
+        .calls[0][0],
+    ).toMatchObject({
+      caseEntity: firstCaseEntity,
+      docketEntryId: caseSpecificDocketEntryId1,
+    });
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails.mock
+        .calls[1][0],
+    ).toMatchObject({
+      caseEntity: secondCaseEntity,
+      docketEntryId: caseSpecificDocketEntryId2,
+    });
+  });
+
+  it('should load case-specific PDFs and append paper service pages when caseSpecificDocketEntries is provided with paper service parties', async () => {
+    applicationContext
+      .getUseCaseHelpers()
+      .appendPaperServiceAddressPageToPdf.mockImplementation(
+        ({ newPdfDoc }) => {
+          newPdfDoc.addPage();
+        },
+      );
+
+    const firstCaseEntity = new Case(
+      {
+        ...MOCK_CASE,
+        petitioners: [
+          {
+            ...getContactPrimary(MOCK_CASE),
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
+      },
+      { authorizedUser: mockDocketClerkUser },
+    );
+
+    const secondCaseEntity = new Case(
+      {
+        ...MOCK_CASE,
+        docketNumber: '102-20',
+        petitioners: [
+          {
+            ...getContactPrimary(MOCK_CASE),
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
+      },
+      { authorizedUser: mockDocketClerkUser },
+    );
+
+    const caseSpecificDocketEntryId1 = 'docket-entry-1';
+    const caseSpecificDocketEntryId2 = 'docket-entry-2';
+
+    const result = await serveDocumentAndGetPaperServicePdf({
+      applicationContext,
+      caseEntities: [firstCaseEntity, secondCaseEntity],
+      caseSpecificDocketEntries: [
+        {
+          caseEntity: firstCaseEntity,
+          docketEntryId: caseSpecificDocketEntryId1,
+        },
+        {
+          caseEntity: secondCaseEntity,
+          docketEntryId: caseSpecificDocketEntryId2,
+        },
+      ],
+      docketEntryId: mockDocketEntryId,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getDocument,
+    ).toHaveBeenCalledTimes(2);
+    expect(
+      applicationContext.getPersistenceGateway().getDocument.mock.calls[0][0],
+    ).toMatchObject({
+      key: caseSpecificDocketEntryId1,
+    });
+    expect(
+      applicationContext.getPersistenceGateway().getDocument.mock.calls[1][0],
+    ).toMatchObject({
+      key: caseSpecificDocketEntryId2,
+    });
+    expect(
+      applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
+    ).toHaveBeenCalledTimes(2);
+    expect(result).toEqual({ pdfUrl: mockPdfUrl });
   });
 });

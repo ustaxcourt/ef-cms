@@ -10,6 +10,9 @@ describe('setViewerDocumentToDisplayAction', () => {
       .getDocumentDownloadUrlInteractor.mockReturnValue({
         url: 'www.example.com',
       });
+    applicationContext
+      .getUseCases()
+      .getIsFiledAcrossAllCasesInteractor.mockReturnValue(true);
     presenter.providers.applicationContext = applicationContext;
   });
 
@@ -35,6 +38,7 @@ describe('setViewerDocumentToDisplayAction', () => {
     });
     expect(result.state.docketEntryId).toEqual('1234');
     expect(result.state.iframeSrc).toEqual('www.example.com');
+    expect(result.state.isFiledAcrossAllCases).toEqual(true);
   });
 
   it('does not set iframeSrc if props.viewerDocumentToDisplay is null', async () => {
