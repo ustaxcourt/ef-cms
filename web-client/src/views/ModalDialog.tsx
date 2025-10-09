@@ -16,8 +16,8 @@ export const ModalDialog = ({
   confirmHref,
   confirmLabel,
   clearLabel,
-  confirmSequence,
   clearSequence,
+  confirmSequence,
   confirmTarget = '_self',
   dataTestId = 'modal-dialog',
   disableSubmit = false,
@@ -39,8 +39,8 @@ export const ModalDialog = ({
   confirmHref?: string;
   confirmLabel?: string;
   clearLabel?: string;
-  confirmSequence: any;
   clearSequence?: any;
+  confirmSequence: any;
   confirmTarget?: string;
   dataTestId?: string;
   disableSubmit?: boolean;

@@ -11,6 +11,7 @@ export const EditRemoteStatusModal = connect(
   {
     cancelSequence: sequences.clearModalSequence,
     confirmSequence: sequences.editRemoteStatusSequence,
+    clearSequence: sequences.clearRemoteStatusSequence,
     modal: state.modal,
     updateModalValueSequence: sequences.updateModalValueSequence,
     validateEditRemoteStatusSequence:
@@ -22,6 +23,7 @@ export const EditRemoteStatusModal = connect(
   function EditRemoteStatusModal({
     cancelSequence,
     confirmSequence,
+    clearSequence,
     modal,
     updateModalValueSequence,
     validateEditRemoteTrialModalSequence,
@@ -32,8 +34,9 @@ export const EditRemoteStatusModal = connect(
         cancelLabel="Cancel"
         cancelSequence={cancelSequence}
         confirmLabel="Save"
-        clearLabel="Clear date"
         confirmSequence={confirmSequence}
+        clearLabel="Clear date"
+        clearSequence={clearSequence}
         title="Edit Remote Status"
       >
         <div className="margin-bottom-4">

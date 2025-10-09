@@ -54,6 +54,7 @@ import { clearAdvancedSearchFormSequence } from './sequences/clearAdvancedSearch
 import { clearAlertSequence } from './sequences/clearAlertSequence';
 import { clearDropDownMenuStateSequence } from './sequences/clearDropDownMenuStateSequence';
 import { clearDueDateSequence } from './sequences/clearDueDateSequence';
+import { clearRemoteStatusSequence } from './sequences/clearRemoteStatusSequence';
 import { clearExistingDocumentSequence } from './sequences/clearExistingDocumentSequence';
 import { clearModalFormSequence } from './sequences/clearModalFormSequence';
 import { clearModalSequence } from './sequences/clearModalSequence';
@@ -713,6 +714,7 @@ export const presenterSequences = {
   clearDropDownMenuStateSequence:
     clearDropDownMenuStateSequence as unknown as Function,
   clearDueDateSequence: clearDueDateSequence as unknown as Function,
+  clearRemoteStatusSequence: clearRemoteStatusSequence as unknown as Function,
   clearExistingDocumentSequence:
     clearExistingDocumentSequence as unknown as Function,
   clearModalFormSequence: clearModalFormSequence as unknown as Function,
