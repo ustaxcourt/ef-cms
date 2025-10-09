@@ -1,10 +1,10 @@
-import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
-import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
+import { CaseLink } from '@web-client/ustc-ui/CaseLink/CaseLink';
+import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseIcon';
 import { WorkQueueAssignments } from './WorkQueueAssignments';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import { FormattedWorkItemWithCaseInfo } from '../../presenter/computeds/formattedWorkQueue';
+import { FormattedWorkItemWithCaseInfo } from '@web-client/presenter/computeds/formattedWorkQueue';
 import React from 'react';
 
 export const SectionWorkQueueInProgress = connect(
@@ -175,7 +175,6 @@ function SectionWorkQueueInProgressRow({
         <td className="to message-queue-row">{item.assigneeName}</td>
       )}
     </tr>
-
   );
 }
 

@@ -1,6 +1,6 @@
-import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
-import { Icon } from '../../ustc-ui/Icon/Icon';
-import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
+import { CaseLink } from '@web-client/ustc-ui/CaseLink/CaseLink';
+import { Icon } from '@web-client/ustc-ui/Icon/Icon';
+import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseIcon';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sortMemberCases } from '@web-client/presenter/computeds/consolidateWorkQueueItemsOutboxHelper';
 import { state } from '@web-client/presenter/app.cerebral';

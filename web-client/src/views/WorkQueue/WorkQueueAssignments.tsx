@@ -1,5 +1,5 @@
-import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
-import { Icon } from '../../ustc-ui/Icon/Icon';
+import { BindedSelect } from '@web-client/ustc-ui/BindedSelect/BindedSelect';
+import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import { RawUser } from '@shared/business/entities/User';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';

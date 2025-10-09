@@ -1,12 +1,12 @@
-import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
-import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
-import { Icon } from '../../ustc-ui/Icon/Icon';
+import { CaseLink } from '@web-client/ustc-ui/CaseLink/CaseLink';
+import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseIcon';
+import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import { WorkQueueAssignments } from './WorkQueueAssignments';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { sortMemberCases } from '@web-client/presenter/computeds/consolidateWorkQueueItemsOutboxHelper';
 import { state } from '@web-client/presenter/app.cerebral';
-import { FormattedWorkItemWithCaseInfo } from '../../presenter/computeds/formattedWorkQueue';
+import { FormattedWorkItemWithCaseInfo } from '@web-client/presenter/computeds/formattedWorkQueue';
 import React from 'react';
 
 const SectionWorkQueueTable = connect(

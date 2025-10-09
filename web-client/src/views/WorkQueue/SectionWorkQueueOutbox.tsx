@@ -1,4 +1,4 @@
-import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
+import { CaseLink } from '@web-client/ustc-ui/CaseLink/CaseLink';
 import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseIcon';
 import { WorkQueueAssignments } from './WorkQueueAssignments';
 import { connect } from '@web-client/presenter/shared.cerebral';

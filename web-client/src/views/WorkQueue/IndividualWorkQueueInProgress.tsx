@@ -1,4 +1,4 @@
-import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
+import { CaseLink } from '@web-client/ustc-ui/CaseLink/CaseLink';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -42,7 +42,10 @@ export const IndividualWorkQueueInProgress = connect(
           <tbody>
             {formattedWorkQueue.map(item => {
               return (
-                <tr key={item.workItemId} data-testid={`${item.docketNumber}-qc-item-row`}>
+                <tr
+                  key={item.workItemId}
+                  data-testid={`${item.docketNumber}-qc-item-row`}
+                >
                   <td className="consolidated-case-column">
                     <ConsolidatedCaseIcon
                       consolidatedIconTooltipText={
