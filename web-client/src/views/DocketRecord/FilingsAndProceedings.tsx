@@ -167,26 +167,29 @@ export const FilingsAndProceedings = connect<
               console.log('entry', entry);
               return (
                 <>
-                  <span> --- </span>
-                  <Button
-                    link
-                    className={classNames(
-                      'text-right',
-                      // entry.isStricken && 'stricken-docket-record', // NOTE (#8546): This may be unnecessary
-                      'view-pdf-link',
-                    )}
-                    // arial-label={`View PDF for: ${entry.DocketEntryIndex}`}
-                    onClick={() =>
-                      changeTabAndSetViewerDocumentToDisplaySequence({
-                        docketRecordTab: 'documentView',
-                        viewerDocumentToDisplay: {
-                          docketEntryId: entry.docketEntryId,
-                        },
-                      })
-                    }
-                  >
-                    {entry?.disposition} #{entry.docketEntryIndex}
-                  </Button>
+                  <br></br>
+                  <span className="display-inline-block">
+                    <span> --- </span>
+                    <Button
+                      link
+                      className={classNames(
+                        'text-right',
+                        // entry.isStricken && 'stricken-docket-record', // NOTE (#8546): This may be unnecessary
+                        'view-pdf-link',
+                      )}
+                      arial-label={`View PDF for: ${entry.docketEntryIndex}`}
+                      onClick={() =>
+                        changeTabAndSetViewerDocumentToDisplaySequence({
+                          docketRecordTab: 'documentView',
+                          viewerDocumentToDisplay: {
+                            docketEntryId: entry.docketEntryId,
+                          },
+                        })
+                      }
+                    >
+                      {entry?.disposition} #{entry.docketEntryIndex}
+                    </Button>
+                  </span>
                 </>
               );
             })}
