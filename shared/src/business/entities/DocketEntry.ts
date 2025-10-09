@@ -8,6 +8,7 @@ import {
   COURT_ISSUED_EVENT_CODES,
   DECISION_EVENT_CODE,
   DOCKET_ENTRY_SEALED_TO_TYPES,
+  DocketEntryRelations,
   DOCUMENT_NOTICE_EVENT_CODES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   EXTERNAL_DOCUMENT_TYPES,
@@ -187,7 +188,8 @@ export class DocketEntry extends JoiValidationEntity {
   public strickenBy?: string;
   public strickenByUserId?: string;
   public orderDocketEntryId?: string;
-  public motionDisposition?: string; // 'GRANTED' | 'DENTIED' | 'PARTIAL';
+  public motionDisposition?: string; // 'GRANTED' | 'DENTIED' | 'GRANTED IN PART';
+  public docketEntryRelations?: DocketEntryRelations;
 
   // These are optional fields set solely for the UI in certain cases.
   public qcComplete?: boolean;
