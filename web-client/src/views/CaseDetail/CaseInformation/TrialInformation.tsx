@@ -5,6 +5,7 @@ import { PreformattedText } from '@web-client/ustc-ui/PreformatedText/Preformatt
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
 import React from 'react';
+import { applicationContext } from '@web-client/applicationContext';
 
 const EditCaseTrialInformationMenu = ({
   caseDetail,
@@ -37,6 +38,18 @@ const EditCaseTrialInformationMenu = ({
       ]}
       menuState="caseInformationTrialEdit"
     ></DropdownMenu>
+  );
+};
+
+const RemoteTrialSessionInformation = ({ remoteTrialGrantedDate }) => {
+  const date = applicationContext
+    .getUtilities()
+    .formatDateString(remoteTrialGrantedDate, 'MMDDYYYY');
+  return (
+    <div>
+      <p className="text-bold">Motion to proceed remotely granted date</p>
+      <p>{date}</p>
+    </div>
   );
 };
 
@@ -123,6 +136,11 @@ export const TrialInformation = connect(
                   )}
                 </tbody>
               </table>
+              {caseDetail.remoteTrialGrantedDate && (
+                <RemoteTrialSessionInformation
+                  remoteTrialGrantedDate={caseDetail.remoteTrialGrantedDate}
+                />
+              )}
             </div>
           </>
         )}
@@ -209,6 +227,11 @@ export const TrialInformation = connect(
                 Add Manual Block
               </Button>
             </div>
+            {caseDetail.remoteTrialGrantedDate && (
+              <RemoteTrialSessionInformation
+                remoteTrialGrantedDate={caseDetail.remoteTrialGrantedDate}
+              />
+            )}
           </>
         )}
         {caseDetail.showScheduled && (

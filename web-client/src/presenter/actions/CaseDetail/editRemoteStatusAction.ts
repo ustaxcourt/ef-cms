@@ -13,33 +13,7 @@ export const editRemoteStatusAction = async ({
 }: ActionProps) => {
   const docketNumber = get(state.caseDetail.docketNumber);
   const modalState = get(state.modal);
-  let { remoteTrialGrantedDate } = modalState;
-
-  if (remoteTrialGrantedDate && remoteTrialGrantedDate.trim() !== '') {
-    const { DATE_FORMATS } = applicationContext.getConstants();
-    const isValidDate = applicationContext
-      .getUtilities()
-      .isValidDateString(remoteTrialGrantedDate, [
-        DATE_FORMATS.MMDDYYYY,
-        DATE_FORMATS.MDYYYY,
-      ]);
-
-    if (!isValidDate) {
-      throw new Error('Invalid format');
-    }
-
-    const inputFormat = applicationContext
-      .getUtilities()
-      .getDateFormat(remoteTrialGrantedDate, [
-        DATE_FORMATS.MMDDYYYY,
-        DATE_FORMATS.MDYYYY,
-      ]);
-
-    remoteTrialGrantedDate = applicationContext
-      .getUtilities()
-      .createISODateString(remoteTrialGrantedDate, inputFormat);
-  }
-
+  const { remoteTrialGrantedDate } = modalState;
   const hasDate = Boolean(
     remoteTrialGrantedDate && remoteTrialGrantedDate.trim() !== '',
   );
