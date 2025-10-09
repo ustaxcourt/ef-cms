@@ -48,12 +48,12 @@ export const EditRemoteStatusModal = connect(
           <FormGroup errorText={validationErrors.remoteTrialGrantedDate}>
             <div className="edit-remote-trial-date-picker">
               <DateSelector
-                key={modal.remoteTrialGrantedDate || 'no-date'}
                 data-testid="remote-trial-granted-date"
                 defaultValue={modal.remoteTrialGrantedDate}
                 id="remote-trial-granted-date"
                 label="Date granted: MM/DD/YYYY"
                 maxDate={createStartOfDayISO()}
+                pristine={!modal.remoteTrialGrantedDate}
                 onChange={e => {
                   formatAndUpdateDateFromDatePickerSequence({
                     key: 'remoteTrialGrantedDate',
