@@ -15,6 +15,7 @@ import { fromKyselyTrialSession } from '@web-api/persistence/postgres/trialSessi
 import { UserKysely } from '../users/schema';
 import { fromKyselyUser } from '../users/mapper';
 import { UserOnCaseKysely } from '@web-api/persistence/postgres/cases/userOnCase/schema';
+import { sql } from 'kysely';
 
 export const ALL_OMITTABLE_CASE_FIELDS = [
   'docketEntries',
@@ -284,19 +285,83 @@ async function getIrsPractitioners({
 async function getDocketEntries(docketNumbers: string[]) {
   const dbDocketEntries = await getDbReader(reader =>
     reader
-      .selectFrom('dwDocketEntry as de')
-      .where('docketNumber', 'in', docketNumbers)
-      .leftJoin('dwDocketEntryOrderMotion as deom', join =>
-        join
-          .onRef('de.docketEntryId', '=', eb =>
-            eb.cast('deom.motionDocketEntryId', 'varchar'),
+      .with('affectedDocketEntries', db =>
+        db
+          .selectFrom('dwDocketEntryOrderMotion')
+          .where('served', 'is', true)
+          .select([
+            'orderDocketEntryId as docketEntryId',
+            'orderDocketNumber as docketNumber',
+          ])
+          .select(fn =>
+            fn.fn
+              .jsonAgg(
+                fn.fn<{ docketEntryId: string; disposition: string }>(
+                  'json_build_object',
+                  [
+                    sql.lit('docketEntryId'),
+                    'motionDocketEntryId',
+                    sql.lit('disposition'),
+                    'disposition',
+                  ],
+                ),
+              )
+              .as('affectedDocketEntries'),
           )
-          .onRef('de.docketNumber', '=', 'deom.motionDocketNumber'),
+          .groupBy(['orderDocketEntryId', 'orderDocketNumber']),
+      )
+      .with('affectedByDocketEntries', db =>
+        db
+          .selectFrom('dwDocketEntryOrderMotion')
+          .where('served', 'is', true)
+          .select([
+            'motionDocketEntryId as docketEntryId',
+            'motionDocketNumber as docketNumber',
+          ])
+          .select(fn =>
+            fn.fn
+              .jsonAgg(
+                fn.fn<{ docketEntryId: string; disposition: string }>(
+                  'json_build_object',
+                  [
+                    sql.lit('docketEntryId'),
+                    'orderDocketEntryId',
+                    sql.lit('disposition'),
+                    'disposition',
+                  ],
+                ),
+              )
+              .as('affectedByDocketEntries'),
+          )
+          .groupBy(['motionDocketEntryId', 'motionDocketNumber']),
+      )
+      .selectFrom('dwDocketEntry as de')
+      .where('de.docketNumber', 'in', docketNumbers)
+      .leftJoin('affectedDocketEntries', join =>
+        join
+          .onRef(
+            eb => eb.cast('affectedDocketEntries.docketEntryId', 'varchar'),
+            '=',
+            'de.docketEntryId',
+          )
+          .onRef('affectedDocketEntries.docketNumber', '=', 'de.docketNumber'),
+      )
+      .leftJoin('affectedByDocketEntries', join =>
+        join
+          .onRef(
+            eb => eb.cast('affectedByDocketEntries.docketEntryId', 'varchar'),
+            '=',
+            'de.docketEntryId',
+          )
+          .onRef(
+            'affectedByDocketEntries.docketNumber',
+            '=',
+            'de.docketNumber',
+          ),
       )
       .selectAll('de')
-      .select('deom.disposition as motionDisposition')
-      .select('deom.orderDocketEntryId')
-      .selectAll()
+      .select('affectedDocketEntries.affectedDocketEntries')
+      .select('affectedByDocketEntries.affectedByDocketEntries')
       .execute(),
   );
 
@@ -319,19 +384,83 @@ export async function getDocketEntriesOnCases(
 ): Promise<DocketEntryKysely[]> {
   return getDbReader(reader =>
     reader
+      .with('affectedDocketEntries', db =>
+        db
+          .selectFrom('dwDocketEntryOrderMotion')
+          .where('served', 'is', true)
+          .select([
+            'orderDocketEntryId as docketEntryId',
+            'orderDocketNumber as docketNumber',
+          ])
+          .select(fn =>
+            fn.fn
+              .jsonAgg(
+                fn.fn<{ docketEntryId: string; disposition: string }>(
+                  'json_build_object',
+                  [
+                    sql.lit('docketEntryId'),
+                    'motionDocketEntryId',
+                    sql.lit('disposition'),
+                    'disposition',
+                  ],
+                ),
+              )
+              .as('affectedDocketEntries'),
+          )
+          .groupBy(['orderDocketEntryId', 'orderDocketNumber']),
+      )
+      .with('affectedByDocketEntries', db =>
+        db
+          .selectFrom('dwDocketEntryOrderMotion')
+          .where('served', 'is', true)
+          .select([
+            'motionDocketEntryId as docketEntryId',
+            'motionDocketNumber as docketNumber',
+          ])
+          .select(fn =>
+            fn.fn
+              .jsonAgg(
+                fn.fn<{ docketEntryId: string; disposition: string }>(
+                  'json_build_object',
+                  [
+                    sql.lit('docketEntryId'),
+                    'orderDocketEntryId',
+                    sql.lit('disposition'),
+                    'disposition',
+                  ],
+                ),
+              )
+              .as('affectedByDocketEntries'),
+          )
+          .groupBy(['motionDocketEntryId', 'motionDocketNumber']),
+      )
       .selectFrom('dwDocketEntry as de')
       .where('docketNumber', 'in', docketNumbers)
-      .leftJoin('dwDocketEntryOrderMotion as deom', join =>
+      .leftJoin('affectedDocketEntries', join =>
         join
-          .onRef('de.docketEntryId', '=', eb =>
-            eb.cast('deom.motionDocketEntryId', 'varchar'),
+          .onRef(
+            eb => eb.cast('affectedDocketEntries.docketEntryId', 'varchar'),
+            '=',
+            'de.docketEntryId',
           )
-          .onRef('de.docketNumber', '=', 'deom.motionDocketNumber'),
+          .onRef('affectedDocketEntries.docketNumber', '=', 'de.docketNumber'),
+      )
+      .leftJoin('affectedByDocketEntries', join =>
+        join
+          .onRef(
+            eb => eb.cast('affectedByDocketEntries.docketEntryId', 'varchar'),
+            '=',
+            'de.docketEntryId',
+          )
+          .onRef(
+            'affectedByDocketEntries.docketNumber',
+            '=',
+            'de.docketNumber',
+          ),
       )
       .selectAll('de')
-      .select('deom.disposition as motionDisposition')
-      .select('deom.orderDocketEntryId')
-      .selectAll()
+      .select('affectedDocketEntries.affectedDocketEntries')
+      .select('affectedByDocketEntries.affectedByDocketEntries')
       .execute(),
   );
 }

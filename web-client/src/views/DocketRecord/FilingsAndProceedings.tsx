@@ -6,15 +6,25 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
+import _ from 'lodash';
 
 type FilingsAndProceedingsProps = {
   entry: {
     descriptionDisplay: string;
     isStricken: boolean;
     docketEntryId: string;
-    motionDisposition?: string;
-    orderDocketEntryId?: string;
-    orderDocketEntryIndex?: number;
+    affectedDocketEntries: {
+      disposition?: string;
+      docketEntryId?: string;
+      docketEntryIndex?: number;
+      documentType: string;
+    }[];
+    affectedByDocketEntries: {
+      disposition?: string;
+      docketEntryId?: string;
+      docketEntryIndex?: number;
+      documentType: string;
+    }[];
     showDocumentProcessing: boolean;
     showLinkToDocument: boolean;
     showDocumentViewerLink: boolean;
@@ -98,6 +108,8 @@ export const FilingsAndProceedings = connect<
       );
     };
 
+    console.log('Filings', entry);
+
     return (
       <>
         {entry.showLinkToDocument && renderDocumentLink()}
@@ -148,30 +160,36 @@ export const FilingsAndProceedings = connect<
               )}
               {entry.descriptionDisplay}
             </Button>
-            {entry.motionDisposition && (
-              <>
-                <span> --- </span>
-                <Button
-                  link
-                  className={classNames(
-                    'text-right',
-                    entry.isStricken && 'stricken-docket-record', // NOTE (#8546): This may be unnecessary
-                    'view-pdf-link',
-                  )}
-                  arial-label={`View PDF for: ${entry.orderDocketEntryIndex}`}
-                  onClick={() =>
-                    changeTabAndSetViewerDocumentToDisplaySequence({
-                      docketRecordTab: 'documentView',
-                      viewerDocumentToDisplay: {
-                        docketEntryId: entry.orderDocketEntryId,
-                      },
-                    })
-                  }
-                >
-                  {entry.motionDisposition} #{entry.orderDocketEntryIndex}
-                </Button>
-              </>
-            )}
+            {_.concat(
+              entry.affectedByDocketEntries ?? [],
+              entry.affectedDocketEntries ?? [],
+            ).map(entry => {
+              console.log('entry', entry);
+              return (
+                <>
+                  <span> --- </span>
+                  <Button
+                    link
+                    className={classNames(
+                      'text-right',
+                      // entry.isStricken && 'stricken-docket-record', // NOTE (#8546): This may be unnecessary
+                      'view-pdf-link',
+                    )}
+                    // arial-label={`View PDF for: ${entry.DocketEntryIndex}`}
+                    onClick={() =>
+                      changeTabAndSetViewerDocumentToDisplaySequence({
+                        docketRecordTab: 'documentView',
+                        viewerDocumentToDisplay: {
+                          docketEntryId: entry.docketEntryId,
+                        },
+                      })
+                    }
+                  >
+                    {entry?.disposition} #{entry.docketEntryIndex}
+                  </Button>
+                </>
+              );
+            })}
           </>
         )}
 

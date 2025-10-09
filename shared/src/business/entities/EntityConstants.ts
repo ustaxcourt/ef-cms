@@ -86,19 +86,11 @@ export const JURISDICTIONAL_OPTIONS = {
   undersigned: 'Jurisdiction is retained by the undersigned',
 };
 
-export type DocketEntryRelations = {
-  affects: {
-    dispostion: string;
-    docketEntryId: string;
-    docketEntryType: string;
-    docketIndex: number;
-  }[];
-  affectedBy: {
-    dispostion: string;
-    docketEntryId: string;
-    docketEntryType: string;
-    docketIndex: number;
-  }[];
+export type DocketEntryRelation = {
+  dispostion: string;
+  docketEntryId: string;
+  docketEntryType: string;
+  docketIndex: number;
 };
 
 export const MOTION_DISPOSITIONS = {

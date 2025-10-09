@@ -98,9 +98,10 @@ export const getShowSealDocketRecordEntry = ({ applicationContext, entry }) => {
 const getMotionDispositionOrderIndex = (
   motionEntry: RawDocketEntry,
   rawCase: RawCase,
+  targetDocketEntryId: string,
 ) => {
   const relatedOrder = rawCase.docketEntries.find(
-    entry => entry.docketEntryId === motionEntry.orderDocketEntryId,
+    entry => entry.docketEntryId === targetDocketEntryId,
   );
 
   if (!relatedOrder) {
@@ -130,19 +131,30 @@ export const getFormattedDocketEntry = ({
   const { DOCKET_ENTRY_SEALED_TO_TYPES, DOCUMENT_PROCESSING_STATUS_OPTIONS } =
     applicationContext.getConstants();
 
-  const hasMotionDisposition = !!entry.motionDisposition;
-
   const formattedResult = {
     numberOfPages: 0,
     ...entry,
     createdAtFormatted: entry.createdAtFormatted,
   };
 
-  if (hasMotionDisposition) {
-    formattedResult.orderDocketEntryIndex = getMotionDispositionOrderIndex(
-      entry,
-      rawCase,
-    );
+  if (entry.affectedDocketEntries) {
+    entry.affectedDocketEntries.forEach(affectedEntry => {
+      affectedEntry.docketEntryIndex = getMotionDispositionOrderIndex(
+        entry,
+        rawCase,
+        affectedEntry.docketEntryId,
+      );
+    });
+  }
+
+  if (entry.affectedByDocketEntries) {
+    entry.affectedByDocketEntries.forEach(affectedEntry => {
+      affectedEntry.docketEntryIndex = getMotionDispositionOrderIndex(
+        entry,
+        rawCase,
+        affectedEntry.docketEntryId,
+      );
+    });
   }
 
   if (!isExternalUser) {
