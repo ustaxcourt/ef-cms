@@ -5,6 +5,7 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
+import { createStartOfDayISO } from '@shared/business/utilities/DateHandler';
 
 export const EditRemoteStatusModal = connect(
   {
@@ -43,11 +44,11 @@ export const EditRemoteStatusModal = connect(
           <FormGroup errorText={validationErrors.remoteTrialGrantedDate}>
             <div className="edit-remote-trial-date-picker">
               <DateSelector
+                data-testid="remote-trial-granted-date"
                 defaultValue={modal.remoteTrialGrantedDate}
                 id="remote-trial-granted-date"
                 label="Date granted: MM/DD/YYYY"
-                placeHolderText="Select Date"
-                data-testid="remote-trial-granted-date"
+                maxDate={createStartOfDayISO()}
                 onChange={e => {
                   updateModalValueSequence({
                     key: 'remoteTrialGrantedDate',
@@ -55,6 +56,7 @@ export const EditRemoteStatusModal = connect(
                   });
                   validateEditRemoteTrialModalSequence();
                 }}
+                placeHolderText="Select Date"
               />
             </div>
           </FormGroup>
