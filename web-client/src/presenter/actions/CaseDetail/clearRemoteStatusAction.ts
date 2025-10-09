@@ -6,6 +6,5 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {object} providers.store the cerebral store
  */
 export const clearRemoteStatusAction = ({ store }: ActionProps) => {
-  console.log(store);
-  store.unset(state.form.remoteTrialGrantedDate);
+  store.unset(state.modal.remoteTrialGrantedDate);
 };

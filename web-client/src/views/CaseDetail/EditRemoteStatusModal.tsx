@@ -12,10 +12,10 @@ export const EditRemoteStatusModal = connect(
     cancelSequence: sequences.clearModalSequence,
     confirmSequence: sequences.editRemoteStatusSequence,
     clearSequence: sequences.clearRemoteStatusSequence,
+    constants: state.constants,
+    formatAndUpdateDateFromDatePickerSequence:
+      sequences.formatAndUpdateDateFromDatePickerSequence,
     modal: state.modal,
-    updateModalValueSequence: sequences.updateModalValueSequence,
-    validateEditRemoteStatusSequence:
-      sequences.validateEditRemoteStatusSequence,
     validateEditRemoteTrialModalSequence:
       sequences.validateEditRemoteTrialModalSequence,
     validationErrors: state.validationErrors,
@@ -24,8 +24,9 @@ export const EditRemoteStatusModal = connect(
     cancelSequence,
     confirmSequence,
     clearSequence,
+    constants,
+    formatAndUpdateDateFromDatePickerSequence,
     modal,
-    updateModalValueSequence,
     validateEditRemoteTrialModalSequence,
     validationErrors,
   }) {
@@ -47,14 +48,17 @@ export const EditRemoteStatusModal = connect(
           <FormGroup errorText={validationErrors.remoteTrialGrantedDate}>
             <div className="edit-remote-trial-date-picker">
               <DateSelector
+                key={modal.remoteTrialGrantedDate || 'no-date'}
                 data-testid="remote-trial-granted-date"
                 defaultValue={modal.remoteTrialGrantedDate}
                 id="remote-trial-granted-date"
                 label="Date granted: MM/DD/YYYY"
                 maxDate={createStartOfDayISO()}
                 onChange={e => {
-                  updateModalValueSequence({
+                  formatAndUpdateDateFromDatePickerSequence({
                     key: 'remoteTrialGrantedDate',
+                    root: 'modal',
+                    toFormat: constants.DATE_FORMATS.ISO,
                     value: e.target.value,
                   });
                   validateEditRemoteTrialModalSequence();
