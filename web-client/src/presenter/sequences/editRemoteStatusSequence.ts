@@ -6,11 +6,11 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
-import { validateBlockFromTrialAction } from '../actions/CaseDetail/validateBlockFromTrialAction';
+import { validateRemoteTrialPermissionAction } from '@web-client/presenter/actions/CaseDetail/validateRemoteTrialPermissionAction';
 
 export const editRemoteStatusSequence = [
   startShowValidationAction,
-  validateBlockFromTrialAction,
+  validateRemoteTrialPermissionAction,
   {
     error: [setValidationErrorsAction],
     success: showProgressSequenceDecorator([

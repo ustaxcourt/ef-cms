@@ -25,7 +25,7 @@ export const validateRemoteTrialPermissionAction = ({
     ]);
   if (!isValidDate) {
     return path.error({
-      error: { remoteTrialGrantedDate: 'Format date as MM/DD/YYYY' },
+      errors: { remoteTrialGrantedDate: 'Format date as MM/DD/YYYY' },
     });
   }
   return path.success();

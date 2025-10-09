@@ -1,14 +1,14 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { shouldValidateAction } from '../actions/shouldValidateAction';
-import { validateBlockFromTrialAction } from '../actions/CaseDetail/validateBlockFromTrialAction';
+import { validateRemoteTrialPermissionAction } from '@web-client/presenter/actions/CaseDetail/validateRemoteTrialPermissionAction';
 
 export const validateEditRemoteStatusSequence = [
   shouldValidateAction,
   {
     ignore: [],
     validate: [
-      validateBlockFromTrialAction,
+      validateRemoteTrialPermissionAction,
       {
         error: [setValidationErrorsAction],
         success: [clearAlertsAction],
