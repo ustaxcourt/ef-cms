@@ -7,7 +7,6 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {object} providers.store the cerebral store
  */
 export const setRemoteTrialPermissionModalStateAction = ({ get, store }) => {
-  // Only set the date - the granted status is derived from whether there's a date
   const caseDetail = get(state.caseDetail);
 
   store.set(
