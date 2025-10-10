@@ -165,6 +165,14 @@ describe('pollAWSBatchProgress', () => {
       .mockResolvedValueOnce({
         jobs: [
           {
+            status: 'STARTING',
+            container: { logStreamName: 'test-log-stream' },
+          },
+        ],
+      })
+      .mockResolvedValueOnce({
+        jobs: [
+          {
             status: 'PENDING',
             container: { logStreamName: 'test-log-stream' },
           },
