@@ -25,7 +25,8 @@ export const CaseInformationInternal = connect(
       sequences.openAddEditHearingNoteModalSequence,
     openAddToTrialModalSequence: sequences.openAddToTrialModalSequence,
     openBlockFromTrialModalSequence: sequences.openBlockFromTrialModalSequence,
-    openEditRemoteStatusModalSequence: sequences.openEditRemoteStatusModalSequence,
+    openEditRemoteStatusModalSequence:
+      sequences.openEditRemoteStatusModalSequence,
     openCleanModalSequence: sequences.openCleanModalSequence,
     openRemoveFromTrialSessionModalSequence:
       sequences.openRemoveFromTrialSessionModalSequence,
@@ -145,6 +146,9 @@ export const CaseInformationInternal = connect(
                     }
                     openEditRemoteStatusModalSequence={
                       openEditRemoteStatusModalSequence
+                    }
+                    showEditRemoteTrialPermission={
+                      caseInformationHelper.showEditRemoteTrialPermission
                     }
                     trialSessionJudge={trialSessionJudge}
                   />

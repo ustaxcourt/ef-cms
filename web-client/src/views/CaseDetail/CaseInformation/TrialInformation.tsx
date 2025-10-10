@@ -64,6 +64,7 @@ export const TrialInformation = connect(
     openRemoveFromTrialSessionModalSequence:
       props.openRemoveFromTrialSessionModalSequence,
     openUnblockFromTrialModalSequence: props.openUnblockFromTrialModalSequence,
+    showEditRemoteTrialPermission: props.showEditRemoteTrialPermission,
     trialSessionJudge: props.trialSessionJudge,
   },
   function TrialInformation({
@@ -74,6 +75,7 @@ export const TrialInformation = connect(
     openEditRemoteStatusModalSequence,
     openRemoveFromTrialSessionModalSequence,
     openUnblockFromTrialModalSequence,
+    showEditRemoteTrialPermission,
     trialSessionJudge,
   }) {
     return (
@@ -287,19 +289,21 @@ export const TrialInformation = connect(
             </div>
           </>
         )}
-        <div className="margin-bottom-1">
-          <Button
-            link
-            data-testid="edit-remote-status"
-            icon="edit"
-            id="edit-remote-status-button"
-            onClick={() => {
-              openEditRemoteStatusModalSequence();
-            }}
-          >
-            Edit Remote Status
-          </Button>
-        </div>
+        {showEditRemoteTrialPermission && (
+          <div className="margin-bottom-1">
+            <Button
+              link
+              data-testid="edit-remote-status"
+              icon="edit"
+              id="edit-remote-status-button"
+              onClick={() => {
+                openEditRemoteStatusModalSequence();
+              }}
+            >
+              Edit Remote Status
+            </Button>
+          </div>
+        )}
       </>
     );
   },
