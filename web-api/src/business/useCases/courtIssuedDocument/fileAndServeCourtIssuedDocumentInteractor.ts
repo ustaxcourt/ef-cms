@@ -256,11 +256,11 @@ export const fileAndServeCourtIssuedDocument = async (
         return Object.values(form.affectedMotions)
           .filter(motion => {
             return caseToUpdate.docketEntries.find(
-              docketEntry => docketEntry.docketEntryId === motion.docketEntryid,
+              docketEntry => docketEntry.docketEntryId === motion.docketEntryId,
             );
           })
           .map(motion => ({
-            docketEntryId: motion.docketEntryid,
+            docketEntryId: motion.docketEntryId,
             docketNumber: caseToUpdate.docketNumber,
             disposition: motion.disposition,
           }));

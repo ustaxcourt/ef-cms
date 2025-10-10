@@ -205,7 +205,7 @@ export const CourtIssuedDocketEntry = connect(
                         return (
                           <FormGroup
                             errorText={validationErrors.dispositionOrder}
-                            key={motion}
+                            key={motion.arrayKey}
                           >
                             <label
                               className="usa-label"
@@ -233,7 +233,7 @@ export const CourtIssuedDocketEntry = connect(
                                   value: Object.assign(
                                     form.affectedMotions[i],
                                     {
-                                      docketEntryid:
+                                      docketEntryId:
                                         inputValue.value.docketEntryId,
                                       docketNumber:
                                         inputValue.value.docketNumber,
@@ -305,7 +305,10 @@ export const CourtIssuedDocketEntry = connect(
                         onClick={() => {
                           updateCourtIssuedDocketEntryFormValueSequence({
                             key: 'affectedMotions',
-                            value: [...form.affectedMotions, {}],
+                            value: [
+                              ...form.affectedMotions,
+                              { arrayKey: Date.now() },
+                            ],
                           });
                         }}
                       >

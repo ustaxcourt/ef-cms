@@ -3,6 +3,7 @@ import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { Get } from 'cerebral';
 import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
 import { state } from '@web-client/presenter/app.cerebral';
+import _ from 'lodash';
 
 export const addCourtIssuedDocketEntryHelper = (
   get: Get,
@@ -43,7 +44,11 @@ export const addCourtIssuedDocketEntryHelper = (
         DocketEntry.isMotion(d.eventCode) &&
         !d.isStricken &&
         !d.isDraft &&
-        !d.motionDisposition,
+        !d.affectedByDocketEntries &&
+        !_.find(
+          form.affectedMotions ?? [],
+          am => am.docketEntryId === d.docketEntryId,
+        ),
     )
     .map((m: RawDocketEntry) => ({
       label: `${m.index} - ${m.documentTitle}`,

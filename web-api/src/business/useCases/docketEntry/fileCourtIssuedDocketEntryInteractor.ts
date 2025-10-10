@@ -36,7 +36,7 @@ export type FileCourtIssueDocketEntryForm = {
   isOrder: boolean;
   affectedMotions: {
     [docketNumber: string]: {
-      docketEntryid: string;
+      docketEntryId: string;
       docketNumber: string;
       disposition: string;
     };
@@ -208,11 +208,11 @@ export const fileCourtIssuedDocketEntry = async (
       return Object.values(documentMeta.affectedMotions)
         .filter(motion => {
           return caseToUpdate.docketEntries.find(
-            docketEntry => docketEntry.docketEntryId === motion.docketEntryid,
+            docketEntry => docketEntry.docketEntryId === motion.docketEntryId,
           );
         })
         .map(motion => ({
-          docketEntryId: motion.docketEntryid,
+          docketEntryId: motion.docketEntryId,
           docketNumber: caseToUpdate.docketNumber,
           disposition: motion.disposition,
         }));
