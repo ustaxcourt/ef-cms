@@ -1,4 +1,4 @@
-import { Case } from '@shared/business/entities/cases/Case';
+import { Case, isMemberCase } from '@shared/business/entities/cases/Case';
 import { SIMULTANEOUS_DOCUMENT_EVENT_CODES } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
@@ -78,10 +78,7 @@ export const addCoversheetInteractor = async (
     useInitialData,
   });
 
-  const isMemberCase =
-    caseEntity.leadDocketNumber && caseEntity.leadDocketNumber !== docketNumber;
-
-  if (isMemberCase) {
+  if (isMemberCase(caseEntity)) {
     if (replaceCoversheet) {
       throw new Error(
         'Coversheet replacement for multidocketed filings must be performed on the lead case',

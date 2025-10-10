@@ -1,10 +1,11 @@
 /* eslint-disable complexity */
 
-import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { getShowNotServedForDocument } from './getShowNotServedForDocument';
 import { state } from '@web-client/presenter/app.cerebral';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+import { isLeadCase, isMemberCase } from '@shared/business/entities/cases/Case';
 import {
   ORDER_RESPONSE_DOCUMENTS_ALLOWLIST,
   SIMULTANEOUS_DOCUMENT_EVENT_CODES,
@@ -98,15 +99,6 @@ export const documentViewerHelper = (
       d => d.eventCode === STIPULATED_DECISION_EVENT_CODE && !d.archived,
     );
 
-  const isLeadCase =
-    !caseDetail.leadDocketNumber ||
-    caseDetail.leadDocketNumber === caseDetail.docketNumber;
-
-  const isMemberCase = Boolean(
-    caseDetail?.leadDocketNumber &&
-      caseDetail?.leadDocketNumber !== caseDetail?.docketNumber,
-  );
-
   const isDocumentUnserved = () => {
     return showNotServed || !servedLabel;
   };
@@ -114,7 +106,8 @@ export const documentViewerHelper = (
   const showCompleteQcButton =
     permissions.EDIT_DOCKET_ENTRY &&
     formattedDocumentToDisplay.qcNeeded &&
-    (isLeadCase || (isMemberCase && !isFiledAcrossAllCases));
+    (isLeadCase(caseDetail) ||
+      (isMemberCase(caseDetail) && !isFiledAcrossAllCases));
 
   const showApplyStampButton =
     permissions.STAMP_MOTION &&
@@ -135,12 +128,14 @@ export const documentViewerHelper = (
     // If not a simultaneous doc, use normal logic
     (!isSimultaneousDocType ||
       // If simultaneous doc on lead case, show serve button
-      (isSimultaneousDocType && isLeadCase) ||
+      (isSimultaneousDocType && isLeadCase(caseDetail)) ||
       // If simultaneous doc on member case and NOT filed across group, show serve button
-      (isSimultaneousDocType && isMemberCase && !isFiledAcrossAllCases));
+      (isSimultaneousDocType &&
+        isMemberCase(caseDetail) &&
+        !isFiledAcrossAllCases));
 
   const showLeadCaseBanner =
-    isMemberCase &&
+    isMemberCase(caseDetail) &&
     isSimultaneousDocType &&
     isFiledAcrossAllCases &&
     isDocumentUnserved() &&

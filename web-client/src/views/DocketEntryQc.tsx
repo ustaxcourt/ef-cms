@@ -9,6 +9,7 @@ import { PrimaryDocumentForm } from './EditDocketEntry/PrimaryDocumentForm';
 import { SuccessNotification } from './SuccessNotification';
 import { WorkItemAlreadyCompletedModal } from './DocketEntryQc/WorkItemAlreadyCompletedModal';
 import { connect } from '@web-client/presenter/shared.cerebral';
+import { isLeadCase, isMemberCase } from '@shared/business/entities/cases/Case';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -44,16 +45,6 @@ export const DocketEntryQc = connect(
     formattedCaseDetail,
     isFiledAcrossAllCases,
   }) {
-    const isMemberCase = Boolean(
-      caseDetail?.leadDocketNumber &&
-        caseDetail?.leadDocketNumber !== caseDetail?.docketNumber,
-    );
-
-    const isLeadCase = Boolean(
-      caseDetail?.leadDocketNumber &&
-        caseDetail?.leadDocketNumber === caseDetail?.docketNumber,
-    );
-
     const mappedMemberedCases = () =>
       formattedCaseDetail.consolidatedCases
         .filter(
@@ -108,7 +99,8 @@ export const DocketEntryQc = connect(
             <div className="grid-row grid-gap">
               <div className="grid-col-5">
                 <div>
-                  {isLeadCase &&
+                  {caseDetail &&
+                    isLeadCase(caseDetail) &&
                     formattedCaseDetail?.consolidatedCases &&
                     formattedCaseDetail.consolidatedCases.length > 1 && (
                       <InfoNotificationComponent
@@ -149,7 +141,11 @@ export const DocketEntryQc = connect(
                     disableOnClick
                     id="save-and-finish"
                     data-testid="save-and-finish-document-qc"
-                    disabled={isMemberCase && isFiledAcrossAllCases}
+                    disabled={
+                      caseDetail &&
+                      isMemberCase(caseDetail) &&
+                      isFiledAcrossAllCases
+                    }
                     type="submit"
                     onClick={async () => {
                       await completeDocketEntryQCSequence();
@@ -161,7 +157,11 @@ export const DocketEntryQc = connect(
                     disableOnClick
                     secondary
                     id="save-and-add-supporting"
-                    disabled={isMemberCase && isFiledAcrossAllCases}
+                    disabled={
+                      caseDetail &&
+                      isMemberCase(caseDetail) &&
+                      isFiledAcrossAllCases
+                    }
                     onClick={async () => {
                       await openCompleteAndSendMessageModalSequence();
                     }}

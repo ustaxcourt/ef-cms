@@ -11,6 +11,7 @@ import { FormCancelModalDialog } from '@web-client/views/FormCancelModalDialog';
 import { Tab, Tabs } from '@web-client/ustc-ui/Tabs/Tabs';
 import { InfoNotificationComponent } from '@web-client/views/InfoNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
+import { isLeadCase, isMemberCase } from '@shared/business/entities/cases/Case';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -40,17 +41,8 @@ export const EditDocketEntryMeta = connect(
     form,
     isFiledAcrossAllCases,
   }) {
-    const isMemberCase = !!(
-      caseDetail &&
-      caseDetail.leadDocketNumber &&
-      caseDetail.leadDocketNumber !== caseDetail.docketNumber &&
-      isFiledAcrossAllCases
-    );
-    const isLeadCase = !!(
-      caseDetail &&
-      caseDetail.leadDocketNumber &&
-      caseDetail.leadDocketNumber === caseDetail.docketNumber
-    );
+    const isDisabled =
+      caseDetail && isMemberCase(caseDetail) && isFiledAcrossAllCases;
     return (
       <>
         <CaseDetailHeader />
@@ -71,7 +63,8 @@ export const EditDocketEntryMeta = connect(
           </div>
           <div className="grid-row grid-gap">
             <div className="grid-col-5 DocumentDetail">
-              {isLeadCase &&
+              {caseDetail &&
+                isLeadCase(caseDetail) &&
                 formattedCaseDetail?.consolidatedCases &&
                 formattedCaseDetail.consolidatedCases.length > 1 && (
                   <InfoNotificationComponent
@@ -108,7 +101,7 @@ export const EditDocketEntryMeta = connect(
                     scrollToTop={false}
                   />
                 )}
-              {isMemberCase && (
+              {isDisabled && (
                 <InfoNotificationComponent
                   alertInfo={{
                     message: (

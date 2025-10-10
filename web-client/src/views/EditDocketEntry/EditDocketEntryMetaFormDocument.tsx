@@ -6,6 +6,7 @@ import { NonstandardForm } from '../FileDocument/NonstandardForm';
 import { SecondaryDocumentForm } from '../PaperFiling/SecondaryDocumentForm';
 import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { connect } from '@web-client/presenter/shared.cerebral';
+import { isMemberCase } from '@shared/business/entities/cases/Case';
 import { reactSelectValue } from '@web-client/ustc-ui/Utils/documentTypeSelectHelper';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -39,12 +40,8 @@ export const EditDocketEntryMetaFormDocument = connect(
     validateDocumentSequence,
     validationErrors,
   }) {
-    const isMemberCase = !!(
-      caseDetail &&
-      caseDetail.leadDocketNumber &&
-      caseDetail.leadDocketNumber !== caseDetail.docketNumber &&
-      isFiledAcrossAllCases
-    );
+    const isDisabled =
+      caseDetail && isMemberCase(caseDetail) && isFiledAcrossAllCases;
 
     return (
       <div className="blue-container">
@@ -60,7 +57,7 @@ export const EditDocketEntryMetaFormDocument = connect(
                   name="lodged"
                   type="radio"
                   value={option}
-                  disabled={isMemberCase}
+                  disabled={isDisabled}
                   onChange={e => {
                     updateDocketEntryMetaDocumentFormValueSequence({
                       key: e.target.name,
@@ -92,7 +89,7 @@ export const EditDocketEntryMetaFormDocument = connect(
             });
             validateDocumentSequence();
           }}
-          disabled={isMemberCase}
+          disabled={isDisabled}
         />
         <FormGroup errorText={validationErrors.eventCode}>
           <label
@@ -127,7 +124,7 @@ export const EditDocketEntryMetaFormDocument = connect(
                 value: inputText,
               });
             }}
-            isDisabled={isMemberCase}
+            isDisabled={isDisabled}
           />
         </FormGroup>
         {editDocketEntryMetaHelper.primary.showSecondaryDocumentForm && (
@@ -173,7 +170,7 @@ export const EditDocketEntryMetaFormDocument = connect(
                   value: inputText,
                 });
               }}
-              isDisabled={isMemberCase}
+              isDisabled={isDisabled}
             />
           </FormGroup>
         )}
@@ -202,7 +199,7 @@ export const EditDocketEntryMetaFormDocument = connect(
             id="additional-info"
             name="additionalInfo"
             value={form.additionalInfo || ''}
-            disabled={isMemberCase}
+            disabled={isDisabled}
             onBlur={() => {
               validateDocumentSequence();
             }}
@@ -222,7 +219,7 @@ export const EditDocketEntryMetaFormDocument = connect(
               id="add-to-coversheet"
               name="addToCoversheet"
               type="checkbox"
-              disabled={isMemberCase}
+              disabled={isDisabled}
               onChange={e => {
                 updateDocketEntryMetaDocumentFormValueSequence({
                   key: e.target.name,
@@ -251,7 +248,7 @@ export const EditDocketEntryMetaFormDocument = connect(
             id="additional-info2"
             name="additionalInfo2"
             value={form.additionalInfo2 || ''}
-            disabled={isMemberCase}
+            disabled={isDisabled}
             onBlur={() => {
               validateDocumentSequence();
             }}
@@ -266,13 +263,13 @@ export const EditDocketEntryMetaFormDocument = connect(
         <FormGroup>
           <Inclusions
             updateSequence="updateDocketEntryMetaDocumentFormValueSequence"
-            isMemberCase={isMemberCase}
+            isMemberCase={isDisabled}
           />
         </FormGroup>
         <FilingPartiesForm
           updateSequence={updateDocketEntryMetaDocumentFormValueSequence}
           validateSequence={validateDocumentSequence}
-          isMemberCase={isMemberCase}
+          isMemberCase={isDisabled}
         />
         {editDocketEntryMetaHelper.showObjection && (
           <FormGroup errorText={validationErrors.objections}>
@@ -290,7 +287,7 @@ export const EditDocketEntryMetaFormDocument = connect(
                     name="objections"
                     type="radio"
                     value={option}
-                    disabled={isMemberCase}
+                    disabled={isDisabled}
                     onChange={e => {
                       updateDocketEntryMetaDocumentFormValueSequence({
                         key: e.target.name,
@@ -321,7 +318,7 @@ export const EditDocketEntryMetaFormDocument = connect(
                 id="pending"
                 name="pending"
                 type="checkbox"
-                disabled={isMemberCase}
+                disabled={isDisabled}
                 onChange={e => {
                   updateDocketEntryMetaDocumentFormValueSequence({
                     key: e.target.name,
