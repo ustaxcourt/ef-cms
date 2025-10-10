@@ -44,6 +44,10 @@ And the **Experimental** environments:
 - [https://exp3.ef-cms.ustaxcourt.gov/](https://exp3.ef-cms.ustaxcourt.gov/) (ustc experimental3)
 - [https://exp4.ef-cms.ustaxcourt.gov/](https://exp4.ef-cms.ustaxcourt.gov/) (ustc experimental4)
 - [https://exp5.ef-cms.ustaxcourt.gov/](https://exp5.ef-cms.ustaxcourt.gov/) (ustc experimental5)
+- [https://exp6.ef-cms.ustaxcourt.gov/](https://exp6.ef-cms.ustaxcourt.gov/) (ustc experimental6)
+- [https://exp7.ef-cms.ustaxcourt.gov/](https://exp7.ef-cms.ustaxcourt.gov/) (ustc experimental7)
+- [https://exp8.ef-cms.ustaxcourt.gov/](https://exp8.ef-cms.ustaxcourt.gov/) (ustc experimental8)
+- [https://exp9.ef-cms.ustaxcourt.gov/](https://exp9.ef-cms.ustaxcourt.gov/) (ustc experimental9)
 
 
 ## Dawson User Roles
