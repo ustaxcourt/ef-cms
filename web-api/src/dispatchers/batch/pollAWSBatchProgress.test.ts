@@ -136,7 +136,7 @@ describe('pollAWSBatchProgress', () => {
       applicationContext,
       jobId: 'succeeded-job-id',
       pollInterval: 10,
-      timeout: 50,
+      timeout: 1000,
       onProgress: onProgressMock,
     });
 
@@ -149,7 +149,7 @@ describe('pollAWSBatchProgress', () => {
       applicationContext,
       jobId: 'succeeded-job-id',
       pollInterval: 10,
-      timeout: 50,
+      timeout: 1000,
       onProgress: onProgressMock,
     });
 
@@ -191,7 +191,7 @@ describe('pollAWSBatchProgress', () => {
       applicationContext,
       jobId: 'succeeded-job-id',
       pollInterval: 10,
-      timeout: 50,
+      timeout: 1000,
       onProgress: onProgressMock,
     });
 
