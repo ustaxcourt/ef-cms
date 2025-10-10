@@ -33,8 +33,6 @@ export const editRemoteStatus = async (
 
   const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
-  // caseEntity.setRemoteGrantedDate(timestamp);
-
   const updatedCase = await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
