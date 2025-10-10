@@ -146,9 +146,7 @@ describe('Document QC Complete', () => {
         );
 
         cy.visit('/document-qc/my/outbox');
-        cy.get(
-          `[data-testid="section-work-item-outbox-${docketNumber}"]`,
-        ).should('exist');
+        cy.contains('#section-work-queue tr', docketNumber).should('exist');
       });
     });
   });
