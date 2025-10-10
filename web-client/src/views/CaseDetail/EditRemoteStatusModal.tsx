@@ -47,24 +47,28 @@ export const EditRemoteStatusModal = connect(
           </div>
           <FormGroup errorText={validationErrors.remoteTrialGrantedDate}>
             <div className="edit-remote-trial-date-picker">
-              <DateSelector
-                data-testid="remote-trial-granted-date"
-                defaultValue={modal.remoteTrialGrantedDate}
-                id="remote-trial-granted-date"
-                label="Date granted: MM/DD/YYYY"
-                maxDate={createStartOfDayISO()}
-                pristine={!modal.remoteTrialGrantedDate}
-                onChange={e => {
-                  formatAndUpdateDateFromDatePickerSequence({
-                    key: 'remoteTrialGrantedDate',
-                    root: 'modal',
-                    toFormat: constants.DATE_FORMATS.ISO,
-                    value: e.target.value,
-                  });
-                  validateEditRemoteTrialModalSequence();
-                }}
-                placeHolderText="Select Date"
-              />
+              <p className="text-bold">
+                Date granted: <span className="text-light">MM/DD/YYYY</span>
+              </p>
+              <div className="grid-col-4">
+                <DateSelector
+                  data-testid="remote-trial-granted-date"
+                  defaultValue={modal.remoteTrialGrantedDate}
+                  id="remote-trial-granted-date"
+                  maxDate={createStartOfDayISO()}
+                  pristine={!modal.remoteTrialGrantedDate}
+                  onChange={e => {
+                    formatAndUpdateDateFromDatePickerSequence({
+                      key: 'remoteTrialGrantedDate',
+                      root: 'modal',
+                      toFormat: constants.DATE_FORMATS.ISO,
+                      value: e.target.value,
+                    });
+                    validateEditRemoteTrialModalSequence();
+                  }}
+                  placeHolderText="Select Date"
+                />
+              </div>
             </div>
           </FormGroup>
         </div>
