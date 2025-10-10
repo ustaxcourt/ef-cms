@@ -2,21 +2,22 @@ import { Kysely } from 'kysely';
 
 export async function up(db: Kysely<any>): Promise<void> {
   await db.schema
-    .createTable('dwDocketEntryOrderMotion')
-    .addColumn('orderDocketEntryId', 'uuid')
-    .addColumn('orderDocketNumber', 'varchar') // Is this needed?
-    .addColumn('motionDocketEntryId', 'uuid')
-    .addColumn('motionDocketNumber', 'varchar')
+    .createTable('dwDocketEntryRelatedDocketEntry')
+    .addColumn('primaryDocketEntryId', 'uuid') // order
+    .addColumn('primaryDocketNumber', 'varchar')
+    .addColumn('secondaryDocketEntryId', 'uuid') // motion
+    .addColumn('secondaryDocketNumber', 'varchar')
     .addColumn('disposition', 'varchar')
     .addColumn('served', 'boolean')
-    .addPrimaryKeyConstraint('dwDocketEntryOrderMotionPK', [
-      'orderDocketEntryId',
-      'motionDocketEntryId',
-      'motionDocketNumber',
+    .addPrimaryKeyConstraint('dwDocketEntryRelatedDocketEntryPK', [
+      'primaryDocketEntryId',
+      'primaryDocketNumber',
+      'secondaryDocketEntryId',
+      'secondaryDocketNumber',
     ])
     .execute();
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
-  await db.schema.dropTable('dwDocketEntryOrderMotion');
+  await db.schema.dropTable('dwDocketEntryRelatedDocketEntry');
 }

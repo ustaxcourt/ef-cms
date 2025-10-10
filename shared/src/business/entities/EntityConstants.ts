@@ -87,10 +87,9 @@ export const JURISDICTIONAL_OPTIONS = {
 };
 
 export type DocketEntryRelation = {
-  dispostion: string;
+  disposition: string;
   docketEntryId: string;
-  docketEntryType: string;
-  docketIndex: number;
+  // docketEntryType: string;
 };
 
 export const MOTION_DISPOSITIONS = {

@@ -17,7 +17,7 @@ import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/get
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { upsertDocketEntryOrderMotions } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntryOrderMotion';
+import { upsertDocketEntryRelatedEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntryOrderMotion';
 
 export type FileCourtIssueDocketEntryForm = {
   docketEntryId: string;
@@ -218,7 +218,7 @@ export const fileCourtIssuedDocketEntry = async (
         }));
     });
 
-    await upsertDocketEntryOrderMotions({
+    await upsertDocketEntryRelatedEntries({
       orderDocketEntry: subjectDocketEntry,
       // name not final
       motionDocketEntries: docketEntryOrderMotions,

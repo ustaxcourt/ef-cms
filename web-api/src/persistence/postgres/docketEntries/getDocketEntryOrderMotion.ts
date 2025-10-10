@@ -6,9 +6,9 @@ export const getDocketEntryOrderMotion = async (
 ): Promise<DocketEntryOrderMotionKysely[]> => {
   return getDbReader(reader =>
     reader
-      .selectFrom('dwDocketEntryOrderMotion')
+      .selectFrom('dwDocketEntryRelatedDocketEntry')
       .selectAll()
-      .where('orderDocketEntryId', '==', orderDocketEntityId)
+      .where('primaryDocketEntryId', '==', orderDocketEntityId)
       .execute(),
   );
 };

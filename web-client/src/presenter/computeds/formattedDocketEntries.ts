@@ -106,7 +106,7 @@ const getMotionDispositionOrderIndex = (
 
   if (!relatedOrder) {
     throw new Error(
-      `Related order not found for motion with id ${motionEntry.docketEntryId} and orderDocketEntryId ${motionEntry.orderDocketEntryId} and title ${
+      `Related order not found for motion with id ${motionEntry.docketEntryId} and targetDocketEntryId ${targetDocketEntryId} and title ${
         motionEntry.documentTitle
       }`,
     );

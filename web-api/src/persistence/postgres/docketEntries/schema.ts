@@ -123,22 +123,22 @@ export type NewDocketEntryKysely = Insertable<DocketEntryTable>;
 
 ///////////////////////////////////
 
-export const docketEntryOrderMotionTableDefinition = {
-  orderDocketEntryId: DEFAULT as string,
-  orderDocketNumber: DEFAULT as string,
-  motionDocketEntryId: DEFAULT as string,
-  motionDocketNumber: DEFAULT as string,
+export const docketEntryRelatedDocketEntryTableDefinition = {
+  primaryDocketEntryId: DEFAULT as string,
+  primaryDocketNumber: DEFAULT as string,
+  secondaryDocketEntryId: DEFAULT as string,
+  secondaryDocketNumber: DEFAULT as string,
   disposition: DEFAULT as string,
   served: DEFAULT as boolean,
 };
 
-export type DocketEntryOrderMotionTable =
-  typeof docketEntryOrderMotionTableDefinition;
+export type DocketEntryRelatedDocketEntryTable =
+  typeof docketEntryRelatedDocketEntryTableDefinition;
 export const DW_DOCKET_ENTRY_ORDER_MOTION_COLUMNS = Object.keys(
-  docketEntryOrderMotionTableDefinition,
-) as Array<keyof DocketEntryOrderMotionTable>;
+  docketEntryRelatedDocketEntryTableDefinition,
+) as Array<keyof DocketEntryRelatedDocketEntryTable>;
 
 export type DocketEntryOrderMotionKysely =
-  Selectable<DocketEntryOrderMotionTable>;
+  Selectable<DocketEntryRelatedDocketEntryTable>;
 export type NewDocketEntryOrderMotionKysely =
-  Insertable<DocketEntryOrderMotionTable>;
+  Insertable<DocketEntryRelatedDocketEntryTable>;

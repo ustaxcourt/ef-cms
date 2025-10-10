@@ -8,9 +8,9 @@ export const updateDocketEntryOrderMotionServed = async ({
   served: boolean;
 }) => {
   await pgUpdateTable({
-    table: 'dwDocketEntryOrderMotion',
+    table: 'dwDocketEntryRelatedDocketEntry',
     values: { served },
     where: db =>
-      db.where('orderDocketEntryId', '=', orderDocketEntry.docketEntryId),
+      db.where('primaryDocketEntryId', '=', orderDocketEntry.docketEntryId),
   });
 };

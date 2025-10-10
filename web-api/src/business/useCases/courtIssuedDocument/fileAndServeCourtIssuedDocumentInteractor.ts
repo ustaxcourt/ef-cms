@@ -29,7 +29,7 @@ import {
   RawCaseDeadline,
 } from '@shared/business/entities/CaseDeadline';
 import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
-import { upsertDocketEntryOrderMotions } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntryOrderMotion';
+import { upsertDocketEntryRelatedEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntryOrderMotion';
 import { FileCourtIssueDocketEntryForm } from '@web-api/business/useCases/docketEntry/fileCourtIssuedDocketEntryInteractor';
 export const fileAndServeCourtIssuedDocument = async (
   applicationContext: ServerApplicationContext,
@@ -69,7 +69,6 @@ export const fileAndServeCourtIssuedDocument = async (
   const subjectCase = await getCaseByDocketNumber({
     docketNumber: subjectCaseDocketNumber,
   });
-
 
   const subjectCaseEntity = new Case(subjectCase, { authorizedUser });
 
@@ -267,7 +266,7 @@ export const fileAndServeCourtIssuedDocument = async (
           }));
       });
 
-      await upsertDocketEntryOrderMotions({
+      await upsertDocketEntryRelatedEntries({
         orderDocketEntry: docketEntryToServe,
         // name not final
         motionDocketEntries: docketEntryOrderMotions,

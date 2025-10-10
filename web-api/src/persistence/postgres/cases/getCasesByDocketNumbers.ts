@@ -287,11 +287,11 @@ async function getDocketEntries(docketNumbers: string[]) {
     reader
       .with('affectedDocketEntries', db =>
         db
-          .selectFrom('dwDocketEntryOrderMotion')
+          .selectFrom('dwDocketEntryRelatedDocketEntry')
           .where('served', 'is', true)
           .select([
-            'orderDocketEntryId as docketEntryId',
-            'orderDocketNumber as docketNumber',
+            'primaryDocketEntryId as docketEntryId',
+            'primaryDocketNumber as docketNumber',
           ])
           .select(fn =>
             fn.fn
@@ -300,7 +300,7 @@ async function getDocketEntries(docketNumbers: string[]) {
                   'json_build_object',
                   [
                     sql.lit('docketEntryId'),
-                    'motionDocketEntryId',
+                    'secondaryDocketEntryId',
                     sql.lit('disposition'),
                     'disposition',
                   ],
@@ -308,15 +308,15 @@ async function getDocketEntries(docketNumbers: string[]) {
               )
               .as('affectedDocketEntries'),
           )
-          .groupBy(['orderDocketEntryId', 'orderDocketNumber']),
+          .groupBy(['primaryDocketEntryId', 'primaryDocketNumber']),
       )
       .with('affectedByDocketEntries', db =>
         db
-          .selectFrom('dwDocketEntryOrderMotion')
+          .selectFrom('dwDocketEntryRelatedDocketEntry')
           .where('served', 'is', true)
           .select([
-            'motionDocketEntryId as docketEntryId',
-            'motionDocketNumber as docketNumber',
+            'secondaryDocketEntryId as docketEntryId',
+            'secondaryDocketNumber as docketNumber',
           ])
           .select(fn =>
             fn.fn
@@ -325,7 +325,7 @@ async function getDocketEntries(docketNumbers: string[]) {
                   'json_build_object',
                   [
                     sql.lit('docketEntryId'),
-                    'orderDocketEntryId',
+                    'primaryDocketEntryId',
                     sql.lit('disposition'),
                     'disposition',
                   ],
@@ -333,7 +333,7 @@ async function getDocketEntries(docketNumbers: string[]) {
               )
               .as('affectedByDocketEntries'),
           )
-          .groupBy(['motionDocketEntryId', 'motionDocketNumber']),
+          .groupBy(['secondaryDocketEntryId', 'secondaryDocketNumber']),
       )
       .selectFrom('dwDocketEntry as de')
       .where('de.docketNumber', 'in', docketNumbers)
@@ -386,11 +386,11 @@ export async function getDocketEntriesOnCases(
     reader
       .with('affectedDocketEntries', db =>
         db
-          .selectFrom('dwDocketEntryOrderMotion')
+          .selectFrom('dwDocketEntryRelatedDocketEntry')
           .where('served', 'is', true)
           .select([
-            'orderDocketEntryId as docketEntryId',
-            'orderDocketNumber as docketNumber',
+            'primaryDocketEntryId as docketEntryId',
+            'primaryDocketNumber as docketNumber',
           ])
           .select(fn =>
             fn.fn
@@ -399,7 +399,7 @@ export async function getDocketEntriesOnCases(
                   'json_build_object',
                   [
                     sql.lit('docketEntryId'),
-                    'motionDocketEntryId',
+                    'secondaryDocketEntryId',
                     sql.lit('disposition'),
                     'disposition',
                   ],
@@ -407,15 +407,15 @@ export async function getDocketEntriesOnCases(
               )
               .as('affectedDocketEntries'),
           )
-          .groupBy(['orderDocketEntryId', 'orderDocketNumber']),
+          .groupBy(['primaryDocketEntryId', 'primaryDocketNumber']),
       )
       .with('affectedByDocketEntries', db =>
         db
-          .selectFrom('dwDocketEntryOrderMotion')
+          .selectFrom('dwDocketEntryRelatedDocketEntry')
           .where('served', 'is', true)
           .select([
-            'motionDocketEntryId as docketEntryId',
-            'motionDocketNumber as docketNumber',
+            'secondaryDocketEntryId as docketEntryId',
+            'secondaryDocketNumber as docketNumber',
           ])
           .select(fn =>
             fn.fn
@@ -424,7 +424,7 @@ export async function getDocketEntriesOnCases(
                   'json_build_object',
                   [
                     sql.lit('docketEntryId'),
-                    'orderDocketEntryId',
+                    'primaryDocketEntryId',
                     sql.lit('disposition'),
                     'disposition',
                   ],
@@ -432,7 +432,7 @@ export async function getDocketEntriesOnCases(
               )
               .as('affectedByDocketEntries'),
           )
-          .groupBy(['motionDocketEntryId', 'motionDocketNumber']),
+          .groupBy(['secondaryDocketEntryId', 'secondaryDocketNumber']),
       )
       .selectFrom('dwDocketEntry as de')
       .where('docketNumber', 'in', docketNumbers)
