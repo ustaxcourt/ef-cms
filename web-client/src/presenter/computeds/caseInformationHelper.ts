@@ -58,6 +58,8 @@ export const caseInformationHelper = (
     user.role === USER_ROLES.docketClerk ||
     user.role === USER_ROLES.caseServicesSupervisor;
 
+  const showEditRemote = permissions.EDIT_CASE_DETAILS;
+
   return {
     formattedPetitioners,
     isInternalUser,
@@ -70,6 +72,7 @@ export const caseInformationHelper = (
     showHearingsTable,
     showSealAddressLink,
     showSealCaseButton,
+    showEditRemote,
     showUnsealCaseButton,
     showViewCounselButton,
     toggleAdditionalPetitionersDisplay,

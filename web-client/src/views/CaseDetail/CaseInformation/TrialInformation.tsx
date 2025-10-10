@@ -41,14 +41,36 @@ const EditCaseTrialInformationMenu = ({
   );
 };
 
-const RemoteTrialSessionInformation = ({ remoteTrialGrantedDate }) => {
+export const RemoteTrialSessionInformation = ({ remoteTrialGrantedDate }) => {
   const date = applicationContext
     .getUtilities()
     .formatDateString(remoteTrialGrantedDate, 'MMDDYYYY');
-  return (
+
+  return remoteTrialGrantedDate ? (
     <div>
-      <p className="text-bold">Motion to proceed remotely granted date</p>
-      <p>{date}</p>
+      <p className="text-bold margin-bottom-0">
+        Motion to proceed remotely granted date
+      </p>
+      <p className="text-base">{date}</p>
+    </div>
+  ) : null;
+};
+
+const EditRemoteStatusButton = ({ openEditRemoteStatusModalSequence }) => {
+  return (
+    <div className="margin-bottom-1">
+      <Button
+        className="padding-0"
+        link
+        data-testid="edit-remote-status"
+        icon="edit"
+        id="edit-remote-status-button"
+        onClick={() => {
+          openEditRemoteStatusModalSequence();
+        }}
+      >
+        Edit Remote Status
+      </Button>
     </div>
   );
 };
@@ -138,11 +160,20 @@ export const TrialInformation = connect(
                   )}
                 </tbody>
               </table>
-              {caseDetail.remoteTrialGrantedDate && (
+              <div className="grid-col-8">
                 <RemoteTrialSessionInformation
                   remoteTrialGrantedDate={caseDetail.remoteTrialGrantedDate}
                 />
-              )}
+              </div>
+              <div className="grid-col-4">
+                {showEditRemoteTrialPermission && (
+                  <EditRemoteStatusButton
+                    openEditRemoteStatusModalSequence={
+                      openEditRemoteStatusModalSequence
+                    }
+                  />
+                )}
+              </div>
             </div>
           </>
         )}
@@ -203,37 +234,48 @@ export const TrialInformation = connect(
         {caseDetail.showNotScheduled && (
           <>
             <h3 className="underlined">Trial - Not Scheduled</h3>
-            <div className="margin-bottom-1">
-              <Button
-                link
-                data-testid="add-to-trial-session-btn"
-                icon="plus-circle"
-                id="add-to-trial-session-btn"
-                onClick={() => {
-                  openAddToTrialModalSequence();
-                }}
-              >
-                Add to Trial
-              </Button>
+            <div className="grid-row">
+              <div className="grid-col-6">
+                <div className="margin-bottom-1">
+                  <Button
+                    link
+                    data-testid="add-to-trial-session-btn"
+                    icon="plus-circle"
+                    id="add-to-trial-session-btn"
+                    onClick={() => {
+                      openAddToTrialModalSequence();
+                    }}
+                  >
+                    Add to Trial
+                  </Button>
+                </div>
+                <div>
+                  <Button
+                    link
+                    className="block-from-trial-btn red-warning"
+                    data-testid="add-manual-block-button"
+                    icon="hand-paper"
+                    onClick={() => {
+                      openBlockFromTrialModalSequence();
+                    }}
+                  >
+                    Add Manual Block
+                  </Button>
+                </div>
+                <div className="grid-col-6 margin-top-3">
+                  <EditRemoteStatusButton
+                    openEditRemoteStatusModalSequence={
+                      openEditRemoteStatusModalSequence
+                    }
+                  />
+                </div>
+              </div>
+              <div className="grid-col-6">
+                <RemoteTrialSessionInformation
+                  remoteTrialGrantedDate={caseDetail.remoteTrialGrantedDate}
+                />
+              </div>
             </div>
-            <div>
-              <Button
-                link
-                className="block-from-trial-btn red-warning"
-                data-testid="add-manual-block-button"
-                icon="hand-paper"
-                onClick={() => {
-                  openBlockFromTrialModalSequence();
-                }}
-              >
-                Add Manual Block
-              </Button>
-            </div>
-            {caseDetail.remoteTrialGrantedDate && (
-              <RemoteTrialSessionInformation
-                remoteTrialGrantedDate={caseDetail.remoteTrialGrantedDate}
-              />
-            )}
           </>
         )}
         {caseDetail.showScheduled && (
@@ -288,21 +330,6 @@ export const TrialInformation = connect(
               </table>
             </div>
           </>
-        )}
-        {showEditRemoteTrialPermission && (
-          <div className="margin-bottom-1">
-            <Button
-              link
-              data-testid="edit-remote-status"
-              icon="edit"
-              id="edit-remote-status-button"
-              onClick={() => {
-                openEditRemoteStatusModalSequence();
-              }}
-            >
-              Edit Remote Status
-            </Button>
-          </div>
         )}
       </>
     );
