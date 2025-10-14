@@ -44,7 +44,7 @@ describe('File a petition', () => {
           if (!response) throw Error('Did not find response');
           expect(response.body).to.have.property('docketNumber');
           const createdDocketNumber = response.body.docketNumber;
-          cy.get('.usa-alert__heading').should(
+          cy.get('[data-testid="alert-header"]').should(
             'contain.text',
             `Your case has been assigned docket number ${createdDocketNumber}`,
           );
