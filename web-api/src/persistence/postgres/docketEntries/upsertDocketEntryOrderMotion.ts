@@ -17,7 +17,7 @@ export const upsertDocketEntryRelatedEntries = async ({
   const values: NewDocketEntryOrderMotionKysely[] = motionDocketEntries.map(
     entry => ({
       primaryDocketEntryId: orderDocketEntry.docketEntryId,
-      primaryDocketNumber: orderDocketEntry.docketNumber,
+      primaryDocketNumber: entry.docketNumber,
       secondaryDocketEntryId: entry.docketEntryId,
       secondaryDocketNumber: entry.docketNumber,
       disposition: entry.disposition,

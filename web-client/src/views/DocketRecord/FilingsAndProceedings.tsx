@@ -60,8 +60,6 @@ export const FilingsAndProceedings = connect<
     showDocketRecordDetailModalSequence,
   }) {
     const renderDocumentLink = () => {
-      console.log('Rendering document link for:', entry);
-      console.log('Case detail:', caseDetail);
       return (
         <>
           <NonMobile>
@@ -108,7 +106,6 @@ export const FilingsAndProceedings = connect<
       );
     };
 
-    console.log('Filings', entry);
 
     return (
       <>
