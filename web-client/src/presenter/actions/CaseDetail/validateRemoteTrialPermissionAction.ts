@@ -13,10 +13,9 @@ export const validateRemoteTrialPermissionAction = ({
   path,
 }) => {
   const remoteTrialGrantedDate = get(state.modal.remoteTrialGrantedDate);
+
   if (!remoteTrialGrantedDate || remoteTrialGrantedDate.trim() === '') {
-    return path.error({
-      errors: { remoteTrialGrantedDate: 'Insert Date as MM/DD/YYYY' },
-    });
+    return path.success();
   }
   const { DATE_FORMATS } = applicationContext.getConstants();
   const isValidDate = applicationContext

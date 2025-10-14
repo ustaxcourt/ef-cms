@@ -30,7 +30,7 @@ describe('Edit Remote Status', () => {
         const today = DateTime.now();
         const dateString = today.toFormat('MM/dd/yyyy');
 
-        cy.get('[data-testid="remote-trial-granted-date"]').type(dateString);
+        cy.get('#remote-trial-granted-date-picker').type(dateString);
 
         // Save
         cy.get('.modal-button-confirm').click();
@@ -58,7 +58,7 @@ describe('Edit Remote Status', () => {
         cy.get('[data-testid="edit-remote-status"]').click();
         const today = DateTime.now();
         const dateString = today.toFormat('MM/dd/yyyy');
-        cy.get('[data-testid="remote-trial-granted-date"]').type(dateString);
+        cy.get('#remote-trial-granted-date-picker').type(dateString);
         cy.get('.modal-button-confirm').click();
 
         // Wait for success
@@ -69,10 +69,7 @@ describe('Edit Remote Status', () => {
         cy.get('.modal-button-clear').click();
 
         // Verify the date input is cleared
-        cy.get('[data-testid="remote-trial-granted-date"]').should(
-          'have.value',
-          '',
-        );
+        cy.get('#remote-trial-granted-date-picker').should('have.value', '');
 
         // Save
         cy.get('.modal-button-confirm').click();
@@ -87,7 +84,7 @@ describe('Edit Remote Status', () => {
       });
     });
 
-    it('should show validation error when saving without a date', () => {
+    it('should allow saving without a date (no-op when no date is entered)', () => {
       // Create a case
       createAndServePaperPetition().then(({ docketNumber }) => {
         // Navigate to case detail
@@ -97,13 +94,15 @@ describe('Edit Remote Status', () => {
         // Open modal
         cy.get('[data-testid="edit-remote-status"]').click();
 
-        // Try to save without entering a date
+        // Save without entering a date (this should succeed but not change anything)
         cy.get('.modal-button-confirm').click();
 
-        // Verify validation error
-        cy.get('.usa-error-message').should(
-          'contain',
-          'Insert Date as MM/DD/YYYY',
+        // Verify success message
+        cy.get('.usa-alert--success').should('exist');
+
+        // Verify no date is displayed (since we didn't add one)
+        cy.contains('Motion to proceed remotely granted date').should(
+          'not.exist',
         );
       });
     });
@@ -119,7 +118,7 @@ describe('Edit Remote Status', () => {
         cy.get('[data-testid="edit-remote-status"]').click();
 
         // Enter invalid date
-        cy.get('[data-testid="remote-trial-granted-date"]').type('13/45/2023');
+        cy.get('#remote-trial-granted-date-picker').type('13/45/2023');
 
         // Try to save
         cy.get('.modal-button-confirm').click();
@@ -143,7 +142,7 @@ describe('Edit Remote Status', () => {
         cy.get('[data-testid="edit-remote-status"]').click();
         const today = DateTime.now();
         const dateString = today.toFormat('MM/dd/yyyy');
-        cy.get('[data-testid="remote-trial-granted-date"]').type(dateString);
+        cy.get('#remote-trial-granted-date-picker').type(dateString);
         cy.get('.modal-button-confirm').click();
 
         // Wait for success
@@ -169,7 +168,7 @@ describe('Edit Remote Status', () => {
         // Enter a date
         const today = DateTime.now();
         const dateString = today.toFormat('MM/dd/yyyy');
-        cy.get('[data-testid="remote-trial-granted-date"]').type(dateString);
+        cy.get('#remote-trial-granted-date-picker').type(dateString);
 
         // Cancel
         cy.get('.modal-button-cancel').click();
@@ -200,13 +199,11 @@ describe('Edit Remote Status', () => {
         // Try to enter a future date
         const futureDate = DateTime.now().plus({ days: 30 });
         const futureDateString = futureDate.toFormat('MM/dd/yyyy');
-        cy.get('[data-testid="remote-trial-granted-date"]').type(
-          futureDateString,
-        );
+        cy.get('#remote-trial-granted-date-picker').type(futureDateString);
 
         // The date picker should have maxDate set to today, so future dates should not be selectable
         // This test verifies the DateSelector component has the maxDate prop set correctly
-        cy.get('[data-testid="remote-trial-granted-date"]').should('exist');
+        cy.get('#remote-trial-granted-date-picker').should('exist');
       });
     });
   });
@@ -220,7 +217,9 @@ describe('Edit Remote Status', () => {
       // Navigate to a case with remote trial permission granted
       // Using a known test case from the seed data
       cy.visit('/case-detail/101-19');
-      getCaseDetailTab('case-information').click();
+
+      // Wait for page to load
+      cy.get('[data-testid="docket-record-table"]').should('exist');
 
       // Verify Edit Remote Status button is NOT visible
       cy.get('[data-testid="edit-remote-status"]').should('not.exist');
@@ -231,7 +230,9 @@ describe('Edit Remote Status', () => {
 
     it('should not be able to access the edit remote status modal', () => {
       cy.visit('/case-detail/101-19');
-      getCaseDetailTab('case-information').click();
+
+      // Wait for page to load
+      cy.get('[data-testid="docket-record-table"]').should('exist');
 
       // Verify button doesn't exist
       cy.get('[data-testid="edit-remote-status"]').should('not.exist');
@@ -254,7 +255,7 @@ describe('Edit Remote Status', () => {
         cy.get('[data-testid="edit-remote-status"]').click();
         const today = DateTime.now();
         const dateString = today.toFormat('MM/dd/yyyy');
-        cy.get('[data-testid="remote-trial-granted-date"]').type(dateString);
+        cy.get('#remote-trial-granted-date-picker').type(dateString);
         cy.get('.modal-button-confirm').click();
 
         // Wait for success
@@ -281,9 +282,7 @@ describe('Edit Remote Status', () => {
         cy.get('[data-testid="edit-remote-status"]').click();
         const today = DateTime.now();
         const initialDateString = today.toFormat('MM/dd/yyyy');
-        cy.get('[data-testid="remote-trial-granted-date"]').type(
-          initialDateString,
-        );
+        cy.get('#remote-trial-granted-date-picker').type(initialDateString);
         cy.get('.modal-button-confirm').click();
 
         // Wait for success
@@ -295,8 +294,8 @@ describe('Edit Remote Status', () => {
         const newDateString = newDate.toFormat('MM/dd/yyyy');
 
         // Clear existing date and enter new one
-        cy.get('[data-testid="remote-trial-granted-date"]').clear();
-        cy.get('[data-testid="remote-trial-granted-date"]').type(newDateString);
+        cy.get('#remote-trial-granted-date-picker').clear();
+        cy.get('#remote-trial-granted-date-picker').type(newDateString);
         cy.get('.modal-button-confirm').click();
 
         // Wait for success

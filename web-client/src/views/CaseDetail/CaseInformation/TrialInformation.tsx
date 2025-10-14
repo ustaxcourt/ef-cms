@@ -41,10 +41,16 @@ const EditCaseTrialInformationMenu = ({
   );
 };
 
-export const RemoteTrialSessionInformation = ({ remoteTrialGrantedDate }) => {
-  const date = applicationContext
-    .getUtilities()
-    .formatDateString(remoteTrialGrantedDate, 'MMDDYYYY');
+export const RemoteTrialSessionInformation = ({
+  remoteTrialGrantedDate,
+}: {
+  remoteTrialGrantedDate?: string | null;
+}) => {
+  const date = remoteTrialGrantedDate
+    ? applicationContext
+        .getUtilities()
+        .formatDateString(remoteTrialGrantedDate, 'MMDDYYYY')
+    : '';
 
   return remoteTrialGrantedDate ? (
     <div>
@@ -56,7 +62,11 @@ export const RemoteTrialSessionInformation = ({ remoteTrialGrantedDate }) => {
   ) : null;
 };
 
-const EditRemoteStatusButton = ({ openEditRemoteStatusModalSequence }) => {
+const EditRemoteStatusButton = ({
+  openEditRemoteStatusModalSequence,
+}: {
+  openEditRemoteStatusModalSequence: () => void;
+}) => {
   return (
     <div className="margin-bottom-1">
       <Button
