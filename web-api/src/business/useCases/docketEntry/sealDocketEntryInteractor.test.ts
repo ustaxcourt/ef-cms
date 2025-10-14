@@ -1,9 +1,16 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/docketEntries/mocks.jest';
+
+jest.mock(
+  '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumberAndDocketEntryId',
+);
+jest.mock(
+  '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId',
+);
 import { DOCKET_ENTRY_SEALED_TO_TYPES } from '@shared/business/entities/EntityConstants';
 import { MOCK_CASE } from '@shared/test/mockCase';
-import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getDocketEntriesByDocketNumberAndDocketEntryId as getDocketEntriesByDocketNumberAndDocketEntryIdMock } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumberAndDocketEntryId';
 import {
   mockDocketClerkUser,
   mockPetitionsClerkUser,
@@ -13,6 +20,8 @@ import { sealDocketEntryInteractor } from './sealDocketEntryInteractor';
 describe('sealDocketEntryInteractor', () => {
   const answerDocketEntryId = 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const getDocketEntriesByDocketNumberAndDocketEntryId =
+    getDocketEntriesByDocketNumberAndDocketEntryIdMock as jest.Mock;
   getCaseByDocketNumber.mockResolvedValue({});
 
   it('should require a value for dockeEntrySealedTo', async () => {
@@ -43,9 +52,9 @@ describe('sealDocketEntryInteractor', () => {
   });
 
   it('should throw an error when the docket entry is not found', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+    getCaseByDocketNumber.mockReturnValueOnce(MOCK_CASE);
+    getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValueOnce([]);
+
     await expect(
       sealDocketEntryInteractor(
         {
@@ -60,6 +69,9 @@ describe('sealDocketEntryInteractor', () => {
 
   it('should throw an error when an invalid option is provided for docketEntrySealedTo', async () => {
     getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
+    getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([
+      MOCK_CASE.docketEntries[0],
+    ]);
 
     await expect(
       sealDocketEntryInteractor(
@@ -77,6 +89,10 @@ describe('sealDocketEntryInteractor', () => {
 
   it('should mark the docket entry as sealed and save', async () => {
     getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+    getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([
+      MOCK_CASE.docketEntries[0],
+    ]);
+
     const sealedDocketEntry = await sealDocketEntryInteractor(
       {
         docketEntryId: answerDocketEntryId,
