@@ -110,6 +110,12 @@ export const efcmsCaseMappings: Record<string, Object> = {
     'receivedAt.S': {
       type: 'date',
     },
+    'remoteTrialGranted.BOOL': {
+      type: 'boolean',
+    },
+    'remoteTrialGrantedDate.S': {
+      type: 'date',
+    },
     'sealedDate.S': {
       type: 'date',
     },

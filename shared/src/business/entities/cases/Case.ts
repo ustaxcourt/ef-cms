@@ -117,6 +117,8 @@ export class Case extends JoiValidationEntity {
   public petitionPaymentStatus: string;
   public petitionPaymentWaivedDate?: string;
   public preferredTrialCity?: string;
+  public remoteTrialGranted?: boolean;
+  public remoteTrialGrantedDate?: string;
   public procedureType: string;
   public receivedAt: string;
   public sealedDate?: string;
@@ -368,6 +370,8 @@ export class Case extends JoiValidationEntity {
     this.orderForCds = rawCase.orderForCds || false;
     this.orderForRatification = rawCase.orderForRatification || false;
     this.orderToShowCause = rawCase.orderToShowCause || false;
+    this.remoteTrialGranted = rawCase.remoteTrialGranted;
+    this.remoteTrialGrantedDate = rawCase.remoteTrialGrantedDate;
 
     this.assignArchivedDocketEntries({
       authorizedUser,
@@ -651,6 +655,18 @@ export class Case extends JoiValidationEntity {
       .required()
       .description('Procedure type of the case.')
       .messages({ '*': 'Select a case procedure' }),
+    remoteTrialGranted: joi
+      .boolean()
+      .optional()
+      .description(
+        'Whether the case has been granted a motion to proceed remotely.',
+      )
+      .meta({ tags: ['Restricted'] }),
+    remoteTrialGrantedDate: JoiValidationConstants.ISO_DATE.optional()
+      .allow(null)
+      .description(
+        'A date stamp indicating the date permission was granted to proceed remotely.',
+      ),
     qcCompleteForTrial: joi
       .object()
       .optional()
@@ -1554,9 +1570,8 @@ export class Case extends JoiValidationEntity {
    * @returns {Case} the updated case entity
    */
   setCaseCaption(caseCaption) {
-    
     this.caseCaption = caseCaption;
-    
+
     if (this.consolidatedCases && this.consolidatedCases.length > 0) {
       this.setCaseCaptionInSingleCase();
     }
@@ -1565,13 +1580,13 @@ export class Case extends JoiValidationEntity {
   }
 
   setCaseCaptionInSingleCase() {
-
-    const currentCase = this.consolidatedCases.find((c) => c.docketNumber === this.docketNumber);
+    const currentCase = this.consolidatedCases.find(
+      c => c.docketNumber === this.docketNumber,
+    );
 
     if (currentCase) {
       currentCase.caseCaption = this.caseCaption;
     }
-
   }
 
   /**
