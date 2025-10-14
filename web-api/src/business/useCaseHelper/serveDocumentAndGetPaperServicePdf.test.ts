@@ -3,6 +3,7 @@ import {
   MOCK_CASE,
   MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
 } from '@shared/test/mockCase';
+import { PDFDocument } from 'pdf-lib';
 import { SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
@@ -364,6 +365,78 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
     expect(
       applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
     ).toHaveBeenCalledTimes(2);
+    expect(result).toEqual({ pdfUrl: mockPdfUrl });
+  });
+
+  it('should NOT load document when paper service parties have no pages to serve', async () => {
+    const caseEntity = new Case(
+      {
+        ...MOCK_CASE,
+        petitioners: [
+          {
+            ...getContactPrimary(MOCK_CASE),
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+          },
+        ],
+      },
+      { authorizedUser: mockDocketClerkUser },
+    );
+
+    applicationContext
+      .getPersistenceGateway()
+      .getDocument.mockResolvedValue(Buffer.from(''));
+
+    const result = await serveDocumentAndGetPaperServicePdf({
+      applicationContext,
+      caseEntities: [caseEntity],
+      docketEntryId: mockDocketEntryId,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getDocument,
+    ).not.toHaveBeenCalled();
+    expect(result).toBeUndefined();
+  });
+
+  it('should use stampedPdf when provided and paper service parties exist', async () => {
+    const mockPdfDoc = await PDFDocument.create();
+    mockPdfDoc.addPage();
+    const stampedPdfBuffer = await mockPdfDoc.save();
+
+    const caseEntity = new Case(
+      {
+        ...MOCK_CASE,
+        petitioners: [
+          {
+            ...getContactPrimary(MOCK_CASE),
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
+      },
+      { authorizedUser: mockDocketClerkUser },
+    );
+
+    applicationContext
+      .getUseCaseHelpers()
+      .appendPaperServiceAddressPageToPdf.mockImplementation(
+        ({ newPdfDoc }) => {
+          newPdfDoc.addPage();
+        },
+      );
+
+    const result = await serveDocumentAndGetPaperServicePdf({
+      applicationContext,
+      caseEntities: [caseEntity],
+      docketEntryId: mockDocketEntryId,
+      stampedPdf: stampedPdfBuffer,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getDocument,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
+    ).toHaveBeenCalledTimes(1);
     expect(result).toEqual({ pdfUrl: mockPdfUrl });
   });
 });

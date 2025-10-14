@@ -78,6 +78,97 @@ describe('noticeOfDocketChangeHelper', () => {
         'Failed to parse docketEntry.editState for notice of docket change',
       );
     });
+
+    it('should NOT parse editState when it is "{}"', () => {
+      const mockDocketEntry = {
+        documentTitle: 'Original Motion',
+        filedBy: 'Original Petitioner',
+        editState: '{}',
+      };
+
+      applicationContext
+        .getUtilities()
+        .getDocumentTitleForNoticeOfChange.mockReturnValue('Original Motion');
+
+      const result = getOriginalNoticeValues({
+        applicationContext,
+        docketEntry: mockDocketEntry,
+      });
+
+      expect(result.documentTitleForNotice).toEqual('Original Motion');
+      expect(result.filedBy).toEqual('Original Petitioner');
+    });
+
+    it('should NOT update fields when parsedEditState is not an object', () => {
+      const mockDocketEntry = {
+        documentTitle: 'Original Motion',
+        filedBy: 'Original Petitioner',
+        editState: 'null',
+      };
+
+      applicationContext
+        .getUtilities()
+        .getDocumentTitleForNoticeOfChange.mockReturnValue('Original Motion');
+
+      const result = getOriginalNoticeValues({
+        applicationContext,
+        docketEntry: mockDocketEntry,
+      });
+
+      expect(result.documentTitleForNotice).toEqual('Original Motion');
+      expect(result.filedBy).toEqual('Original Petitioner');
+    });
+
+    it('should NOT update documentTitleForNotice when parsedTitle is falsy', () => {
+      const mockDocketEntry = {
+        documentTitle: 'Original Motion',
+        filedBy: 'Original Petitioner',
+        editState: JSON.stringify({
+          documentTitle: '',
+          filedBy: 'Amended Petitioner',
+        }),
+      };
+
+      applicationContext
+        .getUtilities()
+        .getDocumentTitleForNoticeOfChange.mockReturnValueOnce(
+          'Original Motion',
+        )
+        .mockReturnValueOnce('');
+
+      const result = getOriginalNoticeValues({
+        applicationContext,
+        docketEntry: mockDocketEntry,
+      });
+
+      expect(result.documentTitleForNotice).toEqual('Original Motion');
+      expect(result.filedBy).toEqual('Amended Petitioner');
+    });
+
+    it('should NOT update filedBy when parsedFiledBy is not present', () => {
+      const mockDocketEntry = {
+        documentTitle: 'Original Motion',
+        filedBy: 'Original Petitioner',
+        editState: JSON.stringify({
+          documentTitle: 'Amended Motion',
+        }),
+      };
+
+      applicationContext
+        .getUtilities()
+        .getDocumentTitleForNoticeOfChange.mockReturnValueOnce(
+          'Original Motion',
+        )
+        .mockReturnValueOnce('Amended Motion');
+
+      const result = getOriginalNoticeValues({
+        applicationContext,
+        docketEntry: mockDocketEntry,
+      });
+
+      expect(result.documentTitleForNotice).toEqual('Amended Motion');
+      expect(result.filedBy).toEqual('Original Petitioner');
+    });
   });
 
   describe('buildUpdatedPrimaryDocketEntry', () => {
