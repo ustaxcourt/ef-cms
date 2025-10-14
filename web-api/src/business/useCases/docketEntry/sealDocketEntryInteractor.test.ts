@@ -52,8 +52,8 @@ describe('sealDocketEntryInteractor', () => {
   });
 
   it('should throw an error when the docket entry is not found', async () => {
-    getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
-    getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([]);
+    getCaseByDocketNumber.mockReturnValueOnce(MOCK_CASE);
+    getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValueOnce([]);
 
     await expect(
       sealDocketEntryInteractor(
