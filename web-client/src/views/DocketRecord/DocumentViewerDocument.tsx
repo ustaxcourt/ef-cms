@@ -1,9 +1,10 @@
 /* eslint-disable complexity */
-import { Button } from '@web-client/ustc-ui/Button/Button';
-import { ConfirmInitiateServiceModal } from '@web-client/views/ConfirmInitiateServiceModal';
-import { Icon } from '@web-client/ustc-ui/Icon/Icon';
-import { PdfViewer } from '@web-client/ustc-ui/PdfPreview/PdfViewer';
-import { WorkItemAlreadyCompletedModal } from '@web-client/views/DocketEntryQc/WorkItemAlreadyCompletedModal';
+import { Button } from '../../ustc-ui/Button/Button';
+import { ConfirmInitiateServiceModal } from '../ConfirmInitiateServiceModal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Icon } from '../../ustc-ui/Icon/Icon';
+import { PdfViewer } from '../../ustc-ui/PdfPreview/PdfViewer';
+import { WorkItemAlreadyCompletedModal } from '../DocketEntryQc/WorkItemAlreadyCompletedModal';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -97,6 +98,13 @@ export const DocumentViewerDocument = connect(
             )}
 
             <h3>
+              {documentViewerHelper.showSealed && (
+                <FontAwesomeIcon
+                  className="fa-icon-red margin-right-1"
+                  icon="lock"
+                  title={documentViewerHelper.sealedToTooltip}
+                />
+              )}
               {documentViewerHelper.description}{' '}
               {documentViewerHelper.showStricken && '(STRICKEN)'}
             </h3>
