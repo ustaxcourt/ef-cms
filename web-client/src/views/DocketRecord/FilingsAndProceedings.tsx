@@ -164,7 +164,6 @@ export const FilingsAndProceedings = connect<
               entry.affectedByDocketEntries ?? [],
               entry.affectedDocketEntries ?? [],
             ).map(entry => {
-              console.log('entry', entry);
               return (
                 <>
                   <br></br>
