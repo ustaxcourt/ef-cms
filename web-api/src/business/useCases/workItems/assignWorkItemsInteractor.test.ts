@@ -341,7 +341,7 @@ describe('assignWorkItemsInteractor', () => {
     const leadWorkItem: RawWorkItem = {
       ...mockWorkItem,
       docketNumber: leadDocketNumber,
-      leadDocketNumber: leadDocketNumber,
+      leadDocketNumber,
       docketEntryId: sharedDocketEntryId,
     };
 
@@ -351,7 +351,7 @@ describe('assignWorkItemsInteractor', () => {
       createdAt: '2018-12-27T18:06:02.971Z',
       docketEntryId: sharedDocketEntryId,
       docketNumber: memberDocketNumber1,
-      leadDocketNumber: leadDocketNumber,
+      leadDocketNumber,
       section: DOCKET_SECTION,
       sentBy: 'irsPractitioner',
       updatedAt: '2018-12-27T18:06:02.968Z',
@@ -364,7 +364,7 @@ describe('assignWorkItemsInteractor', () => {
       createdAt: '2018-12-27T18:06:02.971Z',
       docketEntryId: sharedDocketEntryId,
       docketNumber: memberDocketNumber2,
-      leadDocketNumber: leadDocketNumber,
+      leadDocketNumber,
       section: DOCKET_SECTION,
       sentBy: 'irsPractitioner',
       updatedAt: '2018-12-27T18:06:02.968Z',
@@ -447,7 +447,7 @@ describe('assignWorkItemsInteractor', () => {
     const memberWorkItem: RawWorkItem = {
       ...mockWorkItem,
       docketNumber: memberDocketNumber,
-      leadDocketNumber: leadDocketNumber,
+      leadDocketNumber,
     };
 
     getUserById
@@ -481,5 +481,95 @@ describe('assignWorkItemsInteractor', () => {
         assigneeName: 'Ted Docket',
       },
     ]);
+  });
+
+  it('should throw an error when the current user is not found', async () => {
+    getUserById.mockResolvedValueOnce(undefined);
+
+    await expect(
+      assignWorkItemsInteractor(
+        applicationContext,
+        {
+          assigneeId: mockDocketClerkUser.userId,
+          assigneeName: 'Ted Docket',
+          workItemId: mockWorkItem.workItemId,
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow('User not found with user id');
+  });
+
+  it('should throw an error when the user being assigned is not found', async () => {
+    getUserById
+      .mockResolvedValueOnce({
+        ...mockDocketClerkUser,
+        section: DOCKET_SECTION,
+      } as DbUser)
+      .mockResolvedValueOnce(undefined);
+
+    await expect(
+      assignWorkItemsInteractor(
+        applicationContext,
+        {
+          assigneeId: 'unknown-user-id',
+          assigneeName: 'Unknown User',
+          workItemId: mockWorkItem.workItemId,
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow('User not found with user id unknown-user-id');
+  });
+
+  it('should throw an error when work item is not found by workItemId', async () => {
+    getUserById
+      .mockResolvedValueOnce({
+        ...mockDocketClerkUser,
+        section: DOCKET_SECTION,
+      } as DbUser)
+      .mockResolvedValueOnce({
+        ...mockDocketClerkUser,
+        section: DOCKET_SECTION,
+      } as DbUser);
+
+    getWorkItemById.mockResolvedValue(undefined);
+
+    await expect(
+      assignWorkItemsInteractor(
+        applicationContext,
+        {
+          assigneeId: mockDocketClerkUser.userId,
+          assigneeName: 'Ted Docket',
+          workItemId: 'non-existent-work-item-id',
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow('WorkItem non-existent-work-item-id was not found.');
+  });
+
+  it('should throw an error when docket entry associated with work item is not found', async () => {
+    getUserById
+      .mockResolvedValueOnce({
+        ...mockDocketClerkUser,
+        section: DOCKET_SECTION,
+      } as DbUser)
+      .mockResolvedValueOnce({
+        ...mockDocketClerkUser,
+        section: DOCKET_SECTION,
+      } as DbUser);
+
+    getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([]);
+
+    await expect(
+      assignWorkItemsInteractor(
+        applicationContext,
+        {
+          assigneeId: mockDocketClerkUser.userId,
+          assigneeName: 'Ted Docket',
+          workItem: mockWorkItem,
+          workItemId: undefined,
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow('Docket entry associated with work item');
   });
 });

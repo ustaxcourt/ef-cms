@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
@@ -772,5 +773,114 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         docketNumbers: [leadDocketNumber],
       });
     });
+  });
+
+  it('should throw NotFoundError when user is not found', async () => {
+    getUserById.mockResolvedValue(undefined);
+
+    await expect(
+      serveExternallyFiledDocumentInteractor(
+        applicationContext,
+        {
+          clientConnectionId: mockClientConnectionId,
+          docketEntryId: mockDocketEntryId,
+          docketNumbers: [],
+          subjectCaseDocketNumber: mockCase.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow('User not found with user id');
+  });
+
+  it('should navigate to lead case when subject case is a member case with simultaneous doc type and isFiledAcrossAllCases is true', async () => {
+    const leadDocketNumber = '100-20';
+    const memberDocketNumber = '101-20';
+
+    const memberCase = {
+      ...mockCase,
+      docketNumber: memberDocketNumber,
+      leadDocketNumber,
+      docketEntries: [
+        {
+          docketEntryId: mockDocketEntryId,
+          eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
+        } as RawDocketEntry,
+      ],
+    };
+
+    const leadCase = {
+      ...mockCase,
+      docketNumber: leadDocketNumber,
+      consolidatedCases: [
+        {
+          ...MOCK_CONSOLIDATED_CASE_SUMMARY,
+          docketNumber: memberDocketNumber,
+        },
+      ],
+      docketEntries: [
+        {
+          docketEntryId: mockDocketEntryId,
+          eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
+        } as RawDocketEntry,
+      ],
+    };
+
+    getCaseByDocketNumber
+      .mockResolvedValueOnce(memberCase)
+      .mockResolvedValueOnce(leadCase);
+
+    getCasesByDocketNumbers.mockResolvedValue([leadCase, memberCase]);
+
+    await serveExternallyFiledDocumentInteractor(
+      applicationContext,
+      {
+        clientConnectionId: mockClientConnectionId,
+        docketEntryId: mockDocketEntryId,
+        docketNumbers: [],
+        isFiledAcrossAllCases: true,
+        subjectCaseDocketNumber: memberDocketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(getCaseByDocketNumber).toHaveBeenCalledWith({
+      docketNumber: leadDocketNumber,
+    });
+
+    expect(getCasesByDocketNumbers).toHaveBeenCalledWith({
+      docketNumbers: expect.arrayContaining([
+        leadDocketNumber,
+        memberDocketNumber,
+      ]),
+    });
+  });
+
+  it('should throw NotFoundError when docket entry is not found after serving', async () => {
+    const { Case } = await import('@shared/business/entities/cases/Case');
+
+    fileAndServeDocumentOnOneCase.mockImplementation(({ caseEntity }) => {
+      const caseWithoutDocketEntry = {
+        ...caseEntity,
+        docketEntries: [],
+      };
+      return Promise.resolve(
+        new Case(caseWithoutDocketEntry, {
+          authorizedUser: mockDocketClerkUser,
+        }),
+      );
+    });
+
+    await expect(
+      serveExternallyFiledDocumentInteractor(
+        applicationContext,
+        {
+          clientConnectionId: mockClientConnectionId,
+          docketEntryId: mockDocketEntryId,
+          docketNumbers: [],
+          subjectCaseDocketNumber: mockCase.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow('Could not find docket entry with id');
   });
 });
