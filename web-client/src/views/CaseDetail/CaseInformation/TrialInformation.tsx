@@ -2,10 +2,11 @@ import { Button } from '../../../ustc-ui/Button/Button';
 import { DropdownMenu } from '../../../ustc-ui/DropdownMenu/DropdownMenu';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PreformattedText } from '@web-client/ustc-ui/PreformatedText/PreformattedText';
+import { applicationContext } from '@web-client/applicationContext';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
-import { applicationContext } from '@web-client/applicationContext';
 
 const EditCaseTrialInformationMenu = ({
   caseDetail,
@@ -65,7 +66,7 @@ export const RemoteTrialSessionInformation = ({
 const EditRemoteStatusButton = ({
   openEditRemoteStatusModalSequence,
 }: {
-  openEditRemoteStatusModalSequence: () => void;
+  openEditRemoteStatusModalSequence: Function;
 }) => {
   return (
     <div className="margin-bottom-1">
@@ -92,11 +93,13 @@ export const TrialInformation = connect(
       props.openAddEditCalendarNoteModalSequence,
     openAddToTrialModalSequence: props.openAddToTrialModalSequence,
     openBlockFromTrialModalSequence: props.openBlockFromTrialModalSequence,
-    openEditRemoteStatusModalSequence: props.openEditRemoteStatusModalSequence,
+    openEditRemoteStatusModalSequence:
+      sequences.openEditRemoteStatusModalSequence,
     openRemoveFromTrialSessionModalSequence:
       props.openRemoveFromTrialSessionModalSequence,
     openUnblockFromTrialModalSequence: props.openUnblockFromTrialModalSequence,
-    showEditRemoteTrialPermission: props.showEditRemoteTrialPermission,
+    showEditRemoteTrialPermission:
+      state.caseInformationHelper.showEditRemoteTrialPermission,
     trialSessionJudge: props.trialSessionJudge,
   },
   function TrialInformation({
