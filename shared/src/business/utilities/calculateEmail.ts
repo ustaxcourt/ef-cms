@@ -1,4 +1,7 @@
-export const getOldEmail = (email: string, isAddressSealed: boolean): string => {
+export const formattedOldEmailForChangeOfAddress = (
+  email: string,
+  isAddressSealed: boolean,
+): string => {
   if (!email && isAddressSealed) {
     return ``;
   } else if (email && isAddressSealed) {
@@ -9,6 +12,9 @@ export const getOldEmail = (email: string, isAddressSealed: boolean): string => 
   return email;
 };
 
-export const getNewEmail = (email: string, isAddressSealed: boolean): string => {
+export const formattedNewEmailForChangeOfAddress = (
+  email: string,
+  isAddressSealed: boolean,
+): string => {
   return isAddressSealed ? 'SEALED BY COURT ORDER' : email;
 };

@@ -173,12 +173,12 @@ hr {
 }
 
 .word-wrap-break-word {
-  word-wrap: break-word;
+  word-wrap: break-word; /* stylelint-disable-line property-no-deprecated */
 }
 
 address {
   p {
-    word-wrap: break-word;
+    word-wrap: break-word; /* stylelint-disable-line property-no-deprecated */
   }
 }
 
@@ -2326,7 +2326,7 @@ button.change-scanner-button {
   padding: 0;
   border: 0;
   margin: -1px;
-  clip: rect(0, 0, 0, 0);
+  clip: rect(0, 0, 0, 0); /* stylelint-disable-line property-no-deprecated */
 }
 
 .petition-review-petitioner-section {

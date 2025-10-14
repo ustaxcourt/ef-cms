@@ -13,8 +13,8 @@ import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { Case } from '@shared/business/entities/cases/Case';
 import {
-  getNewEmail,
-  getOldEmail,
+  formattedNewEmailForChangeOfAddress,
+  formattedOldEmailForChangeOfAddress,
 } from '@shared/business/utilities/calculateEmail';
 
 /**
@@ -70,8 +70,14 @@ const createDocketEntryForChange = async ({
         petitioner.email === newData.email && petitioner.name === newData.name,
     )?.isAddressSealed ?? false;
 
-  oldData.email = getOldEmail(oldData.email, isAddressSealed);
-  newData.email = getNewEmail(newData.email, isAddressSealed);
+  oldData.email = formattedOldEmailForChangeOfAddress(
+    oldData.email,
+    isAddressSealed,
+  );
+  newData.email = formattedNewEmailForChangeOfAddress(
+    newData.email,
+    isAddressSealed,
+  );
 
   const changeOfAddressPdf = await applicationContext
     .getDocumentGenerators()

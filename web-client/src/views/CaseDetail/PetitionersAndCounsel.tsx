@@ -100,15 +100,18 @@ export const PetitionersAndCounsel = connect(
                       Remove Email
                     </Button>
                   )}
-                  <div
-                    data-testid="petitioner-pending-email"
-                    className={classNames(
-                      petitioner.isAddressSealed &&
-                        'margin-left-205 sealed-address',
-                    )}
-                  >
-                    {petitioner.formattedPendingEmail}
-                  </div>
+                  {!petitioner.sealedAndUnavailable && (
+                    <div
+                      data-testid="petitioner-pending-email"
+                      className={classNames(
+                        petitioner.isAddressSealed &&
+                          'margin-left-205 sealed-address',
+                      )}
+                    >
+                      {petitioner.formattedPendingEmail}
+                    </div>
+                  )}
+
                   {petitioner.showPaperPetitionEmail && (
                     <>
                       <p className="semi-bold margin-bottom-0">

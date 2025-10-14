@@ -9,7 +9,9 @@ import {
 import { Holiday } from '@18f/us-federal-holidays';
 import { getHolidaysInDateRange } from '@shared/business/utilities/getHolidaysInDateRange';
 
-export const termBuilderHelper = (get: Get): any => {
+export const termBuilderHelper = (
+  get: Get,
+): { formattedHolidaysInDateRange: { name: string; date: string }[] } => {
   const termState = get(state[STATE_KEYS.TERM_BUILDER_INFORMATION]);
 
   if (!termState) {

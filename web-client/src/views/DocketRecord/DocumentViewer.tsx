@@ -95,13 +95,19 @@ export const DocumentViewer = connect(
                             )}
                           >
                             {entry.createdAtFormatted}
-                            {entry.qcNeeded && (
-                              <FontAwesomeIcon
-                                className="top-neg-2px fa-icon-red float-right position-relative"
-                                icon={['fa', 'star']}
-                                title="Is untouched"
-                              />
-                            )}
+                            <div className="float-right text-align-center">
+                              {entry.iconsToDisplay.map((iconInfo, index) => (
+                                <div
+                                  key={iconInfo.icon}
+                                  className={classNames('display-block', {
+                                    'margin-bottom-1':
+                                      index < entry.iconsToDisplay.length - 1,
+                                  })}
+                                >
+                                  <FontAwesomeIcon {...iconInfo} />
+                                </div>
+                              ))}
+                            </div>
                           </div>
                           <div className="grid-col-5">
                             <span

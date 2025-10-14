@@ -93,9 +93,9 @@ To publish a new ECR docker image:
 
 ### 3. Update Terraform AWS provider
 
-Check if there is an update to the Terraform AWS provider and update all of the following files to use the [latest version](https://registry.terraform.io/providers/hashicorp/aws/latest) of the provider.
+Check if there is an update to the Terraform AWS provider and update our `.tf` files to use the [latest version](https://registry.terraform.io/providers/hashicorp/aws/latest) of the provider.
 
-regex search the entire project for `"~> \d+.\d+.\d+"` and make sure it's to the latest version.  For example, some of these files have the providers defined:
+regex search the entire project for `"~> \d+.\d+.\d+"` and make sure it's set to the latest version.  For example, some of these files have the AWS provider defined:
 
   - `./shared/admin-tools/glue/glue_migrations/main.tf`
   - `./shared/admin-tools/glue/remote_role/main.tf`
@@ -105,34 +105,47 @@ regex search the entire project for `"~> \d+.\d+.\d+"` and make sure it's to the
 
 ### 4. Update Terraform OpenSearch provider 
 
-Check if there is an update to the Terraform OpenSearch provider and update all of the following files to use the [latest version](https://registry.terraform.io/providers/opensearch-project/opensearch/latest) of the provider.
+Check if there is an update to the Terraform OpenSearch provider and update our `.tf` files to use the [latest version](https://registry.terraform.io/providers/opensearch-project/opensearch/latest) of the provider.
 
-regex search the entire project for `"~> \d+.\d+.\d+"` and make sure it's to the latest version.  For example, some of these files have the providers defined:
+Search the entire project for `source  = "opensearch-project/opensearch"` and make sure it's set to the latest version.  For example, these files have the OpenSearch provider defined:
 
   - `web-api/terraform/applyables/account-specific/account-specific.tf`
   - `web-api/terraform/modules/kibana/providers.tf`
 
-	> version = "~>~ <LATEST_VERSION>"
+	> version = "<LATEST_VERSION>"
 
 ### 5. Update OpenSearch 
 
-Check to see if there is an updated version of OpenSearch available:
+Check to see if there is an updated version of OpenSearch available.
 
-```
-aws opensearch list-versions
-```
+- Run `./scripts/env/set-env.zsh` for a fresh AWS access key, then use it to list the available versions:
 
-If an update is available, follow these steps to update OpenSearch to the [latest version](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/what-is.html#choosing-version):
+   > aws opensearch list-versions
 
-- Set the value of the `ES_ENGINE_VERSION` secret in the `[env]_deploy` secrets in Secrets Manager using `scripts/secrets/update-secret.ts`
+If an update is available, we'll need to update OpenSearch locally, in github actions, and in deployed environments.
 
-- Set the value of the `ES_LOGS_ENGINE_VERSION` secret in the `account_deploy` secrets in Secrets Manager using `scripts/secrets/update-secret.ts`
+- Update OpenSearch to the latest version in a deployed environment:
 
-- Run an account-specific terraform deployment using `deploy:account-specific`. Verify cluster is still functional while upgrade is being performed and after by running queries in kibana.
+   - Set the value of the `ES_ENGINE_VERSION` secret in the `[env]_deploy` secrets in Secrets Manager using `scripts/secrets/update-secret.ts`
 
-- Run deployment. Verify cluster is still functional while upgrade is being performed and after by running search smoketests against current color.
- 
-- Add these manual steps in the dependency updates pr
+   - Set the value of the `ES_LOGS_ENGINE_VERSION` secret in the `account_deploy` secrets in Secrets Manager using `scripts/secrets/update-secret.ts`
+
+   - Run an account-specific terraform deployment using `deploy:account-specific`. Verify cluster is still functional while upgrade is being performed and after by running queries in kibana.
+
+   - Run deployment. Verify cluster is still functional while upgrade is being performed and after by running search smoketests against current color.
+
+   - Describe the manual steps in the dependency updates pull request. See [PR #9189](https://github.com/ustaxcourt/ef-cms/pull/9189) for an example.
+
+- Update OpenSearch to the latest version locally: 
+
+   - Set the value of the `image` property in `web-api/elasticsearch/docker-compose.yml` to correspond to the new version number, then run the api locally to verify:
+
+      > npm run start:api
+
+- Update OpenSearch to the latest version in github actions:
+
+   - Search the project for `opensearch-version:` and make sure it's set to the latest version. For example, some of the files in the `.github/workflows` directory will need to be updated.
+
 
 ### 6. Wrap up
 
@@ -145,10 +158,6 @@ If an update is available, follow these steps to update OpenSearch to the [lates
 ### cerebral and @cerebral/react
 
 - New versions of cerebral (5.2.1 to 5.2.4) and @cerebral/react (4.2.1 to 4.2.2) were released on February 27, 2025. These upgrades are the first since spring 2020. The new versions do not work with the import syntax used in `web-client/src/presenter/test.cerebral.ts` for `runAction` and `runCompute`, so keep these pinned to 5.2.1 and "github:ustaxcourt/cerebral-react#main" respectively for the time being.
-
-### @fortawesome
-
-- fortawesome packages are locked down to pre-6.x.x to maintain consistency of icon styling until there is usability feedback and research that determines we should change them. This includes `@fortawesome/free-solid-svg-icons`, `@fortawesome/free-regular-svg-icons`, and `@fortawesome/fontawesome-svg-core`.
 
 ## Caveats
 
@@ -216,3 +225,6 @@ https://www.npmjs.com/package/uuid?activeTab=readme
 Quote from site
 
 "Starting with uuid@12 CommonJS is no longer supported. See implications and motivation for details."
+
+## typescript
+When I tried updating Typescript last week, it enforced more type errors in many files. To proceed with an upgrade, you'll need to make some changes to the files in question
