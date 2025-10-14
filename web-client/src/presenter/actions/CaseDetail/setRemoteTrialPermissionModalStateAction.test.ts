@@ -1,16 +1,66 @@
-import { state } from '@web-client/presenter/app.cerebral';
+import { runAction } from '@web-client/presenter/test.cerebral';
+import { setRemoteTrialPermissionModalStateAction } from './setRemoteTrialPermissionModalStateAction';
 
-/**
- * Sets the modal state for editing remote trial permission from props
- * @param {object} providers the providers object
- * @param {object} providers.get the cerebral get function
- * @param {object} providers.store the cerebral store
- */
-export const setRemoteTrialPermissionModalStateAction = ({ get, store }) => {
-  const caseDetail = get(state.caseDetail);
+describe('setRemoteTrialPermissionModalStateAction', () => {
+  it('should set modal.remoteTrialGrantedDate from caseDetail when date exists', async () => {
+    const mockDate = '2023-10-14T00:00:00.000Z';
 
-  store.set(
-    state.modal.remoteTrialGrantedDate,
-    caseDetail.remoteTrialGrantedDate || '',
-  );
-};
+    const result = await runAction(setRemoteTrialPermissionModalStateAction, {
+      state: {
+        caseDetail: {
+          docketNumber: '123-45',
+          remoteTrialGrantedDate: mockDate,
+        },
+        modal: {},
+      },
+    });
+
+    expect(result.state.modal.remoteTrialGrantedDate).toEqual(mockDate);
+  });
+
+  it('should set modal.remoteTrialGrantedDate to empty string when date is null', async () => {
+    const result = await runAction(setRemoteTrialPermissionModalStateAction, {
+      state: {
+        caseDetail: {
+          docketNumber: '123-45',
+          remoteTrialGrantedDate: null,
+        },
+        modal: {},
+      },
+    });
+
+    expect(result.state.modal.remoteTrialGrantedDate).toEqual('');
+  });
+
+  it('should set modal.remoteTrialGrantedDate to empty string when date is undefined', async () => {
+    const result = await runAction(setRemoteTrialPermissionModalStateAction, {
+      state: {
+        caseDetail: {
+          docketNumber: '123-45',
+        },
+        modal: {},
+      },
+    });
+
+    expect(result.state.modal.remoteTrialGrantedDate).toEqual('');
+  });
+
+  it('should overwrite existing modal.remoteTrialGrantedDate with new value from caseDetail', async () => {
+    const oldDate = '2023-09-01T00:00:00.000Z';
+    const newDate = '2023-10-14T00:00:00.000Z';
+
+    const result = await runAction(setRemoteTrialPermissionModalStateAction, {
+      state: {
+        caseDetail: {
+          docketNumber: '123-45',
+          remoteTrialGrantedDate: newDate,
+        },
+        modal: {
+          remoteTrialGrantedDate: oldDate,
+        },
+      },
+    });
+
+    expect(result.state.modal.remoteTrialGrantedDate).toEqual(newDate);
+  });
+});
