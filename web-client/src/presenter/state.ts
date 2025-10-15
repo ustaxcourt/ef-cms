@@ -632,6 +632,7 @@ export const baseState = {
     documentTitle: null,
   },
   assigneeId: null,
+  assigneeName: undefined as unknown as string,
   authentication: {
     form: {
       code: '',
@@ -683,6 +684,7 @@ export const baseState = {
   currentPage: 'Loading',
   orderCurrentPaginationPage: 0,
   opinionCurrentPaginationPage: 0,
+  opinionDocumentTypes: [] as string[],
   trialSessionLocationChangeModalInfo: {
     currentTrialSessionLocation: undefined as
       | TrialSessionLocationInfo

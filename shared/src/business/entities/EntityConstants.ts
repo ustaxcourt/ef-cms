@@ -128,6 +128,11 @@ export const CONFIGURATION_ITEM_KEYS = {
 
 export const DEFAULT_PROCEEDING_TYPE = TRIAL_SESSION_PROCEEDING_TYPES.inPerson;
 
+export const ERROR_429 = {
+  message: 'Please wait 1 minute before trying your search again',
+  title: 'Search is experiencing high traffic',
+};
+
 export const SERVICE_INDICATOR_TYPES = {
   SI_ELECTRONIC: 'Electronic',
   SI_NONE: 'None',
