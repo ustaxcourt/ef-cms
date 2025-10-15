@@ -23,14 +23,15 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
     return (
       <div className="tw:flex tw:flex-col">
         {label && (
-          <div className="tw:mb-4">
-            <div className="tw:flex tw:flex-col tw:gap-4">
-              <div className={cn(
-                "tw:flex tw:items-center tw:font-semibold tw:text-gray-900",
-                "!tw:text-[18px]",
-                "max-xs:!tw:text-[16px]"
-              )}>
-                <span>{label}</span>
+          <div>
+            <div className="tw:flex tw:flex-col">
+              <div className="tw:flex tw:items-center">
+                <span className={cn(
+                  "tw:text-[16px]",
+                  "tw:md:text-[18px]",
+                  "!tw:font-semibold",
+                  "!tw:text-gray-900"
+                )} style={{ fontWeight: '600' }}>{label}</span>
                 {helpText && (
                   <FontAwesomeIcon 
                     icon={faQuestionCircle} 
@@ -42,11 +43,11 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                   />
                 )}
                 {!props.required && (
-                  <span className="tw:text-gray-500 tw:ml-1 tw:font-normal tw:text-base">(optional)</span>
+                  <span className="tw:text-gray-500 tw:ml-1 tw:font-normal tw:text-[16px] lg:!tw:text-[14px]">(optional)</span>
                 )}
               </div>
               {helpText && (
-                <div className="tw:text-base tw:text-gray-500">
+                <div className="tw:mt-1 tw:mb-[9px] tw:text-[14px] tw:text-gray-500">
                   {helpText}
                 </div>
               )}
@@ -97,14 +98,15 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
     return (
       <div className="tw:flex tw:flex-col">
         {label && (
-          <div className="tw:mb-4">
-            <div className="tw:flex tw:flex-col tw:gap-4">
-              <div className={cn(
-                "tw:flex tw:items-center tw:font-semibold tw:text-gray-900",
-                "!tw:text-[18px]",
-                "max-xs:!tw:text-[16px]"
-              )}>
-                <span>{label}</span>
+          <div>
+            <div className="tw:flex tw:flex-col">
+              <div className="tw:flex tw:items-center">
+                <span className={cn(
+                  "tw:text-[16px]",
+                  "tw:md:text-[18px]",
+                  "!tw:font-semibold",
+                  "!tw:text-gray-900"
+                )} style={{ fontWeight: '600' }}>{label}</span>
                 {helpText && (
                   <FontAwesomeIcon 
                     icon={faQuestionCircle} 
@@ -116,11 +118,11 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
                   />
                 )}
                 {!props.required && (
-                  <span className="tw:text-gray-500 tw:ml-1 tw:font-normal tw:text-base">(optional)</span>
+                  <span className="tw:text-gray-500 tw:ml-1 tw:font-normal tw:text-[16px] lg:!tw:text-[14px]">(optional)</span>
                 )}
               </div>
               {helpText && (
-                <div className="tw:text-base tw:text-gray-500">
+                <div className="tw:mt-1 tw:mb-[9px] tw:text-[14px] tw:text-gray-500">
                   {helpText}
                 </div>
               )}
@@ -167,10 +169,14 @@ const MobileTextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
     return (
       <div className="tw:flex tw:flex-col">
         {label && (
-          <div className="tw:mb-3">
-            <div className="tw:flex tw:flex-col tw:gap-3">
-              <div className="tw:flex tw:items-center tw:text-base tw:font-semibold tw:text-gray-900">
-                <span>{label}</span>
+          <div>
+            <div className="tw:flex tw:flex-col">
+              <div className="tw:flex tw:items-center">
+                <span className={cn(
+                  "!tw:text-[18px]",
+                  "!tw:font-semibold",
+                  "!tw:text-gray-900"
+                )}>{label}</span>
                 {helpText && (
                   <FontAwesomeIcon 
                     icon={faQuestionCircle} 
@@ -182,7 +188,7 @@ const MobileTextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                   />
                 )}
                 {!props.required && (
-                  <span className="tw:text-gray-500 tw:ml-1 tw:font-normal tw:text-base">(optional)</span>
+                  <span className="tw:text-gray-500 tw:ml-1 tw:font-normal !tw:text-[14px]">(optional)</span>
                 )}
               </div>
               {helpText && (
@@ -245,7 +251,7 @@ const MobileTextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
                   />
                 )}
                 {!props.required && (
-                  <span className="tw:text-gray-500 tw:ml-1 tw:font-normal tw:text-base">(optional)</span>
+                  <span className="tw:text-gray-500 tw:ml-1 tw:font-normal !tw:text-[14px]">(optional)</span>
                 )}
               </div>
               {helpText && (

@@ -14,7 +14,7 @@ export function Inputs() {
               label="Field Label"
               helpText="Help text"
               placeholder="Enter text here"
-              className="tw:w-[380px] max-xs:tw:w-[351px] max-xs:[&_label]:tw:text-[16px] max-xs:[&_span]:tw:text-[14px]"
+              className="tw:w-[380px] max-xs:tw:w-[351px]"
             />
           </div>
 
@@ -23,25 +23,25 @@ export function Inputs() {
               label="Field Label"
               helpText="Help text"
               placeholder="Enter text here"
-              className="tw:w-[380px] max-xs:tw:w-[351px] max-xs:[&_label]:tw:text-[16px] max-xs:[&_span]:tw:text-[14px]"
+              className="tw:w-[380px] max-xs:tw:w-[351px]"
             />
           </div>
 
           <div className="max-xs:tw:w-full tw:flex tw:items-start tw:gap-4 max-xs:tw:flex-col">
             <div className="tw:flex tw:flex-col">
-              <div className="tw:flex tw:items-center !tw:text-[18px] max-xs:!tw:text-[16px] tw:font-semibold tw:text-gray-900">
-                <span>Field Label</span>
+              <div className="tw:flex tw:items-center">
+                <span className="tw:text-[16px] tw:md:text-[18px] !tw:font-semibold !tw:text-gray-900" style={{ fontWeight: '600' }}>Field Label</span>
                 <FontAwesomeIcon 
                   icon={faQuestionCircle} 
                   size="sm" 
-                  className="tw:ml-1 tw:text-blue-600"
+                  className="tw:ml-1 max-xs:tw:ml-[2px] tw:text-blue-600"
                   title="Help text"
                   role="img"
                   aria-label="Help text"
                 />
-                <span className="tw:text-gray-500 tw:ml-1 tw:font-normal tw:text-[16px]">(optional)</span>
+                <span className="tw:text-gray-500 tw:ml-1 max-xs:tw:ml-[2px] tw:font-normal tw:text-base">(optional)</span>
               </div>
-              <div className="tw:text-base tw:text-gray-500">Help text</div>
+              <div className="tw:text-[14px] tw:xs:text-[16px] tw:text-gray-500">Help text</div>
             </div>
             <div className="max-xs:tw:w-[351px] tw:w-[380px]">
               <TextField
