@@ -289,10 +289,7 @@ async function getDocketEntries(docketNumbers: string[]) {
         db
           .selectFrom('dwDocketEntryRelatedDocketEntry')
           .where('served', 'is', true)
-          .select([
-            'primaryDocketEntryId as docketEntryId',
-            'primaryDocketNumber as docketNumber',
-          ])
+          .select(['primaryDocketEntryId as docketEntryId', 'docketNumber'])
           .select(fn =>
             fn.fn
               .jsonAgg(
@@ -308,16 +305,13 @@ async function getDocketEntries(docketNumbers: string[]) {
               )
               .as('affectedDocketEntries'),
           )
-          .groupBy(['primaryDocketEntryId', 'primaryDocketNumber']),
+          .groupBy(['primaryDocketEntryId', 'docketNumber']),
       )
       .with('affectedByDocketEntries', db =>
         db
           .selectFrom('dwDocketEntryRelatedDocketEntry')
           .where('served', 'is', true)
-          .select([
-            'secondaryDocketEntryId as docketEntryId',
-            'secondaryDocketNumber as docketNumber',
-          ])
+          .select(['secondaryDocketEntryId as docketEntryId', 'docketNumber'])
           .select(fn =>
             fn.fn
               .jsonAgg(
@@ -333,7 +327,7 @@ async function getDocketEntries(docketNumbers: string[]) {
               )
               .as('affectedByDocketEntries'),
           )
-          .groupBy(['secondaryDocketEntryId', 'secondaryDocketNumber']),
+          .groupBy(['secondaryDocketEntryId', 'docketNumber']),
       )
       .selectFrom('dwDocketEntry as de')
       .where('de.docketNumber', 'in', docketNumbers)
@@ -388,10 +382,7 @@ export async function getDocketEntriesOnCases(
         db
           .selectFrom('dwDocketEntryRelatedDocketEntry')
           .where('served', 'is', true)
-          .select([
-            'primaryDocketEntryId as docketEntryId',
-            'primaryDocketNumber as docketNumber',
-          ])
+          .select(['primaryDocketEntryId as docketEntryId', 'docketNumber'])
           .select(fn =>
             fn.fn
               .jsonAgg(
@@ -407,16 +398,13 @@ export async function getDocketEntriesOnCases(
               )
               .as('affectedDocketEntries'),
           )
-          .groupBy(['primaryDocketEntryId', 'primaryDocketNumber']),
+          .groupBy(['primaryDocketEntryId', 'docketNumber']),
       )
       .with('affectedByDocketEntries', db =>
         db
           .selectFrom('dwDocketEntryRelatedDocketEntry')
           .where('served', 'is', true)
-          .select([
-            'secondaryDocketEntryId as docketEntryId',
-            'secondaryDocketNumber as docketNumber',
-          ])
+          .select(['secondaryDocketEntryId as docketEntryId', 'docketNumber'])
           .select(fn =>
             fn.fn
               .jsonAgg(
@@ -432,7 +420,7 @@ export async function getDocketEntriesOnCases(
               )
               .as('affectedByDocketEntries'),
           )
-          .groupBy(['secondaryDocketEntryId', 'secondaryDocketNumber']),
+          .groupBy(['secondaryDocketEntryId', 'docketNumber']),
       )
       .selectFrom('dwDocketEntry as de')
       .where('docketNumber', 'in', docketNumbers)

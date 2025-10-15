@@ -16,10 +16,9 @@ export const upsertDocketEntryRelatedEntries = async ({
 }) => {
   const values: NewDocketEntryOrderMotionKysely[] = motionDocketEntries.map(
     entry => ({
+      docketNumber: entry.docketNumber,
       primaryDocketEntryId: orderDocketEntry.docketEntryId,
-      primaryDocketNumber: entry.docketNumber,
       secondaryDocketEntryId: entry.docketEntryId,
-      secondaryDocketNumber: entry.docketNumber,
       disposition: entry.disposition,
       served,
     }),
@@ -30,9 +29,8 @@ export const upsertDocketEntryRelatedEntries = async ({
     values,
     onConflictColumns: [
       'primaryDocketEntryId',
-      'primaryDocketNumber',
+      'docketNumber',
       'secondaryDocketEntryId',
-      'secondaryDocketNumber',
     ],
   });
 };

@@ -3,17 +3,15 @@ import { Kysely } from 'kysely';
 export async function up(db: Kysely<any>): Promise<void> {
   await db.schema
     .createTable('dwDocketEntryRelatedDocketEntry')
+    .addColumn('docketNumber', 'varchar')
     .addColumn('primaryDocketEntryId', 'uuid') // order
-    .addColumn('primaryDocketNumber', 'varchar')
     .addColumn('secondaryDocketEntryId', 'uuid') // motion
-    .addColumn('secondaryDocketNumber', 'varchar')
     .addColumn('disposition', 'varchar')
     .addColumn('served', 'boolean')
     .addPrimaryKeyConstraint('dwDocketEntryRelatedDocketEntryPK', [
+      'docketNumber',
       'primaryDocketEntryId',
-      'primaryDocketNumber',
       'secondaryDocketEntryId',
-      'secondaryDocketNumber',
     ])
     .execute();
 }
