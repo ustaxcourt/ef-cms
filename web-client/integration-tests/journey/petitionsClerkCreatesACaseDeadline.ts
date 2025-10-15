@@ -3,7 +3,12 @@ import { refreshElasticsearchIndex } from '../helpers';
 
 export const petitionsClerkCreatesACaseDeadline = (
   cerebralTest,
-  overrides = {},
+  overrides = {} as {
+    month: string;
+    day: string;
+    year: string;
+    description: string;
+  },
 ) => {
   return it('Petitions clerk creates a case deadline', async () => {
     cerebralTest.setState('caseDetail', {});

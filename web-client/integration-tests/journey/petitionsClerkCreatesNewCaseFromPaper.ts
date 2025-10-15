@@ -11,7 +11,10 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
   cerebralTest,
   fakeFile,
   {
-    formOrdersAndNotices = {},
+    formOrdersAndNotices = {} as {
+      key: string;
+      value: boolean;
+    },
     paymentStatus = PAYMENT_STATUS.WAIVED,
     procedureType = 'Small',
     receivedAtDay = '01',

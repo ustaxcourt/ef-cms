@@ -1658,7 +1658,10 @@ export const presenter = {
     [GatewayTimeoutError, gatewayTimeoutErrorSequence], //504
     [ActionError, setCurrentPageErrorSequence], // generic error handler
   ],
-  providers: {} as { applicationContext: ClientApplicationContext; router: {} },
+  providers: {} as {
+    applicationContext: ClientApplicationContext;
+    router: {};
+  } & { socket: { start: () => void; stop: () => void } },
   sequences: presenterSequences,
   state: cloneDeep(initialState),
 };

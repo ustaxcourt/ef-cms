@@ -7,7 +7,13 @@ const formattedTrialSessionDetails = withAppContextDecorator(
   formattedTrialSessionDetailsComputed,
 );
 
-export const docketClerkEditsTrialSession = (cerebralTest, overrides = {}) => {
+export const docketClerkEditsTrialSession = (
+  cerebralTest,
+  overrides = {} as {
+    fieldToUpdate: string;
+    valueToUpdate: string;
+  },
+) => {
   return it('Docket clerk edits trial session', async () => {
     await cerebralTest.runSequence('gotoEditTrialSessionSequence', {
       trialSessionId: cerebralTest.trialSessionId,

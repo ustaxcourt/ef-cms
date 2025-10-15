@@ -2,7 +2,7 @@ import { find } from 'lodash';
 
 export const docketClerkViewsTrialSessionList = (
   cerebralTest,
-  overrides = {},
+  overrides = {} as { expectSwingSession: boolean },
 ) => {
   return it('Docket clerk views trial session list', async () => {
     await cerebralTest.runSequence('gotoTrialSessionsSequence');
