@@ -64,6 +64,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             // Base styles
             "tw:block tw:w-full tw:rounded-md tw:border tw:border-gray-300 tw:bg-white",
             "tw:px-3 tw:h-9 tw:text-sm tw:outline-none tw:cursor-text",
+            "tw:w-[380px] max-xs:tw:w-[351px]",
             
             // States
             "tw:placeholder:text-gray-400",
@@ -139,6 +140,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
             "tw:block tw:w-full tw:rounded-tl-md tw:rounded-tr-md tw:rounded-bl-md tw:border tw:border-gray-300 tw:bg-white",
             "tw:px-3 tw:py-2 tw:text-sm tw:outline-none tw:cursor-text",
             "tw:min-h-[100px] tw:resize-y",
+            "tw:w-[380px] max-xs:tw:w-[351px]",
             
             // States
             "tw:placeholder:text-gray-400",

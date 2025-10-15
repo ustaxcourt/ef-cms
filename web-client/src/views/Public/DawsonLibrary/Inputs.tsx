@@ -5,7 +5,7 @@ import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 
 export function Inputs() {
   return (
-    <div className="tw:my-4">
+    <div>
       <h2>Text Input </h2>
       <div className="tw:p-6">
         <div className="tw:flex tw:flex-wrap tw:gap-6">
@@ -14,7 +14,7 @@ export function Inputs() {
               label="Field Label"
               helpText="Help text"
               placeholder="Enter text here"
-              className="tw:w-[380px] max-xs:tw:w-[351px]"
+              
             />
           </div>
 
@@ -23,7 +23,6 @@ export function Inputs() {
               label="Field Label"
               helpText="Help text"
               placeholder="Enter text here"
-              className="tw:w-[380px] max-xs:tw:w-[351px]"
             />
           </div>
 
@@ -46,9 +45,9 @@ export function Inputs() {
             <div className="max-xs:tw:w-[351px] tw:w-[380px]">
               <TextField
                 label=""
-                className="tw:w-full"
                 placeholder="Enter text here"
                 hideLabel
+                helpText=''
               />
             </div>
           </div>
