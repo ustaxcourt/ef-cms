@@ -13,9 +13,10 @@ describe('SecondaryDocumentInformationFactory', () => {
         documentType: 'Motion for a New Trial',
         secondaryDocumentFile: {},
       });
-      expect(extDoc.getValidationErrors()?.objections).toEqual(
-        'Enter selection for Objections.',
-      );
+      const errors = extDoc.getValidationErrors();
+      expect(
+        errors && 'objections' in errors ? errors.objections : undefined,
+      ).toEqual('Enter selection for Objections.');
     });
 
     it('should be valid when document is a Motion, a file is not selected, and objections is not present', () => {
