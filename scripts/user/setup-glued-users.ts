@@ -1,0 +1,346 @@
+#!/usr/bin/env -S npx ts-node --transpile-only
+
+import { sql } from 'kysely';
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
+import { getDbReader } from '@web-api/database';
+import { pgDeleteFrom } from '@web-api/persistence/postgres/utils/operation/pgDeleteFrom';
+import { RawUser } from '@shared/business/entities/User';
+
+const scriptConfig: ScriptConfig = {
+  description:
+    'setup-glued-users - Creates cognito accounts for all internal users and high-volume external users that were copied via a glue job.',
+  environment: {
+    Password: 'DEFAULT_ACCOUNT_PASS',
+    UserPoolId: 'USER_POOL_ID',
+  },
+  requireActiveAwsSession: true,
+};
+const { Password, UserPoolId } = parseArgsAndEnvVars(scriptConfig) as {
+  [k: string]: string;
+};
+
+type Users = {
+  [key: string]: {
+    bulkImportedUserId?: string;
+    email: string;
+    gluedUserId?: string;
+    name: string;
+    userFullName: string;
+    role: string;
+    section: string;
+  };
+};
+
+const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
+
+const createOrUpdateCognitoUser = async ({
+  email,
+  name,
+  role,
+  userId,
+}: {
+  email: string;
+  name: string;
+  role: string;
+  userId: string;
+}): Promise<void> => {
+  if (role === 'legacyJudge') {
+    return;
+  }
+
+  let userExists = false;
+  try {
+    await cognito.adminGetUser({
+      UserPoolId,
+      Username: email,
+    });
+
+    userExists = true;
+  } catch (_err) {
+    console.log(`No cognito user found for ${name}:`);
+  }
+
+  if (!userExists) {
+    try {
+      await cognito.adminCreateUser({
+        UserAttributes: [
+          {
+            Name: 'email_verified',
+            Value: 'true',
+          },
+          {
+            Name: 'email',
+            Value: email,
+          },
+          {
+            Name: 'custom:role',
+            Value: role,
+          },
+          {
+            Name: 'name',
+            Value: name,
+          },
+          {
+            Name: 'custom:userId',
+            Value: userId,
+          },
+        ],
+        UserPoolId,
+        Username: email,
+      });
+    } catch (err) {
+      console.error(`ERROR creating cognito user for ${name}:`, err);
+    }
+  } else {
+    await updateCognitoUserId({
+      bulkImportedUserId: email,
+      gluedUserId: userId,
+      name,
+    });
+  }
+  console.log(`Enabled login for ${name}`);
+};
+
+const deleteDuplicateImportedUser = async ({
+  bulkImportedUserId,
+  name,
+}: {
+  bulkImportedUserId: string;
+  name: string;
+}): Promise<void> => {
+  try {
+    await pgDeleteFrom({
+      table: 'dwUser',
+      where: db => db.where('userId', '=', bulkImportedUserId),
+    });
+  } catch (err) {
+    console.error(`ERROR deleting duplicate ${name}:`, err);
+  }
+  console.log(`Deleted duplicate ${name}`);
+};
+
+const getPractitionerUsers = async (): Promise<any[]> => {
+  // 1) Get userIds that have count > 500 in dwUserOnCase
+  const userIdRows = await getDbReader(reader =>
+    reader
+      .selectFrom('dwUserOnCase')
+      .select('userId')
+      .where('actingAsRole', 'in', [
+        'inactivePractitioner',
+        'irsPractitioner',
+        'privatePractitioner',
+      ])
+      .where('serviceIndicator', '=', 'Electronic')
+      .groupBy('userId')
+      .having(sql<boolean>`count(*) > ${500}`)
+      .execute(),
+  );
+
+  const userIds = userIdRows.map(r => r.userId).filter(Boolean) as string[];
+  if (!userIds.length) return [];
+
+  // 2) Fetch users from dwUser where userId in (list)
+  const users = await getDbReader(reader =>
+    reader
+      .selectFrom('dwUser')
+      .where('userId', 'in', userIds)
+      .selectAll()
+      .execute(),
+  );
+
+  return users;
+};
+
+const getPetitionerUsers = async (): Promise<any[]> => {
+  // fetch users whose user_id appears as a petitioner contactId in dw_case
+  const users = await getDbReader(reader =>
+    reader
+      .selectFrom('dwUser')
+      .selectAll()
+      .where(
+        'userId',
+        'in',
+        sql<string>`(
+          select p->>'contactId'
+          from dw_case
+          cross join lateral jsonb_array_elements(petitioners) as p
+          group by p->>'contactId'
+          having count(*) >= 5
+        )`,
+      )
+      .where('email', 'is not', null)
+      .execute(),
+  );
+
+  return users as any[];
+};
+
+const getInternalUsers = async (): Promise<any> => {
+  return await getDbReader(reader =>
+    reader
+      .selectFrom('dwUser')
+      .select(['email', 'judgeTitle', 'name', 'role', 'section', 'userId'])
+      .orderBy('name')
+      .where('role', 'in', [
+        'judge',
+        'legacyJudge',
+        'adc',
+        'admissionsclerk',
+        'caseServicesSupervisor',
+        'chambers',
+        'clerkofcourt',
+        'docketclerk',
+        'floater',
+        'general',
+        'judge',
+        'legacyJudge',
+        'petitionsclerk',
+        'reportersOffice',
+        'trialclerk',
+      ])
+      .limit(1000)
+      .execute(),
+  );
+};
+
+const getUsersByName = async (): Promise<Users> => {
+  let results = await getInternalUsers();
+
+  results.push(
+    ...(await getPractitionerUsers()),
+    ...(await getPetitionerUsers()),
+  );
+
+  results = results.filter(result => {
+    return result.email?.split('@')[1] !== 'example.com';
+  });
+
+  const users = {};
+  for (const user of results as RawUser[]) {
+    const emailDomain = user.email!.split('@')[1];
+    let count = 1;
+    while (user.name in users) {
+      user.name = user.name + count;
+      count++;
+    }
+    count = 0;
+
+    const fullName = user.name;
+    user.name = user.name.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9-_]/g, '');
+
+    if (user.role in ['judge', 'legacyJudge']) {
+      users[user.name] = {
+        email: `${
+          user.judgeTitle!.indexOf('Special Trial') !== -1 ? 'st' : ''
+        }judge.${user.name.toLowerCase()}@example.com`,
+        name: `${user.judgeTitle} ${user.name}`,
+        userFullName: `${user.role} ${fullName}`,
+        role: user.role,
+        section: user.section,
+      };
+    } else {
+      users[user.name] = {
+        email: `${user.role!}.${user.name.toLowerCase()}@example.com`,
+        name: `${user.role} ${user.name}`,
+        userFullName: `${user.role} ${fullName}`,
+        role: user.role,
+        section: user.section,
+      };
+    }
+
+    let sourceOfUser = emailDomain;
+    if (emailDomain === 'ef-cms.ustaxcourt.gov') {
+      sourceOfUser = 'gluedUserId';
+    } else if (emailDomain === 'dawson.ustaxcourt.gov') {
+      sourceOfUser = 'bulkImportedUserId';
+    }
+    users[user.name][sourceOfUser] = user.userId;
+  }
+  return users;
+};
+
+const updateCognitoUserId = async ({
+  bulkImportedUserId,
+  gluedUserId,
+  name,
+}: {
+  bulkImportedUserId: string;
+  gluedUserId: string;
+  name: string;
+}): Promise<void> => {
+  try {
+    await cognito.adminUpdateUserAttributes({
+      UserAttributes: [
+        {
+          Name: 'custom:userId',
+          Value: gluedUserId,
+        },
+      ],
+      UserPoolId,
+      Username: bulkImportedUserId,
+    });
+    console.log(`Updated user attributes for login for ${name}`);
+  } catch (err) {
+    console.error(`ERROR updating custom:userId for ${name}:`, err);
+  }
+};
+
+const processUser = async (userName: string, users: Users): Promise<void> => {
+  if (!users[userName].gluedUserId) {
+    return;
+  }
+  const { bulkImportedUserId, email, gluedUserId, name, role, userFullName } =
+    users[userName];
+  if (bulkImportedUserId) {
+    await deleteDuplicateImportedUser({
+      bulkImportedUserId,
+      name,
+    });
+  }
+  if (role === 'legacyJudge') return;
+  if (gluedUserId) {
+    await createOrUpdateCognitoUser({
+      email,
+      name: userFullName,
+      role,
+      userId: gluedUserId,
+    });
+  }
+  await cognito.adminSetUserPassword({
+    Password,
+    Permanent: true,
+    UserPoolId,
+    Username: email,
+  });
+};
+
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
+(async () => {
+  const users = await getUsersByName();
+
+  // Create task functions so work is started only when invoked
+  const taskFns: (() => Promise<void>)[] = Object.keys(users).map(
+    user => () => processUser(user, users),
+  );
+
+  // Run tasks in chunks of 50, awaiting each batch before continuing
+  const concurrency = 15;
+  for (let i = 0; i < taskFns.length; i += concurrency) {
+    const batch = taskFns.slice(i, i + concurrency);
+    console.log(
+      'running batch:',
+      batch.map((_, idx) => i + idx),
+    );
+    try {
+      await Promise.all(batch.map(fn => fn()));
+    } catch (err) {
+      console.error('Error in batch:', err);
+    }
+    // small delay between batches to avoid bursting
+    await new Promise(resolve => setTimeout(resolve, 1000));
+  }
+})();
