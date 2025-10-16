@@ -468,7 +468,6 @@ import { submitEditContactSequence } from './sequences/submitEditContactSequence
 import { submitEditDeficiencyStatisticSequence } from './sequences/submitEditDeficiencyStatisticSequence';
 import { submitEditDocketEntryMetaSequence } from './sequences/submitEditDocketEntryMetaSequence';
 import { submitEditOrderTitleModalSequence } from './sequences/submitEditOrderTitleModalSequence';
-import { submitEditRemoteTrialModalSequence } from './sequences/submitEditRemoteTrialModalSequence';
 import { submitEditOtherStatisticsSequence } from './sequences/submitEditOtherStatisticsSequence';
 import { submitEditPetitionerCounselSequence } from './sequences/submitEditPetitionerCounselSequence';
 import { submitEditPetitionerSequence } from './sequences/submitEditPetitionerSequence';
@@ -1382,8 +1381,6 @@ export const presenterSequences = {
     submitEditDocketEntryMetaSequence as unknown as Function,
   submitEditOrderTitleModalSequence:
     submitEditOrderTitleModalSequence as unknown as Function,
-  submitEditRemoteTrialModalSequence:
-    submitEditRemoteTrialModalSequence as unknown as Function,
   submitEditOtherStatisticsSequence:
     submitEditOtherStatisticsSequence as unknown as Function,
   submitEditPetitionerCounselSequence:

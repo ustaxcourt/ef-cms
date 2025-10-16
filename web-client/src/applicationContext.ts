@@ -46,7 +46,6 @@ import { associatePrivatePractitionerWithCaseInteractor } from '../../shared/src
 import { batchDownloadDocketEntriesInteractor } from '@shared/proxies/documents/batchDownloadDocketEntriesProxy';
 import { batchDownloadTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/batchDownloadTrialSessionProxy';
 import { blockCaseFromTrialInteractor } from '../../shared/src/proxies/blockCaseFromTrialProxy';
-import { editRemoteStatusInteractor } from '../../shared/src/proxies/editRemoteStatusProxy';
 import { calculateDaysElapsedSinceLastStatusChange } from '../../shared/src/business/utilities/calculateDaysElapsedSinceLastStatusChange';
 import {
   calculateDifferenceInDays,
@@ -375,7 +374,6 @@ const allUseCases = {
   batchDownloadDocketEntriesInteractor,
   batchDownloadTrialSessionInteractor,
   blockCaseFromTrialInteractor,
-  editRemoteStatusInteractor,
   canConsolidateInteractor,
   canSetTrialSessionAsCalendaredInteractor,
   caseAdvancedSearchInteractor,
