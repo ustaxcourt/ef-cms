@@ -9,6 +9,8 @@ interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   helpText?: string;
   hideLabel?: boolean;
+  required?: boolean;
+  optional?: boolean;
 }
 
 interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -24,8 +26,9 @@ interface FieldWithIconProps extends React.InputHTMLAttributes<HTMLInputElement>
 }
 
 const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
-  ({ className, type = "text", error, label, helpText, hideLabel, ...props }, ref) => {
+  ({ className, type = "text", error, label, helpText, hideLabel, required, optional, ...props }, ref) => {
     const inputId = React.useId();
+    console.log(props)
     
     return (
       <div className="tw:flex tw:flex-col">
@@ -49,9 +52,8 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                     aria-label={helpText}
                   />
                 )}
-                {!props.required && (
-                  <span className="tw:text-gray-500 tw:ml-1 tw:font-normal tw:text-[14px] tw:md:text-[16px]">(optional)</span>
-                )}
+
+                <span className="tw:text-gray-500 tw:ml-1 tw:font-normal tw:text-[14px] tw:md:text-[16px]">{props.required?'(optional)' : '(required)'}</span>
               </div>
               {helpText && (
                 <div className="tw:mt-1 tw:mb-[9px] tw:text-[14px] tw:text-gray-500">

@@ -3,6 +3,7 @@ import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
+import { TextField } from '@web-client/dawson-ui/ui/input';
 import React from 'react';
 
 export const CaseSearchByDocketNumber = connect(
@@ -67,6 +68,14 @@ export const CaseSearchByDocketNumber = connect(
                       });
                     }}
                   />
+                            <div className="max-xs:tw:w-full tw:mt-4">
+                              <TextField
+                                label="Docket number"
+                                helpText="Example of docket number format: 123-19"
+                                placeholder=""
+                                required={true}
+                              />
+                            </div>
                 </FormGroup>
               </div>
             </div>

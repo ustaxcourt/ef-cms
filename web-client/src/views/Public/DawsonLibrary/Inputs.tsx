@@ -29,7 +29,7 @@ export function Inputs() {
               label="Field Label"
               helpText="Help text"
               placeholder="Enter text here"
-              className="tw:w-[380px] max-md:tw:w-full"
+              className="tw:w-[380px] max-md:tw:w-[182px]"
             />
           </div>
         </div>
