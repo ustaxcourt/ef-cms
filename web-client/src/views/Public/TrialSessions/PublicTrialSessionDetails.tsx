@@ -1,8 +1,8 @@
+import { WrappedIcon } from '../../../ustc-ui/Icon/Icon';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { CaseIcons } from '@web-client/ustc-ui/Icon/CaseIcons';
 import { CaseLink } from '@web-client/ustc-ui/CaseLink/CaseLink';
 import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseIcon';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   FormattedPublicTrialSession,
   TrialSessionPublicCaseRow,
@@ -89,13 +89,12 @@ const PublicTrialSessionInformation = ({
                 <div className="padding-05"></div>
                 <span className="display-flex gap-1 flex-align-center">
                   <NonPhone>
-                    <FontAwesomeIcon
-                      aria-label="Swing session: will be held in two cities"
-                      className="fa-icon-blue"
+                    <WrappedIcon
+                      iconAriaLabel="Swing session: will be held in two cities"
+                      iconClass="fa-icon-blue"
                       icon="link"
                       size="sm"
-                      title="Swing session: will be held in two cities"
-                    />
+                      title="Swing session: will be held in two cities" />
                   </NonPhone>
                   <a
                     href={`/trial-session-detail/${formattedTrialSession.swingSessionId}`}

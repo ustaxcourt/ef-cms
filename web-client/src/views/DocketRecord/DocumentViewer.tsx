@@ -1,6 +1,6 @@
+import { WrappedIcon } from '../../ustc-ui/Icon/Icon';
 import { Button } from '../../ustc-ui/Button/Button';
 import { DocumentViewerDocument } from './DocumentViewerDocument';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -96,11 +96,10 @@ export const DocumentViewer = connect(
                           >
                             {entry.createdAtFormatted}
                             {entry.qcNeeded && (
-                              <FontAwesomeIcon
-                                className="top-neg-2px fa-icon-red float-right position-relative"
+                              <WrappedIcon
+                                iconClass="top-neg-2px fa-icon-red float-right position-relative"
                                 icon={['fa', 'star']}
-                                title="Is untouched"
-                              />
+                                title="Is untouched" />
                             )}
                           </div>
                           <div className="grid-col-5">

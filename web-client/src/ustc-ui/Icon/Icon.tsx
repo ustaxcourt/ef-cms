@@ -1,7 +1,7 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon, FontAwesomeIconProps } from '@fortawesome/react-fontawesome';
 import { cloneDeep } from 'lodash';
 import React from 'react';
-
 /**
  * Icon component
  * Useful for copying an aria-label on an icon to a tool-tip 'title' attribute,
@@ -22,3 +22,42 @@ export const Icon = props => {
 };
 
 Icon.displayName = 'Icon';
+
+
+type IconWithTooltipProps = {
+  spanClass?: string;
+  iconClass?: string;
+  onClick?: React.MouseEventHandler<SVGElement | HTMLSpanElement>;
+  spanAriaLabel?: string;
+  iconAriaLabel?: string;
+  title?: string;
+  color?: string;
+  icon: IconProp;
+  size?: FontAwesomeIconProps['size'];
+};
+
+
+export const WrappedIcon: React.FC<IconWithTooltipProps> = ({
+  iconAriaLabel,
+  spanAriaLabel,
+  icon,
+  size,
+  title,
+  iconClass,
+  spanClass,
+  color,
+  onClick,
+}) => {
+  return (
+    <span aria-label={spanAriaLabel} className={spanClass} title={title}>
+      <FontAwesomeIcon
+        aria-label={iconAriaLabel}
+        color={color}
+        onClick={onClick}
+        icon={icon}
+        size={size}
+        className={iconClass}
+      />
+    </span>
+  );
+};
