@@ -159,7 +159,6 @@ export const CourtIssuedDocketEntry = connect(
                 {DocketEntry.isOrder(form.eventCode) && (
                   <FormGroup errorText={validationErrors.dispositionOrder}>
                     <fieldset className="usa-fieldset">
-                      {/* <legend className="usa-legend"></legend> */}
                       <div className="usa-checkbox">
                         <input
                           checked={form.dispositionOrder || false} // false if undefined
@@ -218,13 +217,12 @@ export const CourtIssuedDocketEntry = connect(
                               className="usa-label"
                               aria-labelledby="related-motion-label"
                               data-testid="related-motion-type-search"
-                              id="docketEntryid"
+                              id="affectedMotion"
                               isClearable={true}
-                              name="docketEntryid"
+                              name="affectedMotion"
                               options={
                                 addCourtIssuedDocketEntryHelper.caseMotions
                               }
-                              // value={motion.docketEntryid}
                               onChange={(inputValue: any) => {
                                 // TODO (#8546): Refactor this to return eligable docket entries (motions)
                                 updateCourtIssuedDocketEntryFormValueSequence({
@@ -260,7 +258,6 @@ export const CourtIssuedDocketEntry = connect(
                               options={
                                 addCourtIssuedDocketEntryHelper.relatedMotionDispositions
                               }
-                              // value={motion.disposition}
                               onChange={(inputValue: any) => {
                                 // TODO (#8546): Refactor this to return eligable docket entries (motions)
                                 updateCourtIssuedDocketEntryFormValueSequence({
