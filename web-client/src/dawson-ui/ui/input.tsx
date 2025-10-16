@@ -2,6 +2,7 @@ import * as React from "react"
 import { cn } from "@web-client/lib/utils"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: string;
@@ -14,6 +15,12 @@ interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement
   error?: string;
   label?: string;
   helpText?: string;
+}
+
+interface FieldWithIconProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  label: string;
+  helpText?: string;
+  icon?: IconProp;
 }
 
 const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
@@ -43,7 +50,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                   />
                 )}
                 {!props.required && (
-                  <span className="tw:text-gray-500 tw:ml-1 tw:font-normal tw:text-[16px] lg:!tw:text-[14px]">(optional)</span>
+                  <span className="tw:text-gray-500 tw:ml-1 tw:font-normal tw:text-[14px] tw:md:text-[16px]">(optional)</span>
                 )}
               </div>
               {helpText && (
@@ -119,7 +126,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
                   />
                 )}
                 {!props.required && (
-                  <span className="tw:text-gray-500 tw:ml-1 tw:font-normal tw:text-[16px] lg:!tw:text-[14px]">(optional)</span>
+                  <span className="tw:text-gray-500 tw:ml-1 tw:font-normal tw:text-[14px] tw:md:text-[16px]">(optional)</span>
                 )}
               </div>
               {helpText && (
@@ -164,10 +171,65 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
   }
 );
 
-
+const FieldWithIcon = React.forwardRef<HTMLInputElement, FieldWithIconProps>(
+  ({ label, helpText, icon = faQuestionCircle, className, ...props }, ref) => {
+    const inputId = React.useId();
+    return (
+      <div className="tw:flex tw:items-start tw:gap-4 max-md:tw:flex-col">
+        <div className="tw:flex tw:flex-col">
+          <div className="tw:flex tw:items-center">
+            <span className={cn(
+              "tw:text-[16px]",
+              "tw:md:text-[18px]",
+              "!tw:font-semibold",
+              "!tw:text-gray-900"
+            )} style={{ fontWeight: '600' }}>{label}</span>
+            <FontAwesomeIcon
+              icon={icon}
+              size="sm"
+              className="tw:ml-1 max-md:tw:ml-[2px] tw:text-blue-600"
+              title={helpText}
+              role="img"
+              aria-label={helpText}
+            />
+            {!props.required && (
+              <span className="tw:text-gray-500 tw:ml-1 max-md:tw:ml-[2px] tw:font-normal tw:text-[14px] tw:md:text-[16px]">
+                (optional)
+              </span>
+            )}
+          </div>
+          {helpText && (
+            <div className="tw:text-[14px] tw:text-gray-500">
+              {helpText}
+            </div>
+          )}
+        </div>
+        <div className={cn("max-md:tw:w-full tw:w-[380px]", className)}>
+          <input
+            id={inputId}
+            ref={ref}
+            className={cn(
+              // Base styles matching TextField
+              "tw:block tw:w-full tw:rounded-md tw:border tw:border-gray-300 tw:bg-white",
+              "tw:px-3 tw:h-9 tw:text-sm tw:outline-none tw:cursor-text",
+              // Placeholder
+              "tw:placeholder:text-gray-400",
+              // Focus state
+              "tw:focus:border-blue-500 tw:focus:ring-2 tw:focus:ring-blue-500/20",
+              // Disabled state
+              "tw:disabled:cursor-not-allowed tw:disabled:bg-gray-50 tw:disabled:text-gray-500",
+              className
+            )}
+            {...props}
+          />
+        </div>
+      </div>
+    );
+  }
+);
 
 TextField.displayName = "TextField";
 TextArea.displayName = "TextArea";
+FieldWithIcon.displayName = "FieldWithIcon";
 
-
-export { TextField, TextArea};
+export { TextField, TextArea, FieldWithIcon };
