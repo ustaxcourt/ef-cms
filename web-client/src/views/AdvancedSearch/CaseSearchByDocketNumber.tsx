@@ -70,6 +70,7 @@ export const CaseSearchByDocketNumber = connect(
                   />
                   <div className="max-xs:tw:w-full tw:mt-4">
                     <TextField
+                      icon={true}
                       label="Docket number"
                       helpText="Example of docket number format: 123-19"
                       placeholder=""

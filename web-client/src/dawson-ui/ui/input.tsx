@@ -6,11 +6,12 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: string;
-  label?: string;
   helpText?: string;
   hideLabel?: boolean;
-  required?: boolean;
+  icon?: boolean;
+  label?: string;
   optional?: boolean;
+  required?: boolean;
 }
 
 interface TextAreaProps
@@ -31,13 +32,14 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
   (
     {
       className,
-      type = 'text',
       error,
-      label,
       helpText,
       hideLabel,
-      required,
+      icon,
+      label,
       optional,
+      required,
+      type = 'text',
       ...props
     },
     ref,
@@ -61,7 +63,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                 >
                   {label}
                 </span>
-                {helpText && (
+                {helpText && icon && (
                   <FontAwesomeIcon
                     icon={faQuestionCircle}
                     size="sm"
@@ -204,7 +206,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
 );
 
 const FieldWithIcon = React.forwardRef<HTMLInputElement, FieldWithIconProps>(
-  ({ label, helpText, icon = faQuestionCircle, className, ...props }, ref) => {
+  ({ className, helpText, icon = faQuestionCircle, label, ...props }, ref) => {
     const inputId = React.useId();
     return (
       <div className="tw:flex tw:items-start tw:gap-4 max-md:tw:flex-col">
