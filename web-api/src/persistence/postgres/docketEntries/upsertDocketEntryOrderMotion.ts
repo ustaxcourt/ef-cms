@@ -8,8 +8,8 @@ export const upsertDocketEntryRelatedEntries = async ({
 }: {
   orderDocketEntry: RawDocketEntry;
   motionDocketEntries: {
-    docketEntryId: string;
     docketNumber: string;
+    docketEntryId: string;
     disposition: string;
   }[];
   served: boolean;

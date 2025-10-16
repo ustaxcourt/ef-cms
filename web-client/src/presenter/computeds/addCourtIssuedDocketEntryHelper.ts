@@ -44,15 +44,14 @@ export const addCourtIssuedDocketEntryHelper = (
         DocketEntry.isMotion(d.eventCode) &&
         !d.isStricken &&
         !d.isDraft &&
-        !d.affectedByDocketEntries &&
         !_.find(
-          form.affectedMotions ?? [],
+          form.affectedDocketEntries ?? [],
           am => am.docketEntryId === d.docketEntryId,
         ),
     )
     .map((m: RawDocketEntry) => ({
       label: `${m.index} - ${m.documentTitle}`,
-      value: m,
+      value: m.docketEntryId,
     }));
 
   const serviceParties = [

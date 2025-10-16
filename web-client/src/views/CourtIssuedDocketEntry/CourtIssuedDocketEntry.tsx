@@ -174,12 +174,12 @@ export const CourtIssuedDocketEntry = connect(
                             });
                             if (e.target.checked) {
                               updateCourtIssuedDocketEntryFormValueSequence({
-                                key: 'affectedMotions',
+                                key: 'affectedDocketEntries',
                                 value: [{}],
                               });
                             } else {
                               updateCourtIssuedDocketEntryFormValueSequence({
-                                key: 'affectedMotions',
+                                key: 'affectedDocketEntries',
                                 value: undefined,
                               });
                             }
@@ -199,9 +199,9 @@ export const CourtIssuedDocketEntry = connect(
                 {/* TODO (#8546): Fix this */}
                 {DocketEntry.isOrder(form.eventCode) &&
                   form.dispositionOrder &&
-                  form.affectedMotions && (
+                  form.affectedDocketEntries && (
                     <div>
-                      {form.affectedMotions.map((motion, i) => {
+                      {form.affectedDocketEntries.map((motion, i) => {
                         return (
                           <FormGroup
                             errorText={validationErrors.dispositionOrder}
@@ -228,15 +228,12 @@ export const CourtIssuedDocketEntry = connect(
                               onChange={(inputValue: any) => {
                                 // TODO (#8546): Refactor this to return eligable docket entries (motions)
                                 updateCourtIssuedDocketEntryFormValueSequence({
-                                  key: 'affectedMotions',
+                                  key: 'affectedDocketEntries',
                                   index: i,
                                   value: Object.assign(
-                                    form.affectedMotions[i],
+                                    form.affectedDocketEntries[i],
                                     {
-                                      docketEntryId:
-                                        inputValue.value.docketEntryId,
-                                      docketNumber:
-                                        inputValue.value.docketNumber,
+                                      docketEntryId: inputValue.value,
                                     },
                                   ),
                                 });
@@ -264,10 +261,10 @@ export const CourtIssuedDocketEntry = connect(
                               onChange={(inputValue: any) => {
                                 // TODO (#8546): Refactor this to return eligable docket entries (motions)
                                 updateCourtIssuedDocketEntryFormValueSequence({
-                                  key: 'affectedMotions',
+                                  key: 'affectedDocketEntries',
                                   index: i,
                                   value: Object.assign(
-                                    form.affectedMotions[i],
+                                    form.affectedDocketEntries[i],
                                     {
                                       disposition: inputValue.value,
                                     },
@@ -283,10 +280,10 @@ export const CourtIssuedDocketEntry = connect(
                               icon="minus-circle"
                               className="red-warning"
                               onClick={() => {
-                                const motions = [...form.affectedMotions];
+                                const motions = [...form.affectedDocketEntries];
                                 _.pullAt(motions, i);
                                 updateCourtIssuedDocketEntryFormValueSequence({
-                                  key: 'affectedMotions',
+                                  key: 'affectedDocketEntries',
                                   value: motions,
                                 });
                               }}
@@ -294,7 +291,7 @@ export const CourtIssuedDocketEntry = connect(
                               Remove Motion
                             </Button>
 
-                            {form.affectedMotions.length > 1 && <hr></hr>}
+                            {form.affectedDocketEntries.length > 1 && <hr></hr>}
                           </FormGroup>
                         );
                       })}
@@ -304,9 +301,9 @@ export const CourtIssuedDocketEntry = connect(
                         icon="plus-circle"
                         onClick={() => {
                           updateCourtIssuedDocketEntryFormValueSequence({
-                            key: 'affectedMotions',
+                            key: 'affectedDocketEntries',
                             value: [
-                              ...form.affectedMotions,
+                              ...form.affectedDocketEntries,
                               { arrayKey: Date.now() },
                             ],
                           });
