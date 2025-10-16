@@ -3,6 +3,12 @@ import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { setViewerDocumentToDisplayAction } from './setViewerDocumentToDisplayAction';
 
+jest.mock('@shared/proxies/getIsFiledAcrossAllCasesProxy');
+
+const { getIsFiledAcrossAllCasesInteractor } = jest.requireMock(
+  '@shared/proxies/getIsFiledAcrossAllCasesProxy',
+);
+
 describe('setViewerDocumentToDisplayAction', () => {
   beforeAll(() => {
     applicationContext
@@ -10,9 +16,7 @@ describe('setViewerDocumentToDisplayAction', () => {
       .getDocumentDownloadUrlInteractor.mockReturnValue({
         url: 'www.example.com',
       });
-    applicationContext
-      .getUseCases()
-      .getIsFiledAcrossAllCasesInteractor.mockReturnValue(true);
+    getIsFiledAcrossAllCasesInteractor.mockResolvedValue(true);
     presenter.providers.applicationContext = applicationContext;
   });
 
