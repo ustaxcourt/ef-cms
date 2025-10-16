@@ -51,5 +51,5 @@ export const sendZipperBatchJob = async (
   };
 
   const command = new SubmitJobCommand(params);
-  await applicationContext.getBatchClient(awsRegion).send(command);
+  return await applicationContext.getBatchClient(awsRegion).send(command);
 };
