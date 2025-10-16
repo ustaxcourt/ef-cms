@@ -1,5 +1,6 @@
 import {
   COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
+  DOCKET_ENTRY_DOCUMENT_INFO_FIELDS,
   UNSERVABLE_EVENT_CODES,
 } from '@shared/business/entities/EntityConstants';
 import { Case } from '@shared/business/entities/cases/Case';
@@ -51,11 +52,12 @@ export const updateDocketEntryMeta = async (
     );
   }
 
-  if (
+  const isUnservedAndNotExempt =
     !DocketEntry.isServed(originalDocketEntry) &&
     !UNSERVABLE_EVENT_CODES.includes(originalDocketEntry.eventCode) &&
-    !DocketEntry.isMinuteEntry(originalDocketEntry)
-  ) {
+    !DocketEntry.isMinuteEntry(originalDocketEntry);
+
+  if (isUnservedAndNotExempt) {
     throw new Error('Unable to update unserved docket entry.');
   }
 
@@ -179,32 +181,6 @@ export const updateDocketEntryMeta = async (
   const { consolidatedCases } = caseEntity;
 
   if (consolidatedCases && consolidatedCases.length > 0) {
-    const DOCUMENT_INFO_FIELDS = [
-      'addToCoversheet',
-      'additionalInfo',
-      'additionalInfo2',
-      'attachments',
-      'certificateOfService',
-      'certificateOfServiceDate',
-      'documentTitle',
-      'documentType',
-      'eventCode',
-      'filedBy',
-      'filers',
-      'filingDate',
-      'freeText',
-      'hasOtherFilingParty',
-      'ordinalValue',
-      'otherFilingParty',
-      'otherIteration',
-      'partyIrsPractitioner',
-      'pending',
-      'previousDocument',
-      'secondaryDocument',
-      'trialLocation',
-      'docketNumbers',
-      'objections',
-    ];
     const docketNumbersToUpdate = consolidatedCases
       .filter(({ docketNumber }) => docketNumber)
       .map(({ docketNumber }) => docketNumber)
@@ -229,7 +205,7 @@ export const updateDocketEntryMeta = async (
 
         if (consolidatedCaseDocketEntry) {
           const propagationFields: any = {};
-          DOCUMENT_INFO_FIELDS.forEach(field => {
+          DOCKET_ENTRY_DOCUMENT_INFO_FIELDS.forEach(field => {
             if (Object.prototype.hasOwnProperty.call(editableFields, field)) {
               propagationFields[field] = (editableFields as any)[field];
             }
@@ -276,14 +252,22 @@ export const shouldGenerateCoversheetForDocketEntry = ({
   servedAtUpdated,
   shouldAddNewCoverSheet,
 }) => {
+  const hasRelevantFieldUpdates =
+    servedAtUpdated ||
+    filingDateUpdated ||
+    certificateOfServiceUpdated ||
+    shouldAddNewCoverSheet ||
+    documentTitleUpdated;
+
+  const isCourtIssuedAndRequiresCoversheet =
+    !originalDocketEntry.isCourtIssued() || entryRequiresCoverSheet;
+
+  const isNotMinuteEntry = !DocketEntry.isMinuteEntry(originalDocketEntry);
+
   return (
-    (servedAtUpdated ||
-      filingDateUpdated ||
-      certificateOfServiceUpdated ||
-      shouldAddNewCoverSheet ||
-      documentTitleUpdated) &&
-    (!originalDocketEntry.isCourtIssued() || entryRequiresCoverSheet) &&
-    !DocketEntry.isMinuteEntry(originalDocketEntry)
+    hasRelevantFieldUpdates &&
+    isCourtIssuedAndRequiresCoversheet &&
+    isNotMinuteEntry
   );
 };
 

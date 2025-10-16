@@ -1,20 +1,19 @@
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { getDocumentTitleForNoticeOfChange } from '@shared/business/utilities/getDocumentTitleForNoticeOfChange';
+import { getDocumentTitleWithAdditionalInfo } from '@shared/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { DOCUMENT_RELATIONSHIPS } from '@shared/business/entities/EntityConstants';
 import { dateStringsCompared } from '@shared/business/utilities/DateHandler';
-
-export type OriginalNoticeValues = {
-  documentTitleForNotice: string;
-  filedBy?: string;
-};
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
+import { applicationContext } from '@web-api/applicationContext';
 
 export const getOriginalNoticeValues = ({
-  applicationContext,
   docketEntry,
 }: {
-  applicationContext: any;
   docketEntry: any;
-}): OriginalNoticeValues => {
+}): {
+  documentTitleForNotice: string;
+  filedBy?: string;
+} => {
   let { filedBy } = docketEntry;
   let documentTitleForNotice = getDocumentTitleForNoticeOfChange({
     applicationContext,
@@ -45,7 +44,7 @@ export const getOriginalNoticeValues = ({
         }
       }
     } catch (err) {
-      applicationContext.logger.error(
+      getDawsonLogger().error(
         'Failed to parse docketEntry.editState for notice of docket change',
       );
     }
@@ -77,11 +76,9 @@ export const buildUpdatedPrimaryDocketEntry = ({
   ).validate();
 
 export const needsNewCoversheet = ({
-  applicationContext,
   currentDocketEntry,
   updatedDocketEntry,
 }: {
-  applicationContext: any;
   currentDocketEntry: any;
   updatedDocketEntry: any;
 }) => {
@@ -94,10 +91,10 @@ export const needsNewCoversheet = ({
     currentDocketEntry.certificateOfService !==
     updatedDocketEntry.certificateOfService;
   const documentTitleUpdated =
-    applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo({
+    getDocumentTitleWithAdditionalInfo({
       docketEntry: currentDocketEntry,
     }) !==
-    applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo({
+    getDocumentTitleWithAdditionalInfo({
       docketEntry: updatedDocketEntry,
     });
 

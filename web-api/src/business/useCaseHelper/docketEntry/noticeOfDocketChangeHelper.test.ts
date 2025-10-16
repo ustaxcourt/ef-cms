@@ -6,8 +6,23 @@ import {
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { DOCUMENT_RELATIONSHIPS } from '@shared/business/entities/EntityConstants';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
+
+jest.mock('@web-api/utilities/logger/getDawsonLogger');
+
+const mockGetDawsonLogger = getDawsonLogger as jest.MockedFunction<
+  typeof getDawsonLogger
+>;
 
 describe('noticeOfDocketChangeHelper', () => {
+  let mockLogger: { error: jest.Mock };
+
+  beforeEach(() => {
+    mockLogger = {
+      error: jest.fn(),
+    };
+    mockGetDawsonLogger.mockReturnValue(mockLogger as any);
+  });
   describe('getOriginalNoticeValues', () => {
     it('should return documentTitleForNotice and filedBy from docket entry', () => {
       const mockDocketEntry = {
@@ -22,7 +37,6 @@ describe('noticeOfDocketChangeHelper', () => {
         );
 
       const result = getOriginalNoticeValues({
-        applicationContext,
         docketEntry: mockDocketEntry,
       });
 
@@ -50,7 +64,6 @@ describe('noticeOfDocketChangeHelper', () => {
         .mockReturnValueOnce('Amended Motion');
 
       const result = getOriginalNoticeValues({
-        applicationContext,
         docketEntry: mockDocketEntry,
       });
 
@@ -70,11 +83,10 @@ describe('noticeOfDocketChangeHelper', () => {
         .getDocumentTitleForNoticeOfChange.mockReturnValue('Motion');
 
       getOriginalNoticeValues({
-        applicationContext,
         docketEntry: mockDocketEntry,
       });
 
-      expect(applicationContext.logger.error).toHaveBeenCalledWith(
+      expect(mockLogger.error).toHaveBeenCalledWith(
         'Failed to parse docketEntry.editState for notice of docket change',
       );
     });
@@ -91,7 +103,6 @@ describe('noticeOfDocketChangeHelper', () => {
         .getDocumentTitleForNoticeOfChange.mockReturnValue('Original Motion');
 
       const result = getOriginalNoticeValues({
-        applicationContext,
         docketEntry: mockDocketEntry,
       });
 
@@ -111,7 +122,6 @@ describe('noticeOfDocketChangeHelper', () => {
         .getDocumentTitleForNoticeOfChange.mockReturnValue('Original Motion');
 
       const result = getOriginalNoticeValues({
-        applicationContext,
         docketEntry: mockDocketEntry,
       });
 
@@ -137,7 +147,6 @@ describe('noticeOfDocketChangeHelper', () => {
         .mockReturnValueOnce('');
 
       const result = getOriginalNoticeValues({
-        applicationContext,
         docketEntry: mockDocketEntry,
       });
 
@@ -162,7 +171,6 @@ describe('noticeOfDocketChangeHelper', () => {
         .mockReturnValueOnce('Amended Motion');
 
       const result = getOriginalNoticeValues({
-        applicationContext,
         docketEntry: mockDocketEntry,
       });
 
@@ -205,15 +213,8 @@ describe('noticeOfDocketChangeHelper', () => {
   });
 
   describe('needsNewCoversheet', () => {
-    beforeEach(() => {
-      applicationContext
-        .getUtilities()
-        .getDocumentTitleWithAdditionalInfo.mockReturnValue('Same Title');
-    });
-
     it('should return true when receivedAt is different', () => {
       const result = needsNewCoversheet({
-        applicationContext,
         currentDocketEntry: {
           receivedAt: '2023-01-01',
           certificateOfService: false,
@@ -229,7 +230,6 @@ describe('noticeOfDocketChangeHelper', () => {
 
     it('should return true when certificateOfService is different', () => {
       const result = needsNewCoversheet({
-        applicationContext,
         currentDocketEntry: {
           receivedAt: '2023-01-01',
           certificateOfService: false,
@@ -244,20 +244,16 @@ describe('noticeOfDocketChangeHelper', () => {
     });
 
     it('should return true when document title is different', () => {
-      applicationContext
-        .getUtilities()
-        .getDocumentTitleWithAdditionalInfo.mockReturnValueOnce('Title 1')
-        .mockReturnValueOnce('Title 2');
-
       const result = needsNewCoversheet({
-        applicationContext,
         currentDocketEntry: {
           receivedAt: '2023-01-01',
           certificateOfService: false,
+          documentTitle: 'Title 1',
         },
         updatedDocketEntry: {
           receivedAt: '2023-01-01',
           certificateOfService: false,
+          documentTitle: 'Title 2',
         },
       });
 
@@ -266,14 +262,15 @@ describe('noticeOfDocketChangeHelper', () => {
 
     it('should return false when no fields are updated', () => {
       const result = needsNewCoversheet({
-        applicationContext,
         currentDocketEntry: {
           receivedAt: '2023-01-01',
           certificateOfService: false,
+          documentTitle: 'Same Title',
         },
         updatedDocketEntry: {
           receivedAt: '2023-01-01',
           certificateOfService: false,
+          documentTitle: 'Same Title',
         },
       });
 

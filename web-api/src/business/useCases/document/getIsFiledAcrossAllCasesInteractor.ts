@@ -28,31 +28,31 @@ export const getIsFiledAcrossAllCasesInteractor = async (
     docketNumber: firstEntry.docketNumber,
   });
 
-  if (theCase.leadDocketNumber) {
-    const docketNumbersFromEntries = docketEntries.map(
-      entry => entry.docketNumber,
-    );
-
-    const allCasesInGroup = await getConsolidatedCases({
-      leadDocketNumber: theCase.leadDocketNumber,
-      excludeFields: [
-        'docketEntries',
-        'correspondence',
-        'hearings',
-        'privatePractitioners',
-        'irsPractitioners',
-      ],
-    });
-
-    const allDocketNumbersInGroup = allCasesInGroup.map(c => c.docketNumber);
-
-    const docketNumbersFromEntriesSet = new Set(docketNumbersFromEntries);
-    const allDocketNumbersInGroupSet = new Set(allDocketNumbersInGroup);
-
-    return [...allDocketNumbersInGroupSet].every(docketNumber =>
-      docketNumbersFromEntriesSet.has(docketNumber),
-    );
-  } else {
+  if (!theCase.leadDocketNumber) {
     return true;
   }
+
+  const docketNumbersFromEntries = docketEntries.map(
+    entry => entry.docketNumber,
+  );
+
+  const allCasesInGroup = await getConsolidatedCases({
+    leadDocketNumber: theCase.leadDocketNumber,
+    excludeFields: [
+      'docketEntries',
+      'correspondence',
+      'hearings',
+      'privatePractitioners',
+      'irsPractitioners',
+    ],
+  });
+
+  const allDocketNumbersInGroup = allCasesInGroup.map(c => c.docketNumber);
+
+  const docketNumbersFromEntriesSet = new Set(docketNumbersFromEntries);
+  const allDocketNumbersInGroupSet = new Set(allDocketNumbersInGroup);
+
+  return [...allDocketNumbersInGroupSet].every(docketNumber =>
+    docketNumbersFromEntriesSet.has(docketNumber),
+  );
 };

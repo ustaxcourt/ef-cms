@@ -1,8 +1,10 @@
+import { getIsFiledAcrossAllCasesInteractor } from '@shared/proxies/getIsFiledAcrossAllCasesProxy';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * sets the viewerDocumentToDisplay from props
  * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
  * @param {object} providers.get the cerebral get method
  * @param {object} providers.props the cerebral props object
  * @param {object} providers.store the cerebral store object
@@ -21,11 +23,9 @@ export const setViewerDocumentToDisplayAction = async ({
   if (viewerDocumentToDisplay) {
     store.set(state.docketEntryId, viewerDocumentToDisplay.docketEntryId);
 
-    const isFiledAcrossAllCases = await applicationContext
-      .getUseCases()
-      .getIsFiledAcrossAllCasesInteractor(applicationContext, {
-        docketEntryId: viewerDocumentToDisplay.docketEntryId,
-      });
+    const isFiledAcrossAllCases = await getIsFiledAcrossAllCasesInteractor({
+      docketEntryId: viewerDocumentToDisplay.docketEntryId,
+    });
 
     const { url } = await applicationContext
       .getUseCases()

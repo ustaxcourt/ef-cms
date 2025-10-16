@@ -76,11 +76,12 @@ export const addPaperFiling = async (
 
       const subjectCaseEntity = new Case(rawSubjectCase, { authorizedUser });
 
-      if (
+      const isLeadCaseWithConsolidatedCases =
         isLeadCase(subjectCaseEntity) &&
         Array.isArray(rawSubjectCase.consolidatedCases) &&
-        rawSubjectCase.consolidatedCases.length > 0
-      ) {
+        rawSubjectCase.consolidatedCases.length > 0;
+
+      if (isLeadCaseWithConsolidatedCases) {
         effectiveConsolidatedGroupDocketNumbers = [
           subjectCaseDocketNumber,
           ...rawSubjectCase.consolidatedCases.map((c: any) => c.docketNumber),

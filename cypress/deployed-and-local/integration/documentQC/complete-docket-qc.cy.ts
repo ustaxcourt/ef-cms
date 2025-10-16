@@ -102,7 +102,7 @@ describe('Document QC Complete', () => {
     });
   });
 
-  it.only('should have the served case document qc assigned and completed', () => {
+  it('should have the served case document qc assigned and completed', () => {
     loginAsCaseServicesSupervisor('caseServicesSupervisor1@example.com');
     cy.visit('/document-qc/section/inbox/selectedSection?section=docket');
     cy.get<string>('@DOCKET_NUMBER').then(docketNumber => {

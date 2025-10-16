@@ -31,7 +31,6 @@ import {
   getOriginalNoticeValues,
   buildUpdatedPrimaryDocketEntry,
   needsNewCoversheet,
-  OriginalNoticeValues,
 } from '@web-api/business/useCaseHelper/docketEntry/noticeOfDocketChangeHelper';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
@@ -135,7 +134,6 @@ const completeDocketEntryQC = async (
   };
 
   const leadOriginalNoticeValues = getOriginalNoticeValues({
-    applicationContext,
     docketEntry: currentDocketEntry,
   });
 
@@ -152,7 +150,6 @@ const completeDocketEntryQC = async (
   });
 
   const isNewCoverSheetNeeded = needsNewCoversheet({
-    applicationContext,
     currentDocketEntry,
     updatedDocketEntry: updatedPrimaryDocketEntry,
   });
@@ -176,7 +173,10 @@ const completeDocketEntryQC = async (
       : [];
 
   const originalNoticeValuesByDocketNumber: {
-    [docketNumber: string]: OriginalNoticeValues;
+    [docketNumber: string]: {
+      documentTitleForNotice: string;
+      filedBy?: string;
+    };
   } = {};
 
   for (const rawMemberEntry of docketEntriesAcrossCases || []) {
@@ -184,7 +184,6 @@ const completeDocketEntryQC = async (
 
     originalNoticeValuesByDocketNumber[rawMemberEntry.docketNumber] =
       getOriginalNoticeValues({
-        applicationContext,
         docketEntry: rawMemberEntry,
       });
   }
