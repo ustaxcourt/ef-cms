@@ -679,6 +679,11 @@ export const baseState = {
     entries: [],
   },
   completeForm: {},
+  confirmationText: undefined as
+    | string
+    | { penalties: Record<string, string> }
+    | { statistics: Record<string, unknown> }
+    | undefined,
   constants: {} as ReturnType<typeof getConstants>,
   createOrderAddedDocketNumbers: undefined as unknown as string[],
   createOrderSelectedCases: [] as any[],
@@ -825,9 +830,9 @@ export const baseState = {
     nameForSigning: '',
     nameForSigningLine2: '',
     pageNumber: 1,
-    pdfjsObj: null,
+    pdfjsObj: null as { getData: () => Promise<unknown> } | null,
     signatureApplied: false,
-    signatureData: null,
+    signatureData: null as { scale: number; x: number; y: number } | null,
     stampApplied: false,
     stampData: null,
   },
@@ -872,6 +877,7 @@ export const baseState = {
     taxYear: undefined,
   },
   practitionerDetail: {} as PractitionerDetail,
+  practitionerDocuments: undefined as unknown[] | undefined,
   previewPdfFile: null,
   progressIndicator: {
     // used for the spinner that shows when waiting for network responses

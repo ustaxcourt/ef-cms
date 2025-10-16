@@ -9,9 +9,12 @@ describe('clearFormAssigneeIdAction', () => {
         testForm: {
           assigneeId: 'abc-123',
         },
-      },
+      } as Record<string, unknown>,
     });
 
-    expect(state.testForm.assigneeId).toBe('');
+    expect(
+      (state as unknown as Record<string, Record<string, string>>).testForm
+        .assigneeId,
+    ).toBe('');
   });
 });
