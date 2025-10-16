@@ -1682,6 +1682,7 @@ declare global {
       set: (key: any, value: any) => void;
       merge: (key: any, value: any) => void;
       unset: (key: any) => void;
+      increment: (key: any) => void;
     };
     path: any;
     props: Props;

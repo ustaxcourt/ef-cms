@@ -691,6 +691,7 @@ export const baseState = {
   correspondenceId: undefined as string | undefined,
   createOrderAddedDocketNumbers: undefined as unknown as string[],
   createOrderSelectedCases: [] as any[],
+  createOrderTab: 'generate' as 'generate' | 'edit',
   currentJudges: [],
   currentPage: 'Loading',
   orderCurrentPaginationPage: 0,
@@ -716,6 +717,17 @@ export const baseState = {
         trackedItems: false,
       },
       frozen: undefined as boolean | undefined,
+      primaryTab: undefined as string | undefined,
+      caseInformationTab: undefined as string | undefined,
+      showEditPetition: false as boolean | undefined,
+      inProgressTab: undefined as string | undefined,
+      docketRecordTab: undefined as string | undefined,
+      partyViewTab: undefined as string | undefined,
+      messagesTab: undefined as string | undefined,
+      trackedItemsTab: undefined as string | undefined,
+      draftsTab: undefined as string | undefined,
+      correspondenceTab: undefined as string | undefined,
+      notesTab: undefined as string | undefined,
     },
     documentSelectedForPreview: undefined as string | undefined,
     documentDetail: {
@@ -738,6 +750,7 @@ export const baseState = {
   documentToEdit: {} as any,
   documentId: undefined as string | undefined,
   documentsSelectedForDownload: [] as { docketEntryId: string }[],
+  editDocketEntryMetaTab: 'documentInfo' as 'documentInfo' | 'documentType',
   orderDocumentSearchSort: {
     sortColumn: 'formattedFiledDate',
     sortDirection: 'desc' as 'asc' | 'desc',
@@ -774,6 +787,7 @@ export const baseState = {
   isCreatingOrder: false,
   isEditingDocketEntry: false,
   isUpdatingWithFile: false,
+  isExpanded: false as boolean | undefined,
   judgeActivityReport: {
     judgeActivityReportData: {},
   } as JudgeActivityReportState,
@@ -848,6 +862,7 @@ export const baseState = {
     signatureData: null as { scale: number; x: number; y: number } | null,
     stampApplied: false,
     stampData: null,
+    isPdfAlreadySigned: false as boolean | undefined,
   },
   pdfGeneratedUrl: '',
   pdfPreviewUrl: '',
@@ -896,6 +911,7 @@ export const baseState = {
     // used for the spinner that shows when waiting for network responses
     waitingForResponse: false,
     waitingForResponseRequests: 0,
+    waitText: undefined as string | undefined,
   },
   redirectUrl: undefined as string | undefined,
   refreshTokenInterval: undefined as unknown as NodeJS.Timeout,
@@ -944,6 +960,7 @@ export const baseState = {
     sortOrder: ASCENDING,
   },
   tabName: undefined as string | undefined,
+  testUsers: [] as RawUser[],
   todaysDate: '',
   token: '',
   trialLocationPage: {
@@ -973,6 +990,9 @@ export const baseState = {
   userContactEditProgress: {} as { inProgress?: boolean },
   users: [] as RawUser[],
   validationErrors: {} as Record<string, any>,
+  viewerCorrespondenceToDisplay: null as {
+    correspondenceId: string;
+  } | null,
   viewerDocumentToDisplay: undefined as unknown as ViewerDocument,
   viewerDraftDocumentToDisplay: undefined as unknown as ViewerDocument,
   wizardStep: undefined as string | undefined,
