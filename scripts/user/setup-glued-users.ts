@@ -207,16 +207,7 @@ const getInternalUsers = async (): Promise<any> => {
   );
 };
 
-const getUsersByName = async (): Promise<{
-  [key: string]: {
-    bulkImportedUserId?: string;
-    email: string;
-    gluedUserId?: string;
-    name: string;
-    role: string;
-    section: string;
-  };
-}> => {
+const getUsersByName = async (): Promise<Users> => {
   let results = await getInternalUsers();
 
   results.push(
