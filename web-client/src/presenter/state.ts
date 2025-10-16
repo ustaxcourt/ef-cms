@@ -664,7 +664,7 @@ export const baseState = {
     judgeIdFilter: string;
   },
   caseDeadlines: [] as RawCaseDeadline[],
-  caseDetail: {} as RawCase,
+  caseDetail: {} as RawCase & { messages?: RawMessage[] },
   caseInventoryReportData: {
     foundCasesForCurrentPage: [] as FormattedCaseInventoryReportEntry[],
     foundCasesTotalCount: 0,
@@ -672,7 +672,9 @@ export const baseState = {
   clientConnectionId: '',
   clientNeedsToRefresh: false,
   closedCases: [] as TAssociatedCase[],
+  closedCasesCurrentPage: undefined as number | undefined,
   cognito: {} as any,
+  contactToSeal: undefined as Contact | undefined,
   coldCaseReport: {
     entries: [],
   },
@@ -704,6 +706,7 @@ export const baseState = {
         notes: false,
         trackedItems: false,
       },
+      frozen: undefined as boolean | undefined,
     },
     documentDetail: {
       tab: '',
@@ -784,14 +787,17 @@ export const baseState = {
   minuteSheetForm: cloneDeep(initialMinuteSheetFormState),
   minuteSheetFormSnapshot: '',
   modal: {
-    contactSupportMessage: undefined, // the "contact support" message sans email address
+    calendarNotes: undefined as string | undefined,
+    contactSupportMessage: undefined as string | undefined, // the "contact support" message sans email address
     docketEntry: undefined,
-    message: undefined, // the message to show
+    form: {} as Record<string, unknown>,
+    message: undefined as string | undefined, // the message to show
     pdfPreviewModal: undefined,
-    showModal: undefined, // the name of the modal to display
-    title: undefined,
-    troubleshootingInfo: undefined as unknown as TroubleshootingLinkInfo, // steps for troubleshooting
-  } as Record<string, any>,
+    showModal: undefined as string | undefined, // the name of the modal to display
+    title: undefined as string | undefined,
+    trialSessionId: undefined as string | undefined,
+    troubleshootingInfo: undefined as TroubleshootingLinkInfo | undefined, // steps for troubleshooting
+  } as Record<string, unknown>,
   navigation: {
     caseDetailMenu: '',
     openMenu: '',
@@ -808,6 +814,7 @@ export const baseState = {
     unreadMessageCount?: number;
   },
   openCases: [] as TAssociatedCase[],
+  openCasesCurrentPage: undefined as number | undefined,
   paperServiceStatusState: {
     pdfsAppended: 0,
     totalPdfs: 0,
@@ -915,6 +922,7 @@ export const baseState = {
     sortField: 'createdAt',
     sortOrder: ASCENDING,
   },
+  tabName: undefined as string | undefined,
   todaysDate: '',
   token: '',
   trialLocationPage: {
