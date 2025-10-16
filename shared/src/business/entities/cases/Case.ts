@@ -1949,7 +1949,7 @@ export class Case extends JoiValidationEntity {
         remoteTrialGrantedDate.trim() !== '',
     );
     this.remoteTrialGranted = hasDate;
-    this.remoteTrialGrantedDate = hasDate ? remoteTrialGrantedDate : null;
+    this.remoteTrialGrantedDate = hasDate ? remoteTrialGrantedDate : undefined;
     return this;
   }
 
