@@ -175,21 +175,18 @@ const completeDocketEntryQC = async (
         })
       : [];
 
-  const originalNoticeValuesByDocketNumber = new Map<
-    string,
-    OriginalNoticeValues
-  >();
+  const originalNoticeValuesByDocketNumber: {
+    [docketNumber: string]: OriginalNoticeValues;
+  } = {};
 
   for (const rawMemberEntry of docketEntriesAcrossCases || []) {
     if (rawMemberEntry.docketNumber === caseEntity.docketNumber) continue;
 
-    originalNoticeValuesByDocketNumber.set(
-      rawMemberEntry.docketNumber,
+    originalNoticeValuesByDocketNumber[rawMemberEntry.docketNumber] =
       getOriginalNoticeValues({
         applicationContext,
         docketEntry: rawMemberEntry,
-      }),
-    );
+      });
   }
 
   const isMultiDocketed = (docketEntriesAcrossCases || []).length > 1;
@@ -243,10 +240,8 @@ const completeDocketEntryQC = async (
     titleOfClerk: title,
   };
 
-  originalNoticeValuesByDocketNumber.set(
-    caseEntity.docketNumber,
-    leadOriginalNoticeValues,
-  );
+  originalNoticeValuesByDocketNumber[caseEntity.docketNumber] =
+    leadOriginalNoticeValues;
 
   caseEntity.updateDocketEntry(updatedPrimaryDocketEntry);
 
@@ -415,7 +410,7 @@ const completeDocketEntryQC = async (
     const caseSpecificNotices: Array<{
       caseEntity: Case;
       docketEntryId: string;
-    }> = []; // Track case-specific NODCs
+    }> = [];
 
     if (isMultiDocketed) {
       for (const de of docketEntriesAcrossCases) {
@@ -438,14 +433,12 @@ const completeDocketEntryQC = async (
           if (!memberDocketEntry) continue;
 
           const originalMemberNoticeValues =
-            originalNoticeValuesByDocketNumber.get(
-              memberCaseEntity.docketNumber,
-            );
+            originalNoticeValuesByDocketNumber[memberCaseEntity.docketNumber];
 
           const originalMemberFiledBy =
-            originalMemberNoticeValues?.filedBy ?? memberDocketEntry.filedBy;
+            originalMemberNoticeValues.filedBy ?? memberDocketEntry.filedBy;
           const originalMemberDocumentTitleForNotice =
-            originalMemberNoticeValues?.documentTitleForNotice ??
+            originalMemberNoticeValues.documentTitleForNotice ??
             getDocumentTitleForNoticeOfChange({
               applicationContext,
               docketEntry: memberDocketEntry,
@@ -493,15 +486,19 @@ const completeDocketEntryQC = async (
             titleOfClerk: title,
           };
 
-          const memberHasDiff =
-            memberDocketChangeInfo.filingParties.after !==
-              memberDocketChangeInfo.filingParties.before ||
-            memberDocketChangeInfo.filingsAndProceedings.after !==
-              memberDocketChangeInfo.filingsAndProceedings.before;
+          const { filingParties, filingsAndProceedings } =
+            memberDocketChangeInfo;
 
-          if (!memberHasDiff) {
-            continue;
-          }
+          const hasFilingPartiesChanged =
+            filingParties.after !== filingParties.before;
+
+          const hasFilingsAndProceedingsChanged =
+            filingsAndProceedings.after !== filingsAndProceedings.before;
+
+          const memberHasDiff =
+            hasFilingPartiesChanged || hasFilingsAndProceedingsChanged;
+
+          if (!memberHasDiff) continue;
 
           const noticeDocketEntryId = await generateNoticeOfDocketChangePdf({
             applicationContext,
@@ -570,7 +567,6 @@ const completeDocketEntryQC = async (
             caseToUpdate: memberCaseEntity,
           });
 
-          // Collect case-specific NODC info for consolidated paper service PDF generation
           if (memberServedParties.paper.length > 0) {
             caseSpecificNotices.push({
               caseEntity: memberCaseEntity,
@@ -589,15 +585,14 @@ const completeDocketEntryQC = async (
         }
       }
 
-      // Generate ONE consolidated paper service PDF with all case-specific NODCs
       if (caseSpecificNotices.length > 0) {
         const consolidatedPaperServiceResult = await applicationContext
           .getUseCaseHelpers()
           .serveDocumentAndGetPaperServicePdf({
             applicationContext,
             caseEntities: caseSpecificNotices.map(n => n.caseEntity),
-            docketEntryId: caseSpecificNotices[0].docketEntryId, // Fallback for backward compatibility
-            caseSpecificDocketEntries: caseSpecificNotices, // Pass case-specific NODCs
+            docketEntryId: caseSpecificNotices[0].docketEntryId,
+            caseSpecificDocketEntries: caseSpecificNotices,
           });
 
         if (consolidatedPaperServiceResult) {

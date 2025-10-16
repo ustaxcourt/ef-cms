@@ -90,26 +90,36 @@ export const getNotificationsInteractor = async (
   );
 
   const isTableRecord = (row: any, _index: number, array: any[]) => {
-    return (
-      !row.leadDocketNumber ||
-      row.leadDocketNumber === row.docketNumber ||
-      (row.leadDocketNumber && array.filter(r => r.docketEntryId === row.docketEntryId && r.leadDocketNumber === row.leadDocketNumber && r !== row).length === 0)
-    );
+    const isNotLeadDocket = !row.leadDocketNumber;
+
+    const isLeadCase = row.leadDocketNumber === row.docketNumber;
+
+    const isFirstOccurence =
+      !!row.leadDocketNumber &&
+      array.filter(r => {
+        return (
+          r.docketEntryId === row.docketEntryId &&
+          r.leadDocketNumber === row.leadDocketNumber &&
+          r !== row
+        );
+      }).length === 0;
+
+    return isNotLeadDocket || isLeadCase || isFirstOccurence;
   };
 
-  const qcIndividualInProgressCount = documentQCIndividualInbox.filter(
-    filters['my']['inProgress'],
-  ).filter(isTableRecord).length;
-  const qcIndividualInboxCount = documentQCIndividualInbox.filter(
-    filters['my']['inbox'],
-  ).filter(isTableRecord).length;
+  const qcIndividualInProgressCount = documentQCIndividualInbox
+    .filter(filters['my']['inProgress'])
+    .filter(isTableRecord).length;
+  const qcIndividualInboxCount = documentQCIndividualInbox
+    .filter(filters['my']['inbox'])
+    .filter(isTableRecord).length;
 
-  const qcSectionInProgressCount = documentQCSectionInbox?.filter(
-    filters['section']['inProgress'],
-  ).filter(isTableRecord).length;
-  const qcSectionInboxCount = documentQCSectionInbox?.filter(
-    filters['section']['inbox'],
-  ).filter(isTableRecord).length;
+  const qcSectionInProgressCount = documentQCSectionInbox
+    ?.filter(filters['section']['inProgress'])
+    .filter(isTableRecord).length;
+  const qcSectionInboxCount = documentQCSectionInbox
+    ?.filter(filters['section']['inbox'])
+    .filter(isTableRecord).length;
 
   const unreadMessageCount = userInbox.filter(
     message => !message.isRead,
