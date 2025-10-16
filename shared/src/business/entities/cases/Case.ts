@@ -1938,6 +1938,22 @@ export class Case extends JoiValidationEntity {
   }
 
   /**
+   * sets the remote trial granted date and boolean flag
+   * @param {string | null | undefined} remoteTrialGrantedDate the date when motion to proceed remotely was granted, or null/undefined to clear
+   * @returns {Case} this case entity
+   */
+  setRemoteTrialGrantedDate(remoteTrialGrantedDate?: string | null) {
+    const hasDate = Boolean(
+      remoteTrialGrantedDate &&
+        typeof remoteTrialGrantedDate === 'string' &&
+        remoteTrialGrantedDate.trim() !== '',
+    );
+    this.remoteTrialGranted = hasDate;
+    this.remoteTrialGrantedDate = hasDate ? remoteTrialGrantedDate : null;
+    return this;
+  }
+
+  /**
    * sets the qc complete for trial boolean for a case
    * @param {object} providers the providers object
    * @param {boolean} providers.qcCompleteForTrial the value to set for qcCompleteForTrial
