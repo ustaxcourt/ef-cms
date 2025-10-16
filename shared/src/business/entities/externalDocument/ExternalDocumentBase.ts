@@ -5,11 +5,6 @@ export class ExternalDocumentBase extends JoiValidationEntity {
   public category: string;
   public documentTitle?: string;
   public documentType: string;
-  public validate: (
-    options?:
-      | { applicationContext: IApplicationContext; logErrors: boolean }
-      | undefined,
-  ) => this;
 
   constructor(rawProps, scenario: string) {
     super(scenario);
@@ -17,7 +12,6 @@ export class ExternalDocumentBase extends JoiValidationEntity {
     this.category = rawProps.category;
     this.documentTitle = rawProps.documentTitle;
     this.documentType = rawProps.documentType;
-    this.validate = rawProps.validate;
   }
 
   static VALIDATION_RULES = {
@@ -32,7 +26,6 @@ export class ExternalDocumentBase extends JoiValidationEntity {
       'string.invalid':
         'Proposed Stipulated Decision must be filed separately in each case',
     }),
-    validate: JoiValidationConstants.STRING.required(),
   };
 
   getValidationRules() {
