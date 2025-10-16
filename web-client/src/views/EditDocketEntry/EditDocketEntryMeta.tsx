@@ -20,6 +20,7 @@ export const EditDocketEntryMeta = connect(
   {
     closeModalAndReturnToCaseDetailSequence:
       sequences.closeModalAndReturnToCaseDetailSequence,
+    editDocketEntryMetaHelper: state.editDocketEntryMetaHelper,
     editType: state.screenMetadata.editType,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.modal.showModal,
@@ -32,6 +33,7 @@ export const EditDocketEntryMeta = connect(
   },
   function EditDocketEntryMeta({
     closeModalAndReturnToCaseDetailSequence,
+    editDocketEntryMetaHelper,
     editType,
     formCancelToggleCancelSequence,
     showModal,
@@ -73,11 +75,8 @@ export const EditDocketEntryMeta = connect(
                         <div className="margin-top-2 margin-bottom-2">
                           <b>Edits to Document Info will also be edited for:</b>
                           <ul className="usa-list padding-top-0 padding-bottom-0 margin-top-1 margin-bottom-1">
-                            {formattedCaseDetail.consolidatedCases
-                              .filter(
-                                c => c.docketNumber !== caseDetail.docketNumber,
-                              )
-                              .map(c => (
+                            {editDocketEntryMetaHelper.consolidatedCasesToDisplay.map(
+                              c => (
                                 <li
                                   key={c.docketNumber}
                                   className="margin-bottom-0"
@@ -88,7 +87,8 @@ export const EditDocketEntryMeta = connect(
                                     form?.documentTitle ||
                                     form?.eventCode}
                                 </li>
-                              ))}
+                              ),
+                            )}
                           </ul>
                           <p className="margin-bottom-0 margin-top-0">
                             Service and Action edits will only apply to this

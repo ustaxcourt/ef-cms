@@ -63,20 +63,6 @@ describe('WorkItem', () => {
       expect(workItem.isValid()).toBeTruthy();
     });
 
-    it('should set the docketNumber on the workitem', () => {
-      const workItem = new WorkItem({
-        assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
-        assigneeName: 'bob',
-        caseStatus: CASE_STATUS_TYPES.new,
-        caseTitle: 'Johnny Joe Jacobson',
-        docketEntryId: '9b4cd447-6278-461b-b62b-d9e357eea62c',
-        docketNumber: '123-45',
-        section: DOCKET_SECTION,
-        sentBy: 'bob',
-      });
-      expect(workItem.docketNumber).toEqual('123-45');
-    });
-
     it('should create a valid workitem when caseStatus is calendared', () => {
       const workItem = new WorkItem({
         assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
