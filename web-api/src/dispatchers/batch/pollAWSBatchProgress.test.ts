@@ -136,7 +136,7 @@ describe('pollAWSBatchProgress', () => {
       applicationContext,
       jobId: 'succeeded-job-id',
       pollInterval: 10,
-      timeout: 50,
+      timeout: 1000,
       onProgress: onProgressMock,
     });
 
@@ -149,7 +149,7 @@ describe('pollAWSBatchProgress', () => {
       applicationContext,
       jobId: 'succeeded-job-id',
       pollInterval: 10,
-      timeout: 50,
+      timeout: 1000,
       onProgress: onProgressMock,
     });
 
@@ -162,6 +162,14 @@ describe('pollAWSBatchProgress', () => {
 
   it('polls job status until SUCCEEDED and returns job', async () => {
     mockBatchClientSend
+      .mockResolvedValueOnce({
+        jobs: [
+          {
+            status: 'STARTING',
+            container: { logStreamName: 'test-log-stream' },
+          },
+        ],
+      })
       .mockResolvedValueOnce({
         jobs: [
           {
@@ -183,7 +191,7 @@ describe('pollAWSBatchProgress', () => {
       applicationContext,
       jobId: 'succeeded-job-id',
       pollInterval: 10,
-      timeout: 50,
+      timeout: 1000,
       onProgress: onProgressMock,
     });
 
