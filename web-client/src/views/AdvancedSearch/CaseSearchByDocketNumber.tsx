@@ -68,14 +68,14 @@ export const CaseSearchByDocketNumber = connect(
                       });
                     }}
                   />
-                            <div className="max-xs:tw:w-full tw:mt-4">
-                              <TextField
-                                label="Docket number"
-                                helpText="Example of docket number format: 123-19"
-                                placeholder=""
-                                required={true}
-                              />
-                            </div>
+                  <div className="max-xs:tw:w-full tw:mt-4">
+                    <TextField
+                      label="Docket number"
+                      helpText="Example of docket number format: 123-19"
+                      placeholder=""
+                      required={true}
+                    />
+                  </div>
                 </FormGroup>
               </div>
             </div>
