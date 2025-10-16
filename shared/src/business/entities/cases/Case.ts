@@ -118,7 +118,7 @@ export class Case extends JoiValidationEntity {
   public petitionPaymentWaivedDate?: string;
   public preferredTrialCity?: string;
   public remoteTrialGranted?: boolean;
-  public remoteTrialGrantedDate?: string;
+  public remoteTrialGrantedDate?: string | null;
   public procedureType: string;
   public receivedAt: string;
   public sealedDate?: string;
@@ -1949,7 +1949,7 @@ export class Case extends JoiValidationEntity {
         remoteTrialGrantedDate.trim() !== '',
     );
     this.remoteTrialGranted = hasDate;
-    this.remoteTrialGrantedDate = hasDate ? remoteTrialGrantedDate : undefined;
+    this.remoteTrialGrantedDate = hasDate ? remoteTrialGrantedDate : null;
     return this;
   }
 
