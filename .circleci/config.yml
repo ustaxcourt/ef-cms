@@ -182,7 +182,7 @@ jobs:
               echo "skipping…"
             fi
       - run:
-          name: Judge Users Setup
+          name: Users Setup
           command: |
             if [ "${CIRCLE_BRANCH}" == "prod" ] || [ "$DEPLOY_EMPTY_PERSISTENCE" == "true" ]; then
               echo "skipping…"
@@ -196,7 +196,7 @@ jobs:
                 --query 'DomainStatus.Endpoint' \
                 --output text)
               export ELASTICSEARCH_ENDPOINT="$ELASTICSEARCH_ENDPOINT"
-              ./scripts/user/setup-glued-judges.ts
+              ./scripts/user/setup-glued-users.ts
             else
               npx ts-node --transpile-only ./scripts/circleci/judge/bulkImportJudgeUsers.ts | tee bulk-import-log.txt
             fi
