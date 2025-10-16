@@ -3,6 +3,12 @@ import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { setIsFiledAcrossAllCasesAction } from './setIsFiledAcrossAllCasesAction';
 
+jest.mock('@shared/proxies/getIsFiledAcrossAllCasesProxy');
+
+const { getIsFiledAcrossAllCasesInteractor } = jest.requireMock(
+  '@shared/proxies/getIsFiledAcrossAllCasesProxy',
+);
+
 describe('setIsFiledAcrossAllCasesAction', () => {
   const mockDocketEntryId = 'test-docket-entry-id-123';
   const mockDocketRecordIndex = 1;
@@ -10,15 +16,11 @@ describe('setIsFiledAcrossAllCasesAction', () => {
   beforeEach(() => {
     presenter.providers.applicationContext = applicationContext;
 
-    applicationContext
-      .getUseCases()
-      .getIsFiledAcrossAllCasesInteractor.mockResolvedValue(false);
+    getIsFiledAcrossAllCasesInteractor.mockResolvedValue(false);
   });
 
   it('should set isFiledAcrossAllCases to true when the docket entry is filed across all cases', async () => {
-    applicationContext
-      .getUseCases()
-      .getIsFiledAcrossAllCasesInteractor.mockResolvedValue(true);
+    getIsFiledAcrossAllCasesInteractor.mockResolvedValue(true);
 
     const result = await runAction(setIsFiledAcrossAllCasesAction, {
       modules: { presenter },
@@ -35,19 +37,14 @@ describe('setIsFiledAcrossAllCasesAction', () => {
       },
     });
 
-    expect(
-      applicationContext.getUseCases().getIsFiledAcrossAllCasesInteractor.mock
-        .calls[0][1],
-    ).toMatchObject({
+    expect(getIsFiledAcrossAllCasesInteractor).toHaveBeenCalledWith({
       docketEntryId: mockDocketEntryId,
     });
     expect(result.state.isFiledAcrossAllCases).toBe(true);
   });
 
   it('should set isFiledAcrossAllCases to false when the docket entry is not filed across all cases', async () => {
-    applicationContext
-      .getUseCases()
-      .getIsFiledAcrossAllCasesInteractor.mockResolvedValue(false);
+    getIsFiledAcrossAllCasesInteractor.mockResolvedValue(false);
 
     const result = await runAction(setIsFiledAcrossAllCasesAction, {
       modules: { presenter },
@@ -83,9 +80,7 @@ describe('setIsFiledAcrossAllCasesAction', () => {
       },
     });
 
-    expect(
-      applicationContext.getUseCases().getIsFiledAcrossAllCasesInteractor,
-    ).not.toHaveBeenCalled();
+    expect(getIsFiledAcrossAllCasesInteractor).not.toHaveBeenCalled();
     expect(result.state.isFiledAcrossAllCases).toBe(false);
   });
 
@@ -104,18 +99,14 @@ describe('setIsFiledAcrossAllCasesAction', () => {
       },
     });
 
-    expect(
-      applicationContext.getUseCases().getIsFiledAcrossAllCasesInteractor,
-    ).not.toHaveBeenCalled();
+    expect(getIsFiledAcrossAllCasesInteractor).not.toHaveBeenCalled();
     expect(result.state.isFiledAcrossAllCases).toBe(false);
   });
 
   it('should set isFiledAcrossAllCases to false when the interactor throws an error', async () => {
-    applicationContext
-      .getUseCases()
-      .getIsFiledAcrossAllCasesInteractor.mockRejectedValue(
-        new Error('Test error'),
-      );
+    getIsFiledAcrossAllCasesInteractor.mockRejectedValue(
+      new Error('Test error'),
+    );
 
     const result = await runAction(setIsFiledAcrossAllCasesAction, {
       modules: { presenter },
