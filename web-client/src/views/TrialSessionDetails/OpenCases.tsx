@@ -17,7 +17,7 @@ export const OpenCases = connect(
       <React.Fragment>
         <div className="text-right">
           <span className="text-semibold">Count: </span>
-          <span data-testid="open-cases-count" >{openCases.length}</span>
+          <span data-testid="open-cases-count">{openCases.length}</span>
         </div>
         <div className="padding-1"></div>
         <div className="overflow-x-auto overflow-y-hidden">
@@ -58,8 +58,9 @@ export const OpenCases = connect(
                   </td>
                   <td>
                     {item.isManuallyAdded && (
-                      <span aria-label="Manually added indicator">
+                      <span>
                         <FontAwesomeIcon
+                          aria-label="Manually added indicator"
                           className="mini-success"
                           icon="calendar-plus"
                           title="Manually added"
