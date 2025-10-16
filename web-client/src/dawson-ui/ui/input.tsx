@@ -43,7 +43,6 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
     ref,
   ) => {
     const inputId = React.useId();
-    console.log(props);
 
     return (
       <div className="tw:flex tw:flex-col">
