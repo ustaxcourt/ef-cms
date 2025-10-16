@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextField, TextArea, FieldWithIcon } from '@web-client/dawson-ui/ui/input';
+import { TextField, TextArea } from '@web-client/dawson-ui/ui/input';
 
 export function Inputs() {
   return (
@@ -12,6 +12,7 @@ export function Inputs() {
               label="Field Label"
               helpText="Help text"
               placeholder="Enter text here"
+              icon={true}
               
             />
           </div>
@@ -25,11 +26,13 @@ export function Inputs() {
           </div>
 
           <div className="max-xs:tw:w-full">
-            <FieldWithIcon
+            <TextField
               label="Field Label"
               helpText="Help text"
               placeholder="Enter text here"
               className="tw:w-[380px] max-md:tw:w-[182px]"
+              icon={true}
+              
             />
           </div>
         </div>
