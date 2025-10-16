@@ -1506,6 +1506,10 @@ describe('serveCaseToIrsInteractor', () => {
     expect(
       applicationContext.getUtilities().serveCaseDocument,
     ).toHaveBeenCalledTimes(Object.keys(INITIAL_DOCUMENT_TYPES).length);
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
+    expect(
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.automaticBlocked,
+    ).toBe(true);
   });
 
   it('should generate an order and upload it to s3 for noticeOfAttachments', async () => {
