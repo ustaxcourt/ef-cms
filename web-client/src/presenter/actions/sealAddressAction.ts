@@ -13,7 +13,7 @@ export const sealAddressAction = async ({
   get,
   store,
 }: ActionProps) => {
-  const { contactId, name } = get(state.contactToSeal);
+  const { contactId, name } = get(state.contactToSeal)!;
   const { docketNumber } = get(state.caseDetail);
 
   const updatedCase = await applicationContext

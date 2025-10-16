@@ -16,4 +16,5 @@ export type JudgeActivityReportState = {
   filters: JudgeActivityReportFilters;
   judgeActivityReportData: JudgeActivityReportData;
   hasUserSubmittedForm: boolean;
+  judgeName?: string;
 };

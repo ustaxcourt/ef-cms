@@ -16,7 +16,9 @@ describe('toggleMenuStateAction', () => {
       },
     });
 
-    expect(result.state.foo).toEqual(false);
+    expect((result.state as unknown as Record<string, unknown>).foo).toEqual(
+      false,
+    );
   });
 
   it('sets the value of the given props.menuState to true if it is currently false', async () => {
@@ -32,7 +34,9 @@ describe('toggleMenuStateAction', () => {
       },
     });
 
-    expect(result.state.foo).toEqual(true);
+    expect((result.state as unknown as Record<string, unknown>).foo).toEqual(
+      true,
+    );
   });
 
   it('sets the value of the given props.menuState to true if it is currently undefined', async () => {
@@ -48,6 +52,8 @@ describe('toggleMenuStateAction', () => {
       },
     });
 
-    expect(result.state.foo).toEqual(true);
+    expect((result.state as unknown as Record<string, unknown>).foo).toEqual(
+      true,
+    );
   });
 });

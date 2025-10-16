@@ -622,7 +622,10 @@ export const baseState = {
   advancedSearchTab: 'case',
   alertError: undefined,
   alertInfo: undefined,
-  alertSuccess: undefined,
+  alertSuccess: undefined as unknown as {
+    message: string;
+    overwritable?: boolean;
+  },
   alertWarning: undefined,
   allJudges: [],
   archiveDraftDocument: {
@@ -674,7 +677,7 @@ export const baseState = {
   closedCases: [] as TAssociatedCase[],
   closedCasesCurrentPage: undefined as number | undefined,
   cognito: {} as any,
-  contactToSeal: undefined as Contact | undefined,
+  contactToSeal: undefined as (Contact & { contactId: string }) | undefined,
   coldCaseReport: {
     entries: [],
   },
@@ -685,6 +688,7 @@ export const baseState = {
     | { statistics: Record<string, unknown> }
     | undefined,
   constants: {} as ReturnType<typeof getConstants>,
+  correspondenceId: undefined as string | undefined,
   createOrderAddedDocketNumbers: undefined as unknown as string[],
   createOrderSelectedCases: [] as any[],
   currentJudges: [],
@@ -713,6 +717,7 @@ export const baseState = {
       },
       frozen: undefined as boolean | undefined,
     },
+    documentSelectedForPreview: undefined as string | undefined,
     documentDetail: {
       tab: '',
     },
@@ -731,6 +736,7 @@ export const baseState = {
   docketEntryId: '',
   docketRecordIndex: 0,
   documentToEdit: {} as any,
+  documentId: undefined as string | undefined,
   documentsSelectedForDownload: [] as { docketEntryId: string }[],
   orderDocumentSearchSort: {
     sortColumn: 'formattedFiledDate',
@@ -741,6 +747,7 @@ export const baseState = {
     sortDirection: 'desc' as 'asc' | 'desc',
   },
   draftDocumentViewerDocketEntryId: null,
+  editDocumentEntryPoint: 'CaseDetail' as 'CaseDetail' | 'DocumentDetail',
   featureFlags: undefined as unknown as { [key: string]: string },
   fileUploadProgress: {
     isHavingSystemIssues: false,
@@ -764,6 +771,9 @@ export const baseState = {
   irsNoticeUploadFormInfo: [] as CreateCaseIrsForm[],
   irsPractitioners: [] as RawUser[],
   isTerminalUser: false,
+  isCreatingOrder: false,
+  isEditingDocketEntry: false,
+  isUpdatingWithFile: false,
   judgeActivityReport: {
     judgeActivityReportData: {},
   } as JudgeActivityReportState,
@@ -782,15 +792,18 @@ export const baseState = {
   },
   messages: [] as RawMessage[],
   messagesInboxCount: 0,
+  messageDetail: undefined as unknown as RawMessage,
   messagesPage: {
     completionSuccess: false,
     messagesCompletedAt: '',
     messagesCompletedBy: '',
     selectedMessages: new Map() as Map<string, string>,
   },
+  messageCacheKey: undefined as unknown as string,
   messagesSectionCount: 0,
   minuteSheetForm: cloneDeep(initialMinuteSheetFormState),
   minuteSheetFormSnapshot: '',
+  messageViewerDocumentToDisplay: undefined as unknown as ViewerDocument,
   modal: {
     calendarNotes: undefined as string | undefined,
     contactSupportMessage: undefined as string | undefined, // the "contact support" message sans email address
@@ -884,13 +897,14 @@ export const baseState = {
     waitingForResponse: false,
     waitingForResponseRequests: 0,
   },
+  redirectUrl: undefined as string | undefined,
   refreshTokenInterval: undefined as unknown as NodeJS.Timeout,
   saveAlertsForNavigation: false,
   scanner: {
     batchIndexToDelete: null,
     batchIndexToRescan: null, // batch index for re-scanning
     batchToDeletePageCount: null,
-    batches: [],
+    batches: {} as Record<string, Array<{ index: number; pages: any[] }>>,
     currentPageIndex: 0, // batches from scanning
     isScanning: false,
     scanMode: undefined,
@@ -899,6 +913,7 @@ export const baseState = {
     dynamScriptClass: null,
     initiateScriptLoaded: false,
     configScriptLoaded: false,
+    sources: [] as string[],
   },
   screenMetadata: {} as any,
   searchResults: {} as any,
@@ -960,6 +975,7 @@ export const baseState = {
   validationErrors: {} as Record<string, any>,
   viewerDocumentToDisplay: undefined as unknown as ViewerDocument,
   viewerDraftDocumentToDisplay: undefined as unknown as ViewerDocument,
+  wizardStep: undefined as string | undefined,
   workItem: {},
   workItemActions: {},
   workItemMetadata: {},
@@ -994,6 +1010,7 @@ export type CreateCaseIrsForm = {
 
 export type ViewerDocument = {
   docketEntryId: string;
+  documentId?: string;
   documentTitle?: string; // Should this be required?
   documentType?: string;
   eventCode?: string;

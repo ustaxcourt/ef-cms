@@ -64,7 +64,11 @@ export const baseState = {
     pageNumber?: number;
     proceedingType?: string;
   },
-  advancedSearchForm: {},
+  advancedSearchForm: undefined as unknown as {
+    caseSearchByName: { petitionerName: string };
+    opinionSearch?: { [key: string]: boolean };
+    orderSearch?: { [key: string]: boolean };
+  },
   advancedSearchTab: 'case',
   alertError: null,
   alertSuccess: null,
