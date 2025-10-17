@@ -23,6 +23,7 @@ export const OpinionSearchForm = connect(
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
     setCurrentPaginationPageSequence:
       sequences.setCurrentPaginationPageSequence,
+    submitAdvancedSearchSequence: sequences.submitOpinionAdvancedSearchSequence,
     updateAdvancedOpinionSearchFormValueSequence:
       sequences.updateAdvancedOpinionSearchFormValueSequence,
     validateOpinionSearchSequence: sequences.validateOpinionSearchSequence,

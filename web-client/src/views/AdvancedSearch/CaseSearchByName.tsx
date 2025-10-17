@@ -22,6 +22,7 @@ export const CaseSearchByName = connect(
     advancedSearchHelper: state.advancedSearchHelper,
     caseSearchByNameHelper: state.caseSearchByNameHelper,
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
+    submitAdvancedSearchSequence: sequences.submitCaseAdvancedSearchSequence,
     updateAdvancedSearchFormValueSequence:
       sequences.updateAdvancedSearchFormValueSequence,
     updateCaseAdvancedSearchByNameFormValueSequence:

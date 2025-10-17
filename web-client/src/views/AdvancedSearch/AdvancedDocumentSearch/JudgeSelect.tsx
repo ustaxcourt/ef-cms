@@ -5,10 +5,24 @@ import React from 'react';
 
 export const JudgeSelect = connect(
   {
-    formValue: props.formValue,
-    judges: props.judges,
+    formValue: (props as { formValue: string }).formValue,
+    judges: (
+      props as {
+        judges: Array<{
+          judgeFullName: string;
+          lastName: string;
+          name: string;
+        }>;
+      }
+    ).judges,
   },
-  function JudgeSelect({ formValue, judges }) {
+  function JudgeSelect({
+    formValue,
+    judges,
+  }: {
+    formValue: string;
+    judges: Array<{ judgeFullName: string; lastName: string; name: string }>;
+  }) {
     return (
       <>
         <label className="usa-label" htmlFor="date-range">

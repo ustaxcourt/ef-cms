@@ -10,7 +10,8 @@ const modalRoot = window.document.getElementById('modal-root');
 
 const OverlayUnRef = connect(
   {
-    onEscSequence: sequences[props.onEscSequence],
+    onEscSequence:
+      sequences[(props as { onEscSequence: string }).onEscSequence],
   },
   function OverlayUnRef({
     children,
@@ -19,6 +20,13 @@ const OverlayUnRef = connect(
     onEscSequence,
     preventEsc,
     preventScrolling,
+  }: {
+    onEscSequence?: (event: Event) => void | boolean;
+    children?: React.ReactNode;
+    className?: string;
+    forwardedRef?: React.Ref<HTMLDialogElement>;
+    preventEsc?: boolean;
+    preventScrolling?: boolean;
   }) {
     if (!onEscSequence) onEscSequence = () => {};
 

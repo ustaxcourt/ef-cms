@@ -771,6 +771,7 @@ export const baseState = {
   },
   form: {} as any,
   fromPage: '',
+  isPublic: false,
   // shared object for creating new entities, clear before using
   header: {
     searchTerm: '',

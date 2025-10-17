@@ -21,6 +21,7 @@ export const OrderSearchForm = connect(
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
     setCurrentPaginationPageSequence:
       sequences.setCurrentPaginationPageSequence,
+    submitAdvancedSearchSequence: sequences.submitOrderAdvancedSearchSequence,
     updateAdvancedOrderSearchFormValueSequence:
       sequences.updateAdvancedOrderSearchFormValueSequence,
     validateOrderSearchSequence: sequences.validateOrderSearchSequence,

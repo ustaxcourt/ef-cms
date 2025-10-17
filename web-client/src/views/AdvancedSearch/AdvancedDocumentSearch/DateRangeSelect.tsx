@@ -6,15 +6,21 @@ import React from 'react';
 export const DateRangeSelect = connect(
   {
     DATE_RANGE_SEARCH_OPTIONS: state.constants.DATE_RANGE_SEARCH_OPTIONS,
-    searchValue: props.searchValue,
-    updateSequence: props.updateSequence,
-    validateSequence: props.validateSequence,
+    searchValue: (props as { searchValue: string }).searchValue,
+    updateSequence: (props as { updateSequence: Function }).updateSequence,
+    validateSequence: (props as { validateSequence: Function })
+      .validateSequence,
   },
   function DateRangeSelect({
     DATE_RANGE_SEARCH_OPTIONS,
     searchValue,
     updateSequence,
     validateSequence,
+  }: {
+    DATE_RANGE_SEARCH_OPTIONS: { ALL_DATES: string; CUSTOM_DATES: string };
+    searchValue: string;
+    updateSequence: (params: { key: string; value: string }) => void;
+    validateSequence: () => void;
   }) {
     return (
       <>

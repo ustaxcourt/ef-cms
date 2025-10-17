@@ -17,8 +17,6 @@ export const DropdownMenu = connect(
       sequences.openAddEditCalendarNoteModalSequence,
     openRemoveFromTrialSessionModalSequence:
       sequences.openRemoveFromTrialSessionModalSequence,
-    toggleEditCaseTrialInfoMenuSequence:
-      sequences.toggleEditCaseTrialInfoMenuSequence,
     toggleMenuStateSequence: sequences.toggleMenuStateSequence,
   },
   function DropdownMenu({
@@ -28,6 +26,13 @@ export const DropdownMenu = connect(
     menuItems,
     menuState,
     toggleMenuStateSequence,
+  }: {
+    clearDropDownMenuStateSequence: Function;
+    id: string;
+    isMenuOpen: boolean;
+    menuItems: Array<{ id: string; label: string; click: () => void }>;
+    menuState: string;
+    toggleMenuStateSequence: Function;
   }) {
     const menuRef = useRef(null);
 

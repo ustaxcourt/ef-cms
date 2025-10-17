@@ -9,6 +9,8 @@ export const CaseSearchByDocketNumber = connect(
   {
     advancedSearchForm: state.advancedSearchForm,
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
+    submitDocketNumberSearchSequence:
+      sequences.submitCaseDocketNumberSearchSequence,
     updateAdvancedSearchFormValueSequence:
       sequences.updateAdvancedSearchFormValueSequence,
     validateCaseDocketNumberSearchFormSequence:
