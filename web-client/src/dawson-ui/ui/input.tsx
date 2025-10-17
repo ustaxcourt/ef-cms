@@ -111,7 +111,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
         />
 
         {error && (
-          <div className="tw:mt-1 tw:flex tw:items-center tw:gap-2 tw:text-red-500">
+          <div className="tw:mt-[6px] tw:md:mt-[8px] tw:flex tw:items-center tw:gap-2 tw:text-red-500">
             <FontAwesomeIcon icon={faExclamationCircle} className="tw-text-[12px]" />
             <span className="tw-text-[16px] tw:md:text-[18px]">Enter a valid answer</span>
           </div>
