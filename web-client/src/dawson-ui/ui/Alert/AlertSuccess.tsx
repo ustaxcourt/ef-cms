@@ -42,7 +42,8 @@ export function AlertSuccess({
     }
   }, [alertSuccess]);
 
-  const AlertMessage = alertSuccess?.title ? AlertDescription : AlertHeader; // TODO: refactor this
+  const AlertMessage = alertSuccess?.title ? AlertDescription : AlertHeader; 
+
   const successProps = {
     closeButtonOnClick: dismissAlertSequence,
     isDismissible,
