@@ -2,6 +2,7 @@ import * as React from 'react';
 import { cn } from '@web-client/lib/utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
+// import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 
 interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: string;
@@ -90,6 +91,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             'tw:block tw:w-full tw:rounded-md tw:border tw:border-gray-300 tw:bg-white',
             'tw:px-3 tw:h-9 tw:text-sm tw:outline-none tw:cursor-text',
             'tw:w-[380px] max-xs:tw:w-[351px]',
+            'tw:placeholder:text-[18px]',
 
             // States
             'tw:placeholder:text-gray-400',
@@ -178,6 +180,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
             // States
             'tw:placeholder:text-gray-400',
             'tw:focus:border-blue-500 tw:focus:ring-2 tw:focus:ring-blue-500/20',
+            'tw:placeholder:text-[18px]',
             error &&
               'tw:border-red-300 tw:focus:border-red-500 tw:focus:ring-red-500/20',
             'tw:disabled:cursor-not-allowed tw:disabled:bg-gray-50 tw:disabled:text-gray-500',
