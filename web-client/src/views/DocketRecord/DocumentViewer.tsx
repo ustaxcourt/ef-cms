@@ -98,7 +98,7 @@ export const DocumentViewer = connect(
                             {entry.qcNeeded && (
                               <WrappedIcon
                                 iconClass="top-neg-2px fa-icon-red float-right position-relative"
-                                icon={['fa', 'star']}
+                                icon={['fas', 'star']}
                                 title="Is untouched" />
                             )}
                           </div>
