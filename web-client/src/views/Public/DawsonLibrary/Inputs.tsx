@@ -27,7 +27,7 @@ export function Inputs() {
             />
           </div>
 
-          <div className="tw:flex tw:items-start tw:gap-4 max-xs:tw:flex-col max-xs:tw:w-full">
+          <div className="tw:flex tw:items-center tw:gap-4 max-xs:tw:flex-col max-xs:tw:w-full">
             <div className="tw:flex tw:flex-col">
               <div className="tw:flex tw:items-center">
                 <span className="tw:text-[16px] tw:md:text-[18px] !tw:font-semibold !tw:text-gray-900" style={{ fontWeight: '600' }}>
