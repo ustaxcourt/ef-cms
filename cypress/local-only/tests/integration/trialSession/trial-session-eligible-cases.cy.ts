@@ -35,6 +35,7 @@ describe('Trial Session Eligible Cases Journey', () => {
       trialLocation,
       caseType: 'Other',
       yearReceived: '2019',
+      includeApwDocument: false,
     }).then(({ docketNumber }) => {
       createdDocketNumbers.push(docketNumber);
 
@@ -48,6 +49,7 @@ describe('Trial Session Eligible Cases Journey', () => {
       trialLocation,
       yearReceived: '2019',
       caseType: 'Other',
+      includeApwDocument: false,
     }).then(({ docketNumber }) => {
       createdDocketNumbers.push(docketNumber);
 
