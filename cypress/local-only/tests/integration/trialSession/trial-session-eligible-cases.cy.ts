@@ -62,6 +62,7 @@ describe('Trial Session Eligible Cases Journey', () => {
       procedureType: 'Regular',
       trialLocation,
       yearReceived: '2019',
+      includeApwDocument: false,
     }).then(({ docketNumber }) => {
       createdDocketNumbers.push(docketNumber);
 
@@ -75,6 +76,7 @@ describe('Trial Session Eligible Cases Journey', () => {
       trialLocation,
       caseType: 'CDP (Lien/Levy)',
       yearReceived: '2019',
+      includeApwDocument: false,
     }).then(({ docketNumber }) => {
       createdDocketNumbers.push(docketNumber);
 
@@ -88,6 +90,7 @@ describe('Trial Session Eligible Cases Journey', () => {
       trialLocation,
       caseType: 'Passport',
       yearReceived: '2019',
+      includeApwDocument: false,
     }).then(({ docketNumber }) => {
       createdDocketNumbers.push(docketNumber);
 
