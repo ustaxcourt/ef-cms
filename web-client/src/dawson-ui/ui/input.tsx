@@ -91,7 +91,8 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             'tw:block tw:w-full tw:rounded-md tw:border tw:border-gray-300 tw:bg-white',
             'tw:px-3 tw:h-9 tw:text-sm tw:outline-none tw:cursor-text',
             'tw:w-[380px] max-xs:tw:w-[351px]',
-            'tw:placeholder:text-[18px]',
+            // Responsive placeholder sizing: 16px mobile, 18px desktop
+            'tw:placeholder:text-[16px] tw:md:placeholder:text-[18px]',
 
             // States
             'tw:placeholder:text-gray-400',
@@ -110,9 +111,9 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
         />
 
         {error && (
-          <div className="tw:flex tw:items-center tw:gap-2 tw:text-red-500">
+          <div className="tw:mt-1 tw:flex tw:items-center tw:gap-2 tw:text-red-500">
             <FontAwesomeIcon icon={faExclamationCircle} className="tw-text-[12px]" />
-            <span className="tw-text-[12px]">Enter a valid answer</span>
+            <span className="tw-text-[16px] tw:md:text-[18px]">Enter a valid answer</span>
           </div>
         )}
       </div>
@@ -176,11 +177,11 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
             'tw:px-3 tw:py-2 tw:text-sm tw:outline-none tw:cursor-text',
             'tw:min-h-[100px] tw:resize-y',
             'tw:w-[380px] max-xs:tw:w-[351px]',
-
-            // States
+            
+            // Responsive placeholder sizing: 16px mobile, 18px desktop
+            'tw:placeholder:text-[16px] tw:md:placeholder:text-[18px]',
             'tw:placeholder:text-gray-400',
             'tw:focus:border-blue-500 tw:focus:ring-2 tw:focus:ring-blue-500/20',
-            'tw:placeholder:text-[18px]',
             error &&
               'tw:border-red-500 tw:ring-1 tw:ring-red-500',
             'tw:disabled:cursor-not-allowed tw:disabled:bg-gray-50 tw:disabled:text-gray-500',
@@ -191,9 +192,9 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
         />
 
         {error && (
-          <div className="tw:flex tw:items-center tw:gap-2 tw:text-red-500">
+          <div className="tw:mt-1 tw:flex tw:items-center tw:gap-2 tw:text-red-500">
             <FontAwesomeIcon icon={faQuestionCircle} className="tw-text-[16px]" />
-            <span className="tw-text-[12px]">Enter a valid answer</span>
+            <span className="tw-text-[16px] tw:md:text-[18px]">Enter a valid answer</span>
           </div>
         )}
       </div>
