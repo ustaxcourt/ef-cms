@@ -72,7 +72,6 @@ export function AlertWarning({
       )}
 
       {alertWarning.message && (
-        // TODO: replace id where it is implemented
         <AlertMessage dataTestId={`warning-msg-${dataTestId}`} {...warningProps}>
           {alertWarning.message}
         </AlertMessage>
