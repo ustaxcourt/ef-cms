@@ -51,7 +51,6 @@ function Alert({
   closeButtonOnClick,
   variant,
   dataTestId,
-    ...props
 
 }: React.ComponentProps<'div'> &
   VariantProps<typeof alertVariants> & {
@@ -63,12 +62,13 @@ function Alert({
     const dataTestIdProp = dataTestId ? `data-testId-${dataTestId}` : undefined;
     
       return (
-      <div
+      /* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions */
+      <div 
         data-slot="alert"
         role="alert"
         className={cn(alertVariants({ variant }), className)}
         data-testId={dataTestIdProp}
-        {...props}>
+        onClick={closeButtonOnClick}>
         <div className="tw:relative">{children}</div>
       </div>
     );
@@ -87,7 +87,6 @@ function AlertHeader({
   title,
   variant,
   dataTestId,
-  ...props
 }: React.ComponentProps<'p'> & AlertHeaderType) {
   return (
     <div className="tw:flex">
@@ -106,7 +105,6 @@ function AlertHeader({
         data-slot="alert-title"
         data-testid={`alert-header-${dataTestId}`}
         onClick={closeButtonOnClick}
-        {...props}
       ></div>
       {isDismissible && (
         <div className="tw:ml-auto">
