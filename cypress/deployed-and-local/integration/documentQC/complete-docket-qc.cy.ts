@@ -121,7 +121,16 @@ describe('Document QC Complete', () => {
           loginAsCaseServicesSupervisor('caseServicesSupervisor1@example.com');
           cy.visit('/document-qc/section/inbox/selectedSection?section=docket');
           cy.get('table.usa-table');
-          return cy.contains('tr', docketNumber);
+          return cy.get('body').then(body => {
+            const workItem = body.find(
+              `[data-testid="work-item-${docketNumber}"]`,
+            );
+            const assigneeName = workItem.find(
+              '[data-testid="table-column-work-item-assigned-to"]',
+            );
+            const text = assigneeName.text();
+            return cy.wrap(text.includes(docketClerkInfo.name));
+          });
         });
 
         cy.get(`[data-testid="work-item-${docketNumber}"]`)
@@ -139,15 +148,9 @@ describe('Document QC Complete', () => {
         retry(() => {
           cy.visit('/document-qc/my/outbox');
           cy.get('table.usa-table');
-          return cy.get('tr').then(rows => {
-            const hasDocketNumber = rows
-              .toArray()
-              .some(
-                row =>
-                  row.textContent && row.textContent.includes(docketNumber),
-              );
-            return cy.wrap(hasDocketNumber);
-          });
+          return cy
+            .get(`[data-testid^="work-item-outbox-row-${docketNumber}"]`)
+            .then($el => cy.wrap($el.length > 0));
         });
       });
     });
