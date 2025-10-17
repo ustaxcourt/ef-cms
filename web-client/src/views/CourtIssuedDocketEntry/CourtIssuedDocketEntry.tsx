@@ -202,76 +202,90 @@ export const CourtIssuedDocketEntry = connect(
                     <div>
                       {form.affectedDocketEntries.map((motion, i) => {
                         return (
-                          <FormGroup
-                            errorText={validationErrors.dispositionOrder}
-                            key={motion.arrayKey}
-                          >
-                            <label
-                              className="usa-label"
-                              htmlFor="related-motion"
-                              id="related-motion-label"
-                            >
-                              What motion is being acted on?
-                            </label>
-                            <SelectSearch
-                              className="usa-label"
-                              aria-labelledby="related-motion-label"
-                              data-testid="related-motion-type-search"
-                              id="affectedMotion"
-                              isClearable={true}
-                              name="affectedMotion"
-                              options={
-                                addCourtIssuedDocketEntryHelper.caseMotions
+                          <div key={motion.arrayKey}>
+                            <FormGroup
+                              errorText={
+                                validationErrors[
+                                  `affectedDocketEntries-${i}-docketEntryId`
+                                ]
                               }
-                              onChange={(inputValue: any) => {
-                                // TODO (#8546): Refactor this to return eligable docket entries (motions)
-                                updateCourtIssuedDocketEntryFormValueSequence({
-                                  key: 'affectedDocketEntries',
-                                  index: i,
-                                  value: Object.assign(
-                                    form.affectedDocketEntries[i],
-                                    {
-                                      docketEntryId: inputValue.value,
-                                    },
-                                  ),
-                                });
-
-                                validateCourtIssuedDocketEntrySequence();
-                              }}
-                            />
-                            <label
-                              className="usa-label"
-                              htmlFor="related-motion-disposition"
-                              id="related-motion-disposition-label"
                             >
-                              What action is being taken?
-                            </label>
-                            <SelectSearch
-                              aria-labelledby="related-motion-disposition-label"
-                              data-testid="related-motion-disposition-type-search"
-                              id="related-motion-disposition"
-                              isClearable={true}
-                              name="relatedMotionDisposition"
-                              options={
-                                addCourtIssuedDocketEntryHelper.relatedMotionDispositions
-                              }
-                              onChange={(inputValue: any) => {
-                                // TODO (#8546): Refactor this to return eligable docket entries (motions)
-                                updateCourtIssuedDocketEntryFormValueSequence({
-                                  key: 'affectedDocketEntries',
-                                  index: i,
-                                  value: Object.assign(
-                                    form.affectedDocketEntries[i],
+                              <label
+                                className="usa-label"
+                                htmlFor="related-motion"
+                                id="related-motion-label"
+                              >
+                                What motion is being acted on?
+                              </label>
+                              <SelectSearch
+                                className="usa-label"
+                                aria-labelledby="related-motion-label"
+                                data-testid="related-motion-type-search"
+                                id="affectedMotion"
+                                isClearable={true}
+                                name="affectedMotion"
+                                options={
+                                  addCourtIssuedDocketEntryHelper.caseMotions
+                                }
+                                onChange={(inputValue: any) => {
+                                  updateCourtIssuedDocketEntryFormValueSequence(
                                     {
-                                      disposition: inputValue.value,
+                                      key: 'affectedDocketEntries',
+                                      index: i,
+                                      value: Object.assign(
+                                        form.affectedDocketEntries[i],
+                                        {
+                                          docketEntryId: inputValue.value,
+                                        },
+                                      ),
                                     },
-                                  ),
-                                });
+                                  );
 
-                                validateCourtIssuedDocketEntrySequence();
-                              }}
-                            />
+                                  validateCourtIssuedDocketEntrySequence();
+                                }}
+                              />
+                            </FormGroup>
+                            <FormGroup
+                              errorText={
+                                validationErrors[
+                                  `affectedDocketEntries-${i}-disposition`
+                                ]
+                              }
+                            >
+                              <label
+                                className="usa-label"
+                                htmlFor="related-motion-disposition"
+                                id="related-motion-disposition-label"
+                              >
+                                What action is being taken?
+                              </label>
+                              <SelectSearch
+                                aria-labelledby="related-motion-disposition-label"
+                                data-testid="related-motion-disposition-type-search"
+                                id="related-motion-disposition"
+                                isClearable={true}
+                                name="relatedMotionDisposition"
+                                options={
+                                  addCourtIssuedDocketEntryHelper.relatedMotionDispositions
+                                }
+                                onChange={(inputValue: any) => {
+                                  updateCourtIssuedDocketEntryFormValueSequence(
+                                    {
+                                      key: 'affectedDocketEntries',
+                                      index: i,
+                                      value: Object.assign(
+                                        form.affectedDocketEntries[i],
+                                        {
+                                          disposition: inputValue.value,
+                                        },
+                                      ),
+                                    },
+                                  );
 
+                                  validateCourtIssuedDocketEntrySequence();
+                                }}
+                              />
+                            </FormGroup>
                             <Button
                               link
                               icon="minus-circle"
@@ -289,7 +303,7 @@ export const CourtIssuedDocketEntry = connect(
                             </Button>
 
                             {form.affectedDocketEntries.length > 1 && <hr></hr>}
-                          </FormGroup>
+                          </div>
                         );
                       })}
 
