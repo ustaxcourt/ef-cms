@@ -40,6 +40,16 @@ export const JoiValidationConstants = Object.freeze({
       .valid(...CAV_AND_SUBMITTED_CASE_STATUS),
   ),
   MAX_FILE_SIZE_BYTES: joi.number().integer().min(1).max(MAX_FILE_SIZE_BYTES),
+  RELATED_DOCKET_ENTRY: joi
+    .object({
+      disposition: joi.string().required(),
+      docketEntryId: joi.string().required(),
+    })
+    .messages({
+      'any.required':
+        'Each related docket entry must have a disposition and docketEntryId',
+      'object.base': 'Related docket entry must be a valid object',
+    }),
   STRING,
   TWENTYFOUR_HOUR_MINUTES: STRING.regex(
     /^(([0-1][0-9])|([2][0-3])):([0-5][0-9])$/,

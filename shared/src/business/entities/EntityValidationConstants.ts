@@ -45,13 +45,6 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
   additionalInfo2: JoiValidationConstants.STRING.max(500).optional().messages({
     'string.max': 'Limit is 500 characters. Enter 500 or fewer characters.',
   }),
-  affectedMotion: joi.when('dispositionOrder', {
-    is: true,
-    then: joi.required().messages({
-      'any.required': 'Select a motion to which this order relates.',
-    }),
-    otherwise: joi.optional().allow(null),
-  }),
   archived: joi
     .boolean()
     .optional()
