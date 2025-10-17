@@ -32,7 +32,6 @@ export const SERVICE_INDICATOR_ERROR = {
   serviceIndicator:
     'You cannot change from paper to electronic service. Select a valid service preference.',
 };
-// TODO (#8546): Add order motion relation validation rules here
 export const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
   action: JoiValidationConstants.STRING.max(100)
     .optional()
