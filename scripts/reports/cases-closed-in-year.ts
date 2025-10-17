@@ -6,13 +6,11 @@ import {
   type ScriptConfig,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
-import {
-  ServerApplicationContext,
-  createApplicationContext,
-} from '@web-api/applicationContext';
+import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { generateCsv } from '../helpers/generate-csv';
+import { getDbReader } from '@web-api/database';
 import { pick } from 'lodash';
-import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
+import { sql } from 'kysely';
 import { validateDateAndCreateISO } from '@shared/business/utilities/DateHandler';
 
 const scriptConfig: ScriptConfig = {
@@ -58,71 +56,28 @@ const END = validateDateAndCreateISO({
   year: fiscal ? year : `${Number(year) + 1}`,
 })!;
 
-const getAllCasesClosedInFiscalYear = async ({
-  applicationContext,
-}: {
-  applicationContext: ServerApplicationContext;
-}): Promise<RawCase[]> => {
-  const { results }: { results: RawCase[] } = await searchAll({
-    applicationContext,
-    searchParameters: {
-      body: {
-        query: {
-          bool: {
-            must: [
-              {
-                term: {
-                  'entityName.S': 'Case',
-                },
-              },
-              {
-                terms: {
-                  'caseStatusHistory.L.M.updatedCaseStatus.S': CLOSED_STATUSES,
-                },
-              },
-              {
-                range: {
-                  'caseStatusHistory.L.M.date.S': {
-                    gte: BEGIN,
-                    lt: END,
-                  },
-                },
-              },
-            ],
-          },
-        },
-        sort: [{ 'sortableDocketNumber.N': 'asc' }],
-      },
-      index: 'efcms-case',
-    },
-  });
-  console.log(
-    `Found ${results.length} cases with a "closed" status history record and` +
-      ` a status history record generated in fiscal year ${year}`,
-  );
-  const ret = results.filter(c => wasClosedThisFiscalYear(c));
-  console.log(
-    `Filtered results to ${ret.length} cases having a "closed"` +
-      ` status history record that was generated in fiscal year ${year}`,
-  );
-  return ret;
-};
+const getAllCasesClosedInYear = async (): Promise<RawCase[]> => {
+  const allResults = (await getDbReader(reader =>
+    reader
+      .selectFrom('dwCase')
+      .crossJoin(
+        sql`LATERAL jsonb_array_elements(case_status_history)`.as('csh'),
+      )
+      .select(sql`dw_case.*`.as('dwCase'))
+      .where(sql`csh->>'updatedCaseStatus'`, 'in', CLOSED_STATUSES)
+      .where(sql`(csh->>'date')::date`, '>=', BEGIN)
+      .where(sql`(csh->>'date')::date`, '<', END)
+      .execute(),
+  )) as unknown as RawCase[];
+  const results = [
+    ...new Map(allResults.map(c => [c.docketNumber, c])).values(),
+  ].map(fromKyselyCase);
 
-const wasClosedThisFiscalYear = (c: RawCase): boolean => {
-  let closedThisFiscalYear = false;
-  for (const csh of c.caseStatusHistory || []) {
-    if (
-      csh.date &&
-      csh.date >= BEGIN &&
-      csh.date < END &&
-      csh.updatedCaseStatus &&
-      CLOSED_STATUSES.includes(csh.updatedCaseStatus)
-    ) {
-      closedThisFiscalYear = true;
-      break;
-    }
-  }
-  return closedThisFiscalYear;
+  console.log(
+    `Found ${results.length} cases with a "closed" status history record ` +
+      `that was generated in ${fiscal ? 'fiscal' : 'calendar'} year ${year}`,
+  );
+  return results;
 };
 
 const outputCsv = ({
@@ -168,9 +123,6 @@ const outputCsv = ({
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const applicationContext = createApplicationContext({});
-  const casesClosedInYear = await getAllCasesClosedInFiscalYear({
-    applicationContext,
-  });
+  const casesClosedInYear = await getAllCasesClosedInYear();
   outputCsv({ casesClosedInYear });
 })();
