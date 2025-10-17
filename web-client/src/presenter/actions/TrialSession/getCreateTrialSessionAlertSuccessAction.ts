@@ -11,10 +11,7 @@ export const getCreateTrialSessionAlertSuccessAction = ({
     metaData: string;
   };
 } => {
-  store.set(
-    (state as { lastCreatedTrialSessionId: unknown }).lastCreatedTrialSessionId,
-    props.trialSession,
-  );
+  store.set(state.lastCreatedTrialSessionId, props.trialSession);
 
   return {
     alertSuccess: {

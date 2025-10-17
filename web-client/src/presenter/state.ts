@@ -682,7 +682,7 @@ export const baseState = {
     entries: [],
   },
   completeForm: {},
-  confirmationText: undefined as
+  confirmationText: undefined as unknown as
     | string
     | { penalties: Record<string, string> }
     | { statistics: Record<string, unknown> }
@@ -986,6 +986,7 @@ export const baseState = {
   trialSessions: [] as any[],
   // Sometimes trialSessions, sometimes TrialSessionInfoDTO, sometimes ad-hoc trial sessions
   trialSessionsPage: cloneDeep(initialTrialSessionPageState),
+  lastCreatedTrialSessionId: undefined as unknown as string,
   user: cloneDeep(emptyUserState),
   userContactEditProgress: {} as {
     inProgress?: boolean;
