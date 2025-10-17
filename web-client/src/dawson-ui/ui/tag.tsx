@@ -9,17 +9,16 @@ import { omit } from 'lodash';
 
 const tagVariants = cva(
   cn(
-    'tw:rounded-[4px] tw:font-bold tw:uppercase tw:text-nowrap',
-    'tw:[&_svg]:align-[-1px]',
+    'tw:rounded-[4px] tw:font-bold tw:uppercase tw:text-nowrap tw:inline-flex tw:items-center tw:justify-center',
     //Mobile
-    'tw:text-[12px]',
+    'tw:text-xs',
     'tw:px-[6px]',
-    'tw:py-[2.25px]',
+    'tw:py-[2px]',
     'tw:[&_svg]:h-[10px]',
     'tw:[&_svg]:w-[10px]',
     //Desktop
-    'tw:xs:text-[14px]',
-    'tw:xs:py-[3px]',
+    'tw:xs:text-sm',
+    'tw:xs:py-[2px]',
     'tw:xs:px-[8px]',
     'tw:xs:[&_svg]:h-[12px]',
     'tw:xs:[&_svg]:w-[12px]',
@@ -30,13 +29,9 @@ const tagVariants = cva(
         primary: cn('tw:bg-white tw:text-primary-darker'),
         destructive: cn('tw:bg-destructive-dark tw:text-white'),
       },
-      size: {
-        default: '',
-      },
     },
     defaultVariants: {
       variant: 'primary',
-      size: 'default',
     },
   },
 );
@@ -49,7 +44,7 @@ export const Tag = ({
   children,
   variant,
   iconProps,
-  ...props
+  ...props // TODO: remove ...props, add className
 }: React.ComponentProps<'span'> &
   VariantProps<typeof tagVariants> &
   TagProps) => {
@@ -59,7 +54,7 @@ export const Tag = ({
   return (
     <span className={classes} {...remainingProps}>
       {iconProps && <FontAwesomeIcon className="tw:mr-[4px]" {...iconProps} />}
-      {children}
+      <span>{children}</span>
     </span>
   );
 };

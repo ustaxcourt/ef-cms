@@ -38,8 +38,7 @@ export function AlertSuccess({
     }
   }, [alertSuccess]);
 
-  const AlertMessage = alertSuccess?.title ? AlertDescription : AlertHeader;
-
+  const AlertMessage = alertSuccess?.title ? AlertDescription : AlertHeader; // TODO: refactor this
   const successProps = {
     closeButtonOnClick: dismissAlertSequence,
     isDismissible,
@@ -55,7 +54,7 @@ export function AlertSuccess({
           className={cn(className)}
           closeButtonOnClick={dismissAlertSequence}
           data-metadata={`${alertSuccess.metaData}`}
-          data-testid="success-alert"
+          data-testid="success-alert" // TODO: replace id where it is implemented
           isDismissible={isDismissible}
           ref={notificationRef}
           role="alert"
@@ -64,6 +63,7 @@ export function AlertSuccess({
           {alertSuccess.title && (
             <AlertHeader {...successProps}>{alertSuccess.title}</AlertHeader>
           )}
+          {/* message can be the header if the title does not exist */}
           <AlertMessage {...successProps}>{alertSuccess.message}</AlertMessage>
           {alertSuccess.linkUrl && (
             <AlertMessage {...successProps}>
