@@ -1,4 +1,5 @@
 import promiseRetry from 'promise-retry';
+import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
 
 function convertBytesToString(pdfBytes: number[]): string {
   const chunkSize = 10000;
@@ -75,8 +76,7 @@ export const cleanFileMetadata = async (pdfLib, fileReader: FileReader) => {
 
   pdfDoc.setKeywords([]);
 
-  // eslint-disable-next-line custom-rules-plugin/no-new-dates
-  const nowDateString = new Date();
+  const nowDateString = formatNow(FORMATS.ISO);
   pdfDoc.setCreationDate(nowDateString);
   pdfDoc.setModificationDate(nowDateString);
 
