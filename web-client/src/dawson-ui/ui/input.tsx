@@ -2,6 +2,7 @@ import * as React from 'react';
 import { cn } from '@web-client/lib/utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
+import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 
 interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: string;
@@ -110,7 +111,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 
         {error && (
           <div className="tw:flex tw:items-center tw:gap-2 tw:text-red-500">
-            <FontAwesomeIcon icon={faQuestionCircle} className="tw-text-[12px]" />
+            <FontAwesomeIcon icon={faExclamationCircle} className="tw-text-[12px]" />
             <span className="tw-text-[12px]">Enter a valid answer</span>
           </div>
         )}
