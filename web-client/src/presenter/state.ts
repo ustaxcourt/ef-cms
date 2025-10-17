@@ -987,7 +987,11 @@ export const baseState = {
   // Sometimes trialSessions, sometimes TrialSessionInfoDTO, sometimes ad-hoc trial sessions
   trialSessionsPage: cloneDeep(initialTrialSessionPageState),
   user: cloneDeep(emptyUserState),
-  userContactEditProgress: {} as { inProgress?: boolean },
+  userContactEditProgress: {} as {
+    inProgress?: boolean;
+    totalCases?: number;
+    completedCases?: number;
+  },
   users: [] as RawUser[],
   validationErrors: {} as Record<string, any>,
   viewerCorrespondenceToDisplay: null as {

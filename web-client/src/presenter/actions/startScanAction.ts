@@ -29,6 +29,13 @@ export const startScanAction = async ({
     const documentSelectedForScan = get(
       state.currentViewMetadata.documentSelectedForScan,
     );
+
+    if (!documentSelectedForScan) {
+      return path.error({
+        error: new Error('No document selected for scan'),
+      });
+    }
+
     const batches = get(state.scanner.batches[documentSelectedForScan]) || [];
     const nextIndex = batches.length
       ? Math.max(...batches.map(b => b.index)) + 1
@@ -36,13 +43,11 @@ export const startScanAction = async ({
 
     store.set(state.scanner.batches[documentSelectedForScan], [
       ...batches,
-      ...[
-        {
-          index: nextIndex,
-          pages,
-          scanMode,
-        },
-      ],
+      {
+        index: nextIndex,
+        pages,
+        scanMode,
+      },
     ]);
     store.set(state.scanner.selectedBatchIndex, nextIndex);
     store.set(state.scanner.currentPageIndex, 0);
