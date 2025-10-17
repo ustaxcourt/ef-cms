@@ -18,7 +18,7 @@ export const handler: Handler = async (_event, context) => {
     await Promise.all(
       TABLES_WITH_TTLS.map(async tableMetaData => {
         const { name: tableName } = tableMetaData;
-        const nowSeconds = formatNow(FORMATS.UNIX_TIMESTAMP_SECONDS);
+        const nowSeconds = Number(formatNow(FORMATS.UNIX_TIMESTAMP_SECONDS));
         await pgDeleteFrom({
           table: tableName as keyof Database,
           where: (cb: any) => cb.where(TIME_TO_LIVE_COLUMN, '<', nowSeconds),
