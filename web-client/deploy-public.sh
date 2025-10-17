@@ -3,8 +3,6 @@
 # shellcheck disable=SC1091
 . ./scripts/load-environment-from-secrets.sh
 
-echo "Env = ${ENV}"
-
 ./check-env-variables.sh \
   "EFCMS_DOMAIN" \
   "ENV" \
