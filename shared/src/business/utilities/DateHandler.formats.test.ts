@@ -1,3 +1,4 @@
+/* eslint-disable custom-rules-plugin/no-dates*/
 import { FORMATS, createISODateString, formatDateString } from './DateHandler';
 import { JoiValidationConstants } from '../entities/JoiValidationConstants';
 

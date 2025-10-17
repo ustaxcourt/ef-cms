@@ -1,4 +1,5 @@
 import { Kysely } from 'kysely';
+import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
 
 export async function up(db: Kysely<any>): Promise<void> {
   // dw User Table
@@ -119,11 +120,25 @@ export async function down(db: Kysely<any>): Promise<void> {
   await db.schema.dropIndex('idx_user_section').execute();
 
   // Rename tables to preserve data instead of dropping them
-  // eslint-disable-next-line custom-rules-plugin/no-new-dates
-  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-  await db.schema.alterTable('dwUserOnCasePending').renameTo(`dwUserOnCasePending_rollback_${timestamp}`).execute();
-  await db.schema.alterTable('dwUserConfirmationCode').renameTo(`dwUserConfirmationCode_rollback_${timestamp}`).execute();
-  await db.schema.alterTable('dwUserOnCase').renameTo(`dwUserOnCase_rollback_${timestamp}`).execute();
-  await db.schema.alterTable('dwUser').renameTo(`dwUser_rollback_${timestamp}`).execute();
-  await db.schema.alterTable('dwBarNumber').renameTo(`dwBarNumber_rollback_${timestamp}`).execute();
+  const timestamp = formatNow(FORMATS.ISO).replace(/[:.]/g, '-');
+  await db.schema
+    .alterTable('dwUserOnCasePending')
+    .renameTo(`dwUserOnCasePending_rollback_${timestamp}`)
+    .execute();
+  await db.schema
+    .alterTable('dwUserConfirmationCode')
+    .renameTo(`dwUserConfirmationCode_rollback_${timestamp}`)
+    .execute();
+  await db.schema
+    .alterTable('dwUserOnCase')
+    .renameTo(`dwUserOnCase_rollback_${timestamp}`)
+    .execute();
+  await db.schema
+    .alterTable('dwUser')
+    .renameTo(`dwUser_rollback_${timestamp}`)
+    .execute();
+  await db.schema
+    .alterTable('dwBarNumber')
+    .renameTo(`dwBarNumber_rollback_${timestamp}`)
+    .execute();
 }
