@@ -42,7 +42,7 @@ export const statisticsFormHelper = (
     }
   });
 
-  const penalties = get(state.modal.penalties);
+  const penalties = get(state.modal.penalties) as unknown[] | undefined;
   const showAddAnotherPenaltyButton = penalties && penalties.length < 10;
 
   return {

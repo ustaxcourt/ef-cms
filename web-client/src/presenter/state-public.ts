@@ -70,7 +70,12 @@ export const baseState = {
     orderSearch?: { [key: string]: boolean };
   },
   advancedSearchTab: 'case',
-  alertError: null,
+  alertError: null as null | {
+    title?: string;
+    message?: string;
+    messages?: string[];
+    responseCode?: number;
+  },
   alertSuccess: null,
   caseDetail: {} as RawPublicCase,
   cognitoResendVerificationLinkUrl: '',
@@ -119,10 +124,22 @@ export const baseState = {
     sortField: 'filingDate',
     sortOrder: DESCENDING,
   },
-  todaysOpinions: [],
+  todaysOpinions: [] as Array<{
+    filingDate: string;
+    judge?: string;
+    signedJudgeName?: string;
+    numberOfPages?: number;
+  }>,
   todaysOrders: {
     page: 1,
-    results: [],
+    results: [] as Array<{
+      eventCode: string;
+      judge?: string;
+      signedJudgeName?: string;
+      filingDate: string;
+      numberOfPages?: number;
+      docketNumber: string;
+    }>,
     totalCount: 0,
   },
   trialSessionDetailsPage: {

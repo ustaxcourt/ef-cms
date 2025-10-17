@@ -767,6 +767,7 @@ export const baseState = {
     isUploading: false,
     percentComplete: 0,
     timeRemaining: Number.POSITIVE_INFINITY,
+    noThrottle: false as boolean | undefined,
   },
   form: {} as any,
   fromPage: '',
@@ -806,7 +807,7 @@ export const baseState = {
   },
   messages: [] as RawMessage[],
   messagesInboxCount: 0,
-  messageDetail: undefined as unknown as RawMessage,
+  messageDetail: undefined as unknown as RawMessage[],
   messagesPage: {
     completionSuccess: false,
     messagesCompletedAt: '',
@@ -829,6 +830,7 @@ export const baseState = {
     title: undefined as string | undefined,
     trialSessionId: undefined as string | undefined,
     troubleshootingInfo: undefined as TroubleshootingLinkInfo | undefined, // steps for troubleshooting
+    penalties: undefined as unknown[] | undefined,
   } as Record<string, unknown>,
   navigation: {
     caseDetailMenu: '',
@@ -857,12 +859,16 @@ export const baseState = {
     nameForSigning: '',
     nameForSigningLine2: '',
     pageNumber: 1,
-    pdfjsObj: null as { getData: () => Promise<unknown> } | null,
+    pdfjsObj: null as {
+      getData: () => Promise<unknown>;
+      numPages: number;
+    } | null,
     signatureApplied: false,
     signatureData: null as { scale: number; x: number; y: number } | null,
     stampApplied: false,
     stampData: null,
     isPdfAlreadySigned: false as boolean | undefined,
+    isPdfAlreadyStamped: false as boolean | undefined,
   },
   pdfGeneratedUrl: '',
   pdfPreviewUrl: '',
@@ -920,7 +926,15 @@ export const baseState = {
     batchIndexToDelete: null,
     batchIndexToRescan: null, // batch index for re-scanning
     batchToDeletePageCount: null,
-    batches: {} as Record<string, Array<{ index: number; pages: any[] }>>,
+    batches: {} as Record<
+      string,
+      Array<{
+        index: number;
+        pages: any[];
+        scanMode?: string;
+        scanModeLabel?: string;
+      }>
+    >,
     currentPageIndex: 0, // batches from scanning
     isScanning: false,
     scanMode: undefined,
@@ -946,6 +960,7 @@ export const baseState = {
   showConfirmPassword: false,
   showPassword: false,
   showValidation: false,
+  showingAdditionalPetitioners: false,
   statusReportOrder: {
     docketNumbersToDisplay: [],
     statusReportFilingDate: '',
@@ -994,6 +1009,7 @@ export const baseState = {
     completedCases?: number;
   },
   users: [] as RawUser[],
+  trialClerks: [] as RawUser[],
   validationErrors: {} as Record<string, any>,
   viewerCorrespondenceToDisplay: null as {
     correspondenceId: string;
