@@ -10,12 +10,12 @@ import {
   createISODateAtStartOfDayEST,
 } from '@shared/business/utilities/DateHandler';
 import { getDocumentQCServedForUser } from '@web-api/persistence/postgres/workitems/getDocumentQCServedForUser';
-import { WorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
+import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
 
 export const getDocumentQCServedForUserInteractor = async (
   { userId }: { userId: string },
   authorizedUser: UnknownAuthUser,
-): Promise<WorkItemWithCaseInfo[]> => {
+): Promise<RawWorkItemWithCaseAndDocketEntryInfo[]> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.WORKITEM)) {
     throw new UnauthorizedError('Unauthorized');
   }

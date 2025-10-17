@@ -27,7 +27,7 @@ export const openCaseDocumentDownloadUrlAction = async ({
   }
 
   if (!isForIFrame && !useSameTab) {
-    await applicationContext.getUtilities().openUrlInNewTab({ url });
+    applicationContext.getUtilities().openUrlInNewTab({ url });
   } else {
     if (isForIFrame) {
       store.set(state.iframeSrc, url);

@@ -6,21 +6,30 @@ import {
   isAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
+import { ROLES } from '@shared/business/entities/EntityConstants';
+
 
 export const getCaseInteractor = async (
   { docketNumber }: { docketNumber: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<RawCase> => {
   if (!isAuthUser(authorizedUser)) {
     throw new UnauthorizedError(
       `Invalid User attempting to view docket Number: ${docketNumber}`,
     );
   }
 
-  const caseRecord = await getCaseByDocketNumber({
-    docketNumber: Case.formatDocketNumber(docketNumber),
-    user: authorizedUser,
-  });
+  const [caseRecord, workItems] = await Promise.all([
+    getCaseByDocketNumber({
+      docketNumber: Case.formatDocketNumber(docketNumber),
+      user: authorizedUser,
+    }),
+    getWorkItemsByDocketNumber({
+      docketNumber: Case.formatDocketNumber(docketNumber),
+    }),
+  ]);
+
   const isValidCase = Boolean(caseRecord?.docketNumber);
 
   if (!isValidCase) {
@@ -29,5 +38,34 @@ export const getCaseInteractor = async (
     throw error;
   }
 
-  return CaseFactory.getCase({ rawCase: caseRecord, user: authorizedUser });
+  const theCase = CaseFactory.getCase({
+    rawCase: caseRecord,
+    user: authorizedUser,
+  });
+
+  // The UI needs some work item info associated with the docket entry, so we attach that here
+  const workItemByDocketEntryId = new Map<string, (typeof workItems)[0]>(
+    workItems.map(wi => [wi.docketEntryId, wi]),
+  );
+  const docketEntriesWithUIInfo = theCase.docketEntries.map(docketEntry => {
+    const workItem = workItemByDocketEntryId.get(docketEntry.docketEntryId);
+
+    docketEntry.servedParties?.forEach(party => {
+      if (!(authorizedUser.role === ROLES.docketClerk || authorizedUser.role === ROLES.admissionsClerk)) {
+        party.email = undefined
+      }
+      return party;
+    })
+
+    return {
+      ...docketEntry,
+      qcComplete: !!workItem?.completedAt,
+      qcViewed: !!workItem?.isRead,
+      workItemId: workItem?.workItemId,
+    };
+  });
+  return {
+    ...theCase.toRawObject(),
+    docketEntries: docketEntriesWithUIInfo,
+  } as RawCase;
 };

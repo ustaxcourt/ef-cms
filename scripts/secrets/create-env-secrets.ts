@@ -69,6 +69,11 @@ const scriptConfig: ScriptConfig = {
       long: 'irs-superuser-email',
       type: 'string',
     },
+    opensearchEngineVersion: {
+      default: 'OpenSearch_2.19',
+      long: 'opensearch-engine-version',
+      type: 'string',
+    },
     opensearchInstanceCount: {
       default: '1',
       long: 'opensearch-instance-count',
@@ -103,6 +108,11 @@ const scriptConfig: ScriptConfig = {
       required: true,
       type: 'string',
     },
+    rdsEngineVersion: {
+      default: '17.5',
+      long: 'rds-engine-version',
+      type: 'string',
+    },
     rdsMaxCapacity: {
       default: '1',
       long: 'rds-max-capacity',
@@ -129,6 +139,11 @@ const scriptConfig: ScriptConfig = {
       default: false,
       type: 'boolean',
     },
+    zendeskUserEmail: {
+      default: 'ustczendesk@dawson.ustaxcourt.gov',
+      long: 'zendesk-user-email',
+      type: 'string',
+    },
   },
   // can't use requireActiveAwsSession; we haven't deployed the dawson_dev role yet
   requireActiveAwsSession: false,
@@ -144,17 +159,20 @@ const {
   env,
   generateSecureDefaultAccountPassword,
   irsSuperuserEmail,
+  opensearchEngineVersion,
   opensearchInstanceCount,
   opensearchInstanceType,
   opensearchVolumeSize,
   postgresOriginalUsername,
   prodAccountId,
   prodDocumentsBucket,
+  rdsEngineVersion,
   rdsMaxCapacity,
   rdsMinCapacity,
   region,
   rumSampleRate,
   update,
+  zendeskUserEmail,
 } = parseArgsAndEnvVars(scriptConfig) as {
   adminUserEmail: string;
   baseDomain: string;
@@ -166,17 +184,20 @@ const {
   env: string;
   generateSecureDefaultAccountPassword: boolean;
   irsSuperuserEmail: string;
+  opensearchEngineVersion: string;
   opensearchInstanceCount: number;
   opensearchInstanceType: string;
   opensearchVolumeSize: number;
   postgresOriginalUsername: string;
   prodAccountId: string;
   prodDocumentsBucket: string;
+  rdsEngineVersion: string;
   rdsMaxCapacity: string;
   rdsMinCapacity: string;
   region: string;
   rumSampleRate: string;
   update: boolean;
+  zendeskUserEmail: string;
 };
 
 if (env === 'prod') {
@@ -198,6 +219,8 @@ if (env === 'prod') {
     42,
   );
 
+  const zendeskUserPassword = makeNewPassword();
+
   const envSecrets = {
     COGNITO_SUFFIX: `${repoSlug}-${env}`,
     DATABASE_NAME: `${env}_dawson`,
@@ -208,6 +231,7 @@ if (env === 'prod') {
     EMAIL_DMARC_POLICY: emailDmarcPolicy,
     ENABLE_HEALTH_CHECKS: enableHealthChecks ? 1 : 0,
     ENV: env,
+    ES_ENGINE_VERSION: opensearchEngineVersion,
     ES_INSTANCE_COUNT: opensearchInstanceCount,
     ES_INSTANCE_TYPE: opensearchInstanceType,
     ES_VOLUME_SIZE: opensearchVolumeSize,
@@ -219,11 +243,14 @@ if (env === 'prod') {
     POSTGRES_USER: `${env}_dawson`,
     PROD_DOCUMENTS_BUCKET_NAME: prodDocumentsBucket,
     PROD_ENV_ACCOUNT_ID: prodAccountId,
+    RDS_ENGINE_VERSION: rdsEngineVersion,
     RDS_MAX_CAPACITY: rdsMaxCapacity,
     RDS_MIN_CAPACITY: rdsMinCapacity,
     RUM_SAMPLE_RATE: rumSampleRate,
     USTC_ADMIN_PASS: adminUserPassword,
     USTC_ADMIN_USER: adminUserEmail,
+    USTC_ZENDESK_USER: zendeskUserEmail,
+    USTC_ZENDESK_PASS: zendeskUserPassword,
   };
 
   const secretsClient = new SecretsManagerClient({ region });

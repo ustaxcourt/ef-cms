@@ -1,14 +1,19 @@
+import { createBarNumber } from '@web-api/persistence/postgres/users/createBarNumber';
 import { Practitioner, RawPractitioner } from '../entities/Practitioner';
-import { ServerApplicationContext } from '@web-api/applicationContext';
+import { getUniqueId } from '@shared/sharedAppContext';
+import { ACCOUNT_STATUS } from '@shared/business/entities/EntityConstants';
 
-export const createPractitionerUser = async (
-  applicationContext: ServerApplicationContext,
-  { user }: { user: RawPractitioner },
-): Promise<RawPractitioner> => {
+type PractitionerInput = Omit<RawPractitioner, 'barNumber'> &
+  Partial<Pick<RawPractitioner, 'barNumber'>>;
+
+export const createPractitionerUser = async ({
+  user,
+}: {
+  user: PractitionerInput;
+}): Promise<RawPractitioner> => {
   const barNumber =
     user.barNumber ||
-    (await applicationContext.barNumberGenerator.createBarNumber({
-      applicationContext,
+    (await createBarNumber({
       initials:
         user.lastName.charAt(0).toUpperCase() +
         user.firstName.charAt(0).toUpperCase(),
@@ -17,7 +22,8 @@ export const createPractitionerUser = async (
   return new Practitioner({
     ...user,
     barNumber,
-    userId: applicationContext.getUniqueId(),
+    userId: getUniqueId(),
+    accountStatus: ACCOUNT_STATUS.active,
   })
     .validate()
     .toRawObject();

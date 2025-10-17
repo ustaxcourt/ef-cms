@@ -1,6 +1,6 @@
 import { CASE_DEADLINES_REPORT_PAGE_SIZE } from '../../../../../shared/src/business/entities/EntityConstants';
-import { caseDeadlineEntity } from '@web-api/persistence/postgres/caseDeadlines/mapper';
-import { getDbReader } from '@web-api/persistence/postgres/database';
+import { fromCaseDeadlineKysely } from '@web-api/persistence/postgres/caseDeadlines/mapper';
+import { getDbReader } from '@web-api/database';
 
 export const getCaseDeadlinesByDateRange = async ({
   endDate,
@@ -62,7 +62,7 @@ export const getCaseDeadlinesByDateRange = async ({
 
   return {
     foundDeadlines: caseDeadlines.map(caseDeadline =>
-      caseDeadlineEntity(caseDeadline),
+      fromCaseDeadlineKysely(caseDeadline),
     ),
     totalCount: Number(totalCount),
   };

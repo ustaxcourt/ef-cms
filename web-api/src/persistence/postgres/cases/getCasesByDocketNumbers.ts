@@ -1,19 +1,20 @@
 import { Case } from '@shared/business/entities/cases/Case';
-import { RawPractitioner } from '@shared/business/entities/Practitioner';
-import { applicationContext } from '@web-api/applicationContext';
-import { getDbReader } from '@web-api/persistence/postgres/database';
+import { ROLES } from '@shared/business/entities/EntityConstants';
+import { getDbReader } from '@web-api/database';
 import { NotFoundError } from '@web-api/errors/errors';
 import { purgeDynamoKeys } from '@web-api/persistence/dynamo/helpers/purgeDynamoKeys';
-import { getIrsPractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getIrsPractitionersOnCase';
-import { getPrivatePractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getPrivatePractitionersOnCase';
-import { queryFull } from '@web-api/persistence/dynamodbClientService';
-import { caseCorrespondenceEntity } from '@web-api/persistence/postgres/caseCorrespondences/mapper';
+import { fromKyselyCaseCorrespondence } from '@web-api/persistence/postgres/caseCorrespondences/mapper';
 import { CaseCorrespondenceKysely } from '@web-api/persistence/postgres/caseCorrespondences/schema';
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { CaseKysely } from '@web-api/persistence/postgres/cases/schema';
 import { fromKyselyDocketEntry } from '@web-api/persistence/postgres/docketEntries/mapper';
 import { DocketEntryKysely } from '@web-api/persistence/postgres/docketEntries/schema';
 import { difference, isEmpty, sortBy } from 'lodash';
+import { TrialSessionKysely } from '../trialSessions/schema';
+import { fromKyselyTrialSession } from '@web-api/persistence/postgres/trialSessions/mapper';
+import { UserKysely } from '../users/schema';
+import { fromKyselyUser } from '../users/mapper';
+import { UserOnCaseKysely } from '@web-api/persistence/postgres/cases/userOnCase/schema';
 
 export const ALL_OMITTABLE_CASE_FIELDS = [
   'docketEntries',
@@ -68,12 +69,12 @@ async function getAllCaseData<T extends OmittableCaseFields[]>({
     getCasesMetadata(docketNumbers),
     (async () => {
       if (!excludeFields?.includes('privatePractitioners')) {
-        return await getPrivatePractitioners(docketNumbers, applicationContext);
+        return getPrivatePractitioners({ docketNumbers });
       } else return [];
     })(),
     (async () => {
       if (!excludeFields?.includes('irsPractitioners')) {
-        return await getIrsPractitioners(docketNumbers, applicationContext);
+        return getIrsPractitioners({ docketNumbers });
       } else return [];
     })(),
     (async () => {
@@ -133,18 +134,30 @@ async function getAllCaseData<T extends OmittableCaseFields[]>({
       caseMap.set(docketEntryInfo.docketNumber, { ...caseInfo, docketEntries });
     }
   });
-  privatePractitioners.forEach(info => {
-    const caseInfo = caseMap.get(info.docketNumber)!;
-    caseMap.set(info.docketNumber, {
+  privatePractitioners.forEach(privatePractitioner => {
+    const caseInfo = caseMap.get(privatePractitioner.docketNumber)!;
+    const existingPrivatePractitioners = caseInfo.privatePractitioners ?? [];
+    existingPrivatePractitioners.push(privatePractitioner);
+    caseMap.set(privatePractitioner.docketNumber, {
       ...caseInfo,
-      privatePractitioners: info.privatePractitioners,
+      // a privatePractitioner can be on a case as a irsPractitioner, and vice versa, so we hard code the role to prevent validation errors everywhere
+      privatePractitioners: existingPrivatePractitioners.map(p => ({
+        ...p,
+        role: ROLES.privatePractitioner,
+      })),
     });
   });
-  irsPractitioners.forEach(info => {
-    const caseInfo = caseMap.get(info.docketNumber)!;
-    caseMap.set(info.docketNumber, {
+  irsPractitioners.forEach(irsPractitioner => {
+    const caseInfo = caseMap.get(irsPractitioner.docketNumber)!;
+    const existingIrsPractitioners = caseInfo.irsPractitioners ?? [];
+    existingIrsPractitioners.push(irsPractitioner);
+    caseMap.set(irsPractitioner.docketNumber, {
       ...caseInfo,
-      irsPractitioners: info.irsPractitioners,
+      // a privatePractitioner can be on a case as a irsPractitioner, and vice versa, so we hard code the role to prevent validation errors everywhere
+      irsPractitioners: existingIrsPractitioners.map(p => ({
+        ...p,
+        role: ROLES.irsPractitioner,
+      })),
     });
   });
   caseCorrespondences.forEach(correspondence => {
@@ -209,79 +222,61 @@ function convertDbCaseToRawCase(
   const appCase = {
     ...fromKyselyCase(dbCase),
     correspondence: dbCase.correspondence.map(cc =>
-      caseCorrespondenceEntity(cc),
+      fromKyselyCaseCorrespondence(cc),
     ),
     archivedCorrespondences: dbCase.archivedCorrespondences?.map(cc =>
-      caseCorrespondenceEntity(cc),
+      fromKyselyCaseCorrespondence(cc),
+    ),
+    irsPractitioners: dbCase.irsPractitioners.map(ip => fromKyselyUser(ip)),
+    privatePractitioners: dbCase.privatePractitioners.map(pp =>
+      fromKyselyUser(pp),
     ),
     docketEntries: dbCase.docketEntries.map(d => fromKyselyDocketEntry(d)),
     archivedDocketEntries: dbCase.archivedDocketEntries.map(aD =>
       fromKyselyDocketEntry(aD),
+    ),
+    hearings: dbCase.hearings.map(hi =>
+      fromKyselyTrialSession(hi, hi.pdf, hi.caseOrders),
     ),
   };
 
   return purgeDynamoKeys(appCase);
 }
 
-async function getCasesMetadata(docketNumbers: string[]) {
-  const caseInfo = await getDbReader(db =>
-    db
-      .selectFrom('dwCase')
-      .where('docketNumber', 'in', docketNumbers)
-      .selectAll()
-      .execute(),
-  );
-  return caseInfo;
-}
-
-async function getIrsPractitioners(
-  docketNumbers: string[],
-  applicationContext,
-): Promise<
-  {
-    docketNumber: string;
-    irsPractitioners: any[];
-  }[]
-> {
-  const practitionerInfo = await Promise.all(
-    docketNumbers.map(async docketNumber => {
-      const irsPractitioners = await getIrsPractitionersOnCase({
-        applicationContext,
-        docketNumber,
-      });
-
-      return {
-        docketNumber,
-        irsPractitioners,
-      };
-    }),
-  );
+async function getPrivatePractitioners({
+  docketNumbers,
+}: {
+  docketNumbers: string[];
+}) {
+  const practitionerInfo = await getDbReader(reader => {
+    return reader
+      .selectFrom('dwUserOnCase as uoc')
+      .innerJoin('dwUser as u', 'uoc.userId', 'u.userId')
+      .where('uoc.docketNumber', 'in', docketNumbers)
+      .where('uoc.actingAsRole', '=', ROLES.privatePractitioner)
+      .selectAll('uoc')
+      .selectAll('u')
+      .execute();
+  });
 
   return practitionerInfo;
 }
 
-async function getPrivatePractitioners(
-  docketNumbers: string[],
-  applicationContext,
-): Promise<
-  {
-    docketNumber: string;
-    privatePractitioners: any[];
-  }[]
-> {
-  const practitionerInfo = await Promise.all(
-    docketNumbers.map(async docketNumber => {
-      const privatePractitioners = await getPrivatePractitionersOnCase({
-        docketNumber,
-        applicationContext,
-      });
-
-      return {
-        docketNumber,
-        privatePractitioners,
-      };
-    }),
-  );
+async function getIrsPractitioners({
+  docketNumbers,
+}: {
+  docketNumbers: string[];
+}) {
+  const practitionerInfo = await getDbReader(reader => {
+    return reader
+      .selectFrom('dwUserOnCase as uoc')
+      .innerJoin('dwUser as u', 'uoc.userId', 'u.userId')
+      .where('uoc.docketNumber', 'in', docketNumbers)
+      .where('uoc.actingAsRole', '=', ROLES.irsPractitioner)
+      .selectAll('uoc')
+      .selectAll('u')
+      .execute();
+  });
 
   return practitionerInfo;
 }
@@ -298,6 +293,29 @@ async function getDocketEntries(docketNumbers: string[]) {
   return dbDocketEntries;
 }
 
+async function getCasesMetadata(docketNumbers: string[]) {
+  const caseInfo = await getDbReader(db =>
+    db
+      .selectFrom('dwCase')
+      .where('docketNumber', 'in', docketNumbers)
+      .selectAll()
+      .execute(),
+  );
+  return caseInfo;
+}
+
+export async function getDocketEntriesOnCases(
+  docketNumbers: string[],
+): Promise<DocketEntryKysely[]> {
+  return await getDbReader(reader =>
+    reader
+      .selectFrom('dwDocketEntry')
+      .where('docketNumber', 'in', docketNumbers)
+      .selectAll()
+      .execute(),
+  );
+}
+
 async function getCaseCorrespondenceByDocketNumber(docketNumbers: string[]) {
   const correspondence = await getDbReader(reader =>
     reader
@@ -312,23 +330,38 @@ async function getCaseCorrespondenceByDocketNumber(docketNumbers: string[]) {
 
 async function getHearings(
   docketNumbers: string[],
-): Promise<{ docketNumber: string; hearings: any[] }[]> {
-  const hearingsInfo = await Promise.all(
-    docketNumbers.map(async docketNumber => {
-      const hearings = await queryFull({
-        ExpressionAttributeNames: {
-          '#pk': 'pk',
-          '#sk': 'sk',
-        },
-        ExpressionAttributeValues: {
-          ':pk': `case|${docketNumber}`,
-          ':prefix': 'hearing|',
-        },
-        KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
-        applicationContext,
-      });
-      return { docketNumber, hearings };
-    }),
+): Promise<{ docketNumber: string; hearings: TrialSessionKysely[] }[]> {
+  const hearingsInfoRaw = await getDbReader(reader =>
+    reader
+      .selectFrom('dwTrialSessionCase as ch')
+      .select(['ch.trialSessionId', 'ch.docketNumber'])
+      .innerJoin(
+        'dwTrialSession as ts',
+        'ch.trialSessionId',
+        'ts.trialSessionId',
+      )
+      .selectAll('ts')
+      .where('ch.docketNumber', 'in', docketNumbers)
+      .where('ch.isHearing', 'is', true)
+      .where('ch.removedFromTrial', 'is', false)
+      .orderBy('ts.createdAt', 'asc')
+      .execute(),
+  );
+  const hearingsInfo = Object.values(
+    hearingsInfoRaw.reduce(
+      (acc, item) => {
+        const { docketNumber, ...rest } = item;
+        if (!acc[docketNumber]) {
+          acc[docketNumber] = { docketNumber, hearings: [] };
+        }
+        acc[docketNumber].hearings.push(rest);
+        return acc;
+      },
+      {} as Record<
+        string,
+        { docketNumber: string; hearings: TrialSessionKysely[] }
+      >,
+    ),
   );
 
   return hearingsInfo;
@@ -338,8 +371,8 @@ type EnrichedCaseRow = CaseKysely & {
   docketNumberWithSuffix: string;
   docketEntries: DocketEntryKysely[];
   archivedDocketEntries: DocketEntryKysely[];
-  irsPractitioners: RawPractitioner[];
-  privatePractitioners: RawPractitioner[];
+  irsPractitioners: (UserKysely & UserOnCaseKysely)[];
+  privatePractitioners: (UserKysely & UserOnCaseKysely)[];
   correspondence: CaseCorrespondenceKysely[];
   archivedCorrespondences: CaseCorrespondenceKysely[];
   hearings: any[];

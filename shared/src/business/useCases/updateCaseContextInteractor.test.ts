@@ -3,6 +3,7 @@ import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
+import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
@@ -21,8 +22,11 @@ import {
 import { updateCaseContextInteractor } from './updateCaseContextInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { deleteCaseDeadline as deleteCaseDeadlineMock } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
+import { upsertCaseDeadlines as upsertCaseDeadlinesMock } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
+import { getCaseDeadlinesByConsolidatedCaseDeadlineIds as getCaseDeadlinesByConsolidatedCaseDeadlineIdsMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds';
 import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 
 describe('updateCaseContextInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
@@ -30,12 +34,19 @@ describe('updateCaseContextInteractor', () => {
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
   const deleteCaseDeadline = jest.mocked(deleteCaseDeadlineMock);
+  const upsertCaseDeadlines = jest.mocked(upsertCaseDeadlinesMock);
+  const getCaseDeadlinesByConsolidatedCaseDeadlineIds = jest.mocked(
+    getCaseDeadlinesByConsolidatedCaseDeadlineIdsMock,
+  );
   const getCaseDeadlinesByDocketNumber = jest.mocked(
     getCaseDeadlinesByDocketNumberMock,
   );
+  const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
 
   beforeEach(() => {
     getCaseByDocketNumber.mockReturnValue(Promise.resolve(MOCK_CASE));
+    upsertCaseDeadlines.mockImplementation(deadlines => deadlines as any);
+    getCaseDeadlinesByConsolidatedCaseDeadlineIds.mockResolvedValue([]);
   });
 
   it('should throw an error if the user is unauthorized to update a case', async () => {
@@ -93,9 +104,7 @@ describe('updateCaseContextInteractor', () => {
       Promise.resolve(MOCK_CASE_WITH_TRIAL_SESSION),
     );
 
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockReturnValue(MOCK_TRIAL_REMOTE);
+    getTrialSessionById.mockResolvedValue(MOCK_TRIAL_REMOTE);
 
     const result = await updateCaseContextInteractor(
       applicationContext,
@@ -169,6 +178,90 @@ describe('updateCaseContextInteractor', () => {
     expect(deleteCaseDeadline).toHaveBeenCalledWith({
       caseDeadlineId: '123',
     });
+  });
+
+  it('should unlink children case deadlines from the lead case deadlines if case is status is closed', async () => {
+    getCaseByDocketNumber.mockReturnValue(
+      Promise.resolve({
+        ...MOCK_CASE,
+        leadDocketNumber: MOCK_CASE.docketNumber,
+      }),
+    );
+
+    const LEAD_CASE_DEADLINE_ID = 'LEAD_CASE_DEADLINE_ID';
+    getCaseDeadlinesByDocketNumber.mockResolvedValue([
+      { caseDeadlineId: LEAD_CASE_DEADLINE_ID } as any,
+    ]);
+
+    const CHILD_CASE_DEADLINE_ID = 'CHILD_CASE_DEADLINE_ID';
+    getCaseDeadlinesByConsolidatedCaseDeadlineIds.mockResolvedValue([
+      {
+        caseDeadlineId: CHILD_CASE_DEADLINE_ID,
+        consolidatedCaseDeadlineId: 'TEST_CONSOLIDATED_CASE_DEADLINE_ID',
+      } as any,
+    ]);
+
+    deleteCaseDeadline.mockResolvedValue({} as any);
+
+    const result = await updateCaseContextInteractor(
+      applicationContext,
+      {
+        caseStatus: CASE_STATUS_TYPES.closed,
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(result.status).toEqual(CASE_STATUS_TYPES.closed);
+
+    const deleteCaseDeadlineCalls = deleteCaseDeadline.mock.calls;
+    expect(deleteCaseDeadlineCalls.length).toEqual(1);
+    expect(deleteCaseDeadlineCalls[0][0]).toEqual({
+      caseDeadlineId: LEAD_CASE_DEADLINE_ID,
+    });
+
+    const upsertCaseDeadlinesCalls = upsertCaseDeadlines.mock.calls;
+    expect(upsertCaseDeadlinesCalls.length).toEqual(1);
+    expect(upsertCaseDeadlinesCalls[0][0]).toEqual([
+      {
+        caseDeadlineId: CHILD_CASE_DEADLINE_ID,
+        consolidatedCaseDeadlineId: undefined,
+      },
+    ]);
+  });
+
+  it('should not call "getCaseDeadlinesByConsolidatedCaseDeadlineIds" if there are no lead deadlines', async () => {
+    getCaseByDocketNumber.mockReturnValue(
+      Promise.resolve({
+        ...MOCK_CASE,
+        leadDocketNumber: MOCK_CASE.docketNumber,
+      }),
+    );
+
+    getCaseDeadlinesByDocketNumber.mockResolvedValue([]);
+
+    const CHILD_CASE_DEADLINE_ID = 'CHILD_CASE_DEADLINE_ID';
+    getCaseDeadlinesByConsolidatedCaseDeadlineIds.mockResolvedValue([
+      {
+        caseDeadlineId: CHILD_CASE_DEADLINE_ID,
+        consolidatedCaseDeadlineId: 'TEST_CONSOLIDATED_CASE_DEADLINE_ID',
+      } as any,
+    ]);
+
+    await updateCaseContextInteractor(
+      applicationContext,
+      {
+        caseStatus: CASE_STATUS_TYPES.closed,
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    const getCaseDeadlinesByConsolidatedCaseDeadlineIdsCalls =
+      getCaseDeadlinesByConsolidatedCaseDeadlineIds.mock.calls;
+    expect(getCaseDeadlinesByConsolidatedCaseDeadlineIdsCalls.length).toEqual(
+      0,
+    );
   });
 
   it('should remove automatic block information if case status is closed', async () => {

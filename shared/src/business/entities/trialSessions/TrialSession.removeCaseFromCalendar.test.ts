@@ -29,8 +29,8 @@ describe('TrialSession entity', () => {
         removedFromTrial: true,
       });
       expect(trialSession.caseOrder![0].removedFromTrialDate).toBeDefined();
-      expect(trialSession.caseOrder![1]).not.toHaveProperty('removedFromTrial');
-      expect(trialSession.caseOrder![2]).not.toHaveProperty('removedFromTrial');
+      expect(trialSession.caseOrder![1]?.removedFromTrial).toEqual(false);
+      expect(trialSession.caseOrder![2]?.removedFromTrial).toEqual(false);
     });
 
     it('should not modify case calendar if docketNumber is not in caseOrder', () => {
@@ -49,9 +49,9 @@ describe('TrialSession entity', () => {
       });
 
       expect(trialSession.caseOrder!.length).toEqual(3);
-      expect(trialSession.caseOrder![0]).not.toHaveProperty('removedFromTrial');
-      expect(trialSession.caseOrder![1]).not.toHaveProperty('removedFromTrial');
-      expect(trialSession.caseOrder![2]).not.toHaveProperty('removedFromTrial');
+      expect(trialSession.caseOrder![0]?.removedFromTrial).toEqual(false);
+      expect(trialSession.caseOrder![1]?.removedFromTrial).toEqual(false);
+      expect(trialSession.caseOrder![2]?.removedFromTrial).toEqual(false);
     });
   });
 

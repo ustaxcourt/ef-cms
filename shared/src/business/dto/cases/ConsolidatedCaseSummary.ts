@@ -4,11 +4,9 @@ import {
   CASE_CAPTION_RULE,
   CASE_DOCKET_NUMBER_RULE,
   CASE_DOCKET_NUMBER_WITH_SUFFIX_RULE,
-  CASE_IRS_PRACTITIONERS_RULE,
   CASE_IS_SEALED_RULE,
   CASE_LEAD_DOCKET_NUMBER_RULE,
   CASE_PETITIONERS_RULE,
-  CASE_PRIVATE_PRACTITIONERS_RULE,
   CASE_SORTABLE_DOCKET_NUMBER_RULE,
   CASE_STATUS_RULE,
 } from '@shared/business/entities/EntityValidationConstants';
@@ -52,11 +50,9 @@ export class ConsolidatedCaseSummary extends JoiValidationEntity {
     caseCaption: CASE_CAPTION_RULE,
     docketNumber: CASE_DOCKET_NUMBER_RULE,
     docketNumberWithSuffix: CASE_DOCKET_NUMBER_WITH_SUFFIX_RULE,
-    irsPractitioners: CASE_IRS_PRACTITIONERS_RULE,
     isSealed: CASE_IS_SEALED_RULE,
     leadDocketNumber: CASE_LEAD_DOCKET_NUMBER_RULE,
     petitioners: CASE_PETITIONERS_RULE,
-    privatePractitioners: CASE_PRIVATE_PRACTITIONERS_RULE,
     sortableDocketNumber: CASE_SORTABLE_DOCKET_NUMBER_RULE,
     status: CASE_STATUS_RULE,
   } as const;

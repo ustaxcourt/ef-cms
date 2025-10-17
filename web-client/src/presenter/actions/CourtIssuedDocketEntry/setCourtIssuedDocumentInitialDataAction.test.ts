@@ -19,24 +19,24 @@ describe('setCourtIssuedDocumentInitialDataAction', () => {
     MOCK_CASE.docketEntries.push({
       docketEntryId: docketEntryIds[0],
       eventCode: 'OF',
-    });
+    } as RawDocketEntry);
     MOCK_CASE.docketEntries.push({
       docketEntryId: docketEntryIds[1],
       eventCode: 'O',
       freeText: 'something',
-    });
+    } as RawDocketEntry);
     MOCK_CASE.docketEntries.push({
       docketEntryId: docketEntryIds[2],
       eventCode: 'OJR',
       signedByUserId: judgeColvin.userId,
       signedJudgeName: judgeColvin.judgeFullName,
-    });
+    } as RawDocketEntry);
     MOCK_CASE.docketEntries.push({
       docketEntryId: docketEntryIds[3],
       eventCode: 'OJR',
       signedByUserId: 'not-colvins-id',
       signedJudgeName: judgeColvin.judgeFullName,
-    });
+    } as RawDocketEntry);
   });
 
   it('should set correct values on state.form for the docketEntryId passed in via props', async () => {

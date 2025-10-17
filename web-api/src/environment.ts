@@ -8,14 +8,24 @@ const emailFromAddress =
 const isRunningOnLambda = !!process.env.LAMBDA_TASK_ROOT;
 
 function getJestDBConnectionError(): string {
-  return [
-    '\n',
+  const error = new Error();
+
+  const message = [
+    '',
     'Hello Developer',
     'You should not connect to the Database when running JEST tests',
     'Something was not mocked out',
-    'If you are running Integration tests and need a Database connection',
-    'Set the environment variable "NODE_ENV" to "integration"',
-  ].join('\n');
+    'If you are running Integration tests and need a Database connection,',
+    'set the environment variable "NODE_ENV" to "integration".',
+    '',
+    'Call Stack:',
+  ];
+
+  // Include stack trace but strip the first line (which is the error message itself)
+  const stack =
+    error.stack?.split('\n').slice(1).join('\n') ?? 'No stack trace available.';
+
+  return [...message, stack].join('\n');
 }
 
 export const environment = {
@@ -36,7 +46,6 @@ export const environment = {
     process.env.ELASTICSEARCH_ENDPOINT || 'http://localhost:9200',
   emailFromAddress,
   isRunningOnLambda,
-  nodeEnv: process.env.NODE_ENV,
   rds: {
     pool: {
       database: process.env.DATABASE_NAME || 'postgres',
@@ -64,6 +73,6 @@ export const environment = {
   userPoolId: process.env.USER_POOL_ID || 'local_2pHzece7',
   userPoolIrsId: process.env.USER_POOL_IRS_ID || 'NOT_REAL_USER_POOL_ID',
   workerQueueUrl: `https://sqs.${region}.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/worker_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}`,
-  opensearchQueueUrl: `https://sqs.${process.env.AWS_REGION}.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/opensearch_sync_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}`,
+  opensearchQueueUrl: `https://sqs.${region}.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/opensearch_sync_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}`,
   wsEndpoint: process.env.WS_ENDPOINT || 'http://localhost:3011',
 };

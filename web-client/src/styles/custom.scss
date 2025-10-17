@@ -173,12 +173,12 @@ hr {
 }
 
 .word-wrap-break-word {
-  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 address {
   p {
-    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 }
 
@@ -2308,7 +2308,7 @@ button.change-scanner-button {
   padding: 0;
   border: 0;
   margin: -1px;
-  clip: rect(0, 0, 0, 0);
+  clip-path: rect(0, 0, 0, 0);
 }
 
 .petition-review-petitioner-section {
@@ -2491,6 +2491,18 @@ button.change-scanner-button {
   }
 }
 
+@media only screen and (max-width: $medium-screen) {
+  .mobile-header-button {
+    margin-right: 0;
+    margin-left: auto;
+    color: $color-white;
+
+    &:visited {
+      color: $color-white;
+    }
+  }
+}
+
 .service-party {
   display: flex;
   align-items: baseline;
@@ -2517,3 +2529,4 @@ button.change-scanner-button {
     }
   }
 }
+

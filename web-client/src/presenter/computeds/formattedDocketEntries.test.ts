@@ -2,24 +2,24 @@
 
 import {
   ALLOWLIST_FEATURE_FLAGS,
-  DOCKET_ENTRY_SEALED_TO_TYPES,
   DOCKET_RECORD_FILTER_OPTIONS,
+  DOCKET_ENTRY_SEALED_TO_TYPES,
   ROLES,
   STATE_KEYS,
-} from '../../../../shared/src/business/entities/EntityConstants';
-import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+} from '@shared/business/entities/EntityConstants';
+import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import {
   casePetitioner,
   docketClerkUser,
   petitionerUser,
   petitionsClerkUser,
-} from '../../../../shared/src/test/mockUsers';
+} from '@shared/test/mockUsers';
 import {
   formattedDocketEntries as formattedDocketEntriesComputed,
   setupIconsToDisplay,
 } from './formattedDocketEntries';
-import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
+import { getUserPermissions } from '@shared/authorization/getUserPermissions';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
@@ -912,10 +912,9 @@ describe('formattedDocketEntries', () => {
             docketEntries: [
               {
                 ...mockDocketEntry,
-                workItem: {
-                  completedAt: undefined,
-                  isRead: false,
-                },
+                qcViewed: false,
+                qcComplete: false,
+                workItemId: 'someId',
               },
             ],
           },
@@ -1027,6 +1026,7 @@ describe('formattedDocketEntries', () => {
 
       expect(result).toEqual([
         {
+          className: 'fa-icon-gold',
           icon: ['fas', 'thumbtack'],
           title: 'In progress',
         },
@@ -1045,6 +1045,7 @@ describe('formattedDocketEntries', () => {
 
       expect(result).toEqual([
         {
+          className: 'fa-icon-red',
           icon: ['fa', 'star'],
           title: 'Is untouched',
         },

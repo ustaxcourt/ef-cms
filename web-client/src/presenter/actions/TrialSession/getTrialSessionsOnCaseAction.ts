@@ -1,3 +1,4 @@
+import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -15,7 +16,7 @@ export const getTrialSessionsOnCaseAction = async ({
 }: ActionProps) => {
   const caseDetail = get(state.caseDetail);
 
-  let trialSessions = [];
+  let trialSessions: RawTrialSession[] = [];
 
   if (caseDetail && caseDetail.trialSessionId) {
     const trialSession = await applicationContext

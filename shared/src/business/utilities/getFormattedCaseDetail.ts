@@ -89,9 +89,10 @@ export const formatDocketEntry = (applicationContext, docketEntry) => {
     ({ eventCode }) => eventCode,
   ).includes(formattedEntry.eventCode);
 
-  const qcWorkItem = formattedEntry.workItem;
+  const hasWorkItemInfo = DocketEntry.hasWorkItemInfo(formattedEntry);
 
-  formattedEntry.qcWorkItemsCompleted = !qcWorkItem || !!qcWorkItem.completedAt;
+  formattedEntry.qcWorkItemsCompleted =
+    !hasWorkItemInfo || !!formattedEntry.qcComplete;
 
   formattedEntry.isUnservable = DocketEntry.isUnservable(formattedEntry);
 
@@ -107,7 +108,8 @@ export const formatDocketEntry = (applicationContext, docketEntry) => {
   formattedEntry.isStipDecision =
     formattedEntry.eventCode === STIPULATED_DECISION_EVENT_CODE;
 
-  formattedEntry.qcWorkItemsUntouched = qcWorkItem && !qcWorkItem.completedAt;
+  formattedEntry.qcWorkItemsUntouched =
+    hasWorkItemInfo && !formattedEntry.qcComplete;
 
   formattedEntry.qcNeeded =
     formattedEntry.qcWorkItemsUntouched && !formattedEntry.isInProgress;
@@ -144,6 +146,12 @@ export const formatDocketEntry = (applicationContext, docketEntry) => {
 
   if (formattedEntry.lodged) {
     formattedEntry.eventCode = 'MISCL';
+  }
+
+  if (formattedEntry.isSealed) {
+    formattedEntry.sealedToTooltip = applicationContext.getUtilities().getSealedDocketEntryTooltip(applicationContext, formattedEntry);
+  } else if (formattedEntry.isLegacySealed) {
+    formattedEntry.sealedToTooltip = "Sealed in Blackstone";
   }
 
   return formattedEntry;

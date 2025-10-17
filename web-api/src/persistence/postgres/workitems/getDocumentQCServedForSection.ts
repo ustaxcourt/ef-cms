@@ -2,9 +2,15 @@ import {
   DOCKET_SECTION,
   PETITIONS_SECTION,
 } from '@shared/business/entities/EntityConstants';
-import { getDbReader } from '@web-api/persistence/postgres/database';
-import { WorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
-import { toWorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/mapper';
+import { getDbReader } from '@web-api/database';
+import {
+  attachDocketEntriesToWorkItemQC,
+  workItemQCQueryBase,
+} from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
+import {
+  RawWorkItemWithCaseAndDocketEntryInfo,
+  WorkItemWithCaseInfoKysely,
+} from '@web-api/persistence/postgres/workitems/schema';
 
 export const getDocumentQCServedForSection = async ({
   afterDate,
@@ -12,24 +18,13 @@ export const getDocumentQCServedForSection = async ({
 }: {
   section: typeof DOCKET_SECTION | typeof PETITIONS_SECTION;
   afterDate: Date;
-}): Promise<WorkItemWithCaseInfo[]> => {
-  const workItems = await getDbReader(reader => {
-    return reader
-      .selectFrom('dwWorkItem as w')
-      .leftJoin('dwCase as c', 'c.docketNumber', 'w.docketNumber')
+}): Promise<RawWorkItemWithCaseAndDocketEntryInfo[]> => {
+  const workItems: WorkItemWithCaseInfoKysely[] = await getDbReader(reader => {
+    return workItemQCQueryBase(reader)
       .where('w.section', '=', section)
       .where('w.completedAt', '>=', afterDate)
-      .select([
-        'c.status',
-        'c.caption',
-        'c.leadDocketNumber',
-        'c.trialDate',
-        'c.trialLocation',
-      ])
-      .selectAll('w')
-      .select('w.docketNumber')
       .execute();
   });
 
-  return workItems.map(toWorkItemWithCaseInfo);
+  return await attachDocketEntriesToWorkItemQC({ workItems });
 };

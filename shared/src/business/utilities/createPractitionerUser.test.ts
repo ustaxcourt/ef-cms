@@ -1,58 +1,76 @@
-import { ROLES, SERVICE_INDICATOR_TYPES } from '../entities/EntityConstants';
-import { RawPractitioner } from '@shared/business/entities/Practitioner';
-import { applicationContext } from '../test/createTestApplicationContext';
 import { createPractitionerUser } from './createPractitionerUser';
+import { createBarNumber } from '@web-api/persistence/postgres/users/createBarNumber';
+import { getUniqueId } from '@shared/sharedAppContext';
+import {
+  ACCOUNT_STATUS,
+  PRACTICE_TYPE_OPTIONS,
+  PRACTITIONER_TYPE_OPTIONS,
+  ROLES,
+  SERVICE_INDICATOR_TYPES,
+} from '@shared/business/entities/EntityConstants';
+
+jest.mock('@web-api/persistence/postgres/users/createBarNumber');
+jest.mock('@shared/sharedAppContext');
 
 describe('createPractitionerUser', () => {
-  it('should generate a bar number and userId when they are not provided', async () => {
-    const { barNumber, userId } = await createPractitionerUser(
-      applicationContext,
-      {
-        user: {
-          admissionsDate: '1876-02-19',
-          admissionsStatus: 'Active',
-          barNumber: undefined,
-          birthYear: '1993',
-          entityName: 'Practitioner',
-          firstName: 'Test',
-          lastName: 'IRSPractitioner',
-          name: 'Test IRSPractitioner',
-          originalBarState: 'CA',
-          practiceType: 'DOJ',
-          practitionerType: 'Attorney',
-          role: ROLES.irsPractitioner,
-          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
-          userId: undefined,
-        } as unknown as RawPractitioner,
-      },
-    );
+  const mockGetUniqueId = jest.mocked(getUniqueId);
+  const mockCreateBarNumber = jest.mocked(createBarNumber);
 
-    expect(barNumber).toBeDefined();
-    expect(userId).toBeDefined();
+  const sampleUser = {
+    firstName: 'Alice',
+    lastName: 'Smith',
+    email: 'alice@example.com',
+    admissionsDate: '2020-01-01',
+    admissionsStatus: 'Active',
+    birthYear: 1980,
+    practiceType: PRACTICE_TYPE_OPTIONS[2],
+    employer: 'Law Firm',
+    firmName: 'Smith & Co',
+    originalBarState: 'NY',
+    userId: 'b07d648b-f5f3-4e81-bdb9-6e744f1d4125',
+    accountStatus: ACCOUNT_STATUS.active,
+    contact: {
+      address1: '123 Main St',
+      city: 'New York',
+      state: 'NY',
+      postalCode: '10001',
+      country: 'USA',
+      countryType: 'domestic', // or 'international' as appropriate
+      phone: '555-555-5555',
+    },
+    practitionerType: PRACTITIONER_TYPE_OPTIONS[0],
+    serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+    name: 'Alice Smith', // example value
+    role: ROLES.privatePractitioner,
+  };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    mockGetUniqueId.mockReturnValue('c17d648b-f5f3-4e81-bdb9-6e744f1d4126');
   });
 
-  it('should use provided bar number when it is provided', async () => {
-    const mockBarNumber = 'tp8172';
+  it('should use existing barNumber if provided', async () => {
+    const userWithBarNumber = {
+      ...sampleUser,
+      barNumber: 'EXIST123',
+    };
 
-    const { barNumber } = await createPractitionerUser(applicationContext, {
-      user: {
-        admissionsDate: '1876-02-19',
-        admissionsStatus: 'Active',
-        barNumber: mockBarNumber,
-        birthYear: '1993',
-        entityName: 'Practitioner',
-        firstName: 'Test',
-        lastName: 'IRSPractitioner',
-        name: 'Test IRSPractitioner',
-        originalBarState: 'CA',
-        practiceType: 'DOJ',
-        practitionerType: 'Attorney',
-        role: ROLES.irsPractitioner,
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
-        userId: '70e686e6-3ab3-49f1-8d5b-edf1596d86ac',
-      },
+    const result = await createPractitionerUser({ user: userWithBarNumber });
+
+    expect(createBarNumber).not.toHaveBeenCalled();
+    expect(mockGetUniqueId).toHaveBeenCalled();
+    expect(result.barNumber).toEqual(userWithBarNumber.barNumber);
+  });
+
+  it('should generate barNumber if not provided', async () => {
+    mockCreateBarNumber.mockResolvedValue('NEWBAR456');
+
+    await createPractitionerUser({ user: sampleUser });
+
+    expect(createBarNumber).toHaveBeenCalledWith({
+      initials: 'SA',
     });
 
-    expect(barNumber).toBe(mockBarNumber);
+    expect(mockGetUniqueId).toHaveBeenCalled();
   });
 });

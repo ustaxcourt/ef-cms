@@ -34,7 +34,6 @@ describe('getHealthCheckInteractor', () => {
       getPersistenceGateway() {
         return {
           getClientId: () => 'a',
-          getDeployTableStatus: () => 'ACTIVE',
           getFirstSingleCaseRecord: () => true,
           getSesStatus: () => true,
           getTableStatus: () => 'ACTIVE',
@@ -49,7 +48,6 @@ describe('getHealthCheckInteractor', () => {
       cognito: true,
       dynamo: {
         efcms: true,
-        efcmsDeploy: true,
       },
       elasticsearch: true,
       emailService: true,
@@ -88,9 +86,6 @@ describe('getHealthCheckInteractor', () => {
           getClientId: () => {
             throw new Error();
           },
-          getDeployTableStatus: () => {
-            throw new Error();
-          },
           getFirstSingleCaseRecord: () => {
             throw new Error();
           },
@@ -111,7 +106,6 @@ describe('getHealthCheckInteractor', () => {
       cognito: false,
       dynamo: {
         efcms: false,
-        efcmsDeploy: false,
       },
       elasticsearch: false,
       emailService: false,
@@ -157,7 +151,6 @@ describe('getHealthCheckInteractor', () => {
         getPersistenceGateway() {
           return {
             getClientId: () => 'a',
-            getDeployTableStatus: () => 'ACTIVE',
             getFirstSingleCaseRecord: () => true,
             getSesStatus: () => true,
             getTableStatus: () => 'ACTIVE',

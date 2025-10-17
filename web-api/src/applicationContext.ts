@@ -1,4 +1,3 @@
-import * as barNumberGenerator from './persistence/dynamo/users/barNumberGenerator';
 import * as pdfLib from 'pdf-lib';
 import {
   CASE_INVENTORY_PAGE_SIZE,
@@ -6,8 +5,10 @@ import {
   CLERK_OF_THE_COURT_CONFIGURATION,
   CLOSED_CASE_STATUSES,
   CONFIGURATION_ITEM_KEYS,
+  DOCKET_ENTRY_SEALED_TO_TYPES,
   MAX_SEARCH_CLIENT_RESULTS,
-  MAX_SEARCH_RESULTS,
+  MAX_DOCUMENT_SEARCH_RESULTS,
+  MAX_CASE_SEARCH_RESULTS,
   ORDER_TYPES,
   SESSION_STATUS_GROUPS,
   TRIAL_SESSION_SCOPE_TYPES,
@@ -50,7 +51,7 @@ import { worker } from '@web-api/gateways/worker/worker';
 import { workerLocal } from '@web-api/gateways/worker/workerLocal';
 import axios from 'axios';
 import pug from 'pug';
-import * as sass from 'sass'
+import * as sass from 'sass';
 import { getEntityByName } from '@web-api/business/getEntityByName';
 import { type SendBulkTemplatedEmailCommandInput } from '@aws-sdk/client-ses';
 import { getMessagingClient } from '@web-api/gateways/message/getMessagingClient';
@@ -58,7 +59,6 @@ import { getMessagingClient } from '@web-api/gateways/message/getMessagingClient
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const createApplicationContext = (appContextUser = {}) => {
   return {
-    barNumberGenerator,
     environment,
     getBatchClient,
     getBounceAlertRecipients: () =>
@@ -82,8 +82,10 @@ export const createApplicationContext = (appContextUser = {}) => {
         : undefined,
       CLERK_OF_THE_COURT_CONFIGURATION,
       CONFIGURATION_ITEM_KEYS,
+      DOCKET_ENTRY_SEALED_TO_TYPES,
       MAX_SEARCH_CLIENT_RESULTS,
-      MAX_SEARCH_RESULTS,
+      MAX_DOCUMENT_SEARCH_RESULTS,
+      MAX_CASE_SEARCH_RESULTS,
       MAX_SES_RETRIES: 6,
       OPEN_CASE_STATUSES: Object.values(CASE_STATUS_TYPES).filter(
         status => !CLOSED_CASE_STATUSES.includes(status as any),
@@ -178,7 +180,9 @@ export const createApplicationContext = (appContextUser = {}) => {
       },
     }),
     isAuthorized,
-    isCurrentColorActive,
+    getConfigurationGateway: () => ({
+      isCurrentColorActive,
+    }),
     logger: getDawsonLogger(),
     setTimeout: (callback: Function, timeout) => setTimeout(callback, timeout),
   };

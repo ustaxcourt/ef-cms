@@ -10,30 +10,41 @@ import {
   createApplicationContext,
 } from '@web-api/applicationContext';
 import { createOrUpdateUser } from '../../shared/admin-tools/user/admin';
-import { environment } from '@web-api/environment';
+import { RawPractitioner } from '@shared/business/entities/Practitioner';
+import {
+  ACCOUNT_STATUS,
+  Role,
+  SERVICE_INDICATOR_TYPES,
+} from '@shared/business/entities/EntityConstants';
+import { getUniqueId } from '@shared/sharedAppContext';
+import pLimit from 'p-limit';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 const scriptConfig: ScriptConfig = {
   description: 'setup-test-users - Creates test users.',
   environment: {
-    destinationTable: 'DESTINATION_TABLE',
     env: 'ENV',
     password: 'DEFAULT_ACCOUNT_PASS',
     userPoolId: 'USER_POOL_ID',
   },
   requireActiveAwsSession: true,
 };
-const { destinationTable, env, password } = parseArgsAndEnvVars(
-  scriptConfig,
-) as { [k: string]: string };
+const { env, password } = parseArgsAndEnvVars(scriptConfig) as {
+  [k: string]: string;
+};
 
 if (env === 'prod') {
   console.error('ERROR: attempted to create test users in production');
   process.exit(1);
 }
 
-const createManyAccounts = async (
+const CONCURRENCY_LIMIT = 25;
+const limit = pLimit(CONCURRENCY_LIMIT);
+const accounts: Promise<any>[] = [];
+
+const createManyAccounts = (
   applicationContext: ServerApplicationContext,
-  [num, role, section]: [number, string, string],
+  [num, role, section]: [number, Role, string],
 ) => {
   for (let i = 1; i <= num; i++) {
     const email =
@@ -41,8 +52,7 @@ const createManyAccounts = async (
         ? `${section}${i}@example.com`
         : `${role}${i}@example.com`;
 
-    const user = {
-      birthYear: '1950',
+    const user: RawUser = {
       contact: {
         address1: '234 Main St',
         address2: 'Apartment 4',
@@ -54,26 +64,29 @@ const createManyAccounts = async (
         state: 'IL',
       },
       email,
-      lastName: 'Test',
       name: `Test ${role}${i}`,
-      practiceType: '',
       role,
       section,
-      suffix: '',
-    } as unknown as RawUser;
+      accountStatus: ACCOUNT_STATUS.active,
+      userId: getUniqueId(),
+    };
 
-    await createOrUpdateUser(applicationContext, {
-      password,
-      setPasswordAsPermanent: true,
-      user,
-    });
+    accounts.push(
+      limit(() =>
+        createOrUpdateUser(applicationContext, {
+          password,
+          setPasswordAsPermanent: true,
+          user,
+        }),
+      ),
+    );
   }
 };
 
 const setupCourtUsers = async (
   applicationContext: ServerApplicationContext,
 ) => {
-  const userSet: Array<[number, string, string]> = [
+  const userSet: Array<[number, Role, string]> = [
     [10, 'adc', 'adc'],
     [10, 'admissionsclerk', 'admissions'],
     [10, 'clerkofcourt', 'clerkofcourt'],
@@ -110,13 +123,13 @@ const setupPetitioners = async (
 const setupPractitionerInformationArray = (
   barNumbers: string[],
   practiceType: string,
-  role: string,
+  role: Role,
   emailUsername?: string,
 ): {
   barNumber: string;
   emailUsername: string | undefined;
   practiceType: string;
-  role: string;
+  role: Role;
 }[] => {
   return barNumbers.map((barNumber: string) => {
     return {
@@ -128,9 +141,7 @@ const setupPractitionerInformationArray = (
   });
 };
 
-const setupPractitioners = async (
-  applicationContext: ServerApplicationContext,
-) => {
+const setupPractitioners = (applicationContext: ServerApplicationContext) => {
   const PRACTICE_TYPES = {
     DOJ: 'DOJ',
     IRS: 'IRS',
@@ -140,7 +151,7 @@ const setupPractitioners = async (
   const PRACTITIONER_ROLE = {
     IRS: 'irsPractitioner',
     PRIVATE: 'privatePractitioner',
-  };
+  } as const;
 
   const privatePractitionersBarNumbers = [
     'PT1234',
@@ -199,11 +210,11 @@ const setupPractitioners = async (
         practitionerArray[j];
 
       const email = `${emailUsername || role}${j + 1}@example.com`;
-      const user = {
+      const user: RawPractitioner = {
         admissionsDate: '2019-03-01',
         admissionsStatus: 'Active',
         barNumber,
-        birthYear: '1950',
+        birthYear: 1950,
         contact: {
           address1: '234 Main St',
           address2: 'Apartment 4',
@@ -215,31 +226,36 @@ const setupPractitioners = async (
           state: 'IL',
         },
         email,
+        accountStatus: ACCOUNT_STATUS.active,
         firmName: 'Some Firm',
         firstName: `${emailUsername || role} ${j + 1}`,
         lastName: 'Test',
         name: `Test ${emailUsername || role}${j + 1}`,
         originalBarState: 'WA',
-        password,
         practiceType,
         practitionerType: 'Attorney',
+        userId: getUniqueId(),
         role,
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
         section: role,
         suffix: '',
-      } as unknown as RawUser;
+      };
 
-      await createOrUpdateUser(applicationContext, {
-        password,
-        setPasswordAsPermanent: true,
-        user,
-      });
+      accounts.push(
+        limit(() =>
+          createOrUpdateUser(applicationContext, {
+            password,
+            setPasswordAsPermanent: true,
+            user,
+          }),
+        ),
+      );
     }
   }
 };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  environment.dynamoDbTableName = destinationTable;
   const applicationContext = createApplicationContext({});
 
   console.log('== Creating Court Users');
@@ -251,5 +267,6 @@ const setupPractitioners = async (
   console.log('== Creating Practitioners');
   await setupPractitioners(applicationContext);
 
+  await settlePromises(accounts);
   console.log('== Done!');
 })();

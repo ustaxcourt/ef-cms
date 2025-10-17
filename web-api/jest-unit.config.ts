@@ -1,6 +1,8 @@
 import { pathsToModuleNameMapper } from 'ts-jest';
-import tsconfig from '../tsconfig.json';
 import type { Config } from 'jest';
+import { loadTsConfig } from '../utils/load-tsconfig.mjs';
+
+const tsconfig = loadTsConfig('tsconfig.json');
 
 const config: Config = {
   clearMocks: true,
@@ -35,6 +37,15 @@ const config: Config = {
     '!src/lambdas/api/api.ts',
     '!src/lambdas/api-public/api-public.ts',
     '!src/lambdas/migration/utilities/getRecordSize.ts',
+    '!src/persistence/elasticsearch/searchClient/getSearchClient.ts',
+    '!src/**/mocks.jest.ts',
+    '!src/persistence/s3/getStorageClient.ts',
+    '!src/persistence/batch/getBatchClient.ts',
+    '!src/notifications/getNotificationService.ts',
+    '!src/lambdas/**/*',
+    '!src/gateways/openSearch/openSearchGateway.ts',
+    '!src/gateways/message/getMessagingClient.ts',
+    '!src/gateways/lambda/getLambdaClient.ts',
   ],
   coverageDirectory: './coverage',
   coverageProvider: 'babel',
@@ -50,7 +61,7 @@ const config: Config = {
     ...pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
       prefix: '<rootDir>/../',
     }),
-    uuid: require.resolve('uuid'),
+    '^uuid$': 'uuid',
   },
   testEnvironment: 'node',
   testPathIgnorePatterns: ['hostedEnvironmentTests'],
@@ -58,6 +69,8 @@ const config: Config = {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
   verbose: false,
+  setupFilesAfterEnv: [
+    '<rootDir>/src/persistence/postgres/featureFlag/mocks.jest.ts',
+  ],
 };
-// eslint-disable-next-line import/no-default-export
 export default config;

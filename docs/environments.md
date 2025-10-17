@@ -46,7 +46,7 @@ This document covers the initial setup needed to get EF-CMS continuous integrati
   ../bin/deploy-app.sh prod
   ```
 
-- Deploy Docker images to Amazon ECR with `./docker-to-ecr.sh`. This will build an image per the `Dockerfile` config, tag it as `latest`, and push it to the repo in ECR.
+- Deploy Docker images to Amazon ECR with `./scripts/ecr/docker-to-ecr.sh`. This will build an image per the `Dockerfile` config, tag it as `latest`, and push it to the repo in ECR.
   - Both Flexion and USTC AWS accounts have container registries, so the image needs to be published to both registries.
 
 ### 4. Configure CircleCI to test and release code to this environment.
@@ -125,12 +125,12 @@ EF-CMS currently has both the concept of a deployment at a domain as well as a n
 
 11. Setup the environment's migrate flag:
     ```bash
-    aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENVIRONMENT}" --item '{"pk":{"S":"migrate"},"sk":{"S":"migrate"},"current":{"BOOL":true}}'
+    aws ssm put-parameter --region us-east-1 --name "/DAWSON/${ENV}/migrate" --value "true" --type "String" --overwrite
     ```
 
 12. Setup the environment's current color:
     ```bash
-    aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENVIRONMENT}" --item '{"pk":{"S":"current-color"},"sk":{"S":"current-color"},"current":{"S":"blue"}}'
+    aws ssm put-parameter --region us-east-1 --name "/DAWSON/${ENV}/current-color" --value "blue" --type "String" --overwrite
     ```
 
 13. Setup all database configuration flags:
@@ -139,26 +139,21 @@ EF-CMS currently has both the concept of a deployment at a domain as well as a n
     ```
 14. Setup the environment's source table version:
     ```bash
-    aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENVIRONMENT}" --item '{"pk":{"S":"source-table-version"},"sk":{"S":"source-table-version"},"current":{"S":"alpha"}}'
+    aws ssm put-parameter --region us-east-1 --name "/DAWSON/${ENV}/source-table-version" --value "alpha" --type "String" --overwrite
     ```
 
 15. Setup the environment's destination table version:
     ```bash
-    aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENVIRONMENT}" --item '{"pk":{"S":"destination-table-version"},"sk":{"S":"destination-table-version"},"current":{"S":"beta"}}'
+		aws ssm put-parameter --region us-east-1 --name "/DAWSON/${ENV}/destination-table-version" --value "alpha" --type "String" --overwrite
     ```
 
-16. Set the environment's maintenance-mode flag to **false**:
-    ```bash
-    aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENVIRONMENT}" --item '{"pk":{"S":"maintenance-mode"},"sk":{"S":"maintenance-mode"},"current":{"BOOL": false}}'
-    ```
+16. Delete the destination DynamoDB tables from us-east-1. 
 
-17. Delete the destination DynamoDB tables from us-east-1. 
+17. Delete the destination ElasticSearch cluster from us-east-1.
 
-18. Delete the destination ElasticSearch cluster from us-east-1.
+18. Rerun the circle deploy from step 10.
 
-19. Rerun the circle deploy from step 10.
-
-20. If the environment is a test environment, setup test users and judges so smoketests will pass:
+19. If the environment is a test environment, setup test users and judges so smoketests will pass:
     ```bash
     ./scripts/user/setup-test-users.ts
     ```
