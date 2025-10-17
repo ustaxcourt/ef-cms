@@ -93,7 +93,6 @@ describe('Trial Session Eligible Cases Journey', () => {
       includeApwDocument: false,
     }).then(({ docketNumber }) => {
       createdDocketNumbers.push(docketNumber);
-
       loginAsDocketClerk();
       goToCase(docketNumber);
       updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
