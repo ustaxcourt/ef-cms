@@ -96,8 +96,6 @@ export default async function ({
       {
         name: 'postcss-tailwind',
         setup(build) {
-          const cssMap = new Map();
-
           // Watch for changes in TSX/TS/JS files and invalidate CSS cache
           build.onLoad({ filter: /\.(tsx|ts|js|jsx)$/ }, async args => {
             // Invalidate CSS cache when TSX/TS/JS files change
