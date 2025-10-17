@@ -19,6 +19,7 @@ export const batchDownloadTrialSessionLambda = (
       applicationContext,
       {
         trialSessionId,
+        ...event.queryStringParameters,
       },
       authorizedUser,
     );
