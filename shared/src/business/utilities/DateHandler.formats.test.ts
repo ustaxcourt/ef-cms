@@ -32,6 +32,7 @@ describe('DateHandler', () => {
       TIME_TZ: '3:56 am ET',
       TRIAL_SORT_TAG: '20180702035647',
       TRIAL_TIME: '2018-07-02 3:56',
+      UNIX_TIMESTAMP_MS: '1530518207007',
       UNIX_TIMESTAMP_SECONDS: '1530518207',
       WEEK: '27',
       YEAR: '2018',
