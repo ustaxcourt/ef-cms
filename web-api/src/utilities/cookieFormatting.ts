@@ -11,7 +11,7 @@ export const createCookieString = (
 ) => {
   return serialize(cookieKey, cookieValue, {
     domain,
-    expires: DateTime.fromHTTP(expiresDateTime).toJSDate(),
+    expires: DateTime.fromISO(expiresDateTime).toJSDate(),
     httpOnly,
     secure,
   });
