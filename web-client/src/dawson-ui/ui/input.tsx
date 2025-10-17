@@ -61,7 +61,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                   <FontAwesomeIcon
                     icon={faQuestionCircle}
                     size="sm"
-                    className="tw:ml-1 tw:text-primary-dark"
+                    className="tw:ml-1 tw:text-primary"
                     title={helpText}
                     role="img"
                     aria-label={helpText}
@@ -146,7 +146,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
                   <FontAwesomeIcon
                     icon={faQuestionCircle}
                     size="sm"
-                    className="tw:ml-1 tw:text-primary-dark"
+                    className="tw:ml-1 tw:text-primary"
                     title={helpText}
                     role="img"
                     aria-label={helpText}
