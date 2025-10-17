@@ -1,5 +1,5 @@
 import promiseRetry from 'promise-retry';
-import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
+import { DateTime } from 'luxon';
 
 function convertBytesToString(pdfBytes: number[]): string {
   const chunkSize = 10000;
@@ -76,9 +76,9 @@ export const cleanFileMetadata = async (pdfLib, fileReader: FileReader) => {
 
   pdfDoc.setKeywords([]);
 
-  const nowDateString = formatNow(FORMATS.ISO);
-  pdfDoc.setCreationDate(nowDateString);
-  pdfDoc.setModificationDate(nowDateString);
+  const nowJSDate = DateTime.now().toJSDate();
+  pdfDoc.setCreationDate(nowJSDate);
+  pdfDoc.setModificationDate(nowJSDate);
 
   const modifiedPdfBytes: number[] = await pdfDoc.save();
   const finalModifiedPdfBytes: BlobPart =
