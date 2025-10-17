@@ -56,6 +56,17 @@ export function Inputs() {
               />
             </div>
           </div>
+
+         
+          <div className="max-xs:tw:w-full">
+            <TextField
+              label="Field Label"
+              helpText="Help text"
+              placeholder="Enter text here"
+              icon={true}
+              error="error"
+            />
+          </div>
         </div>
       </div>
     </div>

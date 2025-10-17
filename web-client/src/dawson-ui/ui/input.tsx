@@ -2,7 +2,6 @@ import * as React from 'react';
 import { cn } from '@web-client/lib/utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
-// import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 
 interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: string;
@@ -99,7 +98,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 
             // Error state
             error &&
-              'tw:border-red-300 tw:focus:border-red-500 tw:focus:ring-red-500/20',
+              'tw:border-red-500 tw:ring-1 tw:ring-red-500',
 
             // Disabled state
             'tw:disabled:cursor-not-allowed tw:disabled:bg-gray-50 tw:disabled:text-gray-500',
@@ -110,9 +109,9 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
         />
 
         {error && (
-          <div className="tw:flex tw:items-center tw:gap-2 tw:text-red-500 tw:text-sm">
-            <FontAwesomeIcon icon={faQuestionCircle} size="sm" />
-            <span>{error}</span>
+          <div className="tw:flex tw:items-center tw:gap-2 tw:text-red-500">
+            <FontAwesomeIcon icon={faQuestionCircle} className="tw-text-[12px]" />
+            <span className="tw-text-[12px]">Enter a valid answer</span>
           </div>
         )}
       </div>
@@ -182,7 +181,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
             'tw:focus:border-blue-500 tw:focus:ring-2 tw:focus:ring-blue-500/20',
             'tw:placeholder:text-[18px]',
             error &&
-              'tw:border-red-300 tw:focus:border-red-500 tw:focus:ring-red-500/20',
+              'tw:border-red-500 tw:ring-1 tw:ring-red-500',
             'tw:disabled:cursor-not-allowed tw:disabled:bg-gray-50 tw:disabled:text-gray-500',
 
             className,
@@ -191,9 +190,9 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
         />
 
         {error && (
-          <div className="tw:flex tw:items-center tw:gap-2 tw:text-red-500 tw:text-sm">
-            <FontAwesomeIcon icon={faQuestionCircle} size="sm" />
-            <span>{error}</span>
+          <div className="tw:flex tw:items-center tw:gap-2 tw:text-red-500">
+            <FontAwesomeIcon icon={faQuestionCircle} className="tw-text-[16px]" />
+            <span className="tw-text-[12px]">Enter a valid answer</span>
           </div>
         )}
       </div>

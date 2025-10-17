@@ -36,24 +36,21 @@ export const CaseSearchByDocketNumber = connect(
           <form>
             <div className="grid-row">
               <div className="tablet:grid-col-6">
+
                 <FormGroup errorText={validationErrors.docketNumber}>
-                  <label
-                    className="usa-label margin-bottom-0"
-                    htmlFor="docket-number"
-                  >
-                    Docket number <span className="usa-hint">(required)</span>
-                  </label>
-                  <span className="usa-hint">
-                    Example of docket number format: 123-19
-                  </span>
-                  <input
-                    aria-describedby="search-by-docket-number"
-                    className="usa-input"
-                    data-testid="docket-number"
-                    id="docket-number"
-                    name="docketNumber"
-                    type="text"
-                    value={
+
+                  <div className="max-xs:tw:w-full tw:mt-4">
+                    <TextField
+                      aria-describedby="search-by-docket-number"
+                      data-testid="docket-number"
+                      id="docket-number"
+                      name="docketNumber"
+                      icon={true}
+                      label="Docket number"
+                      helpText="Example of docket number format: 123-19"
+                      placeholder=""
+                      required={true}
+                                        value={
                       advancedSearchForm.caseSearchByDocketNumber
                         .docketNumber || ''
                     }
@@ -67,14 +64,6 @@ export const CaseSearchByDocketNumber = connect(
                         value: e.target.value.toUpperCase(),
                       });
                     }}
-                  />
-                  <div className="max-xs:tw:w-full tw:mt-4">
-                    <TextField
-                      icon={true}
-                      label="Docket number"
-                      helpText="Example of docket number format: 123-19"
-                      placeholder=""
-                      required={true}
                     />
                   </div>
                 </FormGroup>
