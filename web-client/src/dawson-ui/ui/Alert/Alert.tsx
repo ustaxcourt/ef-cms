@@ -50,28 +50,35 @@ function Alert({
   className,
   closeButtonOnClick,
   variant,
-  ...props
+  dataTestId,
+    ...props
+
 }: React.ComponentProps<'div'> &
   VariantProps<typeof alertVariants> & {
     closeButtonOnClick?: () => React.MouseEventHandler<HTMLButtonElement> | void;
     isDismissible?: boolean;
+    dataTestId?: string;
   }) {
-  return (
-    <div
-      data-slot="alert"
-      role="alert"
-      className={cn(alertVariants({ variant }), className)}
-      {...props}
-    >
-      <div className="tw:relative">{children}</div>
-    </div>
-  );
-}
+
+    const dataTestIdProp = dataTestId ? `data-testId-${dataTestId}` : undefined;
+    
+      return (
+      <div
+        data-slot="alert"
+        role="alert"
+        className={cn(alertVariants({ variant }), className)}
+        data-testId={dataTestIdProp}
+        {...props}>
+        <div className="tw:relative">{children}</div>
+      </div>
+    );
+  }
 type AlertHeaderType = {
   closeButtonOnClick?: () => React.MouseEventHandler<HTMLButtonElement> | void;
   isDismissible?: boolean;
   title?: string;
   variant: string;
+  dataTestId?: string;
 };
 
 function AlertHeader({
@@ -79,6 +86,7 @@ function AlertHeader({
   isDismissible = true,
   title,
   variant,
+  dataTestId,
   ...props
 }: React.ComponentProps<'p'> & AlertHeaderType) {
   return (
@@ -89,13 +97,15 @@ function AlertHeader({
           className="tw:!h-[20px] tw:!w-[20px] tw:xs:!h-[24px] tw:xs:!w-[24px]"
         />
       </div>
+      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
       <div
         className={cn(
           title ? 'tw:font-bold' : '',
           'tw:pb-0 tw:xs:ml-[16px] tw:ml-[12px] tw:xs:mr-[16px] tw:mr-[12px] tw:text-[16px] tw:leading-[20px] tw:xs:text-[18px] tw:xs:leading-[24px]',
         )}
         data-slot="alert-title"
-        data-testid="alert-header"
+        data-testid={`alert-header-${dataTestId}`}
+        onClick={closeButtonOnClick}
         {...props}
       ></div>
       {isDismissible && (
@@ -109,11 +119,12 @@ function AlertHeader({
   );
 }
 
-function AlertDescription({ ...props }: React.ComponentProps<'p'>) {
+function AlertDescription({ dataTestId, ...props }: React.ComponentProps<'p'> & { dataTestId?: string }) {
   return (
     <div
       className="tw:xs:mt-[8px] tw:xs:text-[18px] tw:xs:leading-[24px] tw:ml-[32px] tw:xs:ml-[40px] tw:pt-[8px] tw:xs:pt-0"
       data-slot="alert-description"
+      data-testid={`alert-description-${dataTestId}`}
       {...props}
     />
   );
