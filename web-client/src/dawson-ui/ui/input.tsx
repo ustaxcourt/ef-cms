@@ -71,11 +71,11 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                   {!required ? '(optional)' : '(required)'}
                 </span>
               </div>
-              {helpText && (
-                <div className="tw:mt-1 tw:mb-[9px] tw:text-[14px] tw:md:text-[16px] tw:text-gray-500">
-                  {helpText}
-                </div>
-              )}
+                  {helpText && (
+                    <div className="tw:mt-1 tw:mb-[9px] tw:text-[14px] tw:md:text-[16px] tw:text-gray-500">
+                      {helpText}
+                    </div>
+                  )}
             </div>
           </div>
         )}
