@@ -34,7 +34,7 @@ export type FileCourtIssueDocketEntryForm = {
   serviceStamp: string;
   trialLocation: string;
   isOrder: boolean;
-  affectedMotions: {
+  affectedDocketEntries: {
     [docketNumber: string]: {
       docketEntryId: string;
       docketNumber: string;
@@ -203,9 +203,9 @@ export const fileCourtIssuedDocketEntry = async (
     }),
   );
 
-  if (documentMeta.isOrder && documentMeta.affectedMotions) {
+  if (documentMeta.isOrder && documentMeta.affectedDocketEntries) {
     const docketEntryOrderMotions = casesToUpdate.flatMap(caseToUpdate => {
-      return Object.values(documentMeta.affectedMotions)
+      return Object.values(documentMeta.affectedDocketEntries)
         .filter(motion => {
           return caseToUpdate.docketEntries.find(
             docketEntry => docketEntry.docketEntryId === motion.docketEntryId,
@@ -220,7 +220,6 @@ export const fileCourtIssuedDocketEntry = async (
 
     await upsertDocketEntryRelatedEntries({
       orderDocketEntry: subjectDocketEntry,
-      // name not final
       motionDocketEntries: docketEntryOrderMotions,
       served: false,
     });

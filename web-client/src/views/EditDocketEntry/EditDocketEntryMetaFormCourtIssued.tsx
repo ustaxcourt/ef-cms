@@ -7,6 +7,9 @@ import { reactSelectValue } from '@web-client/ustc-ui/Utils/documentTypeSelectHe
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { Button } from '@web-client/ustc-ui/Button/Button';
+import _ from 'lodash';
 
 export const EditDocketEntryMetaFormCourtIssued = connect(
   {
@@ -21,6 +24,7 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
       sequences.validateCourtIssuedDocketEntrySequence,
     validateDocumentSequence: sequences.validateDocumentSequence,
     validationErrors: state.validationErrors,
+    caseDetail: state.caseDetail,
   },
   function EditDocketEntryMetaFormCourtIssued({
     addCourtIssuedDocketEntryHelper,
@@ -31,6 +35,7 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
     validateCourtIssuedDocketEntrySequence,
     validateDocumentSequence,
     validationErrors,
+    caseDetail,
   }) {
     return (
       <div className="blue-container">
@@ -97,6 +102,176 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
         </FormGroup>
 
         {form.eventCode && <CourtIssuedNonstandardForm />}
+
+        {DocketEntry.isOrder(form.eventCode) && (
+          <FormGroup errorText={validationErrors.dispositionOrder}>
+            <fieldset className="usa-fieldset">
+              {/* <legend className="usa-legend"></legend> */}
+              <div className="usa-checkbox">
+                <input
+                  checked={
+                    form.dispositionOrder || form.affectedDocketEntries || false
+                  } // false if undefined
+                  className="usa-checkbox__input"
+                  id="dispositionOrder"
+                  name="dispositionOrder"
+                  type="checkbox"
+                  onChange={e => {
+                    updateCourtIssuedDocketEntryFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.checked,
+                    });
+                    if (e.target.checked) {
+                      updateCourtIssuedDocketEntryFormValueSequence({
+                        key: 'affectedDocketEntries',
+                        value: [{}],
+                      });
+                    } else {
+                      updateCourtIssuedDocketEntryFormValueSequence({
+                        key: 'affectedDocketEntries',
+                        value: undefined,
+                      });
+                    }
+                    validateCourtIssuedDocketEntrySequence();
+                  }}
+                />
+                <label
+                  className="usa-checkbox__label"
+                  htmlFor="dispositionOrder"
+                >
+                  This order acts on at least one motion
+                </label>
+              </div>
+            </fieldset>
+          </FormGroup>
+        )}
+        {/* TODO (#8546): Fix this */}
+        {DocketEntry.isOrder(form.eventCode) &&
+          (form.dispositionOrder || form.affectedDocketEntries) && (
+            <div>
+              {form.affectedDocketEntries.map((motion, i) => {
+                return (
+                  <FormGroup
+                    errorText={validationErrors.dispositionOrder}
+                    key={motion.arrayKey}
+                  >
+                    <label
+                      className="usa-label"
+                      htmlFor="related-motion"
+                      id="related-motion-label"
+                    >
+                      What motion is being acted on?
+                    </label>
+                    <SelectSearch
+                      className="usa-label"
+                      aria-labelledby="related-motion-label"
+                      data-testid="related-motion-type-search"
+                      id="docketEntryid"
+                      isClearable={true}
+                      name="docketEntryid"
+                      options={addCourtIssuedDocketEntryHelper.caseMotions}
+                      value={
+                        motion.docketEntryId
+                          ? {
+                              label: _.filter(
+                                caseDetail.docketEntries,
+                                de => de.docketEntryId === motion.docketEntryId,
+                              )
+                                .map(m => `${m.index} - ${m.documentTitle}`)
+                                .at(0),
+                              value: motion.docketEntryId,
+                            }
+                          : undefined
+                      }
+                      onChange={(inputValue: any) => {
+                        // TODO (#8546): Refactor this to return eligable docket entries (motions)
+                        updateCourtIssuedDocketEntryFormValueSequence({
+                          key: 'affectedDocketEntries',
+                          index: i,
+                          value: Object.assign(form.affectedDocketEntries[i], {
+                            docketEntryId: inputValue.value,
+                          }),
+                        });
+
+                        validateCourtIssuedDocketEntrySequence();
+                      }}
+                    />
+                    <label
+                      className="usa-label"
+                      htmlFor="related-motion-disposition"
+                      id="related-motion-disposition-label"
+                    >
+                      What action is being taken?
+                    </label>
+                    <SelectSearch
+                      aria-labelledby="related-motion-disposition-label"
+                      data-testid="related-motion-disposition-type-search"
+                      id="related-motion-disposition"
+                      isClearable={true}
+                      name="relatedMotionDisposition"
+                      options={
+                        addCourtIssuedDocketEntryHelper.relatedMotionDispositions
+                      }
+                      value={
+                        motion.disposition
+                          ? {
+                              label: motion.disposition,
+                              value: motion.disposition,
+                            }
+                          : undefined
+                      }
+                      onChange={(inputValue: any) => {
+                        // TODO (#8546): Refactor this to return eligable docket entries (motions)
+                        updateCourtIssuedDocketEntryFormValueSequence({
+                          key: 'affectedDocketEntries',
+                          index: i,
+                          value: Object.assign(form.affectedDocketEntries[i], {
+                            disposition: inputValue.value,
+                          }),
+                        });
+
+                        validateCourtIssuedDocketEntrySequence();
+                      }}
+                    />
+
+                    <Button
+                      link
+                      icon="minus-circle"
+                      className="red-warning"
+                      onClick={() => {
+                        const motions = [...form.affectedDocketEntries];
+                        _.pullAt(motions, i);
+                        updateCourtIssuedDocketEntryFormValueSequence({
+                          key: 'affectedDocketEntries',
+                          value: motions,
+                        });
+                      }}
+                    >
+                      Remove Motion
+                    </Button>
+
+                    {form.affectedDocketEntries.length > 1 && <hr></hr>}
+                  </FormGroup>
+                );
+              })}
+
+              <Button
+                link
+                icon="plus-circle"
+                onClick={() => {
+                  updateCourtIssuedDocketEntryFormValueSequence({
+                    key: 'affectedDocketEntries',
+                    value: [
+                      ...form.affectedDocketEntries,
+                      { arrayKey: Date.now() },
+                    ],
+                  });
+                }}
+              >
+                Add new motion
+              </Button>
+            </div>
+          )}
 
         <FormGroup errorText={validationErrors.attachments}>
           <fieldset className="usa-fieldset">

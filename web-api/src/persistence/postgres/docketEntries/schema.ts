@@ -124,10 +124,9 @@ export type NewDocketEntryKysely = Insertable<DocketEntryTable>;
 ///////////////////////////////////
 
 export const docketEntryRelatedDocketEntryTableDefinition = {
+  docketNumber: DEFAULT as string,
   primaryDocketEntryId: DEFAULT as string,
-  primaryDocketNumber: DEFAULT as string,
   secondaryDocketEntryId: DEFAULT as string,
-  secondaryDocketNumber: DEFAULT as string,
   disposition: DEFAULT as string,
   served: DEFAULT as boolean,
 };

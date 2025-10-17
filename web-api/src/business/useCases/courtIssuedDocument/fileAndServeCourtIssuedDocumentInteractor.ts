@@ -251,9 +251,9 @@ export const fileAndServeCourtIssuedDocument = async (
     );
 
     // TODO (#8546): Update docket entries here
-    if (form.isOrder && form.affectedMotions) {
+    if (form.isOrder && form.affectedDocketEntries) {
       const docketEntryOrderMotions = casesToUpdate.flatMap(caseToUpdate => {
-        return Object.values(form.affectedMotions)
+        return Object.values(form.affectedDocketEntries)
           .filter(motion => {
             return caseToUpdate.docketEntries.find(
               docketEntry => docketEntry.docketEntryId === motion.docketEntryId,
@@ -268,7 +268,6 @@ export const fileAndServeCourtIssuedDocument = async (
 
       await upsertDocketEntryRelatedEntries({
         orderDocketEntry: docketEntryToServe,
-        // name not final
         motionDocketEntries: docketEntryOrderMotions,
         served: true,
       });
