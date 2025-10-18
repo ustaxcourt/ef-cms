@@ -1,5 +1,4 @@
 import { MOCK_TRIAL_REGULAR, MOCK_TRIAL_REMOTE } from '@shared/test/mockTrial';
-import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 import {
   getUniqueValues,
@@ -70,7 +69,7 @@ describe('getUniqueValues', () => {
 });
 
 describe('trialSessionsReport', () => {
-  const start = '2020-01-01T05:00:00Z';
+  const begin = '2020-01-01T05:00:00Z';
   const end = '2021-01-01T05:00:00Z';
   const filename = '/tmp/2020-trial-sessions.csv';
   const mockTrialSessions = [MOCK_TRIAL_REMOTE, MOCK_TRIAL_REGULAR];
@@ -83,10 +82,9 @@ describe('trialSessionsReport', () => {
 
   it('retrieves trial sessions and outputs a CSV file', async () => {
     await trialSessionsReport({
-      applicationContext,
+      begin,
       end,
       filename,
-      start,
       stats: false,
     });
     expect(getTrialSessions).toHaveBeenCalled();
@@ -96,10 +94,9 @@ describe('trialSessionsReport', () => {
 
   it('retrieves trial sessions and returns aggregated statistics', async () => {
     await trialSessionsReport({
-      applicationContext,
+      begin,
       end,
       filename,
-      start,
       stats: true,
     });
     expect(getTrialSessions).not.toHaveBeenCalled(); // because the results were cached

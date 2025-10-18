@@ -1,22 +1,21 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
+import type { RawPractitioner } from '@shared/business/entities/Practitioner';
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
+  getJsTimeframeForYear,
 } from '../helpers/parseArgsAndEnvVars';
-import {
-  type ServerApplicationContext,
-  createApplicationContext,
-} from '@web-api/applicationContext';
+import { fromKyselyDocketEntry } from '@web-api/persistence/postgres/docketEntries/mapper';
+import { fromKyselyUser } from '@web-api/persistence/postgres/users/mapper';
 import { generateCsv } from '../helpers/generate-csv';
+import { getDbReader } from '@web-api/database';
 import { pick } from 'lodash';
-import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
 
 const scriptConfig: ScriptConfig = {
   description:
     'documents-filed-by-non-attorneys - Generates a CSV of documents filed by non-attorneys.',
   environment: {
-    elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
     env: 'ENV',
   },
   parameters: {
@@ -36,131 +35,74 @@ const scriptConfig: ScriptConfig = {
       default: '2024',
       required: false,
       short: 'y',
-      transform: 'number',
       type: 'string',
     },
   },
   requireActiveAwsSession: true,
 };
+const { eventCode, fiscal, year } = parseArgsAndEnvVars(scriptConfig) as {
+  eventCode: string;
+  fiscal: boolean;
+  year: string;
+};
+const { begin, end } = getJsTimeframeForYear({ fiscal, year });
 
 const OUTPUT_DIR = `${process.env.HOME}/Documents`;
 
-const getNonAttorneys = async ({
-  applicationContext,
-}: {
-  applicationContext: ServerApplicationContext;
-}): Promise<{ [k: string]: string }> => {
+const getNonAttorneys = async (): Promise<{ [k: string]: string }> => {
   const nonAttorneys = {};
-  const { results } = await searchAll({
-    applicationContext,
-    searchParameters: {
-      body: {
-        query: {
-          bool: {
-            must: [
-              {
-                term: {
-                  'admissionsStatus.S': 'Active',
-                },
-              },
-              {
-                term: {
-                  'practitionerType.S': 'Non-Attorney',
-                },
-              },
-            ],
-          },
-        },
-      },
-      index: 'efcms-user',
-    },
-  });
+  const results = (
+    await getDbReader(reader =>
+      reader
+        .selectFrom('dwUser as u')
+        .selectAll('u')
+        .where('u.admissionsStatus', '=', 'Active')
+        .where('u.practitionerType', '=', 'Non-Attorney')
+        .orderBy('u.admissionsDate', 'asc')
+        .execute(),
+    )
+  ).map(fromKyselyUser) as RawPractitioner[];
   for (const result of results) {
-    nonAttorneys[result.pk.replace('user|', '')] = result.name;
+    nonAttorneys[result.userId] = result.name;
   }
   return nonAttorneys;
 };
 
 const getDocuments = async ({
-  applicationContext,
   eventCode,
-  fiscal,
   userIds,
-  year,
 }: {
-  applicationContext: ServerApplicationContext;
   eventCode: string;
-  fiscal: boolean;
   userIds: string[];
-  year: number;
 }): Promise<RawDocketEntry[]> => {
-  const { results } = await searchAll({
-    applicationContext,
-    searchParameters: {
-      body: {
-        query: {
-          bool: {
-            must: [
-              {
-                term: {
-                  'entityName.S': 'DocketEntry',
-                },
-              },
-              {
-                term: {
-                  'eventCode.S': eventCode,
-                },
-              },
-              {
-                terms: {
-                  'userId.S': userIds,
-                },
-              },
-              {
-                range: {
-                  'receivedAt.S': {
-                    gte: fiscal
-                      ? `${year - 1}-10-01T05:00:00Z`
-                      : `${year}-01-01T04:00:00Z`,
-                    lt: fiscal
-                      ? `${year}-10-01T05:00:00Z`
-                      : `${year + 1}-01-01T04:00:00Z`,
-                  },
-                },
-              },
-            ],
-          },
-        },
-        sort: [{ 'receivedAt.S': 'asc' }],
-      },
-      index: 'efcms-docket-entry',
-    },
-  });
-  return results;
+  return (
+    await getDbReader(reader =>
+      reader
+        .selectFrom('dwDocketEntry as de')
+        .selectAll('de')
+        .where('de.eventCode', '=', eventCode)
+        .where('de.userId', 'in', userIds)
+        .where('de.receivedAt', '>=', begin)
+        .where('de.receivedAt', '<', end)
+        .orderBy('de.receivedAt', 'asc')
+        .execute(),
+    )
+  ).map(fromKyselyDocketEntry) as RawDocketEntry[];
 };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const applicationContext = createApplicationContext({});
-  const { eventCode, fiscal, year } = parseArgsAndEnvVars(scriptConfig) as {
-    eventCode: string;
-    fiscal: boolean;
-    year: number;
-  };
   console.log(
     `Looking for documents with event code ${eventCode} filed by non-attorneys ` +
       `in ${fiscal ? 'fiscal' : 'calendar'} year ${year}...`,
   );
-  const nonAttorneys = await getNonAttorneys({ applicationContext });
+  const nonAttorneys = await getNonAttorneys();
   console.log(
     `Found ${Object.keys(nonAttorneys).length} non-attorneys with active admissions status.`,
   );
   const documents = await getDocuments({
-    applicationContext,
     eventCode,
-    fiscal,
     userIds: Object.keys(nonAttorneys),
-    year,
   });
   if (!documents.length) {
     console.log(
