@@ -1,58 +1,37 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
+import { CLOSED_CASE_STATUSES } from '@shared/business/entities/EntityConstants';
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
-import { applicationContext } from '@web-api/applicationContext';
+import { fromKyselyDocketEntry } from '@web-api/persistence/postgres/docketEntries/mapper';
 import { generateCsv } from '../helpers/generate-csv';
-import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
-import { CLOSED_CASE_STATUSES } from '@shared/business/entities/EntityConstants';
+import { getDbReader } from '@web-api/database';
 
 const scriptConfig: ScriptConfig = {
   description:
     'served-docket-entries-missing-service-date-in-open-cases - Generates a ' +
     'CSV of legacy-served documents that are missing a service timestamp',
   environment: {
-    elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
     env: 'ENV',
   },
   requireActiveAwsSession: true,
 };
-
 parseArgsAndEnvVars(scriptConfig);
 
 const OUTPUT_DIR = `${process.env.HOME}/Documents`;
 
 const getDocketNumbersOfAllOpenCases = async (): Promise<string[]> => {
-  const { results } = await searchAll({
-    applicationContext,
-    searchParameters: {
-      body: {
-        _source: ['docketNumber.S'],
-        query: {
-          bool: {
-            must: [
-              {
-                term: {
-                  'entityName.S': 'Case',
-                },
-              },
-            ],
-            must_not: [
-              {
-                terms: {
-                  'status.S': CLOSED_CASE_STATUSES,
-                },
-              },
-            ],
-          },
-        },
-      },
-      index: 'efcms-case',
-    },
-  });
-  return results.map((c: RawCase) => c.docketNumber);
+  const results = (await getDbReader(reader =>
+    reader
+      .selectFrom('dwCase as c')
+      .select('c.docketNumber')
+      .where('c.status', 'not in', CLOSED_CASE_STATUSES)
+      .orderBy('c.sortableDocketNumber', 'asc')
+      .execute(),
+  )) as { docketNumber: string }[];
+  return results.map(c => c.docketNumber);
 };
 
 const getDocketEntriesMissingServiceDate = async ({
@@ -60,50 +39,18 @@ const getDocketEntriesMissingServiceDate = async ({
 }: {
   openCases: string[];
 }): Promise<RawDocketEntry[]> => {
-  const { results } = await searchAll({
-    applicationContext,
-    searchParameters: {
-      body: {
-        _source: [
-          'docketEntryId.S',
-          'docketNumber.S',
-          'documentType.S',
-          'eventCode.S',
-          'index.N',
-        ],
-        query: {
-          bool: {
-            must: [
-              {
-                term: {
-                  'entityName.S': 'DocketEntry',
-                },
-              },
-              {
-                term: {
-                  'isLegacyServed.BOOL': true,
-                },
-              },
-              {
-                terms: {
-                  'docketNumber.S': openCases,
-                },
-              },
-            ],
-            must_not: [
-              {
-                exists: {
-                  field: 'servedAt.S',
-                },
-              },
-            ],
-          },
-        },
-      },
-      index: 'efcms-docket-entry',
-    },
-  });
-  return results;
+  return (
+    await getDbReader(reader =>
+      reader
+        .selectFrom('dwDocketEntry as de')
+        .selectAll('de')
+        .where('de.docketNumber', 'in', openCases)
+        .where('de.isLegacyServed', '=', true)
+        .where('de.servedAt', '=', null)
+        .orderBy('de.receivedAt', 'asc')
+        .execute(),
+    )
+  ).map(fromKyselyDocketEntry) as RawDocketEntry[];
 };
 
 const outputCSV = ({

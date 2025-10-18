@@ -3,21 +3,17 @@
 import { DateTime } from 'luxon';
 import {
   type ScriptConfig,
+  getJsTimeframeForYear,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
-import { applicationContext } from '@web-api/applicationContext';
-import {
-  count,
-  searchAll,
-} from '@web-api/persistence/elasticsearch/searchClient';
-import { validateDateAndCreateISO } from '@shared/business/utilities/DateHandler';
+import { getDbReader } from '@web-api/database';
+import { ROLES } from '@shared/business/entities/EntityConstants';
 
 const scriptConfig: ScriptConfig = {
   description:
     'represented-count-by-year - Generates a table comparing counts of ' +
     'represented and pro se cases in a given calendar or fiscal year',
   environment: {
-    elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
     env: 'ENV',
   },
   parameters: {
@@ -38,52 +34,20 @@ const { fiscal, year } = parseArgsAndEnvVars(scriptConfig) as {
   fiscal: boolean;
   year: string;
 };
+const { begin, end } = getJsTimeframeForYear({ fiscal, year });
 
 const getDocketNumbersOfCasesFiledInYear = async (): Promise<string[]> => {
-  const { results } = await searchAll({
-    applicationContext,
-    searchParameters: {
-      body: {
-        query: {
-          bool: {
-            must: [
-              {
-                term: {
-                  'entityName.S': 'DocketEntry',
-                },
-              },
-              {
-                term: {
-                  'eventCode.S': 'P',
-                },
-              },
-              {
-                range: {
-                  'receivedAt.S': {
-                    gte: validateDateAndCreateISO({
-                      day: '1',
-                      month: fiscal ? '10' : '1',
-                      year: fiscal ? `${Number(year) - 1}` : year,
-                    }),
-                    lt: validateDateAndCreateISO({
-                      day: '1',
-                      month: fiscal ? '10' : '1',
-                      year: fiscal ? year : `${Number(year) + 1}`,
-                    }),
-                  },
-                },
-              },
-            ],
-          },
-        },
-        sort: [{ 'receivedAt.S': 'asc' }],
-      },
-      index: 'efcms-docket-entry',
-    },
-  });
-  return Array.from(
-    new Set(results.map((p: RawDocketEntry) => p.docketNumber)),
-  );
+  const results = (await getDbReader(reader =>
+    reader
+      .selectFrom('dwDocketEntry as de')
+      .select('de.docketNumber')
+      .where('de.eventCode', '=', 'P')
+      .where('de.receivedAt', '>=', begin)
+      .where('de.receivedAt', '<', end)
+      .orderBy('de.receivedAt', 'asc')
+      .execute(),
+  )) as { docketNumber: string }[];
+  return Array.from(new Set(results.map(p => p.docketNumber)));
 };
 
 const countCasesWithRepresentation = async ({
@@ -91,35 +55,16 @@ const countCasesWithRepresentation = async ({
 }: {
   docketNumbers: string[];
 }): Promise<number> => {
-  return await count({
-    applicationContext,
-    searchParameters: {
-      body: {
-        query: {
-          bool: {
-            must: [
-              {
-                term: {
-                  'entityName.S': 'Case',
-                },
-              },
-              {
-                terms: {
-                  'docketNumber.S': docketNumbers,
-                },
-              },
-              {
-                exists: {
-                  field: 'privatePractitioners.L.M.userId.S',
-                },
-              },
-            ],
-          },
-        },
-      },
-      index: 'efcms-case',
-    },
-  });
+  const results = (await getDbReader(reader =>
+    reader
+      .selectFrom('dwUserOnCase as uc')
+      .select('uc.docketNumber')
+      .where('uc.actingAsRole', '=', ROLES.privatePractitioner)
+      .where('uc.docketNumber', 'in', docketNumbers)
+      .execute(),
+  )) as { docketNumber: string }[];
+  const uniqueDocketNumbers = new Set(results.map(c => c.docketNumber));
+  return uniqueDocketNumbers.size;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
