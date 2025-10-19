@@ -1,4 +1,4 @@
-/* eslint-disable custom-rules-plugin/no-new-dates*/
+/* eslint-disable custom-rules-plugin/no-dates*/
 import esbuildHelper from './esbuildHelper.mjs';
 import fs from 'fs';
 
