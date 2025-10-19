@@ -204,7 +204,7 @@ On June 26 2025, newer versions of babel-core and jest core also started to caus
 - On September 19th, 2025, babel/core was successfully updated to 7.28..4 from 7.28.3, had some issues with Github Actions checks running all the way through, but Github still gave the commit a check. Refer to this PR for more info. https://github.com/ustaxcourt/ef-cms/pull/9164
 
 ### @types/node
-The major version of this package should match our major version of node. At the moment that we are using node v22.16.0 so we should use a package that starts with 22.
+The major version of this package should match our major version of node. At the moment that we are using node v22.20.0 so we should use a package that starts with 22.
 
 ### TypeScript
 We cannot update TypeScript version beyond v5.8.3 until ts-jest supports it
@@ -229,3 +229,6 @@ https://www.npmjs.com/package/uuid?activeTab=readme
 Quote from site
 
 "Starting with uuid@12 CommonJS is no longer supported. See implications and motivation for details."
+
+## typescript
+When I tried updating Typescript last week, it enforced more type errors in many files. To proceed with an upgrade, you'll need to make some changes to the files in question

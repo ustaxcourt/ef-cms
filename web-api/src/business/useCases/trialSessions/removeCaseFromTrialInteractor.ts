@@ -50,6 +50,12 @@ export const removeCaseFromTrial = async (
 
   const trialSessionEntity = new TrialSession(trialSession);
 
+  const myCase = await getCaseByDocketNumber({
+    docketNumber,
+  });
+
+  const caseEntity = new Case(myCase, { authorizedUser });
+
   if (trialSessionEntity.isCalendared) {
     trialSessionEntity.removeCaseFromCalendar({ disposition, docketNumber });
     await removeCaseFromTrialSession({
@@ -67,12 +73,6 @@ export const removeCaseFromTrial = async (
       trialSessionId,
     });
   }
-
-  const myCase = await getCaseByDocketNumber({
-    docketNumber,
-  });
-
-  const caseEntity = new Case(myCase, { authorizedUser });
 
   if (!caseEntity.isHearing(trialSessionId)) {
     caseEntity.removeFromTrial({
