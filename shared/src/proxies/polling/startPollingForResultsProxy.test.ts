@@ -1,5 +1,6 @@
 jest.mock('../requests');
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
 import { get } from '../requests';
 import { startPollingForResultsInteractor } from '@shared/proxies/polling/startPollingForResultsProxy';
 
@@ -7,7 +8,9 @@ describe('startPollingForResultsProxy', () => {
   let GET_RESPONSES: any[] = [];
   let iteration = 0;
   const TEST_REQUEST_ID = 'TEST_REQUEST_ID';
-  const TEST_EXP_DATE = Math.floor(Date.now() / 1000) + 60 * 60;
+  const nowSeconds = Number(formatNow(FORMATS.UNIX_TIMESTAMP_SECONDS));
+  const oneHourInSeconds = 60 * 60;
+  const TEST_EXP_DATE = nowSeconds + oneHourInSeconds;
   let RESOLVER_MOCK;
 
   beforeEach(() => {
