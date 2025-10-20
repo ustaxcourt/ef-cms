@@ -53,7 +53,7 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
     getTrialSessionById.mockImplementation(() => mockTrial);
     applicationContext
       .getPersistenceGateway()
-      .getEligibleCasesForTrialSession.mockReturnValue([MOCK_ELIGIBLE_CASE]);
+      .getEligibleCasesForTrialSession.mockReturnValue([{...MOCK_ELIGIBLE_CASE, docketEntries: []}]);
     getCalendaredCasesForTrialSession.mockResolvedValue([MOCK_ASSOCIATED_CASE]);
   });
 
@@ -113,6 +113,7 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
       error = e;
     }
 
+    console.log(result)
     expect(error).toBeUndefined();
     expect(result).toMatchObject([
       mockEligibleCaseWithPractitioners,

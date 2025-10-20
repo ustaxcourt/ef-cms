@@ -10,12 +10,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { getCalendaredCasesForTrialSession } from '@web-api/persistence/postgres/trialSessions/getCalendaredCasesForTrialSession';
-import {
-  dateStringsCompared,
-  calculateISODate,
-  createISODateString,
-} from '@shared/business/utilities/DateHandler';
-import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
+import { setIsAgedCaseForEligibleCases } from '@shared/business/useCases/getEligibleCasesForCityInteractor';
 
 /**
  * get eligible cases for trial session
@@ -62,40 +57,11 @@ export const getEligibleCasesForTrialSessionInteractor = async (
       trialCity: trialSessionEntity.trialLocation!,
     });
 
-  const eligibleCasesWithFilingDate = eligibleCases.map(eligibleCase => {
-    console.log('c: ', { ...eligibleCase, docketEntries: undefined });
-    let isAgedCase: boolean;
-    if (
-      [
-        CASE_STATUS_TYPES.closed,
-        CASE_STATUS_TYPES.closedDismissed,
-        CASE_STATUS_TYPES.onAppeal,
-      ].some(status => eligibleCase.status === status)
-    ) {
-      isAgedCase = false;
-    } else {
-      const filingDate =
-        eligibleCase.docketEntries
-          .map(docketEntry => docketEntry.filingDate)
-          .sort((a, b) => dateStringsCompared(b, a))[0] ||
-        createISODateString();
-      isAgedCase =
-        dateStringsCompared(
-          filingDate,
-          calculateISODate({
-            dateString: createISODateString(),
-            howMuch: -365,
-          }),
-        ) < 0;
-    }
-    return {
-      ...eligibleCase,
-      isAgedCase,
-    };
-  });
+  const eligibleCasesWithIsAgedCase =
+    setIsAgedCaseForEligibleCases(eligibleCases);
 
   const eligibleCasesFiltered = calendaredCases
-    .concat(eligibleCasesWithFilingDate)
+    .concat(eligibleCasesWithIsAgedCase)
     .map(rawCase => {
       return new EligibleCase(rawCase).validate().toRawObject();
     });

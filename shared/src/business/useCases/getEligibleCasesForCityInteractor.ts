@@ -10,25 +10,18 @@ import {
   RawEligibleCase,
 } from '@shared/business/entities/cases/EligibleCase';
 import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
-import { dateStringsCompared, createISODateString, calculateISODate } from '../utilities/DateHandler';
+import {
+  dateStringsCompared,
+  createISODateString,
+  calculateISODate,
+} from '../utilities/DateHandler';
 
-export const getEligibleCasesForCityInteractor = async (
-  { trialCity }: { trialCity: string },
-  authorizedUser: UnknownAuthUser,
-): Promise<RawEligibleCase[] | undefined> => {
-  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
-    throw new UnauthorizedError(
-      `Invalid User attempting to view eligible cases for: ${trialCity}`,
-    );
-  }
-
-  const eligibleCases = await getEligibleCasesForTrialCity({
-    trialCity,
-  });
-
-  // TODO: make a function for this
-  const eligibleCasesWithIsAgedCase = eligibleCases.map(eligibleCase => {
-    console.log('c: ', { ...eligibleCase, docketEntries: undefined });
+export const setIsAgedCaseForEligibleCases = (
+  eligibleCases: Omit<RawCase, 'consolidatedCases'>[],
+): Omit<RawCase, 'consolidatedCases'>[] => {
+  console.log(eligibleCases)
+  return eligibleCases.map(eligibleCase => {
+    console.log(eligibleCase.docketEntries)
     let isAgedCase: boolean;
     if (
       [
@@ -58,6 +51,24 @@ export const getEligibleCasesForCityInteractor = async (
       isAgedCase,
     };
   });
+};
+
+export const getEligibleCasesForCityInteractor = async (
+  { trialCity }: { trialCity: string },
+  authorizedUser: UnknownAuthUser,
+): Promise<RawEligibleCase[] | undefined> => {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
+    throw new UnauthorizedError(
+      `Invalid User attempting to view eligible cases for: ${trialCity}`,
+    );
+  }
+
+  const eligibleCases = await getEligibleCasesForTrialCity({
+    trialCity,
+  });
+
+  const eligibleCasesWithIsAgedCase =
+    setIsAgedCaseForEligibleCases(eligibleCases);
 
   return eligibleCasesWithIsAgedCase.map(rawCase => {
     return new EligibleCase(rawCase).validate().toRawObject();
