@@ -51,18 +51,17 @@ jobs:
         uses: runforesight/workflow-telemetry-action@v2
         with:
           comment_on_pr: false
-
-      - name: Restore Cache Dependencies
-        id: cache-dependencies
-        uses: actions/cache/restore@v4
-        with:
-          path: |
-            node_modules
-            .cache/puppeteer
-            /home/runner/.cache/Cypress
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+      # - name: Restore Cache Dependencies
+      #   id: cache-dependencies
+      #   uses: actions/cache/restore@v4
+      #   with:
+      #     path: |
+      #       node_modules
+      #       .cache/puppeteer
+      #       /home/runner/.cache/Cypress
+      #     key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Install Node Dependencies - Cache Miss Install
-        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        # if: steps.cache-dependencies.outputs.cache-hit != 'true'
         id: npm-clean-install
         run: npm ci
       - name: Setup Postgres
