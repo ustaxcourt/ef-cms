@@ -9,6 +9,8 @@ import { selectTypeaheadInput } from '../../../../../helpers/components/typeAhea
 import { createAndServeConsolidatedGroup } from '../../../../../helpers/fileAPetition/create-consolidated-case-group';
 import { externalUserSearchesDocketNumber } from '../../../../../helpers/advancedSearch/external-user-searches-docket-number';
 
+// Each describe block relies on the previous one having been run
+
 describe('Multidocket QC Process and Edit Docket Entry', () => {
   let consolidatedGroupInfo: {
     leadDocketNumber: string;
