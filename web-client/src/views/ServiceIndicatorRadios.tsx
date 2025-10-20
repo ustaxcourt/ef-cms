@@ -1,9 +1,16 @@
 import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { props as cerebralProps } from 'cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import { RunableSequence as RunnableSequence } from 'cerebral';
+
+const props = cerebralProps as unknown as {
+  bind: string;
+  getValidationError: () => string;
+  hideElectronic: boolean;
+  validationErrors: string;
+};
 
 export const ServiceIndicatorRadios = connect(
   {
@@ -25,6 +32,15 @@ export const ServiceIndicatorRadios = connect(
     SERVICE_INDICATOR_TYPES,
     validateSequence,
     validationErrors,
+  }: {
+    bindKey: string;
+    bindObject: Record<string, unknown>;
+    cerebralBindSimpleSetStateSequence: Function | RunnableSequence;
+    getValidationError: () => string;
+    hideElectronic: boolean;
+    SERVICE_INDICATOR_TYPES: Record<string, unknown>;
+    validateSequence: Function | RunnableSequence;
+    validationErrors: Record<string, unknown>;
   }) {
     const selectElectronic =
       bindObject.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;

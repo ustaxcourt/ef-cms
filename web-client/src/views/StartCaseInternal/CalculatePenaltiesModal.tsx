@@ -52,11 +52,11 @@ export const CalculatePenaltiesModal = connect(
             );
           })}
         {penalties &&
-          penalties.map((penalty, index) => (
+          (penalties as Array<{ name: string; penaltyAmount?: string }>).map((penalty, index) => (
             <FormGroup
               className="margin-top-3"
               confirmationText={
-                confirmationText?.penalties[index]?.penaltyAmount
+                (confirmationText as { penalties?: Array<{ penaltyAmount?: string }> })?.penalties?.[index]?.penaltyAmount
               }
               key={penalty.name}
             >
