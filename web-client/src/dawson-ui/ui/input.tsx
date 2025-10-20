@@ -60,8 +60,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                 {icon && (
                   <FontAwesomeIcon
                     icon={faQuestionCircle}
-                    size="lg"
-                    className="tw:ml-1 tw:text-primary"
+                    className="tw:ml-1 tw:text-[16px] tw:md:text-[18px] tw:text-primary"
                     title={helpText}
                     role="img"
                     aria-label={helpText}
@@ -113,7 +112,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 
         {error && (
           <div className="tw:mt-[6px] tw:md:mt-[8px] tw:flex tw:items-center tw:gap-2 tw:text-red-500">
-            <FontAwesomeIcon icon={faExclamationCircle} className="tw-text-[12px]" />
+            <FontAwesomeIcon icon={faExclamationCircle} className="tw-text-[16px] tw:md:text-[18px]" />
             <span className="tw-text-[16px] tw:md:text-[18px]">Enter a valid answer</span>
           </div>
         )}
@@ -146,8 +145,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
                 {helpText && (
                   <FontAwesomeIcon
                     icon={faQuestionCircle}
-                    size="sm"
-                    className="tw:ml-1 tw:text-primary"
+                    className="tw:ml-1 tw:text-[16px] tw:md:text-[18px] tw:text-primary"
                     title={helpText}
                     role="img"
                     aria-label={helpText}
@@ -195,7 +193,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
 
         {error && (
           <div className="tw:mt-1 tw:flex tw:items-center tw:gap-2 tw:text-red-500">
-            <FontAwesomeIcon icon={faQuestionCircle} className="tw-text-[16px]" />
+            <FontAwesomeIcon icon={faQuestionCircle} className="tw-text-[16px] tw:md:text-[18px]" />
             <span className="tw-text-[16px] tw:md:text-[18px]">Enter a valid answer</span>
           </div>
         )}

@@ -35,8 +35,7 @@ export function Inputs() {
                 </span>
                 <FontAwesomeIcon
                   icon={faQuestionCircle}
-                  size="sm"
-                  className="tw:ml-1 tw:text-primary"
+                  className="tw:ml-1 tw:text-[16px] tw:md:text-[18px] tw:text-primary"
                   title="Help text"
                   role="img"
                   aria-label="Help text"
