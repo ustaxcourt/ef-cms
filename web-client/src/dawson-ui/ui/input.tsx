@@ -60,7 +60,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                 {icon && (
                   <FontAwesomeIcon
                     icon={faQuestionCircle}
-                    size="sm"
+                    size="lg"
                     className="tw:ml-1 tw:text-primary"
                     title={helpText}
                     role="img"
@@ -91,6 +91,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             'tw:block tw:w-full tw:rounded-md tw:border tw:border-gray-300 tw:bg-white',
             'tw:px-3 tw:h-9 tw:text-sm tw:outline-none tw:cursor-text',
             'tw:w-[380px] max-xs:tw:w-[351px]',
+            'tw:focus-visible:ring-4 tw:focus-visible:ring-offset-[4px] tw:focus-visible:ring-ring tw:focus-visible:outline-none',
             // Responsive placeholder sizing: 16px mobile, 18px desktop
             'tw:placeholder:text-[16px] tw:md:placeholder:text-[18px]',
 
@@ -177,6 +178,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
             'tw:px-3 tw:py-2 tw:text-sm tw:outline-none tw:cursor-text',
             'tw:min-h-[100px] tw:resize-y',
             'tw:w-[380px] max-xs:tw:w-[351px]',
+            'tw:focus-visible:ring-4 tw:focus-visible:ring-offset-[4px] tw:focus-visible:ring-ring tw:focus-visible:outline-none',
             
             // Responsive placeholder sizing: 16px mobile, 18px desktop
             'tw:placeholder:text-[16px] tw:md:placeholder:text-[18px]',
