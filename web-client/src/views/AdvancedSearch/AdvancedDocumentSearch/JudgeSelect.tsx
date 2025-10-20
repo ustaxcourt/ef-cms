@@ -5,16 +5,8 @@ import React from 'react';
 
 export const JudgeSelect = connect(
   {
-    formValue: (props as { formValue: string }).formValue,
-    judges: (
-      props as {
-        judges: Array<{
-          judgeFullName: string;
-          lastName: string;
-          name: string;
-        }>;
-      }
-    ).judges,
+    formValue: props.formValue,
+    judges: props.judges,
   },
   function JudgeSelect({
     formValue,

@@ -10,8 +10,7 @@ const modalRoot = window.document.getElementById('modal-root');
 
 const OverlayUnRef = connect(
   {
-    onEscSequence:
-      sequences[(props as { onEscSequence: string }).onEscSequence],
+    onEscSequence: sequences[props.onEscSequence],
   },
   function OverlayUnRef({
     children,

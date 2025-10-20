@@ -1662,7 +1662,7 @@ export const presenter = {
     applicationContext: ClientApplicationContext;
     router: {};
   } & { socket: { start: () => void; stop: () => void } } & {
-    path: { yes: jest.Mock; no: jest.Mock };
+    path: any;
   },
   sequences: presenterSequences,
   state: cloneDeep(initialState),

@@ -7,10 +7,10 @@ import classNames from 'classnames';
 
 export const PdfPreview = connect(
   {
-    heightOverride: (props as { heightOverride: boolean }).heightOverride,
-    noDocumentText: (props as { noDocumentText: string }).noDocumentText,
+    heightOverride: props.heightOverride,
+    noDocumentText: props.noDocumentText,
     pdfPreviewUrl: state.pdfPreviewUrl,
-    removeToolbar: (props as { removeToolbar: boolean }).removeToolbar,
+    removeToolbar: props.removeToolbar,
   },
   function PdfPreview({
     heightOverride,

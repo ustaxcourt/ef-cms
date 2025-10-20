@@ -4,10 +4,9 @@ import React from 'react';
 
 export const KeywordSearchField = connect(
   {
-    searchValue: (props as { searchValue: string }).searchValue,
-    updateSequence: (props as { updateSequence: Function }).updateSequence,
-    validateSequence: (props as { validateSequence: Function })
-      .validateSequence,
+    searchValue: props.searchValue,
+    updateSequence: props.updateSequence,
+    validateSequence: props.validateSequence,
   },
   function KeywordSearchField({
     searchValue,
