@@ -684,8 +684,12 @@ export const baseState = {
   completeForm: {},
   confirmationText: undefined as unknown as
     | string
-    | { penalties: Record<string, string> }
-    | { statistics: Record<string, unknown> }
+    | {
+        penalties?: Record<string, string>;
+        statistics?: Record<string, unknown>;
+        irsDeficiencyAmount?: string;
+        determinationDeficiencyAmount?: string;
+      }
     | undefined,
   constants: {} as ReturnType<typeof getConstants>,
   correspondenceId: undefined as string | undefined,
@@ -720,6 +724,7 @@ export const baseState = {
       primaryTab: undefined as string | undefined,
       caseInformationTab: undefined as string | undefined,
       showEditPetition: false as boolean | undefined,
+      showEditCase: false as boolean | undefined,
       inProgressTab: undefined as string | undefined,
       docketRecordTab: undefined as string | undefined,
       partyViewTab: undefined as string | undefined,
@@ -1014,6 +1019,8 @@ export const baseState = {
   validationErrors: {} as Record<string, any>,
   viewerCorrespondenceToDisplay: null as {
     correspondenceId: string;
+    documentTitle?: string;
+    filedBy?: string;
   } | null,
   viewerDocumentToDisplay: undefined as unknown as ViewerDocument,
   viewerDraftDocumentToDisplay: undefined as unknown as ViewerDocument,

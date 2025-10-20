@@ -1,14 +1,12 @@
 import { Icon } from '../ustc-ui/Icon/Icon';
 import { TROUBLESHOOTING_INFO } from '@shared/business/entities/EntityConstants';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const Contact = connect(
   {
     alertHelper: state.alertHelper,
-    gotoPublicSearchSequence: sequences.gotoPublicSearchSequence,
     isPublic: state.isPublic,
   },
   function Contact() {

@@ -2,10 +2,15 @@ import { ConsolidatedCasesCheckboxes } from './ConsolidatedCasesCheckboxes';
 import { Hint } from '../ustc-ui/Hint/Hint';
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
+import { props as cerebralProps } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+
+const props = cerebralProps as unknown as {
+  confirmSequence: unknown;
+  documentTitle: unknown;
+};
 
 export const ConfirmInitiateServiceModal = connect(
   {
@@ -21,6 +26,18 @@ export const ConfirmInitiateServiceModal = connect(
     confirmSequence,
     documentTitle,
     waitingForResponse,
+  }: {
+    cancelSequence: () => void;
+    confirmInitiateServiceModalHelper: {
+      confirmationText: string;
+      showPaperAlert: boolean;
+      caseOrGroup: string;
+      contactsNeedingPaperService: Array<{ name: string }>;
+      showConsolidatedCasesForService: boolean;
+    };
+    confirmSequence: () => void;
+    documentTitle: string;
+    waitingForResponse: boolean;
   }) {
     let isSubmitDebounced = false;
 

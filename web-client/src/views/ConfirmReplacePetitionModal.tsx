@@ -1,15 +1,25 @@
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
+import { props as cerebralProps } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+
+const props = cerebralProps as unknown as {
+  confirmSequence: string;
+};
 
 export const ConfirmReplacePetitionModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
-    confirmSequence: sequences[props.confirmSequence],
+    confirmSequence: sequences[props.confirmSequence as keyof typeof sequences],
   },
-  function ConfirmReplacePetitionModal({ cancelSequence, confirmSequence }) {
+  function ConfirmReplacePetitionModal({
+    cancelSequence,
+    confirmSequence,
+  }: {
+    cancelSequence: () => void;
+    confirmSequence: () => void;
+  }) {
     return (
       <ModalDialog
         cancelLabel="No, Keep Current PDF"
