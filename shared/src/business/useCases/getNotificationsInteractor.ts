@@ -90,7 +90,7 @@ export const getNotificationsInteractor = async (
   );
 
   const isTableRecord = (row: any, _index: number, array: any[]) => {
-    const isNotLeadDocket = !row.leadDocketNumber;
+    const isNotConsolidated = !row.leadDocketNumber;
 
     const isLeadCase = row.leadDocketNumber === row.docketNumber;
 
@@ -104,7 +104,7 @@ export const getNotificationsInteractor = async (
         );
       }).length === 0;
 
-    return isNotLeadDocket || isLeadCase || isFirstOccurence;
+    return isNotConsolidated || isLeadCase || isFirstOccurence;
   };
 
   const qcIndividualInProgressCount = documentQCIndividualInbox
