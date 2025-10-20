@@ -18,8 +18,7 @@ export function CaseIcons({ formattedCase }: { formattedCase: any }) {
       >
         <Icon
           aria-hidden={!formattedCase.isAgedCase}
-          // aria-label="Aged Case"
-          className=""
+          className="aged-case-flag"
           icon="flag"
         />
       </span>

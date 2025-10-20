@@ -3,7 +3,7 @@ import { Case } from '@shared/business/entities/cases/Case';
 import { Get } from 'cerebral';
 import {
   addGroupSymbol,
-  compareTrialSessionEligibleCases,
+  sortEligbleCases,
   getPriorityGroups,
   groupKeySymbol,
 } from '@web-client/presenter/computeds/formattedEligibleCasesHelper';
@@ -73,18 +73,20 @@ export const trialLocationHelper = (
 
   const groups = getPriorityGroups(formattedEligibleCases);
 
-  const sortedEligibleCases = formattedEligibleCases
-    .map(caseItem => {
-      return addGroupSymbol(
-        setConsolidationFlagsForDisplay(
-          caseItem,
-          groups[caseItem[groupKeySymbol]],
-        ),
-        caseItem[groupKeySymbol],
-      );
-    })
-    .sort(compareTrialSessionEligibleCases(formattedEligibleCases))
-    .sort((a, b) => b.isAgedCase - a.isAgedCase);
+  const mappedEligibleCases = formattedEligibleCases.map(caseItem => {
+    return addGroupSymbol(
+      setConsolidationFlagsForDisplay(
+        caseItem,
+        groups[caseItem[groupKeySymbol]],
+      ),
+      caseItem[groupKeySymbol],
+    );
+  });
+
+  const sortedEligibleCases = sortEligbleCases(
+    mappedEligibleCases,
+    formattedEligibleCases,
+  );
   const currentTab = get(state.trialLocationPage.currentTab);
 
   const isExportDisabled =
