@@ -26,6 +26,7 @@ export const FORMATS = {
   TIME_TZ: "h:mm a 'ET'",
   TRIAL_SORT_TAG: 'yyyyMMddHHmmss',
   TRIAL_TIME: 'yyyy-MM-dd H:mm',
+  UNIX_TIMESTAMP_MS: 'x',
   UNIX_TIMESTAMP_SECONDS: 'X',
   WEEK: 'W',
   YEAR: 'yyyy',
@@ -317,6 +318,9 @@ export const formatDateString = (
 };
 
 export const formatNow = (formatStr?: TimeFormats | TimeFormatNames) => {
+  // if (formatStr === FORMATS.UNIX_TIMESTAMP_MS) return DateTime.now().toMillis();
+  // if (formatStr === FORMATS.UNIX_TIMESTAMP_SECONDS) return DateTime.now().toSeconds();
+
   const now = createISODateString();
   return formatDateString(now, formatStr);
 };
