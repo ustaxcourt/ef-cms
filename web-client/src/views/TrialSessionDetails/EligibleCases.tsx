@@ -76,7 +76,11 @@ export const EligibleCases = connect(
           </thead>
           {formattedEligibleCases.map(item => (
             <tbody key={item.docketNumber}>
-              <tr className="eligible-cases-row">
+              <tr
+                className={classNames({
+                  'aged-cases': item.isAgedCase,
+                })}
+              >
                 <td>
                   <CaseIcons formattedCase={item} />
                 </td>

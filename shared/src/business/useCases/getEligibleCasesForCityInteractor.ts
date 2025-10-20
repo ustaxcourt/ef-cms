@@ -9,6 +9,8 @@ import {
   EligibleCase,
   RawEligibleCase,
 } from '@shared/business/entities/cases/EligibleCase';
+import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
+import { dateStringsCompared, createISODateString, calculateISODate } from '../utilities/DateHandler';
 
 export const getEligibleCasesForCityInteractor = async (
   { trialCity }: { trialCity: string },
@@ -24,7 +26,40 @@ export const getEligibleCasesForCityInteractor = async (
     trialCity,
   });
 
-  return eligibleCases.map(rawCase => {
+  // TODO: make a function for this
+  const eligibleCasesWithIsAgedCase = eligibleCases.map(eligibleCase => {
+    console.log('c: ', { ...eligibleCase, docketEntries: undefined });
+    let isAgedCase: boolean;
+    if (
+      [
+        CASE_STATUS_TYPES.closed,
+        CASE_STATUS_TYPES.closedDismissed,
+        CASE_STATUS_TYPES.onAppeal,
+      ].some(status => eligibleCase.status === status)
+    ) {
+      isAgedCase = false;
+    } else {
+      const filingDate =
+        eligibleCase.docketEntries
+          .map(docketEntry => docketEntry.filingDate)
+          .sort((a, b) => dateStringsCompared(b, a))[0] ||
+        createISODateString();
+      isAgedCase =
+        dateStringsCompared(
+          filingDate,
+          calculateISODate({
+            dateString: createISODateString(),
+            howMuch: -365,
+          }),
+        ) < 0;
+    }
+    return {
+      ...eligibleCase,
+      isAgedCase,
+    };
+  });
+
+  return eligibleCasesWithIsAgedCase.map(rawCase => {
     return new EligibleCase(rawCase).validate().toRawObject();
   });
 };

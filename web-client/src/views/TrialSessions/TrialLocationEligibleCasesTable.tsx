@@ -6,6 +6,7 @@ import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginato
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useRef } from 'react';
 import { useClientSidePaginator } from '@web-client/utilities/useClientSidePaginator';
+import classNames from 'classnames';
 
 export const TrialLocationEligibleCasesTable = connect(
   {
@@ -37,7 +38,7 @@ export const TrialLocationEligibleCasesTable = connect(
             </div>
           </div>
         )}
-        <div className="text-right" data-testId="eligible-cases-count">
+        <div className="text-right" data-testid="eligible-cases-count">
           <span className="text-semibold">Count: </span>
           {trialLocationHelper.formattedEligibleCases.length}
         </div>
@@ -68,7 +69,11 @@ export const TrialLocationEligibleCasesTable = connect(
               {pageRecords.map(eligibleCase => {
                 return (
                   <tbody key={eligibleCase.docketNumber}>
-                    <tr>
+                    <tr
+                      className={classNames({
+                        'aged-cases': eligibleCase.isAgedCase,
+                      })}
+                    >
                       <td>
                         <CaseIcons formattedCase={eligibleCase} />
                       </td>
