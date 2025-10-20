@@ -104,12 +104,7 @@ const getConsolidatedCaseData = async ({
     return reader
       .selectFrom('dwCase as c')
       .select(['c.docketNumber', 'c.docketNumberSuffix', 'c.leadDocketNumber'])
-      .where(eb =>
-        eb.or([
-          eb('c.leadDocketNumber', 'in', leadDocketNumbers),
-          eb('c.docketNumber', 'in', leadDocketNumbers),
-        ]),
-      )
+      .where('c.leadDocketNumber', 'in', leadDocketNumbers)
       .execute();
   });
 

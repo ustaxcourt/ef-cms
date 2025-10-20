@@ -28,20 +28,18 @@ export const getOriginalNoticeValues = ({
     try {
       const parsedEditState = JSON.parse(docketEntry.editState);
 
-      if (parsedEditState && typeof parsedEditState === 'object') {
-        const parsedTitle = getDocumentTitleForNoticeOfChange({
-          applicationContext,
-          docketEntry: parsedEditState,
-        });
+      const parsedTitle = getDocumentTitleForNoticeOfChange({
+        applicationContext,
+        docketEntry: parsedEditState,
+      });
 
-        if (parsedTitle) {
-          documentTitleForNotice = parsedTitle;
-        }
+      if (parsedTitle) {
+        documentTitleForNotice = parsedTitle;
+      }
 
-        const { filedBy: parsedFiledBy } = parsedEditState;
-        if (parsedFiledBy) {
-          filedBy = parsedFiledBy;
-        }
+      const { filedBy: parsedFiledBy } = parsedEditState;
+      if (parsedFiledBy) {
+        filedBy = parsedFiledBy;
       }
     } catch (err) {
       getDawsonLogger().error(
