@@ -37,6 +37,7 @@ const tagVariants = cva(
 
 type TagProps = {
   iconProps?: FontAwesomeIconProps;
+  dataTestId?: string;
 };
 
 export const Tag = ({
@@ -44,13 +45,15 @@ export const Tag = ({
   variant,
   iconProps,
   className = '',
+  dataTestId,
+  id
 }: React.ComponentProps<'span'> &
   VariantProps<typeof tagVariants> &
   TagProps) => {
   const classes = cn(tagVariants({ variant })) + ` ${className}`;
 
   return (
-    <span className={classes}>
+    <span className={classes} id={id} data-testid={dataTestId}>
       {iconProps && <FontAwesomeIcon className="tw:mr-[4px]" {...iconProps} />}
       <span>{children}</span>
     </span>
