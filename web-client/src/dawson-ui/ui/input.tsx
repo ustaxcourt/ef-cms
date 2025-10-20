@@ -88,7 +88,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
           className={cn(
             // Base styles
             'tw:block tw:w-full tw:rounded-md tw:border tw:border-gray-300 tw:bg-white',
-            'tw:px-3 tw:h-9 tw:text-sm tw:outline-none tw:cursor-text',
+            'tw:px-3 tw:h-8 tw:md:h-9 tw:text-sm tw:outline-none tw:cursor-text',
             'tw:w-[380px] max-xs:tw:w-[351px]',
             'tw:focus-visible:ring-4 tw:focus-visible:ring-offset-[4px] tw:focus-visible:ring-ring tw:focus-visible:outline-none',
             // Responsive placeholder sizing: 16px mobile, 18px desktop
