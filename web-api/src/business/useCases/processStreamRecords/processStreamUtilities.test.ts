@@ -4,6 +4,7 @@ import {
   shouldProcessRecord,
 } from './processStreamUtilities';
 import type { DynamoDBStreamEvent } from 'aws-lambda';
+import { DateTime } from 'luxon';
 
 describe('processStreamUtilities', () => {
   const deploymentTimestamp = 1577854800;
@@ -33,8 +34,7 @@ describe('processStreamUtilities', () => {
     it("converts a stream event's ApproximateCreationDateTime from Date to unix timestamp", () => {
       const timestamp = deploymentTimestamp + 300;
       const timestampMillis = timestamp * 1000;
-      // eslint-disable-next-line custom-rules-plugin/no-new-dates
-      const approxCreationDT = new Date(timestampMillis);
+      const approxCreationDT = DateTime.fromMillis(timestampMillis).toJSDate();
       // @ts-ignore
       streamEvent.Records[0].dynamodb.ApproximateCreationDateTime =
         approxCreationDT;
