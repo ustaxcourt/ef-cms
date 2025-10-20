@@ -83,8 +83,8 @@ export const trialLocationHelper = (
         caseItem[groupKeySymbol],
       );
     })
-    .sort(compareTrialSessionEligibleCases(formattedEligibleCases));
-
+    .sort(compareTrialSessionEligibleCases(formattedEligibleCases))
+    .sort((a, b) => b.isAgedCase - a.isAgedCase);
   const currentTab = get(state.trialLocationPage.currentTab);
 
   const isExportDisabled =

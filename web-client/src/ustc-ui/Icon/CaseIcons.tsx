@@ -11,6 +11,20 @@ export function CaseIcons({ formattedCase }: { formattedCase: any }) {
     >
       <span
         className={
+          formattedCase.isAgedCase ? 'visibility-visible' : 'visibility-hidden'
+        }
+        data-testid="case-aged-icon"
+        title="There has not been activity on this case for the past 12 months."
+      >
+        <Icon
+          aria-hidden={!formattedCase.isAgedCase}
+          // aria-label="Aged Case"
+          className=""
+          icon="flag"
+        />
+      </span>
+      <span
+        className={
           formattedCase.isSealed ? 'visibility-visible' : 'visibility-hidden'
         }
         data-testid="case-sealed-icon"

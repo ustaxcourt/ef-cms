@@ -88,6 +88,7 @@ export const formattedEligibleCasesHelper = (
     applicationContext.getUtilities();
 
   const eligibleCases = get(state.trialSession.eligibleCases) ?? [];
+  console.log(eligibleCases);
   const { maxCases, caseOrder } = get(state.trialSession);
   const caseLimit =
     maxCases! + (TRIAL_SESSION_ELIGIBLE_CASES_BUFFER - caseOrder.length);
@@ -113,6 +114,7 @@ export const formattedEligibleCasesHelper = (
       );
     })
     .sort(compareTrialSessionEligibleCases(formattedCases))
+    .sort((a, b) => b.isAgedCase - a.isAgedCase)
     .filter(eligibleCase => {
       if (filter === 'Small') {
         return (
