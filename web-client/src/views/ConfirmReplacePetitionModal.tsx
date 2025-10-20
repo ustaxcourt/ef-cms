@@ -3,6 +3,7 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { props as cerebralProps } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import { RunableSequence as RunnableSequence } from 'cerebral';
 
 const props = cerebralProps as unknown as {
   confirmSequence: string;
@@ -11,14 +12,14 @@ const props = cerebralProps as unknown as {
 export const ConfirmReplacePetitionModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
-    confirmSequence: sequences[props.confirmSequence as keyof typeof sequences],
+    confirmSequence: sequences[props.confirmSequence],
   },
   function ConfirmReplacePetitionModal({
     cancelSequence,
     confirmSequence,
   }: {
-    cancelSequence: () => void;
-    confirmSequence: () => void;
+    cancelSequence: Function | RunnableSequence;
+    confirmSequence: Function | RunnableSequence;
   }) {
     return (
       <ModalDialog
