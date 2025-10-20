@@ -1,13 +1,10 @@
-import { Case } from '@shared/business/entities/cases/Case';
-import { SIMULTANEOUS_DOCUMENT_EVENT_CODES } from '@shared/business/entities/EntityConstants';
+import { Case, isMemberCase } from '@shared/business/entities/cases/Case';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { addCoverToPdf } from './addCoverToPdf';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
-import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { NotFoundError } from '@web-api/errors/errors';
-import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { updateDocketEntriesWithPageCount } from '@web-api/business/useCaseHelper/coverSheet/updateDocketEntriesWithPageCount';
 
 /**
  * addCoversheetInteractor
@@ -78,70 +75,34 @@ export const addCoversheetInteractor = async (
     useInitialData,
   });
 
-  await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    document: newPdfData,
-    key: docketEntryId,
-  });
+  let pageCount: number;
 
-  let docketNumbersToUpdate = [docketNumber];
+  if (isMemberCase(caseEntity)) {
+    if (replaceCoversheet) {
+      throw new Error(
+        'Coversheet replacement for multidocketed filings must be performed on the lead case',
+      );
+    }
 
-  if (consolidatedCases) {
-    docketNumbersToUpdate = consolidatedCases
-      .filter(consolidatedCase => consolidatedCase.documentNumber)
-      .map(({ docketNumber: caseDocketNumber }) => caseDocketNumber);
+    const { PDFDocument } = await applicationContext.getPdfLib();
+    const existingPdfDoc = await PDFDocument.load(pdfData);
+    pageCount = existingPdfDoc.getPageCount();
+  } else {
+    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+      document: newPdfData,
+      key: docketEntryId,
+    });
+    pageCount = numberOfPages;
   }
 
-  const casesToUpdate = await getCasesByDocketNumbers({
-    docketNumbers: docketNumbersToUpdate,
+  const updatedDocketEntries = await updateDocketEntriesWithPageCount({
+    authorizedUser,
+    caseEntity,
+    consolidatedCases,
+    docketEntryId,
+    docketNumber,
+    pageCount,
   });
-
-  const updatedDocketEntries = casesToUpdate
-    .map(caseRecord => {
-      const consolidatedCaseEntity =
-        caseRecord.docketNumber === docketNumber
-          ? caseEntity
-          : new Case(caseRecord, {
-              authorizedUser,
-            });
-
-      const consolidatedCaseDocketEntry =
-        consolidatedCaseEntity!.getDocketEntryById({
-          docketEntryId,
-        });
-
-      if (consolidatedCaseDocketEntry) {
-        const isSimultaneousDocType =
-          SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(
-            consolidatedCaseDocketEntry.eventCode,
-          ) ||
-          consolidatedCaseDocketEntry.documentTitle?.includes('Simultaneous');
-
-        const consolidatedCaseDocketEntryEntity = new DocketEntry(
-          consolidatedCaseDocketEntry,
-          { authorizedUser },
-        );
-
-        if (
-          !isSimultaneousDocType ||
-          (isSimultaneousDocType &&
-            caseEntity &&
-            caseRecord.docketNumber === docketNumber)
-        ) {
-          consolidatedCaseDocketEntryEntity.setAsProcessingStatusAsCompleted();
-        }
-
-        consolidatedCaseDocketEntryEntity.setNumberOfPages(numberOfPages);
-
-        const updateConsolidatedDocketEntry = consolidatedCaseDocketEntryEntity
-          .validate()
-          .toRawObject();
-
-        return updateConsolidatedDocketEntry;
-      }
-    })
-    .filter(docketEntry => docketEntry !== undefined);
-
-  await upsertDocketEntries(updatedDocketEntries);
 
   return updatedDocketEntries.find(
     entry => entry.docketNumber === docketNumber,

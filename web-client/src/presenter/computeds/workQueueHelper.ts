@@ -40,6 +40,7 @@ export const workQueueHelper = (
   showSendToBar: boolean;
   showStartPetitionButton: boolean;
   showSwitchToMyDocQCLink: boolean;
+  outboxRenderedRowCount: number;
   workQueueTitle: string;
 } => {
   const user = get(state.user);
@@ -102,6 +103,12 @@ export const workQueueHelper = (
   const showSwitchToMyDocQCLink =
     !isCaseServicesSupervisor && showSectionWorkQueue && showMyQueueToggle;
 
+  let outboxRenderedRowCount = 0;
+  if (showOutbox) {
+    const outboxHelper = get(state.consolidateWorkQueueItemsOutboxHelper);
+    outboxRenderedRowCount = outboxHelper?.outboxRenderedRowCount || 0;
+  }
+
   return {
     currentBoxView: workQueueToDisplay.box,
     documentQCNavigationPath,
@@ -140,5 +147,6 @@ export const workQueueHelper = (
     showStartPetitionButton,
     showSwitchToMyDocQCLink,
     workQueueTitle,
+    outboxRenderedRowCount,
   };
 };
