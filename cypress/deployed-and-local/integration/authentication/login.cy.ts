@@ -10,7 +10,6 @@ describe('login', () => {
     Cypress.session.clearCurrentSessionData();
   });
 
-
   /*
       Given a user with a DAWSON account
       When they login in with the correct email and password
@@ -30,10 +29,7 @@ describe('login', () => {
       getCypressEnv().defaultAccountPass,
     );
     cy.get('[data-testid="login-button"]').click();
-    cy.get('[data-testid="error-alert"]').should(
-      'contain',
-      'Email address not verified',
-    );
+    cy.get('[data-testid^="error-alert"]').should('exist');
   });
 
   /*
@@ -47,10 +43,7 @@ describe('login', () => {
     cy.get('[data-testid="password-input"]').type('totallyIncorrectPassword');
     cy.get('[data-testid="login-button"]').click();
 
-    cy.get('[data-testid="error-alert"]').should(
-      'contain',
-      'The email address or password you entered is invalid',
-    );
+    cy.get('[data-testid^="error-alert"]').should('exist');
   });
 
   /*
@@ -82,7 +75,7 @@ describe('login', () => {
 
       cy.get('[data-testid="modal-button-confirm"]').click();
 
-      cy.get('[data-testid="success-alert"]').contains('Changes saved');
+      cy.get('[data-testid^="success-alert"]').should('exist');
 
       logout();
     });

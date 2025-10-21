@@ -59,7 +59,7 @@ export function AlertError({
         <Alert
           aria-live="polite"
           className={cn(className)}
-          dataTestId={`alert-error-${dataTestId}`}
+          dataTestId={`error-alert-${dataTestId}`}
           ref={notificationRef}
           role="alert"
           variant="error"

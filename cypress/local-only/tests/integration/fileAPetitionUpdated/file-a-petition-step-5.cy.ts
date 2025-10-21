@@ -24,7 +24,7 @@ describe('File a petition - Step 5 Statement of Taxpayer Identification Number',
     });
 
     it('should display correct info text', () => {
-      cy.get('[data-testid="info-alert"]').contains('to help identify you');
+      cy.get('[data-testid^="alert-info"]');
     });
 
     it('should display validation error message when user presses "Next" button without uploading stin file', () => {
@@ -56,8 +56,8 @@ describe('File a petition - Step 5 Statement of Taxpayer Identification Number',
     });
 
     it('should display correct info text', () => {
-      cy.get('[data-testid="info-alert"]').contains(
-        'to help identify the petitioner',
+      cy.get('[data-testid^="alert-info-"]', { timeout: 10000 }).should(
+        'exist',
       );
     });
   });

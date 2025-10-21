@@ -59,7 +59,6 @@ function Alert({
     dataTestId?: string;
   }) {
 
-    const dataTestIdProp = dataTestId ? `data-testId-${dataTestId}` : undefined;
     
       return (
       /* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions */
@@ -67,7 +66,7 @@ function Alert({
         data-slot="alert"
         role="alert"
         className={cn(alertVariants({ variant }), className)}
-        data-testId={dataTestIdProp}
+        data-testId={dataTestId}
         onClick={closeButtonOnClick}>
         <div className="tw:relative">{children}</div>
       </div>
