@@ -101,8 +101,7 @@ export const DocketEntryQc = connect(
                 <div>
                   {caseDetail &&
                     isLeadCase(caseDetail) &&
-                    formattedCaseDetail?.consolidatedCases &&
-                    formattedCaseDetail.consolidatedCases.length > 1 && (
+                    isFiledAcrossAllCases && (
                       <InfoNotificationComponent
                         alertInfo={{
                           message: (

@@ -1,5 +1,5 @@
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
-import { needsNewCoversheet } from './completeDocketEntryQCInteractor';
+import { needsNewCoversheet } from '@web-api/business/useCaseHelper/docketEntry/noticeOfDocketChangeHelper';
 
 describe('completeDocketEntryQCInteractor needsNewCoversheet', () => {
   let currentDocketEntry;

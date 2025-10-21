@@ -735,5 +735,3 @@ export const completeDocketEntryQCInteractor = withLocking(
   }),
   new InvalidRequest('The document is currently being updated'),
 );
-
-export { needsNewCoversheet };
