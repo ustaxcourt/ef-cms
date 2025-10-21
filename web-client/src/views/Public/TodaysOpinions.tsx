@@ -2,8 +2,8 @@ import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { sequences } from '@web-client/presenter/app-public.cerebral';
+import { state } from '@web-client/presenter/app-public.cerebral';
 import React from 'react';
 
 export const TodaysOpinions = connect(
