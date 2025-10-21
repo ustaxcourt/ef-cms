@@ -12,7 +12,6 @@ import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
 const scriptConfig: ScriptConfig = {
   description: "update-judge-titles - Sets Judges' judgeTitle attribute",
   environment: {
-    dynamoDbTableName: 'DYNAMODB_TABLE_NAME',
     env: 'ENV',
     region: 'REGION',
   },
