@@ -88,7 +88,7 @@ export const baseState = {
     showMobileMenu: false,
     showUsaBannerDetails: false,
   },
-  constants: {} as { [key: string]: any },
+  constants: {} as Record<string, unknown>,
   currentPage: 'Interstitial',
   orderCurrentPaginationPage: 0,
   opinionCurrentPaginationPage: 0,
@@ -101,7 +101,7 @@ export const baseState = {
     sortDirection: 'desc' as 'asc' | 'desc',
   },
   featureFlags: undefined as unknown as { [key: string]: string },
-  form: {} as Record<string, any>,
+  form: {} as Record<string, unknown>,
   header: {
     searchTerm: '',
     showBetaBar: true, // default state

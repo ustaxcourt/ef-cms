@@ -1,6 +1,7 @@
 /* eslint-disable max-lines */
 import { Contact } from '@shared/business/useCases/generatePetitionPdfInteractor';
 import { EligibleCase } from '@shared/business/entities/cases/EligibleCase';
+import { PDFDocumentProxy } from 'pdfjs-dist';
 import { FormattedCaseInventoryReportEntry } from '@shared/business/utilities/getFormattedCaseDetail';
 import { FormattedPendingMotionWithWorksheet } from '@web-api/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { GetCasesByStatusAndByJudgeResponse } from '@web-api/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
@@ -865,10 +866,7 @@ export const baseState = {
     nameForSigning: '',
     nameForSigningLine2: '',
     pageNumber: 1,
-    pdfjsObj: null as {
-      getData: () => Promise<unknown>;
-      numPages: number;
-    } | null,
+    pdfjsObj: null as PDFDocumentProxy | null,
     signatureApplied: false,
     signatureData: null as { scale: number; x: number; y: number } | null,
     stampApplied: false,

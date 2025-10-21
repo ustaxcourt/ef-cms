@@ -10,6 +10,7 @@ type JudgeActivityReportData = {
   opinions: AggregatedEventCodesType;
   orders: AggregatedEventCodesType;
   submittedAndCavCasesByJudge: GetCasesByStatusAndByJudgeResponse[];
+  ordersFiledTotal?: number;
 };
 
 export type JudgeActivityReportState = {
