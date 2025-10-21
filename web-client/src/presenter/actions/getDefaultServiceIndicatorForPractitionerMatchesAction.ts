@@ -21,9 +21,9 @@ export const getDefaultServiceIndicatorForPractitionerMatchesAction =
       let defaultStateForSelected = null;
 
       if (matches && selectedPractitionerId) {
-        const selectedPractitioner = matches.find(
-          respondent => respondent.userId === selectedPractitionerId,
-        );
+        const selectedPractitioner = (
+          matches as Array<{ userId: string; email?: string }>
+        ).find(respondent => respondent.userId === selectedPractitionerId);
 
         defaultStateForSelected = selectedPractitioner.email
           ? SERVICE_INDICATOR_TYPES.SI_ELECTRONIC

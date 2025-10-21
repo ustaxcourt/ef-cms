@@ -6,7 +6,15 @@ export const updateMessageModalAttachmentsAction = ({
   props,
   store,
 }: ActionProps) => {
-  const { attachments, draftAttachments, subject } = get(state.modal.form);
+  const { attachments, draftAttachments, subject } = get(state.modal.form) as {
+    attachments?: Array<unknown>;
+    draftAttachments?: Array<{
+      documentId: string;
+      documentTitle: string;
+      index: string;
+    }>;
+    subject?: string;
+  };
   const caseDetail = get(state.caseDetail);
   const documentId = props.documentId || get(state.docketEntryId);
   const showModal = get(state.modal.showModal);
