@@ -4,7 +4,7 @@ import { DateTime } from 'luxon';
 import type { RawPractitioner } from '@shared/business/entities/Practitioner';
 import {
   type ScriptConfig,
-  getJsTimeframeForYear,
+  getTimeframeForYear,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
 import { fromKyselyUser } from '@web-api/persistence/postgres/users/mapper';
@@ -35,9 +35,7 @@ const { fiscal, year } = parseArgsAndEnvVars(scriptConfig) as {
   fiscal: boolean;
   year: string;
 };
-const { begin, end } = getJsTimeframeForYear({ fiscal, year });
-const fromDate = DateTime.fromJSDate(begin).toISODate();
-const toDate = DateTime.fromJSDate(end).toISODate();
+const { begin: fromDate, end: toDate } = getTimeframeForYear({ fiscal, year });
 
 const getAllPractitioners = async (): Promise<RawPractitioner[]> => {
   return (
@@ -57,7 +55,7 @@ const getAllPractitioners = async (): Promise<RawPractitioner[]> => {
 (async () => {
   const allPractitioners: RawPractitioner[] = await getAllPractitioners();
   const admittedInYear = allPractitioners.filter(p => {
-    return p.admissionsDate >= fromDate! && p.admissionsDate < toDate!;
+    return p.admissionsDate >= fromDate && p.admissionsDate < toDate;
   });
   const uniquePracticeTypes = getUniqueValues({
     arrayOfObjects: admittedInYear,
