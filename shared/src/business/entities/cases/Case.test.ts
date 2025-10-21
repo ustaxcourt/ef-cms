@@ -17,7 +17,7 @@ import {
   SESSION_TYPES,
   UNIQUE_OTHER_FILER_TYPE,
 } from '../EntityConstants';
-import { Case, getContactPrimary } from './Case';
+import { Case, getContactPrimary, isMemberCase } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_DOCUMENTS } from '../../../test/mockDocketEntry';
 import { createISODateString } from '../../utilities/DateHandler';
@@ -1393,6 +1393,35 @@ describe('Case entity', () => {
       });
 
       expect(myCase.getFormattedValidationErrors()).toBe(null);
+    });
+  });
+
+  describe('isMemberCase', () => {
+    it('should return true when case is a member of a consolidated group', () => {
+      const result = isMemberCase({
+        docketNumber: '123-45',
+        leadDocketNumber: '678-90',
+      });
+
+      expect(result).toBe(true);
+    });
+
+    it('should return false when case is the lead case', () => {
+      const result = isMemberCase({
+        docketNumber: '123-45',
+        leadDocketNumber: '123-45',
+      });
+
+      expect(result).toBe(false);
+    });
+
+    it('should return false when case is not consolidated', () => {
+      const result = isMemberCase({
+        docketNumber: '123-45',
+        leadDocketNumber: undefined,
+      });
+
+      expect(result).toBe(false);
     });
   });
 });
