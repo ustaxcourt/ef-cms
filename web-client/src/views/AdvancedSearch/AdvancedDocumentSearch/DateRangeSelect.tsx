@@ -1,25 +1,28 @@
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
+import { props as cerebralProps } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
+const props = cerebralProps as unknown as {
+  searchValue: string;
+  updateSequence: (params: { key: string; value: string }) => void;
+  validateSequence: () => void;
+};
+
+const dateRangeSelectDeps = {
+  DATE_RANGE_SEARCH_OPTIONS: state.constants.DATE_RANGE_SEARCH_OPTIONS,
+  searchValue: props.searchValue,
+  updateSequence: props.updateSequence,
+  validateSequence: props.validateSequence,
+};
+
 export const DateRangeSelect = connect(
-  {
-    DATE_RANGE_SEARCH_OPTIONS: state.constants.DATE_RANGE_SEARCH_OPTIONS,
-    searchValue: props.searchValue,
-    updateSequence: props.updateSequence,
-    validateSequence: props.validateSequence,
-  },
+  dateRangeSelectDeps,
   function DateRangeSelect({
     DATE_RANGE_SEARCH_OPTIONS,
     searchValue,
     updateSequence,
     validateSequence,
-  }: {
-    DATE_RANGE_SEARCH_OPTIONS: { ALL_DATES: string; CUSTOM_DATES: string };
-    searchValue: string;
-    updateSequence: (params: { key: string; value: string }) => void;
-    validateSequence: () => void;
   }) {
     return (
       <>
