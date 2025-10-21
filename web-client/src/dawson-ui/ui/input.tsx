@@ -21,7 +21,6 @@ interface TextAreaProps
   helpText?: string;
 }
 
-
 const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
   (
     {
@@ -71,11 +70,11 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                   {!required ? '(optional)' : '(required)'}
                 </span>
               </div>
-                  {helpText && (
-                    <div className="tw:mt-1 tw:mb-[9px] tw:text-[14px] tw:md:text-[16px] tw:text-gray-500">
-                      {helpText}
-                    </div>
-                  )}
+              {helpText && (
+                <div className="tw:mt-1 tw:mb-[9px] tw:text-[14px] tw:md:text-[16px] tw:text-gray-500">
+                  {helpText}
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -97,10 +96,10 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             // States
             'tw:placeholder:text-gray-400',
             'tw:focus:border-blue-500 tw:focus:ring-2 tw:focus:ring-blue-500/20',
+            'tw:hover:tw:border-gray-300 tw:hover:shadow-none', //disable hover state
 
             // Error state
-            error &&
-              'tw:border-red-500 tw:ring-1 tw:ring-red-500',
+            error && 'tw:border-red-500 tw:ring-1 tw:ring-red-500',
 
             // Disabled state
             'tw:disabled:cursor-not-allowed tw:disabled:bg-gray-50 tw:disabled:text-gray-500',
@@ -112,8 +111,13 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 
         {error && (
           <div className="tw:mt-[6px] tw:md:mt-[8px] tw:flex tw:items-center tw:gap-2 tw:text-red-500">
-            <FontAwesomeIcon icon={faExclamationCircle} className="tw-text-[16px] tw:md:text-[18px]" />
-            <span className="tw-text-[16px] tw:md:text-[18px]">Enter a valid answer</span>
+            <FontAwesomeIcon
+              icon={faExclamationCircle}
+              className="tw-text-[16px] tw:md:text-[18px]"
+            />
+            <span className="tw-text-[16px] tw:md:text-[18px]">
+              Enter a valid answer
+            </span>
           </div>
         )}
       </div>
@@ -177,14 +181,16 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
             'tw:min-h-[100px] tw:resize-y',
             'tw:w-[380px] max-xs:tw:w-[351px]',
             'tw:focus-visible:ring-4 tw:focus-visible:ring-offset-[4px] tw:focus-visible:ring-ring tw:focus-visible:outline-none',
-            
+
             // Responsive placeholder sizing: 16px mobile, 18px desktop
             'tw:placeholder:text-[16px] tw:md:placeholder:text-[18px]',
             'tw:placeholder:text-gray-400',
             'tw:focus:border-blue-500 tw:focus:ring-2 tw:focus:ring-blue-500/20',
-            error &&
-              'tw:border-red-500 tw:ring-1 tw:ring-red-500',
+            error && 'tw:border-red-500 tw:ring-1 tw:ring-red-500',
             'tw:disabled:cursor-not-allowed tw:disabled:bg-gray-50 tw:disabled:text-gray-500',
+
+            // States
+            'tw:hover:tw:border-gray-300 tw:hover:shadow-none', //disable hover state
 
             className,
           )}
@@ -193,8 +199,13 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
 
         {error && (
           <div className="tw:mt-1 tw:flex tw:items-center tw:gap-2 tw:text-red-500">
-            <FontAwesomeIcon icon={faQuestionCircle} className="tw-text-[16px] tw:md:text-[18px]" />
-            <span className="tw-text-[16px] tw:md:text-[18px]">Enter a valid answer</span>
+            <FontAwesomeIcon
+              icon={faQuestionCircle}
+              className="tw-text-[16px] tw:md:text-[18px]"
+            />
+            <span className="tw-text-[16px] tw:md:text-[18px]">
+              Enter a valid answer
+            </span>
           </div>
         )}
       </div>
@@ -202,10 +213,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
   },
 );
 
-
-
 TextField.displayName = 'TextField';
 TextArea.displayName = 'TextArea';
 
-
-export { TextField, TextArea};
+export { TextField, TextArea };
