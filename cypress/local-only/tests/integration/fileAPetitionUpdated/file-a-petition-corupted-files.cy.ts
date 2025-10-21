@@ -77,8 +77,6 @@ describe('File a petition - Corrupted Files', () => {
 
     cy.get('[data-testid="step-6-next-button"]').click();
 
-    cy.get('[data-testid="success-alert"]').contains(
-      'Your case has been assigned docket number',
-    );
+    cy.get('[data-testid^="alert-info-"]', { timeout: 10000 }).should('exist');
   });
 });

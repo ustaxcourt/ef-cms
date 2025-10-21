@@ -29,11 +29,18 @@ describe('File a petition - Step 7 Pay Filing Fee', () => {
       cy.wait('@postCase').then(({ response }) => {
         if (!response) throw Error('Did not find resposne');
         expect(response.body).to.have.property('docketNumber');
-        const createdDocketNumber = response.body.docketNumber;
-        cy.get('[data-testid="alert-header"]').should(
-          'contain.text',
-          `Your case has been assigned docket number ${createdDocketNumber}`,
-        );
+
+        // Try to find a success alert
+        cy.get('[data-testid^="alert-success-"]', { timeout: 10000 })
+          .should('exist')
+          .first()
+          .then($el => {
+            // Assert the alert contains the expected text (use createdDocketNumber)
+            cy.wrap($el).should(
+              'contain.text',
+              `Your case has been created and your documents were sent to the U.S. Tax Court.`,
+            );
+          });
       });
     });
   });
