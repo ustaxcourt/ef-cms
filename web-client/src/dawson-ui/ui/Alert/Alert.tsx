@@ -86,6 +86,7 @@ function AlertHeader({
   title,
   variant,
   dataTestId,
+  children
 }: React.ComponentProps<'p'> & AlertHeaderType) {
   return (
     <div className="tw:flex">
@@ -104,7 +105,9 @@ function AlertHeader({
         data-slot="alert-title"
         data-testid={`alert-header-${dataTestId}`}
         onClick={closeButtonOnClick}
-      ></div>
+      >
+        {children}
+      </div>
       {isDismissible && (
         <div className="tw:ml-auto">
           <Button variant="terminatorButton" aria-label="Terminator Button">
@@ -116,14 +119,17 @@ function AlertHeader({
   );
 }
 
-function AlertDescription({ dataTestId, ...props }: React.ComponentProps<'p'> & { dataTestId?: string }) {
+function AlertDescription({ dataTestId, children, ...props }: React.ComponentProps<'p'> & { dataTestId?: string }) {
+
   return (
     <div
       className="tw:xs:mt-[8px] tw:xs:text-[18px] tw:xs:leading-[24px] tw:ml-[32px] tw:xs:ml-[40px] tw:pt-[8px] tw:xs:pt-0"
       data-slot="alert-description"
       data-testid={`alert-description-${dataTestId}`}
       {...props}
-    />
+    >
+      {children}
+    </div>
   );
 }
 
