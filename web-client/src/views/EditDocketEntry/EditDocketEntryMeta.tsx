@@ -27,7 +27,6 @@ export const EditDocketEntryMeta = connect(
     submitEditDocketEntryMetaSequence:
       sequences.submitEditDocketEntryMetaSequence,
     caseDetail: state.caseDetail,
-    formattedCaseDetail: state.formattedCaseDetail,
     form: state.form,
     isFiledAcrossAllCases: state.isFiledAcrossAllCases,
   },
@@ -39,7 +38,6 @@ export const EditDocketEntryMeta = connect(
     showModal,
     submitEditDocketEntryMetaSequence,
     caseDetail,
-    formattedCaseDetail,
     form,
     isFiledAcrossAllCases,
   }) {
@@ -67,8 +65,7 @@ export const EditDocketEntryMeta = connect(
             <div className="grid-col-5 DocumentDetail">
               {caseDetail &&
                 isLeadCase(caseDetail) &&
-                formattedCaseDetail?.consolidatedCases &&
-                formattedCaseDetail.consolidatedCases.length > 1 && (
+                isFiledAcrossAllCases && (
                   <InfoNotificationComponent
                     alertInfo={{
                       message: (
