@@ -9,7 +9,7 @@ export class CourtIssuedDocumentTypeF extends CourtIssuedDocument {
   public attachments: boolean;
   public documentTitle?: string;
   public documentType: string;
-  public eventCode?: string;
+  public eventCode: string;
   public filingDate?: string;
   public freeText?: string;
   public judge: string;

@@ -12,7 +12,7 @@ export class CourtIssuedDocumentTypeD extends CourtIssuedDocument {
   public attachments: boolean;
   public documentTitle?: string;
   public documentType: string;
-  public eventCode?: string;
+  public eventCode: string;
   public filingDate?: string;
   public createdAt: any;
   public date: string;

@@ -462,8 +462,8 @@ const formatCounsel = ({ caseDetail, counsel }) => {
 
 // sort items that do not display a filingDate (based on createdAtFormatted) at the bottom
 export const sortUndefined = (
-  a: { createdAtFormatted: string },
-  b: { createdAtFormatted: string },
+  a: { createdAtFormatted?: string },
+  b: { createdAtFormatted?: string },
 ) => {
   if (a.createdAtFormatted && !b.createdAtFormatted) {
     return -1;
@@ -472,6 +472,8 @@ export const sortUndefined = (
   if (!a.createdAtFormatted && b.createdAtFormatted) {
     return 1;
   }
+
+  return 0;
 };
 
 export const sortDocketEntries = (

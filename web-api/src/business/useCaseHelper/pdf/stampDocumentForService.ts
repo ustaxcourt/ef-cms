@@ -14,13 +14,13 @@ export const stampDocumentForService = async ({
   documentToStamp: {
     documentType: string;
     eventCode: string;
-    serviceStamp: string;
+    serviceStamp?: string;
   };
 }) => {
   let serviceStampType = 'Served';
 
   if (documentToStamp.documentType === GENERIC_ORDER_DOCUMENT_TYPE) {
-    serviceStampType = documentToStamp.serviceStamp;
+    serviceStampType = documentToStamp.serviceStamp!;
   } else if (
     ENTERED_AND_SERVED_EVENT_CODES.includes(documentToStamp.eventCode)
   ) {

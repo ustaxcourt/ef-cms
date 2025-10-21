@@ -20,32 +20,6 @@ import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseA
 import { upsertDocketEntryRelatedEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntryOrderMotion';
 import { CourtIssuedDocumentAnyType } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 
-export type FileCourtIssueDocketEntryForm = {
-  docketEntryId: string;
-  attachments: any[];
-  date: string;
-  docketNumber: string;
-  generatedDocumentTitle: string;
-  documentType: string;
-  eventCode: string;
-  filingDate: string;
-  freeText: string;
-  judge: string;
-  scenario: string;
-  serviceStamp: string;
-  trialLocation: string;
-  isOrder: boolean;
-  affectedDocketEntries: {
-    [docketNumber: string]: {
-      docketEntryId: string;
-      docketNumber: string;
-      disposition: string;
-    };
-  };
-  orderType: string; //Used in fileAndServe function, but not file and serve functions
-  docketNumbers: string; //Used in fileAndServe function, but not file and serve functions
-};
-
 /**
  *
  * @param {object} applicationContext the application context
@@ -157,13 +131,7 @@ export const fileCourtIssuedDocketEntry = async (
         sentByUserId: user.userId,
       });
 
-      if (
-        documentMeta.eventCode &&
-        DocketEntry.isUnservable({
-          eventCode: documentMeta.eventCode,
-          isLegacyServed: documentMeta.isLegacyServed,
-        })
-      ) {
+      if (DocketEntry.isUnservable(documentMeta)) {
         workItem.setAsCompleted({ message: 'completed', user });
       }
 

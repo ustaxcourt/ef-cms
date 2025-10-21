@@ -30,7 +30,8 @@ import {
 } from '@shared/business/entities/CaseDeadline';
 import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
 import { upsertDocketEntryRelatedEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntryOrderMotion';
-import { FileCourtIssueDocketEntryForm } from '@web-api/business/useCases/docketEntry/fileCourtIssuedDocketEntryInteractor';
+import { CourtIssuedDocumentAnyType } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+
 export const fileAndServeCourtIssuedDocument = async (
   applicationContext: ServerApplicationContext,
   {
@@ -43,7 +44,7 @@ export const fileAndServeCourtIssuedDocument = async (
     clientConnectionId: string;
     docketEntryId: string;
     docketNumbers: string[];
-    form: FileCourtIssueDocketEntryForm;
+    form: CourtIssuedDocumentAnyType;
     subjectCaseDocketNumber: string;
   },
   authorizedUser: UnknownAuthUser,
@@ -251,10 +252,10 @@ export const fileAndServeCourtIssuedDocument = async (
     );
 
     // TODO (#8546): Update docket entries here
-    if (form.isOrder && form.affectedDocketEntries) {
+    if (form.affectedDocketEntries) {
       const docketEntryOrderMotions = casesToUpdate.flatMap(caseToUpdate => {
-        return Object.values(form.affectedDocketEntries)
-          .filter(motion => {
+        return form
+          .affectedDocketEntries!.filter(motion => {
             return caseToUpdate.docketEntries.find(
               docketEntry => docketEntry.docketEntryId === motion.docketEntryId,
             );

@@ -15,7 +15,7 @@ export class CourtIssuedDocumentTypeA extends CourtIssuedDocument {
   public dispositionOrder: boolean;
   public documentTitle?: string;
   public documentType: string;
-  public eventCode?: string;
+  public eventCode: string;
   public filingDate?: string;
   public freeText?: string;
   public isLegacy: boolean;

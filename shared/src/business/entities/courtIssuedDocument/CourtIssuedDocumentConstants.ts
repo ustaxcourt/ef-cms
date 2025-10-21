@@ -20,7 +20,7 @@ export abstract class CourtIssuedDocument extends JoiValidationEntity {
   public documentTitle?: string;
   public generatedDocumentTitle?: string;
   public documentType!: string;
-  public eventCode?: string;
+  public eventCode!: string;
   public filingDate?: string;
   public scenario?: string;
   public isLegacyServed?: boolean;
