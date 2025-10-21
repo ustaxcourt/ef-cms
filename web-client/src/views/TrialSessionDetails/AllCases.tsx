@@ -56,8 +56,9 @@ export const AllCases = connect(
 
                   <td>
                     {item.isManuallyAdded && (
-                      <span aria-label="manually added indicator">
+                      <span>
                         <FontAwesomeIcon
+                          aria-label="Manually added indicator"
                           className="mini-success"
                           icon="calendar-plus"
                           title="Manually added"

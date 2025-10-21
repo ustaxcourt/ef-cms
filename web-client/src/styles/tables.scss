@@ -347,6 +347,10 @@ table,
       gap: 1rem;
     }
 
+    .fa-file-lines {
+      color: color($theme-color-primary);
+    }
+
     tr.in-progress {
       td {
         background: $color-yellow;
