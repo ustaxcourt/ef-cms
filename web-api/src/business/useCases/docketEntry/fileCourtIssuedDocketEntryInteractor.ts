@@ -18,6 +18,7 @@ import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { upsertDocketEntryRelatedEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntryOrderMotion';
+import { CourtIssuedDocumentAnyType } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 
 export type FileCourtIssueDocketEntryForm = {
   docketEntryId: string;
@@ -60,7 +61,7 @@ export const fileCourtIssuedDocketEntry = async (
     subjectDocketNumber,
   }: {
     docketNumbers: string[];
-    documentMeta: FileCourtIssueDocketEntryForm; // TODO: Add better typing to this function & proxy?
+    documentMeta: CourtIssuedDocumentAnyType; // TODO: Add better typing to this function & proxy?
     subjectDocketNumber: string;
   },
   authorizedUser: UnknownAuthUser,
@@ -106,8 +107,6 @@ export const fileCourtIssuedDocketEntry = async (
       `User not found with user id ${authorizedUser.userId}`,
     );
   }
-
-  const isUnservable = DocketEntry.isUnservable(documentMeta);
 
   const casesToUpdate = await getCasesByDocketNumbers({
     docketNumbers: [subjectDocketNumber, ...docketNumbers],
@@ -158,7 +157,13 @@ export const fileCourtIssuedDocketEntry = async (
         sentByUserId: user.userId,
       });
 
-      if (isUnservable) {
+      if (
+        documentMeta.eventCode &&
+        DocketEntry.isUnservable({
+          eventCode: documentMeta.eventCode,
+          isLegacyServed: documentMeta.isLegacyServed,
+        })
+      ) {
         workItem.setAsCompleted({ message: 'completed', user });
       }
 
@@ -203,9 +208,9 @@ export const fileCourtIssuedDocketEntry = async (
     }),
   );
 
-  if (documentMeta.isOrder && documentMeta.affectedDocketEntries) {
+  if (documentMeta.affectedDocketEntries) {
     const docketEntryOrderMotions = casesToUpdate.flatMap(caseToUpdate => {
-      return Object.values(documentMeta.affectedDocketEntries)
+      return Object.values(documentMeta.affectedDocketEntries!)
         .filter(motion => {
           return caseToUpdate.docketEntries.find(
             docketEntry => docketEntry.docketEntryId === motion.docketEntryId,

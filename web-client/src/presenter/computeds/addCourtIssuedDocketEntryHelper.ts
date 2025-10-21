@@ -45,6 +45,7 @@ export const addCourtIssuedDocketEntryHelper = (
         !d.isStricken &&
         !d.isDraft &&
         !_.find(
+          // Motions not already in the order
           form.affectedDocketEntries ?? [],
           am => am.docketEntryId === d.docketEntryId,
         ),
