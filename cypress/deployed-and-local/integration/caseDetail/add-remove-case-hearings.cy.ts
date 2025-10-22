@@ -16,7 +16,16 @@ describe('Add and Remove Case Hearings', () => {
     // Create a calendared trial session
     loginAsPetitionsClerk1();
     createTrialSession().then(({ trialSessionId }) => {
-      cy.wrap(trialSessionId).as('TRIAL_SESSION_ID');
+      cy.wrap(trialSessionId).as('TRIAL_SESSION_ID_HEARING');
+      cy.get('[data-testid="new-trial-sessions-tab"]').click();
+      cy.get(`[data-testid="trial-location-link-${trialSessionId}"]`).click();
+      cy.get('[data-testid="set-calendar-button"]').click();
+      cy.get('[data-testid="modal-button-confirm"]').click();
+    });
+
+    // Create a calendared trial session
+    createTrialSession().then(({ trialSessionId }) => {
+      cy.wrap(trialSessionId).as('TRIAL_SESSION_ID_PRIMARY');
       cy.get('[data-testid="new-trial-sessions-tab"]').click();
       cy.get(`[data-testid="trial-location-link-${trialSessionId}"]`).click();
       cy.get('[data-testid="set-calendar-button"]').click();
@@ -30,7 +39,17 @@ describe('Add and Remove Case Hearings', () => {
       goToCase(docketNumber);
     });
 
-    cy.get<string>('@TRIAL_SESSION_ID').then(trialSessionId => {
+    cy.get<string>('@TRIAL_SESSION_ID_PRIMARY').then(trialSessionId => {
+      cy.get('[data-testid="tab-case-information"] span.button-text').click();
+      cy.get('[data-testid="add-to-trial-session-btn"]').click();
+      cy.get('[data-testid="all-locations-option"]').click();
+      cy.get('[data-testid="trial-session-select"]').select(trialSessionId);
+      cy.get('[name="calendarNotes"]').click();
+      cy.get('[name="calendarNotes"]').type('TRIAL SESSION');
+      cy.get('[data-testid="modal-button-confirm"]').click();
+    });
+
+    cy.get<string>('@TRIAL_SESSION_ID_HEARING').then(trialSessionId => {
       // Add a hearing to the created trial session
       cy.get('[data-testid="tab-case-information"]').click();
       cy.get('[data-testid="set-for-hearing-button"]').click();
@@ -51,6 +70,9 @@ describe('Add and Remove Case Hearings', () => {
 
       // Assert that the hearing we created is no longer visible
       cy.get(`[id=hearing-edit-menu-${trialSessionId}]`).should('not.exist');
+
+      // Assert that the trial session we added at the beginning is still there
+      cy.get('[data-testid="trial-session-location-link"]').should('exist');
     });
   });
 });
