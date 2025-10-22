@@ -11,28 +11,34 @@ describe('Docket clerk creates and edits draft order with selected docket number
     loginAsDocketClerk1();
     goToCase(leadCase);
 
-    cy.get('[data-testid^="consolidatedCasesOfLeadCase-"]')
-      .invoke('attr', 'data-testid')
-      .then(text => {
-        consolidatedCases = text!.replace(/consolidatedCasesOfLeadCase-/g, '');
-      });
+    // create motion on lead case
+    cy.get('[data-testid="menu-button-add-paper-filing"]').click();
 
-    cy.get('[data-testid="icon-tab-unread-messages-count"]')
-      .invoke('text')
-      .then(text => {
-        draftsCount = Number(text) || draftsCount;
-      });
+    // cy.get('[data-testid^="consolidatedCasesOfLeadCase-"]')
+    //   .invoke('attr', 'data-testid')
+    //   .then(text => {
+    //     consolidatedCases = text!.replace(/consolidatedCasesOfLeadCase-/g, '');
+    //   });
 
-    createOrderOnConsolidatedCase('Apply order on all subsidiary cases.');
+    // cy.get('[data-testid="icon-tab-unread-messages-count"]')
+    //   .invoke('text')
+    //   .then(text => {
+    //     draftsCount = Number(text) || draftsCount;
+    //   });
 
-    // Apply signature
-    // Add Docket Entry
-    cy.get('#apply-signature').click();
-    cy.get('[data-testid="sign-pdf-canvas"]').click();
-    cy.get('[data-testid="save-signature-button"]').click();
-    cy.get('[data-testid="add-court-issued-docket-entry-button"]').click();
+    // createOrderOnConsolidatedCase('Apply order on all subsidiary cases.');
 
-    // select dispositionOrder checkbox
-    cy.get('[data-testid=')
+    // // Apply signature
+    // // Add Docket Entry
+    // cy.get('#apply-signature').click();
+    // cy.get('[data-testid="sign-pdf-canvas"]').click();
+    // cy.get('[data-testid="save-signature-button"]').click();
+    // cy.get('[data-testid="add-court-issued-docket-entry-button"]').click();
+
+    // // select dispositionOrder checkbox
+    // cy.get('[data-testid="disposition-order-checkbox"]').click({ force: true });
+
+    // // ensure specific label is present
+    // cy.get('[data-testid="related-motion-label"]').should('exist');
   });
 });

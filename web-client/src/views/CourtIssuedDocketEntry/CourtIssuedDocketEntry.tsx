@@ -215,6 +215,7 @@ export const CourtIssuedDocketEntry = connect(
                                 className="usa-label"
                                 htmlFor="related-motion"
                                 id="related-motion-label"
+                                data-testid="related-motion-label"
                               >
                                 What motion is being acted on?
                               </label>
