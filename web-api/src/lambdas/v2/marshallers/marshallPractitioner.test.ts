@@ -22,6 +22,7 @@ describe('marshallPractitioner', () => {
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     });
 
+    // @ts-expect-error
     expect(mock.barNumber).toBeDefined();
     expect(mock.contact).toBeDefined();
     expect(mock.email).toBeDefined();
@@ -31,6 +32,7 @@ describe('marshallPractitioner', () => {
 
     const marshalled = marshallPractitioner(mock);
 
+    // @ts-expect-error
     expect(marshalled.barNumber).toEqual(mock.barNumber);
     expect(marshalled.email).toEqual(mock.email);
     expect(marshalled.name).toEqual(mock.name);

@@ -4,5 +4,6 @@ import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWeb
 
 export const chooseWizardStepSequence =
   startWebSocketConnectionSequenceDecorator([
+    // @ts-expect-error
     setWizardStepAction(props.value),
   ]) as unknown as (props: { value: string }) => void;
