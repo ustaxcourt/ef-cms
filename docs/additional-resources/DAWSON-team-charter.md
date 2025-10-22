@@ -1,143 +1,185 @@
-# DAWSON Team Charter (Updated 01/24)
+# DAWSON-Gunnison Team Charter 
 
-### Vision Statement:
+**Date Updated:** October 22nd, 2025 
 
-For parties, practitioners, Court staff, and the public at large, DAWSON is a one-stop app that makes working with the USTC secure, efficient, and reliable. DAWSON empowers all of its users with an accessible, frictionless experience and sets the standard for how to engage with and manage the administration of justice.
+**Team Name:** DAWSON-Gunnison Team 
 
-### Mission Statement:
+## 1. Team Purpose 
 
-The mission of the DAWSON Product Team is to continue to add and improve functionality that gives the US Tax Court, its constituents and the public an easy, efficient and simple way to access and manage cases. The DAWSON team uses Agile principles, clean architecture practices, test driven development, and team collaboration to identify, ideate on and deliver high-quality solutions that give users confidence in the system and increase transparency for the US Tax Court. Unlike previous legacy systems, DAWSON empowers petitioners and the Court by providing increased accessibility into Court data, is web-based and can be accessed from anywhere there’s Internet, and is built for scalability.
+The DAWSON-Gunnison Team exists to deliver a secure, reliable, and accessible web-based application that empowers the United States Tax Court, legal practitioners, and the public to manage and engage with Court cases efficiently. Through continuous improvement, user-centered design, and agile development practices, the team builds scalable solutions that increase transparency, simplify case access, and set a new standard for justice system technology. 
 
-### Team Members:
+## 2. Members of the Team 
 
-Jennilee Bertrand - Delivery Manager
+Donna Kullman - Delivery Manager 
 
-Sui Wong - User Experience Design and Research 
+Evelyn Durbin – UX Researcher/Designer 
 
-Katie Cissell - User Experience - Lean
+Kwabena Ampofo – DevOps Engineer 
 
-Cody Seibert - Software Engineer
+Niusha Alavizdeh – Software Quality Assurance Engineer  
 
-Chris Bisom - Software Engineer
+Zack Brown – Senior Web Developer  
 
-Javis Sullivan - Software Engineer
+Christie Laferriere - Senior Web Developer 
 
-Tom Elliott- Software Engineer
+Anthony Loera - Senior Web Developer 
 
-Andy Kuny - Software Engineer
-Jonathan Cruz - Software Engineer
+Devin Ganey - Senior Web Developer  
 
-Zach Rogers - Software Engineer
+Abel Ratanaphan - Senior Web Developer  
 
-Nechama Krigsman - Software Engineer
+Alex Dziarnowski - Web Developer  
 
-Kaitlyn Swann - Software Engineer
+Favour Ori – Systems Engineer 
 
-Mike Marcotte (USTC) - Senior Software Developer/Tech Lead
+Jake Roberts - Systems Engineer 
 
-Jim Lerza (USTC) - IT Specialist
+Paulo Filho – Systems Engineer 
 
-Jim deVos (USTC) - IT Specialist
+Jim Lerza (USTC) - IT Specialist 
 
-Tenille Lenard (USTC) - Product Specialist
+Tenille Lenard (USTC) - Product Specialist 
 
-Chris Holly (USTC)- Product Owner
+Chris Holly (USTC)- Product Owner 
 
-### Core Values:
+## 3. Team Values and Behaviors 
 
-**Respect and Appreciation**: Be excellent to one another. We respect and appreciate our teammates as individual people and as co-workers. We take time to give regular feedback and accept that our differences can also be a strength.
+Our team culture is grounded in trust, accountability, and a shared sense of ownership. We value respectful, open communication and strive to create an environment where psychological safety and positive intent are the norm. Collaboration is central to how we work, including frequent pairing and knowledge sharing. We embrace adaptability and experimentation, always seeking opportunities for continuous improvement and learning. Clear expectations, regular retrospectives, and a commitment to recognizing and incorporating feedback help us grow individually and as a team. We support work-life balance and aim to create a joyful, inclusive team dynamic—one where humor is welcomed when used thoughtfully, and where we remain mindful of each other's diverse working styles. 
 
-**Assume Positive Intent**: We encourage trust and default to assuming our teammates are working to the best of their ability with the resources and information they have now. We approach each situation on its own terms and respond accordingly.
+## 4. Working Agreements 
 
-**Communication:** We value open and honest communication and go out of our way to understand one another to provide context and clarity. We believe cooperation and communication are keys to our success.
+### Work Hours & Availability 
 
-**Knowledge Sharing:** We share as much knowledge as possible with one another to allow us to continuously build, grow and improve our capabilities.
+As a team, we commit to the following working hour expectations to maintain consistency, collaboration, and accountability: 
 
-**Experimentation**: Because _we don’t know what we don’t know_. By experimenting, we increase optionality which helps us learn/reveal what we don’t know through the process of elimination. Sometimes multiple experiments are needed and failures can inform successes. Sometimes experiments will fail no matter what and that is okay, too. All experiments should be time boxed and have a concrete set of goals.
+We will work a full 8-hour shift each workday to support project goals and ensure productivity. 
 
-**Quality**: We embrace exceptions, backtracking and refactoring code. Producing high quality software (low defects, easy to manage and understand) is far more important than quickly delivering features. We use the refinement meeting as our first point of quality assurance and have defined what it means for a story to be READY and DONE so that we have guard rails for our minimum standards. Mistakes are valued as learning opportunities and failure generates more knowledge. We retrospect on failures and success to make improvements for the future. We work on stories in collaboration with one another because it produces higher quality software, shortens feedback loops, increases creativity, and strengthens knowledge sharing.
+We will be fully available during core hours, 9:00 AM – 3:00 PM EST, to align with USTC expectations and enable effective team collaboration. 
 
-**Psychological Safety**: Team members should feel safe to explore their ideas and expect a diversity of opinions. We can disagree and still be respectful and open to ideas.
+We will schedule our individual workdays to prioritize availability during this core window. 
 
-**Embrace and drive change**. We recognize that this work requires constant learning on the part of all participants, and embrace the state of not-knowing that must precede learning.
+When stepping away for less than 3 hours, we will update our status in Teams to keep the team informed. 
 
-**Feedback**: Feedback is a function of respect whether you are the giver or the receiver. We have a monthly direct feedback meeting and attendance is optional.
+When away for more than 3 hours, we will update the Gunnison Team Calendar to maintain visibility and support alignment. 
 
-### Working Agreements:
+This commitment helps us build trust with each other and with USTC, ensuring reliable support and efficient collaboration throughout the workday. 
 
-**Flexion Specific Agreements:** Flexion uses its [<u>Flexion Fundamentals</u>](https://docs.google.com/document/d/1kaPsF-HnKgPao1V_DZhtaFhW-9ADoVprsmF-jyR7Puc/edit?usp=sharing) as a “north star” guide to how we operate as an organization and our [<u>Accountabilities</u>](https://sites.google.com/flexion.us/advising-group/how-we-work/accountabilities) list to assign team specific responsibilities.
+### Communication Tools & Standards 
 
-**Agile First:** We run agile meetings and use iterative processes as a framework for how we operate and get work done. We consistently deliver working, prioritized features to stakeholders. We value continuous improvement, inspection and adaptation.
+Microsoft Teams is used for meetings. 
 
-**Core Team Hours**: Our team runs across four time zones and we all have responsibilities outside our core team. To this end, we keep core hours (10AM-3PM Eastern) open for team members to collaborate.
+Teams is the primary channel for quick questions and informal communication. 
 
-**Time Away**:
+Task tracking is managed through the US Tax Court Board. 
 
-- If you plan to be gone for a half-day or longer, add the time away to the team calendar, block off your calendar, and decline meetings.
+Code is maintained in Git. 
 
-- Before your planned absence, update Slack and your calendar with OOO notifications.
+Shared files are stored in the SharePoint directory: Gunnison-adhoc\General. 
 
-**Methods of Communication**
+The Gather Town app is used for real-time collaboration with colleagues. 
 
-- We use the **Gather Town** to start all collaborative and informal meetings, as well as use **Clarion** as a back up in case **Gather Town** is unavailable. 
+### Meetings: 
 
-- We use **Slack** to update our whereabouts, ask questions and post general announcements. Slack should be on and checked regularly throughout the day.
+Video Presence: We commit to having cameras always on during all team meetings (e.g., Zoom, Teams) to foster engagement, connection, and collaboration. 
 
-- We use Google **email** and **calendars** to send agendas and schedule/decline meetings.
+Meetings should generally be avoided on Fridays or after 4:00 PM EST. 
 
-- **Stand up** We meet daily to communicate our goals and/or blockers for the day. We demonstrate work in progress and strive to understand our team priorities.
+Daily standups are held Monday through Friday to support alignment and team cohesion. 
 
-- We track our work on **GitHub** for updating daily as we complete tasks.
+## 5. Roles & Responsibilities 
 
-**Meetings**
+### Delivery Manager 
 
-We meet regularly to provide feedback, refine, retrospect, make decisions, communicate and iterate.
+Provide overall direction and coordination for the team. 
+Facilitate communication with stakeholders, ensure alignment with project goals, and remove blockers. 
+Own delivery timelines and oversee resource planning and team workload. 
 
-- Meetings have an agenda and clear expectations of the goal.
+### Product Owner 
 
-- Cameras should be on in meetings when facilitating, presenting, or working with end users. Cameras are optional for team meetings, but we try to balance zoom fatigue and the value of communication via facial expressions.
+Define and prioritize the product backlog based on stakeholder input and user needs. 
+Ensure acceptance criteria are clear and approve completed work. 
+Collaborate closely with the team to answer questions and clarify requirements. 
 
-- We respect the start and finish times of meetings so that we are not disruptive to other commitments.
+### UX Researcher/Designer 
 
-- We decline meetings we will not attend. We decline/do not attend meetings that bring us no value.
+Conduct user research and usability testing. 
+Design intuitive, accessible interfaces aligned with user needs and Court standards. 
+Collaborate with developers to ensure UI/UX designs are implemented accurately. 
 
-**Voting**
+### Web Developers 
 
-As a team we use multiple methods of voting for decision making within the team.
+Develop and maintain high-quality, scalable, and secure code. 
+Collaborate through pairing and code reviews. 
+Write and maintain unit, integration, and performance tests. 
+Keep documentation current and support sprint demos with working software. 
 
-- **Roman voting**: for quick feedback from the group on a singular topic.
+### DevOps Engineer 
 
-- **Planning Poker**: for estimation voting and on the urgency and importance in regards to the DevEx/OpEx backlog.
+Manage CI/CD pipelines, infrastructure, and deployment processes. 
+Ensure system reliability, monitoring, and logging are in place and maintained. 
+Support security, compliance, and performance best practices. 
 
-### Technical Working Agreements:
+### Systems Engineers 
 
-- We default to collaborative working styles. We do this because it produces higher quality software, helps developers find defects in a shorter feedback loop, increases creativity, and strengthens knowledge sharing. Working style is determined by each story’s needs and may change due to unforeseen circumstances. Stories are self assigned and anyone can join or leave as needed. The preference is for the group to remain together until the story is completed but can be fluid. Taking breaks from cameras/mics/groups are acceptable whenever the need arises as long as it’s communicated to the group.
-    - **Ensembles:** 2+ people actively working toward a shared goal in a structured, highly-engaged environment; Utilized when tight, frequent feedback loops are needed or desired; High expectations from contributing members with regard to engagement and communication; Ensembles of 3+ can merge to test without external code reviews. Groups of two or individuals require at least one code review from a team member who didn't work on the PR
-    - **Swarming:** 2+ people working on independent tasks in a Zoom; Utilized when you need or desire more frequent feedback than when working independently; Relies on speaking up when you need assistance or to bounce ideas off each other
-    - **Async:** 1 person working asynchronously on one task at a time; Utilized when live/in-person feedback is not needed; Small, frequent PRs expected from other team members; Design debt/devex are good examples of this type of work
+Configure and support underlying systems architecture. 
+Monitor performance and troubleshoot issues across environments. 
+Support integrations and infrastructure components essential to delivery. 
 
-- We practice human-centered design to inform technical and design decisions. UX are embedded members of the development team and perform usability tests, interviews, brainstorming sessions and collaborate with devs and the PO throughout the SDLC.
+### Software QA Engineer 
 
-- Favor emergent architecture over "big up-front design." Consistent with agile, we optimize for serving the emergent needs of users, instead of planning and executing an architecture that cannot respond to those changing needs.
+Define and execute test plans, including automated and manual testing. 
+Ensure software quality meets acceptance criteria before release. 
+Collaborate with developers to ensure test coverage and identify defects early. 
 
-- Refactoring is a regular and expected part of story work because we work in a mature application.
+### All Team Members 
 
-- We strive to iteratively add vertical slices of functionality to the DAWSON application using clean code principles and test coverage standards.
+Participate in daily standups, sprint planning, and retrospectives. 
+Collaborate respectfully, give and receive feedback constructively. 
+Contribute to documentation and knowledge sharing. 
+Follow agreed-upon agile, coding, and documentation standards. 
 
-- We maintain and prioritize package dependencies and perform regular security audits.
+## 6. Collaboration & Knowledge Sharing 
 
-- We follow agreed upon guidelines and processes for code review, code merge, refactoring, definitions of ready/done and test coverage.
+Collaboration and knowledge sharing are core team practices 
 
-- We Identify and fix technical risk within the system.
+Team members are expected to work in mobs or ensembles - small groups of 2-3 people – regularly trading off responsibilities while working on tickets. 
 
-- Default to open. We build secure, open source software, creating and maintaining it in public repositories and where it may be inspected by the public who places their trust in it.
+The Gather app will be used to support pairing and real-time problem solving. 
 
-- Own and manage our data. We ensure that all Court data remains in the Court's care, custody, and control.
+Frequent pairing and collaborative development are encouraged to: 
 
-- Own and manage our software. We retain control over our mission-critical custom software, ensuring portability and flexibility by using service-oriented architecture.
+Promote shared ownership of the codebase 
 
-- Build atop a modern technology stack. We use cloud-based hosting infrastructure, modular software frameworks, containerization, and automated testing to increase efficiency, allow the team to work effectively, and scale the service on demand.
+Reduce knowledge silos 
 
-- Rely on DevSecOps. This allows us to rapidly develop and deploy improvements to our systems, infrastructure-as-code, configuration-as-code, and CI/CD, to ensure that our work is high-quality and secure.
+## 7. Feedback & Continuous Improvement 
 
-- Embrace and drive change. We recognize that this work requires constant learning on the part of all participants, and embrace the state of not-knowing that must precede learning.
+We are committed to a culture of continuous improvement and open, constructive feedback. All code must undergo peer and tech lead review prior to being merged, ensuring quality, alignment with standards, and shared understanding. Team retrospectives are held regularly to reflect on our processes, identify areas for growth, and openly request or provide feedback. Constructive feedback is not only welcomed but expected, as it plays a vital role in fostering professional development, strengthening collaboration, and delivering high-quality outcomes. 
+
+## 8. Conflict Resolution 
+
+To maintain a healthy and productive team environment, we commit to offering feedback that is both direct and respectful. Private matters or sensitive topics are best addressed through one-on-one conversations, which are encouraged when appropriate. We approach disagreements by assuming positive intent and seeking mutual understanding. When challenges arise that require additional support, team members are encouraged to engage leadership to help resolve concerns. In all cases, inappropriate behavior will be addressed promptly, directly, and respectfully to uphold a culture of professionalism and psychological safety. 
+
+## 9. Inclusion & Team Culture 
+
+We foster an inclusive team culture where differing opinions are welcomed and respected. Open communication through group threads is encouraged to promote transparency and ensure all voices are included in discussions. We approach retrospectives and post-mortems as opportunities for learning rather than assigning blame, focusing on continuous improvement. Above all, we are committed to creating a psychologically safe environment where team members feel supported, valued, and empowered to contribute fully. 
+
+## 10. Work-Life Balance 
+
+We prioritize work-life balance by respecting each team member's personal time and life events. Flexibility is supported to accommodate diverse working styles and unplanned needs that may arise. As a team, we remain mindful of each other's well-being through regular check-ins and a shared commitment to fostering a healthy, sustainable work environment. 
+
+## 11. Technical Agreements 
+
+Developers will work collaboratively using Agile principles to deliver working software iteratively. Work will not be considered complete until it includes automated integration and unit tests, meets acceptance criteria, and is approved by the Product Owner. The team will be expected to keep documentation current and demonstrate working software at the end of each sprint. 
+
+### Definition of Ready (for Sprint Planning) 
+
+For a user story to be considered ready for sprint planning, it must clearly address both the "why" and the "what" of the work to be done. Stories should align with the INVEST principles—Independent, Negotiable, Valuable, Estimable, Small, and Testable—to ensure they are well-defined and actionable. Each story must include clear acceptance criteria and, when applicable, have a completed UI design. These standards help ensure that the team enters each sprint with a shared understanding of the work and is set up for successful delivery. 
+
+### Definition of Done 
+
+A user story is considered done when it meets all technical, functional, and quality requirements. Code must be written, clearly commented on and committed to the repository, free of build errors. It must undergo thorough review by a peer and the tech lead, with all feedback addressed. Unit tests should achieve at least 90% coverage, be automated, and run in isolation. Integration testing must validate interactions with related features, and performance or security testing should be completed where applicable. UX design is reviewed prior to final acceptance, and acceptance testing must confirm that all defined criteria are met. Documentation should be complete, with architectural decision records (ADRs) updated if needed. Final approval rests with the Product Owner, who formally accepts the story as done. 
+
+### Definition of Ready to Release (Public) 
+
+A feature or release is considered ready for public deployment once it has been successfully deployed to the system test environment and has passed all related system tests. It must also complete User Acceptance Testing (UAT) with formal sign-off from the appropriate stakeholders. Finally, the release must meet all criteria outlined in the Release Readiness Checklist to ensure quality, stability, and preparedness for production deployment. 
