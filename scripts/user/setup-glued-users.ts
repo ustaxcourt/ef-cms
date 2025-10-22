@@ -152,7 +152,23 @@ const getPractitionerUsers = async (): Promise<any[]> => {
       .execute(),
   );
 
-  return users;
+  // 2b) Also include users who are irsPractitioner with practice_type = 'DOJ'
+  const dojIrsPractitioners = await getDbReader(reader =>
+    reader
+      .selectFrom('dwUser')
+      .selectAll()
+      .where('role', '=', 'irsPractitioner')
+      .where('practice_type', '=', 'DOJ') // adjust column name if your schema differs
+      .execute(),
+  );
+
+  // Merge and deduplicate by userId
+  const mergedById = new Map<string, any>();
+  for (const user of [...users, ...dojIrsPractitioners]) {
+    if (user?.userId) mergedById.set(user.userId, user);
+  }
+
+  return Array.from(mergedById.values());
 };
 
 const getPetitionerUsers = async (): Promise<any[]> => {
@@ -244,7 +260,7 @@ const getUsersByName = async (): Promise<Users> => {
       };
     } else {
       users[user.name] = {
-        email: `${user.role!}.${user.name.toLowerCase()}@example.com`,
+        email: `${user.role!.toLowerCase()}.${user.name.toLowerCase()}@example.com`,
         name: `${user.role} ${user.name}`,
         userFullName: `${user.role} ${fullName}`,
         role: user.role,
