@@ -13,10 +13,18 @@ import { CourtIssuedDocumentTypeE } from '@shared/business/entities/courtIssuedD
 import { CourtIssuedDocumentTypeF } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentTypeF';
 import { CourtIssuedDocumentTypeG } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentTypeG';
 import { CourtIssuedDocumentTypeH } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentTypeH';
+import {
+  DocketEntryRelation,
+  UNSERVABLE_EVENT_CODES,
+} from '../EntityConstants';
+import { JoiValidationConstants } from '../JoiValidationConstants';
+import joi from 'joi';
 
 export abstract class CourtIssuedDocument extends JoiValidationEntity {
+  public affectedDocketEntries?: Array<DocketEntryRelation>;
   public docketEntryId!: string;
   public attachments!: boolean;
+  public dispositionOrder?: boolean;
   public documentTitle?: string;
   public generatedDocumentTitle?: string;
   public documentType!: string;
@@ -26,6 +34,35 @@ export abstract class CourtIssuedDocument extends JoiValidationEntity {
   public isLegacyServed?: boolean;
 
   abstract getDocumentTitle(): string;
+  static VALIDATION_RULES = {
+    affectedDocketEntries: joi.when('dispositionOrder', {
+      is: true,
+      then: joi
+        .array()
+        .items(JoiValidationConstants.RELATED_DOCKET_ENTRY)
+        .required(),
+      otherwise: joi.optional().allow(null),
+    }),
+    attachments: joi
+      .boolean()
+      .required()
+      .messages({ '*': 'Enter selection for Attachments' }),
+    documentTitle: JoiValidationConstants.STRING.optional(),
+    documentType: JoiValidationConstants.STRING.required().messages({
+      '*': 'Select a document type',
+    }),
+    eventCode: JoiValidationConstants.STRING.optional(),
+    filingDate: joi
+      .when('eventCode', {
+        is: joi
+          .exist()
+          .not(null)
+          .valid(...UNSERVABLE_EVENT_CODES),
+        otherwise: joi.optional().allow(null),
+        then: JoiValidationConstants.ISO_DATE.max('now').required(),
+      })
+      .messages({ '*': 'Enter a filing date' }),
+  };
 }
 
 export const ENTERED_AND_SERVED_EVENT_CODES = [

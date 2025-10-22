@@ -1,5 +1,4 @@
 import { CourtIssuedDocument } from './CourtIssuedDocumentConstants';
-import { CourtIssuedDocumentBase } from './CourtIssuedDocumentBase';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
 export class CourtIssuedDocumentTypeB extends CourtIssuedDocument {
@@ -14,8 +13,9 @@ export class CourtIssuedDocumentTypeB extends CourtIssuedDocument {
 
   constructor(rawProps) {
     super('CourtIssuedDocumentTypeB');
-
+    this.affectedDocketEntries = rawProps.affectedDocketEntries;
     this.attachments = rawProps.attachments || false;
+    this.dispositionOrder = rawProps.dispositionOrder || false;
     this.documentTitle = rawProps.documentTitle;
     this.documentType = rawProps.documentType;
     this.eventCode = rawProps.eventCode;
@@ -26,7 +26,7 @@ export class CourtIssuedDocumentTypeB extends CourtIssuedDocument {
   }
 
   static VALIDATION_RULES = {
-    ...CourtIssuedDocumentBase.VALIDATION_RULES,
+    ...CourtIssuedDocument.VALIDATION_RULES,
     freeText: JoiValidationConstants.STRING.max(1000).optional().messages({
       'string.max': 'Limit is 1000 characters. Enter 1000 or fewer characters.',
     }),

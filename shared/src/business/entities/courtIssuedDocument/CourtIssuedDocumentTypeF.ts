@@ -1,5 +1,4 @@
 import { CourtIssuedDocument } from './CourtIssuedDocumentConstants';
-import { CourtIssuedDocumentBase } from './CourtIssuedDocumentBase';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { TRIAL_SESSION_SCOPE_TYPES } from '../EntityConstants';
 import { getStandaloneRemoteDocumentTitle } from '../../utilities/getStandaloneRemoteDocumentTitle';
@@ -19,7 +18,9 @@ export class CourtIssuedDocumentTypeF extends CourtIssuedDocument {
   constructor(rawProps) {
     super('CourtIssuedDocumentTypeF');
 
+    this.affectedDocketEntries = rawProps.affectedDocketEntries;
     this.attachments = rawProps.attachments || false;
+    this.dispositionOrder = rawProps.dispositionOrder || false;
     this.documentTitle = rawProps.documentTitle;
     this.documentType = rawProps.documentType;
     this.eventCode = rawProps.eventCode;
@@ -31,7 +32,7 @@ export class CourtIssuedDocumentTypeF extends CourtIssuedDocument {
   }
 
   static VALIDATION_RULES = {
-    ...CourtIssuedDocumentBase.VALIDATION_RULES,
+    ...CourtIssuedDocument.VALIDATION_RULES,
     freeText: JoiValidationConstants.STRING.max(1000).optional().messages({
       'string.max': 'Limit is 1000 characters. Enter 1000 or fewer characters.',
     }),

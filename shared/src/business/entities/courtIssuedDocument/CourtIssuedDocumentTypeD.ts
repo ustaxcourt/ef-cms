@@ -2,7 +2,6 @@ import {
   CourtIssuedDocument,
   yesterdayFormatted,
 } from './CourtIssuedDocumentConstants';
-import { CourtIssuedDocumentBase } from './CourtIssuedDocumentBase';
 import { FORMATS, formatDateString } from '../../utilities/DateHandler';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
@@ -21,7 +20,9 @@ export class CourtIssuedDocumentTypeD extends CourtIssuedDocument {
   constructor(rawProps) {
     super('CourtIssuedDocumentTypeD');
 
+    this.affectedDocketEntries = rawProps.affectedDocketEntries;
     this.attachments = rawProps.attachments || false;
+    this.dispositionOrder = rawProps.dispositionOrder || false;
     this.documentTitle = rawProps.documentTitle;
     this.documentType = rawProps.documentType;
     this.eventCode = rawProps.eventCode;
@@ -32,7 +33,7 @@ export class CourtIssuedDocumentTypeD extends CourtIssuedDocument {
   }
 
   static VALIDATION_RULES = {
-    ...CourtIssuedDocumentBase.VALIDATION_RULES,
+    ...CourtIssuedDocument.VALIDATION_RULES,
     date: joi
       .when('createdAt', {
         is: joi.exist().not(null),

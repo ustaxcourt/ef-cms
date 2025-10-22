@@ -1,5 +1,4 @@
 import { CourtIssuedDocument } from './CourtIssuedDocumentConstants';
-import { CourtIssuedDocumentBase } from './CourtIssuedDocumentBase';
 import { FORMATS, formatDateString } from '../../utilities/DateHandler';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
@@ -26,7 +25,7 @@ export class CourtIssuedDocumentTypeH extends CourtIssuedDocument {
   }
 
   static VALIDATION_RULES = {
-    ...CourtIssuedDocumentBase.VALIDATION_RULES,
+    ...CourtIssuedDocument.VALIDATION_RULES,
     date: JoiValidationConstants.ISO_DATE.max('now').required().messages({
       '*': 'Enter a date',
       'date.max': 'Date cannot be in the future. Enter a valid date.',

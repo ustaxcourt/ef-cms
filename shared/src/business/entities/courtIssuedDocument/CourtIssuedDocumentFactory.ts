@@ -1,5 +1,4 @@
 import { CourtIssuedDocument } from './CourtIssuedDocumentConstants';
-import { CourtIssuedDocumentBase } from './CourtIssuedDocumentBase';
 import { CourtIssuedDocumentTypeA } from './CourtIssuedDocumentTypeA';
 import { CourtIssuedDocumentTypeB } from './CourtIssuedDocumentTypeB';
 import { CourtIssuedDocumentTypeC } from './CourtIssuedDocumentTypeC';
@@ -31,8 +30,12 @@ export function CourtIssuedDocumentFactory(
         return new CourtIssuedDocumentTypeG(documentMetadata);
       case 'type h':
         return new CourtIssuedDocumentTypeH(documentMetadata);
+      default:
+        throw new Error(
+          `Unknown document scenario: ${documentMetadata.scenario}`,
+        );
     }
+  } else {
+    throw new Error('Document scenario is required to create document.');
   }
-
-  return new CourtIssuedDocumentBase(documentMetadata);
 }

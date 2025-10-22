@@ -4,13 +4,11 @@ import {
   GENERIC_ORDER_DOCUMENT_TYPE,
   SERVICE_STAMP_OPTIONS,
 } from './CourtIssuedDocumentConstants';
-import { CourtIssuedDocumentBase } from './CourtIssuedDocumentBase';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
 import joi from 'joi';
 
 export class CourtIssuedDocumentTypeA extends CourtIssuedDocument {
-  public affectedDocketEntries?: any[];
   public attachments: boolean;
   public dispositionOrder: boolean;
   public documentTitle?: string;
@@ -23,7 +21,6 @@ export class CourtIssuedDocumentTypeA extends CourtIssuedDocument {
 
   constructor(rawProps) {
     super('CourtIssuedDocumentTypeA');
-
     this.affectedDocketEntries = rawProps.affectedDocketEntries;
     this.attachments = rawProps.attachments || false;
     this.dispositionOrder = rawProps.dispositionOrder || false;
@@ -37,15 +34,7 @@ export class CourtIssuedDocumentTypeA extends CourtIssuedDocument {
   }
 
   static VALIDATION_RULES = {
-    ...CourtIssuedDocumentBase.VALIDATION_RULES,
-    affectedDocketEntries: joi.when('dispositionOrder', {
-      is: true,
-      then: joi
-        .array()
-        .items(JoiValidationConstants.RELATED_DOCKET_ENTRY)
-        .required(),
-      otherwise: joi.optional().allow(null),
-    }),
+    ...CourtIssuedDocument.VALIDATION_RULES,
     freeText: JoiValidationConstants.STRING.max(1000)
       .when('documentType', {
         is: joi.exist().valid(...DOCUMENT_TYPES_REQUIRING_DESCRIPTION),
