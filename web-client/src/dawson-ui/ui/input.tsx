@@ -3,6 +3,7 @@ import { cn } from '@web-client/lib/utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
+import classNames from 'classnames';
 
 interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: string;
@@ -12,6 +13,7 @@ interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   optional?: boolean;
   required?: boolean;
+  flexDirection?: 'vertical' | 'horizontal'; 
 }
 
 interface TextAreaProps
@@ -33,22 +35,47 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
       optional,
       required,
       type = 'text',
+      flexDirection = 'vertical',
       ...props
     },
     ref,
   ) => {
+
     const inputId = React.useId();
 
+    const parentDiv = classNames(
+      "tw:flex", 
+      flexDirection === "vertical" ? "tw:flex-col" : "tw:flex-row"
+    )
+
+    const inputClass = classNames(
+
+
+      // Base styles
+      'tw:block tw:w-full tw:rounded-md tw:border-[1px] tw:border-grey-base tw:bg-white',
+      'tw:px-3 tw:h-8 tw:xs:h-9 tw:text-sm tw:outline-none tw:cursor-text',
+      'tw:w-[380px] max-xs:tw:w-[351px]',
+      'tw:focus-visible:ring-4 tw:focus-visible:ring-offset-[4px] tw:focus-visible:ring-ring tw:focus-visible:outline-none',
+      // States
+      // 'tw:focus:border-blue-500 tw:focus:ring-2 tw:focus:ring-blue-500/20',
+      'tw:hover:border-grey-base tw:hover:shadow-none', //disable hover state
+      // Disabled state
+      'tw:disabled:cursor-not-allowed tw:disabled:bg-grey-light tw:disabled:text-grey-light',
+      className,
+      // Error state
+      error && 'tw:border-red-primary tw:hover:border-red-primary tw:focus-visible:!ring-0',
+    )
+
     return (
-      <div className="tw:flex tw:flex-col">
+      <div className={parentDiv}>
         {label && (
-          <div>
+          <div className={`${flexDirection === "horizontal" ? "tw:mr-[16px]" : ""} tw:shrink-0`}>
             <div className="tw:flex tw:flex-col">
               <div className="tw:flex tw:items-center">
                 <span
                   className={cn(
                     'tw:text-[16px]',
-                    'tw:md:text-[18px]',
+                    'tw:xs:text-[18px]',
                     '!tw:font-semibold',
                     '!tw:text-gray-900',
                   )}
@@ -59,19 +86,19 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                 {icon && (
                   <FontAwesomeIcon
                     icon={faQuestionCircle}
-                    className="tw:ml-1 tw:text-[16px] tw:md:text-[18px] tw:text-primary"
+                    className="tw:ml-1 tw:text-[16px] tw:xs:text-[18px] tw:text-primary"
                     title={helpText}
                     role="img"
                     aria-label={helpText}
                   />
                 )}
 
-                <span className="tw:text-gray-500 tw:ml-1 tw:font-normal tw:text-[14px] tw:md:text-[16px]">
+                <span className="tw:text-grey-base tw:ml-1 tw:font-normal tw:text-[14px] tw:xs:text-[16px]">
                   {!required ? '(optional)' : '(required)'}
                 </span>
               </div>
               {helpText && (
-                <div className="tw:mt-1 tw:mb-[9px] tw:text-[14px] tw:md:text-[16px] tw:text-gray-500">
+                <div className="tw:mt-1 tw:mb-[9px] tw:text-[14px] tw:xs:text-[16px] tw:text-grey-base">
                   {helpText}
                 </div>
               )}
@@ -84,38 +111,17 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
           ref={ref}
           type={type}
           aria-invalid={!!error}
-          className={cn(
-            // Base styles
-            'tw:block tw:w-full tw:rounded-md tw:border tw:border-gray-300 tw:bg-white',
-            'tw:px-3 tw:h-8 tw:md:h-9 tw:text-sm tw:outline-none tw:cursor-text',
-            'tw:w-[380px] max-xs:tw:w-[351px]',
-            'tw:focus-visible:ring-4 tw:focus-visible:ring-offset-[4px] tw:focus-visible:ring-ring tw:focus-visible:outline-none',
-            // Responsive placeholder sizing: 16px mobile, 18px desktop
-            'tw:placeholder:text-[16px] tw:md:placeholder:text-[18px]',
-
-            // States
-            'tw:placeholder:text-gray-400',
-            'tw:focus:border-blue-500 tw:focus:ring-2 tw:focus:ring-blue-500/20',
-            'tw:hover:tw:border-gray-300 tw:hover:shadow-none', //disable hover state
-
-            // Error state
-            error && 'tw:border-red-500 tw:ring-1 tw:ring-red-500',
-
-            // Disabled state
-            'tw:disabled:cursor-not-allowed tw:disabled:bg-gray-50 tw:disabled:text-gray-500',
-
-            className,
-          )}
+          className={inputClass}
           {...props}
         />
 
         {error && (
-          <div className="tw:mt-[6px] tw:md:mt-[8px] tw:flex tw:items-center tw:gap-2 tw:text-red-500">
+          <div className="tw:mt-[6px] tw:xs:mt-[8px] tw:flex tw:items-center tw:gap-2 tw:text-destructive">
             <FontAwesomeIcon
               icon={faExclamationCircle}
-              className="tw-text-[16px] tw:md:text-[18px]"
+              className="tw-text-[16px] tw:xs:text-[18px]"
             />
-            <span className="tw-text-[16px] tw:md:text-[18px]">
+            <span className="tw-text-[16px] tw:xs:text-[18px]">
               Enter a valid answer
             </span>
           </div>
@@ -127,7 +133,28 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 
 const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
   ({ className, error, label, helpText, ...props }, ref) => {
-    const textareaId = React.useId();
+      const textareaId = React.useId();
+
+      const textAreaClass = classNames(
+        // Base styles
+        'tw:block tw:w-full tw:rounded-tl-md tw:rounded-tr-md tw:rounded-bl-md tw:border tw:border-gray-base tw:bg-white',
+        'tw:px-3 tw:py-2 tw:text-sm tw:outline-none tw:cursor-text',
+        'tw:min-h-[100px] tw:resize-y',
+        'tw:w-[380px] max-xs:tw:w-[351px]',
+        
+        // Focus state
+        'tw:focus-visible:ring-4 tw:focus-visible:ring-offset-[4px] tw:focus-visible:ring-ring tw:focus-visible:outline-none',   
+
+        // Error state     
+        error && 'tw:border-destructive tw:ring-1 tw:ring-destructive',
+        'tw:disabled:cursor-not-allowed tw:disabled:bg-gray-50 tw:disabled:text-grey-base',
+
+        // States
+        'tw:hover:tw:border-gray-300 tw:hover:shadow-none', //disable hover state
+
+        className,
+      )
+
 
     return (
       <div className="tw:flex tw:flex-col">
@@ -138,7 +165,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
                 <span
                   className={cn(
                     'tw:text-[16px]',
-                    'tw:md:text-[18px]',
+                    'tw:xs:text-[18px]',
                     '!tw:font-semibold',
                     '!tw:text-gray-900',
                   )}
@@ -149,20 +176,20 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
                 {helpText && (
                   <FontAwesomeIcon
                     icon={faQuestionCircle}
-                    className="tw:ml-1 tw:text-[16px] tw:md:text-[18px] tw:text-primary"
+                    className="tw:ml-1 tw:text-[16px] tw:xs:text-[18px] tw:text-primary"
                     title={helpText}
                     role="img"
                     aria-label={helpText}
                   />
                 )}
                 {!props.required && (
-                  <span className="tw:text-gray-500 tw:ml-1 tw:font-normal tw:text-[14px] tw:md:text-[16px]">
+                  <span className="tw:text-grey-base tw:ml-1 tw:font-normal tw:text-[14px] tw:xs:text-[16px]">
                     (optional)
                   </span>
                 )}
               </div>
               {helpText && (
-                <div className="tw:mt-1 tw:mb-[9px] tw:text-[14px] tw:md:text-[16px] tw:text-gray-500">
+                <div className="tw:mt-1 tw:mb-[9px] tw:text-[14px] tw:xs:text-[16px] tw:text-grey-base">
                   {helpText}
                 </div>
               )}
@@ -174,36 +201,17 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
           id={textareaId}
           ref={ref}
           aria-invalid={!!error}
-          className={cn(
-            // Base styles
-            'tw:block tw:w-full tw:rounded-tl-md tw:rounded-tr-md tw:rounded-bl-md tw:border tw:border-gray-300 tw:bg-white',
-            'tw:px-3 tw:py-2 tw:text-sm tw:outline-none tw:cursor-text',
-            'tw:min-h-[100px] tw:resize-y',
-            'tw:w-[380px] max-xs:tw:w-[351px]',
-            'tw:focus-visible:ring-4 tw:focus-visible:ring-offset-[4px] tw:focus-visible:ring-ring tw:focus-visible:outline-none',
-
-            // Responsive placeholder sizing: 16px mobile, 18px desktop
-            'tw:placeholder:text-[16px] tw:md:placeholder:text-[18px]',
-            'tw:placeholder:text-gray-400',
-            'tw:focus:border-blue-500 tw:focus:ring-2 tw:focus:ring-blue-500/20',
-            error && 'tw:border-red-500 tw:ring-1 tw:ring-red-500',
-            'tw:disabled:cursor-not-allowed tw:disabled:bg-gray-50 tw:disabled:text-gray-500',
-
-            // States
-            'tw:hover:tw:border-gray-300 tw:hover:shadow-none', //disable hover state
-
-            className,
-          )}
+          className={textAreaClass}
           {...props}
         />
 
         {error && (
-          <div className="tw:mt-1 tw:flex tw:items-center tw:gap-2 tw:text-red-500">
+          <div className="tw:mt-1 tw:flex tw:items-center tw:gap-2 tw:text-destructive">
             <FontAwesomeIcon
               icon={faQuestionCircle}
-              className="tw-text-[16px] tw:md:text-[18px]"
+              className="tw-text-[16px] tw:xs:text-[18px]"
             />
-            <span className="tw-text-[16px] tw:md:text-[18px]">
+            <span className="tw-text-[16px] tw:xs:text-[18px]">
               Enter a valid answer
             </span>
           </div>

@@ -50,7 +50,12 @@
   --red-error: rgb(244 227 219 / 100%);
   --green: rgb(46 133 64 / 100%);
   --green-success: rgb(231 244 228 / 100%);
+  --grey-darkest: rgb(27 27 27 / 100%);
+  --grey-dark: rgb(86 92 101 / 100%);
+  --grey-base: rgb(113 118 122 / 100%);
   --grey-light: rgb(169 174 177 / 100%);
+  --grey-lighter: rgb(220 222 224 / 100%);
+  --grey-lightest: rgb(240 240 240 / 100%);
 }
 
 
@@ -104,6 +109,11 @@
   --color-red-error: var(--red-error);
   --color-green: var(--green);
   --color-green-success: var(--green-success);
+  --color-grey-darkest: var(--grey-darkest);
+  --color-grey-dark: var(--grey-dark);
+  --color-grey-base: var(--grey-base);
   --color-grey-light: var(--grey-light);
+  --color-grey-lighter: var(--grey-lighter);
+  --color-grey-lightest: var(--grey-lightest)
   --breakpoint-xs: 30rem;
 }
