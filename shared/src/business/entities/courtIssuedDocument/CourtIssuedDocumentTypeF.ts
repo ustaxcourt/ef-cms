@@ -6,7 +6,7 @@ import { replaceBracketed } from '../../utilities/replaceBracketed';
 
 export class CourtIssuedDocumentTypeF extends CourtIssuedDocument {
   public attachments: boolean;
-  public documentTitle?: string;
+  public documentTitle: string;
   public documentType: string;
   public eventCode: string;
   public filingDate?: string;
@@ -57,14 +57,14 @@ export class CourtIssuedDocumentTypeF extends CourtIssuedDocument {
         documentTitle: this.documentTitle,
       });
 
-      return replaceBracketed(this.documentTitle, judge, this.freeText);
+      return replaceBracketed(this.documentTitle, judge, this.freeText ?? '');
     }
 
     return replaceBracketed(
       this.documentTitle,
       judge,
       this.trialLocation,
-      this.freeText,
+      this.freeText ?? '',
     );
   }
 }

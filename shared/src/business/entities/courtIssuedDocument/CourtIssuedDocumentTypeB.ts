@@ -3,7 +3,7 @@ import { JoiValidationConstants } from '../JoiValidationConstants';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
 export class CourtIssuedDocumentTypeB extends CourtIssuedDocument {
   public attachments: boolean;
-  public documentTitle?: string;
+  public documentTitle: string;
   public documentType: string;
   public eventCode: string;
   public filingDate?: string;
@@ -42,7 +42,7 @@ export class CourtIssuedDocumentTypeB extends CourtIssuedDocument {
 
   getDocumentTitle() {
     const judge = this.judgeWithTitle || this.judge;
-    return replaceBracketed(this.documentTitle, judge, this.freeText);
+    return replaceBracketed(this.documentTitle, judge, this.freeText ?? '');
   }
 }
 

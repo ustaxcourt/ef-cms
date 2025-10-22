@@ -1,5 +1,4 @@
 /* eslint-disable max-lines */
-import { ENTERED_AND_SERVED_EVENT_CODES } from './courtIssuedDocument/CourtIssuedDocumentConstants';
 import { FORMATS, formatNow } from '../utilities/DateHandler';
 import {
   flatten,
@@ -668,6 +667,15 @@ export const SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES = flatten([
 ])
   .filter((internalEvent: Record<string, any>) => internalEvent.caseDecision)
   .map(x => x.eventCode);
+
+export const ENTERED_AND_SERVED_EVENT_CODES = [
+  'ODJ',
+  'OD',
+  'ODD',
+  'OAD',
+  'DEC',
+  'SDEC',
+];
 
 export const NON_MULTI_DOCKETABLE_EVENT_CODES = [
   ...ENTERED_AND_SERVED_EVENT_CODES,

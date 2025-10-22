@@ -11,7 +11,7 @@ import joi from 'joi';
 export class CourtIssuedDocumentTypeA extends CourtIssuedDocument {
   public attachments: boolean;
   public dispositionOrder: boolean;
-  public documentTitle?: string;
+  public documentTitle: string;
   public documentType: string;
   public eventCode: string;
   public filingDate?: string;
@@ -64,7 +64,7 @@ export class CourtIssuedDocumentTypeA extends CourtIssuedDocument {
   }
 
   getDocumentTitle() {
-    return replaceBracketed(this.documentTitle, this.freeText);
+    return replaceBracketed(this.documentTitle, this.freeText ?? '');
   }
 }
 

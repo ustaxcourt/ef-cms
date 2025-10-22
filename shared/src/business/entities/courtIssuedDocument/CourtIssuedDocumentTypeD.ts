@@ -9,7 +9,7 @@ import joi from 'joi';
 
 export class CourtIssuedDocumentTypeD extends CourtIssuedDocument {
   public attachments: boolean;
-  public documentTitle?: string;
+  public documentTitle: string;
   public documentType: string;
   public eventCode: string;
   public filingDate?: string;
@@ -58,7 +58,7 @@ export class CourtIssuedDocumentTypeD extends CourtIssuedDocument {
     return replaceBracketed(
       this.documentTitle,
       formatDateString(this.date, FORMATS.MMDDYYYY_DASHED),
-      this.freeText,
+      this.freeText ?? '',
     );
   }
 }

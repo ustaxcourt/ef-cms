@@ -25,7 +25,7 @@ export abstract class CourtIssuedDocument extends JoiValidationEntity {
   public docketEntryId!: string;
   public attachments!: boolean;
   public dispositionOrder?: boolean;
-  public documentTitle?: string;
+  public documentTitle!: string;
   public generatedDocumentTitle?: string;
   public documentType!: string;
   public eventCode!: string;
@@ -64,15 +64,6 @@ export abstract class CourtIssuedDocument extends JoiValidationEntity {
       .messages({ '*': 'Enter a filing date' }),
   };
 }
-
-export const ENTERED_AND_SERVED_EVENT_CODES = [
-  'ODJ',
-  'OD',
-  'ODD',
-  'OAD',
-  'DEC',
-  'SDEC',
-];
 
 export const GENERIC_ORDER_DOCUMENT_TYPE = 'Order';
 export const REPORT_PAMPHLET_DOCUMENT_TYPE = 'Tax Court Report Pamphlet';
