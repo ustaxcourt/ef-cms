@@ -158,7 +158,7 @@ const getPractitionerUsers = async (): Promise<any[]> => {
       .selectFrom('dwUser')
       .selectAll()
       .where('role', '=', 'irsPractitioner')
-      .where('practice_type', '=', 'DOJ') // adjust column name if your schema differs
+      .where('practiceType', '=', 'DOJ') // adjust column name if your schema differs
       .execute(),
   );
 
