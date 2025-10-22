@@ -164,6 +164,7 @@ export const CourtIssuedDocketEntry = connect(
                           checked={form.dispositionOrder || false} // false if undefined
                           className="usa-checkbox__input"
                           id="dispositionOrder"
+                          data-testid="disposition-order-checkbox"
                           name="dispositionOrder"
                           type="checkbox"
                           onChange={e => {
