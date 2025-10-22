@@ -17,6 +17,7 @@ import { RawIrsCalendarAdministratorInfo } from '@shared/business/entities/trial
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { compact, partition } from 'lodash';
 import { caseIsEligibleForMinuteSheet } from '@shared/business/utilities/trialSessionMinutes/caseIsEligibleForMinuteSheet';
+import type { ClientApplicationContext } from '@web-client/applicationContext';
 
 export const setPretrialMemorandumFiler = ({ caseItem }): string => {
   if (caseItem.PMTServedPartiesCode !== undefined) {
@@ -67,6 +68,7 @@ export type FormattedTrialSessionCase = CalendaredCaseItemType & {
   removedFromTrialDateFormatted: string;
   filingPartiesCode: string;
   isDocketSuffixHighPriority: boolean;
+  memberCases?: FormattedTrialSessionCase[];
 };
 
 export const formatCaseForTrialSession = ({
@@ -75,7 +77,7 @@ export const formatCaseForTrialSession = ({
   eligibleCases = [],
   setFilingPartiesCode = false,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ClientApplicationContext;
   caseItem: CalendaredCaseItemType;
   eligibleCases?: RawEligibleCase[];
   setFilingPartiesCode?: boolean;
