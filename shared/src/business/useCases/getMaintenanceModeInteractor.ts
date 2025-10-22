@@ -1,3 +1,5 @@
+import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
+
 /**
  * getMaintenanceModeInteractor
  *
@@ -7,13 +9,14 @@
 export const getMaintenanceModeInteractor = async (
   applicationContext: IApplicationContext,
 ) => {
-  const start = Date.now();
+  const start = Number(formatNow(FORMATS.UNIX_TIMESTAMP_MS));
   applicationContext.logger.info('Start getMaintenanceModeInteractor');
   const result = await applicationContext
     .getPersistenceGateway()
     .getMaintenanceMode();
+  const end = Number(formatNow(FORMATS.UNIX_TIMESTAMP_MS));
   applicationContext.logger.info(
-    `End getMaintenanceModeInteractor. Time: ${Date.now() - start}ms`,
+    `End getMaintenanceModeInteractor. Time: ${end - start}ms`,
   );
   return !!(result && result.current);
 };
