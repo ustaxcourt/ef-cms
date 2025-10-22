@@ -1,5 +1,6 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { SubmitJobCommand, SubmitJobCommandInput } from '@aws-sdk/client-batch';
+import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
 
 export const sendZipperBatchJob = async (
   applicationContext: ServerApplicationContext,
@@ -46,10 +47,10 @@ export const sendZipperBatchJob = async (
       ],
     },
     jobDefinition: `s3-zip-job-${stage}-${currentColor}-${awsRegion}`,
-    jobName: `batch-docket-entries-download-${Date.now()}`,
+    jobName: `batch-docket-entries-download-${formatNow(FORMATS.UNIX_TIMESTAMP_MS)}`,
     jobQueue: `aws-batch-job-queue-${stage}-${currentColor}-${awsRegion}`,
   };
 
   const command = new SubmitJobCommand(params);
-  await applicationContext.getBatchClient(awsRegion).send(command);
+  return await applicationContext.getBatchClient(awsRegion).send(command);
 };
