@@ -26,6 +26,7 @@ import { JoiValidationConstants } from './JoiValidationConstants';
 import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { createEndOfDayISO } from '@shared/business/utilities/DateHandler';
 import joi from 'joi';
+import { is } from 'o';
 
 export const SERVICE_INDICATOR_ERROR = {
   serviceIndicator:
@@ -197,6 +198,10 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     .boolean()
     .optional()
     .description('Whether the document is a draft (not on the docket record).'),
+  // isFiledAcrossAllCases: joi
+  //   .boolean()
+  //   .required()
+  //   .description('Whether the document is filed across all cases.'),
   isFileAttached: joi
     .boolean()
     .optional()

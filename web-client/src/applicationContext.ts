@@ -349,7 +349,6 @@ import deepFreeze from 'deep-freeze';
 import { getTrialSessionOpenCasesCountInteractor } from '@shared/proxies/trialSessions/getTrialSessionOpenCasesCountProxy';
 import { getConsolidatedCaseDeadlinesInteractor } from '@shared/proxies/caseDeadline/getConsolidatedCaseDeadlinesProxy';
 import { removePetitionerEmailInteractor } from '@shared/proxies/removePetitionerEmailProxy';
-import { getIsFiledAcrossAllCasesInteractor } from '@shared/proxies/getIsFiledAcrossAllCasesProxy';
 
 const reduce = ImageBlobReduce({
   pica: ImageBlobReduce.pica({ features: ['js'] }),
@@ -482,7 +481,6 @@ const allUseCases = {
   getTrialSessionsForJudgeInteractor,
   getTrialSessionsInteractor,
   getUserCaseNoteForCasesInteractor,
-  getIsFiledAcrossAllCasesInteractor,
   getUserCaseNoteInteractor,
   getUserInteractor,
   getUserPendingEmailInteractor,
