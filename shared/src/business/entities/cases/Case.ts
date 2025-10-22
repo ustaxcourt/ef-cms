@@ -1554,9 +1554,8 @@ export class Case extends JoiValidationEntity {
    * @returns {Case} the updated case entity
    */
   setCaseCaption(caseCaption) {
-    
     this.caseCaption = caseCaption;
-    
+
     if (this.consolidatedCases && this.consolidatedCases.length > 0) {
       this.setCaseCaptionInSingleCase();
     }
@@ -1565,13 +1564,13 @@ export class Case extends JoiValidationEntity {
   }
 
   setCaseCaptionInSingleCase() {
-
-    const currentCase = this.consolidatedCases.find((c) => c.docketNumber === this.docketNumber);
+    const currentCase = this.consolidatedCases.find(
+      c => c.docketNumber === this.docketNumber,
+    );
 
     if (currentCase) {
       currentCase.caseCaption = this.caseCaption;
     }
-
   }
 
   /**
@@ -2102,6 +2101,15 @@ export const isLeadCase = (rawCase: {
   docketNumber: string;
   leadDocketNumber?: string;
 }): boolean => rawCase.docketNumber === rawCase.leadDocketNumber;
+
+export const isMemberCase = (rawCase: {
+  docketNumber: string;
+  leadDocketNumber?: string;
+}): boolean =>
+  Boolean(
+    rawCase.leadDocketNumber &&
+      rawCase.leadDocketNumber !== rawCase.docketNumber,
+  );
 
 export const caseHasServedDocketEntries = rawCase => {
   return rawCase.docketEntries.some(docketEntry =>
