@@ -418,6 +418,7 @@ export const MOCK_ELIGIBLE_CASE: RawEligibleCase = {
   isAgedCase: false,
   irsPractitioners: [],
   privatePractitioners: [],
+  inConsolidatedGroup: false,
 };
 
 export const MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS = {

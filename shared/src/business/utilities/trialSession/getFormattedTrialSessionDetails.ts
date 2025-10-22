@@ -12,7 +12,10 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
-import { RawEligibleCase } from '../../entities/cases/EligibleCase';
+import {
+  EligibleCase,
+  RawEligibleCase,
+} from '../../entities/cases/EligibleCase';
 import { RawIrsCalendarAdministratorInfo } from '@shared/business/entities/trialSessions/IrsCalendarAdministratorInfo';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { compact, partition } from 'lodash';
@@ -68,7 +71,7 @@ export type FormattedTrialSessionCase = CalendaredCaseItemType & {
   removedFromTrialDateFormatted: string;
   filingPartiesCode: string;
   isDocketSuffixHighPriority: boolean;
-  memberCases?: FormattedTrialSessionCase[];
+  memberCases?: (FormattedTrialSessionCase | EligibleCase)[];
 };
 
 export const formatCaseForTrialSession = ({
