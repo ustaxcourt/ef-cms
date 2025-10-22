@@ -34,7 +34,12 @@ export const DW_WORK_ITEM_COLUMNS = Object.keys(
 export type WorkItemWithCaseInfoKysely = WorkItemKysely &
   NullablePick<
     CaseKysely,
-    'status' | 'trialDate' | 'trialLocation' | 'leadDocketNumber' | 'caption'
+    | 'status'
+    | 'trialDate'
+    | 'trialLocation'
+    | 'leadDocketNumber'
+    | 'caption'
+    | 'docketNumberSuffix'
   >;
 
 export type RawWorkItemWithCaseInfo = RawWorkItem & {
@@ -43,10 +48,16 @@ export type RawWorkItemWithCaseInfo = RawWorkItem & {
   leadDocketNumber?: string;
   trialDate?: string;
   trialLocation?: string;
+  docketNumberSuffix?: string;
 };
 
 export type RawWorkItemWithCaseAndDocketEntryInfo = RawWorkItemWithCaseInfo & {
   docketEntry: RawDocketEntry;
+  consolidatedCases?: Array<{
+    docketNumber: string;
+    docketNumberWithSuffix?: string;
+    inLeadCase: boolean;
+  }>;
 };
 
 export type WorkItemKysely = Selectable<WorkItemTable>;

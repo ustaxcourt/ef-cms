@@ -1,8 +1,7 @@
 import { ConsolidatedCasesCheckboxes } from './ConsolidatedCasesCheckboxes';
-import { Hint } from '../ustc-ui/Hint/Hint';
+import { InfoNotificationComponent } from './InfoNotification';
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -11,17 +10,20 @@ export const ConfirmInitiateServiceModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
     confirmInitiateServiceModalHelper: state.confirmInitiateServiceModalHelper,
-    confirmSequence: props.confirmSequence,
-    documentTitle: props.documentTitle,
+    additionalServedCases:
+      state.confirmInitiateServiceModalHelper.additionalServedCases,
     waitingForResponse: state.progressIndicator.waitingForResponse,
   },
-  function ConfirmInitiateServiceModal({
-    cancelSequence,
-    confirmInitiateServiceModalHelper,
-    confirmSequence,
-    documentTitle,
-    waitingForResponse,
-  }) {
+  function ConfirmInitiateServiceModal(props: any) {
+    const {
+      cancelSequence,
+      confirmInitiateServiceModalHelper,
+      waitingForResponse,
+      additionalServedCases,
+    } = props;
+
+    const confirmSequence = props.confirmSequence as any;
+    const documentTitle = props.documentTitle as any;
     let isSubmitDebounced = false;
 
     const debounceSubmit = timeout => {
@@ -46,26 +48,48 @@ export const ConfirmInitiateServiceModal = connect(
         disableSubmit={waitingForResponse || isSubmitDebounced}
         title="Are You Ready to Initiate Service?"
       >
-        <p className="margin-bottom-1">
+        <p className="margin-0">
           {confirmInitiateServiceModalHelper.confirmationText}
         </p>
         <p className="margin-top-0 margin-bottom-2">
           <strong>{documentTitle}</strong>
         </p>
-        {confirmInitiateServiceModalHelper.showPaperAlert && (
-          <Hint fullWidth className="block">
-            <div className="margin-bottom-1">
-              This {confirmInitiateServiceModalHelper.caseOrGroup} has parties
-              receiving paper service:
-            </div>
-            {confirmInitiateServiceModalHelper.contactsNeedingPaperService.map(
-              contact => (
-                <div className="margin-bottom-1" key={contact.name}>
-                  {contact.name}
-                </div>
+        {additionalServedCases && additionalServedCases.length > 0 && (
+          <div>
+            <div>This document will also be served for:</div>
+            <ul className="padding-left-3 margin-top-1">
+              {additionalServedCases.map(c => (
+                <li key={c.docketNumber}>
+                  {c.docketNumber} - {c.caseTitle}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {confirmInitiateServiceModalHelper.paperPartiesConsolidated && (
+          <InfoNotificationComponent
+            alertInfo={{
+              message: (
+                <>
+                  <div>
+                    <strong>
+                      Paper service is required for these parties:
+                    </strong>
+                  </div>
+                  {confirmInitiateServiceModalHelper.paperPartiesConsolidated.map(
+                    contact => (
+                      <div key={`${contact.docketNumber}-${contact.name}`}>
+                        {contact.docketNumber} - {contact.name},{' '}
+                        {contact.contactType}
+                      </div>
+                    ),
+                  )}
+                </>
               ),
-            )}
-          </Hint>
+            }}
+            dismissible={false}
+            scrollToTop={false}
+          />
         )}
         {confirmInitiateServiceModalHelper.showConsolidatedCasesForService && (
           <ConsolidatedCasesCheckboxes />

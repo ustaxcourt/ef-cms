@@ -31,8 +31,10 @@ import { MOCK_CASE_DEADLINE } from '@shared/test/mockCaseDeadline';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 const getUserById = jest.mocked(getUserByIdMock);
+const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
 
 describe('addPaperFilingInteractor', () => {
   const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
@@ -66,6 +68,7 @@ describe('addPaperFilingInteractor', () => {
     getUserById.mockResolvedValue(docketClerkUser as DbUser);
 
     getCasesByDocketNumbers.mockResolvedValue([mockCase]);
+    getCaseByDocketNumber.mockResolvedValue(mockCase);
   });
 
   it('should throw an error when the user is not authorized to add a paper filing', async () => {
@@ -574,5 +577,147 @@ describe('addPaperFilingInteractor', () => {
       applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf
         .mock.calls[0][0].electronicParties,
     ).toEqual([]);
+  });
+
+  it('should auto-detect and include consolidated cases when consolidatedGroupDocketNumbers is empty and case is lead case', async () => {
+    const leadCaseWithMembers = {
+      ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+      consolidatedCases: [
+        {
+          caseCaption: 'Member Case 1',
+          docketNumber: '102-20',
+          docketNumberWithSuffix: '102-20',
+          sortableDocketNumber: 2020000102,
+        },
+        {
+          caseCaption: 'Member Case 2',
+          docketNumber: '103-20',
+          docketNumberWithSuffix: '103-20',
+          sortableDocketNumber: 2020000103,
+        },
+      ],
+      docketNumber: '101-20',
+      leadDocketNumber: '101-20',
+    } as any;
+
+    const memberCase1 = {
+      ...MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
+      docketNumber: '102-20',
+      leadDocketNumber: '101-20',
+    } as any;
+
+    const memberCase2 = {
+      ...MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE,
+      docketNumber: '103-20',
+      leadDocketNumber: '101-20',
+    } as any;
+
+    getCaseByDocketNumber.mockResolvedValue(leadCaseWithMembers);
+    getCasesByDocketNumbers.mockResolvedValue([
+      leadCaseWithMembers,
+      memberCase1,
+      memberCase2,
+    ]);
+
+    await addPaperFilingInteractor(
+      applicationContext,
+      {
+        clientConnectionId: mockClientConnectionId,
+        consolidatedGroupDocketNumbers: [],
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentMetadata: {
+          docketNumber: '101-20',
+          documentTitle: 'Motion',
+          documentType: 'Motion',
+          eventCode: 'M115',
+          filedBy: 'Test Petitioner',
+          isFileAttached: true,
+          isPaper: true,
+        },
+        isSavingForLater: false,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(getCaseByDocketNumber).toHaveBeenCalledWith({
+      docketNumber: '101-20',
+    });
+    expect(getCasesByDocketNumbers).toHaveBeenCalledWith({
+      docketNumbers: expect.arrayContaining(['101-20', '102-20', '103-20']),
+    });
+    expect(updateCaseAndAssociations).toHaveBeenCalledTimes(3);
+  });
+
+  it('should NOT auto-detect consolidated cases when case is NOT a lead case', async () => {
+    const memberCase = {
+      ...mockCase,
+      docketNumber: '102-20',
+      leadDocketNumber: '101-20',
+    };
+
+    getCaseByDocketNumber.mockResolvedValue(memberCase);
+    getCasesByDocketNumbers.mockResolvedValue([memberCase]);
+
+    await addPaperFilingInteractor(
+      applicationContext,
+      {
+        clientConnectionId: mockClientConnectionId,
+        consolidatedGroupDocketNumbers: [],
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentMetadata: {
+          docketNumber: '102-20',
+          documentTitle: 'Motion',
+          documentType: 'Motion',
+          eventCode: 'M115',
+          filedBy: 'Test Petitioner',
+          isFileAttached: true,
+          isPaper: true,
+        },
+        isSavingForLater: false,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(getCasesByDocketNumbers).toHaveBeenCalledWith({
+      docketNumbers: ['102-20'],
+    });
+    expect(updateCaseAndAssociations).toHaveBeenCalledTimes(1);
+  });
+
+  it('should NOT auto-detect when consolidatedCases array is empty on lead case', async () => {
+    const leadCaseNoMembers = {
+      ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+      consolidatedCases: [],
+      docketNumber: '101-20',
+      leadDocketNumber: '101-20',
+    } as any;
+
+    getCaseByDocketNumber.mockResolvedValue(leadCaseNoMembers);
+    getCasesByDocketNumbers.mockResolvedValue([leadCaseNoMembers]);
+
+    await addPaperFilingInteractor(
+      applicationContext,
+      {
+        clientConnectionId: mockClientConnectionId,
+        consolidatedGroupDocketNumbers: [],
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentMetadata: {
+          docketNumber: '101-20',
+          documentTitle: 'Motion',
+          documentType: 'Motion',
+          eventCode: 'M115',
+          filedBy: 'Test Petitioner',
+          isFileAttached: true,
+          isPaper: true,
+        },
+        isSavingForLater: false,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(getCasesByDocketNumbers).toHaveBeenCalledWith({
+      docketNumbers: ['101-20'],
+    });
+    expect(updateCaseAndAssociations).toHaveBeenCalledTimes(1);
   });
 });
