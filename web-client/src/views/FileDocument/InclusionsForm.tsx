@@ -40,15 +40,15 @@ export const InclusionsForm = connect(
     validateExternalDocumentInformationSequence,
     validationData,
   }: {
-    constants: Record<string, unknown>;
-    data: Record<string, unknown>;
-    fileDocumentHelper: Record<string, unknown>;
+    constants: Record<string, any>;
+    data: Record<string, any>;
+    fileDocumentHelper: Record<string, any>;
     formatAndUpdateDateFromDatePickerSequence: Function | RunnableSequence;
     openCleanModalSequence: Function | RunnableSequence;
     type: string;
     updateFileDocumentWizardFormValueSequence: Function | RunnableSequence;
     validateExternalDocumentInformationSequence: Function | RunnableSequence;
-    validationData: Record<string, unknown>;
+    validationData: Record<string, any>;
   }) {
     return (
       <>

@@ -7,7 +7,7 @@ const seal = require('../../images/ustc_seal.svg') as string;
 
 // Public-specific state and sequences (available in presenter-public.ts)
 const publicState = state as typeof state & {
-  headerPublicHelper: Record<string, unknown>;
+  headerPublicHelper: Record<string, any>;
 };
 
 const publicSequences = sequences as typeof sequences & {

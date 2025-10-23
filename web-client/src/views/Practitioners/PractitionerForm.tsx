@@ -37,15 +37,15 @@ export const PractitionerForm = connect(
     validationErrors,
     practitionerInformationHelper,
   }: {
-    constants: Record<string, unknown>;
-    createPractitionerUserHelper: Record<string, unknown>;
-    form: Record<string, unknown>;
+    constants: Record<string, any>;
+    createPractitionerUserHelper: Record<string, any>;
+    form: Record<string, any>;
     formatAndUpdateDateFromDatePickerSequence: Function | RunnableSequence;
     updateFormValueSequence: Function | RunnableSequence;
     validateSequence: Function | RunnableSequence;
     validateSequenceName: string;
-    validationErrors: Record<string, unknown>;
-    practitionerInformationHelper: Record<string, unknown>;
+    validationErrors: Record<string, any>;
+    practitionerInformationHelper: Record<string, any>;
   }) {
     return (
       <>

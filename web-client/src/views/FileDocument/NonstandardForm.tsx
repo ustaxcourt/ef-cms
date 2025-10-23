@@ -51,15 +51,15 @@ export const NonstandardForm = connect(
   }: {
     caseDetail: { procedureType: string };
     DATE_FORMATS: { ISO: string };
-    form: Record<string, unknown>;
+    form: Record<string, any>;
     formatAndUpdateDateFromDatePickerSequence: Function | RunnableSequence;
     getOrdinalValuesForUploadIteration: string[];
-    helper: Record<string, unknown>;
+    helper: Record<string, any>;
     level: string;
     namespace: string;
     updateSequence: Function | RunnableSequence;
     validateSequence: Function | RunnableSequence;
-    validationErrors: Record<string, unknown>;
+    validationErrors: Record<string, any>;
   }) {
     useEffect(() => {
       const input = window.document.getElementById('other-iteration');

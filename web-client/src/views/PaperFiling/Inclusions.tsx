@@ -32,12 +32,12 @@ export const Inclusions = connect(
     validationErrors,
   }: {
     DATE_FORMATS: { ISO: string };
-    form: Record<string, unknown>;
+    form: Record<string, any>;
     formatAndUpdateDateFromDatePickerSequence: Function | RunnableSequence;
     marginClass: string;
     updateSequence: Function | RunnableSequence;
     validateDocketEntrySequence: Function | RunnableSequence;
-    validationErrors: Record<string, unknown>;
+    validationErrors: Record<string, any>;
   }) {
     return (
       <div className={classNames('usa-form-group', marginClass)}>

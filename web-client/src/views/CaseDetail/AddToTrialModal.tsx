@@ -29,7 +29,7 @@ export const AddToTrialModal = connect(
     cancelSequence: Function;
     confirmSequence: Function;
     isNoteRequired?: boolean;
-    modal: Record<string, unknown> & {
+    modal: Record<string, any> & {
       showAllLocations?: boolean;
       trialSessionId?: string;
       calendarNotes?: string;

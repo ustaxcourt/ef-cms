@@ -10,7 +10,7 @@ import { RunableSequence as RunnableSequence } from 'cerebral';
 
 const props = cerebralProps as unknown as {
   bind: string;
-  onBlur: (args: Record<string, unknown>) => void;
+  onBlur: (args: Record<string, any>) => void;
   registerRef: (param: string) => void;
   type: string;
   onChange: string;
@@ -35,20 +35,20 @@ export const Address = connect(
     updateFormValueSequence,
     validationErrors,
   }: {
-    data: Record<string, unknown>;
-    onBlur: (args: Record<string, unknown>) => void;
+    data: Record<string, any>;
+    onBlur: (args: Record<string, any>) => void;
     registerRef: (param: string) => void;
     type: string;
     updateFormValueAndSecondaryContactInfoSequence: Function | RunnableSequence;
     updateFormValueSequence: Function | RunnableSequence;
-    validationErrors: Record<string, unknown>;
+    validationErrors: Record<string, any>;
   }) {
     function MobileCityAndState() {
       return (
         <Mobile>
           <FormGroup
             errorText={
-              (validationErrors?.[type] as Record<string, unknown>)?.state
+              (validationErrors?.[type] as Record<string, any>)?.state
             }
           >
             <label className="usa-label" htmlFor={`${type}.state`}>
@@ -74,7 +74,7 @@ export const Address = connect(
           </FormGroup>
           <FormGroup
             errorText={
-              (validationErrors?.[type] as Record<string, unknown>)?.postalCode
+              (validationErrors?.[type] as Record<string, any>)?.postalCode
             }
           >
             <label
@@ -118,8 +118,8 @@ export const Address = connect(
             className={classNames(
               'usa-form-group',
               'usa-form-group-horizontal',
-              ((validationErrors?.[type] as Record<string, unknown>)?.state ||
-                (validationErrors?.[type] as Record<string, unknown>)
+              ((validationErrors?.[type] as Record<string, any>)?.state ||
+                (validationErrors?.[type] as Record<string, any>)
                   ?.postalCode) &&
                 'usa-form-group--error',
             )}
@@ -148,14 +148,14 @@ export const Address = connect(
                   }
                 />
                 <div>
-                  {(validationErrors?.[type] as Record<string, unknown>)
+                  {(validationErrors?.[type] as Record<string, any>)
                     ?.state && (
                     <span
                       className="usa-error-message"
                       data-testid="state-error-message"
                     >
                       {
-                        (validationErrors[type] as Record<string, unknown>)
+                        (validationErrors[type] as Record<string, any>)
                           .state
                       }
                     </span>
@@ -193,14 +193,14 @@ export const Address = connect(
                   }}
                 />
                 <div>
-                  {(validationErrors?.[type] as Record<string, unknown>)
+                  {(validationErrors?.[type] as Record<string, any>)
                     ?.postalCode && (
                     <span
                       className="usa-error-message"
                       data-testid="postal-code-error-message"
                     >
                       {
-                        (validationErrors[type] as Record<string, unknown>)
+                        (validationErrors[type] as Record<string, any>)
                           .postalCode
                       }
                     </span>
@@ -217,7 +217,7 @@ export const Address = connect(
         <FormGroup
           errorMessageId="address-1-error-message"
           errorText={
-            (validationErrors?.[type] as Record<string, unknown>)?.address1
+            (validationErrors?.[type] as Record<string, any>)?.address1
           }
         >
           <label className="usa-label" htmlFor={`${type}.address1`}>
@@ -296,7 +296,7 @@ export const Address = connect(
         <FormGroup
           errorMessageId="city-error-message"
           errorText={
-            (validationErrors?.[type] as Record<string, unknown>)?.city
+            (validationErrors?.[type] as Record<string, any>)?.city
           }
         >
           <label className="usa-label" htmlFor={`${type}.city`}>

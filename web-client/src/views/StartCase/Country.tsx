@@ -7,7 +7,7 @@ import { RunableSequence as RunnableSequence } from 'cerebral';
 
 const props = cerebralProps as unknown as {
   bind: string;
-  onBlur: (args: Record<string, unknown>) => void;
+  onBlur: (args: Record<string, any>) => void;
   onChangeCountryType: string;
   registerRef: (param: string) => void;
   type: string;
@@ -35,20 +35,20 @@ export const Country = connect(
     updateFormValueSequence,
     validationErrors,
   }: {
-    constants: Record<string, unknown>;
-    data: Record<string, unknown>;
-    onBlur: (args: Record<string, unknown>) => void;
+    constants: Record<string, any>;
+    data: Record<string, any>;
+    onBlur: (args: Record<string, any>) => void;
     onChangeCountryType: Function | RunnableSequence;
     registerRef: (param: string) => void;
     type: string;
     updateFormValueSequence: Function | RunnableSequence;
-    validationErrors: Record<string, unknown>;
+    validationErrors: Record<string, any>;
   }) {
     return (
       <React.Fragment>
         <FormGroup
           errorText={
-            (validationErrors?.[type] as Record<string, unknown>)?.countryType
+            (validationErrors?.[type] as Record<string, any>)?.countryType
           }
         >
           <label className="usa-label" htmlFor={`${type}.countryType`}>
@@ -124,7 +124,7 @@ export const Country = connect(
           <FormGroup
             errorMessageId="country-error-message"
             errorText={
-              (validationErrors?.[type] as Record<string, unknown>)?.country
+              (validationErrors?.[type] as Record<string, any>)?.country
             }
           >
             <label className="usa-label" htmlFor={`${type}.country`}>

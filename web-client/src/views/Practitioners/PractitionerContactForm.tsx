@@ -36,12 +36,12 @@ export const PractitionerContactForm = connect(
     bind: string;
     changeCountryTypeSequence: Function | RunnableSequence;
     COUNTRY_TYPES: { DOMESTIC: string; INTERNATIONAL: string };
-    form: Record<string, unknown>;
+    form: Record<string, any>;
     onBlurValidationSequence: Function | RunnableSequence;
     onChangeSequenceName: string;
     onChangeUpdateSequence: Function | RunnableSequence;
     type: string;
-    validationErrors: Record<string, unknown>;
+    validationErrors: Record<string, any>;
   }) {
     return (
       <>

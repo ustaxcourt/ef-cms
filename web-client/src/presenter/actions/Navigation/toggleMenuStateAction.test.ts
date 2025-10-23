@@ -16,7 +16,7 @@ describe('toggleMenuStateAction', () => {
       },
     });
 
-    expect((result.state as unknown as Record<string, unknown>).foo).toEqual(
+    expect((result.state as unknown as Record<string, any>).foo).toEqual(
       false,
     );
   });
@@ -34,7 +34,7 @@ describe('toggleMenuStateAction', () => {
       },
     });
 
-    expect((result.state as unknown as Record<string, unknown>).foo).toEqual(
+    expect((result.state as unknown as Record<string, any>).foo).toEqual(
       true,
     );
   });
@@ -52,7 +52,7 @@ describe('toggleMenuStateAction', () => {
       },
     });
 
-    expect((result.state as unknown as Record<string, unknown>).foo).toEqual(
+    expect((result.state as unknown as Record<string, any>).foo).toEqual(
       true,
     );
   });

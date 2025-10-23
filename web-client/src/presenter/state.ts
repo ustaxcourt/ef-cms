@@ -687,7 +687,7 @@ export const baseState = {
     | string
     | {
         penalties?: Record<string, string>;
-        statistics?: Record<string, unknown>;
+        statistics?: Record<string, any>;
         irsDeficiencyAmount?: string;
         determinationDeficiencyAmount?: string;
       }
@@ -830,7 +830,7 @@ export const baseState = {
     calendarNotes: undefined as string | undefined,
     contactSupportMessage: undefined as string | undefined, // the "contact support" message sans email address
     docketEntry: undefined,
-    form: {} as Record<string, unknown>,
+    form: {} as Record<string, any>,
     message: undefined as string | undefined, // the message to show
     pdfPreviewModal: undefined,
     showModal: undefined as string | undefined, // the name of the modal to display
@@ -838,7 +838,7 @@ export const baseState = {
     trialSessionId: undefined as string | undefined,
     troubleshootingInfo: undefined as TroubleshootingLinkInfo | undefined, // steps for troubleshooting
     penalties: undefined as unknown[] | undefined,
-  } as Record<string, unknown>,
+  } as Record<string, any>,
   navigation: {
     caseDetailMenu: '',
     openMenu: '',

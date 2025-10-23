@@ -29,10 +29,10 @@ export const PaperPetitionEmail = connect(
     validationErrors = {},
   }: {
     contactType: string;
-    data: Record<string, Record<string, unknown>>;
+    data: Record<string, Record<string, any>>;
     onBlur: () => void;
     updateFormValueAndSecondaryContactInfoSequence: Function | RunnableSequence;
-    validationErrors: Record<string, Record<string, unknown>>;
+    validationErrors: Record<string, Record<string, any>>;
   }) {
     return (
       <>

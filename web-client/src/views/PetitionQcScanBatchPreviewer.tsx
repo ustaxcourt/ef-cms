@@ -21,7 +21,7 @@ import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
 
 const props = cerebralProps as unknown as {
-  documentTabs: Record<string, unknown>[];
+  documentTabs: Record<string, any>[];
   documentType: string;
   title: string;
 };

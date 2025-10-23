@@ -13,7 +13,7 @@ const props = cerebralProps as unknown as {
 
 interface ComponentProps {
   onUpdate: (args: Record<string, string>) => void;
-  validateFormData: (args?: Record<string, unknown>) => void;
+  validateFormData: (args?: Record<string, any>) => void;
 }
 
 interface CerebralProps {

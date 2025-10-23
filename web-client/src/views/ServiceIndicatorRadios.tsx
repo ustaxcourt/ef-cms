@@ -34,13 +34,13 @@ export const ServiceIndicatorRadios = connect(
     validationErrors,
   }: {
     bindKey: string;
-    bindObject: Record<string, unknown>;
+    bindObject: Record<string, any>;
     cerebralBindSimpleSetStateSequence: Function | RunnableSequence;
     getValidationError: () => string;
     hideElectronic: boolean;
-    SERVICE_INDICATOR_TYPES: Record<string, unknown>;
+    SERVICE_INDICATOR_TYPES: Record<string, any>;
     validateSequence: Function | RunnableSequence;
-    validationErrors: Record<string, unknown>;
+    validationErrors: Record<string, any>;
   }) {
     const selectElectronic =
       bindObject.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;

@@ -5,7 +5,7 @@ export const aggregateStatisticsErrors = ({
   errors,
   get,
 }: {
-  errors: Record<string, unknown>;
+  errors: Record<string, any>;
   get: <T>(slice: T) => T;
 }) => {
   let newErrorStatistics;
@@ -54,7 +54,7 @@ export const aggregateStatisticsErrors = ({
 export const aggregatePetitionerErrors = ({
   errors,
 }: {
-  errors: Record<string, unknown>;
+  errors: Record<string, any>;
 }) => {
   if (errors?.petitioners) {
     (errors.petitioners as { index: number }[]).forEach(e => {

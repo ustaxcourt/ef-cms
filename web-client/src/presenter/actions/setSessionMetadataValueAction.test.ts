@@ -7,7 +7,7 @@ describe('setSessionMetadataValueAction', () => {
       props: { key: 'backpack', value: 'blue' },
     });
 
-    expect((state.sessionMetadata as Record<string, unknown>).backpack).toBe(
+    expect((state.sessionMetadata as Record<string, any>).backpack).toBe(
       'blue',
     );
   });

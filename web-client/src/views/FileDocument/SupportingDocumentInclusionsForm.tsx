@@ -41,7 +41,7 @@ export const SupportingDocumentInclusionsForm = connect(
     validateExternalDocumentInformationSequence,
     validationData,
   }: {
-    data: Record<string, unknown>;
+    data: Record<string, any>;
     DATE_FORMATS: { ISO: string };
     formatAndUpdateDateFromDatePickerSequence: Function | RunnableSequence;
     index: number;
@@ -49,7 +49,7 @@ export const SupportingDocumentInclusionsForm = connect(
     type: string;
     updateFileDocumentWizardFormValueSequence: Function | RunnableSequence;
     validateExternalDocumentInformationSequence: Function | RunnableSequence;
-    validationData: Record<string, unknown>;
+    validationData: Record<string, any>;
   }) {
     return (
       <>

@@ -17,7 +17,7 @@ export const Contacts = connect(
     wrapperClassName,
   }: {
     bind: string;
-    contactsHelper: Record<string, unknown>;
+    contactsHelper: Record<string, any>;
     onBlur: () => void;
     onChange: string;
     parentView: string;

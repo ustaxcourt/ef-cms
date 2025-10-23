@@ -9,8 +9,7 @@ export const clearConfirmationTextStatisticsAction = ({
   store,
 }: ActionProps) => {
   store.set(
-    (state.confirmationText as { statistics: Record<string, unknown> })
-      .statistics,
+    (state.confirmationText as { statistics: Record<string, any> }).statistics,
     {},
   );
 };

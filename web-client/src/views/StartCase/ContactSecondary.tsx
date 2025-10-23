@@ -50,9 +50,9 @@ export const ContactSecondary = connect(
     wrapperClassName,
   }: {
     bind: string;
-    constants: Record<string, unknown>;
-    contactsHelper: Record<string, unknown>;
-    data: Record<string, unknown>;
+    constants: Record<string, any>;
+    contactsHelper: Record<string, any>;
+    data: Record<string, any>;
     onBlur: () => void;
     onChange: string;
     onChangeSequence: Function | RunnableSequence;
@@ -60,7 +60,7 @@ export const ContactSecondary = connect(
     toggleUseContactPrimaryAddressSequence: Function | RunnableSequence;
     updateFormValueAndSecondaryContactInfoSequence: Function | RunnableSequence;
     useSameAsPrimary: boolean;
-    validationErrors: Record<string, unknown>;
+    validationErrors: Record<string, any>;
     wrapperClassName: string;
   }) {
     return (
@@ -76,7 +76,7 @@ export const ContactSecondary = connect(
           <FormGroup
             errorText={
               validationErrors.contactSecondary &&
-              (validationErrors.contactSecondary as Record<string, unknown>)
+              (validationErrors.contactSecondary as Record<string, any>)
                 .name
             }
           >
@@ -130,7 +130,7 @@ export const ContactSecondary = connect(
             <FormGroup
               errorText={
                 validationErrors.contactSecondary &&
-                (validationErrors.contactSecondary as Record<string, unknown>)
+                (validationErrors.contactSecondary as Record<string, any>)
                   .inCareOf
               }
             >
@@ -212,7 +212,7 @@ export const ContactSecondary = connect(
             <FormGroup
               errorText={
                 validationErrors.contactSecondary &&
-                (validationErrors.contactSecondary as Record<string, unknown>)
+                (validationErrors.contactSecondary as Record<string, any>)
                   .phone
               }
             >

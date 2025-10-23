@@ -32,13 +32,13 @@ export const ObjectionsForm = connect(
     validateExternalDocumentInformationSequence,
     validationData,
   }: {
-    data: Record<string, unknown>;
-    DOCUMENT_RELATIONSHIPS: Record<string, unknown>;
+    data: Record<string, any>;
+    DOCUMENT_RELATIONSHIPS: Record<string, any>;
     OBJECTIONS_OPTIONS: string[];
     type: string;
     updateFileDocumentWizardFormValueSequence: Function | RunnableSequence;
     validateExternalDocumentInformationSequence: Function | RunnableSequence;
-    validationData: Record<string, unknown>;
+    validationData: Record<string, any>;
   }) {
     return (
       <>
