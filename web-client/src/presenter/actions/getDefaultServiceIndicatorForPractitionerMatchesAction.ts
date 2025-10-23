@@ -18,16 +18,18 @@ export const getDefaultServiceIndicatorForPractitionerMatchesAction =
       const matches = get(state.modal[matchesKey]);
       const selectedPractitionerId = get(state.modal.user.userId);
 
-      let defaultStateForSelected = null;
+      let defaultStateForSelected: string | null = null;
 
       if (matches && selectedPractitionerId) {
         const selectedPractitioner = (
           matches as Array<{ userId: string; email?: string }>
         ).find(respondent => respondent.userId === selectedPractitionerId);
 
-        defaultStateForSelected = selectedPractitioner.email
-          ? SERVICE_INDICATOR_TYPES.SI_ELECTRONIC
-          : SERVICE_INDICATOR_TYPES.SI_PAPER;
+        if (selectedPractitioner) {
+          defaultStateForSelected = selectedPractitioner.email
+            ? SERVICE_INDICATOR_TYPES.SI_ELECTRONIC
+            : SERVICE_INDICATOR_TYPES.SI_PAPER;
+        }
       }
 
       return {

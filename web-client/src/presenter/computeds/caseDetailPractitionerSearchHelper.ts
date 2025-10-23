@@ -46,11 +46,11 @@ export const caseDetailPractitionerSearchHelper = (get: Get): any => {
     ? modalStateTyped.respondentMatches?.length
     : undefined;
 
-  const showOnePractitioner = practitionerSearchResultsCount === 1;
-  const showMultiplePractitioners = practitionerSearchResultsCount > 1;
+  const showOnePractitioner = (practitionerSearchResultsCount || 0) === 1;
+  const showMultiplePractitioners = (practitionerSearchResultsCount || 0) > 1;
 
-  const showOneRespondent = respondentSearchResultsCount === 1;
-  const showMultipleRespondents = respondentSearchResultsCount > 1;
+  const showOneRespondent = (respondentSearchResultsCount || 0) === 1;
+  const showMultipleRespondents = (respondentSearchResultsCount || 0) > 1;
 
   return {
     practitionerMatchesFormatted,

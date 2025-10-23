@@ -48,12 +48,8 @@ const computeds = {
     typeof publicTrialSessionsHelper
   >,
   templateHelper,
-  todaysOpinionsHelper: todaysOpinionsHelper as unknown as ReturnType<
-    typeof todaysOpinionsHelper
-  >,
-  todaysOrdersHelper: todaysOrdersHelper as unknown as ReturnType<
-    typeof todaysOrdersHelper
-  >,
+  todaysOpinionsHelper,
+  todaysOrdersHelper,
 };
 
 export const baseState = {

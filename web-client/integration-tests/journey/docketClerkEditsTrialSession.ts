@@ -11,7 +11,7 @@ export const docketClerkEditsTrialSession = (
   cerebralTest,
   overrides: {
     fieldToUpdate?: string;
-    valueToUpdate?: string;
+    valueToUpdate?: string | { name: string; userId: string };
   } = {},
 ) => {
   return it('Docket clerk edits trial session', async () => {
@@ -42,8 +42,9 @@ export const docketClerkEditsTrialSession = (
       state: cerebralTest.getState(),
     });
 
-    const receivedUpdatedValue =
-      formatted[overrides.fieldToUpdate] || formatted.notes;
+    const receivedUpdatedValue = overrides.fieldToUpdate
+      ? formatted[overrides.fieldToUpdate]
+      : formatted.notes;
     const expectedUpdatedValue = overrides.valueToUpdate || mockNote;
 
     expect(receivedUpdatedValue).toEqual(expectedUpdatedValue);
