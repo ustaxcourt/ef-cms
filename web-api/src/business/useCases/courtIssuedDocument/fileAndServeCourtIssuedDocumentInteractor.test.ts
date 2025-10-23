@@ -1,14 +1,13 @@
+/* eslint-disable max-lines */
 jest.mock(
   '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
 );
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
-);
-jest.mock(
-  '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus',
 );
 import {
   AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES,
@@ -30,6 +29,7 @@ import { updateDocketEntryPendingServiceStatus as updateDocketEntryPendingServic
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 import { CourtIssuedDocumentAnyType } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import { upsertDocketEntryRelatedEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntryRelatedEntries';
 
 const getUserById = jest.mocked(getUserByIdMock);
 
@@ -63,6 +63,14 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   const mockPdfUrl = 'www.example.com';
   const mockClientConnectionId = 'ABC123';
   const mockDocketEntryId = 'c54ba5a9-b37b-479d-9201-067ec6e335ba';
+
+  const defaultFormFields: CourtIssuedDocumentAnyType = {
+    docketEntryId: mockDocketEntryId,
+    attachments: false,
+    documentTitle: '',
+    documentType: '',
+    eventCode: '',
+  };
 
   beforeEach(() => {
     MOCK_DATE = '2022-12-06T22:54:06.000Z';
@@ -207,7 +215,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
           clientConnectionId: mockClientConnectionId,
           docketEntryId: docketEntry.docketEntryId,
           docketNumbers: [],
-          form: { ...docketEntry },
+          form: { ...defaultFormFields, ...docketEntry },
           subjectCaseDocketNumber: docketEntry.docketNumber,
         },
         mockDocketClerkUser,
@@ -349,7 +357,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
         clientConnectionId: mockClientConnectionId,
         docketEntryId: caseRecord.docketEntries[0].docketEntryId,
         docketNumbers: [],
-        form: caseRecord.docketEntries[0],
+        form: { ...defaultFormFields, ...caseRecord.docketEntries[0] },
         subjectCaseDocketNumber: caseRecord.docketNumber,
       },
       mockDocketClerkUser,
@@ -372,7 +380,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
         clientConnectionId: mockClientConnectionId,
         docketEntryId: caseRecord.docketEntries[0].docketEntryId,
         docketNumbers: [],
-        form: caseRecord.docketEntries[0],
+        form: { ...defaultFormFields, ...caseRecord.docketEntries[0] },
         subjectCaseDocketNumber: caseRecord.docketNumber,
       },
       mockDocketClerkUser,
@@ -437,6 +445,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       date: '2009-03-01T21:40:46.415Z',
       documentType: 'Order',
       eventCode: 'O',
+      //@ts-expect-error
       filedBy: mockFiledBy, // ?? filed by is not used
       freeText: 'Hurry! This is urgent',
       generatedDocumentTitle: 'Important Filing',
@@ -597,7 +606,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
         clientConnectionId: mockClientConnectionId,
         docketEntryId: caseRecord.docketEntries[0].docketEntryId,
         docketNumbers: [],
-        form: caseRecord.docketEntries[0],
+        form: { ...defaultFormFields, ...caseRecord.docketEntries[0] },
         subjectCaseDocketNumber: caseRecord.docketNumber,
       },
       mockDocketClerkUser,
@@ -630,7 +639,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
         clientConnectionId: mockClientConnectionId,
         docketEntryId: docketEntry.docketEntryId,
         docketNumbers: [],
-        form: docketEntry,
+        form: { ...defaultFormFields, ...docketEntry },
         subjectCaseDocketNumber: docketEntry.docketNumber,
       },
       mockDocketClerkUser,
@@ -773,5 +782,89 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       document: expect.anything(),
       key: mockDocketEntryId,
     });
+  });
+
+  it('should make call to upsert related docket entry records', async () => {
+    const mockOrderDocketEntry = {
+      ...mockDocketEntryWithWorkItem,
+      docketEntryId: 'ed68e80a-cab3-44b9-9280-03816bba8cba',
+      eventCode: 'O',
+    };
+
+    const mockOrderForm: CourtIssuedDocumentAnyType = {
+      date: '2030-01-20T00:00:00.000Z',
+      documentType: 'Order for Filing Fee',
+      docketEntryId: 'ed68e80a-cab3-44b9-9280-03816bba8cba',
+      eventCode: 'O',
+      attachments: false,
+      documentTitle: '',
+      affectedDocketEntries: [
+        {
+          disposition: 'GRANTED',
+          docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+        },
+      ],
+    };
+
+    caseRecord.docketEntries.push(mockOrderDocketEntry);
+
+    await fileAndServeCourtIssuedDocumentInteractor(
+      applicationContext,
+      {
+        clientConnectionId: mockClientConnectionId,
+        docketEntryId: mockOrderDocketEntry.docketEntryId,
+        docketNumbers: [],
+        form: mockOrderForm,
+        subjectCaseDocketNumber: caseRecord.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(upsertDocketEntryRelatedEntries).toHaveBeenCalledWith({
+      motionDocketEntries: [
+        {
+          disposition: 'GRANTED',
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
+          docketNumber: '101-18',
+        },
+      ],
+      orderDocketEntry: expect.objectContaining({
+        docketEntryId: 'ed68e80a-cab3-44b9-9280-03816bba8cba',
+      }),
+      served: true,
+    });
+  });
+
+  it('should not affect related docket entries if affectedDocketEntries is not present', async () => {
+    const mockOrderDocketEntry = {
+      ...mockDocketEntryWithWorkItem,
+      docketEntryId: 'ed68e80a-cab3-44b9-9280-03816bba8cba',
+      eventCode: 'O',
+    };
+
+    const mockOrderForm: CourtIssuedDocumentAnyType = {
+      date: '2030-01-20T00:00:00.000Z',
+      documentType: 'Order for Filing Fee',
+      docketEntryId: 'ed68e80a-cab3-44b9-9280-03816bba8cba',
+      eventCode: 'O',
+      attachments: false,
+      documentTitle: '',
+    };
+
+    caseRecord.docketEntries.push(mockOrderDocketEntry);
+
+    await fileAndServeCourtIssuedDocumentInteractor(
+      applicationContext,
+      {
+        clientConnectionId: mockClientConnectionId,
+        docketEntryId: mockOrderDocketEntry.docketEntryId,
+        docketNumbers: [],
+        form: mockOrderForm,
+        subjectCaseDocketNumber: caseRecord.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(upsertDocketEntryRelatedEntries).not.toHaveBeenCalled();
   });
 });

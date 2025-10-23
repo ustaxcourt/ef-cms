@@ -251,7 +251,6 @@ export const fileAndServeCourtIssuedDocument = async (
       }),
     );
 
-    // TODO (#8546): Update docket entries here
     if (form.affectedDocketEntries) {
       const docketEntryOrderMotions = casesToUpdate.flatMap(caseToUpdate => {
         return form
