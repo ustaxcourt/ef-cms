@@ -49,12 +49,10 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
     )
 
     const inputClass = classNames(
-
-
       // Base styles
       'tw:block tw:w-full tw:rounded-md tw:border-[1px] tw:border-grey-base tw:bg-white',
-      'tw:px-3 tw:h-8 tw:xs:h-9 tw:text-sm tw:outline-none tw:cursor-text',
-      'tw:w-[380px] max-xs:tw:w-[351px]',
+      'tw:px-3 tw:xs:h-[36px] tw:h-[32px] tw:text-sm tw:outline-none tw:cursor-text',
+      'tw:w-[380px] tw:ps-[10px] tw:xs:ps-[12px]',
       'tw:focus-visible:ring-4 tw:focus-visible:ring-offset-[4px] tw:focus-visible:ring-ring tw:focus-visible:outline-none',
       // States
       // 'tw:focus:border-blue-500 tw:focus:ring-2 tw:focus:ring-blue-500/20',
@@ -98,7 +96,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                 </span>
               </div>
               {helpText && (
-                <div className="tw:mt-1 tw:mb-[9px] tw:text-[14px] tw:xs:text-[16px] tw:text-grey-base">
+              <div className="tw:mt-[8px] tw:mb-[9px] tw:xs:mt-[10px] tw:xs:mb-[13px] tw:text-[14px] tw:xs:text-[16px] tw:text-grey-base">
                   {helpText}
                 </div>
               )}
@@ -111,7 +109,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
           ref={ref}
           type={type}
           aria-invalid={!!error}
-          className={inputClass}
+          className={inputClass }
           {...props}
         />
 
@@ -137,10 +135,10 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
 
       const textAreaClass = classNames(
         // Base styles
-        'tw:block tw:w-full tw:rounded-tl-md tw:rounded-tr-md tw:rounded-bl-md tw:border tw:border-gray-base tw:bg-white',
-        'tw:px-3 tw:py-2 tw:text-sm tw:outline-none tw:cursor-text',
+        'tw:block tw:w-full tw:rounded-tl-md tw:rounded-tr-md tw:rounded-bl-md tw:border tw:border-grey-base tw:bg-white',
+        'tw:p-[10px] tw:xs:p-[12px] tw:text-sm tw:outline-none tw:cursor-text',
         'tw:min-h-[100px] tw:resize-y',
-        'tw:w-[380px] max-xs:tw:w-[351px]',
+        'tw:w-[380px]',
         
         // Focus state
         'tw:focus-visible:ring-4 tw:focus-visible:ring-offset-[4px] tw:focus-visible:ring-ring tw:focus-visible:outline-none',   
@@ -150,7 +148,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
         'tw:disabled:cursor-not-allowed tw:disabled:bg-gray-50 tw:disabled:text-grey-base',
 
         // States
-        'tw:hover:tw:border-gray-300 tw:hover:shadow-none', //disable hover state
+        'tw:hover:border-grey-base tw:hover:shadow-none', //disable hover state
 
         className,
       )
@@ -189,7 +187,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
                 )}
               </div>
               {helpText && (
-                <div className="tw:mt-1 tw:mb-[9px] tw:text-[14px] tw:xs:text-[16px] tw:text-grey-base">
+                <div className="tw:my-[8px] tw:xs:mt-[10px] tw:xs:mb-[13px] tw:text-[14px] tw:xs:text-[16px] tw:text-grey-base">
                   {helpText}
                 </div>
               )}

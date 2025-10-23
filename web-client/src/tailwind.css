@@ -114,6 +114,6 @@
   --color-grey-base: var(--grey-base);
   --color-grey-light: var(--grey-light);
   --color-grey-lighter: var(--grey-lighter);
-  --color-grey-lightest: var(--grey-lightest)
+  --color-grey-lightest: var(--grey-lightest);
   --breakpoint-xs: 30rem;
 }
