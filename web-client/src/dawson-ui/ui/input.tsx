@@ -28,11 +28,11 @@ const styles = {
     'tw:block tw:w-full tw:rounded-md tw:border-[1px] tw:border-grey-base tw:bg-white',
   focus: 'tw:focus-visible:ring-4 tw:focus-visible:ring-offset-[4px] tw:focus-visible:ring-ring tw:focus-visible:outline-none',
   icon: 'tw:ml-1 tw:text-[16px] tw:xs:text-[18px] tw:text-primary',
-  label: 'tw:text-[16px] tw:xs:text-[18px] !tw:font-semibold !tw:text-gray-900',
-  optional: 'tw:text-grey-base tw:ml-1 tw:font-normal tw:text-[14px] tw:xs:text-[16px]',
+  label: 'tw:text-[16px] tw:xs:text-[18px] !tw:font-semibold !tw:text-grey-base',
+  optional: 'tw:text-grey-dark tw:ml-1 tw:font-normal tw:text-[14px] tw:xs:text-[16px]',
   text: {
-    base: 'tw:text-sm tw:outline-none tw:cursor-text',
-    help: 'tw:xs:mt-[10px] tw:xs:mb-[13px] tw:text-[14px] tw:xs:text-[16px] tw:text-grey-base'
+    base: 'tw:xs:text-[18px] tw:text-[16px] tw:outline-none tw:cursor-text',
+    help: 'tw:xs:mt-[10px] tw:xs:mb-[13px] tw:text-[14px] tw:xs:text-[16px] tw:text-grey-dark'
   },
   states: {
     disabled:'tw:disabled:cursor-not-allowed tw:disabled:bg-grey-light tw:disabled:text-grey-light',
@@ -40,6 +40,37 @@ const styles = {
     hover:'tw:hover:border-grey-base tw:hover:shadow-none'
   }
 };
+
+/**
+ * Used custom hook because browser focus-visible is triggered by both 
+ * keyboard and mouse for inputs/textboxes, 
+ * but we only want to apply focus styles on keyboard navigation
+ */ 
+const useKeyboardListenerHook = () => {
+  const [isTab, setIsTab] = React.useState(false);
+
+  React.useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Tab') {
+        setIsTab(true);
+      }
+    };  
+
+    const handleMouseDown = () => {
+      setIsTab(false);
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('mousedown', handleMouseDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('mousedown', handleMouseDown);
+    };
+  }, []);
+
+  return {isTab}
+}
 
 const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
   (
@@ -59,6 +90,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
     ref,
   ) => {
     const inputId = React.useId();
+    const { isTab } = useKeyboardListenerHook();
 
     const parentDiv = classNames(
       'tw:flex',
@@ -68,7 +100,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
     const inputClass = classNames(
       className,
       styles.border,
-      styles.focus,
+      isTab && styles.focus,
       styles.text.base,
       styles.states.disabled,
       styles.states.hover,
@@ -121,13 +153,13 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
           {...props}
         />
         {error && (
-          <div className="tw:mt-[6px] tw:xs:mt-[8px] tw:flex tw:items-center tw:gap-2 tw:text-destructive">
+          <div className="tw:mt-[6px] tw:xs:mt-[8px] tw:gap-2 tw:text-destructive">
             <FontAwesomeIcon
               icon={faExclamationCircle}
-              className="tw-text-[16px] tw:xs:text-[18px]"
+              className="tw-text-[16px] tw:xs:text-[18px] tw:mr-[4px]"
             />
             <span className="tw-text-[16px] tw:xs:text-[18px]">
-              Enter a valid answer
+              {error}
             </span>
           </div>
         )}
@@ -139,11 +171,12 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
   ({ className, error, label, helpText, ...props }, ref) => {
     const textareaId = React.useId();
+    const { isTab } = useKeyboardListenerHook();
 
     const textAreaClass = classNames(
       className,
       styles.border,
-      styles.focus,
+      isTab && styles.focus,
       styles.text.base,
       styles.states.disabled,
       styles.states.hover,
@@ -176,13 +209,13 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
                   />
                 )}
                 {!props.required && (
-                  <span className="tw:text-grey-base tw:ml-1 tw:font-normal tw:text-[14px] tw:xs:text-[16px]">
+                  <span className="tw:text-grey-dark tw:ml-1 tw:font-normal tw:text-[14px] tw:xs:text-[16px]">
                     (optional)
                   </span>
                 )}
               </div>
               {helpText && (
-                <div className={cn(styles.text.help, )}>
+                <div className={cn(styles.text.help, "tw:!my-[12px]")}>
                   {helpText}
                 </div>
               )}
@@ -197,13 +230,13 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
           {...props}
         />
         {error && (
-          <div className="tw:mt-1 tw:flex tw:items-center tw:gap-2 tw:text-destructive">
+          <div className="tw:mt-1 tw:gap-2 tw:text-destructive">
             <FontAwesomeIcon
               icon={faQuestionCircle}
-              className="tw-text-[16px] tw:xs:text-[18px]"
+              className="tw-text-[16px] tw:xs:text-[18px] tw:mr-[4px]"
             />
             <span className="tw-text-[16px] tw:xs:text-[18px]">
-              Enter a valid answer
+              {error}
             </span>
           </div>
         )}

@@ -37,7 +37,7 @@ export function Inputs() {
               label="Field Label"
               helpText="Help text"
               icon={true}
-              error="error"
+              error="Enter a valid answer"
             />
           </div>
         </div>
