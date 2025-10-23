@@ -88,9 +88,7 @@ export const trialLocationHelper = (
         caseItem[groupKeySymbol],
       );
     })
-    .sort(
-      compareTrialSessionEligibleCases(),
-    );
+    .sort(compareTrialSessionEligibleCases());
 
   const currentTab = get(state.trialLocationPage.currentTab);
 
@@ -99,9 +97,17 @@ export const trialLocationHelper = (
       formattedEligibleCasesWithoutMembers.length === 0) ||
     (currentTab === 'blockedCases' && formattedBlockedCases.length === 0);
 
+  const flattenedCases = sortedEligibleCases.reduce((acc, c) => {
+    acc.push(c);
+    if (c.memberCases) {
+      acc = acc.concat(c.memberCases);
+    }
+    return acc;
+  }, []);
+
   return {
     formattedBlockedCases,
-    formattedEligibleCases: sortedEligibleCases,
+    formattedEligibleCases: flattenedCases,
     location,
     isExportDisabled,
   };

@@ -285,23 +285,13 @@ describe('formattedEligibleCasesHelper', () => {
         },
       },
     });
-    expect(
-      result.reduce((acc, c) => {
-        acc.push(c.docketNumber);
-        if (c.memberCases) {
-          for (const memberCase of c.memberCases) {
-            acc.push(memberCase.docketNumber);
-          }
-        }
-        return acc;
-      }, []),
-    ).toEqual([
+    expect(result.map(c => c.docketNumber)).toEqual([
       '108-22',
       '103-22',
       '104-22',
       '106-22',
       '105-22',
-      '107-22'
+      '107-22',
     ]);
   });
 
@@ -347,23 +337,13 @@ describe('formattedEligibleCasesHelper', () => {
         },
       },
     });
-    expect(
-      result.reduce((acc, c) => {
-        acc.push(c.docketNumber);
-        if (c.memberCases) {
-          for (const memberCase of c.memberCases) {
-            acc.push(memberCase.docketNumber);
-          }
-        }
-        return acc;
-      }, []),
-    ).toEqual([
+    expect(result.map(c => c.docketNumber)).toEqual([
       '108-22',
       '107-22',
       '103-22',
       '104-22',
       '106-22',
-      '105-22'
+      '105-22',
     ]);
   });
 
@@ -412,17 +392,7 @@ describe('formattedEligibleCasesHelper', () => {
         },
       },
     });
-    expect(
-      result.reduce((acc, c) => {
-        acc.push(c.docketNumber);
-        if (c.memberCases) {
-          for (const memberCase of c.memberCases) {
-            acc.push(memberCase.docketNumber);
-          }
-        }
-        return acc;
-      }, []),
-    ).toEqual([
+    expect(result.map(c => c.docketNumber)).toEqual([
       '108-22',
       '103-21',
       '105-21',

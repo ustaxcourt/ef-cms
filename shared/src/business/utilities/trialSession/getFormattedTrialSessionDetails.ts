@@ -13,7 +13,6 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import {
-  EligibleCase,
   RawEligibleCase,
 } from '../../entities/cases/EligibleCase';
 import { RawIrsCalendarAdministratorInfo } from '@shared/business/entities/trialSessions/IrsCalendarAdministratorInfo';
@@ -71,7 +70,6 @@ export type FormattedTrialSessionCase = CalendaredCaseItemType & {
   removedFromTrialDateFormatted: string;
   filingPartiesCode: string;
   isDocketSuffixHighPriority: boolean;
-  memberCases?: (FormattedTrialSessionCase | EligibleCase)[];
 };
 
 export const formatCaseForTrialSession = ({

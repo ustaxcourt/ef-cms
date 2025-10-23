@@ -21,36 +21,6 @@ export const TrialLocationEligibleCasesTable = connect(
     const { activePage, pageRecords, setActivePage, totalPages } =
       useClientSidePaginator(trialLocationHelper.formattedEligibleCases, 100);
 
-    const createRow = (eligibleCase, key) => {
-      return (
-        <tr
-          className={classNames({
-            'aged-cases': eligibleCase.isAgedCase,
-          })}
-          key={key}
-        >
-          <td>
-            <CaseIcons formattedCase={eligibleCase} />
-          </td>
-          <td>
-            <CaseLink formattedCase={eligibleCase} target="_blank" />
-          </td>
-          <td>{eligibleCase.caseTitle}</td>
-          <td>
-            {eligibleCase.privatePractitioners?.map(practitioner => (
-              <div key={practitioner.userId}>{practitioner.name}</div>
-            ))}
-          </td>
-          <td>
-            {eligibleCase.irsPractitioners?.map(practitioner => (
-              <div key={practitioner.userId}>{practitioner.name}</div>
-            ))}
-          </td>
-          <td>{eligibleCase.caseType}</td>
-        </tr>
-      );
-    };
-
     return (
       <>
         {totalPages > 1 && (
@@ -96,20 +66,34 @@ export const TrialLocationEligibleCasesTable = connect(
                   <th className="width-card">Case Type</th>
                 </tr>
               </thead>
-              <tbody>
-                {pageRecords.map(eligibleCase => {
-                  // Initialize an array to hold the rows for lead and member cases
-                  const rows: React.ReactElement[] = [];
-                  rows.push(createRow(eligibleCase, eligibleCase.docketNumber));
-                  // If the case has member cases, push rows for each member case
-                  if (eligibleCase.memberCases) {
-                    eligibleCase.memberCases.forEach(memberCase => {
-                      rows.push(createRow(memberCase, memberCase.docketNumber));
-                    });
-                  }
-                  return rows;
-                })}
-              </tbody>
+              {pageRecords.map(eligibleCase => (
+                <tbody key={eligibleCase.docketNumber}>
+                  <tr
+                    className={classNames({
+                      'aged-cases': eligibleCase.isAgedCase,
+                    })}
+                  >
+                    <td>
+                      <CaseIcons formattedCase={eligibleCase} />
+                    </td>
+                    <td>
+                      <CaseLink formattedCase={eligibleCase} target="_blank" />
+                    </td>
+                    <td>{eligibleCase.caseTitle}</td>
+                    <td>
+                      {eligibleCase.privatePractitioners?.map(practitioner => (
+                        <div key={practitioner.userId}>{practitioner.name}</div>
+                      ))}
+                    </td>
+                    <td>
+                      {eligibleCase.irsPractitioners?.map(practitioner => (
+                        <div key={practitioner.userId}>{practitioner.name}</div>
+                      ))}
+                    </td>
+                    <td>{eligibleCase.caseType}</td>
+                  </tr>
+                </tbody>
+              ))}
             </table>
           </div>
         </div>

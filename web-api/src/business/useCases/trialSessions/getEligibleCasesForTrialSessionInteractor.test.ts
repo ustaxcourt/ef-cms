@@ -113,7 +113,6 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
       error = e;
     }
 
-    console.log(result)
     expect(error).toBeUndefined();
     expect(result).toMatchObject([
       mockEligibleCaseWithPractitioners,

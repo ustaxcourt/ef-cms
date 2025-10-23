@@ -19,9 +19,7 @@ import {
 export const setIsAgedCaseForEligibleCases = (
   eligibleCases: Omit<RawCase, 'consolidatedCases'>[],
 ): Omit<RawCase, 'consolidatedCases'>[] => {
-  console.log(eligibleCases)
   return eligibleCases.map(eligibleCase => {
-    console.log(eligibleCase.docketEntries)
     let isAgedCase: boolean;
     if (
       [

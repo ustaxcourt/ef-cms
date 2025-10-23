@@ -149,7 +149,6 @@ export const formattedEligibleCasesHelper = (
       );
     })
     .sort(compareTrialSessionEligibleCases())
-    // .sort((a, b) => b.isAgedCase - a.isAgedCase)
     .filter(eligibleCase => {
       if (filter === 'Small') {
         return (
@@ -170,5 +169,13 @@ export const formattedEligibleCasesHelper = (
     })
     .splice(0, caseLimit); //10493: consider removing limit entirely
 
-  return sortedCases;
+  const flattenedCases = sortedCases.reduce((acc, c) => {
+    acc.push(c);
+    if (c.memberCases) {
+      acc = acc.concat(c.memberCases);
+    }
+    return acc;
+  }, []);
+
+  return flattenedCases;
 };
