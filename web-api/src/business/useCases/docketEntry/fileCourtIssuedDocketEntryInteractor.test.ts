@@ -293,7 +293,8 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
         ],
         documentMeta: {
           docketEntryId: LEAD_CASE.docketEntries[0].docketEntryId,
-
+          attachments: false,
+          documentTitle: '',
           documentType: 'Trial Exhibits',
           eventCode: 'TE',
           freeText: 'free text testing',

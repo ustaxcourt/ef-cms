@@ -5,14 +5,14 @@ import {
   formatDateString,
 } from '../../utilities/DateHandler';
 import { JoiValidationEntity } from '../JoiValidationEntity';
-import { CourtIssuedDocumentTypeA } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentTypeA';
-import { CourtIssuedDocumentTypeB } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentTypeB';
-import { CourtIssuedDocumentTypeC } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentTypeC';
-import { CourtIssuedDocumentTypeD } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentTypeD';
-import { CourtIssuedDocumentTypeE } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentTypeE';
-import { CourtIssuedDocumentTypeF } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentTypeF';
-import { CourtIssuedDocumentTypeG } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentTypeG';
-import { CourtIssuedDocumentTypeH } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentTypeH';
+import { RawCourtIssuedDocumentTypeA } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentTypeA';
+import { RawCourtIssuedDocumentTypeB } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentTypeB';
+import { RawCourtIssuedDocumentTypeC } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentTypeC';
+import { RawCourtIssuedDocumentTypeD } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentTypeD';
+import { RawCourtIssuedDocumentTypeE } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentTypeE';
+import { RawCourtIssuedDocumentTypeF } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentTypeF';
+import { RawCourtIssuedDocumentTypeG } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentTypeG';
+import { RawCourtIssuedDocumentTypeH } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentTypeH';
 import {
   DocketEntryRelation,
   UNSERVABLE_EVENT_CODES,
@@ -81,12 +81,14 @@ export const yesterdayFormatted = formatDateString(
   FORMATS.MMDDYYYY,
 );
 
-export type CourtIssuedDocumentAnyType = CourtIssuedDocument &
-  Partial<CourtIssuedDocumentTypeA> &
-  Partial<CourtIssuedDocumentTypeB> &
-  Partial<CourtIssuedDocumentTypeC> &
-  Partial<CourtIssuedDocumentTypeD> &
-  Partial<CourtIssuedDocumentTypeE> &
-  Partial<CourtIssuedDocumentTypeF> &
-  Partial<CourtIssuedDocumentTypeG> &
-  Partial<CourtIssuedDocumentTypeH>;
+export type RawCourtIssuedDocument = ExcludeMethods<CourtIssuedDocument>;
+
+export type CourtIssuedDocumentAnyType = RawCourtIssuedDocument &
+  Partial<RawCourtIssuedDocumentTypeA> &
+  Partial<RawCourtIssuedDocumentTypeB> &
+  Partial<RawCourtIssuedDocumentTypeC> &
+  Partial<RawCourtIssuedDocumentTypeD> &
+  Partial<RawCourtIssuedDocumentTypeE> &
+  Partial<RawCourtIssuedDocumentTypeF> &
+  Partial<RawCourtIssuedDocumentTypeG> &
+  Partial<RawCourtIssuedDocumentTypeH>;

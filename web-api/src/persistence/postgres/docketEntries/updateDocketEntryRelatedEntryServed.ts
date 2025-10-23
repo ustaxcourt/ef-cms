@@ -1,6 +1,6 @@
 import { pgUpdateTable } from '@web-api/persistence/postgres/utils/operation/pgUpdateTable';
 
-export const updateDocketEntryOrderMotionServed = async ({
+export const updateDocketEntryRelatedEntryServed = async ({
   orderDocketEntry,
   served = true,
 }: {

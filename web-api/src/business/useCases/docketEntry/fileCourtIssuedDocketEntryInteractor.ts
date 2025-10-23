@@ -17,7 +17,7 @@ import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/get
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { upsertDocketEntryRelatedEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntryOrderMotion';
+import { upsertDocketEntryRelatedEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntryRelatedEntries';
 import { CourtIssuedDocumentAnyType } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 
 /**
@@ -35,7 +35,7 @@ export const fileCourtIssuedDocketEntry = async (
     subjectDocketNumber,
   }: {
     docketNumbers: string[];
-    documentMeta: CourtIssuedDocumentAnyType; // TODO: Add better typing to this function & proxy?
+    documentMeta: CourtIssuedDocumentAnyType;
     subjectDocketNumber: string;
   },
   authorizedUser: UnknownAuthUser,
