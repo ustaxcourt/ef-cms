@@ -49,15 +49,19 @@ const getFullSortString = (theCase, cases) => {
     return '';
   }
 
-  let priorityPrefix = 'D';
+  let priorityPrefix = '';
 
-  if (theCase.isManuallyAdded) {
-    priorityPrefix = 'B';
-  } else if (theCase.isDocketSuffixHighPriority) {
-    priorityPrefix = 'C';
-  } else if (theCase.isAgedCase) {
-    priorityPrefix = 'A';
+  if (theCase.isAgedCase) {
+    priorityPrefix += 'A';
   }
+  if (theCase.isManuallyAdded) {
+    priorityPrefix += 'B';
+  }
+  if (theCase.isDocketSuffixHighPriority) {
+    priorityPrefix += 'C';
+  }
+
+  priorityPrefix += 'D';
 
   return `${priorityPrefix}_${getSortableDocketNumber(theCase.docketNumber)}`;
 };
