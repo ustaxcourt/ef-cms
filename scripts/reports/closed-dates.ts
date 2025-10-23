@@ -1,6 +1,5 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
-import { DateTime } from 'luxon';
 import {
   type ScriptConfig,
   getJsTimeframeForYear,
@@ -9,7 +8,9 @@ import {
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { generateCsv } from '../helpers/generate-csv';
 import { getDbReader } from '@web-api/database';
+import { getNowObject } from '@shared/business/utilities/DateHandler';
 
+const thisYear = getNowObject().year;
 const scriptConfig: ScriptConfig = {
   description:
     'closed-dates - Generates a spreadsheet of the closed date of all cases opened in the given year.',
@@ -23,7 +24,7 @@ const scriptConfig: ScriptConfig = {
       type: 'boolean',
     },
     year: {
-      default: `${DateTime.now().toObject().year}`,
+      default: `${thisYear}`,
       position: 0,
       type: 'string',
     },
