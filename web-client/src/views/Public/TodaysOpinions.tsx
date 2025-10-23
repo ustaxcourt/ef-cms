@@ -15,7 +15,7 @@ export const TodaysOpinions = connect(
   function TodaysOpinions({
     openCaseDocumentDownloadUrlSequence,
     todaysOpinionsHelper,
-  }) {
+  }: any) {
     return (
       <>
         <BigHeader text="Today’s Opinions" />

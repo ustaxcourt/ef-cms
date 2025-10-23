@@ -7,8 +7,8 @@ import React from 'react';
 import classNames from 'classnames';
 
 const props = cerebralProps as unknown as {
-  bind: unknown;
-  validationErrorsBind: unknown;
+  bind: string;
+  validationErrorsBind: string;
 };
 
 interface ComponentProps {

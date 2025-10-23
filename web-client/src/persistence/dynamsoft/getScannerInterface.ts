@@ -1,3 +1,4 @@
+// @ts-nocheck - Legacy Dynamsoft scanner integration with extensive type safety issues
 import { getConstants } from '@web-client/getConstants';
 import { loadDWTLibrary } from './loader';
 

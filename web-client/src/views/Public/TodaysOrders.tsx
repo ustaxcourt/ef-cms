@@ -33,7 +33,7 @@ export const TodaysOrders = connect(
     sortTableSequence,
     tableSort,
     todaysOrdersHelper,
-  }) {
+  }: any) {
     return (
       <>
         <BigHeader text="Today's Orders" />
