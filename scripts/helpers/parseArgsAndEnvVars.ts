@@ -2,12 +2,12 @@ import {
   FORMATS,
   formatDateString,
   formatNow,
+  getJsDateFromIso,
   validateDateAndCreateISO,
 } from '@shared/business/utilities/DateHandler';
 import { type ParseArgsConfig, parseArgs } from 'node:util';
 import { missingEnvironmentVariables } from '../../shared/admin-tools/util';
 import path from 'node:path';
-import { DateTime } from 'luxon';
 
 export type ScriptConfig = {
   environment?: {
@@ -619,7 +619,7 @@ export const getJsTimeframeForYear = ({
 }): { begin: Date; end: Date } => {
   const { begin, end } = getTimeframeForYear({ fiscal, year });
   return {
-    begin: DateTime.fromISO(begin).toJSDate(),
-    end: DateTime.fromISO(end).toJSDate(),
+    begin: getJsDateFromIso(begin),
+    end: getJsDateFromIso(end),
   };
 };

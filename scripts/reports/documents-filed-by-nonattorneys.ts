@@ -10,8 +10,10 @@ import { fromKyselyDocketEntry } from '@web-api/persistence/postgres/docketEntri
 import { fromKyselyUser } from '@web-api/persistence/postgres/users/mapper';
 import { generateCsv } from '../helpers/generate-csv';
 import { getDbReader } from '@web-api/database';
+import { getNowObject } from '@shared/business/utilities/DateHandler';
 import { pick } from 'lodash';
 
+const thisYear = getNowObject().year;
 const scriptConfig: ScriptConfig = {
   description:
     'documents-filed-by-non-attorneys - Generates a CSV of documents filed by non-attorneys.',
@@ -32,7 +34,7 @@ const scriptConfig: ScriptConfig = {
       type: 'boolean',
     },
     year: {
-      default: '2024',
+      default: `${thisYear}`,
       required: false,
       short: 'y',
       type: 'string',

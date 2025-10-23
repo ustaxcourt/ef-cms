@@ -1,19 +1,24 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
-import { DateTime } from 'luxon';
 import {
   type ScriptConfig,
   getTimeframeForYear,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
-import { calculateDifferenceInDays } from '@shared/business/utilities/DateHandler';
+import {
+  calculateDifferenceInDays,
+  getIsoFromJsDate,
+  getJsDateFromIso,
+  getNowObject,
+} from '@shared/business/utilities/DateHandler';
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { generateCsv } from '../helpers/generate-csv';
 import { getDbReader } from '@web-api/database';
 import { pick } from 'lodash';
 import { sql } from 'kysely';
 
+const thisYear = getNowObject().year;
 const scriptConfig: ScriptConfig = {
   description:
     'cases-closed-in-year - Generates a spreadsheet of cases closed at any ' +
@@ -28,7 +33,7 @@ const scriptConfig: ScriptConfig = {
       type: 'boolean',
     },
     year: {
-      default: `${DateTime.now().toObject().year}`,
+      default: `${thisYear}`,
       position: 0,
       type: 'string',
     },
@@ -58,8 +63,8 @@ const getClosedDateFromCaseStatusHistory = async (): Promise<RawCase[]> => {
       .where(eb =>
         eb.or([
           eb.and([
-            eb('closedDate', '>=', DateTime.fromISO(begin).toJSDate()),
-            eb('closedDate', '<', DateTime.fromISO(end).toJSDate()),
+            eb('closedDate', '>=', getJsDateFromIso(begin)),
+            eb('closedDate', '<', getJsDateFromIso(end)),
           ]),
           eb.and([
             eb(sql`csh->>'updatedCaseStatus'`, 'in', CLOSED_STATUSES),
@@ -77,8 +82,8 @@ const getClosedDateFromCaseRecord = async (): Promise<RawCase[]> => {
     reader
       .selectFrom('dwCase as c')
       .selectAll('c')
-      .where('c.closedDate', '>=', DateTime.fromISO(begin).toJSDate())
-      .where('c.closedDate', '<', DateTime.fromISO(end).toJSDate())
+      .where('c.closedDate', '>=', getJsDateFromIso(begin))
+      .where('c.closedDate', '<', getJsDateFromIso(end))
       .execute(),
   )) as unknown as RawCase[];
 };
@@ -117,10 +122,12 @@ const getPetitionServiceDates = async ({
       .execute(),
   )) as { docketNumber: string; servedAt: Date | null }[];
   for (const r of results) {
-    if (Object.prototype.toString.call(r.servedAt) === '[object Date]') {
-      const petitionServiceDateISO =
-        DateTime.fromJSDate(r.servedAt!).toISO() || '';
-      if (petitionServiceDateISO.length > 0) {
+    if (
+      r.servedAt &&
+      Object.prototype.toString.call(r.servedAt) === '[object Date]'
+    ) {
+      const petitionServiceDateISO = getIsoFromJsDate(r.servedAt);
+      if (petitionServiceDateISO) {
         petitionServiceDates.set(r.docketNumber, petitionServiceDateISO);
       }
     }

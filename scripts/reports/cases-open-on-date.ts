@@ -1,6 +1,5 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
-import { DateTime } from 'luxon';
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
@@ -9,8 +8,13 @@ import { appendFileSync } from 'fs';
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { fromKyselyDocketEntry } from '@web-api/persistence/postgres/docketEntries/mapper';
 import { getDbReader } from '@web-api/database';
-import { validateDateAndCreateISO } from '@shared/business/utilities/DateHandler';
+import {
+  getJsDateFromIso,
+  getNowObject,
+  validateDateAndCreateISO,
+} from '@shared/business/utilities/DateHandler';
 
+const nowObject = getNowObject();
 const scriptConfig: ScriptConfig = {
   description:
     'cases-open-on-date - Generates spreadsheets containing a list of cases ' +
@@ -21,12 +25,12 @@ const scriptConfig: ScriptConfig = {
   },
   parameters: {
     day: {
-      default: `${DateTime.now().toObject().day}`,
+      default: `${nowObject.day}`,
       position: 1,
       type: 'string',
     },
     month: {
-      default: `${DateTime.now().toObject().month}`,
+      default: `${nowObject.month}`,
       position: 0,
       type: 'string',
     },
@@ -44,7 +48,7 @@ const getAllCasesOpenOnDate = async ({
 }: {
   targetDate: string;
 }): Promise<RawCase[]> => {
-  const targetJsDate = DateTime.fromISO(targetDate).toJSDate();
+  const targetJsDate = getJsDateFromIso(targetDate);
   return (
     await getDbReader(reader =>
       reader
@@ -97,7 +101,7 @@ const generateCsv = ({
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const thisYear = DateTime.now().toObject().year;
+  const thisYear = nowObject.year!;
   const totals: { [year: string]: number } = {};
   const filesGenerated: string[] = [];
 
