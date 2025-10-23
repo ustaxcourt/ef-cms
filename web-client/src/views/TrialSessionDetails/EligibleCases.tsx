@@ -22,88 +22,6 @@ export const EligibleCases = connect(
     trialSessionId,
     updateQcCompleteForTrialSequence,
   }) {
-    const createRow = (eligibleCase, key) => {
-      return (
-        <tr
-          className={classNames({
-            'aged-cases': eligibleCase.isAgedCase,
-          })}
-          key={key}
-        >
-          <td>
-            <CaseIcons formattedCase={eligibleCase} />
-          </td>
-          <td>
-            <span
-              className={classNames({
-                'margin-left-2': eligibleCase.shouldIndent,
-              })}
-            >
-              <CaseLink formattedCase={eligibleCase} />
-            </span>
-          </td>
-          <td>
-            {eligibleCase.isManuallyAdded && (
-              <span aria-label="Manually added indicator">
-                <FontAwesomeIcon
-                  className="mini-success"
-                  icon="calendar-plus"
-                  title="Manually added"
-                />
-              </span>
-            )}
-          </td>
-          <td>{eligibleCase.caseCaption}</td>
-          <td>
-            {eligibleCase.privatePractitioners.map(practitioner => (
-              <div key={practitioner.userId}>{practitioner.name}</div>
-            ))}
-          </td>
-          <td>
-            {eligibleCase.irsPractitioners.map(practitioner => (
-              <div key={practitioner.userId}>{practitioner.name}</div>
-            ))}
-          </td>
-          <td>{eligibleCase.caseType}</td>
-          <td>
-            <PreformattedText text={eligibleCase.calendarNotes} />
-          </td>
-          {trialSessionDetailsHelper.showQcComplete && (
-            <td>
-              <div className="text-center">
-                <input
-                  aria-label="qc complete"
-                  checked={
-                    trialSessionId
-                      ? eligibleCase.qcCompleteForTrial[trialSessionId] === true
-                      : false
-                  }
-                  className="usa-checkbox__input"
-                  data-testid={`qc-complete-${eligibleCase.docketNumber}`}
-                  id={`qc-complete-${eligibleCase.docketNumber}`}
-                  name={`${eligibleCase.docketNumber}Complete`}
-                  type="checkbox"
-                  onChange={() => {
-                    updateQcCompleteForTrialSequence({
-                      docketNumber: eligibleCase.docketNumber,
-                      qcCompleteForTrial: trialSessionId
-                        ? !eligibleCase.qcCompleteForTrial[trialSessionId]
-                        : false,
-                    });
-                  }}
-                />
-                <label
-                  className="usa-checkbox__label"
-                  htmlFor={`qc-complete-${eligibleCase.docketNumber}`}
-                >
-                  {''}
-                </label>
-              </div>
-            </td>
-          )}
-        </tr>
-      );
-    };
     return (
       <React.Fragment>
         <div className="grid-row float-right text-semibold margin-bottom-2">
@@ -156,25 +74,89 @@ export const EligibleCases = connect(
               )}
             </tr>
           </thead>
-          <tbody>
-            {formattedEligibleCases.map(eligibleCase => {
-              // Initialize an array to hold the rows for lead and member cases
-              const rows: React.ReactElement[] = [];
-
-              // Push parent case row
-              rows.push(createRow(eligibleCase, eligibleCase.docketNumber));
-              if (eligibleCase.memberCases) {
-                // check if there are member cases
-                // Push member case rows
-                eligibleCase.memberCases.forEach(memberCase =>
-                  rows.push(createRow(memberCase, memberCase.docketNumber)),
-                );
-              }
-
-              // Return all rows for lead and its members
-              return rows;
-            })}
-          </tbody>
+          {formattedEligibleCases.map(eligibleCase => (
+            <tbody key={eligibleCase.docketNumber}>
+              <tr
+                className={classNames({
+                  'aged-cases': eligibleCase.isAgedCase,
+                })}
+              >
+                <td>
+                  <CaseIcons formattedCase={eligibleCase} />
+                </td>
+                <td>
+                  <span
+                    className={classNames({
+                      'margin-left-2': eligibleCase.shouldIndent,
+                    })}
+                  >
+                    <CaseLink formattedCase={eligibleCase} />
+                  </span>
+                </td>
+                <td>
+                  {eligibleCase.isManuallyAdded && (
+                    <span aria-label="Manually added indicator">
+                      <FontAwesomeIcon
+                        className="mini-success"
+                        icon="calendar-plus"
+                        title="Manually added"
+                      />
+                    </span>
+                  )}
+                </td>
+                <td>{eligibleCase.caseCaption}</td>
+                <td>
+                  {eligibleCase.privatePractitioners.map(practitioner => (
+                    <div key={practitioner.userId}>{practitioner.name}</div>
+                  ))}
+                </td>
+                <td>
+                  {eligibleCase.irsPractitioners.map(practitioner => (
+                    <div key={practitioner.userId}>{practitioner.name}</div>
+                  ))}
+                </td>
+                <td>{eligibleCase.caseType}</td>
+                <td>
+                  <PreformattedText text={eligibleCase.calendarNotes} />
+                </td>
+                {trialSessionDetailsHelper.showQcComplete && (
+                  <td>
+                    <div className="text-center">
+                      <input
+                        aria-label="qc complete"
+                        checked={
+                          trialSessionId
+                            ? eligibleCase.qcCompleteForTrial[
+                                trialSessionId
+                              ] === true
+                            : false
+                        }
+                        className="usa-checkbox__input"
+                        data-testid={`qc-complete-${eligibleCase.docketNumber}`}
+                        id={`qc-complete-${eligibleCase.docketNumber}`}
+                        name={`${eligibleCase.docketNumber}Complete`}
+                        type="checkbox"
+                        onChange={() => {
+                          updateQcCompleteForTrialSequence({
+                            docketNumber: eligibleCase.docketNumber,
+                            qcCompleteForTrial: trialSessionId
+                              ? !eligibleCase.qcCompleteForTrial[trialSessionId]
+                              : false,
+                          });
+                        }}
+                      />
+                      <label
+                        className="usa-checkbox__label"
+                        htmlFor={`qc-complete-${eligibleCase.docketNumber}`}
+                      >
+                        {''}
+                      </label>
+                    </div>
+                  </td>
+                )}
+              </tr>
+            </tbody>
+          ))}
         </table>
         {formattedEligibleCases.length === 0 && (
           <p>There are no eligible cases.</p>
