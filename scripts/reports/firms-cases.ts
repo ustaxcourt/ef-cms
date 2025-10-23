@@ -8,7 +8,7 @@ import { getDbReader } from '@web-api/database';
 import { pick } from 'lodash';
 import { requireEnvVars } from '../../shared/admin-tools/util';
 
-requireEnvVars(['ELASTICSEARCH_ENDPOINT', 'ENV']);
+requireEnvVars(['ENV']);
 
 const OUTPUT_DIR = `${process.env.HOME}/Documents`;
 
