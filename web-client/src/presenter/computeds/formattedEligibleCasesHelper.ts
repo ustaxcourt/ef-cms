@@ -44,11 +44,7 @@ const getSortableDocketNumber = docketNumber => {
   return `${year}-${number.padStart(6, '0')}`;
 };
 
-const getFullSortString = (theCase, cases) => {
-  if (!Array.isArray(cases)) {
-    return '';
-  }
-
+const getFullSortString = theCase => {
   let priorityPrefix = '';
 
   if (theCase.isAgedCase) {
@@ -66,11 +62,10 @@ const getFullSortString = (theCase, cases) => {
   return `${priorityPrefix}_${getSortableDocketNumber(theCase.docketNumber)}`;
 };
 
-export const compareTrialSessionEligibleCases = eligibleCases => {
-  const groups = getPriorityGroups(eligibleCases);
+export const compareTrialSessionEligibleCases = () => {
   return (a, b) => {
-    const aSortString = getFullSortString(a, groups[a[groupKeySymbol]]);
-    const bSortString = getFullSortString(b, groups[b[groupKeySymbol]]);
+    const aSortString = getFullSortString(a);
+    const bSortString = getFullSortString(b);
     return aSortString.localeCompare(bSortString);
   };
 };
@@ -97,6 +92,11 @@ export const getFormattedEligibleCases = formattedCases => {
       memberCasesObj[caseItem.leadDocketNumber]
     ) {
       caseItem.memberCases = memberCasesObj[caseItem.leadDocketNumber];
+      caseItem.memberCases.sort((a, b) => {
+        const aSortString = getFullSortString(a);
+        const bSortString = getFullSortString(b);
+        return aSortString.localeCompare(bSortString);
+      });
     }
   });
 
@@ -148,7 +148,7 @@ export const formattedEligibleCasesHelper = (
         caseItem[groupKeySymbol],
       );
     })
-    .sort(compareTrialSessionEligibleCases(formattedCasesWithoutMembers))
+    .sort(compareTrialSessionEligibleCases())
     // .sort((a, b) => b.isAgedCase - a.isAgedCase)
     .filter(eligibleCase => {
       if (filter === 'Small') {
