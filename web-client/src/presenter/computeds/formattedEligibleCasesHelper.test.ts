@@ -405,6 +405,52 @@ describe('formattedEligibleCasesHelper', () => {
     ]);
   });
 
+  it('sorts aged cases correctly', () => {
+    const result = runCompute(formattedEligibleCasesHelper, {
+      state: {
+        trialSession: {
+          ...TRIAL_SESSION,
+          eligibleCases: [
+            {
+              docketNumber: '105-21',
+              leadDocketNumber: '103-21',
+              isAgedCase: true,
+            },
+            {
+              docketNumber: '103-21',
+              leadDocketNumber: '103-21',
+            },
+            {
+              docketNumber: '105-23',
+              isAgedCase: true,
+              docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY
+            },
+            {
+              docketNumber: '107-22',
+              isAgedCase: true,
+            },
+            {
+              docketNumber: '108-22',
+              isAgedCase: false,
+            },
+            {
+              docketNumber: '104-21',
+              leadDocketNumber: '103-21',
+            },
+          ],
+        },
+      },
+    });
+    expect(result.map(c => c.docketNumber)).toEqual([ //AD_23-000105, AD_22-000107
+      '105-23',
+      '107-22',
+      '103-21',
+      '105-21',
+      '104-21',
+      '108-22',
+    ]);
+  });
+
   it('should display all cases when filter is falsy', () => {
     const result = runCompute(formattedEligibleCasesHelper, {
       state: {
@@ -477,5 +523,18 @@ describe('formattedEligibleCasesHelper', () => {
         }),
       ]),
     );
+  });
+
+  it('should handle there being no eligible cases', () => {
+    const result = runCompute(formattedEligibleCasesHelper, {
+      state: {
+        trialSession: {
+          ...TRIAL_SESSION,
+          eligibleCases: undefined,
+        },
+      },
+    });
+
+    expect(result).toEqual([]);
   });
 });

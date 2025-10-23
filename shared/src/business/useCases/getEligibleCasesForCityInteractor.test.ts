@@ -6,6 +6,8 @@ import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
+import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
+import { MOCK_PETITION } from '@shared/test/mockDocketEntry';
 
 describe('getEligibleCasesForCityInteractor', () => {
   const getEligibleCasesForTrialCity = jest.mocked(
@@ -42,5 +44,29 @@ describe('getEligibleCasesForCityInteractor', () => {
     expect(getEligibleCasesForTrialCity.mock.calls[0][0]).toEqual(
       expect.objectContaining({ trialCity: mockTrialCity }),
     );
+  });
+
+  it('should set isAgedCase to false for closed cases', async () => {
+    getEligibleCasesForTrialCity.mockResolvedValueOnce([{...MOCK_CASE, status: CASE_STATUS_TYPES.closed}])
+    const result = await getEligibleCasesForCityInteractor(
+      {
+        trialCity: mockTrialCity,
+      },
+      mockPetitionsClerkUser,
+    );
+
+    expect(result![0].isAgedCase).toBe(false);
+  });
+
+  it('should handle docket entry filing date being empty', async () => {
+    getEligibleCasesForTrialCity.mockResolvedValueOnce([{...MOCK_CASE, docketEntries: [{...MOCK_PETITION, filingDate: ''}]}])
+    const result = await getEligibleCasesForCityInteractor(
+      {
+        trialCity: mockTrialCity,
+      },
+      mockPetitionsClerkUser,
+    );
+
+    expect(result![0].isAgedCase).toBe(false);
   });
 });
