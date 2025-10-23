@@ -3,11 +3,11 @@ import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../../shared/src/business/ent
 
 export const docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring = (
   cerebralTest,
-  overrides = {} as {
-    maxCases: number;
-    sessionType: string;
-    trialLocation: string;
-  },
+  overrides: {
+    maxCases?: number;
+    sessionType?: string;
+    trialLocation?: string;
+  } = {},
 ) => {
   return it('Docket clerk starts a trial session before calendaring', async () => {
     await cerebralTest.runSequence('gotoAddTrialSessionSequence');

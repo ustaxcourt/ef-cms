@@ -2,7 +2,7 @@ import { getFormattedDocketEntriesForTest } from '../helpers';
 
 export const docketClerkQCsDocketEntry = (
   cerebralTest,
-  data = {} as { index: number },
+  data: { index?: number } = {},
 ) => {
   return it('Docket Clerk QCs docket entry', async () => {
     let { formattedDocketEntriesOnDocketRecord } =

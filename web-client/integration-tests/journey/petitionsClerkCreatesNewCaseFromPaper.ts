@@ -11,16 +11,24 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
   cerebralTest,
   fakeFile,
   {
-    formOrdersAndNotices = {} as {
-      key: string;
-      value: boolean;
-    },
+    formOrdersAndNotices = {},
     paymentStatus = PAYMENT_STATUS.WAIVED,
     procedureType = 'Small',
     receivedAtDay = '01',
     receivedAtMonth = '01',
     receivedAtYear = '2001',
     trialLocation = 'Birmingham, Alabama',
+  }: {
+    formOrdersAndNotices?: {
+      key: string;
+      value: boolean;
+    };
+    paymentStatus?: string;
+    procedureType?: string;
+    receivedAtDay?: string;
+    receivedAtMonth?: string;
+    receivedAtYear?: string;
+    trialLocation?: string;
   } = {},
   formOverrides: {
     key: string;

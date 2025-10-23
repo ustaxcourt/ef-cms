@@ -8,12 +8,12 @@ import {
 
 export const docketClerkAddsDocketEntryWithoutFile = (
   cerebralTest,
-  overrides = {} as {
-    receivedAtMonth: number;
-    receivedAtDay: number;
-    receivedAtYear: number;
-    contactType: string;
-  },
+  overrides: {
+    receivedAtMonth?: number;
+    receivedAtDay?: number;
+    receivedAtYear?: number;
+    contactType?: string;
+  } = {},
 ) => {
   return it('Docketclerk adds docket entry data without a file', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {

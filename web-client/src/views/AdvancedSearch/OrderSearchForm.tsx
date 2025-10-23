@@ -21,7 +21,6 @@ export const OrderSearchForm = connect(
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
     setCurrentPaginationPageSequence:
       sequences.setCurrentPaginationPageSequence,
-    submitAdvancedSearchSequence: sequences.submitOrderAdvancedSearchSequence,
     updateAdvancedOrderSearchFormValueSequence:
       sequences.updateAdvancedOrderSearchFormValueSequence,
     validateOrderSearchSequence: sequences.validateOrderSearchSequence,
@@ -37,6 +36,16 @@ export const OrderSearchForm = connect(
     updateAdvancedOrderSearchFormValueSequence,
     validateOrderSearchSequence,
     validationErrors,
+  }: {
+    advancedDocumentSearchHelper: any;
+    advancedSearchForm: any;
+    advancedSearchTab: string;
+    clearAdvancedSearchFormSequence: Function;
+    setCurrentPaginationPageSequence: Function;
+    submitAdvancedSearchSequence: Function;
+    updateAdvancedOrderSearchFormValueSequence: Function;
+    validateOrderSearchSequence: Function;
+    validationErrors: any;
   }) {
     return (
       <>

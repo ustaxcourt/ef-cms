@@ -23,7 +23,6 @@ export const OpinionSearchForm = connect(
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
     setCurrentPaginationPageSequence:
       sequences.setCurrentPaginationPageSequence,
-    submitAdvancedSearchSequence: sequences.submitOpinionAdvancedSearchSequence,
     updateAdvancedOpinionSearchFormValueSequence:
       sequences.updateAdvancedOpinionSearchFormValueSequence,
     validateOpinionSearchSequence: sequences.validateOpinionSearchSequence,
@@ -40,6 +39,17 @@ export const OpinionSearchForm = connect(
     updateAdvancedOpinionSearchFormValueSequence,
     validateOpinionSearchSequence,
     validationErrors,
+  }: {
+    ADVANCED_SEARCH_OPINION_TYPES_LIST: any[];
+    advancedDocumentSearchHelper: any;
+    advancedSearchForm: any;
+    advancedSearchTab: string;
+    clearAdvancedSearchFormSequence: Function;
+    setCurrentPaginationPageSequence: Function;
+    submitAdvancedSearchSequence: Function;
+    updateAdvancedOpinionSearchFormValueSequence: Function;
+    validateOpinionSearchSequence: Function;
+    validationErrors: any;
   }) {
     return (
       <>

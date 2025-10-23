@@ -9,17 +9,21 @@ export const ArchiveDraftDocumentModal = connect(
     archiveDraftDocument: state.archiveDraftDocument,
     cancelSequence: sequences.dismissModalSequence,
     confirmSequence: sequences.archiveDraftDocumentSequence,
-    message: 'Once deleted, it can’t be restored.',
-    showDocumentTitle: true,
-    title: 'Are You Sure You Want to Delete This Document?',
   },
   function ArchiveDraftDocumentModal({
     archiveDraftDocument,
     cancelSequence,
     confirmSequence,
-    message,
-    showDocumentTitle,
-    title,
+    message = "Once deleted, it can't be restored.",
+    showDocumentTitle = true,
+    title = 'Are You Sure You Want to Delete This Document?',
+  }: {
+    archiveDraftDocument: { documentTitle: string | null };
+    cancelSequence: Function;
+    confirmSequence: Function;
+    message?: string;
+    showDocumentTitle?: boolean;
+    title?: string;
   }) {
     return (
       <ModalDialog

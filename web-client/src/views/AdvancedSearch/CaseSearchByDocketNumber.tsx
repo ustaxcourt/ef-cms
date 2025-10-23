@@ -9,8 +9,6 @@ export const CaseSearchByDocketNumber = connect(
   {
     advancedSearchForm: state.advancedSearchForm,
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
-    submitDocketNumberSearchSequence:
-      sequences.submitCaseDocketNumberSearchSequence,
     updateAdvancedSearchFormValueSequence:
       sequences.updateAdvancedSearchFormValueSequence,
     validateCaseDocketNumberSearchFormSequence:
@@ -24,6 +22,13 @@ export const CaseSearchByDocketNumber = connect(
     updateAdvancedSearchFormValueSequence,
     validateCaseDocketNumberSearchFormSequence,
     validationErrors,
+  }: {
+    advancedSearchForm: { caseSearchByDocketNumber: { docketNumber?: string } };
+    clearAdvancedSearchFormSequence: Function;
+    submitDocketNumberSearchSequence: Function;
+    updateAdvancedSearchFormValueSequence: Function;
+    validateCaseDocketNumberSearchFormSequence: Function;
+    validationErrors: { docketNumber?: string };
   }) {
     return (
       <>
