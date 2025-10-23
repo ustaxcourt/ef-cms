@@ -89,7 +89,7 @@ export const trialLocationHelper = (
       );
     })
     .sort(
-      compareTrialSessionEligibleCases(formattedEligibleCasesWithoutMembers),
+      compareTrialSessionEligibleCases(),
     );
 
   const currentTab = get(state.trialLocationPage.currentTab);
