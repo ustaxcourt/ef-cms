@@ -13,7 +13,7 @@ interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   optional?: boolean;
   required?: boolean;
-  flexDirection?: 'vertical' | 'horizontal'; 
+  flexDirection?: 'vertical' | 'horizontal';
 }
 
 interface TextAreaProps
@@ -22,6 +22,24 @@ interface TextAreaProps
   label?: string;
   helpText?: string;
 }
+
+const styles = {
+  border:
+    'tw:block tw:w-full tw:rounded-md tw:border-[1px] tw:border-grey-base tw:bg-white',
+  focus: 'tw:focus-visible:ring-4 tw:focus-visible:ring-offset-[4px] tw:focus-visible:ring-ring tw:focus-visible:outline-none',
+  icon: 'tw:ml-1 tw:text-[16px] tw:xs:text-[18px] tw:text-primary',
+  label: 'tw:text-[16px] tw:xs:text-[18px] !tw:font-semibold !tw:text-gray-900',
+  optional: 'tw:text-grey-base tw:ml-1 tw:font-normal tw:text-[14px] tw:xs:text-[16px]',
+  text: {
+    base: 'tw:text-sm tw:outline-none tw:cursor-text',
+    help: 'tw:xs:mt-[10px] tw:xs:mb-[13px] tw:text-[14px] tw:xs:text-[16px] tw:text-grey-base'
+  },
+  states: {
+    disabled:'tw:disabled:cursor-not-allowed tw:disabled:bg-grey-light tw:disabled:text-grey-light',
+    error: 'tw:border-red-primary tw:hover:border-red-primary tw:focus-visible:!ring-0',
+    hover:'tw:hover:border-grey-base tw:hover:shadow-none'
+  }
+};
 
 const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
   (
@@ -40,43 +58,35 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
     },
     ref,
   ) => {
-
     const inputId = React.useId();
 
     const parentDiv = classNames(
-      "tw:flex", 
-      flexDirection === "vertical" ? "tw:flex-col" : "tw:flex-row"
-    )
+      'tw:flex',
+      flexDirection === 'vertical' ? 'tw:flex-col' : 'tw:flex-row',
+    );
 
     const inputClass = classNames(
-      // Base styles
-      'tw:block tw:w-full tw:rounded-md tw:border-[1px] tw:border-grey-base tw:bg-white',
-      'tw:px-3 tw:xs:h-[36px] tw:h-[32px] tw:text-sm tw:outline-none tw:cursor-text',
-      'tw:w-[380px] tw:ps-[10px] tw:xs:ps-[12px]',
-      'tw:focus-visible:ring-4 tw:focus-visible:ring-offset-[4px] tw:focus-visible:ring-ring tw:focus-visible:outline-none',
-      // States
-      // 'tw:focus:border-blue-500 tw:focus:ring-2 tw:focus:ring-blue-500/20',
-      'tw:hover:border-grey-base tw:hover:shadow-none', //disable hover state
-      // Disabled state
-      'tw:disabled:cursor-not-allowed tw:disabled:bg-grey-light tw:disabled:text-grey-light',
       className,
-      // Error state
-      error && 'tw:border-red-primary tw:hover:border-red-primary tw:focus-visible:!ring-0',
-    )
+      styles.border,
+      styles.focus,
+      styles.text.base,
+      styles.states.disabled,
+      styles.states.hover,
+      error && styles.states.error,
+      'tw:px-3 tw:xs:h-[36px] tw:h-[32px]',
+      'tw:w-[380px] tw:ps-[10px] tw:xs:ps-[12px]'
+    );
 
     return (
       <div className={parentDiv}>
         {label && (
-          <div className={`${flexDirection === "horizontal" ? "tw:mr-[16px]" : ""} tw:shrink-0`}>
+          <div
+            className={`${flexDirection === 'horizontal' ? 'tw:xs:mr-[16px] tw:mr-[12px]' : ''} tw:shrink-0`}
+          >
             <div className="tw:flex tw:flex-col">
               <div className="tw:flex tw:items-center">
                 <span
-                  className={cn(
-                    'tw:text-[16px]',
-                    'tw:xs:text-[18px]',
-                    '!tw:font-semibold',
-                    '!tw:text-gray-900',
-                  )}
+                  className={cn(styles.label)}
                   style={{ fontWeight: '600' }}
                 >
                   {label}
@@ -84,35 +94,32 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                 {icon && (
                   <FontAwesomeIcon
                     icon={faQuestionCircle}
-                    className="tw:ml-1 tw:text-[16px] tw:xs:text-[18px] tw:text-primary"
+                    className={cn(styles.icon)}
                     title={helpText}
                     role="img"
                     aria-label={helpText}
                   />
                 )}
-
-                <span className="tw:text-grey-base tw:ml-1 tw:font-normal tw:text-[14px] tw:xs:text-[16px]">
+                <span className={cn(styles.optional)}>
                   {!required ? '(optional)' : '(required)'}
                 </span>
               </div>
               {helpText && (
-              <div className="tw:mt-[8px] tw:mb-[9px] tw:xs:mt-[10px] tw:xs:mb-[13px] tw:text-[14px] tw:xs:text-[16px] tw:text-grey-base">
+                <div className={cn(styles.text.help, "tw:mt-[8px] tw:mb-[9px]", flexDirection === 'horizontal' && 'tw:mt-[0px]')}>
                   {helpText}
                 </div>
               )}
             </div>
           </div>
         )}
-
         <input
           id={inputId}
           ref={ref}
           type={type}
           aria-invalid={!!error}
-          className={inputClass }
+          className={inputClass}
           {...props}
         />
-
         {error && (
           <div className="tw:mt-[6px] tw:xs:mt-[8px] tw:flex tw:items-center tw:gap-2 tw:text-destructive">
             <FontAwesomeIcon
@@ -131,28 +138,21 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 
 const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
   ({ className, error, label, helpText, ...props }, ref) => {
-      const textareaId = React.useId();
+    const textareaId = React.useId();
 
-      const textAreaClass = classNames(
-        // Base styles
-        'tw:block tw:w-full tw:rounded-tl-md tw:rounded-tr-md tw:rounded-bl-md tw:border tw:border-grey-base tw:bg-white',
-        'tw:p-[10px] tw:xs:p-[12px] tw:text-sm tw:outline-none tw:cursor-text',
-        'tw:min-h-[100px] tw:resize-y',
-        'tw:w-[380px]',
-        
-        // Focus state
-        'tw:focus-visible:ring-4 tw:focus-visible:ring-offset-[4px] tw:focus-visible:ring-ring tw:focus-visible:outline-none',   
-
-        // Error state     
-        error && 'tw:border-destructive tw:ring-1 tw:ring-destructive',
-        'tw:disabled:cursor-not-allowed tw:disabled:bg-gray-50 tw:disabled:text-grey-base',
-
-        // States
-        'tw:hover:border-grey-base tw:hover:shadow-none', //disable hover state
-
-        className,
-      )
-
+    const textAreaClass = classNames(
+      className,
+      styles.border,
+      styles.focus,
+      styles.text.base,
+      styles.states.disabled,
+      styles.states.hover,
+      'tw:rounded-tl-md tw:rounded-tr-md tw:rounded-bl-md',
+      'tw:p-[10px] tw:xs:p-[12px]',
+      'tw:min-h-[100px] tw:resize-y',
+      'tw:w-[380px]',
+      error && 'tw:border-destructive tw:ring-1 tw:ring-destructive',
+    );
 
     return (
       <div className="tw:flex tw:flex-col">
@@ -161,12 +161,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
             <div className="tw:flex tw:flex-col">
               <div className="tw:flex tw:items-center">
                 <span
-                  className={cn(
-                    'tw:text-[16px]',
-                    'tw:xs:text-[18px]',
-                    '!tw:font-semibold',
-                    '!tw:text-gray-900',
-                  )}
+                  className={cn(styles.label)}
                   style={{ fontWeight: '600' }}
                 >
                   {label}
@@ -174,7 +169,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
                 {helpText && (
                   <FontAwesomeIcon
                     icon={faQuestionCircle}
-                    className="tw:ml-1 tw:text-[16px] tw:xs:text-[18px] tw:text-primary"
+                    className={cn(styles.icon)}
                     title={helpText}
                     role="img"
                     aria-label={helpText}
@@ -187,14 +182,13 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
                 )}
               </div>
               {helpText && (
-                <div className="tw:my-[8px] tw:xs:mt-[10px] tw:xs:mb-[13px] tw:text-[14px] tw:xs:text-[16px] tw:text-grey-base">
+                <div className={cn(styles.text.help, )}>
                   {helpText}
                 </div>
               )}
             </div>
           </div>
         )}
-
         <textarea
           id={textareaId}
           ref={ref}
@@ -202,7 +196,6 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
           className={textAreaClass}
           {...props}
         />
-
         {error && (
           <div className="tw:mt-1 tw:flex tw:items-center tw:gap-2 tw:text-destructive">
             <FontAwesomeIcon
