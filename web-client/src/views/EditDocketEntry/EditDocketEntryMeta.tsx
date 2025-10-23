@@ -11,7 +11,6 @@ import { FormCancelModalDialog } from '@web-client/views/FormCancelModalDialog';
 import { Tab, Tabs } from '@web-client/ustc-ui/Tabs/Tabs';
 import { InfoNotificationComponent } from '@web-client/views/InfoNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { isLeadCase, isMemberCase } from '@shared/business/entities/cases/Case';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -26,9 +25,7 @@ export const EditDocketEntryMeta = connect(
     showModal: state.modal.showModal,
     submitEditDocketEntryMetaSequence:
       sequences.submitEditDocketEntryMetaSequence,
-    caseDetail: state.caseDetail,
     form: state.form,
-    isFiledAcrossAllCases: state.isFiledAcrossAllCases,
   },
   function EditDocketEntryMeta({
     closeModalAndReturnToCaseDetailSequence,
@@ -37,12 +34,8 @@ export const EditDocketEntryMeta = connect(
     formCancelToggleCancelSequence,
     showModal,
     submitEditDocketEntryMetaSequence,
-    caseDetail,
     form,
-    isFiledAcrossAllCases,
   }) {
-    const isDisabled =
-      caseDetail && isMemberCase(caseDetail) && isFiledAcrossAllCases;
     return (
       <>
         <CaseDetailHeader />
@@ -63,42 +56,39 @@ export const EditDocketEntryMeta = connect(
           </div>
           <div className="grid-row grid-gap">
             <div className="grid-col-5 DocumentDetail">
-              {caseDetail &&
-                isLeadCase(caseDetail) &&
-                isFiledAcrossAllCases && (
-                  <InfoNotificationComponent
-                    alertInfo={{
-                      message: (
-                        <div className="margin-top-2 margin-bottom-2">
-                          <b>Edits to Document Info will also be edited for:</b>
-                          <ul className="usa-list padding-top-0 padding-bottom-0 margin-top-1 margin-bottom-1">
-                            {editDocketEntryMetaHelper.consolidatedCasesToDisplay.map(
-                              c => (
-                                <li
-                                  key={c.docketNumber}
-                                  className="margin-bottom-0"
-                                >
-                                  {c.docketNumber}{' '}
-                                  {c.caseTitle ||
-                                    c.caseCaption ||
-                                    form?.documentTitle ||
-                                    form?.eventCode}
-                                </li>
-                              ),
-                            )}
-                          </ul>
-                          <p className="margin-bottom-0 margin-top-0">
-                            Service and Action edits will only apply to this
-                            case.
-                          </p>
-                        </div>
-                      ),
-                    }}
-                    dismissible={false}
-                    scrollToTop={false}
-                  />
-                )}
-              {isDisabled && (
+              {editDocketEntryMetaHelper.showEditHelpText && (
+                <InfoNotificationComponent
+                  alertInfo={{
+                    message: (
+                      <div className="margin-top-2 margin-bottom-2">
+                        <b>Edits to Document Info will also be edited for:</b>
+                        <ul className="usa-list padding-top-0 padding-bottom-0 margin-top-1 margin-bottom-1">
+                          {editDocketEntryMetaHelper.consolidatedCasesToDisplay.map(
+                            c => (
+                              <li
+                                key={c.docketNumber}
+                                className="margin-bottom-0"
+                              >
+                                {c.docketNumber}{' '}
+                                {c.caseTitle ||
+                                  c.caseCaption ||
+                                  form?.documentTitle ||
+                                  form?.eventCode}
+                              </li>
+                            ),
+                          )}
+                        </ul>
+                        <p className="margin-bottom-0 margin-top-0">
+                          Service and Action edits will only apply to this case.
+                        </p>
+                      </div>
+                    ),
+                  }}
+                  dismissible={false}
+                  scrollToTop={false}
+                />
+              )}
+              {editDocketEntryMetaHelper.isEditDisabled && (
                 <InfoNotificationComponent
                   alertInfo={{
                     message: (

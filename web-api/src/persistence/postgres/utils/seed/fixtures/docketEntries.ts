@@ -22,6 +22,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '103-22',
     addToCoversheet: false,
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -62,6 +63,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     signedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     docketNumber: '103-22',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -88,6 +90,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '103-22',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -114,6 +117,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '103-22',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Virginia Vincent' }],
@@ -153,6 +157,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     signedByUserId: '2805d1ab-18d0-43ec-bafb-654e83405416',
     docketNumber: '101-11',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'IRS', role: 'irsSuperuser' }],
@@ -183,6 +188,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-10-29T13:41:09.325Z',
     docketNumber: '101-11',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'IRS', role: 'irsSuperuser' }],
@@ -213,6 +219,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-10-29T13:41:09.327Z',
     docketNumber: '101-11',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'IRS', role: 'irsSuperuser' }],
@@ -243,6 +250,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-10-29T13:41:09.316Z',
     docketNumber: '101-11',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'IRS', role: 'irsSuperuser' }],
@@ -273,6 +281,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-10-29T13:06:24.912Z',
     docketNumber: '101-16',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Gwendolyn Cross' }],
@@ -314,6 +323,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     signedByUserId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     docketNumber: '101-16',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'IRS', role: 'irsSuperuser' }],
@@ -344,6 +354,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-10-29T13:06:24.921Z',
     docketNumber: '101-16',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'IRS', role: 'irsSuperuser' }],
@@ -374,6 +385,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-10-29T13:06:24.924Z',
     docketNumber: '101-16',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -400,6 +412,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -434,6 +447,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     signedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -462,6 +476,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-09-25T19:27:17.083Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -485,6 +500,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     documentTitle: 'Statement of Taxpayer Identification',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -508,6 +524,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '101-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -532,6 +549,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     documentTitle: 'Petition',
     docketNumber: '101-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Bill Burr', email: 'petitioner@example.com' }],
@@ -560,14 +578,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-09-25T19:27:16.495Z',
     docketNumber: '101-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -601,14 +617,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:27:35.917Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -642,14 +656,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:28:42.213Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -683,14 +695,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:28:32.038Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -724,14 +734,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:30:45.447Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -765,14 +773,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:28:26.905Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -806,14 +812,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:28:44.749Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     isPaper: true,
     isStricken: false,
@@ -846,14 +850,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:27:03.544Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -887,14 +889,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:29:15.534Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -928,14 +928,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:31:25.768Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -969,14 +967,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:27:50.122Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -1010,6 +1006,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:27:54.301Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -1035,14 +1032,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '101-21',
     addToCoversheet: false,
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -1076,14 +1071,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:28:57.654Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -1117,14 +1110,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:30:06.374Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -1158,14 +1149,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:31:16.689Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -1199,14 +1188,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:29:07.825Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -1240,14 +1227,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:27:25.692Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -1281,14 +1266,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:27:19.585Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -1322,14 +1305,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:28:01.589Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -1363,6 +1344,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:28:34.583Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -1386,14 +1368,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '101-21',
     addToCoversheet: false,
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -1427,14 +1407,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:28:37.251Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -1468,14 +1446,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:30:42.822Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -1509,14 +1485,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:28:24.438Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -1550,6 +1524,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:28:14.281Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -1575,14 +1550,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '101-21',
     addToCoversheet: false,
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -1616,14 +1589,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:31:00.341Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -1657,14 +1628,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:29:25.475Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -1698,14 +1667,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:29:17.931Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     isPaper: true,
     isStricken: false,
@@ -1738,14 +1705,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:27:08.589Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -1779,14 +1744,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:27:37.952Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -1820,14 +1783,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:27:21.673Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -1861,14 +1822,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:30:14.363Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -1902,14 +1861,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:30:27.151Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -1943,14 +1900,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:29:56.048Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -1984,14 +1939,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:29:33.052Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -2025,14 +1978,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:30:09.176Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -2066,14 +2017,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:30:57.123Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -2107,14 +2056,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:29:00.247Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -2148,6 +2095,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:28:22.026Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Mona Schultz', email: 'petitioner@example.com' }],
@@ -2183,14 +2131,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:26:56.921Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -2224,14 +2170,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:30:51.008Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -2265,14 +2209,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:30:37.777Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -2306,14 +2248,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:28:19.407Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -2347,14 +2287,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:29:50.956Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -2388,14 +2326,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:28:09.260Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -2429,6 +2365,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:29:40.763Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isPaper: true,
@@ -2458,14 +2395,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
       '{"lodged":false,"filersMap":{"7805d1ab-18d0-43ec-bafb-654e83405416":true},"filers":["7805d1ab-18d0-43ec-bafb-654e83405416"],"practitioner":[],"dateReceivedMonth":1,"dateReceivedDay":1,"dateReceivedYear":2018,"primaryDocumentFileSize":100,"eventCode":"A","category":"Answer (filed by respondent only)","documentType":"Answer","documentTitle":"Answer","scenario":"Standard","pending":true,"certificateOfServiceDate":null,"dateReceived":"2018-01-01T05:00:00.000Z","createdAt":"2018-01-01T05:00:00.000Z","docketNumber":"101-21","isFileAttached":false,"isPaper":true,"receivedAt":"2018-01-01T05:00:00.000Z"}',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -2499,14 +2434,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:30:03.886Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -2540,14 +2473,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:29:22.842Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -2581,14 +2512,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:29:38.243Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -2622,14 +2551,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:27:48.142Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -2663,14 +2590,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:27:31.901Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -2704,14 +2629,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:30:40.284Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -2745,14 +2668,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:29:35.654Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -2786,14 +2707,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:30:29.748Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -2827,14 +2746,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:29:20.465Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -2868,14 +2785,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:29:28.034Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -2909,14 +2824,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:27:46.078Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -2950,14 +2863,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:27:33.852Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -2991,14 +2902,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:29:12.811Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -3032,14 +2941,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:27:15.775Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -3073,14 +2980,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:30:11.787Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -3114,14 +3019,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:30:01.131Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -3155,14 +3058,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:31:22.730Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -3196,14 +3097,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:29:10.314Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -3237,14 +3136,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:27:59.071Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -3278,14 +3175,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:28:11.784Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -3319,14 +3214,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:27:52.245Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -3360,14 +3253,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:28:52.268Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -3401,14 +3292,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:27:44.042Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -3442,14 +3331,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:31:10.246Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -3483,14 +3370,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:27:29.785Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -3524,14 +3409,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:30:19.559Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -3565,14 +3448,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:28:16.874Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -3606,14 +3487,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:31:03.905Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -3647,14 +3526,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:29:45.844Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -3688,14 +3565,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:28:49.778Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -3729,14 +3604,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:28:04.224Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -3770,14 +3643,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:29:48.374Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -3811,14 +3682,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:30:48.050Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -3852,14 +3721,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:29:02.708Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -3893,14 +3760,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:31:19.741Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -3934,14 +3799,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:27:56.370Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -3975,14 +3838,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:29:58.603Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -4016,14 +3877,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:30:16.921Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -4057,14 +3916,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:30:35.133Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -4098,14 +3955,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:27:39.972Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -4139,14 +3994,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:28:39.799Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -4180,14 +4033,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:29:43.306Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -4221,14 +4072,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:27:23.738Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -4262,14 +4111,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:30:22.031Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -4303,14 +4150,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:31:07.067Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -4344,14 +4189,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:28:54.852Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -4385,14 +4228,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:30:53.892Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -4426,14 +4267,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:28:47.278Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -4467,14 +4306,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:27:27.715Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -4508,14 +4345,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:27:41.991Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -4549,14 +4384,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:30:24.563Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -4590,14 +4423,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:30:32.533Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -4631,14 +4462,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:28:29.484Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -4672,14 +4501,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:29:53.431Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -4713,14 +4540,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:29:05.233Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -4754,14 +4579,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:28:06.665Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -4795,14 +4618,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:27:17.629Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -4836,14 +4657,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:31:13.622Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -4877,6 +4696,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-03-01T16:29:30.604Z',
     docketNumber: '101-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -4917,6 +4737,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     signedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     docketNumber: '101-22',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -4940,6 +4761,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '101-22',
     addToCoversheet: false,
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -4966,6 +4788,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '101-22',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -4992,6 +4815,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '101-22',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -5015,6 +4839,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     documentTitle: 'Request for Place of Trial at Birmingham, Alabama',
     docketNumber: '101-23',
     addToCoversheet: false,
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -5041,6 +4866,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     processingStatus: 'complete',
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '101-23',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -5067,6 +4893,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     processingStatus: 'complete',
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '101-23',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -5098,6 +4925,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'B',
     servedAt: '2024-06-04T22:37:28.345Z',
     docketNumber: '101-24',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -5128,6 +4956,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'R',
     servedAt: '2024-06-04T22:35:01.144Z',
     docketNumber: '101-24',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -5158,6 +4987,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'R',
     servedAt: '2024-06-04T22:35:01.148Z',
     docketNumber: '101-24',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -5188,6 +5018,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'R',
     servedAt: '2024-06-04T22:35:01.148Z',
     docketNumber: '101-24',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -5219,6 +5050,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'B',
     servedAt: '2024-06-04T22:35:52.935Z',
     docketNumber: '101-24',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -5248,6 +5080,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     documentTitle: 'Order',
     docketNumber: '101-24',
     addToCoversheet: false,
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -5275,6 +5108,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'P',
     servedAt: '2024-06-04T22:35:04.672Z',
     docketNumber: '101-24',
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -5299,6 +5133,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     documentTitle: 'Petition',
     docketNumber: '102-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
@@ -5343,6 +5178,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-09-25T19:27:17.127Z',
     docketNumber: '102-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -5366,6 +5202,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     documentTitle: 'Statement of Taxpayer Identification',
     docketNumber: '102-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
@@ -5373,10 +5210,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner1@example.com',
       },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     isStricken: false,
     documentType: 'Request for Place of Trial',
@@ -5403,6 +5237,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-09-25T19:27:17.056Z',
     docketNumber: '102-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -5427,6 +5262,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '102-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
@@ -5434,10 +5270,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner1@example.com',
       },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     isSealed: true,
     isStricken: false,
@@ -5468,6 +5301,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-09-25T19:27:17.056Z',
     docketNumber: '102-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -5492,6 +5326,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     documentTitle: 'Petition',
     docketNumber: '102-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -5515,6 +5350,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     documentTitle: 'Request for Place of Trial at Birmingham, Alabama',
     docketNumber: '102-22',
     addToCoversheet: false,
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -5541,6 +5377,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     processingStatus: 'complete',
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '102-22',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -5567,6 +5404,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     processingStatus: 'complete',
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '102-22',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -5607,6 +5445,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'B',
     servedAt: '2023-08-08T17:32:21.434Z',
     docketNumber: '102-67',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -5637,6 +5476,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'R',
     servedAt: '2023-04-03T15:52:59.426Z',
     docketNumber: '102-67',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -5645,10 +5485,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner@example.com',
       },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -5681,6 +5518,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'B',
     servedAt: '2024-06-28T19:55:09.127Z',
     docketNumber: '102-67',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -5711,6 +5549,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'R',
     servedAt: '2023-04-03T15:52:59.423Z',
     docketNumber: '102-67',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -5719,10 +5558,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner@example.com',
       },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     isStricken: false,
     isPendingService: false,
@@ -5754,6 +5590,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
       '{"freeText":"test","date":null,"documentType":"Standing Pretrial Order","documentTitle":"Standing Pretrial Order","generatedDocumentTitle":"Standing Pretrial Order","eventCode":"SPTO","scenario":"Type B","docketEntryId":"c7ea55fe-1716-47bb-b2c5-8112fea11d14","docketNumber":"102-67"}',
     servedAt: '2023-08-15T16:48:20.679Z',
     docketNumber: '102-67',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -5781,6 +5618,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'P',
     servedAt: '2023-04-03T15:53:02.251Z',
     docketNumber: '102-67',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -5804,14 +5642,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     documentTitle: 'Filing Fee Paid',
     docketNumber: '102-67',
     addToCoversheet: false,
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Samson Workman', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     isStricken: false,
     documentType: 'Request for Place of Trial',
@@ -5838,6 +5674,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-09-25T19:27:16.913Z',
     docketNumber: '103-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -5861,6 +5698,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     documentTitle: 'Statement of Taxpayer Identification',
     docketNumber: '103-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -5885,6 +5723,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     documentTitle: 'Petition',
     docketNumber: '103-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isPaper: true,
@@ -5919,14 +5758,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
       '{"lodged":false,"practitioner":[],"dateReceivedMonth":"10","dateReceivedDay":"10","dateReceivedYear":"2001","eventCode":"SIAB","category":"Simultaneous Brief","documentTitle":"Simultaneous Answering Brief","documentType":"Simultaneous Answering Brief","scenario":"Standard","additionalInfo":"abc","additionalInfo2":"123","partyIrsPractitioner":true,"attachments":true,"searchError":false,"serviceDate":null,"certificateOfServiceDate":null,"dateReceived":"2001-10-10","isFileAttached":false,"isPaper":true,"docketNumber":"103-19","createdAt":"2019-08-14T20:35:52.858Z","receivedAt":"2001-10-10"}',
     docketNumber: '103-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
       { name: 'Samson Workman', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     isStricken: false,
     documentType: 'Answer',
@@ -5951,6 +5788,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2019-03-01T22:54:05.993Z',
     docketNumber: '103-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -5985,6 +5823,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     freeText: 'Hello draft',
     docketNumber: '103-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Reuben Blair', email: 'petitioner@example.com' }],
@@ -6016,6 +5855,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-01-23T21:45:34.521Z',
     docketNumber: '103-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -6054,6 +5894,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'B',
     servedAt: '2022-12-01T20:02:10.612Z',
     docketNumber: '103-20',
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Reuben Blair', email: 'petitioner@example.com' }],
@@ -6081,6 +5922,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-01-23T21:45:14.148Z',
     docketNumber: '103-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Reuben Blair', email: 'petitioner@example.com' }],
@@ -6112,6 +5954,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-09-21T20:55:12.840Z',
     docketNumber: '103-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Reuben Blair', email: 'petitioner@example.com' }],
@@ -6140,6 +5983,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-09-25T19:27:16.630Z',
     docketNumber: '103-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Reuben Blair', email: 'petitioner@example.com' }],
@@ -6166,6 +6010,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-09-25T19:27:16.630Z',
     docketNumber: '103-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -6189,15 +6034,13 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '103-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
     servedParties: [
       { name: 'Brett Osborne', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Britanney Wiley' },
     ],
     attachments: false,
@@ -6231,6 +6074,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'B',
     servedAt: '2023-08-08T17:32:21.452Z',
     docketNumber: '103-67',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -6254,6 +6098,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     documentTitle: 'Filing Fee Paid',
     docketNumber: '103-67',
     addToCoversheet: false,
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -6284,15 +6129,13 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'R',
     servedAt: '2023-04-03T15:53:18.587Z',
     docketNumber: '103-67',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
     servedParties: [
       { name: 'Brett Osborne', email: 'petitioner@example.com' },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Britanney Wiley' },
     ],
     attachments: false,
@@ -6326,6 +6169,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'B',
     servedAt: '2024-06-28T19:55:09.130Z',
     docketNumber: '103-67',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -6356,6 +6200,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'R',
     servedAt: '2023-04-03T15:53:18.588Z',
     docketNumber: '103-67',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -6383,6 +6228,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'P',
     servedAt: '2023-04-03T15:53:21.857Z',
     docketNumber: '103-67',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -6413,6 +6259,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'R',
     servedAt: '2023-04-03T15:53:18.589Z',
     docketNumber: '103-67',
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Luksa Lucia' }],
@@ -6446,6 +6293,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     signedByUserId: '2805d1ab-18d0-43ec-bafb-654e83405416',
     docketNumber: '104-17',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Luksa Lucia' }],
@@ -6473,6 +6321,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-04-14T19:59:46.673Z',
     docketNumber: '104-17',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Luksa Lucia' }],
@@ -6501,6 +6350,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-04-14T19:59:46.671Z',
     docketNumber: '104-17',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Luksa Lucia' }],
@@ -6528,6 +6378,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-04-14T19:59:46.672Z',
     docketNumber: '104-17',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Luksa Lucia' }],
@@ -6561,6 +6412,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     signedByUserId: '2805d1ab-18d0-43ec-bafb-654e83405416',
     docketNumber: '104-18',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Luksa Lucia' }],
@@ -6588,6 +6440,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-04-14T19:59:46.673Z',
     docketNumber: '104-18',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Luksa Lucia' }],
@@ -6616,6 +6469,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-04-14T19:59:46.671Z',
     docketNumber: '104-18',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Luksa Lucia' }],
@@ -6643,6 +6497,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-04-14T19:59:46.672Z',
     docketNumber: '104-18',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Mufutau Wade', email: 'petitioner@example.com' }],
@@ -6671,6 +6526,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-09-25T19:27:16.771Z',
     docketNumber: '104-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Mufutau Wade', email: 'petitioner@example.com' }],
@@ -6697,6 +6553,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2019-03-05T17:34:13.491Z',
     docketNumber: '104-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -6720,6 +6577,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     documentTitle: 'Statement of Taxpayer Identification',
     docketNumber: '104-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -6744,6 +6602,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     documentTitle: 'Petition',
     docketNumber: '104-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Luksa Lucia' }],
@@ -6777,6 +6636,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-04-14T03:01:50.399Z',
     docketNumber: '104-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Luksa Lucia' }],
@@ -6804,6 +6664,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-04-14T19:59:46.673Z',
     docketNumber: '104-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Luksa Lucia' }],
@@ -6832,6 +6693,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-04-14T19:59:46.671Z',
     docketNumber: '104-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Luksa Lucia' }],
@@ -6859,6 +6721,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-04-14T19:59:46.672Z',
     docketNumber: '104-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -6889,6 +6752,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'R',
     servedAt: '2023-01-06T22:33:13.813Z',
     docketNumber: '104-23',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -6916,6 +6780,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     documentTitle: 'Order',
     docketNumber: '104-23',
     addToCoversheet: false,
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -6946,6 +6811,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'R',
     servedAt: '2023-01-06T22:33:13.821Z',
     docketNumber: '104-23',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -6973,6 +6839,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'P',
     servedAt: '2023-01-06T22:33:18.438Z',
     docketNumber: '104-23',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -7011,6 +6878,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'B',
     servedAt: '2023-08-08T17:32:21.459Z',
     docketNumber: '104-67',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -7034,6 +6902,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     documentTitle: 'Filing Fee Waived',
     docketNumber: '104-67',
     addToCoversheet: false,
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -7064,6 +6933,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'P',
     servedAt: '2023-04-03T15:53:47.142Z',
     docketNumber: '104-67',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -7097,14 +6967,12 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'R',
     servedAt: '2023-04-03T15:53:43.153Z',
     docketNumber: '104-67',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
     servedParties: [
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Cassidy Mejia' },
       { name: 'juvek@mailinator.com' },
     ],
@@ -7139,6 +7007,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'B',
     servedAt: '2024-06-28T19:55:09.122Z',
     docketNumber: '104-67',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -7172,6 +7041,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'R',
     servedAt: '2023-04-03T15:53:43.152Z',
     docketNumber: '104-67',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -7205,6 +7075,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'R',
     servedAt: '2023-04-03T15:53:43.150Z',
     docketNumber: '104-67',
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -7229,6 +7100,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     documentTitle: 'Petition',
     docketNumber: '105-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
@@ -7262,6 +7134,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-09-25T19:27:16.809Z',
     docketNumber: '105-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -7285,6 +7158,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     documentTitle: 'Statement of Taxpayer Identification',
     docketNumber: '105-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
@@ -7323,6 +7197,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-04-29T15:52:16.484Z',
     docketNumber: '105-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
@@ -7364,6 +7239,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-05-13T14:50:46.374Z',
     docketNumber: '105-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -7405,6 +7281,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     editState: '{}',
     servedAt: '2022-08-05T20:25:50.077Z',
     docketNumber: '105-20',
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
@@ -7433,6 +7310,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-04-29T15:51:29.168Z',
     docketNumber: '105-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
@@ -7462,6 +7340,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-04-29T15:51:29.168Z',
     docketNumber: '105-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
@@ -7495,6 +7374,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-09-25T19:27:16.469Z',
     docketNumber: '105-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -7522,6 +7402,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     documentTitle: 'Order',
     docketNumber: '105-23',
     addToCoversheet: false,
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -7530,10 +7411,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner1@example.com',
       },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     isPaper: true,
     isStricken: false,
@@ -7570,6 +7448,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     editState: '{}',
     servedAt: '2023-07-26T18:58:04.853Z',
     docketNumber: '105-23',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -7599,6 +7478,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'R',
     servedAt: '2023-07-26T17:04:05.684Z',
     docketNumber: '105-23',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -7607,10 +7487,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner1@example.com',
       },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -7644,6 +7521,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'B',
     servedAt: '2023-07-26T17:15:54.105Z',
     docketNumber: '105-23',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -7653,10 +7531,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner1@example.com',
       },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -7691,6 +7566,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'B',
     servedAt: '2023-07-26T17:15:58.874Z',
     docketNumber: '105-23',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -7699,10 +7575,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner1@example.com',
       },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -7742,6 +7615,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     editState: '{}',
     servedAt: '2023-07-26T17:26:16.107Z',
     docketNumber: '105-23',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -7773,6 +7647,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     processingStatus: 'complete',
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405418'],
     docketNumber: '105-23',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -7781,10 +7656,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner1@example.com',
       },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     isStricken: false,
     documentType: 'Notice of Docket Change',
@@ -7809,6 +7681,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'B',
     servedAt: '2023-07-26T17:16:25.628Z',
     docketNumber: '105-23',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -7817,10 +7690,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner1@example.com',
       },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -7859,6 +7729,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'B',
     servedAt: '2023-07-26T17:26:52.639Z',
     docketNumber: '105-23',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -7886,6 +7757,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'P',
     servedAt: '2023-07-26T17:04:11.260Z',
     docketNumber: '105-23',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -7894,10 +7766,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner1@example.com',
       },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     isPaper: true,
     isStricken: false,
@@ -7930,6 +7799,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     editState: '{}',
     servedAt: '2023-07-26T17:28:58.253Z',
     docketNumber: '105-23',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -7938,10 +7808,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner1@example.com',
       },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -7981,6 +7848,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'B',
     servedAt: '2023-07-26T17:16:03.508Z',
     docketNumber: '105-23',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -7989,10 +7857,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner1@example.com',
       },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -8028,6 +7893,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'B',
     servedAt: '2023-07-26T18:56:11.194Z',
     docketNumber: '105-23',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -8051,6 +7917,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     documentTitle: 'Request for Place of Trial at Portland, Oregon',
     docketNumber: '105-23',
     addToCoversheet: false,
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -8059,10 +7926,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner1@example.com',
       },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -8097,6 +7961,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     editState: '{}',
     servedAt: '2023-07-26T17:14:35.404Z',
     docketNumber: '105-23',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -8105,10 +7970,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner1@example.com',
       },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: true,
@@ -8144,6 +8006,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'B',
     servedAt: '2023-07-26T17:26:46.556Z',
     docketNumber: '105-23',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -8173,6 +8036,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'R',
     servedAt: '2023-07-26T17:04:05.693Z',
     docketNumber: '105-23',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -8181,10 +8045,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner1@example.com',
       },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -8218,6 +8079,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     editState: '{}',
     servedAt: '2023-07-26T17:25:57.569Z',
     docketNumber: '105-23',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -8226,10 +8088,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner1@example.com',
       },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: true,
@@ -8272,6 +8131,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'B',
     servedAt: '2023-07-26T17:16:09.198Z',
     docketNumber: '105-23',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -8280,10 +8140,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner1@example.com',
       },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -8321,6 +8178,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'B',
     servedAt: '2023-07-26T17:29:56.286Z',
     docketNumber: '105-23',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -8329,10 +8187,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner1@example.com',
       },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -8420,6 +8275,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'B',
     servedAt: '2023-07-26T18:56:11.185Z',
     docketNumber: '105-23',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -8428,10 +8284,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner1@example.com',
       },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -8469,6 +8322,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'B',
     servedAt: '2023-07-26T17:29:33.751Z',
     docketNumber: '105-23',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -8477,10 +8331,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner1@example.com',
       },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -8519,6 +8370,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'B',
     servedAt: '2023-07-26T17:27:17.586Z',
     docketNumber: '105-23',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -8527,10 +8379,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner1@example.com',
       },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     isPaper: true,
     isStricken: false,
@@ -8563,6 +8412,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     editState: '{}',
     servedAt: '2023-07-26T17:28:33.233Z',
     docketNumber: '105-23',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -8571,10 +8421,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner1@example.com',
       },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -8608,6 +8455,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'B',
     servedAt: '2023-07-26T17:15:49.507Z',
     docketNumber: '105-23',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -8616,10 +8464,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner1@example.com',
       },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -8654,6 +8499,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     editState: '{}',
     servedAt: '2023-07-26T17:14:50.854Z',
     docketNumber: '105-23',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -8662,10 +8508,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner1@example.com',
       },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -8702,6 +8545,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'B',
     servedAt: '2023-07-26T18:58:50.921Z',
     docketNumber: '105-23',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -8711,10 +8555,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner1@example.com',
       },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -8750,6 +8591,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     editState: '{}',
     servedAt: '2023-07-26T17:15:09.213Z',
     docketNumber: '105-23',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -8758,10 +8600,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner1@example.com',
       },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -8801,6 +8640,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     editState: '{}',
     servedAt: '2023-07-26T17:15:28.246Z',
     docketNumber: '105-23',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -8809,10 +8649,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner1@example.com',
       },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -8852,6 +8689,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'B',
     servedAt: '2023-07-26T17:16:14.154Z',
     docketNumber: '105-23',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -8861,10 +8699,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner1@example.com',
       },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -8903,6 +8738,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'B',
     servedAt: '2023-07-26T17:27:24.651Z',
     docketNumber: '105-23',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -8911,10 +8747,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner1@example.com',
       },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -8953,6 +8786,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'B',
     servedAt: '2023-07-26T17:12:26.530Z',
     docketNumber: '105-23',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -8961,10 +8795,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner@example.com',
       },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -8997,6 +8828,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'B',
     servedAt: '2023-08-08T17:32:21.464Z',
     docketNumber: '105-67',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -9005,10 +8837,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner@example.com',
       },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -9041,6 +8870,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'B',
     servedAt: '2024-06-28T19:55:09.125Z',
     docketNumber: '105-67',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -9068,6 +8898,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'P',
     servedAt: '2023-04-03T15:52:39.435Z',
     docketNumber: '105-67',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -9091,6 +8922,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     documentTitle: 'Filing Fee Paid',
     docketNumber: '105-67',
     addToCoversheet: false,
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -9121,6 +8953,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'R',
     servedAt: '2023-04-03T15:52:36.489Z',
     docketNumber: '105-67',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -9151,6 +8984,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'R',
     servedAt: '2023-04-03T15:52:36.482Z',
     docketNumber: '105-67',
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Denise Gould', email: 'petitioner@example.com' }],
@@ -9180,6 +9014,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-09-25T19:27:17.149Z',
     docketNumber: '106-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Denise Gould', email: 'petitioner@example.com' }],
@@ -9210,6 +9045,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2019-07-12T17:11:26.955Z',
     docketNumber: '106-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -9234,6 +9070,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     documentTitle: 'Statement of Taxpayer Identification',
     docketNumber: '106-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -9258,6 +9095,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     documentTitle: 'Petition',
     docketNumber: '106-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Denise Gould', email: 'petitioner@example.com' }],
@@ -9288,6 +9126,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2019-07-12T17:11:26.955Z',
     docketNumber: '106-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -9317,6 +9156,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'R',
     servedAt: '2023-01-06T22:34:39.112Z',
     docketNumber: '106-23',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -9340,6 +9180,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     documentTitle: 'Request for Place of Trial at Birmingham, Alabama',
     docketNumber: '106-23',
     addToCoversheet: false,
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -9369,6 +9210,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'P',
     servedAt: '2023-01-06T22:34:42.963Z',
     docketNumber: '106-23',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -9398,6 +9240,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'R',
     servedAt: '2023-01-06T22:34:39.108Z',
     docketNumber: '106-23',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -9425,6 +9268,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     documentTitle: 'Order',
     docketNumber: '106-23',
     addToCoversheet: false,
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -9433,10 +9277,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner@example.com',
       },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -9469,6 +9310,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'B',
     servedAt: '2024-06-28T19:54:22.468Z',
     docketNumber: '107-19',
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
@@ -9476,10 +9318,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner@example.com',
       },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -9517,6 +9356,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     signedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     docketNumber: '107-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -9550,6 +9390,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     signedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     docketNumber: '107-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
@@ -9557,10 +9398,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner@example.com',
       },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     isStricken: false,
     documentType: 'Corporate Disclosure Statement',
@@ -9585,6 +9423,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2019-08-16T17:29:10.133Z',
     docketNumber: '107-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -9626,6 +9465,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: [],
     freeText: 'Test Status Report Order (Unsigned)',
     docketNumber: '107-19',
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Tatum Craig', email: 'petitioner@example.com' }],
@@ -9652,6 +9492,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2019-08-16T17:30:10.526Z',
     docketNumber: '107-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -9697,6 +9538,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     signedAt: '2024-07-10T21:37:10.438Z',
     signedByUserId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     docketNumber: '107-19',
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -9720,6 +9562,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     documentTitle: 'Statement of Taxpayer Identification',
     docketNumber: '107-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
@@ -9727,10 +9570,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner@example.com',
       },
-      {
-        name: 'Test IRS Practitioner',
-        email: 'irspractitioner@example.com',
-      },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     isStricken: false,
     documentType: 'Request for Place of Trial',
@@ -9757,6 +9597,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-09-25T19:27:16.956Z',
     docketNumber: '107-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -9780,6 +9621,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     documentTitle: 'Statement of Taxpayer Identification',
     docketNumber: '108-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
@@ -9811,6 +9653,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2019-08-16T19:22:13.925Z',
     docketNumber: '108-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
@@ -9841,6 +9684,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-09-25T19:27:16.706Z',
     docketNumber: '108-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -9864,6 +9708,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     documentTitle: 'Petition',
     docketNumber: '109-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -9897,6 +9742,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     signedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     docketNumber: '109-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -9924,6 +9770,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     signedByUserId: '7b69a8b5-bcc4-4449-8994-08fda8d342e7',
     docketNumber: '109-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -9947,6 +9794,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     documentTitle: 'Statement of Taxpayer Identification',
     docketNumber: '109-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -9970,6 +9818,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     documentTitle: 'Petition',
     docketNumber: '110-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -10004,6 +9853,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     signedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     docketNumber: '110-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -10031,6 +9881,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     signedByUserId: '7b69a8b5-bcc4-4449-8994-08fda8d342e7',
     docketNumber: '110-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -10054,6 +9905,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     documentTitle: 'Statement of Taxpayer Identification',
     docketNumber: '110-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -10089,6 +9941,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     signedAt: '2019-10-07T14:29:30.288Z',
     signedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     docketNumber: '111-19',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -10116,6 +9969,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'P',
     servedAt: '2022-09-28T16:48:36.112Z',
     docketNumber: '111-19',
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
@@ -10146,6 +10000,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-09-25T19:27:16.880Z',
     docketNumber: '111-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -10174,6 +10029,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'R',
     servedAt: '2022-09-28T16:48:30.564Z',
     docketNumber: '111-19',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -10202,6 +10058,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'R',
     servedAt: '2022-09-28T16:48:30.554Z',
     docketNumber: '111-19',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -10231,6 +10088,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     editState: '{}',
     docketNumber: '111-19',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -10259,6 +10117,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'R',
     servedAt: '2022-09-28T16:48:49.670Z',
     docketNumber: '112-19',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -10287,6 +10146,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'R',
     servedAt: '2022-09-28T16:48:49.667Z',
     docketNumber: '112-19',
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
@@ -10317,6 +10177,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-09-25T19:27:17.110Z',
     docketNumber: '112-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -10344,6 +10205,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'P',
     servedAt: '2022-09-28T16:48:52.607Z',
     docketNumber: '112-19',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -10371,6 +10233,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'P',
     servedAt: '2022-09-28T19:47:07.223Z',
     docketNumber: '113-19',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -10399,6 +10262,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'R',
     servedAt: '2022-09-28T19:47:03.643Z',
     docketNumber: '113-19',
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -10427,6 +10291,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'R',
     servedAt: '2022-09-28T19:47:03.636Z',
     docketNumber: '113-19',
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Letti Toretto', email: 'petitioner@example.com' }],
@@ -10455,6 +10320,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-09-25T19:27:16.669Z',
     docketNumber: '113-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isSealed: true,
@@ -10483,6 +10349,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '117-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -10508,6 +10375,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '117-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Bart Simpson', email: 'petitioner@example.com' }],
@@ -10536,6 +10404,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-09-25T19:27:17.029Z',
     docketNumber: '117-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Sean Connery', email: 'petitioner@example.com' }],
@@ -10565,6 +10434,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-09-25T19:27:16.530Z',
     docketNumber: '120-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: true,
@@ -10590,6 +10460,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '120-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isSealed: true,
@@ -10619,6 +10490,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '120-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isPaper: true,
@@ -10644,6 +10516,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['1566ea80-1d95-42bc-b006-7fc55c698dea'],
     docketNumber: '121-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
@@ -10684,6 +10557,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-08-10T04:00:00.000Z',
     docketNumber: '121-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
@@ -10724,6 +10598,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-08-10T04:00:00.000Z',
     docketNumber: '121-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -10749,6 +10624,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '122-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -10773,6 +10649,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     documentTitle: 'Request for Place of Trial at Birmingham, Alabama',
     docketNumber: '122-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -10797,6 +10674,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     privatePractitioners: [],
     docketNumber: '122-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -10822,6 +10700,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '123-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -10844,6 +10723,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     documentTitle: 'Request for Place of Trial at Birmingham, Alabama',
     docketNumber: '123-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -10868,6 +10748,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     privatePractitioners: [],
     docketNumber: '123-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'IRS', role: 'irsSuperuser' }],
@@ -10896,6 +10777,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-09-30T20:24:15.162Z',
     docketNumber: '124-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'IRS', role: 'irsSuperuser' }],
@@ -10924,6 +10806,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-09-30T20:24:15.222Z',
     docketNumber: '124-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Stacy Russold' }],
@@ -10960,6 +10843,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-09-30T20:25:32.869Z',
     docketNumber: '124-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Stacy Russold' }],
@@ -10992,6 +10876,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-09-30T20:26:08.914Z',
     docketNumber: '124-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -11017,6 +10902,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '125-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -11039,6 +10925,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     documentTitle: 'Request for Place of Trial at Birmingham, Alabama',
     docketNumber: '125-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -11063,6 +10950,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     privatePractitioners: [],
     docketNumber: '125-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -11088,6 +10976,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['8d6d7ebb-6863-41c8-acc4-b014935efafb'],
     docketNumber: '126-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -11112,6 +11001,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     privatePractitioners: [],
     docketNumber: '126-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -11134,6 +11024,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     documentTitle: 'Request for Place of Trial at Birmingham, Alabama',
     docketNumber: '126-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -11159,6 +11050,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '127-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -11181,6 +11073,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     documentTitle: 'Request for Place of Trial at Birmingham, Alabama',
     docketNumber: '127-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -11206,6 +11099,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '127-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -11231,6 +11125,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '128-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -11256,6 +11151,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '128-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -11278,6 +11174,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     documentTitle: 'Request for Place of Trial at Birmingham, Alabama',
     docketNumber: '128-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isSealed: true,
@@ -11315,6 +11212,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     signedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     docketNumber: '129-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'IRS', role: 'irsSuperuser' }],
@@ -11343,6 +11241,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-11-30T22:58:08.081Z',
     docketNumber: '129-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'IRS', role: 'irsSuperuser' }],
@@ -11371,6 +11270,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-11-30T22:58:08.130Z',
     docketNumber: '129-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isSealed: true,
@@ -11412,6 +11312,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-10-29T13:42:43.037Z',
     docketNumber: '129-20',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -11436,6 +11337,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '150-12',
     addToCoversheet: false,
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -11459,6 +11361,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '150-12',
     addToCoversheet: false,
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
@@ -11488,6 +11391,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2019-08-25T05:00:00.000Z',
     docketNumber: '150-12',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
@@ -11517,6 +11421,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2019-08-25T05:00:00.000Z',
     docketNumber: '150-12',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -11541,6 +11446,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '151-12',
     addToCoversheet: false,
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -11564,6 +11470,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '151-12',
     addToCoversheet: false,
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
@@ -11593,6 +11500,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2019-08-25T05:00:00.000Z',
     docketNumber: '151-12',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
@@ -11622,6 +11530,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2019-08-25T05:00:00.000Z',
     docketNumber: '151-12',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -11646,6 +11555,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '152-12',
     addToCoversheet: false,
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -11669,6 +11579,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '152-12',
     addToCoversheet: false,
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
@@ -11698,6 +11609,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2019-08-25T05:00:00.000Z',
     docketNumber: '152-12',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
@@ -11727,6 +11639,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2019-08-25T05:00:00.000Z',
     docketNumber: '152-12',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -11753,6 +11666,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '301-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -11779,6 +11693,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '301-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -11802,6 +11717,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '301-21',
     addToCoversheet: false,
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -11825,6 +11741,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '302-21',
     addToCoversheet: false,
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -11851,6 +11768,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '302-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -11877,6 +11795,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '302-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -11916,6 +11835,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-04-27T17:06:18.013Z',
     docketNumber: '302-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -11939,6 +11859,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '302-21',
     addToCoversheet: false,
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -11965,6 +11886,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '302-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -11991,6 +11913,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '302-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -12030,6 +11953,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-04-27T17:12:55.874Z',
     docketNumber: '303-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -12053,6 +11977,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '303-21',
     addToCoversheet: false,
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -12079,6 +12004,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '303-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -12105,6 +12031,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '303-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -12144,6 +12071,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-04-27T20:51:00.762Z',
     docketNumber: '304-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -12170,6 +12098,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '304-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -12193,6 +12122,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '304-21',
     addToCoversheet: false,
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -12219,6 +12149,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '304-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -12258,6 +12189,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-05-04T17:17:10.195Z',
     docketNumber: '305-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -12284,6 +12216,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '305-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -12307,6 +12240,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '305-21',
     addToCoversheet: false,
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -12333,6 +12267,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '305-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -12372,6 +12307,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-05-14T17:32:48.337Z',
     docketNumber: '306-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -12395,6 +12331,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '306-21',
     addToCoversheet: false,
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -12421,6 +12358,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '306-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -12447,6 +12385,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '306-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -12486,6 +12425,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-05-25T13:09:46.815Z',
     docketNumber: '307-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -12512,6 +12452,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '307-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -12535,6 +12476,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '307-21',
     addToCoversheet: false,
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -12561,6 +12503,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '307-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -12600,6 +12543,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-05-25T13:24:01.671Z',
     docketNumber: '308-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -12623,6 +12567,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '308-21',
     addToCoversheet: false,
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -12649,6 +12594,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '308-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -12675,6 +12621,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '308-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -12701,6 +12648,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '309-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -12740,6 +12688,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-05-28T15:15:37.686Z',
     docketNumber: '309-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -12766,6 +12715,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '309-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -12789,6 +12739,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '309-21',
     addToCoversheet: false,
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -12828,6 +12779,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-06-07T20:28:16.223Z',
     docketNumber: '310-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -12854,6 +12806,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '310-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -12877,6 +12830,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '310-21',
     addToCoversheet: false,
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -12903,6 +12857,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '310-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -12942,6 +12897,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-06-14T15:16:23.180Z',
     docketNumber: '311-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -12965,6 +12921,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '311-21',
     addToCoversheet: false,
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -12991,6 +12948,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '311-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -13017,6 +12975,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '311-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -13057,6 +13016,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     signedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     docketNumber: '312-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -13083,6 +13043,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '312-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -13109,6 +13070,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '312-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -13132,6 +13094,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '312-21',
     addToCoversheet: false,
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Hanae Guerrero' }],
@@ -13173,6 +13136,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     signedByUserId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     docketNumber: '313-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'IRS', role: 'irsSuperuser' }],
@@ -13203,6 +13167,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-10-25T18:56:39.976Z',
     docketNumber: '313-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'IRS', role: 'irsSuperuser' }],
@@ -13233,6 +13198,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-10-25T18:56:39.967Z',
     docketNumber: '313-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'IRS', role: 'irsSuperuser' }],
@@ -13263,6 +13229,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-10-25T18:56:39.979Z',
     docketNumber: '313-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -13286,6 +13253,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '314-21',
     addToCoversheet: false,
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -13326,6 +13294,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     signedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     docketNumber: '314-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -13352,6 +13321,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '314-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -13378,6 +13348,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '314-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -13418,6 +13389,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     signedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     docketNumber: '315-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -13444,6 +13416,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '315-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -13467,6 +13440,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '315-21',
     addToCoversheet: false,
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -13493,6 +13467,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '315-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -13533,6 +13508,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     signedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     docketNumber: '316-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -13559,6 +13535,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '316-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -13582,6 +13559,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '316-21',
     addToCoversheet: false,
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -13608,6 +13586,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '316-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -13648,6 +13627,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     signedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     docketNumber: '317-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -13674,6 +13654,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '317-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -13697,6 +13678,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '317-21',
     addToCoversheet: false,
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -13723,6 +13705,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '317-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -13746,6 +13729,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '318-21',
     addToCoversheet: false,
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -13786,6 +13770,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     signedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     docketNumber: '318-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -13812,6 +13797,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '318-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -13838,6 +13824,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '318-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -13878,6 +13865,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     signedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     docketNumber: '319-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -13904,6 +13892,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '319-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -13930,6 +13919,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
     docketNumber: '319-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -13953,6 +13943,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '319-21',
     addToCoversheet: false,
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: "Rand al'Thor", email: 'petitioner@example.com' }],
@@ -13993,6 +13984,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     signedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     docketNumber: '320-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -14035,6 +14027,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     editState: '{}',
     servedAt: '2022-10-28T20:45:59.211Z',
     docketNumber: '320-21',
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'IRS', role: 'irsSuperuser' }],
@@ -14064,6 +14057,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-11-08T15:19:17.214Z',
     docketNumber: '320-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: "Rand al'Thor", email: 'petitioner@example.com' }],
@@ -14097,6 +14091,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-11-20T15:26:23.535Z',
     docketNumber: '320-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'IRS', role: 'irsSuperuser' }],
@@ -14126,6 +14121,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2021-11-05T15:19:17.229Z',
     docketNumber: '320-21',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -14149,6 +14145,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '320-21',
     addToCoversheet: false,
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -14175,6 +14172,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -14209,6 +14207,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     editState: '{}',
     servedAt: '2023-11-22T01:19:21.049Z',
     docketNumber: '400-22',
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -14235,6 +14234,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '400-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -14261,6 +14261,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -14287,6 +14288,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '401-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -14313,6 +14315,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -14339,6 +14342,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '402-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -14365,6 +14369,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -14391,6 +14396,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '403-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -14417,6 +14423,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -14451,6 +14458,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     editState: '{}',
     servedAt: '2023-11-22T01:17:49.177Z',
     docketNumber: '404-22',
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -14477,6 +14485,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '404-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -14503,6 +14512,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -14537,6 +14547,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     editState: '{}',
     servedAt: '2023-11-22T01:17:49.334Z',
     docketNumber: '405-22',
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -14563,6 +14574,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '405-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -14589,6 +14601,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -14615,6 +14628,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '406-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -14641,6 +14655,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -14667,6 +14682,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '407-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -14693,6 +14709,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -14719,6 +14736,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '408-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -14745,6 +14763,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -14779,6 +14798,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     editState: '{}',
     servedAt: '2023-11-22T01:20:35.162Z',
     docketNumber: '409-22',
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -14805,6 +14825,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '409-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -14831,6 +14852,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -14857,6 +14879,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '410-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -14883,6 +14906,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -14917,6 +14941,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     editState: '{}',
     servedAt: '2023-11-22T01:20:35.395Z',
     docketNumber: '411-22',
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -14943,6 +14968,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '411-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -14969,6 +14995,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -14995,6 +15022,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '412-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15021,6 +15049,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -15055,6 +15084,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     editState: '{}',
     servedAt: '2023-11-22T01:20:35.518Z',
     docketNumber: '413-22',
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15081,6 +15111,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '413-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15107,6 +15138,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15133,6 +15165,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '414-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15159,6 +15192,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15185,6 +15219,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '415-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15211,6 +15246,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15237,6 +15273,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '416-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15263,6 +15300,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15289,6 +15327,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '417-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15315,6 +15354,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15341,6 +15381,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '418-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15367,6 +15408,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15393,6 +15435,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '419-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15419,6 +15462,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15445,6 +15489,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '420-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15471,6 +15516,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15497,6 +15543,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '421-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15523,6 +15570,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15549,6 +15597,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '422-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15575,6 +15624,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15601,6 +15651,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '423-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15627,6 +15678,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15653,6 +15705,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '424-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15679,6 +15732,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15705,6 +15759,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '425-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15731,6 +15786,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15757,6 +15813,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '426-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15783,6 +15840,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15809,6 +15867,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '427-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15835,6 +15894,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15861,6 +15921,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '428-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15887,6 +15948,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15913,6 +15975,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '429-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15939,6 +16002,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15965,6 +16029,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '430-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -15991,6 +16056,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16017,6 +16083,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '431-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16043,6 +16110,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16069,6 +16137,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '432-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16095,6 +16164,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16121,6 +16191,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '433-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16147,6 +16218,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16173,6 +16245,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '434-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16199,6 +16272,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16225,6 +16299,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '435-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16251,6 +16326,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16277,6 +16353,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '436-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16303,6 +16380,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16329,6 +16407,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '437-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16355,6 +16434,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16381,6 +16461,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '438-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16407,6 +16488,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16433,6 +16515,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '439-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16459,6 +16542,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16485,6 +16569,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '440-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16511,6 +16596,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16537,6 +16623,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '441-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16563,6 +16650,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16589,6 +16677,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '442-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16615,6 +16704,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16641,6 +16731,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '443-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16667,6 +16758,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16693,6 +16785,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '444-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16719,6 +16812,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16745,6 +16839,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '445-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16771,6 +16866,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '101-19',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16797,6 +16893,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '446-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16823,6 +16920,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '447-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16849,6 +16947,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '448-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16875,6 +16974,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '449-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16901,6 +17001,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '450-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16927,6 +17028,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '451-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16953,6 +17055,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '452-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -16979,6 +17082,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '453-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -17005,6 +17109,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '454-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -17031,6 +17136,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '455-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -17057,6 +17163,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '456-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -17083,6 +17190,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '457-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -17109,6 +17217,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '458-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Brett Osborne', email: 'petitioner@example.com' }],
@@ -17135,6 +17244,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-03-01T21:40:46.415Z',
     docketNumber: '459-23',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -17159,6 +17269,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '69312-87',
     addToCoversheet: false,
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isStricken: false,
@@ -17182,6 +17293,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '69312-87',
     addToCoversheet: false,
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     isSealed: true,
@@ -17210,6 +17322,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     filers: [],
     docketNumber: '69312-87',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
@@ -17239,6 +17352,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2019-08-25T05:00:00.000Z',
     docketNumber: '69312-87',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
@@ -17268,6 +17382,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2019-08-25T05:00:00.000Z',
     docketNumber: '69312-87',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     stampData: {},
@@ -17306,6 +17421,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     editState: '{}',
     servedAt: '2023-11-22T01:08:04.712Z',
     docketNumber: '999-15',
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
@@ -17353,6 +17469,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     signedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     docketNumber: '999-15',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Stacy Russold' }],
@@ -17392,6 +17509,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-09-30T20:25:32.869Z',
     docketNumber: '999-15',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
@@ -17439,6 +17557,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     signedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     docketNumber: '999-15',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [{ name: 'Stacy Russold' }],
@@ -17479,6 +17598,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2020-09-30T20:25:32.869Z',
     docketNumber: '999-15',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
   {
     servedParties: [
@@ -17509,5 +17629,6 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     isLegacyServed: true,
     docketNumber: '999-15',
     stampData: {},
+    isFiledAcrossAllCases: false,
   },
 ];

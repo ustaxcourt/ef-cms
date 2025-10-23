@@ -3,7 +3,6 @@ import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { isMemberCase } from '@shared/business/entities/cases/Case';
 import { reactSelectValue } from '@web-client/ustc-ui/Utils/documentTypeSelectHelper';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -13,9 +12,8 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
   {
     DATE_FORMATS: state.constants.DATE_FORMATS,
     addCourtIssuedDocketEntryHelper: state.addCourtIssuedDocketEntryHelper,
+    editDocketEntryMetaHelper: state.editDocketEntryMetaHelper,
     form: state.form,
-    caseDetail: state.caseDetail,
-    isFiledAcrossAllCases: state.isFiledAcrossAllCases,
     formatAndUpdateDateFromDatePickerSequence:
       sequences.formatAndUpdateDateFromDatePickerSequence,
     updateCourtIssuedDocketEntryFormValueSequence:
@@ -27,19 +25,15 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
   },
   function EditDocketEntryMetaFormCourtIssued({
     addCourtIssuedDocketEntryHelper,
+    editDocketEntryMetaHelper,
     DATE_FORMATS,
     form,
-    caseDetail,
-    isFiledAcrossAllCases,
     formatAndUpdateDateFromDatePickerSequence,
     updateCourtIssuedDocketEntryFormValueSequence,
     validateCourtIssuedDocketEntrySequence,
     validateDocumentSequence,
     validationErrors,
   }) {
-    const isDisabled =
-      caseDetail && isMemberCase(caseDetail) && isFiledAcrossAllCases;
-
     return (
       <div className="blue-container">
         <DateSelector
@@ -55,7 +49,7 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
             });
             validateDocumentSequence();
           }}
-          disabled={isDisabled}
+          disabled={editDocketEntryMetaHelper.isEditDisabled}
         />
 
         <FormGroup errorText={validationErrors.documentType}>
@@ -98,7 +92,7 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
                   value: inputText,
                 });
               }}
-              isDisabled={isDisabled}
+              isDisabled={editDocketEntryMetaHelper.isEditDisabled}
             />
           )}
           {!addCourtIssuedDocketEntryHelper.showDocumentTypeDropdown && (

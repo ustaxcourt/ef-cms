@@ -23,7 +23,6 @@ export const documentViewerHelper = (
     STIPULATED_DECISION_EVENT_CODE,
   } = applicationContext.getConstants();
 
-  const isFiledAcrossAllCases = get(state.isFiledAcrossAllCases);
   const permissions = get(state.permissions);
   const viewerDocumentToDisplay = get(state.viewerDocumentToDisplay);
   const caseDetail = get(state.caseDetail);
@@ -107,7 +106,8 @@ export const documentViewerHelper = (
     permissions.EDIT_DOCKET_ENTRY &&
     formattedDocumentToDisplay.qcNeeded &&
     (isLeadCase(caseDetail) ||
-      (isMemberCase(caseDetail) && !isFiledAcrossAllCases));
+      (isMemberCase(caseDetail) &&
+        !formattedDocumentToDisplay.isFiledAcrossAllCases));
 
   const showApplyStampButton =
     permissions.STAMP_MOTION &&
@@ -132,12 +132,12 @@ export const documentViewerHelper = (
       // If simultaneous doc on member case and NOT filed across group, show serve button
       (isSimultaneousDocType &&
         isMemberCase(caseDetail) &&
-        !isFiledAcrossAllCases));
+        !formattedDocumentToDisplay.isFiledAcrossAllCases));
 
   const showLeadCaseBanner =
     isMemberCase(caseDetail) &&
     isSimultaneousDocType &&
-    isFiledAcrossAllCases &&
+    formattedDocumentToDisplay.isFiledAcrossAllCases &&
     isDocumentUnserved() &&
     permissions.SERVE_DOCUMENT;
 

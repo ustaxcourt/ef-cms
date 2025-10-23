@@ -138,6 +138,7 @@ export const fileExternalDocument = async (
               ...baseMetadata,
               ...metadata,
               docketEntryId,
+              isFiledAcrossAllCases: consolidatedCasesToFileAcross,
               documentType: metadata.documentType,
               isOnDocketRecord: true,
               relationship,

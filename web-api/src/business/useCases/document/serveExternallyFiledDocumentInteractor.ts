@@ -29,13 +29,11 @@ export const serveExternallyFiledDocument = async (
     clientConnectionId,
     docketEntryId,
     docketNumbers,
-    isFiledAcrossAllCases,
     subjectCaseDocketNumber,
   }: {
     clientConnectionId: string;
     docketEntryId: string;
     docketNumbers: string[];
-    isFiledAcrossAllCases?: boolean;
     subjectCaseDocketNumber: string;
   },
   authorizedUser: UnknownAuthUser,
@@ -99,7 +97,10 @@ export const serveExternallyFiledDocument = async (
       originalSubjectDocketEntry.eventCode,
     ) || originalSubjectDocketEntry.documentTitle?.includes('Simultaneous');
 
-  if (subjectCaseIsSimultaneousDocType && isFiledAcrossAllCases) {
+  if (
+    subjectCaseIsSimultaneousDocType &&
+    originalSubjectDocketEntry.isFiledAcrossAllCases
+  ) {
     if (
       subjectCaseEntity.leadDocketNumber &&
       subjectCaseEntity.leadDocketNumber !== subjectCaseEntity.docketNumber

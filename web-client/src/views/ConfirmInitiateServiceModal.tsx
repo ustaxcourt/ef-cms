@@ -1,6 +1,7 @@
 import { ConsolidatedCasesCheckboxes } from './ConsolidatedCasesCheckboxes';
 import { InfoNotificationComponent } from './InfoNotification';
 import { ModalDialog } from './ModalDialog';
+import { props } from 'cerebral';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -10,20 +11,17 @@ export const ConfirmInitiateServiceModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
     confirmInitiateServiceModalHelper: state.confirmInitiateServiceModalHelper,
-    additionalServedCases:
-      state.confirmInitiateServiceModalHelper.additionalServedCases,
+    confirmSequence: props.confirmSequence,
+    documentTitle: props.documentTitle,
     waitingForResponse: state.progressIndicator.waitingForResponse,
   },
-  function ConfirmInitiateServiceModal(props: any) {
-    const {
-      cancelSequence,
-      confirmInitiateServiceModalHelper,
-      waitingForResponse,
-      additionalServedCases,
-    } = props;
-
-    const confirmSequence = props.confirmSequence as any;
-    const documentTitle = props.documentTitle as any;
+  function ConfirmInitiateServiceModal({
+    cancelSequence,
+    confirmInitiateServiceModalHelper,
+    confirmSequence,
+    documentTitle,
+    waitingForResponse,
+  }) {
     let isSubmitDebounced = false;
 
     const debounceSubmit = timeout => {
@@ -54,18 +52,22 @@ export const ConfirmInitiateServiceModal = connect(
         <p className="margin-top-0 margin-bottom-2">
           <strong>{documentTitle}</strong>
         </p>
-        {additionalServedCases && additionalServedCases.length > 0 && (
-          <div>
-            <div>This document will also be served for:</div>
-            <ul className="padding-left-3 margin-top-1">
-              {additionalServedCases.map(c => (
-                <li key={c.docketNumber}>
-                  {c.docketNumber} - {c.caseTitle}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+        {confirmInitiateServiceModalHelper.additionalServedCases &&
+          confirmInitiateServiceModalHelper.additionalServedCases.length >
+            0 && (
+            <div>
+              <div>This document will also be served for:</div>
+              <ul className="padding-left-3 margin-top-1">
+                {confirmInitiateServiceModalHelper.additionalServedCases.map(
+                  c => (
+                    <li key={c.docketNumber}>
+                      {c.docketNumber} - {c.caseTitle}
+                    </li>
+                  ),
+                )}
+              </ul>
+            </div>
+          )}
         {confirmInitiateServiceModalHelper.paperPartiesConsolidated && (
           <InfoNotificationComponent
             alertInfo={{

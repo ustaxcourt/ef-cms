@@ -3,6 +3,7 @@ import { uniqBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstants';
+import { isLeadCase } from '@shared/business/entities/cases/Case';
 
 /**
  * Returns computed values for the confirm initiate court issued filing service modal
@@ -27,14 +28,18 @@ export const confirmInitiateServiceModalHelper = (
   const docketEntryId = get(state.docketEntryId);
   const formattedCaseDetail = get(state.formattedCaseDetail);
   const form = get(state.form);
-
   const isOnMessageDetailPage = get(state.currentPage) === 'MessageDetail';
-  let { documentTitle, eventCode, consolidatedCaseAllCheckbox } = form;
+  let { documentTitle, eventCode } = form;
+
+  let isFiledAcrossAllCases;
   if (!eventCode) {
-    ({ documentTitle, eventCode } = formattedCaseDetail.docketEntries.find(
-      doc => doc.docketEntryId === docketEntryId,
-    ));
+    ({ documentTitle, eventCode, isFiledAcrossAllCases } =
+      formattedCaseDetail.docketEntries.find(
+        doc => doc.docketEntryId === docketEntryId,
+      ));
   }
+  const canFileAcrossGroup =
+    isLeadCase(formattedCaseDetail) && isFiledAcrossAllCases;
 
   let showConsolidatedCasesForService =
     formattedCaseDetail.isLeadCase &&
@@ -51,10 +56,7 @@ export const confirmInitiateServiceModalHelper = (
   }
 
   let additionalServedCases: { docketNumber: string; caseTitle: string }[] = [];
-  if (
-    !SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(eventCode) &&
-    !documentTitle?.includes('Simultaneous')
-  ) {
+  if (canFileAcrossGroup) {
     if (Array.isArray(formattedCaseDetail.consolidatedCases)) {
       additionalServedCases = formattedCaseDetail.consolidatedCases
         .filter((c: any) => c.docketNumber !== formattedCaseDetail.docketNumber)
@@ -74,7 +76,6 @@ export const confirmInitiateServiceModalHelper = (
     const modalForm = get(state.modal.form) || {};
     const consolidatedCasesToMultiDocketOn =
       modalForm.consolidatedCasesToMultiDocketOn || [];
-
     const paperServiceParties: {
       contactId: string;
       userId: string;
@@ -138,8 +139,42 @@ export const confirmInitiateServiceModalHelper = (
     }
   }
 
-  const paperPartiesConsolidated =
-    getPaperPartiesConsolidated(formattedCaseDetail);
+  const paperPartiesConsolidated: {
+    contactId?: string;
+    userId?: string;
+    name: string;
+    contactType?: string;
+    serviceIndicator: string;
+    docketNumber: string;
+  }[] = [];
+
+  const casesToIterateOver = canFileAcrossGroup
+    ? formattedCaseDetail.consolidatedCases
+    : [formattedCaseDetail];
+
+  for (const caseItem of casesToIterateOver) {
+    const {
+      irsPractitioners = [],
+      petitioners = [],
+      privatePractitioners = [],
+      docketNumber,
+    } = caseItem;
+    const allParties = [
+      ...irsPractitioners,
+      ...petitioners,
+      ...privatePractitioners,
+    ];
+    allParties
+      .filter(
+        person => person.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
+      )
+      .forEach(person => {
+        paperPartiesConsolidated.push({
+          ...person,
+          docketNumber,
+        });
+      });
+  }
 
   return {
     caseOrGroup,
@@ -167,45 +202,4 @@ const getPaperServiceParties = rawCase => {
   );
 
   return paperServiceParties;
-};
-
-const getPaperPartiesConsolidated = formattedCaseDetail => {
-  const paperPartiesConsolidated: Array<{
-    contactId?: string;
-    userId?: string;
-    name: string;
-    contactType?: string;
-    serviceIndicator: string;
-    docketNumber: string;
-  }> = [];
-
-  if (!formattedCaseDetail?.consolidatedCases) return paperPartiesConsolidated;
-
-  for (const caseItem of formattedCaseDetail.consolidatedCases) {
-    const {
-      irsPractitioners = [],
-      petitioners = [],
-      privatePractitioners = [],
-      docketNumber,
-    } = caseItem;
-
-    const allParties = [
-      ...irsPractitioners,
-      ...petitioners,
-      ...privatePractitioners,
-    ];
-
-    allParties
-      .filter(
-        person => person.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
-      )
-      .forEach(person => {
-        paperPartiesConsolidated.push({
-          ...person,
-          docketNumber,
-        });
-      });
-  }
-
-  return paperPartiesConsolidated;
 };

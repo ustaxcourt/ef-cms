@@ -7,6 +7,7 @@ import {
   INTERNAL_DOCUMENTS_ARRAY,
 } from '@shared/business/entities/EntityConstants';
 import { formatDateString } from '@shared/business/utilities/DateHandler';
+import { isLeadCase, isMemberCase } from '@shared/business/entities/cases/Case';
 
 export const editDocketEntryMetaHelper = (
   get: Get,
@@ -21,6 +22,8 @@ export const editDocketEntryMetaHelper = (
   showObjection: boolean;
   strickenAtFormatted: string;
   strickenBy: string;
+  isEditDisabled: boolean;
+  showEditHelpText: boolean;
 } => {
   const { eventCode, isStricken, strickenAt, strickenBy } = get(state.form);
 
@@ -65,6 +68,12 @@ export const editDocketEntryMetaHelper = (
         caseCaption: c.caseCaption,
       })) || [];
 
+  const isEditDisabled =
+    caseDetail && isMemberCase(caseDetail) && form.isFiledAcrossAllCases;
+
+  const showEditHelpText =
+    caseDetail && isLeadCase(caseDetail) && form.isFiledAcrossAllCases;
+
   return {
     consolidatedCasesToDisplay,
     isStricken,
@@ -72,5 +81,7 @@ export const editDocketEntryMetaHelper = (
     showObjection,
     strickenAtFormatted,
     strickenBy,
+    isEditDisabled,
+    showEditHelpText,
   };
 };
