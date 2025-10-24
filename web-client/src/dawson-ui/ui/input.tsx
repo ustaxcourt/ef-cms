@@ -45,6 +45,7 @@ const styles = {
  * Used custom hook because browser focus-visible is triggered by both 
  * keyboard and mouse for inputs/textboxes, 
  * but we only want to apply focus styles on keyboard navigation
+ * 
  */ 
 const useKeyboardListenerHook = () => {
   const [isTab, setIsTab] = React.useState(false);
