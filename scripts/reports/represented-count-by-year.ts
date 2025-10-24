@@ -1,14 +1,15 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
-import { DateTime } from 'luxon';
+import { ROLES } from '@shared/business/entities/EntityConstants';
 import {
   type ScriptConfig,
   getJsTimeframeForYear,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
 import { getDbReader } from '@web-api/database';
-import { ROLES } from '@shared/business/entities/EntityConstants';
+import { getNowObject } from '@shared/business/utilities/DateHandler';
 
+const thisYear = getNowObject().year;
 const scriptConfig: ScriptConfig = {
   description:
     'represented-count-by-year - Generates a table comparing counts of ' +
@@ -23,7 +24,7 @@ const scriptConfig: ScriptConfig = {
       type: 'boolean',
     },
     year: {
-      default: `${DateTime.now().toObject().year}`,
+      default: `${thisYear}`,
       position: 0,
       type: 'string',
     },

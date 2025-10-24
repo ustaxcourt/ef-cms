@@ -1,6 +1,5 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
-import { DateTime } from 'luxon';
 import type { RawPractitioner } from '@shared/business/entities/Practitioner';
 import {
   type ScriptConfig,
@@ -10,7 +9,9 @@ import {
 import { fromKyselyUser } from '@web-api/persistence/postgres/users/mapper';
 import { getDbReader } from '@web-api/database';
 import { getUniqueValues } from './trial-sessions-report-helpers';
+import { getNowObject } from '@shared/business/utilities/DateHandler';
 
+const thisYear = getNowObject().year;
 const scriptConfig: ScriptConfig = {
   description:
     'practitioner-stats - Outputs practitioner stats over a given year',
@@ -24,7 +25,7 @@ const scriptConfig: ScriptConfig = {
       type: 'boolean',
     },
     year: {
-      default: `${DateTime.now().toObject().year}`,
+      default: `${thisYear}`,
       position: 0,
       type: 'string',
     },
