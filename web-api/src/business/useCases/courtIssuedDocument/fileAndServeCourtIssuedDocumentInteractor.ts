@@ -38,12 +38,14 @@ export const fileAndServeCourtIssuedDocument = async (
     docketNumbers,
     form,
     subjectCaseDocketNumber,
+    isFiledAcrossAllCases,
   }: {
     clientConnectionId: string;
     docketEntryId: string;
     docketNumbers: string[];
     form: any;
     subjectCaseDocketNumber: string;
+    isFiledAcrossAllCases: boolean;
   },
   authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
@@ -183,6 +185,7 @@ export const fileAndServeCourtIssuedDocument = async (
             filingDate: createISODateString(),
             freeText: form.freeText,
             isDraft: false,
+            isFiledAcrossAllCases,
             isFileAttached: true,
             isOnDocketRecord: true,
             judge: form.judge,

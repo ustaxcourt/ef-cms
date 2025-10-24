@@ -127,9 +127,11 @@ export const documentViewerHelper = (
     permissions.SERVE_DOCUMENT &&
     // If not a simultaneous doc, use normal logic
     (!isSimultaneousDocType ||
-      // If simultaneous doc on lead case, show serve button
+      // unconsolidated case
+      (isSimultaneousDocType && !caseDetail.leadDocketNumber) ||
+      // in lead case of group
       (isSimultaneousDocType && isLeadCase(caseDetail)) ||
-      // If simultaneous doc on member case and NOT filed across group, show serve button
+      // in member case and not filed across group
       (isSimultaneousDocType &&
         isMemberCase(caseDetail) &&
         !formattedDocumentToDisplay.isFiledAcrossAllCases));

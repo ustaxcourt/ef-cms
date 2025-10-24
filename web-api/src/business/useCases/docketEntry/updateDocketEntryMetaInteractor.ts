@@ -180,7 +180,7 @@ export const updateDocketEntryMeta = async (
 
   const { consolidatedCases } = caseEntity;
 
-  if (consolidatedCases && consolidatedCases.length > 0) {
+  if (originalDocketEntry.isFiledAcrossAllCases && consolidatedCases) {
     const docketNumbersToUpdate = consolidatedCases
       .filter(({ docketNumber }) => docketNumber)
       .map(({ docketNumber }) => docketNumber)
@@ -203,7 +203,10 @@ export const updateDocketEntryMeta = async (
             docketEntryId: docketEntryMeta.docketEntryId,
           });
 
-        if (consolidatedCaseDocketEntry) {
+        if (
+          consolidatedCaseDocketEntry &&
+          consolidatedCaseDocketEntry.isFiledAcrossAllCases
+        ) {
           const propagationFields: any = {};
           DOCKET_ENTRY_DOCUMENT_INFO_FIELDS.forEach(field => {
             if (Object.prototype.hasOwnProperty.call(editableFields, field)) {

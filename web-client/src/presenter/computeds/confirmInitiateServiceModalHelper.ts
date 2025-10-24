@@ -16,12 +16,18 @@ import { isLeadCase } from '@shared/business/entities/cases/Case';
 export const confirmInitiateServiceModalHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-): any => {
+): {
+  canFileAcrossGroup: boolean;
+  confirmationText: string;
+  paperFilingText: string;
+  showConsolidatedCasesForService: boolean;
+  showPaperAlert: boolean;
+  additionalServedCases: string[];
+  contactsNeedingPaperService: {}[];
+} => {
   const {
-    CONTACT_TYPE_TITLES,
     NON_MULTI_DOCKETABLE_EVENT_CODES,
     SIMULTANEOUS_DOCUMENT_EVENT_CODES,
-    USER_ROLES,
   } = applicationContext.getConstants();
   const { isCourtIssued } = applicationContext.getUtilities();
 
@@ -111,35 +117,7 @@ export const confirmInitiateServiceModalHelper = (
     parties = getPaperServiceParties(formattedCaseDetail);
   }
 
-  const contactsNeedingPaperService: { name: string }[] = [];
-
-  const roleToDisplay = party => {
-    if (party.role === USER_ROLES.privatePractitioner) {
-      return 'Petitioner Counsel';
-    } else if (party.role === USER_ROLES.irsPractitioner) {
-      return 'Respondent Counsel';
-    } else {
-      return CONTACT_TYPE_TITLES[party.contactType];
-    }
-  };
-
-  parties.forEach(party => {
-    contactsNeedingPaperService.push({
-      name: `${party.name}, ${roleToDisplay(party)}`,
-    });
-  });
-
-  let caseOrGroup = 'case';
-  if (showConsolidatedCasesForService) {
-    const consolidatedCasesToMultiDocketOn =
-      (get(state.modal.form) || {}).consolidatedCasesToMultiDocketOn || [];
-
-    if (consolidatedCasesToMultiDocketOn.filter(c => c.checked).length > 1) {
-      caseOrGroup = 'group';
-    }
-  }
-
-  const paperPartiesConsolidated: {
+  const contactsNeedingPaperService: {
     contactId?: string;
     userId?: string;
     name: string;
@@ -169,23 +147,27 @@ export const confirmInitiateServiceModalHelper = (
         person => person.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
       )
       .forEach(person => {
-        paperPartiesConsolidated.push({
+        contactsNeedingPaperService.push({
           ...person,
           docketNumber,
         });
       });
   }
 
+  const paperFilingText = canFileAcrossGroup
+    ? 'Paper service is required for these parties:'
+    : 'This case has parties receiving paper service:';
+
   return {
-    caseOrGroup,
+    canFileAcrossGroup,
     confirmationText,
-    contactsNeedingPaperService,
+    paperFilingText,
     showConsolidatedCasesForService,
     showPaperAlert: contactsNeedingPaperService.length > 0,
     additionalServedCases,
-    paperPartiesConsolidated:
-      paperPartiesConsolidated.length > 0
-        ? paperPartiesConsolidated
+    contactsNeedingPaperService:
+      contactsNeedingPaperService.length > 0
+        ? contactsNeedingPaperService
         : undefined,
   };
 };

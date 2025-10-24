@@ -18,6 +18,10 @@ export const getDocketNumbersForConsolidatedServiceAction = ({
   const consolidatedCases =
     get(state.modal.form.consolidatedCasesToMultiDocketOn) || [];
 
+  const isFiledAcrossAllCases = get(
+    state.modal.form.consolidatedCaseAllCheckbox,
+  );
+
   let docketNumbers = consolidatedCases
     .filter(consolidatedCase => consolidatedCase.checked)
     .filter(consolidatedCase => !isLeadCase(consolidatedCase))
@@ -33,5 +37,5 @@ export const getDocketNumbersForConsolidatedServiceAction = ({
     docketNumbers = [];
   }
 
-  return { docketNumbers };
+  return { docketNumbers, isFiledAcrossAllCases };
 };
