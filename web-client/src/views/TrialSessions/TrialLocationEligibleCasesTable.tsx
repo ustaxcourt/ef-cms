@@ -72,6 +72,7 @@ export const TrialLocationEligibleCasesTable = connect(
                     className={classNames({
                       'aged-cases': eligibleCase.isAgedCase,
                     })}
+                    data-testid={`eligible-case-${eligibleCase.docketNumber}`}
                   >
                     <td>
                       <CaseIcons formattedCase={eligibleCase} />
