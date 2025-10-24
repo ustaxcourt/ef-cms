@@ -19,7 +19,7 @@ export function Inputs() {
           <div className="tw:w-full">
             <TextArea
               label="Field Label"
-              helpText="Help text"
+              helpText=""
             />
           </div>
 

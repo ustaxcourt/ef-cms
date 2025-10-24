@@ -36,7 +36,7 @@ const styles = {
   },
   states: {
     disabled:'tw:disabled:cursor-not-allowed tw:disabled:bg-grey-light tw:disabled:text-grey-light',
-    error: 'tw:border-red-primary tw:hover:border-red-primary',
+    error: 'tw:border-red-primary tw:hover:border-red-primary tw:border-[2px]',
     hover:'tw:hover:border-grey-base tw:hover:shadow-none'
   }
 };
@@ -154,7 +154,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                 </span>
               </div>
               {helpText && (
-                <div className={cn(styles.text.help, "tw:mt-[8px] tw:mb-[9px]", flexDirection === 'horizontal' && 'tw:mt-[0px]')}>
+                <div className={cn(styles.text.help, "tw:mt-[8px] tw:mb-[9px]", flexDirection === 'horizontal' && 'tw:mt-[0px] tw:xs:mt-[0px]')}>
                   {helpText}
                 </div>
               )}
@@ -189,7 +189,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
       styles.text.base,
       styles.states.disabled,
       styles.states.hover,
-      'tw:rounded-tl-md tw:rounded-tr-md tw:rounded-bl-md',
+      'tw:rounded-tl-md tw:rounded-tr-md tw:rounded-bl-md tw:rounded-br-[0px]',
       'tw:p-[10px] tw:xs:p-[12px]',
       'tw:min-h-[100px] tw:resize-y',
       'tw:w-[380px]',
@@ -224,7 +224,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
                 )}
               </div>
               {helpText && (
-                <div className={cn(styles.text.help, "tw:!my-[12px]")}>
+                <div className={cn(styles.text.help, "tw:mt-[8px] tw:mb-[9px]")}>
                   {helpText}
                 </div>
               )}
