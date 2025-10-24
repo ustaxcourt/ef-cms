@@ -4,15 +4,11 @@ import {
   type ScriptConfig,
   parseArgsAndEnvVars,
 } from './helpers/parseArgsAndEnvVars';
-import {
-  type ServerApplicationContext,
-  createApplicationContext,
-} from '@web-api/applicationContext';
 
 // Example:
 //   scripts/template.ts m073,m074 --fiscal -y 2018 --years 2020,2022-2024
 const scriptConfig: ScriptConfig = {
-  description: 'TypeScript Shell Script Template',
+  description: 'template - TypeScript Shell Script Template',
   environment: {
     env: 'ENV',
     region: 'REGION',
@@ -58,10 +54,22 @@ const { env, eventCodes, fiscal, verbose, years } = parseArgsAndEnvVars(
   years: number[];
 };
 
-(() => {
-  const applicationContext: ServerApplicationContext = createApplicationContext(
-    {},
-  );
+const placeholder = async ({
+  eventCodes,
+  fiscal,
+  years,
+}: {
+  eventCodes: string[];
+  fiscal: boolean;
+  years: number[];
+}) => {
+  if (eventCodes.length || fiscal || years.length) {
+    await new Promise(resolve => setTimeout(resolve, 200));
+  }
+};
+
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
+(async () => {
   console.log({ env, eventCodes, fiscal, verbose, years });
-  console.log(applicationContext.environment.stage);
+  await placeholder({ eventCodes, fiscal, years });
 })();
