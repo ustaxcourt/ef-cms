@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import { ClientApplicationContext } from '@web-client/applicationContext';
@@ -53,11 +54,9 @@ export const confirmInitiateServiceModalHelper = (
   }
 
   const { isFiledAcrossAllCases, processingStatus } = currentDocketEntry;
-  console.log('currentDocketEntry', currentDocketEntry);
 
   const hasFiledAcrossGroup =
     isLeadCase(formattedCaseDetail) && isFiledAcrossAllCases;
-  console.log('isFiledAcrossAllCases', isFiledAcrossAllCases);
 
   const canFileAcrossGroup =
     processingStatus === DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING &&
@@ -141,15 +140,11 @@ export const confirmInitiateServiceModalHelper = (
       docketNumber,
     } = caseItem;
 
-    console.log('caseItem**********', caseItem);
-
     const allParties = [
       ...irsPractitioners,
       ...petitioners,
       ...privatePractitioners,
     ];
-
-    console.log('allParties**********', allParties);
 
     allParties
       .filter(

@@ -18,13 +18,21 @@ import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNew
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../src/withAppContext';
+import {
+  createISODateString,
+  formatDateString,
+  FORMATS,
+} from '@shared/business/utilities/DateHandler';
 
 describe('Docket Clerk Multi-Dockets a Court Issued Order in a Consolidated Group with Paper Service', () => {
   const cerebralTest = setupTest();
 
   cerebralTest.consolidatedCases = [];
 
-  const trialLocation = `Houston, Texas, ${Date.now()}`;
+  const trialLocation = `Houston, Texas, ${formatDateString(
+    createISODateString(),
+    FORMATS.UNIX_TIMESTAMP_SECONDS,
+  )}`;
   const overrides = {
     preferredTrialCity: trialLocation,
     procedureType: 'Small',
@@ -105,11 +113,13 @@ describe('Docket Clerk Multi-Dockets a Court Issued Order in a Consolidated Grou
       },
     );
 
-    expect(modalHelper.showPaperAlert).toEqual(true);
+    expect(modalHelper.contactsNeedingPaperService).toBeDefined();
     expect(modalHelper.contactsNeedingPaperService).toEqual([
-      {
-        name: 'Daenerys Stormborn, Petitioner',
-      },
+      expect.objectContaining({
+        name: 'Daenerys Stormborn',
+        docketNumber: cerebralTest.docketNumber,
+        contactType: 'petitioner',
+      }),
     ]);
     expect(modalHelper.showConsolidatedCasesForService).toEqual(true);
 
