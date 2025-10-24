@@ -4,6 +4,6 @@ import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWeb
 
 export const chooseWizardStepSequence =
   startWebSocketConnectionSequenceDecorator([
-    // @ts-expect-error
+    // @ts-expect-error - Cerebral decorator type mismatch with action signature
     setWizardStepAction(props.value),
   ]) as unknown as (props: { value: string }) => void;
