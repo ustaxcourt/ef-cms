@@ -54,22 +54,12 @@ const { env, eventCodes, fiscal, verbose, years } = parseArgsAndEnvVars(
   years: number[];
 };
 
-const placeholder = async ({
-  eventCodes,
-  fiscal,
-  years,
-}: {
-  eventCodes: string[];
-  fiscal: boolean;
-  years: number[];
-}) => {
-  if (eventCodes.length || fiscal || years.length) {
-    await new Promise(resolve => setTimeout(resolve, 200));
-  }
+const placeholder = async () => {
+  await new Promise(resolve => setTimeout(resolve, 200));
 };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   console.log({ env, eventCodes, fiscal, verbose, years });
-  await placeholder({ eventCodes, fiscal, years });
+  await placeholder();
 })();
