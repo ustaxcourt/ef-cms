@@ -16,10 +16,11 @@ const scriptConfig: ScriptConfig = {
   environment: {
     Password: 'DEFAULT_ACCOUNT_PASS',
     UserPoolId: 'USER_POOL_ID',
+    region: 'REGION',
   },
   requireActiveAwsSession: true,
 };
-const { Password, UserPoolId } = parseArgsAndEnvVars(scriptConfig) as {
+const { Password, UserPoolId, region } = parseArgsAndEnvVars(scriptConfig) as {
   [k: string]: string;
 };
 
@@ -35,7 +36,7 @@ type Users = {
   };
 };
 
-const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
+const cognito = new CognitoIdentityProvider({ region: region });
 
 const createOrUpdateCognitoUser = async ({
   email,
