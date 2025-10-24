@@ -109,7 +109,8 @@ export const generateStaleCasesReport = async ({
 }): Promise<void> => {
   const casesNotClosedOrOnAppeal = await getAllCasesNotInExcludedStatus();
   console.log(
-    `Found ${casesNotClosedOrOnAppeal.length} cases not closed or on appeal.`,
+    `Found ${casesNotClosedOrOnAppeal.length} cases not closed or on ` +
+      'appeal that were received at least a year ago.',
   );
   const queue = new PQueue({ concurrency: CONCURRENCY });
   const funcs = casesNotClosedOrOnAppeal.map(
