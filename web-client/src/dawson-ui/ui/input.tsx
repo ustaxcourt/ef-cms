@@ -201,7 +201,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
         {label && (
           <div>
             <div className="tw:flex tw:flex-col">
-              <div className="tw:flex tw:items-center">
+              <div className="tw:flex tw:items-center tw:mb-[9px] ">
                 <span
                   className={cn(styles.label)}
                   style={{ fontWeight: '600' }}
@@ -224,7 +224,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
                 )}
               </div>
               {helpText && (
-                <div className={cn(styles.text.help, "tw:mt-[8px] tw:mb-[9px]")}>
+                <div className={cn(styles.text.help, "tw:mb-[9px]")}>
                   {helpText}
                 </div>
               )}
