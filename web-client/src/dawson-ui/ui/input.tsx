@@ -32,7 +32,7 @@ const styles = {
   optional: 'tw:text-grey-dark tw:ml-1 tw:font-normal tw:text-[14px] tw:xs:text-[16px]',
   text: {
     base: 'tw:xs:text-[18px] tw:text-[16px] tw:outline-none tw:cursor-text',
-    help: 'tw:xs:mt-[10px] tw:xs:mb-[13px] tw:text-[14px] tw:xs:text-[16px] tw:text-grey-dark'
+    help: 'tw:xs:mb-[13px] tw:text-[14px] tw:xs:text-[16px] tw:text-grey-dark'
   },
   states: {
     disabled:'tw:disabled:cursor-not-allowed tw:disabled:bg-grey-light tw:disabled:text-grey-light',
@@ -202,7 +202,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
         {label && (
           <div>
             <div className="tw:flex tw:flex-col">
-              <div className="tw:flex tw:items-center tw:mb-[9px] ">
+              <div className="tw:flex tw:items-center tw:mb-[9px]">
                 <span
                   className={cn(styles.label)}
                   style={{ fontWeight: '600' }}
