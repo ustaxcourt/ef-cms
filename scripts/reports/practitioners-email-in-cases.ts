@@ -1,11 +1,13 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
-import { ROLES } from '@shared/business/entities/EntityConstants';
+import {
+  CLOSED_CASE_STATUSES,
+  ROLES,
+} from '@shared/business/entities/EntityConstants';
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
-import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { getDbReader } from '@web-api/database';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
@@ -16,6 +18,11 @@ const scriptConfig: ScriptConfig = {
     environmentName: 'ENV',
   },
   parameters: {
+    includeClosed: {
+      long: 'include-closed',
+      short: 'c',
+      type: 'boolean',
+    },
     practitionerId: {
       position: 0,
       required: true,
@@ -24,7 +31,8 @@ const scriptConfig: ScriptConfig = {
   },
   requireActiveAwsSession: true,
 };
-const { practitionerId } = parseArgsAndEnvVars(scriptConfig) as {
+const { includeClosed, practitionerId } = parseArgsAndEnvVars(scriptConfig) as {
+  includeClosed: boolean;
   practitionerId: string;
 };
 
@@ -43,19 +51,28 @@ const getPractitionersCases = async ({
 }: {
   role: string;
   userId: string;
-}): Promise<RawCase[]> => {
-  return (
-    await getDbReader(reader =>
-      reader
-        .selectFrom('dwCase as c')
-        .leftJoin('dwUserOnCase as uc', 'c.docketNumber', 'uc.docketNumber')
-        .selectAll('c')
-        .where('uc.userId', '=', userId)
-        .where('uc.actingAsRole', '=', ROLES[role])
-        .orderBy('c.sortableDocketNumber', 'asc')
-        .execute(),
-    )
-  ).map(fromKyselyCase) as RawCase[];
+}): Promise<{ [docketNumber: string]: string }> => {
+  const practitionersCases = (await getDbReader(reader => {
+    let query = reader
+      .selectFrom('dwCase as c')
+      .innerJoin('dwUserOnCase as uc', 'c.docketNumber', 'uc.docketNumber')
+      .innerJoin('dwUser as u', 'uc.userId', 'u.userId')
+      .select(['c.docketNumber', 'u.email']);
+    if (!includeClosed) {
+      query = query.where('c.status', 'not in', CLOSED_CASE_STATUSES);
+    }
+    return query
+      .where('uc.userId', '=', userId)
+      .where('uc.actingAsRole', '=', ROLES[role])
+      .orderBy('c.sortableDocketNumber', 'asc')
+      .execute();
+  })) as { docketNumber: string; email: string }[];
+
+  const practitionersEmailInCases = {};
+  for (const pc of practitionersCases) {
+    practitionersEmailInCases[pc.docketNumber] = pc.email;
+  }
+  return practitionersEmailInCases;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -65,19 +82,9 @@ const getPractitionersCases = async ({
     console.log(`Error: user is not a practitioner! User's role: ${role}`);
     return;
   }
-  const practitionersCases: RawCase[] = await getPractitionersCases({
+  const practitionersEmailInCases = await getPractitionersCases({
     role,
     userId: practitionerId,
   });
-  const practitionersEmailInCases = {};
-  for (const practitionersCase of practitionersCases) {
-    const practitionerObj = practitionersCase[`${role}s`]?.find(
-      pract => pract.userId === practitionerId,
-    );
-    if (practitionerObj && practitionerObj.email) {
-      practitionersEmailInCases[practitionersCase.docketNumber] =
-        practitionerObj.email;
-    }
-  }
   console.log(practitionersEmailInCases);
 })();
