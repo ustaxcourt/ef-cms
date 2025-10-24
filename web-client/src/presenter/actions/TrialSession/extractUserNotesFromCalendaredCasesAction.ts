@@ -16,7 +16,7 @@ export const extractUserNotesFromCalendaredCasesAction = ({
   const userNotes = [];
 
   for (const calendaredCase of calendaredCases) {
-    userNotes.push(calendaredCase.notes);
+    userNotes.push((calendaredCase as { notes?: unknown }).notes);
   }
   store.set(
     state.trialSessionWorkingCopy.userNotes,

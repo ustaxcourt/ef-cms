@@ -87,7 +87,9 @@ describe('marshallCase (which fails if version increase is needed, DO NOT CHANGE
     expect(mock.sortableDocketNumber).toBeDefined();
     expect(mock.status).toBeDefined();
     expect(mock.trialLocation).toBeDefined();
+    // @ts-ignore
     expect(mock.contactPrimary).not.toBeDefined();
+    // @ts-ignore
     expect(mock.contactSecondary).not.toBeDefined();
     expect(mock.petitioners).toBeDefined();
     expect(mock.docketEntries).toBeDefined();

@@ -75,9 +75,12 @@ export const confirmInitiateServiceModalHelper = (
 
   let parties;
   if (showConsolidatedCasesForService) {
-    const modalForm = get(state.modal.form) || {};
-    const consolidatedCasesToMultiDocketOn =
-      modalForm.consolidatedCasesToMultiDocketOn || [];
+    const { consolidatedCasesToMultiDocketOn } = get(state.modal.form) as {
+      consolidatedCasesToMultiDocketOn: Array<{
+        checked: boolean;
+        docketNumber: string;
+      }>;
+    };
 
     const paperServiceParties: {
       contactId: string;
@@ -134,8 +137,12 @@ export const confirmInitiateServiceModalHelper = (
 
   let caseOrGroup = 'case';
   if (showConsolidatedCasesForService) {
-    const consolidatedCasesToMultiDocketOn =
-      (get(state.modal.form) || {}).consolidatedCasesToMultiDocketOn || [];
+    const { consolidatedCasesToMultiDocketOn } = get(state.modal.form) as {
+      consolidatedCasesToMultiDocketOn: Array<{
+        checked: boolean;
+        docketNumber: string;
+      }>;
+    };
 
     if (consolidatedCasesToMultiDocketOn.filter(c => c.checked).length > 1) {
       caseOrGroup = 'group';

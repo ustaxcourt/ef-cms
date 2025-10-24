@@ -1658,7 +1658,12 @@ export const presenter = {
     [GatewayTimeoutError, gatewayTimeoutErrorSequence], //504
     [ActionError, setCurrentPageErrorSequence], // generic error handler
   ],
-  providers: {} as { applicationContext: ClientApplicationContext; router: {} },
+  providers: {} as {
+    applicationContext: ClientApplicationContext;
+    router: {};
+  } & { socket: { start: () => void; stop: () => void } } & {
+    path: any;
+  },
   sequences: presenterSequences,
   state: cloneDeep(initialState),
 };
@@ -1677,6 +1682,7 @@ declare global {
       set: (key: any, value: any) => void;
       merge: (key: any, value: any) => void;
       unset: (key: any) => void;
+      increment: (key: any) => void;
     };
     path: any;
     props: Props;

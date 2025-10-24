@@ -2,9 +2,15 @@ import { ConsolidatedCasesCheckboxes } from './ConsolidatedCasesCheckboxes';
 import { InfoNotificationComponent } from './InfoNotification';
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@web-client/presenter/shared.cerebral';
+import { props as cerebralProps } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+
+const _props = cerebralProps as unknown as {
+  confirmSequence: unknown;
+  documentTitle: unknown;
+};
 
 export const ConfirmInitiateServiceModal = connect(
   {
@@ -14,16 +20,25 @@ export const ConfirmInitiateServiceModal = connect(
       state.confirmInitiateServiceModalHelper.additionalServedCases,
     waitingForResponse: state.progressIndicator.waitingForResponse,
   },
-  function ConfirmInitiateServiceModal(props: any) {
-    const {
-      cancelSequence,
-      confirmInitiateServiceModalHelper,
-      waitingForResponse,
-      additionalServedCases,
-    } = props;
-
-    const confirmSequence = props.confirmSequence as any;
-    const documentTitle = props.documentTitle as any;
+  function ConfirmInitiateServiceModal({
+    cancelSequence,
+    confirmInitiateServiceModalHelper,
+    confirmSequence,
+    documentTitle,
+    waitingForResponse,
+  }: {
+    cancelSequence: () => void;
+    confirmInitiateServiceModalHelper: {
+      confirmationText: string;
+      showPaperAlert: boolean;
+      caseOrGroup: string;
+      contactsNeedingPaperService: Array<{ name: string }>;
+      showConsolidatedCasesForService: boolean;
+    };
+    confirmSequence: () => void;
+    documentTitle: string;
+    waitingForResponse: boolean;
+  }) {
     let isSubmitDebounced = false;
 
     const debounceSubmit = timeout => {

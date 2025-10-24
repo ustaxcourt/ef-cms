@@ -2,11 +2,18 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { props as cerebralProps } from 'cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
+import { RunableSequence as RunnableSequence } from 'cerebral';
+
+const props = cerebralProps as unknown as {
+  bind: string;
+  index: number;
+  type: string;
+  validationBind: string;
+};
 
 export const SupportingDocumentInclusionsForm = connect(
   {
@@ -33,6 +40,16 @@ export const SupportingDocumentInclusionsForm = connect(
     updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence,
     validationData,
+  }: {
+    data: Record<string, any>;
+    DATE_FORMATS: { ISO: string };
+    formatAndUpdateDateFromDatePickerSequence: Function | RunnableSequence;
+    index: number;
+    openCleanModalSequence: Function | RunnableSequence;
+    type: string;
+    updateFileDocumentWizardFormValueSequence: Function | RunnableSequence;
+    validateExternalDocumentInformationSequence: Function | RunnableSequence;
+    validationData: Record<string, any>;
   }) {
     return (
       <>

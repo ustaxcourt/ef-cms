@@ -25,6 +25,31 @@ export const AddToTrialModal = connect(
     updateModalValueSequence,
     validateSequence,
     validationErrors,
+  }: {
+    cancelSequence: Function;
+    confirmSequence: Function;
+    isNoteRequired?: boolean;
+    modal: Record<string, any> & {
+      showAllLocations?: boolean;
+      trialSessionId?: string;
+      calendarNotes?: string;
+    };
+    modalHelper: {
+      trialSessionsFormatted: Array<{
+        trialSessionId: string;
+        optionText: string;
+      }>;
+      trialSessionStatesSorted: string[];
+      trialSessionsFormattedByState: Record<
+        string,
+        Array<{ trialSessionId: string; optionText: string }>
+      >;
+      showSessionNotSetAlert: boolean;
+    };
+    modalTitle: string;
+    updateModalValueSequence: Function;
+    validateSequence: Function;
+    validationErrors: Record<string, any>;
   }) {
     return (
       <ModalDialog
