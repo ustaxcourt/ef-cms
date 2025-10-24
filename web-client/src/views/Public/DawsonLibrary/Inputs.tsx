@@ -26,12 +26,19 @@ export function Inputs() {
           <div className="tw:w-full">
             <TextField
               label="Field Label"
-              helpText="Help text"
+              helpText="Help Text"
               icon={true}
               flexDirection='horizontal'
             />
           </div>
-         
+
+          <div className="tw:w-full">
+            <TextField
+              label="Field Label"
+              flexDirection='horizontal'
+            />
+          </div>
+
           <div className="tw:w-full">
             <TextField
               label="Field Label"

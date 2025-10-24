@@ -112,6 +112,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
     const parentDiv = classNames(
       'tw:flex',
       flexDirection === 'vertical' ? 'tw:flex-col' : 'tw:flex-row',
+      !helpText && 'tw:items-center'
     );
 
     const inputClass = classNames(
