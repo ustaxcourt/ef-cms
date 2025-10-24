@@ -141,3 +141,5 @@ As a team we use multiple methods of voting for decision making within the team.
 - Rely on DevSecOps. This allows us to rapidly develop and deploy improvements to our systems, infrastructure-as-code, configuration-as-code, and CI/CD, to ensure that our work is high-quality and secure.
 
 - Embrace and drive change. We recognize that this work requires constant learning on the part of all participants, and embrace the state of not-knowing that must precede learning.
+
+Embrace and drive change. We recognize that this work requires constant learning on the part of all participants, and embrace the state of not-knowing that must precede learning.
