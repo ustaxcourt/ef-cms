@@ -4,8 +4,14 @@ import {
 } from 'cypress/helpers/authentication/login-as-helpers';
 import { createAndServePaperPetition } from 'cypress/helpers/fileAPetition/create-and-serve-paper-petition';
 import { getCaseDetailTab } from 'cypress/local-only/support/pages/case-detail';
-import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
-import { DateTime } from 'luxon';
+import {
+  calculateISODate,
+  createISODateString,
+  formatDateString,
+  formatNow,
+  FORMATS,
+} from '@shared/business/utilities/DateHandler';
+import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
 
 describe('Edit Remote Status', () => {
   describe('As a docket clerk', () => {
@@ -15,7 +21,7 @@ describe('Edit Remote Status', () => {
 
     it('should allow docket clerk to edit remote status and add a granted date', () => {
       createAndServePaperPetition().then(({ docketNumber }) => {
-        cy.visit(`/case-detail/${docketNumber}`);
+        goToCase(docketNumber);
         getCaseDetailTab('case-information').click();
 
         cy.get('[data-testid="edit-remote-status"]').should('exist');
@@ -41,7 +47,7 @@ describe('Edit Remote Status', () => {
 
     it('should allow docket clerk to clear the remote status date', () => {
       createAndServePaperPetition().then(({ docketNumber }) => {
-        cy.visit(`/case-detail/${docketNumber}`);
+        goToCase(docketNumber);
         getCaseDetailTab('case-information').click();
 
         cy.get('[data-testid="edit-remote-status"]').click();
@@ -68,7 +74,7 @@ describe('Edit Remote Status', () => {
 
     it('should allow saving without a date (no-op when no date is entered)', () => {
       createAndServePaperPetition().then(({ docketNumber }) => {
-        cy.visit(`/case-detail/${docketNumber}`);
+        goToCase(docketNumber);
         getCaseDetailTab('case-information').click();
 
         cy.get('[data-testid="edit-remote-status"]').click();
@@ -85,7 +91,7 @@ describe('Edit Remote Status', () => {
 
     it('should show validation error for invalid date format', () => {
       createAndServePaperPetition().then(({ docketNumber }) => {
-        cy.visit(`/case-detail/${docketNumber}`);
+        goToCase(docketNumber);
         getCaseDetailTab('case-information').click();
 
         cy.get('[data-testid="edit-remote-status"]').click();
@@ -103,7 +109,7 @@ describe('Edit Remote Status', () => {
 
     it('should display remote status date in Trial Information section when case is not scheduled', () => {
       createAndServePaperPetition().then(({ docketNumber }) => {
-        cy.visit(`/case-detail/${docketNumber}`);
+        goToCase(docketNumber);
         getCaseDetailTab('case-information').click();
 
         cy.get('[data-testid="edit-remote-status"]').click();
@@ -121,7 +127,7 @@ describe('Edit Remote Status', () => {
 
     it('should allow docket clerk to cancel editing without saving changes', () => {
       createAndServePaperPetition().then(({ docketNumber }) => {
-        cy.visit(`/case-detail/${docketNumber}`);
+        goToCase(docketNumber);
         getCaseDetailTab('case-information').click();
 
         cy.get('[data-testid="edit-remote-status"]').click();
@@ -143,13 +149,17 @@ describe('Edit Remote Status', () => {
 
     it('should not allow future dates for remote trial granted date', () => {
       createAndServePaperPetition().then(({ docketNumber }) => {
-        cy.visit(`/case-detail/${docketNumber}`);
+        goToCase(docketNumber);
         getCaseDetailTab('case-information').click();
 
         cy.get('[data-testid="edit-remote-status"]').click();
 
-        const futureDate = DateTime.now().plus({ days: 30 });
-        const futureDateString = futureDate.toFormat('MM/dd/yyyy');
+        const futureDate = calculateISODate({
+          dateString: createISODateString(),
+          howMuch: 30,
+          units: 'days',
+        });
+        const futureDateString = formatDateString(futureDate, FORMATS.MMDDYYYY);
         cy.get('#remote-trial-granted-date-picker').type(futureDateString);
 
         cy.get('#remote-trial-granted-date-picker').should('exist');
@@ -186,7 +196,7 @@ describe('Edit Remote Status', () => {
 
     it('should persist remote trial granted date after page refresh', () => {
       createAndServePaperPetition().then(({ docketNumber }) => {
-        cy.visit(`/case-detail/${docketNumber}`);
+        goToCase(docketNumber);
         getCaseDetailTab('case-information').click();
 
         cy.get('[data-testid="edit-remote-status"]').click();
@@ -206,7 +216,7 @@ describe('Edit Remote Status', () => {
 
     it('should allow updating an existing remote trial granted date', () => {
       createAndServePaperPetition().then(({ docketNumber }) => {
-        cy.visit(`/case-detail/${docketNumber}`);
+        goToCase(docketNumber);
         getCaseDetailTab('case-information').click();
 
         cy.get('[data-testid="edit-remote-status"]').click();
@@ -217,8 +227,12 @@ describe('Edit Remote Status', () => {
         cy.get('.usa-alert--success').should('exist');
 
         cy.get('[data-testid="edit-remote-status"]').click();
-        const newDate = DateTime.now().minus({ days: 7 });
-        const newDateString = newDate.toFormat('MM/dd/yyyy');
+        const newDate = calculateISODate({
+          dateString: createISODateString(),
+          howMuch: -7,
+          units: 'days',
+        });
+        const newDateString = formatDateString(newDate, FORMATS.MMDDYYYY);
 
         cy.get('#remote-trial-granted-date-picker').clear();
         cy.get('#remote-trial-granted-date-picker').type(newDateString);
@@ -227,7 +241,7 @@ describe('Edit Remote Status', () => {
         cy.get('.usa-alert--success').should('exist');
 
         cy.contains('Motion to proceed remotely granted date').should('exist');
-        cy.contains(newDate.toFormat('MM/dd/yyyy')).should('exist');
+        cy.contains(formatDateString(newDate, FORMATS.MMDDYYYY)).should('exist');
         cy.contains(initialDateString).should('not.exist');
       });
     });

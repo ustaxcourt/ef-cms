@@ -1942,7 +1942,7 @@ export class Case extends JoiValidationEntity {
    * @param {string | null | undefined} remoteTrialGrantedDate the date when motion to proceed remotely was granted, or null/undefined to clear
    * @returns {Case} this case entity
    */
-  setRemoteTrialGrantedDate(remoteTrialGrantedDate?: string | null) {
+  setRemoteTrialGrantedDate(remoteTrialGrantedDate?: string | null): Case {
     const hasDate = Boolean(
       remoteTrialGrantedDate &&
         typeof remoteTrialGrantedDate === 'string' &&

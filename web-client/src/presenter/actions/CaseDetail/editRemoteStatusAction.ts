@@ -13,15 +13,10 @@ export const editRemoteStatusAction = async ({
   get,
 }: ActionProps) => {
   const docketNumber = get(state.caseDetail.docketNumber);
-  const modalState = get(state.modal);
-  const { remoteTrialGrantedDate } = modalState;
+  const { remoteTrialGrantedDate } = get(state.modal);
   const rawCase = get(state.caseDetail);
   const user = get(state.user);
-  const currentCase = new Case(rawCase, { 
-    authorizedUser: user,
-    filtered: false,
-    isNewCase: false 
-  });
+  const currentCase = new Case(rawCase, { authorizedUser: user });
   
   currentCase.setRemoteTrialGrantedDate(remoteTrialGrantedDate);
 
