@@ -82,7 +82,7 @@ export const ConfirmInitiateServiceModal = connect(
                   {confirmInitiateServiceModalHelper.contactsNeedingPaperService.map(
                     contact => (
                       <div key={`${contact.docketNumber}-${contact.name}`}>
-                        {confirmInitiateServiceModalHelper.canFileAcrossGroup &&
+                        {confirmInitiateServiceModalHelper.canServeAcrossGroup &&
                           `${contact.docketNumber} - `}
                         {contact.name}, {contact.contactType}
                       </div>

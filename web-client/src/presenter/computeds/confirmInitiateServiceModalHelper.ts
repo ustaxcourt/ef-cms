@@ -1,8 +1,10 @@
 import { Get } from 'cerebral';
-import { uniqBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstants';
+import {
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  SERVICE_INDICATOR_TYPES,
+} from '@shared/business/entities/EntityConstants';
 import { isLeadCase } from '@shared/business/entities/cases/Case';
 
 /**
@@ -17,13 +19,19 @@ export const confirmInitiateServiceModalHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): {
-  canFileAcrossGroup: boolean;
+  canServeAcrossGroup: boolean;
   confirmationText: string;
   paperFilingText: string;
   showConsolidatedCasesForService: boolean;
-  showPaperAlert: boolean;
-  additionalServedCases: string[];
-  contactsNeedingPaperService: {}[];
+  additionalServedCases: { docketNumber: string; caseTitle: string }[];
+  contactsNeedingPaperService?: {
+    contactId?: string;
+    userId?: string;
+    name: string;
+    contactType?: string;
+    serviceIndicator: string;
+    docketNumber: string;
+  }[];
 } => {
   const {
     NON_MULTI_DOCKETABLE_EVENT_CODES,
@@ -36,16 +44,26 @@ export const confirmInitiateServiceModalHelper = (
   const form = get(state.form);
   const isOnMessageDetailPage = get(state.currentPage) === 'MessageDetail';
   let { documentTitle, eventCode } = form;
+  const currentDocketEntry = formattedCaseDetail.docketEntries.find(
+    doc => doc.docketEntryId === docketEntryId,
+  );
 
-  let isFiledAcrossAllCases;
   if (!eventCode) {
-    ({ documentTitle, eventCode, isFiledAcrossAllCases } =
-      formattedCaseDetail.docketEntries.find(
-        doc => doc.docketEntryId === docketEntryId,
-      ));
+    ({ documentTitle, eventCode } = currentDocketEntry);
   }
-  const canFileAcrossGroup =
+
+  const { isFiledAcrossAllCases, processingStatus } = currentDocketEntry;
+  console.log('currentDocketEntry', currentDocketEntry);
+
+  const hasFiledAcrossGroup =
     isLeadCase(formattedCaseDetail) && isFiledAcrossAllCases;
+  console.log('isFiledAcrossAllCases', isFiledAcrossAllCases);
+
+  const canFileAcrossGroup =
+    processingStatus === DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING &&
+    isLeadCase(formattedCaseDetail);
+
+  const canServeAcrossGroup = canFileAcrossGroup || hasFiledAcrossGroup;
 
   let showConsolidatedCasesForService =
     formattedCaseDetail.isLeadCase &&
@@ -62,7 +80,7 @@ export const confirmInitiateServiceModalHelper = (
   }
 
   let additionalServedCases: { docketNumber: string; caseTitle: string }[] = [];
-  if (canFileAcrossGroup) {
+  if (hasFiledAcrossGroup) {
     if (Array.isArray(formattedCaseDetail.consolidatedCases)) {
       additionalServedCases = formattedCaseDetail.consolidatedCases
         .filter((c: any) => c.docketNumber !== formattedCaseDetail.docketNumber)
@@ -77,7 +95,6 @@ export const confirmInitiateServiceModalHelper = (
     ? 'The following document will be served on all parties in selected cases:'
     : 'The following document will be served on all parties:';
 
-  let parties;
   if (showConsolidatedCasesForService) {
     const modalForm = get(state.modal.form) || {};
     const consolidatedCasesToMultiDocketOn =
@@ -101,20 +118,6 @@ export const confirmInitiateServiceModalHelper = (
         paperServiceParties.push(...checkboxPaperServiceParties);
       }
     });
-
-    const paperServicePetitioners = paperServiceParties.filter(
-      party => party.contactId,
-    );
-    const paperServicePractitioners = paperServiceParties.filter(
-      party => party.userId,
-    );
-
-    parties = [
-      ...uniqBy(paperServicePetitioners, 'contactId'),
-      ...uniqBy(paperServicePractitioners, 'userId'),
-    ];
-  } else {
-    parties = getPaperServiceParties(formattedCaseDetail);
   }
 
   const contactsNeedingPaperService: {
@@ -126,7 +129,7 @@ export const confirmInitiateServiceModalHelper = (
     docketNumber: string;
   }[] = [];
 
-  const casesToIterateOver = canFileAcrossGroup
+  const casesToIterateOver = canServeAcrossGroup
     ? formattedCaseDetail.consolidatedCases
     : [formattedCaseDetail];
 
@@ -137,11 +140,17 @@ export const confirmInitiateServiceModalHelper = (
       privatePractitioners = [],
       docketNumber,
     } = caseItem;
+
+    console.log('caseItem**********', caseItem);
+
     const allParties = [
       ...irsPractitioners,
       ...petitioners,
       ...privatePractitioners,
     ];
+
+    console.log('allParties**********', allParties);
+
     allParties
       .filter(
         person => person.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
@@ -153,17 +162,16 @@ export const confirmInitiateServiceModalHelper = (
         });
       });
   }
-
-  const paperFilingText = canFileAcrossGroup
+  // should we use canServeAcrossGroup here instead?
+  const paperFilingText = hasFiledAcrossGroup
     ? 'Paper service is required for these parties:'
     : 'This case has parties receiving paper service:';
 
   return {
-    canFileAcrossGroup,
+    canServeAcrossGroup,
     confirmationText,
     paperFilingText,
     showConsolidatedCasesForService,
-    showPaperAlert: contactsNeedingPaperService.length > 0,
     additionalServedCases,
     contactsNeedingPaperService:
       contactsNeedingPaperService.length > 0

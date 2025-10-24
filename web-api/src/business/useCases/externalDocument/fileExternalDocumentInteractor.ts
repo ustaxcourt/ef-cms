@@ -130,6 +130,10 @@ export const fileExternalDocument = async (
       let caseEntity = new Case(caseToUpdate, { authorizedUser });
 
       const servedParties = aggregatePartiesForService(caseEntity);
+      console.log(
+        'consolidatedCasesToFileAcross',
+        consolidatedCasesToFileAcross,
+      );
 
       for (const [docketEntryId, metadata, relationship] of documentsToAdd) {
         if (docketEntryId && metadata) {
@@ -138,7 +142,7 @@ export const fileExternalDocument = async (
               ...baseMetadata,
               ...metadata,
               docketEntryId,
-              isFiledAcrossAllCases: consolidatedCasesToFileAcross,
+              isFiledAcrossAllCases: !!consolidatedCasesToFileAcross,
               documentType: metadata.documentType,
               isOnDocketRecord: true,
               relationship,
