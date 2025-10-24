@@ -42,11 +42,11 @@ table,
   }
 
   tr.aged-cases {
-    background: rgb(244 227 219 / 100%);
+    background: $red-error;
     
     &:hover {
-      background: rgb(244 227 219 / 100%);
-      box-shadow: 5px 0 0 0 rgb(216 57 51 / 100%) inset;
+      background: $red-error;
+      box-shadow: 5px 0 0 0 $red-primary inset;
     }
   }
 }
