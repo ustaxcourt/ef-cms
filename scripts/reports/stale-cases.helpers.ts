@@ -2,10 +2,10 @@ import {
   CASE_STATUS_TYPES,
   CaseStatus,
 } from '@shared/business/entities/EntityConstants';
-import { DateTime } from 'luxon';
 import {
   calculateDifferenceInDays,
   createISODateString,
+  getJsDateFromIso,
   subtractISODates,
 } from '@shared/business/utilities/DateHandler';
 import { compareStrings } from '@shared/business/utilities/sortFunctions';
@@ -37,9 +37,9 @@ type StaleCase = {
 const staleCases: StaleCase[] = [];
 
 const getAllCasesNotInExcludedStatus = async (): Promise<RawCase[]> => {
-  const oneYearAgo = DateTime.fromISO(
+  const oneYearAgo = getJsDateFromIso(
     subtractISODates(todayISO, { day: YEAR_IN_DAYS }),
-  ).toJSDate();
+  );
   return (
     await getDbReader(reader =>
       reader
