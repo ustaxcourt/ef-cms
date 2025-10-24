@@ -80,6 +80,7 @@ export const EligibleCases = connect(
                 className={classNames({
                   'aged-cases': eligibleCase.isAgedCase,
                 })}
+                data-testid={`table-row-${eligibleCase.docketNumber}`}
               >
                 <td>
                   <CaseIcons formattedCase={eligibleCase} />
