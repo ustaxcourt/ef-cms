@@ -13,9 +13,8 @@ import {
   calculateDifferenceInDays,
   formatDateString,
 } from '@shared/business/utilities/DateHandler';
-import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
-import { fromKyselyDocketEntry } from '@web-api/persistence/postgres/docketEntries/mapper';
 import { fromKyselyUser } from '@web-api/persistence/postgres/users/mapper';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { getDbReader } from '@web-api/database';
 import { pick, sortBy } from 'lodash';
 import { substantiveEventCodes } from './non-attorney-practitioners-constants';
@@ -39,31 +38,10 @@ const scriptConfig: ScriptConfig = {
 };
 const { stats } = parseArgsAndEnvVars(scriptConfig) as { stats: boolean };
 
-type tCase = {
-  caseCaption: string;
-  closedDate?: string;
-  closedDateFormatted: string;
-  docketEntries?: tDocketEntry[];
-  docketNumber: string;
-  noticeOfTrialDate?: string;
-  noticeOfTrialDateFormatted: string;
-  privatePractitioners?: RawPractitioner[];
-  procedureType: string;
-  receivedAt: string;
-  receivedAtFormatted: string;
-  status: string;
-  trialDate?: string;
-  trialDateFormatted: string;
-  trialSessionId?: string;
-};
-type tDocketEntry = {
-  docketNumber: string;
-  eventCode: string;
-  index?: number;
-  receivedAt: string;
-  receivedAtFormatted: string;
-  userId?: string;
-};
+type tCase = Omit<
+  RawCase,
+  'hearings' | 'irsPractitioners' | 'correspondence' | 'consolidatedCases'
+>;
 type tUsersCase = {
   caseCaption: string;
   closedByStipulatedDecision: boolean;
@@ -135,90 +113,30 @@ const retrieveNonAttorneys = async (): Promise<{
   return formatNonAttorneys({ results });
 };
 
-const retrievePrivatePractitionersCases = async ({
-  userIds,
-}: {
-  userIds: string[];
-}): Promise<tCase[]> => {
-  const results = (
+const retrieveNonAttorneysCases = async (): Promise<tCase[]> => {
+  const docketNumbers = (
     await getDbReader(reader =>
       reader
         .selectFrom('dwCase as c')
-        .leftJoin('dwUserOnCase as uc', 'c.docketNumber', 'uc.docketNumber')
-        .selectAll('c')
-        .where('uc.userId', 'in', userIds)
+        .innerJoin('dwUserOnCase as uc', 'c.docketNumber', 'uc.docketNumber')
+        .innerJoin('dwUser as u', 'uc.userId', 'u.userId')
+        .select('c.docketNumber')
+        .where('u.practitionerType', '=', 'Non-Attorney')
         .orderBy('c.sortableDocketNumber', 'asc')
         .execute(),
     )
-  ).map(fromKyselyCase) as RawCase[];
-  return results.map(hit => {
-    return {
-      ...pick(hit, [
-        'caseCaption',
-        'closedDate',
-        'docketNumber',
-        'noticeOfTrialDate',
-        'privatePractitioners',
-        'procedureType',
-        'receivedAt',
-        'status',
-        'trialDate',
-        'trialSessionId',
-      ]),
-      closedDateFormatted: hit.closedDate
-        ? formatDateString(hit.closedDate, 'MMDDYYYY')
-        : '',
-      noticeOfTrialDateFormatted: hit.noticeOfTrialDate
-        ? formatDateString(hit.noticeOfTrialDate, 'MMDDYYYY')
-        : '',
-      receivedAtFormatted: hit.receivedAt
-        ? formatDateString(hit.receivedAt, 'MMDDYYYY')
-        : '',
-      trialDateFormatted: hit.trialDate
-        ? formatDateString(hit.trialDate, 'MMDDYYYY')
-        : '',
-    };
-  });
-};
-
-const retrieveDocketEntries = async ({
-  docketNumbers,
-}: {
-  docketNumbers: string[];
-}): Promise<tDocketEntry[]> => {
-  const results = (
-    await getDbReader(reader =>
-      reader
-        .selectFrom('dwDocketEntry as de')
-        .selectAll('de')
-        .where('de.docketNumber', 'in', docketNumbers)
-        .orderBy('de.receivedAt', 'asc')
-        .execute(),
-    )
-  ).map(fromKyselyDocketEntry) as RawDocketEntry[];
-  return results.map((hit: RawDocketEntry) => {
-    return {
-      ...pick(hit, [
-        'docketNumber',
-        'eventCode',
-        'index',
-        'receivedAt',
-        'userId',
-      ]),
-      receivedAtFormatted: hit.receivedAt
-        ? formatDateString(hit.receivedAt, 'MMDDYYYY')
-        : '',
-    };
+  ).map(c => c.docketNumber);
+  return await getCasesByDocketNumbers({
+    docketNumbers,
+    excludeFields: ['irsPractitioners', 'correspondence', 'hearings'],
   });
 };
 
 const getUsersCases = ({
   cases,
-  docketEntries,
   userId,
 }: {
   cases: tCase[];
-  docketEntries: tDocketEntry[];
   userId: string;
 }): tUsersCase[] => {
   const usersCases: tUsersCase[] = [];
@@ -228,14 +146,33 @@ const getUsersCases = ({
     return privatePractitionerIds.includes(userId);
   });
   for (const caseRecord of casesFiltered) {
-    caseRecord.docketEntries = docketEntries.filter(de => {
-      return de.docketNumber === caseRecord.docketNumber;
-    });
     usersCases.push({
-      ...caseRecord,
+      ...pick(caseRecord, [
+        'caseCaption',
+        'closedDate',
+        'docketNumber',
+        'noticeOfTrialDate',
+        'procedureType',
+        'receivedAt',
+        'status',
+        'trialDate',
+        'trialSessionId',
+      ]),
       closedByStipulatedDecision: closedByStipulatedDecision(caseRecord),
+      closedDateFormatted: caseRecord.closedDate
+        ? formatDateString(caseRecord.closedDate, 'MMDDYYYY')
+        : '',
       duration: calculateCaseDuration(caseRecord),
       hasNoticeOfAppeal: hasNoticeOfAppeal(caseRecord),
+      noticeOfTrialDateFormatted: caseRecord.noticeOfTrialDate
+        ? formatDateString(caseRecord.noticeOfTrialDate, 'MMDDYYYY')
+        : '',
+      receivedAtFormatted: caseRecord.receivedAt
+        ? formatDateString(caseRecord.receivedAt, 'MMDDYYYY')
+        : '',
+      trialDateFormatted: caseRecord.trialDate
+        ? formatDateString(caseRecord.trialDate, 'MMDDYYYY')
+        : '',
       userFiledPretrialMemorandum: userFiledPretrialMemorandum(
         caseRecord,
         userId,
@@ -461,19 +398,14 @@ const outputStatsRow = ({
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const nonAttorneys = await retrieveNonAttorneys();
-  const cases = await retrievePrivatePractitionersCases({
-    userIds: Object.keys(nonAttorneys),
-  });
-  const docketEntries = await retrieveDocketEntries({
-    docketNumbers: cases.map(c => c.docketNumber),
-  });
+  const cases = await retrieveNonAttorneysCases();
   if (stats) {
     outputStatsHeader();
   } else {
     outputHeader();
   }
   for (const userId of Object.keys(nonAttorneys)) {
-    const usersCases = getUsersCases({ cases, docketEntries, userId });
+    const usersCases = getUsersCases({ cases, userId });
     if (stats) {
       const nonAttorneyStats = generateCompositeStatistics({ usersCases });
       outputStatsRow({ nonAttorney: nonAttorneys[userId], nonAttorneyStats });
