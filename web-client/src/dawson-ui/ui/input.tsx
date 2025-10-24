@@ -36,7 +36,7 @@ const styles = {
   },
   states: {
     disabled:'tw:disabled:cursor-not-allowed tw:disabled:bg-grey-light tw:disabled:text-grey-light',
-    error: 'tw:border-red-primary tw:hover:border-red-primary tw:focus-visible:!ring-0',
+    error: 'tw:border-red-primary tw:hover:border-red-primary',
     hover:'tw:hover:border-grey-base tw:hover:shadow-none'
   }
 };
@@ -72,6 +72,22 @@ const useKeyboardListenerHook = () => {
 
   return {isTab}
 }
+
+const InputError = ({error}) => (
+  <>
+    {error && (
+      <div className="tw:mt-[6px] tw:xs:mt-[8px] tw:gap-2 tw:text-destructive">
+        <FontAwesomeIcon
+          icon={faExclamationCircle}
+          className="tw-text-[16px] tw:xs:text-[18px] tw:mr-[4px]"
+        />
+        <span className="tw-text-[16px] tw:xs:text-[18px]">
+              {error}
+            </span>
+      </div>
+    )}
+  </>
+)
 
 const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
   (
@@ -145,25 +161,17 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             </div>
           </div>
         )}
-        <input
-          id={inputId}
-          ref={ref}
-          type={type}
-          aria-invalid={!!error}
-          className={inputClass}
-          {...props}
-        />
-        {error && (
-          <div className="tw:mt-[6px] tw:xs:mt-[8px] tw:gap-2 tw:text-destructive">
-            <FontAwesomeIcon
-              icon={faExclamationCircle}
-              className="tw-text-[16px] tw:xs:text-[18px] tw:mr-[4px]"
-            />
-            <span className="tw-text-[16px] tw:xs:text-[18px]">
-              {error}
-            </span>
-          </div>
-        )}
+        <div className={flexDirection === 'vertical' ? 'tw:flex-col' : 'tw:flex-row tw:w-full'}>
+          <input
+            id={inputId}
+            ref={ref}
+            type={type}
+            aria-invalid={!!error}
+            className={inputClass}
+            {...props}
+          />
+          <InputError error={error} />
+        </div>
       </div>
     );
   },
@@ -185,7 +193,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
       'tw:p-[10px] tw:xs:p-[12px]',
       'tw:min-h-[100px] tw:resize-y',
       'tw:w-[380px]',
-      error && 'tw:border-destructive tw:ring-1 tw:ring-destructive',
+      error && styles.states.error,
     );
 
     return (
@@ -223,24 +231,16 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
             </div>
           </div>
         )}
-        <textarea
-          id={textareaId}
-          ref={ref}
-          aria-invalid={!!error}
-          className={textAreaClass}
-          {...props}
-        />
-        {error && (
-          <div className="tw:mt-1 tw:gap-2 tw:text-destructive">
-            <FontAwesomeIcon
-              icon={faQuestionCircle}
-              className="tw-text-[16px] tw:xs:text-[18px] tw:mr-[4px]"
-            />
-            <span className="tw-text-[16px] tw:xs:text-[18px]">
-              {error}
-            </span>
-          </div>
-        )}
+        <div>
+          <textarea
+            id={textareaId}
+            ref={ref}
+            aria-invalid={!!error}
+            className={textAreaClass}
+            {...props}
+          />
+          <InputError error={error} />
+        </div>
       </div>
     );
   },

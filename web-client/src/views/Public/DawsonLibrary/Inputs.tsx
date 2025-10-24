@@ -40,6 +40,25 @@ export function Inputs() {
               error="Enter a valid answer"
             />
           </div>
+
+          <div className="tw:w-full">
+            <TextArea
+              label="Field Label"
+              helpText="Help text"
+              error="Enter a valid answer"
+            />
+          </div>
+
+          <div className="tw:w-full">
+            <TextField
+              label="Field Label"
+              helpText="Help text"
+              icon={true}
+              flexDirection='horizontal'
+              error="Enter a valid answer"
+
+            />
+          </div>
         </div>
       </div>
     </div>
