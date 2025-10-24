@@ -13,7 +13,7 @@ export function CaseIcons({ formattedCase }: { formattedCase: any }) {
         className={
           formattedCase.isAgedCase ? 'visibility-visible' : 'visibility-hidden'
         }
-        data-testid="case-aged-icon"
+        data-testid={`case-aged-icon-${formattedCase.docketNumber}`}
       >
         <Icon
           aria-hidden={!formattedCase.isAgedCase}
