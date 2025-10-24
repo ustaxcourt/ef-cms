@@ -161,4 +161,5 @@ export const initialPublicState = {
   ...computeds,
 };
 
+// @ts-expect-error
 export type PublicClientState = typeof initialPublicState;
