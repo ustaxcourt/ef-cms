@@ -1,3 +1,4 @@
+import { CourtIssuedDocumentPartial } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentPartial';
 import { CourtIssuedDocument } from './CourtIssuedDocumentConstants';
 import { CourtIssuedDocumentTypeA } from './CourtIssuedDocumentTypeA';
 import { CourtIssuedDocumentTypeB } from './CourtIssuedDocumentTypeB';
@@ -31,11 +32,9 @@ export function CourtIssuedDocumentFactory(
       case 'type h':
         return new CourtIssuedDocumentTypeH(documentMetadata);
       default:
-        throw new Error(
-          `Unknown document scenario: ${documentMetadata.scenario}`,
-        );
+        return new CourtIssuedDocumentPartial(documentMetadata);
     }
   } else {
-    throw new Error('Document scenario is required to create document.');
+    return new CourtIssuedDocumentPartial(documentMetadata);
   }
 }
