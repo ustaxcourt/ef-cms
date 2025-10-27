@@ -27,14 +27,6 @@ describe('Trial Session Aged Eligible Cases', () => {
         trialLocation,
         procedureType: PROCEDURE_TYPES_MAP.small,
       }).then(({ docketNumber }) => {
-        loginAsDocketClerk();
-        goToCase(docketNumber);
-        updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
-
-        loginAsPetitionsClerk1();
-        cy.get('[data-testid="trial-session-link"]').click();
-        cy.get('[data-testid="new-trial-sessions-tab"]').click();
-
         cy.intercept(
           'GET',
           `/trial-sessions/${trialSessionId}/eligible-cases`,
@@ -47,6 +39,13 @@ describe('Trial Session Aged Eligible Cases', () => {
             });
           },
         );
+        loginAsDocketClerk();
+        goToCase(docketNumber);
+        updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
+
+        loginAsPetitionsClerk1();
+        cy.get('[data-testid="trial-session-link"]').click();
+        cy.get('[data-testid="new-trial-sessions-tab"]').click();
 
         cy.get(`[data-testid="trial-location-link-${trialSessionId}"]`).click();
         cy.get(`[data-testid="table-row-${docketNumber}"]`).should(
@@ -94,14 +93,6 @@ describe('Trial Session Aged Eligible Cases', () => {
         trialLocation,
         procedureType: PROCEDURE_TYPES_MAP.small,
       }).then(({ docketNumber }) => {
-        loginAsDocketClerk();
-        goToCase(docketNumber);
-        updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
-
-        loginAsPetitionsClerk1();
-        cy.get('[data-testid="trial-session-link"]').click();
-        cy.get('[data-testid="new-trial-sessions-tab"]').click();
-
         cy.intercept(
           'GET',
           `/trial-sessions/${trialSessionId}/eligible-cases`,
@@ -114,6 +105,13 @@ describe('Trial Session Aged Eligible Cases', () => {
             });
           },
         );
+        loginAsDocketClerk();
+        goToCase(docketNumber);
+        updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
+
+        loginAsPetitionsClerk1();
+        cy.get('[data-testid="trial-session-link"]').click();
+        cy.get('[data-testid="new-trial-sessions-tab"]').click();
 
         cy.get(`[data-testid="trial-location-link-${trialSessionId}"]`).click();
 
@@ -200,14 +198,6 @@ describe('Trial Session Aged Eligible Cases', () => {
         trialLocation,
         procedureType: PROCEDURE_TYPES_MAP.regular,
       }).then(({ docketNumber }) => {
-        loginAsDocketClerk();
-        goToCase(docketNumber);
-        updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
-
-        loginAsPetitionsClerk1();
-        cy.get('[data-testid="trial-session-link"]').click();
-        cy.get('[data-testid="new-trial-sessions-tab"]').click();
-
         cy.intercept(
           'GET',
           `/trial-sessions/${trialSessionId}/eligible-cases`,
@@ -220,6 +210,13 @@ describe('Trial Session Aged Eligible Cases', () => {
             });
           },
         );
+        loginAsDocketClerk();
+        goToCase(docketNumber);
+        updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
+
+        loginAsPetitionsClerk1();
+        cy.get('[data-testid="trial-session-link"]').click();
+        cy.get('[data-testid="new-trial-sessions-tab"]').click();
 
         cy.get(`[data-testid="trial-location-link-${trialSessionId}"]`).click();
         cy.get(`[data-testid="table-row-${docketNumber}"]`).should(
@@ -276,14 +273,6 @@ describe('Trial Session Aged Eligible Cases', () => {
           trialLocation,
           procedureType: PROCEDURE_TYPES_MAP.regular,
         }).then(({ docketNumber }) => {
-          loginAsDocketClerk();
-          goToCase(docketNumber);
-          updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
-
-          loginAsPetitionsClerk1();
-          cy.get('[data-testid="trial-session-link"]').click();
-          cy.get('[data-testid="new-trial-sessions-tab"]').click();
-
           cy.intercept(
             'GET',
             `/trial-sessions/${trialSessionId}/eligible-cases`,
@@ -296,6 +285,13 @@ describe('Trial Session Aged Eligible Cases', () => {
               });
             },
           );
+          loginAsDocketClerk();
+          goToCase(docketNumber);
+          updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
+
+          loginAsPetitionsClerk1();
+          cy.get('[data-testid="trial-session-link"]').click();
+          cy.get('[data-testid="new-trial-sessions-tab"]').click();
 
           cy.get(
             `[data-testid="trial-location-link-${trialSessionId}"]`,
@@ -346,6 +342,14 @@ describe('Trial Session Aged Eligible Cases', () => {
       trialLocation,
       procedureType: PROCEDURE_TYPES_MAP.regular,
     }).then(({ docketNumber }) => {
+      cy.intercept('GET', `/cases/*/eligible-cases`, req => {
+        req.continue(resp => {
+          const eligibleCase = resp.body.find(
+            (c: EligibleCase) => c.docketNumber === docketNumber,
+          );
+          eligibleCase.isAgedCase = true;
+        });
+      });
       loginAsDocketClerk();
       goToCase(docketNumber);
       updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
@@ -369,15 +373,6 @@ describe('Trial Session Aged Eligible Cases', () => {
         }
       });
       cy.get('[data-testid="modal-button-confirm"]').click();
-
-      cy.intercept('GET', `/cases/*/eligible-cases`, req => {
-        req.continue(resp => {
-          const eligibleCase = resp.body.find(
-            (c: EligibleCase) => c.docketNumber === docketNumber,
-          );
-          eligibleCase.isAgedCase = true;
-        });
-      });
 
       cy.get(
         '[data-testid="trial-location-link-Birmingham, Alabama"] a',
