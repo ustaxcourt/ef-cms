@@ -40,19 +40,16 @@ describe('Trial Session Aged Eligible Cases', () => {
           `/trial-sessions/${trialSessionId}/eligible-cases`,
           req => {
             req.continue(res => {
-              const eligibleCase = res.body.find(
-                (c: EligibleCase) => c.docketNumber === docketNumber,
-              );
-              if (!eligibleCase) {
-                console.log('ERROR: Case not found!', docketNumber);
-                console.log(
-                  'Available dockets:',
-                  res.body.map((c: EligibleCase) => c.docketNumber),
-                );
-              } else {
-                console.log('Found case, setting isAgedCase to true');
-                eligibleCase.isAgedCase = true;
-              }
+              const modifiedBody = res.body.map((c: EligibleCase) => {
+                if (c.docketNumber === docketNumber) {
+                  return { ...c, isAgedCase: true };
+                }
+                return c;
+              });
+              res.send({
+                statusCode: 200,
+                body: modifiedBody,
+              });
             });
           },
         );
@@ -99,26 +96,20 @@ describe('Trial Session Aged Eligible Cases', () => {
           `/trial-sessions/${trialSessionId}/eligible-cases`,
           req => {
             req.continue(res => {
-              const eligibleCase = res.body.find(
-                (c: EligibleCase) => c.docketNumber === docketNumber,
-              );
-              if (!eligibleCase) {
-                console.log('ERROR: Case not found!', docketNumber);
-                console.log(
-                  'Available dockets:',
-                  res.body.map((c: EligibleCase) => c.docketNumber),
-                );
-              } else {
-                console.log('Found case, setting isAgedCase to true');
-                eligibleCase.isAgedCase = true;
-              }
+              const modifiedBody = res.body.map((c: EligibleCase) => {
+                if (c.docketNumber === docketNumber) {
+                  return { ...c, isAgedCase: true };
+                }
+                return c;
+              });
+              res.send({
+                statusCode: 200,
+                body: modifiedBody,
+              });
             });
           },
-        ).as('getEligibleCases');
-
+        );
         cy.get(`[data-testid="trial-location-link-${trialSessionId}"]`).click();
-
-        cy.wait('@getEligibleCases');
 
         cy.get('#hybrid-session-filter').select(PROCEDURE_TYPES_MAP.small);
 
@@ -159,19 +150,16 @@ describe('Trial Session Aged Eligible Cases', () => {
           `/trial-sessions/${trialSessionId}/eligible-cases`,
           req => {
             req.continue(res => {
-              const eligibleCase = res.body.find(
-                (c: EligibleCase) => c.docketNumber === docketNumber,
-              );
-              if (!eligibleCase) {
-                console.log('ERROR: Case not found!', docketNumber);
-                console.log(
-                  'Available dockets:',
-                  res.body.map((c: EligibleCase) => c.docketNumber),
-                );
-              } else {
-                console.log('Found case, setting isAgedCase to true');
-                eligibleCase.isAgedCase = true;
-              }
+              const modifiedBody = res.body.map((c: EligibleCase) => {
+                if (c.docketNumber === docketNumber) {
+                  return { ...c, isAgedCase: true };
+                }
+                return c;
+              });
+              res.send({
+                statusCode: 200,
+                body: modifiedBody,
+              });
             });
           },
         );
@@ -225,25 +213,21 @@ describe('Trial Session Aged Eligible Cases', () => {
           `/trial-sessions/${trialSessionId}/eligible-cases`,
           req => {
             req.continue(res => {
-              const eligibleCase = res.body.find(
-                (c: EligibleCase) => c.docketNumber === docketNumber,
-              );
-              if (!eligibleCase) {
-                console.log('ERROR: Case not found!', docketNumber);
-                console.log(
-                  'Available dockets:',
-                  res.body.map((c: EligibleCase) => c.docketNumber),
-                );
-              } else {
-                console.log('Found case, setting isAgedCase to true');
-                eligibleCase.isAgedCase = true;
-              }
+              const modifiedBody = res.body.map((c: EligibleCase) => {
+                if (c.docketNumber === docketNumber) {
+                  return { ...c, isAgedCase: true };
+                }
+                return c;
+              });
+              res.send({
+                statusCode: 200,
+                body: modifiedBody,
+              });
             });
           },
-        ).as('getEligibleCases');
+        );
 
         cy.get(`[data-testid="trial-location-link-${trialSessionId}"]`).click();
-        cy.wait('@getEligibleCases');
         cy.get(`[data-testid="table-row-${docketNumber}"]`).should(
           'have.class',
           'aged-cases',
@@ -289,27 +273,23 @@ describe('Trial Session Aged Eligible Cases', () => {
             `/trial-sessions/${trialSessionId}/eligible-cases`,
             req => {
               req.continue(res => {
-                const eligibleCase = res.body.find(
-                  (c: EligibleCase) => c.docketNumber === docketNumber,
-                );
-                if (!eligibleCase) {
-                  console.log('ERROR: Case not found!', docketNumber);
-                  console.log(
-                    'Available dockets:',
-                    res.body.map((c: EligibleCase) => c.docketNumber),
-                  );
-                } else {
-                  console.log('Found case, setting isAgedCase to true');
-                  eligibleCase.isAgedCase = true;
-                }
+                const modifiedBody = res.body.map((c: EligibleCase) => {
+                  if (c.docketNumber === docketNumber) {
+                    return { ...c, isAgedCase: true };
+                  }
+                  return c;
+                });
+                res.send({
+                  statusCode: 200,
+                  body: modifiedBody,
+                });
               });
             },
-          ).as('getEligibleCases');
+          );
 
           cy.get(
             `[data-testid="trial-location-link-${trialSessionId}"]`,
           ).click();
-          cy.wait('@getEligibleCases');
           cy.get(`[data-testid="table-row-${docketNumber}"]`).should(
             'have.class',
             'aged-cases',
