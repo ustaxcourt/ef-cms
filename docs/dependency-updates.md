@@ -183,6 +183,8 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 - Peer-dependency tar-fs has high security vulnerability but this shouldn't affect us as far as we are aware of.
 
+- On October 27th, 2025, successfully updated puppeteer to 24.23.1 and @sparticuz/chromium to 141.0.0. Verified compatibility using the puppeteer supported browsers page. Updated versions in both `package.json` and `web-api/runtimes/puppeteer/package.json`. 
+
 ### ws, 3rd party dependency of Cerebral
 
 - When running npm audit, you'll see a high severity issue with ws, 'affected by a DoS when handling a request with many HTTP headers - https://github.com/advisories/GHSA-3h5v-q93c-6h6q'. This doesn't affect us as the vulnerability is on the server side and we're not using this package on the server. We tried to override this to 5.2.4 and 8.18.0 and weren't able to make this work as import paths have changed. In the mean time, we recommend skipping this issue. We could always fork the cerebral repo in the future if needed.
@@ -206,10 +208,20 @@ On June 26 2025, newer versions of babel-core and jest core also started to caus
 ### @types/node
 The major version of this package should match our major version of node. At the moment that we are using node v22.20.0 so we should use a package that starts with 22.
 
+- On October 27th, 2025, successfully updated @types/node to 22.18.12 to match Node.js v22.20.0.
+
 ### TypeScript
 We cannot update TypeScript version beyond v5.8.3 until ts-jest supports it
 
-- On September 19th, 2025, tried to update to 5.9.2, the highest non-beta version but we would need to address the Typescript issues. I ran out of time to do so. Refer to this PR. https://github.com/ustaxcourt/ef-cms/pull/9164 
+- On September 19th, 2025, tried to update to 5.9.2, the highest non-beta version but we would need to address the Typescript issues. I ran out of time to do so. Refer to this PR. https://github.com/ustaxcourt/ef-cms/pull/9164
+
+- On October 27th, 2025, tried to update to 5.9.3. The update introduced 116+ new TypeScript errors due to stricter type checking:
+  - 35 null-checking errors (TS18047 "possibly null") from stricter null-checking on DOM elements, refs, and properties
+  - 49 "never" type inference errors where TypeScript more aggressively infers `never` type for uninitialized or narrowed types
+  - 55 IApplicationContext type errors related to stricter type checking on mock vs. real application context objects
+  - Additional errors in test files and UI components
+  
+  The decision was made to revert back to 5.8.3 as the migration would require multiple days of dedicated work.
 
 ### p-queue
 There are a few scripts that depend on p-queue v6.6.2.  Upgrading this past version 6 will cause issues related to module imports.  It might be good to verify if the scripts using p-queue are still in use and if not, we could just remove p-queue and those scripts.
@@ -225,10 +237,11 @@ It's rare to need modify cache key. One reason you may want to do so is if a pac
 
 https://www.npmjs.com/package/uuid?activeTab=readme
 
-
-Quote from site
+Quote from site:
 
 "Starting with uuid@12 CommonJS is no longer supported. See implications and motivation for details."
+
+- On October 27th, 2025, added `uuid` to the caveats list in `scripts/npm/upgrade-npm-packages.ts` to prevent automatic upgrades to v12+ during future
 
 ## typescript
 When I tried updating Typescript last week, it enforced more type errors in many files. To proceed with an upgrade, you'll need to make some changes to the files in question
