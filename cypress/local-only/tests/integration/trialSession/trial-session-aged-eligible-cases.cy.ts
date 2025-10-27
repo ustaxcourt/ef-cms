@@ -23,22 +23,29 @@ describe('Trial Session Aged Eligible Cases', () => {
       sessionType: SESSION_TYPES.small,
       trialLocation,
     }).then(({ trialSessionId }) => {
+      let interceptedDocketNumber: string;
+      cy.intercept(
+        'GET',
+        `/trial-sessions/${trialSessionId}/eligible-cases`,
+        req => {
+          req.continue(resp => {
+            if (interceptedDocketNumber) {
+              const eligibleCase = resp.body.find(
+                (c: EligibleCase) => c.docketNumber === interceptedDocketNumber,
+              );
+              if (eligibleCase) {
+                eligibleCase.isAgedCase = true;
+              }
+            }
+          });
+        },
+      );
+
       createAndServePaperPetition({
         trialLocation,
         procedureType: PROCEDURE_TYPES_MAP.small,
       }).then(({ docketNumber }) => {
-        cy.intercept(
-          'GET',
-          `/trial-sessions/${trialSessionId}/eligible-cases`,
-          req => {
-            req.continue(resp => {
-              const eligibleCase = resp.body.find(
-                (c: EligibleCase) => c.docketNumber === docketNumber,
-              );
-              eligibleCase.isAgedCase = true;
-            });
-          },
-        );
+        interceptedDocketNumber = docketNumber;
         loginAsDocketClerk();
         goToCase(docketNumber);
         updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
@@ -89,22 +96,28 @@ describe('Trial Session Aged Eligible Cases', () => {
       sessionType: SESSION_TYPES.hybrid,
       trialLocation,
     }).then(({ trialSessionId }) => {
+      let interceptedDocketNumber: string;
+      cy.intercept(
+        'GET',
+        `/trial-sessions/${trialSessionId}/eligible-cases`,
+        req => {
+          req.continue(resp => {
+            if (interceptedDocketNumber) {
+              const eligibleCase = resp.body.find(
+                (c: EligibleCase) => c.docketNumber === interceptedDocketNumber,
+              );
+              if (eligibleCase) {
+                eligibleCase.isAgedCase = true;
+              }
+            }
+          });
+        },
+      );
       createAndServePaperPetition({
         trialLocation,
         procedureType: PROCEDURE_TYPES_MAP.small,
       }).then(({ docketNumber }) => {
-        cy.intercept(
-          'GET',
-          `/trial-sessions/${trialSessionId}/eligible-cases`,
-          req => {
-            req.continue(resp => {
-              const eligibleCase = resp.body.find(
-                (c: EligibleCase) => c.docketNumber === docketNumber,
-              );
-              eligibleCase.isAgedCase = true;
-            });
-          },
-        );
+        interceptedDocketNumber = docketNumber;
         loginAsDocketClerk();
         goToCase(docketNumber);
         updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
@@ -194,22 +207,28 @@ describe('Trial Session Aged Eligible Cases', () => {
       sessionType: SESSION_TYPES.regular,
       trialLocation,
     }).then(({ trialSessionId }) => {
+      let interceptedDocketNumber: string;
+      cy.intercept(
+        'GET',
+        `/trial-sessions/${trialSessionId}/eligible-cases`,
+        req => {
+          req.continue(resp => {
+            if (interceptedDocketNumber) {
+              const eligibleCase = resp.body.find(
+                (c: EligibleCase) => c.docketNumber === interceptedDocketNumber,
+              );
+              if (eligibleCase) {
+                eligibleCase.isAgedCase = true;
+              }
+            }
+          });
+        },
+      );
       createAndServePaperPetition({
         trialLocation,
         procedureType: PROCEDURE_TYPES_MAP.regular,
       }).then(({ docketNumber }) => {
-        cy.intercept(
-          'GET',
-          `/trial-sessions/${trialSessionId}/eligible-cases`,
-          req => {
-            req.continue(resp => {
-              const eligibleCase = resp.body.find(
-                (c: EligibleCase) => c.docketNumber === docketNumber,
-              );
-              eligibleCase.isAgedCase = true;
-            });
-          },
-        );
+        interceptedDocketNumber = docketNumber;
         loginAsDocketClerk();
         goToCase(docketNumber);
         updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
@@ -269,22 +288,29 @@ describe('Trial Session Aged Eligible Cases', () => {
         trialLocation,
         associatedSwingTrialSessionId: trialSessionId,
       }).then(({ trialSessionId }) => {
+        let interceptedDocketNumber: string;
+        cy.intercept(
+          'GET',
+          `/trial-sessions/${trialSessionId}/eligible-cases`,
+          req => {
+            req.continue(resp => {
+              if (interceptedDocketNumber) {
+                const eligibleCase = resp.body.find(
+                  (c: EligibleCase) =>
+                    c.docketNumber === interceptedDocketNumber,
+                );
+                if (eligibleCase) {
+                  eligibleCase.isAgedCase = true;
+                }
+              }
+            });
+          },
+        );
         createAndServePaperPetition({
           trialLocation,
           procedureType: PROCEDURE_TYPES_MAP.regular,
         }).then(({ docketNumber }) => {
-          cy.intercept(
-            'GET',
-            `/trial-sessions/${trialSessionId}/eligible-cases`,
-            req => {
-              req.continue(resp => {
-                const eligibleCase = resp.body.find(
-                  (c: EligibleCase) => c.docketNumber === docketNumber,
-                );
-                eligibleCase.isAgedCase = true;
-              });
-            },
-          );
+          interceptedDocketNumber = docketNumber;
           loginAsDocketClerk();
           goToCase(docketNumber);
           updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
@@ -337,19 +363,22 @@ describe('Trial Session Aged Eligible Cases', () => {
       });
     });
   });
+
   it('should show aged cases in trial session planning report', () => {
+    let interceptedDocketNumber: string;
+    cy.intercept('GET', `/cases/*/eligible-cases`, req => {
+      req.continue(resp => {
+        const eligibleCase = resp.body.find(
+          (c: EligibleCase) => c.docketNumber === interceptedDocketNumber,
+        );
+        eligibleCase.isAgedCase = true;
+      });
+    });
     createAndServePaperPetition({
       trialLocation,
       procedureType: PROCEDURE_TYPES_MAP.regular,
     }).then(({ docketNumber }) => {
-      cy.intercept('GET', `/cases/*/eligible-cases`, req => {
-        req.continue(resp => {
-          const eligibleCase = resp.body.find(
-            (c: EligibleCase) => c.docketNumber === docketNumber,
-          );
-          eligibleCase.isAgedCase = true;
-        });
-      });
+      interceptedDocketNumber = docketNumber;
       loginAsDocketClerk();
       goToCase(docketNumber);
       updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
