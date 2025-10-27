@@ -17,7 +17,7 @@ import { createTrialSession } from 'cypress/helpers/trialSession/create-trial-se
 describe('Trial Session Aged Eligible Cases', () => {
   const trialLocation = 'Birmingham, Alabama';
 
-  it('should show aged cases for small trial sessions', () => {
+  it.only('should show aged cases for small trial sessions', () => {
     loginAsPetitionsClerk1();
     createTrialSession({
       sessionType: SESSION_TYPES.small,
@@ -52,10 +52,17 @@ describe('Trial Session Aged Eligible Cases', () => {
               });
             });
           },
-        );
-
+        ).as('getEligibleCases');
         cy.get(`[data-testid="trial-location-link-${trialSessionId}"]`).click();
-
+        cy.scrollTo('bottom');
+        cy.wait('@getEligibleCases').then(interception => {
+          cy.log('Response Body:', JSON.stringify(interception.response?.body));
+          cy.log('Status Code:', interception.response?.statusCode);
+          const modifiedCase = interception.response?.body.find(
+            (c: EligibleCase) => c.docketNumber === docketNumber,
+          );
+          expect(modifiedCase?.isAgedCase).to.equal(true);
+        });
         cy.get(`[data-testid="table-row-${docketNumber}"]`).should(
           'have.class',
           'aged-cases',
