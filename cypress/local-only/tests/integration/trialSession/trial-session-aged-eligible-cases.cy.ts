@@ -47,7 +47,11 @@ describe('Trial Session Aged Eligible Cases', () => {
                   }
                   return c;
                 });
-                res.body = modifiedBody;
+                res.send({
+                  statusCode: res.statusCode || 200,
+                  body: modifiedBody,
+                  headers: res.headers,
+                });
               }
             });
           },
