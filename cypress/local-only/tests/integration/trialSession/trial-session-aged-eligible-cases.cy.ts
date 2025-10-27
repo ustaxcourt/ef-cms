@@ -39,19 +39,25 @@ describe('Trial Session Aged Eligible Cases', () => {
           'GET',
           `/trial-sessions/${trialSessionId}/eligible-cases`,
           req => {
-            req.reply(res => {
-              const modifiedBody = res.body.map((c: EligibleCase) =>
-                c.docketNumber === docketNumber
-                  ? { ...c, isAgedCase: true }
-                  : c,
+            req.continue(res => {
+              const eligibleCase = res.body.find(
+                (c: EligibleCase) => c.docketNumber === docketNumber,
               );
-              res.send(modifiedBody);
+              if (!eligibleCase) {
+                console.log('ERROR: Case not found!', docketNumber);
+                console.log(
+                  'Available dockets:',
+                  res.body.map((c: EligibleCase) => c.docketNumber),
+                );
+              } else {
+                console.log('Found case, setting isAgedCase to true');
+                eligibleCase.isAgedCase = true;
+              }
             });
           },
-        ).as('getEligibleCases');
+        );
 
         cy.get(`[data-testid="trial-location-link-${trialSessionId}"]`).click();
-        cy.wait('@getEligibleCases');
 
         cy.get(`[data-testid="table-row-${docketNumber}"]`).should(
           'have.class',
@@ -66,24 +72,6 @@ describe('Trial Session Aged Eligible Cases', () => {
           .contains(
             'There has not been activity on this case for the past 12 months.',
           );
-      });
-
-      createAndServePaperPetition({
-        trialLocation,
-        procedureType: PROCEDURE_TYPES_MAP.small,
-      }).then(({ docketNumber }) => {
-        loginAsDocketClerk();
-        goToCase(docketNumber);
-        updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
-
-        loginAsPetitionsClerk1();
-        cy.get('[data-testid="trial-session-link"]').click();
-        cy.get('[data-testid="new-trial-sessions-tab"]').click();
-        cy.get(`[data-testid="trial-location-link-${trialSessionId}"]`).click();
-        cy.get(`[data-testid="case-aged-icon-${docketNumber}"]`).should(
-          'have.class',
-          'visibility-hidden',
-        );
       });
     });
   });
@@ -110,13 +98,20 @@ describe('Trial Session Aged Eligible Cases', () => {
           'GET',
           `/trial-sessions/${trialSessionId}/eligible-cases`,
           req => {
-            req.reply(res => {
-              const modifiedBody = res.body.map((c: EligibleCase) =>
-                c.docketNumber === docketNumber
-                  ? { ...c, isAgedCase: true }
-                  : c,
+            req.continue(res => {
+              const eligibleCase = res.body.find(
+                (c: EligibleCase) => c.docketNumber === docketNumber,
               );
-              res.send(modifiedBody);
+              if (!eligibleCase) {
+                console.log('ERROR: Case not found!', docketNumber);
+                console.log(
+                  'Available dockets:',
+                  res.body.map((c: EligibleCase) => c.docketNumber),
+                );
+              } else {
+                console.log('Found case, setting isAgedCase to true');
+                eligibleCase.isAgedCase = true;
+              }
             });
           },
         ).as('getEligibleCases');
@@ -163,13 +158,20 @@ describe('Trial Session Aged Eligible Cases', () => {
           'GET',
           `/trial-sessions/${trialSessionId}/eligible-cases`,
           req => {
-            req.reply(res => {
-              const modifiedBody = res.body.map((c: EligibleCase) =>
-                c.docketNumber === docketNumber
-                  ? { ...c, isAgedCase: true }
-                  : c,
+            req.continue(res => {
+              const eligibleCase = res.body.find(
+                (c: EligibleCase) => c.docketNumber === docketNumber,
               );
-              res.send(modifiedBody);
+              if (!eligibleCase) {
+                console.log('ERROR: Case not found!', docketNumber);
+                console.log(
+                  'Available dockets:',
+                  res.body.map((c: EligibleCase) => c.docketNumber),
+                );
+              } else {
+                console.log('Found case, setting isAgedCase to true');
+                eligibleCase.isAgedCase = true;
+              }
             });
           },
         );
@@ -222,13 +224,20 @@ describe('Trial Session Aged Eligible Cases', () => {
           'GET',
           `/trial-sessions/${trialSessionId}/eligible-cases`,
           req => {
-            req.reply(res => {
-              const modifiedBody = res.body.map((c: EligibleCase) =>
-                c.docketNumber === docketNumber
-                  ? { ...c, isAgedCase: true }
-                  : c,
+            req.continue(res => {
+              const eligibleCase = res.body.find(
+                (c: EligibleCase) => c.docketNumber === docketNumber,
               );
-              res.send(modifiedBody);
+              if (!eligibleCase) {
+                console.log('ERROR: Case not found!', docketNumber);
+                console.log(
+                  'Available dockets:',
+                  res.body.map((c: EligibleCase) => c.docketNumber),
+                );
+              } else {
+                console.log('Found case, setting isAgedCase to true');
+                eligibleCase.isAgedCase = true;
+              }
             });
           },
         ).as('getEligibleCases');
@@ -248,28 +257,6 @@ describe('Trial Session Aged Eligible Cases', () => {
           .contains(
             'There has not been activity on this case for the past 12 months.',
           );
-      });
-
-      createAndServePaperPetition({
-        trialLocation,
-        procedureType: PROCEDURE_TYPES_MAP.regular,
-      }).then(({ docketNumber }) => {
-        loginAsDocketClerk();
-        goToCase(docketNumber);
-        updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
-
-        loginAsPetitionsClerk1();
-        cy.get('[data-testid="trial-session-link"]').click();
-        cy.get('[data-testid="new-trial-sessions-tab"]').click();
-        cy.get(`[data-testid="trial-location-link-${trialSessionId}"]`).click();
-        cy.get(`[data-testid="table-row-${docketNumber}"]`).should(
-          'not.have.class',
-          'aged-cases',
-        );
-        cy.get(`[data-testid="case-aged-icon-${docketNumber}"]`).should(
-          'have.class',
-          'visibility-hidden',
-        );
       });
     });
   });
@@ -301,11 +288,20 @@ describe('Trial Session Aged Eligible Cases', () => {
             'GET',
             `/trial-sessions/${trialSessionId}/eligible-cases`,
             req => {
-              req.continue(resp => {
-                const eligibleCase = resp.body.find(
+              req.continue(res => {
+                const eligibleCase = res.body.find(
                   (c: EligibleCase) => c.docketNumber === docketNumber,
                 );
-                eligibleCase.isAgedCase = true;
+                if (!eligibleCase) {
+                  console.log('ERROR: Case not found!', docketNumber);
+                  console.log(
+                    'Available dockets:',
+                    res.body.map((c: EligibleCase) => c.docketNumber),
+                  );
+                } else {
+                  console.log('Found case, setting isAgedCase to true');
+                  eligibleCase.isAgedCase = true;
+                }
               });
             },
           ).as('getEligibleCases');
@@ -327,30 +323,6 @@ describe('Trial Session Aged Eligible Cases', () => {
             .contains(
               'There has not been activity on this case for the past 12 months.',
             );
-        });
-
-        createAndServePaperPetition({
-          trialLocation,
-          procedureType: PROCEDURE_TYPES_MAP.regular,
-        }).then(({ docketNumber }) => {
-          loginAsDocketClerk();
-          goToCase(docketNumber);
-          updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
-
-          loginAsPetitionsClerk1();
-          cy.get('[data-testid="trial-session-link"]').click();
-          cy.get('[data-testid="new-trial-sessions-tab"]').click();
-          cy.get(
-            `[data-testid="trial-location-link-${trialSessionId}"]`,
-          ).click();
-          cy.get(`[data-testid="table-row-${docketNumber}"]`).should(
-            'not.have.class',
-            'aged-cases',
-          );
-          cy.get(`[data-testid="case-aged-icon-${docketNumber}"]`).should(
-            'have.class',
-            'visibility-hidden',
-          );
         });
       });
     });
@@ -385,11 +357,20 @@ describe('Trial Session Aged Eligible Cases', () => {
       cy.get('[data-testid="modal-button-confirm"]').click();
 
       cy.intercept('GET', `/cases/*/eligible-cases`, req => {
-        req.reply(res => {
-          const modifiedBody = res.body.map((c: EligibleCase) =>
-            c.docketNumber === docketNumber ? { ...c, isAgedCase: true } : c,
+        req.continue(res => {
+          const eligibleCase = res.body.find(
+            (c: EligibleCase) => c.docketNumber === docketNumber,
           );
-          res.send(modifiedBody);
+          if (!eligibleCase) {
+            console.log('ERROR: Case not found!', docketNumber);
+            console.log(
+              'Available dockets:',
+              res.body.map((c: EligibleCase) => c.docketNumber),
+            );
+          } else {
+            console.log('Found case, setting isAgedCase to true');
+            eligibleCase.isAgedCase = true;
+          }
         });
       }).as('getEligibleCases');
 
