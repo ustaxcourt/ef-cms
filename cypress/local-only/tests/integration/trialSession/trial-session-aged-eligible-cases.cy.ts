@@ -40,67 +40,25 @@ describe('Trial Session Aged Eligible Cases', () => {
           `/trial-sessions/${trialSessionId}/eligible-cases`,
           req => {
             req.continue(res => {
-              // Use console.log instead of cy.task inside the intercept
-              console.log(
-                'Original response:',
-                JSON.stringify(
-                  res.body.map((c: EligibleCase) => ({
-                    docketNumber: c.docketNumber,
-                    isAgedCase: c.isAgedCase,
-                  })),
-                ),
-              );
-
               if (res.body && Array.isArray(res.body)) {
                 const modifiedBody = res.body.map((c: any) => {
                   if (c.docketNumber === docketNumber) {
-                    console.log(
-                      `Modifying case ${c.docketNumber} to set isAgedCase: true`,
-                    );
                     return { ...c, isAgedCase: true };
                   }
                   return c;
                 });
-
                 res.body = modifiedBody;
-                console.log('Modified response:', JSON.stringify(res.body));
-              } else {
-                console.log('Response body is not an array or is null');
               }
             });
           },
         ).as('getEligibleCases');
         cy.get(`[data-testid="trial-location-link-${trialSessionId}"]`).click();
-        cy.scrollTo('bottom');
-
         cy.wait('@getEligibleCases').then(interception => {
-          // Now use cy.task outside of the intercept callback
-          cy.task(
-            'log',
-            `Intercept completed. Status: ${interception.response?.statusCode}`,
-          );
-
+          expect(interception.response?.body).to.equal([]);
           const modifiedCase = interception.response?.body.find(
             (c: EligibleCase) => c.docketNumber === docketNumber,
           );
-
-          cy.task(
-            'log',
-            `Found case for verification: ${JSON.stringify(modifiedCase)}`,
-          );
-
-          if (!modifiedCase) {
-            cy.task(
-              'log',
-              `ERROR: Could not find case with docketNumber ${docketNumber}`,
-            );
-            cy.task(
-              'log',
-              `Available cases: ${JSON.stringify(interception.response?.body?.map((c: any) => c.docketNumber))}`,
-            );
-          }
-
-          expect(modifiedCase?.isAgedCase).to.equal(true);
+          expect(modifiedCase?.isAgedCase).to.equal(true); //fails in ci, modified
         });
         cy.get(`[data-testid="table-row-${docketNumber}"]`).should(
           'have.class',
