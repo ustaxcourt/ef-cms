@@ -46,9 +46,11 @@ describe('Trial Session Aged Eligible Cases', () => {
               eligibleCase.isAgedCase = true;
             });
           },
-        );
+        ).as('getEligibleCases');
 
         cy.get(`[data-testid="trial-location-link-${trialSessionId}"]`).click();
+        cy.wait('@getEligibleCases');
+
         cy.get(`[data-testid="table-row-${docketNumber}"]`).should(
           'have.class',
           'aged-cases',
@@ -113,9 +115,11 @@ describe('Trial Session Aged Eligible Cases', () => {
               eligibleCase.isAgedCase = true;
             });
           },
-        );
+        ).as('getEligibleCases');
 
         cy.get(`[data-testid="trial-location-link-${trialSessionId}"]`).click();
+
+        cy.wait('@getEligibleCases');
 
         cy.get('#hybrid-session-filter').select(PROCEDURE_TYPES_MAP.small);
 
@@ -219,9 +223,10 @@ describe('Trial Session Aged Eligible Cases', () => {
               eligibleCase.isAgedCase = true;
             });
           },
-        );
+        ).as('getEligibleCases');
 
         cy.get(`[data-testid="trial-location-link-${trialSessionId}"]`).click();
+        cy.wait('@getEligibleCases');
         cy.get(`[data-testid="table-row-${docketNumber}"]`).should(
           'have.class',
           'aged-cases',
@@ -295,11 +300,12 @@ describe('Trial Session Aged Eligible Cases', () => {
                 eligibleCase.isAgedCase = true;
               });
             },
-          );
+          ).as('getEligibleCases');
 
           cy.get(
             `[data-testid="trial-location-link-${trialSessionId}"]`,
           ).click();
+          cy.wait('@getEligibleCases');
           cy.get(`[data-testid="table-row-${docketNumber}"]`).should(
             'have.class',
             'aged-cases',
@@ -377,11 +383,13 @@ describe('Trial Session Aged Eligible Cases', () => {
           );
           eligibleCase.isAgedCase = true;
         });
-      });
+      }).as('getEligibleCases');
 
       cy.get(
         '[data-testid="trial-location-link-Birmingham, Alabama"] a',
       ).click();
+
+      cy.wait('@getEligibleCases');
 
       cy.get(`[data-testid="eligible-case-${docketNumber}"]`).should(
         'have.class',
