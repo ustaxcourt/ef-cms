@@ -56,8 +56,15 @@ describe('Trial Session Aged Eligible Cases', () => {
         cy.get(`[data-testid="trial-location-link-${trialSessionId}"]`).click();
         cy.scrollTo('bottom');
         cy.wait('@getEligibleCases').then(interception => {
-          cy.log('Response Body:', JSON.stringify(interception.response?.body));
-          cy.log('Status Code:', interception.response?.statusCode);
+          cy.task('table', {
+            'Response Body': JSON.stringify(
+              interception.response?.body.map((c: EligibleCase) => ({
+                docketNumber: c.docketNumber,
+                isAgedCase: c.isAgedCase,
+              })),
+            ),
+            'Status Code': interception.response?.statusCode,
+          });
           const modifiedCase = interception.response?.body.find(
             (c: EligibleCase) => c.docketNumber === docketNumber,
           );
