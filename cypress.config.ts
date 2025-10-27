@@ -63,10 +63,6 @@ export default defineConfig({
         getUserByEmail(email: string) {
           return getUserByEmail(email);
         },
-        log(message) {
-          console.log(message);
-          return null;
-        },
         parsePdf({ filePath }) {
           return parsePdf({ filePath });
         },
