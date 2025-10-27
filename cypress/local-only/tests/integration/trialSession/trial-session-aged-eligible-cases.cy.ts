@@ -39,13 +39,11 @@ describe('Trial Session Aged Eligible Cases', () => {
           'GET',
           `/trial-sessions/${trialSessionId}/eligible-cases`,
           req => {
-            req.reply(res => {
-              const modifiedBody = res.body.map((c: EligibleCase) =>
-                c.docketNumber === docketNumber
-                  ? { ...c, isAgedCase: true }
-                  : c,
+            req.continue(resp => {
+              const eligibleCase = resp.body.find(
+                (c: EligibleCase) => c.docketNumber === docketNumber,
               );
-              res.send(modifiedBody);
+              eligibleCase.isAgedCase = true;
             });
           },
         ).as('getEligibleCases');
@@ -110,13 +108,11 @@ describe('Trial Session Aged Eligible Cases', () => {
           'GET',
           `/trial-sessions/${trialSessionId}/eligible-cases`,
           req => {
-            req.reply(res => {
-              const modifiedBody = res.body.map((c: EligibleCase) =>
-                c.docketNumber === docketNumber
-                  ? { ...c, isAgedCase: true }
-                  : c,
+            req.continue(resp => {
+              const eligibleCase = resp.body.find(
+                (c: EligibleCase) => c.docketNumber === docketNumber,
               );
-              res.send(modifiedBody);
+              eligibleCase.isAgedCase = true;
             });
           },
         ).as('getEligibleCases');
@@ -163,13 +159,11 @@ describe('Trial Session Aged Eligible Cases', () => {
           'GET',
           `/trial-sessions/${trialSessionId}/eligible-cases`,
           req => {
-            req.reply(res => {
-              const modifiedBody = res.body.map((c: EligibleCase) =>
-                c.docketNumber === docketNumber
-                  ? { ...c, isAgedCase: true }
-                  : c,
+            req.continue(resp => {
+              const eligibleCase = resp.body.find(
+                (c: EligibleCase) => c.docketNumber === docketNumber,
               );
-              res.send(modifiedBody);
+              eligibleCase.isAgedCase = true;
             });
           },
         );
@@ -222,13 +216,11 @@ describe('Trial Session Aged Eligible Cases', () => {
           'GET',
           `/trial-sessions/${trialSessionId}/eligible-cases`,
           req => {
-            req.reply(res => {
-              const modifiedBody = res.body.map((c: EligibleCase) =>
-                c.docketNumber === docketNumber
-                  ? { ...c, isAgedCase: true }
-                  : c,
+            req.continue(resp => {
+              const eligibleCase = resp.body.find(
+                (c: EligibleCase) => c.docketNumber === docketNumber,
               );
-              res.send(modifiedBody);
+              eligibleCase.isAgedCase = true;
             });
           },
         ).as('getEligibleCases');
@@ -385,11 +377,11 @@ describe('Trial Session Aged Eligible Cases', () => {
       cy.get('[data-testid="modal-button-confirm"]').click();
 
       cy.intercept('GET', `/cases/*/eligible-cases`, req => {
-        req.reply(res => {
-          const modifiedBody = res.body.map((c: EligibleCase) =>
-            c.docketNumber === docketNumber ? { ...c, isAgedCase: true } : c,
+        req.continue(resp => {
+          const eligibleCase = resp.body.find(
+            (c: EligibleCase) => c.docketNumber === docketNumber,
           );
-          res.send(modifiedBody);
+          eligibleCase.isAgedCase = true;
         });
       }).as('getEligibleCases');
 
