@@ -18,6 +18,7 @@ const caveats: string[] = [
   'quill',
   'quill-delta-to-html',
   'jest-environment-jsdom',
+  'jsdom', // v27+ is ESM-only (CommonJS incompatibility)
   '@types/node',
   'typescript',
   'websocket',
