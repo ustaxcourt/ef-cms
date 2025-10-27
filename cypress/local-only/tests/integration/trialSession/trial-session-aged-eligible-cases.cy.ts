@@ -35,6 +35,13 @@ describe('Trial Session Aged Eligible Cases', () => {
         cy.get('[data-testid="trial-session-link"]').click();
         cy.get('[data-testid="new-trial-sessions-tab"]').click();
 
+        cy.request(
+          'GET',
+          `/trial-sessions/${trialSessionId}/eligible-cases`,
+        ).then(response => {
+          expect(response.body).to.equal([]);
+          expect(response.body.length).to.equal(1);
+        });
         cy.intercept(
           'GET',
           `/trial-sessions/${trialSessionId}/eligible-cases`,
