@@ -181,9 +181,7 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 - As of 15 April 2025, there is a high-security vulnerability for tar-fs < 3.0.7, which our current version of puppeteer relies on. As far as I can tell, this should not affect our use case since we are downloading from a trusted source (chromium). Hopefully the update to tar-fs will make its way into the next version of puppeteer we update to.
 
-- Peer-dependency tar-fs has high security vulnerability but this shouldn't affect us as far as we are aware of.
-
-- On October 27th, 2025, successfully updated puppeteer to 24.23.1 and @sparticuz/chromium to 141.0.0. Verified compatibility using the puppeteer supported browsers page. Updated versions in both `package.json` and `web-api/runtimes/puppeteer/package.json`. 
+- Peer-dependency tar-fs has high security vulnerability but this shouldn't affect us as far as we are aware of. 
 
 ### ws, 3rd party dependency of Cerebral
 
