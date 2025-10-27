@@ -1,44 +1,60 @@
-import { createOrderOnConsolidatedCase } from '../../../../../../helpers/caseDetail/docketRecord/courtIssuedFiling/create-order';
 import { goToCase } from '../../../../../../helpers/caseDetail/go-to-case';
 import { loginAsDocketClerk1 } from '../../../../../../helpers/authentication/login-as-helpers';
+import { createAndServePaperFiling } from 'cypress/helpers/caseDetail/docketRecord/paperFiling/create-and-serve-paper-filing';
+import { createDocketEntryAffectingOrderOnConsolidatedCase } from 'cypress/helpers/caseDetail/docketRecord/courtIssuedFiling/create-docket-entry-affecting-order';
 
 describe('Docket clerk creates and edits draft order with selected docket numbers', function () {
   it('should create an order with ALL cases selected', () => {
-    let consolidatedCases = '';
-    let draftsCount = 0;
     const leadCase = '111-19';
+    const motionPurpose = 'Test motions';
 
     loginAsDocketClerk1();
     goToCase(leadCase);
 
     // create motion on lead case
-    cy.get('[data-testid="menu-button-add-paper-filing"]').click();
+    createAndServePaperFiling({
+      dateReceived: '10/23/2025',
+      documentType: 'Motion',
+      purpose: motionPurpose,
+      isPaperCase: false,
+    });
 
-    // cy.get('[data-testid^="consolidatedCasesOfLeadCase-"]')
-    //   .invoke('attr', 'data-testid')
-    //   .then(text => {
-    //     consolidatedCases = text!.replace(/consolidatedCasesOfLeadCase-/g, '');
-    //   });
+    // Now check if new motion was added
+    // get the last docket entry row
+    cy.get('[data-testid="docket-record-table"] tbody tr')
+      .last() // Get the last motion if multiple exist
+      .within(() => {
+        // / Capture the index value for later use
+        cy.get('[data-testid^="docket-entry-index-"]')
+          .invoke('text')
+          .then(text => text.trim())
+          .as('motionIndex'); // Store as alias
 
-    // cy.get('[data-testid="icon-tab-unread-messages-count"]')
-    //   .invoke('text')
-    //   .then(text => {
-    //     draftsCount = Number(text) || draftsCount;
-    //   });
+        cy.get('[data-testid^="docket-entry-filingsAndProceedings-"]')
+          .should('be.visible')
+          .within(() => {
+            cy.get('button').should('contain.text', motionPurpose);
+          });
+      });
 
-    // createOrderOnConsolidatedCase('Apply order on all subsidiary cases.');
+    // create order and apply to lead case motion
+    cy.get('@motionIndex').then(motionIndex => {
+      console.log(`Creating order for motion index: `, motionIndex);
+      createDocketEntryAffectingOrderOnConsolidatedCase(
+        'Order to deny motion',
+        motionIndex,
+      );
+    });
 
-    // // Apply signature
-    // // Add Docket Entry
-    // cy.get('#apply-signature').click();
-    // cy.get('[data-testid="sign-pdf-canvas"]').click();
-    // cy.get('[data-testid="save-signature-button"]').click();
-    // cy.get('[data-testid="add-court-issued-docket-entry-button"]').click();
+    // Verify the order was created and references the correct motion
+    // cy.get('[data-testid="docket-record-table"] tbody tr')
+    // .last()
+    // .within(() => {
+    //   cy.get('[data-testid^="docket-entry-description-"]')
+    //     .should('contain', motionIndex)
+    //     .should('contain', 'Order');
+    // });
 
-    // // select dispositionOrder checkbox
-    // cy.get('[data-testid="disposition-order-checkbox"]').click({ force: true });
 
-    // // ensure specific label is present
-    // cy.get('[data-testid="related-motion-label"]').should('exist');
   });
 });
