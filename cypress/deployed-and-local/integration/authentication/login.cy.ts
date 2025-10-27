@@ -29,7 +29,7 @@ describe('login', () => {
       getCypressEnv().defaultAccountPass,
     );
     cy.get('[data-testid="login-button"]').click();
-    cy.get('[data-testid^="error-alert"]').should('exist');
+    cy.get('[data-testid^="error-alert"]').should('contain', 'The email address is associated with an account but is not verified. We sent an email with a link to verify the email address. If you don’t see it, check your spam folder. If you’re still having trouble, email dawson.support@ustaxcourt.gov.');
   });
 
   /*
@@ -43,7 +43,7 @@ describe('login', () => {
     cy.get('[data-testid="password-input"]').type('totallyIncorrectPassword');
     cy.get('[data-testid="login-button"]').click();
 
-    cy.get('[data-testid^="error-alert"]').should('exist');
+    cy.get('[data-testid^="error-alert"]').should('contain', 'The email address or password you entered is invalid.');
   });
 
   /*

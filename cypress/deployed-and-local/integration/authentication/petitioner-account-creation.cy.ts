@@ -207,7 +207,7 @@ describe('Petitioner Account Creation', () => {
         );
       });
 
-      cy.get('[data-testid^="error-alert"]').should('be.visible');
+      cy.get('[data-testid^="error-alert"]').should('contain', 'Enter your email address and password below, then log in to be sent a new verification email.');
     });
   });
 
