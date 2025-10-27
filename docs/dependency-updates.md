@@ -181,7 +181,11 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 - As of 15 April 2025, there is a high-security vulnerability for tar-fs < 3.0.7, which our current version of puppeteer relies on. As far as I can tell, this should not affect our use case since we are downloading from a trusted source (chromium). Hopefully the update to tar-fs will make its way into the next version of puppeteer we update to.
 
-- Peer-dependency tar-fs has high security vulnerability but this shouldn't affect us as far as we are aware of. 
+- Peer-dependency tar-fs has high security vulnerability but this shouldn't affect us as far as we are aware of.
+
+- On October 27th, 2025, attempted to update puppeteer to 24.23.1 and @sparticuz/chromium to 141.0.0. However, this caused PDF visual regression tests to fail with pixel differences of 0.5-1.3% due to rendering engine changes in the newer Chromium version. The updates were reverted to maintain test stability.
+
+- On October 27th, 2025, successfully updated @types/aws-lambda from 8.10.155 to 8.10.156. This required changing `AttributeValueWithName` in `processStreamUtilities.ts` from an `interface extends` to a `type` with intersection (`&`) because the new version of `AttributeValue` is no longer extendable by interfaces.
 
 ### ws, 3rd party dependency of Cerebral
 
