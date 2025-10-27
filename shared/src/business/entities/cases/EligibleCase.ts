@@ -40,7 +40,7 @@ export class EligibleCase extends JoiValidationEntity {
     this.caseType = rawProps.caseType;
     this.qcCompleteForTrial = rawProps.qcCompleteForTrial || {};
     this.isSealed = isSealedCase(rawProps);
-    this.isAgedCase = rawProps.isAgedCase;
+    this.isAgedCase = !!rawProps.isAgedCase;
     this.inConsolidatedGroup = !!rawProps.leadDocketNumber;
 
     if (Array.isArray(rawProps.privatePractitioners)) {
