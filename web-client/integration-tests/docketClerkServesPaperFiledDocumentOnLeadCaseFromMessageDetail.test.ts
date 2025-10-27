@@ -228,7 +228,7 @@ describe('Docket Clerk Serves Paper Filed Document On Lead Case From Message Det
       },
     );
 
-    expect(modalHelper.showConsolidatedCasesForService).toBe(false);
+    expect(modalHelper.canFileAcrossGroup).toBe(false);
     expect(cerebralTest.getState('modal.showModal')).toBe(
       'ConfirmInitiatePaperFilingServiceModal',
     );

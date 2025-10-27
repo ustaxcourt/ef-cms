@@ -282,6 +282,10 @@ export const MessageDocument = connect(
                 documentTitle={messageViewerDocumentToDisplay.documentTitle}
               />
             )}
+            {console.log(
+              'messageViewerDocumentToDisplay',
+              messageViewerDocumentToDisplay,
+            )}
             {showModal == 'ConfirmInitiatePaperFilingServiceModal' && (
               <ConfirmInitiateServiceModal
                 confirmSequence={servePaperFiledDocumentSequence}

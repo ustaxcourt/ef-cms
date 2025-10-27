@@ -302,7 +302,7 @@ describe('confirmInitiateServiceModalHelper', () => {
     });
   });
 
-  describe('showConsolidatedCasesForService', () => {
+  describe('canFileAcrossGroup', () => {
     let baseState;
 
     beforeEach(() => {
@@ -321,7 +321,7 @@ describe('confirmInitiateServiceModalHelper', () => {
     });
 
     it('should be false when the case is not a lead case', () => {
-      const { showConsolidatedCasesForService } = runCompute(
+      const { canFileAcrossGroup } = runCompute(
         confirmInitiateServiceModalHelper,
         {
           state: {
@@ -333,11 +333,11 @@ describe('confirmInitiateServiceModalHelper', () => {
         },
       );
 
-      expect(showConsolidatedCasesForService).toEqual(false);
+      expect(canFileAcrossGroup).toEqual(false);
     });
 
     it('should be false when the document type cannot be multi-docketed', () => {
-      const { showConsolidatedCasesForService } = runCompute(
+      const { canFileAcrossGroup } = runCompute(
         confirmInitiateServiceModalHelper,
         {
           state: {
@@ -352,11 +352,11 @@ describe('confirmInitiateServiceModalHelper', () => {
         },
       );
 
-      expect(showConsolidatedCasesForService).toEqual(false);
+      expect(canFileAcrossGroup).toEqual(false);
     });
 
     it('should be false when serving from a message detail page', () => {
-      const { showConsolidatedCasesForService } = runCompute(
+      const { canFileAcrossGroup } = runCompute(
         confirmInitiateServiceModalHelper,
         {
           state: {
@@ -369,11 +369,11 @@ describe('confirmInitiateServiceModalHelper', () => {
         },
       );
 
-      expect(showConsolidatedCasesForService).toEqual(false);
+      expect(canFileAcrossGroup).toEqual(false);
     });
 
     it('should be false for non-court-issued simultaneous documents', () => {
-      const { showConsolidatedCasesForService } = runCompute(
+      const { canFileAcrossGroup } = runCompute(
         confirmInitiateServiceModalHelper,
         {
           state: {
@@ -388,11 +388,11 @@ describe('confirmInitiateServiceModalHelper', () => {
         },
       );
 
-      expect(showConsolidatedCasesForService).toEqual(false);
+      expect(canFileAcrossGroup).toEqual(false);
     });
 
     it('should be true for lead case with multi-docketable document type', () => {
-      const { showConsolidatedCasesForService } = runCompute(
+      const { canFileAcrossGroup } = runCompute(
         confirmInitiateServiceModalHelper,
         {
           state: {
@@ -407,7 +407,7 @@ describe('confirmInitiateServiceModalHelper', () => {
         },
       );
 
-      expect(showConsolidatedCasesForService).toEqual(true);
+      expect(canFileAcrossGroup).toEqual(true);
     });
   });
 
@@ -438,7 +438,7 @@ describe('confirmInitiateServiceModalHelper', () => {
         },
       });
 
-      expect(result.showPaperAlert).toEqual(true);
+      expect(result.contactsNeedingPaperService).toBeDefined();
     });
 
     it('should be false when none of the parties being served have paper service', () => {
@@ -453,7 +453,7 @@ describe('confirmInitiateServiceModalHelper', () => {
         },
       });
 
-      expect(result.showPaperAlert).toEqual(false);
+      expect(result.contactsNeedingPaperService).toBeUndefined();
     });
   });
 

@@ -15,7 +15,6 @@ export const getDefaultAttachmentViewerDocumentToDisplayAction = ({
 
   let documentId = get(state.documentId);
   const { mostRecentMessage } = props;
-
   if (!documentId) {
     ({ documentId } = props);
   }
@@ -34,10 +33,14 @@ export const getDefaultAttachmentViewerDocumentToDisplayAction = ({
   let messageViewerDocumentToDisplay = null;
 
   if (attachments && attachments.length) {
-    messageViewerDocumentToDisplay = attachments[0];
+    messageViewerDocumentToDisplay = get(
+      state.formattedMessageDetail.attachments,
+    ).find(attachment => {
+      return attachment.docketEntryId === attachments[0].docketEntryId;
+    });
 
     if (documentId) {
-      const foundDocument = attachments.find(
+      const foundDocument = get(state.formattedMessageDetail.attachments).find(
         attachment => attachment.documentId === documentId,
       );
 

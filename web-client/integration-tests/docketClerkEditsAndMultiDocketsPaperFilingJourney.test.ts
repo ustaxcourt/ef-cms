@@ -50,7 +50,7 @@ describe('Docket Clerk edits and multi-dockets a paper filing journey', () => {
         trialLocation: 'Little Rock, AR',
       };
 
-      for (let [key, value] of Object.entries(formValues)) {
+      for (const [key, value] of Object.entries(formValues)) {
         await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
           key,
           value,
@@ -129,7 +129,7 @@ describe('Docket Clerk edits and multi-dockets a paper filing journey', () => {
       );
 
       expect(modalHelper.contactsNeedingPaperService).toBeDefined();
-      expect(modalHelper.showConsolidatedCasesForService).toBe(true);
+      expect(modalHelper.canFileAcrossGroup).toBe(true);
       expect(cerebralTest.getState('modal.showModal')).toEqual(
         'ConfirmInitiatePaperFilingServiceModal',
       );
