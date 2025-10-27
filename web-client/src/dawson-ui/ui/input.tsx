@@ -76,7 +76,7 @@ const useKeyboardListenerHook = () => {
 const InputError = ({error}) => (
   <>
     {error && (
-      <div className="tw:mt-[6px] tw:xs:mt-[8px] tw:gap-2 tw:text-destructive">
+      <div className="tw:mt-[6px] tw:xs:mt-[8px] tw:gap-2 tw:text-red-primary">
         <FontAwesomeIcon
           icon={faExclamationCircle}
           className="tw-text-[16px] tw:xs:text-[18px] tw:mr-[4px]"
@@ -155,7 +155,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                 </span>
               </div>
               {helpText && (
-                <div className={cn(styles.text.help, "tw:mt-[8px] tw:mb-[9px]", flexDirection === 'horizontal' && 'tw:mt-[0px] tw:xs:mt-[0px]')}>
+                <div className={cn(styles.text.help, "tw:xs:mt-[10px] tw:mt-[8px] tw:mb-[9px]", flexDirection === 'horizontal' && 'tw:mt-[0px] tw:xs:mt-[0px]')}>
                   {helpText}
                 </div>
               )}
