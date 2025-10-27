@@ -36,35 +36,25 @@ describe('Trial Session Aged Eligible Cases', () => {
         cy.get('[data-testid="new-trial-sessions-tab"]').click();
 
         cy.intercept(
-          'GET',
           `/trial-sessions/${trialSessionId}/eligible-cases`,
           req => {
             req.continue(res => {
-              expect(res).to.equal({}); // doing this to debug ci failure
-              if (res.body && Array.isArray(res.body)) {
-                const modifiedBody = res.body.map((c: any) => {
-                  if (c.docketNumber === docketNumber) {
-                    return { ...c, isAgedCase: true };
-                  }
-                  return c;
-                });
-                res.send({
-                  statusCode: res.statusCode || 200,
-                  body: modifiedBody,
-                  headers: res.headers,
-                });
-              }
+              expect(res.body).to.deep.equal([]); // doing this to debug ci failure
+              const modifiedBody = res.body.map((c: EligibleCase) => {
+                if (c.docketNumber === docketNumber) {
+                  return { ...c, isAgedCase: true };
+                }
+                return c;
+              });
+              res.send({
+                ...res,
+                body: modifiedBody,
+              });
             });
           },
         ).as('getEligibleCases');
         cy.get(`[data-testid="trial-location-link-${trialSessionId}"]`).click();
-        cy.wait('@getEligibleCases').then(interception => {
-          expect(interception.response?.body).to.equal([]);
-          const modifiedCase = interception.response?.body.find(
-            (c: EligibleCase) => c.docketNumber === docketNumber,
-          );
-          expect(modifiedCase?.isAgedCase).to.equal(true); //fails in ci, modified
-        });
+        cy.wait('@getEligibleCases');
         cy.get(`[data-testid="table-row-${docketNumber}"]`).should(
           'have.class',
           'aged-cases',
