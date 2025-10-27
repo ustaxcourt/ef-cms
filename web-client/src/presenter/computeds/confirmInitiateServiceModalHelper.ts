@@ -1,9 +1,7 @@
-/* eslint-disable complexity */
 import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import { ClientApplicationContext } from '@web-client/applicationContext';
 import {
-  DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  NON_MULTI_DOCKETABLE_EVENT_CODES,
   SERVICE_INDICATOR_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import { isLeadCase } from '@shared/business/entities/cases/Case';
@@ -18,12 +16,11 @@ import { isLeadCase } from '@shared/business/entities/cases/Case';
 
 export const confirmInitiateServiceModalHelper = (
   get: Get,
-  applicationContext: ClientApplicationContext,
 ): {
+  canFileAcrossGroup: boolean;
   canServeAcrossGroup: boolean;
   confirmationText: string;
   paperFilingText: string;
-  showConsolidatedCasesForService: boolean;
   additionalServedCases: { docketNumber: string; caseTitle: string }[];
   contactsNeedingPaperService?: {
     contactId?: string;
@@ -34,51 +31,29 @@ export const confirmInitiateServiceModalHelper = (
     docketNumber: string;
   }[];
 } => {
-  const {
-    NON_MULTI_DOCKETABLE_EVENT_CODES,
-    SIMULTANEOUS_DOCUMENT_EVENT_CODES,
-  } = applicationContext.getConstants();
-  const { isCourtIssued } = applicationContext.getUtilities();
-
   const docketEntryId = get(state.docketEntryId);
   const formattedCaseDetail = get(state.formattedCaseDetail);
   const form = get(state.form);
-  const isOnMessageDetailPage = get(state.currentPage) === 'MessageDetail';
-  let { documentTitle, eventCode } = form;
+  let { eventCode, isFiledAcrossAllCases } = form;
   const currentDocketEntry = formattedCaseDetail.docketEntries.find(
     doc => doc.docketEntryId === docketEntryId,
   );
 
   if (!eventCode) {
-    ({ documentTitle, eventCode } = currentDocketEntry);
+    ({ eventCode, isFiledAcrossAllCases } = currentDocketEntry);
   }
-
-  const { isFiledAcrossAllCases, processingStatus } = currentDocketEntry;
 
   const hasFiledAcrossGroup =
     isLeadCase(formattedCaseDetail) && isFiledAcrossAllCases;
 
   const canFileAcrossGroup =
-    processingStatus === DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING &&
+    !NON_MULTI_DOCKETABLE_EVENT_CODES.includes(eventCode) &&
     isLeadCase(formattedCaseDetail);
 
   const canServeAcrossGroup = canFileAcrossGroup || hasFiledAcrossGroup;
 
-  let showConsolidatedCasesForService =
-    formattedCaseDetail.isLeadCase &&
-    !NON_MULTI_DOCKETABLE_EVENT_CODES.includes(eventCode) &&
-    !isOnMessageDetailPage;
-
-  if (!isCourtIssued(eventCode)) {
-    if (
-      SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(eventCode) ||
-      documentTitle?.includes('Simultaneous')
-    ) {
-      showConsolidatedCasesForService = false;
-    }
-  }
-
   let additionalServedCases: { docketNumber: string; caseTitle: string }[] = [];
+
   if (hasFiledAcrossGroup) {
     if (Array.isArray(formattedCaseDetail.consolidatedCases)) {
       additionalServedCases = formattedCaseDetail.consolidatedCases
@@ -90,34 +65,9 @@ export const confirmInitiateServiceModalHelper = (
     }
   }
 
-  const confirmationText = showConsolidatedCasesForService
+  const confirmationText = canFileAcrossGroup
     ? 'The following document will be served on all parties in selected cases:'
     : 'The following document will be served on all parties:';
-
-  if (showConsolidatedCasesForService) {
-    const modalForm = get(state.modal.form) || {};
-    const consolidatedCasesToMultiDocketOn =
-      modalForm.consolidatedCasesToMultiDocketOn || [];
-    const paperServiceParties: {
-      contactId: string;
-      userId: string;
-      name: string;
-    }[] = [];
-
-    consolidatedCasesToMultiDocketOn.forEach(aCase => {
-      if (aCase.checked) {
-        const caseDetail = [
-          ...formattedCaseDetail.consolidatedCases,
-          formattedCaseDetail,
-        ].find(
-          checkboxCase => checkboxCase.docketNumber === aCase.docketNumber,
-        );
-
-        const checkboxPaperServiceParties = getPaperServiceParties(caseDetail);
-        paperServiceParties.push(...checkboxPaperServiceParties);
-      }
-    });
-  }
 
   const contactsNeedingPaperService: {
     contactId?: string;
@@ -128,9 +78,21 @@ export const confirmInitiateServiceModalHelper = (
     docketNumber: string;
   }[] = [];
 
-  const casesToIterateOver = canServeAcrossGroup
-    ? formattedCaseDetail.consolidatedCases
-    : [formattedCaseDetail];
+  let casesToIterateOver: any[] = [];
+
+  if (hasFiledAcrossGroup) {
+    casesToIterateOver = formattedCaseDetail.consolidatedCases;
+  } else if (canFileAcrossGroup) {
+    const checkedCases = get(state.modal.form.consolidatedCasesToMultiDocketOn)
+      .filter(consolidatedCase => consolidatedCase.checked)
+      .map(consolidatedCase => consolidatedCase.docketNumber);
+
+    casesToIterateOver = formattedCaseDetail.consolidatedCases.filter(cc => {
+      return checkedCases.includes(cc.docketNumber);
+    });
+  } else {
+    casesToIterateOver = [formattedCaseDetail];
+  }
 
   for (const caseItem of casesToIterateOver) {
     const {
@@ -157,34 +119,20 @@ export const confirmInitiateServiceModalHelper = (
         });
       });
   }
-  // should we use canServeAcrossGroup here instead?
-  const paperFilingText = hasFiledAcrossGroup
+
+  const paperFilingText = canFileAcrossGroup
     ? 'Paper service is required for these parties:'
     : 'This case has parties receiving paper service:';
 
   return {
+    canFileAcrossGroup,
     canServeAcrossGroup,
     confirmationText,
     paperFilingText,
-    showConsolidatedCasesForService,
     additionalServedCases,
     contactsNeedingPaperService:
       contactsNeedingPaperService.length > 0
         ? contactsNeedingPaperService
         : undefined,
   };
-};
-
-const getPaperServiceParties = rawCase => {
-  const allParties = [
-    ...(rawCase.irsPractitioners || []),
-    ...(rawCase.petitioners || []),
-    ...(rawCase.privatePractitioners || []),
-  ];
-
-  const paperServiceParties = allParties.filter(
-    person => person.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
-  );
-
-  return paperServiceParties;
 };

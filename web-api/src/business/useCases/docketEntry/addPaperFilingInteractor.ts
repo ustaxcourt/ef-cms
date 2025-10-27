@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { Case, isLeadCase } from '@shared/business/entities/cases/Case';
 import {
   DOCUMENT_RELATIONSHIPS,
@@ -32,11 +33,13 @@ export const addPaperFiling = async (
     consolidatedGroupDocketNumbers,
     docketEntryId,
     documentMetadata,
+    isFiledAcrossAllCases,
     isSavingForLater,
   }: {
     clientConnectionId: string;
     consolidatedGroupDocketNumbers: string[];
     documentMetadata: DocumentMetadata;
+    isFiledAcrossAllCases: boolean;
     isSavingForLater: boolean;
     docketEntryId: string;
   },
@@ -113,7 +116,6 @@ export const addPaperFiling = async (
 
   for (const rawCase of consolidatedGroupCases) {
     let caseEntity = new Case(rawCase, { authorizedUser });
-
     const docketEntryEntity = new DocketEntry(
       {
         ...documentMetadata,
@@ -122,6 +124,7 @@ export const addPaperFiling = async (
         documentType: documentMetadata.documentType,
         editState: JSON.stringify(docketRecordEditState),
         filingDate: documentMetadata.receivedAt,
+        isFiledAcrossAllCases,
         isOnDocketRecord: true,
         mailingDate: documentMetadata.mailingDate,
         relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,

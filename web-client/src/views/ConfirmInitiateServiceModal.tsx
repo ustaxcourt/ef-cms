@@ -95,7 +95,7 @@ export const ConfirmInitiateServiceModal = connect(
             scrollToTop={false}
           />
         )}
-        {confirmInitiateServiceModalHelper.showConsolidatedCasesForService && (
+        {confirmInitiateServiceModalHelper.canFileAcrossGroup && (
           <ConsolidatedCasesCheckboxes />
         )}
       </ModalDialog>
