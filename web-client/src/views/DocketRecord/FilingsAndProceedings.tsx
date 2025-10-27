@@ -106,7 +106,6 @@ export const FilingsAndProceedings = connect<
       );
     };
 
-
     return (
       <>
         {entry.showLinkToDocument && renderDocumentLink()}
@@ -173,6 +172,7 @@ export const FilingsAndProceedings = connect<
                         // entry.isStricken && 'stricken-docket-record', // NOTE (#8546): This may be unnecessary
                         'view-pdf-link',
                       )}
+                      data-testid={`related-document-viewer-link-${entry.docketEntryIndex}`}
                       arial-label={`View PDF for: ${entry.docketEntryIndex}`}
                       onClick={() =>
                         changeTabAndSetViewerDocumentToDisplaySequence({

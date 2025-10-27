@@ -3,17 +3,20 @@ import { loginAsDocketClerk1 } from '../../../../../../helpers/authentication/lo
 import { createAndServePaperFiling } from 'cypress/helpers/caseDetail/docketRecord/paperFiling/create-and-serve-paper-filing';
 import { createDocketEntryAffectingOrderOnConsolidatedCase } from 'cypress/helpers/caseDetail/docketRecord/courtIssuedFiling/create-docket-entry-affecting-order';
 
-describe('Docket clerk creates and edits draft order with selected docket numbers', function () {
-  it('should create an order with ALL cases selected', () => {
+describe('Docket clerk creates an order affecting other docket entries', function () {
+  // Simplify this later
+  it('should create an order to grant a motion with a link to said motion', () => {
     const leadCase = '111-19';
     const motionPurpose = 'Test motions';
+    const orderTitle = 'Order to grant motion';
+    const disposition = 'GRANTED';
 
     loginAsDocketClerk1();
     goToCase(leadCase);
 
     // create motion on lead case
     createAndServePaperFiling({
-      dateReceived: '10/23/2025',
+      dateReceived: '10/23/2025', // use this as fileBy date on order later
       documentType: 'Motion',
       purpose: motionPurpose,
       isPaperCase: false,
@@ -22,39 +25,35 @@ describe('Docket clerk creates and edits draft order with selected docket number
     // Now check if new motion was added
     // get the last docket entry row
     cy.get('[data-testid="docket-record-table"] tbody tr')
+      .contains('tr', 'Motion')
       .last() // Get the last motion if multiple exist
-      .within(() => {
-        // / Capture the index value for later use
-        cy.get('[data-testid^="docket-entry-index-"]')
-          .invoke('text')
-          .then(text => text.trim())
-          .as('motionIndex'); // Store as alias
-
-        cy.get('[data-testid^="docket-entry-filingsAndProceedings-"]')
-          .should('be.visible')
-          .within(() => {
-            cy.get('button').should('contain.text', motionPurpose);
-          });
+      .find('td')
+      .eq(1)
+      .then($td => {
+        const motionIndex = $td.text().trim();
+        cy.wrap(motionIndex).as('motionIndex');
+        cy.log(`Captured motion index: ${motionIndex}`);
       });
 
     // create order and apply to lead case motion
     cy.get('@motionIndex').then(motionIndex => {
-      console.log(`Creating order for motion index: `, motionIndex);
       createDocketEntryAffectingOrderOnConsolidatedCase(
-        'Order to deny motion',
+        orderTitle,
         motionIndex,
+        disposition,
       );
     });
-
-    // Verify the order was created and references the correct motion
-    // cy.get('[data-testid="docket-record-table"] tbody tr')
-    // .last()
-    // .within(() => {
-    //   cy.get('[data-testid^="docket-entry-description-"]')
-    //     .should('contain', motionIndex)
-    //     .should('contain', 'Order');
-    // });
-
-
+    cy.get('[data-testid="docket-record-table"] tbody tr')
+      .contains('tr', 'Order')
+      .last() // Get the last motion if multiple exist
+      .find('td')
+      .eq(5)
+      .then($td => {
+        cy.get('@motionIndex').then(motionIndex => {
+          expect($td.text().trim()).to.contain(
+            `${disposition} #${motionIndex}`,
+          );
+        });
+      });
   });
 });

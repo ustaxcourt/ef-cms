@@ -1,6 +1,7 @@
 export const createDocketEntryAffectingOrderOnConsolidatedCase = (
   orderContents = 'this is a test order',
   motionIndex: string,
+  disposition = 'GRANTED',
 ) => {
   const orderTitle = 'Order first title';
   const orderEventCode = 'O';
@@ -43,26 +44,8 @@ export const createDocketEntryAffectingOrderOnConsolidatedCase = (
     // Type the motion index to filter options
     cy.get('[data-testid="related-motion-type-search"]').type(motionIndex);
 
-    // Wait for filtered options to appear
-    // cy.wait(500);
-
-    cy.log(`Selecting motion with index: ${motionIndex}`);
-    // Select the option that contains the motion index
-    // Debug approach to see exact text content
-    cy.get('.select-search__option').then($options => {
-      cy.log(`Found ${$options.length} options`);
-
-      $options.each((index, option) => {
-        const optionText = Cypress.$(option).text().trim();
-        cy.log(`Option ${index}: "${optionText}"`);
-        cy.log(
-          `Does it include "${motionIndex}"? ${optionText.includes(motionIndex)}`,
-        );
-      });
-    });
-    cy.get('.select-search__option')
-      .contains(motionIndex)
-      .click({ force: true }); // This is not triggering
+    // Select from dropdown options
+    cy.get('[class*="option"]').contains(motionIndex).click();
   } else {
     // Fallback: select the first available motion
     cy.get('[data-testid="related-motion-type-search"]').click();
@@ -71,8 +54,12 @@ export const createDocketEntryAffectingOrderOnConsolidatedCase = (
   }
   // Select disposition
   cy.get('[data-testid="related-motion-disposition-type-search"]').click();
-  cy.get('.select-search__option').contains('Granted').click();
+  cy.get('[data-testid="related-motion-disposition-type-search"]')
+    .contains(disposition)
+    .click();
 
-  // Save the docket entry
-  cy.get('[data-testid="save-docket-entry-button"]').click();
+  cy.get('[data-testid="service-stamp-Served"]').click();
+  // Save and serve docket entry
+  cy.get('[data-testid="serve-to-parties-btn"]').click();
+  cy.get('[data-testid="modal-button-confirm"]').click();
 };
