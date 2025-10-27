@@ -6,7 +6,7 @@ export function Inputs() {
     <div>
       <h2>Text Input</h2>
       <div className="tw:p-6">
-        <div className="tw:flex tw:flex-wrap tw:gap-6 tw:w-[600px]">
+        <div className="tw:flex tw:flex-wrap tw:gap-6">
           <div className="tw:w-full">
             <TextField
               label="Field Label"
