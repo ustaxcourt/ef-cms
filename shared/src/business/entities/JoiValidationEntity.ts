@@ -1,6 +1,7 @@
 import { InvalidEntityError } from '../../../../web-api/src/errors/errors';
 import { isEmpty } from 'lodash';
 import joi from 'joi';
+import _ from 'lodash';
 
 const setIsValidated = obj => {
   Object.defineProperty(obj, 'isValidated', {
@@ -104,7 +105,9 @@ export abstract class JoiValidationEntity {
     if (!error) return null;
     const errors = {};
     error.details.forEach(detail => {
-      if (!Number.isInteger(detail.context.key)) {
+      if (detail.path.length > 1) {
+        errors[_.join(detail.path, '-')] = detail.message;
+      } else if (!Number.isInteger(detail.context.key)) {
         errors[detail.context.key || detail.type] = detail.message;
       } else {
         errors[detail.context.label] = detail.message;

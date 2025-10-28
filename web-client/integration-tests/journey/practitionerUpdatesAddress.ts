@@ -15,7 +15,7 @@ export const practitionerUpdatesAddress = cerebralTest => {
       'submitUpdateUserContactInformationSequence',
     );
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      contact: { address1: expect.anything() },
+      contact: { 'contact-address1': expect.anything() },
     });
 
     cerebralTest.updatedPractitionerAddress =

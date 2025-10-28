@@ -3,7 +3,7 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import React from 'react';
-
+// TODO (#8546): If Order dispossessing a motion is stricken, we should revert related motion dispositions
 export const StrikeDocketEntryModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,

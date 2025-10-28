@@ -62,7 +62,7 @@ export const EditDocketEntryMetaTabAction = connect(
               {editDocketEntryMetaHelper.strickenAtFormatted}
             </>
           )}
-          {!editDocketEntryMetaHelper.isStricken && (
+          {!editDocketEntryMetaHelper.isStricken && ( // TODO (#8546): handle striken orders that have affected other motions
             <Button
               link
               className="text-secondary-dark"

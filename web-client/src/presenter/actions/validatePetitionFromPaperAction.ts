@@ -1,16 +1,18 @@
-import { omit } from 'lodash';
+import { omit, omitBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const aggregateStatisticsErrors = ({ errors, get }: ActionProps) => {
   let newErrorStatistics;
   let statisticsErrorMessages = [];
 
-  const purgedErrors = omit(errors, [
-    'irsDeficiencyAmount',
-    'irsTotalPenalties',
-    'penalties',
-    'year',
-  ]);
+  const purgedErrors = omitBy(errors, (_, key) => {
+    return [
+      'irsDeficiencyAmount',
+      'irsTotalPenalties',
+      'penalties',
+      'year',
+    ].some(str => key.includes(str));
+  });
 
   if (purgedErrors.statistics) {
     newErrorStatistics = [];

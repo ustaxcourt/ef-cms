@@ -23,3 +23,13 @@ jest.mock(
   '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumberAndDocketEntryId',
   () => mockFactory('getDocketEntriesByDocketNumberAndDocketEntryId'),
 );
+
+jest.mock(
+  '@web-api/persistence/postgres/docketEntries/upsertDocketEntryRelatedEntries',
+  () => mockFactory('upsertDocketEntryRelatedEntries'),
+);
+
+jest.mock(
+  '@web-api/persistence/postgres/docketEntries/updateDocketEntryRelatedEntryServed',
+  () => mockFactory('updateDocketEntryRelatedEntryServed'),
+);

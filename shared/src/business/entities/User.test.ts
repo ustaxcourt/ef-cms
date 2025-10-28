@@ -289,12 +289,12 @@ describe('User entity', () => {
 
       expect(user.isValid()).toBeFalsy();
       expect(user.getFormattedValidationErrors()).toEqual({
-        address1: 'Enter mailing address',
-        city: 'Enter city',
-        countryType: 'Enter country type',
-        phone: 'Enter phone number',
-        postalCode: 'Enter ZIP code',
-        state: 'Enter state',
+        'contact-address1': 'Enter mailing address',
+        'contact-city': 'Enter city',
+        'contact-countryType': 'Enter country type',
+        'contact-phone': 'Enter phone number',
+        'contact-postalCode': 'Enter ZIP code',
+        'contact-state': 'Enter state',
         userId: '"userId" is required',
       });
     });
