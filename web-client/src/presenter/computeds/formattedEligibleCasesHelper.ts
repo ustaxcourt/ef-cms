@@ -3,6 +3,7 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import { FormattedTrialSessionCase } from '@shared/business/utilities/trialSession/getFormattedTrialSessionDetails';
 import { TRIAL_SESSION_ELIGIBLE_CASES_BUFFER } from '@shared/business/entities/EntityConstants';
+import { isLeadCase } from '@shared/business/entities/cases/Case';
 
 export const groupKeySymbol = Symbol('group');
 
@@ -63,7 +64,7 @@ const getFullSortString = (theCase, cases) => {
 
   return `${priorityPrefix}_${getSortableDocketNumber(
     isLeadInEligible
-      ? theCase.docketNumber === theCase.leadDocketNumber
+      ? isLeadCase(theCase)
         ? theCase.docketNumber
         : theCase.leadDocketNumber
       : theCase.docketNumber,
