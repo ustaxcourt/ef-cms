@@ -196,6 +196,7 @@ jobs:
                 --query 'DomainStatus.Endpoint' \
                 --output text)
               export ELASTICSEARCH_ENDPOINT="$ELASTICSEARCH_ENDPOINT"
+              export REGION="us-east-1"
               ./scripts/user/setup-glued-users.ts
             else
               npx ts-node --transpile-only ./scripts/circleci/judge/bulkImportJudgeUsers.ts | tee bulk-import-log.txt
