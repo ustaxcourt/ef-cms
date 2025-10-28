@@ -235,17 +235,13 @@ export const PrimaryDocumentForm = connect(
               }}
             />
 
-                      <div className="max-xs:tw:w-full tw:mt-6">
-                        <TextArea
-                          label="Additional info 1"
-                          helpText="Help text"
-                          placeholder=""
-                        />
-                      </div>
-
-
-
-
+            <div className="max-xs:tw:w-full tw:mt-6">
+              <TextArea
+                label="Additional info 1"
+                helpText="Help text"
+                placeholder=""
+              />
+            </div>
           </FormGroup>
           <div className="usa-form-group">
             <div className="usa-checkbox">

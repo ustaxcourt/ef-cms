@@ -15,14 +15,12 @@ export function Inputs() {
               flexDirection='vertical'
             />
           </div>
-
           <div className="tw:w-full">
             <TextArea
               label="Field Label"
               helpText=""
             />
           </div>
-
           <div className="tw:w-full">
             <TextField
               label="Field Label"
@@ -31,14 +29,12 @@ export function Inputs() {
               flexDirection='horizontal'
             />
           </div>
-
           <div className="tw:w-full">
             <TextField
               label="Field Label"
               flexDirection='horizontal'
             />
           </div>
-
           <div className="tw:w-full">
             <TextField
               label="Field Label"
@@ -47,7 +43,6 @@ export function Inputs() {
               error="Enter a valid answer"
             />
           </div>
-
           <div className="tw:w-full">
             <TextArea
               label="Field Label"
@@ -55,7 +50,6 @@ export function Inputs() {
               error="Enter a valid answer"
             />
           </div>
-
           <div className="tw:w-full">
             <TextField
               label="Field Label"

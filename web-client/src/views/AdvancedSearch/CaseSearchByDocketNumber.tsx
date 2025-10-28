@@ -36,9 +36,7 @@ export const CaseSearchByDocketNumber = connect(
           <form>
             <div className="grid-row">
               <div className="tablet:grid-col-6">
-
                 <FormGroup errorText={validationErrors.docketNumber}>
-
                   <div className="max-xs:tw:w-full tw:mt-4">
                     <TextField
                       aria-describedby="search-by-docket-number"
@@ -50,20 +48,20 @@ export const CaseSearchByDocketNumber = connect(
                       helpText="Example of docket number format: 123-19"
                       placeholder=""
                       required={true}
-                                        value={
-                      advancedSearchForm.caseSearchByDocketNumber
-                        .docketNumber || ''
-                    }
-                    onBlur={() => {
-                      validateCaseDocketNumberSearchFormSequence();
-                    }}
-                    onChange={e => {
-                      updateAdvancedSearchFormValueSequence({
-                        formType: 'caseSearchByDocketNumber',
-                        key: e.target.name,
-                        value: e.target.value.toUpperCase(),
-                      });
-                    }}
+                      value={
+                        advancedSearchForm.caseSearchByDocketNumber
+                          .docketNumber || ''
+                      }
+                      onBlur={() => {
+                        validateCaseDocketNumberSearchFormSequence();
+                      }}
+                      onChange={e => {
+                        updateAdvancedSearchFormValueSequence({
+                          formType: 'caseSearchByDocketNumber',
+                          key: e.target.name,
+                          value: e.target.value.toUpperCase(),
+                        });
+                      }}
                     />
                   </div>
                 </FormGroup>
