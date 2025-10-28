@@ -36,7 +36,7 @@ describe('Trial Session Aged Eligible Cases', () => {
         cy.get('[data-testid="new-trial-sessions-tab"]').click();
 
         cy.intercept(
-          `/trial-sessions/${trialSessionId}/eligible-cases`,
+          `**/trial-sessions/${trialSessionId}/eligible-cases`,
           req => {
             req.continue(res => {
               expect(res.body).to.deep.equal([]); // doing this to debug ci failure
