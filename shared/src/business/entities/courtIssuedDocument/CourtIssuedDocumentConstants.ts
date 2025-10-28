@@ -32,6 +32,7 @@ export abstract class CourtIssuedDocument extends JoiValidationEntity {
   public filingDate?: string;
   public scenario?: string;
   public isLegacyServed?: boolean;
+  public orderType?: string;
 
   abstract getDocumentTitle(): string;
   static VALIDATION_RULES = {

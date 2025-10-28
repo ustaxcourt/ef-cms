@@ -4,6 +4,7 @@ import { Get } from 'cerebral';
 import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
 import { state } from '@web-client/presenter/app.cerebral';
 import _ from 'lodash';
+import { MOTION_DISPOSITIONS } from '@shared/business/entities/EntityConstants';
 
 export const addCourtIssuedDocketEntryHelper = (
   get: Get,
@@ -11,7 +12,6 @@ export const addCourtIssuedDocketEntryHelper = (
 ): any => {
   const {
     COURT_ISSUED_EVENT_CODES,
-    MOTION_DISPOSITIONS,
     SYSTEM_GENERATED_DOCUMENT_TYPES,
     USER_ROLES,
   } = applicationContext.getConstants();
