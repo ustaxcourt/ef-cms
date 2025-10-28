@@ -1424,4 +1424,44 @@ describe('Case entity', () => {
       expect(result).toBe(false);
     });
   });
+
+  describe('setRemoteTrialGrantedDate', () => {
+    it('sets remoteTrialGranted and remoteTrialGrantedDate when a valid date string is provided', () => {
+      const mockDate = '2025-10-28T12:00:00.000Z';
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        { authorizedUser: mockDocketClerkUser },
+      );
+
+      myCase.setRemoteTrialGrantedDate(mockDate);
+
+      expect(myCase.remoteTrialGranted).toBe(true);
+      expect(myCase.remoteTrialGrantedDate).toBe(mockDate);
+    });
+
+    it('clears remoteTrialGranted and remoteTrialGrantedDate when null or blank values are provided', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          remoteTrialGranted: true,
+          remoteTrialGrantedDate: '2024-01-01T00:00:00.000Z',
+        },
+        { authorizedUser: mockDocketClerkUser },
+      );
+
+      myCase.setRemoteTrialGrantedDate(null);
+      expect(myCase.remoteTrialGranted).toBe(false);
+      expect(myCase.remoteTrialGrantedDate).toBeNull();
+
+      myCase.setRemoteTrialGrantedDate('');
+      expect(myCase.remoteTrialGranted).toBe(false);
+      expect(myCase.remoteTrialGrantedDate).toBeNull();
+
+      myCase.setRemoteTrialGrantedDate('   ');
+      expect(myCase.remoteTrialGranted).toBe(false);
+      expect(myCase.remoteTrialGrantedDate).toBeNull();
+    });
+  });
 });
