@@ -27,14 +27,13 @@ describe('Advanced Search', () => {
       cy.get('[data-testid="petitioner-name"]').type(name);
       selectTypeaheadInput('case-type-selection', CASE_TYPES_MAP.cdp);
 
-        /** Assert */
-        // need to wait for elasticsearch potentially
-        retry(() => {
-          cy.get('[data-testid="submit-case-search-by-name-button"]').click();
-          return assertExists(`[data-testid="case-result-${docketNumber}"]`);
-        });
-      },
-    );
+      /** Assert */
+      // need to wait for elasticsearch potentially
+      retry(() => {
+        cy.get('[data-testid="submit-case-search-by-name-button"]').click();
+        return assertExists(`[data-testid="case-result-${docketNumber}"]`);
+      });
+    });
   });
 
   it('should return practitioner results when the user searches by name', () => {
