@@ -76,6 +76,7 @@ describe('addPaperFilingInteractor', () => {
       isFileAttached: true,
       isPaper: true,
     },
+    isFiledAcrossAllCases: false,
     isSavingForLater: true,
   };
 

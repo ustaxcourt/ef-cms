@@ -99,34 +99,7 @@ export const serveExternallyFiledDocument = async (
       originalSubjectDocketEntry.eventCode,
     ) || originalSubjectDocketEntry.documentTitle?.includes('Simultaneous');
 
-  if (
-    subjectCaseIsSimultaneousDocType &&
-    originalSubjectDocketEntry.isFiledAcrossAllCases
-  ) {
-    if (
-      subjectCaseEntity.leadDocketNumber &&
-      subjectCaseEntity.leadDocketNumber !== subjectCaseEntity.docketNumber
-    ) {
-      const { leadDocketNumber } = subjectCaseEntity;
-      const leadCase = await getCaseByDocketNumber({
-        docketNumber: leadDocketNumber,
-      });
-
-      subjectCaseDocketNumber = leadDocketNumber;
-      docketNumbers = [
-        leadDocketNumber,
-        ...(leadCase.consolidatedCases || []).map(c => c.docketNumber),
-      ];
-    } else {
-      subjectCaseDocketNumber = subjectCase.docketNumber;
-      docketNumbers = [
-        subjectCaseDocketNumber,
-        ...(subjectCase.consolidatedCases || []).map(c => c.docketNumber),
-      ];
-    }
-  } else {
-    docketNumbers = [subjectCaseDocketNumber, ...docketNumbers];
-  }
+  docketNumbers = [subjectCaseDocketNumber, ...docketNumbers];
 
   try {
     const casesToUpdate = await getCasesByDocketNumbers({ docketNumbers });
