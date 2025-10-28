@@ -15,7 +15,22 @@ export const TodaysOpinions = connect(
   function TodaysOpinions({
     openCaseDocumentDownloadUrlSequence,
     todaysOpinionsHelper,
-  }: any) {
+  }: {
+    openCaseDocumentDownloadUrlSequence: any;
+    todaysOpinionsHelper: {
+      formattedCurrentDate: string;
+      formattedOpinions: Array<{
+        docketEntryId: string;
+        docketNumber: string;
+        caseCaption: string;
+        documentType: string;
+        numberOfPagesFormatted: string | number;
+        formattedFilingDate: string;
+        formattedJudgeName: string;
+        descriptionDisplay?: string;
+      }>;
+    };
+  }) {
     return (
       <>
         <BigHeader text="Today’s Opinions" />

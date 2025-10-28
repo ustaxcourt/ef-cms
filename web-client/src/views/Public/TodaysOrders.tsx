@@ -33,7 +33,35 @@ export const TodaysOrders = connect(
     sortTableSequence,
     tableSort,
     todaysOrdersHelper,
-  }: any) {
+  }: {
+    loadMoreTodaysOrdersSequence: any;
+    openCaseDocumentDownloadUrlSequence: any;
+    sortTableSequence: any;
+    tableSort: {
+      sortField: string;
+      sortOrder: 'asc' | 'desc';
+    };
+    todaysOrdersHelper: {
+      formattedCurrentDate: string;
+      formattedOrders: Array<{
+        docketNumber: string;
+        docketEntryId: string;
+        filingDate: string;
+        caseCaption: string;
+        documentTitle: string;
+        numberOfPagesFormatted: string | number;
+        formattedJudgeName: string;
+      }>;
+      hasResults: boolean;
+      showLoadMoreButton: boolean;
+      totalCount: number;
+      sortOptions: Array<{
+        label: string;
+        sortField: string;
+        sortOrder: string;
+      }>;
+    };
+  }) {
     return (
       <>
         <BigHeader text="Today's Orders" />
@@ -210,8 +238,17 @@ const TodaysOrdersColumnHeader = ({
   tableSort,
 }: {
   orderListId: string;
-  columnData: any;
-  tableSort: any;
+  columnData: {
+    columnName: string;
+    sortFieldInfo: {
+      sortField: string;
+      sortType: string;
+    };
+  };
+  tableSort: {
+    sortField: string;
+    sortOrder: 'asc' | 'desc';
+  };
   onSort: ({
     sortField,
     sortOrder,
@@ -242,7 +279,15 @@ const TodaysOrdersRow = ({
   order,
   openCaseDocumentDownloadUrlSequence,
 }: {
-  order: any;
+  order: {
+    docketNumber: string;
+    docketEntryId: string;
+    filingDate: string;
+    caseCaption: string;
+    documentTitle: string;
+    numberOfPagesFormatted: string | number;
+    formattedJudgeName: string;
+  };
   openCaseDocumentDownloadUrlSequence: any;
 }) => {
   return (
