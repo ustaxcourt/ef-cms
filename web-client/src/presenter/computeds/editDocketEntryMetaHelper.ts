@@ -11,6 +11,11 @@ import { formatDateString } from '@shared/business/utilities/DateHandler';
 export const editDocketEntryMetaHelper = (
   get: Get,
 ): {
+  consolidatedCasesToDisplay: {
+    docketNumber: string;
+    caseTitle?: string;
+    caseCaption?: string;
+  }[];
   isStricken: boolean;
   primary: any;
   showObjection: boolean;
@@ -20,6 +25,7 @@ export const editDocketEntryMetaHelper = (
   const { eventCode, isStricken, strickenAt, strickenBy } = get(state.form);
 
   const caseDetail = get(state.caseDetail);
+  const formattedCaseDetail = get(state.formattedCaseDetail);
   const form = get(state.form);
   const user = get(state.user);
 
@@ -50,7 +56,17 @@ export const editDocketEntryMetaHelper = (
         form.previousDocument?.documentType,
       ));
 
+  const consolidatedCasesToDisplay =
+    formattedCaseDetail?.consolidatedCases
+      ?.filter(c => c.docketNumber !== caseDetail.docketNumber)
+      .map(c => ({
+        docketNumber: c.docketNumber,
+        caseTitle: c.caseTitle,
+        caseCaption: c.caseCaption,
+      })) || [];
+
   return {
+    consolidatedCasesToDisplay,
     isStricken,
     primary: optionsForCategory,
     showObjection,

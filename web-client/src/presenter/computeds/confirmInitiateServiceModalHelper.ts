@@ -27,6 +27,7 @@ export const confirmInitiateServiceModalHelper = (
   const docketEntryId = get(state.docketEntryId);
   const formattedCaseDetail = get(state.formattedCaseDetail);
   const form = get(state.form);
+  const isFiledAcrossAllCases = get(state.isFiledAcrossAllCases);
 
   const isOnMessageDetailPage = get(state.currentPage) === 'MessageDetail';
   let { documentTitle, eventCode } = form;
@@ -68,7 +69,9 @@ export const confirmInitiateServiceModalHelper = (
 
   const confirmationText = showConsolidatedCasesForService
     ? 'The following document will be served on all parties in selected cases:'
-    : 'The following document will be served on all parties:';
+    : isFiledAcrossAllCases === false
+      ? 'The following document will be served on this case:'
+      : 'The following document will be served on all parties:';
 
   let parties;
   if (showConsolidatedCasesForService) {

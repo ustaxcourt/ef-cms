@@ -145,10 +145,13 @@ describe('Document QC Complete', () => {
           'QC Completed',
         );
 
-        cy.visit('/document-qc/my/outbox');
-        cy.get(
-          `[data-testid="section-work-item-outbox-${docketNumber}"]`,
-        ).should('exist');
+        retry(() => {
+          cy.visit('/document-qc/my/outbox');
+          cy.get('table.usa-table');
+          return cy
+            .get(`[data-testid^="work-item-outbox-row-${docketNumber}"]`)
+            .then($el => cy.wrap($el.length > 0));
+        });
       });
     });
   });

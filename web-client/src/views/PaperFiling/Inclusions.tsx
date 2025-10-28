@@ -21,7 +21,7 @@ export const Inclusions = connect(
     formatAndUpdateDateFromDatePickerSequence:
       sequences.formatAndUpdateDateFromDatePickerSequence,
     marginClass: props.marginClass,
-    updateSequence: sequences[props.updateSequence],
+    updateSequence: sequences[props.updateSequence as any],
     validateDocketEntrySequence: sequences.validateDocketEntrySequence,
     validationErrors: state.validationErrors,
     isMemberCase: props.isMemberCase || false,

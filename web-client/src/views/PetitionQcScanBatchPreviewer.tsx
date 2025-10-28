@@ -104,15 +104,15 @@ export const PetitionQcScanBatchPreviewer = connect(
       return (
         <>
           <div className="grid-container padding-x-0">
-            <div className="grid-row grid-gap">
-              <div className="grid-col-6">
+            <div className="grid-row space-between">
+              <div>
                 <h4 className="margin-bottom-0 margin-top-2">
                   Scan Preview: Batch{' '}
                   {scanBatchPreviewerHelper.selectedBatch.index + 1}
                 </h4>
               </div>
 
-              <div className="grid-col-6 text-right margin-bottom-2">
+              <div className="margin-bottom-2">
                 <PreviewControls
                   currentPage={scanBatchPreviewerHelper.currentPage + 1}
                   disableLeftButtons={

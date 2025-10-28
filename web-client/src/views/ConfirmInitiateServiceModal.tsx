@@ -1,5 +1,5 @@
 import { ConsolidatedCasesCheckboxes } from './ConsolidatedCasesCheckboxes';
-import { Hint } from '../ustc-ui/Hint/Hint';
+import { InfoNotificationComponent } from './InfoNotification';
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { props as cerebralProps } from 'cerebral';
@@ -15,8 +15,8 @@ export const ConfirmInitiateServiceModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
     confirmInitiateServiceModalHelper: state.confirmInitiateServiceModalHelper,
-    confirmSequence: props.confirmSequence,
-    documentTitle: props.documentTitle,
+    additionalServedCases:
+      state.confirmInitiateServiceModalHelper.additionalServedCases,
     waitingForResponse: state.progressIndicator.waitingForResponse,
   },
   function ConfirmInitiateServiceModal({
@@ -71,7 +71,7 @@ export const ConfirmInitiateServiceModal = connect(
         disableSubmit={waitingForResponse || isSubmitDebounced}
         title="Are You Ready to Initiate Service?"
       >
-        <p className="margin-bottom-1">
+        <p className="margin-0">
           {confirmInitiateServiceModalHelper.confirmationText}
         </p>
         <p className="margin-top-0 margin-bottom-2">
@@ -119,8 +119,10 @@ export const ConfirmInitiateServiceModal = connect(
                   {contact.name}
                 </div>
               ),
-            )}
-          </Hint>
+            }}
+            dismissible={false}
+            scrollToTop={false}
+          />
         )}
         {confirmInitiateServiceModalHelper.showConsolidatedCasesForService && (
           <ConsolidatedCasesCheckboxes />

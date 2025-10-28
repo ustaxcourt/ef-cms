@@ -1,6 +1,7 @@
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@web-client/presenter/shared.cerebral';
+import { isMemberCase } from '@shared/business/entities/cases/Case';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -9,6 +10,8 @@ export const EditDocketEntryMetaFormNoDocument = connect(
   {
     DATE_FORMATS: state.constants.DATE_FORMATS,
     form: state.form,
+    caseDetail: state.caseDetail,
+    isFiledAcrossAllCases: state.isFiledAcrossAllCases,
     formatAndUpdateDateFromDatePickerSequence:
       sequences.formatAndUpdateDateFromDatePickerSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
@@ -18,11 +21,16 @@ export const EditDocketEntryMetaFormNoDocument = connect(
   function EditDocketEntryMetaFormNoDocument({
     DATE_FORMATS,
     form,
+    caseDetail,
+    isFiledAcrossAllCases,
     formatAndUpdateDateFromDatePickerSequence,
     updateFormValueSequence,
     validateDocumentSequence,
     validationErrors,
   }) {
+    const isDisabled =
+      caseDetail && isMemberCase(caseDetail) && isFiledAcrossAllCases;
+
     return (
       <div className="blue-container">
         <DateSelector
@@ -38,6 +46,7 @@ export const EditDocketEntryMetaFormNoDocument = connect(
             });
             validateDocumentSequence();
           }}
+          disabled={isDisabled}
         />
 
         <FormGroup errorText={validationErrors.documentTitle}>
@@ -55,6 +64,7 @@ export const EditDocketEntryMetaFormNoDocument = connect(
             name="documentTitle"
             type="text"
             value={form.documentTitle || ''}
+            disabled={isDisabled}
             onChange={e => {
               updateFormValueSequence({
                 key: e.target.name,
