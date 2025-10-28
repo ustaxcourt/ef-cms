@@ -11,7 +11,7 @@ const props = cerebralProps as unknown as {
 };
 
 const filingPartiesFormDeps = {
-  caseDetail: state.formattedCaseDetail,
+  formattedCaseDetail: state.formattedCaseDetail,
   filingPartiesFormHelper: state.filingPartiesFormHelper,
   form: state.form,
   updateSequence: props.updateSequence,
@@ -22,12 +22,21 @@ const filingPartiesFormDeps = {
 export const FilingPartiesForm = connect(
   filingPartiesFormDeps,
   function FilingPartiesForm({
-    caseDetail,
+    formattedCaseDetail,
     filingPartiesFormHelper,
     form,
+    validationErrors,
     updateSequence,
     validateSequence,
-    validationErrors,
+    isMemberCase = false,
+  }: {
+    formattedCaseDetail;
+    filingPartiesFormHelper;
+    form;
+    validationErrors;
+    updateSequence?;
+    validateSequence?;
+    isMemberCase?: boolean;
   }) {
     return (
       <>
@@ -66,18 +75,17 @@ export const FilingPartiesForm = connect(
               </legend>
               {filingPartiesFormHelper.showFilingPartiesAsCheckboxes ? (
                 <>
-                  {caseDetail.petitioners.map(petitioner => (
+                  {(formattedCaseDetail?.petitioners || []).map(petitioner => (
                     <div className="usa-checkbox" key={petitioner.contactId}>
                       <input
                         checked={
-                          (form.filersMap &&
-                            form.filersMap[petitioner.contactId]) ||
-                          false
+                          form.filersMap?.[petitioner.contactId] || false
                         }
                         className="usa-checkbox__input"
                         id={`filing-${petitioner.contactId}`}
                         name={`filersMap.${petitioner.contactId}`}
                         type="checkbox"
+                        disabled={isMemberCase}
                         onChange={e => {
                           updateSequence({
                             key: e.target.name,

@@ -3,13 +3,12 @@ import { Hint } from '../ustc-ui/Hint/Hint';
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { props as cerebralProps } from 'cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 const props = cerebralProps as unknown as {
-  confirmSequence: unknown;
-  documentTitle: unknown;
+  confirmSequence: Function;
+  documentTitle: string;
 };
 
 export const ConfirmInitiateServiceModal = connect(
@@ -27,21 +26,30 @@ export const ConfirmInitiateServiceModal = connect(
     documentTitle,
     waitingForResponse,
   }: {
-    cancelSequence: () => void;
+    cancelSequence: Function;
     confirmInitiateServiceModalHelper: {
       confirmationText: string;
       showPaperAlert: boolean;
       caseOrGroup: string;
       contactsNeedingPaperService: Array<{ name: string }>;
       showConsolidatedCasesForService: boolean;
+      additionalServedCases?: Array<{
+        docketNumber: string;
+        caseTitle: string;
+      }>;
+      paperPartiesConsolidated?: Array<{
+        name: string;
+        docketNumber: string;
+        contactType?: string;
+      }>;
     };
-    confirmSequence: () => void;
+    confirmSequence: Function;
     documentTitle: string;
     waitingForResponse: boolean;
   }) {
     let isSubmitDebounced = false;
 
-    const debounceSubmit = timeout => {
+    const debounceSubmit = (timeout: number) => {
       isSubmitDebounced = true;
 
       setTimeout(() => {
@@ -69,6 +77,36 @@ export const ConfirmInitiateServiceModal = connect(
         <p className="margin-top-0 margin-bottom-2">
           <strong>{documentTitle}</strong>
         </p>
+        {confirmInitiateServiceModalHelper.additionalServedCases &&
+          confirmInitiateServiceModalHelper.additionalServedCases.length >
+            0 && (
+            <div>
+              <div>This document will also be served for:</div>
+              <ul className="padding-left-3 margin-top-1">
+                {confirmInitiateServiceModalHelper.additionalServedCases.map(
+                  c => (
+                    <li key={c.docketNumber}>
+                      {c.docketNumber} - {c.caseTitle}
+                    </li>
+                  ),
+                )}
+              </ul>
+            </div>
+          )}
+        {confirmInitiateServiceModalHelper.paperPartiesConsolidated && (
+          <Hint fullWidth className="block">
+            <div className="margin-bottom-1">
+              <strong>Paper service is required for these parties:</strong>
+            </div>
+            {confirmInitiateServiceModalHelper.paperPartiesConsolidated.map(
+              contact => (
+                <div key={`${contact.docketNumber}-${contact.name}`}>
+                  {contact.docketNumber} - {contact.name}, {contact.contactType}
+                </div>
+              ),
+            )}
+          </Hint>
+        )}
         {confirmInitiateServiceModalHelper.showPaperAlert && (
           <Hint fullWidth className="block">
             <div className="margin-bottom-1">
