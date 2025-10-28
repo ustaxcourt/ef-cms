@@ -1,4 +1,5 @@
 import { state } from '@web-client/presenter/app.cerebral';
+import { formatMessage } from '../computeds/formattedMessageDetail';
 /**
  * gets the first attachment document from the most recent message to set as the default messageViewerDocumentToDisplay
  * @param {object} providers the providers object
@@ -6,6 +7,7 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @returns {object} object containing messageViewerDocumentToDisplay
  */
 export const getDefaultAttachmentViewerDocumentToDisplayAction = ({
+  applicationContext,
   get,
   props,
 }: ActionProps) => {
@@ -33,14 +35,21 @@ export const getDefaultAttachmentViewerDocumentToDisplayAction = ({
   let messageViewerDocumentToDisplay = null;
 
   if (attachments && attachments.length) {
-    messageViewerDocumentToDisplay = get(
-      state.formattedMessageDetail.attachments,
-    ).find(attachment => {
-      return attachment.docketEntryId === attachments[0].docketEntryId;
+    const caseDetail = get(state.caseDetail);
+    const formattedMessage = formatMessage({
+      applicationContext,
+      caseDetail,
+      message: mostRecentMessage,
     });
 
+    messageViewerDocumentToDisplay = formattedMessage.attachments.find(
+      attachment => {
+        return attachment.docketEntryId === attachments[0].docketEntryId;
+      },
+    );
+
     if (documentId) {
-      const foundDocument = get(state.formattedMessageDetail.attachments).find(
+      const foundDocument = formattedMessage.attachments.find(
         attachment => attachment.documentId === documentId,
       );
 
