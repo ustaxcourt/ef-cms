@@ -10,6 +10,7 @@ import React from 'react';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import _ from 'lodash';
+import { createISODateString } from '@shared/business/utilities/DateHandler';
 
 export const EditDocketEntryMetaFormCourtIssued = connect(
   {
@@ -283,7 +284,7 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
                     key: 'affectedDocketEntries',
                     value: [
                       ...form.affectedDocketEntries,
-                      { arrayKey: Date.now() },
+                      { arrayKey: createISODateString() },
                     ],
                   });
                 }}

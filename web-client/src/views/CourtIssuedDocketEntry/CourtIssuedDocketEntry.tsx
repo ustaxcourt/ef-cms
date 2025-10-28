@@ -20,6 +20,7 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import _ from 'lodash';
+import { createISODateString } from '@shared/business/utilities/DateHandler';
 
 export const CourtIssuedDocketEntry = connect(
   {
@@ -317,7 +318,7 @@ export const CourtIssuedDocketEntry = connect(
                             key: 'affectedDocketEntries',
                             value: [
                               ...form.affectedDocketEntries,
-                              { arrayKey: Date.now() },
+                              { arrayKey: createISODateString() },
                             ],
                           });
                         }}

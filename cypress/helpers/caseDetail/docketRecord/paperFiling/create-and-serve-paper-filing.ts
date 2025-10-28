@@ -3,7 +3,7 @@ import { fillPaperFilingForm } from './fill-paper-filing-form';
 export function createAndServePaperFiling({
   dateReceived,
   documentType,
-  purpose = 'Motion to Dismiss',
+  purpose,
   isPaperCase = true,
 }: {
   documentType: string;
@@ -11,12 +11,12 @@ export function createAndServePaperFiling({
   isPaperCase?: boolean;
   purpose?: string;
 }) {
-  
   fillPaperFilingForm({ dateReceived, documentType });
 
-  if (documentType.includes('Motion')) {
+  if (documentType.includes('Motion') && purpose) {
     cy.log('Filling in document description for motion type document');
-    cy.get('#free-text').clear().type(purpose); // NOTE (#8546): May want to make this a data-testid
+    cy.get('#free-text').clear();
+    cy.get('#free-text').type(purpose); // NOTE (#8546): May want to make this a data-testid
   }
 
   cy.get('[data-testid="save-and-serve"]').click();
