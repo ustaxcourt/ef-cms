@@ -57,7 +57,6 @@ export function Inputs() {
               icon={true}
               flexDirection='horizontal'
               error="Enter a valid answer"
-
             />
           </div>
         </div>
