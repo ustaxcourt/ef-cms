@@ -15,28 +15,13 @@ import { createTrialSession } from 'cypress/helpers/trialSession/create-trial-se
 
 describe('Trial Session Aged Eligible Cases', () => {
   const trialLocation = 'Birmingham, Alabama';
-  const mockSmallEligibleCase = {
+  const mockEligibleCase = {
     entityName: 'EligibleCase',
-    caseCaption: 'rick james 1761578011322, Petitioner',
-    docketNumber: '1340-20',
-    docketNumberSuffix: 'SL',
-    docketNumberWithSuffix: '1340-20SL',
-    procedureType: 'Small',
-    caseType: 'CDP (Lien/Levy)',
-    qcCompleteForTrial: {},
-    isSealed: false,
-    isAgedCase: false,
-    inConsolidatedGroup: false,
-    privatePractitioners: [],
-    irsPractitioners: [],
-  };
-  const mockRegularEligibleCase = {
-    entityName: 'EligibleCase',
-    caseCaption: 'rick james 1761578011316, Petitioner',
-    docketNumber: '1339-20',
-    docketNumberSuffix: 'SL',
-    docketNumberWithSuffix: '1339-20SL',
-    procedureType: 'Small',
+    caseCaption: 'rick james 1761578048592, Petitioner',
+    docketNumber: '1342-20',
+    docketNumberSuffix: 'L',
+    docketNumberWithSuffix: '1342-20L',
+    procedureType: 'Regular',
     caseType: 'CDP (Lien/Levy)',
     qcCompleteForTrial: {},
     isSealed: false,
@@ -46,7 +31,7 @@ describe('Trial Session Aged Eligible Cases', () => {
     irsPractitioners: [],
   };
 
-  it.only('should show aged cases for small trial sessions', () => {
+  it('should show aged cases for small trial sessions', () => {
     loginAsPetitionsClerk1();
     createTrialSession({
       sessionType: SESSION_TYPES.small,
@@ -71,8 +56,11 @@ describe('Trial Session Aged Eligible Cases', () => {
             statusCode: 200,
             body: [
               {
-                ...mockRegularEligibleCase,
+                ...mockEligibleCase,
                 docketNumber,
+                docketNumberWithSuffix: `${docketNumber}SL`,
+                docketNumberSuffix: 'SL',
+                procedureType: PROCEDURE_TYPES_MAP.small,
                 isAgedCase: true,
               },
             ],
@@ -87,11 +75,11 @@ describe('Trial Session Aged Eligible Cases', () => {
           'have.class',
           'visibility-visible',
         );
-        cy.get(`[data-testid="case-aged-icon-${docketNumber}"]`)
-          .find('title')
-          .contains(
-            'There has not been activity on this case for the past 12 months.',
-          );
+        cy.get(`[data-testid="case-aged-icon-${docketNumber}"]`).should(
+          'have.attr',
+          'title',
+          'There has not been activity on this case for the past 12 months.',
+        );
       });
     });
   });
@@ -121,8 +109,11 @@ describe('Trial Session Aged Eligible Cases', () => {
             statusCode: 200,
             body: [
               {
-                ...mockSmallEligibleCase,
+                ...mockEligibleCase,
                 docketNumber,
+                docketNumberWithSuffix: `${docketNumber}SL`,
+                docketNumberSuffix: 'SL',
+                procedureType: PROCEDURE_TYPES_MAP.small,
                 isAgedCase: true,
               },
             ],
@@ -141,15 +132,15 @@ describe('Trial Session Aged Eligible Cases', () => {
           'have.class',
           'visibility-visible',
         );
-        cy.get(`[data-testid="case-aged-icon-${docketNumber}"]`)
-          .find('title')
-          .contains(
-            'There has not been activity on this case for the past 12 months.',
-          );
+        cy.get(`[data-testid="case-aged-icon-${docketNumber}"]`).should(
+          'have.attr',
+          'title',
+          'There has not been activity on this case for the past 12 months.',
+        );
 
         cy.get('#hybrid-session-filter').select(PROCEDURE_TYPES_MAP.regular);
 
-        // cy.get(`[data-testid="table-row-${docketNumber}"]`).should('not.exist');
+        cy.get(`[data-testid="table-row-${docketNumber}"]`).should('not.exist');
       });
 
       createAndServePaperPetition({
@@ -171,8 +162,11 @@ describe('Trial Session Aged Eligible Cases', () => {
             statusCode: 200,
             body: [
               {
-                ...mockRegularEligibleCase,
+                ...mockEligibleCase,
                 docketNumber,
+                docketNumberWithSuffix: `${docketNumber}L`,
+                docketNumberSuffix: 'L',
+                procedureType: PROCEDURE_TYPES_MAP.regular,
                 isAgedCase: true,
               },
             ],
@@ -183,7 +177,7 @@ describe('Trial Session Aged Eligible Cases', () => {
 
         cy.get('#hybrid-session-filter').select(PROCEDURE_TYPES_MAP.small);
 
-        // cy.get(`[data-testid="table-row-${docketNumber}"]`).should('not.exist');
+        cy.get(`[data-testid="table-row-${docketNumber}"]`).should('not.exist');
 
         cy.get('#hybrid-session-filter').select(PROCEDURE_TYPES_MAP.regular);
 
@@ -196,11 +190,11 @@ describe('Trial Session Aged Eligible Cases', () => {
           'have.class',
           'visibility-visible',
         );
-        cy.get(`[data-testid="case-aged-icon-${docketNumber}"]`)
-          .find('title')
-          .contains(
-            'There has not been activity on this case for the past 12 months.',
-          );
+        cy.get(`[data-testid="case-aged-icon-${docketNumber}"]`).should(
+          'have.attr',
+          'title',
+          'There has not been activity on this case for the past 12 months.',
+        );
       });
     });
   });
@@ -232,6 +226,9 @@ describe('Trial Session Aged Eligible Cases', () => {
               {
                 ...mockEligibleCase,
                 docketNumber,
+                docketNumberWithSuffix: `${docketNumber}L`,
+                docketNumberSuffix: 'L',
+                procedureType: PROCEDURE_TYPES_MAP.regular,
                 isAgedCase: true,
               },
             ],
@@ -247,11 +244,11 @@ describe('Trial Session Aged Eligible Cases', () => {
           'have.class',
           'visibility-visible',
         );
-        cy.get(`[data-testid="case-aged-icon-${docketNumber}"]`)
-          .find('title')
-          .contains(
-            'There has not been activity on this case for the past 12 months.',
-          );
+        cy.get(`[data-testid="case-aged-icon-${docketNumber}"]`).should(
+          'have.attr',
+          'title',
+          'There has not been activity on this case for the past 12 months.',
+        );
       });
     });
   });
@@ -288,6 +285,9 @@ describe('Trial Session Aged Eligible Cases', () => {
                 {
                   ...mockEligibleCase,
                   docketNumber,
+                  docketNumberWithSuffix: `${docketNumber}L`,
+                  docketNumberSuffix: 'L',
+                  procedureType: PROCEDURE_TYPES_MAP.regular,
                   isAgedCase: true,
                 },
               ],
@@ -305,11 +305,11 @@ describe('Trial Session Aged Eligible Cases', () => {
             'have.class',
             'visibility-visible',
           );
-          cy.get(`[data-testid="case-aged-icon-${docketNumber}"]`)
-            .find('title')
-            .contains(
-              'There has not been activity on this case for the past 12 months.',
-            );
+          cy.get(`[data-testid="case-aged-icon-${docketNumber}"]`).should(
+            'have.attr',
+            'title',
+            'There has not been activity on this case for the past 12 months.',
+          );
         });
       });
     });
@@ -348,6 +348,9 @@ describe('Trial Session Aged Eligible Cases', () => {
           {
             ...mockEligibleCase,
             docketNumber,
+            docketNumberWithSuffix: `${docketNumber}L`,
+            docketNumberSuffix: 'L',
+            procedureType: PROCEDURE_TYPES_MAP.regular,
             isAgedCase: true,
           },
         ],
@@ -365,11 +368,11 @@ describe('Trial Session Aged Eligible Cases', () => {
         'have.class',
         'visibility-visible',
       );
-      cy.get(`[data-testid="case-aged-icon-${docketNumber}"]`)
-        .find('title')
-        .contains(
-          'There has not been activity on this case for the past 12 months.',
-        );
+      cy.get(`[data-testid="case-aged-icon-${docketNumber}"]`).should(
+        'have.attr',
+        'title',
+        'There has not been activity on this case for the past 12 months.',
+      );
     });
   });
 });
