@@ -148,8 +148,12 @@ describe('Petitioner Updates e-mail', () => {
     clickConfirmModal();
 
     cy.visit('/verify-email?token=hello_world');
-    cy.get('[data-testid^="error-alert"]').should('be.visible');
-
+    cy.get('[data-testid^="error-alert"]')
+      .should('be.visible')
+      .and(
+        'contain.text',
+        'Your request cannot be completed. Please try to log in. If you’re still having trouble',
+      );
     loginAsPetitioner(email);
   });
 });
