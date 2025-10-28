@@ -65,24 +65,30 @@ export const RemoteTrialSessionInformation = ({
 
 const EditRemoteStatusButton = ({
   openEditRemoteStatusModalSequence,
+  showEditRemoteTrialPermission,
 }: {
   openEditRemoteStatusModalSequence: Function;
+  showEditRemoteTrialPermission: String;
 }) => {
   return (
-    <div className="margin-bottom-1">
-      <Button
-        className="padding-0"
-        link
-        data-testid="edit-remote-status"
-        icon="edit"
-        id="edit-remote-status-button"
-        onClick={() => {
-          openEditRemoteStatusModalSequence();
-        }}
-      >
-        Edit Remote Status
-      </Button>
-    </div>
+    <>
+      {showEditRemoteTrialPermission && (
+        <div className="margin-bottom-1">
+          <Button
+            className="padding-0"
+            link
+            data-testid="edit-remote-status"
+            icon="edit"
+            id="edit-remote-status-button"
+            onClick={() => {
+              openEditRemoteStatusModalSequence();
+            }}
+          >
+            Edit Remote Status
+          </Button>
+        </div>
+      )}
+    </>
   );
 };
 
@@ -179,13 +185,12 @@ export const TrialInformation = connect(
                 />
               </div>
               <div className="grid-col-4">
-                {showEditRemoteTrialPermission && (
-                  <EditRemoteStatusButton
-                    openEditRemoteStatusModalSequence={
-                      openEditRemoteStatusModalSequence
-                    }
-                  />
-                )}
+                <EditRemoteStatusButton
+                  showEditRemoteTrialPermission={showEditRemoteTrialPermission}
+                  openEditRemoteStatusModalSequence={
+                    openEditRemoteStatusModalSequence
+                  }
+                />
               </div>
             </div>
           </>
@@ -277,6 +282,7 @@ export const TrialInformation = connect(
                 </div>
                 <div className="grid-col-6 margin-top-3">
                   <EditRemoteStatusButton
+                    showEditRemoteTrialPermission={showEditRemoteTrialPermission}
                     openEditRemoteStatusModalSequence={
                       openEditRemoteStatusModalSequence
                     }
