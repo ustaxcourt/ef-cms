@@ -1,4 +1,5 @@
 import { state } from '@web-client/presenter/app.cerebral';
+import { MAX_MESSAGE_SUBJECT_CHARACTERS } from '@shared/business/entities/EntityConstants';
 
 export const updateMessageModalAttachmentsAction = ({
   applicationContext,
@@ -33,31 +34,39 @@ export const updateMessageModalAttachmentsAction = ({
 
     const isSubjectEmpty = !subject || subject.trim() === '';
 
-  if (
-    isSubjectEmpty &&
-    (attachments?.length || 0) + (draftAttachments?.length || 0) === 0
-  ) {
-    store.set(state.modal.form.subject, documentTitle.slice(0, 250));
-  }
-  if (props.action === 'add' && draftAttachments) {
-    draftAttachments.push({
-      documentId,
-      documentTitle,
-      index: document.index,
-    });
+    // Extract attachment calculations for better readability
+    const attachmentCount = attachments?.length || 0;
+    const draftAttachmentCount = draftAttachments?.length || 0;
+    const hasNoAttachments = attachmentCount + draftAttachmentCount === 0;
 
-    if (
-      showModal === 'CreateMessageModal' &&
-      !get(state.modal.form.subject)
-    ) {
-      store.set(state.modal.form.subject, documentTitle.slice(0, 250));
+    if (isSubjectEmpty && hasNoAttachments) {
+      store.set(
+        state.modal.form.subject,
+        documentTitle.slice(0, MAX_MESSAGE_SUBJECT_CHARACTERS),
+      );
     }
-  } else if (props.action === 'remove' && draftAttachments) {
-    const foundIndex = draftAttachments.findIndex(
-      attachment => attachment.documentId == props.documentId,
-    );
-    draftAttachments.splice(foundIndex, 1);
-  }
+    if (props.action === 'add' && draftAttachments) {
+      draftAttachments.push({
+        documentId,
+        documentTitle,
+        index: document.index,
+      });
+
+      if (
+        showModal === 'CreateMessageModal' &&
+        !get(state.modal.form.subject)
+      ) {
+        store.set(
+          state.modal.form.subject,
+          documentTitle.slice(0, MAX_MESSAGE_SUBJECT_CHARACTERS),
+        );
+      }
+    } else if (props.action === 'remove' && draftAttachments) {
+      const foundIndex = draftAttachments.findIndex(
+        attachment => attachment.documentId == props.documentId,
+      );
+      draftAttachments.splice(foundIndex, 1);
+    }
 
     store.set(state.modal.form.draftAttachments, draftAttachments);
   }
