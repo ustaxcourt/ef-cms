@@ -30,6 +30,7 @@ describe('DocketEntry isPublic', () => {
     eventCode: 'SDEC',
     filers: [],
     filingDate: beforeVisibilityChangeDate,
+    isFiledAcrossAllCases: false,
     isOnDocketRecord: true,
     processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
     receivedAt: '',
@@ -136,6 +137,7 @@ describe('DocketEntry isPublic', () => {
         ROLES.irsPractitioner,
       ];
       const otherRoles = Object.values(ROLES).filter(
+        // @ts-ignore
         role => !practitionerRoles.includes(role),
       );
 

@@ -187,6 +187,7 @@ describe('consolidated cases', () => {
             MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
           ],
           form: leadCaseDocketEntries[0],
+          isFiledAcrossAllCases: true,
           subjectCaseDocketNumber:
             MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
         },
@@ -234,6 +235,7 @@ describe('consolidated cases', () => {
           MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
         ],
         form: leadCaseDocketEntries[0],
+        isFiledAcrossAllCases: true,
         subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
       },
       mockDocketClerkUser,
@@ -256,6 +258,7 @@ describe('consolidated cases', () => {
           MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
         ],
         form: leadCaseDocketEntries[0],
+        isFiledAcrossAllCases: true,
         subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
       },
       mockDocketClerkUser,
