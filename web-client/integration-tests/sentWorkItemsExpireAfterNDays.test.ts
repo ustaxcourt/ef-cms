@@ -69,6 +69,7 @@ describe('verify old sent work items do not show up in the outbox', () => {
       eventCode: 'O',
       documentTitle: 'Test',
       filingDate: '2018-06-26T16:31:17.643Z',
+      isFiledAcrossAllCases: false,
       isOnDocketRecord: true,
       filers: [],
       processingStatus: '',
