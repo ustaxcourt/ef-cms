@@ -38,9 +38,6 @@ export const FilingPartiesForm = connect(
     validateSequence?;
     isMemberCase?: boolean;
   }) {
-    const petitioners =
-      (formattedCaseDetail && formattedCaseDetail.petitioners) || [];
-
     return (
       <>
         {filingPartiesFormHelper.isServed ? (

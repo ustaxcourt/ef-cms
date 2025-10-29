@@ -54,8 +54,9 @@ export const confirmInitiateServiceModalHelper = (
 
   let additionalServedCases: { docketNumber: string; caseTitle: string }[] = [];
   if (
-    SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(eventCode) ||
-    documentTitle?.includes('Simultaneous')
+    (SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(eventCode) ||
+      documentTitle?.includes('Simultaneous')) &&
+    isFiledAcrossAllCases !== false
   ) {
     if (Array.isArray(formattedCaseDetail.consolidatedCases)) {
       additionalServedCases = formattedCaseDetail.consolidatedCases
