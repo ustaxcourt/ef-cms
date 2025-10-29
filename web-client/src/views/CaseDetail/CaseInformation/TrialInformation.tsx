@@ -295,7 +295,7 @@ export const TrialInformation = connect(
                     Add Manual Block
                   </Button>
                 </div>
-                <div className="grid-col-6 margin-top-3">
+                <div className="margin-top-3">
                   <EditRemoteStatusButton
                     showEditRemoteTrialPermission={
                       showEditRemoteTrialPermission
