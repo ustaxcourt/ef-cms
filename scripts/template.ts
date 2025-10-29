@@ -4,15 +4,11 @@ import {
   type ScriptConfig,
   parseArgsAndEnvVars,
 } from './helpers/parseArgsAndEnvVars';
-import {
-  type ServerApplicationContext,
-  createApplicationContext,
-} from '@web-api/applicationContext';
 
-// Example:
+// When this script is called like so...
 //   scripts/template.ts m073,m074 --fiscal -y 2018 --years 2020,2022-2024
 const scriptConfig: ScriptConfig = {
-  description: 'TypeScript Shell Script Template',
+  description: 'template - TypeScript Shell Script Template',
   environment: {
     env: 'ENV',
     region: 'REGION',
@@ -40,14 +36,6 @@ const scriptConfig: ScriptConfig = {
   },
   requireActiveAwsSession: true,
 };
-// Example:
-//   {
-//      env: 'myenv',
-//      eventCodes: [ 'M073', 'M074' ],
-//      fiscal: true,
-//      verbose: false,
-//      years: [ 2018, 2020, 2022, 2023, 2024 ]
-//    }
 const { env, eventCodes, fiscal, verbose, years } = parseArgsAndEnvVars(
   scriptConfig,
 ) as {
@@ -57,11 +45,21 @@ const { env, eventCodes, fiscal, verbose, years } = parseArgsAndEnvVars(
   verbose: boolean;
   years: number[];
 };
+// ...the output from parseArgsAndEnvVars will look like this:
+//   {
+//      env: 'myenv',
+//      eventCodes: [ 'M073', 'M074' ],
+//      fiscal: true,
+//      verbose: false,
+//      years: [ 2018, 2020, 2022, 2023, 2024 ]
+//    }
 
-(() => {
-  const applicationContext: ServerApplicationContext = createApplicationContext(
-    {},
-  );
+const placeholder = async () => {
+  await new Promise(resolve => setTimeout(resolve, 200));
+};
+
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
+(async () => {
   console.log({ env, eventCodes, fiscal, verbose, years });
-  console.log(applicationContext.environment.stage);
+  await placeholder();
 })();
