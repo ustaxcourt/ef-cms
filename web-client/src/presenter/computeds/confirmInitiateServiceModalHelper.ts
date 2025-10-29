@@ -1,8 +1,10 @@
 import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import {
+  CONTACT_TYPE_TITLES,
   NON_MULTI_DOCKETABLE_EVENT_CODES,
   SERVICE_INDICATOR_TYPES,
+  ROLES,
 } from '@shared/business/entities/EntityConstants';
 import { isLeadCase } from '@shared/business/entities/cases/Case';
 
@@ -14,6 +16,12 @@ import { isLeadCase } from '@shared/business/entities/cases/Case';
  * @returns {object} the computed values
  */
 
+type ContactsNeedingPaperService = {
+  name: string;
+  formattedContactType?: string;
+  docketNumber: string;
+}[];
+
 export const confirmInitiateServiceModalHelper = (
   get: Get,
 ): {
@@ -22,14 +30,7 @@ export const confirmInitiateServiceModalHelper = (
   confirmationText: string;
   paperFilingText: string;
   additionalServedCases: { docketNumber: string; caseTitle: string }[];
-  contactsNeedingPaperService?: {
-    contactId?: string;
-    userId?: string;
-    name: string;
-    contactType?: string;
-    serviceIndicator: string;
-    docketNumber: string;
-  }[];
+  contactsNeedingPaperService?: ContactsNeedingPaperService;
 } => {
   const docketEntryId = get(state.docketEntryId);
   const formattedCaseDetail = get(state.formattedCaseDetail);
@@ -69,14 +70,7 @@ export const confirmInitiateServiceModalHelper = (
     ? 'The following document will be served on all parties in selected cases:'
     : 'The following document will be served on all parties:';
 
-  const contactsNeedingPaperService: {
-    contactId?: string;
-    userId?: string;
-    name: string;
-    contactType?: string;
-    serviceIndicator: string;
-    docketNumber: string;
-  }[] = [];
+  const contactsNeedingPaperService: ContactsNeedingPaperService = [];
 
   let casesToIterateOver: any[] = [];
 
@@ -114,7 +108,8 @@ export const confirmInitiateServiceModalHelper = (
       )
       .forEach(person => {
         contactsNeedingPaperService.push({
-          ...person,
+          name: person.name,
+          formattedContactType: roleToDisplay(person),
           docketNumber,
         });
       });
@@ -135,4 +130,14 @@ export const confirmInitiateServiceModalHelper = (
         ? contactsNeedingPaperService
         : undefined,
   };
+};
+
+const roleToDisplay = party => {
+  if (party.role === ROLES.privatePractitioner) {
+    return 'Petitioner Counsel';
+  } else if (party.role === ROLES.irsPractitioner) {
+    return 'Respondent Counsel';
+  } else {
+    return CONTACT_TYPE_TITLES[party.contactType];
+  }
 };

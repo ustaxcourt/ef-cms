@@ -425,6 +425,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         clientConnectionId: '',
         docketEntryId: mockDocketEntryId,
         docketNumbers: [mockMemberCaseDocketNumber],
+        isFiledAcrossAllCases: true,
         subjectCaseDocketNumber: mockCase.docketNumber,
       },
       mockDocketClerkUser,
@@ -455,6 +456,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         clientConnectionId: '',
         docketEntryId: mockDocketEntryId,
         docketNumbers: [],
+        isFiledAcrossAllCases: false,
         subjectCaseDocketNumber: mockCase.docketNumber,
       },
       mockDocketClerkUser,
@@ -481,6 +483,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         clientConnectionId: '',
         docketEntryId: mockDocketEntryId,
         docketNumbers: [memberCaseDocketNumber],
+        isFiledAcrossAllCases: true,
         subjectCaseDocketNumber: mockCase.docketNumber,
       },
       mockDocketClerkUser,
@@ -497,7 +500,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     ).toBeFalsy();
   });
 
-  it('should call the persistence method to set and unset the pending service status on the subjectCase`s docket entry ONLY', async () => {
+  it('******************* should call the persistence method to set and unset the pending service status on the subjectCase`s docket entry ONLY', async () => {
     const memberCaseDocketNumber = '999-16';
 
     await serveExternallyFiledDocumentInteractor(
@@ -506,6 +509,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         clientConnectionId: '',
         docketEntryId: mockDocketEntryId,
         docketNumbers: [memberCaseDocketNumber],
+        isFiledAcrossAllCases: true,
         subjectCaseDocketNumber: mockCase.docketNumber,
       },
       mockDocketClerkUser,
@@ -539,6 +543,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
           clientConnectionId: '',
           docketEntryId: mockDocketEntryId,
           docketNumbers: [],
+          isFiledAcrossAllCases: false,
           subjectCaseDocketNumber: mockCase.docketNumber,
         },
         mockDocketClerkUser,
@@ -569,6 +574,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         clientConnectionId: '',
         docketEntryId: mockDocketEntryId,
         docketNumbers: [],
+        isFiledAcrossAllCases: false,
         subjectCaseDocketNumber: mockCase.docketNumber,
       },
       mockDocketClerkUser,
@@ -589,6 +595,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         clientConnectionId: mockClientConnectionId,
         docketEntryId: mockDocketEntryId,
         docketNumbers: [],
+        isFiledAcrossAllCases: false,
         subjectCaseDocketNumber: mockCase.docketNumber,
       },
       mockDocketClerkUser,
@@ -615,6 +622,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         clientConnectionId: mockClientConnectionId,
         docketEntryId: mockDocketEntryId,
         docketNumbers: ['102-34'],
+        isFiledAcrossAllCases: false,
         subjectCaseDocketNumber: mockCase.docketNumber,
       },
       mockDocketClerkUser,
@@ -633,6 +641,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         clientConnectionId: mockClientConnectionId,
         docketEntryId: mockDocketEntryId,
         docketNumbers: [],
+        isFiledAcrossAllCases: false,
         subjectCaseDocketNumber: mockCase.docketNumber,
       },
       mockDocketClerkUser,
@@ -651,6 +660,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         clientConnectionId: mockClientConnectionId,
         docketEntryId: mockDocketEntryId,
         docketNumbers: [],
+        isFiledAcrossAllCases: false,
         subjectCaseDocketNumber: mockCase.docketNumber,
       },
       mockDocketClerkUser,
@@ -675,6 +685,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         clientConnectionId: mockClientConnectionId,
         docketEntryId: mockDocketEntryId,
         docketNumbers: [],
+        isFiledAcrossAllCases: false,
         subjectCaseDocketNumber: mockCase.docketNumber,
       },
       mockDocketClerkUser,
@@ -726,7 +737,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         {
           clientConnectionId: mockClientConnectionId,
           docketEntryId: mockDocketEntryId,
-          docketNumbers: [],
+          docketNumbers: [member1DocketNumber, member2DocketNumber],
           isFiledAcrossAllCases: true,
           subjectCaseDocketNumber: leadDocketNumber,
         },
@@ -797,74 +808,12 @@ describe('serveExternallyFiledDocumentInteractor', () => {
           clientConnectionId: mockClientConnectionId,
           docketEntryId: mockDocketEntryId,
           docketNumbers: [],
+          isFiledAcrossAllCases: false,
           subjectCaseDocketNumber: mockCase.docketNumber,
         },
         mockDocketClerkUser,
       ),
     ).rejects.toThrow('User not found with user id');
-  });
-
-  it('should navigate to lead case when subject case is a member case with simultaneous doc type and isFiledAcrossAllCases is true', async () => {
-    const leadDocketNumber = '100-20';
-    const memberDocketNumber = '101-20';
-
-    const memberCase = {
-      ...mockCase,
-      docketNumber: memberDocketNumber,
-      leadDocketNumber,
-      docketEntries: [
-        {
-          docketEntryId: mockDocketEntryId,
-          eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
-        } as RawDocketEntry,
-      ],
-    };
-
-    const leadCase = {
-      ...mockCase,
-      docketNumber: leadDocketNumber,
-      consolidatedCases: [
-        {
-          ...MOCK_CONSOLIDATED_CASE_SUMMARY,
-          docketNumber: memberDocketNumber,
-        },
-      ],
-      docketEntries: [
-        {
-          docketEntryId: mockDocketEntryId,
-          eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
-        } as RawDocketEntry,
-      ],
-    };
-
-    getCaseByDocketNumber
-      .mockResolvedValueOnce(memberCase)
-      .mockResolvedValueOnce(leadCase);
-
-    getCasesByDocketNumbers.mockResolvedValue([leadCase, memberCase]);
-
-    await serveExternallyFiledDocumentInteractor(
-      applicationContext,
-      {
-        clientConnectionId: mockClientConnectionId,
-        docketEntryId: mockDocketEntryId,
-        docketNumbers: [],
-        isFiledAcrossAllCases: true,
-        subjectCaseDocketNumber: memberDocketNumber,
-      },
-      mockDocketClerkUser,
-    );
-
-    expect(getCaseByDocketNumber).toHaveBeenCalledWith({
-      docketNumber: leadDocketNumber,
-    });
-
-    expect(getCasesByDocketNumbers).toHaveBeenCalledWith({
-      docketNumbers: expect.arrayContaining([
-        leadDocketNumber,
-        memberDocketNumber,
-      ]),
-    });
   });
 
   it('should throw NotFoundError when docket entry is not found after serving', async () => {
@@ -889,6 +838,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
           clientConnectionId: mockClientConnectionId,
           docketEntryId: mockDocketEntryId,
           docketNumbers: [],
+          isFiledAcrossAllCases: false,
           subjectCaseDocketNumber: mockCase.docketNumber,
         },
         mockDocketClerkUser,

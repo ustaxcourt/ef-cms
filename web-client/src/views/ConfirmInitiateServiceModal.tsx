@@ -84,7 +84,7 @@ export const ConfirmInitiateServiceModal = connect(
                       <div key={`${contact.docketNumber}-${contact.name}`}>
                         {confirmInitiateServiceModalHelper.canServeAcrossGroup &&
                           `${contact.docketNumber} - `}
-                        {contact.name}, {contact.contactType}
+                        {contact.name}, {contact.formattedContactType}
                       </div>
                     ),
                   )}
