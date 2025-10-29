@@ -36,10 +36,8 @@ describe('Trial Session Blocked Cases', () => {
       
       cy.get('[data-testid="tab-tracked-items"]').click();
       cy.get('[data-testid="pending-report-tab"]').click();
-      cy.get('#pending-items').should('exist');
-      cy.get('#pending-items').should('contain', 'Application for Waiver of Filing Fee');
-
       cy.get('[data-testid="blocked-case-icon"]').should('exist');
+      cy.get(`[data-testid="${docketNumber}_Application for Waiver of Filing Fee"]`).should('exist');
     });
   });
 
