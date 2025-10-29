@@ -107,6 +107,10 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
     ref,
   ) => {
     const inputId = React.useId();
+    const labelId = React.useId();
+    const helpTextId = helpText ? React.useId() : undefined;
+    const errorId = error ? React.useId() : undefined;
+
     const { isTab } = useKeyboardListenerHook();
 
     const parentDiv = classNames(
@@ -130,7 +134,9 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
     return (
       <div className={parentDiv}>
         {label && (
-          <div
+          <label
+            id={labelId}
+            htmlFor={inputId}
             className={`${flexDirection === 'horizontal' ? 'tw:xs:mr-[16px] tw:mr-[12px]' : ''} tw:shrink-0`}
           >
             <div className="tw:flex tw:flex-col">
@@ -155,12 +161,12 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                 </span>
               </div>
               {helpText && (
-                <div className={cn(styles.text.help, "tw:xs:mt-[10px] tw:mt-[8px] tw:mb-[9px]", flexDirection === 'horizontal' && 'tw:mt-[0px] tw:xs:mt-[0px]')}>
+                <div id={helpTextId} className={cn(styles.text.help, "tw:xs:mt-[10px] tw:mt-[8px] tw:mb-[9px]", flexDirection === 'horizontal' && 'tw:mt-[0px] tw:xs:mt-[0px]')}>
                   {helpText}
                 </div>
               )}
             </div>
-          </div>
+          </label>
         )}
         <div className={flexDirection === 'vertical' ? 'tw:flex-col' : 'tw:flex-row tw:w-full'}>
           <input
@@ -168,6 +174,12 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             ref={ref}
             type={type}
             aria-invalid={!!error}
+            aria-required={required}
+            aria-describedby={cn(
+              helpTextId,
+              errorId
+            )}
+            aria-labelledby={labelId}
             className={inputClass}
             {...props}
           />
@@ -180,7 +192,12 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 
 const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
   ({ className, error, label, helpText, ...props }, ref) => {
+
     const textareaId = React.useId();
+    const labelId = React.useId();
+    const helpTextId = helpText ? React.useId() : undefined;
+    const errorId = error ? React.useId() : undefined;
+
     const { isTab } = useKeyboardListenerHook();
 
     const textAreaClass = classNames(
@@ -200,7 +217,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
     return (
       <div className="tw:flex tw:flex-col">
         {label && (
-          <div>
+          <label id={labelId} htmlFor={textareaId}>
             <div className="tw:flex tw:flex-col">
               <div className="tw:flex tw:items-center tw:mb-[9px]">
                 <span
@@ -230,13 +247,17 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
                 </div>
               )}
             </div>
-          </div>
+          </label>
         )}
         <div>
           <textarea
             id={textareaId}
             ref={ref}
             aria-invalid={!!error}
+            aria-describedby={cn(
+              helpTextId, 
+              errorId && errorId
+            )}
             className={textAreaClass}
             {...props}
           />
