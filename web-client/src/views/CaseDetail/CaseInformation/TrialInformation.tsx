@@ -68,7 +68,7 @@ const EditRemoteStatusButton = ({
   showEditRemoteTrialPermission,
 }: {
   openEditRemoteStatusModalSequence: Function;
-  showEditRemoteTrialPermission: String;
+  showEditRemoteTrialPermission: boolean;
 }) => {
   return (
     <>
@@ -247,6 +247,21 @@ export const TrialInformation = connect(
                 </div>
               </div>
             )}
+            <div className="grid-row margin-top-2">
+              <div className="grid-col-8">
+                <RemoteTrialSessionInformation
+                  remoteTrialGrantedDate={caseDetail.remoteTrialGrantedDate}
+                />
+              </div>
+              <div className="grid-col-4">
+                <EditRemoteStatusButton
+                  showEditRemoteTrialPermission={showEditRemoteTrialPermission}
+                  openEditRemoteStatusModalSequence={
+                    openEditRemoteStatusModalSequence
+                  }
+                />
+              </div>
+            </div>
           </>
         )}
         {caseDetail.showNotScheduled && (
@@ -282,7 +297,9 @@ export const TrialInformation = connect(
                 </div>
                 <div className="grid-col-6 margin-top-3">
                   <EditRemoteStatusButton
-                    showEditRemoteTrialPermission={showEditRemoteTrialPermission}
+                    showEditRemoteTrialPermission={
+                      showEditRemoteTrialPermission
+                    }
                     openEditRemoteStatusModalSequence={
                       openEditRemoteStatusModalSequence
                     }
