@@ -99,6 +99,8 @@ const EditRemoteStatusButton = ({
       )}
     </>
   );
+};
+
 const props = cerebralProps as unknown as {
   caseDetail: unknown;
   openAddEditCalendarNoteModalSequence: unknown;
