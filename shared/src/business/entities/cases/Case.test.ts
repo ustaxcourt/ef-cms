@@ -17,7 +17,8 @@ import {
   SESSION_TYPES,
   UNIQUE_OTHER_FILER_TYPE,
 } from '../EntityConstants';
-import { Case, getContactPrimary, isMemberCase } from './Case';
+import { Case, getContactPrimary } from './Case';
+import { isMemberCase } from '../../utilities/generateSelectedFilterList';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_DOCUMENTS } from '../../../test/mockDocketEntry';
 import { createISODateString } from '../../utilities/DateHandler';
@@ -1399,8 +1400,8 @@ describe('Case entity', () => {
   describe('isMemberCase', () => {
     it('should return true when case is a member of a consolidated group', () => {
       const result = isMemberCase({
-        docketNumber: '123-45',
-        leadDocketNumber: '678-90',
+        inConsolidatedGroup: true,
+        isLeadCase: false,
       });
 
       expect(result).toBe(true);
@@ -1408,8 +1409,8 @@ describe('Case entity', () => {
 
     it('should return false when case is the lead case', () => {
       const result = isMemberCase({
-        docketNumber: '123-45',
-        leadDocketNumber: '123-45',
+        inConsolidatedGroup: true,
+        isLeadCase: true,
       });
 
       expect(result).toBe(false);
@@ -1417,8 +1418,8 @@ describe('Case entity', () => {
 
     it('should return false when case is not consolidated', () => {
       const result = isMemberCase({
-        docketNumber: '123-45',
-        leadDocketNumber: undefined,
+        inConsolidatedGroup: false,
+        isLeadCase: false,
       });
 
       expect(result).toBe(false);

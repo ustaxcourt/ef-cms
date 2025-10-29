@@ -68,7 +68,7 @@ const EditRemoteStatusButton = ({
   showEditRemoteTrialPermission,
 }: {
   openEditRemoteStatusModalSequence: Function;
-  showEditRemoteTrialPermission: String;
+  showEditRemoteTrialPermission: boolean;
 }) => {
   return (
     <>
