@@ -4,6 +4,29 @@ import {
   removeDuplicateLogInformation,
 } from './createLogger';
 
+interface LogEntryWithRequest {
+  request: {
+    headers: Record<string, any>;
+    method: string;
+    url: string;
+    body?: string;
+  };
+  user: {
+    email?: string;
+    token?: string;
+    [key: string]: any;
+  };
+  [key: string]: any;
+}
+
+interface LogEntryWithContext {
+  context: Record<string, any>;
+  environment: any;
+  requestId: any;
+  user: any;
+  [key: string]: any;
+}
+
 describe('getMetadataLines', () => {
   it('should get empty array with no info', () => {
     const metadata = {};
@@ -67,7 +90,9 @@ describe('redact', () => {
   };
 
   it('should remove sensitive information and preserve important information from a log entry', () => {
-    const redactedLogEntry = redact().transform(mockLogEntry);
+    const redactedLogEntry = redact().transform(
+      mockLogEntry,
+    ) as LogEntryWithRequest;
 
     // redact sensitive information
     expect(redactedLogEntry.request.headers.Authorization).toBe(undefined);
@@ -187,8 +212,9 @@ describe('removeDuplicateLogInformation', () => {
     },
     zTotallyUnexpectedKey: 'Chill out on the requests please',
   };
-  const formattedLogEntry =
-    removeDuplicateLogInformation().transform(mockLogEntry);
+  const formattedLogEntry = removeDuplicateLogInformation().transform(
+    mockLogEntry,
+  ) as LogEntryWithContext;
 
   it('removes duplicate data from the context object', () => {
     const expectedBaseKeys = [

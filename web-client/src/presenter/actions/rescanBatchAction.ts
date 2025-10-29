@@ -1,5 +1,7 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
+type ScanSessionResult = { scannedBuffer: Uint8Array[] };
+
 /**
  * initiates a rescan session for the given batch
  * @param {object} providers the providers object
@@ -26,10 +28,10 @@ export const rescanBatchAction = async ({
   scanner.setSourceByIndex(props.scannerSourceIndex);
 
   try {
-    const { scannedBuffer: pages } = await scanner.startScanSession({
+    const { scannedBuffer: pages } = (await scanner.startScanSession({
       applicationContext,
       scanMode,
-    });
+    })) as ScanSessionResult;
     const documentSelectedForScan = get(
       state.currentViewMetadata.documentSelectedForScan,
     );

@@ -22,21 +22,22 @@ describe('generatePrintableTrialSessionCopyReportAction', () => {
     { key: 'statusUnassigned', label: 'Unassigned' },
   ];
   const formattedCaseMock = {
-    calendarNotes: MOCK_CASE.calendarNotes,
+    calendarNotes: (MOCK_CASE as { calendarNotes?: string }).calendarNotes,
     caseTitle: 'Case Notes Title',
     docketNumber: '678-90',
     docketNumberWithSuffix: 'L',
     filingPartiesCode: 'OTP',
-    inConsolidatedGroup: MOCK_CASE.inConsolidatedGroup,
+    inConsolidatedGroup: (MOCK_CASE as { inConsolidatedGroup?: boolean })
+      .inConsolidatedGroup,
     irsPractitioners: MOCK_CASE.irsPractitioners,
-    isLeadCase: MOCK_CASE.isLeadCase,
+    isLeadCase: (MOCK_CASE as { isLeadCase?: boolean }).isLeadCase,
     notes: {
       docketNumber: '678-90',
       notes: 'this is a note added',
       userId: 'f0a1e52a-876f-4c03-853c-f66e407e5a1e',
     },
     privatePractitioners: MOCK_CASE.privatePractitioners,
-    trialStatus: MOCK_CASE.trialStatus,
+    trialStatus: (MOCK_CASE as { trialStatus?: string }).trialStatus,
     userNotes: 'user notes',
   };
   beforeAll(() => {

@@ -3,7 +3,7 @@ import { DropdownMenu } from '../../../ustc-ui/DropdownMenu/DropdownMenu';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PreformattedText } from '@web-client/ustc-ui/PreformatedText/PreformattedText';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
+import { props as cerebralProps } from 'cerebral';
 import React from 'react';
 
 const EditCaseTrialInformationMenu = ({
@@ -11,6 +11,15 @@ const EditCaseTrialInformationMenu = ({
   openAddEditCalendarNoteModalSequence,
   openRemoveFromTrialSessionModalSequence,
   trialSessionId,
+}: {
+  caseDetail: {
+    trialSessionNotes?: string;
+  };
+  openAddEditCalendarNoteModalSequence: (args: { note?: string }) => void;
+  openRemoveFromTrialSessionModalSequence: (args: {
+    trialSessionId: string;
+  }) => void;
+  trialSessionId: string;
 }) => {
   return (
     <DropdownMenu
@@ -40,6 +49,16 @@ const EditCaseTrialInformationMenu = ({
   );
 };
 
+const props = cerebralProps as unknown as {
+  caseDetail: unknown;
+  openAddEditCalendarNoteModalSequence: unknown;
+  openAddToTrialModalSequence: unknown;
+  openBlockFromTrialModalSequence: unknown;
+  openRemoveFromTrialSessionModalSequence: unknown;
+  openUnblockFromTrialModalSequence: unknown;
+  trialSessionJudge: unknown;
+};
+
 export const TrialInformation = connect(
   {
     caseDetail: props.caseDetail,
@@ -60,6 +79,32 @@ export const TrialInformation = connect(
     openRemoveFromTrialSessionModalSequence,
     openUnblockFromTrialModalSequence,
     trialSessionJudge,
+  }: {
+    caseDetail: {
+      showTrialCalendared?: boolean;
+      showBlockedFromTrial?: boolean;
+      showNotScheduled?: boolean;
+      showScheduled?: boolean;
+      trialSessionId?: string;
+      userIsAssignedToSession?: boolean;
+      formattedTrialCity?: string;
+      formattedTrialDate?: string;
+      formattedAssociatedJudge?: string;
+      trialSessionNotes?: string;
+      blocked?: boolean;
+      blockedDateFormatted?: string;
+      blockedReason?: string;
+    };
+    openAddEditCalendarNoteModalSequence: (args: { note?: string }) => void;
+    openAddToTrialModalSequence: () => void;
+    openBlockFromTrialModalSequence: () => void;
+    openRemoveFromTrialSessionModalSequence: (args: {
+      trialSessionId: string;
+    }) => void;
+    openUnblockFromTrialModalSequence: () => void;
+    trialSessionJudge: {
+      name: string;
+    };
   }) {
     return (
       <>
