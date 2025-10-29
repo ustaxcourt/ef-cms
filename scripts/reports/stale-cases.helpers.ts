@@ -16,7 +16,7 @@ import { getDbReader } from '@web-api/database';
 import PQueue from 'p-queue';
 
 const todayISO = createISODateString();
-const CONCURRENCY = 50;
+const CONCURRENCY = 5;
 const YEAR_IN_DAYS = 365;
 const excludedCaseStatuses = [
   CASE_STATUS_TYPES.closed,
