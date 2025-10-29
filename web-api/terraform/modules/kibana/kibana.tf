@@ -1,4 +1,5 @@
 resource "aws_cognito_user_pool" "log_viewers" {
+  count = var.es_info_cluster_create ? 1 : 0
   name = "log_viewers"
   password_policy {
     minimum_length                   = 8
@@ -11,11 +12,13 @@ resource "aws_cognito_user_pool" "log_viewers" {
 }
 
 resource "aws_cognito_user_pool_domain" "log_viewers" {
+  count = var.es_info_cluster_create ? 1 : 0
   domain       = "ef-cms-info-${var.cognito_suffix}"
-  user_pool_id = aws_cognito_user_pool.log_viewers.id
+  user_pool_id = aws_cognito_user_pool.log_viewers[0].id
 }
 
 resource "aws_cognito_identity_pool" "log_viewers" {
+  count = var.es_info_cluster_create ? 1 : 0
   identity_pool_name               = "kibana dashboard identity pool"
   allow_unauthenticated_identities = false
 
@@ -27,6 +30,7 @@ resource "aws_cognito_identity_pool" "log_viewers" {
 }
 
 resource "aws_iam_role" "es_kibana_role" {
+  count = var.es_info_cluster_create ? 1 : 0
   name               = "es_kibana_role"
   assume_role_policy = <<CONFIG
 {
@@ -45,15 +49,18 @@ CONFIG
 }
 
 resource "aws_iam_role_policy_attachment" "es_cognito_auth" {
-  role       = aws_iam_role.es_kibana_role.name
+  count = var.es_info_cluster_create ? 1 : 0
+  role       = aws_iam_role.es_kibana_role[0].name
   policy_arn = "arn:aws:iam::aws:policy/AmazonOpenSearchServiceCognitoAccess"
 }
 
 resource "aws_cloudwatch_log_group" "elasticsearch_kibana_logs" {
+  count = var.es_info_cluster_create ? 1 : 0
   name = "/aws/aes/kibana"
 }
 
 resource "aws_opensearch_domain" "efcms-logs" {
+  count = var.es_info_cluster_create ? 1 : 0
   domain_name    = "info"
   engine_version = var.es_logs_engine_version
 
@@ -64,9 +71,9 @@ resource "aws_opensearch_domain" "efcms-logs" {
 
   cognito_options {
     enabled          = true
-    user_pool_id     = aws_cognito_user_pool.log_viewers.id
-    identity_pool_id = aws_cognito_identity_pool.log_viewers.id
-    role_arn         = aws_iam_role.es_kibana_role.arn
+    user_pool_id     = aws_cognito_user_pool.log_viewers[0].id
+    identity_pool_id = aws_cognito_identity_pool.log_viewers[0].id
+    role_arn         = aws_iam_role.es_kibana_role[0].arn
   }
 
   domain_endpoint_options {
@@ -84,13 +91,14 @@ resource "aws_opensearch_domain" "efcms-logs" {
   }
 
   log_publishing_options {
-    cloudwatch_log_group_arn = aws_cloudwatch_log_group.elasticsearch_kibana_logs.arn
+    cloudwatch_log_group_arn = aws_cloudwatch_log_group.elasticsearch_kibana_logs[0].arn
     log_type                 = "ES_APPLICATION_LOGS"
   }
 }
 
 resource "aws_elasticsearch_domain_policy" "kibana_access" {
-  domain_name     = aws_opensearch_domain.efcms-logs.domain_name
+  count = var.es_info_cluster_create ? 1 : 0
+  domain_name     = aws_opensearch_domain.efcms-logs[0].domain_name
   access_policies = <<POLICY
 {
   "Version": "2012-10-17",
@@ -98,10 +106,10 @@ resource "aws_elasticsearch_domain_policy" "kibana_access" {
     {
       "Effect":"Allow",
       "Principal": {
-        "AWS": ["${aws_iam_role.log_viewers_auth.arn}"]
+        "AWS": ["${aws_iam_role.log_viewers_auth[0].arn}"]
       },
       "Action": "es:ESHttp*",
-      "Resource":"${aws_opensearch_domain.efcms-logs.arn}/*"
+      "Resource":"${aws_opensearch_domain.efcms-logs[0].arn}/*"
     }
   ]
 }
@@ -109,6 +117,7 @@ POLICY
 }
 
 resource "aws_cloudwatch_log_resource_policy" "allow_elasticsearch_to_write_logs" {
+  count = var.es_info_cluster_create ? 1 : 0
   policy_name = "allow_elasticsearch_to_write_logs"
 
   policy_document = <<CONFIG
@@ -133,6 +142,7 @@ CONFIG
 }
 
 data "aws_iam_policy_document" "log_viewers_auth" {
+  count = var.es_info_cluster_create ? 1 : 0
   statement {
     actions = [
       "es:*",
@@ -146,11 +156,12 @@ data "aws_iam_policy_document" "log_viewers_auth" {
       "es:ESHttpGet"
     ]
 
-    resources = ["${aws_opensearch_domain.efcms-logs.arn}/*"]
+    resources = ["${aws_opensearch_domain.efcms-logs[0].arn}/*"]
   }
 }
 
 resource "aws_iam_role" "log_viewers_auth" {
+  count = var.es_info_cluster_create ? 1 : 0
   name               = "log_viewers_auth_role"
   assume_role_policy = <<CONFIG
 {
@@ -164,7 +175,7 @@ resource "aws_iam_role" "log_viewers_auth" {
       "Action": "sts:AssumeRoleWithWebIdentity",
       "Condition": {
         "StringEquals": {
-          "cognito-identity.amazonaws.com:aud": "${aws_cognito_identity_pool.log_viewers.id}"
+          "cognito-identity.amazonaws.com:aud": "${aws_cognito_identity_pool.log_viewers[0].id}"
         },
         "ForAnyValue:StringLike": {
           "cognito-identity.amazonaws.com:amr": "authenticated"
@@ -177,20 +188,23 @@ CONFIG
 }
 
 resource "aws_iam_policy" "log_viewers_auth" {
+  count = var.es_info_cluster_create ? 1 : 0
   name   = "log_viewers_auth_policy"
   path   = "/"
-  policy = data.aws_iam_policy_document.log_viewers_auth.json
+  policy = data.aws_iam_policy_document.log_viewers_auth[0].json
 }
 
 resource "aws_iam_role_policy_attachment" "log_viewers_auth" {
-  role       = aws_iam_role.log_viewers_auth.name
-  policy_arn = aws_iam_policy.log_viewers_auth.arn
+  count = var.es_info_cluster_create ? 1 : 0
+  role       = aws_iam_role.log_viewers_auth[0].name
+  policy_arn = aws_iam_policy.log_viewers_auth[0].arn
 }
 
 resource "aws_cognito_identity_pool_roles_attachment" "log_viewers" {
-  identity_pool_id = aws_cognito_identity_pool.log_viewers.id
+  count = var.es_info_cluster_create ? 1 : 0
+  identity_pool_id = aws_cognito_identity_pool.log_viewers[0].id
   roles = {
-    "authenticated" = aws_iam_role.log_viewers_auth.arn
+    "authenticated" = aws_iam_role.log_viewers_auth[0].arn
   }
 }
 
@@ -199,9 +213,10 @@ locals {
 }
 
 module "logs_alarms" {
+  count = var.es_info_cluster_create ? 1 : 0
   source                       = "github.com/dubiety/terraform-aws-elasticsearch-cloudwatch-sns-alarms.git?ref=v1.0.4"
-  domain_name                  = aws_opensearch_domain.efcms-logs.domain_name
-  alarm_name_prefix            = "${aws_opensearch_domain.efcms-logs.domain_name}: "
+  domain_name                  = aws_opensearch_domain.efcms-logs[0].domain_name
+  alarm_name_prefix            = "${aws_opensearch_domain.efcms-logs[0].domain_name}: "
   free_storage_space_threshold = local.instance_size_in_mb * 0.25
   create_sns_topic             = false
   sns_topic                    = var.sns_alarm_arn

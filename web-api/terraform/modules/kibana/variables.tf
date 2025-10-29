@@ -37,3 +37,27 @@ variable "log_snapshot_bucket_name" {
 variable "es_logs_engine_version" {
   type = string
 }
+
+variable "es_info_cluster_create" {
+  default = false
+  description = "determines whether to create an info opensearch or not"
+  type = bool
+}
+
+variable "es_info_cluster_primary_id" {
+  default = ""
+  description = "aws account id that shares the info cluster"
+  type = string
+}
+
+variable "es_info_cluster_shared_cluster_endpoint" {
+  default = ""
+  description = "endpoint of info cluster opensearch (used when es_info_cluster_create is false)"
+  type = ""
+}
+
+variable "es_info_cluster_shared_arn" {
+  default = ""
+  description = "arn of info cluster opensearch (used when es_info_cluster_create is false)"
+  type = ""
+}
