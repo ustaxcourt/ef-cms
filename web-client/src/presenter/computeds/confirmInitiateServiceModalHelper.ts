@@ -44,8 +44,9 @@ export const confirmInitiateServiceModalHelper = (
 
   if (!isCourtIssued(eventCode)) {
     if (
-      SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(eventCode) ||
-      documentTitle?.includes('Simultaneous')
+      (SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(eventCode) ||
+        documentTitle?.includes('Simultaneous')) &&
+      !form.isPaper
     ) {
       showConsolidatedCasesForService = false;
     }
@@ -53,9 +54,9 @@ export const confirmInitiateServiceModalHelper = (
 
   let additionalServedCases: { docketNumber: string; caseTitle: string }[] = [];
   if (
-    isFiledAcrossAllCases !== false &&
     (SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(eventCode) ||
-      documentTitle?.includes('Simultaneous'))
+      documentTitle?.includes('Simultaneous')) &&
+    isFiledAcrossAllCases !== false
   ) {
     if (Array.isArray(formattedCaseDetail.consolidatedCases)) {
       additionalServedCases = formattedCaseDetail.consolidatedCases
@@ -76,8 +77,12 @@ export const confirmInitiateServiceModalHelper = (
   let parties;
   if (showConsolidatedCasesForService) {
     const modalForm = get(state.modal.form) || {};
-    const consolidatedCasesToMultiDocketOn =
-      modalForm.consolidatedCasesToMultiDocketOn || [];
+    const { consolidatedCasesToMultiDocketOn = [] } = modalForm as {
+      consolidatedCasesToMultiDocketOn?: Array<{
+        checked: boolean;
+        docketNumber: string;
+      }>;
+    };
 
     const paperServiceParties: {
       contactId: string;
@@ -134,8 +139,13 @@ export const confirmInitiateServiceModalHelper = (
 
   let caseOrGroup = 'case';
   if (showConsolidatedCasesForService) {
-    const consolidatedCasesToMultiDocketOn =
-      (get(state.modal.form) || {}).consolidatedCasesToMultiDocketOn || [];
+    const modalForm = get(state.modal.form) || {};
+    const { consolidatedCasesToMultiDocketOn = [] } = modalForm as {
+      consolidatedCasesToMultiDocketOn?: Array<{
+        checked: boolean;
+        docketNumber: string;
+      }>;
+    };
 
     if (consolidatedCasesToMultiDocketOn.filter(c => c.checked).length > 1) {
       caseOrGroup = 'group';

@@ -110,7 +110,7 @@ describe('Get trial session working copy', () => {
 
   it('throws an error if the entity returned from persistence is invalid', async () => {
     getTrialSessionWorkingCopies.mockResolvedValue(
-      //@ts-expect-error
+      // @ts-expect-error - Intentionally testing with incomplete mock data missing userId field
       [omit(MOCK_WORKING_COPY, 'userId')],
     );
 
