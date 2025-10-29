@@ -2,21 +2,21 @@ import {
   CASE_STATUS_TYPES,
   CaseStatus,
 } from '@shared/business/entities/EntityConstants';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import {
   calculateDifferenceInDays,
   createISODateString,
+  getJsDateFromIso,
+  subtractISODates,
 } from '@shared/business/utilities/DateHandler';
 import { compareStrings } from '@shared/business/utilities/sortFunctions';
+import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
+import { fromKyselyDocketEntry } from '@web-api/persistence/postgres/docketEntries/mapper';
 import { generateCsv } from '../helpers/generate-csv';
-import {
-  search,
-  searchAll,
-} from '@web-api/persistence/elasticsearch/searchClient';
+import { getDbReader } from '@web-api/database';
 import PQueue from 'p-queue';
 
 const todayISO = createISODateString();
-const CONCURRENCY = 50;
+const CONCURRENCY = 5;
 const YEAR_IN_DAYS = 365;
 const excludedCaseStatuses = [
   CASE_STATUS_TYPES.closed,
@@ -36,87 +36,46 @@ type StaleCase = {
 
 const staleCases: StaleCase[] = [];
 
-const getAllCasesNotInExcludedStatus = async ({
-  applicationContext,
-}: {
-  applicationContext: ServerApplicationContext;
-}): Promise<RawCase[]> => {
-  const { results } = await searchAll({
-    applicationContext,
-    searchParameters: {
-      body: {
-        query: {
-          bool: {
-            must: [
-              {
-                term: {
-                  'entityName.S': 'Case',
-                },
-              },
-            ],
-            must_not: [
-              {
-                terms: {
-                  'status.S': excludedCaseStatuses,
-                },
-              },
-            ],
-          },
-        },
-        sort: [{ 'pk.S': 'asc' }],
-      },
-      index: 'efcms-case',
-    },
-  });
-  return results;
+const getAllCasesNotInExcludedStatus = async (): Promise<RawCase[]> => {
+  const oneYearAgo = getJsDateFromIso(
+    subtractISODates(todayISO, { day: YEAR_IN_DAYS }),
+  );
+  return (
+    await getDbReader(reader =>
+      reader
+        .selectFrom('dwCase as c')
+        .selectAll('c')
+        .where('c.status', 'not in', excludedCaseStatuses)
+        .where('c.receivedAt', '<=', oneYearAgo)
+        .orderBy('c.sortableDocketNumber', 'asc')
+        .execute(),
+    )
+  ).map(fromKyselyCase) as RawCase[];
 };
 
 const getMostRecentDocketEntry = async ({
-  applicationContext,
   docketNumber,
 }: {
-  applicationContext: ServerApplicationContext;
   docketNumber: string;
 }): Promise<RawDocketEntry | undefined> => {
-  const { results } = await search({
-    applicationContext,
-    searchParameters: {
-      body: {
-        from: 0,
-        query: {
-          bool: {
-            must: [
-              {
-                term: {
-                  'entityName.S': 'DocketEntry',
-                },
-              },
-              {
-                term: {
-                  'docketNumber.S': docketNumber,
-                },
-              },
-            ],
-          },
-        },
-        size: 1,
-        sort: [{ 'receivedAt.S': 'desc' }],
-      },
-      index: 'efcms-docket-entry',
-    },
-  });
+  const results = (
+    await getDbReader(reader =>
+      reader
+        .selectFrom('dwDocketEntry as de')
+        .selectAll('de')
+        .where('de.docketNumber', '=', docketNumber)
+        .where('de.isDraft', '!=', true)
+        .where('de.filingDate', 'is not', null)
+        .orderBy('de.receivedAt', 'desc')
+        .limit(1)
+        .execute(),
+    )
+  ).map(fromKyselyDocketEntry) as RawDocketEntry[];
   return results[0];
 };
 
-const isCaseStale = async ({
-  aCase,
-  applicationContext,
-}: {
-  aCase: RawCase;
-  applicationContext: ServerApplicationContext;
-}): Promise<void> => {
+const isCaseStale = async ({ aCase }: { aCase: RawCase }): Promise<void> => {
   const mostRecentDocketEntry = await getMostRecentDocketEntry({
-    applicationContext,
     docketNumber: aCase.docketNumber,
   });
   const deRcvdAt = mostRecentDocketEntry?.receivedAt;
@@ -144,22 +103,18 @@ const isCaseStale = async ({
 };
 
 export const generateStaleCasesReport = async ({
-  applicationContext,
   filename,
 }: {
-  applicationContext: ServerApplicationContext;
   filename: string;
 }): Promise<void> => {
-  const casesNotClosedOrOnAppeal = await getAllCasesNotInExcludedStatus({
-    applicationContext,
-  });
+  const casesNotClosedOrOnAppeal = await getAllCasesNotInExcludedStatus();
   console.log(
-    `Found ${casesNotClosedOrOnAppeal.length} cases not closed or on appeal.`,
+    `Found ${casesNotClosedOrOnAppeal.length} cases not closed or on ` +
+      'appeal that were received at least a year ago.',
   );
   const queue = new PQueue({ concurrency: CONCURRENCY });
   const funcs = casesNotClosedOrOnAppeal.map(
-    (aCase: RawCase) => async () =>
-      await isCaseStale({ aCase, applicationContext }),
+    (aCase: RawCase) => async () => await isCaseStale({ aCase }),
   );
   await queue.addAll(funcs);
   console.log(`Found ${staleCases.length} stale cases.`);
