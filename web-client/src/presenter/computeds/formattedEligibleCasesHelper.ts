@@ -71,7 +71,10 @@ export const compareTrialSessionEligibleCases = () => {
 };
 
 export const getFormattedEligibleCases = formattedCases => {
-  const memberCasesObj = {} as Record<string, EligibleCase[] | FormattedTrialSessionCase[]>;
+  const memberCasesObj = {} as Record<
+    string,
+    EligibleCase[] | FormattedTrialSessionCase[]
+  >;
 
   formattedCases.forEach(caseItem => {
     if (
@@ -100,7 +103,6 @@ export const getFormattedEligibleCases = formattedCases => {
     }
   });
 
-  // loop through formatted cases
   const formattedCasesWithoutMembers = formattedCases.filter(caseItem => {
     return !(
       caseItem.leadDocketNumber &&
