@@ -333,17 +333,13 @@ async function getDocketEntries(docketNumbers: string[]) {
       .where('de.docketNumber', 'in', docketNumbers)
       .leftJoin('affectedDocketEntries', join =>
         join
-          .onRef(
-            eb => eb.cast('affectedDocketEntries.docketEntryId', 'varchar'),
-            '=',
-            'de.docketEntryId',
-          )
+          .onRef('affectedDocketEntries.docketEntryId', '=', 'de.docketEntryId')
           .onRef('affectedDocketEntries.docketNumber', '=', 'de.docketNumber'),
       )
       .leftJoin('affectedByDocketEntries', join =>
         join
           .onRef(
-            eb => eb.cast('affectedByDocketEntries.docketEntryId', 'varchar'),
+            'affectedByDocketEntries.docketEntryId',
             '=',
             'de.docketEntryId',
           )
@@ -426,17 +422,13 @@ export async function getDocketEntriesOnCases(
       .where('docketNumber', 'in', docketNumbers)
       .leftJoin('affectedDocketEntries', join =>
         join
-          .onRef(
-            eb => eb.cast('affectedDocketEntries.docketEntryId', 'varchar'),
-            '=',
-            'de.docketEntryId',
-          )
+          .onRef('affectedDocketEntries.docketEntryId', '=', 'de.docketEntryId')
           .onRef('affectedDocketEntries.docketNumber', '=', 'de.docketNumber'),
       )
       .leftJoin('affectedByDocketEntries', join =>
         join
           .onRef(
-            eb => eb.cast('affectedByDocketEntries.docketEntryId', 'varchar'),
+            'affectedByDocketEntries.docketEntryId',
             '=',
             'de.docketEntryId',
           )

@@ -56,17 +56,13 @@ export const getDocketEntriesByDocketNumber = async ({
       .selectFrom('dwDocketEntry as de')
       .leftJoin('affectedDocketEntries', join =>
         join
-          .onRef(
-            eb => eb.cast('affectedDocketEntries.docketEntryId', 'varchar'),
-            '=',
-            'de.docketEntryId',
-          )
+          .onRef('affectedDocketEntries.docketEntryId', '=', 'de.docketEntryId')
           .onRef('affectedDocketEntries.docketNumber', '=', 'de.docketNumber'),
       )
       .leftJoin('affectedByDocketEntries', join =>
         join
           .onRef(
-            eb => eb.cast('affectedByDocketEntries.docketEntryId', 'varchar'),
+            'affectedByDocketEntries.docketEntryId',
             '=',
             'de.docketEntryId',
           )
