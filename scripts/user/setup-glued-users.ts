@@ -16,10 +16,11 @@ const scriptConfig: ScriptConfig = {
   environment: {
     Password: 'DEFAULT_ACCOUNT_PASS',
     UserPoolId: 'USER_POOL_ID',
+    region: 'REGION',
   },
   requireActiveAwsSession: true,
 };
-const { Password, UserPoolId } = parseArgsAndEnvVars(scriptConfig) as {
+const { Password, UserPoolId, region } = parseArgsAndEnvVars(scriptConfig) as {
   [k: string]: string;
 };
 
@@ -35,7 +36,7 @@ type Users = {
   };
 };
 
-const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
+const cognito = new CognitoIdentityProvider({ region: region });
 
 const createOrUpdateCognitoUser = async ({
   email,
@@ -124,7 +125,6 @@ const deleteDuplicateImportedUser = async ({
 };
 
 const getPractitionerUsers = async (): Promise<any[]> => {
-  // 1) Get userIds that have count > 500 in dwUserOnCase
   const userIdRows = await getDbReader(reader =>
     reader
       .selectFrom('dwUserOnCase')
@@ -143,7 +143,6 @@ const getPractitionerUsers = async (): Promise<any[]> => {
   const userIds = userIdRows.map(r => r.userId).filter(Boolean) as string[];
   if (!userIds.length) return [];
 
-  // 2) Fetch users from dwUser where userId in (list)
   const users = await getDbReader(reader =>
     reader
       .selectFrom('dwUser')
@@ -152,7 +151,22 @@ const getPractitionerUsers = async (): Promise<any[]> => {
       .execute(),
   );
 
-  return users;
+  const dojIrsPractitioners = await getDbReader(reader =>
+    reader
+      .selectFrom('dwUser')
+      .selectAll()
+      .where('role', '=', 'irsPractitioner')
+      .where('practiceType', '=', 'DOJ')
+      .execute(),
+  );
+
+  // Merge and deduplicate by userId
+  const mergedById = new Map<string, any>();
+  for (const user of [...users, ...dojIrsPractitioners]) {
+    if (user?.userId) mergedById.set(user.userId, user);
+  }
+
+  return Array.from(mergedById.values());
 };
 
 const getPetitionerUsers = async (): Promise<any[]> => {
@@ -244,7 +258,7 @@ const getUsersByName = async (): Promise<Users> => {
       };
     } else {
       users[user.name] = {
-        email: `${user.role!}.${user.name.toLowerCase()}@example.com`,
+        email: `${user.role!.toLowerCase()}.${user.name.toLowerCase()}@example.com`,
         name: `${user.role} ${user.name}`,
         userFullName: `${user.role} ${fullName}`,
         role: user.role,
@@ -327,7 +341,7 @@ const processUser = async (userName: string, users: Users): Promise<void> => {
     user => () => processUser(user, users),
   );
 
-  // Run tasks in chunks of 50, awaiting each batch before continuing
+  // Run tasks in chunks of 15, awaiting each batch before continuing
   const concurrency = 15;
   for (let i = 0; i < taskFns.length; i += concurrency) {
     const batch = taskFns.slice(i, i + concurrency);
