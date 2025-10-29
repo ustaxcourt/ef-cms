@@ -6,6 +6,7 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import { RemoteTrialSessionInformation } from '@web-client/views/CaseDetail/CaseInformation/TrialInformation';
 
 const CaseDetails = ({ caseDetail, caseDetailHelper }) => (
   <React.Fragment>
@@ -69,6 +70,9 @@ const TrialInformation = ({ caseDetail }) => (
     {!caseDetail.formattedTrialDate && (
       <p>This case is not scheduled for trial</p>
     )}
+    <RemoteTrialSessionInformation
+      remoteTrialGrantedDate={caseDetail.remoteTrialGrantedDate}
+    />
   </React.Fragment>
 );
 
