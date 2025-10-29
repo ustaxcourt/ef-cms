@@ -28,7 +28,6 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
       sequences.validateCourtIssuedDocketEntrySequence,
     validateDocumentSequence: sequences.validateDocumentSequence,
     validationErrors: state.validationErrors,
-    caseDetail: state.caseDetail,
   },
   function EditDocketEntryMetaFormCourtIssued({
     addCourtIssuedDocketEntryHelper,
@@ -41,7 +40,6 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
     validateCourtIssuedDocketEntrySequence,
     validateDocumentSequence,
     validationErrors,
-    caseDetail,
   }) {
     const isDisabled =
       caseDetail && isMemberCase(caseDetail) && isFiledAcrossAllCases;
