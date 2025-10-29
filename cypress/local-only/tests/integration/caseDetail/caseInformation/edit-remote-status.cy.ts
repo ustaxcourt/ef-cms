@@ -15,12 +15,9 @@ import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
 
 describe('Edit Remote Status', () => {
   describe('As a docket clerk', () => {
-    beforeEach(() => {
-      loginAsDocketClerk();
-    });
-
     it('should allow docket clerk to edit remote status and add a granted date', () => {
       createAndServePaperPetition().then(({ docketNumber }) => {
+        loginAsDocketClerk();
         goToCase(docketNumber);
         getCaseDetailTab('case-information').click();
 
@@ -47,6 +44,7 @@ describe('Edit Remote Status', () => {
 
     it('should allow docket clerk to clear the remote status date', () => {
       createAndServePaperPetition().then(({ docketNumber }) => {
+        loginAsDocketClerk();
         goToCase(docketNumber);
         getCaseDetailTab('case-information').click();
 
@@ -74,6 +72,7 @@ describe('Edit Remote Status', () => {
 
     it('should allow saving without a date (no-op when no date is entered)', () => {
       createAndServePaperPetition().then(({ docketNumber }) => {
+        loginAsDocketClerk();
         goToCase(docketNumber);
         getCaseDetailTab('case-information').click();
 
@@ -91,6 +90,7 @@ describe('Edit Remote Status', () => {
 
     it('should show validation error for invalid date format', () => {
       createAndServePaperPetition().then(({ docketNumber }) => {
+        loginAsDocketClerk();
         goToCase(docketNumber);
         getCaseDetailTab('case-information').click();
 
@@ -109,6 +109,7 @@ describe('Edit Remote Status', () => {
 
     it('should display remote status date in Trial Information section when case is not scheduled', () => {
       createAndServePaperPetition().then(({ docketNumber }) => {
+        loginAsDocketClerk();
         goToCase(docketNumber);
         getCaseDetailTab('case-information').click();
 
@@ -127,6 +128,7 @@ describe('Edit Remote Status', () => {
 
     it('should allow docket clerk to cancel editing without saving changes', () => {
       createAndServePaperPetition().then(({ docketNumber }) => {
+        loginAsDocketClerk();
         goToCase(docketNumber);
         getCaseDetailTab('case-information').click();
 
@@ -149,6 +151,7 @@ describe('Edit Remote Status', () => {
 
     it('should not allow future dates for remote trial granted date', () => {
       createAndServePaperPetition().then(({ docketNumber }) => {
+        loginAsDocketClerk();
         goToCase(docketNumber);
         getCaseDetailTab('case-information').click();
 
@@ -190,12 +193,9 @@ describe('Edit Remote Status', () => {
   });
 
   describe('Edit Remote Status persistence', () => {
-    beforeEach(() => {
-      loginAsDocketClerk();
-    });
-
     it('should persist remote trial granted date after page refresh', () => {
       createAndServePaperPetition().then(({ docketNumber }) => {
+        loginAsDocketClerk();
         goToCase(docketNumber);
         getCaseDetailTab('case-information').click();
 
@@ -216,6 +216,7 @@ describe('Edit Remote Status', () => {
 
     it('should allow updating an existing remote trial granted date', () => {
       createAndServePaperPetition().then(({ docketNumber }) => {
+        loginAsDocketClerk();
         goToCase(docketNumber);
         getCaseDetailTab('case-information').click();
 
@@ -241,7 +242,9 @@ describe('Edit Remote Status', () => {
         cy.get('.usa-alert--success').should('exist');
 
         cy.contains('Motion to proceed remotely granted date').should('exist');
-        cy.contains(formatDateString(newDate, FORMATS.MMDDYYYY)).should('exist');
+        cy.contains(formatDateString(newDate, FORMATS.MMDDYYYY)).should(
+          'exist',
+        );
         cy.contains(initialDateString).should('not.exist');
       });
     });
