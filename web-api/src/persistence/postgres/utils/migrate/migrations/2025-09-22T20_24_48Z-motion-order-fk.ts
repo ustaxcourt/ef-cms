@@ -4,8 +4,8 @@ export async function up(db: Kysely<any>): Promise<void> {
   await db.schema
     .createTable('dwDocketEntryRelatedDocketEntry')
     .addColumn('docketNumber', 'varchar')
-    .addColumn('primaryDocketEntryId', 'uuid') // order
-    .addColumn('secondaryDocketEntryId', 'uuid') // motion
+    .addColumn('primaryDocketEntryId', 'varchar') // order
+    .addColumn('secondaryDocketEntryId', 'varchar') // motion
     .addColumn('disposition', 'varchar')
     .addColumn('served', 'boolean')
     .addPrimaryKeyConstraint('dwDocketEntryRelatedDocketEntryPK', [
@@ -13,6 +13,18 @@ export async function up(db: Kysely<any>): Promise<void> {
       'primaryDocketEntryId',
       'secondaryDocketEntryId',
     ])
+    .addForeignKeyConstraint(
+      'dwDocketEntryRelatedDocketEntryPrimaryFK',
+      ['docketNumber', 'primaryDocketEntryId'],
+      'dwDocketEntry',
+      ['docketNumber', 'docketEntryId'],
+    )
+    .addForeignKeyConstraint(
+      'dwDocketEntryRelatedDocketEntrySecondaryFK',
+      ['docketNumber', 'secondaryDocketEntryId'],
+      'dwDocketEntry',
+      ['docketNumber', 'docketEntryId'],
+    )
     .execute();
 }
 
