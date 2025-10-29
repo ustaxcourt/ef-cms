@@ -77,7 +77,7 @@ export const formatDocketEntryOnDocketRecord = (
 
   entry.filingsAndProceedings = getFilingsAndProceedings(entry);
 
-  const canPublicUserSeeLink = DocketEntry.isDownloadable(entry, { // NOTE (#8546): may use similar to determine if link should be active for relations
+  const canPublicUserSeeLink = DocketEntry.isDownloadable(entry, {
     isTerminalUser,
     rawCase,
     user: {
@@ -92,7 +92,7 @@ export const formatDocketEntryOnDocketRecord = (
   const canTerminalUserSeeLink =
     entry.isFileAttached && isServed && !entry.isSealed && !entry.isStricken;
 
-  const showLinkToDocument = isTerminalUser // NOTE (#8546): may use similar to determine if link shoulb active for relations
+  const showLinkToDocument = isTerminalUser
     ? canTerminalUserSeeLink
     : canPublicUserSeeLink;
 
