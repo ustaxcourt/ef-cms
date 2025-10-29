@@ -188,18 +188,41 @@ describe('confirmInitiateServiceModalHelper', () => {
       ]);
     });
 
-    it('should return unique paper service parties from consolidated group', () => {
+    it('should return paper service parties from consolidated group', () => {
       const mockPrivatePractitionerName = 'Attorney McGurney';
       const mockIrsPractitionerName = 'IRS Macbeth';
+
+      const mockLeadCase = {
+        ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+        irsPractitioners: [
+          {
+            name: mockIrsPractitionerName,
+            role: ROLES.irsPractitioner,
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+            userId: '3dfe8d03-0034-4e38-9f8f-67b478430330',
+          },
+        ],
+        isLeadCase: true,
+        petitioners: [],
+        privatePractitioners: [
+          {
+            name: mockPrivatePractitionerName,
+            role: ROLES.privatePractitioner,
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+            userId: '63356468-ed6a-47e8-8fac-07c7ab750dfa',
+          },
+        ],
+      };
 
       const result = runCompute(confirmInitiateServiceModalHelper, {
         state: {
           form: {
-            eventCode: mockEventCode,
+            eventCode: mockMultiDocketableEventCode,
           },
           formattedCaseDetail: {
-            ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+            ...mockLeadCase,
             consolidatedCases: [
+              mockLeadCase,
               {
                 ...MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
                 irsPractitioners: [
@@ -212,24 +235,6 @@ describe('confirmInitiateServiceModalHelper', () => {
                 ],
                 petitioners: [],
                 privatePractitioners: [],
-              },
-            ],
-            irsPractitioners: [
-              {
-                name: mockIrsPractitionerName,
-                role: ROLES.irsPractitioner,
-                serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-                userId: '3dfe8d03-0034-4e38-9f8f-67b478430330',
-              },
-            ],
-            isLeadCase: true,
-            petitioners: [],
-            privatePractitioners: [
-              {
-                name: mockPrivatePractitionerName,
-                role: ROLES.privatePractitioner,
-                serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-                userId: '63356468-ed6a-47e8-8fac-07c7ab750dfa',
               },
             ],
           },
@@ -251,13 +256,23 @@ describe('confirmInitiateServiceModalHelper', () => {
         },
       });
 
-      expect(result.contactsNeedingPaperService).toHaveLength(2);
-      expect(result.contactsNeedingPaperService).toEqual(
-        expect.arrayContaining([
-          { name: `${mockPrivatePractitionerName}, Petitioner Counsel` },
-          { name: `${mockIrsPractitionerName}, Respondent Counsel` },
-        ]),
-      );
+      expect(result.contactsNeedingPaperService).toEqual([
+        {
+          docketNumber: '109-19',
+          formattedContactType: 'Respondent Counsel',
+          name: 'IRS Macbeth',
+        },
+        {
+          docketNumber: '109-19',
+          formattedContactType: 'Petitioner Counsel',
+          name: 'Attorney McGurney',
+        },
+        {
+          docketNumber: '110-19',
+          formattedContactType: 'Respondent Counsel',
+          name: 'IRS Macbeth',
+        },
+      ]);
     });
   });
 
