@@ -11,6 +11,8 @@ describe('setupPropsForPrintablePendingReportAction', () => {
       state: {},
     });
 
-    expect(result.output.docketNumberFilter).toEqual('123-45');
+    expect(
+      (result.output as unknown as Record<string, string>).docketNumberFilter,
+    ).toEqual('123-45');
   });
 });

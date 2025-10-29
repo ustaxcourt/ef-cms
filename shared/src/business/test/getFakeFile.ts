@@ -13,7 +13,7 @@ export const getFakeFile = (returnArray = false, useFakeData1 = false) => {
   const fakeFile = Buffer.from(
     useFakeData1 === true ? fakeData1 : fakeData,
     'base64',
-  );
+  ) as Buffer & { name: string; size: number };
   fakeFile.name = 'fakeFile.pdf';
   fakeFile.size = fakeFile.length;
 

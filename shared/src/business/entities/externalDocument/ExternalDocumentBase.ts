@@ -1,5 +1,6 @@
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
+
 export class ExternalDocumentBase extends JoiValidationEntity {
   public category: string;
   public documentTitle?: string;

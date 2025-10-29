@@ -1,15 +1,26 @@
 import { ModalDialog } from '../ModalDialog';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
+import { props as cerebralProps } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import React from 'react';
-// TODO (#8546): If Order dispossessing a motion is stricken, we should revert related motion dispositions
+import { RunableSequence as RunnableSequence } from 'cerebral';
+
+const props = cerebralProps as unknown as {
+  confirmSequence: string;
+};
+
 export const StrikeDocketEntryModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
     confirmSequence: sequences[props.confirmSequence],
   },
-  function StrikeDocketEntryModal({ cancelSequence, confirmSequence }) {
+  function StrikeDocketEntryModal({
+    cancelSequence,
+    confirmSequence,
+  }: {
+    cancelSequence: Function | RunnableSequence;
+    confirmSequence: Function | RunnableSequence;
+  }) {
     return (
       <ModalDialog
         cancelLabel="No, Cancel"

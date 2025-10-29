@@ -16,11 +16,11 @@ export const updateCalendaredCaseUserNoteAction = ({
   const caseToUpdate = calendaredCases.find(
     aCase => aCase.docketNumber === userNote.docketNumber,
   );
-  caseToUpdate.notes = userNote;
+  (caseToUpdate as { notes?: unknown }).notes = userNote;
 
   const userNotes = [];
   for (const calendaredCase of calendaredCases) {
-    userNotes.push(calendaredCase.notes);
+    userNotes.push((calendaredCase as { notes?: unknown }).notes);
   }
   store.set(
     state.trialSessionWorkingCopy.userNotes,

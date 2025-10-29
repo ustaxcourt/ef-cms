@@ -71,7 +71,9 @@ export const publicTrialSessionDetailsHelper = (
 
   const formattedCases = Case.sortByDocketNumberAndGroupConsolidatedCases(
     trialSession.calendaredCases,
-  ).map(c => formatPublicCase(c));
+  ).map(c =>
+    formatPublicCase(c as unknown as Omit<RawPublicCase, 'consolidatedCases'>),
+  );
 
   const formattedTrialSession = {
     address1: trialSession.address1,

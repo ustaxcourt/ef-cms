@@ -10,6 +10,9 @@ describe('clearConfirmationTextForCalculatePenaltiesModalAction', () => {
       },
     );
 
-    expect(state.confirmationText.penalties).toEqual({});
+    expect(
+      (state.confirmationText as { penalties: Record<string, string> })
+        .penalties,
+    ).toEqual({});
   });
 });

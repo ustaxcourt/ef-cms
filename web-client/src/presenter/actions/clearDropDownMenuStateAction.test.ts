@@ -9,8 +9,8 @@ describe('clearDropDownMenuStateAction', () => {
       },
       state: {
         someKey: 'someValue',
-      },
+      } as Record<string, any>,
     });
-    expect(result.state.someKey).toBeUndefined();
+    expect(result.state).not.toHaveProperty('someKey');
   });
 });

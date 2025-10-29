@@ -137,7 +137,7 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
     getTrialSessionById.mockResolvedValue({
       ...MOCK_TRIAL_REGULAR,
       isCalendared: true,
-      //@ts-expect-error This is intentionally breaking the type
+      // @ts-expect-error - This is intentionally breaking the type to test null handling for required field
       proceedingType: null, // Required on TrialSession entity
     });
 
