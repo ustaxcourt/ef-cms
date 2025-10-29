@@ -129,11 +129,7 @@ const getPractitionerUsers = async (): Promise<any[]> => {
     reader
       .selectFrom('dwUserOnCase')
       .select('userId')
-      .where('actingAsRole', 'in', [
-        'inactivePractitioner',
-        'irsPractitioner',
-        'privatePractitioner',
-      ])
+      .where('actingAsRole', 'in', ['irsPractitioner', 'privatePractitioner'])
       .where('serviceIndicator', '=', 'Electronic')
       .groupBy('userId')
       .having(sql<boolean>`count(*) > ${500}`)
@@ -147,6 +143,7 @@ const getPractitionerUsers = async (): Promise<any[]> => {
     reader
       .selectFrom('dwUser')
       .where('userId', 'in', userIds)
+      .where('accountStatus', '=', 'active')
       .selectAll()
       .execute(),
   );
@@ -157,6 +154,7 @@ const getPractitionerUsers = async (): Promise<any[]> => {
       .selectAll()
       .where('role', '=', 'irsPractitioner')
       .where('practiceType', '=', 'DOJ')
+      .where('accountStatus', '=', 'active')
       .execute(),
   );
 
@@ -187,6 +185,7 @@ const getPetitionerUsers = async (): Promise<any[]> => {
         )`,
       )
       .where('email', 'is not', null)
+      .where('accountStatus', '=', 'active')
       .execute(),
   );
 
@@ -216,18 +215,20 @@ const getInternalUsers = async (): Promise<any> => {
         'reportersOffice',
         'trialclerk',
       ])
+      .where('accountStatus', '=', 'active')
       .limit(1000)
       .execute(),
   );
 };
 
-const getUsersByName = async (): Promise<Users> => {
-  let results = await getInternalUsers();
-
-  results.push(
-    ...(await getPractitionerUsers()),
-    ...(await getPetitionerUsers()),
+const getUsers = async (): Promise<Users> => {
+  const [internalUsers, practitionerUsers, petitionerUsers] = await Promise.all(
+    [getInternalUsers(), getPractitionerUsers(), getPetitionerUsers()],
   );
+  console.log(
+    `Fetched ${internalUsers.length} internal users, ${practitionerUsers.length} practitioner users, and ${petitionerUsers.length} petitioner users`,
+  );
+  let results = [...internalUsers, ...practitionerUsers, ...petitionerUsers];
 
   results = results.filter(result => {
     return result.email?.split('@')[1] !== 'example.com';
@@ -334,7 +335,7 @@ const processUser = async (userName: string, users: Users): Promise<void> => {
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const users = await getUsersByName();
+  const users = await getUsers();
 
   // Create task functions so work is started only when invoked
   const taskFns: (() => Promise<void>)[] = Object.keys(users).map(
