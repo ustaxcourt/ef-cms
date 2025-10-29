@@ -64,7 +64,7 @@ export const ConfirmModal = connect<ConfirmModalProps, typeof confirmModalDeps>(
       const focusModal = () => {
         const modalHeader = window.document.querySelector(
           '.modal-header .modal-header__title',
-        );
+        ) as HTMLElement | null;
         modalHeader?.focus();
       };
 

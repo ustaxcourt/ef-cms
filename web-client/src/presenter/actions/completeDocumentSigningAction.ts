@@ -16,31 +16,37 @@ export const completeDocumentSigningAction = async ({
   const parentMessageId = get(state.parentMessageId);
   let docketEntryId;
 
-  if (get(state.pdfForSigning.signatureData.x)) {
-    const {
-      nameForSigning,
-      nameForSigningLine2,
-      pageNumber,
-      signatureData: { scale, x, y },
-    } = get(state.pdfForSigning);
+  const signatureData = get(state.pdfForSigning.signatureData);
+  if (signatureData?.x) {
+    const { nameForSigning, nameForSigningLine2, pageNumber } = get(
+      state.pdfForSigning,
+    );
+    const { scale, x, y } = signatureData;
 
-    const pdfjsObj = window.pdfjsObj || get(state.pdfForSigning.pdfjsObj);
+    const pdfjsObj = ((
+      window as Window & { pdfjsObj?: { getData: () => Promise<unknown> } }
+    ).pdfjsObj || get(state.pdfForSigning.pdfjsObj)) as {
+      getData: () => Promise<unknown>;
+    };
 
     // generate signed document to bytes
     const signedPdfBytes = await applicationContext
       .getUseCases()
-      .generateSignedDocumentInteractor(applicationContext, {
-        pageIndex: pageNumber - 1,
-        // pdf.js starts at 1
-        pdfData: await pdfjsObj.getData(),
-        posX: x,
-        posY: y,
-        scale,
-        sigTextData: {
-          signatureName: `(Signed) ${nameForSigning}`,
-          signatureTitle: nameForSigningLine2,
+      .generateSignedDocumentInteractor(
+        applicationContext as unknown as IApplicationContext,
+        {
+          pageIndex: pageNumber - 1,
+          // pdf.js starts at 1
+          pdfData: await pdfjsObj.getData(),
+          posX: x,
+          posY: y,
+          scale,
+          sigTextData: {
+            signatureName: `(Signed) ${nameForSigning}`,
+            signatureTitle: nameForSigningLine2,
+          },
         },
-      });
+      );
 
     const documentFile = new File([signedPdfBytes], 'myfile.pdf', {
       type: 'application/pdf',
@@ -55,13 +61,16 @@ export const completeDocumentSigningAction = async ({
 
     ({ signedDocketEntryId: docketEntryId } = await applicationContext
       .getUseCases()
-      .saveSignedDocumentInteractor(applicationContext, {
-        docketNumber,
-        nameForSigning,
-        originalDocketEntryId,
-        parentMessageId,
-        signedDocketEntryId: signedDocumentFromUploadId,
-      }));
+      .saveSignedDocumentInteractor(
+        applicationContext as unknown as IApplicationContext,
+        {
+          docketNumber,
+          nameForSigning,
+          originalDocketEntryId,
+          parentMessageId,
+          signedDocketEntryId: signedDocumentFromUploadId,
+        },
+      ));
   }
 
   let redirectUrl;

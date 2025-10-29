@@ -1,16 +1,26 @@
 import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@web-client/presenter/shared.cerebral';
+import { props as cerebralProps } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
+const props = cerebralProps as unknown as {
+  updateSequence: (params: { key: string; value: unknown }) => void;
+  validateSequence: () => void;
+};
+
+const filingPartiesFormDeps = {
+  formattedCaseDetail: state.formattedCaseDetail,
+  filingPartiesFormHelper: state.filingPartiesFormHelper,
+  form: state.form,
+  updateSequence: props.updateSequence,
+  validateSequence: props.validateSequence,
+  validationErrors: state.validationErrors,
+};
+
 export const FilingPartiesForm = connect(
-  {
-    formattedCaseDetail: state.formattedCaseDetail,
-    filingPartiesFormHelper: state.filingPartiesFormHelper,
-    form: state.form,
-    validationErrors: state.validationErrors,
-  },
+  filingPartiesFormDeps,
   function FilingPartiesForm({
     formattedCaseDetail,
     filingPartiesFormHelper,
@@ -18,7 +28,7 @@ export const FilingPartiesForm = connect(
     validationErrors,
     updateSequence,
     validateSequence,
-    isMemberCase,
+    isMemberCase = false,
   }: {
     formattedCaseDetail;
     filingPartiesFormHelper;
@@ -28,9 +38,6 @@ export const FilingPartiesForm = connect(
     validateSequence?;
     isMemberCase?: boolean;
   }) {
-    const petitioners =
-      (formattedCaseDetail && formattedCaseDetail.petitioners) || [];
-
     return (
       <>
         {filingPartiesFormHelper.isServed ? (
@@ -69,13 +76,11 @@ export const FilingPartiesForm = connect(
               </legend>
               {filingPartiesFormHelper.showFilingPartiesAsCheckboxes ? (
                 <>
-                  {petitioners.map(petitioner => (
+                  {(formattedCaseDetail?.petitioners || []).map(petitioner => (
                     <div className="usa-checkbox" key={petitioner.contactId}>
                       <input
                         checked={
-                          (form.filersMap &&
-                            form.filersMap[petitioner.contactId]) ||
-                          false
+                          form.filersMap?.[petitioner.contactId] || false
                         }
                         className="usa-checkbox__input"
                         id={`filing-${petitioner.contactId}`}

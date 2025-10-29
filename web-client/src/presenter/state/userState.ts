@@ -6,6 +6,7 @@ import {
 
 export const emptyUserState: GetUserResponse & {
   email: string;
+  barNumber?: string;
 } = {
   email: '',
   entityName: '',

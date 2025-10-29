@@ -20,7 +20,7 @@ describe('noticeOfChangeOfTrialJudge', () => {
           nameOfClerk: 'Stephanie A. Servoss',
           titleOfClerk: 'Clerk of the Court',
           trialInfo: {
-            caseProcedureType: PROCEDURE_TYPES.SMALL,
+            caseProcedureType: PROCEDURE_TYPES['small'],
             chambersPhoneNumber: '1-721-740-9885 x4239',
             docketNumber: '999-99',
             formattedStartDate: '01/01/2001',

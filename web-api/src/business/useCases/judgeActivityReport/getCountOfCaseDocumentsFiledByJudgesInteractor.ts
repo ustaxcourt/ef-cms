@@ -13,6 +13,7 @@ export type JudgeActivityReportFilters = {
   endDate: string;
   startDate: string;
   judgeName: string;
+  judges?: string[];
 };
 
 export type JudgeActivityStatisticsRequest = {
