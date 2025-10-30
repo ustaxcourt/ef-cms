@@ -97,18 +97,35 @@ describe('validateRemoteTrialPermissionAction', () => {
     });
   });
 
-  it('should return the success path when remoteTrialGrantedDate is a valid ISO date', async () => {
+  it('should return the success path when remoteTrialGrantedDate is a valid ISO date in the past', async () => {
     await runAction(validateRemoteTrialPermissionAction, {
       modules: {
         presenter,
       },
       state: {
         modal: {
-          remoteTrialGrantedDate: '2023-10-14T04:00:00.000-04:00',
+          remoteTrialGrantedDate: '2024-01-14T05:00:00.000+00:00',
         },
       },
     });
 
     expect(pathSuccessStub).toHaveBeenCalled();
+  });
+
+  it('should return the error path when remoteTrialGrantedDate is in the future', async () => {
+    await runAction(validateRemoteTrialPermissionAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        modal: {
+          remoteTrialGrantedDate: '2099-12-31T05:00:00.000+00:00',
+        },
+      },
+    });
+
+    expect(pathErrorStub).toHaveBeenCalledWith({
+      errors: { remoteTrialGrantedDate: 'Date cannot be in the future' },
+    });
   });
 });

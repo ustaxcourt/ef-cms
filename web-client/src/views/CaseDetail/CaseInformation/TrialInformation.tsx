@@ -2,11 +2,23 @@ import { Button } from '../../../ustc-ui/Button/Button';
 import { DropdownMenu } from '../../../ustc-ui/DropdownMenu/DropdownMenu';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PreformattedText } from '@web-client/ustc-ui/PreformatedText/PreformattedText';
-import { applicationContext } from '@web-client/applicationContext';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { sequences, state } from '@web-client/presenter/app.cerebral';
 import { props as cerebralProps } from 'cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
+import { EditRemoteStatusButton } from './EditRemoteStatusButton';
+import { RemoteTrialSessionInformation } from './RemoteTrialSessionInformation';
+
 import React from 'react';
+
+const props = cerebralProps as unknown as {
+  caseDetail: unknown;
+  openAddEditCalendarNoteModalSequence: unknown;
+  openAddToTrialModalSequence: unknown;
+  openBlockFromTrialModalSequence: unknown;
+  openRemoveFromTrialSessionModalSequence: unknown;
+  openUnblockFromTrialModalSequence: unknown;
+  trialSessionJudge: unknown;
+};
 
 const EditCaseTrialInformationMenu = ({
   caseDetail,
@@ -49,66 +61,6 @@ const EditCaseTrialInformationMenu = ({
       menuState="caseInformationTrialEdit"
     ></DropdownMenu>
   );
-};
-
-export const RemoteTrialSessionInformation = ({
-  remoteTrialGrantedDate,
-}: {
-  remoteTrialGrantedDate?: string | null;
-}) => {
-  const date = remoteTrialGrantedDate
-    ? applicationContext
-        .getUtilities()
-        .formatDateString(remoteTrialGrantedDate, 'MMDDYYYY')
-    : '';
-
-  return remoteTrialGrantedDate ? (
-    <div>
-      <p className="text-bold margin-bottom-0">
-        Motion to proceed remotely granted date
-      </p>
-      <p className="text-base">{date}</p>
-    </div>
-  ) : null;
-};
-
-const EditRemoteStatusButton = ({
-  openEditRemoteStatusModalSequence,
-  showEditRemoteTrialPermission,
-}: {
-  openEditRemoteStatusModalSequence: () => void;
-  showEditRemoteTrialPermission: boolean;
-}) => {
-  return (
-    <>
-      {showEditRemoteTrialPermission && (
-        <div className="margin-bottom-1">
-          <Button
-            className="padding-0"
-            link
-            data-testid="edit-remote-status"
-            icon="edit"
-            id="edit-remote-status-button"
-            onClick={() => {
-              openEditRemoteStatusModalSequence();
-            }}
-          >
-            Edit Remote Status
-          </Button>
-        </div>
-      )}
-    </>
-  );
-};
-
-const props = cerebralProps as unknown as {
-  caseDetail: unknown;
-  openAddEditCalendarNoteModalSequence: unknown;
-  openAddToTrialModalSequence: unknown;
-  openBlockFromTrialModalSequence: unknown;
-  openRemoveFromTrialSessionModalSequence: unknown;
-  openUnblockFromTrialModalSequence: unknown;
-  trialSessionJudge: unknown;
 };
 
 export const TrialInformation = connect(
@@ -332,7 +284,7 @@ export const TrialInformation = connect(
                     Add to Trial
                   </Button>
                 </div>
-                <div className="margin-bottom-3">
+                <div>
                   <Button
                     link
                     className="block-from-trial-btn red-warning"
@@ -401,7 +353,7 @@ export const TrialInformation = connect(
                         openRemoveFromTrialSessionModalSequence={
                           openRemoveFromTrialSessionModalSequence
                         }
-                        trialSessionId={caseDetail.trialSessionId}
+                        trialSessionId={caseDetail.trialSessionId!}
                       />
                     </td>
                   </tr>

@@ -33,19 +33,45 @@ export const updateCaseDetails = async (
     throw new UnauthorizedError('Unauthorized for editing case details');
   }
 
+  // Extract only the fields that are actually provided (not undefined)
+  // to avoid overwriting existing case data with undefined values
   const editableFields = {
-    caseType: caseDetails.caseType,
-    hasVerifiedIrsNotice: caseDetails.hasVerifiedIrsNotice,
-    irsNoticeDate: caseDetails.irsNoticeDate,
-    petitionPaymentDate: caseDetails.petitionPaymentDate,
-    petitionPaymentMethod: caseDetails.petitionPaymentMethod,
-    petitionPaymentStatus: caseDetails.petitionPaymentStatus,
-    petitionPaymentWaivedDate: caseDetails.petitionPaymentWaivedDate,
-    preferredTrialCity: caseDetails.preferredTrialCity,
-    procedureType: caseDetails.procedureType,
-    remoteTrialGranted: caseDetails.remoteTrialGranted,
-    remoteTrialGrantedDate: caseDetails.remoteTrialGrantedDate,
-    statistics: caseDetails.statistics,
+    ...(caseDetails.caseType !== undefined && {
+      caseType: caseDetails.caseType,
+    }),
+    ...(caseDetails.hasVerifiedIrsNotice !== undefined && {
+      hasVerifiedIrsNotice: caseDetails.hasVerifiedIrsNotice,
+    }),
+    ...(caseDetails.irsNoticeDate !== undefined && {
+      irsNoticeDate: caseDetails.irsNoticeDate,
+    }),
+    ...(caseDetails.petitionPaymentDate !== undefined && {
+      petitionPaymentDate: caseDetails.petitionPaymentDate,
+    }),
+    ...(caseDetails.petitionPaymentMethod !== undefined && {
+      petitionPaymentMethod: caseDetails.petitionPaymentMethod,
+    }),
+    ...(caseDetails.petitionPaymentStatus !== undefined && {
+      petitionPaymentStatus: caseDetails.petitionPaymentStatus,
+    }),
+    ...(caseDetails.petitionPaymentWaivedDate !== undefined && {
+      petitionPaymentWaivedDate: caseDetails.petitionPaymentWaivedDate,
+    }),
+    ...(caseDetails.preferredTrialCity !== undefined && {
+      preferredTrialCity: caseDetails.preferredTrialCity,
+    }),
+    ...(caseDetails.procedureType !== undefined && {
+      procedureType: caseDetails.procedureType,
+    }),
+    ...(caseDetails.remoteTrialGranted !== undefined && {
+      remoteTrialGranted: caseDetails.remoteTrialGranted,
+    }),
+    ...(caseDetails.remoteTrialGrantedDate !== undefined && {
+      remoteTrialGrantedDate: caseDetails.remoteTrialGrantedDate,
+    }),
+    ...(caseDetails.statistics !== undefined && {
+      statistics: caseDetails.statistics,
+    }),
   };
 
   const oldCase = await getCaseByDocketNumber({

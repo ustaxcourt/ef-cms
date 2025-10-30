@@ -279,6 +279,9 @@ const createTestApplicationContext = () => {
     isValidDateString: jest
       .fn()
       .mockImplementation(DateHandler.isValidDateString),
+    isValidPastDate: jest
+      .fn()
+      .mockImplementation(DateHandler.isValidPastDate),
     prepareDateFromString: jest
       .fn()
       .mockImplementation(DateHandler.prepareDateFromString),
