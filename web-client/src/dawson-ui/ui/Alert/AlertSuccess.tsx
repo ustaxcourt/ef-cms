@@ -7,13 +7,6 @@ import {
   AlertDescription,
 } from '@web-client/dawson-ui/ui/Alert/Alert';
 
-type AlertSuccessProps = {
-  alertSuccess?: AlertSuccess;
-  className?: string;
-  dismissAlertSequence?: () => void;
-  isDismissible?: boolean;
-};
-
 type AlertSuccess = {
   linkText?: string;
   linkUrl?: string;
@@ -24,11 +17,22 @@ type AlertSuccess = {
   title?: string;
 };
 
+
+type AlertSuccessProps = {
+  alertSuccess?: AlertSuccess;
+  className?: string;
+  dismissAlertSequence?: () => void;
+  isDismissible?: boolean;
+  dataTestId?: string
+};
+
+
 export function AlertSuccess({
   alertSuccess,
   className,
   dismissAlertSequence,
   isDismissible = true,
+  dataTestId,
 }: AlertSuccessProps) {
   const notificationRef = useRef<HTMLDivElement | null>(null);
 
@@ -38,12 +42,14 @@ export function AlertSuccess({
     }
   }, [alertSuccess]);
 
-  const AlertMessage = alertSuccess?.title ? AlertDescription : AlertHeader; // TODO: refactor this
+  const AlertMessage = alertSuccess?.title ? AlertDescription : AlertHeader; 
+
   const successProps = {
     closeButtonOnClick: dismissAlertSequence,
     isDismissible,
     title: alertSuccess?.title,
     variant: 'success',
+    
   };
 
   return (
@@ -54,19 +60,19 @@ export function AlertSuccess({
           className={cn(className)}
           closeButtonOnClick={dismissAlertSequence}
           data-metadata={`${alertSuccess.metaData}`}
-          data-testid="success-alert" // TODO: replace id where it is implemented
+          dataTestId={`alert-success-${dataTestId}`} 
           isDismissible={isDismissible}
           ref={notificationRef}
           role="alert"
           variant="success"
         >
-          {alertSuccess.title && (
-            <AlertHeader {...successProps}>{alertSuccess.title}</AlertHeader>
+        {alertSuccess.title && (
+            <AlertHeader dataTestId={`success-${dataTestId}`} {...successProps}>{alertSuccess.title}</AlertHeader>
           )}
           {/* message can be the header if the title does not exist */}
-          <AlertMessage {...successProps}>{alertSuccess.message}</AlertMessage>
+          <AlertMessage dataTestId={`success-msg-${dataTestId}`} {...successProps}>{alertSuccess.message}</AlertMessage>
           {alertSuccess.linkUrl && (
-            <AlertMessage {...successProps}>
+            <AlertMessage dataTestId={`success-link-${dataTestId}`} {...successProps}>
               <Button
                 className="tw:p-0 tw:mt-2 ustc-button--mobile-inline"
                 href={alertSuccess.linkUrl}
