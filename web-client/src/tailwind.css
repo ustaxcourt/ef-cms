@@ -134,7 +134,7 @@
   --color-yellow-lighter: var(--yellow-lighter);
   --color-red-primary: var(--red-primary);
   --color-red-error: var(--red-error);
-  --color-green: var(--green);
+  --color-green: var(--green-primary);
   --color-green-success: var(--green-success);
   --color-grey-light: var(--grey-light);
   --breakpoint-xs: 30rem;
