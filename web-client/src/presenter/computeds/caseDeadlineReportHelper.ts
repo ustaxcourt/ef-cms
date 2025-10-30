@@ -109,7 +109,7 @@ export const caseDeadlineReportHelper = (
         .getUtilities()
         .formatDateString(d.deadlineDate, 'MMDDYY'),
       inConsolidatedGroup,
-      inLeadCase,
+      inLeadCase: isLeadCaseResult,
     };
   });
 
