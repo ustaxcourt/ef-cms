@@ -17,7 +17,6 @@ import {
   createEndOfDayISO,
   createISODateAtStartOfDayEST,
   createISODateStringFromObject,
-  createISODateString,
   createStartOfDayISO,
   dateStringsCompared,
   deconstructDate,
@@ -38,7 +37,7 @@ import {
   roundDateDownToNearestHour,
   subtractISODates,
   validateDateAndCreateISO,
-   isValidPastDate,
+  isValidPastDate,
 } from './DateHandler';
 
 describe('DateHandler', () => {
@@ -1067,7 +1066,8 @@ describe('DateHandler', () => {
     const originalNow = Settings.now.bind(Settings);
     const originalDefaultZone = Settings.defaultZone;
     beforeAll(() => {
-      Settings.now = () => DateTime.fromISO(createISODateString('2025-10-30T12:00:00.000Z', FORMATS.ISO)).toMillis();
+      // Mock current time to 2024-10-30T12:00:00.000Z (1730289600000 ms)
+      Settings.now = () => 1730289600000;
       Settings.defaultZone = 'system';
     });
 
@@ -1077,17 +1077,17 @@ describe('DateHandler', () => {
     });
 
     it('returns true for today', () => {
-      const iso = '2025-10-30T12:00:00.000Z';
+      const iso = '2024-10-30T12:00:00.000Z';
       expect(isValidPastDate(iso)).toBe(true);
     });
 
     it('returns true for a past date', () => {
-      const iso = '2025-10-29T12:00:00.000Z';
+      const iso = '2024-10-29T12:00:00.000Z';
       expect(isValidPastDate(iso)).toBe(true);
     });
 
     it('returns false for a future date', () => {
-      const iso = '2025-10-31T12:00:00.000Z';
+      const iso = '2024-10-31T12:00:00.000Z';
       expect(isValidPastDate(iso)).toBe(false);
     });
 
