@@ -67,7 +67,7 @@ const buttonVariants = cva(
       },
     },
     defaultVariants: {
-      variant: 'primary',
+      variant: 'destructive',
     },
   },
 );
