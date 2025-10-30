@@ -93,10 +93,10 @@
   --color-card-foreground: var(--card-foreground);
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-darker: var(--primary-darker);
-  --color-primary-dark: var(--primary-dark);
-  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--blue-primary);
+  --color-primary-dark: var(--blue-dark);
+  --color-primary-darker: var(--blue-darker);
+  --color-primary-foreground: var(--white);
   --color-tertiary-darker: var(--tertiary-darker);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
@@ -104,9 +104,9 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-dark: var(--destructive-dark);
-  --color-destructive-darker: var(--destructive-darker);
+  --color-destructive: var(--red-primary);
+  --color-destructive-dark: var(--red-dark);
+  --color-destructive-darker: var(--red-darker);
   --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
