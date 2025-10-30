@@ -14,11 +14,12 @@ export const validateRemoteTrialPermissionAction = ({
 }) => {
   const remoteTrialGrantedDate = get(state.modal.remoteTrialGrantedDate);
 
+  // Allow empty dates (user is clearing the date)
   if (!remoteTrialGrantedDate || remoteTrialGrantedDate.trim() === '') {
-    return path.error({
-      errors: { remoteTrialGrantedDate: 'Date cannot be invalid or empty' },
-    });
+    return path.success();
   }
+
+  // If a date is provided, validate it
   const { DATE_FORMATS } = applicationContext.getConstants();
   const isValidDate = applicationContext
     .getUtilities()
