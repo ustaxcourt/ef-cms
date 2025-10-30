@@ -14,7 +14,9 @@ describe('gotoDashboardSequence', () => {
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
-    presenter.providers.socket = { start: startSocketMock };
+    (
+      presenter.providers as unknown as { socket: { start: jest.Mock } }
+    ).socket = { start: startSocketMock };
     presenter.sequences = {
       gotoDashboardSequence,
     };

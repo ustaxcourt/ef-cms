@@ -31,6 +31,7 @@ describe('messageModalHelper', () => {
   const mockDocketEntryWithFileAttachedOnDocketRecordAndNoDescription = {
     docketEntryId: mockDocketEntryIdAlsoOnDocketRecord,
     documentTitle: 'Some Document',
+    documentType: 'Some Document',
     index: 2,
     isFileAttached: true,
     isOnDocketRecord: true,

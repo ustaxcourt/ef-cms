@@ -29,7 +29,7 @@ const addNewInitialFilingToCase = ({
   } else {
     const { eventCode } = Object.values(INITIAL_DOCUMENT_TYPES).find(
       dt => dt.documentType === documentType,
-    );
+    ) as { eventCode: string };
 
     const contactSecondary = caseEntity.getContactSecondary();
 

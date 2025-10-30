@@ -1,32 +1,58 @@
 import { ConsolidatedCasesCheckboxes } from './ConsolidatedCasesCheckboxes';
+import { Hint } from '../ustc-ui/Hint/Hint';
 import { InfoNotificationComponent } from './InfoNotification';
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
-import React from 'react';
+import { props as cerebralProps } from 'cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
+import React, { JSX } from 'react';
+
+interface ConfirmInitiateServiceModalProps {
+  confirmSequence: Function;
+  documentTitle: string;
+}
+
+const props = cerebralProps as unknown as ConfirmInitiateServiceModalProps;
 
 export const ConfirmInitiateServiceModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
     confirmInitiateServiceModalHelper: state.confirmInitiateServiceModalHelper,
-    additionalServedCases:
-      state.confirmInitiateServiceModalHelper.additionalServedCases,
+    confirmSequence: props.confirmSequence,
+    documentTitle: props.documentTitle,
     waitingForResponse: state.progressIndicator.waitingForResponse,
   },
-  function ConfirmInitiateServiceModal(props: any) {
-    const {
-      cancelSequence,
-      confirmInitiateServiceModalHelper,
-      waitingForResponse,
-      additionalServedCases,
-    } = props;
-
-    const confirmSequence = props.confirmSequence as any;
-    const documentTitle = props.documentTitle as any;
+  function ConfirmInitiateServiceModal({
+    cancelSequence,
+    confirmInitiateServiceModalHelper,
+    confirmSequence,
+    documentTitle,
+    waitingForResponse,
+  }: {
+    cancelSequence: Function;
+    confirmInitiateServiceModalHelper: {
+      confirmationText: string;
+      showPaperAlert: boolean;
+      caseOrGroup: string;
+      contactsNeedingPaperService: Array<{ name: string }>;
+      showConsolidatedCasesForService: boolean;
+      additionalServedCases?: Array<{
+        docketNumber: string;
+        caseTitle: string;
+      }>;
+      paperPartiesConsolidated?: Array<{
+        name: string;
+        docketNumber: string;
+        contactType?: string;
+      }>;
+    };
+    confirmSequence: Function;
+    documentTitle: string;
+    waitingForResponse: boolean;
+  }): JSX.Element {
     let isSubmitDebounced = false;
 
-    const debounceSubmit = timeout => {
+    const debounceSubmit = (timeout: number): void => {
       isSubmitDebounced = true;
 
       setTimeout(() => {
@@ -40,7 +66,7 @@ export const ConfirmInitiateServiceModal = connect(
         cancelSequence={cancelSequence}
         className="confirm-initiate-service-modal"
         confirmLabel="Yes, Serve"
-        confirmSequence={() => {
+        confirmSequence={(): void => {
           debounceSubmit(200);
           confirmSequence();
         }}
@@ -54,18 +80,22 @@ export const ConfirmInitiateServiceModal = connect(
         <p className="margin-top-0 margin-bottom-2">
           <strong>{documentTitle}</strong>
         </p>
-        {additionalServedCases && additionalServedCases.length > 0 && (
-          <div>
-            <div>This document will also be served for:</div>
-            <ul className="padding-left-3 margin-top-1">
-              {additionalServedCases.map(c => (
-                <li key={c.docketNumber}>
-                  {c.docketNumber} - {c.caseTitle}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+        {confirmInitiateServiceModalHelper.additionalServedCases &&
+          confirmInitiateServiceModalHelper.additionalServedCases.length >
+            0 && (
+            <div>
+              <div>This document will also be served for:</div>
+              <ul className="padding-left-3 margin-top-1">
+                {confirmInitiateServiceModalHelper.additionalServedCases.map(
+                  c => (
+                    <li key={c.docketNumber}>
+                      {c.docketNumber} - {c.caseTitle}
+                    </li>
+                  ),
+                )}
+              </ul>
+            </div>
+          )}
         {confirmInitiateServiceModalHelper.paperPartiesConsolidated && (
           <InfoNotificationComponent
             alertInfo={{
@@ -90,6 +120,21 @@ export const ConfirmInitiateServiceModal = connect(
             dismissible={false}
             scrollToTop={false}
           />
+        )}
+        {confirmInitiateServiceModalHelper.showPaperAlert && (
+          <Hint fullWidth className="block">
+            <div className="margin-bottom-1">
+              This {confirmInitiateServiceModalHelper.caseOrGroup} has parties
+              receiving paper service:
+            </div>
+            {confirmInitiateServiceModalHelper.contactsNeedingPaperService.map(
+              contact => (
+                <div className="margin-bottom-1" key={contact.name}>
+                  {contact.name}
+                </div>
+              ),
+            )}
+          </Hint>
         )}
         {confirmInitiateServiceModalHelper.showConsolidatedCasesForService && (
           <ConsolidatedCasesCheckboxes />

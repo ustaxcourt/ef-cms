@@ -2,8 +2,10 @@ import { Button } from '../../../ustc-ui/Button/Button';
 import { DropdownMenu } from '../../../ustc-ui/DropdownMenu/DropdownMenu';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PreformattedText } from '@web-client/ustc-ui/PreformatedText/PreformattedText';
+import { applicationContext } from '@web-client/applicationContext';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
+import { props as cerebralProps } from 'cerebral';
 import React from 'react';
 
 const EditCaseTrialInformationMenu = ({
@@ -11,6 +13,15 @@ const EditCaseTrialInformationMenu = ({
   openAddEditCalendarNoteModalSequence,
   openRemoveFromTrialSessionModalSequence,
   trialSessionId,
+}: {
+  caseDetail: {
+    trialSessionNotes?: string;
+  };
+  openAddEditCalendarNoteModalSequence: (args: { note?: string }) => void;
+  openRemoveFromTrialSessionModalSequence: (args: {
+    trialSessionId: string;
+  }) => void;
+  trialSessionId: string;
 }) => {
   return (
     <DropdownMenu
@@ -40,6 +51,66 @@ const EditCaseTrialInformationMenu = ({
   );
 };
 
+export const RemoteTrialSessionInformation = ({
+  remoteTrialGrantedDate,
+}: {
+  remoteTrialGrantedDate?: string | null;
+}) => {
+  const date = remoteTrialGrantedDate
+    ? applicationContext
+        .getUtilities()
+        .formatDateString(remoteTrialGrantedDate, 'MMDDYYYY')
+    : '';
+
+  return remoteTrialGrantedDate ? (
+    <div>
+      <p className="text-bold margin-bottom-0">
+        Motion to proceed remotely granted date
+      </p>
+      <p className="text-base">{date}</p>
+    </div>
+  ) : null;
+};
+
+const EditRemoteStatusButton = ({
+  openEditRemoteStatusModalSequence,
+  showEditRemoteTrialPermission,
+}: {
+  openEditRemoteStatusModalSequence: () => void;
+  showEditRemoteTrialPermission: boolean;
+}) => {
+  return (
+    <>
+      {showEditRemoteTrialPermission && (
+        <div className="margin-bottom-1">
+          <Button
+            className="padding-0"
+            link
+            data-testid="edit-remote-status"
+            icon="edit"
+            id="edit-remote-status-button"
+            onClick={() => {
+              openEditRemoteStatusModalSequence();
+            }}
+          >
+            Edit Remote Status
+          </Button>
+        </div>
+      )}
+    </>
+  );
+};
+
+const props = cerebralProps as unknown as {
+  caseDetail: unknown;
+  openAddEditCalendarNoteModalSequence: unknown;
+  openAddToTrialModalSequence: unknown;
+  openBlockFromTrialModalSequence: unknown;
+  openRemoveFromTrialSessionModalSequence: unknown;
+  openUnblockFromTrialModalSequence: unknown;
+  trialSessionJudge: unknown;
+};
+
 export const TrialInformation = connect(
   {
     caseDetail: props.caseDetail,
@@ -47,9 +118,13 @@ export const TrialInformation = connect(
       props.openAddEditCalendarNoteModalSequence,
     openAddToTrialModalSequence: props.openAddToTrialModalSequence,
     openBlockFromTrialModalSequence: props.openBlockFromTrialModalSequence,
+    openEditRemoteStatusModalSequence:
+      sequences.openEditRemoteStatusModalSequence,
     openRemoveFromTrialSessionModalSequence:
       props.openRemoveFromTrialSessionModalSequence,
     openUnblockFromTrialModalSequence: props.openUnblockFromTrialModalSequence,
+    showEditRemoteTrialPermission:
+      state.caseInformationHelper.showEditRemoteTrialPermission,
     trialSessionJudge: props.trialSessionJudge,
   },
   function TrialInformation({
@@ -57,9 +132,40 @@ export const TrialInformation = connect(
     openAddEditCalendarNoteModalSequence,
     openAddToTrialModalSequence,
     openBlockFromTrialModalSequence,
+    openEditRemoteStatusModalSequence,
     openRemoveFromTrialSessionModalSequence,
     openUnblockFromTrialModalSequence,
+    showEditRemoteTrialPermission,
     trialSessionJudge,
+  }: {
+    caseDetail: {
+      showTrialCalendared?: boolean;
+      showBlockedFromTrial?: boolean;
+      showNotScheduled?: boolean;
+      showScheduled?: boolean;
+      trialSessionId?: string;
+      userIsAssignedToSession?: boolean;
+      formattedTrialCity?: string;
+      formattedTrialDate?: string;
+      formattedAssociatedJudge?: string;
+      trialSessionNotes?: string;
+      blocked?: boolean;
+      blockedDateFormatted?: string;
+      blockedReason?: string;
+      remoteTrialGrantedDate?: string | null;
+    };
+    openAddEditCalendarNoteModalSequence: (args: { note?: string }) => void;
+    openAddToTrialModalSequence: () => void;
+    openBlockFromTrialModalSequence: () => void;
+    openEditRemoteStatusModalSequence: () => void;
+    openRemoveFromTrialSessionModalSequence: (args: {
+      trialSessionId: string;
+    }) => void;
+    openUnblockFromTrialModalSequence: () => void;
+    showEditRemoteTrialPermission: boolean;
+    trialSessionJudge: {
+      name: string;
+    };
   }) {
     return (
       <>
@@ -100,16 +206,18 @@ export const TrialInformation = connect(
                     <td>{caseDetail.formattedTrialDate}</td>
                     <td>{caseDetail.formattedAssociatedJudge}</td>
                     <td>
-                      <EditCaseTrialInformationMenu
-                        caseDetail={caseDetail}
-                        openAddEditCalendarNoteModalSequence={
-                          openAddEditCalendarNoteModalSequence
-                        }
-                        openRemoveFromTrialSessionModalSequence={
-                          openRemoveFromTrialSessionModalSequence
-                        }
-                        trialSessionId={caseDetail.trialSessionId}
-                      />
+                      {caseDetail.trialSessionId && (
+                        <EditCaseTrialInformationMenu
+                          caseDetail={caseDetail}
+                          openAddEditCalendarNoteModalSequence={
+                            openAddEditCalendarNoteModalSequence
+                          }
+                          openRemoveFromTrialSessionModalSequence={
+                            openRemoveFromTrialSessionModalSequence
+                          }
+                          trialSessionId={caseDetail.trialSessionId}
+                        />
+                      )}
                     </td>
                   </tr>
                   {caseDetail.trialSessionNotes && (
@@ -121,6 +229,19 @@ export const TrialInformation = connect(
                   )}
                 </tbody>
               </table>
+              <div className="grid-col-8">
+                <RemoteTrialSessionInformation
+                  remoteTrialGrantedDate={caseDetail.remoteTrialGrantedDate}
+                />
+              </div>
+              <div className="grid-col-4">
+                <EditRemoteStatusButton
+                  showEditRemoteTrialPermission={showEditRemoteTrialPermission}
+                  openEditRemoteStatusModalSequence={
+                    openEditRemoteStatusModalSequence
+                  }
+                />
+              </div>
             </div>
           </>
         )}
@@ -176,36 +297,70 @@ export const TrialInformation = connect(
                 </div>
               </div>
             )}
+            <div className="grid-row margin-top-2">
+              <div className="grid-col-8">
+                <RemoteTrialSessionInformation
+                  remoteTrialGrantedDate={caseDetail.remoteTrialGrantedDate}
+                />
+              </div>
+              <div className="grid-col-4">
+                <EditRemoteStatusButton
+                  showEditRemoteTrialPermission={showEditRemoteTrialPermission}
+                  openEditRemoteStatusModalSequence={
+                    openEditRemoteStatusModalSequence
+                  }
+                />
+              </div>
+            </div>
           </>
         )}
         {caseDetail.showNotScheduled && (
           <>
             <h3 className="underlined">Trial - Not Scheduled</h3>
-            <div className="margin-bottom-1">
-              <Button
-                link
-                data-testid="add-to-trial-session-btn"
-                icon="plus-circle"
-                id="add-to-trial-session-btn"
-                onClick={() => {
-                  openAddToTrialModalSequence();
-                }}
-              >
-                Add to Trial
-              </Button>
-            </div>
-            <div>
-              <Button
-                link
-                className="block-from-trial-btn red-warning"
-                data-testid="add-manual-block-button"
-                icon="hand-paper"
-                onClick={() => {
-                  openBlockFromTrialModalSequence();
-                }}
-              >
-                Add Manual Block
-              </Button>
+            <div className="grid-row">
+              <div className="grid-col-6">
+                <div className="margin-bottom-1">
+                  <Button
+                    link
+                    data-testid="add-to-trial-session-btn"
+                    icon="plus-circle"
+                    id="add-to-trial-session-btn"
+                    onClick={() => {
+                      openAddToTrialModalSequence();
+                    }}
+                  >
+                    Add to Trial
+                  </Button>
+                </div>
+                <div className="margin-bottom-3">
+                  <Button
+                    link
+                    className="block-from-trial-btn red-warning"
+                    data-testid="add-manual-block-button"
+                    icon="hand-paper"
+                    onClick={() => {
+                      openBlockFromTrialModalSequence();
+                    }}
+                  >
+                    Add Manual Block
+                  </Button>
+                </div>
+                <div className="margin-top-3">
+                  <EditRemoteStatusButton
+                    showEditRemoteTrialPermission={
+                      showEditRemoteTrialPermission
+                    }
+                    openEditRemoteStatusModalSequence={
+                      openEditRemoteStatusModalSequence
+                    }
+                  />
+                </div>
+              </div>
+              <div className="grid-col-6">
+                <RemoteTrialSessionInformation
+                  remoteTrialGrantedDate={caseDetail.remoteTrialGrantedDate}
+                />
+              </div>
             </div>
           </>
         )}
