@@ -18,7 +18,6 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
     DATE_FORMATS: state.constants.DATE_FORMATS,
     addCourtIssuedDocketEntryHelper: state.addCourtIssuedDocketEntryHelper,
     form: state.form,
-    caseDetail: state.caseDetail,
     isFiledAcrossAllCases: state.isFiledAcrossAllCases,
     formatAndUpdateDateFromDatePickerSequence:
       sequences.formatAndUpdateDateFromDatePickerSequence,
@@ -34,7 +33,6 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
     addCourtIssuedDocketEntryHelper,
     DATE_FORMATS,
     form,
-    caseDetail,
     isFiledAcrossAllCases,
     formatAndUpdateDateFromDatePickerSequence,
     updateCourtIssuedDocketEntryFormValueSequence,
