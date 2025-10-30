@@ -29,7 +29,7 @@ const alertVariants = cva(
         error:
           'tw:[&_button]:focus-visible:bg-red-error tw:[&_button]:focus-visible:ring-offset-red-error tw:bg-red-error tw:border-red-primary',
         success:
-          'tw:[&_button]:focus-visible:bg-green-success tw:[&_button]:focus-visible:ring-offset-green-success tw:bg-green-success tw:border-green',
+          'tw:[&_button]:focus-visible:bg-green-success tw:[&_button]:focus-visible:ring-offset-green-success tw:bg-green-success tw:border-green-primary',
       },
     },
     defaultVariants: {
