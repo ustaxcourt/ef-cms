@@ -33,8 +33,6 @@ export const updateCaseDetails = async (
     throw new UnauthorizedError('Unauthorized for editing case details');
   }
 
-  // Extract only the fields that are actually provided (not undefined)
-  // to avoid overwriting existing case data with undefined values
   const editableFields = {
     ...(caseDetails.caseType !== undefined && {
       caseType: caseDetails.caseType,
