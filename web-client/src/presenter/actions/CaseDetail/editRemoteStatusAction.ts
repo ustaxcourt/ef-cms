@@ -21,7 +21,7 @@ export const editRemoteStatusAction = async ({
     .updateCaseDetailsInteractor(applicationContext, {
       caseDetails: {
         remoteTrialGranted: !!hasDate,
-        remoteTrialGrantedDate,
+        remoteTrialGrantedDate: hasDate ? remoteTrialGrantedDate : null,
       },
       docketNumber,
     });

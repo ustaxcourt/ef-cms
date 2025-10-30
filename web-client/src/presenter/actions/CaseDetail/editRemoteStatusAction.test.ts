@@ -92,7 +92,7 @@ describe('editRemoteStatusAction', () => {
     ).toMatchObject({
       caseDetails: {
         remoteTrialGranted: false,
-        remoteTrialGrantedDate: '',
+        remoteTrialGrantedDate: null,
       },
       docketNumber: mockDocketNumber,
     });
@@ -140,7 +140,7 @@ describe('editRemoteStatusAction', () => {
     ).toMatchObject({
       caseDetails: {
         remoteTrialGranted: false,
-        remoteTrialGrantedDate: '   ',
+        remoteTrialGrantedDate: null,
       },
       docketNumber: mockDocketNumber,
     });
