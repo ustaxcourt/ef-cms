@@ -2,10 +2,12 @@ import { Button } from '../../../ustc-ui/Button/Button';
 import { DropdownMenu } from '../../../ustc-ui/DropdownMenu/DropdownMenu';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PreformattedText } from '@web-client/ustc-ui/PreformatedText/PreformattedText';
-import { applicationContext } from '@web-client/applicationContext';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
+import { EditRemoteStatusButton } from './EditRemoteStatusButton';
+import { RemoteTrialSessionInformation } from './RemoteTrialSessionInformation';
+
 import React from 'react';
 
 const EditCaseTrialInformationMenu = ({
@@ -39,56 +41,6 @@ const EditCaseTrialInformationMenu = ({
       ]}
       menuState="caseInformationTrialEdit"
     ></DropdownMenu>
-  );
-};
-
-export const RemoteTrialSessionInformation = ({
-  remoteTrialGrantedDate,
-}: {
-  remoteTrialGrantedDate?: string | null;
-}) => {
-  const date = remoteTrialGrantedDate
-    ? applicationContext
-        .getUtilities()
-        .formatDateString(remoteTrialGrantedDate, 'MMDDYYYY')
-    : '';
-
-  return remoteTrialGrantedDate ? (
-    <div>
-      <p className="text-semibold margin-bottom-0 Dawson_body Dawson_body_secondary">
-        Motion to proceed remotely granted date
-      </p>
-      <p className="text-base">{date}</p>
-    </div>
-  ) : null;
-};
-
-const EditRemoteStatusButton = ({
-  openEditRemoteStatusModalSequence,
-  showEditRemoteTrialPermission,
-}: {
-  openEditRemoteStatusModalSequence: Function;
-  showEditRemoteTrialPermission: boolean;
-}) => {
-  return (
-    <>
-      {showEditRemoteTrialPermission && (
-        <div className="margin-bottom-1">
-          <Button
-            className="padding-0"
-            link
-            data-testid="edit-remote-status"
-            icon="edit"
-            id="edit-remote-status-button"
-            onClick={() => {
-              openEditRemoteStatusModalSequence();
-            }}
-          >
-            Edit Remote Status
-          </Button>
-        </div>
-      )}
-    </>
   );
 };
 
