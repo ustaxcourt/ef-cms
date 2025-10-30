@@ -198,7 +198,6 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
                             : undefined
                         }
                         onChange={(inputValue: any) => {
-                          // TODO (#8546): Refactor this to return eligable docket entries (motions)
                           updateCourtIssuedDocketEntryFormValueSequence({
                             key: 'affectedDocketEntries',
                             index: i,
@@ -246,7 +245,6 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
                             : undefined
                         }
                         onChange={(inputValue: any) => {
-                          // TODO (#8546): Refactor this to return eligable docket entries (motions)
                           updateCourtIssuedDocketEntryFormValueSequence({
                             key: 'affectedDocketEntries',
                             index: i,
