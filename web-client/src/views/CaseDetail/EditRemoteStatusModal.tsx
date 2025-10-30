@@ -48,7 +48,7 @@ export const EditRemoteStatusModal = connect(
           </div>
           <FormGroup errorText={validationErrors.remoteTrialGrantedDate}>
             <div className="edit-remote-trial-date-picker">
-              <p className="text-bold">
+              <p className="text-semibold Dawson_body Dawson_body_secondary">
                 Date granted: <span className="text-light">MM/DD/YYYY</span>
               </p>
               <div className="grid-col-4">

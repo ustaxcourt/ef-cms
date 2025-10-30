@@ -55,7 +55,7 @@ export const RemoteTrialSessionInformation = ({
 
   return remoteTrialGrantedDate ? (
     <div>
-      <p className="text-bold margin-bottom-0">
+      <p className="text-semibold margin-bottom-0 Dawson_body Dawson_body_secondary">
         Motion to proceed remotely granted date
       </p>
       <p className="text-base">{date}</p>
