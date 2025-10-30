@@ -54,21 +54,22 @@ export const PaperServiceConfirmModal = connect(
             )}
           </ul>
 
-          {confirmInitiateServiceModalHelper.paperPartiesConsolidated && (
+          {confirmInitiateServiceModalHelper.contactsNeedingPaperService && (
             <InfoNotificationComponent
               alertInfo={{
                 message: (
                   <>
                     <div>
                       <strong>
-                        Paper service is required for these parties:
+                        {confirmInitiateServiceModalHelper.paperFilingText}
                       </strong>
                     </div>
-                    {confirmInitiateServiceModalHelper.paperPartiesConsolidated.map(
+                    {confirmInitiateServiceModalHelper.contactsNeedingPaperService.map(
                       contact => (
                         <div key={`${contact.docketNumber}-${contact.name}`}>
-                          {contact.docketNumber} - {contact.name},{' '}
-                          {contact.contactType}
+                          {confirmInitiateServiceModalHelper.canServeAcrossGroup &&
+                            `${contact.docketNumber} - `}
+                          {contact.name}, {contact.formattedContactType}
                         </div>
                       ),
                     )}

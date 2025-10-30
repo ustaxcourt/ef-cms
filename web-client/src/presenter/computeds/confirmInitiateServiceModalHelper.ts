@@ -87,7 +87,6 @@ export const confirmInitiateServiceModalHelper = (
   } else {
     casesToIterateOver = [formattedCaseDetail];
   }
-
   for (const caseItem of casesToIterateOver) {
     const {
       irsPractitioners = [],
