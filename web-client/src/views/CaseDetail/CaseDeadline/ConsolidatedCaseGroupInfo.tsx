@@ -15,7 +15,7 @@ export function ConsolidatedCaseGroupInfo({
     caseCaption: string;
   }[];
 }) {
-  if (leadDocketNumber && !isLeadCase({ docketNumber, leadDocketNumber })) return;
+  if (docketNumber && leadDocketNumber && !isLeadCase({ docketNumber, leadDocketNumber })) return;
   if (consolidatedCaseDeadlines.length < 2) return;
 
   const TEXT_DICT = {

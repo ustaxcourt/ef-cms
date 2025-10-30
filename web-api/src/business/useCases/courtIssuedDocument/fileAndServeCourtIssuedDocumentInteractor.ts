@@ -141,7 +141,7 @@ export const fileAndServeCourtIssuedDocument = async (
 
       await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
         contentType: 'application/json',
-        document: Buffer.from(JSON.stringify(contentToStore)),
+        document: Buffer.from(JSON.stringify(contentToStore)) as any,
         key: documentContentsId,
         useTempBucket: false,
       });
@@ -215,7 +215,7 @@ export const fileAndServeCourtIssuedDocument = async (
 
           if (isLeadCase(caseEntity)) {
             const consolidatedCases = await getConsolidatedCases({
-              leadDocketNumber: caseEntity.leadDocketNumber,
+              leadDocketNumber: caseEntity.leadDocketNumber!,
             });
 
             const childCaseDeadlines: RawCaseDeadline[] = [];

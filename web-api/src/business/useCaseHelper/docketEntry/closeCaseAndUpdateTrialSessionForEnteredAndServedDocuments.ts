@@ -4,7 +4,7 @@ import {
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { NotFoundError } from '@web-api/errors/errors';
 import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
-import { Case, isLeadCase } from '../../../../../shared/src/business/entities/cases/Case';
+import { isLeadCase } from '../../../../../shared/src/business/entities/cases/Case';
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { deleteCaseDeadline } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
 import { settlePromises } from '@web-api/utilities/settlePromises';
