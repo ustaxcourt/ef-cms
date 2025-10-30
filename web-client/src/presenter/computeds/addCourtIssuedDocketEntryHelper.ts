@@ -3,6 +3,8 @@ import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { Get } from 'cerebral';
 import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
 import { state } from '@web-client/presenter/app.cerebral';
+import _ from 'lodash';
+import { MOTION_DISPOSITIONS } from '@shared/business/entities/EntityConstants';
 
 export const addCourtIssuedDocketEntryHelper = (
   get: Get,
@@ -32,6 +34,26 @@ export const addCourtIssuedDocketEntryHelper = (
   const petitioners = applicationContext
     .getUtilities()
     .getFormattedPartiesNameAndTitle({ petitioners: caseDetail.petitioners });
+
+  const relatedMotionDispositions = Object.values(MOTION_DISPOSITIONS).map(
+    d => ({ label: d, value: d }),
+  );
+  const caseMotions = caseDetail.docketEntries
+    .filter(
+      d =>
+        DocketEntry.isMotion(d.eventCode) &&
+        !d.isStricken &&
+        !d.isDraft &&
+        !_.find(
+          // Motions not already in the order
+          form.affectedDocketEntries ?? [],
+          am => am.docketEntryId === d.docketEntryId,
+        ),
+    )
+    .map((m: RawDocketEntry) => ({
+      label: `${m.index} - ${m.documentTitle}`,
+      value: m.docketEntryId,
+    }));
 
   const serviceParties = [
     ...petitioners,
@@ -77,6 +99,8 @@ export const addCourtIssuedDocketEntryHelper = (
   return {
     documentTypes,
     formattedDocumentTitle,
+    caseMotions,
+    relatedMotionDispositions,
     serviceParties,
     showAttachmentAndServiceFields,
     showDocumentTypeDropdown,
