@@ -12,7 +12,6 @@ export const validateRemoteTrialPermissionAction = ({
   get,
   path,
 }) => {
-  console.log('hey')
   const remoteTrialGrantedDate = get(state.modal.remoteTrialGrantedDate);
 
   if (!remoteTrialGrantedDate || remoteTrialGrantedDate.trim() === '') {
