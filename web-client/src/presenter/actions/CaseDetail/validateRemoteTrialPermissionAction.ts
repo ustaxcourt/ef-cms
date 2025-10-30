@@ -12,15 +12,19 @@ export const validateRemoteTrialPermissionAction = ({
   get,
   path,
 }) => {
+  console.log('hey')
   const remoteTrialGrantedDate = get(state.modal.remoteTrialGrantedDate);
 
   if (!remoteTrialGrantedDate || remoteTrialGrantedDate.trim() === '') {
-    return path.success();
+    return path.error({
+      errors: { remoteTrialGrantedDate: 'Date cannot be invalid or empty' },
+    });
   }
   const { DATE_FORMATS } = applicationContext.getConstants();
   const isValidDate = applicationContext
     .getUtilities()
     .isValidDateString(remoteTrialGrantedDate, [DATE_FORMATS.ISO]);
+
   if (!isValidDate) {
     return path.error({
       errors: { remoteTrialGrantedDate: 'Format date as MM/DD/YYYY' },
