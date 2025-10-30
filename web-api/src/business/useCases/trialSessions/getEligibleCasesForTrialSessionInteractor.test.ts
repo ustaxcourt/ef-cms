@@ -53,7 +53,9 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
     getTrialSessionById.mockImplementation(() => mockTrial);
     applicationContext
       .getPersistenceGateway()
-      .getEligibleCasesForTrialSession.mockReturnValue([MOCK_ELIGIBLE_CASE]);
+      .getEligibleCasesForTrialSession.mockReturnValue([
+        { ...MOCK_ELIGIBLE_CASE, docketEntries: [] },
+      ]);
     getCalendaredCasesForTrialSession.mockResolvedValue([MOCK_ASSOCIATED_CASE]);
   });
 
@@ -118,5 +120,20 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
       mockEligibleCaseWithPractitioners,
       mockEligibleCase,
     ]);
+  });
+
+  it('should throw error if trial session is not found', async () => {
+    getTrialSessionById.mockResolvedValueOnce(undefined);
+    await expect(
+      getEligibleCasesForTrialSessionInteractor(
+        applicationContext,
+        {
+          trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow(
+      'Trial session 6805d1ab-18d0-43ec-bafb-654e83405416 was not found.',
+    );
   });
 });

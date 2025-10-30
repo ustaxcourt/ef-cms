@@ -74,26 +74,30 @@ export const EligibleCases = connect(
               )}
             </tr>
           </thead>
-          {formattedEligibleCases.map(item => (
-            <tbody key={item.docketNumber}>
-              <tr className="eligible-cases-row">
+          {formattedEligibleCases.map(eligibleCase => (
+            <tbody key={eligibleCase.docketNumber}>
+              <tr
+                className={classNames({
+                  'aged-cases': eligibleCase.isAgedCase,
+                })}
+                data-testid={`table-row-${eligibleCase.docketNumber}`}
+              >
                 <td>
-                  <CaseIcons formattedCase={item} />
+                  <CaseIcons formattedCase={eligibleCase} />
                 </td>
                 <td>
                   <span
                     className={classNames({
-                      'margin-left-2': item.shouldIndent,
+                      'margin-left-2': eligibleCase.shouldIndent,
                     })}
                   >
-                    <CaseLink formattedCase={item} />
+                    <CaseLink formattedCase={eligibleCase} />
                   </span>
                 </td>
                 <td>
-                  {item.isManuallyAdded && (
-                    <span>
+                  {eligibleCase.isManuallyAdded && (
+                    <span aria-label="Manually added indicator">
                       <FontAwesomeIcon
-                        aria-label="Manually added indicator"
                         className="mini-success"
                         icon="calendar-plus"
                         title="Manually added"
@@ -101,20 +105,20 @@ export const EligibleCases = connect(
                     </span>
                   )}
                 </td>
-                <td>{item.caseCaption}</td>
+                <td>{eligibleCase.caseCaption}</td>
                 <td>
-                  {item.privatePractitioners.map(practitioner => (
+                  {eligibleCase.privatePractitioners.map(practitioner => (
                     <div key={practitioner.userId}>{practitioner.name}</div>
                   ))}
                 </td>
                 <td>
-                  {item.irsPractitioners.map(practitioner => (
+                  {eligibleCase.irsPractitioners.map(practitioner => (
                     <div key={practitioner.userId}>{practitioner.name}</div>
                   ))}
                 </td>
-                <td>{item.caseType}</td>
+                <td>{eligibleCase.caseType}</td>
                 <td>
-                  <PreformattedText text={item.calendarNotes} />
+                  <PreformattedText text={eligibleCase.calendarNotes} />
                 </td>
                 {trialSessionDetailsHelper.showQcComplete && (
                   <td>
@@ -123,26 +127,28 @@ export const EligibleCases = connect(
                         aria-label="qc complete"
                         checked={
                           trialSessionId
-                            ? item.qcCompleteForTrial[trialSessionId] === true
+                            ? eligibleCase.qcCompleteForTrial[
+                                trialSessionId
+                              ] === true
                             : false
                         }
                         className="usa-checkbox__input"
-                        data-testid={`qc-complete-${item.docketNumber}`}
-                        id={`qc-complete-${item.docketNumber}`}
-                        name={`${item.docketNumber}Complete`}
+                        data-testid={`qc-complete-${eligibleCase.docketNumber}`}
+                        id={`qc-complete-${eligibleCase.docketNumber}`}
+                        name={`${eligibleCase.docketNumber}Complete`}
                         type="checkbox"
                         onChange={() => {
                           updateQcCompleteForTrialSequence({
-                            docketNumber: item.docketNumber,
+                            docketNumber: eligibleCase.docketNumber,
                             qcCompleteForTrial: trialSessionId
-                              ? !item.qcCompleteForTrial[trialSessionId]
+                              ? !eligibleCase.qcCompleteForTrial[trialSessionId]
                               : false,
                           });
                         }}
                       />
                       <label
                         className="usa-checkbox__label"
-                        htmlFor={`qc-complete-${item.docketNumber}`}
+                        htmlFor={`qc-complete-${eligibleCase.docketNumber}`}
                       >
                         {''}
                       </label>
