@@ -128,14 +128,39 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-  --color-blue-accent: var(--blue-accent);
-  --color-blue-lightest: var(--blue-lightest);
-  --color-yellow-warning: var(--yellow-warning);
-  --color-yellow-lighter: var(--yellow-lighter);
-  --color-red-primary: var(--red-primary);
-  --color-red-error: var(--red-error);
   --color-green: var(--green-primary);
-  --color-green-success: var(--green-success);
-  --color-grey-light: var(--grey-light);
   --breakpoint-xs: 30rem;
+
+  /* DAWSON UI palette -> semantic color mappings */
+  --color-blue-primary: var(--blue-primary);
+  --color-blue-dark: var(--blue-dark);
+  --color-blue-darker: var(--blue-darker);
+  --color-blue-lightest: var(--blue-lightest);
+  --color-blue-docket-hover: var(--blue-docket-hover);
+  --color-blue-accent: var(--blue-accent);
+  --color-blue-focus: var(--blue-focus);
+  --color-blue-vivid: var(--blue-vivid);
+  --color-blue-cool-light: var(--blue-cool-light);
+  --color-blue-cool-dark: var(--blue-cool-dark);
+  --color-blue-cool-darker: var(--blue-cool-darker);
+  --color-blue-search-box: var(--blue-search-box);
+  --color-red-primary: var(--red-primary);
+  --color-red-dark: var(--red-dark);
+  --color-red-darker: var(--red-darker);
+  --color-red-vivid: var(--red-vivid);
+  --color-red-light: var(--red-light);
+  --color-red-error: var(--red-error);
+  --color-grey-darkest: var(--grey-darkest);
+  --color-grey-dark: var(--grey-dark);
+  --color-grey-base: var(--grey-base);
+  --color-grey-light: var(--grey-light);
+  --color-grey-lighter: var(--grey-lighter);
+  --color-grey-lightest: var(--grey-lightest);
+  --color-white: var(--white);
+  --color-yellow-warning: var(--yellow-warning);
+  --color-yellow-darker: var(--yellow-darker);
+  --color-yellow-lighter: var(--yellow-lighter);
+  --color-green-primary: var(--green-primary);
+  --color-green-success: var(--green-success);
+  --color-purple-visited-link: var(--purple-visited-link);
 }
