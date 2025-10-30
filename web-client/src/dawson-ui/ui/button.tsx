@@ -13,9 +13,9 @@ const tertiaryBaseStyles = cn(
 );
 
 const primaryColors = cn(
-  'tw:text-primary tw:fill-primary', // standard
-  'tw:hover:text-primary-dark tw:hover:fill-primary-dark', // hover
-  'tw:active:text-primary-darker tw:active:fill-primary-darker', // active
+  'tw:text-blue-primary tw:fill-blue-primary', // standard
+  'tw:hover:text-blue-dark tw:hover:fill-blue-dark', // hover
+  'tw:active:text-blue-darker tw:active:fill-blue-darker', // active
   'tw:invalid:text-grey-light tw:invalid:fill-grey-light', // invalid
 );
 
@@ -30,9 +30,9 @@ const buttonVariants = cva(
     variants: {
       variant: {
         primary: cn(
-          'tw:h-[40px] tw:bg-primary tw:text-primary-foreground tw:shadow-xs tw:font-bold', // standard
-          'tw:hover:bg-primary-dark', // hover
-          'tw:active:bg-primary-darker', // active
+          'tw:h-[40px] tw:bg-blue-primary tw:text-white tw:shadow-xs tw:font-bold', // standard
+          'tw:hover:bg-blue-dark', // hover
+          'tw:active:bg-blue-darker', // active
           'tw:invalid:bg-grey-light', // invalid
         ),
         destructive: cn(
@@ -43,9 +43,9 @@ const buttonVariants = cva(
         ),
         secondary: cn(
           primaryColors,
-          'tw:h-[40px] tw:shadow-none tw:bg-background tw:border-primary tw:border-[2px] tw:border-solid tw:font-bold', // standard
-          'tw:hover:border-primary-dark', // hover
-          'tw:active:border-primary-darker', // active
+          'tw:h-[40px] tw:shadow-none tw:bg-background tw:border-blue-primary tw:border-[2px] tw:border-solid tw:font-bold', // standard
+          'tw:hover:border-blue-dark', // hover
+          'tw:active:border-blue-darker', // active
           'tw:invalid:border-grey-light', // invalid
         ),
         destructiveTertiary: cn(

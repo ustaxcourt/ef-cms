@@ -25,7 +25,7 @@ const tagVariants = cva(
   {
     variants: {
       variant: {
-        primary: cn('tw:bg-white tw:text-primary-darker'),
+        primary: cn('tw:bg-white tw:text-blue-darker'),
         destructive: cn('tw:bg-destructive-dark tw:text-white'),
       },
     },
@@ -46,7 +46,7 @@ export const Tag = ({
   iconProps,
   className = '',
   dataTestId,
-  id
+  id,
 }: React.ComponentProps<'span'> &
   VariantProps<typeof tagVariants> &
   TagProps) => {
