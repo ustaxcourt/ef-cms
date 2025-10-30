@@ -47,8 +47,6 @@ export const confirmInitiateServiceModalHelper = (
   const hasFiledAcrossGroup =
     isLeadCase(formattedCaseDetail) && !!isFiledAcrossAllCases;
 
-  console.log('hasFiledAcrossGroup', hasFiledAcrossGroup);
-
   const canFileAcrossGroup =
     !NON_MULTI_DOCKETABLE_EVENT_CODES.includes(eventCode) &&
     isLeadCase(formattedCaseDetail);

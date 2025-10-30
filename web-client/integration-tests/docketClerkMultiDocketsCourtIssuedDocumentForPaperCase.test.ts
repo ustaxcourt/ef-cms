@@ -118,7 +118,7 @@ describe('Docket Clerk Multi-Dockets a Court Issued Order in a Consolidated Grou
       expect.objectContaining({
         name: 'Daenerys Stormborn',
         docketNumber: cerebralTest.docketNumber,
-        contactType: 'petitioner',
+        formattedContactType: 'Petitioner',
       }),
     ]);
     expect(modalHelper.canFileAcrossGroup).toEqual(true);

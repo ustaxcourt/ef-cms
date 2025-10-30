@@ -43,7 +43,7 @@ export const docketClerkServesOrderWithPaperService = (
       expect.objectContaining({
         name: 'Daenerys Stormborn',
         docketNumber: cerebralTest.docketNumber,
-        contactType: 'petitioner',
+        formattedContactType: 'Petitioner',
       }),
     ]);
 
