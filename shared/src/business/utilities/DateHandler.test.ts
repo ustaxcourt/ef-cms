@@ -17,6 +17,7 @@ import {
   createEndOfDayISO,
   createISODateAtStartOfDayEST,
   createISODateStringFromObject,
+  createISODateString,
   createStartOfDayISO,
   dateStringsCompared,
   deconstructDate,
@@ -37,6 +38,7 @@ import {
   roundDateDownToNearestHour,
   subtractISODates,
   validateDateAndCreateISO,
+   isValidPastDate,
 } from './DateHandler';
 
 describe('DateHandler', () => {
@@ -1058,6 +1060,39 @@ describe('DateHandler', () => {
 
       const resultDate = roundDateDownToNearestHour(inputISO);
       expect(resultDate.toISOString()).toBe(inputISO);
+    });
+  });
+
+  describe('isValidPastDate', () => {
+    const originalNow = Settings.now.bind(Settings);
+    const originalDefaultZone = Settings.defaultZone;
+    beforeAll(() => {
+      Settings.now = () => DateTime.fromISO(createISODateString('2025-10-30T12:00:00.000Z', FORMATS.ISO)).toMillis();
+      Settings.defaultZone = 'system';
+    });
+
+    afterAll(() => {
+      Settings.now = originalNow;
+      Settings.defaultZone = originalDefaultZone;
+    });
+
+    it('returns true for today', () => {
+      const iso = '2025-10-30T12:00:00.000Z';
+      expect(isValidPastDate(iso)).toBe(true);
+    });
+
+    it('returns true for a past date', () => {
+      const iso = '2025-10-29T12:00:00.000Z';
+      expect(isValidPastDate(iso)).toBe(true);
+    });
+
+    it('returns false for a future date', () => {
+      const iso = '2025-10-31T12:00:00.000Z';
+      expect(isValidPastDate(iso)).toBe(false);
+    });
+
+    it('returns false for invalid input', () => {
+      expect(isValidPastDate('not-a-date')).toBe(false);
     });
   });
 });

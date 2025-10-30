@@ -679,6 +679,23 @@ export const isValidReconciliationDate = dateString => {
 };
 
 /**
+ * Return true when the provided ISO date is valid and is not in the future.
+ * @param {string} dateString any valid  ISO-8601 date string
+ * @returns {boolean} when date is in the past will return true
+ */
+export const isValidPastDate = dateString => {
+  const dateInputValid = isValidISODate(dateString);
+  if (!dateInputValid) return false;
+
+  const formattedDate = prepareDateFromString(dateString, FORMATS.ISO)
+    .setZone(USTC_TZ)
+    .toFormat(FORMATS.YYYYMMDD);
+  const todayDate = formatNow(FORMATS.YYYYMMDD);
+
+  return formattedDate <= todayDate;
+};
+
+/**
  * Return an IsoDateRange containing start/end ISO time stamps given a starting partial ISO Date and
  * an optional partial end date.  A "partial" ISO date may be any portion of an ISO date is still
  * considered a valid ISO date, e.g. ("2022", "2022-01", "2022-01-02").

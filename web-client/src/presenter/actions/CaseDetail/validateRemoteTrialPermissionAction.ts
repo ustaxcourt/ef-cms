@@ -26,5 +26,14 @@ export const validateRemoteTrialPermissionAction = ({
       errors: { remoteTrialGrantedDate: 'Format date as MM/DD/YYYY' },
     });
   }
+  const isPastDate = applicationContext
+    .getUtilities()
+    .isValidPastDate(remoteTrialGrantedDate);
+
+  if (!isPastDate) {
+    return path.error({
+      errors: { remoteTrialGrantedDate: 'Date cannot be in the future' },
+    });
+  }
   return path.success();
 };
