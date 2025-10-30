@@ -56,9 +56,8 @@ export const caseInformationHelper = (
   const { USER_ROLES } = applicationContext.getConstants();
   const showEditRemoteTrialPermission =
     user.role === USER_ROLES.docketClerk ||
+    user.role === USER_ROLES.clerkOfCourt ||
     user.role === USER_ROLES.caseServicesSupervisor;
-
-  const showEditRemote = permissions.EDIT_CASE_DETAILS;
 
   return {
     formattedPetitioners,
@@ -72,7 +71,6 @@ export const caseInformationHelper = (
     showHearingsTable,
     showSealAddressLink,
     showSealCaseButton,
-    showEditRemote,
     showUnsealCaseButton,
     showViewCounselButton,
     toggleAdditionalPetitionersDisplay,

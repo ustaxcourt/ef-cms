@@ -4,8 +4,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PreformattedText } from '@web-client/ustc-ui/PreformatedText/PreformattedText';
 import { applicationContext } from '@web-client/applicationContext';
 import { connect } from '@web-client/presenter/shared.cerebral';
+import { props } from 'cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
-import { props as cerebralProps } from 'cerebral';
+import { EditRemoteStatusButton } from './EditRemoteStatusButton';
+import { RemoteTrialSessionInformation } from './RemoteTrialSessionInformation';
+
 import React from 'react';
 
 const EditCaseTrialInformationMenu = ({
@@ -332,7 +335,7 @@ export const TrialInformation = connect(
                     Add to Trial
                   </Button>
                 </div>
-                <div className="margin-bottom-3">
+                <div>
                   <Button
                     link
                     className="block-from-trial-btn red-warning"

@@ -1,3 +1,4 @@
+import { RemoteTrialSessionInformation } from '@web-client/views/CaseDetail/CaseInformation/RemoteTrialSessionInformation';
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConsolidatedCases } from './CaseInformation/ConsolidatedCases';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

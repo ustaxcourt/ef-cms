@@ -5,7 +5,11 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
-import { createStartOfDayISO } from '@shared/business/utilities/DateHandler';
+import {
+  createStartOfDayISO,
+  formatDateString,
+  FORMATS,
+} from '@shared/business/utilities/DateHandler';
 
 export const EditRemoteStatusModal = connect(
   {
@@ -30,6 +34,7 @@ export const EditRemoteStatusModal = connect(
     validateEditRemoteTrialModalSequence,
     validationErrors,
   }) {
+    const maxDate = formatDateString(createStartOfDayISO(), FORMATS.YYYYMMDD);
     return (
       <ModalDialog
         cancelLabel="Cancel"
@@ -47,7 +52,7 @@ export const EditRemoteStatusModal = connect(
           </div>
           <FormGroup errorText={validationErrors.remoteTrialGrantedDate}>
             <div className="edit-remote-trial-date-picker">
-              <p className="text-bold">
+              <p className="text-semibold Dawson_body Dawson_body_secondary">
                 Date granted: <span className="text-light">MM/DD/YYYY</span>
               </p>
               <div className="grid-col-4">
@@ -55,7 +60,7 @@ export const EditRemoteStatusModal = connect(
                   data-testid="remote-trial-granted-date"
                   defaultValue={modal.remoteTrialGrantedDate}
                   id="remote-trial-granted-date"
-                  maxDate={createStartOfDayISO()}
+                  maxDate={maxDate}
                   pristine={!modal.remoteTrialGrantedDate}
                   onChange={e => {
                     formatAndUpdateDateFromDatePickerSequence({
