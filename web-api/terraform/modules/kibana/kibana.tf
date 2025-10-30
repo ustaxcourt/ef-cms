@@ -209,7 +209,9 @@ resource "aws_cognito_identity_pool_roles_attachment" "log_viewers" {
 }
 
 locals {
-  instance_size_in_mb = aws_opensearch_domain.efcms-logs.ebs_options[0].volume_size * 1000
+  instance_size_in_mb = var.es_info_cluster_create ? aws_opensearch_domain.efcms-logs.ebs_options[0].volume_size * 1000 : 0
+  info_cluster_arn = var.es_info_cluster_create ? aws_opensearch_domain.efcms-logs[0].arn : var.es_info_cluster_shared_cluster_arn
+  info_cluster_endpoint = var.es_info_cluster_create ? aws_opensearch_domain.efcms-logs[0].endpoint : var.es_info_cluster_shared_cluster_endpoint
 }
 
 module "logs_alarms" {
@@ -264,7 +266,7 @@ resource "aws_iam_role_policy" "lambda_elasticsearch_execution_policy" {
         "es:*"
       ],
       "Resource": [
-        "${aws_opensearch_domain.efcms-logs.arn}/*"
+        "${local.info_cluster_arn}/*"
       ]
     }
   ]
@@ -279,7 +281,7 @@ module "logs_to_es" {
   lambda_name    = "LogsToElasticSearch_info"
   role           = aws_iam_role.lambda_elasticsearch_execution_role.arn
   environment = {
-    es_endpoint = aws_opensearch_domain.efcms-logs.endpoint
+    es_endpoint = local.info_cluster_endpoint
   }
   timeout     = "900"
   memory_size = "3008"

@@ -56,7 +56,7 @@ variable "es_info_cluster_shared_cluster_endpoint" {
   type = ""
 }
 
-variable "es_info_cluster_shared_arn" {
+variable "es_info_cluster_shared_cluster_arn" {
   default = ""
   description = "arn of info cluster opensearch (used when es_info_cluster_create is false)"
   type = ""

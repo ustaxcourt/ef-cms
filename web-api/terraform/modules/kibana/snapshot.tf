@@ -1,16 +1,17 @@
 data "aws_caller_identity" "current" {}
 
 provider "opensearch" {
-  url = "https://${aws_opensearch_domain.efcms-logs.endpoint}"
+  url = local.info_cluster_endpoint
 }
 
 resource "opensearch_snapshot_repository" "archived-logs" {
+  count = var.es_info_cluster_create ? 1 : 0
   name = "archived-logs"
   type = "s3" 
   settings = {
-    bucket   = aws_s3_bucket.ustc_log_snapshots_bucket.bucket
+    bucket   = aws_s3_bucket.ustc_log_snapshots_bucket[0].bucket
     region   = "us-east-1"
-    role_arn = aws_iam_role.es_s3_snapshot_access_role.arn
+    role_arn = aws_iam_role.es_s3_snapshot_access_role[0].arn
   }
 
   depends_on = [
@@ -19,6 +20,7 @@ resource "opensearch_snapshot_repository" "archived-logs" {
 }
 
 resource "aws_iam_role" "es_s3_snapshot_access_role" {
+  count = var.es_info_cluster_create ? 1 : 0
   name = "es_s3_snapshot_access_role"
 
   assume_role_policy = <<EOF
@@ -38,8 +40,9 @@ EOF
 }
 
 resource "aws_iam_role_policy" "es_s3_snapshot_access_policy" {
+  count = var.es_info_cluster_create ? 1 : 0
   name = "es_s3_snapshot_access_policy"
-  role = aws_iam_role.es_s3_snapshot_access_role.id
+  role = aws_iam_role.es_s3_snapshot_access_role[0].id
 
   policy = <<EOF
 {
@@ -50,7 +53,7 @@ resource "aws_iam_role_policy" "es_s3_snapshot_access_policy" {
       "Effect": "Allow",
       "Action": ["iam:PassRole", "s3:ListBucket"],
       "Resource": [
-        "arn:aws:s3:::${aws_s3_bucket.ustc_log_snapshots_bucket.bucket}",
+        "arn:aws:s3:::${aws_s3_bucket.ustc_log_snapshots_bucket[0].bucket}",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/es_s3_snapshot_access_role"
       ]
     },
@@ -58,13 +61,14 @@ resource "aws_iam_role_policy" "es_s3_snapshot_access_policy" {
       "Sid": "VisualEditor1",
       "Effect": "Allow",
       "Action": ["s3:PutObject", "s3:GetObject", "s3:DeleteObject"],
-      "Resource": "arn:aws:s3:::${aws_s3_bucket.ustc_log_snapshots_bucket.bucket}/*"
+      "Resource": "arn:aws:s3:::${aws_s3_bucket.ustc_log_snapshots_bucket[0].bucket}/*"
     }
   ]}
 EOF
 }
 
 resource "aws_s3_bucket" "ustc_log_snapshots_bucket" {
+  count = var.es_info_cluster_create ? 1 : 0
   bucket = "${var.log_snapshot_bucket_name}"
   force_destroy = false
 }
