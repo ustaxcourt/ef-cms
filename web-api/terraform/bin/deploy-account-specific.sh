@@ -16,6 +16,7 @@ popd || exit
 [ -z "${NUM_DAYS_TO_KEEP_LOGS}" ] && echo "You must set NUM_DAYS_TO_KEEP_LOGS as an environment variable" && exit 1
 [ -z "${ES_LOGS_ENGINE_VERSION}" ] && echo "You must set ES_LOGS_ENGINE_VERSION as an environment variable" && exit 1
 
+ES_INFO_CLUSTER_CREATE="${ES_INFO_CLUSTER_CREATE:-false}"
 ../../../../scripts/verify-terraform-version.sh
 
 BUCKET="${EFCMS_DOMAIN}.terraform.deploys"
@@ -65,6 +66,9 @@ export TF_VAR_dawson_dev_trusted_role_arns="${DAWSON_DEV_TRUSTED_ROLE_ARNS}"
 export TF_VAR_log_snapshot_bucket_name="${LOG_SNAPSHOT_BUCKET_NAME}"
 export TF_VAR_lower_env_restore_roles="[\"arn:aws:iam::${LOWER_ENV_ACCOUNT_IDS//,/:role/restore_role_*\",\"arn:aws:iam::}:role/restore_role_*\"]"
 export TF_VAR_es_logs_engine_version="$ES_LOGS_ENGINE_VERSION"
+export TF_VAR_es_info_cluster_create="${ES_INFO_CLUSTER_CREATE}"
+export TF_VAR_es_info_cluster_shared_cluster_arn="${ES_INFO_CLUSTER_SHARED_CLUSTER_ARN}"
+export TF_VAR_es_info_cluster_shared_cluster_endpoint="${ES_INFO_CLUSTER_SHARED_CLUSTER_ENDPOINT}"
 
 npm run build:assets
 

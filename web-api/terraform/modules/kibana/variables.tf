@@ -44,12 +44,6 @@ variable "es_info_cluster_create" {
   type = bool
 }
 
-variable "es_info_cluster_primary_id" {
-  default = ""
-  description = "aws account id that shares the info cluster"
-  type = string
-}
-
 variable "es_info_cluster_shared_cluster_endpoint" {
   default = ""
   description = "endpoint of info cluster opensearch (used when es_info_cluster_create is false)"
