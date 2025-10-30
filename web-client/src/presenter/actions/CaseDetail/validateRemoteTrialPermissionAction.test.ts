@@ -20,7 +20,7 @@ describe('validateRemoteTrialPermissionAction', () => {
     pathErrorStub.mockReset();
   });
 
-  it('should return the success path when remoteTrialGrantedDate is empty (allowing clearing of date)', async () => {
+  it('should return the error path when remoteTrialGrantedDate is empty', async () => {
     await runAction(validateRemoteTrialPermissionAction, {
       modules: {
         presenter,
@@ -32,10 +32,10 @@ describe('validateRemoteTrialPermissionAction', () => {
       },
     });
 
-    expect(pathSuccessStub).toHaveBeenCalled();
+    expect(pathSuccessStub).not.toHaveBeenCalled();
   });
 
-  it('should return the success path when remoteTrialGrantedDate is undefined (allowing clearing of date)', async () => {
+  it('should return the error path when remoteTrialGrantedDate is undefined', async () => {
     await runAction(validateRemoteTrialPermissionAction, {
       modules: {
         presenter,
@@ -45,10 +45,10 @@ describe('validateRemoteTrialPermissionAction', () => {
       },
     });
 
-    expect(pathSuccessStub).toHaveBeenCalled();
+    expect(pathSuccessStub).not.toHaveBeenCalled();
   });
 
-  it('should return the success path when remoteTrialGrantedDate is only whitespace (allowing clearing of date)', async () => {
+  it('should return the error path when remoteTrialGrantedDate is only whitespace', async () => {
     await runAction(validateRemoteTrialPermissionAction, {
       modules: {
         presenter,
@@ -60,7 +60,7 @@ describe('validateRemoteTrialPermissionAction', () => {
       },
     });
 
-    expect(pathSuccessStub).toHaveBeenCalled();
+    expect(pathSuccessStub).not.toHaveBeenCalled();
   });
 
   it('should return the error path when remoteTrialGrantedDate is not a valid ISO date', async () => {
