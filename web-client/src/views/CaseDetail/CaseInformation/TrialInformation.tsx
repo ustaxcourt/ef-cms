@@ -3,12 +3,22 @@ import { DropdownMenu } from '../../../ustc-ui/DropdownMenu/DropdownMenu';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PreformattedText } from '@web-client/ustc-ui/PreformatedText/PreformattedText';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
+import { props as cerebralProps } from 'cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import { EditRemoteStatusButton } from './EditRemoteStatusButton';
 import { RemoteTrialSessionInformation } from './RemoteTrialSessionInformation';
 
 import React from 'react';
+
+const props = cerebralProps as unknown as {
+  caseDetail: unknown;
+  openAddEditCalendarNoteModalSequence: unknown;
+  openAddToTrialModalSequence: unknown;
+  openBlockFromTrialModalSequence: unknown;
+  openRemoveFromTrialSessionModalSequence: unknown;
+  openUnblockFromTrialModalSequence: unknown;
+  trialSessionJudge: unknown;
+};
 
 const EditCaseTrialInformationMenu = ({
   caseDetail,
