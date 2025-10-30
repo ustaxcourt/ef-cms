@@ -11,13 +11,32 @@ import { RemoteTrialSessionInformation } from './RemoteTrialSessionInformation';
 import React from 'react';
 
 const props = cerebralProps as unknown as {
-  caseDetail: unknown;
-  openAddEditCalendarNoteModalSequence: unknown;
-  openAddToTrialModalSequence: unknown;
-  openBlockFromTrialModalSequence: unknown;
-  openRemoveFromTrialSessionModalSequence: unknown;
-  openUnblockFromTrialModalSequence: unknown;
-  trialSessionJudge: unknown;
+  caseDetail: {
+    showTrialCalendared?: boolean;
+    showBlockedFromTrial?: boolean;
+    showNotScheduled?: boolean;
+    showScheduled?: boolean;
+    trialSessionId?: string;
+    userIsAssignedToSession?: boolean;
+    formattedTrialCity?: string;
+    formattedTrialDate?: string;
+    formattedAssociatedJudge?: string;
+    trialSessionNotes?: string;
+    blocked?: boolean;
+    blockedDateFormatted?: string;
+    blockedReason?: string;
+    remoteTrialGrantedDate?: string | null;
+  };
+  openAddEditCalendarNoteModalSequence: (args: { note?: string }) => void;
+  openAddToTrialModalSequence: () => void;
+  openBlockFromTrialModalSequence: () => void;
+  openRemoveFromTrialSessionModalSequence: (args: {
+    trialSessionId: string;
+  }) => void;
+  openUnblockFromTrialModalSequence: () => void;
+  trialSessionJudge: {
+    name: string;
+  };
 };
 
 const EditCaseTrialInformationMenu = ({
@@ -25,6 +44,15 @@ const EditCaseTrialInformationMenu = ({
   openAddEditCalendarNoteModalSequence,
   openRemoveFromTrialSessionModalSequence,
   trialSessionId,
+}: {
+  caseDetail: {
+    trialSessionNotes?: string;
+  };
+  openAddEditCalendarNoteModalSequence: (args: { note?: string }) => void;
+  openRemoveFromTrialSessionModalSequence: (args: {
+    trialSessionId: string;
+  }) => void;
+  trialSessionId: string;
 }) => {
   return (
     <DropdownMenu
@@ -80,6 +108,35 @@ export const TrialInformation = connect(
     openUnblockFromTrialModalSequence,
     showEditRemoteTrialPermission,
     trialSessionJudge,
+  }: {
+    caseDetail: {
+      showTrialCalendared?: boolean;
+      showBlockedFromTrial?: boolean;
+      showNotScheduled?: boolean;
+      showScheduled?: boolean;
+      trialSessionId?: string;
+      userIsAssignedToSession?: boolean;
+      formattedTrialCity?: string;
+      formattedTrialDate?: string;
+      formattedAssociatedJudge?: string;
+      trialSessionNotes?: string;
+      blocked?: boolean;
+      blockedDateFormatted?: string;
+      blockedReason?: string;
+      remoteTrialGrantedDate?: string | null;
+    };
+    openAddEditCalendarNoteModalSequence: (args: { note?: string }) => void;
+    openAddToTrialModalSequence: () => void;
+    openBlockFromTrialModalSequence: () => void;
+    openEditRemoteStatusModalSequence: () => void;
+    openRemoveFromTrialSessionModalSequence: (args: {
+      trialSessionId: string;
+    }) => void;
+    openUnblockFromTrialModalSequence: () => void;
+    showEditRemoteTrialPermission: boolean;
+    trialSessionJudge: {
+      name: string;
+    };
   }) {
     return (
       <>
@@ -120,16 +177,18 @@ export const TrialInformation = connect(
                     <td>{caseDetail.formattedTrialDate}</td>
                     <td>{caseDetail.formattedAssociatedJudge}</td>
                     <td>
-                      <EditCaseTrialInformationMenu
-                        caseDetail={caseDetail}
-                        openAddEditCalendarNoteModalSequence={
-                          openAddEditCalendarNoteModalSequence
-                        }
-                        openRemoveFromTrialSessionModalSequence={
-                          openRemoveFromTrialSessionModalSequence
-                        }
-                        trialSessionId={caseDetail.trialSessionId}
-                      />
+                      {caseDetail.trialSessionId && (
+                        <EditCaseTrialInformationMenu
+                          caseDetail={caseDetail}
+                          openAddEditCalendarNoteModalSequence={
+                            openAddEditCalendarNoteModalSequence
+                          }
+                          openRemoveFromTrialSessionModalSequence={
+                            openRemoveFromTrialSessionModalSequence
+                          }
+                          trialSessionId={caseDetail.trialSessionId}
+                        />
+                      )}
                     </td>
                   </tr>
                   {caseDetail.trialSessionNotes && (
@@ -313,7 +372,7 @@ export const TrialInformation = connect(
                         openRemoveFromTrialSessionModalSequence={
                           openRemoveFromTrialSessionModalSequence
                         }
-                        trialSessionId={caseDetail.trialSessionId}
+                        trialSessionId={caseDetail.trialSessionId!}
                       />
                     </td>
                   </tr>
