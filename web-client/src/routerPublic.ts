@@ -96,9 +96,15 @@ const router = {
       });
     });
 
-    route('/dawson-ui-components', () => {
-      setPageTitle('UI Components');
-      return app.getSequence('goToDawsonUIComponentSequence')();
+    // only visible on lower envs
+    route('/dawson-library', () => {
+      if (process.env.ENV === 'prod') {
+        return app.getSequence('notFoundErrorSequence')({
+          error: {},
+        });
+      }
+      setPageTitle('Dawson Library');
+      return app.getSequence('gotoDawsonLibrarySequence')();
     });
 
     route('..', () => {
