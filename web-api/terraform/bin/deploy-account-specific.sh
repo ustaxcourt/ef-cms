@@ -25,7 +25,7 @@ else
   echo "Using shared ES Info Cluster at ARN: ${ES_INFO_CLUSTER_SHARED_CLUSTER_ARN} and Endpoint: ${ES_INFO_CLUSTER_SHARED_CLUSTER_ENDPOINT}"
   ES_LOGS_EBS_VOLUME_SIZE_GB="${ES_LOGS_EBS_VOLUME_SIZE_GB:-10}"
   ES_LOGS_INSTANCE_COUNT="${ES_LOGS_INSTANCE_COUNT:-1}"
-  ES_LOGS_INSTANCE_TYPE="${ES_LOGS_INSTANCE_TYPE:t2.small.search}"
+  ES_LOGS_INSTANCE_TYPE="${ES_LOGS_INSTANCE_TYPE:-t2.small.search}"
 fi
 ../../../../scripts/verify-terraform-version.sh
 
