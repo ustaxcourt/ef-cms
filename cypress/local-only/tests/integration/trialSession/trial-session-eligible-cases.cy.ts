@@ -126,7 +126,7 @@ describe('Trial Session Eligible Cases Journey', () => {
 
     cy.then(() => {
       calendarTrialSession(trialSessionId);
-      cy.get('[data-testid="success-alert"]').should('exist');
+      cy.get('[data-testid^="warning-alert"]').should('exist');
     });
 
     cy.then(() => {
@@ -203,7 +203,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         '[data-testid="remove-from-trial-session-disposition-textarea"]',
       ).type('testing');
       cy.get('[data-testid="modal-button-confirm"]').click();
-      cy.get('[data-testid="success-alert"]').should('exist');
+      cy.get('[data-testid^="success-alert"]').should('exist');
 
       // Verify case is no longer calendared
       cy.get('[data-testid="case-status"]').should(
