@@ -189,13 +189,6 @@ jobs:
               exit 0
             fi
             if [ "${CIRCLE_BRANCH}" == "test" ]; then
-              SOURCE_DOMAIN=$(./scripts/elasticsearch/get-source-elasticsearch.sh "${ENV}")
-              ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
-                --domain-name "${SOURCE_DOMAIN}" \
-                --region "us-east-1" \
-                --query 'DomainStatus.Endpoint' \
-                --output text)
-              export ELASTICSEARCH_ENDPOINT="$ELASTICSEARCH_ENDPOINT"
               export REGION="us-east-1"
               ./scripts/user/setup-glued-users.ts
             else
