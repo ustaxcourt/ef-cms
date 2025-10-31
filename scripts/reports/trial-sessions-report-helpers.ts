@@ -3,7 +3,6 @@ import {
   formatDateString,
 } from '@shared/business/utilities/DateHandler';
 import { type RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
-import { type ServerApplicationContext } from '@web-api/applicationContext';
 import { generateCsv } from '../helpers/generate-csv';
 import { pick } from 'lodash';
 import { getTrialSessions } from '@web-api/persistence/postgres/trialSessions/getTrialSessions';
@@ -39,17 +38,17 @@ const getTrialSessionsCache = async (): Promise<RawTrialSession[]> => {
 };
 
 const getTrialSessionsInTimeframe = async ({
+  begin,
   end,
-  start,
 }: {
+  begin: string;
   end: string;
-  start: string;
 }): Promise<RawTrialSession[]> => {
   const trialSessions = await getTrialSessionsCache();
   const yearSessions = trialSessions.filter(
     session =>
       session.startDate &&
-      session.startDate >= start &&
+      session.startDate >= begin &&
       session.startDate <= end,
   );
   yearSessions.sort((a, b) => a.startDate.localeCompare(b.startDate));
@@ -124,20 +123,19 @@ const outputTrialSessionsStats = ({
 };
 
 export const trialSessionsReport = async ({
+  begin,
   end,
   filename,
-  start,
   stats,
 }: {
-  applicationContext: ServerApplicationContext;
+  begin: string;
   end: string;
   filename: string;
-  start: string;
   stats: boolean;
 }): Promise<void> => {
   const trialSessions = await getTrialSessionsInTimeframe({
+    begin,
     end,
-    start,
   });
   if (stats) {
     outputTrialSessionsStats({ trialSessions });

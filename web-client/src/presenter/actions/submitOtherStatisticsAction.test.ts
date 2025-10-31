@@ -60,11 +60,12 @@ describe('submitOtherStatisticsAction', () => {
   });
 
   it('returns the error path if an error is encountered when calling the interactor when adding a new other statistic', async () => {
-    presenter.providers.applicationContext
-      .getUseCases()
-      .updateOtherStatisticsInteractor.mockImplementationOnce(() => {
-        throw new Error('error');
-      });
+    (
+      presenter.providers.applicationContext.getUseCases()
+        .updateOtherStatisticsInteractor as jest.Mock
+    ).mockImplementationOnce(() => {
+      throw new Error('error');
+    });
 
     await runAction(submitOtherStatisticsAction, {
       modules: {
@@ -91,11 +92,12 @@ describe('submitOtherStatisticsAction', () => {
   });
 
   it('returns the error path if an error is encountered when calling the interactor when editing an other statistic', async () => {
-    presenter.providers.applicationContext
-      .getUseCases()
-      .updateOtherStatisticsInteractor.mockImplementationOnce(() => {
-        throw new Error('error');
-      });
+    (
+      presenter.providers.applicationContext.getUseCases()
+        .updateOtherStatisticsInteractor as jest.Mock
+    ).mockImplementationOnce(() => {
+      throw new Error('error');
+    });
 
     await runAction(submitOtherStatisticsAction, {
       modules: {

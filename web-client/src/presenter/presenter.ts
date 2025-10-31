@@ -35,6 +35,7 @@ import { batchDownloadErrorSequence } from './sequences/batchDownloadErrorSequen
 import { batchDownloadReadySequence } from './sequences/batchDownloadReadySequence';
 import { batchDownloadTrialSessionSequence } from './sequences/batchDownloadTrialSessionSequence';
 import { blockCaseFromTrialSequence } from './sequences/blockCaseFromTrialSequence';
+import { editRemoteStatusSequence } from './sequences/editRemoteStatusSequence';
 import { broadcastLogoutSequence } from './sequences/broadcastLogoutSequence';
 import { calculatePenaltiesSequence } from './sequences/calculatePenaltiesSequence';
 import { canEditContactInformationSequence } from './sequences/canEditContactInformationSequence';
@@ -53,6 +54,7 @@ import { clearAdvancedSearchFormSequence } from './sequences/clearAdvancedSearch
 import { clearAlertSequence } from './sequences/clearAlertSequence';
 import { clearDropDownMenuStateSequence } from './sequences/clearDropDownMenuStateSequence';
 import { clearDueDateSequence } from './sequences/clearDueDateSequence';
+import { clearRemoteStatusSequence } from './sequences/clearRemoteStatusSequence';
 import { clearExistingDocumentSequence } from './sequences/clearExistingDocumentSequence';
 import { clearModalFormSequence } from './sequences/clearModalFormSequence';
 import { clearModalSequence } from './sequences/clearModalSequence';
@@ -270,8 +272,10 @@ import { openAddIrsPractitionerModalSequence } from './sequences/openAddIrsPract
 import { openAddPrivatePractitionerModalSequence } from './sequences/openAddPrivatePractitionerModalSequence';
 import { openAddToTrialModalSequence } from './sequences/openAddToTrialModalSequence';
 import { openAppMaintenanceModalSequence } from './sequences/openAppMaintenanceModalSequence';
+import { openEditRemoteTrialModalSequence } from './sequences/openEditRemoteTrialModalSequence';
 import { openAppUpdatedModalSequence } from './sequences/openAppUpdatedModalSequence';
 import { openBlockFromTrialModalSequence } from './sequences/openBlockFromTrialModalSequence';
+import { openEditRemoteStatusModalSequence } from './sequences/openEditRemoteStatusModalSequence';
 import { openCancelDraftDocumentModalSequence } from './sequences/openCancelDraftDocumentModalSequence';
 import { openCaseDocumentDownloadUrlSequence } from './sequences/openCaseDocumentDownloadUrlSequence';
 import { openCaseInNewTabSequence } from './sequences/openCaseInNewTabSequence';
@@ -581,6 +585,7 @@ import { validateAddPractitionerSequence } from './sequences/validateAddPractiti
 import { validateAddPrivatePractitionerSequence } from './sequences/CaseAssociation/validateAddPrivatePractitionerSequence';
 import { validateAddToTrialSessionSequence } from './sequences/validateAddToTrialSessionSequence';
 import { validateBlockFromTrialSequence } from './sequences/validateBlockFromTrialSequence';
+import { validateEditRemoteStatusSequence } from './sequences/validateEditRemoteStatusSequence';
 import { validateCaseAdvancedSearchFormSequence } from './sequences/validateCaseAdvancedSearchFormSequence';
 import { validateCaseAssociationRequestSequence } from './sequences/validateCaseAssociationRequestSequence';
 import { validateCaseDeadlineSequence } from './sequences/validateCaseDeadlineSequence';
@@ -598,6 +603,7 @@ import { validateDocketEntrySequence } from './sequences/validateDocketEntrySequ
 import { validateDocketEntryWorksheetSequence } from '@web-client/presenter/sequences/validateDocketEntryWorksheetSequence';
 import { validateDocumentSequence } from './sequences/validateDocumentSequence';
 import { validateEditPetitionerCounselSequence } from './sequences/CaseAssociation/validateEditPetitionerCounselSequence';
+import { validateEditRemoteTrialModalSequence } from './sequences/validateEditRemoteTrialModalSequence';
 import { validateEditRespondentCounselSequence } from './sequences/CaseAssociation/validateEditRespondentCounselSequence';
 import { validateExternalDocumentInformationSequence } from './sequences/validateExternalDocumentInformationSequence';
 import { validateFilePetitionStep2Sequence } from '@web-client/presenter/sequences/validateFilePetitionStep2Sequence';
@@ -677,6 +683,7 @@ export const presenterSequences = {
   batchDownloadTrialSessionSequence:
     batchDownloadTrialSessionSequence as unknown as Function,
   blockCaseFromTrialSequence: blockCaseFromTrialSequence as unknown as Function,
+  editRemoteStatusSequence: editRemoteStatusSequence as unknown as Function,
   broadcastLogoutSequence: broadcastLogoutSequence as unknown as Function,
   calculatePenaltiesSequence: calculatePenaltiesSequence as unknown as Function,
   canEditContactInformationSequence:
@@ -706,6 +713,7 @@ export const presenterSequences = {
   clearDropDownMenuStateSequence:
     clearDropDownMenuStateSequence as unknown as Function,
   clearDueDateSequence: clearDueDateSequence as unknown as Function,
+  clearRemoteStatusSequence: clearRemoteStatusSequence as unknown as Function,
   clearExistingDocumentSequence:
     clearExistingDocumentSequence as unknown as Function,
   clearModalFormSequence: clearModalFormSequence as unknown as Function,
@@ -1047,9 +1055,13 @@ export const presenterSequences = {
     openAddToTrialModalSequence as unknown as Function,
   openAppMaintenanceModalSequence:
     openAppMaintenanceModalSequence as unknown as Function,
+  openEditRemoteTrialModalSequence:
+    openEditRemoteTrialModalSequence as unknown as Function,
   openAppUpdatedModalSequence,
   openBlockFromTrialModalSequence:
     openBlockFromTrialModalSequence as unknown as Function,
+  openEditRemoteStatusModalSequence:
+    openEditRemoteStatusModalSequence as unknown as Function,
   openCancelDraftDocumentModalSequence:
     openCancelDraftDocumentModalSequence as unknown as Function,
   openCaseDocumentDownloadUrlSequence:
@@ -1565,6 +1577,8 @@ export const presenterSequences = {
     validateAddToTrialSessionSequence as unknown as Function,
   validateBlockFromTrialSequence:
     validateBlockFromTrialSequence as unknown as Function,
+  validateEditRemoteStatusSequence:
+    validateEditRemoteStatusSequence as unknown as Function,
   validateCaseAdvancedSearchFormSequence:
     validateCaseAdvancedSearchFormSequence as unknown as Function,
   validateCaseAssociationRequestSequence:
@@ -1595,6 +1609,8 @@ export const presenterSequences = {
   validateDocumentSequence: validateDocumentSequence as unknown as Function,
   validateEditPetitionerCounselSequence:
     validateEditPetitionerCounselSequence as unknown as Function,
+  validateEditRemoteTrialModalSequence:
+    validateEditRemoteTrialModalSequence as unknown as Function,
   validateEditRespondentCounselSequence:
     validateEditRespondentCounselSequence as unknown as Function,
   validateExternalDocumentInformationSequence:
@@ -1658,7 +1674,12 @@ export const presenter = {
     [GatewayTimeoutError, gatewayTimeoutErrorSequence], //504
     [ActionError, setCurrentPageErrorSequence], // generic error handler
   ],
-  providers: {} as { applicationContext: ClientApplicationContext; router: {} },
+  providers: {} as {
+    applicationContext: ClientApplicationContext;
+    router: {};
+  } & { socket: { start: () => void; stop: () => void } } & {
+    path: any;
+  },
   sequences: presenterSequences,
   state: cloneDeep(initialState),
 };
@@ -1677,6 +1698,7 @@ declare global {
       set: (key: any, value: any) => void;
       merge: (key: any, value: any) => void;
       unset: (key: any) => void;
+      increment: (key: any) => void;
     };
     path: any;
     props: Props;

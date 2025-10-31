@@ -43,6 +43,8 @@ export const updateCaseDetails = async (
     petitionPaymentWaivedDate: caseDetails.petitionPaymentWaivedDate,
     preferredTrialCity: caseDetails.preferredTrialCity,
     procedureType: caseDetails.procedureType,
+    remoteTrialGranted: caseDetails.remoteTrialGranted,
+    remoteTrialGrantedDate: caseDetails.remoteTrialGrantedDate,
     statistics: caseDetails.statistics,
   };
 

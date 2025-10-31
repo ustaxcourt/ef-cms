@@ -4,7 +4,7 @@ import { FilePetitionButtons } from '@web-client/views/StartCaseUpdated/FilePeti
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { IrsNoticeUploadForm } from './IrsNoticeUploadForm';
 import { RedactionAcknowledgement } from '@web-client/views/StartCaseUpdated/RedactionAcknowledgement';
-import { WarningNotificationComponent } from '@web-client/views/WarningNotification';
+import { AlertWarning } from '@web-client/dawson-ui/ui/Alert/AlertWarning';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -121,12 +121,12 @@ export const FilePetitionStep3 = connect(
 
             {form.hasIrsNotice && (
               <>
-                <WarningNotificationComponent
+                <AlertWarning
                   alertWarning={{
                     message:
                       'Ensure that personal information (such as Social Security Numbers, Taxpayer Identification Numbers, Employer Identification Numbers) has been removed or blocked out (redacted) from every form except the Statement of Taxpayer Identification Number.',
                   }}
-                  dismissible={false}
+                  isDismissible={false}
                   scrollToTop={false}
                 />
                 {irsNoticeUploadFormInfo.map((info, index) => {

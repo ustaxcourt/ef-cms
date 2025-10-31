@@ -14,6 +14,10 @@ export const getCaseAction = async ({
 }: ActionProps) => {
   const docketNumber = props.docketNumber || get(state.caseDetail.docketNumber);
 
+  if (!docketNumber) {
+    throw new Error('Docket number is required to get case details');
+  }
+
   const caseDetail = await applicationContext
     .getUseCases()
     .getCaseInteractor(applicationContext, {

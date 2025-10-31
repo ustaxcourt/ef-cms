@@ -1,15 +1,16 @@
 import { state } from '@web-client/presenter/app.cerebral';
-
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { CONTACT_CHANGE_DOCUMENT_TYPES } from '@shared/business/entities/EntityConstants';
+
 export const docketEntryQcHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): any => {
   const caseDetail = get(state.caseDetail);
   const docketEntryId = get(state.docketEntryId);
-  const { CONTACT_CHANGE_DOCUMENT_TYPES } = applicationContext.getConstants();
+  const formattedCaseDetail = get(state.formattedCaseDetail);
 
   const currentDocument = caseDetail.docketEntries.find(
     docketEntry => docketEntry.docketEntryId === docketEntryId,
@@ -36,5 +37,13 @@ export const docketEntryQcHelper = (
     .getUtilities()
     .formatDocketEntry(applicationContext, currentDocument);
 
-  return { formattedDocketEntry, showPaperServiceWarning };
+  const mappedMemberedCases = () =>
+    formattedCaseDetail.consolidatedCases
+      .filter(
+        (c: { docketNumber: string }) =>
+          c.docketNumber !== caseDetail.docketNumber,
+      )
+      .map(c => c.docketNumber);
+
+  return { formattedDocketEntry, showPaperServiceWarning, mappedMemberedCases };
 };

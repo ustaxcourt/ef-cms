@@ -1,4 +1,4 @@
-import { DateTime, DurationLike, Interval } from 'luxon';
+import { DateTime, DurationLike, Interval, type ToObjectOutput } from 'luxon';
 import fedHolidays from '@18f/us-federal-holidays';
 
 export const FORMATS = {
@@ -111,6 +111,18 @@ export const prepareDateFromString = (
     }).setZone('utc');
   }
   return result;
+};
+
+export const getJsDateFromIso = (isoDate: string): Date => {
+  return prepareDateFromString(isoDate, FORMATS.ISO).toJSDate();
+};
+
+export const getIsoFromJsDate = (jsDate: Date): string | null => {
+  return DateTime.fromJSDate(jsDate).toISO();
+};
+
+export const getNowObject = (): ToObjectOutput => {
+  return DateTime.now().toObject();
 };
 
 export const calculateISODate = ({

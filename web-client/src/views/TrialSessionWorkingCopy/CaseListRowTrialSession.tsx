@@ -35,8 +35,9 @@ const getCaseRow = ({
         </td>
         <td>
           {formattedCase.isManuallyAdded && (
-            <span aria-label="Manually added indicator">
+            <span>
               <FontAwesomeIcon
+                aria-label="Manually added indicator"
                 className="mini-success"
                 icon="calendar-plus"
                 title="Manually added"
@@ -181,13 +182,28 @@ export const CaseListRowTrialSession = connect(
     openDeleteUserCaseNoteConfirmModalSequence:
       sequences.openDeleteUserCaseNoteConfirmModalSequence,
   },
-  ({
-    autoSaveTrialSessionWorkingCopySequence,
-    formattedCase,
-    openAddEditUserCaseNoteModalFromListSequence,
-    openDeleteUserCaseNoteConfirmModalSequence,
-    trialSessionWorkingCopy,
+  (props: {
+    autoSaveTrialSessionWorkingCopySequence: Function;
+    openAddEditUserCaseNoteModalFromListSequence: Function;
+    openDeleteUserCaseNoteConfirmModalSequence: Function;
+    formattedCase?: { docketNumber: string; [key: string]: unknown };
+    trialSessionWorkingCopy?: {
+      caseMetadata: Record<string, { trialStatus?: string }>;
+    };
   }) => {
+    const {
+      autoSaveTrialSessionWorkingCopySequence,
+      formattedCase,
+      openAddEditUserCaseNoteModalFromListSequence,
+      openDeleteUserCaseNoteConfirmModalSequence,
+      trialSessionWorkingCopy,
+    } = props as typeof props & {
+      formattedCase: { docketNumber: string; [key: string]: unknown };
+      trialSessionWorkingCopy: {
+        caseMetadata: Record<string, { trialStatus?: string }>;
+      };
+    };
+
     return getCaseRow({
       formattedCase,
       trialSequences: {

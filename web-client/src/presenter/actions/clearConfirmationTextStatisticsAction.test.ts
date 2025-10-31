@@ -7,6 +7,9 @@ describe('clearConfirmationTextStatisticsAction', () => {
       state: { confirmationText: { statistics: { something: 'something' } } },
     });
 
-    expect(state.confirmationText.statistics).toEqual({});
+    expect(
+      (state.confirmationText as { statistics: Record<string, any> })
+        .statistics,
+    ).toEqual({});
   });
 });

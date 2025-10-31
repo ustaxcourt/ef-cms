@@ -53,6 +53,8 @@ export const caseTableDefinition = {
   petitionPaymentStatus: DEFAULT as string,
   petitionPaymentWaivedDate: DEFAULT as Date | null,
   preferredTrialCity: DEFAULT as string | null,
+  remoteTrialGranted: DEFAULT as boolean | null,
+  remoteTrialGrantedDate: DEFAULT as Date | null,
   procedureType: DEFAULT as string,
   qcCompleteForTrial: DEFAULT as ColumnType<
     { trialSessionId: string },
