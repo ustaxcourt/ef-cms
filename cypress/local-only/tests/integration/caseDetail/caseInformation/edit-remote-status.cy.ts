@@ -52,42 +52,20 @@ describe('Edit Remote Status', () => {
         getCaseDetailTab('case-information').click();
 
         cy.get('[data-testid="edit-remote-status"]').click();
+
         const dateString = formatNow(FORMATS.MMDDYYYY);
         cy.get('#remote-trial-granted-date-picker').type(dateString);
-        cy.get('.modal-button-confirm').click();
 
-        cy.get('.usa-alert--success').should('exist');
-
-        cy.get('[data-testid="edit-remote-status"]').click();
-        cy.get('.modal-button-clear').click();
-
-        cy.get('#remote-trial-granted-date-picker').should('have.value', '');
+        cy.get('#remote-trial-granted-date-picker').clear();
 
         cy.get('.modal-button-confirm').click();
 
-        cy.get('.usa-alert--success').should('exist');
-
-        cy.contains('Motion to proceed remotely granted date').should(
-          'not.exist',
+        cy.get('.usa-error-message').should(
+          'contain',
+          'Date cannot be invalid or empty',
         );
-      });
-    });
 
-    it('should allow saving without a date (no-op when no date is entered)', () => {
-      createAndServePaperPetition().then(({ docketNumber }) => {
-        loginAsDocketClerk();
-        goToCase(docketNumber);
-        getCaseDetailTab('case-information').click();
-
-        cy.get('[data-testid="edit-remote-status"]').click();
-
-        cy.get('.modal-button-confirm').click();
-
-        cy.get('.usa-alert--success').should('exist');
-
-        cy.contains('Motion to proceed remotely granted date').should(
-          'not.exist',
-        );
+        cy.get('.modal-header').should('exist');
       });
     });
 
