@@ -33,6 +33,7 @@ describe('servePaperFiledDocumentAction', () => {
       props: {
         docketNumbers,
         primaryDocumentFileId: 'document-id-123',
+        isFiledAcrossAllCases: false,
       },
       state: {
         caseDetail,
@@ -42,7 +43,6 @@ describe('servePaperFiledDocumentAction', () => {
         form: {
           primaryDocumentFile: {},
         },
-        isFiledAcrossAllCases: false,
       },
     });
     expect(
@@ -77,6 +77,7 @@ describe('servePaperFiledDocumentAction', () => {
       props: {
         docketNumbers,
         primaryDocumentFileId: 'document-id-123',
+        isFiledAcrossAllCases: false,
       },
       state: {
         caseDetail,
@@ -86,7 +87,6 @@ describe('servePaperFiledDocumentAction', () => {
         form: {
           primaryDocumentFile: {},
         },
-        isFiledAcrossAllCases: false,
       },
     });
 
@@ -120,6 +120,7 @@ describe('servePaperFiledDocumentAction', () => {
       props: {
         docketNumbers,
         primaryDocumentFileId: 'document-id-123',
+        isFiledAcrossAllCases: true,
       },
       state: {
         caseDetail,
@@ -129,7 +130,6 @@ describe('servePaperFiledDocumentAction', () => {
         form: {
           primaryDocumentFile: {},
         },
-        isFiledAcrossAllCases: true,
       },
     });
 

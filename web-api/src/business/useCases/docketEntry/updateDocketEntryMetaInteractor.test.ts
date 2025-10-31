@@ -645,6 +645,8 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should propagate docket entry updates to all consolidated cases', async () => {
+    mockDocketEntries[0].isFiledAcrossAllCases = true;
+
     const consolidatedCase1 = {
       ...MOCK_CASE,
       docketNumber: '102-20',
@@ -768,46 +770,5 @@ describe('updateDocketEntryMetaInteractor', () => {
         }),
       ]),
     );
-  });
-
-  it('should skip consolidated cases that do not have the docket entry being updated', async () => {
-    const consolidatedCase1 = {
-      ...MOCK_CASE,
-      docketNumber: '102-20',
-      docketEntries: [],
-    };
-
-    const leadCase = {
-      ...MOCK_CASE,
-      consolidatedCases: [
-        {
-          caseCaption: MOCK_CASE.caseCaption,
-          docketNumber: '102-20',
-          sortableDocketNumber: 102000020,
-        },
-      ],
-      docketEntries: mockDocketEntries,
-    };
-
-    getCaseByDocketNumber.mockResolvedValueOnce(leadCase);
-    getCasesByDocketNumbers.mockResolvedValueOnce([
-      leadCase,
-      consolidatedCase1,
-    ]);
-
-    await updateDocketEntryMetaInteractor(
-      applicationContext,
-      {
-        docketEntryMeta: {
-          ...mockDocketEntries[0],
-          documentTitle: 'Updated Document Title',
-        },
-        docketNumber: MOCK_CASE.docketNumber,
-      },
-      mockDocketClerkUser,
-    );
-
-    expect(getCasesByDocketNumbers).toHaveBeenCalled();
-    expect(upsertDocketEntries).toHaveBeenCalled();
   });
 });

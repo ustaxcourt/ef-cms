@@ -19,6 +19,9 @@ describe('docketEntryQcHelper', () => {
           ],
         },
         docketEntryId: 'abc',
+        formattedCaseDetail: {
+          consolidatedCases: [{ docketNumber: '1234' }],
+        },
       },
     });
     expect(result.showPaperServiceWarning).toEqual(false);
@@ -37,6 +40,9 @@ describe('docketEntryQcHelper', () => {
           ],
         },
         docketEntryId: 'abc',
+        formattedCaseDetail: {
+          consolidatedCases: [{ docketNumber: '1234' }],
+        },
       },
     });
     expect(result.showPaperServiceWarning).toEqual(false);
@@ -54,6 +60,9 @@ describe('docketEntryQcHelper', () => {
           ],
         },
         docketEntryId: 'abc',
+        formattedCaseDetail: {
+          consolidatedCases: [{ docketNumber: '1234' }],
+        },
       },
     });
     expect(result.showPaperServiceWarning).toEqual(false);
@@ -71,6 +80,9 @@ describe('docketEntryQcHelper', () => {
               workItemId: 'someId',
             },
           ],
+        },
+        formattedCaseDetail: {
+          consolidatedCases: [{ docketNumber: '1234' }],
         },
         docketEntryId: 'abc',
       },
