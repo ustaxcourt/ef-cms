@@ -34,7 +34,7 @@ jobs:
       - name: Setup OpenSearch
         uses: ankane/setup-opensearch@v1
         with:
-          opensearch-version: 2.19
+          opensearch-version: 3.1.0
       - name: Setup DynamoDB Local
         uses: codyseibert/dynamodb-action@v4.1.0
         with:

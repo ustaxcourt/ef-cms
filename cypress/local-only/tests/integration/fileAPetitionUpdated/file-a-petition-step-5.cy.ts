@@ -24,7 +24,7 @@ describe('File a petition - Step 5 Statement of Taxpayer Identification Number',
     });
 
     it('should display correct info text', () => {
-      cy.get('[data-testid="info-alert"]').contains('to help identify you');
+      cy.get('[data-testid^="alert-info"]').contains(`The Statement of Taxpayer Identification Number is the only document that should include Social Security Numbers, Taxpayer Identification Numbers, or Employer Identification Numbers. It's sent to the IRS to help identify you but is never visible as part of the case record.`);
     });
 
     it('should display validation error message when user presses "Next" button without uploading stin file', () => {
@@ -56,9 +56,12 @@ describe('File a petition - Step 5 Statement of Taxpayer Identification Number',
     });
 
     it('should display correct info text', () => {
-      cy.get('[data-testid="info-alert"]').contains(
-        'to help identify the petitioner',
-      );
+      cy.get('[data-testid^="alert-info-"]', { timeout: 10000 })
+        .first()
+        .should('contain.text', 'The Statement of Taxpayer Identification Number')
+        .and('contain.text', 'document that should include Social Security Numbers')
+        .and('contain.text', 'to help identify the petitioner')
+        .and('contain.text', 'never visible as part of the case record');
     });
   });
 });

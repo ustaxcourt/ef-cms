@@ -30,7 +30,7 @@ export const handler: Handler = async (_event, context) => {
     return fail({ context, results: 'No Recipients found.' });
   }
   try {
-    await generateStaleCasesReport({ applicationContext, filename });
+    await generateStaleCasesReport({ filename });
   } catch (err) {
     const results = 'Unable to generate stale cases report.';
     console.error(results, err);

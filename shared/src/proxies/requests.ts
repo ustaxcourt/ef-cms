@@ -1,5 +1,6 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import moize from 'moize';
+import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
 
 let token: string = '';
 export const getCurrentUserToken = (): string => {
@@ -145,7 +146,9 @@ export const asyncSyncHandler = (
 
     request(asyncSyncId);
 
-    const expirationTimestamp = Math.floor(Date.now() / 1000) + 16 * 60;
+    const nowSeconds = Number(formatNow(FORMATS.UNIX_TIMESTAMP_SECONDS));
+    const futureSeconds = 16 * 60;
+    const expirationTimestamp = nowSeconds + futureSeconds;
     applicationContext
       .getUseCases()
       .startPollingForResultsInteractor(
