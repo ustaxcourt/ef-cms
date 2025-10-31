@@ -281,7 +281,7 @@ module "logs_to_es" {
   lambda_name    = "LogsToElasticSearch_info"
   role           = aws_iam_role.lambda_elasticsearch_execution_role.arn
   environment = {
-    es_endpoint = local.info_cluster_endpoint
+    es_endpoint = "https://${local.info_cluster_endpoint}"
   }
   timeout     = "900"
   memory_size = "3008"
