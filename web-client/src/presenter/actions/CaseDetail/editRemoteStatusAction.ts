@@ -1,5 +1,4 @@
 import { state } from '@web-client/presenter/app.cerebral';
-import { Case } from '@shared/business/entities/cases/Case';
 
 /**
  * calls the editRemoteStatusInteractor to indicate remote status
@@ -14,16 +13,16 @@ export const editRemoteStatusAction = async ({
 }: ActionProps) => {
   const docketNumber = get(state.caseDetail.docketNumber);
   const { remoteTrialGrantedDate } = get(state.modal);
-  const rawCase = get(state.caseDetail);
-  const user = get(state.user);
-  const currentCase = new Case(rawCase, { authorizedUser: user });
-  
-  currentCase.setRemoteTrialGrantedDate(remoteTrialGrantedDate);
+
+  const hasDate = remoteTrialGrantedDate?.trim();
 
   const caseDetail = await applicationContext
     .getUseCases()
     .updateCaseDetailsInteractor(applicationContext, {
-      caseDetails: currentCase,
+      caseDetails: {
+        remoteTrialGranted: !!hasDate,
+        remoteTrialGrantedDate: hasDate ? remoteTrialGrantedDate : null,
+      },
       docketNumber,
     });
 
