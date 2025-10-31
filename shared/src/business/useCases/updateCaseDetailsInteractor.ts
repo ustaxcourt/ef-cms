@@ -33,44 +33,26 @@ export const updateCaseDetails = async (
     throw new UnauthorizedError('Unauthorized for editing case details');
   }
 
-  const editableFields = {
-    ...(caseDetails.caseType !== undefined && {
-      caseType: caseDetails.caseType,
-    }),
-    ...(caseDetails.hasVerifiedIrsNotice !== undefined && {
-      hasVerifiedIrsNotice: caseDetails.hasVerifiedIrsNotice,
-    }),
-    ...(caseDetails.irsNoticeDate !== undefined && {
-      irsNoticeDate: caseDetails.irsNoticeDate,
-    }),
-    ...(caseDetails.petitionPaymentDate !== undefined && {
-      petitionPaymentDate: caseDetails.petitionPaymentDate,
-    }),
-    ...(caseDetails.petitionPaymentMethod !== undefined && {
-      petitionPaymentMethod: caseDetails.petitionPaymentMethod,
-    }),
-    ...(caseDetails.petitionPaymentStatus !== undefined && {
-      petitionPaymentStatus: caseDetails.petitionPaymentStatus,
-    }),
-    ...(caseDetails.petitionPaymentWaivedDate !== undefined && {
-      petitionPaymentWaivedDate: caseDetails.petitionPaymentWaivedDate,
-    }),
-    ...(caseDetails.preferredTrialCity !== undefined && {
-      preferredTrialCity: caseDetails.preferredTrialCity,
-    }),
-    ...(caseDetails.procedureType !== undefined && {
-      procedureType: caseDetails.procedureType,
-    }),
-    ...(caseDetails.remoteTrialGranted !== undefined && {
-      remoteTrialGranted: caseDetails.remoteTrialGranted,
-    }),
-    ...(caseDetails.remoteTrialGrantedDate !== undefined && {
-      remoteTrialGrantedDate: caseDetails.remoteTrialGrantedDate,
-    }),
-    ...(caseDetails.statistics !== undefined && {
-      statistics: caseDetails.statistics,
-    }),
-  };
+  const allowedFields = [
+    'caseType',
+    'hasVerifiedIrsNotice',
+    'irsNoticeDate',
+    'petitionPaymentDate',
+    'petitionPaymentMethod',
+    'petitionPaymentStatus',
+    'petitionPaymentWaivedDate',
+    'preferredTrialCity',
+    'procedureType',
+    'remoteTrialGranted',
+    'remoteTrialGrantedDate',
+    'statistics',
+  ];
+
+  const editableFields = Object.fromEntries(
+    Object.entries(caseDetails).filter(
+      ([key, value]) => allowedFields.includes(key) && value !== undefined,
+    ),
+  );
 
   const oldCase = await getCaseByDocketNumber({
     docketNumber,

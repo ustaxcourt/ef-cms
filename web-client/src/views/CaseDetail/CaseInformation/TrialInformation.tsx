@@ -7,7 +7,6 @@ import { props as cerebralProps } from 'cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import { EditRemoteStatusButton } from './EditRemoteStatusButton';
 import { RemoteTrialSessionInformation } from './RemoteTrialSessionInformation';
-
 import React from 'react';
 
 const props = cerebralProps as unknown as {
