@@ -148,7 +148,7 @@ if (env === 'prod') {
     LOG_GROUP_ENVIRONMENTS: `[\\\"${env}\\\"]`,
     LOG_SNAPSHOT_BUCKET_NAME: `${repoSlug}-${env}-log-snapshots`,
     NUM_DAYS_TO_KEEP_LOGS: logExpirationDays,
-    ES_LOG_CLUSTER_CREATE: createInfoCluster.toString(),
+    ES_INFO_CLUSTER_CREATE: createInfoCluster.toString(),
   };
   if (createInfoCluster) {
     accountSecrets.ES_LOGS_EBS_VOLUME_SIZE_GB = opensearchLogsVolumeSize;

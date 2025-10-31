@@ -1,7 +1,7 @@
 data "aws_caller_identity" "current" {}
 
 provider "opensearch" {
-  url = local.info_cluster_endpoint
+  url = "https://${local.info_cluster_endpoint}"
 }
 
 resource "opensearch_snapshot_repository" "archived-logs" {
