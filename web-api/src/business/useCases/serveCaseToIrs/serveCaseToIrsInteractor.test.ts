@@ -13,6 +13,7 @@ import {
   CONTACT_TYPES,
   COUNTRY_TYPES,
   DOCKET_SECTION,
+  AUTOMATIC_BLOCKED_REASONS,
   INITIAL_DOCUMENT_TYPES,
   PARTY_TYPES,
   PAYMENT_STATUS,
@@ -1506,6 +1507,44 @@ describe('serveCaseToIrsInteractor', () => {
     expect(
       applicationContext.getUtilities().serveCaseDocument,
     ).toHaveBeenCalledTimes(Object.keys(INITIAL_DOCUMENT_TYPES).length);
+  });
+
+  it('should automatically block the case when an Application for Waiver (APW) is pending on a paper petition', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      docketEntries: [
+        ...MOCK_CASE.docketEntries,
+        {
+          createdAt: '2018-11-21T20:49:28.192Z',
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          docketNumber: MOCK_CASE.docketNumber,
+          documentTitle: 'Application for Waiver of Filing Fee',
+          documentType: 'Application for Waiver of Filing Fee',
+          eventCode: 'APW',
+          filedBy: 'Test Petitioner',
+          filedByRole: ROLES.petitioner,
+          isOnDocketRecord: true,
+          processingStatus: 'pending',
+          userId: 'b88a8284-b859-4641-a270-b3ee26c6c068',
+        },
+      ],
+      isPaper: true,
+      mailingDate: 'some day',
+    };
+
+    await serveCaseToIrsInteractor(
+      applicationContext,
+      mockParams,
+      mockPetitionsClerkUser,
+    );
+
+    expect(
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
+    ).toMatchObject({
+      automaticBlocked: true,
+      automaticBlockedDate: expect.anything(),
+      automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
+    });
   });
 
   it('should generate an order and upload it to s3 for noticeOfAttachments', async () => {
