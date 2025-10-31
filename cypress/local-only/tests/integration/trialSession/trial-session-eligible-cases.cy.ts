@@ -35,6 +35,7 @@ describe('Trial Session Eligible Cases Journey', () => {
       trialLocation,
       caseType: 'Other',
       yearReceived: '2019',
+      includeApwDocument: false,
     }).then(({ docketNumber }) => {
       createdDocketNumbers.push(docketNumber);
 
@@ -48,6 +49,7 @@ describe('Trial Session Eligible Cases Journey', () => {
       trialLocation,
       yearReceived: '2019',
       caseType: 'Other',
+      includeApwDocument: false,
     }).then(({ docketNumber }) => {
       createdDocketNumbers.push(docketNumber);
 
@@ -60,6 +62,7 @@ describe('Trial Session Eligible Cases Journey', () => {
       procedureType: 'Regular',
       trialLocation,
       yearReceived: '2019',
+      includeApwDocument: false,
     }).then(({ docketNumber }) => {
       createdDocketNumbers.push(docketNumber);
 
@@ -73,6 +76,7 @@ describe('Trial Session Eligible Cases Journey', () => {
       trialLocation,
       caseType: 'CDP (Lien/Levy)',
       yearReceived: '2019',
+      includeApwDocument: false,
     }).then(({ docketNumber }) => {
       createdDocketNumbers.push(docketNumber);
 
@@ -86,9 +90,9 @@ describe('Trial Session Eligible Cases Journey', () => {
       trialLocation,
       caseType: 'Passport',
       yearReceived: '2019',
+      includeApwDocument: false,
     }).then(({ docketNumber }) => {
       createdDocketNumbers.push(docketNumber);
-
       loginAsDocketClerk();
       goToCase(docketNumber);
       updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
@@ -122,7 +126,7 @@ describe('Trial Session Eligible Cases Journey', () => {
 
     cy.then(() => {
       calendarTrialSession(trialSessionId);
-      cy.get('[data-testid="success-alert"]').should('exist');
+      cy.get('[data-testid^="warning-alert"]').should('exist');
     });
 
     cy.then(() => {
@@ -199,7 +203,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         '[data-testid="remove-from-trial-session-disposition-textarea"]',
       ).type('testing');
       cy.get('[data-testid="modal-button-confirm"]').click();
-      cy.get('[data-testid="success-alert"]').should('exist');
+      cy.get('[data-testid^="success-alert"]').should('exist');
 
       // Verify case is no longer calendared
       cy.get('[data-testid="case-status"]').should(
