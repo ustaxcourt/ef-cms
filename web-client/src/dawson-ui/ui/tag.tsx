@@ -5,7 +5,6 @@ import {
   FontAwesomeIcon,
   FontAwesomeIconProps,
 } from '@fortawesome/react-fontawesome';
-import { omit } from 'lodash';
 
 const tagVariants = cva(
   cn(
@@ -26,8 +25,8 @@ const tagVariants = cva(
   {
     variants: {
       variant: {
-        primary: cn('tw:bg-white tw:text-primary-darker'),
-        destructive: cn('tw:bg-destructive-dark tw:text-white'),
+        primary: cn('tw:bg-white tw:text-blue-darker'),
+        destructive: cn('tw:bg-red-dark tw:text-white'),
       },
     },
     defaultVariants: {
@@ -38,21 +37,23 @@ const tagVariants = cva(
 
 type TagProps = {
   iconProps?: FontAwesomeIconProps;
+  dataTestId?: string;
 };
 
 export const Tag = ({
   children,
   variant,
   iconProps,
-  ...props // TODO: remove ...props, add className
+  className = '',
+  dataTestId,
+  id,
 }: React.ComponentProps<'span'> &
   VariantProps<typeof tagVariants> &
   TagProps) => {
-  const classes = cn(tagVariants({ variant })) + ` ${props?.className}`;
-  const remainingProps = omit(props, 'className');
+  const classes = cn(tagVariants({ variant })) + ` ${className}`;
 
   return (
-    <span className={classes} {...remainingProps}>
+    <span className={classes} id={id} data-testid={dataTestId}>
       {iconProps && <FontAwesomeIcon className="tw:mr-[4px]" {...iconProps} />}
       <span>{children}</span>
     </span>

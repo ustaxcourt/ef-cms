@@ -25,6 +25,7 @@ export type AlertInfoProps = {
   className?: string;
   scrollToTop?: boolean;
   iconRight?: boolean;
+  dataTestId?: string
 };
 
 export function AlertInfo({
@@ -33,6 +34,7 @@ export function AlertInfo({
   dismissAlertSequence,
   className,
   scrollToTop = true,
+  dataTestId
 }: AlertInfoProps) {
   const notificationRef = useRef<HTMLDivElement | null>(null);
 
@@ -58,18 +60,18 @@ export function AlertInfo({
       aria-live="polite"
       className={cn(className)}
       closeButtonOnClick={dismissAlertSequence}
-      data-testid="info-alert" // TODO: replace id where it is implemented
+      dataTestId={`alert-info-${dataTestId}`} 
       isDismissible={isDismissible}
       ref={notificationRef}
       role="alert"
       variant="info"
     >
       {alertInfo.title && (
-        <AlertHeader {...infoProps}>{alertInfo.title}</AlertHeader>
+        <AlertHeader dataTestId={`info-${dataTestId}`} {...infoProps}>{alertInfo.title}</AlertHeader>
       )}
 
       {alertInfo.message && (
-        <AlertMessage {...infoProps}>
+        <AlertMessage dataTestId={`info-msg-${dataTestId}`}  {...infoProps}>
           <Message
             additionalClassname="tw:mt-0 tw:mb-0 tw:text-base/5 tw:xs:text-lg/6"
             inlineLinkText={alertInfo.inlineLinkText}
@@ -80,7 +82,7 @@ export function AlertInfo({
       )}
 
       {alertInfo.linkUrl && (
-        <AlertMessage {...infoProps}>
+        <AlertMessage dataTestId={`info-link-${dataTestId}`}  {...infoProps}>
           <Button
             className="p-0 mt-2"
             href={alertInfo.linkUrl}
@@ -119,7 +121,7 @@ function Message({
     <p className={additionalClassname}>
       {beforeLink}
       <a
-        className="tw:text-primary-darker tw:underline"
+        className="tw:text-blue-darker tw:underline"
         href={inlineLinkUrl}
         rel="noreferrer"
         target="_blank"

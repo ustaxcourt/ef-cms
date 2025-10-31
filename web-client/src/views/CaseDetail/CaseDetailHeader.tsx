@@ -196,7 +196,7 @@ export const CaseDetailHeader = connect<
                       <Tag
                         className="margin-right-1 text-tbottom"
                         aria-label={`status: ${formattedCaseDetail.status}`}
-                        data-testid="case-status"
+                        dataTestId="case-status"
                         id="case-status"
                       >
                         {formattedCaseDetail.status}
@@ -214,7 +214,7 @@ export const CaseDetailHeader = connect<
                       {caseDetailHeaderHelper.showBlockedTag && (
                         <Tag
                           className="margin-right-1 text-tbottom"
-                          data-testid="blocked-case-icon"
+                          dataTestId="blocked-case-icon"
                           iconProps={{ icon: 'hand-paper' }}
                           variant="destructive"
                         >

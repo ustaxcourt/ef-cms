@@ -1026,6 +1026,7 @@ describe('formattedDocketEntries', () => {
 
       expect(result).toEqual([
         {
+          className: 'fa-icon-gold',
           icon: ['fas', 'thumbtack'],
           title: 'In progress',
         },
@@ -1044,6 +1045,7 @@ describe('formattedDocketEntries', () => {
 
       expect(result).toEqual([
         {
+          className: 'fa-icon-red',
           icon: ['fa', 'star'],
           title: 'Is untouched',
         },
