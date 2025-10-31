@@ -42,11 +42,10 @@ describe('editRemoteStatusAction', () => {
       applicationContext.getUseCases().updateCaseDetailsInteractor.mock
         .calls[0][1],
     ).toMatchObject({
-      caseDetails: expect.objectContaining({
-        docketNumber: mockDocketNumber,
+      caseDetails: {
         remoteTrialGranted: true,
         remoteTrialGrantedDate: mockRemoteTrialGrantedDate,
-      }),
+      },
       docketNumber: mockDocketNumber,
     });
 
@@ -91,11 +90,10 @@ describe('editRemoteStatusAction', () => {
       applicationContext.getUseCases().updateCaseDetailsInteractor.mock
         .calls[0][1],
     ).toMatchObject({
-      caseDetails: expect.objectContaining({
-        docketNumber: mockDocketNumber,
+      caseDetails: {
         remoteTrialGranted: false,
         remoteTrialGrantedDate: null,
-      }),
+      },
       docketNumber: mockDocketNumber,
     });
 
@@ -140,18 +138,17 @@ describe('editRemoteStatusAction', () => {
       applicationContext.getUseCases().updateCaseDetailsInteractor.mock
         .calls[0][1],
     ).toMatchObject({
-      caseDetails: expect.objectContaining({
-        docketNumber: mockDocketNumber,
+      caseDetails: {
         remoteTrialGranted: false,
         remoteTrialGrantedDate: null,
-      }),
+      },
       docketNumber: mockDocketNumber,
     });
 
     expect(result.output.caseDetail).toEqual(mockUpdatedCase);
   });
 
-  it('should preserve other case details when updating remote trial permission', async () => {
+  it('should only send remoteTrialGranted fields to avoid payload size issues', async () => {
     const existingCaseDetails = {
       docketNumber: mockDocketNumber,
       status: 'General Docket - At Issue (Ready for Trial)',
@@ -185,15 +182,15 @@ describe('editRemoteStatusAction', () => {
     expect(
       applicationContext.getUseCases().updateCaseDetailsInteractor,
     ).toHaveBeenCalled();
+    // Only remoteTrialGranted fields should be sent to avoid 413 errors on large cases
     expect(
       applicationContext.getUseCases().updateCaseDetailsInteractor.mock
         .calls[0][1],
     ).toMatchObject({
-      caseDetails: expect.objectContaining({
-        ...existingCaseDetails,
+      caseDetails: {
         remoteTrialGranted: true,
         remoteTrialGrantedDate: mockRemoteTrialGrantedDate,
-      }),
+      },
       docketNumber: mockDocketNumber,
     });
   });

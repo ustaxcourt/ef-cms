@@ -185,12 +185,12 @@ describe('Multidocket QC Process and Edit Docket Entry', () => {
 
         cy.get('[data-testid="edit-ADMR"]').click();
 
-        cy.get('[data-testid="info-alert"]').should('exist');
-        cy.get('[data-testid="info-alert"]').should(
+        cy.get('[data-testid="alert-info"]').should('exist');
+        cy.get('[data-testid="alert-info"]').should(
           'contain',
           'Edits to Document Info will also be edited for:',
         );
-        cy.get('[data-testid="info-alert"]').should(
+        cy.get('[data-testid="alert-info"]').should(
           'contain',
           'Service and Action edits will only apply to this case.',
         );
@@ -236,8 +236,8 @@ describe('Multidocket QC Process and Edit Docket Entry', () => {
           .find('[data-testid="edit-RPT"]')
           .click();
 
-        cy.get('[data-testid="info-alert"]').should('exist');
-        cy.get('[data-testid="info-alert"]').should(
+        cy.get('[data-testid="alert-info"]').should('exist');
+        cy.get('[data-testid="alert-info"]').should(
           'contain',
           'Edits to Document Info can only be done from the lead case in a consolidated group. This is a member case.',
         );
