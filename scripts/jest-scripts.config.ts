@@ -1,6 +1,8 @@
 import { pathsToModuleNameMapper } from 'ts-jest';
-import tsconfig from '../tsconfig.json';
 import type { Config } from 'jest';
+import { loadTsConfig } from '../utils/load-tsconfig.mjs';
+
+const tsconfig = loadTsConfig('tsconfig.json');
 
 const config: Config = {
   clearMocks: true,
@@ -12,6 +14,7 @@ const config: Config = {
     '!circleci/*.ts',
     '!circleci/judge/bulkImportJudgeUsers.helpers.ts',
     '!circleci/judge/bulkImportJudgeUsers.ts',
+    '!cloudwatch/perform-query.ts',
     '!compareTypescriptErrors.ts',
     '!coverage/**',
     '!download-all-case-documents.ts',
@@ -25,6 +28,7 @@ const config: Config = {
     '!elasticsearch/health-migration.ts',
     '!elasticsearch/ready-cluster-for-migration.ts',
     '!elasticsearch/reindex.ts',
+    '!elasticsearch/retry-ocr-failures.ts',
     '!email/**',
     '!generate-uuid.ts',
     '!glue/**',
@@ -45,7 +49,7 @@ const config: Config = {
     '!reports/**',
     '!run-once-scripts/**',
     '!secrets/**',
-    '!set-maintenance-mode-locally.ts',
+    '!send-maintenance-mode-notifications-locally.ts',
     '!template.ts',
     '!judge/get-judge-name.ts',
     '!judge/set-judge-title.ts',
@@ -67,7 +71,7 @@ const config: Config = {
     ...pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
       prefix: '<rootDir>/../',
     }),
-    uuid: require.resolve('uuid'),
+    '^uuid$': 'uuid',
   },
   testEnvironment: 'node',
   testMatch: ['**/scripts/**/?(*.)+(spec|test).[jt]s?(x)'],

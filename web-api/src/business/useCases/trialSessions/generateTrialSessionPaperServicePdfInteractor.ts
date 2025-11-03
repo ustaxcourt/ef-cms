@@ -7,6 +7,8 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { updateTrialSession } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
 
 export const generateTrialSessionPaperServicePdfInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -79,10 +81,7 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
       fileNamePrefix: 'paper-service-pdf/',
     });
 
-  const trialSession = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById({
-      applicationContext,
+  const trialSession = await getTrialSessionById({
       trialSessionId,
     });
 
@@ -94,8 +93,7 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
 
   trialSessionEntity.addPaperServicePdf(fileId, 'Initial Calendaring');
 
-  await applicationContext.getPersistenceGateway().updateTrialSession({
-    applicationContext,
+  await updateTrialSession({
     trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
   });
 

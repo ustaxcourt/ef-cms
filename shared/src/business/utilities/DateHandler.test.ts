@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-/* eslint-disable custom-rules-plugin/no-new-dates*/
+/* eslint-disable custom-rules-plugin/no-dates*/
 import { DateTime, Settings } from 'luxon';
 import {
   FORMATS,
@@ -1028,11 +1028,11 @@ describe('DateHandler', () => {
       const weeks = getWeeksInRange({ startDate: start, endDate: end });
 
       expect(weeks).toEqual([
-        '2023-01-02',
-        '2023-01-09',
-        '2023-01-16',
-        '2023-01-23',
-        '2023-01-30',
+        { start: '2023-01-02', end: '2023-01-06' },
+        { start: '2023-01-09', end: '2023-01-13' },
+        { start: '2023-01-16', end: '2023-01-20' },
+        { start: '2023-01-23', end: '2023-01-27' },
+        { start: '2023-01-30', end: '2023-02-03' },
       ]);
     });
 

@@ -8,9 +8,8 @@ export const getTrialSessionsForJudgeActivityReportLambda = (
 ) =>
   genericHandler(
     event,
-    async ({ applicationContext }) => {
+    async () => {
       return await getTrialSessionsForJudgeActivityReportInteractor(
-        applicationContext,
         {
           ...JSON.parse(event.body),
         },

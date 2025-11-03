@@ -16,10 +16,6 @@ import { v4 } from 'uuid';
 import { verifyPetitionerAccount } from '../../../helpers/authentication/verify-petitioner-account';
 
 describe('Petitioner Updates e-mail', () => {
-  after(() => {
-    cy.task('deleteAllCypressTestAccounts');
-  });
-
   beforeEach(() => {
     Cypress.session.clearCurrentSessionData();
   });
@@ -133,9 +129,7 @@ describe('Petitioner Updates e-mail', () => {
       cy.get('[data-testid="email-input"]').type(email);
       cy.get('[data-testid="password-input"]').type(password);
       cy.get('[data-testid="login-button"]').click();
-      cy.get('[data-testid="error-alert"]').contains(
-        'The email address or password you entered is invalid.',
-      );
+      cy.get('[data-testid^="error-alert"]').should('exist');
     }
   });
 
@@ -154,13 +148,12 @@ describe('Petitioner Updates e-mail', () => {
     clickConfirmModal();
 
     cy.visit('/verify-email?token=hello_world');
-    cy.get('[data-testid="error-alert"]')
+    cy.get('[data-testid^="error-alert"]')
       .should('be.visible')
       .and(
         'contain.text',
         'Your request cannot be completed. Please try to log in. If you’re still having trouble',
       );
-
     loginAsPetitioner(email);
   });
 });

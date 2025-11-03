@@ -1,4 +1,4 @@
-import { DateTime, DurationLike, Interval } from 'luxon';
+import { DateTime, DurationLike, Interval, type ToObjectOutput } from 'luxon';
 import fedHolidays from '@18f/us-federal-holidays';
 
 export const FORMATS = {
@@ -26,6 +26,7 @@ export const FORMATS = {
   TIME_TZ: "h:mm a 'ET'",
   TRIAL_SORT_TAG: 'yyyyMMddHHmmss',
   TRIAL_TIME: 'yyyy-MM-dd H:mm',
+  UNIX_TIMESTAMP_MS: 'x',
   UNIX_TIMESTAMP_SECONDS: 'X',
   WEEK: 'W',
   YEAR: 'yyyy',
@@ -110,6 +111,18 @@ export const prepareDateFromString = (
     }).setZone('utc');
   }
   return result;
+};
+
+export const getJsDateFromIso = (isoDate: string): Date => {
+  return prepareDateFromString(isoDate, FORMATS.ISO).toJSDate();
+};
+
+export const getIsoFromJsDate = (jsDate: Date): string | null => {
+  return DateTime.fromJSDate(jsDate).toISO();
+};
+
+export const getNowObject = (): ToObjectOutput => {
+  return DateTime.now().toObject();
 };
 
 export const calculateISODate = ({
@@ -254,6 +267,24 @@ export const createStartOfDayISO = (params?: {
   return dateObject.startOf('day').setZone('utc').toISO();
 };
 
+// expects a date string like 2025-09-18
+export const createStartOfDayISOUtc = (dateString: string): string => {
+  return DateTime.fromFormat(dateString, FORMATS.YYYYMMDD, {
+    zone: 'utc',
+  })
+    .startOf('day')
+    .toISO()!;
+};
+
+// expects a date string like 2025-09-18
+export const createEndOfDayISOUtc = (dateString: string): string => {
+  return DateTime.fromFormat(dateString, FORMATS.YYYYMMDD, {
+    zone: 'utc',
+  })
+    .endOf('day')
+    .toISO()!;
+};
+
 /**
  * @param {object} options the date options containing year, month, day
  * @returns {string} a formatted ISO date string
@@ -299,6 +330,9 @@ export const formatDateString = (
 };
 
 export const formatNow = (formatStr?: TimeFormats | TimeFormatNames) => {
+  // if (formatStr === FORMATS.UNIX_TIMESTAMP_MS) return DateTime.now().toMillis();
+  // if (formatStr === FORMATS.UNIX_TIMESTAMP_SECONDS) return DateTime.now().toSeconds();
+
   const now = createISODateString();
   return formatDateString(now, formatStr);
 };
@@ -705,21 +739,21 @@ export const getWeeksInRange = ({
 }: {
   startDate: string;
   endDate: string;
-}): string[] => {
+}): IsoDateRange[] => {
   let start = DateTime.fromISO(startDate).startOf('week');
   const end = DateTime.fromISO(endDate).startOf('week');
 
-  const weeks: string[] = [];
+  const weeks: IsoDateRange[] = [];
 
   // Loop through each week, adding each Monday to the array
   while (start <= end) {
     const isoStart = start.toISODate();
-    if (isoStart !== null) {
-      weeks.push(isoStart);
+    const isoEnd = start.plus({ days: 4 }).toISODate();
+    if (isoStart !== null && isoEnd !== null) {
+      weeks.push({ start: isoStart, end: isoEnd });
     }
     start = start.plus({ weeks: 1 });
   }
-
   return weeks;
 };
 

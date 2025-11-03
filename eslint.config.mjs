@@ -102,7 +102,7 @@ export default tseslint.config(
         ecmaVersion: 2020,
         sourceType: 'module',
         projectService: {
-          allowDefaultProject: ['*.js', '*.mjs', '*.ts'],
+          allowDefaultProject: ['*.js', '*.mjs', '*/*.mjs'],
         },
         tsconfigRootDir: import.meta.dirname,
         ecmaFeatures: {
@@ -208,7 +208,7 @@ export default tseslint.config(
       'custom-rules-plugin': customRulesPlugin,
     },
     rules: {
-      'custom-rules-plugin/no-new-dates': 'error',
+      'custom-rules-plugin/no-dates': 'error',
     },
   },
 );

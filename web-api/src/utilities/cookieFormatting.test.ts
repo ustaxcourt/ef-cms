@@ -7,19 +7,20 @@ import {
 describe('createCookieString', () => {
   const cookieKey = 'DogCow';
   const cookieValue = 'Moof';
-  const expiresDateTime = 'Sat, 26 Feb 2022 07:45:00 GMT';
+  const expiresDateTimeISO = '2022-02-26T01:45:00-06:00';
+  const expiresDateTimeJS = 'Sat, 26 Feb 2022 07:45:00 GMT';
   const domain = 'dawson.ustaxcourt.gov';
 
   it('correctly formats the cookie string with default arguments', () => {
     const actualCookieString = createCookieString(
       cookieKey,
       cookieValue,
-      expiresDateTime,
+      expiresDateTimeISO,
       domain,
     );
 
     expect(actualCookieString).toContain(`${cookieKey}=${cookieValue}`);
-    expect(actualCookieString).toContain(`Expires=${expiresDateTime}`);
+    expect(actualCookieString).toContain(`Expires=${expiresDateTimeJS}`);
     expect(actualCookieString).toContain(`Domain=${domain}`);
     expect(actualCookieString).toContain('Secure');
     expect(actualCookieString).toContain('HttpOnly');
@@ -29,13 +30,13 @@ describe('createCookieString', () => {
     const actualCookieString = createCookieString(
       cookieKey,
       cookieValue,
-      expiresDateTime,
+      expiresDateTimeISO,
       domain,
       false,
     );
 
     expect(actualCookieString).toContain(`${cookieKey}=${cookieValue}`);
-    expect(actualCookieString).toContain(`Expires=${expiresDateTime}`);
+    expect(actualCookieString).toContain(`Expires=${expiresDateTimeJS}`);
     expect(actualCookieString).toContain(`Domain=${domain}`);
     expect(actualCookieString).not.toContain('Secure');
     expect(actualCookieString).toContain('HttpOnly');
@@ -45,14 +46,14 @@ describe('createCookieString', () => {
     const actualCookieString = createCookieString(
       cookieKey,
       cookieValue,
-      expiresDateTime,
+      expiresDateTimeISO,
       domain,
       true,
       false,
     );
 
     expect(actualCookieString).toContain(`${cookieKey}=${cookieValue}`);
-    expect(actualCookieString).toContain(`Expires=${expiresDateTime}`);
+    expect(actualCookieString).toContain(`Expires=${expiresDateTimeJS}`);
     expect(actualCookieString).toContain(`Domain=${domain}`);
     expect(actualCookieString).toContain('Secure');
     expect(actualCookieString).not.toContain('HttpOnly');
@@ -62,14 +63,14 @@ describe('createCookieString', () => {
     const actualCookieString = createCookieString(
       cookieKey,
       cookieValue,
-      expiresDateTime,
+      expiresDateTimeISO,
       domain,
       false,
       false,
     );
 
     expect(actualCookieString).toContain(`${cookieKey}=${cookieValue}`);
-    expect(actualCookieString).toContain(`Expires=${expiresDateTime}`);
+    expect(actualCookieString).toContain(`Expires=${expiresDateTimeJS}`);
     expect(actualCookieString).toContain(`Domain=${domain}`);
     expect(actualCookieString).not.toContain('Secure');
     expect(actualCookieString).not.toContain('HttpOnly');

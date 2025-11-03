@@ -14,6 +14,7 @@ describe('File a petition - Corrupted Files', () => {
 
   beforeEach(() => {
     loginAsPetitioner();
+    cy.intercept('POST', '**/cases').as('postCase');
     cy.visit('/file-a-petition/new');
   });
 
@@ -77,8 +78,23 @@ describe('File a petition - Corrupted Files', () => {
 
     cy.get('[data-testid="step-6-next-button"]').click();
 
-    cy.get('[data-testid="success-alert"]').contains(
-      'Your case has been assigned docket number',
-    );
+
+    cy.wait('@postCase').then(interception => {
+
+       if (!interception.response?.body?.docketNumber) {
+        throw new Error('Missing docket number in response');
+      }
+
+      const {docketNumber} = interception.response.body;
+      
+      cy.get('[data-testid^="alert-success-"]', { timeout: 10000 })
+        .should('contain.text', `Your case has been assigned docket number ${docketNumber}`)
+        .and('contain.text', 'Your case has been created and your documents were sent to the U.S. Tax Court.');
+    });
+
+    // cy.get('[data-testid^="alert-success-"]', { timeout: 10000 })
+    // .should("contain.text", `Your case has been assigned docket number ${docketNumber}Your case has been created and your documents were sent to the U.S. Tax Court.`);
+
+    
   });
 });
