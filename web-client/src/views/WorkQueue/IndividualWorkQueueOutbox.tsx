@@ -3,6 +3,7 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseIcon';
+import { isLeadCase } from '@shared/business/entities/cases/Case';
 
 export const IndividualWorkQueueOutbox = connect(
   {
@@ -67,8 +68,7 @@ export const IndividualWorkQueueOutbox = connect(
                             workItem.leadItemForIcons.inConsolidatedGroup
                           }
                           showLeadCaseIcon={
-                            workItem.leadItemForIcons.leadDocketNumber ===
-                            workItem.leadItemForIcons.docketNumber
+                            isLeadCase(workItem.leadItemForIcons)
                           }
                         />
                         {outboxHelper
