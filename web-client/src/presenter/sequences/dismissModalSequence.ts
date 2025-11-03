@@ -1,4 +1,4 @@
 import { clearModalAction } from '../actions/clearModalAction';
-import { clearModalStateAction } from '../actions/clearModalStateAction';
+import { clearModalFormAction } from '../actions/clearModalFormAction';
 
-export const dismissModalSequence = [clearModalAction, clearModalStateAction];
+export const dismissModalSequence = [clearModalAction, clearModalFormAction];
