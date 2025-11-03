@@ -292,7 +292,7 @@ export class TrialSession extends JoiValidationEntity {
         })
         .messages({ '*': 'Enter a valid number of maximum cases' }),
       meetingId: stringRequiredForRemoteProceedings,
-      notes: JoiValidationConstants.STRING.max(400).optional(),
+      notes: JoiValidationConstants.STRING.max(450).optional(),
       noticeIssuedDate: JoiValidationConstants.ISO_DATE.optional(),
       paperServicePdfs: joi
         .array()
