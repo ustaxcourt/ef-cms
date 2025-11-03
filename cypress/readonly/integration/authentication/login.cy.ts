@@ -8,7 +8,7 @@ describe('Given a user with a DAWSON account', () => {
 
   describe('When they login in with the correct email and password', () => {
     it('Then they should be taken to their dashboard', () => {
-      loginAsAdmissionsClerk();
+      loginAsAdmissionsClerk('testAdmissionsClerk@example.com');
       cy.get('[data-testid="account-menu-button"]').click();    // Burger in corner
       cy.get('[data-testid^="error-alert"]').should('not.exist');
 
