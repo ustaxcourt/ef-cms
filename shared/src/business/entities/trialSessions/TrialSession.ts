@@ -272,7 +272,7 @@ export class TrialSession extends JoiValidationEntity {
         }),
       hasNottBeenServed: joi.boolean().required(),
       irsCalendarAdministrator:
-        JoiValidationConstants.STRING.max(100).optional(),
+        JoiValidationConstants.STRING.max(300).optional(),
       irsCalendarAdministratorInfo: joi
         .object(IrsCalendarAdministratorInfo.VALIDATIONS)
         .optional(),
