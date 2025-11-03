@@ -1,6 +1,6 @@
-// EF-CMS Database Schema
+// EF-CMS Database Entity Relationship Diagram
 
-title EF-CMS Database Schema
+title EF-CMS Database Entity Relationship Diagram
 notation crows-foot
 colorMode bold
 styleMode shadow

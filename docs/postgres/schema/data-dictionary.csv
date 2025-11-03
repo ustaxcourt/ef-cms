@@ -62,34 +62,34 @@ dw_case_status_update,changed_by,string,The entitiy that triggered the update. T
 dw_case_status_update,date,date,The date that the case status was updated.
 dw_case_status_update,docket_number,string,The docket number of the case.
 dw_case_status_update,updated_case_status,string,The case status of the case.
-dw_message,attachments,array,
+dw_message,attachments,array,If a document is attached to a message, the document id of each document is stored in this field.
 dw_message,completed_at,date,
 dw_message,completed_by,string,
 dw_message,completed_by_section,string,
 dw_message,completed_by_user_id,string,
 dw_message,completed_message,string,
-dw_message,created_at,date,
-dw_message,docket_number,string,
-dw_message,from,string,
-dw_message,from_section,string,
-dw_message,from_user_id,string,
+dw_message,created_at,date,The date/timestamp of when the message was created.
+dw_message,docket_number,string,The docket number of the case that the message is in.
+dw_message,from,string,The user name of the individual that sent the message.
+dw_message,from_section,string,The section of the court that the user that sent the message is assigned to.
+dw_message,from_user_id,string,the id of the user that sent the message.
 dw_message,is_completed,boolean,
 dw_message,is_read,boolean,
 dw_message,is_replied_to,boolean,
 dw_message,message,string,
-dw_message,message_id,string,
+dw_message,message_id,string,The system generated id of the message.
 dw_message,parent_message_id,string,
-dw_message,subject,string,
-dw_message,to,string,
-dw_message,to_section,string,
-dw_message,to_user_id,string,
+dw_message,subject,string,The subject line of the message.
+dw_message,to,string,The user name of the individual that message was sent to.
+dw_message,to_section,string,The section of the court for the user that the message was sent to.
+dw_message,to_user_id,string,The id of the user that the message was sent to.
 dw_response_string,response_string,string,
 dw_response_string,request_id,string,
 dw_response_string,ttl,number,
 dw_response_string,user_id,string,
-dw_user_case_note,docket_number,string,
-dw_user_case_note,user_id,string,
-dw_user_case_note,notes,string,
+dw_user_case_note,docket_number,string,The docket number of the case that the note is added to.
+dw_user_case_note,user_id,string,The id of the user that added the note.
+dw_user_case_note,notes,string,The contents of the note that the user input on the case.
 dw_practitioner_document,practitioner_document_file_id,string,
 dw_practitioner_document,bar_number,string,
 dw_practitioner_document,category_name,string,
@@ -174,57 +174,57 @@ dw_docket_entry,supporting_document,string,
 dw_docket_entry,tax_year,string,
 dw_docket_entry,trial_location,string,
 dw_docket_entry,user_id,string,
-dw_work_item,assignee_id,string,
-dw_work_item,assignee_name,string,
-dw_work_item,completed_at,date,
-dw_work_item,completed_by,string,
-dw_work_item,completed_by_user_id,string,
-dw_work_item,completed_message,string,
-dw_work_item,created_at,date,
-dw_work_item,docket_entry_id,string,
-dw_work_item,docket_number,string,
-dw_work_item,in_progress,boolean,
-dw_work_item,is_read,boolean,
-dw_work_item,section,string,
-dw_work_item,sent_by,string,
-dw_work_item,sent_by_section,string,
-dw_work_item,sent_by_user_id,string,
-dw_work_item,updated_at,date,
-dw_work_item,work_item_id,string,
-dw_docket_entry_worksheet,docket_entry_id,string,
-dw_docket_entry_worksheet,final_brief_due_date,date,
-dw_docket_entry_worksheet,primary_issue,string,
-dw_docket_entry_worksheet,status_of_matter,string,
-dw_user_on_case_pending,user_id,string,
-dw_user_on_case_pending,docket_number,string,
-dw_user_on_case,user_id,string,
-dw_user_on_case,docket_number,string,
-dw_user_on_case,representing,array,
-dw_user_on_case,service_indicator,string,
-dw_user_on_case,acting_as_role,object,
-dw_case_correspondence,archived,boolean,
-dw_case_correspondence,correspondence_id,string,
-dw_case_correspondence,document_title,string,
-dw_case_correspondence,filed_by,string,
-dw_case_correspondence,filing_date,date,
-dw_case_correspondence,user_id,string,
-dw_case_correspondence,docket_number,string,
+dw_work_item,assignee_id,string,The clerk that is assigned to the work item.
+dw_work_item,assignee_name,string,This is the name of the clerk that either 1) the work item is assigned to for petition or Document, or 2) if the QC item was not assigned, it is populated with the clerk that completed the QC. <span style="font-family: Calibri;font-size: 15px;color: #FF0000;">There are a handful of records where this field is NULL, but the QC item has been completed - I cannot figure out when this happens</span>.
+dw_work_item,completed_at,date,The date and timestamp of when the work item was completed.
+dw_work_item,completed_by,string,The user name of the user that compelted the work item.
+dw_work_item,completed_by_user_id,string,The user ID of the user that completed the work item.
+dw_work_item,completed_message,string,If it is a petition that is served to the IRS, then the auto-generated message is "Served to IRS". If it is a document that is completed, then the auto-generated message is "Completed". User does not type this. Also, if you are Qcing a document, the message that is written by docket does not appear in this field.
+dw_work_item,created_at,date,The date and timestamp of when the work item was created.
+dw_work_item,docket_entry_id,string,The id of the document that is in QC.
+dw_work_item,docket_number,string,The Docket number of the Case that the work item is associated with.
+dw_work_item,in_progress,boolean,This is set to TRUE if a paper filed Document is saved for later during QC. This is also set to true if a Petitions Clerk drafts an Order and then clicks save entry, rather than Save and Serve. This field does NOT populate to TRUE for electronic Petitions or Paper Petitions that are saved for Later.  However, once a petition get's through QC (whether it is paper or Electronic), this field get's switched to FALSE. In addition, once a paper filed or Electronically filed document is QC'd, then this field gets set to False. <span style="font-family: Calibri;font-size: 15px;color: #FF0000;">*NOTE: All of the "setting to FALSE" behavior is new in Postgres, as this field was undefined before in dynamo, and we never set anything to FALSE ever in Dynamo.</span>
+dw_work_item,is_read,boolean,For Documents (eFiled and Paper), as soon as a docket clerk views (electronic)/processes (paper) the QC item, this field is set to TRUE.  For Court-issued documents that display in the Work Item table, this field stays as NULL. This field also remains NULL for Petitions. <span style="font-family: Calibri;font-size: 15px;color: #FF0000;">Should we be setting this to TRUE in the future for internal docs and Petitions?</span>
+dw_work_item,section,string,This varies based on if the QC item is a Petition (then the value is Petitions) or if it is a document submitted (then the value is Docket), or it could be CaseServicesSupervisor.
+dw_work_item,sent_by,string,This is the user name of whoever sent the work item last.  It gets updated when a Court user assigns it to another Court user from Section QC. If the work item is completed from the Section QC box, then this field keeps the name of the person that submitted it, rather that a Court User's name.
+dw_work_item,sent_by_section,string,This is the Section that sent the Work item (Petitions, Docket, or CaseServicesSupervisor). If the work item is completed from the Section QC box, then this field remains blank.
+dw_work_item,sent_by_user_id,string,This is the ID for whoever sent the work item last.  It gets updated when a Court user assigns it to another Court user from Section QC. If the work item is completed from the Section QC box, then this field keeps the ID of the person that submitted it.
+dw_work_item,updated_at,date,This column never changes after it is generated.
+dw_work_item,work_item_id,string,The ID of the Work Item.
+dw_docket_entry_worksheet,docket_entry_id,string,The ID of the Pending Motion document that displays on the Pending Motions tab on the Judge/Chambers Dashboard.
+dw_docket_entry_worksheet,final_brief_due_date,date,The due date for the final brief that the Chambers user input for the pending motion.
+dw_docket_entry_worksheet,primary_issue,string,The primary issue that was input by the Chambers user for the pending motion.
+dw_docket_entry_worksheet,status_of_matter,string,The status of matter that was selected by the Chambers user for the pending motion.
+dw_user_on_case_pending,user_id,string,The user id of the practitioner that filed either a 1) Motion to Substitute Parties and Change Caption, 2) Notice of Election to Intervene, 3) Notice of Election to Participate, or 4) Notice of Intervention.
+dw_user_on_case_pending,docket_number,string,The docket number that one of the documents listed by `dw_user_on_case_pending.user_id` is filed on.
+dw_user_on_case,user_id,string,The user id of the party on the case.
+dw_user_on_case,docket_number,string,The docket number of the case that the user is a party on.
+dw_user_on_case,representing,array,This field includes the user id or id's of the party or parties on the case that a private practitioner represents.
+dw_user_on_case,service_indicator,string,The service indicator for the party on the case.
+dw_user_on_case,acting_as_role,object,The role of the party on the specific case.
+dw_case_correspondence,archived,boolean,The default value of this field is NULL. If the file was deleted in the UI, then this field populates with TRUE.
+dw_case_correspondence,correspondence_id,string,System generated id assigned to the correspondence document.
+dw_case_correspondence,document_title,string,The title of the document that is input by the user uploading/scanning the document into DAWSON.
+dw_case_correspondence,filed_by,string,The user name of the user that uploaded the document to the case.
+dw_case_correspondence,filing_date,date,The date the document was uploaded to the case.
+dw_case_correspondence,user_id,string,The id of the user that uploaded/scanned the document to the case.
+dw_case_correspondence,docket_number,string,The docket number of the case that the correspondence file was uploaded/scanned to.
 dw_feature_flag,name,string,
 dw_feature_flag,value,object,
 dw_connection,client_connection_id,string,
-dw_connection,connection_id,string,
-dw_connection,endpoint,string,
-dw_connection,user_id,string,
-dw_connection,ttl,number,
-dw_case_deadline,associated_judge,string,
-dw_case_deadline,associated_judge_id,string,
-dw_case_deadline,case_deadline_id,string,
-dw_case_deadline,consolidated_case_deadline_id,string,
-dw_case_deadline,created_at,date,
-dw_case_deadline,deadline_date,date,
-dw_case_deadline,description,string,
-dw_case_deadline,docket_number,string,
-dw_case_deadline,sortable_docket_number,number,
+dw_connection,connection_id,string,The ID that is generated for the specific connection to the database.
+dw_connection,endpoint,string,The url of the DAWSON environment that the user is connected to. The URL also includes the color that the user is connected to.
+dw_connection,user_id,string,The ID of the user that is connected to the database.
+dw_connection,ttl,number,This is the "Time To Live" for the connection.
+dw_case_deadline,associated_judge,string,Current associated Judge name.
+dw_case_deadline,associated_judge_id,string,Current associated Judge id.
+dw_case_deadline,case_deadline_id,string,The id that the system generates for a deadline.
+dw_case_deadline,consolidated_case_deadline_id,string,For lead cases in a group, this field displays as NULL. For non-consolidated cases, this field displays as NULL. If a deadline was created in the lead case in a group, a deadline is created on all cases in the group, when this happens, this field will display the Lead case's deadline ID.
+dw_case_deadline,created_at,date,The date that the deadline was created.
+dw_case_deadline,deadline_date,date,The date that the deadline is due.
+dw_case_deadline,description,string,This is the explanation of what the deadline is for.
+dw_case_deadline,docket_number,string,The docket number of the case that the deadline was created on.
+dw_case_deadline,sortable_docket_number,number,The docket number in a sortable format. Example 3167-25 would be 2025003167.
 dw_user,user_id,string,
 dw_user,pending_email_verification_token,string,
 dw_user,pending_email_verification_token_timestamp,date,
@@ -259,14 +259,14 @@ dw_user,updated_email,string,
 dw_user,account_status,object,
 dw_bar_number,year,number,
 dw_bar_number,last_used_number,number,
-dw_user_confirmation_code,user_id,string,
-dw_user_confirmation_code,confirmation_code,string,
-dw_user_confirmation_code,ttl,number,
+dw_user_confirmation_code,user_id,string,The user id of the user that updated their email address.
+dw_user_confirmation_code,confirmation_code,string,The id of the confirmation code.
+dw_user_confirmation_code,ttl,number,The time to live of the confirmation code when a user updates their email address.
 dw_minute_sheet,trial_session_id,string,
 dw_minute_sheet,docket_number,string,
 dw_minute_sheet,content,object,
-dw_change_of_address,job_id,string,
-dw_change_of_address,remaining,number,
-dw_notification,id,number,
-dw_notification,topic,string,
-dw_notification,ttl,number,
+dw_change_of_address,job_id,string,The ID of the job that is created when a practitioner updates their address and/or phone number.
+dw_change_of_address,remaining,number,The remaining number of cases that need to be updated when a practitioner updates their address and/or phone number.
+dw_notification,id,number,The id of the notification.
+dw_notification,topic,string,The only value that displays here is "notification".  This notification is if there is a bounced service email received for the IRS Super User.
+dw_notification,ttl,number,This is the "Time To Live" for the notification.
