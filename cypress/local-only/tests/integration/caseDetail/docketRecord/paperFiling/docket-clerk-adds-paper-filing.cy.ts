@@ -32,7 +32,7 @@ describe('Docket clerk adding a paper filing', () => {
       'Please correct the following errors on the page',
     );
   });
-  it.only('should set title properly for a notice', () => {
+  it('should set title properly for a notice', () => {
     const title = 'this is a title';
     const additionalInfo1 = 'add1';
     const additionalInfo2 = 'add2';
