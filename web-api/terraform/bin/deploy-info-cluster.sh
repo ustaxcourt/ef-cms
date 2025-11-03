@@ -31,7 +31,7 @@ deploy_primary() {
   log_info "Switching to primary environment: ${env}"
 
   . ./scripts/env/set-env.zsh "${env}" || {
-    log_error "Failed to switch environment: ${env}"
+    log_error "Failed to primary switch environment: ${env}"
     exit 1
     }
 
@@ -40,23 +40,23 @@ deploy_primary() {
   --env "${env}" \
   --domain "${domain}" \
   --update || {
-     log_error "Failed to write secrets for environment: ${env}"
+     log_error "Failed to write primary secrets for environment: ${env}"
      exit 1
    }
 
   log_info "Deploying primary environment: ${env}"
   pushd web-api/terraform/applyables/account-specific/account-specific >/dev/null || {
-   log_error "Failed to change directory for Terraform applyables: ${env}"
+   log_error "Failed to primary change directory for Terraform applyables: ${env}"
    exit 1
   }
 
-   ../..//bin/deploy-account-specific.sh || {
+   ../../bin/deploy-account-specific.sh || {
     log_error "Failed to deploy primary environment: ${env}"
     popd >/dev/null
     exit 1
   }
 
-  log_info "Capturing info cluster endpoint and arn from Terraform"
+  log_info "Capturing primary info cluster endpoint and arn from Terraform"
 
   local endpoint
   local arn
@@ -68,14 +68,14 @@ deploy_primary() {
   }
 
   arn=$(terraform output -raw es_info_cluster_shared_cluster_arn 2>/dev/null) || {
-    log_error "Failed to get info cluster shared arn from Terraform: ${env}"
+    log_error "Failed to primary get info cluster shared arn from Terraform: ${env}"
     popd >/dev/null
     exit 1
   }
 
   popd >/dev/null
   if [ -z "${endpoint}" ] || [ -z "${arn}" ]; then
-      log_error "Terraform outputs are empty. Endpoint: '${endpoint}' Arn: '${arn}'"
+      log_error "Terraform primary outputs are empty. Endpoint: '${endpoint}' Arn: '${arn}'"
       exit 1
   fi
   log_success "Primary deployment complete."
@@ -87,3 +87,63 @@ deploy_primary() {
 }
 
 deploy_primary "${PRIMARY_ENV}" "${BASE_DOMAIN}"
+
+deploy_consumer() {
+  local env="$1"
+  local domain="$2"
+  local shared_endpoint="$3"
+  local share_arn="$4"
+  log_info "Switching to consumer environment: ${env}"
+
+  . ./scripts/env/set-env.zsh "${env}" || {
+    log_error "Failed to consumer switch environment: ${env}"
+    exit 1
+    }
+
+  log_info "Writing secrets to consumer environment: ${env}"
+  npx ts-node scripts/secrets/create-account-secrets.ts \
+  --env "${env}" \
+  --domain "${domain}" \
+  --es_info_cluster_shared_cluster_endpoint "${shared_endpoint}" \
+  --es_info_cluster_shared_cluster_arn "${share_arn}" \
+  --update || {
+     log_error "Failed to write consumer secrets for environment: ${env}"
+     exit 1
+   }
+
+  log_info "Deploying consumer environment: ${env}"
+  pushd web-api/terraform/applyables/account-specific/account-specific >/dev/null || {
+   log_error "Failed to change consumer directory for Terraform applyables: ${env}"
+   exit 1
+  }
+
+   ../../bin/deploy-account-specific.sh || {
+    log_error "Failed to deploy consumer environment: ${env}"
+    popd >/dev/null
+    exit 1
+  }
+
+  popd >/dev/null
+  log_success "Consumer deployment complete for: ${env}"
+}
+
+if [ ${#CONSUMER_ENVS[@]} -eq 0 ]; then
+    log_info "No consumer environments specified. Only primary was deployed."
+else
+    log_info "Deploying ${#CONSUMER_ENVS[@]} consumer environments: ${CONSUMER_ENVS[*]}"
+    failed_consumers=()
+    for ENV_NAME in "${CONSUMER_ENVS[@]}"; do
+      if ! deploy_consumer "${ENV_NAME}" "${BASE_DOMAIN}" "${PRIMARY_ENDPOINT}" "${PRIMARY_ARN}"; then
+          log_error " Consumer deploy failed for: ${ENV_NAME}"
+          failed_consumers+=("${ENV_NAME}")
+      fi
+    done
+    
+    if [ ${#failed_consumers} -gt 0 ]; then
+        log_error "Deployment failed for consumers: ${failed_consumers[*]}"
+        exit 1
+    fi
+fi
+
+log_success "All deployments completed successfully!"
+log_info "Kibana url: https://${PRIMARY_ENDPOINT}/_dashboard"
