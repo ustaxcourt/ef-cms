@@ -98,82 +98,82 @@ dw_practitioner_document,description,string,
 dw_practitioner_document,file_name,string,
 dw_practitioner_document,location,string,
 dw_practitioner_document,upload_date,string,
-dw_docket_entry,action,string,
-dw_docket_entry,additional_info,string,
-dw_docket_entry,additional_info2,string,
-dw_docket_entry,add_to_coversheet,boolean,
-dw_docket_entry,archived,boolean,
-dw_docket_entry,attachments,boolean,
-dw_docket_entry,case_type,string,
-dw_docket_entry,certificate_of_service,boolean,
-dw_docket_entry,certificate_of_service_date,date,
+dw_docket_entry,action,string,If there is a action added when editing a document, then this data is added to this column.
+dw_docket_entry,additional_info,string,If there is text added to the additional info 1 field as part of the document metadata, then this data will be stored in this field. This field is also populated with Notice of Change types of auto-generated documents.
+dw_docket_entry,additional_info2,string,If there is text added to the additional info 2 field as part of the document metadata, then this data will be stored in this field
+dw_docket_entry,add_to_coversheet,boolean,If the check box for add to coversheet is checked then this field is set to TRUE. IF the check box is not checked, then this is set to the default of FALSE. This is also set to TRUE for Notice of Change types of auto-generated documents.
+dw_docket_entry,archived,boolean,If a draft document was created, but then deleted, the document and the docket entry infomration is still available in the table, but this field is set to TRUE.  The default for all docket entries on the docket record and in the drafts folder is always FALSE.
+dw_docket_entry,attachments,boolean,This field is populated with True for all filings that have the "attachments" checkbox checked, and FALSE if the attachments checkbox is not checked. This field is set to NULL for document types that do not have the Attachments checkbox. For example, Notice of change of address, Auto-generated documents, stipulated decisions, Answer, Petition, etc.
+dw_docket_entry,case_type,string,This field is populated for Attachment to Petition documents only. If a clerk changes the document type to something else, the data in this field that was stored originally with the ATP is retained.
+dw_docket_entry,certificate_of_service,boolean,This field is populated with True for all filings that have the "certificate of service" checkbox checked, and FALSE if the certificate of service checkbox is not checked. This field is set to NULL for document types that do not have the certificate of service checkbox. For example, court issued documents, Petition, STIN, ATP, minute entries, etc.
+dw_docket_entry,certificate_of_service_date,date,The date/timestamp entered for when the certificate of Service occurred.   The timestamp will always default to either 04:00 or 05:00, depending on daylight savings time (ET). This field should always have a value, as it is a required field if the Cerificate of Service checkbox is checked in the system.
 dw_docket_entry,created_at,date,
-dw_docket_entry,date,date,
-dw_docket_entry,docket_entry_id,string,
+dw_docket_entry,date,date,This field is populated with a date/timestamp for certain types of documents that require a date to be input when adding to the docket record.  For example, Order for Amended Petition, Notice of trial, Order for Filing Fee, 30 Day Notice, Order for Ratification of Petition, etc.
+dw_docket_entry,docket_entry_id,string,This field is only displayed for the user for scenario "Type C" documents. Example: Order that the Letter "S" is added to the Docket Number". <span style="font-family: Calibri;font-size: 15px;color: #FF0000;">There is an existing bug with this field.  It is not getting populated on initial save, only when a clerk edits the docket entry, adds data to the field, and then saves a second time.  Chris is looking into fixing this.</span>
 dw_docket_entry,docket_number,string,
 dw_docket_entry,docket_numbers,string,
-dw_docket_entry,document_contents_id,string,
-dw_docket_entry,document_id_before_signature,string,
+dw_docket_entry,document_contents_id,string,Per Chirs: an id for the s3 object that contains the searchable text of the docket entry.
+dw_docket_entry,document_id_before_signature,string,Per Chris: This is working as expected. It is just a backup document id. We always point to the docket entry id, but we save backups every time before we sign. (If you sign and save, you'll have two documents in s3: the "real" and the unsigned backup corresponding to document_id_before_signature. If you unsign, resign, and resave, you will have three documents in s3: the "real" one, the first unsigned backup corresponding to the old document_id_before_signature, and the new unsigned backup corresponding to a new document_id_before_signature.)
 dw_docket_entry,document_title,string,
 dw_docket_entry,document_type,string,
-dw_docket_entry,draft_order_state,object,
-dw_docket_entry,edit_state,string,
+dw_docket_entry,draft_order_state,object,When an order or any PDF upload is in the drafts folder, this field is populated.  This field is also populated for any Order or PDF upload that has been created and then deleted/archived = TRUE. <span style="font-family: Calibri;font-size: 15px;color: #FF0000;">There is an issue with this field. Per Chris: This we were setting to "null" instead of NULL as a result of our changes. I'll push a fix in the next push to test.</span>
+dw_docket_entry,edit_state,string,Chris said this is set when a user saves a paper filing for later.
 dw_docket_entry,event_code,string,
-dw_docket_entry,filed_by,string,
-dw_docket_entry,filed_by_role,string,
-dw_docket_entry,filers,array,
+dw_docket_entry,filed_by,string,This field displays the filing party(ies) selected or typed in (ex: Amicus Brief) when filing a document, or if a docket clerk edits the filed by field when editing a documents metadata. For Court related documents, this is always NULL.  This field remains null for the Notice of change documents that are auto-generated when a user changes their contact info.
+dw_docket_entry,filed_by_role,string,The role of the user that completed the filing.  This field can be external user roles or internal or System if the document was auto-generated or if it is migrated data. <span style="font-family: Calibri;font-size: 15px;color: #FF0000;">There seems to be an issue with data in this field.  Multiple records indicate that the document was filed by a docket clerk, but the filed_by is an external party. This doesn't seem to be correct. Chris looked into this data and he thinks that there may have been an issue historically with this field, but it seems to be corrected now.  Need to determine if we should update this data so that it is more accurate?</span>
+dw_docket_entry,filers,array,This field appears to only display petitioner ID's, and not respondent ID or the Court user ID - Need to ask Chris about this.
 dw_docket_entry,filing_date,date,
-dw_docket_entry,free_text,string,
-dw_docket_entry,has_other_filing_party,boolean,
-dw_docket_entry,has_supporting_documents,boolean,
-dw_docket_entry,index,number,
-dw_docket_entry,is_auto_generated,boolean,
-dw_docket_entry,is_draft,boolean,
-dw_docket_entry,is_file_attached,boolean,
-dw_docket_entry,is_legacy,boolean,
-dw_docket_entry,is_legacy_sealed,boolean,
+dw_docket_entry,free_text,string,This is the What is the this Order for? Text box, the description Text box in certain filings (MISC, TRAN, RM, LTR), the What is this notice for? text box for Court filings.  This also is the text entered in the "who signed this?" field for declartion of support. The text input in this field is appended to the document title.
+dw_docket_entry,has_other_filing_party,boolean,If a docket clerk selects the other checkbox for filing party, this field is set to True. The default value is NULL. <span style="font-family: Calibri;font-size: 15px;color: #FF0000;">There are some records with FALSE reported, but I can't seem to figure out how this data gets set to False.</span>
+dw_docket_entry,has_supporting_documents,boolean,This field is set to TRUE if there are supporting documents added with an external users filing.  This field is set to FALSE for some document filings. This field is set to NULL for all internal Court Filings and many other filings. Why are only some documents causing FALSE here and some are NULL?
+dw_docket_entry,index,number,The index number of the document on the docket record.  The STIN, it was uploaded when the case is created, will always be index 0.
+dw_docket_entry,is_auto_generated,boolean,This field is set to TRUE for the following event codes: NOTT, NCA, NCAP, NCP, NOCE, NORP, NOT, NCTL, NOIP. This is NOT set to TRUE for auto-generated minute entry, Notice of Trial, STPO, SPOS, auto-generated EA, or for any of the auto-generated orders that get created during the Petition QC flow.
+dw_docket_entry,is_draft,boolean,This field is set to true if the document is in the draft folder.  This field is also set to true if it was once in drafts but has since been deleted/archived.
+dw_docket_entry,is_file_attached,boolean,When there is a document on the docket record, then this field is set to TRUE. If the docket entry is a minute entry (ex: RQT, FEE, etc.), then this field is set to FALSE.
+dw_docket_entry,is_legacy,boolean,This field is set to TRUE if the filing/created at date is prior to 12-28-2020, DAWSON's launch date.
+dw_docket_entry,is_legacy_sealed,boolean,This field is set to TRUE for all documents that were sealed in Blackstone, the case management system that the Court used prior to DAWSON. This field is set to FALSE for all documents that were filed prior to 12-28-2020, DAWSON's launch date. This field is set to NULL for all documents filed in DAWSON.
 dw_docket_entry,is_legacy_served,boolean,
-dw_docket_entry,is_on_docket_record,boolean,
-dw_docket_entry,is_paper,boolean,
-dw_docket_entry,is_pending_service,boolean,
+dw_docket_entry,is_on_docket_record,boolean,This field is set to True for all documents that are on the Case Docket Record.  This field is set to FALSE for any document in Drafts or any Drafts that have been Archived.
+dw_docket_entry,is_paper,boolean,This field is set to TRUE for all paper filings. This field is sometimes set to FALSE for the following Court Issued event codes: O, SDEC, DEC, OJR, ODS, OCA, and MISC. This field is set to NULL for Court Filings and Party filed documents that are eFiled.<span style="font-family: Calibri;font-size: 15px;color: #FF0000;"> Chris is looking into why these sometimes are displayed differently for Null or False</span>
+dw_docket_entry,is_pending_service,boolean,This field is typically set to FALSE. This is only set to true right when a document is about to be served. Chris thinks that the only reason why there are 4 records in the DB for this is due to something going wrong.
 dw_docket_entry,is_sealed,boolean,
 dw_docket_entry,is_stricken,boolean,
 dw_docket_entry,judge,string,
-dw_docket_entry,lodged,boolean,
-dw_docket_entry,mailing_date,string,
-dw_docket_entry,notice_issued_date,date,
+dw_docket_entry,lodged,boolean,This field is set to TRUE if the document is Lodged. This field is set to either FALSE or NULL if it is not Lodged. <span style="font-family: Calibri;font-size: 15px;color: #FF0000;">Chris is looking into this to ensure that False and Null are interchangable like it is for is_paper</span>
+dw_docket_entry,mailing_date,string,This field is populated when a mailing date is added to a paper filing
+dw_docket_entry,notice_issued_date,date,This field is populated for Attachment to Petition documents only and includes the notice issued date that the Private Practitioner or Petitioner inputs. All other entries display NULL for this field.
 dw_docket_entry,number_of_pages,number,
-dw_docket_entry,objections,string,
-dw_docket_entry,ordinal_value,string,
-dw_docket_entry,other_filing_party,string,
-dw_docket_entry,other_iteration,string,
-dw_docket_entry,party_irs_practitioner,boolean,
+dw_docket_entry,objections,string,This field is populated with Yes, No, or Unknown, depending on what the user selected if they filed a Motion, Application, or an Amendment or Amended Motion. This field is NULL for all other entries that do not ask the user if there are any objections to the grangin to the document.
+dw_docket_entry,ordinal_value,string,This field is populated with the number that the user has input for the field "What iteration is this filing?" The values are 1-15, and then Other.  When Other is selected, then another field is availalbe for the user to input a numberic value.
+dw_docket_entry,other_filing_party,string,This field is populated and required if the checkbox for other is selected for documents.
+dw_docket_entry,other_iteration,string,This field is populated with the number that the user has input for the field "Iteration". This is technically supposed to be all numbers above 15, but there are some records in the database where the user has input 1 or 2 for example.
+dw_docket_entry,party_irs_practitioner,boolean,This is populated with TRUE if the party filing the document is an IRS Practitioner.
 dw_docket_entry,pending,boolean,
-dw_docket_entry,previous_document,object,
-dw_docket_entry,private_practitioners,array,
-dw_docket_entry,processing_status,string,
+dw_docket_entry,previous_document,object,For document types that have the user select a document from the docket record (ex: declaration of support, affadavit in Support, amended), this field populates with the document type, docket entry ID, and document title. These are all the Nonstandard A, B, C, D, F.  This field is also populated when there is a supporting document filed. The previous document populates with "main" document that is filed. Note that if a document type is changed during QC, where it started as one of the non-standards, and then changed to a standard, this field will still be populated with the original selection that the user made.
+dw_docket_entry,private_practitioners,array,This field appears to only display the Private Practitioner ID for the initial submission documents if there is a private practitioner completing the filing, changing the practitioner contact info and filing an entry of appearance or other appearance and representation type doc. <span style="font-family: Calibri;font-size: 15px;color: #FF0000;">Chris B suggests that we leave as is for now, and maybe we can make this field more consistently populated later.</span>
+dw_docket_entry,processing_status,string,When a Petitions clerk adds a paper petition, and it has not yet been served to the IRS, the processing_status is set to Pending. After serving to the IRS, the Petition processing status changes to Complete.  After serving to the IRS, any Auto-generated orders created in the Paper Petition QC process are stored in Postgres, with the processing_status of Pending.  If a Petitioner eFiles a Petition, upon submitting to the Court, the processing_status is set to Complete.  After serving the eFiled petition to the IRS, any auto-generated orders created in the eFiled Petition QC process are stored in Postgres with the processing_status or Pending. Private Practitioner efiled EA + motion processing status was complete prior to Docket QCing. When a paper filing is saved for later by a docket clerk the Paper filing has processing status set to pending.  After serving the paper filed document, the processing status updates to complete. <span style="font-family: Calibri;font-size: 15px;color: #FF0000;">Not sure why there are over 15K records with pending as the processing_status. I asked Chris and Zach</span>
 dw_docket_entry,received_at,date,
-dw_docket_entry,redaction_acknowledgement,boolean,
-dw_docket_entry,relationship,string,
-dw_docket_entry,scenario,string,
+dw_docket_entry,redaction_acknowledgement,boolean,This field displays as NULL for any document type that does not have the redaction acknowledgement checkbox in the efiling workflow (auto-generated Petition, auto-generated EA, STIN), for paper filings filed by the Court, and for Court issued documents. This field displays as TRUE for most documents with the redaction acknowledgement checkbox for the eFiling workflow. This field does display as NULL for all supporting documents, but TRUE for the primary documents. The redaction acknowldegement checkbox was added to the eFiling workfow on 4/23/23, so eFiled document filed before this date will have a NULL in this field. <span style="font-family: Calibri;font-size: 15px;color: #FF0000;">We should probably fix the supporting documents that were filed with eFiled docs as of 4/23/23 since they are displaying as NULL.  They should be TRUE b/c a user wouldn't be able to file it if the redaction checkbox isn't checked.</span>
+dw_docket_entry,relationship,string,Most documents filed are considered the "primaryDocument". For motions for leave type documents, the relationship for the motion for leave is primaryDocument, and the document they are filing leave for is the secondaryDocument. When a supporting document is added to a primary document, the relationship is primarySupportingDocument.  When a supporting document is added to a secondary document, the relationship is "supportingDocument".  For auto-generated documents like the Notice of Change - this field is not populated. <span style="font-family: Calibri;font-size: 15px;color: #FF0000;">Chris is looking in Dynamo to check on the fact that in Test there is only one singular "supportingDocument" which was my test. Should we have more data populated for this?</span>
+dw_docket_entry,scenario,string,This field doesn't seem to be getting populated with the scenario for all document types. New eFiled and paper petitions are not populating this, but I see other data that has standard populated for the petition. For auto-generated documents like the Notice of Change - this field is not populated. <span style="font-family: Calibri;font-size: 15px;color: #FF0000;">I asked Chris about this</span>
 dw_docket_entry,sealed_to,string,
-dw_docket_entry,secondary_document,object,
+dw_docket_entry,secondary_document,object,This field is populated with the primaryDocument and contains infomration about the secondary document that was filed. For example, if someone filed a motion for leave doc, the motion for leave is the primary document, and in the secondary_document field, it would contain the information about the document that the user was filing leave for.
 dw_docket_entry,served_at,date,
-dw_docket_entry,served_parties,array,
-dw_docket_entry,served_parties_code,string,
-dw_docket_entry,service_date,date,
-dw_docket_entry,service_stamp,string,
-dw_docket_entry,signed_at,string,
-dw_docket_entry,signed_by_user_id,string,
-dw_docket_entry,signed_judge_name,string,
-dw_docket_entry,stamp_data,object,
-dw_docket_entry,stricken_at,date,
-dw_docket_entry,stricken_by,string,
-dw_docket_entry,stricken_by_user_id,string,
-dw_docket_entry,supporting_document,string,
-dw_docket_entry,tax_year,string,
-dw_docket_entry,trial_location,string,
-dw_docket_entry,user_id,string,
+dw_docket_entry,served_parties,array,This field displays the IRS super user on initial service of the petition documents, but it is not currently displaying IRS Superuser for any other filing.  <span style="font-family: Calibri;font-size: 15px;color: #FF0000;">Chris B is looking into this</span>
+dw_docket_entry,served_parties_code,string,The code that represents who the document was served to. P = Petitioner, R = Respondent, B = Both
+dw_docket_entry,service_date,date,This field is populated only for Certificate of Service or Amended Certificate of Service documents.
+dw_docket_entry,service_stamp,string,Values for this field are Served, Entered and Served, or NULL. IF a docket clerk selects the radio button for served when adding a docket entry, the data is relfected as "served". If they select "entered and served", then "Entered and Served" is reflected in the table. The NULL value is set for Stipulated Decisions, OAPF, NTD etc (all filings that do not have a service stamp radio button)
+dw_docket_entry,signed_at,string,The timestamp that the docket entry was signed with the judge's signature.
+dw_docket_entry,signed_by_user_id,string,The user id that applied the signature.
+dw_docket_entry,signed_judge_name,string,This field right now is only NULL. I asked Chris about this one. Chris is going to remove this field - DELETED
+dw_docket_entry,stamp_data,object,This field contains an array with all of the selections made when a user is making selections in the stamp workflow.
+dw_docket_entry,stricken_at,date,The timestamp that the docket entry was stricken.
+dw_docket_entry,stricken_by,string,The name of the user that the document was sticken by.
+dw_docket_entry,stricken_by_user_id,string,The user id of the user that the document was stricken by.
+dw_docket_entry,supporting_document,string,When a document is eFiled, the user has the option to add supporting documents. This field captures what selection the user made for their supporting document type.
+dw_docket_entry,tax_year,string,This field is populated for Attachment to Petition documents only and includes the Tax Year that the Private Practitioner or Petitioner inputs. All other entries display NULL for this field.
+dw_docket_entry,trial_location,string,This field is populated for documents that capture a Trial Location, including 30-Day Notice of Trial, Notice of Trial, Amended Notice of Trial, Further Trial before, Hearing Before, TRL, Motion to change place of trial, Partial Trial Before, RQT, etc.  This field is not getting populated for RQT that is auto-generated with the eFiling flow. <span style="font-family: Calibri;font-size: 15px;color: #FF0000;">Chris is looking into the Notice of change to Remote Proceeding for me - this isn't populating the trial location, but in some older cases, the Trial location WAS getting populated.</span>
+dw_docket_entry,user_id,string,The id of the user that created the document.
 dw_work_item,assignee_id,string,The clerk that is assigned to the work item.
 dw_work_item,assignee_name,string,This is the name of the clerk that either 1) the work item is assigned to for petition or Document, or 2) if the QC item was not assigned, it is populated with the clerk that completed the QC. <span style="font-family: Calibri;font-size: 15px;color: #FF0000;">There are a handful of records where this field is NULL, but the QC item has been completed - I cannot figure out when this happens</span>.
 dw_work_item,completed_at,date,The date and timestamp of when the work item was completed.
@@ -225,40 +225,40 @@ dw_case_deadline,deadline_date,date,The date that the deadline is due.
 dw_case_deadline,description,string,This is the explanation of what the deadline is for.
 dw_case_deadline,docket_number,string,The docket number of the case that the deadline was created on.
 dw_case_deadline,sortable_docket_number,number,The docket number in a sortable format. Example 3167-25 would be 2025003167.
-dw_user,user_id,string,
-dw_user,pending_email_verification_token,string,
-dw_user,pending_email_verification_token_timestamp,date,
-dw_user,email,string,
-dw_user,name,string,
-dw_user,pending_email,string,
-dw_user,role,object,
-dw_user,token,string,
-dw_user,is_updating_information,boolean,
-dw_user,contact,object,
-dw_user,judge_full_name,string,
-dw_user,judge_title,object,
-dw_user,section,string,
-dw_user,is_senior_judge,boolean,
-dw_user,judge_phone_number,string,
-dw_user,additional_phone,string,
-dw_user,admissions_date,date,
-dw_user,admissions_status,string,
-dw_user,bar_number,string,
-dw_user,birth_year,number,
-dw_user,confirm_email,string,
-dw_user,practice_type,string,
-dw_user,firm_name,string,
-dw_user,first_name,string,
-dw_user,last_name,string,
-dw_user,middle_name,string,
-dw_user,original_bar_state,string,
-dw_user,practitioner_notes,string,
-dw_user,practitioner_type,string,
-dw_user,suffix,string,
-dw_user,updated_email,string,
-dw_user,account_status,object,
-dw_bar_number,year,number,
-dw_bar_number,last_used_number,number,
+dw_user,user_id,string,The id of the DAWSON  user.
+dw_user,pending_email_verification_token,string, This field populates with an ID when a Petitioner or Practitioner changes their email address in the UI. Tthis does not populate when creating new Practitioner or when a Petitioner creates a brand new account. If a user clicks on the resend verification token link, a new ID is generated.
+dw_user,pending_email_verification_token_timestamp,date,This field populates with a date + timestamp of when the user saves their new email address in the system and the email address is still pending, and has not yet been verified. This does not populate when creating new Practitioner or when a Petitioner creates a brand new account. If a user clicks on the resend verification token link, a new date/timestamp is generated.
+dw_user,email,string,The verified email address of the user.
+dw_user,name,string,This field combines first_name and last_name<span style="font-style: italic;font-family: Aptos Narrow;font-size: 15px;color: #000000;"> </span><span style="font-style: italic;font-family: Aptos Narrow;font-size: 15px;color: #0070C0;">need to check about middle name + suffix from Practitioner</span><span style="font-family: Aptos Narrow;font-size: 15px;color: #000000;">. For Judges, it is only the judge's last name.</span>.
+dw_user,pending_email,string,This field is populated when an admissions clerk adds a new practitioner and the email that is input is not yet verified. This field is also populated when a Petitioner or Practitioner changes their email and it is not yet verified. Once the email is verified, this field populates with NULL.
+dw_user,role,object,The role of the user. This includes both internal and external roles. The role inactivePractitioner happens whenever a Practitioner's roles is not active.
+dw_user,token,string,Open question to the team about what this field is.
+dw_user,is_updating_information,boolean,When a user updates their contact information in DAWSON, there is a small period of time where they receive a progress bar (when they have many cases). During the update process of their information on the cases, this field will go from NULL to TRUE.  After the process completes, the field sets to FALSE.
+dw_user,contact,object,<span style="font-family: Aptos Narrow;font-size: 15px;">This field contains the contact information for Practitioners and some Court users. If the practitioner updates their contact information, the information in this field is updated.  I am seeing 1972 records for petitioners and some records for Court users.</span><span style="font-family: Aptos Narrow;font-size: 15px;color: #FF0000;"> After asking the devs about this, they are unsure why there is data for petitioners in this field.  If the petitioner contact info is updated in DAWSON, it gets updated on the case and NOT in the contact field, which would be expected. Do we need to clean this data up in the future?  I am also seeing contact info for some Court users, but it is not populated consistently either.  I assume this is weird data from Dynamo for Court users, like how it is populated some for Petitioners. Open question for Court users to the Devs.</span>
+dw_user,judge_full_name,string,The full name of the judge. For non-judge users, this field is set to NULL.
+dw_user,judge_title,object,The title of the Judge (Special Trial Judge, Judge). For non-judge users, this field is set to NULL.
+dw_user,section,string,For Court users only, this field indicates which section of the Court the user is assigned to in DAWSON. For legacy Judges, the Section is "legacyJudgesChambers". For non-court users, this field is set to NULL.
+dw_user,is_senior_judge,boolean,If a judge is a senior judge, then this field is set to true. If not, then it is false. For non-judge users, this field is set to NULL.
+dw_user,judge_phone_number,string,The phone number for the Judge's Chambers. For non-judge users or for many of the legacy judge's this field is NULL.
+dw_user,additional_phone,string,If an additional phone number is added to the Practitioner record, this field is populated. For non-practitioner users, this field is NULL.
+dw_user,admissions_date,date,The date that a Practitioner was admitted to practice before the US Tax Court. For non Practitioners, this field is NULL.
+dw_user,admissions_status,string,The Practitioner's admission status with the Court.  Values include Active, Inactive, Resigned, Disbarred, Suspended, and Deceased. If the Admissions Status is any other than Active, the Attorney 's role will change to inactivePractitioner. For non Practitioners, this field is NULL.
+dw_user,bar_number,string,The Bar number of a Practitioner. For non Practitioners, this field is NULL.
+dw_user,birth_year,number,The Birth year of a Practitioner. For non Practitioners, this field is NULL.
+dw_user,confirm_email,string,This is only NULL - how does this field get populated? Open Question to DEVS.
+dw_user,practice_type,string,The Employer of the practitioner. Values include Private, IRS, or DOJ. For non Practitioners, this field is NULL.
+dw_user,firm_name,string,The firm name for a Private Practitioner only (could also be an inactive practitioner). There is no data in this field if the user isn't a Private Practitioner. For all non-Private Practitioners, this field is set to NULL.
+dw_user,first_name,string,The first name of a Practitioner.  For all non-Practitioners, this field is set to NULL.
+dw_user,last_name,string,The last name of a Practitioner.  For all non-Practitioners, this field is set to NULL.
+dw_user,middle_name,string,The middle  name of a Practitioner.  For all non-Practitioners, this field is set to NULL.
+dw_user,original_bar_state,string,The state in which a practitoner first received a USTC Bar number. For all non-practitioners, this field is set to NULL.
+dw_user,practitioner_notes,string,Any notes that are captured as part of the practitioner record. For all non-practitioners, this field is set to NULL.
+dw_user,practitioner_type,string,This field is only populated for Practitioners. Values can be Attorney or Non-Attorney. For non-practitioners, this field is set to NULL.
+dw_user,suffix,string,The suffix is captured for Practitioners only. This is not a required field. If no suffix, the values in this field are NULL.  Open question to the Devs as to why some fields are displaying as EMTPY.
+dw_user,updated_email,string,This is only NULL - how does this field get populated? Open Question to DEVS
+dw_user,account_status,object,When we run the first migration from test into prod, the code will look into the user accounts in Cognito in order to populate this field.  When we use the Deactivate Court user, then this field will change from active to inactive for the user.  If the value is inactive, then the Court user's name will no longer display in the drop down menus for assigning QC items, trial clerk dropdown, or the user dropdown when sending messages. <span style="font-family: Aptos Narrow;font-size: 15px;color: #0F9ED5;">Note: If at a later time, a DAWSON tech member disables a user's cognito account, the udpate in Cognito does not automatically update this table in Postgres. Zach recommended that we might want to update the Zendesk automation so that we can also deactivate other types of users if the need arises (ex: misuse of eFiling).</span>
+dw_bar_number,year,number,The calendar year. This table starts with 2020, and will automatically populate for each subsequent year.
+dw_bar_number,last_used_number,number,Bar number starts at 001, and continues to count up. This number identifies which number is next available, when Bar numbers are genearated by the system.
 dw_user_confirmation_code,user_id,string,The user id of the user that updated their email address.
 dw_user_confirmation_code,confirmation_code,string,The id of the confirmation code.
 dw_user_confirmation_code,ttl,number,The time to live of the confirmation code when a user updates their email address.
@@ -270,3 +270,89 @@ dw_change_of_address,remaining,number,The remaining number of cases that need to
 dw_notification,id,number,The id of the notification.
 dw_notification,topic,string,The only value that displays here is "notification".  This notification is if there is a bounced service email received for the IRS Super User.
 dw_notification,ttl,number,This is the "Time To Live" for the notification.
+
+export const trialSessionTableDefinition = {
+  trialSessionId: DEFAULT as string,
+  address1: DEFAULT as string | null,
+  address2: DEFAULT as string | null,
+  alternateTrialClerkName: DEFAULT as string | null,
+  chambersPhoneNumber: DEFAULT as string | null,
+  city: DEFAULT as string | null,
+  courthouseName: DEFAULT as string | null,
+  courtReporter: DEFAULT as string | null,
+  createdAt: DEFAULT as Date,
+  dismissedAlertForNott: DEFAULT as boolean | null,
+  hasNottBeenServed: DEFAULT as boolean,
+  estimatedEndDate: DEFAULT as Date | null,
+  irsCalendarAdministrator: DEFAULT as string | null,
+  irsCalendarAdministratorInfoName: DEFAULT as string | null,
+  irsCalendarAdministratorInfoEmail: DEFAULT as string | null,
+  irsCalendarAdministratorInfoPhone: DEFAULT as string | null,
+  isCalendared: DEFAULT as boolean,
+  joinPhoneNumber: DEFAULT as string | null,
+  judgeName: DEFAULT as string | null,
+  judgeUserId: DEFAULT as string | null,
+  maxCases: DEFAULT as number | null,
+  meetingId: DEFAULT as string | null,
+  notes: DEFAULT as string | null,
+  noticeIssuedDate: DEFAULT as Date | null,
+  password: DEFAULT as string | null,
+  postalCode: DEFAULT as string | null,
+  proceedingType: DEFAULT as string,
+  sessionScope: DEFAULT as string,
+  sessionStatus: DEFAULT as string,
+  sessionType: DEFAULT as string,
+  startDate: DEFAULT as Date,
+  startTime: DEFAULT as string | null,
+  state: DEFAULT as string | null,
+  swingSession: DEFAULT as boolean | null,
+  swingSessionId: DEFAULT as string | null,
+  term: DEFAULT as string,
+  termYear: DEFAULT as string,
+  trialClerkName: DEFAULT as string | null,
+  trialClerkUserId: DEFAULT as string | null,
+  trialLocation: DEFAULT as string | null,
+};
+
+export const trialSessionWorkingCopyTableDefinition = {
+  trialSessionId: DEFAULT as string,
+  caseMetadata: DEFAULT as ColumnType<
+    TrialSessionWorkingCopyCaseMetadata,
+    string,
+    string
+  >,
+  filters: DEFAULT as any,
+  sessionNotes: DEFAULT as string | null,
+  sort: DEFAULT as string | null,
+  sortOrder: DEFAULT as string | null,
+  userId: DEFAULT as string,
+};
+
+export const trialSessionPaperPdfTableDefinition = {
+  trialSessionId: DEFAULT as string,
+  ttl: DEFAULT as number,
+  fileId: DEFAULT as string,
+  title: DEFAULT as string,
+};
+
+export type TrialSessionPaperPdfTable =
+  typeof trialSessionPaperPdfTableDefinition;
+
+export const trialSessionNotificationProcessingTableDefinition = {
+  trialSessionId: DEFAULT as string,
+  caseStatuses: DEFAULT as any,
+  status: DEFAULT as string,
+  unfinishedCases: DEFAULT as number,
+};
+
+export const trialSessionCaseTableDefinition = {
+  docketNumber: DEFAULT as string,
+  trialSessionId: DEFAULT as string,
+  addedToSessionAt: DEFAULT as Date | null,
+  calendarNotes: DEFAULT as string | null,
+  disposition: DEFAULT as string | null,
+  isManuallyAdded: DEFAULT as boolean,
+  removedFromTrial: DEFAULT as boolean,
+  removedFromTrialDate: DEFAULT as Date | null,
+  isHearing: DEFAULT as boolean,
+};
