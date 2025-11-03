@@ -54,6 +54,7 @@ module "kibana" {
   es_info_cluster_create           = var.es_info_cluster_create
   es_info_cluster_shared_cluster_endpoint = var.es_info_cluster_shared_cluster_endpoint
   es_info_cluster_shared_cluster_arn = var.es_info_cluster_shared_cluster_arn
+  es_info_cluster_shared_cluster_account_ids = var.es_info_cluster_shared_cluster_account_ids
 }
 
 module "dawson-developer-permissions" {

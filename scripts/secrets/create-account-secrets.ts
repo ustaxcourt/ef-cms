@@ -83,6 +83,12 @@ const scriptConfig: ScriptConfig = {
       long: 'es-info-cluster-shared-endpoint',
       type: 'string',
     },
+    esInfoClusterSharedAccountIds:{
+      default: '',
+      description: "A comma separated list of AWS account that are consumers of the info cluster",
+      long: 'es-info-cluster-shared-account-ids',
+      type: 'string',
+    },
     update: {
       default: false,
       type: 'boolean',
@@ -103,6 +109,7 @@ const {
   region,
   esInfoClusterSharedArn,
   esInfoClusterSharedEndPoint,
+  esInfoClusterSharedAccountIds,
   update,
 } = parseArgsAndEnvVars(scriptConfig) as {
   baseDomain: string;
@@ -114,8 +121,9 @@ const {
   opensearchLogsInstanceType: string;
   opensearchLogsVolumeSize: number;
   region: string;
-  esInfoClusterSharedArn: string
+  esInfoClusterSharedArn: string;
   esInfoClusterSharedEndPoint: string;
+  esInfoClusterSharedAccountIds: string;
   update: boolean;
 };
 
@@ -154,6 +162,10 @@ if (env === 'prod') {
     accountSecrets.ES_LOGS_EBS_VOLUME_SIZE_GB = opensearchLogsVolumeSize;
     accountSecrets.ES_LOGS_INSTANCE_COUNT = opensearchLogsInstanceCount;
     accountSecrets.ES_LOGS_INSTANCE_TYPE = opensearchLogsInstanceType;
+
+    if (esInfoClusterSharedAccountIds) {
+      accountSecrets.ES_INFO_CLUSTER_SHARED_ACCOUNT_IDS = esInfoClusterSharedAccountIds;
+    }
     console.log('Creating new Info Opensearch cluster');
   } else {
     if (!esInfoClusterSharedArn || !esInfoClusterSharedEndPoint) {

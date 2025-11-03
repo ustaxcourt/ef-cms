@@ -55,3 +55,9 @@ variable "es_info_cluster_shared_cluster_arn" {
   description = "arn of info cluster opensearch (used when es_info_cluster_create is false)"
   type = string
 }
+
+variable "es_info_cluster_shared_cluster_account_ids" {
+  default = []
+  description = "List of AWS account that are consumers of the info cluster"
+  type = list(string)
+}
