@@ -29,8 +29,8 @@ import {
   RawCaseDeadline,
 } from '@shared/business/entities/CaseDeadline';
 import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
-import { upsertDocketEntryRelatedEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntryRelatedEntries';
 import { CourtIssuedDocumentAnyType } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import { addAssociatedDocketEntries } from '@web-api/business/useCaseHelper/docketEntry/addAssociatedDocketEntries';
 
 export const fileAndServeCourtIssuedDocument = async (
   applicationContext: ServerApplicationContext,
@@ -252,25 +252,12 @@ export const fileAndServeCourtIssuedDocument = async (
     );
 
     if (form.affectedDocketEntries) {
-      const docketEntryOrderMotions = casesToUpdate.flatMap(caseToUpdate => {
-        return form
-          .affectedDocketEntries!.filter(motion => {
-            return caseToUpdate.docketEntries.find(
-              docketEntry => docketEntry.docketEntryId === motion.docketEntryId,
-            );
-          })
-          .map(motion => ({
-            docketEntryId: motion.docketEntryId,
-            docketNumber: caseToUpdate.docketNumber,
-            disposition: motion.disposition,
-          }));
-      });
-
-      await upsertDocketEntryRelatedEntries({
-        orderDocketEntry: docketEntryToServe,
-        motionDocketEntries: docketEntryOrderMotions,
-        served: true,
-      });
+      await addAssociatedDocketEntries(
+        casesToUpdate,
+        form,
+        docketEntryToServe,
+        true,
+      );
     }
 
     serviceResults = await applicationContext

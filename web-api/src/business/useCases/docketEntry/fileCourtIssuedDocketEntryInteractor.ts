@@ -17,8 +17,8 @@ import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/get
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { upsertDocketEntryRelatedEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntryRelatedEntries';
 import { CourtIssuedDocumentAnyType } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import { addAssociatedDocketEntries } from '@web-api/business/useCaseHelper/docketEntry/addAssociatedDocketEntries';
 
 /**
  *
@@ -177,25 +177,12 @@ export const fileCourtIssuedDocketEntry = async (
   );
 
   if (documentMeta.affectedDocketEntries) {
-    const docketEntryOrderMotions = casesToUpdate.flatMap(caseToUpdate => {
-      return Object.values(documentMeta.affectedDocketEntries!)
-        .filter(motion => {
-          return caseToUpdate.docketEntries.find(
-            docketEntry => docketEntry.docketEntryId === motion.docketEntryId,
-          );
-        })
-        .map(motion => ({
-          docketEntryId: motion.docketEntryId,
-          docketNumber: caseToUpdate.docketNumber,
-          disposition: motion.disposition,
-        }));
-    });
-
-    await upsertDocketEntryRelatedEntries({
-      orderDocketEntry: subjectDocketEntry,
-      motionDocketEntries: docketEntryOrderMotions,
-      served: false,
-    });
+    await addAssociatedDocketEntries(
+      casesToUpdate,
+      documentMeta,
+      subjectDocketEntry,
+      false,
+    );
   }
 
   const rawSubjectCase = await getCaseByDocketNumber({

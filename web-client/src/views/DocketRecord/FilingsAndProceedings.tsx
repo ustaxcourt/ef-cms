@@ -167,11 +167,7 @@ export const FilingsAndProceedings = connect<
                     <span> --- </span>
                     <Button
                       link
-                      className={classNames(
-                        'text-right',
-                        // entry.isStricken && 'stricken-docket-record', // NOTE (#8546): This may be unnecessary
-                        'view-pdf-link',
-                      )}
+                      className={classNames('text-right', 'view-pdf-link')}
                       data-testid={`related-document-viewer-link-${entry.docketEntryIndex}`}
                       arial-label={`View PDF for: ${entry.docketEntryIndex}`}
                       onClick={() =>

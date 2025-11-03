@@ -280,12 +280,6 @@ describe('consolidated cases', () => {
   });
 
   it('should make call to related order to motion in multiple cases', async () => {
-    const mockOrderDocketEntry: any = {
-      ...mockDocketEntryWithWorkItem,
-      docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-      eventCode: 'O',
-    };
-
     const mockOrderForm: CourtIssuedDocumentAnyType = {
       date: '2030-01-20T00:00:00.000Z',
       documentType: 'Order for Filing Fee',
@@ -301,13 +295,11 @@ describe('consolidated cases', () => {
       ],
     };
 
-    MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketEntries.push(mockOrderDocketEntry);
-
     await fileAndServeCourtIssuedDocumentInteractor(
       applicationContext,
       {
         clientConnectionId,
-        docketEntryId: mockOrderDocketEntry.docketEntryId,
+        docketEntryId: mockOrderForm.docketEntryId,
         docketNumbers: [
           MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
           MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
