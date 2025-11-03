@@ -19,9 +19,17 @@ export function createAndServePaperFiling({
     cy.get('#free-text').type(purpose); // NOTE (#8546): May want to make this a data-testid
   }
 
+  cy.intercept('GET', '**/documents/**/upload-policy').as('uploadPolicy');
+
   cy.get('[data-testid="save-and-serve"]').click();
   cy.get('[data-testid="modal-button-confirm"]').click();
 
   if (isPaperCase)
     cy.get('[data-testid="print-paper-service-done-button"]').click();
+
+  return cy.wait('@uploadPolicy').then(({ request }) => {
+    const regex = /(?<=documents\/).*(?=\/upload-policy)/;
+    const docketEntryId = regex.exec(request.url)?.join()!;
+    return cy.wrap({ docketEntryId });
+  });
 }

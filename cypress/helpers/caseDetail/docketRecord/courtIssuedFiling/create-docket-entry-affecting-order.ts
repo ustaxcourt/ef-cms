@@ -55,7 +55,16 @@ export const createDocketEntryAffectingOrderOnConsolidatedCase = (
     .click();
 
   cy.get('[data-testid="service-stamp-Served"]').click();
+
+  cy.intercept('POST', '**/file-and-serve-court-issued-docket-entry').as(
+    'PostCourtIssuedDocument',
+  );
+
   // Save and serve docket entry
   cy.get('[data-testid="serve-to-parties-btn"]').click();
   cy.get('[data-testid="modal-button-confirm"]').click();
+
+  return cy.wait('@PostCourtIssuedDocument').then(({ request }) => {
+    return cy.wrap({ docketEntryId: request.body.docketEntryId });
+  });
 };

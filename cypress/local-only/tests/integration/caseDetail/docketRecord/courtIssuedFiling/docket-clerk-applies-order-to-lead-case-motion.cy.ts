@@ -20,40 +20,36 @@ describe('Docket clerk creates an order affecting other docket entries', functio
       documentType: 'Motion',
       purpose: motionPurpose,
       isPaperCase: false,
-    });
-
-    // Now check if new motion was added
-    // get the last docket entry row
-    cy.get('[data-testid="docket-record-table"] tbody tr')
-      .contains('tr', 'Motion')
-      .last() // Get the last motion if multiple exist
-      .find('td')
-      .eq(1)
-      .then($td => {
-        const motionIndex = $td.text().trim();
-        cy.wrap(motionIndex).as('motionIndex');
-        cy.log(`Captured motion index: ${motionIndex}`);
-      });
-
-    // create order and apply to lead case motion
-    cy.get('@motionIndex').then(motionIndex => {
-      createDocketEntryAffectingOrderOnConsolidatedCase(
-        orderTitle,
-        motionIndex,
-        disposition,
-      );
-    });
-    cy.get('[data-testid="docket-record-table"] tbody tr')
-      .contains('tr', 'Order')
-      .last() // Get the last motion if multiple exist
-      .find('td')
-      .eq(5)
-      .then($td => {
-        cy.get('@motionIndex').then(motionIndex => {
-          expect($td.text().trim()).to.contain(
-            `${disposition} #${motionIndex}`,
-          );
+    }).then(({ docketEntryId }) => {
+      // Now check if new motion was added
+      // get the last docket entry row
+      cy.get(`[data-testid="${docketEntryId}"]`).should('exist');
+      cy.get(`[data-testid="${docketEntryId}"]`)
+        .find('td')
+        .eq(1)
+        .then($td => {
+          const motionIndex = $td.text().trim();
+          cy.wrap(motionIndex).as('motionIndex');
+        });
+      // create order and apply to lead case motion
+      cy.get('@motionIndex').then(motionIndex => {
+        createDocketEntryAffectingOrderOnConsolidatedCase(
+          orderTitle,
+          motionIndex,
+          disposition,
+        ).then(({ docketEntryId: orderDocketEntryId }) => {
+          cy.get(`[data-testid="${orderDocketEntryId}"]`)
+            .find('td')
+            .eq(5)
+            .then($td => {
+              cy.get('@motionIndex').then(motionIndex => {
+                expect($td.text().trim()).to.contain(
+                  `${disposition} #${motionIndex}`,
+                );
+              });
+            });
         });
       });
+    });
   });
 });
