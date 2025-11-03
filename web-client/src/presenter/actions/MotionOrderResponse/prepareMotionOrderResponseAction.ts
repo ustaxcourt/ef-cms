@@ -1,4 +1,4 @@
-import { Case } from '@shared/business/entities/cases/Case';
+import { Case, isLeadCase } from '@shared/business/entities/cases/Case';
 import {
   CASE_STATUS_TYPES,
   MOTION_ORDER_RESPONSE_OPTIONS,
@@ -56,7 +56,7 @@ export const prepareMotionOrderResponseAction = ({
     FORMATS.MONTH_DAY_YEAR,
   );
 
-  const isOnLeadCase = caseDetail.leadDocketNumber === caseDetail.docketNumber;
+  const isOnLeadCase = isLeadCase(caseDetail);
   const hasStrickenFromTrialSessions = !!strickenFromTrialSession;
   const hasAdditionalOrderText = !!additionalOrderText;
 
