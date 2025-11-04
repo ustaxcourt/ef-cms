@@ -92,7 +92,7 @@ export const formatDocketEntryOnDocketRecord = (
   const canTerminalUserSeeLink =
     entry.isFileAttached && isServed && !entry.isSealed && !entry.isStricken;
 
-  const showLinkToDocument = isTerminalUser // NOTE (#8546): may use similar to determine if link shoulb active for relations
+  const showLinkToDocument = isTerminalUser
     ? canTerminalUserSeeLink
     : canPublicUserSeeLink;
 

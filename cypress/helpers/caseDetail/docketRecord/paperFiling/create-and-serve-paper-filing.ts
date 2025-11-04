@@ -16,7 +16,7 @@ export function createAndServePaperFiling({
   if (documentType.includes('Motion') && purpose) {
     cy.log('Filling in document description for motion type document');
     cy.get('#free-text').clear();
-    cy.get('#free-text').type(purpose); // NOTE (#8546): May want to make this a data-testid
+    cy.get('#free-text').type(purpose);
   }
 
   cy.intercept('GET', '**/documents/**/upload-policy').as('uploadPolicy');
