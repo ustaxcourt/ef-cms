@@ -154,7 +154,6 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
             </fieldset>
           </FormGroup>
         )}
-        {/* TODO (#8546): Fix this */}
         {DocketEntry.isOrder(form.eventCode) &&
           (form.dispositionOrder || form.affectedDocketEntries) && (
             <div>
