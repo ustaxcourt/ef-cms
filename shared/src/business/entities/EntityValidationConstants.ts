@@ -197,10 +197,6 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     .boolean()
     .optional()
     .description('Whether the document is a draft (not on the docket record).'),
-  isFiledAcrossAllCases: joi
-    .boolean()
-    .required()
-    .description('Whether the document is filed across all cases.'),
   isFileAttached: joi
     .boolean()
     .optional()
@@ -266,6 +262,14 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     )
     .messages({ '*': 'Enter selection for filing status.' }),
   mailingDate: JoiValidationConstants.STRING.max(100).optional(),
+  multiDocketedOn: joi
+    .array()
+    .items(JoiValidationConstants.DOCKET_NUMBER)
+    .required(),
+  multiDocketedOriginalDocketNumber:
+    JoiValidationConstants.DOCKET_NUMBER.optional().description(
+      'Docket Number of the Case originally filed on in XXXXX-YY format.',
+    ),
   numberOfPages: joi.number().integer().optional().allow(null),
   objections: JoiValidationConstants.STRING.valid(
     ...OBJECTIONS_OPTIONS,
