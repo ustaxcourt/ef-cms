@@ -62,7 +62,7 @@ To update Node.js:
   - `./.circleci/config.yml`
 4. Manually update DAWSON's GitHub Actions YAML files.
   - **Note:** These files will point to `.nvmrc` in a future update.
-5. Update the node version used by our lambdas. 
+5. Update the node version used by our lambdas.
   - `web-api/terraform/modules/lambda/lambda.tf`
   - `web-api/terraform/modules/api/layers.tf`
 
@@ -103,7 +103,7 @@ regex search the entire project for `"~> \d+.\d+.\d+"` and make sure it's set to
 	> version = "~>~ <LATEST_VERSION>"
 
 
-### 4. Update Terraform OpenSearch provider 
+### 4. Update Terraform OpenSearch provider
 
 Check if there is an update to the Terraform OpenSearch provider and update our `.tf` files to use the [latest version](https://registry.terraform.io/providers/opensearch-project/opensearch/latest) of the provider.
 
@@ -114,7 +114,7 @@ Search the entire project for `source  = "opensearch-project/opensearch"` and ma
 
 	> version = "<LATEST_VERSION>"
 
-### 5. Update OpenSearch 
+### 5. Update OpenSearch
 
 Check to see if there is an updated version of OpenSearch available.
 
@@ -126,6 +126,8 @@ If an update is available, we'll need to update OpenSearch locally, in github ac
 
 - Update OpenSearch to the latest version in a deployed environment:
 
+   - Run `scripts/reports/indices.ts` and note the indices and aliases set up for the deployed environment.
+
    - Set the value of the `ES_ENGINE_VERSION` secret in the `[env]_deploy` secrets in Secrets Manager using `scripts/secrets/update-secret.ts`
 
    - Set the value of the `ES_LOGS_ENGINE_VERSION` secret in the `account_deploy` secrets in Secrets Manager using `scripts/secrets/update-secret.ts`
@@ -134,9 +136,11 @@ If an update is available, we'll need to update OpenSearch locally, in github ac
 
    - Run deployment. Verify cluster is still functional while upgrade is being performed and after by running search smoketests against current color.
 
+   - Rerun `scripts/reports/indices.ts` and ensure that all indices and aliases are configured as expected.
+
    - Describe the manual steps in the dependency updates pull request. See [PR #9189](https://github.com/ustaxcourt/ef-cms/pull/9189) for an example.
 
-- Update OpenSearch to the latest version locally: 
+- Update OpenSearch to the latest version locally:
 
    - Set the value of the `image` property in `web-api/elasticsearch/docker-compose.yml` to correspond to the new version number, then run the api locally to verify:
 
@@ -167,7 +171,7 @@ If an update is available, we'll need to update OpenSearch locally, in github ac
 
 Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Try to update these items but please be aware of the issue that's documented and ensure it's been resolved.
 
-### DWT 
+### DWT
 
 - Minor versions of DWT _should_ be updated, but require that Court IT update the Windows clients in concert with our app. Do not update without coordinating.
 
@@ -209,12 +213,12 @@ The major version of this package should match our major version of node. At the
 ### TypeScript
 We cannot update TypeScript version beyond v5.8.3 until ts-jest supports it
 
-- On September 19th, 2025, tried to update to 5.9.2, the highest non-beta version but we would need to address the Typescript issues. I ran out of time to do so. Refer to this PR. https://github.com/ustaxcourt/ef-cms/pull/9164 
+- On September 19th, 2025, tried to update to 5.9.2, the highest non-beta version but we would need to address the Typescript issues. I ran out of time to do so. Refer to this PR. https://github.com/ustaxcourt/ef-cms/pull/9164
 
 ### p-queue
 There are a few scripts that depend on p-queue v6.6.2.  Upgrading this past version 6 will cause issues related to module imports.  It might be good to verify if the scripts using p-queue are still in use and if not, we could just remove p-queue and those scripts.
 
-- On September 19th, 2025, tried to updAte to 8.1.1. Errors were thrown on Github Action checks to address imports. A potential fix could be to update our build configuration to properly handle ES modules or maybe use dynamic imports as a workaround? Refer to this PR. https://github.com/ustaxcourt/ef-cms/pull/9164 
+- On September 19th, 2025, tried to updAte to 8.1.1. Errors were thrown on Github Action checks to address imports. A potential fix could be to update our build configuration to properly handle ES modules or maybe use dynamic imports as a workaround? Refer to this PR. https://github.com/ustaxcourt/ef-cms/pull/9164
 
 ## Incrementing the Node Cache Key Version
 
