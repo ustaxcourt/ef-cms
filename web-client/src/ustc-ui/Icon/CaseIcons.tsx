@@ -10,6 +10,15 @@ export function CaseIcons({ formattedCase }: { formattedCase: any }) {
       style={{ display: 'flex', flexWrap: 'nowrap', gap: '1rem' }} // USWDS overwrites these styles at certain breakpoints even with !important
     >
       <WrappedIcon
+        icon="flag"
+        iconClass="aged-case-flag"
+        spanClass={
+          formattedCase.isAgedCase ? 'visibility-visible' : 'visibility-hidden'
+        }
+        spanDataTestId={`case-aged-icon-${formattedCase.docketNumber}`}
+        title="There has not been activity on this case for the past 12 months."
+      />
+      <WrappedIcon
         spanClass={
           formattedCase.isSealed ? 'visibility-visible' : 'visibility-hidden'
         }
