@@ -65,9 +65,9 @@ variable "es_info_cluster_shared_cluster_arn" {
 }
 
 variable "es_info_cluster_shared_cluster_account_ids" {
-  default = []
-  description = "List of AWS account that are consumers of the info cluster"
-  type = list(string)
+  default = ""
+  description = "A comma separated list of AWS account that are consumers of the info cluster"
+  type = string
 }
 
 

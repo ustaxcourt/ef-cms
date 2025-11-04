@@ -73,19 +73,19 @@ const scriptConfig: ScriptConfig = {
     },
     esInfoClusterSharedArn:{
       default: '',
-      description: "arn of info cluster opensearch (used when es_info_cluster_create is false)",
+      description: 'arn of info cluster opensearch (used when es_info_cluster_create is false)',
       long: 'es-info-cluster-shared-arn',
       type: 'string',
     },
     esInfoClusterSharedEndPoint:{
       default: '',
-      description: "endpoint of info cluster opensearch (used when es_info_cluster_create is false)",
+      description: 'endpoint of info cluster opensearch (used when es_info_cluster_create is false)',
       long: 'es-info-cluster-shared-endpoint',
       type: 'string',
     },
     esInfoClusterSharedAccountIds:{
       default: '',
-      description: "A comma separated list of AWS account that are consumers of the info cluster",
+      description: 'A comma separated list of AWS account that are consumers of the info cluster',
       long: 'es-info-cluster-shared-account-ids',
       type: 'string',
     },
