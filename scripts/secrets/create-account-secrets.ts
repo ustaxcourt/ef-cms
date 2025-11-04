@@ -71,21 +71,24 @@ const scriptConfig: ScriptConfig = {
       default: 'us-east-1',
       type: 'string',
     },
-    esInfoClusterSharedArn:{
+    esInfoClusterSharedArn: {
       default: '',
-      description: 'arn of info cluster opensearch (used when es_info_cluster_create is false)',
+      description:
+        'arn of info cluster opensearch (used when es_info_cluster_create is false)',
       long: 'es-info-cluster-shared-arn',
       type: 'string',
     },
-    esInfoClusterSharedEndPoint:{
+    esInfoClusterSharedEndPoint: {
       default: '',
-      description: 'endpoint of info cluster opensearch (used when es_info_cluster_create is false)',
+      description:
+        'endpoint of info cluster opensearch (used when es_info_cluster_create is false)',
       long: 'es-info-cluster-shared-endpoint',
       type: 'string',
     },
-    esInfoClusterSharedAccountIds:{
+    esInfoClusterSharedAccountIds: {
       default: '',
-      description: 'A comma separated list of AWS account that are consumers of the info cluster',
+      description:
+        'A comma separated list of AWS account that are consumers of the info cluster',
       long: 'es-info-cluster-shared-account-ids',
       type: 'string',
     },
@@ -145,8 +148,10 @@ if (env === 'prod') {
   if (externalTrustedRoleArn) {
     dawsonDevTrustedRoleArns.push(externalTrustedRoleArn);
   }
-  const createInfoCluster = !(esInfoClusterSharedArn && esInfoClusterSharedEndPoint);
-  const accountSecrets: Record<string,any> = {
+  const createInfoCluster = !(
+    esInfoClusterSharedArn && esInfoClusterSharedEndPoint
+  );
+  const accountSecrets: Record<string, any> = {
     COGNITO_SUFFIX: `${repoSlug}-${env}`,
     // eslint-disable-next-line no-useless-escape
     DAWSON_DEV_TRUSTED_ROLE_ARNS: `[\\\"${dawsonDevTrustedRoleArns.join('\\\",\\\"')}\\\"]`,
@@ -164,21 +169,27 @@ if (env === 'prod') {
     accountSecrets.ES_LOGS_INSTANCE_TYPE = opensearchLogsInstanceType;
 
     if (esInfoClusterSharedAccountIds) {
-      accountSecrets.ES_INFO_CLUSTER_SHARED_ACCOUNT_IDS = esInfoClusterSharedAccountIds;
+      accountSecrets.ES_INFO_CLUSTER_SHARED_CLUSTER_ACCOUNT_IDS =
+        esInfoClusterSharedAccountIds;
     }
     console.log('Creating new Info Opensearch cluster');
   } else {
     if (!esInfoClusterSharedArn || !esInfoClusterSharedEndPoint) {
-      console.error('ERROR: When using shared Info Opensearch cluster, both arn and endpoint must be provided');
+      console.error(
+        'ERROR: When using shared Info Opensearch cluster, both arn and endpoint must be provided',
+      );
       process.exit(1);
     }
     accountSecrets.ES_INFO_CLUSTER_SHARED_ARN = esInfoClusterSharedArn;
-    accountSecrets.ES_INFO_CLUSTER_SHARED_ENDPOINT = esInfoClusterSharedEndPoint;
+    accountSecrets.ES_INFO_CLUSTER_SHARED_ENDPOINT =
+      esInfoClusterSharedEndPoint;
     accountSecrets.ES_LOGS_EBS_VOLUME_SIZE_GB = 10;
     accountSecrets.ES_LOGS_INSTANCE_COUNT = 1;
     accountSecrets.ES_LOGS_INSTANCE_TYPE = 't2.small.search';
-    console.log(`Using shared Info Opensearch cluster: arn ${esInfoClusterSharedArn} endpoint ${esInfoClusterSharedEndPoint}`);
-  } 
+    console.log(
+      `Using shared Info Opensearch cluster: arn ${esInfoClusterSharedArn} endpoint ${esInfoClusterSharedEndPoint}`,
+    );
+  }
 
   const secretsClient = new SecretsManagerClient({ region });
   if (update) {
