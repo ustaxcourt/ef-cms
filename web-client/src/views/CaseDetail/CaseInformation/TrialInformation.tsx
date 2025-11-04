@@ -200,17 +200,31 @@ export const TrialInformation = connect(
                 </tbody>
               </table>
               <div className="grid-col-8">
+                {!caseDetail.remoteTrialGrantedDate && (
+                  <EditRemoteStatusButton
+                    showEditRemoteTrialPermission={
+                      showEditRemoteTrialPermission
+                    }
+                    openEditRemoteStatusModalSequence={
+                      openEditRemoteStatusModalSequence
+                    }
+                  />
+                )}
                 <RemoteTrialSessionInformation
                   remoteTrialGrantedDate={caseDetail.remoteTrialGrantedDate}
                 />
               </div>
               <div className="grid-col-4">
-                <EditRemoteStatusButton
-                  showEditRemoteTrialPermission={showEditRemoteTrialPermission}
-                  openEditRemoteStatusModalSequence={
-                    openEditRemoteStatusModalSequence
-                  }
-                />
+                {caseDetail.remoteTrialGrantedDate && (
+                  <EditRemoteStatusButton
+                    showEditRemoteTrialPermission={
+                      showEditRemoteTrialPermission
+                    }
+                    openEditRemoteStatusModalSequence={
+                      openEditRemoteStatusModalSequence
+                    }
+                  />
+                )}
               </div>
             </div>
           </>
