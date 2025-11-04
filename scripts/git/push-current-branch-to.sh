@@ -25,21 +25,11 @@ fi
 git checkout "$SOURCE"
 git pull
 
-
-if [[ -n "$2" ]] && { [[ "$2" == "--trigger" ]] || [[ "$2" == "--trigger-minimal" ]]; }; then
+if [[ -n "$2" ]] && [[ "$2" == "--trigger" ]]; then
   [[ -z "$CIRCLE_PROJECT_SLUG" ]] && echo "You must have CIRCLE_PROJECT_SLUG set in your environment to trigger a deployment" && exit 1
   [[ -z "$CIRCLE_PERSONAL_TOKEN" ]] && echo "You must have CIRCLE_PERSONAL_TOKEN set in your environment to trigger a deployment" && exit 1
-  if [[ "$2" == "--trigger" ]]; then
-    curl --request POST --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
-      --header "Circle-Token: ${CIRCLE_PERSONAL_TOKEN}" \
-      --header "content-type: application/json" \
-      --data "{\"branch\":\"${TARGET}\"}"
-  elif [[ "$2" == "--trigger-minimal" ]]; then
-    curl --request POST --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
-      --header "Circle-Token: ${CIRCLE_PERSONAL_TOKEN}" \
-      --header "content-type: application/json" \
-      --data "{\"branch\":\"${TARGET}\", \"parameters\":{ \
-        \"run_build_and_deploy\":false, \
-        \"run_build_and_deploy_minimal\":true}}"
-  fi
+  curl --request POST --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
+    --header "Circle-Token: ${CIRCLE_PERSONAL_TOKEN}" \
+    --header "content-type: application/json" \
+    --data "{\"branch\":\"${TARGET}\"}"
 fi
