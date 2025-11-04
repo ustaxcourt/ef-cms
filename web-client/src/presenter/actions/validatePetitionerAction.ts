@@ -16,18 +16,31 @@ export const validatePetitionerAction = ({
   path,
 }: ActionProps) => {
   const { contact } = get(state.form);
+
   const caseDetail = get(state.caseDetail);
 
-  const errors = applicationContext
+  const { petitioners } = caseDetail;
+
+  const errors = {};
+
+  if (
+    contact.confirmEmail &&
+    petitioners.map(p => p.email).includes(contact.confirmEmail)
+  ) {
+    errors['confirmEmail'] =
+      'This email is already associated with another petitioner on this case. Please use a different email address.';
+  }
+
+  const result = applicationContext
     .getUseCases()
     .validatePetitionerInteractor(applicationContext, {
       contactInfo: contact,
       existingPetitioners: caseDetail.petitioners,
     });
 
-  if (isEmpty(errors)) {
-    return path.success();
-  } else {
-    return path.error({ errors: { contact: errors } });
-  }
+  if (result) Object.assign(errors, result);
+
+  return isEmpty(errors)
+    ? path.success()
+    : path.error({ errors: { contact: errors } });
 };
