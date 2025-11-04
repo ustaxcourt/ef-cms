@@ -1,6 +1,9 @@
 import {
   loginAsDocketClerk,
   loginAsPetitioner,
+  loginAsClerkOfCourt,
+  loginAsTrialClerk,
+  loginAsCaseServicesSupervisor,
 } from 'cypress/helpers/authentication/login-as-helpers';
 import { createAndServePaperPetition } from 'cypress/helpers/fileAPetition/create-and-serve-paper-petition';
 import { getCaseDetailTab } from 'cypress/local-only/support/pages/case-detail';
@@ -14,7 +17,7 @@ import {
 import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
 
 describe('Edit Remote Status', () => {
-  describe('As a docket clerk', () => {
+  describe('As a Docket Clerk', () => {
     it('should allow docket clerk to edit remote status and add a granted date', () => {
       createAndServePaperPetition().then(({ docketNumber }) => {
         loginAsDocketClerk();
@@ -49,42 +52,20 @@ describe('Edit Remote Status', () => {
         getCaseDetailTab('case-information').click();
 
         cy.get('[data-testid="edit-remote-status"]').click();
+
         const dateString = formatNow(FORMATS.MMDDYYYY);
         cy.get('#remote-trial-granted-date-picker').type(dateString);
-        cy.get('.modal-button-confirm').click();
 
-        cy.get('.usa-alert--success').should('exist');
-
-        cy.get('[data-testid="edit-remote-status"]').click();
-        cy.get('.modal-button-clear').click();
-
-        cy.get('#remote-trial-granted-date-picker').should('have.value', '');
+        cy.get('#remote-trial-granted-date-picker').clear();
 
         cy.get('.modal-button-confirm').click();
 
-        cy.get('.usa-alert--success').should('exist');
-
-        cy.contains('Motion to proceed remotely granted date').should(
-          'not.exist',
+        cy.get('.usa-error-message').should(
+          'contain',
+          'Date cannot be invalid or empty',
         );
-      });
-    });
 
-    it('should allow saving without a date (no-op when no date is entered)', () => {
-      createAndServePaperPetition().then(({ docketNumber }) => {
-        loginAsDocketClerk();
-        goToCase(docketNumber);
-        getCaseDetailTab('case-information').click();
-
-        cy.get('[data-testid="edit-remote-status"]').click();
-
-        cy.get('.modal-button-confirm').click();
-
-        cy.get('.usa-alert--success').should('exist');
-
-        cy.contains('Motion to proceed remotely granted date').should(
-          'not.exist',
-        );
+        cy.get('.modal-header').should('exist');
       });
     });
 
@@ -166,6 +147,76 @@ describe('Edit Remote Status', () => {
         cy.get('#remote-trial-granted-date-picker').type(futureDateString);
 
         cy.get('#remote-trial-granted-date-picker').should('exist');
+      });
+    });
+  });
+
+  describe('As a Clerk of The Court', () => {
+    it('should allow clerk of the court to edit remote status and add a granted date', () => {
+      createAndServePaperPetition().then(({ docketNumber }) => {
+        loginAsClerkOfCourt();
+        goToCase(docketNumber);
+        getCaseDetailTab('case-information').click();
+
+        cy.get('[data-testid="edit-remote-status"]').should('exist');
+        cy.get('[data-testid="edit-remote-status"]').click();
+
+        cy.get('.modal-header').should('contain', 'Edit Remote Status');
+
+        const dateString = formatNow(FORMATS.MMDDYYYY);
+
+        cy.get('#remote-trial-granted-date-picker').type(dateString);
+
+        cy.get('.modal-button-confirm').click();
+
+        cy.get('.usa-alert--success').should(
+          'contain',
+          'Successfully updated motion to proceed remotely date',
+        );
+
+        cy.contains('Motion to proceed remotely granted date').should('exist');
+        cy.contains(dateString).should('exist');
+      });
+    });
+  });
+
+  describe('As a Case Services Supervisor', () => {
+    it('should allow case services supervisor to edit remote status and add a granted date', () => {
+      createAndServePaperPetition().then(({ docketNumber }) => {
+        loginAsCaseServicesSupervisor();
+        goToCase(docketNumber);
+        getCaseDetailTab('case-information').click();
+
+        cy.get('[data-testid="edit-remote-status"]').should('exist');
+        cy.get('[data-testid="edit-remote-status"]').click();
+
+        cy.get('.modal-header').should('contain', 'Edit Remote Status');
+
+        const dateString = formatNow(FORMATS.MMDDYYYY);
+
+        cy.get('#remote-trial-granted-date-picker').type(dateString);
+
+        cy.get('.modal-button-confirm').click();
+
+        cy.get('.usa-alert--success').should(
+          'contain',
+          'Successfully updated motion to proceed remotely date',
+        );
+
+        cy.contains('Motion to proceed remotely granted date').should('exist');
+        cy.contains(dateString).should('exist');
+      });
+    });
+  });
+
+  describe('As a Trial Clerk', () => {
+    it('should not allow trial clerk to edit remote status and add a granted date', () => {
+      createAndServePaperPetition().then(({ docketNumber }) => {
+        loginAsTrialClerk();
+        goToCase(docketNumber);
+        getCaseDetailTab('case-information').click();
+
+        cy.get('[data-testid="edit-remote-status"]').should('not.exist');
       });
     });
   });

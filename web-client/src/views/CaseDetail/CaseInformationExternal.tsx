@@ -1,3 +1,4 @@
+import { RemoteTrialSessionInformation } from '@web-client/views/CaseDetail/CaseInformation/RemoteTrialSessionInformation';
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConsolidatedCases } from './CaseInformation/ConsolidatedCases';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -6,7 +7,6 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
-import { RemoteTrialSessionInformation } from '@web-client/views/CaseDetail/CaseInformation/TrialInformation';
 
 const CaseDetails = ({ caseDetail, caseDetailHelper }) => (
   <React.Fragment>
