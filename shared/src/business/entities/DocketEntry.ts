@@ -187,8 +187,6 @@ export class DocketEntry extends JoiValidationEntity {
   public signedJudgeName?: string;
   public strickenBy?: string;
   public strickenByUserId?: string;
-  // public orderDocketEntryId?: string;
-  // public motionDisposition?: string; // 'GRANTED' | 'DENTIED' | 'PARTIAL';
   public affectedDocketEntries?: DocketEntryRelation[];
   public affectedByDocketEntries?: DocketEntryRelation[];
 
