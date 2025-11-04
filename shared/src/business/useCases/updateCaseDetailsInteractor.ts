@@ -69,13 +69,15 @@ export const updateCaseDetails = async (
       irsNoticeDate: editableFields.hasVerifiedIrsNotice
         ? editableFields.irsNoticeDate
         : undefined,
-      petitionPaymentDate: isPaid ? editableFields.petitionPaymentDate : null,
-      petitionPaymentMethod: isPaid
-        ? editableFields.petitionPaymentMethod
-        : null,
-      petitionPaymentWaivedDate: isWaived
-        ? editableFields.petitionPaymentWaivedDate
-        : null,
+      ...('petitionPaymentStatus' in editableFields && {
+        petitionPaymentDate: isPaid ? editableFields.petitionPaymentDate : null,
+        petitionPaymentMethod: isPaid
+          ? editableFields.petitionPaymentMethod
+          : null,
+        petitionPaymentWaivedDate: isWaived
+          ? editableFields.petitionPaymentWaivedDate
+          : null,
+      }),
     },
     { authorizedUser },
   );

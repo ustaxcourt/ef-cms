@@ -5,7 +5,11 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
-import { createStartOfDayISO, formatDateString, FORMATS } from '@shared/business/utilities/DateHandler';
+import {
+  createStartOfDayISO,
+  formatDateString,
+  FORMATS,
+} from '@shared/business/utilities/DateHandler';
 
 export const EditRemoteStatusModal = connect(
   {
@@ -35,6 +39,7 @@ export const EditRemoteStatusModal = connect(
       <ModalDialog
         cancelLabel="Cancel"
         cancelSequence={cancelSequence}
+        className="edit-remote-status-modal"
         confirmLabel="Save"
         confirmSequence={confirmSequence}
         clearLabel="Clear date"
@@ -43,10 +48,9 @@ export const EditRemoteStatusModal = connect(
       >
         <div className="margin-bottom-4">
           <div className="margin-bottom-2">
-            By putting in a date, you are indicating that the Motion to Proceed
-            Remotely was granted.{' '}
+            Enter the date the Motion to Proceed Remotely was granted.{' '}
           </div>
-          <FormGroup errorText={validationErrors.remoteTrialGrantedDate}>
+          <FormGroup>
             <div className="edit-remote-trial-date-picker">
               <p className="text-semibold Dawson_body Dawson_body_secondary">
                 Date granted: <span className="text-light">MM/DD/YYYY</span>
@@ -55,6 +59,7 @@ export const EditRemoteStatusModal = connect(
                 <DateSelector
                   data-testid="remote-trial-granted-date"
                   defaultValue={modal.remoteTrialGrantedDate}
+                  errorText={validationErrors.remoteTrialGrantedDate}
                   id="remote-trial-granted-date"
                   maxDate={maxDate}
                   pristine={!modal.remoteTrialGrantedDate}
