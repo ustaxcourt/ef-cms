@@ -88,7 +88,6 @@ export const JURISDICTIONAL_OPTIONS = {
 export type DocketEntryRelation = {
   disposition: string;
   docketEntryId: string;
-  // docketEntryType: string;
 };
 
 export const MOTION_DISPOSITIONS = {
