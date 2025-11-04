@@ -62,7 +62,7 @@ describe('Edit Remote Status', () => {
 
         cy.get('.usa-error-message').should(
           'contain',
-          'Date cannot be invalid or empty',
+          'Enter a valid date',
         );
 
         cy.get('.modal-header').should('exist');

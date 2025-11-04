@@ -16,7 +16,7 @@ export const validateRemoteTrialPermissionAction = ({
 
   if (!remoteTrialGrantedDate || remoteTrialGrantedDate.trim() === '') {
     return path.error({
-      errors: { remoteTrialGrantedDate: 'Date cannot be invalid or empty' },
+      errors: { remoteTrialGrantedDate: 'Enter a valid date' },
     });
   }
 
