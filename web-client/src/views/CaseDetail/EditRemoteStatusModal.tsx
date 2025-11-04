@@ -46,7 +46,7 @@ export const EditRemoteStatusModal = connect(
             By putting in a date, you are indicating that the Motion to Proceed
             Remotely was granted.{' '}
           </div>
-          <FormGroup errorText={validationErrors.remoteTrialGrantedDate}>
+          <FormGroup>
             <div className="edit-remote-trial-date-picker">
               <p className="text-semibold Dawson_body Dawson_body_secondary">
                 Date granted: <span className="text-light">MM/DD/YYYY</span>
@@ -55,6 +55,7 @@ export const EditRemoteStatusModal = connect(
                 <DateSelector
                   data-testid="remote-trial-granted-date"
                   defaultValue={modal.remoteTrialGrantedDate}
+                  errorText={validationErrors.remoteTrialGrantedDate}
                   id="remote-trial-granted-date"
                   maxDate={maxDate}
                   pristine={!modal.remoteTrialGrantedDate}
