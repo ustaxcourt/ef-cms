@@ -29,6 +29,7 @@ export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
     return iconsToDisplay;
   } else if (formattedResult.isPaper) {
     iconsToDisplay.push({
+      className: 'fa-icon-blue',
       icon: ['fas', 'file-alt'],
       title: 'Is paper',
     });

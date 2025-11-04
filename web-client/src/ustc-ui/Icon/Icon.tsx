@@ -1,5 +1,8 @@
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { FontAwesomeIcon, FontAwesomeIconProps } from '@fortawesome/react-fontawesome';
+import {
+  FontAwesomeIcon,
+  FontAwesomeIconProps,
+} from '@fortawesome/react-fontawesome';
 import { cloneDeep } from 'lodash';
 import React from 'react';
 /**
@@ -23,7 +26,6 @@ export const Icon = props => {
 
 Icon.displayName = 'Icon';
 
-
 type IconWithTooltipProps = {
   spanClass?: string;
   iconClass?: string;
@@ -34,8 +36,9 @@ type IconWithTooltipProps = {
   color?: string;
   icon: IconProp;
   size?: FontAwesomeIconProps['size'];
+  spanDataTestId?: string;
+  ariaHidden?: boolean | undefined;
 };
-
 
 export const WrappedIcon: React.FC<IconWithTooltipProps> = ({
   iconAriaLabel,
@@ -47,10 +50,18 @@ export const WrappedIcon: React.FC<IconWithTooltipProps> = ({
   spanClass,
   color,
   onClick,
+  spanDataTestId,
+  ariaHidden,
 }) => {
   return (
-    <span aria-label={spanAriaLabel} className={spanClass} title={title}>
+    <span
+      data-testid={spanDataTestId}
+      aria-label={spanAriaLabel}
+      className={spanClass}
+      title={title}
+    >
       <FontAwesomeIcon
+        aria-hidden={ariaHidden}
         aria-label={iconAriaLabel}
         color={color}
         onClick={onClick}

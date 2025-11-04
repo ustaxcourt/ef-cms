@@ -1,5 +1,5 @@
 import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseIcon';
-import { Icon } from '@web-client/ustc-ui/Icon/Icon';
+import { WrappedIcon } from '@web-client/ustc-ui/Icon/Icon';
 import React from 'react';
 import classNames from 'classnames';
 
@@ -9,33 +9,16 @@ export function CaseIcons({ formattedCase }: { formattedCase: any }) {
       className="multi-filing-type-icon"
       style={{ display: 'flex', flexWrap: 'nowrap', gap: '1rem' }} // USWDS overwrites these styles at certain breakpoints even with !important
     >
-      <span
-        className={
-          formattedCase.isAgedCase ? 'visibility-visible' : 'visibility-hidden'
-        }
-        data-testid={`case-aged-icon-${formattedCase.docketNumber}`}
-        title="There has not been activity on this case for the past 12 months."
-      >
-        <Icon
-          aria-hidden={!formattedCase.isAgedCase}
-          className="aged-case-flag"
-          icon="flag"
-        />
-      </span>
-      <span
-        className={
+      <WrappedIcon
+        spanClass={
           formattedCase.isSealed ? 'visibility-visible' : 'visibility-hidden'
         }
-        data-testid="case-sealed-icon"
-      >
-        <Icon
-          aria-hidden={!formattedCase.isSealed}
-          aria-label="Sealed"
-          className="sealed-case-entry"
-          icon="lock"
-          title="Sealed"
-        />
-      </span>
+        spanDataTestId="case-sealed-icon"
+        title="Sealed"
+        icon="lock"
+        iconAriaLabel="Sealed"
+        iconClass="sealed-case-entry"
+      />
       <span
         className={classNames({
           'margin-left-2':
