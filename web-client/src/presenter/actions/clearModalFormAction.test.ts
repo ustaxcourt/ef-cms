@@ -1,9 +1,9 @@
-import { clearModalStateAction } from './clearModalStateAction';
+import { clearModalFormAction } from './clearModalFormAction';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('clearModalFormAction', () => {
   it('should clear the value of state.modal.form', async () => {
-    const result = await runAction(clearModalStateAction, {
+    const result = await runAction(clearModalFormAction, {
       state: {
         modal: {
           form: {
@@ -13,7 +13,6 @@ describe('clearModalFormAction', () => {
         },
       },
     });
-
-    expect(result.state.modal).toEqual({});
+    expect(result.state.modal.form).toEqual({});
   });
 });
