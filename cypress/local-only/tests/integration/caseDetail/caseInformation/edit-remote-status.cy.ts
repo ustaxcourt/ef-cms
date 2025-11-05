@@ -50,22 +50,30 @@ describe('Edit Remote Status', () => {
         loginAsDocketClerk();
         goToCase(docketNumber);
         getCaseDetailTab('case-information').click();
-
         cy.get('[data-testid="edit-remote-status"]').click();
-
         const dateString = formatNow(FORMATS.MMDDYYYY);
         cy.get('#remote-trial-granted-date-picker').type(dateString);
-
-        cy.get('#remote-trial-granted-date-picker').clear();
-
         cy.get('.modal-button-confirm').click();
 
-        cy.get('.usa-error-message').should(
-          'contain',
-          'Enter a valid date',
-        );
+        cy.get('.usa-alert--success').should('exist');
+        cy.contains('Motion to proceed remotely granted date').should('exist');
 
-        cy.get('.modal-header').should('exist');
+        cy.get('[data-testid="edit-remote-status"]').click();
+        cy.get('#remote-trial-granted-date-picker').should(
+          'have.value',
+          dateString,
+        );
+        cy.get('#remote-trial-granted-date-picker').clear();
+        cy.get('.modal-button-confirm').click();
+
+        cy.get('.modal-header').should('not.exist');
+        cy.get('.usa-alert--success').should(
+          'contain',
+          'Successfully updated motion to proceed remotely date',
+        );
+        cy.contains('Motion to proceed remotely granted date').should(
+          'not.exist',
+        );
       });
     });
 
@@ -104,6 +112,22 @@ describe('Edit Remote Status', () => {
         cy.contains('h3', 'Trial - Not Scheduled').should('exist');
         cy.contains('Motion to proceed remotely granted date').should('exist');
         cy.contains(dateString).should('exist');
+      });
+    });
+
+    it('should show validation error when trying to save without a date and no existing date', () => {
+      createAndServePaperPetition().then(({ docketNumber }) => {
+        loginAsDocketClerk();
+        goToCase(docketNumber);
+        getCaseDetailTab('case-information').click();
+
+        cy.get('[data-testid="edit-remote-status"]').click();
+
+        cy.get('.modal-button-confirm').click();
+
+        cy.get('.usa-error-message').should('contain', 'Enter a valid date');
+
+        cy.get('.modal-header').should('exist');
       });
     });
 
@@ -157,7 +181,9 @@ describe('Edit Remote Status', () => {
 
         cy.get('[data-testid="tab-case-information"]').click();
         cy.get('[data-testid="add-to-trial-session-btn"]').click();
-        cy.get('[data-testid="trial-session-select"]').select('Birmingham, Alabama 11/02/19 (S)');
+        cy.get('[data-testid="trial-session-select"]').select(
+          'Birmingham, Alabama 11/02/19 (S)',
+        );
         cy.get('[data-testid="modal-button-confirm"]').click();
 
         getCaseDetailTab('case-information').click();

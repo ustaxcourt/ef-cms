@@ -13,8 +13,14 @@ export const validateRemoteTrialPermissionAction = ({
   path,
 }) => {
   const remoteTrialGrantedDate = get(state.modal.remoteTrialGrantedDate);
+  const existingRemoteTrialGrantedDate = get(
+    state.caseDetail.remoteTrialGrantedDate,
+  );
 
   if (!remoteTrialGrantedDate || remoteTrialGrantedDate.trim() === '') {
+    if (existingRemoteTrialGrantedDate) {
+      return path.success();
+    }
     return path.error({
       errors: { remoteTrialGrantedDate: 'Enter a valid date' },
     });
