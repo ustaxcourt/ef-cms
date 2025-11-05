@@ -833,6 +833,10 @@ export class DocketEntry extends JoiValidationEntity {
     return DOCKET_ENTRY_VALIDATION_RULES;
   }
 
+  static isMultiDocketed(originalDocketEntry: DocketEntry) {
+    return originalDocketEntry.multiDocketedOn.length > 1;
+  }
+
   static isMinuteEntry({
     eventCode,
     isFileAttached,

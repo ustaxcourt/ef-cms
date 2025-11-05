@@ -29,13 +29,11 @@ export const serveExternallyFiledDocument = async (
     clientConnectionId,
     docketEntryId,
     docketNumbers,
-    isFiledAcrossAllCases,
     subjectCaseDocketNumber,
   }: {
     clientConnectionId: string;
     docketEntryId: string;
     docketNumbers: string[];
-    isFiledAcrossAllCases: boolean;
     subjectCaseDocketNumber: string;
   },
   authorizedUser: UnknownAuthUser,
@@ -121,10 +119,11 @@ export const serveExternallyFiledDocument = async (
                 .createISODateString(),
             }),
             isDraft: false,
-            isFiledAcrossAllCases,
             isFileAttached: true,
             isOnDocketRecord: true,
             isPendingService: isSubjectCase,
+            multiDocketedOn: docketNumbers,
+            multiDocketedOriginalDocketNumber: subjectCaseDocketNumber,
             numberOfPages: numberOfPages + coversheetLength,
             processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
           },

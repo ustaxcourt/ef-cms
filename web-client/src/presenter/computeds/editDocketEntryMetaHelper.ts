@@ -8,6 +8,7 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { formatDateString } from '@shared/business/utilities/DateHandler';
 import { isLeadCase, isMemberCase } from '@shared/business/entities/cases/Case';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 
 export const editDocketEntryMetaHelper = (
   get: Get,
@@ -69,10 +70,10 @@ export const editDocketEntryMetaHelper = (
       })) || [];
 
   const isEditDisabled =
-    caseDetail && isMemberCase(caseDetail) && form.isFiledAcrossAllCases;
+    caseDetail && isMemberCase(caseDetail) && DocketEntry.isMultiDocketed(form);
 
   const showEditHelpText =
-    caseDetail && isLeadCase(caseDetail) && form.isFiledAcrossAllCases;
+    caseDetail && isLeadCase(caseDetail) && DocketEntry.isMultiDocketed(form);
 
   return {
     consolidatedCasesToDisplay,

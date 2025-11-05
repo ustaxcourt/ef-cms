@@ -43,12 +43,12 @@ export const docketEntryQcHelper = (
   );
 
   const showQCHelpText =
-    isLeadCase(caseDetail) && formattedDocketEntry.isFiledAcrossAllCases;
+    isLeadCase(caseDetail) && DocketEntry.isMultiDocketed(formattedDocketEntry);
 
   const disableCompleteButtons =
     caseDetail &&
     isMemberCase(caseDetail) &&
-    formattedDocketEntry.isFiledAcrossAllCases;
+    DocketEntry.isMultiDocketed(formattedDocketEntry);
 
   return {
     formattedDocketEntry,

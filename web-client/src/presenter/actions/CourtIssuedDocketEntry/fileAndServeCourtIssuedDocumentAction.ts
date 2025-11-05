@@ -34,7 +34,7 @@ export const fileAndServeCourtIssuedDocumentAction = async ({
 
   const clientConnectionId = get(state.clientConnectionId);
 
-  const { docketNumbers, isFiledAcrossAllCases } = props;
+  const { docketNumbers } = props;
 
   await applicationContext
     .getUseCases()
@@ -42,7 +42,6 @@ export const fileAndServeCourtIssuedDocumentAction = async ({
       clientConnectionId,
       docketEntryId,
       docketNumbers,
-      isFiledAcrossAllCases,
       form: {
         ...form,
         orderType,

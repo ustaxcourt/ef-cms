@@ -178,16 +178,9 @@ export const updateDocketEntryMeta = async (
     caseEntity.updateDocketEntry(docketEntryEntity);
   }
 
-  const { consolidatedCases } = caseEntity;
-
-  if (originalDocketEntry.isFiledAcrossAllCases && consolidatedCases) {
-    const docketNumbersToUpdate = consolidatedCases
-      .filter(({ docketNumber }) => docketNumber)
-      .map(({ docketNumber }) => docketNumber)
-      .concat(caseEntity.docketNumber);
-
+  if (DocketEntry.isMultiDocketed(originalDocketEntry)) {
     const casesToUpdate = await getCasesByDocketNumbers({
-      docketNumbers: Array.from(new Set(docketNumbersToUpdate)),
+      docketNumbers: originalDocketEntry.multiDocketedOn,
     });
 
     const updatedDocketEntries = casesToUpdate
@@ -205,7 +198,7 @@ export const updateDocketEntryMeta = async (
 
         if (
           consolidatedCaseDocketEntry &&
-          consolidatedCaseDocketEntry.isFiledAcrossAllCases
+          DocketEntry.isMultiDocketed(consolidatedCaseDocketEntry)
         ) {
           const propagationFields: any = {};
           DOCKET_ENTRY_DOCUMENT_INFO_FIELDS.forEach(field => {

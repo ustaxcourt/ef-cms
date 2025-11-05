@@ -19,7 +19,6 @@ export const submitAddPaperFilingAction = async ({
   const isFileAttachedNow = get(state.form.primaryDocumentFile);
   const clientConnectionId = get(state.clientConnectionId);
   const isFileAttached = get(state.form.isFileAttached) || isFileAttachedNow;
-  const { isFiledAcrossAllCases } = props;
   let { docketEntryId } = props;
 
   if (!isFileAttached) {
@@ -48,7 +47,6 @@ export const submitAddPaperFilingAction = async ({
       consolidatedGroupDocketNumbers: docketNumbers,
       docketEntryId,
       documentMetadata,
-      isFiledAcrossAllCases,
       isSavingForLater,
     });
 };

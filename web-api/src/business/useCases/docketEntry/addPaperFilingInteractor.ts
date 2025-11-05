@@ -24,7 +24,7 @@ import {
 } from '@web-api/persistence/postgres/utils/mutex';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
-import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+// import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 export const addPaperFiling = async (
   applicationContext: ServerApplicationContext,
@@ -33,13 +33,11 @@ export const addPaperFiling = async (
     consolidatedGroupDocketNumbers,
     docketEntryId,
     documentMetadata,
-    isFiledAcrossAllCases,
     isSavingForLater,
   }: {
     clientConnectionId: string;
     consolidatedGroupDocketNumbers: string[];
     documentMetadata: DocumentMetadata;
-    isFiledAcrossAllCases: boolean;
     isSavingForLater: boolean;
     docketEntryId: string;
   },
@@ -71,26 +69,6 @@ export const addPaperFiling = async (
       subjectCaseDocketNumber,
       ...incomingGroupDocketNumbers,
     ];
-
-    if (incomingGroupDocketNumbers.length === 0) {
-      const rawSubjectCase = await getCaseByDocketNumber({
-        docketNumber: subjectCaseDocketNumber,
-      });
-
-      const subjectCaseEntity = new Case(rawSubjectCase, { authorizedUser });
-
-      const isLeadCaseWithConsolidatedCases =
-        isLeadCase(subjectCaseEntity) &&
-        Array.isArray(rawSubjectCase.consolidatedCases) &&
-        rawSubjectCase.consolidatedCases.length > 0;
-
-      if (isLeadCaseWithConsolidatedCases) {
-        effectiveConsolidatedGroupDocketNumbers = [
-          subjectCaseDocketNumber,
-          ...rawSubjectCase.consolidatedCases.map((c: any) => c.docketNumber),
-        ];
-      }
-    }
   }
 
   const isReadyForService =
@@ -124,9 +102,14 @@ export const addPaperFiling = async (
         documentType: documentMetadata.documentType,
         editState: JSON.stringify(docketRecordEditState),
         filingDate: documentMetadata.receivedAt,
-        isFiledAcrossAllCases,
         isOnDocketRecord: true,
         mailingDate: documentMetadata.mailingDate,
+        multiDocketedOn: isSavingForLater
+          ? []
+          : effectiveConsolidatedGroupDocketNumbers,
+        multiDocketedOriginalDocketNumber: isSavingForLater
+          ? undefined
+          : subjectCaseDocketNumber,
         relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
       },
       { authorizedUser, petitioners: caseEntity.petitioners },

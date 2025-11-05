@@ -82,7 +82,7 @@ export const ConfirmInitiateServiceModal = connect(
                   {confirmInitiateServiceModalHelper.contactsNeedingPaperService.map(
                     contact => (
                       <div key={`${contact.docketNumber}-${contact.name}`}>
-                        {confirmInitiateServiceModalHelper.canServeAcrossGroup &&
+                        {confirmInitiateServiceModalHelper.canServeMultiDocketed &&
                           `${contact.docketNumber} - `}
                         {contact.name}, {contact.formattedContactType}
                       </div>
@@ -95,7 +95,7 @@ export const ConfirmInitiateServiceModal = connect(
             scrollToTop={false}
           />
         )}
-        {confirmInitiateServiceModalHelper.canFileAcrossGroup && (
+        {confirmInitiateServiceModalHelper.canMultiDocket && (
           <ConsolidatedCasesCheckboxes />
         )}
       </ModalDialog>

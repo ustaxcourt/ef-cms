@@ -107,7 +107,7 @@ export const documentViewerHelper = (
     formattedDocumentToDisplay.qcNeeded &&
     (isLeadCase(caseDetail) ||
       (isMemberCase(caseDetail) &&
-        !formattedDocumentToDisplay.isFiledAcrossAllCases));
+        !DocketEntry.isMultiDocketed(formattedDocumentToDisplay)));
 
   const showApplyStampButton =
     permissions.STAMP_MOTION &&
@@ -134,12 +134,12 @@ export const documentViewerHelper = (
       // in member case and not filed across group
       (isSimultaneousDocType &&
         isMemberCase(caseDetail) &&
-        !formattedDocumentToDisplay.isFiledAcrossAllCases));
+        !DocketEntry.isMultiDocketed(formattedDocumentToDisplay)));
 
   const showLeadCaseBanner =
     isMemberCase(caseDetail) &&
     isSimultaneousDocType &&
-    formattedDocumentToDisplay.isFiledAcrossAllCases &&
+    DocketEntry.isMultiDocketed(formattedDocumentToDisplay) &&
     isDocumentUnserved() &&
     permissions.SERVE_DOCUMENT;
 

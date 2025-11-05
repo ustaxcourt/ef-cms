@@ -25,8 +25,8 @@ type ContactsNeedingPaperService = {
 export const confirmInitiateServiceModalHelper = (
   get: Get,
 ): {
-  canFileAcrossGroup: boolean;
-  canServeAcrossGroup: boolean;
+  canMultiDocket: boolean;
+  canServeMultiDocketed: boolean;
   confirmationText: string;
   paperFilingText: string;
   additionalServedCases: { docketNumber: string; caseTitle: string }[];
@@ -35,30 +35,31 @@ export const confirmInitiateServiceModalHelper = (
   const docketEntryId = get(state.docketEntryId);
   const formattedCaseDetail = get(state.formattedCaseDetail);
   const form = get(state.form);
-  let { eventCode, isFiledAcrossAllCases } = form;
+  let { eventCode, multiDocketedOn } = form;
   const currentDocketEntry = formattedCaseDetail.docketEntries.find(
     doc => doc.docketEntryId === docketEntryId,
   );
 
   if (!eventCode) {
-    ({ eventCode, isFiledAcrossAllCases } = currentDocketEntry);
+    ({ eventCode, multiDocketedOn } = currentDocketEntry);
   }
 
-  const hasFiledAcrossGroup =
-    isLeadCase(formattedCaseDetail) && !!isFiledAcrossAllCases;
+  const isMultiDocketed =
+    isLeadCase(formattedCaseDetail) && multiDocketedOn.length > 1;
 
-  const canFileAcrossGroup =
+  const canMultiDocket =
     !NON_MULTI_DOCKETABLE_EVENT_CODES.includes(eventCode) &&
     isLeadCase(formattedCaseDetail);
 
-  const canServeAcrossGroup = canFileAcrossGroup || hasFiledAcrossGroup;
+  const canServeMultiDocketed = canMultiDocket || isMultiDocketed;
 
   let additionalServedCases: { docketNumber: string; caseTitle: string }[] = [];
 
-  if (hasFiledAcrossGroup) {
+  if (isMultiDocketed) {
     if (Array.isArray(formattedCaseDetail.consolidatedCases)) {
       additionalServedCases = formattedCaseDetail.consolidatedCases
         .filter((c: any) => c.docketNumber !== formattedCaseDetail.docketNumber)
+        .filter(c => multiDocketedOn.includes(c.docketNumber))
         .map((c: any) => ({
           docketNumber: c.docketNumber,
           caseTitle: c.caseTitle,
@@ -66,7 +67,7 @@ export const confirmInitiateServiceModalHelper = (
     }
   }
 
-  const confirmationText = canFileAcrossGroup
+  const confirmationText = canMultiDocket
     ? 'The following document will be served on all parties in selected cases:'
     : 'The following document will be served on all parties:';
 
@@ -74,9 +75,11 @@ export const confirmInitiateServiceModalHelper = (
 
   let casesToIterateOver: any[] = [];
 
-  if (hasFiledAcrossGroup) {
-    casesToIterateOver = formattedCaseDetail.consolidatedCases;
-  } else if (canFileAcrossGroup) {
+  if (isMultiDocketed) {
+    casesToIterateOver = formattedCaseDetail.consolidatedCases.filter(c => {
+      multiDocketedOn.includes(c.docketNumber);
+    });
+  } else if (canMultiDocket) {
     const checkedCases = get(state.modal.form.consolidatedCasesToMultiDocketOn)
       .filter(consolidatedCase => consolidatedCase.checked)
       .map(consolidatedCase => consolidatedCase.docketNumber);
@@ -87,6 +90,7 @@ export const confirmInitiateServiceModalHelper = (
   } else {
     casesToIterateOver = [formattedCaseDetail];
   }
+
   for (const caseItem of casesToIterateOver) {
     const {
       irsPractitioners = [],
@@ -114,13 +118,13 @@ export const confirmInitiateServiceModalHelper = (
       });
   }
 
-  const paperFilingText = canFileAcrossGroup
+  const paperFilingText = canMultiDocket
     ? 'Paper service is required for these parties:'
     : 'This case has parties receiving paper service:';
 
   return {
-    canFileAcrossGroup,
-    canServeAcrossGroup,
+    canMultiDocket,
+    canServeMultiDocketed,
     confirmationText,
     paperFilingText,
     additionalServedCases,
