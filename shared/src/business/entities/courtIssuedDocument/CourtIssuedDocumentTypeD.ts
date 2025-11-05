@@ -2,7 +2,6 @@ import {
   CourtIssuedDocument,
   yesterdayFormatted,
 } from './CourtIssuedDocumentConstants';
-import { CourtIssuedDocumentBase } from './CourtIssuedDocumentBase';
 import { FORMATS, formatDateString } from '../../utilities/DateHandler';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
@@ -10,9 +9,9 @@ import joi from 'joi';
 
 export class CourtIssuedDocumentTypeD extends CourtIssuedDocument {
   public attachments: boolean;
-  public documentTitle?: string;
+  public documentTitle: string;
   public documentType: string;
-  public eventCode?: string;
+  public eventCode: string;
   public filingDate?: string;
   public createdAt: any;
   public date: string;
@@ -21,7 +20,9 @@ export class CourtIssuedDocumentTypeD extends CourtIssuedDocument {
   constructor(rawProps) {
     super('CourtIssuedDocumentTypeD');
 
+    this.affectedDocketEntries = rawProps.affectedDocketEntries;
     this.attachments = rawProps.attachments || false;
+    this.dispositionOrder = rawProps.dispositionOrder || false;
     this.documentTitle = rawProps.documentTitle;
     this.documentType = rawProps.documentType;
     this.eventCode = rawProps.eventCode;
@@ -32,7 +33,7 @@ export class CourtIssuedDocumentTypeD extends CourtIssuedDocument {
   }
 
   static VALIDATION_RULES = {
-    ...CourtIssuedDocumentBase.VALIDATION_RULES,
+    ...CourtIssuedDocument.VALIDATION_RULES,
     date: joi
       .when('createdAt', {
         is: joi.exist().not(null),
@@ -57,7 +58,7 @@ export class CourtIssuedDocumentTypeD extends CourtIssuedDocument {
     return replaceBracketed(
       this.documentTitle,
       formatDateString(this.date, FORMATS.MMDDYYYY_DASHED),
-      this.freeText,
+      this.freeText ?? '',
     );
   }
 }

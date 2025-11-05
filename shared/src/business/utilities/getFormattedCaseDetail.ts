@@ -50,7 +50,6 @@ export const computeIsNotServedDocument = ({ formattedEntry }) => {
       !DocketEntry.isMinuteEntry(formattedEntry))
   );
 };
-
 export const formatDocketEntry = (applicationContext, docketEntry) => {
   const formattedEntry = cloneDeep(docketEntry);
 
@@ -156,7 +155,6 @@ export const formatDocketEntry = (applicationContext, docketEntry) => {
 
   return formattedEntry;
 };
-
 export const getFilingsAndProceedings = formattedDocketEntry => {
   //filings and proceedings string
   //(C/S 04/17/2019) (Exhibit(s)) (Attachment(s)) (Objection) (Lodged)
@@ -470,8 +468,8 @@ const formatCounsel = ({ caseDetail, counsel }) => {
 
 // sort items that do not display a filingDate (based on createdAtFormatted) at the bottom
 export const sortUndefined = (
-  a: { createdAtFormatted: string },
-  b: { createdAtFormatted: string },
+  a: { createdAtFormatted?: string },
+  b: { createdAtFormatted?: string },
 ) => {
   if (a.createdAtFormatted && !b.createdAtFormatted) {
     return -1;
@@ -480,6 +478,8 @@ export const sortUndefined = (
   if (!a.createdAtFormatted && b.createdAtFormatted) {
     return 1;
   }
+
+  return 0;
 };
 
 export const sortDocketEntries = (

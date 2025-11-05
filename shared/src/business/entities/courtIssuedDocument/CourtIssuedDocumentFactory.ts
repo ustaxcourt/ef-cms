@@ -1,5 +1,5 @@
+import { CourtIssuedDocumentPartial } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentPartial';
 import { CourtIssuedDocument } from './CourtIssuedDocumentConstants';
-import { CourtIssuedDocumentBase } from './CourtIssuedDocumentBase';
 import { CourtIssuedDocumentTypeA } from './CourtIssuedDocumentTypeA';
 import { CourtIssuedDocumentTypeB } from './CourtIssuedDocumentTypeB';
 import { CourtIssuedDocumentTypeC } from './CourtIssuedDocumentTypeC';
@@ -31,8 +31,10 @@ export function CourtIssuedDocumentFactory(
         return new CourtIssuedDocumentTypeG(documentMetadata);
       case 'type h':
         return new CourtIssuedDocumentTypeH(documentMetadata);
+      default:
+        return new CourtIssuedDocumentPartial(documentMetadata);
     }
+  } else {
+    return new CourtIssuedDocumentPartial(documentMetadata);
   }
-
-  return new CourtIssuedDocumentBase(documentMetadata);
 }

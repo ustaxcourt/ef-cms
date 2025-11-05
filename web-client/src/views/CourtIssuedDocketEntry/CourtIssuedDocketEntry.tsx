@@ -5,6 +5,7 @@ import { ConfirmInitiateSaveModal } from '../ConfirmInitiateSaveModal';
 import { ConfirmInitiateServiceModal } from '../ConfirmInitiateServiceModal';
 import { CourtIssuedNonstandardForm } from './CourtIssuedNonstandardForm';
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { DocumentDisplayIframe } from '../DocumentDisplayIframe';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
@@ -18,6 +19,8 @@ import { reactSelectValue } from '@web-client/ustc-ui/Utils/documentTypeSelectHe
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import _ from 'lodash';
+import { createISODateString } from '@shared/business/utilities/DateHandler';
 
 export const CourtIssuedDocketEntry = connect(
   {
@@ -154,6 +157,176 @@ export const CourtIssuedDocketEntry = connect(
 
                 {form.eventCode && <CourtIssuedNonstandardForm />}
 
+                {DocketEntry.isOrder(form.eventCode) && (
+                  <FormGroup errorText={validationErrors.dispositionOrder}>
+                    <fieldset className="usa-fieldset">
+                      <div className="usa-checkbox">
+                        <input
+                          checked={form.dispositionOrder || false} // false if undefined
+                          className="usa-checkbox__input"
+                          id="dispositionOrder"
+                          data-testid="disposition-order-checkbox"
+                          name="dispositionOrder"
+                          type="checkbox"
+                          onChange={e => {
+                            updateCourtIssuedDocketEntryFormValueSequence({
+                              key: e.target.name,
+                              value: e.target.checked,
+                            });
+                            if (e.target.checked) {
+                              updateCourtIssuedDocketEntryFormValueSequence({
+                                key: 'affectedDocketEntries',
+                                value: [{}],
+                              });
+                            } else {
+                              updateCourtIssuedDocketEntryFormValueSequence({
+                                key: 'affectedDocketEntries',
+                                value: undefined,
+                              });
+                            }
+                            validateCourtIssuedDocketEntrySequence();
+                          }}
+                        />
+                        <label
+                          className="usa-checkbox__label"
+                          htmlFor="dispositionOrder"
+                        >
+                          This order acts on at least one motion
+                        </label>
+                      </div>
+                    </fieldset>
+                  </FormGroup>
+                )}
+                {DocketEntry.isOrder(form.eventCode) &&
+                  form.dispositionOrder &&
+                  form.affectedDocketEntries && (
+                    <div>
+                      {form.affectedDocketEntries.map((motion, i) => {
+                        return (
+                          <div key={motion.arrayKey}>
+                            <FormGroup
+                              errorText={
+                                validationErrors[
+                                  `affectedDocketEntries-${i}-docketEntryId`
+                                ]
+                              }
+                            >
+                              <label
+                                className="usa-label"
+                                htmlFor="related-motion"
+                                id="related-motion-label"
+                                data-testid="related-motion-label"
+                              >
+                                What motion is being acted on?
+                              </label>
+                              <SelectSearch
+                                className="usa-label"
+                                aria-labelledby="related-motion-label"
+                                data-testid="related-motion-type-search"
+                                id="affectedMotion"
+                                isClearable={true}
+                                name="affectedMotion"
+                                options={
+                                  addCourtIssuedDocketEntryHelper.caseMotions
+                                }
+                                onChange={(inputValue: any) => {
+                                  updateCourtIssuedDocketEntryFormValueSequence(
+                                    {
+                                      key: 'affectedDocketEntries',
+                                      index: i,
+                                      value: Object.assign(
+                                        form.affectedDocketEntries[i],
+                                        {
+                                          docketEntryId: inputValue.value,
+                                        },
+                                      ),
+                                    },
+                                  );
+
+                                  validateCourtIssuedDocketEntrySequence();
+                                }}
+                              />
+                            </FormGroup>
+                            <FormGroup
+                              errorText={
+                                validationErrors[
+                                  `affectedDocketEntries-${i}-disposition`
+                                ]
+                              }
+                            >
+                              <label
+                                className="usa-label"
+                                htmlFor="related-motion-disposition"
+                                id="related-motion-disposition-label"
+                              >
+                                What action is being taken?
+                              </label>
+                              <SelectSearch
+                                aria-labelledby="related-motion-disposition-label"
+                                data-testid="related-motion-disposition-type-search"
+                                id="related-motion-disposition"
+                                isClearable={true}
+                                name="relatedMotionDisposition"
+                                options={
+                                  addCourtIssuedDocketEntryHelper.relatedMotionDispositions
+                                }
+                                onChange={(inputValue: any) => {
+                                  updateCourtIssuedDocketEntryFormValueSequence(
+                                    {
+                                      key: 'affectedDocketEntries',
+                                      index: i,
+                                      value: Object.assign(
+                                        form.affectedDocketEntries[i],
+                                        {
+                                          disposition: inputValue.value,
+                                        },
+                                      ),
+                                    },
+                                  );
+
+                                  validateCourtIssuedDocketEntrySequence();
+                                }}
+                              />
+                            </FormGroup>
+                            <Button
+                              link
+                              icon="minus-circle"
+                              className="red-warning"
+                              onClick={() => {
+                                const motions = [...form.affectedDocketEntries];
+                                _.pullAt(motions, i);
+                                updateCourtIssuedDocketEntryFormValueSequence({
+                                  key: 'affectedDocketEntries',
+                                  value: motions,
+                                });
+                              }}
+                            >
+                              Remove Motion
+                            </Button>
+
+                            {form.affectedDocketEntries.length > 1 && <hr></hr>}
+                          </div>
+                        );
+                      })}
+
+                      <Button
+                        link
+                        icon="plus-circle"
+                        onClick={() => {
+                          updateCourtIssuedDocketEntryFormValueSequence({
+                            key: 'affectedDocketEntries',
+                            value: [
+                              ...form.affectedDocketEntries,
+                              { arrayKey: createISODateString() },
+                            ],
+                          });
+                        }}
+                      >
+                        Add new motion
+                      </Button>
+                    </div>
+                  )}
+
                 {addCourtIssuedDocketEntryHelper.showAttachmentAndServiceFields && (
                   <FormGroup errorText={validationErrors.attachments}>
                     <fieldset className="usa-fieldset">
@@ -266,7 +439,6 @@ export const CourtIssuedDocketEntry = connect(
                   />
                 )}
               </div>
-
               <section className="usa-section DocumentDetail">
                 <div className="margin-top-5 button-container">
                   {addCourtIssuedDocketEntryHelper.showSaveAndServeButton && (

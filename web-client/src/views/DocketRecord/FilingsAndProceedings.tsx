@@ -6,12 +6,25 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
+import _ from 'lodash';
 
 type FilingsAndProceedingsProps = {
   entry: {
     descriptionDisplay: string;
     isStricken: boolean;
     docketEntryId: string;
+    affectedDocketEntries: {
+      disposition?: string;
+      docketEntryId?: string;
+      docketEntryIndex?: number;
+      documentType: string;
+    }[];
+    affectedByDocketEntries: {
+      disposition?: string;
+      docketEntryId?: string;
+      docketEntryIndex?: number;
+      documentType: string;
+    }[];
     showDocumentProcessing: boolean;
     showLinkToDocument: boolean;
     showDocumentViewerLink: boolean;
@@ -138,6 +151,35 @@ export const FilingsAndProceedings = connect<
               )}
               {entry.descriptionDisplay}
             </Button>
+            {_.concat(
+              entry.affectedByDocketEntries ?? [],
+              entry.affectedDocketEntries ?? [],
+            ).map(entry => {
+              return (
+                <>
+                  <br></br>
+                  <span className="display-inline-block">
+                    <span> --- </span>
+                    <Button
+                      link
+                      className={classNames('text-right', 'view-pdf-link')}
+                      data-testid={`related-document-viewer-link-${entry.docketEntryIndex}`}
+                      arial-label={`View PDF for: ${entry.docketEntryIndex}`}
+                      onClick={() =>
+                        changeTabAndSetViewerDocumentToDisplaySequence({
+                          docketRecordTab: 'documentView',
+                          viewerDocumentToDisplay: {
+                            docketEntryId: entry.docketEntryId,
+                          },
+                        })
+                      }
+                    >
+                      {entry?.disposition} #{entry.docketEntryIndex}
+                    </Button>
+                  </span>
+                </>
+              );
+            })}
           </>
         )}
         <span
