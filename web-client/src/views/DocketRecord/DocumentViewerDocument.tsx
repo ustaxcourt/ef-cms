@@ -1,8 +1,7 @@
 /* eslint-disable complexity */
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConfirmInitiateServiceModal } from '../ConfirmInitiateServiceModal';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Icon } from '../../ustc-ui/Icon/Icon';
+import { Icon, WrappedIcon } from '../../ustc-ui/Icon/Icon';
 import { PdfViewer } from '../../ustc-ui/PdfPreview/PdfViewer';
 import { WorkItemAlreadyCompletedModal } from '../DocketEntryQc/WorkItemAlreadyCompletedModal';
 import { connect } from '@web-client/presenter/shared.cerebral';
@@ -99,9 +98,9 @@ export const DocumentViewerDocument = connect(
 
             <h3>
               {documentViewerHelper.showSealed && (
-                <FontAwesomeIcon
-                  className="fa-icon-red margin-right-1"
+                <WrappedIcon
                   icon="lock"
+                  iconClass="fa-icon-red margin-right-1"
                   title={documentViewerHelper.sealedToTooltip}
                 />
               )}
