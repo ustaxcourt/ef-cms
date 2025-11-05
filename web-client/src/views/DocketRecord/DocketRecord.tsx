@@ -260,7 +260,7 @@ export const DocketRecord = connect(
                         <td
                           className="hide-on-mobile"
                           data-testid="docket-entry-filedBy"
-                        >
+                        > 
                           {entry.filedBy}
                         </td>
                         <td
