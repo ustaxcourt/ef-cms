@@ -20,47 +20,120 @@ describe('validateRemoteTrialPermissionAction', () => {
     pathErrorStub.mockReset();
   });
 
-  it('should return the error path when remoteTrialGrantedDate is empty', async () => {
+  it('should return error when remoteTrialGrantedDate is empty and there is no existing date', async () => {
     await runAction(validateRemoteTrialPermissionAction, {
       modules: {
         presenter,
       },
       state: {
+        caseDetail: {
+          remoteTrialGrantedDate: null,
+        },
         modal: {
           remoteTrialGrantedDate: '',
         },
       },
     });
 
+    expect(pathErrorStub).toHaveBeenCalledWith({
+      errors: { remoteTrialGrantedDate: 'Enter a valid date' },
+    });
     expect(pathSuccessStub).not.toHaveBeenCalled();
   });
 
-  it('should return the error path when remoteTrialGrantedDate is undefined', async () => {
+  it('should return success when remoteTrialGrantedDate is empty and there is an existing date to clear', async () => {
     await runAction(validateRemoteTrialPermissionAction, {
       modules: {
         presenter,
       },
       state: {
+        caseDetail: {
+          remoteTrialGrantedDate: '2024-01-14T05:00:00.000+00:00',
+        },
+        modal: {
+          remoteTrialGrantedDate: '',
+        },
+      },
+    });
+
+    expect(pathSuccessStub).toHaveBeenCalled();
+    expect(pathErrorStub).not.toHaveBeenCalled();
+  });
+
+  it('should return error when remoteTrialGrantedDate is undefined and there is no existing date', async () => {
+    await runAction(validateRemoteTrialPermissionAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          remoteTrialGrantedDate: null,
+        },
         modal: {},
       },
     });
 
+    expect(pathErrorStub).toHaveBeenCalledWith({
+      errors: { remoteTrialGrantedDate: 'Enter a valid date' },
+    });
     expect(pathSuccessStub).not.toHaveBeenCalled();
   });
 
-  it('should return the error path when remoteTrialGrantedDate is only whitespace', async () => {
+  it('should return success when remoteTrialGrantedDate is undefined and there is an existing date to clear', async () => {
     await runAction(validateRemoteTrialPermissionAction, {
       modules: {
         presenter,
       },
       state: {
+        caseDetail: {
+          remoteTrialGrantedDate: '2024-01-14T05:00:00.000+00:00',
+        },
+        modal: {},
+      },
+    });
+
+    expect(pathSuccessStub).toHaveBeenCalled();
+    expect(pathErrorStub).not.toHaveBeenCalled();
+  });
+
+  it('should return error when remoteTrialGrantedDate is only whitespace and there is no existing date', async () => {
+    await runAction(validateRemoteTrialPermissionAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          remoteTrialGrantedDate: null,
+        },
         modal: {
           remoteTrialGrantedDate: '   ',
         },
       },
     });
 
+    expect(pathErrorStub).toHaveBeenCalledWith({
+      errors: { remoteTrialGrantedDate: 'Enter a valid date' },
+    });
     expect(pathSuccessStub).not.toHaveBeenCalled();
+  });
+
+  it('should return success when remoteTrialGrantedDate is only whitespace and there is an existing date to clear', async () => {
+    await runAction(validateRemoteTrialPermissionAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          remoteTrialGrantedDate: '2024-01-14T05:00:00.000+00:00',
+        },
+        modal: {
+          remoteTrialGrantedDate: '   ',
+        },
+      },
+    });
+
+    expect(pathSuccessStub).toHaveBeenCalled();
+    expect(pathErrorStub).not.toHaveBeenCalled();
   });
 
   it('should return the error path when remoteTrialGrantedDate is not a valid ISO date', async () => {
