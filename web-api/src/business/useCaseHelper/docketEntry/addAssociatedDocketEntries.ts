@@ -21,7 +21,6 @@ export async function addAssociatedDocketEntries(
         disposition: motion.disposition,
       }));
   });
-
   await upsertDocketEntryRelatedEntries({
     orderDocketEntry: subjectDocketEntry,
     motionDocketEntries: docketEntryOrderMotions,
