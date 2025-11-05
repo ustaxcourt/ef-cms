@@ -7,7 +7,6 @@ import {
   FormattedPublicTrialSession,
   TrialSessionPublicCaseRow,
 } from '@web-client/presenter/computeds/Public/publicTrialSessionDetailsHelper';
-import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import { NonPhone, Phone } from '@web-client/ustc-ui/Responsive/Responsive';
 import { TrialSessionDetailsHeader } from '@web-client/views/TrialSessionDetails/TrialSessionDetailsHeader';
 import { connect } from '@web-client/presenter/shared.cerebral';
@@ -94,7 +93,8 @@ const PublicTrialSessionInformation = ({
                       iconClass="fa-icon-blue"
                       icon="link"
                       size="sm"
-                      title="Swing session: will be held in two cities" />
+                      title="Swing session: will be held in two cities"
+                    />
                   </NonPhone>
                   <a
                     href={`/trial-session-detail/${formattedTrialSession.swingSessionId}`}
@@ -228,10 +228,10 @@ function MobileOpenCases({
                     <CaseLink formattedCase={publicCase} />
                     {publicCase.isSealed && (
                       <span className="text-right margin-left-auto">
-                        <Icon
-                          aria-hidden={!publicCase.isSealed}
-                          aria-label="sealed"
-                          className="sealed-case-entry"
+                        <WrappedIcon
+                          ariaHidden={!publicCase.isSealed}
+                          iconAriaLabel="sealed"
+                          iconClass="sealed-case-entry"
                           icon="lock"
                           title="sealed"
                         />
