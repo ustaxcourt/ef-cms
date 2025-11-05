@@ -351,10 +351,9 @@ button {
 }
 
 .edit-remote-status-modal {
-  // Remove overflow clipping so date picker calendar can appear above modal
-  overflow: visible !important;
+  overflow: visible;
 
   .usa-date-picker__calendar {
-    z-index: 9999 !important;
+    z-index: 9999;
   }
 }
