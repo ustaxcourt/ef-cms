@@ -14,6 +14,8 @@ export const updatePetitionerInformationAction = async ({
   const docketNumber = get(state.caseDetail.docketNumber);
   const { contact } = get(state.form);
 
+  console.log(contact, docketNumber)
+  
   const { updatedCase } = await applicationContext
     .getUseCases()
     .updatePetitionerInformationInteractor(applicationContext, {

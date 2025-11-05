@@ -125,10 +125,12 @@ export const updatePetitionerInformation = async (
   const petitionerCaseRaw = await getCaseByDocketNumber({
     docketNumber,
   });
+  
 
   if (!petitionerCaseRaw) {
     throw new Error(`Case with docket number ${docketNumber} was not found`);
   }
+  
 
   if (petitionerCaseRaw.status === CASE_STATUS_TYPES.new) {
     throw new Error(
@@ -156,6 +158,13 @@ export const updatePetitionerInformation = async (
       `Case contact with id ${updatedPetitionerData.contactId} was not found on the case`,
     );
   }
+
+  // validate email doesn't already exist on another party in the case
+console.log(petitionerCaseRaw.petitioners.map(p => p.email), "check here....")
+
+if (petitionerCaseRaw.petitioners.map(p => p.email).includes(updatedPetitionerData.updatedEmail)) {
+  throw new Error(`Email ${updatedPetitionerData.updatedEmail} is already in use by another petitioner`);
+}
 
   const editableFields = pick(
     defaults(updatedPetitionerData, {
