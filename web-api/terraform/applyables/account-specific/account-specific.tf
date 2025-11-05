@@ -18,7 +18,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-       version = "~>6.15"
+      version = "6.19.0"
     }
     opensearch = {
       source  = "opensearch-project/opensearch"
@@ -36,7 +36,7 @@ module "api-gateway-global-logging-permissions" {
 }
 
 module "ci-cd" {
-  source               = "../../modules/ci-cd"
+  source                  = "../../modules/ci-cd"
   lower_env_restore_roles = var.lower_env_restore_roles
 }
 
