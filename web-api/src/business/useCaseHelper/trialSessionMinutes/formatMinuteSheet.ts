@@ -16,6 +16,7 @@ import {
 import { COURT_ISSUED_EVENTS } from '@shared/business/entities/docketEntry/courtIssuedEventCodes';
 import {
   BriefDetailsType,
+  CalendarEvent,
   MinuteSheet,
 } from '@shared/business/entities/trialSessionMinutes/MinuteSheet';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
@@ -43,7 +44,9 @@ export type FormattedMinuteSheet = {
   notCalled: string;
   recalled: { content: string }[];
   pretrialConference?: string;
-  trialHearing?: string;
+  // trialHearing?: string;
+  trial?: string;
+  hearing?: string;
   respondentAppearances: string[];
   jurisdictionRetained?: string;
   jurisdictionContinued?: string;
@@ -90,8 +93,15 @@ export const formatMinuteSheet = ({
   const docketNumbers = aCase.consolidatedCases.map(
     consolidatedCase => consolidatedCase.docketNumber,
   );
-  const { calendarCall, notCalled, pretrialConference, recalls, trialHearing } =
-    minuteSheet.caseRecord;
+  const {
+    calendarCall,
+    notCalled,
+    pretrialConference,
+    recalls,
+    // trialHearing,
+    trial,
+    hearing,
+  } = minuteSheet.caseRecord;
 
   return {
     actionsAndFilings: formatActionsAndFilings(
@@ -141,7 +151,9 @@ export const formatMinuteSheet = ({
     ),
     trialBrief: formatTrialBrief(sanitizeMinuteSheetForm(minuteSheet.brief)),
     trialClerk: minuteSheet.trialSession.trialClerk,
-    trialHearing: formatTrialHearing(sanitizeMinuteSheetForm(trialHearing)),
+    // trialHearing: formatTrialHearing(sanitizeMinuteSheetForm(trialHearing)),
+    trial: formatTrialHearing(sanitizeMinuteSheetForm(trial)),
+    hearing: formatTrialHearing(sanitizeMinuteSheetForm(hearing)),
     trialLocation: trialSession.trialLocation!,
     trialStartDate: formatDateString(
       trialSession.startDate,
@@ -453,7 +465,8 @@ export const formatPretrialConference = (
 };
 
 export const formatTrialHearing = (
-  trialHearing: MinuteSheet['caseRecord']['trialHearing'],
+  // trialHearing: [MinuteSheet['caseRecord']['trial']| MinuteSheet['caseRecord']['hearing'],
+  trialHearing: CalendarEvent,
 ): string => {
   if (!trialHearing) return '';
   return [
