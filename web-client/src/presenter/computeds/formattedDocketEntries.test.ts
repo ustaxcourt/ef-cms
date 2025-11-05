@@ -1000,6 +1000,7 @@ describe('formattedDocketEntries', () => {
           ...mockDocketEntry,
           isPaper: true,
           qcNeeded: true,
+          className: 'fa-icon-blue',
           showLoadingIcon: true,
         },
         isExternalUser: false,
@@ -1009,6 +1010,7 @@ describe('formattedDocketEntries', () => {
         {
           icon: ['fas', 'file-alt'],
           title: 'Is paper',
+          className: 'fa-icon-blue',
         },
       ]);
     });

@@ -1,9 +1,9 @@
+import { WrappedIcon } from '../../ustc-ui/Icon/Icon';
 import { ALL_TRIAL_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PreformattedText } from '@web-client/ustc-ui/PreformatedText/PreformattedText';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -35,14 +35,12 @@ const getCaseRow = ({
         </td>
         <td>
           {formattedCase.isManuallyAdded && (
-            <span>
-              <FontAwesomeIcon
-                aria-label="Manually added indicator"
-                className="mini-success"
-                icon="calendar-plus"
-                title="Manually added"
-              />
-            </span>
+            <WrappedIcon
+              iconAriaLabel="Manually added indicator"
+              iconClass="mini-success"
+              icon="calendar-plus"
+              title="Manually added"
+            />
           )}
         </td>
         <td className="minw-80">{formattedCase.caseTitle}</td>
