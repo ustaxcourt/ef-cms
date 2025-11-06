@@ -14,11 +14,6 @@ declare global {
 
 let DWObject = null;
 let dynamsoftLoader = null;
-let DynamsoftInstance:
-  | (typeof Dynamsoft & {
-      DWT: typeof Dynamsoft.DWT & { ScanDirectly: boolean };
-    })
-  | null = null;
 
 export const getScannerInterface = () => {
   const completeScanSession = () => {
@@ -54,7 +49,6 @@ export const getScannerInterface = () => {
         if (!Dynamsoft) {
           throw new Error('Dynamsoft library failed to load');
         }
-        DynamsoftInstance = Dynamsoft;
 
         Dynamsoft.DWT.ResourcesPath = 'https://unpkg.com/dwt@latest/dist';
         Dynamsoft.DWT.ProductKey = getConstants().DYNAMSOFT_PRODUCT_KEYS ?? '';
@@ -128,7 +122,7 @@ export const getScannerInterface = () => {
             new Promise((resolveImage, rejectImage) => {
               DWObject.ConvertToBlob(
                 [index],
-                DynamsoftInstance!.DWT.EnumDWT_ImageType.IT_JPG,
+                window.Dynamsoft!.DWT.EnumDWT_ImageType.IT_JPG,
                 resolveImage,
                 rejectImage,
               );
@@ -177,9 +171,9 @@ export const getScannerInterface = () => {
       DWObject.Resolution = 300;
       DWObject.IfDuplexEnabled = duplexEnabled;
       DWObject.IfFeederEnabled = feederEnabled;
-      DWObject.PixelType = DynamsoftInstance!.DWT.EnumDWT_PixelType.TWPT_RGB;
+      DWObject.PixelType = window.Dynamsoft!.DWT.EnumDWT_PixelType.TWPT_RGB;
       DWObject.PageSize =
-        DynamsoftInstance!.DWT.EnumDWT_CapSupportedSizes.TWSS_A4;
+        window.Dynamsoft!.DWT.EnumDWT_CapSupportedSizes.TWSS_A4;
 
       if (feederEnabled && !DWObject.IfFeederLoaded) {
         DWObject.UnregisterEvent('OnPostAllTransfers', onScanFinished);
