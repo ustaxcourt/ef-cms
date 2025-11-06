@@ -13,12 +13,12 @@ export const validateSetForHearingAction = ({
   get,
   path,
 }: ActionProps) => {
-  const { calendarNotes, trialSessionId } = get(state.modal) as {
+  const { calendarNotes, trialSessionId }: {
     calendarNotes?: string;
     trialSessionId?: string;
-  };
+  } = get(state.modal);
 
-  const errors = {} as { trialSessionId?: string; calendarNotes?: string };
+  const errors: { trialSessionId?: string; calendarNotes?: string } = {};
   if (!trialSessionId) {
     errors.trialSessionId = 'Select a Trial Session';
   }

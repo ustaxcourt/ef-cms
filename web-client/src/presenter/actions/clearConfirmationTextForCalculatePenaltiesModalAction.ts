@@ -8,8 +8,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const clearConfirmationTextForCalculatePenaltiesModalAction = ({
   store,
 }: ActionProps) => {
-  store.set(
-    (state.confirmationText as { penalties: Record<string, string> }).penalties,
-    {},
-  );
+  const { penalties }: { penalties: Record<string, string> } =
+    state.confirmationText;
+  store.set(penalties, {});
 };

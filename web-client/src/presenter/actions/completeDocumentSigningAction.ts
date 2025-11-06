@@ -23,11 +23,11 @@ export const completeDocumentSigningAction = async ({
     );
     const { scale, x, y } = signatureData;
 
-    const pdfjsObj = ((
-      window as Window & { pdfjsObj?: { getData: () => Promise<unknown> } }
-    ).pdfjsObj || get(state.pdfForSigning.pdfjsObj)) as {
-      getData: () => Promise<unknown>;
+    const windowWithPdfjs = window as Window & {
+      pdfjsObj?: { getData: () => Promise<unknown> };
     };
+    const pdfjsObj: { getData: () => Promise<unknown> } =
+      windowWithPdfjs.pdfjsObj || get(state.pdfForSigning.pdfjsObj);
 
     // generate signed document to bytes
     const signedPdfBytes = await applicationContext

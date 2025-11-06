@@ -64,17 +64,21 @@ export const handle = async (event, fun) => {
       return sendOk(response);
     }
   } catch (err) {
-    if (!process.env.CI && !err.skipLogging) {
-      console.error('err', err);
+    const error = err as ErrorWithStatusCode & {
+      toJSON?: () => any;
+      skipLogging?: boolean;
+    };
+    if (!process.env.CI && !error.skipLogging) {
+      console.error('err', error);
     }
-    if (err instanceof NotFoundError) {
-      err.statusCode = 404;
-      return sendError(err);
-    } else if (err instanceof UnauthorizedError) {
-      err.statusCode = 403;
-      return sendError(err);
+    if (error instanceof NotFoundError) {
+      error.statusCode = 404;
+      return sendError(error);
+    } else if (error instanceof UnauthorizedError) {
+      error.statusCode = 403;
+      return sendError(error);
     } else {
-      return sendError(err);
+      return sendError(error);
     }
   }
 };
@@ -95,7 +99,7 @@ export const redirect = async (_event, fun, statusCode = 302) => {
       statusCode,
     };
   } catch (err) {
-    return sendError(err);
+    return sendError(err as ErrorWithStatusCode & { toJSON?: () => any });
   }
 };
 
@@ -105,7 +109,9 @@ export const redirect = async (_event, fun, statusCode = 302) => {
  * @param {Error} err the error to convert to the api gateway response event
  * @returns {object} an api gateway response object
  */
-export const sendError = (err: ErrorWithStatusCode & { toJSON?: () => any }) => {
+export const sendError = (
+  err: ErrorWithStatusCode & { toJSON?: () => any },
+) => {
   return {
     body: JSON.stringify(err.toJSON ? err.toJSON() : err.message),
     headers: headerOverride,
