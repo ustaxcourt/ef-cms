@@ -18,7 +18,11 @@ export const Icon = props => {
   const iconProps = cloneDeep(props);
   if (iconProps['aria-label']) {
     iconProps['aria-hidden'] = false;
-    iconProps.title = iconProps['aria-label'];
+    return (
+      <span title={iconProps['aria-label']}>
+        <FontAwesomeIcon {...iconProps} />
+      </span>
+    );
   }
 
   return <FontAwesomeIcon {...iconProps} />;
