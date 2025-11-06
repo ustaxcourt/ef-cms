@@ -19,6 +19,7 @@ import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseA
 import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { omit } from 'lodash';
 
 export const updateDocketEntryMeta = async (
   applicationContext: ServerApplicationContext,
@@ -139,7 +140,7 @@ export const updateDocketEntryMeta = async (
   const docketEntryEntity = new DocketEntry(
     {
       ...originalDocketEntry,
-      ...editableFields,
+      ...omit(editableFields, DOCKET_ENTRY_DOCUMENT_INFO_FIELDS),
     },
     { authorizedUser, petitioners: caseEntity.petitioners },
   ).validate();
@@ -177,6 +178,10 @@ export const updateDocketEntryMeta = async (
 
     caseEntity.updateDocketEntry(docketEntryEntity);
   }
+
+  // TODO:
+  // a. they updated parties or served tabs, that needs to update the currentDocketEntry (non multi docketed original)
+  // b. they updated document info tab, we lookup all cases using multiDocketOn, and update the docket entry with latest data
 
   if (DocketEntry.isMultiDocketed(originalDocketEntry)) {
     const casesToUpdate = await getCasesByDocketNumbers({

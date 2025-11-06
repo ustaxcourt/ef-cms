@@ -9,6 +9,7 @@ import {
 import { formatDateString } from '@shared/business/utilities/DateHandler';
 import { isLeadCase, isMemberCase } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { isEmpty } from 'lodash';
 
 export const editDocketEntryMetaHelper = (
   get: Get,
@@ -28,7 +29,8 @@ export const editDocketEntryMetaHelper = (
 } => {
   const { eventCode, isStricken, strickenAt, strickenBy } = get(state.form);
 
-  const caseDetail = get(state.caseDetail);
+  const caseDetail =
+    get(state.multiDocketedOriginalCaseDetail) ?? get(state.caseDetail);
   const formattedCaseDetail = get(state.formattedCaseDetail);
   const form = get(state.form);
   const user = get(state.user);
@@ -70,10 +72,16 @@ export const editDocketEntryMetaHelper = (
       })) || [];
 
   const isEditDisabled =
-    caseDetail && isMemberCase(caseDetail) && DocketEntry.isMultiDocketed(form);
+    caseDetail &&
+    isMemberCase(get(state.caseDetail)) &&
+    !isEmpty(form) &&
+    DocketEntry.isMultiDocketed(form);
 
   const showEditHelpText =
-    caseDetail && isLeadCase(caseDetail) && DocketEntry.isMultiDocketed(form);
+    caseDetail &&
+    isLeadCase(get(state.caseDetail)) &&
+    !isEmpty(form) &&
+    DocketEntry.isMultiDocketed(form);
 
   return {
     consolidatedCasesToDisplay,

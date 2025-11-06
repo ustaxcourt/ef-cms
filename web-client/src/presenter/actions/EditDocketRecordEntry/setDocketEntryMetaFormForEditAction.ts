@@ -1,4 +1,5 @@
 import { state } from '@web-client/presenter/app.cerebral';
+import { pick } from 'lodash';
 
 /**
  * update state form with docket record entry and document properties
@@ -18,11 +19,11 @@ export const setDocketEntryMetaFormForEditAction = ({
   const { docketEntries } = get(state.caseDetail);
   const { docketRecordIndex } = props;
 
-  let documentDetail = docketEntries.find(
+  const currentDocumentDetail = docketEntries.find(
     ({ index }) => index === docketRecordIndex,
   );
 
-  if (!documentDetail) {
+  if (!currentDocumentDetail) {
     throw new Error(
       `Could not find docket entry with index ${docketRecordIndex}`,
     );
@@ -32,31 +33,45 @@ export const setDocketEntryMetaFormForEditAction = ({
     state.multiDocketedOriginalCaseDetail,
   );
 
-  if (multiDocketedOriginalCaseDetail) {
-    const { docketEntryId } = documentDetail;
+  let originalDocumentDetail;
 
-    documentDetail = multiDocketedOriginalCaseDetail.docketEntries.find(
-      ({ currentId }) => currentId === docketEntryId,
+  if (multiDocketedOriginalCaseDetail) {
+    const { docketEntryId } = currentDocumentDetail;
+    originalDocumentDetail = multiDocketedOriginalCaseDetail.docketEntries.find(
+      de => de.docketEntryId === docketEntryId,
     );
 
-    if (!documentDetail) {
+    if (!originalDocumentDetail) {
       throw new Error(
         `Could not find multiDocketed entry with docketEntryId ${docketEntryId} on case ${multiDocketedOriginalCaseDetail.docketNumber}`,
       );
     }
-    
+  } else {
+    originalDocumentDetail = currentDocumentDetail;
   }
 
   // store.set(state.docketRecordIndex, docketRecordIndex);
 
   const filersMap = {};
-  documentDetail.filers.forEach(filer => (filersMap[filer] = true));
+  originalDocumentDetail.filers.forEach(filer => (filersMap[filer] = true));
 
-  documentDetail.servedPartiesCode =
-    documentDetail.servedPartiesCode ||
+  currentDocumentDetail.servedPartiesCode =
+    currentDocumentDetail.servedPartiesCode ||
     applicationContext
       .getUtilities()
-      .getServedPartiesCode(documentDetail.servedParties);
+      .getServedPartiesCode(currentDocumentDetail.servedParties);
+
+  const currentEditableFields = [
+    'servedParties',
+    'servedPartiesCode',
+    'action',
+    'isStricken',
+  ];
+
+  const documentDetail = {
+    ...originalDocumentDetail,
+    ...pick(currentDocumentDetail, currentEditableFields),
+  };
 
   store.set(state.form, {
     ...documentDetail,
