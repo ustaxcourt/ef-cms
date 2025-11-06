@@ -1,6 +1,24 @@
 import { isEmpty } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
+const checkEmails = (
+  confirmEmail: string,
+  allPendingEmails: string[],
+  petitioners: any[],
+): { confirmEmail?: string } => {
+  const errors: { confirmEmail?: string } = {};
+
+  if (
+    confirmEmail &&
+    (allPendingEmails.includes(confirmEmail) ||
+      petitioners.map(p => p.email).includes(confirmEmail))
+  ) {
+    errors.confirmEmail =
+      'This email is already associated with another petitioner on this case. Please use a different email address.';
+  }
+  return errors;
+};
+
 /**
  * Validates petitioner information and redirects user to success or error path
  * @param {object} providers the providers object
@@ -15,21 +33,17 @@ export const validatePetitionerAction = ({
   get,
   path,
 }: ActionProps) => {
+  const caseDetail = get(state.caseDetail);
+
   const { contact } = get(state.form);
 
-  const caseDetail = get(state.caseDetail);
+  const { allPendingEmails } = get(state.screenMetadata);
 
   const { petitioners } = caseDetail;
 
-  const errors = {};
+  const { confirmEmail } = contact;
 
-  if (
-    contact.confirmEmail &&
-    petitioners.map(p => p.email).includes(contact.confirmEmail)
-  ) {
-    errors['confirmEmail'] =
-      'This email is already associated with another petitioner on this case. Please use a different email address.';
-  }
+  const errors = checkEmails(confirmEmail, allPendingEmails, petitioners);
 
   const result = applicationContext
     .getUseCases()
@@ -43,6 +57,4 @@ export const validatePetitionerAction = ({
   return isEmpty(errors)
     ? path.success()
     : path.error({ errors: { contact: errors } });
-
-
 };

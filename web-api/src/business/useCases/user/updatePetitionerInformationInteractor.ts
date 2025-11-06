@@ -125,12 +125,10 @@ export const updatePetitionerInformation = async (
   const petitionerCaseRaw = await getCaseByDocketNumber({
     docketNumber,
   });
-  
 
   if (!petitionerCaseRaw) {
     throw new Error(`Case with docket number ${docketNumber} was not found`);
   }
-  
 
   if (petitionerCaseRaw.status === CASE_STATUS_TYPES.new) {
     throw new Error(
@@ -159,12 +157,39 @@ export const updatePetitionerInformation = async (
     );
   }
 
-  // validate email doesn't already exist on another party in the case
-console.log(petitionerCaseRaw.petitioners.map(p => p.email), "check here....")
+  const { updatedEmail } = updatedPetitionerData;
 
-if (petitionerCaseRaw.petitioners.map(p => p.email).includes(updatedPetitionerData.updatedEmail)) {
-  throw new Error(`Email ${updatedPetitionerData.updatedEmail} is already in use by another petitioner`);
-}
+  const { petitioners } = petitionerCaseRaw;
+
+  const contactIdArray = petitioners.map(p => p.contactId);
+
+  // Returns as object {id#: email}, will put values into an array
+  const allUsers =
+    (await applicationContext.getUseCases().getUsersPendingEmailInteractor(
+      {
+        userIds: contactIdArray,
+      },
+      authorizedUser,
+    )) || {};
+
+  const allPendingEmails: string[] = Object.values(allUsers);
+
+  if (
+    allPendingEmails.length > 0 &&
+    updatedEmail &&
+    allPendingEmails.includes(updatedEmail)
+  ) {
+    throw new Error(`Email ${updatedEmail} is pending for another petitioner`);
+  }
+
+  if (
+    updatedEmail &&
+    petitionerCaseRaw.petitioners.map(p => p.email).includes(updatedEmail)
+  ) {
+    throw new Error(
+      `Email ${updatedPetitionerData.updatedEmail} is already in use by another petitioner`,
+    );
+  }
 
   const editableFields = pick(
     defaults(updatedPetitionerData, {
