@@ -57,8 +57,14 @@ const splitTrialHearing = (
       (ms.content.caseRecord as any).trial = ms.content.caseRecord.trialHearing;
       (ms.content.caseRecord as any).hearing = blankTrialOrHearing;
     } else {
-      (ms.content.caseRecord as any).trial = blankTrialOrHearing;
-      (ms.content.caseRecord as any).hearing = blankTrialOrHearing;
+      (ms.content.caseRecord as any).trial = {
+        date: ms.content.caseRecord.trialHearing.date || '',
+        note: ms.content.caseRecord.trialHearing.note || '',
+        transcriptOrdered:
+          ms.content.caseRecord.trialHearing.transcriptOrdered || '',
+        trialHearingType:
+          ms.content.caseRecord.trialHearing.trialHearingType || '',
+      };
     }
   }
 
