@@ -18,7 +18,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-       version = "~>6.15"
+      version = "~>6.15"
     }
     opensearch = {
       source  = "opensearch-project/opensearch"
@@ -36,24 +36,24 @@ module "api-gateway-global-logging-permissions" {
 }
 
 module "ci-cd" {
-  source               = "../../modules/ci-cd"
+  source                  = "../../modules/ci-cd"
   lower_env_restore_roles = var.lower_env_restore_roles
 }
 
 module "kibana" {
-  source                           = "../../modules/kibana"
-  cognito_suffix                   = var.cognito_suffix
-  es_logs_ebs_volume_size_gb       = var.es_logs_ebs_volume_size_gb
-  es_logs_instance_count           = var.es_logs_instance_count
-  es_logs_instance_type            = var.es_logs_instance_type
-  es_logs_engine_version           = var.es_logs_engine_version
-  sns_alarm_arn                    = module.health-alarms-east.topic_arn
-  log_group_environments           = var.log_group_environments
-  number_of_days_to_keep_info_logs = var.number_of_days_to_keep_info_logs
-  log_snapshot_bucket_name         = var.log_snapshot_bucket_name
-  es_info_cluster_create           = var.es_info_cluster_create
-  es_info_cluster_shared_cluster_endpoint = var.es_info_cluster_shared_cluster_endpoint
-  es_info_cluster_shared_cluster_arn = var.es_info_cluster_shared_cluster_arn
+  source                                     = "../../modules/kibana"
+  cognito_suffix                             = var.cognito_suffix
+  es_logs_ebs_volume_size_gb                 = var.es_logs_ebs_volume_size_gb
+  es_logs_instance_count                     = var.es_logs_instance_count
+  es_logs_instance_type                      = var.es_logs_instance_type
+  es_logs_engine_version                     = var.es_logs_engine_version
+  sns_alarm_arn                              = module.health-alarms-east.topic_arn
+  log_group_environments                     = var.log_group_environments
+  number_of_days_to_keep_info_logs           = var.number_of_days_to_keep_info_logs
+  log_snapshot_bucket_name                   = var.log_snapshot_bucket_name
+  es_info_cluster_create                     = var.es_info_cluster_create
+  es_info_cluster_shared_cluster_endpoint    = var.es_info_cluster_shared_cluster_endpoint
+  es_info_cluster_shared_cluster_arn         = var.es_info_cluster_shared_cluster_arn
   es_info_cluster_shared_cluster_account_ids = var.es_info_cluster_shared_cluster_account_ids != "" ? split(",", var.es_info_cluster_shared_cluster_account_ids) : []
 }
 
