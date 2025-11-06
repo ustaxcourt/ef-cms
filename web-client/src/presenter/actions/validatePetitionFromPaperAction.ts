@@ -9,7 +9,7 @@ export const aggregateStatisticsErrors = ({
   get: <T>(slice: T) => T;
 }) => {
   let newErrorStatistics;
-  let statisticsErrorMessages = [];
+  let statisticsErrorMessages: string[] = [];
 
   const purgedErrors = omit(errors, [
     'irsDeficiencyAmount',
@@ -54,10 +54,12 @@ export const aggregateStatisticsErrors = ({
 export const aggregatePetitionerErrors = ({
   errors,
 }: {
-  errors: Record<string, any>;
+  errors: Record<string, any> & {
+    petitioners?: Array<{ index: number; [key: string]: any }>;
+  };
 }) => {
   if (errors?.petitioners) {
-    (errors.petitioners as { index: number }[]).forEach(e => {
+    errors.petitioners.forEach(e => {
       if (e.index === 0) {
         errors.contactPrimary = omit(e, 'index');
       } else {

@@ -1,4 +1,5 @@
 import {
+  ErrorWithStatusCode,
   NotFoundError,
   UnauthorizedError,
   UnsanitizedEntityError,
@@ -104,9 +105,9 @@ export const redirect = async (_event, fun, statusCode = 302) => {
  * @param {Error} err the error to convert to the api gateway response event
  * @returns {object} an api gateway response object
  */
-export const sendError = err => {
+export const sendError = (err: ErrorWithStatusCode & { toJSON?: () => any }) => {
   return {
-    body: JSON.stringify(err.message),
+    body: JSON.stringify(err.toJSON ? err.toJSON() : err.message),
     headers: headerOverride,
     statusCode: err.statusCode || '400',
   };

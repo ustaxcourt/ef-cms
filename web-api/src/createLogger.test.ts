@@ -3,8 +3,9 @@ import {
   redact,
   removeDuplicateLogInformation,
 } from './createLogger';
+import { TransformableInfo } from 'logform';
 
-interface LogEntryWithRequest {
+interface LogEntryWithRequest extends TransformableInfo {
   request: {
     headers: Record<string, any>;
     method: string;
@@ -19,7 +20,7 @@ interface LogEntryWithRequest {
   [key: string]: any;
 }
 
-interface LogEntryWithContext {
+interface LogEntryWithContext extends TransformableInfo {
   context: Record<string, any>;
   environment: any;
   requestId: any;

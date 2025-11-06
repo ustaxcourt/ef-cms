@@ -1,3 +1,5 @@
+import { ErrorWithStatusCode } from '../../errors/errors';
+
 /**
  * Errors returned by the v1 API. The structure of this object
  * and returned response codes are considered part of the API version
@@ -11,20 +13,25 @@
  * 500: returned by wrapping any Error which doesn't specify a statusCode.
  */
 const V1_API_ERROR_STATUS_CODES = [401, 403, 404, 500];
-type ErrorWithStatusCode = Error & { statusCode?: number };
 
 class v1ApiError extends Error {
   statusCode: number;
 
   constructor(error: ErrorWithStatusCode) {
-    super();
+    const msg = error.message || 'An unexpected error occurred';
+    super(msg);
     this.statusCode =
       error.statusCode && V1_API_ERROR_STATUS_CODES.includes(error.statusCode)
         ? error.statusCode
         : 500;
-    const msg = error.message || 'An unexpected error occurred';
-    this.message = { message: msg, toString: () => msg } as unknown as string;
     this.stack = error.stack;
+  }
+
+  toJSON() {
+    return {
+      message: this.message,
+      statusCode: this.statusCode,
+    };
   }
 }
 
