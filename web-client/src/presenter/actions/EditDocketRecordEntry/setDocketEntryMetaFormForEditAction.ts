@@ -18,7 +18,7 @@ export const setDocketEntryMetaFormForEditAction = ({
   const { docketEntries } = get(state.caseDetail);
   const { docketRecordIndex } = props;
 
-  const documentDetail = docketEntries.find(
+  let documentDetail = docketEntries.find(
     ({ index }) => index === docketRecordIndex,
   );
 
@@ -28,7 +28,26 @@ export const setDocketEntryMetaFormForEditAction = ({
     );
   }
 
-  store.set(state.docketRecordIndex, docketRecordIndex);
+  const multiDocketedOriginalCaseDetail = get(
+    state.multiDocketedOriginalCaseDetail,
+  );
+
+  if (multiDocketedOriginalCaseDetail) {
+    const { docketEntryId } = documentDetail;
+
+    documentDetail = multiDocketedOriginalCaseDetail.docketEntries.find(
+      ({ currentId }) => currentId === docketEntryId,
+    );
+
+    if (!documentDetail) {
+      throw new Error(
+        `Could not find multiDocketed entry with docketEntryId ${docketEntryId} on case ${multiDocketedOriginalCaseDetail.docketNumber}`,
+      );
+    }
+    
+  }
+
+  // store.set(state.docketRecordIndex, docketRecordIndex);
 
   const filersMap = {};
   documentDetail.filers.forEach(filer => (filersMap[filer] = true));
