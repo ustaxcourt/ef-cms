@@ -22,18 +22,24 @@ export const minuteSheets: NewMinuteSheetKysely[] = [
         notCalled: { date: '', note: '' },
         recalls: [{ date: '', note: '', transcriptOrdered: false }],
         pretrialConference: { date: '', note: '', transcriptOrdered: false },
-        trialHearing: {
-          date: '11/22/2025',
-          note: 'trial note',
-          transcriptOrdered: true,
-          trialHearingType: 'trial',
-        },
+        // trialHearing: {
+        //   date: '11/22/2025',
+        //   note: 'trial note',
+        //   trialHearingType: 'trial',
+        //   transcriptOrdered: true,
+        // },
         trial: {
           date: '',
           note: '',
+          trialHearingType: '',
           transcriptOrdered: false,
         },
-        hearing: { date: '', note: '', transcriptOrdered: false },
+        hearing: {
+          date: '',
+          note: '',
+          trialHearingType: '',
+          transcriptOrdered: false,
+        },
       },
       appearances: {
         petitioners: {
@@ -113,18 +119,24 @@ export const minuteSheets: NewMinuteSheetKysely[] = [
         notCalled: { date: '', note: '' },
         recalls: [{ date: '', note: '', transcriptOrdered: false }],
         pretrialConference: { date: '', note: '', transcriptOrdered: false },
-        trialHearing: {
-          date: '12/01/2025',
-          note: 'test note for unspecified type field',
-          transcriptOrdered: false,
-          trialHearingType: '',
-        },
+        // trialHearing: {
+        //   date: '12/01/2025',
+        //   note: 'test note for unspecified type field',
+        //   trialHearingType: '',
+        //   transcriptOrdered: false,
+        // },
         trial: {
           date: '',
           note: '',
+          trialHearingType: '',
           transcriptOrdered: false,
         },
-        hearing: { date: '', note: '', transcriptOrdered: false },
+        hearing: {
+          date: '',
+          note: '',
+          trialHearingType: '',
+          transcriptOrdered: false,
+        },
       },
       appearances: {
         petitioners: {
