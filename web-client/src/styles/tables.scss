@@ -333,13 +333,11 @@ table,
     }
 
     .filing-type-icon {
-      display: flex;
-      padding-top: 100%;
       padding-right: 0;
-      padding-bottom: 100%;
       text-align: right;
 
       svg {
+        margin-top: 4px;
         margin-right: 0;
       }
     }
