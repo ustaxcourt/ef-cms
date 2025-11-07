@@ -36,7 +36,7 @@ deploy_primary() {
     }
 
   log_info "Writing secrets to primary environment: ${env}"
-  npx ts-node scripts/secrets/create-account-secrets.ts \
+  ./scripts/secrets/create-account-secrets.ts \
     --env "${env}" \
     --domain "${domain}" \
     --update || {
@@ -102,7 +102,7 @@ deploy_consumer() {
     }
 
   log_info "Writing secrets to consumer environment: ${env}"
-  npx ts-node scripts/secrets/create-account-secrets.ts \
+  ./scripts/secrets/create-account-secrets.ts \
     --env "${env}" \
     --domain "${domain}" \
     --es-info-cluster-shared-endpoint "${shared_endpoint}" \
