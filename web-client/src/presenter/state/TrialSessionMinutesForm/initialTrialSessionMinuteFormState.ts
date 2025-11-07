@@ -62,7 +62,6 @@ export type MinuteSheetFormState = {
     notCalled: CalendarEvent;
     recalled: KeyedCaseMetadataEntryByKey;
     pretrialConference: CalendarEvent;
-    // trialHearing: CalendarEvent;
     trial: CalendarEvent;
     hearing: CalendarEvent;
   };
@@ -156,20 +155,12 @@ export const initialMinuteSheetFormState: MinuteSheetFormState = {
       transcriptOrdered: false,
     },
     recalled: {},
-    // trialHearing: {
-    //   // OLD  Could suggest a trial hearing object containing trial and hearing containing the same fields
-    //   date: '',
-    //   note: '',
-    //   transcriptOrdered: false,
-    // },
     trial: {
-      // NEW
       date: '',
       note: '',
       transcriptOrdered: false,
     },
     hearing: {
-      // NEW
       date: '',
       note: '',
       transcriptOrdered: false,

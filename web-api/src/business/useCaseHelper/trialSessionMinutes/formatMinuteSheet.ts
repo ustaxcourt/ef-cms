@@ -44,7 +44,6 @@ export type FormattedMinuteSheet = {
   notCalled: string;
   recalled: { content: string }[];
   pretrialConference?: string;
-  // trialHearing?: string;
   trial?: string;
   hearing?: string;
   respondentAppearances: string[];
@@ -98,7 +97,6 @@ export const formatMinuteSheet = ({
     notCalled,
     pretrialConference,
     recalls,
-    // trialHearing,
     trial,
     hearing,
   } = minuteSheet.caseRecord;
@@ -151,7 +149,6 @@ export const formatMinuteSheet = ({
     ),
     trialBrief: formatTrialBrief(sanitizeMinuteSheetForm(minuteSheet.brief)),
     trialClerk: minuteSheet.trialSession.trialClerk,
-    // trialHearing: formatTrialHearing(sanitizeMinuteSheetForm(trialHearing)),
     trial: formatTrialHearing(sanitizeMinuteSheetForm(trial)),
     hearing: formatTrialHearing(sanitizeMinuteSheetForm(hearing)),
     trialLocation: trialSession.trialLocation!,
@@ -464,10 +461,7 @@ export const formatPretrialConference = (
     .join('; ');
 };
 
-export const formatTrialHearing = (
-  // trialHearing: [MinuteSheet['caseRecord']['trial']| MinuteSheet['caseRecord']['hearing'],
-  trialHearing: CalendarEvent,
-): string => {
+export const formatTrialHearing = (trialHearing: CalendarEvent): string => {
   if (!trialHearing) return '';
   return [
     trialHearing.date,

@@ -80,13 +80,6 @@ const transformCaseMetadataSection = (minuteSheet: MinuteSheet) => ({
       minuteSheet.caseRecord.pretrialConference?.transcriptOrdered || false,
   },
   recalled: arrayToKeyedRecord(minuteSheet.caseRecord.recalls || []),
-  // trialHearing: {
-  //   date: minuteSheet.caseRecord.trialHearing?.date || '',
-  //   note: minuteSheet.caseRecord.trialHearing?.note || '',
-  //   transcriptOrdered:
-  //     minuteSheet.caseRecord.trialHearing?.transcriptOrdered || false,
-  //   trialHearingType: minuteSheet.caseRecord.trialHearing?.trialHearingType,
-  // },
   trial: {
     date: minuteSheet.caseRecord.trial?.date || '',
     note: minuteSheet.caseRecord.trial?.note || '',

@@ -83,12 +83,6 @@ export const transformFormStateToMinuteSheet = (
         transcriptOrdered:
           caseMetadataSection.pretrialConference.transcriptOrdered,
       },
-      // trialHearing: {
-      //   date: caseMetadataSection.trialHearing.date,
-      //   note: caseMetadataSection.trialHearing.note,
-      //   transcriptOrdered: caseMetadataSection.trialHearing.transcriptOrdered,
-      //   trialHearingType: caseMetadataSection.trialHearing.trialHearingType,
-      // },
       trial: {
         date: caseMetadataSection.trial.date,
         note: caseMetadataSection.trial.note,

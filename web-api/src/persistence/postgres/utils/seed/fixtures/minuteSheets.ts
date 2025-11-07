@@ -22,12 +22,6 @@ export const minuteSheets: NewMinuteSheetKysely[] = [
         notCalled: { date: '', note: '' },
         recalls: [{ date: '', note: '', transcriptOrdered: false }],
         pretrialConference: { date: '', note: '', transcriptOrdered: false },
-        // trialHearing: {
-        //   date: '11/22/2025',
-        //   note: 'trial note',
-        //   trialHearingType: 'trial',
-        //   transcriptOrdered: true,
-        // },
         trial: {
           date: '',
           note: '',
@@ -119,12 +113,6 @@ export const minuteSheets: NewMinuteSheetKysely[] = [
         notCalled: { date: '', note: '' },
         recalls: [{ date: '', note: '', transcriptOrdered: false }],
         pretrialConference: { date: '', note: '', transcriptOrdered: false },
-        // trialHearing: {
-        //   date: '12/01/2025',
-        //   note: 'test note for unspecified type field',
-        //   trialHearingType: '',
-        //   transcriptOrdered: false,
-        // },
         trial: {
           date: '',
           note: '',

@@ -144,11 +144,6 @@ export const MinuteSheet = ({
                 <strong>Proceeding</strong>
               )}
             </div>
-            {/* <div
-              dangerouslySetInnerHTML={{
-                __html: formattedMinuteSheet.trialHearing,
-              }}
-            /> */}
             {formattedMinuteSheet.trial && (
               <div
                 dangerouslySetInnerHTML={{
