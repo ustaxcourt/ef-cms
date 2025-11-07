@@ -15,10 +15,9 @@ log_success() {
 }
 
 if [ $# -lt 2 ]; then
-    log_error "Insufficient arguments provided."
-    echo "Usage: $0 <primary-env>"
-    echo "Base domain: $0 <base-domain>"
-    echo "Consumers: $0 <consumer1> [consumer2 ...]" >&2
+  log_error "Insufficient arguments provided."
+  echo "Usage: $0 <primary-env> <base-domain> [consumer1 consumer2 ...]" >&2
+  exit 1
 fi
 
 PRIMARY_ENV="$1"; shift
@@ -30,6 +29,7 @@ deploy_primary() {
   local domain="$2"
   log_info "Switching to primary environment: ${env}"
 
+  # shellcheck disable=SC1091
   . ./scripts/env/set-env.zsh "${env}" || {
     log_error "Failed to primary switch environment: ${env}"
     exit 1
@@ -37,9 +37,9 @@ deploy_primary() {
 
   log_info "Writing secrets to primary environment: ${env}"
   npx ts-node scripts/secrets/create-account-secrets.ts \
-  --env "${env}" \
-  --domain "${domain}" \
-  --update || {
+    --env "${env}" \
+    --domain "${domain}" \
+    --update || {
      log_error "Failed to write primary secrets for environment: ${env}"
      exit 1
    }
@@ -92,9 +92,10 @@ deploy_consumer() {
   local env="$1"
   local domain="$2"
   local shared_endpoint="$3"
-  local share_arn="$4"
+  local shared_arn="$4"
   log_info "Switching to consumer environment: ${env}"
 
+  # shellcheck disable=SC1091
   . ./scripts/env/set-env.zsh "${env}" || {
     log_error "Failed to consumer switch environment: ${env}"
     exit 1
@@ -102,11 +103,11 @@ deploy_consumer() {
 
   log_info "Writing secrets to consumer environment: ${env}"
   npx ts-node scripts/secrets/create-account-secrets.ts \
-  --env "${env}" \
-  --domain "${domain}" \
-  --es_info_cluster_shared_cluster_endpoint "${shared_endpoint}" \
-  --es_info_cluster_shared_cluster_arn "${share_arn}" \
-  --update || {
+    --env "${env}" \
+    --domain "${domain}" \
+    --es-info-cluster-shared-endpoint "${shared_endpoint}" \
+    --es-info-cluster-shared-arn "${shared_arn}" \
+    --update || {
      log_error "Failed to write consumer secrets for environment: ${env}"
      exit 1
    }
@@ -139,7 +140,7 @@ else
       fi
     done
     
-    if [ ${#failed_consumers} -gt 0 ]; then
+    if [ ${#failed_consumers[@]} -gt 0 ]; then
         log_error "Deployment failed for consumers: ${failed_consumers[*]}"
         exit 1
     fi

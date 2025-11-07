@@ -113,7 +113,7 @@ resource "aws_elasticsearch_domain_policy" "kibana_access" {
     }, {
       "Effect":"Allow",
       "Principal": {
-        "AWS": ["${jsonencode(local.all_lambda_arn)}"]
+        "AWS": ${jsonencode(local.all_lambda_arns)}
       },
       "Action": "es:ESHttp*",
       "Resource":"${aws_opensearch_domain.efcms-logs[0].arn}/*"
@@ -219,14 +219,13 @@ locals {
   instance_size_in_mb   = var.es_info_cluster_create ? aws_opensearch_domain.efcms-logs[0].ebs_options[0].volume_size * 1000 : 0
   info_cluster_arn      = var.es_info_cluster_create ? aws_opensearch_domain.efcms-logs[0].arn : var.es_info_cluster_shared_cluster_arn
   info_cluster_endpoint = var.es_info_cluster_create ? aws_opensearch_domain.efcms-logs[0].endpoint : var.es_info_cluster_shared_cluster_endpoint
-  info_cluster_shared_cluster_consumers = [
-    for consumer_ids in var.es_info_cluster_shared_cluster_account_ids :
-    "arn:aws:iam::${consumer_ids}:role.lambda_elasticsearch_execution_role"
+  info_cluster_consumer_lambda_arns = [
+    for account_id in var.es_info_cluster_shared_cluster_account_ids :
+    "arn:aws:iam::${account_id}:role/lambda_elasticsearch_execution_role"
   ]
-  all_lambda_arn = concat([
-    aws_iam_role.lambda_elasticsearch_execution_role.arn
-    ],
-    local.info_cluster_shared_cluster_consumers
+  all_lambda_arns = concat(
+    [aws_iam_role.lambda_elasticsearch_execution_role.arn],
+    local.info_cluster_consumer_lambda_arns
   )
 }
 
