@@ -22,6 +22,7 @@ export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
       className: 'sealed-docket-entry',
       icon: 'lock',
       title: formattedResult.sealedToTooltip,
+      size: 'lg',
     });
   }
 
@@ -32,24 +33,28 @@ export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
       className: 'fa-icon-blue',
       icon: ['fas', 'file-alt'],
       title: 'Is paper',
+      size: 'lg',
     });
   } else if (formattedResult.isInProgress) {
     iconsToDisplay.push({
       className: 'fa-icon-gold',
       icon: ['fas', 'thumbtack'],
       title: 'In progress',
+      size: 'lg',
     });
   } else if (formattedResult.qcNeeded) {
     iconsToDisplay.push({
       className: 'fa-icon-red',
       icon: ['fa', 'star'],
       title: 'Is untouched',
+      size: 'lg',
     });
   } else if (formattedResult.showLoadingIcon) {
     iconsToDisplay.push({
       className: 'fa-spin spinner',
       icon: ['fa-spin', 'spinner'],
       title: 'Is loading',
+      size: 'lg',
     });
   }
 
