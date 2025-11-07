@@ -1,6 +1,9 @@
-#!/bin/bash
+#!/bin/zsh
+# shellcheck disable=SC1071
 
-set -euo pipefail
+set -e
+set -u
+setopt pipefail
 
 log_info() {
   echo "[INFO] $*" >&2
@@ -35,6 +38,15 @@ deploy_primary() {
     exit 1
     }
 
+  if [[ -z "${AWS_PROFILE:-}" ]]; then
+    if [[ "${env}" == ustc-* ]]; then
+      export AWS_PROFILE="${env}"
+    else
+      export AWS_PROFILE="ustc-${env}"
+    fi
+    log_info "AWS_PROFILE not set. Defaulting to ${AWS_PROFILE}"
+  fi
+
   log_info "Writing secrets to primary environment: ${env}"
   ./scripts/secrets/create-account-secrets.ts \
     --env "${env}" \
@@ -45,7 +57,7 @@ deploy_primary() {
    }
 
   log_info "Deploying primary environment: ${env}"
-  pushd web-api/terraform/applyables/account-specific/account-specific >/dev/null || {
+  pushd web-api/terraform/applyables/account-specific >/dev/null || {
    log_error "Failed to primary change directory for Terraform applyables: ${env}"
    exit 1
   }
@@ -101,6 +113,15 @@ deploy_consumer() {
     exit 1
     }
 
+  if [[ -z "${AWS_PROFILE:-}" ]]; then
+    if [[ "${env}" == ustc-* ]]; then
+      export AWS_PROFILE="${env}"
+    else
+      export AWS_PROFILE="ustc-${env}"
+    fi
+    log_info "AWS_PROFILE not set. Defaulting to ${AWS_PROFILE}"
+  fi
+
   log_info "Writing secrets to consumer environment: ${env}"
   ./scripts/secrets/create-account-secrets.ts \
     --env "${env}" \
@@ -113,7 +134,7 @@ deploy_consumer() {
    }
 
   log_info "Deploying consumer environment: ${env}"
-  pushd web-api/terraform/applyables/account-specific/account-specific >/dev/null || {
+  pushd web-api/terraform/applyables/account-specific >/dev/null || {
    log_error "Failed to change consumer directory for Terraform applyables: ${env}"
    exit 1
   }
