@@ -186,7 +186,7 @@ export const updateDocketEntryMeta = async (
   // fields, but the other fields will get handled below
   const result = await updateCaseAndAssociations({
     authorizedUser,
-    caseToUpdate: caseEntity, // 102-67
+    caseToUpdate: caseEntity,
   });
 
   if (DocketEntry.isMultiDocketed(originalDocketEntry)) {
@@ -194,7 +194,7 @@ export const updateDocketEntryMeta = async (
       docketNumbers: originalDocketEntry.multiDocketedOn,
     });
 
-    const updatedDocketEntries = casesToUpdate // 102-67
+    const updatedDocketEntries = casesToUpdate 
       .map(caseRecord => {
         const { docketNumber } = caseRecord;
         const consolidatedCaseEntity =
