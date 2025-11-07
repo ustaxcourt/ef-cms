@@ -137,10 +137,13 @@ export const updateDocketEntryMeta = async (
     shouldAddNewCoverSheet,
   });
 
+  const isMultiDocketed = DocketEntry.isMultiDocketed(originalDocketEntry);
+
   const docketEntryEntity = new DocketEntry(
     {
       ...originalDocketEntry,
-      ...omit(editableFields, DOCKET_ENTRY_DOCUMENT_INFO_FIELDS),
+      // when multi docketed, we don't want to update the document info fields as they get uploaded later in this method
+      ...omit(editableFields, isMultiDocketed ? DOCKET_ENTRY_DOCUMENT_INFO_FIELDS : []),
     },
     { authorizedUser, petitioners: caseEntity.petitioners },
   ).validate();
@@ -179,16 +182,19 @@ export const updateDocketEntryMeta = async (
     caseEntity.updateDocketEntry(docketEntryEntity);
   }
 
-  // TODO:
-  // a. they updated parties or served tabs, that needs to update the currentDocketEntry (non multi docketed original)
-  // b. they updated document info tab, we lookup all cases using multiDocketOn, and update the docket entry with latest data
+  // We call this firs to update the stricken, service, and action
+  // fields, but the other fields will get handled below
+  const result = await updateCaseAndAssociations({
+    authorizedUser,
+    caseToUpdate: caseEntity, // 102-67
+  });
 
   if (DocketEntry.isMultiDocketed(originalDocketEntry)) {
     const casesToUpdate = await getCasesByDocketNumbers({
       docketNumbers: originalDocketEntry.multiDocketedOn,
     });
 
-    const updatedDocketEntries = casesToUpdate
+    const updatedDocketEntries = casesToUpdate // 102-67
       .map(caseRecord => {
         const { docketNumber } = caseRecord;
         const consolidatedCaseEntity =
@@ -235,11 +241,6 @@ export const updateDocketEntryMeta = async (
       await upsertDocketEntries(updatedDocketEntries as any[]);
     }
   }
-
-  const result = await updateCaseAndAssociations({
-    authorizedUser,
-    caseToUpdate: caseEntity,
-  });
 
   return new Case(result, { authorizedUser }).validate().toRawObject();
 };
