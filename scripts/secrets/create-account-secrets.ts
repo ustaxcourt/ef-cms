@@ -74,14 +74,14 @@ const scriptConfig: ScriptConfig = {
     esInfoClusterSharedArn: {
       default: '',
       description:
-        'arn of info cluster opensearch (used when es_info_cluster_create is false)',
+        'ARN of info cluster opensearch (used when es_info_cluster_create is false)',
       long: 'es-info-cluster-shared-arn',
       type: 'string',
     },
     esInfoClusterSharedEndPoint: {
       default: '',
       description:
-        'endpoint of info cluster opensearch (used when es_info_cluster_create is false)',
+        'Endpoint of info cluster opensearch (used when es_info_cluster_create is false)',
       long: 'es-info-cluster-shared-endpoint',
       type: 'string',
     },
@@ -185,7 +185,7 @@ if (env === 'prod') {
       esInfoClusterSharedEndPoint;
     accountSecrets.ES_LOGS_EBS_VOLUME_SIZE_GB = 10;
     accountSecrets.ES_LOGS_INSTANCE_COUNT = 1;
-    accountSecrets.ES_LOGS_INSTANCE_TYPE = 't2.small.search';
+    accountSecrets.ES_LOGS_INSTANCE_TYPE = 'm5.large.search';
     console.log(
       `Using shared Info Opensearch cluster: arn ${esInfoClusterSharedArn} endpoint ${esInfoClusterSharedEndPoint}`,
     );
