@@ -37,9 +37,9 @@ export const validatePetitionerAction = ({
 
   const { contact } = get(state.form);
 
-  const { allPendingEmails } = get(state.screenMetadata);
+  const { allPendingEmails = [] } = get(state.screenMetadata) || {};
 
-  const { petitioners } = caseDetail;
+  const { petitioners = [] } = caseDetail || {};
 
   const { confirmEmail } = contact;
 
