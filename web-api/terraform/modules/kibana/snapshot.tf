@@ -68,7 +68,7 @@ EOF
 }
 
 resource "aws_s3_bucket" "ustc_log_snapshots_bucket" {
-  count = var.es_info_cluster_create ? 1 : 0
-  bucket = "${var.log_snapshot_bucket_name}"
+  count         = var.es_info_cluster_create ? 1 : 0
+  bucket        = var.log_snapshot_bucket_name
   force_destroy = false
 }

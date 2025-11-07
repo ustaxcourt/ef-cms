@@ -1,5 +1,5 @@
 module "rotate_info_indices" {
-  count = var.es_info_cluster_create ? 1 : 0
+  count          = var.es_info_cluster_create ? 1 : 0
   source         = "../../../../web-api/terraform/modules/lambda"
   handler_file   = "./aws/lambdas/RotateInfoIndices/src/index.js"
   handler_method = "handler"
@@ -13,20 +13,20 @@ module "rotate_info_indices" {
 }
 
 resource "aws_cloudwatch_log_group" "rotate_info_indices" {
-  count = var.es_info_cluster_create ? 1 : 0
+  count             = var.es_info_cluster_create ? 1 : 0
   name              = "/aws/lambda/${module.rotate_info_indices[0].function_name}"
   retention_in_days = 14
 }
 
 resource "aws_cloudwatch_event_rule" "every_day" {
-  count = var.es_info_cluster_create ? 1 : 0
+  count               = var.es_info_cluster_create ? 1 : 0
   name                = "daily-job"
   description         = "Fires every day"
   schedule_expression = "rate(1 day)"
 }
 
 resource "aws_cloudwatch_event_target" "rotate_info_indices_daily" {
-  count = var.es_info_cluster_create ? 1 : 0
+  count     = var.es_info_cluster_create ? 1 : 0
   rule      = aws_cloudwatch_event_rule.every_day[0].name
   target_id = "lambda"
   arn       = module.rotate_info_indices[0].arn
@@ -38,7 +38,7 @@ resource "terraform_data" "rotate_info_indices_last_modified" {
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch_to_rotate_info_indices_daily" {
-  count = var.es_info_cluster_create ? 1 : 0
+  count         = var.es_info_cluster_create ? 1 : 0
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
   function_name = module.rotate_info_indices[0].function_name

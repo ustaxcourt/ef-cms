@@ -39,25 +39,25 @@ variable "es_logs_engine_version" {
 }
 
 variable "es_info_cluster_create" {
-  default = false
-  description = "determines whether to create an info opensearch or not"
-  type = bool
+  default     = false
+  description = "Determines whether to create an info opensearch or not"
+  type        = bool
 }
 
 variable "es_info_cluster_shared_cluster_endpoint" {
-  default = ""
-  description = "endpoint of info cluster opensearch (used when es_info_cluster_create is false)"
-  type = string
+  default     = ""
+  description = "Endpoint of info cluster opensearch (used when es_info_cluster_create is false)"
+  type        = string
 }
 
 variable "es_info_cluster_shared_cluster_arn" {
-  default = ""
-  description = "arn of info cluster opensearch (used when es_info_cluster_create is false)"
-  type = string
+  default     = ""
+  description = "Arn of info cluster opensearch (used when es_info_cluster_create is false)"
+  type        = string
 }
 
 variable "es_info_cluster_shared_cluster_account_ids" {
-  default = []
+  default     = []
   description = "List of AWS account that are consumers of the info cluster"
-  type = list(string)
+  type        = list(string)
 }
