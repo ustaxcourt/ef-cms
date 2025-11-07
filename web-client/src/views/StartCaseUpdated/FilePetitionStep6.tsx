@@ -4,12 +4,12 @@ import { ErrorNotification } from '@web-client/views/ErrorNotification';
 import { FilePetitionButtons } from '@web-client/views/StartCaseUpdated/FilePetitionButtons';
 import { FileUploadStatusModal } from '@web-client/views/FileUploadStatusModal';
 import { IRSNoticeInformation } from './IRSNoticeInformation';
-import { InfoNotificationComponent } from '@web-client/views/InfoNotification';
+import { AlertInfo } from '@web-client/dawson-ui/ui/Alert/AlertInfo';
+import { AlertWarning } from '@web-client/dawson-ui/ui/Alert/AlertWarning';
 import { PETITION_TYPES } from '@shared/business/entities/EntityConstants';
 import { PetitionInformation } from './PetitionInformation';
 import { PetitionerInformation } from './PetitionerInformation';
 import { STINInformation } from './STINInformation';
-import { WarningNotificationComponent } from '@web-client/views/WarningNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -44,12 +44,13 @@ export const FilePetitionStep6 = connect(
               each section. You will not be able to make changes to ${isPetitioner ? 'your' : 'the'} case
               once you create it without filing a motion.`}
             </p>
-            <InfoNotificationComponent
+            <AlertInfo
               alertInfo={{
                 message: `${isPetitioner ? 'Your' : 'The'} Petition will not be created with the Court until the Submit Documents & Create Case button is clicked.`,
               }}
-              dismissible={false}
+              isDismissible={false}
               scrollToTop={false}
+              className="tw:mb-4"
             />
             <div className="padding-x-0">
               <div>
@@ -115,12 +116,12 @@ export const FilePetitionStep6 = connect(
                     </ol>
                   </div>
                 </div>
-                <WarningNotificationComponent
+                <AlertWarning
                   alertWarning={{
                     message:
                       'Ensure that personal information (such as Social Security Numbers, Taxpayer Identification Numbers, Employer Identification Numbers) has been removed or blocked out (redacted) from every form except the Statement of Taxpayer Identification Number.',
                   }}
-                  dismissible={false}
+                  isDismissible={false}
                   scrollToTop={false}
                 />
 

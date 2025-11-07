@@ -50,7 +50,9 @@ export const ConfirmInitiateServiceModal = connect(
           {confirmInitiateServiceModalHelper.confirmationText}
         </p>
         <p className="margin-top-0 margin-bottom-2">
-          <strong>{documentTitle}</strong>
+          <strong data-testid="confirm-modal-document-title">
+            {documentTitle}
+          </strong>
         </p>
         {confirmInitiateServiceModalHelper.showPaperAlert && (
           <Hint fullWidth className="block">
