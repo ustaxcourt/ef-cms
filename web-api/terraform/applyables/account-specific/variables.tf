@@ -48,19 +48,19 @@ variable "es_logs_engine_version" {
 
 variable "es_info_cluster_create" {
   default = false
-  description = "determines whether to create an info opensearch or not"
+  description = "Determines whether to create an info opensearch or not"
   type = bool
 }
 
 variable "es_info_cluster_shared_cluster_endpoint" {
   default = ""
-  description = "endpoint of info cluster opensearch (used when es_info_cluster_create is false)"
+  description = "Endpoint of info cluster opensearch (used when es_info_cluster_create is false)"
   type = string
 }
 
 variable "es_info_cluster_shared_cluster_arn" {
   default = ""
-  description = "arn of info cluster opensearch (used when es_info_cluster_create is false)"
+  description = "ARN of info cluster opensearch (used when es_info_cluster_create is false)"
   type = string
 }
 
