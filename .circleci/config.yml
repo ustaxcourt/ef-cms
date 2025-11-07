@@ -57,6 +57,18 @@ parameters:
     default: false
     type: boolean
 
+  deploy_info_cluster:
+    default: false
+    type: boolean
+
+  info_cluster_primary_env:
+    default: 'exp1'
+    type: string
+
+  info_cluster_consumer_env:
+    default: 'exp2'
+    type: string
+
 commands:
   npm-and-cypress-install:
     steps:
@@ -544,6 +556,16 @@ jobs:
           name: 'Delete OpenSearch alpha/beta clusters'
           command: |
             ./scripts/elasticsearch/delete-alpha-and-beta-clusters.sh
+      - run:
+          name: 'Deploy Info Cluster'
+          environment:
+            DEPLOY_INFO_CLUSTER: << pipeline.parameters.deploy_info_cluster >>
+            PRIMARY_ENV: << pipeline.parameters.info_cluster_primary_env >>
+            CONSUMER_ENVS: << pipeline.parameters.info_cluster_consumer_env >>
+          command: |
+            if [ -n "DEPLOY_INFO_CLUSTER" ]; then
+                npm run deploy:info-cluster
+            fi
       - run:
           no_output_timeout: 20m
           name: 'Recreate the alpha OpenSearch cluster'
