@@ -19,6 +19,9 @@ import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/get
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { getDocketEntriesById } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesById';
 
 /**
  * removeConsolidatedCases
@@ -124,6 +127,40 @@ const removeConsolidatedCases = async (
     updateCasePromises.push(
       removeConsolidatedCaseReferences(caseToRemove.docketNumber),
     );
+
+    //     - clone the original PDF document, upload it to s3 with a new id, replace the docket_entry_id with NEW_DOCKET_ENTRY_ID ONLY WHERE docket_number = UNCONSOLIDATED_CASE_DOCKET_NUMBER and docket_entry_id = OLD_DOCKET_ENTRY_ID
+
+    // NEXT STEPS: avoid race conditions and repeated persistence calls be deduping logic in this loop
+    const docketEnIdsToUpdate: string[] = caseToRemove.docketEntries.map(
+      docketEntry => {
+        if (DocketEntry.isMultiDocketed(docketEntry))
+          return docketEntry.docketEntryId;
+      },
+    );
+
+    const docketEntriesToUpdate: RawDocketEntry[] = [];
+    docketEnIdsToUpdate.forEach(async id => {
+      const entries = await getDocketEntriesById({ docketEntryId: id });
+      docketEntriesToUpdate.push(...entries);
+    });
+
+    const UPDATED_CASE_DOCKET_ENTRIES = docketEntriesToUpdate.map(
+      docketEntry => {
+        if (docketEntry.docketNumber !== caseToRemove.docketNumber) {
+          docketEntry.multiDocketedOn = docketEntry.multiDocketedOn.filter(
+            docketNumber => {
+              return docketNumber !== caseToRemove.docketNumber;
+            },
+          );
+        } else {
+          docketEntry.multiDocketedOn = [];
+          docketEntry.multiDocketedOriginalDocketNumber = undefined;
+        }
+        return docketEntry;
+      },
+    );
+
+    updateCasePromises.push(upsertDocketEntries(UPDATED_CASE_DOCKET_ENTRIES));
   }
 
   await settlePromises(updateCasePromises);

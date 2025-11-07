@@ -40,6 +40,12 @@ export const setDocketEntryMetaFormForEditAction = ({
     originalDocumentDetail = multiDocketedOriginalCaseDetail.docketEntries.find(
       de => de.docketEntryId === docketEntryId,
     );
+    if (!originalDocumentDetail) {
+      originalDocumentDetail =
+        multiDocketedOriginalCaseDetail.docketEntries.find(
+          de => de.originalDocketEntryId === docketEntryId,
+        );
+    }
 
     if (!originalDocumentDetail) {
       throw new Error(
@@ -69,6 +75,7 @@ export const setDocketEntryMetaFormForEditAction = ({
   ];
 
   const documentDetail = {
+    docketEntryId: originalDocumentDetail.originalDocketEntryId,
     ...originalDocumentDetail,
     ...pick(currentDocumentDetail, currentEditableFields),
   };
