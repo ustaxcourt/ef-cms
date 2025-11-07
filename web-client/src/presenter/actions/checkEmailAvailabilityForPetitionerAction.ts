@@ -21,6 +21,9 @@ export const checkEmailAvailabilityForPetitionerAction = async ({
       email: updatedEmail,
     });
 
+    console.log('isEmailAvailable', isEmailAvailable);
+    console.log('isAccountUnverified', isAccountUnverified);
+    
   if (isEmailAvailable) {
     return path.emailAvailable();
   } else {

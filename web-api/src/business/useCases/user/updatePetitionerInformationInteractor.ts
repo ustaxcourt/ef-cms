@@ -157,6 +157,40 @@ export const updatePetitionerInformation = async (
     );
   }
 
+  const { updatedEmail } = updatedPetitionerData;
+
+  const { petitioners } = petitionerCaseRaw;
+
+  const contactIdArray = petitioners.map(p => p.contactId);
+
+  // Returns as object {id#: email}, will put values into an array
+  const allUsers =
+    (await applicationContext.getUseCases().getUsersPendingEmailInteractor(
+      {
+        userIds: contactIdArray,
+      },
+      authorizedUser,
+    )) || {};
+
+  const allPendingEmails: string[] = Object.values(allUsers);
+
+  if (
+    allPendingEmails.length > 0 &&
+    updatedEmail &&
+    allPendingEmails.includes(updatedEmail)
+  ) {
+    throw new Error(`Email ${updatedEmail} is pending for another petitioner`);
+  }
+
+  if (
+    updatedEmail &&
+    petitionerCaseRaw.petitioners.map(p => p.email).includes(updatedEmail)
+  ) {
+    throw new Error(
+      `Email ${updatedPetitionerData.updatedEmail} is already in use by another petitioner`,
+    );
+  }
+
   const editableFields = pick(
     defaults(updatedPetitionerData, {
       additionalName: undefined,
