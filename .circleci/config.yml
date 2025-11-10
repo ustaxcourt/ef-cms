@@ -168,6 +168,7 @@ jobs:
             PRIMARY_ENV: << pipeline.parameters.info_cluster_primary_env >>
             CONSUMER_ENVS: << pipeline.parameters.info_cluster_consumer_env >>
           command: |
+            pwd
             if [ -n "DEPLOY_INFO_CLUSTER" ]; then
                 npm run deploy:info-cluster
             fi
