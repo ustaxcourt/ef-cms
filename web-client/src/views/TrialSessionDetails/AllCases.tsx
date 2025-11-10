@@ -56,13 +56,12 @@ export const AllCases = connect(
 
                   <td>
                     {item.isManuallyAdded && (
-                      <span>
-                        <WrappedIcon
-                          iconAriaLabel="Manually added indicator"
-                          iconClass="mini-success"
-                          icon="calendar-plus"
-                          title="Manually added" />
-                      </span>
+                      <WrappedIcon
+                        iconAriaLabel="Manually added indicator"
+                        iconClass="mini-success"
+                        icon="calendar-plus"
+                        title="Manually added"
+                      />
                     )}
                   </td>
                   <td>{item.caseTitle}</td>

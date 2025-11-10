@@ -35,13 +35,12 @@ const getCaseRow = ({
         </td>
         <td>
           {formattedCase.isManuallyAdded && (
-            <span>
-              <WrappedIcon
-                iconAriaLabel="Manually added indicator"
-                iconClass="mini-success"
-                icon="calendar-plus"
-                title="Manually added" />
-            </span>
+            <WrappedIcon
+              iconAriaLabel="Manually added indicator"
+              iconClass="mini-success"
+              icon="calendar-plus"
+              title="Manually added"
+            />
           )}
         </td>
         <td className="minw-80">{formattedCase.caseTitle}</td>

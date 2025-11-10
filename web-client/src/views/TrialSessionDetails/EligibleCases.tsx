@@ -91,13 +91,12 @@ export const EligibleCases = connect(
                 </td>
                 <td>
                   {item.isManuallyAdded && (
-                    <span>
-                      <WrappedIcon
-                        iconAriaLabel="Manually added indicator"
-                        iconClass="mini-success"
-                        icon="calendar-plus"
-                        title="Manually added" />
-                    </span>
+                    <WrappedIcon
+                      iconAriaLabel="Manually added indicator"
+                      iconClass="mini-success"
+                      icon="calendar-plus"
+                      title="Manually added"
+                    />
                   )}
                 </td>
                 <td>{item.caseCaption}</td>
