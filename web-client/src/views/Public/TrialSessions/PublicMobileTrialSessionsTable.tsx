@@ -2,6 +2,12 @@ import { PublicMobileTrialSessionsDataRow } from '@web-client/views/Public/Trial
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app-public.cerebral';
 import React from 'react';
+import {
+  createISODateAtStartOfDayEST,
+  createISODateString,
+  dateStringsCompared,
+  FORMATS,
+} from '@shared/business/utilities/DateHandler';
 
 type PublicMobileTrialSessionsTableProps = {};
 
@@ -9,21 +15,45 @@ const PublicMobileTrialSessionsTableDeps = {
   publicTrialSessionsHelper: state.publicTrialSessionsHelper,
 };
 
+const dateComparison = tsGroup => {
+  const firstEndDate = tsGroup?.rows?.[0]?.formattedEstimatedEndDate;
+
+  const todayIso = createISODateAtStartOfDayEST();
+  let compareIso;
+
+  if (firstEndDate) {
+    const firstEndIso = createISODateString(firstEndDate, FORMATS.MMDDYYYY);
+
+    compareIso = createISODateAtStartOfDayEST(firstEndIso);
+  } else {
+    const firstStartDate = tsGroup?.rows?.[0]?.startDate;
+
+    if (!firstStartDate) return false;
+
+    compareIso = createISODateAtStartOfDayEST(firstStartDate);
+  }
+
+  return dateStringsCompared(compareIso, todayIso) >= 0;
+};
+
 export const PublicMobileTrialSessionsTable = connect<
   PublicMobileTrialSessionsTableProps,
   typeof PublicMobileTrialSessionsTableDeps
 >(PublicMobileTrialSessionsTableDeps, function ({ publicTrialSessionsHelper }) {
   const { groupedTrialSessions } = publicTrialSessionsHelper;
+
+  const filteredGroups = groupedTrialSessions.filter(tsGroup =>
+    dateComparison(tsGroup),
+  );
+
   return (
     <>
       <div className="grid-row margin-bottom-2 width-full flex-align-center"></div>
       <div className="width-full text-right">
         <span className="text-bold">Count:</span>{' '}
-        <span className="text-semibold">
-          {publicTrialSessionsHelper.trialSessionsCount}
-        </span>
+        <span className="text-semibold">{filteredGroups.length}</span>
       </div>
-      {publicTrialSessionsHelper.trialSessionRows.length === 0 && (
+      {filteredGroups.length === 0 && (
         <p>There are no trial sessions for the selected filters.</p>
       )}
       <div className="padding-1"></div>
@@ -36,7 +66,7 @@ export const PublicMobileTrialSessionsTable = connect<
           </tr>
         </thead>
         <tbody>
-          {groupedTrialSessions.map(tsGroup => {
+          {filteredGroups.map(tsGroup => {
             return (
               <tr
                 className="padding-0"
