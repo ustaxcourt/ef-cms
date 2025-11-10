@@ -161,7 +161,107 @@ describe('transformFormStateToMinuteSheet', () => {
     });
   });
 
-  it('should transform form state with calendar call and trial hearing data', () => {
+  it('should transform form state with calendar call and trial data', () => {
+    const formStateWithHearings = {
+      ...mockMinuteSheetFormState,
+      caseMetadataSection: {
+        ...mockMinuteSheetFormState.caseMetadataSection,
+        called: {
+          date: '2023-02-01',
+          note: 'Called for trial',
+          transcriptOrdered: true,
+        } as CalendarEvent,
+        notCalled: {
+          date: '2023-02-02',
+          note: 'Not called - weather delay',
+        } as CalendarEvent,
+        recalled: {
+          'key-1': {
+            date: '2023-02-03',
+            note: 'First recall',
+            renderKey: 'key-1',
+            transcriptOrdered: false,
+          },
+          'key-2': {
+            date: '2023-02-04',
+            note: 'Second recall',
+            renderKey: 'key-2',
+            transcriptOrdered: true,
+          },
+        },
+        pretrialConference: {
+          date: '2023-02-10',
+          note: 'Pretrial conference held',
+          transcriptOrdered: true,
+        } as CalendarEvent,
+        hearing: {
+          date: '',
+          note: '',
+          transcriptOrdered: false,
+          trialHearingType: '',
+        } as CalendarEvent,
+        trial: {
+          date: '2023-02-15',
+          note: 'Trial commenced',
+          transcriptOrdered: true,
+          trialHearingType: 'trial',
+        } as CalendarEvent,
+      },
+    };
+
+    const transformed = transformFormStateToMinuteSheet(
+      formStateWithHearings,
+      'trial-123',
+      '123-45',
+    );
+
+    expect(transformed).toEqual({
+      ...mockMinuteSheet,
+      caseRecord: {
+        docketNumber: '123-45',
+        calendarCall: {
+          date: '2023-02-01',
+          note: 'Called for trial',
+          transcriptOrdered: true,
+        },
+        notCalled: {
+          date: '2023-02-02',
+          note: 'Not called - weather delay',
+        },
+        recalls: [
+          {
+            date: '2023-02-03',
+            note: 'First recall',
+            transcriptOrdered: false,
+          },
+          {
+            date: '2023-02-04',
+            note: 'Second recall',
+            transcriptOrdered: true,
+          },
+        ],
+        pretrialConference: {
+          date: '2023-02-10',
+          note: 'Pretrial conference held',
+          transcriptOrdered: true,
+        },
+        hearing: {
+          date: '',
+          note: '',
+          transcriptOrdered: false,
+          trialHearingType: '',
+        },
+        trial: {
+          date: '2023-02-15',
+          note: 'Trial commenced',
+          transcriptOrdered: true,
+          trialHearingType: 'trial',
+        },
+      },
+    });
+  });
+
+  it('should transform form state with calendar call and hearing data', () => {
     const formStateWithHearings = {
       ...mockMinuteSheetFormState,
       caseMetadataSection: {
@@ -254,6 +354,106 @@ describe('transformFormStateToMinuteSheet', () => {
         hearing: {
           date: '2023-02-15',
           note: 'Trial commenced',
+          transcriptOrdered: true,
+          trialHearingType: 'hearing',
+        },
+      },
+    });
+  });
+
+  it('should transform form state with calendar call and trial and hearing data', () => {
+    const formStateWithHearings = {
+      ...mockMinuteSheetFormState,
+      caseMetadataSection: {
+        ...mockMinuteSheetFormState.caseMetadataSection,
+        called: {
+          date: '2023-02-01',
+          note: 'Called for trial',
+          transcriptOrdered: true,
+        } as CalendarEvent,
+        notCalled: {
+          date: '2023-02-02',
+          note: 'Not called - weather delay',
+        } as CalendarEvent,
+        recalled: {
+          'key-1': {
+            date: '2023-02-03',
+            note: 'First recall',
+            renderKey: 'key-1',
+            transcriptOrdered: false,
+          },
+          'key-2': {
+            date: '2023-02-04',
+            note: 'Second recall',
+            renderKey: 'key-2',
+            transcriptOrdered: true,
+          },
+        },
+        pretrialConference: {
+          date: '2023-02-10',
+          note: 'Pretrial conference held',
+          transcriptOrdered: true,
+        } as CalendarEvent,
+        trial: {
+          date: '2024-03-16',
+          note: 'Trial Commenced',
+          transcriptOrdered: false,
+          trialHearingType: 'trial',
+        } as CalendarEvent,
+        hearing: {
+          date: '2023-02-15',
+          note: 'Hearing commenced',
+          transcriptOrdered: true,
+          trialHearingType: 'hearing',
+        } as CalendarEvent,
+      },
+    };
+
+    const transformed = transformFormStateToMinuteSheet(
+      formStateWithHearings,
+      'trial-123',
+      '123-45',
+    );
+
+    expect(transformed).toEqual({
+      ...mockMinuteSheet,
+      caseRecord: {
+        docketNumber: '123-45',
+        calendarCall: {
+          date: '2023-02-01',
+          note: 'Called for trial',
+          transcriptOrdered: true,
+        },
+        notCalled: {
+          date: '2023-02-02',
+          note: 'Not called - weather delay',
+        },
+        recalls: [
+          {
+            date: '2023-02-03',
+            note: 'First recall',
+            transcriptOrdered: false,
+          },
+          {
+            date: '2023-02-04',
+            note: 'Second recall',
+            transcriptOrdered: true,
+          },
+        ],
+        pretrialConference: {
+          date: '2023-02-10',
+          note: 'Pretrial conference held',
+          transcriptOrdered: true,
+        },
+        trial: {
+          date: '2024-03-16',
+          note: 'Trial Commenced',
+          transcriptOrdered: false,
+          trialHearingType: 'trial',
+        },
+        hearing: {
+          date: '2023-02-15',
+          note: 'Hearing commenced',
           transcriptOrdered: true,
           trialHearingType: 'hearing',
         },
