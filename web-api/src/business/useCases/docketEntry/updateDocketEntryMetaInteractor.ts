@@ -143,7 +143,10 @@ export const updateDocketEntryMeta = async (
     {
       ...originalDocketEntry,
       // when multi docketed, we don't want to update the document info fields as they get uploaded later in this method
-      ...omit(editableFields, isMultiDocketed ? DOCKET_ENTRY_DOCUMENT_INFO_FIELDS : []),
+      ...omit(
+        editableFields,
+        isMultiDocketed ? DOCKET_ENTRY_DOCUMENT_INFO_FIELDS : [],
+      ),
     },
     { authorizedUser, petitioners: caseEntity.petitioners },
   ).validate();
@@ -182,7 +185,7 @@ export const updateDocketEntryMeta = async (
     caseEntity.updateDocketEntry(docketEntryEntity);
   }
 
-  // We call this firs to update the stricken, service, and action
+  // We call this first to update the stricken, service, and action
   // fields, but the other fields will get handled below
   const result = await updateCaseAndAssociations({
     authorizedUser,
@@ -194,7 +197,7 @@ export const updateDocketEntryMeta = async (
       docketNumbers: originalDocketEntry.multiDocketedOn,
     });
 
-    const updatedDocketEntries = casesToUpdate 
+    const updatedDocketEntries = casesToUpdate
       .map(caseRecord => {
         const { docketNumber } = caseRecord;
         const consolidatedCaseEntity =

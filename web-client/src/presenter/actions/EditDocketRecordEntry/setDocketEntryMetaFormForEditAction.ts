@@ -40,11 +40,12 @@ export const setDocketEntryMetaFormForEditAction = ({
     originalDocumentDetail = multiDocketedOriginalCaseDetail.docketEntries.find(
       de => de.docketEntryId === docketEntryId,
     );
+    // TODO 8477: refactor this
     if (!originalDocumentDetail) {
       originalDocumentDetail =
         multiDocketedOriginalCaseDetail.docketEntries.find(
           de => de.originalDocketEntryId === docketEntryId,
-        );
+        ).nestedDocketEntry; //<-- idea, not real yet
     }
 
     if (!originalDocumentDetail) {
@@ -75,7 +76,10 @@ export const setDocketEntryMetaFormForEditAction = ({
   ];
 
   const documentDetail = {
-    docketEntryId: originalDocumentDetail.originalDocketEntryId,
+    docketEntryId:
+      originalDocumentDetail.originalDocketEntryId ??
+      originalDocumentDetail.docketEntryId,
+    multiDocketedOn: currentDocumentDetail.multiDocketedOn,
     ...originalDocumentDetail,
     ...pick(currentDocumentDetail, currentEditableFields),
   };
