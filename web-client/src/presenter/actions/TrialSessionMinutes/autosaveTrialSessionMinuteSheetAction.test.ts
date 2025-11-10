@@ -194,7 +194,13 @@ describe('transformFormStateToMinuteSheet', () => {
           note: 'Pretrial conference held',
           transcriptOrdered: true,
         } as CalendarEvent,
-        trialHearing: {
+        trial: {
+          date: '',
+          note: '',
+          transcriptOrdered: false,
+          trialHearingType: '',
+        } as CalendarEvent,
+        hearing: {
           date: '2023-02-15',
           note: 'Trial commenced',
           transcriptOrdered: true,
@@ -239,7 +245,13 @@ describe('transformFormStateToMinuteSheet', () => {
           note: 'Pretrial conference held',
           transcriptOrdered: true,
         },
-        trialHearing: {
+        trial: {
+          date: '',
+          note: '',
+          transcriptOrdered: false,
+          trialHearingType: '',
+        },
+        hearing: {
           date: '2023-02-15',
           note: 'Trial commenced',
           transcriptOrdered: true,
@@ -323,8 +335,8 @@ describe('transformFormStateToMinuteSheet', () => {
       expectedOutputForSection: { date: '', note: '', transcriptOrdered: true },
     },
     {
-      subSection: 'trialHearing',
-      transformedSubSection: 'trialHearing',
+      subSection: 'trial',
+      transformedSubSection: 'trial',
       propertyToFillOut: 'date',
       value: '2020-10-02',
       expectedOutputForSection: {
@@ -335,8 +347,8 @@ describe('transformFormStateToMinuteSheet', () => {
       },
     },
     {
-      subSection: 'trialHearing',
-      transformedSubSection: 'trialHearing',
+      subSection: 'trial',
+      transformedSubSection: 'trial',
       propertyToFillOut: 'note',
       value: 'test note',
       expectedOutputForSection: {
@@ -347,8 +359,8 @@ describe('transformFormStateToMinuteSheet', () => {
       },
     },
     {
-      subSection: 'trialHearing',
-      transformedSubSection: 'trialHearing',
+      subSection: 'hearing',
+      transformedSubSection: 'hearing',
       propertyToFillOut: 'trialHearingType',
       value: 'hearing',
       expectedOutputForSection: {
@@ -359,8 +371,8 @@ describe('transformFormStateToMinuteSheet', () => {
       },
     },
     {
-      subSection: 'trialHearing',
-      transformedSubSection: 'trialHearing',
+      subSection: 'trial',
+      transformedSubSection: 'trial',
       propertyToFillOut: 'transcriptOrdered',
       value: true,
       expectedOutputForSection: {
