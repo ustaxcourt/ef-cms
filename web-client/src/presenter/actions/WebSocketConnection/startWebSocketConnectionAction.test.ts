@@ -9,15 +9,11 @@ describe('startWebSocketConnectionAction', () => {
   presenter.providers.path = {
     error: pathErrorStub,
     success: pathSuccessStub,
-};
+  };
 
   it('should call the socket start function', async () => {
     const start = jest.fn();
-    (
-      presenter.providers as unknown as { socket: { start: jest.Mock } }
-    ).socket = {
-      start,
-    };
+    presenter.providers.socket = { start };
 
     await runAction(startWebSocketConnectionAction, {
       modules: {
@@ -30,11 +26,7 @@ describe('startWebSocketConnectionAction', () => {
 
   it('should call the success path if there is no error when starting the socket', async () => {
     const start = jest.fn();
-    (
-      presenter.providers as unknown as { socket: { start: jest.Mock } }
-    ).socket = {
-      start,
-    };
+    presenter.providers.socket = { start };
 
     await runAction(startWebSocketConnectionAction, {
       modules: {

@@ -5,9 +5,7 @@ import { stopWebSocketConnectionAction } from './stopWebSocketConnectionAction';
 describe('stopWebSocketConnectionAction', () => {
   it('should call the socket stop function', async () => {
     const stop = jest.fn();
-    (
-      presenter.providers as unknown as { socket: { stop: jest.Mock } }
-    ).socket = { stop };
+    presenter.providers.socket = { stop };
 
     await runAction(stopWebSocketConnectionAction, {
       modules: {

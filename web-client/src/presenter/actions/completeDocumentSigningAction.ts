@@ -34,18 +34,17 @@ export const completeDocumentSigningAction = async ({
     const signedPdfBytes = await applicationContext
       .getUseCases()
       .generateSignedDocumentInteractor(appContext, {
-          pageIndex: pageNumber - 1,
-          // pdf.js starts at 1
-          pdfData: await pdfjsObj.getData(),
-          posX: x,
-          posY: y,
-          scale,
-          sigTextData: {
-            signatureName: `(Signed) ${nameForSigning}`,
-            signatureTitle: nameForSigningLine2,
-          },
+        pageIndex: pageNumber - 1,
+        // pdf.js starts at 1
+        pdfData: await pdfjsObj.getData(),
+        posX: x,
+        posY: y,
+        scale,
+        sigTextData: {
+          signatureName: `(Signed) ${nameForSigning}`,
+          signatureTitle: nameForSigningLine2,
         },
-      );
+      });
 
     const documentFile = new File([signedPdfBytes], 'myfile.pdf', {
       type: 'application/pdf',
@@ -61,13 +60,12 @@ export const completeDocumentSigningAction = async ({
     ({ signedDocketEntryId: docketEntryId } = await applicationContext
       .getUseCases()
       .saveSignedDocumentInteractor(appContext, {
-          docketNumber,
-          nameForSigning,
-          originalDocketEntryId,
-          parentMessageId,
-          signedDocketEntryId: signedDocumentFromUploadId,
-        },
-      ));
+        docketNumber,
+        nameForSigning,
+        originalDocketEntryId,
+        parentMessageId,
+        signedDocketEntryId: signedDocumentFromUploadId,
+      }));
   }
 
   let redirectUrl;
