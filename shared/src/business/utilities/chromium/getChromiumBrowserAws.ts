@@ -36,7 +36,27 @@ export const getChromiumBrowserAWS = async (): Promise<Browser> => {
         `Unable to launch chromium browser on attempt: ${i}`,
         e,
       );
-      getDawsonLogger().error(`${JSON.stringify(e)}`, e);
+      getDawsonLogger().error(
+        `${JSON.stringify({
+          args: chromium.args,
+          defaultViewport: {
+            deviceScaleFactor: 1,
+            hasTouch: false,
+            height: 1080,
+            isLandscape: true,
+            isMobile: false,
+            width: 1920,
+          },
+          executablePath: await chromium.executablePath(),
+          headless: 'shell',
+          env: {
+            LD_LIBRARY_PATH: process.env.LD_LIBRARY_PATH, // be careful editing this; see 10658
+            PATH: process.env.PATH,
+            FONTCONFIG_PATH: process.env.FONTCONFIG_PATH,
+          },
+        })}`,
+        e,
+      );
       await sleep(100);
     }
   }
