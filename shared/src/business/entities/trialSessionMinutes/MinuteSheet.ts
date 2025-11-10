@@ -28,7 +28,8 @@ export type MinuteSheet = {
     notCalled: CalendarEvent;
     recalls: CalendarEvent[];
     pretrialConference: Event;
-    trialHearing: CalendarEvent;
+    trial: CalendarEvent;
+    hearing: CalendarEvent;
   };
 
   appearances: {
