@@ -57,14 +57,14 @@ export const getEligibleCasesForTrialSessionInteractor = async (
       trialCity: trialSessionEntity.trialLocation!,
     });
 
-  const eligibleCasesWithIsAgedCase =
-    getEligibleCasesWithIsAgedCase(eligibleCases);
+  const eligibleCasesWithIsAgedCase = getEligibleCasesWithIsAgedCase([
+    ...calendaredCases,
+    ...eligibleCases,
+  ]);
 
-  const eligibleCasesFiltered = calendaredCases
-    .concat(eligibleCasesWithIsAgedCase)
-    .map(rawCase => {
-      return new EligibleCase(rawCase).validate().toRawObject();
-    });
+  const eligibleCasesFiltered = eligibleCasesWithIsAgedCase.map(rawCase => {
+    return new EligibleCase(rawCase).validate().toRawObject();
+  });
 
   return eligibleCasesFiltered;
 };
