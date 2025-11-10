@@ -162,6 +162,16 @@ jobs:
               echo "skipping…"
             fi
       - run:
+          name: 'Deploy Info Cluster'
+          environment:
+            DEPLOY_INFO_CLUSTER: << pipeline.parameters.deploy_info_cluster >>
+            PRIMARY_ENV: << pipeline.parameters.info_cluster_primary_env >>
+            CONSUMER_ENVS: << pipeline.parameters.info_cluster_consumer_env >>
+          command: |
+            if [ -n "DEPLOY_INFO_CLUSTER" ]; then
+                npm run deploy:info-cluster
+            fi
+      - run:
           no_output_timeout: 20m
           name: 'Deploy - All Color Terraform'
           command: |
@@ -556,16 +566,6 @@ jobs:
           name: 'Delete OpenSearch alpha/beta clusters'
           command: |
             ./scripts/elasticsearch/delete-alpha-and-beta-clusters.sh
-      - run:
-          name: 'Deploy Info Cluster'
-          environment:
-            DEPLOY_INFO_CLUSTER: << pipeline.parameters.deploy_info_cluster >>
-            PRIMARY_ENV: << pipeline.parameters.info_cluster_primary_env >>
-            CONSUMER_ENVS: << pipeline.parameters.info_cluster_consumer_env >>
-          command: |
-            if [ -n "DEPLOY_INFO_CLUSTER" ]; then
-                npm run deploy:info-cluster
-            fi
       - run:
           no_output_timeout: 20m
           name: 'Recreate the alpha OpenSearch cluster'
