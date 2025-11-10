@@ -493,7 +493,7 @@ export const CaseMetadataFieldset = ({
               id="trialNote"
               name="trialNote"
               type="text"
-              value={caseMetadataFormState.trial.note} // add state for trial and hearing seperately?
+              value={caseMetadataFormState.trial.note}
               onBlur={() => onBlurHandler()}
               onChange={e => {
                 onChangeHandler({
@@ -513,7 +513,7 @@ export const CaseMetadataFieldset = ({
             <div className="usa-checkbox">
               <input
                 aria-describedby="representing-legend"
-                checked={caseMetadataFormState.trial.transcriptOrdered} // add state for trial and hearing seperately?
+                checked={caseMetadataFormState.trial.transcriptOrdered}
                 className="usa-checkbox__input"
                 id="trialTranscriptOrdered"
                 name="trialTranscriptOrdered"
