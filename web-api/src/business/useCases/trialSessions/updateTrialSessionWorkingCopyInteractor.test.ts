@@ -35,7 +35,7 @@ const MOCK_WORKING_COPY: RawTrialSessionWorkingCopy = {
   },
 };
 
-const trialSessionWorkingCopy = MOCK_WORKING_COPY as RawTrialSessionWorkingCopy;
+const trialSessionWorkingCopy: RawTrialSessionWorkingCopy = MOCK_WORKING_COPY;
 
 describe('Update trial session working copy', () => {
   const getTrialSessionWorkingCopies = jest.mocked(
