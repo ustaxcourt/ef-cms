@@ -1,6 +1,9 @@
 /* eslint-disable jest/no-conditional-expect */
 import { ErrorWithStatusCode } from '../../errors/errors';
 import { v1ApiWrapper } from './v1ApiWrapper';
+type CapturedError = ErrorWithStatusCode & {
+  toJSON(): { message: string; statusCode: number };
+};
 
 describe('v1ApiWrapper', () => {
   const throwWithStatus = (statusCode?: number, message?: string) => () => {
@@ -13,7 +16,7 @@ describe('v1ApiWrapper', () => {
     try {
       await v1ApiWrapper(throwWithStatus(undefined, 'Test error'));
     } catch (err) {
-      const error = err as any;
+      const error = err as CapturedError;
       expect(error.message).toBe('Test error');
       expect(error.statusCode).toBe(500);
       expect(error.toJSON()).toEqual({
@@ -27,7 +30,7 @@ describe('v1ApiWrapper', () => {
     try {
       await v1ApiWrapper(throwWithStatus(undefined));
     } catch (err) {
-      const error = err as any;
+      const error = err as CapturedError;
       expect(error.message).toBe('An unexpected error occurred');
       expect(error.statusCode).toBe(500);
       expect(error.toJSON()).toEqual({

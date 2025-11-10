@@ -8,6 +8,8 @@ import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
 import { Get } from 'cerebral';
 import { compact, some } from 'lodash';
 import { state } from '@web-client/presenter/app-public.cerebral';
+import { PublicCase } from '@shared/business/entities/cases/PublicCase';
+type CalendaredPublicCase = Omit<RawCase | PublicCase, 'consolidatedCases'>;
 
 export type FormattedPublicTrialSession = {
   formattedStartDate: string;
@@ -71,9 +73,7 @@ export const publicTrialSessionDetailsHelper = (
 
   const formattedCases = Case.sortByDocketNumberAndGroupConsolidatedCases(
     trialSession.calendaredCases,
-  ).map(c =>
-    formatPublicCase(c as unknown as Omit<RawPublicCase, 'consolidatedCases'>),
-  );
+  ).map(c => formatPublicCase(c as CalendaredPublicCase));
 
   const formattedTrialSession = {
     address1: trialSession.address1,

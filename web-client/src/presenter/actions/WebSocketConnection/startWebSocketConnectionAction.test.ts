@@ -9,7 +9,7 @@ describe('startWebSocketConnectionAction', () => {
   presenter.providers.path = {
     error: pathErrorStub,
     success: pathSuccessStub,
-  };
+};
 
   it('should call the socket start function', async () => {
     const start = jest.fn();

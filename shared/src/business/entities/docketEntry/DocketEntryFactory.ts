@@ -193,10 +193,9 @@ export class DocketEntryFactory extends JoiValidationEntity {
 
     const exDoc = ExternalDocumentFactory(this);
     const rules = exDoc.getValidationRules();
-    const docketEntryExternalDocumentSchema =
-      'validate' in rules && rules.validate
-        ? (rules as unknown as joi.ObjectSchema)
-        : joi.object().keys(rules);
+    const docketEntryExternalDocumentSchema = (
+      joi.isSchema(rules) ? rules : joi.object().keys(rules)
+    ) as joi.ObjectSchema;
 
     schema = schema.concat(docketEntryExternalDocumentSchema).concat(
       joi.object({

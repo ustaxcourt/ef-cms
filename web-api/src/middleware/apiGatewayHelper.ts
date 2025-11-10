@@ -8,6 +8,10 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { headerOverride } from '../lambdaWrapper';
 import { pick } from 'lodash';
 import jwt from 'jsonwebtoken';
+type LoggedError = ErrorWithStatusCode & {
+  toJSON?: () => any;
+  skipLogging?: boolean;
+};
 
 /**
  * invokes the param fun and returns a lambda specific object containing error messages and status codes depending on any caught exceptions (or none)
@@ -64,10 +68,7 @@ export const handle = async (event, fun) => {
       return sendOk(response);
     }
   } catch (err) {
-    const error = err as ErrorWithStatusCode & {
-      toJSON?: () => any;
-      skipLogging?: boolean;
-    };
+    const error = err as LoggedError;
     if (!process.env.CI && !error.skipLogging) {
       console.error('err', error);
     }
@@ -99,7 +100,7 @@ export const redirect = async (_event, fun, statusCode = 302) => {
       statusCode,
     };
   } catch (err) {
-    return sendError(err as ErrorWithStatusCode & { toJSON?: () => any });
+    return sendError(err as LoggedError);
   }
 };
 
@@ -109,9 +110,7 @@ export const redirect = async (_event, fun, statusCode = 302) => {
  * @param {Error} err the error to convert to the api gateway response event
  * @returns {object} an api gateway response object
  */
-export const sendError = (
-  err: ErrorWithStatusCode & { toJSON?: () => any },
-) => {
+export const sendError = (err: LoggedError) => {
   return {
     body: JSON.stringify(err.toJSON ? err.toJSON() : err.message),
     headers: headerOverride,

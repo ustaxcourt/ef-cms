@@ -623,10 +623,7 @@ export const baseState = {
   advancedSearchTab: 'case',
   alertError: undefined,
   alertInfo: undefined,
-  alertSuccess: undefined as unknown as {
-    message: string;
-    overwritable?: boolean;
-  },
+  alertSuccess: undefined as AlertSuccess | undefined,
   alertWarning: undefined,
   allJudges: [],
   archiveDraftDocument: {
@@ -1064,6 +1061,8 @@ export type ViewerDocument = {
   filingDate?: string;
   index?: number;
 };
+
+export type AlertSuccess = { message: string; overwritable?: boolean };
 
 export type PracticeType = (typeof PRACTICE_TYPE)[keyof typeof PRACTICE_TYPE];
 export type ServiceIndicatorType =

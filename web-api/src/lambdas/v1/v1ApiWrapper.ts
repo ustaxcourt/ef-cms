@@ -1,4 +1,5 @@
 import { ErrorWithStatusCode } from '../../errors/errors';
+type StatusError = ErrorWithStatusCode & Error;
 
 /**
  * Errors returned by the v1 API. The structure of this object
@@ -39,7 +40,10 @@ export const v1ApiWrapper = async handler => {
   try {
     return await handler();
   } catch (e) {
-    const error = e as ErrorWithStatusCode;
+    const error: StatusError =
+      e instanceof Error
+        ? (e as StatusError)
+        : (new Error(String(e)) as StatusError);
     // Workaround until https://github.com/ustaxcourt/ef-cms/pull/462 is resolved
     // (API returning 400 instead of 404 on unknown cases)
     if (error.message.includes('The Case entity was invalid')) {

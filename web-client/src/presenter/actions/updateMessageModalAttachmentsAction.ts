@@ -1,5 +1,6 @@
 import { state } from '@web-client/presenter/app.cerebral';
 import { MAX_MESSAGE_SUBJECT_CHARACTERS } from '@shared/business/entities/EntityConstants';
+type DraftMessageAttachment = { documentId: string; documentTitle: string; index: string };
 
 export const updateMessageModalAttachmentsAction = ({
   applicationContext,
@@ -9,11 +10,7 @@ export const updateMessageModalAttachmentsAction = ({
 }: ActionProps) => {
   const { attachments, draftAttachments, subject }: {
     attachments?: unknown[];
-    draftAttachments?: Array<{
-      documentId: string;
-      documentTitle: string;
-      index: string;
-    }>;
+    draftAttachments?: DraftMessageAttachment[];
     subject?: string;
   } = get(state.modal.form);
   const caseDetail = get(state.caseDetail);
