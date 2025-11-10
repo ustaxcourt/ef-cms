@@ -29,6 +29,7 @@ export const getChromiumBrowserAWS = async (): Promise<Browser> => {
         `Unable to launch chromium browser on attempt: ${i}`,
         e,
       );
+      getDawsonLogger().error(`${JSON.stringify(e)}`, e);
       await sleep(100);
     }
   }
