@@ -174,18 +174,19 @@ export const updatePetitionerInformation = async (
 
   const allPendingEmails: string[] = Object.values(allUsers);
 
-  if (
-    allPendingEmails.length > 0 &&
-    updatedEmail &&
-    allPendingEmails.includes(updatedEmail)
-  ) {
+  const pendingMatchesUpdated: boolean = allPendingEmails
+    .map(email => (email || '').toLowerCase())
+    .includes((updatedEmail || '').toLowerCase());
+
+  if (allPendingEmails.length > 0 && updatedEmail && pendingMatchesUpdated) {
     throw new Error(`Email ${updatedEmail} is pending for another petitioner`);
   }
 
-  if (
-    updatedEmail &&
-    petitionerCaseRaw.petitioners.map(p => p.email).includes(updatedEmail)
-  ) {
+  const currentMatchesUpdated = petitionerCaseRaw.petitioners
+    .map(p => (p.email || '').toLowerCase())
+    .includes((updatedEmail || '').toLowerCase());
+
+  if (updatedEmail && currentMatchesUpdated) {
     throw new Error(
       `Email ${updatedPetitionerData.updatedEmail} is already in use by another petitioner`,
     );

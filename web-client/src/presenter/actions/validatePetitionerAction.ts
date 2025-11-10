@@ -8,11 +8,15 @@ const checkEmails = (
 ): { confirmEmail?: string } => {
   const errors: { confirmEmail?: string } = {};
 
-  if (
-    confirmEmail &&
-    (allPendingEmails.includes(confirmEmail) ||
-      petitioners.map(p => p.email).includes(confirmEmail))
-  ) {
+  const pendingMatchesConfirm = allPendingEmails
+    .map(p => (p || '').toLowerCase())
+    .includes((confirmEmail || '').toLowerCase());
+
+  const currentMatchesConfirm = petitioners
+    .map(p => (p.email || '').toLowerCase())
+    .includes((confirmEmail || '').toLowerCase());
+
+  if ((confirmEmail && pendingMatchesConfirm) || currentMatchesConfirm) {
     errors.confirmEmail =
       'This email is already associated with another petitioner on this case. Please use a different email address.';
   }
