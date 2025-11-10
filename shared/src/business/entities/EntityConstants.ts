@@ -1997,10 +1997,10 @@ export const ACTION_STATUS_OPTIONS = {
   seeOrder: 'See Order',
   cav: 'CAV',
   denied: 'Denied',
+  deniedAsMoot: 'Denied as Moot',
   granted: 'Granted',
   filed: 'Filed',
   lodged: 'Lodged',
-  deniedAsMoot: 'Denied as Moot',
 } as const;
 export type ActionStatusOption = keyof typeof ACTION_STATUS_OPTIONS;
 
