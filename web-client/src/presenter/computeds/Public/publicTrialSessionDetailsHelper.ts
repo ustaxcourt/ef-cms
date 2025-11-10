@@ -71,9 +71,10 @@ export const publicTrialSessionDetailsHelper = (
     formattedCityStateZip,
   ]);
 
-  const formattedCases = Case.sortByDocketNumberAndGroupConsolidatedCases(
-    trialSession.calendaredCases,
-  ).map(c => formatPublicCase(c as CalendaredPublicCase));
+  const formattedCases =
+    Case.sortByDocketNumberAndGroupConsolidatedCases<CalendaredPublicCase>(
+      trialSession.calendaredCases,
+    ).map(formatPublicCase);
 
   const formattedTrialSession = {
     address1: trialSession.address1,

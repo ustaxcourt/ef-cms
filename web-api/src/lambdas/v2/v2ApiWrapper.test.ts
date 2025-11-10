@@ -2,6 +2,10 @@
 import { ErrorWithStatusCode } from '../../errors/errors';
 import { v2ApiWrapper } from './v2ApiWrapper';
 
+type CapturedError = ErrorWithStatusCode & {
+  toJSON(): { message: string; statusCode: number };
+};
+
 describe('v2ApiWrapper', () => {
   const throwWithStatus = (statusCode?: number, message?: string) => () => {
     const err = new Error(message) as ErrorWithStatusCode;
@@ -13,7 +17,7 @@ describe('v2ApiWrapper', () => {
     try {
       await v2ApiWrapper(throwWithStatus(undefined, 'Test error'));
     } catch (err) {
-      const error = err as any;
+      const error = err as CapturedError;
       expect(error.message).toBe('Test error');
       expect(error.statusCode).toBe(500);
       expect(error.toJSON()).toEqual({
@@ -27,7 +31,7 @@ describe('v2ApiWrapper', () => {
     try {
       await v2ApiWrapper(throwWithStatus(undefined));
     } catch (err) {
-      const error = err as any;
+      const error = err as CapturedError;
       expect(error.message).toBe('An unexpected error occurred');
       expect(error.statusCode).toBe(500);
       expect(error.toJSON()).toEqual({

@@ -7,8 +7,9 @@ type CapturedError = ErrorWithStatusCode & {
 
 describe('v1ApiWrapper', () => {
   const throwWithStatus = (statusCode?: number, message?: string) => () => {
-    const err = new Error(message) as ErrorWithStatusCode;
-    err.statusCode = statusCode;
+    const err: ErrorWithStatusCode = Object.assign(new Error(message), {
+      statusCode,
+    });
     throw err;
   };
 
