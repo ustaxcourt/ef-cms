@@ -22,16 +22,11 @@ import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseA
 import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { getDocketEntriesById } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesById';
+import { CopyObjectCommand } from '@aws-sdk/client-s3';
+import { getStorageClient } from '@web-api/persistence/s3/getStorageClient';
+import { environment } from '@web-api/environment';
+import { v4 as uuidv4 } from 'uuid';
 
-/**
- * removeConsolidatedCases
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.docketNumber the docket number of the case to consolidate
- * @param {Array} providers.docketNumbersToRemove the docket numbers of the cases to remove from consolidation
- * @returns {object} the updated case data
- */
 const removeConsolidatedCases = async (
   _applicationContext: ServerApplicationContext,
   {
@@ -51,6 +46,8 @@ const removeConsolidatedCases = async (
   if (!caseToUpdate || !caseToUpdate?.leadDocketNumber) {
     throw new NotFoundError(`Case ${docketNumber} was not found.`);
   }
+
+  const storageClient = getStorageClient();
 
   const updateCasePromises: Promise<any>[] = [];
 
@@ -113,6 +110,8 @@ const removeConsolidatedCases = async (
     docketNumbers: docketNumbersToRemove,
   });
 
+  const docketEnIdsToUpdate: Set<string> = new Set();
+  const docketEntriesToUpdate: Set<RawDocketEntry> = new Set();
   for (const caseToRemove of casesToRemove) {
     const caseEntity = new Case(caseToRemove, { authorizedUser });
     caseEntity.removeConsolidation();
@@ -128,40 +127,44 @@ const removeConsolidatedCases = async (
       removeConsolidatedCaseReferences(caseToRemove.docketNumber),
     );
 
-    //     - clone the original PDF document, upload it to s3 with a new id, replace the docket_entry_id with NEW_DOCKET_ENTRY_ID ONLY WHERE docket_number = UNCONSOLIDATED_CASE_DOCKET_NUMBER and docket_entry_id = OLD_DOCKET_ENTRY_ID
-
-    // NEXT STEPS: avoid race conditions and repeated persistence calls be deduping logic in this loop
-    const docketEnIdsToUpdate: string[] = caseToRemove.docketEntries.map(
-      docketEntry => {
-        if (DocketEntry.isMultiDocketed(docketEntry))
-          return docketEntry.docketEntryId;
-      },
-    );
-
-    const docketEntriesToUpdate: RawDocketEntry[] = [];
-    docketEnIdsToUpdate.forEach(async id => {
-      const entries = await getDocketEntriesById({ docketEntryId: id });
-      docketEntriesToUpdate.push(...entries);
+    caseToRemove.docketEntries.forEach(docketEntry => {
+      if (DocketEntry.isMultiDocketed(docketEntry))
+        docketEnIdsToUpdate.add(docketEntry.docketEntryId);
     });
 
-    const UPDATED_CASE_DOCKET_ENTRIES = docketEntriesToUpdate.map(
-      docketEntry => {
-        if (docketEntry.docketNumber !== caseToRemove.docketNumber) {
-          docketEntry.multiDocketedOn = docketEntry.multiDocketedOn.filter(
-            docketNumber => {
-              return docketNumber !== caseToRemove.docketNumber;
-            },
-          );
-        } else {
-          docketEntry.multiDocketedOn = [];
-          docketEntry.multiDocketedOriginalDocketNumber = undefined;
-        }
-        return docketEntry;
-      },
-    );
-
-    updateCasePromises.push(upsertDocketEntries(UPDATED_CASE_DOCKET_ENTRIES));
+    docketEnIdsToUpdate.forEach(async id => {
+      const entries = await getDocketEntriesById({ docketEntryId: id });
+      entries.forEach(entry => {
+        docketEntriesToUpdate.add(entry);
+      });
+    });
   }
+
+  const UPDATED_CASE_DOCKET_ENTRIES: RawDocketEntry[] = [];
+  docketEntriesToUpdate.forEach(docketEntry => {
+    if (!docketNumbersToRemove.includes(docketEntry.docketNumber)) {
+      docketEntry.multiDocketedOn = docketEntry.multiDocketedOn.filter(
+        docketNumber => {
+          return !docketNumbersToRemove.includes(docketNumber);
+        },
+      );
+    } else {
+      docketEntry.multiDocketedOn = [];
+      docketEntry.multiDocketedOriginalDocketNumber = undefined;
+      const newId = uuidv4();
+      const oldId = docketEntry.docketEntryId;
+      const command = new CopyObjectCommand({
+        Bucket: environment.documentsBucketName,
+        CopySource: `${environment.documentsBucketName}/${oldId}`,
+        Key: newId,
+      });
+      updateCasePromises.push(storageClient.send(command));
+      docketEntry.docketEntryId = newId;
+    }
+    UPDATED_CASE_DOCKET_ENTRIES.push(docketEntry);
+  });
+
+  updateCasePromises.push(upsertDocketEntries(UPDATED_CASE_DOCKET_ENTRIES));
 
   await settlePromises(updateCasePromises);
 };
