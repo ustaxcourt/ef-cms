@@ -174,7 +174,7 @@ jobs:
             fi
             PRIMARY="${PRIMARY_ENV:-$ENV}"
             echo "Running deploy info cluster script"
-            zsh ./web-api/terraform/bin/deploy-info-cluster.sh "${PRIMARY}"
+            ./web-api/terraform/bin/deploy-info-cluster.sh "${PRIMARY}"
       - run:
           no_output_timeout: 20m
           name: 'Deploy - All Color Terraform'
