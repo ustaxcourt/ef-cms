@@ -62,11 +62,11 @@ parameters:
     type: boolean
 
   info_cluster_primary_env:
-    default: 'exp1'
+    default: 'test'
     type: string
 
   info_cluster_consumer_env:
-    default: 'exp2'
+    default: 'exp1,exp2,exp3,exp4,exp5,exp6,exp7,exp8,exp9,irs,migration,staging'
     type: string
 
 commands:
