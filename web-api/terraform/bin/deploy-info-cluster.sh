@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 # shellcheck disable=SC1071
 
 set -e
@@ -17,15 +17,45 @@ log_success() {
   echo "[SUCCESS] $*" >&2
 }
 
-if [ $# -lt 2 ]; then
+if [ $# -lt 1 ]; then
   log_error "Insufficient arguments provided."
-  echo "Usage: $0 <primary-env> <base-domain> [consumer1 consumer2 ...]" >&2
+  echo "Usage: $0 <primary-env> [base-domain] [consumer1 consumer2 ...]" >&2
   exit 1
 fi
 
 PRIMARY_ENV="$1"; shift
-BASE_DOMAIN="$1"; shift
-CONSUMER_ENVS=("$@")
+
+if [ $# -gt 0 ]; then
+  BASE_DOMAIN="$1"
+  shift
+else
+  BASE_DOMAIN="${INFO_CLUSTER_BASE_DOMAIN:-}"
+fi
+
+if [[ -z "${BASE_DOMAIN}" && -n "${EFCMS_DOMAIN:-}" ]]; then
+  BASE_DOMAIN="${EFCMS_DOMAIN#*.}"
+fi
+
+if [[ -z "${BASE_DOMAIN}" ]]; then
+  log_error "Base domain is required. Provide it as an argument or via INFO_CLUSTER_BASE_DOMAIN (or EFCMS_DOMAIN)."
+  exit 1
+fi
+
+if [ $# -gt 0 ]; then
+  CONSUMER_ENVS=("$@")
+else
+  CONSUMER_ENVS=()
+  if [[ -n "${INFO_CLUSTER_CONSUMER_ENVS:-}" ]]; then
+    sanitized_consumers="$(echo "${INFO_CLUSTER_CONSUMER_ENVS}" | tr ',' ' ')"
+    read -r -a consumer_list <<< "${sanitized_consumers}"
+    for consumer in "${consumer_list[@]}"; do
+      consumer_trimmed="${consumer//[[:space:]]/}"
+      if [[ -n "${consumer_trimmed}" ]]; then
+        CONSUMER_ENVS+=("${consumer_trimmed}")
+      fi
+    done
+  fi
+fi
 
 deploy_primary() {
   local env="$1"
