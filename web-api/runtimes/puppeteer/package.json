@@ -8,9 +8,9 @@
     "npm": ">=11.6.1 <12.0.0"
   },
   "dependencies": {
-    "@sparticuz/chromium": "133.0.0",
+    "@sparticuz/chromium": "141.0.0",
     "pug": "3.0.3",
-    "puppeteer-core": "24.3.1",
+    "puppeteer-core": "24.26.1",
     "sass": "1.93.2"
   },
   "scripts": {},

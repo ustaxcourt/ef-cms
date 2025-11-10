@@ -64,8 +64,6 @@ To update Node.js:
    - `./web-api/runtimes/puppeteer/Dockerfile`
 1. Manually update the Node.js version in:
    - `./.circleci/config.yml`
-1. Manually update DAWSON's GitHub Actions YAML files.
-   - **Note:** These files will point to `.nvmrc` in a future update.
 1. Update the node version used by our lambdas.
    - `web-api/terraform/modules/lambda/lambda.tf`
    - `web-api/terraform/modules/api/layers.tf`
