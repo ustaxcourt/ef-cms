@@ -1,22 +1,12 @@
-// @ts-nocheck - Legacy Dynamsoft scanner integration with extensive type safety issues
 import { getConstants } from '@web-client/getConstants';
 import { loadDWTLibrary } from './loader';
+import Dynamsoft from 'dwt';
 
 declare global {
   interface Window {
-    Dynamsoft?: {
-      DWT: {
-        ResourcesPath: string;
-        ProductKey: string;
+    Dynamsoft?: typeof Dynamsoft & {
+      DWT: typeof Dynamsoft.DWT & {
         ScanDirectly: boolean;
-        CreateDWTObject: (
-          containerId: string,
-          onSuccess: (obj: unknown) => void,
-          onError: (error: unknown) => void,
-        ) => void;
-        EnumDWT_ImageType: { IT_JPG: number; IT_PNG: number };
-        EnumDWT_PixelType: { TWPT_RGB: number };
-        EnumDWT_CapSupportedSizes: { TWSS_A4: number };
       };
     };
   }
@@ -56,8 +46,12 @@ export const getScannerInterface = () => {
       dynamsoftLoader = new Promise(async resolve => {
         await loadDWTLibrary();
         const { Dynamsoft } = window;
+        if (!Dynamsoft) {
+          throw new Error('Dynamsoft library failed to load');
+        }
+
         Dynamsoft.DWT.ResourcesPath = 'https://unpkg.com/dwt@latest/dist';
-        Dynamsoft.DWT.ProductKey = getConstants().DYNAMSOFT_PRODUCT_KEYS;
+        Dynamsoft.DWT.ProductKey = getConstants().DYNAMSOFT_PRODUCT_KEYS ?? '';
         Dynamsoft.DWT.ScanDirectly = true;
 
         Dynamsoft.DWT.CreateDWTObject(
@@ -128,7 +122,7 @@ export const getScannerInterface = () => {
             new Promise((resolveImage, rejectImage) => {
               DWObject.ConvertToBlob(
                 [index],
-                window.Dynamsoft.DWT.EnumDWT_ImageType.IT_JPG,
+                window.Dynamsoft!.DWT.EnumDWT_ImageType.IT_JPG,
                 resolveImage,
                 rejectImage,
               );
@@ -177,9 +171,9 @@ export const getScannerInterface = () => {
       DWObject.Resolution = 300;
       DWObject.IfDuplexEnabled = duplexEnabled;
       DWObject.IfFeederEnabled = feederEnabled;
-      DWObject.PixelType = window.Dynamsoft.DWT.EnumDWT_PixelType.TWPT_RGB;
+      DWObject.PixelType = window.Dynamsoft!.DWT.EnumDWT_PixelType.TWPT_RGB;
       DWObject.PageSize =
-        window.Dynamsoft.DWT.EnumDWT_CapSupportedSizes.TWSS_A4;
+        window.Dynamsoft!.DWT.EnumDWT_CapSupportedSizes.TWSS_A4;
 
       if (feederEnabled && !DWObject.IfFeederLoaded) {
         DWObject.UnregisterEvent('OnPostAllTransfers', onScanFinished);
