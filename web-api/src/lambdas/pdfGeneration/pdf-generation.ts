@@ -19,7 +19,11 @@ export const handler = async (event: GeneratePdfRequest) => {
     try {
       const browser = await getChromiumBrowser();
 
+      getDawsonLogger().info('Successfully gotten browser', browser);
+
       const results = await generatePdfFromHtmlHelper(event, browser);
+
+      getDawsonLogger().info('Successfully gotten results', results);
 
       const pages = await browser.pages();
       await Promise.all(pages.map(p => p.close()));
