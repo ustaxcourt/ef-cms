@@ -10,16 +10,16 @@ typeface clean
 
 dwCase [icon: briefcase, color: blue]{
   docketNumber string pk "The docket number of the case."
-  associatedJudgeId string fk "Current associated Judge id."
+  associatedJudgeId string fk "Current associated Judge user ID"
   trialSessionId string fk "Trial session identifier"
 }
 
 dwDocketEntry [icon: file-text, color: orange]{
   docketEntryId string pk "Unique docket entry identifier"
   docketNumber string pk fk "Associated case docket number"
-  filedBy string fk "User ID(s) of person/people who filed the document"
+  filedBy string fk "ID(s) of user/users who filed the document"
   signedByUserId string fk "ID of the user who applied the signature"
-  strikenByUserId string fk "User ID of the user who struck the document"
+  strikenByUserId string fk "ID of the user who struck the document"
   userId string fk "ID of the user who created the document"
 }
 
@@ -28,12 +28,12 @@ dwUser [icon: user, color: yellow]{
 }
 
 dwWorkItem [icon: clipboard-list, color: green]{
-  workItemId string pk "The ID of the Work Item"
-  assigneeId string fk "The clerk that is assigned to the work item"
-  completedByUserId string fk "The user ID of the user that completed the work item"
-  docketEntryId string fk "the id of the document that is in QC"
-  docketNumber string fk "The Docket number of the Case"
-  sentByUserId string fk "This is the ID for whoever sent the work item last"
+  workItemId string pk "ID of the Work Item"
+  assigneeId string fk "ID of the clerk user who is assigned to the work item"
+  completedByUserId string fk "ID of the user who completed the work item"
+  docketEntryId string fk "ID of the document that is in QC"
+  docketNumber string fk "Docket number of the Case"
+  sentByUserId string fk "ID of the user who sent the work item last"
 }
 
 dwUserOnCase [icon: user-check, color: cyan]{
@@ -60,7 +60,7 @@ dwCaseDeadline [icon: calendar-clock, color: red]{
 dwCaseCorrespondence [icon: mail, color: purple]{
   correspondenceId string pk "Unique correspondence identifier"
   docketNumber string fk "Associated case docket number"
-  userId string fk "User who created the correspondence"
+  userId string fk "ID of the user who created the correspondence"
 }
 
 dwMinuteSheet [icon: file-text, color: indigo]{
@@ -70,7 +70,7 @@ dwMinuteSheet [icon: file-text, color: indigo]{
 
 dwUserCaseNote [icon: sticky-note, color: yellow]{
   docketNumber string pk fk "Case docket number"
-  userId string pk fk "User ID who created the note"
+  userId string pk fk "ID of the user who created the note"
 }
 
 dwBarNumber [icon: id-card, color: brown]{
@@ -124,29 +124,29 @@ dwPractitionerDocuments [icon: file-plus, color: brown]{
 }
 
 dwTrialSession [icon:clock, color:gray]{
-  trialSessionId string pk "The system generated ID for the trial session"
-  judgeUserId string fk "The assigned Judge's DAWSON generated user id"
-  swingSessionId string fk "The trial session id of the session identified as the swing session"
-  trialClerkUserId string fk "The user id of the trial clerk selected by the user"
+  trialSessionId string pk "System-generated ID for the trial session"
+  judgeUserId string fk "Assigned Judge's system-generated user id"
+  swingSessionId string fk "Trial session ID of the session identified as the swing session"
+  trialClerkUserId string fk "User ID of the trial clerk selected by the user"
 }
 
 dwTrialSessionCase [icon:clock, color:gray]{
-  docketNumber string pk fk "The docket number of the case assigned to a trial session"
-  trialSessionId string pk fk "The system generated ID for the trial session"
+  docketNumber string pk fk "Docket number of the case assigned to a trial session"
+  trialSessionId string pk fk "System-generated ID for the trial session"
 }
 
 dwTrialSessionNotificationProcessing [icon:clock, color:gray]{
-  trialSessionId string pk fk "The system generated ID for the trial session"
+  trialSessionId string pk fk "System-generated ID for the trial session"
 }
 
 dwTrialSessionPaperPdf [icon:clock, color:gray]{
-  fileId string pk "The id of the document that was available for printing of service"
-  trialSessionId string pk fk "The system generated ID for the trial session"
+  fileId string pk "Id of the document that was available for printing of service"
+  trialSessionId string pk fk "System-generated ID for the trial session"
 }
 
 dwTrialSessionWorkingCopy [icon:clock, color:gray]{
-  trialSessionId string pk fk "The system generated ID for the trial session"
-  userId string pk fk "The Judge user id or trial clerk user id (chambers user edits saved with Judge user id)"
+  trialSessionId string pk fk "System-generated ID for the trial session"
+  userId string pk fk "Judge user ID or trial clerk user ID"
 }
 
 // Relationships
