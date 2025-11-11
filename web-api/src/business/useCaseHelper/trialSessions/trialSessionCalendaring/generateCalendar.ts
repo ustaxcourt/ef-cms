@@ -302,7 +302,7 @@ const getTrialLocationForSpecialSession = ({
     if (
       calendarState.sessionCountPerCity[WASHINGTON_DC_NORTH_STRING] >=
         calendaringConfig.maxSessionsPerLocation ||
-      calendarState.sessionScheduledPerCityPerWeek[sessionWeekOf].has(
+      calendarState.sessionScheduledPerCityPerWeek[sessionWeekOf]?.has(
         WASHINGTON_DC_NORTH_STRING,
       )
     ) {
