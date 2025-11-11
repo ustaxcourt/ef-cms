@@ -14,11 +14,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Mermaid CLI
-        run: npm install -g @mermaid-js/mermaid-cli
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
 
-      - name: Install Chromium for Puppeteer
-        run: npx puppeteer browsers install chrome-headless-shell
+      - name: Install Mermaid CLI and Puppeteer
+        run: |
+          npm install -g @mermaid-js/mermaid-cli
+          npm install -g puppeteer
 
       - name: Generate PNG from Mermaid
         run: |
