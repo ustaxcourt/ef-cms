@@ -24,14 +24,6 @@ jobs:
           npm install -g @mermaid-js/mermaid-cli
           npx --package=@playwright/test playwright install chromium --with-deps
 
-      - name: Generate PNG from Mermaid
-        run: |
-          find . -name "*.mmd" -type f | while read mermaid_file; do
-            output_file="${mermaid_file%.mmd}.png"
-            echo "Generating $output_file from $mermaid_file"
-            mmdc -i "$mermaid_file" -o "$output_file" -b transparent --puppeteerConfigFile puppeteer-config.json
-          done
-
       - name: Create Puppeteer config for Playwright
         run: |
           cat > puppeteer-config.json << 'EOF'
@@ -39,6 +31,14 @@ jobs:
             "executablePath": "/home/runner/.cache/ms-playwright/chromium-1163/chrome-linux/chrome"
           }
           EOF
+
+      - name: Generate PNG from Mermaid
+        run: |
+          find . -name "*.mmd" -type f | while read mermaid_file; do
+            output_file="${mermaid_file%.mmd}.png"
+            echo "Generating $output_file from $mermaid_file"
+            mmdc -i "$mermaid_file" -o "$output_file" -b transparent --puppeteerConfigFile puppeteer-config.json
+          done
 
       - name: Commit generated diagram
         run: |
