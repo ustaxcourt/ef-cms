@@ -17,6 +17,13 @@ log_success() {
   echo "[SUCCESS] $*" >&2
 }
 
+SCRIPT_DIR=${0:A:h}
+REPO_ROOT="${SCRIPT_DIR}/../../.."
+cd "${REPO_ROOT}" || {
+  log_error "Failed to change directory to repo root from ${SCRIPT_DIR}"
+  exit 1
+}
+
 if [ $# -lt 1 ]; then
   log_error "Insufficient arguments provided."
   echo "Usage: $0 <primary-env> [base-domain] [consumer1 consumer2 ...]" >&2
