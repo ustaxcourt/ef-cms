@@ -61,12 +61,12 @@ parameters:
     default: false
     type: boolean
 
-  info_cluster_primary_env:
-    default: 'test'
+  info_cluster_base_domain:
+    default: 'ustaxcourt.gov'
     type: string
 
-  info_cluster_consumer_env:
-    default: 'exp1,exp2,exp3,exp4,exp5,exp6,exp7,exp8,exp9,irs,migration,staging'
+  info_cluster_primary_env:
+    default: 'test'
     type: string
 
 commands:
@@ -165,16 +165,12 @@ jobs:
           name: 'Deploy Info Cluster'
           environment:
             DEPLOY_INFO_CLUSTER: << pipeline.parameters.deploy_info_cluster >>
+            BASE_DOMAIN: << pipeline.parameters.info_cluster_base_domain >>
             PRIMARY_ENV: << pipeline.parameters.info_cluster_primary_env >>
-            CONSUMER_ENVS: << pipeline.parameters.info_cluster_consumer_env >>
           command: |
-            if [ -n "${DEPLOY_INFO_CLUSTER:-false}" != "true" ]; then
-              echo "Skipping Deploy Info Cluster"
-              exit 0
+            if [ -n "DEPLOY_INFO_CLUSTER" ]; then
+                npm run deploy:info-cluster
             fi
-            PRIMARY="${PRIMARY_ENV:-$ENV}"
-            echo "Running deploy info cluster script"
-            ./web-api/terraform/bin/deploy-info-cluster.sh "${PRIMARY}"
       - run:
           no_output_timeout: 20m
           name: 'Deploy - All Color Terraform'

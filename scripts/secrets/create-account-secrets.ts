@@ -85,11 +85,11 @@ const scriptConfig: ScriptConfig = {
       long: 'es-info-cluster-shared-endpoint',
       type: 'string',
     },
-    esInfoClusterSharedAccountIds: {
+    esInfoClusterPrimaryEnv: {
       default: '',
       description:
-        'A comma separated list of AWS account that are consumers of the info cluster',
-      long: 'es-info-cluster-shared-account-ids',
+        'The primary environment name for the info cluster (used to identify which environment created the cluster)',
+      long: 'es-info-cluster-primary-env',
       type: 'string',
     },
     update: {
@@ -112,7 +112,7 @@ const {
   region,
   esInfoClusterSharedArn,
   esInfoClusterSharedEndPoint,
-  esInfoClusterSharedAccountIds,
+  esInfoClusterPrimaryEnv,
   update,
 } = parseArgsAndEnvVars(scriptConfig) as {
   baseDomain: string;
@@ -126,7 +126,7 @@ const {
   region: string;
   esInfoClusterSharedArn: string;
   esInfoClusterSharedEndPoint: string;
-  esInfoClusterSharedAccountIds: string;
+  esInfoClusterPrimaryEnv: string;
   update: boolean;
 };
 
@@ -148,7 +148,7 @@ if (env === 'prod') {
   if (externalTrustedRoleArn) {
     dawsonDevTrustedRoleArns.push(externalTrustedRoleArn);
   }
-  const createInfoCluster = !(
+  const createInfoCluster = (
     esInfoClusterSharedArn && esInfoClusterSharedEndPoint
   );
   const accountSecrets: Record<string, any> = {
@@ -163,15 +163,14 @@ if (env === 'prod') {
     NUM_DAYS_TO_KEEP_LOGS: logExpirationDays,
     ES_INFO_CLUSTER_CREATE: createInfoCluster.toString(),
   };
+  
+  if (esInfoClusterPrimaryEnv) {
+    accountSecrets.ES_INFO_CLUSTER_PRIMARY_ENV = esInfoClusterPrimaryEnv;
+  }
   if (createInfoCluster) {
     accountSecrets.ES_LOGS_EBS_VOLUME_SIZE_GB = opensearchLogsVolumeSize;
     accountSecrets.ES_LOGS_INSTANCE_COUNT = opensearchLogsInstanceCount;
     accountSecrets.ES_LOGS_INSTANCE_TYPE = opensearchLogsInstanceType;
-
-    if (esInfoClusterSharedAccountIds) {
-      accountSecrets.ES_INFO_CLUSTER_SHARED_CLUSTER_ACCOUNT_IDS =
-        esInfoClusterSharedAccountIds;
-    }
     console.log('Creating new Info Opensearch cluster');
   } else {
     if (!esInfoClusterSharedArn || !esInfoClusterSharedEndPoint) {

@@ -13,8 +13,15 @@ popd || exit
 [ -z "${NUM_DAYS_TO_KEEP_LOGS}" ] && echo "You must set NUM_DAYS_TO_KEEP_LOGS as an environment variable" && exit 1
 [ -z "${ES_LOGS_ENGINE_VERSION}" ] && echo "You must set ES_LOGS_ENGINE_VERSION as an environment variable" && exit 1
 
+if [[ -n "${ES_INFO_CLUSTER_PRIMARY_ENV:-}" ]] && [[ "${ES_INFO_CLUSTER_PRIMARY_ENV}" == "${ENV}" ]]; then
+  ES_INFO_CLUSTER_CREATE="true"
+elif [[ -n "${PRIMARY_ENV:-}" ]] && [[ "${PRIMARY_ENV}" == "${ENV}" ]]; then
+  ES_INFO_CLUSTER_CREATE="true"
+fi
+
 ES_INFO_CLUSTER_CREATE="${ES_INFO_CLUSTER_CREATE:-false}"
-if [ "$ES_INFO_CLUSTER_CREATE" = "true" ]; then
+
+if [ "${ES_INFO_CLUSTER_CREATE}" = "true" ]; then
   [ -z "${ES_LOGS_EBS_VOLUME_SIZE_GB}" ] && echo "You must set ES_LOGS_EBS_VOLUME_SIZE_GB as an environment variable" && exit 1
   [ -z "${ES_LOGS_INSTANCE_COUNT}" ] && echo "You must set ES_LOGS_INSTANCE_COUNT as an environment variable" && exit 1
   [ -z "${ES_LOGS_INSTANCE_TYPE}" ] && echo "You must set ES_LOGS_INSTANCE_TYPE as an environment variable" && exit 1

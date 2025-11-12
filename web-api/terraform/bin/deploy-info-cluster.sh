@@ -1,9 +1,12 @@
 #!/bin/bash
 # shellcheck disable=SC1071
 
-set -e
-set -u
-setopt pipefail
+set -euo pipefail
+
+pushd "$(dirname "$0")/../../.." >/dev/null || {
+  echo "[ERROR] Failed to navigate to project root" >&2
+  exit 1
+}
 
 log_info() {
   echo "[INFO] $*" >&2
@@ -17,83 +20,37 @@ log_success() {
   echo "[SUCCESS] $*" >&2
 }
 
-if [ $# -lt 1 ]; then
-  log_error "Insufficient arguments provided."
-  echo "Usage: $0 <primary-env> [base-domain] [consumer1 consumer2 ...]" >&2
+if [[ -z "${ENV:-}" ]]; then
+  log_error "ENV environment variable is required."
   exit 1
 fi
 
-PRIMARY_ENV="$1"; shift
-
-if [ $# -gt 0 ]; then
-  BASE_DOMAIN="$1"
-  shift
-else
-  BASE_DOMAIN="${INFO_CLUSTER_BASE_DOMAIN:-}"
+if [[ -z "${PRIMARY_ENV:-}" ]]; then
+  log_error "PRIMARY_ENV environment variable is required."
+  exit 1
 fi
 
+BASE_DOMAIN="${INFO_CLUSTER_BASE_DOMAIN:-}"
 if [[ -z "${BASE_DOMAIN}" && -n "${EFCMS_DOMAIN:-}" ]]; then
   BASE_DOMAIN="${EFCMS_DOMAIN#*.}"
 fi
 
 if [[ -z "${BASE_DOMAIN}" ]]; then
-  log_error "Base domain is required. Provide it as an argument or via INFO_CLUSTER_BASE_DOMAIN (or EFCMS_DOMAIN)."
+  log_error "Base domain is required. Set INFO_CLUSTER_BASE_DOMAIN or EFCMS_DOMAIN environment variable."
   exit 1
 fi
 
-if [ $# -gt 0 ]; then
-  CONSUMER_ENVS=("$@")
-else
-  CONSUMER_ENVS=()
-  if [[ -n "${INFO_CLUSTER_CONSUMER_ENVS:-}" ]]; then
-    sanitized_consumers="$(echo "${INFO_CLUSTER_CONSUMER_ENVS}" | tr ',' ' ')"
-    read -r -a consumer_list <<< "${sanitized_consumers}"
-    for consumer in "${consumer_list[@]}"; do
-      consumer_trimmed="${consumer//[[:space:]]/}"
-      if [[ -n "${consumer_trimmed}" ]]; then
-        CONSUMER_ENVS+=("${consumer_trimmed}")
-      fi
-    done
-  fi
-fi
-
 deploy_primary() {
-  local env="$1"
-  local domain="$2"
-  log_info "Switching to primary environment: ${env}"
+  log_info "Deploying primary environment: ${ENV}"
 
-  # shellcheck disable=SC1091
-  . ./scripts/env/set-env.zsh "${env}" || {
-    log_error "Failed to primary switch environment: ${env}"
-    exit 1
-    }
-
-  if [[ -z "${AWS_PROFILE:-}" ]]; then
-    if [[ "${env}" == ustc-* ]]; then
-      export AWS_PROFILE="${env}"
-    else
-      export AWS_PROFILE="ustc-${env}"
-    fi
-    log_info "AWS_PROFILE not set. Defaulting to ${AWS_PROFILE}"
-  fi
-
-  log_info "Writing secrets to primary environment: ${env}"
-  ./scripts/secrets/create-account-secrets.ts \
-    --env "${env}" \
-    --domain "${domain}" \
-    --update || {
-     log_error "Failed to write primary secrets for environment: ${env}"
-     exit 1
-   }
-
-  log_info "Deploying primary environment: ${env}"
+  log_info "Deploying primary environment: ${ENV}"
   pushd web-api/terraform/applyables/account-specific >/dev/null || {
-   log_error "Failed to primary change directory for Terraform applyables: ${env}"
+   log_error "Failed to change directory for Terraform applyables: ${ENV}"
    exit 1
   }
 
    ../../bin/deploy-account-specific.sh || {
-    log_error "Failed to deploy primary environment: ${env}"
+    log_error "Failed to deploy primary environment: ${ENV}"
     popd >/dev/null
     exit 1
   }
@@ -104,13 +61,13 @@ deploy_primary() {
   local arn
 
   endpoint=$(terraform output -raw es_info_cluster_shared_cluster_endpoint 2>/dev/null) || {
-    log_error "Failed to get info cluster shared endpoint from Terraform: ${env}"
+    log_error "Failed to get info cluster shared endpoint from Terraform: ${ENV}"
     popd >/dev/null
     exit 1
   }
 
   arn=$(terraform output -raw es_info_cluster_shared_cluster_arn 2>/dev/null) || {
-    log_error "Failed to primary get info cluster shared arn from Terraform: ${env}"
+    log_error "Failed to get info cluster shared arn from Terraform: ${ENV}"
     popd >/dev/null
     exit 1
   }
@@ -124,78 +81,57 @@ deploy_primary() {
   log_info "Cluster endpoint: ${endpoint}"
   log_info "Cluster arn: ${arn}"
 
-  PRIMARY_ENDPOINT="${endpoint}"
-  PRIMARY_ARN="${arn}"
-}
-
-deploy_primary "${PRIMARY_ENV}" "${BASE_DOMAIN}"
-
-deploy_consumer() {
-  local env="$1"
-  local domain="$2"
-  local shared_endpoint="$3"
-  local shared_arn="$4"
-  log_info "Switching to consumer environment: ${env}"
-
-  # shellcheck disable=SC1091
-  . ./scripts/env/set-env.zsh "${env}" || {
-    log_error "Failed to consumer switch environment: ${env}"
-    exit 1
-    }
-
-  if [[ -z "${AWS_PROFILE:-}" ]]; then
-    if [[ "${env}" == ustc-* ]]; then
-      export AWS_PROFILE="${env}"
-    else
-      export AWS_PROFILE="ustc-${env}"
-    fi
-    log_info "AWS_PROFILE not set. Defaulting to ${AWS_PROFILE}"
-  fi
-
-  log_info "Writing secrets to consumer environment: ${env}"
+  log_info "Updating secrets with info cluster endpoint, ARN, and primary environment: ${ENV}"
   ./scripts/secrets/create-account-secrets.ts \
-    --env "${env}" \
-    --domain "${domain}" \
-    --es-info-cluster-shared-endpoint "${shared_endpoint}" \
-    --es-info-cluster-shared-arn "${shared_arn}" \
+    --env "${ENV}" \
+    --base-domain "${BASE_DOMAIN}" \
+    --es-info-cluster-shared-endpoint "${endpoint}" \
+    --es-info-cluster-shared-arn "${arn}" \
+    --es-info-cluster-primary-env "${ENV}" \
     --update || {
-     log_error "Failed to write consumer secrets for environment: ${env}"
+     log_error "Failed to update primary secrets with cluster info for environment: ${ENV}"
      exit 1
    }
 
-  log_info "Deploying consumer environment: ${env}"
+  log_success "Primary secrets updated with cluster endpoint and ARN."
+  export PRIMARY_ENDPOINT="${endpoint}"
+  export PRIMARY_ARN="${arn}"
+}
+
+deploy_consumer() {
+
+  log_info "Switching to consumer environment: ${ENV}"
+  
+  log_info "Loading variables from Secrets Manager into Environment"
+  ./scripts/load-environment-from-secrets.sh || {
+   log_error "Failed to get variables from Secrets Manager, environment: ${ENV}"
+   popd >/dev/null
+   exit 1
+ }
+
+  log_info "Deploying consumer environment: ${ENV}"
   pushd web-api/terraform/applyables/account-specific >/dev/null || {
-   log_error "Failed to change consumer directory for Terraform applyables: ${env}"
+   log_error "Failed to change consumer directory for Terraform applyables: ${ENV}"
    exit 1
   }
 
    ../../bin/deploy-account-specific.sh || {
-    log_error "Failed to deploy consumer environment: ${env}"
+    log_error "Failed to deploy consumer environment: ${ENV}"
     popd >/dev/null
     exit 1
   }
 
   popd >/dev/null
-  log_success "Consumer deployment complete for: ${env}"
+  log_success "Consumer deployment complete for: ${ENV}"
 }
 
-if [ ${#CONSUMER_ENVS[@]} -eq 0 ]; then
-    log_info "No consumer environments specified. Only primary was deployed."
+if [[ "${PRIMARY_ENV}" == "${ENV}" ]]; then
+  log_info "Current ENV (${ENV}) matches PRIMARY_ENV (${PRIMARY_ENV}). Running primary deployment."
+  deploy_primary
+  log_success "Primary deployment completed successfully!"
+  log_info "Kibana url: https://${PRIMARY_ENDPOINT}/_dashboard"
 else
-    log_info "Deploying ${#CONSUMER_ENVS[@]} consumer environments: ${CONSUMER_ENVS[*]}"
-    failed_consumers=()
-    for ENV_NAME in "${CONSUMER_ENVS[@]}"; do
-      if ! deploy_consumer "${ENV_NAME}" "${BASE_DOMAIN}" "${PRIMARY_ENDPOINT}" "${PRIMARY_ARN}"; then
-          log_error " Consumer deploy failed for: ${ENV_NAME}"
-          failed_consumers+=("${ENV_NAME}")
-      fi
-    done
-    
-    if [ ${#failed_consumers[@]} -gt 0 ]; then
-        log_error "Deployment failed for consumers: ${failed_consumers[*]}"
-        exit 1
-    fi
+  log_info "Current ENV (${ENV}) does not match PRIMARY_ENV (${PRIMARY_ENV}). Running consumer deployment."
+  deploy_consumer
+  log_success "Consumer deployment completed successfully!"
 fi
-
-log_success "All deployments completed successfully!"
-log_info "Kibana url: https://${PRIMARY_ENDPOINT}/_dashboard"
