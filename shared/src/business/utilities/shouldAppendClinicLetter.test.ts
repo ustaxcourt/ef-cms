@@ -7,9 +7,8 @@ import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { shouldAppendClinicLetter } from './shouldAppendClinicLetter';
 
 jest.mock('./getClinicLetterKey');
-const mockGetClinicLetterKey = getClinicLetterKey as jest.MockedFunction<
-  typeof getClinicLetterKey
->;
+const mockGetClinicLetterKey: jest.MockedFunction<typeof getClinicLetterKey> =
+  jest.mocked(getClinicLetterKey);
 
 describe('shouldAppendClinicLetter', () => {
   const clinicLetterKey = 'clinic-letter-key';
