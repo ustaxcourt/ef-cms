@@ -22,6 +22,7 @@ export const getChromiumBrowserAWS = async (): Promise<Browser> => {
           isMobile: false,
           width: 1920,
         },
+        dumpio: true,
         executablePath: await chromium.executablePath(),
         headless: 'shell',
         env: {
