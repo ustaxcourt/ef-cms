@@ -58,15 +58,15 @@ parameters:
     type: boolean
 
   deploy_info_cluster:
-    default: false
+    default: true
     type: boolean
 
   info_cluster_primary_env:
-    default: 'test'
+    default: 'exp6'
     type: string
 
   info_cluster_consumer_env:
-    default: 'exp1,exp2,exp3,exp4,exp5,exp6,exp7,exp8,exp9,irs,migration,staging'
+    default: ''
     type: string
 
 commands:
