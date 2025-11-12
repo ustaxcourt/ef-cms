@@ -62,9 +62,15 @@ else
 fi
 
 deploy_primary() {
-  local env="$1"
+  local env_input="$1"
   local domain="$2"
-  log_info "Switching to primary environment: ${env}"
+  local env_config="${env_input}"
+
+  if [[ "${env_input}" != *"-"* ]] && [[ ! -f "${REPO_ROOT}/scripts/env/environments/${env_input}.env" ]]; then
+    env_config="ustc-${env_input}"
+  fi
+
+  log_info "Switching to primary environment: ${env_input}"
   log_info "Current working directory: $(pwd)"
 
   set +u
@@ -74,39 +80,39 @@ deploy_primary() {
   }
   export DEFAULT_ENV="${DEFAULT_ENV:-local}"
   # shellcheck disable=SC1091
-  . ./scripts/env/set-env.zsh ${env} || {
-    log_error "Failed to primary switch environment: ${env}"
+  . ./scripts/env/set-env.zsh ${env_config} || {
+    log_error "Failed to primary switch environment: ${env_input}"
     exit 1
     }
   popd >/dev/null || true
   set -u
 
   if [[ -z "${AWS_PROFILE:-}" ]]; then
-    if [[ "${env}" == ustc-* ]]; then
-      export AWS_PROFILE="${env}"
+    if [[ "${env_config}" == ustc-* ]]; then
+      export AWS_PROFILE="${env_config}"
     else
-      export AWS_PROFILE="ustc-${env}"
+      export AWS_PROFILE="ustc-${env_input}"
     fi
     log_info "AWS_PROFILE not set. Defaulting to ${AWS_PROFILE}"
   fi
 
-  log_info "Writing secrets to primary environment: ${env}"
+  log_info "Writing secrets to primary environment: ${env_input}"
   ./scripts/secrets/create-account-secrets.ts \
-    --env "${env}" \
+    --env "${env_input}" \
     --domain "${domain}" \
     --update || {
-     log_error "Failed to write primary secrets for environment: ${env}"
+     log_error "Failed to write primary secrets for environment: ${env_input}"
      exit 1
    }
 
-  log_info "Deploying primary environment: ${env}"
+  log_info "Deploying primary environment: ${env_input}"
   pushd web-api/terraform/applyables/account-specific >/dev/null || {
-   log_error "Failed to primary change directory for Terraform applyables: ${env}"
+   log_error "Failed to primary change directory for Terraform applyables: ${env_input}"
    exit 1
   }
 
    ../../bin/deploy-account-specific.sh || {
-    log_error "Failed to deploy primary environment: ${env}"
+    log_error "Failed to deploy primary environment: ${env_input}"
     popd >/dev/null
     exit 1
   }
@@ -117,13 +123,13 @@ deploy_primary() {
   local arn
 
   endpoint=$(terraform output -raw es_info_cluster_shared_cluster_endpoint 2>/dev/null) || {
-    log_error "Failed to get info cluster shared endpoint from Terraform: ${env}"
+    log_error "Failed to get info cluster shared endpoint from Terraform: ${env_input}"
     popd >/dev/null
     exit 1
   }
 
   arn=$(terraform output -raw es_info_cluster_shared_cluster_arn 2>/dev/null) || {
-    log_error "Failed to primary get info cluster shared arn from Terraform: ${env}"
+    log_error "Failed to primary get info cluster shared arn from Terraform: ${env_input}"
     popd >/dev/null
     exit 1
   }
@@ -144,11 +150,17 @@ deploy_primary() {
 deploy_primary "${PRIMARY_ENV}" "${BASE_DOMAIN}"
 
 deploy_consumer() {
-  local env="$1"
+  local env_input="$1"
   local domain="$2"
   local shared_endpoint="$3"
   local shared_arn="$4"
-  log_info "Switching to consumer environment: ${env}"
+  local env_config="${env_input}"
+
+  if [[ "${env_input}" != *"-"* ]] && [[ ! -f "${REPO_ROOT}/scripts/env/environments/${env_input}.env" ]]; then
+    env_config="ustc-${env_input}"
+  fi
+
+  log_info "Switching to consumer environment: ${env_input}"
 
   set +u
   pushd "${REPO_ROOT}" >/dev/null || {
@@ -156,47 +168,47 @@ deploy_consumer() {
     exit 1
   }
   # shellcheck disable=SC1091
-  . ./scripts/env/set-env.zsh ${env} || {
-    log_error "Failed to consumer switch environment: ${env}"
+  . ./scripts/env/set-env.zsh ${env_config} || {
+    log_error "Failed to consumer switch environment: ${env_input}"
     exit 1
     }
   popd >/dev/null || true
   set -u
 
   if [[ -z "${AWS_PROFILE:-}" ]]; then
-    if [[ "${env}" == ustc-* ]]; then
-      export AWS_PROFILE="${env}"
+    if [[ "${env_config}" == ustc-* ]]; then
+      export AWS_PROFILE="${env_config}"
     else
-      export AWS_PROFILE="ustc-${env}"
+      export AWS_PROFILE="ustc-${env_input}"
     fi
     log_info "AWS_PROFILE not set. Defaulting to ${AWS_PROFILE}"
   fi
 
-  log_info "Writing secrets to consumer environment: ${env}"
+  log_info "Writing secrets to consumer environment: ${env_input}"
   ./scripts/secrets/create-account-secrets.ts \
-    --env "${env}" \
+    --env "${env_input}" \
     --domain "${domain}" \
     --es-info-cluster-shared-endpoint "${shared_endpoint}" \
     --es-info-cluster-shared-arn "${shared_arn}" \
     --update || {
-     log_error "Failed to write consumer secrets for environment: ${env}"
+     log_error "Failed to write consumer secrets for environment: ${env_input}"
      exit 1
    }
 
-  log_info "Deploying consumer environment: ${env}"
+  log_info "Deploying consumer environment: ${env_input}"
   pushd web-api/terraform/applyables/account-specific >/dev/null || {
-   log_error "Failed to change consumer directory for Terraform applyables: ${env}"
+   log_error "Failed to change consumer directory for Terraform applyables: ${env_input}"
    exit 1
   }
 
    ../../bin/deploy-account-specific.sh || {
-    log_error "Failed to deploy consumer environment: ${env}"
+    log_error "Failed to deploy consumer environment: ${env_input}"
     popd >/dev/null
     exit 1
   }
 
   popd >/dev/null
-  log_success "Consumer deployment complete for: ${env}"
+  log_success "Consumer deployment complete for: ${env_input}"
 }
 
 if [ ${#CONSUMER_ENVS[@]} -eq 0 ]; then
