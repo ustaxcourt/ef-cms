@@ -64,11 +64,6 @@ fi
 deploy_primary() {
   local env_input="$1"
   local domain="$2"
-  local env_config="${env_input}"
-
-  if [[ "${env_input}" != *"-"* ]] && [[ ! -f "${REPO_ROOT}/scripts/env/environments/${env_input}.env" ]]; then
-    env_config="ustc-${env_input}"
-  fi
 
   log_info "Switching to primary environment: ${env_input}"
   log_info "Current working directory: $(pwd)"
@@ -79,8 +74,8 @@ deploy_primary() {
     exit 1
   }
   export DEFAULT_ENV="${DEFAULT_ENV:-local}"
-  # shellcheck disable=SC1091
-  . ./scripts/env/set-env.zsh ${env_config} || {
+
+  . ./scripts/env/set-env.zsh ${env_input} || {
     log_error "Failed to primary switch environment: ${env_input}"
     exit 1
     }
@@ -88,11 +83,7 @@ deploy_primary() {
   set -u
 
   if [[ -z "${AWS_PROFILE:-}" ]]; then
-    if [[ "${env_config}" == ustc-* ]]; then
-      export AWS_PROFILE="${env_config}"
-    else
-      export AWS_PROFILE="ustc-${env_input}"
-    fi
+    export AWS_PROFILE="${env_input}"
     log_info "AWS_PROFILE not set. Defaulting to ${AWS_PROFILE}"
   fi
 
@@ -154,11 +145,6 @@ deploy_consumer() {
   local domain="$2"
   local shared_endpoint="$3"
   local shared_arn="$4"
-  local env_config="${env_input}"
-
-  if [[ "${env_input}" != *"-"* ]] && [[ ! -f "${REPO_ROOT}/scripts/env/environments/${env_input}.env" ]]; then
-    env_config="ustc-${env_input}"
-  fi
 
   log_info "Switching to consumer environment: ${env_input}"
 
@@ -167,8 +153,13 @@ deploy_consumer() {
     log_error "Failed to change directory to repo root."
     exit 1
   }
-  # shellcheck disable=SC1091
-  . ./scripts/env/set-env.zsh ${env_config} || {
+  if [[ ! -f "${REPO_ROOT}/scripts/env/environments/${env_input}.env" ]]; then
+    log_error "Environment configuration not found for ${env_input}. Please create scripts/env/environments/${env_input}.env"
+    popd >/dev/null || true
+    exit 1
+  fi
+
+  . ./scripts/env/set-env.zsh ${env_input} || {
     log_error "Failed to consumer switch environment: ${env_input}"
     exit 1
     }
@@ -176,11 +167,7 @@ deploy_consumer() {
   set -u
 
   if [[ -z "${AWS_PROFILE:-}" ]]; then
-    if [[ "${env_config}" == ustc-* ]]; then
-      export AWS_PROFILE="${env_config}"
-    else
-      export AWS_PROFILE="ustc-${env_input}"
-    fi
+    export AWS_PROFILE="${env_input}"
     log_info "AWS_PROFILE not set. Defaulting to ${AWS_PROFILE}"
   fi
 
