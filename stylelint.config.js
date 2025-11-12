@@ -24,5 +24,11 @@ module.exports = {
     'no-descending-specificity': null,
     'selector-class-pattern': null,
     'shorthand-property-no-redundant-values': null,
+    'scss/at-rule-no-unknown': [true, {
+      ignoreAtRules: [
+        'custom-variant',
+        'theme',
+      ],
+    }],
   },
 };
