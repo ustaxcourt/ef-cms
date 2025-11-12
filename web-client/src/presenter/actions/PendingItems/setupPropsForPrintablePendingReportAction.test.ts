@@ -3,15 +3,18 @@ import { setupPropsForPrintablePendingReportAction } from './setupPropsForPrinta
 
 describe('setupPropsForPrintablePendingReportAction', () => {
   it('should update the props with docketNumber if docketNumberFilter is true', async () => {
-    const result = await runAction<{ docketNumberFilter: string }>(setupPropsForPrintablePendingReportAction, {
-      props: {
-        caseDetail: { docketNumber: '123-45' },
-        docketNumberFilter: true,
+    const result = await runAction<{ docketNumberFilter?: string }>(
+      setupPropsForPrintablePendingReportAction,
+      {
+        props: {
+          caseDetail: { docketNumber: '123-45' },
+          docketNumberFilter: true,
+        },
+        state: {},
       },
-      state: {},
-    });
+    );
 
-    const output = result.output as { docketNumberFilter: string };
+    const output = result.output as { docketNumberFilter?: string };
     expect(output.docketNumberFilter).toEqual('123-45');
   });
 });
