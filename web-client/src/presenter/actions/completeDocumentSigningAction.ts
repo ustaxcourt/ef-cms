@@ -1,12 +1,5 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-type PdfjsObj = { getData: () => Promise<unknown> };
-type PdfjsSource =
-  | PdfjsObj
-  | (() => PdfjsObj | null | undefined)
-  | null
-  | undefined;
-
 /**
  * generates an action for completing document signing
  * @param {object} providers the providers object
@@ -30,21 +23,15 @@ export const completeDocumentSigningAction = async ({
       state.pdfForSigning,
     );
     const { scale, x, y } = signatureData;
-    const pdfjsSource: PdfjsSource =
-      (
-        globalThis as typeof globalThis & {
-          pdfjsObj?: PdfjsSource;
-        }
-      ).pdfjsObj ?? get(state.pdfForSigning.pdfjsObj);
+    const windowWithPdfjs = window as Window & {
+      pdfjsObj?: { getData: () => Promise<unknown> };
+    };
+    const pdfjsObj: { getData: () => Promise<unknown> } | null =
+      windowWithPdfjs.pdfjsObj || get(state.pdfForSigning.pdfjsObj);
 
-    const pdfjsObjCandidate =
-      typeof pdfjsSource === 'function' ? pdfjsSource() : pdfjsSource;
-
-    if (!pdfjsObjCandidate) {
+    if (!pdfjsObj) {
       throw new Error('pdfjsObj is required to complete document signing.');
     }
-
-    const pdfjsObj = pdfjsObjCandidate;
 
     // generate signed document to bytes
     const signedPdfBytes = await applicationContext
