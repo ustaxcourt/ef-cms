@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   git-shallow-clone: guitarrapc/git-shallow-clone@2.8.0
 
-efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.55
+efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.56
 
 parameters:
   run_build_and_deploy:
@@ -11,10 +11,6 @@ parameters:
 
   run_build_and_deploy_to_prod:
     default: true
-    type: boolean
-
-  run_build_and_deploy_minimal:
-    default: false
     type: boolean
 
   run_glue_to_test:
@@ -128,8 +124,6 @@ jobs:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     resource_class: xlarge
-    environment:
-      DEPLOY_EMPTY_PERSISTENCE: << pipeline.parameters.run_build_and_deploy_minimal >>
     steps:
       - setup_remote_docker:
           version: docker23
@@ -176,27 +170,21 @@ jobs:
       - run:
           name: Test Users Setup
           command: |
-            if [ "${CIRCLE_BRANCH}" != "prod" ] && [ "$DEPLOY_EMPTY_PERSISTENCE" != "true" ]; then
+            if [ "${CIRCLE_BRANCH}" != "prod" ]; then
               ./scripts/user/setup-test-users.ts
             else
               echo "skipping…"
             fi
       - run:
-          name: Judge Users Setup
+          name: Users Setup
           command: |
-            if [ "${CIRCLE_BRANCH}" == "prod" ] || [ "$DEPLOY_EMPTY_PERSISTENCE" == "true" ]; then
+            if [ "${CIRCLE_BRANCH}" == "prod" ]; then
               echo "skipping…"
               exit 0
             fi
             if [ "${CIRCLE_BRANCH}" == "test" ]; then
-              SOURCE_DOMAIN=$(./scripts/elasticsearch/get-source-elasticsearch.sh "${ENV}")
-              ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
-                --domain-name "${SOURCE_DOMAIN}" \
-                --region "us-east-1" \
-                --query 'DomainStatus.Endpoint' \
-                --output text)
-              export ELASTICSEARCH_ENDPOINT="$ELASTICSEARCH_ENDPOINT"
-              ./scripts/user/setup-glued-judges.ts
+              export REGION="us-east-1"
+              ./scripts/user/setup-glued-users.ts
             else
               npx ts-node --transpile-only ./scripts/circleci/judge/bulkImportJudgeUsers.ts | tee bulk-import-log.txt
             fi
@@ -1001,20 +989,6 @@ workflows:
           <<: *only-prod
           requires:
             - disable-switch-colors-cron
-            - switch-colors
-
-  build-and-deploy-minimal:
-    when: << pipeline.parameters.run_build_and_deploy_minimal >>
-    jobs:
-      - deploy:
-          <<: *only-deployed-lower-environments
-      - switch-colors:
-          <<: *only-deployed-lower-environments
-          requires:
-            - deploy
-      - cleanup:
-          <<: *only-deployed-lower-environments
-          requires:
             - switch-colors
 
   glue-to-test:

@@ -916,17 +916,17 @@ export const SYSTEM_GENERATED_DOCUMENT_TYPES = {
   ...AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES_WITH_NAMES,
 };
 
-export const SYSTEM_AND_INTERNAL_DOCUMENT_TYPES = [
-  ...Object.values(SYSTEM_GENERATED_DOCUMENT_TYPES).map(doc => ({
-    ...doc,
-    label: doc.documentTitle,
-    value: doc.eventCode,
-  })),
+export const INTERNAL_DOCUMENT_TYPES_AND_NOTR = [
   ...INTERNAL_DOCUMENTS_ARRAY.map(doc => ({
     ...doc,
     label: doc.documentType,
     value: doc.eventCode,
   })),
+  {
+    ...SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfReceiptOfPetition,
+    label:
+      SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfReceiptOfPetition.documentType,
+  },
 ];
 
 export const AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES = flatten(
@@ -2092,3 +2092,7 @@ export const ALLOWED_EVENT_CODES = [
 export const PRO_SE_CHECKLIST = 'pro-se-checklist';
 
 export const NOT_PROVIDED = 'Not Provided';
+
+export const AWS_BATCH_POLLING_INTERVAL = 5000;
+
+export const AWS_BATCH_POLLING_TIMEOUT = 600000;

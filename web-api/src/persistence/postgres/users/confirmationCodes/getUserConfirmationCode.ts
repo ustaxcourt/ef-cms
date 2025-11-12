@@ -1,3 +1,4 @@
+import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
 import { getDbReader } from '@web-api/database';
 
 export const getUserConfirmationCode = async ({
@@ -9,7 +10,7 @@ export const getUserConfirmationCode = async ({
     reader
       .selectFrom('dwUserConfirmationCode')
       .where('userId', '=', userId)
-      .where('ttl', '>', Math.floor(Date.now() / 1000))
+      .where('ttl', '>', Number(formatNow(FORMATS.UNIX_TIMESTAMP_SECONDS)))
       .select(['confirmationCode'])
       .executeTakeFirst(),
   );
