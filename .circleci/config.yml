@@ -147,6 +147,13 @@ jobs:
           command: |
             ./scripts/env/env-for-circle.sh
       - run:
+          name: Ensure zsh is available
+          command: |
+            if ! command -v zsh >/dev/null 2>&1; then
+              sudo apt-get update
+              sudo apt-get install -y zsh
+            fi
+      - run:
           name: Build Docker Image
           command: |
             cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
@@ -164,17 +171,17 @@ jobs:
       - run:
           name: 'Deploy Info Cluster'
           environment:
-            DEPLOY_INFO_CLUSTER: << pipeline.parameters.deploy_info_cluster >>
-            PRIMARY_ENV: << pipeline.parameters.info_cluster_primary_env >>
-            CONSUMER_ENVS: << pipeline.parameters.info_cluster_consumer_env >>
+            RUN_INFO_CLUSTER_DEPLOY: << pipeline.parameters.deploy_info_cluster >>
+            INFO_CLUSTER_PRIMARY_ENV: << pipeline.parameters.info_cluster_primary_env >>
+            INFO_CLUSTER_CONSUMER_ENVS: << pipeline.parameters.info_cluster_consumer_env >>
           command: |
-            if [ -n "${DEPLOY_INFO_CLUSTER:-false}" != "true" ]; then
-              echo "Skipping Deploy Info Cluster"
+            if [ "${RUN_INFO_CLUSTER_DEPLOY:-false}" != "true" ]; then
+              echo "Skipping info cluster deploy (RUN_INFO_CLUSTER_DEPLOY not true)."
               exit 0
             fi
-            PRIMARY="${PRIMARY_ENV:-$ENV}"
-            echo "Running deploy info cluster script"
-            ./web-api/terraform/bin/deploy-info-cluster.sh "${PRIMARY}"
+            PRIMARY_ENV="${INFO_CLUSTER_PRIMARY_ENV:-$ENV}"
+            echo "Running deploy info cluster script for ${PRIMARY_ENV}"
+            zsh ./web-api/terraform/bin/deploy-info-cluster.sh "${PRIMARY_ENV}"
       - run:
           no_output_timeout: 20m
           name: 'Deploy - All Color Terraform'

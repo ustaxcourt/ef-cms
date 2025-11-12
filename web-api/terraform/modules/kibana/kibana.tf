@@ -117,6 +117,13 @@ resource "aws_elasticsearch_domain_policy" "kibana_access" {
       },
       "Action": "es:ESHttp*",
       "Resource":"${aws_opensearch_domain.efcms-logs[0].arn}/*"
+    }, {
+      "Effect":"Allow",
+      "Principal": {
+        "AWS": ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
+      },
+      "Action": "es:*",
+      "Resource":"${aws_opensearch_domain.efcms-logs[0].arn}/*"
     }
   ]
 }

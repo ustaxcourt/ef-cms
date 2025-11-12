@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 # shellcheck disable=SC1071
 
 set -e
