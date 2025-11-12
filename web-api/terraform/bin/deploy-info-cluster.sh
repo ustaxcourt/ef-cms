@@ -21,11 +21,6 @@ SCRIPT_PATH="${(%):-%N}"
 SCRIPT_DIR="${SCRIPT_PATH:A:h}"
 REPO_ROOT="${SCRIPT_DIR}/../../.."
 
-cd "${REPO_ROOT}" || {
-  log_error "Failed to change directory to repo root from ${SCRIPT_DIR}"
-  exit 1
-}
-
 if [ $# -lt 1 ]; then
   log_error "Insufficient arguments provided."
   echo "Usage: $0 <primary-env> [base-domain] [consumer1 consumer2 ...]" >&2
@@ -78,7 +73,7 @@ deploy_primary() {
     exit 1
   }
   # shellcheck disable=SC1091
-  . "${REPO_ROOT}/scripts/env/set-env.zsh" "${env}" || {
+  . ./scripts/env/set-env.zsh "${env}" || {
     log_error "Failed to primary switch environment: ${env}"
     exit 1
     }
@@ -160,7 +155,7 @@ deploy_consumer() {
     exit 1
   }
   # shellcheck disable=SC1091
-  . "${REPO_ROOT}/scripts/env/set-env.zsh" "${env}" || {
+  . ./scripts/env/set-env.zsh "${env}" || {
     log_error "Failed to consumer switch environment: ${env}"
     exit 1
     }

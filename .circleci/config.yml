@@ -62,7 +62,7 @@ parameters:
     type: boolean
 
   info_cluster_primary_env:
-    default: 'exp6'
+    default: 'experimental6'
     type: string
 
   info_cluster_consumer_env:
