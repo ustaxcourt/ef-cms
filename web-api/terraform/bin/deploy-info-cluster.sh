@@ -68,9 +68,10 @@ deploy_primary() {
   local env="$1"
   local domain="$2"
   log_info "Switching to primary environment: ${env}"
+  log_info "Current working directory: $(pwd)"
 
   # shellcheck disable=SC1091
-  . ./scripts/env/set-env.zsh "${env}" || {
+  . "${REPO_ROOT}/scripts/env/set-env.zsh" "${env}" || {
     log_error "Failed to primary switch environment: ${env}"
     exit 1
     }
@@ -145,7 +146,7 @@ deploy_consumer() {
   log_info "Switching to consumer environment: ${env}"
 
   # shellcheck disable=SC1091
-  . ./scripts/env/set-env.zsh "${env}" || {
+  . "${REPO_ROOT}/scripts/env/set-env.zsh" "${env}" || {
     log_error "Failed to consumer switch environment: ${env}"
     exit 1
     }
