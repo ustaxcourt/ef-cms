@@ -13,13 +13,13 @@ popd || exit
 [ -z "${NUM_DAYS_TO_KEEP_LOGS}" ] && echo "You must set NUM_DAYS_TO_KEEP_LOGS as an environment variable" && exit 1
 [ -z "${ES_LOGS_ENGINE_VERSION}" ] && echo "You must set ES_LOGS_ENGINE_VERSION as an environment variable" && exit 1
 
+ES_INFO_CLUSTER_CREATE="${ES_INFO_CLUSTER_CREATE:-false}"
+
 if [[ -n "${ES_INFO_CLUSTER_PRIMARY_ENV:-}" ]] && [[ "${ES_INFO_CLUSTER_PRIMARY_ENV}" == "${ENV}" ]]; then
   ES_INFO_CLUSTER_CREATE="true"
 elif [[ -n "${PRIMARY_ENV:-}" ]] && [[ "${PRIMARY_ENV}" == "${ENV}" ]]; then
   ES_INFO_CLUSTER_CREATE="true"
 fi
-
-ES_INFO_CLUSTER_CREATE="${ES_INFO_CLUSTER_CREATE:-false}"
 
 if [ "${ES_INFO_CLUSTER_CREATE}" = "true" ]; then
   [ -z "${ES_LOGS_EBS_VOLUME_SIZE_GB}" ] && echo "You must set ES_LOGS_EBS_VOLUME_SIZE_GB as an environment variable" && exit 1
@@ -27,9 +27,9 @@ if [ "${ES_INFO_CLUSTER_CREATE}" = "true" ]; then
   [ -z "${ES_LOGS_INSTANCE_TYPE}" ] && echo "You must set ES_LOGS_INSTANCE_TYPE as an environment variable" && exit 1
   echo "ES Info Cluster will be created"
 else
-  [ -z "${ES_INFO_CLUSTER_SHARED_CLUSTER_ARN}" ] && echo "You must set ES_INFO_CLUSTER_SHARED_CLUSTER_ARN as an environment variable" && exit 1
-  [ -z "${ES_INFO_CLUSTER_SHARED_CLUSTER_ENDPOINT}" ] && echo "You must set ES_INFO_CLUSTER_SHARED_CLUSTER_ENDPOINT as an environment variable" && exit 1
-  echo "Using shared ES Info Cluster at ARN: ${ES_INFO_CLUSTER_SHARED_CLUSTER_ARN} and Endpoint: ${ES_INFO_CLUSTER_SHARED_CLUSTER_ENDPOINT}"
+#  [ -z "${ES_INFO_CLUSTER_SHARED_CLUSTER_ARN}" ] && echo "You must set ES_INFO_CLUSTER_SHARED_CLUSTER_ARN as an environment variable" && exit 1
+#  [ -z "${ES_INFO_CLUSTER_SHARED_CLUSTER_ENDPOINT}" ] && echo "You must set ES_INFO_CLUSTER_SHARED_CLUSTER_ENDPOINT as an environment variable" && exit 1
+#  echo "Using shared ES Info Cluster at ARN: ${ES_INFO_CLUSTER_SHARED_CLUSTER_ARN} and Endpoint: ${ES_INFO_CLUSTER_SHARED_CLUSTER_ENDPOINT}"
   ES_LOGS_EBS_VOLUME_SIZE_GB="${ES_LOGS_EBS_VOLUME_SIZE_GB:-10}"
   ES_LOGS_INSTANCE_COUNT="${ES_LOGS_INSTANCE_COUNT:-1}"
   ES_LOGS_INSTANCE_TYPE="${ES_LOGS_INSTANCE_TYPE:-m5.large.search}"
@@ -86,7 +86,7 @@ export TF_VAR_es_logs_engine_version="$ES_LOGS_ENGINE_VERSION"
 export TF_VAR_es_info_cluster_create="${ES_INFO_CLUSTER_CREATE}"
 export TF_VAR_es_info_cluster_shared_cluster_arn="${ES_INFO_CLUSTER_SHARED_CLUSTER_ARN}"
 export TF_VAR_es_info_cluster_shared_cluster_endpoint="${ES_INFO_CLUSTER_SHARED_CLUSTER_ENDPOINT}"
-export TF_VAR_es_info_cluster_shared_cluster_account_ids="${ES_INFO_CLUSTER_SHARED_CLUSTER_ACCOUNT_IDS:-}"
+export TF_VAR_es_info_cluster_shared_cluster_account_ids="${LOWER_ENV_ACCOUNT_IDS}"
 
 npm run build:assets
 
