@@ -72,6 +72,8 @@ deploy_primary() {
     log_error "Failed to change directory to repo root."
     exit 1
   }
+  export DEFAULT_ORG="${DEFAULT_ORG:-ustc}"
+  export DEFAULT_ENV="${DEFAULT_ENV:-local}"
   # shellcheck disable=SC1091
   . ./scripts/env/set-env.zsh "${env}" || {
     log_error "Failed to primary switch environment: ${env}"
@@ -154,6 +156,8 @@ deploy_consumer() {
     log_error "Failed to change directory to repo root."
     exit 1
   }
+  export DEFAULT_ORG="${DEFAULT_ORG:-ustc}"
+  export DEFAULT_ENV="${DEFAULT_ENV:-local}"
   # shellcheck disable=SC1091
   . ./scripts/env/set-env.zsh "${env}" || {
     log_error "Failed to consumer switch environment: ${env}"
