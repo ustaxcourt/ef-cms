@@ -26,13 +26,13 @@ if [ "${ES_INFO_CLUSTER_CREATE}" = "true" ]; then
   [ -z "${ES_LOGS_INSTANCE_COUNT}" ] && echo "You must set ES_LOGS_INSTANCE_COUNT as an environment variable" && exit 1
   [ -z "${ES_LOGS_INSTANCE_TYPE}" ] && echo "You must set ES_LOGS_INSTANCE_TYPE as an environment variable" && exit 1
   echo "ES Info Cluster will be created"
-else
 #  [ -z "${ES_INFO_CLUSTER_SHARED_CLUSTER_ARN}" ] && echo "You must set ES_INFO_CLUSTER_SHARED_CLUSTER_ARN as an environment variable" && exit 1
 #  [ -z "${ES_INFO_CLUSTER_SHARED_CLUSTER_ENDPOINT}" ] && echo "You must set ES_INFO_CLUSTER_SHARED_CLUSTER_ENDPOINT as an environment variable" && exit 1
 #  echo "Using shared ES Info Cluster at ARN: ${ES_INFO_CLUSTER_SHARED_CLUSTER_ARN} and Endpoint: ${ES_INFO_CLUSTER_SHARED_CLUSTER_ENDPOINT}"
   ES_LOGS_EBS_VOLUME_SIZE_GB="${ES_LOGS_EBS_VOLUME_SIZE_GB:-10}"
   ES_LOGS_INSTANCE_COUNT="${ES_LOGS_INSTANCE_COUNT:-1}"
   ES_LOGS_INSTANCE_TYPE="${ES_LOGS_INSTANCE_TYPE:-m5.large.search}"
+    echo "ES Info Cluster will be created"
 fi
 ../../../../scripts/verify-terraform-version.sh
 
