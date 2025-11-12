@@ -17,8 +17,10 @@ log_success() {
   echo "[SUCCESS] $*" >&2
 }
 
-SCRIPT_DIR=${0:A:h}
+SCRIPT_PATH="${(%):-%N}"
+SCRIPT_DIR="${SCRIPT_PATH:A:h}"
 REPO_ROOT="${SCRIPT_DIR}/../../.."
+
 cd "${REPO_ROOT}" || {
   log_error "Failed to change directory to repo root from ${SCRIPT_DIR}"
   exit 1
@@ -71,11 +73,16 @@ deploy_primary() {
   log_info "Current working directory: $(pwd)"
 
   set +u
+  pushd "${REPO_ROOT}" >/dev/null || {
+    log_error "Failed to change directory to repo root."
+    exit 1
+  }
   # shellcheck disable=SC1091
   . "${REPO_ROOT}/scripts/env/set-env.zsh" "${env}" || {
     log_error "Failed to primary switch environment: ${env}"
     exit 1
     }
+  popd >/dev/null || true
   set -u
 
   if [[ -z "${AWS_PROFILE:-}" ]]; then
@@ -148,11 +155,16 @@ deploy_consumer() {
   log_info "Switching to consumer environment: ${env}"
 
   set +u
+  pushd "${REPO_ROOT}" >/dev/null || {
+    log_error "Failed to change directory to repo root."
+    exit 1
+  }
   # shellcheck disable=SC1091
   . "${REPO_ROOT}/scripts/env/set-env.zsh" "${env}" || {
     log_error "Failed to consumer switch environment: ${env}"
     exit 1
     }
+  popd >/dev/null || true
   set -u
 
   if [[ -z "${AWS_PROFILE:-}" ]]; then
