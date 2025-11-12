@@ -70,11 +70,13 @@ deploy_primary() {
   log_info "Switching to primary environment: ${env}"
   log_info "Current working directory: $(pwd)"
 
+  set +u
   # shellcheck disable=SC1091
   . "${REPO_ROOT}/scripts/env/set-env.zsh" "${env}" || {
     log_error "Failed to primary switch environment: ${env}"
     exit 1
     }
+  set -u
 
   if [[ -z "${AWS_PROFILE:-}" ]]; then
     if [[ "${env}" == ustc-* ]]; then
@@ -145,11 +147,13 @@ deploy_consumer() {
   local shared_arn="$4"
   log_info "Switching to consumer environment: ${env}"
 
+  set +u
   # shellcheck disable=SC1091
   . "${REPO_ROOT}/scripts/env/set-env.zsh" "${env}" || {
     log_error "Failed to consumer switch environment: ${env}"
     exit 1
     }
+  set -u
 
   if [[ -z "${AWS_PROFILE:-}" ]]; then
     if [[ "${env}" == ustc-* ]]; then
