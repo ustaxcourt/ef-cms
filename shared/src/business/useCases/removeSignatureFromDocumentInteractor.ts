@@ -50,7 +50,6 @@ export const removeSignatureFromDocumentInteractor = async (
     .getPersistenceGateway()
     .getDocument({
       applicationContext,
-      // @ts-ignore
       key: docketEntryToUnsign.documentIdBeforeSignature,
       useTempBucket: false,
     });
