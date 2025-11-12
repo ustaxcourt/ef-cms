@@ -178,7 +178,7 @@ jobs:
             echo "RUN_INFO_CLUSTER_DEPLOY: ${RUN_INFO_CLUSTER_DEPLOY}"
             echo "INFO_CLUSTER_PRIMARY_ENV: ${INFO_CLUSTER_PRIMARY_ENV}"
             echo "INFO_CLUSTER_CONSUMER_ENVS: ${INFO_CLUSTER_CONSUMER_ENVS}"
-            if [ "${RUN_INFO_CLUSTER_DEPLOY:-false}" != 'true' ]; then
+            if [ "${RUN_INFO_CLUSTER_DEPLOY:-0}" != "1" ] && [ "${RUN_INFO_CLUSTER_DEPLOY}" != "true" ]; then
               echo 'Skipping info cluster deploy (RUN_INFO_CLUSTER_DEPLOY not true).'
               exit 0
             fi
