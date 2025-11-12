@@ -175,8 +175,11 @@ jobs:
             INFO_CLUSTER_PRIMARY_ENV: << pipeline.parameters.info_cluster_primary_env >>
             INFO_CLUSTER_CONSUMER_ENVS: << pipeline.parameters.info_cluster_consumer_env >>
           command: |
-            if [ "${RUN_INFO_CLUSTER_DEPLOY:-false}" != "true" ]; then
-              echo "Skipping info cluster deploy (RUN_INFO_CLUSTER_DEPLOY not true)."
+            echo "RUN_INFO_CLUSTER_DEPLOY: ${RUN_INFO_CLUSTER_DEPLOY}"
+            echo "INFO_CLUSTER_PRIMARY_ENV: ${INFO_CLUSTER_PRIMARY_ENV}"
+            echo "INFO_CLUSTER_CONSUMER_ENVS: ${INFO_CLUSTER_CONSUMER_ENVS}"
+            if [ "${RUN_INFO_CLUSTER_DEPLOY:-false}" != 'true' ]; then
+              echo 'Skipping info cluster deploy (RUN_INFO_CLUSTER_DEPLOY not true).'
               exit 0
             fi
             PRIMARY_ENV="${INFO_CLUSTER_PRIMARY_ENV:-$ENV}"
