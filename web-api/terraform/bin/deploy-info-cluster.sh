@@ -74,6 +74,7 @@ deploy_primary() {
     exit 1
   }
   export DEFAULT_ENV="${DEFAULT_ENV:-local}"
+  export DEFAULT_ORG="${DEFAULT_ORG:-ustc}"
 
   . ./scripts/env/set-env.zsh ${env_input} || {
     log_error "Failed to primary switch environment: ${env_input}"
@@ -153,11 +154,8 @@ deploy_consumer() {
     log_error "Failed to change directory to repo root."
     exit 1
   }
-  if [[ ! -f "${REPO_ROOT}/scripts/env/environments/${env_input}.env" ]]; then
-    log_error "Environment configuration not found for ${env_input}. Please create scripts/env/environments/${env_input}.env"
-    popd >/dev/null || true
-    exit 1
-  fi
+  export DEFAULT_ENV="${DEFAULT_ENV:-local}"
+  export DEFAULT_ORG="${DEFAULT_ORG:-ustc}"
 
   . ./scripts/env/set-env.zsh ${env_input} || {
     log_error "Failed to consumer switch environment: ${env_input}"
