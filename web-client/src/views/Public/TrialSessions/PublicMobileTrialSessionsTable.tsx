@@ -2,12 +2,6 @@ import { PublicMobileTrialSessionsDataRow } from '@web-client/views/Public/Trial
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app-public.cerebral';
 import React from 'react';
-import {
-  createISODateAtStartOfDayEST,
-  createISODateString,
-  dateStringsCompared,
-  FORMATS,
-} from '@shared/business/utilities/DateHandler';
 
 type PublicMobileTrialSessionsTableProps = {};
 
@@ -15,36 +9,11 @@ const PublicMobileTrialSessionsTableDeps = {
   publicTrialSessionsHelper: state.publicTrialSessionsHelper,
 };
 
-const dateComparison = tsGroup => {
-  const firstEndDate = tsGroup?.rows?.[0]?.formattedEstimatedEndDate;
-
-  const todayIso = createISODateAtStartOfDayEST();
-  let compareIso;
-
-  if (firstEndDate) {
-    const firstEndIso = createISODateString(firstEndDate, FORMATS.MMDDYYYY);
-
-    compareIso = createISODateAtStartOfDayEST(firstEndIso);
-  } else {
-    const firstStartDate = tsGroup?.rows?.[0]?.startDate;
-
-    if (!firstStartDate) return false;
-
-    compareIso = createISODateAtStartOfDayEST(firstStartDate);
-  }
-
-  return dateStringsCompared(compareIso, todayIso) >= 0;
-};
-
 export const PublicMobileTrialSessionsTable = connect<
   PublicMobileTrialSessionsTableProps,
   typeof PublicMobileTrialSessionsTableDeps
 >(PublicMobileTrialSessionsTableDeps, function ({ publicTrialSessionsHelper }) {
-  const { groupedTrialSessions } = publicTrialSessionsHelper;
-
-  const filteredGroups = groupedTrialSessions.filter(tsGroup =>
-    dateComparison(tsGroup),
-  );
+  const { filteredGroups } = publicTrialSessionsHelper;
 
   return (
     <>
