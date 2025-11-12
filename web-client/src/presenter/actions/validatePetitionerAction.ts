@@ -16,7 +16,7 @@ const checkEmails = (
     .map(p => (p.email || '').toLowerCase())
     .includes((confirmEmail || '').toLowerCase());
 
-  if ((confirmEmail && pendingMatchesConfirm) || currentMatchesConfirm) {
+  if (confirmEmail && (pendingMatchesConfirm || currentMatchesConfirm)) {
     errors.confirmEmail =
       'This email is already associated with another petitioner on this case. Please use a different email address.';
   }
