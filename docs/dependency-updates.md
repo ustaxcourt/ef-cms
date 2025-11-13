@@ -52,6 +52,7 @@ When updating Node.js, keep in mind:
 - Only update to newer patch or minor versions within the current major version
 - Do not update to odd-numbered releases since they become unsupported after six months
 - Do not update to the next even-numbered major version until it enters Active LTS status
+- Do not update to the next even-numbered major version until it is offically supported by AWS Lambda. [Supported Runtimes](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html)
 
 To update Node.js:
 
@@ -213,6 +214,12 @@ Below is a list of dependencies that are locked down due to known issues with se
 - Peer-dependency tar-fs has high security vulnerability but this shouldn't affect us as far as we are aware of.
 - On October 27th, 2025, attempted to update puppeteer to 24.23.1 and @sparticuz/chromium to 141.0.0. However, this caused PDF visual regression tests to fail with pixel differences of 0.5-1.3% due to rendering engine changes in the newer Chromium version. The updates were reverted to maintain test stability.
 - On October 27th, 2025, successfully updated @types/aws-lambda from 8.10.155 to 8.10.156. This required changing `AttributeValueWithName` in `processStreamUtilities.ts` from an `interface extends` to a `type` with intersection (`&`) because the new version of `AttributeValue` is no longer extendable by interfaces.
+- On November 11th, 2025, attempted to upgrade to NodeJS v24.X. This caused an issue in the pdf-generation lambda function as puppeteer was no longer able able to launch chromium. Recieved an error stating 
+  ```
+  /tmp/chromium: error while loading shared libraries: libnspr4.so: cannot open shared object file: No such file or directory
+  ```
+  Researching this error results in some threads that suggest the error is caused by the lambda layer that puppeteer and chromium are stored on. Reverting to NodeJS V22.X resolved this issue.
+  At the time this upgrade was attempted, the NodeJS v24.X container for lambda was only in a beta/preview build. Hopefully this issue will not occur once this version is offically supported.
 
 ### ws, 3rd party dependency of Cerebral
 
