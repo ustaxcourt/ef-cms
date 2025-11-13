@@ -1,7 +1,7 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { StringDecoder } from 'string_decoder';
 
-export const removePdf = async ({
+const removePdf = async ({
   applicationContext,
   key,
   message = 'PDF Error',

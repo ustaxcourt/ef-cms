@@ -20,11 +20,7 @@ export const submitAddPaperFilingAction = async ({
   const clientConnectionId = get(state.clientConnectionId);
   const isFileAttached = get(state.form.isFileAttached) || isFileAttachedNow;
 
-  let { docketEntryId } = props;
-
-  if (!isFileAttached) {
-    docketEntryId = applicationContext.getUniqueId();
-  }
+  const { documentStorageId } = props;
 
   let documentMetadata = omit(
     {
@@ -46,7 +42,7 @@ export const submitAddPaperFilingAction = async ({
     .addPaperFilingInteractor(applicationContext, {
       clientConnectionId,
       consolidatedGroupDocketNumbers: docketNumbers,
-      docketEntryId,
+      documentStorageId,
       documentMetadata,
       isSavingForLater,
     });

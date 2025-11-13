@@ -2,21 +2,21 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const countPagesInDocument = async ({
   applicationContext,
-  docketEntryId,
+  documentStorageId,
   documentBytes,
 }: {
   applicationContext: ServerApplicationContext;
-  docketEntryId?: string;
+  documentStorageId?: string;
   documentBytes?: Uint8Array;
 }): Promise<number> => {
   let bytes;
 
   if (documentBytes) {
     bytes = documentBytes;
-  } else if (docketEntryId) {
+  } else if (documentStorageId) {
     bytes = await applicationContext.getPersistenceGateway().getDocument({
       applicationContext,
-      key: docketEntryId,
+      key: documentStorageId,
     });
   }
   const { PDFDocument } = await applicationContext.getPdfLib();

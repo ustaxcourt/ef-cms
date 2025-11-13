@@ -8,13 +8,12 @@ export const getPDFForPreviewTabAction = async ({
   if (props.file.name) {
     return props;
   }
-  const { docketEntryId } = props.file;
   const docketNumber = get(state.caseDetail.docketNumber);
 
   const pdfObj = await applicationContext
     .getUseCases()
     .loadPDFForPreviewInteractor(applicationContext, {
-      docketEntryId,
+      documentStorageId: props.documentStorageId,
       docketNumber,
     });
   return { file: pdfObj };

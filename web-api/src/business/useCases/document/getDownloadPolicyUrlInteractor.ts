@@ -29,9 +29,15 @@ export const getDownloadPolicyUrlInteractor = async (
   }
 
   const caseEntity = new Case(caseData, { authorizedUser });
-  const docketEntryEntity = caseEntity.getDocketEntryById({
+  
+  let docketEntryEntity = caseEntity.getDocketEntryById({
     docketEntryId: key,
   });
+  if (!docketEntryEntity) {
+    docketEntryEntity = caseEntity.docketEntries.find(de => {
+      return de.documentStorageId === key;
+    });
+  }
 
   if (key.includes('.pdf')) {
     if (
@@ -77,7 +83,7 @@ export const getDownloadPolicyUrlInteractor = async (
 
   return applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
     applicationContext,
-    key,
+    key: docketEntryEntity!.documentStorageId,
   });
 };
 

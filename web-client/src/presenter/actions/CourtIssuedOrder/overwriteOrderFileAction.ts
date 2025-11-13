@@ -24,7 +24,7 @@ export const overwriteOrderFileAction = async ({
         applicationContext,
         {
           documentFile: primaryDocumentFile,
-          fileIdToOverwrite: documentToEdit.docketEntryId,
+          fileIdToOverwrite: documentToEdit.documentStorageId,
         },
         user,
       );

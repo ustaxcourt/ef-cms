@@ -36,7 +36,7 @@ export const saveCaseDetailInternalEditAction = async ({
           .getUseCases()
           .uploadDocumentAndMakeSafeInteractor(applicationContext, {
             document: fileUploadProgressMap[key].file,
-            key: oldPetitionDocument.docketEntryId,
+            key: oldPetitionDocument.documentStorageId,
             onUploadProgress: fileUploadProgressMap[key].uploadProgress,
           });
       } else {

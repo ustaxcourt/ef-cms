@@ -33,7 +33,6 @@ const onFileUploadedSuccess = [
   submitCourtIssuedOrderAction,
   setDefaultDraftDocumentIdAction,
   setCaseAction,
-  setDefaultDraftDocumentIdAction,
   getFileExternalDocumentAlertSuccessAction,
   setAlertSuccessAction,
   setSaveAlertsForNavigationAction,

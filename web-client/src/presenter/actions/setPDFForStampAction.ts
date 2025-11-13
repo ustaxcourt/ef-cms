@@ -13,14 +13,14 @@ export const setPDFForStampAction = async ({
   props,
   store,
 }: ActionProps) => {
-  const { caseDetail, docketEntryId } = props;
+  const { caseDetail, docketEntryId, documentStorageId } = props;
 
   store.set(state.pdfForSigning.docketEntryId, docketEntryId);
 
   const pdfObj: PDFDocumentProxy = await applicationContext
     .getUseCases()
     .loadPDFForSigningInteractor(applicationContext, {
-      docketEntryId,
+      documentStorageId,
       docketNumber: caseDetail?.docketNumber,
       onlyCover: true,
     });

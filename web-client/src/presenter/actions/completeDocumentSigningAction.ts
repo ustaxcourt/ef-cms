@@ -60,7 +60,7 @@ export const completeDocumentSigningAction = async ({
         nameForSigning,
         originalDocketEntryId,
         parentMessageId,
-        signedDocketEntryId: signedDocumentFromUploadId,
+        signedDocumentStorageId: signedDocumentFromUploadId,
       }));
   }
 
