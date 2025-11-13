@@ -51,10 +51,6 @@ module "kibana" {
   log_group_environments                     = var.log_group_environments
   number_of_days_to_keep_info_logs           = var.number_of_days_to_keep_info_logs
   log_snapshot_bucket_name                   = var.log_snapshot_bucket_name
-  es_info_cluster_create                     = var.es_info_cluster_create
-  es_info_cluster_shared_cluster_endpoint    = var.es_info_cluster_shared_cluster_endpoint
-  es_info_cluster_shared_cluster_arn         = var.es_info_cluster_shared_cluster_arn
-  es_info_cluster_shared_cluster_account_ids = var.es_info_cluster_shared_cluster_account_ids != "" ? split(",", var.es_info_cluster_shared_cluster_account_ids) : [  ]
 }
 
 module "dawson-developer-permissions" {

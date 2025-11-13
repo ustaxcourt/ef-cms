@@ -45,29 +45,3 @@ variable "lower_env_restore_roles" {
 variable "es_logs_engine_version" {
   type = string
 }
-
-variable "es_info_cluster_create" {
-  default = false
-  description = "Determines whether to create an info opensearch or not"
-  type = bool
-}
-
-variable "es_info_cluster_shared_cluster_endpoint" {
-  default = ""
-  description = "Endpoint of info cluster opensearch (used when es_info_cluster_create is false)"
-  type = string
-}
-
-variable "es_info_cluster_shared_cluster_arn" {
-  default = ""
-  description = "ARN of info cluster opensearch (used when es_info_cluster_create is false)"
-  type = string
-}
-
-variable "es_info_cluster_shared_cluster_account_ids" {
-  default = ""
-  description = "A comma separated list of AWS account that are consumers of the info cluster"
-  type = string
-}
-
-
