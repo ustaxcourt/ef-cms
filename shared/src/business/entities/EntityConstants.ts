@@ -1940,12 +1940,23 @@ export const MINUTE_SHEET_FORM_SECTION_MAP = {
   witnessesSection: 'witnessesSection',
 } as const;
 
-export const TRIAL_HEARING_OPTIONS = {
+export const TRIAL_OPTIONS = {
   trial: 'Trial',
-  hearing: 'Hearing',
   partialTrial: 'Partial Trial',
   furtherTrial: 'Further Trial',
+} as const;
+export type TrialOption = keyof typeof TRIAL_OPTIONS;
+
+export const HEARING_OPTIONS = {
+  hearing: 'Hearing',
+  motionHearing: 'Motion Hearing',
   furtherHearing: 'Further Hearing',
+} as const;
+export type HearingOption = keyof typeof HEARING_OPTIONS;
+
+export const TRIAL_HEARING_OPTIONS = {
+  ...TRIAL_OPTIONS,
+  ...HEARING_OPTIONS,
 } as const;
 export type TrialHearingOption = keyof typeof TRIAL_HEARING_OPTIONS;
 
@@ -2031,6 +2042,7 @@ export const ACTION_STATUS_OPTIONS = {
   seeOrder: 'See Order',
   cav: 'CAV',
   denied: 'Denied',
+  deniedAsMoot: 'Denied as Moot',
   granted: 'Granted',
   filed: 'Filed',
   lodged: 'Lodged',
