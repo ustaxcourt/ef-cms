@@ -17,6 +17,56 @@ log_success() {
   echo "[SUCCESS] $*" >&2
 }
 
+switch_environment() {
+  local env_name="$1"
+
+  set +u
+  pushd "${REPO_ROOT}" >/dev/null || {
+    log_error "Failed to change directory to repo root."
+    exit 1
+  }
+
+  export DEFAULT_ENV="${DEFAULT_ENV:-local}"
+  export DEFAULT_ORG=""
+
+  . ./scripts/env/set-env.zsh ${env_name} || {
+    log_error "Failed to switch environment: ${env_name}"
+    popd >/dev/null || true
+    set -u
+    exit 1
+  }
+
+  popd >/dev/null || true
+  set -u
+}
+
+ensure_aws_profile() {
+  local env_name="$1"
+
+  if [[ -z "${AWS_PROFILE:-}" ]]; then
+    export AWS_PROFILE="${env_name}"
+    log_info "AWS_PROFILE not set. Defaulting to ${AWS_PROFILE}"
+  fi
+}
+
+run_account_specific_terraform() {
+  local env_name="$1"
+  local context="$2"
+
+  pushd web-api/terraform/applyables/account-specific >/dev/null || {
+    log_error "Failed to change directory for Terraform applyables: ${context}"
+    exit 1
+  }
+
+  ../../bin/deploy-account-specific.sh || {
+    log_error "Failed to deploy account-specific Terraform for environment: ${env_name}"
+    popd >/dev/null
+    exit 1
+  }
+
+  popd >/dev/null
+}
+
 SCRIPT_PATH="${(%):-%N}"
 SCRIPT_DIR="${SCRIPT_PATH:A:h}"
 REPO_ROOT="${SCRIPT_DIR}/../../.."
@@ -68,25 +118,8 @@ deploy_primary() {
   log_info "Switching to primary environment: ${env_input}"
   log_info "Current working directory: $(pwd)"
 
-  set +u
-  pushd "${REPO_ROOT}" >/dev/null || {
-    log_error "Failed to change directory to repo root."
-    exit 1
-  }
-  export DEFAULT_ENV="${DEFAULT_ENV:-local}"
-  export DEFAULT_ORG="${DEFAULT_ORG:-ustc}"
-
-  . ./scripts/env/set-env.zsh ${env_input} || {
-    log_error "Failed to primary switch environment: ${env_input}"
-    exit 1
-    }
-  popd >/dev/null || true
-  set -u
-
-  if [[ -z "${AWS_PROFILE:-}" ]]; then
-    export AWS_PROFILE="${env_input}"
-    log_info "AWS_PROFILE not set. Defaulting to ${AWS_PROFILE}"
-  fi
+  switch_environment "${env_input}"
+  ensure_aws_profile "${env_input}"
 
   log_info "Writing secrets to primary environment: ${env_input}"
   ./scripts/secrets/create-account-secrets.ts \
@@ -98,16 +131,7 @@ deploy_primary() {
    }
 
   log_info "Deploying primary environment: ${env_input}"
-  pushd web-api/terraform/applyables/account-specific >/dev/null || {
-   log_error "Failed to primary change directory for Terraform applyables: ${env_input}"
-   exit 1
-  }
-
-   ../../bin/deploy-account-specific.sh || {
-    log_error "Failed to deploy primary environment: ${env_input}"
-    popd >/dev/null
-    exit 1
-  }
+  run_account_specific_terraform "${env_input}" "primary"
 
   log_info "Capturing primary info cluster endpoint and arn from Terraform"
 
@@ -149,25 +173,8 @@ deploy_consumer() {
 
   log_info "Switching to consumer environment: ${env_input}"
 
-  set +u
-  pushd "${REPO_ROOT}" >/dev/null || {
-    log_error "Failed to change directory to repo root."
-    exit 1
-  }
-  export DEFAULT_ENV="${DEFAULT_ENV:-local}"
-  export DEFAULT_ORG="${DEFAULT_ORG:-ustc}"
-
-  . ./scripts/env/set-env.zsh ${env_input} || {
-    log_error "Failed to consumer switch environment: ${env_input}"
-    exit 1
-    }
-  popd >/dev/null || true
-  set -u
-
-  if [[ -z "${AWS_PROFILE:-}" ]]; then
-    export AWS_PROFILE="${env_input}"
-    log_info "AWS_PROFILE not set. Defaulting to ${AWS_PROFILE}"
-  fi
+  switch_environment "${env_input}"
+  ensure_aws_profile "${env_input}"
 
   log_info "Writing secrets to consumer environment: ${env_input}"
   ./scripts/secrets/create-account-secrets.ts \
@@ -181,18 +188,8 @@ deploy_consumer() {
    }
 
   log_info "Deploying consumer environment: ${env_input}"
-  pushd web-api/terraform/applyables/account-specific >/dev/null || {
-   log_error "Failed to change consumer directory for Terraform applyables: ${env_input}"
-   exit 1
-  }
+  run_account_specific_terraform "${env_input}" "consumer"
 
-   ../../bin/deploy-account-specific.sh || {
-    log_error "Failed to deploy consumer environment: ${env_input}"
-    popd >/dev/null
-    exit 1
-  }
-
-  popd >/dev/null
   log_success "Consumer deployment complete for: ${env_input}"
 }
 
