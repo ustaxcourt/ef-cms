@@ -28,7 +28,7 @@ class v1ApiError extends Error {
     this.stack = error.stack;
   }
 
-  toJSON() {
+  toResponseBody() {
     return {
       message: this.message,
       statusCode: this.statusCode,
