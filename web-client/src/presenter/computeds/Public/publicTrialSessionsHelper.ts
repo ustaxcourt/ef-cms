@@ -12,6 +12,12 @@ import {
 } from '@web-client/presenter/computeds/trialSessionsHelper';
 import { getTrialCitiesGroupedByState } from '@shared/business/utilities/trialSession/trialCitiesGroupedByState';
 import { state } from '@web-client/presenter/app-public.cerebral';
+import {
+  createISODateAtStartOfDayEST,
+  createISODateString,
+  dateStringsCompared,
+  FORMATS,
+} from '@shared/business/utilities/DateHandler';
 
 export type PublicTrialSessionsHelperResults = {
   sessionTypeOptions: {
@@ -30,10 +36,7 @@ export type PublicTrialSessionsHelperResults = {
   totalPages: number;
   trialSessionsCount: number;
   trialSessionRows: (TrialSessionRow | TrialSessionWeek)[];
-  groupedTrialSessions: {
-    header: TrialSessionWeek;
-    rows: TrialSessionRow[];
-  }[];
+  filteredGroups: { header: TrialSessionWeek; rows: TrialSessionRow[] }[];
 };
 
 function areAnyFiltersModified(
@@ -80,6 +83,27 @@ function groupTrialSessions(
 }
 
 const PAGE_SIZE = 100;
+
+function dateComparison(tsGroup): boolean {
+  const firstEndDate = tsGroup?.rows?.[0]?.formattedEstimatedEndDate;
+
+  const todayIso = createISODateAtStartOfDayEST();
+  let compareIso;
+
+  if (firstEndDate) {
+    const firstEndIso = createISODateString(firstEndDate, FORMATS.MMDDYYYY);
+
+    compareIso = createISODateAtStartOfDayEST(firstEndIso);
+  } else {
+    const firstStartDate = tsGroup?.rows?.[0]?.startDate;
+
+    if (!firstStartDate) return false;
+
+    compareIso = createISODateAtStartOfDayEST(firstStartDate);
+  }
+
+  return dateStringsCompared(compareIso, todayIso) >= 0;
+}
 
 export const publicTrialSessionsHelper = (
   get: Get,
@@ -152,11 +176,13 @@ export const publicTrialSessionsHelper = (
     trialSessions: paginatedTrialSessions,
   });
 
-  const groupedTrialSessions = groupTrialSessions(trialSessionRows);
+  const filteredGroups = groupTrialSessions(trialSessionRows).filter(tsGroup =>
+    dateComparison(tsGroup),
+  );
 
   return {
+    filteredGroups,
     filtersHaveBeenModified,
-    groupedTrialSessions,
     sessionTypeOptions,
     totalPages: Math.ceil(filteredTrialSessions.length / PAGE_SIZE),
     trialCitiesByState,
