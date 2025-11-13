@@ -97,20 +97,33 @@ resource "aws_opensearch_domain" "efcms-logs" {
 }
 
 resource "aws_secretsmanager_secret" "info_cluster" {
+  count       = var.es_info_cluster_create ? 1 : 0
   name        = "info_cluster"
   description = "Stores info cluster information"
+
+  depends_on = [aws_opensearch_domain.efcms-logs]
+
 }
 
 resource "aws_secretsmanager_secret_version" "info_cluster" {
-  secret_id     = aws_secretsmanager_secret.info_cluster.id
+  count = var.es_info_cluster_create ? 1 : 0
+
+  secret_id = aws_secretsmanager_secret.info_cluster[0].id
   secret_string = jsonencode({
     endpoint = aws_opensearch_domain.efcms-logs[0].endpoint
-    arn = aws_opensearch_domain.efcms-logs[0].arn
+    arn      = aws_opensearch_domain.efcms-logs[0].arn
   })
+
+  depends_on = [aws_opensearch_domain.efcms-logs]
+
 }
 
 data "aws_secretsmanager_secret_version" "info_cluster" {
-  secret_id = aws_secretsmanager_secret_version.info_cluster
+  count = var.es_info_cluster_create ? 1 : 0
+
+  secret_id = aws_secretsmanager_secret_version.info_cluster[0].id
+
+  depends_on = [aws_opensearch_domain.efcms-logs]
 }
 
 resource "aws_elasticsearch_domain_policy" "kibana_access" {
@@ -233,7 +246,7 @@ resource "aws_cognito_identity_pool_roles_attachment" "log_viewers" {
 }
 
 locals {
-  instance_size_in_mb   = var.es_info_cluster_create ? aws_opensearch_domain.efcms-logs[0].ebs_options[0].volume_size * 1000 : 0
+  instance_size_in_mb = var.es_info_cluster_create ? aws_opensearch_domain.efcms-logs[0].ebs_options[0].volume_size * 1000 : 0
 
   info_cluster_consumer_lambda_arns = [
     for account_id in var.es_info_cluster_shared_cluster_account_ids :
