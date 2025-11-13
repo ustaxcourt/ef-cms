@@ -87,11 +87,6 @@ export TF_VAR_es_info_cluster_shared_cluster_arn="${ES_INFO_CLUSTER_SHARED_CLUST
 export TF_VAR_es_info_cluster_shared_cluster_endpoint="${ES_INFO_CLUSTER_SHARED_CLUSTER_ENDPOINT}"
 export TF_VAR_es_info_cluster_shared_cluster_account_ids="${LOWER_ENV_ACCOUNT_IDS:-}"
 
-echo "TF_VAR_es_info_cluster_create: ${TF_VAR_es_info_cluster_create}"
-echo "TF_VAR_es_info_cluster_shared_cluster_arn: ${TF_VAR_es_info_cluster_shared_cluster_arn}"
-echo "TF_VAR_es_info_cluster_shared_cluster_endpoint: ${TF_VAR_es_info_cluster_shared_cluster_endpoint}"
-echo "TF_VAR_es_info_cluster_shared_cluster_account_ids: ${TF_VAR_es_info_cluster_shared_cluster_account_ids}"
-
 npm run build:assets
 
 terraform init -upgrade -backend=true \
