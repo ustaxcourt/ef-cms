@@ -13,17 +13,16 @@ export const PublicMobileTrialSessionsTable = connect<
   PublicMobileTrialSessionsTableProps,
   typeof PublicMobileTrialSessionsTableDeps
 >(PublicMobileTrialSessionsTableDeps, function ({ publicTrialSessionsHelper }) {
-  const { groupedTrialSessions } = publicTrialSessionsHelper;
+  const { filteredGroups } = publicTrialSessionsHelper;
+
   return (
     <>
       <div className="grid-row margin-bottom-2 width-full flex-align-center"></div>
       <div className="width-full text-right">
         <span className="text-bold">Count:</span>{' '}
-        <span className="text-semibold">
-          {publicTrialSessionsHelper.trialSessionsCount}
-        </span>
+        <span className="text-semibold">{filteredGroups.length}</span>
       </div>
-      {publicTrialSessionsHelper.trialSessionRows.length === 0 && (
+      {filteredGroups.length === 0 && (
         <p>There are no trial sessions for the selected filters.</p>
       )}
       <div className="padding-1"></div>
@@ -36,7 +35,7 @@ export const PublicMobileTrialSessionsTable = connect<
           </tr>
         </thead>
         <tbody>
-          {groupedTrialSessions.map(tsGroup => {
+          {filteredGroups.map(tsGroup => {
             return (
               <tr
                 className="padding-0"
