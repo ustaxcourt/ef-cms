@@ -7,6 +7,7 @@ import { aggregatePartiesForService } from '@shared/business/utilities/aggregate
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
+import { countPagesInDocument } from '@web-api/business/useCaseHelper/countPagesInDocument';
 
 export const getDocumentFromDynamo = async ({
   docketEntryId,
@@ -80,12 +81,10 @@ export const fixRaceConditionServedInDrafts = async (
   }
 
   // might need to update number of page
-  const numberOfPages = await applicationContext
-    .getUseCaseHelpers()
-    .countPagesInDocument({
-      applicationContext,
-      docketEntryId,
-    });
+  const numberOfPages = await countPagesInDocument({
+    applicationContext,
+    documentStorageId: rawDocketEntry.documentStorageId,
+  });
   // set as served for all of the parties
 
   // set

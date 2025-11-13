@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import {
   AuthUser,
   UnknownAuthUser,
@@ -38,6 +39,7 @@ import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getUniqueId } from '@shared/sharedAppContext';
+import { countPagesInDocument } from '@web-api/business/useCaseHelper/countPagesInDocument';
 
 export const addDocketEntryForPaymentStatus = ({ caseEntity, user }) => {
   if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.PAID) {
@@ -391,12 +393,10 @@ const generateNoticeOfReceipt = async ({
   notrDocketEntry.servedPartiesCode = PARTIES_CODES.PETITIONER; //overwrite the served party code for the NOTR docket entry because this is a special one-off with special rules that don't follow the normal party code algorithm
   notrDocketEntry.setAsProcessingStatusAsCompleted();
 
-  notrDocketEntry.numberOfPages = await applicationContext
-    .getUseCaseHelpers()
-    .countPagesInDocument({
-      applicationContext,
-      documentBytes: combinedNotrPdfData,
-    });
+  notrDocketEntry.numberOfPages = await countPagesInDocument({
+    applicationContext,
+    documentBytes: combinedNotrPdfData,
+  });
 
   caseEntity.addDocketEntry(notrDocketEntry);
 

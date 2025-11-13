@@ -100,7 +100,10 @@ export const serveCourtIssuedDocument = async (
 
   docketEntryToServe.numberOfPages = await applicationContext
     .getUseCaseHelpers()
-    .countPagesInDocument({ applicationContext, docketEntryId });
+    .countPagesInDocument({
+      applicationContext,
+      documentStorageId: docketEntryToServe.documentStorageId,
+    });
 
   const user = await getUserById({ userId: authorizedUser.userId });
 
