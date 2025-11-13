@@ -25,6 +25,7 @@ const caveats: string[] = [
   'p-queue',
   'dwt',
   'uuid',
+  'sass',
 ];
 
 // Function to run a shell command and capture output, even if it has a non-zero exit code
