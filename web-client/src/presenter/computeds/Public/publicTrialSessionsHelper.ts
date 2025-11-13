@@ -36,10 +36,6 @@ export type PublicTrialSessionsHelperResults = {
   totalPages: number;
   trialSessionsCount: number;
   trialSessionRows: (TrialSessionRow | TrialSessionWeek)[];
-  groupedTrialSessions: {
-    header: TrialSessionWeek;
-    rows: TrialSessionRow[];
-  }[];
   filteredGroups: { header: TrialSessionWeek; rows: TrialSessionRow[] }[];
 };
 
@@ -180,16 +176,13 @@ export const publicTrialSessionsHelper = (
     trialSessions: paginatedTrialSessions,
   });
 
-  const groupedTrialSessions = groupTrialSessions(trialSessionRows);
-
-  const filteredGroups = groupedTrialSessions.filter(tsGroup =>
+  const filteredGroups = groupTrialSessions(trialSessionRows).filter(tsGroup =>
     dateComparison(tsGroup),
   );
 
   return {
     filteredGroups,
     filtersHaveBeenModified,
-    groupedTrialSessions,
     sessionTypeOptions,
     totalPages: Math.ceil(filteredTrialSessions.length / PAGE_SIZE),
     trialCitiesByState,
