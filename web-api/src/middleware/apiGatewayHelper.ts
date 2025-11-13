@@ -9,6 +9,7 @@ import { headerOverride } from '../lambdaWrapper';
 import { pick } from 'lodash';
 import jwt from 'jsonwebtoken';
 type LoggedError = ErrorWithStatusCode & {
+  toResponseBody?: () => any;
   toJSON?: () => any;
   skipLogging?: boolean;
 };
@@ -111,8 +112,18 @@ export const redirect = async (_event, fun, statusCode = 302) => {
  * @returns {object} an api gateway response object
  */
 export const sendError = (err: LoggedError) => {
+  let errorPayload;
+
+  if (err.toResponseBody) {
+    errorPayload = err.toResponseBody();
+  } else if (err.toJSON) {
+    errorPayload = err.toJSON();
+  } else {
+    errorPayload = err.message;
+  }
+
   return {
-    body: JSON.stringify(err.toJSON ? err.toJSON() : err.message),
+    body: JSON.stringify(errorPayload),
     headers: headerOverride,
     statusCode: err.statusCode || '400',
   };
