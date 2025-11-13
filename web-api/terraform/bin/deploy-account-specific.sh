@@ -19,6 +19,10 @@ if [[ -n "${PRIMARY_ENV:-}" ]] && [[ "${PRIMARY_ENV}" == "${ENV}" ]]; then
 else
   ES_INFO_CLUSTER_CREATE="${ES_INFO_CLUSTER_CREATE:-false}"
 fi
+echo "info cluster create"
+echo "${ES_INFO_CLUSTER_CREATE}"
+echo "${PRIMARY_ENV:-}"
+echo [[ "${ES_INFO_CLUSTER_CREATE}" == "true" ]]
 
 if [[ "${ES_INFO_CLUSTER_CREATE}" == "true" ]] || [[ "${ES_INFO_CLUSTER_CREATE}" == "1" ]]; then
   echo "ES Info Cluster will be created"
