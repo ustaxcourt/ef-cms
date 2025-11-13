@@ -9,9 +9,9 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
-import { Button } from '@web-client/ustc-ui/Button/Button';
 import _ from 'lodash';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
+import { Button } from '@web-client/dawson-ui/ui/button';
 
 export const EditDocketEntryMetaFormCourtIssued = connect(
   {
@@ -159,7 +159,7 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
             <div>
               {form.affectedDocketEntries.map((motion, i) => {
                 return (
-                  <div key={motion.arrayKey}>
+                  <div key={motion.arrayKey} className="tw:mb-[16px]">
                     <FormGroup
                       errorText={
                         validationErrors[
@@ -169,13 +169,12 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
                     >
                       <label
                         className="usa-label"
-                        htmlFor="related-motion"
+                        htmlFor="docketEntryid"
                         id="related-motion-label"
                       >
                         What motion is being acted on?
                       </label>
                       <SelectSearch
-                        className="usa-label"
                         aria-labelledby="related-motion-label"
                         data-testid="related-motion-type-search"
                         id="docketEntryid"
@@ -218,6 +217,7 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
                           `affectedDocketEntries-${i}-disposition`
                         ]
                       }
+                      className="tw:mb-[0px]"
                     >
                       <label
                         className="usa-label"
@@ -258,32 +258,35 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
                           validateCourtIssuedDocketEntrySequence();
                         }}
                       />
-
-                      <Button
-                        link
-                        icon="minus-circle"
-                        className="red-warning"
-                        onClick={() => {
-                          const motions = [...form.affectedDocketEntries];
-                          _.pullAt(motions, i);
-                          updateCourtIssuedDocketEntryFormValueSequence({
-                            key: 'affectedDocketEntries',
-                            value: motions,
-                          });
-                        }}
-                      >
-                        Remove Motion
-                      </Button>
-
-                      {form.affectedDocketEntries.length > 1 && <hr></hr>}
                     </FormGroup>
+                    {form.affectedDocketEntries.length > 1 && (
+                      <>
+                        <Button
+                          variant="destructiveTertiary"
+                          icon="minus-circle"
+                          className="tw:mt-[16px] tw:mb-[16px]"
+                          onClick={() => {
+                            const motions = [...form.affectedDocketEntries];
+                            _.pullAt(motions, i);
+                            updateCourtIssuedDocketEntryFormValueSequence({
+                              key: 'affectedDocketEntries',
+                              value: motions,
+                            });
+                          }}
+                        >
+                          Remove Motion
+                        </Button>
+                        <hr className="tw:m-[0px]"></hr>
+                      </>
+                    )}
                   </div>
                 );
               })}
 
               <Button
-                link
+                variant="primaryTertiary"
                 icon="plus-circle"
+                className="tw:mb-[16px]"
                 onClick={() => {
                   updateCourtIssuedDocketEntryFormValueSequence({
                     key: 'affectedDocketEntries',

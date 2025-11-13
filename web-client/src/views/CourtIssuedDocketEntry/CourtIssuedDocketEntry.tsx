@@ -1,4 +1,3 @@
-import { Button } from '../../ustc-ui/Button/Button';
 import { CancelDraftDocumentModal } from '../CancelDraftDocumentModal';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { ConfirmInitiateSaveModal } from '../ConfirmInitiateSaveModal';
@@ -21,6 +20,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import _ from 'lodash';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
+import { Button } from '@web-client/dawson-ui/ui/button';
 
 export const CourtIssuedDocketEntry = connect(
   {
@@ -203,7 +203,7 @@ export const CourtIssuedDocketEntry = connect(
                     <div>
                       {form.affectedDocketEntries.map((motion, i) => {
                         return (
-                          <div key={motion.arrayKey}>
+                          <div key={motion.arrayKey} className="tw:mb-[16px]">
                             <FormGroup
                               errorText={
                                 validationErrors[
@@ -213,14 +213,13 @@ export const CourtIssuedDocketEntry = connect(
                             >
                               <label
                                 className="usa-label"
-                                htmlFor="related-motion"
+                                htmlFor="affectedMotion"
                                 id="related-motion-label"
                                 data-testid="related-motion-label"
                               >
                                 What motion is being acted on?
                               </label>
                               <SelectSearch
-                                className="usa-label"
                                 aria-labelledby="related-motion-label"
                                 data-testid="related-motion-type-search"
                                 id="affectedMotion"
@@ -253,6 +252,7 @@ export const CourtIssuedDocketEntry = connect(
                                   `affectedDocketEntries-${i}-disposition`
                                 ]
                               }
+                              className="tw:mb-[0px]"
                             >
                               <label
                                 className="usa-label"
@@ -288,30 +288,38 @@ export const CourtIssuedDocketEntry = connect(
                                 }}
                               />
                             </FormGroup>
-                            <Button
-                              link
-                              icon="minus-circle"
-                              className="red-warning"
-                              onClick={() => {
-                                const motions = [...form.affectedDocketEntries];
-                                _.pullAt(motions, i);
-                                updateCourtIssuedDocketEntryFormValueSequence({
-                                  key: 'affectedDocketEntries',
-                                  value: motions,
-                                });
-                              }}
-                            >
-                              Remove Motion
-                            </Button>
-
-                            {form.affectedDocketEntries.length > 1 && <hr></hr>}
+                            {form.affectedDocketEntries.length > 1 && (
+                              <>
+                                <Button
+                                  variant="destructiveTertiary"
+                                  icon="minus-circle"
+                                  className="tw:mt-[16px] tw:mb-[16px]"
+                                  onClick={() => {
+                                    const motions = [
+                                      ...form.affectedDocketEntries,
+                                    ];
+                                    _.pullAt(motions, i);
+                                    updateCourtIssuedDocketEntryFormValueSequence(
+                                      {
+                                        key: 'affectedDocketEntries',
+                                        value: motions,
+                                      },
+                                    );
+                                  }}
+                                >
+                                  Remove Motion
+                                </Button>
+                                <hr className="tw:m-[0px]"></hr>
+                              </>
+                            )}
                           </div>
                         );
                       })}
 
                       <Button
-                        link
+                        variant="primaryTertiary"
                         icon="plus-circle"
+                        className="tw:mb-[16px]"
                         onClick={() => {
                           updateCourtIssuedDocketEntryFormValueSequence({
                             key: 'affectedDocketEntries',
@@ -443,6 +451,7 @@ export const CourtIssuedDocketEntry = connect(
                 <div className="margin-top-5 button-container">
                   {addCourtIssuedDocketEntryHelper.showSaveAndServeButton && (
                     <Button
+                      className="tw:mr-[1rem]"
                       data-testid="serve-to-parties-btn"
                       id="serve-to-parties-btn"
                       onClick={() => {
@@ -453,7 +462,8 @@ export const CourtIssuedDocketEntry = connect(
                     </Button>
                   )}
                   <Button
-                    secondary
+                    variant="secondary"
+                    className="tw:mr-[1rem]"
                     data-testid="save-docket-entry-button"
                     onClick={() => {
                       saveCourtIssuedDocketEntrySequence();
@@ -462,7 +472,8 @@ export const CourtIssuedDocketEntry = connect(
                     Save Entry
                   </Button>
                   <Button
-                    link
+                    className="tw:mr-[1rem]"
+                    variant="primaryTertiary"
                     id="cancel-button"
                     onClick={() => {
                       openCancelDraftDocumentModalSequence();
