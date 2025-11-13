@@ -54,9 +54,9 @@ export const validateNoticeOfWithdrawalAction = ({ get, path }) => {
     return path.error({
       alertError: {
         message:
-          'You cannot file a Notice of Withdrawal as Counsel because of the following:',
+          'You must file a Motion to Withdraw as Counsel because of the following:',
         title: 'Cannot file Notice of Withdrawal as Counsel',
-        messages: Object.values(errors),
+        messages: errors,
       },
     });
   }
