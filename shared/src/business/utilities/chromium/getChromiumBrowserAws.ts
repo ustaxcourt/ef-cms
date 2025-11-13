@@ -23,7 +23,9 @@ export const getChromiumBrowserAWS = async (): Promise<Browser> => {
           width: 1920,
         },
         dumpio: true,
-        executablePath: await chromium.executablePath(),
+        executablePath: await chromium.executablePath(
+          'https://github.com/Sparticuz/chromium/releases/download/v141.0.0/chromium-v141.0.0-pack.x64.tar',
+        ),
         headless: 'shell',
         env: {
           LD_LIBRARY_PATH: process.env.LD_LIBRARY_PATH, // be careful editing this; see 10658
