@@ -109,7 +109,7 @@ resource "aws_secretsmanager_secret_version" "info_cluster" {
   })
 }
 
-data "aws_secretsmanager_secret_version" "info_cluster_data" {
+data "aws_secretsmanager_secret_version" "info_cluster" {
   secret_id = aws_secretsmanager_secret_version.info_cluster
 }
 
@@ -234,8 +234,7 @@ resource "aws_cognito_identity_pool_roles_attachment" "log_viewers" {
 
 locals {
   instance_size_in_mb   = var.es_info_cluster_create ? aws_opensearch_domain.efcms-logs[0].ebs_options[0].volume_size * 1000 : 0
-  info_cluster_arn      = var.es_info_cluster_create ? aws_opensearch_domain.efcms-logs[0].arn : var.es_info_cluster_shared_cluster_arn
-  info_cluster_endpoint = var.es_info_cluster_create ? aws_opensearch_domain.efcms-logs[0].endpoint : var.es_info_cluster_shared_cluster_endpoint
+
   info_cluster_consumer_lambda_arns = [
     for account_id in var.es_info_cluster_shared_cluster_account_ids :
     "arn:aws:iam::${account_id}:role/lambda_elasticsearch_execution_role"
@@ -298,7 +297,7 @@ resource "aws_iam_role_policy" "lambda_elasticsearch_execution_policy" {
         "es:*"
       ],
       "Resource": [
-        "${local.info_cluster_arn}/*"
+        "${jsondecode(data.aws_secretsmanager_secret_version.info_cluster.secret_string)["arn"]}/*"
       ]
     }
   ]
@@ -313,7 +312,7 @@ module "logs_to_es" {
   lambda_name    = "LogsToElasticSearch_info"
   role           = aws_iam_role.lambda_elasticsearch_execution_role.arn
   environment = {
-    es_endpoint = jsondecode(data.aws_secretsmanager_secret_version.info_cluster_data.secret_string)["endpoint"]
+    es_endpoint = jsondecode(data.aws_secretsmanager_secret_version.info_cluster.secret_string)["endpoint"]
 
   }
   timeout     = "900"
