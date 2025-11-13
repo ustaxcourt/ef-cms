@@ -96,6 +96,23 @@ resource "aws_opensearch_domain" "efcms-logs" {
   }
 }
 
+resource "aws_secretsmanager_secret" "info_cluster" {
+  name        = "info_cluster"
+  description = "Stores info cluster information"
+}
+
+resource "aws_secretsmanager_secret_version" "info_cluster" {
+  secret_id     = aws_secretsmanager_secret.info_cluster.id
+  secret_string = jsonencode({
+    endpoint = aws_opensearch_domain.efcms-logs[0].endpoint
+    arn = aws_opensearch_domain.efcms-logs[0].arn
+  })
+}
+
+data "aws_secretsmanager_secret_version" "info_cluster_data" {
+  secret_id = aws_secretsmanager_secret_version.info_cluster
+}
+
 resource "aws_elasticsearch_domain_policy" "kibana_access" {
   count           = var.es_info_cluster_create ? 1 : 0
   domain_name     = aws_opensearch_domain.efcms-logs[0].domain_name
@@ -296,7 +313,8 @@ module "logs_to_es" {
   lambda_name    = "LogsToElasticSearch_info"
   role           = aws_iam_role.lambda_elasticsearch_execution_role.arn
   environment = {
-    es_endpoint = local.info_cluster_endpoint
+    es_endpoint = jsondecode(data.aws_secretsmanager_secret_version.info_cluster_data.secret_string)["endpoint"]
+
   }
   timeout     = "900"
   memory_size = "3008"
@@ -339,5 +357,4 @@ resource "aws_cloudwatch_log_subscription_filter" "cognito_authorizer_filter" {
   log_group_name  = "/aws/lambda/cognito_authorizer_lambda_${element(var.log_group_environments, count.index)}"
   depends_on      = [aws_lambda_permission.allow_cloudwatch]
 }
-
 

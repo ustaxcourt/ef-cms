@@ -43,18 +43,6 @@ fi
 deploy_primary() {
   log_info "Deploying primary environment: ${ENV}"
 
-  log_info "Deploying primary environment: ${ENV}"
-  pushd web-api/terraform/applyables/account-specific >/dev/null || {
-   log_error "Failed to change directory for Terraform applyables: ${ENV}"
-   exit 1
-  }
-
-   ../../bin/deploy-account-specific.sh || {
-    log_error "Failed to deploy primary environment: ${ENV}"
-    popd >/dev/null
-    exit 1
-  }
-
   log_info "Capturing primary info cluster endpoint and arn from Terraform"
 
   local endpoint

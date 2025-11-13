@@ -6,7 +6,7 @@ module "rotate_info_indices" {
   lambda_name    = "RotateInfoIndices"
   role           = aws_iam_role.lambda_elasticsearch_execution_role.arn
   environment = {
-    es_endpoint = local.info_cluster_endpoint
+    es_endpoint = jsondecode(data.aws_secretsmanager_secret_version.info_cluster_data.secret_string)["endpoint"]
     expiration  = var.number_of_days_to_keep_info_logs
   }
   timeout = "60"
