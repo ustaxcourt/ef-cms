@@ -12,6 +12,16 @@ import { setValidationErrorsAction } from '../actions/setValidationErrorsAction'
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validateSelectDocumentTypeAction } from '../actions/validateSelectDocumentTypeAction';
+import { isNoticeOfWithdrawalAction } from '../actions/isNoticeOfWithdrawalAction';
+import { validateNoticeOfWithdrawalAction } from '../actions/validateNoticeOfWithdrawalAction';
+import { setAlertErrorAction } from '../actions/setAlertErrorAction';
+
+const continueToFileDocumentSequence = [
+  setDocketNumberPropAction,
+  setDefaultFileDocumentFormValuesAction,
+  clearOtherIterationAction,
+  navigateToFileADocumentAction,
+];
 
 export const completeDocumentSelectSequence = [
   startShowValidationAction,
@@ -28,10 +38,17 @@ export const completeDocumentSelectSequence = [
     success: [
       clearAlertsAction,
       stopShowValidationAction,
-      setDocketNumberPropAction,
-      setDefaultFileDocumentFormValuesAction,
-      clearOtherIterationAction,
-      navigateToFileADocumentAction,
+      isNoticeOfWithdrawalAction,
+      {
+        yes: [
+          validateNoticeOfWithdrawalAction,
+          {
+            error: [setAlertErrorAction],
+            success: continueToFileDocumentSequence,
+          },
+        ],
+        no: continueToFileDocumentSequence,
+      },
     ],
   },
 ];
