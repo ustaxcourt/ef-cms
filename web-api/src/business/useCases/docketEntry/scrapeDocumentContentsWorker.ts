@@ -48,7 +48,7 @@ export const scrapeDocumentContentsWorker = async (
     .getPersistenceGateway()
     .getDocument({
       applicationContext,
-      key: docketEntryId,
+      key: docketEntryEntity.documentStorageId,
       useTempBucket: false,
     });
   applicationContext.logger.info(

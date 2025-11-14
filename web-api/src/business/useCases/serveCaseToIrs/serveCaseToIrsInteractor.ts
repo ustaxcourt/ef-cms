@@ -359,18 +359,19 @@ const generateNoticeOfReceipt = async ({
     pdfName: caseConfirmationPdfName,
   });
 
-  const notrDocketEntryId = getUniqueId();
+  const notrDocumentStorageId = getUniqueId();
   await applicationContext.getPersistenceGateway().uploadDocument({
     applicationContext,
     pdfData: Buffer.from(combinedNotrPdfData),
-    pdfName: notrDocketEntryId,
+    pdfName: notrDocumentStorageId,
   });
 
   let urlToReturn;
 
   const notrDocketEntry = new DocketEntry(
     {
-      docketEntryId: notrDocketEntryId,
+      docketEntryId: notrDocumentStorageId,
+      documentStorageId: notrDocumentStorageId,
       documentTitle:
         SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfReceiptOfPetition.documentTitle,
       documentType:
@@ -413,7 +414,7 @@ const generateNoticeOfReceipt = async ({
       .getPersistenceGateway()
       .getDownloadPolicyUrl({
         applicationContext,
-        key: notrDocketEntry.docketEntryId,
+        key: notrDocketEntry.documentStorageId,
         useTempBucket: false,
       }));
   }

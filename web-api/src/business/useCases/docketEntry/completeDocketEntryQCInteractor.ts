@@ -240,7 +240,7 @@ const completeDocketEntryQC = async (
         .getPersistenceGateway()
         .getDocument({
           applicationContext,
-          key: updatedDocketEntry.docketEntryId,
+          key: updatedDocketEntry.documentStorageId,
         });
 
       const noticeDoc = await PDFDocument.load(pdfData);
@@ -323,7 +323,7 @@ const completeDocketEntryQC = async (
       .getPersistenceGateway()
       .getDocument({
         applicationContext,
-        key: noticeUpdatedDocketEntry.docketEntryId,
+        key: noticeUpdatedDocketEntry.documentStorageId,
       });
 
     const newPdfData = await addServedStampToDocument({
@@ -334,7 +334,7 @@ const completeDocketEntryQC = async (
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       document: newPdfData,
-      key: noticeUpdatedDocketEntry.docketEntryId,
+      key: noticeUpdatedDocketEntry.documentStorageId,
     });
 
     const paperServiceResult = await applicationContext
