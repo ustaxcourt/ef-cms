@@ -1,7 +1,7 @@
+import { WrappedIcon } from '../../ustc-ui/Icon/Icon';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import React from 'react';
 import { RecentFiling } from '@shared/business/useCases/getRecentFilingsForUserInteractor';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 type RecentFilingsDocumentDisplayProps = {
   filing: RecentFiling;
@@ -23,21 +23,19 @@ const StatusIcons = ({
 }) => (
   <>
     {isStricken && (
-      <FontAwesomeIcon
+      <WrappedIcon
         icon="times-circle"
-        className="margin-right-05 text-secondary"
+        iconClass="margin-right-05 text-secondary"
         title="Stricken Document"
         aria-hidden="true"
-        data-testid="stricken-document-icon"
-      />
+        data-testid="stricken-document-icon" />
     )}
     {showProcessing && (
-      <FontAwesomeIcon
+      <WrappedIcon
         icon="spinner"
-        className="margin-right-05 text-secondary fa-spin"
+        iconClass="margin-right-05 text-secondary fa-spin"
         title="Processing Document"
-        aria-hidden="true"
-      />
+        aria-hidden="true" />
     )}
   </>
 );
