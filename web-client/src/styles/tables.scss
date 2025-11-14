@@ -40,6 +40,15 @@ table,
       vertical-align: top;
     }
   }
+
+  tr.aged-cases {
+    background: $red-error;
+    
+    &:hover {
+      background: $red-error;
+      box-shadow: 5px 0 0 0 $red-primary inset;
+    }
+  }
 }
 
 .min-width-150 {
