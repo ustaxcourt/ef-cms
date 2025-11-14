@@ -1,7 +1,7 @@
 data "aws_caller_identity" "current" {}
 
 provider "opensearch" {
-  url = "https://${aws_opensearch_domain.efcms-logs[0].endpoint}"
+  url = var.es_info_cluster_create ? "https://${aws_opensearch_domain.efcms-logs[0].endpoint}" : "https://${jsondecode(data.aws_secretsmanager_secret_version.info_cluster[0].secret_string)["endpoint"]}"
 }
 
 resource "opensearch_snapshot_repository" "archived-logs" {
