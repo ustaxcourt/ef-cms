@@ -103,7 +103,7 @@ export const fileAndServeCourtIssuedDocument = async (
     .getUseCaseHelpers()
     .stampDocumentForService({
       applicationContext,
-      docketEntryId: docketEntryToServe.docketEntryId,
+      documentStorageId: docketEntryToServe.documentStorageId,
       documentToStamp: form,
     });
 

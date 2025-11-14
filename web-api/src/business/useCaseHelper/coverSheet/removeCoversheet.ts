@@ -2,14 +2,14 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const removeCoversheet = async (
   applicationContext: ServerApplicationContext,
-  { docketEntryId }: { docketEntryId: string },
+  { documentStorageId }: { documentStorageId: string },
 ) => {
   try {
     const pdfData = await applicationContext
       .getPersistenceGateway()
       .getDocument({
         applicationContext,
-        key: docketEntryId,
+        key: documentStorageId,
       });
 
     const { PDFDocument } = await applicationContext.getPdfLib();

@@ -11,5 +11,10 @@ export const clearExistingDocumentAction = ({ get, store }: ActionProps) => {
   store.set(state.screenMetadata.documentReset, true);
   store.set(state.currentViewMetadata.documentUploadMode, 'scan');
   store.set(state.documentToEdit.docketEntryId, get(state.form.docketEntryId));
+  // 8477: TODO: make sure this does not cause unintended side effects
+  store.set(
+    state.documentToEdit.documentStorageId,
+    get(state.form.documentStorageId),
+  );
   store.unset(state.form.primaryDocumentFile);
 };
