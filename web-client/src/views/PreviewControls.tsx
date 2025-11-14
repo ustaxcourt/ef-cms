@@ -49,7 +49,7 @@ export const PreviewControls = connect(
             className={'icon-button'}
             icon={['fas', 'step-backward']}
             id="firstPage"
-            size="2x"
+            size="2xl"
           />
         </Button>
         <Button
@@ -62,12 +62,14 @@ export const PreviewControls = connect(
             className={'icon-button'}
             icon={['fas', 'caret-left']}
             id="previous"
-            size="2x"
+            size="2xl"
           />
         </Button>
-        <span className="pages">
-          Page {currentPage} of {totalPages}
-        </span>
+        <div className="pages">
+          <span>
+            Page {currentPage} of {totalPages}
+          </span>
+        </div>
         <Button
           link
           className={classNames(disableRightButtons && 'disabled')}
@@ -78,7 +80,7 @@ export const PreviewControls = connect(
             className={'icon-button'}
             icon={['fas', 'caret-right']}
             id="next"
-            size="2x"
+            size="2xl"
           />
         </Button>
         <Button
@@ -91,7 +93,7 @@ export const PreviewControls = connect(
             className={'icon-button'}
             icon={['fas', 'step-forward']}
             id="lastPage"
-            size="2x"
+            size="2xl"
           />
         </Button>
       </div>
