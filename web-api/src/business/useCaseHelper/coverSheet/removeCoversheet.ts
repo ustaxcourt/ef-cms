@@ -22,13 +22,13 @@ export const removeCoversheet = async (
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       document: pdfWithoutCoversheet,
-      key: docketEntryId,
+      key: documentStorageId,
     });
 
     return { numberOfPages: pdfDoc.getPageCount() };
   } catch (err) {
     const error = err as Error;
-    error.message = `${error.message} docket entry id is ${docketEntryId}`;
+    error.message = `${error.message} documentStorageId is ${documentStorageId}`;
     throw error;
   }
 };

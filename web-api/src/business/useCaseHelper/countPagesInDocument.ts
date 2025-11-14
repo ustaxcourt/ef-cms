@@ -11,6 +11,7 @@ export const countPagesInDocument = async ({
 }): Promise<number> => {
   let bytes;
 
+  console.log('documentStorageId', documentStorageId);
   if (documentBytes) {
     bytes = documentBytes;
   } else if (documentStorageId) {

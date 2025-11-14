@@ -49,7 +49,7 @@ export const addCoversheetInteractor = async (
 
   const pdfData = await applicationContext.getPersistenceGateway().getDocument({
     applicationContext,
-    key: docketEntryEntity!.documentStorageId,
+    key: docketEntryEntity.documentStorageId,
   });
 
   const {
@@ -68,7 +68,7 @@ export const addCoversheetInteractor = async (
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     document: newPdfData,
-    key: docketEntryId,
+    key: docketEntryEntity.documentStorageId,
   });
 
   let docketNumbersToUpdate = [docketNumber];

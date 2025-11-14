@@ -48,7 +48,7 @@ const createStampedCoversheetPdf = async ({
 
 export const generateStampedCoversheetInteractor = async (
   applicationContext,
-  { docketEntryId, docketNumber, stampData, stampedDocketEntryId },
+  { docketEntryId, docketNumber, stampData, stampedDocumentStorageId },
   authorizedUser: UnknownAuthUser,
 ) => {
   const caseRecord = await getCaseByDocketNumber({
@@ -72,6 +72,6 @@ export const generateStampedCoversheetInteractor = async (
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     document: newPdfData,
-    key: stampedDocketEntryId,
+    key: stampedDocumentStorageId,
   });
 };

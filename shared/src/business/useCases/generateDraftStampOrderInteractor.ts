@@ -24,22 +24,20 @@ export const generateDraftStampOrderInteractor = async (
     motionDocketEntryId,
     parentMessageId,
     stampData,
-    stampedDocketEntryId,
   }: {
     docketNumber: string;
     formattedDraftDocumentTitle: string;
     motionDocketEntryId: string;
     parentMessageId: string;
     stampData: any;
-    stampedDocketEntryId: string;
   },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<{ stampedDocketEntryId: string }> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.STAMP_MOTION)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  await applicationContext
+  const stampedDocketEntry = await applicationContext
     .getUseCaseHelpers()
     .addDraftStampOrderDocketEntryInteractor(
       applicationContext,
@@ -49,7 +47,6 @@ export const generateDraftStampOrderInteractor = async (
         originalDocketEntryId: motionDocketEntryId,
         parentMessageId,
         stampData,
-        stampedDocketEntryId,
       },
       authorizedUser,
     );
@@ -62,8 +59,10 @@ export const generateDraftStampOrderInteractor = async (
         docketEntryId: motionDocketEntryId,
         docketNumber,
         stampData,
-        stampedDocketEntryId,
+        stampedDocumentStorageId: stampedDocketEntry.documentStorageId,
       },
       authorizedUser,
     );
+
+  return { stampedDocketEntryId: stampedDocketEntry.docketEntryId };
 };

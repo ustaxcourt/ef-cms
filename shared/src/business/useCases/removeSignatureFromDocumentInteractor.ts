@@ -56,7 +56,7 @@ export const removeSignatureFromDocumentInteractor = async (
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     document: originalPdfNoSignature,
-    key: docketEntryId,
+    key: docketEntryToUnsign.documentStorageId,
   });
 
   await updateCaseAndAssociations({

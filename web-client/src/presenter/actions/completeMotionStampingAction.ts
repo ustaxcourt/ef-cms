@@ -19,8 +19,6 @@ export const completeMotionStampingAction = async ({
   const parentMessageId = get(state.parentMessageId);
   const stampFormData = get(state.form);
 
-  const newDocketEntryId = applicationContext.getUniqueId();
-
   const { nameForSigning, nameForSigningLine2 } = get(state.pdfForSigning);
 
   const stampEntity = new Stamp(stampFormData);
@@ -30,7 +28,7 @@ export const completeMotionStampingAction = async ({
     nameForSigningLine2,
   };
 
-  await applicationContext
+  const newDocketEntryId = await applicationContext
     .getUseCases()
     .generateDraftStampOrderInteractor(applicationContext, {
       docketNumber,
@@ -38,7 +36,6 @@ export const completeMotionStampingAction = async ({
       motionDocketEntryId,
       parentMessageId,
       stampData,
-      stampedDocketEntryId: newDocketEntryId,
     });
 
   let redirectUrl;
