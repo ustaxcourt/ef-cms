@@ -204,7 +204,7 @@ const addScheduledTrialSession = ({
   calendarState.sessionCountPerCity[scheduledTrialSession.trialLocation]++;
   calendarState.sessionScheduledPerCityPerWeek[
     scheduledTrialSession.weekOf
-  ].add(scheduledTrialSession.trialLocation); // Mark this city as scheduled for the current week
+  ]?.add(scheduledTrialSession.trialLocation); // Mark this city as scheduled for the current week
 };
 
 const decrementRemainingCaseCounters = (
