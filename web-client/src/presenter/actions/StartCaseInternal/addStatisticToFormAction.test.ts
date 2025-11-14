@@ -12,9 +12,9 @@ describe('addStatisticToFormAction', () => {
   });
 
   beforeEach(() => {
-    presenter.providers.applicationContext.getUniqueId.mockReturnValue(
-      statisticId,
-    );
+    (
+      presenter.providers.applicationContext.getUniqueId as jest.Mock
+    ).mockReturnValue(statisticId);
   });
 
   it('should add a statistic to the form.statistics array', async () => {

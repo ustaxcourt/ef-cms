@@ -1,6 +1,6 @@
+import { WrappedIcon } from '../../ustc-ui/Icon/Icon';
 import { CaseIcons } from '@web-client/ustc-ui/Icon/CaseIcons';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -56,13 +56,12 @@ export const AllCases = connect(
 
                   <td>
                     {item.isManuallyAdded && (
-                      <span aria-label="manually added indicator">
-                        <FontAwesomeIcon
-                          className="mini-success"
-                          icon="calendar-plus"
-                          title="Manually added"
-                        />
-                      </span>
+                      <WrappedIcon
+                        iconAriaLabel="Manually added indicator"
+                        iconClass="mini-success"
+                        icon="calendar-plus"
+                        title="Manually added"
+                      />
                     )}
                   </td>
                   <td>{item.caseTitle}</td>

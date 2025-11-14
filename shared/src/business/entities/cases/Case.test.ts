@@ -18,6 +18,7 @@ import {
   UNIQUE_OTHER_FILER_TYPE,
 } from '../EntityConstants';
 import { Case, getContactPrimary } from './Case';
+import { isMemberCase } from '../../utilities/generateSelectedFilterList';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_DOCUMENTS } from '../../../test/mockDocketEntry';
 import { createISODateString } from '../../utilities/DateHandler';
@@ -507,7 +508,7 @@ describe('Case entity', () => {
       const errors = myCase.getFormattedValidationErrors();
 
       expect(errors).toMatchObject({
-        'petitioners[2]':
+        'petitioners-2':
           'Only one (1) Intervenor is allowed per case. Please select a different Role.',
       });
     });
@@ -1393,6 +1394,75 @@ describe('Case entity', () => {
       });
 
       expect(myCase.getFormattedValidationErrors()).toBe(null);
+    });
+  });
+
+  describe('isMemberCase', () => {
+    it('should return true when case is a member of a consolidated group', () => {
+      const result = isMemberCase({
+        inConsolidatedGroup: true,
+        isLeadCase: false,
+      });
+
+      expect(result).toBe(true);
+    });
+
+    it('should return false when case is the lead case', () => {
+      const result = isMemberCase({
+        inConsolidatedGroup: true,
+        isLeadCase: true,
+      });
+
+      expect(result).toBe(false);
+    });
+
+    it('should return false when case is not consolidated', () => {
+      const result = isMemberCase({
+        inConsolidatedGroup: false,
+        isLeadCase: false,
+      });
+
+      expect(result).toBe(false);
+    });
+  });
+
+  describe('setRemoteTrialGrantedDate', () => {
+    it('sets remoteTrialGranted and remoteTrialGrantedDate when a valid date string is provided', () => {
+      const mockDate = '2025-10-28T12:00:00.000Z';
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        { authorizedUser: mockDocketClerkUser },
+      );
+
+      myCase.setRemoteTrialGrantedDate(mockDate);
+
+      expect(myCase.remoteTrialGranted).toBe(true);
+      expect(myCase.remoteTrialGrantedDate).toBe(mockDate);
+    });
+
+    it('clears remoteTrialGranted and remoteTrialGrantedDate when null or blank values are provided', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          remoteTrialGranted: true,
+          remoteTrialGrantedDate: '2024-01-01T00:00:00.000Z',
+        },
+        { authorizedUser: mockDocketClerkUser },
+      );
+
+      myCase.setRemoteTrialGrantedDate(null);
+      expect(myCase.remoteTrialGranted).toBe(false);
+      expect(myCase.remoteTrialGrantedDate).toBeNull();
+
+      myCase.setRemoteTrialGrantedDate('');
+      expect(myCase.remoteTrialGranted).toBe(false);
+      expect(myCase.remoteTrialGrantedDate).toBeNull();
+
+      myCase.setRemoteTrialGrantedDate('   ');
+      expect(myCase.remoteTrialGranted).toBe(false);
+      expect(myCase.remoteTrialGrantedDate).toBeNull();
     });
   });
 });

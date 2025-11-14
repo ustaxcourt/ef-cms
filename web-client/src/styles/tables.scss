@@ -40,6 +40,15 @@ table,
       vertical-align: top;
     }
   }
+
+  tr.aged-cases {
+    background: $red-error;
+    
+    &:hover {
+      background: $red-error;
+      box-shadow: 5px 0 0 0 $red-primary inset;
+    }
+  }
 }
 
 .min-width-150 {
@@ -345,6 +354,10 @@ table,
       margin-top: 4px;
       margin-right: 0;
       gap: 1rem;
+    }
+
+    .fa-file-lines {
+      color: color($theme-color-primary);
     }
 
     tr.in-progress {
@@ -750,4 +763,10 @@ table.case-list tbody tr:nth-child(even) td {
 .table-caption-serif {
   font-family: $font-serif !important;
   font-size: 20px !important;
+}
+
+.consolidated-icons-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }

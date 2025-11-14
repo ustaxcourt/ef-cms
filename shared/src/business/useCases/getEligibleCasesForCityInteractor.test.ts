@@ -1,5 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
-import { MOCK_ELIGIBLE_CASE } from '@shared/test/mockCase';
+import { MOCK_CASE } from '@shared/test/mockCase';
 import { getEligibleCasesForTrialCity as getEligibleCasesForTrialCityMock } from '@web-api/persistence/postgres/cases/getEligibleCasesForTrialCity';
 import { getEligibleCasesForCityInteractor } from '@shared/business/useCases/getEligibleCasesForCityInteractor';
 import {
@@ -14,7 +14,7 @@ describe('getEligibleCasesForCityInteractor', () => {
   const mockTrialCity = 'Birmingham, Alabama';
   beforeAll(() => {
     getEligibleCasesForTrialCity.mockResolvedValue([
-      MOCK_ELIGIBLE_CASE as Omit<RawCase, 'consolidatedCases'>,
+      MOCK_CASE as Omit<RawCase, 'consolidatedCases'>,
     ]);
   });
 

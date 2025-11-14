@@ -349,3 +349,11 @@ button {
     margin-right: 5px;
   }
 }
+
+.edit-remote-status-modal {
+  overflow: visible;
+
+  .usa-date-picker__calendar {
+    z-index: 9999;
+  }
+}

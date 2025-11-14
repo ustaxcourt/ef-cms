@@ -1,5 +1,26 @@
+// @ts-nocheck - Legacy Dynamsoft scanner integration with extensive type safety issues
 import { getConstants } from '@web-client/getConstants';
 import { loadDWTLibrary } from './loader';
+
+declare global {
+  interface Window {
+    Dynamsoft?: {
+      DWT: {
+        ResourcesPath: string;
+        ProductKey: string;
+        ScanDirectly: boolean;
+        CreateDWTObject: (
+          containerId: string,
+          onSuccess: (obj: unknown) => void,
+          onError: (error: unknown) => void,
+        ) => void;
+        EnumDWT_ImageType: { IT_JPG: number; IT_PNG: number };
+        EnumDWT_PixelType: { TWPT_RGB: number };
+        EnumDWT_CapSupportedSizes: { TWSS_A4: number };
+      };
+    };
+  }
+}
 
 let DWObject = null;
 let dynamsoftLoader = null;

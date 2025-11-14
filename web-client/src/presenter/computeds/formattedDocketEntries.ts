@@ -22,6 +22,7 @@ export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
       className: 'sealed-docket-entry',
       icon: 'lock',
       title: formattedResult.sealedToTooltip,
+      size: 'lg',
     });
   }
 
@@ -29,26 +30,31 @@ export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
     return iconsToDisplay;
   } else if (formattedResult.isPaper) {
     iconsToDisplay.push({
+      className: 'fa-icon-blue',
       icon: ['fas', 'file-alt'],
       title: 'Is paper',
+      size: 'lg',
     });
   } else if (formattedResult.isInProgress) {
     iconsToDisplay.push({
       className: 'fa-icon-gold',
       icon: ['fas', 'thumbtack'],
       title: 'In progress',
+      size: 'lg',
     });
   } else if (formattedResult.qcNeeded) {
     iconsToDisplay.push({
       className: 'fa-icon-red',
       icon: ['fa', 'star'],
       title: 'Is untouched',
+      size: 'lg',
     });
   } else if (formattedResult.showLoadingIcon) {
     iconsToDisplay.push({
       className: 'fa-spin spinner',
       icon: ['fa-spin', 'spinner'],
       title: 'Is loading',
+      size: 'lg',
     });
   }
 
@@ -97,6 +103,26 @@ export const getShowSealDocketRecordEntry = ({ applicationContext, entry }) => {
   return !docketEntryIsOpinion;
 };
 
+const getMotionDispositionOrderIndex = (
+  motionEntry: RawDocketEntry,
+  rawCase: RawCase,
+  targetDocketEntryId: string,
+) => {
+  const relatedOrder = rawCase.docketEntries.find(
+    entry => entry.docketEntryId === targetDocketEntryId,
+  );
+
+  if (!relatedOrder) {
+    throw new Error(
+      `Related order not found for motion with id ${motionEntry.docketEntryId} and targetDocketEntryId ${targetDocketEntryId} and title ${
+        motionEntry.documentTitle
+      }`,
+    );
+  }
+
+  return relatedOrder.index;
+};
+
 export const getFormattedDocketEntry = ({
   applicationContext,
   docketNumber,
@@ -118,6 +144,26 @@ export const getFormattedDocketEntry = ({
     ...entry,
     createdAtFormatted: entry.createdAtFormatted,
   };
+
+  if (entry.affectedDocketEntries) {
+    entry.affectedDocketEntries.forEach(affectedEntry => {
+      affectedEntry.docketEntryIndex = getMotionDispositionOrderIndex(
+        entry,
+        rawCase,
+        affectedEntry.docketEntryId,
+      );
+    });
+  }
+
+  if (entry.affectedByDocketEntries) {
+    entry.affectedByDocketEntries.forEach(affectedEntry => {
+      affectedEntry.docketEntryIndex = getMotionDispositionOrderIndex(
+        entry,
+        rawCase,
+        affectedEntry.docketEntryId,
+      );
+    });
+  }
 
   if (!isExternalUser) {
     formattedResult.showLoadingIcon =

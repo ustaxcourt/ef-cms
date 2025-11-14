@@ -11,19 +11,19 @@
  * 500: returned by wrapping any Error which doesn't specify a statusCode.
  */
 const V2_API_ERROR_STATUS_CODES = [401, 403, 404, 500];
+type ErrorWithStatusCode = Error & { statusCode?: number };
 
 class v2ApiError extends Error {
-  constructor(error) {
+  statusCode: number;
+
+  constructor(error: ErrorWithStatusCode) {
     super();
-    this.statusCode = V2_API_ERROR_STATUS_CODES.includes(error.statusCode)
-      ? error.statusCode
-      : 500;
-    this.message = {
-      message: error.message || 'An unexpected error occurred',
-      toString() {
-        return this.message;
-      },
-    };
+    this.statusCode =
+      error.statusCode && V2_API_ERROR_STATUS_CODES.includes(error.statusCode)
+        ? error.statusCode
+        : 500;
+    const msg = error.message || 'An unexpected error occurred';
+    this.message = { message: msg, toString: () => msg } as unknown as string;
     this.stack = error.stack;
   }
 }
@@ -32,13 +32,14 @@ export const v2ApiWrapper = async handler => {
   try {
     return await handler();
   } catch (e) {
+    const error = e as ErrorWithStatusCode;
     // Workaround until https://github.com/ustaxcourt/ef-cms/pull/462 is resolved
     // (API returning 400 instead of 404 on unknown cases)
-    if (e.message.includes('The Case entity was invalid')) {
-      e.statusCode = 404;
-      e.message = 'Case not found';
+    if (error.message.includes('The Case entity was invalid')) {
+      error.statusCode = 404;
+      error.message = 'Case not found';
     }
 
-    throw new v2ApiError(e);
+    throw new v2ApiError(error);
   }
 };

@@ -1,13 +1,13 @@
 /* eslint-disable complexity */
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConfirmInitiateServiceModal } from '../ConfirmInitiateServiceModal';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Icon } from '../../ustc-ui/Icon/Icon';
+import { Icon, WrappedIcon } from '../../ustc-ui/Icon/Icon';
 import { PdfViewer } from '../../ustc-ui/PdfPreview/PdfViewer';
 import { WorkItemAlreadyCompletedModal } from '../DocketEntryQc/WorkItemAlreadyCompletedModal';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
+import { InfoNotificationComponent } from '@web-client/views/InfoNotification';
 import React from 'react';
 import classNames from 'classnames';
 
@@ -81,11 +81,26 @@ export const DocumentViewerDocument = connect(
               </div>
             )}
 
+            {documentViewerHelper.showLeadCaseBanner && (
+              <InfoNotificationComponent
+                alertInfo={{
+                  message: (
+                    <>
+                      This document can only be served from the <b>lead case</b>{' '}
+                      in a consolidated group. This is a member case.
+                    </>
+                  ),
+                }}
+                dismissible={false}
+                scrollToTop={false}
+              />
+            )}
+
             <h3>
               {documentViewerHelper.showSealed && (
-                <FontAwesomeIcon
-                  className="fa-icon-red margin-right-1"
+                <WrappedIcon
                   icon="lock"
+                  iconClass="fa-icon-red margin-right-1"
                   title={documentViewerHelper.sealedToTooltip}
                 />
               )}
@@ -217,9 +232,12 @@ export const DocumentViewerDocument = connect(
                   onClick={() => {
                     navigateToStatusReportOrderSequence({
                       path: documentViewerLinksHelper.statusReportOrderFromCaseDetailsLink,
-                      statusReportFilingDate:
-                        viewerDocumentToDisplay.filingDate,
-                      statusReportIndex: viewerDocumentToDisplay.index,
+                      statusReportFilingDate: String(
+                        viewerDocumentToDisplay.filingDate || '',
+                      ),
+                      statusReportIndex: Number(
+                        viewerDocumentToDisplay.index ?? 0,
+                      ),
                     });
                   }}
                 >

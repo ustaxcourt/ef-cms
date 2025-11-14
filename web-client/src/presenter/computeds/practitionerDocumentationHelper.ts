@@ -14,11 +14,12 @@ export const practitionerDocumentationHelper = (
   const tableSort = get(state.tableSort);
 
   let formattedPractitionerDocuments = practitionerDocuments.map(document => {
+    const doc = document as any;
     return {
-      ...document,
+      ...doc,
       formattedUploadDate: applicationContext
         .getUtilities()
-        .formatDateString(document.uploadDate, 'MMDDYY'),
+        .formatDateString(doc.uploadDate, 'MMDDYY'),
     };
   });
 

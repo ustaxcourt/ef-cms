@@ -1,17 +1,30 @@
+import { WrappedIcon } from '../../ustc-ui/Icon/Icon';
 import { Button } from '../../ustc-ui/Button/Button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
+import _ from 'lodash';
 
 type FilingsAndProceedingsProps = {
   entry: {
     descriptionDisplay: string;
     isStricken: boolean;
     docketEntryId: string;
+    affectedDocketEntries: {
+      disposition?: string;
+      docketEntryId?: string;
+      docketEntryIndex?: number;
+      documentType: string;
+    }[];
+    affectedByDocketEntries: {
+      disposition?: string;
+      docketEntryId?: string;
+      docketEntryIndex?: number;
+      documentType: string;
+    }[];
     showDocumentProcessing: boolean;
     showLinkToDocument: boolean;
     showDocumentViewerLink: boolean;
@@ -96,7 +109,6 @@ export const FilingsAndProceedings = connect<
     return (
       <>
         {entry.showLinkToDocument && renderDocumentLink()}
-
         {entry.showDocumentProcessing && (
           <>
             {caseDetailHelper.showDocketRecordInProgressState && (
@@ -114,7 +126,6 @@ export const FilingsAndProceedings = connect<
             </span>
           </>
         )}
-
         {entry.showDocumentViewerLink && (
           <>
             <Button
@@ -135,25 +146,48 @@ export const FilingsAndProceedings = connect<
             >
               {entry.isPaper && (
                 <span className="filing-type-icon-mobile">
-                  <FontAwesomeIcon
-                    icon={['fas', 'file-alt']}
-                    title="Is paper"
-                  />
+                  <WrappedIcon icon={['fas', 'file-alt']} title="Is paper" />
                 </span>
               )}
               {entry.descriptionDisplay}
             </Button>
+            {_.concat(
+              entry.affectedByDocketEntries ?? [],
+              entry.affectedDocketEntries ?? [],
+            ).map(entry => {
+              return (
+                <>
+                  <br></br>
+                  <span className="display-inline-block">
+                    <span> --- </span>
+                    <Button
+                      link
+                      className={classNames('text-right', 'view-pdf-link')}
+                      data-testid={`related-document-viewer-link-${entry.docketEntryIndex}`}
+                      arial-label={`View PDF for: ${entry.docketEntryIndex}`}
+                      onClick={() =>
+                        changeTabAndSetViewerDocumentToDisplaySequence({
+                          docketRecordTab: 'documentView',
+                          viewerDocumentToDisplay: {
+                            docketEntryId: entry.docketEntryId,
+                          },
+                        })
+                      }
+                    >
+                      {entry?.disposition} #{entry.docketEntryIndex}
+                    </Button>
+                  </span>
+                </>
+              );
+            })}
           </>
         )}
-
         <span
           className={classNames(entry.isStricken && 'stricken-docket-record')}
         >
           {entry.showDocumentDescriptionWithoutLink && entry.descriptionDisplay}
         </span>
-
         <span> {entry.signatory}</span>
-
         {entry.isStricken && <span>(STRICKEN)</span>}
       </>
     );
