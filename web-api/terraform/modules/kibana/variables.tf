@@ -39,7 +39,7 @@ variable "es_logs_engine_version" {
 }
 
 variable "es_info_cluster_create" {
-  default     = false
+  default     = true
   description = "Determines whether to create an info opensearch or not"
   type        = bool
 }
