@@ -50,13 +50,32 @@ const EditCaseTrialInformationMenu = ({
 };
 
 const props = cerebralProps as unknown as {
-  caseDetail: unknown;
-  openAddEditCalendarNoteModalSequence: unknown;
-  openAddToTrialModalSequence: unknown;
-  openBlockFromTrialModalSequence: unknown;
-  openRemoveFromTrialSessionModalSequence: unknown;
-  openUnblockFromTrialModalSequence: unknown;
-  trialSessionJudge: unknown;
+  caseDetail: {
+    showTrialCalendared?: boolean;
+    showBlockedFromTrial?: boolean;
+    showNotScheduled?: boolean;
+    showScheduled?: boolean;
+    trialSessionId?: string;
+    userIsAssignedToSession?: boolean;
+    formattedTrialCity?: string;
+    formattedTrialDate?: string;
+    formattedAssociatedJudge?: string;
+    trialSessionNotes?: string;
+    blocked?: boolean;
+    blockedDateFormatted?: string;
+    blockedReason?: string;
+    remoteTrialGrantedDate?: string | null;
+  };
+  openAddEditCalendarNoteModalSequence: (args: { note?: string }) => void;
+  openAddToTrialModalSequence: () => void;
+  openBlockFromTrialModalSequence: () => void;
+  openRemoveFromTrialSessionModalSequence: (args: {
+    trialSessionId: string;
+  }) => void;
+  openUnblockFromTrialModalSequence: () => void;
+  trialSessionJudge: {
+    name: string;
+  };
 };
 
 export const TrialInformation = connect(
@@ -153,7 +172,7 @@ export const TrialInformation = connect(
                         openRemoveFromTrialSessionModalSequence={
                           openRemoveFromTrialSessionModalSequence
                         }
-                        trialSessionId={caseDetail.trialSessionId}
+                        trialSessionId={caseDetail.trialSessionId!}
                       />
                     </td>
                   </tr>
@@ -291,7 +310,7 @@ export const TrialInformation = connect(
                         openRemoveFromTrialSessionModalSequence={
                           openRemoveFromTrialSessionModalSequence
                         }
-                        trialSessionId={caseDetail.trialSessionId}
+                        trialSessionId={caseDetail.trialSessionId!}
                       />
                     </td>
                   </tr>
