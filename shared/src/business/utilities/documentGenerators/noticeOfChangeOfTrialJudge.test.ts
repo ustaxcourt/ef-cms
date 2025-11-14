@@ -1,5 +1,5 @@
 import {
-  PROCEDURE_TYPES,
+  PROCEDURE_TYPES_MAP,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
@@ -20,7 +20,7 @@ describe('noticeOfChangeOfTrialJudge', () => {
           nameOfClerk: 'Stephanie A. Servoss',
           titleOfClerk: 'Clerk of the Court',
           trialInfo: {
-            caseProcedureType: PROCEDURE_TYPES['small'],
+            caseProcedureType: PROCEDURE_TYPES_MAP.small,
             chambersPhoneNumber: '1-721-740-9885 x4239',
             docketNumber: '999-99',
             formattedStartDate: '01/01/2001',

@@ -8,8 +8,5 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const clearConfirmationTextStatisticsAction = ({
   store,
 }: ActionProps) => {
-  store.set(
-    (state.confirmationText as { statistics: Record<string, any> }).statistics,
-    {},
-  );
+  store.set(state['confirmationText']!['statistics'], {});
 };
