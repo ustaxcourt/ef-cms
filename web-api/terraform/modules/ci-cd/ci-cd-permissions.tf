@@ -279,8 +279,7 @@ resource "aws_iam_policy" "ci_cd_policy" {
         ],
        "Resource": [
           "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/*",
-          "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/*",
-          "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-service-role/*"
+          "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/*"
         ]
     },
     {
@@ -458,8 +457,7 @@ resource "aws_iam_policy" "ci_cd_iam_policy" {
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/switch_colors_cron_lambda_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/wait_for_workflow_lambda_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/rds_expired_records_cleanup_lambda_role_*",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/*",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-service-role/*"
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/*"
       ]
     }
   ]
