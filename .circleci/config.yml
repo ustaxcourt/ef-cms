@@ -61,14 +61,6 @@ parameters:
     default: false
     type: boolean
 
-  info_cluster_base_domain:
-    default: 'ustaxcourt.gov'
-    type: string
-
-  info_cluster_primary_env:
-    default: 'test'
-    type: string
-
 commands:
   npm-and-cypress-install:
     steps:
@@ -164,12 +156,10 @@ jobs:
       - run:
           name: 'Deploy Info Cluster'
           environment:
-            DEPLOY_INFO_CLUSTER: << pipeline.parameters.deploy_info_cluster >>
-            BASE_DOMAIN: << pipeline.parameters.info_cluster_base_domain >>
-            PRIMARY_ENV: << pipeline.parameters.info_cluster_primary_env >>
+            ES_INFO_CLUSTER_CREATE: << pipeline.parameters.deploy_info_cluster >>
           command: |
-            if [ -n "DEPLOY_INFO_CLUSTER" ]; then
-                npm run deploy:info-cluster
+            if [ -n "ES_INFO_CLUSTER_CREATE" ]; then
+                npm run deploy:account-specific
             fi
       - run:
           no_output_timeout: 20m
