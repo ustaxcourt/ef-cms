@@ -72,8 +72,10 @@ export const generateCalendar = ({
       );
     })
     .forEach(specialSession => {
-      const weeksToSchedule =
-        getWeeksToScheduleForSpecialSession(specialSession);
+      const weeksToSchedule = getWeeksToScheduleForSpecialSession(
+        specialSession,
+        weeksToLoop,
+      );
 
       weeksToSchedule.forEach(currentWeek => {
         const scheduledTrialSession: ScheduledTrialSession = {
@@ -384,6 +386,7 @@ const addNonSpecialTrialSession = ({
 
 const getWeeksToScheduleForSpecialSession = (
   specialSession: RawTrialSession,
+  weeksToLoop: IsoDateRange[],
 ): string[] => {
   const startWeek = createDateAtStartOfWeekEST(
     specialSession.startDate,
@@ -399,5 +402,8 @@ const getWeeksToScheduleForSpecialSession = (
     endDate: specialSession.estimatedEndDate,
   });
 
-  return weekRanges.map(week => week.start);
+  const validWeeks = new Set(weeksToLoop.map(w => w.start));
+  return weekRanges
+    .map(week => week.start)
+    .filter(week => validWeeks.has(week));
 };
