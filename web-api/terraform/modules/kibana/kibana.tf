@@ -96,33 +96,6 @@ resource "aws_opensearch_domain" "efcms-logs" {
   }
 }
 
-resource "aws_secretsmanager_secret" "info_cluster" {
-  count       = var.es_info_cluster_create ? 1 : 0
-  name        = "info_cluster"
-  description = "Stores info cluster information"
-}
-
-resource "aws_secretsmanager_secret_version" "info_cluster" {
-  count = var.es_info_cluster_create ? 1 : 0
-
-  secret_id = aws_secretsmanager_secret.info_cluster[0].id
-  secret_string = jsonencode({
-    endpoint = aws_opensearch_domain.efcms-logs[0].endpoint
-    arn      = aws_opensearch_domain.efcms-logs[0].arn
-  })
-
-  depends_on = [aws_opensearch_domain.efcms-logs]
-
-}
-
-data "aws_secretsmanager_secret_version" "info_cluster" {
-  count = var.es_info_cluster_create ? 1 : 0
-
-  secret_id = aws_secretsmanager_secret.info_cluster[0].id
-
-  depends_on = [aws_secretsmanager_secret_version.info_cluster]
-}
-
 resource "aws_elasticsearch_domain_policy" "kibana_access" {
   count           = var.es_info_cluster_create ? 1 : 0
   domain_name     = aws_opensearch_domain.efcms-logs[0].domain_name
@@ -307,7 +280,7 @@ resource "aws_iam_role_policy" "lambda_elasticsearch_execution_policy" {
         "es:*"
       ],
       "Resource": [
-        "${jsondecode(data.aws_secretsmanager_secret_version.info_cluster[0].secret_string)["arn"]}/*"
+        "${aws_opensearch_domain.efcms-logs[0].arn}/*"
       ]
     }
   ]
@@ -322,8 +295,7 @@ module "logs_to_es" {
   lambda_name    = "LogsToElasticSearch_info"
   role           = aws_iam_role.lambda_elasticsearch_execution_role.arn
   environment = {
-    es_endpoint = jsondecode(data.aws_secretsmanager_secret_version.info_cluster[0].secret_string)["endpoint"]
-
+    es_endpoint = var.es_info_cluster_create ? "https://${aws_opensearch_domain.efcms-logs[0].endpoint}" : "https://${var.es_info_cluster_endpoint}"
   }
   timeout     = "900"
   memory_size = "3008"

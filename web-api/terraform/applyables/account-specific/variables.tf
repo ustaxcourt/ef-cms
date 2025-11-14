@@ -45,3 +45,7 @@ variable "lower_env_restore_roles" {
 variable "es_logs_engine_version" {
   type = string
 }
+
+variable "es_info_cluster_endpoint" {
+  type = string
+}

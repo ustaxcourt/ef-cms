@@ -51,6 +51,7 @@ module "kibana" {
   log_group_environments           = var.log_group_environments
   number_of_days_to_keep_info_logs = var.number_of_days_to_keep_info_logs
   log_snapshot_bucket_name         = var.log_snapshot_bucket_name
+  es_info_cluster_endpoint         = var.es_info_cluster_endpoint
 }
 
 module "dawson-developer-permissions" {

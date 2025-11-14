@@ -67,6 +67,7 @@ export TF_VAR_lower_env_restore_roles="[\"arn:aws:iam::${LOWER_ENV_ACCOUNT_IDS//
 export TF_VAR_es_logs_engine_version="$ES_LOGS_ENGINE_VERSION"
 export TF_VAR_es_info_cluster_create="${ES_INFO_CLUSTER_CREATE}"
 export TF_VAR_es_info_cluster_shared_cluster_account_ids="${LOWER_ENV_ACCOUNT_IDS:-}"
+export TF_VAR_es_info_cluster_endpoint="${ES_INFO_CLUSTER_ENDPOINT:-}"
 
 npm run build:assets
 
