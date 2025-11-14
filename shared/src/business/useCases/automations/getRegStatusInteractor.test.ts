@@ -148,6 +148,9 @@ describe('getRegStatusInteractor', () => {
     getCognito.mockReturnValueOnce({
       send: jest.fn().mockResolvedValue({ Users: [] }),
     });
+    getCognito.mockReturnValueOnce({
+      send: jest.fn().mockResolvedValue({ Users: [] }),
+    });
 
     const result = await getRegStatusInteractor({ userEmail }, mockZendeskUser);
 
