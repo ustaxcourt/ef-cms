@@ -19,7 +19,7 @@ export const createOrderOnConsolidatedCase = (
   );
   cy.get('[data-testid="add-docket-number-btn"] > .svg-inline--fa').should(
     'have.class',
-    'fa-plus-circle',
+    'fa-circle-plus',
   );
   cy.get('[data-testid="add-docket-number-btn"]').click();
   cy.get('[data-testid="modal-button-confirm"]').click();
@@ -29,7 +29,7 @@ export const createOrderOnConsolidatedCase = (
   );
   cy.get('[data-testid="add-docket-number-btn"] > .svg-inline--fa').should(
     'have.class',
-    'fa-edit',
+    'fa-pen-to-square',
   );
   cy.get('.ql-editor').click();
   cy.get('.ql-editor').type(orderContents);
