@@ -12,11 +12,14 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
-import { RawEligibleCase } from '../../entities/cases/EligibleCase';
+import {
+  RawEligibleCase,
+} from '../../entities/cases/EligibleCase';
 import { RawIrsCalendarAdministratorInfo } from '@shared/business/entities/trialSessions/IrsCalendarAdministratorInfo';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { compact, partition } from 'lodash';
 import { caseIsEligibleForMinuteSheet } from '@shared/business/utilities/trialSessionMinutes/caseIsEligibleForMinuteSheet';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
 export const setPretrialMemorandumFiler = ({ caseItem }): string => {
   if (caseItem.PMTServedPartiesCode !== undefined) {
@@ -75,7 +78,7 @@ export const formatCaseForTrialSession = ({
   eligibleCases = [],
   setFilingPartiesCode = false,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: IApplicationContext | ClientApplicationContext;
   caseItem: CalendaredCaseItemType;
   eligibleCases?: RawEligibleCase[];
   setFilingPartiesCode?: boolean;
