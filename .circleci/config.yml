@@ -57,10 +57,6 @@ parameters:
     default: false
     type: boolean
 
-  deploy_info_cluster:
-    default: false
-    type: boolean
-
 commands:
   npm-and-cypress-install:
     steps:
@@ -152,14 +148,6 @@ jobs:
               # maintenance mode is color-specific so when we switch colors it'll be off
             else
               echo "skipping…"
-            fi
-      - run:
-          name: 'Deploy Info Cluster'
-          environment:
-            ES_INFO_CLUSTER_CREATE: << pipeline.parameters.deploy_info_cluster >>
-          command: |
-            if [ -n "ES_INFO_CLUSTER_CREATE" ]; then
-                npm run deploy:account-specific
             fi
       - run:
           no_output_timeout: 20m
