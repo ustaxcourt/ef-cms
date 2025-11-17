@@ -1,5 +1,6 @@
 import {
   ListUsersCommand,
+  ListUsersCommandOutput,
   UserType,
 } from '@aws-sdk/client-cognito-identity-provider';
 import { environment } from '@web-api/environment';
@@ -26,12 +27,34 @@ export async function getUsersWithSimilarEmails({
     UserPoolId: environment.userPoolId,
     AttributesToGet: ['email', 'custom:role', 'custom:userId'],
     Filter: `email ^= "${username}"`,
-    Limit: 60,
   });
 
-  const { Users = [] } = await getCognito().send(listCommand);
+  let result: ListUsersCommandOutput;
+  let userList: UserType[] = [];
+  do {
+    result = await getCognito().send(listCommand);
+    listCommand.input.PaginationToken = result.PaginationToken;
+    const { Users = [] } = result;
+    userList = userList.concat(Users);
+  } while (result.PaginationToken);
 
-  const matchedUsers = Users.reduce<UserInfo[]>((acc, user) => {
+  if (
+    !userList.find(
+      user =>
+        user.Attributes?.find(
+          attr => attr.Name === 'email',
+        )?.Value?.toLowerCase() === normalizedEmail,
+    )
+  ) {
+    listCommand.input.Filter = `email = "${normalizedEmail}"`;
+    delete listCommand.input.PaginationToken;
+    result = await getCognito().send(listCommand);
+
+    const { Users = [] } = result;
+    userList = userList.concat(Users);
+  }
+
+  const matchedUsers = userList.reduce<UserInfo[]>((acc, user) => {
     const info = gatherUserInfo(user);
     if (info.email.endsWith(`@${domain}`)) {
       acc.push(info);

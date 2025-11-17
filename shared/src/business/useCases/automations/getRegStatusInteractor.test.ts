@@ -145,6 +145,11 @@ describe('getRegStatusInteractor', () => {
   });
 
   it('returns message if no matching users are found', async () => {
+    // if the first list users command in getUsersWithSimilarEmails does not return the passed email,
+    // it will search again with a different filter, so the return value needs to be mocked twice.
+    getCognito.mockReturnValueOnce({
+      send: jest.fn().mockResolvedValue({ Users: [] }),
+    });
     getCognito.mockReturnValueOnce({
       send: jest.fn().mockResolvedValue({ Users: [] }),
     });
