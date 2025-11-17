@@ -310,7 +310,7 @@
     "axe-core": "4.11.0",
     "babel-jest": "30.2.0",
     "babel-plugin-cerebral": "1.0.2",
-    "cognito-local": "3.7.1",
+    "cognito-local": "5.1.0",
     "crypto-browserify": "3.12.1",
     "csv-parse": "6.1.0",
     "cypress": "15.6.0",
