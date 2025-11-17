@@ -10,6 +10,7 @@ import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import { FileNoticeOfWithdrawal } from './FileNoticeOfWithdrawal';
 
 export const FileDocumentWizard = connect(
   {
@@ -44,6 +45,9 @@ export const FileDocumentWizard = connect(
             </Tab>
             <Tab tabName="FileDocument">
               <FileDocument />
+            </Tab>
+            <Tab tabName="FileNoticeOfWithdrawal">
+              <FileNoticeOfWithdrawal />
             </Tab>
             <Tab tabName="FileDocumentReview">
               <div className="grid-container">

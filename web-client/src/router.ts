@@ -528,7 +528,13 @@ const router = {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} File a document`,
         );
+        console.log('app.getState', app.getState('currentPage'));
         if (app.getState('currentPage') === 'FileDocumentWizard') {
+          if (app.getState('wizardStep') === 'FileNoticeOfWithdrawal') {
+            return app.getSequence('chooseWizardStepSequence')({
+              value: 'FileNoticeOfWithdrawal',
+            });
+          }
           return app.getSequence('chooseWizardStepSequence')({
             value: 'FileDocument',
           });
