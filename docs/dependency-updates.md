@@ -32,14 +32,11 @@ This command informs us of minor and major version updates that we need to updat
 
 This command informs us of known security vulnerabilities. If transitive dependencies are vulnerable, use the overrides block in `package.json` to specify version overrides. If a dependency is vulnerable and has no fix, consider replacing it with an alternative.
 
-> **Why am I seeing a medium severity for `quill`?**
-> Quill is used as our rich text editor for open text submissions. It currently has a potential XSS vulnerability if used incorrectly. This vulnerability can be avoided by using getContents/setContents in combination with the quill delta. Currently we are not at risk for how we are using Quill and this vulnerability is actively being disputed: https://github.com/quilljs/quill/issues/3364
-
 > **Why am I seeing a high severity for `ws`?**
 > [See below](#ws-3rd-party-dependency-of-cerebral).
 
-> **Why am I seeing a medium severity for `@babel/runtime`?**
-> [See below](#babelruntime).
+> **Why am I seeing a high severity for `tar-fs`?**
+> [See below](#puppeteer-and-sparticuzchromium).
 
 ### 2. Update third-party dependencies
 
@@ -220,10 +217,6 @@ Below is a list of dependencies that are locked down due to known issues with se
 ### ws, 3rd party dependency of Cerebral
 
 - When running npm audit, you'll see a high severity issue with ws, 'affected by a DoS when handling a request with many HTTP headers - https://github.com/advisories/GHSA-3h5v-q93c-6h6q'. This doesn't affect us as the vulnerability is on the server side and we're not using this package on the server. We tried to override this to 5.2.4 and 8.18.0 and weren't able to make this work as import paths have changed. In the mean time, we recommend skipping this issue. We could always fork the cerebral repo in the future if needed.
-
-### quill
-
-- Quill released version 2 in April 2024. It includes substantial changes. Because the focus is currently on Postgres, we have left it at a previous version.
 
 ### pdfjs-dist
 
