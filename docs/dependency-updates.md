@@ -260,6 +260,9 @@ Upgrading `p-queue` past version 6 will cause issues related to module imports.
 ### uuid
 9/17/25 keeping it 11.1.0. The next version 12.0.0 and above no longer supports CommonJS
 
+### cognito-local
+keeping version 3.7.1 as newer versions introcude this vulnerability `fast-redact vulnerable to prototype pollution - https://github.com/advisories/GHSA-ffrw-9mx8-89p8`
+
 https://www.npmjs.com/package/uuid?activeTab=readme
 
 Quote from site:
