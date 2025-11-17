@@ -508,4 +508,77 @@ describe('caseInformationHelper', () => {
       expect(result.showEditCaseButton).toEqual(false);
     });
   });
+
+  describe('showEditRemoteTrialPermission', () => {
+    it('should be true when the user is a docket clerk', () => {
+      const result = runCompute(caseInformationHelper, {
+        state: {
+          ...getBaseState(mockDocketClerk),
+          caseDetail: { petitioners: [] },
+        },
+      });
+
+      expect(result.showEditRemoteTrialPermission).toEqual(true);
+    });
+
+    it('should be true when the user is a case services supervisor', () => {
+      const mockCaseServicesSupervisor = {
+        ...mockDocketClerk,
+        role: ROLES.caseServicesSupervisor,
+      };
+
+      const result = runCompute(caseInformationHelper, {
+        state: {
+          ...getBaseState(mockCaseServicesSupervisor),
+          caseDetail: { petitioners: [] },
+        },
+      });
+
+      expect(result.showEditRemoteTrialPermission).toEqual(true);
+    });
+
+    it('should be false when the user is a petitions clerk', () => {
+      const result = runCompute(caseInformationHelper, {
+        state: {
+          ...getBaseState(mockPetitionsClerk),
+          caseDetail: { petitioners: [] },
+        },
+      });
+
+      expect(result.showEditRemoteTrialPermission).toEqual(false);
+    });
+
+    it('should be false when the user is a judge', () => {
+      const result = runCompute(caseInformationHelper, {
+        state: {
+          ...getBaseState(mockJudge),
+          caseDetail: { petitioners: [] },
+        },
+      });
+
+      expect(result.showEditRemoteTrialPermission).toEqual(false);
+    });
+
+    it('should be false when the user is an ADC user', () => {
+      const result = runCompute(caseInformationHelper, {
+        state: {
+          ...getBaseState(mockAdc),
+          caseDetail: { petitioners: [] },
+        },
+      });
+
+      expect(result.showEditRemoteTrialPermission).toEqual(false);
+    });
+
+    it('should be false when the user is an external user', () => {
+      const result = runCompute(caseInformationHelper, {
+        state: {
+          ...getBaseState(mockPrivatePractitioner),
+          caseDetail: { petitioners: [] },
+        },
+      });
+
+      expect(result.showEditRemoteTrialPermission).toEqual(false);
+    });
+  });
 });
