@@ -117,6 +117,13 @@ resource "aws_elasticsearch_domain_policy" "kibana_access" {
       },
       "Action": "es:ESHttp*",
       "Resource":"${aws_opensearch_domain.efcms-logs[0].arn}/*"
+    }, {
+      "Effect":"Allow",
+      "Principal": {
+        "AWS": ${jsonencode(local.all_account_roots)}
+      },
+      "Action": "es:ESHttp*",
+      "Resource":"${aws_opensearch_domain.efcms-logs[0].arn}/*"
     }
   ]
 }
@@ -227,6 +234,15 @@ locals {
   all_lambda_arns = concat(
     [aws_iam_role.lambda_elasticsearch_execution_role.arn],
     local.info_cluster_consumer_lambda_arns
+  )
+
+  consumer_account_roots = [
+    for account_id in var.es_info_cluster_lower_environment_account_ids :
+    "arn:aws:iam::${account_id}:root"
+  ]
+  all_account_roots = concat(
+    ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"],
+    local.consumer_account_roots
   )
 }
 
