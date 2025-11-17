@@ -42,8 +42,9 @@ export const statisticsFormHelper = (
     }
   });
 
-  const penalties = get(state.modal.penalties) as unknown[] | undefined;
-  const showAddAnotherPenaltyButton = penalties && penalties.length < 10;
+  const penalties = get(state.modal.penalties);
+  const showAddAnotherPenaltyButton =
+    Array.isArray(penalties) && penalties.length < 10;
 
   return {
     penaltyAmountType,

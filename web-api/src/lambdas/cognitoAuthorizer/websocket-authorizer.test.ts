@@ -3,7 +3,7 @@ import axios from 'axios';
 import jwk from 'jsonwebtoken';
 
 jest.mock('axios');
-const mockAxios = axios as jest.Mocked<typeof axios>;
+const mockAxios = jest.mocked(axios, { shallow: false });
 
 const mockLogger = {
   addContext: jest.fn(),
