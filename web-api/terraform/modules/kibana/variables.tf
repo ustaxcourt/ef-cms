@@ -45,10 +45,14 @@ variable "es_info_cluster_create" {
 }
 
 
-variable "es_info_cluster_shared_cluster_account_ids" {
+variable "es_info_cluster_lower_environment_account_ids" {
   default     = []
   description = "List of AWS account that are consumers of the info cluster"
   type        = list(string)
+}
+
+variable "es_info_cluster_arn" {
+  type = string
 }
 
 variable "es_info_cluster_endpoint" {

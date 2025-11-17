@@ -41,17 +41,20 @@ module "ci-cd" {
 }
 
 module "kibana" {
-  source                           = "../../modules/kibana"
-  cognito_suffix                   = var.cognito_suffix
-  es_logs_ebs_volume_size_gb       = var.es_logs_ebs_volume_size_gb
-  es_logs_instance_count           = var.es_logs_instance_count
-  es_logs_instance_type            = var.es_logs_instance_type
-  es_logs_engine_version           = var.es_logs_engine_version
-  sns_alarm_arn                    = module.health-alarms-east.topic_arn
-  log_group_environments           = var.log_group_environments
-  number_of_days_to_keep_info_logs = var.number_of_days_to_keep_info_logs
-  log_snapshot_bucket_name         = var.log_snapshot_bucket_name
-  es_info_cluster_endpoint         = var.es_info_cluster_endpoint
+  source                                        = "../../modules/kibana"
+  cognito_suffix                                = var.cognito_suffix
+  es_logs_ebs_volume_size_gb                    = var.es_logs_ebs_volume_size_gb
+  es_logs_instance_count                        = var.es_logs_instance_count
+  es_logs_instance_type                         = var.es_logs_instance_type
+  es_logs_engine_version                        = var.es_logs_engine_version
+  sns_alarm_arn                                 = module.health-alarms-east.topic_arn
+  log_group_environments                        = var.log_group_environments
+  number_of_days_to_keep_info_logs              = var.number_of_days_to_keep_info_logs
+  log_snapshot_bucket_name                      = var.log_snapshot_bucket_name
+  es_info_cluster_create                        = var.es_info_cluster_create
+  es_info_cluster_arn                           = var.es_info_cluster_arn
+  es_info_cluster_endpoint                      = var.es_info_cluster_endpoint
+  es_info_cluster_lower_environment_account_ids = var.es_info_cluster_lower_environment_account_ids
 }
 
 module "dawson-developer-permissions" {

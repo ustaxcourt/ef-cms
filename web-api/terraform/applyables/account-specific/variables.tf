@@ -46,6 +46,23 @@ variable "es_logs_engine_version" {
   type = string
 }
 
+variable "es_info_cluster_create" {
+  default     = false
+  description = "Determines whether to create an info opensearch or not"
+  type        = bool
+}
+
+
+variable "es_info_cluster_lower_environment_account_ids" {
+  default     = []
+  description = "List of AWS account that are consumers of the info cluster"
+  type        = list(string)
+}
+
+variable "es_info_cluster_arn" {
+  type = string
+}
+
 variable "es_info_cluster_endpoint" {
   type = string
 }
