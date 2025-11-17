@@ -82,7 +82,7 @@ export const oneSessionPerLocationPerWeekConstraint: Constraint = ({
 
   const meetsConstraint = !calendarState.sessionScheduledPerCityPerWeek[
     session.weekOf
-  ].has(session.trialLocation);
+  ]?.has(session.trialLocation);
 
   if (!meetsConstraint && session.sessionType === SESSION_TYPES.special) {
     return `More than one special trial per week scheduled: ${session.trialLocation}, ${formatDateString(session.weekOf, FORMATS.MD)}. \n`;
@@ -128,7 +128,7 @@ export const washingtonDcSpecialConstraint: Constraint = ({
   }
 
   if (
-    calendarState.sessionScheduledPerCityPerWeek[session.weekOf].has(
+    calendarState.sessionScheduledPerCityPerWeek[session.weekOf]?.has(
       WASHINGTON_DC_SOUTH_STRING,
     )
   ) {

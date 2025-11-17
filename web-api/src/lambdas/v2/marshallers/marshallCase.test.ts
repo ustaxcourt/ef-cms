@@ -61,6 +61,7 @@ describe('marshallCase (which fails if version increase is needed, DO NOT CHANGE
       'docketNumber',
       'docketNumberSuffix',
       'filingType',
+      'isSealed',
       'leadDocketNumber',
       'partyType',
       'practitioners',
@@ -86,10 +87,8 @@ describe('marshallCase (which fails if version increase is needed, DO NOT CHANGE
     expect(mock.status).toBeDefined();
     expect(mock.trialDate).toBeDefined();
     expect(mock.trialLocation).toBeDefined();
-    // @ts-ignore
-    expect(mock.contactPrimary).not.toBeDefined();
-    // @ts-ignore
-    expect(mock.contactSecondary).not.toBeDefined();
+    expect('contactPrimary' in mock).toBe(false);
+    expect('contactSecondary' in mock).toBe(false);
     expect(mock.petitioners).toBeDefined();
     expect(mock.docketEntries).toBeDefined();
     expect(mock.irsPractitioners).toBeDefined();

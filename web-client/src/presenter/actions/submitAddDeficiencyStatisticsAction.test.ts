@@ -50,12 +50,14 @@ describe('submitAddDeficiencyStatisticsAction', () => {
   });
 
   it('returns the error path if an error is encountered when calling the interactor', async () => {
-    (
-      presenter.providers.applicationContext.getUseCases()
-        .addDeficiencyStatisticInteractor as jest.Mock
-    ).mockImplementationOnce(() => {
-      throw new Error('error');
-    });
+    jest
+      .mocked(
+        presenter.providers.applicationContext.getUseCases()
+          .addDeficiencyStatisticInteractor,
+      )
+      .mockImplementationOnce(() => {
+        throw new Error('error');
+      });
 
     await runAction(submitAddDeficiencyStatisticsAction, {
       modules: {

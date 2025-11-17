@@ -135,12 +135,12 @@ describe('SPTO/SPOS requires a judge', () => {
         formattedDocketEntries: RawDocketEntry[];
       };
 
-      const caseDetailFormatted = (await runCompute(
+      const caseDetailFormatted: FormattedCaseDetail = await runCompute(
         withAppContextDecorator(formattedCaseDetail),
         {
           state: cerebralTest.getState(),
         },
-      )) as FormattedCaseDetail;
+      );
 
       const updatedDocument = caseDetailFormatted.formattedDocketEntries.find(
         doc => doc.docketEntryId === cerebralTest.docketEntryId,

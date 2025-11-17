@@ -18,35 +18,36 @@ export const completeDocumentSigningAction = async ({
 
   const signatureData = get(state.pdfForSigning.signatureData);
   if (signatureData?.x) {
+    const appContext = applicationContext as unknown as IApplicationContext;
     const { nameForSigning, nameForSigningLine2, pageNumber } = get(
       state.pdfForSigning,
     );
     const { scale, x, y } = signatureData;
-
-    const pdfjsObj = ((
-      window as Window & { pdfjsObj?: { getData: () => Promise<unknown> } }
-    ).pdfjsObj || get(state.pdfForSigning.pdfjsObj)) as {
-      getData: () => Promise<unknown>;
+    const windowWithPdfjs = window as Window & {
+      pdfjsObj?: { getData: () => Promise<unknown> };
     };
+    const pdfjsObj: { getData: () => Promise<unknown> } | null =
+      windowWithPdfjs.pdfjsObj || get(state.pdfForSigning.pdfjsObj);
+
+    if (!pdfjsObj) {
+      throw new Error('pdfjsObj is required to complete document signing.');
+    }
 
     // generate signed document to bytes
     const signedPdfBytes = await applicationContext
       .getUseCases()
-      .generateSignedDocumentInteractor(
-        applicationContext as unknown as IApplicationContext,
-        {
-          pageIndex: pageNumber - 1,
-          // pdf.js starts at 1
-          pdfData: await pdfjsObj.getData(),
-          posX: x,
-          posY: y,
-          scale,
-          sigTextData: {
-            signatureName: `(Signed) ${nameForSigning}`,
-            signatureTitle: nameForSigningLine2,
-          },
+      .generateSignedDocumentInteractor(appContext, {
+        pageIndex: pageNumber - 1,
+        // pdf.js starts at 1
+        pdfData: await pdfjsObj.getData(),
+        posX: x,
+        posY: y,
+        scale,
+        sigTextData: {
+          signatureName: `(Signed) ${nameForSigning}`,
+          signatureTitle: nameForSigningLine2,
         },
-      );
+      });
 
     const documentFile = new File([signedPdfBytes], 'myfile.pdf', {
       type: 'application/pdf',
@@ -61,16 +62,13 @@ export const completeDocumentSigningAction = async ({
 
     ({ signedDocketEntryId: docketEntryId } = await applicationContext
       .getUseCases()
-      .saveSignedDocumentInteractor(
-        applicationContext as unknown as IApplicationContext,
-        {
-          docketNumber,
-          nameForSigning,
-          originalDocketEntryId,
-          parentMessageId,
-          signedDocketEntryId: signedDocumentFromUploadId,
-        },
-      ));
+      .saveSignedDocumentInteractor(appContext, {
+        docketNumber,
+        nameForSigning,
+        originalDocketEntryId,
+        parentMessageId,
+        signedDocketEntryId: signedDocumentFromUploadId,
+      }));
   }
 
   let redirectUrl;
