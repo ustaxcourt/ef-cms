@@ -10,7 +10,7 @@ export const BaseModal = ({
   className,
   title,
 }: {
-  title: string;
+  title?: string;
   children?: React.ReactNode;
   className?: string;
 }) => {

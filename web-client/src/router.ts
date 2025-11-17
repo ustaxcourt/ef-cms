@@ -101,7 +101,8 @@ const router = {
     setPageTitle('U.S. Tax Court');
     // expose route function on window for use with cypress
 
-    window.__cy_route = path => route(path || '/');
+    (window as Window & { __cy_route?: (path: string) => void }).__cy_route =
+      path => route(path || '/');
     const { ROLE_PERMISSIONS } = app.getState('constants');
 
     registerRoute(
@@ -368,7 +369,6 @@ const router = {
         });
       }),
     );
-
     registerRoute(
       '/case-detail/*/documents/*/edit-court-issued..',
       ifHasAccess({ app }, (docketNumber, docketEntryId) => {
@@ -792,7 +792,6 @@ const router = {
         });
       }),
     );
-
     registerRoute(
       '/case-detail/*/documents/*/add-court-issued-docket-entry/*',
       ifHasAccess({ app }, (docketNumber, docketEntryId, parentMessageId) => {

@@ -1,13 +1,14 @@
+/* eslint-disable max-lines */
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import {
   docketClerkUser,
   petitionsClerkUser,
   validUser,
-} from '../../../../shared/src/test/mockUsers';
+} from '@shared/test/mockUsers';
 import { formattedWorkQueue as formattedWorkQueueComputed } from './formattedWorkQueue';
-import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
+import { getUserPermissions } from '@shared/authorization/getUserPermissions';
 import { runCompute } from '@web-client/presenter/test.cerebral';
-import { withAppContextDecorator } from '../../withAppContext';
+import { withAppContextDecorator } from '@web-client/withAppContext';
 
 describe('formattedWorkQueue', () => {
   const {
@@ -740,5 +741,220 @@ describe('formattedWorkQueue', () => {
     ).not.toHaveBeenCalled();
 
     expect(result[0].formattedCaseStatus).toBe(result[0].caseStatus);
+  });
+
+  it('should combine multiple work items from the same consolidated group into one with proper groupedCases for section inbox', () => {
+    const sharedDocketEntryId = '8eef49b4-9d40-4773-84ab-49e1e59e49cd';
+    const leadDocketNumber = '101-18';
+
+    const leadWorkItem = {
+      ...baseWorkItem,
+      assigneeId: docketClerkUser.userId,
+      docketEntry: {
+        ...baseWorkItem.docketEntry,
+        docketEntryId: sharedDocketEntryId,
+      },
+      docketEntryId: sharedDocketEntryId,
+      docketNumber: leadDocketNumber,
+      docketNumberWithSuffix: '101-18S',
+      leadDocketNumber,
+      workItemId: 'lead-work-item-id',
+    };
+
+    const consolidatedWorkItem1 = {
+      ...baseWorkItem,
+      assigneeId: docketClerkUser.userId,
+      docketEntry: {
+        ...baseWorkItem.docketEntry,
+        docketEntryId: sharedDocketEntryId,
+      },
+      docketEntryId: sharedDocketEntryId,
+      docketNumber: '102-18',
+      docketNumberWithSuffix: '102-18S',
+      leadDocketNumber,
+      workItemId: 'consolidated-work-item-1-id',
+    };
+
+    const consolidatedWorkItem2 = {
+      ...baseWorkItem,
+      assigneeId: docketClerkUser.userId,
+      docketEntry: {
+        ...baseWorkItem.docketEntry,
+        docketEntryId: sharedDocketEntryId,
+      },
+      docketEntryId: sharedDocketEntryId,
+      docketNumber: '103-18',
+      docketNumberWithSuffix: '103-18S',
+      leadDocketNumber,
+      workItemId: 'consolidated-work-item-2-id',
+    };
+
+    const soloWorkItemWithLead = {
+      ...baseWorkItem,
+      assigneeId: docketClerkUser.userId,
+      docketEntry: {
+        ...baseWorkItem.docketEntry,
+        docketEntryId: 'solo-docket-entry-id-1',
+      },
+      docketEntryId: 'solo-docket-entry-id-1',
+      docketNumber: '104-18',
+      docketNumberWithSuffix: '104-18S',
+      leadDocketNumber: '999-18', // Lead not in queue
+      workItemId: 'solo-work-item-with-lead-id',
+    };
+
+    const soloWorkItemWithoutLead = {
+      ...baseWorkItem,
+      assigneeId: docketClerkUser.userId,
+      docketEntry: {
+        ...baseWorkItem.docketEntry,
+        docketEntryId: 'solo-docket-entry-id-2',
+      },
+      docketEntryId: 'solo-docket-entry-id-2',
+      docketNumber: '105-18',
+      docketNumberWithSuffix: '105-18S',
+      leadDocketNumber: undefined,
+      workItemId: 'solo-work-item-without-lead-id',
+    };
+
+    const result = runCompute(formattedWorkQueue, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        workQueue: [
+          leadWorkItem,
+          consolidatedWorkItem1,
+          consolidatedWorkItem2,
+          soloWorkItemWithLead,
+          soloWorkItemWithoutLead,
+        ],
+        workQueueToDisplay: {
+          box: 'inbox',
+          queue: 'section',
+        },
+        selectedWorkItems: [],
+      },
+    });
+
+    // Should have 3 items total: 1 lead with grouped cases, 2 solo items
+    expect(result.length).toEqual(3);
+
+    // Find the lead work item in results
+    const leadResult = result.find(
+      item => item.workItemId === 'lead-work-item-id',
+    );
+    expect(leadResult).toBeDefined();
+    expect(leadResult!.groupedCases).toBeDefined();
+    expect(leadResult!.groupedCases!.length).toEqual(3);
+    expect(leadResult!.groupedCases).toEqual(
+      expect.arrayContaining([
+        {
+          docketNumber: leadDocketNumber,
+          docketNumberWithSuffix: '101-18S',
+          inLeadCase: true,
+        },
+        {
+          docketNumber: '102-18',
+          docketNumberWithSuffix: '102-18S',
+          inLeadCase: false,
+        },
+        {
+          docketNumber: '103-18',
+          docketNumberWithSuffix: '103-18S',
+          inLeadCase: false,
+        },
+      ]),
+    );
+
+    // Consolidated work items should not appear separately in results
+    expect(
+      result.find(item => item.workItemId === 'consolidated-work-item-1-id'),
+    ).toBeUndefined();
+    expect(
+      result.find(item => item.workItemId === 'consolidated-work-item-2-id'),
+    ).toBeUndefined();
+
+    // Solo item with lead should appear as standalone
+    const soloWithLeadResult = result.find(
+      item => item.workItemId === 'solo-work-item-with-lead-id',
+    );
+    expect(soloWithLeadResult).toBeDefined();
+    expect(soloWithLeadResult!.groupedCases).toBeUndefined();
+
+    // Solo item without lead should appear as standalone
+    const soloWithoutLeadResult = result.find(
+      item => item.workItemId === 'solo-work-item-without-lead-id',
+    );
+    expect(soloWithoutLeadResult).toBeDefined();
+    expect(soloWithoutLeadResult!.groupedCases).toBeUndefined();
+  });
+
+  it('should combine multiple work items from the same consolidated group into one with proper groupedCases for my inbox', () => {
+    const sharedDocketEntryId = '8eef49b4-9d40-4773-84ab-49e1e59e49cd';
+    const leadDocketNumber = '101-18';
+
+    const leadWorkItem = {
+      ...baseWorkItem,
+      assigneeId: docketClerkUser.userId,
+      docketEntry: {
+        ...baseWorkItem.docketEntry,
+        docketEntryId: sharedDocketEntryId,
+      },
+      docketEntryId: sharedDocketEntryId,
+      docketNumber: leadDocketNumber,
+      docketNumberWithSuffix: '101-18S',
+      leadDocketNumber,
+      workItemId: 'lead-work-item-id',
+    };
+
+    const consolidatedWorkItem1 = {
+      ...baseWorkItem,
+      assigneeId: docketClerkUser.userId,
+      docketEntry: {
+        ...baseWorkItem.docketEntry,
+        docketEntryId: sharedDocketEntryId,
+      },
+      docketEntryId: sharedDocketEntryId,
+      docketNumber: '102-18',
+      docketNumberWithSuffix: '102-18S',
+      leadDocketNumber,
+      workItemId: 'consolidated-work-item-1-id',
+    };
+
+    const result = runCompute(formattedWorkQueue, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        workQueue: [leadWorkItem, consolidatedWorkItem1],
+        workQueueToDisplay: {
+          box: 'inbox',
+          queue: 'my',
+        },
+        selectedWorkItems: [],
+      },
+    });
+
+    // Should have 1 item: the lead with grouped cases
+    expect(result.length).toEqual(1);
+
+    // Find the lead work item in results
+    const leadResult = result.find(
+      item => item.workItemId === 'lead-work-item-id',
+    );
+    expect(leadResult).toBeDefined();
+    expect(leadResult!.groupedCases).toBeDefined();
+    expect(leadResult!.groupedCases!.length).toEqual(2);
+    expect(leadResult!.groupedCases).toEqual(
+      expect.arrayContaining([
+        {
+          docketNumber: leadDocketNumber,
+          docketNumberWithSuffix: '101-18S',
+          inLeadCase: true,
+        },
+        {
+          docketNumber: '102-18',
+          docketNumberWithSuffix: '102-18S',
+          inLeadCase: false,
+        },
+      ]),
+    );
   });
 });

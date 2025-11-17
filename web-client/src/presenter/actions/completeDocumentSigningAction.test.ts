@@ -77,7 +77,7 @@ describe('completeDocumentSigningAction', () => {
   });
 
   beforeEach(() => {
-    global.window.pdfjsObj = mockPdfjsObj;
+    (global.window as Window & { pdfjsObj?: unknown }).pdfjsObj = mockPdfjsObj;
   });
 
   it('should sign a document via executing various use cases', async () => {
@@ -171,7 +171,7 @@ describe('completeDocumentSigningAction', () => {
   });
 
   it('accesses pdfjsObj from state if not available on window', async () => {
-    delete global.window.pdfjsObj;
+    delete (global.window as Window & { pdfjsObj?: unknown }).pdfjsObj;
     await runAction(completeDocumentSigningAction, {
       modules: {
         presenter,

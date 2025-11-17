@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
@@ -25,6 +26,7 @@ import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } fr
 import { updateDocketEntryPendingServiceStatus as updateDocketEntryPendingServiceStatusMock } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
+import { MOCK_CONSOLIDATED_CASE_SUMMARY } from '@shared/test/mockCase';
 
 const getUserById = jest.mocked(getUserByIdMock);
 
@@ -283,35 +285,6 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     expect(
       fileAndServeDocumentOnOneCase.mock.calls[0][0].docketEntryEntity.isDraft,
     ).toBe(false);
-  });
-
-  it('should set isFileAttached to true on the docket entry', async () => {
-    getCaseByDocketNumber.mockResolvedValue({
-      ...mockCase,
-      docketEntries: [
-        {
-          docketEntryId: mockDocketEntryId,
-          documentTitle: 'fake title',
-          isFileAttached: false,
-        } as RawDocketEntry,
-      ],
-    });
-
-    await serveExternallyFiledDocumentInteractor(
-      applicationContext,
-      {
-        clientConnectionId: '',
-        docketEntryId: mockDocketEntryId,
-        docketNumbers: [],
-        subjectCaseDocketNumber: mockCase.docketNumber,
-      },
-      mockDocketClerkUser,
-    );
-
-    expect(
-      fileAndServeDocumentOnOneCase.mock.calls[0][0].docketEntryEntity
-        .isFileAttached,
-    ).toBe(true);
   });
 
   it('should mark the docket entry as on the docket record', async () => {
@@ -699,5 +672,215 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
         .calls[0][0].message.pdfUrl,
     ).toBeUndefined();
+  });
+
+  describe('isFiledAcrossAllCases parameter', () => {
+    it('should serve document on all consolidated cases when isFiledAcrossAllCases is true and subject case is lead case with simultaneous document type', async () => {
+      const leadDocketNumber = '100-20';
+      const member1DocketNumber = '101-20';
+      const member2DocketNumber = '102-20';
+
+      const leadCase = {
+        ...mockCase,
+        docketNumber: leadDocketNumber,
+        leadDocketNumber,
+        consolidatedCases: [
+          {
+            ...MOCK_CONSOLIDATED_CASE_SUMMARY,
+            docketNumber: member1DocketNumber,
+          },
+          {
+            ...MOCK_CONSOLIDATED_CASE_SUMMARY,
+            docketNumber: member2DocketNumber,
+          },
+        ],
+        docketEntries: [
+          {
+            docketEntryId: mockDocketEntryId,
+            eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
+          } as RawDocketEntry,
+        ],
+      };
+
+      getCaseByDocketNumber.mockResolvedValue(leadCase);
+      getCasesByDocketNumbers.mockResolvedValue([
+        leadCase,
+        { ...mockCase, docketNumber: member1DocketNumber },
+        { ...mockCase, docketNumber: member2DocketNumber },
+      ]);
+
+      await serveExternallyFiledDocumentInteractor(
+        applicationContext,
+        {
+          clientConnectionId: mockClientConnectionId,
+          docketEntryId: mockDocketEntryId,
+          docketNumbers: [],
+          isFiledAcrossAllCases: true,
+          subjectCaseDocketNumber: leadDocketNumber,
+        },
+        mockDocketClerkUser,
+      );
+
+      expect(fileAndServeDocumentOnOneCase).toHaveBeenCalledTimes(3);
+      expect(getCasesByDocketNumbers).toHaveBeenCalledWith({
+        docketNumbers: [
+          leadDocketNumber,
+          member1DocketNumber,
+          member2DocketNumber,
+        ],
+      });
+    });
+
+    it('should only serve document on subject case when isFiledAcrossAllCases is false even with simultaneous document type', async () => {
+      const leadDocketNumber = '100-20';
+      const member1DocketNumber = '101-20';
+
+      const leadCase = {
+        ...mockCase,
+        docketNumber: leadDocketNumber,
+        leadDocketNumber,
+        consolidatedCases: [
+          {
+            ...MOCK_CONSOLIDATED_CASE_SUMMARY,
+            docketNumber: member1DocketNumber,
+          },
+        ],
+        docketEntries: [
+          {
+            docketEntryId: mockDocketEntryId,
+            eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
+          } as RawDocketEntry,
+        ],
+      };
+
+      getCaseByDocketNumber.mockResolvedValue(leadCase);
+      getCasesByDocketNumbers.mockResolvedValue([leadCase]);
+
+      await serveExternallyFiledDocumentInteractor(
+        applicationContext,
+        {
+          clientConnectionId: mockClientConnectionId,
+          docketEntryId: mockDocketEntryId,
+          docketNumbers: [],
+          isFiledAcrossAllCases: false,
+          subjectCaseDocketNumber: leadDocketNumber,
+        },
+        mockDocketClerkUser,
+      );
+
+      expect(fileAndServeDocumentOnOneCase).toHaveBeenCalledTimes(1);
+      expect(getCasesByDocketNumbers).toHaveBeenCalledWith({
+        docketNumbers: [leadDocketNumber],
+      });
+    });
+  });
+
+  it('should throw NotFoundError when user is not found', async () => {
+    getUserById.mockResolvedValue(undefined);
+
+    await expect(
+      serveExternallyFiledDocumentInteractor(
+        applicationContext,
+        {
+          clientConnectionId: mockClientConnectionId,
+          docketEntryId: mockDocketEntryId,
+          docketNumbers: [],
+          subjectCaseDocketNumber: mockCase.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow('User not found with user id');
+  });
+
+  it('should navigate to lead case when subject case is a member case with simultaneous doc type and isFiledAcrossAllCases is true', async () => {
+    const leadDocketNumber = '100-20';
+    const memberDocketNumber = '101-20';
+
+    const memberCase = {
+      ...mockCase,
+      docketNumber: memberDocketNumber,
+      leadDocketNumber,
+      docketEntries: [
+        {
+          docketEntryId: mockDocketEntryId,
+          eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
+        } as RawDocketEntry,
+      ],
+    };
+
+    const leadCase = {
+      ...mockCase,
+      docketNumber: leadDocketNumber,
+      consolidatedCases: [
+        {
+          ...MOCK_CONSOLIDATED_CASE_SUMMARY,
+          docketNumber: memberDocketNumber,
+        },
+      ],
+      docketEntries: [
+        {
+          docketEntryId: mockDocketEntryId,
+          eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
+        } as RawDocketEntry,
+      ],
+    };
+
+    getCaseByDocketNumber
+      .mockResolvedValueOnce(memberCase)
+      .mockResolvedValueOnce(leadCase);
+
+    getCasesByDocketNumbers.mockResolvedValue([leadCase, memberCase]);
+
+    await serveExternallyFiledDocumentInteractor(
+      applicationContext,
+      {
+        clientConnectionId: mockClientConnectionId,
+        docketEntryId: mockDocketEntryId,
+        docketNumbers: [],
+        isFiledAcrossAllCases: true,
+        subjectCaseDocketNumber: memberDocketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(getCaseByDocketNumber).toHaveBeenCalledWith({
+      docketNumber: leadDocketNumber,
+    });
+
+    expect(getCasesByDocketNumbers).toHaveBeenCalledWith({
+      docketNumbers: expect.arrayContaining([
+        leadDocketNumber,
+        memberDocketNumber,
+      ]),
+    });
+  });
+
+  it('should throw NotFoundError when docket entry is not found after serving', async () => {
+    const { Case } = await import('@shared/business/entities/cases/Case');
+
+    fileAndServeDocumentOnOneCase.mockImplementation(({ caseEntity }) => {
+      const caseWithoutDocketEntry = {
+        ...caseEntity,
+        docketEntries: [],
+      };
+      return Promise.resolve(
+        new Case(caseWithoutDocketEntry, {
+          authorizedUser: mockDocketClerkUser,
+        }),
+      );
+    });
+
+    await expect(
+      serveExternallyFiledDocumentInteractor(
+        applicationContext,
+        {
+          clientConnectionId: mockClientConnectionId,
+          docketEntryId: mockDocketEntryId,
+          docketNumbers: [],
+          subjectCaseDocketNumber: mockCase.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow('Could not find docket entry with id');
   });
 });

@@ -178,6 +178,7 @@ import { getDocketEntriesByFilter } from '@shared/business/utilities/getDocketEn
 import { getDocument } from '@web-client/persistence/s3/getDocument';
 import { getDocumentContentsForDocketEntryInteractor } from '../../shared/src/proxies/documents/getDocumentContentsForDocketEntryProxy';
 import { getDocumentDownloadUrlInteractor } from '../../shared/src/proxies/getDocumentDownloadUrlProxy';
+
 import { getDocumentTitleWithAdditionalInfo } from '../../shared/src/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { getEligibleCasesForTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/getEligibleCasesForTrialSessionProxy';
 import { getFormattedPartiesNameAndTitle } from '../../shared/src/business/utilities/getFormattedPartiesNameAndTitle';
@@ -349,6 +350,7 @@ import deepFreeze from 'deep-freeze';
 import { getTrialSessionOpenCasesCountInteractor } from '@shared/proxies/trialSessions/getTrialSessionOpenCasesCountProxy';
 import { getConsolidatedCaseDeadlinesInteractor } from '@shared/proxies/caseDeadline/getConsolidatedCaseDeadlinesProxy';
 import { removePetitionerEmailInteractor } from '@shared/proxies/removePetitionerEmailProxy';
+import { getIsFiledAcrossAllCasesInteractor } from '@shared/proxies/getIsFiledAcrossAllCasesProxy';
 
 const reduce = ImageBlobReduce({
   pica: ImageBlobReduce.pica({ features: ['js'] }),
@@ -481,6 +483,7 @@ const allUseCases = {
   getTrialSessionsForJudgeInteractor,
   getTrialSessionsInteractor,
   getUserCaseNoteForCasesInteractor,
+  getIsFiledAcrossAllCasesInteractor,
   getUserCaseNoteInteractor,
   getUserInteractor,
   getUserPendingEmailInteractor,

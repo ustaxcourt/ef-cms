@@ -1,11 +1,18 @@
 import { ConsolidatedCasesCheckboxes } from './ConsolidatedCasesCheckboxes';
 import { Hint } from '../ustc-ui/Hint/Hint';
+import { InfoNotificationComponent } from './InfoNotification';
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
-import React from 'react';
+import { props as cerebralProps } from 'cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
+import React, { JSX } from 'react';
+
+interface ConfirmInitiateServiceModalProps {
+  confirmSequence: Function;
+  documentTitle: string;
+}
+
+const props = cerebralProps as unknown as ConfirmInitiateServiceModalProps;
 
 export const ConfirmInitiateServiceModal = connect(
   {
@@ -21,10 +28,31 @@ export const ConfirmInitiateServiceModal = connect(
     confirmSequence,
     documentTitle,
     waitingForResponse,
-  }) {
+  }: {
+    cancelSequence: Function;
+    confirmInitiateServiceModalHelper: {
+      confirmationText: string;
+      showPaperAlert: boolean;
+      caseOrGroup: string;
+      contactsNeedingPaperService: Array<{ name: string }>;
+      showConsolidatedCasesForService: boolean;
+      additionalServedCases?: Array<{
+        docketNumber: string;
+        caseTitle: string;
+      }>;
+      paperPartiesConsolidated?: Array<{
+        name: string;
+        docketNumber: string;
+        contactType?: string;
+      }>;
+    };
+    confirmSequence: Function;
+    documentTitle: string;
+    waitingForResponse: boolean;
+  }): JSX.Element {
     let isSubmitDebounced = false;
 
-    const debounceSubmit = timeout => {
+    const debounceSubmit = (timeout: number): void => {
       isSubmitDebounced = true;
 
       setTimeout(() => {
@@ -38,7 +66,7 @@ export const ConfirmInitiateServiceModal = connect(
         cancelSequence={cancelSequence}
         className="confirm-initiate-service-modal"
         confirmLabel="Yes, Serve"
-        confirmSequence={() => {
+        confirmSequence={(): void => {
           debounceSubmit(200);
           confirmSequence();
         }}
@@ -46,7 +74,7 @@ export const ConfirmInitiateServiceModal = connect(
         disableSubmit={waitingForResponse || isSubmitDebounced}
         title="Are You Ready to Initiate Service?"
       >
-        <p className="margin-bottom-1">
+        <p className="margin-0">
           {confirmInitiateServiceModalHelper.confirmationText}
         </p>
         <p className="margin-top-0 margin-bottom-2">
@@ -54,6 +82,47 @@ export const ConfirmInitiateServiceModal = connect(
             {documentTitle}
           </strong>
         </p>
+        {confirmInitiateServiceModalHelper.additionalServedCases &&
+          confirmInitiateServiceModalHelper.additionalServedCases.length >
+            0 && (
+            <div>
+              <div>This document will also be served for:</div>
+              <ul className="padding-left-3 margin-top-1">
+                {confirmInitiateServiceModalHelper.additionalServedCases.map(
+                  c => (
+                    <li key={c.docketNumber}>
+                      {c.docketNumber} - {c.caseTitle}
+                    </li>
+                  ),
+                )}
+              </ul>
+            </div>
+          )}
+        {confirmInitiateServiceModalHelper.paperPartiesConsolidated && (
+          <InfoNotificationComponent
+            alertInfo={{
+              message: (
+                <>
+                  <div>
+                    <strong>
+                      Paper service is required for these parties:
+                    </strong>
+                  </div>
+                  {confirmInitiateServiceModalHelper.paperPartiesConsolidated.map(
+                    contact => (
+                      <div key={`${contact.docketNumber}-${contact.name}`}>
+                        {contact.docketNumber} - {contact.name},{' '}
+                        {contact.contactType}
+                      </div>
+                    ),
+                  )}
+                </>
+              ),
+            }}
+            dismissible={false}
+            scrollToTop={false}
+          />
+        )}
         {confirmInitiateServiceModalHelper.showPaperAlert && (
           <Hint fullWidth className="block">
             <div className="margin-bottom-1">

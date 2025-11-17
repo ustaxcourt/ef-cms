@@ -12,9 +12,7 @@ describe('refreshStatisticsAction', () => {
   });
 
   beforeEach(() => {
-    presenter.providers.applicationContext.getUniqueId.mockReturnValue(
-      statisticId,
-    );
+    jest.mocked(presenter.providers.applicationContext.getUniqueId).mockReturnValue(statisticId);
   });
 
   it('should clear the statistics array if case type is not deficiency', async () => {

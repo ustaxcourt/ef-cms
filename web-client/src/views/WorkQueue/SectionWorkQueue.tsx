@@ -1,7 +1,7 @@
 import { SectionWorkQueueInProgress } from './SectionWorkQueueInProgress';
 import { SectionWorkQueueInbox } from './SectionWorkQueueInbox';
 import { SectionWorkQueueOutbox } from './SectionWorkQueueOutbox';
-import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
+import { Tab, Tabs } from '@web-client/ustc-ui/Tabs/Tabs';
 import { WorkQueueActionButtons } from './WorkQueueActionButtons';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -21,6 +21,9 @@ export const SectionWorkQueue = connect(
     section,
     workQueueHelper,
   }) {
+    const inboxCountForTitle = workQueueHelper.sectionInboxCount;
+    const inProgressCountForTitle = workQueueHelper.sectionInProgressCount;
+
     return (
       <Tabs
         bind="workQueueToDisplay.box"
@@ -40,7 +43,7 @@ export const SectionWorkQueue = connect(
         <Tab
           data-testid="section-inbox-tab"
           tabName="inbox"
-          title={`Inbox (${workQueueHelper.sectionInboxCount})`}
+          title={`Inbox (${inboxCountForTitle})`}
         >
           <div id="section-inbox-tab-content">
             <SectionWorkQueueInbox />
@@ -50,7 +53,7 @@ export const SectionWorkQueue = connect(
           <Tab
             id="section-in-progress-tab"
             tabName="inProgress"
-            title={`In Progress (${workQueueHelper.sectionInProgressCount})`}
+            title={`In Progress (${inProgressCountForTitle})`}
           >
             <div id="section-in-progress-tab-content">
               <SectionWorkQueueInProgress />
@@ -61,7 +64,7 @@ export const SectionWorkQueue = connect(
           <Tab
             id="section-sent-tab"
             tabName="outbox"
-            title={workQueueHelper.sentTitle}
+            title={`${workQueueHelper.sentTitle}`}
           >
             <div id="section-sent-tab-content">
               <SectionWorkQueueOutbox />

@@ -14,6 +14,7 @@ import {
   EVENT_CODES_REQUIRING_SIGNATURE,
   EXTERNAL_DOCUMENT_TYPES,
   INTERNAL_DOCUMENT_TYPES,
+  MOTION_DISPOSITIONS,
   OBJECTIONS_OPTIONS,
   OPINION_DOCUMENT_TYPES,
   PARTIES_CODES,
@@ -31,7 +32,6 @@ export const SERVICE_INDICATOR_ERROR = {
   serviceIndicator:
     'You cannot change from paper to electronic service. Select a valid service preference.',
 };
-
 export const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
   action: JoiValidationConstants.STRING.max(100)
     .optional()
@@ -74,6 +74,7 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     .description(
       'An optional date used when generating a fully concatenated document title.',
     ),
+  dispositionOrder: joi.boolean().optional(),
   docketEntryId: JoiValidationConstants.UUID.required().description(
     'System-generated unique ID for the docket entry. If the docket entry is associated with a document in S3, this is also the S3 document key.',
   ),
@@ -319,6 +320,13 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
   ).required(),
   receivedAt: JoiValidationConstants.ISO_DATE.optional(),
   redactionAcknowledgement: joi.boolean().optional().invalid(false),
+  relatedMotionDisposition: joi.when('dispositionOrder', {
+    is: true,
+    then: JoiValidationConstants.STRING.required().valid(
+      ...Object.values(MOTION_DISPOSITIONS),
+    ),
+    otherwise: joi.optional().allow(null),
+  }),
   relationship: JoiValidationConstants.STRING.valid(
     ...Object.values(DOCUMENT_RELATIONSHIPS),
   ).optional(),

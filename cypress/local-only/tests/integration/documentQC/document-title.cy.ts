@@ -56,11 +56,11 @@ describe('Document title updates correctly', () => {
       });
       cy.get('[data-testid="save-and-finish-document-qc"]').click();
       viewMyOutbox();
-      cy.get(`[data-testid=work-item-outbox-row-${docketNumber}]`)
+      cy.contains('tr', docketNumber)
         .find('[data-testid=work-item-outbox-document-link]')
         .should('contain', `Exhibit(s) ${additionalInfo}`);
 
-      // Add ammendment to exhibit
+      // Add amendment to exhibit
       loginAsPrivatePractitioner();
       cy.visit(`/case-detail/${docketNumber}`);
       cy.get('[data-testid="button-file-document"]').click();
@@ -88,7 +88,7 @@ describe('Document title updates correctly', () => {
       cy.get('[data-testid="file-document-review-submit-document"]').click();
       cy.get('[data-testid="loading-overlay"]').should('not.exist');
 
-      // Docket clerks views work item for ammendment and sees it has the additional info in ammendment
+      // Docket clerks views work item for amendment and sees it has the additional info in amendment
       loginAsDocketClerk();
       cy.get('[data-testid="document-qc-nav-item"]').click();
       cy.get('[data-testid="switch-to-section-document-qc-button"]').click();
@@ -97,7 +97,7 @@ describe('Document title updates correctly', () => {
         .click();
       cy.get('[data-testid="save-and-finish-document-qc"]').click();
       viewMyOutbox();
-      cy.get(`[data-testid=work-item-outbox-row-${docketNumber}]`)
+      cy.contains('tr', docketNumber)
         .find('[data-testid=work-item-outbox-document-link]')
         .should(
           'contain',

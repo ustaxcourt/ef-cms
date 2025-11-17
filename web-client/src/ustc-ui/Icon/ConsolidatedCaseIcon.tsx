@@ -13,7 +13,7 @@ export const ConsolidatedCaseIcon = ({
   return (
     <>
       {inConsolidatedGroup && (
-        <span className="fa-layers fa-fw" title={consolidatedIconTooltipText}>
+        <span className="fa-layers fa-fw " title={consolidatedIconTooltipText}>
           <Icon
             aria-label={consolidatedIconTooltipText}
             className="fa-icon-blue"
