@@ -13,7 +13,7 @@ export const completeMessageAction = async ({
   get,
   props,
 }: ActionProps): Promise<void> => {
-  const form = get(state.modal.form);
+  const form: { message?: string } = get(state.modal.form);
   const { mostRecentMessage } = props;
 
   await applicationContext
@@ -21,8 +21,7 @@ export const completeMessageAction = async ({
     .completeMessageInteractor(applicationContext, {
       messages: [
         {
-          messageBody: ((form as { message?: string })?.message ||
-            '') as string,
+          messageBody: form?.message || '',
           parentMessageId: mostRecentMessage.parentMessageId,
         },
       ],

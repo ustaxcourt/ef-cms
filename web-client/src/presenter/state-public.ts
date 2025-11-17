@@ -23,6 +23,7 @@ import { publicTrialSessionsHelper } from '@web-client/presenter/computeds/Publi
 import { templateHelper } from './computeds/templateHelper';
 import { todaysOpinionsHelper } from './computeds/Public/todaysOpinionsHelper';
 import { todaysOrdersHelper } from './computeds/Public/todaysOrdersHelper';
+type PublicAdvancedSearchForm = { caseSearchByName: { petitionerName: string }; opinionSearch?: Record<string, boolean>; orderSearch?: Record<string, boolean> };
 
 const computeds = {
   advancedDocumentSearchHelper,
@@ -68,11 +69,7 @@ export const baseState = {
     pageNumber?: number;
     proceedingType?: string;
   },
-  advancedSearchForm: undefined as unknown as {
-    caseSearchByName: { petitionerName: string };
-    opinionSearch?: { [key: string]: boolean };
-    orderSearch?: { [key: string]: boolean };
-  },
+  advancedSearchForm: undefined as PublicAdvancedSearchForm | undefined,
   advancedSearchTab: 'case',
   alertError: null as null | {
     title?: string;

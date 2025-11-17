@@ -30,7 +30,11 @@ export const createConsolidatedGroup = (
 
       expect(docketNumber).toBeDefined();
 
-      cerebralTest.docketNumber = cerebralTest.leadDocketNumber = docketNumber;
+      cerebralTest.leadDocketNumber = docketNumber;
+      cerebralTest.docketNumber = docketNumber;
+      if (!cerebralTest.leadDocketNumber) {
+        throw new Error('Test setup failed: leadDocketNumber is not set');
+      }
       cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries.push(
         cerebralTest.docketNumber,
       );
@@ -62,6 +66,9 @@ export const createConsolidatedGroup = (
         expect(docketNumber).toBeDefined();
 
         cerebralTest.docketNumber = docketNumber;
+        if (!cerebralTest.leadDocketNumber) {
+          throw new Error('Test setup failed: leadDocketNumber is not set before member case creation');
+        }
         cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries.push(
           cerebralTest.docketNumber,
         );
