@@ -32,6 +32,9 @@ This command informs us of minor and major version updates that we need to updat
 
 This command informs us of known security vulnerabilities. If transitive dependencies are vulnerable, use the overrides block in `package.json` to specify version overrides. If a dependency is vulnerable and has no fix, consider replacing it with an alternative.
 
+> **Why am I seeing a medium severity for `quill`?**
+> Quill is used as our rich text editor for open text submissions. It currently has a potential XSS vulnerability if used incorrectly. This vulnerability can be avoided by using getContents/setContents in combination with the quill delta. Currently we are not at risk for how we are using Quill and this vulnerability is actively being disputed: https://github.com/quilljs/quill/issues/3364
+
 > **Why am I seeing a high severity for `ws`?**
 > [See below](#ws-3rd-party-dependency-of-cerebral).
 
@@ -218,6 +221,10 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 - When running npm audit, you'll see a high severity issue with ws, 'affected by a DoS when handling a request with many HTTP headers - https://github.com/advisories/GHSA-3h5v-q93c-6h6q'. This doesn't affect us as the vulnerability is on the server side and we're not using this package on the server. We tried to override this to 5.2.4 and 8.18.0 and weren't able to make this work as import paths have changed. In the mean time, we recommend skipping this issue. We could always fork the cerebral repo in the future if needed.
 
+### quill
+
+- Quill released version 2 in April 2024. It includes substantial changes. Because the focus is currently on Postgres, we have left it at a previous version.
+
 ### pdfjs-dist
 
 - As of [this release](https://github.com/mozilla/pdf.js/releases/tag/v5.1.91), and I think [this PR](https://github.com/mozilla/pdf.js/pull/19689), pdfjs seems to expect certain browser-side API functionality when loaded. This causes issues with our Cypress tests. The best way to fix this is worth investigating further. Perhaps we could polyfill, or even consider creating an issue in the pdfjs repo.
@@ -259,9 +266,6 @@ Upgrading `p-queue` past version 6 will cause issues related to module imports.
 
 ### uuid
 9/17/25 keeping it 11.1.0. The next version 12.0.0 and above no longer supports CommonJS
-
-### cognito-local
-keeping version 3.7.1 as newer versions introcude this vulnerability `fast-redact vulnerable to prototype pollution - https://github.com/advisories/GHSA-ffrw-9mx8-89p8`
 
 https://www.npmjs.com/package/uuid?activeTab=readme
 
