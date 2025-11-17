@@ -77,8 +77,9 @@ describe('deleteDeficiencyStatisticsAction', () => {
   });
 
   it('returns the error path if an error is encountered when calling the interactor', async () => {
-    const mockInteractor = applicationContext.getUseCases()
-      .deleteDeficiencyStatisticInteractor as jest.Mock;
+    const mockInteractor = jest.mocked(
+      applicationContext.getUseCases().deleteDeficiencyStatisticInteractor,
+    );
     mockInteractor.mockImplementationOnce(() => {
       throw new Error('error');
     });

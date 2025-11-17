@@ -33,10 +33,10 @@ export const caseDetailPractitionerSearchHelper = (get: Get): any => {
   const practitionerMatchesFormatted = formatMatches('practitionerMatches');
   const respondentMatchesFormatted = formatMatches('respondentMatches');
 
-  const modalStateTyped = modalState as {
+  const modalStateTyped: {
     practitionerMatches?: unknown[];
     respondentMatches?: unknown[];
-  };
+  } = modalState;
 
   const practitionerSearchResultsCount = modalState
     ? modalStateTyped.practitionerMatches?.length

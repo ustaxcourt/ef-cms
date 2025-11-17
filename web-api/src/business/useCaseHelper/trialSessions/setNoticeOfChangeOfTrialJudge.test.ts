@@ -11,9 +11,8 @@ import { setNoticeOfChangeOfTrialJudge } from './setNoticeOfChangeOfTrialJudge';
 jest.mock('@shared/business/utilities/getJudgeWithTitle', () => ({
   getJudgeWithTitle: jest.fn(),
 }));
-const mockGetJudgeWithTitle = getJudgeWithTitle as jest.MockedFunction<
-  typeof getJudgeWithTitle
->;
+const mockGetJudgeWithTitle: jest.MockedFunction<typeof getJudgeWithTitle> =
+  jest.mocked(getJudgeWithTitle);
 
 describe('setNoticeOfChangeOfTrialJudge', () => {
   const trialSessionId = '76a5b1c8-1eed-44b6-932a-967af060597a';
