@@ -40,6 +40,7 @@ import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getUniqueId } from '@shared/sharedAppContext';
 import { countPagesInDocument } from '@web-api/business/useCaseHelper/countPagesInDocument';
+import { uploadDocument } from '@web-api/persistence/s3/uploadDocument';
 
 export const addDocketEntryForPaymentStatus = ({ caseEntity, user }) => {
   if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.PAID) {
@@ -353,17 +354,17 @@ const generateNoticeOfReceipt = async ({
   const caseConfirmationPdfName =
     caseEntity.getCaseConfirmationGeneratedPdfFileName();
 
-  await applicationContext.getPersistenceGateway().uploadDocument({
+  await uploadDocument({
     applicationContext,
     pdfData: Buffer.from(combinedNotrPdfData),
-    pdfName: caseConfirmationPdfName,
+    key: caseConfirmationPdfName,
   });
 
   const notrDocumentStorageId = getUniqueId();
-  await applicationContext.getPersistenceGateway().uploadDocument({
+  await uploadDocument({
     applicationContext,
     pdfData: Buffer.from(combinedNotrPdfData),
-    pdfName: notrDocumentStorageId,
+    key: notrDocumentStorageId,
   });
 
   let urlToReturn;

@@ -55,7 +55,7 @@ export const generatePrintableTrialSessionCopyReportInteractor = async (
   await applicationContext.getPersistenceGateway().uploadDocument({
     applicationContext,
     pdfData: pdf,
-    pdfName: key,
+    key,
     useTempBucket: true,
   });
 

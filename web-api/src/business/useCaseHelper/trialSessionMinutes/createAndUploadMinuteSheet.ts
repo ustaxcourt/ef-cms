@@ -32,7 +32,7 @@ export const createAndUploadMinuteSheet = async (
   await uploadDocument({
     applicationContext,
     pdfData: pdf,
-    pdfName: storageId,
+    key: storageId,
   });
 
   return pdf;

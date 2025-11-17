@@ -67,7 +67,7 @@ export const generatePrintablePendingReportInteractor = async (
   await applicationContext.getPersistenceGateway().uploadDocument({
     applicationContext,
     pdfData: pdf,
-    pdfName: key,
+    key,
     useTempBucket: true,
   });
 

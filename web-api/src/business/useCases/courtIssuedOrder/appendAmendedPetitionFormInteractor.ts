@@ -44,6 +44,6 @@ export const appendAmendedPetitionFormInteractor = async (
   await applicationContext.getPersistenceGateway().uploadDocument({
     applicationContext,
     pdfData: Buffer.from(combinedPdf),
-    pdfName: documentStorageId,
+    key: documentStorageId,
   });
 };
