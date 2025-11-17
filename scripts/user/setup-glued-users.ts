@@ -247,7 +247,7 @@ const getUsers = async (): Promise<Users> => {
     const fullName = user.name;
     user.name = user.name.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9-_]/g, '');
 
-    if (user.role in ['judge', 'legacyJudge']) {
+    if (['judge', 'legacyJudge'].includes(user.role)) {
       users[user.name] = {
         email: `${
           user.judgeTitle!.indexOf('Special Trial') !== -1 ? 'st' : ''
