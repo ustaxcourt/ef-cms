@@ -10,16 +10,16 @@ There are a few areas that type error exist but are being ignored as we are tryi
 import React from 'react';
 import isEqual from 'lodash/isEqual';
 import Quill, {
-  QuillOptionsStatic,
-  DeltaStatic,
-  RangeStatic,
-  BoundsStatic,
-  StringMap,
-  Sources,
+  QuillOptions as QuillOptionsStatic,
+  Delta as DeltaStatic,
+  Range as RangeStatic,
+  Bounds as BoundsStatic,
+  EmitterSource as Sources,
 } from 'quill';
 
 type Value = string | DeltaStatic;
 type Range = RangeStatic | null;
+type StringMap = Record<string, any>;
 
 interface QuillOptions extends QuillOptionsStatic {
   tabIndex?: number;
