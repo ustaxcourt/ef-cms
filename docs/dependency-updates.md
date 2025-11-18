@@ -267,6 +267,7 @@ Quote from site:
 "Starting with uuid@12 CommonJS is no longer supported. See implications and motivation for details."
 
 - On October 27th, 2025, added `uuid` to the caveats list in `scripts/npm/upgrade-npm-packages.ts` to prevent automatic upgrades to v12+ during future
+- On November 18th, 2025, ugpraded `uuid` to 13.0.0, edited the jest config to ignore patterns for uuid
 
 ## Troubleshooting
 
