@@ -1,5 +1,4 @@
 import { WrappedIcon } from '../../ustc-ui/Icon/Icon';
-import { Button } from '@web-client/ustc-ui/Button/Button';
 import { CaseIcons } from '@web-client/ustc-ui/Icon/CaseIcons';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { PreformattedText } from '@web-client/ustc-ui/PreformatedText/PreformattedText';
@@ -80,20 +79,7 @@ export const OpenCases = connect(
                   <td>
                     <PreformattedText text={item.calendarNotes} />
                   </td>
-                  <td>
-                    {item.displayMinuteSheetFormButton && (
-                      <Button
-                        data-testId={`minute-sheet-button-${item.docketNumber}`}
-                        link
-                        href={item.minuteSheetRoute}
-                        rel="noreferrer noopener"
-                        target="_blank"
-                        icon="pencil-alt"
-                      >
-                        Minutes
-                      </Button>
-                    )}
-                  </td>
+                  <td></td>
                 </tr>
               </tbody>
             ))}
