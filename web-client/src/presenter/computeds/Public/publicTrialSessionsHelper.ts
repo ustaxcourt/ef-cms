@@ -13,6 +13,7 @@ import {
 import { getTrialCitiesGroupedByState } from '@shared/business/utilities/trialSession/trialCitiesGroupedByState';
 import { state } from '@web-client/presenter/app-public.cerebral';
 import {
+  createDateAtStartOfWeekEST,
   createISODateAtStartOfDayEST,
   createISODateString,
   dateStringsCompared,
@@ -84,25 +85,28 @@ function groupTrialSessions(
 
 const PAGE_SIZE = 100;
 
+// Check to see if the tsGroup start date is in the current week or future weeks
 function dateComparison(tsGroup): boolean {
-  const firstEndDate = tsGroup?.rows?.[0]?.formattedEstimatedEndDate;
+  const firstStartDate = tsGroup?.rows?.[0]?.startDate;
+  if (!firstStartDate) return false;
 
-  const todayIso = createISODateAtStartOfDayEST();
-  let compareIso;
+  const todayIso = createISODateString();
+  const startDateIso = createISODateString(firstStartDate);
 
-  if (firstEndDate) {
-    const firstEndIso = createISODateString(firstEndDate, FORMATS.MMDDYYYY);
+  const todayWeekStart = createDateAtStartOfWeekEST(todayIso, FORMATS.YYYYMMDD);
+  const startDateWeekStart = createDateAtStartOfWeekEST(
+    startDateIso,
+    FORMATS.YYYYMMDD,
+  );
 
-    compareIso = createISODateAtStartOfDayEST(firstEndIso);
-  } else {
-    const firstStartDate = tsGroup?.rows?.[0]?.startDate;
+  if (todayWeekStart === startDateWeekStart) return true;
 
-    if (!firstStartDate) return false;
+  const startDateIsoAtStartOfDay = createISODateAtStartOfDayEST(startDateIso);
+  const todayIsoAtStartOfDay = createISODateAtStartOfDayEST(todayIso);
 
-    compareIso = createISODateAtStartOfDayEST(firstStartDate);
-  }
-
-  return dateStringsCompared(compareIso, todayIso) >= 0;
+  return (
+    dateStringsCompared(startDateIsoAtStartOfDay, todayIsoAtStartOfDay) > 0
+  );
 }
 
 export const publicTrialSessionsHelper = (
