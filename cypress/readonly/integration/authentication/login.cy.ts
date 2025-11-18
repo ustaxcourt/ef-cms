@@ -1,3 +1,4 @@
+import { loginAsAdmissionsClerk } from 'cypress/helpers/authentication/login-as-helpers';
 import { getCypressEnv } from '../../../helpers/env/cypressEnvironment';
 
 describe('Given a user with a DAWSON account', () => {
@@ -7,21 +8,14 @@ describe('Given a user with a DAWSON account', () => {
 
   describe('When they login in with the correct email and password', () => {
     it('Then they should be taken to their dashboard', () => {
-      cy.visit('/login');
-      cy.get('[data-testid="email-input"]').type(
-        'testAdmissionsClerk@example.com',
-      );
-      cy.get('[data-testid="password-input"]').type(
-        getCypressEnv().defaultAccountPass,
-      );
-      cy.get('[data-testid="login-button"]').click();
-      cy.get('[data-testid="account-menu-button"]');
-      cy.get('[data-testid="error-alert"]').should('not.exist');
+      loginAsAdmissionsClerk('testAdmissionsClerk@example.com');
+      cy.get('[data-testid="account-menu-button"]').click();    // Burger in corner
+      cy.get('[data-testid^="error-alert"]').should('not.exist');
 
       // after reloading they are still logged in
       cy.reload();
-      cy.get('[data-testid="account-menu-button"]');
-      cy.get('[data-testid="error-alert"]').should('not.exist');
+      cy.get('[data-testid="account-menu-button"]').click();  // Burger in corner
+      cy.get('[data-testid^="error-alert"]').should('not.exist');
       cy.url().should('contain', '/messages');
 
       // manually access url (still logged in)
@@ -40,7 +34,7 @@ describe('Given a user with a DAWSON account', () => {
       cy.get('[data-testid="password-input"]').type('misspelled');
       cy.get('[data-testid="login-button"]').click();
 
-      cy.get('[data-testid="error-alert"]').should(
+      cy.get('[data-testid^="error-alert"]').should(
         'contain',
         'The email address or password you entered is invalid',
       );
@@ -62,7 +56,7 @@ describe('Given a user without a DAWSON account', () => {
       );
       cy.get('[data-testid="login-button"]').click();
 
-      cy.get('[data-testid="error-alert"]').should(
+      cy.get('[data-testid^="error-alert"]').should(
         'contain',
         'The email address or password you entered is invalid',
       );

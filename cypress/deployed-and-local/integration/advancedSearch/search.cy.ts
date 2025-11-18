@@ -21,7 +21,7 @@ describe('Advanced Search', () => {
 
   it('should find a served paper case when the user searches by party name or docket number', () => {
     /** Arrange */
-    createAndServePaperPetition().then(({ docketNumber, name }) => {
+    createAndServePaperPetition({ includeApwDocument: false }).then(({ docketNumber, name }) => {
       /** Act */
       cy.get('[data-testid="search-link"]').click();
       cy.get('[data-testid="petitioner-name"]').type(name);
@@ -102,8 +102,9 @@ describe('Advanced Search', () => {
   it('should find matching results when the user searches for an order by keyword', () => {
     /** Arrange */
     loginAsPetitionsClerk1();
-    createAndServePaperPetition().then(({ docketNumber }) => {
-      loginAsDocketClerk1();
+    createAndServePaperPetition({ includeApwDocument: false }).then(
+      ({ docketNumber }) => {
+        loginAsDocketClerk1();
 
       goToCase(docketNumber);
 
@@ -177,8 +178,9 @@ describe('Advanced Search', () => {
   it('should find matching results when the user searches for an opinion by keyword', () => {
     /** Arrange */
     loginAsPetitionsClerk1();
-    createAndServePaperPetition().then(({ docketNumber }) => {
-      loginAsDocketClerk1();
+    createAndServePaperPetition({ includeApwDocument: false }).then(
+      ({ docketNumber }) => {
+        loginAsDocketClerk1();
 
       goToCase(docketNumber);
 

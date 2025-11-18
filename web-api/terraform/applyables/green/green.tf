@@ -20,7 +20,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-       version = "~>6.15"
+      version = "6.20.0"
     }
   }
 }
@@ -194,10 +194,10 @@ module "ui-green" {
 }
 
 module "rds-expired-records-cleanup" {
-    source                 = "../../modules/rds-expired-records-cleanup"
-    current_color          = "green"
-    environment            = var.environment
-    postgres_user          = data.terraform_remote_state.remote.outputs.postgres_user
-    postgres_database      = data.terraform_remote_state.remote.outputs.database_name
-    postgres_host          = data.terraform_remote_state.remote.outputs.rds_host_name
+  source            = "../../modules/rds-expired-records-cleanup"
+  current_color     = "green"
+  environment       = var.environment
+  postgres_user     = data.terraform_remote_state.remote.outputs.postgres_user
+  postgres_database = data.terraform_remote_state.remote.outputs.database_name
+  postgres_host     = data.terraform_remote_state.remote.outputs.rds_host_name
 }
