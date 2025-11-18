@@ -208,14 +208,7 @@ Below is a list of dependencies that are locked down due to known issues with se
 - There is a high-severity security issue with ws (ws affected by a DoS when handling a request with many HTTP headers - https://github.com/advisories/GHSA-3h5v-q93c-6h6q); however, we only use ws on the client side, so this should not be an issue. (Only @cypress/puppeteer depends  on vulnerable version of puppeteer-core)
 - As of 15 April 2025, there is a high-security vulnerability for tar-fs < 3.0.7, which our current version of puppeteer relies on. As far as I can tell, this should not affect our use case since we are downloading from a trusted source (chromium). Hopefully the update to tar-fs will make its way into the next version of puppeteer we update to.
 - Peer-dependency tar-fs has high security vulnerability but this shouldn't affect us as far as we are aware of.
-- On October 27th, 2025, attempted to update puppeteer to 24.23.1 and @sparticuz/chromium to 141.0.0. However, this caused PDF visual regression tests to fail with pixel differences of 0.5-1.3% due to rendering engine changes in the newer Chromium version. The updates were reverted to maintain test stability.
 - On October 27th, 2025, successfully updated @types/aws-lambda from 8.10.155 to 8.10.156. This required changing `AttributeValueWithName` in `processStreamUtilities.ts` from an `interface extends` to a `type` with intersection (`&`) because the new version of `AttributeValue` is no longer extendable by interfaces.
-- On November 11th, 2025, attempted to upgrade to NodeJS v24.X. This caused an issue in the pdf-generation lambda function as puppeteer was no longer able able to launch chromium. Recieved an error stating 
-  ```
-  /tmp/chromium: error while loading shared libraries: libnspr4.so: cannot open shared object file: No such file or directory
-  ```
-  Researching this error results in some threads that suggest the error is caused by the lambda layer that puppeteer and chromium are stored on. Reverting to NodeJS V22.X resolved this issue.
-  At the time this upgrade was attempted, the NodeJS v24.X container for lambda was only in a beta/preview build. Hopefully this issue will not occur once this version is offically supported.
 
 ### ws, 3rd party dependency of Cerebral
 
