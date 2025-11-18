@@ -73,18 +73,19 @@ EOF
 }
 
 resource "aws_s3_bucket" "ustc_log_snapshots_bucket" {
-  count         = var.es_info_cluster_create ? 0 : 1
+  count         = var.es_info_cluster_create ? 1 : 1
   bucket        = var.log_snapshot_bucket_name
   force_destroy = false
 
-  provisioner "local-exec" {
-    when = create
-        command = "aws s3 cp s3://${self.bucket} s3://${local.backup_bucket_name} --recursive"
-  }
 }
 
 resource "aws_s3_bucket" "ustc_log_snapshots_bucket_backup" {
   count         = var.es_info_cluster_create ? 0 : 1
   bucket        = local.backup_bucket_name
   force_destroy = false
+
+  provisioner "local-exec" {
+    when = create
+    command = "aws s3 cp s3://${aws_s3_bucket.ustc_log_snapshots_bucket[0].bucket} s3://${self.bucket} --recursive"
+  }
 }
