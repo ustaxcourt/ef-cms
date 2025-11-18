@@ -11,6 +11,7 @@ import {
   formatDateString,
   formatNow,
   prepareDateFromString,
+  isValidPastDate
 } from '../../shared/src/business/utilities/DateHandler';
 import { caseStatusWithTrialInformation } from '@shared/business/utilities/caseStatusWithTrialInformation';
 import { combineAllPdfDocuments } from '@shared/business/utilities/pdfs/combineAllPdfDocuments';
@@ -84,6 +85,7 @@ const utilities = {
   isLeadCase,
   isPending: DocketEntry.isPending,
   isSealedCase,
+  isValidPastDate,
   prepareDateFromString,
   scrapePdfContents,
   serveCaseDocument,

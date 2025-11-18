@@ -18,6 +18,7 @@ import {
 import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { getCalendaredCasesForTrialSession as getCalendaredCasesForTrialSessionMock } from '@web-api/persistence/postgres/trialSessions/getCalendaredCasesForTrialSession';
 import { TCaseOrder } from '@shared/business/entities/trialSessions/TrialSession';
+import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
 
 describe('getEligibleCasesForTrialSessionInteractor', () => {
   let mockTrial;
@@ -53,7 +54,9 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
     getTrialSessionById.mockImplementation(() => mockTrial);
     applicationContext
       .getPersistenceGateway()
-      .getEligibleCasesForTrialSession.mockReturnValue([MOCK_ELIGIBLE_CASE]);
+      .getEligibleCasesForTrialSession.mockReturnValue([
+        { ...MOCK_ELIGIBLE_CASE, docketEntries: [] },
+      ]);
     getCalendaredCasesForTrialSession.mockResolvedValue([MOCK_ASSOCIATED_CASE]);
   });
 
@@ -118,5 +121,47 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
       mockEligibleCaseWithPractitioners,
       mockEligibleCase,
     ]);
+  });
+
+  it('should throw error if trial session is not found', async () => {
+    getTrialSessionById.mockResolvedValueOnce(undefined);
+    await expect(
+      getEligibleCasesForTrialSessionInteractor(
+        applicationContext,
+        {
+          trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow(
+      'Trial session 6805d1ab-18d0-43ec-bafb-654e83405416 was not found.',
+    );
+  });
+
+  it('should assign isAgedCase property', async () => {
+    mockTrial = {
+      ...MOCK_TRIAL,
+      caseOrder: [
+        {
+          docketNumber: MOCK_ASSOCIATED_CASE.docketNumber,
+          isManuallyAdded: true,
+        },
+      ],
+      isCalendared: false,
+    };
+    applicationContext
+      .getPersistenceGateway()
+      .getEligibleCasesForTrialSession.mockReturnValue([
+        { ...MOCK_ELIGIBLE_CASE, docketEntries: MOCK_DOCUMENTS },
+      ]);
+    const result = await getEligibleCasesForTrialSessionInteractor(
+      applicationContext,
+      {
+        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      },
+      mockDocketClerkUser,
+    );
+    expect(result[0].isAgedCase).toBe(true);
+    expect(result[1].isAgedCase).toBe(true);
   });
 });

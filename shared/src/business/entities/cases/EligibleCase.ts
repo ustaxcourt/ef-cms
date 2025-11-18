@@ -22,6 +22,8 @@ export class EligibleCase extends JoiValidationEntity {
   public privatePractitioners?: PrivatePractitioner[];
   public qcCompleteForTrial?: Record<string, any>;
   public isSealed: boolean;
+  public isAgedCase: boolean;
+  public inConsolidatedGroup: boolean;
 
   constructor(rawProps) {
     super('EligibleCase');
@@ -38,6 +40,8 @@ export class EligibleCase extends JoiValidationEntity {
     this.caseType = rawProps.caseType;
     this.qcCompleteForTrial = rawProps.qcCompleteForTrial || {};
     this.isSealed = isSealedCase(rawProps);
+    this.isAgedCase = !!rawProps.isAgedCase;
+    this.inConsolidatedGroup = !!rawProps.leadDocketNumber;
 
     if (Array.isArray(rawProps.privatePractitioners)) {
       this.privatePractitioners = rawProps.privatePractitioners.map(
