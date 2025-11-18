@@ -29,15 +29,6 @@ export const getDownloadPolicyUrlInteractor = async (
   }
 
   const caseEntity = new Case(caseData, { authorizedUser });
-  
-  let docketEntryEntity = caseEntity.getDocketEntryById({
-    docketEntryId: key,
-  });
-  if (!docketEntryEntity) {
-    docketEntryEntity = caseEntity.docketEntries.find(de => {
-      return de.documentStorageId === key;
-    });
-  }
 
   if (key.includes('.pdf')) {
     if (
@@ -51,14 +42,27 @@ export const getDownloadPolicyUrlInteractor = async (
       throw new UnauthorizedError(UNAUTHORIZED_DOCUMENT_MESSAGE);
     }
   } else {
+    let docketEntryEntity = caseEntity.getDocketEntryById({
+      docketEntryId: key,
+    });
+
+    if (!docketEntryEntity) {
+      docketEntryEntity = caseEntity.docketEntries.find(de => {
+        return de.documentStorageId === key;
+      });
+    }
+
     if (!docketEntryEntity) {
       throw new NotFoundError(`Docket entry ${key} was not found.`);
     }
+
     if (!docketEntryEntity.isFileAttached) {
       throw new NotFoundError(
         `Docket entry ${key} does not have an attached file.`,
       );
     }
+
+    key = docketEntryEntity.documentStorageId;
 
     const featureFlags = await applicationContext
       .getUseCases()
@@ -83,7 +87,7 @@ export const getDownloadPolicyUrlInteractor = async (
 
   return applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
     applicationContext,
-    key: docketEntryEntity!.documentStorageId,
+    key,
   });
 };
 
