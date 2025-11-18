@@ -15,12 +15,17 @@ export const PublicMobileTrialSessionsTable = connect<
 >(PublicMobileTrialSessionsTableDeps, function ({ publicTrialSessionsHelper }) {
   const { filteredGroups } = publicTrialSessionsHelper;
 
+  const totalCount = filteredGroups.reduce(
+    (sum, group) => sum + group.rows.length,
+    0,
+  );
+
   return (
     <>
       <div className="grid-row margin-bottom-2 width-full flex-align-center"></div>
       <div className="width-full text-right">
         <span className="text-bold">Count:</span>{' '}
-        <span className="text-semibold">{filteredGroups.length}</span>
+        <span className="text-semibold">{totalCount}</span>
       </div>
       {filteredGroups.length === 0 && (
         <p>There are no trial sessions for the selected filters.</p>
