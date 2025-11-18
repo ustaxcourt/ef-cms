@@ -26,27 +26,31 @@ interface TextAreaProps
 const styles = {
   border:
     'tw:block tw:w-full tw:rounded-md tw:border-[1px] tw:border-grey-base tw:bg-white',
-  focus: 'tw:focus-visible:ring-4 tw:focus-visible:ring-offset-[4px] tw:focus-visible:ring-ring tw:focus-visible:outline-none',
+  focus:
+    'tw:focus-visible:ring-4 tw:focus-visible:ring-offset-[4px] tw:focus-visible:ring-ring tw:focus-visible:outline-none',
   icon: 'tw:ml-1 tw:text-[16px] tw:xs:text-[18px] tw:text-primary',
-  label: 'tw:text-[16px] tw:xs:text-[18px] !tw:font-semibold !tw:text-grey-base',
-  optional: 'tw:text-grey-dark tw:ml-1 tw:font-normal tw:text-[14px] tw:xs:text-[16px]',
+  label:
+    'tw:text-[16px] tw:xs:text-[18px] !tw:font-semibold !tw:text-grey-base',
+  optional:
+    'tw:text-grey-dark tw:ml-1 tw:font-normal tw:text-[14px] tw:xs:text-[16px]',
   text: {
     base: 'tw:xs:text-[18px] tw:text-[16px] tw:outline-none tw:cursor-text',
-    help: 'tw:xs:mb-[13px] tw:text-[14px] tw:xs:text-[16px] tw:text-grey-dark'
+    help: 'tw:xs:mb-[13px] tw:text-[14px] tw:xs:text-[16px] tw:text-grey-dark',
   },
   states: {
-    disabled:'tw:disabled:cursor-not-allowed tw:disabled:bg-grey-light tw:disabled:text-grey-light',
+    disabled:
+      'tw:disabled:cursor-not-allowed tw:disabled:bg-grey-light tw:disabled:text-grey-light',
     error: 'tw:border-red-primary tw:hover:border-red-primary tw:border-[2px]',
-    hover:'tw:hover:border-grey-base tw:hover:shadow-none'
-  }
+    hover: 'tw:hover:border-grey-base tw:hover:shadow-none',
+  },
 };
 
 /**
- * Used custom hook because browser focus-visible is triggered by both 
- * keyboard and mouse for inputs/textboxes, 
+ * Used custom hook because browser focus-visible is triggered by both
+ * keyboard and mouse for inputs/textboxes,
  * but we only want to apply focus styles on keyboard navigation
- * 
- */ 
+ *
+ */
 const useKeyboardListenerHook = () => {
   const [isTab, setIsTab] = React.useState(false);
 
@@ -55,7 +59,7 @@ const useKeyboardListenerHook = () => {
       if (event.key === 'Tab') {
         setIsTab(true);
       }
-    };  
+    };
 
     const handleMouseDown = () => {
       setIsTab(false);
@@ -70,10 +74,10 @@ const useKeyboardListenerHook = () => {
     };
   }, []);
 
-  return {isTab}
-}
+  return { isTab };
+};
 
-const InputError = ({error}) => (
+const InputError = ({ error }) => (
   <>
     {error && (
       <div className="tw:mt-[6px] tw:xs:mt-[8px] tw:gap-2 tw:text-red-primary">
@@ -81,13 +85,11 @@ const InputError = ({error}) => (
           icon={faExclamationCircle}
           className="tw-text-[16px] tw:xs:text-[18px] tw:mr-[4px]"
         />
-        <span className="tw-text-[16px] tw:xs:text-[18px]">
-              {error}
-            </span>
+        <span className="tw-text-[16px] tw:xs:text-[18px]">{error}</span>
       </div>
     )}
   </>
-)
+);
 
 const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
   (
@@ -116,7 +118,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
     const parentDiv = classNames(
       'tw:flex',
       flexDirection === 'vertical' ? 'tw:flex-col' : 'tw:flex-row',
-      !helpText && 'tw:items-center'
+      !helpText && 'tw:items-center',
     );
 
     const inputClass = classNames(
@@ -128,7 +130,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
       styles.states.hover,
       error && styles.states.error,
       'tw:px-3 tw:xs:h-[36px] tw:h-[32px]',
-      'tw:w-[380px] tw:ps-[10px] tw:xs:ps-[12px]'
+      'tw:w-[380px] tw:ps-[10px] tw:xs:ps-[12px]',
     );
 
     return (
@@ -161,24 +163,35 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                 </span>
               </div>
               {helpText && (
-                <div id={helpTextId} className={cn(styles.text.help, "tw:xs:mt-[10px] tw:mt-[8px] tw:mb-[9px]", flexDirection === 'horizontal' && 'tw:mt-[0px] tw:xs:mt-[0px]')}>
+                <div
+                  id={helpTextId}
+                  className={cn(
+                    styles.text.help,
+                    'tw:font-normal tw:xs:mt-[10px] tw:mt-[8px] tw:mb-[9px]',
+                    flexDirection === 'horizontal' &&
+                      'tw:mt-[0px] tw:xs:mt-[0px]',
+                  )}
+                >
                   {helpText}
                 </div>
               )}
             </div>
           </label>
         )}
-        <div className={flexDirection === 'vertical' ? 'tw:flex-col' : 'tw:flex-row tw:w-full'}>
+        <div
+          className={
+            flexDirection === 'vertical'
+              ? 'tw:flex-col'
+              : 'tw:flex-row tw:w-full'
+          }
+        >
           <input
             id={inputId}
             ref={ref}
             type={type}
             aria-invalid={!!error}
             aria-required={required}
-            aria-describedby={cn(
-              helpTextId,
-              errorId
-            )}
+            aria-describedby={cn(helpTextId, errorId)}
             aria-labelledby={labelId}
             className={inputClass}
             {...props}
@@ -192,7 +205,6 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 
 const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
   ({ className, error, label, helpText, ...props }, ref) => {
-
     const textareaId = React.useId();
     const labelId = React.useId();
     const helpTextId = helpText ? React.useId() : undefined;
@@ -242,7 +254,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
                 )}
               </div>
               {helpText && (
-                <div className={cn(styles.text.help, "tw:mb-[9px]")}>
+                <div className={cn(styles.text.help, 'tw:mb-[9px]')}>
                   {helpText}
                 </div>
               )}
@@ -254,10 +266,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
             id={textareaId}
             ref={ref}
             aria-invalid={!!error}
-            aria-describedby={cn(
-              helpTextId, 
-              errorId && errorId
-            )}
+            aria-describedby={cn(helpTextId, errorId && errorId)}
             className={textAreaClass}
             {...props}
           />
