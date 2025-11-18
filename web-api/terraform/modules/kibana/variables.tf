@@ -39,11 +39,8 @@ variable "es_logs_engine_version" {
 }
 
 variable "es_info_cluster_create" {
-  default     = false
-  description = "Determines whether to create an info opensearch or not"
-  type        = bool
+  type = true
 }
-
 
 variable "es_info_cluster_lower_environment_account_ids" {
   default     = []
