@@ -47,7 +47,8 @@ variable "es_logs_engine_version" {
 }
 
 variable "es_info_cluster_create" {
-  type = true
+  default = true
+  type = bool
 }
 
 variable "es_info_cluster_lower_environment_account_ids" {
