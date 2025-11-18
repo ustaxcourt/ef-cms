@@ -153,6 +153,7 @@ export const Login = connect(
                         e.preventDefault();
                         navigateToCreatePetitionerAccountSequence();
                       }}
+                      variant="primary"
                     >
                       Create your account now.
                     </Button>
