@@ -2,6 +2,7 @@ data "aws_caller_identity" "current" {}
 
 locals {
   opensearch_endpoint = length(aws_opensearch_domain.efcms-logs) > 0 ? "https://${aws_opensearch_domain.efcms-logs[0].endpoint}" : "https://${var.es_info_cluster_endpoint}"
+  backup_bucket_name  = "${var.log_snapshot_bucket_name}-backup"
 }
 
 provider "opensearch" {
@@ -72,7 +73,18 @@ EOF
 }
 
 resource "aws_s3_bucket" "ustc_log_snapshots_bucket" {
-  count         = var.es_info_cluster_create ? 1 : 0
-  bucket        = "${var.log_snapshot_bucket_name}-new"
+  count         = var.es_info_cluster_create ? 0 : 1
+  bucket        = var.log_snapshot_bucket_name
+  force_destroy = false
+
+  provisioner "local-exec" {
+    when = create
+        command = "aws s3 cp s3://${self.bucket} s3://${local.backup_bucket_name} --recursive"
+  }
+}
+
+resource "aws_s3_bucket" "ustc_log_snapshots_bucket_backup" {
+  count         = var.es_info_cluster_create ? 0 : 1
+  bucket        = local.backup_bucket_name
   force_destroy = false
 }
