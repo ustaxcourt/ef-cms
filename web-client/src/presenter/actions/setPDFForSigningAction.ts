@@ -1,4 +1,3 @@
-import { loadPDFForSigningInteractor } from '@shared/business/useCases/loadPDFForSigningInteractor';
 import { state } from '@web-client/presenter/app.cerebral';
 import { PDFDocumentProxy } from 'pdfjs-dist';
 
@@ -32,14 +31,13 @@ export const setPDFForSigningAction = async ({
     store.set(state.pdfForSigning.isPdfAlreadySigned, true);
   }
 
-  const pdfObj: PDFDocumentProxy = await loadPDFForSigningInteractor(
-    applicationContext,
-    {
+  const pdfObj: PDFDocumentProxy = await applicationContext
+    .getUseCases()
+    .loadPDFForSigningInteractor(applicationContext, {
       documentStorageId,
       docketNumber: caseDetail?.docketNumber,
       removeCover,
-    },
-  );
+    });
 
   store.set(state.pdfForSigning.pdfjsObj, pdfObj);
 };

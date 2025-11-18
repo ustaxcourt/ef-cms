@@ -54,10 +54,6 @@ export const loadPDFForSigningInteractor = async (
       isEvalSupported: false,
     }).promise;
   } catch (err) {
-    applicationContext.logger.error(
-      `error loading PDF for signing with documentStorageId ${documentStorageId}`,
-      err,
-    );
-    throw new Error('error loading PDF for signing');
+    throw new Error(`error loading PDF for signing: ${documentStorageId}`);
   }
 };
