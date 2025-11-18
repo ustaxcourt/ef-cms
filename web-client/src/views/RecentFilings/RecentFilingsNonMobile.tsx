@@ -5,7 +5,7 @@ import {
 import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseIcon';
-import { WrappedIcon } from '@web-client/ustc-ui/Icon/Icon';
+import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
 import { SortableHeader } from '@web-client/ustc-ui/Table/SortableHeader';
 import React from 'react';
@@ -204,14 +204,14 @@ export const RecentFilingsNonMobile = ({
                       </td>
                       <td className="text-center width-5">
                         {filing.isSealed && (
-                          <WrappedIcon
-                            iconAriaLabel={
+                          <Icon
+                            aria-label={
                               filing.sealedTo ===
                               DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC
                                 ? 'Sealed to the public'
                                 : 'Sealed to the public and parties of this case'
                             }
-                            iconClass="sealed-case-entry"
+                            className="sealed-case-entry"
                             icon="lock"
                             title={
                               filing.sealedTo ===

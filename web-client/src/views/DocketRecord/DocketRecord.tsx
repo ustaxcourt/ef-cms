@@ -3,6 +3,7 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { DocketRecordHeader } from './DocketRecordHeader';
 import { DocketRecordOverlay } from './DocketRecordOverlay';
 import { FilingsAndProceedings } from '../DocketRecord/FilingsAndProceedings';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { NonPhone, Phone } from '@web-client/ustc-ui/Responsive/Responsive';
 import { SealDocketEntryModal } from './SealDocketEntryModal';
 import { UnsealDocketEntryModal } from './UnsealDocketEntryModal';
@@ -12,7 +13,6 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
 import { SortableHeader } from '@web-client/ustc-ui/Table/SortableHeader';
-import { WrappedIcon } from '@web-client/ustc-ui/Icon/Icon';
 
 export const DocketRecord = connect(
   {
@@ -236,16 +236,12 @@ export const DocketRecord = connect(
                           {entry.eventCode}
                         </td>
                         <td aria-hidden="true" className="filing-type-icon">
-                          {entry.iconsToDisplay.map(
-                            ({ icon, className, title }, index) => (
-                              <WrappedIcon
-                                key={index}
-                                icon={icon}
-                                iconClass={className}
-                                title={title}
-                              />
-                            ),
-                          )}
+                          {entry.iconsToDisplay.map(iconInfo => (
+                            <FontAwesomeIcon
+                              key={iconInfo.icon}
+                              {...iconInfo}
+                            />
+                          ))}
                         </td>
                         <td
                           data-testid={`docket-entry-filingsAndProceedings-${entry.index}`}

@@ -15,8 +15,6 @@ export const ModalDialog = ({
   closeLink = true,
   confirmHref,
   confirmLabel,
-  clearLabel,
-  clearSequence,
   confirmSequence,
   confirmTarget = '_self',
   dataTestId = 'modal-dialog',
@@ -38,8 +36,6 @@ export const ModalDialog = ({
   closeLink?: boolean;
   confirmHref?: string;
   confirmLabel?: string;
-  clearLabel?: string;
-  clearSequence?: any;
   confirmSequence: any;
   confirmTarget?: string;
   dataTestId?: string;
@@ -84,11 +80,6 @@ export const ModalDialog = ({
   const runConfirmSequence = evt => {
     evt.stopPropagation();
     confirmSequence.call();
-  };
-
-  const runClearSequence = evt => {
-    evt.stopPropagation();
-    clearSequence?.call();
   };
 
   const touchmoveTriggered = evt => {
@@ -183,16 +174,6 @@ export const ModalDialog = ({
                     onClick={runCancelSequence}
                   >
                     {cancelLabel}
-                  </Button>
-                )}
-                {clearLabel && (
-                  <Button
-                    link
-                    aria-label="Clear"
-                    className="modal-button-clear"
-                    onClick={runClearSequence}
-                  >
-                    {clearLabel}
                   </Button>
                 )}
               </div>

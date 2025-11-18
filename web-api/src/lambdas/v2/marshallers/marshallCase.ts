@@ -40,6 +40,5 @@ export const marshallCase = caseObject => {
     status: caseObject.status,
     trialDate: caseObject.trialDate,
     trialLocation: caseObject.trialLocation,
-    isSealed: caseObject.isSealed,
   };
 };

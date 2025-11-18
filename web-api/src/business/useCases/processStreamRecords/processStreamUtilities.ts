@@ -67,6 +67,6 @@ export const shouldProcessRecord = ({
   );
 };
 
-export type AttributeValueWithName = AttributeValue & {
-  name?: string;
-};
+export interface AttributeValueWithName extends AttributeValue {
+  name?: string | undefined;
+}

@@ -37,7 +37,6 @@ import {
   roundDateDownToNearestHour,
   subtractISODates,
   validateDateAndCreateISO,
-  isValidPastDate,
 } from './DateHandler';
 
 describe('DateHandler', () => {
@@ -1059,40 +1058,6 @@ describe('DateHandler', () => {
 
       const resultDate = roundDateDownToNearestHour(inputISO);
       expect(resultDate.toISOString()).toBe(inputISO);
-    });
-  });
-
-  describe('isValidPastDate', () => {
-    const originalNow = Settings.now.bind(Settings);
-    const originalDefaultZone = Settings.defaultZone;
-    beforeAll(() => {
-      // Mock current time to 2024-10-30T12:00:00.000Z (1730289600000 ms)
-      Settings.now = () => 1730289600000;
-      Settings.defaultZone = 'system';
-    });
-
-    afterAll(() => {
-      Settings.now = originalNow;
-      Settings.defaultZone = originalDefaultZone;
-    });
-
-    it('returns true for today', () => {
-      const iso = '2024-10-30T12:00:00.000Z';
-      expect(isValidPastDate(iso)).toBe(true);
-    });
-
-    it('returns true for a past date', () => {
-      const iso = '2024-10-29T12:00:00.000Z';
-      expect(isValidPastDate(iso)).toBe(true);
-    });
-
-    it('returns false for a future date', () => {
-      const iso = '2024-10-31T12:00:00.000Z';
-      expect(isValidPastDate(iso)).toBe(false);
-    });
-
-    it('returns false for invalid input', () => {
-      expect(isValidPastDate('not-a-date')).toBe(false);
     });
   });
 });

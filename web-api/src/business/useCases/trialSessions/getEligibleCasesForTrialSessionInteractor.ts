@@ -10,7 +10,6 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { getCalendaredCasesForTrialSession } from '@web-api/persistence/postgres/trialSessions/getCalendaredCasesForTrialSession';
-import { getEligibleCasesWithIsAgedCase } from '@shared/business/useCaseHelper/getEligibleCasesWithIsAgedCase';
 
 /**
  * get eligible cases for trial session
@@ -57,14 +56,11 @@ export const getEligibleCasesForTrialSessionInteractor = async (
       trialCity: trialSessionEntity.trialLocation!,
     });
 
-  const eligibleCasesWithIsAgedCase = getEligibleCasesWithIsAgedCase([
-    ...calendaredCases,
-    ...eligibleCases,
-  ]);
-
-  const eligibleCasesFiltered = eligibleCasesWithIsAgedCase.map(rawCase => {
-    return new EligibleCase(rawCase).validate().toRawObject();
-  });
+  const eligibleCasesFiltered = calendaredCases
+    .concat(eligibleCases)
+    .map(rawCase => {
+      return new EligibleCase(rawCase).validate().toRawObject();
+    });
 
   return eligibleCasesFiltered;
 };

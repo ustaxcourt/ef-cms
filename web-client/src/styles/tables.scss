@@ -40,15 +40,6 @@ table,
       vertical-align: top;
     }
   }
-
-  tr.aged-cases {
-    background: $red-error;
-    
-    &:hover {
-      background: $red-error;
-      box-shadow: 5px 0 0 0 $red-primary inset;
-    }
-  }
 }
 
 .min-width-150 {
@@ -354,10 +345,6 @@ table,
       margin-top: 4px;
       margin-right: 0;
       gap: 1rem;
-    }
-
-    .fa-file-lines {
-      color: color($theme-color-primary);
     }
 
     tr.in-progress {

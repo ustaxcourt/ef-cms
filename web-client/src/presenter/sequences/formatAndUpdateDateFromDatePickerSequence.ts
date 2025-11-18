@@ -9,5 +9,4 @@ export const formatAndUpdateDateFromDatePickerSequence = [
   key: string;
   value: string;
   toFormat: TimeFormats;
-  root?: string;
 }) => void;

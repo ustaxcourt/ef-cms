@@ -14,7 +14,6 @@ export class ReconciliationReportEntry extends JoiValidationEntity {
   public index: string;
   public servedAt: string;
   public servedPartiesCode: string;
-  public isSealed: boolean;
 
   constructor(rawDocketEntry) {
     super('ReconciliationReportEntry');
@@ -30,7 +29,6 @@ export class ReconciliationReportEntry extends JoiValidationEntity {
     this.index = rawDocketEntry.index;
     this.servedAt = rawDocketEntry.servedAt;
     this.servedPartiesCode = rawDocketEntry.servedPartiesCode;
-    this.isSealed = rawDocketEntry.isSealed ?? false;
   }
 
   getValidationRules() {
@@ -46,7 +44,6 @@ export class ReconciliationReportEntry extends JoiValidationEntity {
       'index',
       'servedAt',
       'servedPartiesCode',
-      'isSealed',
     ]);
   }
 }

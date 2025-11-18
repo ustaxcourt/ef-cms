@@ -6,11 +6,11 @@ variable "environment" {
   type = string
 }
 
-variable "database_name" {
+variable "disable_emails" {
   type = string
 }
 
-variable "disable_emails" {
+variable "elasticsearch_endpoint" {
   type = string
 }
 
@@ -19,13 +19,5 @@ variable "email_source" {
 }
 
 variable "inactivity_report_recipients" {
-  type = string
-}
-
-variable "postgres_host" {
-  type = string
-}
-
-variable "postgres_user" {
   type = string
 }

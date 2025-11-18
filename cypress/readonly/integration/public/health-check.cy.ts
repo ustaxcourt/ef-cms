@@ -21,7 +21,7 @@ describe('Health check', () => {
       cy.visit('/health');
       cy.url().should('include', '/health');
       for (const id of HEALTH_CHECK_IDS) {
-        cy.get(`#${id} svg[data-icon="circle-check"]`).should('exist');
+        cy.get(`#${id} svg[data-icon="check-circle"]`).should('exist');
       }
     });
   }

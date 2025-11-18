@@ -56,7 +56,6 @@ export const getReconciliationReport = async ({
           'pk',
           'servedAt',
           'servedPartiesCode',
-          'isSealed',
         ],
         query,
         size: 5000,

@@ -9,23 +9,22 @@ import {
   EligibleCase,
   RawEligibleCase,
 } from '@shared/business/entities/cases/EligibleCase';
-import { getEligibleCasesWithIsAgedCase } from '../useCaseHelper/getEligibleCasesWithIsAgedCase';
 
 export const getEligibleCasesForCityInteractor = async (
   { trialCity }: { trialCity: string },
   authorizedUser: UnknownAuthUser,
-): Promise<RawEligibleCase[]> => {
+): Promise<RawEligibleCase[] | undefined> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
     throw new UnauthorizedError(
       `Invalid User attempting to view eligible cases for: ${trialCity}`,
     );
   }
 
-  const eligibleCases = await getEligibleCasesForTrialCity({ trialCity });
-  const eligibleCasesWithIsAgedCase =
-    getEligibleCasesWithIsAgedCase(eligibleCases);
+  const eligibleCases = await getEligibleCasesForTrialCity({
+    trialCity,
+  });
 
-  return eligibleCasesWithIsAgedCase.map(rawCase =>
-    new EligibleCase(rawCase).validate().toRawObject(),
-  );
+  return eligibleCases.map(rawCase => {
+    return new EligibleCase(rawCase).validate().toRawObject();
+  });
 };

@@ -18,7 +18,6 @@ describe('marshallDocketEntry', () => {
       'filingDate',
       'index',
       'isFileAttached',
-      'isSealed',
       'servedAt',
     ]);
   });

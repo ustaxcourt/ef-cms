@@ -240,7 +240,6 @@ export const SessionInformationForm = connect<
                     <label
                       className="usa-checkbox__label"
                       htmlFor="swing-session"
-                      data-testid="swing-session-label"
                     >
                       This is part of a Swing session
                     </label>

@@ -4,7 +4,6 @@ import { Get } from 'cerebral';
 import {
   addGroupSymbol,
   compareTrialSessionEligibleCases,
-  getFormattedEligibleCases,
   getPriorityGroups,
   groupKeySymbol,
 } from '@web-client/presenter/computeds/formattedEligibleCasesHelper';
@@ -72,13 +71,9 @@ export const trialLocationHelper = (
     };
   });
 
-  const formattedEligibleCasesWithoutMembers = getFormattedEligibleCases(
-    formattedEligibleCases,
-  );
+  const groups = getPriorityGroups(formattedEligibleCases);
 
-  const groups = getPriorityGroups(formattedEligibleCasesWithoutMembers);
-
-  const sortedEligibleCases = formattedEligibleCasesWithoutMembers
+  const sortedEligibleCases = formattedEligibleCases
     .map(caseItem => {
       return addGroupSymbol(
         setConsolidationFlagsForDisplay(
@@ -88,26 +83,17 @@ export const trialLocationHelper = (
         caseItem[groupKeySymbol],
       );
     })
-    .sort(compareTrialSessionEligibleCases());
+    .sort(compareTrialSessionEligibleCases(formattedEligibleCases));
 
   const currentTab = get(state.trialLocationPage.currentTab);
 
   const isExportDisabled =
-    (currentTab === 'eligibleCases' &&
-      formattedEligibleCasesWithoutMembers.length === 0) ||
+    (currentTab === 'eligibleCases' && formattedEligibleCases.length === 0) ||
     (currentTab === 'blockedCases' && formattedBlockedCases.length === 0);
-
-  const flattenedCases = sortedEligibleCases.reduce((acc, c) => {
-    acc.push(c);
-    if (c.memberCases) {
-      acc = acc.concat(c.memberCases);
-    }
-    return acc;
-  }, []);
 
   return {
     formattedBlockedCases,
-    formattedEligibleCases: flattenedCases,
+    formattedEligibleCases: sortedEligibleCases,
     location,
     isExportDisabled,
   };

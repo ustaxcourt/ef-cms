@@ -272,7 +272,6 @@ export const PrimaryDocumentForm = connect(
               autoCapitalize="none"
               className="usa-textarea height-8 textarea-resize-vertical"
               id="additional-info2"
-              data-testid="additional-info-2-textarea"
               name="additionalInfo2"
               value={form.additionalInfo2 || ''}
               onBlur={() => {

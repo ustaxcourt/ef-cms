@@ -1,4 +1,3 @@
-import { RemoteTrialSessionInformation } from '@web-client/views/CaseDetail/CaseInformation/RemoteTrialSessionInformation';
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConsolidatedCases } from './CaseInformation/ConsolidatedCases';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -70,9 +69,6 @@ const TrialInformation = ({ caseDetail }) => (
     {!caseDetail.formattedTrialDate && (
       <p>This case is not scheduled for trial</p>
     )}
-    <RemoteTrialSessionInformation
-      remoteTrialGrantedDate={caseDetail.remoteTrialGrantedDate}
-    />
   </React.Fragment>
 );
 

@@ -1,11 +1,11 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { DocumentViewerDocument } from './DocumentViewerDocument';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
-import { WrappedIcon } from '@web-client/ustc-ui/Icon/Icon';
 
 export const DocumentViewer = connect(
   {
@@ -96,23 +96,17 @@ export const DocumentViewer = connect(
                           >
                             {entry.createdAtFormatted}
                             <div className="float-right text-align-center">
-                              {entry.iconsToDisplay.map(
-                                ({ icon, className, title }, index) => (
-                                  <div
-                                    key={index}
-                                    className={classNames('display-block', {
-                                      'margin-bottom-1':
-                                        index < entry.iconsToDisplay.length - 1,
-                                    })}
-                                  >
-                                    <WrappedIcon
-                                      iconClass={className}
-                                      icon={icon}
-                                      title={title}
-                                    />
-                                  </div>
-                                ),
-                              )}
+                              {entry.iconsToDisplay.map((iconInfo, index) => (
+                                <div
+                                  key={iconInfo.icon}
+                                  className={classNames('display-block', {
+                                    'margin-bottom-1':
+                                      index < entry.iconsToDisplay.length - 1,
+                                  })}
+                                >
+                                  <FontAwesomeIcon {...iconInfo} />
+                                </div>
+                              ))}
                             </div>
                           </div>
                           <div className="grid-col-5">

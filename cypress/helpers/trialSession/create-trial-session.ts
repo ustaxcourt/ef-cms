@@ -14,7 +14,6 @@ export function createTrialSession(
     startDate = '02/02/2099',
     trialLocation = 'Anchorage, Alaska',
     maxCases = '10',
-    associatedSwingTrialSessionId = '',
   }: Partial<{
     trialLocation: string;
     endDate: string;
@@ -23,7 +22,6 @@ export function createTrialSession(
     proceedingType: TrialSessionProceedingType;
     judge: string;
     maxCases: string;
-    associatedSwingTrialSessionId: string;
   }> = {
     endDate: '02/02/2100',
     judge: 'Carluzzo',
@@ -32,7 +30,6 @@ export function createTrialSession(
     startDate: '02/02/2099',
     trialLocation: 'Anchorage, Alaska',
     maxCases: '10',
-    associatedSwingTrialSessionId: '',
   },
 ): Cypress.Chainable<{
   trialSessionId: string;
@@ -42,12 +39,6 @@ export function createTrialSession(
   cy.get('#start-date-picker').type(startDate);
   cy.get('#estimated-end-date-picker').type(endDate);
   cy.get(`[data-testid="session-type-${sessionType}"]`).click();
-
-  if (associatedSwingTrialSessionId) {
-    cy.get('[data-testid="swing-session-label"]').click();
-    cy.get('#swing-session-id').select(associatedSwingTrialSessionId);
-  }
-
   cy.get('[data-testid="trial-session-number-of-cases-allowed"]').type(
     maxCases,
   );

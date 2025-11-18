@@ -6,7 +6,7 @@ import { DOCKET_ENTRY_SEALED_TO_TYPES } from '@shared/business/entities/EntityCo
 import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseIcon';
-import { WrappedIcon } from '@web-client/ustc-ui/Icon/Icon';
+import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
@@ -200,15 +200,15 @@ export const RecentFilingsMobile = ({
                     <th>Document</th>
                     <td className="divider">
                       {filing.isSealed && (
-                        <WrappedIcon
-                          iconAriaLabel={
+                        <Icon
+                          aria-label={
                             filing.sealedTo ===
                             DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC
                               ? 'Sealed to the public'
                               : 'Sealed to the public and parties of this case'
                           }
+                          className="sealed-case-entry margin-right-1"
                           icon="lock"
-                          iconClass="sealed-case-entry margin-right-1"
                           title={
                             filing.sealedTo ===
                             DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC

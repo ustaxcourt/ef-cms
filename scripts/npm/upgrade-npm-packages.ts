@@ -18,13 +18,11 @@ const caveats: string[] = [
   'quill',
   'quill-delta-to-html',
   'jest-environment-jsdom',
-  'jsdom', // v27+ is ESM-only (CommonJS incompatibility)
   '@types/node',
   'typescript',
   'websocket',
   'p-queue',
   'dwt',
-  'uuid',
 ];
 
 // Function to run a shell command and capture output, even if it has a non-zero exit code

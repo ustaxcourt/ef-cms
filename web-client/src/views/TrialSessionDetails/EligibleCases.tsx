@@ -1,6 +1,6 @@
-import { WrappedIcon } from '../../ustc-ui/Icon/Icon';
 import { CaseIcons } from '@web-client/ustc-ui/Icon/CaseIcons';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PreformattedText } from '@web-client/ustc-ui/PreformatedText/PreformattedText';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -74,50 +74,46 @@ export const EligibleCases = connect(
               )}
             </tr>
           </thead>
-          {formattedEligibleCases.map(eligibleCase => (
-            <tbody key={eligibleCase.docketNumber}>
-              <tr
-                className={classNames({
-                  'aged-cases': eligibleCase.isAgedCase,
-                })}
-                data-testid={`table-row-${eligibleCase.docketNumber}`}
-              >
+          {formattedEligibleCases.map(item => (
+            <tbody key={item.docketNumber}>
+              <tr className="eligible-cases-row">
                 <td>
-                  <CaseIcons formattedCase={eligibleCase} />
+                  <CaseIcons formattedCase={item} />
                 </td>
                 <td>
                   <span
                     className={classNames({
-                      'margin-left-2': eligibleCase.shouldIndent,
+                      'margin-left-2': item.shouldIndent,
                     })}
                   >
-                    <CaseLink formattedCase={eligibleCase} />
+                    <CaseLink formattedCase={item} />
                   </span>
                 </td>
                 <td>
-                  {eligibleCase.isManuallyAdded && (
-                    <WrappedIcon
-                      iconAriaLabel="Manually added indicator"
-                      iconClass="mini-success"
-                      icon="calendar-plus"
-                      title="Manually added"
-                    />
+                  {item.isManuallyAdded && (
+                    <span aria-label="Manually added indicator">
+                      <FontAwesomeIcon
+                        className="mini-success"
+                        icon="calendar-plus"
+                        title="Manually added"
+                      />
+                    </span>
                   )}
                 </td>
-                <td>{eligibleCase.caseCaption}</td>
+                <td>{item.caseCaption}</td>
                 <td>
-                  {eligibleCase.privatePractitioners.map(practitioner => (
+                  {item.privatePractitioners.map(practitioner => (
                     <div key={practitioner.userId}>{practitioner.name}</div>
                   ))}
                 </td>
                 <td>
-                  {eligibleCase.irsPractitioners.map(practitioner => (
+                  {item.irsPractitioners.map(practitioner => (
                     <div key={practitioner.userId}>{practitioner.name}</div>
                   ))}
                 </td>
-                <td>{eligibleCase.caseType}</td>
+                <td>{item.caseType}</td>
                 <td>
-                  <PreformattedText text={eligibleCase.calendarNotes} />
+                  <PreformattedText text={item.calendarNotes} />
                 </td>
                 {trialSessionDetailsHelper.showQcComplete && (
                   <td>
@@ -126,28 +122,26 @@ export const EligibleCases = connect(
                         aria-label="qc complete"
                         checked={
                           trialSessionId
-                            ? eligibleCase.qcCompleteForTrial[
-                                trialSessionId
-                              ] === true
+                            ? item.qcCompleteForTrial[trialSessionId] === true
                             : false
                         }
                         className="usa-checkbox__input"
-                        data-testid={`qc-complete-${eligibleCase.docketNumber}`}
-                        id={`qc-complete-${eligibleCase.docketNumber}`}
-                        name={`${eligibleCase.docketNumber}Complete`}
+                        data-testid={`qc-complete-${item.docketNumber}`}
+                        id={`qc-complete-${item.docketNumber}`}
+                        name={`${item.docketNumber}Complete`}
                         type="checkbox"
                         onChange={() => {
                           updateQcCompleteForTrialSequence({
-                            docketNumber: eligibleCase.docketNumber,
+                            docketNumber: item.docketNumber,
                             qcCompleteForTrial: trialSessionId
-                              ? !eligibleCase.qcCompleteForTrial[trialSessionId]
+                              ? !item.qcCompleteForTrial[trialSessionId]
                               : false,
                           });
                         }}
                       />
                       <label
                         className="usa-checkbox__label"
-                        htmlFor={`qc-complete-${eligibleCase.docketNumber}`}
+                        htmlFor={`qc-complete-${item.docketNumber}`}
                       >
                         {''}
                       </label>

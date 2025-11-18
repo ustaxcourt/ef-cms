@@ -599,7 +599,7 @@ select[disabled] {
 }
 
 .icon-column {
-  width: 65px;
+  width: 55px;
 }
 
 .mini-success {
@@ -1499,16 +1499,11 @@ hr.lighter {
   }
 }
 
-.space-between {
-  justify-content: space-between;
-}
-
 .pdf-preview-controls {
-  display: flex;
-  align-items: center;
-
-  button {
-    margin: 0;
+  [data-icon='caret-left'],
+  [data-icon='caret-right'] {
+    position: relative;
+    top: 5px;
   }
 
   svg:hover {
@@ -1516,10 +1511,12 @@ hr.lighter {
   }
 
   .pages {
+    display: inline-block;
+    width: 126px;
     margin-right: 10px;
     margin-left: 10px;
     font-weight: $font-semibold;
-    white-space: nowrap;
+    text-align: center;
   }
 }
 
@@ -1816,7 +1813,7 @@ button.change-scanner-button {
 }
 
 .ustc-table .filing-type-icon .sealed-docket-entry {
-  margin-right: 0;
+  margin-right: 4px;
 }
 
 .sealed-docket-entry,
@@ -1826,10 +1823,6 @@ button.change-scanner-button {
 
 .sealed-address,
 .sealed-in-blackstone {
-  color: color($theme-color-secondary-dark);
-}
-
-.aged-case-flag {
   color: color($theme-color-secondary-dark);
 }
 
@@ -2536,3 +2529,4 @@ button.change-scanner-button {
     }
   }
 }
+

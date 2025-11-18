@@ -53,12 +53,6 @@ export const caseInformationHelper = (
     permissions.ADD_PETITIONER_TO_CASE &&
     caseDetail.status !== STATUS_TYPES.new;
 
-  const { USER_ROLES } = applicationContext.getConstants();
-  const showEditRemoteTrialPermission =
-    user.role === USER_ROLES.docketClerk ||
-    user.role === USER_ROLES.clerkOfCourt ||
-    user.role === USER_ROLES.caseServicesSupervisor;
-
   return {
     formattedPetitioners,
     isInternalUser,
@@ -67,7 +61,6 @@ export const caseInformationHelper = (
     showEditCaseButton: permissions.UPDATE_CASE_CONTEXT,
     showEditIrsPractitioners: showEditIrsPractitionersButton,
     showEditPrivatePractitioners: showEditPrivatePractitionersButton,
-    showEditRemoteTrialPermission,
     showHearingsTable,
     showSealAddressLink,
     showSealCaseButton,

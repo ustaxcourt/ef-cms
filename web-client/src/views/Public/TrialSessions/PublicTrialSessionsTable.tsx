@@ -1,4 +1,4 @@
-import { WrappedIcon } from '../../../ustc-ui/Icon/Icon';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import {
   isTrialSessionRow,
@@ -64,22 +64,24 @@ export const PublicTrialSessionsTable = connect<
                   >
                     <td>
                       {row.showAlertForNOTTReminder && (
-                        <WrappedIcon
-                          iconClass="fa-icon-blue margin-right-05"
+                        <FontAwesomeIcon
+                          className="fa-icon-blue margin-right-05"
                           icon="clock"
                           size="sm"
-                          title={row.alertMessageForNOTT} />
+                          title={row.alertMessageForNOTT}
+                        />
                       )}
                       {row.formattedStartDate}
                     </td>
                     <td>
                       {row.swingSession && (
-                        <WrappedIcon
-                          iconAriaLabel="Swing session: will be held in two cities"
-                          iconClass="fa-icon-blue"
+                        <FontAwesomeIcon
+                          aria-label="Swing session: will be held in two cities"
+                          className="fa-icon-blue"
                           icon="link"
                           size="sm"
-                          title="Swing session: will be held in two cities" />
+                          title="Swing session: will be held in two cities"
+                        />
                       )}
                     </td>
                     <td>

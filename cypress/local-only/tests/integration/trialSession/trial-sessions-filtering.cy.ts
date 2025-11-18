@@ -51,7 +51,6 @@ describe('trial sessions filtering', () => {
       createAndServePaperPetition({
         procedureType: sessionType,
         trialLocation,
-        includeApwDocument: false,
       }).then(({ docketNumber }) => {
         // set case as ready for trial
         loginAsDocketClerk1();

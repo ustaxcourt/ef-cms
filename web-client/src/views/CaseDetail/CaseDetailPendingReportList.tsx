@@ -56,10 +56,7 @@ export const CaseDetailPendingReportList = connect(
           {formattedDocketEntries.formattedPendingDocketEntriesOnDocketRecord.map(
             (entry, rowIndex) => (
               <tbody key={entry.docketEntryId}>
-                <tr
-                  className="pending-item-row"
-                  data-testid={`${entry.docketNumber}_${entry.documentTitle}`}
-                >
+                <tr className="pending-item-row">
                   <td>{entry.index}</td>
                   <td>
                     <span className="no-wrap">{entry.createdAtFormatted}</span>

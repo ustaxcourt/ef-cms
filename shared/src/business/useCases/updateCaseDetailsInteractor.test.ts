@@ -64,7 +64,7 @@ describe('updateCaseDetailsInteractor', () => {
         applicationContext,
         {
           caseDetails: {
-            caseType: 'InvalidCaseType' as any,
+            caseType: undefined,
           },
           docketNumber: mockCase.docketNumber,
         },

@@ -555,8 +555,6 @@ export const serveCaseToIrs = async (
       user: authorizedUser,
     });
 
-    caseEntity.updateAutomaticBlocked({ hasCaseDeadline: false });
-
     caseEntity
       .updateCaseCaptionDocketRecord({ authorizedUser })
       .updateDocketNumberRecord({ authorizedUser })
