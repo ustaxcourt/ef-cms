@@ -85,7 +85,6 @@ function groupTrialSessions(
 
 const PAGE_SIZE = 100;
 
-// Check to see if the tsGroup start date is in the current week or future weeks
 function dateComparison(tsGroup): boolean {
   const firstStartDate = tsGroup?.rows?.[0]?.startDate;
   if (!firstStartDate) return false;
