@@ -186,7 +186,7 @@ const setNoticeForCase = async ({
     });
   } else {
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-      document: noticeOfTrialIssued,
+      document: noticeOfTrialIssued.buffer,
       key: newNoticeOfTrialIssuedDocketEntryId,
     });
   }
@@ -325,7 +325,7 @@ const setNoticeForCase = async ({
     const pdfData = await newPdfDoc.save();
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-      document: pdfData,
+      document: pdfData.buffer,
       key: `${jobId}-${docketNumber}`,
       useTempBucket: true,
     });

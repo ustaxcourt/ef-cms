@@ -116,7 +116,7 @@ export const createCsvCustomCaseReportFileInteractor = async (
   const fileInfo = await saveFileAndGenerateUrl({
     applicationContext,
     contentType: 'text/csv',
-    file: csvBuffer,
+    file: csvBuffer.buffer,
     useTempBucket: true,
   });
 

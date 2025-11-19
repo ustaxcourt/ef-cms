@@ -41,7 +41,7 @@ export const createAndServeNoticeDocketEntry = async (
   const docketEntryId = applicationContext.getUniqueId();
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    document: noticePdf,
+    document: noticePdf.buffer,
     key: docketEntryId,
   });
 

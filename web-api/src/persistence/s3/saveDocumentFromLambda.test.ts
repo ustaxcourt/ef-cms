@@ -32,7 +32,7 @@ describe('saveDocumentFromLambda', () => {
 
   it('saves the document', async () => {
     await saveDocumentFromLambda({
-      document: expectedArray,
+      document: expectedArray.buffer,
       key: expectedDocketEntryId,
     });
 
@@ -46,7 +46,7 @@ describe('saveDocumentFromLambda', () => {
 
   it('saves the document in the temp bucket', async () => {
     await saveDocumentFromLambda({
-      document: expectedArray,
+      document: expectedArray.buffer,
       key: expectedDocketEntryId,
       useTempBucket: true,
     });
@@ -62,7 +62,7 @@ describe('saveDocumentFromLambda', () => {
   it('saves the document with a custom mime type (contentType)', async () => {
     await saveDocumentFromLambda({
       contentType: 'text/plain',
-      document: expectedArray,
+      document: expectedArray.buffer,
       key: expectedDocketEntryId,
     });
 
@@ -82,7 +82,7 @@ describe('saveDocumentFromLambda', () => {
 
     await saveDocumentFromLambda({
       contentType: 'text/plain',
-      document: expectedArray,
+      document: expectedArray.buffer,
       key: expectedDocketEntryId,
     });
 
@@ -97,7 +97,7 @@ describe('saveDocumentFromLambda', () => {
     await expect(
       saveDocumentFromLambda({
         contentType: 'text/plain',
-        document: expectedArray,
+        document: expectedArray.buffer,
         key: expectedDocketEntryId,
       }),
     ).rejects.toThrow('fail');

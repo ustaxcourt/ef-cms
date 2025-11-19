@@ -1,4 +1,5 @@
 import { getPdfJs } from '@shared/business/utilities/pdfs/getPdfJs';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { PDFDocumentProxy } from 'pdfjs-dist';
 
 /**
@@ -15,12 +16,10 @@ export const loadPDFForSigningInteractor = async (
   applicationContext: IApplicationContext,
   {
     docketEntryId,
-    docketNumber,
     onlyCover = false,
     removeCover = false,
   }: {
     docketEntryId: string;
-    docketNumber: string;
     onlyCover: boolean;
     removeCover: boolean;
   },
@@ -32,8 +31,7 @@ export const loadPDFForSigningInteractor = async (
     const pdfData = await applicationContext
       .getPersistenceGateway()
       .getDocument({
-        applicationContext,
-        docketNumber,
+        applicationContext: applicationContext as ServerApplicationContext,
         key: docketEntryId,
       });
 

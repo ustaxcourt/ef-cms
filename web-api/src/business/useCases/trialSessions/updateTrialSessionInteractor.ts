@@ -160,7 +160,7 @@ export const updateTrialSession = async (
     if (hasPaper) {
       ({ fileId, url: pdfUrl } = await saveFileAndGenerateUrl({
         applicationContext,
-        file: paperServicePdfData,
+        file: paperServicePdfData.buffer,
         fileNamePrefix: 'paper-service-pdf/',
       }));
 
@@ -176,7 +176,6 @@ export const updateTrialSession = async (
   }
 
   if (trialSession.swingSession && trialSession.swingSessionId) {
-    
     await associateSwingTrialSessions(
       {
         swingSessionId: trialSession.swingSessionId,
@@ -209,8 +208,8 @@ export const determineEntitiesToLock = async (
   { trialSession }: { trialSession: TrialSession },
 ) => {
   const currentTrialSession = await getTrialSessionById({
-      trialSessionId: trialSession.trialSessionId || '',
-    });
+    trialSessionId: trialSession.trialSessionId || '',
+  });
 
   if (!currentTrialSession) {
     throw new NotFoundError(

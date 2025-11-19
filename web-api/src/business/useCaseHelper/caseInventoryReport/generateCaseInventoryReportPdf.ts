@@ -76,7 +76,7 @@ export const generateCaseInventoryReportPdf = async ({
     .getUseCaseHelpers()
     .saveFileAndGenerateUrl({
       applicationContext,
-      file: caseInventoryReportPdf,
+      file: caseInventoryReportPdf.buffer,
       useTempBucket: true,
     });
 
