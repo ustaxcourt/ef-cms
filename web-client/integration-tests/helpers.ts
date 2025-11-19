@@ -641,6 +641,16 @@ export const setupTest = ({ constantsOverrides = {} } = {}) => {
       revokeObjectURL: () => {},
     },
     document: {},
+    history: {
+      pushState: jest.fn(),
+      replaceState: jest.fn(),
+      back: jest.fn(),
+      forward: jest.fn(),
+      go: jest.fn(),
+      length: 0,
+      scrollRestoration: 'auto',
+      state: null,
+    },
     localStorage: {
       getItem: () => null,
       removeItem: () => null,
