@@ -222,12 +222,6 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 - As of [this release](https://github.com/mozilla/pdf.js/releases/tag/v5.1.91), and I think [this PR](https://github.com/mozilla/pdf.js/pull/19689), pdfjs seems to expect certain browser-side API functionality when loaded. This causes issues with our Cypress tests. The best way to fix this is worth investigating further. Perhaps we could polyfill, or even consider creating an issue in the pdfjs repo.
 
-### jsdom
-
-- jsdom v27.0.0 and later dropped CommonJS support and are ESM-only. The package is pinned to v26.1.0 (the last CommonJS-compatible version)
-
-- On October 27th, 2025, discovered that jsdom was already at 27.0.0, which is ESM-only and caused Cypress tests to fail with "Cannot use import statement outside a module" errors. 
-
 ### babel-jest, babel-core
 Tried to update to 30.0.0-beta.3 from 29.7.0 on Friday, June 06, 2025, we weren't able to update it because it conflicts with ts-jest 29.3.4.
 On June 26 2025, newer versions of babel-core and jest core also started to cause issues with ts-jest. Once ts-jest is updated these issues should all clear up.
@@ -251,6 +245,7 @@ We cannot update TypeScript version beyond v5.8.3 until ts-jest supports it
    - Additional errors in test files and UI components
 
 The decision was made to revert back to 5.8.3 as the migration would require multiple days of dedicated work.
+- On November 19th, 2025, updated to typescript 5.9.3 and as a result resolved many of the typing issues involved in pdf buffers, applicationContext between client, shared, and api.
 
 ### p-queue
 Upgrading `p-queue` past version 6 will cause issues related to module imports.
