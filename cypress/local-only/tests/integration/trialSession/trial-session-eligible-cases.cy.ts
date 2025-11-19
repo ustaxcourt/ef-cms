@@ -133,7 +133,6 @@ describe('Trial Session Eligible Cases Journey', () => {
     cy.then(() => {
       loginAsPetitionsClerk1();
       cy.visit(`/trial-session-detail/${trialSessionId}`);
-      //fail here
 
       cy.get('table#open-cases').within(() => {
         cy.get('tr').should('contain', createdDocketNumbers[0]);
