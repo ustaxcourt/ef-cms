@@ -77,9 +77,11 @@ terraform init -upgrade -backend=true \
  -backend-config=key="$KEY" \
  -backend-config=dynamodb_table="$LOCK_TABLE" \
  -backend-config=region="$REGION"
-
-terraform state rm 'module.kibana.opensearch_snapshot_repository.archived-logs' 2>/dev/null && echo "Removed OpenSearch snapshot repository from state" || echo "OpenSearch snapshot repository not in state"
-terraform state rm 'module.kibana.aws_cloudwatch_event_target.rotate_info_indices_daily' 2>/dev/null && echo "Removed EventBridge target from state" || echo "EventBridge target not in state"
-terraform state rm 'module.kibana.aws_cloudwatch_event_rule.every_day' 2>/dev/null && echo "Removed EventBridge rule from state" || echo "EventBridge rule not in state"
+ 
+if [ "${ES_INFO_CLUSTER_CREATE}" = "false" ]; then
+  terraform state rm 'module.kibana.opensearch_snapshot_repository.archived-logs' 2>/dev/null && echo "Removed OpenSearch snapshot repository from state" || echo "OpenSearch snapshot repository not in state"
+  terraform state rm 'module.kibana.aws_cloudwatch_event_target.rotate_info_indices_daily' 2>/dev/null && echo "Removed EventBridge target from state" || echo "EventBridge target not in state"
+  terraform state rm 'module.kibana.aws_cloudwatch_event_rule.every_day' 2>/dev/null && echo "Removed EventBridge rule from state" || echo "EventBridge rule not in state"
+fi
 
 terraform apply
