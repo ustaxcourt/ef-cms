@@ -47,7 +47,7 @@ export const generatePractitionerCaseListPdfInteractor = async (
 
   return await applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl({
     applicationContext,
-    file: pdf.buffer,
+    file: pdf,
     useTempBucket: true,
   });
 };

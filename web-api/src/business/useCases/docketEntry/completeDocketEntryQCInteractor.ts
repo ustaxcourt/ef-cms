@@ -261,7 +261,7 @@ const completeDocketEntryQC = async (
       const paperServicePdfId = applicationContext.getUniqueId();
 
       await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-        document: paperServicePdfData.buffer,
+        document: paperServicePdfData,
         key: paperServicePdfId,
         useTempBucket: true,
       });

@@ -116,7 +116,7 @@ export const addDocketEntryForSystemGeneratedOrder = async ({
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     contentType: 'application/json',
-    document: Buffer.from(JSON.stringify(contentToStore)).buffer,
+    document: Buffer.from(JSON.stringify(contentToStore)),
     key: documentContentsId,
     useTempBucket: false,
   });

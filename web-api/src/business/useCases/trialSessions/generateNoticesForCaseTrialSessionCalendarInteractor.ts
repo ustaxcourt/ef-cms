@@ -325,7 +325,7 @@ const setNoticeForCase = async ({
     const pdfData = await newPdfDoc.save();
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-      document: pdfData.buffer,
+      document: pdfData,
       key: `${jobId}-${docketNumber}`,
       useTempBucket: true,
     });

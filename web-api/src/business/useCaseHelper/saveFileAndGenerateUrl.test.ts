@@ -37,7 +37,7 @@ describe('saveFileAndGenerateUrl', () => {
     await saveFileAndGenerateUrl({
       applicationContext,
       contentType: 'text/csv',
-      file: Buffer.from('abc', 'utf-8').buffer,
+      file: Buffer.from('abc', 'utf-8'),
       fileNamePrefix: 'paper-service-pdf/',
     });
 

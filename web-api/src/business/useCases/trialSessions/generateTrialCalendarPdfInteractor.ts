@@ -12,16 +12,16 @@ export const generateTrialCalendarPdfInteractor = async (
   { trialSessionId }: { trialSessionId: string },
 ): Promise<{ fileId: string; url: string }> => {
   const trialSession = await getTrialSessionById({
-    trialSessionId,
-  });
+      trialSessionId,
+    });
 
   if (!trialSession) {
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
   }
 
   const calendaredCases = await getCalendaredCasesForTrialSession({
-    trialSessionId,
-  });
+      trialSessionId,
+    });
 
   const formattedOpenCases = formatCases({
     applicationContext,
@@ -81,7 +81,7 @@ export const generateTrialCalendarPdfInteractor = async (
 
   return await saveFileAndGenerateUrl({
     applicationContext,
-    file: file.buffer,
+    file,
     useTempBucket: true,
   });
 };

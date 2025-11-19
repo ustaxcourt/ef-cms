@@ -63,7 +63,7 @@ export const serveDocumentAndGetPaperServicePdf = async ({
     const paperServicePdfData = await newPdfDoc.save();
     const { url } = await saveFileAndGenerateUrl({
       applicationContext,
-      file: paperServicePdfData.buffer,
+      file: paperServicePdfData,
       useTempBucket: true,
     });
 
