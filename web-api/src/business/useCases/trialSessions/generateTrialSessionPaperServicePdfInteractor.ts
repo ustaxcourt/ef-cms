@@ -77,13 +77,13 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
     .getUseCaseHelpers()
     .saveFileAndGenerateUrl({
       applicationContext,
-      file: paperServicePdfData,
+      file: paperServicePdfData.buffer,
       fileNamePrefix: 'paper-service-pdf/',
     });
 
   const trialSession = await getTrialSessionById({
-      trialSessionId,
-    });
+    trialSessionId,
+  });
 
   if (!trialSession) {
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);

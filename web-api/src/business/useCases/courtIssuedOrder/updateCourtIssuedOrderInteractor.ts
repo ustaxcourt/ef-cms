@@ -76,7 +76,7 @@ export const updateCourtIssuedOrder = async (
     }
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-      document: Buffer.from(JSON.stringify(contentToStore)),
+      document: Buffer.from(JSON.stringify(contentToStore)).buffer,
       key: documentContentsId,
       useTempBucket: false,
     });

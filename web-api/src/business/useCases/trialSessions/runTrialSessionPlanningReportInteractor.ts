@@ -40,7 +40,7 @@ export const runTrialSessionPlanningReportInteractor = async (
 
   return await applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl({
     applicationContext,
-    file: trialSessionPlanningReport,
+    file: trialSessionPlanningReport.buffer,
     useTempBucket: true,
   });
 };
