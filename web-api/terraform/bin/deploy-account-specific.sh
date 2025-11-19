@@ -81,17 +81,33 @@ terraform apply
 
 # ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
 
+
+# If ES_INFO_CLUSTER_CREATE=false, the resource won't be in config but might be in state else If ES_INFO_CLUSTER_CREATE=true, removing it allows Terraform to create it fresh
+# terraform state rm 'module.kibana.opensearch_snapshot_repository.archived-logs[0]' || echo "OpenSearch snapshot repository not in state (this is OK)"
+
+# Remove EventBridge target and rule from state if they exist in that order
+# terraform state rm 'module.kibana.aws_cloudwatch_event_target.rotate_info_indices_daily[0]' || echo "EventBridge target not in state (this is OK)"
+# terraform state rm 'module.kibana.aws_cloudwatch_event_rule.every_day[0]' || echo "EventBridge rule not in state (this is OK)"
+
+# Only uncomment the imports below if the resources already exist and are causing errors
 #terraform import "module.ci-cd.aws_ecr_repository.image_repository" "ef-cms-us-east-1"
 #terraform import "module.dawson-developer-permissions.aws_iam_role.dawson_dev" "dawson_dev"
 #terraform import "module.edge-lambda-permissions.aws_iam_service_linked_role.lambda_cloudfront_logger_role" "arn:aws:iam::${ACCOUNT_ID}:role/aws-service-role/logger.cloudfront.amazonaws.com/AWSServiceRoleForCloudFrontLogger"
 #terraform import "module.email-monitoring.aws_ses_receipt_rule_set.email_forwarding_rule_set" "email_forwarding_rule_set"
-#terraform import "module.kibana.aws_iam_policy.log_viewers_auth" "arn:aws:iam::${ACCOUNT_ID}:policy/log_viewers_auth_policy"
+#terraform import "module.kibana.aws_iam_policy.log_viewers_auth[0]" "arn:aws:iam::${ACCOUNT_ID}:policy/log_viewers_auth_policy"
 #terraform import "module.kibana.module.logs_to_es.aws_lambda_function.lambda_function" "LogsToElasticSearch_info"
 #terraform import "module.edge-lambda-permissions.aws_iam_service_linked_role.lambda_replication_role" "arn:aws:iam::${ACCOUNT_ID}:role/aws-service-role/replicator.lambda.amazonaws.com/AWSServiceRoleForLambdaReplicator"
 #terraform import "module.kibana.aws_cloudwatch_log_group.logs_to_elasticsearch" "/aws/lambda/LogsToElasticSearch_info"
 #terraform import "module.kibana.aws_lambda_permission.allow_cloudwatch" "LogsToElasticSearch_info/AllowExecutionFromCloudWatch"
 
 # NOTE: The following imports are for resources that only exist when ES_INFO_CLUSTER_CREATE=true
+# Only uncomment these if ES_INFO_CLUSTER_CREATE=true, otherwise the resources won't exist in the configuration
 #terraform import "module.kibana.aws_cloudwatch_event_rule.every_day[0]" "daily-job"
 #terraform import "module.kibana.aws_s3_bucket.ustc_log_snapshots_bucket[0]" "efcms-exp6-log-snapshots"
 #terraform import "module.kibana.opensearch_snapshot_repository.archived-logs[0]" "archived-logs"
+#terraform import "module.kibana.module.rotate_info_indices[0].aws_lambda_function.lambda_function" "RotateInfoIndices"
+
+# Conditionally import OpenSearch snapshot repository only if ES_INFO_CLUSTER_CREATE is true
+# if [ "${ES_INFO_CLUSTER_CREATE:-true}" = "true" ]; then
+#   terraform import "module.kibana.opensearch_snapshot_repository.archived-logs[0]" "archived-logs" || echo "Warning: Failed to import OpenSearch snapshot repository. It may not exist yet."
+# fi
