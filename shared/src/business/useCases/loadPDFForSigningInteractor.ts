@@ -32,9 +32,9 @@ export const loadPDFForSigningInteractor = async (
     const pdfData = await applicationContext
       .getPersistenceGateway()
       .getDocument({
-        applicationContext: applicationContext as any,
+        applicationContext,
+        docketNumber,
         key: docketEntryId,
-        ...(docketNumber && { docketNumber }),
       });
 
     let formattedArrayBuffer;
