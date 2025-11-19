@@ -157,6 +157,7 @@ describe('setPDFForSigningAction', () => {
         .calls[0][1],
     ).toMatchObject({
       docketEntryId,
+      docketNumber: '123-20',
       removeCover: false,
     });
   });
