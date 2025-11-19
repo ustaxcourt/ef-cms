@@ -40,14 +40,11 @@ export const setPDFForSigningAction = async ({
 
   const pdfObj: PDFDocumentProxy = await applicationContext
     .getUseCases()
-    .loadPDFForSigningInteractor(
-      applicationContext as unknown as IApplicationContext,
-      {
-        docketEntryId,
-        onlyCover: false,
-        removeCover,
-      },
-    );
+    .loadPDFForSigningInteractor(applicationContext, {
+      docketEntryId,
+      docketNumber: caseDetail?.docketNumber,
+      removeCover,
+    });
 
   store.set(state.pdfForSigning.pdfjsObj, pdfObj);
 };

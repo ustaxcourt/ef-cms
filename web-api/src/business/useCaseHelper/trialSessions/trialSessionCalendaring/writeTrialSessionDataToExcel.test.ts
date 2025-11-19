@@ -64,7 +64,7 @@ describe('writeTrialSessionDataToExcel', () => {
     });
 
     const actualWorkbook = new ExcelJS.Workbook();
-    await actualWorkbook.xlsx.load(new Uint8Array(buffer).buffer);
+    await actualWorkbook.xlsx.load(buffer);
     const actualSuggestedSessionCalendarWorksheet = actualWorkbook.getWorksheet(
       'Suggested Session Calendar',
     );
@@ -120,7 +120,7 @@ describe('writeTrialSessionDataToExcel', () => {
     });
 
     const actualWorkbook = new ExcelJS.Workbook();
-    await actualWorkbook.xlsx.load(new Uint8Array(buffer).buffer);
+    await actualWorkbook.xlsx.load(buffer);
 
     const incorrectlySizedCasesWorksheet = actualWorkbook.getWorksheet(
       'Incorrectly Sized Cases',

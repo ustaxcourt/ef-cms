@@ -12,7 +12,7 @@ describe('saveFileAndGenerateUrl', () => {
 
     const result = await saveFileAndGenerateUrl({
       applicationContext,
-      file: Buffer.from('abc', 'utf-8').buffer,
+      file: Buffer.from('abc', 'utf-8'),
     });
 
     expect(applicationContext.getUniqueId).toHaveBeenCalled();
@@ -37,7 +37,7 @@ describe('saveFileAndGenerateUrl', () => {
     await saveFileAndGenerateUrl({
       applicationContext,
       contentType: 'text/csv',
-      file: Buffer.from('abc', 'utf-8').buffer,
+      file: Buffer.from('abc', 'utf-8'),
       fileNamePrefix: 'paper-service-pdf/',
     });
 

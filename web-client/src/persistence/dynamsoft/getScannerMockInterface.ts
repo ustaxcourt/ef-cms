@@ -7,13 +7,9 @@ const DWObject = {
   IfDuplexEnabled: false,
   IfFeederEnabled: false,
   AcquireImage: () => {
-    const b64toBlob = (
-      b64Data: string,
-      contentType = '',
-      sliceSize = 512,
-    ): Blob => {
+    const b64toBlob = (b64Data, contentType = '', sliceSize = 512) => {
       const byteCharacters = atob(b64Data);
-      const byteArrays: BlobPart[] = [];
+      const byteArrays: Uint8Array[] = [];
 
       for (
         let offset = 0;
@@ -22,7 +18,12 @@ const DWObject = {
       ) {
         const slice = byteCharacters.slice(offset, offset + sliceSize);
 
-        const byteArray = Uint8Array.from(slice, char => char.charCodeAt(0));
+        const byteNumbers = new Array(slice.length);
+        for (let i = 0; i < slice.length; i++) {
+          byteNumbers[i] = slice.charCodeAt(i);
+        }
+
+        const byteArray = new Uint8Array(byteNumbers);
         byteArrays.push(byteArray);
       }
 
