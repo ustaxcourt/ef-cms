@@ -22,7 +22,7 @@ describe('fix race condion in drafts helper', () => {
   const mockedDDBClient = mockClient(DynamoDBClient);
   const mockedItem = MOCK_DOCUMENTS[0];
   const mockedMarshalledItem = marshall(mockedItem);
-  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
   getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
   const upsertDocketEntries = jest.mocked(upsertDocketEntriesMock);
   describe('getDocumentFromDynamo', () => {
@@ -85,6 +85,7 @@ describe('fix race condion in drafts helper', () => {
       mockCall = {
         docketEntryId: mockedItem.docketEntryId,
         docketNumber: mockedItem.docketNumber,
+        documentStorageId: mockedItem.documentStorageId,
         performUpdate: mockPerformUpdate,
         request: mockRequest,
         timestamp: mockedFilingDate,
@@ -112,7 +113,7 @@ describe('fix race condion in drafts helper', () => {
         applicationContext.getUseCaseHelpers().countPagesInDocument,
       ).toHaveBeenCalledWith({
         applicationContext,
-        docketEntryId: mockCall.docketEntryId,
+        documentStorageId: mockCall.documentStorageId,
       });
     });
 
