@@ -96,7 +96,7 @@ resource "null_resource" "copy_bucket_contents" {
 }
 
 resource "null_resource" "remove_bucket_contents" {
-  count = var.es_info_cluster_create ? 0 : 1
+  count      = var.es_info_cluster_create ? 0 : 1
   depends_on = [null_resource.copy_bucket_contents]
   provisioner "local-exec" {
     command = "aws s3 rm s3://${aws_s3_bucket.ustc_log_snapshots_bucket[0].bucket} --recursive"
@@ -104,7 +104,7 @@ resource "null_resource" "remove_bucket_contents" {
 }
 
 resource "null_resource" "delete_empty_bucket" {
-  count = var.es_info_cluster_create ? 0 : 1
+  count      = var.es_info_cluster_create ? 0 : 1
   depends_on = [null_resource.remove_bucket_contents]
   provisioner "local-exec" {
     command = "aws s3 rb s3://${aws_s3_bucket.ustc_log_snapshots_bucket[0].bucket}"

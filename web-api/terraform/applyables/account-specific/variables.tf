@@ -48,20 +48,20 @@ variable "es_logs_engine_version" {
 
 variable "es_info_cluster_create" {
   default = true
-  type = bool
+  type    = bool
 }
 
 variable "es_info_cluster_lower_environment_account_ids" {
-  type = list(string)
+  type    = list(string)
   default = []
 }
 
 variable "es_info_cluster_arn" {
-  type = string
+  type    = string
   default = ""
 }
 
 variable "es_info_cluster_endpoint" {
-  type = string
+  type    = string
   default = ""
 }
