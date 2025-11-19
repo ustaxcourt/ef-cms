@@ -129,6 +129,7 @@ export const Login = connect(
                         <DawsonUiButton
                           aria-label="Login"
                           data-testid="login-button"
+                          variant="primary"
                         >
                           Log in
                         </DawsonUiButton>
