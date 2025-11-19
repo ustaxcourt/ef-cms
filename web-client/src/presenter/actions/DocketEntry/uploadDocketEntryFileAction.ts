@@ -10,6 +10,7 @@ export const uploadDocketEntryFileAction = async ({
   fileUploadProgressMap: Record<string, FileUploadProgressType>;
 }>) => {
   const user = get(state.user);
+  const documentStorageId = get(state.form.documentStorageId) || undefined;
   const { fileUploadProgressMap } = props;
   try {
     const primaryDocumentFileId = await applicationContext
@@ -18,7 +19,7 @@ export const uploadDocketEntryFileAction = async ({
         applicationContext,
         {
           documentFile: fileUploadProgressMap.primary.file,
-          key: undefined,
+          key: documentStorageId,
           onUploadProgress: fileUploadProgressMap.primary.uploadProgress,
         },
         user,
