@@ -10,7 +10,7 @@ export const saveDocumentFromLambda = async ({
   useTempBucket = false,
 }: {
   contentType?: string;
-  document: WithImplicitCoercion<ArrayBuffer | SharedArrayBuffer>;
+  document: WithImplicitCoercion<ArrayBuffer | SharedArrayBuffer | Uint8Array>;
   key: string;
   useTempBucket?: boolean;
 }): Promise<void> => {
