@@ -250,6 +250,7 @@ const getUsers = async (): Promise<Users> => {
     while (sanitize(finalName) in users) {
       finalName = `${baseName}${count}`;
       count++;
+      finalName = `${baseName.split('Test User')[0]}Test User${count}`;
     }
 
     user.name = sanitize(finalName);
