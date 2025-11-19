@@ -5,7 +5,6 @@ import { execSync, spawnSync } from 'child_process';
 const caveats: string[] = [
   '@cerebral/react',
   'cerebral',
-  'cognito-local',
   'babel-plugin-cerebral',
   '@fortawesome/fontawesome-svg-core',
   '@fortawesome/free-regular-svg-icons',
