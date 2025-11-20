@@ -313,7 +313,7 @@ module "logs_to_es" {
   lambda_name    = "LogsToElasticSearch_info"
   role           = aws_iam_role.lambda_elasticsearch_execution_role.arn
   environment = {
-    es_endpoint = var.es_info_cluster_create ? "https://${aws_opensearch_domain.efcms-logs[0].endpoint}" : "https://${var.es_info_cluster_endpoint}"
+    es_endpoint = var.es_info_cluster_create ? aws_opensearch_domain.efcms-logs[0].endpoint : var.es_info_cluster_endpoint
   }
   timeout     = "900"
   memory_size = "3008"
