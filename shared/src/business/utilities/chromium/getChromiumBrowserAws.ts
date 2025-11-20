@@ -19,6 +19,11 @@ export const getChromiumBrowserAWS = async (): Promise<Browser> => {
         }),
         executablePath: await chromium.executablePath(),
         headless: 'shell',
+        env: {
+          LD_LIBRARY_PATH: process.env.LD_LIBRARY_PATH, // be careful editing this; see 10658
+          PATH: process.env.PATH,
+          FONTCONFIG_PATH: process.env.FONTCONFIG_PATH,
+        },
       });
       return browser;
     } catch (e) {
