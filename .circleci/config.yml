@@ -57,18 +57,6 @@ parameters:
     default: false
     type: boolean
 
-  deploy_info_cluster:
-    default: true
-    type: boolean
-
-  info_cluster_primary_env:
-    default: 'exp6'
-    type: string
-
-  info_cluster_consumer_env:
-    default: ''
-    type: string
-
 commands:
   npm-and-cypress-install:
     steps:
@@ -168,23 +156,6 @@ jobs:
             else
               echo "skipping…"
             fi
-      - run:
-          name: 'Deploy Info Cluster'
-          environment:
-            RUN_INFO_CLUSTER_DEPLOY: << pipeline.parameters.deploy_info_cluster >>
-            INFO_CLUSTER_PRIMARY_ENV: << pipeline.parameters.info_cluster_primary_env >>
-            INFO_CLUSTER_CONSUMER_ENVS: << pipeline.parameters.info_cluster_consumer_env >>
-          command: |
-            echo "RUN_INFO_CLUSTER_DEPLOY: ${RUN_INFO_CLUSTER_DEPLOY}"
-            echo "INFO_CLUSTER_PRIMARY_ENV: ${INFO_CLUSTER_PRIMARY_ENV}"
-            echo "INFO_CLUSTER_CONSUMER_ENVS: ${INFO_CLUSTER_CONSUMER_ENVS}"
-            if [ "${RUN_INFO_CLUSTER_DEPLOY:-0}" != "1" ] && [ "${RUN_INFO_CLUSTER_DEPLOY}" != "true" ]; then
-              echo 'Skipping info cluster deploy (RUN_INFO_CLUSTER_DEPLOY not true).'
-              exit 0
-            fi
-            PRIMARY_ENV="${INFO_CLUSTER_PRIMARY_ENV:-$ENV}"
-            echo "Running deploy info cluster script for ${PRIMARY_ENV}"
-            zsh ./web-api/terraform/bin/deploy-info-cluster.sh "${PRIMARY_ENV}"
       - run:
           no_output_timeout: 20m
           name: 'Deploy - All Color Terraform'

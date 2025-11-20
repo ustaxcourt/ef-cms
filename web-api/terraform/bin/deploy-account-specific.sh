@@ -9,24 +9,13 @@ popd || exit
 
 [ -z "${COGNITO_SUFFIX}" ] && echo "You must set COGNITO_SUFFIX as an environment variable" && exit 1
 [ -z "${EFCMS_DOMAIN}" ] && echo "You must set EFCMS_DOMAIN as an environment variable" && exit 1
+[ -z "${ES_LOGS_EBS_VOLUME_SIZE_GB}" ] && echo "You must set ES_LOGS_EBS_VOLUME_SIZE_GB as an environment variable" && exit 1
+[ -z "${ES_LOGS_INSTANCE_COUNT}" ] && echo "You must set ES_LOGS_INSTANCE_COUNT as an environment variable" && exit 1
+[ -z "${ES_LOGS_INSTANCE_TYPE}" ] && echo "You must set ES_LOGS_INSTANCE_TYPE as an environment variable" && exit 1
 [ -z "${LOG_SNAPSHOT_BUCKET_NAME}" ] && echo "You must set LOG_SNAPSHOT_BUCKET_NAME as an environment variable" && exit 1
 [ -z "${NUM_DAYS_TO_KEEP_LOGS}" ] && echo "You must set NUM_DAYS_TO_KEEP_LOGS as an environment variable" && exit 1
 [ -z "${ES_LOGS_ENGINE_VERSION}" ] && echo "You must set ES_LOGS_ENGINE_VERSION as an environment variable" && exit 1
 
-ES_INFO_CLUSTER_CREATE="${ES_INFO_CLUSTER_CREATE:-false}"
-if [ "$ES_INFO_CLUSTER_CREATE" = "true" ]; then
-  [ -z "${ES_LOGS_EBS_VOLUME_SIZE_GB}" ] && echo "You must set ES_LOGS_EBS_VOLUME_SIZE_GB as an environment variable" && exit 1
-  [ -z "${ES_LOGS_INSTANCE_COUNT}" ] && echo "You must set ES_LOGS_INSTANCE_COUNT as an environment variable" && exit 1
-  [ -z "${ES_LOGS_INSTANCE_TYPE}" ] && echo "You must set ES_LOGS_INSTANCE_TYPE as an environment variable" && exit 1
-  echo "ES Info Cluster will be created"
-else
-  [ -z "${ES_INFO_CLUSTER_SHARED_CLUSTER_ARN}" ] && echo "You must set ES_INFO_CLUSTER_SHARED_CLUSTER_ARN as an environment variable" && exit 1
-  [ -z "${ES_INFO_CLUSTER_SHARED_CLUSTER_ENDPOINT}" ] && echo "You must set ES_INFO_CLUSTER_SHARED_CLUSTER_ENDPOINT as an environment variable" && exit 1
-  echo "Using shared ES Info Cluster at ARN: ${ES_INFO_CLUSTER_SHARED_CLUSTER_ARN} and Endpoint: ${ES_INFO_CLUSTER_SHARED_CLUSTER_ENDPOINT}"
-  ES_LOGS_EBS_VOLUME_SIZE_GB="${ES_LOGS_EBS_VOLUME_SIZE_GB:-10}"
-  ES_LOGS_INSTANCE_COUNT="${ES_LOGS_INSTANCE_COUNT:-1}"
-  ES_LOGS_INSTANCE_TYPE="${ES_LOGS_INSTANCE_TYPE:-m5.large.search}"
-fi
 ../../../../scripts/verify-terraform-version.sh
 
 BUCKET="${EFCMS_DOMAIN}.terraform.deploys"
@@ -76,10 +65,10 @@ export TF_VAR_dawson_dev_trusted_role_arns="${DAWSON_DEV_TRUSTED_ROLE_ARNS}"
 export TF_VAR_log_snapshot_bucket_name="${LOG_SNAPSHOT_BUCKET_NAME}"
 export TF_VAR_lower_env_restore_roles="[\"arn:aws:iam::${LOWER_ENV_ACCOUNT_IDS//,/:role/restore_role_*\",\"arn:aws:iam::}:role/restore_role_*\"]"
 export TF_VAR_es_logs_engine_version="$ES_LOGS_ENGINE_VERSION"
-export TF_VAR_es_info_cluster_create="${ES_INFO_CLUSTER_CREATE}"
-export TF_VAR_es_info_cluster_shared_cluster_arn="${ES_INFO_CLUSTER_SHARED_CLUSTER_ARN}"
-export TF_VAR_es_info_cluster_shared_cluster_endpoint="${ES_INFO_CLUSTER_SHARED_CLUSTER_ENDPOINT}"
-export TF_VAR_es_info_cluster_shared_cluster_account_ids="${ES_INFO_CLUSTER_SHARED_CLUSTER_ACCOUNT_IDS:-}"
+export TF_VAR_es_info_cluster_create="${ES_INFO_CLUSTER_CREATE:-true}"
+export TF_VAR_es_info_cluster_arn="${ES_INFO_CLUSTER_ARN}"
+export TF_VAR_es_info_cluster_lower_environment_account_ids="${ES_INFO_CLUSTER_LOWER_ENVIRONMENT_ACCOUNT_IDS:-}"
+export TF_VAR_es_info_cluster_endpoint="${ES_INFO_CLUSTER_ENDPOINT:-}"
 
 npm run build:assets
 
@@ -88,4 +77,12 @@ terraform init -upgrade -backend=true \
  -backend-config=key="$KEY" \
  -backend-config=dynamodb_table="$LOCK_TABLE" \
  -backend-config=region="$REGION"
+ 
+if [ "${ES_INFO_CLUSTER_CREATE}" = "false" ]; then
+  terraform state rm 'module.kibana.opensearch_snapshot_repository.archived-logs' 2>/dev/null && echo "Removed OpenSearch snapshot repository from state" || echo "OpenSearch snapshot repository not in state"
+  terraform state rm 'module.kibana.aws_cloudwatch_event_target.rotate_info_indices_daily' 2>/dev/null && echo "Removed EventBridge target from state" || echo "EventBridge target not in state"
+  terraform state rm 'module.kibana.aws_cloudwatch_event_rule.every_day' 2>/dev/null && echo "Removed EventBridge rule from state" || echo "EventBridge rule not in state"
+  aws s3 rm "s3://${LOG_SNAPSHOT_BUCKET_NAME}" --recursive
+fi
+
 terraform apply
