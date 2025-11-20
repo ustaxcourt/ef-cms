@@ -132,10 +132,10 @@ export const fileExternalDocument = async (
       const servedParties = aggregatePartiesForService(caseEntity);
 
       for (const [docketEntryId, metadata, relationship] of documentsToAdd) {
-        const numberOfPages = await applicationContext
-          .getUseCaseHelpers()
-          .countPagesInDocument({ applicationContext, docketEntryId });
         if (docketEntryId && metadata) {
+          const numberOfPages = await applicationContext
+            .getUseCaseHelpers()
+            .countPagesInDocument({ applicationContext, docketEntryId });
           const docketEntryEntity = new DocketEntry(
             {
               ...baseMetadata,
@@ -144,7 +144,7 @@ export const fileExternalDocument = async (
               documentType: metadata.documentType,
               isOnDocketRecord: true,
               relationship,
-              numberOfPages
+              numberOfPages,
             },
             {
               authorizedUser,
