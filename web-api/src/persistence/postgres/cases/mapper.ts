@@ -78,6 +78,10 @@ export function toKyselyNewCase(rawCase: RawCase): NewCaseKysely {
       : null,
     preferredTrialCity: rawCase.preferredTrialCity,
     procedureType: rawCase.procedureType,
+    remoteTrialGranted: rawCase.remoteTrialGranted,
+    remoteTrialGrantedDate: rawCase.remoteTrialGrantedDate
+      ? calculateDate({ dateString: rawCase.remoteTrialGrantedDate })
+      : null,
     qcCompleteForTrial: JSON.stringify(rawCase.qcCompleteForTrial),
     receivedAt: rawCase.receivedAt
       ? calculateDate({ dateString: rawCase.receivedAt })
@@ -147,6 +151,10 @@ export function fromKyselyCase<T extends object>(record: T) {
       value: typeof dwCaseSchema.receivedAt,
       _: Partial<CaseKysely>,
     ) => value.toISOString(),
+    remoteTrialGrantedDate: (
+      value: typeof dwCaseSchema.remoteTrialGrantedDate,
+      _: Partial<CaseKysely>,
+    ) => value?.toISOString(),
     sealedDate: (
       value: typeof dwCaseSchema.sealedDate,
       _: Partial<CaseKysely>,
