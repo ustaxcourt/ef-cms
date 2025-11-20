@@ -79,6 +79,7 @@ import { emptyUserState } from '@web-client/presenter/state/userState';
 import { externalConsolidatedCaseGroupHelper } from './computeds/externalConsolidatedCaseGroupHelper';
 import { externalUserCasesHelper } from './computeds/Dashboard/externalUserCasesHelper';
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
+import { fileNoticeOfWithdrawalHelper } from './computeds/fileNoticeOfWithdrawalHelper';
 import { filePetitionHelper } from '@web-client/presenter/computeds/filePetitionHelper';
 import { fileUploadStatusHelper } from './computeds/fileUploadStatusHelper';
 import { filingPartiesFormHelper } from './computeds/filingPartiesFormHelper';
@@ -350,6 +351,10 @@ export const computeds = {
   fileDocumentHelper: fileDocumentHelper as unknown as ReturnType<
     typeof fileDocumentHelper
   >,
+  fileNoticeOfWithdrawalHelper:
+    fileNoticeOfWithdrawalHelper as unknown as ReturnType<
+      typeof fileNoticeOfWithdrawalHelper
+    >,
   filePetitionHelper: filePetitionHelper as unknown as ReturnType<
     typeof filePetitionHelper
   >,
