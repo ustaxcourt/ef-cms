@@ -9,11 +9,13 @@ import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { createAndServeNoticeDocketEntry } from '@web-api/business/useCaseHelper/docketEntry/createAndServeNoticeDocketEntry';
 import { PDFDocument } from 'pdf-lib';
+import { countPagesInDocument as countPagesInDocumentMock } from '../countPagesInDocument';
 
 describe('createAndServeDocketEntry', () => {
   const TEST_PDF_DOCUMENT = getFakeFile as unknown as PDFDocument;
   const mockDocketEntryId = '85a5b1c81eed44b6932a967af060597a';
   const mockNotice = Buffer.from('The rain falls mainly on the plane');
+  const mockNumberOfPages = 3;
 
   const mockCaseEntity = new Case(
     {
@@ -34,6 +36,9 @@ describe('createAndServeDocketEntry', () => {
         load: jest.fn().mockResolvedValue({}),
       },
     });
+
+    const countPagesInDocument = jest.mocked(countPagesInDocumentMock);
+    countPagesInDocument.mockResolvedValue(mockNumberOfPages);
   });
 
   it('should save the generated notice to s3', async () => {
@@ -79,6 +84,7 @@ describe('createAndServeDocketEntry', () => {
     );
     expect(expectedNotice).toMatchObject({
       isOnDocketRecord: true,
+      numberOfPages: mockNumberOfPages,
       servedAt: expect.anything(),
       servedParties: [
         {

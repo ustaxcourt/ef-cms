@@ -77,6 +77,7 @@ export const addDraftStampOrderDocketEntry = async (
   const validatedStampData = new Stamp(stampData);
 
   const stampedDocketEntryId = getUniqueId();
+
   const stampedDocketEntryEntity = new DocketEntry(
     {
       createdAt: applicationContext.getUtilities().createISODateString(),
