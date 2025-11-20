@@ -37,7 +37,9 @@ export type PublicTrialSessionsHelperResults = {
   totalPages: number;
   trialSessionsCount: number;
   trialSessionRows: (TrialSessionRow | TrialSessionWeek)[];
-  filteredGroups: { header: TrialSessionWeek; rows: TrialSessionRow[] }[];
+  mobileCount: number;
+  mobileFilteredGroups: { header: TrialSessionWeek; rows: TrialSessionRow[] }[];
+  mobileTotalPages: number;
 };
 
 function areAnyFiltersModified(
@@ -86,7 +88,8 @@ function groupTrialSessions(
 const PAGE_SIZE = 100;
 
 function dateComparison(tsGroup): boolean {
-  const firstStartDate = tsGroup?.rows?.[0]?.startDate;
+  const firstStartDate = tsGroup?.startDate;
+
   if (!firstStartDate) return false;
 
   const todayIso = createISODateString();
@@ -170,6 +173,15 @@ export const publicTrialSessionsHelper = (
       return sessionA.startDate.localeCompare(sessionB.startDate);
     });
 
+  const mobileFilteredGroups = filteredTrialSessions.filter(g =>
+    dateComparison(g),
+  );
+
+  const paginatedMobileFilteredGroups = mobileFilteredGroups.slice(
+    pageNumber * PAGE_SIZE,
+    pageNumber * PAGE_SIZE + PAGE_SIZE,
+  );
+
   const paginatedTrialSessions = filteredTrialSessions.slice(
     pageNumber * PAGE_SIZE,
     pageNumber * PAGE_SIZE + PAGE_SIZE,
@@ -179,12 +191,26 @@ export const publicTrialSessionsHelper = (
     trialSessions: paginatedTrialSessions,
   });
 
-  const filteredGroups = groupTrialSessions(trialSessionRows).filter(tsGroup =>
-    dateComparison(tsGroup),
-  );
+  const mobileTrialSessionRows = formatTrialSessions({
+    trialSessions: paginatedMobileFilteredGroups,
+  });
+
+  const mobileCount = filteredTrialSessions.reduce((totalSum, ts) => {
+    return dateComparison(ts) ? totalSum + 1 : totalSum;
+  }, 0);
+
+  const allGroups = groupTrialSessions(mobileTrialSessionRows);
+  const groupedMobileFilteredSessions = allGroups
+    .map(tsGroup => ({
+      header: tsGroup.header,
+      rows: tsGroup.rows.filter(tsRow => dateComparison(tsRow)),
+    }))
+    .filter(tsGroup => tsGroup.rows.length > 0);
 
   return {
-    filteredGroups,
+    mobileFilteredGroups: groupedMobileFilteredSessions,
+    mobileCount,
+    mobileTotalPages: Math.ceil(mobileFilteredGroups.length / PAGE_SIZE),
     filtersHaveBeenModified,
     sessionTypeOptions,
     totalPages: Math.ceil(filteredTrialSessions.length / PAGE_SIZE),
