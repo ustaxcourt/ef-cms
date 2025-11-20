@@ -2,7 +2,6 @@ data "aws_caller_identity" "current" {}
 
 locals {
   opensearch_endpoint = length(aws_opensearch_domain.efcms-logs) > 0 ? aws_opensearch_domain.efcms-logs[0].endpoint : var.es_info_cluster_endpoint
-  backup_bucket_name  = "${var.log_snapshot_bucket_name}-backup"
 }
 
 provider "opensearch" {
