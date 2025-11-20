@@ -6,6 +6,7 @@ import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginato
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useRef } from 'react';
 import { useClientSidePaginator } from '@web-client/utilities/useClientSidePaginator';
+import classNames from 'classnames';
 
 export const TrialLocationEligibleCasesTable = connect(
   {
@@ -37,7 +38,7 @@ export const TrialLocationEligibleCasesTable = connect(
             </div>
           </div>
         )}
-        <div className="text-right" data-testId="eligible-cases-count">
+        <div className="text-right" data-testid="eligible-cases-count">
           <span className="text-semibold">Count: </span>
           {trialLocationHelper.formattedEligibleCases.length}
         </div>
@@ -65,41 +66,35 @@ export const TrialLocationEligibleCasesTable = connect(
                   <th className="width-card">Case Type</th>
                 </tr>
               </thead>
-              {pageRecords.map(eligibleCase => {
-                return (
-                  <tbody key={eligibleCase.docketNumber}>
-                    <tr>
-                      <td>
-                        <CaseIcons formattedCase={eligibleCase} />
-                      </td>
-                      <td>
-                        <CaseLink
-                          formattedCase={eligibleCase}
-                          target="_blank"
-                        />
-                      </td>
-                      <td>{eligibleCase.caseTitle}</td>
-                      <td>
-                        {eligibleCase.privatePractitioners?.map(
-                          practitioner => (
-                            <div key={practitioner.userId}>
-                              {practitioner.name}
-                            </div>
-                          ),
-                        )}
-                      </td>
-                      <td>
-                        {eligibleCase.irsPractitioners?.map(practitioner => (
-                          <div key={practitioner.userId}>
-                            {practitioner.name}
-                          </div>
-                        ))}
-                      </td>
-                      <td>{eligibleCase.caseType}</td>
-                    </tr>
-                  </tbody>
-                );
-              })}
+              {pageRecords.map(eligibleCase => (
+                <tbody key={eligibleCase.docketNumber}>
+                  <tr
+                    className={classNames({
+                      'aged-cases': eligibleCase.isAgedCase,
+                    })}
+                    data-testid={`eligible-case-${eligibleCase.docketNumber}`}
+                  >
+                    <td>
+                      <CaseIcons formattedCase={eligibleCase} />
+                    </td>
+                    <td>
+                      <CaseLink formattedCase={eligibleCase} target="_blank" />
+                    </td>
+                    <td>{eligibleCase.caseTitle}</td>
+                    <td>
+                      {eligibleCase.privatePractitioners?.map(practitioner => (
+                        <div key={practitioner.userId}>{practitioner.name}</div>
+                      ))}
+                    </td>
+                    <td>
+                      {eligibleCase.irsPractitioners?.map(practitioner => (
+                        <div key={practitioner.userId}>{practitioner.name}</div>
+                      ))}
+                    </td>
+                    <td>{eligibleCase.caseType}</td>
+                  </tr>
+                </tbody>
+              ))}
             </table>
           </div>
         </div>
