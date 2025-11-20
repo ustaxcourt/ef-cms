@@ -41,6 +41,9 @@ This command informs us of known security vulnerabilities. If transitive depende
 > **Why am I seeing a high severity for `tar-fs`?**
 > [See below](#puppeteer-and-sparticuzchromium).
 
+> **Why am I seeing a vulnerability for `fast-redact`?**
+> On November 19th, 2025. Unsuccessfully rolled back cognito-local to 3.7.1
+
 ### 2. Update third-party dependencies
 
 #### 2.1 Update Node.js version
