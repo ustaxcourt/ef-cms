@@ -45,3 +45,23 @@ variable "lower_env_restore_roles" {
 variable "es_logs_engine_version" {
   type = string
 }
+
+variable "es_info_cluster_create" {
+  default = true
+  type    = bool
+}
+
+variable "es_info_cluster_lower_environment_account_ids" {
+  type    = list(string)
+  default = []
+}
+
+variable "es_info_cluster_arn" {
+  type    = string
+  default = ""
+}
+
+variable "es_info_cluster_endpoint" {
+  type    = string
+  default = ""
+}
