@@ -12,6 +12,7 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import { TextArea } from '@web-client/dawson-ui/ui/input';
 
 export const AddPetitionerToCase = connect(
   {
@@ -259,8 +260,7 @@ export const AddPetitionerToCase = connect(
               <label className="usa-label" htmlFor="case-caption">
                 Case caption
               </label>
-              <textarea
-                className="usa-textarea textarea-resize-vertical"
+              <TextArea
                 id="case-caption"
                 name="caseCaption"
                 value={form.contact.caseCaption || ''}
