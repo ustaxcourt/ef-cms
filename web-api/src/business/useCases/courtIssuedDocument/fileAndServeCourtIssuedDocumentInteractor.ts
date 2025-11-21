@@ -29,7 +29,6 @@ import {
   RawCaseDeadline,
 } from '@shared/business/entities/CaseDeadline';
 import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
-import { countPagesInDocument } from '@web-api/business/useCaseHelper/countPagesInDocument';
 
 export const fileAndServeCourtIssuedDocument = async (
   applicationContext: ServerApplicationContext,
@@ -107,10 +106,12 @@ export const fileAndServeCourtIssuedDocument = async (
       documentToStamp: form,
     });
 
-  const numberOfPages = await countPagesInDocument({
-    applicationContext,
-    documentBytes: stampedPdf,
-  });
+  const numberOfPages = await applicationContext
+    .getUseCaseHelpers()
+    .countPagesInDocument({
+      applicationContext,
+      documentBytes: stampedPdf,
+    });
 
   await updateDocketEntryPendingServiceStatus({
     docketEntryId: docketEntryToServe.docketEntryId,
