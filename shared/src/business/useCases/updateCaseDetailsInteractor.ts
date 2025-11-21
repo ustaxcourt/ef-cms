@@ -33,18 +33,26 @@ export const updateCaseDetails = async (
     throw new UnauthorizedError('Unauthorized for editing case details');
   }
 
-  const editableFields = {
-    caseType: caseDetails.caseType,
-    hasVerifiedIrsNotice: caseDetails.hasVerifiedIrsNotice,
-    irsNoticeDate: caseDetails.irsNoticeDate,
-    petitionPaymentDate: caseDetails.petitionPaymentDate,
-    petitionPaymentMethod: caseDetails.petitionPaymentMethod,
-    petitionPaymentStatus: caseDetails.petitionPaymentStatus,
-    petitionPaymentWaivedDate: caseDetails.petitionPaymentWaivedDate,
-    preferredTrialCity: caseDetails.preferredTrialCity,
-    procedureType: caseDetails.procedureType,
-    statistics: caseDetails.statistics,
-  };
+  const allowedFields = [
+    'caseType',
+    'hasVerifiedIrsNotice',
+    'irsNoticeDate',
+    'petitionPaymentDate',
+    'petitionPaymentMethod',
+    'petitionPaymentStatus',
+    'petitionPaymentWaivedDate',
+    'preferredTrialCity',
+    'procedureType',
+    'remoteTrialGranted',
+    'remoteTrialGrantedDate',
+    'statistics',
+  ];
+
+  const editableFields = Object.fromEntries(
+    Object.entries(caseDetails).filter(
+      ([key, value]) => allowedFields.includes(key) && value !== undefined,
+    ),
+  );
 
   const oldCase = await getCaseByDocketNumber({
     docketNumber,
@@ -61,13 +69,15 @@ export const updateCaseDetails = async (
       irsNoticeDate: editableFields.hasVerifiedIrsNotice
         ? editableFields.irsNoticeDate
         : undefined,
-      petitionPaymentDate: isPaid ? editableFields.petitionPaymentDate : null,
-      petitionPaymentMethod: isPaid
-        ? editableFields.petitionPaymentMethod
-        : null,
-      petitionPaymentWaivedDate: isWaived
-        ? editableFields.petitionPaymentWaivedDate
-        : null,
+      ...('petitionPaymentStatus' in editableFields && {
+        petitionPaymentDate: isPaid ? editableFields.petitionPaymentDate : null,
+        petitionPaymentMethod: isPaid
+          ? editableFields.petitionPaymentMethod
+          : null,
+        petitionPaymentWaivedDate: isWaived
+          ? editableFields.petitionPaymentWaivedDate
+          : null,
+      }),
     },
     { authorizedUser },
   );
