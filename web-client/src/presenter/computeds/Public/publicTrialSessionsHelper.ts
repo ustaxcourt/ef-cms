@@ -8,6 +8,7 @@ import {
   TrialSessionRow,
   TrialSessionWeek,
   formatTrialSessions,
+  isTrialSessionRow,
   isTrialSessionWeek,
 } from '@web-client/presenter/computeds/trialSessionsHelper';
 import { getTrialCitiesGroupedByState } from '@shared/business/utilities/trialSession/trialCitiesGroupedByState';
@@ -37,6 +38,8 @@ export type PublicTrialSessionsHelperResults = {
   totalPages: number;
   trialSessionsCount: number;
   trialSessionRows: (TrialSessionRow | TrialSessionWeek)[];
+  filteredTrialSessionRows: (TrialSessionRow | TrialSessionWeek)[];
+  filteredTrialSessionRowsCount: number;
   mobileCount: number;
   mobileFilteredGroups: { header: TrialSessionWeek; rows: TrialSessionRow[] }[];
   mobileTotalPages: number;
@@ -86,6 +89,40 @@ function groupTrialSessions(
 }
 
 const PAGE_SIZE = 100;
+
+function filterPastTrialSessionRows(
+  trialSessionRows: (TrialSessionRow | TrialSessionWeek)[],
+): {
+  filteredTrialSessionRows: (TrialSessionRow | TrialSessionWeek)[];
+  filteredTrialSessionRowsCount: number;
+} {
+  let inThePast: boolean = false;
+  const filteredTrialSessionRows: TrialSessionRow[] = [];
+  let filteredTrialSessionRowsCount = 0;
+  for (const r of trialSessionRows) {
+    if (isTrialSessionWeek(r)) {
+      const { sessionWeekStartDate } = r;
+      const today = createISODateString();
+      const todayWeekStart = createDateAtStartOfWeekEST(
+        today,
+        FORMATS.YYYYMMDD,
+      );
+      inThePast = dateStringsCompared(todayWeekStart, sessionWeekStartDate) > 0;
+      if (!inThePast) filteredTrialSessionRows.push(r);
+      continue;
+    }
+
+    if (isTrialSessionRow(r)) {
+      if (inThePast) continue;
+      else {
+        filteredTrialSessionRowsCount++;
+        filteredTrialSessionRows.push(r);
+      }
+    }
+  }
+
+  return { filteredTrialSessionRows, filteredTrialSessionRowsCount };
+}
 
 function dateComparison(tsGroup): boolean {
   const firstStartDate = tsGroup?.startDate;
@@ -207,6 +244,9 @@ export const publicTrialSessionsHelper = (
     }))
     .filter(tsGroup => tsGroup.rows.length > 0);
 
+  const { filteredTrialSessionRows, filteredTrialSessionRowsCount } =
+    filterPastTrialSessionRows(trialSessionRows);
+
   return {
     mobileFilteredGroups: groupedMobileFilteredSessions,
     mobileCount,
@@ -217,6 +257,8 @@ export const publicTrialSessionsHelper = (
     trialCitiesByState,
     trialSessionJudgeOptions,
     trialSessionRows,
+    filteredTrialSessionRows,
+    filteredTrialSessionRowsCount,
     trialSessionsCount: filteredTrialSessions.length,
   };
 };

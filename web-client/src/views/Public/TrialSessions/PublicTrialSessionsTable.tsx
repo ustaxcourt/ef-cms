@@ -17,12 +17,14 @@ export const PublicTrialSessionsTable = connect<
   PublicTrialSessionsTableProps,
   typeof PublicTrialSessionsTableDeps
 >(PublicTrialSessionsTableDeps, function ({ publicTrialSessionsHelper }) {
+  const { filteredTrialSessionRows, filteredTrialSessionRowsCount } =
+    publicTrialSessionsHelper;
   return (
     <>
       <div className="grid-row margin-bottom-2 width-full flex-align-center"></div>
       <div className="text-right width-full">
         <span className="text-semibold">Count: </span>
-        {publicTrialSessionsHelper.trialSessionsCount}
+        {filteredTrialSessionRowsCount}
       </div>
       <div className="padding-1"></div>
       <div className="overflow-x-auto">
@@ -40,8 +42,9 @@ export const PublicTrialSessionsTable = connect<
               <th className="width-mobile">Judge</th>
             </tr>
           </thead>
-          {publicTrialSessionsHelper.trialSessionRows.map(row => {
+          {filteredTrialSessionRows.map(row => {
             if (isTrialSessionWeek(row)) {
+              console.log('row: ', row);
               return (
                 <tbody key={row.formattedSessionWeekStartDate}>
                   <tr className="trial-date">
