@@ -65,6 +65,10 @@ export TF_VAR_dawson_dev_trusted_role_arns="${DAWSON_DEV_TRUSTED_ROLE_ARNS}"
 export TF_VAR_log_snapshot_bucket_name="${LOG_SNAPSHOT_BUCKET_NAME}"
 export TF_VAR_lower_env_restore_roles="[\"arn:aws:iam::${LOWER_ENV_ACCOUNT_IDS//,/:role/restore_role_*\",\"arn:aws:iam::}:role/restore_role_*\"]"
 export TF_VAR_es_logs_engine_version="$ES_LOGS_ENGINE_VERSION"
+export TF_VAR_es_info_cluster_create="${ES_INFO_CLUSTER_CREATE:-true}"
+export TF_VAR_es_info_cluster_arn="${ES_INFO_CLUSTER_ARN}"
+export TF_VAR_es_info_cluster_lower_environment_account_ids="${ES_INFO_CLUSTER_LOWER_ENVIRONMENT_ACCOUNT_IDS:-}"
+export TF_VAR_es_info_cluster_endpoint="${ES_INFO_CLUSTER_ENDPOINT:-}"
 
 npm run build:assets
 
@@ -73,4 +77,12 @@ terraform init -upgrade -backend=true \
  -backend-config=key="$KEY" \
  -backend-config=dynamodb_table="$LOCK_TABLE" \
  -backend-config=region="$REGION"
+ 
+if [ "${ES_INFO_CLUSTER_CREATE}" = "false" ]; then
+  terraform state rm 'module.kibana.opensearch_snapshot_repository.archived-logs' 2>/dev/null && echo "Removed OpenSearch snapshot repository from state" || echo "OpenSearch snapshot repository not in state"
+  terraform state rm 'module.kibana.aws_cloudwatch_event_target.rotate_info_indices_daily' 2>/dev/null && echo "Removed EventBridge target from state" || echo "EventBridge target not in state"
+  terraform state rm 'module.kibana.aws_cloudwatch_event_rule.every_day' 2>/dev/null && echo "Removed EventBridge rule from state" || echo "EventBridge rule not in state"
+  aws s3 rm "s3://${LOG_SNAPSHOT_BUCKET_NAME}" --recursive
+fi
+
 terraform apply
