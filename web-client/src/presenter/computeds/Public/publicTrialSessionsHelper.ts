@@ -97,7 +97,7 @@ function filterPastTrialSessionRows(
   filteredTrialSessionRowsCount: number;
 } {
   let inThePast: boolean = false;
-  const filteredTrialSessionRows: TrialSessionRow | TrialSessionWeek[] = [];
+  const filteredTrialSessionRows: (TrialSessionRow | TrialSessionWeek)[] = [];
   let filteredTrialSessionRowsCount = 0;
   for (const r of trialSessionRows) {
     if (isTrialSessionWeek(r)) {
