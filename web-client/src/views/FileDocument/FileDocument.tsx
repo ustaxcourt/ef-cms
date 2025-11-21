@@ -48,8 +48,6 @@ export const FileDocument = connect(
           *All fields required unless otherwise noted
         </p>
 
-        {/* should put the notice of withdrawal here */}
-
         {fileDocumentHelper.showGenerationTypeForm ? (
           <PrimaryDocumentGeneratedTypeForm />
         ) : (

@@ -1,5 +1,6 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { InclusionsForm } from './InclusionsForm';
+import { NoticeOfWithdrawalForm } from './NoticeOfWithdrawalForm';
 import { ObjectionsForm } from './ObjectionsForm';
 import { PIIRedactedWarning } from '@web-client/views/CaseAssociationRequest/PIIRedactedWarning';
 import { StateDrivenFileInput } from './StateDrivenFileInput';
@@ -24,6 +25,9 @@ export const PrimaryDocumentForm = connect(
     return (
       <React.Fragment>
         <h2 className="margin-top-4">{form.documentTitle}</h2>
+        {fileDocumentHelper.showNoticeOfWithdrawal && (
+          <NoticeOfWithdrawalForm />
+        )}
         <PIIRedactedWarning />
         <div className="blue-container">
           <FormGroup errorText={validationErrors.primaryDocumentFile}>
