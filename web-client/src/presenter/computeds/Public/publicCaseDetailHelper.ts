@@ -159,8 +159,6 @@ export const formatDocketEntryOnDocketRecord = (
 
   return {
     action: entry.action,
-    affectedByDocketEntries: entry.affectedByDocketEntries,
-    affectedDocketEntries: entry.affectedDocketEntries,
     createdAtFormatted,
     description: entry.description,
     descriptionDisplay: applicationContext

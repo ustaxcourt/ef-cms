@@ -58,7 +58,6 @@ export const DocketRecord = connect(
 
     return (
       <>
-        Hello :)
         <DocketRecordHeader
           docketRecordTableSortData={docketRecordTableSortData}
         />
