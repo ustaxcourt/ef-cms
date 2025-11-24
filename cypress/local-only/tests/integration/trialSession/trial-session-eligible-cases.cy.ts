@@ -36,67 +36,68 @@ describe('Trial Session Eligible Cases Journey', () => {
       caseType: 'Passport',
       yearReceived: '2019',
       includeApwDocument: false,
-    }).then(({ docketNumber }) => {
-      createdDocketNumbers.push(docketNumber);
+    })
+      .then(({ docketNumber }) => {
+        createdDocketNumbers.push(docketNumber);
 
-      loginAsDocketClerk();
-      goToCase(docketNumber);
-      updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
-    });
+        loginAsDocketClerk();
+        goToCase(docketNumber);
+        updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
+        return createAndServePaperPetition({
+          procedureType: 'Small',
+          trialLocation,
+          yearReceived: '2019',
+          caseType: 'Other',
+          includeApwDocument: false,
+        });
+      })
+      .then(({ docketNumber }) => {
+        createdDocketNumbers.push(docketNumber);
 
-    createAndServePaperPetition({
-      procedureType: 'Small',
-      trialLocation,
-      yearReceived: '2019',
-      caseType: 'Other',
-      includeApwDocument: false,
-    }).then(({ docketNumber }) => {
-      createdDocketNumbers.push(docketNumber);
+        loginAsDocketClerk();
+        goToCase(docketNumber);
+        updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
+        return createAndServePaperPetition({
+          procedureType: 'Regular',
+          trialLocation,
+          yearReceived: '2019',
+          includeApwDocument: false,
+        });
+      })
+      .then(({ docketNumber }) => {
+        createdDocketNumbers.push(docketNumber);
 
-      loginAsDocketClerk();
-      goToCase(docketNumber);
-      updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
-    });
+        loginAsDocketClerk();
+        goToCase(docketNumber);
+        updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
+        return createAndServePaperPetition({
+          procedureType: 'Small',
+          trialLocation,
+          caseType: 'CDP (Lien/Levy)',
+          yearReceived: '2019',
+          includeApwDocument: false,
+        });
+      })
+      .then(({ docketNumber }) => {
+        createdDocketNumbers.push(docketNumber);
 
-    createAndServePaperPetition({
-      procedureType: 'Regular',
-      trialLocation,
-      yearReceived: '2019',
-      includeApwDocument: false,
-    }).then(({ docketNumber }) => {
-      createdDocketNumbers.push(docketNumber);
-
-      loginAsDocketClerk();
-      goToCase(docketNumber);
-      updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
-    });
-
-    createAndServePaperPetition({
-      procedureType: 'Small',
-      trialLocation,
-      caseType: 'CDP (Lien/Levy)',
-      yearReceived: '2019',
-      includeApwDocument: false,
-    }).then(({ docketNumber }) => {
-      createdDocketNumbers.push(docketNumber);
-
-      loginAsDocketClerk();
-      goToCase(docketNumber);
-      updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
-    });
-
-    createAndServePaperPetition({
-      procedureType: 'Small',
-      trialLocation,
-      caseType: 'Passport',
-      yearReceived: '2019',
-      includeApwDocument: false,
-    }).then(({ docketNumber }) => {
-      createdDocketNumbers.push(docketNumber);
-      loginAsDocketClerk();
-      goToCase(docketNumber);
-      updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
-    });
+        loginAsDocketClerk();
+        goToCase(docketNumber);
+        updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
+        return createAndServePaperPetition({
+          procedureType: 'Small',
+          trialLocation,
+          caseType: 'Passport',
+          yearReceived: '2019',
+          includeApwDocument: false,
+        });
+      })
+      .then(({ docketNumber }) => {
+        createdDocketNumbers.push(docketNumber);
+        loginAsDocketClerk();
+        goToCase(docketNumber);
+        updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
+      });
 
     cy.then(() => {
       loginAsPetitionsClerk1();
