@@ -50,6 +50,7 @@ export const computeIsNotServedDocument = ({ formattedEntry }) => {
       !DocketEntry.isMinuteEntry(formattedEntry))
   );
 };
+
 export const formatDocketEntry = (applicationContext, docketEntry) => {
   const formattedEntry = cloneDeep(docketEntry);
 
@@ -148,13 +149,16 @@ export const formatDocketEntry = (applicationContext, docketEntry) => {
   }
 
   if (formattedEntry.isSealed) {
-    formattedEntry.sealedToTooltip = applicationContext.getUtilities().getSealedDocketEntryTooltip(applicationContext, formattedEntry);
+    formattedEntry.sealedToTooltip = applicationContext
+      .getUtilities()
+      .getSealedDocketEntryTooltip(applicationContext, formattedEntry);
   } else if (formattedEntry.isLegacySealed) {
-    formattedEntry.sealedToTooltip = "Sealed in Blackstone";
+    formattedEntry.sealedToTooltip = 'Sealed in Blackstone';
   }
 
   return formattedEntry;
 };
+
 export const getFilingsAndProceedings = formattedDocketEntry => {
   //filings and proceedings string
   //(C/S 04/17/2019) (Exhibit(s)) (Attachment(s)) (Objection) (Lodged)
