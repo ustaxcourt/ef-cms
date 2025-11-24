@@ -12,28 +12,22 @@ export function Inputs() {
               label="Field Label"
               helpText="Help text"
               icon={true}
-              flexDirection='vertical'
+              flexDirection="vertical"
             />
           </div>
           <div className="tw:w-full">
-            <TextArea
-              label="Field Label"
-              helpText=""
-            />
+            <TextArea label="Field Label" helpText="" />
           </div>
           <div className="tw:w-full">
             <TextField
               label="Field Label"
               helpText="Help Text"
               icon={true}
-              flexDirection='horizontal'
+              flexDirection="horizontal"
             />
           </div>
           <div className="tw:w-full">
-            <TextField
-              label="Field Label"
-              flexDirection='horizontal'
-            />
+            <TextField label="Field Label" flexDirection="horizontal" />
           </div>
           <div className="tw:w-full">
             <TextField
@@ -43,6 +37,9 @@ export function Inputs() {
               error="Enter a valid answer"
             />
           </div>
+          {/* need for proper spacing */}
+
+          <div></div>
           <div className="tw:w-full">
             <TextArea
               label="Field Label"
@@ -50,12 +47,14 @@ export function Inputs() {
               error="Enter a valid answer"
             />
           </div>
+          {/* need for proper spacing */}
+          <div></div>
           <div className="tw:w-full">
             <TextField
               label="Field Label"
               helpText="Help text"
               icon={true}
-              flexDirection='horizontal'
+              flexDirection="horizontal"
               error="Enter a valid answer"
             />
           </div>

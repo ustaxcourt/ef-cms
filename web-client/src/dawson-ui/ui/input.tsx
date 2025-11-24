@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { cn } from '@web-client/lib/utils';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
-import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import classNames from 'classnames';
 
 interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -35,7 +34,7 @@ const styles = {
     'tw:text-grey-dark tw:ml-1 tw:font-normal tw:text-[14px] tw:xs:text-[16px]',
   text: {
     base: 'tw:xs:text-[18px] tw:text-[16px] tw:outline-none tw:cursor-text',
-    help: 'tw:xs:mb-[13px] tw:text-[14px] tw:xs:text-[16px] tw:text-grey-dark',
+    help: 'tw:xs:mb-[13px] tw:text-[14px] tw:xs:text-[16px] tw:text-grey-dark', // mus add conditional
   },
   states: {
     disabled:
@@ -80,9 +79,9 @@ const useKeyboardListenerHook = () => {
 const InputError = ({ error }) => (
   <>
     {error && (
-      <div className="tw:mt-[6px] tw:xs:mt-[8px] tw:gap-2 tw:text-red-primary">
+      <div className="tw:absolute tw:mt-[6px] tw:xs:mt-[8px] tw:gap-2 tw:text-red-primary">
         <FontAwesomeIcon
-          icon={faExclamationCircle}
+          icon={faInfoCircle}
           className="tw-text-[16px] tw:xs:text-[18px] tw:mr-[4px]"
         />
         <span className="tw-text-[16px] tw:xs:text-[18px]">{error}</span>
@@ -151,7 +150,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                 </span>
                 {icon && (
                   <FontAwesomeIcon
-                    icon={faQuestionCircle}
+                    icon={faInfoCircle}
                     className={cn(styles.icon)}
                     title={helpText}
                     role="img"
@@ -167,9 +166,9 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                   id={helpTextId}
                   className={cn(
                     styles.text.help,
-                    'tw:font-normal tw:xs:mt-[10px] tw:mt-[8px] tw:mb-[9px]',
+                    'tw:font-normal tw:xs:mt-[10px] tw:mt-[5px] tw:mb-[9px]',
                     flexDirection === 'horizontal' &&
-                      'tw:mt-[0px] tw:xs:mt-[0px]',
+                      'tw:mt-[0px] tw:xs:mt-[0px] tw:!mb-[0px]',
                   )}
                 >
                   {helpText}
@@ -182,7 +181,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
           className={
             flexDirection === 'vertical'
               ? 'tw:flex-col'
-              : 'tw:flex-row tw:w-full'
+              : 'tw:flex-row tw:w-full tw:content-center'
           }
         >
           <input
@@ -229,7 +228,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
     return (
       <div className="tw:flex tw:flex-col">
         {label && (
-          <label id={labelId} htmlFor={textareaId}>
+          <label className="tw:mb-[0px]" id={labelId} htmlFor={textareaId}>
             <div className="tw:flex tw:flex-col">
               <div className="tw:flex tw:items-center tw:mb-[9px]">
                 <span
@@ -240,7 +239,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
                 </span>
                 {helpText && (
                   <FontAwesomeIcon
-                    icon={faQuestionCircle}
+                    icon={faInfoCircle}
                     className={cn(styles.icon)}
                     title={helpText}
                     role="img"
@@ -254,7 +253,9 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
                 )}
               </div>
               {helpText && (
-                <div className={cn(styles.text.help, 'tw:mb-[9px]')}>
+                <div
+                  className={cn(styles.text.help, 'tw:mb-[9px] tw:font-normal')}
+                >
                   {helpText}
                 </div>
               )}
