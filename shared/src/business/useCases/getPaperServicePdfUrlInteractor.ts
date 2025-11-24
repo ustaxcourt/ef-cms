@@ -4,9 +4,10 @@ import {
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../../web-api/src/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const getPaperServicePdfUrlInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { fileId }: { fileId: string },
   authorizedUser: UnknownAuthUser,
 ): Promise<{ url: string }> => {
