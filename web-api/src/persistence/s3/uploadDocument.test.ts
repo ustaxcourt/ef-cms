@@ -15,7 +15,7 @@ describe('uploadDocument', () => {
       uploadDocument({
         applicationContext,
         pdfData: testPdfDoc,
-        pdfName: 'pdf name',
+        key: 'pdf name',
       }),
     ).rejects.toEqual(new Error('Upload failed'));
     expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
@@ -29,7 +29,7 @@ describe('uploadDocument', () => {
     await uploadDocument({
       applicationContext,
       pdfData: testPdfDoc,
-      pdfName: 'pdf name',
+      key: 'pdf name',
     });
 
     expect(applicationContext.logger.error).not.toHaveBeenCalled();

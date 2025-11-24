@@ -403,7 +403,6 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
       interactorParamObject,
     );
 
-    console.log(JSON.stringify(updateTrialSessionNotificationProcessing.mock));
     expect(
       applicationContext.getUseCases().generateNoticeOfTrialIssuedInteractor,
     ).toHaveBeenCalled();

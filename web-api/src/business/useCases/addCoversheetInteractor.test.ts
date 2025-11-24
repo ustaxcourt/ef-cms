@@ -35,10 +35,11 @@ const getCasesByDocketNumbers =
       excludeFields?: OmittableCaseFields[];
     }) => Promise<Omit<RawCase, 'consolidatedCases'>[]>
   >;
-  const upsertDocketEntries = jest.mocked(upsertDocketEntriesMock);
+const upsertDocketEntries = jest.mocked(upsertDocketEntriesMock);
 
 describe('addCoversheetInteractor', () => {
   const mockDocketEntryId = MOCK_CASE.docketEntries[0].docketEntryId;
+  const mockDocumentStorageId = MOCK_CASE.docketEntries[0].documentStorageId;
 
   const testingCaseData = {
     ...MOCK_CASE,
@@ -110,8 +111,13 @@ describe('addCoversheetInteractor', () => {
       applicationContext.getDocumentGenerators().coverSheet,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
-    ).toHaveBeenCalled();
+      applicationContext.getPersistenceGateway().getDocument.mock.calls[0][0]
+        .key,
+    ).toEqual(mockDocumentStorageId);
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
+        .calls[0][0].key,
+    ).toEqual(mockDocumentStorageId);
   });
 
   it('replaces the cover page on a document', async () => {
