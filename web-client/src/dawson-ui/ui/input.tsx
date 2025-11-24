@@ -139,7 +139,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
           <label
             id={labelId}
             htmlFor={inputId}
-            className={`${flexDirection === 'horizontal' ? 'tw:xs:mr-[16px] tw:mr-[12px]' : ''} tw:shrink-0`}
+            className={`${flexDirection === 'horizontal' ? 'tw:xs:mr-[16px] tw:mr-[12px]' : ''} tw:shrink-0 tw:mb-[0px]`}
           >
             <div className="tw:flex tw:flex-col">
               <div className="tw:flex tw:items-center">
