@@ -15,7 +15,7 @@ export const computeCoordinates = ({
   textHeight,
   titleTextWidth,
 }) => {
-  const bottomLeftBoxCoordinates = {
+  const bottomLeftBoxCoordinates: { x: number; y: number | undefined } = {
     x: posX / scale,
     y: undefined,
   };

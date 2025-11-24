@@ -16,7 +16,7 @@ export class Message extends JoiValidationEntity {
   public completedBy?: string;
   public completedBySection?: string;
   public completedByUserId?: string;
-  public completedMessage?: string;
+  public completedMessage: string | null;
   public createdAt: string;
   public docketNumber: string;
   public docketNumberWithSuffix: string;

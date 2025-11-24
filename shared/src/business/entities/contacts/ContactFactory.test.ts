@@ -277,12 +277,22 @@ describe('ContactFactory', () => {
     }).toThrow('Unrecognized party type "SOME INVALID PARTY TYPE"');
   });
 
-  it('should return an empty primary object if no partyType is given and case has not been served', () => {
+it('should return a primary object with default values if no partyType is given', () => {
     const contacts = ContactFactory({
+      // @ts-expect-error
       partyType: undefined,
-      status: CASE_STATUS_TYPES.new,
     });
-
-    expect(contacts).toEqual({ primary: {}, secondary: null });
+ 
+    expect(contacts).toEqual({ primary: {
+      address1: '',
+      city: '',
+      contactId: '',
+      contactType: '',
+      countryType: '',
+      isAddressSealed: false,
+      name: '',
+      phone: '',
+      postalCode: ''
+    }, secondary: null });
   });
 });
