@@ -7,28 +7,16 @@ const DWObject = {
   IfDuplexEnabled: false,
   IfFeederEnabled: false,
   AcquireImage: () => {
-    const b64toBlob = (b64Data, contentType = '', sliceSize = 512) => {
+    const b64toBlob = (b64Data: string, contentType = ''): Blob => {
       const byteCharacters = atob(b64Data);
-      const byteArrays: Uint8Array[] = [];
+      const arrayBuffer = new ArrayBuffer(byteCharacters.length);
+      const byteArray = new Uint8Array(arrayBuffer);
 
-      for (
-        let offset = 0;
-        offset < byteCharacters.length;
-        offset += sliceSize
-      ) {
-        const slice = byteCharacters.slice(offset, offset + sliceSize);
-
-        const byteNumbers = new Array(slice.length);
-        for (let i = 0; i < slice.length; i++) {
-          byteNumbers[i] = slice.charCodeAt(i);
-        }
-
-        const byteArray = new Uint8Array(byteNumbers);
-        byteArrays.push(byteArray);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteArray[i] = byteCharacters.charCodeAt(i);
       }
 
-      const blob = new Blob(byteArrays, { type: contentType });
-      return blob;
+      return new Blob([byteArray], { type: contentType });
     };
 
     scanBuffer.push(b64toBlob(image1, 'image/jpeg'));
