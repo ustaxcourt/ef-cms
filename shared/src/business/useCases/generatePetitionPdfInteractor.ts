@@ -32,6 +32,8 @@ export interface Contact {
   phone: string;
   state: string;
   placeOfLegalResidence?: string;
+  preferredLanguage?: string;
+  preferredCommunicationMethod?: string;
   contactType: 'primary' | 'secondary';
   email: string;
 }

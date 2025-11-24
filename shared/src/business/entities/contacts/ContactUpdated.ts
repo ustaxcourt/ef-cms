@@ -30,6 +30,8 @@ export class ContactUpdated extends JoiValidationEntity {
   public petitionType: string;
   public partyType: string;
   public hasConsentedToElectronicService?: boolean;
+  public preferredLanguage?: string;
+  public preferredCommunicationMethod?: string;
   public secondaryName?: string;
   public title?: string;
 
@@ -59,6 +61,8 @@ export class ContactUpdated extends JoiValidationEntity {
     this.partyType = partyType;
     this.hasConsentedToElectronicService =
       rawContact.hasConsentedToElectronicService;
+    this.preferredLanguage = rawContact.preferredLanguage;
+    this.preferredCommunicationMethod = rawContact.preferredCommunicationMethod;
     this.secondaryName = rawContact.secondaryName;
     this.title = rawContact.title;
   }
@@ -93,6 +97,9 @@ export class ContactUpdated extends JoiValidationEntity {
         'Other',
       )
       .messages({ '*': 'Enter a place of legal residence' }),
+    preferredLanguage: JoiValidationConstants.STRING.max(20).optional(),
+    preferredCommunicationMethod: JoiValidationConstants.STRING.max(20)
+      .optional(),
   } as const;
 
   static DOMESTIC_VALIDATION_RULES = {

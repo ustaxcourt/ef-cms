@@ -81,6 +81,7 @@ export function Spouse({
           }
           registerRef={registerRef}
           showElectronicServiceConsent={isPetitioner}
+          showLanguageFields={true}
           showSameAsPrimaryCheckbox={true}
           useSameAsPrimary={useSameAsPrimary}
         />

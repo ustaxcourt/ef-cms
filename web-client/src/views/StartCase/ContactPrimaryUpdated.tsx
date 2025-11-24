@@ -28,6 +28,7 @@ type ContactPrimaryUpdate = {
   showEmail?: boolean;
   showInCareOf?: boolean;
   showInCareOfOptional?: boolean;
+  showLanguageFields?: boolean;
   titleLabel?: string;
   titleLabelNote?: string;
 };
@@ -56,6 +57,7 @@ export const ContactPrimaryUpdated = connect<
     showEmail,
     showInCareOf,
     showInCareOfOptional,
+    showLanguageFields,
     titleLabel,
     titleLabelNote,
     validationErrors,
@@ -309,6 +311,95 @@ export const ContactPrimaryUpdated = connect<
                 }}
               />
             </FormGroup>
+          )}
+          {showLanguageFields && (
+            <>
+              <FormGroup
+                errorMessageId="preferred-language-error-message"
+                errorText={
+                  validationErrors.contactPrimary &&
+                  validationErrors.contactPrimary.preferredLanguage
+                }
+              >
+                <label className="usa-label" htmlFor="preferredLanguage">
+                  If you have difficulty communicating in English, please state
+                  your preferred language:{' '}
+                  <span className="usa-hint">(Optional)</span>
+                </label>
+                <input
+                  autoCapitalize="none"
+                  className="usa-input"
+                  data-testid="contact-primary-preferred-language"
+                  id="preferredLanguage"
+                  maxLength={20}
+                  name="contactPrimary.preferredLanguage"
+                  ref={
+                    registerRef &&
+                    registerRef('contactPrimary.preferredLanguage')
+                  }
+                  type="text"
+                  value={addressInfo.preferredLanguage || ''}
+                  onBlur={() => {
+                    handleBlur({
+                      validationKey: [
+                        'contactPrimary',
+                        'preferredLanguage',
+                      ],
+                    });
+                  }}
+                  onChange={e => {
+                    handleChange({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                  }}
+                />
+              </FormGroup>
+              <FormGroup
+                errorMessageId="preferred-communication-method-error-message"
+                errorText={
+                  validationErrors.contactPrimary &&
+                  validationErrors.contactPrimary.preferredCommunicationMethod
+                }
+              >
+                <label
+                  className="usa-label"
+                  htmlFor="preferredCommunicationMethod"
+                >
+                  If you are deaf or hard of hearing, please state your
+                  preferred method of communication (ASL, TTY, etc.):{' '}
+                  <span className="usa-hint">(Optional)</span>
+                </label>
+                <input
+                  autoCapitalize="none"
+                  className="usa-input"
+                  data-testid="contact-primary-preferred-communication-method"
+                  id="preferredCommunicationMethod"
+                  maxLength={20}
+                  name="contactPrimary.preferredCommunicationMethod"
+                  ref={
+                    registerRef &&
+                    registerRef('contactPrimary.preferredCommunicationMethod')
+                  }
+                  type="text"
+                  value={addressInfo.preferredCommunicationMethod || ''}
+                  onBlur={() => {
+                    handleBlur({
+                      validationKey: [
+                        'contactPrimary',
+                        'preferredCommunicationMethod',
+                      ],
+                    });
+                  }}
+                  onChange={e => {
+                    handleChange({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                  }}
+                />
+              </FormGroup>
+            </>
           )}
         </div>
       </>

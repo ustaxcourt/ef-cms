@@ -24,6 +24,7 @@ type ContactSecondary = {
   handleChangeCountryType: OnChangeCountryTypeHandler;
   registerRef?: Function;
   showElectronicServiceConsent?: boolean;
+  showLanguageFields?: boolean;
   showSameAsPrimaryCheckbox: boolean;
   useSameAsPrimary: boolean;
 };
@@ -50,6 +51,7 @@ export const ContactSecondaryUpdated = connect<
     registerRef,
     resetSecondaryAddressSequence,
     showElectronicServiceConsent = true,
+    showLanguageFields,
     showSameAsPrimaryCheckbox,
     useSameAsPrimary,
     validationErrors = {} as {
@@ -59,6 +61,8 @@ export const ContactSecondaryUpdated = connect<
         name: string;
         phone: string;
         paperPetitionEmail: string;
+        preferredLanguage: string;
+        preferredCommunicationMethod: string;
       };
     },
   }) {
@@ -238,6 +242,95 @@ export const ContactSecondaryUpdated = connect<
                   scrollToTop={false}
                 />
               )}
+            </>
+          )}
+          {showLanguageFields && (
+            <>
+              <FormGroup
+                errorMessageId="preferred-language-error-message"
+                errorText={
+                  validationErrors.contactSecondary &&
+                  validationErrors.contactSecondary.preferredLanguage
+                }
+              >
+                <label className="usa-label" htmlFor="preferredLanguage">
+                  If you have difficulty communicating in English, please state
+                  your preferred language:{' '}
+                  <span className="usa-hint">(Optional)</span>
+                </label>
+                <input
+                  autoCapitalize="none"
+                  className="usa-input"
+                  data-testid="contact-secondary-preferred-language"
+                  id="preferredLanguage"
+                  maxLength={20}
+                  name="contactSecondary.preferredLanguage"
+                  ref={
+                    registerRef &&
+                    registerRef('contactSecondary.preferredLanguage')
+                  }
+                  type="text"
+                  value={addressInfo.preferredLanguage || ''}
+                  onBlur={() => {
+                    handleBlur({
+                      validationKey: [
+                        'contactSecondary',
+                        'preferredLanguage',
+                      ],
+                    });
+                  }}
+                  onChange={e => {
+                    handleChange({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                  }}
+                />
+              </FormGroup>
+              <FormGroup
+                errorMessageId="preferred-communication-method-error-message"
+                errorText={
+                  validationErrors.contactSecondary &&
+                  validationErrors.contactSecondary.preferredCommunicationMethod
+                }
+              >
+                <label
+                  className="usa-label"
+                  htmlFor="preferredCommunicationMethod"
+                >
+                  If you are deaf or hard of hearing, please state your
+                  preferred method of communication (ASL, TTY, etc.):{' '}
+                  <span className="usa-hint">(Optional)</span>
+                </label>
+                <input
+                  autoCapitalize="none"
+                  className="usa-input"
+                  data-testid="contact-secondary-preferred-communication-method"
+                  id="preferredCommunicationMethod"
+                  maxLength={20}
+                  name="contactSecondary.preferredCommunicationMethod"
+                  ref={
+                    registerRef &&
+                    registerRef('contactSecondary.preferredCommunicationMethod')
+                  }
+                  type="text"
+                  value={addressInfo.preferredCommunicationMethod || ''}
+                  onBlur={() => {
+                    handleBlur({
+                      validationKey: [
+                        'contactSecondary',
+                        'preferredCommunicationMethod',
+                      ],
+                    });
+                  }}
+                  onChange={e => {
+                    handleChange({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                  }}
+                />
+              </FormGroup>
             </>
           )}
         </div>

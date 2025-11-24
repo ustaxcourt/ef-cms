@@ -87,6 +87,7 @@ export function PetitionerAndSpouseInfo({
           nameLabel="Full name of deceased spouse"
           registerRef={registerRef}
           showElectronicServiceConsent={isPetitioner}
+          showLanguageFields={false}
           useSameAsPrimary={useSameAsPrimary}
         />
       )}
