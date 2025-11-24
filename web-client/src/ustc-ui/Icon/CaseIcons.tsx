@@ -2,7 +2,6 @@ import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseI
 import { WrappedIcon } from '@web-client/ustc-ui/Icon/Icon';
 import React from 'react';
 import classNames from 'classnames';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export function CaseIcons({ formattedCase }: { formattedCase: any }) {
   return (
@@ -29,13 +28,22 @@ export function CaseIcons({ formattedCase }: { formattedCase: any }) {
         iconAriaLabel="Sealed"
         iconClass="sealed-case-entry"
       />
+      <WrappedIcon
+        spanClass={
+          formattedCase.remoteTrialGranted ? 'visibility-visible' : 'visibility-hidden'
+        }
+        spanDataTestId="laptop"
+        title="MOTR"
+        icon="laptop"
+        iconAriaLabel="MOTR"
+        iconClass="tw:text-primary"
+      />
       <span
         className={classNames({
           'margin-left-2':
             formattedCase.inConsolidatedGroup && !formattedCase.isLeadCase,
         })}
       >
-        {formattedCase.remoteTrialGranted && <FontAwesomeIcon className="tw:text-primary" icon="laptop" />}
         <ConsolidatedCaseIcon
           consolidatedIconTooltipText={
             formattedCase.consolidatedIconTooltipText
