@@ -34,6 +34,7 @@ import {
 } from '../../trialSessions/mapper';
 import { users } from '@web-api/persistence/postgres/utils/seed/fixtures/users';
 import { usersOnCases } from '@web-api/persistence/postgres/utils/seed/fixtures/usersOnCases';
+import { minuteSheets } from './fixtures/minuteSheets';
 
 export const seed = async () => {
   const insertMessages = pgInsertInto({
@@ -102,6 +103,12 @@ export const seed = async () => {
     action: OPENSEARCH_SYNC_ACTIONS.UPSERT,
   });
 
+  const insertMinuteSheet = pgInsertInto({
+    table: 'dwMinuteSheet',
+    values: minuteSheets,
+    onConflictColumns: ['trialSessionId', 'docketNumber'],
+  });
+
   // Seed the cases
   const cases = [
     ...cases100_104,
@@ -158,6 +165,7 @@ export const seed = async () => {
     insertUsers,
     insertUserOnCase,
     insertWorkItem,
+    insertMinuteSheet,
   ]);
 };
 
