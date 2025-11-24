@@ -15,6 +15,7 @@ import classNames from 'classnames';
 import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
 import { useClientSidePaginator } from '@web-client/utilities/useClientSidePaginator';
 import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const BlockedCasesReport = connect(
   {
@@ -142,6 +143,7 @@ export const BlockedCasesReport = connect(
                                     !item.isLeadCase,
                                 })}
                               >
+                                {item.remoteTrialGranted && <FontAwesomeIcon className="tw:text-primary" icon="laptop" />}
                                 <ConsolidatedCaseIcon
                                   consolidatedIconTooltipText={
                                     item.consolidatedIconTooltipText

@@ -2,6 +2,7 @@ import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseI
 import { WrappedIcon } from '@web-client/ustc-ui/Icon/Icon';
 import React from 'react';
 import classNames from 'classnames';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export function CaseIcons({ formattedCase }: { formattedCase: any }) {
   return (
@@ -34,6 +35,7 @@ export function CaseIcons({ formattedCase }: { formattedCase: any }) {
             formattedCase.inConsolidatedGroup && !formattedCase.isLeadCase,
         })}
       >
+        {formattedCase.remoteTrialGranted && <FontAwesomeIcon className="tw:text-primary" icon="laptop" />}
         <ConsolidatedCaseIcon
           consolidatedIconTooltipText={
             formattedCase.consolidatedIconTooltipText
