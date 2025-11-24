@@ -99,7 +99,7 @@ export class Case extends JoiValidationEntity {
   public orderForRatification?: boolean;
   public orderToShowCause?: boolean;
   public petitioners: TPetitioner[];
-  public caseCaption?: string;
+  public caseCaption: string='';
   public caseType?: CaseType;
   public closedDate?: string;
   public createdAt?: string;
@@ -138,7 +138,7 @@ export class Case extends JoiValidationEntity {
   public archivedDocketEntries?: RawDocketEntry[];
   public docketEntries: DocketEntry[]= [];
   public isSealed?: boolean;
-  public hearings?: any[];
+  public hearings: any[]= [];
   public privatePractitioners: any[]= [];
   public initialCaption?: string;
   public irsPractitioners?: any[];
