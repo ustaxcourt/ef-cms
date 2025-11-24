@@ -52,6 +52,7 @@ export function loginAsIrsPractitioner1() {
   cy.get('[data-testid="closed-cases-count"]').contains('Closed Cases');
 }
 
+// petitioner1 should be used to login
 export function loginAsPetitioner(
   petitionerUser: string = 'petitioner1@example.com',
 ) {
