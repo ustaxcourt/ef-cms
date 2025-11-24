@@ -8,7 +8,11 @@ import {
   TrialSessionTypes,
 } from '@shared/business/entities/EntityConstants';
 
-export type CalendaredCaseItemType = (RawCase | RawCalendaredCase) & {
+export type CalendaredCaseItemType = (
+  | RawCase
+  | RawCalendaredCase
+  | RawEligibleCase
+) & {
   removedFromTrial?: boolean;
   removedFromTrialDate?: string;
 };

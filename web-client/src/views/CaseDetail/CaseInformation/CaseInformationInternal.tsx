@@ -8,8 +8,7 @@ import { SetForHearingModal } from '../SetForHearingModal';
 import { TrialInformation } from './TrialInformation';
 import { UnconsolidateCasesModal } from '../UnconsolidateCasesModal';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const CaseInformationInternal = connect(
