@@ -475,19 +475,19 @@ describe('trial session working copy computed', () => {
   });
   describe('trialStatusCounts', () => {
     const calendaredCases = [
-        {
-          ...MOCK_CASE,
-          docketNumber: '111-11'
-        },
-        {
-          ...MOCK_CASE,
-          docketNumber: '222-22'
-        },
-        {
-          ...MOCK_CASE,
-          docketNumber: '333-33'
-        },
-      ]
+      {
+        ...MOCK_CASE,
+        docketNumber: '111-11',
+      },
+      {
+        ...MOCK_CASE,
+        docketNumber: '222-22',
+      },
+      {
+        ...MOCK_CASE,
+        docketNumber: '333-33',
+      },
+    ];
     it('should add to statusUnassigned counts if the caseMetadata key field is blank', () => {
       const { trialStatusCounts } = runCompute(trialSessionWorkingCopyHelper, {
         state: {
@@ -511,13 +511,14 @@ describe('trial session working copy computed', () => {
           },
           trialSessionWorkingCopy: {
             caseMetadata: {
-              '111-11': { trialStatus: ''},
-              '222-22': { trialStatus: ''},
-              '333-33': { trialStatus: 'basisReached'},
+              '111-11': { trialStatus: '' },
+              '222-22': { trialStatus: '' },
+              '333-33': { trialStatus: 'basisReached' },
             },
           },
         },
       });
+      console.log('trialStatusCounts', trialStatusCounts);
       expect(trialStatusCounts.statusUnassigned).toEqual(2);
     });
     it('should count the number of statuses based on caseMetadata', () => {
@@ -529,9 +530,9 @@ describe('trial session working copy computed', () => {
           },
           trialSessionWorkingCopy: {
             caseMetadata: {
-              '111-11': { trialStatus: 'statusUnassigned'},
-              '222-22': { trialStatus: 'submittedCAV'},
-              '333-33': { trialStatus: 'basisReached'},
+              '111-11': { trialStatus: 'statusUnassigned' },
+              '222-22': { trialStatus: 'submittedCAV' },
+              '333-33': { trialStatus: 'basisReached' },
             },
           },
         },
@@ -539,8 +540,8 @@ describe('trial session working copy computed', () => {
       expect(trialStatusCounts).toEqual({
         statusUnassigned: 1,
         submittedCAV: 1,
-        basisReached: 1
+        basisReached: 1,
       });
-    })
-  })
+    });
+  });
 });

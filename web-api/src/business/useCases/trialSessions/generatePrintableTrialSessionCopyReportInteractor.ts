@@ -27,7 +27,7 @@ export const generatePrintableTrialSessionCopyReportInteractor = async (
     showCaseNotes: boolean;
     sort: string;
     userHeading: string;
-    trialStatusCounts: { [caseNumber: string]: number };
+    trialStatusCounts: { [trialStatus: string]: number };
   },
   authorizedUser: UnknownAuthUser,
 ): Promise<string> => {
