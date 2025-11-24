@@ -42,13 +42,22 @@ Deep dive interviews with 2 IRS attorneys and 2 administrative staff probing on 
 ### User Management Interviews (March 2021)
 [Docket Clerk Interview Guide](./docket-clerk-interview-plan.pdf)
 
-[PR 65 Research Interviews - Recommendations](./recommendations.pdf) 
+[PR 65 Research Interviews - Recommendations](./recommendations.pdf)
 
 ## Continuous Research
 Post-launch, the team continues with research and testing activities.
 
 [Continuous Research Plan](./Continuous-research-plan.pdf)
 
+An integral part of continuous research are the feedback loops we integrate into our discovery and project processes. Feedback loops are how we stay aligned with mission outcomes, discover hidden needs, and build momentum without losing direction.
+
+Some of the integrated feedback loops include:
+
+- **Bi-weekly user group meetings:** Representatives from across roles share feedback on active work and upcoming features.
+
+- **Feature-specific loops:** We hold targeted discussions on design mocks or tickets to unpack real user pain points.
+
+- **Ad hoc communication:** Strong relationships mean informal feedback flows freely. Users share ideas and frustrations as they happen, creating a natural, ongoing discovery loop.
 
 ## User Flows
 
@@ -227,7 +236,7 @@ Use plain language for error messages, alerts, and instructions so users can cle
 - Error messages should be clear directions/verb phrases of what the user needs to do e.g., "Enter state" or "Select trial city" without periods at the end
 
 ## System-Generated PDFs
-* for content, use one space after a period punctuation 
+* for content, use one space after a period punctuation
 
 ### Success and error messages
 
