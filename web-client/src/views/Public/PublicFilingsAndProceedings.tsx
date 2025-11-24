@@ -5,6 +5,7 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
+import { concat } from 'lodash';
 
 type PublicFilingsAndProceedingsPros = {
   entry: PublicFormattedDocketEntryInfo;
@@ -46,7 +47,6 @@ export const PublicFilingsAndProceedings = connect<
             {entry.descriptionDisplay}
           </Button>
         )}
-
         <span
           className={classNames(entry.isStricken && 'stricken-docket-record')}
         >
@@ -57,8 +57,47 @@ export const PublicFilingsAndProceedings = connect<
 
           <span>{entry.signatory}</span>
         </span>
-
         {entry.isStricken && <span> (STRICKEN)</span>}
+
+        {concat(
+          entry.affectedByDocketEntries ?? [],
+          entry.affectedDocketEntries ?? [],
+        ).map(affectedEntry => {
+          return (
+            <>
+              <br></br>
+              <span className="display-inline-block">
+                <span> --- </span>
+                {affectedEntry.showDownloadLink && (
+                  <Button
+                    link
+                    className={classNames('text-right', 'view-pdf-link')}
+                    data-testid={`related-document-viewer-link-${affectedEntry.docketEntryIndex}`}
+                    arial-label={`View PDF for: ${affectedEntry.docketEntryIndex}`}
+                    onClick={() =>
+                      openCaseDocumentDownloadUrlSequence({
+                        docketEntryId: affectedEntry.docketEntryId,
+                        docketNumber: caseDetail.docketNumber,
+                        isPublic: true,
+                        useSameTab: entry.openInSameTab,
+                      })
+                    }
+                  >
+                    {affectedEntry?.disposition} #
+                    {affectedEntry.docketEntryIndex}
+                  </Button>
+                )}
+                {!affectedEntry.showDownloadLink && (
+                  <span>
+                    {' '}
+                    {affectedEntry?.disposition} #
+                    {affectedEntry.docketEntryIndex}{' '}
+                  </span>
+                )}
+              </span>
+            </>
+          );
+        })}
       </React.Fragment>
     );
   },

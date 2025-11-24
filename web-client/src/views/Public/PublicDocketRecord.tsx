@@ -151,7 +151,8 @@ export const PublicDocketRecord = connect(
                               iconClass="sealed-in-blackstone icon-sealed"
                               icon="lock"
                               size="1x"
-                              title={entry.sealedToTooltip} />
+                              title={entry.sealedToTooltip}
+                            />
                           )}
                         </td>
                         <td data-label="Filings and Proceedings">

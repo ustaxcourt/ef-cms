@@ -17,13 +17,15 @@ type FilingsAndProceedingsProps = {
       disposition?: string;
       docketEntryId?: string;
       docketEntryIndex?: number;
-      documentType: string;
+      showDocumentViewerLink: boolean;
+      showDownloadLink: boolean;
     }[];
     affectedByDocketEntries: {
       disposition?: string;
       docketEntryId?: string;
       docketEntryIndex?: number;
-      documentType: string;
+      showDocumentViewerLink: boolean;
+      showDownloadLink: boolean;
     }[];
     showDocumentProcessing: boolean;
     showLinkToDocument: boolean;
@@ -151,35 +153,6 @@ export const FilingsAndProceedings = connect<
               )}
               {entry.descriptionDisplay}
             </Button>
-            {_.concat(
-              entry.affectedByDocketEntries ?? [],
-              entry.affectedDocketEntries ?? [],
-            ).map(entry => {
-              return (
-                <>
-                  <br></br>
-                  <span className="display-inline-block">
-                    <span> --- </span>
-                    <Button
-                      link
-                      className={classNames('text-right', 'view-pdf-link')}
-                      data-testid={`related-document-viewer-link-${entry.docketEntryIndex}`}
-                      arial-label={`View PDF for: ${entry.docketEntryIndex}`}
-                      onClick={() =>
-                        changeTabAndSetViewerDocumentToDisplaySequence({
-                          docketRecordTab: 'documentView',
-                          viewerDocumentToDisplay: {
-                            docketEntryId: entry.docketEntryId,
-                          },
-                        })
-                      }
-                    >
-                      {entry?.disposition} #{entry.docketEntryIndex}
-                    </Button>
-                  </span>
-                </>
-              );
-            })}
           </>
         )}
         <span
@@ -189,6 +162,54 @@ export const FilingsAndProceedings = connect<
         </span>
         <span> {entry.signatory}</span>
         {entry.isStricken && <span>(STRICKEN)</span>}
+        {_.concat(
+          entry.affectedByDocketEntries ?? [],
+          entry.affectedDocketEntries ?? [],
+        ).map(affectedEntry => {
+          return (
+            <>
+              <br></br>
+              <span className="display-inline-block">
+                <span> --- </span>
+                {(affectedEntry.showDocumentViewerLink ||
+                  affectedEntry.showDownloadLink) && (
+                  <Button
+                    link
+                    className={classNames('text-right', 'view-pdf-link')}
+                    data-testid={`related-document-viewer-link-${affectedEntry.docketEntryIndex}`}
+                    arial-label={`View PDF for: ${affectedEntry.docketEntryIndex}`}
+                    onClick={() =>
+                      affectedEntry.showDocumentViewerLink
+                        ? changeTabAndSetViewerDocumentToDisplaySequence({
+                            docketRecordTab: 'documentView',
+                            viewerDocumentToDisplay: {
+                              docketEntryId: affectedEntry.docketEntryId,
+                            },
+                          })
+                        : openCaseDocumentDownloadUrlSequence({
+                            docketEntryId: affectedEntry.docketEntryId,
+                            docketNumber: caseDetail.docketNumber,
+                          })
+                    }
+                  >
+                    {affectedEntry?.disposition} #
+                    {affectedEntry.docketEntryIndex}
+                  </Button>
+                )}
+                {!(
+                  affectedEntry.showDocumentViewerLink ||
+                  affectedEntry.showDownloadLink
+                ) && (
+                  <span>
+                    {' '}
+                    {affectedEntry?.disposition} #
+                    {affectedEntry.docketEntryIndex}{' '}
+                  </span>
+                )}
+              </span>
+            </>
+          );
+        })}
       </>
     );
   },

@@ -16,6 +16,42 @@ import { sortDocketEntryTable } from '@web-client/presenter/computeds/formattedD
 import { state } from '@web-client/presenter/app-public.cerebral';
 import { formatDateString } from '@shared/business/utilities/DateHandler';
 
+const getRelatedDocketEntryDetails = (
+  motionEntry: RawDocketEntry,
+  rawCase: RawPublicCase,
+  targetDocketEntryId: string,
+  visibilityPolicyDate: any,
+) => {
+  const relatedOrder = rawCase.docketEntries.find(
+    entry => entry.docketEntryId === targetDocketEntryId,
+  );
+
+  if (!relatedOrder) {
+    throw new Error(
+      `Related order not found for motion with id ${motionEntry.docketEntryId} and targetDocketEntryId ${targetDocketEntryId} and title ${
+        motionEntry.documentTitle
+      }`,
+    );
+  }
+
+  const isDownloadable = DocketEntry.isDownloadable(relatedOrder, {
+    isTerminalUser: false,
+    rawCase,
+    user: {
+      role: ROLES.petitioner,
+      userId: '',
+      email: '',
+      name: '',
+    },
+    visibilityChangeDate: visibilityPolicyDate,
+  });
+  const showDownloadLink = isDownloadable;
+  return {
+    index: relatedOrder.index,
+    showDownloadLink,
+  };
+};
+
 export const formatDocketEntryOnDocketRecord = (
   applicationContext,
   {
@@ -75,6 +111,34 @@ export const formatDocketEntryOnDocketRecord = (
     );
   }
 
+  if (entry.affectedDocketEntries) {
+    entry.affectedDocketEntries.forEach(affectedEntry => {
+      const { index, showDownloadLink } = getRelatedDocketEntryDetails(
+        entry,
+        rawCase,
+        affectedEntry.docketEntryId,
+        visibilityPolicyDate,
+      );
+
+      affectedEntry.docketEntryIndex = index;
+      affectedEntry.showDownloadLink = showDownloadLink;
+    });
+  }
+
+  if (entry.affectedByDocketEntries) {
+    entry.affectedByDocketEntries.forEach(affectedEntry => {
+      const { index, showDownloadLink } = getRelatedDocketEntryDetails(
+        entry,
+        rawCase,
+        affectedEntry.docketEntryId,
+        visibilityPolicyDate,
+      );
+
+      affectedEntry.docketEntryIndex = index;
+      affectedEntry.showDownloadLink = showDownloadLink;
+    });
+  }
+
   entry.filingsAndProceedings = getFilingsAndProceedings(entry);
 
   const canPublicUserSeeLink = DocketEntry.isDownloadable(entry, {
@@ -104,6 +168,8 @@ export const formatDocketEntryOnDocketRecord = (
 
   return {
     action: entry.action,
+    affectedByDocketEntries: entry.affectedByDocketEntries,
+    affectedDocketEntries: entry.affectedDocketEntries,
     createdAtFormatted,
     description: entry.description,
     descriptionDisplay: applicationContext
@@ -172,6 +238,18 @@ export type PublicFormattedDocketEntryInfo = {
   showDocumentDescriptionWithoutLink: boolean;
   signatory?: string;
   hasDocument: boolean;
+  affectedDocketEntries: {
+    disposition?: string;
+    docketEntryId?: string;
+    docketEntryIndex?: number;
+    showDownloadLink: boolean;
+  }[];
+  affectedByDocketEntries: {
+    disposition?: string;
+    docketEntryId?: string;
+    docketEntryIndex?: number;
+    showDownloadLink: boolean;
+  }[];
 };
 
 export type PublicCaseDetailHelperResults = {

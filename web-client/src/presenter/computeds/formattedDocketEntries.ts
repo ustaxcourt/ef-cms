@@ -103,10 +103,13 @@ export const getShowSealDocketRecordEntry = ({ applicationContext, entry }) => {
   return !docketEntryIsOpinion;
 };
 
-const getMotionDispositionOrderIndex = (
+const getRelatedDocketEntryDetails = (
   motionEntry: RawDocketEntry,
   rawCase: RawCase,
   targetDocketEntryId: string,
+  isExternalUser: boolean,
+  user: any,
+  visibilityPolicyDateFormatted: any,
 ) => {
   const relatedOrder = rawCase.docketEntries.find(
     entry => entry.docketEntryId === targetDocketEntryId,
@@ -120,7 +123,20 @@ const getMotionDispositionOrderIndex = (
     );
   }
 
-  return relatedOrder.index;
+  const isDownloadable = DocketEntry.isDownloadable(relatedOrder, {
+    isTerminalUser: false,
+    rawCase,
+    user,
+    visibilityChangeDate: visibilityPolicyDateFormatted,
+  });
+
+  const showDocumentViewerLink = isDownloadable && !isExternalUser;
+  const showDownloadLink = isDownloadable && isExternalUser;
+  return {
+    index: relatedOrder.index,
+    showDocumentViewerLink,
+    showDownloadLink,
+  };
 };
 
 export const getFormattedDocketEntry = ({
@@ -147,21 +163,37 @@ export const getFormattedDocketEntry = ({
 
   if (entry.affectedDocketEntries) {
     entry.affectedDocketEntries.forEach(affectedEntry => {
-      affectedEntry.docketEntryIndex = getMotionDispositionOrderIndex(
-        entry,
-        rawCase,
-        affectedEntry.docketEntryId,
-      );
+      const { index, showDocumentViewerLink, showDownloadLink } =
+        getRelatedDocketEntryDetails(
+          entry,
+          rawCase,
+          affectedEntry.docketEntryId,
+          isExternalUser,
+          user,
+          visibilityPolicyDateFormatted,
+        );
+
+      affectedEntry.docketEntryIndex = index;
+      affectedEntry.showDocumentViewerLink = showDocumentViewerLink;
+      affectedEntry.showDownloadLink = showDownloadLink;
     });
   }
 
   if (entry.affectedByDocketEntries) {
     entry.affectedByDocketEntries.forEach(affectedEntry => {
-      affectedEntry.docketEntryIndex = getMotionDispositionOrderIndex(
-        entry,
-        rawCase,
-        affectedEntry.docketEntryId,
-      );
+      const { index, showDocumentViewerLink, showDownloadLink } =
+        getRelatedDocketEntryDetails(
+          entry,
+          rawCase,
+          affectedEntry.docketEntryId,
+          isExternalUser,
+          user,
+          visibilityPolicyDateFormatted,
+        );
+
+      affectedEntry.docketEntryIndex = index;
+      affectedEntry.showDocumentViewerLink = showDocumentViewerLink;
+      affectedEntry.showDownloadLink = showDownloadLink;
     });
   }
 
