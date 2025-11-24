@@ -1,0 +1,200 @@
+// EF-CMS Database Entity Relationship Diagram
+
+title EF-CMS Database Entity Relationship Diagram
+notation crows-foot
+colorMode bold
+styleMode shadow
+typeface clean
+
+// Tables
+
+dwCase [icon: briefcase, color: blue]{
+  docketNumber string pk "The docket number of the case."
+  associatedJudgeId string fk "Current associated Judge user ID"
+  trialSessionId string fk "Trial session identifier"
+}
+
+dwDocketEntry [icon: file-text, color: orange]{
+  docketEntryId string pk "Unique docket entry identifier"
+  docketNumber string pk fk "Associated case docket number"
+  filedBy string fk "ID(s) of user/users who filed the document"
+  signedByUserId string fk "ID of the user who applied the signature"
+  strikenByUserId string fk "ID of the user who struck the document"
+  userId string fk "ID of the user who created the document"
+}
+
+dwUser [icon: user, color: yellow]{
+  userId string pk "Unique user identifier"
+}
+
+dwWorkItem [icon: clipboard-list, color: green]{
+  workItemId string pk "ID of the Work Item"
+  assigneeId string fk "ID of the clerk user who is assigned to the work item"
+  completedByUserId string fk "ID of the user who completed the work item"
+  docketEntryId string fk "ID of the document that is in QC"
+  docketNumber string fk "Docket number of the Case"
+  sentByUserId string fk "ID of the user who sent the work item last"
+}
+
+dwUserOnCase [icon: user-check, color: cyan]{
+  docketNumber string pk fk "Case docket number"
+  userId string pk fk "User ID"
+}
+
+dwUserOnCasePending [icon: user-clock, color: cyan]{
+  docketNumber string pk fk "Case docket number"
+  userId string pk fk "User ID"
+}
+
+dwCaseWorksheet [icon: file-spreadsheet, color: teal]{
+  docketNumber string pk fk "Case docket number"
+  judgeUserId string fk "Judge's user ID"
+}
+
+dwCaseDeadline [icon: calendar-clock, color: red]{
+  caseDeadlineId string pk "Unique case deadline identifier"
+  docketNumber string fk "Associated case docket number"
+  associatedJudgeId string fk "Judge user ID"
+}
+
+dwCaseCorrespondence [icon: mail, color: purple]{
+  correspondenceId string pk "Unique correspondence identifier"
+  docketNumber string fk "Associated case docket number"
+  userId string fk "ID of the user who created the correspondence"
+}
+
+dwMinuteSheet [icon: file-text, color: indigo]{
+  minuteSheetId string pk "Unique minute sheet identifier"
+  docketNumber string fk "Associated case docket number"
+}
+
+dwUserCaseNote [icon: sticky-note, color: yellow]{
+  docketNumber string pk fk "Case docket number"
+  userId string pk fk "ID of the user who created the note"
+}
+
+dwBarNumber [icon: id-card, color: brown]{
+  barNumber string pk "Bar admission number"
+  userId string fk "Associated user ID"
+}
+
+dwUserConfirmationCode [icon: key, color: gray]{
+  confirmationCode string pk "Confirmation code"
+  userId string fk "Associated user ID"
+}
+
+dwDocketEntryWorksheet [icon: edit, color: pink]{
+  docketEntryId string pk fk "Associated docket entry ID"
+}
+
+dwMessage [icon: message-square, color: blue]{
+  messageId string pk "Unique message identifier"
+  docketNumber string fk "Associated case docket number"
+  fromUserId string fk "User ID of sender"
+  toUserId string fk "User ID of recipient"
+}
+
+dwNotification [icon: bell, color: orange]{
+  id number pk "Primary key"
+}
+
+dwConnection [icon: link, color: blue]{
+  connectionId string pk "Primary key"
+  userId string fk "User ID"
+}
+
+dwResponseString [icon: code, color: gray]{
+  id number pk "Primary key"
+  responseString string pk "Response string"
+  userId string fk "User ID"
+}
+
+dwChangeOfAddress [icon: map-pin, color: green]{
+  changeOfAddressId string pk "Primary key"
+  userId string fk "User ID"
+}
+
+dwFeatureFlag [icon: toggle-right, color: purple]{
+  name string pk "Feature flag name"
+}
+
+dwPractitionerDocuments [icon: file-plus, color: brown]{
+  practitionerDocumentFileId string pk "Document file ID"
+  barNumber string fk "Practitioner bar number"
+}
+
+dwTrialSession [icon:clock, color:gray]{
+  trialSessionId string pk "System-generated ID for the trial session"
+  judgeUserId string fk "Assigned Judge's system-generated user id"
+  swingSessionId string fk "Trial session ID of the session identified as the swing session"
+  trialClerkUserId string fk "User ID of the trial clerk selected by the user"
+}
+
+dwTrialSessionCase [icon:clock, color:gray]{
+  docketNumber string pk fk "Docket number of the case assigned to a trial session"
+  trialSessionId string pk fk "System-generated ID for the trial session"
+}
+
+dwTrialSessionNotificationProcessing [icon:clock, color:gray]{
+  trialSessionId string pk fk "System-generated ID for the trial session"
+}
+
+dwTrialSessionPaperPdf [icon:clock, color:gray]{
+  fileId string pk "Id of the document that was available for printing of service"
+  trialSessionId string pk fk "System-generated ID for the trial session"
+}
+
+dwTrialSessionWorkingCopy [icon:clock, color:gray]{
+  trialSessionId string pk fk "System-generated ID for the trial session"
+  userId string pk fk "Judge user ID or trial clerk user ID"
+}
+
+// Relationships
+
+// Case relationships
+dwCase.docketNumber > dwDocketEntry.docketNumber
+dwCase.docketNumber > dwUserOnCase.docketNumber
+dwCase.docketNumber > dwUserOnCasePending.docketNumber
+dwCase.docketNumber - dwCaseWorksheet.docketNumber
+dwCase.docketNumber > dwCaseDeadline.docketNumber
+dwCase.docketNumber > dwCaseCorrespondence.docketNumber
+dwCase.docketNumber > dwMinuteSheet.docketNumber
+dwCase.docketNumber > dwWorkItem.docketNumber
+dwCase.docketNumber > dwUserCaseNote.docketNumber
+dwCase.docketNumber > dwMessage.docketNumber
+dwCase.trialSessionId - dwTrialSession.trialSessionId
+dwCase.docketNumber > dwTrialSessionCase.docketNumber
+
+// User relationships
+dwUser.userId > dwUserOnCase.userId
+dwUser.userId > dwUserOnCasePending.userId
+dwUser.userId > dwBarNumber.userId
+dwUser.userId > dwUserConfirmationCode.userId
+dwUser.userId > dwUserCaseNote.userId
+dwUser.userId > dwMessage.fromUserId
+dwUser.userId > dwMessage.toUserId
+dwUser.userId > dwConnection.userId
+dwUser.userId > dwChangeOfAddress.userId
+dwUser.userId > dwWorkItem.assigneeId
+dwUser.userId > dwWorkItem.sentByUserId
+dwUser.userId > dwWorkItem.completedByUserId
+dwUser.userId > dwResponseString.userId
+dwUser.userId > dwDocketEntry.filedBy
+dwUser.userId > dwCaseCorrespondence.userId
+dwUser.userId > dwTrialSessionWorkingCopy.userId
+
+// Docket entry relationships
+dwDocketEntry.docketEntryId - dwDocketEntryWorksheet.docketEntryId
+dwDocketEntry.docketEntryId > dwWorkItem.docketEntryId
+
+// Bar number relationships
+dwBarNumber.barNumber > dwPractitionerDocuments.barNumber
+
+// Trial session relationships
+dwTrialSession.trialSessionId > dwTrialSessionCase.trialSessionId
+dwTrialSession.trialSessionId > dwTrialSessionNotificationProcessing.trialSessionId
+dwTrialSession.trialSessionId > dwTrialSessionPaperPdf.trialSessionId
+dwTrialSession.trialSessionId > dwTrialSessionWorkingCopy.trialSessionId
+dwTrialSession.swingSessionId - dwTrialSession.trialSessionId
+dwTrialSession.judgeUserId - dwUser.userId
+dwTrialSession.trialClerkUserId - dwUser.userId
