@@ -13,14 +13,7 @@ type FilingsAndProceedingsProps = {
     descriptionDisplay: string;
     isStricken: boolean;
     docketEntryId: string;
-    affectedDocketEntries: {
-      disposition?: string;
-      docketEntryId?: string;
-      docketEntryIndex?: number;
-      showDocumentViewerLink: boolean;
-      showDownloadLink: boolean;
-    }[];
-    affectedByDocketEntries: {
+    relatedDocketEntries: {
       disposition?: string;
       docketEntryId?: string;
       docketEntryIndex?: number;
@@ -162,10 +155,7 @@ export const FilingsAndProceedings = connect<
         </span>
         <span> {entry.signatory}</span>
         {entry.isStricken && <span>(STRICKEN)</span>}
-        {_.concat(
-          entry.affectedByDocketEntries ?? [],
-          entry.affectedDocketEntries ?? [],
-        ).map(affectedEntry => {
+        {entry.relatedDocketEntries?.map(affectedEntry => {
           return (
             <>
               <br></br>

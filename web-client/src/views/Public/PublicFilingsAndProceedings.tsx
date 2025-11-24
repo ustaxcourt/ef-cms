@@ -5,7 +5,6 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
-import { concat } from 'lodash';
 
 type PublicFilingsAndProceedingsPros = {
   entry: PublicFormattedDocketEntryInfo;
@@ -59,10 +58,7 @@ export const PublicFilingsAndProceedings = connect<
         </span>
         {entry.isStricken && <span> (STRICKEN)</span>}
 
-        {concat(
-          entry.affectedByDocketEntries ?? [],
-          entry.affectedDocketEntries ?? [],
-        ).map(affectedEntry => {
+        {entry.relatedDocketEntries.map(affectedEntry => {
           return (
             <>
               <br></br>

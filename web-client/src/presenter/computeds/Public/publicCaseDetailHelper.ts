@@ -111,8 +111,12 @@ export const formatDocketEntryOnDocketRecord = (
     );
   }
 
-  if (entry.affectedDocketEntries) {
-    entry.affectedDocketEntries.forEach(affectedEntry => {
+  let relatedDocketEntries;
+  if (entry.affectedDocketEntries || entry.affectedByDocketEntries) {
+    relatedDocketEntries = [
+      ...(entry.affectedByDocketEntries ?? []),
+      ...(entry.affectedDocketEntries ?? []),
+    ].map(affectedEntry => {
       const { index, showDownloadLink } = getRelatedDocketEntryDetails(
         entry,
         rawCase,
@@ -122,20 +126,7 @@ export const formatDocketEntryOnDocketRecord = (
 
       affectedEntry.docketEntryIndex = index;
       affectedEntry.showDownloadLink = showDownloadLink;
-    });
-  }
-
-  if (entry.affectedByDocketEntries) {
-    entry.affectedByDocketEntries.forEach(affectedEntry => {
-      const { index, showDownloadLink } = getRelatedDocketEntryDetails(
-        entry,
-        rawCase,
-        affectedEntry.docketEntryId,
-        visibilityPolicyDate,
-      );
-
-      affectedEntry.docketEntryIndex = index;
-      affectedEntry.showDownloadLink = showDownloadLink;
+      return affectedEntry;
     });
   }
 
@@ -186,6 +177,7 @@ export const formatDocketEntryOnDocketRecord = (
     isStricken: entry.isStricken,
     numberOfPages: entry.numberOfPages || 0,
     openInSameTab: !isTerminalUser,
+    relatedDocketEntries,
     sealedToTooltip: entry.sealedToTooltip,
     servedAtFormatted: entry.servedAtFormatted,
     servedPartiesCode: entry.servedPartiesCode,
@@ -238,13 +230,7 @@ export type PublicFormattedDocketEntryInfo = {
   showDocumentDescriptionWithoutLink: boolean;
   signatory?: string;
   hasDocument: boolean;
-  affectedDocketEntries: {
-    disposition?: string;
-    docketEntryId?: string;
-    docketEntryIndex?: number;
-    showDownloadLink: boolean;
-  }[];
-  affectedByDocketEntries: {
+  relatedDocketEntries: {
     disposition?: string;
     docketEntryId?: string;
     docketEntryIndex?: number;

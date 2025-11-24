@@ -161,8 +161,11 @@ export const getFormattedDocketEntry = ({
     createdAtFormatted: entry.createdAtFormatted,
   };
 
-  if (entry.affectedDocketEntries) {
-    entry.affectedDocketEntries.forEach(affectedEntry => {
+  if (entry.affectedDocketEntries || entry.affectedByDocketEntries) {
+    formattedResult.relatedDocketEntries = [
+      ...(entry.affectedByDocketEntries ?? []),
+      ...(entry.affectedDocketEntries ?? []),
+    ].map(affectedEntry => {
       const { index, showDocumentViewerLink, showDownloadLink } =
         getRelatedDocketEntryDetails(
           entry,
@@ -176,26 +179,12 @@ export const getFormattedDocketEntry = ({
       affectedEntry.docketEntryIndex = index;
       affectedEntry.showDocumentViewerLink = showDocumentViewerLink;
       affectedEntry.showDownloadLink = showDownloadLink;
+
+      return affectedEntry;
     });
   }
 
-  if (entry.affectedByDocketEntries) {
-    entry.affectedByDocketEntries.forEach(affectedEntry => {
-      const { index, showDocumentViewerLink, showDownloadLink } =
-        getRelatedDocketEntryDetails(
-          entry,
-          rawCase,
-          affectedEntry.docketEntryId,
-          isExternalUser,
-          user,
-          visibilityPolicyDateFormatted,
-        );
-
-      affectedEntry.docketEntryIndex = index;
-      affectedEntry.showDocumentViewerLink = showDocumentViewerLink;
-      affectedEntry.showDownloadLink = showDownloadLink;
-    });
-  }
+  console.log('FormattedResult', formattedResult);
 
   if (!isExternalUser) {
     formattedResult.showLoadingIcon =
