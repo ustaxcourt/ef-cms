@@ -58,7 +58,7 @@ export const PublicFilingsAndProceedings = connect<
         </span>
         {entry.isStricken && <span> (STRICKEN)</span>}
 
-        {entry.relatedDocketEntries.map(affectedEntry => {
+        {entry.relatedDocketEntries?.map(affectedEntry => {
           return (
             <>
               <br></br>
