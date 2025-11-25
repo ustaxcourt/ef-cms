@@ -63,6 +63,7 @@ import {
   isDateWithinGivenInterval,
   isStringISOFormatted,
   isValidDateString,
+  isValidPastDate,
   prepareDateFromString,
   validateDateAndCreateISO,
 } from '../../shared/src/business/utilities/DateHandler';
@@ -743,6 +744,7 @@ const applicationContext = {
       isStringISOFormatted,
       isUserPartOfGroup,
       isValidDateString,
+      isValidPastDate,
       openUrlInNewTab,
       prepareDateFromString,
       replaceBracketed,

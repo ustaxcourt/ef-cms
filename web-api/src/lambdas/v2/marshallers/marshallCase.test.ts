@@ -61,6 +61,7 @@ describe('marshallCase (which fails if version increase is needed, DO NOT CHANGE
       'docketNumber',
       'docketNumberSuffix',
       'filingType',
+      'isSealed',
       'leadDocketNumber',
       'partyType',
       'practitioners',
