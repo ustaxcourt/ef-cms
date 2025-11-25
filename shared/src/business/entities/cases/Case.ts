@@ -496,7 +496,7 @@ export class Case extends JoiValidationEntity {
     docketNumberWithSuffix:
       JoiValidationConstants.STRING.optional().description(
         'Auto-generated from docket number and the suffix.',
-      ),
+      ).min(0),
     entityName: JoiValidationConstants.STRING.valid('Case').required(),
     filingType: JoiValidationConstants.STRING.valid(
       ...FILING_TYPES[ROLES.petitioner],
