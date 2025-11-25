@@ -18,6 +18,14 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
     receivedAtMonth = '01',
     receivedAtYear = '2001',
     trialLocation = 'Birmingham, Alabama',
+  }: {
+    formOrdersAndNotices?: { key?: string; value?: any };
+    paymentStatus?: any;
+    procedureType?: string;
+    receivedAtDay?: string;
+    receivedAtMonth?: string;
+    receivedAtYear?: string;
+    trialLocation?: string;
   } = {},
   formOverrides: {
     key: string;
@@ -134,11 +142,11 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
   ];
 
   formValues =
-    formOrdersAndNotices &&
-    formOrdersAndNotices.key &&
-    formOrdersAndNotices.value
-      ? [...formValues, formOrdersAndNotices]
-      : formValues;
+      formOrdersAndNotices &&
+      typeof formOrdersAndNotices.key === 'string' &&
+      formOrdersAndNotices.value !== undefined
+        ? [...formValues, formOrdersAndNotices as { key: string; value: any }]
+        : formValues;
 
   formValues =
     formOverrides && formOverrides.length > 0
