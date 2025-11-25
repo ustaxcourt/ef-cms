@@ -40,6 +40,7 @@ import jwt from 'jsonwebtoken';
 import qs from 'qs';
 import riotRoute from 'riot-route';
 import { getDbReader } from '@web-api/database';
+import { ModuleDefinition } from 'cerebral';
 
 const applicationContext = clientApplicationContext as any;
 
@@ -615,7 +616,7 @@ export const setupTest = ({ constantsOverrides = {} } = {}) => {
     socketRouter,
   });
   // presenter.providers has a narrow declared type in the app; cast to any to extend it in tests
-  (presenter.providers as any).socket = { start, stop: stopSocket };
+  presenter.providers.socket = { start, stop: stopSocket };
 
   global.window ??= Object.create({
     DOMParser: () => {
@@ -707,7 +708,7 @@ export const setupTest = ({ constantsOverrides = {} } = {}) => {
   };
 
   // cast presenter to any to satisfy the CerebralTest signature in tests
-  cerebralTest = CerebralTest(presenter as any);
+  cerebralTest = CerebralTest(presenter as ModuleDefinition);
   cerebralTest.getSequence = seqName => obj =>
     cerebralTest.runSequence(seqName, obj);
   const oldRunSequence = cerebralTest.runSequence;

@@ -25,7 +25,10 @@ import { todaysOpinionsHelper } from './computeds/Public/todaysOpinionsHelper';
 import { todaysOrdersHelper } from './computeds/Public/todaysOrdersHelper';
 
 const computeds = {
-  advancedDocumentSearchHelper,
+  advancedDocumentSearchHelper:
+    advancedDocumentSearchHelper as unknown as ReturnType<
+      typeof advancedDocumentSearchHelper
+    >,
   advancedSearchHelper,
   alertHelper: publicAlertHelper,
   caseSearchByNameHelper,

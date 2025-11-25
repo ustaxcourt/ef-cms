@@ -4,6 +4,7 @@ import { getFakeFile } from '../../shared/src/business/test/getFakeFile';
 import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter-public';
 import { withAppContextDecorator } from '../src/withAppContext';
+import { ModuleDefinition } from 'cerebral';
 
 export const fakeFile = getFakeFile();
 
@@ -45,16 +46,14 @@ export const setupTest = ({ useCases = {} } = {}) => {
     },
   };
 
-  // map and decorate functions in presenter.state; cast to any to avoid strict type mismatches in tests
-  (presenter.state as any) = mapValues(presenter.state, value => {
+  presenter.state = mapValues(presenter.state, value => {
     if (isFunction(value)) {
       return withAppContextDecorator(value, applicationContext);
     }
     return value;
   });
 
-  // cast presenter to any for test harness compatibility with CerebralTest
-  cerebralTest = CerebralTest(presenter as any);
+  cerebralTest = CerebralTest(presenter as ModuleDefinition);
   cerebralTest.closeSocket = () => {
     /* no-op */
   };
