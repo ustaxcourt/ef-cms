@@ -38,6 +38,8 @@ export class Contact extends JoiValidationEntity {
   public additionalName?: string;
   public hasElectronicAccess?: boolean;
   public placeOfLegalResidence?: string;
+  public preferredLanguage?: string;
+  public preferredCommunicationMethod?: string;
 
   constructor(rawContact, contactName: string) {
     super(contactName);
@@ -67,6 +69,8 @@ export class Contact extends JoiValidationEntity {
     this.additionalName = rawContact.additionalName;
     this.hasElectronicAccess = rawContact.hasElectronicAccess ?? undefined;
     this.placeOfLegalResidence = rawContact.placeOfLegalResidence || undefined;
+    this.preferredLanguage = rawContact.preferredLanguage;
+    this.preferredCommunicationMethod = rawContact.preferredCommunicationMethod;
   }
 
   static SHARED_VALIDATION_RULES = {
@@ -127,6 +131,9 @@ export class Contact extends JoiValidationEntity {
       ...Object.values(SERVICE_INDICATOR_TYPES),
     ).optional(),
     title: JoiValidationConstants.STRING.max(100).optional(),
+    preferredLanguage: JoiValidationConstants.STRING.max(20).optional(),
+    preferredCommunicationMethod: JoiValidationConstants.STRING.max(20)
+      .optional(),
   } as const;
 
   static DOMESTIC_VALIDATION_RULES = {

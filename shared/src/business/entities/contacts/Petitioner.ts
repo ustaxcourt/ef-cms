@@ -31,6 +31,8 @@ export class Petitioner extends JoiValidationEntity {
   public state?: string;
   public title?: string;
   public placeOfLegalResidence?: string;
+  public preferredLanguage?: string;
+  public preferredCommunicationMethod?: string;
 
   constructor(rawProps) {
     super('Petitioner');
@@ -60,6 +62,8 @@ export class Petitioner extends JoiValidationEntity {
     this.serviceIndicator = rawProps.serviceIndicator;
     this.state = rawProps.state;
     this.title = rawProps.title;
+    this.preferredLanguage = rawProps.preferredLanguage;
+    this.preferredCommunicationMethod = rawProps.preferredCommunicationMethod;
   }
 
   static VALIDATION_RULES = {
@@ -113,6 +117,9 @@ export class Petitioner extends JoiValidationEntity {
       .required()
       .messages({ '*': 'Select a service indicator' }),
     title: JoiValidationConstants.STRING.max(100).optional(),
+    preferredLanguage: JoiValidationConstants.STRING.max(20).optional(),
+    preferredCommunicationMethod: JoiValidationConstants.STRING.max(20)
+      .optional(),
   };
 
   getValidationRules() {
