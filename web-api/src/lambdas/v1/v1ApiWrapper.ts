@@ -13,6 +13,9 @@
 const V1_API_ERROR_STATUS_CODES = [401, 403, 404, 500];
 
 class v1ApiError extends Error {
+  message: any;
+  statusCode: number;
+
   constructor(error) {
     super();
     this.statusCode = V1_API_ERROR_STATUS_CODES.includes(error.statusCode)
@@ -31,7 +34,7 @@ class v1ApiError extends Error {
 export const v1ApiWrapper = async handler => {
   try {
     return await handler();
-  } catch (e) {
+  } catch (e: any) {
     // Workaround until https://github.com/ustaxcourt/ef-cms/pull/462 is resolved
     // (API returning 400 instead of 404 on unknown cases)
     if (e.message.includes('The Case entity was invalid')) {

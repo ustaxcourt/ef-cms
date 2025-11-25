@@ -15,8 +15,9 @@ import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/
 
 export type FormattedTrialInfoType = RawTrialSession & {
   formattedStartDate: string;
-  formattedStartTime: string;
-  formattedJudge: string;
+  formattedStartTime?: string;
+  formattedJudge?: string;
+  trialLocationAndProceedingType?: string;
 };
 
 export const generateNoticeOfTrialIssuedInteractor = async (
@@ -53,7 +54,7 @@ export const generateNoticeOfTrialIssuedInteractor = async (
   const formattedStartTime = formatDateString(trialStartTimeIso, FORMATS.TIME);
 
   const judgeWithTitle = await getJudgeWithTitle({
-    judgeUserName: trialSession.judge.name,
+    judgeUserName: trialSession.judge?.name,
   });
 
   const { CLERK_OF_THE_COURT_CONFIGURATION } =
