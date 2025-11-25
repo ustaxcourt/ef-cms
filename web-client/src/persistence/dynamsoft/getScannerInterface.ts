@@ -1,8 +1,8 @@
 import { getConstants } from '@web-client/getConstants';
 import { loadDWTLibrary } from './loader';
 
-let DWObject = null;
-let dynamsoftLoader = null;
+let DWObject: any = null;
+let dynamsoftLoader: Promise<any> | null = null;
 
 export const getScannerInterface = () => {
   const completeScanSession = () => {
@@ -15,7 +15,7 @@ export const getScannerInterface = () => {
 
   const getSources = () => {
     const count = DWObject.SourceCount;
-    const sources = [];
+    const sources: any[] = [];
     for (let i = 0; i < count; i++) {
       sources.push(DWObject.GetSourceNameItems(i));
     }
@@ -34,18 +34,18 @@ export const getScannerInterface = () => {
       // eslint-disable-next-line no-async-promise-executor
       dynamsoftLoader = new Promise(async resolve => {
         await loadDWTLibrary();
-        const { Dynamsoft } = window;
+  const { Dynamsoft } = (window as any);
         Dynamsoft.DWT.ResourcesPath = 'https://unpkg.com/dwt@latest/dist';
         Dynamsoft.DWT.ProductKey = getConstants().DYNAMSOFT_PRODUCT_KEYS;
         Dynamsoft.DWT.ScanDirectly = true;
 
         Dynamsoft.DWT.CreateDWTObject(
           'dwtcontrolContainer',
-          function (object) {
+          function (object: any) {
             DWObject = object;
             resolve('dynam-scanner-injection');
           },
-          function (exp) {
+          function (exp: any) {
             console.error(exp);
           },
         );
@@ -64,7 +64,7 @@ export const getScannerInterface = () => {
   };
 
   const setSourceByIndex = index => {
-    return DWObject.SelectSourceByIndex(index) > -1;
+    return (DWObject.SelectSourceByIndex(index) as any) > -1;
   };
 
   const getSourceNameByIndex = index => {
@@ -100,23 +100,25 @@ export const getScannerInterface = () => {
           reject(new Error('no images in buffer'));
           return;
         }
-        const promises = [];
-        const response = { error: null, scannedBuffer: null };
+        const promises: Promise<any>[] = [];
+        const response: { error: any; scannedBuffer: any[] | null } = {
+          error: null,
+          scannedBuffer: null,
+        };
         for (let index = 0; index < count; index++) {
           promises.push(
             new Promise((resolveImage, rejectImage) => {
               DWObject.ConvertToBlob(
                 [index],
-                window.Dynamsoft.DWT.EnumDWT_ImageType.IT_JPG,
+                (window as any).Dynamsoft.DWT.EnumDWT_ImageType.IT_JPG,
                 resolveImage,
                 rejectImage,
               );
             }),
           );
         }
-
         return Promise.all(promises)
-          .then(async blobs => {
+          .then(async (blobs: any[]) => {
             const COVER_SHEET_WIDTH_IN_PX = 866;
 
             const scaledDownBlobs = await Promise.all(
@@ -131,7 +133,7 @@ export const getScannerInterface = () => {
               scaledDownBlobs.map(applicationContext.convertBlobToUInt8Array),
             );
 
-            response.scannedBuffer = blobBuffers;
+            response.scannedBuffer = blobBuffers as any[];
             DWObject.RemoveAllImages();
             return resolve(response);
           })
