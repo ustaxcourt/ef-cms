@@ -190,7 +190,7 @@ export class Message extends JoiValidationEntity {
     user: {
       name: string;
       userId: string;
-      section: string;
+      section?: string;
     };
   }): Message {
     this.isCompleted = true;
