@@ -8,7 +8,8 @@ import { withAppContextDecorator } from '../src/withAppContext';
 export const fakeFile = getFakeFile();
 
 export const setupTest = ({ useCases = {} } = {}) => {
-  let cerebralTest;
+  // eslint-disable-next-line prefer-const
+  let cerebralTest: any;
 
   presenter.providers.applicationContext = applicationContext;
   const originalUseCases = applicationContext.getUseCases();
@@ -44,14 +45,16 @@ export const setupTest = ({ useCases = {} } = {}) => {
     },
   };
 
-  presenter.state = mapValues(presenter.state, value => {
+  // map and decorate functions in presenter.state; cast to any to avoid strict type mismatches in tests
+  (presenter.state as any) = mapValues(presenter.state, value => {
     if (isFunction(value)) {
       return withAppContextDecorator(value, applicationContext);
     }
     return value;
   });
 
-  cerebralTest = CerebralTest(presenter);
+  // cast presenter to any for test harness compatibility with CerebralTest
+  cerebralTest = CerebralTest(presenter as any);
   cerebralTest.closeSocket = () => {
     /* no-op */
   };
