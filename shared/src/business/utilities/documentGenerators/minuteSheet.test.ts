@@ -84,7 +84,7 @@ const testFormattedMinuteSheet: FormattedMinuteSheet = {
     note: '',
   },
   trialClerk: 'Mary Johnson',
-  trialHearing:
+  trial:
     '01/15/2024; Trial Session; <em>Full day hearing</em>; Transcript ordered',
   trialLocation: 'Washington, D.C.',
   trialStartDate: '01/15/2024',

@@ -38,8 +38,11 @@ This command informs us of known security vulnerabilities. If transitive depende
 > **Why am I seeing a high severity for `ws`?**
 > [See below](#ws-3rd-party-dependency-of-cerebral).
 
-> **Why am I seeing a medium severity for `@babel/runtime`?**
-> [See below](#babelruntime).
+> **Why am I seeing a high severity for `tar-fs`?**
+> [See below](#puppeteer-and-sparticuzchromium).
+
+> **Why am I seeing a vulnerability for `fast-redact`?**
+> On November 19th, 2025. Unsuccessfully rolled back cognito-local to 3.7.1
 
 ### 2. Update third-party dependencies
 
@@ -206,14 +209,7 @@ Below is a list of dependencies that are locked down due to known issues with se
 - There is a high-severity security issue with ws (ws affected by a DoS when handling a request with many HTTP headers - https://github.com/advisories/GHSA-3h5v-q93c-6h6q); however, we only use ws on the client side, so this should not be an issue. (Only @cypress/puppeteer depends  on vulnerable version of puppeteer-core)
 - As of 15 April 2025, there is a high-security vulnerability for tar-fs < 3.0.7, which our current version of puppeteer relies on. As far as I can tell, this should not affect our use case since we are downloading from a trusted source (chromium). Hopefully the update to tar-fs will make its way into the next version of puppeteer we update to.
 - Peer-dependency tar-fs has high security vulnerability but this shouldn't affect us as far as we are aware of.
-- On October 27th, 2025, attempted to update puppeteer to 24.23.1 and @sparticuz/chromium to 141.0.0. However, this caused PDF visual regression tests to fail with pixel differences of 0.5-1.3% due to rendering engine changes in the newer Chromium version. The updates were reverted to maintain test stability.
 - On October 27th, 2025, successfully updated @types/aws-lambda from 8.10.155 to 8.10.156. This required changing `AttributeValueWithName` in `processStreamUtilities.ts` from an `interface extends` to a `type` with intersection (`&`) because the new version of `AttributeValue` is no longer extendable by interfaces.
-- On November 11th, 2025, attempted to upgrade to NodeJS v24.X. This caused an issue in the pdf-generation lambda function as puppeteer was no longer able able to launch chromium. Recieved an error stating 
-  ```
-  /tmp/chromium: error while loading shared libraries: libnspr4.so: cannot open shared object file: No such file or directory
-  ```
-  Researching this error results in some threads that suggest the error is caused by the lambda layer that puppeteer and chromium are stored on. Reverting to NodeJS V22.X resolved this issue.
-  At the time this upgrade was attempted, the NodeJS v24.X container for lambda was only in a beta/preview build. Hopefully this issue will not occur once this version is offically supported.
 
 ### ws, 3rd party dependency of Cerebral
 
@@ -226,12 +222,6 @@ Below is a list of dependencies that are locked down due to known issues with se
 ### pdfjs-dist
 
 - As of [this release](https://github.com/mozilla/pdf.js/releases/tag/v5.1.91), and I think [this PR](https://github.com/mozilla/pdf.js/pull/19689), pdfjs seems to expect certain browser-side API functionality when loaded. This causes issues with our Cypress tests. The best way to fix this is worth investigating further. Perhaps we could polyfill, or even consider creating an issue in the pdfjs repo.
-
-### jsdom
-
-- jsdom v27.0.0 and later dropped CommonJS support and are ESM-only. The package is pinned to v26.1.0 (the last CommonJS-compatible version)
-
-- On October 27th, 2025, discovered that jsdom was already at 27.0.0, which is ESM-only and caused Cypress tests to fail with "Cannot use import statement outside a module" errors. 
 
 ### babel-jest, babel-core
 Tried to update to 30.0.0-beta.3 from 29.7.0 on Friday, June 06, 2025, we weren't able to update it because it conflicts with ts-jest 29.3.4.
@@ -256,6 +246,7 @@ We cannot update TypeScript version beyond v5.8.3 until ts-jest supports it
    - Additional errors in test files and UI components
 
 The decision was made to revert back to 5.8.3 as the migration would require multiple days of dedicated work.
+- On November 19th, 2025, updated to typescript 5.9.3 and as a result resolved many of the typing issues involved in pdf buffers, applicationContext between client, shared, and api.
 
 ### p-queue
 Upgrading `p-queue` past version 6 will cause issues related to module imports.
@@ -272,6 +263,7 @@ Quote from site:
 "Starting with uuid@12 CommonJS is no longer supported. See implications and motivation for details."
 
 - On October 27th, 2025, added `uuid` to the caveats list in `scripts/npm/upgrade-npm-packages.ts` to prevent automatic upgrades to v12+ during future
+- On November 18th, 2025, ugpraded `uuid` to 13.0.0, edited the jest config to ignore patterns for uuid
 
 ## Troubleshooting
 
