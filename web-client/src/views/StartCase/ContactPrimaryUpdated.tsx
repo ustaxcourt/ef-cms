@@ -21,6 +21,7 @@ type ContactPrimaryUpdate = {
   handleBlur: OnBlurHandler;
   handleChange: OnChangeHandler;
   handleChangeCountryType: OnChangeCountryTypeHandler;
+  isPetitioner?: boolean;
   placeOfLegalResidenceTitle?: string;
   registerRef?: Function;
   secondaryLabel?: string;
@@ -49,6 +50,7 @@ export const ContactPrimaryUpdated = connect<
     handleBlur,
     handleChange,
     handleChangeCountryType,
+    isPetitioner = false,
     nameLabel,
     placeOfLegalResidenceTitle,
     registerRef,
@@ -62,6 +64,14 @@ export const ContactPrimaryUpdated = connect<
     titleLabelNote,
     validationErrors,
   }) {
+    const preferredLanguageLabel = isPetitioner
+      ? 'If you have difficulty communicating in English, please state your preferred language:'
+      : "If petitioner has difficulty communicating in English, please state the petitioner's preferred language:";
+
+    const preferredCommunicationLabel = isPetitioner
+      ? 'If you are deaf or hard of hearing, please state your preferred method of communication (ASL, TTY, etc.):'
+      : "If petitioner is deaf or hard of hearing, please state the petitioner's preferred method of communication (ASL, TTY, etc.):";
+
     return (
       <>
         <div>
@@ -315,6 +325,7 @@ export const ContactPrimaryUpdated = connect<
           {showLanguageFields && (
             <>
               <FormGroup
+                className="preferred-language-form-group"
                 errorMessageId="preferred-language-error-message"
                 errorText={
                   validationErrors.contactPrimary &&
@@ -322,8 +333,8 @@ export const ContactPrimaryUpdated = connect<
                 }
               >
                 <label className="usa-label" htmlFor="preferredLanguage">
-                  If you have difficulty communicating in English, please state
-                  your preferred language:{' '}
+                  {preferredLanguageLabel}
+                  <br />
                   <span className="usa-hint">(Optional)</span>
                 </label>
                 <input
@@ -341,10 +352,7 @@ export const ContactPrimaryUpdated = connect<
                   value={addressInfo.preferredLanguage || ''}
                   onBlur={() => {
                     handleBlur({
-                      validationKey: [
-                        'contactPrimary',
-                        'preferredLanguage',
-                      ],
+                      validationKey: ['contactPrimary', 'preferredLanguage'],
                     });
                   }}
                   onChange={e => {
@@ -356,6 +364,7 @@ export const ContactPrimaryUpdated = connect<
                 />
               </FormGroup>
               <FormGroup
+                className="preferred-communication-form-group"
                 errorMessageId="preferred-communication-method-error-message"
                 errorText={
                   validationErrors.contactPrimary &&
@@ -366,8 +375,8 @@ export const ContactPrimaryUpdated = connect<
                   className="usa-label"
                   htmlFor="preferredCommunicationMethod"
                 >
-                  If you are deaf or hard of hearing, please state your
-                  preferred method of communication (ASL, TTY, etc.):{' '}
+                  {preferredCommunicationLabel}
+                  <br />
                   <span className="usa-hint">(Optional)</span>
                 </label>
                 <input
