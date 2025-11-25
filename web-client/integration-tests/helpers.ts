@@ -578,13 +578,10 @@ export const loginAs = (cerebralTest, email, password = 'Testing1234$') =>
 export const setupTest = ({ constantsOverrides = {} } = {}) => {
   // eslint-disable-next-line prefer-const
   let cerebralTest;
-  global.FormData = FormDataHelper;
-  global.Blob = () => {
-    return fakeFile;
-  };
-  global.File = () => {
-    return fakeFile;
-  };
+  // cast to any to avoid TS type incompatibilities in the test environment
+  (global as any).FormData = FormDataHelper;
+  (global as any).Blob = (() => fakeFile) as any;
+  (global as any).File = (() => fakeFile) as any;
   global.WebSocket = require('websocket').w3cwebsocket;
 
   presenter.providers.applicationContext = applicationContext;
@@ -617,7 +614,8 @@ export const setupTest = ({ constantsOverrides = {} } = {}) => {
   } = socketProvider({
     socketRouter,
   });
-  presenter.providers.socket = { start, stop: stopSocket };
+  // presenter.providers has a narrow declared type in the app; cast to any to extend it in tests
+  (presenter.providers as any).socket = { start, stop: stopSocket };
 
   global.window ??= Object.create({
     DOMParser: () => {
@@ -697,7 +695,7 @@ export const setupTest = ({ constantsOverrides = {} } = {}) => {
     return value;
   });
 
-  const routes = [];
+  const routes: { route: any; cb: any }[] = [];
 
   presenter.providers.router = {
     back,
@@ -708,7 +706,8 @@ export const setupTest = ({ constantsOverrides = {} } = {}) => {
     route: (routeToGoTo = '/') => gotoRoute(routes, routeToGoTo),
   };
 
-  cerebralTest = CerebralTest(presenter);
+  // cast presenter to any to satisfy the CerebralTest signature in tests
+  cerebralTest = CerebralTest(presenter as any);
   cerebralTest.getSequence = seqName => obj =>
     cerebralTest.runSequence(seqName, obj);
   const oldRunSequence = cerebralTest.runSequence;
@@ -750,7 +749,8 @@ export const setupTest = ({ constantsOverrides = {} } = {}) => {
     });
   });
 
-  initializeSocketProvider(cerebralTest);
+  // initialize the socket provider with the cerebral test instance and the application context
+  initializeSocketProvider(cerebralTest, applicationContext);
 
   return cerebralTest;
 };
