@@ -257,10 +257,8 @@ export const AddPetitionerToCase = connect(
           <h2>Case Caption</h2>
           <div className="blue-container margin-bottom-5">
             <FormGroup errorText={validationErrors?.caseCaption}>
-              <label className="usa-label" htmlFor="case-caption">
-                Case caption
-              </label>
               <TextArea
+                label={'Case caption'}
                 id="case-caption"
                 name="caseCaption"
                 value={form.contact.caseCaption || ''}
