@@ -37,6 +37,7 @@ import jwt from 'jsonwebtoken';
 import qs from 'qs';
 import riotRoute from 'riot-route';
 import { getDbReader } from '@web-api/database';
+import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 
 const applicationContext = clientApplicationContext as any;
 
@@ -138,14 +139,16 @@ export const getConnection = async connectionId => {
   );
 };
 
-export const setOpinionSearchEnabled = (isEnabled, keyPrefix) => {
-  return client.put({
-    Item: {
-      current: isEnabled,
-      pk: `${keyPrefix}-opinion-search-enabled`,
-      sk: `${keyPrefix}-opinion-search-enabled`,
-    },
-    applicationContext,
+export const setOpinionSearchEnabled = async (isEnabled, keyPrefix) => {
+  return await pgInsertInto({
+    table: 'dwFeatureFlag',
+    values: [
+      {
+        name: `${keyPrefix}-opinion-search-enabled`,
+        value: { current: isEnabled },
+      },
+    ],
+    onConflictColumns: ['name'],
   });
 };
 
@@ -154,13 +157,15 @@ export const setOrderSearchEnabled = async (isEnabled, keyPrefix) => {
 };
 
 export const setFeatureFlag = async (isEnabled, key) => {
-  return await client.put({
-    Item: {
-      current: isEnabled,
-      pk: key,
-      sk: key,
-    },
-    applicationContext,
+  return await pgInsertInto({
+    table: 'dwFeatureFlag',
+    values: [
+      {
+        name: key,
+        value: { current: isEnabled },
+      },
+    ],
+    onConflictColumns: ['name'],
   });
 };
 
