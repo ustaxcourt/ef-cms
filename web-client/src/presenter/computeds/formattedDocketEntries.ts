@@ -184,8 +184,6 @@ export const getFormattedDocketEntry = ({
     });
   }
 
-  console.log('FormattedResult', formattedResult);
-
   if (!isExternalUser) {
     formattedResult.showLoadingIcon =
       !permissions.UPDATE_CASE &&
