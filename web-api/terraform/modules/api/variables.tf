@@ -38,14 +38,6 @@ variable "create_check_case_cron" {
   type = number
 }
 
-variable "create_streams" {
-  type = number
-}
-
-variable "stream_arn" {
-  type = string
-}
-
 variable "create_triggers" {
   type    = number
   default = 1

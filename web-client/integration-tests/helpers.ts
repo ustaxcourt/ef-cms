@@ -1,9 +1,6 @@
 /* eslint-disable max-lines */
-import * as client from '../../web-api/src/persistence/dynamodbClientService';
 import { Agent } from 'http';
 import { CerebralTest } from 'cerebral/test';
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { FORMATS } from '../../shared/src/business/utilities/DateHandler';
 import { JSDOM } from 'jsdom';
 import {
@@ -57,25 +54,10 @@ const formattedCaseMessages = withAppContextDecorator(
 const workQueueHelper = withAppContextDecorator(workQueueHelperComputed);
 const formattedMessages = withAppContextDecorator(formattedMessagesComputed);
 
-let dynamoDbCache;
 let httpCache;
 
 Object.assign(applicationContext, {
-  getDocumentClient: () => {
-    if (!dynamoDbCache) {
-      const dynamoDbClient = new DynamoDBClient({
-        endpoint: 'http://localhost:8000',
-        region: 'us-east-1',
-      });
-      dynamoDbCache = DynamoDBDocument.from(dynamoDbClient, {
-        marshallOptions: { removeUndefinedValues: true },
-      });
-    }
-
-    return dynamoDbCache;
-  },
   getEnvironment: () => ({
-    dynamoDbTableName: 'efcms-local',
     stage: 'local',
   }),
   getScanner: getScannerMockInterface,

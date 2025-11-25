@@ -17,11 +17,6 @@ import { ACCOUNT_STATUS } from '@shared/business/entities/EntityConstants';
 const scriptConfig: ScriptConfig = {
   description:
     'add-user - Creates a new DAWSON user in a deployed environment.',
-  environment: {
-    dynamoDbTableName: 'DYNAMODB_TABLE_NAME',
-    env: 'ENV',
-    userPoolId: 'USER_POOL_ID',
-  },
   parameters: {
     email: {
       position: 0,

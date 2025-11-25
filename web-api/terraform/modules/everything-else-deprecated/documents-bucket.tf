@@ -110,13 +110,13 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "documents_sse_us_
   }
 }
 
-resource "aws_s3_bucket_policy" "allow_access_for_glue_job" {
+resource "aws_s3_bucket_policy" "allow_access_for_back_migration_job" {
   count  = var.environment == "prod" ? 1 : 0
   bucket = aws_s3_bucket.documents_us_east_1.bucket
-  policy = data.aws_iam_policy_document.allow_access_for_glue_job.json
+  policy = data.aws_iam_policy_document.allow_access_for_back_migration_job.json
 }
 
-data "aws_iam_policy_document" "allow_access_for_glue_job" {
+data "aws_iam_policy_document" "allow_access_for_back_migration_job" {
   statement {
     sid = "DelegateS3Access"
 
