@@ -244,35 +244,27 @@ const getUsers = async (): Promise<Users> => {
 
     let count = 1;
 
-    const baseName = `${user.role} Test User${count}`;
-    let finalName = baseName;
+    const fullName = user.name;
 
-    while (sanitize(finalName) in users) {
-      finalName = `${baseName}${count}`;
+    user.name = sanitize(user.name) + count;
+    while (user.name in users) {
+      user.name = sanitize(fullName) + count;
       count++;
-      finalName = `${baseName.split('Test User')[0]}Test User${count}`;
     }
-
-    user.name = sanitize(finalName);
-
-    const fullNameNoRole = finalName.split(' ').slice(1).join(' ');
-    const userNameNoRole = sanitize(fullNameNoRole);
 
     if (['judge', 'legacyJudge'].includes(user.role)) {
       users[user.name] = {
-        email: `${
-          user.judgeTitle!.indexOf('Special Trial') !== -1 ? 'st' : ''
-        }judge.${userNameNoRole.toLowerCase()}@example.com`,
-        name: `${user.judgeTitle} ${userNameNoRole}`,
-        userFullName: `${user.role} ${fullNameNoRole}`,
+        email: user.email,
+        name: `${user.judgeTitle} ${fullName}`,
+        userFullName: `${fullName}`,
         role: user.role,
         section: user.section,
       };
     } else {
       users[user.name] = {
-        email: `${user.role!.toLowerCase()}.${userNameNoRole.toLowerCase()}@example.com`,
-        name: `${user.role} ${userNameNoRole}`,
-        userFullName: `${user.role} ${fullNameNoRole}`,
+        email: user.email,
+        name: `${user.role} ${fullName}`,
+        userFullName: `${fullName}`,
         role: user.role,
         section: user.section,
       };
