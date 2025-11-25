@@ -29,14 +29,6 @@ npm run seed:s3
 
 if [ -n "${RESUME}" ]; then
   echo "Resuming operation with previous s3 data"
-else
-  echo "creating & seeding database"
-  npm run seed:db
-  exitCode=$?
-fi
-
-if [ "${exitCode}" != 0 ]; then                   
-  echo "Failed to seed data!". 1>&2 && exit 1
 fi
 
 npm run migration:postgres
