@@ -11,6 +11,7 @@ import {
   CASE_STATUS_TYPES,
   SESSION_TYPES,
 } from '@shared/business/entities/EntityConstants';
+import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
 
 describe('Trial Session Eligible Cases Journey', () => {
   const trialLocation = `Phoenix, Arizona`;
@@ -227,6 +228,8 @@ describe('Trial Session Eligible Cases Journey', () => {
   });
 
   it('should create trial session and cases, then verify eligible cases granted remote motion have an indicator', () => {
+    const date = formatNow(FORMATS.MMDDYYYY)
+
     loginAsPetitionsClerk1();
     createTrialSession({
       trialLocation,
@@ -269,10 +272,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         goToCase(docketNumber);
         updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
         cy.get('[data-testid="edit-remote-status"]').click();
-        cy.get(
-          '[data-testid="modal-dialog"] button.usa-date-picker__button',
-        ).click();
-        cy.get('[data-testid="modal-dialog"] button[data-day="20"]').click();
+        cy.get('#remote-trial-granted-date-picker').type(date);
         cy.get('[data-testid="modal-button-confirm"]').click();
         cy.get('[data-testid="trial-session-link"]').click();
       });

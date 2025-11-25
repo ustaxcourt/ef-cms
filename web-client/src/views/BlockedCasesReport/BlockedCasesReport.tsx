@@ -143,7 +143,7 @@ export const BlockedCasesReport = connect(
                                     !item.isLeadCase,
                                 })}
                               >
-                                {item.remoteTrialGranted && <FontAwesomeIcon className="tw:text-primary" icon="laptop" />}
+                                {item.remoteTrialGranted && <FontAwesomeIcon className="tw:text-primary" icon="laptop" data-testid="laptop"/>}
                                 <ConsolidatedCaseIcon
                                   consolidatedIconTooltipText={
                                     item.consolidatedIconTooltipText
