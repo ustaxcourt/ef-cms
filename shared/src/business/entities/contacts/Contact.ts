@@ -69,8 +69,9 @@ export class Contact extends JoiValidationEntity {
     this.additionalName = rawContact.additionalName;
     this.hasElectronicAccess = rawContact.hasElectronicAccess ?? undefined;
     this.placeOfLegalResidence = rawContact.placeOfLegalResidence || undefined;
-    this.preferredLanguage = rawContact.preferredLanguage;
-    this.preferredCommunicationMethod = rawContact.preferredCommunicationMethod;
+    this.preferredLanguage = rawContact.preferredLanguage?.trim() || undefined;
+    this.preferredCommunicationMethod =
+      rawContact.preferredCommunicationMethod?.trim() || undefined;
   }
 
   static SHARED_VALIDATION_RULES = {
@@ -131,9 +132,18 @@ export class Contact extends JoiValidationEntity {
       ...Object.values(SERVICE_INDICATOR_TYPES),
     ).optional(),
     title: JoiValidationConstants.STRING.max(100).optional(),
-    preferredLanguage: JoiValidationConstants.STRING.max(20).optional(),
+    preferredLanguage: JoiValidationConstants.STRING.max(20)
+      .optional()
+      .messages({
+        'string.max':
+          'Limit is 20 characters. Enter 20 or fewer characters.',
+      }),
     preferredCommunicationMethod: JoiValidationConstants.STRING.max(20)
-      .optional(),
+      .optional()
+      .messages({
+        'string.max':
+          'Limit is 20 characters. Enter 20 or fewer characters.',
+      }),
   } as const;
 
   static DOMESTIC_VALIDATION_RULES = {

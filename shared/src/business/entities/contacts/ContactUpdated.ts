@@ -61,8 +61,9 @@ export class ContactUpdated extends JoiValidationEntity {
     this.partyType = partyType;
     this.hasConsentedToElectronicService =
       rawContact.hasConsentedToElectronicService;
-    this.preferredLanguage = rawContact.preferredLanguage;
-    this.preferredCommunicationMethod = rawContact.preferredCommunicationMethod;
+    this.preferredLanguage = rawContact.preferredLanguage?.trim() || undefined;
+    this.preferredCommunicationMethod =
+      rawContact.preferredCommunicationMethod?.trim() || undefined;
     this.secondaryName = rawContact.secondaryName;
     this.title = rawContact.title;
   }
@@ -97,9 +98,16 @@ export class ContactUpdated extends JoiValidationEntity {
         'Other',
       )
       .messages({ '*': 'Enter a place of legal residence' }),
-    preferredLanguage: JoiValidationConstants.STRING.max(20).optional(),
+    preferredLanguage: JoiValidationConstants.STRING.max(20)
+      .optional()
+      .messages({
+        'string.max': 'Limit is 20 characters. Enter 20 or fewer characters.',
+      }),
     preferredCommunicationMethod: JoiValidationConstants.STRING.max(20)
-      .optional(),
+      .optional()
+      .messages({
+        'string.max': 'Limit is 20 characters. Enter 20 or fewer characters.',
+      }),
   } as const;
 
   static DOMESTIC_VALIDATION_RULES = {

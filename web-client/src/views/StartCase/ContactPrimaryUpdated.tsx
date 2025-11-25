@@ -326,13 +326,16 @@ export const ContactPrimaryUpdated = connect<
             <>
               <FormGroup
                 className="preferred-language-form-group"
-                errorMessageId="preferred-language-error-message"
+                errorMessageId="contact-primary-preferred-language-error-message"
                 errorText={
                   validationErrors.contactPrimary &&
                   validationErrors.contactPrimary.preferredLanguage
                 }
               >
-                <label className="usa-label" htmlFor="preferredLanguage">
+                <label
+                  className="usa-label"
+                  htmlFor="contactPrimary.preferredLanguage"
+                >
                   {preferredLanguageLabel}
                   <br />
                   <span className="usa-hint">(Optional)</span>
@@ -341,7 +344,7 @@ export const ContactPrimaryUpdated = connect<
                   autoCapitalize="none"
                   className="usa-input"
                   data-testid="contact-primary-preferred-language"
-                  id="preferredLanguage"
+                  id="contactPrimary.preferredLanguage"
                   maxLength={20}
                   name="contactPrimary.preferredLanguage"
                   ref={
@@ -365,7 +368,7 @@ export const ContactPrimaryUpdated = connect<
               </FormGroup>
               <FormGroup
                 className="preferred-communication-form-group"
-                errorMessageId="preferred-communication-method-error-message"
+                errorMessageId="contact-primary-preferred-communication-method-error-message"
                 errorText={
                   validationErrors.contactPrimary &&
                   validationErrors.contactPrimary.preferredCommunicationMethod
@@ -373,7 +376,7 @@ export const ContactPrimaryUpdated = connect<
               >
                 <label
                   className="usa-label"
-                  htmlFor="preferredCommunicationMethod"
+                  htmlFor="contactPrimary.preferredCommunicationMethod"
                 >
                   {preferredCommunicationLabel}
                   <br />
@@ -383,7 +386,7 @@ export const ContactPrimaryUpdated = connect<
                   autoCapitalize="none"
                   className="usa-input"
                   data-testid="contact-primary-preferred-communication-method"
-                  id="preferredCommunicationMethod"
+                  id="contactPrimary.preferredCommunicationMethod"
                   maxLength={20}
                   name="contactPrimary.preferredCommunicationMethod"
                   ref={

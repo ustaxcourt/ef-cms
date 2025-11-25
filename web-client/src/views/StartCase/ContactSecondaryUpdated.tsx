@@ -258,13 +258,16 @@ export const ContactSecondaryUpdated = connect<
             <>
               <FormGroup
                 className="preferred-language-form-group"
-                errorMessageId="preferred-language-error-message"
+                errorMessageId="contact-secondary-preferred-language-error-message"
                 errorText={
                   validationErrors.contactSecondary &&
                   validationErrors.contactSecondary.preferredLanguage
                 }
               >
-                <label className="usa-label" htmlFor="preferredLanguage">
+                <label
+                  className="usa-label"
+                  htmlFor="contactSecondary.preferredLanguage"
+                >
                   {preferredLanguageLabel}
                   <br />
                   <span className="usa-hint">(Optional)</span>
@@ -273,7 +276,7 @@ export const ContactSecondaryUpdated = connect<
                   autoCapitalize="none"
                   className="usa-input"
                   data-testid="contact-secondary-preferred-language"
-                  id="preferredLanguage"
+                  id="contactSecondary.preferredLanguage"
                   maxLength={20}
                   name="contactSecondary.preferredLanguage"
                   ref={
@@ -297,7 +300,7 @@ export const ContactSecondaryUpdated = connect<
               </FormGroup>
               <FormGroup
                 className="preferred-communication-form-group"
-                errorMessageId="preferred-communication-method-error-message"
+                errorMessageId="contact-secondary-preferred-communication-method-error-message"
                 errorText={
                   validationErrors.contactSecondary &&
                   validationErrors.contactSecondary.preferredCommunicationMethod
@@ -305,7 +308,7 @@ export const ContactSecondaryUpdated = connect<
               >
                 <label
                   className="usa-label"
-                  htmlFor="preferredCommunicationMethod"
+                  htmlFor="contactSecondary.preferredCommunicationMethod"
                 >
                   {preferredCommunicationLabel}
                   <br />
@@ -315,7 +318,7 @@ export const ContactSecondaryUpdated = connect<
                   autoCapitalize="none"
                   className="usa-input"
                   data-testid="contact-secondary-preferred-communication-method"
-                  id="preferredCommunicationMethod"
+                  id="contactSecondary.preferredCommunicationMethod"
                   maxLength={20}
                   name="contactSecondary.preferredCommunicationMethod"
                   ref={
