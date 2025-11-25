@@ -36,7 +36,6 @@ export const submitCourtIssuedOrderAction = async ({
     'primaryDocumentFile',
     'docketEntryIdToEdit',
   ]);
-
   documentMetadata.docketNumber = docketNumber;
 
   documentMetadata.draftOrderState = {

@@ -518,7 +518,6 @@ describe('trial session working copy computed', () => {
           },
         },
       });
-      console.log('trialStatusCounts', trialStatusCounts);
       expect(trialStatusCounts.statusUnassigned).toEqual(2);
     });
     it('should count the number of statuses based on caseMetadata', () => {

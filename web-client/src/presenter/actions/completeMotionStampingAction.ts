@@ -1,14 +1,6 @@
 import { Stamp } from '../../../../shared/src/business/entities/Stamp';
 import { state } from '@web-client/presenter/app.cerebral';
 
-/**
- * generates an action for completing motion stamping
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the applicationContext
- * @param {object} providers.get the cerebral get function
- * @param {object} providers.props the cerebral props object
- * @returns {Function} the action to complete the motion stamping
- */
 export const completeMotionStampingAction = async ({
   applicationContext,
   get,

@@ -1,13 +1,6 @@
 import { state } from '@web-client/presenter/app.cerebral';
 import { PDFDocumentProxy } from 'pdfjs-dist';
 
-/**
- * given a PDF document, returns a pdf.js object
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context used for getting loadPDFForSigning
- * @param {Function} providers.props used for getting docketEntryId
- * @param {Function} providers.store the cerebral store used for setting state.pdfForSigning.pdfjsObj
- */
 export const setPDFForStampAction = async ({
   applicationContext,
   props,

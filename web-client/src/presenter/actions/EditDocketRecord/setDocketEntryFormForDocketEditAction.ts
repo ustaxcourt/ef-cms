@@ -1,14 +1,6 @@
 import { cloneDeep, omit } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
-/**
- * sets the current docket entry data for edit
- * @param {object} providers the providers object
- * @param {object} providers.get the cerebral get method
- * @param {object} providers.props the cerebral props object
- * @param {object} providers.store the cerebral store
- * @returns {void} sets state for docket entry edit
- */
 export const setDocketEntryFormForDocketEditAction = ({
   get,
   props,
@@ -38,9 +30,10 @@ export const setDocketEntryFormForDocketEditAction = ({
 
   docketEntryFormData.lodged = !!docketEntryFormData.lodged;
 
+  docketEntryFormData.documentStorageId = docketEntry.documentStorageId;
+
   store.set(state.form, {
     ...docketEntryFormData,
-    documentStorageId: docketEntry.documentStorageId,
     filersMap,
   });
 
