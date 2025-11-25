@@ -581,8 +581,8 @@ export const setupTest = ({ constantsOverrides = {} } = {}) => {
   let cerebralTest;
   // cast to any to avoid TS type incompatibilities in the test environment
   (global as any).FormData = FormDataHelper;
-  (global as any).Blob = (() => fakeFile) as any;
-  (global as any).File = (() => fakeFile) as any;
+  (global as any).Blob = (() => fakeFile);
+  (global as any).File = (() => fakeFile);
   global.WebSocket = require('websocket').w3cwebsocket;
 
   presenter.providers.applicationContext = applicationContext;
@@ -615,7 +615,6 @@ export const setupTest = ({ constantsOverrides = {} } = {}) => {
   } = socketProvider({
     socketRouter,
   });
-  // presenter.providers has a narrow declared type in the app; cast to any to extend it in tests
   presenter.providers.socket = { start, stop: stopSocket };
 
   global.window ??= Object.create({

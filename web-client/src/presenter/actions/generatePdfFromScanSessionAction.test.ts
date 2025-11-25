@@ -7,7 +7,8 @@ describe('generatePdfFromScanSessionAction', () => {
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
 
-    global.File = class {
+    (global as any).File = class {
+      foo: string;
       constructor() {
         this.foo = 'bar';
       }
