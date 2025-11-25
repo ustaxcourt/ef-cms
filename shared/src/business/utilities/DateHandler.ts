@@ -1,4 +1,4 @@
-import { DateTime, DurationLike, Interval } from 'luxon';
+import { DateTime, DurationLike, Interval, type ToObjectOutput } from 'luxon';
 import fedHolidays from '@18f/us-federal-holidays';
 
 export const FORMATS = {
@@ -111,6 +111,18 @@ export const prepareDateFromString = (
     }).setZone('utc');
   }
   return result;
+};
+
+export const getJsDateFromIso = (isoDate: string): Date => {
+  return prepareDateFromString(isoDate, FORMATS.ISO).toJSDate();
+};
+
+export const getIsoFromJsDate = (jsDate: Date): string | null => {
+  return DateTime.fromJSDate(jsDate).toISO();
+};
+
+export const getNowObject = (): ToObjectOutput => {
+  return DateTime.now().toObject();
 };
 
 export const calculateISODate = ({
@@ -676,6 +688,23 @@ export const isValidReconciliationDate = dateString => {
   const todayDate = formatNow(FORMATS.YYYYMMDD);
   const dateLessthanOrEqualToToday = dateString <= todayDate;
   return dateInputValid && dateLessthanOrEqualToToday;
+};
+
+/**
+ * Return true when the provided ISO date is valid and is not in the future.
+ * @param {string} dateString any valid  ISO-8601 date string
+ * @returns {boolean} when date is in the past will return true
+ */
+export const isValidPastDate = dateString => {
+  const dateInputValid = isValidISODate(dateString);
+  if (!dateInputValid) return false;
+
+  const formattedDate = prepareDateFromString(dateString, FORMATS.ISO)
+    .setZone(USTC_TZ)
+    .toFormat(FORMATS.YYYYMMDD);
+  const todayDate = formatNow(FORMATS.YYYYMMDD);
+
+  return formattedDate <= todayDate;
 };
 
 /**

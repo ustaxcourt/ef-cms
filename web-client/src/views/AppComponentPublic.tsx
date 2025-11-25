@@ -20,6 +20,7 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app-public.cerebral';
 import { useScript } from '../utilities/useScript';
 import React, { useEffect } from 'react';
+import { DawsonLibrary } from '@web-client/views/Public/DawsonLibrary/DawsonLibrary';
 
 const pages = {
   AppMaintenance,
@@ -27,6 +28,7 @@ const pages = {
   EmailVerificationInstructions,
   ErrorView,
   HealthCheck,
+  DawsonLibrary,
   Interstitial,
   Privacy,
   PublicCaseDetail,
