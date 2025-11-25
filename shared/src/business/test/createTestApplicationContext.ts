@@ -536,6 +536,7 @@ export const createTestApplicationContext = () => {
       sendBulkTemplatedEmail: jest.fn(),
       sendNotificationOfSealing: jest.fn(),
       sendSlackNotification: jest.fn(),
+      sendZipperBatchJob: jest.fn(),
     }),
     getDocumentClient: jest.fn().mockImplementation(() => mockDocumentClient),
     getDocumentGenerators: jest

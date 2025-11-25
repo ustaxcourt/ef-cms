@@ -25,7 +25,7 @@ describe('overwriteOrderFileAction', () => {
       },
       state: {
         documentToEdit: {
-          docketEntryId: 'document-id-123',
+          documentStorageId: 'document-id-123',
         },
         form: {
           primaryDocumentFile: {},
@@ -34,8 +34,9 @@ describe('overwriteOrderFileAction', () => {
     });
 
     expect(
-      applicationContextForClient.getUseCases().uploadOrderDocumentInteractor,
-    ).toHaveBeenCalled();
+      applicationContextForClient.getUseCases().uploadOrderDocumentInteractor
+        .mock.calls[0][1].fileIdToOverwrite,
+    ).toEqual('document-id-123');
   });
 
   it('fails to overwrite the file for an order', () => {
@@ -49,7 +50,7 @@ describe('overwriteOrderFileAction', () => {
       modules: { presenter },
       state: {
         documentToEdit: {
-          docketEntryId: 'document-id-123',
+          documentStorageId: 'document-id-123',
         },
         form: {
           primaryDocumentFile: {},

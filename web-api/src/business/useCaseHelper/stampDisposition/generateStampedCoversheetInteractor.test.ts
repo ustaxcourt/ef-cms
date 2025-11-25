@@ -26,7 +26,7 @@ describe('generateStampedCoversheetInteractor', () => {
     ],
   };
 
-  const mockStampedDocketEntryId = 'f0ebf166-1dda-4c72-a540-21e883061611';
+  const mockStampedDocumentStorageId = 'f0ebf166-1dda-4c72-a540-21e883061611';
   const mockStampData = {
     customText: 'yeehaw',
     disposition: MOTION_DISPOSITIONS.GRANTED,
@@ -43,7 +43,7 @@ describe('generateStampedCoversheetInteractor', () => {
         docketEntryId: mockDocketEntryId,
         docketNumber: MOCK_CASE.docketNumber,
         stampData: mockStampData,
-        stampedDocketEntryId: mockStampedDocketEntryId,
+        stampedDocumentStorageId: mockStampedDocumentStorageId,
       },
       mockPetitionerUser,
     );
@@ -61,7 +61,7 @@ describe('generateStampedCoversheetInteractor', () => {
         docketEntryId: mockDocketEntryId,
         docketNumber: MOCK_CASE.docketNumber,
         stampData: mockStampData,
-        stampedDocketEntryId: mockStampedDocketEntryId,
+        stampedDocumentStorageId: mockStampedDocumentStorageId,
       },
       mockPetitionerUser,
     );
@@ -84,7 +84,7 @@ describe('generateStampedCoversheetInteractor', () => {
         docketEntryId: mockDocketEntryId,
         docketNumber: MOCK_CASE.docketNumber,
         stampData: {},
-        stampedDocketEntryId: mockStampedDocketEntryId,
+        stampedDocumentStorageId: mockStampedDocumentStorageId,
       },
       mockPetitionerUser,
     );
@@ -92,6 +92,6 @@ describe('generateStampedCoversheetInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
         .calls[0][0],
-    ).toMatchObject({ key: mockStampedDocketEntryId });
+    ).toMatchObject({ key: mockStampedDocumentStorageId });
   });
 });

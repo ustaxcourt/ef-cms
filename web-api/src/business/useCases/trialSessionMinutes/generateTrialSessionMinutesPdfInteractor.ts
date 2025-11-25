@@ -33,19 +33,19 @@ export const generateTrialSessionMinutesPdfInteractor = async (
     throw new Error('Case and trial session could not be retrieved');
   }
 
-  const docketEntryId = getUniqueId();
+  const documentStorageId = getUniqueId();
 
   await createAndUploadMinuteSheet(applicationContext, {
     docketNumber,
     trialSessionId,
     aCase,
     trialSession,
-    docketEntryId,
+    documentStorageId,
   });
 
   const { url } = await getDownloadPolicyUrl({
     applicationContext,
-    key: docketEntryId,
+    key: documentStorageId,
     filename: generateMinuteSheetFilename({ trialSession, caseDetail: aCase }),
   });
 

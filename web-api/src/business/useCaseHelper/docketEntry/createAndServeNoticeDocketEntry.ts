@@ -12,6 +12,7 @@ import { aggregatePartiesForService } from '@shared/business/utilities/aggregate
 import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { PDFDocument } from 'pdf-lib';
+import { countPagesInDocument } from '../countPagesInDocument';
 
 type CreateAndServeNoticeDocketEntryParams = {
   additionalDocketEntryInfo?: any;
@@ -38,27 +39,26 @@ export const createAndServeNoticeDocketEntry = async (
   }: CreateAndServeNoticeDocketEntryParams,
   authorizedUser: AuthUser,
 ) => {
-  const docketEntryId = applicationContext.getUniqueId();
+  const documentStorageId = applicationContext.getUniqueId();
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     document: noticePdf,
-    key: docketEntryId,
+    key: documentStorageId,
   });
 
   const servedParties = aggregatePartiesForService(caseEntity, {
     onlyProSePetitioners,
   });
 
-  const numberOfPages = await applicationContext
-    .getUseCaseHelpers()
-    .countPagesInDocument({
-      applicationContext,
-      docketEntryId,
-    });
+  const numberOfPages = await countPagesInDocument({
+    applicationContext,
+    documentStorageId,
+  });
 
   const noticeDocketEntry = new DocketEntry(
     {
-      docketEntryId,
+      docketEntryId: documentStorageId,
+      documentStorageId,
       documentTitle: documentInfo.documentTitle,
       documentType: documentInfo.documentType,
       eventCode: documentInfo.eventCode,

@@ -437,7 +437,7 @@ const updateDocketEntry = async ({
       .getUseCaseHelpers()
       .countPagesInDocument({
         applicationContext,
-        docketEntryId: docketEntry.docketEntryId,
+        documentStorageId: docketEntry.documentStorageId,
       });
   }
 

@@ -58,14 +58,14 @@ describe('setPDFForStampAction', () => {
   });
 
   it('should call loadPDFForSigningInteractor', async () => {
-    const docketEntryId = '123';
+    const documentStorageId = '123';
     await runAction(setPDFForStampAction, {
       modules: {
         presenter,
       },
       props: {
         caseDetail: { docketNumber: '123-20' },
-        docketEntryId,
+        documentStorageId,
       },
       state: {
         pdfForSigning: {
@@ -79,7 +79,7 @@ describe('setPDFForStampAction', () => {
       applicationContext.getUseCases().loadPDFForSigningInteractor.mock
         .calls[0][1],
     ).toMatchObject({
-      docketEntryId,
+      documentStorageId,
       docketNumber: '123-20',
       onlyCover: true,
     });

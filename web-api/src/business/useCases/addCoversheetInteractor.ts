@@ -6,17 +6,6 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { NotFoundError } from '@web-api/errors/errors';
 import { updateDocketEntriesWithPageCount } from '@web-api/business/useCaseHelper/coverSheet/updateDocketEntriesWithPageCount';
 
-/**
- * addCoversheetInteractor
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketEntryId the docket entry id
- * @param {string} providers.docketNumber the docket number of the case
- * @param {boolean} providers.filingDateUpdated flag that represents if the filing date was updated
- * @param {boolean} providers.replaceCoversheet flag that represents if the coversheet should be replaced
- * @param {boolean} providers.useInitialData flag that represents to use initial data
- * @returns {Promise<*>} updated docket entry entity
- */
 export const addCoversheetInteractor = async (
   applicationContext: ServerApplicationContext,
   {
@@ -45,12 +34,6 @@ export const addCoversheetInteractor = async (
       authorizedUser,
     });
   }
-
-  const pdfData = await applicationContext.getPersistenceGateway().getDocument({
-    applicationContext,
-    key: docketEntryId,
-  });
-
   const docketEntryEntity = caseEntity.getDocketEntryById({
     docketEntryId,
   });
@@ -60,6 +43,11 @@ export const addCoversheetInteractor = async (
       `Could not find docket entry with id ${docketEntryId} on case ${docketNumber}`,
     );
   }
+
+  const pdfData = await applicationContext.getPersistenceGateway().getDocument({
+    applicationContext,
+    key: docketEntryEntity.documentStorageId,
+  });
 
   const {
     consolidatedCases, // if feature flag is off, this will always be null
@@ -90,7 +78,7 @@ export const addCoversheetInteractor = async (
   } else {
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       document: newPdfData,
-      key: docketEntryId,
+      key: docketEntryEntity.documentStorageId,
     });
     pageCount = numberOfPages;
   }

@@ -8,15 +8,6 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { NotFoundError } from '@web-api/errors/errors';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
-/**
- * Removes a signature from a document
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketNumber the docket number of the case on which to remove the signature from the document
- * @param {string} providers.docketEntryId the id of the docket entry for the signed document
- * @returns {object} the updated case
- */
 export const removeSignatureFromDocumentInteractor = async (
   applicationContext: ServerApplicationContext,
   { docketEntryId, docketNumber },
@@ -50,14 +41,13 @@ export const removeSignatureFromDocumentInteractor = async (
     .getPersistenceGateway()
     .getDocument({
       applicationContext,
-      // @ts-ignore
-      key: docketEntryToUnsign.documentIdBeforeSignature,
+      key: docketEntryToUnsign.documentIdBeforeSignature!,
       useTempBucket: false,
     });
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     document: originalPdfNoSignature,
-    key: docketEntryId,
+    key: docketEntryToUnsign.documentStorageId,
   });
 
   await updateCaseAndAssociations({

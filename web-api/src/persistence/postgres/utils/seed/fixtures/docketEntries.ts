@@ -636,6 +636,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -674,6 +675,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -714,6 +716,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -752,6 +755,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -792,6 +796,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -830,6 +835,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -870,6 +876,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     isPaper: true,
     isStricken: false,
@@ -907,6 +914,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -947,6 +955,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -986,6 +995,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -1024,6 +1034,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -1090,6 +1101,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -1128,6 +1140,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -1168,6 +1181,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -1206,6 +1220,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -1246,6 +1261,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -1284,6 +1300,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -1324,6 +1341,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -1362,6 +1380,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -1426,6 +1445,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -1464,6 +1484,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -1504,6 +1525,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -1542,6 +1564,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -1608,6 +1631,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -1646,6 +1670,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -1686,6 +1711,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -1725,6 +1751,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     isPaper: true,
     isStricken: false,
@@ -1762,6 +1789,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -1802,6 +1830,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -1840,6 +1869,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -1880,6 +1910,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -1918,6 +1949,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -1958,6 +1990,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -1996,6 +2029,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -2036,6 +2070,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -2075,6 +2110,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -2113,6 +2149,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -2189,6 +2226,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -2227,6 +2265,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -2267,6 +2306,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -2305,6 +2345,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -2345,6 +2386,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -2383,6 +2425,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -2453,6 +2496,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -2491,6 +2535,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -2531,6 +2576,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -2569,6 +2615,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -2609,6 +2656,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -2647,6 +2695,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -2687,6 +2736,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -2725,6 +2775,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -2765,6 +2816,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -2803,6 +2855,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -2843,6 +2896,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -2881,6 +2935,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -2921,6 +2976,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -2959,6 +3015,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -2999,6 +3056,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -3037,6 +3095,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -3077,6 +3136,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -3115,6 +3175,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -3155,6 +3216,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -3193,6 +3255,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -3233,6 +3296,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -3271,6 +3335,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -3311,6 +3376,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -3349,6 +3415,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -3389,6 +3456,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -3427,6 +3495,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -3467,6 +3536,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -3505,6 +3575,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -3545,6 +3616,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -3583,6 +3655,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -3623,6 +3696,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -3661,6 +3735,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -3701,6 +3776,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -3739,6 +3815,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -3779,6 +3856,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -3817,6 +3895,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -3857,6 +3936,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -3895,6 +3975,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -3935,6 +4016,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -3973,6 +4055,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -4013,6 +4096,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -4051,6 +4135,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -4091,6 +4176,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -4129,6 +4215,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -4169,6 +4256,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -4207,6 +4295,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -4247,6 +4336,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -4285,6 +4375,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -4325,6 +4416,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -4363,6 +4455,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -4403,6 +4496,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -4441,6 +4535,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -4481,6 +4576,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -4519,6 +4615,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -4559,6 +4656,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -4597,6 +4695,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -4637,6 +4736,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -4676,6 +4776,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -4714,6 +4815,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Mona Schultz', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -5289,6 +5391,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         email: 'privatePractitioner1@example.com',
       },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     isStricken: false,
     documentType: 'Request for Place of Trial',
@@ -5348,6 +5451,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner1@example.com',
       },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     isSealed: true,
@@ -5566,6 +5670,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         email: 'privatePractitioner@example.com',
       },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -5639,6 +5744,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner@example.com',
       },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     isStricken: false,
@@ -5728,6 +5834,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Samson Workman', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     isStricken: false,
@@ -5845,6 +5952,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
   {
     servedParties: [
       { name: 'Samson Workman', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     isStricken: false,
@@ -6125,6 +6233,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedParties: [
       { name: 'Brett Osborne', email: 'petitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Britanney Wiley' },
     ],
     attachments: false,
@@ -6220,6 +6329,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     servedParties: [
       { name: 'Brett Osborne', email: 'petitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Britanney Wiley' },
     ],
@@ -7063,6 +7173,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     stampData: {},
     servedParties: [
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Cassidy Mejia' },
       { name: 'juvek@mailinator.com' },
     ],
@@ -7512,6 +7623,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         email: 'privatePractitioner1@example.com',
       },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     isPaper: true,
     isStricken: false,
@@ -7588,6 +7700,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         email: 'privatePractitioner1@example.com',
       },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -7632,6 +7745,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         email: 'privatePractitioner1@example.com',
       },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -7675,6 +7789,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner1@example.com',
       },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -7757,6 +7872,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         email: 'privatePractitioner1@example.com',
       },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     isStricken: false,
     documentType: 'Notice of Docket Change',
@@ -7790,6 +7906,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner1@example.com',
       },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -7867,6 +7984,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         email: 'privatePractitioner1@example.com',
       },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     isPaper: true,
     isStricken: false,
@@ -7908,6 +8026,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner1@example.com',
       },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -7957,6 +8076,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner1@example.com',
       },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -8027,6 +8147,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         email: 'privatePractitioner1@example.com',
       },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -8070,6 +8191,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner1@example.com',
       },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -8146,6 +8268,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         email: 'privatePractitioner1@example.com',
       },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -8188,6 +8311,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner1@example.com',
       },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -8241,6 +8365,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         email: 'privatePractitioner1@example.com',
       },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -8287,6 +8412,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner1@example.com',
       },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -8385,6 +8511,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         email: 'privatePractitioner1@example.com',
       },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -8431,6 +8558,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner1@example.com',
       },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -8480,6 +8608,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         email: 'privatePractitioner1@example.com',
       },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     isPaper: true,
     isStricken: false,
@@ -8521,6 +8650,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner1@example.com',
       },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -8565,6 +8695,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         email: 'privatePractitioner1@example.com',
       },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -8608,6 +8739,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner1@example.com',
       },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -8656,6 +8788,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         email: 'privatePractitioner1@example.com',
       },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -8700,6 +8833,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner1@example.com',
       },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -8749,6 +8883,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner1@example.com',
       },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -8800,6 +8935,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         email: 'privatePractitioner1@example.com',
       },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -8847,6 +8983,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner1@example.com',
       },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -8896,6 +9033,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         email: 'privatePractitioner@example.com',
       },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -8938,6 +9076,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner@example.com',
       },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -9388,6 +9527,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         email: 'privatePractitioner@example.com',
       },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
     isStricken: false,
@@ -9428,6 +9568,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner@example.com',
       },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     attachments: false,
@@ -9542,6 +9683,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner@example.com',
       },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     isStricken: false,
@@ -9714,6 +9856,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
         name: 'Test Private Practitioner',
         email: 'privatePractitioner@example.com',
       },
+      { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
       { name: 'Test IRS Practitioner', email: 'irspractitioner@example.com' },
     ],
     isStricken: false,

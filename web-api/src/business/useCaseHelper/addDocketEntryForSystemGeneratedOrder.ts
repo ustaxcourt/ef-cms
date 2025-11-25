@@ -104,7 +104,7 @@ export const addDocketEntryForSystemGeneratedOrder = async ({
   await applicationContext.getPersistenceGateway().uploadDocument({
     applicationContext,
     pdfData: combinedPdf,
-    pdfName: newDocketEntry.docketEntryId,
+    key: newDocketEntry.documentStorageId,
   });
 
   const documentContentsId = applicationContext.getUniqueId();

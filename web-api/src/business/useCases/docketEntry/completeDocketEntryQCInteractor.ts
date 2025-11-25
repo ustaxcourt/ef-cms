@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import {
   CONTACT_CHANGE_DOCUMENT_TYPES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
@@ -41,6 +42,7 @@ import { getDocketEntriesByDocketNumberAndDocketEntryId } from '@web-api/persist
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { WorkItem } from '@shared/business/entities/WorkItem';
+import { countPagesInDocument } from '@web-api/business/useCaseHelper/countPagesInDocument';
 
 const completeDocketEntryQC = async (
   applicationContext: ServerApplicationContext,
@@ -366,7 +368,7 @@ const completeDocketEntryQC = async (
         .getPersistenceGateway()
         .getDocument({
           applicationContext,
-          key: updatedPrimaryDocketEntry.docketEntryId,
+          key: updatedPrimaryDocketEntry.documentStorageId,
         });
 
       const noticeDoc = await PDFDocument.load(pdfData);
@@ -499,16 +501,19 @@ const completeDocketEntryQC = async (
 
           if (!memberHasDiff) continue;
 
-          const noticeDocketEntryId = await generateNoticeOfDocketChangePdf({
-            applicationContext,
-            authorizedUser,
-            docketChangeInfo: memberDocketChangeInfo,
-          });
+          const noticeDocumentStorageId = await generateNoticeOfDocketChangePdf(
+            {
+              applicationContext,
+              authorizedUser,
+              docketChangeInfo: memberDocketChangeInfo,
+            },
+          );
 
           const memberNoticeUpdatedDocketEntry = new DocketEntry(
             {
               ...SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange,
-              docketEntryId: noticeDocketEntryId,
+              docketEntryId: noticeDocumentStorageId,
+              documentStorageId: noticeDocumentStorageId,
               documentTitle: replaceBracketed(
                 SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange
                   .documentTitle,
@@ -524,9 +529,9 @@ const completeDocketEntryQC = async (
           memberNoticeUpdatedDocketEntry.setFiledBy(user);
 
           memberNoticeUpdatedDocketEntry.numberOfPages =
-            await applicationContext.getUseCaseHelpers().countPagesInDocument({
+            await countPagesInDocument({
               applicationContext,
-              docketEntryId: memberNoticeUpdatedDocketEntry.docketEntryId,
+              docketEntryId: memberNoticeUpdatedDocketEntry.documentStorageId,
             });
 
           const memberServedParties =
@@ -545,7 +550,7 @@ const completeDocketEntryQC = async (
             .getPersistenceGateway()
             .getDocument({
               applicationContext,
-              key: memberNoticeUpdatedDocketEntry.docketEntryId,
+              key: memberNoticeUpdatedDocketEntry.documentStorageId,
             });
 
           const newPdfData = await addServedStampToDocument({
@@ -558,7 +563,7 @@ const completeDocketEntryQC = async (
             .getPersistenceGateway()
             .saveDocumentFromLambda({
               document: Buffer.from(newPdfData).buffer,
-              key: memberNoticeUpdatedDocketEntry.docketEntryId,
+              key: memberNoticeUpdatedDocketEntry.documentStorageId,
             });
 
           await updateCaseAndAssociations({
@@ -626,12 +631,10 @@ const completeDocketEntryQC = async (
 
       noticeUpdatedDocketEntry.setFiledBy(user);
 
-      noticeUpdatedDocketEntry.numberOfPages = await applicationContext
-        .getUseCaseHelpers()
-        .countPagesInDocument({
-          applicationContext,
-          docketEntryId: noticeUpdatedDocketEntry.docketEntryId,
-        });
+      noticeUpdatedDocketEntry.numberOfPages = await countPagesInDocument({
+        applicationContext,
+        docketEntryId: noticeUpdatedDocketEntry.documentStorageId,
+      });
 
       noticeUpdatedDocketEntry.setAsServed(servedParties.all);
 
@@ -646,7 +649,7 @@ const completeDocketEntryQC = async (
         .getPersistenceGateway()
         .getDocument({
           applicationContext,
-          key: noticeUpdatedDocketEntry.docketEntryId,
+          key: noticeUpdatedDocketEntry.documentStorageId,
         });
 
       const newPdfData = await addServedStampToDocument({

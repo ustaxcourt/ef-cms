@@ -84,7 +84,7 @@ export const fixRaceConditionServedInDrafts = async (
     .getUseCaseHelpers()
     .countPagesInDocument({
       applicationContext,
-      docketEntryId,
+      documentStorageId: rawDocketEntry.documentStorageId,
     });
   // set as served for all of the parties
 

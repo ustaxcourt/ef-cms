@@ -98,6 +98,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       {
         ...baseDocketEntry,
         docketEntryId: 'd2297867-f25d-4e26-828c-f536419c96b7',
+        documentStorageId: 'fe6d2053-c5cb-4d66-91b5-8d3811469de9',
         documentTitle: 'Unservable Document with Filing Date',
         documentType: 'U.S.C.A',
         eventCode: 'USCA',
@@ -442,8 +443,10 @@ describe('updateDocketEntryMetaInteractor', () => {
     );
 
     expect(
-      applicationContext.getUseCaseHelpers().removeCoversheet,
-    ).toHaveBeenCalled();
+      applicationContext.getUseCaseHelpers().removeCoversheet.mock.calls[0][1],
+    ).toEqual({
+      documentStorageId: mockDocketEntries[4].documentStorageId,
+    });
   });
 
   it('should not generate a coversheet for the document if the filingDate field is changed on a document that does NOT require a coversheet', async () => {
