@@ -2,6 +2,12 @@ import { SCAN_MODES } from '../../../../shared/src/business/entities/EntityConst
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getScannerInterface } from './getScannerInterface';
 
+declare global {
+  interface Window {
+    Dynamsoft?: any;
+  }
+}
+
 jest.mock('./loader', () => ({
   loadDWTLibrary: jest.fn().mockResolvedValue(undefined), // or a specific mock value
 }));
@@ -69,7 +75,7 @@ describe('getScannerInterface', () => {
       },
     };
 
-    window.Dynamsoft = { ...Dynamsoft };
+  (global as any).Dynamsoft = { ...Dynamsoft };
   });
 
   it('returns the TWAIN driver API', () => {
@@ -275,8 +281,9 @@ describe('getScannerInterface', () => {
   });
 
   it('should attempt to load the dynamsoft libraries', async () => {
-    delete global.window.document;
-    global.window.document = {
+    const originalDocument = (global as any).window?.document;
+    delete (global as any).window.document;
+    (global as any).window.document = {
       addEventListener: () => null,
       createElement: () =>
         ({
@@ -297,7 +304,7 @@ describe('getScannerInterface', () => {
           },
         ] as any;
       },
-    };
+    } as any;
     const scannerAPI = getScannerInterface();
     let script = await scannerAPI.loadDynamsoft();
     expect(script).toEqual('dynam-scanner-injection');
@@ -305,5 +312,8 @@ describe('getScannerInterface', () => {
     // try to load it again to verify it doesn't attempt to download the scripts again
     script = await scannerAPI.loadDynamsoft();
     expect(script).toEqual('dynam-scanner-injection');
+
+    // restore original document to avoid test pollution
+    (global as any).window.document = originalDocument;
   });
 });
