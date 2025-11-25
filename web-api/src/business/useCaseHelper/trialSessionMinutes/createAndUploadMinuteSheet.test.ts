@@ -45,7 +45,7 @@ describe('createAndUploadMinuteSheet', () => {
   });
 
   it('throw not found error if minute sheet is not found', async () => {
-    mockGetMinuteSheet.mockResolvedValue(null);
+    mockGetMinuteSheet.mockResolvedValue(undefined);
     await expect(
       createAndUploadMinuteSheet(applicationContext, mockParams),
     ).rejects.toThrow(NotFoundError);

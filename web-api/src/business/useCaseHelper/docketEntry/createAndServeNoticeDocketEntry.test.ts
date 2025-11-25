@@ -1,3 +1,4 @@
+jest.mock('../countPagesInDocument');
 import { Case } from '@shared/business/entities/cases/Case';
 import {
   SYSTEM_GENERATED_DOCUMENT_TYPES,

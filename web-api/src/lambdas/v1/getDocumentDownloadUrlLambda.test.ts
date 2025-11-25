@@ -146,6 +146,8 @@ describe('getDocumentDownloadUrlLambda', () => {
   });
 
   it('returns the document download URL in v1 format - when the document exists', async () => {
+    const mockDocketEntryId = '26c6a0e5-5d11-45f0-9904-04d103ada04f';
+    const mockDocumentStorageId = '028154ac-29ee-4752-a016-03fb01ea49fa';
     const request = Object.assign({}, REQUEST_EVENT, {
       pathParameters: {
         docketNumber: '123-30',
@@ -156,8 +158,8 @@ describe('getDocumentDownloadUrlLambda', () => {
       docketEntries: [
         {
           ...MOCK_PETITION,
-          // docket entry does not match the requested entry
-          docketEntryId: '26c6a0e5-5d11-45f0-9904-04d103ada04f',
+          docketEntryId: mockDocketEntryId,
+          documentStorageId: mockDocumentStorageId,
         },
       ],
       docketNumber: '123-20',
@@ -174,7 +176,7 @@ describe('getDocumentDownloadUrlLambda', () => {
     expect(response.headers['Content-Type']).toBe('application/json');
     expect(JSON.parse(response.body)).toHaveProperty(
       'url',
-      'https://example.com/download-policy-url/bucket/item/26c6a0e5-5d11-45f0-9904-04d103ada04f',
+      `https://example.com/download-policy-url/bucket/item/${mockDocumentStorageId}`,
     );
   });
 });
