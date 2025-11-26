@@ -34,7 +34,6 @@ import { socketRouter } from '../src/providers/socketRouter';
 import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import { withAppContextDecorator } from '../src/withAppContext';
 import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/computeds/workQueueHelper';
-import FormDataHelper from 'form-data';
 import axios, { AxiosError } from 'axios';
 import jwt from 'jsonwebtoken';
 import qs from 'qs';
@@ -579,10 +578,11 @@ export const loginAs = (cerebralTest, email, password = 'Testing1234$') =>
 export const setupTest = ({ constantsOverrides = {} } = {}) => {
   // eslint-disable-next-line prefer-const
   let cerebralTest;
-  // cast to any to avoid TS type incompatibilities in the test environment
-  (global as any).FormData = FormDataHelper;
-  (global as any).Blob = (() => fakeFile);
-  (global as any).File = (() => fakeFile);
+  global.FormData = require('form-data');
+  // @ts-expect-error
+  global.Blob = (() => fakeFile);
+  // @ts-expect-error
+  global.File = (() => fakeFile);
   global.WebSocket = require('websocket').w3cwebsocket;
 
   presenter.providers.applicationContext = applicationContext;

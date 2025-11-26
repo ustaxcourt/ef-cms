@@ -2,6 +2,8 @@ import { formatDateIfToday } from '../computeds/formattedWorkQueue';
 import { getConstants } from '../../getConstants';
 import { map, uniq } from 'lodash';
 import { Case } from '@shared/business/entities/cases/Case';
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { RawMessage } from '@shared/business/entities/Message';
 
 const { CASE_SERVICES_SUPERVISOR_SECTION, DESCENDING } = getConstants();
 
@@ -74,14 +76,19 @@ export const sortCompletedMessages = (
 // useful for users that have a large amount of messages (ADC Users) since
 // recalculating the formatted date fields is expensive.
 
-let messageCache = null;
-let lastCacheKey = null;
+let messageCache: RawMessage[] | null = null;
+let lastCacheKey: string | null = null;
 
 export const getFormattedMessages = ({
   applicationContext,
   messages,
   tableSort = null,
   cacheKey = applicationContext.getUniqueId(),
+}: {
+  applicationContext: ClientApplicationContext;
+  messages: RawMessage[];
+  tableSort?: TableSort | null;
+  cacheKey?: string;
 }) => {
   // We cache these results because recalculating these dates takes a lot of time.
   // this cache is cleared by the resetCacheKeyAction

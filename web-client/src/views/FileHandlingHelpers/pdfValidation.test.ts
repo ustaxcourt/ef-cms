@@ -50,7 +50,8 @@ describe('validatePdf', () => {
       .spyOn(pdfValidationHelpers, 'validatePermissions')
       .mockResolvedValue(true);
 
-    (global as any).FileReader = jest.fn(() => mockFileReader);
+    // @ts-expect-error
+    global.FileReader = jest.fn(() => mockFileReader);
 
     mockFile = new File([new ArrayBuffer(8)], 'test.pdf', {
       type: 'application/pdf',

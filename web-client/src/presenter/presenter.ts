@@ -1697,5 +1697,6 @@ declare global {
     path: any;
     props: Props;
     router: any;
+    // errors: any;
   };
 }

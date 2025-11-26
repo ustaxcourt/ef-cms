@@ -11,7 +11,7 @@ const createWebSocketClient = ({ clientConnectionId, token }) => {
 export const socketProvider = ({ socketRouter }) => {
   let app;
   let applicationContext;
-  let socket: WebSocket;
+  let socket: WebSocket | null;
   let pingInterval;
   let reconnectAttempt = 0;
   // API Gateway is 10 minute idle timeout, so let's just do 1 minute ping interval
@@ -70,7 +70,7 @@ export const socketProvider = ({ socketRouter }) => {
             }, 300);
 
             pingInterval = setInterval(() => {
-              socket.send('ping');
+              socket?.send('ping');
             }, PING_INTERVAL);
           };
         } catch (e) {

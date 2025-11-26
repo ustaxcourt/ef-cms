@@ -1,8 +1,15 @@
 import { getConstants } from '@web-client/getConstants';
 import { loadDWTLibrary } from './loader';
+import { WebTwain } from 'dwt/dist/types/WebTwain';
 
-let DWObject: any = null;
-let dynamsoftLoader: Promise<any> | null = null;
+declare global {
+  interface Window {
+    Dynamsoft: any;
+  }
+}
+
+let DWObject: WebTwain;
+let dynamsoftLoader: Promise<string> | null = null;
 
 export const getScannerInterface = () => {
   const completeScanSession = () => {
@@ -15,7 +22,7 @@ export const getScannerInterface = () => {
 
   const getSources = () => {
     const count = DWObject.SourceCount;
-    const sources: any[] = [];
+    const sources: string[] = [];
     for (let i = 0; i < count; i++) {
       sources.push(DWObject.GetSourceNameItems(i));
     }
@@ -34,18 +41,18 @@ export const getScannerInterface = () => {
       // eslint-disable-next-line no-async-promise-executor
       dynamsoftLoader = new Promise(async resolve => {
         await loadDWTLibrary();
-  const { Dynamsoft } = (window as any);
+        const { Dynamsoft } = window;
         Dynamsoft.DWT.ResourcesPath = 'https://unpkg.com/dwt@latest/dist';
         Dynamsoft.DWT.ProductKey = getConstants().DYNAMSOFT_PRODUCT_KEYS;
         Dynamsoft.DWT.ScanDirectly = true;
 
         Dynamsoft.DWT.CreateDWTObject(
           'dwtcontrolContainer',
-          function (object: any) {
+          function (object: WebTwain) {
             DWObject = object;
             resolve('dynam-scanner-injection');
           },
-          function (exp: any) {
+          function (exp: { code: number; message: string }) {
             console.error(exp);
           },
         );
@@ -64,7 +71,7 @@ export const getScannerInterface = () => {
   };
 
   const setSourceByIndex = index => {
-    return (DWObject.SelectSourceByIndex(index) as any) > -1;
+    return DWObject.SelectSourceByIndex(index);
   };
 
   const getSourceNameByIndex = index => {
@@ -100,8 +107,8 @@ export const getScannerInterface = () => {
           reject(new Error('no images in buffer'));
           return;
         }
-        const promises: Promise<any>[] = [];
-        const response: { error: any; scannedBuffer: any[] | null } = {
+        const promises: Promise<unknown>[] = [];
+        const response: { error; scannedBuffer } = {
           error: null,
           scannedBuffer: null,
         };
@@ -110,7 +117,7 @@ export const getScannerInterface = () => {
             new Promise((resolveImage, rejectImage) => {
               DWObject.ConvertToBlob(
                 [index],
-                (window as any).Dynamsoft.DWT.EnumDWT_ImageType.IT_JPG,
+                window.Dynamsoft.DWT.EnumDWT_ImageType.IT_JPG,
                 resolveImage,
                 rejectImage,
               );
@@ -118,7 +125,7 @@ export const getScannerInterface = () => {
           );
         }
         return Promise.all(promises)
-          .then(async (blobs: any[]) => {
+          .then(async blobs => {
             const COVER_SHEET_WIDTH_IN_PX = 866;
 
             const scaledDownBlobs = await Promise.all(
@@ -133,7 +140,7 @@ export const getScannerInterface = () => {
               scaledDownBlobs.map(applicationContext.convertBlobToUInt8Array),
             );
 
-            response.scannedBuffer = blobBuffers as any[];
+            response.scannedBuffer = blobBuffers;
             DWObject.RemoveAllImages();
             return resolve(response);
           })
@@ -167,7 +174,7 @@ export const getScannerInterface = () => {
         return reject(new Error('no images in buffer'));
       }
 
-      DWObject.AcquireImage(null, null, e => {
+      DWObject.AcquireImage(undefined, undefined, e => {
         DWObject.UnregisterEvent('OnPostAllTransfers', onScanFinished);
         // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
         return reject(e);

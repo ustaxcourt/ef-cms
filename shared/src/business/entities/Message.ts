@@ -22,6 +22,7 @@ export class Message extends JoiValidationEntity {
   public docketNumberWithSuffix: string;
   public from: string;
   public fromSection: string;
+  public fromSectionFormatted?: string;
   public fromUserId: string;
   public isCompleted: boolean;
   public isRead: boolean;
