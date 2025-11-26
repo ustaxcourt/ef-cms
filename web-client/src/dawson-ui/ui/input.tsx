@@ -79,7 +79,7 @@ const useKeyboardListenerHook = () => {
 const InputError = ({ error }) => (
   <>
     {error && (
-      <div className="tw:absolute tw:mt-[6px] tw:xs:mt-[8px] tw:gap-2 tw:text-red-primary">
+      <div className="tw:absolute tw:mt-[5px] tw:xs:mt-[9px] tw:gap-2 tw:text-red-primary">
         <FontAwesomeIcon
           icon={faInfoCircle}
           className="tw-text-[16px] tw:xs:text-[18px] tw:mr-[4px]"
@@ -117,7 +117,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
     const parentDiv = classNames(
       'tw:flex',
       flexDirection === 'vertical' ? 'tw:flex-col' : 'tw:flex-row',
-      !helpText && 'tw:items-center',
+      !helpText && flexDirection === 'horizontal' && 'tw:items-center',
     );
 
     const inputClass = classNames(
@@ -138,7 +138,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
           <label
             id={labelId}
             htmlFor={inputId}
-            className={`${flexDirection === 'horizontal' ? 'tw:xs:mr-[16px] tw:mr-[12px]' : ''} tw:shrink-0 tw:mb-[0px]`}
+            className={`${flexDirection === 'horizontal' ? 'tw:xs:mr-[16px] tw:mr-[12px]' : ''} tw:shrink-0 ${!helpText ? 'tw:mb-[8px] tw:xs:mb-[12px]' : 'tw:mb-[0px]'}`}
           >
             <div className="tw:flex tw:flex-col">
               <div className="tw:flex tw:items-center">
@@ -166,7 +166,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                   id={helpTextId}
                   className={cn(
                     styles.text.help,
-                    'tw:font-normal tw:xs:mt-[10px] tw:mt-[5px] tw:mb-[9px]',
+                    'tw:font-normal tw:mt-[5px] tw:xs:mt-[12px] tw:mb-[8px] tw:xs:mb-[12px]',
                     flexDirection === 'horizontal' &&
                       'tw:mt-[0px] tw:xs:mt-[0px] tw:!mb-[0px]',
                   )}
@@ -230,7 +230,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
         {label && (
           <label className="tw:mb-[0px]" id={labelId} htmlFor={textareaId}>
             <div className="tw:flex tw:flex-col">
-              <div className="tw:flex tw:items-center tw:mb-[9px]">
+              <div className="tw:flex tw:items-center tw:mb-[12px]">
                 <span
                   className={cn(styles.label)}
                   style={{ fontWeight: '600' }}

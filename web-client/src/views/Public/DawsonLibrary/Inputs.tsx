@@ -16,6 +16,15 @@ export function Inputs() {
             />
           </div>
           <div className="tw:w-full">
+            <TextField
+              label="Field Label"
+              icon={true}
+              flexDirection="vertical"
+              error="Enter a valid answer"
+            />
+          </div>
+          <div></div>
+          <div className="tw:w-full">
             <TextArea label="Field Label" helpText="" />
           </div>
           <div className="tw:w-full">
