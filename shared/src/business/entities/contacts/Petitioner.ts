@@ -118,16 +118,9 @@ export class Petitioner extends JoiValidationEntity {
       .required()
       .messages({ '*': 'Select a service indicator' }),
     title: JoiValidationConstants.STRING.max(100).optional(),
-    preferredLanguage: JoiValidationConstants.STRING.max(20)
-      .optional()
-      .messages({
-        'string.max': 'Limit is 20 characters. Enter 20 or fewer characters.',
-      }),
-    preferredCommunicationMethod: JoiValidationConstants.STRING.max(20)
-      .optional()
-      .messages({
-        'string.max': 'Limit is 20 characters. Enter 20 or fewer characters.',
-      }),
+    preferredLanguage: JoiValidationConstants.STRING.max(20).optional(),
+    preferredCommunicationMethod:
+      JoiValidationConstants.STRING.max(20).optional(),
   };
 
   getValidationRules() {

@@ -23,6 +23,8 @@ export const validateUploadPetitionStep1Action = ({
       'placeOfLegalResidence',
       'phone',
       'paperPetitionEmail',
+      'preferredLanguage',
+      'preferredCommunicationMethod',
     ];
 
     return path.error({

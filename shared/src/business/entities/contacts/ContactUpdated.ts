@@ -98,16 +98,9 @@ export class ContactUpdated extends JoiValidationEntity {
         'Other',
       )
       .messages({ '*': 'Enter a place of legal residence' }),
-    preferredLanguage: JoiValidationConstants.STRING.max(20)
-      .optional()
-      .messages({
-        'string.max': 'Limit is 20 characters. Enter 20 or fewer characters.',
-      }),
+    preferredLanguage: JoiValidationConstants.STRING.max(20).optional(),
     preferredCommunicationMethod: JoiValidationConstants.STRING.max(20)
-      .optional()
-      .messages({
-        'string.max': 'Limit is 20 characters. Enter 20 or fewer characters.',
-      }),
+      .optional(),
   } as const;
 
   static DOMESTIC_VALIDATION_RULES = {
