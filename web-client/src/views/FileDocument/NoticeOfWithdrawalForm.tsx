@@ -152,7 +152,6 @@ export const NoticeOfWithdrawalForm = connect(
                           key: `confirmPetitionersContactInformationMap.${party.contactId}`,
                           value: e.target.checked,
                         });
-                        validateExternalDocumentInformationSequence();
                       }}
                     />
                     <label
