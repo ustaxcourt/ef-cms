@@ -15,12 +15,12 @@ import { validateSelectDocumentTypeAction } from '../actions/validateSelectDocum
 import { isNoticeOfWithdrawalAction } from '../actions/isNoticeOfWithdrawalAction';
 import { validateNoticeOfWithdrawalAction } from '../actions/validateNoticeOfWithdrawalAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
-import { navigateToFileANoticeOfWithdrawalAction } from '../actions/navigateToFileANoticeOfWithDrawalAction';
 
-const beforeNavigationSequence = [
+const navigationSequence = [
   setDocketNumberPropAction,
   setDefaultFileDocumentFormValuesAction,
   clearOtherIterationAction,
+  navigateToFileADocumentAction,
 ];
 
 export const completeDocumentSelectSequence = [
@@ -44,13 +44,10 @@ export const completeDocumentSelectSequence = [
           validateNoticeOfWithdrawalAction,
           {
             error: [setAlertErrorAction],
-            success: [
-              beforeNavigationSequence,
-              navigateToFileANoticeOfWithdrawalAction,
-            ],
+            success: [navigationSequence],
           },
         ],
-        no: [beforeNavigationSequence, navigateToFileADocumentAction],
+        no: navigationSequence,
       },
     ],
   },
