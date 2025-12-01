@@ -138,8 +138,9 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
           <label
             id={labelId}
             htmlFor={inputId}
-            className={`${flexDirection === 'horizontal' ? 'tw:xs:mr-[16px] tw:mr-[12px]' : ''} tw:shrink-0 ${!helpText ? 'tw:mb-[8px] tw:xs:mb-[12px]' : 'tw:mb-[0px]'}`}
+            className={`${flexDirection === 'horizontal' && !helpText ? 'tw:!mb-[0px] ' : ''} ${flexDirection === 'horizontal' ? 'tw:xs:mr-[16px] tw:mr-[12px]' : ''} tw:shrink-0 ${!helpText ? 'tw:mb-[8px] tw:xs:mb-[12px]' : 'tw:mb-[0px]'}`}
           >
+            {/* jake */}
             <div className="tw:flex tw:flex-col">
               <div className="tw:flex tw:items-center">
                 <span
@@ -227,10 +228,13 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
 
     return (
       <div className="tw:flex tw:flex-col">
+        {/* jake 2 */}
         {label && (
           <label className="tw:mb-[0px]" id={labelId} htmlFor={textareaId}>
             <div className="tw:flex tw:flex-col">
-              <div className="tw:flex tw:items-center tw:mb-[12px]">
+              <div
+                className={`tw:flex tw:items-center tw:mb-[8px] tw:xs:mb-[12px]`}
+              >
                 <span
                   className={cn(styles.label)}
                   style={{ fontWeight: '600' }}
@@ -254,7 +258,10 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
               </div>
               {helpText && (
                 <div
-                  className={cn(styles.text.help, 'tw:mb-[9px] tw:font-normal')}
+                  className={cn(
+                    styles.text.help,
+                    'tw:mb-[8px] tw:xs:mb-[12px] tw:font-normal',
+                  )}
                 >
                   {helpText}
                 </div>
