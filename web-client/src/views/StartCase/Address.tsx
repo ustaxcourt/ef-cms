@@ -17,7 +17,7 @@ type AddressProps = {
 
 export const Address: React.FC<AddressProps> = connect(
   {
-    data: state[props.bind],
+    data: state[props`bind`],
     onBlur: props`onBlur`,
     registerRef: props`registerRef`,
     type: props`type`,

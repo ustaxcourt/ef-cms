@@ -3,14 +3,14 @@ import { props as cerebralProps } from 'cerebral';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React from 'react';
+import React, { Ref } from 'react';
 
 const props = cerebralProps as unknown as {
   bind: string;
   onBlur: (args: Record<string, any>) => void;
   type: string;
   onChange: string;
-  registerRef: (param: string) => void;
+  registerRef: (param: string) => Ref<HTMLInputElement>;
 };
 
 type InternationalAddressProps = {

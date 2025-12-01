@@ -11,7 +11,7 @@ import classNames from 'classnames';
 
 type BindedSelectProps = {
   children: any;
-  bind: any,
+  bind: string,
   className?: string;
   onChange?: (value: any) => void;
   id?: string;
@@ -22,7 +22,7 @@ export const BindedSelect: React.FC<BindedSelectProps> = connect(
   {
     bind: props.bind,
     simpleSetter: sequences.cerebralBindSimpleSetStateSequence,
-    value: state[props.bind],
+    value: state[props`bind`],
   },
   function BindedSelect(componentProps) {
     const { bind, children, className, onChange, simpleSetter, value } =

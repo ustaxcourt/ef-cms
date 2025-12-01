@@ -247,9 +247,9 @@ export function TabsComponent({
 
 export const Tabs = connect<any, TabsProps>(
   {
-    bind: (props as any).bind,
+    bind: props`bind`,
     simpleSetter: sequences.cerebralBindSimpleSetStateSequence,
-    value: (state as any)[(props as any).bind],
+    value: state[props`bind`],
   },
   TabsComponent,
 );
