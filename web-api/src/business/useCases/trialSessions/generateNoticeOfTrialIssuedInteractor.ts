@@ -21,7 +21,6 @@ export type FormattedTrialInfoType = RawTrialSession & {
   trialLocationAndProceedingType?: string;
   priorJudgeTitleWithFullName?: string;
   updatedJudgeTitleWithFullName?: string;
-  caseProcedureType?: string;
 };
 
 export const generateNoticeOfTrialIssuedInteractor = async (
