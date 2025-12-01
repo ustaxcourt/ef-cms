@@ -5,15 +5,23 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const Country = connect(
+type CountryProps = {
+  bind: string;
+  onBlur?: Function;
+  type: string;
+  clearTypeOnCountryChange?: boolean;
+  onChange: any;
+}
+
+export const Country: React.FC<CountryProps> = connect(
   {
     constants: state.constants,
     data: state[props.bind],
-    onBlur: props.onBlur,
-    onChangeCountryType: sequences[props.onChangeCountryType],
-    registerRef: props.registerRef,
-    type: props.type,
-    updateFormValueSequence: sequences[props.onChange],
+    onBlur: props`onBlur`,
+    onChangeCountryType: sequences[props`onChangeCountryType`],
+    registerRef: props`registerRef`,
+    type: props`type`,
+    updateFormValueSequence: sequences[props`onChange`],
     validationErrors: state.validationErrors,
   },
   function Country({

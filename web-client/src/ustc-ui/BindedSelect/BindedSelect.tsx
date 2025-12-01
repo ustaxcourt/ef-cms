@@ -9,7 +9,16 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React, { useState } from 'react';
 import classNames from 'classnames';
 
-export const BindedSelect = connect(
+type BindedSelectProps = {
+  children: any;
+  bind: any,
+  className?: string;
+  onChange?: (value: any) => void;
+  id?: string;
+  name?: string;
+};
+
+export const BindedSelect: React.FC<BindedSelectProps> = connect(
   {
     bind: props.bind,
     simpleSetter: sequences.cerebralBindSimpleSetStateSequence,

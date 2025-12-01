@@ -5,7 +5,14 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const ServiceIndicatorRadios = connect(
+type ServiceIndicatorRadiosProps = {
+  bind: string;
+  hideElectronic?: boolean;
+  validationErrors?: string;
+  validateSequence?: Function;
+}
+
+export const ServiceIndicatorRadios: React.FC<ServiceIndicatorRadiosProps> = connect(
   {
     SERVICE_INDICATOR_TYPES: state.constants.SERVICE_INDICATOR_TYPES,
     bindKey: props.bind,

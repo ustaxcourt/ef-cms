@@ -11,8 +11,18 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React, { ReactNode, useState } from 'react';
 import classNames from 'classnames';
 
-const renderTabFactory = ({ activeKey, asSwitch, boxed, setTab }) =>
-  function TabComponent(child) {
+const renderTabFactory = (params: any) => {
+  const {
+    activeKey,
+    asSwitch,
+    boxed,
+    setTab,
+  // accept but ignore these optional props so callers may pass them without TS errors
+  _headingLevel,
+  _marginBottom,
+  } = params || {};
+
+  return function TabComponent(child: any) {
     const {
       children: tabChildren,
       className: childClassName,
@@ -62,6 +72,7 @@ const renderTabFactory = ({ activeKey, asSwitch, boxed, setTab }) =>
       </li>
     );
   };
+};
 /**
  * Tab //: This is a strange hollow component that is being used in renderTabFactory + TabsComponent to make a styled component
  */
@@ -78,8 +89,11 @@ export function Tab(properties: {
   return <></>;
 }
 
-// Tabs convey the document headings implicitly, but we also add an invisible header for accessibility reasons
-const HeadingElement = ({ children, level }) => {
+
+const HeadingElement: React.FC<{ children: ReactNode; level: string | number }> = ({
+  children,
+  level,
+}) => {
   return React.createElement(
     `h${level}`,
     { 'aria-hidden': 'false', className: 'sr-only' },
@@ -233,9 +247,9 @@ export function TabsComponent({
 
 export const Tabs = connect<any, TabsProps>(
   {
-    bind: props.bind,
+    bind: (props as any).bind,
     simpleSetter: sequences.cerebralBindSimpleSetStateSequence,
-    value: state[props.bind],
+    value: (state as any)[(props as any).bind],
   },
   TabsComponent,
 );

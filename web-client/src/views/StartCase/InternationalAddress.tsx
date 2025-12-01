@@ -13,7 +13,14 @@ const props = cerebralProps as unknown as {
   registerRef: (param: string) => void;
 };
 
-export const InternationalAddress = connect(
+type InternationalAddressProps = {
+  bind: string;
+  onBlur?: Function;
+  type: string;
+  onChange: any;
+}
+  
+export const InternationalAddress: React.FC<InternationalAddressProps>  = connect(
   {
     data: state[props.bind],
     onBlur: props.onBlur,

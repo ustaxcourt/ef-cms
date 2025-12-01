@@ -8,14 +8,21 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-export const Address = connect(
+type AddressProps = {
+  bind: string;
+  onBlur?: Function;
+  type: string;
+  onChange: any;
+}
+
+export const Address: React.FC<AddressProps> = connect(
   {
     data: state[props.bind],
-    onBlur: props.onBlur,
-    registerRef: props.registerRef,
-    type: props.type,
-    updateFormValueAndSecondaryContactInfoSequence: sequences[props.onChange],
-    updateFormValueSequence: sequences[props.onChange],
+    onBlur: props`onBlur`,
+    registerRef: props`registerRef`,
+    type: props`type`,
+    updateFormValueAndSecondaryContactInfoSequence: sequences[props`onChange`],
+    updateFormValueSequence: sequences[props`onChange`],
     validationErrors: state.validationErrors,
   },
   function Address({
