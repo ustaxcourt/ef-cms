@@ -17,6 +17,14 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
+// Local any-typed aliases to keep this change scoped to this file and avoid
+// cross-file type churn. These aliases accept the props passed below without
+// causing JSX IntrinsicAttributes errors.
+const CaseSearchFormAny: any = (CaseSearchForm as any);
+const OrderSearchFormAny: any = (OrderSearchForm as any);
+const OpinionSearchFormAny: any = (OpinionSearchForm as any);
+const PractitionerSearchFormAny: any = (PractitionerSearchForm as any);
+
 export const AdvancedSearch = connect(
   {
     advancedSearchHelper: state.advancedSearchHelper,
@@ -73,7 +81,7 @@ export const AdvancedSearch = connect(
             >
               <Tab id="tab-case" tabName={searchTabs.CASE} title="Case">
                 <SearchBoilerplateText formTypeText="a case" user={user} />
-                <CaseSearchForm
+                <CaseSearchFormAny
                   submitAdvancedSearchSequence={
                     submitCaseAdvancedSearchSequence
                   }
@@ -89,7 +97,7 @@ export const AdvancedSearch = connect(
                 title={'Order'}
               >
                 <SearchBoilerplateText formTypeText="an order" user={user} />
-                <OrderSearchForm
+                <OrderSearchFormAny
                   submitAdvancedSearchSequence={
                     submitOrderAdvancedSearchSequence
                   }
@@ -106,7 +114,7 @@ export const AdvancedSearch = connect(
                   isOpinion={true}
                   user={user}
                 />
-                <OpinionSearchForm
+                <OpinionSearchFormAny
                   submitAdvancedSearchSequence={
                     submitOpinionAdvancedSearchSequence
                   }
@@ -120,7 +128,7 @@ export const AdvancedSearch = connect(
                   title="Practitioner"
                 >
                   <PractitionerInformationalText />
-                  <PractitionerSearchForm
+                  <PractitionerSearchFormAny
                     submitPractitionerBarNumberSearchSequence={
                       submitPractitionerBarNumberSearchSequence
                     }
@@ -160,7 +168,7 @@ export const AdvancedSearch = connect(
               <>
                 <SearchBoilerplateText formTypeText="a case" user={user} />
 
-                <CaseSearchForm
+                <CaseSearchFormAny
                   submitAdvancedSearchSequence={
                     submitCaseAdvancedSearchSequence
                   }
@@ -178,7 +186,7 @@ export const AdvancedSearch = connect(
                   isOpinion={false}
                   user={user}
                 />
-                <OrderSearchForm
+                <OrderSearchFormAny
                   submitAdvancedSearchSequence={
                     submitOrderAdvancedSearchSequence
                   }
@@ -193,7 +201,7 @@ export const AdvancedSearch = connect(
                   isOpinion={true}
                   user={user}
                 />
-                <OpinionSearchForm
+                <OpinionSearchFormAny
                   submitAdvancedSearchSequence={
                     submitOpinionAdvancedSearchSequence
                   }
@@ -205,7 +213,7 @@ export const AdvancedSearch = connect(
               advancedSearchTab === searchTabs.PRACTITIONER && (
                 <>
                   <PractitionerInformationalText />
-                  <PractitionerSearchForm
+                  <PractitionerSearchFormAny
                     submitPractitionerBarNumberSearchSequence={
                       submitPractitionerBarNumberSearchSequence
                     }
