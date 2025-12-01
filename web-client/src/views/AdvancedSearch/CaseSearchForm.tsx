@@ -3,11 +3,20 @@ import { CaseSearchByDocketNumber } from './CaseSearchByDocketNumber';
 import { CaseSearchByName } from './CaseSearchByName';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@web-client/presenter/shared.cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
+const CaseSearchByNameAny: any = (CaseSearchByName as any);
+const CaseSearchByDocketNumberAny: any = (CaseSearchByDocketNumber as any);
+
 export const CaseSearchForm = connect(
-  { advancedSearchForm: state.advancedSearchForm },
+  {
+    advancedSearchForm: state.advancedSearchForm,
+    submitAdvancedSearchSequence: sequences.submitCaseAdvancedSearchSequence,
+    submitDocketNumberSearchSequence:
+      sequences.submitCaseDocketNumberSearchSequence,
+  },
   function CaseSearchForm({
     advancedSearchForm,
     submitAdvancedSearchSequence,
@@ -26,12 +35,12 @@ export const CaseSearchForm = connect(
           </BindedSelect>
 
           {advancedSearchForm.searchMode === 'byName' && (
-            <CaseSearchByName
+            <CaseSearchByNameAny
               submitAdvancedSearchSequence={submitAdvancedSearchSequence}
             />
           )}
           {advancedSearchForm.searchMode === 'byDocketNumber' && (
-            <CaseSearchByDocketNumber
+            <CaseSearchByDocketNumberAny
               submitDocketNumberSearchSequence={
                 submitDocketNumberSearchSequence
               }
@@ -42,13 +51,13 @@ export const CaseSearchForm = connect(
         <NonMobile>
           <div className="grid-row grid-gap-6">
             <div className="grid-col-6 right-gray-border display-flex flex-column">
-              <CaseSearchByName
+              <CaseSearchByNameAny
                 submitAdvancedSearchSequence={submitAdvancedSearchSequence}
               />
             </div>
 
             <div className="grid-col-6 display-flex flex-column">
-              <CaseSearchByDocketNumber
+              <CaseSearchByDocketNumberAny
                 submitDocketNumberSearchSequence={
                   submitDocketNumberSearchSequence
                 }
