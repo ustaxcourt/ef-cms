@@ -79,36 +79,6 @@ We will also need to install the following GUI tools:
 - [Pop](https://pop.com/) - pair programming tool
 - [Slack](https://slack.com/) - team communication tool
 
-### Container Runtime Setup (Optional container runtime for Docker)
-
-Instead of installing Docker Desktop, you may use a different setup with **Colima** as the container runtime. This method is lightweight, MacOS resource friendly and avoids the need for Docker Desktop. Note, that this only applies if you are NOT using Docker Desktop (See above GUI software)
-
-To use colima complete the following steps:
-
-1. Install Colima using Homebrew:
-   ```bash
-   brew install colima
-   ```
-1. Start Colima:
-   ```bash
-   colima start
-   ```
-1. Install Docker and Docker Compose:
-   ```bash
-   brew install docker docker-compose
-   ```
-1. Ensure that the Docker CLI is properly configured in your shell. Add the   following to your ~/.zshrc or ~/.bashrc file if necessary:
-   ```bash
-   export PATH="/usr/local/bin:$PATH"
-   ```
-1. Verify that Docker is working:
-   ```bash
-   docker --version
-   docker-compose --version
-   ```
-
-This approach provides a lightweight alternative to Docker Desktop while maintaining full compatibility with Docker and Docker Compose.
-
 ## Getting Running
 
 All of the scripts needed to run this project should be outlined in our [package.json](https://github.com/ustaxcourt/ef-cms/blob/staging/package.json#L162).  I recommend looking through this list of scripts because you will be using a lot of them as you advance through learning this application.  But for now, let's just talk about the most important ones.
