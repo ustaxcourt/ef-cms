@@ -878,13 +878,10 @@ export const waitUntil = cb => {
 };
 
 export const refreshElasticsearchIndex = async (time = 2000) => {
-  // TODO: this refreshElasticsearchIndex function might be unnecessary.
-  //
-  // refresh all ES indices:
   // https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-refresh.html#refresh-api-all-ex
-  // await axios.post('http://localhost:9200/_refresh');
-  // await axios.post('http://localhost:9200/_flush');
-  // return await wait(time);
+  await axios.post('http://localhost:9200/_refresh');
+  await axios.post('http://localhost:9200/_flush');
+  return await wait(time);
 };
 
 export const base64ToUInt8Array = b64 => {
