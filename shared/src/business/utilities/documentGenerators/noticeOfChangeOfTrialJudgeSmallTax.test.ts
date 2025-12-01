@@ -30,7 +30,7 @@ describe('noticeOfChangeOfTrialJudgeSmallTax', () => {
             trialLocation: 'Mobile, Alabama',
             trialLocationAndProceedingType: `Mobile, Alabama, ${TRIAL_SESSION_PROCEEDING_TYPES.inPerson}`,
             updatedJudgeTitleWithFullName: 'Chief Judge Lady Macbeth',
-          },
+          } as any,
         },
       });
     },
