@@ -37,7 +37,7 @@ export function showGenerationType(
   eventCode: string,
   petitioners: { serviceIndicator?: string }[],
 ): boolean {
-  if (eventCode !== 'EA') return false;
+  if (eventCode !== 'EA' && eventCode !== 'NOTW') return false;
   const somePartiesHavePaper = petitioners.some(
     party => party.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
   );
