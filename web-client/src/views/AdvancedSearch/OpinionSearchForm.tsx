@@ -27,6 +27,7 @@ export const OpinionSearchForm = connect(
       sequences.updateAdvancedOpinionSearchFormValueSequence,
     validateOpinionSearchSequence: sequences.validateOpinionSearchSequence,
     validationErrors: state.validationErrors,
+    submitAdvancedSearchSequence: sequences.submitCaseAdvancedSearchSequence,
   },
   function OpinionSearchForm({
     ADVANCED_SEARCH_OPINION_TYPES_LIST,

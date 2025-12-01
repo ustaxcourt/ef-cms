@@ -32,7 +32,7 @@ export const ModalDialog = ({
   cancelLabel?: string;
   cancelLink?: boolean;
   messageClass?: string;
-  cancelSequence: any;
+  cancelSequence?: any;
   children?: ReactNode;
   className?: string;
   closeLink?: boolean;
@@ -50,6 +50,7 @@ export const ModalDialog = ({
   showButtons?: boolean;
   title: string;
   useRunConfirmSequence?: boolean;
+  preventCancelOnBlur: any
 }) => {
   preventScrolling = preventScrolling !== undefined ? preventScrolling : true;
 

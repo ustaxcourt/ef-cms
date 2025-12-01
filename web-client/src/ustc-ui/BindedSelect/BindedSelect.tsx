@@ -10,12 +10,13 @@ import React, { useState } from 'react';
 import classNames from 'classnames';
 
 type BindedSelectProps = {
-  children: any;
+  children: React.ReactNode;
   bind: string,
   className?: string;
   onChange?: (value: any) => void;
   id?: string;
   name?: string;
+  style: any;
 };
 
 export const BindedSelect: React.FC<BindedSelectProps> = connect(

@@ -2,11 +2,17 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
 import React from 'react';
 
-export const KeywordSearchField = connect(
+type KeywordSearchFieldProps = {
+  searchValue: string;
+  updateSequence: Function;
+  validateSequence: Function;
+}
+
+export const KeywordSearchField: React.FC<KeywordSearchFieldProps> = connect(
   {
-    searchValue: props.searchValue,
-    updateSequence: props.updateSequence,
-    validateSequence: props.validateSequence,
+    searchValue: props`searchValue`,
+    updateSequence: props`updateSequence`,
+    validateSequence: props`validateSequence`,
   },
   function KeywordSearchField({
     searchValue,

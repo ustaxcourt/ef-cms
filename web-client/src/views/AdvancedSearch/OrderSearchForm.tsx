@@ -25,6 +25,7 @@ export const OrderSearchForm = connect(
       sequences.updateAdvancedOrderSearchFormValueSequence,
     validateOrderSearchSequence: sequences.validateOrderSearchSequence,
     validationErrors: state.validationErrors,
+    submitAdvancedSearchSequence: sequences.submitCaseAdvancedSearchSequence
   },
   function OrderSearchForm({
     advancedDocumentSearchHelper,
