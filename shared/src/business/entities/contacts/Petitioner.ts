@@ -1,4 +1,9 @@
-import { CONTACT_TYPES, SERVICE_INDICATOR_TYPES } from '../EntityConstants';
+import {
+  CONTACT_TYPES,
+  MAX_PREFERRED_COMMUNICATION_METHOD_CHARACTERS,
+  MAX_PREFERRED_LANGUAGE_CHARACTERS,
+  SERVICE_INDICATOR_TYPES,
+} from '../EntityConstants';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { User } from '@shared/business/entities/User';
@@ -118,9 +123,12 @@ export class Petitioner extends JoiValidationEntity {
       .required()
       .messages({ '*': 'Select a service indicator' }),
     title: JoiValidationConstants.STRING.max(100).optional(),
-    preferredLanguage: JoiValidationConstants.STRING.max(20).optional(),
-    preferredCommunicationMethod:
-      JoiValidationConstants.STRING.max(20).optional(),
+    preferredLanguage: JoiValidationConstants.STRING.max(
+      MAX_PREFERRED_LANGUAGE_CHARACTERS,
+    ).optional(),
+    preferredCommunicationMethod: JoiValidationConstants.STRING.max(
+      MAX_PREFERRED_COMMUNICATION_METHOD_CHARACTERS,
+    ).optional(),
   };
 
   getValidationRules() {

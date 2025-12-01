@@ -2,6 +2,8 @@ import {
   CONTACT_TYPES,
   COUNTRY_TYPES,
   CountryTypes,
+  MAX_PREFERRED_COMMUNICATION_METHOD_CHARACTERS,
+  MAX_PREFERRED_LANGUAGE_CHARACTERS,
   SERVICE_INDICATOR_TYPES,
   STATE_NOT_AVAILABLE,
   US_STATES,
@@ -132,9 +134,12 @@ export class Contact extends JoiValidationEntity {
       ...Object.values(SERVICE_INDICATOR_TYPES),
     ).optional(),
     title: JoiValidationConstants.STRING.max(100).optional(),
-    preferredLanguage: JoiValidationConstants.STRING.max(20).optional(),
-    preferredCommunicationMethod: JoiValidationConstants.STRING.max(20)
-      .optional(),
+    preferredLanguage: JoiValidationConstants.STRING.max(
+      MAX_PREFERRED_LANGUAGE_CHARACTERS,
+    ).optional(),
+    preferredCommunicationMethod: JoiValidationConstants.STRING.max(
+      MAX_PREFERRED_COMMUNICATION_METHOD_CHARACTERS,
+    ).optional(),
   } as const;
 
   static DOMESTIC_VALIDATION_RULES = {

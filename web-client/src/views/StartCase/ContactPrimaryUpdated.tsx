@@ -1,11 +1,16 @@
 /* eslint-disable complexity */
 import {
+  MAX_PREFERRED_COMMUNICATION_METHOD_CHARACTERS,
+  MAX_PREFERRED_LANGUAGE_CHARACTERS,
+} from '@shared/business/entities/EntityConstants';
+import {
   AddressType,
   AddressUpdated,
   OnBlurHandler,
   OnChangeCountryTypeHandler,
   OnChangeHandler,
 } from '@web-client/views/StartCase/AddressUpdated';
+import { CharactersRemainingHint } from '../../ustc-ui/CharactersRemainingHint/CharactersRemainingHint';
 import { CountryUpdated } from '@web-client/views/StartCase/CountryUpdated';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { InCareOf } from '@web-client/views/StartCase/ContactSecondaryUpdated';
@@ -338,14 +343,20 @@ export const ContactPrimaryUpdated = connect<
                 >
                   {preferredLanguageLabel}
                   <br />
-                  <span className="usa-hint">(Optional)</span>
+                  <span
+                    className="usa-hint"
+                    id="contactPrimary.preferredLanguage-hint"
+                  >
+                    (Optional)
+                  </span>
                 </label>
                 <input
+                  aria-describedby="contactPrimary.preferredLanguage-hint contactPrimary.preferredLanguage-count"
                   autoCapitalize="none"
                   className="usa-input"
                   data-testid="contact-primary-preferred-language"
                   id="contactPrimary.preferredLanguage"
-                  maxLength={20}
+                  maxLength={MAX_PREFERRED_LANGUAGE_CHARACTERS}
                   name="contactPrimary.preferredLanguage"
                   ref={
                     registerRef &&
@@ -365,6 +376,11 @@ export const ContactPrimaryUpdated = connect<
                     });
                   }}
                 />
+                <CharactersRemainingHint
+                  id="contactPrimary.preferredLanguage-count"
+                  maxCharacters={MAX_PREFERRED_LANGUAGE_CHARACTERS}
+                  stringToCount={addressInfo.preferredLanguage}
+                />
               </FormGroup>
               <FormGroup
                 className="preferred-communication-form-group"
@@ -380,14 +396,20 @@ export const ContactPrimaryUpdated = connect<
                 >
                   {preferredCommunicationLabel}
                   <br />
-                  <span className="usa-hint">(Optional)</span>
+                  <span
+                    className="usa-hint"
+                    id="contactPrimary.preferredCommunicationMethod-hint"
+                  >
+                    (Optional)
+                  </span>
                 </label>
                 <input
+                  aria-describedby="contactPrimary.preferredCommunicationMethod-hint contactPrimary.preferredCommunicationMethod-count"
                   autoCapitalize="none"
                   className="usa-input"
                   data-testid="contact-primary-preferred-communication-method"
                   id="contactPrimary.preferredCommunicationMethod"
-                  maxLength={20}
+                  maxLength={MAX_PREFERRED_COMMUNICATION_METHOD_CHARACTERS}
                   name="contactPrimary.preferredCommunicationMethod"
                   ref={
                     registerRef &&
@@ -409,6 +431,11 @@ export const ContactPrimaryUpdated = connect<
                       value: e.target.value,
                     });
                   }}
+                />
+                <CharactersRemainingHint
+                  id="contactPrimary.preferredCommunicationMethod-count"
+                  maxCharacters={MAX_PREFERRED_COMMUNICATION_METHOD_CHARACTERS}
+                  stringToCount={addressInfo.preferredCommunicationMethod}
                 />
               </FormGroup>
             </>
