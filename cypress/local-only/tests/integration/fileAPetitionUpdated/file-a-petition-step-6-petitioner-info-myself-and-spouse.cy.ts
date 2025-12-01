@@ -141,7 +141,6 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
         cy.get('[data-testid="is-spouse-deceased-1"]').click();
         cy.get('[data-testid="have-spouse-consent-label"]').click();
         cy.get('[data-testid="contact-secondary-name"]').should('be.visible');
-        fillPrimaryContact();
         cy.get('[data-testid="contact-secondary-name"]').type(
           secondaryContactInfo.name,
         );
@@ -150,17 +149,28 @@ describe('File a petition - Step 6 Review & Submit Case', () => {
         cy.get('[data-testid="contact-primary-preferred-language"]').type(
           'Spanish',
         );
+        cy.get('[data-testid="contact-primary-preferred-language"]').blur();
         cy.get(
           '[data-testid="contact-primary-preferred-communication-method"]',
         ).type('ASL');
+        cy.get(
+          '[data-testid="contact-primary-preferred-communication-method"]',
+        ).blur();
         cy.get('[data-testid="contact-secondary-preferred-language"]').type(
           'French',
         );
+        cy.get('[data-testid="contact-secondary-preferred-language"]').blur();
         cy.get(
           '[data-testid="contact-secondary-preferred-communication-method"]',
         ).type('TTY');
+        cy.get(
+          '[data-testid="contact-secondary-preferred-communication-method"]',
+        ).blur();
+        cy.get('[data-testid="step-1-next-button"]').should('not.be.disabled');
         cy.get('[data-testid="step-1-next-button"]').click();
-        cy.get('[data-testid="step-indicator-current-step-2-icon"]');
+        cy.get('[data-testid="step-indicator-current-step-2-icon"]').should(
+          'exist',
+        );
 
         fillPetitionFileInformation(VALID_FILE);
         fillIrsNoticeInformation(VALID_FILE);
