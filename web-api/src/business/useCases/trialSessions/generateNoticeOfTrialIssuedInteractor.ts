@@ -14,6 +14,7 @@ import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions
 import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 
 export type FormattedTrialInfoType = RawTrialSession & {
+  caseProcedureType: string;
   formattedStartDate: string;
   formattedStartTime: string;
   formattedJudge: string;
