@@ -110,6 +110,7 @@ export class TrialSession extends JoiValidationEntity {
   public trialLocation?: string;
   public trialSessionId: string;
   public paperServicePdfs: { fileId: string; title: string }[];
+  public caseProcedureType?: string;
 
   public static PAPER_SERVICE_PDF_TTL = 60 * 60 * 24 * 3; // 3 days
 
