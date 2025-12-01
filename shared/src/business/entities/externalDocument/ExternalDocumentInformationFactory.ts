@@ -19,6 +19,7 @@ import { isEqual, reduce, some, sortBy, values } from 'lodash';
 import joi from 'joi';
 
 export class ExternalDocumentInformationFactory extends JoiValidationEntity {
+  public allPartiesConsent?: boolean;
   public attachments: string;
   public casesParties?: object;
   public certificateOfService: boolean;
@@ -47,6 +48,7 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
 
   constructor(rawProps) {
     super('ExternalDocumentInformationFactory');
+    this.allPartiesConsent = rawProps.allPartiesConsent;
     this.attachments = rawProps.attachments || false;
     this.casesParties = rawProps.casesParties;
     this.certificateOfService = rawProps.certificateOfService;
@@ -269,6 +271,15 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
             }),
         );
       }
+    }
+
+    if (this.eventCode === 'NOTW') {
+      addProperty(
+        'allPartiesConsent',
+        joi.boolean().valid(true).required().messages({
+          '*': 'All parties have not consented to your withdrawal as counsel.',
+        }),
+      );
     }
 
     return schema;

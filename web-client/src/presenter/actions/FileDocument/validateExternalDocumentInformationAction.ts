@@ -43,6 +43,7 @@ export const validateExternalDocumentInformationAction = ({
       'hasSecondarySupportingDocuments',
       'secondarySupportingDocuments',
       'filers',
+      'allPartiesConsent',
       'partyIrsPractitioner',
     ];
 
