@@ -24,6 +24,7 @@ import { standingPretrialOrderForSmallCase } from '../../shared/src/business/uti
 import { thirtyDayNoticeOfTrial } from '../../shared/src/business/utilities/documentGenerators/thirtyDayNoticeOfTrial';
 import { trialCalendar } from '../../shared/src/business/utilities/documentGenerators/trialCalendar';
 import { trialSessionPlanningReport } from '../../shared/src/business/utilities/documentGenerators/trialSessionPlanningReport';
+import { noticeOfWithdrawal } from '@shared/business/utilities/documentGenerators/noticeOfWithdrawal';
 
 export const getDocumentGenerators = () => ({
   addressLabelCoverSheet,
@@ -41,6 +42,7 @@ export const getDocumentGenerators = () => ({
   noticeOfReceiptOfPetition,
   noticeOfTrialIssued,
   noticeOfTrialIssuedInPerson,
+  noticeOfWithdrawal,
   order,
   pendingReport,
   petition,
