@@ -40,7 +40,7 @@ export type PublicTrialSessionsHelperResults = {
   trialSessionRows: (TrialSessionRow | TrialSessionWeek)[];
   filteredTrialSessionRows: (TrialSessionRow | TrialSessionWeek)[];
   filteredTrialSessionRowsCount: number;
-  mobileCount: number;
+  publicTrialSessionCount: number;
   mobileFilteredGroups: { header: TrialSessionWeek; rows: TrialSessionRow[] }[];
   mobileTotalPages: number;
 };
@@ -232,9 +232,12 @@ export const publicTrialSessionsHelper = (
     trialSessions: paginatedMobileFilteredGroups,
   });
 
-  const mobileCount = filteredTrialSessions.reduce((totalSum, ts) => {
-    return dateComparison(ts) ? totalSum + 1 : totalSum;
-  }, 0);
+  const publicTrialSessionCount = filteredTrialSessions.reduce(
+    (totalSum, ts) => {
+      return dateComparison(ts) ? totalSum + 1 : totalSum;
+    },
+    0,
+  );
 
   const allGroups = groupTrialSessions(mobileTrialSessionRows);
   const groupedMobileFilteredSessions = allGroups
@@ -249,7 +252,7 @@ export const publicTrialSessionsHelper = (
 
   return {
     mobileFilteredGroups: groupedMobileFilteredSessions,
-    mobileCount,
+    publicTrialSessionCount,
     mobileTotalPages: Math.ceil(mobileFilteredGroups.length / PAGE_SIZE),
     filtersHaveBeenModified,
     sessionTypeOptions,
