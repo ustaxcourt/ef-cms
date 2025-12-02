@@ -54,13 +54,10 @@ resource "aws_iam_role_policy" "stale_cases_email_lambda_policy" {
     {
       "Effect": "Allow",
       "Action": [
-        "es:ESHttpDelete",
-        "es:ESHttpGet",
-        "es:ESHttpPost",
-        "es:ESHttpPut"
+        "rds-db:connect"
       ],
       "Resource": [
-        "arn:aws:es:us-east-1:${data.aws_caller_identity.current.account_id}:domain/efcms-search-${var.environment}-*"
+        "arn:aws:rds-db:*:${data.aws_caller_identity.current.account_id}:dbuser:*/${var.postgres_user}"
       ]
     },
     {
@@ -88,10 +85,12 @@ module "stale_cases_email_lambda" {
     STAGE                        = var.environment
     NODE_ENV                     = "production"
     ACCOUNT_ID                   = data.aws_caller_identity.current.account_id
+    DATABASE_NAME                = var.database_name
     DISABLE_EMAILS               = "false"
-    ELASTICSEARCH_ENDPOINT       = var.elasticsearch_endpoint
     EMAIL_SOURCE                 = var.email_source
     INACTIVITY_REPORT_RECIPIENTS = var.inactivity_report_recipients
+    POSTGRES_HOST                = var.postgres_host
+    POSTGRES_USER                = var.postgres_user
   }
   timeout = "900"
 }
