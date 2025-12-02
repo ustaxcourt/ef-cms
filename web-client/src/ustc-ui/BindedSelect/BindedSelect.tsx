@@ -16,7 +16,7 @@ type BindedSelectProps = {
   onChange?: (value: any) => void;
   id?: string;
   name?: string;
-  style: any;
+  style?: any;
 };
 
 export const BindedSelect: React.FC<BindedSelectProps> = connect(

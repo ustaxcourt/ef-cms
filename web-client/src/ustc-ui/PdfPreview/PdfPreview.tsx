@@ -5,7 +5,14 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-export const PdfPreview = connect(
+type PdfPreviewProps = {
+  heightOverride?: boolean;
+  noDocumentText?: string;
+  pdfPreviewUrl?: string;
+  removeToolbar?: boolean;
+};
+
+export const PdfPreview: React.FC<PdfPreviewProps> = connect(
   {
     heightOverride: props`heightOverride`,
     noDocumentText: props`noDocumentText`,
