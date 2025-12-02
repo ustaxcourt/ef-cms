@@ -15,6 +15,7 @@ import { validateSelectDocumentTypeAction } from '../actions/validateSelectDocum
 import { isNoticeOfWithdrawalAction } from '../actions/isNoticeOfWithdrawalAction';
 import { validateNoticeOfWithdrawalAction } from '../actions/validateNoticeOfWithdrawalAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
+import { setDefaultPaperServiceAcknowledgementAction } from '../actions/setDefaultPaperServiceAcknowledgementAction';
 
 const navigationSequence = [
   setDocketNumberPropAction,
@@ -44,7 +45,10 @@ export const completeDocumentSelectSequence = [
           validateNoticeOfWithdrawalAction,
           {
             error: [setAlertErrorAction],
-            success: [navigationSequence],
+            success: [
+              setDefaultPaperServiceAcknowledgementAction,
+              navigationSequence,
+            ],
           },
         ],
         no: navigationSequence,

@@ -181,6 +181,50 @@ export const NoticeOfWithdrawalForm = connect(
               ))}
             </div>
           </FormGroup>
+
+          {noticeOfWithdrawalHelper.partiesWithPaperService.length > 0 && (
+            <FormGroup
+              errorText={validationErrors?.paperServiceAcknowledgement}
+            >
+              <legend>Paper Service Acknowledgement</legend>
+
+              {noticeOfWithdrawalHelper.partiesWithPaperService.map(party => (
+                <div
+                  className="tw:w-sm"
+                  key={`paper-service-${party.contactId}`}
+                >
+                  <span className="tw:block tw:mb-[5px]">{party.name}</span>
+                  <span className="tw:block">{party.address1}</span>
+                  <span className="tw:block">{party.address2}</span>
+                  <span className="tw:block">{party.address3}</span>
+                  <span className="tw:block">{`${party.city}, ${party.state} ${party.postalCode}`}</span>
+                  <span className="tw:block">{party.country}</span>
+                </div>
+              ))}
+
+              <input
+                checked={form.paperServiceAcknowledgement}
+                className="usa-checkbox__input"
+                id={`paperServiceAcknowledgement`}
+                name="paperServiceAcknowledgement"
+                type="checkbox"
+                onChange={e => {
+                  updateFileDocumentWizardFormValueSequence({
+                    key: 'paperServiceAcknowledgement',
+                    value: e.target.checked,
+                  });
+                }}
+              />
+              <label
+                className="usa-checkbox__label"
+                htmlFor={`paperServiceAcknowledgement`}
+              >
+                I certify that I will serve any party who does not receive
+                electronic service a copy of the Notice of Withdrawal of Counsel
+                by mail today.
+              </label>
+            </FormGroup>
+          )}
         </fieldset>
       </>
     );

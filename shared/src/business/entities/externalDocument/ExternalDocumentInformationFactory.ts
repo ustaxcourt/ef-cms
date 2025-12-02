@@ -33,6 +33,7 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
   public filers: string[];
   public objections: string;
   public ordinalValue?: string;
+  public paperServiceAcknowledgement?: boolean;
   public partyIrsPractitioner: boolean;
   public previousDocument?: ExternalDocumentBase;
   public primaryDocumentFile: object;
@@ -63,6 +64,7 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
     this.filers = rawProps.filers;
     this.objections = rawProps.objections;
     this.ordinalValue = rawProps.ordinalValue;
+    this.paperServiceAcknowledgement = rawProps.paperServiceAcknowledgement;
     this.partyIrsPractitioner = rawProps.partyIrsPractitioner;
     this.previousDocument = rawProps.previousDocument;
     this.primaryDocumentFile = rawProps.primaryDocumentFile;
@@ -280,6 +282,14 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
           '*': 'All parties have not consented to your withdrawal as counsel.',
         }),
       );
+      if (this.paperServiceAcknowledgement !== undefined) {
+        addProperty(
+          'paperServiceAcknowledgement',
+          joi.boolean().valid(true).required().messages({
+            '*': 'You do not certify to serve the above parties who do not receive electronic service a copy of your withdrawal by mail today.',
+          }),
+        );
+      }
     }
 
     return schema;
