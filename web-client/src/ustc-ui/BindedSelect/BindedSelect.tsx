@@ -11,12 +11,14 @@ import classNames from 'classnames';
 
 type BindedSelectProps = {
   children: React.ReactNode;
-  bind: string,
+  bind?: string,
   className?: string;
   onChange?: (value: any) => void;
   id?: string;
   name?: string;
   style?: any;
+  placeholder?: string;
+  value?: any;
 };
 
 export const BindedSelect: React.FC<BindedSelectProps> = connect(
