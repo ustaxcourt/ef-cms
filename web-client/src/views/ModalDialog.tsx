@@ -50,7 +50,7 @@ export const ModalDialog = ({
   showButtons?: boolean;
   title: string;
   useRunConfirmSequence?: boolean;
-  preventCancelOnBlur: any
+  preventCancelOnBlur?: any;
 }) => {
   preventScrolling = preventScrolling !== undefined ? preventScrolling : true;
 
