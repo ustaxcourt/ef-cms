@@ -40,12 +40,19 @@ export const setDocketEntryMetaFormForEditAction = ({
     originalDocumentDetail = multiDocketedOriginalCaseDetail.docketEntries.find(
       de => de.docketEntryId === docketEntryId,
     );
-    // TODO 8477: refactor this
+    // TODO 8477: refactor this (editable data should _not_ have it's multiDocketedOn array cleared)
+    // if (!originalDocumentDetail.multiDocketedOn.length) {
+    //   originalDocumentDetail =
+    //     multiDocketedOriginalCaseDetail.docketEntries.find(
+    //       de => de.docketEntryId === docketEntryId,
+    //     ).nestedDocketEntry; //<-- idea, not real yet
+    //   // make persistence call here? new table? new entry?
+    // }
+
     if (!originalDocumentDetail.multiDocketedOn.length) {
-      originalDocumentDetail =
-        multiDocketedOriginalCaseDetail.docketEntries.find(
-          de => de.originalDocketEntryId === docketEntryId,
-        ).nestedDocketEntry; //<-- idea, not real yet
+      originalDocumentDetail = get(state.caseDetail).docketEntries.find(
+        de => de.docketEntryId === docketEntryId,
+      );
     }
 
     if (!originalDocumentDetail) {

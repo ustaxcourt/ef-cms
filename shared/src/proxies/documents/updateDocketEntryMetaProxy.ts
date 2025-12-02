@@ -12,7 +12,7 @@ import { asyncSyncHandler, put } from '../requests';
  */
 export const updateDocketEntryMetaInteractor = (
   applicationContext,
-  { docketEntryMeta, docketNumber, docketRecordIndex },
+  { docketEntryMeta, docketNumber },
 ) => {
   return asyncSyncHandler(
     applicationContext,
@@ -22,7 +22,6 @@ export const updateDocketEntryMetaInteractor = (
         asyncSyncId,
         body: {
           docketEntryMeta,
-          docketRecordIndex,
         },
         endpoint: `/async/case-documents/${docketNumber}/docket-entry-meta`,
       }),
