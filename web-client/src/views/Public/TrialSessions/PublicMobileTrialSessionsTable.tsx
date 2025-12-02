@@ -13,16 +13,17 @@ export const PublicMobileTrialSessionsTable = connect<
   PublicMobileTrialSessionsTableProps,
   typeof PublicMobileTrialSessionsTableDeps
 >(PublicMobileTrialSessionsTableDeps, function ({ publicTrialSessionsHelper }) {
-  const { mobileFilteredGroups, mobileCount } = publicTrialSessionsHelper;
+  const { mobileFilteredGroups, publicTrialSessionCount } =
+    publicTrialSessionsHelper;
 
   return (
     <>
       <div className="grid-row margin-bottom-2 width-full flex-align-center"></div>
       <div className="width-full text-right">
         <span className="text-bold">Count:</span>{' '}
-        <span className="text-semibold">{mobileCount}</span>
+        <span className="text-semibold">{publicTrialSessionCount}</span>
       </div>
-      {mobileCount === 0 && (
+      {publicTrialSessionCount === 0 && (
         <p>There are no trial sessions for the selected filters.</p>
       )}
       <div className="padding-1"></div>
