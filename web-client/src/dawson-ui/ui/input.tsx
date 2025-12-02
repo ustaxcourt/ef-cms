@@ -275,6 +275,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
             ref={ref}
             aria-invalid={!!error}
             aria-describedby={cn(helpTextId, errorId && errorId)}
+            aria-labelledby={labelId}
             className={textAreaClass}
             {...props}
           />
