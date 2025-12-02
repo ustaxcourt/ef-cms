@@ -81,7 +81,7 @@ export function Tab(properties: {
   children?: React.ReactNode;
   className?: string;
   disabled?: boolean;
-  icon?: React.JSX.Element;
+  icon?: React.JSX.Element | boolean;
   id?: string;
   tabName?: string;
   title?: string;
@@ -245,9 +245,9 @@ export function TabsComponent({
   );
 }
 
-export const Tabs = connect<any, TabsProps>(
+export const Tabs: React.FC<TabsProps> = connect(
   {
-    bind: props`bind`,
+    bind: props.bind,
     simpleSetter: sequences.cerebralBindSimpleSetStateSequence,
     value: state[props`bind`],
   },

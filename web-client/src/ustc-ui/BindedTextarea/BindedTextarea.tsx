@@ -14,7 +14,9 @@ type BindedTextareaProps = {
   onChange?: (value: any) => void;
   id?: string;
   onBlur?: (event: React.FocusEvent<HTMLTextAreaElement>) => void;
-  className?: string
+  className?: string;
+  name?: string;
+  required?: boolean;
 };
 
 export const BindedTextarea: React.FC<BindedTextareaProps> = connect(

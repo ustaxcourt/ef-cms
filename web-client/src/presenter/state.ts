@@ -702,6 +702,9 @@ export const baseState = {
         notes: false,
         trackedItems: false,
       },
+      primaryTab: '',
+      caseInformationTab: '',
+      showEditCase: undefined
     },
     documentDetail: {
       tab: '',
@@ -956,6 +959,7 @@ export const baseState = {
     sortField: 'filedDate',
     sortOrder: 'desc' as 'asc' | 'desc',
   },
+  confirmationText: undefined as any
 };
 
 export const initialState = {

@@ -5,20 +5,30 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
 
-export const DropdownMenu = connect(
+type DropdownMenuProps = {
+  caseDetail?: any;
+  clearDropDownMenuStateSequence?: any;
+  id: string;
+  isMenuOpen?: boolean;
+  menuItems: any;
+  menuState: any;
+  openAddEditCalendarNoteModalSequence?: any;
+  openRemoveFromTrialSessionModalSequence?: any;
+  toggleMenuStateSequence?: any;
+}
+
+export const DropdownMenu: React.FC<DropdownMenuProps> = connect(
   {
     caseDetail: state.formattedCaseDetail,
     clearDropDownMenuStateSequence: sequences.clearDropDownMenuStateSequence,
-    id: props.id,
-    isMenuOpen: state[props.menuState],
-    menuItems: props.menuItems,
-    menuState: props.menuState,
+    id: props`id`,
+    isMenuOpen: state[props`menuState`],
+    menuItems: props`menuItems`,
+    menuState: props`menuState`,
     openAddEditCalendarNoteModalSequence:
       sequences.openAddEditCalendarNoteModalSequence,
     openRemoveFromTrialSessionModalSequence:
       sequences.openRemoveFromTrialSessionModalSequence,
-    toggleEditCaseTrialInfoMenuSequence:
-      sequences.toggleEditCaseTrialInfoMenuSequence,
     toggleMenuStateSequence: sequences.toggleMenuStateSequence,
   },
   function DropdownMenu({
@@ -29,7 +39,7 @@ export const DropdownMenu = connect(
     menuState,
     toggleMenuStateSequence,
   }) {
-    const menuRef = useRef(null);
+    const menuRef = useRef<HTMLDivElement | null>(null);
 
     const keydown = event => {
       const pressedESC = event.keyCode === 27;
@@ -41,7 +51,7 @@ export const DropdownMenu = connect(
     };
 
     const reset = e => {
-      const clickedWithinComponent = menuRef.current.contains(e.target);
+      const clickedWithinComponent = menuRef.current?.contains(e.target);
       const clickedOnMenuButton = e.target.closest('.trial-session-edit-btn');
       const clickedOnSubNav = e.target.closest('.edit-case-trial-menu');
       if (!clickedWithinComponent) {

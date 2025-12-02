@@ -3,14 +3,24 @@ import { PreformattedText } from '@web-client/ustc-ui/PreformatedText/Preformatt
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
 import React from 'react';
+import { caseDetailHelper } from '@web-client/presenter/computeds/caseDetailHelper';
 
-export const DisplayHearings = connect(
+type DisplayHearingsProps = {
+  hearings: any;
+  caseDetailHelper: ReturnType<
+    typeof caseDetailHelper
+  >;
+  openAddEditHearingNoteModalSequence: Function;
+  removeHearingSequence: Function
+}
+
+export const DisplayHearings: React.FC<DisplayHearingsProps> = connect(
   {
-    caseDetailHelper: props.caseDetailHelper,
-    hearings: props.hearings,
+    caseDetailHelper: props`caseDetailHelper`,
+    hearings: props`hearings`,
     openAddEditHearingNoteModalSequence:
-      props.openAddEditHearingNoteModalSequence,
-    removeHearingSequence: props.removeHearingSequence,
+      props`openAddEditHearingNoteModalSequence`,
+    removeHearingSequence: props`removeHearingSequence`,
   },
   function DisplayHearings({
     caseDetailHelper,

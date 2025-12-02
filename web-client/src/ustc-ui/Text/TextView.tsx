@@ -10,9 +10,8 @@ type TextViewProps = {
 }
 
 export const TextView: React.FC<TextViewProps> = connect({
-  bind: props`bind`,
+  bind: props.bind,
   className: props`className`,
-  get: props`get`
 },function TextView(props) {
   const { bind, className, get } = props;
 

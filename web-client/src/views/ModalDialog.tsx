@@ -40,7 +40,7 @@ export const ModalDialog = ({
   confirmLabel?: string;
   clearLabel?: string;
   clearSequence?: any;
-  confirmSequence: any;
+  confirmSequence?: any;
   confirmTarget?: string;
   dataTestId?: string;
   disableSubmit?: boolean;
@@ -48,13 +48,13 @@ export const ModalDialog = ({
   onModalMount?: () => void;
   preventScrolling?: boolean;
   showButtons?: boolean;
-  title: string;
+  title?: string;
   useRunConfirmSequence?: boolean;
   preventCancelOnBlur?: any;
 }) => {
   preventScrolling = preventScrolling !== undefined ? preventScrolling : true;
 
-  const elRef = useRef(null);
+  const elRef = useRef<HTMLDivElement | null>(null);
 
   const getEl = () => {
     if (!elRef.current) {
@@ -73,7 +73,7 @@ export const ModalDialog = ({
       window.document.body.classList.remove('no-scroll');
       window.document.removeEventListener('touchmove', touchmoveTriggered, {
         passive: false,
-      });
+      } as EventListenerOptions);
     }
   };
 
@@ -101,11 +101,11 @@ export const ModalDialog = ({
       onModalMount();
     }
 
-    modalRoot.appendChild(getEl());
+    modalRoot?.appendChild(getEl());
     toggleNoScroll(true);
 
     return () => {
-      modalRoot.removeChild(getEl());
+      modalRoot?.removeChild(getEl());
       toggleNoScroll(false);
     };
   }, []);

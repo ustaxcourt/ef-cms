@@ -3,11 +3,17 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
 import React from 'react';
 
-export const CaseDetails = connect(
+type CaseDetailsProps = {
+  caseDetail: any;
+  caseInformationHelper: any;
+  openCleanModalSequence: Function;
+}
+
+export const CaseDetails: React.FC<CaseDetailsProps> = connect(
   {
-    caseDetail: props.caseDetail,
-    caseInformationHelper: props.caseInformationHelper,
-    openCleanModalSequence: props.openCleanModalSequence,
+    caseDetail: props`caseDetail`,
+    caseInformationHelper: props`caseInformationHelper`,
+    openCleanModalSequence: props`openCleanModalSequence`,
   },
   function CaseDetails({
     caseDetail,

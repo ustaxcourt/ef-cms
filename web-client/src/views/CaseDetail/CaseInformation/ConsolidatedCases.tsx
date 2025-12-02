@@ -1,13 +1,21 @@
+import { caseDetailHelper } from '@web-client/presenter/computeds/caseDetailHelper';
 import { CaseLink } from '../../../ustc-ui/CaseLink/CaseLink';
 import { Mobile, NonMobile } from '../../../ustc-ui/Responsive/Responsive';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
 import React from 'react';
 
-export const ConsolidatedCases = connect(
+type ConsolidatedCasesProps = {
+  caseDetail: any;
+  caseDetailHelper: ReturnType<
+    typeof caseDetailHelper
+  >
+}
+
+export const ConsolidatedCases: React.FC<ConsolidatedCasesProps> = connect(
   {
-    caseDetail: props.caseDetail,
-    caseDetailHelper: props.caseDetailHelper,
+    caseDetail: props`caseDetail`,
+    caseDetailHelper: props`caseDetailHelper`,
   },
   function ConsolidatedCases({ caseDetail, caseDetailHelper }) {
     return (
