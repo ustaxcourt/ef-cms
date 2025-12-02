@@ -102,7 +102,8 @@ describe('formatMinuteSheet', () => {
           totalTrialHours: '',
         },
         trialClerk: '',
-        trialHearing: '',
+        trial: '',
+        hearing: '',
         trialLocation: 'Washington, D.C.',
         trialStartDate: 'January 1, 2024',
       });
@@ -1163,7 +1164,7 @@ describe('formatMinuteSheet', () => {
 
     describe('formatTrialHearing', () => {
       it('should format with all fields present', () => {
-        const section: MinuteSheet['caseRecord']['trialHearing'] = {
+        const section: MinuteSheet['caseRecord']['trial'] = {
           date: '01/15/2023',
           note: 'test note',
           transcriptOrdered: true,
@@ -1176,7 +1177,7 @@ describe('formatMinuteSheet', () => {
       });
 
       it('should handle empty optional fields', () => {
-        const section: MinuteSheet['caseRecord']['trialHearing'] = {
+        const section: MinuteSheet['caseRecord']['trial'] = {
           date: '01/15/2023',
           note: '',
           transcriptOrdered: false,

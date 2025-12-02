@@ -1,5 +1,5 @@
+import { WrappedIcon } from '../Icon/Icon';
 import { Button } from '../Button/Button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getConstants } from '../../getConstants';
 import React from 'react';
 import classNames from 'classnames';
@@ -89,12 +89,7 @@ export const SortableColumn = ({
         {/* We fix the icon width so that switching from double arrow to smaller single arrow icon does not affect line-breaking behavior */}
         <span className="display-inline-block width-205">
           {isLoading && (
-            <FontAwesomeIcon
-              className="fa-spin spinner"
-              icon="sync"
-              size="sm"
-              title="sorting results"
-            />
+            <WrappedIcon iconClass="fa-spin spinner" icon="sync" size="sm" title="sorting results" />
           )}
           {!isLoading &&
             getFontAwesomeIcon({
@@ -132,12 +127,11 @@ const getFontAwesomeIcon = ({
   }
 
   return (
-    <FontAwesomeIcon
-      className={
+    <WrappedIcon
+      iconClass={
         isActiveColumn ? 'icon-sortable-header-active' : 'icon-sortable-header'
       }
       icon={fontAwesomeIcon}
-      title={tooltipText}
-    />
+      title={tooltipText} />
   );
 };
