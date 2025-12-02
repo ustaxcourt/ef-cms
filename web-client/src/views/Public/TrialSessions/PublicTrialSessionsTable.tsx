@@ -17,14 +17,14 @@ export const PublicTrialSessionsTable = connect<
   PublicTrialSessionsTableProps,
   typeof PublicTrialSessionsTableDeps
 >(PublicTrialSessionsTableDeps, function ({ publicTrialSessionsHelper }) {
-  const { filteredTrialSessionRows, filteredTrialSessionRowsCount } =
+  const { filteredTrialSessionRows, publicTrialSessionCount } =
     publicTrialSessionsHelper;
   return (
     <>
       <div className="grid-row margin-bottom-2 width-full flex-align-center"></div>
       <div className="text-right width-full">
         <span className="text-semibold">Count: </span>
-        {filteredTrialSessionRowsCount}
+        {publicTrialSessionCount}
       </div>
       <div className="padding-1"></div>
       <div className="overflow-x-auto">
