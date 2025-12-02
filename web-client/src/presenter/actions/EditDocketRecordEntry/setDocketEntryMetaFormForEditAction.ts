@@ -41,7 +41,7 @@ export const setDocketEntryMetaFormForEditAction = ({
       de => de.docketEntryId === docketEntryId,
     );
     // TODO 8477: refactor this
-    if (!originalDocumentDetail) {
+    if (!originalDocumentDetail.multiDocketedOn.length) {
       originalDocumentDetail =
         multiDocketedOriginalCaseDetail.docketEntries.find(
           de => de.originalDocketEntryId === docketEntryId,
@@ -76,10 +76,7 @@ export const setDocketEntryMetaFormForEditAction = ({
   ];
 
   const documentDetail = {
-    docketEntryId:
-      originalDocumentDetail.originalDocketEntryId ??
-      originalDocumentDetail.docketEntryId,
-    multiDocketedOn: currentDocumentDetail.multiDocketedOn,
+    multiDocketedOn: currentDocumentDetail.multiDocketedOn, // TODO 8477: keep an eye on this: this either needs to be done here, or, if we create a "shadow copy", we can preserve the "correct" multidocketedon array there
     ...originalDocumentDetail,
     ...pick(currentDocumentDetail, currentEditableFields),
   };

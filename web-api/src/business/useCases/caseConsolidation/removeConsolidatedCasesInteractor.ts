@@ -25,7 +25,7 @@ import { getDocketEntriesById } from '@web-api/persistence/postgres/docketEntrie
 import { CopyObjectCommand } from '@aws-sdk/client-s3';
 import { getStorageClient } from '@web-api/persistence/s3/getStorageClient';
 import { environment } from '@web-api/environment';
-import { v4 as uuidv4 } from 'uuid';
+import { getUniqueId } from '@shared/sharedAppContext';
 
 const removeConsolidatedCases = async (
   _applicationContext: ServerApplicationContext,
@@ -132,12 +132,13 @@ const removeConsolidatedCases = async (
         docketEnIdsToUpdate.add(docketEntry.docketEntryId);
     });
 
-    docketEnIdsToUpdate.forEach(async id => {
+    for (const id of docketEnIdsToUpdate) {
+      // entries are docketEntries on ALL cases in the consolidated group
       const entries = await getDocketEntriesById({ docketEntryId: id });
       entries.forEach(entry => {
         docketEntriesToUpdate.add(entry);
       });
-    });
+    }
   }
 
   const UPDATED_CASE_DOCKET_ENTRIES: RawDocketEntry[] = [];
@@ -151,16 +152,29 @@ const removeConsolidatedCases = async (
     } else {
       docketEntry.multiDocketedOn = [];
       docketEntry.multiDocketedOriginalDocketNumber = undefined;
-      const newId = uuidv4();
-      const oldId = docketEntry.docketEntryId;
-      const command = new CopyObjectCommand({
+      const newStorageId = getUniqueId();
+      const oldStorageId = docketEntry.documentStorageId;
+      const storageCommand = new CopyObjectCommand({
         Bucket: environment.documentsBucketName,
-        CopySource: `${environment.documentsBucketName}/${oldId}`,
-        Key: newId,
+        CopySource: `${environment.documentsBucketName}/${oldStorageId}`,
+        Key: newStorageId,
       });
-      updateCasePromises.push(storageClient.send(command));
-      docketEntry.docketEntryId = newId;
+      updateCasePromises.push(storageClient.send(storageCommand));
+      docketEntry.documentStorageId = newStorageId;
+
+      if (docketEntry.documentContentsId!!) {
+        const newContentsId = getUniqueId();
+        const oldContentsId = docketEntry.documentContentsId;
+        const contentsCommand = new CopyObjectCommand({
+          Bucket: environment.documentsBucketName,
+          CopySource: `${environment.documentsBucketName}/${oldContentsId}`,
+          Key: newContentsId,
+        });
+        updateCasePromises.push(storageClient.send(contentsCommand));
+        docketEntry.documentContentsId = newContentsId;
+      }
     }
+
     UPDATED_CASE_DOCKET_ENTRIES.push(docketEntry);
   });
 
