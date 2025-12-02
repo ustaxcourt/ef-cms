@@ -8,18 +8,18 @@ describe('Petition generation - step 1', () => {
   });
 
   describe('Myself', () => {
-    it('Myself - domestic: should be free of a11y issues', () => {
+    it('should be free of a11y issues with domestic address', () => {
       cy.get('[data-testid="filing-type-0"').click();
       checkA11y();
     });
 
-    it('Myself - international: should be free of a11y issues', () => {
+    it('should be free of a11y issues with international address', () => {
       cy.get('[data-testid="filing-type-0"').click();
       cy.get('[data-testid="international-country-btn"]').click();
       checkA11y();
     });
 
-    it('Myself - with language fields filled: should be free of a11y issues', () => {
+    it('should be free of a11y issues with language fields filled', () => {
       cy.get('[data-testid="filing-type-0"').click();
       cy.get('[data-testid="contact-primary-preferred-language"]').type(
         'Spanish',
@@ -35,20 +35,20 @@ describe('Petition generation - step 1', () => {
     });
   });
   describe('Myself and my spouse', () => {
-    it('Myself and my spouse - deceased: should be free of a11y issues', () => {
+    it('should be free of a11y issues when spouse is deceased', () => {
       cy.get('[data-testid="filing-type-1"').click();
       cy.get('[data-testid="is-spouse-deceased-0"]').click();
       checkA11y();
     });
 
-    it('Myself and my spouse - not deceased: should be free of a11y issues', () => {
+    it('should be free of a11y issues when spouse is not deceased', () => {
       cy.get('[data-testid="filing-type-1"').click();
       cy.get('[data-testid="is-spouse-deceased-1"]').click();
       cy.get('[data-testid="have-spouse-consent-label"').click();
       checkA11y();
     });
 
-    it('Myself and my spouse - with language fields filled: should be free of a11y issues', () => {
+    it('should be free of a11y issues with language fields filled', () => {
       cy.get('[data-testid="filing-type-1"').click();
       cy.get('[data-testid="is-spouse-deceased-1"]').click();
       cy.get('[data-testid="have-spouse-consent-label"').click();
