@@ -34,9 +34,9 @@ export async function getCasesInTrialSession({
     return new Case(aCase, { authorizedUser });
   });
 
-  const casesThatShouldReceiveNotices = calendaredCaseEntities
-    .filter(aCase => !aCase.isClosed())
-    .filter(aCase => aCase.trialSessionId === trialSession.trialSessionId);
+  const casesThatShouldReceiveNotices = calendaredCaseEntities.filter(
+    aCase => !aCase.isClosed(),
+  );
 
   return { calendaredCaseEntities, casesThatShouldReceiveNotices };
 }
@@ -62,11 +62,10 @@ export const updateCasesAndSetNoticeOfChange = async ({
   shouldSetNoticeOfTrialSessionLocationChange,
   updatedTrialSessionEntity,
 }: UpdateCasesAndSetNoticeOfChangeParams): Promise<PDFDocumentType> => {
-  const { casesThatShouldReceiveNotices } =
-    await getCasesInTrialSession({
-      trialSession: currentTrialSession,
-      authorizedUser,
-    });
+  const { casesThatShouldReceiveNotices } = await getCasesInTrialSession({
+    trialSession: currentTrialSession,
+    authorizedUser,
+  });
 
   const TASKS = casesThatShouldReceiveNotices.map(async (caseEntity: Case) => {
     const { PDFDocument } = await applicationContext.getPdfLib();
