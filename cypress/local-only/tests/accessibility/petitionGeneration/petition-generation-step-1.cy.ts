@@ -18,6 +18,21 @@ describe('Petition generation - step 1', () => {
       cy.get('[data-testid="international-country-btn"]').click();
       checkA11y();
     });
+
+    it('Myself - with language fields filled: should be free of a11y issues', () => {
+      cy.get('[data-testid="filing-type-0"').click();
+      cy.get('[data-testid="contact-primary-preferred-language"]').type(
+        'Spanish',
+      );
+      cy.get('[data-testid="contact-primary-preferred-language"]').blur();
+      cy.get(
+        '[data-testid="contact-primary-preferred-communication-method"]',
+      ).type('ASL');
+      cy.get(
+        '[data-testid="contact-primary-preferred-communication-method"]',
+      ).blur();
+      checkA11y();
+    });
   });
   describe('Myself and my spouse', () => {
     it('Myself and my spouse - deceased: should be free of a11y issues', () => {
@@ -30,6 +45,33 @@ describe('Petition generation - step 1', () => {
       cy.get('[data-testid="filing-type-1"').click();
       cy.get('[data-testid="is-spouse-deceased-1"]').click();
       cy.get('[data-testid="have-spouse-consent-label"').click();
+      checkA11y();
+    });
+
+    it('Myself and my spouse - with language fields filled: should be free of a11y issues', () => {
+      cy.get('[data-testid="filing-type-1"').click();
+      cy.get('[data-testid="is-spouse-deceased-1"]').click();
+      cy.get('[data-testid="have-spouse-consent-label"').click();
+      cy.get('[data-testid="contact-primary-preferred-language"]').type(
+        'Spanish',
+      );
+      cy.get('[data-testid="contact-primary-preferred-language"]').blur();
+      cy.get(
+        '[data-testid="contact-primary-preferred-communication-method"]',
+      ).type('ASL');
+      cy.get(
+        '[data-testid="contact-primary-preferred-communication-method"]',
+      ).blur();
+      cy.get('[data-testid="contact-secondary-preferred-language"]').type(
+        'French',
+      );
+      cy.get('[data-testid="contact-secondary-preferred-language"]').blur();
+      cy.get(
+        '[data-testid="contact-secondary-preferred-communication-method"]',
+      ).type('TTY');
+      cy.get(
+        '[data-testid="contact-secondary-preferred-communication-method"]',
+      ).blur();
       checkA11y();
     });
   });

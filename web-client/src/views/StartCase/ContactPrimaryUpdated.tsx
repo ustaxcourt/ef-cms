@@ -1,11 +1,16 @@
 /* eslint-disable complexity */
 import {
+  MAX_PREFERRED_COMMUNICATION_METHOD_CHARACTERS,
+  MAX_PREFERRED_LANGUAGE_CHARACTERS,
+} from '@shared/business/entities/EntityConstants';
+import {
   AddressType,
   AddressUpdated,
   OnBlurHandler,
   OnChangeCountryTypeHandler,
   OnChangeHandler,
 } from '@web-client/views/StartCase/AddressUpdated';
+import { CharactersRemainingHint } from '../../ustc-ui/CharactersRemainingHint/CharactersRemainingHint';
 import { CountryUpdated } from '@web-client/views/StartCase/CountryUpdated';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { InCareOf } from '@web-client/views/StartCase/ContactSecondaryUpdated';
@@ -21,6 +26,7 @@ type ContactPrimaryUpdate = {
   handleBlur: OnBlurHandler;
   handleChange: OnChangeHandler;
   handleChangeCountryType: OnChangeCountryTypeHandler;
+  isPetitioner?: boolean;
   placeOfLegalResidenceTitle?: string;
   registerRef?: Function;
   secondaryLabel?: string;
@@ -28,6 +34,7 @@ type ContactPrimaryUpdate = {
   showEmail?: boolean;
   showInCareOf?: boolean;
   showInCareOfOptional?: boolean;
+  showLanguageFields?: boolean;
   titleLabel?: string;
   titleLabelNote?: string;
 };
@@ -48,6 +55,7 @@ export const ContactPrimaryUpdated = connect<
     handleBlur,
     handleChange,
     handleChangeCountryType,
+    isPetitioner = false,
     nameLabel,
     placeOfLegalResidenceTitle,
     registerRef,
@@ -56,10 +64,19 @@ export const ContactPrimaryUpdated = connect<
     showEmail,
     showInCareOf,
     showInCareOfOptional,
+    showLanguageFields,
     titleLabel,
     titleLabelNote,
     validationErrors,
   }) {
+    const preferredLanguageLabel = isPetitioner
+      ? 'If you have difficulty communicating in English, please state your preferred language:'
+      : "If petitioner has difficulty communicating in English, please state the petitioner's preferred language:";
+
+    const preferredCommunicationLabel = isPetitioner
+      ? 'If you are deaf or hard of hearing, please state your preferred method of communication (ASL, TTY, etc.):'
+      : "If petitioner is deaf or hard of hearing, please state the petitioner's preferred method of communication (ASL, TTY, etc.):";
+
     return (
       <>
         <div>
@@ -309,6 +326,119 @@ export const ContactPrimaryUpdated = connect<
                 }}
               />
             </FormGroup>
+          )}
+          {showLanguageFields && (
+            <>
+              <FormGroup
+                className="preferred-language-form-group"
+                errorMessageId="contact-primary-preferred-language-error-message"
+                errorText={
+                  validationErrors.contactPrimary &&
+                  validationErrors.contactPrimary.preferredLanguage
+                }
+              >
+                <label
+                  className="usa-label"
+                  htmlFor="contactPrimary.preferredLanguage"
+                >
+                  {preferredLanguageLabel}
+                  <br />
+                  <span
+                    className="usa-hint"
+                    id="contactPrimary.preferredLanguage-hint"
+                  >
+                    (Optional)
+                  </span>
+                </label>
+                <input
+                  aria-describedby="contactPrimary.preferredLanguage-hint contactPrimary.preferredLanguage-count"
+                  autoCapitalize="none"
+                  className="usa-input"
+                  data-testid="contact-primary-preferred-language"
+                  id="contactPrimary.preferredLanguage"
+                  maxLength={MAX_PREFERRED_LANGUAGE_CHARACTERS}
+                  name="contactPrimary.preferredLanguage"
+                  ref={
+                    registerRef &&
+                    registerRef('contactPrimary.preferredLanguage')
+                  }
+                  type="text"
+                  value={addressInfo.preferredLanguage || ''}
+                  onBlur={() => {
+                    handleBlur({
+                      validationKey: ['contactPrimary', 'preferredLanguage'],
+                    });
+                  }}
+                  onChange={e => {
+                    handleChange({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                  }}
+                />
+                <CharactersRemainingHint
+                  id="contactPrimary.preferredLanguage-count"
+                  maxCharacters={MAX_PREFERRED_LANGUAGE_CHARACTERS}
+                  stringToCount={addressInfo.preferredLanguage}
+                />
+              </FormGroup>
+              <FormGroup
+                className="preferred-communication-form-group"
+                errorMessageId="contact-primary-preferred-communication-method-error-message"
+                errorText={
+                  validationErrors.contactPrimary &&
+                  validationErrors.contactPrimary.preferredCommunicationMethod
+                }
+              >
+                <label
+                  className="usa-label"
+                  htmlFor="contactPrimary.preferredCommunicationMethod"
+                >
+                  {preferredCommunicationLabel}
+                  <br />
+                  <span
+                    className="usa-hint"
+                    id="contactPrimary.preferredCommunicationMethod-hint"
+                  >
+                    (Optional)
+                  </span>
+                </label>
+                <input
+                  aria-describedby="contactPrimary.preferredCommunicationMethod-hint contactPrimary.preferredCommunicationMethod-count"
+                  autoCapitalize="none"
+                  className="usa-input"
+                  data-testid="contact-primary-preferred-communication-method"
+                  id="contactPrimary.preferredCommunicationMethod"
+                  maxLength={MAX_PREFERRED_COMMUNICATION_METHOD_CHARACTERS}
+                  name="contactPrimary.preferredCommunicationMethod"
+                  ref={
+                    registerRef &&
+                    registerRef('contactPrimary.preferredCommunicationMethod')
+                  }
+                  type="text"
+                  value={addressInfo.preferredCommunicationMethod || ''}
+                  onBlur={() => {
+                    handleBlur({
+                      validationKey: [
+                        'contactPrimary',
+                        'preferredCommunicationMethod',
+                      ],
+                    });
+                  }}
+                  onChange={e => {
+                    handleChange({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                  }}
+                />
+                <CharactersRemainingHint
+                  id="contactPrimary.preferredCommunicationMethod-count"
+                  maxCharacters={MAX_PREFERRED_COMMUNICATION_METHOD_CHARACTERS}
+                  stringToCount={addressInfo.preferredCommunicationMethod}
+                />
+              </FormGroup>
+            </>
           )}
         </div>
       </>
