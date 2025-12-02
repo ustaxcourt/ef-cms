@@ -7,11 +7,14 @@ import { PdfPreview } from '@web-client/ustc-ui/PdfPreview/PdfPreview';
 import { WarningNotificationComponent } from '@web-client/views/WarningNotification';
 import React from 'react';
 
+// should rename this since it also now supports NOTW
 export const FileEntryOfAppearanceReview = ({
   documentTitle,
+  formattedFilingParties,
   onBack,
   onCancel,
   onSubmit,
+  partyIrsPractitioner,
   pdfPreviewUrl,
   showModal,
 }) => {
@@ -70,6 +73,36 @@ export const FileEntryOfAppearanceReview = ({
                             </div>
                           </div>
                         </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid-container padding-x-0">
+            <div className="grid-row grid-gap">
+              <div className="margin-bottom-4 grid-col-12">
+                <div className="card height-full margin-bottom-0">
+                  <div className="content-wrapper">
+                    <h3 className="underlined">
+                      Parties Filing The Document(s)
+                    </h3>
+                    <div className="grid-row grid-gap">
+                      <div className="tablet:grid-col-12 margin-bottom-1">
+                        <h3 className="usa-label">Filing parties</h3>
+                        <ul className="ustc-unstyled-list without-margins">
+                          {formattedFilingParties.map(party => (
+                            <li
+                              data-testid={`filingParty-${party}`}
+                              key={party}
+                            >
+                              {party}
+                            </li>
+                          ))}
+                          {partyIrsPractitioner && <li>Respondent</li>}
+                        </ul>
                       </div>
                     </div>
                   </div>
