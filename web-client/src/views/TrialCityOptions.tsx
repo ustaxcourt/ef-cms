@@ -2,7 +2,7 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-type TrialCityProps = { procedureType: string };
+type TrialCityProps = { procedureType?: string };
 
 const trialCityDeps = { trialCitiesHelper: state.trialCitiesHelper };
 

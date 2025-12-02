@@ -18,7 +18,16 @@ const props = cerebralProps as unknown as {
   parentView: string;
 };
 
-export const ContactPrimary = connect(
+type ContactsPrimaryProps = {
+  contactsHelper: string;
+  bind: string;
+  onBlur: Function;
+  onChange: string;
+  parentView: string;
+  wrapperClassName?: string; 
+};
+
+export const ContactPrimary: React.FC<ContactsPrimaryProps> = connect(
   {
     bind: props.bind,
     constants: state.constants,

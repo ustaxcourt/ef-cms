@@ -10,16 +10,26 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const ContactSecondary = connect(
+type ContactSecondaryProps = {
+  contactsHelper: string;
+  bind: string;
+  onBlur: Function;
+  onChange: string;
+  parentView: string;
+  wrapperClassName?: string;
+  useSameAsPrimary: boolean;
+};
+
+export const ContactSecondary: React.FC<ContactSecondaryProps> = connect(
   {
     bind: props.bind,
     constants: state.constants,
-    contactsHelper: state[props.contactsHelper],
-    data: state[props.bind],
-    onBlur: props.onBlur,
-    onChange: props.onChange,
-    onChangeSequence: sequences[props.onChange],
-    parentView: props.parentView,
+    contactsHelper: state[props`contactsHelper`],
+    data: state[props`bind`],
+    onBlur: props`onBlur`,
+    onChange: props`onChange`,
+    onChangeSequence: sequences[props`onChange`],
+    parentView: props `parentView`,
     toggleUseContactPrimaryAddressSequence:
       sequences.toggleUseContactPrimaryAddressSequence,
     updateFormValueAndSecondaryContactInfoSequence:

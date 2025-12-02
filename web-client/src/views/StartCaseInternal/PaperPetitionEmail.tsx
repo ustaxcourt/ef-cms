@@ -5,12 +5,18 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const PaperPetitionEmail = connect(
+type PaperPetitionEmailProps = {
+  bind: any;
+  contactType: string;
+  onBlur: Function;
+}
+
+export const PaperPetitionEmail: React.FC<PaperPetitionEmailProps> = connect(
   {
     bind: props.bind,
-    contactType: props.contactType,
-    data: state[props.bind],
-    onBlur: props.onBlur,
+    contactType: props`contactType`,
+    data: state[props`bind`],
+    onBlur: props`onBlur`,
     updateFormValueAndSecondaryContactInfoSequence:
       sequences.updateFormValueAndSecondaryContactInfoSequence,
     validationErrors: state.validationErrors,
