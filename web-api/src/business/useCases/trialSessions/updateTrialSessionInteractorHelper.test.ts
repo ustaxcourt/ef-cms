@@ -115,35 +115,78 @@ describe('updateTrialSessionInteractorHelper', () => {
       const setNoticeOfChangeToRemoteProceedingCalls =
         applicationContext.getUseCaseHelpers()
           .setNoticeOfChangeToRemoteProceeding.mock.calls;
-      expect(setNoticeOfChangeToRemoteProceedingCalls.length).toEqual(1);
-      expect(
-        setNoticeOfChangeToRemoteProceedingCalls[0][1].caseEntity.docketNumber,
-      ).toEqual('444-25');
+      expect(setNoticeOfChangeToRemoteProceedingCalls.length).toEqual(2);
+      expect(setNoticeOfChangeToRemoteProceedingCalls).toEqual(
+        expect.arrayContaining([
+          expect.arrayContaining([
+            expect.objectContaining({
+              caseEntity: expect.objectContaining({ docketNumber: '444-25' }),
+            }),
+          ]),
+          expect.arrayContaining([
+            expect.objectContaining({
+              caseEntity: expect.objectContaining({ docketNumber: '333-25' }),
+            }),
+          ]),
+        ]),
+      );
 
       const setNoticeOfChangeToInPersonProceedingCalls =
         applicationContext.getUseCaseHelpers()
           .setNoticeOfChangeToInPersonProceeding.mock.calls;
-      expect(setNoticeOfChangeToInPersonProceedingCalls.length).toEqual(1);
-      expect(
-        setNoticeOfChangeToInPersonProceedingCalls[0][1].caseEntity
-          .docketNumber,
-      ).toEqual('444-25');
+      expect(setNoticeOfChangeToInPersonProceedingCalls.length).toEqual(2);
+      expect(setNoticeOfChangeToInPersonProceedingCalls).toEqual(
+        expect.arrayContaining([
+          expect.arrayContaining([
+            expect.objectContaining({
+              caseEntity: expect.objectContaining({ docketNumber: '444-25' }),
+            }),
+          ]),
+          expect.arrayContaining([
+            expect.objectContaining({
+              caseEntity: expect.objectContaining({ docketNumber: '333-25' }),
+            }),
+          ]),
+        ]),
+      );
 
       const setNoticeOfChangeOfTrialJudgeCalls =
         applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialJudge
           .mock.calls;
-      expect(setNoticeOfChangeOfTrialJudgeCalls.length).toEqual(1);
-      expect(
-        setNoticeOfChangeOfTrialJudgeCalls[0][1].caseEntity.docketNumber,
-      ).toEqual('444-25');
+      expect(setNoticeOfChangeOfTrialJudgeCalls.length).toEqual(2);
+      expect(setNoticeOfChangeOfTrialJudgeCalls).toEqual(
+        expect.arrayContaining([
+          expect.arrayContaining([
+            expect.objectContaining({
+              caseEntity: expect.objectContaining({ docketNumber: '444-25' }),
+            }),
+          ]),
+          expect.arrayContaining([
+            expect.objectContaining({
+              caseEntity: expect.objectContaining({ docketNumber: '333-25' }),
+            }),
+          ]),
+        ]),
+      );
 
       const setNoticeOfChangeOfTrialLocationCalls =
         applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialLocation
           .mock.calls;
-      expect(setNoticeOfChangeOfTrialLocationCalls.length).toEqual(1);
-      expect(
-        setNoticeOfChangeOfTrialLocationCalls[0][1].caseEntity.docketNumber,
-      ).toEqual('444-25');
+      expect(setNoticeOfChangeOfTrialLocationCalls.length).toEqual(2);
+      expect(setNoticeOfChangeOfTrialLocationCalls).toEqual(
+        expect.arrayContaining([
+          expect.arrayContaining([
+            expect.objectContaining({
+              caseEntity: expect.objectContaining({ docketNumber: '444-25' }),
+            }),
+          ]),
+          expect.arrayContaining([
+            expect.objectContaining({
+              caseEntity: expect.objectContaining({ docketNumber: '333-25' }),
+            }),
+          ]),
+        ]),
+      );
     });
 
     it('should not generate notices when flags are "false"', async () => {
