@@ -40,7 +40,7 @@ echo "Updating judge with last name: ${NEW_JUDGE_LAST_NAME} to Chief Judge"
 # update the judge's names in cognito
 USER_POOL_ID=$(aws cognito-idp list-user-pools --query "UserPools[?Name == 'efcms-${ENV}'].Id | [0]" --max-results 30 --region "${REGION}" --output text)
 
-# will not work on lower envs (emails are sanitized during back migration job; email differs in cognito vs persistence)
+# will not work on lower envs (emails are sanitized during glue job; email differs in cognito vs persistence)
 aws cognito-idp admin-update-user-attributes \
     --user-pool-id "${USER_POOL_ID}" \
     --region "${REGION}" \

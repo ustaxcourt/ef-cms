@@ -23,6 +23,10 @@ const scriptConfig: ScriptConfig = {
     },
   },
   requireActiveAwsSession: true,
+  environment: {
+    efcmsDomain: 'EFCMS_DOMAIN',
+    env: 'ENV',
+  },
 };
 const { docketNumber } = parseArgsAndEnvVars(scriptConfig) as {
   docketNumber: string;

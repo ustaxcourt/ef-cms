@@ -13,7 +13,7 @@ parameters:
     default: true
     type: boolean
 
-  run_back_migration_to_test:
+  run_glue_to_test:
     default: false
     type: boolean
 
@@ -21,7 +21,7 @@ parameters:
     default: false
     type: boolean
 
-  run_back_migration_to_lower_env:
+  run_glue_to_lower_env:
     default: false
     type: boolean
 
@@ -184,7 +184,7 @@ jobs:
             fi
             if [ "${CIRCLE_BRANCH}" == "test" ]; then
               export REGION="us-east-1"
-              ./scripts/user/setup-back-migrated-users.ts
+              ./scripts/user/setup-glued-users.ts
             else
               npx ts-node --transpile-only ./scripts/circleci/judge/bulkImportJudgeUsers.ts | tee bulk-import-log.txt
             fi
@@ -491,9 +491,9 @@ jobs:
           command: |
             npm run cleanup:cypress-test-accounts
 
-  ######################## BACK_MIGRATION JOB: Jobs that run in a lower environment ########################
+  ######################## GLUE JOB: Jobs that run in a lower environment ########################
 
-  initiate-back-migration-job:
+  initiate-glue-job:
     docker:
       - image: *efcms-docker-image
         aws_auth:
@@ -520,9 +520,9 @@ jobs:
             echo "export SOURCE_BUCKET=${PROD_DOCUMENTS_BUCKET_NAME}" >> $BASH_ENV
             echo "export DESTINATION_BUCKET=${EFCMS_DOMAIN}-documents-${ENV}-us-east-1" >> $BASH_ENV
       - run:
-          name: Setup SSM for a back-migration job
+          name: Setup SSM for a glue job
           command: |
-            ./scripts/circleci/setup-ssm-for-back-migration-job.sh
+            ./scripts/circleci/setup-ssm-for-glue-job.sh
       - run:
           name: Kick off the sync-s3-to-lower-env workflow if syncing early
           command: |
@@ -558,7 +558,7 @@ jobs:
           command: |
             npx ts-node --transpile-only ./web-api/elasticsearch/elasticsearch-alias-settings.ts
       - run:
-          name: Kick off the back-migration-to-lower-env workflow
+          name: Kick off the glue-to-lower-env workflow
           command: |
             CIRCLE_PIPELINE_ID=$(curl --request POST \
               --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
@@ -566,14 +566,14 @@ jobs:
               --header "content-type: application/json" \
               --data "{\"branch\":\"prod\", \"parameters\":{ \
                 \"run_build_and_deploy_to_prod\":false, \
-                \"run_back_migration_to_lower_env\":true, \
+                \"run_glue_to_lower_env\":true, \
                 \"lower_env\":\"${ENV}\", \
                 \"lower_env_account_id\":\"${AWS_ACCOUNT_ID}\"}}" | jq -r '.id')
             echo "export CIRCLE_PIPELINE_ID=${CIRCLE_PIPELINE_ID}" >> $BASH_ENV
       - run:
           name: Deploy Wait for Workflow Cron Lambda
           command: |
-            export APPROVAL_JOB_NAME=wait-for-back-migration-workflow
+            export APPROVAL_JOB_NAME=wait-for-glue-workflow
             npm run deploy:wait-for-workflow-cron -- $ENV
       - run:
           name: Enable Wait for Workflow Cron
@@ -618,7 +618,7 @@ jobs:
       - run:
           name: Destroy Wait for Workflow Lambda
           command: |
-            export APPROVAL_JOB_NAME=wait-for-back-migration-workflow
+            export APPROVAL_JOB_NAME=wait-for-glue-workflow
             export CIRCLE_PIPELINE_ID=noop
             npm run destroy:wait-for-workflow-cron -- $ENV
       - run:
@@ -730,7 +730,7 @@ jobs:
               NODE_ENV=production ./scripts/reindex/index-docket-entries/index-docket-entries.ts 5
             fi
 
-  cleanup-back-migration-job:
+  cleanup-glue-job:
     docker:
       - image: *efcms-docker-image
         aws_auth:
@@ -837,7 +837,7 @@ jobs:
                 \"source_bucket\":\"${SOURCE_BUCKET}\", \
                 \"destination_bucket\":\"${DESTINATION_BUCKET}\"}}"
 
-  ######################## BACK_MIGRATION JOB: Jobs that run in prod ########################
+  ######################## GLUE JOB: Jobs that run in prod ########################
 
   restore-postgres:
     docker:
@@ -991,28 +991,28 @@ workflows:
             - disable-switch-colors-cron
             - switch-colors
 
-  back-migration-to-test:
+  glue-to-test:
     when:
       or:
-        - equal: [back-migration-to-test-schedule, << pipeline.schedule.name >>]
-        - << pipeline.parameters.run_back_migration_to_test >>
+        - equal: [glue-to-test-schedule, << pipeline.schedule.name >>]
+        - << pipeline.parameters.run_glue_to_test >>
     jobs:
-      - initiate-back-migration-job:
+      - initiate-glue-job:
           <<: *only-test
       - wait-for-s3-sync-workflow:
           <<: *only-test
           type: approval
           requires:
-            - initiate-back-migration-job
-      - wait-for-back-migration-workflow:
+            - initiate-glue-job
+      - wait-for-glue-workflow:
           <<: *only-test
           type: approval
           requires:
-            - initiate-back-migration-job
+            - initiate-glue-job
       - migrate-restored-postgres-data:
           <<: *only-test
           requires:
-            - wait-for-back-migration-workflow
+            - wait-for-glue-workflow
       - index-cases:
           <<: *only-test
           requires:
@@ -1026,13 +1026,13 @@ workflows:
           requires:
             - wait-for-s3-sync-workflow
             - index-users
-      - cleanup-back-migration-job:
+      - cleanup-glue-job:
           <<: *only-test
           requires:
             - index-docket-entries
 
-  back-migration-to-lower-env:
-    when: << pipeline.parameters.run_back_migration_to_lower_env >>
+  glue-to-lower-env:
+    when: << pipeline.parameters.run_glue_to_lower_env >>
     jobs:
       - restore-postgres:
           <<: *only-prod

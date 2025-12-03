@@ -70,6 +70,10 @@ const scriptConfig: ScriptConfig = {
     },
   },
   requireActiveAwsSession: true,
+  environment: {
+    userPoolId: 'USER_POOL_ID',
+    env: 'ENV',
+  },
 };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises

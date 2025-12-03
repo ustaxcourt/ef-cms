@@ -12,7 +12,7 @@ import { RawUser } from '@shared/business/entities/User';
 
 const scriptConfig: ScriptConfig = {
   description:
-    'setup-back-migrated-users - Creates cognito accounts for all internal users and high-volume external users that were copied via a back migration job.',
+    'setup-glued-users - Creates cognito accounts for all internal users and high-volume external users that were copied via a glue job.',
   environment: {
     Password: 'DEFAULT_ACCOUNT_PASS',
     UserPoolId: 'USER_POOL_ID',
@@ -28,7 +28,7 @@ type Users = {
   [key: string]: {
     bulkImportedUserId?: string;
     email: string;
-    backMigratedUserId?: string;
+    gluedUserId?: string;
     name: string;
     userFullName: string;
     role: string;
@@ -99,7 +99,7 @@ const createOrUpdateCognitoUser = async ({
   } else {
     await updateCognitoUserId({
       bulkImportedUserId: email,
-      backMigratedUserId: userId,
+      gluedUserId: userId,
       name,
     });
   }
@@ -269,7 +269,7 @@ const getUsers = async (): Promise<Users> => {
 
     let sourceOfUser = emailDomain;
     if (emailDomain === 'ef-cms.ustaxcourt.gov') {
-      sourceOfUser = 'backMigratedUserId';
+      sourceOfUser = 'gluedUserId';
     } else if (emailDomain === 'dawson.ustaxcourt.gov') {
       sourceOfUser = 'bulkImportedUserId';
     }
@@ -280,11 +280,11 @@ const getUsers = async (): Promise<Users> => {
 
 const updateCognitoUserId = async ({
   bulkImportedUserId,
-  backMigratedUserId,
+  gluedUserId,
   name,
 }: {
   bulkImportedUserId: string;
-  backMigratedUserId: string;
+  gluedUserId: string;
   name: string;
 }): Promise<void> => {
   try {
@@ -292,7 +292,7 @@ const updateCognitoUserId = async ({
       UserAttributes: [
         {
           Name: 'custom:userId',
-          Value: backMigratedUserId,
+          Value: gluedUserId,
         },
       ],
       UserPoolId,
@@ -305,10 +305,10 @@ const updateCognitoUserId = async ({
 };
 
 const processUser = async (userName: string, users: Users): Promise<void> => {
-  if (!users[userName].backMigratedUserId) {
+  if (!users[userName].gluedUserId) {
     return;
   }
-  const { bulkImportedUserId, email, backMigratedUserId, name, role, userFullName } =
+  const { bulkImportedUserId, email, gluedUserId, name, role, userFullName } =
     users[userName];
   if (bulkImportedUserId) {
     await deleteDuplicateImportedUser({
@@ -317,12 +317,12 @@ const processUser = async (userName: string, users: Users): Promise<void> => {
     });
   }
   if (role === 'legacyJudge') return;
-  if (backMigratedUserId) {
+  if (gluedUserId) {
     await createOrUpdateCognitoUser({
       email,
       name: userFullName,
       role,
-      userId: backMigratedUserId,
+      userId: gluedUserId,
     });
   }
   await cognito.adminSetUserPassword({

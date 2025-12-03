@@ -364,9 +364,9 @@ This runbook describes the process of creating a new DAWSON lower environment in
    ```bash
    cd ./scripts/postgres && ./create-rds-users.sh && cd ../..
    ```
-1. ⚖️ If this lower environment is to have prod-like data, kick off a back migration job now:
-   1. In [CircleCI](https://app.circleci.com/pipelines/github/ustaxcourt/ef-cms), trigger a back migration job, choosing the following settings:
+1. ⚖️ If this lower environment is to have prod-like data, kick off a glue job now:
+   1. In [CircleCI](https://app.circleci.com/pipelines/github/ustaxcourt/ef-cms), trigger a glue job, choosing the following settings:
       1. `run_build_and_deploy`: `false`
-      1. `run_back_migrated_to_[ENV]`: `true`
+      1. `run_glue_to_[ENV]`: `true`
 1. If this lower environment is NOT to have prod-like data, kick off a deployment now:
    1. In [CircleCI](https://app.circleci.com/pipelines/github/ustaxcourt/ef-cms), trigger a deployment in the new environment, accepting the default settings. Note: outgoing email will fail until the account is promoted out of the SES sandbox.
