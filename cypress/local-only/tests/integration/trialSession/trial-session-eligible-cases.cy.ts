@@ -33,7 +33,7 @@ describe('Trial Session Eligible Cases Journey', () => {
     createAndServePaperPetition({
       procedureType: 'Small',
       trialLocation,
-      caseType: 'Other',
+      caseType: 'Passport',
       yearReceived: '2019',
       includeApwDocument: false,
     })
