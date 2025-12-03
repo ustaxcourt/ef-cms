@@ -17,6 +17,7 @@ import { mockCaseServicesSupervisorUser } from '@shared/test/mockAuthUsers';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import {
   createWorkingCopyForNewUserOnSession,
+  getCasesInTrialSession,
   getPaperServicePdfName,
   shouldCreateWorkingCopyForNewJudge,
   shouldCreateWorkingCopyForNewTrialClerk,
@@ -237,6 +238,28 @@ describe('updateTrialSessionInteractorHelper', () => {
         applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialLocation
           .mock.calls;
       expect(setNoticeOfChangeOfTrialLocationCalls.length).toEqual(0);
+    });
+
+    it('should filter out hearings in getCasesInTrialSession', async () => {
+      const result = await getCasesInTrialSession({
+        trialSession: {
+          trialSessionId: TEST_TRIAL_SESSION_ID,
+          caseOrder: TEST_DOCKET_NUMBERS.map(docketNumber => {
+            return {
+              docketNumber,
+              removedFromTrial: docketNumber === '111-25',
+            };
+          }),
+        } as unknown as RawTrialSession,
+        authorizedUser: mockCaseServicesSupervisorUser,
+      });
+
+      expect(result).toEqual({
+        calendaredCaseEntities: expect.anything(),
+        casesThatShouldReceiveNotices: expect.arrayContaining([
+          expect.objectContaining({ docketNumber: '444-25' }),
+        ]),
+      });
     });
   });
 
