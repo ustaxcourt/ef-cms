@@ -5,7 +5,6 @@ import { CerebralTest } from 'cerebral/test';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { FORMATS } from '../../shared/src/business/utilities/DateHandler';
-import { JSDOM } from 'jsdom';
 import {
   back,
   createObjectURL,
@@ -553,6 +552,7 @@ export const uploadPetition = async (
     headers: {
       Authorization: `Bearer ${userToken}`,
     },
+    httpAgent: new Agent({ keepAlive: false })
   });
 
   cerebralTest.setState('caseDetail', response.data);
@@ -588,16 +588,6 @@ export const setupTest = ({ constantsOverrides = {} } = {}) => {
   };
   global.WebSocket = require('websocket').w3cwebsocket;
 
-  const dom = new JSDOM(
-    `<!DOCTYPE html>
-<body>
-  <input type="file" />
-</body>`,
-    {
-      url: 'http://localhost',
-    },
-  );
-
   presenter.providers.applicationContext = applicationContext;
 
   presenter.providers.applicationContext.getHttpClient = () => {
@@ -631,7 +621,6 @@ export const setupTest = ({ constantsOverrides = {} } = {}) => {
   presenter.providers.socket = { start, stop: stopSocket };
 
   global.window ??= Object.create({
-    ...dom.window,
     DOMParser: () => {
       return {
         parseFromString: () => {
@@ -653,6 +642,16 @@ export const setupTest = ({ constantsOverrides = {} } = {}) => {
       revokeObjectURL: () => {},
     },
     document: {},
+    history: {
+      pushState: jest.fn(),
+      replaceState: jest.fn(),
+      back: jest.fn(),
+      forward: jest.fn(),
+      go: jest.fn(),
+      length: 0,
+      scrollRestoration: 'auto',
+      state: null,
+    },
     localStorage: {
       getItem: () => null,
       removeItem: () => null,
