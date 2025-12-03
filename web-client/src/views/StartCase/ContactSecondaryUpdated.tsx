@@ -9,7 +9,6 @@ import {
   OnChangeCountryTypeHandler,
   OnChangeHandler,
 } from '@web-client/views/StartCase/AddressUpdated';
-import { CharactersRemainingHint } from '../../ustc-ui/CharactersRemainingHint/CharactersRemainingHint';
 import { CountryUpdated } from '@web-client/views/StartCase/CountryUpdated';
 import { ElectronicServiceConsentCheckbox } from '@web-client/views/StartCaseInternal/ElectronicServiceCheckbox';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
@@ -74,11 +73,11 @@ export const ContactSecondaryUpdated = connect<
     },
   }) {
     const preferredLanguageLabel = isPetitioner
-      ? 'If spouse has difficulty communicating in English, please state spouse&apos;s preferred language:'
+      ? "If spouse has difficulty communicating in English, please state spouse's preferred language:"
       : "If petitioner spouse has difficulty communicating in English, please state the petitioner spouse's preferred language:";
 
     const preferredCommunicationLabel = isPetitioner
-      ? 'If spouse is deaf or hard of hearing, please state spouse&apos;s preferred method of communication (ASL, TTY, etc.):'
+      ? "If spouse is deaf or hard of hearing, please state spouse's preferred method of communication (ASL, TTY, etc.):"
       : "If petitioner spouse is deaf or hard of hearing, please state the petitioner spouse's preferred method of communication (ASL, TTY, etc.):";
 
     return (
@@ -308,11 +307,6 @@ export const ContactSecondaryUpdated = connect<
                     });
                   }}
                 />
-                <CharactersRemainingHint
-                  id="contactSecondary.preferredLanguage-count"
-                  maxCharacters={MAX_PREFERRED_LANGUAGE_CHARACTERS}
-                  stringToCount={addressInfo.preferredLanguage}
-                />
               </FormGroup>
               <FormGroup
                 className="preferred-communication-form-group"
@@ -363,11 +357,6 @@ export const ContactSecondaryUpdated = connect<
                       value: e.target.value,
                     });
                   }}
-                />
-                <CharactersRemainingHint
-                  id="contactSecondary.preferredCommunicationMethod-count"
-                  maxCharacters={MAX_PREFERRED_COMMUNICATION_METHOD_CHARACTERS}
-                  stringToCount={addressInfo.preferredCommunicationMethod}
                 />
               </FormGroup>
             </>

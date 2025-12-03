@@ -10,7 +10,6 @@ import {
   OnChangeCountryTypeHandler,
   OnChangeHandler,
 } from '@web-client/views/StartCase/AddressUpdated';
-import { CharactersRemainingHint } from '../../ustc-ui/CharactersRemainingHint/CharactersRemainingHint';
 import { CountryUpdated } from '@web-client/views/StartCase/CountryUpdated';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { InCareOf } from '@web-client/views/StartCase/ContactSecondaryUpdated';
@@ -376,11 +375,6 @@ export const ContactPrimaryUpdated = connect<
                     });
                   }}
                 />
-                <CharactersRemainingHint
-                  id="contactPrimary.preferredLanguage-count"
-                  maxCharacters={MAX_PREFERRED_LANGUAGE_CHARACTERS}
-                  stringToCount={addressInfo.preferredLanguage}
-                />
               </FormGroup>
               <FormGroup
                 className="preferred-communication-form-group"
@@ -431,11 +425,6 @@ export const ContactPrimaryUpdated = connect<
                       value: e.target.value,
                     });
                   }}
-                />
-                <CharactersRemainingHint
-                  id="contactPrimary.preferredCommunicationMethod-count"
-                  maxCharacters={MAX_PREFERRED_COMMUNICATION_METHOD_CHARACTERS}
-                  stringToCount={addressInfo.preferredCommunicationMethod}
                 />
               </FormGroup>
             </>
