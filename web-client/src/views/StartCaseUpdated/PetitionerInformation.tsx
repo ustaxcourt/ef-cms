@@ -124,7 +124,7 @@ export function PetitionerInformation({ isPetitioner, petitionFormatted }) {
                     .preferredCommunicationMethod && (
                     <div className="margin-top-1">
                       <span className="text-semibold">
-                        Preferred communication method:{' '}
+                        Preferred method of communication:{' '}
                       </span>
                       <span
                         className="margin-left-05"
@@ -218,7 +218,7 @@ export function PetitionerInformation({ isPetitioner, petitionFormatted }) {
                   .preferredCommunicationMethod && (
                   <div className="margin-top-1">
                     <span className="text-semibold">
-                      Preferred communication method:{' '}
+                      Preferred method of communication:{' '}
                     </span>
                     <span
                       className="margin-left-05"
