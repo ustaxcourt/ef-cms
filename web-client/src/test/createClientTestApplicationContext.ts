@@ -40,7 +40,6 @@ import {
   compareStrings,
 } from '@shared/business/utilities/sortFunctions';
 import { copyPagesAndAppendToTargetPdf } from '@shared/business/utilities/copyPagesAndAppendToTargetPdf';
-import { createMockDocumentClient } from '@shared/business/test/createMockDocumentClient';
 import { filterEmptyStrings } from '@shared/business/utilities/filterEmptyStrings';
 import { formatAttachments } from '@shared/business/utilities/formatAttachments';
 import {
@@ -73,7 +72,6 @@ import { getSealedDocketEntryTooltip } from '@shared/business/utilities/getSeale
 import { getSelectedConsolidatedCasesToMultiDocketOn } from '@shared/business/utilities/getSelectedConsolidatedCasesToMultiDocketOn';
 import { getStampBoxCoordinates } from '@shared/business/utilities/getStampBoxCoordinates';
 import { getTextByCount } from '@shared/test/getTextByCount';
-import { incrementCounter } from '@web-api/persistence/dynamo/helpers/incrementCounter';
 import { removeItem } from '@web-client/persistence/localStorage/removeItem';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
 import { sealCaseInteractor } from '@shared/proxies/sealCaseProxy';
@@ -406,7 +404,6 @@ const createTestApplicationContext = () => {
     getRecord: jest.fn(),
     getTrialSessionJobStatusForCase: jest.fn(),
     getUserCaseMappingsByDocketNumber: jest.fn().mockReturnValue([]),
-    incrementCounter,
     isEmailAvailable: jest.fn(),
     isFileExists: jest.fn(),
     persistUser: jest.fn(),
@@ -427,8 +424,6 @@ const createTestApplicationContext = () => {
     deleteMessage: jest.fn().mockReturnValue({ promise: () => {} }),
     sendMessage: jest.fn().mockReturnValue({ promise: () => {} }),
   };
-
-  const mockDocumentClient = createMockDocumentClient();
 
   const mockBroadcastGateway = {
     postMessage: jest.fn(),
@@ -473,7 +468,6 @@ const createTestApplicationContext = () => {
       sendNotificationOfSealing: jest.fn(),
       sendSlackNotification: jest.fn(),
     }),
-    getDocumentClient: jest.fn().mockImplementation(() => mockDocumentClient),
     getDocumentGenerators: jest
       .fn()
       .mockReturnValue(getDocumentGeneratorsReturnMock),

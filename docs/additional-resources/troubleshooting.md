@@ -225,7 +225,7 @@ Problem:
 
 Solution:
 
-- This solution should only be used on non-prod environments. Clear the dynamo tables and recreate the users and judges.
+- This solution should only be used on non-prod environments. Clear the database tables and recreate the users and judges.
 
   ```bash
   ./scripts/user/setup-test-users.ts
@@ -295,7 +295,7 @@ Solution:
 
   - Refer to the [AWS Service Dashboard](https://health.aws.amazon.com/health/status) to check if there are any current issues with AWS Lambda in `us-east-1`. It's not uncommon for them to be experiencing issues and not reporting them.
   - Query Kibana to see the APIs that are returning a Status Code of 504. If it's an unusual amount of them, higher than historical activity, then it's quite likely that there's an AWS outage. Consider opening up a ticket with AWS Support. Ideally, we shouldn't be seeing any.
-  - If it's consistently the same endpoint, then perhaps one of its downstream dependencies is not healthy (e.g., DynamoDB for database reads or writes).
+  - If it's consistently the same endpoint, then perhaps one of its downstream dependencies is not healthy (e.g., the database for reads or writes).
   - Navigate to the current color's `api_<env>_<color>` Lambda, and click the Monitor tab. See if you notice any Lambda invocations that are hitting the 29s limit.
   - Go to Cloudwatch > Log Insights, and query the log group for reports that mention a duration greater than 28000ms:
 

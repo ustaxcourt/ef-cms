@@ -14,7 +14,7 @@ describe('websocket connections are cleaned up when disconnecting', () => {
 
   loginAs(cerebralTest, 'petitionsclerk1@example.com');
 
-  it('should clean up the connection records in dynamo when the user disconnect', async () => {
+  it('should clean up the connection records when the user disconnect', async () => {
     const petitionsClerk1UserId = '4805d1ab-18d0-43ec-bafb-654e83405416';
     const connectionsBeforeSignOut = await getConnectionsByUserId(
       petitionsClerk1UserId,
