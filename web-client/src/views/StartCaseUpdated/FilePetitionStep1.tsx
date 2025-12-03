@@ -89,9 +89,11 @@ export const FilePetitionStep1 = connect(
             handleBlur={petitionGenerationLiveValidationSequence}
             handleChange={updateFormValueUpdatedSequence}
             handleChangeCountryType={updateFormValueCountryTypeSequence}
+            isPetitioner={isPetitioner}
             nameLabel={filePetitionHelper.primaryContactNameLabel}
             registerRef={registerRef}
             showEmail={!isPetitioner}
+            showLanguageFields={true}
           />
         )}
         {(form.filingType === 'Myself and my spouse' ||
@@ -103,9 +105,11 @@ export const FilePetitionStep1 = connect(
               handleBlur={petitionGenerationLiveValidationSequence}
               handleChange={updateFormValueUpdatedSequence}
               handleChangeCountryType={updateFormValueCountryTypeSequence}
+              isPetitioner={isPetitioner}
               nameLabel={filePetitionHelper.primaryContactNameLabel}
               registerRef={registerRef}
               showEmail={!isPetitioner}
+              showLanguageFields={true}
             />
             <h2 data-testid="spouse-header">
               {isPetitioner ? "Your spouse's" : 'Petitioner Spouse'} information
