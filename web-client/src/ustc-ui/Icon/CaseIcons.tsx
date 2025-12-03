@@ -33,9 +33,9 @@ export function CaseIcons({ formattedCase }: { formattedCase: any }) {
           formattedCase.remoteTrialGranted ? 'visibility-visible' : 'visibility-hidden'
         }
         spanDataTestId="laptop"
-        title="MOTR"
+        title="Motion to Proceed Remotely Granted"
         icon="laptop"
-        iconAriaLabel="MOTR"
+        iconAriaLabel="Motion to Proceed Remotely Granted"
         iconClass="tw:text-primary"
       />
       <span
