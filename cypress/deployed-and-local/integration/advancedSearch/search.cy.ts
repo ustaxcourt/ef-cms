@@ -164,11 +164,11 @@ describe('Advanced Search', () => {
         cy.get('[data-testid="sort-button-filed-date"]').click();
 
         /** Assert */
-        // After sorting, ensure the created order is present in the first row
+        // After sorting, ensure the created order is present in the last row
         cy.get(
           'table[data-testid="advanced-document-search-results-table"] tbody tr',
         )
-          .first()
+          .last()
           .within(() => {
             cy.get(`[data-testid="docket-number-link-${docketNumber}"]`).should(
               'exist',
@@ -246,11 +246,11 @@ describe('Advanced Search', () => {
         cy.get('[data-testid="sort-button-filed-date"]').click();
 
         /** Assert */
-        // After sorting, ensure the created opinion is present in the first row
+        // After sorting, ensure the created opinion is present in the last row
         cy.get(
           'table[data-testid="advanced-document-search-results-table"] tbody tr',
         )
-          .first()
+          .last()
           .within(() => {
             cy.get(`[data-testid="docket-number-link-${docketNumber}"]`).should(
               'exist',
