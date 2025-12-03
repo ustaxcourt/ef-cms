@@ -539,6 +539,7 @@ export const uploadPetition = async (
     headers: {
       Authorization: `Bearer ${userToken}`,
     },
+    httpAgent: new Agent({ keepAlive: false })
   });
 
   cerebralTest.setState('caseDetail', response.data);
