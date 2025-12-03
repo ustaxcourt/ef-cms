@@ -19,6 +19,11 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
+
+const ConfirmInitiateServiceModalAny: any = (ConfirmInitiateServiceModal as any);
+const ConfirmInitiateSaveModalAny: any = (ConfirmInitiateSaveModal as any);
+const WorkItemAlreadyCompletedModalAny: any = (WorkItemAlreadyCompletedModal as any);
+
 export const CourtIssuedDocketEntry = connect(
   {
     addCourtIssuedDocketEntryHelper: state.addCourtIssuedDocketEntryHelper,
@@ -30,7 +35,8 @@ export const CourtIssuedDocketEntry = connect(
     form: state.form,
     formatAndUpdateDateFromDatePickerSequence:
       sequences.formatAndUpdateDateFromDatePickerSequence,
-    isEditingDocketEntry: state.isEditingDocketEntry,
+  isEditingDocketEntry: (state as any).isEditingDocketEntry,
+  // accept unknown state typings locally to avoid cross-file changes
     openCancelDraftDocumentModalSequence:
       sequences.openCancelDraftDocumentModalSequence,
     openConfirmInitiateCourtIssuedFilingServiceModalSequence:
@@ -222,9 +228,9 @@ export const CourtIssuedDocketEntry = connect(
 
                 {addCourtIssuedDocketEntryHelper.showAttachmentAndServiceFields && (
                   <>
-                    <div className="usa-label" htmlFor="service-parties">
+                    <label className="usa-label" htmlFor="service-parties">
                       Service parties
-                    </div>
+                    </label>
 
                     <div id="service-parties">
                       {addCourtIssuedDocketEntryHelper.serviceParties.map(
@@ -307,7 +313,7 @@ export const CourtIssuedDocketEntry = connect(
           </div>
         </section>
         {showModal === 'ConfirmInitiateCourtIssuedFilingServiceModal' && (
-          <ConfirmInitiateServiceModal
+          <ConfirmInitiateServiceModalAny
             confirmSequence={
               fileAndServeCourtIssuedDocumentFromDocketEntrySequence
             }
@@ -317,7 +323,7 @@ export const CourtIssuedDocketEntry = connect(
           />
         )}
         {showModal === 'ConfirmInitiateSaveModal' && (
-          <ConfirmInitiateSaveModal
+          <ConfirmInitiateSaveModalAny
             documentTitle={
               addCourtIssuedDocketEntryHelper.formattedDocumentTitle
             }
@@ -327,7 +333,7 @@ export const CourtIssuedDocketEntry = connect(
           <CancelDraftDocumentModal />
         )}
         {showModal === 'WorkItemAlreadyCompletedModal' && (
-          <WorkItemAlreadyCompletedModal
+          <WorkItemAlreadyCompletedModalAny
             confirmSequence={confirmWorkItemAlreadyCompleteSequence}
           />
         )}

@@ -12,6 +12,9 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
+
+const ScanBatchPreviewerAny: any = (ScanBatchPreviewer as any);
+
 export const EditCorrespondenceDocument = connect(
   {
     cancelAndNavigateToCorrespondenceSequence:
@@ -126,7 +129,7 @@ export const EditCorrespondenceDocument = connect(
 
               <div className="desktop:grid-col-7 tablet:grid-row">
                 {(screenMetadata.documentReset && (
-                  <ScanBatchPreviewer
+                  <ScanBatchPreviewerAny
                     documentType="primaryDocumentFile"
                     title="Add Document"
                     validateSequence={

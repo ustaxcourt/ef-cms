@@ -15,7 +15,7 @@ export const CorrespondenceViewerCorrespondence = connect(
       sequences.openCaseDocumentDownloadUrlSequence,
     openConfirmDeleteCorrespondenceModalSequence:
       sequences.openConfirmDeleteCorrespondenceModalSequence,
-    viewerCorrespondenceToDisplay: state.viewerCorrespondenceToDisplay,
+  viewerCorrespondenceToDisplay: (state as any).viewerCorrespondenceToDisplay,
   },
   function CorrespondenceViewerCorrespondence({
     caseDetail,
