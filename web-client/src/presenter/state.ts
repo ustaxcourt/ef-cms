@@ -795,7 +795,7 @@ export const baseState = {
     title: undefined,
     troubleshootingInfo: undefined as unknown as TroubleshootingLinkInfo, // steps for troubleshooting
   } as Record<string, any>,
-  multiDocketedOriginalCaseDetail: {},
+  multiDocketedOriginalCaseDetail: undefined as unknown as RawCase,
   navigation: {
     caseDetailMenu: '',
     openMenu: '',

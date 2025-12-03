@@ -71,6 +71,7 @@ export const editDocketEntryMetaHelper = (
         caseCaption: c.caseCaption,
       })) || [];
 
+  // TODO probably need to use formattedCaseDetail here because caseDetail may have been reassigned
   const isEditDisabled =
     caseDetail &&
     isMemberCase(get(state.caseDetail)) &&

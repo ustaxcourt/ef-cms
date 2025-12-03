@@ -54,7 +54,8 @@ export const updateDocketEntryWizardDataAction = ({
           state.screenMetadata.filedDocketEntryIds,
         );
         if (filedDocketEntryIds.length === 1) {
-          const caseDetail = get(state.caseDetail);
+          const caseDetail =
+            get(state.multiDocketedOriginalCaseDetail) ?? get(state.caseDetail);
 
           const previousDocument = find(caseDetail.docketEntries, doc =>
             includes(filedDocketEntryIds, doc.docketEntryId),
@@ -100,7 +101,8 @@ export const updateDocketEntryWizardDataAction = ({
         store.unset(state.form.certificateOfServiceDate);
 
         //restore previous doc data from screenMetadata onto form
-        const caseDetail = get(state.caseDetail);
+        const caseDetail =
+          get(state.multiDocketedOriginalCaseDetail) ?? get(state.caseDetail);
         const filedDocketEntryIds = get(
           state.screenMetadata.filedDocketEntryIds,
         );

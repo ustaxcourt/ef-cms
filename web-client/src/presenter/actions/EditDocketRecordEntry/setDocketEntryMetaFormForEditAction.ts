@@ -1,5 +1,4 @@
 import { state } from '@web-client/presenter/app.cerebral';
-import { pick } from 'lodash';
 
 /**
  * update state form with docket record entry and document properties
@@ -19,74 +18,28 @@ export const setDocketEntryMetaFormForEditAction = ({
   const { docketEntries } = get(state.caseDetail);
   const { docketRecordIndex } = props;
 
-  const currentDocumentDetail = docketEntries.find(
+  const documentDetail = docketEntries.find(
     ({ index }) => index === docketRecordIndex,
   );
 
-  if (!currentDocumentDetail) {
+  if (!documentDetail) {
     throw new Error(
       `Could not find docket entry with index ${docketRecordIndex}`,
     );
   }
 
-  const multiDocketedOriginalCaseDetail = get(
-    state.multiDocketedOriginalCaseDetail,
-  );
-
-  let originalDocumentDetail;
-
-  if (multiDocketedOriginalCaseDetail) {
-    const { docketEntryId } = currentDocumentDetail;
-    originalDocumentDetail = multiDocketedOriginalCaseDetail.docketEntries.find(
-      de => de.docketEntryId === docketEntryId,
-    );
-    // TODO 8477: refactor this (editable data should _not_ have it's multiDocketedOn array cleared)
-    // if (!originalDocumentDetail.multiDocketedOn.length) {
-    //   originalDocumentDetail =
-    //     multiDocketedOriginalCaseDetail.docketEntries.find(
-    //       de => de.docketEntryId === docketEntryId,
-    //     ).nestedDocketEntry; //<-- idea, not real yet
-    //   // make persistence call here? new table? new entry?
-    // }
-
-    if (!originalDocumentDetail.multiDocketedOn.length) {
-      originalDocumentDetail = get(state.caseDetail).docketEntries.find(
-        de => de.docketEntryId === docketEntryId,
-      );
-    }
-
-    if (!originalDocumentDetail) {
-      throw new Error(
-        `Could not find multiDocketed entry with docketEntryId ${docketEntryId} on case ${multiDocketedOriginalCaseDetail.docketNumber}`,
-      );
-    }
-  } else {
-    originalDocumentDetail = currentDocumentDetail;
-  }
-
   // store.set(state.docketRecordIndex, docketRecordIndex);
 
   const filersMap = {};
-  originalDocumentDetail.filers.forEach(filer => (filersMap[filer] = true));
+  documentDetail.filers.forEach(filer => (filersMap[filer] = true));
 
-  currentDocumentDetail.servedPartiesCode =
-    currentDocumentDetail.servedPartiesCode ||
+  documentDetail.servedPartiesCode =
+    documentDetail.servedPartiesCode ||
     applicationContext
       .getUtilities()
-      .getServedPartiesCode(currentDocumentDetail.servedParties);
+      .getServedPartiesCode(documentDetail.servedParties);
 
-  const currentEditableFields = [
-    'servedParties',
-    'servedPartiesCode',
-    'action',
-    'isStricken',
-  ];
-
-  const documentDetail = {
-    multiDocketedOn: currentDocumentDetail.multiDocketedOn, // TODO 8477: keep an eye on this: this either needs to be done here, or, if we create a "shadow copy", we can preserve the "correct" multidocketedon array there
-    ...originalDocumentDetail,
-    ...pick(currentDocumentDetail, currentEditableFields),
-  };
+  console.log('documentDetail', documentDetail);
 
   store.set(state.form, {
     ...documentDetail,

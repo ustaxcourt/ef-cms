@@ -16,7 +16,8 @@ export const setFileDocumentFormValueAction = ({
       props.key,
     )
   ) {
-    const caseDetail = get(state.caseDetail);
+    const caseDetail =
+      get(state.multiDocketedOriginalCaseDetail) ?? get(state.caseDetail);
 
     const previousDocument = caseDetail.docketEntries.find(
       docketEntry => docketEntry.docketEntryId === props.value,
