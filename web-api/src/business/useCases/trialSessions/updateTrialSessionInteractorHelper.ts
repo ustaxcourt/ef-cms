@@ -17,11 +17,13 @@ import { createTrialSessionWorkingCopy } from '@web-api/persistence/postgres/tri
 type GetCasesInTrialSessionParams = {
   trialSession: RawTrialSession;
   authorizedUser: AuthUser;
+  includeHearings?: boolean;
 };
 
 export async function getCasesInTrialSession({
   trialSession,
   authorizedUser,
+  includeHearings = false,
 }: GetCasesInTrialSessionParams): Promise<{
   calendaredCaseEntities: Case[];
   casesThatShouldReceiveNotices: Case[];
@@ -34,9 +36,12 @@ export async function getCasesInTrialSession({
     return new Case(aCase, { authorizedUser });
   });
 
-  const casesThatShouldReceiveNotices = calendaredCaseEntities.filter(
-    aCase => !aCase.isClosed(),
-  );
+  const casesThatShouldReceiveNotices = calendaredCaseEntities
+    .filter(aCase => !aCase.isClosed())
+    .filter(
+      aCase =>
+        includeHearings || aCase.trialSessionId === trialSession.trialSessionId,
+    );
 
   return { calendaredCaseEntities, casesThatShouldReceiveNotices };
 }
@@ -64,6 +69,7 @@ export const updateCasesAndSetNoticeOfChange = async ({
 }: UpdateCasesAndSetNoticeOfChangeParams): Promise<PDFDocumentType> => {
   const { casesThatShouldReceiveNotices } = await getCasesInTrialSession({
     trialSession: currentTrialSession,
+    includeHearings: true,
     authorizedUser,
   });
 
@@ -129,7 +135,11 @@ export const updateCasesAndSetNoticeOfChange = async ({
         );
     }
 
-    caseEntity.updateTrialSessionInformation(updatedTrialSessionEntity);
+    if (
+      caseEntity.trialSessionId === updatedTrialSessionEntity.trialSessionId
+    ) {
+      caseEntity.updateTrialSessionInformation(updatedTrialSessionEntity);
+    }
 
     await updateCaseAndAssociations({
       authorizedUser,
