@@ -55,6 +55,7 @@ export const Login = connect(
                   alertError={alertError}
                   alertHelper={alertHelper}
                   closeButtonOnClick={() => dismissAlertSequence()}
+                  isDismissible={false}
                 />
               </div>
 

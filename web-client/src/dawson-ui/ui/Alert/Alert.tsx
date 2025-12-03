@@ -16,7 +16,7 @@ const alertVariants = cva(
     'tw:relative tw:border-solid tw:border-0 tw:border-l-[6px] tw:p-[12px] tw:font-normal tw:text-[16px] tw:leading-[20px]',
     'tw:[&_ul]:m-0 tw:[&_ul]:-ml-[16px] tw:[&_ul]:list-disc',
     'tw:[&_svg]:h-[24px] tw:[&_svg]:w-[24px]',
-    'tw:xs:border-l-[8px] tw:xs:p-[14px] tw:xs:text-[18px] tw:xs:leading-[24px]',
+    'tw:xs:border-l-[8px] tw:xs:p-[16px] tw:xs:text-[18px] tw:xs:leading-[24px]',
     'tw:xs:[&_svg]:h-[28px] tw:xs:[&_svg]:w-[28px]',
     'tw:xs:max-w-[740px] tw:w-full',
   ),
@@ -29,7 +29,7 @@ const alertVariants = cva(
         error:
           'tw:[&_button]:focus-visible:bg-red-error tw:[&_button]:focus-visible:ring-offset-red-error tw:bg-red-error tw:border-red-primary',
         success:
-          'tw:[&_button]:focus-visible:bg-green-success tw:[&_button]:focus-visible:ring-offset-green-success tw:bg-green-success tw:border-green',
+          'tw:[&_button]:focus-visible:bg-green-success tw:[&_button]:focus-visible:ring-offset-green-success tw:bg-green-success tw:border-green-primary',
       },
     },
     defaultVariants: {
@@ -50,20 +50,24 @@ function Alert({
   className,
   closeButtonOnClick,
   variant,
-  ...props
-}: Omit<React.ComponentProps<'div'>, 'children'> &
+  dataTestId,
+
+}: React.ComponentProps<'div'> &
   VariantProps<typeof alertVariants> & {
-    children?: React.ReactNode;
     closeButtonOnClick?: () => React.MouseEventHandler<HTMLButtonElement> | void;
     isDismissible?: boolean;
+    dataTestId?: string;
   }) {
+
+    
   return (
+    /* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions */
     <div
       data-slot="alert"
       role="alert"
       className={cn(alertVariants({ variant }), className)}
-      {...props}
-    >
+      data-testId={dataTestId}
+        onClick={closeButtonOnClick}>
       <div className="tw:relative">{children}</div>
     </div>
   );
@@ -73,6 +77,7 @@ type AlertHeaderType = {
   isDismissible?: boolean;
   title?: string;
   variant: string;
+  dataTestId?: string;
 };
 
 function AlertHeader({
@@ -80,7 +85,8 @@ function AlertHeader({
   isDismissible = true,
   title,
   variant,
-  ...props
+  dataTestId,
+  children
 }: React.ComponentProps<'p'> & AlertHeaderType) {
   return (
     <div className="tw:flex">
@@ -90,21 +96,21 @@ function AlertHeader({
           className="tw:!h-[20px] tw:!w-[20px] tw:xs:!h-[24px] tw:xs:!w-[24px]"
         />
       </div>
+      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
       <div
         className={cn(
           title ? 'tw:font-bold' : '',
           'tw:pb-0 tw:xs:ml-[16px] tw:ml-[12px] tw:xs:mr-[16px] tw:mr-[12px] tw:text-[16px] tw:leading-[20px] tw:xs:text-[18px] tw:xs:leading-[24px]',
         )}
         data-slot="alert-title"
-        data-testid="alert-header"
-        {...props}
-      ></div>
+        data-testid={`alert-header-${dataTestId}`}
+        onClick={closeButtonOnClick}
+      >
+        {children}
+      </div>
       {isDismissible && (
         <div className="tw:ml-auto">
-          <Button
-            variant="terminatorButton"
-            aria-label="Terminator Button"
-            >
+          <Button variant="terminatorButton" aria-label="Terminator Button">
             Close
           </Button>
         </div>
@@ -113,13 +119,17 @@ function AlertHeader({
   );
 }
 
-function AlertDescription({ ...props }: React.ComponentProps<'p'>) {
+function AlertDescription({ dataTestId, children, ...props }: React.ComponentProps<'p'> & { dataTestId?: string }) {
+
   return (
     <div
       className="tw:xs:mt-[8px] tw:xs:text-[18px] tw:xs:leading-[24px] tw:ml-[32px] tw:xs:ml-[40px] tw:pt-[8px] tw:xs:pt-0"
       data-slot="alert-description"
+      data-testid={`alert-description-${dataTestId}`}
       {...props}
-    />
+    >
+      {children}
+    </div>
   );
 }
 

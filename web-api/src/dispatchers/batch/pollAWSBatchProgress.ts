@@ -3,8 +3,16 @@ import {
   CloudWatchLogsClient,
   GetLogEventsCommand,
 } from '@aws-sdk/client-cloudwatch-logs';
+import {
+  AWS_BATCH_POLLING_INTERVAL,
+  AWS_BATCH_POLLING_TIMEOUT,
+} from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { ProgressData } from '@web-api/persistence/s3/zipDocuments';
+import {
+  createISODateString,
+  dateStringsCompared,
+} from '@shared/business/utilities/DateHandler';
 
 interface PingCloudWatchParams {
   applicationContext: ServerApplicationContext;
@@ -17,11 +25,11 @@ interface PingCloudWatchParams {
 export const pollAWSBatchProgress = async ({
   applicationContext,
   jobId,
-  pollInterval = 5000,
-  timeout = 600000,
+  pollInterval = AWS_BATCH_POLLING_INTERVAL,
+  timeout = AWS_BATCH_POLLING_TIMEOUT,
   onProgress,
 }: PingCloudWatchParams) => {
-  const startTime = Date.now();
+  const startTime = createISODateString();
   const batchClient = applicationContext.getBatchClient('us-east-1');
   const logsClient = new CloudWatchLogsClient({ region: 'us-east-1' });
 
@@ -29,7 +37,12 @@ export const pollAWSBatchProgress = async ({
   let nextToken: string | undefined;
 
   while (true) {
-    if (Date.now() - startTime > timeout) {
+    const currentTime = createISODateString();
+    const elapsedMs = dateStringsCompared(currentTime, startTime, {
+      exact: true,
+    });
+
+    if (elapsedMs > timeout) {
       throw new Error(`Batch job ${jobId} timed out after ${timeout}ms`);
     }
 

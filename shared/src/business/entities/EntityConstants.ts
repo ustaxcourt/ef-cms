@@ -916,17 +916,17 @@ export const SYSTEM_GENERATED_DOCUMENT_TYPES = {
   ...AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES_WITH_NAMES,
 };
 
-export const SYSTEM_AND_INTERNAL_DOCUMENT_TYPES = [
-  ...Object.values(SYSTEM_GENERATED_DOCUMENT_TYPES).map(doc => ({
-    ...doc,
-    label: doc.documentTitle,
-    value: doc.eventCode,
-  })),
+export const INTERNAL_DOCUMENT_TYPES_AND_NOTR = [
   ...INTERNAL_DOCUMENTS_ARRAY.map(doc => ({
     ...doc,
     label: doc.documentType,
     value: doc.eventCode,
   })),
+  {
+    ...SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfReceiptOfPetition,
+    label:
+      SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfReceiptOfPetition.documentType,
+  },
 ];
 
 export const AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES = flatten(
@@ -1895,12 +1895,23 @@ export const MINUTE_SHEET_FORM_SECTION_MAP = {
   witnessesSection: 'witnessesSection',
 } as const;
 
-export const TRIAL_HEARING_OPTIONS = {
+export const TRIAL_OPTIONS = {
   trial: 'Trial',
-  hearing: 'Hearing',
   partialTrial: 'Partial Trial',
   furtherTrial: 'Further Trial',
+} as const;
+export type TrialOption = keyof typeof TRIAL_OPTIONS;
+
+export const HEARING_OPTIONS = {
+  hearing: 'Hearing',
+  motionHearing: 'Motion Hearing',
   furtherHearing: 'Further Hearing',
+} as const;
+export type HearingOption = keyof typeof HEARING_OPTIONS;
+
+export const TRIAL_HEARING_OPTIONS = {
+  ...TRIAL_OPTIONS,
+  ...HEARING_OPTIONS,
 } as const;
 export type TrialHearingOption = keyof typeof TRIAL_HEARING_OPTIONS;
 
@@ -1986,6 +1997,7 @@ export const ACTION_STATUS_OPTIONS = {
   seeOrder: 'See Order',
   cav: 'CAV',
   denied: 'Denied',
+  deniedAsMoot: 'Denied as Moot',
   granted: 'Granted',
   filed: 'Filed',
   lodged: 'Lodged',
@@ -2092,3 +2104,7 @@ export const ALLOWED_EVENT_CODES = [
 export const PRO_SE_CHECKLIST = 'pro-se-checklist';
 
 export const NOT_PROVIDED = 'Not Provided';
+
+export const AWS_BATCH_POLLING_INTERVAL = 5000;
+
+export const AWS_BATCH_POLLING_TIMEOUT = 600000;

@@ -6,6 +6,7 @@ import { environment } from './environment';
 import fs from 'fs';
 import { sleep } from '@shared/tools/helpers';
 import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
+import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
 
 let dbInstance: Promise<Kysely<Database>> | null = null;
 let tokenExpirationTime: number = 0;
@@ -20,7 +21,7 @@ export async function getConnection<T>({
     dbInstance = establishConnection();
   }
 
-  if (Date.now() > tokenExpirationTime) {
+  if (Number(formatNow(FORMATS.UNIX_TIMESTAMP_MS)) > tokenExpirationTime) {
     if (pool) {
       await resetPoolPassword();
     }
@@ -87,7 +88,9 @@ async function getToken() {
       ? environment.rds.pool.password
       : await generateRDSAuthToken();
 
-  tokenExpirationTime = Date.now() + 13 * 60 * 1000; // rds auth token expires every 15min. So refresh every 13min
+  const nowMillis = Number(formatNow(FORMATS.UNIX_TIMESTAMP_MS));
+  const futureMillis = 13 * 60 * 1000; // rds auth token expires every 15min. So refresh every 13min
+  tokenExpirationTime = nowMillis + futureMillis;
   return token;
 }
 

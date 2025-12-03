@@ -47,6 +47,7 @@ export const batchDownloadTrialSessionInteractor = async (
     if (userId) {
       await applicationContext.getNotificationGateway().sendNotificationToUser({
         applicationContext,
+        clientConnectionId,
         message: {
           action: 'batch_download_error',
           error,
@@ -126,6 +127,8 @@ export const batchDownloadTrialSessionInteractorHelper = async (
   let numberOfDocketRecordsGenerated = 0;
   const numberOfDocketRecordsToGenerate = batchableSessionCases.length;
 
+  applicationContext.logger.info('Generating file');
+
   const onDocketRecordCreation = async ({
     docketNumber,
   }: {
@@ -136,6 +139,7 @@ export const batchDownloadTrialSessionInteractorHelper = async (
     }
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
+      clientConnectionId,
       message: {
         action: 'batch_download_docket_generated',
         filesCompleted: numberOfDocketRecordsGenerated,
@@ -171,6 +175,7 @@ export const batchDownloadTrialSessionInteractorHelper = async (
   const onProgress = async (progressData: ProgressData): Promise<void> => {
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
+      clientConnectionId,
       message: {
         action: 'batch_download_progress',
         filesCompleted: progressData.filesCompleted,
@@ -182,6 +187,7 @@ export const batchDownloadTrialSessionInteractorHelper = async (
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
+    clientConnectionId,
     message: {
       action: 'batch_download_progress',
       filesCompleted: 0,
@@ -214,6 +220,7 @@ export const batchDownloadTrialSessionInteractorHelper = async (
 
   try {
     if (useAwsBatchMechanism) {
+      applicationContext.logger.info('Starting batch job');
       const UUID = applicationContext.getUniqueId();
       await applicationContext.getPersistenceGateway().uploadDocument({
         applicationContext,
@@ -262,6 +269,7 @@ export const batchDownloadTrialSessionInteractorHelper = async (
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
+    clientConnectionId,
     message: {
       action: 'batch_download_ready',
       url,

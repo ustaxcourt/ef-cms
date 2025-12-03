@@ -44,7 +44,7 @@ export const mockFormattedMinuteSheet: FormattedMinuteSheet = {
     note: '',
   },
   trialClerk: 'Mary Clerk',
-  trialHearing: '01/09/2024; Trial note',
+  trial: '01/09/2024; Trial note',
   trialLocation: 'Washington, D.C.',
   trialStartDate: 'January 1, 2024',
 };

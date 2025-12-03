@@ -990,6 +990,7 @@ describe('formattedDocketEntries', () => {
           className: 'sealed-docket-entry',
           icon: 'lock',
           title: expect.anything(),
+          size: 'lg',
         },
       ]);
     });
@@ -1000,6 +1001,7 @@ describe('formattedDocketEntries', () => {
           ...mockDocketEntry,
           isPaper: true,
           qcNeeded: true,
+          className: 'fa-icon-blue',
           showLoadingIcon: true,
         },
         isExternalUser: false,
@@ -1009,6 +1011,8 @@ describe('formattedDocketEntries', () => {
         {
           icon: ['fas', 'file-alt'],
           title: 'Is paper',
+          className: 'fa-icon-blue',
+          size: 'lg',
         },
       ]);
     });
@@ -1026,8 +1030,10 @@ describe('formattedDocketEntries', () => {
 
       expect(result).toEqual([
         {
+          className: 'fa-icon-gold',
           icon: ['fas', 'thumbtack'],
           title: 'In progress',
+          size: 'lg',
         },
       ]);
     });
@@ -1044,8 +1050,10 @@ describe('formattedDocketEntries', () => {
 
       expect(result).toEqual([
         {
+          className: 'fa-icon-red',
           icon: ['fa', 'star'],
           title: 'Is untouched',
+          size: 'lg',
         },
       ]);
     });
@@ -1064,6 +1072,7 @@ describe('formattedDocketEntries', () => {
           className: 'fa-spin spinner',
           icon: ['fa-spin', 'spinner'],
           title: 'Is loading',
+          size: 'lg',
         },
       ]);
     });

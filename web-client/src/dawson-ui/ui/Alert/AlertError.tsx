@@ -1,4 +1,3 @@
-import { Focus } from '@web-client/ustc-ui/Focus/Focus';
 import React, { useEffect, useRef } from 'react';
 import cn from 'classnames';
 import {
@@ -26,6 +25,8 @@ type AlertErrorProps = {
   alertHelper?: AlertHelper;
   className?: string;
   closeButtonOnClick?: () => void;
+  isDismissible?: boolean;
+  dataTestId?: string
 };
 
 export function AlertError({
@@ -33,6 +34,8 @@ export function AlertError({
   alertHelper,
   className,
   closeButtonOnClick,
+  isDismissible,
+  dataTestId
 }: AlertErrorProps) {
   const notificationRef = useRef<HTMLDivElement | null>(null);
 
@@ -47,6 +50,7 @@ export function AlertError({
     closeButtonOnClick,
     title: alertError?.title,
     variant: 'error',
+    isDismissible,
   };
 
   return (
@@ -55,21 +59,20 @@ export function AlertError({
         <Alert
           aria-live="polite"
           className={cn(className)}
-          data-testid="error-alert"
+          dataTestId={`error-alert-${dataTestId}`}
           ref={notificationRef}
           role="alert"
           variant="error"
         >
           {alertError.title && (
-            <Focus>
-              <AlertHeader {...errorProps}>{alertError.title}</AlertHeader>
-            </Focus>
+            <AlertHeader dataTestId={`error-${dataTestId}`}  {...errorProps}>{alertError.title}</AlertHeader>
+          
           )}
           {alertHelper.showSingleMessage && (
-            <AlertMessage {...errorProps}>{alertError.message}</AlertMessage>
+            <AlertMessage dataTestId={`error-msg-${dataTestId}`}  {...errorProps}>{alertError.message}</AlertMessage>
           )}
           {alertHelper.showMultipleMessages && (
-            <AlertMessage {...errorProps}>
+            <AlertMessage dataTestId={`error-multiple-msg-${dataTestId}`}  {...errorProps}>
               <ul>
                 {alertHelper.messagesDeduped.map(message => (
                   <li key={message}>{message}</li>

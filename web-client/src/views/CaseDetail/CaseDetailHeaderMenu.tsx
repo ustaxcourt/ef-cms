@@ -3,6 +3,7 @@ import { AddEditCaseNoteModal } from './AddEditCaseNoteModal';
 import { AddEditHearingNoteModal } from './AddEditHearingNoteModal';
 import { AddToTrialModal } from './AddToTrialModal';
 import { BlockFromTrialModal } from './BlockFromTrialModal';
+import { EditRemoteStatusModal } from './EditRemoteStatusModal';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { CreateCaseDeadlineModalDialog } from './CreateCaseDeadlineModalDialog';
 import { CreateMessageModalDialog } from '../Messages/CreateMessageModalDialog';
@@ -321,6 +322,7 @@ export const CaseDetailHeaderMenu = connect(
           />
         )}
         {showModal === 'BlockFromTrialModal' && <BlockFromTrialModal />}
+        {showModal === 'EditRemoteStatusModal' && <EditRemoteStatusModal />}
         {showModal === 'UnblockFromTrialModal' && <UnblockFromTrialModal />}
         {showModal === 'RemoveFromTrialSessionModal' && (
           <RemoveFromTrialSessionModal />

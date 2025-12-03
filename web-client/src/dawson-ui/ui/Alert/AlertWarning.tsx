@@ -24,6 +24,7 @@ type AlertWarningProps = {
   isDismissible?: boolean;
   messageNotBold?: boolean;
   scrollToTop?: boolean;
+  dataTestId?: string;
 };
 
 export function AlertWarning({
@@ -32,6 +33,7 @@ export function AlertWarning({
   dismissAlertSequence,
   isDismissible = true,
   scrollToTop = true,
+  dataTestId,
 }: AlertWarningProps) {
   const notificationRef = useRef<HTMLDivElement | null>(null);
 
@@ -57,28 +59,27 @@ export function AlertWarning({
       aria-live="polite"
       className={cn(className)}
       closeButtonOnClick={dismissAlertSequence}
-      data-testid="warning-alert"
+      dataTestId={`alert-warning-${dataTestId}`} 
       isDismissible={isDismissible}
       ref={notificationRef}
       role="alert"
       variant="warning"
     >
       {alertWarning.title && (
-        <AlertHeader data-testid="warning-alert-title" {...warningProps}>
+        <AlertHeader dataTestId={`warning-${dataTestId}`}  {...warningProps}>
           {alertWarning.title}
         </AlertHeader>
       )}
 
       {alertWarning.message && (
-        <AlertMessage data-testid="warning-alert-message" {...warningProps}>
+        <AlertMessage dataTestId={`warning-msg-${dataTestId}`} {...warningProps}>
           {alertWarning.message}
         </AlertMessage>
       )}
 
       {alertWarning.linkUrl && (
-        <AlertMessage data-testid="warning-alert-message" {...warningProps}>
+        <AlertMessage dataTestId={`warning-link-${dataTestId}`} {...warningProps}>
           <Button
-            className=""
             href={alertWarning.linkUrl}
             link
             rel="noopener noreferrer"
