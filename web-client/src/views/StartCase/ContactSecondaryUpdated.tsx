@@ -282,7 +282,7 @@ export const ContactSecondaryUpdated = connect<
                   </span>
                 </label>
                 <input
-                  aria-describedby="contactSecondary.preferredLanguage-hint contactSecondary.preferredLanguage-count"
+                  aria-describedby="contactSecondary.preferredLanguage-hint"
                   autoCapitalize="none"
                   className="usa-input"
                   data-testid="contact-secondary-preferred-language"
@@ -330,7 +330,7 @@ export const ContactSecondaryUpdated = connect<
                   </span>
                 </label>
                 <input
-                  aria-describedby="contactSecondary.preferredCommunicationMethod-hint contactSecondary.preferredCommunicationMethod-count"
+                  aria-describedby="contactSecondary.preferredCommunicationMethod-hint"
                   autoCapitalize="none"
                   className="usa-input"
                   data-testid="contact-secondary-preferred-communication-method"
