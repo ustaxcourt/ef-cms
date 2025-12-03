@@ -18,9 +18,7 @@ export const DocketRecordMobileHeader = ({
 }: {
   docketNumber: string;
   filterOptions: Record<string, string>;
-  gotoPrintableDocketRecordSequence: (options: {
-    docketNumber: string;
-  }) => void;
+  gotoPrintableDocketRecordSequence: Function;
   docketRecordTableSortData: {
     sortField: string;
     sortOrder: 'asc' | 'desc';

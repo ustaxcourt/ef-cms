@@ -2,7 +2,11 @@ import { ModalDialog } from '../ModalDialog';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import React from 'react';
 
-export const WorkItemAlreadyCompletedModal = connect(
+type WorkItemAlreadyCompletedModalProps = {
+  confirmSequence: Function;
+}
+
+export const WorkItemAlreadyCompletedModal: React.FC<WorkItemAlreadyCompletedModalProps> = connect(
   {},
   function WorkItemAlreadyCompletedModal({ confirmSequence }) {
     return (

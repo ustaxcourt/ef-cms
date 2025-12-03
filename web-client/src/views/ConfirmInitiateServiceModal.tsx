@@ -7,12 +7,17 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const ConfirmInitiateServiceModal = connect(
+type ConfirmInitiateServiceModalProps = {
+  confirmSequence: Function;
+  documentTitle?: string;
+}
+
+export const ConfirmInitiateServiceModal: React.FC<ConfirmInitiateServiceModalProps> = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
     confirmInitiateServiceModalHelper: state.confirmInitiateServiceModalHelper,
-    confirmSequence: props.confirmSequence,
-    documentTitle: props.documentTitle,
+    confirmSequence: props`confirmSequence`,
+    documentTitle: props`documentTitle`,
     waitingForResponse: state.progressIndicator.waitingForResponse,
   },
   function ConfirmInitiateServiceModal({
