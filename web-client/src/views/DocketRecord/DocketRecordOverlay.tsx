@@ -8,7 +8,11 @@ import ReactDOM from 'react-dom';
 
 const modalRoot = window.document.getElementById('modal-root');
 
-export const DocketRecordOverlay = connect(
+type DocketRecordOverlayProps = {
+  runCancelSequence?: any;
+}
+
+export const DocketRecordOverlay: React.FC<DocketRecordOverlayProps> = connect(
   {
     caseDetail: state.caseDetail,
     dismissModalSequence: sequences.dismissModalSequence,
@@ -23,7 +27,7 @@ export const DocketRecordOverlay = connect(
     openCaseDocumentDownloadUrlSequence,
     runCancelSequence,
   }) {
-    const elRef = React.useRef(null);
+    const elRef = React.useRef(null) as React.RefObject<HTMLDivElement | null>;;
 
     const getEl = () => {
       if (!elRef.current) {
@@ -43,7 +47,7 @@ export const DocketRecordOverlay = connect(
           window.document.body.classList.remove('no-scroll');
           window.document.removeEventListener('touchmove', touchmoveTriggered, {
             passive: false,
-          });
+          } as EventListenerOptions);
         }
       };
 
@@ -61,12 +65,12 @@ export const DocketRecordOverlay = connect(
         return runCancelSequence(event);
       };
 
-      modalRoot.appendChild(getEl());
+      modalRoot?.appendChild(getEl());
       window.document.addEventListener('keydown', keydownTriggered, false);
       toggleNoScroll(true);
 
       return () => {
-        modalRoot.removeChild(getEl());
+        modalRoot?.removeChild(getEl());
         window.document.removeEventListener('keydown', keydownTriggered, false);
         toggleNoScroll(false);
       };
