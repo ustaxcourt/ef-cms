@@ -267,6 +267,10 @@ Quote from site:
 - On October 27th, 2025, added `uuid` to the caveats list in `scripts/npm/upgrade-npm-packages.ts` to prevent automatic upgrades to v12+ during future
 - On November 18th, 2025, ugpraded `uuid` to 13.0.0, edited the jest config to ignore patterns for uuid
 
+### sass
+11/26/2025 ran into issues trying to update this package. Error: Upgrading sass to version 1.94.2 npm error code ERR_INVALID_ARG_TYPE.
+Solution was removing node_modules and package-lock.json and updating the version manually in package-lock.json and then reinstalling dependencies and running the upgrade script
+
 ## Troubleshooting
 
 ### Incrementing the Node Cache Key Version
