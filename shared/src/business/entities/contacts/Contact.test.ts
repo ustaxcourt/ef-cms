@@ -31,4 +31,32 @@ describe('Contact', () => {
       expect(contact.getFormattedValidationErrors()?.email).toEqual(undefined);
     });
   });
+
+  describe('preferredLanguage', () => {
+    it('should populate preferredLanguage field', () => {
+      const contact = new Contact(
+        {
+          ...MOCK_CONTACT_PRIMARY,
+          preferredLanguage: 'Spanish',
+        },
+        'PetitionerPrimaryContact',
+      );
+
+      expect(contact.preferredLanguage).toEqual('Spanish');
+    });
+  });
+
+  describe('preferredCommunicationMethod', () => {
+    it('should populate preferredCommunicationMethod field', () => {
+      const contact = new Contact(
+        {
+          ...MOCK_CONTACT_PRIMARY,
+          preferredCommunicationMethod: 'ASL',
+        },
+        'PetitionerPrimaryContact',
+      );
+
+      expect(contact.preferredCommunicationMethod).toEqual('ASL');
+    });
+  });
 });
