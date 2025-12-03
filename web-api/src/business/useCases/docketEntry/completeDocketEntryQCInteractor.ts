@@ -531,7 +531,8 @@ const completeDocketEntryQC = async (
           memberNoticeUpdatedDocketEntry.numberOfPages =
             await countPagesInDocument({
               applicationContext,
-              docketEntryId: memberNoticeUpdatedDocketEntry.documentStorageId,
+              documentStorageId:
+                memberNoticeUpdatedDocketEntry.documentStorageId,
             });
 
           const memberServedParties =
@@ -633,7 +634,7 @@ const completeDocketEntryQC = async (
 
       noticeUpdatedDocketEntry.numberOfPages = await countPagesInDocument({
         applicationContext,
-        docketEntryId: noticeUpdatedDocketEntry.documentStorageId,
+        documentStorageId: noticeUpdatedDocketEntry.documentStorageId,
       });
 
       noticeUpdatedDocketEntry.setAsServed(servedParties.all);

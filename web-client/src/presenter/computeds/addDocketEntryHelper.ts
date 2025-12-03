@@ -31,7 +31,8 @@ export const addDocketEntryHelper = (
   showTrackOption: boolean;
 } => {
   const user = get(state.user);
-  const caseDetail = get(state.caseDetail);
+  const caseDetail =
+    get(state.multiDocketedOriginalCaseDetail) ?? get(state.caseDetail);
   if (!caseDetail.partyType) {
     return {
       primary: undefined,

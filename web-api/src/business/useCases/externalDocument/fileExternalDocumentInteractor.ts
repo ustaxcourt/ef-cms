@@ -135,15 +135,19 @@ export const fileExternalDocument = async (
         if (docketEntryId && metadata) {
           const numberOfPages = await applicationContext
             .getUseCaseHelpers()
-            .countPagesInDocument({ applicationContext, docketEntryId });
+            .countPagesInDocument({
+              applicationContext,
+              documentStorageId: docketEntryId,
+            });
+
           const docketEntryEntity = new DocketEntry(
             {
               ...baseMetadata,
               ...metadata,
               docketEntryId,
+              documentStorageId: docketEntryId,
               multiDocketedOn: docketNumbers,
               multiDocketedOriginalDocketNumber: docketNumber,
-              documentStorageId: docketEntryId,
               documentType: metadata.documentType,
               isOnDocketRecord: true,
               relationship,

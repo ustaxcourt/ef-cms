@@ -39,8 +39,6 @@ export const setDocketEntryMetaFormForEditAction = ({
       .getUtilities()
       .getServedPartiesCode(documentDetail.servedParties);
 
-  console.log('documentDetail', documentDetail);
-
   store.set(state.form, {
     ...documentDetail,
     filersMap,

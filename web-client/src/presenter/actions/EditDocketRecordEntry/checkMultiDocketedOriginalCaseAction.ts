@@ -6,10 +6,10 @@ export const checkMultiDocketedOriginalCaseAction = ({
   props,
 }: ActionProps) => {
   const { docketEntries } = get(state.caseDetail);
-  const { docketRecordIndex } = props;
+  const { docketRecordIndex, docketEntryId } = props;
 
   const documentDetail = docketEntries.find(
-    ({ index }) => index === docketRecordIndex,
+    de => de.index === docketRecordIndex || de.docketEntryId === docketEntryId,
   );
 
   if (!documentDetail) {
