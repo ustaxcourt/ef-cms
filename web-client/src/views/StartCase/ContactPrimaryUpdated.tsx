@@ -350,7 +350,7 @@ export const ContactPrimaryUpdated = connect<
                   </span>
                 </label>
                 <input
-                  aria-describedby="contactPrimary.preferredLanguage-hint contactPrimary.preferredLanguage-count"
+                  aria-describedby="contactPrimary.preferredLanguage-hint"
                   autoCapitalize="none"
                   className="usa-input"
                   data-testid="contact-primary-preferred-language"
@@ -398,7 +398,7 @@ export const ContactPrimaryUpdated = connect<
                   </span>
                 </label>
                 <input
-                  aria-describedby="contactPrimary.preferredCommunicationMethod-hint contactPrimary.preferredCommunicationMethod-count"
+                  aria-describedby="contactPrimary.preferredCommunicationMethod-hint"
                   autoCapitalize="none"
                   className="usa-input"
                   data-testid="contact-primary-preferred-communication-method"

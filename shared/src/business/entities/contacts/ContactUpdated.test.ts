@@ -511,64 +511,6 @@ describe('ContactUpdated', () => {
 
         expect(entity.preferredLanguage).toEqual('Spanish');
       });
-
-      it('should fail validation when preferredLanguage exceeds max characters', () => {
-        const entity = new ContactUpdated(
-          {
-            ...VALID_ENTITY,
-            preferredLanguage: 'a'.repeat(21),
-          },
-          CONTACT_NAME,
-          PETITION_TYPE,
-          PARTY_TYPE,
-        );
-
-        expect(entity.getFormattedValidationErrors()).toHaveProperty(
-          'preferredLanguage',
-        );
-      });
-
-      it('should pass validation when preferredLanguage is at max characters', () => {
-        const entity = new ContactUpdated(
-          {
-            ...VALID_ENTITY,
-            preferredLanguage: 'a'.repeat(20),
-          },
-          CONTACT_NAME,
-          PETITION_TYPE,
-          PARTY_TYPE,
-        );
-
-        expect(entity.getFormattedValidationErrors()).toBeNull();
-      });
-
-      it('should trim whitespace from preferredLanguage', () => {
-        const entity = new ContactUpdated(
-          {
-            ...VALID_ENTITY,
-            preferredLanguage: '  Spanish  ',
-          },
-          CONTACT_NAME,
-          PETITION_TYPE,
-          PARTY_TYPE,
-        );
-
-        expect(entity.preferredLanguage).toEqual('Spanish');
-      });
-
-      it('should convert whitespace-only preferredLanguage to undefined', () => {
-        const entity = new ContactUpdated(
-          {
-            ...VALID_ENTITY,
-            preferredLanguage: '   ',
-          },
-          CONTACT_NAME,
-          PETITION_TYPE,
-          PARTY_TYPE,
-        );
-
-        expect(entity.preferredLanguage).toBeUndefined();
-      });
     });
 
     describe('preferredCommunicationMethod', () => {
@@ -584,64 +526,6 @@ describe('ContactUpdated', () => {
         );
 
         expect(entity.preferredCommunicationMethod).toEqual('ASL');
-      });
-
-      it('should fail validation when preferredCommunicationMethod exceeds max characters', () => {
-        const entity = new ContactUpdated(
-          {
-            ...VALID_ENTITY,
-            preferredCommunicationMethod: 'a'.repeat(21),
-          },
-          CONTACT_NAME,
-          PETITION_TYPE,
-          PARTY_TYPE,
-        );
-
-        expect(entity.getFormattedValidationErrors()).toHaveProperty(
-          'preferredCommunicationMethod',
-        );
-      });
-
-      it('should pass validation when preferredCommunicationMethod is at max characters', () => {
-        const entity = new ContactUpdated(
-          {
-            ...VALID_ENTITY,
-            preferredCommunicationMethod: 'a'.repeat(20),
-          },
-          CONTACT_NAME,
-          PETITION_TYPE,
-          PARTY_TYPE,
-        );
-
-        expect(entity.getFormattedValidationErrors()).toBeNull();
-      });
-
-      it('should trim whitespace from preferredCommunicationMethod', () => {
-        const entity = new ContactUpdated(
-          {
-            ...VALID_ENTITY,
-            preferredCommunicationMethod: '  ASL  ',
-          },
-          CONTACT_NAME,
-          PETITION_TYPE,
-          PARTY_TYPE,
-        );
-
-        expect(entity.preferredCommunicationMethod).toEqual('ASL');
-      });
-
-      it('should convert whitespace-only preferredCommunicationMethod to undefined', () => {
-        const entity = new ContactUpdated(
-          {
-            ...VALID_ENTITY,
-            preferredCommunicationMethod: '   ',
-          },
-          CONTACT_NAME,
-          PETITION_TYPE,
-          PARTY_TYPE,
-        );
-
-        expect(entity.preferredCommunicationMethod).toBeUndefined();
       });
     });
   });
