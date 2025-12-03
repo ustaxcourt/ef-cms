@@ -508,7 +508,7 @@ describe('Case entity', () => {
       const errors = myCase.getFormattedValidationErrors();
 
       expect(errors).toMatchObject({
-        'petitioners[2]':
+        'petitioners-2':
           'Only one (1) Intervenor is allowed per case. Please select a different Role.',
       });
     });

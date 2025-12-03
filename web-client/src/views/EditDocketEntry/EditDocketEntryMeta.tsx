@@ -1,15 +1,17 @@
-import { Button } from '../../ustc-ui/Button/Button';
-import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
+import { Button } from '@web-client/ustc-ui/Button/Button';
+import { CaseDetailHeader } from '@web-client/views/CaseDetail/CaseDetailHeader';
 import { EditDocketEntryMetaDocketEntryPreview } from './EditDocketEntryMetaDocketEntryPreview';
 import { EditDocketEntryMetaFormCourtIssued } from './EditDocketEntryMetaFormCourtIssued';
 import { EditDocketEntryMetaFormDocument } from './EditDocketEntryMetaFormDocument';
 import { EditDocketEntryMetaFormNoDocument } from './EditDocketEntryMetaFormNoDocument';
 import { EditDocketEntryMetaTabAction } from './EditDocketEntryMetaTabAction';
 import { EditDocketEntryMetaTabService } from './EditDocketEntryMetaTabService';
-import { ErrorNotification } from '../ErrorNotification';
-import { FormCancelModalDialog } from '../FormCancelModalDialog';
-import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
+import { ErrorNotification } from '@web-client/views/ErrorNotification';
+import { FormCancelModalDialog } from '@web-client/views/FormCancelModalDialog';
+import { Tab, Tabs } from '@web-client/ustc-ui/Tabs/Tabs';
+import { InfoNotificationComponent } from '@web-client/views/InfoNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
+import { isLeadCase, isMemberCase } from '@shared/business/entities/cases/Case';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -18,19 +20,29 @@ export const EditDocketEntryMeta = connect(
   {
     closeModalAndReturnToCaseDetailSequence:
       sequences.closeModalAndReturnToCaseDetailSequence,
+    editDocketEntryMetaHelper: state.editDocketEntryMetaHelper,
     editType: state.screenMetadata.editType,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     showModal: state.modal.showModal,
     submitEditDocketEntryMetaSequence:
       sequences.submitEditDocketEntryMetaSequence,
+    caseDetail: state.caseDetail,
+    form: state.form,
+    isFiledAcrossAllCases: state.isFiledAcrossAllCases,
   },
   function EditDocketEntryMeta({
     closeModalAndReturnToCaseDetailSequence,
+    editDocketEntryMetaHelper,
     editType,
     formCancelToggleCancelSequence,
     showModal,
     submitEditDocketEntryMetaSequence,
+    caseDetail,
+    form,
+    isFiledAcrossAllCases,
   }) {
+    const isDisabled =
+      caseDetail && isMemberCase(caseDetail) && isFiledAcrossAllCases;
     return (
       <>
         <CaseDetailHeader />
@@ -51,6 +63,56 @@ export const EditDocketEntryMeta = connect(
           </div>
           <div className="grid-row grid-gap">
             <div className="grid-col-5 DocumentDetail">
+              {caseDetail &&
+                isLeadCase(caseDetail) &&
+                isFiledAcrossAllCases && (
+                  <InfoNotificationComponent
+                    alertInfo={{
+                      message: (
+                        <div className="margin-top-2 margin-bottom-2">
+                          <b>Edits to Document Info will also be edited for:</b>
+                          <ul className="usa-list padding-top-0 padding-bottom-0 margin-top-1 margin-bottom-1">
+                            {editDocketEntryMetaHelper.consolidatedCasesToDisplay.map(
+                              c => (
+                                <li
+                                  key={c.docketNumber}
+                                  className="margin-bottom-0"
+                                >
+                                  {c.docketNumber}{' '}
+                                  {c.caseTitle ||
+                                    c.caseCaption ||
+                                    form?.documentTitle ||
+                                    form?.eventCode}
+                                </li>
+                              ),
+                            )}
+                          </ul>
+                          <p className="margin-bottom-0 margin-top-0">
+                            Service and Action edits will only apply to this
+                            case.
+                          </p>
+                        </div>
+                      ),
+                    }}
+                    dismissible={false}
+                    scrollToTop={false}
+                  />
+                )}
+              {isDisabled && (
+                <InfoNotificationComponent
+                  alertInfo={{
+                    message: (
+                      <div className="margin-top-1 margin-bottom-1">
+                        Edits to Document Info can only be done from the{' '}
+                        <strong>lead case</strong> in a consolidated group. This
+                        is a member case.
+                      </div>
+                    ),
+                  }}
+                  dismissible={false}
+                  scrollToTop={false}
+                />
+              )}
               <Tabs
                 boxed
                 bind="editDocketEntryMetaTab"
@@ -104,7 +166,7 @@ export const EditDocketEntryMeta = connect(
                 </Button>
               </div>
             </div>
-            <div className="grid-col-7">{/* TODO: File preview */}</div>
+            <div className="grid-col-7"></div>
           </div>
         </section>
         {showModal === 'FormCancelModalDialog' && (

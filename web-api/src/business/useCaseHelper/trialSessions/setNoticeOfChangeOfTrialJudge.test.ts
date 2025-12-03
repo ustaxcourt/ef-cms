@@ -11,6 +11,8 @@ import { setNoticeOfChangeOfTrialJudge } from './setNoticeOfChangeOfTrialJudge';
 jest.mock('@shared/business/utilities/getJudgeWithTitle', () => ({
   getJudgeWithTitle: jest.fn(),
 }));
+const mockGetJudgeWithTitle: jest.MockedFunction<typeof getJudgeWithTitle> =
+  jest.mocked(getJudgeWithTitle);
 
 describe('setNoticeOfChangeOfTrialJudge', () => {
   const trialSessionId = '76a5b1c8-1eed-44b6-932a-967af060597a';
@@ -65,11 +67,11 @@ describe('setNoticeOfChangeOfTrialJudge', () => {
       mockDocketClerkUser,
     );
 
-    expect(getJudgeWithTitle.mock.calls[0][0]).toMatchObject({
+    expect(mockGetJudgeWithTitle.mock.calls[0][0]).toMatchObject({
       judgeUserName: currentTrialSession.judge.name,
       useFullName: true,
     });
-    expect(getJudgeWithTitle.mock.calls[1][0]).toMatchObject({
+    expect(mockGetJudgeWithTitle.mock.calls[1][0]).toMatchObject({
       judgeUserName: updatedTrialSession.judge.name,
       useFullName: true,
     });

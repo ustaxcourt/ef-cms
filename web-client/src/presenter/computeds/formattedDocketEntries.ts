@@ -103,6 +103,26 @@ export const getShowSealDocketRecordEntry = ({ applicationContext, entry }) => {
   return !docketEntryIsOpinion;
 };
 
+const getMotionDispositionOrderIndex = (
+  motionEntry: RawDocketEntry,
+  rawCase: RawCase,
+  targetDocketEntryId: string,
+) => {
+  const relatedOrder = rawCase.docketEntries.find(
+    entry => entry.docketEntryId === targetDocketEntryId,
+  );
+
+  if (!relatedOrder) {
+    throw new Error(
+      `Related order not found for motion with id ${motionEntry.docketEntryId} and targetDocketEntryId ${targetDocketEntryId} and title ${
+        motionEntry.documentTitle
+      }`,
+    );
+  }
+
+  return relatedOrder.index;
+};
+
 export const getFormattedDocketEntry = ({
   applicationContext,
   docketNumber,
@@ -124,6 +144,26 @@ export const getFormattedDocketEntry = ({
     ...entry,
     createdAtFormatted: entry.createdAtFormatted,
   };
+
+  if (entry.affectedDocketEntries) {
+    entry.affectedDocketEntries.forEach(affectedEntry => {
+      affectedEntry.docketEntryIndex = getMotionDispositionOrderIndex(
+        entry,
+        rawCase,
+        affectedEntry.docketEntryId,
+      );
+    });
+  }
+
+  if (entry.affectedByDocketEntries) {
+    entry.affectedByDocketEntries.forEach(affectedEntry => {
+      affectedEntry.docketEntryIndex = getMotionDispositionOrderIndex(
+        entry,
+        rawCase,
+        affectedEntry.docketEntryId,
+      );
+    });
+  }
 
   if (!isExternalUser) {
     formattedResult.showLoadingIcon =

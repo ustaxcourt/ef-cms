@@ -1,5 +1,6 @@
 import {
   COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
+  DOCKET_ENTRY_DOCUMENT_INFO_FIELDS,
   UNSERVABLE_EVENT_CODES,
 } from '@shared/business/entities/EntityConstants';
 import { Case } from '@shared/business/entities/cases/Case';
@@ -16,7 +17,11 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { getDocumentTitleWithAdditionalInfo } from '@shared/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import diff from 'diff-arrays-of-objects';
+import { upsertDocketEntryRelatedEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntryRelatedEntries';
+import _ from 'lodash';
 
 export const updateDocketEntryMeta = async (
   applicationContext: ServerApplicationContext,
@@ -50,13 +55,24 @@ export const updateDocketEntryMeta = async (
     );
   }
 
-  if (
+  const isUnservedAndNotExempt =
     !DocketEntry.isServed(originalDocketEntry) &&
     !UNSERVABLE_EVENT_CODES.includes(originalDocketEntry.eventCode) &&
-    !DocketEntry.isMinuteEntry(originalDocketEntry)
-  ) {
+    !DocketEntry.isMinuteEntry(originalDocketEntry);
+
+  if (isUnservedAndNotExempt) {
     throw new Error('Unable to update unserved docket entry.');
   }
+
+  if (
+    docketEntryMeta.affectedDocketEntries ||
+    originalDocketEntry.affectedDocketEntries
+  )
+    await handleRelatedDocketEntries(
+      originalDocketEntry,
+      docketEntryMeta,
+      docketNumber,
+    );
 
   const editableFields = {
     action: docketEntryMeta.action,
@@ -175,6 +191,63 @@ export const updateDocketEntryMeta = async (
     caseEntity.updateDocketEntry(docketEntryEntity);
   }
 
+  const { consolidatedCases } = caseEntity;
+
+  if (consolidatedCases && consolidatedCases.length > 0) {
+    const docketNumbersToUpdate = consolidatedCases
+      .filter(({ docketNumber }) => docketNumber)
+      .map(({ docketNumber }) => docketNumber)
+      .concat(caseEntity.docketNumber);
+
+    const casesToUpdate = await getCasesByDocketNumbers({
+      docketNumbers: Array.from(new Set(docketNumbersToUpdate)),
+    });
+
+    const updatedDocketEntries = casesToUpdate
+      .map(caseRecord => {
+        const { docketNumber } = caseRecord;
+        const consolidatedCaseEntity =
+          docketNumber === caseEntity.docketNumber
+            ? caseEntity
+            : new Case(caseRecord, { authorizedUser });
+
+        const consolidatedCaseDocketEntry =
+          consolidatedCaseEntity.getDocketEntryById({
+            docketEntryId: docketEntryMeta.docketEntryId,
+          });
+
+        if (consolidatedCaseDocketEntry) {
+          const propagationFields: any = {};
+          DOCKET_ENTRY_DOCUMENT_INFO_FIELDS.forEach(field => {
+            if (Object.prototype.hasOwnProperty.call(editableFields, field)) {
+              propagationFields[field] = (editableFields as any)[field];
+            }
+          });
+
+          const merged = new DocketEntry(
+            {
+              ...consolidatedCaseDocketEntry,
+              ...propagationFields,
+            },
+            { authorizedUser, petitioners: consolidatedCaseEntity.petitioners },
+          );
+
+          if (docketEntryEntity && docketEntryEntity.numberOfPages) {
+            merged.setNumberOfPages(docketEntryEntity.numberOfPages);
+          }
+
+          return merged.validate().toRawObject();
+        }
+
+        return undefined;
+      })
+      .filter(Boolean);
+
+    if (updatedDocketEntries.length > 0) {
+      await upsertDocketEntries(updatedDocketEntries as any[]);
+    }
+  }
+
   const result = await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
@@ -192,14 +265,22 @@ export const shouldGenerateCoversheetForDocketEntry = ({
   servedAtUpdated,
   shouldAddNewCoverSheet,
 }) => {
+  const hasRelevantFieldUpdates =
+    servedAtUpdated ||
+    filingDateUpdated ||
+    certificateOfServiceUpdated ||
+    shouldAddNewCoverSheet ||
+    documentTitleUpdated;
+
+  const isCourtIssuedAndRequiresCoversheet =
+    !originalDocketEntry.isCourtIssued() || entryRequiresCoverSheet;
+
+  const isNotMinuteEntry = !DocketEntry.isMinuteEntry(originalDocketEntry);
+
   return (
-    (servedAtUpdated ||
-      filingDateUpdated ||
-      certificateOfServiceUpdated ||
-      shouldAddNewCoverSheet ||
-      documentTitleUpdated) &&
-    (!originalDocketEntry.isCourtIssued() || entryRequiresCoverSheet) &&
-    !DocketEntry.isMinuteEntry(originalDocketEntry)
+    hasRelevantFieldUpdates &&
+    isCourtIssuedAndRequiresCoversheet &&
+    isNotMinuteEntry
   );
 };
 
@@ -209,3 +290,36 @@ export const updateDocketEntryMetaInteractor = withLocking(
     identifiers: [`case|${docketNumber}`],
   }),
 );
+
+const handleRelatedDocketEntries = async (
+  originalDocketEntry: DocketEntry,
+  docketEntryMeta: any,
+  docketNumber: string,
+) => {
+  {
+    const { added, updated, removed } = diff(
+      originalDocketEntry.affectedDocketEntries,
+      docketEntryMeta.affectedDocketEntries,
+      'docketEntryId',
+    );
+
+    if (added.length > 0 || updated.length > 0) {
+      await upsertDocketEntryRelatedEntries({
+        orderDocketEntry: docketEntryMeta,
+        motionDocketEntries: _.concat(added ?? [], updated ?? []).map(m => ({
+          docketNumber,
+          ...m,
+        })),
+        served: true,
+      });
+    }
+
+    if (removed.length > 0) {
+      await upsertDocketEntryRelatedEntries({
+        orderDocketEntry: docketEntryMeta,
+        motionDocketEntries: removed.map(m => ({ docketNumber, ...m })),
+        served: false,
+      });
+    }
+  }
+};

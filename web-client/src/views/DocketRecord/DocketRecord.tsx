@@ -191,7 +191,6 @@ export const DocketRecord = connect(
                         data-testid={entry.docketEntryId}
                         key={entry.docketEntryId}
                       >
-                        {' '}
                         {docketRecordHelper.showBatchDownloadControls && (
                           <td>
                             {entry.isSelectableForDownload && (
@@ -261,7 +260,7 @@ export const DocketRecord = connect(
                         <td
                           className="hide-on-mobile"
                           data-testid="docket-entry-filedBy"
-                        >
+                        > 
                           {entry.filedBy}
                         </td>
                         <td

@@ -3,9 +3,9 @@ import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 import {
   CASE_DISMISSAL_ORDER_TYPES,
   CASE_STATUS_TYPES,
+  ENTERED_AND_SERVED_EVENT_CODES,
 } from '@shared/business/entities/EntityConstants';
 import { Case } from '@shared/business/entities/cases/Case';
-import { ENTERED_AND_SERVED_EVENT_CODES } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
@@ -137,7 +137,7 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
     getTrialSessionById.mockResolvedValue({
       ...MOCK_TRIAL_REGULAR,
       isCalendared: true,
-      //@ts-expect-error This is intentionally breaking the type
+      // @ts-expect-error - This is intentionally breaking the type to test null handling for required field
       proceedingType: null, // Required on TrialSession entity
     });
 

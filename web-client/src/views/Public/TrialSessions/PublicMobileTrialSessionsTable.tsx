@@ -13,17 +13,16 @@ export const PublicMobileTrialSessionsTable = connect<
   PublicMobileTrialSessionsTableProps,
   typeof PublicMobileTrialSessionsTableDeps
 >(PublicMobileTrialSessionsTableDeps, function ({ publicTrialSessionsHelper }) {
-  const { groupedTrialSessions } = publicTrialSessionsHelper;
+  const { mobileFilteredGroups, mobileCount } = publicTrialSessionsHelper;
+
   return (
     <>
       <div className="grid-row margin-bottom-2 width-full flex-align-center"></div>
       <div className="width-full text-right">
         <span className="text-bold">Count:</span>{' '}
-        <span className="text-semibold">
-          {publicTrialSessionsHelper.trialSessionsCount}
-        </span>
+        <span className="text-semibold">{mobileCount}</span>
       </div>
-      {publicTrialSessionsHelper.trialSessionRows.length === 0 && (
+      {mobileCount === 0 && (
         <p>There are no trial sessions for the selected filters.</p>
       )}
       <div className="padding-1"></div>
@@ -36,25 +35,21 @@ export const PublicMobileTrialSessionsTable = connect<
           </tr>
         </thead>
         <tbody>
-          {groupedTrialSessions.map(tsGroup => {
+          {mobileFilteredGroups.map(group => {
             return (
-              <tr
-                className="padding-0"
-                key={tsGroup.header.sessionWeekStartDate}
-              >
+              <tr className="padding-0" key={group.header.sessionWeekStartDate}>
                 <th data-label="Document title" scope="row">
-                  Week of {tsGroup.header.formattedSessionWeekStartDate}
+                  Week of {group.header.formattedSessionWeekStartDate}
                 </th>
-                {tsGroup.rows.map((tsRow, index) => {
+                {group.rows.map((tsRow, index) => {
                   return (
-                    <>
+                    <React.Fragment key={tsRow.trialSessionId}>
                       <td
                         className={
-                          index !== tsGroup.rows.length - 1
+                          index !== group.rows.length - 1
                             ? 'double-border'
                             : undefined
                         }
-                        key={tsRow.formattedStartDate}
                       >
                         <PublicMobileTrialSessionsDataRow
                           judgeName={tsRow.judge.name}
@@ -66,7 +61,7 @@ export const PublicMobileTrialSessionsTable = connect<
                           trialSessionId={tsRow.trialSessionId}
                         />
                       </td>
-                    </>
+                    </React.Fragment>
                   );
                 })}
               </tr>

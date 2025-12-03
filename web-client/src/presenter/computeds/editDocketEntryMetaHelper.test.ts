@@ -141,4 +141,165 @@ describe('editDocketEntryMetaHelper', () => {
 
     expect(result.primary.showSecondaryDocumentForm).toBeFalsy();
   });
+
+  describe('consolidatedCasesToDisplay', () => {
+    it('should return an empty array when there are no consolidated cases', () => {
+      const result = runCompute(editDocketEntryMetaHelper, {
+        state: {
+          caseDetail: {
+            docketNumber: '101-20',
+            partyType: PARTY_TYPES.petitioner,
+          },
+          form: {
+            docketEntryId: '123',
+            documentType: 'Answer',
+          },
+          formattedCaseDetail: {
+            consolidatedCases: undefined,
+          },
+        },
+      });
+
+      expect(result.consolidatedCasesToDisplay).toEqual([]);
+    });
+
+    it('should return an empty array when formattedCaseDetail is undefined', () => {
+      const result = runCompute(editDocketEntryMetaHelper, {
+        state: {
+          caseDetail: {
+            docketNumber: '101-20',
+            partyType: PARTY_TYPES.petitioner,
+          },
+          form: {
+            docketEntryId: '123',
+            documentType: 'Answer',
+          },
+        },
+      });
+
+      expect(result.consolidatedCasesToDisplay).toEqual([]);
+    });
+
+    it('should filter out the current case and return other consolidated cases', () => {
+      const result = runCompute(editDocketEntryMetaHelper, {
+        state: {
+          caseDetail: {
+            docketNumber: '101-20',
+            partyType: PARTY_TYPES.petitioner,
+          },
+          form: {
+            docketEntryId: '123',
+            documentType: 'Answer',
+          },
+          formattedCaseDetail: {
+            consolidatedCases: [
+              {
+                caseCaption: 'Lead Case Caption',
+                caseTitle: 'Lead Case Title',
+                docketNumber: '101-20',
+              },
+              {
+                caseCaption: 'Member Case 1 Caption',
+                caseTitle: 'Member Case 1 Title',
+                docketNumber: '102-20',
+              },
+              {
+                caseCaption: 'Member Case 2 Caption',
+                caseTitle: 'Member Case 2 Title',
+                docketNumber: '103-20',
+              },
+            ],
+          },
+        },
+      });
+
+      expect(result.consolidatedCasesToDisplay).toEqual([
+        {
+          caseCaption: 'Member Case 1 Caption',
+          caseTitle: 'Member Case 1 Title',
+          docketNumber: '102-20',
+        },
+        {
+          caseCaption: 'Member Case 2 Caption',
+          caseTitle: 'Member Case 2 Title',
+          docketNumber: '103-20',
+        },
+      ]);
+    });
+
+    it('should return consolidated cases with only the required properties', () => {
+      const result = runCompute(editDocketEntryMetaHelper, {
+        state: {
+          caseDetail: {
+            docketNumber: '101-20',
+            partyType: PARTY_TYPES.petitioner,
+          },
+          form: {
+            docketEntryId: '123',
+            documentType: 'Answer',
+          },
+          formattedCaseDetail: {
+            consolidatedCases: [
+              {
+                caseCaption: 'Lead Case Caption',
+                caseTitle: 'Lead Case Title',
+                docketNumber: '101-20',
+                otherProperty: 'should not be included',
+              },
+              {
+                caseCaption: 'Member Case Caption',
+                caseTitle: 'Member Case Title',
+                docketNumber: '102-20',
+                anotherProperty: 'should not be included',
+              },
+            ],
+          },
+        },
+      });
+
+      expect(result.consolidatedCasesToDisplay).toEqual([
+        {
+          caseCaption: 'Member Case Caption',
+          caseTitle: 'Member Case Title',
+          docketNumber: '102-20',
+        },
+      ]);
+      expect(result.consolidatedCasesToDisplay[0]).not.toHaveProperty(
+        'anotherProperty',
+      );
+    });
+
+    it('should handle consolidated cases with missing optional properties', () => {
+      const result = runCompute(editDocketEntryMetaHelper, {
+        state: {
+          caseDetail: {
+            docketNumber: '101-20',
+            partyType: PARTY_TYPES.petitioner,
+          },
+          form: {
+            docketEntryId: '123',
+            documentType: 'Answer',
+          },
+          formattedCaseDetail: {
+            consolidatedCases: [
+              {
+                docketNumber: '101-20',
+              },
+              {
+                docketNumber: '102-20',
+              },
+            ],
+          },
+        },
+      });
+
+      expect(result.consolidatedCasesToDisplay).toEqual([
+        {
+          caseCaption: undefined,
+          caseTitle: undefined,
+          docketNumber: '102-20',
+        },
+      ]);
+    });
+  });
 });

@@ -1,5 +1,4 @@
 /* eslint-disable max-lines */
-import { ENTERED_AND_SERVED_EVENT_CODES } from './courtIssuedDocument/CourtIssuedDocumentConstants';
 import { FORMATS, formatNow } from '../utilities/DateHandler';
 import {
   flatten,
@@ -42,6 +41,8 @@ export const COLD_CASE_LOOKBACK_IN_DAYS = 120;
 export const MAX_PRACTITIONER_DOCUMENT_DESCRIPTION_CHARACTERS = 1000;
 
 export const MAX_STAMP_CUSTOM_TEXT_CHARACTERS = 60;
+
+export const MAX_MESSAGE_SUBJECT_CHARACTERS = 250;
 
 export const EXHIBIT_EVENT_CODES = ['EXH', 'PTE', 'HE', 'TE', 'M123', 'STIP'];
 
@@ -86,7 +87,16 @@ export const JURISDICTIONAL_OPTIONS = {
   undersigned: 'Jurisdiction is retained by the undersigned',
 };
 
-export const MOTION_DISPOSITIONS = { DENIED: 'Denied', GRANTED: 'Granted' };
+export type DocketEntryRelation = {
+  disposition: string;
+  docketEntryId: string;
+};
+
+export const MOTION_DISPOSITIONS = {
+  DENIED: 'DENIED',
+  GRANTED: 'GRANTED',
+  GRANTED_IN_PART: 'GRANTED IN PART',
+};
 
 export const STRICKEN_FROM_TRIAL_SESSION_MESSAGE =
   'This case is stricken from the trial session';
@@ -418,7 +428,6 @@ export const ADVANCED_SEARCH_OPINION_TYPES_LIST = [
     label: 'Bench Opinion (Order of Service of Transcript)',
   },
 ];
-
 export const ORDER_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(
   d => d.isOrder && d.eventCode !== BENCH_OPINION_EVENT_CODE,
 ).map(pickEventCode);
@@ -447,6 +456,33 @@ export const DOCUMENT_EXTERNAL_CATEGORIES = Object.keys(EXTERNAL_FILING_EVENTS);
 export const DOCUMENT_INTERNAL_CATEGORIES = Object.keys(INTERNAL_FILING_EVENTS);
 export const COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET =
   COURT_ISSUED_EVENT_CODES.filter(d => d.requiresCoversheet).map(pickEventCode);
+
+export const DOCKET_ENTRY_DOCUMENT_INFO_FIELDS = [
+  'addToCoversheet',
+  'additionalInfo',
+  'additionalInfo2',
+  'attachments',
+  'certificateOfService',
+  'certificateOfServiceDate',
+  'documentTitle',
+  'documentType',
+  'eventCode',
+  'filedBy',
+  'filers',
+  'filingDate',
+  'freeText',
+  'hasOtherFilingParty',
+  'ordinalValue',
+  'otherFilingParty',
+  'otherIteration',
+  'partyIrsPractitioner',
+  'pending',
+  'previousDocument',
+  'secondaryDocument',
+  'trialLocation',
+  'docketNumbers',
+  'objections',
+] as const;
 
 export const EVENT_CODES_REQUIRING_SIGNATURE = COURT_ISSUED_EVENT_CODES.filter(
   d => d.requiresSignature,
@@ -659,6 +695,15 @@ export const SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES = flatten([
 ])
   .filter((internalEvent: Record<string, any>) => internalEvent.caseDecision)
   .map(x => x.eventCode);
+
+export const ENTERED_AND_SERVED_EVENT_CODES = [
+  'ODJ',
+  'OD',
+  'ODD',
+  'OAD',
+  'DEC',
+  'SDEC',
+];
 
 export const NON_MULTI_DOCKETABLE_EVENT_CODES = [
   ...ENTERED_AND_SERVED_EVENT_CODES,
