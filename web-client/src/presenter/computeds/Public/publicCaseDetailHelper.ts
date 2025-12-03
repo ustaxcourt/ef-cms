@@ -16,6 +16,42 @@ import { sortDocketEntryTable } from '@web-client/presenter/computeds/formattedD
 import { state } from '@web-client/presenter/app-public.cerebral';
 import { formatDateString } from '@shared/business/utilities/DateHandler';
 
+const getRelatedDocketEntryDetails = (
+  motionEntry: RawDocketEntry,
+  rawCase: RawPublicCase,
+  targetDocketEntryId: string,
+  visibilityPolicyDate: any,
+) => {
+  const relatedOrder = rawCase.docketEntries.find(
+    entry => entry.docketEntryId === targetDocketEntryId,
+  );
+
+  if (!relatedOrder) {
+    throw new Error(
+      `Related order not found for motion with id ${motionEntry.docketEntryId} and targetDocketEntryId ${targetDocketEntryId} and title ${
+        motionEntry.documentTitle
+      }`,
+    );
+  }
+
+  const isDownloadable = DocketEntry.isDownloadable(relatedOrder, {
+    isTerminalUser: false,
+    rawCase,
+    user: {
+      role: ROLES.petitioner,
+      userId: '',
+      email: '',
+      name: '',
+    },
+    visibilityChangeDate: visibilityPolicyDate,
+  });
+  const showDownloadLink = isDownloadable;
+  return {
+    index: relatedOrder.index,
+    showDownloadLink,
+  };
+};
+
 export const formatDocketEntryOnDocketRecord = (
   applicationContext,
   {
@@ -75,6 +111,25 @@ export const formatDocketEntryOnDocketRecord = (
     );
   }
 
+  let relatedDocketEntries;
+  if (entry.affectedDocketEntries || entry.affectedByDocketEntries) {
+    relatedDocketEntries = [
+      ...(entry.affectedByDocketEntries ?? []),
+      ...(entry.affectedDocketEntries ?? []),
+    ].map(affectedEntry => {
+      const { index, showDownloadLink } = getRelatedDocketEntryDetails(
+        entry,
+        rawCase,
+        affectedEntry.docketEntryId,
+        visibilityPolicyDate,
+      );
+
+      affectedEntry.docketEntryIndex = index;
+      affectedEntry.showDownloadLink = showDownloadLink;
+      return affectedEntry;
+    });
+  }
+
   entry.filingsAndProceedings = getFilingsAndProceedings(entry);
 
   const canPublicUserSeeLink = DocketEntry.isDownloadable(entry, {
@@ -120,6 +175,7 @@ export const formatDocketEntryOnDocketRecord = (
     isStricken: entry.isStricken,
     numberOfPages: entry.numberOfPages || 0,
     openInSameTab: !isTerminalUser,
+    relatedDocketEntries,
     sealedToTooltip: entry.sealedToTooltip,
     servedAtFormatted: entry.servedAtFormatted,
     servedPartiesCode: entry.servedPartiesCode,
@@ -172,6 +228,12 @@ export type PublicFormattedDocketEntryInfo = {
   showDocumentDescriptionWithoutLink: boolean;
   signatory?: string;
   hasDocument: boolean;
+  relatedDocketEntries: {
+    disposition?: string;
+    docketEntryId?: string;
+    docketEntryIndex?: number;
+    showDownloadLink: boolean;
+  }[];
 };
 
 export type PublicCaseDetailHelperResults = {
