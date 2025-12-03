@@ -109,5 +109,23 @@ describe('Petitioner', () => {
 
       expect(entity.hasConsentedToElectronicService).toBeFalsy();
     });
+
+    it('should populate preferredLanguage field', () => {
+      const entity = new Petitioner({
+        ...mockValidPetitioner,
+        preferredLanguage: 'Spanish',
+      });
+
+      expect(entity.preferredLanguage).toEqual('Spanish');
+    });
+
+    it('should populate preferredCommunicationMethod field', () => {
+      const entity = new Petitioner({
+        ...mockValidPetitioner,
+        preferredCommunicationMethod: 'ASL',
+      });
+
+      expect(entity.preferredCommunicationMethod).toEqual('ASL');
+    });
   });
 });
