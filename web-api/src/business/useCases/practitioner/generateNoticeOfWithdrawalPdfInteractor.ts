@@ -1,7 +1,7 @@
-// import {
-//   isAuthorized,
-//   ROLE_PERMISSIONS,
-// } from '@shared/authorization/authorizationClientService';
+import {
+  isAuthorized,
+  ROLE_PERMISSIONS,
+} from '@shared/authorization/authorizationClientService';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { ROLES } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
@@ -36,7 +36,7 @@ export const generateNoticeOfWithdrawalPdfInteractor = async (
 ): Promise<{ fileId: string; url: string }> => {
   // For now, just check that the user is logged in
   // use isAuthorized to check for type of user
-  if (!authorizedUser) {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.FILE_EXTERNAL_DOCUMENT)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
