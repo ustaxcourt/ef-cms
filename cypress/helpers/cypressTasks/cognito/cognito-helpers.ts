@@ -2,13 +2,10 @@ import {
   AuthFlowType,
   ChallengeNameType,
 } from '@aws-sdk/client-cognito-identity-provider';
-import { DeleteRequest } from '@web-api/persistence/dynamo/dynamoTypes';
 import { TOTP } from 'totp-generator';
-import { batchWrite, getDocumentClient } from '../dynamo/getDynamoCypress';
 import { getCognito } from './getCognitoCypress';
 import { getCypressEnv } from '../../env/cypressEnvironment';
-
-export const DEFAULT_FORGOT_PASSWORD_CODE = '385030';
+import { deleteAllUserRecords } from '../postgres/postgres-helpers';
 
 export const confirmUser = async ({ email }: { email: string }) => {
   const userPoolId = await getUserPoolId();
@@ -164,63 +161,7 @@ const deleteAccount = async (
     Username: user.email.toLowerCase(),
   };
   await getCognito().adminDeleteUser(params);
-
-  const userRecords = await getDocumentClient().query({
-    ExpressionAttributeNames: {
-      '#pk': 'pk',
-    },
-    ExpressionAttributeValues: {
-      ':pk': `user|${user.userId}`,
-    },
-    KeyConditionExpression: '#pk = :pk ',
-    TableName: getCypressEnv().dynamoDbTableName,
-  });
-
-  const userRecord = userRecords.Items?.find(record => {
-    return record.sk === `user|${user.userId}`;
-  });
-
-  const deleteRequests: DeleteRequest[] = [];
-  if (userRecord) {
-    deleteRequests.push({
-      DeleteRequest: {
-        Key: {
-          pk: `user-email|${userRecord.email}`,
-          sk: `user|${user.userId}`,
-        },
-      },
-    });
-
-    deleteRequests.push({
-      DeleteRequest: {
-        Key: {
-          pk: `privatePractitioner|${userRecord.barNumber}`,
-          sk: `user|${user.userId}`,
-        },
-      },
-    });
-    deleteRequests.push({
-      DeleteRequest: {
-        Key: {
-          pk: `privatePractitioner|${userRecord.name}`,
-          sk: `user|${user.userId}`,
-        },
-      },
-    });
-
-    userRecords.Items?.map(record =>
-      deleteRequests.push({
-        DeleteRequest: {
-          Key: {
-            pk: record.pk,
-            sk: record.sk,
-          },
-        },
-      }),
-    );
-
-    await batchWrite(deleteRequests);
-  }
+  await deleteAllUserRecords({ userId: user.userId });
 };
 
 const getAllCypressTestAccounts = async (
@@ -301,7 +242,7 @@ export async function getIrsBearerToken({
   if (!associateResult.SecretCode) {
     throw new Error('Could not generate Secret Code');
   }
-  const { otp } = TOTP.generate(associateResult.SecretCode);
+  const { otp } = await TOTP.generate(associateResult.SecretCode);
   const verifyTokenResult = await getCognito().verifySoftwareToken({
     Session: associateResult.Session,
     UserCode: otp,

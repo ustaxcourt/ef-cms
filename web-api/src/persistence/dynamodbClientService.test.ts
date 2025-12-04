@@ -4,20 +4,15 @@ import {
   batchDelete,
   batchGet,
   remove as deleteObj,
-  describeDeployTable,
   describeTable,
   get,
-  getDeployTableName,
-  getFromDeployTable,
   getTableName,
   put,
-  putInDeployTable,
   query,
   queryFull,
   scan,
   update,
   updateConsistent,
-  updateToDeployTable,
 } from './dynamodbClientService';
 
 describe('dynamodbClientService', function () {
@@ -134,48 +129,6 @@ describe('dynamodbClientService', function () {
     });
   });
 
-  describe('getDeployTableName', () => {
-    let currentEnvironment;
-    const testEnvironment = {
-      appEndpoint: '',
-      dynamoDbTableName: 'some-table',
-      stage: 'local',
-      tempDocumentsBucketName: 'some-temp-bucket',
-    };
-
-    beforeAll(() => {
-      currentEnvironment = applicationContext.environment;
-      applicationContext.getEnvironment = jest.fn().mockReturnValue({
-        stage: 'other',
-      });
-    });
-
-    beforeEach(() => {
-      applicationContext.environment = testEnvironment;
-    });
-
-    afterAll(() => {
-      applicationContext.environment = currentEnvironment;
-    });
-
-    it('returns environment.dynamoDbTableName if environment.stage is local', () => {
-      const tableName = getDeployTableName({ applicationContext });
-      expect(tableName).toBe('some-table');
-    });
-
-    it('falls back to getEnvironment() if applicationContext.environment is undefined if environment.stage is local', () => {
-      applicationContext.environment = undefined!;
-      const tableName = getDeployTableName({ applicationContext });
-      expect(tableName).toBe('efcms-deploy-other');
-    });
-
-    it('returns the table name based on environment.stage if not local', () => {
-      applicationContext.environment.stage = 'example';
-      const tableName = getDeployTableName({ applicationContext });
-      expect(tableName).toBe('efcms-deploy-example');
-    });
-  });
-
   describe('put', () => {
     it('should return the same Item property passed in in the params', async () => {
       const result = await put({
@@ -212,44 +165,6 @@ describe('dynamodbClientService', function () {
     });
   });
 
-  describe('getDeployTable', () => {
-    it('should return the deploy table name when the environment is NOT local', async () => {
-      const mockEnvironment = 'exp99';
-      applicationContext.environment.stage = mockEnvironment;
-
-      applicationContext.getEnvironment.mockReturnValue({
-        stage: mockEnvironment,
-      });
-
-      const result = await getDeployTableName({
-        applicationContext,
-      });
-
-      expect(result).toEqual('efcms-deploy-exp99');
-    });
-
-    it('should return the regular dynamo table name when the environment is local', async () => {
-      applicationContext.environment.dynamoDbTableName = dynamoDbTableName;
-      applicationContext.environment.stage = 'local';
-
-      const result = await getDeployTableName({
-        applicationContext,
-      });
-
-      expect(result).toEqual(dynamoDbTableName);
-    });
-  });
-
-  describe('updateToDeployTable', () => {
-    it('should return the same Item property passed in in the params', async () => {
-      const result = await updateToDeployTable({
-        Item: MOCK_ITEM,
-        applicationContext,
-      });
-      expect(result).toEqual(MOCK_ITEM);
-    });
-  });
-
   describe('get', () => {
     it('should remove the global aws fields on the object returned', async () => {
       const result = await get({ applicationContext });
@@ -257,51 +172,6 @@ describe('dynamodbClientService', function () {
     });
   });
 
-  describe('getFromDeployTable', () => {
-    const mockItem = {
-      'aws:rep:updatetime': 'anytime',
-      current: 'foobar',
-      pk: 'foo',
-      sk: 'bar',
-    };
-
-    const mockParams = {
-      applicationContext,
-      pk: mockItem.pk,
-      sk: mockItem.sk,
-    };
-
-    const tableName = getDeployTableName({ applicationContext });
-
-    beforeEach(() => {
-      applicationContext.getDocumentClient({ useMainRegion: true }).get = jest
-        .fn()
-        .mockResolvedValue({ Item: mockItem });
-    });
-
-    it('uses the master region', async () => {
-      await getFromDeployTable(mockParams);
-      expect(applicationContext.getDocumentClient).toHaveBeenCalledWith({
-        useMainRegion: true,
-      });
-    });
-
-    it('gets the deploy table name', async () => {
-      await getFromDeployTable(mockParams);
-
-      expect(
-        applicationContext.getDocumentClient({ useMainRegion: true }).get,
-      ).toHaveBeenCalledWith({ TableName: tableName, ...mockParams });
-    });
-
-    it('removes the AWS Global Fields', async () => {
-      const result = await getFromDeployTable(mockParams);
-      expect(result['aws:rep:updatetime']).toBeUndefined();
-      expect(result['pk']).toEqual(mockItem.pk);
-      expect(result['sk']).toEqual(mockItem.sk);
-      expect(result['current']).toEqual(mockItem.current);
-    });
-  });
   describe('query', () => {
     it('should remove the global aws fields on the object returned', async () => {
       const result = await query({ applicationContext });
@@ -581,44 +451,6 @@ describe('dynamodbClientService', function () {
       expect(mockDynamoClient.send.mock.calls[0][0].input).toEqual(
         new DescribeTableCommand({ TableName: dynamoDbTableName }).input,
       );
-    });
-  });
-
-  describe('describeDeployTable', () => {
-    it("should return information on the environment's table", async () => {
-      applicationContext.environment.stage = 'local';
-      applicationContext.environment.dynamoDbTableName = dynamoDbTableName;
-
-      await describeDeployTable({
-        applicationContext,
-      });
-
-      expect(mockDynamoClient.send.mock.calls[0][0].input).toEqual(
-        new DescribeTableCommand({ TableName: dynamoDbTableName }).input,
-      );
-    });
-  });
-
-  describe('putInDeployTable', () => {
-    it('should write an item to the deploy table', async () => {
-      applicationContext.environment.stage = 'local';
-      applicationContext.environment.dynamoDbTableName = dynamoDbTableName;
-
-      const dynamoRecord = {
-        data: {
-          allChecksHealthy: false,
-          timeStamp: 20384938202,
-        },
-        pk: 'healthCheckValue',
-        sk: 'healthCheckValue|us-west-1',
-      };
-
-      await putInDeployTable(applicationContext, dynamoRecord);
-
-      expect(applicationContext.getDocumentClient().put).toHaveBeenCalledWith({
-        Item: dynamoRecord,
-        TableName: dynamoDbTableName,
-      });
     });
   });
 });

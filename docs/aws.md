@@ -51,7 +51,7 @@ DynamoDB can basically be boiled down to a few main operations, PutItem, GetItem
 
 DynamoDB has many limitations, and one of the main pitfalls of DynamoDB is that you need to really understand your applications access patterns before you can start using it in a useful way.  You can always add on GSI (global secondary indicies) at a later time if you need to.  These GSIs will allow you to query for items based on something other than the original PK,SK pair defined when creating the table, but know that with each GSI, you will be charged extra money for write requests.
 
-In our project, our data is stored in a table named `efcms-$ENV-alpha` and `efcms-$ENV-beta`.  The `alpha` and `beta` suffixes are due to our blue-green migration process.  We also store data into another table called `efcms-deploy-$ENV` which is used to keep track of environment state, a historical record of ran migration scripts, feature flags, etc.  Lastly, we store the terraform lock state in a table called `efcms-terraform-lock`.  These locks help prevent multiple terraform runs from running at the same time which can cause major issues.
+In our project, our data, is stored in a table named `efcms-$ENV-alpha` and `efcms-$ENV-beta`.  The `alpha` and `beta` suffixes are due to our blue-green migration process.  We also store data into AWS SSM which is used to keep track of environment state.  Lastly, we store the terraform lock state in a table called `efcms-terraform-lock`.  These locks help prevent multiple terraform runs from running at the same time which can cause major issues.
 
 For more information on DynamoDB, please see the [AWS Documentation](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/).
 
@@ -103,7 +103,7 @@ API Gateway has a default timeout of 30 seconds.  That means if your lambda exec
 
 ## Route53
 
-Route53 is a service which allows you to configure a zone and DNS records associated with that zone.  Before an environment is first deployed, someone will need to setup a domain to point to a manually created Route53 zone.  For example, our sub domain at `ustc-case-mgmt.flexion.us` was created and points to our Route53 zone.  This allows us to use AWS to configure and manage various sub domains, such as `exp1.ustc-case-mgmt.flexion.us` without the need to go to the top level DNS management service that is hosting `flexion.us`.  
+Route53 is a service which allows you to configure a zone and DNS records associated with that zone.  Before an environment is first deployed, someone will need to setup a domain to point to a manually created Route53 zone.  For example, our sub domain at `ef-cms.ustaxcourt.gov` was created and points to our Route53 zone.  This allows us to use AWS to configure and manage various sub domains, such as `exp1.ef-cms.ustaxcourt.gov` without the need to go to the top level DNS management service that is hosting `ustaxcourt.gov`.  
 
 ## CloudFront
 

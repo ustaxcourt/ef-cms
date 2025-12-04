@@ -1,7 +1,6 @@
 const HEALTH_CHECK_IDS = [
   'cognito',
   'dynamoEfcms',
-  'dynamo-deploy-table',
   'elasticsearch',
   // 'emailService', disable for now due to flaky tests
   's3-app',
@@ -22,7 +21,7 @@ describe('Health check', () => {
       cy.visit('/health');
       cy.url().should('include', '/health');
       for (const id of HEALTH_CHECK_IDS) {
-        cy.get(`#${id} svg[data-icon="check-circle"]`).should('exist');
+        cy.get(`#${id} svg[data-icon="circle-check"]`).should('exist');
       }
     });
   }

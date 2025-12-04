@@ -6,7 +6,13 @@ import {
 
 export const docketClerkCreatesARemoteTrialSession = (
   cerebralTest,
-  overrides = {},
+  overrides: {
+    maxCases?: number;
+    sessionType?: string;
+    trialLocation?: string;
+    trialClerk?: { name: string; userId: string };
+    judge?: { name: string; userId: string };
+  } = {},
 ) => {
   return it('Docket clerk starts a remote trial session', async () => {
     await cerebralTest.runSequence('gotoAddTrialSessionSequence');

@@ -3,6 +3,10 @@ name: E2E Cypress Public
 on:
   pull_request:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: true
+
 jobs:
   e2e_cypress_public:
     runs-on: ubuntu-latest
@@ -30,7 +34,7 @@ jobs:
       - name: Setup OpenSearch
         uses: ankane/setup-opensearch@v1
         with:
-          opensearch-version: 2.11
+          opensearch-version: 3.1.0
       - name: Setup DynamoDB Local
         uses: codyseibert/dynamodb-action@v4.1.0
         with:
@@ -41,11 +45,23 @@ jobs:
         uses: runforesight/workflow-telemetry-action@v2
         with:
           comment_on_pr: false
-      - name: Install Node Dependencies
+      - name: Restore Cache Dependencies
+        id: cache-dependencies
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            node_modules
+            .cache/puppeteer
+            /home/runner/.cache/Cypress
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+      - name: Install Node Dependencies - Cache Miss Install
+        if: steps.cache-dependencies.outputs.cache-hit != 'true'
+        id: npm-clean-install
         run: npm ci
       - name: Setup Postgres
         run: |
           npm run migration:postgres
+          npm run migration:postgres:contract
           npm run seed:postgres
       - name: Run E2E Cypress
         run: |
@@ -60,3 +76,12 @@ jobs:
         with:
           name: cypress-videos
           path: ${{ github.workspace }}/cypress/local-only/videos
+      - name: Save Cache Dependencies
+        if: steps.npm-clean-install.outcome == 'success'
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            node_modules
+            .cache/puppeteer
+            /home/runner/.cache/Cypress
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}

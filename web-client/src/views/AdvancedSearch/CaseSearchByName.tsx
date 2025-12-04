@@ -30,7 +30,6 @@ export const CaseSearchByName = connect(
     usStatesOther: state.constants.US_STATES_OTHER,
     validateCaseAdvancedSearchFormSequence:
       sequences.validateCaseAdvancedSearchFormSequence,
-    validateOrderSearchSequence: sequences.validateOrderSearchSequence,
     validationErrors: state.validationErrors,
   },
   function CaseSearchByName({
@@ -45,6 +44,18 @@ export const CaseSearchByName = connect(
     usStatesOther,
     validateCaseAdvancedSearchFormSequence,
     validationErrors,
+  }: {
+    advancedSearchForm: any;
+    advancedSearchHelper: any;
+    caseSearchByNameHelper: any;
+    clearAdvancedSearchFormSequence: Function;
+    submitAdvancedSearchSequence: Function;
+    updateAdvancedSearchFormValueSequence: Function;
+    updateCaseAdvancedSearchByNameFormValueSequence: Function;
+    usStates: any[];
+    usStatesOther: any[];
+    validateCaseAdvancedSearchFormSequence: Function;
+    validationErrors: any;
   }) {
     return (
       <>

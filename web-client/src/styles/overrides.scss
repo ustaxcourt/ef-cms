@@ -217,6 +217,10 @@ option:first-child {
     font-weight: 600;
   }
 
+  &.usa-alert--success-max-width-none {
+    max-width: none;
+  }
+
   &.usa-alert-success-message-only {
     @media only screen and (min-width: $medium-screen) {
       .usa-grid-full {
@@ -421,5 +425,11 @@ td.message-select-control {
 .usa-footer {
   [class^='grid-col-'] {
     width: 100%;
+  }
+}
+
+.message-modal-add-document-form {
+  .message-modal-remove-button.ustc-button--unstyled {
+    padding-bottom: 0;
   }
 }

@@ -4,7 +4,6 @@ import {
   parseArgsAndEnvVars,
   type ScriptConfig,
 } from '../../helpers/parseArgsAndEnvVars';
-import { environment } from '@web-api/environment';
 import { getDbReader } from '@web-api/persistence/postgres/database';
 import { isEmpty } from 'lodash';
 import {
@@ -23,9 +22,6 @@ const scriptConfig: ScriptConfig = {
   requireActiveAwsSession: true,
 };
 parseArgsAndEnvVars(scriptConfig);
-
-// We set the environment as 'production' (= "a deployed environment") to get the RDS connection to work properly
-environment.nodeEnv = 'production';
 
 const pageSize = 2000;
 

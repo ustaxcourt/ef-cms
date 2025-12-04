@@ -1,4 +1,4 @@
-import { DateTime, DurationLike, Interval } from 'luxon';
+import { DateTime, DurationLike, Interval, type ToObjectOutput } from 'luxon';
 import fedHolidays from '@18f/us-federal-holidays';
 
 export const FORMATS = {
@@ -26,6 +26,7 @@ export const FORMATS = {
   TIME_TZ: "h:mm a 'ET'",
   TRIAL_SORT_TAG: 'yyyyMMddHHmmss',
   TRIAL_TIME: 'yyyy-MM-dd H:mm',
+  UNIX_TIMESTAMP_MS: 'x',
   UNIX_TIMESTAMP_SECONDS: 'X',
   WEEK: 'W',
   YEAR: 'yyyy',
@@ -110,6 +111,18 @@ export const prepareDateFromString = (
     }).setZone('utc');
   }
   return result;
+};
+
+export const getJsDateFromIso = (isoDate: string): Date => {
+  return prepareDateFromString(isoDate, FORMATS.ISO).toJSDate();
+};
+
+export const getIsoFromJsDate = (jsDate: Date): string | null => {
+  return DateTime.fromJSDate(jsDate).toISO();
+};
+
+export const getNowObject = (): ToObjectOutput => {
+  return DateTime.now().toObject();
 };
 
 export const calculateISODate = ({
@@ -254,6 +267,24 @@ export const createStartOfDayISO = (params?: {
   return dateObject.startOf('day').setZone('utc').toISO();
 };
 
+// expects a date string like 2025-09-18
+export const createStartOfDayISOUtc = (dateString: string): string => {
+  return DateTime.fromFormat(dateString, FORMATS.YYYYMMDD, {
+    zone: 'utc',
+  })
+    .startOf('day')
+    .toISO()!;
+};
+
+// expects a date string like 2025-09-18
+export const createEndOfDayISOUtc = (dateString: string): string => {
+  return DateTime.fromFormat(dateString, FORMATS.YYYYMMDD, {
+    zone: 'utc',
+  })
+    .endOf('day')
+    .toISO()!;
+};
+
 /**
  * @param {object} options the date options containing year, month, day
  * @returns {string} a formatted ISO date string
@@ -299,6 +330,9 @@ export const formatDateString = (
 };
 
 export const formatNow = (formatStr?: TimeFormats | TimeFormatNames) => {
+  // if (formatStr === FORMATS.UNIX_TIMESTAMP_MS) return DateTime.now().toMillis();
+  // if (formatStr === FORMATS.UNIX_TIMESTAMP_SECONDS) return DateTime.now().toSeconds();
+
   const now = createISODateString();
   return formatDateString(now, formatStr);
 };
@@ -657,6 +691,23 @@ export const isValidReconciliationDate = dateString => {
 };
 
 /**
+ * Return true when the provided ISO date is valid and is not in the future.
+ * @param {string} dateString any valid  ISO-8601 date string
+ * @returns {boolean} when date is in the past will return true
+ */
+export const isValidPastDate = dateString => {
+  const dateInputValid = isValidISODate(dateString);
+  if (!dateInputValid) return false;
+
+  const formattedDate = prepareDateFromString(dateString, FORMATS.ISO)
+    .setZone(USTC_TZ)
+    .toFormat(FORMATS.YYYYMMDD);
+  const todayDate = formatNow(FORMATS.YYYYMMDD);
+
+  return formattedDate <= todayDate;
+};
+
+/**
  * Return an IsoDateRange containing start/end ISO time stamps given a starting partial ISO Date and
  * an optional partial end date.  A "partial" ISO date may be any portion of an ISO date is still
  * considered a valid ISO date, e.g. ("2022", "2022-01", "2022-01-02").
@@ -705,21 +756,21 @@ export const getWeeksInRange = ({
 }: {
   startDate: string;
   endDate: string;
-}): string[] => {
+}): IsoDateRange[] => {
   let start = DateTime.fromISO(startDate).startOf('week');
   const end = DateTime.fromISO(endDate).startOf('week');
 
-  const weeks: string[] = [];
+  const weeks: IsoDateRange[] = [];
 
   // Loop through each week, adding each Monday to the array
   while (start <= end) {
     const isoStart = start.toISODate();
-    if (isoStart !== null) {
-      weeks.push(isoStart);
+    const isoEnd = start.plus({ days: 4 }).toISODate();
+    if (isoStart !== null && isoEnd !== null) {
+      weeks.push({ start: isoStart, end: isoEnd });
     }
     start = start.plus({ weeks: 1 });
   }
-
   return weeks;
 };
 

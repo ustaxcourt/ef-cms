@@ -8,8 +8,7 @@ import { SetForHearingModal } from '../SetForHearingModal';
 import { TrialInformation } from './TrialInformation';
 import { UnconsolidateCasesModal } from '../UnconsolidateCasesModal';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const CaseInformationInternal = connect(
@@ -216,6 +215,7 @@ export const CaseInformationInternal = connect(
                         aria-label="set hearing for trial sessions"
                         className="margin-right-0 margin-top-1 padding-0 float-right"
                         icon="plus-circle"
+                        data-testid="set-for-hearing-button"
                         onClick={() => {
                           openSetForHearingModalSequence();
                         }}

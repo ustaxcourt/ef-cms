@@ -101,7 +101,8 @@ const router = {
     setPageTitle('U.S. Tax Court');
     // expose route function on window for use with cypress
 
-    window.__cy_route = path => route(path || '/');
+    (window as Window & { __cy_route?: (path: string) => void }).__cy_route =
+      path => route(path || '/');
     const { ROLE_PERMISSIONS } = app.getState('constants');
 
     registerRoute(
@@ -1553,6 +1554,11 @@ const router = {
     registerRoute('/contact', () => {
       setPageTitle('Contact');
       return app.getSequence('gotoContactSequence')();
+    });
+
+    registerRoute('/cases/recent-filings', () => {
+      setPageTitle('Recent Filings');
+      return app.getSequence('gotoRecentFilingsSequence')();
     });
 
     registerRoute('/maintenance', () => {

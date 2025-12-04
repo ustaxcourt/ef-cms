@@ -138,10 +138,10 @@ button:not(.ustc-button--unstyled) .fa-file-pdf {
 
 .lead-case-icon-text {
   position: absolute;
-  top: 42%;
-  left: 58%;
+  top: 35%;
+  left: 60%;
   cursor: default;
-  font-size: 14px;
+  font-size: 12px;
   transform: translate(-50%, -50%);
   transform-origin: center center;
 }
@@ -215,3 +215,8 @@ button:not(.ustc-button--unstyled) .fa-file-pdf {
 .active .icon-tab-notification .icon-tab-notification-exclamation {
   color: white;
 }
+
+.icon-spacing-4 {
+  margin-right: 4px; 
+}
+

@@ -1,12 +1,13 @@
-import { Case } from '@shared/business/entities/cases/Case';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
+import { getDocketEntriesByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumberAndDocketEntryId';
+import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 
 /**
  * unseals a given docket entry on a case
@@ -33,23 +34,36 @@ export const unsealDocketEntryInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const caseToUpdate = await getCaseByDocketNumber({
-    docketNumber,
-  });
+  const docketEntry = (
+    await getDocketEntriesByDocketNumberAndDocketEntryId({
+      docketNumbersAndIds: [{ docketEntryId, docketNumber }],
+    })
+  )[0];
 
-  const caseEntity = new Case(caseToUpdate, { authorizedUser });
-
-  const docketEntryEntity = caseEntity.getDocketEntryById({
-    docketEntryId,
-  });
-
-  if (!docketEntryEntity) {
+  if (!docketEntry) {
     throw new NotFoundError('Docket entry not found');
   }
 
+  const workItem = await getWorkItemByDocketNumberAndDocketEntryId({
+    docketEntryId,
+    docketNumber,
+  });
+
+  const docketEntryEntity = new DocketEntry(
+    {
+      ...docketEntry,
+      qcComplete: !!workItem?.completedAt,
+      qcViewed: !!workItem?.isRead,
+      workItemId: workItem?.workItemId,
+    },
+    { authorizedUser },
+  );
+
   docketEntryEntity.unsealEntry();
 
-  await upsertDocketEntries([docketEntryEntity.validate().toRawObject()]);
+  const validatedDocketEntry = docketEntryEntity.validate().toRawObject();
 
-  return docketEntryEntity.toRawObject();
+  await upsertDocketEntries([validatedDocketEntry]);
+
+  return validatedDocketEntry;
 };

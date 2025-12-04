@@ -24,6 +24,10 @@ import { getCaseCaptionMeta } from '../utilities/getCaseCaptionMeta';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import {
+  formattedNewEmailForChangeOfAddress,
+  formattedOldEmailForChangeOfAddress,
+} from '@shared/business/utilities/calculateEmail';
 
 /**
  * updateContact
@@ -115,6 +119,17 @@ export const updateContact = async (
   ) {
     const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
 
+    const { isAddressSealed } = updatedPetitioner;
+
+    oldCaseContact.email = formattedOldEmailForChangeOfAddress(
+      oldCaseContact.email,
+      isAddressSealed,
+    );
+    contactInfo.email = formattedNewEmailForChangeOfAddress(
+      contactInfo.email,
+      isAddressSealed,
+    );
+
     const changeOfAddressPdf = await applicationContext
       .getDocumentGenerators()
       .changeOfAddress({
@@ -170,17 +185,12 @@ export const updateContact = async (
       const workItem = new WorkItem({
         assigneeId: null,
         assigneeName: null,
-        docketEntry: {
-          ...changeOfAddressDocketEntry.toRawObject(),
-          createdAt: changeOfAddressDocketEntry.createdAt,
-        },
+        docketEntryId: changeOfAddressDocketEntry.docketEntryId,
         docketNumber: caseEntity.docketNumber,
         section: DOCKET_SECTION,
         sentBy: authorizedUser.name,
         sentByUserId: authorizedUser.userId,
       });
-
-      changeOfAddressDocketEntry.setWorkItem(workItem);
 
       await upsertWorkItems({
         workItems: [workItem.validate().toRawObject()],

@@ -1,7 +1,16 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/docketEntries/mocks.jest';
+
+jest.mock(
+  '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumberAndDocketEntryId',
+);
+jest.mock(
+  '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId',
+);
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getDocketEntriesByDocketNumberAndDocketEntryId as getDocketEntriesByDocketNumberAndDocketEntryIdMock } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumberAndDocketEntryId';
+import { getWorkItemByDocketNumberAndDocketEntryId as getWorkItemByDocketNumberAndDocketEntryIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 import {
   mockDocketClerkUser,
   mockPetitionsClerkUser,
@@ -11,6 +20,10 @@ import { unsealDocketEntryInteractor } from './unsealDocketEntryInteractor';
 describe('unsealDocketEntryInteractor', () => {
   const answerDocketEntryId = 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const getDocketEntriesByDocketNumberAndDocketEntryId =
+    getDocketEntriesByDocketNumberAndDocketEntryIdMock as jest.Mock;
+  const getWorkItemByDocketNumberAndDocketEntryId =
+    getWorkItemByDocketNumberAndDocketEntryIdMock as jest.Mock;
 
   it('should only allow docket clerks to unseal a docket entry', async () => {
     await expect(
@@ -26,6 +39,9 @@ describe('unsealDocketEntryInteractor', () => {
 
   it('should throw an error when the docket entry is not found', async () => {
     getCaseByDocketNumber.mockReturnValue({});
+    getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([]);
+    getWorkItemByDocketNumberAndDocketEntryId.mockResolvedValue(undefined);
+
     await expect(
       unsealDocketEntryInteractor(
         {
@@ -39,6 +55,11 @@ describe('unsealDocketEntryInteractor', () => {
 
   it('should mark the docket entry as unsealed and save', async () => {
     getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+    getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([
+      MOCK_CASE.docketEntries[0],
+    ]);
+    getWorkItemByDocketNumberAndDocketEntryId.mockResolvedValue(undefined);
+
     const unsealedDocketEntry = await unsealDocketEntryInteractor(
       {
         docketEntryId: answerDocketEntryId,

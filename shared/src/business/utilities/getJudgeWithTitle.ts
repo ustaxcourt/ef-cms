@@ -1,14 +1,11 @@
+import { ROLES } from '@shared/business/entities/EntityConstants';
+import { getUsersInSections } from '@web-api/persistence/postgres/users/getUsersInSections';
+
 export const getJudgeWithTitle = async ({
-  applicationContext,
   judgeUserName,
   useFullName = false,
 }) => {
-  const judges = await applicationContext
-    .getPersistenceGateway()
-    .getUsersInSection({
-      applicationContext,
-      section: 'judge',
-    });
+  const judges = await getUsersInSections({ sections: [ROLES.judge] });
 
   const foundJudge = judges.find(_judge => _judge.name === judgeUserName);
 

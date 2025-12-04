@@ -1,9 +1,14 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
+import { props as cerebralProps } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+
+const props = cerebralProps as unknown as {
+  bind: string;
+  contactType: string;
+};
 
 export const ElectronicServiceConsentCheckbox = connect(
   {

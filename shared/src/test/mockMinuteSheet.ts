@@ -14,7 +14,13 @@ export const mockMinuteSheet: MinuteSheet = {
     notCalled: { date: '', note: '' },
     recalls: [{ date: '', note: '', transcriptOrdered: false }],
     pretrialConference: { date: '', note: '', transcriptOrdered: false },
-    trialHearing: {
+    trial: {
+      date: '',
+      note: '',
+      transcriptOrdered: false,
+      trialHearingType: '',
+    },
+    hearing: {
       date: '',
       note: '',
       transcriptOrdered: false,

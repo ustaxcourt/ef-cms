@@ -1,3 +1,5 @@
+import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+
 /**
  * Fetches the details about a trial session
  * @param {object} providers the providers object
@@ -12,11 +14,13 @@ export const getTrialSessionDetailsAction = async ({
   trialSessionId: string;
 }>) => {
   const { trialSessionId } = props;
-  const trialSession = await applicationContext
-    .getUseCases()
-    .getTrialSessionDetailsInteractor(applicationContext, {
-      trialSessionId,
-    });
+
+  const trialSession: RawTrialSession & { swingSessionLocation?: string } =
+    await applicationContext
+      .getUseCases()
+      .getTrialSessionDetailsInteractor(applicationContext, {
+        trialSessionId,
+      });
 
   if (trialSession.swingSession && trialSession.swingSessionId) {
     const swingSession = await applicationContext

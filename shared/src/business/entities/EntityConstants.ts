@@ -19,6 +19,7 @@ export const STATE_KEYS = {
   DOCKET_RECORD_TABLE_SORT: 'DOCKET_RECORD_TABLE_SORT',
   TERM_BUILDER_INFORMATION: 'TERM_BUILDER_INFORMATION',
   PENDING_REPORT_TABLE_SORT: 'PENDING_REPORT_TABLE_SORT',
+  RECENT_FILINGS_TABLE_SORT: 'RECENT_FILINGS_TABLE_SORT',
   CONSOLIDATED_CASE_DEADLINES: 'CONSOLIDATED_CASE_DEADLINES',
 } as const;
 
@@ -41,6 +42,8 @@ export const COLD_CASE_LOOKBACK_IN_DAYS = 120;
 export const MAX_PRACTITIONER_DOCUMENT_DESCRIPTION_CHARACTERS = 1000;
 
 export const MAX_STAMP_CUSTOM_TEXT_CHARACTERS = 60;
+
+export const MAX_MESSAGE_SUBJECT_CHARACTERS = 250;
 
 export const EXHIBIT_EVENT_CODES = ['EXH', 'PTE', 'HE', 'TE', 'M123', 'STIP'];
 
@@ -109,15 +112,15 @@ export const ALLOWLIST_FEATURE_FLAGS = {
   E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG: {
     key: 'e-consent-fields-enabled-feature-flag',
   },
-  ENTITY_LOCKING_FEATURE_FLAG: {
-    key: 'entity-locking-feature-flag',
-  },
   USE_CHANGE_OF_ADDRESS_LAMBDA: {
     disabledMessage:
       'A flag to know when to use the change of address lambda for processing.',
     key: 'use-change-of-address-lambda',
   },
 };
+
+type FeatureFlags = typeof ALLOWLIST_FEATURE_FLAGS;
+export type FeatureFlagKeys = FeatureFlags[keyof FeatureFlags]['key'];
 
 export const CONFIGURATION_ITEM_KEYS = {
   SECTION_OUTBOX_NUMBER_OF_DAYS: {
@@ -783,6 +786,12 @@ export const SPOS_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
   doc => doc.eventCode === 'SPOS',
 )!;
 
+export const AUTO_GENERATED_STATUS_REPORT_ORDER_DESCRIPTIONS = {
+  statusReport: 'Status Report Due',
+  statusReportStipulatedDecision:
+    'Status Report or Proposed Stipulated Decision Due',
+};
+
 const AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES_WITH_NAMES = {
   orderForFilingFee: {
     content:
@@ -909,17 +918,17 @@ export const SYSTEM_GENERATED_DOCUMENT_TYPES = {
   ...AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES_WITH_NAMES,
 };
 
-export const SYSTEM_AND_INTERNAL_DOCUMENT_TYPES = [
-  ...Object.values(SYSTEM_GENERATED_DOCUMENT_TYPES).map(doc => ({
-    ...doc,
-    label: doc.documentTitle,
-    value: doc.eventCode,
-  })),
+export const INTERNAL_DOCUMENT_TYPES_AND_NOTR = [
   ...INTERNAL_DOCUMENTS_ARRAY.map(doc => ({
     ...doc,
-    label: doc.documentTitle,
+    label: doc.documentType,
     value: doc.eventCode,
   })),
+  {
+    ...SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfReceiptOfPetition,
+    label:
+      SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfReceiptOfPetition.documentType,
+  },
 ];
 
 export const AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES = flatten(
@@ -1141,8 +1150,16 @@ export const ROLES = {
   privatePractitioner: 'privatePractitioner',
   reportersOffice: 'reportersOffice',
   trialClerk: 'trialclerk',
+  zendesk: 'zendesk',
 } as const;
 export type Role = (typeof ROLES)[keyof typeof ROLES];
+
+export const ACCOUNT_STATUS = {
+  active: 'active',
+  inactive: 'inactive',
+};
+export type AccountStatus =
+  (typeof ACCOUNT_STATUS)[keyof typeof ACCOUNT_STATUS];
 
 // this isn't a real role someone can login with, which is why
 // it's a separate constant.
@@ -1762,7 +1779,9 @@ export const PENALTY_TYPES = {
 
 export const MAX_ELASTICSEARCH_PAGINATION = 10000;
 export const MAX_SEARCH_CLIENT_RESULTS = 200;
-export const MAX_SEARCH_RESULTS = 100;
+export const MAX_CASE_SEARCH_RESULTS = 100;
+export const MAX_DOCUMENT_SEARCH_RESULTS = 5000;
+export const ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE = 100;
 
 export const JUDGE_TITLES = [
   'Judge',
@@ -1878,12 +1897,23 @@ export const MINUTE_SHEET_FORM_SECTION_MAP = {
   witnessesSection: 'witnessesSection',
 } as const;
 
-export const TRIAL_HEARING_OPTIONS = {
+export const TRIAL_OPTIONS = {
   trial: 'Trial',
-  hearing: 'Hearing',
   partialTrial: 'Partial Trial',
   furtherTrial: 'Further Trial',
+} as const;
+export type TrialOption = keyof typeof TRIAL_OPTIONS;
+
+export const HEARING_OPTIONS = {
+  hearing: 'Hearing',
+  motionHearing: 'Motion Hearing',
   furtherHearing: 'Further Hearing',
+} as const;
+export type HearingOption = keyof typeof HEARING_OPTIONS;
+
+export const TRIAL_HEARING_OPTIONS = {
+  ...TRIAL_OPTIONS,
+  ...HEARING_OPTIONS,
 } as const;
 export type TrialHearingOption = keyof typeof TRIAL_HEARING_OPTIONS;
 
@@ -1969,6 +1999,7 @@ export const ACTION_STATUS_OPTIONS = {
   seeOrder: 'See Order',
   cav: 'CAV',
   denied: 'Denied',
+  deniedAsMoot: 'Denied as Moot',
   granted: 'Granted',
   filed: 'Filed',
   lodged: 'Lodged',
@@ -2056,3 +2087,26 @@ export const TERM_GENERATOR_DEFAULT_VALUES = {
 } as const;
 
 export const MOBILE_SCREEN_BREAKPOINT = 640;
+
+export const ALLOWED_EVENT_CODES = [
+  'P',
+  'ATP',
+  'DISC',
+  'NOT',
+  'NOTR',
+  'NTD',
+  'SPOS',
+  'SPTO',
+  'TCRP',
+  'NORP',
+  'NOIP',
+  'NCTL',
+  'NODC',
+];
+export const PRO_SE_CHECKLIST = 'pro-se-checklist';
+
+export const NOT_PROVIDED = 'Not Provided';
+
+export const AWS_BATCH_POLLING_INTERVAL = 5000;
+
+export const AWS_BATCH_POLLING_TIMEOUT = 600000;

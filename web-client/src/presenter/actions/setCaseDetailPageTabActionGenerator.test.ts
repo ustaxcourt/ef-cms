@@ -29,9 +29,9 @@ describe('setDefaultDocumentDetailTab', () => {
     expect(state.currentViewMetadata.caseDetail.primaryTab).toEqual(
       'caseInformation',
     );
-    expect(state.currentViewMetadata.caseDetail.caseInformationTab).toEqual(
-      'overview',
-    );
+    expect(
+      state.currentViewMetadata.caseDetail.caseInformationTab as string,
+    ).toEqual('overview');
   });
 
   it('sets state.currentViewMetadata.caseDetail.primaryTab to the passed in parameter value if isSecondary is true', async () => {

@@ -9,7 +9,10 @@ const { DOCKET_NUMBER_SUFFIXES, INITIAL_DOCUMENT_TYPES } =
 
 export const petitionerViewsCaseDetailAfterFilingDocument = (
   cerebralTest,
-  overrides = {},
+  overrides: {
+    documentCount?: number;
+    docketNumberSuffix?: string;
+  } = {},
 ) => {
   return it('petitioner views case detail after filing a document', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {

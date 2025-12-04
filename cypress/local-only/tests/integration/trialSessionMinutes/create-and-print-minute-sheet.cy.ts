@@ -148,20 +148,38 @@ describe('Create a minute sheet, fill out sections of the form, navigate away an
         });
       });
 
-      it('Can fill out Trial/Hearing date, type, and note', function () {
-        cy.get('#trialHearingTranscriptOrdered').check({
+      it('Can fill out Trial date, type, and note', function () {
+        cy.get('#trialTranscriptOrdered').check({
           force: true,
         });
-        cy.get('#trialHearingType').select('Hearing');
-        cy.get('#trialHearingNote').type('Trial note');
+        cy.get('#trialType').select('Trial');
+        cy.get('#trialNote').type('Trial note');
 
-        cy.get('#trialHearingType').should('have.value', 'hearing');
-        cy.get('#trialHearingNote').should('have.value', 'Trial note');
-        cy.get('#trialHearingTranscriptOrdered').should('be.checked');
+        cy.get('#trialType').should('have.value', 'trial');
+        cy.get('#trialNote').should('have.value', 'Trial note');
+        cy.get('#trialTranscriptOrdered').should('be.checked');
 
-        cy.get('#trialHearingNote').clear();
-        cy.get('#trialHearingType').select('');
-        cy.get('#trialHearingTranscriptOrdered').uncheck({
+        cy.get('#trialNote').clear();
+        cy.get('#trialType').select('');
+        cy.get('#trialTranscriptOrdered').uncheck({
+          force: true,
+        });
+      });
+
+      it('Can fill out Hearing date, type, and note', function () {
+        cy.get('#hearingTranscriptOrdered').check({
+          force: true,
+        });
+        cy.get('#hearingType').select('Hearing');
+        cy.get('#hearingNote').type('Trial note');
+
+        cy.get('#hearingType').should('have.value', 'hearing');
+        cy.get('#hearingNote').should('have.value', 'Trial note');
+        cy.get('#hearingTranscriptOrdered').should('be.checked');
+
+        cy.get('#hearingNote').clear();
+        cy.get('#hearingType').select('');
+        cy.get('#hearingTranscriptOrdered').uncheck({
           force: true,
         });
       });
@@ -490,7 +508,7 @@ describe('Create a minute sheet, fill out sections of the form, navigate away an
         cy.get('[data-testid="exhibit-status-0"]').select('Admitted');
         cy.get('[data-testid="exhibit-note-0"]').type('First exhibit note');
 
-        cy.get('[data-testid="add-exhibit-button"]').click();
+        cy.get('[data-testid="add-exhibit-button-0"]').click();
         cy.get('[data-testid="exhibit-description-1"]').type('Exhibit B');
         cy.get('[data-testid="exhibit-status-1"]').select('Not admitted');
         cy.get('[data-testid="exhibit-note-1"]').type('Second exhibit note');
@@ -546,7 +564,7 @@ describe('Create a minute sheet, fill out sections of the form, navigate away an
           `/trial-session-detail/${this.trialSessionId}/case/${this.docketNumber}/minutes`,
         ).then(window => {
           cy.stub(window, 'open').as('windowOpen');
-          cy.get('[data-testid="download-pdf-button"]').click();
+          cy.get('[data-testid="preview-pdf-button-top"]').click();
           cy.get('@windowOpen').should('have.been.called');
         });
       });

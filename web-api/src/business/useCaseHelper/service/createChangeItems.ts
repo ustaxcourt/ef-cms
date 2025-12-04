@@ -12,6 +12,10 @@ import { addCoverToPdf } from '../../useCases/addCoverToPdf';
 import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { Case } from '@shared/business/entities/cases/Case';
+import {
+  formattedNewEmailForChangeOfAddress,
+  formattedOldEmailForChangeOfAddress,
+} from '@shared/business/utilities/calculateEmail';
 
 /**
  * This function isolates task of generating the Docket Entry
@@ -59,6 +63,21 @@ const createDocketEntryForChange = async ({
     changeOfAddressPdfName = changeOfAddressPdfName + ` (${user.barNumber})`;
     contactName = newData.name;
   }
+
+  const isAddressSealed =
+    caseEntity.petitioners.find(
+      petitioner =>
+        petitioner.email === newData.email && petitioner.name === newData.name,
+    )?.isAddressSealed ?? false;
+
+  oldData.email = formattedOldEmailForChangeOfAddress(
+    oldData.email,
+    isAddressSealed,
+  );
+  newData.email = formattedNewEmailForChangeOfAddress(
+    newData.email,
+    isAddressSealed,
+  );
 
   const changeOfAddressPdf = await applicationContext
     .getDocumentGenerators()
@@ -139,22 +158,15 @@ const createWorkItemForChange = async ({
   changeOfAddressDocketEntry,
   user,
 }) => {
-  const workItem = new WorkItem(
-    {
-      assigneeId: null,
-      assigneeName: null,
-      docketEntry: {
-        ...changeOfAddressDocketEntry.toRawObject(),
-        createdAt: changeOfAddressDocketEntry.createdAt,
-      },
-      docketNumber: caseEntity.docketNumber,
-      section: DOCKET_SECTION,
-      sentBy: user.name,
-      sentByUserId: user.userId,
-    }
-  );
-
-  changeOfAddressDocketEntry.setWorkItem(workItem);
+  const workItem = new WorkItem({
+    assigneeId: null,
+    assigneeName: null,
+    docketEntryId: changeOfAddressDocketEntry.docketEntryId,
+    docketNumber: caseEntity.docketNumber,
+    section: DOCKET_SECTION,
+    sentBy: user.name,
+    sentByUserId: user.userId,
+  });
 
   await upsertWorkItems({
     workItems: [workItem.validate().toRawObject()],

@@ -1,4 +1,6 @@
 import {
+  ACCOUNT_STATUS,
+  AccountStatus,
   CASE_SERVICES_SUPERVISOR_SECTION,
   COUNTRY_TYPES,
   JudgeTitle,
@@ -18,7 +20,7 @@ export type UserContact = {
   address2?: string;
   address3?: string;
   city: string;
-  country: string;
+  country?: string;
   countryType: string;
   phone: string;
   postalCode: string;
@@ -41,6 +43,7 @@ export class User extends JoiValidationEntity {
   public section?: string;
   public isSeniorJudge?: boolean;
   public judgePhoneNumber?: string;
+  public accountStatus: AccountStatus;
 
   constructor(rawUser, { filtered = false } = {}) {
     super('User');
@@ -59,7 +62,10 @@ export class User extends JoiValidationEntity {
     this.token = rawUser.token;
     this.userId = rawUser.userId;
     this.isUpdatingInformation = rawUser.isUpdatingInformation;
+    this.accountStatus = rawUser.accountStatus;
+
     this.setContactInformation(rawUser);
+
     if (this.role === ROLES.judge || this.role === ROLES.legacyJudge) {
       this.judgeFullName = rawUser.judgeFullName;
       this.judgeTitle = rawUser.judgeTitle;
@@ -168,6 +174,9 @@ export class User extends JoiValidationEntity {
     section: JoiValidationConstants.STRING.optional(),
     token: JoiValidationConstants.STRING.optional(),
     userId: JoiValidationConstants.UUID.required(),
+    accountStatus: JoiValidationConstants.STRING.valid(
+      ...Object.values(ACCOUNT_STATUS),
+    ).required(),
   };
 
   isChambersUser(): boolean {
@@ -208,7 +217,7 @@ export class User extends JoiValidationEntity {
     return internalRoles.includes(role);
   }
 
-  static isCaseServicesUser({ section }: { section: string }): boolean {
+  static isCaseServicesUser({ section }: { section?: string }): boolean {
     return section === CASE_SERVICES_SUPERVISOR_SECTION;
   }
 

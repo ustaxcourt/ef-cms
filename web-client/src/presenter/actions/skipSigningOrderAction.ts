@@ -47,7 +47,7 @@ export const skipSigningOrderAction = ({
 
   return {
     alertSuccess: {
-      message: `${order.documentTitle || order.documentType} updated.`,
+      message: `${order?.documentTitle || order?.documentType || 'Document'} updated.`,
       metaData: addedDocketNumbers.join(', '),
     },
     path: `/case-detail/${docketNumber}/draft-documents`,

@@ -117,6 +117,8 @@ export class Case extends JoiValidationEntity {
   public petitionPaymentStatus: string;
   public petitionPaymentWaivedDate?: string;
   public preferredTrialCity?: string;
+  public remoteTrialGranted?: boolean;
+  public remoteTrialGrantedDate?: string | null;
   public procedureType: string;
   public receivedAt: string;
   public sealedDate?: string;
@@ -134,7 +136,7 @@ export class Case extends JoiValidationEntity {
   public canAllowPrintableDocketRecord?: boolean;
   public canDojPractitionersRepresentParty?: boolean;
   public archivedDocketEntries?: RawDocketEntry[];
-  public docketEntries: any[];
+  public docketEntries: DocketEntry[];
   public isSealed?: boolean;
   public hearings: any[];
   public privatePractitioners?: any[];
@@ -215,9 +217,13 @@ export class Case extends JoiValidationEntity {
     const oldestYear = 65;
 
     const [sequentialNumber, yearFiled] = docketNumber.split('-');
+    const yearSansSuffix = yearFiled.replace(/\D+$/, '');
+
     const sequentialNumberPadded = sequentialNumber.padStart(6, '0');
     const yearFiledAdjusted =
-      parseInt(yearFiled) >= oldestYear ? `19${yearFiled}` : `20${yearFiled}`;
+      parseInt(yearSansSuffix) >= oldestYear
+        ? `19${yearSansSuffix}`
+        : `20${yearSansSuffix}`;
 
     return parseInt(`${yearFiledAdjusted}${sequentialNumberPadded}`);
   }
@@ -364,6 +370,8 @@ export class Case extends JoiValidationEntity {
     this.orderForCds = rawCase.orderForCds || false;
     this.orderForRatification = rawCase.orderForRatification || false;
     this.orderToShowCause = rawCase.orderToShowCause || false;
+    this.remoteTrialGranted = rawCase.remoteTrialGranted;
+    this.remoteTrialGrantedDate = rawCase.remoteTrialGrantedDate;
 
     this.assignArchivedDocketEntries({
       authorizedUser,
@@ -474,7 +482,6 @@ export class Case extends JoiValidationEntity {
       .optional()
       .allow(null)
       .description('Damages for the case.'),
-    // docketEntries: 'At least one valid docket entry is required',
     docketEntries: joi
       .array()
       .items(DOCKET_ENTRY_VALIDATION_RULES)
@@ -648,6 +655,18 @@ export class Case extends JoiValidationEntity {
       .required()
       .description('Procedure type of the case.')
       .messages({ '*': 'Select a case procedure' }),
+    remoteTrialGranted: joi
+      .boolean()
+      .optional()
+      .description(
+        'Whether the case has been granted a motion to proceed remotely.',
+      )
+      .meta({ tags: ['Restricted'] }),
+    remoteTrialGrantedDate: JoiValidationConstants.ISO_DATE.optional()
+      .allow(null)
+      .description(
+        'A date stamp indicating the date permission was granted to proceed remotely.',
+      ),
     qcCompleteForTrial: joi
       .object()
       .optional()
@@ -978,14 +997,17 @@ export class Case extends JoiValidationEntity {
     });
   }
 
-  toRawObject(processPendingItems = true) {
+  //@ts-ignore
+  toRawObject(options: { processPendingItems?: boolean } = {}): RawCase {
+    const { processPendingItems = true } = options;
     const result = this.toRawObjectFromJoi();
 
     if (processPendingItems) {
       (result as any).hasPendingItems = this.doesHavePendingItems();
     }
 
-    return result;
+    // @ts-ignore
+    return result as RawCase;
   }
 
   doesHavePendingItems() {
@@ -1107,7 +1129,7 @@ export class Case extends JoiValidationEntity {
    *
    * @param {object} docketEntryEntity the docket entry to add to the case
    */
-  addDocketEntry(docketEntryEntity) {
+  addDocketEntry(docketEntryEntity: DocketEntry) {
     docketEntryEntity.docketNumber = this.docketNumber;
 
     if (docketEntryEntity.isOnDocketRecord) {
@@ -1262,7 +1284,7 @@ export class Case extends JoiValidationEntity {
    * @params {string} params.docketEntryId the id of the docketEntry to retrieve
    * @returns {object} the retrieved docketEntry
    */
-  getDocketEntryById({ docketEntryId }) {
+  getDocketEntryById({ docketEntryId }: { docketEntryId: string }) {
     return this.docketEntries.find(
       docketEntry => docketEntry.docketEntryId === docketEntryId,
     );
@@ -1379,7 +1401,7 @@ export class Case extends JoiValidationEntity {
   }
 
   getPetitionDocketEntry() {
-    return getPetitionDocketEntry(this);
+    return getPetitionDocketEntry(this) as DocketEntry; // We know it is a DocketEntry not RawDocketEntry because this is the Case entity
   }
 
   getIrsSendDate() {
@@ -1549,7 +1571,22 @@ export class Case extends JoiValidationEntity {
    */
   setCaseCaption(caseCaption) {
     this.caseCaption = caseCaption;
+
+    if (this.consolidatedCases && this.consolidatedCases.length > 0) {
+      this.setCaseCaptionInSingleCase();
+    }
+
     return this;
+  }
+
+  setCaseCaptionInSingleCase() {
+    const currentCase = this.consolidatedCases.find(
+      c => c.docketNumber === this.docketNumber,
+    );
+
+    if (currentCase) {
+      currentCase.caseCaption = this.caseCaption;
+    }
   }
 
   /**
@@ -1679,6 +1716,7 @@ export class Case extends JoiValidationEntity {
     const nextIndex =
       this.docketEntries
         .filter(d => d.isOnDocketRecord && d.index !== undefined)
+        // @ts-ignore
         .sort((a, b) => a.index - b.index).length + 1;
     return nextIndex;
   }
@@ -1896,6 +1934,22 @@ export class Case extends JoiValidationEntity {
    */
   setNoticeOfTrialDate() {
     this.noticeOfTrialDate = createISODateString();
+    return this;
+  }
+
+  /**
+   * sets the remote trial granted date and boolean flag
+   * @param {string | null | undefined} remoteTrialGrantedDate the date when motion to proceed remotely was granted, or null/undefined to clear
+   * @returns {Case} this case entity
+   */
+  setRemoteTrialGrantedDate(remoteTrialGrantedDate?: string | null): Case {
+    const hasDate = Boolean(
+      remoteTrialGrantedDate &&
+        typeof remoteTrialGrantedDate === 'string' &&
+        remoteTrialGrantedDate.trim() !== '',
+    );
+    this.remoteTrialGranted = hasDate;
+    this.remoteTrialGrantedDate = hasDate ? remoteTrialGrantedDate : null;
     return this;
   }
 
@@ -2197,7 +2251,9 @@ export const getPractitionersRepresenting = function (
   );
 };
 
-export const getPetitionDocketEntry = function (rawCase) {
+export const getPetitionDocketEntry = function (
+  rawCase: RawCase | RawPublicCase,
+) {
   return rawCase.docketEntries?.find(
     docketEntry =>
       docketEntry.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
@@ -2395,7 +2451,9 @@ export const getOtherFilers = function (rawCase) {
 };
 
 declare global {
-  type RawCase = ExcludeMethods<Case>;
+  type RawCase = Omit<ExcludeMethods<Case>, 'docketEntries'> & {
+    docketEntries: RawDocketEntry[];
+  };
 }
 
 const generateCaptionFromContacts = ({

@@ -95,7 +95,7 @@ describe('initializeMinuteSheet', () => {
   const mockFormattedTrialSession = {
     caseOrder: [],
     entityName: 'TrialSession',
-    hasNOTTBeenServed: false,
+    hasNottBeenServed: false,
     isCalendared: false,
     judge: {
       name: 'Judge Smith',

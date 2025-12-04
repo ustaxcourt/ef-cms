@@ -10,8 +10,10 @@ import {
 } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/constraints';
 import {
   FORMATS,
+  IsoDateRange,
   createDateAtStartOfWeekEST,
   createISODateString,
+  getWeeksInRange,
 } from '@shared/business/utilities/DateHandler';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import {
@@ -41,7 +43,7 @@ export const generateCalendar = ({
 }: {
   specialSessions: RawTrialSession[];
   caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity;
-  weeksToLoop: string[];
+  weeksToLoop: IsoDateRange[];
   constraints: Constraint[];
   calendaringConfig: CalendaringConfig;
 }): {
@@ -70,61 +72,65 @@ export const generateCalendar = ({
       );
     })
     .forEach(specialSession => {
-      const sessionWeekOf = createDateAtStartOfWeekEST(
-        specialSession.startDate,
-        FORMATS.YYYYMMDD,
+      const weeksToSchedule = getWeeksToScheduleForSpecialSession(
+        specialSession,
+        weeksToLoop,
       );
 
-      const scheduledTrialSession: ScheduledTrialSession = {
-        sessionType: SESSION_TYPES.special,
-        trialLocation: getTrialLocationForSpecialSession({
+      weeksToSchedule.forEach(currentWeek => {
+        const scheduledTrialSession: ScheduledTrialSession = {
+          sessionType: SESSION_TYPES.special,
+          trialLocation: getTrialLocationForSpecialSession({
+            calendarState,
+            calendaringConfig,
+            originalLocation: specialSession.trialLocation!,
+            sessionWeekOf: currentWeek,
+          }),
+          weekOf: currentWeek,
+        };
+
+        const messages = checkConstraints({
           calendarState,
           calendaringConfig,
-          originalLocation: specialSession.trialLocation!,
-          sessionWeekOf,
-        }),
-        weekOf: sessionWeekOf,
-      };
+          constraints,
+          scheduledTrialSession,
+        }).filter(r => {
+          return typeof r === 'string';
+        });
 
-      const messages = checkConstraints({
-        calendarState,
-        calendaringConfig,
-        constraints,
-        scheduledTrialSession,
-      }).filter(r => {
-        return typeof r === 'string';
-      });
+        /**
+         * Any given item in the messages array represents an ignored constraint.
+         * For business reasons, not all constraints trigger a formatting change
+         * in the resulting spreadsheet: therefore, only two specific categories
+         * of ignored constraints will cause the session to have ignoresConstraints
+         * set to true.
+         */
+        messages.forEach(message => {
+          if (
+            message.startsWith(
+              'More than one special trial per week scheduled:',
+            ) ||
+            message.startsWith('More than two special trial sessions per week:')
+          ) {
+            scheduledTrialSession.ignoresConstraints = true;
+          }
+        });
 
-      /**
-       * Any given item in the messages array represents an ignored constraint.
-       * For business reasons, not all constraints trigger a formatting change
-       * in the resulting spreadsheet: therefore, only two specific categories
-       * of ignored constraints will cause the session to have ignoresConstraints
-       * set to true.
-       */
-      messages.forEach(message => {
-        if (
-          message.startsWith(
-            'More than one special trial per week scheduled:',
-          ) ||
-          message.startsWith('More than two special trial sessions per week:')
-        ) {
-          scheduledTrialSession.ignoresConstraints = true;
-        }
-      });
+        userMessages.push(...messages);
 
-      userMessages.push(...messages);
-
-      addSpecialScheduledTrialSession({
-        calendarState,
-        caseCountsAndSessionsByCity,
-        scheduledTrialSession,
-        weeksToLoop,
+        addSpecialScheduledTrialSession({
+          calendarState,
+          caseCountsAndSessionsByCity,
+          scheduledTrialSession,
+          weeksToLoop,
+          currentWeek,
+          allWeeks: weeksToSchedule,
+        });
       });
     });
 
   for (const currentWeek of weeksToLoop) {
-    const weekOfString = currentWeek;
+    const weekOfString = currentWeek.start;
     for (const city in caseCountsAndSessionsByCity) {
       for (const prospectiveSession of caseCountsAndSessionsByCity[city]
         .prospectiveSessions) {
@@ -167,15 +173,19 @@ const reserveWeekAfterSpecialSession = ({
   session,
   weeksToLoop,
 }: {
-  weeksToLoop: string[];
+  weeksToLoop: IsoDateRange[];
   calendarState: CalendarState;
   session: ScheduledTrialSession;
 }): void => {
-  const nextWeekOfString = weeksToLoop[weeksToLoop.indexOf(session.weekOf) + 1];
+  const nextWeek =
+    weeksToLoop[
+      weeksToLoop.findIndex(week => week.start === session.weekOf) + 1
+    ];
+  if (!nextWeek) return;
 
-  if (!calendarState.reservedWeekOfLocationIntersection[nextWeekOfString])
-    calendarState.reservedWeekOfLocationIntersection[nextWeekOfString] = [];
-  calendarState.reservedWeekOfLocationIntersection[nextWeekOfString].push(
+  if (!calendarState.reservedWeekOfLocationIntersection[nextWeek.start])
+    calendarState.reservedWeekOfLocationIntersection[nextWeek.start] = [];
+  calendarState.reservedWeekOfLocationIntersection[nextWeek.start].push(
     session.trialLocation,
   );
 };
@@ -196,7 +206,7 @@ const addScheduledTrialSession = ({
   calendarState.sessionCountPerCity[scheduledTrialSession.trialLocation]++;
   calendarState.sessionScheduledPerCityPerWeek[
     scheduledTrialSession.weekOf
-  ].add(scheduledTrialSession.trialLocation); // Mark this city as scheduled for the current week
+  ]?.add(scheduledTrialSession.trialLocation); // Mark this city as scheduled for the current week
 };
 
 const decrementRemainingCaseCounters = (
@@ -251,7 +261,7 @@ const decrementRemainingCaseCounters = (
   }
 };
 
-const setupCalendarState = (weeksToLoop: string[]): CalendarState => {
+const setupCalendarState = (weeksToLoop: IsoDateRange[]): CalendarState => {
   const calendarState: CalendarState = {
     reservedWeekOfLocationIntersection: {},
     sessionCountPerCity: {},
@@ -261,8 +271,8 @@ const setupCalendarState = (weeksToLoop: string[]): CalendarState => {
 
   // Initialize session counts
   weeksToLoop.forEach(week => {
-    calendarState.sessionCountPerWeek[week] = 0;
-    calendarState.sessionScheduledPerCityPerWeek[week] = new Set();
+    calendarState.sessionCountPerWeek[week.start] = 0;
+    calendarState.sessionScheduledPerCityPerWeek[week.start] = new Set();
   });
 
   TRIAL_CITY_STRINGS.forEach(cityStringKey => {
@@ -294,7 +304,7 @@ const getTrialLocationForSpecialSession = ({
     if (
       calendarState.sessionCountPerCity[WASHINGTON_DC_NORTH_STRING] >=
         calendaringConfig.maxSessionsPerLocation ||
-      calendarState.sessionScheduledPerCityPerWeek[sessionWeekOf].has(
+      calendarState.sessionScheduledPerCityPerWeek[sessionWeekOf]?.has(
         WASHINGTON_DC_NORTH_STRING,
       )
     ) {
@@ -312,22 +322,30 @@ const addSpecialScheduledTrialSession = ({
   caseCountsAndSessionsByCity,
   scheduledTrialSession,
   weeksToLoop,
+  currentWeek,
+  allWeeks,
 }: {
   scheduledTrialSession: ScheduledTrialSession;
-  weeksToLoop: string[];
+  weeksToLoop: IsoDateRange[];
   calendarState: CalendarState;
   caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity;
+  currentWeek: string;
+  allWeeks: string[];
 }) => {
   addScheduledTrialSession({
     calendarState,
     caseCountsAndSessionsByCity,
     scheduledTrialSession,
   });
-  reserveWeekAfterSpecialSession({
-    calendarState,
-    session: scheduledTrialSession,
-    weeksToLoop,
-  });
+
+  const isLastWeek = currentWeek === allWeeks[allWeeks.length - 1];
+  if (isLastWeek) {
+    reserveWeekAfterSpecialSession({
+      calendarState,
+      session: scheduledTrialSession,
+      weeksToLoop,
+    });
+  }
 };
 
 const addNonSpecialTrialSession = ({
@@ -364,4 +382,28 @@ const addNonSpecialTrialSession = ({
       prospectiveSession.trialLocation
     ].prospectiveSessions.splice(index, 1);
   }
+};
+
+const getWeeksToScheduleForSpecialSession = (
+  specialSession: RawTrialSession,
+  weeksToLoop: IsoDateRange[],
+): string[] => {
+  const startWeek = createDateAtStartOfWeekEST(
+    specialSession.startDate,
+    FORMATS.YYYYMMDD,
+  );
+
+  if (!specialSession.estimatedEndDate) {
+    return [startWeek];
+  }
+
+  const weekRanges = getWeeksInRange({
+    startDate: specialSession.startDate,
+    endDate: specialSession.estimatedEndDate,
+  });
+
+  const validWeeks = new Set(weeksToLoop.map(w => w.start));
+  return weekRanges
+    .map(week => week.start)
+    .filter(week => validWeeks.has(week));
 };
