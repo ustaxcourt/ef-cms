@@ -53,7 +53,7 @@ export const generateNoticeOfWithdrawalPdfInteractor = async (
           .filter(Boolean) as string[]);
 
   const { PDFDocument } = await applicationContext.getPdfLib();
-  const docs: PDFDocument[] = [];
+  const promises: Promise<PDFDocument>[] = [];
   let pdfDoc;
   try {
     const noticeOfWithdrawalPdf = await applicationContext
@@ -68,11 +68,9 @@ export const generateNoticeOfWithdrawalPdfInteractor = async (
           practitionerInformation,
         },
       });
-    const noticeOfWithdrawalPdfDoc = await PDFDocument.load(
-      noticeOfWithdrawalPdf,
-    );
+    const noticeOfWithdrawalPdfDoc = PDFDocument.load(noticeOfWithdrawalPdf);
 
-    docs.push(noticeOfWithdrawalPdfDoc);
+    promises.push(noticeOfWithdrawalPdfDoc);
 
     const caseData = await getCaseByDocketNumber({
       docketNumber,
@@ -96,13 +94,13 @@ export const generateNoticeOfWithdrawalPdfInteractor = async (
             docketNumberWithSuffix,
           },
         });
-      const certificateOfServicePdfDoc = await PDFDocument.load(
+      const certificateOfServicePdfDoc = PDFDocument.load(
         certificateOfServicePdf,
       );
-      docs.push(certificateOfServicePdfDoc);
+      promises.push(certificateOfServicePdfDoc);
     }
 
-    // should await all promises in parallel
+    const docs = await Promise.all(promises);
 
     pdfDoc = await applicationContext
       .getUtilities()
