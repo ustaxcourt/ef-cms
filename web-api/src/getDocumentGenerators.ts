@@ -2,6 +2,7 @@ import { addressLabelCoverSheet } from '../../shared/src/business/utilities/docu
 import { caseInventoryReport } from '../../shared/src/business/utilities/documentGenerators/caseInventoryReport';
 import { changeOfAddress } from '../../shared/src/business/utilities/documentGenerators/changeOfAddress';
 import { coverSheet } from '../../shared/src/business/utilities/documentGenerators/coverSheet';
+import { certificateOfService } from '@shared/business/utilities/documentGenerators/certificateOfService';
 import { docketRecord } from '../../shared/src/business/utilities/documentGenerators/docketRecord';
 import { entryOfAppearance } from '@shared/business/utilities/documentGenerators/entryOfAppearance';
 import { minuteSheet } from '@shared/business/utilities/documentGenerators/minuteSheet';
@@ -29,6 +30,7 @@ import { noticeOfWithdrawal } from '@shared/business/utilities/documentGenerator
 export const getDocumentGenerators = () => ({
   addressLabelCoverSheet,
   caseInventoryReport,
+  certificateOfService,
   changeOfAddress,
   coverSheet,
   docketRecord,

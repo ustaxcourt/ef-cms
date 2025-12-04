@@ -15,9 +15,9 @@ export const autoGenerateFilingPdfAction = async ({
     const caseDetail = get(state.caseDetail);
     const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
 
-    const { docketNumberWithSuffix } = caseDetail;
+    const { docketNumber, docketNumberWithSuffix } = caseDetail;
 
-    const { filers } = get(state.form);
+    const { filers, filersMap } = get(state.form);
 
     let response;
     switch (eventCode) {
@@ -38,8 +38,10 @@ export const autoGenerateFilingPdfAction = async ({
           .generateNoticeOfWithdrawalPdfInteractor(applicationContext, {
             caseCaptionExtension,
             caseTitle,
+            docketNumber,
             docketNumberWithSuffix,
             filers,
+            filersMap,
             petitioners,
           });
         break;

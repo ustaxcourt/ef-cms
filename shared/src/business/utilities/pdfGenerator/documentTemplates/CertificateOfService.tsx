@@ -1,12 +1,10 @@
 import React from 'react';
 import { AddressLabel } from '../components/AddressLabel';
 import { UserContact } from '@shared/business/entities/User';
+import { RawContact } from '@shared/business/entities/contacts/Contact';
 type CertificateOfServiceParams = {
   date: string;
-  partyInformation: {
-    contact: UserContact;
-    name: string;
-  };
+  partyInformation: RawContact;
   practitionerInformation: {
     contact: UserContact;
     barNumber: string;
@@ -19,20 +17,20 @@ export const CertificateOfService = ({
   partyInformation,
   practitionerInformation,
 }: CertificateOfServiceParams) => {
-  const partyFullAddress = `${partyInformation.contact.address1}${partyInformation.contact.address2 ? `, ${partyInformation.contact.address2}` : ''}${partyInformation.contact.address3 ? `, ${partyInformation.contact.address3}` : ''}, ${partyInformation.contact.city}${partyInformation.contact.state ? `, ${partyInformation.contact.state}` : ''}${partyInformation.contact.postalCode ? `, ${partyInformation.contact.postalCode}` : ''}${partyInformation.contact.country ? `, ${partyInformation.contact.country}` : ''}`;
+  const partyFullAddress = `${partyInformation.address1}${partyInformation.address2 ? `, ${partyInformation.address2}` : ''}${partyInformation.address3 ? `, ${partyInformation.address3}` : ''}, ${partyInformation.city}${partyInformation.state ? `, ${partyInformation.state}` : ''}${partyInformation.postalCode ? `, ${partyInformation.postalCode}` : ''}${partyInformation.country ? `, ${partyInformation.country}` : ''}`;
   return (
     <div id="certificate-of-service-pdf">
-      <h2>Certificate of Service</h2>
-      <p className="indent-paragraph">
+      <h2 className="cos-header">Certificate of Service</h2>
+      <p className="indent-paragraph cos-paragraph">
         This is to certify that a copy of the foregoing paper was served on{' '}
         {partyInformation.name} by (delivering the same to{' '}
         {partyInformation.name} at {partyFullAddress} on {date}) or (mailing the
         same on {date} in a postage-paid wrapper addressed to{' '}
         {partyInformation.name} at {partyFullAddress}).
       </p>
-      <div>
-        <div>Dated: {date}</div>
-        <div>
+      <div className="cos-practitioner-info">
+        <div className="width-50">Dated: {date}</div>
+        <div className="width-50">
           <AddressLabel
             address1={practitionerInformation.contact.address1}
             address2={practitionerInformation.contact.address2}
