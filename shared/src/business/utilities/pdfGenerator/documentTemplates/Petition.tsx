@@ -229,7 +229,7 @@ export const Petition = ({
             )}
             {contactPrimary.preferredCommunicationMethod && (
               <div>
-                <b>Preferred communication method: </b>
+                <b>Preferred method of communication: </b>
                 {contactPrimary.preferredCommunicationMethod}
               </div>
             )}
@@ -294,7 +294,7 @@ export const Petition = ({
                 )}
                 {contactSecondary.preferredCommunicationMethod && (
                   <div>
-                    <b>Preferred communication method: </b>
+                    <b>Preferred method of communication: </b>
                     {contactSecondary.preferredCommunicationMethod}
                   </div>
                 )}
