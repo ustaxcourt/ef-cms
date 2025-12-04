@@ -36,6 +36,7 @@ export const confirmInitiateServiceModalHelper = (
   const formattedCaseDetail = get(state.formattedCaseDetail);
   const form = get(state.form);
   let { eventCode, multiDocketedOn } = form;
+
   const currentDocketEntry = formattedCaseDetail.docketEntries.find(
     doc => doc.docketEntryId === docketEntryId,
   );
@@ -45,7 +46,7 @@ export const confirmInitiateServiceModalHelper = (
   }
 
   const isMultiDocketed =
-    isLeadCase(formattedCaseDetail) && multiDocketedOn.length > 1;
+    isLeadCase(formattedCaseDetail) && multiDocketedOn?.length > 1;
 
   const canMultiDocket =
     !NON_MULTI_DOCKETABLE_EVENT_CODES.includes(eventCode) &&

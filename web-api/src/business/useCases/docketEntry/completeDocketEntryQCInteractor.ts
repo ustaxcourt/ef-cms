@@ -609,7 +609,7 @@ const completeDocketEntryQC = async (
         }
       }
     } else {
-      const noticeDocketEntryId = await generateNoticeOfDocketChangePdf({
+      const noticeDocumentStorageId = await generateNoticeOfDocketChangePdf({
         applicationContext,
         authorizedUser,
         docketChangeInfo,
@@ -618,7 +618,8 @@ const completeDocketEntryQC = async (
       const noticeUpdatedDocketEntry = new DocketEntry(
         {
           ...SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange,
-          docketEntryId: noticeDocketEntryId,
+          docketEntryId: noticeDocumentStorageId,
+          documentStorageId: noticeDocumentStorageId,
           documentTitle: replaceBracketed(
             SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange.documentTitle,
             docketChangeInfo.docketEntryIndex,

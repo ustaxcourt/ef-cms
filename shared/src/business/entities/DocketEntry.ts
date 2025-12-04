@@ -258,7 +258,7 @@ export class DocketEntry extends JoiValidationEntity {
     this.isStricken = rawDocketEntry.isStricken || false;
     this.lodged = rawDocketEntry.lodged;
     this.mailingDate = rawDocketEntry.mailingDate;
-    this.multiDocketedOn = rawDocketEntry.multiDocketedOn;
+    this.multiDocketedOn = rawDocketEntry.multiDocketedOn || [];
     this.multiDocketedOriginalDocketNumber =
       rawDocketEntry.multiDocketedOriginalDocketNumber;
     this.numberOfPages = rawDocketEntry.numberOfPages;
