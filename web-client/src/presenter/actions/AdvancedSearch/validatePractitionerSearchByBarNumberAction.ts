@@ -15,7 +15,7 @@ export const validatePractitionerSearchByBarNumberAction = ({
   const { barNumber } = get(
     state.advancedSearchForm.practitionerSearchByBarNumber,
   );
-  const errors = {};
+  const errors: { barNumber?: string } = {};
 
   if (!barNumber) {
     errors.barNumber = 'Enter a bar number';

@@ -141,12 +141,14 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     return a.localeCompare(b);
   });
 
-  const bufferArray = await writeTrialSessionDataToExcel({
-    caseCountsAndSessionsByCity,
-    incorrectSizeRegularCases,
-    userMessages,
-    weeksRange: weeksToLoop,
-  });
+  const bufferArray = Buffer.from(
+    await writeTrialSessionDataToExcel({
+      caseCountsAndSessionsByCity,
+      incorrectSizeRegularCases,
+      userMessages,
+      weeksRange: weeksToLoop,
+    }),
+  );
 
   return {
     bufferArray,

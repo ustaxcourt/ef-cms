@@ -1,3 +1,4 @@
+import { WrappedIcon } from '../../ustc-ui/Icon/Icon';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { Icon } from '../../ustc-ui/Icon/Icon';
@@ -183,12 +184,11 @@ export const DocumentSearchResults = connect(
                     className={`tablet:grid-col-4 text-right ${totalPages < 2 ? ' padding-bottom-1' : ''}`}
                   >
                     {results.length === MAX_DOCUMENT_SEARCH_RESULTS && (
-                      <FontAwesomeIcon
-                        className="fa-icon-blue icon-spacing-4"
+                      <WrappedIcon
+                        iconClass="fa-icon-blue icon-spacing-4"
                         icon="info-circle"
                         title={`Search is limited to ${MAX_DOCUMENT_SEARCH_RESULTS.toLocaleString()} results.`}
-                        aria-label={`Search is limited to ${MAX_DOCUMENT_SEARCH_RESULTS.toLocaleString()} results.`}
-                      />
+                        iconAriaLabel={`Search is limited to ${MAX_DOCUMENT_SEARCH_RESULTS.toLocaleString()} results.`} />
                     )}
                     <span
                       className="cursor-default"
