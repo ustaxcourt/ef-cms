@@ -10,7 +10,6 @@ import joi from 'joi';
 
 export class CourtIssuedDocumentTypeA extends CourtIssuedDocument {
   public attachments: boolean;
-  public dispositionOrder: boolean;
   public documentTitle: string;
   public documentType: string;
   public eventCode: string;
@@ -23,7 +22,6 @@ export class CourtIssuedDocumentTypeA extends CourtIssuedDocument {
     super('CourtIssuedDocumentTypeA');
     this.affectedDocketEntries = rawProps.affectedDocketEntries;
     this.attachments = rawProps.attachments || false;
-    this.dispositionOrder = rawProps.dispositionOrder || false;
     this.documentTitle = rawProps.documentTitle;
     this.documentType = rawProps.documentType;
     this.eventCode = rawProps.eventCode;

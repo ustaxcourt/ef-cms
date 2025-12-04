@@ -24,7 +24,6 @@ export abstract class CourtIssuedDocument extends JoiValidationEntity {
   public affectedDocketEntries?: Array<DocketEntryRelation>;
   public docketEntryId!: string;
   public attachments!: boolean;
-  public dispositionOrder?: boolean;
   public documentTitle!: string;
   public generatedDocumentTitle?: string;
   public documentType!: string;
@@ -36,14 +35,9 @@ export abstract class CourtIssuedDocument extends JoiValidationEntity {
 
   abstract getDocumentTitle(): string;
   static VALIDATION_RULES = {
-    affectedDocketEntries: joi.when('dispositionOrder', {
-      is: true,
-      then: joi
-        .array()
-        .items(JoiValidationConstants.RELATED_DOCKET_ENTRY)
-        .required(),
-      otherwise: joi.optional().allow(null),
-    }),
+    affectedDocketEntries: joi
+      .array()
+      .items(JoiValidationConstants.RELATED_DOCKET_ENTRY),
     attachments: joi
       .boolean()
       .required()
