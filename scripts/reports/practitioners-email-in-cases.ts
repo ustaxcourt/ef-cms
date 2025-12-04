@@ -8,7 +8,7 @@ import {
   type ScriptConfig,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 const scriptConfig: ScriptConfig = {

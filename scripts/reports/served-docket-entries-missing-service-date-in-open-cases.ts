@@ -6,7 +6,7 @@ import {
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
 import { generateCsv } from '../helpers/generate-csv';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 
 const scriptConfig: ScriptConfig = {
   description:

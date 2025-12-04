@@ -74,7 +74,7 @@ import {
   TrialSessionPaperPdfTable,
   TrialSessionTable,
   TrialSessionWorkingCopyTable,
-} from './persistence/postgres/trialSessions/schema';
+} from '@web-api/persistence/postgres/trialSessions/schema';
 import {
   DW_PRACTITIONER_DOCUMENT_COLUMNS,
   PractitionerDocumentTable,
@@ -98,8 +98,8 @@ import {
 import {
   indexOpenSearchUser,
   transformOpenSearchUser,
-} from '../elasticsearch/index-users';
-import { transformOpenSearchUserOnCase } from '../elasticsearch/cases/transformOpenSearchUserOnCase';
+} from '../../../elasticsearch/index-users';
+import { transformOpenSearchUserOnCase } from '../../../elasticsearch/cases/transformOpenSearchUserOnCase';
 import {
   BarNumberTable,
   DW_BAR_NUMBER_COLUMNS,

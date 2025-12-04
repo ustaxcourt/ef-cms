@@ -4,7 +4,7 @@ import {
   parseArgsAndEnvVars,
   type ScriptConfig,
 } from '../../helpers/parseArgsAndEnvVars';
-import { getDbWriter } from '@web-api/database';
+import { getDbWriter } from '@web-api/persistence/postgres/database';
 import { sql, SqlBool } from 'kysely';
 
 const scriptConfig: ScriptConfig = {

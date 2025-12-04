@@ -4,7 +4,7 @@ import type { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { fromKyselyUser } from '@web-api/persistence/postgres/users/mapper';
 import { generateCsv } from '../helpers/generate-csv';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { pick } from 'lodash';
 import { requireEnvVars } from '../../shared/admin-tools/util';
 

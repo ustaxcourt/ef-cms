@@ -12,7 +12,7 @@ import { compareStrings } from '@shared/business/utilities/sortFunctions';
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { fromKyselyDocketEntry } from '@web-api/persistence/postgres/docketEntries/mapper';
 import { generateCsv } from '../helpers/generate-csv';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import PQueue from 'p-queue';
 
 const todayISO = createISODateString();

@@ -14,7 +14,7 @@ import {
 } from '@shared/business/utilities/DateHandler';
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { generateCsv } from '../helpers/generate-csv';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { pick } from 'lodash';
 import { sql } from 'kysely';
 
