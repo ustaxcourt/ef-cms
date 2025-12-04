@@ -2,14 +2,13 @@ variable "cognito_suffix" {
   type = string
 }
 
-variable "es_logs_instance_type" {
+variable "es_logs_cluster_arn" {
   type    = string
-  default = "t2.medium.elasticsearch"
 }
 
-variable "es_logs_instance_count" {
-  type    = string
-  default = "1"
+variable "es_logs_consumer_account_ids" {
+  type    = list(string)
+  default = []
 }
 
 variable "es_logs_ebs_volume_size_gb" {
@@ -17,8 +16,22 @@ variable "es_logs_ebs_volume_size_gb" {
   default = 20
 }
 
-variable "sns_alarm_arn" {
+variable "es_logs_endpoint" {
+  type    = string
+}
+
+variable "es_logs_engine_version" {
   type = string
+}
+
+variable "es_logs_instance_count" {
+  type    = number
+  default = 1
+}
+
+variable "es_logs_instance_type" {
+  type    = string
+  default = "t2.medium.elasticsearch"
 }
 
 variable "log_group_environments" {
@@ -26,14 +39,14 @@ variable "log_group_environments" {
   type        = list(string)
 }
 
-variable "number_of_days_to_keep_info_logs" {
-  type = number
-}
-
 variable "log_snapshot_bucket_name" {
-  type = string
+  type    = string
 }
 
-variable "es_logs_engine_version" {
+variable "number_of_days_to_keep_info_logs" {
+  type    = number
+}
+
+variable "sns_alarm_arn" {
   type = string
 }
