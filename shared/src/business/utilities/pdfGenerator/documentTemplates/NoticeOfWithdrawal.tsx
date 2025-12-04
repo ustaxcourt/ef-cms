@@ -1,6 +1,8 @@
 import React from 'react';
 import { PrimaryHeaderWithoutSeal } from '../components/PrimaryHeaderWithoutSeal';
 import { DocketHeader } from '../components/DocketHeader';
+import { AddressLabel } from '../components/AddressLabel';
+import { UserContact } from '@shared/business/entities/User';
 
 export const NoticeOfWithdrawal = ({
   caseCaptionExtension,
@@ -16,17 +18,7 @@ export const NoticeOfWithdrawal = ({
   docketNumberWithSuffix: string;
   filers: string[];
   practitionerInformation: {
-    contact: {
-      address1: string;
-      address2?: string;
-      address3?: string;
-      city: string;
-      country: string;
-      countryType: string;
-      phone: string;
-      postalCode: string;
-      state: string;
-    };
+    contact: UserContact;
     barNumber: string;
     email: string;
     name: string;
@@ -68,23 +60,17 @@ export const NoticeOfWithdrawal = ({
         </ol>
 
         <div className="address-label">
-          <div>{practitionerInformation.name}</div>
-          <div>{practitionerInformation.contact.address1}</div>
-          {practitionerInformation.contact.address2 && (
-            <div>{practitionerInformation.contact.address2}</div>
-          )}
-          {practitionerInformation.contact.address3 && (
-            <div>{practitionerInformation.contact.address3}</div>
-          )}
-          <div>
-            {practitionerInformation.contact.city},{' '}
-            {practitionerInformation.contact.state}{' '}
-            {practitionerInformation.contact.postalCode}
-          </div>
-          <div>
-            {practitionerInformation.contact.countryType === 'international' &&
-              practitionerInformation.contact.country}
-          </div>
+          <AddressLabel
+            address1={practitionerInformation.contact.address1}
+            address2={practitionerInformation.contact.address2}
+            address3={practitionerInformation.contact.address3}
+            city={practitionerInformation.contact.city}
+            country={practitionerInformation.contact.country}
+            countryType={practitionerInformation.contact.countryType}
+            name={practitionerInformation.name}
+            postalCode={practitionerInformation.contact.postalCode}
+            state={practitionerInformation.contact.state}
+          />
           <div>{practitionerInformation.contact.phone}</div>
           <div>Tax Court Bar No. {practitionerInformation.barNumber}</div>
           <div>{practitionerInformation.email}</div>

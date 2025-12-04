@@ -3,6 +3,7 @@ import {
   AccountStatus,
   CASE_SERVICES_SUPERVISOR_SECTION,
   COUNTRY_TYPES,
+  CountryTypes,
   JudgeTitle,
   ROLES,
   Role,
@@ -21,7 +22,7 @@ export type UserContact = {
   address3?: string;
   city: string;
   country?: string;
-  countryType: string;
+  countryType: CountryTypes;
   phone: string;
   postalCode: string;
   state: string;
