@@ -57,10 +57,10 @@ const getAllCognitoUsers = async () => {
 (async () => {
   const allUsers: any[] = await getAllCognitoUsers();
 
-  if (allUsers.length > 0) {
-    for (const user of allUsers) {
-      console.log(allUsers);
+  console.log(allUsers);
 
+  const taskFns: (() => Promise<void>)[] = allUsers.map(user => {
+    return async () => {
       const adminDeleteUserCommandInput = {
         UserPoolId,
         Username: user.Username,
@@ -76,8 +76,25 @@ const getAllCognitoUsers = async () => {
       } catch (error) {
         console.log('Error deleting user Username: ', user.Username);
       }
+    };
+  });
+
+  // Run tasks in chunks of 15, awaiting each batch before continuing
+  const concurrency = 15;
+  for (let i = 0; i < taskFns.length; i += concurrency) {
+    const batch = taskFns.slice(i, i + concurrency);
+    console.log(
+      'running batch:',
+      batch.map((_, idx) => i + idx),
+    );
+    try {
+      await Promise.all(batch.map(fn => fn()));
+    } catch (err) {
+      console.error('Error in batch:', err);
     }
-  } else {
-    console.log('No cognito users.');
+    // small delay between batches to avoid bursting
+    await new Promise(resolve => setTimeout(resolve, 1000));
   }
+
+  console.log('All users deleted.');
 })();
