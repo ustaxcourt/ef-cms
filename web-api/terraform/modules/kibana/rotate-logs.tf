@@ -4,7 +4,7 @@ module "rotate_info_indices" {
   handler_file   = "./aws/lambdas/RotateInfoIndices/src/index.js"
   handler_method = "handler"
   lambda_name    = "RotateInfoIndices"
-  role           = aws_iam_role.lambda_elasticsearch_execution_role.arn
+  role           = aws_iam_role.lambda_elasticsearch_execution_role[0].arn
   environment = {
     es_endpoint = aws_opensearch_domain.efcms-logs[0].endpoint
     expiration  = var.number_of_days_to_keep_info_logs

@@ -96,7 +96,7 @@ resource "aws_opensearch_domain" "efcms-logs" {
   }
 }
 
-resource "aws_elasticsearch_domain_policy" "kibana_access" {
+resource "aws_opensearch_domain_policy" "kibana_access" {
   count           = var.es_logs_instance_count > 0 ? 1 : 0
   domain_name     = aws_opensearch_domain.efcms-logs[0].domain_name
   access_policies = <<POLICY
@@ -220,16 +220,16 @@ locals {
 
   info_cluster_primary_arn = var.es_logs_instance_count > 0 ? "${aws_opensearch_domain.efcms-logs[0].arn}/*" : "${var.es_logs_cluster_arn}/*"
 
+  logs_to_es_count = var.es_logs_instance_count > 0 ? 1 : ((length(var.es_logs_cluster_arn) > 0 && length(var.es_logs_endpoint) > 0) ? 1 : 0)
+
   info_cluster_consumer_lambda_arns = [
     for account_id in var.es_logs_consumer_account_ids :
     "arn:aws:iam::${account_id}:role/lambda_elasticsearch_execution_role"
   ]
-  all_lambda_arns = concat(
-    [aws_iam_role.lambda_elasticsearch_execution_role.arn],
+  all_lambda_arns = local.logs_to_es_count > 0 ? concat(
+    [aws_iam_role.lambda_elasticsearch_execution_role[0].arn],
     local.info_cluster_consumer_lambda_arns
-  )
-
-  logs_to_es_count = var.es_logs_instance_count > 0 ? 1 : ((length(var.es_logs_cluster_arn) > 0 && length(var.es_logs_endpoint) > 0) ? 1 : 0)
+  ) : local.info_cluster_consumer_lambda_arns
 }
 
 module "logs_alarms" {
@@ -264,7 +264,7 @@ EOF
 resource "aws_iam_role_policy" "lambda_elasticsearch_execution_policy" {
   count  = local.logs_to_es_count
   name   = "lambda_elasticsearch_execution_policy"
-  role   = aws_iam_role.lambda_elasticsearch_execution_role.id
+  role   = aws_iam_role.lambda_elasticsearch_execution_role[0].id
   policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -300,7 +300,7 @@ module "logs_to_es" {
   handler_file   = "./aws/lambdas/LogsToElasticSearch_info/index.js"
   handler_method = "handler"
   lambda_name    = "LogsToElasticSearch_info"
-  role           = aws_iam_role.lambda_elasticsearch_execution_role.arn
+  role           = aws_iam_role.lambda_elasticsearch_execution_role[0].arn
   environment = {
     es_endpoint = var.es_logs_instance_count > 0 ? aws_opensearch_domain.efcms-logs[0].endpoint : var.es_logs_endpoint
   }
@@ -310,20 +310,20 @@ module "logs_to_es" {
 
 resource "aws_cloudwatch_log_group" "logs_to_elasticsearch" {
   count             = local.logs_to_es_count
-  name              = "/aws/lambda/${module.logs_to_es.function_name}"
+  name              = "/aws/lambda/${module.logs_to_es[0].function_name}"
   retention_in_days = 14
 }
 
 resource "terraform_data" "logs_to_es_last_modified" {
   count = local.logs_to_es_count
-  input = module.logs_to_es.last_modified
+  input = module.logs_to_es[0].last_modified
 }
 
 resource "aws_lambda_permission" "allow_cloudwatch" {
   count         = local.logs_to_es_count
   statement_id  = "AllowExecutionFromCloudWatch"
   action        = "lambda:InvokeFunction"
-  function_name = module.logs_to_es.function_name
+  function_name = module.logs_to_es[0].function_name
   principal     = "logs.amazonaws.com"
   lifecycle {
     replace_triggered_by = [
@@ -336,17 +336,16 @@ module "regional-log-subscription-filters-east" {
   count                            = local.logs_to_es_count
   source                           = "../regional-log-subscription-filters"
   log_group_environments           = var.log_group_environments
-  logs_to_elasticsearch_lambda_arn = module.logs_to_es.arn
+  logs_to_elasticsearch_lambda_arn = module.logs_to_es[0].arn
 
   depends_on = [aws_lambda_permission.allow_cloudwatch]
 }
 
 resource "aws_cloudwatch_log_subscription_filter" "cognito_authorizer_filter" {
-  count           = length(var.log_group_environments)
-  destination_arn = module.logs_to_es.arn
+  count           = local.logs_to_es_count > 0 ? length(var.log_group_environments) : 0
+  destination_arn = module.logs_to_es[0].arn
   filter_pattern  = ""
   name            = "cognito_authorizer_${element(var.log_group_environments, count.index)}_lambda_filter"
   log_group_name  = "/aws/lambda/cognito_authorizer_lambda_${element(var.log_group_environments, count.index)}"
   depends_on      = [aws_lambda_permission.allow_cloudwatch]
 }
-

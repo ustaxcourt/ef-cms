@@ -40,11 +40,11 @@ variable "log_group_environments" {
 }
 
 variable "log_snapshot_bucket_name" {
-  type = string
+  type    = string
 }
 
 variable "number_of_days_to_keep_info_logs" {
-  type = number
+  type    = number
 }
 
 variable "sns_alarm_arn" {
