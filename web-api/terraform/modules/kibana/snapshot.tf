@@ -1,7 +1,7 @@
 data "aws_caller_identity" "current" {}
 
 locals {
-  opensearch_endpoint = length(aws_opensearch_domain.efcms-logs) > 0 ? "https://${aws_opensearch_domain.efcms-logs[0].endpoint}" : "https://${var.es_info_cluster_endpoint}"
+  opensearch_endpoint = length(aws_opensearch_domain.efcms-logs) > 0 ? "https://${aws_opensearch_domain.efcms-logs[0].endpoint}" : "https://${var.es_logs_endpoint}"
 }
 
 provider "opensearch" {
@@ -9,7 +9,7 @@ provider "opensearch" {
 }
 
 resource "opensearch_snapshot_repository" "archived-logs" {
-  count = var.es_info_cluster_create ? 1 : 0
+  count = var.es_logs_instance_count > 0 ? 1 : 0
   name  = "archived-logs"
   type  = "s3"
   settings = {
@@ -24,7 +24,7 @@ resource "opensearch_snapshot_repository" "archived-logs" {
 }
 
 resource "aws_iam_role" "es_s3_snapshot_access_role" {
-  count = var.es_info_cluster_create ? 1 : 0
+  count = var.es_logs_instance_count > 0 ? 1 : 0
   name  = "es_s3_snapshot_access_role"
 
   assume_role_policy = <<EOF
@@ -44,7 +44,7 @@ EOF
 }
 
 resource "aws_iam_role_policy" "es_s3_snapshot_access_policy" {
-  count = var.es_info_cluster_create ? 1 : 0
+  count = var.es_logs_instance_count > 0 ? 1 : 0
   name  = "es_s3_snapshot_access_policy"
   role  = aws_iam_role.es_s3_snapshot_access_role[0].id
 
@@ -72,7 +72,7 @@ EOF
 }
 
 resource "aws_s3_bucket" "ustc_log_snapshots_bucket" {
-  count         = var.es_info_cluster_create ? 1 : 0
+  count         = var.es_logs_instance_count > 0 ? 1 : 0
   bucket        = var.log_snapshot_bucket_name
   force_destroy = false
 }
