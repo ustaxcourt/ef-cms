@@ -57,8 +57,6 @@ const getAllCognitoUsers = async () => {
 (async () => {
   const allUsers: any[] = await getAllCognitoUsers();
 
-  console.log(allUsers);
-
   const taskFns: (() => Promise<void>)[] = allUsers.map(user => {
     return async () => {
       const adminDeleteUserCommandInput = {
