@@ -13,31 +13,24 @@ import { alphabetizeObjectProps } from './createSecretsHelpers';
 
 const scriptConfig: ScriptConfig = {
   description:
-    'update-secret - Updates the [env]_deploy secrets with the provided key/value pair',
+    'delete-variable-from-secret - Updates the [env]_deploy secrets and removes the provided key',
   environment: {
     env: 'ENV',
     region: 'REGION',
   },
   parameters: {
     key: {
+      position: 0,
       required: true,
-      short: 'k',
-      type: 'string',
-    },
-    value: {
-      required: true,
-      short: 'v',
-      // do not transform; bash values are always strings
       type: 'string',
     },
   },
   requireActiveAwsSession: true,
 };
-const { env, key, region, value } = parseArgsAndEnvVars(scriptConfig) as {
+const { env, key, region } = parseArgsAndEnvVars(scriptConfig) as {
   env: string;
   key: string;
   region: string;
-  value: string;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -50,14 +43,12 @@ const { env, key, region, value } = parseArgsAndEnvVars(scriptConfig) as {
     throw new Error(`Secret ${SecretId} not found`);
   }
   const trimmedKey = key.trim().replace(' ', '_').toUpperCase();
-  const secrets = {
-    ...JSON.parse(SecretString),
-    [trimmedKey]: value,
-  };
+  const secrets = JSON.parse(SecretString);
+  delete secrets[trimmedKey];
   const putSecretValueCommand = new PutSecretValueCommand({
     SecretId,
     SecretString: JSON.stringify(alphabetizeObjectProps(secrets)),
   });
   await secretsClient.send(putSecretValueCommand);
-  console.log(`Updated secret ${SecretId} with "${key}": "${value}"`);
+  console.log(`Updated secret ${SecretId} to remove "${key}"`);
 })();

@@ -120,7 +120,13 @@ export const DeficiencyStatisticsForm = connect(
           <div className="grid-row grid-gap-2">
             <div className="grid-col-3">
               <FormGroup
-                confirmationText={confirmationText?.irsDeficiencyAmount}
+                confirmationText={
+                  typeof confirmationText === 'object' &&
+                  confirmationText &&
+                  'irsDeficiencyAmount' in confirmationText
+                    ? confirmationText.irsDeficiencyAmount
+                    : undefined
+                }
                 errorText={validationErrors.irsDeficiencyAmount}
               >
                 <label className="usa-label" htmlFor="irs-deficiency-amount">
@@ -185,7 +191,11 @@ export const DeficiencyStatisticsForm = connect(
             <div className="grid-col-3">
               <FormGroup
                 confirmationText={
-                  confirmationText?.determinationDeficiencyAmount
+                  typeof confirmationText === 'object' &&
+                  confirmationText &&
+                  'determinationDeficiencyAmount' in confirmationText
+                    ? confirmationText.determinationDeficiencyAmount
+                    : undefined
                 }
                 errorText={validationErrors.determinationDeficiencyAmount}
               >
