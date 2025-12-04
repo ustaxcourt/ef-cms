@@ -1,10 +1,15 @@
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { props as cerebralProps } from 'cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
+import { RunableSequence as RunnableSequence } from 'cerebral';
+
+const props = cerebralProps as unknown as {
+  marginClass: string;
+  updateSequence: string;
+};
 
 export const Inclusions = connect(
   {
@@ -27,13 +32,13 @@ export const Inclusions = connect(
     validationErrors,
     isMemberCase,
   }: {
-    DATE_FORMATS;
-    form;
-    formatAndUpdateDateFromDatePickerSequence;
-    marginClass;
-    updateSequence;
-    validateDocketEntrySequence;
-    validationErrors;
+    DATE_FORMATS: { ISO: string };
+    form: Record<string, any>;
+    formatAndUpdateDateFromDatePickerSequence: Function | RunnableSequence;
+    marginClass: string;
+    updateSequence: Function | RunnableSequence;
+    validateDocketEntrySequence: Function | RunnableSequence;
+    validationErrors: Record<string, any>;
     isMemberCase?: boolean;
   }) {
     return (

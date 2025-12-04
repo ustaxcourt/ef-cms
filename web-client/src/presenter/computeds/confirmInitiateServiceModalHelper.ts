@@ -16,7 +16,7 @@ import { isLeadCase } from '@shared/business/entities/cases/Case';
  * @returns {object} the computed values
  */
 
-type ContactsNeedingPaperService = {
+export type ContactsNeedingPaperService = {
   name: string;
   formattedContactType?: string;
   docketNumber: string;

@@ -1,11 +1,17 @@
 import { ConsolidatedCasesCheckboxes } from './ConsolidatedCasesCheckboxes';
 import { InfoNotificationComponent } from './InfoNotification';
 import { ModalDialog } from './ModalDialog';
-import { props } from 'cerebral';
 import { connect } from '@web-client/presenter/shared.cerebral';
+import { props as cerebralProps } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import { ContactsNeedingPaperService } from '@web-client/presenter/computeds/confirmInitiateServiceModalHelper';
+
+const props = cerebralProps as unknown as {
+  confirmSequence: () => void;
+  documentTitle: string;
+};
 
 export const ConfirmInitiateServiceModal = connect(
   {
@@ -21,6 +27,19 @@ export const ConfirmInitiateServiceModal = connect(
     confirmSequence,
     documentTitle,
     waitingForResponse,
+  }: {
+    cancelSequence: Function;
+    confirmInitiateServiceModalHelper: {
+      additionalServedCases: { docketNumber: string; caseTitle: string }[];
+      canMultiDocket: boolean;
+      canServeMultiDocketed: boolean;
+      confirmationText: string;
+      contactsNeedingPaperService?: ContactsNeedingPaperService;
+      paperFilingText: string;
+    };
+    confirmSequence: () => void;
+    documentTitle: string;
+    waitingForResponse: boolean;
   }) {
     let isSubmitDebounced = false;
 

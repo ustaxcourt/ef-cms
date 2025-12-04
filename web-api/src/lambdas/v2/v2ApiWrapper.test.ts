@@ -1,9 +1,14 @@
 /* eslint-disable jest/no-conditional-expect */
+import { ErrorWithStatusCode } from '../../errors/errors';
 import { v2ApiWrapper } from './v2ApiWrapper';
 
+type CapturedError = ErrorWithStatusCode & {
+  toResponseBody(): { message: string; statusCode: number };
+};
+
 describe('v2ApiWrapper', () => {
-  const throwWithStatus = (statusCode, message) => () => {
-    const err = new Error(message);
+  const throwWithStatus = (statusCode?: number, message?: string) => () => {
+    const err = new Error(message) as ErrorWithStatusCode;
     err.statusCode = statusCode;
     throw err;
   };
@@ -12,8 +17,13 @@ describe('v2ApiWrapper', () => {
     try {
       await v2ApiWrapper(throwWithStatus(undefined, 'Test error'));
     } catch (err) {
-      expect(JSON.stringify(err.message)).toBe('{"message":"Test error"}');
-      expect(err.statusCode).toBe(500);
+      const error = err as CapturedError;
+      expect(error.message).toBe('Test error');
+      expect(error.statusCode).toBe(500);
+      expect(error.toResponseBody()).toEqual({
+        message: 'Test error',
+        statusCode: 500,
+      });
     }
   });
 
@@ -21,10 +31,13 @@ describe('v2ApiWrapper', () => {
     try {
       await v2ApiWrapper(throwWithStatus(undefined));
     } catch (err) {
-      expect(JSON.stringify(err.message)).toBe(
-        '{"message":"An unexpected error occurred"}',
-      );
-      expect(err.statusCode).toBe(500);
+      const error = err as CapturedError;
+      expect(error.message).toBe('An unexpected error occurred');
+      expect(error.statusCode).toBe(500);
+      expect(error.toResponseBody()).toEqual({
+        message: 'An unexpected error occurred',
+        statusCode: 500,
+      });
     }
   });
   [401, 403, 404, 500].forEach(statusCode =>
