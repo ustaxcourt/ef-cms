@@ -34,8 +34,6 @@ export const generateNoticeOfWithdrawalPdfInteractor = async (
   },
   authorizedUser: UnknownAuthUser,
 ): Promise<{ fileId: string; url: string }> => {
-  // For now, just check that the user is logged in
-  // use isAuthorized to check for type of user
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.FILE_EXTERNAL_DOCUMENT)) {
     throw new UnauthorizedError('Unauthorized');
   }
