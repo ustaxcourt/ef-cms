@@ -6,7 +6,7 @@
   "repository": "https://github.com/ustaxcourt/ef-cms",
   "engines": {
     "node": ">=24.11.1 <25.0.0",
-    "npm": ">=10.9.4 <11.0.0"
+    "npm": ">=11.6.2 <12.0.0"
   },
   "dependencies": {
     "@18f/us-federal-holidays": "4.0.0",
@@ -22,7 +22,7 @@
     "@aws-sdk/client-dynamodb": "3.943.0",
     "@aws-sdk/client-dynamodb-streams": "3.943.0",
     "@aws-sdk/client-glue": "3.943.0",
-    "@aws-sdk/client-lambda": "3.943.0",
+    "@aws-sdk/client-lambda": "3.945.0",
     "@aws-sdk/client-opensearch": "3.943.0",
     "@aws-sdk/client-route-53": "3.943.0",
     "@aws-sdk/client-s3": "3.943.0",
@@ -81,7 +81,7 @@
     "htmlparser2": "10.0.0",
     "image-blob-reduce": "4.1.0",
     "joi": "18.0.2",
-    "jsonwebtoken": "9.0.2",
+    "jsonwebtoken": "9.0.3",
     "jwk-to-pem": "2.0.7",
     "kysely": "0.28.8",
     "lodash": "4.17.21",
@@ -298,7 +298,7 @@
     "@types/jest": "30.0.0",
     "@types/lodash": "4.17.21",
     "@types/luxon": "3.7.1",
-    "@types/node": "22.19.1",
+    "@types/node": "^24.10.1",
     "@types/promise-retry": "1.1.6",
     "@types/react": "19.2.7",
     "@types/react-dom": "19.2.3",
