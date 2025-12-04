@@ -71,21 +71,21 @@ We strive to be keep our project as Agile as possible.  This means that every sp
 
 Since we strive to work in pairs and mobs, our stand ups focus more on group goals.  Every morning we meet to talk about our goals for our current sprint and also talk about our story goals for the day.  We setup **parking lot** items to give an opportunity to discuss any important topics that the entire team should be aware of.  We will often give small demos of story / bug progress to the Tax Court.
 
-- Time of Ceremony: 9:30 AM CT
+- Time of Ceremony: 10:00 AM ET
 - Frequency of Ceremony: Daily Monday through Friday
 
 ### Sprint Retrospective
 
 The retrospective is performed at the end of the sprint and offers the team a time to reflect on what went well or what they’d like to improve.
 
-- Time of Ceremony: 2:30-4:00 CT
+- Time of Ceremony: 3:30 - 4:00 PM ET
 - Frequency of Ceremony: Every other week Tuesday
 
 ### Sprint Planning/Refinement
 
 We have combined our grooming and planning into one event. During this meeting we groom stories for the sprint. While a sprint is 2 weeks, we groom every week to allow for shifting PO priorities.
 
-- Time of Ceremony: 11:30-12:00 PM CT
+- Time of Ceremony: TBD
 - Frequency of Ceremony: Every Tuesday
 
 ### OpEx/DevEx Backlog Review
@@ -94,12 +94,12 @@ A meeting for the team to review the backlog of larger refactoring items and poi
 
 Refactoring backlog: <https://trello.com/b/9tgrIFfA/ef-cms-opex-devex>
 
-- Time of Ceremony: 2:00-3:00 PM CT
+- Time of Ceremony: TBD
 - Frequency of Ceremony: Every 2 weeks on Monday
 
 ### Epic Refinement
 
-- Time of Ceremony: 2:00-3:00 PM CT
+- Time of Ceremony: TBD
 - Frequency of Ceremony: Ad hoc meeting
 
 ### Refactoring Backlog
