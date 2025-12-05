@@ -57,7 +57,7 @@ const getAllCognitoUsers = async () => {
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const allUsers: any[] = await getAllCognitoUsers();
+  const allUsers: UserType[] = await getAllCognitoUsers();
 
   const taskFns: (() => Promise<void>)[] = allUsers.map(user => {
     return async () => {
