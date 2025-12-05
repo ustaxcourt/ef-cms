@@ -1,10 +1,14 @@
 import { ConsolidatedCasesCheckboxes } from './ConsolidatedCasesCheckboxes';
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
+import { props as cerebralProps } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useState } from 'react';
+
+const props = cerebralProps as unknown as {
+  documentTitle: unknown;
+};
 
 export const ConfirmInitiateSaveModal = connect(
   {
@@ -18,6 +22,10 @@ export const ConfirmInitiateSaveModal = connect(
     cancelSequence,
     documentTitle,
     submitCourtIssuedDocketEntrySequence,
+  }: {
+    cancelSequence: () => void;
+    documentTitle: string;
+    submitCourtIssuedDocketEntrySequence: () => void;
   }) {
     const [isSubmitting, setIsSubmitting] = useState(false);
     return (

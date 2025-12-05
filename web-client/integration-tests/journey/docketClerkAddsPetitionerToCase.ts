@@ -6,7 +6,14 @@ import { contactPrimaryFromState } from '../helpers';
 
 export const docketClerkAddsPetitionerToCase = (
   cerebralTest,
-  overrides = {},
+  overrides: {
+    contactType?: string;
+    name?: string;
+    additionalName?: string;
+    phone?: string;
+    caseCaption?: string;
+    serviceIndicator?: string;
+  } = {},
 ) => {
   return it('docket clerk adds new petitioner to case', async () => {
     const petitionersBeforeAdding = cerebralTest.getState(
