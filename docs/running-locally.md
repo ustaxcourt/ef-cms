@@ -122,7 +122,7 @@ Use one of the mock logins documented below to log in to the private UI.
 
 ## How to Login Locally
 
-Now that your application is running locally, try to log in with some of the local mock user accounts.  All of these users are defined in [users.json](https://github.com/ustaxcourt/ef-cms/blob/staging/web-api/storage/fixtures/seed/users.json), and also in [efcms-local.json](https://github.com/ustaxcourt/ef-cms/blob/staging/web-api/storage/fixtures/seed/efcms-local.json) which contains all of our dynamodb seed data.
+Now that your application is running locally, try to log in with some of the local mock user accounts.  All of these users are defined in [users.json](https://github.com/ustaxcourt/ef-cms/blob/staging/web-api/storage/fixtures/seed/users.json), and also in [efcms-local.json](https://github.com/ustaxcourt/ef-cms/blob/staging/web-api/storage/fixtures/seed/efcms-local.json) which contains all of our seed data.
 
 Open a browser to [http://localhost:1234](http://localhost:1234) and enter one of the following mock user emails.
 

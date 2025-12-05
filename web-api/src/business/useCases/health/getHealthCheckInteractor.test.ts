@@ -36,7 +36,6 @@ describe('getHealthCheckInteractor', () => {
           getClientId: () => 'a',
           getFirstSingleCaseRecord: () => true,
           getSesStatus: () => true,
-          getTableStatus: () => 'ACTIVE',
         };
       },
       logger: {
@@ -46,9 +45,6 @@ describe('getHealthCheckInteractor', () => {
 
     expect(statusResult).toEqual({
       cognito: true,
-      dynamo: {
-        efcms: true,
-      },
       elasticsearch: true,
       emailService: true,
       s3: {
@@ -92,9 +88,6 @@ describe('getHealthCheckInteractor', () => {
           getSesStatus: () => {
             throw new Error();
           },
-          getTableStatus: () => {
-            throw new Error();
-          },
         };
       },
       logger: {
@@ -104,9 +97,6 @@ describe('getHealthCheckInteractor', () => {
 
     expect(status).toEqual({
       cognito: false,
-      dynamo: {
-        efcms: false,
-      },
       elasticsearch: false,
       emailService: false,
       s3: {
@@ -153,7 +143,6 @@ describe('getHealthCheckInteractor', () => {
             getClientId: () => 'a',
             getFirstSingleCaseRecord: () => true,
             getSesStatus: () => true,
-            getTableStatus: () => 'ACTIVE',
           };
         },
         logger: {
