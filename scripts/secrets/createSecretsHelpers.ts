@@ -31,3 +31,15 @@ export const getLowerEnvSsoRoleId = async (): Promise<string> => {
   ]);
   return callerIdentityArn.split('/')[1];
 };
+
+export const alphabetizeObjectProps = (obj: Record<string, any>) => {
+  return Object.keys(obj)
+    .sort()
+    .reduce(
+      (acc, key) => {
+        acc[key] = obj[key];
+        return acc;
+      },
+      {} as Record<string, any>,
+    );
+};
