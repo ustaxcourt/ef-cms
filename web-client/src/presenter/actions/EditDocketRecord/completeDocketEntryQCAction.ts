@@ -44,11 +44,16 @@ export const completeDocketEntryQCAction = async ({
       paperServiceDocumentTitle,
       paperServiceParties,
       paperServicePdfUrl,
-    } = await applicationContext
+    } = (await applicationContext
       .getUseCases()
       .completeDocketEntryQCInteractor(applicationContext, {
         entryMetadata,
-      });
+      })) as {
+      caseDetail: RawCase;
+      paperServiceDocumentTitle: string;
+      paperServiceParties: string[];
+      paperServicePdfUrl: string;
+    };
 
     const updatedDocument = caseDetail.docketEntries.filter(
       doc => doc.docketEntryId === docketEntryId,

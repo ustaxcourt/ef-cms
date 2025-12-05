@@ -5,7 +5,11 @@ import {
 
 export const petitionsClerkViewsDeadlineReportForSingleCase = (
   cerebralTest,
-  overrides = {},
+  overrides: {
+    day?: string;
+    month?: string;
+    year?: string;
+  } = {},
 ) => {
   return it('Petitions clerk views deadline report for a single case', async () => {
     await cerebralTest.runSequence('gotoCaseDeadlineReportSequence');
