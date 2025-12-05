@@ -182,10 +182,7 @@ jobs:
               echo "skipping…"
               exit 0
             fi
-            if [ "${CIRCLE_BRANCH}" == "test" ]; then
-              export REGION="us-east-1"
-              ./scripts/user/setup-glued-users.ts
-            else
+            if [ "${CIRCLE_BRANCH}" != "test" ]; then
               npx ts-node --transpile-only ./scripts/circleci/judge/bulkImportJudgeUsers.ts | tee bulk-import-log.txt
             fi
       - run:
@@ -545,6 +542,10 @@ jobs:
           command: |
             ./scripts/elasticsearch/delete-alpha-and-beta-clusters.sh
       - run:
+          name: 'Delete Cognito users in test'
+          command: |
+            ./scripts/user/clear-all-cognito-users.ts
+      - run:
           no_output_timeout: 20m
           name: 'Recreate the alpha OpenSearch cluster'
           command: |
@@ -728,6 +729,13 @@ jobs:
           command: |
             if [ "$MIGRATE_FLAG" == "true" ]; then
               NODE_ENV=production ./scripts/reindex/index-docket-entries/index-docket-entries.ts 5
+            fi
+      - run:
+          name: Populate test users in Cognito
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "test" ]; then
+                  export REGION="us-east-1"
+                  ./scripts/user/setup-glued-users.ts
             fi
 
   cleanup-glue-job:
