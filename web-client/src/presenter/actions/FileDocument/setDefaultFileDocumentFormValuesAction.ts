@@ -39,7 +39,11 @@ export const setDefaultFileDocumentFormValuesAction = ({
   store.set(state.form.certificateOfService, false);
   store.set(state.form.hasSupportingDocuments, false);
   store.set(state.form.hasSecondarySupportingDocuments, false);
-  store.set(state.form.generationType, GENERATION_TYPES.MANUAL);
+  if (eventCode === 'NOTW' || eventCode === 'EA') {
+    store.set(state.form.generationType, GENERATION_TYPES.AUTO);
+  } else {
+    store.set(state.form.generationType, GENERATION_TYPES.MANUAL);
+  }
   store.set(state.form.practitioner, []);
   store.set(state.form.filersMap, filersMap);
 };
