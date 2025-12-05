@@ -4,6 +4,7 @@ import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import { Button } from '@web-client/dawson-ui/ui/button';
 import { EditContactInformationModal } from '../CaseDetail/EditContactInformationModal';
+import { COUNTRY_TYPES } from '@shared/business/entities/EntityConstants';
 
 export const NoticeOfWithdrawalForm = connect(
   {
@@ -40,7 +41,7 @@ export const NoticeOfWithdrawalForm = connect(
               <div className="usa-checkbox" key={party.contactId}>
                 <input
                   aria-describedby="who-legend"
-                  checked={form.partiesToWithdrawFrom?.[party.contactId]}
+                  checked={form.filersMap?.[party.contactId]}
                   className="usa-checkbox__input"
                   id={`party-${party.contactId}`}
                   name={`filersMap.${party.contactId}`}
@@ -139,7 +140,9 @@ export const NoticeOfWithdrawalForm = connect(
                         <span className="tw:block">{party.address2}</span>
                         <span className="tw:block">{party.address3}</span>
                         <span className="tw:block">{`${party.city}, ${party.state} ${party.postalCode}`}</span>
-                        <span className="tw:block">{party.country}</span>
+                        {party.countryType === COUNTRY_TYPES.INTERNATIONAL && (
+                          <span className="tw-block">{party.country}</span>
+                        )}
                         <span className="tw:block">{party.phone}</span>
                         <input
                           checked={
@@ -208,7 +211,9 @@ export const NoticeOfWithdrawalForm = connect(
                       <span className="tw:block">{party.address2}</span>
                       <span className="tw:block">{party.address3}</span>
                       <span className="tw:block">{`${party.city}, ${party.state} ${party.postalCode}`}</span>
-                      <span className="tw:block">{party.country}</span>
+                      {party.countryType === COUNTRY_TYPES.INTERNATIONAL && (
+                        <span className="tw-block">{party.country}</span>
+                      )}
                     </>
                   )}
                 </div>
