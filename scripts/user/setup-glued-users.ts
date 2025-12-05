@@ -254,7 +254,9 @@ const getUsers = async (): Promise<Users> => {
 
     if (['judge', 'legacyJudge'].includes(user.role)) {
       users[user.name] = {
-        email: user.email,
+        email: `${
+          user.judgeTitle!.indexOf('Special Trial') !== -1 ? 'st' : ''
+        }judge.${user.name.toLowerCase()}@example.com`,
         name: `${user.judgeTitle} ${fullName}`,
         userFullName: `${fullName}`,
         role: user.role,

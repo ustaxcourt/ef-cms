@@ -181,7 +181,8 @@ jobs:
             if [ "${CIRCLE_BRANCH}" == "prod" ]; then
               echo "skipping…"
               exit 0
-            else
+            fi
+            if [ "${CIRCLE_BRANCH}" != "test" ]; then
               npx ts-node --transpile-only ./scripts/circleci/judge/bulkImportJudgeUsers.ts | tee bulk-import-log.txt
             fi
       - run:
