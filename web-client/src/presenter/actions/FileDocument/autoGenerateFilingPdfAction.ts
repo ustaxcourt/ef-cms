@@ -17,7 +17,7 @@ export const autoGenerateFilingPdfAction = async ({
 
     const { docketNumber, docketNumberWithSuffix } = caseDetail;
 
-    const { filers, filersMap } = get(state.form);
+    const { filers } = get(state.form);
 
     let response;
     switch (eventCode) {
@@ -41,7 +41,6 @@ export const autoGenerateFilingPdfAction = async ({
             docketNumber,
             docketNumberWithSuffix,
             filers,
-            filersMap,
             petitioners,
           });
         break;

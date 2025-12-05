@@ -3,7 +3,10 @@ import {
   ROLE_PERMISSIONS,
 } from '@shared/authorization/authorizationClientService';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { ROLES } from '@shared/business/entities/EntityConstants';
+import {
+  ROLES,
+  SERVICE_INDICATOR_TYPES,
+} from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
@@ -18,7 +21,6 @@ export const generateNoticeOfWithdrawalPdfInteractor = async (
     docketNumber,
     docketNumberWithSuffix,
     filers,
-    filersMap,
     petitioners,
   }: {
     caseCaptionExtension: string;
@@ -26,7 +28,6 @@ export const generateNoticeOfWithdrawalPdfInteractor = async (
     docketNumber: string;
     docketNumberWithSuffix: string;
     filers: string[];
-    filersMap: { [key: string]: boolean };
     petitioners: {
       contactId: string;
       name: string;
@@ -52,11 +53,10 @@ export const generateNoticeOfWithdrawalPdfInteractor = async (
           })
           .filter(Boolean) as string[]);
 
-  const { PDFDocument } = await applicationContext.getPdfLib();
-  const promises: Promise<PDFDocument>[] = [];
-  let pdfDoc;
+  const generatedPdfPromises: Promise<Uint8Array>[] = [];
+  let pdfDoc: PDFDocument;
   try {
-    const noticeOfWithdrawalPdf = await applicationContext
+    const noticeOfWithdrawalPdf = applicationContext
       .getDocumentGenerators()
       .noticeOfWithdrawal({
         applicationContext,
@@ -68,23 +68,21 @@ export const generateNoticeOfWithdrawalPdfInteractor = async (
           practitionerInformation,
         },
       });
-    const noticeOfWithdrawalPdfDoc = PDFDocument.load(noticeOfWithdrawalPdf);
-
-    promises.push(noticeOfWithdrawalPdfDoc);
+    generatedPdfPromises.push(noticeOfWithdrawalPdf);
 
     const caseData = await getCaseByDocketNumber({
       docketNumber,
     });
 
-    const petitionersFiledContactId = filers.filter(
-      filerId => filersMap[filerId],
-    );
-
-    for (const petitionerContactId of petitionersFiledContactId) {
+    for (const petitionerContactId of petitioners.map(p => p.contactId)) {
       const partyInformation = caseData.petitioners.find(
         p => p.contactId === petitionerContactId,
       );
-      const certificateOfServicePdf = await applicationContext
+      if (
+        partyInformation?.serviceIndicator !== SERVICE_INDICATOR_TYPES.SI_PAPER
+      )
+        continue;
+      const certificateOfServicePdf = applicationContext
         .getDocumentGenerators()
         .certificateOfService({
           applicationContext,
@@ -94,17 +92,18 @@ export const generateNoticeOfWithdrawalPdfInteractor = async (
             docketNumberWithSuffix,
           },
         });
-      const certificateOfServicePdfDoc = PDFDocument.load(
-        certificateOfServicePdf,
-      );
-      promises.push(certificateOfServicePdfDoc);
+      generatedPdfPromises.push(certificateOfServicePdf);
     }
+    const generatedPdfs = await Promise.all(generatedPdfPromises);
 
-    const docs = await Promise.all(promises);
+    const { PDFDocument } = await applicationContext.getPdfLib();
+    const loadedPdfs = await Promise.all(
+      generatedPdfs.map(pdfBytes => PDFDocument.load(pdfBytes)),
+    );
 
     pdfDoc = await applicationContext
       .getUtilities()
-      .combineAllPdfDocuments(applicationContext, docs);
+      .combineAllPdfDocuments(applicationContext, loadedPdfs);
   } catch (err) {
     console.error('Error generating PDFs:', err);
     throw err;
