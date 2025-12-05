@@ -17,7 +17,6 @@ export const getChromiumBrowserAWS = async (): Promise<Browser> => {
           args: chromium.args,
           headless: 'shell',
         }),
-        dumpio: true,
         executablePath: await chromium.executablePath(),
         headless: 'shell',
         env: {
