@@ -16,7 +16,7 @@ describe('clearMaintenanceModeAction', () => {
       },
     });
 
-    expect(result.maintenanceMode).toBeUndefined();
+    expect(result.state.maintenanceMode).toBeUndefined();
   });
 
   it('should make a call to remove maintenanceMode from local storage', async () => {

@@ -5,8 +5,9 @@ export const caseDetailPractitionerSearchHelper = (get: Get): any => {
   const caseDetail = get(state.caseDetail);
   const modalState = get(state.modal);
 
-  const formatMatches = matchesKey => {
-    const matchesFormatted = (modalState && modalState[matchesKey]) || [];
+  const formatMatches = (matchesKey: string) => {
+    const matchesFormatted: any[] =
+      (modalState && modalState[matchesKey]) || [];
 
     const casePractitionerKey =
       matchesKey === 'practitionerMatches'
@@ -32,19 +33,24 @@ export const caseDetailPractitionerSearchHelper = (get: Get): any => {
   const practitionerMatchesFormatted = formatMatches('practitionerMatches');
   const respondentMatchesFormatted = formatMatches('respondentMatches');
 
+  const modalStateTyped: {
+    practitionerMatches?: unknown[];
+    respondentMatches?: unknown[];
+  } = modalState;
+
   const practitionerSearchResultsCount = modalState
-    ? modalState.practitionerMatches?.length
+    ? modalStateTyped.practitionerMatches?.length
     : undefined;
 
   const respondentSearchResultsCount = modalState
-    ? modalState.respondentMatches?.length
+    ? modalStateTyped.respondentMatches?.length
     : undefined;
 
-  const showOnePractitioner = practitionerSearchResultsCount === 1;
-  const showMultiplePractitioners = practitionerSearchResultsCount > 1;
+  const showOnePractitioner = (practitionerSearchResultsCount || 0) === 1;
+  const showMultiplePractitioners = (practitionerSearchResultsCount || 0) > 1;
 
-  const showOneRespondent = respondentSearchResultsCount === 1;
-  const showMultipleRespondents = respondentSearchResultsCount > 1;
+  const showOneRespondent = (respondentSearchResultsCount || 0) === 1;
+  const showMultipleRespondents = (respondentSearchResultsCount || 0) > 1;
 
   return {
     practitionerMatchesFormatted,

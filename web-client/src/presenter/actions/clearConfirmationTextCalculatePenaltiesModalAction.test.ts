@@ -3,13 +3,12 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('clearConfirmationTextForCalculatePenaltiesModalAction', () => {
   it('should clear state.confirmationText.penalties', async () => {
-    const { state } = await runAction(
-      clearConfirmationTextForCalculatePenaltiesModalAction,
-      {
+    const result = await Promise.resolve(
+      runAction(clearConfirmationTextForCalculatePenaltiesModalAction, {
         state: { confirmationText: { penalties: { 0: 'something' } } },
-      },
+      }),
     );
 
-    expect(state.confirmationText.penalties).toEqual({});
+    expect(result.state).toHaveProperty(['confirmationText', 'penalties'], {});
   });
 });

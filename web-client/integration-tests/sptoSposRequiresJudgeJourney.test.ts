@@ -131,7 +131,11 @@ describe('SPTO/SPOS requires a judge', () => {
         docketNumber: cerebralTest.docketNumber,
       });
 
-      const caseDetailFormatted = await runCompute(
+      type FormattedCaseDetail = ReturnType<typeof formattedCaseDetail> & {
+        formattedDocketEntries: RawDocketEntry[];
+      };
+
+      const caseDetailFormatted: FormattedCaseDetail = await runCompute(
         withAppContextDecorator(formattedCaseDetail),
         {
           state: cerebralTest.getState(),

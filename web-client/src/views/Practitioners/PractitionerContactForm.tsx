@@ -3,10 +3,15 @@ import { Country } from '../StartCase/Country';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { InternationalAddress } from '../StartCase/InternationalAddress';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { props as cerebralProps } from 'cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import { RunableSequence as RunnableSequence } from 'cerebral';
+
+const props = cerebralProps as unknown as {
+  onBlurSequenceName: string;
+  onChangeSequenceName: string;
+};
 
 export const PractitionerContactForm = connect(
   {
@@ -27,6 +32,16 @@ export const PractitionerContactForm = connect(
     onChangeUpdateSequence,
     type,
     validationErrors,
+  }: {
+    bind: string;
+    changeCountryTypeSequence: Function | RunnableSequence;
+    COUNTRY_TYPES: { DOMESTIC: string; INTERNATIONAL: string };
+    form: Record<string, any>;
+    onBlurValidationSequence: Function | RunnableSequence;
+    onChangeSequenceName: string;
+    onChangeUpdateSequence: Function | RunnableSequence;
+    type: string;
+    validationErrors: Record<string, any>;
   }) {
     return (
       <>

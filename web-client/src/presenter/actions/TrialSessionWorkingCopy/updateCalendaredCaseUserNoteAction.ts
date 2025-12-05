@@ -1,3 +1,5 @@
+import { CalendaredCaseItemType } from '@web-client/presenter/state/trialSessionState';
+import { RawUserCaseNote } from '@shared/business/entities/notes/UserCaseNote';
 import { makeMap } from '../../computeds/makeMap';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -11,16 +13,22 @@ export const updateCalendaredCaseUserNoteAction = ({
   props,
   store,
 }: ActionProps) => {
-  const calendaredCases = get(state.trialSession.calendaredCases);
+  const calendaredCases: CalendaredCaseItemType[] = get(
+    state.trialSession.calendaredCases,
+  );
   const { userNote } = props;
   const caseToUpdate = calendaredCases.find(
     aCase => aCase.docketNumber === userNote.docketNumber,
   );
-  caseToUpdate.notes = userNote;
+  if (caseToUpdate) {
+    caseToUpdate.notes = userNote;
+  }
 
-  const userNotes = [];
+  const userNotes: RawUserCaseNote[] = [];
   for (const calendaredCase of calendaredCases) {
-    userNotes.push(calendaredCase.notes);
+    if (calendaredCase.notes) {
+      userNotes.push(calendaredCase.notes);
+    }
   }
   store.set(
     state.trialSessionWorkingCopy.userNotes,
