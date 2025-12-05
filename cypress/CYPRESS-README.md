@@ -48,7 +48,7 @@ In order to write a reliable cypress test suites, there are some best practices 
 - Organize helper functions by feature.
   - Helper functions that perform often repeated steps (such as creating and serving a case, granting e-access) are organized similarly as tests under `cypress >helpers`.
   - For example, a helper function that creates a paper petition should be organized under `helpers > fileAPetition`.
-  - Helper functions that connect to or interact with lower level services (Dynamo, Cognito, etc.) or run Node functions from within a Cypress task are organized under `helpers > cypressTasks`.
+  - Helper functions that connect to or interact with lower level services (Cognito, etc.) or run Node functions from within a Cypress task are organized under `helpers > cypressTasks`.
 - Tests for individual React components should be placed under `components > <COMPONENT_NAME>`.
   - For example, we have custom validation logic for the date picker component, the test for that validation is placed at `components > datePicker > date-picker-validation-invalid-year.cy.ts`.
 

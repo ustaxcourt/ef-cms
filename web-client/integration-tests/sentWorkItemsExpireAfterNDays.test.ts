@@ -37,7 +37,6 @@ describe('verify old sent work items do not show up in the outbox', () => {
     };
 
     const applicationContext = applicationContextFactory(mockUser);
-    applicationContext.environment.dynamoDbTableName = 'efcms-local';
     const daysToRetrieveKey =
       applicationContext.getConstants().CONFIGURATION_ITEM_KEYS
         .SECTION_OUTBOX_NUMBER_OF_DAYS.key;

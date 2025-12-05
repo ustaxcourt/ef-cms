@@ -5,7 +5,6 @@ describe('setHealthCheckAction', () => {
   it('sets the state.health to the passed in props.health', async () => {
     const mockHealth = {
       cognito: false,
-      dynamo: { efcms: true, efcmsDeploy: false },
       elasticsearch: true,
       emailService: true,
       s3: {
