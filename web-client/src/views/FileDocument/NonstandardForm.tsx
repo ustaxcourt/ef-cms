@@ -48,6 +48,7 @@ export const NonstandardForm = connect(
     updateSequence,
     validateSequence,
     validationErrors,
+    showIndex = false
   }: {
     caseDetail: { procedureType: string };
     DATE_FORMATS: { ISO: string };
@@ -60,6 +61,7 @@ export const NonstandardForm = connect(
     updateSequence: Function | RunnableSequence;
     validateSequence: Function | RunnableSequence;
     validationErrors: Record<string, any>;
+    showIndex?: boolean
   }) {
     useEffect(() => {
       const input = window.document.getElementById('other-iteration');
@@ -210,7 +212,7 @@ export const NonstandardForm = connect(
                     key={previousDocument.docketEntryId}
                     value={previousDocument.docketEntryId}
                   >
-                    {previousDocument.documentTitle ||
+                    {showIndex && `${previousDocument.index} - ${previousDocument.createdAtFormatted} - `}{previousDocument.documentTitle ||
                       previousDocument.documentType}
                   </option>
                 );
