@@ -77,7 +77,7 @@ resource "terraform_data" "locals" {
     POSTGRES_HOST                      = data.terraform_remote_state.remote.outputs.rds_host_name
     POSTGRES_USER                      = data.terraform_remote_state.remote.outputs.postgres_user
     DATABASE_NAME                      = data.terraform_remote_state.remote.outputs.database_name
-    AWS_LAMBDA_JS_RUNTIME              = nodejs24.x
+    AWS_LAMBDA_JS_RUNTIME              = "nodejs24.x"
   }
 }
 
