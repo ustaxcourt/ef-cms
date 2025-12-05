@@ -156,4 +156,3 @@ docker run -p 3030:3030 -d appbaseio/mirage
 Dawson now uses PostgreSQL as its primary database. Unlike DynamoDB, PostgreSQL provides a relational data model with structured schemas, strongly typed columns, and support for SQL queries. This allows us to model data using tables, relationships, and constraints while benefiting from PostgreSQL’s robust indexing and transactional guarantees.
 
 Our schema is organized around clearly defined entities and their relationships, with tables designed to support the core features of the Dawson webapp. PostgreSQL’s features—such as foreign keys, joins, transactions, and advanced indexing—provide consistency, reliability, and improved query flexibility compared to the previous DynamoDB implementation.
-
