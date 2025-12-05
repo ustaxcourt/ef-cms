@@ -7,6 +7,7 @@ import fs from 'fs';
 import { AsyncLocalStorage } from 'async_hooks';
 import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { sleep } from '@shared/tools/helpers';
+import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
 
 const CONNECTION_RETRY_COUNT = 3;
 
@@ -99,7 +100,7 @@ async function getToken(): Promise<string> {
     return environment.rds.pool.password;
   }
   // Unset the token if we are past the expiration time
-  if (Date.now() > tokenExpirationTime) {
+  if (Number(formatNow(FORMATS.UNIX_TIMESTAMP_MS)) > tokenExpirationTime) {
     token = null;
   }
   // If we still have a valid token, return it
@@ -113,7 +114,7 @@ async function getToken(): Promise<string> {
       .then(t => {
         // On success, cache the token and its expiration time
         token = t;
-        tokenExpirationTime = Date.now() + 13 * 60 * 1000;
+        tokenExpirationTime = Number(formatNow(FORMATS.UNIX_TIMESTAMP_MS)) + 13 * 60 * 1000;
         return t;
       })
       .finally(() => {
