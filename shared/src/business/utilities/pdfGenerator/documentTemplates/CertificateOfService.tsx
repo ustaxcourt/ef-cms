@@ -17,7 +17,20 @@ export const CertificateOfService = ({
   partyInformation,
   practitionerInformation,
 }: CertificateOfServiceParams) => {
-  const partyFullAddress = `${partyInformation.address1}${partyInformation.address2 ? `, ${partyInformation.address2}` : ''}${partyInformation.address3 ? `, ${partyInformation.address3}` : ''}, ${partyInformation.city}${partyInformation.state ? `, ${partyInformation.state}` : ''}${partyInformation.postalCode ? `, ${partyInformation.postalCode}` : ''}${partyInformation.country ? `, ${partyInformation.country}` : ''}`;
+  const partyFullAddress = partyInformation.isAddressSealed
+    ? 'ADDRESS SEALED BY COURT ORDER'
+    : [
+        partyInformation.address1,
+        partyInformation.address2,
+        partyInformation.address3,
+        partyInformation.city,
+        partyInformation.state,
+        partyInformation.postalCode,
+        partyInformation.country,
+      ]
+        .filter(Boolean)
+        .join(', ');
+
   return (
     <div id="certificate-of-service-pdf">
       <h2 className="cos-header">Certificate of Service</h2>
@@ -26,7 +39,8 @@ export const CertificateOfService = ({
         {partyInformation.name} by (delivering the same to{' '}
         {partyInformation.name} at {partyFullAddress} on {date}) or (mailing the
         same on {date} in a postage-paid wrapper addressed to{' '}
-        {partyInformation.name} at {partyFullAddress}).
+        {partyInformation.name} at {partyFullAddress}
+        ).
       </p>
       <div className="cos-practitioner-info">
         <div className="width-50">Dated: {date}</div>
