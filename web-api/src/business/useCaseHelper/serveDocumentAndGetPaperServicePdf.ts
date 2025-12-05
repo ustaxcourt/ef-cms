@@ -41,7 +41,7 @@ export const serveDocumentAndGetPaperServicePdf = async ({
             return de.docketEntryId === caseSpecificDocketEntryId;
           })!;
 
-          await applicationContext.getPersistenceGateway().getDocument({
+          return await applicationContext.getPersistenceGateway().getDocument({
             applicationContext,
             key: documentStorageId,
           });
@@ -51,6 +51,7 @@ export const serveDocumentAndGetPaperServicePdf = async ({
     }
   } else {
     let cachedPdfData: any = null;
+    let cachedDocumentStorageId: string | undefined = undefined;
 
     for (const caseEntity of caseEntities) {
       await processCaseForService({
@@ -69,12 +70,25 @@ export const serveDocumentAndGetPaperServicePdf = async ({
                   return de.docketEntryId === docketEntryId;
                 },
               )!;
-              cachedPdfData = await applicationContext
-                .getPersistenceGateway()
-                .getDocument({
-                  applicationContext,
-                  key: documentStorageId,
-                });
+
+              if (!cachedDocumentStorageId) {
+                cachedDocumentStorageId = documentStorageId;
+                cachedPdfData = await applicationContext
+                  .getPersistenceGateway()
+                  .getDocument({
+                    applicationContext,
+                    key: documentStorageId,
+                  });
+              }
+
+              if (cachedDocumentStorageId !== documentStorageId) {
+                cachedPdfData = await applicationContext
+                  .getPersistenceGateway()
+                  .getDocument({
+                    applicationContext,
+                    key: documentStorageId,
+                  });
+              }
             }
           }
           return cachedPdfData;

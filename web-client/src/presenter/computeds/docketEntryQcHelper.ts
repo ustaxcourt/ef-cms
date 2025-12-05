@@ -3,7 +3,6 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { CONTACT_CHANGE_DOCUMENT_TYPES } from '@shared/business/entities/EntityConstants';
-import { isLeadCase, isMemberCase } from '@shared/business/entities/cases/Case';
 
 export const docketEntryQcHelper = (
   get: Get,
@@ -42,19 +41,12 @@ export const docketEntryQcHelper = (
     (c: { docketNumber: string }) => c.docketNumber !== caseDetail.docketNumber,
   );
 
-  const showQCHelpText =
-    isLeadCase(caseDetail) && DocketEntry.isMultiDocketed(formattedDocketEntry);
-
-  const disableCompleteButtons =
-    caseDetail &&
-    isMemberCase(caseDetail) &&
-    DocketEntry.isMultiDocketed(formattedDocketEntry);
+  const showQCHelpText = DocketEntry.isMultiDocketed(formattedDocketEntry);
 
   return {
     formattedDocketEntry,
     showPaperServiceWarning,
     memberCases,
     showQCHelpText,
-    disableCompleteButtons,
   };
 };

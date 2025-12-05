@@ -118,7 +118,6 @@ export const DocketEntryQc = connect(
                     disableOnClick
                     id="save-and-finish"
                     data-testid="save-and-finish-document-qc"
-                    disabled={docketEntryQcHelper.disableCompleteButtons}
                     type="submit"
                     onClick={async () => {
                       await completeDocketEntryQCSequence();
@@ -130,7 +129,6 @@ export const DocketEntryQc = connect(
                     disableOnClick
                     secondary
                     id="save-and-add-supporting"
-                    disabled={docketEntryQcHelper.disableCompleteButtons}
                     onClick={async () => {
                       await openCompleteAndSendMessageModalSequence();
                     }}

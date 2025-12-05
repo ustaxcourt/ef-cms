@@ -33,11 +33,15 @@ export const completeDocketEntryQCAndSendMessageSequence = [
       {
         error: [
           switchErrorActionFactory({
-            'currently being updated': 'completed',
+            'was already completed': 'completed',
+            'currently being updated': 'lockError',
           }),
           {
             completed: [
               setShowModalFactoryAction('WorkItemAlreadyCompletedModal'),
+            ],
+            lockError: [
+              setShowModalFactoryAction('AsyncServiceUnavailableModal'),
             ],
             default: [setShowModalFactoryAction('GenericErrorModal')],
           },
