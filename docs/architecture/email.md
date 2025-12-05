@@ -57,7 +57,7 @@ Here are the steps required to verify a new email:
 #### Automated
 
 1. Set the environment variables:
-  - `EFCMS_DOMAIN` e.g. `exp2.ustc-case-mgmt.flexion.us`
+  - `EFCMS_DOMAIN` e.g. `exp2.ef-cms.ustaxcourt.gov`
   - `REGION` e.g. `us-east-1`
   - `AWS_ACCESS_KEY_ID`
   - `AWS_ACCOUNT_ID`
