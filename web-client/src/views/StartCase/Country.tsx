@@ -1,9 +1,18 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { props as cerebralProps } from 'cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import { RunableSequence as RunnableSequence } from 'cerebral';
+
+const props = cerebralProps as unknown as {
+  bind: string;
+  onBlur: (args: Record<string, any>) => void;
+  onChangeCountryType: string;
+  registerRef: (param: string) => void;
+  type: string;
+  onChange: string;
+};
 
 export const Country = connect(
   {
@@ -25,10 +34,23 @@ export const Country = connect(
     type,
     updateFormValueSequence,
     validationErrors,
+  }: {
+    constants: Record<string, any>;
+    data: Record<string, any>;
+    onBlur: (args: Record<string, any>) => void;
+    onChangeCountryType: Function | RunnableSequence;
+    registerRef: (param: string) => void;
+    type: string;
+    updateFormValueSequence: Function | RunnableSequence;
+    validationErrors: Record<string, any>;
   }) {
     return (
       <React.Fragment>
-        <FormGroup errorText={validationErrors?.[type]?.countryType}>
+        <FormGroup
+          errorText={
+            (validationErrors?.[type] as Record<string, any>)?.countryType
+          }
+        >
           <label className="usa-label" htmlFor={`${type}.countryType`}>
             Country
           </label>
@@ -101,7 +123,9 @@ export const Country = connect(
         {data[type].countryType === constants.COUNTRY_TYPES.INTERNATIONAL && (
           <FormGroup
             errorMessageId="country-error-message"
-            errorText={validationErrors?.[type]?.country}
+            errorText={
+              (validationErrors?.[type] as Record<string, any>)?.country
+            }
           >
             <label className="usa-label" htmlFor={`${type}.country`}>
               Country name

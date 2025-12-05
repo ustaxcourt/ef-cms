@@ -1,15 +1,33 @@
 import { CaseLink } from '../../../ustc-ui/CaseLink/CaseLink';
 import { Mobile, NonMobile } from '../../../ustc-ui/Responsive/Responsive';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
+import { props as cerebralProps } from 'cerebral';
 import React from 'react';
+
+const props = cerebralProps as unknown as {
+  caseDetail: unknown;
+  caseDetailHelper: unknown;
+};
 
 export const ConsolidatedCases = connect(
   {
     caseDetail: props.caseDetail,
     caseDetailHelper: props.caseDetailHelper,
   },
-  function ConsolidatedCases({ caseDetail, caseDetailHelper }) {
+  function ConsolidatedCases({
+    caseDetail,
+    caseDetailHelper,
+  }: {
+    caseDetail: {
+      consolidatedCases: Array<{
+        docketNumber: string;
+        caseTitle?: string;
+      }>;
+    };
+    caseDetailHelper: {
+      hasConsolidatedCases: boolean;
+    };
+  }) {
     return (
       <>
         {!caseDetailHelper.hasConsolidatedCases && <p>Not consolidated</p>}

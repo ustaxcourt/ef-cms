@@ -1,4 +1,5 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
+import { MAX_MESSAGE_SUBJECT_CHARACTERS } from '@shared/business/entities/EntityConstants';
 import { createNewMessageOnCase } from './journey/createNewMessageOnCase';
 import { docketClerkAddsDocketEntryFromMessage } from './journey/docketClerkAddsDocketEntryFromMessage';
 import { docketClerkAppliesSignatureFromMessage } from './journey/docketClerkAppliesSignatureFromMessage';
@@ -171,9 +172,11 @@ describe('messages journey', () => {
       documentId: docketEntryWithLongTitle.docketEntryId,
     });
 
-    expect(cerebralTest.getState('modal.form.subject').length).toEqual(250);
+    expect(cerebralTest.getState('modal.form.subject').length).toEqual(
+      MAX_MESSAGE_SUBJECT_CHARACTERS,
+    );
     expect(cerebralTest.getState('modal.form.subject')).toEqual(
-      longDocumentTitle.slice(0, 250),
+      longDocumentTitle.slice(0, MAX_MESSAGE_SUBJECT_CHARACTERS),
     );
 
     await cerebralTest.runSequence('clearModalFormSequence');
