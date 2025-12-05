@@ -4,6 +4,8 @@ import {
   AdminDeleteUserCommand,
   CognitoIdentityProvider,
   ListUsersCommand,
+  ListUsersCommandOutput,
+  UserType,
 } from '@aws-sdk/client-cognito-identity-provider';
 import {
   type ScriptConfig,
@@ -28,7 +30,7 @@ const { UserPoolId, region } = parseArgsAndEnvVars(scriptConfig) as {
 const cognito = new CognitoIdentityProvider({ region });
 
 const getAllCognitoUsers = async () => {
-  let allUsers = [];
+  let allUsers: UserType[] = [];
   let paginationToken: string | undefined = undefined;
 
   do {
@@ -39,7 +41,7 @@ const getAllCognitoUsers = async () => {
     });
 
     try {
-      const response = await cognito.send(command);
+      const response: ListUsersCommandOutput = await cognito.send(command);
       if (response.Users) {
         allUsers = allUsers.concat(response.Users);
       }
