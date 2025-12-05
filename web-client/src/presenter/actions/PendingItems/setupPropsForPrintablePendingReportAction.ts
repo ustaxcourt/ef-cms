@@ -8,7 +8,7 @@ export const setupPropsForPrintablePendingReportAction = ({
   props,
 }: ActionProps) => {
   const { caseDetail, docketNumberFilter } = props;
-  const returnProps = {};
+  const returnProps: { docketNumberFilter?: string } = {};
 
   if (docketNumberFilter) {
     returnProps.docketNumberFilter = caseDetail.docketNumber;

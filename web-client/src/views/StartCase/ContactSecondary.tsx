@@ -5,10 +5,18 @@ import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { InternationalAddress } from './InternationalAddress';
 import { PaperPetitionEmail } from '../StartCaseInternal/PaperPetitionEmail';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { props as cerebralProps } from 'cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import { RunableSequence as RunnableSequence } from 'cerebral';
+
+const props = cerebralProps as unknown as {
+  bind: string;
+  contactsHelper: string;
+  onBlur: () => void;
+  onChange: string;
+  parentView: string;
+};
 
 export const ContactSecondary = connect(
   {
@@ -40,6 +48,20 @@ export const ContactSecondary = connect(
     useSameAsPrimary,
     validationErrors,
     wrapperClassName,
+  }: {
+    bind: string;
+    constants: Record<string, any>;
+    contactsHelper: Record<string, any>;
+    data: Record<string, any>;
+    onBlur: () => void;
+    onChange: string;
+    onChangeSequence: Function | RunnableSequence;
+    parentView: string;
+    toggleUseContactPrimaryAddressSequence: Function | RunnableSequence;
+    updateFormValueAndSecondaryContactInfoSequence: Function | RunnableSequence;
+    useSameAsPrimary: boolean;
+    validationErrors: Record<string, any>;
+    wrapperClassName: string;
   }) {
     return (
       <>
@@ -54,7 +76,8 @@ export const ContactSecondary = connect(
           <FormGroup
             errorText={
               validationErrors.contactSecondary &&
-              validationErrors.contactSecondary.name
+              (validationErrors.contactSecondary as Record<string, any>)
+                .name
             }
           >
             <label className="usa-label" htmlFor="secondaryName">
@@ -107,7 +130,8 @@ export const ContactSecondary = connect(
             <FormGroup
               errorText={
                 validationErrors.contactSecondary &&
-                validationErrors.contactSecondary.inCareOf
+                (validationErrors.contactSecondary as Record<string, any>)
+                  .inCareOf
               }
             >
               <label className="usa-label" htmlFor="secondaryInCareOf">
@@ -188,7 +212,8 @@ export const ContactSecondary = connect(
             <FormGroup
               errorText={
                 validationErrors.contactSecondary &&
-                validationErrors.contactSecondary.phone
+                (validationErrors.contactSecondary as Record<string, any>)
+                  .phone
               }
             >
               <label className="usa-label" htmlFor="secondaryPhone">

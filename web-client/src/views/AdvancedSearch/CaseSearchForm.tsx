@@ -12,6 +12,10 @@ export const CaseSearchForm = connect(
     advancedSearchForm,
     submitAdvancedSearchSequence,
     submitDocketNumberSearchSequence,
+  }: {
+    advancedSearchForm: { searchMode: string };
+    submitAdvancedSearchSequence: Function;
+    submitDocketNumberSearchSequence: Function;
   }) {
     return (
       <>
