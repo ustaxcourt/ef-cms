@@ -6,7 +6,11 @@ const { STATUS_TYPES } = applicationContext.getConstants();
 export const petitionsClerkBlocksCase = (
   cerebralTest,
   trialLocation,
-  overrides = {},
+  overrides: {
+    caseCaption?: string;
+    docketNumberSuffix?: string;
+    caseStatus?: string;
+  } = {},
 ) => {
   return it('Petitions clerk blocks the case', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
