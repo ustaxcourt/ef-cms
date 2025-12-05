@@ -12,7 +12,6 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
   {
     DATE_FORMATS: state.constants.DATE_FORMATS,
     addCourtIssuedDocketEntryHelper: state.addCourtIssuedDocketEntryHelper,
-    editDocketEntryMetaHelper: state.editDocketEntryMetaHelper,
     form: state.form,
     formatAndUpdateDateFromDatePickerSequence:
       sequences.formatAndUpdateDateFromDatePickerSequence,
@@ -25,7 +24,6 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
   },
   function EditDocketEntryMetaFormCourtIssued({
     addCourtIssuedDocketEntryHelper,
-    editDocketEntryMetaHelper,
     DATE_FORMATS,
     form,
     formatAndUpdateDateFromDatePickerSequence,
@@ -49,7 +47,6 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
             });
             validateDocumentSequence();
           }}
-          disabled={editDocketEntryMetaHelper.isEditDisabled}
         />
 
         <FormGroup errorText={validationErrors.documentType}>
@@ -92,7 +89,6 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
                   value: inputText,
                 });
               }}
-              isDisabled={editDocketEntryMetaHelper.isEditDisabled}
             />
           )}
           {!addCourtIssuedDocketEntryHelper.showDocumentTypeDropdown && (

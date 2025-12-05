@@ -9,7 +9,6 @@ export const EditDocketEntryMetaFormNoDocument = connect(
   {
     DATE_FORMATS: state.constants.DATE_FORMATS,
     form: state.form,
-    editDocketEntryMetaHelper: state.editDocketEntryMetaHelper,
     formatAndUpdateDateFromDatePickerSequence:
       sequences.formatAndUpdateDateFromDatePickerSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
@@ -19,7 +18,6 @@ export const EditDocketEntryMetaFormNoDocument = connect(
   function EditDocketEntryMetaFormNoDocument({
     DATE_FORMATS,
     form,
-    editDocketEntryMetaHelper,
     formatAndUpdateDateFromDatePickerSequence,
     updateFormValueSequence,
     validateDocumentSequence,
@@ -40,7 +38,6 @@ export const EditDocketEntryMetaFormNoDocument = connect(
             });
             validateDocumentSequence();
           }}
-          disabled={editDocketEntryMetaHelper.isEditDisabled}
         />
 
         <FormGroup errorText={validationErrors.documentTitle}>
@@ -58,7 +55,6 @@ export const EditDocketEntryMetaFormNoDocument = connect(
             name="documentTitle"
             type="text"
             value={form.documentTitle || ''}
-            disabled={editDocketEntryMetaHelper.isEditDisabled}
             onChange={e => {
               updateFormValueSequence({
                 key: e.target.name,

@@ -88,21 +88,6 @@ export const EditDocketEntryMeta = connect(
                   scrollToTop={false}
                 />
               )}
-              {editDocketEntryMetaHelper.isEditDisabled && (
-                <InfoNotificationComponent
-                  alertInfo={{
-                    message: (
-                      <div className="margin-top-1 margin-bottom-1">
-                        Edits to Document Info can only be done from the{' '}
-                        <strong>lead case</strong> in a consolidated group. This
-                        is a member case.
-                      </div>
-                    ),
-                  }}
-                  dismissible={false}
-                  scrollToTop={false}
-                />
-              )}
               <Tabs
                 boxed
                 bind="editDocketEntryMetaTab"

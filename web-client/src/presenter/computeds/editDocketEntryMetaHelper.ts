@@ -7,7 +7,6 @@ import {
   INTERNAL_DOCUMENTS_ARRAY,
 } from '@shared/business/entities/EntityConstants';
 import { formatDateString } from '@shared/business/utilities/DateHandler';
-import { isLeadCase, isMemberCase } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { isEmpty } from 'lodash';
 
@@ -24,7 +23,6 @@ export const editDocketEntryMetaHelper = (
   showObjection: boolean;
   strickenAtFormatted: string;
   strickenBy: string;
-  isEditDisabled: boolean;
   showEditHelpText: boolean;
 } => {
   const { eventCode, isStricken, strickenAt, strickenBy } = get(state.form);
@@ -64,25 +62,14 @@ export const editDocketEntryMetaHelper = (
 
   const consolidatedCasesToDisplay =
     formattedCaseDetail?.consolidatedCases
-      ?.filter(c => c.docketNumber !== caseDetail.docketNumber)
+      ?.filter(c => c.docketNumber !== formattedCaseDetail.docketNumber)
       .map(c => ({
         docketNumber: c.docketNumber,
         caseTitle: c.caseTitle,
         caseCaption: c.caseCaption,
       })) || [];
 
-  // TODO probably need to use formattedCaseDetail here because caseDetail may have been reassigned
-  const isEditDisabled =
-    caseDetail &&
-    isMemberCase(get(state.caseDetail)) &&
-    !isEmpty(form) &&
-    DocketEntry.isMultiDocketed(form);
-
-  const showEditHelpText =
-    caseDetail &&
-    isLeadCase(get(state.caseDetail)) &&
-    !isEmpty(form) &&
-    DocketEntry.isMultiDocketed(form);
+  const showEditHelpText = !isEmpty(form) && DocketEntry.isMultiDocketed(form);
 
   return {
     consolidatedCasesToDisplay,
@@ -91,7 +78,6 @@ export const editDocketEntryMetaHelper = (
     showObjection,
     strickenAtFormatted,
     strickenBy,
-    isEditDisabled,
     showEditHelpText,
   };
 };

@@ -26,7 +26,6 @@ export const FilingPartiesForm = connect(
     validationErrors,
     updateSequence,
     validateSequence,
-    isMemberCase,
   }: {
     formattedCaseDetail;
     filingPartiesFormHelper;
@@ -34,7 +33,6 @@ export const FilingPartiesForm = connect(
     validationErrors;
     updateSequence?;
     validateSequence?;
-    isMemberCase?: boolean;
   }) {
     const petitioners =
       (formattedCaseDetail && formattedCaseDetail.petitioners) || [];
@@ -52,7 +50,6 @@ export const FilingPartiesForm = connect(
               id="filed-by"
               name="filedBy"
               value={form.filedBy || ''}
-              disabled={isMemberCase}
               onChange={e => {
                 updateSequence({
                   key: e.target.name,
@@ -89,7 +86,6 @@ export const FilingPartiesForm = connect(
                         id={`filing-${petitioner.contactId}`}
                         name={`filersMap.${petitioner.contactId}`}
                         type="checkbox"
-                        disabled={isMemberCase}
                         onChange={e => {
                           updateSequence({
                             key: e.target.name,
@@ -118,7 +114,6 @@ export const FilingPartiesForm = connect(
                       id="party-irs-practitioner"
                       name="partyIrsPractitioner"
                       type="checkbox"
-                      disabled={isMemberCase}
                       onChange={e => {
                         updateSequence({
                           key: e.target.name,
@@ -141,7 +136,6 @@ export const FilingPartiesForm = connect(
                       id="has-other-filing-party"
                       name="hasOtherFilingParty"
                       type="checkbox"
-                      disabled={isMemberCase}
                       onChange={e => {
                         updateSequence({
                           key: e.target.name,
@@ -176,7 +170,6 @@ export const FilingPartiesForm = connect(
                           type="text"
                           value={form.otherFilingParty || ''}
                           onBlur={() => validateSequence()}
-                          disabled={isMemberCase}
                           onChange={e => {
                             updateSequence({
                               key: e.target.name,
@@ -193,7 +186,6 @@ export const FilingPartiesForm = connect(
                   className="usa-input usa-input-inline"
                   name="otherFilingParty"
                   value={form.otherFilingParty || ''}
-                  disabled={isMemberCase}
                   onChange={e => {
                     updateSequence({
                       key: e.target.name,

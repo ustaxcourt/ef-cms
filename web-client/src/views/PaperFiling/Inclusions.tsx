@@ -30,7 +30,6 @@ export const Inclusions = connect(
     updateSequence,
     validateDocketEntrySequence,
     validationErrors,
-    isMemberCase,
   }: {
     DATE_FORMATS: { ISO: string };
     form: Record<string, any>;
@@ -39,7 +38,6 @@ export const Inclusions = connect(
     updateSequence: Function | RunnableSequence;
     validateDocketEntrySequence: Function | RunnableSequence;
     validationErrors: Record<string, any>;
-    isMemberCase?: boolean;
   }) {
     return (
       <div className={classNames('usa-form-group', marginClass)}>
@@ -54,7 +52,6 @@ export const Inclusions = connect(
               id="attachments"
               name="attachments"
               type="checkbox"
-              disabled={isMemberCase}
               onChange={e => {
                 updateSequence({
                   key: e.target.name,
@@ -74,7 +71,6 @@ export const Inclusions = connect(
               id="certificate-of-service"
               name="certificateOfService"
               type="checkbox"
-              disabled={isMemberCase}
               onChange={e => {
                 updateSequence({
                   key: e.target.name,
@@ -106,7 +102,6 @@ export const Inclusions = connect(
                   });
                   validateDocketEntrySequence();
                 }}
-                disabled={isMemberCase}
               />
             )}
           </div>

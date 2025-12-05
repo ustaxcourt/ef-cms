@@ -49,7 +49,6 @@ export const EditDocketEntryMetaFormDocument = connect(
                   name="lodged"
                   type="radio"
                   value={option}
-                  disabled={editDocketEntryMetaHelper.isEditDisabled}
                   onChange={e => {
                     updateDocketEntryMetaDocumentFormValueSequence({
                       key: e.target.name,
@@ -81,7 +80,6 @@ export const EditDocketEntryMetaFormDocument = connect(
             });
             validateDocumentSequence();
           }}
-          disabled={editDocketEntryMetaHelper.isEditDisabled}
         />
         <FormGroup errorText={validationErrors.eventCode}>
           <label
@@ -116,7 +114,6 @@ export const EditDocketEntryMetaFormDocument = connect(
                 value: inputText,
               });
             }}
-            isDisabled={editDocketEntryMetaHelper.isEditDisabled}
           />
         </FormGroup>
         {editDocketEntryMetaHelper.primary.showSecondaryDocumentForm && (
@@ -162,7 +159,6 @@ export const EditDocketEntryMetaFormDocument = connect(
                   value: inputText,
                 });
               }}
-              isDisabled={editDocketEntryMetaHelper.isEditDisabled}
             />
           </FormGroup>
         )}
@@ -191,7 +187,6 @@ export const EditDocketEntryMetaFormDocument = connect(
             id="additional-info"
             name="additionalInfo"
             value={form.additionalInfo || ''}
-            disabled={editDocketEntryMetaHelper.isEditDisabled}
             onBlur={() => {
               validateDocumentSequence();
             }}
@@ -211,7 +206,6 @@ export const EditDocketEntryMetaFormDocument = connect(
               id="add-to-coversheet"
               name="addToCoversheet"
               type="checkbox"
-              disabled={editDocketEntryMetaHelper.isEditDisabled}
               onChange={e => {
                 updateDocketEntryMetaDocumentFormValueSequence({
                   key: e.target.name,
@@ -240,7 +234,6 @@ export const EditDocketEntryMetaFormDocument = connect(
             id="additional-info2"
             name="additionalInfo2"
             value={form.additionalInfo2 || ''}
-            disabled={editDocketEntryMetaHelper.isEditDisabled}
             onBlur={() => {
               validateDocumentSequence();
             }}
@@ -253,15 +246,11 @@ export const EditDocketEntryMetaFormDocument = connect(
           />
         </FormGroup>
         <FormGroup>
-          <Inclusions
-            updateSequence="updateDocketEntryMetaDocumentFormValueSequence"
-            isMemberCase={editDocketEntryMetaHelper.isEditDisabled}
-          />
+          <Inclusions updateSequence="updateDocketEntryMetaDocumentFormValueSequence" />
         </FormGroup>
         <FilingPartiesForm
           updateSequence={updateDocketEntryMetaDocumentFormValueSequence}
           validateSequence={validateDocumentSequence}
-          isMemberCase={editDocketEntryMetaHelper.isEditDisabled}
         />
         {editDocketEntryMetaHelper.showObjection && (
           <FormGroup errorText={validationErrors.objections}>
@@ -279,7 +268,6 @@ export const EditDocketEntryMetaFormDocument = connect(
                     name="objections"
                     type="radio"
                     value={option}
-                    disabled={editDocketEntryMetaHelper.isEditDisabled}
                     onChange={e => {
                       updateDocketEntryMetaDocumentFormValueSequence({
                         key: e.target.name,
@@ -310,7 +298,6 @@ export const EditDocketEntryMetaFormDocument = connect(
                 id="pending"
                 name="pending"
                 type="checkbox"
-                disabled={editDocketEntryMetaHelper.isEditDisabled}
                 onChange={e => {
                   updateDocketEntryMetaDocumentFormValueSequence({
                     key: e.target.name,
