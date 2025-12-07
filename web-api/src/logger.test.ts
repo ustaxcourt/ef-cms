@@ -1,6 +1,6 @@
 import { expressLogger } from './logger';
-jest.mock('@vendia/serverless-express');
-import { getCurrentInvoke } from '@vendia/serverless-express';
+jest.mock('@codegenie/serverless-express');
+import { getCurrentInvoke } from '@codegenie/serverless-express';
 
 const mockGetCurrentInvoke = jest.mocked(getCurrentInvoke);
 

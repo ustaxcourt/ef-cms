@@ -10,7 +10,7 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { getCaseByDocketNumber as mockGetCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
-const mockDynamoCaseRecord = Object.assign({}, MOCK_CASE_WITH_TRIAL_SESSION, {
+const mockCaseRecord = Object.assign({}, MOCK_CASE_WITH_TRIAL_SESSION, {
   noticeOfTrialDate: '2020-10-20T01:38:43.489Z',
   pk: 'case|123-20',
   sk: 'case|23',
@@ -83,7 +83,7 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
   });
 
   it('returns 200 when the user is not associated and the case is found', async () => {
-    getCaseByDocketNumber.mockResolvedValue(mockDynamoCaseRecord as any);
+    getCaseByDocketNumber.mockResolvedValue(mockCaseRecord as any);
 
     const response = await getCaseLambda(REQUEST_EVENT, mockPetitionerUser);
 
@@ -131,7 +131,7 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
     // Careful! Changing this test would mean that the v1 format is changing;
     // this would mean breaking changes for any user of the v1 API
     getCaseByDocketNumber.mockResolvedValue({
-      ...mockDynamoCaseRecord,
+      ...mockCaseRecord,
       docketEntries: [],
     } as any);
 

@@ -64,26 +64,7 @@ services:
       - .:/home/app
       - node_modules:/home/app/node_modules
     depends_on:
-      - dynamodb-local
       - elasticsearch
-
-  dynamodb-local:
-    image: amazon/dynamodb-local:latest
-    container_name: dynamodb-local
-    ports:
-      - '8000:8000'
-
-  dynamodb-admin:
-    image: aaronshaf/dynamodb-admin
-    ports:
-      - '8001:8001'
-    environment:
-      DYNAMO_ENDPOINT: 'http://dynamodb-local:8000'
-      AWS_REGION: 'us-east-1'
-      AWS_ACCESS_KEY_ID: S3RVER
-      AWS_SECRET_ACCESS_KEY: S3RVER
-    depends_on:
-      - dynamodb-local
 
   opensearch-node:
     image: opensearchproject/opensearch:2.19.0

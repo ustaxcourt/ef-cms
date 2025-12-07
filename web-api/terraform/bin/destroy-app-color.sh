@@ -88,20 +88,14 @@ if [ -z "${CIRCLE_BRANCH}" ]; then # Build lambda layer for generating pdfs.
 fi
 
 if [ "${MIGRATE_FLAG}" == 'false' ]; then
-  BLUE_TABLE_NAME=$(../../../../scripts/dynamo/get-destination-table.sh "${ENV}")
-  GREEN_TABLE_NAME=$(../../../../scripts/dynamo/get-destination-table.sh "${ENV}")
   DESTINATION_DOMAIN=$(../../../../scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
   BLUE_ELASTICSEARCH_DOMAIN="${DESTINATION_DOMAIN}"
   GREEN_ELASTICSEARCH_DOMAIN="${DESTINATION_DOMAIN}"
 else
   if [ "${DEPLOYING_COLOR}" == 'blue' ]; then
-    BLUE_TABLE_NAME=$(../../../../scripts/dynamo/get-destination-table.sh "${ENV}")
-    GREEN_TABLE_NAME=$(../../../../scripts/dynamo/get-source-table.sh "${ENV}")
     BLUE_ELASTICSEARCH_DOMAIN=$(../../../../scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
     GREEN_ELASTICSEARCH_DOMAIN=$(../../../../scripts/elasticsearch/get-source-elasticsearch.sh "${ENV}")
   else
-    GREEN_TABLE_NAME=$(../../../../scripts/dynamo/get-destination-table.sh "${ENV}")
-    BLUE_TABLE_NAME=$(../../../../scripts/dynamo/get-source-table.sh "${ENV}")
     GREEN_ELASTICSEARCH_DOMAIN=$(../../../../scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
     BLUE_ELASTICSEARCH_DOMAIN=$(../../../../scripts/elasticsearch/get-source-elasticsearch.sh "${ENV}")
   fi
@@ -113,7 +107,6 @@ export TF_VAR_all_colors_tfstate_bucket=$BUCKET
 export TF_VAR_all_colors_tfstate_key=$ALL_COLORS_KEY
 export TF_VAR_environment=$ENV
 export TF_VAR_zone_name=$DNS_DOMAIN
-export TF_VAR_blue_table_name=$BLUE_TABLE_NAME
 export TF_VAR_dns_domain=$EFCMS_DOMAIN
 export TF_VAR_blue_elasticsearch_domain=$BLUE_ELASTICSEARCH_DOMAIN
 export TF_VAR_enable_health_checks=$ENABLE_HEALTH_CHECKS
@@ -127,7 +120,6 @@ export TF_VAR_disable_emails=$DISABLE_EMAILS
 export TF_VAR_irs_superuser_email=$IRS_SUPERUSER_EMAIL
 export TF_VAR_slack_webhook_url=$SLACK_WEBHOOK_URL
 export TF_VAR_green_elasticsearch_domain=$GREEN_ELASTICSEARCH_DOMAIN
-export TF_VAR_green_table_name=$GREEN_TABLE_NAME
 
 if [[ -n "${CW_VIEWER_PROTOCOL_POLICY}" ]]
 then

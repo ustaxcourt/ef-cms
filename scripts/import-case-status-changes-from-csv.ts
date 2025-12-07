@@ -1,12 +1,6 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
 import {
-  AttributeValue,
-  DynamoDBClient,
-  GetItemCommand,
-  PutItemCommand,
-} from '@aws-sdk/client-dynamodb';
-import {
   FORMATS,
   prepareDateFromEST,
 } from '@shared/business/utilities/DateHandler';
@@ -17,26 +11,22 @@ import {
 } from './helpers/parseArgsAndEnvVars';
 import { parse } from 'csv-parse/sync';
 import fs from 'fs';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 
 const scriptConfig: ScriptConfig = {
   description:
     'import-case-status-changes-from-csv - Ingests case status changes from ' +
     "a CSV and inserts entries into each case's caseStatusHistory array.",
   environment: {
-    TableName: 'DYNAMODB_TABLE_NAME',
     env: 'ENV',
     home: 'HOME',
-    region: 'REGION',
   },
   requireActiveAwsSession: true,
 };
-const { home, region, TableName } = parseArgsAndEnvVars(scriptConfig) as {
-  TableName: string;
+const { home } = parseArgsAndEnvVars(scriptConfig) as {
   home: string;
-  region: string;
 };
-
-const dynamodbClient = new DynamoDBClient({ region });
 
 //  Example CSV content:
 //     Docket,Date,Status
@@ -48,16 +38,11 @@ const getCaseRecord = async ({
   docketNumber,
 }: {
   docketNumber: string;
-}): Promise<Record<string, AttributeValue> | undefined> => {
-  const getCaseCommand = new GetItemCommand({
-    Key: {
-      pk: { S: `case|${docketNumber}` },
-      sk: { S: `case|${docketNumber}` },
-    },
-    TableName,
+}): Promise<Omit<RawCase, 'consolidatedCases'> | undefined> => {
+  const cases = await getCasesByDocketNumbers({
+    docketNumbers: [docketNumber],
   });
-  const result = await dynamodbClient.send(getCaseCommand);
-  return result?.Item;
+  return cases[0];
 };
 
 const putCaseStatusHistoryRecord = async ({
@@ -65,31 +50,25 @@ const putCaseStatusHistoryRecord = async ({
   date,
   updatedCaseStatus,
 }: {
-  caseRecord: Record<string, AttributeValue>;
+  caseRecord: Omit<RawCase, 'consolidatedCases'>;
   date: string;
   updatedCaseStatus: string;
 }): Promise<boolean> => {
-  if (
-    !('caseStatusHistory' in caseRecord) ||
-    typeof caseRecord.caseStatusHistory.L === 'undefined'
-  ) {
-    caseRecord.caseStatusHistory = { L: [] };
+  if (!caseRecord.caseStatusHistory) {
+    caseRecord.caseStatusHistory = [];
   }
-  caseRecord.caseStatusHistory.L.push({
-    M: {
-      changedBy: { S: SYSTEM_ROLE },
-      date: { S: date },
-      updatedCaseStatus: { S: updatedCaseStatus },
-    },
+  caseRecord.caseStatusHistory.push({
+    changedBy: SYSTEM_ROLE,
+    date,
+    updatedCaseStatus,
   });
 
-  const putCaseCommand = new PutItemCommand({
-    Item: caseRecord,
-    TableName,
-  });
   let result = false;
   try {
-    await dynamodbClient.send(putCaseCommand);
+    // Add consolidatedCases as empty array to satisfy RawCase type requirement
+    await upsertCases([
+      caseRecord as RawCase,
+    ]);
     result = true;
   } catch (error) {
     console.log(error);
