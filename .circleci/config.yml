@@ -542,9 +542,9 @@ jobs:
           command: |
             ./scripts/elasticsearch/delete-alpha-and-beta-clusters.sh
       - run:
-          name: 'Delete Cognito users in test'
+          name: 'Delete Cognito users'
           command: |
-            ./scripts/user/clear-all-cognito-users.ts
+            REGION=us-east-1 ./scripts/user/clear-all-cognito-users.ts
       - run:
           no_output_timeout: 20m
           name: 'Recreate the alpha OpenSearch cluster'
@@ -755,8 +755,7 @@ jobs:
       - run:
           name: Populate test users in Cognito
           command: |
-            export REGION="us-east-1"
-            ./scripts/user/setup-glued-users.ts
+            REGION="us-east-1" ./scripts/user/setup-glued-users.ts
       - run:
           name: Kick off a deployment
           command: |

@@ -133,6 +133,13 @@ export function loginAsTrialClerk() {
   cy.get('[data-testid="trial-session-link"]').should('exist');
 }
 
+export function loginAsPractitionerWithManyCases(email: string) {
+  login({ email });
+  cy.get('[data-testid="search-for-a-case-card"]').should('exist');
+  cy.get('[data-testid="open-cases-count"]').contains('Open Cases');
+  cy.get('[data-testid="closed-cases-count"]').contains('Closed Cases');
+}
+
 // Try to use the above account specific logins as they wait for specific content.
 function login({ email }: { email: string }) {
   cy.clearAllCookies();
