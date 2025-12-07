@@ -79,7 +79,7 @@ To update Node.js:
 Check if updates are necessary for the main `Dockerfile`. We base this image on `cypress/browsers`, a debian linux image that contains the latest (headless) versions of Chrome, Firefox, and Edge.
 
 - Base image - `cypress/browsers`
-   - Check [DockerHub](https://hub.docker.com/r/cypress/browsers/tags?page=1&name=node-22) if an update is available for the current node version the project is using
+   - Check [DockerHub](https://hub.docker.com/r/cypress/browsers/tags?page=1&name=node-24) if an update is available for the current node version the project is using
    - Change the `FROM` line in the `Dockerfile` to use the new version
 - `terraform`
    - Check the [Terraform site](https://developer.hashicorp.com/terraform/install) if an update is available
