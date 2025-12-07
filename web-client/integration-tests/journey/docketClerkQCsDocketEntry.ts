@@ -1,6 +1,9 @@
 import { getFormattedDocketEntriesForTest } from '../helpers';
 
-export const docketClerkQCsDocketEntry = (cerebralTest, data = {}) => {
+export const docketClerkQCsDocketEntry = (
+  cerebralTest,
+  data: { index?: number } = {},
+) => {
   return it('Docket Clerk QCs docket entry', async () => {
     let { formattedDocketEntriesOnDocketRecord } =
       await getFormattedDocketEntriesForTest(cerebralTest);

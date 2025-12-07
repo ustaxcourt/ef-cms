@@ -10,7 +10,7 @@ const tabbableSelector =
 export const FocusLock = ({ children }) => {
   const el = useRef(null);
 
-  const previousElementWithFocus =
+  const previousElementWithFocus: { focus?: () => void } =
     (window.document.hasFocus() &&
       window.document.activeElement !== window.document.body &&
       window.document.activeElement !== window.document.documentElement &&
