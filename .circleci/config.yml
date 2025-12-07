@@ -644,7 +644,7 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: xlarge
+    resource_class: medium+
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -675,7 +675,7 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: xlarge
+    resource_class: medium+
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -706,7 +706,7 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: xlarge
+    resource_class: medium+
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -730,13 +730,6 @@ jobs:
             if [ "$MIGRATE_FLAG" == "true" ]; then
               NODE_ENV=production ./scripts/reindex/index-docket-entries/index-docket-entries.ts 5
             fi
-      - run:
-          name: Populate test users in Cognito
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "test" ]; then
-                  export REGION="us-east-1"
-                  ./scripts/user/setup-glued-users.ts
-            fi
 
   cleanup-glue-job:
     docker:
@@ -759,6 +752,10 @@ jobs:
           name: Cleanup Deploy Table
           command: |
             npm run migration:cleanup -- $ENV
+      - run:
+          name: Populate test users in Cognito
+          command: |
+            REGION="us-east-1" ./scripts/user/setup-glued-users.ts
       - run:
           name: Kick off a deployment
           command: |
