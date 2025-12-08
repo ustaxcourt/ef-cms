@@ -1,5 +1,5 @@
 import { cloneDeep, get } from 'lodash';
-import { getCurrentInvoke } from '@vendia/serverless-express';
+import { getCurrentInvoke } from '@codegenie/serverless-express';
 import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
 

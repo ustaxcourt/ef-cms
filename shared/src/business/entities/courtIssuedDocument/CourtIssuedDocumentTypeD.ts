@@ -22,7 +22,6 @@ export class CourtIssuedDocumentTypeD extends CourtIssuedDocument {
 
     this.affectedDocketEntries = rawProps.affectedDocketEntries;
     this.attachments = rawProps.attachments || false;
-    this.dispositionOrder = rawProps.dispositionOrder || false;
     this.documentTitle = rawProps.documentTitle;
     this.documentType = rawProps.documentType;
     this.eventCode = rawProps.eventCode;

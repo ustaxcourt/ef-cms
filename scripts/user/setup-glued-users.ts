@@ -36,7 +36,7 @@ type Users = {
   };
 };
 
-const cognito = new CognitoIdentityProvider({ region: region });
+const cognito = new CognitoIdentityProvider({ region });
 
 const createOrUpdateCognitoUser = async ({
   email,
@@ -234,34 +234,39 @@ const getUsers = async (): Promise<Users> => {
     return result.email?.split('@')[1] !== 'example.com';
   });
 
+  const sanitize = (str: string) => {
+    return str.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9-_]/g, '');
+  };
+
   const users = {};
   for (const user of results as RawUser[]) {
     const emailDomain = user.email!.split('@')[1];
+
     let count = 1;
-    while (user.name in users) {
-      user.name = user.name + count;
-      count++;
-    }
-    count = 0;
 
     const fullName = user.name;
-    user.name = user.name.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9-_]/g, '');
 
-    if (user.role in ['judge', 'legacyJudge']) {
+    user.name = sanitize(user.name) + count;
+    while (user.name in users) {
+      user.name = sanitize(fullName) + count;
+      count++;
+    }
+
+    if (['judge', 'legacyJudge'].includes(user.role)) {
       users[user.name] = {
         email: `${
           user.judgeTitle!.indexOf('Special Trial') !== -1 ? 'st' : ''
         }judge.${user.name.toLowerCase()}@example.com`,
-        name: `${user.judgeTitle} ${user.name}`,
-        userFullName: `${user.role} ${fullName}`,
+        name: `${user.judgeTitle} ${fullName}`,
+        userFullName: `${fullName}`,
         role: user.role,
         section: user.section,
       };
     } else {
       users[user.name] = {
-        email: `${user.role!.toLowerCase()}.${user.name.toLowerCase()}@example.com`,
-        name: `${user.role} ${user.name}`,
-        userFullName: `${user.role} ${fullName}`,
+        email: user.email,
+        name: `${user.role} ${fullName}`,
+        userFullName: `${fullName}`,
         role: user.role,
         section: user.section,
       };

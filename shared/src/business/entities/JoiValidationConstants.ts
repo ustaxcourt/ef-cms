@@ -3,6 +3,7 @@ import {
   CURRENT_YEAR,
   DOCKET_NUMBER_MATCHER,
   MAX_FILE_SIZE_BYTES,
+  MOTION_DISPOSITIONS,
 } from './EntityConstants';
 import joiDate from '@joi/date';
 import joiImported, { Root } from 'joi';
@@ -44,6 +45,7 @@ export const JoiValidationConstants = Object.freeze({
     disposition: joi
       .string()
       .required()
+      .valid(...Object.values(MOTION_DISPOSITIONS))
       .messages({ '*': 'Requires a disposition' }),
     docketEntryId: joi
       .string()
