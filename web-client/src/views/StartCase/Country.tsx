@@ -1,18 +1,9 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props as cerebralProps } from 'cerebral';
+import { props } from 'cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
-import React from 'react';
+import React, { Ref } from 'react';
 import { RunableSequence as RunnableSequence } from 'cerebral';
-
-const props = cerebralProps as unknown as {
-  bind: string;
-  onBlur: (args: Record<string, any>) => void;
-  onChangeCountryType: string;
-  registerRef: (param: string) => void;
-  type: string;
-  onChange: string;
-};
 
 type CountryProps = {
   bind: string;
@@ -20,12 +11,13 @@ type CountryProps = {
   type: string;
   clearTypeOnCountryChange?: boolean;
   onChange: any;
+  onChangeCountryType?: string;
 }
 
 export const Country: React.FC<CountryProps> = connect(
   {
     constants: state.constants,
-    data: state[props.bind],
+    data: state[props`bind`],
     onBlur: props`onBlur`,
     onChangeCountryType: sequences[props`onChangeCountryType`],
     registerRef: props`registerRef`,
@@ -47,7 +39,7 @@ export const Country: React.FC<CountryProps> = connect(
     data: Record<string, any>;
     onBlur: (args: Record<string, any>) => void;
     onChangeCountryType: Function | RunnableSequence;
-    registerRef: (param: string) => void;
+    registerRef: (param: string) => Ref<HTMLInputElement>;
     type: string;
     updateFormValueSequence: Function | RunnableSequence;
     validationErrors: Record<string, any>;

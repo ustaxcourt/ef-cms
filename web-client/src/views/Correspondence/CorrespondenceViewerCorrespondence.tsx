@@ -15,7 +15,7 @@ export const CorrespondenceViewerCorrespondence = connect(
       sequences.openCaseDocumentDownloadUrlSequence,
     openConfirmDeleteCorrespondenceModalSequence:
       sequences.openConfirmDeleteCorrespondenceModalSequence,
-  viewerCorrespondenceToDisplay: (state as any).viewerCorrespondenceToDisplay,
+    viewerCorrespondenceToDisplay: state.viewerCorrespondenceToDisplay,
   },
   function CorrespondenceViewerCorrespondence({
     caseDetail,
@@ -34,21 +34,15 @@ export const CorrespondenceViewerCorrespondence = connect(
       showDeleteCorrespondenceButton: boolean;
     };
     iframeSrc: string;
-    openCaseDocumentDownloadUrlSequence: (args: {
-      docketEntryId: string;
-      docketNumber: string;
-    }) => void;
-    openConfirmDeleteCorrespondenceModalSequence: (args: {
-      correspondenceId: string;
-      documentTitle: string;
-    }) => void;
-    viewerCorrespondenceToDisplay:
+    openCaseDocumentDownloadUrlSequence: Function;
+    openConfirmDeleteCorrespondenceModalSequence: Function;
+    viewerCorrespondenceToDisplay?:
       | {
           correspondenceId: string;
-          documentTitle: string;
-          filedBy: string;
+          documentTitle?: string;
+          filedBy?: string;
         }
-      | undefined;
+      | null;
   }) {
     return (
       <div
@@ -123,7 +117,7 @@ export const CorrespondenceViewerCorrespondence = connect(
             {!process.env.CI && (
               <PdfViewer
                 src={iframeSrc}
-                title={viewerCorrespondenceToDisplay.documentTitle}
+                title={viewerCorrespondenceToDisplay.documentTitle || ''}
               />
             )}
           </>

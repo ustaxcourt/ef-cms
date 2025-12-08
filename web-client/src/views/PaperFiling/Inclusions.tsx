@@ -1,24 +1,24 @@
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props as cerebralProps } from 'cerebral';
+import { props } from 'cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 import { RunableSequence as RunnableSequence } from 'cerebral';
 
-const props = cerebralProps as unknown as {
-  marginClass: string;
+type InclusionsProps = {
+  marginClass?: string;
   updateSequence: string;
 };
 
-export const Inclusions = connect(
+export const Inclusions: React.FC<InclusionsProps> = connect(
   {
     DATE_FORMATS: state.constants.DATE_FORMATS,
     form: state.form,
     formatAndUpdateDateFromDatePickerSequence:
       sequences.formatAndUpdateDateFromDatePickerSequence,
-    marginClass: props.marginClass,
-    updateSequence: sequences[props.updateSequence],
+    marginClass: props`marginClass`,
+    updateSequence: sequences[props`updateSequence`],
     validateDocketEntrySequence: sequences.validateDocketEntrySequence,
     validationErrors: state.validationErrors,
   },

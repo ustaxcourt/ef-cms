@@ -13,7 +13,11 @@ import React from 'react';
 import classNames from 'classnames';
 import { DateRangePickerComponent } from '@web-client/ustc-ui/DateInput/DateRangePickerComponent';
 
-export const OpinionSearchForm = connect(
+type OpinionSearchFormProps = {
+  submitAdvancedSearchSequence: Function;
+}
+
+export const OpinionSearchForm: React.FC<OpinionSearchFormProps> = connect(
   {
     ADVANCED_SEARCH_OPINION_TYPES_LIST:
       state.constants.ADVANCED_SEARCH_OPINION_TYPES_LIST,

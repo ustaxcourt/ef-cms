@@ -9,7 +9,12 @@ const props = cerebralProps as unknown as {
   confirmSequence: string;
 };
 
-export const ConfirmRemoveSignatureModal = connect(
+type ConfirmRemoveSignatureModalProps = {
+  confirmSequence: string;
+}
+
+
+export const ConfirmRemoveSignatureModal: React.FC<ConfirmRemoveSignatureModalProps> = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
     confirmSequence: sequences[props.confirmSequence],

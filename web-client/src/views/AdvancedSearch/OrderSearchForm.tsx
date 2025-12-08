@@ -13,7 +13,11 @@ import { DateRangePickerComponent } from '@web-client/ustc-ui/DateInput/DateRang
 import React from 'react';
 import classNames from 'classnames';
 
-export const OrderSearchForm = connect(
+type OrderSearchFormProps = {
+  submitAdvancedSearchSequence: Function;
+}
+
+export const OrderSearchForm: React.FC<OrderSearchFormProps> = connect(
   {
     advancedDocumentSearchHelper: state.advancedDocumentSearchHelper,
     advancedSearchForm: state.advancedSearchForm,
