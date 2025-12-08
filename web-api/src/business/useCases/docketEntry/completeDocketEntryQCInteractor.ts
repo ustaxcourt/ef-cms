@@ -49,12 +49,7 @@ const completeDocketEntryQC = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const {
-    docketEntryId,
-    docketNumber,
-    overridePaperServiceAddress,
-    selectedSection,
-  } = entryMetadata;
+  const { docketEntryId, docketNumber, selectedSection } = entryMetadata;
 
   const user = await getUserById({ userId: authorizedUser.userId });
 
@@ -231,12 +226,9 @@ const completeDocketEntryQC = async (
   let paperServiceDocumentTitle;
 
   // TODO: investigate:
-  // - what is overridePaperServiceAddress
-  // - are CONTACT_CHANGE_DOCUMENT_TYPES even manually QCed? Is this interactor being called automatically? How do we even hit this block?
   // - should this really be an if/ELSE if? Are the flows mutually exclusive?
   // - should CONTACT_CHANGE_DOCUMENT_TYPES be filed across the group (or be given the option to fie across a group?)
   if (
-    overridePaperServiceAddress ||
     CONTACT_CHANGE_DOCUMENT_TYPES.includes(updatedDocketEntry.documentType!)
   ) {
     if (servedParties.paper.length > 0) {

@@ -55,12 +55,7 @@ const completeDocketEntryQC = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const {
-    docketEntryId,
-    docketNumber,
-    overridePaperServiceAddress,
-    selectedSection,
-  } = entryMetadata;
+  const { docketEntryId, docketNumber, selectedSection } = entryMetadata;
 
   const { userId } = authorizedUser;
 
@@ -350,7 +345,6 @@ const completeDocketEntryQC = async (
   let paperServiceParties = servedParties.paper;
 
   if (
-    overridePaperServiceAddress ||
     CONTACT_CHANGE_DOCUMENT_TYPES.includes(
       updatedPrimaryDocketEntry.documentType!,
     )

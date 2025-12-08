@@ -18,7 +18,7 @@ export const completeDocketEntryQCAction = async ({
 }: ActionProps) => {
   const { docketNumber, leadDocketNumber } = get(state.caseDetail);
   const docketEntryId = get(state.docketEntryId);
-  const { overridePaperServiceAddress, qcCompletionAndMessageFlag } = props;
+  const { qcCompletionAndMessageFlag } = props;
   const selectedSection = get(state.workQueueToDisplay.section);
 
   let entryMetadata = omit(
@@ -34,7 +34,6 @@ export const completeDocketEntryQCAction = async ({
     docketEntryId,
     docketNumber,
     leadDocketNumber,
-    overridePaperServiceAddress,
     selectedSection,
   };
 
