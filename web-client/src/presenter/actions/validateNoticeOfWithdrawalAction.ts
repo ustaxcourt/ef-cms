@@ -16,7 +16,7 @@ export const validateNoticeOfWithdrawalAction = ({ get, path }) => {
   const errors: string[] = [];
   if (documentMetadata.eventCode === 'NOTW') {
     if (user.role === ROLES.privatePractitioner) {
-      const partiesToWithdrawFrom = getPartiesToWithrawFrom(caseDetail, user);
+      const partiesToWithdrawFrom = getPartiesToWithrawFrom(caseDetail);
       if (partiesToWithdrawFrom.length === 0) {
         errors.push(
           'You are the only counsel representing a party on this case.',
