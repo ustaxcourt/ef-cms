@@ -1,5 +1,5 @@
 # this dockerfile is needed if building the puppeteer layer from a non-unix machine
-FROM node:22.21.0-slim
+FROM node:24.11.1-slim
 
 WORKDIR /home/build
 

@@ -1,13 +1,14 @@
 import {
+  PROCEDURE_TYPES_MAP,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
 import { noticeOfChangeOfTrialJudge } from './noticeOfChangeOfTrialJudge';
 
-describe('noticeOfChangeOfTrialJudge', () => {
+describe('noticeOfChangeOfTrialJudgeSmallTax', () => {
   generateAndVerifyPdfDiff({
-    fileName: 'Notice_Of_Change_Of_Trial_Judge.pdf',
+    fileName: 'Notice_Of_Change_Of_Trial_Judge_Small_Tax.pdf',
     pageNumber: 1,
     pdfGenerateFunction: () => {
       return noticeOfChangeOfTrialJudge({
@@ -19,6 +20,7 @@ describe('noticeOfChangeOfTrialJudge', () => {
           nameOfClerk: 'Stephanie A. Servoss',
           titleOfClerk: 'Clerk of the Court',
           trialInfo: {
+            caseProcedureType: PROCEDURE_TYPES_MAP.small,
             chambersPhoneNumber: '1-721-740-9885 x4239',
             docketNumber: '999-99',
             formattedStartDate: '01/01/2001',
