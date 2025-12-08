@@ -158,21 +158,16 @@ export const CourtIssuedDocketEntry = connect(
                 {form.eventCode && <CourtIssuedNonstandardForm />}
 
                 {DocketEntry.isOrder(form.eventCode) && (
-                  <FormGroup errorText={validationErrors.dispositionOrder}>
+                  <FormGroup>
                     <fieldset className="usa-fieldset">
                       <div className="usa-checkbox">
                         <input
-                          checked={form.dispositionOrder || false} // false if undefined
                           className="usa-checkbox__input"
                           id="dispositionOrder"
                           data-testid="disposition-order-checkbox"
                           name="dispositionOrder"
                           type="checkbox"
                           onChange={e => {
-                            updateCourtIssuedDocketEntryFormValueSequence({
-                              key: e.target.name,
-                              value: e.target.checked,
-                            });
                             if (e.target.checked) {
                               updateCourtIssuedDocketEntryFormValueSequence({
                                 key: 'affectedDocketEntries',
@@ -198,7 +193,6 @@ export const CourtIssuedDocketEntry = connect(
                   </FormGroup>
                 )}
                 {DocketEntry.isOrder(form.eventCode) &&
-                  form.dispositionOrder &&
                   form.affectedDocketEntries && (
                     <div>
                       {form.affectedDocketEntries.map((motion, i) => {
