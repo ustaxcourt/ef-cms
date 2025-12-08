@@ -3,7 +3,11 @@ import {
   getAllUserEmailsInCognito,
 } from '../cognito/cognito-helpers';
 import { getCypressPostgresDb } from './getCypressPostgresDb';
-import { formatNow } from '../../../../shared/src/business/utilities/DateHandler';
+import {
+  formatNow,
+  calculateISODate,
+} from '../../../../shared/src/business/utilities/DateHandler';
+import { sql } from 'kysely';
 
 export const getNewAccountVerificationCode = async ({
   email,
@@ -133,11 +137,43 @@ export async function getPractionerWithMostCasesEmail(): Promise<string> {
     .limit(1)
     .executeTakeFirst();
 
-  // i need to figure out the out put of this...
   const id = user?.userId || '';
-  // console.log('ID: ', id);
-  // get the email using getPractitionerEmailById function or with initial query
   const email = getPractitionerEmailById({ userId: id });
-  // console.log('email: ', email);
   return email;
+}
+
+export async function getOpenAndRecentCasesByEmail(
+  email: string,
+): Promise<string[]> {
+  const { userId } = await getUserByEmail(email);
+  if (!userId) return [];
+
+  const dbConnection = await getCypressPostgresDb();
+
+  const cases = await dbConnection
+    .selectFrom('dwUserOnCase')
+    .where('userId', '=', userId)
+    .select(['docketNumber'])
+    .execute();
+
+  const sixMonthsAgo = calculateISODate({
+    howMuch: -6,
+    units: 'months',
+  });
+
+  const openAndRecentCases = await dbConnection
+    .selectFrom('dwCase')
+    .where(
+      'docketNumber',
+      'in',
+      cases.map(c => c.docketNumber),
+    )
+    .where(sql`(closed_date IS NULL OR closed_date >= ${sixMonthsAgo})`)
+    .select(['docketNumber'])
+    .execute()
+    .then(results => results.map(r => r.docketNumber));
+
+  return openAndRecentCases.filter(
+    (docketNumber): docketNumber is string => docketNumber !== null,
+  );
 }
