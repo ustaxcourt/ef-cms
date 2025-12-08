@@ -212,8 +212,7 @@ export const NonstandardForm = connect(
                     key={previousDocument.docketEntryId}
                     value={previousDocument.docketEntryId}
                   >
-                    {showIndex && `${previousDocument.index} - ${previousDocument.createdAtFormatted} - `}{previousDocument.documentTitle ||
-                      previousDocument.documentType}
+                    {`${showIndex ? `${previousDocument.index} - ${previousDocument.createdAtFormatted} - ` : ''}${previousDocument.documentTitle || previousDocument.documentType}`}
                   </option>
                 );
               })}
