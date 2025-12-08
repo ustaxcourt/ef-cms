@@ -27,6 +27,25 @@ export const DisplayHearings: React.FC<DisplayHearingsProps> = connect(
     hearings,
     openAddEditHearingNoteModalSequence,
     removeHearingSequence,
+  }: {
+    caseDetailHelper: {
+      showAddRemoveFromHearingButtons: boolean;
+      docketNumber: string;
+    };
+    hearings: Array<{
+      trialSessionId: string;
+      userIsAssignedToSession: boolean;
+      formattedTrialCity: string;
+      formattedTrialDate: string;
+      formattedAssociatedJudge: string;
+      calendarNotes?: string;
+    }>;
+    openAddEditHearingNoteModalSequence: (args: {
+      docketNumber: string;
+      note?: string;
+      trialSessionId: string;
+    }) => void;
+    removeHearingSequence: (args: { trialSessionId: string }) => void;
   }) {
     return hearings.map(hearing => (
       <tbody className="hoverable" key={hearing.trialSessionId}>

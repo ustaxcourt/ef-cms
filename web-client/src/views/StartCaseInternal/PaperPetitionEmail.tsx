@@ -1,9 +1,15 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { props as cerebralProps } from 'cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import { RunableSequence as RunnableSequence } from 'cerebral';
+
+const props = cerebralProps as unknown as {
+  bind: string;
+  contactType: string;
+  onBlur: () => void;
+};
 
 type PaperPetitionEmailProps = {
   bind: any;
@@ -27,6 +33,12 @@ export const PaperPetitionEmail: React.FC<PaperPetitionEmailProps> = connect(
     onBlur,
     updateFormValueAndSecondaryContactInfoSequence,
     validationErrors = {},
+  }: {
+    contactType: string;
+    data: Record<string, Record<string, any>>;
+    onBlur: () => void;
+    updateFormValueAndSecondaryContactInfoSequence: Function | RunnableSequence;
+    validationErrors: Record<string, Record<string, any>>;
   }) {
     return (
       <>
@@ -47,7 +59,7 @@ export const PaperPetitionEmail: React.FC<PaperPetitionEmailProps> = connect(
             id={`paper-petition-email-${contactType}`}
             name={`${contactType}.paperPetitionEmail`}
             type="email"
-            value={data[contactType].paperPetitionEmail || ''}
+            value={(data[contactType]?.paperPetitionEmail as string) || ''}
             onBlur={() => {
               onBlur();
             }}

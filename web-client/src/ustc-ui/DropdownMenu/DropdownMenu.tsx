@@ -1,8 +1,7 @@
 import { Button } from '../Button/Button';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
 
 type DropdownMenuProps = {
@@ -38,6 +37,13 @@ export const DropdownMenu: React.FC<DropdownMenuProps> = connect(
     menuItems,
     menuState,
     toggleMenuStateSequence,
+  }: {
+    clearDropDownMenuStateSequence: Function;
+    id: string;
+    isMenuOpen: boolean;
+    menuItems: Array<{ id: string; label: string; click: () => void }>;
+    menuState: string;
+    toggleMenuStateSequence: Function;
   }) {
     const menuRef = useRef<HTMLDivElement | null>(null);
 

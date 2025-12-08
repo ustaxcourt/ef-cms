@@ -5,10 +5,10 @@ export const aggregateStatisticsErrors = ({
   errors,
   get,
 }: {
-  errors: any;
-  get: any;
-}): { errors: any; statisticsErrorMessages: string[] } => {
-  let newErrorStatistics: any[] = [];
+  errors: Record<string, any>;
+  get: <T>(slice: T) => T;
+}) => {
+  let newErrorStatistics;
   let statisticsErrorMessages: string[] = [];
 
   const purgedErrors = omit(errors, [
@@ -51,7 +51,13 @@ export const aggregateStatisticsErrors = ({
   return { errors: purgedErrors, statisticsErrorMessages };
 };
 
-export const aggregatePetitionerErrors = ({ errors }: { errors: any }) => {
+export const aggregatePetitionerErrors = ({
+  errors,
+}: {
+  errors: Record<string, any> & {
+    petitioners?: Array<{ index: number; [key: string]: any }>;
+  };
+}) => {
   if (errors?.petitioners) {
     errors.petitioners.forEach(e => {
       if (e.index === 0) {

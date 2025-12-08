@@ -27,7 +27,15 @@ export const BindedSelect: React.FC<BindedSelectProps> = connect(
     simpleSetter: sequences.cerebralBindSimpleSetStateSequence,
     value: state[props`bind`],
   },
-  function BindedSelect(componentProps) {
+  function BindedSelect(componentProps: {
+    bind: string;
+    simpleSetter: Function;
+    value: unknown;
+    children?: React.ReactNode;
+    className?: string;
+    onChange?: (value: string) => void;
+    [key: string]: unknown;
+  }) {
     const { bind, children, className, onChange, simpleSetter, value } =
       componentProps;
     let activeOption, setSelect;

@@ -15,7 +15,8 @@ export const getDefaultServiceIndicatorForPractitionerMatchesAction =
      */
     return ({ applicationContext, get }: ActionProps) => {
       const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
-      const matches = get(state.modal[matchesKey]);
+      const matches: Array<{ userId: string; email?: string }> | undefined =
+        get(state.modal[matchesKey]);
       const selectedPractitionerId = get(state.modal.user.userId);
 
       let defaultStateForSelected: string | null = null;
@@ -25,9 +26,11 @@ export const getDefaultServiceIndicatorForPractitionerMatchesAction =
           respondent => respondent.userId === selectedPractitionerId,
         );
 
-        defaultStateForSelected = selectedPractitioner.email
-          ? SERVICE_INDICATOR_TYPES.SI_ELECTRONIC
-          : SERVICE_INDICATOR_TYPES.SI_PAPER;
+        if (selectedPractitioner) {
+          defaultStateForSelected = selectedPractitioner.email
+            ? SERVICE_INDICATOR_TYPES.SI_ELECTRONIC
+            : SERVICE_INDICATOR_TYPES.SI_PAPER;
+        }
       }
 
       return {

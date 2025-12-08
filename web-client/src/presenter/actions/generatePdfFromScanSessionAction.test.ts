@@ -7,13 +7,12 @@ describe('generatePdfFromScanSessionAction', () => {
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
 
-    // @ts-expect-error
-    global.File = class {
+    global.File = class MockFile {
       foo: string;
       constructor() {
         this.foo = 'bar';
       }
-    };
+    } as unknown as typeof File;
   });
 
   it('generates a PDF from provided scan batches', async () => {

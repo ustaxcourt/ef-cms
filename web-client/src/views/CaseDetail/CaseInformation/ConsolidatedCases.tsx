@@ -17,7 +17,20 @@ export const ConsolidatedCases: React.FC<ConsolidatedCasesProps> = connect(
     caseDetail: props`caseDetail`,
     caseDetailHelper: props`caseDetailHelper`,
   },
-  function ConsolidatedCases({ caseDetail, caseDetailHelper }) {
+  function ConsolidatedCases({
+    caseDetail,
+    caseDetailHelper,
+  }: {
+    caseDetail: {
+      consolidatedCases: Array<{
+        docketNumber: string;
+        caseTitle?: string;
+      }>;
+    };
+    caseDetailHelper: {
+      hasConsolidatedCases: boolean;
+    };
+  }) {
     return (
       <>
         {!caseDetailHelper.hasConsolidatedCases && <p>Not consolidated</p>}

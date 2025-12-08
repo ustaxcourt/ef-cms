@@ -19,6 +19,19 @@ export const CaseDetails: React.FC<CaseDetailsProps> = connect(
     caseDetail,
     caseInformationHelper,
     openCleanModalSequence,
+  }: {
+    caseDetail: {
+      caseType: string;
+      procedureType: string;
+      irsNoticeDateFormatted: string;
+      filingFee: string;
+      formattedPreferredTrialCity: string;
+    };
+    caseInformationHelper: {
+      showSealCaseButton: boolean;
+      showUnsealCaseButton: boolean;
+    };
+    openCleanModalSequence: (args: { showModal: string }) => void;
   }) {
     return (
       <>

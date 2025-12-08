@@ -22,6 +22,10 @@ export const ConfirmInitiateSaveModal: React.FC<ConfirmInitiateSaveModalProps> =
     cancelSequence,
     documentTitle,
     submitCourtIssuedDocketEntrySequence,
+  }: {
+    cancelSequence: () => void;
+    documentTitle: string;
+    submitCourtIssuedDocketEntrySequence: () => void;
   }) {
     const [isSubmitting, setIsSubmitting] = useState(false);
     return (

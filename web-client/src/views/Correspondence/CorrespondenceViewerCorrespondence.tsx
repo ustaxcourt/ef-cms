@@ -24,6 +24,31 @@ export const CorrespondenceViewerCorrespondence = connect(
     openCaseDocumentDownloadUrlSequence,
     openConfirmDeleteCorrespondenceModalSequence,
     viewerCorrespondenceToDisplay,
+  }: {
+    caseDetail: {
+      docketNumber: string;
+    };
+    correspondenceViewerHelper: {
+      showEditCorrespondenceButton: boolean;
+      editCorrespondenceLink: string;
+      showDeleteCorrespondenceButton: boolean;
+    };
+    iframeSrc: string;
+    openCaseDocumentDownloadUrlSequence: (args: {
+      docketEntryId: string;
+      docketNumber: string;
+    }) => void;
+    openConfirmDeleteCorrespondenceModalSequence: (args: {
+      correspondenceId: string;
+      documentTitle: string;
+    }) => void;
+    viewerCorrespondenceToDisplay:
+      | {
+          correspondenceId: string;
+          documentTitle: string;
+          filedBy: string;
+        }
+      | undefined;
   }) {
     return (
       <div

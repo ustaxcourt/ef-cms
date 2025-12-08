@@ -22,7 +22,11 @@ export const EditDocketEntryMetaTabService = connect(
   }) {
     return (
       <div className="blue-container">
-        <FormGroup errorText={validationErrors?.servedPartiesCode}>
+        <FormGroup
+          errorText={
+            (validationErrors as Record<string, string>)?.servedPartiesCode
+          }
+        >
           <fieldset
             className="usa-fieldset margin-bottom-2"
             id="served-parties-radios"

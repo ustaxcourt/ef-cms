@@ -26,6 +26,18 @@ export const ConfirmInitiateServiceModal: React.FC<ConfirmInitiateServiceModalPr
     confirmSequence,
     documentTitle,
     waitingForResponse,
+  }: {
+    cancelSequence: () => void;
+    confirmInitiateServiceModalHelper: {
+      confirmationText: string;
+      showPaperAlert: boolean;
+      caseOrGroup: string;
+      contactsNeedingPaperService: Array<{ name: string }>;
+      showConsolidatedCasesForService: boolean;
+    };
+    confirmSequence: () => void;
+    documentTitle: string;
+    waitingForResponse: boolean;
   }) {
     let isSubmitDebounced = false;
 

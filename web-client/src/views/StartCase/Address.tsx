@@ -2,11 +2,19 @@ import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { StateSelect } from './StateSelect';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { props as cerebralProps } from 'cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
+import { RunableSequence as RunnableSequence } from 'cerebral';
+
+const props = cerebralProps as unknown as {
+  bind: string;
+  onBlur: (args: Record<string, any>) => void;
+  registerRef: (param: string) => void;
+  type: string;
+  onChange: string;
+};
 
 type AddressProps = {
   bind: string;
@@ -33,11 +41,23 @@ export const Address: React.FC<AddressProps> = connect(
     updateFormValueAndSecondaryContactInfoSequence,
     updateFormValueSequence,
     validationErrors,
+  }: {
+    data: Record<string, any>;
+    onBlur: (args: Record<string, any>) => void;
+    registerRef: (param: string) => void;
+    type: string;
+    updateFormValueAndSecondaryContactInfoSequence: Function | RunnableSequence;
+    updateFormValueSequence: Function | RunnableSequence;
+    validationErrors: Record<string, any>;
   }) {
     function MobileCityAndState() {
       return (
         <Mobile>
-          <FormGroup errorText={validationErrors?.[type]?.state}>
+          <FormGroup
+            errorText={
+              (validationErrors?.[type] as Record<string, any>)?.state
+            }
+          >
             <label className="usa-label" htmlFor={`${type}.state`}>
               State
             </label>
@@ -59,7 +79,11 @@ export const Address: React.FC<AddressProps> = connect(
               }
             />
           </FormGroup>
-          <FormGroup errorText={validationErrors?.[type]?.postalCode}>
+          <FormGroup
+            errorText={
+              (validationErrors?.[type] as Record<string, any>)?.postalCode
+            }
+          >
             <label
               aria-hidden
               className="usa-label"
@@ -101,8 +125,9 @@ export const Address: React.FC<AddressProps> = connect(
             className={classNames(
               'usa-form-group',
               'usa-form-group-horizontal',
-              (validationErrors?.[type]?.state ||
-                validationErrors?.[type]?.postalCode) &&
+              ((validationErrors?.[type] as Record<string, any>)?.state ||
+                (validationErrors?.[type] as Record<string, any>)
+                  ?.postalCode) &&
                 'usa-form-group--error',
             )}
           >
@@ -130,12 +155,16 @@ export const Address: React.FC<AddressProps> = connect(
                   }
                 />
                 <div>
-                  {validationErrors?.[type]?.state && (
+                  {(validationErrors?.[type] as Record<string, any>)
+                    ?.state && (
                     <span
                       className="usa-error-message"
                       data-testid="state-error-message"
                     >
-                      {validationErrors[type].state}
+                      {
+                        (validationErrors[type] as Record<string, any>)
+                          .state
+                      }
                     </span>
                   )}
                 </div>
@@ -171,12 +200,16 @@ export const Address: React.FC<AddressProps> = connect(
                   }}
                 />
                 <div>
-                  {validationErrors?.[type]?.postalCode && (
+                  {(validationErrors?.[type] as Record<string, any>)
+                    ?.postalCode && (
                     <span
                       className="usa-error-message"
                       data-testid="postal-code-error-message"
                     >
-                      {validationErrors[type].postalCode}
+                      {
+                        (validationErrors[type] as Record<string, any>)
+                          .postalCode
+                      }
                     </span>
                   )}
                 </div>
@@ -190,7 +223,9 @@ export const Address: React.FC<AddressProps> = connect(
       <>
         <FormGroup
           errorMessageId="address-1-error-message"
-          errorText={validationErrors?.[type]?.address1}
+          errorText={
+            (validationErrors?.[type] as Record<string, any>)?.address1
+          }
         >
           <label className="usa-label" htmlFor={`${type}.address1`}>
             Mailing address line 1
@@ -267,7 +302,9 @@ export const Address: React.FC<AddressProps> = connect(
         </div>
         <FormGroup
           errorMessageId="city-error-message"
-          errorText={validationErrors?.[type]?.city}
+          errorText={
+            (validationErrors?.[type] as Record<string, any>)?.city
+          }
         >
           <label className="usa-label" htmlFor={`${type}.city`}>
             City

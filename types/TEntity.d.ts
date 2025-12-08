@@ -29,6 +29,10 @@ type TPetitioner = {
   title?: string;
   hasConsentedToElectronicService?: boolean;
   hasElectronicAccess?: boolean;
+  formattedTitle?: string;
+  formattedPendingEmail?: string;
+  formattedEmail?: string;
+  formattedPaperPetitionEmail?: string;
 };
 
 interface IValidateRawCollection<I> {

@@ -25,7 +25,6 @@ export const DocketRecordOverlay: React.FC<DocketRecordOverlayProps> = connect(
     dismissModalSequence,
     docketEntry,
     openCaseDocumentDownloadUrlSequence,
-    runCancelSequence,
   }) {
     const elRef = React.useRef(null) as React.RefObject<HTMLDivElement | null>;;
 
@@ -62,7 +61,7 @@ export const DocketRecordOverlay: React.FC<DocketRecordOverlayProps> = connect(
       };
 
       const blurDialog = event => {
-        return runCancelSequence(event);
+        return dismissModalSequence(event);
       };
 
       modalRoot?.appendChild(getEl());

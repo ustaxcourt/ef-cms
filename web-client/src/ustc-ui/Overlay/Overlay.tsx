@@ -28,6 +28,13 @@ const OverlayUnRef: React.FC<OverlayUnRefProps> = connect(
     onEscSequence,
     preventEsc,
     preventScrolling,
+  }: {
+    onEscSequence?: (event: Event) => void | boolean;
+    children?: React.ReactNode;
+    className?: string;
+    forwardedRef?: React.Ref<HTMLDialogElement>;
+    preventEsc?: boolean;
+    preventScrolling?: boolean;
   }) {
     if (!onEscSequence) onEscSequence = () => {};
 
