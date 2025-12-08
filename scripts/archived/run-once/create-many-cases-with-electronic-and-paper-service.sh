@@ -8,7 +8,7 @@ petitionerToken="[PLACE TOKEN HERE]"
 petitionsClerkToken="[PLACE TOKEN HERE]"
 targetExperimentalEnvironment="[EXP OF CHOICE]"
 currentColor="[CURRENT COLOR OF EXP]"
-hostName="api-${currentColor}.${targetExperimentalEnvironment}.ustc-case-mgmt.flexion.us"
+hostName="api-${currentColor}.${targetExperimentalEnvironment}.ef-cms.ustaxcourt.gov"
 baseUrl="https://${hostName}"
 # these Id's must be valid. Can pull from a newly created case.
 trialSessionId="[PLACE TRIAL SESSION ID HERE]"

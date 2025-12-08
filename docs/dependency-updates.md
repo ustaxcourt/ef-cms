@@ -79,7 +79,7 @@ To update Node.js:
 Check if updates are necessary for the main `Dockerfile`. We base this image on `cypress/browsers`, a debian linux image that contains the latest (headless) versions of Chrome, Firefox, and Edge.
 
 - Base image - `cypress/browsers`
-   - Check [DockerHub](https://hub.docker.com/r/cypress/browsers/tags?page=1&name=node-22) if an update is available for the current node version the project is using
+   - Check [DockerHub](https://hub.docker.com/r/cypress/browsers/tags?page=1&name=node-24) if an update is available for the current node version the project is using
    - Change the `FROM` line in the `Dockerfile` to use the new version
 - `terraform`
    - Check the [Terraform site](https://developer.hashicorp.com/terraform/install) if an update is available
@@ -266,6 +266,10 @@ Quote from site:
 
 - On October 27th, 2025, added `uuid` to the caveats list in `scripts/npm/upgrade-npm-packages.ts` to prevent automatic upgrades to v12+ during future
 - On November 18th, 2025, ugpraded `uuid` to 13.0.0, edited the jest config to ignore patterns for uuid
+
+### sass
+11/26/2025 ran into issues trying to update this package. Error: Upgrading sass to version 1.94.2 npm error code ERR_INVALID_ARG_TYPE.
+Solution was removing node_modules and package-lock.json and updating the version manually in package-lock.json and then reinstalling dependencies and running the upgrade script
 
 ## Troubleshooting
 

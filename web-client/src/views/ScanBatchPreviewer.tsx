@@ -18,42 +18,54 @@ import {
   genericOnValidationErrorHandler,
   validateFileOnSelect,
 } from '@web-client/views/FileHandlingHelpers/fileValidation';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { props as cerebralProps } from 'cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
 
+const props = cerebralProps as unknown as {
+  documentTabs: Record<string, any>[];
+  documentType: string;
+  title: string;
+  validateSequence?: () => void;
+};
+
+const scanBatchPreviewerDeps = {
+  constants: state.constants,
+  documentTabs: props.documentTabs,
+  documentType: props.documentType,
+  generatePdfFromScanSessionSequence:
+    sequences.generatePdfFromScanSessionSequence,
+  openChangeScannerSourceModalSequence:
+    sequences.openChangeScannerSourceModalSequence,
+  openConfirmDeleteBatchModalSequence:
+    sequences.openConfirmDeleteBatchModalSequence,
+  openConfirmDeletePDFModalSequence:
+    sequences.openConfirmDeletePDFModalSequence,
+  openConfirmRescanBatchModalSequence:
+    sequences.openConfirmRescanBatchModalSequence,
+  removeScannedPdfSequence: sequences.removeScannedPdfSequence,
+  scanBatchPreviewerHelper: state.scanBatchPreviewerHelper,
+  scanHelper: state.scanHelper,
+  scannerStartupSequence: sequences.scannerStartupSequence,
+  selectDocumentForScanSequence: sequences.selectDocumentForScanSequence,
+  selectedBatchIndex: state.scanner.selectedBatchIndex,
+  setCurrentPageIndexSequence: sequences.setCurrentPageIndexSequence,
+  setDocumentForUploadSequence: sequences.setDocumentForUploadSequence,
+  setDocumentUploadModeSequence: sequences.setDocumentUploadModeSequence,
+  setIsLoadingSequence: sequences.setIsLoadingSequence,
+  setIsNotLoadingSequence: sequences.setIsNotLoadingSequence,
+  setSelectedBatchIndexSequence: sequences.setSelectedBatchIndexSequence,
+  showFileUploadErrorModalSequence: sequences.showFileUploadErrorModalSequence,
+  showModal: state.modal.showModal,
+  startScanSequence: sequences.startScanSequence,
+  title: props.title,
+  validateSequence: props.validateSequence,
+  validationErrors: state.validationErrors,
+};
+
 export const ScanBatchPreviewer = connect(
-  {
-    constants: state.constants,
-    generatePdfFromScanSessionSequence:
-      sequences.generatePdfFromScanSessionSequence,
-    openChangeScannerSourceModalSequence:
-      sequences.openChangeScannerSourceModalSequence,
-    openConfirmDeleteBatchModalSequence:
-      sequences.openConfirmDeleteBatchModalSequence,
-    openConfirmDeletePDFModalSequence:
-      sequences.openConfirmDeletePDFModalSequence,
-    openConfirmRescanBatchModalSequence:
-      sequences.openConfirmRescanBatchModalSequence,
-    removeScannedPdfSequence: sequences.removeScannedPdfSequence,
-    scanBatchPreviewerHelper: state.scanBatchPreviewerHelper,
-    scanHelper: state.scanHelper,
-    scannerStartupSequence: sequences.scannerStartupSequence,
-    selectDocumentForScanSequence: sequences.selectDocumentForScanSequence,
-    selectedBatchIndex: state.scanner.selectedBatchIndex,
-    setCurrentPageIndexSequence: sequences.setCurrentPageIndexSequence,
-    setDocumentForUploadSequence: sequences.setDocumentForUploadSequence,
-    setDocumentUploadModeSequence: sequences.setDocumentUploadModeSequence,
-    setIsLoadingSequence: sequences.setIsLoadingSequence,
-    setIsNotLoadingSequence: sequences.setIsNotLoadingSequence,
-    setSelectedBatchIndexSequence: sequences.setSelectedBatchIndexSequence,
-    showFileUploadErrorModalSequence:
-      sequences.showFileUploadErrorModalSequence,
-    showModal: state.modal.showModal,
-    startScanSequence: sequences.startScanSequence,
-    validationErrors: state.validationErrors,
-  },
+  scanBatchPreviewerDeps,
   function ScanBatchPreviewer({
     constants,
     documentTabs,
@@ -86,7 +98,7 @@ export const ScanBatchPreviewer = connect(
       scannerStartupSequence();
     }, []);
 
-    const batchWrapperRef = useRef(null);
+    const batchWrapperRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
       if (batchWrapperRef.current)

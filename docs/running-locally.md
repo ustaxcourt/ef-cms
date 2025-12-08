@@ -26,6 +26,8 @@ To run a DAWSON development environment, we will need to install the following C
 - [OAthToolkit](https://oath-toolkit.codeberg.page/) - command-line tools for OAuth 2.0
 - [LibPQ](https://www.postgresql.org/docs/current/libpq.html) - command-line interface for PostgreSQL
 - [GH](https://cli.github.com/) - command-line interface for GitHub
+- [Docker](https://docs.docker.com/get-started/) - Docker is an open platform for developing, shipping, and running applications.
+- [Docker Compose](https://docs.docker.com/compose/) - Docker Compose is a tool for defining and running multi-container applications.
 
 **Homebrew**
 
@@ -35,6 +37,8 @@ To run a DAWSON development environment, we will need to install the following C
    ```bash
    brew --version
    ```
+
+
 
 **Other CLI tools**
 
