@@ -37,7 +37,7 @@ export const NoticeOfWithdrawalForm = connect(
               Who are you removing yourself as counsel of record for?
             </legend>
             <span className="usa-hint">Check all that apply.</span>
-            {noticeOfWithdrawalHelper.partiesToWithdrawFrom.map(party => (
+            {noticeOfWithdrawalHelper.filingParties.map(party => (
               <div className="usa-checkbox" key={party.contactId}>
                 <input
                   aria-describedby="who-legend"
@@ -62,6 +62,32 @@ export const NoticeOfWithdrawalForm = connect(
                 </label>
               </div>
             ))}
+            {noticeOfWithdrawalHelper.showRespondant && (
+              <div className="usa-checkbox">
+                <input
+                  aria-describedby="who-legend"
+                  checked={form.partyIrsPractitioner || false}
+                  className="usa-checkbox__input"
+                  id="party-irs-practitioner"
+                  name="partyIrsPractitioner"
+                  type="checkbox"
+                  onChange={e => {
+                    updateFileDocumentWizardFormValueSequence({
+                      key: e.target.name,
+                      value: e.target.checked,
+                    });
+                    validateExternalDocumentInformationSequence();
+                  }}
+                />
+                <label
+                  className="usa-checkbox__label"
+                  htmlFor="party-irs-practitioner"
+                  data-testid="party-irs-practitioner-label"
+                >
+                  Respondent
+                </label>
+              </div>
+            )}
           </FormGroup>
 
           <FormGroup errorText={validationErrors?.allPartiesConsent}>
@@ -126,7 +152,7 @@ export const NoticeOfWithdrawalForm = connect(
                 <span className="usa-hint">(Optional)</span>
               </legend>
               <div className="tw:flex">
-                {noticeOfWithdrawalHelper.partiesToWithdrawFrom.map(party => (
+                {noticeOfWithdrawalHelper.filingParties.map(party => (
                   <>
                     <div
                       className="tw:w-sm"
