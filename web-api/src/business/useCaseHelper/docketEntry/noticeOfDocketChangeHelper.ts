@@ -51,7 +51,7 @@ export const getOriginalNoticeValues = ({
   return { documentTitleForNotice, filedBy };
 };
 
-export const buildUpdatedPrimaryDocketEntry = ({
+export const buildUpdatedDocketEntry = ({
   authorizedUser,
   docketEntry,
   editableFields,
