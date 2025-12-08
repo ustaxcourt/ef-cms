@@ -23,6 +23,7 @@ import {
   expireUserConfirmationCode,
   getEmailVerificationToken,
   getNewAccountVerificationCode,
+  getOpenAndRecentCasesByEmail,
   getPractionerWithMostCasesEmail,
 } from './cypress/helpers/cypressTasks/postgres/postgres-helpers';
 import { unzipFile } from './cypress/helpers/file/unzip-file';
@@ -124,6 +125,9 @@ export default defineConfig({
         },
         getPractionerWithMostCasesEmail() {
           return getPractionerWithMostCasesEmail();
+        },
+        getOpenAndRecentCasesByEmail(email: string) {
+          return getOpenAndRecentCasesByEmail(email);
         },
       });
     },
