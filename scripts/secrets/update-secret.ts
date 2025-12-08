@@ -9,6 +9,7 @@ import {
   type ScriptConfig,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
+import { alphabetizeObjectProps } from './createSecretsHelpers';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -37,18 +38,6 @@ const { env, key, region, value } = parseArgsAndEnvVars(scriptConfig) as {
   key: string;
   region: string;
   value: string;
-};
-
-const alphabetizeObjectProps = (obj: Record<string, any>) => {
-  return Object.keys(obj)
-    .sort()
-    .reduce(
-      (acc, key) => {
-        acc[key] = obj[key];
-        return acc;
-      },
-      {} as Record<string, any>,
-    );
 };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
