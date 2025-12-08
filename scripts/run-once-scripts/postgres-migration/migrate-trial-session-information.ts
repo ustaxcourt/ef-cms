@@ -8,12 +8,13 @@ import {
   parseArgsAndEnvVars,
   ScriptConfig,
 } from 'scripts/helpers/parseArgsAndEnvVars';
-import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+import { RawTrialSession, TCaseOrder } from '@shared/business/entities/trialSessions/TrialSession';
 import { RawTrialSessionWorkingCopy } from '@shared/business/entities/trialSessions/TrialSessionWorkingCopy';
 import {
   toKyselyNewTrialSession,
   toKyselyNewTrialSessionCase,
 } from '@web-api/persistence/postgres/trialSessions/mapper';
+import { NewTrialSessionPaperPdfKysely } from '@web-api/persistence/postgres/trialSessions/schema';
 import { getConnection } from '@web-api/getConnection';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 
@@ -49,7 +50,7 @@ async function main() {
   console.log('Finished moving trial sessions from dynamo to postgres');
 }
 
-async function createTrialSessionRecords(trialSessions) {
+async function createTrialSessionRecords(trialSessions: RawTrialSession[]) {
   await getConnection({
     cb: db =>
       db
@@ -63,7 +64,7 @@ async function createTrialSessionRecords(trialSessions) {
   });
 }
 
-async function createPaperPdfRecords(trialSessionPaperPdfs) {
+async function createPaperPdfRecords(trialSessionPaperPdfs: NewTrialSessionPaperPdfKysely[]) {
   await getConnection({
     cb: db =>
       db
@@ -73,7 +74,7 @@ async function createPaperPdfRecords(trialSessionPaperPdfs) {
   });
 }
 
-async function createTrialSessionWorkingCopies(trialSessionWorkingCopies) {
+async function createTrialSessionWorkingCopies(trialSessionWorkingCopies: RawTrialSessionWorkingCopy[]) {
   await getConnection({
     cb: db =>
       db
@@ -83,7 +84,7 @@ async function createTrialSessionWorkingCopies(trialSessionWorkingCopies) {
   });
 }
 
-async function createCaseTrialSessionFromOrder(caseOrders) {
+async function createCaseTrialSessionFromOrder(caseOrders: Array<TCaseOrder & { trialSessionId: string }>) {
   await getConnection({
     cb: db =>
       db
@@ -107,7 +108,7 @@ async function createCaseTrialSessionFromOrder(caseOrders) {
   });
 }
 
-async function createCaseTrialSessionFromHearing(caseHearings) {
+async function createCaseTrialSessionFromHearing(caseHearings: Array<TCaseOrder & { trialSessionId: string; isHearing: boolean }>) {
   await getConnection({
     cb: db =>
       db
@@ -132,9 +133,9 @@ async function scanContinuously(params: ScanCommandInput) {
   do {
     const trialSessions: RawTrialSession[] = [];
     const trialSessionWorkingCopies: RawTrialSessionWorkingCopy[] = [];
-    const caseOrders: any = [];
-    const caseHearings: any = [];
-    const trialSessionPaperPdfs: any[] = [];
+    const caseOrders: Array<TCaseOrder & { trialSessionId: string }> = [];
+    const caseHearings: Array<TCaseOrder & { trialSessionId: string; isHearing: boolean }> = [];
+    const trialSessionPaperPdfs: NewTrialSessionPaperPdfKysely[] = [];
 
     const result = await documentClient.scan({
       ...params,

@@ -120,8 +120,8 @@ async function deleteCognitoUser({
         UserPoolId: userPoolId,
         Username: email.toLowerCase(),
       });
-    } catch (err: any) {
-      const name = err?.name || err?.__type;
+    } catch (err: unknown) {
+      const name = (err as { name?: string; __type?: string })?.name || (err as { name?: string; __type?: string })?.__type;
       // Swallow user not existing
       if (name === 'UserNotFoundException') {
         return;
@@ -141,8 +141,8 @@ async function deleteCognitoUser({
               Username: email.toLowerCase(),
             });
             return;
-          } catch (e2: any) {
-            const n2 = e2?.name || e2?.__type;
+          } catch (e2: unknown) {
+            const n2 = (e2 as { name?: string; __type?: string })?.name || (e2 as { name?: string; __type?: string })?.__type;
             if (n2 === 'UserNotFoundException') return;
             if (!(n2 === 'TooManyRequestsException' || n2 === 'LimitExceededException' || n2 === 'ThrottlingException')) {
               throw e2;

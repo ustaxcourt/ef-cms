@@ -37,7 +37,7 @@ describe('removeConsolidatedCasesInteractor deadlines', () => {
       { successfullyLocked: true, identifier: 'TESTS' },
     ]);
 
-    updateCaseAndAssociations.mockRejectedValue(undefined);
+    updateCaseAndAssociations.mockResolvedValue(undefined);
     upsertCaseDeadlines.mockResolvedValue([]);
 
     const MOCK_CASES_DICT = {

@@ -131,7 +131,7 @@ async function scanContinuously(params: ScanCommandInput) {
     const irsPractitionerCaseAssociations: Array<UserOnCaseAssociation> = []; // {pk: case|, sk: irsPractitioner| }
     const privatePractitionerCaseAssociations: Array<UserOnCaseAssociation> =
       []; // {pk: case|, sk: privatePractitioner| }
-    const userRecords: any[] = []; // {pk: user|, sk: user| }
+    const userRecords: Array<RawUser | RawPractitioner | RawIrsPractitioner> = []; // {pk: user|, sk: user| }
     const userOnCasePendingRecords: TDynamoRecord[] = []; // {pk: user|, sk: pending-case| }
     // const userRecords = [] // {pk: user|, sk: case| } We should not need to process these. For irs/private association is defined through the {pk: case|, sk: privatePractitioner| }. For petitioners it is defined by the dwCase.petitioners array
     const barNumberRecords: BarNumberKysely[] = [];
