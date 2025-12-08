@@ -168,7 +168,9 @@ export async function getOpenAndRecentCasesByEmail(
       'in',
       cases.map(c => c.docketNumber),
     )
-    .where(sql`(closed_date IS NULL OR closed_date >= ${sixMonthsAgo})`)
+    .where(
+      sql<boolean>`(closed_date IS NULL OR closed_date >= ${sixMonthsAgo})`,
+    )
     .select(['docketNumber'])
     .execute()
     .then(results => results.map(r => r.docketNumber));
