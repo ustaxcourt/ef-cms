@@ -29,7 +29,11 @@ export const getNewAccountVerificationCode = async ({
     (await dbConnection
       .selectFrom('dwUserConfirmationCode')
       .where('userId', '=', userId)
-      .where('ttl', '>', Math.floor(formatNow('UNIX_TIMESTAMP_MS') / 1000))
+      .where(
+        'ttl',
+        '>',
+        Math.floor(parseInt(formatNow('UNIX_TIMESTAMP_MS')) / 1000),
+      )
       .select(['confirmationCode'])
       .executeTakeFirst()) ?? {};
 
