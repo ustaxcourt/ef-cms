@@ -17,7 +17,9 @@ export const removePetitionerAndUpdateCaptionAction = async ({
   const { contactId } = get(state.form.contact);
   const { caseCaption } = get(state.modal);
 
-  const { contactType } = petitioners.find(p => p.contactId === contactId);
+  const foundPetitioner: TPetitioner & { contactType: string } =
+    petitioners.find(p => p.contactId === contactId)!;
+  const { contactType } = foundPetitioner;
 
   const updatedCaseDetail = await applicationContext
     .getUseCases()

@@ -377,7 +377,7 @@ export const getTransformedPendingItemDetails = (
     pendingItem: {
       eventCode: string;
       objections: string;
-    } & Record<string, unknown>,
+    } & Record<string, any>,
   ): string => {
     if (!DocketEntry.isMotion(pendingItem.eventCode)) return '';
 
