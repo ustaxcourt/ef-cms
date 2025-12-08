@@ -18,9 +18,12 @@ import { pick } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
-import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import {
+  onTransactionCommit,
+  withTransaction,
+} from '@web-api/persistence/postgres/utils/transactions';
 
 export const fileExternalDocument = async (
   applicationContext: ServerApplicationContext,
@@ -125,8 +128,10 @@ export const fileExternalDocument = async (
   );
   const casesToUpdate = await getCasesByDocketNumbers({ docketNumbers });
 
-  const consolidatedCaseEntities: Promise<RawCase>[] = casesToUpdate.map(
-    async caseToUpdate => {
+  const resolvedCaseEntities: RawCase[] = await withTransaction(async () => {
+    const caseEntities: RawCase[] = [];
+
+    for (const caseToUpdate of casesToUpdate) {
       let caseEntity = new Case(caseToUpdate, { authorizedUser });
 
       const servedParties = aggregatePartiesForService(caseEntity);
@@ -173,14 +178,16 @@ export const fileExternalDocument = async (
           if (isAutoServed) {
             docketEntryEntity.setAsServed(servedParties.all);
 
-            await applicationContext
-              .getUseCaseHelpers()
-              .sendServedPartiesEmails({
-                applicationContext,
-                caseEntity,
-                docketEntryId: docketEntryEntity.docketEntryId,
-                servedParties,
-              });
+            onTransactionCommit(async () => {
+              await applicationContext
+                .getUseCaseHelpers()
+                .sendServedPartiesEmails({
+                  applicationContext,
+                  caseEntity,
+                  docketEntryId: docketEntryEntity.docketEntryId,
+                  servedParties,
+                });
+            });
           }
         }
       }
@@ -197,17 +204,14 @@ export const fileExternalDocument = async (
         includeCorrespondence: false,
       });
 
-      const rawCaseEntity = caseEntity.toRawObject();
-      return rawCaseEntity;
-    },
-  );
+      caseEntities.push(caseEntity.toRawObject());
+    }
 
-  const resolvedCaseEntities: RawCase[] = await settlePromises(
-    consolidatedCaseEntities,
-  );
+    await upsertWorkItems({
+      workItems,
+    });
 
-  await upsertWorkItems({
-    workItems,
+    return caseEntities;
   });
 
   return resolvedCaseEntities.find(

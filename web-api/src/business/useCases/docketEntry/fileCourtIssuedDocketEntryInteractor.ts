@@ -14,9 +14,9 @@ import { omit } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
-import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 /**
  *
@@ -86,8 +86,8 @@ export const fileCourtIssuedDocketEntry = async (
     docketNumbers: [subjectDocketNumber, ...docketNumbers],
   });
 
-  await settlePromises(
-    casesToUpdate.map(async caseToUpdate => {
+  await withTransaction(async () => {
+    for (const caseToUpdate of casesToUpdate) {
       const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
       const docketEntryEntity = new DocketEntry(
@@ -157,24 +157,18 @@ export const fileCourtIssuedDocketEntry = async (
         sentByUserId: user.userId,
       });
 
-      const saveItems: Promise<any>[] = [
-        updateCaseAndAssociations({
-          authorizedUser,
-          caseToUpdate: caseEntity,
-        }),
-      ];
+      await updateCaseAndAssociations({
+        authorizedUser,
+        caseToUpdate: caseEntity,
+      });
 
       const rawValidWorkItem = workItem.validate().toRawObject();
 
-      saveItems.push(
-        upsertWorkItems({
-          workItems: [rawValidWorkItem],
-        }),
-      );
-
-      return settlePromises(saveItems);
-    }),
-  );
+      await upsertWorkItems({
+        workItems: [rawValidWorkItem],
+      });
+    }
+  });
 
   const rawSubjectCase = await getCaseByDocketNumber({
     docketNumber: subjectDocketNumber,

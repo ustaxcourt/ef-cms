@@ -37,6 +37,7 @@ import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { WorkItem } from '@shared/business/entities/WorkItem';
+import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 const completeDocketEntryQC = async (
   applicationContext: ServerApplicationContext,
@@ -222,10 +223,6 @@ const completeDocketEntryQC = async (
     sentByUserId: user.userId,
   });
 
-  await upsertWorkItems({
-    workItems: [workItem.validate().toRawObject()],
-  });
-
   const servedParties = aggregatePartiesForService(caseEntity);
   let paperServicePdfUrl;
   let paperServiceDocumentTitle;
@@ -351,9 +348,15 @@ const completeDocketEntryQC = async (
     }
   }
 
-  await updateCaseAndAssociations({
-    authorizedUser,
-    caseToUpdate: caseEntity,
+  await withTransaction(async () => {
+    await upsertWorkItems({
+      workItems: [workItem.validate().toRawObject()],
+    });
+
+    await updateCaseAndAssociations({
+      authorizedUser,
+      caseToUpdate: caseEntity,
+    });
   });
 
   if (isNewCoverSheetNeeded) {
