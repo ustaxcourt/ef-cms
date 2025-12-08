@@ -146,7 +146,6 @@ describe('getNotificationsInteractor', () => {
       qcIndividualInboxCount: 1,
       qcSectionInProgressCount: 1,
       qcSectionInboxCount: 3,
-      qcUnreadCount: 0,
       unreadMessageCount: 0,
       userInboxCount: 1,
       userSectionCount: 2,
@@ -186,22 +185,6 @@ describe('getNotificationsInteractor', () => {
     );
 
     expect(result.userSectionCount).toEqual(2);
-  });
-
-  it('returns an accurate unread count for legacy items marked complete', async () => {
-    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
-      role: ROLES.docketClerk,
-      section: DOCKET_SECTION,
-      userId: mockDocketClerkUser.userId,
-    });
-
-    const result = await getNotificationsInteractor(
-      applicationContext,
-      { judgeId: '123456', section: DOCKET_SECTION },
-      mockDocketClerkUser,
-    );
-
-    expect(result.qcUnreadCount).toEqual(1);
   });
 
   it('returns the qcIndividualInProgressCount for qc individual items with isFileAttached true and a judgeId supplied', async () => {
@@ -457,6 +440,7 @@ describe('getNotificationsInteractor', () => {
 
     expect(getDocumentQCInboxForSection.mock.calls[0][0]).toMatchObject({
       judgeId: mockJudgeUser.userId,
+      section: DOCKET_SECTION,
     });
   });
 
@@ -475,6 +459,22 @@ describe('getNotificationsInteractor', () => {
 
     expect(getDocumentQCInboxForSection.mock.calls[0][0]).toMatchObject({
       judgeId: undefined,
+      section: DOCKET_SECTION,
+    });
+  });
+
+  it('should fetch the qc section items with judgeId as null when user is ADC', async () => {
+    getDocumentQCInboxForSection.mockReturnValue([]);
+
+    await getNotificationsInteractor(
+      applicationContext,
+      { judgeId: mockJudgeUser.userId, section: DOCKET_SECTION },
+      mockAdcUser,
+    );
+
+    expect(getDocumentQCInboxForSection.mock.calls[0][0]).toMatchObject({
+      judgeId: null,
+      section: DOCKET_SECTION,
     });
   });
 
@@ -510,7 +510,7 @@ describe('getNotificationsInteractor', () => {
       SELECTED_SECTION,
     );
     expect(getDocumentQCInboxForSection.mock.calls[0][0].section).toEqual(
-      SELECTED_SECTION,
+      PETITIONS_SECTION,
     );
 
     expect(result.qcSectionInboxCount).toEqual(1);

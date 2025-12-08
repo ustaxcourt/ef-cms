@@ -6,7 +6,7 @@ The goal of this part of the documentation is to outline the various AWS service
 
 ## IAM
 
-IAM is an AWS service for creating and managing users, roles, and permissions that can be used for interacting with aws via the cli, terraform, or attached to lambda functions to grant them access to other AWS resources.  By default, most AWS resources have limited access to other resources.  For example, since we use Elasticsearch and Dynamo on our project, we have to explicitly grant permissions to our lambda functions to be able to access those databases.  It's worth noting that IAM is not the same as Cognito. Cognito is for managing the users of the application and NOT of our AWS resources.
+IAM is an AWS service for creating and managing users, roles, and permissions that can be used for interacting with aws via the cli, terraform, or attached to lambda functions to grant them access to other AWS resources.  By default, most AWS resources have limited access to other resources.  For example, since we use Elasticsearch on our project, we have to explicitly grant permissions to our lambda functions to be able to access that database.  It's worth noting that IAM is not the same as Cognito. Cognito is for managing the users of the application and NOT of our AWS resources.
 
 A majority of our permissions are defined in our terraform files. For example, `iam/terraform/account-specific/main/circle-ci.tf` is where we grant access to our circle-ci user to be able to create and destroy the various AWS resources needed to deploy and environment.  Another common file you may modified in regards to permissions is the `iam/terraform/environment-specific/main/lambda.tf` file. 
 
@@ -39,31 +39,15 @@ The policies can be attached to roles, and roles can be specified when creating 
 
 Cognito is a user management service provided by AWS which handles the ability to create users, send out forgot password emails, send out verifications emails, etc.  Cognito also provides a hosted UI where users can login and register.  The choice in use Cognito was mainly to speed up development time since it reduces our developer time needed to implement our own login system and reduce the risks involved with designing our own authentication system.  We also create a separate Cognito pool for the IRS super user which is named `efcms-irs-$ENV`.  The main reason we have a separate pool for the IRS is so we could enable MFA since the IRS user.
 
-## DynamoDB
-
-> DynamoDB is the source of truth of all our data in Dawson
-
-DynamoDB is a database as a service provided by AWS.  It is mainly a key-value store, but supports some additional features such as **global secondary indicies** which can be used for performing custom queries.  DynamoDB was picked due to it's no-sql nature and promises of reduced operation costs.  It is also highly scalable which was something we decided we might need since we have zero insight into the size of production dataset when we started with development. 
-
-When we create a table in DynamoDB, we must specify something called a **pk** and **sk**.  These stand for **primary key** and **sort key**.  Once your table is defined, every item in your table must have those two keys.  A useful feature of Dynamo is that you can attach any additional attributes to your records and store them directly into the database without needing to perform any type of migration.  It's similar to other No-SQL databases in that it doesn't require schema migrations.
-
-DynamoDB can basically be boiled down to a few main operations, PutItem, GetItem, and Query.  PutItem is how you can write items into dynamo.  This request will overwrite the existing item with the new version you provide.  GetItem is how can you request an item by providing the pk,sk pair.  Query is one of the most useful operations in that it allows you to query the database for items regardless of the sk.  You must know the PK to do a query, but the sk can do more interesting queries such as checking if the sk `begins_with` a prefix, etc.
-
-DynamoDB has many limitations, and one of the main pitfalls of DynamoDB is that you need to really understand your applications access patterns before you can start using it in a useful way.  You can always add on GSI (global secondary indicies) at a later time if you need to.  These GSIs will allow you to query for items based on something other than the original PK,SK pair defined when creating the table, but know that with each GSI, you will be charged extra money for write requests.
-
-In our project, our data, is stored in a table named `efcms-$ENV-alpha` and `efcms-$ENV-beta`.  The `alpha` and `beta` suffixes are due to our blue-green migration process.  We also store data into AWS SSM which is used to keep track of environment state.  Lastly, we store the terraform lock state in a table called `efcms-terraform-lock`.  These locks help prevent multiple terraform runs from running at the same time which can cause major issues.
-
-For more information on DynamoDB, please see the [AWS Documentation](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/).
-
 ## OpenSearch (ElasticSearch)
 
-> ElasticSearch is a inverted index solution we use to help us query against our dynamodb data
+> ElasticSearch is an inverted index solution we use to help us query our data
 
-OpenSearch is an AWS service that provides a managed forked ElasticSearch version.  It has the ability to easily scale up and scale down your elasticsearch cluster, change instance types, easily upgrade versions without downtime, and more.  ElasticSearch is a tool used for help our users and application easily query for information that they need based on regardless of the PK,SK definitions of our DynamoDB records.  
+OpenSearch is an AWS service that provides a managed forked ElasticSearch version.  It has the ability to easily scale up and scale down your elasticsearch cluster, change instance types, easily upgrade versions without downtime, and more.  ElasticSearch is a tool used to help our users and application easily query for information that they need.
 
-Because dynamo is very difficult to perform specific queries against arbitrary attributes of your data.  Because of this, we needed to bring in a inverted indexing solution which could allow users to easily search over docket records by date, title, petitioner name, docket number, etc.  Doing these types of queries is difficult, if not impossible while using DynamoDB.  We mainly started using ElasticSearch for order and opinion searches, but we slowly started finding needs to do other queries against our elasticsearch cluster since we found it too difficult to achieve in Dynamo.
+We use ElasticSearch to allow users to easily search over docket records by date, title, petitioner name, docket number, etc.  We mainly started using ElasticSearch for order and opinion searches, but we slowly started finding needs to do other queries against our elasticsearch cluster.
 
-One use case of using elasticsearch in our system is for finding all open cases.  Because our dynamo PK and SK do not include status, it's very hard to find all the cases where the status is `open`.  Now, we could have created a **GSI** to allow us to query for cases based on status, but at the time all of the necessary data was already indexed inside elasticsearch, so we can just use a query:
+One use case of using elasticsearch in our system is for finding all open cases.  We can use a query like:
 
 ```
 await esClient.search({
@@ -85,7 +69,7 @@ await esClient.search({
 });
 ```
 
-This query will find use all cases from the `efcms-case` index whose status is NOT closed.  A query like this in dynamo is very costly because we'd need to query all cases that are `open`, `new`, `ready for trial`, etc, and then combine them together at the API level and send that back to the user.  This is why we use elasticsearch.
+This query will find all cases from the `efcms-case` index whose status is NOT closed.  This is why we use elasticsearch.
 
 ## Lambda
 
@@ -103,7 +87,7 @@ API Gateway has a default timeout of 30 seconds.  That means if your lambda exec
 
 ## Route53
 
-Route53 is a service which allows you to configure a zone and DNS records associated with that zone.  Before an environment is first deployed, someone will need to setup a domain to point to a manually created Route53 zone.  For example, our sub domain at `ustc-case-mgmt.flexion.us` was created and points to our Route53 zone.  This allows us to use AWS to configure and manage various sub domains, such as `exp1.ustc-case-mgmt.flexion.us` without the need to go to the top level DNS management service that is hosting `flexion.us`.  
+Route53 is a service which allows you to configure a zone and DNS records associated with that zone.  Before an environment is first deployed, someone will need to setup a domain to point to a manually created Route53 zone.  For example, our sub domain at `ef-cms.ustaxcourt.gov` was created and points to our Route53 zone.  This allows us to use AWS to configure and manage various sub domains, such as `exp1.ef-cms.ustaxcourt.gov` without the need to go to the top level DNS management service that is hosting `ustaxcourt.gov`.  
 
 ## CloudFront
 
@@ -127,7 +111,7 @@ In Dawson, we store a majority of our PDFs inside of S3 buckets.  We also scrape
 
 SQS is a service which allows you to send and receive messages into a queue.  A queue is a data structure which accepts messages and pushes them to the end of a list.  When other lambda servers read from the queue, they will get the first message added to the queue so they can process it.
 
-IN Dawson, we use SQS for a variety of things.  Our migration process uses a SQS queue for keeping track of which dynamodb segment events we need to process.  We also utilize a SQS queue for when we need to run any type of long running process of do some type of fan out logic to process many events in parallel.
+IN Dawson, we use SQS for a variety of things.  We utilize SQS queues for when we need to run any type of long running process or do some type of fan out logic to process many events in parallel.
 
 ## SNS
 

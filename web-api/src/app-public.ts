@@ -1,5 +1,5 @@
 import { expressLogger } from './logger';
-import { getCurrentInvoke } from '@vendia/serverless-express';
+import { getCurrentInvoke } from '@codegenie/serverless-express';
 import { json, urlencoded } from 'body-parser';
 import { lambdaWrapper } from './lambdaWrapper';
 import { set } from 'lodash';
@@ -24,8 +24,8 @@ app.use((req, _res, next) => {
   return next();
 });
 app.use(async (_req, _res, next) => {
-  // This code is here so that we have a way to mock out the terminal user
-  // via using dynamo locally.  This is only ran locally and on CI/CD which is
+  // This code is here so that we have a way to mock out the terminal user.
+  // This is only ran locally and on CI/CD which is
   // why we also lazy require some of these packages.  See story 8955 for more info.
   if (process.env.NODE_ENV !== 'production') {
     const currentInvoke = getCurrentInvoke();

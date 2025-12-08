@@ -26,6 +26,8 @@ To run a DAWSON development environment, we will need to install the following C
 - [OAthToolkit](https://oath-toolkit.codeberg.page/) - command-line tools for OAuth 2.0
 - [LibPQ](https://www.postgresql.org/docs/current/libpq.html) - command-line interface for PostgreSQL
 - [GH](https://cli.github.com/) - command-line interface for GitHub
+- [Docker](https://docs.docker.com/get-started/) - Docker is an open platform for developing, shipping, and running applications.
+- [Docker Compose](https://docs.docker.com/compose/) - Docker Compose is a tool for defining and running multi-container applications.
 
 **Homebrew**
 
@@ -35,6 +37,8 @@ To run a DAWSON development environment, we will need to install the following C
    ```bash
    brew --version
    ```
+
+
 
 **Other CLI tools**
 
@@ -118,7 +122,7 @@ Use one of the mock logins documented below to log in to the private UI.
 
 ## How to Login Locally
 
-Now that your application is running locally, try to log in with some of the local mock user accounts.  All of these users are defined in [users.json](https://github.com/ustaxcourt/ef-cms/blob/staging/web-api/storage/fixtures/seed/users.json), and also in [efcms-local.json](https://github.com/ustaxcourt/ef-cms/blob/staging/web-api/storage/fixtures/seed/efcms-local.json) which contains all of our dynamodb seed data.
+Now that your application is running locally, try to log in with some of the local mock user accounts.  All of these users are defined in [users.json](https://github.com/ustaxcourt/ef-cms/blob/staging/web-api/storage/fixtures/seed/users.json), and also in [efcms-local.json](https://github.com/ustaxcourt/ef-cms/blob/staging/web-api/storage/fixtures/seed/efcms-local.json) which contains all of our seed data.
 
 Open a browser to [http://localhost:1234](http://localhost:1234) and enter one of the following mock user emails.
 

@@ -1,7 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 
 export const getEnvironment = () => ({
-  dynamoDbTableName: process.env.DYNAMODB_TABLE_NAME,
   stage: process.env.STAGE || 'local',
 });
 

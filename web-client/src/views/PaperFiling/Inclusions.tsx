@@ -1,10 +1,18 @@
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import {
+  props as cerebralProps,
+  RunableSequence as RunnableSequence,
+} from 'cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
+
+const props = cerebralProps as unknown as {
+  marginClass: string;
+  updateSequence: string;
+  isMemberCase?: boolean;
+};
 
 export const Inclusions = connect(
   {
@@ -13,9 +21,10 @@ export const Inclusions = connect(
     formatAndUpdateDateFromDatePickerSequence:
       sequences.formatAndUpdateDateFromDatePickerSequence,
     marginClass: props.marginClass,
-    updateSequence: sequences[props.updateSequence],
+    updateSequence: sequences[props.updateSequence as any],
     validateDocketEntrySequence: sequences.validateDocketEntrySequence,
     validationErrors: state.validationErrors,
+    isMemberCase: props.isMemberCase || false,
   },
   function Inclusions({
     DATE_FORMATS,
@@ -25,6 +34,16 @@ export const Inclusions = connect(
     updateSequence,
     validateDocketEntrySequence,
     validationErrors,
+    isMemberCase,
+  }: {
+    DATE_FORMATS: { ISO: string };
+    form: Record<string, any>;
+    formatAndUpdateDateFromDatePickerSequence: Function | RunnableSequence;
+    marginClass: string;
+    updateSequence: Function | RunnableSequence;
+    validateDocketEntrySequence: Function | RunnableSequence;
+    validationErrors: Record<string, any>;
+    isMemberCase: boolean;
   }) {
     return (
       <div className={classNames('usa-form-group', marginClass)}>
@@ -39,6 +58,7 @@ export const Inclusions = connect(
               id="attachments"
               name="attachments"
               type="checkbox"
+              disabled={isMemberCase}
               onChange={e => {
                 updateSequence({
                   key: e.target.name,
@@ -58,6 +78,7 @@ export const Inclusions = connect(
               id="certificate-of-service"
               name="certificateOfService"
               type="checkbox"
+              disabled={isMemberCase}
               onChange={e => {
                 updateSequence({
                   key: e.target.name,
@@ -89,6 +110,7 @@ export const Inclusions = connect(
                   });
                   validateDocketEntrySequence();
                 }}
+                disabled={isMemberCase}
               />
             )}
           </div>

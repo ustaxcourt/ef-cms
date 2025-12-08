@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   git-shallow-clone: guitarrapc/git-shallow-clone@2.8.0
 
-efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.58
+efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.60
 
 parameters:
   run_build_and_deploy:
@@ -182,10 +182,7 @@ jobs:
               echo "skipping…"
               exit 0
             fi
-            if [ "${CIRCLE_BRANCH}" == "test" ]; then
-              export REGION="us-east-1"
-              ./scripts/user/setup-glued-users.ts
-            else
+            if [ "${CIRCLE_BRANCH}" != "test" ]; then
               npx ts-node --transpile-only ./scripts/circleci/judge/bulkImportJudgeUsers.ts | tee bulk-import-log.txt
             fi
       - run:
@@ -223,7 +220,7 @@ jobs:
 
   docker-image-zipper:
     docker:
-      - image: cimg/node:22.21.0
+      - image: cimg/node:24.11.1
     resource_class: xlarge
     steps:
       - git-shallow-clone/checkout
@@ -545,6 +542,10 @@ jobs:
           command: |
             ./scripts/elasticsearch/delete-alpha-and-beta-clusters.sh
       - run:
+          name: 'Delete Cognito users'
+          command: |
+            REGION=us-east-1 ./scripts/user/clear-all-cognito-users.ts
+      - run:
           no_output_timeout: 20m
           name: 'Recreate the alpha OpenSearch cluster'
           command: |
@@ -643,7 +644,7 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: xlarge
+    resource_class: medium+
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -674,7 +675,7 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: xlarge
+    resource_class: medium+
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -705,7 +706,7 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: xlarge
+    resource_class: medium+
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -751,6 +752,10 @@ jobs:
           name: Cleanup Deploy Table
           command: |
             npm run migration:cleanup -- $ENV
+      - run:
+          name: Populate test users in Cognito
+          command: |
+            REGION="us-east-1" ./scripts/user/setup-glued-users.ts
       - run:
           name: Kick off a deployment
           command: |

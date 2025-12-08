@@ -28,7 +28,6 @@ export const getNotificationsInteractor = async (
   qcIndividualInboxCount: number;
   qcSectionInProgressCount: number;
   qcSectionInboxCount: number;
-  qcUnreadCount: number;
   unreadMessageCount: number;
   userInboxCount: number;
   userSectionCount: number;
@@ -90,19 +89,37 @@ export const getNotificationsInteractor = async (
     },
   );
 
-  const qcIndividualInProgressCount = documentQCIndividualInbox.filter(
-    filters['my']['inProgress'],
-  ).length;
-  const qcIndividualInboxCount = documentQCIndividualInbox.filter(
-    filters['my']['inbox'],
-  ).length;
+  const isTableRecord = (row: any, _index: number, array: any[]) => {
+    const isNotConsolidated = !row.leadDocketNumber;
 
-  const qcSectionInProgressCount = documentQCSectionInbox?.filter(
-    filters['section']['inProgress'],
-  ).length;
-  const qcSectionInboxCount = documentQCSectionInbox?.filter(
-    filters['section']['inbox'],
-  ).length;
+    const isLeadCase = row.leadDocketNumber === row.docketNumber;
+
+    const isFirstOccurence =
+      !!row.leadDocketNumber &&
+      array.filter(r => {
+        return (
+          r.docketEntryId === row.docketEntryId &&
+          r.leadDocketNumber === row.leadDocketNumber &&
+          r !== row
+        );
+      }).length === 0;
+
+    return isNotConsolidated || isLeadCase || isFirstOccurence;
+  };
+
+  const qcIndividualInProgressCount = documentQCIndividualInbox
+    .filter(filters['my']['inProgress'])
+    .filter(isTableRecord).length;
+  const qcIndividualInboxCount = documentQCIndividualInbox
+    .filter(filters['my']['inbox'])
+    .filter(isTableRecord).length;
+
+  const qcSectionInProgressCount = documentQCSectionInbox
+    ?.filter(filters['section']['inProgress'])
+    .filter(isTableRecord).length;
+  const qcSectionInboxCount = documentQCSectionInbox
+    ?.filter(filters['section']['inbox'])
+    .filter(isTableRecord).length;
 
   const unreadMessageCount = userInbox.filter(
     message => !message.isRead,
@@ -121,8 +138,6 @@ export const getNotificationsInteractor = async (
     qcIndividualInboxCount,
     qcSectionInProgressCount: qcSectionInProgressCount || 0,
     qcSectionInboxCount: qcSectionInboxCount || 0,
-    qcUnreadCount: documentQCIndividualInbox.filter(item => !item.isRead)
-      .length,
     unreadMessageCount,
     userInboxCount: userInbox.length,
     userSectionCount: sectionInbox.length,
