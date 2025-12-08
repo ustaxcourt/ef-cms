@@ -989,6 +989,13 @@ export const PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP = [
     allowImmediateAssociation: false,
     filedByPractitioner: true,
   },
+  {
+    documentType: 'Notice of Withdrawal',
+    documentTitle: 'Notice of Withdrawal',
+    eventCode: 'NOTW',
+    allowImmediateAssociation: true,
+    filedByPractitioner: true,
+  },
 ];
 
 export const PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES =
