@@ -14,11 +14,9 @@ import {
 import { getTrialCitiesGroupedByState } from '@shared/business/utilities/trialSession/trialCitiesGroupedByState';
 import { state } from '@web-client/presenter/app-public.cerebral';
 import {
-  createDateAtStartOfWeekEST,
   createISODateAtStartOfDayEST,
   createISODateString,
   dateStringsCompared,
-  FORMATS,
 } from '@shared/business/utilities/DateHandler';
 
 export type PublicTrialSessionsHelperResults = {
@@ -96,25 +94,42 @@ function filterPastTrialSessionRows(
   filteredTrialSessionRows: (TrialSessionRow | TrialSessionWeek)[];
   filteredTrialSessionRowsCount: number;
 } {
-  let inThePast: boolean = false;
   const filteredTrialSessionRows: (TrialSessionRow | TrialSessionWeek)[] = [];
   let filteredTrialSessionRowsCount = 0;
+  const today = createISODateString();
+  const todayAtStartOfDay = createISODateAtStartOfDayEST(today);
+  let currentWeekHeader: TrialSessionWeek | null = null;
+
   for (const r of trialSessionRows) {
     if (isTrialSessionWeek(r)) {
-      const { sessionWeekStartDate } = r;
-      const today = createISODateString();
-      const todayWeekStart = createDateAtStartOfWeekEST(
-        today,
-        FORMATS.YYYYMMDD,
-      );
-      inThePast = dateStringsCompared(todayWeekStart, sessionWeekStartDate) > 0;
-      if (!inThePast) filteredTrialSessionRows.push(r);
+      currentWeekHeader = r;
+      // We'll add the week header only if there are valid sessions under it
       continue;
     }
 
     if (isTrialSessionRow(r)) {
-      if (inThePast) continue;
-      else {
+      // If no end date, always show
+      if (!r.estimatedEndDate) {
+        if (currentWeekHeader) {
+          filteredTrialSessionRows.push(currentWeekHeader);
+          currentWeekHeader = null;
+        }
+        filteredTrialSessionRowsCount++;
+        filteredTrialSessionRows.push(r);
+        continue;
+      }
+
+      // Check if end date has passed
+      const endDateIso = createISODateString(r.estimatedEndDate);
+      const endDateAtStartOfDay = createISODateAtStartOfDayEST(endDateIso);
+      const hasEndDatePassed =
+        dateStringsCompared(endDateAtStartOfDay, todayAtStartOfDay) < 0;
+
+      if (!hasEndDatePassed) {
+        if (currentWeekHeader) {
+          filteredTrialSessionRows.push(currentWeekHeader);
+          currentWeekHeader = null;
+        }
         filteredTrialSessionRowsCount++;
         filteredTrialSessionRows.push(r);
       }
@@ -125,27 +140,18 @@ function filterPastTrialSessionRows(
 }
 
 function dateComparison(tsGroup): boolean {
-  const firstStartDate = tsGroup?.startDate;
+  // If no end date, always show (per acceptance criteria)
+  if (!tsGroup?.estimatedEndDate) return true;
 
-  if (!firstStartDate) return false;
-
+  const endDate = tsGroup.estimatedEndDate;
   const todayIso = createISODateString();
-  const startDateIso = createISODateString(firstStartDate);
+  const endDateIso = createISODateString(endDate);
 
-  const todayWeekStart = createDateAtStartOfWeekEST(todayIso, FORMATS.YYYYMMDD);
-  const startDateWeekStart = createDateAtStartOfWeekEST(
-    startDateIso,
-    FORMATS.YYYYMMDD,
-  );
-
-  if (todayWeekStart === startDateWeekStart) return true;
-
-  const startDateIsoAtStartOfDay = createISODateAtStartOfDayEST(startDateIso);
+  const endDateIsoAtStartOfDay = createISODateAtStartOfDayEST(endDateIso);
   const todayIsoAtStartOfDay = createISODateAtStartOfDayEST(todayIso);
 
-  return (
-    dateStringsCompared(startDateIsoAtStartOfDay, todayIsoAtStartOfDay) > 0
-  );
+  // Show if end date is today or in the future
+  return dateStringsCompared(endDateIsoAtStartOfDay, todayIsoAtStartOfDay) >= 0;
 }
 
 export const publicTrialSessionsHelper = (
