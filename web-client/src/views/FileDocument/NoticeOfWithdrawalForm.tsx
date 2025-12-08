@@ -118,78 +118,81 @@ export const NoticeOfWithdrawalForm = connect(
             </div>
           </FormGroup>
 
-          <FormGroup errorText={validationErrors?.confirmPetitioners}>
-            <legend className="with-hint">
-              Is petitioner&apos;s contact information in the record of the case
-              current?
-              <span className="usa-hint">(Optional)</span>
-            </legend>
-            <div className="tw:flex">
-              {noticeOfWithdrawalHelper.partiesToWithdrawFrom.map(party => (
-                <>
-                  <div
-                    className="tw:w-sm"
-                    key={`edit-contact-${party.contactId}`}
-                  >
-                    <span className="tw:block tw:mb-[5px]">{party.name}</span>
-                    {party.isAddressSealed ? (
-                      <span>ADDRESS SEALED BY COURT ORDER</span>
-                    ) : (
-                      <>
-                        <span className="tw:block">{party.address1}</span>
-                        <span className="tw:block">{party.address2}</span>
-                        <span className="tw:block">{party.address3}</span>
-                        <span className="tw:block">{`${party.city}, ${party.state} ${party.postalCode}`}</span>
-                        {party.countryType === COUNTRY_TYPES.INTERNATIONAL && (
-                          <span className="tw-block">{party.country}</span>
-                        )}
-                        <span className="tw:block">{party.phone}</span>
-                        <input
-                          checked={
-                            form.confirmPetitionersContactInformationMap?.[
-                              party.contactId
-                            ]
-                          }
-                          className="usa-checkbox__input"
-                          id={`confirmPetitionersContactInformationMap-${party.contactId}`}
-                          name={`confirmPetitionersContactInformationMap.${party.contactId}`}
-                          type="checkbox"
-                          onChange={e => {
-                            updateFileDocumentWizardFormValueSequence({
-                              key: `confirmPetitionersContactInformationMap.${party.contactId}`,
-                              value: e.target.checked,
-                            });
-                          }}
-                        />
-                        <label
-                          className="usa-checkbox__label"
-                          htmlFor={`confirmPetitionersContactInformationMap-${party.contactId}`}
-                        >
-                          Yes, this information is current
-                        </label>
-                        <Button
-                          variant="primaryTertiary"
-                          icon="pencil"
-                          aria-label="Edit contact information"
-                          onClick={() =>
-                            openEditContactInformationModalSequence({
-                              key: 'contact',
-                              value: { ...party },
-                            })
-                          }
-                        >
-                          Edit contact information
-                        </Button>
-                        {showModal === 'EditContactInformationModal' && (
-                          <EditContactInformationModal />
-                        )}
-                      </>
-                    )}
-                  </div>
-                </>
-              ))}
-            </div>
-          </FormGroup>
+          {noticeOfWithdrawalHelper.showEditContactInformation && (
+            <FormGroup>
+              <legend className="with-hint">
+                Is petitioner&apos;s contact information in the record of the
+                case current?
+                <span className="usa-hint">(Optional)</span>
+              </legend>
+              <div className="tw:flex">
+                {noticeOfWithdrawalHelper.partiesToWithdrawFrom.map(party => (
+                  <>
+                    <div
+                      className="tw:w-sm"
+                      key={`edit-contact-${party.contactId}`}
+                    >
+                      <span className="tw:block tw:mb-[5px]">{party.name}</span>
+                      {party.isAddressSealed ? (
+                        <span>ADDRESS SEALED BY COURT ORDER</span>
+                      ) : (
+                        <>
+                          <span className="tw:block">{party.address1}</span>
+                          <span className="tw:block">{party.address2}</span>
+                          <span className="tw:block">{party.address3}</span>
+                          <span className="tw:block">{`${party.city}, ${party.state} ${party.postalCode}`}</span>
+                          {party.countryType ===
+                            COUNTRY_TYPES.INTERNATIONAL && (
+                            <span className="tw-block">{party.country}</span>
+                          )}
+                          <span className="tw:block">{party.phone}</span>
+                          <input
+                            checked={
+                              form.confirmPetitionersContactInformationMap?.[
+                                party.contactId
+                              ]
+                            }
+                            className="usa-checkbox__input"
+                            id={`confirmPetitionersContactInformationMap-${party.contactId}`}
+                            name={`confirmPetitionersContactInformationMap.${party.contactId}`}
+                            type="checkbox"
+                            onChange={e => {
+                              updateFileDocumentWizardFormValueSequence({
+                                key: `confirmPetitionersContactInformationMap.${party.contactId}`,
+                                value: e.target.checked,
+                              });
+                            }}
+                          />
+                          <label
+                            className="usa-checkbox__label"
+                            htmlFor={`confirmPetitionersContactInformationMap-${party.contactId}`}
+                          >
+                            Yes, this information is current
+                          </label>
+                          <Button
+                            variant="primaryTertiary"
+                            icon="pencil"
+                            aria-label="Edit contact information"
+                            onClick={() =>
+                              openEditContactInformationModalSequence({
+                                key: 'contact',
+                                value: { ...party },
+                              })
+                            }
+                          >
+                            Edit contact information
+                          </Button>
+                          {showModal === 'EditContactInformationModal' && (
+                            <EditContactInformationModal />
+                          )}
+                        </>
+                      )}
+                    </div>
+                  </>
+                ))}
+              </div>
+            </FormGroup>
+          )}
 
           {noticeOfWithdrawalHelper.partiesWithPaperService.length > 0 && (
             <FormGroup

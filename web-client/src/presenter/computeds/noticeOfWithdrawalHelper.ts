@@ -16,6 +16,9 @@ export const noticeOfWithdrawalHelper = (get: Get) => {
     },
   );
 
+  const showEditContactInformation =
+    partiesToWithdrawFrom.filter(p => p.isAddressSealed === false).length > 0;
+
   const partiesWithPaperService = caseDetail.petitioners.filter(
     p => p.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
   );
@@ -23,5 +26,6 @@ export const noticeOfWithdrawalHelper = (get: Get) => {
   return {
     partiesToWithdrawFrom,
     partiesWithPaperService,
+    showEditContactInformation,
   };
 };
