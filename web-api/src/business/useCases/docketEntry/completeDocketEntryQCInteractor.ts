@@ -1,14 +1,12 @@
 import {
   CONTACT_CHANGE_DOCUMENT_TYPES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
-  DOCUMENT_RELATIONSHIPS,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import { Case } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import {
   FORMATS,
-  dateStringsCompared,
   formatDateString,
 } from '@shared/business/utilities/DateHandler';
 import {
@@ -26,7 +24,6 @@ import { User } from '@shared/business/entities/User';
 import { addServedStampToDocument } from '@web-api/business/useCases/courtIssuedDocument/addServedStampToDocument';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { generateNoticeOfDocketChangePdf } from '@web-api/business/useCaseHelper/noticeOfDocketChange/generateNoticeOfDocketChangePdf';
-import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
 import { getDocumentTitleForNoticeOfChange } from '@shared/business/utilities/getDocumentTitleForNoticeOfChange';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
@@ -37,6 +34,12 @@ import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { WorkItem } from '@shared/business/entities/WorkItem';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import {
+  buildUpdatedDocketEntry,
+  needsNewCoversheet,
+} from '@web-api/business/useCaseHelper/docketEntry/noticeOfDocketChangeHelper';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 const completeDocketEntryQC = async (
   applicationContext: ServerApplicationContext,
@@ -49,8 +52,6 @@ const completeDocketEntryQC = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { docketEntryId, docketNumber, selectedSection } = entryMetadata;
-
   const user = await getUserById({ userId: authorizedUser.userId });
 
   if (!user) {
@@ -59,38 +60,66 @@ const completeDocketEntryQC = async (
     );
   }
 
-  const [caseToUpdate, workItem] = await Promise.all([
-    getCaseByDocketNumber({
-      docketNumber,
-    }),
-    getWorkItemByDocketNumberAndDocketEntryId({
-      docketNumber,
-      docketEntryId,
-    }),
-  ]);
-
-  if (!workItem) {
-    throw new NotFoundError(
-      `Could not find work item associated with ${docketNumber} document ${docketEntryId}`,
-    );
-  }
-
-  let caseEntity = new Case(caseToUpdate, { authorizedUser });
-  const currentDocketEntry = caseEntity.getDocketEntryById({
+  const {
     docketEntryId,
+    docketNumber,
+    selectedSection,
+    multiDocketedOn,
+    multiDocketedOriginalDocketNumber,
+  }: {
+    docketEntryId: string;
+    docketNumber: string;
+    selectedSection: any;
+    multiDocketedOn?: string[];
+    multiDocketedOriginalDocketNumber?: string;
+  } = entryMetadata;
+
+  const docketNumbers = multiDocketedOn?.length
+    ? multiDocketedOn
+    : [docketNumber];
+  const allCases = await getCasesByDocketNumbers({
+    docketNumbers,
   });
 
-  if (!currentDocketEntry) {
-    throw new NotFoundError(
-      `Could not find docket entry with id ${docketEntryId} on case ${docketNumber}`,
-    );
-  }
+  type CaseWithWorkItem = {
+    currentCase: Case;
+    currentWorkItem: WorkItem;
+  };
 
-  const { index: docketRecordIndexUpdated } = currentDocketEntry;
+  const casesWithWorkItems: CaseWithWorkItem[] = await Promise.all(
+    allCases.map(async aCase => {
+      const currentDocketEntry = aCase.docketEntries.find(
+        docketEntry => docketEntry.docketEntryId === docketEntryId,
+      );
 
-  if (workItem.isCompleted()) {
-    throw new InvalidRequest('The work item was already completed');
-  }
+      if (!currentDocketEntry) {
+        throw new NotFoundError(
+          `Could not find docket entry with id ${docketEntryId} on case ${aCase.docketNumber}`,
+        );
+      }
+
+      const workItem = await getWorkItemByDocketNumberAndDocketEntryId({
+        docketNumber: aCase.docketNumber,
+        docketEntryId,
+      });
+
+      if (!workItem) {
+        throw new NotFoundError(
+          `Could not find work item associated with ${aCase.docketNumber} document ${docketEntryId}`,
+        );
+      } else if (workItem.isCompleted()) {
+        throw new InvalidRequest(
+          `The work item was already completed on case ${aCase.docketNumber}`,
+        );
+      }
+
+      const thisCase = new Case(aCase, {
+        authorizedUser,
+      });
+
+      return { currentCase: thisCase, currentWorkItem: workItem };
+    }),
+  );
 
   const editableFields = {
     addToCoversheet: entryMetadata.addToCoversheet,
@@ -122,39 +151,7 @@ const completeDocketEntryQC = async (
     serviceDate: entryMetadata.serviceDate,
   };
 
-  const updatedDocketEntry = new DocketEntry(
-    {
-      ...currentDocketEntry,
-      ...editableFields,
-      documentTitle: editableFields.documentTitle,
-      editState: '{}',
-      relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
-    },
-    { authorizedUser, petitioners: caseToUpdate.petitioners },
-  ).validate();
-
-  const updatedDocumentTitle = getDocumentTitleForNoticeOfChange({
-    applicationContext,
-    docketEntry: updatedDocketEntry,
-  });
-
-  const currentDocumentTitle = getDocumentTitleForNoticeOfChange({
-    applicationContext,
-    docketEntry: currentDocketEntry,
-  });
-
-  const isNewCoverSheetNeeded = needsNewCoversheet({
-    applicationContext,
-    currentDocketEntry,
-    updatedDocketEntry,
-  });
-
-  const needsNoticeOfDocketChange =
-    updatedDocketEntry.filedBy !== currentDocketEntry.filedBy ||
-    updatedDocumentTitle !== currentDocumentTitle;
-
-  const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
-
+  // potentially create helper method/abstract ff below
   const { CLERK_OF_THE_COURT_CONFIGURATION } =
     applicationContext.getConstants();
 
@@ -167,37 +164,6 @@ const completeDocketEntryQC = async (
     title: string;
   };
 
-  const docketChangeInfo = {
-    caseCaptionExtension,
-    caseTitle,
-    docketEntryIndex: docketRecordIndexUpdated,
-    docketNumber: Case.getDocketNumberWithSuffix({
-      docketNumber: caseToUpdate.docketNumber,
-      docketNumberSuffix: caseToUpdate.docketNumberSuffix,
-    }),
-    filingParties: {
-      after: updatedDocketEntry.filedBy,
-      before: currentDocketEntry.filedBy,
-    },
-    filingsAndProceedings: {
-      after: updatedDocumentTitle,
-      before: currentDocumentTitle,
-    },
-    nameOfClerk: name,
-    titleOfClerk: title,
-  };
-
-  caseEntity.updateDocketEntry(updatedDocketEntry);
-
-  caseEntity = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAutomaticBlock({ caseEntity });
-
-  workItem.setAsCompleted({
-    message: 'completed',
-    user,
-  });
-
   const userIsCaseServices = User.isCaseServicesUser({
     section: user.section || '',
   });
@@ -205,169 +171,294 @@ const completeDocketEntryQC = async (
   const sectionToAssignTo =
     userIsCaseServices && selectedSection ? selectedSection : user.section;
 
-  workItem.assignToUser({
-    assigneeId: user.userId,
-    assigneeName: user.name,
-    section: WorkItem.getWorkItemSectionFromUserSection({
-      section: sectionToAssignTo,
-      documentTitle: updatedDocketEntry.documentTitle,
-    }),
-    sentBy: user.name,
-    sentBySection: user.section,
-    sentByUserId: user.userId,
+  let paperServicePdfUrl: string | undefined;
+  let paperServiceDocumentTitle: string | undefined;
+  let originalFilingCaseNoticeDocumentTitle: string | undefined;
+  let isNewCoverSheetNeeded = false;
+
+  const paperServiceParties = new Set();
+  const caseSpecificNotices: Array<{
+    caseEntity: Case;
+    docketEntryId: string;
+  }> = [];
+  const updatePersistencePromises: Promise<any>[] = [];
+
+  const cannotUseOriginalFilingCase = !canUseOriginalFilingCase({
+    multiDocketedOn,
+    multiDocketedOriginalDocketNumber,
   });
 
-  await upsertWorkItems({
-    workItems: [workItem.validate().toRawObject()],
-  });
+  for (const caseWithWorkItem of casesWithWorkItems) {
+    const { currentCase, currentWorkItem } = caseWithWorkItem;
 
-  const servedParties = aggregatePartiesForService(caseEntity);
-  let paperServicePdfUrl;
-  let paperServiceDocumentTitle;
+    const currentDocketEntry = currentCase.getDocketEntryById({
+      docketEntryId,
+    })!;
 
-  // TODO: investigate:
-  // - should this really be an if/ELSE if? Are the flows mutually exclusive?
-  // - should CONTACT_CHANGE_DOCUMENT_TYPES be filed across the group (or be given the option to fie across a group?)
-  if (
-    CONTACT_CHANGE_DOCUMENT_TYPES.includes(updatedDocketEntry.documentType!)
-  ) {
-    if (servedParties.paper.length > 0) {
+    const updatedDocketEntry = buildUpdatedDocketEntry({
+      authorizedUser,
+      docketEntry: currentDocketEntry,
+      editableFields,
+      petitioners: currentCase.petitioners,
+    });
+
+    // extract to helper function?
+    if (
+      currentDocketEntry.multiDocketedOriginalDocketNumber ===
+        currentDocketEntry.docketNumber ||
+      cannotUseOriginalFilingCase
+    ) {
+      console.log('hit original filing case check***');
+      isNewCoverSheetNeeded = needsNewCoversheet({
+        currentDocketEntry,
+        updatedDocketEntry,
+      });
+      console.log('isNewCoverSheetNeeded', isNewCoverSheetNeeded);
+    }
+
+    const updatedDocumentTitle = getDocumentTitleForNoticeOfChange({
+      applicationContext,
+      docketEntry: updatedDocketEntry,
+    });
+
+    const currentDocumentTitle = getDocumentTitleForNoticeOfChange({
+      applicationContext,
+      docketEntry: currentDocketEntry,
+    });
+
+    const needsNoticeOfDocketChange =
+      currentDocketEntry.filedBy !== updatedDocketEntry.filedBy ||
+      updatedDocumentTitle !== currentDocumentTitle;
+
+    const { index: docketEntryIndex } = currentDocketEntry;
+
+    const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(currentCase);
+
+    const docketChangeInfo = {
+      caseCaptionExtension,
+      caseTitle,
+      docketEntryIndex,
+      docketNumber: Case.getDocketNumberWithSuffix({
+        docketNumber: currentCase.docketNumber,
+        docketNumberSuffix: currentCase.docketNumberSuffix,
+      }),
+      filingParties: {
+        after: updatedDocketEntry.filedBy,
+        before: currentDocketEntry.filedBy,
+      },
+      filingsAndProceedings: {
+        after: updatedDocumentTitle,
+        before: currentDocumentTitle,
+      },
+      nameOfClerk: name,
+      titleOfClerk: title,
+    };
+
+    currentCase.updateDocketEntry(updatedDocketEntry);
+
+    await applicationContext
+      .getUseCaseHelpers()
+      .updateCaseAutomaticBlock({ caseEntity: currentCase });
+
+    currentWorkItem.setAsCompleted({
+      message: 'completed',
+      user,
+    });
+
+    currentWorkItem.assignToUser({
+      assigneeId: user.userId,
+      assigneeName: user.name,
+      section: WorkItem.getWorkItemSectionFromUserSection({
+        section: sectionToAssignTo,
+        documentTitle: updatedDocketEntry.documentTitle,
+      }),
+      sentBy: user.name,
+      sentBySection: user.section,
+      sentByUserId: user.userId,
+    });
+
+    updatePersistencePromises.push(
+      upsertWorkItems({
+        workItems: [currentWorkItem.validate().toRawObject()],
+      }),
+    );
+
+    const servedParties = aggregatePartiesForService(currentCase);
+
+    servedParties.paper?.forEach(sp => {
+      paperServiceParties.add(sp);
+    });
+
+    if (
+      CONTACT_CHANGE_DOCUMENT_TYPES.includes(updatedDocketEntry.documentType!)
+    ) {
+      if (servedParties.paper.length > 0) {
+        const pdfData = await applicationContext
+          .getPersistenceGateway()
+          .getDocument({
+            applicationContext,
+            key: currentDocketEntry.documentStorageId,
+          });
+
+        const noticeDoc = await PDFDocument.load(pdfData);
+
+        const newPdfDoc = await PDFDocument.create();
+
+        await applicationContext
+          .getUseCaseHelpers()
+          .appendPaperServiceAddressPageToPdf({
+            applicationContext,
+            caseEntity: currentCase,
+            newPdfDoc,
+            noticeDoc,
+            servedParties,
+          });
+
+        const paperServicePdfData = await newPdfDoc.save();
+
+        const paperServicePdfId = applicationContext.getUniqueId();
+
+        await applicationContext
+          .getPersistenceGateway()
+          .saveDocumentFromLambda({
+            document: paperServicePdfData,
+            key: paperServicePdfId,
+            useTempBucket: true,
+          });
+
+        const { url } = await applicationContext
+          .getPersistenceGateway()
+          .getDownloadPolicyUrl({
+            applicationContext,
+            key: paperServicePdfId,
+            useTempBucket: true,
+          });
+
+        paperServicePdfUrl = url;
+        paperServiceDocumentTitle = updatedDocketEntry.documentTitle;
+      }
+    } else if (needsNoticeOfDocketChange) {
+      const noticeDocumentStorageId = await generateNoticeOfDocketChangePdf({
+        applicationContext,
+        authorizedUser,
+        // @ts-ignore
+        docketChangeInfo,
+      });
+
+      const noticeUpdatedDocketEntry = new DocketEntry(
+        {
+          ...SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange,
+          docketEntryId: noticeDocumentStorageId,
+          documentStorageId: noticeDocumentStorageId,
+          documentTitle: replaceBracketed(
+            SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange.documentTitle,
+            // @ts-ignore
+            docketChangeInfo.docketEntryIndex,
+          ),
+          isFileAttached: true,
+          isOnDocketRecord: true,
+          processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+        },
+        { authorizedUser, petitioners: currentCase.petitioners },
+      );
+
+      noticeUpdatedDocketEntry.setFiledBy(user);
+
+      noticeUpdatedDocketEntry.numberOfPages = await applicationContext
+        .getUseCaseHelpers()
+        .countPagesInDocument({
+          applicationContext,
+          documentStorageId: noticeUpdatedDocketEntry.documentStorageId,
+        });
+
+      noticeUpdatedDocketEntry.setAsServed(servedParties.all);
+
+      currentCase.addDocketEntry(noticeUpdatedDocketEntry);
+
+      const serviceStampDate = formatDateString(
+        noticeUpdatedDocketEntry.servedAt!,
+        FORMATS.MMDDYY,
+      );
+
       const pdfData = await applicationContext
         .getPersistenceGateway()
         .getDocument({
           applicationContext,
-          key: updatedDocketEntry.docketEntryId,
+          key: noticeUpdatedDocketEntry.documentStorageId,
         });
 
-      const noticeDoc = await PDFDocument.load(pdfData);
-
-      const newPdfDoc = await PDFDocument.create();
-
-      await applicationContext
-        .getUseCaseHelpers()
-        .appendPaperServiceAddressPageToPdf({
-          applicationContext,
-          caseEntity,
-          newPdfDoc,
-          noticeDoc,
-          servedParties,
-        });
-
-      const paperServicePdfData = await newPdfDoc.save();
-
-      const paperServicePdfId = applicationContext.getUniqueId();
-
-      await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-        document: paperServicePdfData,
-        key: paperServicePdfId,
-        useTempBucket: true,
+      const newPdfData = await addServedStampToDocument({
+        applicationContext,
+        pdfData,
+        serviceStampText: `Served ${serviceStampDate}`,
       });
 
-      const { url } = await applicationContext
-        .getPersistenceGateway()
-        .getDownloadPolicyUrl({
-          applicationContext,
-          key: paperServicePdfId,
-          useTempBucket: true,
-        });
+      await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+        document: newPdfData,
+        key: noticeUpdatedDocketEntry.documentStorageId,
+      });
 
-      paperServicePdfUrl = url;
-      paperServiceDocumentTitle = updatedDocketEntry.documentTitle;
-    }
-  } else if (needsNoticeOfDocketChange) {
-    const noticeDocketEntryId = await generateNoticeOfDocketChangePdf({
-      applicationContext,
-      authorizedUser,
-      // @ts-ignore
-      docketChangeInfo,
-    });
-
-    const noticeUpdatedDocketEntry = new DocketEntry(
-      {
-        ...SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange,
-        docketEntryId: noticeDocketEntryId,
-        documentTitle: replaceBracketed(
-          SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange.documentTitle,
-          // @ts-ignore
-          docketChangeInfo.docketEntryIndex,
-        ),
-        isFileAttached: true,
-        isOnDocketRecord: true,
-        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-      },
-      { authorizedUser, petitioners: caseToUpdate.petitioners },
-    );
-
-    noticeUpdatedDocketEntry.setFiledBy(user);
-
-    noticeUpdatedDocketEntry.numberOfPages = await applicationContext
-      .getUseCaseHelpers()
-      .countPagesInDocument({
-        applicationContext,
+      caseSpecificNotices.push({
+        caseEntity: currentCase,
         docketEntryId: noticeUpdatedDocketEntry.docketEntryId,
       });
 
-    noticeUpdatedDocketEntry.setAsServed(servedParties.all);
+      // this is bad, I do not like it Sam I Am
+      if (
+        currentDocketEntry.multiDocketedOriginalDocketNumber ===
+          currentDocketEntry.docketNumber ||
+        cannotUseOriginalFilingCase
+      ) {
+        originalFilingCaseNoticeDocumentTitle =
+          noticeUpdatedDocketEntry.documentTitle;
+      }
+    }
 
-    caseEntity.addDocketEntry(noticeUpdatedDocketEntry);
-
-    const serviceStampDate = formatDateString(
-      noticeUpdatedDocketEntry.servedAt!,
-      FORMATS.MMDDYY,
+    updatePersistencePromises.push(
+      updateCaseAndAssociations({
+        authorizedUser,
+        caseToUpdate: currentCase,
+      }),
     );
+  }
 
-    const pdfData = await applicationContext
-      .getPersistenceGateway()
-      .getDocument({
-        applicationContext,
-        key: noticeUpdatedDocketEntry.docketEntryId,
-      });
-
-    const newPdfData = await addServedStampToDocument({
-      applicationContext,
-      pdfData,
-      serviceStampText: `Served ${serviceStampDate}`,
-    });
-
-    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-      document: newPdfData,
-      key: noticeUpdatedDocketEntry.docketEntryId,
-    });
-
+  if (caseSpecificNotices.length > 0) {
     const paperServiceResult = await applicationContext
       .getUseCaseHelpers()
       .serveDocumentAndGetPaperServicePdf({
         applicationContext,
-        caseEntities: [caseEntity],
-        docketEntryId: noticeUpdatedDocketEntry.docketEntryId,
+        caseEntities: caseSpecificNotices.map(n => n.caseEntity),
+        docketEntryId: caseSpecificNotices[0].docketEntryId,
+        caseSpecificDocketEntries: caseSpecificNotices,
       });
 
-    if (servedParties.paper.length > 0) {
+    if (Array.from(paperServiceParties).length > 0) {
       paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
-      paperServiceDocumentTitle = noticeUpdatedDocketEntry.documentTitle;
+      paperServiceDocumentTitle = originalFilingCaseNoticeDocumentTitle;
     }
   }
-
-  await updateCaseAndAssociations({
-    authorizedUser,
-    caseToUpdate: caseEntity,
-  });
 
   if (isNewCoverSheetNeeded) {
     await applicationContext.getUseCases().addCoversheetInteractor(
       applicationContext,
       {
         docketEntryId,
-        docketNumber: caseEntity.docketNumber,
+        docketNumber,
       },
       authorizedUser,
     );
   }
 
+  await settlePromises(updatePersistencePromises);
+
+  const { currentCase: filingCase } = casesWithWorkItems.find(co => {
+    return co.currentCase.docketNumber === docketNumber;
+  })!;
+
   return {
-    caseDetail: caseEntity.toRawObject(),
+    caseDetail: filingCase.toRawObject(),
     paperServiceDocumentTitle,
-    paperServiceParties: servedParties.paper,
+    paperServiceParties: Array.from(paperServiceParties),
     paperServicePdfUrl,
   };
 };
@@ -380,28 +471,18 @@ export const completeDocketEntryQCInteractor = withLocking(
   new InvalidRequest('The document is currently being updated'),
 );
 
-export const needsNewCoversheet = ({
-  applicationContext,
-  currentDocketEntry,
-  updatedDocketEntry,
+const canUseOriginalFilingCase = ({
+  multiDocketedOn,
+  multiDocketedOriginalDocketNumber,
+}: {
+  multiDocketedOn: string[] | undefined;
+  multiDocketedOriginalDocketNumber: string | undefined;
 }) => {
-  const receivedAtUpdated =
-    dateStringsCompared(
-      currentDocketEntry.receivedAt,
-      updatedDocketEntry.receivedAt,
-    ) !== 0;
-  const certificateOfServiceUpdated =
-    currentDocketEntry.certificateOfService !==
-    updatedDocketEntry.certificateOfService;
-  const documentTitleUpdated =
-    applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo({
-      docketEntry: currentDocketEntry,
-    }) !==
-    applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo({
-      docketEntry: updatedDocketEntry,
-    });
-
-  return (
-    receivedAtUpdated || certificateOfServiceUpdated || documentTitleUpdated
-  );
+  let canUseOriginalFilingCase = true;
+  if (!multiDocketedOriginalDocketNumber || !multiDocketedOn) {
+    canUseOriginalFilingCase = false;
+  } else if (!multiDocketedOn.includes(multiDocketedOriginalDocketNumber)) {
+    canUseOriginalFilingCase = false;
+  }
+  return canUseOriginalFilingCase;
 };
