@@ -24,7 +24,7 @@ export const ContactSecondary: React.FC<ContactSecondaryProps> = connect(
   {
     bind: props.bind,
     constants: state.constants,
-    contactsHelper: state[props`contactsHelper`],
+    contactsHelper: props`contactsHelper`,
     data: state[props`bind`],
     onBlur: props`onBlur`,
     onChange: props`onChange`,
