@@ -214,12 +214,10 @@ const completeDocketEntryQC = async (
         currentDocketEntry.docketNumber ||
       cannotUseOriginalFilingCase
     ) {
-      console.log('hit original filing case check***');
       isNewCoverSheetNeeded = needsNewCoversheet({
         currentDocketEntry,
         updatedDocketEntry,
       });
-      console.log('isNewCoverSheetNeeded', isNewCoverSheetNeeded);
     }
 
     const updatedDocumentTitle = getDocumentTitleForNoticeOfChange({

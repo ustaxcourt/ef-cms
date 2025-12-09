@@ -25,8 +25,6 @@ export const addCoversheetInteractor = async (
   },
   authorizedUser: UnknownAuthUser,
 ) => {
-  // TODO 8477: - look into the relationship between below caseRecord/Entity and content of coversheet. Confirm assumption that using the case record of the non-original-filing case (shorthand leadCase) will create inaccurate coversheets
-  // - if above is true, use docketEntryId and docketNumber above to query for docketEntry, use that docketEntry's multiDocketedOriginalDocketNumber to query for caseRecord/Entity (to be used in coversheet generation below)
   if (!caseEntity) {
     const caseRecord = await getCaseByDocketNumber({
       docketNumber,
@@ -66,25 +64,10 @@ export const addCoversheetInteractor = async (
     useInitialData,
   });
 
-  // let pageCount: number;
-
-  // if (isMemberCase(caseEntity)) {
-  //   if (replaceCoversheet) {
-  //     throw new Error(
-  //       'Coversheet replacement for multidocketed filings must be performed on the lead case',
-  //     );
-  //   }
-
-  //   const { PDFDocument } = await applicationContext.getPdfLib();
-  //   const existingPdfDoc = await PDFDocument.load(pdfData);
-  //   pageCount = existingPdfDoc.getPageCount();
-  // } else {
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     document: newPdfData,
     key: docketEntryEntity.documentStorageId,
   });
-  // pageCount = numberOfPages;
-  // }
 
   const updatedDocketEntries = await updateDocketEntriesWithPageCount({
     authorizedUser,
@@ -92,7 +75,6 @@ export const addCoversheetInteractor = async (
     consolidatedCases,
     docketEntryId,
     docketNumber,
-    // pageCount,
     pageCount: numberOfPages,
   });
 
