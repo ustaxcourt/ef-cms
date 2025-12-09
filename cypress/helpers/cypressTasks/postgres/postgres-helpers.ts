@@ -6,6 +6,7 @@ import { getCypressPostgresDb } from './getCypressPostgresDb';
 import {
   formatNow,
   calculateISODate,
+  getJsDateFromIso,
 } from '../../../../shared/src/business/utilities/DateHandler';
 import { sql } from 'kysely';
 
@@ -118,32 +119,24 @@ export async function getPractionerWithMostCasesEmail(): Promise<string> {
   const cognitoEmails = await getAllUserEmailsInCognito();
 
   // get id of cognito user with most cases
-  const uc = dbConnection
-    .selectFrom('dwUserOnCase')
-    .select(['userId', dbConnection.fn.countAll().as('cnt')])
-    .where('actingAsRole', 'in', ['irsPractitioner', 'privatePractitioner'])
-    .where('serviceIndicator', '=', 'Electronic')
-    .groupBy('userId')
-    .as('uc');
-  const u = dbConnection
+
+  const result = await dbConnection
     .selectFrom('dwUser as u')
-    .select(['userId'])
+    .innerJoin('dwUserOnCase as uc', 'uc.userId', 'u.userId')
+    .select(({ fn }) => [
+      'u.email',
+      fn.count<number>('uc.docketNumber').as('caseCount'),
+    ])
+    .where('uc.actingAsRole', 'in', ['irsPractitioner', 'privatePractitioner'])
+    .where('uc.serviceIndicator', '=', 'Electronic')
     .where('u.accountStatus', '=', 'active')
-    .where('email', 'in', cognitoEmails)
-    .as('u');
-  const user = await dbConnection
-    .selectFrom(uc)
-    .innerJoin(u, 'uc.userId', 'u.userId')
-    .selectAll('uc')
-    .selectAll('u')
-    // .where('uc.cnt', '<=', 500)
-    .orderBy('uc.cnt', 'desc')
+    .where('u.email', 'in', cognitoEmails)
+    .groupBy('u.userId')
+    // .having(eb => eb.fn.count('uc.docketNumber'), '<=', 1000)
+    .orderBy('caseCount', 'desc')
     .limit(1)
     .executeTakeFirst();
-
-  const id = user?.userId || '';
-  const email = getPractitionerEmailById({ userId: id });
-  return email;
+  return result?.email || '';
 }
 
 export async function getOpenAndRecentCasesByEmail(
@@ -182,4 +175,31 @@ export async function getOpenAndRecentCasesByEmail(
   return openAndRecentCases.filter(
     (docketNumber): docketNumber is string => docketNumber !== null,
   );
+}
+
+export async function getRecentEventsByCode(
+  eventCode: string,
+  cases: string[],
+  dateStart: string,
+): Promise<{ [docketNumber: string]: string }> {
+  const dbConnection = await getCypressPostgresDb();
+
+  const recentEvents = await dbConnection
+    .selectFrom('dwDocketEntry')
+    .where('docketNumber', 'in', cases)
+    .where('eventCode', '=', eventCode)
+    .where('createdAt', '>=', getJsDateFromIso(dateStart))
+    .select(['eventCode', 'docketNumber'])
+    .execute()
+    .then(results => {
+      const casesObject: { [docketNumber: string]: string } = {};
+      for (const result of results) {
+        const { eventCode, docketNumber } = result;
+        casesObject[docketNumber] = eventCode;
+      }
+
+      return casesObject;
+    });
+
+  return recentEvents;
 }
