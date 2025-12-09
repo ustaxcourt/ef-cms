@@ -25,6 +25,7 @@ import {
   getNewAccountVerificationCode,
   getOpenAndRecentCasesByEmail,
   getPractionerWithMostCasesEmail,
+  getRecentEventsByCode,
 } from './cypress/helpers/cypressTasks/postgres/postgres-helpers';
 import { unzipFile } from './cypress/helpers/file/unzip-file';
 import { waitForNoce } from './cypress/helpers/cypressTasks/wait-for-noce';
@@ -128,6 +129,17 @@ export default defineConfig({
         },
         getOpenAndRecentCasesByEmail(email: string) {
           return getOpenAndRecentCasesByEmail(email);
+        },
+        getRecentEventsByCode({
+          eventCode,
+          cases,
+          dateStart,
+        }: {
+          eventCode: string;
+          cases: string[];
+          dateStart: string;
+        }) {
+          return getRecentEventsByCode(eventCode, cases, dateStart);
         },
       });
     },
