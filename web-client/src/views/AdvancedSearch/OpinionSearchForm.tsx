@@ -15,7 +15,7 @@ import classNames from 'classnames';
 import { DateRangePickerComponent } from '@web-client/ustc-ui/DateInput/DateRangePickerComponent';
 
 type OpinionSearchFormProps = {
-  submitAdvancedSearchSequence: Function | typeof sequencesPublic.submitPublicOrderAdvancedSearchSequence;
+submitAdvancedSearchSequence: Function | typeof sequencesPublic.submitPublicOpinionAdvancedSearchSequence;
 }
 
 export const OpinionSearchForm: React.FC<OpinionSearchFormProps> = connect(
@@ -32,7 +32,6 @@ export const OpinionSearchForm: React.FC<OpinionSearchFormProps> = connect(
       sequences.updateAdvancedOpinionSearchFormValueSequence,
     validateOpinionSearchSequence: sequences.validateOpinionSearchSequence,
     validationErrors: state.validationErrors,
-    submitAdvancedSearchSequence: sequences.submitCaseAdvancedSearchSequence,
   },
   function OpinionSearchForm({
     ADVANCED_SEARCH_OPINION_TYPES_LIST,

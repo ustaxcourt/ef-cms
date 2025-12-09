@@ -30,7 +30,6 @@ export const OrderSearchForm: React.FC<OrderSearchFormProps> = connect(
       sequences.updateAdvancedOrderSearchFormValueSequence,
     validateOrderSearchSequence: sequences.validateOrderSearchSequence,
     validationErrors: state.validationErrors,
-    submitAdvancedSearchSequence: sequences.submitCaseAdvancedSearchSequence
   },
   function OrderSearchForm({
     advancedDocumentSearchHelper,
