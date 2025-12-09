@@ -1,5 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { generateEntryOfAppearancePdfAction } from '@web-client/presenter/actions/CaseAssociationRequest/generateEntryOfAppearancePdfAction';
+import { autoGenerateFilingPdfAction } from '@web-client/presenter/actions/FileDocument/autoGenerateFilingPdfAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { generateTitleForSupportingDocumentsAction } from '../actions/FileDocument/generateTitleForSupportingDocumentsAction';
 import { navigateToReviewFileADocumentAction } from '../actions/FileDocument/navigateToReviewFileADocumentAction';
@@ -27,7 +27,7 @@ export const reviewExternalDocumentInformationSequence =
         setValidationAlertErrorsAction,
       ],
       success: [
-        generateEntryOfAppearancePdfAction,
+        autoGenerateFilingPdfAction,
         setPdfPreviewUrlAction,
         setSupportingDocumentScenarioAction,
         generateTitleAction,

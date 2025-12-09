@@ -35,11 +35,20 @@ export const setDefaultGenerationTypeAction = ({
 export function showGenerationType(
   user: { role: string },
   eventCode: string,
-  petitioners: { serviceIndicator?: string }[],
+  petitioners?: { serviceIndicator?: string }[],
 ): boolean {
-  if (eventCode !== 'EA') return false;
-  const somePartiesHavePaper = petitioners.some(
-    party => party.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
-  );
-  return user.role === ROLES.privatePractitioner || !somePartiesHavePaper;
+  if (eventCode !== 'EA' && eventCode !== 'NOTW') return false;
+
+  if (eventCode === 'EA') {
+    const somePartiesHavePaper = petitioners?.some(
+      party => party.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
+    );
+    return user.role === ROLES.privatePractitioner || !somePartiesHavePaper;
+  } else if (eventCode === 'NOTW') {
+    return (
+      user.role === ROLES.privatePractitioner ||
+      user.role === ROLES.irsPractitioner
+    );
+  }
+  return false;
 }

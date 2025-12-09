@@ -212,6 +212,7 @@ import { deactivateUserLambda } from '@web-api/lambdas/automations/deactivateUse
 import { removeUserPendingEmailLambda } from '@web-api/lambdas/automations/removeUserPendingEmailLambda';
 import { saveMinuteSheetToDraftsLambda } from './lambdas/trialSessionMinutes/saveMinuteSheetToDraftsLambda';
 import { getIsFiledAcrossAllCasesLambda } from './lambdas/documents/getIsFiledAcrossAllCasesLambda';
+import { generateNoticeOfWithdrawalPdfLambda } from './lambdas/cases/generateNoticeOfWithdrawalPdfLambda';
 
 export const app = express();
 
@@ -674,6 +675,10 @@ app.use(expressLogger);
   app.post(
     '/cases/:docketNumber/generate-entry-of-appearance',
     lambdaWrapper(generateEntryOfAppearancePdfLambda),
+  );
+  app.post(
+    '/cases/:docketNumber/generate-notice-of-withdrawal',
+    lambdaWrapper(generateNoticeOfWithdrawalPdfLambda),
   );
   app.post(
     '/cases/generate-petition',
