@@ -22,7 +22,7 @@ EOF
 resource "aws_iam_role_policy" "zendesk_automations_policy" {
   count = var.zendesk_aws_account_id != "" ? 1 : 0
   name = "zendesk-automations-lambda-role-policy"
-  role = aws_iam_role.cognizendesk_automations_role[0].id
+  role = aws_iam_role.zendesk_automations_role[0].id
 
   policy = jsonencode({
     Version = "2012-10-17",
