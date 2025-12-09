@@ -78,7 +78,6 @@ A prerequisite for a successful build within CircleCI is [access to CircleCI’s
   | `SLACK_WEBHOOK_URL` | Optional URL to send POST requests to notify a Slack App |
   | `BOUNCE_ALERT_RECIPIENTS` | Optional comma separated list of Email addresses to be notified when email bounces to the `IRS_SUPERUSER_EMAIL` |
 
-
   > **Note:**\
   `*` - These environment variables are now stored in AWS Secrets Manager and retrieved as part of the deployment 
 
