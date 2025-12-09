@@ -5,9 +5,9 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 type ArchiveDraftDocumentModalProps = {
-  message: string;
-  showDocumentTitle: boolean;
-  title: string;
+  message?: string;
+  showDocumentTitle?: boolean;
+  title?: string;
 }
 
 export const ArchiveDraftDocumentModal: React.FC<ArchiveDraftDocumentModalProps> = connect(

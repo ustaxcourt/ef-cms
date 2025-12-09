@@ -17,6 +17,7 @@ type BindedTextareaProps = {
   className?: string;
   name?: string;
   required?: boolean;
+  maxLength?: number;
 };
 
 export const BindedTextarea: React.FC<BindedTextareaProps> = connect(

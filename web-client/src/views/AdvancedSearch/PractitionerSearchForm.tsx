@@ -8,8 +8,8 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React, { useState } from 'react';
 
 type PractitionerSearchFormProps = {
-  submitPractitionerBarNumberSearchSequence: Function;
-  submitPractitionerNameSearchSequence: Function
+  submitPractitionerBarNumberSearchSequence?: Function;
+  submitPractitionerNameSearchSequence?: Function
 }
 
 export const PractitionerSearchForm: React.FC<PractitionerSearchFormProps> = connect(

@@ -34,11 +34,10 @@ export const AddTrialSession = connect(
         <BigHeader text="Create Trial Session" />
 
         <section className="usa-section grid-container DocumentDetail">
-          <div
+          <form
             noValidate
             aria-labelledby="start-case-header"
             className="usa-form maxw-none"
-            role="form"
           >
             {showModal === 'FormCancelModalDialog' && (
               <FormCancelModalDialog
@@ -100,7 +99,7 @@ export const AddTrialSession = connect(
                 Cancel
               </Button>
             </div>
-          </div>
+          </form>
         </section>
       </>
     );

@@ -13,12 +13,13 @@ type BindedSelectProps = {
   children: React.ReactNode;
   bind?: string,
   className?: string;
-  onChange?: (value: any) => void;
+  onChange?: ((value: any) => void) | Function;
   id?: string;
   name?: string;
   style?: any;
   placeholder?: string;
   value?: any;
+  disabled?: boolean
 };
 
 export const BindedSelect: React.FC<BindedSelectProps> = connect(
@@ -33,7 +34,7 @@ export const BindedSelect: React.FC<BindedSelectProps> = connect(
     value: unknown;
     children?: React.ReactNode;
     className?: string;
-    onChange?: (value: string) => void;
+    onChange?: ((value: string) => void) | Function;
     [key: string]: unknown;
   }) {
     const { bind, children, className, onChange, simpleSetter, value } =

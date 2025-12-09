@@ -5,21 +5,13 @@ import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { InternationalAddress } from './InternationalAddress';
 import { PaperPetitionEmail } from '../StartCaseInternal/PaperPetitionEmail';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props as cerebralProps } from 'cerebral';
+import { props } from 'cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import { RunableSequence as RunnableSequence } from 'cerebral';
 
-const props = cerebralProps as unknown as {
-  bind: string;
-  contactsHelper: string;
-  onBlur: () => void;
-  onChange: string;
-  parentView: string;
-};
-
 type ContactSecondaryProps = {
-  contactsHelper: string;
+  contactsHelper: Record<string, any>;
   bind: string;
   onBlur: Function;
   onChange: string;
@@ -71,7 +63,7 @@ export const ContactSecondary: React.FC<ContactSecondaryProps> = connect(
     updateFormValueAndSecondaryContactInfoSequence: Function | RunnableSequence;
     useSameAsPrimary: boolean;
     validationErrors: Record<string, any>;
-    wrapperClassName: string;
+    wrapperClassName?: string;
   }) {
     return (
       <>

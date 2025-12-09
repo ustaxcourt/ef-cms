@@ -6,7 +6,7 @@ import React from 'react';
 type JudgeSelectProps = {
   formValue: string;
   judges: any;
-}
+};
 
 export const JudgeSelect: React.FC<JudgeSelectProps> = connect(
   {

@@ -112,6 +112,9 @@ export const NonMobileHeaderControls = ({
   filterOptions,
 }: {
   filterOptions: Record<string, string>;
+  docketNumber?: any;
+  sessionMetadata?: any;
+  updateSessionMetadataSequence?: (props: { key: string; value: string }) => void;
 }) => {
   return (
     <>
