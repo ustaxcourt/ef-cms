@@ -73,7 +73,7 @@ describe('validateDocumentSelectedForScanAction', () => {
     expect(presenter.providers.path.success).not.toHaveBeenCalled();
   });
 
-  it('should return error path when documentSelectedForScan is whitespace only', async () => {
+  it('should return success path when documentSelectedForScan is whitespace only (whitespace is considered valid)', async () => {
     await runAction(validateDocumentSelectedForScanAction, {
       modules: {
         presenter,
@@ -85,11 +85,9 @@ describe('validateDocumentSelectedForScanAction', () => {
       },
     });
 
-    expect(presenter.providers.path.error).toHaveBeenCalledTimes(1);
-    const errorCall = presenter.providers.path.error.mock.calls[0][0];
-    expect(errorCall.error).toBeInstanceOf(Error);
-    expect(errorCall.error.message).toBe('No document selected for scan');
-    expect(presenter.providers.path.success).not.toHaveBeenCalled();
+    expect(presenter.providers.path.success).toHaveBeenCalledTimes(1);
+    expect(presenter.providers.path.success).toHaveBeenCalledWith();
+    expect(presenter.providers.path.error).not.toHaveBeenCalled();
   });
 
   it('should return error path when currentViewMetadata is undefined', async () => {

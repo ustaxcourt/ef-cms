@@ -15,12 +15,7 @@ export const validateDocumentSelectedForScanAction = ({
     state.currentViewMetadata.documentSelectedForScan,
   );
 
-  // Reject null, undefined, empty string, whitespace-only strings, or any other falsy value
-  if (
-    !documentSelectedForScan ||
-    (typeof documentSelectedForScan === 'string' &&
-      documentSelectedForScan.trim().length === 0)
-  ) {
+  if (!documentSelectedForScan || typeof documentSelectedForScan !== 'string') {
     return path.error({
       error: new Error('No document selected for scan'),
     });

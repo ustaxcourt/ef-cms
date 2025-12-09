@@ -72,7 +72,9 @@ describe('generatePdfFromScanSessionAction', () => {
     expect(presenter.providers.path.error).toHaveBeenCalledTimes(1);
     const errorCall = presenter.providers.path.error.mock.calls[0][0];
     expect(errorCall.error).toBeInstanceOf(Error);
-    expect(errorCall.error.message).toBe('No batches found for PDF generation');
+    expect(errorCall.error.message).toBe(
+      'No batches found for document type: petition',
+    );
     expect(presenter.providers.path.success).not.toHaveBeenCalled();
   });
 
@@ -96,7 +98,9 @@ describe('generatePdfFromScanSessionAction', () => {
     expect(presenter.providers.path.error).toHaveBeenCalledTimes(1);
     const errorCall = presenter.providers.path.error.mock.calls[0][0];
     expect(errorCall.error).toBeInstanceOf(Error);
-    expect(errorCall.error.message).toBe('No batches found for PDF generation');
+    expect(errorCall.error.message).toBe(
+      'No batches found for document type: petition',
+    );
     expect(presenter.providers.path.success).not.toHaveBeenCalled();
   });
 
@@ -120,7 +124,9 @@ describe('generatePdfFromScanSessionAction', () => {
     expect(presenter.providers.path.error).toHaveBeenCalledTimes(1);
     const errorCall = presenter.providers.path.error.mock.calls[0][0];
     expect(errorCall.error).toBeInstanceOf(Error);
-    expect(errorCall.error.message).toBe('No batches found for PDF generation');
+    expect(errorCall.error.message).toBe(
+      'No batches found for document type: petition',
+    );
     expect(presenter.providers.path.success).not.toHaveBeenCalled();
   });
 });

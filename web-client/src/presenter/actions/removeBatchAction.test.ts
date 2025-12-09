@@ -11,6 +11,7 @@ describe('removeBatchAction', () => {
         },
         scanner: {
           batchIndexToDelete: 5,
+          selectedBatchIndex: 5,
           batches: {
             petition: [
               {
@@ -37,6 +38,7 @@ describe('removeBatchAction', () => {
         },
         scanner: {
           batchIndexToDelete: 4,
+          selectedBatchIndex: 4,
           batches: {
             petition: [
               {
