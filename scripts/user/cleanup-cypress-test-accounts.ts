@@ -37,7 +37,7 @@
 import { CognitoIdentityProvider, ListUsersCommandOutput, UserType } from '@aws-sdk/client-cognito-identity-provider';
 import pLimit from 'p-limit';
 import { Kysely } from 'kysely';
-import { getConnection } from 'web-client/integration-tests/helpers';
+import { getDb } from '@web-api/persistence/postgres/databaseConnection';
 import { getUserPoolId, requireEnvVars } from '../../shared/admin-tools/util';
 import { Database } from '@web-api/persistence/postgres/database-schema';
 
@@ -212,7 +212,7 @@ async function runDbFirstCleanup({
   pools,
   emailPrefix,
 }: {
-  db: any;
+  db: Kysely<Database>;
   cognito: CognitoIdentityProvider;
   pools: Pool[];
   emailPrefix: string;
@@ -259,7 +259,7 @@ async function runCognitoCleanupForPool({
   pool,
   emailPrefix,
 }: {
-  db: any;
+  db: Kysely<Database>;
   cognito: CognitoIdentityProvider;
   pool: Pool;
   emailPrefix: string;
@@ -307,7 +307,7 @@ async function main(): Promise<void> {
   const pools = await buildPools();
 
   // Establish a single DB connection for all deletes
-  const db = await getConnection({ cb: r => r });
+  const db = await getDb();
 
   // Pass 1: DB-first - find users by email prefix in Postgres, delete from Cognito and Postgres
   await runDbFirstCleanup({
