@@ -1,6 +1,7 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import {
+  EXPLICITLY_DENIED_CONSOLIDATED_GROUP_FILING_EVENT_CODES,
   EXTERNAL_DOCUMENT_TYPES_REQUIRING_OBJECTION,
   ROLES,
 } from '@shared/business/entities/EntityConstants';
@@ -58,9 +59,16 @@ export const fileDocumentHelper = (
   const isMultiDocketableEventCode = !!applicationContext
     .getConstants()
     .MULTI_DOCKET_FILING_EVENT_CODES.includes(form.eventCode);
-
+  const isAllowedToFileInConsolidatedGroup =
+    !EXPLICITLY_DENIED_CONSOLIDATED_GROUP_FILING_EVENT_CODES.includes(
+      form.eventCode,
+    );
   let allowExternalConsolidatedGroupFiling = false;
-  if (isMultiDocketableEventCode && isInConsolidatedGroup) {
+  if (
+    isMultiDocketableEventCode &&
+    isInConsolidatedGroup &&
+    isAllowedToFileInConsolidatedGroup
+  ) {
     allowExternalConsolidatedGroupFiling = true;
   } else {
     allowExternalConsolidatedGroupFiling = false;

@@ -2,6 +2,7 @@ import { Case } from '@shared/business/entities/cases/Case';
 import { GENERATION_TYPES } from '@web-client/getConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 import { showGenerationType } from '../setDefaultGenerationTypeAction';
+import { EXPLICITLY_DENIED_CONSOLIDATED_GROUP_FILING_EVENT_CODES } from '@shared/business/entities/EntityConstants';
 
 export const setDefaultFileDocumentFormValuesAction = ({
   applicationContext,
@@ -19,8 +20,14 @@ export const setDefaultFileDocumentFormValuesAction = ({
   const isMultiDocketableEventCode = !!applicationContext
     .getConstants()
     .MULTI_DOCKET_FILING_EVENT_CODES.includes(eventCode);
+  const isAllowedToFileInConsolidatedGroup =
+    !EXPLICITLY_DENIED_CONSOLIDATED_GROUP_FILING_EVENT_CODES.includes(
+      eventCode,
+    );
   const canFileInConsolidatedGroup =
-    isInConsolidatedGroup && isMultiDocketableEventCode;
+    isInConsolidatedGroup &&
+    isMultiDocketableEventCode &&
+    isAllowedToFileInConsolidatedGroup;
 
   const filersMap = {};
 
