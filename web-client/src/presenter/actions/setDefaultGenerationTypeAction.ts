@@ -35,12 +35,12 @@ export const setDefaultGenerationTypeAction = ({
 export function showGenerationType(
   user: { role: string },
   eventCode: string,
-  petitioners: { serviceIndicator?: string }[],
+  petitioners?: { serviceIndicator?: string }[],
 ): boolean {
   if (eventCode !== 'EA' && eventCode !== 'NOTW') return false;
 
   if (eventCode === 'EA') {
-    const somePartiesHavePaper = petitioners.some(
+    const somePartiesHavePaper = petitioners?.some(
       party => party.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
     return user.role === ROLES.privatePractitioner || !somePartiesHavePaper;

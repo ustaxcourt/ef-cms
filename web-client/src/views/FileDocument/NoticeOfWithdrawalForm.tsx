@@ -8,7 +8,6 @@ import { COUNTRY_TYPES } from '@shared/business/entities/EntityConstants';
 
 export const NoticeOfWithdrawalForm = connect(
   {
-    caseDetail: state.caseDetail,
     noticeOfWithdrawalHelper: state.noticeOfWithdrawalHelper,
     form: state.form,
     openEditContactInformationModalSequence:

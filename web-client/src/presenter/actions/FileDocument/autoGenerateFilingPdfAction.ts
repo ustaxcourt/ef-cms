@@ -1,4 +1,7 @@
-import { SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstants';
+import {
+  ROLES,
+  SERVICE_INDICATOR_TYPES,
+} from '@shared/business/entities/EntityConstants';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -16,7 +19,13 @@ export const autoGenerateFilingPdfAction = async ({
 
   const { generationType, eventCode } = get(state.form);
 
-  if (generationType === GENERATION_TYPES.AUTO) {
+  const user = get(state.user);
+
+  if (
+    generationType === GENERATION_TYPES.AUTO &&
+    (user.role === ROLES.privatePractitioner ||
+      user.role === ROLES.irsPractitioner)
+  ) {
     const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
 
     const { docketNumber, docketNumberWithSuffix } = caseDetail;

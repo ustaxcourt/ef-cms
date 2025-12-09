@@ -275,7 +275,11 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
       }
     }
 
-    if (this.eventCode === 'NOTW') {
+    if (
+      this.eventCode === 'NOTW' &&
+      (this.currentUser.role === ROLES.privatePractitioner ||
+        this.currentUser.role === ROLES.irsPractitioner)
+    ) {
       addProperty(
         'allPartiesConsent',
         joi.boolean().valid(true).required().messages({
