@@ -96,7 +96,3 @@ variable "rds_engine_version" {
 variable "es_engine_version" {
   type = string
 }
-
-variable "zendesk_aws_account_id" {
-  type = string
-}

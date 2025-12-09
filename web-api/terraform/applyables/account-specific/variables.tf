@@ -59,3 +59,7 @@ variable "number_of_days_to_keep_info_logs" {
 variable "zone_name" {
   type = string
 }
+
+variable "zendesk_aws_account_id" {
+  type = string
+}
