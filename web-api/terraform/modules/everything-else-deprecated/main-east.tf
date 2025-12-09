@@ -21,6 +21,7 @@ resource "aws_s3_object" "amended-petition-form-bucket-object-east" {
   bucket = aws_s3_bucket.documents_us_east_1.id
   key    = "amended-petition-form.pdf"
   source = "${path.module}/../../../../shared/static/pdfs/amended-petition-form.pdf"
+  etag   = filemd5("${path.module}/../../../../shared/static/pdfs/amended-petition-form.pdf")
 }
 
 resource "aws_acm_certificate" "api_gateway_cert_east" {

@@ -85,7 +85,7 @@ import { getCasesForUserLambda } from './lambdas/cases/getCasesForUserLambda';
 import { getCompletedMessagesForSectionLambda } from './lambdas/messages/getCompletedMessagesForSectionLambda';
 import { getCompletedMessagesForUserLambda } from './lambdas/messages/getCompletedMessagesForUserLambda';
 import { getCountOfCaseDocumentsFiledByJudgesLambda } from '@web-api/lambdas/reports/getCountOfCaseDocumentsFiledByJudgesLambda';
-import { getCurrentInvoke } from '@vendia/serverless-express';
+import { getCurrentInvoke } from '@codegenie/serverless-express';
 import { getCustomCaseReportLambda } from './lambdas/reports/getCustomCaseReportLambda';
 import { getDocumentContentsForDocketEntryLambda } from './lambdas/documents/getDocumentContentsForDocketEntryLambda';
 import { getDocumentDownloadUrlLambda } from './lambdas/documents/getDocumentDownloadUrlLambda';
@@ -211,6 +211,7 @@ import { getRecentFilingsForUserLambda } from './lambdas/recentFilings/getRecent
 import { deactivateUserLambda } from '@web-api/lambdas/automations/deactivateUserLambda';
 import { removeUserPendingEmailLambda } from '@web-api/lambdas/automations/removeUserPendingEmailLambda';
 import { saveMinuteSheetToDraftsLambda } from './lambdas/trialSessionMinutes/saveMinuteSheetToDraftsLambda';
+import { getIsFiledAcrossAllCasesLambda } from './lambdas/documents/getIsFiledAcrossAllCasesLambda';
 
 export const app = express();
 
@@ -388,6 +389,11 @@ app.use(expressLogger);
     '/case-documents/count',
     lambdaWrapper(getCountOfCaseDocumentsFiledByJudgesLambda),
   );
+  app.get(
+    '/case-documents/:docketEntryId/is-filed-across-all-cases',
+    lambdaWrapper(getIsFiledAcrossAllCasesLambda),
+  );
+
   // POST
   app.post(
     '/async/case-documents/:docketEntryId/append-pdf',

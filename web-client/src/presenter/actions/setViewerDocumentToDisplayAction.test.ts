@@ -3,6 +3,12 @@ import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { setViewerDocumentToDisplayAction } from './setViewerDocumentToDisplayAction';
 
+jest.mock('@shared/proxies/getIsFiledAcrossAllCasesProxy');
+
+const { getIsFiledAcrossAllCasesInteractor } = jest.requireMock(
+  '@shared/proxies/getIsFiledAcrossAllCasesProxy',
+);
+
 describe('setViewerDocumentToDisplayAction', () => {
   beforeAll(() => {
     applicationContext
@@ -10,6 +16,7 @@ describe('setViewerDocumentToDisplayAction', () => {
       .getDocumentDownloadUrlInteractor.mockReturnValue({
         url: 'www.example.com',
       });
+    getIsFiledAcrossAllCasesInteractor.mockResolvedValue(true);
     presenter.providers.applicationContext = applicationContext;
   });
 
@@ -35,6 +42,7 @@ describe('setViewerDocumentToDisplayAction', () => {
     });
     expect(result.state.docketEntryId).toEqual('1234');
     expect(result.state.iframeSrc).toEqual('www.example.com');
+    expect(result.state.isFiledAcrossAllCases).toEqual(true);
   });
 
   it('does not set iframeSrc if props.viewerDocumentToDisplay is null', async () => {

@@ -44,7 +44,6 @@ describe('verify old served work items do not show up in the outbox', () => {
     };
 
     const appContext = applicationContextFactory(mockUser);
-    appContext.environment.dynamoDbTableName = 'efcms-local';
 
     const CREATED_8_DAYS_AGO = applicationContext
       .getUtilities()

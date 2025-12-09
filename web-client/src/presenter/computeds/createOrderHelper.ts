@@ -1,6 +1,7 @@
 import { Get } from 'cerebral';
 import { isEmpty } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
+import { isLeadCase } from '@shared/business/entities/cases/Case';
 
 export const createOrderHelper = (
   get: Get,
@@ -26,7 +27,7 @@ export const createOrderHelper = (
     ? `Edit ${documentTitle}`
     : `Create ${documentTitle}`;
 
-  const isLeadCase = caseDetail.leadDocketNumber === caseDetail.docketNumber;
+  const isLeadCaseResult = isLeadCase(caseDetail);
 
   return {
     addDocketNumbersButtonIcon: setSelectedConsolidatedCasesToMultiDocketOn
@@ -38,6 +39,6 @@ export const createOrderHelper = (
     documentToEdit,
     isEditing,
     pageTitle,
-    showAddDocketNumbersButton: isLeadCase,
+    showAddDocketNumbersButton: isLeadCaseResult,
   };
 };

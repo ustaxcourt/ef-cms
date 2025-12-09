@@ -1,4 +1,4 @@
-import { Case, isLeadCase } from '@shared//business/entities/cases/Case';
+import { Case, isLeadCase } from '@shared/business/entities/cases/Case';
 import {
   DOCUMENT_RELATIONSHIPS,
   DOCUMENT_SERVED_MESSAGES,
@@ -24,6 +24,7 @@ import {
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { withTransaction } from '@web-api/persistence/postgres/utils/transactions';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 export const addPaperFiling = async (
   applicationContext: ServerApplicationContext,
@@ -57,13 +58,37 @@ export const addPaperFiling = async (
   const { docketNumber: subjectCaseDocketNumber, isFileAttached } =
     documentMetadata;
 
+  const incomingGroupDocketNumbers = consolidatedGroupDocketNumbers || [];
+
+  let effectiveConsolidatedGroupDocketNumbers: string[] = [];
+
   if (isSavingForLater) {
-    consolidatedGroupDocketNumbers = [subjectCaseDocketNumber];
+    effectiveConsolidatedGroupDocketNumbers = [subjectCaseDocketNumber];
   } else {
-    consolidatedGroupDocketNumbers = [
+    effectiveConsolidatedGroupDocketNumbers = [
       subjectCaseDocketNumber,
-      ...consolidatedGroupDocketNumbers,
+      ...incomingGroupDocketNumbers,
     ];
+
+    if (incomingGroupDocketNumbers.length === 0) {
+      const rawSubjectCase = await getCaseByDocketNumber({
+        docketNumber: subjectCaseDocketNumber,
+      });
+
+      const subjectCaseEntity = new Case(rawSubjectCase, { authorizedUser });
+
+      const isLeadCaseWithConsolidatedCases =
+        isLeadCase(subjectCaseEntity) &&
+        Array.isArray(rawSubjectCase.consolidatedCases) &&
+        rawSubjectCase.consolidatedCases.length > 0;
+
+      if (isLeadCaseWithConsolidatedCases) {
+        effectiveConsolidatedGroupDocketNumbers = [
+          subjectCaseDocketNumber,
+          ...rawSubjectCase.consolidatedCases.map((c: any) => c.docketNumber),
+        ];
+      }
+    }
   }
 
   const isReadyForService =
@@ -84,7 +109,7 @@ export const addPaperFiling = async (
   let filedByFromLeadCase;
 
   const consolidatedGroupCases = await getCasesByDocketNumbers({
-    docketNumbers: consolidatedGroupDocketNumbers,
+    docketNumbers: effectiveConsolidatedGroupDocketNumbers,
   });
 
   await withTransaction(async () => {
@@ -200,7 +225,7 @@ export const addPaperFiling = async (
   }
 
   const successMessage =
-    consolidatedGroupDocketNumbers.length > 1
+    effectiveConsolidatedGroupDocketNumbers.length > 1
       ? DOCUMENT_SERVED_MESSAGES.SELECTED_CASES
       : DOCUMENT_SERVED_MESSAGES.ENTRY_ADDED;
 

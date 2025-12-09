@@ -1,4 +1,4 @@
-import { Case } from '@shared/business/entities/cases/Case';
+import { Case, isLeadCase } from '@shared/business/entities/cases/Case';
 import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
 import {
   ROLE_PERMISSIONS,
@@ -47,7 +47,7 @@ export const createCaseDeadline = async (
       .updateCaseAutomaticBlock({
         caseEntity: currentCaseEntity,
         hasCaseDeadline: true,
-      });
+      })
 
     const updatedCase = await updateCaseAndAssociations({
       authorizedUser,
@@ -55,7 +55,7 @@ export const createCaseDeadline = async (
     });
 
     const { docketNumber, leadDocketNumber, consolidatedCases } = caseDetail;
-    if (!handlingConsolidatedCases && docketNumber === leadDocketNumber) {
+    if (!handlingConsolidatedCases && isLeadCase({ docketNumber, leadDocketNumber })) {
       const ADD_DEADLINE_TO_CONSOLIDATED_CASES = consolidatedCases
         .filter(
           ({ docketNumber: ccDocketNumber }) => ccDocketNumber !== docketNumber,
@@ -97,7 +97,7 @@ export async function getcreateCaseDeadlineLockInfo(
     });
 
   const IDENTIFIERS = [`case|${caseDeadline.docketNumber}`];
-  if (docketNumber !== leadDocketNumber) {
+  if (!isLeadCase({ docketNumber, leadDocketNumber })) {
     return {
       identifiers: IDENTIFIERS,
     };

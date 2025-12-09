@@ -1,8 +1,9 @@
-import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
+import { CaseLink } from '@web-client/ustc-ui/CaseLink/CaseLink';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseIcon';
+import { isLeadCase } from '@shared/business/entities/cases/Case';
 
 export const IndividualWorkQueueInProgress = connect(
   {
@@ -15,6 +16,11 @@ export const IndividualWorkQueueInProgress = connect(
   }) {
     return (
       <React.Fragment>
+        <div className="text-right">
+          <span className="text-semibold">Count: </span>
+          {formattedWorkQueue.length}
+        </div>
+        <div className="padding-1"></div>
         <table
           aria-describedby="tab-my-queue"
           className="usa-table ustc-table subsection"
@@ -34,10 +40,13 @@ export const IndividualWorkQueueInProgress = connect(
               {workQueueHelper.showProcessedByColumn && <th>Processed By</th>}
             </tr>
           </thead>
-          {formattedWorkQueue.map(item => {
-            return (
-              <tbody key={item.workItemId}>
-                <tr data-testid={`${item.docketNumber}-qc-item-row`}>
+          <tbody>
+            {formattedWorkQueue.map(item => {
+              return (
+                <tr
+                  key={item.workItemId}
+                  data-testid={`${item.docketNumber}-qc-item-row`}
+                >
                   <td className="consolidated-case-column">
                     <ConsolidatedCaseIcon
                       consolidatedIconTooltipText={
@@ -45,7 +54,7 @@ export const IndividualWorkQueueInProgress = connect(
                       }
                       inConsolidatedGroup={item.inConsolidatedGroup}
                       showLeadCaseIcon={
-                        item.leadDocketNumber === item.docketNumber
+                        isLeadCase(item)
                       }
                     />
                   </td>
@@ -84,9 +93,9 @@ export const IndividualWorkQueueInProgress = connect(
                     <td>{item.assigneeName}</td>
                   )}
                 </tr>
-              </tbody>
-            );
-          })}
+              );
+            })}
+          </tbody>
         </table>
         {formattedWorkQueue.length === 0 && <p>There are no documents.</p>}
       </React.Fragment>

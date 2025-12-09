@@ -42,6 +42,7 @@ describe('servePaperFiledDocumentAction', () => {
         form: {
           primaryDocumentFile: {},
         },
+        isFiledAcrossAllCases: false,
       },
     });
     expect(
@@ -51,6 +52,7 @@ describe('servePaperFiledDocumentAction', () => {
       clientConnectionId,
       docketEntryId,
       docketNumbers,
+      isFiledAcrossAllCases: false,
       subjectCaseDocketNumber: docketNumber,
     });
 
@@ -84,6 +86,7 @@ describe('servePaperFiledDocumentAction', () => {
         form: {
           primaryDocumentFile: {},
         },
+        isFiledAcrossAllCases: false,
       },
     });
 
@@ -94,6 +97,7 @@ describe('servePaperFiledDocumentAction', () => {
       clientConnectionId,
       docketEntryId,
       docketNumbers,
+      isFiledAcrossAllCases: false,
       subjectCaseDocketNumber: docketNumber,
     });
 
@@ -101,6 +105,49 @@ describe('servePaperFiledDocumentAction', () => {
       alertSuccess: { message: DOCUMENT_SERVED_MESSAGES.GENERIC },
       hasPaper: false,
       pdfUrl: undefined,
+    });
+  });
+
+  it('serves a paper filed document when isFiledAcrossAllCases is true', async () => {
+    applicationContext
+      .getUseCases()
+      .serveExternallyFiledDocumentInteractor.mockReturnValue({ pdfUrl });
+
+    const result = await runAction(servePaperFiledDocumentAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        docketNumbers,
+        primaryDocumentFileId: 'document-id-123',
+      },
+      state: {
+        caseDetail,
+        clientConnectionId,
+        docketEntryId,
+        document: '123-456-789-abc',
+        form: {
+          primaryDocumentFile: {},
+        },
+        isFiledAcrossAllCases: true,
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().serveExternallyFiledDocumentInteractor
+        .mock.calls[0][1],
+    ).toMatchObject({
+      clientConnectionId,
+      docketEntryId,
+      docketNumbers,
+      isFiledAcrossAllCases: true,
+      subjectCaseDocketNumber: docketNumber,
+    });
+
+    expect(result.output).toEqual({
+      alertSuccess: { message: DOCUMENT_SERVED_MESSAGES.GENERIC },
+      hasPaper: true,
+      pdfUrl,
     });
   });
 });

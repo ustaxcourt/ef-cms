@@ -35,7 +35,7 @@ const getCasesByDocketNumbers =
       excludeFields?: OmittableCaseFields[];
     }) => Promise<Omit<RawCase, 'consolidatedCases'>[]>
   >;
-  const upsertDocketEntries = jest.mocked(upsertDocketEntriesMock);
+const upsertDocketEntries = jest.mocked(upsertDocketEntriesMock);
 
 describe('addCoversheetInteractor', () => {
   const mockDocketEntryId = MOCK_CASE.docketEntries[0].docketEntryId;
@@ -403,6 +403,165 @@ describe('addCoversheetInteractor', () => {
           processingStatus: mockProcessingStatus,
         }),
       ]),
+    );
+  });
+
+  it('should use existing PDF page count for member cases without regenerating the PDF', async () => {
+    const memberCaseDocketNumber = '102-20';
+    const existingPageCount = 3;
+    const memberCaseData = {
+      ...testingCaseData,
+      docketNumber: memberCaseDocketNumber,
+      leadDocketNumber: '101-20',
+      docketEntries: [
+        {
+          ...testingCaseData.docketEntries[0],
+          docketNumber: memberCaseDocketNumber,
+        },
+      ],
+    };
+
+    getCaseByDocketNumber.mockResolvedValue(memberCaseData);
+    getCasesByDocketNumbers.mockResolvedValueOnce([memberCaseData]);
+
+    const mockPdfLib = {
+      PDFDocument: {
+        load: jest.fn().mockResolvedValue({
+          getPageCount: jest.fn().mockReturnValue(existingPageCount),
+        }),
+      },
+    };
+    applicationContext.getPdfLib.mockResolvedValue(mockPdfLib);
+
+    (addCoverToPdf as jest.Mock).mockResolvedValue({
+      consolidatedCases: null,
+      numberOfPages: 5,
+      pdfData: 'newPdfData',
+    });
+
+    const result = await addCoversheetInteractor(
+      applicationContext,
+      {
+        docketEntryId: mockDocketEntryId,
+        docketNumber: memberCaseDocketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(mockPdfLib.PDFDocument.load).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).not.toHaveBeenCalled();
+    expect(upsertDocketEntries).toHaveBeenCalledWith(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketNumber: memberCaseDocketNumber,
+          numberOfPages: existingPageCount,
+        }),
+      ]),
+    );
+    expect(result).toMatchObject({
+      docketNumber: memberCaseDocketNumber,
+      numberOfPages: existingPageCount,
+    });
+  });
+
+  it('should throw an error when attempting to replace coversheet on a member case', async () => {
+    const memberCaseDocketNumber = '102-20';
+    const memberCaseData = {
+      ...testingCaseData,
+      docketNumber: memberCaseDocketNumber,
+      leadDocketNumber: '101-20',
+    };
+
+    getCaseByDocketNumber.mockResolvedValue(memberCaseData);
+
+    await expect(
+      addCoversheetInteractor(
+        applicationContext,
+        {
+          docketEntryId: mockDocketEntryId,
+          docketNumber: memberCaseDocketNumber,
+          replaceCoversheet: true,
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow(
+      'Coversheet replacement for multidocketed filings must be performed on the lead case',
+    );
+  });
+
+  it('should filter out consolidated cases without documentNumber for member cases', async () => {
+    const memberCaseDocketNumber = '102-20';
+    const existingPageCount = 3;
+    const memberCaseData = {
+      ...testingCaseData,
+      docketNumber: memberCaseDocketNumber,
+      leadDocketNumber: '101-20',
+      docketEntries: [
+        {
+          ...testingCaseData.docketEntries[0],
+          docketNumber: memberCaseDocketNumber,
+        },
+      ],
+    };
+
+    getCaseByDocketNumber.mockResolvedValue(memberCaseData);
+
+    const mockPdfLib = {
+      PDFDocument: {
+        load: jest.fn().mockResolvedValue({
+          getPageCount: jest.fn().mockReturnValue(existingPageCount),
+        }),
+      },
+    };
+    applicationContext.getPdfLib.mockResolvedValue(mockPdfLib);
+
+    (addCoverToPdf as jest.Mock).mockResolvedValue({
+      consolidatedCases: [
+        {
+          docketNumber: '101-19',
+          documentNumber: null,
+        },
+        {
+          docketNumber: '102-20',
+          documentNumber: 2,
+        },
+      ],
+      numberOfPages: 5,
+      pdfData: 'newPdfData',
+    });
+
+    getCasesByDocketNumbers.mockResolvedValueOnce([memberCaseData]);
+
+    await addCoversheetInteractor(
+      applicationContext,
+      {
+        docketEntryId: mockDocketEntryId,
+        docketNumber: memberCaseDocketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(getCasesByDocketNumbers).toHaveBeenCalledWith({
+      docketNumbers: ['102-20'],
+    });
+  });
+
+  it('should throw a NotFoundError when the docket entry is not found on the case', async () => {
+    const nonExistentDocketEntryId = 'non-existent-id';
+
+    await expect(
+      addCoversheetInteractor(
+        applicationContext,
+        {
+          docketEntryId: nonExistentDocketEntryId,
+          docketNumber: MOCK_CASE.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow(
+      `Could not find docket entry with id ${nonExistentDocketEntryId} on case ${MOCK_CASE.docketNumber}`,
     );
   });
 });

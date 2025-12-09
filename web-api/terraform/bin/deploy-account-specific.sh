@@ -83,7 +83,7 @@ terraform init -upgrade -backend=true \
  -backend-config=key="$KEY" \
  -backend-config=dynamodb_table="$LOCK_TABLE" \
  -backend-config=region="$REGION"
- 
+
 if [[ "$ES_LOGS_INSTANCE_COUNT" -eq 0 ]]; then
   terraform state rm 'module.kibana.opensearch_snapshot_repository.archived-logs' 2>/dev/null && echo "Removed OpenSearch snapshot repository from state" || echo "OpenSearch snapshot repository not in state"
   terraform state rm 'module.kibana.aws_cloudwatch_event_target.rotate_info_indices_daily' 2>/dev/null && echo "Removed EventBridge target from state" || echo "EventBridge target not in state"

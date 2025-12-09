@@ -270,6 +270,7 @@ export const formatTrialSessions = ({
 
       return {
         alertMessageForNOTT,
+        estimatedEndDate: trialSession.estimatedEndDate,
         formattedEstimatedEndDate,
         formattedNoticeIssuedDate,
         formattedStartDate,
@@ -330,6 +331,7 @@ export type TrialSessionRow = {
   alertMessageForNOTT: string;
   formattedStartDate: string; //MM/DD/YYYY
   formattedEstimatedEndDate: string;
+  estimatedEndDate?: string; // ISO format
   swingSession: boolean;
   userIsAssignedToSession: boolean;
   trialLocation: string;
