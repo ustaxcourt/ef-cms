@@ -59,16 +59,16 @@ export const verifyUserPendingEmailInteractor = async (
     userId: user.userId,
   });
   const identifiers = docketNumbers.map(dN => `case|${dN}`);
-
-  const removeLockFunction = await acquireLock({
-    applicationContext,
-    authorizedUser: user,
-    identifiers,
-    retries: 10,
-    waitTime: 5000,
-  });
+  // default to no-op in case error is thrown before acquireLock is called
+  let removeLockFunction: () => Promise<void> = async () => {};
 
   try {
+    removeLockFunction = await acquireLock({
+      applicationContext,
+      authorizedUser: user,
+      identifiers,
+    });
+
     const { updatedUser } = await updateUserPendingEmailRecord({
       setIsUpdatingInformation: true,
       user,
@@ -86,6 +86,8 @@ export const verifyUserPendingEmailInteractor = async (
         type: MESSAGE_TYPES.QUEUE_EMAIL_UPDATE_ASSOCIATED_CASES,
       },
     });
+  } catch (e) {
+    applicationContext.logger.error('Error verifying user pending email');
   } finally {
     await removeLockFunction();
   }

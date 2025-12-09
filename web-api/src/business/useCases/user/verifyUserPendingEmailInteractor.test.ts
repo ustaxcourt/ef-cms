@@ -27,6 +27,7 @@ import { upsertUsers as upsertUsersMock } from '@web-api/persistence/postgres/us
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 import { getUserByPendingEmailVerificationToken as getUserByPendingEmailVerificationTokenMock } from '@web-api/persistence/postgres/users/getUserByPendingEmailVerificationToken';
 import { getUserByIdOnceAllUpdatesComplete as getUserByIdOnceAllUpdatesCompleteMock } from '@web-api/persistence/postgres/users/getUserByIdOnceAllUpdatesComplete';
+import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 
 describe('Verify User Pending Email', () => {
   const TOKEN = '41189629-abe1-46d7-b7a4-9d3834f919cb';
@@ -52,6 +53,7 @@ describe('Verify User Pending Email', () => {
   const getUserByIdOnceAllUpdatesComplete = jest.mocked(
     getUserByIdOnceAllUpdatesCompleteMock,
   );
+  const tryGetLocks = jest.mocked(tryGetLocksMock);
 
   beforeEach(() => {
     const TOTAL_CASE_COUNT = 100;
@@ -303,6 +305,54 @@ describe('Verify User Pending Email', () => {
           pendingEmailVerificationTokenTimestamp: undefined,
         },
       ]);
+    });
+
+    it('should acquire a lock', async () => {
+      const mockUser = {
+        ...mockPetitioner,
+        pendingEmailVerificationTokenTimestamp: TOKEN_TIMESTAMP_VALID,
+      };
+
+      const mockDocketNumber = MOCK_CASE.docketNumber;
+
+      getDocketNumbersByUser.mockResolvedValue([mockDocketNumber]);
+
+      getUserByPendingEmailVerificationToken.mockResolvedValue(mockUser);
+      getUserByIdOnceAllUpdatesComplete.mockResolvedValue(mockUser);
+
+      await verifyUserPendingEmailInteractor(applicationContext, {
+        token: mockPetitioner.pendingEmailVerificationToken!,
+      });
+
+      expect(tryGetLocks).toHaveBeenCalledWith(
+        expect.objectContaining({
+          identifiers: [`case|${mockDocketNumber}`],
+        }),
+      );
+    });
+
+    it('should not update user if a lock is not in place', async () => {
+      const mockUser = {
+        ...mockPetitioner,
+        pendingEmailVerificationTokenTimestamp: TOKEN_TIMESTAMP_VALID,
+      };
+
+      const mockDocketNumber = MOCK_CASE.docketNumber;
+
+      getDocketNumbersByUser.mockResolvedValue([mockDocketNumber]);
+
+      getUserByPendingEmailVerificationToken.mockResolvedValue(mockUser);
+      getUserByIdOnceAllUpdatesComplete.mockResolvedValue(mockUser);
+
+      tryGetLocks.mockResolvedValueOnce([
+        { successfullyLocked: false, identifier: 'abc' },
+      ]);
+
+      await verifyUserPendingEmailInteractor(applicationContext, {
+        token: mockPetitioner.pendingEmailVerificationToken!,
+      });
+
+      expect(upsertUsers).not.toHaveBeenCalled();
     });
   });
 });
