@@ -91,6 +91,50 @@ describe('removePdfFromCaseAction', () => {
     expect(state.form.applicationForWaiverOfFilingFeeFile).toBeUndefined();
   });
 
+  it('should handle undefined documentSelectedForPreview gracefully when docketEntryId is not set', async () => {
+    const formData = {
+      applicationForWaiverOfFilingFeeFile: {},
+      applicationForWaiverOfFilingFeeFileSize: 2,
+      docketNumber: '101-19',
+    };
+    const { output } = await runAction(removePdfFromCaseAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        currentViewMetadata: {
+          documentSelectedForPreview: undefined,
+        },
+        form: formData,
+      },
+    });
+
+    expect(output.caseDetail).toEqual(formData);
+    expect(output.documentUploadMode).toBe('scan');
+  });
+
+  it('should handle null documentSelectedForPreview gracefully when docketEntryId is not set', async () => {
+    const formData = {
+      applicationForWaiverOfFilingFeeFile: {},
+      applicationForWaiverOfFilingFeeFileSize: 2,
+      docketNumber: '101-19',
+    };
+    const { output } = await runAction(removePdfFromCaseAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        currentViewMetadata: {
+          documentSelectedForPreview: null,
+        },
+        form: formData,
+      },
+    });
+
+    expect(output.caseDetail).toEqual(formData);
+    expect(output.documentUploadMode).toBe('scan');
+  });
+
   it('should return caseDetail from form unchanged if form contains no docket entries', async () => {
     const { output } = await runAction(removePdfFromCaseAction, {
       modules: {

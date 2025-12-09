@@ -11,6 +11,7 @@ describe('removeBatchAction', () => {
         },
         scanner: {
           batchIndexToDelete: 5,
+          selectedBatchIndex: 5,
           batches: {
             petition: [
               {
@@ -37,6 +38,7 @@ describe('removeBatchAction', () => {
         },
         scanner: {
           batchIndexToDelete: 4,
+          selectedBatchIndex: 4,
           batches: {
             petition: [
               {
@@ -68,7 +70,7 @@ describe('removeBatchAction', () => {
           documentSelectedForScan: 'petition',
         },
         scanner: {
-          batchIndex: 2,
+          batchIndexToDelete: 2,
           batches: {
             petition: [
               {
@@ -91,5 +93,117 @@ describe('removeBatchAction', () => {
         },
       ],
     });
+  });
+
+  it('should return early when batches is null', async () => {
+    const initialState = {
+      currentViewMetadata: {
+        documentSelectedForScan: 'petition',
+      },
+      scanner: {
+        batchIndexToDelete: 5,
+        batches: {
+          petition: null,
+        },
+        selectedBatchIndex: 4,
+      },
+    };
+
+    const { state } = await runAction(removeBatchAction, {
+      props: {},
+      state: initialState,
+    });
+
+    // State should remain unchanged
+    expect(state.scanner.batches).toEqual({ petition: null });
+    expect(state.scanner.selectedBatchIndex).toEqual(4);
+  });
+
+  it('should return early when batches is undefined', async () => {
+    const initialState = {
+      currentViewMetadata: {
+        documentSelectedForScan: 'petition',
+      },
+      scanner: {
+        batchIndexToDelete: 5,
+        batches: {
+          petition: undefined,
+        },
+        selectedBatchIndex: 4,
+      },
+    };
+
+    const { state } = await runAction(removeBatchAction, {
+      props: {},
+      state: initialState,
+    });
+
+    // State should remain unchanged
+    expect(state.scanner.batches).toEqual({ petition: undefined });
+    expect(state.scanner.selectedBatchIndex).toEqual(4);
+  });
+
+  it('should return early when batches is an empty array', async () => {
+    const initialState = {
+      currentViewMetadata: {
+        documentSelectedForScan: 'petition',
+      },
+      scanner: {
+        batchIndexToDelete: 5,
+        batches: {
+          petition: [],
+        },
+        selectedBatchIndex: 4,
+      },
+    };
+
+    const { state } = await runAction(removeBatchAction, {
+      props: {},
+      state: initialState,
+    });
+
+    // State should remain unchanged
+    expect(state.scanner.batches).toEqual({ petition: [] });
+    expect(state.scanner.selectedBatchIndex).toEqual(4);
+  });
+
+  it('should return early when batchIndexToDelete does not exist in batches', async () => {
+    const initialState = {
+      currentViewMetadata: {
+        documentSelectedForScan: 'petition',
+      },
+      scanner: {
+        batchIndexToDelete: 99,
+        batches: {
+          petition: [
+            {
+              index: 4,
+            },
+            {
+              index: 2,
+            },
+          ],
+        },
+        selectedBatchIndex: 4,
+      },
+    };
+
+    const { state } = await runAction(removeBatchAction, {
+      props: {},
+      state: initialState,
+    });
+
+    // State should remain unchanged since batch was not found
+    expect(state.scanner.batches).toEqual({
+      petition: [
+        {
+          index: 4,
+        },
+        {
+          index: 2,
+        },
+      ],
+    });
+    expect(state.scanner.selectedBatchIndex).toEqual(4);
   });
 });

@@ -1,8 +1,12 @@
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
+import { props as cerebralProps } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+
+const props = cerebralProps as unknown as {
+  bind: string;
+};
 
 export const Email = connect(
   {
