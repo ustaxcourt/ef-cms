@@ -139,6 +139,20 @@ describe('Verify User Pending Email', () => {
       ).rejects.toThrow('Invalid token');
     });
 
+    it('should throw unauthorized error when the user corresponding to the token is not a valid AuthUser', async () => {
+      getUserByPendingEmailVerificationToken.mockResolvedValue({
+        ...mockPractitioner,
+        email: undefined,
+        pendingEmailVerificationTokenTimestamp: TOKEN_TIMESTAMP_EXPIRED,
+      });
+
+      await expect(
+        verifyUserPendingEmailInteractor(applicationContext, {
+          token: TOKEN,
+        }),
+      ).rejects.toThrow('Invalid token');
+    });
+
     it('should throw an unauthorized error when there is no token timestamp', async () => {
       getUserByPendingEmailVerificationToken.mockResolvedValue({
         ...mockPractitioner,
@@ -243,7 +257,7 @@ describe('Verify User Pending Email', () => {
 
     it('should call updateUser with email set to pendingEmail and pending fields set to undefined', async () => {
       getUserByPendingEmailVerificationToken.mockResolvedValue({
-        ...mockPractitioner,
+        ...mockPetitioner,
         pendingEmailVerificationTokenTimestamp: TOKEN_TIMESTAMP_VALID,
       });
 
