@@ -26,6 +26,7 @@ import { getDocketNumbersByUser as getDocketNumbersByUserMock } from '@web-api/p
 import { upsertUsers as upsertUsersMock } from '@web-api/persistence/postgres/users/upsertUsers';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 import { getUserByPendingEmailVerificationToken as getUserByPendingEmailVerificationTokenMock } from '@web-api/persistence/postgres/users/getUserByPendingEmailVerificationToken';
+import { getUserByIdOnceAllUpdatesComplete as getUserByIdOnceAllUpdatesCompleteMock } from '@web-api/persistence/postgres/users/getUserByIdOnceAllUpdatesComplete';
 
 describe('Verify User Pending Email', () => {
   const TOKEN = '41189629-abe1-46d7-b7a4-9d3834f919cb';
@@ -47,6 +48,9 @@ describe('Verify User Pending Email', () => {
   const upsertUsers = jest.mocked(upsertUsersMock);
   const getUserByPendingEmailVerificationToken = jest.mocked(
     getUserByPendingEmailVerificationTokenMock,
+  );
+  const getUserByIdOnceAllUpdatesComplete = jest.mocked(
+    getUserByIdOnceAllUpdatesCompleteMock,
   );
 
   beforeEach(() => {
@@ -142,6 +146,11 @@ describe('Verify User Pending Email', () => {
     it('should throw unauthorized error when the user corresponding to the token is not a valid AuthUser', async () => {
       getUserByPendingEmailVerificationToken.mockResolvedValue({
         ...mockPractitioner,
+        pendingEmailVerificationTokenTimestamp: TOKEN_TIMESTAMP_EXPIRED,
+      });
+
+      getUserByIdOnceAllUpdatesComplete.mockResolvedValue({
+        ...mockPractitioner,
         email: undefined,
         pendingEmailVerificationTokenTimestamp: TOKEN_TIMESTAMP_EXPIRED,
       });
@@ -150,14 +159,17 @@ describe('Verify User Pending Email', () => {
         verifyUserPendingEmailInteractor(applicationContext, {
           token: TOKEN,
         }),
-      ).rejects.toThrow('Invalid token');
+      ).rejects.toThrow('Invalid user');
     });
 
     it('should throw an unauthorized error when there is no token timestamp', async () => {
-      getUserByPendingEmailVerificationToken.mockResolvedValue({
+      const mockUser = {
         ...mockPractitioner,
         pendingEmailVerificationTokenTimestamp: undefined,
-      });
+      };
+
+      getUserByPendingEmailVerificationToken.mockResolvedValue(mockUser);
+      getUserByIdOnceAllUpdatesComplete.mockResolvedValue(mockUser);
 
       await expect(
         verifyUserPendingEmailInteractor(applicationContext, {
@@ -167,10 +179,13 @@ describe('Verify User Pending Email', () => {
     });
 
     it('should throw an unauthorized error when token timestamp is expired', async () => {
-      getUserByPendingEmailVerificationToken.mockResolvedValue({
+      const mockUser = {
         ...mockPractitioner,
         pendingEmailVerificationTokenTimestamp: TOKEN_TIMESTAMP_EXPIRED,
-      });
+      };
+
+      getUserByPendingEmailVerificationToken.mockResolvedValue(mockUser);
+      getUserByIdOnceAllUpdatesComplete.mockResolvedValue(mockUser);
 
       await expect(
         verifyUserPendingEmailInteractor(applicationContext, {
@@ -180,10 +195,13 @@ describe('Verify User Pending Email', () => {
     });
 
     it('should throw an error when the pendingEmail address is not available in cognito', async () => {
-      getUserByPendingEmailVerificationToken.mockResolvedValue({
+      const mockUser = {
         ...mockPractitioner,
         pendingEmailVerificationTokenTimestamp: TOKEN_TIMESTAMP_VALID,
-      });
+      };
+
+      getUserByPendingEmailVerificationToken.mockResolvedValue(mockUser);
+      getUserByIdOnceAllUpdatesComplete.mockResolvedValue(mockUser);
 
       applicationContext
         .getPersistenceGateway()
@@ -197,10 +215,13 @@ describe('Verify User Pending Email', () => {
     });
 
     it('should update the cognito email when token is valid', async () => {
-      getUserByPendingEmailVerificationToken.mockResolvedValue({
+      const mockUser = {
         ...mockPractitioner,
         pendingEmailVerificationTokenTimestamp: TOKEN_TIMESTAMP_VALID,
-      });
+      };
+
+      getUserByPendingEmailVerificationToken.mockResolvedValue(mockUser);
+      getUserByIdOnceAllUpdatesComplete.mockResolvedValue(mockUser);
 
       await verifyUserPendingEmailInteractor(applicationContext, {
         token: TOKEN,
@@ -214,10 +235,13 @@ describe('Verify User Pending Email', () => {
     });
 
     it('should update the postgres record with the new info when token is valid', async () => {
-      getUserByPendingEmailVerificationToken.mockResolvedValue({
+      const mockUser = {
         ...mockPractitioner,
         pendingEmailVerificationTokenTimestamp: TOKEN_TIMESTAMP_VALID,
-      });
+      };
+
+      getUserByPendingEmailVerificationToken.mockResolvedValue(mockUser);
+      getUserByIdOnceAllUpdatesComplete.mockResolvedValue(mockUser);
 
       await verifyUserPendingEmailInteractor(applicationContext, {
         token: TOKEN,
@@ -234,10 +258,13 @@ describe('Verify User Pending Email', () => {
     });
 
     it('should call updateUser with email set to pendingEmail and pending fields set to undefined, and service indicator set to electronic with a practitioner user', async () => {
-      getUserByPendingEmailVerificationToken.mockResolvedValue({
+      const mockUser = {
         ...mockPractitioner,
         pendingEmailVerificationTokenTimestamp: TOKEN_TIMESTAMP_VALID,
-      });
+      };
+
+      getUserByPendingEmailVerificationToken.mockResolvedValue(mockUser);
+      getUserByIdOnceAllUpdatesComplete.mockResolvedValue(mockUser);
 
       await verifyUserPendingEmailInteractor(applicationContext, {
         token: TOKEN,
@@ -256,10 +283,13 @@ describe('Verify User Pending Email', () => {
     });
 
     it('should call updateUser with email set to pendingEmail and pending fields set to undefined', async () => {
-      getUserByPendingEmailVerificationToken.mockResolvedValue({
+      const mockUser = {
         ...mockPetitioner,
         pendingEmailVerificationTokenTimestamp: TOKEN_TIMESTAMP_VALID,
-      });
+      };
+
+      getUserByPendingEmailVerificationToken.mockResolvedValue(mockUser);
+      getUserByIdOnceAllUpdatesComplete.mockResolvedValue(mockUser);
 
       await verifyUserPendingEmailInteractor(applicationContext, {
         token: mockPetitioner.pendingEmailVerificationToken!,

@@ -10,6 +10,7 @@ import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
 import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
 import { getUserByPendingEmailVerificationToken } from '@web-api/persistence/postgres/users/getUserByPendingEmailVerificationToken';
 import { isAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getUserByIdOnceAllUpdatesComplete } from '@web-api/persistence/postgres/users/getUserByIdOnceAllUpdatesComplete';
 
 export const TOKEN_EXPIRATION_TIME_HOURS = 24;
 
@@ -21,38 +22,47 @@ export const verifyUserPendingEmailInteractor = async (
     pendingEmailVerificationToken: token,
   });
 
-  if (!userToVerify || !isAuthUser(userToVerify)) {
+  if (!userToVerify) {
     applicationContext.logger.info(
       'Unable to verify pending email, there is no user with the provided token',
     );
     throw new UnauthorizedError('Invalid token');
   }
 
-  if (
-    userTokenHasExpired(userToVerify.pendingEmailVerificationTokenTimestamp)
-  ) {
+  const user = await getUserByIdOnceAllUpdatesComplete({
+    userId: userToVerify.userId,
+  });
+
+  if (!isAuthUser(user)) {
+    applicationContext.logger.info(
+      'Unable to verify user pending email, user is not valid',
+    );
+    throw new UnauthorizedError('Invalid user');
+  }
+
+  if (userTokenHasExpired(user.pendingEmailVerificationTokenTimestamp)) {
     applicationContext.logger.info('Pending email verification link expired', {
-      email: userToVerify.email,
+      email: user.email,
     });
     throw new UnauthorizedError('Link has expired');
   }
 
   const isEmailAvailable = await applicationContext
     .getPersistenceGateway()
-    .isEmailAvailable({ applicationContext, email: userToVerify.pendingEmail });
+    .isEmailAvailable({ applicationContext, email: user.pendingEmail });
 
   if (!isEmailAvailable) {
     throw new Error('Email is not available');
   }
 
   const docketNumbers = await getDocketNumbersByUser({
-    userId: userToVerify.userId,
+    userId: user.userId,
   });
   const identifiers = docketNumbers.map(dN => `case|${dN}`);
 
   const removeLockFunction = await acquireLock({
     applicationContext,
-    authorizedUser: userToVerify,
+    authorizedUser: user,
     identifiers,
     retries: 10,
     waitTime: 5000,
@@ -61,17 +71,17 @@ export const verifyUserPendingEmailInteractor = async (
   try {
     const { updatedUser } = await updateUserPendingEmailRecord({
       setIsUpdatingInformation: true,
-      user: userToVerify,
+      user,
     });
 
     await applicationContext.getUserGateway().updateUser(applicationContext, {
       attributesToUpdate: { email: updatedUser.email },
-      email: userToVerify.email!,
+      email: user.email!,
     });
 
     await applicationContext.getWorkerGateway().queueWork(applicationContext, {
       message: {
-        authorizedUser: userToVerify,
+        authorizedUser: user,
         payload: { user: updatedUser },
         type: MESSAGE_TYPES.QUEUE_EMAIL_UPDATE_ASSOCIATED_CASES,
       },
