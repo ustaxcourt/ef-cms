@@ -1,5 +1,6 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import { formatCaseTitle } from '@web-api/business/useCases/generateCoverSheetData';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
 
 /**
@@ -27,7 +28,10 @@ export const formatConsolidatedCaseCoversheetData = async ({
   let caseCaptionExtension;
   const consolidatedCasesFiltered = consolidatedCases
     ?.map(consolidatedCase => {
-      if (consolidatedCase.docketNumber === caseEntity.leadDocketNumber) {
+      if (
+        consolidatedCase.docketNumber ===
+        docketEntryEntity.multiDocketedOriginalDocketNumber
+      ) {
         ({ caseCaptionExtension, caseTitle } = formatCaseTitle({
           applicationContext,
           caseEntity: consolidatedCase,
@@ -45,6 +49,18 @@ export const formatConsolidatedCaseCoversheetData = async ({
       };
     })
     .filter(consolidatedCase => consolidatedCase.documentNumber !== undefined);
+
+  if (!caseTitle) {
+    const originalFilingCase = await getCaseByDocketNumber({
+      docketNumber: docketEntryEntity.multiDocketedOriginalDocketNumber,
+      includeConsolidatedCases: false,
+    });
+    ({ caseCaptionExtension, caseTitle } = formatCaseTitle({
+      applicationContext,
+      caseEntity: originalFilingCase,
+      useInitialData,
+    }));
+  }
 
   if (consolidatedCasesFiltered.length > 1) {
     coverSheetData.consolidatedCases = consolidatedCasesFiltered;
