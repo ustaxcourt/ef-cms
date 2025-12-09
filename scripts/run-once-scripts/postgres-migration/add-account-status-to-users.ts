@@ -8,6 +8,7 @@ import {
 import { environment } from '@web-api/environment';
 import { getCognito } from '@web-api/persistence/cognito/getCognito';
 import { ACCOUNT_STATUS } from '@shared/business/entities/EntityConstants';
+import { getConnection } from 'web-client/integration-tests/helpers';
 
 const scriptConfig: ScriptConfig = {
   description:
