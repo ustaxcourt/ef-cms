@@ -39,6 +39,7 @@ echo "  - PROD_ENV_ACCOUNT_ID=${PROD_ENV_ACCOUNT_ID}"
 echo "  - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL}"
 echo "  - RDS_ENGINE_VERSION=${RDS_ENGINE_VERSION}"
 echo "  - ES_ENGINE_VERSION=${ES_ENGINE_VERSION}"
+echo "  - ZENDESK_AWS_ACCOUNT_ID=${ZENDESK_AWS_ACCOUNT_ID}"
 
 ../../../../scripts/verify-terraform-version.sh
 
@@ -113,6 +114,7 @@ export TF_VAR_restoring_aws_account_id=$PROD_ENV_ACCOUNT_ID
 export TF_VAR_rum_sample_rate=$RUM_SAMPLE_RATE
 export TF_VAR_rds_engine_version="$RDS_ENGINE_VERSION"
 export TF_VAR_es_engine_version="$ES_ENGINE_VERSION"
+export TF_VAR_zendesk_aws_account_id=$ZENDESK_AWS_ACCOUNT_ID
 
 if [[ -n "${RDS_MIN_CAPACITY}" ]]
 then
