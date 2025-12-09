@@ -22,6 +22,7 @@ export const ConnectionStore = new AsyncLocalStorage<ConnectionInfo>();
 let dbInstance: Promise<Kysely<Database>> | null = null;
 let pool: Pool | null = null;
 let poolConfig: PoolConfig;
+
 export async function getDb(): Promise<Kysely<Database>> {
   const currentConnection = ConnectionStore.getStore()?.currentTransaction;
   if (currentConnection) {
