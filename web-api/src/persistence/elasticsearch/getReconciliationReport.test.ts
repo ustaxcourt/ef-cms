@@ -9,7 +9,7 @@ describe('getReconciliationReport', () => {
     const mockEndDate = '2018-03-01T00:01:00.000Z';
     const mockStartDate = '2018-05-01T00:01:00.000Z';
 
-    search.mockResolvedValue({
+    (search as jest.Mock).mockResolvedValue({
       results: [{ docketNumber: '102-20' }, { docketNumber: '134-30' }],
       total: 2,
     });
@@ -20,7 +20,9 @@ describe('getReconciliationReport', () => {
       reconciliationDateStart: mockStartDate,
     });
 
-    expect(search.mock.calls[0][0].searchParameters.body.query).toMatchObject({
+    expect(
+      (search as jest.Mock).mock.calls[0][0].searchParameters.body.query,
+    ).toMatchObject({
       bool: {
         must: [
           {

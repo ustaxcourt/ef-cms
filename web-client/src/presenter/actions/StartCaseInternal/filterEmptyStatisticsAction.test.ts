@@ -12,9 +12,7 @@ describe('filterEmptyStatisticsAction', () => {
   });
 
   beforeEach(() => {
-    presenter.providers.applicationContext.getUniqueId.mockReturnValue(
-      statisticId,
-    );
+    jest.mocked(presenter.providers.applicationContext.getUniqueId).mockReturnValue(statisticId);
   });
 
   it('filters out empty statistics', async () => {
@@ -40,9 +38,7 @@ describe('filterEmptyStatisticsAction', () => {
   });
 
   it('appends default statistic if deficiency and hasVerifiedIrsNotice', async () => {
-    presenter.providers.applicationContext.getUniqueId.mockReturnValue(
-      statisticId,
-    );
+    jest.mocked(presenter.providers.applicationContext.getUniqueId).mockReturnValue(statisticId);
 
     const result = await runAction(filterEmptyStatisticsAction, {
       modules: {

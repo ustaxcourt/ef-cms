@@ -147,3 +147,5 @@ export const InvalidEntityError = class InvalidEntityError extends Error {
 };
 
 export const EntityNotValidatedError = class EntityNotValidatedError extends Error {};
+
+export type ErrorWithStatusCode = Error & { statusCode?: number };

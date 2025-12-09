@@ -207,7 +207,13 @@ const getShowNoticeOfWithdrawal = form => {
 };
 
 const getPrimarySecondaryDocuments = ({ AMENDMENT_EVENT_CODES, form }) => {
-  const primarySecondaryDocuments = {
+  const primarySecondaryDocuments: {
+    primaryDocument: { showObjection: boolean };
+    secondaryDocument: {
+      showObjection: boolean;
+      certificateOfServiceDateFormatted?: string;
+    };
+  } = {
     primaryDocument: {
       showObjection:
         EXTERNAL_DOCUMENT_TYPES_REQUIRING_OBJECTION.has(form.documentType) ||

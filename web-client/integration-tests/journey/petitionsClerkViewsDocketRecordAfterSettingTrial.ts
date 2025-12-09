@@ -2,7 +2,10 @@ import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../../shared/src/business/en
 
 export const petitionsClerkViewsDocketRecordAfterSettingTrial = (
   cerebralTest,
-  overrides = {},
+  overrides: {
+    documentTitle?: string;
+    eventCode?: string;
+  } = {},
 ) => {
   return it('Petitions clerk views docket record for a case after calendaring', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {

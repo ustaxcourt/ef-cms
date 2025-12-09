@@ -1,5 +1,4 @@
 import {
-  PROCEDURE_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
@@ -20,7 +19,6 @@ describe('noticeOfChangeOfTrialJudge', () => {
           nameOfClerk: 'Stephanie A. Servoss',
           titleOfClerk: 'Clerk of the Court',
           trialInfo: {
-            caseProcedureType: PROCEDURE_TYPES.SMALL,
             chambersPhoneNumber: '1-721-740-9885 x4239',
             docketNumber: '999-99',
             formattedStartDate: '01/01/2001',
@@ -30,7 +28,7 @@ describe('noticeOfChangeOfTrialJudge', () => {
             trialLocation: 'Mobile, Alabama',
             trialLocationAndProceedingType: `Mobile, Alabama, ${TRIAL_SESSION_PROCEEDING_TYPES.inPerson}`,
             updatedJudgeTitleWithFullName: 'Chief Judge Lady Macbeth',
-          },
+          } as any,
         },
       });
     },
