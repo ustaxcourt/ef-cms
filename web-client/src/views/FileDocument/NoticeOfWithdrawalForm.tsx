@@ -150,11 +150,11 @@ export const NoticeOfWithdrawalForm = connect(
                 case current?
                 <span className="usa-hint">(Optional)</span>
               </legend>
-              <div className="tw:flex">
+              <div className="tw:flex tw:flex-wrap tw:justify-between">
                 {noticeOfWithdrawalHelper.filingParties.map(party => (
                   <>
                     <div
-                      className="tw:w-sm"
+                      className="tw:mt-6 tw:w-[300px]"
                       key={`edit-contact-${party.contactId}`}
                     >
                       <span className="tw:block tw:mb-[5px]">{party.name}</span>
@@ -195,6 +195,7 @@ export const NoticeOfWithdrawalForm = connect(
                             Yes, this information is current
                           </label>
                           <Button
+                            className="tw:mt-2"
                             variant="primaryTertiary"
                             icon="pencil"
                             aria-label="Edit contact information"
