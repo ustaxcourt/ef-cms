@@ -12,6 +12,8 @@ provider "aws" {
   alias  = "us-west-1"
 }
 
+data "aws_caller_identity" "current" {}
+
 terraform {
   backend "s3" {}
 

@@ -39,7 +39,7 @@ resource "aws_iam_role_policy" "zendesk_automations_policy" {
           "cognito-idp:ListUsers",
         ]
         Effect = "Allow",
-        Resource = "arn:aws:cognito-idp::${data.aws_caller_identity.current.account_id}:userpool/${aws_cognito_user_pool.pool.id}"
+        Resource = "arn:aws:cognito-idp::${data.aws_caller_identity.current.account_id}:userpool/${var.cognito_user_pool}"
       },
       {
         Action = [

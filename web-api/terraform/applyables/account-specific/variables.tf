@@ -63,3 +63,7 @@ variable "zone_name" {
 variable "zendesk_aws_account_id" {
   type = string
 }
+
+variable "cognito_user_pool" {
+  type = string
+}

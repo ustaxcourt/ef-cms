@@ -76,6 +76,7 @@ export TF_VAR_lower_env_restore_roles="[\"arn:aws:iam::${LOWER_ENV_ACCOUNT_IDS//
 export TF_VAR_number_of_days_to_keep_info_logs="$NUM_DAYS_TO_KEEP_LOGS"
 export TF_VAR_zone_name="$DNS_DOMAIN"
 export TF_VAR_zendesk_aws_account_id="$ZENDESK_AWS_ACCOUNT_ID"
+export TF_VAR_cognito_user_pool="$COGNITO_USER_POOL"
 
 npm run build:assets
 
