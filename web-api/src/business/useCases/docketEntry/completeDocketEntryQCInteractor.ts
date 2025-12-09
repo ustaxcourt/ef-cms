@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import {
   CONTACT_CHANGE_DOCUMENT_TYPES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
@@ -45,7 +46,12 @@ const completeDocketEntryQC = async (
   applicationContext: ServerApplicationContext,
   { entryMetadata }: { entryMetadata: any },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<{
+  caseDetail: RawCase;
+  paperServiceDocumentTitle: string | undefined;
+  paperServiceParties: any[];
+  paperServicePdfUrl: string | undefined;
+}> => {
   const { PDFDocument } = await applicationContext.getPdfLib();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY)) {
