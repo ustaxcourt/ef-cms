@@ -37,9 +37,9 @@
 import { CognitoIdentityProvider, ListUsersCommandOutput, UserType } from '@aws-sdk/client-cognito-identity-provider';
 import pLimit from 'p-limit';
 import { Kysely } from 'kysely';
-import type { Database } from '../../web-api/src/database-schema';
-import { getConnection } from '../../web-api/src/getConnection';
+import { getConnection } from 'web-client/integration-tests/helpers';
 import { getUserPoolId, requireEnvVars } from '../../shared/admin-tools/util';
+import { Database } from '@web-api/persistence/postgres/database-schema';
 
 // ============================================================================
 // UTILITIES
@@ -212,7 +212,7 @@ async function runDbFirstCleanup({
   pools,
   emailPrefix,
 }: {
-  db: Kysely<Database>;
+  db: any;
   cognito: CognitoIdentityProvider;
   pools: Pool[];
   emailPrefix: string;
@@ -259,7 +259,7 @@ async function runCognitoCleanupForPool({
   pool,
   emailPrefix,
 }: {
-  db: Kysely<Database>;
+  db: any;
   cognito: CognitoIdentityProvider;
   pool: Pool;
   emailPrefix: string;

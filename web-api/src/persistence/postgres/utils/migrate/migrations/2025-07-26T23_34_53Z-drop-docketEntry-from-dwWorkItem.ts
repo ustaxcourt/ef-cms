@@ -1,7 +1,7 @@
-import { Database } from '@web-api/database-schema';
+import { Database } from '@web-api/persistence/postgres/database-schema';
 import { CompiledQuery, Kysely } from 'kysely';
 
-export async function up(db: Kysely<Database>): Promise<void> {
+export async function up(db: Kysely<any>): Promise<void> {
   await db.schema.alterTable('dwWorkItem').dropColumn('docketEntry').execute();
 }
 

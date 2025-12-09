@@ -8,7 +8,6 @@ import {
   parseArgsAndEnvVars,
   ScriptConfig,
 } from 'scripts/helpers/parseArgsAndEnvVars';
-import { getConnection } from '@web-api/getConnection';
 import { toKyselyNewUserOnCase } from '@web-api/persistence/postgres/cases/userOnCase/mapper';
 import { toKyselyNewUser } from '@web-api/persistence/postgres/users/mapper';
 import { getColumnsForTable } from '@web-api/persistence/postgres/utils/getColumnsForTable';
@@ -23,6 +22,7 @@ import {
 import { UserOnCaseAssociation } from '@web-api/persistence/postgres/cases/userOnCase/schema';
 import { BarNumberKysely } from '@web-api/persistence/postgres/users/barNumber/schema';
 import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
+import { getConnection } from 'web-client/integration-tests/helpers';
 
 const scriptConfig: ScriptConfig = {
   description: 'Move users and case associations from dynamo to postgres ',
@@ -131,7 +131,7 @@ async function scanContinuously(params: ScanCommandInput) {
     const irsPractitionerCaseAssociations: Array<UserOnCaseAssociation> = []; // {pk: case|, sk: irsPractitioner| }
     const privatePractitionerCaseAssociations: Array<UserOnCaseAssociation> =
       []; // {pk: case|, sk: privatePractitioner| }
-    const userRecords: Array<RawUser | RawPractitioner | RawIrsPractitioner> = []; // {pk: user|, sk: user| }
+    const userRecords: any[] = []; // {pk: user|, sk: user| }
     const userOnCasePendingRecords: TDynamoRecord[] = []; // {pk: user|, sk: pending-case| }
     // const userRecords = [] // {pk: user|, sk: case| } We should not need to process these. For irs/private association is defined through the {pk: case|, sk: privatePractitioner| }. For petitioners it is defined by the dwCase.petitioners array
     const barNumberRecords: BarNumberKysely[] = [];

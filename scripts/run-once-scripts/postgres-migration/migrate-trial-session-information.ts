@@ -15,8 +15,8 @@ import {
   toKyselyNewTrialSessionCase,
 } from '@web-api/persistence/postgres/trialSessions/mapper';
 import { NewTrialSessionPaperPdfKysely } from '@web-api/persistence/postgres/trialSessions/schema';
-import { getConnection } from '@web-api/getConnection';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { getConnection } from 'web-client/integration-tests/helpers';
 
 const scriptConfig: ScriptConfig = {
   description: 'Move trial session information from dynamo to postgres ',
@@ -159,7 +159,7 @@ async function scanContinuously(params: ScanCommandInput) {
         }
         if (record.sk.startsWith('paper-service-pdf|')) {
           trialSessionPaperPdfs.push({
-            ttl: record.ttl,
+            ttl: record.ttl ?? 0,
             trialSessionId: record.pk.substring(14),
             fileId: record.fileId,
             title: record.title,

@@ -7,7 +7,7 @@ import {
 import { getDbReader } from '@web-api/persistence/postgres/database';
 import { isEmpty } from 'lodash';
 import { ROLES } from '@shared/business/entities/EntityConstants';
-import { getConnection } from '@web-api/getConnection';
+import { getConnection } from 'web-client/integration-tests/helpers';
 import { toKyselyNewUserOnCase } from '@web-api/persistence/postgres/cases/userOnCase/mapper';
 import { UserOnCaseAssociation } from '@web-api/persistence/postgres/cases/userOnCase/schema';
 
