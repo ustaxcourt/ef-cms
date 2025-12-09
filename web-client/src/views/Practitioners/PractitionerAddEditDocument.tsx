@@ -22,7 +22,6 @@ export const PractitionerAddEditDocument = connect(
     documentTypes: state.constants.PRACTITIONER_DOCUMENT_TYPES,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    isEditingPractitionerDocument: state.isEditingPractitionerDocument,
     practitionerDocumentationFormHelper:
       state.practitionerDocumentationFormHelper,
     showModal: state.modal.showModal,

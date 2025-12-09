@@ -15,22 +15,22 @@ import { PreviewControls } from './PreviewControls';
 import { SelectScannerSourceModal } from './ScanBatchPreviewer/SelectScannerSourceModal';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props as cerebralProps } from 'cerebral';
+import { props } from 'cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
 
-const props = cerebralProps as unknown as {
+type PetitionQcScanBatchPreviewerProps = {
   documentTabs: Record<string, any>[];
-  documentType: string;
+  documentType?: string;
   title: string;
 };
 
 const petitionQcScanBatchPreviewerDeps = {
   constants: state.constants,
   deleteUploadedPdfSequence: sequences.deleteUploadedPdfSequence,
-  documentTabs: props.documentTabs,
-  documentType: props.documentType,
+  documentTabs: props`documentTabs`,
+  documentType: props`documentType`,
   generatePdfFromScanSessionSequence:
     sequences.generatePdfFromScanSessionSequence,
   openChangeScannerSourceModalSequence:
@@ -56,11 +56,11 @@ const petitionQcScanBatchPreviewerDeps = {
   setSelectedBatchIndexSequence: sequences.setSelectedBatchIndexSequence,
   showModal: state.modal.showModal,
   startScanSequence: sequences.startScanSequence,
-  title: props.title,
+  title: props`title`,
   validationErrors: state.validationErrors,
 };
 
-export const PetitionQcScanBatchPreviewer = connect(
+export const PetitionQcScanBatchPreviewer: React.FC<PetitionQcScanBatchPreviewerProps> = connect(
   petitionQcScanBatchPreviewerDeps,
   function PetitionQcScanBatchPreviewer({
     constants,

@@ -66,8 +66,8 @@ export const handleBounceNotificationInteractor = async (
       defaultTemplateData: {
         emailContent,
       },
-      destinations: alertRecipients.map(email => ({ email })),
-      templateName: process.env.BOUNCE_ALERT_TEMPLATE,
+      destinations: alertRecipients.map(email => ({ email, templateData: {} })),
+      templateName: process.env.BOUNCE_ALERT_TEMPLATE || '',
     });
   }
 

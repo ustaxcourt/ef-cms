@@ -2,6 +2,7 @@ import { SCAN_MODES } from '../../../../shared/src/business/entities/EntityConst
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getScannerInterface } from './getScannerInterface';
 
+
 jest.mock('./loader', () => ({
   loadDWTLibrary: jest.fn().mockResolvedValue(undefined), // or a specific mock value
 }));
@@ -69,7 +70,7 @@ describe('getScannerInterface', () => {
       },
     };
 
-    window.Dynamsoft = { ...Dynamsoft };
+  window.Dynamsoft = { ...Dynamsoft };
   });
 
   it('returns the TWAIN driver API', () => {
@@ -275,7 +276,9 @@ describe('getScannerInterface', () => {
   });
 
   it('should attempt to load the dynamsoft libraries', async () => {
+    // @ts-expect-error
     delete global.window.document;
+    // @ts-expect-error
     global.window.document = {
       addEventListener: () => null,
       createElement: () =>

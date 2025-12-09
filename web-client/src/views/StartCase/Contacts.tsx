@@ -1,10 +1,25 @@
+import { props, state } from 'cerebral';
 import { ContactPrimary } from './ContactPrimary';
 import { ContactSecondary } from './ContactSecondary';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import React from 'react';
 
-export const Contacts = connect(
-  {},
+type ContactsProps = {
+  bind: string;
+  contactsHelper: string;
+  parentView: string;
+  showPrimaryContact: any;
+  showSecondaryContact: any;
+  useSameAsPrimary: boolean;
+  onBlur: Function;
+  onChange: string;
+  wrapperClassName?: string;
+}
+
+export const Contacts: React.FC<ContactsProps> = connect(
+  {
+    contactsHelper: state[props`contactsHelper`],
+  },
   function Contacts({
     bind,
     contactsHelper,
@@ -18,13 +33,13 @@ export const Contacts = connect(
   }: {
     bind: string;
     contactsHelper: Record<string, any>;
-    onBlur: () => void;
+    onBlur: Function;
     onChange: string;
     parentView: string;
     showPrimaryContact: boolean;
     showSecondaryContact: boolean;
     useSameAsPrimary: boolean;
-    wrapperClassName: string;
+    wrapperClassName?: string;
   }) {
     return (
       <>

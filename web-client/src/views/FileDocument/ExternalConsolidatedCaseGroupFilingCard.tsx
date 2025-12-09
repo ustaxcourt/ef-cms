@@ -29,10 +29,11 @@ export const ExternalConsolidatedCaseGroupFilingCard = connect(
             >
               <legend
                 className="with-hint"
-                htmlFor="consolidated-case-group-radios"
                 id="consolidated-case-group-radios-legend"
               >
-                This case is part of a consolidated group.
+                <label htmlFor="consolidated-case-group-radios">
+                  This case is part of a consolidated group.
+                </label>
               </legend>
               <span className="usa-hint">
                 Select the group or this case to file in.

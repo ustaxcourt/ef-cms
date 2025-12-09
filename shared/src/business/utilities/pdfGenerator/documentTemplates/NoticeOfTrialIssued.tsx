@@ -1,7 +1,7 @@
+import { FormattedTrialInfoType } from '@web-api/business/useCases/trialSessions/generateNoticeOfTrialIssuedInteractor';
 import { ClerkOfTheCourtSignature } from '../components/ClerkOfTheCourtSignature';
 import { DocketHeader } from '../components/DocketHeader';
 import { PrimaryHeader } from '../components/PrimaryHeader';
-import { TrialInfoType } from '@web-api/business/useCases/trialSessions/generateNoticeOfChangeToRemoteProceedingInteractor';
 import React from 'react';
 
 export const NoticeOfTrialIssued = ({
@@ -17,7 +17,7 @@ export const NoticeOfTrialIssued = ({
   caseCaptionExtension: string;
   caseTitle: string;
   docketNumberWithSuffix: string;
-  trialInfo: TrialInfoType;
+  trialInfo: FormattedTrialInfoType;
 }) => {
   return (
     <div id="notice-of-trial-pdf">

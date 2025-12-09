@@ -1,21 +1,19 @@
 import { BindedSelect } from '../../../ustc-ui/BindedSelect/BindedSelect';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props as cerebralProps } from 'cerebral';
+import { props } from 'cerebral';
 import React from 'react';
 
-const props = cerebralProps as unknown as {
+type JudgeSelectProps = {
   formValue: string;
-  judges: Array<{ judgeFullName: string; lastName: string; name: string }>;
+  judges: any;
 };
 
-const judgeSelectDeps = {
-  formValue: props.formValue,
-  judges: props.judges,
-};
-
-export const JudgeSelect = connect(
-  judgeSelectDeps,
-  function JudgeSelect({ formValue, judges }) {
+export const JudgeSelect: React.FC<JudgeSelectProps> = connect(
+  {
+    formValue: props`formValue`,
+    judges: props`judges`,
+  },
+  function JudgeSelect({ formValue, judges }: any) {
     return (
       <>
         <label className="usa-label" htmlFor="date-range">

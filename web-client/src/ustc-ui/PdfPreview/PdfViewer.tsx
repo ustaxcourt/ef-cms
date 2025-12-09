@@ -11,7 +11,7 @@ export const PdfViewer = ({
   id?: string;
   removeToolbar?: boolean;
   src: string | null;
-  title: string;
+  title?: string;
 }) => {
   if (!src) {
     return;

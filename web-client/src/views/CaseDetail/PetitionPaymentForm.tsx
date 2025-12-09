@@ -198,14 +198,21 @@ const PetitionPaymentFormComponent: React.FC<
   );
 };
 
-export const PetitionPaymentForm = connect(
+type PetitionPaymentFormProps = {
+  bind: string;
+  validateFormData: Function;
+  validationErrorsBind: string;
+  onUpdate: Function;
+}
+
+export const PetitionPaymentForm: React.FC<PetitionPaymentFormProps> = connect(
   {
     DATE_FORMATS: state.constants.DATE_FORMATS,
-    bind: state[props.bind],
+    bind: state[props`bind`],
     formatAndUpdateDateFromDatePickerSequence:
       sequences.formatAndUpdateDateFromDatePickerSequence,
     paymentStatus: state.constants.PAYMENT_STATUS,
-    validationErrors: state[props.validationErrorsBind],
+    validationErrors: state[props`validationErrorsBind`],
   },
   PetitionPaymentFormComponent,
 );

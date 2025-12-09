@@ -32,8 +32,10 @@ export const SealDocketEntryModal = connect(
           className="usa-fieldset margin-bottom-2"
           id="docket-entry-sealed-to-radios"
         >
-          <legend htmlFor="docket-entry-sealed-to-radios">
-            Who do you want to seal this to?
+          <legend>
+            <label htmlFor="docket-entry-sealed-to-radios">
+              Who do you want to seal this to?
+            </label>
           </legend>
           <div className="usa-radio">
             <input

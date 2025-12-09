@@ -3,23 +3,22 @@ import { Hint } from '../ustc-ui/Hint/Hint';
 import { InfoNotificationComponent } from './InfoNotification';
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props as cerebralProps } from 'cerebral';
-import { sequences, state } from '@web-client/presenter/app.cerebral';
+import { props } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React, { JSX } from 'react';
 
-interface ConfirmInitiateServiceModalProps {
+type ConfirmInitiateServiceModalProps = {
   confirmSequence: Function;
-  documentTitle: string;
+  documentTitle?: string;
 }
 
-const props = cerebralProps as unknown as ConfirmInitiateServiceModalProps;
-
-export const ConfirmInitiateServiceModal = connect(
+export const ConfirmInitiateServiceModal: React.FC<ConfirmInitiateServiceModalProps> = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
     confirmInitiateServiceModalHelper: state.confirmInitiateServiceModalHelper,
-    confirmSequence: props.confirmSequence,
-    documentTitle: props.documentTitle,
+    confirmSequence: props`confirmSequence`,
+    documentTitle: props`documentTitle`,
     waitingForResponse: state.progressIndicator.waitingForResponse,
   },
   function ConfirmInitiateServiceModal({

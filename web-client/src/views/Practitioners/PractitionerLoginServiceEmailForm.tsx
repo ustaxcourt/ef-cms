@@ -6,6 +6,7 @@ import React from 'react';
 
 type PractitionerLoginServiceEmailFormProps = {
   emailFormName: string;
+  validateSequenceName: string;
 };
 
 const practitionerLoginServiceEmailFormDependencies = {

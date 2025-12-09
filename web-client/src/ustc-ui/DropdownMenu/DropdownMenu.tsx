@@ -1,31 +1,35 @@
 import { Button } from '../Button/Button';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props as cerebralProps } from 'cerebral';
+import { props } from 'cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
 
-const props = cerebralProps as unknown as {
+type DropdownMenuProps = {
+  caseDetail?: any;
+  clearDropDownMenuStateSequence?: any;
   id: string;
-  menuState: string;
-  menuItems: Array<{ id: string; label: string; click: () => void }>;
-};
+  isMenuOpen?: boolean;
+  menuItems: any;
+  menuState: any;
+  openAddEditCalendarNoteModalSequence?: any;
+  openRemoveFromTrialSessionModalSequence?: any;
+  toggleMenuStateSequence?: any;
+}
 
-const dropdownMenuDeps = {
-  caseDetail: state.formattedCaseDetail,
-  clearDropDownMenuStateSequence: sequences.clearDropDownMenuStateSequence,
-  id: props.id,
-  isMenuOpen: state[props.menuState],
-  menuItems: props.menuItems,
-  menuState: props.menuState,
-  openAddEditCalendarNoteModalSequence:
-    sequences.openAddEditCalendarNoteModalSequence,
-  openRemoveFromTrialSessionModalSequence:
-    sequences.openRemoveFromTrialSessionModalSequence,
-  toggleMenuStateSequence: sequences.toggleMenuStateSequence,
-};
-
-export const DropdownMenu = connect(
-  dropdownMenuDeps,
+export const DropdownMenu: React.FC<DropdownMenuProps> = connect(
+  {
+    caseDetail: state.formattedCaseDetail,
+    clearDropDownMenuStateSequence: sequences.clearDropDownMenuStateSequence,
+    id: props`id`,
+    isMenuOpen: state[props`menuState`],
+    menuItems: props`menuItems`,
+    menuState: props`menuState`,
+    openAddEditCalendarNoteModalSequence:
+      sequences.openAddEditCalendarNoteModalSequence,
+    openRemoveFromTrialSessionModalSequence:
+      sequences.openRemoveFromTrialSessionModalSequence,
+    toggleMenuStateSequence: sequences.toggleMenuStateSequence,
+  },
   function DropdownMenu({
     clearDropDownMenuStateSequence,
     id,
@@ -41,7 +45,7 @@ export const DropdownMenu = connect(
     menuState: string;
     toggleMenuStateSequence: Function;
   }) {
-    const menuRef = useRef(null);
+    const menuRef = useRef<HTMLDivElement | null>(null);
 
     const keydown = event => {
       const pressedESC = event.keyCode === 27;
@@ -53,7 +57,7 @@ export const DropdownMenu = connect(
     };
 
     const reset = e => {
-      const clickedWithinComponent = menuRef.current.contains(e.target);
+      const clickedWithinComponent = menuRef.current?.contains(e.target);
       const clickedOnMenuButton = e.target.closest('.trial-session-edit-btn');
       const clickedOnSubNav = e.target.closest('.edit-case-trial-menu');
       if (!clickedWithinComponent) {

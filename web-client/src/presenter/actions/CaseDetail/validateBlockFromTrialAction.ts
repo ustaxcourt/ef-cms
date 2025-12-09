@@ -10,7 +10,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const validateBlockFromTrialAction = ({ get, path }: ActionProps) => {
   const { reason } = get(state.modal);
 
-  let errors = null;
+  let errors: { reason?: string } | null = null;
   if (!reason) {
     errors = { reason: 'Provide a reason' };
   }

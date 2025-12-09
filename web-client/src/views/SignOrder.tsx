@@ -37,30 +37,36 @@ export const SignOrder = connect(
   }) {
     const yLimitToPreventServedStampOverlay = 705;
 
-    const canvasRef = useRef(null);
-    const signatureRef = useRef(null);
+    const canvasRef = useRef(null) as React.RefObject<HTMLCanvasElement | null>;
+    const signatureRef = useRef(
+      null,
+    ) as React.RefObject<HTMLSpanElement | null>;
 
     const renderPDFPage = pageNumber => {
       const canvas = canvasRef.current;
-      const canvasContext = canvas.getContext('2d');
+      const canvasContext = canvas?.getContext('2d');
 
-      pdfObj
-        ?.getPage(pageNumber)
-        .then(page => {
-          const scale = 1;
-          const viewport = page.getViewport({ scale });
-          canvas.height = viewport.height;
-          canvas.width = viewport.width;
+      if (canvasContext) {
+        pdfObj
+          ?.getPage(pageNumber)
+          .then(page => {
+            const scale = 1;
+            const viewport = page.getViewport({ scale });
+            if (canvas) {
+              canvas.height = viewport.height;
+              canvas.width = viewport.width;
+            }
 
-          const renderContext = {
-            canvasContext,
-            viewport,
-          };
-          return page.render(renderContext);
-        })
-        .catch(() => {
-          /* no-op*/
-        });
+            const renderContext = {
+              canvasContext,
+              viewport,
+            };
+            return page.render(renderContext);
+          })
+          .catch(() => {
+            /* no-op*/
+          });
+      }
     };
 
     const moveSig = (sig, x, y) => {
@@ -104,48 +110,57 @@ export const SignOrder = connect(
         signatureData: null,
       });
 
-      canvasEl.onmousemove = e => {
-        const { pageX, pageY } = e;
-        const canvasBounds = canvasEl.getBoundingClientRect();
-        const sigBox = sigEl.getBoundingClientRect();
+      if (canvasEl) {
+        canvasEl.onmousemove = e => {
+          const { pageX, pageY } = e;
+          const canvasBounds = canvasEl.getBoundingClientRect();
+          const sigBox = sigEl?.getBoundingClientRect();
 
-        const sigParentBounds = sigEl.parentElement.getBoundingClientRect();
-        const scrollYOffset = window.scrollY;
+          const sigParentBounds = sigEl?.parentElement?.getBoundingClientRect();
+          const scrollYOffset = window.scrollY;
 
-        x = pageX - canvasBounds.x;
-        y = pageY - canvasBounds.y - scrollYOffset;
+          x = pageX - canvasBounds.x;
+          y = pageY - canvasBounds.y - scrollYOffset;
 
-        const uiPosX = pageX - sigParentBounds.x;
-        const uiPosY = y + (canvasBounds.y - sigParentBounds.y) - sigBox.height;
+          if (sigParentBounds && sigBox) {
+            const uiPosX = pageX - sigParentBounds.x;
+            const uiPosY =
+              y + (canvasBounds.y - sigParentBounds.y) - sigBox.height;
 
-        if (uiPosY < yLimitToPreventServedStampOverlay) {
-          moveSig(sigEl, uiPosX, uiPosY);
-        }
-      };
+            if (uiPosY < yLimitToPreventServedStampOverlay) {
+              moveSig(sigEl, uiPosX, uiPosY);
+            }
+          }
+        };
 
-      canvasEl.onmousedown = e => {
-        const { pageY } = e;
-        const canvasBounds = canvasEl.getBoundingClientRect();
-        const scrollYOffset = window.scrollY;
-        const sigParentBounds = sigEl.parentElement.getBoundingClientRect();
-        const sigBoxHeight = sigEl.getBoundingClientRect().height;
-        const uiPosY =
-          pageY -
-          canvasBounds.y -
-          scrollYOffset +
-          (canvasBounds.y - sigParentBounds.y) -
-          sigBoxHeight;
+        canvasEl.onmousedown = e => {
+          const { pageY } = e;
+          const canvasBounds = canvasEl.getBoundingClientRect();
+          const scrollYOffset = window.scrollY;
+          const sigParentBounds = sigEl?.parentElement?.getBoundingClientRect();
+          const sigBoxHeight = sigEl?.getBoundingClientRect().height;
+          if (sigParentBounds && sigBoxHeight) {
+            const uiPosY =
+              pageY -
+              canvasBounds.y -
+              scrollYOffset +
+              (canvasBounds.y - sigParentBounds.y) -
+              sigBoxHeight;
 
-        if (uiPosY < yLimitToPreventServedStampOverlay) {
-          stopCanvasEvents(canvasEl, sigEl, x, y - sigBoxHeight);
-        }
-      };
+            if (uiPosY < yLimitToPreventServedStampOverlay) {
+              stopCanvasEvents(canvasEl, sigEl, x, y - sigBoxHeight);
+            }
+          }
+        };
+      }
 
       // sometimes the cursor falls on top of the signature
       // and catches these events
 
-      sigEl.onmousemove = canvasEl.onmousemove;
-      sigEl.onmousedown = canvasEl.onmousedown;
+      if (sigEl && canvasEl) {
+        sigEl.onmousemove = canvasEl.onmousemove;
+        sigEl.onmousedown = canvasEl.onmousedown;
+      }
     };
 
     let hasStarted = false;
@@ -177,7 +192,7 @@ export const SignOrder = connect(
                   });
                 }}
               >
-                <FontAwesomeIcon icon={['fa', 'arrow-alt-circle-left']} />
+                <FontAwesomeIcon icon={'arrow-alt-circle-left'} />
                 Back to Draft Document
               </Button>
             </div>

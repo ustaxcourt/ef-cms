@@ -3,7 +3,6 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { props as cerebralProps } from 'cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
-import { RunableSequence as RunnableSequence } from 'cerebral';
 
 const props = cerebralProps as unknown as {
   bind: string;
@@ -12,7 +11,15 @@ const props = cerebralProps as unknown as {
   validationErrors: string;
 };
 
-export const ServiceIndicatorRadios = connect(
+type ServiceIndicatorRadiosProps = {
+  bind: string;
+  hideElectronic?: boolean;
+  validationErrors?: string;
+  validateSequence?: Function;
+  getValidationError?: () => any;
+}
+
+export const ServiceIndicatorRadios: React.FC<ServiceIndicatorRadiosProps> = connect(
   {
     SERVICE_INDICATOR_TYPES: state.constants.SERVICE_INDICATOR_TYPES,
     bindKey: props.bind,
@@ -35,11 +42,11 @@ export const ServiceIndicatorRadios = connect(
   }: {
     bindKey: string;
     bindObject: Record<string, any>;
-    cerebralBindSimpleSetStateSequence: Function | RunnableSequence;
+    cerebralBindSimpleSetStateSequence: Function;
     getValidationError: () => string;
     hideElectronic: boolean;
     SERVICE_INDICATOR_TYPES: Record<string, any>;
-    validateSequence: Function | RunnableSequence;
+    validateSequence?: Function;
     validationErrors: Record<string, any>;
   }) {
     const selectElectronic =
@@ -62,8 +69,10 @@ export const ServiceIndicatorRadios = connect(
           className="usa-fieldset margin-bottom-2"
           id={`service-type-radios-${bindKey}`}
         >
-          <legend htmlFor={`service-type-radios-${bindKey}`}>
-            Service preference
+          <legend>
+            <label htmlFor={`service-type-radios-${bindKey}`}>
+              Service preference
+            </label>
           </legend>
           {!hideElectronic && (
             <div className="usa-radio usa-radio__inline">

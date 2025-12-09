@@ -3,22 +3,22 @@ import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
 import { SupportingDocumentInclusionsForm } from './SupportingDocumentInclusionsForm';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props as cerebralProps } from 'cerebral';
+import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-const props = cerebralProps as unknown as {
+type SupportingDocumentFormProps = {
   index: number;
 };
 
-export const SupportingDocumentForm = connect(
+export const SupportingDocumentForm: React.FC<SupportingDocumentFormProps> = connect(
   {
     constants: state.constants,
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
-    index: props.index,
+    index: props`index`,
     removeSupportingDocumentSequence:
       sequences.removeSupportingDocumentSequence,
     updateFileDocumentWizardFormValueSequence:
@@ -62,8 +62,8 @@ export const SupportingDocumentForm = connect(
         <div className="blue-container">
           <FormGroup
             className={
-              !form.supportingDocuments[index].supportingDocument &&
-              'margin-bottom-0'
+              !form.supportingDocuments[index].supportingDocument ?
+              'margin-bottom-0' : undefined
             }
             errorText={fileValidationErrors?.supportingDocument}
           >

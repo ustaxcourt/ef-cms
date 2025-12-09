@@ -3,6 +3,7 @@ import { Button } from '../Button/Button';
 import { getConstants } from '../../getConstants';
 import React from 'react';
 import classNames from 'classnames';
+import { IconName } from '@fortawesome/fontawesome-svg-core';
 
 const { ASCENDING, DESCENDING } = getConstants();
 
@@ -117,7 +118,7 @@ const getFontAwesomeIcon = ({
   descText: string;
   isActiveColumn: boolean;
 }) => {
-  let fontAwesomeIcon =
+  let fontAwesomeIcon: IconName =
     direction === DESCENDING ? 'long-arrow-alt-down' : 'long-arrow-alt-up';
   let tooltipText = direction === ASCENDING ? ascText : descText;
 

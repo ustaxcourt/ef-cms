@@ -8,6 +8,9 @@ import { PreformattedText } from '@web-client/ustc-ui/PreformatedText/Preformatt
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import { TrialSessionWorkingCopyCase } from '@web-client/presenter/computeds/trialSessionWorkingCopyHelper';
+import { RawTrialSessionWorkingCopy } from '@shared/business/entities/trialSessions/TrialSessionWorkingCopy';
+import { UserCaseNote } from '@shared/business/entities/notes/UserCaseNote';
 
 const getCaseRow = ({
   formattedCase,
@@ -171,7 +174,17 @@ const getCaseRow = ({
   );
 };
 
-export const CaseListRowTrialSession = connect(
+type CaseListRowTrialSessionProps = {
+  formattedCase: TrialSessionWorkingCopyCase;
+  key: string;
+  trialSessionWorkingCopy: RawTrialSessionWorkingCopy & {
+    userNotes: {
+      [docketNumber: string]: UserCaseNote;
+    };
+  };
+};
+
+export const CaseListRowTrialSession: React.FC<CaseListRowTrialSessionProps> = connect(
   {
     autoSaveTrialSessionWorkingCopySequence:
       sequences.autoSaveTrialSessionWorkingCopySequence,
