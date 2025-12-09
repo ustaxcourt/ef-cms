@@ -3,20 +3,18 @@
 resource "aws_iam_role" "zendesk_automations_role" {
   count = var.zendesk_aws_account_id != "" ? 1 : 0
   name = "zendesk-automations-lambda-role"
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "AWS": "arn:aws:iam::${var.zendesk_aws_account_id}:role/zendesk-automations-lambda-exec"
-      },
-      "Effect": "Allow",
-    }
-  ]
-}
-EOF
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action = "sts:AssumeRole",
+        Principal = {
+          AWS = "arn:aws:iam::${var.zendesk_aws_account_id}:role/zendesk-automations-lambda-exec"
+        },
+        Effect ="Allow",
+      }
+    ]
+  })
 }
 
 resource "aws_iam_role_policy" "zendesk_automations_policy" {
