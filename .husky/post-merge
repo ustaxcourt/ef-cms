@@ -1,0 +1,33 @@
+#!/bin/sh
+if [ -f "CHANGES.md" ]; then
+  CHANGES_DIFF=$(git diff ORIG_HEAD HEAD -- CHANGES.md 2>/dev/null)
+  if [ -n "$CHANGES_DIFF" ]; then
+    {
+      echo ""
+      echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+      echo "⚠️  CHANGES.md has been updated. Please review the manual steps below:"
+      echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+      echo ""
+      echo "$CHANGES_DIFF" | grep -E "^[\+\-]" | grep -v "^[\+\-][\+\-][\+\-]" | grep -v "No newline" | while IFS= read -r line; do
+        case "$line" in
+          +*) printf "  \033[32m%s\033[0m\n" "$line" ;;
+          -*) printf "  \033[31m%s\033[0m\n" "$line" ;;
+        esac
+      done
+      echo ""
+      echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+      echo ""
+    } >&2
+    
+    if command -v code >/dev/null 2>&1; then
+      TEMP_FILE=$(mktemp /tmp/changes-old-XXXXXX.md 2>/dev/null || echo "/tmp/changes-old.md")
+      git show ORIG_HEAD:CHANGES.md > "$TEMP_FILE" 2>/dev/null || touch "$TEMP_FILE"
+      code --diff "$TEMP_FILE" "$(pwd)/CHANGES.md" 2>/dev/null || true
+      (sleep 2 && rm -f "$TEMP_FILE" 2>/dev/null) &
+    fi
+    
+    if command -v osascript >/dev/null 2>&1; then
+      osascript -e 'display notification "CHANGES.md has been updated. VS Code diff view opened." with title "Git Post-Merge Hook" sound name "Glass"' 2>/dev/null || true
+    fi
+  fi
+fi
