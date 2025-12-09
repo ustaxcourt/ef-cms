@@ -77,7 +77,7 @@ A prerequisite for a successful build within CircleCI is [access to CircleCI’s
   | `PROD_ENV_ACCOUNT_ID` | The account ID of the AWS account with Production Data |
   | `SLACK_WEBHOOK_URL` | Optional URL to send POST requests to notify a Slack App |
   | `BOUNCE_ALERT_RECIPIENTS` | Optional comma separated list of Email addresses to be notified when email bounces to the `IRS_SUPERUSER_EMAIL` |
-  | `ZENDESK_AWS_ACCOUNT_ID` | Optional AWS Account ID that houses Zendesk Automations Infrastructure |
+
 
   > **Note:**\
   `*` - These environment variables are now stored in AWS Secrets Manager and retrieved as part of the deployment 

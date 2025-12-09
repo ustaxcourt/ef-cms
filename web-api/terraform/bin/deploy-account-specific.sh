@@ -75,6 +75,7 @@ export TF_VAR_log_snapshot_bucket_name="$LOG_SNAPSHOT_BUCKET_NAME"
 export TF_VAR_lower_env_restore_roles="[\"arn:aws:iam::${LOWER_ENV_ACCOUNT_IDS//,/:role/restore_role_*\",\"arn:aws:iam::}:role/restore_role_*\"]"
 export TF_VAR_number_of_days_to_keep_info_logs="$NUM_DAYS_TO_KEEP_LOGS"
 export TF_VAR_zone_name="$DNS_DOMAIN"
+export TF_VAR_zendesk_aws_account_id="$ZENDESK_AWS_ACCOUNT_ID"
 
 npm run build:assets
 
