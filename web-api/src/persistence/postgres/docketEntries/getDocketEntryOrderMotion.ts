@@ -1,4 +1,4 @@
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { DocketEntryOrderMotionKysely } from '@web-api/persistence/postgres/docketEntries/schema';
 
 export const getDocketEntryOrderMotion = async (
