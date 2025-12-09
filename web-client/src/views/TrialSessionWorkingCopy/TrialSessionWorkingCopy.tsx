@@ -64,7 +64,7 @@ export const TrialSessionWorkingCopy = connect(
                 )}
               </h2>
             </div>
-            {!trialSessionWorkingCopyHelper.showPrintButton ? (
+            {trialSessionWorkingCopyHelper.showPrintButton ? (
               <div className="grid-col-2 text-right padding-top-1">
                 <Button
                   link
