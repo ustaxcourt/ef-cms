@@ -55,7 +55,7 @@ resource "aws_iam_role_policy" "zendesk_automations_policy" {
           "ses:DeleteSuppressedDestination",
         ]
         Effect = "Allow",
-        Resource = "arn:aws:ses:us-east-1:${data.aws_caller_identity.current.account_id}:*"
+        Resource = "*"
       }
     ]
   })
