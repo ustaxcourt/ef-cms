@@ -3,6 +3,7 @@ import React from 'react';
 import { Buttons } from '@web-client/views/Public/DawsonLibrary/Buttons';
 import { Alerts } from '@web-client/views/Public/DawsonLibrary/Alerts';
 import { Tags } from '@web-client/views/Public/DawsonLibrary/Tags';
+import { Inputs } from '@web-client/views/Public/DawsonLibrary/Inputs';
 
 export const DawsonLibrary = () => {
   return (
@@ -12,6 +13,7 @@ export const DawsonLibrary = () => {
         <Buttons />
         <Alerts />
         <Tags />
+        <Inputs />
       </div>
     </>
   );
