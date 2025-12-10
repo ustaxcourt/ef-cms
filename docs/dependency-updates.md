@@ -252,27 +252,6 @@ We cannot update TypeScript version beyond v5.8.3 until ts-jest supports it
 The decision was made to revert back to 5.8.3 as the migration would require multiple days of dedicated work.
 - On November 19th, 2025, updated to typescript 5.9.3 and as a result resolved many of the typing issues involved in pdf buffers, applicationContext between client, shared, and api.
 
-### p-queue
-Upgrading `p-queue` past version 6 will cause issues related to module imports.
-
-- On September 19th, 2025, tried to update to 8.1.1. Errors were thrown on Github Action checks to address imports. A potential fix could be to update our build configuration to properly handle ES modules or maybe use dynamic imports as a workaround? Refer to this PR. https://github.com/ustaxcourt/ef-cms/pull/9164
-
-### uuid
-9/17/25 keeping it 11.1.0. The next version 12.0.0 and above no longer supports CommonJS
-
-https://www.npmjs.com/package/uuid?activeTab=readme
-
-Quote from site:
-
-"Starting with uuid@12 CommonJS is no longer supported. See implications and motivation for details."
-
-- On October 27th, 2025, added `uuid` to the caveats list in `scripts/npm/upgrade-npm-packages.ts` to prevent automatic upgrades to v12+ during future
-- On November 18th, 2025, ugpraded `uuid` to 13.0.0, edited the jest config to ignore patterns for uuid
-
-### sass
-11/26/2025 ran into issues trying to update this package. Error: Upgrading sass to version 1.94.2 npm error code ERR_INVALID_ARG_TYPE.
-Solution was removing node_modules and package-lock.json and updating the version manually in package-lock.json and then reinstalling dependencies and running the upgrade script
-
 ## Troubleshooting
 
 ### Incrementing the Node Cache Key Version
