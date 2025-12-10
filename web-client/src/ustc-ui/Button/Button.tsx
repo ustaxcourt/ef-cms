@@ -51,6 +51,7 @@ export const Button = (props: {
     secondary,
     shouldWrapText = false,
     tooltip,
+    type = 'button',
     ...remainingProps
   } = props;
 
@@ -82,6 +83,7 @@ export const Button = (props: {
       disabled={disableButton}
       {...remainingProps}
       title={tooltip}
+      type={type}
       onClick={getUpdatedOnClick(onClick, disableOnClick, setDisableButton)}
     >
       {icon && !iconRight && (

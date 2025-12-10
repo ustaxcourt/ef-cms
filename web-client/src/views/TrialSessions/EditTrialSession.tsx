@@ -104,7 +104,6 @@ export const EditTrialSession = connect(
               </Button>
               <Button
                 link
-                type="button"
                 onClick={() => {
                   formCancelToggleCancelSequence();
                 }}
