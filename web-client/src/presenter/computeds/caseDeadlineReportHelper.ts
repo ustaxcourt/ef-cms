@@ -3,6 +3,7 @@ import { Get } from 'cerebral';
 import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { CASE_DEADLINES_REPORT_PAGE_SIZE } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
+import { isLeadCase } from '@shared/business/entities/cases/Case';
 
 export const caseDeadlineReportHelper = (
   get: Get,
@@ -86,11 +87,11 @@ export const caseDeadlineReportHelper = (
 
   const formattedCaseDeadlines = caseDeadlinesForCurrentPage.map(d => {
     const inConsolidatedGroup = !!d.leadDocketNumber;
-    const inLeadCase = d.leadDocketNumber === d.docketNumber;
+    const isLeadCaseResult = isLeadCase(d);
     let consolidatedIconTooltipText;
 
     if (inConsolidatedGroup) {
-      if (inLeadCase) {
+      if (isLeadCaseResult) {
         consolidatedIconTooltipText = 'Lead case';
       } else {
         consolidatedIconTooltipText = 'Consolidated case';
@@ -108,7 +109,7 @@ export const caseDeadlineReportHelper = (
         .getUtilities()
         .formatDateString(d.deadlineDate, 'MMDDYY'),
       inConsolidatedGroup,
-      inLeadCase,
+      inLeadCase: isLeadCaseResult,
     };
   });
 

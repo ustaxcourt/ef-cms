@@ -343,12 +343,6 @@ This runbook describes the process of creating a new DAWSON lower environment in
       export DOCUMENTS_BUCKET_NAME="${EFCMS_DOMAIN}-documents-${ENV}-us-east-1"
       aws s3 sync "s3://${PROD_DOCUMENTS_BUCKET_NAME}" "s3://${DOCUMENTS_BUCKET_NAME}"
       ```
-   1. Deploy the `remote_role`:
-      ```bash
-      cd shared/admin-tools/glue/remote_role
-      ./bin/deploy-remote-role.sh "${ENV}"
-      cd ../../../..
-      ```
 1. Create a configuration file for this environment:
    1. Copy the example configuration:
       ```bash

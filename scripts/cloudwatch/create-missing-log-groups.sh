@@ -36,7 +36,6 @@ for COLOR in blue green; do
   process_group "/aws/lambda/api_${ENV}_${COLOR}"
   process_group "/aws/lambda/api_public_${ENV}_${COLOR}"
   process_group "/aws/lambda/api_async_${ENV}_${COLOR}"
-  process_group "/aws/lambda/streams_${ENV}_${COLOR}"
   process_group "/aws/apigateway/gateway_api_${ENV}_${COLOR}"
   process_group "/aws/apigateway/gateway_api_public_${ENV}_${COLOR}"
   process_group "/aws/lambda/websockets_connect_${ENV}_${COLOR}"
