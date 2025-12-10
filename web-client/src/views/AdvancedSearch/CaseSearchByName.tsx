@@ -15,6 +15,7 @@ import {
   ALL_SELECTION,
   MULTI_SELECT_PLACEHOLDER,
 } from '@shared/business/entities/EntityConstants';
+import { TextField } from '@web-client/dawson-ui/ui/input';
 
 export const CaseSearchByName = connect(
   {
@@ -78,9 +79,8 @@ export const CaseSearchByName = connect(
                   </label>
                   <span className="usa-hint">
                     Advanced syntax search (*, “”, - , etc. ) is not supported
-                    at this time.
-                  </span>
-                  <input
+                    at this time.</span>        
+                  <TextField
                     aria-describedby="case-search-by-name"
                     className="usa-input"
                     data-testid="petitioner-name"
