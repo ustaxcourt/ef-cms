@@ -1,5 +1,5 @@
 import { ClientApplicationContext } from '../../../../web-client/src/applicationContext';
- 
+
 export const getCaseDocumentsIdsFilteredByDocumentType = (
   applicationContext: ClientApplicationContext,
   {
@@ -22,7 +22,7 @@ export const getCaseDocumentsIdsFilteredByDocumentType = (
       docketEntriesToDownload.push(entry);
     }
   });
- 
+
   const filteredDocuments = applicationContext
     .getUtilities()
     .getDocketEntriesByFilter(applicationContext, {
@@ -31,7 +31,6 @@ export const getCaseDocumentsIdsFilteredByDocumentType = (
     });
  
   const filteredDocumentsIds = filteredDocuments.map(doc => doc.docketEntryId);
- 
+
   return filteredDocumentsIds;
 };
- 

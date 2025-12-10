@@ -3,7 +3,6 @@ import { CaseSearchByDocketNumber } from './CaseSearchByDocketNumber';
 import { CaseSearchByName } from './CaseSearchByName';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
@@ -15,9 +14,6 @@ type CaseSearchFormProps = {
 export const CaseSearchForm: React.FC<CaseSearchFormProps> = connect(
   {
     advancedSearchForm: state.advancedSearchForm,
-    submitAdvancedSearchSequence: sequences.submitCaseAdvancedSearchSequence,
-    submitDocketNumberSearchSequence:
-      sequences.submitCaseDocketNumberSearchSequence,
   },
   function CaseSearchForm({
     advancedSearchForm,

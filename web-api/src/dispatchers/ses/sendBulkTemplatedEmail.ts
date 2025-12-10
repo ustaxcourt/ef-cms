@@ -33,7 +33,7 @@ export const sendBulkTemplatedEmail = async ({
   applicationContext: ServerApplicationContext;
   defaultTemplateData: { [key: string]: any };
   destinations: { email: string; templateData?: { [key: string]: any } }[];
-  templateName: string | undefined;
+  templateName?: string;
 }): Promise<void> => {
   try {
     const params: SendBulkTemplatedEmailCommandInput = {

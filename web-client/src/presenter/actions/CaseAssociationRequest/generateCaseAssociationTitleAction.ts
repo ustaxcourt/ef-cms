@@ -23,7 +23,7 @@ export const generateCaseAssociationTitleAction = ({
       documentTitle,
       documentType: caseAssociationRequest.documentType,
     };
-    documentTitle = applicationContext 
+    documentTitle = applicationContext
       .getUtilities()
       .generateExternalDocumentTitle(applicationContext, {
         documentMetadata: caseAssociationRequest.supportingDocumentMetadata,

@@ -694,7 +694,6 @@ export const setupTest = ({ constantsOverrides = {} } = {}) => {
     route: (routeToGoTo = '/') => gotoRoute(routes, routeToGoTo),
   };
 
-  // cast presenter to any to satisfy the CerebralTest signature in tests
   cerebralTest = CerebralTest(presenter as ModuleDefinition);
   cerebralTest.getSequence = seqName => obj =>
     cerebralTest.runSequence(seqName, obj);
@@ -737,7 +736,6 @@ export const setupTest = ({ constantsOverrides = {} } = {}) => {
     });
   });
 
-  // initialize the socket provider with the cerebral test instance and the application context
   initializeSocketProvider(cerebralTest, applicationContext);
 
   return cerebralTest;
