@@ -121,6 +121,53 @@ describe('Blocked Cases', () => {
     );
   });
 
+  it('should create trial session and cases, then verify blocked cases granted remote motion have an indicator', () => {
+    const trialLocation = 'Portland, Maine';
+    const procedureType = PROCEDURE_TYPES_MAP.small;
+    const date = formatNow(FORMATS.MMDDYYYY);
+    createAndServePaperPetition({
+      procedureType,
+      trialLocation,
+      includeApwDocument: false,
+    }).then(({ docketNumber }) => {
+      loginAsPetitionsClerk1();
+      cy.wrap(docketNumber).as('docketNumber');
+
+      loginAsDocketClerk1();
+      goToCase(docketNumber);
+      cy.get('[data-testid="tab-case-information"]').click();
+      cy.get('[data-testid="add-manual-block-button"]').click();
+      cy.get('[data-testid="blocked-from-trial-reason-textarea"]').type(
+        'This case cannot go to trial.',
+      );
+      cy.get('[data-testid="modal-button-confirm"]').click();
+      cy.get('[data-testid="success-alert"]').contains(
+        'Case blocked from being set for trial.',
+      );
+      cy.get('[data-testid="blocked-case-icon"]');
+      goToCase(docketNumber);
+      cy.get('[data-testid="blocked-case-icon"]');
+
+      cy.get('[data-testid="dropdown-select-report"]').click();
+      cy.get('[data-testid="blocked-cases-report"]').click();
+      cy.get('[data-testid="trial-location-filter"]').select(trialLocation);
+      cy.get('[data-testid="procedure-type-filter"]').select(procedureType);
+      cy.get(`a[href="/case-detail/${docketNumber}"]`).click();
+      cy.get('[data-testid="tab-case-information"] span.button-text').click();
+      cy.get('[data-testid="edit-remote-status"]').click();
+      cy.get('#remote-trial-granted-date-picker').type(date);
+      cy.get('[data-testid="modal-button-confirm"]').click();
+      cy.get('[data-testid="dropdown-select-report"] span').click();
+      cy.get('[data-testid="blocked-cases-report"]').click();
+      cy.get('[data-testid="trial-location-filter"]').select(trialLocation);
+      cy.get('@docketNumber').then(docketNumber => {
+        cy.get(
+          `[data-testid="blocked-case-${docketNumber}-row"] [data-testid="laptop"]`,
+        ).should('be.visible');
+      });
+    });
+  });
+
   it('should show a case as ineligible for trial when it has a case deadline or a pending item', () => {
     const trialLocation = 'Knoxville, Tennessee';
     const procedureType = PROCEDURE_TYPES_MAP.small;

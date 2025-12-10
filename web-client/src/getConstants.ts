@@ -135,6 +135,7 @@ import {
   ENTERED_AND_SERVED_EVENT_CODES,
   SERVICE_STAMP_OPTIONS,
 } from '../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import { ERROR_429 } from '../../shared/src/sharedAppContext';
 import { FORMATS } from '../../shared/src/business/utilities/DateHandler';
 import { ROLE_PERMISSIONS } from '../../shared/src/authorization/authorizationClientService';
 import { SERVICE_INDICATOR_ERROR } from '../../shared/src/business/entities/EntityValidationConstants';
@@ -213,6 +214,7 @@ export const getConstants = () => ({
   DOCUMENT_RELATIONSHIPS,
   DOCUMENT_SERVED_MESSAGES,
   ENTERED_AND_SERVED_EVENT_CODES,
+  ERROR_429,
   ESTATE_TYPES,
   EVENT_CODES_REQUIRING_JUDGE_SIGNATURE,
   EVENT_CODES_REQUIRING_SIGNATURE,

@@ -71,4 +71,20 @@ describe('sealAddressAction', () => {
 
     expect(state.form.isAddressSealed).toBeTruthy();
   });
+
+  it('throws an error when contactToSeal is undefined', async () => {
+    await expect(
+      runAction(sealAddressAction, {
+        modules: {
+          presenter,
+        },
+        state: {
+          caseDetail: {
+            docketNumber: mockDocketNumber,
+          },
+          contactToSeal: undefined,
+        },
+      }),
+    ).rejects.toThrow('Contact to seal is required');
+  });
 });

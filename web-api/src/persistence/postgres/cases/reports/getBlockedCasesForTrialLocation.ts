@@ -77,6 +77,7 @@ export const getBlockedCasesForTrialLocation = async (
         'leadDocketNumber',
         'status',
         'procedureType',
+        'remoteTrialGranted'
       ])
       .limit(MAX_RESULTS);
 
