@@ -103,6 +103,42 @@ export const getShowSealDocketRecordEntry = ({ applicationContext, entry }) => {
   return !docketEntryIsOpinion;
 };
 
+const getRelatedDocketEntryDetails = (
+  motionEntry: RawDocketEntry,
+  rawCase: RawCase,
+  targetDocketEntryId: string,
+  isExternalUser: boolean,
+  user: any,
+  visibilityPolicyDateFormatted: any,
+) => {
+  const relatedOrder = rawCase.docketEntries.find(
+    entry => entry.docketEntryId === targetDocketEntryId,
+  );
+
+  if (!relatedOrder) {
+    throw new Error(
+      `Related order not found for motion with id ${motionEntry.docketEntryId} and targetDocketEntryId ${targetDocketEntryId} and title ${
+        motionEntry.documentTitle
+      }`,
+    );
+  }
+
+  const isDownloadable = DocketEntry.isDownloadable(relatedOrder, {
+    isTerminalUser: false,
+    rawCase,
+    user,
+    visibilityChangeDate: visibilityPolicyDateFormatted,
+  });
+
+  const showDocumentViewerLink = isDownloadable && !isExternalUser;
+  const showDownloadLink = isDownloadable && isExternalUser;
+  return {
+    index: relatedOrder.index,
+    showDocumentViewerLink,
+    showDownloadLink,
+  };
+};
+
 export const getFormattedDocketEntry = ({
   applicationContext,
   docketNumber,
@@ -124,6 +160,29 @@ export const getFormattedDocketEntry = ({
     ...entry,
     createdAtFormatted: entry.createdAtFormatted,
   };
+
+  if (entry.affectedDocketEntries || entry.affectedByDocketEntries) {
+    formattedResult.relatedDocketEntries = [
+      ...(entry.affectedByDocketEntries ?? []),
+      ...(entry.affectedDocketEntries ?? []),
+    ].map(affectedEntry => {
+      const { index, showDocumentViewerLink, showDownloadLink } =
+        getRelatedDocketEntryDetails(
+          entry,
+          rawCase,
+          affectedEntry.docketEntryId,
+          isExternalUser,
+          user,
+          visibilityPolicyDateFormatted,
+        );
+
+      affectedEntry.docketEntryIndex = index;
+      affectedEntry.showDocumentViewerLink = showDocumentViewerLink;
+      affectedEntry.showDownloadLink = showDownloadLink;
+
+      return affectedEntry;
+    });
+  }
 
   if (!isExternalUser) {
     formattedResult.showLoadingIcon =

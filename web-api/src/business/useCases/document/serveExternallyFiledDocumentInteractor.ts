@@ -29,11 +29,13 @@ export const serveExternallyFiledDocument = async (
     clientConnectionId,
     docketEntryId,
     docketNumbers,
+    isFiledAcrossAllCases,
     subjectCaseDocketNumber,
   }: {
     clientConnectionId: string;
     docketEntryId: string;
     docketNumbers: string[];
+    isFiledAcrossAllCases?: boolean;
     subjectCaseDocketNumber: string;
   },
   authorizedUser: UnknownAuthUser,
@@ -97,8 +99,28 @@ export const serveExternallyFiledDocument = async (
       originalSubjectDocketEntry.eventCode,
     ) || originalSubjectDocketEntry.documentTitle?.includes('Simultaneous');
 
-  if (subjectCaseIsSimultaneousDocType) {
-    docketNumbers = [subjectCaseDocketNumber];
+  if (subjectCaseIsSimultaneousDocType && isFiledAcrossAllCases) {
+    if (
+      subjectCaseEntity.leadDocketNumber &&
+      subjectCaseEntity.leadDocketNumber !== subjectCaseEntity.docketNumber
+    ) {
+      const { leadDocketNumber } = subjectCaseEntity;
+      const leadCase = await getCaseByDocketNumber({
+        docketNumber: leadDocketNumber,
+      });
+
+      subjectCaseDocketNumber = leadDocketNumber;
+      docketNumbers = [
+        leadDocketNumber,
+        ...(leadCase.consolidatedCases || []).map(c => c.docketNumber),
+      ];
+    } else {
+      subjectCaseDocketNumber = subjectCase.docketNumber;
+      docketNumbers = [
+        subjectCaseDocketNumber,
+        ...(subjectCase.consolidatedCases || []).map(c => c.docketNumber),
+      ];
+    }
   } else {
     docketNumbers = [subjectCaseDocketNumber, ...docketNumbers];
   }

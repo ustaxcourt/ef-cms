@@ -132,7 +132,6 @@ import { opinionAdvancedSearchInteractor } from '../../shared/src/business/useCa
 import { opinionPublicSearchInteractor } from './business/useCases/public/opinionPublicSearchInteractor';
 import { orderAdvancedSearchInteractor } from '../../shared/src/business/useCases/orderAdvancedSearchInteractor';
 import { orderPublicSearchInteractor } from './business/useCases/public/orderPublicSearchInteractor';
-import { processStreamRecordsInteractor } from './business/useCases/processStreamRecords/processStreamRecordsInteractor';
 import { queueEmailUpdateAssociatedCasesWorker } from '@web-api/business/useCases/user/queueEmailUpdateAssociatedCasesWorker';
 import { queueUpdateAssociatedCasesWorker } from './business/useCases/user/queueUpdateAssociatedCasesWorker';
 import { removeCaseFromTrialInteractor } from './business/useCases/trialSessions/removeCaseFromTrialInteractor';
@@ -330,7 +329,6 @@ const useCases = {
   opinionPublicSearchInteractor,
   orderAdvancedSearchInteractor,
   orderPublicSearchInteractor,
-  processStreamRecordsInteractor,
   queueEmailUpdateAssociatedCasesWorker,
   queueUpdateAssociatedCasesWorker,
   removeCaseFromTrialInteractor,

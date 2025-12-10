@@ -1,4 +1,4 @@
-import { Case } from '@shared/business/entities/cases/Case';
+import { Case, isLeadCase } from '@shared/business/entities/cases/Case';
 import { formatCaseTitle } from '@web-api/business/useCases/generateCoverSheetData';
 import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
 
@@ -27,7 +27,7 @@ export const formatConsolidatedCaseCoversheetData = async ({
   let caseCaptionExtension;
   const consolidatedCasesFiltered = consolidatedCases
     ?.map(consolidatedCase => {
-      if (consolidatedCase.docketNumber === caseEntity.leadDocketNumber) {
+      if (isLeadCase({docketNumber: consolidatedCase.docketNumber, leadDocketNumber: caseEntity.leadDocketNumber})) {
         ({ caseCaptionExtension, caseTitle } = formatCaseTitle({
           applicationContext,
           caseEntity: consolidatedCase,

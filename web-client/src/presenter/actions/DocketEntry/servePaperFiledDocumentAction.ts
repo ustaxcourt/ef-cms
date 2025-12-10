@@ -16,6 +16,7 @@ export const servePaperFiledDocumentAction = async ({
   const docketNumber = get(state.caseDetail.docketNumber);
   const docketEntryId = get(state.docketEntryId);
   const clientConnectionId = get(state.clientConnectionId);
+  const isFiledAcrossAllCases = get(state.isFiledAcrossAllCases);
   const { docketNumbers } = props;
   const { DOCUMENT_SERVED_MESSAGES } = applicationContext.getConstants();
 
@@ -25,6 +26,7 @@ export const servePaperFiledDocumentAction = async ({
       clientConnectionId,
       docketEntryId,
       docketNumbers,
+      isFiledAcrossAllCases,
       subjectCaseDocketNumber: docketNumber,
     });
 

@@ -46,30 +46,6 @@ resource "aws_cloudwatch_log_subscription_filter" "api_async_filter_green" {
   log_group_name  = "/aws/lambda/api_async_${element(var.log_group_environments, count.index)}_green"
 }
 
-resource "aws_cloudwatch_log_subscription_filter" "streams_filter_blue" {
-  count           = length(var.log_group_environments)
-  destination_arn = var.logs_to_elasticsearch_lambda_arn
-  filter_pattern  = ""
-  name            = "streams_${element(var.log_group_environments, count.index)}_lambda_filter"
-  log_group_name  = "/aws/lambda/streams_${element(var.log_group_environments, count.index)}_blue"
-}
-
-resource "aws_cloudwatch_log_subscription_filter" "streams_filter_green" {
-  count           = length(var.log_group_environments)
-  destination_arn = var.logs_to_elasticsearch_lambda_arn
-  filter_pattern  = ""
-  name            = "streams_${element(var.log_group_environments, count.index)}_lambda_filter"
-  log_group_name  = "/aws/lambda/streams_${element(var.log_group_environments, count.index)}_green"
-}
-
-resource "aws_cloudwatch_log_subscription_filter" "migration_lambda_filter" {
-  count           = length(var.log_group_environments)
-  destination_arn = var.logs_to_elasticsearch_lambda_arn
-  filter_pattern  = ""
-  name            = "migration_${element(var.log_group_environments, count.index)}_lambda_filter"
-  log_group_name  = "/aws/lambda/migration_segments_lambda_${element(var.log_group_environments, count.index)}"
-}
-
 resource "aws_cloudwatch_log_subscription_filter" "api_stage_logs_blue" {
   count           = length(var.log_group_environments)
   destination_arn = var.logs_to_elasticsearch_lambda_arn

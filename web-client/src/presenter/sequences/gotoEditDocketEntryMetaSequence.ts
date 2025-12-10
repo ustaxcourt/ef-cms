@@ -13,6 +13,7 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setDefaultEditDocketEntryMetaTabAction } from '../actions/setDefaultEditDocketEntryMetaTabAction';
 import { setDocketEntryMetaFormForEditAction } from '../actions/EditDocketRecordEntry/setDocketEntryMetaFormForEditAction';
 import { setDocketEntryMetaTypeAction } from '../actions/EditDocketRecordEntry/setDocketEntryMetaTypeAction';
+import { setIsFiledAcrossAllCasesAction } from '../actions/EditDocketRecordEntry/setIsFiledAcrossAllCasesAction';
 import { setUsersByKeyAction } from '../actions/setUsersByKeyAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
@@ -29,6 +30,7 @@ export const gotoEditDocketEntryMetaSequence =
     getCaseAction,
     setCaseAction,
     setDocketEntryMetaFormForEditAction,
+    setIsFiledAcrossAllCasesAction,
     setDocketEntryMetaTypeAction,
     chooseMetaTypePathAction,
     {

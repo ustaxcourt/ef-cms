@@ -4,6 +4,7 @@ import {
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { NotFoundError } from '@web-api/errors/errors';
 import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
+import { isLeadCase } from '../../../../../shared/src/business/entities/cases/Case';
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { deleteCaseDeadline } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
 import { settlePromises } from '@web-api/utilities/settlePromises';
@@ -41,7 +42,7 @@ export const closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments =
 
     const LEAD_CASE_DEADLINES = caseDeadlines.map(cd => cd.caseDeadlineId);
     if (
-      caseEntity.docketNumber === caseEntity.leadDocketNumber &&
+      isLeadCase(caseEntity) &&
       LEAD_CASE_DEADLINES.length
     ) {
       const CHILDREN_DEADLINES =

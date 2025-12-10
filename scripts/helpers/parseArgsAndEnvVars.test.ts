@@ -1,5 +1,5 @@
 /* eslint-disable jest/no-conditional-expect */
-/* eslint-disable custom-rules-plugin/no-new-dates*/
+/* eslint-disable custom-rules-plugin/no-dates */
 import {
   FORMATS,
   formatNow,

@@ -765,3 +765,9 @@ table.case-list tbody tr:nth-child(even) td {
   font-family: $font-serif !important;
   font-size: 20px !important;
 }
+
+.consolidated-icons-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}

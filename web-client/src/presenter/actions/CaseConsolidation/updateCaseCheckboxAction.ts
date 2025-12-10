@@ -1,4 +1,5 @@
 import { state } from '@web-client/presenter/app.cerebral';
+import { isLeadCase } from '@shared/business/entities/cases/Case';
 
 /**
  * flips the value of checkbox for each case
@@ -20,7 +21,7 @@ export const updateCaseCheckboxAction = ({
   consolidatedCases = consolidatedCases.map(consolidatedCase => {
     if (
       consolidatedCase.docketNumber === props.docketNumber &&
-      props.docketNumber !== consolidatedCase.leadDocketNumber
+      !isLeadCase({docketNumber: props.docketNumber, leadDocketNumber: consolidatedCase.leadDocketNumber})
     ) {
       return {
         ...consolidatedCase,

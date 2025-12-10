@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-# clears and reinitializes the current active dynamo and elasticsearch instances
+# clears and reinitializes the current elasticsearch instances
 
 # Usage
 #   ./clear-env.sh
@@ -85,8 +85,6 @@ echo "setting up elasticsearch"
 ./web-api/setup-elasticsearch-index.sh "${ENV}"
 npx ts-node --transpile-only ./web-api/elasticsearch/elasticsearch-alias-settings.ts
 
-echo "clearing dynamo"
-npx ts-node --transpile-only ./web-api/clear-dynamodb-table.ts "efcms-${ENV}-${SOURCE_TABLE_VERSION}"
 echo "setting up test users"
 # shellcheck disable=SC1091
 ./scripts/user/setup-test-users.ts "${ENV}"

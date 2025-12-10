@@ -5,7 +5,7 @@ import {
   OpenSearchClient,
 } from '@aws-sdk/client-opensearch';
 import { defaultProvider } from '@aws-sdk/credential-provider-node';
-import { getSourceTableInfo } from '../../shared/admin-tools/util';
+import { getSourceVersionInfo } from '../../shared/admin-tools/util';
 
 export const getHost = async (
   DomainName: string,
@@ -29,7 +29,7 @@ export const getClient = async ({
   version?: string;
 }): Promise<Client> => {
   if (!elasticsearchEndpoint) {
-    version = version || (await getSourceTableInfo()).version;
+    version = version || (await getSourceVersionInfo()).version;
     const domainName =
       version === 'info'
         ? 'info'

@@ -211,6 +211,7 @@ import { getRecentFilingsForUserLambda } from './lambdas/recentFilings/getRecent
 import { deactivateUserLambda } from '@web-api/lambdas/automations/deactivateUserLambda';
 import { removeUserPendingEmailLambda } from '@web-api/lambdas/automations/removeUserPendingEmailLambda';
 import { saveMinuteSheetToDraftsLambda } from './lambdas/trialSessionMinutes/saveMinuteSheetToDraftsLambda';
+import { getIsFiledAcrossAllCasesLambda } from './lambdas/documents/getIsFiledAcrossAllCasesLambda';
 
 export const app = express();
 
@@ -388,6 +389,11 @@ app.use(expressLogger);
     '/case-documents/count',
     lambdaWrapper(getCountOfCaseDocumentsFiledByJudgesLambda),
   );
+  app.get(
+    '/case-documents/:docketEntryId/is-filed-across-all-cases',
+    lambdaWrapper(getIsFiledAcrossAllCasesLambda),
+  );
+
   // POST
   app.post(
     '/async/case-documents/:docketEntryId/append-pdf',
