@@ -40,9 +40,9 @@ export const addCourtIssuedDocketEntryHelper = (
   );
 
   const caseMotions = flow([
-    (a: RawDocketEntry[]) =>
+    (docketEntries: RawDocketEntry[]) =>
       filter(
-        a,
+        docketEntries,
         d =>
           DocketEntry.isMotion(d.eventCode) &&
           !d.isStricken &&
@@ -53,9 +53,9 @@ export const addCourtIssuedDocketEntryHelper = (
             am => am.docketEntryId === d.docketEntryId,
           ),
       ),
-    a => orderBy(a, ['index'], ['desc']),
-    a =>
-      a.map((m: RawDocketEntry) => ({
+    docketEntries => orderBy(docketEntries, ['index'], ['desc']),
+    docketEntries =>
+      docketEntries.map((m: RawDocketEntry) => ({
         label: `${m.index} - ${m.documentTitle}`,
         value: m.docketEntryId,
       })),
