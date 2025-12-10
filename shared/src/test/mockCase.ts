@@ -131,6 +131,7 @@ export const MOCK_CASE_WITH_SECONDARY_OTHERS = {
   caseType: CASE_TYPES_MAP.other,
   docketEntries: MOCK_DOCUMENTS,
   docketNumber: '109-19',
+  docketNumberWithSuffix: '109-19',
   entityName: 'Case',
   filingType: 'Myself',
   partyType: PARTY_TYPES.petitionerDeceasedSpouse,
@@ -235,6 +236,7 @@ export const MOCK_LEAD_CASE_WITH_PAPER_SERVICE = {
   caseType: CASE_TYPES_MAP.other,
   docketEntries: MOCK_DOCUMENTS,
   docketNumber: '109-19',
+  docketNumberWithSuffix: '109-19',
   entityName: 'Case',
   filingType: 'Myself',
   irsPractitioners: [],
@@ -418,6 +420,7 @@ export const MOCK_ELIGIBLE_CASE: RawEligibleCase = {
   isAgedCase: false,
   irsPractitioners: [],
   privatePractitioners: [],
+  remoteTrialGranted: false,
   inConsolidatedGroup: false,
 };
 

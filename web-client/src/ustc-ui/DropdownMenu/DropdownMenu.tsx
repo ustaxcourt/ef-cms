@@ -1,26 +1,31 @@
 import { Button } from '../Button/Button';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { props as cerebralProps } from 'cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
 
+const props = cerebralProps as unknown as {
+  id: string;
+  menuState: string;
+  menuItems: Array<{ id: string; label: string; click: () => void }>;
+};
+
+const dropdownMenuDeps = {
+  caseDetail: state.formattedCaseDetail,
+  clearDropDownMenuStateSequence: sequences.clearDropDownMenuStateSequence,
+  id: props.id,
+  isMenuOpen: state[props.menuState],
+  menuItems: props.menuItems,
+  menuState: props.menuState,
+  openAddEditCalendarNoteModalSequence:
+    sequences.openAddEditCalendarNoteModalSequence,
+  openRemoveFromTrialSessionModalSequence:
+    sequences.openRemoveFromTrialSessionModalSequence,
+  toggleMenuStateSequence: sequences.toggleMenuStateSequence,
+};
+
 export const DropdownMenu = connect(
-  {
-    caseDetail: state.formattedCaseDetail,
-    clearDropDownMenuStateSequence: sequences.clearDropDownMenuStateSequence,
-    id: props.id,
-    isMenuOpen: state[props.menuState],
-    menuItems: props.menuItems,
-    menuState: props.menuState,
-    openAddEditCalendarNoteModalSequence:
-      sequences.openAddEditCalendarNoteModalSequence,
-    openRemoveFromTrialSessionModalSequence:
-      sequences.openRemoveFromTrialSessionModalSequence,
-    toggleEditCaseTrialInfoMenuSequence:
-      sequences.toggleEditCaseTrialInfoMenuSequence,
-    toggleMenuStateSequence: sequences.toggleMenuStateSequence,
-  },
+  dropdownMenuDeps,
   function DropdownMenu({
     clearDropDownMenuStateSequence,
     id,
@@ -28,6 +33,13 @@ export const DropdownMenu = connect(
     menuItems,
     menuState,
     toggleMenuStateSequence,
+  }: {
+    clearDropDownMenuStateSequence: Function;
+    id: string;
+    isMenuOpen: boolean;
+    menuItems: Array<{ id: string; label: string; click: () => void }>;
+    menuState: string;
+    toggleMenuStateSequence: Function;
   }) {
     const menuRef = useRef(null);
 

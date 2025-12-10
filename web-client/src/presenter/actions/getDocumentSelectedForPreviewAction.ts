@@ -23,6 +23,10 @@ export const getDocumentSelectedForPreviewAction = ({
     state.currentViewMetadata.documentSelectedForPreview,
   );
 
+  if (!documentSelectedForPreview) {
+    return {};
+  }
+
   const file = get(state.form[documentSelectedForPreview]);
 
   if (file) {

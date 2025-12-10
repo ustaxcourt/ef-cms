@@ -75,8 +75,12 @@ export const AddConsolidatedCaseModal = connect(
                 data-testid="found-case-label"
                 htmlFor="confirm-selection"
               >
-                {caseDetail.docketNumber}
-                {caseDetail.docketNumberSuffix} {caseDetail.caseCaption}
+                {(caseDetail as { docketNumber?: string }).docketNumber}
+                {
+                  (caseDetail as { docketNumberSuffix?: string })
+                    .docketNumberSuffix
+                }{' '}
+                {(caseDetail as { caseCaption?: string }).caseCaption}
               </label>
             </div>
           </FormGroup>

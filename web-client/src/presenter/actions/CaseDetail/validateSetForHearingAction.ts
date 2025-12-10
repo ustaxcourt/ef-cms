@@ -13,17 +13,21 @@ export const validateSetForHearingAction = ({
   get,
   path,
 }: ActionProps) => {
-  const { calendarNotes, trialSessionId } = get(state.modal);
+  const { calendarNotes, trialSessionId }: {
+    calendarNotes?: string;
+    trialSessionId?: string;
+  } = get(state.modal);
 
-  const errors = {};
+  const errors: { trialSessionId?: string; calendarNotes?: string } = {};
   if (!trialSessionId) {
     errors.trialSessionId = 'Select a Trial Session';
   }
 
+  const appContext = applicationContext as unknown as IApplicationContext;
   const noteEntityErrors = applicationContext
     .getUseCases()
-    .validateHearingNoteInteractor(applicationContext, {
-      note: calendarNotes,
+    .validateHearingNoteInteractor(appContext, {
+      note: calendarNotes || '',
     });
 
   if (noteEntityErrors?.note) {

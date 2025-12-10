@@ -5,7 +5,9 @@ import { getFormattedDocketEntriesForTest } from '../helpers';
 export const docketClerkEditsDocketEntryMeta = (
   cerebralTest,
   docketRecordIndex,
-  data = {},
+  data: {
+    filedBy?: string;
+  } = {},
 ) => {
   return it('docket clerk edits docket entry meta', async () => {
     expect(cerebralTest.getState('currentPage')).toEqual('EditDocketEntryMeta');

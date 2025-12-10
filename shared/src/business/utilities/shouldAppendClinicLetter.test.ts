@@ -7,6 +7,8 @@ import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { shouldAppendClinicLetter } from './shouldAppendClinicLetter';
 
 jest.mock('./getClinicLetterKey');
+const mockGetClinicLetterKey: jest.MockedFunction<typeof getClinicLetterKey> =
+  jest.mocked(getClinicLetterKey);
 
 describe('shouldAppendClinicLetter', () => {
   const clinicLetterKey = 'clinic-letter-key';
@@ -25,7 +27,7 @@ describe('shouldAppendClinicLetter', () => {
       .getPersistenceGateway()
       .isFileExists.mockResolvedValue(true);
 
-    getClinicLetterKey.mockReturnValue(clinicLetterKey);
+    mockGetClinicLetterKey.mockReturnValue(clinicLetterKey);
   });
 
   it('should return appendClinicLetter as true when petitioner is pro se and when a clinic letter exists for the trial location', async () => {
