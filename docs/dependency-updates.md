@@ -233,9 +233,10 @@ On June 26 2025, newer versions of babel-core and jest core also started to caus
 - On September 19th, 2025, babel/core was successfully updated to 7.28..4 from 7.28.3, had some issues with Github Actions checks running all the way through, but Github still gave the commit a check. Refer to this PR for more info. https://github.com/ustaxcourt/ef-cms/pull/9164
 
 ### @types/node
-The major version of this package should match our major version of node. At the moment that we are using node v22.20.0 so we should use a package that starts with 22.
+The major version of this package should match our major version of Node. At the moment that we are using Node v24.11.1 so we should use a package that starts with 24.
 
 - On October 27th, 2025, successfully updated @types/node to 22.18.12 to match Node.js v22.20.0.
+- [Dependencies 12 01 2025](https://github.com/ustaxcourt/ef-cms/pull/9465/files), Node.js was updated to v24.11.1, successfully updated @types/node to 22.18.12 to match Node.js v24.10.2
 
 ### TypeScript
 We cannot update TypeScript version beyond v5.8.3 until ts-jest supports it
@@ -253,7 +254,7 @@ The decision was made to revert back to 5.8.3 as the migration would require mul
 ### p-queue
 Upgrading `p-queue` past version 6 will cause issues related to module imports.
 
-- On September 19th, 2025, tried to updAte to 8.1.1. Errors were thrown on Github Action checks to address imports. A potential fix could be to update our build configuration to properly handle ES modules or maybe use dynamic imports as a workaround? Refer to this PR. https://github.com/ustaxcourt/ef-cms/pull/9164
+- On September 19th, 2025, tried to update to 8.1.1. Errors were thrown on Github Action checks to address imports. A potential fix could be to update our build configuration to properly handle ES modules or maybe use dynamic imports as a workaround? Refer to this PR. https://github.com/ustaxcourt/ef-cms/pull/9164
 
 ### uuid
 9/17/25 keeping it 11.1.0. The next version 12.0.0 and above no longer supports CommonJS
