@@ -23,7 +23,6 @@ import {
   expireUserConfirmationCode,
   getEmailVerificationToken,
   getNewAccountVerificationCode,
-  getPractionerWithMostCasesEmail,
 } from './cypress/helpers/cypressTasks/postgres/postgres-helpers';
 import { unzipFile } from './cypress/helpers/file/unzip-file';
 import { waitForNoce } from './cypress/helpers/cypressTasks/wait-for-noce';
@@ -121,9 +120,6 @@ export default defineConfig({
         },
         waitForNoce({ docketNumber }: { docketNumber: string }) {
           return waitForNoce({ docketNumber });
-        },
-        getPractionerWithMostCasesEmail() {
-          return getPractionerWithMostCasesEmail();
         },
       });
     },

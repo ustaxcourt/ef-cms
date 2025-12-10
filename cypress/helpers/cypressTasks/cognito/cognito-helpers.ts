@@ -95,9 +95,7 @@ export const getAllUserEmailsInCognito = async (): Promise<string[]> => {
     });
 
     response.Users?.forEach(user => {
-      // console.log('USER: ', user);
       if (user.Username) {
-        // users.push(user.Username);
         const emailAttribute = user.Attributes?.find(
           attr => attr.Name === 'email',
         );
@@ -111,24 +109,6 @@ export const getAllUserEmailsInCognito = async (): Promise<string[]> => {
   } while (paginationToken);
 
   return users;
-
-  // // for each user, get their email attribute
-  // const emails: string[] = [];
-  // for (const username of users) {
-  //   const user = await getCognito().adminGetUser({
-  //     UserPoolId: userPoolId,
-  //     Username: username,
-  //   });
-
-  //   const emailAttribute = user.UserAttributes?.find(
-  //     attr => attr.Name === 'email',
-  //   );
-  //   if (emailAttribute && emailAttribute.Value) {
-  //     emails.push(emailAttribute.Value);
-  //   }
-  // }
-
-  // return emails;
 };
 
 const getUserPoolId = async (isIrsEnv = false): Promise<string> => {

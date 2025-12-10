@@ -3,7 +3,12 @@ import {
   getAllUserEmailsInCognito,
 } from '../cognito/cognito-helpers';
 import { getCypressPostgresDb } from './getCypressPostgresDb';
-import { formatNow } from '../../../../shared/src/business/utilities/DateHandler';
+import {
+  formatNow,
+  calculateISODate,
+  getJsDateFromIso,
+} from '../../../../shared/src/business/utilities/DateHandler';
+import { sql } from 'kysely';
 
 export const getNewAccountVerificationCode = async ({
   email,
@@ -25,7 +30,11 @@ export const getNewAccountVerificationCode = async ({
     (await dbConnection
       .selectFrom('dwUserConfirmationCode')
       .where('userId', '=', userId)
-      .where('ttl', '>', Math.floor(formatNow('UNIX_TIMESTAMP_MS') / 1000))
+      .where(
+        'ttl',
+        '>',
+        Math.floor(parseInt(formatNow('UNIX_TIMESTAMP_MS')) / 1000),
+      )
       .select(['confirmationCode'])
       .executeTakeFirst()) ?? {};
 
@@ -110,34 +119,86 @@ export async function getPractionerWithMostCasesEmail(): Promise<string> {
   const cognitoEmails = await getAllUserEmailsInCognito();
 
   // get id of cognito user with most cases
-  const uc = dbConnection
-    .selectFrom('dwUserOnCase')
-    .select(['userId', dbConnection.fn.countAll().as('cnt')])
-    .where('actingAsRole', 'in', ['irsPractitioner', 'privatePractitioner'])
-    .where('serviceIndicator', '=', 'Electronic')
-    .groupBy('userId')
-    .as('uc');
-  const u = dbConnection
+  const result = await dbConnection
     .selectFrom('dwUser as u')
-    .select(['userId'])
+    .innerJoin('dwUserOnCase as uc', 'uc.userId', 'u.userId')
+    .select(({ fn }) => [
+      'u.email',
+      fn.count<number>('uc.docketNumber').as('caseCount'),
+    ])
+    .where('uc.actingAsRole', 'in', ['irsPractitioner', 'privatePractitioner'])
+    .where('uc.serviceIndicator', '=', 'Electronic')
     .where('u.accountStatus', '=', 'active')
-    .where('email', 'in', cognitoEmails)
-    .as('u');
-  const user = await dbConnection
-    .selectFrom(uc)
-    .innerJoin(u, 'uc.userId', 'u.userId')
-    .selectAll('uc')
-    .selectAll('u')
-    // .where('uc.cnt', '<=', 500)
-    .orderBy('uc.cnt', 'desc')
+    .where('u.email', 'in', cognitoEmails)
+    .groupBy('u.userId')
+    // .having(eb => eb.fn.count('uc.docketNumber'), '<=', 1000)
+    .orderBy('caseCount', 'desc')
     .limit(1)
     .executeTakeFirst();
+  return result?.email || '';
+}
 
-  // i need to figure out the out put of this...
-  const id = user?.userId || '';
-  // console.log('ID: ', id);
-  // get the email using getPractitionerEmailById function or with initial query
-  const email = getPractitionerEmailById({ userId: id });
-  // console.log('email: ', email);
-  return email;
+export async function getOpenAndRecentCasesByEmail(
+  email: string,
+): Promise<string[]> {
+  const { userId } = await getUserByEmail(email);
+  if (!userId) return [];
+
+  const dbConnection = await getCypressPostgresDb();
+
+  const cases = await dbConnection
+    .selectFrom('dwUserOnCase')
+    .where('userId', '=', userId)
+    .select(['docketNumber'])
+    .execute();
+
+  const sixMonthsAgo = calculateISODate({
+    howMuch: -6,
+    units: 'months',
+  });
+
+  const openAndRecentCases = await dbConnection
+    .selectFrom('dwCase')
+    .where(
+      'docketNumber',
+      'in',
+      cases.map(c => c.docketNumber),
+    )
+    .where(
+      sql<boolean>`(closed_date IS NULL OR closed_date >= ${sixMonthsAgo})`,
+    )
+    .select(['docketNumber'])
+    .execute()
+    .then(results => results.map(r => r.docketNumber));
+
+  return openAndRecentCases.filter(
+    (docketNumber): docketNumber is string => docketNumber !== null,
+  );
+}
+
+export async function getRecentEventsByCode(
+  eventCode: string,
+  cases: string[],
+  dateStart: string,
+): Promise<{ [docketNumber: string]: string }> {
+  const dbConnection = await getCypressPostgresDb();
+
+  const recentEvents = await dbConnection
+    .selectFrom('dwDocketEntry')
+    .where('docketNumber', 'in', cases)
+    .where('eventCode', '=', eventCode)
+    .where('createdAt', '>=', getJsDateFromIso(dateStart))
+    .select(['eventCode', 'docketNumber'])
+    .execute()
+    .then(results => {
+      const casesObject: { [docketNumber: string]: string } = {};
+      for (const result of results) {
+        const { eventCode, docketNumber } = result;
+        casesObject[docketNumber] = eventCode;
+      }
+
+      return casesObject;
+    });
+
+  return recentEvents;
 }
