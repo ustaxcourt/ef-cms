@@ -9,8 +9,16 @@ resource "aws_iam_role" "zendesk_automations_role" {
       {
         Action = "sts:AssumeRole",
         Principal = {
-          AWS = "arn:aws:iam::${var.zendesk_aws_account_id}:role/zendesk-automations-lambda-exec"
+          AWS = [
+            "arn:aws:sts::${var.zendesk_aws_account_id}:assumed-role/zendesk-automations-lambda-exec/zendesk-automations-handleTicket",
+            "arn:aws:sts::${var.zendesk_aws_account_id}:assumed-role/zendesk-automations-cicd-deployer-role/GitHubActions"
+          ]
         },
+        Condition = {
+          StringEquals = {
+            "sts:RoleSessionName" = "ZendeskAutomationsSession"
+          }
+        }
         Effect ="Allow",
       }
     ]
@@ -39,15 +47,15 @@ resource "aws_iam_role_policy" "zendesk_automations_policy" {
           "cognito-idp:ListUsers",
         ]
         Effect = "Allow",
-        Resource = "arn:aws:cognito-idp::${data.aws_caller_identity.current.account_id}:userpool/${var.cognito_user_pool}"
+        Resource = "arn:aws:cognito-idp:us-east-1:${data.aws_caller_identity.current.account_id}:userpool/${var.cognito_user_pool}"
       },
       {
         Action = [
-          "sesv2:ListSuppressedDestinations",
-          "sesv2:DeleteSuppressedDestination",
+          "ses:ListSuppressedDestinations",
+          "ses:DeleteSuppressedDestination",
         ]
         Effect = "Allow",
-        Resource = "arn:aws:ses::${data.aws_caller_identity.current.account_id}:"
+        Resource = "arn:aws:ses:us-east-1:${data.aws_caller_identity.current.account_id}:*"
       }
     ]
   })
