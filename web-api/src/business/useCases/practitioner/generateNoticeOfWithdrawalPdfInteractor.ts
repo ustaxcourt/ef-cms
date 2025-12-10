@@ -74,26 +74,28 @@ export const generateNoticeOfWithdrawalPdfInteractor = async (
       docketNumber,
     });
 
-    for (const petitionerContactId of petitioners.map(p => p.contactId)) {
+    const paperServicePetitioners = petitioners.filter(
+      p =>
+        caseData.petitioners.find(
+          petitioner => petitioner.contactId === p.contactId,
+        )?.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
+    );
+
+    const certificateOfServicePromises = paperServicePetitioners.map(p => {
       const partyInformation = caseData.petitioners.find(
-        p => p.contactId === petitionerContactId,
+        petitioner => petitioner.contactId === p.contactId,
       );
-      if (
-        partyInformation?.serviceIndicator !== SERVICE_INDICATOR_TYPES.SI_PAPER
-      )
-        continue;
-      const certificateOfServicePdf = applicationContext
-        .getDocumentGenerators()
-        .certificateOfService({
-          applicationContext,
-          data: {
-            partyInformation,
-            practitionerInformation,
-            docketNumberWithSuffix,
-          },
-        });
-      generatedPdfPromises.push(certificateOfServicePdf);
-    }
+      return applicationContext.getDocumentGenerators().certificateOfService({
+        applicationContext,
+        data: {
+          partyInformation,
+          practitionerInformation,
+          docketNumberWithSuffix,
+        },
+      });
+    });
+    generatedPdfPromises.push(...certificateOfServicePromises);
+
     const generatedPdfs = await Promise.all(generatedPdfPromises);
 
     const { PDFDocument } = await applicationContext.getPdfLib();
