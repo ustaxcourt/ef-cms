@@ -150,7 +150,7 @@ export const writeTrialSessionDataToExcel = async ({
       warningsTab.addRow([message]);
     });
   }
-  return (await workbook.xlsx.writeBuffer()) as unknown as Buffer;
+  return await workbook.xlsx.writeBuffer();
 };
 
 const getRowsByCity = ({

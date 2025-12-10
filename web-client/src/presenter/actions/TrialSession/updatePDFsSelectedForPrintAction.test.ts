@@ -18,6 +18,8 @@ describe('updatePDFsSelectedForPrintAction', () => {
       },
     });
 
-    expect(state.modal!.form!.selectedPdf).toEqual(mockFileId);
+    expect(
+      (state.modal!.form! as { selectedPdf?: string }).selectedPdf,
+    ).toEqual(mockFileId);
   });
 });

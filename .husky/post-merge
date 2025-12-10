@@ -1,0 +1,55 @@
+#!/bin/sh
+if [ -f "CHANGES.md" ]; then
+  CHANGES_DIFF=$(git diff ORIG_HEAD HEAD -- CHANGES.md 2>/dev/null)
+  if [ -n "$CHANGES_DIFF" ]; then
+    {
+      echo ""
+      echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+      echo "⚠️  CHANGES.md has been updated. Please review the manual steps below:"
+      echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+      echo ""
+      echo "$CHANGES_DIFF" | grep -E "^[\+\-]" | grep -v "^[\+\-][\+\-][\+\-]" | grep -v "No newline" | while IFS= read -r line; do
+        clean_line=$(echo "$line" | sed 's/^[+-]//')
+        case "$line" in
+          +*) printf "  \033[32m%s\033[0m\n" "$clean_line" ;;
+          -*) printf "  \033[31m%s\033[0m\n" "$clean_line" ;;
+        esac
+      done
+      echo ""
+      echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+      echo ""
+    } >&2
+    
+    # Detect which IDE is running and open diff accordingly
+    # Priority: IntelliJ IDEA > WebStorm > VS Code
+    TEMP_FILE=$(mktemp /tmp/changes-old-XXXXXX.md 2>/dev/null || echo "/tmp/changes-old.md")
+    CURRENT_FILE="$(pwd)/CHANGES.md"
+    git show ORIG_HEAD:CHANGES.md > "$TEMP_FILE" 2>/dev/null || touch "$TEMP_FILE"
+
+    is_ide_running() {
+      pgrep -f -i "$1" >/dev/null 2>&1 && command -v "$2" >/dev/null 2>&1
+    }
+
+    open_diff() {
+      "$@" "$TEMP_FILE" "$CURRENT_FILE" 2>/dev/null || true
+      (sleep 2 && rm -f "$TEMP_FILE" 2>/dev/null) &
+    }
+
+    if is_ide_running "idea|IntelliJ IDEA" "idea"; then
+      open_diff "idea" "diff"
+    elif pgrep -f -i "WebStorm" >/dev/null 2>&1; then
+      if command -v webstorm >/dev/null 2>&1; then
+        open_diff "webstorm" "diff"
+      elif command -v wstorm >/dev/null 2>&1; then
+        open_diff "wstorm" "diff"
+      else
+        rm -f "$TEMP_FILE" 2>/dev/null || true
+      fi
+    elif is_ide_running "Code|Visual Studio Code" "code"; then
+      open_diff "code" "--diff"
+    else
+      # No supported IDE is running, clean up temp file
+      rm -f "$TEMP_FILE" 2>/dev/null || true
+    fi
+  fi
+fi
