@@ -232,8 +232,7 @@ On June 26 2025, newer versions of babel-core and jest core also started to caus
 ### @types/node
 The major version of this package should match our major version of Node. At the moment that we are using Node v24.11.1 so we should use a package that starts with 24.
 
-- On October 27th, 2025, successfully updated @types/node to 22.18.12 to match Node.js v22.20.0.
-- [Dependencies 12 01 2025](https://github.com/ustaxcourt/ef-cms/pull/9465/files), Node.js was updated to v24.11.1, successfully updated @types/node to 22.18.12 to match Node.js v24.10.2
+- [Dependencies 12 01 2025](https://github.com/ustaxcourt/ef-cms/pull/9465/files), Node.js was updated to v24.11.1, successfully updated @types/node to 24.10.2 to match Node.js v24.11.1
 
 ### TypeScript
 We cannot update TypeScript version beyond v5.8.3 until ts-jest supports it
