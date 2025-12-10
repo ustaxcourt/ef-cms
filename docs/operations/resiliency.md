@@ -24,6 +24,5 @@ We currently have some infrastructure set up for failover, but we have an epic l
   
 Some items that are currently backlogged to be worked on:
 
-* [DynamoDB health alerts](https://github.com/ustaxcourt/ef-cms/issues/780)
 * [SES health alerts](https://github.com/ustaxcourt/ef-cms/issues/792)
 * [application-critical S3 bucket deletion alerts](https://github.com/ustaxcourt/ef-cms/issues/788)

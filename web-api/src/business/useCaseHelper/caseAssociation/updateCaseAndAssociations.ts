@@ -34,8 +34,6 @@ import { Role, ROLES } from '@shared/business/entities/EntityConstants';
 import { removeCasesFromHearings } from '@web-api/persistence/postgres/trialSessions/removeCasesFromHearings';
 import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
 
-// Because we used to rely on Dynamo, we needed to manually maintain relations in app code.
-// In the future, it would be good to avoid doing so by leveraging SQL more effectively.
 export const updateCaseAndAssociations = async ({
   authorizedUser,
   caseToUpdate,
