@@ -29,7 +29,7 @@ const alertVariants = cva(
         error:
           'tw:[&_button]:focus-visible:bg-red-error tw:[&_button]:focus-visible:ring-offset-red-error tw:bg-red-error tw:border-red-primary',
         success:
-          'tw:[&_button]:focus-visible:bg-green-success tw:[&_button]:focus-visible:ring-offset-green-success tw:bg-green-success tw:border-green',
+          'tw:[&_button]:focus-visible:bg-green-success tw:[&_button]:focus-visible:ring-offset-green-success tw:bg-green-success tw:border-green-primary',
       },
     },
     defaultVariants: {
@@ -60,18 +60,18 @@ function Alert({
   }) {
 
     
-      return (
-      /* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions */
-      <div 
-        data-slot="alert"
-        role="alert"
-        className={cn(alertVariants({ variant }), className)}
-        data-testId={dataTestId}
+  return (
+    /* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions */
+    <div
+      data-slot="alert"
+      role="alert"
+      className={cn(alertVariants({ variant }), className)}
+      data-testId={dataTestId}
         onClick={closeButtonOnClick}>
-        <div className="tw:relative">{children}</div>
-      </div>
-    );
-  }
+      <div className="tw:relative">{children}</div>
+    </div>
+  );
+}
 type AlertHeaderType = {
   closeButtonOnClick?: () => React.MouseEventHandler<HTMLButtonElement> | void;
   isDismissible?: boolean;
