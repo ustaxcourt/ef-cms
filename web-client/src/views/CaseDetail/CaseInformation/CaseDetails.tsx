@@ -1,19 +1,19 @@
 import { Button } from '../../../ustc-ui/Button/Button';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props as cerebralProps } from 'cerebral';
+import { props } from 'cerebral';
 import React from 'react';
 
-const props = cerebralProps as unknown as {
-  caseDetail: unknown;
-  caseInformationHelper: unknown;
-  openCleanModalSequence: unknown;
-};
+type CaseDetailsProps = {
+  caseDetail: any;
+  caseInformationHelper: any;
+  openCleanModalSequence: Function;
+}
 
-export const CaseDetails = connect(
+export const CaseDetails: React.FC<CaseDetailsProps> = connect(
   {
-    caseDetail: props.caseDetail,
-    caseInformationHelper: props.caseInformationHelper,
-    openCleanModalSequence: props.openCleanModalSequence,
+    caseDetail: props`caseDetail`,
+    caseInformationHelper: props`caseInformationHelper`,
+    openCleanModalSequence: props`openCleanModalSequence`,
   },
   function CaseDetails({
     caseDetail,

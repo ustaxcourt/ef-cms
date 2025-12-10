@@ -36,6 +36,7 @@ describe('generateCaseInventoryReportPdf', () => {
       receivedAt: '2018-11-20T20:49:28.192Z',
       sortableDocketNumber: 2001000101,
       status: CASE_STATUS_TYPES.new,
+      privatePractitioners: []
     },
     {
       associatedJudge: CHIEF_JUDGE,
@@ -58,6 +59,7 @@ describe('generateCaseInventoryReportPdf', () => {
       receivedAt: '2020-06-29T20:49:28.192Z',
       sortableDocketNumber: 2001000111,
       status: CASE_STATUS_TYPES.new,
+      privatePractitioners: []
     },
   ];
 

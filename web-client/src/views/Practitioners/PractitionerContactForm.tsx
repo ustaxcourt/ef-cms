@@ -3,28 +3,33 @@ import { Country } from '../StartCase/Country';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { InternationalAddress } from '../StartCase/InternationalAddress';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props as cerebralProps } from 'cerebral';
+import { props } from 'cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import { RunableSequence as RunnableSequence } from 'cerebral';
 
-const props = cerebralProps as unknown as {
+type PractitionerContactFormProps = {
+  bind: string;
+  changeCountryTypeSequenceName: string;
+  type: string;
   onBlurSequenceName: string;
   onChangeSequenceName: string;
 };
 
-export const PractitionerContactForm = connect(
+export const PractitionerContactForm: React.FC<PractitionerContactFormProps> = connect(
   {
+    bind: props.bind,
+    changeCountryTypeSequenceName: props`changeCountryTypeSequenceName`,
     COUNTRY_TYPES: state.constants.COUNTRY_TYPES,
     createPractitionerUserHelper: state.createPractitionerUserHelper,
     form: state.form,
-    onBlurValidationSequence: sequences[props.onBlurSequenceName],
-    onChangeUpdateSequence: sequences[props.onChangeSequenceName],
+    onBlurValidationSequence: sequences[props`onBlurSequenceName`],
+    onChangeUpdateSequence: sequences[props`onChangeSequenceName`],
     validationErrors: state.validationErrors,
   },
   function PractitionerContactForm({
     bind,
-    changeCountryTypeSequence,
+    changeCountryTypeSequenceName,
     COUNTRY_TYPES,
     form,
     onBlurValidationSequence,
@@ -34,7 +39,7 @@ export const PractitionerContactForm = connect(
     validationErrors,
   }: {
     bind: string;
-    changeCountryTypeSequence: Function | RunnableSequence;
+    changeCountryTypeSequenceName: string;
     COUNTRY_TYPES: { DOMESTIC: string; INTERNATIONAL: string };
     form: Record<string, any>;
     onBlurValidationSequence: Function | RunnableSequence;
@@ -50,7 +55,7 @@ export const PractitionerContactForm = connect(
           type={type}
           onBlur={onBlurValidationSequence}
           onChange={onChangeSequenceName}
-          onChangeCountryType={changeCountryTypeSequence}
+          onChangeCountryType={changeCountryTypeSequenceName}
         />
         {form.contact.countryType === COUNTRY_TYPES.DOMESTIC ? (
           <Address

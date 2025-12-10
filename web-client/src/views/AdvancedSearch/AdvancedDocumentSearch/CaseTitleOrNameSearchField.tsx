@@ -1,21 +1,19 @@
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props as cerebralProps } from 'cerebral';
+import { props } from 'cerebral';
 import React from 'react';
 
-const props = cerebralProps as unknown as {
+type CaseTitleOrNameSearchFieldProps = {
   searchValue: string;
-  updateSequence: (params: { key: string; value: string }) => void;
-  validateSequence: () => void;
-};
+  updateSequence: Function;
+  validateSequence: Function;
+}
 
-const caseTitleOrNameSearchFieldDeps = {
-  searchValue: props.searchValue,
-  updateSequence: props.updateSequence,
-  validateSequence: props.validateSequence,
-};
-
-export const CaseTitleOrNameSearchField = connect(
-  caseTitleOrNameSearchFieldDeps,
+export const CaseTitleOrNameSearchField: React.FC<CaseTitleOrNameSearchFieldProps> = connect(
+  {
+    searchValue: props`searchValue`,
+    updateSequence: props`updateSequence`,
+    validateSequence: props`validateSequence`,
+  },
   function CaseTitleOrNameSearchField({
     searchValue,
     updateSequence,

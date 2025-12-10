@@ -132,8 +132,8 @@ function compareCasesByPractitioner(a, b) {
 }
 
 function isMemberCaseWithoutCalendaredLead(
-  aCase: RawCase,
-  scheduledCases: RawCase[],
+  aCase: CalendaredCaseItemType,
+  scheduledCases: CalendaredCaseItemType[],
 ): boolean {
   const leadCase = scheduledCases.find(
     scheduledCase => scheduledCase.docketNumber === aCase.leadDocketNumber,
@@ -141,11 +141,11 @@ function isMemberCaseWithoutCalendaredLead(
   return !leadCase;
 }
 
-function isSoloCase(aCase: RawCase): boolean {
+function isSoloCase(aCase: CalendaredCaseItemType): boolean {
   return !aCase.leadDocketNumber;
 }
 
-function isTopLevelCase(aCase: RawCase, scheduledCases: RawCase[]): boolean {
+function isTopLevelCase(aCase: CalendaredCaseItemType, scheduledCases: CalendaredCaseItemType[]): boolean {
   return (
     isLeadCase(aCase) ||
     isSoloCase(aCase) ||

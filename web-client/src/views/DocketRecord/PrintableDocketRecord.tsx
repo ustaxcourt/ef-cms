@@ -22,7 +22,7 @@ export const PrintableDocketRecord = connect(
               navigateBackSequence();
             }}
           >
-            <FontAwesomeIcon icon={['fa', 'arrow-alt-circle-left']} />
+            <FontAwesomeIcon icon={'arrow-alt-circle-left'} />
             Back
           </Button>
           <PdfPreview />

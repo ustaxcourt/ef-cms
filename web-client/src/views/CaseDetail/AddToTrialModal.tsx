@@ -8,7 +8,19 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const AddToTrialModal = connect(
+type AddToTrialModalProps = {
+  cancelSequence?: any;
+  confirmSequence: any;
+  isNoteRequired?: boolean;
+  modal?: Record<string, any>;
+  modalHelper?: any;
+  modalTitle?: string;
+  updateModalValueSequence?: Function;
+  validateSequence: any;
+  validationErrors?: Record<string, any>;
+}
+
+export const AddToTrialModal: React.FC<AddToTrialModalProps> = connect(
   {
     cancelSequence: sequences.clearModalSequence,
     modal: state.modal,

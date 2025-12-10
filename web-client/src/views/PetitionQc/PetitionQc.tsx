@@ -6,7 +6,7 @@ import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import React from 'react';
 
-export const PetitionQc = connect(function PetitionQc() {
+export const PetitionQc = connect({}, function PetitionQc() {
   return (
     <>
       <CaseDetailHeader />

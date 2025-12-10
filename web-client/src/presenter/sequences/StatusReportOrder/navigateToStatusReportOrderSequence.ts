@@ -7,7 +7,7 @@ export const navigateToStatusReportOrderSequence = [
   setStatusReportOrderPathAction,
   navigateToPathAction,
 ] as unknown as (props: {
-  statusReportFilingDate: string;
-  statusReportIndex: number;
+  statusReportFilingDate?: string;
+  statusReportIndex?: number;
   path: string;
 }) => void;

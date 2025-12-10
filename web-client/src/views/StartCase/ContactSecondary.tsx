@@ -5,29 +5,31 @@ import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { InternationalAddress } from './InternationalAddress';
 import { PaperPetitionEmail } from '../StartCaseInternal/PaperPetitionEmail';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props as cerebralProps } from 'cerebral';
+import { props } from 'cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import { RunableSequence as RunnableSequence } from 'cerebral';
 
-const props = cerebralProps as unknown as {
+type ContactSecondaryProps = {
+  contactsHelper: Record<string, any>;
   bind: string;
-  contactsHelper: string;
-  onBlur: () => void;
+  onBlur: Function;
   onChange: string;
   parentView: string;
+  wrapperClassName?: string;
+  useSameAsPrimary: boolean;
 };
 
-export const ContactSecondary = connect(
+export const ContactSecondary: React.FC<ContactSecondaryProps> = connect(
   {
     bind: props.bind,
     constants: state.constants,
-    contactsHelper: state[props.contactsHelper],
-    data: state[props.bind],
-    onBlur: props.onBlur,
-    onChange: props.onChange,
-    onChangeSequence: sequences[props.onChange],
-    parentView: props.parentView,
+    contactsHelper: props`contactsHelper`,
+    data: state[props`bind`],
+    onBlur: props`onBlur`,
+    onChange: props`onChange`,
+    onChangeSequence: sequences[props`onChange`],
+    parentView: props `parentView`,
     toggleUseContactPrimaryAddressSequence:
       sequences.toggleUseContactPrimaryAddressSequence,
     updateFormValueAndSecondaryContactInfoSequence:
@@ -61,7 +63,7 @@ export const ContactSecondary = connect(
     updateFormValueAndSecondaryContactInfoSequence: Function | RunnableSequence;
     useSameAsPrimary: boolean;
     validationErrors: Record<string, any>;
-    wrapperClassName: string;
+    wrapperClassName?: string;
   }) {
     return (
       <>

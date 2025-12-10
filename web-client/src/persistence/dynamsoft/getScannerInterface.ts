@@ -68,11 +68,11 @@ export const getScannerInterface = () => {
 
         Dynamsoft.DWT.CreateDWTObject(
           'dwtcontrolContainer',
-          function (object) {
+          function (object: WebTwain) {
             DWObject = object;
             resolve('dynam-scanner-injection');
           },
-          function (exp) {
+          function (exp: { code: number; message: string }) {
             console.error(exp);
           },
         );
@@ -145,7 +145,6 @@ export const getScannerInterface = () => {
             }),
           );
         }
-
         return Promise.all(promises)
           .then(async blobs => {
             const COVER_SHEET_WIDTH_IN_PX = 866;

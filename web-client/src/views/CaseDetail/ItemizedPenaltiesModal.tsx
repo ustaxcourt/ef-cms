@@ -4,7 +4,11 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const ItemizedPenaltiesModal = connect(
+type ItemizedPenaltiesModalProps = {
+  cancelSequence: string;
+}
+
+export const ItemizedPenaltiesModal: React.FC<ItemizedPenaltiesModalProps> = connect(
   {
     clearModalSequence: sequences.clearModalSequence,
     statistic: state.modal,

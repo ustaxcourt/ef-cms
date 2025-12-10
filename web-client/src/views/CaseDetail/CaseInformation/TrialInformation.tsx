@@ -81,7 +81,36 @@ const EditCaseTrialInformationMenu = ({
   );
 };
 
-export const TrialInformation = connect(
+type TrialInformationProps = {
+  caseDetail: {
+    showTrialCalendared?: boolean;
+    showBlockedFromTrial?: boolean;
+    showNotScheduled?: boolean;
+    showScheduled?: boolean;
+    trialSessionId?: string;
+    userIsAssignedToSession?: boolean;
+    formattedTrialCity?: string;
+    formattedTrialDate?: string;
+    formattedAssociatedJudge?: string;
+    trialSessionNotes?: string;
+    blocked?: boolean;
+    blockedDateFormatted?: string;
+    blockedReason?: string;
+    remoteTrialGrantedDate?: string | null;
+  };
+  openAddEditCalendarNoteModalSequence: Function;
+  openAddToTrialModalSequence: Function;
+  openBlockFromTrialModalSequence: Function;
+  openEditRemoteStatusModalSequence?: Function;
+  openRemoveFromTrialSessionModalSequence: Function;
+  openUnblockFromTrialModalSequence: Function;
+  showEditRemoteTrialPermission?: boolean;
+  trialSessionJudge: {
+    name: string;
+  };
+}
+
+export const TrialInformation: React.FC<TrialInformationProps> = connect(
   {
     caseDetail: props.caseDetail,
     openAddEditCalendarNoteModalSequence:
@@ -107,35 +136,6 @@ export const TrialInformation = connect(
     openUnblockFromTrialModalSequence,
     showEditRemoteTrialPermission,
     trialSessionJudge,
-  }: {
-    caseDetail: {
-      showTrialCalendared?: boolean;
-      showBlockedFromTrial?: boolean;
-      showNotScheduled?: boolean;
-      showScheduled?: boolean;
-      trialSessionId?: string;
-      userIsAssignedToSession?: boolean;
-      formattedTrialCity?: string;
-      formattedTrialDate?: string;
-      formattedAssociatedJudge?: string;
-      trialSessionNotes?: string;
-      blocked?: boolean;
-      blockedDateFormatted?: string;
-      blockedReason?: string;
-      remoteTrialGrantedDate?: string | null;
-    };
-    openAddEditCalendarNoteModalSequence: (args: { note?: string }) => void;
-    openAddToTrialModalSequence: () => void;
-    openBlockFromTrialModalSequence: () => void;
-    openEditRemoteStatusModalSequence: () => void;
-    openRemoveFromTrialSessionModalSequence: (args: {
-      trialSessionId: string;
-    }) => void;
-    openUnblockFromTrialModalSequence: () => void;
-    showEditRemoteTrialPermission: boolean;
-    trialSessionJudge: {
-      name: string;
-    };
   }) {
     return (
       <>

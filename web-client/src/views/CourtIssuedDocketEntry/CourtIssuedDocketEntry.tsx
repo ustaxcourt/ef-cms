@@ -33,7 +33,8 @@ export const CourtIssuedDocketEntry = connect(
     form: state.form,
     formatAndUpdateDateFromDatePickerSequence:
       sequences.formatAndUpdateDateFromDatePickerSequence,
-    isEditingDocketEntry: state.isEditingDocketEntry,
+  isEditingDocketEntry: state.isEditingDocketEntry,
+  // accept unknown state typings locally to avoid cross-file changes
     openCancelDraftDocumentModalSequence:
       sequences.openCancelDraftDocumentModalSequence,
     openConfirmInitiateCourtIssuedFilingServiceModalSequence:
@@ -397,9 +398,9 @@ export const CourtIssuedDocketEntry = connect(
 
                 {addCourtIssuedDocketEntryHelper.showAttachmentAndServiceFields && (
                   <>
-                    <div className="usa-label" htmlFor="service-parties">
+                    <label className="usa-label" htmlFor="service-parties">
                       Service parties
-                    </div>
+                    </label>
 
                     <div id="service-parties">
                       {addCourtIssuedDocketEntryHelper.serviceParties.map(

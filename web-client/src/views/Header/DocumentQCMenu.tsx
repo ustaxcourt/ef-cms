@@ -6,7 +6,7 @@ import classNames from 'classnames';
 
 type DocumentQCMenuProps = {
   isExpanded: boolean;
-  pageIsDocumentQC: boolean;
+  pageIsDocumentQC?: boolean;
 };
 
 const documentQCMenuDeps = {
@@ -16,7 +16,7 @@ const documentQCMenuDeps = {
   toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
 };
 
-export const DocumentQCMenu = connect<
+export const DocumentQCMenu: React.FC<DocumentQCMenuProps> = connect<
   DocumentQCMenuProps,
   typeof documentQCMenuDeps
 >(documentQCMenuDeps, props => {

@@ -7,7 +7,12 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useState } from 'react';
 
-export const PractitionerSearchForm = connect(
+type PractitionerSearchFormProps = {
+  submitPractitionerBarNumberSearchSequence?: Function;
+  submitPractitionerNameSearchSequence?: Function
+}
+
+export const PractitionerSearchForm: React.FC<PractitionerSearchFormProps> = connect(
   {
     practitionerSearchFormHelper: state.practitionerSearchFormHelper,
   },

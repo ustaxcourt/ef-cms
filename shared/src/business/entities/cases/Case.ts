@@ -99,11 +99,11 @@ export class Case extends JoiValidationEntity {
   public orderForRatification?: boolean;
   public orderToShowCause?: boolean;
   public petitioners: TPetitioner[];
-  public caseCaption: string;
-  public caseType: CaseType;
+  public caseCaption: string='';
+  public caseType?: CaseType;
   public closedDate?: string;
-  public createdAt: string;
-  public docketNumber: string;
+  public createdAt?: string;
+  public docketNumber: string='';
   public docketNumberSuffix?: string | null;
   public filingType?: string;
   public hasVerifiedIrsNotice?: boolean;
@@ -111,19 +111,19 @@ export class Case extends JoiValidationEntity {
   public isPaper?: boolean;
   public leadDocketNumber?: string;
   public mailingDate?: string;
-  public partyType: string;
+  public partyType?: string;
   public petitionPaymentDate?: string;
   public petitionPaymentMethod?: string;
-  public petitionPaymentStatus: string;
+  public petitionPaymentStatus?: string;
   public petitionPaymentWaivedDate?: string;
   public preferredTrialCity?: string;
   public remoteTrialGranted?: boolean;
   public remoteTrialGrantedDate?: string | null;
-  public procedureType: string;
-  public receivedAt: string;
+  public procedureType?: string;
+  public receivedAt?: string;
   public sealedDate?: string;
-  public status: CaseStatus;
-  public sortableDocketNumber: number;
+  public status?: CaseStatus;
+  public sortableDocketNumber?: number;
   public trialDate?: string;
   public trialLocation?: string;
   public trialSessionId?: string;
@@ -136,10 +136,10 @@ export class Case extends JoiValidationEntity {
   public canAllowPrintableDocketRecord?: boolean;
   public canDojPractitionersRepresentParty?: boolean;
   public archivedDocketEntries?: RawDocketEntry[];
-  public docketEntries: DocketEntry[];
+  public docketEntries: DocketEntry[]= [];
   public isSealed?: boolean;
-  public hearings: any[];
-  public privatePractitioners?: any[];
+  public hearings: any[]= [];
+  public privatePractitioners: any[]= [];
   public initialCaption?: string;
   public irsPractitioners?: any[];
   public statistics?: RawStatistic[];
@@ -496,7 +496,7 @@ export class Case extends JoiValidationEntity {
     docketNumberWithSuffix:
       JoiValidationConstants.STRING.optional().description(
         'Auto-generated from docket number and the suffix.',
-      ),
+      ).min(0),
     entityName: JoiValidationConstants.STRING.valid('Case').required(),
     filingType: JoiValidationConstants.STRING.valid(
       ...FILING_TYPES[ROLES.petitioner],

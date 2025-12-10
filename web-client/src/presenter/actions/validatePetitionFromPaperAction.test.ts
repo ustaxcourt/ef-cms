@@ -191,7 +191,7 @@ describe('validatePetitionFromPaperAction', () => {
         { yearOrPeriod: 'Year' },
       ];
 
-      const result = aggregateStatisticsErrors({ errors, get });
+      const result = aggregateStatisticsErrors(({ errors, get } as any));
 
       expect(result).toMatchObject({
         errors: {
@@ -225,7 +225,7 @@ describe('validatePetitionFromPaperAction', () => {
 
       const get = () => []; // mock get call returns no results from from.statistics
 
-      const result = aggregateStatisticsErrors({ errors, get });
+      const result = aggregateStatisticsErrors(({ errors, get } as any));
 
       expect(result).toMatchObject({
         errors: {

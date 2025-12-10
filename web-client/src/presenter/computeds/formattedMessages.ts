@@ -45,7 +45,6 @@ export const formattedMessages = (
     const statusWithTrialInfo = applicationContext
       .getUtilities()
       .caseStatusWithTrialInformation({
-        applicationContext,
         caseStatus: message.caseStatus,
         trialDate: message.trialDate,
         trialLocation: message.trialLocation,

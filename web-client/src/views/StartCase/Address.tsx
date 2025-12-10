@@ -16,14 +16,21 @@ const props = cerebralProps as unknown as {
   onChange: string;
 };
 
-export const Address = connect(
+type AddressProps = {
+  bind: string;
+  onBlur?: Function;
+  type: string;
+  onChange: any;
+}
+
+export const Address: React.FC<AddressProps> = connect(
   {
-    data: state[props.bind],
-    onBlur: props.onBlur,
-    registerRef: props.registerRef,
-    type: props.type,
-    updateFormValueAndSecondaryContactInfoSequence: sequences[props.onChange],
-    updateFormValueSequence: sequences[props.onChange],
+    data: state[props`bind`],
+    onBlur: props`onBlur`,
+    registerRef: props`registerRef`,
+    type: props`type`,
+    updateFormValueAndSecondaryContactInfoSequence: sequences[props`onChange`],
+    updateFormValueSequence: sequences[props`onChange`],
     validationErrors: state.validationErrors,
   },
   function Address({

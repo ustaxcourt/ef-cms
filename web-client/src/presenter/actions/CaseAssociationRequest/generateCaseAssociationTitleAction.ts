@@ -23,11 +23,11 @@ export const generateCaseAssociationTitleAction = ({
       documentTitle,
       documentType: caseAssociationRequest.documentType,
     };
-    documentTitle = applicationContext
+    documentTitle = applicationContext 
       .getUtilities()
       .generateExternalDocumentTitle(applicationContext, {
         documentMetadata: caseAssociationRequest.supportingDocumentMetadata,
-      });
+      }) || '';
     store.set(
       state.form.supportingDocumentMetadata.documentTitle,
       documentTitle,

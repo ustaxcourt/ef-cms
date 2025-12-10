@@ -56,7 +56,17 @@ describe('updateCreateOrderModalFormValueAction', () => {
   });
 
   it('unsets state.modal values if event code is empty', async () => {
-    const params = {
+    const params: {
+      modules: { presenter: any };
+      props: { key?: string; value?: string };
+      state: {
+        modal: {
+          documentTitle: string;
+          documentType: string;
+          eventCode: string;
+        };
+      };
+    } = {
       modules: {
         presenter,
       },
