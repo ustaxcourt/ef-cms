@@ -119,7 +119,6 @@ export async function getPractionerWithMostCasesEmail(): Promise<string> {
   const cognitoEmails = await getAllUserEmailsInCognito();
 
   // get id of cognito user with most cases
-
   const result = await dbConnection
     .selectFrom('dwUser as u')
     .innerJoin('dwUserOnCase as uc', 'uc.userId', 'u.userId')
