@@ -12,8 +12,6 @@ provider "aws" {
   alias  = "us-west-1"
 }
 
-data "aws_caller_identity" "current" {}
-
 terraform {
   backend "s3" {}
 
@@ -88,4 +86,10 @@ module "default_vpc_west" {
   providers = {
     aws = aws.us-west-1
   }
+}
+
+module "zendesk-automations" {
+  source                 = "../../modules/zendesk-automations"
+  cognito_user_pool      = var.cognito_user_pool
+  zendesk_aws_account_id = var.zendesk_aws_account_id
 }

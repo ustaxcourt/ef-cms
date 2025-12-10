@@ -1,5 +1,7 @@
 # This file helps facilitate Zendesk Automations, which lives in another account
 
+data "aws_caller_identity" "current" {}
+
 resource "aws_iam_role" "zendesk_automations_role" {
   count = var.zendesk_aws_account_id != "" ? 1 : 0
   name = "zendesk-automations-lambda-role"
