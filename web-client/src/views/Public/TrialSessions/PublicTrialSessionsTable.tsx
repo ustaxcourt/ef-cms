@@ -44,7 +44,6 @@ export const PublicTrialSessionsTable = connect<
           </thead>
           {filteredTrialSessionRows.map(row => {
             if (isTrialSessionWeek(row)) {
-              console.log('row: ', row);
               return (
                 <tbody key={row.formattedSessionWeekStartDate}>
                   <tr className="trial-date">
@@ -71,7 +70,8 @@ export const PublicTrialSessionsTable = connect<
                           iconClass="fa-icon-blue margin-right-05"
                           icon="clock"
                           size="sm"
-                          title={row.alertMessageForNOTT} />
+                          title={row.alertMessageForNOTT}
+                        />
                       )}
                       {row.formattedStartDate}
                     </td>
@@ -82,7 +82,8 @@ export const PublicTrialSessionsTable = connect<
                           iconClass="fa-icon-blue"
                           icon="link"
                           size="sm"
-                          title="Swing session: will be held in two cities" />
+                          title="Swing session: will be held in two cities"
+                        />
                       )}
                     </td>
                     <td>
