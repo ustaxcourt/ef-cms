@@ -32,7 +32,6 @@ export const CaseSearchByName: React.FC<CaseSearchByNameProps> = connect(
       sequences.updateAdvancedSearchFormValueSequence,
     updateCaseAdvancedSearchByNameFormValueSequence:
       sequences.updateCaseAdvancedSearchByNameFormValueSequence,
-    submitAdvancedSearchSequence: sequences.submitCaseAdvancedSearchSequence,
     usStates: state.constants.US_STATES,
     usStatesOther: state.constants.US_STATES_OTHER,
     validateCaseAdvancedSearchFormSequence:

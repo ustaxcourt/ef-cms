@@ -47,7 +47,7 @@ export const completeMessageInteractor = async (
 
       const updatedMessage = new Message(mostRecentMessage).validate();
 
-      updatedMessage.markAsCompleted({ message: message.messageBody, user});
+      updatedMessage.markAsCompleted({ message: message.messageBody, user });
 
       const validatedRawMessage = updatedMessage.validate().toRawObject();
 
