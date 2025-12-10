@@ -94,7 +94,7 @@ The example above is used specifically when we want to use a majority of the ori
 
 ## Integration Testing
 
-Since we know unit tests are not perfect and will miss potential bugs, we incorporate a lot of integration tests against Dawson to verify our code.  Our integration tests test at the presenter level (i.e. we test the Cerebral sequences which will hit our API, Dynamo, and Elasticsearch).  We try to avoid testing at the React level due to additional complexity, brittleness, and slowness.
+Since we know unit tests are not perfect and will miss potential bugs, we incorporate a lot of integration tests against Dawson to verify our code.  Our integration tests test at the presenter level (i.e. we test the Cerebral sequences which will hit our API and Elasticsearch).  We try to avoid testing at the React level due to additional complexity, brittleness, and slowness.
 
 You can run the all of the integration tests locally with the following command, but they will take **a long time**.
 

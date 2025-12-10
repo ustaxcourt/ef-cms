@@ -55,7 +55,6 @@ This includes both successful and unsuccessful attempts of a user elevating thei
 - Infrastructure
   - AWS: Cognito users and roles — ❌
     - Roles and user management are performed through Cognito directly, which despite documentation, appears not to be logging in CloudTrail for changes to users.
-  - AWS: DynamoDB table and stream operations (changes to table entries are not logged) — [CloudTrail][cloudtrail] with event source: `dynamodb.amazonaws.com`
   - AWS: S3 bucket operations (changes to individual documents are not logged) — [CloudTrail][cloudtrail] with event source: `s3.amazonaws.com`
   - AWS: Elasticsearch cluster operations (changes to documents are not logged) — [CloudTrail][cloudtrail] with event source: `es.amazonaws.com`
   - AWS: CloudWatch log group modifications, deletion of logs — [CloudTrail][cloudtrail] with event source: `logs.amazonaws.com`

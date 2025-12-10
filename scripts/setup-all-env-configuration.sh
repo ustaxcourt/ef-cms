@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-# Creates all missing feature flag items in the dynamo deploy table
+# Creates all missing feature flag items in the database
 
 # Usage
 #   ENV=dev ./setup-all-env-configuration.sh
