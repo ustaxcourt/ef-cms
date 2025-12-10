@@ -34,6 +34,9 @@ This runbook describes the process of creating a new DAWSON lower environment in
     - Maximum capacity for prod-like RDS clusters (string) [eg. "0.9"]
     - Minimum capacity for prod-like RDS clusters (string) [eg. "0.1"]
     - RUM sample rate for requests (string) [eg. "0.99"]
+- You should know ahead of time if you intend for this account to have its own `info` cluster. Otherwise, if you intend for this account to post its logs to an `info` cluster in another account, you will need to know:
+  - The ARN of the remote `info` cluster
+  - The endpoint (URL) of the remote `info` cluster
 
 ## Steps
 1. Create a block in your `~/.aws/config` file for the new account:
@@ -62,12 +65,22 @@ This runbook describes the process of creating a new DAWSON lower environment in
    aws sso login
    ```
 1. Create the `account_deploy` secrets for this environment, populating the values appropriately:
-   1. Lower environment:
+   1. Lower environment with its own `info` OpenSearch cluster:
       ```bash
       scripts/secrets/create-account-secrets.ts \
         --domain "ustaxcourt.gov" \
         --env "$ENV" \
         --external-trusted-role-arn "<Flexion-Developer ARN>"
+      ```
+   1. Lower environment that is a consumer of a separate `info` OpenSearch cluster:
+      ```bash
+      scripts/secrets/create-account-secrets.ts \
+        --domain "ustaxcourt.gov" \
+        --env "$ENV" \
+        --external-trusted-role-arn "<Flexion-Developer ARN>" \
+        --opensearch-logs-cluster-arn "<Remote OpenSearch Cluster ARN>" \
+        --opensearch-logs-endpoint "<Remote OpenSearch Endpoint>" \
+        --opensearch-logs-instance-count 0
       ```
    1. ⚖️ Lower environment with prod-like data:
       ```bash

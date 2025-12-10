@@ -5,14 +5,20 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-export const MessagesMenu = connect(
-  {
-    headerHelper: state.headerHelper,
-    pageIsMessages: state.headerHelper.pageIsMessages,
-    resetHeaderAccordionsSequence: sequences.resetHeaderAccordionsSequence,
-    toggleMenuSequence: sequences.toggleMenuSequence,
-    toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
-  },
+type MessagesMenuProps = {
+  isExpanded: boolean;
+};
+
+const messagesMenuDeps = {
+  headerHelper: state.headerHelper,
+  pageIsMessages: state.headerHelper.pageIsMessages,
+  resetHeaderAccordionsSequence: sequences.resetHeaderAccordionsSequence,
+  toggleMenuSequence: sequences.toggleMenuSequence,
+  toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
+};
+
+export const MessagesMenu = connect<MessagesMenuProps, typeof messagesMenuDeps>(
+  messagesMenuDeps,
   function MessagesMenu({
     headerHelper,
     isExpanded,

@@ -9,6 +9,8 @@ import {
 } from './apiGatewayHelper';
 import jwt from 'jsonwebtoken';
 
+type CustomError = Error & { skipLogging?: boolean };
+
 const EXPECTED_HEADERS = {
   'Access-Control-Expose-Headers': 'X-Terminal-User',
   'Cache-Control': 'max-age=0, private, no-cache, no-store, must-revalidate',
@@ -60,7 +62,7 @@ describe('handle', () => {
 
   it('should skip logging an error if skipLogging is true', async () => {
     await handle({}, () => {
-      const e = new Error();
+      const e = new Error() as CustomError;
       e.skipLogging = true;
       throw e;
     });
@@ -70,7 +72,7 @@ describe('handle', () => {
   it('should not log an error if skipLogging is false and CI is true', async () => {
     process.env.CI = 'true';
     await handle({}, () => {
-      const e = new Error();
+      const e = new Error() as CustomError;
       e.skipLogging = false;
       throw e;
     });
@@ -80,7 +82,7 @@ describe('handle', () => {
   it('should not log an error if skipLogging is true and CI is true', async () => {
     process.env.CI = 'true';
     await handle({}, () => {
-      const e = new Error();
+      const e = new Error() as CustomError;
       e.skipLogging = true;
       throw e;
     });
@@ -90,7 +92,7 @@ describe('handle', () => {
   it('should log an error if skipLogging is false and CI is false', async () => {
     delete process.env.CI;
     await handle({}, () => {
-      const e = new Error();
+      const e = new Error() as CustomError;
       e.skipLogging = false;
       throw e;
     });

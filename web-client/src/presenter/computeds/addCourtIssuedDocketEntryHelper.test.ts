@@ -95,6 +95,7 @@ describe('addCourtIssuedDocketEntryHelper', () => {
     docketEntryId: '123',
     form: {
       generatedDocumentTitle: 'Circle of Life',
+      attachments: undefined as boolean | undefined,
     },
     user,
   };
