@@ -6,7 +6,15 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-const NonstandardDateInput = (props: any) => {
+const NonstandardDateInput = (props: {
+  addCourtIssuedDocketEntryNonstandardHelper: any;
+  DATE_FORMATS: typeof state.constants.DATE_FORMATS;
+  form: any;
+  formatAndUpdateDateFromDatePickerSequence: Function;
+  updateCourtIssuedDocketEntryTitleSequence: Function;
+  validateCourtIssuedDocketEntrySequence: Function;
+  validationErrors: Record<string, any>;
+}) => {
   const {
     addCourtIssuedDocketEntryNonstandardHelper,
     DATE_FORMATS,

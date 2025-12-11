@@ -1,15 +1,13 @@
-import { sequences } from '@web-client/presenter/app.cerebral';
 import { ModalDialog } from '../ModalDialog';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import React from 'react';
 
 type WorkItemAlreadyCompletedModalProps = {
   confirmSequence: Function;
-}
+};
 
-export const WorkItemAlreadyCompletedModal: React.FC<WorkItemAlreadyCompletedModalProps> = connect(
-  { confirmSequence: sequences.confirmWorkItemAlreadyCompleteSequence },
-  function WorkItemAlreadyCompletedModal({ confirmSequence }) {
+export const WorkItemAlreadyCompletedModal: React.FC<WorkItemAlreadyCompletedModalProps> =
+  connect({}, function WorkItemAlreadyCompletedModal({ confirmSequence }) {
     return (
       <ModalDialog
         cancelLink={false}
@@ -23,7 +21,6 @@ export const WorkItemAlreadyCompletedModal: React.FC<WorkItemAlreadyCompletedMod
         or workflow.
       </ModalDialog>
     );
-  },
-);
+  });
 
 WorkItemAlreadyCompletedModal.displayName = 'WorkItemAlreadyCompletedModal';

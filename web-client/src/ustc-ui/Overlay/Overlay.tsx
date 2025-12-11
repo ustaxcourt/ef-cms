@@ -9,12 +9,8 @@ import classNames from 'classnames';
 const modalRoot = window.document.getElementById('modal-root');
 
 type OverlayUnRefProps = {
-  onEscSequence: any;
-  children: any;
-  className: any;
-  forwardedRef: any;
-  preventEsc: any;
-  preventScrolling: any;
+  onEscSequence: string;
+  className: string;
 };
 
 const OverlayUnRef: React.FC<OverlayUnRefProps> = connect(
