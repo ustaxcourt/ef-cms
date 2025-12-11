@@ -6,6 +6,7 @@ import { handleScanErrorAction } from '../actions/handleScanErrorAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { startScanAction } from '../actions/startScanAction';
+import { validateDocumentSelectedForScanAction } from '../actions/validateDocumentSelectedForScanAction';
 import { validateScannerSourceAction } from '../actions/validateScannerSourceAction';
 import { waitForSpinnerAction } from '../actions/waitForSpinnerAction';
 
@@ -19,10 +20,16 @@ export const startScanSequence = showProgressSequenceDecorator([
       {
         invalid: [handleInvalidScannerSourceAction],
         valid: [
-          startScanAction,
+          validateDocumentSelectedForScanAction,
           {
             error: [handleScanErrorAction],
-            success: [],
+            success: [
+              startScanAction,
+              {
+                error: [handleScanErrorAction],
+                success: [],
+              },
+            ],
           },
         ],
       },

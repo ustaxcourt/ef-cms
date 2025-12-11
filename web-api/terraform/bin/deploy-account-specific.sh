@@ -8,6 +8,7 @@ pushd ../../../../
 popd || exit
 
 [[ -z "$COGNITO_SUFFIX" ]] && echo "You must set COGNITO_SUFFIX as an environment variable" && exit 1
+[[ -z "$COGNITO_USER_POOL" ]] && echo "You must set COGNITO_USER_POOL as an environment variable" && exit 1
 [[ -z "$EFCMS_DOMAIN" ]] && echo "You must set EFCMS_DOMAIN as an environment variable" && exit 1
 [[ -z "$ES_LOGS_CLUSTER_ARN" ]] && [[ -n "$ES_LOGS_ENDPOINT" ]] && echo "You must set ES_LOGS_CLUSTER_ARN as an environment variable" && exit 1
 [[ -z "$ES_LOGS_ENDPOINT" ]] && [[ -n "$ES_LOGS_CLUSTER_ARN" ]] && echo "You must set ES_LOGS_ENDPOINT as an environment variable" && exit 1
@@ -61,6 +62,7 @@ export TF_VAR_my_s3_state_bucket="$BUCKET"
 export TF_VAR_my_s3_state_key="$KEY"
 
 export TF_VAR_cognito_suffix="$COGNITO_SUFFIX"
+export TF_VAR_cognito_user_pool="$COGNITO_USER_POOL"
 export TF_VAR_dawson_dev_trusted_role_arns="$DAWSON_DEV_TRUSTED_ROLE_ARNS"
 export TF_VAR_dns_domain="$EFCMS_DOMAIN"
 export TF_VAR_es_logs_cluster_arn="$ES_LOGS_CLUSTER_ARN"
@@ -74,6 +76,7 @@ export TF_VAR_es_logs_instance_type="$ES_LOGS_INSTANCE_TYPE"
 export TF_VAR_log_snapshot_bucket_name="$LOG_SNAPSHOT_BUCKET_NAME"
 export TF_VAR_lower_env_restore_roles="[\"arn:aws:iam::${LOWER_ENV_ACCOUNT_IDS//,/:role/restore_role_*\",\"arn:aws:iam::}:role/restore_role_*\"]"
 export TF_VAR_number_of_days_to_keep_info_logs="$NUM_DAYS_TO_KEEP_LOGS"
+export TF_VAR_zendesk_aws_account_id="$ZENDESK_AWS_ACCOUNT_ID"
 export TF_VAR_zone_name="$DNS_DOMAIN"
 
 npm run build:assets

@@ -11,7 +11,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const resetScanSessionAction = ({ get, store }: ActionProps) => {
   const documentSelectedForScan = get(
     state.currentViewMetadata.documentSelectedForScan,
-  );
+  )!;
   const scans = get(state.scanner.batches);
   delete scans[documentSelectedForScan];
   store.set(state.scanner.batches, scans);
