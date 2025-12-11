@@ -19,7 +19,6 @@ describe('Practioner with many cases updates phone number and address', () => {
     cy.task('getPractionerWithMostCasesEmail').as('EMAIL');
     cy.get('@EMAIL').then(email => {
       oldEmail = email.toString();
-      // console.log('Practioner with most cases email: ', email);
       cy.task('getOpenAndRecentCasesByEmail', email).then(resultCases => {
         cases = resultCases as string[];
       });
@@ -43,7 +42,6 @@ describe('Practioner with many cases updates phone number and address', () => {
     );
 
     // check docket record that phone number document is on the docket record of each case
-    // console.log('Cases to check: ', cases);
     cy.task('getRecentEventsByCode', {
       eventCode: 'NCP',
       cases,
@@ -51,7 +49,6 @@ describe('Practioner with many cases updates phone number and address', () => {
     }).as('RECENT_EVENTS');
 
     cy.get('@RECENT_EVENTS').then(recentEvents => {
-      console.log('Recent Events: ', recentEvents);
       const casesFiledIn = Object.keys(recentEvents);
       expect(casesFiledIn).to.have.all.members(cases);
     });
@@ -79,7 +76,6 @@ describe('Practioner with many cases updates phone number and address', () => {
     }).as('RECENT_EVENTS');
 
     cy.get('@RECENT_EVENTS').then(recentEvents => {
-      // console.log('Recent Events: ', recentEvents);
       const casesFiledIn = Object.keys(recentEvents);
       expect(casesFiledIn).to.have.all.members(cases);
     });
@@ -112,7 +108,6 @@ describe('Practioner with many cases updates phone number and address', () => {
     }).as('RECENT_EVENTS');
 
     cy.get('@RECENT_EVENTS').then(recentEvents => {
-      // console.log('Recent Events: ', recentEvents);
       const casesFiledIn = Object.keys(recentEvents);
       expect(casesFiledIn).to.have.all.members(cases);
     });
@@ -126,7 +121,6 @@ describe('Practioner with many cases updates phone number and address', () => {
 
     cy.task('getUserByEmail', oldEmail).then(user => {
       oldEmailUserId = (user as { userId: string }).userId;
-      // console.log('Old Email UserId: ', oldEmailUserId);
     });
 
     // update practitioner email
@@ -140,7 +134,6 @@ describe('Practioner with many cases updates phone number and address', () => {
     cy.task('getEmailVerificationToken', {
       email: oldEmail,
     }).then(verificationToken => {
-      // console.log('Verification Token: ', verificationToken);
       cy.visit(`/verify-email?token=${verificationToken}`);
     });
 
@@ -156,7 +149,6 @@ describe('Practioner with many cases updates phone number and address', () => {
 
     cy.task('getUserByEmail', updatedEmail).then(user => {
       updatedEmailUserId = (user as { userId: string }).userId;
-      // console.log('Updated Email UserId: ', updatedEmailUserId);
       expect(updatedEmailUserId).to.equal(
         oldEmailUserId,
         'UserId for updated email should be the same from old email',
