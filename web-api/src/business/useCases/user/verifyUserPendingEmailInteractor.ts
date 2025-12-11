@@ -6,7 +6,10 @@ import {
   createISODateString,
 } from '@shared/business/utilities/DateHandler';
 import { updateUserPendingEmailRecord } from '@web-api/business/useCases/auth/changePasswordInteractor';
-import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
+import {
+  acquireLock,
+  asyncHandleLockError,
+} from '@web-api/persistence/postgres/utils/mutex';
 import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
 import { getUserByPendingEmailVerificationToken } from '@web-api/persistence/postgres/users/getUserByPendingEmailVerificationToken';
 import { isAuthUser } from '@shared/business/entities/authUser/AuthUser';
@@ -67,6 +70,7 @@ export const verifyUserPendingEmailInteractor = async (
       applicationContext,
       authorizedUser: user,
       identifiers,
+      onLockError: asyncHandleLockError,
     });
 
     const { updatedUser } = await updateUserPendingEmailRecord({
