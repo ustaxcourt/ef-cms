@@ -53,10 +53,10 @@ export const validateNoticeOfWithdrawalAction = ({ get, path }) => {
   }
 };
 
-export const getPartiesToWithrawFrom = caseDetail => {
+export const getPartiesToWithrawFrom = (caseDetail: RawCase): string[] => {
   const partiesRepresented = caseDetail.petitioners.reduce(
     (acc, petitioner) => {
-      acc[petitioner.contactId] = caseDetail.privatePractitioners
+      acc[petitioner.contactId] = (caseDetail.privatePractitioners || [])
         .filter(practitioner =>
           practitioner.representing.includes(petitioner.contactId),
         )
