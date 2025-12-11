@@ -6,10 +6,10 @@ import classNames from 'classnames';
 
 interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: string;
-  helpText?: string;
+  helpText?: string | React.ReactNode;
   hideLabel?: boolean;
   icon?: boolean;
-  label?: string;
+  label?: string | React.ReactNode;
   optional?: boolean;
   required?: boolean;
   flexDirection?: 'vertical' | 'horizontal';
