@@ -8,7 +8,6 @@ import classNames from 'classnames';
 type PdfPreviewProps = {
   heightOverride?: boolean;
   noDocumentText?: string;
-  pdfPreviewUrl?: string;
   removeToolbar?: boolean;
 };
 

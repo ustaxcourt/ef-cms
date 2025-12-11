@@ -5,15 +5,9 @@ import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
 
 type DropdownMenuProps = {
-  caseDetail?: any;
-  clearDropDownMenuStateSequence?: any;
   id: string;
-  isMenuOpen?: boolean;
   menuItems: any;
   menuState: any;
-  openAddEditCalendarNoteModalSequence?: any;
-  openRemoveFromTrialSessionModalSequence?: any;
-  toggleMenuStateSequence?: any;
 }
 
 export const DropdownMenu: React.FC<DropdownMenuProps> = connect(

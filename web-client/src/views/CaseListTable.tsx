@@ -12,7 +12,7 @@ import classNames from 'classnames';
 
 export const CaseListTable = connect(
   {
-  caseType: state.openClosedCases.caseType,
+    caseType: state.openClosedCases.caseType,
     clearOpenClosedCasesCurrentPageSequence:
       sequences.clearOpenClosedCasesCurrentPageSequence,
     closedTab: state.constants.EXTERNAL_USER_DASHBOARD_TABS.CLOSED,
@@ -153,7 +153,7 @@ export const CaseListTable = connect(
                       isMobile: false,
                       showLoadMore:
                         externalUserCasesHelper.showLoadMoreOpenCases,
-                      showMoreResultsSequence: (showMoreOpenCasesSequence),
+                      showMoreResultsSequence: showMoreOpenCasesSequence,
                       tabName: openTab,
                     })}
                   </Tab>
@@ -168,7 +168,7 @@ export const CaseListTable = connect(
                       isMobile: false,
                       showLoadMore:
                         externalUserCasesHelper.showLoadMoreClosedCases,
-                      showMoreResultsSequence: (showMoreClosedCasesSequence),
+                      showMoreResultsSequence: showMoreClosedCasesSequence,
                       tabName: closedTab,
                     })}
                   </Tab>
@@ -210,7 +210,7 @@ export const CaseListTable = connect(
                   cases: externalUserCasesHelper.closedCaseResults,
                   isMobile: true,
                   showLoadMore: externalUserCasesHelper.showLoadMoreClosedCases,
-                  showMoreResultsSequence: (showMoreClosedCasesSequence),
+                  showMoreResultsSequence: showMoreClosedCasesSequence,
                   tabName: closedTab,
                 })}
               {caseType === openTab &&
@@ -218,7 +218,7 @@ export const CaseListTable = connect(
                   cases: externalUserCasesHelper.openCaseResults,
                   isMobile: true,
                   showLoadMore: externalUserCasesHelper.showLoadMoreOpenCases,
-                  showMoreResultsSequence: (showMoreOpenCasesSequence),
+                  showMoreResultsSequence: showMoreOpenCasesSequence,
                   tabName: openTab,
                 })}
             </div>

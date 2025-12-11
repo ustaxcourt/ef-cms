@@ -30,8 +30,7 @@ export const CourtIssuedDocketEntry = connect(
     form: state.form,
     formatAndUpdateDateFromDatePickerSequence:
       sequences.formatAndUpdateDateFromDatePickerSequence,
-  isEditingDocketEntry: state.isEditingDocketEntry,
-  // accept unknown state typings locally to avoid cross-file changes
+    isEditingDocketEntry: state.isEditingDocketEntry,
     openCancelDraftDocumentModalSequence:
       sequences.openCancelDraftDocumentModalSequence,
     openConfirmInitiateCourtIssuedFilingServiceModalSequence:

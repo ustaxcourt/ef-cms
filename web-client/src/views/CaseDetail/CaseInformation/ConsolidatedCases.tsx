@@ -4,13 +4,12 @@ import { Mobile, NonMobile } from '../../../ustc-ui/Responsive/Responsive';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
 import React from 'react';
+import { formattedCaseDetail } from '@web-client/presenter/computeds/formattedCaseDetail';
 
 type ConsolidatedCasesProps = {
-  caseDetail: any;
-  caseDetailHelper: ReturnType<
-    typeof caseDetailHelper
-  >
-}
+  caseDetail: ReturnType<typeof formattedCaseDetail>;
+  caseDetailHelper: ReturnType<typeof caseDetailHelper>;
+};
 
 export const ConsolidatedCases: React.FC<ConsolidatedCasesProps> = connect(
   {

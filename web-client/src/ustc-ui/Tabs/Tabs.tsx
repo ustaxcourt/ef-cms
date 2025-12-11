@@ -11,16 +11,13 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React, { ReactNode, useState } from 'react';
 import classNames from 'classnames';
 
-const renderTabFactory = (params: any) => {
-  const {
-    activeKey,
-    asSwitch,
-    boxed,
-    setTab,
-  // accept but ignore these optional props so callers may pass them without TS errors
-  _headingLevel,
-  _marginBottom,
-  } = params || {};
+const renderTabFactory = (params: {
+  activeKey: any;
+  asSwitch?: boolean;
+  boxed?: boolean;
+  setTab: any;
+}) => {
+  const { activeKey, asSwitch, boxed, setTab } = params || {};
 
   return function TabComponent(child: any) {
     const {
@@ -89,11 +86,11 @@ export function Tab(properties: {
   return <></>;
 }
 
-
-const HeadingElement: React.FC<{ children: ReactNode; level: string | number }> = ({
-  children,
-  level,
-}) => {
+// Tabs convey the document headings implicitly, but we also add an invisible header for accessibility reasons
+const HeadingElement: React.FC<{
+  children: ReactNode;
+  level: string | number;
+}> = ({ children, level }) => {
   return React.createElement(
     `h${level}`,
     { 'aria-hidden': 'false', className: 'sr-only' },
@@ -217,8 +214,6 @@ export function TabsComponent({
     activeKey,
     asSwitch,
     boxed,
-    headingLevel,
-    marginBottom,
     setTab,
   });
 

@@ -11,7 +11,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 type ContactsPrimaryProps = {
-  contactsHelper: string | Record<string, any>;
+  contactsHelper: Record<string, any>;
   bind: string;
   onBlur: Function;
   onChange: string;

@@ -27,7 +27,7 @@ export const ConfirmInitiateServiceModal: React.FC<ConfirmInitiateServiceModalPr
     documentTitle,
     waitingForResponse,
   }: {
-    cancelSequence: () => void;
+    cancelSequence: Function;
     confirmInitiateServiceModalHelper: {
       confirmationText: string;
       showPaperAlert: boolean;
@@ -35,7 +35,7 @@ export const ConfirmInitiateServiceModal: React.FC<ConfirmInitiateServiceModalPr
       contactsNeedingPaperService: Array<{ name: string }>;
       showConsolidatedCasesForService: boolean;
     };
-    confirmSequence: () => void;
+    confirmSequence: Function;
     documentTitle: string;
     waitingForResponse: boolean;
   }) {

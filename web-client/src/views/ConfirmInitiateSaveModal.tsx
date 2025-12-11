@@ -7,7 +7,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React, { useState } from 'react';
 
 type ConfirmInitiateSaveModalProps = {
-  documentTitle: any;
+  documentTitle: string;
 }
 
 export const ConfirmInitiateSaveModal: React.FC<ConfirmInitiateSaveModalProps> = connect(
@@ -23,9 +23,9 @@ export const ConfirmInitiateSaveModal: React.FC<ConfirmInitiateSaveModalProps> =
     documentTitle,
     submitCourtIssuedDocketEntrySequence,
   }: {
-    cancelSequence: () => void;
+    cancelSequence: Function;
     documentTitle: string;
-    submitCourtIssuedDocketEntrySequence: () => void;
+    submitCourtIssuedDocketEntrySequence: Function;
   }) {
     const [isSubmitting, setIsSubmitting] = useState(false);
     return (
