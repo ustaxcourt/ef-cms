@@ -186,7 +186,7 @@ export const CourtIssuedDocketEntry = connect(
                           className="usa-checkbox__label"
                           htmlFor="dispositionOrder"
                         >
-                          This order acts on at least one motion
+                          This order is dispositive for at least one motion
                         </label>
                       </div>
                     </fieldset>

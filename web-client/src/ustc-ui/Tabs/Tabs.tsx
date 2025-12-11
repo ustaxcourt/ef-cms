@@ -242,7 +242,7 @@ export function TabsComponent({
 
 export const Tabs: React.FC<TabsProps> = connect(
   {
-    bind: props.bind,
+    bind: props`bind`,
     simpleSetter: sequences.cerebralBindSimpleSetStateSequence,
     value: state[props`bind`],
   },
