@@ -8,10 +8,16 @@ import {
   TrialSessionRow,
   TrialSessionWeek,
   formatTrialSessions,
+  isTrialSessionRow,
   isTrialSessionWeek,
 } from '@web-client/presenter/computeds/trialSessionsHelper';
 import { getTrialCitiesGroupedByState } from '@shared/business/utilities/trialSession/trialCitiesGroupedByState';
 import { state } from '@web-client/presenter/app-public.cerebral';
+import {
+  createISODateAtStartOfDayEST,
+  createISODateString,
+  dateStringsCompared,
+} from '@shared/business/utilities/DateHandler';
 
 export type PublicTrialSessionsHelperResults = {
   sessionTypeOptions: {
@@ -30,10 +36,11 @@ export type PublicTrialSessionsHelperResults = {
   totalPages: number;
   trialSessionsCount: number;
   trialSessionRows: (TrialSessionRow | TrialSessionWeek)[];
-  groupedTrialSessions: {
-    header: TrialSessionWeek;
-    rows: TrialSessionRow[];
-  }[];
+  filteredTrialSessionRows: (TrialSessionRow | TrialSessionWeek)[];
+  filteredTrialSessionRowsCount: number;
+  publicTrialSessionCount: number;
+  mobileFilteredGroups: { header: TrialSessionWeek; rows: TrialSessionRow[] }[];
+  mobileTotalPages: number;
 };
 
 function areAnyFiltersModified(
@@ -80,6 +87,72 @@ function groupTrialSessions(
 }
 
 const PAGE_SIZE = 100;
+
+function filterPastTrialSessionRows(
+  trialSessionRows: (TrialSessionRow | TrialSessionWeek)[],
+): {
+  filteredTrialSessionRows: (TrialSessionRow | TrialSessionWeek)[];
+  filteredTrialSessionRowsCount: number;
+} {
+  const filteredTrialSessionRows: (TrialSessionRow | TrialSessionWeek)[] = [];
+  let filteredTrialSessionRowsCount = 0;
+  const today = createISODateString();
+  const todayAtStartOfDay = createISODateAtStartOfDayEST(today);
+  let currentWeekHeader: TrialSessionWeek | null = null;
+
+  for (const r of trialSessionRows) {
+    if (isTrialSessionWeek(r)) {
+      currentWeekHeader = r;
+      // We'll add the week header only if there are valid sessions under it
+      continue;
+    }
+
+    if (isTrialSessionRow(r)) {
+      // If no end date, always show
+      if (!r.estimatedEndDate) {
+        if (currentWeekHeader) {
+          filteredTrialSessionRows.push(currentWeekHeader);
+          currentWeekHeader = null;
+        }
+        filteredTrialSessionRowsCount++;
+        filteredTrialSessionRows.push(r);
+        continue;
+      }
+
+      // Check if end date has passed
+      const endDateIso = createISODateString(r.estimatedEndDate);
+      const endDateAtStartOfDay = createISODateAtStartOfDayEST(endDateIso);
+      const hasEndDatePassed =
+        dateStringsCompared(endDateAtStartOfDay, todayAtStartOfDay) < 0;
+
+      if (!hasEndDatePassed) {
+        if (currentWeekHeader) {
+          filteredTrialSessionRows.push(currentWeekHeader);
+          currentWeekHeader = null;
+        }
+        filteredTrialSessionRowsCount++;
+        filteredTrialSessionRows.push(r);
+      }
+    }
+  }
+
+  return { filteredTrialSessionRows, filteredTrialSessionRowsCount };
+}
+
+function dateComparison(tsGroup): boolean {
+  // If no end date, always show (per acceptance criteria)
+  if (!tsGroup?.estimatedEndDate) return true;
+
+  const endDate = tsGroup.estimatedEndDate;
+  const todayIso = createISODateString();
+  const endDateIso = createISODateString(endDate);
+
+  const endDateIsoAtStartOfDay = createISODateAtStartOfDayEST(endDateIso);
+  const todayIsoAtStartOfDay = createISODateAtStartOfDayEST(todayIso);
+
+  // Show if end date is today or in the future
+  return dateStringsCompared(endDateIsoAtStartOfDay, todayIsoAtStartOfDay) >= 0;
+}
 
 export const publicTrialSessionsHelper = (
   get: Get,
@@ -143,6 +216,15 @@ export const publicTrialSessionsHelper = (
       return sessionA.startDate.localeCompare(sessionB.startDate);
     });
 
+  const mobileFilteredGroups = filteredTrialSessions.filter(g =>
+    dateComparison(g),
+  );
+
+  const paginatedMobileFilteredGroups = mobileFilteredGroups.slice(
+    pageNumber * PAGE_SIZE,
+    pageNumber * PAGE_SIZE + PAGE_SIZE,
+  );
+
   const paginatedTrialSessions = filteredTrialSessions.slice(
     pageNumber * PAGE_SIZE,
     pageNumber * PAGE_SIZE + PAGE_SIZE,
@@ -152,16 +234,40 @@ export const publicTrialSessionsHelper = (
     trialSessions: paginatedTrialSessions,
   });
 
-  const groupedTrialSessions = groupTrialSessions(trialSessionRows);
+  const mobileTrialSessionRows = formatTrialSessions({
+    trialSessions: paginatedMobileFilteredGroups,
+  });
+
+  const publicTrialSessionCount = filteredTrialSessions.reduce(
+    (totalSum, ts) => {
+      return dateComparison(ts) ? totalSum + 1 : totalSum;
+    },
+    0,
+  );
+
+  const allGroups = groupTrialSessions(mobileTrialSessionRows);
+  const groupedMobileFilteredSessions = allGroups
+    .map(tsGroup => ({
+      header: tsGroup.header,
+      rows: tsGroup.rows.filter(tsRow => dateComparison(tsRow)),
+    }))
+    .filter(tsGroup => tsGroup.rows.length > 0);
+
+  const { filteredTrialSessionRows, filteredTrialSessionRowsCount } =
+    filterPastTrialSessionRows(trialSessionRows);
 
   return {
+    mobileFilteredGroups: groupedMobileFilteredSessions,
+    publicTrialSessionCount,
+    mobileTotalPages: Math.ceil(mobileFilteredGroups.length / PAGE_SIZE),
     filtersHaveBeenModified,
-    groupedTrialSessions,
     sessionTypeOptions,
     totalPages: Math.ceil(filteredTrialSessions.length / PAGE_SIZE),
     trialCitiesByState,
     trialSessionJudgeOptions,
     trialSessionRows,
+    filteredTrialSessionRows,
+    filteredTrialSessionRowsCount,
     trialSessionsCount: filteredTrialSessions.length,
   };
 };

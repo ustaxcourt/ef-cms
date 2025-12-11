@@ -2,6 +2,7 @@ import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
@@ -28,6 +29,7 @@ import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
+import { upsertDocketEntryRelatedEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntryRelatedEntries';
 
 describe('fileCourtIssuedDocketEntryInteractor', () => {
   let caseRecord;
@@ -293,7 +295,8 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
         ],
         documentMeta: {
           docketEntryId: LEAD_CASE.docketEntries[0].docketEntryId,
-
+          attachments: false,
+          documentTitle: '',
           documentType: 'Trial Exhibits',
           eventCode: 'TE',
           freeText: 'free text testing',
@@ -401,5 +404,86 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
         identifiers: expectedIdentifiers,
       }),
     );
+  });
+
+  it('should associate docket entries related to our court issued document', async () => {
+    const motionEntryId = 'b01afa63-931e-4999-99f0-c892c51292b7';
+    const orderEntryId = 'b01afa63-931e-4999-99f0-c892c51292d6';
+    const LEAD_CASE = {
+      ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+      docketEntries: [
+        {
+          docketEntryId: motionEntryId,
+          docketNumber: '109-19',
+          documentTitle: 'Some Motion',
+          documentType: 'Motion',
+          eventCode: 'M',
+          filedByRole: ROLES.docketClerk,
+          signedAt: '2019-03-01T21:40:46.415Z',
+          signedByUserId: mockUserId,
+          signedJudgeName: 'Dredd',
+          userId: mockUserId,
+        },
+        {
+          docketEntryId: orderEntryId,
+          docketNumber: '109-19',
+          documentTitle: 'Some Order',
+          documentType: 'Order',
+          eventCode: 'O',
+          filedByRole: ROLES.docketClerk,
+          signedAt: '2019-03-01T21:40:46.415Z',
+          signedByUserId: mockUserId,
+          signedJudgeName: 'Dredd',
+          userId: mockUserId,
+        },
+      ],
+    };
+
+    getCaseByDocketNumber.mockResolvedValueOnce(LEAD_CASE);
+
+    getCasesByDocketNumbers.mockResolvedValueOnce([
+      MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
+      LEAD_CASE as any,
+    ]);
+
+    await fileCourtIssuedDocketEntryInteractor(
+      applicationContext,
+      {
+        docketNumbers: [
+          MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+        ],
+        documentMeta: {
+          docketEntryId: LEAD_CASE.docketEntries[1].docketEntryId,
+          attachments: false,
+          documentTitle: 'Some Order',
+          documentType: 'Order',
+          eventCode: 'O',
+          freeText: 'free text testing',
+          affectedDocketEntries: [
+            {
+              disposition: 'GRANTED',
+              docketEntryId: motionEntryId,
+            },
+          ],
+        },
+        subjectDocketNumber: LEAD_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    // Assert that update docket relations table function was called with proper body
+    expect(upsertDocketEntryRelatedEntries).toHaveBeenCalledWith({
+      motionDocketEntries: [
+        {
+          disposition: 'GRANTED',
+          docketEntryId: motionEntryId,
+          docketNumber: '109-19',
+        },
+      ],
+      orderDocketEntry: expect.objectContaining({
+        docketEntryId: orderEntryId,
+      }),
+      served: false,
+    });
   });
 });

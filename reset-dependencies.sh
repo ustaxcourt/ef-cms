@@ -5,7 +5,6 @@ CLEAN_ONLY=$1
 # removes ONLY artifacts from previous runs
 rm -rf \
   .cache/ \
-  .dynamodb \
   .elasticsearch \
   dist/ \
   dist-public/

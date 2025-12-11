@@ -1,6 +1,7 @@
 /* eslint-disable max-lines */
 import { Contact } from '@shared/business/useCases/generatePetitionPdfInteractor';
 import { EligibleCase } from '@shared/business/entities/cases/EligibleCase';
+import { PDFDocumentProxy } from 'pdfjs-dist';
 import { FormattedCaseInventoryReportEntry } from '@shared/business/utilities/getFormattedCaseDetail';
 import { FormattedPendingMotionWithWorksheet } from '@web-api/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { GetCasesByStatusAndByJudgeResponse } from '@web-api/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
@@ -622,7 +623,7 @@ export const baseState = {
   advancedSearchTab: 'case',
   alertError: undefined,
   alertInfo: undefined,
-  alertSuccess: undefined,
+  alertSuccess: undefined as AlertSuccess | undefined,
   alertWarning: undefined,
   allJudges: [],
   archiveDraftDocument: {
@@ -632,6 +633,7 @@ export const baseState = {
     documentTitle: null,
   },
   assigneeId: null,
+  assigneeName: undefined as unknown as string,
   authentication: {
     form: {
       code: '',
@@ -663,7 +665,7 @@ export const baseState = {
     judgeIdFilter: string;
   },
   caseDeadlines: [] as RawCaseDeadline[],
-  caseDetail: {} as RawCase,
+  caseDetail: {} as RawCase & { messages?: RawMessage[] },
   caseInventoryReportData: {
     foundCasesForCurrentPage: [] as FormattedCaseInventoryReportEntry[],
     foundCasesTotalCount: 0,
@@ -671,18 +673,32 @@ export const baseState = {
   clientConnectionId: '',
   clientNeedsToRefresh: false,
   closedCases: [] as TAssociatedCase[],
+  closedCasesCurrentPage: undefined as number | undefined,
   cognito: {} as any,
+  contactToSeal: undefined as (Contact & { contactId: string }) | undefined,
   coldCaseReport: {
     entries: [],
   },
   completeForm: {},
+  confirmationText: undefined as unknown as
+    | string
+    | {
+        penalties?: Record<string, string>;
+        statistics?: Record<string, any>;
+        irsDeficiencyAmount?: string;
+        determinationDeficiencyAmount?: string;
+      }
+    | undefined,
   constants: {} as ReturnType<typeof getConstants>,
+  correspondenceId: undefined as string | undefined,
   createOrderAddedDocketNumbers: undefined as unknown as string[],
   createOrderSelectedCases: [] as any[],
+  createOrderTab: 'generate' as 'generate' | 'edit',
   currentJudges: [],
   currentPage: 'Loading',
   orderCurrentPaginationPage: 0,
   opinionCurrentPaginationPage: 0,
+  opinionDocumentTypes: [] as string[],
   trialSessionLocationChangeModalInfo: {
     currentTrialSessionLocation: undefined as
       | TrialSessionLocationInfo
@@ -702,7 +718,21 @@ export const baseState = {
         notes: false,
         trackedItems: false,
       },
+      frozen: undefined as boolean | undefined,
+      primaryTab: undefined as string | undefined,
+      caseInformationTab: undefined as string | undefined,
+      showEditPetition: false as boolean | undefined,
+      showEditCase: false as boolean | undefined,
+      inProgressTab: undefined as string | undefined,
+      docketRecordTab: undefined as string | undefined,
+      partyViewTab: undefined as string | undefined,
+      messagesTab: undefined as string | undefined,
+      trackedItemsTab: undefined as string | undefined,
+      draftsTab: undefined as string | undefined,
+      correspondenceTab: undefined as string | undefined,
+      notesTab: undefined as string | undefined,
     },
+    documentSelectedForPreview: undefined as string | undefined,
     documentDetail: {
       tab: '',
     },
@@ -721,7 +751,9 @@ export const baseState = {
   docketEntryId: '',
   docketRecordIndex: 0,
   documentToEdit: {} as any,
+  documentId: undefined as string | undefined,
   documentsSelectedForDownload: [] as { docketEntryId: string }[],
+  editDocketEntryMetaTab: 'documentInfo' as 'documentInfo' | 'documentType',
   orderDocumentSearchSort: {
     sortColumn: 'formattedFiledDate',
     sortDirection: 'desc' as 'asc' | 'desc',
@@ -731,15 +763,18 @@ export const baseState = {
     sortDirection: 'desc' as 'asc' | 'desc',
   },
   draftDocumentViewerDocketEntryId: null,
+  editDocumentEntryPoint: 'CaseDetail' as 'CaseDetail' | 'DocumentDetail',
   featureFlags: undefined as unknown as { [key: string]: string },
   fileUploadProgress: {
     isHavingSystemIssues: false,
     isUploading: false,
     percentComplete: 0,
     timeRemaining: Number.POSITIVE_INFINITY,
+    noThrottle: false as boolean | undefined,
   },
   form: {} as any,
   fromPage: '',
+  isPublic: false,
   // shared object for creating new entities, clear before using
   header: {
     searchTerm: '',
@@ -754,6 +789,10 @@ export const baseState = {
   irsNoticeUploadFormInfo: [] as CreateCaseIrsForm[],
   irsPractitioners: [] as RawUser[],
   isTerminalUser: false,
+  isCreatingOrder: false,
+  isEditingDocketEntry: false,
+  isUpdatingWithFile: false,
+  isExpanded: false as boolean | undefined,
   judgeActivityReport: {
     judgeActivityReportData: {},
   } as JudgeActivityReportState,
@@ -772,23 +811,30 @@ export const baseState = {
   },
   messages: [] as RawMessage[],
   messagesInboxCount: 0,
+  messageDetail: undefined as unknown as RawMessage[],
   messagesPage: {
     completionSuccess: false,
     messagesCompletedAt: '',
     messagesCompletedBy: '',
     selectedMessages: new Map() as Map<string, string>,
   },
+  messageCacheKey: undefined as unknown as string,
   messagesSectionCount: 0,
   minuteSheetForm: cloneDeep(initialMinuteSheetFormState),
   minuteSheetFormSnapshot: '',
+  messageViewerDocumentToDisplay: undefined as unknown as ViewerDocument,
   modal: {
-    contactSupportMessage: undefined, // the "contact support" message sans email address
+    calendarNotes: undefined as string | undefined,
+    contactSupportMessage: undefined as string | undefined, // the "contact support" message sans email address
     docketEntry: undefined,
-    message: undefined, // the message to show
+    form: {} as Record<string, any>,
+    message: undefined as string | undefined, // the message to show
     pdfPreviewModal: undefined,
-    showModal: undefined, // the name of the modal to display
-    title: undefined,
-    troubleshootingInfo: undefined as unknown as TroubleshootingLinkInfo, // steps for troubleshooting
+    showModal: undefined as string | undefined, // the name of the modal to display
+    title: undefined as string | undefined,
+    trialSessionId: undefined as string | undefined,
+    troubleshootingInfo: undefined as TroubleshootingLinkInfo | undefined, // steps for troubleshooting
+    penalties: undefined as unknown[] | undefined,
   } as Record<string, any>,
   navigation: {
     caseDetailMenu: '',
@@ -806,6 +852,7 @@ export const baseState = {
     unreadMessageCount?: number;
   },
   openCases: [] as TAssociatedCase[],
+  openCasesCurrentPage: undefined as number | undefined,
   paperServiceStatusState: {
     pdfsAppended: 0,
     totalPdfs: 0,
@@ -816,11 +863,13 @@ export const baseState = {
     nameForSigning: '',
     nameForSigningLine2: '',
     pageNumber: 1,
-    pdfjsObj: null,
+    pdfjsObj: null as PDFDocumentProxy | null,
     signatureApplied: false,
-    signatureData: null,
+    signatureData: null as { scale: number; x: number; y: number } | null,
     stampApplied: false,
     stampData: null,
+    isPdfAlreadySigned: false as boolean | undefined,
+    isPdfAlreadyStamped: false as boolean | undefined,
   },
   pdfGeneratedUrl: '',
   pdfPreviewUrl: '',
@@ -863,19 +912,30 @@ export const baseState = {
     taxYear: undefined,
   },
   practitionerDetail: {} as PractitionerDetail,
+  practitionerDocuments: undefined as unknown[] | undefined,
   previewPdfFile: null,
   progressIndicator: {
     // used for the spinner that shows when waiting for network responses
     waitingForResponse: false,
     waitingForResponseRequests: 0,
+    waitText: undefined as string | undefined,
   },
+  redirectUrl: undefined as string | undefined,
   refreshTokenInterval: undefined as unknown as NodeJS.Timeout,
   saveAlertsForNavigation: false,
   scanner: {
     batchIndexToDelete: null,
     batchIndexToRescan: null, // batch index for re-scanning
     batchToDeletePageCount: null,
-    batches: [],
+    batches: {} as Record<
+      string,
+      Array<{
+        index: number;
+        pages: any[];
+        scanMode?: string;
+        scanModeLabel?: string;
+      }>
+    >,
     currentPageIndex: 0, // batches from scanning
     isScanning: false,
     scanMode: undefined,
@@ -884,6 +944,7 @@ export const baseState = {
     dynamScriptClass: null,
     initiateScriptLoaded: false,
     configScriptLoaded: false,
+    sources: [] as string[],
   },
   screenMetadata: {} as any,
   searchResults: {} as any,
@@ -900,6 +961,7 @@ export const baseState = {
   showConfirmPassword: false,
   showPassword: false,
   showValidation: false,
+  showingAdditionalPetitioners: false,
   statusReportOrder: {
     docketNumbersToDisplay: [],
     statusReportFilingDate: '',
@@ -913,6 +975,8 @@ export const baseState = {
     sortField: 'createdAt',
     sortOrder: ASCENDING,
   },
+  tabName: undefined as string | undefined,
+  testUsers: [] as RawUser[],
   todaysDate: '',
   token: '',
   trialLocationPage: {
@@ -938,12 +1002,24 @@ export const baseState = {
   trialSessions: [] as any[],
   // Sometimes trialSessions, sometimes TrialSessionInfoDTO, sometimes ad-hoc trial sessions
   trialSessionsPage: cloneDeep(initialTrialSessionPageState),
+  lastCreatedTrialSessionId: undefined as unknown as string,
   user: cloneDeep(emptyUserState),
-  userContactEditProgress: {} as { inProgress?: boolean },
+  userContactEditProgress: {} as {
+    inProgress?: boolean;
+    totalCases?: number;
+    completedCases?: number;
+  },
   users: [] as RawUser[],
+  trialClerks: [] as RawUser[],
   validationErrors: {} as Record<string, any>,
+  viewerCorrespondenceToDisplay: null as {
+    correspondenceId: string;
+    documentTitle?: string;
+    filedBy?: string;
+  } | null,
   viewerDocumentToDisplay: undefined as unknown as ViewerDocument,
   viewerDraftDocumentToDisplay: undefined as unknown as ViewerDocument,
+  wizardStep: undefined as string | undefined,
   workItem: {},
   workItemActions: {},
   workItemMetadata: {},
@@ -978,12 +1054,15 @@ export type CreateCaseIrsForm = {
 
 export type ViewerDocument = {
   docketEntryId: string;
+  documentId?: string;
   documentTitle?: string; // Should this be required?
   documentType?: string;
   eventCode?: string;
   filingDate?: string;
   index?: number;
 };
+
+export type AlertSuccess = { message: string; overwritable?: boolean };
 
 export type PracticeType = (typeof PRACTICE_TYPE)[keyof typeof PRACTICE_TYPE];
 export type ServiceIndicatorType =

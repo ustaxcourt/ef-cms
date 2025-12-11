@@ -3,11 +3,15 @@ import {
   decorateWithPostCallback,
   useCerebralStateFactory,
 } from '../Utils/useCerebralState';
-import { props } from 'cerebral';
+import { props as cerebralProps } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useState } from 'react';
 import classNames from 'classnames';
+
+const props = cerebralProps as unknown as {
+  bind: string;
+};
 
 export const BindedTextarea = connect(
   {
@@ -15,7 +19,14 @@ export const BindedTextarea = connect(
     simpleSetter: sequences.cerebralBindSimpleSetStateSequence,
     value: state[props.bind],
   },
-  function BindedTextarea(componentProps) {
+  function BindedTextarea(componentProps: {
+    bind: string;
+    simpleSetter: Function;
+    value: unknown;
+    className?: string;
+    onChange?: (value: string) => void;
+    [key: string]: unknown;
+  }) {
     const { bind, className, onChange, simpleSetter, value } = componentProps;
 
     let textValue, setText;

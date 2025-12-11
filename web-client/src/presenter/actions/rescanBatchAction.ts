@@ -1,5 +1,7 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
+type ScanSessionResult = { scannedBuffer: Uint8Array[] };
+
 /**
  * initiates a rescan session for the given batch
  * @param {object} providers the providers object
@@ -26,15 +28,22 @@ export const rescanBatchAction = async ({
   scanner.setSourceByIndex(props.scannerSourceIndex);
 
   try {
-    const { scannedBuffer: pages } = await scanner.startScanSession({
+    const { scannedBuffer: pages } = (await scanner.startScanSession({
       applicationContext,
       scanMode,
-    });
+    })) as ScanSessionResult;
     const documentSelectedForScan = get(
       state.currentViewMetadata.documentSelectedForScan,
-    );
+    )!;
     const batches = get(state.scanner.batches[documentSelectedForScan]);
-    batches.find(b => b.index === batchIndex).pages = pages;
+    if (!batches) {
+      return path.error({ error: new Error('No batches found') });
+    }
+    const batch = batches.find(b => b.index === batchIndex);
+    if (!batch) {
+      return path.error({ error: new Error('Batch not found') });
+    }
+    batch.pages = pages;
     store.set(state.scanner.batches[documentSelectedForScan], batches);
     store.set(state.scanner.isScanning, false);
     store.set(state.scanner.selectedBatchIndex, batchIndex);

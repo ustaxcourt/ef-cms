@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-# Sets up environment variables for Cypress based on Secrets Manager and Dynamo deploy table
+# Sets up environment variables for Cypress based on SSM parameters
 
 # Usage
 #   ./scripts/setup-cypress-variables.sh

@@ -16,20 +16,24 @@ export const completeDocumentSigningAction = async ({
   const parentMessageId = get(state.parentMessageId);
   let docketEntryId;
 
-  if (get(state.pdfForSigning.signatureData.x)) {
-    const {
-      nameForSigning,
-      nameForSigningLine2,
-      pageNumber,
-      signatureData: { scale, x, y },
-    } = get(state.pdfForSigning);
+  const signatureData = get(state.pdfForSigning.signatureData);
+  if (signatureData?.x) {
+    const appContext = applicationContext as unknown as IApplicationContext;
+    const { nameForSigning, nameForSigningLine2, pageNumber } = get(
+      state.pdfForSigning,
+    );
+    const { scale, x, y } = signatureData;
 
-    const pdfjsObj = window.pdfjsObj || get(state.pdfForSigning.pdfjsObj);
+    const windowWithPdfjs = window as Window & {
+      pdfjsObj?: { getData: () => Promise<unknown> };
+    };
+    const pdfjsObj: { getData: () => Promise<unknown> } =
+      windowWithPdfjs.pdfjsObj || get(state.pdfForSigning.pdfjsObj);
 
     // generate signed document to bytes
     const signedPdfBytes = await applicationContext
       .getUseCases()
-      .generateSignedDocumentInteractor(applicationContext, {
+      .generateSignedDocumentInteractor(appContext, {
         pageIndex: pageNumber - 1,
         // pdf.js starts at 1
         pdfData: await pdfjsObj.getData(),
@@ -55,7 +59,7 @@ export const completeDocumentSigningAction = async ({
 
     ({ signedDocketEntryId: docketEntryId } = await applicationContext
       .getUseCases()
-      .saveSignedDocumentInteractor(applicationContext, {
+      .saveSignedDocumentInteractor(appContext, {
         docketNumber,
         nameForSigning,
         originalDocketEntryId,

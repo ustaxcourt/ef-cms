@@ -11,6 +11,11 @@ export const shouldShowPreviewAction = ({ get, path }: ActionProps) => {
   const documentSelectedForScan = get(
     state.currentViewMetadata.documentSelectedForScan,
   );
+
+  if (!documentSelectedForScan) {
+    return path.no();
+  }
+
   const file = get(state.form[documentSelectedForScan]);
   return file ? path.yes({ file }) : path.no();
 };

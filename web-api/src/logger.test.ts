@@ -1,6 +1,8 @@
 import { expressLogger } from './logger';
-jest.mock('@vendia/serverless-express');
-import { getCurrentInvoke } from '@vendia/serverless-express';
+jest.mock('@codegenie/serverless-express');
+import { getCurrentInvoke } from '@codegenie/serverless-express';
+
+const mockGetCurrentInvoke = jest.mocked(getCurrentInvoke);
 
 describe('logger', () => {
   let req, res, NODE_ENV;
@@ -47,11 +49,11 @@ describe('logger', () => {
   it('defaults to using a console logger if not specified', () => {
     const middleware = expressLogger;
 
-    jest.spyOn(console, 'log').mockImplementation(jest.fn());
+    const localSpy = jest.spyOn(console, 'log').mockImplementation(jest.fn());
     middleware(req, res, () => {
       req.locals.logger.info('test', () => {
         expect(console.log).toHaveBeenCalled();
-        console.log.mockRestore();
+        localSpy.mockRestore();
       });
     });
   });
@@ -112,7 +114,7 @@ describe('logger', () => {
     process.env.NODE_ENV = 'production';
 
     // set by aws-serverless-express.getCurrentInvoke()
-    getCurrentInvoke.mockReturnValueOnce({
+    mockGetCurrentInvoke.mockReturnValueOnce({
       context: {
         awsRequestId: 'c840522b-1e43-4d03-995c-014d199fa237',
       },
@@ -165,7 +167,9 @@ describe('logger', () => {
     ];
 
     for (const apiGateway of mockReturnValues) {
-      getCurrentInvoke.mockReturnValueOnce(apiGateway);
+      mockGetCurrentInvoke.mockReturnValueOnce(
+        apiGateway as ReturnType<typeof getCurrentInvoke>,
+      );
       const request = { ...req };
 
       await subject(request, res);

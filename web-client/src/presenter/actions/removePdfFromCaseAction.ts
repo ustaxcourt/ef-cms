@@ -22,7 +22,9 @@ export const removePdfFromCaseAction = ({ get }: ActionProps) => {
       state.currentViewMetadata.documentSelectedForPreview,
     );
 
-    delete form[fileKeyToRemove];
+    if (fileKeyToRemove && typeof fileKeyToRemove === 'string') {
+      delete form[fileKeyToRemove];
+    }
   }
 
   return {

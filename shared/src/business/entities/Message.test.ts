@@ -192,7 +192,7 @@ describe('Message', () => {
 
       expect(message.isValid()).toBeFalsy();
       expect(Object.keys(message.getFormattedValidationErrors()!)).toEqual([
-        'documentId',
+        'attachments-0-documentId',
       ]);
     });
   });
