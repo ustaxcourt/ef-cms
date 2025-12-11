@@ -1,9 +1,6 @@
 /* eslint-disable max-lines */
-import * as client from '../../web-api/src/persistence/dynamodbClientService';
 import { Agent } from 'http';
 import { CerebralTest } from 'cerebral/test';
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { FORMATS } from '../../shared/src/business/utilities/DateHandler';
 import {
   back,
@@ -40,6 +37,7 @@ import jwt from 'jsonwebtoken';
 import qs from 'qs';
 import riotRoute from 'riot-route';
 import { getDbReader } from '@web-api/database';
+import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 
 const applicationContext = clientApplicationContext as any;
 
@@ -56,25 +54,10 @@ const formattedCaseMessages = withAppContextDecorator(
 const workQueueHelper = withAppContextDecorator(workQueueHelperComputed);
 const formattedMessages = withAppContextDecorator(formattedMessagesComputed);
 
-let dynamoDbCache;
 let httpCache;
 
 Object.assign(applicationContext, {
-  getDocumentClient: () => {
-    if (!dynamoDbCache) {
-      const dynamoDbClient = new DynamoDBClient({
-        endpoint: 'http://localhost:8000',
-        region: 'us-east-1',
-      });
-      dynamoDbCache = DynamoDBDocument.from(dynamoDbClient, {
-        marshallOptions: { removeUndefinedValues: true },
-      });
-    }
-
-    return dynamoDbCache;
-  },
   getEnvironment: () => ({
-    dynamoDbTableName: 'efcms-local',
     stage: 'local',
   }),
   getScanner: getScannerMockInterface,
@@ -156,14 +139,16 @@ export const getConnection = async connectionId => {
   );
 };
 
-export const setOpinionSearchEnabled = (isEnabled, keyPrefix) => {
-  return client.put({
-    Item: {
-      current: isEnabled,
-      pk: `${keyPrefix}-opinion-search-enabled`,
-      sk: `${keyPrefix}-opinion-search-enabled`,
-    },
-    applicationContext,
+export const setOpinionSearchEnabled = async (isEnabled, keyPrefix) => {
+  return await pgInsertInto({
+    table: 'dwFeatureFlag',
+    values: [
+      {
+        name: `${keyPrefix}-opinion-search-enabled`,
+        value: { current: isEnabled },
+      },
+    ],
+    onConflictColumns: ['name'],
   });
 };
 
@@ -172,13 +157,15 @@ export const setOrderSearchEnabled = async (isEnabled, keyPrefix) => {
 };
 
 export const setFeatureFlag = async (isEnabled, key) => {
-  return await client.put({
-    Item: {
-      current: isEnabled,
-      pk: key,
-      sk: key,
-    },
-    applicationContext,
+  return await pgInsertInto({
+    table: 'dwFeatureFlag',
+    values: [
+      {
+        name: key,
+        value: { current: isEnabled },
+      },
+    ],
+    onConflictColumns: ['name'],
   });
 };
 
@@ -892,14 +879,7 @@ export const waitUntil = cb => {
 };
 
 export const refreshElasticsearchIndex = async (time = 2000) => {
-  // refresh all ES indices:
   // https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-refresh.html#refresh-api-all-ex
-  await waitUntil(async () => {
-    const value = await axios
-      .get('http://localhost:5005/isDone')
-      .then(response => response.data);
-    return value === true;
-  });
   await axios.post('http://localhost:9200/_refresh');
   await axios.post('http://localhost:9200/_flush');
   return await wait(time);

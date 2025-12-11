@@ -34,6 +34,10 @@ To run an account specific deploy:
 npm run deploy:account-specific
 ```
 
+## Terraform State Locking
+
+Terraform uses a DynamoDB table called `efcms-terraform-lock` to prevent multiple terraform runs from executing at the same time, which can cause major issues. This table is managed automatically by Terraform and helps ensure state consistency.
+
 ## Manually Unlock the State File
 
 Cancelling a Terraform run before it completes often results in a locked state file. First, double-check that no other person or process is currently applying changes - verify that the state file is _wrongfully_ locked, not _intentionally_ locked.

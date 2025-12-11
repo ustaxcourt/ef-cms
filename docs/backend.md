@@ -25,7 +25,7 @@ Before diving into the technical aspects of the backend, it might be useful just
 │   ├── app-public.js // the public API which contains all the endpoints
 │   ├── app.js // the private API which contains all the endpoints
 │   ├── applicationContext.js // the application context
-│   ├── fallbackHandler.js // used for fallback to a different dynamo region is one if down
+│   ├── fallbackHandler.js // used for fallback handling
 │   ├── genericHandler.js // used to wrap our lambda functions and return the proper format for AWS
 │   ├── createLogger.js // used to create the logger
 │   ├── lambdaWrapper.js // wraps all the lambda functions to be used in AWS

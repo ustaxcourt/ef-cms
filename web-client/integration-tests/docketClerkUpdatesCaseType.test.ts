@@ -92,7 +92,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       value: 100,
     });
 
-    let statisticId = cerebralTest.getState('form.statistics.0.statisticId');
+    const statisticId = cerebralTest.getState('form.statistics.0.statisticId');
 
     await cerebralTest.runSequence('showCalculatePenaltiesModalSequence', {
       key: 'irsTotalPenalties',

@@ -17,12 +17,14 @@ export const PublicTrialSessionsTable = connect<
   PublicTrialSessionsTableProps,
   typeof PublicTrialSessionsTableDeps
 >(PublicTrialSessionsTableDeps, function ({ publicTrialSessionsHelper }) {
+  const { filteredTrialSessionRows, publicTrialSessionCount } =
+    publicTrialSessionsHelper;
   return (
     <>
       <div className="grid-row margin-bottom-2 width-full flex-align-center"></div>
       <div className="text-right width-full">
         <span className="text-semibold">Count: </span>
-        {publicTrialSessionsHelper.trialSessionsCount}
+        {publicTrialSessionCount}
       </div>
       <div className="padding-1"></div>
       <div className="overflow-x-auto">
@@ -40,7 +42,7 @@ export const PublicTrialSessionsTable = connect<
               <th className="width-mobile">Judge</th>
             </tr>
           </thead>
-          {publicTrialSessionsHelper.trialSessionRows.map(row => {
+          {filteredTrialSessionRows.map(row => {
             if (isTrialSessionWeek(row)) {
               return (
                 <tbody key={row.formattedSessionWeekStartDate}>
@@ -68,7 +70,8 @@ export const PublicTrialSessionsTable = connect<
                           iconClass="fa-icon-blue margin-right-05"
                           icon="clock"
                           size="sm"
-                          title={row.alertMessageForNOTT} />
+                          title={row.alertMessageForNOTT}
+                        />
                       )}
                       {row.formattedStartDate}
                     </td>
@@ -79,7 +82,8 @@ export const PublicTrialSessionsTable = connect<
                           iconClass="fa-icon-blue"
                           icon="link"
                           size="sm"
-                          title="Swing session: will be held in two cities" />
+                          title="Swing session: will be held in two cities"
+                        />
                       )}
                     </td>
                     <td>

@@ -14,10 +14,6 @@ variable "zone_name" {
   type = string
 }
 
-variable "green_table_name" {
-  type = string
-}
-
 variable "dns_domain" {
   type = string
 }

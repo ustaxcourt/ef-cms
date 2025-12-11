@@ -3,6 +3,7 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseIcon';
+import { isLeadCase } from '@shared/business/entities/cases/Case';
 
 export const IndividualWorkQueueInProgress = connect(
   {
@@ -45,7 +46,7 @@ export const IndividualWorkQueueInProgress = connect(
                       }
                       inConsolidatedGroup={item.inConsolidatedGroup}
                       showLeadCaseIcon={
-                        item.leadDocketNumber === item.docketNumber
+                        isLeadCase(item)
                       }
                     />
                   </td>

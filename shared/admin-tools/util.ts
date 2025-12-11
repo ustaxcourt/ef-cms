@@ -5,8 +5,7 @@ import { getSSMItem } from '../admin-tools/aws/ssmHelper';
 const { ENV } = process.env;
 const UserPoolCache: Record<string, string> = {};
 
-export const getSourceTableInfo = async (): Promise<{
-  tableName: string;
+export const getSourceVersionInfo = async (): Promise<{
   version: 'alpha' | 'beta';
 }> => {
   requireEnvVars(['ENV']);
@@ -16,14 +15,13 @@ export const getSourceTableInfo = async (): Promise<{
     | 'beta';
 
   if (version) {
-    return { tableName: `efcms-${ENV}-${version}`, version };
+    return { version };
   } else {
     throw 'Could not determine the current version';
   }
 };
 
-export const getDestinationTableInfo = async (): Promise<{
-  tableName: string;
+export const getDestinationVersionInfo = async (): Promise<{
   version: 'alpha' | 'beta';
 }> => {
   requireEnvVars(['ENV']);
@@ -33,7 +31,7 @@ export const getDestinationTableInfo = async (): Promise<{
     | 'beta';
 
   if (version) {
-    return { tableName: `efcms-${ENV}-${version}`, version };
+    return {  version };
   } else {
     throw 'Could not determine the current version';
   }

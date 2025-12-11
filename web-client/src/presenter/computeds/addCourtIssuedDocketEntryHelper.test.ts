@@ -3,6 +3,7 @@ import {
   CONTACT_TYPES,
   CONTACT_TYPE_TITLES,
   INITIAL_DOCUMENT_TYPES,
+  MOTION_DISPOSITIONS,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { addCourtIssuedDocketEntryHelper as addCourtIssuedDocketEntryHelperComputed } from './addCourtIssuedDocketEntryHelper';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
@@ -44,7 +45,32 @@ describe('addCourtIssuedDocketEntryHelper', () => {
 
   const state = {
     caseDetail: {
-      docketEntries: [{ docketEntryId: '123' }],
+      docketEntries: [
+        { docketEntryId: '123' },
+        {
+          docketEntryId: '456',
+          index: 2,
+          documentTitle:
+            'Motion for an Order under Federal Rule of Evidence 502(d)',
+          documentType:
+            'Motion for an Order under Federal Rule of Evidence 502(d)',
+          category: 'Motion',
+          eventCode: 'M001',
+          scenario: 'Standard',
+          labelPreviousDocument: '',
+          labelFreeText: '',
+          ordinalField: '',
+          allowStamp: true,
+          allowOrderResponse: true,
+        },
+        {
+          docketEntryId: '789',
+          documentType: 'Motion',
+          documentTitle: 'Motion to Dismiss',
+          eventCode: 'M002',
+          index: 3,
+        },
+      ],
       irsPractitioners: [{ name: 'Rafiki' }, { name: 'Pumbaa' }],
       petitioners: [
         {
@@ -76,6 +102,27 @@ describe('addCourtIssuedDocketEntryHelper', () => {
 
   beforeEach(() => {
     applicationContext.getConstants.mockImplementation(() => mockConstants);
+  });
+
+  it('should return caseMotions for docket entries that are motions and not already included in the order', () => {
+    const result = runCompute(addCourtIssuedDocketEntryHelper, { state });
+
+    expect(result.caseMotions.length).toEqual(2);
+    expect(result.caseMotions).toEqual([
+      { label: '3 - Motion to Dismiss', value: '789' },
+      {
+        label: '2 - Motion for an Order under Federal Rule of Evidence 502(d)',
+        value: '456',
+      },
+    ]);
+  });
+
+  it('should return the proper relatedMotionDispositions', () => {
+    const result = runCompute(addCourtIssuedDocketEntryHelper, { state });
+
+    expect(result.relatedMotionDispositions).toEqual(
+      Object.values(MOTION_DISPOSITIONS).map(d => ({ label: d, value: d })),
+    );
   });
 
   it('should calculate document types based on constants in applicationContext', () => {

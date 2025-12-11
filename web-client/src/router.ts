@@ -369,7 +369,6 @@ const router = {
         });
       }),
     );
-
     registerRoute(
       '/case-detail/*/documents/*/edit-court-issued..',
       ifHasAccess({ app }, (docketNumber, docketEntryId) => {
@@ -793,7 +792,6 @@ const router = {
         });
       }),
     );
-
     registerRoute(
       '/case-detail/*/documents/*/add-court-issued-docket-entry/*',
       ifHasAccess({ app }, (docketNumber, docketEntryId, parentMessageId) => {
