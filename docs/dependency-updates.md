@@ -204,6 +204,7 @@ Below is a list of dependencies that are locked down due to known issues with se
 ### DWT
 
 - Minor versions of DWT _should_ be updated, but require that Court IT update the Windows clients in concert with our app. Do not update without coordinating.
+- Stay at DWT v19.2.0, wait until January to update to 19.3.0
 
 ### puppeteer and @sparticuz/chromium
 
