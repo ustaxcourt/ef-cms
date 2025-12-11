@@ -34,9 +34,16 @@ export const rescanBatchAction = async ({
     })) as ScanSessionResult;
     const documentSelectedForScan = get(
       state.currentViewMetadata.documentSelectedForScan,
-    );
+    )!;
     const batches = get(state.scanner.batches[documentSelectedForScan]);
-    batches.find(b => b.index === batchIndex).pages = pages;
+    if (!batches) {
+      return path.error({ error: new Error('No batches found') });
+    }
+    const batch = batches.find(b => b.index === batchIndex);
+    if (!batch) {
+      return path.error({ error: new Error('Batch not found') });
+    }
+    batch.pages = pages;
     store.set(state.scanner.batches[documentSelectedForScan], batches);
     store.set(state.scanner.isScanning, false);
     store.set(state.scanner.selectedBatchIndex, batchIndex);
