@@ -2,23 +2,16 @@ import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { StateSelect } from './StateSelect';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props as cerebralProps } from 'cerebral';
+import { props } from 'cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 import { RunableSequence as RunnableSequence } from 'cerebral';
 
-const props = cerebralProps as unknown as {
-  bind: string;
-  onBlur: (args: Record<string, any>) => void;
-  registerRef: (param: string) => void;
-  type: string;
-  onChange: string;
-};
-
 type AddressProps = {
   bind: string;
   onBlur?: Function;
+  registerRef?: Function;
   type: string;
   onChange: any;
 }
@@ -44,7 +37,7 @@ export const Address: React.FC<AddressProps> = connect(
   }: {
     data: Record<string, any>;
     onBlur: (args: Record<string, any>) => void;
-    registerRef: (param: string) => void;
+    registerRef: Function;
     type: string;
     updateFormValueAndSecondaryContactInfoSequence: Function | RunnableSequence;
     updateFormValueSequence: Function | RunnableSequence;

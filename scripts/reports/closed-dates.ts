@@ -70,7 +70,7 @@ const getAllCasesOpenedInYear = async (): Promise<RawCase[]> => {
     caseType: c.caseType,
     closedHumanized: c.closedDate?.split('T')[0] || '',
     docketNumber: c.docketNumber,
-    rcvdAtHumanized: c.receivedAt.split('T')[0],
+    rcvdAtHumanized: c.receivedAt?.split('T')[0],
     status: c.status,
   }));
   generateCsv({ columns, filename, rows });

@@ -54,7 +54,7 @@ type tUsersCase = {
   noticeOfTrialDateFormatted: string;
   privatePractitioners?: RawPractitioner[];
   procedureType: string;
-  receivedAt: string;
+  receivedAt?: string;
   receivedAtFormatted: string;
   status: string;
   trialDate?: string;
