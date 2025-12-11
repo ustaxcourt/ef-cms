@@ -3,6 +3,7 @@ import { createBarNumber } from '@web-api/persistence/postgres/users/createBarNu
 import { getUniqueId } from '@shared/sharedAppContext';
 import {
   ACCOUNT_STATUS,
+  COUNTRY_TYPES,
   PRACTICE_TYPE_OPTIONS,
   PRACTITIONER_TYPE_OPTIONS,
   ROLES,
@@ -35,7 +36,7 @@ describe('createPractitionerUser', () => {
       state: 'NY',
       postalCode: '10001',
       country: 'USA',
-      countryType: 'domestic', // or 'international' as appropriate
+      countryType: COUNTRY_TYPES.DOMESTIC,
       phone: '555-555-5555',
     },
     practitionerType: PRACTITIONER_TYPE_OPTIONS[0],

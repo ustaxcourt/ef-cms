@@ -8,18 +8,24 @@ import {
   SERVICE_INDICATOR_TYPES,
 } from '@shared/business/entities/EntityConstants';
 
-export const noticeOfWithdrawalHelper = (get: Get) => {
+export const noticeOfWithdrawalHelper = (
+  get: Get,
+): {
+  filingParties: TPetitioner[];
+  partiesWithPaperService: TPetitioner[];
+  showEditContactInformation: boolean;
+  showRespondant: boolean;
+} => {
   const caseDetail = get(state.caseDetail);
   const user = get(state.user);
 
-  const filingParties =
+  const filingParties: TPetitioner[] = (
     user.role === ROLES.privatePractitioner
       ? getPartiesToWithrawFrom(caseDetail)
-          .map(partyId =>
-            caseDetail.petitioners.find(p => p.contactId === partyId),
-          )
-          .filter(Boolean)
-      : [];
+      : []
+  ).map(partyId =>
+    caseDetail.petitioners.find(p => p.contactId === partyId),
+  ) as TPetitioner[];
 
   const showRespondant = user.role === ROLES.irsPractitioner;
 
