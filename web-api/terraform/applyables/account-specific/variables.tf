@@ -2,6 +2,10 @@ variable "cognito_suffix" {
   type = string
 }
 
+variable "cognito_user_pool" {
+  type = string
+}
+
 variable "dawson_dev_trusted_role_arns" {
   type    = set(string)
 }
@@ -54,6 +58,10 @@ variable "lower_env_restore_roles" {
 
 variable "number_of_days_to_keep_info_logs" {
   type = number
+}
+
+variable "zendesk_aws_account_id" {
+  type = string
 }
 
 variable "zone_name" {
