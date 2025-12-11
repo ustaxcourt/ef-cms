@@ -184,7 +184,7 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
                           key: 'affectedDocketEntries',
                           index: i,
                           value: Object.assign(form.affectedDocketEntries[i], {
-                            docketEntryId: inputValue.value,
+                            docketEntryId: inputValue?.value,
                           }),
                         });
 
@@ -227,7 +227,7 @@ export const EditDocketEntryMetaFormCourtIssued = connect(
                           key: 'affectedDocketEntries',
                           index: i,
                           value: Object.assign(form.affectedDocketEntries[i], {
-                            disposition: inputValue.value,
+                            disposition: inputValue?.value,
                           }),
                         });
 
