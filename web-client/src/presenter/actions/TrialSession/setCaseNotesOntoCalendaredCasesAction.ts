@@ -18,6 +18,7 @@ export const setCaseNotesOntoCalendaredCasesAction = ({
       foundCalendaredCase =>
         foundCalendaredCase.docketNumber === note.docketNumber,
     );
+    if (!calendaredCase) continue;
     Object.assign(calendaredCase, {
       notes: note,
     });

@@ -13,7 +13,7 @@ describe('validateTrialSessionInteractor', () => {
       trialSession: {} as RawNewTrialSession,
     });
 
-    expect(Object.keys(errors).length).toBeGreaterThan(0);
+    expect(Object.keys({ ...errors }).length).toBeGreaterThan(0);
   });
 
   it('returns null for a valid trial session', () => {

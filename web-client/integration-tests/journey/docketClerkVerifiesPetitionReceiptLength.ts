@@ -23,7 +23,7 @@ export const docketClerkVerifiesPetitionReceiptLength = (
     const pdfPreviewUrl = cerebralTest.getState('pdfPreviewUrl');
 
     const chunks: Buffer[] = [];
-    const buffer = await new Promise((resolve, reject) => {
+    const buffer = await new Promise<Buffer>((resolve, reject) => {
       http.get(pdfPreviewUrl, function (response) {
         response.on('data', chunk => chunks.push(Buffer.from(chunk)));
         response.on('error', err => reject(err));

@@ -7,7 +7,7 @@ describe('validateHearingNoteInteractor', () => {
       note: null,
     });
 
-    expect(Object.keys(errors).length).toBeGreaterThan(0);
+    expect(Object.keys({ ...errors }).length).toBeGreaterThan(0);
   });
 
   it('returns null when note is defined', () => {

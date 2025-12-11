@@ -7,7 +7,7 @@ describe('validateNoteInteractor', () => {
       note: {},
     });
 
-    expect(Object.keys(errors)).toEqual(['notes']);
+    expect(Object.keys({ ...errors })).toEqual(['notes']);
   });
 
   it('returns null on no errors', () => {
