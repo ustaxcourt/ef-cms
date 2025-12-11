@@ -1,7 +1,9 @@
 import { Case } from '../entities/cases/Case';
 import { SERVICE_INDICATOR_TYPES } from '../entities/EntityConstants';
 
-export const setServiceIndicatorsForPetitionersOnCase = caseDetail => {
+export const setServiceIndicatorsForPetitionersOnCase = (
+  caseDetail: RawCase,
+): RawCase => {
   const { petitioners } = caseDetail;
 
   petitioners?.forEach(petitioner => {
