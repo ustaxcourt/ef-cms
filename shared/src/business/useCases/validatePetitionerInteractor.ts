@@ -7,22 +7,18 @@ import { isEmpty } from 'lodash';
 /**
  * validatePetitionerInteractor
  *
- * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {object} providers.contactInfo the contactInfo to validate
  * @returns {object} errors (null if no errors)
  */
 
-export const validatePetitionerInteractor = (
-  _applicationContext: IApplicationContext,
-  {
-    contactInfo,
-    existingPetitioners,
-  }: {
-    contactInfo: RawContact & { updatedEmail?: string; confirmEmail?: string };
-    existingPetitioners: TPetitioner[];
-  },
-) => {
+export const validatePetitionerInteractor = ({
+  contactInfo,
+  existingPetitioners,
+}: {
+  contactInfo: RawContact & { updatedEmail?: string; confirmEmail?: string };
+  existingPetitioners: TPetitioner[];
+}) => {
   const contactErrors = new Petitioner(
     contactInfo,
   ).getFormattedValidationErrors();

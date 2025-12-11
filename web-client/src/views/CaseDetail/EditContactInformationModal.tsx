@@ -46,7 +46,6 @@ export const EditContactInformationModal = connect(
           <span>{form.name}</span>
           <Country
             bind={bind}
-            clearTypeOnCountryChange={true}
             type={type}
             onBlur={onBlur}
             onChange="updateModalFormValueSequence"
