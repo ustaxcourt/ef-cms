@@ -40,3 +40,8 @@ jest.mock(
   '@web-api/persistence/postgres/users/getUserByIdOnceAllUpdatesComplete',
   () => mockFactory('getUserByIdOnceAllUpdatesComplete'),
 );
+
+jest.mock(
+  '@web-api/persistence/postgres/users/getUserByPendingEmailVerificationToken',
+  () => mockFactory('getUserByPendingEmailVerificationToken'),
+);
