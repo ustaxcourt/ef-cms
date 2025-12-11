@@ -28,7 +28,7 @@ export const startScanAction = async ({
     })) as ScanSessionResult;
     const documentSelectedForScan = get(
       state.currentViewMetadata.documentSelectedForScan,
-    );
+    )!;
     const batches = get(state.scanner.batches[documentSelectedForScan]) || [];
     const nextIndex = batches.length
       ? Math.max(...batches.map(b => b.index)) + 1
