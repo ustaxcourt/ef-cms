@@ -3,7 +3,6 @@ import {
   COUNTRY_TYPES,
   SERVICE_INDICATOR_TYPES,
 } from '../entities/EntityConstants';
-import { applicationContext } from '../test/createTestApplicationContext';
 import { validatePetitionerInteractor } from './validatePetitionerInteractor';
 
 describe('validatePetitionerInteractor', () => {
@@ -29,7 +28,7 @@ describe('validatePetitionerInteractor', () => {
   });
 
   it('should not return any validation errors when the updated petitioner is valid', () => {
-    const errors = validatePetitionerInteractor(applicationContext, {
+    const errors = validatePetitionerInteractor({
       contactInfo: mockContact,
       existingPetitioners: [],
     });
@@ -44,7 +43,7 @@ describe('validatePetitionerInteractor', () => {
       updatedEmail: undefined,
     };
 
-    const errors = validatePetitionerInteractor(applicationContext, {
+    const errors = validatePetitionerInteractor({
       contactInfo: mockContact,
       existingPetitioners: [],
     });
@@ -60,7 +59,7 @@ describe('validatePetitionerInteractor', () => {
       serviceIndicator: undefined, // required
     };
 
-    const errors = validatePetitionerInteractor(applicationContext, {
+    const errors = validatePetitionerInteractor({
       contactInfo: mockContact,
       existingPetitioners: [],
     });
@@ -79,7 +78,7 @@ describe('validatePetitionerInteractor', () => {
       postalCode: 'what is love',
     };
 
-    const errors = validatePetitionerInteractor(applicationContext, {
+    const errors = validatePetitionerInteractor({
       contactInfo: contact,
       existingPetitioners: [],
     });
@@ -98,7 +97,7 @@ describe('validatePetitionerInteractor', () => {
       updatedEmail: undefined,
     };
 
-    const errors = validatePetitionerInteractor(applicationContext, {
+    const errors = validatePetitionerInteractor({
       contactInfo: contact,
       existingPetitioners: [],
     });
@@ -116,7 +115,7 @@ describe('validatePetitionerInteractor', () => {
       contactType: CONTACT_TYPES.intervenor,
     };
 
-    const errors = validatePetitionerInteractor(applicationContext, {
+    const errors = validatePetitionerInteractor({
       contactInfo: contact,
       existingPetitioners: [
         {
@@ -141,7 +140,7 @@ describe('validatePetitionerInteractor', () => {
       },
     ];
 
-    const errors = validatePetitionerInteractor(applicationContext, {
+    const errors = validatePetitionerInteractor({
       contactInfo: {
         ...mockContact,
         address1: '9820 Another Street Place', // Updated address
@@ -164,7 +163,7 @@ describe('validatePetitionerInteractor', () => {
       },
     ];
 
-    const errors = validatePetitionerInteractor(applicationContext, {
+    const errors = validatePetitionerInteractor({
       contactInfo: contact,
       existingPetitioners: mockExistingPetitioners,
     });

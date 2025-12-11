@@ -49,12 +49,10 @@ export const validatePetitionerAction = ({
 
   const errors = checkEmails(confirmEmail, allPendingEmails, petitioners);
 
-  const result = applicationContext
-    .getUseCases()
-    .validatePetitionerInteractor(applicationContext, {
-      contactInfo: contact,
-      existingPetitioners: caseDetail.petitioners,
-    });
+  const result = applicationContext.getUseCases().validatePetitionerInteractor({
+    contactInfo: contact,
+    existingPetitioners: caseDetail.petitioners,
+  });
 
   if (result) Object.assign(errors, result);
 

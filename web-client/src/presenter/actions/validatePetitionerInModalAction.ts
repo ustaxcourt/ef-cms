@@ -8,12 +8,10 @@ export const validatePetitionerInModalAction = ({
 }: ActionProps) => {
   const { contact } = get(state.modal.form);
   const caseDetail = get(state.caseDetail);
-  const errors = applicationContext
-    .getUseCases()
-    .validatePetitionerInteractor(applicationContext, {
-      contactInfo: contact,
-      existingPetitioners: caseDetail.petitioners,
-    });
+  const errors = applicationContext.getUseCases().validatePetitionerInteractor({
+    contactInfo: contact,
+    existingPetitioners: caseDetail.petitioners,
+  });
 
   if (isEmpty(errors)) {
     return path.success();
