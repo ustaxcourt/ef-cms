@@ -10,7 +10,7 @@ describe('Docket clerk creates an order affecting other docket entries', functio
     const motionPurpose = 'Test motions';
     const orderTitle = 'Order to grant motion';
     const disposition = 'GRANTED';
-    const displayedDisposition = 'GRANTS';
+    const displayedDisposition = 'GRANTING';
 
     loginAsDocketClerk1();
     goToCase(leadCase);
