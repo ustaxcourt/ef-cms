@@ -152,9 +152,9 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                   <FontAwesomeIcon
                     icon={faInfoCircle}
                     className={cn(styles.icon)}
-                    title={helpText}
+                    title={typeof helpText === "string" ? helpText: ""}
                     role="img"
-                    aria-label={helpText}
+                    aria-label={typeof helpText === "string" ? helpText: ""}
                   />
                 )}
                 <span className={cn(styles.optional)}>
