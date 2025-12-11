@@ -100,7 +100,7 @@ export class Case extends JoiValidationEntity {
   public orderToShowCause?: boolean;
   public petitioners: TPetitioner[];
   public caseCaption: string='';
-  public caseType?: CaseType;
+  public caseType: CaseType;
   public closedDate?: string;
   public createdAt?: string;
   public docketNumber: string='';
@@ -111,19 +111,19 @@ export class Case extends JoiValidationEntity {
   public isPaper?: boolean;
   public leadDocketNumber?: string;
   public mailingDate?: string;
-  public partyType?: string;
+  public partyType: string;
   public petitionPaymentDate?: string;
   public petitionPaymentMethod?: string;
-  public petitionPaymentStatus?: string;
+  public petitionPaymentStatus: string;
   public petitionPaymentWaivedDate?: string;
   public preferredTrialCity?: string;
   public remoteTrialGranted?: boolean;
   public remoteTrialGrantedDate?: string | null;
-  public procedureType?: string;
+  public procedureType: string;
   public receivedAt?: string;
   public sealedDate?: string;
-  public status?: CaseStatus;
-  public sortableDocketNumber?: number;
+  public status: CaseStatus;
+  public sortableDocketNumber: number;
   public trialDate?: string;
   public trialLocation?: string;
   public trialSessionId?: string;
@@ -139,7 +139,7 @@ export class Case extends JoiValidationEntity {
   public docketEntries: DocketEntry[]= [];
   public isSealed?: boolean;
   public hearings: any[]= [];
-  public privatePractitioners: any[]= [];
+  public privatePractitioners?: any[]= [];
   public initialCaption?: string;
   public irsPractitioners?: any[];
   public statistics?: RawStatistic[];
@@ -171,6 +171,17 @@ export class Case extends JoiValidationEntity {
         rawCase,
       });
     }
+
+    // assigning some fields here to avoid type error
+    this.caseType = rawCase.caseType;
+    this.partyType = rawCase.partyType;
+    this.procedureType = rawCase.procedureType;
+    this.petitionPaymentStatus =
+      rawCase.petitionPaymentStatus || PAYMENT_STATUS.UNPAID;
+    this.status = rawCase.status || CASE_STATUS_TYPES.new;
+    this.sortableDocketNumber =
+      rawCase.sortableDocketNumber ||
+      Case.getSortableDocketNumber(rawCase.docketNumber);
 
     // assignContacts needs to come first before assignDocketEntries
     this.assignConsolidatedCases({ rawCase });
@@ -752,7 +763,6 @@ export class Case extends JoiValidationEntity {
 
   assignFieldsForAllUsers({ rawCase }) {
     this.caseCaption = rawCase.caseCaption;
-    this.caseType = rawCase.caseType;
     this.closedDate = rawCase.closedDate;
     this.createdAt = rawCase.createdAt || createISODateString();
     if (rawCase.docketNumber) {
@@ -765,20 +775,12 @@ export class Case extends JoiValidationEntity {
     this.isPaper = rawCase.isPaper;
     this.leadDocketNumber = rawCase.leadDocketNumber;
     this.mailingDate = rawCase.mailingDate;
-    this.partyType = rawCase.partyType;
     this.petitionPaymentDate = rawCase.petitionPaymentDate;
     this.petitionPaymentMethod = rawCase.petitionPaymentMethod;
-    this.petitionPaymentStatus =
-      rawCase.petitionPaymentStatus || PAYMENT_STATUS.UNPAID;
     this.petitionPaymentWaivedDate = rawCase.petitionPaymentWaivedDate;
     this.preferredTrialCity = rawCase.preferredTrialCity;
-    this.procedureType = rawCase.procedureType;
     this.receivedAt = rawCase.receivedAt || createISODateString();
     this.sealedDate = rawCase.sealedDate;
-    this.status = rawCase.status || CASE_STATUS_TYPES.new;
-    this.sortableDocketNumber =
-      rawCase.sortableDocketNumber ||
-      Case.getSortableDocketNumber(rawCase.docketNumber);
     this.trialDate = rawCase.trialDate;
     this.trialLocation = rawCase.trialLocation;
     this.trialSessionId = rawCase.trialSessionId;
