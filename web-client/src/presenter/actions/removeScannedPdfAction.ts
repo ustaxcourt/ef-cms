@@ -17,7 +17,7 @@ export const removeScannedPdfAction = async ({
   const docketNumber = get(state.caseDetail.docketNumber);
   const documentSelectedForScan = get(
     state.currentViewMetadata.documentSelectedForScan,
-  );
+  )!;
 
   store.unset(state.form[documentSelectedForScan]);
   store.unset(state.form[`${documentSelectedForScan}Size`]);
