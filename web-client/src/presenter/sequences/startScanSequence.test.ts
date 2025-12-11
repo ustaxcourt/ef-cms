@@ -28,6 +28,10 @@ describe('startScanSequence', () => {
       scannerSourceName: 'Mock Scanner',
     };
     cerebralTest.setState('scanner.batches', []);
+    cerebralTest.setState(
+      'currentViewMetadata.documentSelectedForScan',
+      'petition',
+    );
     await cerebralTest.runSequence('startScanSequence', {});
 
     expect(applicationContext.getScanner().startScanSession).toHaveBeenCalled();
@@ -40,6 +44,10 @@ describe('startScanSequence', () => {
       scannerSourceName: '',
     };
     cerebralTest.setState('scanner.batches', []);
+    cerebralTest.setState(
+      'currentViewMetadata.documentSelectedForScan',
+      'petition',
+    );
     await cerebralTest.runSequence('startScanSequence', {});
     const scannerState = cerebralTest.getState('scanner');
 
