@@ -82,6 +82,35 @@ export const getUserByEmail = async (
   };
 };
 
+export const getAllUserEmailsInCognito = async (): Promise<string[]> => {
+  // get all users emails in cognito
+  const userPoolId = await getUserPoolId();
+  const users: string[] = [];
+  let paginationToken: string | undefined = undefined;
+
+  do {
+    const response = await getCognito().listUsers({
+      UserPoolId: userPoolId,
+      PaginationToken: paginationToken,
+    });
+
+    response.Users?.forEach(user => {
+      if (user.Username) {
+        const emailAttribute = user.Attributes?.find(
+          attr => attr.Name === 'email',
+        );
+        if (emailAttribute && emailAttribute.Value) {
+          users.push(emailAttribute.Value);
+        }
+      }
+    });
+
+    paginationToken = response.PaginationToken;
+  } while (paginationToken);
+
+  return users;
+};
+
 const getUserPoolId = async (isIrsEnv = false): Promise<string> => {
   const results = await getCognito().listUserPools({
     MaxResults: 50,
