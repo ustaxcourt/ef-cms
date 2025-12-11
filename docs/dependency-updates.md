@@ -128,9 +128,10 @@ Check if there is an update to the Terraform OpenSearch provider and update our 
 
 ### 5. Update OpenSearch
 
-We are currently on OpenSearch 3.3
 
 All lower environments' logs are now consolidated into a single info cluster. [See PR #939](https://github.com/ustaxcourt/ef-cms/pull/9393).
+
+We are currently on OpenSearch 3.3
 
 Check to see if there is an [updated version](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/version-migration.html) of OpenSearch available. If an update is available, we'll need to update OpenSearch locally, in github actions, and in deployed environments. 
 
