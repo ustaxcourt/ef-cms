@@ -180,9 +180,6 @@ app.get('/public-api/judges', lambdaWrapper(getPublicJudgesLambda));
   app.get('/system/feature-flag', lambdaWrapper(getAllFeatureFlagsLambda));
 }
 
-/**
- * Email verification
- */
 {
-  app.put('/verify-email', lambdaWrapper(verifyUserPendingEmailLambda));
+  app.put('/public-api/verify-email', lambdaWrapper(verifyUserPendingEmailLambda));
 }
