@@ -15,9 +15,9 @@ export const autoGenerateFilingPdfAction = async ({
 
   const caseDetail = get(state.caseDetail);
 
-  const { petitioners } = caseDetail;
+  const { petitioners, docketNumber, docketNumberWithSuffix } = caseDetail;
 
-  const { generationType, eventCode } = get(state.form);
+  const { generationType, eventCode, filers } = get(state.form);
 
   const user = get(state.user);
 
@@ -27,14 +27,9 @@ export const autoGenerateFilingPdfAction = async ({
       user.role === ROLES.irsPractitioner)
   ) {
     const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
-
-    const { docketNumber, docketNumberWithSuffix } = caseDetail;
-
-    const { filers } = get(state.form);
-
     let response;
     switch (eventCode) {
-      case 'EA': // Entry of Appearances are generate in another workflow
+      case 'EA':
         response = await applicationContext
           .getUseCases()
           .generateEntryOfAppearancePdfInteractor(applicationContext, {

@@ -1,4 +1,3 @@
-// import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -19,10 +18,9 @@ export const noticeOfWithdrawalHelper = (
   const caseDetail = get(state.caseDetail);
   const user = get(state.user);
 
-  const filingParties: TPetitioner[] = (
-    user.role === ROLES.privatePractitioner
-      ? getPartiesToWithrawFrom(caseDetail)
-      : []
+  const filingParties: TPetitioner[] = getPartiesToWithrawFrom(
+    caseDetail,
+    user,
   ).map(partyId =>
     caseDetail.petitioners.find(p => p.contactId === partyId),
   ) as TPetitioner[];
