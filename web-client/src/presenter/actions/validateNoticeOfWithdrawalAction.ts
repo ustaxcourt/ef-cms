@@ -16,7 +16,7 @@ export const validateNoticeOfWithdrawalAction = ({ get, path }) => {
   const errors: string[] = [];
   if (documentMetadata.eventCode === 'NOTW') {
     if (user.role === ROLES.privatePractitioner) {
-      const partiesToWithdrawFrom = getPartiesToWithrawFrom(caseDetail);
+      const partiesToWithdrawFrom = getPartiesToWithrawFrom(caseDetail, user);
       if (partiesToWithdrawFrom.length === 0) {
         errors.push(
           'You are the only counsel representing a party on this case.',
@@ -53,24 +53,28 @@ export const validateNoticeOfWithdrawalAction = ({ get, path }) => {
   }
 };
 
-export const getPartiesToWithrawFrom = (caseDetail: RawCase): string[] => {
-  const partiesRepresented = caseDetail.petitioners.reduce(
-    (acc, petitioner) => {
-      acc[petitioner.contactId] = (caseDetail.privatePractitioners || [])
-        .filter(practitioner =>
-          practitioner.representing.includes(petitioner.contactId),
-        )
-        .map(practitioner => practitioner.userId);
-      return acc;
-    },
-    {} as { [key: string]: string[] },
-  );
+export const getPartiesToWithrawFrom = (
+  caseDetail: RawCase,
+  user,
+): string[] => {
+  if (user.role === ROLES.privatePractitioner) {
+    const representedPetitioner =
+      caseDetail.privatePractitioners?.find(
+        privatePractitioner => privatePractitioner.userId === user.userId,
+      )?.representing || [];
 
-  const eligiblePartiesToWithdrawFrom = Object.entries(partiesRepresented)
-    .filter(
-      ([, practitioners]) =>
-        Array.isArray(practitioners) && practitioners.length > 1,
-    )
-    .map(([contactId]) => contactId);
-  return eligiblePartiesToWithdrawFrom;
+    const partiesFiltered = representedPetitioner.filter(petitionerId => {
+      for (const practitioner of caseDetail.privatePractitioners || []) {
+        if (
+          practitioner.userId !== user.userId &&
+          practitioner.representing.includes(petitionerId)
+        ) {
+          return true;
+        }
+      }
+      return false;
+    });
+    return partiesFiltered;
+  }
+  return [];
 };
