@@ -98,7 +98,7 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
     And the practitioner verifies the pending email
     Then their email should be updated on their associated cases
   */
-  it('should update the practitioner`s email address when the admissions clerk enters one that is NOT already associated with a DAWSON account', () => {
+  it.only('should update the practitioner`s email address when the admissions clerk enters one that is NOT already associated with a DAWSON account', () => {
     const practitionerEmail = `cypress_test_account+${v4()}@example.com`;
     loginAsAdmissionsClerk('admissionsclerk1@example.com');
     cy.get('[data-testid="messages-banner"]');
