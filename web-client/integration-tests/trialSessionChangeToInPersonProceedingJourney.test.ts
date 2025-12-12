@@ -4,7 +4,7 @@ import {
   SYSTEM_GENERATED_DOCUMENT_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '@shared/business/entities/EntityConstants';
-import { createISODateString, FORMATS } from '@shared/business/utilities/DateHandler';
+import { FORMATS, getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import {
@@ -22,7 +22,7 @@ import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsC
 describe('petitions clerk sets a remote trial session calendar', () => {
   const cerebralTest = setupTest();
 
-  const trialLocation = `Denver, Colorado, ${createISODateString()}`;
+  const trialLocation = `Denver, Colorado, ${getCurrentDateTimeInMillis()}`;
 
   const overrides = {
     maxCases: 2,
