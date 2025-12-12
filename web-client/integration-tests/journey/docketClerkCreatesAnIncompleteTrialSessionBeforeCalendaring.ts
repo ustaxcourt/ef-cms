@@ -43,7 +43,7 @@ export const docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring = (
       {
         key: 'startDate',
         toFormat: FORMATS.ISO,
-        value: '12/12/2025',
+        value: '12/12/2099',
       },
     );
 
