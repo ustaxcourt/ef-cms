@@ -83,6 +83,7 @@ describe('validateNoticeOfWithdrawalAction', () => {
         },
         user: {
           role: USER_ROLES.privatePractitioner,
+          userId: 'practitioner-1',
         },
         caseDetail: {
           status: CASE_STATUS_TYPES.generalDocket,
@@ -118,6 +119,7 @@ describe('validateNoticeOfWithdrawalAction', () => {
         },
         user: {
           role: USER_ROLES.privatePractitioner,
+          userId: 'practitioner-1',
         },
         caseDetail: {
           status: CASE_STATUS_TYPES.generalDocket,
