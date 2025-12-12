@@ -70,9 +70,7 @@ export const ModalDialog = ({
       });
     } else {
       window.document.body.classList.remove('no-scroll');
-      window.document.removeEventListener('touchmove', touchmoveTriggered, {
-        passive: false,
-      });
+      window.document.removeEventListener('touchmove', touchmoveTriggered);
     }
   };
 
@@ -82,7 +80,6 @@ export const ModalDialog = ({
   };
 
   const runConfirmSequence = evt => {
-    console.log(`runConfirmSequence was triggered`);
     evt.stopPropagation();
     confirmSequence.call();
   };
