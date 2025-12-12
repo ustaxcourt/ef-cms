@@ -783,5 +783,5 @@ export const roundDateDownToNearestHour = (isoDateString: string) => {
 };
 
 export const getCurrentDateTimeInMillis = (): number => {
-  return DateTime.now().toMillis();
+  return Number(formatNow(FORMATS.UNIX_TIMESTAMP_MS));
 };
