@@ -51,6 +51,7 @@ export const ApplyStamp = connect(
 
     const renderPDFPage = () => {
       const canvas = canvasRef.current;
+      const canvasContext = canvas.getContext('2d');
 
       pdfObj
         ?.getPage(1)
@@ -61,7 +62,7 @@ export const ApplyStamp = connect(
           canvas.width = viewport.width;
 
           const renderContext = {
-            canvas,
+            canvasContext,
             viewport,
           };
           return page.render(renderContext);
