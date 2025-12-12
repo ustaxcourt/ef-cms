@@ -91,6 +91,7 @@ import { orderPublicSearchLambda } from './lambdas/public-api/orderPublicSearchL
 import { todaysOpinionsLambda } from './lambdas/public-api/todaysOpinionsLambda';
 import { todaysOrdersLambda } from './lambdas/public-api/todaysOrdersLambda';
 import { getDbReader } from '@web-api/database';
+import { verifyUserPendingEmailLambda } from './lambdas/users/verifyUserPendingEmailLambda';
 
 /** Case */
 {
@@ -177,4 +178,8 @@ app.get('/public-api/judges', lambdaWrapper(getPublicJudgesLambda));
  */
 {
   app.get('/system/feature-flag', lambdaWrapper(getAllFeatureFlagsLambda));
+}
+
+{
+  app.put('/public-api/verify-email', lambdaWrapper(verifyUserPendingEmailLambda));
 }
