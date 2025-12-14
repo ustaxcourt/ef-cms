@@ -28,6 +28,16 @@ export function CaseIcons({ formattedCase }: { formattedCase: any }) {
         iconAriaLabel="Sealed"
         iconClass="sealed-case-entry"
       />
+      <WrappedIcon
+        spanClass={
+          formattedCase.remoteTrialGranted ? 'visibility-visible' : 'visibility-hidden'
+        }
+        spanDataTestId="laptop"
+        title="Motion to Proceed Remotely Granted"
+        icon="laptop"
+        iconAriaLabel="Motion to Proceed Remotely Granted"
+        iconClass="tw:text-primary"
+      />
       <span
         className={classNames({
           'margin-left-2':
