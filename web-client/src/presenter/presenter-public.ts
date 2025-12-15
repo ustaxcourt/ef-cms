@@ -24,6 +24,7 @@ import { gotoPublicTrialSessionDetailsSequence } from '@web-client/presenter/seq
 import { gotoPublicTrialSessionsSequence } from '@web-client/presenter/sequences/Public/gotoPublicTrialSessionsSequence';
 import { gotoTodaysOpinionsSequence } from './sequences/Public/gotoTodaysOpinionsSequence';
 import { gotoTodaysOrdersSequence } from './sequences/Public/gotoTodaysOrdersSequence';
+import { gotoVerifyEmailSequence } from './sequences/Public/gotoVerifyEmailSequence';
 import { initialPublicState } from './state-public';
 import { loadMoreTodaysOrdersSequence } from './sequences/loadMoreTodaysOrdersSequence';
 import { navigateBackSequence } from './sequences/navigateBackSequence';
@@ -105,6 +106,7 @@ export const presenterSequences = {
   gotoTodaysOrdersSequence: showMaintenancePageDecorator(
     gotoTodaysOrdersSequence,
   ),
+  gotoVerifyEmailSequence,
   loadMoreTodaysOrdersSequence,
   navigateBackSequence,
   navigateToLoginSequence,

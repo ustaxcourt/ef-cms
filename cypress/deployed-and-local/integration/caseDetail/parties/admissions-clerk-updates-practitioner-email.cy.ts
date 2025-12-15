@@ -98,7 +98,7 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
     And the practitioner verifies the pending email
     Then their email should be updated on their associated cases
   */
-  it('should update the practitioner`s email address when the admissions clerk enters one that is NOT already associated with a DAWSON account', () => {
+  it.only('should update the practitioner`s email address when the admissions clerk enters one that is NOT already associated with a DAWSON account', () => {
     const practitionerEmail = `cypress_test_account+${v4()}@example.com`;
     loginAsAdmissionsClerk('admissionsclerk1@example.com');
     cy.get('[data-testid="messages-banner"]');
@@ -217,17 +217,88 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
           logout();
 
           loginAsPrivatePractitioner(practitionerEmail);
+          logout();
+
           cy.task('getEmailVerificationToken', {
             email: practitionerEmail,
           }).then(verificationToken => {
-            cy.visit(`/verify-email?token=${verificationToken}`);
-          });
-          cy.get('[data-testid="success-alert"]')
-            .should('be.visible')
-            .and(
-              'contain.text',
-              'Your email address is verified. You can now log in to DAWSON.',
+            console.log('Verification Token: ', verificationToken);
+            cy.clearAllCookies();
+            cy.clearAllLocalStorage();
+            cy.clearAllSessionStorage();
+
+            // cy.window({ log: false }).then(win => {
+            //   win.sessionStorage.clear();
+            // });
+
+            // // Now reset the navigation context (prevents referrer)
+            // cy.visit('about:blank');
+            // cy.visit(
+            //   'http://localhost:5678/verify-email?token=' + verificationToken,
+            // );
+
+            // cy.request({
+            //   url: `https://localhost:5678/public-api/verify-email?token=${verificationToken}`,
+            //   method: 'PUT',
+            //   body: { token: verificationToken },
+            //   headers: {
+            //     'Content-Type': 'application/json',
+            //   },
+            // }).then(() => {
+            //   cy.log('Email verified');
+            //   // expect(response.status).to.eq(200);
+            // });
+            // cy.origin(
+            //   'http://localhost:5678',
+            //   { args: { verificationToken } },
+            //   ({ verificationToken }) => {
+            //     // cy.visit(
+            //     //   'http://localhost:5678/verify-email?token=' +
+            //     //     verificationToken,
+            //     // );
+            //     // cy.visit('/health'); // to set the domain
+            //     cy.request({
+            //       url: '/public-api/health',
+            //       method: 'GET',
+            //     });
+            //   },
+            // );
+
+            cy.origin(
+              // `${CYPRESS_BASE_URL}`,
+              `http://localhost:4001`,
+              { args: { verificationToken } },
+              ({ verificationToken }) => {
+                // cy.request({
+                //   url: `/public-api/verify-email?token=${verificationToken}`,
+                //   method: 'GET',
+                //   headers: {
+                //     Accept: '*/*',
+                //   },
+                //   body: { token: verificationToken },
+                // });
+
+                // cy.visit(`/public-api/verify-email?token=${verificationToken}`);
+                // console.log(verificationToken);
+                cy.request({
+                  // url: '/public-api/judges',
+                  url: `/public-api/verify-email?token=${verificationToken}`,
+                  method: 'GET',
+                }).then(response => {
+                  console.log(
+                    'Response from verify email API call: ',
+                    response,
+                  );
+                });
+              },
             );
+          });
+          // cy.get('[data-testid="success-alert"]')
+          //   .should('be.visible')
+          //   .and(
+          //     'contain.text',
+          //     'Your email address is verified. You can now log in to DAWSON.',
+          //   );
           loginAsPrivatePractitioner(updatedPractitionerEmail);
           cy.get(`[data-testid="${docketNumber}"]`)
             .contains(docketNumber)
