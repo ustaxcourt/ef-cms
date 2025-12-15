@@ -3,17 +3,25 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { props as cerebralProps } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import type { FunctionComponent } from 'react';
 import { RunableSequence as RunnableSequence } from 'cerebral';
 
-const props = cerebralProps as unknown as {
+type ConfirmReplacePetitionModalProps = {
   confirmSequence: string;
 };
 
-export const ConfirmReplacePetitionModal = connect(
-  {
-    cancelSequence: sequences.dismissModalSequence,
-    confirmSequence: sequences[props.confirmSequence],
-  },
+const props = cerebralProps as unknown as ConfirmReplacePetitionModalProps;
+
+const confirmReplacePetitionModalDeps = {
+  cancelSequence: sequences.dismissModalSequence,
+  confirmSequence: sequences[props.confirmSequence],
+};
+
+const ConfirmReplacePetitionModalComponent = connect<
+  ConfirmReplacePetitionModalProps,
+  typeof confirmReplacePetitionModalDeps
+>(
+  confirmReplacePetitionModalDeps,
   function ConfirmReplacePetitionModal({
     cancelSequence,
     confirmSequence,
@@ -34,5 +42,8 @@ export const ConfirmReplacePetitionModal = connect(
     );
   },
 );
+
+export const ConfirmReplacePetitionModal =
+  ConfirmReplacePetitionModalComponent as FunctionComponent<ConfirmReplacePetitionModalProps>;
 
 ConfirmReplacePetitionModal.displayName = 'ConfirmReplacePetitionModal';

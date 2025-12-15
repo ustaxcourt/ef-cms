@@ -13,6 +13,10 @@ export const PetitionQcDocumentPreview = connect(
     documentSelectedForPreview,
     petitionQcHelper,
   }) {
+    if (!documentSelectedForPreview) {
+      return null;
+    }
+
     return (
       <>
         <PetitionQcScanBatchPreviewer
