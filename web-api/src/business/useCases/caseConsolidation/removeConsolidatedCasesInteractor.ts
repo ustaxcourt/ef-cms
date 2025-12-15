@@ -174,8 +174,11 @@ const removeConsolidatedCases = async (
         docketEntry.documentContentsId = newContentsId;
       }
     }
+    const validatedDocketEntry = new DocketEntry(docketEntry, {
+      authorizedUser,
+    }).validate();
 
-    UPDATED_CASE_DOCKET_ENTRIES.push(docketEntry);
+    UPDATED_CASE_DOCKET_ENTRIES.push(validatedDocketEntry);
   });
 
   updateCasePromises.push(upsertDocketEntries(UPDATED_CASE_DOCKET_ENTRIES));
