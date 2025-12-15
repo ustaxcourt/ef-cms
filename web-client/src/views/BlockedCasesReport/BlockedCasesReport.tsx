@@ -11,6 +11,7 @@ import { download, generateCsv, mkConfig } from 'export-to-csv';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useRef, useState } from 'react';
 import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseIcon';
+import { RemoteTrialGrantedIcon } from '@web-client/ustc-ui/Icon/RemoteTrialGrantedIcon';
 import classNames from 'classnames';
 import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
 import { useClientSidePaginator } from '@web-client/utilities/useClientSidePaginator';
@@ -136,12 +137,13 @@ export const BlockedCasesReport = connect(
                           >
                             <td className="consolidated-case-column">
                               <span
-                                className={classNames({
+                                className={classNames('tw:flex tw:items-baseline',{
                                   'margin-left-2':
                                     item.inConsolidatedGroup &&
                                     !item.isLeadCase,
                                 })}
                               >
+                                <RemoteTrialGrantedIcon remoteTrialGranted={item.remoteTrialGranted} />
                                 <ConsolidatedCaseIcon
                                   consolidatedIconTooltipText={
                                     item.consolidatedIconTooltipText
