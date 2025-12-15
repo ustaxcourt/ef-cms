@@ -10,6 +10,7 @@ describe('Docket clerk creates an order affecting other docket entries', functio
     const motionPurpose = 'Test motions';
     const orderTitle = 'Order to grant motion';
     const disposition = 'GRANTED';
+    const displayedDisposition = 'GRANTING';
 
     loginAsDocketClerk1();
     goToCase(leadCase);
@@ -44,7 +45,7 @@ describe('Docket clerk creates an order affecting other docket entries', functio
             .then($td => {
               cy.get('@motionIndex').then(motionIndex => {
                 expect($td.text().trim()).to.contain(
-                  `${disposition} #${motionIndex}`,
+                  `${displayedDisposition} #${motionIndex}`,
                 );
               });
             });

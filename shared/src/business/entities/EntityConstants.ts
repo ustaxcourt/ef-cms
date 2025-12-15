@@ -101,6 +101,21 @@ export const MOTION_DISPOSITIONS = {
   GRANTED_IN_PART: 'GRANTED IN PART',
 };
 
+export const MOTION_DISPOSITION_VERBIAGE = {
+  DENIED: {
+    MOTION: 'DENIED BY',
+    ORDER: 'DENYING',
+  },
+  GRANTED: {
+    MOTION: 'GRANTED BY',
+    ORDER: 'GRANTING',
+  },
+  'GRANTED IN PART': {
+    MOTION: 'GRANTED IN PART BY',
+    ORDER: 'GRANTING IN PART',
+  },
+};
+
 export const STRICKEN_FROM_TRIAL_SESSION_MESSAGE =
   'This case is stricken from the trial session';
 

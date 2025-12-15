@@ -1,0 +1,66 @@
+#!/bin/sh
+if [ -f "CHANGES.md" ]; then
+  CHANGES_DIFF=$(git diff ORIG_HEAD HEAD -- CHANGES.md 2>/dev/null)
+  if [ -n "$CHANGES_DIFF" ]; then
+    {
+      echo ""
+      echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+      echo "⚠️  CHANGES.md has been updated. Please review the manual steps below:"
+      echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+      echo ""
+      echo "$CHANGES_DIFF" | grep -E "^[\+\-]" | grep -v "^[\+\-][\+\-][\+\-]" | grep -v "No newline" | while IFS= read -r line; do
+        clean_line=$(echo "$line" | sed 's/^[+-]//')
+        case "$line" in
+        +*) printf '%s\n' "$clean_line" ;;
+        esac
+      done
+      echo ""
+      echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+      echo ""
+    } >&2
+
+    TEMP_FILE=$(mktemp /tmp/changes-old-XXXXXX.md 2>/dev/null || echo "/tmp/changes-old.md")
+    CURRENT_FILE="$(pwd)/CHANGES.md"
+    git show ORIG_HEAD:CHANGES.md >"$TEMP_FILE" 2>/dev/null || touch "$TEMP_FILE"
+
+    is_ide_running() {
+      pgrep -f -i "$1" >/dev/null 2>&1 || pgrep -i "$1" >/dev/null 2>&1
+    }
+
+    open_vscode_diff() {
+      VSCODE_APP="/Applications/Visual Studio Code.app"
+      if [ ! -d "$VSCODE_APP" ]; then
+        VSCODE_APP="$HOME/Applications/Visual Studio Code.app"
+      fi
+      
+      if [ -d "$VSCODE_APP" ]; then
+        CONTENTS="$VSCODE_APP/Contents"
+        ELECTRON="$CONTENTS/MacOS/Electron"
+        CLI="$CONTENTS/Resources/app/out/cli.js"
+        
+        if [ -f "$ELECTRON" ] && [ -f "$CLI" ]; then
+          ELECTRON_RUN_AS_NODE=1 "$ELECTRON" "$CLI" --diff "$1" "$2" 2>/dev/null
+        else
+          open -a "Visual Studio Code.app" --args --diff "$1" "$2" 2>/dev/null
+        fi
+      elif command -v code >/dev/null 2>&1; then
+        code --diff "$1" "$2" 2>/dev/null
+      else
+        open -a "Visual Studio Code.app" --args --diff "$1" "$2" 2>/dev/null
+      fi
+    }
+
+    if is_ide_running "idea"; then
+      open -a "IntelliJ IDEA Ultimate.app" --args diff "$TEMP_FILE" "$CURRENT_FILE" 2>/dev/null || open -a "IntelliJ IDEA.app" --args diff "$TEMP_FILE" "$CURRENT_FILE"
+      (sleep 2 && rm -f "$TEMP_FILE" 2>/dev/null) &
+    elif is_ide_running "webstorm"; then
+      open -a "WebStorm.app" --args diff "$TEMP_FILE" "$CURRENT_FILE"
+      (sleep 2 && rm -f "$TEMP_FILE" 2>/dev/null) &
+    elif is_ide_running "code"; then
+      open_vscode_diff "$TEMP_FILE" "$CURRENT_FILE"
+      (sleep 2 && rm -f "$TEMP_FILE" 2>/dev/null) &
+    else
+      rm -f "$TEMP_FILE" 2>/dev/null || true
+    fi
+  fi
+fi

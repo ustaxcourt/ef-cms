@@ -262,7 +262,7 @@ describe('setServiceIndicatorsForCases', () => {
 
     const result = setServiceIndicatorsForPetitionersOnCase(caseDetail);
 
-    expect(result.privatePractitioners[0].serviceIndicator).toEqual(
+    expect(result.privatePractitioners![0].serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
   });
@@ -274,7 +274,7 @@ describe('setServiceIndicatorsForCases', () => {
     };
     const result = setServiceIndicatorsForPetitionersOnCase(caseDetail);
 
-    expect(result.irsPractitioners[0].serviceIndicator).toEqual(
+    expect(result.irsPractitioners![0].serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
   });

@@ -22,8 +22,8 @@ export const aggregatePartiesForService = (
   } else {
     allParties = [
       ...formattedCase.petitioners,
-      ...formattedCase.privatePractitioners,
-      ...formattedCase.irsPractitioners,
+      ...(formattedCase.privatePractitioners ?? []),
+      ...(formattedCase.irsPractitioners ?? []),
     ];
   }
 

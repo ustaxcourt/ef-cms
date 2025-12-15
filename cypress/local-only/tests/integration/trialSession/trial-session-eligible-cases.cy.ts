@@ -23,8 +23,8 @@ describe('Trial Session Eligible Cases Journey', () => {
     createTrialSession({
       trialLocation,
       sessionType: SESSION_TYPES.small,
-      startDate: '12/12/2025',
-      endDate: '12/12/2025',
+      startDate: '12/12/2099',
+      endDate: '12/13/2099',
       judge: 'Cohen',
       maxCases: '3',
     }).then(({ trialSessionId: createdTrialSessionId }) => {
@@ -234,8 +234,8 @@ describe('Trial Session Eligible Cases Journey', () => {
     createTrialSession({
       trialLocation,
       sessionType: SESSION_TYPES.small,
-      startDate: '12/12/2025',
-      endDate: '12/12/2025',
+      startDate: '12/12/2099',
+      endDate: '12/13/2099',
       judge: 'Cohen',
       maxCases: '3',
     }).then(({ trialSessionId: createdTrialSessionId }) => {
