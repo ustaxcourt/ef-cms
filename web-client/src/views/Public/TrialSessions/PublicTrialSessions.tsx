@@ -295,7 +295,7 @@ function MobilePublicTrialSessions({
         </div>
         <TablePagination
           pageNumber={publicTrialSessionsData.pageNumber || 0}
-          totalPages={publicTrialSessionsHelper.totalPages}
+          totalPages={publicTrialSessionsHelper.mobileTotalPages}
           updateFormValueSequence={updateFormValueSequence}
         >
           <PublicMobileTrialSessionsTable />
