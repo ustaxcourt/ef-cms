@@ -53,9 +53,7 @@ const OverlayUnRef = connect(
           });
         } else {
           window.document.body.classList.remove('no-scroll');
-          window.document.removeEventListener('touchmove', touchmoveTriggered, {
-            passive: false,
-          });
+          window.document.removeEventListener('touchmove', touchmoveTriggered);
         }
       };
 

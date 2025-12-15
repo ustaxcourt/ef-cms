@@ -59,7 +59,7 @@ export const trialSessionsModalHelper = ({
     trialSessions.find(session => session.trialSessionId === trialSessionId);
 
   let trialSessionsFormatted = trialSessions;
-  let trialSessionsFormattedByState = null;
+  let trialSessionsFormattedByState: Record<string, any> | null = null;
   let trialSessionStatesSorted = null;
   const trialSessionRemote = 'Remote';
 
