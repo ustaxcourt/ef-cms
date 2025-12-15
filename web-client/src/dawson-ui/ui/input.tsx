@@ -6,10 +6,10 @@ import classNames from 'classnames';
 
 interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: string;
-  helpText?: string;
+  helpText?: string | React.ReactNode;
   hideLabel?: boolean;
   icon?: boolean;
-  label?: string;
+  label?: string | React.ReactNode;
   optional?: boolean;
   required?: boolean;
   flexDirection?: 'vertical' | 'horizontal';
@@ -152,9 +152,9 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                   <FontAwesomeIcon
                     icon={faInfoCircle}
                     className={cn(styles.icon)}
-                    title={helpText}
+                    title={typeof helpText === "string" ? helpText: ""}
                     role="img"
-                    aria-label={helpText}
+                    aria-label={typeof helpText === "string" ? helpText: ""}
                   />
                 )}
                 <span className={cn(styles.optional)}>
