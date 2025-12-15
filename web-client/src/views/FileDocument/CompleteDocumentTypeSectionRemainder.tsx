@@ -35,6 +35,7 @@ export const CompleteDocumentTypeSectionRemainder = connect(
             updateSequence="updateFileDocumentWizardFormValueSequence"
             validateSequence="validateSelectDocumentTypeSequence"
             validationErrors="validationErrors"
+            showIndex={true}
           />
         )}
 
@@ -113,6 +114,7 @@ export const CompleteDocumentTypeSectionRemainder = connect(
                 updateSequence="updateFileDocumentWizardFormValueSequence"
                 validateSequence="validateSelectDocumentTypeSequence"
                 validationErrors="validationErrors.secondaryDocument"
+                showIndex={true}
               />
             )}
           </>
