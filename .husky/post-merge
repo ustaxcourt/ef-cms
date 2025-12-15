@@ -37,7 +37,7 @@ if [ -f "CHANGES.md" ]; then
       echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
       echo ""
       echo "$CHANGES_DIFF" | grep -E "^[\+]" | grep -v "^[\+][\+][\+]" | grep -v "No newline" | while IFS= read -r line; do
-        printf '%s\n' "${line//^[\+]/}"
+        printf '%s\n' "${line#+}"
       done
       echo ""
       echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
