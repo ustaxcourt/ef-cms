@@ -68,8 +68,6 @@ To update Node.js:
    - `./web-api/runtimes/puppeteer/Dockerfile`
 1. Manually update the Node.js version in:
    - `./.circleci/config.yml`
-1. Manually update DAWSON's GitHub Actions YAML files.
-   - **Note:** These files will point to `.nvmrc` in a future update.
 1. Update the node version used by our lambdas.
    - `web-api/terraform/modules/lambda/lambda.tf`
    - `web-api/terraform/modules/api/layers.tf`
@@ -130,7 +128,12 @@ Check if there is an update to the Terraform OpenSearch provider and update our 
 
 ### 5. Update OpenSearch
 
-Check to see if there is an updated version of OpenSearch available. If an update is available, we'll need to update OpenSearch locally, in github actions, and in deployed environments.
+
+All lower environments' logs are now consolidated into a single info cluster. [See PR #939](https://github.com/ustaxcourt/ef-cms/pull/9393).
+
+We are currently on OpenSearch 3.3
+
+Check to see if there is an [updated version](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/version-migration.html) of OpenSearch available. If an update is available, we'll need to update OpenSearch locally, in github actions, and in deployed environments. 
 
 1. Use the [environment switcher](./additional-resources/environment-switcher.md) to point to an experimental environment and to retrieve a fresh AWS access key:
    ```bash
@@ -194,15 +197,22 @@ Check to see if there is an updated version of OpenSearch available. If an updat
 
 ### cerebral and @cerebral/react
 
-- New versions of cerebral (5.2.1 to 5.2.4) and @cerebral/react (4.2.1 to 4.2.2) were released on February 27, 2025. These upgrades are the first since spring 2020. The new versions do not work with the import syntax used in `web-client/src/presenter/test.cerebral.ts` for `runAction` and `runCompute`, so keep these pinned to 5.2.1 and "github:ustaxcourt/cerebral-react#main" respectively for the time being.
+- New versions of cerebral (5.2.1 to 5.2.4) and @cerebral/react (4.2.1 to 4.2.2) were released on February 27, 2025. These upgrades are the first since spring 2020. The new versions do not work with the import syntax used in `web-client/src/presenter/test.cerebral.ts` for `runAction` and `runCompute`, so keep these pinned to 5.2.1 and "github:ustaxcourt/cerebral-react#main" respectively for the time being. 
+- Will eventually need to decide to maintain our forked version `github:ustaxcourt/cerebral-react#main` or switch back to original repo now that it is started to be maintained again
 
 ## Caveats
 
 Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Try to update these items but please be aware of the issue that's documented and ensure it's been resolved.
 
+### pdfjs-dist
+
+- As of [this release](https://github.com/mozilla/pdf.js/releases/tag/v5.1.91), and I think [this PR](https://github.com/mozilla/pdf.js/pull/19689), pdfjs seems to expect certain browser-side API functionality when loaded. This causes issues with our Cypress tests. The best way to fix this is worth investigating further. Perhaps we could polyfill, or even consider creating an issue in the pdfjs repo.
+- Look at `shared/src/business/utilities/pdfs/getPdfJs.ts`
+
 ### DWT
 
 - Minor versions of DWT _should_ be updated, but require that Court IT update the Windows clients in concert with our app. Do not update without coordinating.
+- Stay at DWT v19.2.0, wait until January to update to 19.3.0
 
 ### puppeteer and @sparticuz/chromium
 
@@ -221,10 +231,6 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 - Quill released version 2 in April 2024. It includes substantial changes. Because the focus is currently on Postgres, we have left it at a previous version.
 
-### pdfjs-dist
-
-- As of [this release](https://github.com/mozilla/pdf.js/releases/tag/v5.1.91), and I think [this PR](https://github.com/mozilla/pdf.js/pull/19689), pdfjs seems to expect certain browser-side API functionality when loaded. This causes issues with our Cypress tests. The best way to fix this is worth investigating further. Perhaps we could polyfill, or even consider creating an issue in the pdfjs repo.
-
 ### babel-jest, babel-core
 Tried to update to 30.0.0-beta.3 from 29.7.0 on Friday, June 06, 2025, we weren't able to update it because it conflicts with ts-jest 29.3.4.
 On June 26 2025, newer versions of babel-core and jest core also started to cause issues with ts-jest. Once ts-jest is updated these issues should all clear up.
@@ -233,9 +239,9 @@ On June 26 2025, newer versions of babel-core and jest core also started to caus
 - On September 19th, 2025, babel/core was successfully updated to 7.28..4 from 7.28.3, had some issues with Github Actions checks running all the way through, but Github still gave the commit a check. Refer to this PR for more info. https://github.com/ustaxcourt/ef-cms/pull/9164
 
 ### @types/node
-The major version of this package should match our major version of node. At the moment that we are using node v22.20.0 so we should use a package that starts with 22.
+The major version of this package should match our major version of Node. At the moment that we are using Node v24.11.1 so we should use a package that starts with 24.
 
-- On October 27th, 2025, successfully updated @types/node to 22.18.12 to match Node.js v22.20.0.
+- [Dependencies 12 01 2025](https://github.com/ustaxcourt/ef-cms/pull/9465/files), Node.js was updated to v24.11.1, successfully updated @types/node to 24.10.2 to match Node.js v24.11.1
 
 ### TypeScript
 We cannot update TypeScript version beyond v5.8.3 until ts-jest supports it
@@ -249,27 +255,6 @@ We cannot update TypeScript version beyond v5.8.3 until ts-jest supports it
 
 The decision was made to revert back to 5.8.3 as the migration would require multiple days of dedicated work.
 - On November 19th, 2025, updated to typescript 5.9.3 and as a result resolved many of the typing issues involved in pdf buffers, applicationContext between client, shared, and api.
-
-### p-queue
-Upgrading `p-queue` past version 6 will cause issues related to module imports.
-
-- On September 19th, 2025, tried to updAte to 8.1.1. Errors were thrown on Github Action checks to address imports. A potential fix could be to update our build configuration to properly handle ES modules or maybe use dynamic imports as a workaround? Refer to this PR. https://github.com/ustaxcourt/ef-cms/pull/9164
-
-### uuid
-9/17/25 keeping it 11.1.0. The next version 12.0.0 and above no longer supports CommonJS
-
-https://www.npmjs.com/package/uuid?activeTab=readme
-
-Quote from site:
-
-"Starting with uuid@12 CommonJS is no longer supported. See implications and motivation for details."
-
-- On October 27th, 2025, added `uuid` to the caveats list in `scripts/npm/upgrade-npm-packages.ts` to prevent automatic upgrades to v12+ during future
-- On November 18th, 2025, ugpraded `uuid` to 13.0.0, edited the jest config to ignore patterns for uuid
-
-### sass
-11/26/2025 ran into issues trying to update this package. Error: Upgrading sass to version 1.94.2 npm error code ERR_INVALID_ARG_TYPE.
-Solution was removing node_modules and package-lock.json and updating the version manually in package-lock.json and then reinstalling dependencies and running the upgrade script
 
 ## Troubleshooting
 
