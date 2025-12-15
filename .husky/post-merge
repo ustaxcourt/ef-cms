@@ -44,7 +44,7 @@ if [ -f "CHANGES.md" ]; then
       echo ""
     } >&2
 
-    NO_IDE_POP="$(pwd)/.husky/post-merge-no-ide-pop"
+    NO_IDE_POP="$(pwd)/.husky/.post-merge-no-ide-pop"
     [[ -f "$NO_IDE_POP" ]] && exit 0
 
     TEMP_FILE=$(mktemp /tmp/changes-old-XXXXXX.md 2>/dev/null || echo "/tmp/changes-old.md")
