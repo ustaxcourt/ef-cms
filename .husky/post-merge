@@ -11,8 +11,7 @@ if [ -f "CHANGES.md" ]; then
       echo "$CHANGES_DIFF" | grep -E "^[\+\-]" | grep -v "^[\+\-][\+\-][\+\-]" | grep -v "No newline" | while IFS= read -r line; do
         clean_line=$(echo "$line" | sed 's/^[+-]//')
         case "$line" in
-        +*) printf "  \033[32m%s\033[0m\n" "$clean_line" ;;
-        -*) printf "  \033[31m%s\033[0m\n" "$clean_line" ;;
+        +*) printf '%s\n' "$clean_line" ;;
         esac
       done
       echo ""
