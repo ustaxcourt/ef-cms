@@ -254,6 +254,15 @@ We cannot update TypeScript version beyond v5.8.3 until ts-jest supports it
 The decision was made to revert back to 5.8.3 as the migration would require multiple days of dedicated work.
 - On November 19th, 2025, updated to typescript 5.9.3 and as a result resolved many of the typing issues involved in pdf buffers, applicationContext between client, shared, and api.
 
+### Commander override for s3rver
+
+- On 12/16/25 we added an version override for the commander package for s3rver. It was failing to start up the test server with our command after s3rver started using 14.0.2 of commander. We reverted it to the previous working version 12.1.0.
+
+```
+npm run start:s3rver
+error: too many arguments. Expected 0 arguments but got 2.
+```
+
 ## Troubleshooting
 
 ### Incrementing the Node Cache Key Version
