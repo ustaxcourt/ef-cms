@@ -110,9 +110,9 @@ describe('Advanced Search', () => {
 
         goToCase(docketNumber);
 
-        const orderTitle = `${faker.word.adjective()} ${faker.word.noun()}`;
+        const orderContents = `${faker.word.adjective()} ${faker.word.noun()}`;
 
-        createOrderAndDecision(orderTitle);
+        createOrderAndDecision(orderContents);
 
         // Add the order to the docket entry and perform a non-paper (electronic) service
         cy.get('[data-testid="add-court-issued-docket-entry-button"]').click();
@@ -130,7 +130,7 @@ describe('Advanced Search', () => {
         /** Act */
         cy.get('[data-testid="search-link"]').click();
         cy.get('[data-testid="order-search-tab"]').click();
-        cy.get('[data-testid="keyword-search-input"]').type(orderTitle);
+        cy.get('[data-testid="keyword-search-input"]').type(orderContents);
         retry(() => {
           cy.get(
             '[data-testid="submit-order-advanced-search-button"], [data-testid="advanced-search-button"], button#advanced-search-button, form[data-testid="order-search-container"] button[type=submit]',
