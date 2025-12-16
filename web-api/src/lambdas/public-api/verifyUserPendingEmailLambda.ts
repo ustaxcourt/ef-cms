@@ -9,9 +9,7 @@ import { verifyUserPendingEmailInteractor } from '@web-api/business/useCases/use
  */
 export const verifyUserPendingEmailLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    console.log('Event query params: ' + event.queryStringParameters);
     return await verifyUserPendingEmailInteractor(applicationContext, {
-      // ...JSON.parse(event.queryStringParameters),
-      ...event.queryStringParameters,
+      ...JSON.parse(event.body),
     });
   });

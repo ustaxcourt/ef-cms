@@ -8,6 +8,7 @@ import { clearAdvancedSearchFormSequence } from './sequences/clearAdvancedSearch
 import { clearPdfPreviewUrlSequence } from './sequences/clearPdfPreviewUrlSequence';
 import { closeModalAndNavigateToMaintenanceSequence } from './sequences/closeModalAndNavigateToMaintenanceSequence';
 import { confirmSignUpSequence } from '@web-client/presenter/sequences/Login/confirmSignUpSequence';
+import { dismissAlertSequence } from './sequences/dismissAlertSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
 import { displayProgressSpinnerSequence } from '@web-client/presenter/sequences/displayProgressSpinnerSequence';
 import { goToCreatePetitionerAccountSequence } from '@web-client/presenter/sequences/Public/goToCreatePetitionerAccountSequence';
@@ -78,6 +79,7 @@ export const presenterSequences = {
   clearPdfPreviewUrlSequence,
   closeModalAndNavigateToMaintenanceSequence,
   confirmSignUpSequence,
+  dismissAlertSequence,
   dismissModalSequence,
   displayProgressSpinnerSequence,
   goToCreatePetitionerAccountSequence,

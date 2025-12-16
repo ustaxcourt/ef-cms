@@ -1,6 +1,5 @@
 import { clearUserAction } from '../../actions/clearUserAction';
 import { gotoLoginSequence } from '@web-client/presenter/sequences/Login/gotoLoginSequence';
-import { navigateToLoginAction } from '@web-client/presenter/actions/Login/navigateToLoginAction';
 import { setAlertErrorAction } from '@web-client/presenter/actions/setAlertErrorAction';
 import { setAlertInfoAction } from '@web-client/presenter/actions/setAlertInfoAction';
 import { setAlertSuccessAction } from '@web-client/presenter/actions/setAlertSuccessAction';
@@ -17,5 +16,4 @@ export const gotoVerifyEmailSequence = [
     success: [setAlertSuccessAction],
   },
   clearUserAction,
-  navigateToLoginAction,
 ] as unknown as (props: { token: string }) => void;
