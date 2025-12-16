@@ -24,8 +24,10 @@ import {
   DW_CASE_WORKSHEET_COLUMNS,
 } from '@web-api/persistence/postgres/caseWorksheets/schema';
 import {
+  DocketEntryRelatedDocketEntryTable,
   DocketEntryTable,
   DW_DOCKET_ENTRY_COLUMNS,
+  DW_DOCKET_ENTRY_ORDER_MOTION_COLUMNS,
 } from '@web-api/persistence/postgres/docketEntries/schema';
 import {
   DW_FEATURE_FLAG_COLUMNS,
@@ -117,8 +119,9 @@ interface DatabaseSchemaType {
   dwChangeOfAddress: DatabaseTableMetadata<ChangeOfAddressTable>;
   dwConnection: DatabaseTableMetadata<ConnectionTable>;
   dwDocketEntry: DatabaseTableMetadata<DocketEntryTable>;
-  dwFeatureFlag: DatabaseTableMetadata<FeatureFlagTable>;
+  dwDocketEntryRelatedDocketEntry: DatabaseTableMetadata<DocketEntryRelatedDocketEntryTable>;
   dwDocketEntryWorksheet: DatabaseTableMetadata<DocketEntryWorksheetTable>;
+  dwFeatureFlag: DatabaseTableMetadata<FeatureFlagTable>;
   dwMessage: DatabaseTableMetadata<MessageTable>;
   dwMinuteSheet: DatabaseTableMetadata<MinuteSheetTable>;
   dwPractitionerDocuments: DatabaseTableMetadata<PractitionerDocumentTable>;
@@ -189,6 +192,10 @@ export const DatabaseSchema: DatabaseSchemaType = {
     columns: DW_DOCKET_ENTRY_COLUMNS,
     transformOpenSearchMessage: transformOpenSearchDocketEntries,
     indexOpenSearchMessage: indexOpenSearchDocketEntries,
+  },
+  dwDocketEntryRelatedDocketEntry: {
+    table: DEFAULT as DocketEntryRelatedDocketEntryTable,
+    columns: DW_DOCKET_ENTRY_ORDER_MOTION_COLUMNS,
   },
   dwDocketEntryWorksheet: {
     table: DEFAULT as DocketEntryWorksheetTable,

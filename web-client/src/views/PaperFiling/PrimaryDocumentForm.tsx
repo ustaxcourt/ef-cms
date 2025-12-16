@@ -9,6 +9,7 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { reactSelectValue } from '@web-client/ustc-ui/Utils/documentTypeSelectHelper';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
+import { TextArea } from '@web-client/dawson-ui/ui/input';
 import React from 'react';
 
 export const PrimaryDocumentForm = connect(
@@ -92,7 +93,7 @@ export const PrimaryDocumentForm = connect(
             <input
               className="usa-input usa-input-inline"
               id="mailing-date"
-              maxLength="25"
+              maxLength={25}
               name="mailingDate"
               value={form.mailingDate || ''}
               onBlur={() => validateDocketEntrySequence()}
@@ -233,6 +234,14 @@ export const PrimaryDocumentForm = connect(
                 });
               }}
             />
+
+            <div className="max-xs:tw:w-full tw:mt-6">
+              <TextArea
+                label="Additional info 1"
+                helpText="Help text"
+                placeholder=""
+              />
+            </div>
           </FormGroup>
           <div className="usa-form-group">
             <div className="usa-checkbox">

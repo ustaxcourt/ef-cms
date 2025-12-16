@@ -9,11 +9,22 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React, { useState } from 'react';
 import classNames from 'classnames';
 
-export const BindedTextarea = connect(
+type BindedTextareaProps = {
+  bind?: string;
+  onChange?: (value: any) => void;
+  id?: string;
+  onBlur?: (event: React.FocusEvent<HTMLTextAreaElement>) => void;
+  className?: string;
+  name?: string;
+  required?: boolean;
+  maxLength?: number;
+};
+
+export const BindedTextarea: React.FC<BindedTextareaProps> = connect(
   {
-    bind: props.bind,
+    bind: props`bind`,
     simpleSetter: sequences.cerebralBindSimpleSetStateSequence,
-    value: state[props.bind],
+    value: state[props`bind`],
   },
   function BindedTextarea(componentProps: {
     bind: string;

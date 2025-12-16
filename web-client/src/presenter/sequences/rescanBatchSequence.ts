@@ -6,6 +6,7 @@ import { handleScanErrorAction } from '../actions/handleScanErrorAction';
 import { rescanBatchAction } from '../actions/rescanBatchAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
+import { validateDocumentSelectedForScanAction } from '../actions/validateDocumentSelectedForScanAction';
 import { validateScannerSourceAction } from '../actions/validateScannerSourceAction';
 import { waitForSpinnerAction } from '../actions/waitForSpinnerAction';
 
@@ -19,10 +20,16 @@ export const rescanBatchSequence = showProgressSequenceDecorator([
       {
         invalid: [handleInvalidScannerSourceAction],
         valid: [
-          rescanBatchAction,
+          validateDocumentSelectedForScanAction,
           {
             error: [handleScanErrorAction],
-            success: [],
+            success: [
+              rescanBatchAction,
+              {
+                error: [handleScanErrorAction],
+                success: [],
+              },
+            ],
           },
         ],
       },

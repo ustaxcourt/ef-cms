@@ -72,7 +72,7 @@ describe('Judge`s chambers stamps an order', () => {
 
       // Apply stamp
       cy.get('[data-testid="clear-optional-fields"]').click();
-      cy.get('[data-testid="motion-disposition-Granted"]').click();
+      cy.get('[data-testid="motion-disposition-GRANTED"]').click();
       cy.get('[data-testid="save-signature-button"]').click();
 
       // Make sure it's there
@@ -118,7 +118,7 @@ describe('Judge`s chambers stamps an order', () => {
             .first()
             .click();
           cy.get('[data-testid="apply-stamp"]').click();
-          cy.get('[data-testid="motion-disposition-Granted"]').click();
+          cy.get('[data-testid="motion-disposition-GRANTED"]').click();
           cy.get('[data-testid="save-signature-button"]').click();
           cy.get('[data-testid="success-alert"]').contains(
             'Motion to Proceed Remotely stamped successfully.',

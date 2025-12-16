@@ -33,7 +33,7 @@ export const PrintableTrialSessionWorkingCopyPreviewPage = connect(
               });
             }}
           >
-            <FontAwesomeIcon icon={['fa', 'arrow-alt-circle-left']} />
+            <FontAwesomeIcon icon={'arrow-alt-circle-left'} />
             Back to Session Copy
           </Button>
           <PdfPreview />
