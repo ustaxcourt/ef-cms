@@ -1,3 +1,45 @@
+<details><summary>Dependency Updates - Week of 2025-12-08</summary>
+
+## Local
+
+#### Upgrade NodeJS to `24.12.0`
+```bash
+nvm install
+nvm use
+nvm alias default "$(cat .nvmrc)"
+```
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Docker container `4.3.61` - choose exp6
+```bash
+. scripts/env/set-env.zsh expN
+npm run ecr:check-version
+```
+</details>
+<details><summary>Dependency Updates - Week of 2025-12-01</summary>
+
+## Local
+
+#### Upgrade NodeJS to `24.11.1`
+```bash
+nvm install
+nvm use
+nvm alias default "$(cat .nvmrc)"
+```
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Docker container `4.3.60` - choose exp3
+```bash
+. scripts/env/set-env.zsh expN
+npm run ecr:check-version
+```
+</details>
 <details><summary>Dependency Updates - Week of 2025-11-24</summary>
 
 ## Manual Deployment Steps
