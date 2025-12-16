@@ -71,6 +71,7 @@ To update Node.js:
 1. Update the node version used by our lambdas.
    - `web-api/terraform/modules/lambda/lambda.tf`
    - `web-api/terraform/modules/api/layers.tf`
+1. Update the `CHANGES.md` file with instructions for installing this NodeJS version locally. See [df83cf3](https://github.com/ustaxcourt/ef-cms/commit/df83cf3db69f2c6149cbef3ae213db488822cc2b) for an example.
 
 #### 2.2 Update `Dockerfile` as needed
 
@@ -108,6 +109,8 @@ If the `Dockerfile` has changed, you will need to build a new docker image and p
 
    > Refer to [ci-cd.md](ci-cd.md#docker) for more info on this as needed
 
+1. Update the `CHANGES.md` file with instructions for deploying this new docker image to other environments. Be sure to indicate the experimental environment to which you just deployed the image. See [df83cf3](https://github.com/ustaxcourt/ef-cms/commit/df83cf3db69f2c6149cbef3ae213db488822cc2b) for an example.
+
 ### 3. Update Terraform AWS provider
 
 Check if there is an update to the Terraform AWS provider and update our `.tf` files to use the [latest version](https://registry.terraform.io/providers/hashicorp/aws/latest) of the provider.
@@ -128,15 +131,15 @@ Check if there is an update to the Terraform OpenSearch provider and update our 
 
 ### 5. Update OpenSearch
 
-All lower environments' logs are now consolidated into a single info cluster. [See PR #939](https://github.com/ustaxcourt/ef-cms/pull/9393).
-
-We are currently on OpenSearch 3.3
-
-Check to see if there is an [updated version](https://docs.aws.amazon.com/opensearch-service/latest/developerguide/version-migration.html) of OpenSearch available. If an update is available, we'll need to update OpenSearch locally, in github actions, and in deployed environments.
+Check to see if there is an updated version of OpenSearch available. If an update is available, we'll need to update OpenSearch locally, in github actions, and in deployed environments.
 
 1. Use the [environment switcher](./additional-resources/environment-switcher.md) to point to an experimental environment and to retrieve a fresh AWS access key:
    ```bash
    . scripts/env/set-env.zsh expN
+   ```
+1. Determine the current OpenSearch engine version in this environment:
+   ```bash
+   aws opensearch describe-domain --domain-name "efcms-search-${ENV}-${SOURCE_TABLE_VERSION}" --query "DomainStatus.EngineVersion" --output text
    ```
 1. Use the AWS CLI to list the available versions of OpenSearch:
    ```bash
@@ -144,6 +147,8 @@ Check to see if there is an [updated version](https://docs.aws.amazon.com/opense
    ```
 
 #### 5.1 Update OpenSearch to the latest version in a deployed environment
+
+If an OpenSearch update is available, we'll need to update OpenSearch in deployed environments.
 
 1. Run the OpenSearch indices report and note the indices and aliases in this deployed environment:
    ```bash
@@ -153,16 +158,6 @@ Check to see if there is an [updated version](https://docs.aws.amazon.com/opense
    ```bash
    scripts/secrets/update-secret.ts --key "ES_ENGINE_VERSION" --value "OpenSearch_99.9"
    ```
-1. Set the value of the `ES_LOGS_ENGINE_VERSION` secret in the `account_deploy` secrets in Secrets Manager:
-   ```bash
-   ENV=account scripts/secrets/update-secret.ts --key "ES_LOGS_ENGINE_VERSION" --value "OpenSearch_99.9"
-   ```
-1. Run an account-specific terraform deployment:
-   ```bash
-   npm run deploy:account-specific
-   ```
-1. While the upgrade is being performed, verify that the running cluster is still functional by performing queries in kibana.
-1. After the upgrade is complete, verify that the same data you retrieved in the previous step is still available in kibana.
 1. Run a deployment to the experimental environment.
 1. While the OpenSearch upgrade is being performed (during the `allColors` terraform deployment), verify cluster is still functional by running search smoketests against current color:
    ```bash
@@ -172,9 +167,12 @@ Check to see if there is an [updated version](https://docs.aws.amazon.com/opense
    ```bash
    scripts/reports/indices.ts
    ```
-1. Describe the required manual steps in the dependency updates pull request. See [PR #9189](https://github.com/ustaxcourt/ef-cms/pull/9189) for an example.
+1. Describe the required manual steps in the dependency updates pull request. Be sure to indicate that `test` and `prod` will also need an `account-specific` deployment to update their `info` clusters' OpenSearch engine version as well. See [PR #9427](https://github.com/ustaxcourt/ef-cms/pull/9189) for an example.
+1. Describe the same manual steps in the `CHANGES.md` file. See [c702a02](https://github.com/ustaxcourt/ef-cms/commit/c702a02cd267d0325884febc739c04ceb6b0e0d2) for an example.
 
 #### 5.2 Update OpenSearch to the latest version locally
+
+If an OpenSearch update is available, we'll need to update OpenSearch locally.
 
 1. Set the value of the `image` property in `web-api/elasticsearch/docker-compose.yml` to correspond to the new version number.
 1. Run the api locally to verify:
@@ -183,6 +181,8 @@ Check to see if there is an [updated version](https://docs.aws.amazon.com/opense
    ```
 
 #### 5.3 Update OpenSearch to the latest version in github actions
+
+If an OpenSearch update is available, we'll need to update OpenSearch in github actions.
 
 1. Search the project for `opensearch-version:` and make sure it's set to the latest version. For example, some of the files in the `.github/workflows` directory will need to be updated.
 
