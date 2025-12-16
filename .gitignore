@@ -63,3 +63,4 @@ dist-lambdas/
 *execution-plan*
 *.dump
 Resources/
+.husky/.post-merge-no-ide-pop
