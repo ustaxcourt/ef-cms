@@ -8,7 +8,11 @@ import ReactDOM from 'react-dom';
 
 const modalRoot = window.document.getElementById('modal-root');
 
-export const DocketRecordOverlay = connect(
+type DocketRecordOverlayProps = {
+  runCancelSequence?: any;
+}
+
+export const DocketRecordOverlay: React.FC<DocketRecordOverlayProps> = connect(
   {
     caseDetail: state.caseDetail,
     dismissModalSequence: sequences.dismissModalSequence,
@@ -22,7 +26,7 @@ export const DocketRecordOverlay = connect(
     docketEntry,
     openCaseDocumentDownloadUrlSequence,
   }) {
-    const elRef = React.useRef(null);
+    const elRef = React.useRef(null) as React.RefObject<HTMLDivElement | null>;;
 
     const getEl = () => {
       if (!elRef.current) {
@@ -58,12 +62,12 @@ export const DocketRecordOverlay = connect(
         return dismissModalSequence(event);
       };
 
-      modalRoot.appendChild(getEl());
+      modalRoot?.appendChild(getEl());
       window.document.addEventListener('keydown', keydownTriggered, false);
       toggleNoScroll(true);
 
       return () => {
-        modalRoot.removeChild(getEl());
+        modalRoot?.removeChild(getEl());
         window.document.removeEventListener('keydown', keydownTriggered, false);
         toggleNoScroll(false);
       };

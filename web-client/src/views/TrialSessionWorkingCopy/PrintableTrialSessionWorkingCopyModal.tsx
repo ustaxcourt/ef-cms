@@ -45,7 +45,7 @@ export const PrintableTrialSessionWorkingCopyModal = connect(
                   id="caseNotesIncluded-yes"
                   name="showCaseNotes"
                   type="radio"
-                  value={true}
+                  value={"true"}
                   onChange={e => {
                     updateModalValueSequence({
                       key: e.target.name,
@@ -69,7 +69,7 @@ export const PrintableTrialSessionWorkingCopyModal = connect(
                   id="caseNotesIncluded-no"
                   name="showCaseNotes"
                   type="radio"
-                  value={false}
+                  value={"false"}
                   onChange={e => {
                     updateModalValueSequence({
                       key: e.target.name,

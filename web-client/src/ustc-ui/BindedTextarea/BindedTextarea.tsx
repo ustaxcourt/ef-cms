@@ -3,21 +3,28 @@ import {
   decorateWithPostCallback,
   useCerebralStateFactory,
 } from '../Utils/useCerebralState';
-import { props as cerebralProps } from 'cerebral';
+import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useState } from 'react';
 import classNames from 'classnames';
 
-const props = cerebralProps as unknown as {
-  bind: string;
+type BindedTextareaProps = {
+  bind?: string;
+  onChange?: (value: any) => void;
+  id?: string;
+  onBlur?: (event: React.FocusEvent<HTMLTextAreaElement>) => void;
+  className?: string;
+  name?: string;
+  required?: boolean;
+  maxLength?: number;
 };
 
-export const BindedTextarea = connect(
+export const BindedTextarea: React.FC<BindedTextareaProps> = connect(
   {
-    bind: props.bind,
+    bind: props`bind`,
     simpleSetter: sequences.cerebralBindSimpleSetStateSequence,
-    value: state[props.bind],
+    value: state[props`bind`],
   },
   function BindedTextarea(componentProps: {
     bind: string;

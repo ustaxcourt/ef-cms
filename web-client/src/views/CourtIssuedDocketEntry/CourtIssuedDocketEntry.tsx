@@ -397,9 +397,9 @@ export const CourtIssuedDocketEntry = connect(
 
                 {addCourtIssuedDocketEntryHelper.showAttachmentAndServiceFields && (
                   <>
-                    <div className="usa-label" htmlFor="service-parties">
+                    <label className="usa-label" htmlFor="service-parties">
                       Service parties
-                    </div>
+                    </label>
 
                     <div id="service-parties">
                       {addCourtIssuedDocketEntryHelper.serviceParties.map(
