@@ -83,14 +83,14 @@ export const docketClerkCreatesARemoteTrialSession = (
       {
         key: 'startDate',
         toFormat: FORMATS.ISO,
-        value: '12/12/2025',
+        value: '12/12/2099',
       },
     );
 
     await cerebralTest.runSequence('validateTrialSessionSequence');
 
     expect(cerebralTest.getState('form.term')).toEqual('Fall');
-    expect(cerebralTest.getState('form.termYear')).toEqual('2025');
+    expect(cerebralTest.getState('form.termYear')).toEqual('2099');
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'trialLocation',
