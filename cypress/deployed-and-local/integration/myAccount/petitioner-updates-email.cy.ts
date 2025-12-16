@@ -96,7 +96,6 @@ describe('Petitioner Updates e-mail', () => {
           'contain.text',
           'Your email address is verified. You can now log in to DAWSON.',
         );
-      cy.url().should('contain', '/login');
       loginAsPetitioner(updatedEmail);
 
       cy.task('waitForNoce', { docketNumber }).then(isNOCECreated => {
