@@ -1,8 +1,8 @@
 import { lambdaWrapper } from './lambdaWrapper';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
-jest.mock('@vendia/serverless-express');
+jest.mock('@codegenie/serverless-express');
 jest.mock('@web-api/middleware/apiGatewayHelper');
-import { getCurrentInvoke } from '@vendia/serverless-express';
+import { getCurrentInvoke } from '@codegenie/serverless-express';
 import { getUserFromAuthHeader } from '@web-api/middleware/apiGatewayHelper';
 
 describe('lambdaWrapper', () => {

@@ -1,7 +1,7 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { get } from 'lodash';
-import { getCurrentInvoke } from '@vendia/serverless-express';
+import { getCurrentInvoke } from '@codegenie/serverless-express';
 import { getUserFromAuthHeader } from '@web-api/middleware/apiGatewayHelper';
 
 export const headerOverride = {

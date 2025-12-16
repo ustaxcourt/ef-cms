@@ -8,6 +8,7 @@ import {
 } from '../helpers/parseArgsAndEnvVars';
 import { getDbReader } from '@web-api/persistence/postgres/database';
 import { getNowObject } from '@shared/business/utilities/DateHandler';
+import { sql } from 'kysely';
 
 const thisYear = getNowObject().year;
 const scriptConfig: ScriptConfig = {
@@ -37,44 +38,43 @@ const { fiscal, year } = parseArgsAndEnvVars(scriptConfig) as {
 };
 const { begin, end } = getJsTimeframeForYear({ fiscal, year });
 
-const getDocketNumbersOfCasesFiledInYear = async (): Promise<string[]> => {
-  const results = (await getDbReader(reader =>
+const countCasesFiledInYear = async (): Promise<number> => {
+  const result = await getDbReader(reader =>
     reader
       .selectFrom('dwDocketEntry as de')
-      .select('de.docketNumber')
       .where('de.eventCode', '=', 'P')
-      .where('de.receivedAt', '>=', begin)
-      .where('de.receivedAt', '<', end)
-      .orderBy('de.receivedAt', 'asc')
-      .execute(),
-  )) as { docketNumber: string }[];
-  return Array.from(new Set(results.map(p => p.docketNumber)));
+      .where('de.filingDate', '>=', begin)
+      .where('de.filingDate', '<', end)
+      .select(({ ref }) =>
+        sql<number>`count(distinct ${ref('de.docketNumber')})`.as('count'),
+      )
+      .executeTakeFirst(),
+  );
+  return Number(result?.count) || 0;
 };
 
-const countCasesWithRepresentation = async ({
-  docketNumbers,
-}: {
-  docketNumbers: string[];
-}): Promise<number> => {
-  const results = (await getDbReader(reader =>
+const countCasesWithRepresentation = async (): Promise<number> => {
+  const result = await getDbReader(reader =>
     reader
-      .selectFrom('dwUserOnCase as uc')
-      .select('uc.docketNumber')
+      .selectFrom('dwDocketEntry as de')
+      .innerJoin('dwUserOnCase as uc', 'uc.docketNumber', 'de.docketNumber')
+      .where('de.eventCode', '=', 'P')
+      .where('de.filingDate', '>=', begin)
+      .where('de.filingDate', '<', end)
       .where('uc.actingAsRole', '=', ROLES.privatePractitioner)
-      .where('uc.docketNumber', 'in', docketNumbers)
-      .execute(),
-  )) as { docketNumber: string }[];
-  const uniqueDocketNumbers = new Set(results.map(c => c.docketNumber));
-  return uniqueDocketNumbers.size;
+      .select(({ ref }) =>
+        sql<number>`count(distinct ${ref('de.docketNumber')})`.as('count'),
+      )
+      .executeTakeFirst(),
+  );
+
+  return Number(result?.count) || 0;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const docketNumbers = await getDocketNumbersOfCasesFiledInYear();
-  const totalCases = docketNumbers.length;
-  const numberOfCasesWithRepresentation = await countCasesWithRepresentation({
-    docketNumbers,
-  });
+  const totalCases = await countCasesFiledInYear();
+  const numberOfCasesWithRepresentation = await countCasesWithRepresentation();
   const numberOfProSeCases = totalCases - numberOfCasesWithRepresentation;
   console.log(`${fiscal ? 'Fiscal' : 'Calendar'} Year ${year}`);
   console.table([

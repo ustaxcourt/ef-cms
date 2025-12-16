@@ -1,4 +1,6 @@
 import { app } from '../../app-public';
-import awsServerlessExpress from '@vendia/serverless-express';
+import awsServerlessExpress from '@codegenie/serverless-express';
 
-export const handler = awsServerlessExpress({ app });
+export const handler = (event, context) => {
+  return awsServerlessExpress({ app })(event, context);
+}

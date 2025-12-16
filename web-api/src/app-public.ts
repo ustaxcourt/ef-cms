@@ -1,5 +1,5 @@
 import { expressLogger } from './logger';
-import { getCurrentInvoke } from '@vendia/serverless-express';
+import { getCurrentInvoke } from '@codegenie/serverless-express';
 import { json, urlencoded } from 'body-parser';
 import { lambdaWrapper } from './lambdaWrapper';
 import { set } from 'lodash';

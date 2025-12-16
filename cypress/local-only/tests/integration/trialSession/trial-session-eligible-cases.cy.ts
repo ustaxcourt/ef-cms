@@ -11,6 +11,7 @@ import {
   CASE_STATUS_TYPES,
   SESSION_TYPES,
 } from '@shared/business/entities/EntityConstants';
+import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
 
 describe('Trial Session Eligible Cases Journey', () => {
   const trialLocation = `Phoenix, Arizona`;
@@ -22,8 +23,8 @@ describe('Trial Session Eligible Cases Journey', () => {
     createTrialSession({
       trialLocation,
       sessionType: SESSION_TYPES.small,
-      startDate: '12/12/2025',
-      endDate: '12/12/2025',
+      startDate: '12/12/2099',
+      endDate: '12/13/2099',
       judge: 'Cohen',
       maxCases: '3',
     }).then(({ trialSessionId: createdTrialSessionId }) => {
@@ -223,6 +224,71 @@ describe('Trial Session Eligible Cases Journey', () => {
         'contain',
         CASE_STATUS_TYPES.calendared,
       );
+    });
+  });
+
+  it('should create trial session and cases, then verify eligible cases granted remote motion have an indicator', () => {
+    const date = formatNow(FORMATS.MMDDYYYY)
+
+    loginAsPetitionsClerk1();
+    createTrialSession({
+      trialLocation,
+      sessionType: SESSION_TYPES.small,
+      startDate: '12/12/2099',
+      endDate: '12/13/2099',
+      judge: 'Cohen',
+      maxCases: '3',
+    }).then(({ trialSessionId: createdTrialSessionId }) => {
+      trialSessionId = createdTrialSessionId;
+      cy.wrap(trialSessionId).as('trialSessionId');
+    });
+
+    createAndServePaperPetition({
+      procedureType: 'Small',
+      trialLocation,
+      caseType: 'Other',
+      yearReceived: '2019',
+      includeApwDocument: false,
+    })
+      .then(({ docketNumber }) => {
+        cy.wrap(docketNumber).as('docketNumber');
+        createdDocketNumbers.push(docketNumber);
+
+        loginAsDocketClerk();
+        goToCase(docketNumber);
+        updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
+        return createAndServePaperPetition({
+          procedureType: 'Small',
+          trialLocation,
+          yearReceived: '2019',
+          caseType: 'Other',
+          includeApwDocument: false,
+        });
+      })
+      .then(({ docketNumber }) => {
+        cy.wrap(docketNumber).as('docketNumberMotr');
+        createdDocketNumbers.push(docketNumber);
+        loginAsDocketClerk();
+        goToCase(docketNumber);
+        updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
+        cy.get('[data-testid="edit-remote-status"]').click();
+        cy.get('#remote-trial-granted-date-picker').type(date);
+        cy.get('[data-testid="modal-button-confirm"]').click();
+        cy.get('[data-testid="trial-session-link"]').click();
+      });
+    cy.get('@trialSessionId').then(trialSessionId => {
+      cy.get('[data-testid="new-trial-sessions-tab"] span.button-text').click();
+      cy.get(`[data-testid="trial-location-link-${trialSessionId}"]`).click();
+    });
+    cy.get('@docketNumberMotr').then(docketNumberMotr => {
+      cy.get(
+        `[data-testid="table-row-${docketNumberMotr}"] [data-testid="laptop"]`,
+      ).should('be.visible');
+    });
+    cy.get('@docketNumber').then(docketNumber => {
+      cy.get(
+        `[data-testid="table-row-${docketNumber}"] [data-testid="laptop"]`,
+      ).should('not.be.visible');
     });
   });
 });
