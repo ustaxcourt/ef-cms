@@ -222,7 +222,9 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
           cy.task('getEmailVerificationToken', {
             email: practitionerEmail,
           }).then(verificationToken => {
-            cy.visit(`/verify-email?token=${verificationToken}`);
+            cy.visit(
+              `${getCypressEnv().publicSiteUrl}/verify-email?token=${verificationToken}`,
+            );
           });
           cy.get('[data-testid="success-alert"]')
             .should('be.visible')
