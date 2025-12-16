@@ -222,6 +222,10 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
           cy.task('getEmailVerificationToken', {
             email: practitionerEmail,
           }).then(verificationToken => {
+            cy.clearAllCookies();
+            cy.clearAllLocalStorage();
+            cy.clearAllSessionStorage();
+
             cy.visit(
               `${getCypressEnv().publicSiteUrl}/verify-email?token=${verificationToken}`,
             );
