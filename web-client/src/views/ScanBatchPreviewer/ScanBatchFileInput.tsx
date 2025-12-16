@@ -9,7 +9,7 @@ import React from 'react';
 
 const props = cerebralProps as unknown as {
   documentType: string;
-  validateSequence?: () => void;
+  validateSequence?: Function;
 };
 
 const dependencies = {
@@ -24,7 +24,7 @@ const dependencies = {
 
 type ScanBatchFileInputProps = {
   documentType: string;
-  validateSequence?: () => void;
+  validateSequence?: Function;
 };
 
 export const ScanBatchFileInput = connect<
@@ -52,8 +52,16 @@ export const ScanBatchFileInput = connect<
         if (validateSequence) {
           await validateSequence();
         }
-      } finally {
         setIsNotLoadingSequence();
+      } catch (error: any) {
+        const errorMessage =
+          error?.message ||
+          error?.toString() ||
+          'Failed to process file. Please try again.';
+        handleError({
+          messageToDisplay: errorMessage,
+          messageToLog: errorMessage,
+        });
       }
     };
 
@@ -96,7 +104,7 @@ export const ScanBatchFileInput = connect<
           <FileInput
             accept=".pdf"
             aria-describedby={`${documentType}-hint`}
-            data-testid={documentType}
+            data-testid={`${documentType}-file-input`}
             id={`${documentType}-file`}
             maxFileSizeMB={constants.MAX_FILE_SIZE_MB}
             name={documentType}

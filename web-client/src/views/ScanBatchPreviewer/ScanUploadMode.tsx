@@ -24,6 +24,7 @@ export const ScanUploadMode = ({
         aria-labelledby="upload-mode-upload"
         checked={checked}
         className="usa-radio__input"
+        data-testid="upload-mode-radio"
         id="uploadMode"
         name="uploadMode"
         type="radio"

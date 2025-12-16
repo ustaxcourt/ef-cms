@@ -78,8 +78,16 @@ export const StateDrivenFileInput = connect<
         if (validationSequence) {
           await validationSequence();
         }
-      } finally {
         setIsNotLoadingSequence();
+      } catch (error: any) {
+        const errorMessage =
+          error?.message ||
+          error?.toString() ||
+          'Failed to process file. Please try again.';
+        handleError({
+          messageToDisplay: errorMessage,
+          messageToLog: errorMessage,
+        });
       }
     };
 

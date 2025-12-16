@@ -15,7 +15,7 @@ export const ScannerAreaHeader = ({
   title,
 }: ScannerAreaHeaderProps) => {
   return (
-    <div className="scanner-area-header">
+    <div className="scanner-area-header" data-testid="scanner-area-header">
       <div className="grid-container padding-x-0">
         <div className="grid-row grid-gap">
           <div className="grid-col-6">

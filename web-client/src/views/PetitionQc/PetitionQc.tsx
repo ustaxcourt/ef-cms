@@ -11,7 +11,9 @@ export const PetitionQc = connect(function PetitionQc() {
     <>
       <CaseDetailHeader />
       <section className="usa-section grid-container DocumentDetail">
-        <h2 className="heading-1">Petition</h2>
+        <h2 className="heading-1" data-testid="petition-qc-page-heading">
+          Petition
+        </h2>
         <SuccessNotification />
         <ErrorNotification />
         <div className="grid-container padding-x-0">

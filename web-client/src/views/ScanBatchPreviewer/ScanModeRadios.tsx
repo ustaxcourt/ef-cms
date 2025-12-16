@@ -49,6 +49,7 @@ export const ScanModeRadios = ({
                 aria-labelledby="upload-mode-scan"
                 checked={uploadMode === 'scan'}
                 className="usa-radio__input"
+                data-testid="scan-mode-radio"
                 id="scanMode"
                 name="uploadMode"
                 type="radio"
@@ -77,7 +78,7 @@ export const ScanModeRadios = ({
 
       <div className="grid-col-4 margin-top-4 text-align-right">
         {uploadMode === 'scan' && scannerSource && (
-          <Button onClick={onStartScan}>
+          <Button data-testid="start-scan-button" onClick={onStartScan}>
             <FontAwesomeIcon icon={['fas', 'plus-circle']} />
             Start Scan
           </Button>

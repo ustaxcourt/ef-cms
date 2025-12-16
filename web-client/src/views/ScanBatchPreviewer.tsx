@@ -20,9 +20,9 @@ import React, { useEffect, useRef } from 'react';
 
 export type ScanBatchPreviewerProps = {
   documentTabs: Record<string, any>[];
-  documentType: string;
+  documentType: string | null;
   title: string;
-  validateSequence?: () => void;
+  validateSequence?: Function;
   scanOnly?: boolean;
   deletePdfSequence?: string;
   showRemovePdfButton?: boolean;
@@ -114,6 +114,11 @@ export const ScanBatchPreviewer = connect<
         batchWrapperRef.current.scrollTop =
           batchWrapperRef.current.scrollHeight;
     }, [scanBatchPreviewerHelper.batches]);
+
+    if (!documentType) {
+      return null;
+    }
+
     return (
       <>
         {showModal === 'ConfirmRescanBatchModal' && (
