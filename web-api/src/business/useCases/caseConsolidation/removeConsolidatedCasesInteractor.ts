@@ -131,14 +131,14 @@ const removeConsolidatedCases = async (
       if (DocketEntry.isMultiDocketed(docketEntry))
         docketEnIdsToUpdate.add(docketEntry.docketEntryId);
     });
+  }
 
-    for (const id of docketEnIdsToUpdate) {
-      // entries are docketEntries on ALL cases in the consolidated group
-      const entries = await getDocketEntriesById({ docketEntryId: id });
-      entries.forEach(entry => {
-        docketEntriesToUpdate.add(entry);
-      });
-    }
+  for (const id of docketEnIdsToUpdate) {
+    // entries are docketEntries on ALL cases in the consolidated group
+    const entries = await getDocketEntriesById({ docketEntryId: id });
+    entries.forEach(entry => {
+      docketEntriesToUpdate.add(entry);
+    });
   }
 
   const UPDATED_CASE_DOCKET_ENTRIES: RawDocketEntry[] = [];
