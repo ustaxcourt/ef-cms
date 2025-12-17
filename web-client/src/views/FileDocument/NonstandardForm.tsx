@@ -4,22 +4,22 @@ import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { TrialCity } from '../StartCase/TrialCity';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { get } from 'lodash';
-import { props as cerebralProps } from 'cerebral';
+import { props } from 'cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect } from 'react';
 import classNames from 'classnames';
 import { RunableSequence as RunnableSequence } from 'cerebral';
 
-const props = cerebralProps as unknown as {
+type NonstandardFormProps = {
   helper: string;
   level: string;
-  namespace: string;
+  namespace?: string;
   updateSequence: string;
   validateSequence: string;
   validationErrors: string;
 };
 
-export const NonstandardForm = connect(
+export const NonstandardForm: React.FC<NonstandardFormProps> = connect(
   {
     DATE_FORMATS: state.constants.DATE_FORMATS,
     caseDetail: state.caseDetail,
@@ -28,13 +28,13 @@ export const NonstandardForm = connect(
       sequences.formatAndUpdateDateFromDatePickerSequence,
     getOrdinalValuesForUploadIteration:
       state.getOrdinalValuesForUploadIteration,
-    helper: state[props.helper],
-    level: props.level,
-    namespace: props.namespace,
+    helper: state[props`helper`],
+    level: props`level`,
+    namespace: props`namespace`,
     trialCitiesHelper: state.trialCitiesHelper,
-    updateSequence: sequences[props.updateSequence],
-    validateSequence: sequences[props.validateSequence],
-    validationErrors: state[props.validationErrors],
+    updateSequence: sequences[props`updateSequence`],
+    validateSequence: sequences[props`validateSequence`],
+    validationErrors: state[props`validationErrors`],
   },
   function NonstandardForm({
     caseDetail,
@@ -48,8 +48,9 @@ export const NonstandardForm = connect(
     updateSequence,
     validateSequence,
     validationErrors,
+    showIndex = false
   }: {
-    caseDetail: { procedureType: string };
+    caseDetail: { procedureType?: string };
     DATE_FORMATS: { ISO: string };
     form: Record<string, any>;
     formatAndUpdateDateFromDatePickerSequence: Function | RunnableSequence;
@@ -60,6 +61,7 @@ export const NonstandardForm = connect(
     updateSequence: Function | RunnableSequence;
     validateSequence: Function | RunnableSequence;
     validationErrors: Record<string, any>;
+    showIndex?: boolean
   }) {
     useEffect(() => {
       const input = window.document.getElementById('other-iteration');
@@ -210,8 +212,7 @@ export const NonstandardForm = connect(
                     key={previousDocument.docketEntryId}
                     value={previousDocument.docketEntryId}
                   >
-                    {previousDocument.documentTitle ||
-                      previousDocument.documentType}
+                    {`${showIndex ? `${previousDocument.index} - ${previousDocument.createdAtFormatted} - ` : ''}${previousDocument.documentTitle || previousDocument.documentType}`}
                   </option>
                 );
               })}

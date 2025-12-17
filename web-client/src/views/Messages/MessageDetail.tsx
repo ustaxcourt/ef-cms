@@ -15,7 +15,13 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-const SingleMessage = ({ indent, message }) => (
+const SingleMessage = ({
+  indent,
+  message,
+}: {
+  indent?: boolean;
+  message: any;
+}) => (
   <>
     <div className={classNames('grid-row', indent && 'padding-left-5')}>
       <div className="grid-col-2">

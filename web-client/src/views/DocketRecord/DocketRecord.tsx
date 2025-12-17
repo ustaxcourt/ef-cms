@@ -61,7 +61,6 @@ export const DocketRecord = connect(
         <DocketRecordHeader
           docketRecordTableSortData={docketRecordTableSortData}
         />
-
         <NonPhone>
           <div className="width-full overflow-x-auto">
             <table
@@ -336,7 +335,6 @@ export const DocketRecord = connect(
             )}
           </div>
         </NonPhone>
-
         <Phone>
           <table className="usa-table usa-table--stacked-header usa-table--borderless">
             <thead>
@@ -377,7 +375,6 @@ export const DocketRecord = connect(
           {!formattedDocketEntriesHelper.formattedDocketEntriesOnDocketRecord
             .length && <p className="margin-bottom-10">{noDocumentsMessage}</p>}
         </Phone>
-
         {showModal == 'DocketRecordOverlay' && <DocketRecordOverlay />}
         {showModal == 'SealDocketEntryModal' && <SealDocketEntryModal />}
         {showModal == 'UnsealDocketEntryModal' && <UnsealDocketEntryModal />}

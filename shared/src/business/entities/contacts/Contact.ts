@@ -2,6 +2,8 @@ import {
   CONTACT_TYPES,
   COUNTRY_TYPES,
   CountryTypes,
+  MAX_PREFERRED_COMMUNICATION_METHOD_CHARACTERS,
+  MAX_PREFERRED_LANGUAGE_CHARACTERS,
   SERVICE_INDICATOR_TYPES,
   STATE_NOT_AVAILABLE,
   US_STATES,
@@ -38,6 +40,8 @@ export class Contact extends JoiValidationEntity {
   public additionalName?: string;
   public hasElectronicAccess?: boolean;
   public placeOfLegalResidence?: string;
+  public preferredLanguage?: string;
+  public preferredCommunicationMethod?: string;
 
   constructor(rawContact, contactName: string) {
     super(contactName);
@@ -67,6 +71,9 @@ export class Contact extends JoiValidationEntity {
     this.additionalName = rawContact.additionalName;
     this.hasElectronicAccess = rawContact.hasElectronicAccess ?? undefined;
     this.placeOfLegalResidence = rawContact.placeOfLegalResidence || undefined;
+    this.preferredLanguage = rawContact.preferredLanguage?.trim() || undefined;
+    this.preferredCommunicationMethod =
+      rawContact.preferredCommunicationMethod?.trim() || undefined;
   }
 
   static SHARED_VALIDATION_RULES = {
@@ -127,6 +134,12 @@ export class Contact extends JoiValidationEntity {
       ...Object.values(SERVICE_INDICATOR_TYPES),
     ).optional(),
     title: JoiValidationConstants.STRING.max(100).optional(),
+    preferredLanguage: JoiValidationConstants.STRING.max(
+      MAX_PREFERRED_LANGUAGE_CHARACTERS,
+    ).optional(),
+    preferredCommunicationMethod: JoiValidationConstants.STRING.max(
+      MAX_PREFERRED_COMMUNICATION_METHOD_CHARACTERS,
+    ).optional(),
   } as const;
 
   static DOMESTIC_VALIDATION_RULES = {

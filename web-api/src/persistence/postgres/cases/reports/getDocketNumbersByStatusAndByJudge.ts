@@ -1,4 +1,4 @@
-import { Case } from '@shared/business/entities/cases/Case';
+import { Case, isLeadCase } from '@shared/business/entities/cases/Case';
 import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
 import { getDbReader } from '@web-api/database';
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
@@ -64,7 +64,7 @@ export const getDocketNumbersByStatusAndByJudge = async ({
     results = results.filter(
       caseInfo =>
         !caseInfo.leadDocketNumber ||
-        caseInfo.docketNumber === caseInfo.leadDocketNumber,
+        isLeadCase(caseInfo),
     );
   }
 

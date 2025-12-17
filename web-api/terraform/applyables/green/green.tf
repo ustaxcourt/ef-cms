@@ -20,7 +20,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "6.24.0"
+      version = "6.26.0"
     }
   }
 }
@@ -44,10 +44,6 @@ data "terraform_remote_state" "remote" {
 data "aws_route53_zone" "zone" {
   name         = "${var.zone_name}."
   private_zone = "false"
-}
-
-data "aws_dynamodb_table" "green_dynamo_table" {
-  name = var.green_table_name
 }
 
 resource "terraform_data" "locals" {
@@ -121,7 +117,6 @@ module "api-east-green" {
   lambda_environment = merge(terraform_data.locals.output, {
     CURRENT_COLOR          = "green"
     DEPLOYMENT_TIMESTAMP   = var.deployment_timestamp
-    DYNAMODB_TABLE_NAME    = var.green_table_name
     ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.green_elasticsearch_domain)) > 0 ? data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_beta : data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_alpha
     REGION                 = "us-east-1"
     DISABLE_HTTP_TRAFFIC   = "true"
@@ -134,8 +129,6 @@ module "api-east-green" {
   current_color          = "green"
   lambda_bucket_id       = data.terraform_remote_state.remote.outputs.api_lambdas_bucket_east_id
   create_check_case_cron = 1
-  create_streams         = 1
-  stream_arn             = data.aws_dynamodb_table.green_dynamo_table.stream_arn
   web_acl_arn            = data.terraform_remote_state.remote.outputs.east_web_acl_arn
 
   # lambda to seal cases in lower environment (only deployed to lower environments)
@@ -153,7 +146,6 @@ module "worker-east-green" {
   alert_sns_topic_arn = data.aws_sns_topic.system_health_alarms_east.arn
   lambda_environment = merge(terraform_data.locals.output, {
     CURRENT_COLOR          = "green"
-    DYNAMODB_TABLE_NAME    = var.green_table_name
     ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.green_elasticsearch_domain)) > 0 ? data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_beta : data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_alpha
     REGION                 = "us-east-1"
   })
@@ -170,7 +162,6 @@ module "opensearch-sync-east-green" {
   alert_sns_topic_arn = data.aws_sns_topic.system_health_alarms_east.arn
   lambda_environment = merge(terraform_data.locals.output, {
     CURRENT_COLOR          = "green"
-    DYNAMODB_TABLE_NAME    = var.green_table_name
     ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.green_elasticsearch_domain)) > 0 ? data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_beta : data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_alpha
     REGION                 = "us-east-1"
   })

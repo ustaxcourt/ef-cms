@@ -40,7 +40,7 @@ export const getPractitionersByNameAction = async ({
       practiceType,
       practitionerType:
         practitionerType === ALL_SELECTION ? undefined : practitionerType,
-      searchAfter: lastKeysOfPages[selectedPage],
+      searchAfter: [lastKeysOfPages[selectedPage]],
     });
 
   store.set(

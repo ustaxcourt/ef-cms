@@ -2,28 +2,28 @@ import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { StateSelect } from './StateSelect';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props as cerebralProps } from 'cerebral';
+import { props } from 'cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 import { RunableSequence as RunnableSequence } from 'cerebral';
 
-const props = cerebralProps as unknown as {
+type AddressProps = {
   bind: string;
-  onBlur: (args: Record<string, any>) => void;
-  registerRef: (param: string) => void;
+  onBlur?: Function;
+  registerRef?: Function;
   type: string;
-  onChange: string;
-};
+  onChange: any;
+}
 
-export const Address = connect(
+export const Address: React.FC<AddressProps> = connect(
   {
-    data: state[props.bind],
-    onBlur: props.onBlur,
-    registerRef: props.registerRef,
-    type: props.type,
-    updateFormValueAndSecondaryContactInfoSequence: sequences[props.onChange],
-    updateFormValueSequence: sequences[props.onChange],
+    data: state[props`bind`],
+    onBlur: props`onBlur`,
+    registerRef: props`registerRef`,
+    type: props`type`,
+    updateFormValueAndSecondaryContactInfoSequence: sequences[props`onChange`],
+    updateFormValueSequence: sequences[props`onChange`],
     validationErrors: state.validationErrors,
   },
   function Address({
@@ -37,7 +37,7 @@ export const Address = connect(
   }: {
     data: Record<string, any>;
     onBlur: (args: Record<string, any>) => void;
-    registerRef: (param: string) => void;
+    registerRef: Function;
     type: string;
     updateFormValueAndSecondaryContactInfoSequence: Function | RunnableSequence;
     updateFormValueSequence: Function | RunnableSequence;

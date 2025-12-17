@@ -19,7 +19,7 @@ import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/get
 interface UserCaseDTO {
   caseCaption: string;
   closedDate?: string;
-  createdAt: string;
+  createdAt?: string;
   docketNumber: string;
   docketNumberWithSuffix?: string;
   leadDocketNumber?: string;

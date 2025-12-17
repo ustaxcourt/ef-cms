@@ -251,7 +251,7 @@ export const Header = connect(
     toggleBetaBarSequence,
     toggleMobileMenuSequence,
   }) {
-    const headerRef = useRef(null);
+    const headerRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
       window.document.addEventListener('mousedown', reset, false);
@@ -269,7 +269,7 @@ export const Header = connect(
     };
 
     const reset = e => {
-      const clickedWithinComponent = headerRef.current.contains(e.target);
+      const clickedWithinComponent = headerRef.current?.contains(e.target);
       const clickedOnMenuButton = e.target.closest('.usa-accordion__button');
       const clickedOnSubNav = e.target.closest('.usa-nav__submenu-item');
       if (!clickedWithinComponent) {

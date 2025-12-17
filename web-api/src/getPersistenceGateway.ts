@@ -19,11 +19,9 @@ import { getPractitionersByName } from './persistence/elasticsearch/getPractitio
 import { getReconciliationReport } from './persistence/elasticsearch/getReconciliationReport';
 import { getSesStatus } from './persistence/ses/getSesStatus';
 import { getColdCases } from './persistence/elasticsearch/getColdCases';
-import { getTableStatus } from './persistence/dynamo/getTableStatus';
 import { getUploadPolicy } from './persistence/s3/getUploadPolicy';
 import { getUserByIdOnceAllUpdatesComplete } from '@web-api/persistence/postgres/users/getUserByIdOnceAllUpdatesComplete';
 import { getWebSocketConnectionsByUserId } from '@web-api/persistence/postgres/connections/getWebSocketConnectionsByUserId';
-import { incrementCounter } from './persistence/dynamo/helpers/incrementCounter';
 import { isEmailAvailable } from './persistence/cognito/isEmailAvailable';
 import { isFileExists } from './persistence/s3/isFileExists';
 import { saveDispatchNotification } from '@web-api/persistence/postgres/notifications/saveDispatchNotification';
@@ -77,7 +75,6 @@ const isValidatedDecorator = <T>(persistenceGatewayMethods: T): T => {
 
 const gatewayMethods = {
   ...isValidatedDecorator({
-    incrementCounter,
     saveDispatchNotification,
     saveDocumentFromLambda,
     saveUserConnection,
@@ -109,7 +106,6 @@ const gatewayMethods = {
   getRequestResults,
   getSesStatus,
   getColdCases,
-  getTableStatus,
   getUploadPolicy,
   getUserByIdOnceAllUpdatesComplete,
   getWebSocketConnectionsByUserId,

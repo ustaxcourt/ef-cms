@@ -495,4 +495,38 @@ describe('ContactUpdated', () => {
       });
     });
   });
+
+  describe('optional fields', () => {
+    describe('preferredLanguage', () => {
+      it('should populate preferredLanguage field', () => {
+        const entity = new ContactUpdated(
+          {
+            ...VALID_ENTITY,
+            preferredLanguage: 'Spanish',
+          },
+          CONTACT_NAME,
+          PETITION_TYPE,
+          PARTY_TYPE,
+        );
+
+        expect(entity.preferredLanguage).toEqual('Spanish');
+      });
+    });
+
+    describe('preferredCommunicationMethod', () => {
+      it('should populate preferredCommunicationMethod field', () => {
+        const entity = new ContactUpdated(
+          {
+            ...VALID_ENTITY,
+            preferredCommunicationMethod: 'ASL',
+          },
+          CONTACT_NAME,
+          PETITION_TYPE,
+          PARTY_TYPE,
+        );
+
+        expect(entity.preferredCommunicationMethod).toEqual('ASL');
+      });
+    });
+  });
 });

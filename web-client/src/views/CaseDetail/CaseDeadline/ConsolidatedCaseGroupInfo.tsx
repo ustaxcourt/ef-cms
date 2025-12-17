@@ -1,4 +1,5 @@
 import React from 'react';
+import { isLeadCase } from '@shared/business/entities/cases/Case';
 
 export function ConsolidatedCaseGroupInfo({
   option,
@@ -14,7 +15,7 @@ export function ConsolidatedCaseGroupInfo({
     caseCaption: string;
   }[];
 }) {
-  if (leadDocketNumber && leadDocketNumber !== docketNumber) return;
+  if (docketNumber && leadDocketNumber && !isLeadCase({ docketNumber, leadDocketNumber })) return;
   if (consolidatedCaseDeadlines.length < 2) return;
 
   const TEXT_DICT = {
