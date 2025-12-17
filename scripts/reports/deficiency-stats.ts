@@ -27,7 +27,9 @@ const OUTPUT_FILENAME = `${OUTPUT_DIR}/deficiency-stats_${today}.csv`;
 
 const aggregateDeficiencyAmounts = async (): Promise<
   {
+    openCases: number;
     preferredTrialCity: string;
+    smallCases: number;
     totalOutstandingDeficiency: number;
   }[]
 > => {
@@ -40,6 +42,11 @@ const aggregateDeficiencyAmounts = async (): Promise<
         fn
           .sum<number>(sql<number>`(stats->>'irsDeficiencyAmount')::float`)
           .as('total_outstanding_deficiency'),
+        fn.count('docketNumber').as('open_cases'),
+        fn
+          .count('docketNumber')
+          .filterWhere('procedureType', '=', 'Small')
+          .as('small_cases'),
       ])
       .where('status', 'not in', [
         CASE_STATUS_TYPES.closed,
@@ -51,31 +58,52 @@ const aggregateDeficiencyAmounts = async (): Promise<
       .groupBy('preferredTrialCity')
       .execute(),
   )) as unknown as {
+    openCases: number;
     preferredTrialCity: string;
+    smallCases: number;
     totalOutstandingDeficiency: number;
   }[];
 };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
+  const aggregateResults = await aggregateDeficiencyAmounts();
+  const totalOpenCases = aggregateResults.reduce(
+    (acc, curr) => acc + Number(curr.openCases),
+    0,
+  );
+  const totalSmallCases = aggregateResults.reduce(
+    (acc, curr) => acc + Number(curr.smallCases),
+    0,
+  );
+  const totalOutstandingDeficiency = aggregateResults.reduce(
+    (acc, curr) => acc + Number(curr.totalOutstandingDeficiency),
+    0,
+  );
+
   const columns = [
     { header: 'Preferred Trial Location', key: 'preferredTrialCity' },
+    { header: 'Open Cases', key: 'openCases' },
     {
       header: 'Total Outstanding Deficiency',
       key: 'totalOutstandingDeficiency',
     },
+    {
+      header: 'Percentage of Small Cases',
+      key: 'smallCasesPct',
+    },
   ];
-  const aggregateResults = await aggregateDeficiencyAmounts();
   const rows = [
     ...aggregateResults.map(result => ({
       ...result,
+      smallCasesPct: `${(result.smallCases / result.openCases) * 100}%`,
       totalOutstandingDeficiency: result.totalOutstandingDeficiency.toFixed(2),
     })),
     {
+      openCases: totalOpenCases,
       preferredTrialCity: 'Total',
-      totalOutstandingDeficiency: aggregateResults
-        .reduce((acc, curr) => acc + curr.totalOutstandingDeficiency, 0)
-        .toFixed(2),
+      smallCasesPct: `${(totalSmallCases / totalOpenCases) * 100}%`,
+      totalOutstandingDeficiency: totalOutstandingDeficiency.toFixed(2),
     },
   ];
   generateCsv({ columns, filename: OUTPUT_FILENAME, rows });
