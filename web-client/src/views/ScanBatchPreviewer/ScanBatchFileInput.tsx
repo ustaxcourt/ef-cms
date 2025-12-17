@@ -41,7 +41,11 @@ export const ScanBatchFileInput = connect<
     showFileUploadErrorModalSequence,
     validateSequence,
   }) {
-    const handleFileChange = async (file: File) => {
+    const handleFileChange = async (
+      fileOrEvent: File | React.ChangeEvent<HTMLInputElement>,
+    ) => {
+      const file = fileOrEvent as File;
+
       setIsLoadingSequence();
       try {
         setDocumentForUploadSequence({
