@@ -256,7 +256,7 @@ The decision was made to revert back to 5.8.3 as the migration would require mul
 
 ### Commander override for s3rver
 
-- On 12/16/25 we added an version override for the commander package for s3rver. It was failing to start up the test server with our command after s3rver started using 14.0.2 of commander. We reverted it to the previous working version 12.1.0.
+- On 12/16/25 we added an version override for the commander package for s3rver. It was failing to start up the test server with our command after s3rver started using 14.0.2 of commander. We reverted it to the previous working version 12.1.0. 
 
 ```
 npm run start:s3rver
