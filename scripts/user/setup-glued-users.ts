@@ -234,51 +234,41 @@ const getUsers = async (): Promise<Users> => {
     return result.email?.split('@')[1] !== 'example.com';
   });
 
-  const sanitize = (str: string) => {
-    return str.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9-_]/g, '');
-  };
-
   const users = {};
   for (const user of results as RawUser[]) {
     const emailDomain = user.email!.split('@')[1];
 
-    let count = 1;
-
     const fullName = user.name;
 
-    user.name = sanitize(user.name) + count;
-    while (user.name in users) {
-      user.name = sanitize(fullName) + count;
-      count++;
-    }
+    if (user.email) {
+      if (['judge', 'legacyJudge'].includes(user.role)) {
+        users[user.email] = {
+          email: `${
+            user.judgeTitle!.indexOf('Special Trial') !== -1 ? 'st' : ''
+          }judge.${user.name.toLowerCase()}@example.com`,
+          name: `${user.judgeTitle} ${fullName}`,
+          userFullName: `${fullName}`,
+          role: user.role,
+          section: user.section,
+        };
+      } else {
+        users[user.email] = {
+          email: user.email,
+          name: `${user.role} ${fullName}`,
+          userFullName: `${fullName}`,
+          role: user.role,
+          section: user.section,
+        };
+      }
 
-    if (['judge', 'legacyJudge'].includes(user.role)) {
-      users[user.name] = {
-        email: `${
-          user.judgeTitle!.indexOf('Special Trial') !== -1 ? 'st' : ''
-        }judge.${user.name.toLowerCase()}@example.com`,
-        name: `${user.judgeTitle} ${fullName}`,
-        userFullName: `${fullName}`,
-        role: user.role,
-        section: user.section,
-      };
-    } else {
-      users[user.name] = {
-        email: user.email,
-        name: `${user.role} ${fullName}`,
-        userFullName: `${fullName}`,
-        role: user.role,
-        section: user.section,
-      };
+      let sourceOfUser = emailDomain;
+      if (emailDomain === 'ef-cms.ustaxcourt.gov') {
+        sourceOfUser = 'gluedUserId';
+      } else if (emailDomain === 'dawson.ustaxcourt.gov') {
+        sourceOfUser = 'bulkImportedUserId';
+      }
+      users[user.email][sourceOfUser] = user.userId;
     }
-
-    let sourceOfUser = emailDomain;
-    if (emailDomain === 'ef-cms.ustaxcourt.gov') {
-      sourceOfUser = 'gluedUserId';
-    } else if (emailDomain === 'dawson.ustaxcourt.gov') {
-      sourceOfUser = 'bulkImportedUserId';
-    }
-    users[user.name][sourceOfUser] = user.userId;
   }
   return users;
 };
