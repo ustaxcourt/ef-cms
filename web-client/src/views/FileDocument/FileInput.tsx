@@ -152,6 +152,7 @@ export const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
             <Button
               link
               className={'ustc-button--mobile-inline margin-left-1'}
+              data-testid={`change-file-button-${id}`}
               onClick={handleChangeClick}
             >
               Change
