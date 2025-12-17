@@ -7,11 +7,10 @@ export const userVerifiesUpdatedEmailAddress = (cerebralTest, user: string) =>
     const userFromPersistence = await getUserById({
       userId: userFromState.userId,
     });
-    const emailVerificationToken =
-      userFromPersistence!.pendingEmailVerificationToken;
+    const token = userFromPersistence!.pendingEmailVerificationToken;
 
-    await cerebralTest.runSequence('navigateToPathSequence', {
-      path: `/verify-email?token=${emailVerificationToken}`,
+    await cerebralTest.runSequence('gotoVerifyEmailSequence', {
+      props: { token },
     });
 
     //we need to wait for the async verify-email endpoint to complete.  It can take longer if there are more cases that the petitioner is associated with.  The endpoint doesn't currently (2022-03-22) emit an event when it is done.
