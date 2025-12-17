@@ -21,10 +21,13 @@ export type FileInputProps = {
     messageToDisplay: string;
     messageToLog?: string;
   }) => void;
-  onFileChange: (file: File) => void | Promise<void>;
+  onFileChange?: (
+    fileOrEvent: File | React.ChangeEvent<HTMLInputElement>,
+  ) => void | Promise<void>;
   onRemoveFile?: () => void;
   showFileInfo?: boolean;
   skipFileTypeValidation?: boolean;
+  useExternalValidation?: boolean;
 };
 
 export const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
@@ -42,6 +45,7 @@ export const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
       onRemoveFile,
       skipFileTypeValidation = false,
       showFileInfo = true,
+      useExternalValidation = false,
       file,
       existingFileName,
       ...remainingProps
@@ -60,13 +64,21 @@ export const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
       : selectedFilename;
 
     const handleFileSelectionChange = async (
-      e: React.ChangeEvent<HTMLInputElement>,
+      changeEvent: React.ChangeEvent<HTMLInputElement>,
     ) => {
-      setSelectedFilename(e.target?.files?.[0]?.name || '');
+      setSelectedFilename(changeEvent.target?.files?.[0]?.name || '');
+
+      const selectedFile = changeEvent.target?.files?.[0];
+      if (!selectedFile) return;
+
+      if (useExternalValidation && onFileChange) {
+        await onFileChange(changeEvent);
+        return;
+      }
 
       await validateFileOnSelect({
         allowedFileExtensions: accept.split(',').map(ext => ext.trim()),
-        e,
+        e: changeEvent,
         megabyteLimit: maxFileSizeMB,
         onError: error => {
           setSelectedFilename('');
@@ -76,7 +88,9 @@ export const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
         },
         onSuccess: async ({ selectedFile }) => {
           try {
-            await onFileChange(selectedFile);
+            if (onFileChange) {
+              await onFileChange(selectedFile);
+            }
           } catch (error) {
             setSelectedFilename('');
             if (onError) {
@@ -117,8 +131,8 @@ export const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
           }}
           type="file"
           onChange={handleFileSelectionChange}
-          onClick={e => {
-            if (fileOnForm) e.preventDefault();
+          onClick={clickEvent => {
+            if (fileOnForm) clickEvent.preventDefault();
           }}
         />
 

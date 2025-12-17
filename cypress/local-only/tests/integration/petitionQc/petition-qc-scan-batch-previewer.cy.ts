@@ -48,5 +48,4 @@ describe('PetitionQcScanBatchPreviewer', () => {
       .contains('button', 'Select Scanner')
       .should('be.visible');
   });
-
 });

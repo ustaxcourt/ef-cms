@@ -1,7 +1,10 @@
 import { FileInput } from './FileInput';
 import { cloneFile } from '../FileHandlingHelpers/cloneFile';
 import { connect } from '../../presenter/shared.cerebral';
-import { genericOnValidationErrorHandler } from '../FileHandlingHelpers/fileValidation';
+import {
+  genericOnValidationErrorHandler,
+  validateFileOnSelect,
+} from '../FileHandlingHelpers/fileValidation';
 import { props as cerebralProps } from 'cerebral';
 import { sequences } from '../../presenter/app.cerebral';
 import { state } from '../../presenter/app.cerebral';
@@ -58,55 +61,49 @@ export const StateDrivenFileInput = connect<
     validationSequence,
     ...remainingProps
   }) {
-    const fileOnForm = file || form[fileInputName];
+    const fileOnForm = file || form[fileInputName] || form.existingFileName;
     const { existingFileName } = form;
 
-    const handleFileChange = async (selectedFile: File) => {
+    const onFileSelectionChange = async (
+      fileOrEvent: File | React.ChangeEvent<HTMLInputElement>,
+    ) => {
+      const e = fileOrEvent as React.ChangeEvent<HTMLInputElement>;
       setIsLoadingSequence();
-      try {
-        const clonedFile = await cloneFile(selectedFile);
-        updateFormValueSequence({
-          key: fileInputName,
-          property: 'file',
-          value: clonedFile,
-        });
-        updateFormValueSequence({
-          key: ignoreSizeKey ? fileInputName : `${fileInputName}Size`,
-          property: 'size',
-          value: clonedFile.size,
-        });
-        if (validationSequence) {
-          await validationSequence();
-        }
-        setIsNotLoadingSequence();
-      } catch (error: any) {
-        const errorMessage =
-          error?.message ||
-          error?.toString() ||
-          'Failed to process file. Please try again.';
-        handleError({
-          messageToDisplay: errorMessage,
-          messageToLog: errorMessage,
-        });
-      }
-    };
-
-    const handleError = ({
-      errorType,
-      messageToDisplay,
-      messageToLog,
-    }: {
-      errorType?: any;
-      messageToDisplay: string;
-      messageToLog?: string;
-    }) => {
-      setIsNotLoadingSequence();
-      genericOnValidationErrorHandler({
-        errorType,
-        messageToDisplay,
-        messageToLog,
-        showFileUploadErrorModalSequence,
+      await validateFileOnSelect({
+        allowedFileExtensions: accept.split(','),
+        e,
+        megabyteLimit: constants.MAX_FILE_SIZE_MB,
+        onError: ({ errorType, messageToDisplay, messageToLog }) => {
+          genericOnValidationErrorHandler({
+            errorType,
+            messageToDisplay,
+            messageToLog,
+            showFileUploadErrorModalSequence,
+          });
+        },
+        onSuccess: ({ selectedFile }) => {
+          const { name: inputName } = e.target;
+          cloneFile(selectedFile!)
+            .then(clonedFile => {
+              updateFormValueSequence({
+                key: inputName,
+                property: 'file',
+                value: clonedFile,
+              });
+              updateFormValueSequence({
+                key: ignoreSizeKey ? inputName : `${inputName}Size`,
+                property: 'size',
+                value: clonedFile.size,
+              });
+              return validationSequence ? validationSequence() : null;
+            })
+            .catch(() => {
+              /* no-op */
+            });
+        },
+        skipFileTypeValidation,
       });
+      setIsNotLoadingSequence();
     };
 
     const handleRemoveFile = () => {
@@ -137,10 +134,10 @@ export const StateDrivenFileInput = connect<
         id={id}
         maxFileSizeMB={constants.MAX_FILE_SIZE_MB}
         name={fileInputName}
-        onError={handleError}
-        onFileChange={handleFileChange}
+        onFileChange={onFileSelectionChange}
         onRemoveFile={handleRemoveFile}
         skipFileTypeValidation={skipFileTypeValidation}
+        useExternalValidation={true}
       />
     );
   },
