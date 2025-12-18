@@ -1,22 +1,21 @@
-import { Button } from '../../ustc-ui/Button/Button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FileInput } from './FileInput';
 import { cloneFile } from '../FileHandlingHelpers/cloneFile';
-import { connect } from '@web-client/presenter/shared.cerebral';
+import { connect } from '../../presenter/shared.cerebral';
 import {
   genericOnValidationErrorHandler,
   validateFileOnSelect,
-} from '@web-client/views/FileHandlingHelpers/fileValidation';
+} from '../FileHandlingHelpers/fileValidation';
 import { props as cerebralProps } from 'cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
-import React, { useState } from 'react';
+import { sequences } from '../../presenter/app.cerebral';
+import { state } from '../../presenter/app.cerebral';
+import React from 'react';
 
 type StateDriveFileInputProps = {
   'aria-describedby': string;
   file?: File;
   id: string;
   updateFormValueSequence: string;
-  validationSequence: string;
+  validationSequence?: string;
   name: string;
   accept?: string;
   ignoreSizeKey?: boolean;
@@ -25,7 +24,7 @@ type StateDriveFileInputProps = {
 
 const props = cerebralProps as unknown as {
   updateFormValueSequence: string;
-  validationSequence: string;
+  validationSequence?: string;
 };
 
 const deps = {
@@ -35,7 +34,9 @@ const deps = {
   setIsNotLoadingSequence: sequences.setIsNotLoadingSequence,
   showFileUploadErrorModalSequence: sequences.showFileUploadErrorModalSequence,
   updateFormValueSequence: sequences[props.updateFormValueSequence],
-  validationSequence: sequences[props.validationSequence],
+  validationSequence: props.validationSequence
+    ? sequences[props.validationSequence]
+    : undefined,
 };
 
 export const StateDrivenFileInput = connect<
@@ -55,31 +56,24 @@ export const StateDrivenFileInput = connect<
     setIsLoadingSequence,
     setIsNotLoadingSequence,
     showFileUploadErrorModalSequence,
-    skipFileTypeValidation = false, // skipFileTypeValidation is only here to support PractitionerAddEditDocument "accepting" certain file types but not enforcing that acceptance
+    skipFileTypeValidation = false,
     updateFormValueSequence,
     validationSequence,
     ...remainingProps
   }) {
-    let inputRef;
-
     const fileOnForm = file || form[fileInputName] || form.existingFileName;
-
-    // Setting the filename here so that we can display it before validation
-    // finishes, otherwise a slow machine might have slight lag and allow the user
-    // to "choose file" again.
-    const [selectedFilename, setSelectedFilename] = useState('');
+    const { existingFileName } = form;
 
     const onFileSelectionChange = async (
-      e: React.ChangeEvent<HTMLInputElement>,
+      fileOrEvent: File | React.ChangeEvent<HTMLInputElement>,
     ) => {
-      setSelectedFilename(e.target?.files?.[0]?.name || '');
+      const e = fileOrEvent as React.ChangeEvent<HTMLInputElement>;
       setIsLoadingSequence();
       await validateFileOnSelect({
         allowedFileExtensions: accept.split(','),
         e,
         megabyteLimit: constants.MAX_FILE_SIZE_MB,
         onError: ({ errorType, messageToDisplay, messageToLog }) => {
-          setSelectedFilename('');
           genericOnValidationErrorHandler({
             errorType,
             messageToDisplay,
@@ -112,74 +106,39 @@ export const StateDrivenFileInput = connect<
       setIsNotLoadingSequence();
     };
 
-    return (
-      <React.Fragment>
-        <input
-          {...remainingProps}
-          accept={accept}
-          aria-describedby={ariaDescribedBy}
-          className="usa-input"
-          data-testid={id}
-          id={id}
-          name={fileInputName}
-          ref={ref => {
-            inputRef = ref;
-          }}
-          style={{
-            display: fileOnForm || selectedFilename ? 'none' : 'block',
-          }}
-          type="file"
-          onChange={onFileSelectionChange}
-          onClick={e => {
-            if (fileOnForm) e.preventDefault();
-          }}
-        />
+    const handleRemoveFile = () => {
+      updateFormValueSequence({
+        key: fileInputName,
+        property: 'file',
+        value: null,
+      });
+      updateFormValueSequence({
+        key: 'existingFileName',
+        value: null,
+      });
+      updateFormValueSequence({
+        key: ignoreSizeKey ? fileInputName : `${fileInputName}Size`,
+        property: 'size',
+        value: null,
+      });
+    };
 
-        {(fileOnForm || selectedFilename) && (
-          <div>
-            <span
-              className="success-message icon-upload margin-right-1"
-              data-testid={
-                fileOnForm
-                  ? `upload-file-success-${id}`
-                  : `pending-upload-file-success-${id}`
-              }
-            >
-              <FontAwesomeIcon icon={'check-circle'} size="1x" />
-            </span>
-            <span className="mr-1">
-              {fileOnForm
-                ? fileOnForm.name || form.existingFileName
-                : selectedFilename}
-            </span>
-            <Button
-              link
-              className={'ustc-button--mobile-inline margin-left-1'}
-              onClick={() => {
-                updateFormValueSequence({
-                  key: fileInputName,
-                  property: 'file',
-                  value: null,
-                });
-                updateFormValueSequence({
-                  key: 'existingFileName',
-                  value: null,
-                });
-                updateFormValueSequence({
-                  key: ignoreSizeKey ? fileInputName : `${fileInputName}Size`,
-                  property: 'size',
-                  value: null,
-                });
-                inputRef.value = null;
-                inputRef.click();
-                setSelectedFilename('');
-              }}
-            >
-              Change
-            </Button>
-          </div>
-        )}
-      </React.Fragment>
+    return (
+      <FileInput
+        {...remainingProps}
+        accept={accept}
+        aria-describedby={ariaDescribedBy}
+        data-testid={id}
+        existingFileName={existingFileName}
+        file={fileOnForm}
+        id={id}
+        maxFileSizeMB={constants.MAX_FILE_SIZE_MB}
+        name={fileInputName}
+        onFileChange={onFileSelectionChange}
+        onRemoveFile={handleRemoveFile}
+        skipFileTypeValidation={skipFileTypeValidation}
+        useExternalValidation={true}
+      />
     );
   },
 );
