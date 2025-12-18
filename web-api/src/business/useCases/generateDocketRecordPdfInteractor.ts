@@ -13,6 +13,8 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
 import { sortDocketEntryTable } from '@web-client/presenter/computeds/formattedDocketEntries';
 import { verifyCaseForUser } from '@web-api/persistence/postgres/cases/userOnCase/verifyCaseForUser';
+import { MOTION_DISPOSITION_VERBIAGE } from '@shared/business/entities/EntityConstants';
+import { concat } from 'lodash';
 
 export const generateDocketRecordPdfInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -80,10 +82,49 @@ export const generateDocketRecordPdfInteractor = async (
     });
 
   formattedCaseDetail.formattedDocketEntries =
-    formattedCaseDetail.formattedDocketEntries.map(docketEntry => ({
-      ...docketEntry,
-      numberOfPages: docketEntry.numberOfPages || 0,
-    }));
+    formattedCaseDetail.formattedDocketEntries.map(docketEntry => {
+      const formattedDocketEntry = {
+        ...docketEntry,
+        numberOfPages: docketEntry.numberOfPages || 0,
+      };
+
+      formattedDocketEntry.relatedDocketEntries = [];
+      if (docketEntry.affectedByDocketEntries) {
+        formattedDocketEntry.relatedDocketEntries = concat(
+          formattedDocketEntry.relatedDocketEntries,
+          docketEntry.affectedByDocketEntries.map(affectedEntry => {
+            const relatedEntry = caseEntity.docketEntries.find(
+              entry => entry.docketEntryId === affectedEntry.docketEntryId,
+            );
+
+            affectedEntry.docketEntryIndex = relatedEntry?.index;
+            affectedEntry.disposition =
+              MOTION_DISPOSITION_VERBIAGE[affectedEntry.disposition].MOTION;
+
+            return affectedEntry;
+          }),
+        );
+      }
+
+      if (docketEntry.affectedDocketEntries) {
+        formattedDocketEntry.relatedDocketEntries = concat(
+          formattedDocketEntry.relatedDocketEntries,
+          docketEntry.affectedDocketEntries.map(affectedEntry => {
+            const relatedEntry = caseEntity.docketEntries.find(
+              entry => entry.docketEntryId === affectedEntry.docketEntryId,
+            );
+
+            affectedEntry.docketEntryIndex = relatedEntry?.index;
+            affectedEntry.disposition =
+              MOTION_DISPOSITION_VERBIAGE[affectedEntry.disposition].ORDER;
+
+            return affectedEntry;
+          }),
+        );
+      }
+
+      return formattedDocketEntry;
+    });
 
   const sortedDocketEntries = sortDocketEntryTable(
     formattedCaseDetail.formattedDocketEntries,

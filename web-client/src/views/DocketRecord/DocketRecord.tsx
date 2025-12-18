@@ -190,7 +190,6 @@ export const DocketRecord = connect(
                         data-testid={entry.docketEntryId}
                         key={entry.docketEntryId}
                       >
-                        {' '}
                         {docketRecordHelper.showBatchDownloadControls && (
                           <td>
                             {entry.isSelectableForDownload && (

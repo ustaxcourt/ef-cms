@@ -179,8 +179,6 @@ export const getFormattedDocketEntry = ({
             visibilityPolicyDateFormatted,
           );
 
-        console.log(JSON.stringify(affectedEntry));
-
         affectedEntry.docketEntryIndex = index;
         affectedEntry.showDocumentViewerLink = showDocumentViewerLink;
         affectedEntry.showDownloadLink = showDownloadLink;
