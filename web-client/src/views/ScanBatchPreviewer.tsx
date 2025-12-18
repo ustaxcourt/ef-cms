@@ -19,7 +19,7 @@ import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
 
 export type ScanBatchPreviewerProps = {
-  documentTabs: Record<string, any>[];
+  documentTabs?: Record<string, any>[];
   documentType: string | null;
   title: string;
   validateSequence?: Function;
@@ -30,6 +30,29 @@ export type ScanBatchPreviewerProps = {
 };
 
 const props = cerebralProps as unknown as ScanBatchPreviewerProps;
+
+type ScanSelectModalProps = {
+  showModal: string;
+};
+
+const ScanSelectModal: React.FC<ScanSelectModalProps> = ({ showModal }) => {
+  switch (showModal) {
+    case 'ConfirmRescanBatchModal':
+      return <ConfirmRescanBatchModal />;
+    case 'ConfirmDeleteBatchModal':
+      return <DeleteBatchModal />;
+    case 'UnfinishedScansModal':
+      return <UnfinishedScansModal />;
+    case 'EmptyHopperModal':
+      return <EmptyHopperModal />;
+    case 'ScanErrorModal':
+      return <ScanErrorModal />;
+    case 'SelectScannerSourceModal':
+      return <SelectScannerSourceModal />;
+    default:
+      return null;
+  }
+};
 
 const scanBatchPreviewerDeps = {
   deletePdfSequence: props.deletePdfSequence
@@ -121,22 +144,7 @@ export const ScanBatchPreviewer = connect<
 
     return (
       <>
-        {showModal === 'ConfirmRescanBatchModal' && (
-          <ConfirmRescanBatchModal />
-        )}
-        {showModal === 'ConfirmDeleteBatchModal' && (
-          <DeleteBatchModal />
-        )}
-
-        {showModal === 'UnfinishedScansModal' && <UnfinishedScansModal />}
-
-        {showModal === 'EmptyHopperModal' && <EmptyHopperModal />}
-
-        {showModal === 'ScanErrorModal' && <ScanErrorModal />}
-
-        {showModal === 'SelectScannerSourceModal' && (
-          <SelectScannerSourceModal />
-        )}
+        <ScanSelectModal showModal={showModal} />
 
         <ScannerAreaHeader
           onOpenChangeScannerSource={openChangeScannerSourceModalSequence}
