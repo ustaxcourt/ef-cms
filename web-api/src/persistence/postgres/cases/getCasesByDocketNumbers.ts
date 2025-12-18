@@ -15,7 +15,7 @@ import { fromKyselyTrialSession } from '@web-api/persistence/postgres/trialSessi
 import { UserKysely } from '../users/schema';
 import { fromKyselyUser } from '../users/mapper';
 import { UserOnCaseKysely } from '@web-api/persistence/postgres/cases/userOnCase/schema';
-import { sql } from 'kysely';
+import { docketEntriesBaseQuery } from '@web-api/persistence/postgres/docketEntries/commonQueries';
 
 export const ALL_OMITTABLE_CASE_FIELDS = [
   'docketEntries',
@@ -283,77 +283,9 @@ async function getIrsPractitioners({
 }
 
 async function getDocketEntries(docketNumbers: string[]) {
-  const dbDocketEntries = await getDbReader(reader =>
-    reader
-      .with('affectedDocketEntries', db =>
-        db
-          .selectFrom('dwDocketEntryRelatedDocketEntry')
-          .where('served', 'is', true)
-          .select(['primaryDocketEntryId as docketEntryId', 'docketNumber'])
-          .select(fn =>
-            fn.fn
-              .jsonAgg(
-                fn.fn<{ docketEntryId: string; disposition: string }>(
-                  'json_build_object',
-                  [
-                    sql.lit('docketEntryId'),
-                    'secondaryDocketEntryId',
-                    sql.lit('disposition'),
-                    'disposition',
-                  ],
-                ),
-              )
-              .as('affectedDocketEntries'),
-          )
-          .groupBy(['primaryDocketEntryId', 'docketNumber']),
-      )
-      .with('affectedByDocketEntries', db =>
-        db
-          .selectFrom('dwDocketEntryRelatedDocketEntry')
-          .where('served', 'is', true)
-          .select(['secondaryDocketEntryId as docketEntryId', 'docketNumber'])
-          .select(fn =>
-            fn.fn
-              .jsonAgg(
-                fn.fn<{ docketEntryId: string; disposition: string }>(
-                  'json_build_object',
-                  [
-                    sql.lit('docketEntryId'),
-                    'primaryDocketEntryId',
-                    sql.lit('disposition'),
-                    'disposition',
-                  ],
-                ),
-              )
-              .as('affectedByDocketEntries'),
-          )
-          .groupBy(['secondaryDocketEntryId', 'docketNumber']),
-      )
-      .selectFrom('dwDocketEntry as de')
-      .where('de.docketNumber', 'in', docketNumbers)
-      .leftJoin('affectedDocketEntries', join =>
-        join
-          .onRef('affectedDocketEntries.docketEntryId', '=', 'de.docketEntryId')
-          .onRef('affectedDocketEntries.docketNumber', '=', 'de.docketNumber'),
-      )
-      .leftJoin('affectedByDocketEntries', join =>
-        join
-          .onRef(
-            'affectedByDocketEntries.docketEntryId',
-            '=',
-            'de.docketEntryId',
-          )
-          .onRef(
-            'affectedByDocketEntries.docketNumber',
-            '=',
-            'de.docketNumber',
-          ),
-      )
-      .selectAll('de')
-      .select('affectedDocketEntries.affectedDocketEntries')
-      .select('affectedByDocketEntries.affectedByDocketEntries')
-      .execute(),
-  );
+  const dbDocketEntries = await (await docketEntriesBaseQuery)
+    .where('de.docketNumber', 'in', docketNumbers)
+    .execute();
 
   return dbDocketEntries;
 }
@@ -372,77 +304,9 @@ async function getCasesMetadata(docketNumbers: string[]) {
 export async function getDocketEntriesOnCases(
   docketNumbers: string[],
 ): Promise<DocketEntryKysely[]> {
-  return getDbReader(reader =>
-    reader
-      .with('affectedDocketEntries', db =>
-        db
-          .selectFrom('dwDocketEntryRelatedDocketEntry')
-          .where('served', 'is', true)
-          .select(['primaryDocketEntryId as docketEntryId', 'docketNumber'])
-          .select(fn =>
-            fn.fn
-              .jsonAgg(
-                fn.fn<{ docketEntryId: string; disposition: string }>(
-                  'json_build_object',
-                  [
-                    sql.lit('docketEntryId'),
-                    'secondaryDocketEntryId',
-                    sql.lit('disposition'),
-                    'disposition',
-                  ],
-                ),
-              )
-              .as('affectedDocketEntries'),
-          )
-          .groupBy(['primaryDocketEntryId', 'docketNumber']),
-      )
-      .with('affectedByDocketEntries', db =>
-        db
-          .selectFrom('dwDocketEntryRelatedDocketEntry')
-          .where('served', 'is', true)
-          .select(['secondaryDocketEntryId as docketEntryId', 'docketNumber'])
-          .select(fn =>
-            fn.fn
-              .jsonAgg(
-                fn.fn<{ docketEntryId: string; disposition: string }>(
-                  'json_build_object',
-                  [
-                    sql.lit('docketEntryId'),
-                    'primaryDocketEntryId',
-                    sql.lit('disposition'),
-                    'disposition',
-                  ],
-                ),
-              )
-              .as('affectedByDocketEntries'),
-          )
-          .groupBy(['secondaryDocketEntryId', 'docketNumber']),
-      )
-      .selectFrom('dwDocketEntry as de')
-      .where('docketNumber', 'in', docketNumbers)
-      .leftJoin('affectedDocketEntries', join =>
-        join
-          .onRef('affectedDocketEntries.docketEntryId', '=', 'de.docketEntryId')
-          .onRef('affectedDocketEntries.docketNumber', '=', 'de.docketNumber'),
-      )
-      .leftJoin('affectedByDocketEntries', join =>
-        join
-          .onRef(
-            'affectedByDocketEntries.docketEntryId',
-            '=',
-            'de.docketEntryId',
-          )
-          .onRef(
-            'affectedByDocketEntries.docketNumber',
-            '=',
-            'de.docketNumber',
-          ),
-      )
-      .selectAll('de')
-      .select('affectedDocketEntries.affectedDocketEntries')
-      .select('affectedByDocketEntries.affectedByDocketEntries')
-      .execute(),
-  );
+  return (await docketEntriesBaseQuery)
+    .where('docketNumber', 'in', docketNumbers)
+    .execute();
 }
 
 async function getCaseCorrespondenceByDocketNumber(docketNumbers: string[]) {
