@@ -69,6 +69,7 @@ const renderTabFactory = ({ activeKey, asSwitch, boxed, setTab }) =>
 export function Tab(properties: {
   children?: React.ReactNode;
   className?: string;
+  'data-testid'?: string;
   disabled?: boolean;
   icon?: React.JSX.Element;
   id?: string;
