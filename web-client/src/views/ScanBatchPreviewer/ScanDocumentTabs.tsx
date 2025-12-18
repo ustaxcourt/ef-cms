@@ -41,7 +41,7 @@ export const ScanDocumentTabs = ({
               const fileUploaded = isFileUploaded(documentTab.eventCode);
               return (
                 <Tab
-                  data-testid={documentTab.tabTitle}
+                  data-testid={`tabButton-${documentTab.documentType}`}
                   icon={
                     fileUploaded ? (
                       <>
