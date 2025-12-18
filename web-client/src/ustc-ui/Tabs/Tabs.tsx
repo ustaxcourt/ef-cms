@@ -5,11 +5,15 @@ import {
   useCerebralStateFactory,
 } from '../Utils/useCerebralState';
 import { getDefaultAttribute, map } from '../Utils/ElementChildren';
-import { props } from 'cerebral';
+import { props as cerebralProps } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { ReactNode, useState } from 'react';
 import classNames from 'classnames';
+
+const props = cerebralProps as unknown as {
+  bind: string;
+};
 
 const renderTabFactory = ({ activeKey, asSwitch, boxed, setTab }) =>
   function TabComponent(child) {
