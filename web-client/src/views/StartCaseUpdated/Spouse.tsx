@@ -74,6 +74,7 @@ export function Spouse({
           handleBlur={petitionGenerationLiveValidationSequence}
           handleChange={updateFormValueUpdatedSequence}
           handleChangeCountryType={updateFormValueCountryTypeSequence}
+          isPetitioner={isPetitioner}
           nameLabel={
             isPetitioner
               ? 'Full name of spouse'
@@ -81,6 +82,7 @@ export function Spouse({
           }
           registerRef={registerRef}
           showElectronicServiceConsent={isPetitioner}
+          showLanguageFields={true}
           showSameAsPrimaryCheckbox={true}
           useSameAsPrimary={useSameAsPrimary}
         />
