@@ -9,7 +9,7 @@ export const getDocketEntriesByDocketNumberAndDocketEntryId = async ({
     docketEntryId: string;
   }[];
 }): Promise<RawDocketEntry[]> => {
-  const dbDocketEntries = await (await docketEntriesBaseQuery)
+  const dbDocketEntries = await (await docketEntriesBaseQuery())
     .where(qb =>
       qb.or(
         docketNumbersAndIds.map(pair =>
