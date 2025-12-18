@@ -68,11 +68,11 @@ To update Node.js:
    - `./web-api/runtimes/puppeteer/Dockerfile`
 1. Manually update the Node.js version in:
    - `./.circleci/config.yml`
-1. Manually update DAWSON's GitHub Actions YAML files.
-   - **Note:** These files will point to `.nvmrc` in a future update.
 1. Update the node version used by our lambdas.
    - `web-api/terraform/modules/lambda/lambda.tf`
    - `web-api/terraform/modules/api/layers.tf`
+1. Update the `CHANGES.md` file with instructions for installing this NodeJS version locally. See [df83cf3](https://github.com/ustaxcourt/ef-cms/commit/df83cf3db69f2c6149cbef3ae213db488822cc2b) for an example.
+
 
 #### 2.2 Update `Dockerfile` as needed
 
@@ -109,6 +109,7 @@ If the `Dockerfile` has changed, you will need to build a new docker image and p
 1. If you run into any errors similar to 'At least one invalid signature was encountered', try running  `docker builder prune` or `docker system prune` on your local machine. https://stackoverflow.com/questions/62473932/at-least-one-invalid-signature-was-encountered
 
    > Refer to [ci-cd.md](ci-cd.md#docker) for more info on this as needed
+1. Update the `CHANGES.md` file with instructions for deploying this new docker image to other environments. Be sure to indicate the experimental environment to which you just deployed the image. See [df83cf3](https://github.com/ustaxcourt/ef-cms/commit/df83cf3db69f2c6149cbef3ae213db488822cc2b) for an example.
 
 ### 3. Update Terraform AWS provider
 
@@ -130,11 +131,15 @@ Check if there is an update to the Terraform OpenSearch provider and update our 
 
 ### 5. Update OpenSearch
 
-Check to see if there is an updated version of OpenSearch available. If an update is available, we'll need to update OpenSearch locally, in github actions, and in deployed environments.
+Check to see if there is an updated version of OpenSearch available. If an update is available, we'll need to update OpenSearch locally, in github actions, and in deployed environments. 
 
 1. Use the [environment switcher](./additional-resources/environment-switcher.md) to point to an experimental environment and to retrieve a fresh AWS access key:
    ```bash
    . scripts/env/set-env.zsh expN
+   ```
+1. Determine the current OpenSearch engine version in this environment:
+   ```bash
+   aws opensearch describe-domain --domain-name "efcms-search-${ENV}-${SOURCE_TABLE_VERSION}" --query "DomainStatus.EngineVersion" --output text
    ```
 1. Use the AWS CLI to list the available versions of OpenSearch:
    ```bash
@@ -142,6 +147,8 @@ Check to see if there is an updated version of OpenSearch available. If an updat
    ```
 
 #### 5.1 Update OpenSearch to the latest version in a deployed environment
+
+If an OpenSearch update is available, we'll need to update OpenSearch in deployed environments.
 
 1. Run the OpenSearch indices report and note the indices and aliases in this deployed environment:
    ```bash
@@ -151,16 +158,6 @@ Check to see if there is an updated version of OpenSearch available. If an updat
    ```bash
    scripts/secrets/update-secret.ts --key "ES_ENGINE_VERSION" --value "OpenSearch_99.9"
    ```
-1. Set the value of the `ES_LOGS_ENGINE_VERSION` secret in the `account_deploy` secrets in Secrets Manager:
-   ```bash
-   ENV=account scripts/secrets/update-secret.ts --key "ES_LOGS_ENGINE_VERSION" --value "OpenSearch_99.9"
-   ```
-1. Run an account-specific terraform deployment:
-   ```bash
-   npm run deploy:account-specific
-   ```
-1. While the upgrade is being performed, verify that the running cluster is still functional by performing queries in kibana.
-1. After the upgrade is complete, verify that the same data you retrieved in the previous step is still available in kibana.
 1. Run a deployment to the experimental environment.
 1. While the OpenSearch upgrade is being performed (during the `allColors` terraform deployment), verify cluster is still functional by running search smoketests against current color:
    ```bash
@@ -170,9 +167,12 @@ Check to see if there is an updated version of OpenSearch available. If an updat
    ```bash
    scripts/reports/indices.ts
    ```
-1. Describe the required manual steps in the dependency updates pull request. See [PR #9189](https://github.com/ustaxcourt/ef-cms/pull/9189) for an example.
+1. Describe the required manual steps in the dependency updates pull request. Be sure to indicate that `test` and `prod` will also need an `account-specific` deployment to update their `info` clusters' OpenSearch engine version as well. See [PR #9427](https://github.com/ustaxcourt/ef-cms/pull/9189) for an example.
+1. Describe the same manual steps in the `CHANGES.md` file. See [c702a02](https://github.com/ustaxcourt/ef-cms/commit/c702a02cd267d0325884febc739c04ceb6b0e0d2) for an example.
 
 #### 5.2 Update OpenSearch to the latest version locally
+
+If an OpenSearch update is available, we'll need to update OpenSearch locally.
 
 1. Set the value of the `image` property in `web-api/elasticsearch/docker-compose.yml` to correspond to the new version number.
 1. Run the api locally to verify:
@@ -181,6 +181,8 @@ Check to see if there is an updated version of OpenSearch available. If an updat
    ```
 
 #### 5.3 Update OpenSearch to the latest version in github actions
+
+If an OpenSearch update is available, we'll need to update OpenSearch in github actions.
 
 1. Search the project for `opensearch-version:` and make sure it's set to the latest version. For example, some of the files in the `.github/workflows` directory will need to be updated.
 
@@ -194,15 +196,22 @@ Check to see if there is an updated version of OpenSearch available. If an updat
 
 ### cerebral and @cerebral/react
 
-- New versions of cerebral (5.2.1 to 5.2.4) and @cerebral/react (4.2.1 to 4.2.2) were released on February 27, 2025. These upgrades are the first since spring 2020. The new versions do not work with the import syntax used in `web-client/src/presenter/test.cerebral.ts` for `runAction` and `runCompute`, so keep these pinned to 5.2.1 and "github:ustaxcourt/cerebral-react#main" respectively for the time being.
+- New versions of cerebral (5.2.1 to 5.2.4) and @cerebral/react (4.2.1 to 4.2.2) were released on February 27, 2025. These upgrades are the first since spring 2020. The new versions do not work with the import syntax used in `web-client/src/presenter/test.cerebral.ts` for `runAction` and `runCompute`, so keep these pinned to 5.2.1 and "github:ustaxcourt/cerebral-react#main" respectively for the time being. 
+- Will eventually need to decide to maintain our forked version `github:ustaxcourt/cerebral-react#main` or switch back to original repo now that it is started to be maintained again
 
 ## Caveats
 
 Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Try to update these items but please be aware of the issue that's documented and ensure it's been resolved.
 
+### pdfjs-dist
+
+- As of [this release](https://github.com/mozilla/pdf.js/releases/tag/v5.1.91), and I think [this PR](https://github.com/mozilla/pdf.js/pull/19689), pdfjs seems to expect certain browser-side API functionality when loaded. This causes issues with our Cypress tests. The best way to fix this is worth investigating further. Perhaps we could polyfill, or even consider creating an issue in the pdfjs repo.
+- Look at `shared/src/business/utilities/pdfs/getPdfJs.ts`
+
 ### DWT
 
 - Minor versions of DWT _should_ be updated, but require that Court IT update the Windows clients in concert with our app. Do not update without coordinating.
+- Stay at DWT v19.2.0, wait until January to update to 19.3.0
 
 ### puppeteer and @sparticuz/chromium
 
@@ -221,10 +230,6 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 - Quill released version 2 in April 2024. It includes substantial changes. Because the focus is currently on Postgres, we have left it at a previous version.
 
-### pdfjs-dist
-
-- As of [this release](https://github.com/mozilla/pdf.js/releases/tag/v5.1.91), and I think [this PR](https://github.com/mozilla/pdf.js/pull/19689), pdfjs seems to expect certain browser-side API functionality when loaded. This causes issues with our Cypress tests. The best way to fix this is worth investigating further. Perhaps we could polyfill, or even consider creating an issue in the pdfjs repo.
-
 ### babel-jest, babel-core
 Tried to update to 30.0.0-beta.3 from 29.7.0 on Friday, June 06, 2025, we weren't able to update it because it conflicts with ts-jest 29.3.4.
 On June 26 2025, newer versions of babel-core and jest core also started to cause issues with ts-jest. Once ts-jest is updated these issues should all clear up.
@@ -233,9 +238,9 @@ On June 26 2025, newer versions of babel-core and jest core also started to caus
 - On September 19th, 2025, babel/core was successfully updated to 7.28..4 from 7.28.3, had some issues with Github Actions checks running all the way through, but Github still gave the commit a check. Refer to this PR for more info. https://github.com/ustaxcourt/ef-cms/pull/9164
 
 ### @types/node
-The major version of this package should match our major version of node. At the moment that we are using node v22.20.0 so we should use a package that starts with 22.
+The major version of this package should match our major version of Node. At the moment that we are using Node v24.11.1 so we should use a package that starts with 24.
 
-- On October 27th, 2025, successfully updated @types/node to 22.18.12 to match Node.js v22.20.0.
+- [Dependencies 12 01 2025](https://github.com/ustaxcourt/ef-cms/pull/9465/files), Node.js was updated to v24.11.1, successfully updated @types/node to 24.10.2 to match Node.js v24.11.1
 
 ### TypeScript
 We cannot update TypeScript version beyond v5.8.3 until ts-jest supports it
@@ -250,26 +255,14 @@ We cannot update TypeScript version beyond v5.8.3 until ts-jest supports it
 The decision was made to revert back to 5.8.3 as the migration would require multiple days of dedicated work.
 - On November 19th, 2025, updated to typescript 5.9.3 and as a result resolved many of the typing issues involved in pdf buffers, applicationContext between client, shared, and api.
 
-### p-queue
-Upgrading `p-queue` past version 6 will cause issues related to module imports.
+### Commander override for s3rver
 
-- On September 19th, 2025, tried to updAte to 8.1.1. Errors were thrown on Github Action checks to address imports. A potential fix could be to update our build configuration to properly handle ES modules or maybe use dynamic imports as a workaround? Refer to this PR. https://github.com/ustaxcourt/ef-cms/pull/9164
+- On 12/16/25 we added an version override for the commander package for s3rver. It was failing to start up the test server with our command after s3rver started using 14.0.2 of commander. We reverted it to the previous working version 12.1.0. 
 
-### uuid
-9/17/25 keeping it 11.1.0. The next version 12.0.0 and above no longer supports CommonJS
-
-https://www.npmjs.com/package/uuid?activeTab=readme
-
-Quote from site:
-
-"Starting with uuid@12 CommonJS is no longer supported. See implications and motivation for details."
-
-- On October 27th, 2025, added `uuid` to the caveats list in `scripts/npm/upgrade-npm-packages.ts` to prevent automatic upgrades to v12+ during future
-- On November 18th, 2025, ugpraded `uuid` to 13.0.0, edited the jest config to ignore patterns for uuid
-
-### sass
-11/26/2025 ran into issues trying to update this package. Error: Upgrading sass to version 1.94.2 npm error code ERR_INVALID_ARG_TYPE.
-Solution was removing node_modules and package-lock.json and updating the version manually in package-lock.json and then reinstalling dependencies and running the upgrade script
+```
+npm run start:s3rver
+error: too many arguments. Expected 0 arguments but got 2.
+```
 
 ## Troubleshooting
 
