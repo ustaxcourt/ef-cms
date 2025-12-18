@@ -101,7 +101,6 @@ const router = {
       setPageTitle('Verify Email');
       const { token } = route.query();
 
-      console.log('Token Grabbed from URL!: ', token);
       return app.getSequence('gotoVerifyEmailSequence')({
         token,
       });
