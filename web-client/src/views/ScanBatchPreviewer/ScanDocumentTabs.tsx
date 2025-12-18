@@ -37,31 +37,31 @@ export const ScanDocumentTabs = ({
       className="document-select container-tabs margin-top-neg-205 margin-x-neg-205"
       onSelect={onSelect}
     >
-            {documentTabs.map((documentTab: any) => {
-              const fileUploaded = isFileUploaded(documentTab.eventCode);
-              const dataTestId = documentTab.documentType.includes(' ')
-                ? documentTab.documentType
-                : `tabButton-${documentTab.documentType}`;
-              return (
-                <Tab
-                  data-testid={dataTestId}
-                  icon={
-                    fileUploaded ? (
-                      <>
-                        <FontAwesomeIcon
-                          color="green"
-                          data-testid={`icon-${documentTab.documentType}`}
-                          icon={['fas', 'check-circle']}
-                        />
-                      </>
-                    ) : undefined
-                  }
-                  key={`tabButton-${documentTab.documentType}`}
-                  tabName={documentTab.documentType}
-                  title={documentTab.tabTitle}
-                />
-              );
-            })}
+      {documentTabs.map((documentTab: any) => {
+        const fileUploaded = isFileUploaded(documentTab.eventCode);
+        const dataTestId = documentTab.documentType.includes(' ')
+          ? documentTab.documentType
+          : `tabButton-${documentTab.documentType}`;
+        return (
+          <Tab
+            data-testid={dataTestId}
+            icon={
+              fileUploaded ? (
+                <>
+                  <FontAwesomeIcon
+                    color="green"
+                    data-testid={`icon-${documentTab.documentType}`}
+                    icon={['fas', 'check-circle']}
+                  />
+                </>
+              ) : undefined
+            }
+            key={`tabButton-${documentTab.documentType}`}
+            tabName={documentTab.documentType}
+            title={documentTab.tabTitle}
+          />
+        );
+      })}
     </Tabs>
   );
 };
