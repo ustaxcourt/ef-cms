@@ -13,13 +13,21 @@ export const petitionsClerkDeletesMultipleScannedBatches = (
     expect(batches).toHaveLength(numBatches);
 
     for (let i = 0; i < numBatches; i++) {
+      const currentBatches = cerebralTest.getState(
+        `scanner.batches.${selectedDocumentType}`,
+      );
+      const firstBatchIndex = currentBatches[0]?.index;
+
       await cerebralTest.runSequence('openConfirmDeleteBatchModalSequence', {
-        batchIndexToDelete: 0,
+        batchIndexToDelete: firstBatchIndex,
       });
 
       await cerebralTest.runSequence('removeBatchSequence');
     }
 
-    expect(batches).toHaveLength(0);
+    const finalBatches = cerebralTest.getState(
+      `scanner.batches.${selectedDocumentType}`,
+    );
+    expect(finalBatches).toHaveLength(0);
   });
 };

@@ -40,12 +40,6 @@ jobs:
         uses: ankane/setup-opensearch@v1
         with:
           opensearch-version: 3.3.0
-      - name: Setup DynamoDB Local
-        uses: codyseibert/dynamodb-action@v4.1.0
-        with:
-          port: 8000
-          cors: '*'
-          version: '2.6.1'
       - name: Collect Workflow Telemetry
         uses: runforesight/workflow-telemetry-action@v2
         with:

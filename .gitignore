@@ -1,6 +1,5 @@
 .cache/
 .DS_Store
-.dynamodb/
 .elasticsearch/
 .idea/
 .nova/
