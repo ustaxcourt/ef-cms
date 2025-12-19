@@ -1,10 +1,10 @@
-import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
+import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FileInput } from '../FileDocument/FileInput';
-import { connect } from '../../presenter/shared.cerebral';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { genericOnValidationErrorHandler } from '@web-client/views/FileHandlingHelpers/fileValidation';
 import { props as cerebralProps } from 'cerebral';
-import { sequences, state } from '../../presenter/app.cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 const props = cerebralProps as unknown as {

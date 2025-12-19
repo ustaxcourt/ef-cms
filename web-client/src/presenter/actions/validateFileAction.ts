@@ -1,4 +1,4 @@
-import { validateFile, ErrorTypes } from '../../views/FileHandlingHelpers/fileValidation';
+import { validateFile, ErrorTypes } from '@web-client/views/FileHandlingHelpers/fileValidation';
 
 /**
  * Validates a file for size, type, and PDF integrity

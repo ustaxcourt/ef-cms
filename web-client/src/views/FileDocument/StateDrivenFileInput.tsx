@@ -1,13 +1,13 @@
 import { FileInput } from './FileInput';
 import { cloneFile } from '../FileHandlingHelpers/cloneFile';
-import { connect } from '../../presenter/shared.cerebral';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import {
   genericOnValidationErrorHandler,
   validateFileOnSelect,
 } from '../FileHandlingHelpers/fileValidation';
 import { props as cerebralProps } from 'cerebral';
-import { sequences } from '../../presenter/app.cerebral';
-import { state } from '../../presenter/app.cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 type StateDriveFileInputProps = {

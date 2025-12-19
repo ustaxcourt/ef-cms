@@ -1,4 +1,4 @@
-import { Button } from '../../ustc-ui/Button/Button';
+import { Button } from '@web-client/ustc-ui/Button/Button';
 import React from 'react';
 
 type ScannerAreaHeaderProps = {

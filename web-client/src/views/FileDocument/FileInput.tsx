@@ -1,5 +1,5 @@
 import React, { useState, useRef, useImperativeHandle } from 'react';
-import { Button } from '../../ustc-ui/Button/Button';
+import { Button } from '@web-client/ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   validateFileOnSelect,
