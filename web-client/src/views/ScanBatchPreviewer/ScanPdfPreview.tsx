@@ -1,7 +1,7 @@
-import { Button } from '../../ustc-ui/Button/Button';
+import { Button } from '@web-client/ustc-ui/Button/Button';
 import { ConfirmDeletePDFModal } from '../ConfirmDeletePdfModal';
 import { ConfirmReplacePetitionModal } from '../ConfirmReplacePetitionModal';
-import { PdfPreview } from '../../ustc-ui/PdfPreview/PdfPreview';
+import { PdfPreview } from '@web-client/ustc-ui/PdfPreview/PdfPreview';
 import React from 'react';
 
 type ScanPdfPreviewProps = {

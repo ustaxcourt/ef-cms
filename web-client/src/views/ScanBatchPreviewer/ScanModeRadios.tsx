@@ -1,6 +1,6 @@
-import { Button } from '../../ustc-ui/Button/Button';
+import { Button } from '@web-client/ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
+import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { ScanUploadMode } from './ScanUploadMode';
 import React from 'react';
 import classNames from 'classnames';

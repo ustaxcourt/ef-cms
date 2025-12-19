@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
+import { Tab, Tabs } from '@web-client/ustc-ui/Tabs/Tabs';
 import React from 'react';
 
 export type DocumentTab = {

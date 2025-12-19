@@ -1,11 +1,10 @@
-import { TROUBLESHOOTING_INFO } from '@shared/business/entities/EntityConstants';
-import { logErrorAction } from '../actions/logErrorAction';
-import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
-import { setErrorModalTroubleshootingStepsAction } from '../actions/setErrorModalTroubleshootingStepsAction';
-import { setModalMessageAction } from '../actions/setModalMessageAction';
-import { setModalTitleAction } from '../actions/setModalTitleAction';
-import { validateFileAction } from '../actions/validateFileAction';
-import { ErrorTypes } from '../../views/FileHandlingHelpers/fileValidation';
+import { logErrorAction } from '@web-client/presenter/actions/logErrorAction';
+import { openFileUploadErrorModal } from '@web-client/presenter/actions/openFileUploadErrorModal';
+import { fileUploadErrorAction } from '@web-client/presenter/actions/fileUploadErrorAction';
+import { setErrorModalTroubleshootingStepsAction } from '@web-client/presenter/actions/setErrorModalTroubleshootingStepsAction';
+import { setModalMessageAction } from '@web-client/presenter/actions/setModalMessageAction';
+import { setModalTitleAction } from '@web-client/presenter/actions/setModalTitleAction';
+import { validateFileAction } from '@web-client/presenter/actions/validateFileAction';
 
 /**
  * Sequence to validate a file and show error modal if validation fails
@@ -14,24 +13,7 @@ export const validateFileSequence = [
   validateFileAction,
   {
     invalid: [
-      ({ props }: ActionProps) => {
-        const { errorInformation } = props;
-        const errorType = errorInformation?.errorType;
-        return {
-          contactSupportMessage:
-            'If you still have a problem uploading the file, email',
-          errorToLog: errorInformation?.errorMessageToLog || errorInformation?.errorMessageToDisplay,
-          message: errorInformation?.errorMessageToDisplay || 'There is a problem with this file.',
-          title: 'There is a problem with this file',
-          troubleshootingInfo:
-            errorType && errorType !== ErrorTypes.WRONG_FILE_TYPE
-              ? {
-                  linkMessage: 'Learn about troubleshooting files',
-                  linkUrl: TROUBLESHOOTING_INFO.FILE_UPLOAD_TROUBLESHOOTING_LINK,
-                }
-              : undefined,
-        };
-      },
+      fileUploadErrorAction,
       setModalTitleAction,
       setModalMessageAction,
       setErrorModalTroubleshootingStepsAction,
