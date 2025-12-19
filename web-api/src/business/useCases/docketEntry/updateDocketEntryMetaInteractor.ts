@@ -19,7 +19,6 @@ import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseA
 import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
-import { omit } from 'lodash';
 
 export const updateDocketEntryMeta = async (
   applicationContext: ServerApplicationContext,
@@ -137,16 +136,10 @@ export const updateDocketEntryMeta = async (
     shouldAddNewCoverSheet,
   });
 
-  const isMultiDocketed = DocketEntry.isMultiDocketed(originalDocketEntry);
-
   const docketEntryEntity = new DocketEntry(
     {
       ...originalDocketEntry,
-      // when multi docketed, we don't want to update the document info fields as they get uploaded later in this method
-      ...omit(
-        editableFields,
-        isMultiDocketed ? DOCKET_ENTRY_DOCUMENT_INFO_FIELDS : [],
-      ),
+      ...editableFields,
     },
     { authorizedUser, petitioners: caseEntity.petitioners },
   ).validate();
@@ -157,10 +150,12 @@ export const updateDocketEntryMeta = async (
     .getUseCaseHelpers()
     .updateCaseAutomaticBlock({ caseEntity });
 
+  let updatedDocketEntry;
+
   if (shouldGenerateCoversheet) {
     await upsertDocketEntries([docketEntryEntity.validate()]);
 
-    const updatedDocketEntry = await applicationContext
+    updatedDocketEntry = await applicationContext
       .getUseCases()
       .addCoversheetInteractor(
         applicationContext,
@@ -185,8 +180,6 @@ export const updateDocketEntryMeta = async (
     caseEntity.updateDocketEntry(docketEntryEntity);
   }
 
-  // We call this first to update the stricken, service, and action
-  // fields, but the other fields will get handled below
   const result = await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
@@ -200,6 +193,9 @@ export const updateDocketEntryMeta = async (
     const updatedDocketEntries = casesToUpdate
       .map(caseRecord => {
         const { docketNumber } = caseRecord;
+        if (docketNumber === caseToUpdate.docketNumber) {
+          return;
+        }
         const consolidatedCaseEntity =
           docketNumber === caseEntity.docketNumber
             ? caseEntity
@@ -229,8 +225,8 @@ export const updateDocketEntryMeta = async (
             { authorizedUser, petitioners: consolidatedCaseEntity.petitioners },
           );
 
-          if (docketEntryEntity && docketEntryEntity.numberOfPages) {
-            merged.setNumberOfPages(docketEntryEntity.numberOfPages);
+          if (updatedDocketEntry && updatedDocketEntry.numberOfPages) {
+            merged.setNumberOfPages(updatedDocketEntry.numberOfPages);
           }
 
           return merged.validate().toRawObject();

@@ -271,7 +271,6 @@ export const createCaseInteractor = async (
       `User not found with user id ${authorizedUser.userId}`,
     );
   }
-  console.log('petitionMetadata**********', petitionMetadata);
 
   const petitionEntity = new ElectronicPetition(petitionMetadata).validate();
 
