@@ -11,12 +11,6 @@
 npm run ecr:check-version
 ```
 
-## Notes
-
-- **pdfjs-dist caveat RESOLVED**: Added Path2D polyfill in `cypress/helpers/cypressTasks/pdf/parsePdf.ts`
-- pdfjs-dist updated from 5.0.375 → 5.4.449
-- AWS CLI updated from 2.32.14 → 2.32.16
-
 </details>
 <details><summary>Dependency Updates - Week of 2025-12-08</summary>
 
