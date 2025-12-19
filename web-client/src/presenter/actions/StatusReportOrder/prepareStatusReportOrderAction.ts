@@ -5,6 +5,7 @@ import {
   STATUS_REPORT_ORDER_OPTIONS,
 } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
+import { isLeadCase } from '@shared/business/entities/cases/Case';
 
 export const prepareStatusReportOrderAction = ({
   applicationContext,
@@ -29,7 +30,7 @@ export const prepareStatusReportOrderAction = ({
   const isCalendared = caseDetail.status === CASE_STATUS_TYPES.calendared;
   const isMotionOrHearing =
     trialSession.sessionType === SESSION_TYPES.motionHearing;
-  const isLeadCase = caseDetail.leadDocketNumber === caseDetail.docketNumber;
+  const isLeadCaseResult = isLeadCase(caseDetail);
   const hasOrderType = !!orderType;
   const hasStrickenFromTrialSessions = !!strickenFromTrialSessions;
   const hasJurisdiction = !!jurisdiction;
@@ -52,7 +53,7 @@ export const prepareStatusReportOrderAction = ({
   }
 
   const filedLine =
-    isLeadCase &&
+    isLeadCaseResult &&
     issueOrder === STATUS_REPORT_ORDER_OPTIONS.issueOrderOptions.allCasesInGroup
       ? `<p class="indent-paragraph">${calendaredLine}On ${statusReportFilingDateFormatted}, a status report was filed (Lead case document no. ${statusReportIndex}). For cause, it is</p>`
       : `<p class="indent-paragraph">${calendaredLine}On ${statusReportFilingDateFormatted}, a status report was filed (Document no. ${statusReportIndex}). For cause, it is</p>`;

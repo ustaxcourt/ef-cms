@@ -270,7 +270,7 @@ export class Case extends JoiValidationEntity {
     for (const c of cases) {
       if (
         c.leadDocketNumber &&
-        c.leadDocketNumber !== c.docketNumber &&
+        !isLeadCase(c) &&
         docketNumbers.has(c.leadDocketNumber) // Check if the lead case exists; if not, treat this case as a non-member case
       ) {
         (memberCases[c.leadDocketNumber] ||= []).push(c);

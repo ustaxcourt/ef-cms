@@ -19,4 +19,4 @@ docker run -it \
   -p 9200:9200 \
   -v "$(pwd)":/home/app \
   --rm efcms /bin/sh \
-  -c "(npm run start:api &) && (npm run dynamo:admin &) && (./wait-until-services.sh && sleep 10 && npm run print:success &) && (npm run start:client &) && npm run start:public"
+  -c "(npm run start:api &) && (./wait-until-services.sh && sleep 10 && npm run print:success &) && (npm run start:client &) && npm run start:public"
