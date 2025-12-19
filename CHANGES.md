@@ -1,9 +1,5 @@
 <details><summary>Dependency Updates - Week of 2025-12-15</summary>
 
-## Local
-
-#### No NodeJS upgrade required (already at 24.12.0)
-
 ## Manual Deployment Steps
 
 ### Before Deployment
