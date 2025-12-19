@@ -157,6 +157,41 @@ export const updateDocketEntryMeta = async (
     .getUseCaseHelpers()
     .updateCaseAutomaticBlock({ caseEntity });
 
+  if (shouldGenerateCoversheet) {
+    await upsertDocketEntries([docketEntryEntity.validate()]);
+
+    const updatedDocketEntry = await applicationContext
+      .getUseCases()
+      .addCoversheetInteractor(
+        applicationContext,
+        {
+          docketEntryId: originalDocketEntry.docketEntryId,
+          docketNumber: caseEntity.docketNumber,
+          filingDateUpdated,
+        },
+        authorizedUser,
+      );
+
+    caseEntity.updateDocketEntry(updatedDocketEntry);
+  } else if (shouldRemoveExistingCoverSheet) {
+    const { numberOfPages } = await applicationContext
+      .getUseCaseHelpers()
+      .removeCoversheet(applicationContext, {
+        documentStorageId: originalDocketEntry.documentStorageId,
+      });
+
+    docketEntryEntity.setNumberOfPages(numberOfPages);
+
+    caseEntity.updateDocketEntry(docketEntryEntity);
+  }
+
+  // We call this first to update the stricken, service, and action
+  // fields, but the other fields will get handled below
+  const result = await updateCaseAndAssociations({
+    authorizedUser,
+    caseToUpdate: caseEntity,
+  });
+
   if (DocketEntry.isMultiDocketed(originalDocketEntry)) {
     const casesToUpdate = await getCasesByDocketNumbers({
       docketNumbers: originalDocketEntry.multiDocketedOn,
@@ -208,49 +243,7 @@ export const updateDocketEntryMeta = async (
     if (updatedDocketEntries.length > 0) {
       await upsertDocketEntries(updatedDocketEntries as any[]);
     }
-    console.log('updatedDocketEntries @@@@@@@@@', updatedDocketEntries);
-
-    if (shouldGenerateCoversheet) {
-      console.log('docketEntryEntity @@@@@@@', updatedDocketEntries);
-      // await upsertDocketEntries([updatedDocketEntries]);
-
-      const modifiedDocketEntry: DocketEntry | undefined =
-        caseEntity.getDocketEntryById({
-          docketEntryId: docketEntryMeta.docketEntryId,
-        });
-
-      const updatedDocketEntry = await applicationContext
-        .getUseCases()
-        .addCoversheetInteractor(
-          applicationContext,
-          {
-            docketEntryId: modifiedDocketEntry!.docketEntryId,
-            docketNumber: caseEntity.docketNumber,
-            filingDateUpdated,
-          },
-          authorizedUser,
-        );
-
-      caseEntity.updateDocketEntry(updatedDocketEntry);
-    } else if (shouldRemoveExistingCoverSheet) {
-      const { numberOfPages } = await applicationContext
-        .getUseCaseHelpers()
-        .removeCoversheet(applicationContext, {
-          documentStorageId: originalDocketEntry.documentStorageId,
-        });
-
-      docketEntryEntity.setNumberOfPages(numberOfPages);
-
-      caseEntity.updateDocketEntry(docketEntryEntity);
-    }
   }
-
-  // We call this first to update the stricken, service, and action
-  // fields, but the other fields will get handled below
-  const result = await updateCaseAndAssociations({
-    authorizedUser,
-    caseToUpdate: caseEntity,
-  });
 
   return new Case(result, { authorizedUser }).validate().toRawObject();
 };
