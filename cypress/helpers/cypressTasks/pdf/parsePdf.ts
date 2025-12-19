@@ -1,6 +1,52 @@
 import { readFile } from 'fs/promises';
 
 async function getPdfJs(): Promise<typeof pdfJs> {
+  if (typeof globalThis.Path2D === 'undefined') {
+      globalThis.Path2D = class Path2D {
+      constructor(_path?: any) {}
+      addPath(_path: any, _transform?: any) {}
+      arc(
+        _x: number,
+        _y: number,
+        _radius: number,
+        _startAngle: number,
+        _endAngle: number,
+        _anticlockwise?: boolean,
+      ) {}
+      arcTo(_x1: number, _y1: number, _x2: number, _y2: number, _radius: number) {}
+      bezierCurveTo(
+        _cp1x: number,
+        _cp1y: number,
+        _cp2x: number,
+        _cp2y: number,
+        _x: number,
+        _y: number,
+      ) {}
+      closePath() {}
+      ellipse(
+        _x: number,
+        _y: number,
+        _radiusX: number,
+        _radiusY: number,
+        _rotation: number,
+        _startAngle: number,
+        _endAngle: number,
+        _anticlockwise?: boolean,
+      ) {}
+      lineTo(_x: number, _y: number) {}
+      moveTo(_x: number, _y: number) {}
+      quadraticCurveTo(_cpx: number, _cpy: number, _x: number, _y: number) {}
+      rect(_x: number, _y: number, _w: number, _h: number) {}
+      roundRect(
+        _x: number,
+        _y: number,
+        _w: number,
+        _h: number,
+        _radii?: number | number[],
+      ) {}
+    };
+  }
+
   const pdfJs = await import('pdfjs-dist/legacy/build/pdf.mjs');
   pdfJs.GlobalWorkerOptions.workerSrc = './pdf.worker.mjs';
   return pdfJs;

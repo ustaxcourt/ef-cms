@@ -6,7 +6,6 @@ node_modules
 shared/coverage
 shared/node_modules
 web-api/.cache
-web-api/.dynamodb
 web-api/.nyc_output
 web-api/coverage
 web-api/dist
