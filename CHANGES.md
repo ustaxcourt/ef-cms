@@ -10,7 +10,16 @@
 . scripts/env/set-env.zsh expN
 npm run ecr:check-version
 ```
+</details>
+<details><summary>DynamoDB Removal</summary>
 
+## Local
+
+#### Remove local DynamoDB installation
+
+```bash
+rm -rf .dynamodb
+```
 </details>
 <details><summary>Dependency Updates - Week of 2025-12-08</summary>
 
