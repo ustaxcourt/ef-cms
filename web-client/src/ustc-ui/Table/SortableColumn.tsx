@@ -3,6 +3,11 @@ import { Button } from '../Button/Button';
 import { getConstants } from '../../getConstants';
 import React from 'react';
 import classNames from 'classnames';
+import {
+  faArrowDownLong,
+  faArrowRightArrowLeft,
+  faArrowUpLong,
+} from '@fortawesome/free-solid-svg-icons';
 
 const { ASCENDING, DESCENDING } = getConstants();
 
@@ -89,7 +94,12 @@ export const SortableColumn = ({
         {/* We fix the icon width so that switching from double arrow to smaller single arrow icon does not affect line-breaking behavior */}
         <span className="display-inline-block width-205">
           {isLoading && (
-            <WrappedIcon iconClass="fa-spin spinner" icon="sync" size="sm" title="sorting results" />
+            <WrappedIcon
+              iconClass="fa-spin spinner"
+              icon="sync"
+              size="sm"
+              title="sorting results"
+            />
           )}
           {!isLoading &&
             getFontAwesomeIcon({
@@ -118,11 +128,11 @@ const getFontAwesomeIcon = ({
   isActiveColumn: boolean;
 }) => {
   let fontAwesomeIcon =
-    direction === DESCENDING ? 'long-arrow-alt-down' : 'long-arrow-alt-up';
+    direction === DESCENDING ? faArrowDownLong : faArrowUpLong;
   let tooltipText = direction === ASCENDING ? ascText : descText;
 
   if (!isActiveColumn) {
-    fontAwesomeIcon = 'exchange-alt';
+    fontAwesomeIcon = faArrowRightArrowLeft;
     tooltipText = '';
   }
 
@@ -132,6 +142,7 @@ const getFontAwesomeIcon = ({
         isActiveColumn ? 'icon-sortable-header-active' : 'icon-sortable-header'
       }
       icon={fontAwesomeIcon}
-      title={tooltipText} />
+      title={tooltipText}
+    />
   );
 };
