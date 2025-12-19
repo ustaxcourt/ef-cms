@@ -11,7 +11,7 @@ export type DocumentTab = {
 };
 
 type ScanDocumentTabsProps = {
-  documentTabs: DocumentTab[] | Record<string, any>[];
+  documentTabs?: DocumentTab[] | Record<string, any>[];
   isFileUploaded: (eventCode?: string) => boolean;
   onSelect: ((documentId?: string) => void) | (() => void) | Function;
   scanOnly?: boolean;
