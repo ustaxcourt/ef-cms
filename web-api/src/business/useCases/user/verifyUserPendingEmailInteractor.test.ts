@@ -242,7 +242,7 @@ describe('Verify User Pending Email', () => {
       ]);
     });
 
-    it('should update the dynamo record with the new info', async () => {
+    it('should update the record with the new info', async () => {
       await verifyUserPendingEmailInteractor(
         applicationContext,
         {

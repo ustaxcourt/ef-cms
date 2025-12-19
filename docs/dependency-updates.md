@@ -116,8 +116,7 @@ If the `Dockerfile` has changed, you will need to build a new docker image and p
 Check if there is an update to the Terraform AWS provider and update our `.tf` files to use the [latest version](https://registry.terraform.io/providers/hashicorp/aws/latest) of the provider.
 
 1. Search the entire project for `source  = "hashicorp/aws"` and make sure it's set to the latest version.  For example, some of these files have the AWS provider defined:
-   - `./shared/admin-tools/glue/glue_migrations/main.tf`
-   - `./shared/admin-tools/glue/remote_role/main.tf`
+   - `./web-api/terraform/modules/worker/providers.tf`
 1. Change the version of the AWS provider using two decimal notation (e.g. `6.19.0`) to ensure providers only increment patch versions automatically
 
 ### 4. Update Terraform OpenSearch provider

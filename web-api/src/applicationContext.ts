@@ -22,9 +22,7 @@ import {
   getCognito,
   getLocalCognito,
 } from '@web-api/persistence/cognito/getCognito';
-import { getDocumentClient } from '@web-api/persistence/dynamo/getDocumentClient';
 import { getDocumentGenerators } from './getDocumentGenerators';
-import { getDynamoClient } from '@web-api/persistence/dynamo/getDynamoClient';
 import { getEmailClient } from './persistence/messages/getEmailClient';
 import { getEnvironment, getUniqueId } from '../../shared/src/sharedAppContext';
 import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
@@ -106,9 +104,7 @@ export const createApplicationContext = (appContextUser = {}) => {
       sendSlackNotification,
       sendZipperBatchJob,
     }),
-    getDocumentClient,
     getDocumentGenerators,
-    getDynamoClient,
     getEmailClient,
     getEntityByName,
     getEnvironment,
