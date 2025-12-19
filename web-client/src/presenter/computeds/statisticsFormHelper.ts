@@ -43,7 +43,8 @@ export const statisticsFormHelper = (
   });
 
   const penalties = get(state.modal.penalties);
-  const showAddAnotherPenaltyButton = penalties && penalties.length < 10;
+  const showAddAnotherPenaltyButton =
+    Array.isArray(penalties) && penalties.length < 10;
 
   return {
     penaltyAmountType,

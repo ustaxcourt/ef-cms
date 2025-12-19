@@ -2,12 +2,17 @@ import { Case } from './Case';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('toRawObject', () => {
+  let doesHavePendingItemsSpy: jest.SpyInstance;
+
   beforeEach(() => {
-    jest.spyOn(Case.prototype, 'doesHavePendingItems');
+    doesHavePendingItemsSpy = jest.spyOn(
+      Case.prototype,
+      'doesHavePendingItems',
+    );
   });
 
   afterEach(() => {
-    Case.prototype.doesHavePendingItems.mockRestore();
+    doesHavePendingItemsSpy.mockRestore();
   });
 
   it('calls own function to update values after decorated toRawObject', () => {

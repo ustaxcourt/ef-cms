@@ -42,7 +42,7 @@ describe('Get trial session details', () => {
 
   it('throws an error if the entity returned from persistence is invalid', async () => {
     getTrialSessionById.mockResolvedValue(
-      //@ts-expect-error
+      // @ts-expect-error - Intentionally testing with incomplete mock data missing maxCases field
       omit(MOCK_TRIAL_SESSION, 'maxCases'),
     );
 

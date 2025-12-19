@@ -15,6 +15,16 @@ export const Contacts = connect(
     showSecondaryContact,
     useSameAsPrimary,
     wrapperClassName,
+  }: {
+    bind: string;
+    contactsHelper: Record<string, any>;
+    onBlur: () => void;
+    onChange: string;
+    parentView: string;
+    showPrimaryContact: boolean;
+    showSecondaryContact: boolean;
+    useSameAsPrimary: boolean;
+    wrapperClassName: string;
   }) {
     return (
       <>

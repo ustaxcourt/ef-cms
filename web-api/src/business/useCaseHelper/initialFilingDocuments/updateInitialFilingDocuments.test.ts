@@ -1,6 +1,7 @@
 import {
   CONTACT_TYPES,
   INITIAL_DOCUMENT_TYPES,
+  INITIAL_DOCUMENT_TYPES_MAP,
   PARTY_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import '@web-api/persistence/postgres/docketEntries/mocks.jest';
@@ -158,6 +159,45 @@ describe('addNewInitialFilingToCase', () => {
       getContactPrimary(mockCaseToUpdate).contactId,
       mockSecondaryId,
     ]);
+  });
+
+  it('should throw when the document type cannot be mapped to an event code', async () => {
+    const mockKey = 'mockInitialDocument';
+    const mockDocumentType = 'Mock Initial Document';
+
+    try {
+      INITIAL_DOCUMENT_TYPES_MAP[mockKey] = mockDocumentType;
+
+      mockOriginalCase = new Case(
+        { ...MOCK_CASE, docketEntries: [mockPetition] },
+        { authorizedUser: mockPetitionsClerkUser },
+      );
+
+      mockCaseToUpdate = {
+        ...MOCK_CASE,
+        docketEntries: [
+          ...MOCK_CASE.docketEntries,
+          {
+            ...mockRQT,
+            docketEntryId: applicationContext.getUniqueId(),
+            documentType: mockDocumentType,
+          },
+        ],
+      };
+
+      await expect(
+        updateInitialFilingDocuments({
+          applicationContext,
+          authorizedUser: mockPetitionsClerkUser,
+          caseEntity: mockOriginalCase,
+          caseToUpdate: mockCaseToUpdate,
+        }),
+      ).rejects.toThrow(
+        `No event code found for document type: ${mockDocumentType}`,
+      );
+    } finally {
+      delete INITIAL_DOCUMENT_TYPES_MAP[mockKey];
+    }
   });
 
   it('should remove a new initial filing document from the case when the document does not exist on the case from the form', async () => {

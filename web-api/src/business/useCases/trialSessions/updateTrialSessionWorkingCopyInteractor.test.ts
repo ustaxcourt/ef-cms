@@ -35,6 +35,8 @@ const MOCK_WORKING_COPY: RawTrialSessionWorkingCopy = {
   },
 };
 
+const trialSessionWorkingCopy: RawTrialSessionWorkingCopy = MOCK_WORKING_COPY;
+
 describe('Update trial session working copy', () => {
   const getTrialSessionWorkingCopies = jest.mocked(
     getTrialSessionWorkingCopiesMock,
@@ -53,8 +55,7 @@ describe('Update trial session working copy', () => {
     await expect(
       updateTrialSessionWorkingCopyInteractor(
         {
-          trialSessionWorkingCopyToUpdate:
-            MOCK_WORKING_COPY as unknown as RawTrialSessionWorkingCopy,
+          trialSessionWorkingCopyToUpdate: trialSessionWorkingCopy,
         },
         user,
       ),
@@ -63,15 +64,14 @@ describe('Update trial session working copy', () => {
 
   it('throws an error if the entity returned from persistence is invalid', async () => {
     getTrialSessionWorkingCopies.mockResolvedValue(
-      //@ts-expect-error
+      // @ts-expect-error - Intentionally testing with incomplete mock data missing userId field
       [omit(MOCK_WORKING_COPY, 'userId')],
     );
 
     await expect(
       updateTrialSessionWorkingCopyInteractor(
         {
-          trialSessionWorkingCopyToUpdate:
-            MOCK_WORKING_COPY as unknown as RawTrialSessionWorkingCopy,
+          trialSessionWorkingCopyToUpdate: trialSessionWorkingCopy,
         },
         mockJudgeUser,
       ),
@@ -81,8 +81,7 @@ describe('Update trial session working copy', () => {
   it('correctly returns data from persistence', async () => {
     const result = await updateTrialSessionWorkingCopyInteractor(
       {
-        trialSessionWorkingCopyToUpdate:
-          MOCK_WORKING_COPY as unknown as RawTrialSessionWorkingCopy,
+        trialSessionWorkingCopyToUpdate: trialSessionWorkingCopy,
       },
       mockJudgeUser,
     );

@@ -1,5 +1,5 @@
 import { app } from '../../app';
-import awsServerlessExpress from '@vendia/serverless-express';
+import awsServerlessExpress from '@codegenie/serverless-express';
 
 export const handler = (event, context) => {
   // This hack is added because serverless-express doesn't seem to work with lambda proxy integrations.

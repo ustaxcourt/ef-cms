@@ -69,6 +69,7 @@ describe('validatePetitionerAction', () => {
             postalCode: '12345',
             state: 'TN',
           },
+          screenMetadata: { allPendingEmails: [] },
         },
       },
     });

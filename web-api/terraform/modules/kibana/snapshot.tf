@@ -1,25 +1,31 @@
 data "aws_caller_identity" "current" {}
 
+locals {
+  opensearch_endpoint = length(aws_opensearch_domain.efcms-logs) > 0 ? "https://${aws_opensearch_domain.efcms-logs[0].endpoint}" : "https://${var.es_logs_endpoint}"
+}
+
 provider "opensearch" {
-  url = "https://${aws_opensearch_domain.efcms-logs.endpoint}"
+  url = local.opensearch_endpoint
 }
 
 resource "opensearch_snapshot_repository" "archived-logs" {
-  name = "archived-logs"
-  type = "s3" 
+  count = var.es_logs_instance_count > 0 ? 1 : 0
+  name  = "archived-logs"
+  type  = "s3"
   settings = {
-    bucket   = aws_s3_bucket.ustc_log_snapshots_bucket.bucket
+    bucket   = aws_s3_bucket.ustc_log_snapshots_bucket[0].bucket
     region   = "us-east-1"
-    role_arn = aws_iam_role.es_s3_snapshot_access_role.arn
+    role_arn = aws_iam_role.es_s3_snapshot_access_role[0].arn
   }
 
   depends_on = [
-    aws_opensearch_domain.efcms-logs
+    aws_opensearch_domain.efcms-logs[0]
   ]
 }
 
 resource "aws_iam_role" "es_s3_snapshot_access_role" {
-  name = "es_s3_snapshot_access_role"
+  count = var.es_logs_instance_count > 0 ? 1 : 0
+  name  = "es_s3_snapshot_access_role"
 
   assume_role_policy = <<EOF
 {
@@ -38,8 +44,9 @@ EOF
 }
 
 resource "aws_iam_role_policy" "es_s3_snapshot_access_policy" {
-  name = "es_s3_snapshot_access_policy"
-  role = aws_iam_role.es_s3_snapshot_access_role.id
+  count = var.es_logs_instance_count > 0 ? 1 : 0
+  name  = "es_s3_snapshot_access_policy"
+  role  = aws_iam_role.es_s3_snapshot_access_role[0].id
 
   policy = <<EOF
 {
@@ -50,7 +57,7 @@ resource "aws_iam_role_policy" "es_s3_snapshot_access_policy" {
       "Effect": "Allow",
       "Action": ["iam:PassRole", "s3:ListBucket"],
       "Resource": [
-        "arn:aws:s3:::${aws_s3_bucket.ustc_log_snapshots_bucket.bucket}",
+        "arn:aws:s3:::${aws_s3_bucket.ustc_log_snapshots_bucket[0].bucket}",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/es_s3_snapshot_access_role"
       ]
     },
@@ -58,13 +65,14 @@ resource "aws_iam_role_policy" "es_s3_snapshot_access_policy" {
       "Sid": "VisualEditor1",
       "Effect": "Allow",
       "Action": ["s3:PutObject", "s3:GetObject", "s3:DeleteObject"],
-      "Resource": "arn:aws:s3:::${aws_s3_bucket.ustc_log_snapshots_bucket.bucket}/*"
+      "Resource": "arn:aws:s3:::${aws_s3_bucket.ustc_log_snapshots_bucket[0].bucket}/*"
     }
   ]}
 EOF
 }
 
 resource "aws_s3_bucket" "ustc_log_snapshots_bucket" {
-  bucket = "${var.log_snapshot_bucket_name}"
+  count         = var.es_logs_instance_count > 0 ? 1 : 0
+  bucket        = var.log_snapshot_bucket_name
   force_destroy = false
 }

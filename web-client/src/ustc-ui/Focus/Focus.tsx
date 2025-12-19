@@ -12,12 +12,14 @@ export const Focus = ({
   className?: string;
 }) => {
   const [focused, setFocused] = useState(false);
-  const node = useRef(null);
+  const node = useRef<HTMLDivElement | null>(null);
 
   const setFocus = e => {
     e?.preventDefault();
-    const focusEl = node?.current?.querySelector(focusableChildren);
-    if (focusEl?.focus) focusEl.focus();
+    const focusEl = node?.current?.querySelector(
+      focusableChildren,
+    ) as HTMLElement | null;
+    if (focusEl) focusEl.focus();
     setFocused(true);
     return false;
   };

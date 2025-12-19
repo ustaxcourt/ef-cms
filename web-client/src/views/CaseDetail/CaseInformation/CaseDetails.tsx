@@ -1,7 +1,13 @@
 import { Button } from '../../../ustc-ui/Button/Button';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
+import { props as cerebralProps } from 'cerebral';
 import React from 'react';
+
+const props = cerebralProps as unknown as {
+  caseDetail: unknown;
+  caseInformationHelper: unknown;
+  openCleanModalSequence: unknown;
+};
 
 export const CaseDetails = connect(
   {
@@ -13,6 +19,19 @@ export const CaseDetails = connect(
     caseDetail,
     caseInformationHelper,
     openCleanModalSequence,
+  }: {
+    caseDetail: {
+      caseType: string;
+      procedureType: string;
+      irsNoticeDateFormatted: string;
+      filingFee: string;
+      formattedPreferredTrialCity: string;
+    };
+    caseInformationHelper: {
+      showSealCaseButton: boolean;
+      showUnsealCaseButton: boolean;
+    };
+    openCleanModalSequence: (args: { showModal: string }) => void;
   }) {
     return (
       <>

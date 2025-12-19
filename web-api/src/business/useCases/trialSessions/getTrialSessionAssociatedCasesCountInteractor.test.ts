@@ -48,7 +48,7 @@ describe('getTrialSessionAssociatedCasesCountInteractor', () => {
   it('should return the correct results', async () => {
     const TEST_TRIAL_SESSION: RawTrialSession = {
       trialSessionId: TEST_TRIAL_SESSION_ID,
-      // @ts-expect-error
+      // @ts-expect-error - Intentionally adding invalid property to test error handling
       testProp: 'TEST_PROP',
     };
 

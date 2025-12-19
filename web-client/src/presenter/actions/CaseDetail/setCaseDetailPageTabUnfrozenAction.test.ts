@@ -3,7 +3,9 @@ import { setCaseDetailPageTabUnfrozenAction } from './setCaseDetailPageTabUnfroz
 
 describe('setCaseDetailPageTabUnfrozenAction', () => {
   it('should set the currentViewMetadata.caseDetail.frozen state to be undefined', async () => {
-    const result = await runAction(setCaseDetailPageTabUnfrozenAction);
+    const result = await runAction(setCaseDetailPageTabUnfrozenAction, {
+      state: {},
+    });
 
     expect(result.state.currentViewMetadata.caseDetail.frozen).toEqual(
       undefined,

@@ -4,11 +4,15 @@ import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { PractitionerContactForm } from './PractitionerContactForm';
 import { PractitionerLoginServiceEmailForm } from './PractitionerLoginServiceEmailForm';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { props as cerebralProps } from 'cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import { WarningNotificationComponent } from '../WarningNotification';
+import { RunableSequence as RunnableSequence } from 'cerebral';
+
+const props = cerebralProps as unknown as {
+  validateSequenceName: string;
+};
 
 export const PractitionerForm = connect(
   {
@@ -32,6 +36,16 @@ export const PractitionerForm = connect(
     validateSequenceName,
     validationErrors,
     practitionerInformationHelper,
+  }: {
+    constants: Record<string, any>;
+    createPractitionerUserHelper: Record<string, any>;
+    form: Record<string, any>;
+    formatAndUpdateDateFromDatePickerSequence: Function | RunnableSequence;
+    updateFormValueSequence: Function | RunnableSequence;
+    validateSequence: Function | RunnableSequence;
+    validateSequenceName: string;
+    validationErrors: Record<string, any>;
+    practitionerInformationHelper: Record<string, any>;
   }) {
     return (
       <>

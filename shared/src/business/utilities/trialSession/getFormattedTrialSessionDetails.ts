@@ -12,9 +12,8 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
-import {
-  RawEligibleCase,
-} from '../../entities/cases/EligibleCase';
+import { RawEligibleCase } from '../../entities/cases/EligibleCase';
+import { isLeadCase } from '../../entities/cases/Case';
 import { RawIrsCalendarAdministratorInfo } from '@shared/business/entities/trialSessions/IrsCalendarAdministratorInfo';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { compact, partition } from 'lodash';
@@ -125,7 +124,7 @@ const getDocketNumberSortString = ({ allCases = [], theCase }) => {
 
   return `${getSortableDocketNumber(
     isLeadCaseInList
-      ? theCase.docketNumber === theCase.leadDocketNumber
+      ? isLeadCase(theCase)
         ? theCase.docketNumber
         : theCase.leadDocketNumber
       : theCase.docketNumber,

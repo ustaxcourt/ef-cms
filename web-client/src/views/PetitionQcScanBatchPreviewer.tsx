@@ -15,42 +15,53 @@ import { PreviewControls } from './PreviewControls';
 import { SelectScannerSourceModal } from './ScanBatchPreviewer/SelectScannerSourceModal';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { props as cerebralProps } from 'cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
 
+const props = cerebralProps as unknown as {
+  documentTabs: Record<string, any>[];
+  documentType: string;
+  title: string;
+};
+
+const petitionQcScanBatchPreviewerDeps = {
+  constants: state.constants,
+  deleteUploadedPdfSequence: sequences.deleteUploadedPdfSequence,
+  documentTabs: props.documentTabs,
+  documentType: props.documentType,
+  generatePdfFromScanSessionSequence:
+    sequences.generatePdfFromScanSessionSequence,
+  openChangeScannerSourceModalSequence:
+    sequences.openChangeScannerSourceModalSequence,
+  openConfirmDeleteBatchModalSequence:
+    sequences.openConfirmDeleteBatchModalSequence,
+  openConfirmDeletePDFModalSequence:
+    sequences.openConfirmDeletePDFModalSequence,
+  openConfirmReplacePetitionPdfSequence:
+    sequences.openConfirmReplacePetitionPdfSequence,
+  openConfirmRescanBatchModalSequence:
+    sequences.openConfirmRescanBatchModalSequence,
+  pdfPreviewUrl: state.pdfPreviewUrl,
+  petitionQcHelper: state.petitionQcHelper,
+  scanBatchPreviewerHelper: state.scanBatchPreviewerHelper,
+  scanHelper: state.scanHelper,
+  scannerStartupSequence: sequences.scannerStartupSequence,
+  selectedBatchIndex: state.scanner.selectedBatchIndex,
+  setCurrentPageIndexSequence: sequences.setCurrentPageIndexSequence,
+  setDocumentForPreviewSequence: sequences.setDocumentForPreviewSequence,
+  setDocumentForUploadSequence: sequences.setDocumentForUploadSequence,
+  setDocumentUploadModeSequence: sequences.setDocumentUploadModeSequence,
+  setSelectedBatchIndexSequence: sequences.setSelectedBatchIndexSequence,
+  showModal: state.modal.showModal,
+  startScanSequence: sequences.startScanSequence,
+  title: props.title,
+  validationErrors: state.validationErrors,
+};
+
 export const PetitionQcScanBatchPreviewer = connect(
-  {
-    constants: state.constants,
-    deleteUploadedPdfSequence: sequences.deleteUploadedPdfSequence,
-    generatePdfFromScanSessionSequence:
-      sequences.generatePdfFromScanSessionSequence,
-    openChangeScannerSourceModalSequence:
-      sequences.openChangeScannerSourceModalSequence,
-    openConfirmDeleteBatchModalSequence:
-      sequences.openConfirmDeleteBatchModalSequence,
-    openConfirmDeletePDFModalSequence:
-      sequences.openConfirmDeletePDFModalSequence,
-    openConfirmReplacePetitionPdfSequence:
-      sequences.openConfirmReplacePetitionPdfSequence,
-    openConfirmRescanBatchModalSequence:
-      sequences.openConfirmRescanBatchModalSequence,
-    pdfPreviewUrl: state.pdfPreviewUrl,
-    petitionQcHelper: state.petitionQcHelper,
-    scanBatchPreviewerHelper: state.scanBatchPreviewerHelper,
-    scanHelper: state.scanHelper,
-    scannerStartupSequence: sequences.scannerStartupSequence,
-    selectedBatchIndex: state.scanner.selectedBatchIndex,
-    setCurrentPageIndexSequence: sequences.setCurrentPageIndexSequence,
-    setDocumentForPreviewSequence: sequences.setDocumentForPreviewSequence,
-    setDocumentForUploadSequence: sequences.setDocumentForUploadSequence,
-    setDocumentUploadModeSequence: sequences.setDocumentUploadModeSequence,
-    setSelectedBatchIndexSequence: sequences.setSelectedBatchIndexSequence,
-    showModal: state.modal.showModal,
-    startScanSequence: sequences.startScanSequence,
-    validationErrors: state.validationErrors,
-  },
+  petitionQcScanBatchPreviewerDeps,
   function PetitionQcScanBatchPreviewer({
     constants,
     deleteUploadedPdfSequence,
@@ -82,7 +93,7 @@ export const PetitionQcScanBatchPreviewer = connect(
       scannerStartupSequence();
     }, []);
 
-    const batchWrapperRef = useRef(null);
+    const batchWrapperRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
       if (batchWrapperRef.current)
@@ -421,7 +432,7 @@ export const PetitionQcScanBatchPreviewer = connect(
               type="file"
               onChange={e => {
                 e.preventDefault();
-                const file = e.target.files[0];
+                const file = e.target.files?.[0];
                 setDocumentForUploadSequence({
                   documentType,
                   documentUploadMode: 'preview',

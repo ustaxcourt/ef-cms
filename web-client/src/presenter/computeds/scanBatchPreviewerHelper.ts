@@ -11,7 +11,12 @@ export const scanBatchPreviewerHelper = (
   const documentSelectedForScan = get(
     state.currentViewMetadata.documentSelectedForScan,
   );
-  const batches =
+  const batches: Array<{
+    index: number;
+    pages: any[];
+    scanMode?: string;
+    scanModeLabel?: string;
+  }> =
     (documentSelectedForScan &&
       get(state.scanner.batches[documentSelectedForScan])) ||
     [];

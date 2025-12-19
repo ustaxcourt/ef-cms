@@ -22,6 +22,8 @@ export interface AddressType {
   paperPetitionEmail?: string;
   phone?: string;
   hasConsentedToElectronicService?: string;
+  preferredLanguage?: string;
+  preferredCommunicationMethod?: string;
 }
 
 export type OnBlurHandler = (params: { validationKey: string[] }) => void;

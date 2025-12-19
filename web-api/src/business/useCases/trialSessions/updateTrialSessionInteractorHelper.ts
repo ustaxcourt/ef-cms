@@ -17,11 +17,13 @@ import { createTrialSessionWorkingCopy } from '@web-api/persistence/postgres/tri
 type GetCasesInTrialSessionParams = {
   trialSession: RawTrialSession;
   authorizedUser: AuthUser;
+  includeHearings?: boolean;
 };
 
 export async function getCasesInTrialSession({
   trialSession,
   authorizedUser,
+  includeHearings = false,
 }: GetCasesInTrialSessionParams): Promise<{
   calendaredCaseEntities: Case[];
   casesThatShouldReceiveNotices: Case[];
@@ -36,7 +38,10 @@ export async function getCasesInTrialSession({
 
   const casesThatShouldReceiveNotices = calendaredCaseEntities
     .filter(aCase => !aCase.isClosed())
-    .filter(aCase => aCase.trialSessionId === trialSession.trialSessionId);
+    .filter(
+      aCase =>
+        includeHearings || aCase.trialSessionId === trialSession.trialSessionId,
+    );
 
   return { calendaredCaseEntities, casesThatShouldReceiveNotices };
 }
@@ -62,11 +67,11 @@ export const updateCasesAndSetNoticeOfChange = async ({
   shouldSetNoticeOfTrialSessionLocationChange,
   updatedTrialSessionEntity,
 }: UpdateCasesAndSetNoticeOfChangeParams): Promise<PDFDocumentType> => {
-  const { casesThatShouldReceiveNotices } =
-    await getCasesInTrialSession({
-      trialSession: currentTrialSession,
-      authorizedUser,
-    });
+  const { casesThatShouldReceiveNotices } = await getCasesInTrialSession({
+    trialSession: currentTrialSession,
+    includeHearings: true,
+    authorizedUser,
+  });
 
   const TASKS = casesThatShouldReceiveNotices.map(async (caseEntity: Case) => {
     const { PDFDocument } = await applicationContext.getPdfLib();
@@ -130,7 +135,11 @@ export const updateCasesAndSetNoticeOfChange = async ({
         );
     }
 
-    caseEntity.updateTrialSessionInformation(updatedTrialSessionEntity);
+    if (
+      caseEntity.trialSessionId === updatedTrialSessionEntity.trialSessionId
+    ) {
+      caseEntity.updateTrialSessionInformation(updatedTrialSessionEntity);
+    }
 
     await updateCaseAndAssociations({
       authorizedUser,

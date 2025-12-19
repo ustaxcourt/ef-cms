@@ -104,7 +104,7 @@ const updateCognitoRecord = async ({
   userPoolId: string;
 }) => {
   console.log('Setting up the updated Cognito user info ...');
-  const cognitoAttributesToUpdate = {} as { name: string; email: string };
+  const cognitoAttributesToUpdate: { name?: string; email?: string } = {};
   if (updates.name) {
     cognitoAttributesToUpdate.name = updates.name;
   }

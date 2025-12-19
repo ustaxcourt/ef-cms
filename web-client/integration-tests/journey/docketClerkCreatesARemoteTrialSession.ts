@@ -6,7 +6,13 @@ import {
 
 export const docketClerkCreatesARemoteTrialSession = (
   cerebralTest,
-  overrides = {},
+  overrides: {
+    maxCases?: number;
+    sessionType?: string;
+    trialLocation?: string;
+    trialClerk?: { name: string; userId: string };
+    judge?: { name: string; userId: string };
+  } = {},
 ) => {
   return it('Docket clerk starts a remote trial session', async () => {
     await cerebralTest.runSequence('gotoAddTrialSessionSequence');
@@ -77,14 +83,14 @@ export const docketClerkCreatesARemoteTrialSession = (
       {
         key: 'startDate',
         toFormat: FORMATS.ISO,
-        value: '12/12/2025',
+        value: '12/12/2099',
       },
     );
 
     await cerebralTest.runSequence('validateTrialSessionSequence');
 
     expect(cerebralTest.getState('form.term')).toEqual('Fall');
-    expect(cerebralTest.getState('form.termYear')).toEqual('2025');
+    expect(cerebralTest.getState('form.termYear')).toEqual('2099');
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'trialLocation',

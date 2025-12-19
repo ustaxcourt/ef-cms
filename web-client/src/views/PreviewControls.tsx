@@ -1,9 +1,20 @@
 import { Button } from '../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
+import { props as cerebralProps } from 'cerebral';
 import React from 'react';
 import classNames from 'classnames';
+
+const props = cerebralProps as unknown as {
+  currentPage: number;
+  disableLeftButtons: boolean;
+  disableRightButtons: boolean;
+  onFirstPage: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onLastPage: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onNextPage: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onPreviousPage: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  totalPages: number;
+};
 
 export const PreviewControls = connect(
   {

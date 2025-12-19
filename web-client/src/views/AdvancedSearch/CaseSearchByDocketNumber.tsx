@@ -22,6 +22,13 @@ export const CaseSearchByDocketNumber = connect(
     updateAdvancedSearchFormValueSequence,
     validateCaseDocketNumberSearchFormSequence,
     validationErrors,
+  }: {
+    advancedSearchForm: { caseSearchByDocketNumber: { docketNumber?: string } };
+    clearAdvancedSearchFormSequence: Function;
+    submitDocketNumberSearchSequence: Function;
+    updateAdvancedSearchFormValueSequence: Function;
+    validateCaseDocketNumberSearchFormSequence: Function;
+    validationErrors: { docketNumber?: string };
   }) {
     return (
       <>

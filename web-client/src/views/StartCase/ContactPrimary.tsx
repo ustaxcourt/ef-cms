@@ -18,20 +18,29 @@ const props = cerebralProps as unknown as {
   parentView: string;
 };
 
-export const ContactPrimary = connect(
-  {
-    bind: props.bind,
-    constants: state.constants,
-    contactsHelper: state[props.contactsHelper],
-    data: state[props.bind],
-    onBlur: props.onBlur,
-    onChange: props.onChange,
-    onChangeSequence: sequences[props.onChange],
-    parentView: props.parentView,
-    updateFormValueAndSecondaryContactInfoSequence:
-      sequences.updateFormValueAndSecondaryContactInfoSequence,
-    validationErrors: state.validationErrors,
-  },
+type ContactPrimaryProps = {
+  wrapperClassName?: string;
+};
+
+const contactPrimaryDeps = {
+  bind: props.bind,
+  constants: state.constants,
+  contactsHelper: state[props.contactsHelper],
+  data: state[props.bind],
+  onBlur: props.onBlur,
+  onChange: props.onChange,
+  onChangeSequence: sequences[props.onChange],
+  parentView: props.parentView,
+  updateFormValueAndSecondaryContactInfoSequence:
+    sequences.updateFormValueAndSecondaryContactInfoSequence,
+  validationErrors: state.validationErrors,
+};
+
+export const ContactPrimary = connect<
+  ContactPrimaryProps,
+  typeof contactPrimaryDeps
+>(
+  contactPrimaryDeps,
   function ContactPrimary({
     bind,
     constants,

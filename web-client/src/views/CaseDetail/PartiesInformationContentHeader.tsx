@@ -21,6 +21,17 @@ export const PartiesInformationContentHeader = connect(
     title,
     updateFormValueSequence,
     validationErrors,
+  }: {
+    caseInformationHelper: {
+      showAddCounsel: boolean;
+    };
+    form: {
+      practitionerSearch?: string;
+    };
+    openAddPrivatePractitionerModalSequence: () => void;
+    title?: string;
+    updateFormValueSequence: (args: { key: string; value: string }) => void;
+    validationErrors: Record<string, string | undefined>;
   }) {
     return (
       <>

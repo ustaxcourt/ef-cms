@@ -3,8 +3,7 @@ import { CaseDetailHeader } from './CaseDetail/CaseDetailHeader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PDFSignerPageButtons } from './PDFSignerPageButtons';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
 
 export const SignOrder = connect(
@@ -46,7 +45,7 @@ export const SignOrder = connect(
       const canvasContext = canvas.getContext('2d');
 
       pdfObj
-        .getPage(pageNumber)
+        ?.getPage(pageNumber)
         .then(page => {
           const scale = 1;
           const viewport = page.getViewport({ scale });
@@ -54,6 +53,7 @@ export const SignOrder = connect(
           canvas.width = viewport.width;
 
           const renderContext = {
+            canvas,
             canvasContext,
             viewport,
           };

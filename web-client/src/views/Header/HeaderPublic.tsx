@@ -1,10 +1,19 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import closeImg from '../../../../node_modules/@uswds/uswds/dist/img/usa-icons/close.svg';
 const seal = require('../../images/ustc_seal.svg') as string;
+
+// Public-specific state and sequences (available in presenter-public.ts)
+const publicState = state as typeof state & {
+  headerPublicHelper: Record<string, any>;
+};
+
+const publicSequences = sequences as typeof sequences & {
+  redirectToCreatePetitionerAccountSequence: () => void;
+  redirectToLoginSequence: () => void;
+};
 
 const BetaBar = toggleBetaBarSequence => {
   return (
@@ -32,11 +41,11 @@ const BetaBar = toggleBetaBarSequence => {
 
 export const HeaderPublic = connect(
   {
-    headerPublicHelper: state.headerPublicHelper,
+    headerPublicHelper: publicState.headerPublicHelper,
     isTerminalUser: state.isTerminalUser,
     redirectToCreatePetitionerAccountSequence:
-      sequences.redirectToCreatePetitionerAccountSequence,
-    redirectToLoginSequence: sequences.redirectToLoginSequence,
+      publicSequences.redirectToCreatePetitionerAccountSequence,
+    redirectToLoginSequence: publicSequences.redirectToLoginSequence,
     showBetaBar: state.templateHelper.showBetaBar,
     toggleBetaBarSequence: sequences.toggleBetaBarSequence,
   },

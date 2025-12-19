@@ -7,7 +7,13 @@ const formattedTrialSessionDetails = withAppContextDecorator(
   formattedTrialSessionDetailsComputed,
 );
 
-export const docketClerkEditsTrialSession = (cerebralTest, overrides = {}) => {
+export const docketClerkEditsTrialSession = (
+  cerebralTest,
+  overrides: {
+    fieldToUpdate?: string;
+    valueToUpdate?: string | { name: string; userId: string };
+  } = {},
+) => {
   return it('Docket clerk edits trial session', async () => {
     await cerebralTest.runSequence('gotoEditTrialSessionSequence', {
       trialSessionId: cerebralTest.trialSessionId,
@@ -36,8 +42,9 @@ export const docketClerkEditsTrialSession = (cerebralTest, overrides = {}) => {
       state: cerebralTest.getState(),
     });
 
-    const receivedUpdatedValue =
-      formatted[overrides.fieldToUpdate] || formatted.notes;
+    const receivedUpdatedValue = overrides.fieldToUpdate
+      ? formatted[overrides.fieldToUpdate]
+      : formatted.notes;
     const expectedUpdatedValue = overrides.valueToUpdate || mockNote;
 
     expect(receivedUpdatedValue).toEqual(expectedUpdatedValue);

@@ -1,9 +1,15 @@
 import { omit } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const aggregateStatisticsErrors = ({ errors, get }: ActionProps) => {
+export const aggregateStatisticsErrors = ({
+  errors,
+  get,
+}: {
+  errors: Record<string, any>;
+  get: <T>(slice: T) => T;
+}) => {
   let newErrorStatistics;
-  let statisticsErrorMessages = [];
+  let statisticsErrorMessages: string[] = [];
 
   const purgedErrors = omit(errors, [
     'irsDeficiencyAmount',
@@ -45,7 +51,13 @@ export const aggregateStatisticsErrors = ({ errors, get }: ActionProps) => {
   return { errors: purgedErrors, statisticsErrorMessages };
 };
 
-export const aggregatePetitionerErrors = ({ errors }) => {
+export const aggregatePetitionerErrors = ({
+  errors,
+}: {
+  errors: Record<string, any> & {
+    petitioners?: Array<{ index: number; [key: string]: any }>;
+  };
+}) => {
   if (errors?.petitioners) {
     errors.petitioners.forEach(e => {
       if (e.index === 0) {

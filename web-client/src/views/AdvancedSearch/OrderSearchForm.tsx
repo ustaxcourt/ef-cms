@@ -36,6 +36,16 @@ export const OrderSearchForm = connect(
     updateAdvancedOrderSearchFormValueSequence,
     validateOrderSearchSequence,
     validationErrors,
+  }: {
+    advancedDocumentSearchHelper: any;
+    advancedSearchForm: any;
+    advancedSearchTab: string;
+    clearAdvancedSearchFormSequence: Function;
+    setCurrentPaginationPageSequence: Function;
+    submitAdvancedSearchSequence: Function;
+    updateAdvancedOrderSearchFormValueSequence: Function;
+    validateOrderSearchSequence: Function;
+    validationErrors: any;
   }) {
     return (
       <>

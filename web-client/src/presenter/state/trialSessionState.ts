@@ -1,5 +1,6 @@
 import { RawCalendaredCase } from '@shared/business/entities/cases/CalendaredCase';
 import { RawEligibleCase } from '@shared/business/entities/cases/EligibleCase';
+import { RawUserCaseNote } from '@shared/business/entities/notes/UserCaseNote';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import {
   SESSION_STATUS_TYPES,
@@ -13,6 +14,7 @@ export type CalendaredCaseItemType = (
   | RawCalendaredCase
   | RawEligibleCase
 ) & {
+  notes?: RawUserCaseNote;
   removedFromTrial?: boolean;
   removedFromTrialDate?: string;
 };

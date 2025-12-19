@@ -1,6 +1,6 @@
 import { FocusLock } from '../FocusLock/FocusLock';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
+import { props as cerebralProps } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
@@ -8,10 +8,16 @@ import classNames from 'classnames';
 
 const modalRoot = window.document.getElementById('modal-root');
 
+const props = cerebralProps as unknown as {
+  onEscSequence: string;
+};
+
+const overlayUnRefDeps = {
+  onEscSequence: sequences[props.onEscSequence],
+};
+
 const OverlayUnRef = connect(
-  {
-    onEscSequence: sequences[props.onEscSequence],
-  },
+  overlayUnRefDeps,
   function OverlayUnRef({
     children,
     className,
@@ -19,6 +25,13 @@ const OverlayUnRef = connect(
     onEscSequence,
     preventEsc,
     preventScrolling,
+  }: {
+    onEscSequence?: (event: Event) => void | boolean;
+    children?: React.ReactNode;
+    className?: string;
+    forwardedRef?: React.Ref<HTMLDialogElement>;
+    preventEsc?: boolean;
+    preventScrolling?: boolean;
   }) {
     if (!onEscSequence) onEscSequence = () => {};
 

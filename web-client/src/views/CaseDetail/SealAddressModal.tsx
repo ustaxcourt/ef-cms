@@ -14,6 +14,8 @@ export const SealAddressModal = connect(
     contactToSeal,
     sealAddressSequence,
   }) {
+    if (!contactToSeal) return null;
+    
     const title = `Seal The Following Information for ${contactToSeal.name}?`;
 
     return (

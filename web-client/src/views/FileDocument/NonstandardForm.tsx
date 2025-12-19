@@ -4,11 +4,20 @@ import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { TrialCity } from '../StartCase/TrialCity';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { get } from 'lodash';
-import { props } from 'cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { props as cerebralProps } from 'cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect } from 'react';
 import classNames from 'classnames';
+import { RunableSequence as RunnableSequence } from 'cerebral';
+
+const props = cerebralProps as unknown as {
+  helper: string;
+  level: string;
+  namespace: string;
+  updateSequence: string;
+  validateSequence: string;
+  validationErrors: string;
+};
 
 export const NonstandardForm = connect(
   {
@@ -39,6 +48,20 @@ export const NonstandardForm = connect(
     updateSequence,
     validateSequence,
     validationErrors,
+    showIndex = false
+  }: {
+    caseDetail: { procedureType: string };
+    DATE_FORMATS: { ISO: string };
+    form: Record<string, any>;
+    formatAndUpdateDateFromDatePickerSequence: Function | RunnableSequence;
+    getOrdinalValuesForUploadIteration: string[];
+    helper: Record<string, any>;
+    level: string;
+    namespace: string;
+    updateSequence: Function | RunnableSequence;
+    validateSequence: Function | RunnableSequence;
+    validationErrors: Record<string, any>;
+    showIndex?: boolean
   }) {
     useEffect(() => {
       const input = window.document.getElementById('other-iteration');
@@ -189,8 +212,7 @@ export const NonstandardForm = connect(
                     key={previousDocument.docketEntryId}
                     value={previousDocument.docketEntryId}
                   >
-                    {previousDocument.documentTitle ||
-                      previousDocument.documentType}
+                    {`${showIndex ? `${previousDocument.index} - ${previousDocument.createdAtFormatted} - ` : ''}${previousDocument.documentTitle || previousDocument.documentType}`}
                   </option>
                 );
               })}

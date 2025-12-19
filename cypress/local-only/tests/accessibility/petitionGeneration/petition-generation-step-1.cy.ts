@@ -8,28 +8,70 @@ describe('Petition generation - step 1', () => {
   });
 
   describe('Myself', () => {
-    it('Myself - domestic: should be free of a11y issues', () => {
+    it('should be free of a11y issues with domestic address', () => {
       cy.get('[data-testid="filing-type-0"').click();
       checkA11y();
     });
 
-    it('Myself - international: should be free of a11y issues', () => {
+    it('should be free of a11y issues with international address', () => {
       cy.get('[data-testid="filing-type-0"').click();
       cy.get('[data-testid="international-country-btn"]').click();
       checkA11y();
     });
+
+    it('should be free of a11y issues with language fields filled', () => {
+      cy.get('[data-testid="filing-type-0"').click();
+      cy.get('[data-testid="contact-primary-preferred-language"]').type(
+        'Spanish',
+      );
+      cy.get('[data-testid="contact-primary-preferred-language"]').blur();
+      cy.get(
+        '[data-testid="contact-primary-preferred-communication-method"]',
+      ).type('ASL');
+      cy.get(
+        '[data-testid="contact-primary-preferred-communication-method"]',
+      ).blur();
+      checkA11y();
+    });
   });
   describe('Myself and my spouse', () => {
-    it('Myself and my spouse - deceased: should be free of a11y issues', () => {
+    it('should be free of a11y issues when spouse is deceased', () => {
       cy.get('[data-testid="filing-type-1"').click();
       cy.get('[data-testid="is-spouse-deceased-0"]').click();
       checkA11y();
     });
 
-    it('Myself and my spouse - not deceased: should be free of a11y issues', () => {
+    it('should be free of a11y issues when spouse is not deceased', () => {
       cy.get('[data-testid="filing-type-1"').click();
       cy.get('[data-testid="is-spouse-deceased-1"]').click();
       cy.get('[data-testid="have-spouse-consent-label"').click();
+      checkA11y();
+    });
+
+    it('should be free of a11y issues with language fields filled', () => {
+      cy.get('[data-testid="filing-type-1"').click();
+      cy.get('[data-testid="is-spouse-deceased-1"]').click();
+      cy.get('[data-testid="have-spouse-consent-label"').click();
+      cy.get('[data-testid="contact-primary-preferred-language"]').type(
+        'Spanish',
+      );
+      cy.get('[data-testid="contact-primary-preferred-language"]').blur();
+      cy.get(
+        '[data-testid="contact-primary-preferred-communication-method"]',
+      ).type('ASL');
+      cy.get(
+        '[data-testid="contact-primary-preferred-communication-method"]',
+      ).blur();
+      cy.get('[data-testid="contact-secondary-preferred-language"]').type(
+        'French',
+      );
+      cy.get('[data-testid="contact-secondary-preferred-language"]').blur();
+      cy.get(
+        '[data-testid="contact-secondary-preferred-communication-method"]',
+      ).type('TTY');
+      cy.get(
+        '[data-testid="contact-secondary-preferred-communication-method"]',
+      ).blur();
       checkA11y();
     });
   });

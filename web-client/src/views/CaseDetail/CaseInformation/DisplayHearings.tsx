@@ -1,8 +1,15 @@
 import { DropdownMenu } from '../../../ustc-ui/DropdownMenu/DropdownMenu';
 import { PreformattedText } from '@web-client/ustc-ui/PreformatedText/PreformattedText';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
+import { props as cerebralProps } from 'cerebral';
 import React from 'react';
+
+const props = cerebralProps as unknown as {
+  caseDetailHelper: unknown;
+  hearings: unknown;
+  openAddEditHearingNoteModalSequence: unknown;
+  removeHearingSequence: unknown;
+};
 
 export const DisplayHearings = connect(
   {
@@ -17,6 +24,25 @@ export const DisplayHearings = connect(
     hearings,
     openAddEditHearingNoteModalSequence,
     removeHearingSequence,
+  }: {
+    caseDetailHelper: {
+      showAddRemoveFromHearingButtons: boolean;
+      docketNumber: string;
+    };
+    hearings: Array<{
+      trialSessionId: string;
+      userIsAssignedToSession: boolean;
+      formattedTrialCity: string;
+      formattedTrialDate: string;
+      formattedAssociatedJudge: string;
+      calendarNotes?: string;
+    }>;
+    openAddEditHearingNoteModalSequence: (args: {
+      docketNumber: string;
+      note: string;
+      trialSessionId: string;
+    }) => void;
+    removeHearingSequence: (args: { trialSessionId: string }) => void;
   }) {
     return hearings.map(hearing => (
       <tbody className="hoverable" key={hearing.trialSessionId}>

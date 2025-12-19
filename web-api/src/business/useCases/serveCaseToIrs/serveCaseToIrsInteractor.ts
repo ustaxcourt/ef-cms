@@ -165,10 +165,10 @@ const generateNoticeOfReceipt = async ({
     CLERK_OF_THE_COURT_CONFIGURATION,
   ]);
 
-  const { name, title } = CLERK_OF_THE_COURT_RECORD.value.current as {
+  const { name, title }: {
     name: string;
     title: string;
-  };
+  } = CLERK_OF_THE_COURT_RECORD.value.current;
 
   let primaryContactNotrPdfData = await applicationContext
     .getDocumentGenerators()

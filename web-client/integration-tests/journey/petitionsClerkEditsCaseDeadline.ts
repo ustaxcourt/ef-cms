@@ -5,7 +5,9 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const petitionsClerkEditsCaseDeadline = (
   cerebralTest,
-  overrides = {},
+  overrides: {
+    description?: string;
+  } = {},
 ) => {
   const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed);
 

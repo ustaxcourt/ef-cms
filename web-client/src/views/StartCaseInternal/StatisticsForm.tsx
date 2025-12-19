@@ -38,6 +38,11 @@ export const StatisticsForm = connect(
     validatePetitionFromPaperSequence,
     validationErrors,
   }) {
+    // Type cast for confirmationText to avoid repeated inline type assertions
+    const statisticsConfirmation = confirmationText as {
+      statistics?: Array<{ irsDeficiencyAmount?: string }>;
+    };
+
     const getDeficiencyAmountInput = index => (
       <>
         <label className="usa-label" htmlFor={`deficiency-amount-${index}`}>
@@ -110,8 +115,7 @@ export const StatisticsForm = connect(
 
         <FormGroup
           confirmationText={
-            confirmationText?.statistics &&
-            confirmationText.statistics[index]?.irsDeficiencyAmount
+            statisticsConfirmation?.statistics?.[index]?.irsDeficiencyAmount
           }
           errorText={
             validationErrors.statistics &&
