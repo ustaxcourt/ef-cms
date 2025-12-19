@@ -73,7 +73,7 @@ npm run ecr:check-version
 npm run deploy:ci-image:from exp5
 ```
 
-#### Set the value of the `ES_ENGINE_VERSION` secret in the [env]\_deploy secrets in Secrets Manager to `OpenSearch_3.3`
+#### Set the value of the `ES_ENGINE_VERSION` secret in the [env]_deploy secrets in Secrets Manager to `OpenSearch_3.3`
 
 ```bash
 scripts/secrets/update-secret.ts --key "ES_ENGINE_VERSION" --value "OpenSearch_3.3"
