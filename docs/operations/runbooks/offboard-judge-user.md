@@ -8,7 +8,7 @@ Since completing this runbook in its entirety requires access to USTC environmen
 ## Prerequisites
 - `offboard-judge-user.sh`
 - Environment switcher config, `set-env.sh`
-- AWS access (DynamoDB and Cognito)
+- AWS access (database and Cognito)
 - Standard development setup described in `running-locally.md`
 - The Judge being offboarded should not have any active cases / trials / etc. assigned to them. (Check with the PO for whether or not this has happened)
 

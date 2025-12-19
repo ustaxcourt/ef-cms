@@ -21,7 +21,7 @@ import { getNewPasswordForEnvironment } from './make-new-password';
 
 /**
  * This script will add a judge user to a deployed environment.
- * It creates both the Cognito record and the associated Dynamo record.
+ * It creates both the Cognito record and the associated database record.
  * Required parameters: name, judgeFullName, and email
  * Optional parameters: phone (defaults to none), judgeTitle (defaults to "Judge"), isSeniorJudge (defaults to false)
  * Note that a phone number is eventually required; otherwise, trial information will
@@ -38,11 +38,6 @@ import { getNewPasswordForEnvironment } from './make-new-password';
 const scriptConfig: ScriptConfig = {
   description:
     'add-judge - Creates a new Judge user in a deployed environment.',
-  environment: {
-    dynamoDbTableName: 'DYNAMODB_TABLE_NAME',
-    env: 'ENV',
-    userPoolId: 'USER_POOL_ID',
-  },
   parameters: {
     email: {
       position: 2,
@@ -75,6 +70,10 @@ const scriptConfig: ScriptConfig = {
     },
   },
   requireActiveAwsSession: true,
+  environment: {
+    userPoolId: 'USER_POOL_ID',
+    env: 'ENV',
+  },
 };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -125,7 +124,7 @@ const scriptConfig: ScriptConfig = {
   const section = getChambersNameFromJudgeName(name);
   const role = 'judge';
 
-  const dynamoUserInfo: RawUser = {
+  const userInfo: RawUser = {
     email,
     entityName: 'User',
     isSeniorJudge,
@@ -138,9 +137,9 @@ const scriptConfig: ScriptConfig = {
     userId: applicationContext.getUniqueId(), // Silly as this will be overwritten, but we need one for validation
     accountStatus: ACCOUNT_STATUS.active
   };
-  const rawUser = new User(dynamoUserInfo).validate().toRawObject();
+  const rawUser = new User(userInfo).validate().toRawObject();
 
-  console.log('Adding user information to Dynamo and Cognito ... ');
+  console.log('Adding user information to Postgres and Cognito ... ');
   const { userId } = await createOrUpdateUser(applicationContext, {
     password: getNewPasswordForEnvironment(),
     setPasswordAsPermanent: false,
