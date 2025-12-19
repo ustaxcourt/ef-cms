@@ -7,6 +7,9 @@ import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
+import { RenderParameters } from 'pdfjs-dist/types/src/display/api';
+import { PageViewport } from 'pdfjs-dist/types/src/display/display_utils';
+
 
 export const ApplyStamp = connect(
   {
@@ -46,35 +49,32 @@ export const ApplyStamp = connect(
     validateStampSequence,
     validationErrors,
   }) {
-    const canvasRef = useRef(null) as React.RefObject<HTMLCanvasElement | null>;
-    const signatureRef = useRef(
-      null,
-    ) as React.RefObject<HTMLSpanElement | null>;
+    const canvasRef = useRef(null);
+    const signatureRef = useRef(null);
 
     const renderPDFPage = () => {
       const canvas = canvasRef.current;
-      const canvasContext = canvas?.getContext('2d');
-      if (canvasContext) {
-        pdfObj
-          ?.getPage(1)
-          .then(page => {
-            const scale = 1;
-            const viewport = page.getViewport({ scale });
-            if (canvas) {
-              canvas.height = viewport.height;
-              canvas.width = viewport.width;
-            }
+      const canvasContext = canvas.getContext('2d');
 
-            const renderContext = {
-              canvasContext,
-              viewport,
-            };
-            return page.render(renderContext);
-          })
-          .catch(() => {
-            /* no-op*/
-          });
-      }
+      pdfObj
+        ?.getPage(1)
+        .then(page => {
+          const scale = 1;
+          const viewport: PageViewport = page.getViewport({ scale });
+          canvas.height = viewport.height;
+          canvas.width = viewport.width;
+
+
+          const renderContext: RenderParameters = {
+            canvas,
+            canvasContext,
+            viewport,
+          };
+          return page.render(renderContext);
+        })
+        .catch(() => {
+          /* no-op*/
+        });
     };
 
     const start = () => {
@@ -84,10 +84,8 @@ export const ApplyStamp = connect(
         stampApplied: true,
       });
 
-      if (sigEl) {
-        sigEl.style.top = '500px';
-        sigEl.style.left = '148px';
-      }
+      sigEl.style.top = '500px';
+      sigEl.style.left = '148px';
     };
 
     let hasStarted = false;
