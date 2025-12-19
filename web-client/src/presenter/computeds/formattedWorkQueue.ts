@@ -78,10 +78,7 @@ export const formattedWorkQueue = (
       docketEntryIdGroups.get(key)!.push(wi);
     }
 
-    console.log('docketEntryIdGroups', docketEntryIdGroups);
-
     for (const group of docketEntryIdGroups.values()) {
-      console.log('group', group);
       if (group.length === 1) {
         solo.push(group[0]);
       } else {
@@ -92,12 +89,8 @@ export const formattedWorkQueue = (
             solo.push(g);
           }
         });
-        // consolidated.push(...group);
-        console.log('consolidated', consolidated);
       }
     }
-
-    console.log('consolidated', consolidated);
 
     const byLead = new Map<string, RawWorkItemWithCaseAndDocketEntryInfo[]>();
     for (const wi of consolidated) {
@@ -105,8 +98,6 @@ export const formattedWorkQueue = (
       if (!byLead.has(key)) byLead.set(key, []);
       byLead.get(key)!.push(wi);
     }
-
-    console.log('byLead', byLead);
 
     const consolidatedResult: Array<
       RawWorkItemWithCaseAndDocketEntryInfo & { groupedCases?: any[] }
@@ -123,21 +114,11 @@ export const formattedWorkQueue = (
 
       if (leadItems.length > 0) {
         for (const li of leadItems) {
-          console.log('path if it is a lead case in consolidated group', li);
           consolidatedResult.push({ ...li, groupedCases });
-          console.log(
-            'consolidatedResult when path is lead case in consolidated group',
-            consolidatedResult,
-          );
         }
       } else {
         for (const member of group) {
-          console.log('path if member case in consolidated group', member);
           consolidatedResult.push({ ...member, groupedCases });
-          console.log(
-            'consolidatedResult when path is member case in consolidated group',
-            consolidatedResult,
-          );
         }
       }
     }
