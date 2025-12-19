@@ -8,7 +8,7 @@ import {
   isAuthorized,
   ROLE_PERMISSIONS,
 } from '@shared/authorization/authorizationClientService';
-import { Case } from '@shared/business/entities/cases/Case';
+import { Case, isLeadCase } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
@@ -140,7 +140,7 @@ export const fileAndServeCourtIssuedDocument = async (
 
       await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
         contentType: 'application/json',
-        document: Buffer.from(JSON.stringify(contentToStore)),
+        document: Buffer.from(JSON.stringify(contentToStore)) as any,
         key: documentContentsId,
         useTempBucket: false,
       });
@@ -214,9 +214,9 @@ export const fileAndServeCourtIssuedDocument = async (
             })
           )[0];
 
-          if (caseEntity.leadDocketNumber === caseEntity.docketNumber) {
+          if (isLeadCase(caseEntity)) {
             const consolidatedCases = await getConsolidatedCases({
-              leadDocketNumber: caseEntity.leadDocketNumber,
+              leadDocketNumber: caseEntity.leadDocketNumber!,
             });
 
             const childCaseDeadlines: RawCaseDeadline[] = [];

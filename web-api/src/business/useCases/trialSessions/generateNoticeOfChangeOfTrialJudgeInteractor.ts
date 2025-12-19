@@ -68,7 +68,7 @@ export const generateNoticeOfChangeOfTrialJudgeInteractor = async (
       data: {
         caseCaptionExtension,
         caseTitle,
-        docketNumberWithSuffix: caseDetail.docketNumber,
+        docketNumberWithSuffix: caseDetail.docketNumberWithSuffix,
         nameOfClerk: name,
         titleOfClerk: title,
         trialInfo,

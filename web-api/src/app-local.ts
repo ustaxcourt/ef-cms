@@ -32,9 +32,6 @@ const server = http.createServer((request, response) => {
       connections[connectionId].sendUTF(requestBody);
       response.writeHead(200);
       return response.end();
-    } else if (request.url?.includes('isDone')) {
-      response.writeHead(200);
-      return response.end();
     } else {
       response.writeHead(410);
       return response.end();

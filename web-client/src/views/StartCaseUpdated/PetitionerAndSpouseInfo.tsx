@@ -79,6 +79,7 @@ export function PetitionerAndSpouseInfo({
       {isSpouseDeceasedSelected === 'Yes' && (
         <ContactSecondaryUpdated
           displayInCareOf
+          isPetitioner={isPetitioner}
           showSameAsPrimaryCheckbox
           addressInfo={contactSecondary}
           handleBlur={petitionGenerationLiveValidationSequence}
@@ -87,6 +88,7 @@ export function PetitionerAndSpouseInfo({
           nameLabel="Full name of deceased spouse"
           registerRef={registerRef}
           showElectronicServiceConsent={isPetitioner}
+          showLanguageFields={false}
           useSameAsPrimary={useSameAsPrimary}
         />
       )}
