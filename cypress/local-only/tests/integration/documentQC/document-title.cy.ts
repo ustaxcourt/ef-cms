@@ -8,11 +8,17 @@ import { logout } from '../../../../helpers/authentication/logout';
 import { petitionsClerkServesPetition } from '../../../../helpers/documentQC/petitionsclerk-serves-petition';
 import { selectTypeaheadInput } from '../../../../helpers/components/typeAhead/select-typeahead-input';
 import { viewMyOutbox } from 'cypress/local-only/support/pages/dashboard';
+import {
+  formatNow,
+  FORMATS,
+} from '@shared/business/utilities/DateHandler';
 
 describe('Document title updates correctly', () => {
   it('should see the document title update when additional info is added during the QC process', () => {
     const primaryFilerName = 'John';
     const additionalInfo = 'This is additional info';
+    const date = formatNow(FORMATS.MMDDYY)
+
     loginAsPrivatePractitioner();
     externalUserCreatesElectronicCase(primaryFilerName).then(docketNumber => {
       petitionsClerkServesPetition(docketNumber);
@@ -60,7 +66,7 @@ describe('Document title updates correctly', () => {
         .find('[data-testid=work-item-outbox-document-link]')
         .should('contain', `Exhibit(s) ${additionalInfo}`);
 
-      // Add ammendment to exhibit
+      // Add amendment to exhibit
       loginAsPrivatePractitioner();
       cy.visit(`/case-detail/${docketNumber}`);
       cy.get('[data-testid="button-file-document"]').click();
@@ -69,9 +75,16 @@ describe('Document title updates correctly', () => {
         'complete-doc-document-type-search',
         'Amendment [anything]',
       );
-      cy.get('[data-testid="previous-document-search"]').select(
-        `Exhibit(s) ${additionalInfo}`,
-      );
+      const expectedText = `5 - ${date} - Exhibit(s) ${additionalInfo}`;
+      cy.get('[data-testid="previous-document-search"]')
+        .find('option')
+        .then($options => {
+          const matchingOption = Array.from($options).find(opt =>
+            opt.textContent?.includes(expectedText),
+          );
+          const optionText = matchingOption?.textContent?.trim() || '';
+          cy.get('[data-testid="previous-document-search"]').select(optionText);
+        });
       cy.get('[data-testid="ordinal-field-select-search"]').select('15');
       cy.get('[data-testid="submit-document"]').click();
       attachFile({
@@ -88,7 +101,7 @@ describe('Document title updates correctly', () => {
       cy.get('[data-testid="file-document-review-submit-document"]').click();
       cy.get('[data-testid="loading-overlay"]').should('not.exist');
 
-      // Docket clerks views work item for ammendment and sees it has the additional info in ammendment
+      // Docket clerks views work item for amendment and sees it has the additional info in amendment
       loginAsDocketClerk();
       cy.get('[data-testid="document-qc-nav-item"]').click();
       cy.get('[data-testid="switch-to-section-document-qc-button"]').click();
