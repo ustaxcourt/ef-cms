@@ -51,8 +51,12 @@ export const ApplyStamp = connect(
     const signatureRef = useRef(null);
 
     const renderPDFPage = () => {
-      const canvas = canvasRef.current;
-      const canvasContext = canvas.getContext('2d');
+      const canvas : HTMLCanvasElement = new HTMLCanvasElement()
+      const canvasContext: CanvasRenderingContext2D | null = canvas.getContext('2d');
+
+      if(canvasContext === null) {
+        throw new Error('Could not get canvas context');
+      }
 
       pdfObj
         ?.getPage(1)
