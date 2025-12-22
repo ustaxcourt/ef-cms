@@ -8,7 +8,6 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
 
-
 export const ApplyStamp = connect(
   {
     applyStampFormChangeSequence: sequences.applyStampFormChangeSequence,
@@ -51,12 +50,8 @@ export const ApplyStamp = connect(
     const signatureRef = useRef(null);
 
     const renderPDFPage = () => {
-      const canvas : HTMLCanvasElement = new HTMLCanvasElement()
-      const canvasContext: CanvasRenderingContext2D | null = canvas.getContext('2d');
-
-      if(canvasContext === null) {
-        throw new Error('Could not get canvas context');
-      }
+      const canvas = canvasRef.current;
+      const canvasContext = canvas.getContext('2d');
 
       pdfObj
         ?.getPage(1)
@@ -65,7 +60,6 @@ export const ApplyStamp = connect(
           const viewport = page.getViewport({ scale });
           canvas.height = viewport.height;
           canvas.width = viewport.width;
-
 
           const renderContext = {
             canvasContext,
