@@ -1,3 +1,4 @@
+import { applicationContext } from '@web-client/applicationContext';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const updateAdvancedSearchFormAction =
@@ -31,6 +32,17 @@ export const updateAdvancedSearchFormAction =
     }
 
     if (props.value) {
+      console.log('props.value: ', props.value);
+      if (
+        (props.key === 'startDate' || props.key === 'endDate') &&
+        formType === 'orderSearch'
+      ) {
+        store.set(
+          state.advancedSearchForm[formType].dateRange,
+          applicationContext.getConstants().DATE_RANGE_SEARCH_OPTIONS
+            .CUSTOM_DATES,
+        );
+      }
       store.set(formFieldPath, props.value);
     } else {
       store.unset(formFieldPath);
