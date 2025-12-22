@@ -15,11 +15,6 @@ import fs from 'fs';
 const scriptConfig: ScriptConfig = {
   description:
     'download-all-case-documents - Downloads all docket entries for the given docket number.',
-  environment: {
-    dynamoDbTableName: 'DYNAMODB_TABLE_NAME',
-    efcmsDomain: 'EFCMS_DOMAIN',
-    env: 'ENV',
-  },
   parameters: {
     docketNumber: {
       position: 0,
@@ -28,6 +23,10 @@ const scriptConfig: ScriptConfig = {
     },
   },
   requireActiveAwsSession: true,
+  environment: {
+    efcmsDomain: 'EFCMS_DOMAIN',
+    env: 'ENV',
+  },
 };
 const { docketNumber } = parseArgsAndEnvVars(scriptConfig) as {
   docketNumber: string;
