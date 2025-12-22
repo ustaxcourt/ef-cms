@@ -157,7 +157,7 @@ export const FilingsAndProceedings = connect<
         {entry.isStricken && <span>(STRICKEN)</span>}
         {entry.relatedDocketEntries?.map(affectedEntry => {
           return (
-            <>
+            <span key={affectedEntry.docketEntryId}>
               <br></br>
               <span className="display-inline-block">
                 <span> --- </span>
@@ -197,7 +197,7 @@ export const FilingsAndProceedings = connect<
                   </span>
                 )}
               </span>
-            </>
+            </span>
           );
         })}
       </>
