@@ -186,7 +186,7 @@ export const CourtIssuedDocketEntry = connect(
                           className="usa-checkbox__label"
                           htmlFor="dispositionOrder"
                         >
-                          This order acts on at least one motion
+                          This order is dispositive for at least one motion
                         </label>
                       </div>
                     </fieldset>
@@ -230,7 +230,7 @@ export const CourtIssuedDocketEntry = connect(
                                       value: Object.assign(
                                         form.affectedDocketEntries[i],
                                         {
-                                          docketEntryId: inputValue.value,
+                                          docketEntryId: inputValue?.value,
                                         },
                                       ),
                                     },
@@ -272,7 +272,7 @@ export const CourtIssuedDocketEntry = connect(
                                       value: Object.assign(
                                         form.affectedDocketEntries[i],
                                         {
-                                          disposition: inputValue.value,
+                                          disposition: inputValue?.value,
                                         },
                                       ),
                                     },
@@ -397,9 +397,9 @@ export const CourtIssuedDocketEntry = connect(
 
                 {addCourtIssuedDocketEntryHelper.showAttachmentAndServiceFields && (
                   <>
-                    <div className="usa-label" htmlFor="service-parties">
+                    <label className="usa-label" htmlFor="service-parties">
                       Service parties
-                    </div>
+                    </label>
 
                     <div id="service-parties">
                       {addCourtIssuedDocketEntryHelper.serviceParties.map(

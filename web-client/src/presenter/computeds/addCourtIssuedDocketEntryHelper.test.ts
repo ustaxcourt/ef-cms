@@ -109,11 +109,11 @@ describe('addCourtIssuedDocketEntryHelper', () => {
 
     expect(result.caseMotions.length).toEqual(2);
     expect(result.caseMotions).toEqual([
+      { label: '3 - Motion to Dismiss', value: '789' },
       {
         label: '2 - Motion for an Order under Federal Rule of Evidence 502(d)',
         value: '456',
       },
-      { label: '3 - Motion to Dismiss', value: '789' },
     ]);
   });
 

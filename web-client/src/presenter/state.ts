@@ -857,6 +857,9 @@ export const baseState = {
   },
   openCases: [] as TAssociatedCase[],
   openCasesCurrentPage: undefined as number | undefined,
+  openClosedCases: {
+    caseType: undefined as string | undefined
+  },
   paperServiceStatusState: {
     pdfsAppended: 0,
     totalPdfs: 0,

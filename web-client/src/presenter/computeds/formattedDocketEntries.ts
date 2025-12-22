@@ -1,9 +1,12 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { Get } from 'cerebral';
-import { STATE_KEYS } from '@shared/business/entities/EntityConstants';
+import {
+  MOTION_DISPOSITION_VERBIAGE,
+  STATE_KEYS,
+} from '@shared/business/entities/EntityConstants';
 import { computeIsNotServedDocument } from '@shared/business/utilities/getFormattedCaseDetail';
-import { sortBy } from 'lodash';
+import { concat, sortBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const isSelectableForDownload = (entry: RawDocketEntry) => {
@@ -161,27 +164,57 @@ export const getFormattedDocketEntry = ({
     createdAtFormatted: entry.createdAtFormatted,
   };
 
-  if (entry.affectedDocketEntries || entry.affectedByDocketEntries) {
-    formattedResult.relatedDocketEntries = [
-      ...(entry.affectedByDocketEntries ?? []),
-      ...(entry.affectedDocketEntries ?? []),
-    ].map(affectedEntry => {
-      const { index, showDocumentViewerLink, showDownloadLink } =
-        getRelatedDocketEntryDetails(
-          entry,
-          rawCase,
-          affectedEntry.docketEntryId,
-          isExternalUser,
-          user,
-          visibilityPolicyDateFormatted,
-        );
+  formattedResult.relatedDocketEntries = [];
+  if (entry.affectedByDocketEntries) {
+    formattedResult.relatedDocketEntries = concat(
+      formattedResult.relatedDocketEntries,
+      entry.affectedByDocketEntries.map(affectedEntry => {
+        const { index, showDocumentViewerLink, showDownloadLink } =
+          getRelatedDocketEntryDetails(
+            entry,
+            rawCase,
+            affectedEntry.docketEntryId,
+            isExternalUser,
+            user,
+            visibilityPolicyDateFormatted,
+          );
 
-      affectedEntry.docketEntryIndex = index;
-      affectedEntry.showDocumentViewerLink = showDocumentViewerLink;
-      affectedEntry.showDownloadLink = showDownloadLink;
+        console.log(JSON.stringify(affectedEntry));
 
-      return affectedEntry;
-    });
+        affectedEntry.docketEntryIndex = index;
+        affectedEntry.showDocumentViewerLink = showDocumentViewerLink;
+        affectedEntry.showDownloadLink = showDownloadLink;
+        affectedEntry.disposition =
+          MOTION_DISPOSITION_VERBIAGE[affectedEntry.disposition].MOTION;
+
+        return affectedEntry;
+      }),
+    );
+  }
+
+  if (entry.affectedDocketEntries) {
+    formattedResult.relatedDocketEntries = concat(
+      formattedResult.relatedDocketEntries,
+      entry.affectedDocketEntries.map(affectedEntry => {
+        const { index, showDocumentViewerLink, showDownloadLink } =
+          getRelatedDocketEntryDetails(
+            entry,
+            rawCase,
+            affectedEntry.docketEntryId,
+            isExternalUser,
+            user,
+            visibilityPolicyDateFormatted,
+          );
+
+        affectedEntry.docketEntryIndex = index;
+        affectedEntry.showDocumentViewerLink = showDocumentViewerLink;
+        affectedEntry.showDownloadLink = showDownloadLink;
+        affectedEntry.disposition =
+          MOTION_DISPOSITION_VERBIAGE[affectedEntry.disposition].ORDER;
+
+        return affectedEntry;
+      }),
+    );
   }
 
   if (!isExternalUser) {

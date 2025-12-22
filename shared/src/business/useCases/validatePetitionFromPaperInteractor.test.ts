@@ -15,7 +15,7 @@ describe('validate petition from paper', () => {
       petition: {},
     });
 
-    expect(Object.keys(errors)).toEqual([
+    expect(Object.keys({ ...errors })).toEqual([
       'caseCaption',
       'caseType',
       'mailingDate',

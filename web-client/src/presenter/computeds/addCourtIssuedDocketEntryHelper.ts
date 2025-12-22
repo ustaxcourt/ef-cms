@@ -3,7 +3,7 @@ import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { Get } from 'cerebral';
 import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
 import { state } from '@web-client/presenter/app.cerebral';
-import _ from 'lodash';
+import { find, filter, orderBy, flow } from 'lodash';
 import { MOTION_DISPOSITIONS } from '@shared/business/entities/EntityConstants';
 
 export const addCourtIssuedDocketEntryHelper = (
@@ -38,30 +38,36 @@ export const addCourtIssuedDocketEntryHelper = (
   const relatedMotionDispositions = Object.values(MOTION_DISPOSITIONS).map(
     d => ({ label: d, value: d }),
   );
-  const caseMotions = caseDetail.docketEntries
-    .filter(
-      d =>
-        DocketEntry.isMotion(d.eventCode) &&
-        !d.isStricken &&
-        !d.isDraft &&
-        !_.find(
-          // Motions not already in the order
-          form.affectedDocketEntries ?? [],
-          am => am.docketEntryId === d.docketEntryId,
-        ),
-    )
-    .map((m: RawDocketEntry) => ({
-      label: `${m.index} - ${m.documentTitle}`,
-      value: m.docketEntryId,
-    }));
+
+  const caseMotions = flow([
+    (docketEntries: RawDocketEntry[]) =>
+      filter(
+        docketEntries,
+        d =>
+          DocketEntry.isMotion(d.eventCode) &&
+          !d.isStricken &&
+          !d.isDraft &&
+          !find(
+            // Motions not already in the order
+            form.affectedDocketEntries ?? [],
+            am => am.docketEntryId === d.docketEntryId,
+          ),
+      ),
+    docketEntries => orderBy(docketEntries, ['index'], ['desc']),
+    docketEntries =>
+      docketEntries.map((m: RawDocketEntry) => ({
+        label: `${m.index} - ${m.documentTitle}`,
+        value: m.docketEntryId,
+      })),
+  ])(caseDetail.docketEntries);
 
   const serviceParties = [
     ...petitioners,
-    ...caseDetail.privatePractitioners.map(practitioner => ({
+    ...(caseDetail.privatePractitioners ?? []).map(practitioner => ({
       ...practitioner,
       displayName: `${practitioner.name}, Petitioner Counsel`,
     })),
-    ...caseDetail.irsPractitioners.map(practitioner => ({
+    ...(caseDetail.irsPractitioners ?? []).map(practitioner => ({
       ...practitioner,
       displayName: `${practitioner.name}, Respondent Counsel`,
     })),

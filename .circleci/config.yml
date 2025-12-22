@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   git-shallow-clone: guitarrapc/git-shallow-clone@2.8.0
 
-efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.60
+efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.62
 
 parameters:
   run_build_and_deploy:
@@ -22,6 +22,10 @@ parameters:
     type: boolean
 
   run_glue_to_lower_env:
+    default: false
+    type: boolean
+
+  run_real_user_tests:
     default: false
     type: boolean
 
@@ -182,10 +186,7 @@ jobs:
               echo "skipping…"
               exit 0
             fi
-            if [ "${CIRCLE_BRANCH}" == "test" ]; then
-              export REGION="us-east-1"
-              ./scripts/user/setup-glued-users.ts
-            else
+            if [ "${CIRCLE_BRANCH}" != "test" ]; then
               npx ts-node --transpile-only ./scripts/circleci/judge/bulkImportJudgeUsers.ts | tee bulk-import-log.txt
             fi
       - run:
@@ -223,7 +224,7 @@ jobs:
 
   docker-image-zipper:
     docker:
-      - image: cimg/node:24.11.1
+      - image: cimg/node:24.12.0
     resource_class: xlarge
     steps:
       - git-shallow-clone/checkout
@@ -545,6 +546,10 @@ jobs:
           command: |
             ./scripts/elasticsearch/delete-alpha-and-beta-clusters.sh
       - run:
+          name: 'Delete Cognito users'
+          command: |
+            REGION=us-east-1 ./scripts/user/clear-all-cognito-users.ts
+      - run:
           no_output_timeout: 20m
           name: 'Recreate the alpha OpenSearch cluster'
           command: |
@@ -643,7 +648,7 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: xlarge
+    resource_class: medium+
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -674,7 +679,7 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: xlarge
+    resource_class: medium+
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -705,7 +710,7 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: xlarge
+    resource_class: medium+
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -751,6 +756,10 @@ jobs:
           name: Cleanup Deploy Table
           command: |
             npm run migration:cleanup -- $ENV
+      - run:
+          name: Populate test users in Cognito
+          command: |
+            REGION="us-east-1" ./scripts/user/setup-glued-users.ts
       - run:
           name: Kick off a deployment
           command: |
@@ -836,6 +845,39 @@ jobs:
                 \"referrer\":\"${CIRCLE_WORKFLOW_ID}\", \
                 \"source_bucket\":\"${SOURCE_BUCKET}\", \
                 \"destination_bucket\":\"${DESTINATION_BUCKET}\"}}"
+
+  cypress-real-user-tests:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-and-cypress-install
+      - run:
+          name: Create Cypress Artifacts Directory
+          command: mkdir /tmp/cypress
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+      - run:
+          name: 'Cypress Real User Tests'
+          command: |
+            set +e
+            npm run cypress:real-users
+            echo "export REAL_USERS_TEST_RESULT=$?" >> $BASH_ENV
+            set -e
+      - run:
+          name: Kill Build if Smoketests Failed
+          command: |
+            if [ "${REAL_USERS_TEST_RESULT}" -ne 0 ]; then
+              exit 1
+            fi
+      - store_artifacts:
+          path: /root/project/cypress/real-users/videos/
 
   ######################## GLUE JOB: Jobs that run in prod ########################
 
@@ -1053,3 +1095,9 @@ workflows:
     jobs:
       - sync-s3-buckets-with-timeout:
           <<: *only-deployed-lower-environments
+
+  real-user-tests:
+    when: << pipeline.parameters.run_real_user_tests >>
+    jobs:
+      - cypress-real-user-tests:
+          <<: *only-test
