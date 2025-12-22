@@ -56,8 +56,8 @@ export const SignOrder = connect(
               canvas.height = viewport.height;
               canvas.width = viewport.width;
             }
-
             const renderContext = {
+              canvas,
               canvasContext,
               viewport,
             };

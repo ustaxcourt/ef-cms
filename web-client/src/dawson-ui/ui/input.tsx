@@ -20,6 +20,7 @@ interface TextAreaProps
   error?: string;
   label?: string;
   helpText?: string;
+  showReqOptionalText?: boolean;
 }
 
 const styles = {
@@ -158,7 +159,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                   />
                 )}
                 <span className={cn(styles.optional)}>
-                  {!required ? '(optional)' : '(required)'}
+                  {!required ? '(optional)' : '(required)'} 
                 </span>
               </div>
               {helpText && (
@@ -203,7 +204,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 );
 
 const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
-  ({ className, error, label, helpText, ...props }, ref) => {
+  ({ className, error, label, helpText, showReqOptionalText, ...props }, ref) => {
     const textareaId = React.useId();
     const labelId = React.useId();
     const helpTextId = helpText ? React.useId() : undefined;
@@ -248,7 +249,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
                     aria-label={helpText}
                   />
                 )}
-                {!props.required && (
+                {showReqOptionalText && !props.required && (
                   <span className="tw:text-grey-dark tw:ml-1 tw:font-normal tw:text-[14px] tw:xs:text-[16px]">
                     (optional)
                   </span>
