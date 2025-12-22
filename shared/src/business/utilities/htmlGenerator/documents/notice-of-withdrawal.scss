@@ -1,0 +1,27 @@
+#notice-of-withdrawal-pdf {
+  ol {
+    padding-left: 0;
+    margin-left: 15px;
+    list-style-type: decimal;
+
+    li {
+      padding-left: 20px;
+    }
+  }
+
+  .address-label {
+    margin-top: 2rem;
+  }
+
+  .dated {
+    margin-top: 1rem;
+  }
+
+  .notice-of-withdrawal-info {
+    position: relative;
+    width: 100%;
+    margin-top: 100px;
+    font-size: 16px;
+    text-align: center;
+  }
+}
