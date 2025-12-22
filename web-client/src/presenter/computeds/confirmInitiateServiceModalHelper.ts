@@ -6,15 +6,6 @@ import {
   SERVICE_INDICATOR_TYPES,
   ROLES,
 } from '@shared/business/entities/EntityConstants';
-import { isLeadCase } from '@shared/business/entities/cases/Case';
-
-/**
- * Returns computed values for the confirm initiate court issued filing service modal
- *
- * @param {Function} get the cerebral get function used
- * @param {object} applicationContext the application context
- * @returns {object} the computed values
- */
 
 export type ContactsNeedingPaperService = {
   name: string;
@@ -45,12 +36,9 @@ export const confirmInitiateServiceModalHelper = (
     ({ eventCode, multiDocketedOn } = currentDocketEntry);
   }
 
-  const isMultiDocketed =
-    isLeadCase(formattedCaseDetail) && multiDocketedOn?.length > 1;
+  const isMultiDocketed = multiDocketedOn?.length > 1;
 
-  const canMultiDocket =
-    !NON_MULTI_DOCKETABLE_EVENT_CODES.includes(eventCode) &&
-    isLeadCase(formattedCaseDetail);
+  const canMultiDocket = !NON_MULTI_DOCKETABLE_EVENT_CODES.includes(eventCode);
 
   const canServeMultiDocketed = canMultiDocket || isMultiDocketed;
 

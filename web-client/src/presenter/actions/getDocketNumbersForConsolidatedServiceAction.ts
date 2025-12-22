@@ -1,35 +1,27 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-/**
- * gets docket numbers of all checked consolidated cases for shared docket entry service
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {Function} providers.get the cerebral get function
- * @returns {object} the list of docketNumbers
- */
 export const getDocketNumbersForConsolidatedServiceAction = ({
   applicationContext,
   get,
 }: ActionProps) => {
   const { NON_MULTI_DOCKETABLE_EVENT_CODES } =
     applicationContext.getConstants();
-  const { isLeadCase } = applicationContext.getUtilities();
+
+  const { eventCode } = get(state.form);
+  const caseDetail = get(state.caseDetail);
 
   const consolidatedCases =
     get(state.modal.form.consolidatedCasesToMultiDocketOn) || [];
 
   let docketNumbers = consolidatedCases
     .filter(consolidatedCase => consolidatedCase.checked)
-    .filter(consolidatedCase => !isLeadCase(consolidatedCase))
+    .filter(
+      consolidatedCase =>
+        consolidatedCase.docketNumber !== caseDetail.docketNumber,
+    )
     .map(consolidatedCase => consolidatedCase.docketNumber);
 
-  const { eventCode } = get(state.form);
-  const caseDetail = get(state.caseDetail);
-
-  if (
-    !isLeadCase(caseDetail) ||
-    NON_MULTI_DOCKETABLE_EVENT_CODES.includes(eventCode)
-  ) {
+  if (NON_MULTI_DOCKETABLE_EVENT_CODES.includes(eventCode)) {
     docketNumbers = [];
   }
 

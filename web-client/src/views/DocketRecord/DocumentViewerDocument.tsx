@@ -7,7 +7,6 @@ import { WorkItemAlreadyCompletedModal } from '../DocketEntryQc/WorkItemAlreadyC
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import { InfoNotificationComponent } from '@web-client/views/InfoNotification';
 import React from 'react';
 import classNames from 'classnames';
 
@@ -79,21 +78,6 @@ export const DocumentViewerDocument = connect(
                 />
                 Sealed in Blackstone
               </div>
-            )}
-
-            {documentViewerHelper.showLeadCaseBanner && (
-              <InfoNotificationComponent
-                alertInfo={{
-                  message: (
-                    <>
-                      This document can only be served from the <b>lead case</b>{' '}
-                      in a consolidated group. This is a member case.
-                    </>
-                  ),
-                }}
-                dismissible={false}
-                scrollToTop={false}
-              />
             )}
 
             <h3>
