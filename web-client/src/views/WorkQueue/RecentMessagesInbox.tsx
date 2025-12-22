@@ -14,17 +14,17 @@ export const RecentMessagesInbox = connect(
     return (
       <React.Fragment>
         <table
+          aria-label="Recent messages table"
           aria-describedby="recent-messages-tab"
-          className="usa-table ustc-table subsection messages"
+          className="usa-table ustc-table usa-table--stacked"
           id="my-recent-messages"
+          data-testid="recent-messages-table"
         >
           <thead>
             <tr>
-              <th aria-hidden="true" className="consolidated-case-column"></th>
-              <th aria-label="Docket Number" className="small">
-                <span className="padding-left-2px">Docket Number</span>
-              </th>
-              <th className="small">Received</th>
+              <th aria-label="Icons for consolidated cases" className="icon-column"></th>
+              <th>Docket No.</th>
+              <th>Received</th>
               <th className="message-unread-column"></th>
               <th>Message</th>
               <th>Case Title</th>

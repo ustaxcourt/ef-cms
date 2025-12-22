@@ -52,20 +52,33 @@ export const formattedClerkOfCourtDashboardTrialSessions = (
     .endOf('day')
     .toISO()!;
 
-  const allTrialSessions = get(state.trialSessions) || [];
+  const allTrialSessions = get(state.trialSessions);
+  if (!allTrialSessions || !Array.isArray(allTrialSessions)) {
+    return {
+      formattedCurrentWeekSessions: [],
+      formattedNextWeekSessions: [],
+    };
+  }
+
   const openTrialSessions = allTrialSessions.filter(
-    session => session.sessionStatus === SESSION_STATUS_GROUPS.open,
+    session =>
+      session &&
+      session.sessionStatus === SESSION_STATUS_GROUPS.open &&
+      session.startDate,
   );
 
   const currentWeekSessions = openTrialSessions.filter(
     session =>
+      session.startDate &&
       session.startDate >= currentWeekStart &&
       session.startDate <= currentWeekEnd,
   );
 
   const nextWeekSessions = openTrialSessions.filter(
     session =>
-      session.startDate >= nextWeekStart && session.startDate <= nextWeekEnd,
+      session.startDate &&
+      session.startDate >= nextWeekStart &&
+      session.startDate <= nextWeekEnd,
   );
 
   const formatSession = (
