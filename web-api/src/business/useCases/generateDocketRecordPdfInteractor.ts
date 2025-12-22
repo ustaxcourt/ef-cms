@@ -13,6 +13,11 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
 import { sortDocketEntryTable } from '@web-client/presenter/computeds/formattedDocketEntries';
 import { verifyCaseForUser } from '@web-api/persistence/postgres/cases/userOnCase/verifyCaseForUser';
+import {
+  DocketEntryRelation,
+  MOTION_DISPOSITION_VERBIAGE,
+} from '@shared/business/entities/EntityConstants';
+import { concat } from 'lodash';
 
 export const generateDocketRecordPdfInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -80,10 +85,34 @@ export const generateDocketRecordPdfInteractor = async (
     });
 
   formattedCaseDetail.formattedDocketEntries =
-    formattedCaseDetail.formattedDocketEntries.map(docketEntry => ({
-      ...docketEntry,
-      numberOfPages: docketEntry.numberOfPages || 0,
-    }));
+    formattedCaseDetail.formattedDocketEntries.map(docketEntry => {
+      const formattedDocketEntry = {
+        ...docketEntry,
+        numberOfPages: docketEntry.numberOfPages || 0,
+      };
+
+      formattedDocketEntry.relatedDocketEntries = [];
+      if (docketEntry.affectedByDocketEntries) {
+        formattedDocketEntry.relatedDocketEntries = processRelatedDocketEntries(
+          docketEntry.affectedByDocketEntries,
+          caseEntity,
+          'MOTION',
+        );
+      }
+
+      if (docketEntry.affectedDocketEntries) {
+        formattedDocketEntry.relatedDocketEntries = concat(
+          formattedDocketEntry.relatedDocketEntries,
+          processRelatedDocketEntries(
+            docketEntry.affectedDocketEntries,
+            caseEntity,
+            'ORDER',
+          ),
+        );
+      }
+
+      return formattedDocketEntry;
+    });
 
   const sortedDocketEntries = sortDocketEntryTable(
     formattedCaseDetail.formattedDocketEntries,
@@ -138,5 +167,25 @@ export const generateDocketRecordPdfInteractor = async (
     applicationContext,
     file: pdf,
     useTempBucket: true,
+  });
+};
+
+const processRelatedDocketEntries = (
+  relatedDocketEntries: DocketEntryRelation[],
+  caseEntity: RawCase,
+  relationshipType: 'ORDER' | 'MOTION',
+) => {
+  return relatedDocketEntries.map(affectedEntry => {
+    const relatedEntry = caseEntity.docketEntries.find(
+      entry => entry.docketEntryId === affectedEntry.docketEntryId,
+    );
+
+    return {
+      docketEntryIndex: relatedEntry?.index,
+      disposition:
+        MOTION_DISPOSITION_VERBIAGE[affectedEntry.disposition][
+          relationshipType
+        ],
+    };
   });
 };
