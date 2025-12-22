@@ -326,16 +326,6 @@ resource "aws_iam_policy" "ci_cd_policy" {
       "Effect": "Allow"
     },
     {
-      "Action": [
-        "glue:GetJobRuns",
-        "glue:StartJobRun"
-      ],
-      "Resource": [
-        "arn:aws:glue:us-east-1:${data.aws_caller_identity.current.account_id}:job/*"
-      ],
-      "Effect": "Allow"
-    },
-    {
       "Action": "sts:AssumeRole",
       "Effect": "Allow",
       "Resource": ${jsonencode(var.lower_env_restore_roles)}
@@ -438,16 +428,11 @@ resource "aws_iam_policy" "ci_cd_iam_policy" {
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/efcms_remote_user_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/es_s3_snapshot_access_role",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/es_kibana_role",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/glue_job_status_lambda_role_*",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/glue_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/header_security_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/job_definition_iam_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_elasticsearch_execution_role",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/log_viewers_auth_role",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/migration_lambda_role_*",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/migration_segments_lambda_role_*",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/migration_status_lambda_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/reindex_status_lambda_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/restore_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/rum_unauthenticated_role_*",

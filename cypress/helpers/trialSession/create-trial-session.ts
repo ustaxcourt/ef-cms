@@ -67,6 +67,7 @@ export function createTrialSession(
   cy.intercept('POST', '**/trial-sessions').as('createTrialSession');
   cy.get('[data-testid="submit-trial-session"]').click();
   cy.get('[data-testid="success-alert"]').should('exist');
+  cy.get('[data-testid="tabs-menu"]').find('li:first-child').should('have.class', 'active');
 
   return cy
     .wait('@createTrialSession')

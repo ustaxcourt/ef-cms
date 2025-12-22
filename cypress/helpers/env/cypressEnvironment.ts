@@ -14,11 +14,6 @@ export const getCypressEnv = () => {
     cognitoEndpoint: env === 'local' ? 'http://localhost:9229/' : undefined,
     defaultAccountPass: getEnvValue('DEFAULT_ACCOUNT_PASS', 'Testing1234$'),
     deployingColor: getEnvValue('DEPLOYING_COLOR'),
-    dynamoDbDeployTableName: getEnvValue(
-      'DYNAMODB_DEPLOY_TABLE_NAME',
-      'efcms-local',
-    ),
-    dynamoDbTableName: getEnvValue('DYNAMODB_TABLE_NAME', 'efcms-local'),
     efcmsDomain: getEnvValue('EFCMS_DOMAIN'),
     env,
     publicSiteUrl:

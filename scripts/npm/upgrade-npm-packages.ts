@@ -14,7 +14,6 @@ const caveats: string[] = [
   'puppeteer-core',
   '@sparticuz/chromium',
   'jest',
-  'pdfjs-dist',
   'quill',
   'quill-delta-to-html',
   'jest-environment-jsdom',

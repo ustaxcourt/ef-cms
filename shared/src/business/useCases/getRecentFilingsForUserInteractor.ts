@@ -5,7 +5,7 @@ import {
 } from '@shared/business/entities/authUser/AuthUser';
 import { getCasesForUserInteractor } from './getCasesForUserInteractor';
 import { calculateISODate, createEndOfDayISO } from '../utilities/DateHandler';
-import { userIsDirectlyAssociated } from '@shared/business/entities/cases/Case';
+import { userIsDirectlyAssociated, isLeadCase } from '@shared/business/entities/cases/Case';
 
 import { getCaseCaptionMeta } from '../utilities/getCaseCaptionMeta';
 
@@ -73,9 +73,9 @@ export const getRecentFilingsForUserInteractor = async (
   const caseInfoMap = new Map();
   allUserCases.forEach(caseItem => {
     const hasConsolidatedCases = (caseItem.consolidatedCases?.length || 0) > 0;
-    const isLeadCase =
+    const isLeadCaseResult =
       !caseItem.leadDocketNumber ||
-      caseItem.leadDocketNumber === caseItem.docketNumber;
+      isLeadCase(caseItem);
     const inConsolidatedGroup =
       hasConsolidatedCases || caseItem.leadDocketNumber;
 
@@ -88,7 +88,7 @@ export const getRecentFilingsForUserInteractor = async (
 
     caseInfoMap.set(caseItem.docketNumber, {
       inConsolidatedGroup,
-      isLeadCase,
+      isLeadCase: isLeadCaseResult,
       consolidatedIconTooltipText,
     });
 
