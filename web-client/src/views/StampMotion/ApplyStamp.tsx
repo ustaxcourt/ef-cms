@@ -7,8 +7,6 @@ import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
-import { RenderParameters } from 'pdfjs-dist/types/src/display/api';
-import { PageViewport } from 'pdfjs-dist/types/src/display/display_utils';
 
 
 export const ApplyStamp = connect(
@@ -60,13 +58,12 @@ export const ApplyStamp = connect(
         ?.getPage(1)
         .then(page => {
           const scale = 1;
-          const viewport: PageViewport = page.getViewport({ scale });
+          const viewport = page.getViewport({ scale });
           canvas.height = viewport.height;
           canvas.width = viewport.width;
 
 
-          const renderContext: RenderParameters = {
-            canvas,
+          const renderContext = {
             canvasContext,
             viewport,
           };
