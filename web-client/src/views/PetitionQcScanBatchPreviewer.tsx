@@ -1,6 +1,3 @@
-import { Button } from '../ustc-ui/Button/Button';
-import { ConfirmDeletePDFModal } from './ConfirmDeletePdfModal';
-import { ConfirmReplacePetitionModal } from './ConfirmReplacePetitionModal';
 import {
   ConfirmRescanBatchModal,
   DeleteBatchModal,
@@ -8,31 +5,33 @@ import {
   ScanErrorModal,
   UnfinishedScansModal,
 } from './ScanBatchPreviewer/ScanBatchModals';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
-import { PdfPreview } from '../ustc-ui/PdfPreview/PdfPreview';
-import { PreviewControls } from './PreviewControls';
+import { ScanBatchesTable } from './ScanBatchPreviewer/ScanBatchesTable';
+import { ScanDocumentTabs } from './ScanBatchPreviewer/ScanDocumentTabs';
+import { ScanModeRadios } from './ScanBatchPreviewer/ScanModeRadios';
+import { ScanPdfPreview } from './ScanBatchPreviewer/ScanPdfPreview';
+import { ScanPreviewSection } from './ScanBatchPreviewer/ScanPreviewSection';
+import { ScannerAreaHeader } from './ScanBatchPreviewer/ScannerAreaHeader';
 import { SelectScannerSourceModal } from './ScanBatchPreviewer/SelectScannerSourceModal';
-import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
+import { props as cerebralProps } from 'cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
-import classNames from 'classnames';
 
-type PetitionQcScanBatchPreviewerProps = {
+const props = cerebralProps as unknown as {
   documentTabs: Record<string, any>[];
-  documentType?: string;
+  documentType: string;
+  scanOnly?: boolean;
   title: string;
+  validateSequence?: () => void;
 };
 
 const petitionQcScanBatchPreviewerDeps = {
-  constants: state.constants,
-  deleteUploadedPdfSequence: sequences.deleteUploadedPdfSequence,
-  documentTabs: props`documentTabs`,
-  documentType: props`documentType`,
+  deletePdfSequence: sequences.deleteUploadedPdfSequence,
+  documentTabs: props.documentTabs,
+  documentType: props.documentType,
   generatePdfFromScanSessionSequence:
     sequences.generatePdfFromScanSessionSequence,
+  isPetitionFile: state.petitionQcHelper.isPetitionFile,
   openChangeScannerSourceModalSequence:
     sequences.openChangeScannerSourceModalSequence,
   openConfirmDeleteBatchModalSequence:
@@ -44,452 +43,75 @@ const petitionQcScanBatchPreviewerDeps = {
   openConfirmRescanBatchModalSequence:
     sequences.openConfirmRescanBatchModalSequence,
   pdfPreviewUrl: state.pdfPreviewUrl,
-  petitionQcHelper: state.petitionQcHelper,
   scanBatchPreviewerHelper: state.scanBatchPreviewerHelper,
   scanHelper: state.scanHelper,
   scannerStartupSequence: sequences.scannerStartupSequence,
+  scanOnly: props.scanOnly ?? true,
   selectedBatchIndex: state.scanner.selectedBatchIndex,
   setCurrentPageIndexSequence: sequences.setCurrentPageIndexSequence,
   setDocumentForPreviewSequence: sequences.setDocumentForPreviewSequence,
-  setDocumentForUploadSequence: sequences.setDocumentForUploadSequence,
   setDocumentUploadModeSequence: sequences.setDocumentUploadModeSequence,
   setSelectedBatchIndexSequence: sequences.setSelectedBatchIndexSequence,
   showModal: state.modal.showModal,
+  showRemovePdfButton: state.petitionQcHelper.showRemovePdfButton,
   startScanSequence: sequences.startScanSequence,
-  title: props`title`,
+  title: props.title,
+  validateSequence: props.validateSequence,
   validationErrors: state.validationErrors,
 };
 
-export const PetitionQcScanBatchPreviewer: React.FC<PetitionQcScanBatchPreviewerProps> = connect(
+export const PetitionQcScanBatchPreviewer = connect<
+  typeof props,
+  typeof petitionQcScanBatchPreviewerDeps
+>(
   petitionQcScanBatchPreviewerDeps,
   function PetitionQcScanBatchPreviewer({
-    constants,
-    deleteUploadedPdfSequence,
+    deletePdfSequence,
     documentTabs,
     documentType,
     generatePdfFromScanSessionSequence,
+    isPetitionFile = false,
     openChangeScannerSourceModalSequence,
     openConfirmDeleteBatchModalSequence,
     openConfirmDeletePDFModalSequence,
     openConfirmReplacePetitionPdfSequence,
     openConfirmRescanBatchModalSequence,
     pdfPreviewUrl,
-    petitionQcHelper,
     scanBatchPreviewerHelper,
     scanHelper,
     scannerStartupSequence,
+    scanOnly = true,
     selectedBatchIndex,
     setCurrentPageIndexSequence,
     setDocumentForPreviewSequence,
-    setDocumentForUploadSequence,
     setDocumentUploadModeSequence,
     setSelectedBatchIndexSequence,
     showModal,
+    showRemovePdfButton = true,
     startScanSequence,
     title,
+    validateSequence,
     validationErrors,
   }) {
     useEffect(() => {
       scannerStartupSequence();
     }, []);
 
-    const batchWrapperRef = useRef<HTMLDivElement>(null);
+    const batchWrapperRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
       if (batchWrapperRef.current)
         batchWrapperRef.current.scrollTop =
           batchWrapperRef.current.scrollHeight;
     }, [scanBatchPreviewerHelper.batches]);
-    const renderPreviewSection = () => {
-      return (
-        <>
-          <div className="grid-container padding-x-0">
-            <div className="grid-row space-between">
-              <div>
-                <h4 className="margin-bottom-0 margin-top-2">
-                  Scan Preview: Batch{' '}
-                  {scanBatchPreviewerHelper.selectedBatch.index + 1}
-                </h4>
-              </div>
-
-              <div className="margin-bottom-2">
-                <PreviewControls
-                  currentPage={scanBatchPreviewerHelper.currentPage + 1}
-                  disableLeftButtons={
-                    scanBatchPreviewerHelper.currentPage === 0
-                  }
-                  disableRightButtons={
-                    scanBatchPreviewerHelper.currentPage ===
-                    scanBatchPreviewerHelper.totalPages - 1
-                  }
-                  totalPages={scanBatchPreviewerHelper.totalPages}
-                  onFirstPage={e => {
-                    e.preventDefault();
-                    setCurrentPageIndexSequence({
-                      currentPageIndex: 0,
-                    });
-                  }}
-                  onLastPage={e => {
-                    e.preventDefault();
-                    setCurrentPageIndexSequence({
-                      currentPageIndex: scanBatchPreviewerHelper.totalPages - 1,
-                    });
-                  }}
-                  onNextPage={e => {
-                    e.preventDefault();
-                    setCurrentPageIndexSequence({
-                      currentPageIndex:
-                        scanBatchPreviewerHelper.currentPage + 1,
-                    });
-                  }}
-                  onPreviousPage={e => {
-                    e.preventDefault();
-                    setCurrentPageIndexSequence({
-                      currentPageIndex:
-                        scanBatchPreviewerHelper.currentPage - 1,
-                    });
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="preview-container--image-area">
-            <img
-              alt="preview"
-              src={`data:image/png;base64,${scanBatchPreviewerHelper.selectedPageImage}`}
-            />
-          </div>
-
-          <Button
-            aria-label="create pdf"
-            className="margin-top-4"
-            onClick={e => {
-              e.preventDefault();
-              generatePdfFromScanSessionSequence({
-                documentType,
-                documentUploadMode: 'preview',
-              });
-            }}
-          >
-            <FontAwesomeIcon icon={['fas', 'file-pdf']} />
-            Create PDF
-          </Button>
-        </>
-      );
-    };
-
-    const renderModeRadios = () => {
-      const headerMargin =
-        (documentTabs && documentTabs.length) > 0
-          ? 'margin-top-2'
-          : 'margin-top-0';
-      return (
-        <div className="grid-row">
-          <div className="grid-col-8">
-            <FormGroup
-              errorText={[
-                validationErrors[documentType],
-                documentType === 'requestForPlaceOfTrialFile' &&
-                  validationErrors['object.missing'],
-              ]}
-            >
-              <fieldset
-                aria-label="scan mode selection"
-                className={classNames(
-                  'usa-fieldset margin-bottom-3',
-                  headerMargin,
-                )}
-                id="scan-mode-radios"
-              >
-                <legend
-                  className="usa-legend with-hint margin-bottom-2"
-                  id="scan-mode-radios-legend"
-                >
-                  How do you want to add this document?
-                </legend>
-                <div className="usa-radio usa-radio__inline">
-                  <input
-                    aria-describedby="scan-mode-radios-legend"
-                    aria-labelledby="upload-mode-scan"
-                    checked={scanBatchPreviewerHelper.uploadMode === 'scan'}
-                    className="usa-radio__input"
-                    id="scanMode"
-                    name="uploadMode"
-                    type="radio"
-                    value="scan"
-                    onChange={() =>
-                      setDocumentUploadModeSequence({
-                        documentUploadMode: 'scan',
-                      })
-                    }
-                  />
-                  <label
-                    className="usa-radio__label"
-                    htmlFor="scanMode"
-                    id="upload-mode-scan"
-                  >
-                    Scan
-                  </label>
-                </div>
-
-                <div className="usa-radio usa-radio__inline">
-                  <input
-                    aria-describedby="scan-mode-radios-legend"
-                    aria-labelledby="upload-mode-upload"
-                    checked={scanBatchPreviewerHelper.uploadMode === 'upload'}
-                    className="usa-radio__input"
-                    id="uploadMode"
-                    name="uploadMode"
-                    type="radio"
-                    value="upload"
-                    onChange={() =>
-                      setDocumentUploadModeSequence({
-                        documentUploadMode: 'upload',
-                      })
-                    }
-                  />
-                  <label
-                    className="usa-radio__label"
-                    htmlFor="uploadMode"
-                    id="upload-mode-upload"
-                  >
-                    Upload
-                  </label>
-                </div>
-              </fieldset>
-            </FormGroup>
-          </div>
-
-          <div className="grid-col-4 margin-top-4 text-align-right">
-            {scanBatchPreviewerHelper.uploadMode === 'scan' &&
-              scanBatchPreviewerHelper.scannerSource && (
-                <Button
-                  onClick={e => {
-                    e.preventDefault();
-                    startScanSequence();
-                  }}
-                >
-                  <FontAwesomeIcon icon={['fas', 'plus-circle']} />
-                  Start Scan
-                </Button>
-              )}
-          </div>
-        </div>
-      );
-    };
-
-    const renderPdfPreview = () => {
-      return (
-        <>
-          {pdfPreviewUrl && (
-            <>
-              {petitionQcHelper.showRemovePdfButton && (
-                <Button
-                  link
-                  className="red-warning push-right remove-pdf-button"
-                  onClick={() => {
-                    if (petitionQcHelper.isPetitionFile) {
-                      openConfirmReplacePetitionPdfSequence();
-                    } else {
-                      openConfirmDeletePDFModalSequence();
-                    }
-                  }}
-                >
-                  Remove PDF
-                </Button>
-              )}
-              <PdfPreview />
-            </>
-          )}
-          {showModal === 'ConfirmDeletePDFModal' && (
-            <ConfirmDeletePDFModal
-              confirmSequence={deleteUploadedPdfSequence}
-              confirmText="Yes, Remove"
-              modalContent="The current PDF will be permanently removed, and you will need to add a new PDF."
-              title="Are You Sure You Want to Remove this PDF?"
-            />
-          )}
-
-          {showModal === 'ConfirmReplacePetitionModal' && (
-            <ConfirmReplacePetitionModal confirmSequence="removePetitionForReplacementSequence" />
-          )}
-        </>
-      );
-    };
-
-    const renderScan = () => {
-      return (
-        scanBatchPreviewerHelper.batches.length > 0 && (
-          <>
-            <h5 className="header-scanned-batches">Scanned batches</h5>
-            <div className="batches-table-wrapper" ref={batchWrapperRef}>
-              <table className="batches-table">
-                <tbody>
-                  {scanBatchPreviewerHelper.batches.map(batch => (
-                    <tr className="no-blue-hover" key={batch.index}>
-                      <td>
-                        {selectedBatchIndex !== batch.index && (
-                          <Button
-                            link
-                            aria-label={`batch ${batch.index + 1} -- ${
-                              batch.pages.length
-                            } pages total`}
-                            onClick={e => {
-                              e.preventDefault();
-                              setSelectedBatchIndexSequence({
-                                selectedBatchIndex: batch.index,
-                              });
-                            }}
-                          >
-                            Batch {batch.index + 1}
-                          </Button>
-                        )}
-                        {selectedBatchIndex === batch.index && (
-                          <span className="batch-index">
-                            Batch {batch.index + 1}
-                          </span>
-                        )}
-                      </td>
-
-                      <td>
-                        <span>{batch.scanModeLabel}</span>
-                      </td>
-                      <td>
-                        <span>{batch.pages.length} pages</span>
-                      </td>
-                      <td>
-                        <Button
-                          link
-                          aria-label={`rescan batch ${batch.index + 1}`}
-                          className="no-underline"
-                          onClick={e => {
-                            e.preventDefault();
-                            openConfirmRescanBatchModalSequence({
-                              batchIndexToRescan: batch.index,
-                            });
-                          }}
-                        >
-                          <FontAwesomeIcon icon={['fas', 'redo-alt']} />
-                          Rescan
-                        </Button>
-                      </td>
-                      <td>
-                        <Button
-                          link
-                          aria-label={`delete batch ${batch.index + 1} - with ${
-                            batch.pages.length
-                          } total pages`}
-                          className="no-underline red-warning float-right"
-                          onClick={e => {
-                            e.preventDefault();
-                            openConfirmDeleteBatchModalSequence({
-                              batchIndexToDelete: batch.index,
-                              batchPageCount: batch.pages.length,
-                            });
-                          }}
-                        >
-                          <FontAwesomeIcon icon={['fas', 'times-circle']} />
-                          Delete
-                        </Button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            <hr className="lighter" />
-          </>
-        )
-      );
-    };
-
-    const renderUpload = () => {
-      return (
-        <div className="document-detail-one-third">
-          <FormGroup>
-            <label
-              className="usa-label ustc-upload-stin with-hint"
-              htmlFor={`${documentType}-file`}
-              id={`${documentType}-label`}
-            >
-              Upload your file{' '}
-              <span className="success-message">
-                <FontAwesomeIcon icon="check-circle" size="1x" />
-              </span>
-            </label>
-            <span className="usa-hint">
-              File must be in PDF format (.pdf). Max file size{' '}
-              {constants.MAX_FILE_SIZE_MB}MB.
-            </span>
-            <input
-              accept=".pdf"
-              aria-describedby={`${documentType}-hint`}
-              className="usa-input"
-              id={`${documentType}-file`}
-              name={documentType}
-              type="file"
-              onChange={e => {
-                e.preventDefault();
-                const file = e.target.files?.[0];
-                setDocumentForUploadSequence({
-                  documentType,
-                  documentUploadMode: 'preview',
-                  file,
-                });
-              }}
-            />
-          </FormGroup>
-        </div>
-      );
-    };
-
-    const renderTabs = documentTabsList => {
-      if (documentTabsList && documentTabsList.length > 1) {
-        return (
-          <Tabs
-            bind="currentViewMetadata.documentSelectedForPreview"
-            className="document-select container-tabs margin-top-neg-205 margin-x-neg-205"
-            onSelect={documentId => {
-              setDocumentForPreviewSequence({ documentId });
-            }}
-          >
-            {documentTabsList.map(documentTab => {
-              const isFileUploaded =
-                scanHelper[`${documentTab.eventCode}FileCompleted`];
-
-              return (
-                <Tab
-                  data-testid={documentTab.documentType}
-                  icon={
-                    isFileUploaded && (
-                      <FontAwesomeIcon
-                        color="green"
-                        icon={['fas', 'check-circle']}
-                      />
-                    )
-                  }
-                  key={documentTab.documentId}
-                  tabName={documentTab.documentId}
-                  title={documentTab.tabTitle}
-                />
-              );
-            })}
-          </Tabs>
-        );
-      }
-
-      return null;
-    };
 
     return (
       <>
         {showModal === 'ConfirmRescanBatchModal' && (
-          <ConfirmRescanBatchModal batchIndex={selectedBatchIndex} />
+          <ConfirmRescanBatchModal />
         )}
         {showModal === 'ConfirmDeleteBatchModal' && (
-          <DeleteBatchModal batchIndex={selectedBatchIndex} />
+          <DeleteBatchModal />
         )}
 
         {showModal === 'UnfinishedScansModal' && <UnfinishedScansModal />}
@@ -502,54 +124,139 @@ export const PetitionQcScanBatchPreviewer: React.FC<PetitionQcScanBatchPreviewer
           <SelectScannerSourceModal />
         )}
 
-        <div className="scanner-area-header">
-          <div className="grid-container padding-x-0">
-            <div className="grid-row grid-gap">
-              <div className="grid-col-6">
-                <h3 className="margin-bottom-0 margin-left-105">{title}</h3>
-              </div>
-              <div className="grid-col-6 text-right margin-top-2px padding-right-4">
-                <span className="margin-right-1">
-                  Scanner: {scanBatchPreviewerHelper.scannerSourceDisplayName}
-                </span>
-                <Button
-                  link
-                  aria-label={`${
-                    scanBatchPreviewerHelper.scannerSource ? 'Change' : 'Select'
-                  } scanner source`}
-                  className="change-scanner-button padding-0"
-                  onClick={e => {
-                    e.preventDefault();
-                    openChangeScannerSourceModalSequence();
-                  }}
-                >
-                  {scanBatchPreviewerHelper.scannerSource
-                    ? 'Change'
-                    : 'Select Scanner'}
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ScannerAreaHeader
+          onOpenChangeScannerSource={openChangeScannerSourceModalSequence}
+          scannerSource={scanBatchPreviewerHelper.scannerSource}
+          scannerSourceDisplayName={
+            scanBatchPreviewerHelper.scannerSourceDisplayName
+          }
+          title={title}
+        />
 
         <div className="document-select-container">
-          {renderTabs(documentTabs)}
+          <ScanDocumentTabs
+            documentTabs={documentTabs}
+            isFileUploaded={eventCode =>
+              !!scanHelper[`${eventCode}FileCompleted`]
+            }
+            onSelect={documentId => {
+              setDocumentForPreviewSequence({ documentId });
+            }}
+            scanOnly={scanOnly}
+          />
+          {scanBatchPreviewerHelper.uploadMode !== 'preview' && (
+            <ScanModeRadios
+              errorText={[
+                validationErrors[documentType],
+                documentType === 'requestForPlaceOfTrialFile' &&
+                  validationErrors['object.missing'],
+              ]}
+              hasDocumentTabs={!!(documentTabs && documentTabs.length > 0)}
+              onSetScanMode={() =>
+                setDocumentUploadModeSequence({
+                  documentUploadMode: 'scan',
+                })
+              }
+              onSetUploadMode={() =>
+                setDocumentUploadModeSequence({
+                  documentUploadMode: 'upload',
+                })
+              }
+              onStartScan={e => {
+                e.preventDefault();
+                startScanSequence();
+              }}
+              scanOnly={scanOnly}
+              scannerSource={scanBatchPreviewerHelper.scannerSource}
+              uploadMode={scanBatchPreviewerHelper.uploadMode}
+            />
+          )}
 
-          {(scanBatchPreviewerHelper.uploadMode !== 'preview' ||
-            !pdfPreviewUrl) &&
-            renderModeRadios()}
+          {scanBatchPreviewerHelper.uploadMode === 'scan' && (
+            <ScanBatchesTable
+              batches={scanBatchPreviewerHelper.batches}
+              batchWrapperRef={batchWrapperRef as React.RefObject<HTMLDivElement>}
+              onDeleteBatch={(batchIndex, pageCount) => {
+                openConfirmDeleteBatchModalSequence({
+                  batchIndexToDelete: batchIndex,
+                  batchPageCount: pageCount,
+                });
+              }}
+              onRescanBatch={batchIndex => {
+                openConfirmRescanBatchModalSequence({
+                  batchIndexToRescan: batchIndex,
+                });
+              }}
+              onSelectBatch={batchIndex => {
+                setSelectedBatchIndexSequence({
+                  selectedBatchIndex: batchIndex,
+                });
+              }}
+              selectedBatchIndex={selectedBatchIndex}
+            />
+          )}
 
-          {scanBatchPreviewerHelper.uploadMode === 'scan' && renderScan()}
-
-          {scanBatchPreviewerHelper.uploadMode === 'upload' && renderUpload()}
-
-          {scanBatchPreviewerHelper.uploadMode === 'preview' &&
-            renderPdfPreview()}
+          {scanBatchPreviewerHelper.uploadMode === 'preview' && (
+            <ScanPdfPreview
+              confirmSequence={() => {
+                deletePdfSequence();
+                if (validateSequence) validateSequence();
+              }}
+              isPetitionFile={isPetitionFile}
+              onConfirmDelete={openConfirmDeletePDFModalSequence}
+              onConfirmReplace={openConfirmReplacePetitionPdfSequence}
+              pdfPreviewUrl={pdfPreviewUrl}
+              scanOnly={scanOnly}
+              showModal={showModal}
+              showRemovePdfButton={showRemovePdfButton}
+            />
+          )}
         </div>
 
         {scanBatchPreviewerHelper.uploadMode === 'scan' &&
           scanBatchPreviewerHelper.selectedPageImage && (
-            <div className="preview-container">{renderPreviewSection()}</div>
+            <div className="preview-container">
+              <ScanPreviewSection
+                batchIndex={scanBatchPreviewerHelper.selectedBatch.index}
+                currentPage={scanBatchPreviewerHelper.currentPage}
+                onCreatePdf={e => {
+                  e.preventDefault();
+                  generatePdfFromScanSessionSequence({
+                    documentType,
+                    documentUploadMode: 'preview',
+                  });
+                }}
+                onFirstPage={e => {
+                  e.preventDefault();
+                  setCurrentPageIndexSequence({
+                    currentPageIndex: 0,
+                  });
+                }}
+                onLastPage={e => {
+                  e.preventDefault();
+                  setCurrentPageIndexSequence({
+                    currentPageIndex:
+                      scanBatchPreviewerHelper.totalPages - 1,
+                  });
+                }}
+                onNextPage={e => {
+                  e.preventDefault();
+                  setCurrentPageIndexSequence({
+                    currentPageIndex:
+                      scanBatchPreviewerHelper.currentPage + 1,
+                  });
+                }}
+                onPreviousPage={e => {
+                  e.preventDefault();
+                  setCurrentPageIndexSequence({
+                    currentPageIndex:
+                      scanBatchPreviewerHelper.currentPage - 1,
+                  });
+                }}
+                selectedPageImage={scanBatchPreviewerHelper.selectedPageImage}
+                totalPages={scanBatchPreviewerHelper.totalPages}
+              />
+            </div>
           )}
       </>
     );
