@@ -32,7 +32,6 @@ export const updateAdvancedSearchFormAction =
     }
 
     if (props.value) {
-      console.log('props.value: ', props.value);
       if (
         (props.key === 'startDate' || props.key === 'endDate') &&
         formType === 'orderSearch'
