@@ -17,6 +17,10 @@ export const PetitionQcDocumentPreview: React.FC<PetitionQcDocumentPreviewProps>
     documentSelectedForPreview,
     petitionQcHelper,
   }) {
+    if (!documentSelectedForPreview) {
+      return null;
+    }
+
     return (
       <>
         <PetitionQcScanBatchPreviewer
