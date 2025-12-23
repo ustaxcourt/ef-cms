@@ -1,20 +1,22 @@
 import {
   ALLOWLIST_FEATURE_FLAGS,
+  MOTION_DISPOSITION_VERBIAGE,
   PUBLIC_DOCKET_RECORD_FILTER,
   PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
   ROLES,
   STATE_KEYS,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { Get } from 'cerebral';
 import {
   computeIsNotServedDocument,
   getFilingsAndProceedings,
-} from '../../../../../shared/src/business/utilities/getFormattedCaseDetail';
+} from '@shared/business/utilities/getFormattedCaseDetail';
 import { sortDocketEntryTable } from '@web-client/presenter/computeds/formattedDocketEntries';
 import { state } from '@web-client/presenter/app-public.cerebral';
 import { formatDateString } from '@shared/business/utilities/DateHandler';
+import { concat } from 'lodash';
 
 const getRelatedDocketEntryDetails = (
   motionEntry: RawDocketEntry,
@@ -111,12 +113,9 @@ export const formatDocketEntryOnDocketRecord = (
     );
   }
 
-  let relatedDocketEntries;
-  if (entry.affectedDocketEntries || entry.affectedByDocketEntries) {
-    relatedDocketEntries = [
-      ...(entry.affectedByDocketEntries ?? []),
-      ...(entry.affectedDocketEntries ?? []),
-    ].map(affectedEntry => {
+  let relatedDocketEntries: any[] = [];
+  if (entry.affectedByDocketEntries) {
+    relatedDocketEntries = entry.affectedByDocketEntries.map(affectedEntry => {
       const { index, showDownloadLink } = getRelatedDocketEntryDetails(
         entry,
         rawCase,
@@ -126,8 +125,30 @@ export const formatDocketEntryOnDocketRecord = (
 
       affectedEntry.docketEntryIndex = index;
       affectedEntry.showDownloadLink = showDownloadLink;
+      affectedEntry.disposition =
+        MOTION_DISPOSITION_VERBIAGE[affectedEntry.disposition].MOTION;
       return affectedEntry;
     });
+  }
+
+  if (entry.affectedDocketEntries) {
+    relatedDocketEntries = concat(
+      relatedDocketEntries,
+      entry.affectedDocketEntries.map(affectedEntry => {
+        const { index, showDownloadLink } = getRelatedDocketEntryDetails(
+          entry,
+          rawCase,
+          affectedEntry.docketEntryId,
+          visibilityPolicyDate,
+        );
+
+        affectedEntry.docketEntryIndex = index;
+        affectedEntry.showDownloadLink = showDownloadLink;
+        affectedEntry.disposition =
+          MOTION_DISPOSITION_VERBIAGE[affectedEntry.disposition].ORDER;
+        return affectedEntry;
+      }),
+    );
   }
 
   entry.filingsAndProceedings = getFilingsAndProceedings(entry);

@@ -60,7 +60,7 @@ export const PublicFilingsAndProceedings = connect<
 
         {entry.relatedDocketEntries?.map(affectedEntry => {
           return (
-            <>
+            <span key={affectedEntry.docketEntryId}>
               <br></br>
               <span className="display-inline-block">
                 <span> --- </span>
@@ -91,7 +91,7 @@ export const PublicFilingsAndProceedings = connect<
                   </span>
                 )}
               </span>
-            </>
+            </span>
           );
         })}
       </React.Fragment>
