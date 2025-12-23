@@ -1,7 +1,7 @@
 import { BigHeader } from '../BigHeader';
 import { ClerkOfCourtTrialSessionsSummary } from '../TrialSessions/ClerkOfCourtTrialSessionsSummary';
 import { ErrorNotification } from '../ErrorNotification';
-import { RecentMessages } from '../WorkQueue/RecentMessages';
+import { RecentMessagesCotC } from '../WorkQueue/RecentMessagesCotC';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '@web-client/ustc-ui/Tabs/Tabs';
 import { connect } from '@web-client/presenter/shared.cerebral';
@@ -22,7 +22,7 @@ export const DashboardClerkOfCourt = connect(
           <ClerkOfCourtTrialSessionsSummary />
           <Tabs className="margin-top-6" marginBottom={false}>
             <Tab tabName="recentMessages" title="Recent Messages">
-              <RecentMessages />
+              <RecentMessagesCotC />
             </Tab>
           </Tabs>
         </section>

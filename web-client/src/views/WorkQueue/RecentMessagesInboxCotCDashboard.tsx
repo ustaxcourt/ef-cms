@@ -1,36 +1,62 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
-import { Icon } from '../../ustc-ui/Icon/Icon';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-export const RecentMessagesInbox = connect(
+export const RecentMessagesInboxCotCDashboard = connect(
   {
     recentMessagesHelper: state.recentMessagesHelper,
   },
-  function RecentMessagesInbox({ recentMessagesHelper }) {
+  function RecentMessagesInboxCotCDashboard({ recentMessagesHelper }) {
     return (
       <React.Fragment>
         <table
+          aria-label="Recent messages table"
           aria-describedby="recent-messages-tab"
-          className="usa-table ustc-table subsection messages"
+          className="usa-table subsection ustc-table responsive-table"
           id="my-recent-messages"
+          data-testid="recent-messages-table"
         >
           <thead>
             <tr>
-              <th aria-hidden="true" className="consolidated-case-column"></th>
-              <th aria-label="Docket Number" className="small">
-                <span className="padding-left-2px">Docket Number</span>
+              <th className="consolidated-case-column"></th>
+              <th>
+                <div className="sortable-header-button margin-right-0 usa-button margin-right-205 usa-button--unstyled ustc-button--unstyled">
+                  Docket No.
+                </div>
               </th>
-              <th className="small">Received</th>
-              <th className="message-unread-column"></th>
-              <th>Message</th>
-              <th>Case Title</th>
-              <th className="no-wrap">Case Status</th>
-              <th>From</th>
-              <th>Section</th>
+              <th>
+                <div className="sortable-header-button margin-right-0 usa-button margin-right-205 usa-button--unstyled ustc-button--unstyled">
+                  Received
+                </div>
+              </th>
+              <th>
+                <div className="sortable-header-button margin-right-0 usa-button margin-right-205 usa-button--unstyled ustc-button--unstyled">
+                  Message
+                </div>
+              </th>
+              <th>
+                <div className="sortable-header-button margin-right-0 usa-button margin-right-205 usa-button--unstyled ustc-button--unstyled no-wrap">
+                  Case Title
+                </div>
+              </th>
+              <th>
+                <div className="sortable-header-button margin-right-0 usa-button margin-right-205 usa-button--unstyled ustc-button--unstyled">
+                  Case Status
+                </div>
+              </th>
+              <th>
+                <div className="sortable-header-button margin-right-0 usa-button margin-right-205 usa-button--unstyled ustc-button--unstyled">
+                  From
+                </div>
+              </th>
+              <th>
+                <div className="sortable-header-button margin-right-0 usa-button margin-right-205 usa-button--unstyled ustc-button--unstyled">
+                  Section
+                </div>
+              </th>
             </tr>
           </thead>
           {recentMessagesHelper.recentMessages.map(item => {
@@ -50,24 +76,11 @@ export const RecentMessagesInbox = connect(
                     {item.docketNumberWithSuffix}
                   </td>
                   <td>{item.createdAtFormatted}</td>
-                  <td className="message-unread-column">
-                    {!item.isRead && (
-                      <Icon
-                        aria-label="Unread message"
-                        className="fa-icon-blue"
-                        icon="envelope"
-                        size="1x"
-                      />
-                    )}
-                  </td>
                   <td>
                     <div className="message-document-title">
                       <Button
                         link
-                        className={classNames(
-                          'padding-0',
-                          item.isRead ? '' : 'text-bold',
-                        )}
+                        className={classNames('padding-0', 'no-underline')}
                         data-testid="message-header-link"
                         href={item.messageDetailLink}
                       >
@@ -97,4 +110,5 @@ export const RecentMessagesInbox = connect(
   },
 );
 
-RecentMessagesInbox.displayName = 'RecentMessagesInbox';
+RecentMessagesInboxCotCDashboard.displayName =
+  'RecentMessagesInboxCotCDashboard';

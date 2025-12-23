@@ -90,7 +90,7 @@ export function loginAsDocketClerk1() {
 
 export function loginAsClerkOfCourt() {
   login({ email: 'clerkofcourt@example.com' });
-  cy.get('[data-testid="inbox-tab-content"]').should('exist');
+  cy.get('h1:contains("Trial Sessions")').should('exist');
 }
 
 export function loginAsFloater() {

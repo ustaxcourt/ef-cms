@@ -1,10 +1,10 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { RecentMessagesInbox } from './RecentMessagesInbox';
 import React from 'react';
+import { RecentMessagesInboxCotCDashboard } from './RecentMessagesInboxCotCDashboard';
 
-export const RecentMessages = () => {
+export const RecentMessagesCotC = () => {
   return (
-    <div className="margin-top-4">
+    <div>
       <Button
         link
         className="float-right"
@@ -13,10 +13,9 @@ export const RecentMessages = () => {
       >
         View All Messages
       </Button>
-
-      <RecentMessagesInbox />
+      <RecentMessagesInboxCotCDashboard />
     </div>
   );
 };
 
-RecentMessages.displayName = 'RecentMessages';
+RecentMessagesCotC.displayName = 'RecentMessagesCotC';
