@@ -6,6 +6,7 @@ import {
   SERVICE_INDICATOR_TYPES,
   ROLES,
 } from '@shared/business/entities/EntityConstants';
+import { isLeadCase } from '@shared/business/entities/cases/Case';
 
 export type ContactsNeedingPaperService = {
   name: string;
@@ -16,8 +17,8 @@ export type ContactsNeedingPaperService = {
 export const confirmInitiateServiceModalHelper = (
   get: Get,
 ): {
+  canShowCheckboxes: boolean;
   canMultiDocket: boolean;
-  canServeMultiDocketed: boolean;
   confirmationText: string;
   paperFilingText: string;
   additionalServedCases: { docketNumber: string; caseTitle: string }[];
@@ -32,53 +33,49 @@ export const confirmInitiateServiceModalHelper = (
     doc => doc.docketEntryId === docketEntryId,
   );
 
+  let isFiling = true;
+
   if (!eventCode) {
+    isFiling = false;
     ({ eventCode, multiDocketedOn } = currentDocketEntry);
   }
 
+  const isLead = isLeadCase(formattedCaseDetail);
+
   const isMultiDocketed = multiDocketedOn?.length > 1;
 
-  const canMultiDocket = !NON_MULTI_DOCKETABLE_EVENT_CODES.includes(eventCode);
+  const canMultiDocket =
+    isLead &&
+    !isMultiDocketed &&
+    !NON_MULTI_DOCKETABLE_EVENT_CODES.includes(eventCode);
 
-  const canServeMultiDocketed = canMultiDocket || isMultiDocketed;
+  const canShowCheckboxes = isLead && (isFiling || isMultiDocketed);
+
+  const checkedCases = get(state.modal.form.consolidatedCasesToMultiDocketOn)
+    .filter(c => c.checked)
+    .map(c => c.docketNumber);
 
   let additionalServedCases: { docketNumber: string; caseTitle: string }[] = [];
-
-  if (isMultiDocketed) {
-    if (Array.isArray(formattedCaseDetail.consolidatedCases)) {
-      additionalServedCases = formattedCaseDetail.consolidatedCases
-        .filter((c: any) => c.docketNumber !== formattedCaseDetail.docketNumber)
-        .filter(c => multiDocketedOn.includes(c.docketNumber))
-        .map((c: any) => ({
-          docketNumber: c.docketNumber,
-          caseTitle: c.caseTitle,
-        }));
-    }
-  }
-
-  const confirmationText = canMultiDocket
-    ? 'The following document will be served on all parties in selected cases:'
-    : 'The following document will be served on all parties:';
-
-  const contactsNeedingPaperService: ContactsNeedingPaperService = [];
-
   let casesToIterateOver: any[] = [];
 
-  if (isMultiDocketed) {
-    casesToIterateOver = formattedCaseDetail.consolidatedCases.filter(c => {
-      multiDocketedOn.includes(c.docketNumber);
-    });
-  } else if (canMultiDocket) {
-    const checkedCases = get(state.modal.form.consolidatedCasesToMultiDocketOn)
-      .filter(consolidatedCase => consolidatedCase.checked)
-      .map(consolidatedCase => consolidatedCase.docketNumber);
+  if (canShowCheckboxes) {
+    additionalServedCases = formattedCaseDetail.consolidatedCases
+      .filter(c => checkedCases.includes(c.docketNumber))
+      .filter(c => c.docketNumber !== formattedCaseDetail.docketNumber)
+      .map(c => ({
+        docketNumber: c.docketNumber,
+        caseTitle: c.caseTitle,
+      }));
 
-    casesToIterateOver = formattedCaseDetail.consolidatedCases.filter(cc => {
-      return checkedCases.includes(cc.docketNumber);
-    });
+    casesToIterateOver = formattedCaseDetail.consolidatedCases.filter(c =>
+      checkedCases.includes(c.docketNumber),
+    );
   } else {
+    additionalServedCases = [];
     casesToIterateOver = [formattedCaseDetail];
   }
+
+  const contactsNeedingPaperService: ContactsNeedingPaperService = [];
 
   for (const caseItem of casesToIterateOver) {
     const {
@@ -107,13 +104,17 @@ export const confirmInitiateServiceModalHelper = (
       });
   }
 
-  const paperFilingText = canMultiDocket
+  const paperFilingText = canShowCheckboxes
     ? 'Paper service is required for these parties:'
     : 'This case has parties receiving paper service:';
 
+  const confirmationText = canShowCheckboxes
+    ? 'The following document will be served on all parties in selected cases:'
+    : 'The following document will be served on all parties:';
+
   return {
     canMultiDocket,
-    canServeMultiDocketed,
+    canShowCheckboxes,
     confirmationText,
     paperFilingText,
     additionalServedCases,

@@ -32,7 +32,7 @@ export const ConfirmInitiateServiceModal = connect(
     confirmInitiateServiceModalHelper: {
       additionalServedCases: { docketNumber: string; caseTitle: string }[];
       canMultiDocket: boolean;
-      canServeMultiDocketed: boolean;
+      canShowCheckboxes: boolean;
       confirmationText: string;
       contactsNeedingPaperService?: ContactsNeedingPaperService;
       paperFilingText: string;
@@ -95,18 +95,18 @@ export const ConfirmInitiateServiceModal = connect(
             alertInfo={{
               message: (
                 <>
-                  <div>
-                    <strong>
-                      {confirmInitiateServiceModalHelper.paperFilingText}
-                    </strong>
-                  </div>
+                  <strong>
+                    {confirmInitiateServiceModalHelper.paperFilingText}
+                  </strong>
+                  <br />
                   {confirmInitiateServiceModalHelper.contactsNeedingPaperService.map(
                     contact => (
-                      <div key={`${contact.docketNumber}-${contact.name}`}>
-                        {confirmInitiateServiceModalHelper.canServeMultiDocketed &&
+                      <span key={`${contact.docketNumber}-${contact.name}`}>
+                        {confirmInitiateServiceModalHelper.canMultiDocket &&
                           `${contact.docketNumber} - `}
                         {contact.name}, {contact.formattedContactType}
-                      </div>
+                        <br />
+                      </span>
                     ),
                   )}
                 </>
@@ -116,7 +116,7 @@ export const ConfirmInitiateServiceModal = connect(
             scrollToTop={false}
           />
         )}
-        {confirmInitiateServiceModalHelper.canMultiDocket && (
+        {confirmInitiateServiceModalHelper.canShowCheckboxes && (
           <ConsolidatedCasesCheckboxes />
         )}
       </ModalDialog>
