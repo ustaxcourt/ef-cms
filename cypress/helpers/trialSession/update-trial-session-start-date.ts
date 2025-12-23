@@ -9,6 +9,6 @@ export const updateTrialSessionStartDate = (
   cy.get(`[data-testid="trial-location-link-${trialSessionId}"]`).click();
   cy.get('[data-testid="edit-trial-session"]').click();
   cy.get('[data-testid="start-date-picker"]').eq(1).clear();
-  cy.get('[data-testid="start-date-picker"]').type(newStartDate);
+  cy.get('[data-testid="start-date-picker"]').eq(1).type(newStartDate);
   cy.get('[data-testid="submit-edit-trial-session"]').click();
 };

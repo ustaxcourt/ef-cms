@@ -101,6 +101,7 @@ export const PartiesInformation = connect(
             {caseInformationHelper.showAddPartyButton && (
               <Button
                 className="margin-right-0 margin-top-3"
+                data-testid="button-add-party"
                 href={`/case-detail/${caseDetail.docketNumber}/add-petitioner-to-case`}
                 icon="plus-circle"
               >
