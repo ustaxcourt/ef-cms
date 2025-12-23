@@ -107,3 +107,8 @@
   --color-grey-light: var(--grey-light);
   --breakpoint-xs: 30rem;
 }
+
+
+@theme {
+  --spacing: 4px;
+}

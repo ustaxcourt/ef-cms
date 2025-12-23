@@ -38,7 +38,8 @@ export const Login = connect(
   }) => {
     return (
       <>
-        <section className="grid-container usa-section">
+        {/* <section className="grid-container usa-section"> */}
+        <section className="grid-container tw:px-4 tw:pb-16 tw:pt-0">
           <div className="grid-row flex-justify-center">
             <div className="grid-col-12 desktop:grid-col-4 tablet:grid-col-7">
               <SuccessNotification isDismissible={false} />
@@ -59,23 +60,27 @@ export const Login = connect(
                 />
               </div>
 
-              <div className="grid-container bg-white padding-y-3 border border-base-lighter login">
+              {/* <div className="grid-container bg-white padding-y-3 border border-base-lighter login"> */}
+              <div className="grid-container bg-white tw:py-6 border border-base-lighter login">
                 <div className="display-flex flex-column">
                   <div className="flex-align-center">
                     <h1
-                      className="margin-bottom-1 inherit-body-font-family"
+                      // className="margin-bottom-1 inherit-body-font-family"
+                      className="tw:mb-2 inherit-body-font-family"
                       data-testid="login-header"
                     >
                       Log in to DAWSON
                     </h1>
                     <form
-                      className="usa-form margin-top-4 max-width-unset login-form"
+                      // className="usa-form margin-top-4 max-width-unset login-form"
+                      className="usa-form tw:mt-8 max-width-unset"
                       onSubmit={e => {
                         e.preventDefault();
                         submitLoginSequence();
                       }}
                     >
-                      <label className="usa-label" htmlFor="email">
+                      {/* <label className="usa-label" htmlFor="email"> */}
+                      <label className="usa-label tw:mb-1.75" htmlFor="email">
                         Email address
                       </label>
                       <input
@@ -94,7 +99,8 @@ export const Login = connect(
                         }}
                       />
                       <label
-                        className="usa-label margin-top-2"
+                        // className="usa-label margin-top-2"
+                        className="usa-label tw:mb-1.75 tw:mt-4"
                         htmlFor="password"
                       >
                         Password
@@ -147,7 +153,8 @@ export const Login = connect(
                     Don&apos;t have an account?{' '}
                     <Button
                       link={true}
-                      className="tw:block padding-top-0 pl-0"
+                      // className="tw:block padding-top-0 pl-0"
+                      className="tw:block tw:pt-0 tw:pl-0"
                       type="button"
                       onClick={e => {
                         e.preventDefault();
