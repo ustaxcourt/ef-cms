@@ -4,7 +4,7 @@ import React from 'react';
 
 export const RecentMessages = () => {
   return (
-    <div className="margin-top-4">
+    <div>
       <Button
         link
         className="float-right"
@@ -13,7 +13,6 @@ export const RecentMessages = () => {
       >
         View All Messages
       </Button>
-
       <RecentMessagesInbox />
     </div>
   );
