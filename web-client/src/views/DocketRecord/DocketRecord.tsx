@@ -181,7 +181,7 @@ export const DocketRecord = connect(
               </thead>
               <tbody>
                 {formattedDocketEntriesHelper.formattedDocketEntriesOnDocketRecord.map(
-                  entry => {
+                  (entry, index) => {
                     return (
                       <tr
                         className={classNames(
@@ -215,7 +215,7 @@ export const DocketRecord = connect(
                           className="center-column hide-on-mobile"
                           data-testid={`docket-entry-index-${entry.index}`}
                         >
-                          {entry.index}
+                          {index + 1}
                         </td>
                         <td>
                           <span
