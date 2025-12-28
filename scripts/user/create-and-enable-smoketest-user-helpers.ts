@@ -4,8 +4,6 @@ import {
   createOrUpdateUser,
   enableUser,
 } from '../../shared/admin-tools/user/admin';
-import { environment } from '@web-api/environment';
-import { getDestinationTableInfo } from 'shared/admin-tools/util';
 import { getEnvironmentVariables } from '../helpers/parseArgsAndEnvVars';
 import { ACCOUNT_STATUS } from '@shared/business/entities/EntityConstants';
 import { getUniqueId } from '@shared/sharedAppContext';
@@ -35,8 +33,6 @@ const user: RawUser = {
 };
 
 export const createAndEnableSmoketestUser = async () => {
-  const { tableName } = await getDestinationTableInfo();
-  environment.dynamoDbTableName = tableName;
   const applicationContext = createApplicationContext({});
 
   try {
