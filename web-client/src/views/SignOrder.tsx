@@ -44,6 +44,10 @@ export const SignOrder = connect(
       const canvas = canvasRef.current;
       const canvasContext = canvas.getContext('2d');
 
+      if (!canvas || !canvasContext) {
+        return;
+      }
+
       pdfObj
         ?.getPage(pageNumber)
         .then(page => {
@@ -53,7 +57,6 @@ export const SignOrder = connect(
           canvas.width = viewport.width;
 
           const renderContext = {
-            canvas,
             canvasContext,
             viewport,
           };
