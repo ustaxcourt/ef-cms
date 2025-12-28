@@ -46,12 +46,16 @@ export const ApplyStamp = connect(
     validateStampSequence,
     validationErrors,
   }) {
-    const canvasRef = useRef(null);
-    const signatureRef = useRef(null);
+    const canvasRef = useRef<HTMLCanvasElement | null>(null);
+    const signatureRef = useRef<HTMLSpanElement | null>(null);
 
     const renderPDFPage = () => {
       const canvas = canvasRef.current;
-      const canvasContext = canvas.getContext('2d');
+      const canvasContext = canvas?.getContext('2d');
+
+      if (!canvas || !canvasContext) {
+        return;
+      }
 
       pdfObj
         ?.getPage(1)
