@@ -54,7 +54,7 @@ while getopts ":chloprst:u" option; do
          export CYPRESS_SMOKETESTS_LOCAL=true
          ;;
       o) # open cypress
-         export OPEN=true
+         OPEN=true
          ;;
       p) # run against the public client
          BROWSER=chrome
