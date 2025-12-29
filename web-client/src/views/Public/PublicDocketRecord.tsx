@@ -127,7 +127,7 @@ export const PublicDocketRecord = connect(
                     return (
                       <tr
                         data-testid={`public-docket-record-no-${entry.index}`}
-                        key={entry.index}
+                        key={entry.docketEntryId}
                       >
                         <td className="center-column hide-on-mobile">
                           {entry.index}
