@@ -64,7 +64,7 @@ export const DocumentViewer = connect(
                 ref={documentsListRef}
               >
                 {formattedDocketEntries.formattedDocketEntriesOnDocketRecord.map(
-                  (entry, index) => {
+                  entry => {
                     return (
                       <Button
                         className={classNames(
@@ -86,7 +86,7 @@ export const DocumentViewer = connect(
                           title={entry.toolTipText}
                         >
                           <div className="grid-col-2 text-align-center">
-                            {index + 1}
+                            {entry.index}
                           </div>
                           <div
                             className={classNames(

@@ -23,6 +23,7 @@ import {
   withLocking,
 } from '@web-api/persistence/postgres/utils/mutex';
 import { countPagesInDocument } from '@web-api/business/useCaseHelper/countPagesInDocument';
+import { omit } from 'lodash';
 
 export const serveExternallyFiledDocument = async (
   applicationContext: ServerApplicationContext,
@@ -112,7 +113,7 @@ export const serveExternallyFiledDocument = async (
 
         const docketEntryEntity = new DocketEntry(
           {
-            ...originalSubjectDocketEntry,
+            ...omit(originalSubjectDocketEntry, ['index']),
             docketNumber: caseEntity.docketNumber,
             draftOrderState: null,
             ...(!subjectCaseIsSimultaneousDocType && {

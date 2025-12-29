@@ -19,6 +19,7 @@ import {
   asyncHandleLockError,
   withLocking,
 } from '@web-api/persistence/postgres/utils/mutex';
+import { omit } from 'lodash';
 
 export const serveCourtIssuedDocument = async (
   applicationContext: ServerApplicationContext,
@@ -125,7 +126,7 @@ export const serveCourtIssuedDocument = async (
       caseEntities.map(caseEntity => {
         const docketEntryEntity = new DocketEntry(
           {
-            ...docketEntryToServe,
+            ...omit(docketEntryToServe, ['index']),
             filingDate: createISODateString(),
             isOnDocketRecord: true,
           },

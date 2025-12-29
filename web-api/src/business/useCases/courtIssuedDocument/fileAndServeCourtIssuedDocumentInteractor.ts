@@ -162,7 +162,7 @@ export const fileAndServeCourtIssuedDocument = async (
       caseEntities.map(async caseEntity => {
         const docketEntryEntity = new DocketEntry(
           {
-            ...omit(docketEntryToServe, 'filedBy'),
+            ...omit(docketEntryToServe, ['filedBy', 'index']),
             attachments: form.attachments,
             date: form.date,
             docketNumber: caseEntity.docketNumber,

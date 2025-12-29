@@ -51,7 +51,9 @@ export const confirmInitiateServiceModalHelper = (
 
   const canShowCheckboxes = isLead && (isFiling || isMultiDocketed);
 
-  const checkedCases = get(state.modal.form.consolidatedCasesToMultiDocketOn)
+  const checkedCases = (
+    get(state.modal.form.consolidatedCasesToMultiDocketOn) || []
+  )
     .filter(c => c.checked)
     .map(c => c.docketNumber);
 

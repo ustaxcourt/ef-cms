@@ -1945,8 +1945,8 @@ export class Case extends JoiValidationEntity {
   setRemoteTrialGrantedDate(remoteTrialGrantedDate?: string | null): Case {
     const hasDate = Boolean(
       remoteTrialGrantedDate &&
-        typeof remoteTrialGrantedDate === 'string' &&
-        remoteTrialGrantedDate.trim() !== '',
+      typeof remoteTrialGrantedDate === 'string' &&
+      remoteTrialGrantedDate.trim() !== '',
     );
     this.remoteTrialGranted = hasDate;
     this.remoteTrialGrantedDate = hasDate ? remoteTrialGrantedDate : null;
@@ -2140,7 +2140,7 @@ export const isMemberCase = (rawCase: {
 }): boolean =>
   Boolean(
     rawCase.leadDocketNumber &&
-      rawCase.leadDocketNumber !== rawCase.docketNumber,
+    rawCase.leadDocketNumber !== rawCase.docketNumber,
   );
 
 export const caseHasServedDocketEntries = rawCase => {
