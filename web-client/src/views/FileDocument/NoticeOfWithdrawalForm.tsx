@@ -5,6 +5,7 @@ import React from 'react';
 import { Button } from '@web-client/dawson-ui/ui/button';
 import { EditContactInformationModal } from '../CaseDetail/EditContactInformationModal';
 import { COUNTRY_TYPES } from '@shared/business/entities/EntityConstants';
+import { AlertWarning } from '@web-client/dawson-ui/ui/Alert/AlertWarning';
 
 export const NoticeOfWithdrawalForm = connect(
   {
@@ -28,8 +29,20 @@ export const NoticeOfWithdrawalForm = connect(
     validationErrors,
     validateExternalDocumentInformationSequence,
   }) {
+    const alertWarning = {
+      message:
+        'If you are withdrawing as counsel from more than one case you must file a Notice of Withdrawal as Counsel for each case.',
+      title: 'Case is in a Consolidated Group',
+    };
     return (
       <>
+        {noticeOfWithdrawalHelper.showConsolidatedCaseAlertWarning && (
+          <AlertWarning
+            alertWarning={alertWarning}
+            className="tw:mt-2 tw:mb-3"
+            isDismissible={false}
+          />
+        )}
         <fieldset className="usa-fieldset margin-bottom-0">
           <FormGroup errorText={validationErrors?.filers}>
             <legend>
