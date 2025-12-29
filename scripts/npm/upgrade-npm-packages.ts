@@ -12,6 +12,7 @@ const caveats: string[] = [
   '@fortawesome/react-fontawesome',
   'puppeteer',
   'puppeteer-core',
+  'pdfjs-dist',
   '@sparticuz/chromium',
   'jest',
   'quill',
