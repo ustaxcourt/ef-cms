@@ -141,6 +141,8 @@
     "cypress:readonly:public": "./scripts/run-cypress.sh -rp",
     "cypress:readonly:public:open": "./scripts/run-cypress.sh -rpo",
     "cypress:readonly:public:open:local": "./scripts/run-cypress.sh -rpol",
+    "cypress:real-users": "./scripts/run-cypress.sh -u",
+    "cypress:real-users:open": "./scripts/run-cypress.sh -uo",
     "cypress:smoketests": "./scripts/run-cypress.sh -s",
     "cypress:smoketests:local": "./scripts/run-cypress.sh -sl",
     "cypress:smoketests:local:file": "./scripts/run-cypress.sh -sl -t",
