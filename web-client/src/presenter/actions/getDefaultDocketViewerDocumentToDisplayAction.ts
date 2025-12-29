@@ -29,25 +29,14 @@ export const getDefaultDocketViewerDocumentToDisplayAction = ({
   let viewerDocumentToDisplay;
 
   if (docketEntriesByFilter?.length) {
-    if (docketEntryId) {
-      const foundDocketEntry = docketEntriesByFilter.find(
-        d => d.docketEntryId === docketEntryId,
-      );
-
-      if (foundDocketEntry) {
-        viewerDocumentToDisplay = foundDocketEntry;
-      } else {
-        viewerDocumentToDisplay =
-          viewerDocumentToDisplayInState || docketEntriesByFilter[0];
-      }
-    } else if (viewerDocumentToDisplayInState) {
-      const stateDocStillVisible = docketEntriesByFilter.find(
-        d => d.docketEntryId === viewerDocumentToDisplayInState.docketEntryId,
-      );
-      viewerDocumentToDisplay =
-        stateDocStillVisible || docketEntriesByFilter[0];
-    } else {
-      viewerDocumentToDisplay = docketEntriesByFilter[0];
+    viewerDocumentToDisplay = docketEntriesByFilter[0];
+    const foundDocketEntry = docketEntriesByFilter.find(
+      d => d.docketEntryId === docketEntryId,
+    );
+    if (!docketEntryId && viewerDocumentToDisplayInState) {
+      viewerDocumentToDisplay = viewerDocumentToDisplayInState;
+    } else if (docketEntryId && foundDocketEntry) {
+      viewerDocumentToDisplay = foundDocketEntry;
     }
   }
 
