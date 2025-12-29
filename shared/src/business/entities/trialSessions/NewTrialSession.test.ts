@@ -51,4 +51,51 @@ describe('NewTrialSession entity', () => {
       expect(() => trialSession.validate()).toThrow();
     });
   });
+
+  describe('estimatedEndDate', () => {
+    it('should be invalid when estimatedEndDate is not provided', () => {
+      const trialSession = new NewTrialSession({
+        ...MOCK_NEW_TRIAL_REMOTE,
+        estimatedEndDate: undefined,
+      });
+
+      expect(trialSession.isValid()).toEqual(false);
+      expect(trialSession.getFormattedValidationErrors()).toMatchObject({
+        estimatedEndDate: 'Enter a valid estimated end date',
+      });
+    });
+
+    it('should be invalid when estimatedEndDate is before startDate', () => {
+      const trialSession = new NewTrialSession({
+        ...MOCK_NEW_TRIAL_REMOTE,
+        estimatedEndDate: '2027-11-01T00:00:00.000Z',
+        startDate: '2027-11-11T00:00:00.000Z',
+      });
+
+      expect(trialSession.isValid()).toEqual(false);
+      expect(trialSession.getFormattedValidationErrors()).toMatchObject({
+        estimatedEndDate: 'Enter a valid estimated end date',
+      });
+    });
+
+    it('should be valid when estimatedEndDate is equal to startDate', () => {
+      const trialSession = new NewTrialSession({
+        ...MOCK_NEW_TRIAL_REMOTE,
+        estimatedEndDate: '2027-11-11T00:00:00.000Z',
+        startDate: '2027-11-11T00:00:00.000Z',
+      });
+
+      expect(trialSession.isValid()).toEqual(true);
+    });
+
+    it('should be valid when estimatedEndDate is after startDate', () => {
+      const trialSession = new NewTrialSession({
+        ...MOCK_NEW_TRIAL_REMOTE,
+        estimatedEndDate: '2027-11-15T00:00:00.000Z',
+        startDate: '2027-11-11T00:00:00.000Z',
+      });
+
+      expect(trialSession.isValid()).toEqual(true);
+    });
+  });
 });
