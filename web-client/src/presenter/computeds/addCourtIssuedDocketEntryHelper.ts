@@ -49,7 +49,7 @@ export const addCourtIssuedDocketEntryHelper = (
   const showServiceStamp =
     selectedEventCode === 'O' && user.role !== USER_ROLES.petitionsClerk;
 
-  const formattedDocumentTitle = `${form.generatedDocumentTitle || ''}${
+  const formattedDocumentTitle = `${selectedEventCode.startsWith('O') ? 'Order - ' : ''}${form.generatedDocumentTitle || ''}${
     form.attachments ? ' (Attachment(s))' : ''
   }`;
 

@@ -61,6 +61,7 @@ export const CourtIssuedNonstandardForm = connect(
     validateCourtIssuedDocketEntrySequence,
     validationErrors,
   }) {
+    form.freeText = `${form.eventCode.startsWith('O') ? 'Order - ' : ''}${form.freeText}`;
     return (
       <>
         {addCourtIssuedDocketEntryNonstandardHelper.showDateFirst && (
