@@ -1,4 +1,5 @@
 import { TrialSessionTypes } from '@shared/business/entities/EntityConstants';
+import { calculateISODate } from '../../utilities/DateHandler';
 import { MOCK_NEW_TRIAL_REMOTE } from '../../../test/mockTrial';
 import { NewTrialSession } from './NewTrialSession';
 
@@ -66,10 +67,12 @@ describe('NewTrialSession entity', () => {
     });
 
     it('should be invalid when estimatedEndDate is before startDate', () => {
+      const startDate = calculateISODate({ howMuch: 10, units: 'days' });
+      const estimatedEndDate = calculateISODate({ howMuch: 1, units: 'days' });
       const trialSession = new NewTrialSession({
         ...MOCK_NEW_TRIAL_REMOTE,
-        estimatedEndDate: '2027-11-01T00:00:00.000Z',
-        startDate: '2027-11-11T00:00:00.000Z',
+        estimatedEndDate,
+        startDate,
       });
 
       expect(trialSession.isValid()).toEqual(false);
@@ -79,20 +82,23 @@ describe('NewTrialSession entity', () => {
     });
 
     it('should be valid when estimatedEndDate is equal to startDate', () => {
+      const startDate = calculateISODate({ howMuch: 10, units: 'days' });
       const trialSession = new NewTrialSession({
         ...MOCK_NEW_TRIAL_REMOTE,
-        estimatedEndDate: '2027-11-11T00:00:00.000Z',
-        startDate: '2027-11-11T00:00:00.000Z',
+        estimatedEndDate: startDate,
+        startDate,
       });
 
       expect(trialSession.isValid()).toEqual(true);
     });
 
     it('should be valid when estimatedEndDate is after startDate', () => {
+      const startDate = calculateISODate({ howMuch: 10, units: 'days' });
+      const estimatedEndDate = calculateISODate({ howMuch: 15, units: 'days' });
       const trialSession = new NewTrialSession({
         ...MOCK_NEW_TRIAL_REMOTE,
-        estimatedEndDate: '2027-11-15T00:00:00.000Z',
-        startDate: '2027-11-11T00:00:00.000Z',
+        estimatedEndDate,
+        startDate,
       });
 
       expect(trialSession.isValid()).toEqual(true);
