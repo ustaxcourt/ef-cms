@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker';
 import { loginAsDocketClerk } from 'cypress/helpers/authentication/login-as-helpers';
 import { goToCase } from '../go-to-case';
 
-export const addPartyPetitionerToCase = (
+export const addPetitionerAsPartyToCase = (
   docketNumber: string,
   petitionerFirstName: string = faker.person.firstName(),
 ) => {

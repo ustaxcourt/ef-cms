@@ -1,6 +1,6 @@
 import { goToCase } from '../go-to-case';
 
-export const addPrivatePractitionerToCase = (
+export const addPrivatePractitionerToCaseAndAllParties = (
   docketNumber: string,
   barNumber: string,
   representing: number[] = [],
@@ -23,16 +23,18 @@ export const addPrivatePractitionerToCase = (
   cy.get('[data-testid="practitioner-search-input"]').clear();
   cy.get('[data-testid="practitioner-search-input"]').type(barNumber);
   cy.get('.usa-search__submit-text').click();
-  if (representing.length > 0) {
-    representing.forEach(index => {
-      cy.get(`[data-testid="practitioner-representing-${index}"]`).click();
-    });
-  } else {
-    cy.get<number[]>('@partiesRepresenting').then(partiesRepresenting => {
-      partiesRepresenting.forEach(index => {
+  cy.then(() => {
+    if (representing.length > 0) {
+      representing.forEach(index => {
         cy.get(`[data-testid="practitioner-representing-${index}"]`).click();
       });
-    });
-  }
+    } else {
+      cy.get<number[]>('@partiesRepresenting').then(partiesRepresenting => {
+        partiesRepresenting.forEach(index => {
+          cy.get(`[data-testid="practitioner-representing-${index}"]`).click();
+        });
+      });
+    }
+  });
   cy.get('[data-testid="modal-button-confirm"]').click();
 };
