@@ -8,7 +8,6 @@ export const entryOfAppearance = async ({ applicationContext, data }) => {
   const {
     caseCaptionExtension,
     caseTitle,
-
     docketNumberWithSuffix,
     filers,
     practitionerInformation,
