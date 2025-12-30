@@ -2571,3 +2571,27 @@ button.change-scanner-button {
     }
   }
 }
+
+.recent-messages-table-mobile-wrapper {
+  width: 100%;
+  overflow-x: auto;
+
+  table {
+    width: 100%;
+    min-width: 900px;
+  }
+}
+
+#my-recent-messages {
+  .message-document-detail {
+    overflow-wrap: break-word;
+    /* stylelint-disable declaration-property-value-keyword-no-deprecated */
+    word-break: break-word;
+    /* stylelint-enable declaration-property-value-keyword-no-deprecated */
+  }
+}
+
+.dashboard-clerk-of-court-mobile-selector {
+  width: 100%;
+  border-radius: 8px;
+}

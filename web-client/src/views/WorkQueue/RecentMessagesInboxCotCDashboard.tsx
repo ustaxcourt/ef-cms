@@ -15,7 +15,7 @@ export const RecentMessagesInboxCotCDashboard = connect(
         <table
           aria-label="Recent messages table"
           aria-describedby="recent-messages-tab"
-          className="usa-table subsection ustc-table responsive-table"
+          className="usa-table subsection ustc-table"
           id="my-recent-messages"
           data-testid="recent-messages-table"
         >
