@@ -1,6 +1,7 @@
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { TrialCityOptions } from '../TrialCityOptions';
+import { addOrderStampPrefix } from '@shared/business/utilities/addOrderStampPrefix';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -61,7 +62,6 @@ export const CourtIssuedNonstandardForm = connect(
     validateCourtIssuedDocketEntrySequence,
     validationErrors,
   }) {
-    form.freeText = `${form.eventCode.startsWith('O') ? 'Order - ' : ''}${form.freeText}`;
     return (
       <>
         {addCourtIssuedDocketEntryNonstandardHelper.showDateFirst && (
@@ -157,7 +157,7 @@ export const CourtIssuedNonstandardForm = connect(
               data-testid="document-description-input"
               id="free-text"
               name="freeText"
-              value={form.freeText || ''}
+              value={addOrderStampPrefix(form.eventCode, form.freeText) || ''}
               onBlur={() => validateCourtIssuedDocketEntrySequence()}
               onChange={e => {
                 updateCourtIssuedDocketEntryFormValueSequence({
