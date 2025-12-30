@@ -139,6 +139,7 @@ export const Login = connect(
                   <div className="tw:my-4">
                     <DawsonUiButton
                       aria-label="Forgot password"
+                      className="tw:w-auto"
                       variant="primaryTertiary"
                       data-testid="forgot-password-button"
                       onClick={() => navigateToForgotPasswordSequence()}
