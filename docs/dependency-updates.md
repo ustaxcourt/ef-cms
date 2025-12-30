@@ -115,7 +115,7 @@ If the `Dockerfile` has changed, you will need to build a new docker image and p
 
 Check if there is an update to the Terraform AWS provider and update our `.tf` files to use the [latest version](https://registry.terraform.io/providers/hashicorp/aws/latest) of the provider.
 
-1. Search the entire project for `source  = "hashicorp/aws"` and make sure it's set to the latest version.  For example, some of these files have the AWS provider defined:
+1. Search the entire project for `source  = "hashicorp/aws"` and make sure it's set to the latest version. For example, some of these files have the AWS provider defined:
    - `./web-api/terraform/modules/worker/providers.tf`
 1. Change the version of the AWS provider using two decimal notation (e.g. `6.19.0`) to ensure providers only increment patch versions automatically
 
@@ -204,9 +204,8 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 ### pdfjs-dist
 
-- ✅ **RESOLVED (December 15, 2025)**: The Path2D browser API issue has been resolved by adding a polyfill in `cypress/helpers/cypressTasks/pdf/parsePdf.ts`. pdfjs-dist can now be updated normally.
-- Historical context: As of [this release](https://github.com/mozilla/pdf.js/releases/tag/v5.1.91), and specifically [PR #19689](https://github.com/mozilla/pdf.js/pull/19689), pdfjs started using Path2D for canvas rendering. This caused issues with Cypress tests since Path2D is a browser-only API not available in Node.js. The fix was to add a minimal Path2D polyfill that allows pdfjs to load and function correctly in the Cypress Node.js environment.
-- See `shared/src/business/utilities/pdfs/getPdfJs.ts` for the main getPdfJs implementation.
+- As of [this release](https://github.com/mozilla/pdf.js/releases/tag/v5.1.91), and I think [this PR](https://github.com/mozilla/pdf.js/pull/19689), pdfjs seems to expect certain browser-side API functionality when loaded. This causes issues with our Cypress tests. The best way to fix this is worth investigating further. Perhaps we could polyfill, or even consider creating an issue in the pdfjs repo.
+- Look at `shared/src/business/utilities/pdfs/getPdfJs.ts`
 
 ### DWT
 
@@ -261,7 +260,7 @@ The decision was made to revert back to 5.8.3 as the migration would require mul
 
 ### Commander override for s3rver
 
-- On 12/16/25 we added an version override for the commander package for s3rver. It was failing to start up the test server with our command after s3rver started using 14.0.2 of commander. We reverted it to the previous working version 12.1.0. 
+- On 12/16/25 we added an version override for the commander package for s3rver. It was failing to start up the test server with our command after s3rver started using 14.0.2 of commander. We reverted it to the previous working version 12.1.0.
 
 ```
 npm run start:s3rver

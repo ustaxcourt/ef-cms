@@ -15,6 +15,7 @@ import {
   ALL_SELECTION,
   MULTI_SELECT_PLACEHOLDER,
 } from '@shared/business/entities/EntityConstants';
+import { TextField } from '@web-client/dawson-ui/ui/input';
 
 export const CaseSearchByName = connect(
   {
@@ -67,20 +68,27 @@ export const CaseSearchByName = connect(
         </div>
         <div className="blue-container height-full display-flex flex-column">
           <form>
-            <div className="grid-row grid-gap">
+            <div className="grid-row grid-gap  tw:mt-[16px]">
               <div className="tablet:grid-col-12">
                 <FormGroup errorText={validationErrors.petitionerName}>
-                  <label
-                    className="usa-label margin-bottom-0"
-                    htmlFor="petitioner-name"
-                  >
-                    Petitioner name <span className="usa-hint">(required)</span>
-                  </label>
-                  <span className="usa-hint">
-                    Advanced syntax search (*, “”, - , etc. ) is not supported
-                    at this time.
-                  </span>
-                  <input
+                 
+                  
+                  <TextField
+                    label={
+                      <label
+                      className="tw:text-[16px] tw:xs:text-[18px] usa-label margin-bottom-0"
+                      htmlFor="petitioner-name"
+                      >
+                        Petitioner name
+                      </label>
+                    }
+                    required={true}
+                    helpText={
+                    <span className="usa-hint">
+                      Advanced syntax search (*, “”, - , etc. ) is not supported
+                      at this time.
+                    </span>        
+                    }
                     aria-describedby="case-search-by-name"
                     className="usa-input"
                     data-testid="petitioner-name"
