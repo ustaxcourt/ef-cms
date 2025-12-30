@@ -52,6 +52,7 @@ export const PartiesInformation = connect(
                 >
                   <div
                     className="grid-row margin-left-205"
+                    data-testid="petitioners-and-counsel"
                     id="petitioners-and-counsel"
                   >
                     {partyViewTabs.petitionersAndCounsel}

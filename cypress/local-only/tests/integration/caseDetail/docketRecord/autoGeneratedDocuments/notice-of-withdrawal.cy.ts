@@ -12,8 +12,10 @@ import {
   loginAsPetitionsClerk1,
   loginAsPrivatePractitioner,
 } from 'cypress/helpers/authentication/login-as-helpers';
-import { addPartyPetitionerToCase } from 'cypress/helpers/caseDetail/caseInformation/add-party-petitioner-to-case';
-import { addPrivatePractitionerToCase } from 'cypress/helpers/caseDetail/caseInformation/add-private-practitioner-to-case';
+import { addIntervenorAsPartyToCase } from 'cypress/helpers/caseDetail/caseInformation/add-intervenor-to-case';
+import { addParticipantAsPartyToCase } from 'cypress/helpers/caseDetail/caseInformation/add-participant-to-case';
+import { addPetitionerAsPartyToCase } from 'cypress/helpers/caseDetail/caseInformation/add-petitioner-to-case';
+import { addPrivatePractitionerToCaseAndAllParties } from 'cypress/helpers/caseDetail/caseInformation/add-private-practitioner-to-case-and-all-parties';
 import { petitionsClerkAddsRespondentToCase } from 'cypress/helpers/caseDetail/caseInformation/petitionsclerk-adds-respondent-to-case';
 import { updateCaseStatus } from 'cypress/helpers/caseDetail/caseInformation/update-case-status';
 import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
@@ -110,7 +112,10 @@ describe('Notice of Withdrawal', () => {
   it('should show validation messages for private practitioners when trying to review filing', () => {
     cy.get<string>('@docketNumber').then(docketNumber => {
       loginAsDocketClerk1();
-      addPrivatePractitionerToCase(docketNumber, privatePractitioner2BarNumber);
+      addPrivatePractitionerToCaseAndAllParties(
+        docketNumber,
+        privatePractitioner2BarNumber,
+      );
 
       cy.get<string>('@trialSessionId').then(trialSessionId => {
         updateTrialSessionStartDate(trialSessionId, validFutureDate);
@@ -170,7 +175,10 @@ describe('Notice of Withdrawal', () => {
   it('should edit the contact information for petitioner in the auto generated form', () => {
     cy.get<string>('@docketNumber').then(docketNumber => {
       loginAsDocketClerk1();
-      addPrivatePractitionerToCase(docketNumber, privatePractitioner2BarNumber);
+      addPrivatePractitionerToCaseAndAllParties(
+        docketNumber,
+        privatePractitioner2BarNumber,
+      );
       cy.get<string>('@trialSessionId').then(trialSessionId => {
         updateTrialSessionStartDate(trialSessionId, validFutureDate);
       });
@@ -221,7 +229,10 @@ describe('Notice of Withdrawal', () => {
       cy.get('[data-testid="seal-address-label"]').click();
       cy.get('[data-testid="modal-confirm"]').click();
 
-      addPrivatePractitionerToCase(docketNumber, privatePractitioner2BarNumber);
+      addPrivatePractitionerToCaseAndAllParties(
+        docketNumber,
+        privatePractitioner2BarNumber,
+      );
       cy.get<string>('@trialSessionId').then(trialSessionId => {
         updateTrialSessionStartDate(trialSessionId, validFutureDate);
       });
@@ -241,7 +252,7 @@ describe('Notice of Withdrawal', () => {
     });
   });
 
-  it.only('should show address sealed for sealed contact info and normal contact info for others', () => {
+  it('should show address sealed for sealed contact info and normal contact info for others', () => {
     cy.get<string>('@docketNumber').then(docketNumber => {
       loginAsDocketClerk1();
 
@@ -252,7 +263,7 @@ describe('Notice of Withdrawal', () => {
       cy.get('[data-testid="seal-address-label"]').click();
       cy.get('[data-testid="modal-confirm"]').click();
 
-      addPartyPetitionerToCase(docketNumber);
+      addPetitionerAsPartyToCase(docketNumber);
 
       cy.intercept('GET', `/cases/${docketNumber}`).as('caseDetails');
       goToCase(docketNumber);
@@ -282,7 +293,10 @@ describe('Notice of Withdrawal', () => {
       cy.get(
         '[data-testid="submit-edit-petitioner-information-button"]',
       ).click();
-      addPrivatePractitionerToCase(docketNumber, privatePractitioner2BarNumber);
+      addPrivatePractitionerToCaseAndAllParties(
+        docketNumber,
+        privatePractitioner2BarNumber,
+      );
 
       cy.get<string>('@trialSessionId').then(trialSessionId => {
         updateTrialSessionStartDate(trialSessionId, validFutureDate);
@@ -325,10 +339,139 @@ describe('Notice of Withdrawal', () => {
         cy.get('[data-testid="file-document-submit-document"]').click();
         cy.wait('@generateNoticeOfWithdrawal').then(interception => {
           const { petitioners } = interception.request.body;
+          // Will fail until 9552 is merged
+          // expect(petitioners[0].address1).to.equal(undefined);
+          // expect(petitioners[0].phone).to.equal(undefined);
+          // expect(petitioners[0].isAddressSealed).to.equal(true);
+
           expect(petitioners[1].address1).to.equal('new address1');
           expect(petitioners[1].phone).to.equal('999-999-9999');
         });
       });
+    });
+  });
+
+  it('should successfully file the auto generated notw as private practitioner for petitioner, intervenor, and participant', () => {
+    cy.get<string>('@docketNumber').then(docketNumber => {
+      loginAsDocketClerk1();
+      // add participant
+      goToCase(docketNumber);
+      addParticipantAsPartyToCase();
+
+      // add intervenor
+      goToCase(docketNumber);
+      addIntervenorAsPartyToCase();
+
+      // add privatepractitioner1 to participant and intervenor party
+      cy.intercept('GET', `/cases/${docketNumber}`).as('caseDetails');
+      goToCase(docketNumber);
+      cy.wait('@caseDetails').then(interception => {
+        cy.wrap(
+          interception.response?.body.petitioners.map(
+            (p: RawPetitioner) => p.contactId,
+          ),
+        ).as('petitionerContactIds');
+      });
+      cy.get('[data-testid="tab-case-information"]').click();
+      cy.get('[data-testid="tab-parties"]').click();
+      cy.get('[data-testid="petitioners-and-counsel"]').click();
+      cy.get('[data-testid="edit-private-practitioner-counsel"]').click();
+      cy.get<string[]>('@petitionerContactIds').then(petitionerContactIds => {
+        petitionerContactIds.forEach(contactId => {
+          cy.get(`input[data-testid="representing-${contactId}"]`).then(
+            $checkbox => {
+              if (!$checkbox.is(':checked')) {
+                cy.get(
+                  `label[data-testid="representing-${contactId}"]`,
+                ).click();
+              }
+            },
+          );
+        });
+      });
+      cy.get(
+        '[data-testid="submit-edit-petitioner-information-button"]',
+      ).click();
+
+      addPrivatePractitionerToCaseAndAllParties(
+        docketNumber,
+        privatePractitioner2BarNumber,
+      );
+      cy.get<string>('@trialSessionId').then(trialSessionId => {
+        updateTrialSessionStartDate(trialSessionId, validFutureDate);
+      });
+      loginAsPrivatePractitioner();
+      cy.get(`[data-testid="${docketNumber}"] a`).click();
+      cy.get('[data-testid="button-file-document"]').click();
+      cy.get('[data-testid="ready-to-file"]').click();
+      selectTypeaheadInput(
+        'complete-doc-document-type-search',
+        'Notice of Withdrawal as Counsel',
+      );
+      cy.get('[data-testid="submit-document"]').click();
+
+      cy.get<string[]>('@petitionerContactIds').then(petitionerContactIds => {
+        petitionerContactIds.forEach(contactId => {
+          cy.get(`[data-testid="party-label-${contactId}"]`).click();
+        });
+        cy.get('[data-testid="allPartiesConsent-yes-label"]').click();
+
+        cy.intercept(
+          'POST',
+          `/cases/${docketNumber}/generate-notice-of-withdrawal`,
+        ).as('generateNoticeOfWithdrawal');
+        cy.get('[data-testid="file-document-submit-document"]').click();
+        cy.wait('@generateNoticeOfWithdrawal').then(interception => {
+          const { petitioners } = interception.request.body;
+          expect(petitioners.length).to.equal(3);
+        });
+      });
+
+      cy.get('[data-testid="auto-generated-filing-parties"]').contains(
+        'Participant',
+      );
+      cy.get('[data-testid="auto-generated-filing-parties"]').contains(
+        'Intervenor',
+      );
+      cy.get('[data-testid="auto-generated-filing-parties"]').contains(
+        'Petitioner',
+      );
+    });
+  });
+
+  it.only('should successfully file the auto generated notw as irs practitioner', () => {
+    cy.get<string>('@docketNumber').then(docketNumber => {
+      loginAsDocketClerk1();
+      petitionsClerkAddsRespondentToCase(
+        docketNumber,
+        irsPractitionerBarNumber,
+      );
+      petitionsClerkAddsRespondentToCase(
+        docketNumber,
+        irsPractitioner2BarNumber,
+      );
+
+      cy.get<string>('@trialSessionId').then(trialSessionId => {
+        updateTrialSessionStartDate(trialSessionId, validFutureDate);
+      });
+
+      loginAsIrsPractitioner1();
+      cy.get(`[data-testid="${docketNumber}"] a`).click();
+      cy.get('[data-testid="button-file-document"]').click();
+      cy.get('[data-testid="ready-to-file"]').click();
+      selectTypeaheadInput(
+        'complete-doc-document-type-search',
+        'Notice of Withdrawal as Counsel',
+      );
+      cy.get('[data-testid="submit-document"]').click();
+      cy.get('[data-testid="party-irs-practitioner-label"]').click();
+      cy.get('[data-testid="allPartiesConsent-yes-label"]').click();
+      cy.get('[data-testid="file-document-submit-document"]').click();
+      cy.get('[data-testid="submit-entry-of-appearance-button"]').click();
+      cy.get('[data-testid="docket-record-table"] tr')
+        .last()
+        .find('[data-testid="docket-entry-filedBy"]')
+        .should('contain', 'Test IRS Practitioner1');
     });
   });
 });
