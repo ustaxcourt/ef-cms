@@ -90,7 +90,7 @@ const PageButton = ({
             selected && 'paginator-current',
             !selected && 'background-none',
           )}
-          data-tesetid={`paginator-page-${pageNumber + 1}`}
+          data-testid={`paginator-page-${pageNumber + 1}`}
           onClick={() => onClick(pageNumber)}
         >
           {pageNumber + 1}

@@ -178,7 +178,7 @@ describe('Advanced Search', () => {
             const lastPage = Math.ceil(
               count / ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE,
             );
-            cy.get(`[data-testid="pagination-button-${lastPage}"]`).click();
+            cy.get(`[data-testid="paginator-page-${lastPage}"]`).click();
           }
         });
 
@@ -274,7 +274,7 @@ describe('Advanced Search', () => {
             const lastPage = Math.ceil(
               count / ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE,
             );
-            cy.get(`[data-testid="pagination-button-${lastPage}"]`).click();
+            cy.get(`[data-testid="paginator-page-${lastPage}"]`).click();
           }
         });
 
