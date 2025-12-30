@@ -31,8 +31,7 @@ if [[ -n $LOCAL_IMAGE_EXISTS ]]; then
   [[ ! $REPLY =~ ^[Yy]$ ]] && BUILD_IMAGE=0
 fi
 if [[ "$BUILD_IMAGE" -eq 1 ]]; then
-  docker build --platform=linux/amd64 --no-cache -t "$LOCAL_IMAGE_NAME" -f Dockerfile .
-  if ! docker; then
+  if ! docker build --platform=linux/amd64 --no-cache -t "$LOCAL_IMAGE_NAME" -f Dockerfile . ; then
     echo "Docker build failed. Exiting without pushing to ECR."
     exit 1
   fi
