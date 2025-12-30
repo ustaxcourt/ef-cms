@@ -166,5 +166,6 @@
   --color-purple-visited-link: var(--purple-visited-link);
 
   /* spacing */
-  --spacing: 4px;
+
+  /* --spacing: 4px; */
 }
