@@ -12,7 +12,7 @@ describe('addOrderStampPrefix', () => {
   });
 
   it('should not add prefix when eventCode does not include O', () => {
-    const result = addOrderStampPrefix('NOT', 'some text');
+    const result = addOrderStampPrefix('NDT', 'some text');
     expect(result).toBe('some text');
   });
 
