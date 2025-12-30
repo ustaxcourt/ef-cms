@@ -15,8 +15,7 @@ interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   flexDirection?: 'vertical' | 'horizontal';
 }
 
-interface TextAreaProps
-  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   error?: string;
   label?: string;
   helpText?: string;
@@ -130,7 +129,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
       styles.states.hover,
       error && styles.states.error,
       'tw:px-3 tw:xs:h-[36px] tw:h-[32px]',
-      'tw:w-[380px] tw:ps-[10px] tw:xs:ps-[12px]',
+      'tw:w-[380px] tw:ps-[12px] tw:xs:ps-[12px]',
     );
 
     return (
@@ -153,13 +152,13 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                   <FontAwesomeIcon
                     icon={faInfoCircle}
                     className={cn(styles.icon)}
-                    title={typeof helpText === "string" ? helpText: ""}
+                    title={typeof helpText === 'string' ? helpText : ''}
                     role="img"
-                    aria-label={typeof helpText === "string" ? helpText: ""}
+                    aria-label={typeof helpText === 'string' ? helpText : ''}
                   />
                 )}
                 <span className={cn(styles.optional)}>
-                  {!required ? '(optional)' : '(required)'} 
+                  {!required ? '(optional)' : '(required)'}
                 </span>
               </div>
               {helpText && (
@@ -204,7 +203,10 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
 );
 
 const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
-  ({ className, error, label, helpText, showReqOptionalText, ...props }, ref) => {
+  (
+    { className, error, label, helpText, showReqOptionalText, ...props },
+    ref,
+  ) => {
     const textareaId = React.useId();
     const labelId = React.useId();
     const helpTextId = helpText ? React.useId() : undefined;
