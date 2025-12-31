@@ -36,7 +36,7 @@ type Users = {
   };
 };
 
-const cognito = new CognitoIdentityProvider({ region: region });
+const cognito = new CognitoIdentityProvider({ region });
 
 const createOrUpdateCognitoUser = async ({
   email,
@@ -237,43 +237,38 @@ const getUsers = async (): Promise<Users> => {
   const users = {};
   for (const user of results as RawUser[]) {
     const emailDomain = user.email!.split('@')[1];
-    let count = 1;
-    while (user.name in users) {
-      user.name = user.name + count;
-      count++;
-    }
-    count = 0;
 
     const fullName = user.name;
-    user.name = user.name.replace(/\s+/g, '-').replace(/[^a-zA-Z0-9-_]/g, '');
 
-    if (user.role in ['judge', 'legacyJudge']) {
-      users[user.name] = {
-        email: `${
-          user.judgeTitle!.indexOf('Special Trial') !== -1 ? 'st' : ''
-        }judge.${user.name.toLowerCase()}@example.com`,
-        name: `${user.judgeTitle} ${user.name}`,
-        userFullName: `${user.role} ${fullName}`,
-        role: user.role,
-        section: user.section,
-      };
-    } else {
-      users[user.name] = {
-        email: `${user.role!.toLowerCase()}.${user.name.toLowerCase()}@example.com`,
-        name: `${user.role} ${user.name}`,
-        userFullName: `${user.role} ${fullName}`,
-        role: user.role,
-        section: user.section,
-      };
-    }
+    if (user.email) {
+      if (['judge', 'legacyJudge'].includes(user.role)) {
+        users[user.email] = {
+          email: `${
+            user.judgeTitle!.indexOf('Special Trial') !== -1 ? 'st' : ''
+          }judge.${user.name.toLowerCase()}@example.com`,
+          name: `${user.judgeTitle} ${fullName}`,
+          userFullName: `${fullName}`,
+          role: user.role,
+          section: user.section,
+        };
+      } else {
+        users[user.email] = {
+          email: user.email,
+          name: `${user.role} ${fullName}`,
+          userFullName: `${fullName}`,
+          role: user.role,
+          section: user.section,
+        };
+      }
 
-    let sourceOfUser = emailDomain;
-    if (emailDomain === 'ef-cms.ustaxcourt.gov') {
-      sourceOfUser = 'gluedUserId';
-    } else if (emailDomain === 'dawson.ustaxcourt.gov') {
-      sourceOfUser = 'bulkImportedUserId';
+      let sourceOfUser = emailDomain;
+      if (emailDomain === 'ef-cms.ustaxcourt.gov') {
+        sourceOfUser = 'gluedUserId';
+      } else if (emailDomain === 'dawson.ustaxcourt.gov') {
+        sourceOfUser = 'bulkImportedUserId';
+      }
+      users[user.email][sourceOfUser] = user.userId;
     }
-    users[user.name][sourceOfUser] = user.userId;
   }
   return users;
 };
