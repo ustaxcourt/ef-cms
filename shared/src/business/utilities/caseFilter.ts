@@ -44,7 +44,7 @@ export const formatSealedAddresses = (
   );
 
   // Seal emails in docket entries
-  formattedCase.docketEntries.forEach(docketEntry => {
+  formattedCase.docketEntries?.forEach(docketEntry => {
     const emailsToBeSealed = caseContactsToBeSealed.map(caseContact => {
       if (caseContact.email) {
         return caseContact.email;
