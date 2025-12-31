@@ -126,6 +126,7 @@ export const formatDocketEntryOnDocketRecord = (
       );
 
       return {
+        ...affectedEntry,
         docketEntryIndex: index,
         showDownloadLink,
         disposition:
@@ -147,6 +148,7 @@ export const formatDocketEntryOnDocketRecord = (
         );
 
         return {
+          ...affectedEntry,
           docketEntryIndex: index,
           showDownloadLink,
           disposition:
