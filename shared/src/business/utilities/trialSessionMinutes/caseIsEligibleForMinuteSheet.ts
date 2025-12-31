@@ -31,6 +31,33 @@ export const caseIsEligibleForMinuteSheet = (
   return true;
 };
 
+/**
+ * Checks if an unscheduled case (not in trial session's caseOrder) is eligible
+ * for a minute sheet. This is used when creating minute sheets for cases that
+ * are NOT calendared on the trial session.
+ */
+export const isEligibleUnscheduledCaseForMinuteSheet = (
+  aCase: RawCase,
+  trialSession: RawTrialSession,
+): boolean => {
+  // Trial session must be calendared
+  if (!trialSession.isCalendared) {
+    return false;
+  }
+
+  // Case cannot be closed
+  if (isClosed(aCase)) {
+    return false;
+  }
+
+  // For consolidated cases, only the lead case is eligible
+  if (!isEligibleConsolidatedCase(aCase as RawCase & TCaseOrder)) {
+    return false;
+  }
+
+  return true;
+};
+
 const isEligibleConsolidatedCase = (aCase: RawCase & TCaseOrder): boolean => {
   if (!aCase.leadDocketNumber) {
     return true;

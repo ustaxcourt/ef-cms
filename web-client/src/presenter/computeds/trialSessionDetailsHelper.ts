@@ -49,6 +49,7 @@ export const trialSessionDetailsHelper = (
     eligibleSmallCaseQcTotalCompleteCount,
     eligibleTotalCaseQcCompleteCount,
     nottReminderAction,
+    showNewMinuteSheetButton: permissions.MANAGE_MINUTE_SHEET,
     showQcComplete,
     showSetCalendarButton: permissions.SET_TRIAL_SESSION_CALENDAR,
     showSmallAndRegularQcComplete,

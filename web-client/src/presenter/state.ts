@@ -119,6 +119,7 @@ import { messagesHelper } from './computeds/messagesHelper';
 import { messagesIndividualInboxHelper } from './computeds/messagesIndividualInboxHelper';
 import { motionOrderResponseFormHelper } from './computeds/motionOrderResponseFormHelper';
 import { myAccountHelper } from './computeds/myAccountHelper';
+import { newMinuteSheetModalHelper } from './computeds/newMinuteSheetModalHelper';
 import { noticeStatusHelper } from './computeds/noticeStatusHelper';
 import { orderTypesHelper } from './computeds/orderTypesHelper';
 import { paperDocketEntryHelper } from './computeds/paperDocketEntryHelper';
@@ -441,6 +442,10 @@ export const computeds = {
   myAccountHelper: myAccountHelper as unknown as ReturnType<
     typeof myAccountHelper
   >,
+  newMinuteSheetModalHelper:
+    newMinuteSheetModalHelper as unknown as ReturnType<
+      typeof newMinuteSheetModalHelper
+    >,
   noticeStatusHelper: noticeStatusHelper as unknown as ReturnType<
     typeof noticeStatusHelper
   >,
@@ -822,6 +827,7 @@ export const baseState = {
   messagesSectionCount: 0,
   minuteSheetForm: cloneDeep(initialMinuteSheetFormState),
   minuteSheetFormSnapshot: '',
+  isUnscheduledMinuteSheet: false,
   messageViewerDocumentToDisplay: undefined as unknown as ViewerDocument,
   modal: {
     calendarNotes: undefined as string | undefined,

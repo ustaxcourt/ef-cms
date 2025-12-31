@@ -211,6 +211,7 @@ import { getRecentFilingsForUserLambda } from './lambdas/recentFilings/getRecent
 import { deactivateUserLambda } from '@web-api/lambdas/automations/deactivateUserLambda';
 import { removeUserPendingEmailLambda } from '@web-api/lambdas/automations/removeUserPendingEmailLambda';
 import { saveMinuteSheetToDraftsLambda } from './lambdas/trialSessionMinutes/saveMinuteSheetToDraftsLambda';
+import { validateCaseForNewMinuteSheetLambda } from './lambdas/trialSessions/validateCaseForNewMinuteSheetLambda';
 
 export const app = express();
 
@@ -965,6 +966,10 @@ app.delete(
   app.put(
     '/trial-sessions/:trialSessionId/set-calendar-note',
     lambdaWrapper(saveCalendarNoteLambda),
+  );
+  app.get(
+    '/trial-sessions/:trialSessionId/validate-case-for-minute-sheet',
+    lambdaWrapper(validateCaseForNewMinuteSheetLambda),
   );
   app.get(
     '/trial-sessions/:trialSessionId',

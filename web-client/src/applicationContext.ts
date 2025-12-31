@@ -332,6 +332,7 @@ import { validateOpinionAdvancedSearchInteractor } from '../../shared/src/busine
 import { validateOrderAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOrderAdvancedSearchInteractor';
 import { validateOrderWithoutBodyInteractor } from '../../shared/src/business/useCases/courtIssuedOrder/validateOrderWithoutBodyInteractor';
 import { validatePdfInteractor } from '../../shared/src/proxies/documents/validatePdfProxy';
+import { validateCaseForNewMinuteSheetInteractor } from '../../shared/src/proxies/trialSessions/validateCaseForNewMinuteSheetProxy';
 import { validatePenaltiesInteractor } from '../../shared/src/business/useCases/validatePenaltiesInteractor';
 import { validatePetitionFromPaperInteractor } from '../../shared/src/business/useCases/validatePetitionFromPaperInteractor';
 import { validatePetitionInteractor } from '../../shared/src/business/useCases/validatePetitionInteractor';
@@ -582,6 +583,7 @@ const allUseCases = {
   validateOrderAdvancedSearchInteractor,
   validateOrderWithoutBodyInteractor,
   validatePdfInteractor,
+  validateCaseForNewMinuteSheetInteractor,
   validatePenaltiesInteractor,
   validatePetitionFromPaperInteractor,
   validatePetitionInteractor,
