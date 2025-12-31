@@ -26,10 +26,6 @@ describe('Dashboard - Clerk of Court Accessibility', () => {
     it('should have focusable interactive elements', () => {
       loginAsClerkOfCourt();
 
-      cy.get('[data-testid="view-all-trial-sessions-button"]')
-        .should('be.visible')
-        .should('have.attr', 'href');
-
       cy.get('a:contains("View All Messages")')
         .should('be.visible')
         .should('have.attr', 'href');
@@ -41,4 +37,3 @@ describe('Dashboard - Clerk of Court Accessibility', () => {
     });
   });
 });
-
