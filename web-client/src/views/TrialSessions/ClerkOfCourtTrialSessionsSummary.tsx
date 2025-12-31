@@ -2,22 +2,37 @@ import { Accordion, AccordionItem } from '../../ustc-ui/Accordion/Accordion';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
+import { FormattedTrialSession } from '@web-client/presenter/computeds/formattedClerkOfCourtDashboardTrialSessions';
+import { CLERK_OF_COURT_DASHBOARD_LABELS } from '@shared/business/entities/EntityConstants';
 import React from 'react';
 
-type FormattedTrialSession = {
-  trialSessionId?: string;
-  formattedStartDate: string;
-  formattedEstimatedEndDate: string;
-  trialLocation?: string;
-  proceedingType: string;
-  sessionType: string;
-  judge?: { name: string; userId: string };
-  trialClerk?: { name: string; userId: string };
+type WeekType = 'current' | 'next';
+
+type ClerkOfCourtTrialSessionsSummaryProps = {
+  formattedClerkOfCourtDashboardTrialSessions?: {
+    formattedCurrentWeekSessions: FormattedTrialSession[];
+    formattedNextWeekSessions: FormattedTrialSession[];
+  };
 };
+
+const getTrialLocationAriaLabel = (trialLocation?: string): string => {
+  const location = trialLocation || 'trial session';
+  return `View trial session details for ${location}`;
+};
+
+const getFieldValue = (value: string | undefined, fallback: string): string => {
+  return value || fallback;
+};
+
+const renderTrialSessionsHeader = () => (
+  <h2 className="margin-top-4 margin-bottom-4">
+    {CLERK_OF_COURT_DASHBOARD_LABELS.TRIAL_SESSIONS_HEADER}
+  </h2>
+);
 
 const renderTrialSessionMobile = (
   session: FormattedTrialSession,
-  weekType: 'current' | 'next',
+  weekType: WeekType,
   isLast: boolean,
 ) => {
   if (!session.trialSessionId) {
@@ -29,17 +44,18 @@ const renderTrialSessionMobile = (
       key={session.trialSessionId}
       data-testid={`${weekType}-week-session-${session.trialSessionId}`}
       className="margin-3"
+      role="listitem"
     >
       <div className="grid-row grid-gap-2">
         <div className="grid-col-6">
           <div>
-            <strong>Start Date</strong>
+            <strong>{CLERK_OF_COURT_DASHBOARD_LABELS.FIELD_START_DATE}</strong>
           </div>
           <div className="margin-top-05">{session.formattedStartDate}</div>
         </div>
         <div className="grid-col-6">
           <div>
-            <strong>Proc. Type</strong>
+            <strong>{CLERK_OF_COURT_DASHBOARD_LABELS.FIELD_PROC_TYPE}</strong>
           </div>
           <div className="margin-top-05">{session.proceedingType}</div>
         </div>
@@ -47,14 +63,18 @@ const renderTrialSessionMobile = (
       <div className="grid-row grid-gap-2">
         <div className="grid-col-12">
           <div>
-            <strong>City</strong>
+            <strong>{CLERK_OF_COURT_DASHBOARD_LABELS.FIELD_CITY}</strong>
           </div>
           <div className="margin-top-05">
             <a
+              aria-label={getTrialLocationAriaLabel(session.trialLocation)}
               data-testid={`trial-location-link-${session.trialSessionId}`}
               href={`/trial-session-detail/${session.trialSessionId}`}
             >
-              {session.trialLocation}
+              {getFieldValue(
+                session.trialLocation,
+                CLERK_OF_COURT_DASHBOARD_LABELS.FALLBACK_EMPTY,
+              )}
             </a>
           </div>
         </div>
@@ -62,13 +82,22 @@ const renderTrialSessionMobile = (
       <div className="grid-row grid-gap-2">
         <div className="grid-col-6">
           <div>
-            <strong>Est. End Date</strong>
+            <strong>
+              {CLERK_OF_COURT_DASHBOARD_LABELS.FIELD_EST_END_DATE}
+            </strong>
           </div>
-          <div>{session.formattedEstimatedEndDate || '—'}</div>
+          <div>
+            {getFieldValue(
+              session.formattedEstimatedEndDate,
+              CLERK_OF_COURT_DASHBOARD_LABELS.FALLBACK_EMPTY,
+            )}
+          </div>
         </div>
         <div className="grid-col-6">
           <div>
-            <strong>Session Type</strong>
+            <strong>
+              {CLERK_OF_COURT_DASHBOARD_LABELS.FIELD_SESSION_TYPE}
+            </strong>
           </div>
           <div>{session.sessionType}</div>
         </div>
@@ -76,21 +105,31 @@ const renderTrialSessionMobile = (
       <div className="grid-row grid-gap-2">
         <div className="grid-col-6">
           <div>
-            <strong>Judge</strong>
+            <strong>{CLERK_OF_COURT_DASHBOARD_LABELS.FIELD_JUDGE}</strong>
           </div>
-          <div>{session.judge?.name || 'Unassigned'}</div>
+          <div>
+            {getFieldValue(
+              session.judge?.name,
+              CLERK_OF_COURT_DASHBOARD_LABELS.FALLBACK_UNASSIGNED,
+            )}
+          </div>
         </div>
         <div className="grid-col-6">
           <div>
-            <strong>Clerk</strong>
+            <strong>{CLERK_OF_COURT_DASHBOARD_LABELS.FIELD_CLERK}</strong>
           </div>
-          <div>{session.trialClerk?.name || '—'}</div>
+          <div>
+            {getFieldValue(
+              session.trialClerk?.name,
+              CLERK_OF_COURT_DASHBOARD_LABELS.FALLBACK_EMPTY,
+            )}
+          </div>
         </div>
       </div>
       {!isLast && (
         <hr
-          className="margin-top-3 margin-bottom-0"
-          style={{ borderTop: '1px solid #d6d7d9' }}
+          aria-hidden="true"
+          className="margin-top-3 margin-bottom-0 trial-session-divider"
         />
       )}
     </div>
@@ -99,7 +138,7 @@ const renderTrialSessionMobile = (
 
 const renderTrialSession = (
   session: FormattedTrialSession,
-  weekType: 'current' | 'next',
+  weekType: WeekType,
   isLast: boolean,
 ) => {
   if (!session.trialSessionId) {
@@ -112,30 +151,37 @@ const renderTrialSession = (
         <div
           data-testid={`${weekType}-week-session-${session.trialSessionId}`}
           className="margin-3"
+          role="listitem"
         >
           <div className="grid-row grid-gap-2">
             <div className="tablet:grid-col-3">
               <div>
-                <strong>Start Date</strong>
+                <strong>
+                  {CLERK_OF_COURT_DASHBOARD_LABELS.FIELD_START_DATE}
+                </strong>
               </div>
               <div className="margin-top-05">{session.formattedStartDate}</div>
             </div>
             <div className="tablet:grid-col-3">
               <div>
-                <strong>Proc. Type</strong>
+                <strong>
+                  {CLERK_OF_COURT_DASHBOARD_LABELS.FIELD_PROC_TYPE}
+                </strong>
               </div>
               <div className="margin-top-05">{session.proceedingType}</div>
             </div>
             <div className="tablet:grid-col-3">
               <div>
-                <strong>City</strong>
+                <strong>{CLERK_OF_COURT_DASHBOARD_LABELS.FIELD_CITY}</strong>
               </div>
               <div className="margin-top-05">
                 <a
+                  aria-label={getTrialLocationAriaLabel(session.trialLocation)}
                   data-testid={`trial-location-link-${session.trialSessionId}`}
                   href={`/trial-session-detail/${session.trialSessionId}`}
                 >
-                  {session.trialLocation}
+                  {session.trialLocation ||
+                    CLERK_OF_COURT_DASHBOARD_LABELS.FALLBACK_EMPTY}
                 </a>
               </div>
             </div>
@@ -144,33 +190,46 @@ const renderTrialSession = (
           <div className="grid-row grid-gap-2">
             <div className="tablet:grid-col-3">
               <div>
-                <strong>Est. End Date</strong>
+                <strong>
+                  {CLERK_OF_COURT_DASHBOARD_LABELS.FIELD_EST_END_DATE}
+                </strong>
               </div>
-              <div>{session.formattedEstimatedEndDate || '—'}</div>
+              <div>
+                {session.formattedEstimatedEndDate ||
+                  CLERK_OF_COURT_DASHBOARD_LABELS.FALLBACK_EMPTY}
+              </div>
             </div>
             <div className="tablet:grid-col-3">
               <div>
-                <strong>Session Type</strong>
+                <strong>
+                  {CLERK_OF_COURT_DASHBOARD_LABELS.FIELD_SESSION_TYPE}
+                </strong>
               </div>
               <div>{session.sessionType}</div>
             </div>
             <div className="tablet:grid-col-3">
               <div>
-                <strong>Judge</strong>
+                <strong>{CLERK_OF_COURT_DASHBOARD_LABELS.FIELD_JUDGE}</strong>
               </div>
-              <div>{session.judge?.name || 'Unassigned'}</div>
+              <div>
+                {session.judge?.name ||
+                  CLERK_OF_COURT_DASHBOARD_LABELS.FALLBACK_UNASSIGNED}
+              </div>
             </div>
             <div className="tablet:grid-col-3">
               <div>
-                <strong>Clerk</strong>
+                <strong>{CLERK_OF_COURT_DASHBOARD_LABELS.FIELD_CLERK}</strong>
               </div>
-              <div>{session.trialClerk?.name || '—'}</div>
+              <div>
+                {session.trialClerk?.name ||
+                  CLERK_OF_COURT_DASHBOARD_LABELS.FALLBACK_EMPTY}
+              </div>
             </div>
           </div>
           {!isLast && (
             <hr
-              className="margin-top-3 margin-bottom-0"
-              style={{ borderTop: '1px solid #d6d7d9' }}
+              aria-hidden="true"
+              className="margin-top-3 margin-bottom-0 trial-session-divider"
             />
           )}
         </div>
@@ -183,7 +242,7 @@ const renderTrialSession = (
 const renderWeekSection = (
   title: string,
   sessions: FormattedTrialSession[],
-  weekType: 'current' | 'next',
+  weekType: WeekType,
   emptyMessage: string,
   testId: string,
 ) => (
@@ -198,13 +257,7 @@ const renderWeekSection = (
       >
         <div className="content-wrapper gray height-full">
           {sessions.length > 0 ? (
-            <div
-              style={{
-                maxHeight: '400px',
-                overflowY: 'auto',
-                paddingRight: '10px',
-              }}
-            >
+            <div className="trial-sessions-scrollable" role="list">
               {sessions.map((session, index) =>
                 renderTrialSession(
                   session,
@@ -214,7 +267,13 @@ const renderWeekSection = (
               )}
             </div>
           ) : (
-            <div className="padding-top-2 padding-bottom-2">{emptyMessage}</div>
+            <div
+              aria-live="polite"
+              className="padding-top-2 padding-bottom-2"
+              role="status"
+            >
+              {emptyMessage}
+            </div>
           )}
         </div>
       </AccordionItem>
@@ -229,12 +288,7 @@ export const ClerkOfCourtTrialSessionsSummary = connect(
   },
   function ClerkOfCourtTrialSessionsSummary({
     formattedClerkOfCourtDashboardTrialSessions,
-  }: {
-    formattedClerkOfCourtDashboardTrialSessions?: {
-      formattedCurrentWeekSessions: FormattedTrialSession[];
-      formattedNextWeekSessions: FormattedTrialSession[];
-    };
-  }) {
+  }: ClerkOfCourtTrialSessionsSummaryProps) {
     const {
       formattedCurrentWeekSessions = [],
       formattedNextWeekSessions = [],
@@ -243,46 +297,46 @@ export const ClerkOfCourtTrialSessionsSummary = connect(
     return (
       <>
         <NonMobile>
-          <h2 className="margin-top-4 margin-bottom-4">Trial Sessions</h2>
+          {renderTrialSessionsHeader()}
           <div className="grid-row grid-gap">
             <div className="grid-col-6">
               {renderWeekSection(
-                'This Week',
+                CLERK_OF_COURT_DASHBOARD_LABELS.WEEK_CURRENT,
                 formattedCurrentWeekSessions,
                 'current',
-                'There are no trial sessions for the current week.',
+                CLERK_OF_COURT_DASHBOARD_LABELS.EMPTY_MESSAGE_CURRENT_WEEK,
                 'current-week-trial-sessions-card',
               )}
             </div>
             <div className="grid-col-6">
               {renderWeekSection(
-                'Next Week',
+                CLERK_OF_COURT_DASHBOARD_LABELS.WEEK_NEXT,
                 formattedNextWeekSessions,
                 'next',
-                'There are no trial sessions for the next week.',
+                CLERK_OF_COURT_DASHBOARD_LABELS.EMPTY_MESSAGE_NEXT_WEEK,
                 'next-week-trial-sessions-card',
               )}
             </div>
           </div>
         </NonMobile>
         <Mobile>
-          <h2 className="margin-top-4 margin-bottom-4">Trial Sessions</h2>
+          {renderTrialSessionsHeader()}
           <div className="grid-row grid-gap">
             <div className="grid-col-12">
               {renderWeekSection(
-                'This Week',
+                CLERK_OF_COURT_DASHBOARD_LABELS.WEEK_CURRENT,
                 formattedCurrentWeekSessions,
                 'current',
-                'There are no trial sessions for the current week.',
+                CLERK_OF_COURT_DASHBOARD_LABELS.EMPTY_MESSAGE_CURRENT_WEEK,
                 'current-week-trial-sessions-card',
               )}
             </div>
             <div className="grid-col-12 margin-top-4">
               {renderWeekSection(
-                'Next Week',
+                CLERK_OF_COURT_DASHBOARD_LABELS.WEEK_NEXT,
                 formattedNextWeekSessions,
                 'next',
-                'There are no trial sessions for the next week.',
+                CLERK_OF_COURT_DASHBOARD_LABELS.EMPTY_MESSAGE_NEXT_WEEK,
                 'next-week-trial-sessions-card',
               )}
             </div>

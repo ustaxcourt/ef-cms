@@ -1654,7 +1654,7 @@ button.change-scanner-button {
 }
 
 .clerk-of-court-accordion-header {
-  background-color: #005ea2;
+  background-color: $color-blue;
   color: $color-white;
   font-family: 'Source Sans Pro', sans-serif;
   font-size: 17px;
@@ -1663,7 +1663,7 @@ button.change-scanner-button {
   &:hover,
   &:focus,
   &:active {
-    background-color: #005ea2;
+    background-color: $color-blue;
     color: $color-white;
   }
 }
@@ -1686,6 +1686,16 @@ button.change-scanner-button {
 
 .clerk-of-court-accordion-content {
   padding: 0;
+}
+
+.trial-session-divider {
+  border-top: 1px solid color($theme-color-base-lighter);
+}
+
+.trial-sessions-scrollable {
+  max-height: 400px;
+  padding-right: 10px;
+  overflow-y: auto;
 }
 
 .represented-text {

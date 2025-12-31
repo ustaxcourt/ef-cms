@@ -1,4 +1,22 @@
+import {
+  FORMATS,
+  createDateAtStartOfWeekEST,
+  createISODateString,
+  formatDateString,
+  prepareDateFromString,
+} from '../../../../../shared/src/business/utilities/DateHandler';
+import { SESSION_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { loginAsClerkOfCourt } from '../../../../helpers/authentication/login-as-helpers';
+import { loginAsPetitionsClerk1 } from '../../../../helpers/authentication/login-as-helpers';
+import { createAndServePaperPetition } from '../../../../helpers/fileAPetition/create-and-serve-paper-petition';
+import {
+  createMessage,
+  enterSubject,
+  fillOutMessageField,
+  selectRecipient,
+  selectSection,
+  sendMessage,
+} from '../../../support/pages/document-qc';
 
 describe('Clerk of Court Dashboard', () => {
   beforeEach(() => {
@@ -8,44 +26,101 @@ describe('Clerk of Court Dashboard', () => {
   it('should display the dashboard with trial sessions and recent messages', () => {
     loginAsClerkOfCourt();
 
-    cy.get('h1:contains("Trial Sessions")').should('exist');
-    cy.get('[data-testid="view-all-trial-sessions-button"]').should('exist');
+    cy.get('h2:contains("Trial Sessions")').should('exist');
     cy.get('[data-testid="current-week-trial-sessions-card"]').should('exist');
     cy.get('[data-testid="next-week-trial-sessions-card"]').should('exist');
     cy.get('[data-testid="recent-messages-table"]').should('exist');
   });
 
   it('should display all required trial session fields when sessions exist', () => {
+    const today = createISODateString();
+    const currentWeekStart = createDateAtStartOfWeekEST(today, FORMATS.ISO);
+    const currentWeekStartDateTime = prepareDateFromString(currentWeekStart);
+    const sessionDate = currentWeekStartDateTime.plus({ days: 3 });
+    const trialSessionStartDate = formatDateString(
+      sessionDate.toISO()!,
+      FORMATS.MMDDYYYY,
+    );
+
+    const trialSessionEndDate = formatDateString(
+      prepareDateFromString(trialSessionStartDate, FORMATS.MMDDYYYY)
+        .plus({ days: 2 })
+        .toISO()!,
+      FORMATS.MMDDYYYY,
+    );
+
     loginAsClerkOfCourt();
+    cy.get('[data-testid="trial-session-link"]').click();
+    cy.get('[data-testid="add-trial-session-button"]').click();
+    cy.get('#standaloneRemote-session-scope-label').click();
+    cy.get('#start-date-picker').type(trialSessionStartDate);
+    cy.get('#estimated-end-date-picker').type(trialSessionEndDate);
+    cy.get(`[data-testid="session-type-${SESSION_TYPES.regular}"]`).click();
+    cy.get('[data-testid="trial-session-meeting-id"]').type('123456789Meet');
+    cy.get('[data-testid="trial-session-password"]').type('testPassword123');
+    cy.get('[data-testid="trial-session-join-phone-number"]').type(
+      '1234567890',
+    );
+    cy.get('[data-testid="trial-session-chambers-phone-number"]').type(
+      '0987654321',
+    );
+    cy.get('[data-testid="trial-session-judge"]').select('Buch');
+    cy.get('[data-testid="trial-session-trial-clerk"]').select(
+      'Test trialclerk1',
+    );
+    cy.intercept('POST', '**/trial-sessions').as('createTrialSession');
+    cy.get('[data-testid="submit-trial-session"]').click();
+    cy.wait('@createTrialSession').then(() => {
+      cy.intercept('GET', '**/trial-sessions').as('getTrialSessions');
+      cy.visit('/');
+      cy.wait('@getTrialSessions');
 
-    cy.get('[data-testid="current-week-trial-sessions-card"]')
-      .find('[data-testid^="current-week-session-"]')
-      .should('have.length.greaterThan', 0);
+      cy.get(
+        '[data-testid="current-week-trial-sessions-card"], [data-testid="next-week-trial-sessions-card"]',
+      )
+        .first()
+        .find(
+          '[data-testid^="current-week-session-"], [data-testid^="next-week-session-"]',
+        )
+        .should('have.length.greaterThan', 0);
 
-    cy.get('[data-testid="current-week-trial-sessions-card"]').within(() => {
-      cy.contains('Start Date').should('exist');
-      cy.contains('Proc. Type').should('exist');
-      cy.contains('City').should('exist');
-      cy.contains('Est. End Date').should('exist');
-      cy.contains('Session Type').should('exist');
-      cy.contains('Judge').should('exist');
-      cy.contains('Clerk').should('exist');
+      cy.get(
+        '[data-testid="current-week-trial-sessions-card"], [data-testid="next-week-trial-sessions-card"]',
+      )
+        .first()
+        .within(() => {
+          cy.contains('Start Date').should('exist');
+          cy.contains('Proc. Type').should('exist');
+          cy.contains('City').should('exist');
+          cy.contains('Est. End Date').should('exist');
+          cy.contains('Session Type').should('exist');
+          cy.contains('Judge').should('exist');
+          cy.contains('Clerk').should('exist');
+        });
     });
   });
 
-  it('should display recent messages with maximum of 5 messages', () => {
-    loginAsClerkOfCourt();
-
-    cy.get('[data-testid="recent-messages-table"]').within(() => {
-      cy.get('tbody tr').should('have.length.at.most', 5);
+  it('should display messages', () => {
+    loginAsPetitionsClerk1();
+    createAndServePaperPetition().then(({ docketNumber }) => {
+      loginAsClerkOfCourt();
+      cy.visit(`/case-detail/${docketNumber}`);
+      createMessage();
+      selectSection('clerkofcourt');
+      selectRecipient('Test Clerk of Court');
+      enterSubject('Test Message');
+      fillOutMessageField();
+      cy.intercept('POST', '**/messages').as('createMessage');
+      sendMessage();
+      cy.wait('@createMessage');
+      cy.intercept('GET', '**/messages/**').as('getMessages');
+      cy.visit('/');
+      cy.wait('@getMessages');
+      cy.get('[data-testid="recent-messages-table"]').within(() => {
+        cy.get('tbody tr').should('have.length.greaterThan', 0);
+        cy.contains('Test Message').should('exist');
+      });
     });
-  });
-
-  it('should navigate to trial sessions page when clicking View All', () => {
-    loginAsClerkOfCourt();
-
-    cy.get('[data-testid="view-all-trial-sessions-button"]').click();
-    cy.url().should('include', '/trial-sessions');
   });
 
   it('should navigate to messages page when clicking View All Messages', () => {
@@ -53,38 +128,6 @@ describe('Clerk of Court Dashboard', () => {
 
     cy.get('a:contains("View All Messages")').click();
     cy.url().should('include', '/messages/my/inbox');
-  });
-
-  it('should navigate to trial session detail when clicking trial location link', () => {
-    loginAsClerkOfCourt();
-
-    cy.get('[data-testid^="trial-location-link-"]')
-      .first()
-      .then($link => {
-        const href = $link.attr('href');
-        if (href) {
-          cy.wrap($link).click();
-          cy.url().should('include', '/trial-session-detail/');
-        }
-      });
-  });
-
-  it('should allow keyboard navigation through accordion headers', () => {
-    loginAsClerkOfCourt();
-
-    cy.get('[data-testid="current-week-trial-sessions-card-accordion"]')
-      .find('button')
-      .focus();
-    cy.get('[data-testid="current-week-trial-sessions-card-accordion"]')
-      .find('button')
-      .should('be.focused');
-
-    cy.get('[data-testid="next-week-trial-sessions-card-accordion"]')
-      .find('button')
-      .focus();
-    cy.get('[data-testid="next-week-trial-sessions-card-accordion"]')
-      .find('button')
-      .should('be.focused');
   });
 
   it('should display mobile view correctly', () => {

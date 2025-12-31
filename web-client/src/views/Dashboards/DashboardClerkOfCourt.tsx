@@ -18,31 +18,33 @@ export const DashboardClerkOfCourt = connect(
       <>
         <BigHeader text={`Welcome, ${user.name}`} />
         <section className="usa-section grid-container">
-          <SuccessNotification />
-          <ErrorNotification />
-          <ClerkOfCourtTrialSessionsSummary />
-          <NonMobile>
-            <Tabs className="margin-top-6" marginBottom={false}>
-              <Tab tabName="recentMessages" title="Recent Messages">
+          <div data-testid="inbox-tab-content">
+            <SuccessNotification />
+            <ErrorNotification />
+            <ClerkOfCourtTrialSessionsSummary />
+            <NonMobile>
+              <Tabs className="margin-top-6" marginBottom={false}>
+                <Tab tabName="recentMessages" title="Recent Messages">
+                  <RecentMessagesCotC />
+                </Tab>
+              </Tabs>
+            </NonMobile>
+            <Mobile>
+              <div className="margin-top-6 margin-bottom-3">
+                <select
+                  aria-label="dashboard section"
+                  className="usa-select dashboard-clerk-of-court-mobile-selector"
+                  data-testid="dashboard-clerk-of-court-mobile-selector"
+                  defaultValue="recentMessages"
+                >
+                  <option value="recentMessages">Recent Messages</option>
+                </select>
+              </div>
+              <div aria-controls="tabContent-recentMessages">
                 <RecentMessagesCotC />
-              </Tab>
-            </Tabs>
-          </NonMobile>
-          <Mobile>
-            <div className="margin-top-6 margin-bottom-3">
-              <select
-                aria-label="dashboard section"
-                className="usa-select dashboard-clerk-of-court-mobile-selector"
-                data-testid="dashboard-clerk-of-court-mobile-selector"
-                defaultValue="recentMessages"
-              >
-                <option value="recentMessages">Recent Messages</option>
-              </select>
-            </div>
-            <div aria-controls="tabContent-recentMessages">
-              <RecentMessagesCotC />
-            </div>
-          </Mobile>
+              </div>
+            </Mobile>
+          </div>
         </section>
       </>
     );
@@ -50,4 +52,3 @@ export const DashboardClerkOfCourt = connect(
 );
 
 DashboardClerkOfCourt.displayName = 'DashboardClerkOfCourt';
-

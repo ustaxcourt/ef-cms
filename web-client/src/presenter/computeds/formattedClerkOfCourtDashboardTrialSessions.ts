@@ -7,9 +7,13 @@ import {
   FORMATS,
   prepareDateFromString,
 } from '@shared/business/utilities/DateHandler';
+import {
+  DAYS_IN_WEEK,
+  DAYS_TO_WEEK_END,
+} from '@shared/business/entities/EntityConstants';
 import { TrialSessionInfoDTO } from '@shared/business/dto/trialSessions/TrialSessionInfoDTO';
 
-type FormattedTrialSession = {
+export type FormattedTrialSession = {
   trialSessionId?: string;
   formattedStartDate: string;
   formattedEstimatedEndDate: string;
@@ -22,6 +26,15 @@ type FormattedTrialSession = {
   estimatedEndDate?: string;
 };
 
+/**
+ * Formats and filters trial sessions for the Clerk of Court dashboard.
+ * Returns sessions grouped by current week and next week, sorted by start date.
+ * Only includes open trial sessions within the specified date ranges.
+ *
+ * @param {Function} get the cerebral get function
+ * @param {object} applicationContext the application context
+ * @returns {object} object containing formattedCurrentWeekSessions and formattedNextWeekSessions arrays
+ */
 export const formattedClerkOfCourtDashboardTrialSessions = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -30,27 +43,55 @@ export const formattedClerkOfCourtDashboardTrialSessions = (
   formattedNextWeekSessions: FormattedTrialSession[];
 } => {
   const { SESSION_STATUS_GROUPS } = applicationContext.getConstants();
-  const DAYS_IN_WEEK = 7;
-  const DAYS_TO_WEEK_END = 6;
 
   const today = createISODateString();
   const currentWeekStart = createDateAtStartOfWeekEST(today, FORMATS.ISO);
   const currentWeekStartDateTime = prepareDateFromString(currentWeekStart);
-  const currentWeekEnd = currentWeekStartDateTime
+
+  const currentWeekEndISO = currentWeekStartDateTime
     .plus({ days: DAYS_TO_WEEK_END })
     .endOf('day')
-    .toISO()!;
+    .toISO();
+
+  if (!currentWeekEndISO) {
+    return {
+      formattedCurrentWeekSessions: [],
+      formattedNextWeekSessions: [],
+    };
+  }
+
+  const currentWeekEnd = currentWeekEndISO;
+
   const nextWeekStartDateTime = currentWeekStartDateTime.plus({
     days: DAYS_IN_WEEK,
   });
+
+  const nextWeekStartDateTimeISO = nextWeekStartDateTime.toISO();
+  if (!nextWeekStartDateTimeISO) {
+    return {
+      formattedCurrentWeekSessions: [],
+      formattedNextWeekSessions: [],
+    };
+  }
+
   const nextWeekStart = createDateAtStartOfWeekEST(
-    nextWeekStartDateTime.toISO()!,
+    nextWeekStartDateTimeISO,
     FORMATS.ISO,
   );
-  const nextWeekEnd = nextWeekStartDateTime
+
+  const nextWeekEndISO = nextWeekStartDateTime
     .plus({ days: DAYS_TO_WEEK_END })
     .endOf('day')
-    .toISO()!;
+    .toISO();
+
+  if (!nextWeekEndISO) {
+    return {
+      formattedCurrentWeekSessions: [],
+      formattedNextWeekSessions: [],
+    };
+  }
+
+  const nextWeekEnd = nextWeekEndISO;
 
   const allTrialSessions = get(state.trialSessions);
   if (!allTrialSessions || !Array.isArray(allTrialSessions)) {

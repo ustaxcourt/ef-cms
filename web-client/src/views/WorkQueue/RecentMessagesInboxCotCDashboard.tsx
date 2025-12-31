@@ -3,7 +3,6 @@ import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 export const RecentMessagesInboxCotCDashboard = connect(
   {
@@ -59,10 +58,10 @@ export const RecentMessagesInboxCotCDashboard = connect(
               </th>
             </tr>
           </thead>
-          {recentMessagesHelper.recentMessages.map(item => {
-            return (
-              <tbody key={item.messageId}>
-                <tr>
+          <tbody>
+            {recentMessagesHelper?.recentMessages?.map(item => {
+              return (
+                <tr key={item.messageId}>
                   <td className="consolidated-case-column">
                     <ConsolidatedCaseIcon
                       consolidatedIconTooltipText={
@@ -80,7 +79,7 @@ export const RecentMessagesInboxCotCDashboard = connect(
                     <div className="message-document-title">
                       <Button
                         link
-                        className={classNames('padding-0', 'no-underline')}
+                        className="padding-0 no-underline"
                         data-testid="message-header-link"
                         href={item.messageDetailLink}
                       >
@@ -98,11 +97,11 @@ export const RecentMessagesInboxCotCDashboard = connect(
                   <td>{item.from}</td>
                   <td>{item.fromSectionFormatted}</td>
                 </tr>
-              </tbody>
-            );
-          })}
+              );
+            })}
+          </tbody>
         </table>
-        {recentMessagesHelper.recentMessages.length === 0 && (
+        {recentMessagesHelper?.recentMessages?.length === 0 && (
           <p>There are no messages.</p>
         )}
       </React.Fragment>

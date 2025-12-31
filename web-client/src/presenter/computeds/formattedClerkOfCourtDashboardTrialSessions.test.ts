@@ -1,7 +1,10 @@
 import {
+  DAYS_IN_WEEK,
+  DAYS_TO_WEEK_END,
   SESSION_STATUS_TYPES,
   SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
+  TrialSessionProceedingType,
 } from '@shared/business/entities/EntityConstants';
 import { TrialSessionInfoDTO } from '@shared/business/dto/trialSessions/TrialSessionInfoDTO';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
@@ -29,19 +32,25 @@ describe('formattedClerkOfCourtDashboardTrialSessions', () => {
   const getCurrentWeekEnd = () => {
     const weekStart = getCurrentWeekStart();
     const weekStartDateTime = prepareDateFromString(weekStart);
-    return weekStartDateTime.plus({ days: 6 }).endOf('day').toISO()!;
+    return weekStartDateTime
+      .plus({ days: DAYS_TO_WEEK_END })
+      .endOf('day')
+      .toISO()!;
   };
 
   const getNextWeekStart = () => {
     const weekStart = getCurrentWeekStart();
     const weekStartDateTime = prepareDateFromString(weekStart);
-    return weekStartDateTime.plus({ days: 7 }).toISO()!;
+    return weekStartDateTime.plus({ days: DAYS_IN_WEEK }).toISO()!;
   };
 
   const getNextWeekEnd = () => {
     const nextWeekStart = getNextWeekStart();
     const nextWeekStartDateTime = prepareDateFromString(nextWeekStart);
-    return nextWeekStartDateTime.plus({ days: 6 }).endOf('day').toISO()!;
+    return nextWeekStartDateTime
+      .plus({ days: DAYS_TO_WEEK_END })
+      .endOf('day')
+      .toISO()!;
   };
 
   const createTrialSession = (
@@ -336,8 +345,8 @@ describe('formattedClerkOfCourtDashboardTrialSessions', () => {
           trialSessionId: '1',
           judge: undefined,
           trialLocation: undefined,
-          proceedingType: undefined as any,
-          sessionType: undefined as any,
+          proceedingType: '' as TrialSessionProceedingType,
+          sessionType: '',
         }),
       ];
 
