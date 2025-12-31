@@ -40,6 +40,7 @@ export const NoticeOfWithdrawalForm = connect(
           <AlertWarning
             alertWarning={alertWarning}
             className="tw:mt-2 tw:mb-3"
+            dataTestId="consolidated-case-alert-warning"
             isDismissible={false}
           />
         )}
