@@ -77,7 +77,6 @@ We will also need to install the following GUI tools:
 - [Gather](https://gather.town) - virtual office space
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) - containerization software
 - [Pop](https://pop.com/) - pair programming tool
-- [Slack](https://slack.com/) - team communication tool
 
 ## Getting Running
 
