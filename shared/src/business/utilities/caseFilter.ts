@@ -43,6 +43,20 @@ export const formatSealedAddresses = (
     caseContact => caseContact && caseContact.isAddressSealed,
   );
 
+  // Seal emails in docket entries
+  formattedCase.docketEntries.forEach(docketEntry => {
+    const emailsToBeSealed = caseContactsToBeSealed.map(caseContact => {
+      if (caseContact.email) {
+        return caseContact.email;
+      }
+    });
+    docketEntry.servedParties?.forEach(party => {
+      if (emailsToBeSealed.includes(party.email)) {
+        party.email = undefined;
+      }
+    });
+  });
+
   caseContactsToBeSealed.forEach(caseContact => {
     const sealedContactAddress = formatSealedAddress(caseContact);
     Object.keys(caseContact).forEach(key => delete caseContact[key]);
