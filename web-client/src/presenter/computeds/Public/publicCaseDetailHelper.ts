@@ -23,6 +23,7 @@ const getRelatedDocketEntryDetails = (
   rawCase: RawPublicCase,
   targetDocketEntryId: string,
   visibilityPolicyDate: any,
+  isTerminalUser: boolean,
 ) => {
   const relatedOrder = rawCase.docketEntries.find(
     entry => entry.docketEntryId === targetDocketEntryId,
@@ -37,7 +38,7 @@ const getRelatedDocketEntryDetails = (
   }
 
   const isDownloadable = DocketEntry.isDownloadable(relatedOrder, {
-    isTerminalUser: false,
+    isTerminalUser,
     rawCase,
     user: {
       role: ROLES.petitioner,
@@ -121,13 +122,15 @@ export const formatDocketEntryOnDocketRecord = (
         rawCase,
         affectedEntry.docketEntryId,
         visibilityPolicyDate,
+        isTerminalUser,
       );
 
-      affectedEntry.docketEntryIndex = index;
-      affectedEntry.showDownloadLink = showDownloadLink;
-      affectedEntry.disposition =
-        MOTION_DISPOSITION_VERBIAGE[affectedEntry.disposition].MOTION;
-      return affectedEntry;
+      return {
+        docketEntryIndex: index,
+        showDownloadLink,
+        disposition:
+          MOTION_DISPOSITION_VERBIAGE[affectedEntry.disposition]?.MOTION,
+      };
     });
   }
 
@@ -140,13 +143,15 @@ export const formatDocketEntryOnDocketRecord = (
           rawCase,
           affectedEntry.docketEntryId,
           visibilityPolicyDate,
+          isTerminalUser,
         );
 
-        affectedEntry.docketEntryIndex = index;
-        affectedEntry.showDownloadLink = showDownloadLink;
-        affectedEntry.disposition =
-          MOTION_DISPOSITION_VERBIAGE[affectedEntry.disposition].ORDER;
-        return affectedEntry;
+        return {
+          docketEntryIndex: index,
+          showDownloadLink,
+          disposition:
+            MOTION_DISPOSITION_VERBIAGE[affectedEntry.disposition]?.ORDER,
+        };
       }),
     );
   }
