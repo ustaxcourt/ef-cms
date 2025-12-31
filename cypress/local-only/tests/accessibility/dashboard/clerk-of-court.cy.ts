@@ -21,5 +21,24 @@ describe('Dashboard - Clerk of Court Accessibility', () => {
       checkA11y();
     });
   });
+
+  describe('Keyboard navigation', () => {
+    it('should have focusable interactive elements', () => {
+      loginAsClerkOfCourt();
+
+      cy.get('[data-testid="view-all-trial-sessions-button"]')
+        .should('be.visible')
+        .should('have.attr', 'href');
+
+      cy.get('a:contains("View All Messages")')
+        .should('be.visible')
+        .should('have.attr', 'href');
+
+      cy.get('[data-testid^="current-week-trial-sessions-card-accordion"]')
+        .find('button')
+        .should('be.visible')
+        .should('have.attr', 'aria-expanded');
+    });
+  });
 });
 

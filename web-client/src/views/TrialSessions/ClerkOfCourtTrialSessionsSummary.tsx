@@ -266,10 +266,11 @@ export const ClerkOfCourtTrialSessionsSummary = connect(
           </div>
         </NonMobile>
         <Mobile>
+          <h2 className="margin-top-4 margin-bottom-4">Trial Sessions</h2>
           <div className="grid-row grid-gap">
             <div className="grid-col-12">
               {renderWeekSection(
-                'Trial Sessions This Week',
+                'This Week',
                 formattedCurrentWeekSessions,
                 'current',
                 'There are no trial sessions for the current week.',
@@ -278,7 +279,7 @@ export const ClerkOfCourtTrialSessionsSummary = connect(
             </div>
             <div className="grid-col-12 margin-top-4">
               {renderWeekSection(
-                'Trial Sessions Next Week',
+                'Next Week',
                 formattedNextWeekSessions,
                 'next',
                 'There are no trial sessions for the next week.',

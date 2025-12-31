@@ -6,11 +6,20 @@ import { RecentMessagesInboxCotCDashboard } from './RecentMessagesInboxCotCDashb
 export const RecentMessagesCotC = () => {
   return (
     <div>
-      <div className="text-right margin-bottom-2">
-        <Button link href="/messages/my/inbox" overrideMargin="margin-0">
-          View All Messages
-        </Button>
-      </div>
+      <NonMobile>
+        <div className="text-right margin-bottom-2">
+          <Button link href="/messages/my/inbox" overrideMargin="margin-0">
+            View All Messages
+          </Button>
+        </div>
+      </NonMobile>
+      <Mobile>
+        <div className="margin-bottom-2">
+          <Button link href="/messages/my/inbox" overrideMargin="margin-0">
+            View All Messages
+          </Button>
+        </div>
+      </Mobile>
       <NonMobile>
         <RecentMessagesInboxCotCDashboard />
       </NonMobile>
