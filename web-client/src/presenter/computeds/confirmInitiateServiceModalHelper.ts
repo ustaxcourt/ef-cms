@@ -17,7 +17,7 @@ export type ContactsNeedingPaperService = {
 export const confirmInitiateServiceModalHelper = (
   get: Get,
 ): {
-  canShowCheckboxes: boolean;
+  showCheckboxes: boolean;
   canMultiDocket: boolean;
   confirmationText: string;
   paperFilingText: string;
@@ -49,7 +49,7 @@ export const confirmInitiateServiceModalHelper = (
     !isMultiDocketed &&
     !NON_MULTI_DOCKETABLE_EVENT_CODES.includes(eventCode);
 
-  const canShowCheckboxes = isLead && (isFiling || isMultiDocketed);
+  const showCheckboxes = isLead && (isFiling || isMultiDocketed);
 
   const checkedCases = (
     get(state.modal.form.consolidatedCasesToMultiDocketOn) || []
@@ -60,7 +60,7 @@ export const confirmInitiateServiceModalHelper = (
   let additionalServedCases: { docketNumber: string; caseTitle: string }[] = [];
   let casesToIterateOver: any[] = [];
 
-  if (canShowCheckboxes) {
+  if (showCheckboxes) {
     additionalServedCases = formattedCaseDetail.consolidatedCases
       .filter(c => checkedCases.includes(c.docketNumber))
       .filter(c => c.docketNumber !== formattedCaseDetail.docketNumber)
@@ -106,17 +106,17 @@ export const confirmInitiateServiceModalHelper = (
       });
   }
 
-  const paperFilingText = canShowCheckboxes
+  const paperFilingText = showCheckboxes
     ? 'Paper service is required for these parties:'
     : 'This case has parties receiving paper service:';
 
-  const confirmationText = canShowCheckboxes
+  const confirmationText = showCheckboxes
     ? 'The following document will be served on all parties in selected cases:'
     : 'The following document will be served on all parties:';
 
   return {
     canMultiDocket,
-    canShowCheckboxes,
+    showCheckboxes,
     confirmationText,
     paperFilingText,
     additionalServedCases,

@@ -143,7 +143,9 @@ const removeConsolidatedCases = async (
 
   const UPDATED_CASE_DOCKET_ENTRIES: RawDocketEntry[] = [];
   docketEntriesToUpdate.forEach(docketEntry => {
+    // if this docket entry is on the cases still in the group
     if (!docketNumbersToRemove.includes(docketEntry.docketNumber)) {
+      // remove the unconsolidated docket number from its multiDocketedOn array
       docketEntry.multiDocketedOn = docketEntry.multiDocketedOn.filter(
         docketNumber => {
           return !docketNumbersToRemove.includes(docketNumber);

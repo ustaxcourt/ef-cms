@@ -32,7 +32,7 @@ export const ConfirmInitiateServiceModal = connect(
     confirmInitiateServiceModalHelper: {
       additionalServedCases: { docketNumber: string; caseTitle: string }[];
       canMultiDocket: boolean;
-      canShowCheckboxes: boolean;
+      showCheckboxes: boolean;
       confirmationText: string;
       contactsNeedingPaperService?: ContactsNeedingPaperService;
       paperFilingText: string;
@@ -116,7 +116,7 @@ export const ConfirmInitiateServiceModal = connect(
             scrollToTop={false}
           />
         )}
-        {confirmInitiateServiceModalHelper.canShowCheckboxes && (
+        {confirmInitiateServiceModalHelper.showCheckboxes && (
           <ConsolidatedCasesCheckboxes />
         )}
       </ModalDialog>
