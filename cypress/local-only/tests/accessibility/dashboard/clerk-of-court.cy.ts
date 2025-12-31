@@ -30,8 +30,7 @@ describe('Dashboard - Clerk of Court Accessibility', () => {
         .should('be.visible')
         .should('have.attr', 'href');
 
-      cy.get('[data-testid^="current-week-trial-sessions-card-accordion"]')
-        .find('button')
+      cy.get('[data-testid="current-week-trial-sessions-card-accordion"]')
         .should('be.visible')
         .should('have.attr', 'aria-expanded');
     });
