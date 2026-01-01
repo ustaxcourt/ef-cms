@@ -1,8 +1,18 @@
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import { props } from 'cerebral';
 
-export const TextView = connect(function TextView(props) {
+type TextViewProps = {
+  bind: string;
+  className: string;
+  get?: any
+}
+
+export const TextView: React.FC<TextViewProps> = connect({
+  bind: props.bind,
+  className: props`className`,
+},function TextView(props) {
   const { bind, className, get } = props;
 
   let text;
