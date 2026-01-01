@@ -8,12 +8,19 @@ import { KeywordSearchField } from './AdvancedDocumentSearch/KeywordSearchField'
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
+import { sequences as sequencesPublic } from '@web-client/presenter/app-public.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 import { DateRangePickerComponent } from '@web-client/ustc-ui/DateInput/DateRangePickerComponent';
 
-export const OpinionSearchForm = connect(
+type OpinionSearchFormProps = {
+  submitAdvancedSearchSequence:
+    | Function
+    | typeof sequencesPublic.submitPublicOpinionAdvancedSearchSequence;
+};
+
+export const OpinionSearchForm: React.FC<OpinionSearchFormProps> = connect(
   {
     ADVANCED_SEARCH_OPINION_TYPES_LIST:
       state.constants.ADVANCED_SEARCH_OPINION_TYPES_LIST,

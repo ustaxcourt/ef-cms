@@ -58,7 +58,7 @@ export const caseWorksheetsHelper = (
         formattedSubmittedCavStatusDate: statusDate,
         inConsolidatedGroup: !!isLeadCase(aCase),
         isLeadCase: isLeadCase(aCase),
-        status: aCase.status,
+        status: aCase.status || '',
         worksheet: aCase.caseWorksheet,
       };
     })
