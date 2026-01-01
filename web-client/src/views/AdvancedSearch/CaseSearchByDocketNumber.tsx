@@ -5,7 +5,11 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const CaseSearchByDocketNumber = connect(
+type CaseSearchByDocketNumberProps = {
+  submitDocketNumberSearchSequence: Function
+}
+
+export const CaseSearchByDocketNumber: React.FC<CaseSearchByDocketNumberProps> = connect(
   {
     advancedSearchForm: state.advancedSearchForm,
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,

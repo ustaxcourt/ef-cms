@@ -59,8 +59,8 @@ export const trialSessionsModalHelper = ({
     trialSessions.find(session => session.trialSessionId === trialSessionId);
 
   let trialSessionsFormatted = trialSessions;
-  let trialSessionsFormattedByState = null;
-  let trialSessionStatesSorted = null;
+  let trialSessionsFormattedByState: Record<string, any[]> | null = null;
+  let trialSessionStatesSorted: string[] | null = null;
   const trialSessionRemote = 'Remote';
 
   if (trialSessionsFormatted) {
@@ -95,15 +95,16 @@ export const trialSessionsModalHelper = ({
       });
 
       trialSessionsFormattedByState = {};
-      trialSessionsFormatted.forEach(
-        trialSession =>
-          (trialSessionsFormattedByState[trialSession.trialLocationState] = [
+      trialSessionsFormatted.forEach(trialSession => {
+        if (trialSessionsFormattedByState) {
+          trialSessionsFormattedByState[trialSession.trialLocationState] = [
             ...(trialSessionsFormattedByState[
               trialSession.trialLocationState
             ] || []),
             trialSession,
-          ]),
-      );
+          ];
+        }
+      });
 
       trialSessionStatesSorted = Object.keys(trialSessionsFormattedByState)
         // sort alpha, but then always keep remote at the top!
@@ -116,10 +117,12 @@ export const trialSessionsModalHelper = ({
         });
 
       trialSessionStatesSorted.forEach(stateName => {
-        trialSessionsFormattedByState[stateName] = sortBy(
-          trialSessionsFormattedByState[stateName],
-          ['trialLocation', 'startDate'],
-        );
+        if (trialSessionsFormattedByState) {
+          trialSessionsFormattedByState[stateName] = sortBy(
+            trialSessionsFormattedByState[stateName],
+            ['trialLocation', 'startDate'],
+          );
+        }
       });
       trialSessionsFormatted = null;
     } else {
