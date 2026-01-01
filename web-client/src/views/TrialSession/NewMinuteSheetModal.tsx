@@ -34,6 +34,7 @@ export const NewMinuteSheetModal = connect(
         showModalWhen="NewMinuteSheetModal"
         title="New Minutes Sheet"
         onCancelSequence={clearModalFormSequence}
+        onConfirmSequence={clearModalFormSequence}
       >
         <form
           className="usa-search usa-search--small ustc-search"
