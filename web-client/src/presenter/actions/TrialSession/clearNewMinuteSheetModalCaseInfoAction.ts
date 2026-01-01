@@ -10,4 +10,8 @@ export const clearNewMinuteSheetModalCaseInfoAction = ({
   store,
 }: ActionProps) => {
   store.unset(state.modal.caseInfo);
+  store.unset(state.modal.hasSearched);
+  store.unset(state.modal.noResultsFound);
+  store.unset(state.modal.isCaseAlreadyOnTrialSession);
+  store.set(state.validationErrors, {});
 };

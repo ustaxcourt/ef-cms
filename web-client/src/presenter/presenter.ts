@@ -326,6 +326,7 @@ import { openRemoveRespondentCounselModalSequence } from './sequences/openRemove
 import { openReplyToMessageModalSequence } from './sequences/openReplyToMessageModalSequence';
 import { openSealAddressModalSequence } from './sequences/openSealAddressModalSequence';
 import { openNewMinuteSheetModalSequence } from './sequences/openNewMinuteSheetModalSequence';
+import { searchNewMinuteSheetCaseSequence } from './sequences/searchNewMinuteSheetCaseSequence';
 import { openSealDocketEntryModalSequence } from './sequences/openSealDocketEntryModalSequence';
 import { openSelectedTrialSessionPaperServicePdfSequence } from '@web-client/presenter/sequences/openSelectedTrialSessionPaperServicePdfSequence';
 import { openSetCalendarModalSequence } from './sequences/openSetCalendarModalSequence';
@@ -1162,6 +1163,8 @@ export const presenterSequences = {
     openSealAddressModalSequence as unknown as Function,
   openNewMinuteSheetModalSequence:
     openNewMinuteSheetModalSequence as unknown as Function,
+  searchNewMinuteSheetCaseSequence:
+    searchNewMinuteSheetCaseSequence as unknown as Function,
   openSealDocketEntryModalSequence:
     openSealDocketEntryModalSequence as unknown as Function,
   openSelectedTrialSessionPaperServicePdfSequence:
@@ -1405,7 +1408,8 @@ export const presenterSequences = {
     submitJudgeActivityStatisticsReportSequence as unknown as Function,
   submitLoginSequence,
   submitMotionOrderResponseSequence,
-  submitNewMinuteSheetSequence,
+  submitNewMinuteSheetSequence:
+    submitNewMinuteSheetSequence as unknown as Function,
   submitOpinionAdvancedSearchSequence:
     submitOpinionAdvancedSearchSequence as unknown as Function,
   submitOrderAdvancedSearchSequence:

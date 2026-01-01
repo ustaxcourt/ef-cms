@@ -1,11 +1,31 @@
-import { runAction } from '@web-client/presenter/test.cerebral';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { openNewMinuteSheetModalAction } from './openNewMinuteSheetModalAction';
+import { presenter } from '@web-client/presenter/presenter-mock';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('openNewMinuteSheetModalAction', () => {
+  const mockUnscheduledMinuteSheets = [
+    {
+      caseCaption: 'Test Case 1',
+      docketNumber: '101-20',
+      docketNumberWithSuffix: '101-20S',
+    },
+  ];
+
+  beforeEach(() => {
+    applicationContext
+      .getUseCases()
+      .getUnscheduledMinuteSheetsInteractor.mockResolvedValue(
+        mockUnscheduledMinuteSheets,
+      );
+    presenter.providers.applicationContext = applicationContext;
+  });
+
   it('should set trialSessionId from state.trialSession.trialSessionId', async () => {
     const mockTrialSessionId = 'trial-session-123';
 
     const result = await runAction(openNewMinuteSheetModalAction, {
+      modules: { presenter },
       state: {
         modal: {},
         trialSession: {
@@ -19,6 +39,7 @@ describe('openNewMinuteSheetModalAction', () => {
 
   it('should clear modal.form when opening the modal', async () => {
     const result = await runAction(openNewMinuteSheetModalAction, {
+      modules: { presenter },
       state: {
         modal: {
           form: {
@@ -36,6 +57,7 @@ describe('openNewMinuteSheetModalAction', () => {
 
   it('should clear modal.caseInfo when opening the modal', async () => {
     const result = await runAction(openNewMinuteSheetModalAction, {
+      modules: { presenter },
       state: {
         modal: {
           caseInfo: {
@@ -52,33 +74,52 @@ describe('openNewMinuteSheetModalAction', () => {
     expect(result.state.modal.caseInfo).toBeUndefined();
   });
 
-  it('should clear both form and caseInfo while setting trialSessionId', async () => {
-    const mockTrialSessionId = 'new-trial-session-456';
+  it('should fetch and set unscheduled minute sheets', async () => {
+    const mockTrialSessionId = 'trial-session-123';
 
     const result = await runAction(openNewMinuteSheetModalAction, {
+      modules: { presenter },
       state: {
-        modal: {
-          caseInfo: {
-            caseCaption: 'Previous Case',
-            docketNumber: '100-19',
-          },
-          form: {
-            docketNumber: '100-19',
-          },
-        },
+        modal: {},
         trialSession: {
           trialSessionId: mockTrialSessionId,
         },
       },
     });
 
-    expect(result.state.modal).toEqual({
+    expect(
+      applicationContext.getUseCases().getUnscheduledMinuteSheetsInteractor,
+    ).toHaveBeenCalledWith({
       trialSessionId: mockTrialSessionId,
     });
+    expect(result.state.modal.editUnscheduledMinutesList).toEqual(
+      mockUnscheduledMinuteSheets,
+    );
+  });
+
+  it('should set empty list if fetching unscheduled minute sheets fails', async () => {
+    applicationContext
+      .getUseCases()
+      .getUnscheduledMinuteSheetsInteractor.mockRejectedValue(
+        new Error('Network error'),
+      );
+
+    const result = await runAction(openNewMinuteSheetModalAction, {
+      modules: { presenter },
+      state: {
+        modal: {},
+        trialSession: {
+          trialSessionId: 'trial-session-123',
+        },
+      },
+    });
+
+    expect(result.state.modal.editUnscheduledMinutesList).toEqual([]);
   });
 
   it('should handle undefined trialSessionId in state', async () => {
     const result = await runAction(openNewMinuteSheetModalAction, {
+      modules: { presenter },
       state: {
         modal: {},
         trialSession: {},

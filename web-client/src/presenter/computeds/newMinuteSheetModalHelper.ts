@@ -4,41 +4,41 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const newMinuteSheetModalHelper = (
   get: Get,
 ): {
-  caseDetailLink: string | undefined;
   caseInfo: any;
-  consolidatedCaseMessage: string | undefined;
-  hasValidationError: boolean;
-  isConsolidatedCase: boolean;
-  minuteSheetDocketNumber: string | undefined;
-  showCaseLink: boolean;
+  editUnscheduledMinutesList: Array<{
+    docketNumber: string;
+    docketNumberWithSuffix?: string;
+    caseCaption?: string;
+  }>;
+  hasSearched: boolean;
+  isCaseAlreadyOnTrialSession: boolean;
+  noResultsFound: boolean;
+  showCaseConfirmation: boolean;
+  trialSessionId: string;
 } => {
   const caseInfo = get(state.modal.caseInfo);
-  const validationErrors = get(state.validationErrors);
+  const hasSearched = get(state.modal.hasSearched) || false;
+  const noResultsFound = get(state.modal.noResultsFound) || false;
+  const isCaseAlreadyOnTrialSession =
+    get(state.modal.isCaseAlreadyOnTrialSession) || false;
+  const trialSession = get(state.trialSession);
+  const trialSessionId = trialSession?.trialSessionId || '';
 
-  // Format the case link URL if case info exists
-  const caseDetailLink = caseInfo?.docketNumber
-    ? `/case-detail/${caseInfo.docketNumber}`
-    : undefined;
+  // Get list of previously edited unscheduled minute sheets from state
+  const editUnscheduledMinutesList =
+    get(state.modal.editUnscheduledMinutesList) || [];
 
-  // Determine which docket number to use for minute sheet (lead case if consolidated)
-  const minuteSheetDocketNumber =
-    caseInfo?.leadDocketNumber || caseInfo?.docketNumber;
-
-  // Format display text for consolidated cases
-  const isConsolidatedCase =
-    !!caseInfo?.leadDocketNumber &&
-    caseInfo.leadDocketNumber !== caseInfo.docketNumber;
-  const consolidatedCaseMessage = isConsolidatedCase
-    ? `This is a consolidated case. The minute sheet will be created for the lead case ${caseInfo.leadDocketNumber}.`
-    : undefined;
+  // Show case confirmation only if we have case info and it's not already on the trial session
+  const showCaseConfirmation =
+    hasSearched && !!caseInfo && !noResultsFound && !isCaseAlreadyOnTrialSession;
 
   return {
-    caseDetailLink,
     caseInfo,
-    consolidatedCaseMessage,
-    hasValidationError: !!validationErrors?.docketNumber,
-    isConsolidatedCase,
-    minuteSheetDocketNumber,
-    showCaseLink: !!caseInfo && !validationErrors?.docketNumber,
+    editUnscheduledMinutesList,
+    hasSearched,
+    isCaseAlreadyOnTrialSession,
+    noResultsFound,
+    showCaseConfirmation,
+    trialSessionId,
   };
 };

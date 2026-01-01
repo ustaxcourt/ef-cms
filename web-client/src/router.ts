@@ -1118,7 +1118,7 @@ const router = {
     );
 
     registerRoute(
-      '/trial-session-detail/*/case/*/minutes',
+      '/trial-session-detail/*/case/*/minutes..',
       ifHasAccess(
         { app, permissionToCheck: ROLE_PERMISSIONS.MANAGE_MINUTE_SHEET },
         (trialSessionId, docketNumber) => {

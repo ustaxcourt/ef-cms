@@ -105,6 +105,8 @@ describe('validateCaseForNewMinuteSheetInteractor', () => {
       caseOrder: [
         {
           docketNumber: MOCK_CASE.docketNumber,
+          isHearing: false,
+          isManuallyAdded: false,
           removedFromTrial: false,
         },
       ],

@@ -159,7 +159,7 @@ export const TrialSessionDetails = connect(
                     icon="plus-circle"
                     onClick={() => openNewMinuteSheetModalSequence()}
                   >
-                    New Minutes Sheet
+                    Unscheduled Case Minutes Sheet
                   </Button>
                 )}
                 {formattedTrialSessionDetails.canClose && (

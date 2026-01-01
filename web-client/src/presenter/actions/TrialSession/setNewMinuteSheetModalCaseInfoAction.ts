@@ -13,4 +13,7 @@ export const setNewMinuteSheetModalCaseInfoAction = ({
   const { caseInfo } = props;
 
   store.set(state.modal.caseInfo, caseInfo);
+  store.set(state.modal.hasSearched, true);
+  store.set(state.modal.noResultsFound, false);
+  store.set(state.modal.isCaseAlreadyOnTrialSession, false);
 };

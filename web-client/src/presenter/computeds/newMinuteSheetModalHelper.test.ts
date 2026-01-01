@@ -9,279 +9,6 @@ describe('newMinuteSheetModalHelper', () => {
     applicationContext,
   );
 
-  describe('caseDetailLink', () => {
-    it('should generate a case detail link when caseInfo exists with docketNumber', () => {
-      const result = runCompute(newMinuteSheetModalHelper, {
-        state: {
-          modal: {
-            caseInfo: {
-              caseCaption: 'Test Case',
-              docketNumber: '101-20',
-              docketNumberWithSuffix: '101-20',
-            },
-            form: {
-              docketNumber: '101-20',
-            },
-          },
-          validationErrors: {},
-        },
-      });
-
-      expect(result.caseDetailLink).toBe('/case-detail/101-20');
-    });
-
-    it('should return undefined for caseDetailLink when caseInfo is not set', () => {
-      const result = runCompute(newMinuteSheetModalHelper, {
-        state: {
-          modal: {
-            form: {
-              docketNumber: '101-20',
-            },
-          },
-          validationErrors: {},
-        },
-      });
-
-      expect(result.caseDetailLink).toBeUndefined();
-    });
-
-    it('should return undefined for caseDetailLink when caseInfo has no docketNumber', () => {
-      const result = runCompute(newMinuteSheetModalHelper, {
-        state: {
-          modal: {
-            caseInfo: {},
-            form: {
-              docketNumber: '101-20',
-            },
-          },
-          validationErrors: {},
-        },
-      });
-
-      expect(result.caseDetailLink).toBeUndefined();
-    });
-  });
-
-  describe('consolidatedCaseMessage', () => {
-    it('should return a consolidated case message when case has a different lead case', () => {
-      const result = runCompute(newMinuteSheetModalHelper, {
-        state: {
-          modal: {
-            caseInfo: {
-              caseCaption: 'Member Case',
-              docketNumber: '102-20',
-              docketNumberWithSuffix: '102-20',
-              leadDocketNumber: '101-20',
-            },
-            form: {
-              docketNumber: '102-20',
-            },
-          },
-          validationErrors: {},
-        },
-      });
-
-      expect(result.consolidatedCaseMessage).toBe(
-        'This is a consolidated case. The minute sheet will be created for the lead case 101-20.',
-      );
-      expect(result.isConsolidatedCase).toBe(true);
-    });
-
-    it('should return undefined for consolidatedCaseMessage when case is the lead case', () => {
-      const result = runCompute(newMinuteSheetModalHelper, {
-        state: {
-          modal: {
-            caseInfo: {
-              caseCaption: 'Lead Case',
-              docketNumber: '101-20',
-              docketNumberWithSuffix: '101-20',
-              leadDocketNumber: '101-20',
-            },
-            form: {
-              docketNumber: '101-20',
-            },
-          },
-          validationErrors: {},
-        },
-      });
-
-      expect(result.consolidatedCaseMessage).toBeUndefined();
-      expect(result.isConsolidatedCase).toBe(false);
-    });
-
-    it('should return undefined for consolidatedCaseMessage when case has no lead case', () => {
-      const result = runCompute(newMinuteSheetModalHelper, {
-        state: {
-          modal: {
-            caseInfo: {
-              caseCaption: 'Standalone Case',
-              docketNumber: '101-20',
-              docketNumberWithSuffix: '101-20',
-            },
-            form: {
-              docketNumber: '101-20',
-            },
-          },
-          validationErrors: {},
-        },
-      });
-
-      expect(result.consolidatedCaseMessage).toBeUndefined();
-      expect(result.isConsolidatedCase).toBe(false);
-    });
-  });
-
-  describe('showCaseLink', () => {
-    it('should return true when caseInfo exists and there are no validation errors', () => {
-      const result = runCompute(newMinuteSheetModalHelper, {
-        state: {
-          modal: {
-            caseInfo: {
-              caseCaption: 'Test Case',
-              docketNumber: '101-20',
-            },
-            form: {
-              docketNumber: '101-20',
-            },
-          },
-          validationErrors: {},
-        },
-      });
-
-      expect(result.showCaseLink).toBe(true);
-    });
-
-    it('should return false when there are validation errors', () => {
-      const result = runCompute(newMinuteSheetModalHelper, {
-        state: {
-          modal: {
-            caseInfo: {
-              caseCaption: 'Test Case',
-              docketNumber: '101-20',
-            },
-            form: {
-              docketNumber: '101-20',
-            },
-          },
-          validationErrors: {
-            docketNumber: 'Enter a valid docket number',
-          },
-        },
-      });
-
-      expect(result.showCaseLink).toBe(false);
-    });
-
-    it('should return false when caseInfo is not set', () => {
-      const result = runCompute(newMinuteSheetModalHelper, {
-        state: {
-          modal: {
-            form: {
-              docketNumber: '101-20',
-            },
-          },
-          validationErrors: {},
-        },
-      });
-
-      expect(result.showCaseLink).toBe(false);
-    });
-  });
-
-  describe('hasValidationError', () => {
-    it('should return true when there is a docketNumber validation error', () => {
-      const result = runCompute(newMinuteSheetModalHelper, {
-        state: {
-          modal: {
-            form: {
-              docketNumber: 'invalid',
-            },
-          },
-          validationErrors: {
-            docketNumber: 'Enter a valid docket number',
-          },
-        },
-      });
-
-      expect(result.hasValidationError).toBe(true);
-    });
-
-    it('should return false when there are no validation errors', () => {
-      const result = runCompute(newMinuteSheetModalHelper, {
-        state: {
-          modal: {
-            caseInfo: {
-              caseCaption: 'Test Case',
-              docketNumber: '101-20',
-            },
-            form: {
-              docketNumber: '101-20',
-            },
-          },
-          validationErrors: {},
-        },
-      });
-
-      expect(result.hasValidationError).toBe(false);
-    });
-  });
-
-  describe('minuteSheetDocketNumber', () => {
-    it('should return leadDocketNumber when case is consolidated', () => {
-      const result = runCompute(newMinuteSheetModalHelper, {
-        state: {
-          modal: {
-            caseInfo: {
-              caseCaption: 'Member Case',
-              docketNumber: '102-20',
-              leadDocketNumber: '101-20',
-            },
-            form: {
-              docketNumber: '102-20',
-            },
-          },
-          validationErrors: {},
-        },
-      });
-
-      expect(result.minuteSheetDocketNumber).toBe('101-20');
-    });
-
-    it('should return docketNumber when case is not consolidated', () => {
-      const result = runCompute(newMinuteSheetModalHelper, {
-        state: {
-          modal: {
-            caseInfo: {
-              caseCaption: 'Standalone Case',
-              docketNumber: '101-20',
-            },
-            form: {
-              docketNumber: '101-20',
-            },
-          },
-          validationErrors: {},
-        },
-      });
-
-      expect(result.minuteSheetDocketNumber).toBe('101-20');
-    });
-
-    it('should return undefined when caseInfo is not set', () => {
-      const result = runCompute(newMinuteSheetModalHelper, {
-        state: {
-          modal: {
-            form: {
-              docketNumber: '101-20',
-            },
-          },
-          validationErrors: {},
-        },
-      });
-
-      expect(result.minuteSheetDocketNumber).toBeUndefined();
-    });
-  });
-
   describe('caseInfo', () => {
     it('should return caseInfo from state', () => {
       const mockCaseInfo = {
@@ -298,7 +25,9 @@ describe('newMinuteSheetModalHelper', () => {
               docketNumber: '101-20',
             },
           },
-          validationErrors: {},
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
         },
       });
 
@@ -311,11 +40,279 @@ describe('newMinuteSheetModalHelper', () => {
           modal: {
             form: {},
           },
-          validationErrors: {},
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
         },
       });
 
       expect(result.caseInfo).toBeUndefined();
+    });
+  });
+
+  describe('hasSearched', () => {
+    it('should return true when hasSearched is true in modal state', () => {
+      const result = runCompute(newMinuteSheetModalHelper, {
+        state: {
+          modal: {
+            hasSearched: true,
+            form: {},
+          },
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
+        },
+      });
+
+      expect(result.hasSearched).toBe(true);
+    });
+
+    it('should return false when hasSearched is not set', () => {
+      const result = runCompute(newMinuteSheetModalHelper, {
+        state: {
+          modal: {
+            form: {},
+          },
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
+        },
+      });
+
+      expect(result.hasSearched).toBe(false);
+    });
+  });
+
+  describe('noResultsFound', () => {
+    it('should return true when noResultsFound is true in modal state', () => {
+      const result = runCompute(newMinuteSheetModalHelper, {
+        state: {
+          modal: {
+            hasSearched: true,
+            noResultsFound: true,
+            form: {},
+          },
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
+        },
+      });
+
+      expect(result.noResultsFound).toBe(true);
+    });
+
+    it('should return false when noResultsFound is not set', () => {
+      const result = runCompute(newMinuteSheetModalHelper, {
+        state: {
+          modal: {
+            form: {},
+          },
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
+        },
+      });
+
+      expect(result.noResultsFound).toBe(false);
+    });
+  });
+
+  describe('isCaseAlreadyOnTrialSession', () => {
+    it('should return true when isCaseAlreadyOnTrialSession is true in modal state', () => {
+      const result = runCompute(newMinuteSheetModalHelper, {
+        state: {
+          modal: {
+            hasSearched: true,
+            isCaseAlreadyOnTrialSession: true,
+            form: {},
+          },
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
+        },
+      });
+
+      expect(result.isCaseAlreadyOnTrialSession).toBe(true);
+    });
+
+    it('should return false when isCaseAlreadyOnTrialSession is not set', () => {
+      const result = runCompute(newMinuteSheetModalHelper, {
+        state: {
+          modal: {
+            form: {},
+          },
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
+        },
+      });
+
+      expect(result.isCaseAlreadyOnTrialSession).toBe(false);
+    });
+  });
+
+  describe('showCaseConfirmation', () => {
+    it('should return true when hasSearched is true, caseInfo exists, and no errors', () => {
+      const result = runCompute(newMinuteSheetModalHelper, {
+        state: {
+          modal: {
+            caseInfo: {
+              caseCaption: 'Test Case',
+              docketNumber: '101-20',
+            },
+            hasSearched: true,
+            noResultsFound: false,
+            isCaseAlreadyOnTrialSession: false,
+            form: {
+              docketNumber: '101-20',
+            },
+          },
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
+        },
+      });
+
+      expect(result.showCaseConfirmation).toBe(true);
+    });
+
+    it('should return false when noResultsFound is true', () => {
+      const result = runCompute(newMinuteSheetModalHelper, {
+        state: {
+          modal: {
+            caseInfo: {
+              caseCaption: 'Test Case',
+              docketNumber: '101-20',
+            },
+            hasSearched: true,
+            noResultsFound: true,
+            form: {
+              docketNumber: '101-20',
+            },
+          },
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
+        },
+      });
+
+      expect(result.showCaseConfirmation).toBe(false);
+    });
+
+    it('should return false when isCaseAlreadyOnTrialSession is true', () => {
+      const result = runCompute(newMinuteSheetModalHelper, {
+        state: {
+          modal: {
+            caseInfo: {
+              caseCaption: 'Test Case',
+              docketNumber: '101-20',
+            },
+            hasSearched: true,
+            isCaseAlreadyOnTrialSession: true,
+            form: {
+              docketNumber: '101-20',
+            },
+          },
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
+        },
+      });
+
+      expect(result.showCaseConfirmation).toBe(false);
+    });
+
+    it('should return false when caseInfo is null', () => {
+      const result = runCompute(newMinuteSheetModalHelper, {
+        state: {
+          modal: {
+            hasSearched: true,
+            form: {
+              docketNumber: '101-20',
+            },
+          },
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
+        },
+      });
+
+      expect(result.showCaseConfirmation).toBe(false);
+    });
+  });
+
+  describe('editUnscheduledMinutesList', () => {
+    it('should return the list of previously edited minute sheets', () => {
+      const mockList = [
+        {
+          docketNumber: '101-20',
+          docketNumberWithSuffix: '101-20S',
+          caseCaption: 'Test Case 1',
+        },
+        {
+          docketNumber: '102-20',
+          docketNumberWithSuffix: '102-20L',
+          caseCaption: 'Test Case 2',
+        },
+      ];
+
+      const result = runCompute(newMinuteSheetModalHelper, {
+        state: {
+          modal: {
+            editUnscheduledMinutesList: mockList,
+            form: {},
+          },
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
+        },
+      });
+
+      expect(result.editUnscheduledMinutesList).toEqual(mockList);
+    });
+
+    it('should return empty array when editUnscheduledMinutesList is not set', () => {
+      const result = runCompute(newMinuteSheetModalHelper, {
+        state: {
+          modal: {
+            form: {},
+          },
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
+        },
+      });
+
+      expect(result.editUnscheduledMinutesList).toEqual([]);
+    });
+  });
+
+  describe('trialSessionId', () => {
+    it('should return trialSessionId from trial session state', () => {
+      const result = runCompute(newMinuteSheetModalHelper, {
+        state: {
+          modal: {
+            form: {},
+          },
+          trialSession: {
+            trialSessionId: 'abc-123',
+          },
+        },
+      });
+
+      expect(result.trialSessionId).toBe('abc-123');
+    });
+
+    it('should return empty string when trialSession is not set', () => {
+      const result = runCompute(newMinuteSheetModalHelper, {
+        state: {
+          modal: {
+            form: {},
+          },
+        },
+      });
+
+      expect(result.trialSessionId).toBe('');
     });
   });
 });
