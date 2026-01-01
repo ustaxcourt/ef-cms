@@ -12,8 +12,8 @@ const props = cerebralProps as unknown as {
 };
 
 interface ComponentProps {
-  onUpdate: (args: Record<string, string>) => void;
-  validateFormData: (args?: Record<string, any>) => void;
+  onUpdate: Function;
+  validateFormData: Function;
 }
 
 interface CerebralProps {
@@ -24,11 +24,7 @@ interface CerebralProps {
     petitionPaymentMethod?: string;
     petitionPaymentWaivedDate?: string;
   };
-  formatAndUpdateDateFromDatePickerSequence: (args: {
-    key: string;
-    toFormat: string;
-    value: string;
-  }) => void;
+  formatAndUpdateDateFromDatePickerSequence: Function;
   paymentStatus: {
     PAID: string;
     UNPAID: string;
@@ -198,7 +194,14 @@ const PetitionPaymentFormComponent: React.FC<
   );
 };
 
-export const PetitionPaymentForm = connect(
+type PetitionPaymentFormProps = {
+  bind: string;
+  validateFormData: Function;
+  validationErrorsBind: string;
+  onUpdate: Function;
+};
+
+export const PetitionPaymentForm: React.FC<PetitionPaymentFormProps> = connect(
   {
     DATE_FORMATS: state.constants.DATE_FORMATS,
     bind: state[props.bind],

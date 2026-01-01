@@ -14,10 +14,16 @@ import { isEmpty } from 'lodash';
 import {
   ALL_SELECTION,
   MULTI_SELECT_PLACEHOLDER,
+  US_STATES,
+  US_STATES_OTHER,
 } from '@shared/business/entities/EntityConstants';
 import { TextField } from '@web-client/dawson-ui/ui/input';
 
-export const CaseSearchByName = connect(
+type CaseSearchByNameProps = {
+  submitAdvancedSearchSequence: Function;
+};
+
+export const CaseSearchByName: React.FC<CaseSearchByNameProps> = connect(
   {
     advancedSearchForm: state.advancedSearchForm,
     advancedSearchHelper: state.advancedSearchHelper,
@@ -53,8 +59,8 @@ export const CaseSearchByName = connect(
     submitAdvancedSearchSequence: Function;
     updateAdvancedSearchFormValueSequence: Function;
     updateCaseAdvancedSearchByNameFormValueSequence: Function;
-    usStates: any[];
-    usStatesOther: any[];
+    usStates: typeof US_STATES;
+    usStatesOther: typeof US_STATES_OTHER;
     validateCaseAdvancedSearchFormSequence: Function;
     validationErrors: any;
   }) {

@@ -28,6 +28,6 @@ export const editUnsignedDraftDocumentSequence = [
 ] as unknown as (props: {
   caseDetail: RawCase;
   docketEntryIdToEdit: string;
-  documentType: string;
+  documentType?: string;
   parentMessageId?: string;
 }) => void;
