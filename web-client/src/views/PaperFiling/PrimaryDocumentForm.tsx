@@ -233,6 +233,7 @@ export const PrimaryDocumentForm = connect(
                 });
               }}
             />
+
           </FormGroup>
           <div className="usa-form-group">
             <div className="usa-checkbox">
