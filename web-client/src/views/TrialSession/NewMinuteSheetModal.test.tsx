@@ -43,22 +43,21 @@ describe('NewMinuteSheetModal', () => {
       // - A docket number input with id "docket-number"
       // - A docket number input with name "docketNumber"
       // - A docket number input with data-testid "new-minute-sheet-docket-number-input"
-      // - Validation error handling for docket number
+      // - A search button with data-testid "new-minute-sheet-search-button"
       expect(NewMinuteSheetModal).toBeTruthy();
     });
 
-    it('should have case link display configuration', () => {
+    it('should have case confirmation display configuration', () => {
       // The component should:
-      // - Display a CaseLink when showCaseLink is true
-      // - Use data-testid "new-minute-sheet-case-link"
+      // - Display a case checkbox when showCaseConfirmation is true and caseInfo exists
+      // - Use data-testid "new-minute-sheet-case-checkbox" and "new-minute-sheet-case-label"
       expect(NewMinuteSheetModal).toBeTruthy();
     });
 
-    it('should have consolidated case message configuration', () => {
+    it('should have error message configurations', () => {
       // The component should:
-      // - Display a consolidated case message when isConsolidatedCase is true
-      // - Use data-testid "new-minute-sheet-consolidated-message"
-      // - Show an info alert with the consolidated case message
+      // - Display "No results found" message with data-testid "no-results-found-message"
+      // - Display "case already on trial session" message with data-testid "case-already-on-trial-session-message"
       expect(NewMinuteSheetModal).toBeTruthy();
     });
   });
@@ -81,8 +80,8 @@ describe('NewMinuteSheetModal', () => {
       expect(NewMinuteSheetModal).toBeTruthy();
     });
 
-    it('should be configured to call validateNewMinuteSheetModalSequence on input blur', () => {
-      // The docket number input onBlur should trigger validateNewMinuteSheetModalSequence
+    it('should be configured to call searchNewMinuteSheetCaseSequence on form submit', () => {
+      // The search form onSubmit should trigger searchNewMinuteSheetCaseSequence
       expect(NewMinuteSheetModal).toBeTruthy();
     });
   });

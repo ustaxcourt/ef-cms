@@ -62,7 +62,7 @@ describe('New Minute Sheet for Unscheduled Cases', () => {
       );
     });
 
-    it('should show validation error for invalid docket number', function () {
+    it('should show no results message for invalid docket number', function () {
       loginAsTrialClerk();
       cy.visit(`/trial-session-detail/${this.trialSessionId}`);
 
@@ -74,17 +74,18 @@ describe('New Minute Sheet for Unscheduled Cases', () => {
         'invalid',
       );
 
-      // Blur the input to trigger validation
-      cy.get('[data-testid="new-minute-sheet-docket-number-input"]').blur();
+      // Click search button to trigger validation
+      cy.get('[data-testid="new-minute-sheet-search-button"]').click();
 
-      // Verify error message appears
-      cy.get('[data-testid="docket-number-error-message"]').should(
+      // Verify "No results found" message appears
+      cy.get('[data-testid="no-results-found-message"]').should('exist');
+      cy.get('[data-testid="no-results-found-message"]').should(
         'contain',
-        'Enter a valid docket number',
+        'No results found',
       );
     });
 
-    it('should show case link when valid docket number entered', function () {
+    it('should show case confirmation when valid docket number entered', function () {
       loginAsTrialClerk();
       cy.visit(`/trial-session-detail/${this.trialSessionId}`);
 
@@ -96,12 +97,12 @@ describe('New Minute Sheet for Unscheduled Cases', () => {
         this.unscheduledDocketNumber,
       );
 
-      // Blur to trigger validation
-      cy.get('[data-testid="new-minute-sheet-docket-number-input"]').blur();
+      // Click search button to search for the case
+      cy.get('[data-testid="new-minute-sheet-search-button"]').click();
 
-      // Verify case link appears
-      cy.get('[data-testid="new-minute-sheet-case-link"]').should('exist');
-      cy.get('[data-testid="new-minute-sheet-case-link"]').should(
+      // Verify case checkbox appears with docket number
+      cy.get('[data-testid="new-minute-sheet-case-checkbox"]').should('exist');
+      cy.get('[data-testid="new-minute-sheet-case-label"]').should(
         'contain',
         this.unscheduledDocketNumber,
       );
@@ -119,11 +120,14 @@ describe('New Minute Sheet for Unscheduled Cases', () => {
         this.unscheduledDocketNumber,
       );
 
-      // Blur to trigger validation
-      cy.get('[data-testid="new-minute-sheet-docket-number-input"]').blur();
+      // Click search button to search for the case
+      cy.get('[data-testid="new-minute-sheet-search-button"]').click();
 
-      // Wait for case link to appear
-      cy.get('[data-testid="new-minute-sheet-case-link"]').should('exist');
+      // Wait for case checkbox to appear and select it
+      cy.get('[data-testid="new-minute-sheet-case-checkbox"]').should('exist');
+      cy.get('[data-testid="new-minute-sheet-case-checkbox"]').check({
+        force: true,
+      });
 
       // Click Add button
       cy.get('[data-testid="modal-confirm"]').click();
@@ -200,17 +204,22 @@ describe('New Minute Sheet for Unscheduled Cases', () => {
         this.scheduledDocketNumber,
       );
 
-      // Blur to trigger validation
-      cy.get('[data-testid="new-minute-sheet-docket-number-input"]').blur();
+      // Click search button to trigger validation
+      cy.get('[data-testid="new-minute-sheet-search-button"]').click();
 
-      // Verify error appears
-      cy.get('[data-testid="docket-number-error-message"]').should(
+      // Verify error message appears
+      cy.get('[data-testid="case-already-on-trial-session-message"]').should(
+        'exist',
+      );
+      cy.get('[data-testid="case-already-on-trial-session-message"]').should(
         'contain',
-        'This case is already associated with this trial session',
+        'This case is currently active in this trial session',
       );
 
-      // Verify case link does NOT appear when there's an error
-      cy.get('[data-testid="new-minute-sheet-case-link"]').should('not.exist');
+      // Verify case checkbox does NOT appear when there's an error
+      cy.get('[data-testid="new-minute-sheet-case-checkbox"]').should(
+        'not.exist',
+      );
     });
   });
 
