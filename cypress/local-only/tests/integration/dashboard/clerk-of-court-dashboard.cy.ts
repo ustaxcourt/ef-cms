@@ -34,31 +34,44 @@ describe('Clerk of Court Dashboard', () => {
 
   it('should display all required trial session fields when sessions exist', () => {
     const today = createISODateString();
+    const todayDateTime = prepareDateFromString(today);
     const currentWeekStart = createDateAtStartOfWeekEST(today, FORMATS.ISO);
     const currentWeekStartDateTime = prepareDateFromString(currentWeekStart);
-    const sessionDate = currentWeekStartDateTime.plus({ days: 3 });
+    const daysFromWeekStart = Math.floor(
+      todayDateTime.diff(currentWeekStartDateTime, 'days').days,
+    );
+    const sessionDate =
+      daysFromWeekStart < 3
+        ? currentWeekStartDateTime.plus({ days: 3 })
+        : todayDateTime.plus({ days: 1 });
     const trialSessionStartDate = formatDateString(
       sessionDate.toISO()!,
       FORMATS.MMDDYYYY,
     );
 
     const trialSessionEndDate = formatDateString(
-      prepareDateFromString(trialSessionStartDate, FORMATS.MMDDYYYY)
-        .plus({ days: 2 })
-        .toISO()!,
+      sessionDate.plus({ days: 2 }).toISO()!,
       FORMATS.MMDDYYYY,
     );
 
-    cy.intercept('POST', '**/trial-sessions').as('createTrialSession');
     loginAsClerkOfCourt();
     cy.get('[data-testid="trial-session-link"]').click();
     cy.get('[data-testid="add-trial-session-button"]').click();
     cy.get('#standaloneRemote-session-scope-label').click();
     cy.get('[data-testid="trial-session-meeting-id"]').should('be.visible');
+    cy.get('#start-date-picker').should('be.visible');
+    cy.intercept('POST', '**/trial-sessions').as('createTrialSession');
+    cy.get('#start-date-picker').click();
     cy.get('#start-date-picker').clear();
     cy.get('#start-date-picker').type(trialSessionStartDate);
+    cy.get('#start-date-picker').should('have.value', trialSessionStartDate);
+    cy.get('#estimated-end-date-picker').click();
     cy.get('#estimated-end-date-picker').clear();
     cy.get('#estimated-end-date-picker').type(trialSessionEndDate);
+    cy.get('#estimated-end-date-picker').should(
+      'have.value',
+      trialSessionEndDate,
+    );
     cy.get(`[data-testid="session-type-${SESSION_TYPES.regular}"]`).click();
     cy.get('[data-testid="trial-session-meeting-id"]').should('be.visible');
     cy.get('[data-testid="trial-session-meeting-id"]').type('123456789Meet');
@@ -75,6 +88,7 @@ describe('Clerk of Court Dashboard', () => {
     );
     cy.get('[data-testid="submit-trial-session"]').should('not.be.disabled');
     cy.get('[data-testid="submit-trial-session"]').click();
+    cy.get('[data-testid="error-alert"]').should('not.exist');
     cy.wait('@createTrialSession', { timeout: 60000 }).then(() => {
       cy.get('[data-testid="success-alert"]').should('exist');
       cy.intercept('GET', '**/trial-sessions').as('getTrialSessions');
