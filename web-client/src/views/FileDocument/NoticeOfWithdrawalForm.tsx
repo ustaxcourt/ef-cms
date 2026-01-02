@@ -249,11 +249,18 @@ export const NoticeOfWithdrawalForm = connect(
                   className="tw:w-sm"
                   key={`paper-service-${party.contactId}`}
                 >
-                  <span className="tw:block tw:mb-[5px]">{party.name}</span>
+                  <span
+                    className="tw:block tw:mb-[5px]"
+                    data-testid={`paper-service-acknowledgement-name-${party.contactId}`}
+                  >
+                    {party.name}
+                  </span>
                   {party.isAddressSealed ? (
                     <span>ADDRESS SEALED BY COURT ORDER</span>
                   ) : (
-                    <>
+                    <div
+                      data-testid={`paper-service-acknowledgement-address-${party.contactId}`}
+                    >
                       <span className="tw:block">{party.address1}</span>
                       <span className="tw:block">{party.address2}</span>
                       <span className="tw:block">{party.address3}</span>
@@ -261,7 +268,7 @@ export const NoticeOfWithdrawalForm = connect(
                       {party.countryType === COUNTRY_TYPES.INTERNATIONAL && (
                         <span className="tw-block">{party.country}</span>
                       )}
-                    </>
+                    </div>
                   )}
                 </div>
               ))}
@@ -269,7 +276,7 @@ export const NoticeOfWithdrawalForm = connect(
               <input
                 checked={form.paperServiceAcknowledgement}
                 className="usa-checkbox__input"
-                id={`paperServiceAcknowledgement`}
+                id="paperServiceAcknowledgement"
                 name="paperServiceAcknowledgement"
                 type="checkbox"
                 onChange={e => {
@@ -281,7 +288,7 @@ export const NoticeOfWithdrawalForm = connect(
               />
               <label
                 className="usa-checkbox__label"
-                htmlFor={`paperServiceAcknowledgement`}
+                htmlFor="paperServiceAcknowledgement"
               >
                 I certify that I will serve any party who does not receive
                 electronic service a copy of the Notice of Withdrawal of Counsel
