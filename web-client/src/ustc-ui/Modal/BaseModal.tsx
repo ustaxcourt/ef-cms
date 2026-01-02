@@ -14,7 +14,7 @@ export const BaseModal = ({
   children?: React.ReactNode;
   className?: string;
 }) => {
-  const elRef = React.useRef(null);
+  const elRef = React.useRef(null) as React.RefObject<HTMLDivElement | null>;
 
   const getEl = () => {
     if (!elRef.current) {
@@ -32,11 +32,11 @@ export const BaseModal = ({
       }
     };
 
-    modalRoot.appendChild(getEl());
+    modalRoot?.appendChild(getEl());
     toggleNoScroll(true);
 
     return () => {
-      modalRoot.removeChild(getEl());
+      modalRoot?.removeChild(getEl());
       toggleNoScroll(false);
     };
   }, []);

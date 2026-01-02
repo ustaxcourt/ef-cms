@@ -11,7 +11,13 @@ const props = cerebralProps as unknown as {
   onBlur: () => void;
 };
 
-export const EConsent = connect(
+type EConsentProps = {
+  bind: any;
+  contactType: string;
+  onBlur: Function;
+}
+
+export const EConsent: React.FC<EConsentProps> = connect(
   {
     bind: props.bind,
     contactType: props.contactType,

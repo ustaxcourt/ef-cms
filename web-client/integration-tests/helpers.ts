@@ -31,12 +31,12 @@ import { socketRouter } from '../src/providers/socketRouter';
 import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import { withAppContextDecorator } from '../src/withAppContext';
 import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/computeds/workQueueHelper';
-import FormDataHelper from 'form-data';
 import axios, { AxiosError } from 'axios';
 import jwt from 'jsonwebtoken';
 import qs from 'qs';
 import riotRoute from 'riot-route';
 import { getDbReader } from '@web-api/database';
+import { ModuleDefinition } from 'cerebral';
 import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 
 const applicationContext = clientApplicationContext as any;
@@ -566,13 +566,11 @@ export const loginAs = (cerebralTest, email, password = 'Testing1234$') =>
 export const setupTest = ({ constantsOverrides = {} } = {}) => {
   // eslint-disable-next-line prefer-const
   let cerebralTest;
-  global.FormData = FormDataHelper;
-  global.Blob = () => {
-    return fakeFile;
-  };
-  global.File = () => {
-    return fakeFile;
-  };
+  global.FormData = require('form-data');
+  // @ts-expect-error
+  global.Blob = (() => fakeFile);
+  // @ts-expect-error
+  global.File = (() => fakeFile);
   global.WebSocket = require('websocket').w3cwebsocket;
 
   presenter.providers.applicationContext = applicationContext;
@@ -685,7 +683,7 @@ export const setupTest = ({ constantsOverrides = {} } = {}) => {
     return value;
   });
 
-  const routes = [];
+  const routes: { route: any; cb: any }[] = [];
 
   presenter.providers.router = {
     back,
@@ -696,7 +694,7 @@ export const setupTest = ({ constantsOverrides = {} } = {}) => {
     route: (routeToGoTo = '/') => gotoRoute(routes, routeToGoTo),
   };
 
-  cerebralTest = CerebralTest(presenter);
+  cerebralTest = CerebralTest(presenter as ModuleDefinition);
   cerebralTest.getSequence = seqName => obj =>
     cerebralTest.runSequence(seqName, obj);
   const oldRunSequence = cerebralTest.runSequence;
@@ -738,7 +736,7 @@ export const setupTest = ({ constantsOverrides = {} } = {}) => {
     });
   });
 
-  initializeSocketProvider(cerebralTest);
+  initializeSocketProvider(cerebralTest, applicationContext);
 
   return cerebralTest;
 };

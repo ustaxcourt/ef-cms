@@ -24,7 +24,11 @@ export const EmptyHopperModal = connect(
 );
 EmptyHopperModal.displayName = 'EmptyHopperModal';
 
-export const ConfirmRescanBatchModal = connect(
+type BatchModalProps = {
+  batchIndex: number;
+}
+
+export const ConfirmRescanBatchModal: React.FC<BatchModalProps> = connect(
   {
     batchIndex: state.scanner.batchIndexToRescan,
     clearModalSequence: sequences.clearModalSequence,
@@ -50,7 +54,7 @@ export const ConfirmRescanBatchModal = connect(
 );
 ConfirmRescanBatchModal.displayName = 'ConfirmRescanBatchModal';
 
-export const DeleteBatchModal = connect(
+export const DeleteBatchModal: React.FC<BatchModalProps> = connect(
   {
     batchIndex: state.scanner.batchIndexToDelete,
     clearModalSequence: sequences.clearModalSequence,
