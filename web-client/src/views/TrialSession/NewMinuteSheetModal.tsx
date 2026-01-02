@@ -165,7 +165,7 @@ export const NewMinuteSheetModal = connect(
           <>
             <hr className="margin-top-4 margin-bottom-4" />
             <div data-testid="edit-unscheduled-minutes-section">
-              <p className="text-bold margin-bottom-2">
+              <p className="text-semibold margin-bottom-2">
                 Edit Unscheduled Minutes
               </p>
               {newMinuteSheetModalHelper.editUnscheduledMinutesList.map(
