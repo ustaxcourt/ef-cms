@@ -44,12 +44,12 @@ export const formatSealedAddresses = (
   );
 
   // Seal emails in docket entries
+  const emailsToBeSealed = caseContactsToBeSealed.map(caseContact => {
+    if (caseContact.email) {
+      return caseContact.email;
+    }
+  });
   formattedCase.docketEntries?.forEach(docketEntry => {
-    const emailsToBeSealed = caseContactsToBeSealed.map(caseContact => {
-      if (caseContact.email) {
-        return caseContact.email;
-      }
-    });
     docketEntry.servedParties?.forEach(party => {
       if (emailsToBeSealed.includes(party.email)) {
         party.email = undefined;
