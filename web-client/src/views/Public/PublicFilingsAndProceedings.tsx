@@ -1,5 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { Phone } from '../../ustc-ui/Responsive/Responsive';
 import { PublicFormattedDocketEntryInfo } from '@web-client/presenter/computeds/Public/publicCaseDetailHelper';
+import { WrappedIcon } from '../../ustc-ui/Icon/Icon';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -28,6 +30,17 @@ export const PublicFilingsAndProceedings = connect<
   }) {
     return (
       <React.Fragment>
+        <Phone>
+          {entry.isSealed && (
+            <span className="tw:inline-flex tw:mr-2">
+              <WrappedIcon
+                iconClass="sealed-in-blackstone icon-sealed"
+                icon="lock"
+                title={entry.sealedToTooltip}
+              />
+            </span>
+          )}
+        </Phone>
         {entry.showLinkToDocument && (
           <Button
             link
