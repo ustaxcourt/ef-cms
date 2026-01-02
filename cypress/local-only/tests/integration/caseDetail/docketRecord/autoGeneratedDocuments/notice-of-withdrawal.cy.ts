@@ -109,6 +109,7 @@ describe('Notice of Withdrawal', () => {
 
         loginAsPrivatePractitioner();
         enterNoticeOfWithdrawalFormType(docketNumber);
+        cy.get('[data-testid="file-document-submit-document"]').click();
         cy.get('[data-testid="error-alert"]').should('be.visible');
         cy.get('[data-testid="error-alert"]').contains('Select a filing party');
         cy.get('[data-testid="error-alert"]').contains(
