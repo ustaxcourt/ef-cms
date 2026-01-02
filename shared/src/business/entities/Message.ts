@@ -16,12 +16,13 @@ export class Message extends JoiValidationEntity {
   public completedBy?: string;
   public completedBySection?: string;
   public completedByUserId?: string;
-  public completedMessage?: string;
+  public completedMessage?: string | null;
   public createdAt: string;
   public docketNumber: string;
   public docketNumberWithSuffix: string;
   public from: string;
   public fromSection: string;
+  public fromSectionFormatted?: string;
   public fromUserId: string;
   public isCompleted: boolean;
   public isRead: boolean;
@@ -190,7 +191,7 @@ export class Message extends JoiValidationEntity {
     user: {
       name: string;
       userId: string;
-      section: string;
+      section?: string;
     };
   }): Message {
     this.isCompleted = true;

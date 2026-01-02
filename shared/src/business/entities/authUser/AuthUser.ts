@@ -4,7 +4,7 @@ import joi from 'joi';
 export type AuthUser = {
   role: Role;
   userId: string;
-  email: string;
+  email?: string;
   name: string;
 };
 
