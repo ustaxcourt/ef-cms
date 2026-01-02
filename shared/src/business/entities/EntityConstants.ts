@@ -45,9 +45,8 @@ export const CLERK_OF_COURT_DASHBOARD_LABELS = {
   TRIAL_SESSIONS_HEADER: 'Trial Sessions',
   WEEK_CURRENT: 'This Week',
   WEEK_NEXT: 'Next Week',
-  EMPTY_MESSAGE_CURRENT_WEEK:
-    'There are no trial sessions for the current week.',
-  EMPTY_MESSAGE_NEXT_WEEK: 'There are no trial sessions for the next week.',
+  EMPTY_MESSAGE_CURRENT_WEEK: 'There are no trial sessions for this week.',
+  EMPTY_MESSAGE_NEXT_WEEK: 'There are no trial sessions for next week.',
   FIELD_START_DATE: 'Start Date',
   FIELD_PROC_TYPE: 'Proc. Type',
   FIELD_CITY: 'City',
