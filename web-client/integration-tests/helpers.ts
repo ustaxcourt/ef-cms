@@ -539,7 +539,7 @@ export const uploadPetition = async (
     headers: {
       Authorization: `Bearer ${userToken}`,
     },
-    httpAgent: new Agent({ keepAlive: false })
+    httpAgent: new Agent({ keepAlive: false }),
   });
 
   cerebralTest.setState('caseDetail', response.data);
@@ -568,9 +568,9 @@ export const setupTest = ({ constantsOverrides = {} } = {}) => {
   let cerebralTest;
   global.FormData = require('form-data');
   // @ts-expect-error
-  global.Blob = (() => fakeFile);
+  global.Blob = () => fakeFile;
   // @ts-expect-error
-  global.File = (() => fakeFile);
+  global.File = () => fakeFile;
   global.WebSocket = require('websocket').w3cwebsocket;
 
   presenter.providers.applicationContext = applicationContext;
@@ -796,12 +796,11 @@ export const waitForLoadingComponentToHide = async ({
   maxWait = 30000,
   refreshInterval = 500,
 }) => {
-  const waitTime = await waitForCondition({
+  await waitForCondition({
     booleanExpressionCondition: () => !cerebralTest.getState(component),
     maxWait,
     refreshInterval,
   });
-  console.log(`Waited ${waitTime}ms for the ${component} to hide`);
 };
 
 export const waitForModalsToHide = async ({
@@ -810,12 +809,11 @@ export const waitForModalsToHide = async ({
   maxWait = 30000,
   refreshInterval = 500,
 }) => {
-  const waitTime = await waitForCondition({
+  await waitForCondition({
     booleanExpressionCondition: () => !cerebralTest.getState(component),
     maxWait,
     refreshInterval,
   });
-  console.log(`Waited ${waitTime}ms for the ${component} to hide`);
 };
 
 export const waitForPage = async ({

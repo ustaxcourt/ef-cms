@@ -129,7 +129,7 @@ describe('Docket Clerk edits and multi-dockets a paper filing journey', () => {
       );
 
       expect(modalHelper.contactsNeedingPaperService).toBeDefined();
-      expect(modalHelper.canFileAcrossGroup).toBe(true);
+      expect(modalHelper.showCheckboxes).toBe(true);
       expect(cerebralTest.getState('modal.showModal')).toEqual(
         'ConfirmInitiatePaperFilingServiceModal',
       );

@@ -137,15 +137,18 @@ export const shouldAllowMultiDocket = ({
   processingStatus,
   isLead,
 }) => {
-  const isFiled =
-    processingStatus !== DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING;
+  const wasFiledExternallyButNotServed = processingStatus
+    ? processingStatus === DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE
+    : false;
+
   const isMultiDocketed = multiDocketedOn?.length > 1;
+
   const isMultiDocketableEvent =
     !NON_MULTI_DOCKETABLE_EVENT_CODES.includes(eventCode);
 
   let shouldAllowMultiDocket = isLead && isMultiDocketableEvent;
 
-  if (isFiled && !isMultiDocketed) {
+  if (wasFiledExternallyButNotServed && !isMultiDocketed) {
     shouldAllowMultiDocket = false;
   }
 
