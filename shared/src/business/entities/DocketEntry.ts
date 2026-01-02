@@ -880,7 +880,7 @@ export class DocketEntry extends JoiValidationEntity {
     return DocketEntry.fetchRootDocument(previousEntry, docketEntries);
   };
 
-  get documentTypeForStampedDocketEntry(): string {
+  documentTypeForStampedDocketEntry(): string {
     const documentTypeIncludesPlaceholder =
       this.documentType?.includes('[') && this.documentType?.includes(']');
 

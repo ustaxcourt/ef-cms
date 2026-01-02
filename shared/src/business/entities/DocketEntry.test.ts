@@ -696,7 +696,7 @@ describe('DocketEntry entity', () => {
         },
         { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
       );
-      expect(docketEntry.documentTypeForStampedDocketEntry).toEqual(
+      expect(docketEntry.documentTypeForStampedDocketEntry()).toEqual(
         documentTitle,
       );
     });
@@ -711,7 +711,7 @@ describe('DocketEntry entity', () => {
         },
         { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
       );
-      expect(docketEntry.documentTypeForStampedDocketEntry).toEqual(
+      expect(docketEntry.documentTypeForStampedDocketEntry()).toEqual(
         documentTitleAndType,
       );
     });
