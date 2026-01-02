@@ -22,7 +22,7 @@ export const unauthedUserViewsTodaysOpinions = cerebralTest => {
       ]),
     );
 
-    for (let todaysOpinion of todaysOpinions) {
+  for (const todaysOpinion of todaysOpinions) {
       await cerebralTest.runSequence('openCaseDocumentDownloadUrlSequence', {
         docketEntryId: todaysOpinion.docketEntryId,
         docketNumber: todaysOpinion.docketNumber,
@@ -31,7 +31,7 @@ export const unauthedUserViewsTodaysOpinions = cerebralTest => {
       });
 
       expect(window.location.href).toContain(todaysOpinion.docketEntryId);
-      window.location.href = undefined;
+      window.location.href = '';
     }
   });
 };

@@ -95,7 +95,7 @@ export const BeforeYouFileADocument = connect(
                 <div className="caseItem" role="listitem">
                   <NonMobile>
                     <div className="caseItem__icon" role="img">
-                      <FontAwesomeIcon icon={['fa', 'shield-alt']} />
+                      <FontAwesomeIcon icon={'shield-alt'} />
                     </div>
                   </NonMobile>
                   <h3 className="caseItem__heading">

@@ -4,43 +4,35 @@ import { EConsent } from '../StartCaseInternal/EConsent';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { InternationalAddress } from './InternationalAddress';
 import { PaperPetitionEmail } from '../StartCaseInternal/PaperPetitionEmail';
-import { props as cerebralProps } from 'cerebral';
+import { props } from 'cerebral';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-const props = cerebralProps as unknown as {
-  contactsHelper: string;
+type ContactsPrimaryProps = {
+  contactsHelper: Record<string, any>;
   bind: string;
-  onBlur: () => void;
+  onBlur: Function;
   onChange: string;
   parentView: string;
+  wrapperClassName?: string; 
 };
 
-type ContactPrimaryProps = {
-  wrapperClassName?: string;
-};
-
-const contactPrimaryDeps = {
-  bind: props.bind,
-  constants: state.constants,
-  contactsHelper: state[props.contactsHelper],
-  data: state[props.bind],
-  onBlur: props.onBlur,
-  onChange: props.onChange,
-  onChangeSequence: sequences[props.onChange],
-  parentView: props.parentView,
-  updateFormValueAndSecondaryContactInfoSequence:
-    sequences.updateFormValueAndSecondaryContactInfoSequence,
-  validationErrors: state.validationErrors,
-};
-
-export const ContactPrimary = connect<
-  ContactPrimaryProps,
-  typeof contactPrimaryDeps
->(
-  contactPrimaryDeps,
+export const ContactPrimary: React.FC<ContactsPrimaryProps> = connect(
+  {
+    bind: props.bind,
+    constants: state.constants,
+    contactsHelper: props`contactsHelper`,
+    data: state[props`bind`],
+    onBlur: props`onBlur`,
+    onChange: props`onChange`,
+    onChangeSequence: sequences[props`onChange`],
+    parentView: props`parentView`,
+    updateFormValueAndSecondaryContactInfoSequence:
+      sequences.updateFormValueAndSecondaryContactInfoSequence,
+    validationErrors: state.validationErrors,
+  },
   function ContactPrimary({
     bind,
     constants,

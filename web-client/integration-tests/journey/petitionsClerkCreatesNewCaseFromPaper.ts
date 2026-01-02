@@ -20,8 +20,8 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
     trialLocation = 'Birmingham, Alabama',
   }: {
     formOrdersAndNotices?: {
-      key: string;
-      value: boolean;
+      key?: string;
+      value?: boolean;
     };
     paymentStatus?: string;
     procedureType?: string;
@@ -145,11 +145,11 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
   ];
 
   formValues =
-    formOrdersAndNotices &&
-    formOrdersAndNotices.key &&
-    formOrdersAndNotices.value
-      ? [...formValues, formOrdersAndNotices]
-      : formValues;
+      formOrdersAndNotices &&
+      typeof formOrdersAndNotices.key === 'string' &&
+      formOrdersAndNotices.value !== undefined
+        ? [...formValues, formOrdersAndNotices as { key: string; value: any }]
+        : formValues;
 
   formValues =
     formOverrides && formOverrides.length > 0
