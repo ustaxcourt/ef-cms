@@ -31,7 +31,6 @@ export const ConfirmInitiateServiceModal = connect(
     cancelSequence: Function;
     confirmInitiateServiceModalHelper: {
       additionalServedCases: { docketNumber: string; caseTitle: string }[];
-      canMultiDocket: boolean;
       showCheckboxes: boolean;
       confirmationText: string;
       contactsNeedingPaperService?: ContactsNeedingPaperService;
@@ -102,7 +101,7 @@ export const ConfirmInitiateServiceModal = connect(
                   {confirmInitiateServiceModalHelper.contactsNeedingPaperService.map(
                     contact => (
                       <span key={`${contact.docketNumber}-${contact.name}`}>
-                        {confirmInitiateServiceModalHelper.canMultiDocket &&
+                        {confirmInitiateServiceModalHelper.showCheckboxes &&
                           `${contact.docketNumber} - `}
                         {contact.name}, {contact.formattedContactType}
                         <br />

@@ -1,37 +1,36 @@
+import { isLeadCase } from '@shared/business/entities/cases/Case';
 import { state } from '@web-client/presenter/app.cerebral';
+import { shouldAllowMultiDocket } from '@web-client/presenter/computeds/confirmInitiateServiceModalHelper';
 
-/**
- * Determines if the docket entry event code is one that can be multi-docketed
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the applicationContext object
- * @param {object} providers.get the cerebral get object
- * @param {object} providers.path the cerebral path object
- * @returns {object} the next path based on if docket entry is multi-docketable
- */
 export const isDocketEntryMultiDocketableAction = ({
-  applicationContext,
   get,
   path,
 }: ActionProps) => {
-  const { NON_MULTI_DOCKETABLE_EVENT_CODES } =
-    applicationContext.getConstants();
-
   const caseDetail = get(state.caseDetail);
   const docketEntryId = get(state.docketEntryId);
-  let { eventCode } = get(state.form);
+  let { eventCode, multiDocketedOn, processingStatus } = get(state.form);
 
   if (!eventCode) {
     const docketEntry = caseDetail.docketEntries.find(
       doc => doc.docketEntryId === docketEntryId,
     );
     if (docketEntry) {
-      ({ eventCode } = docketEntry);
+      ({ eventCode, multiDocketedOn, processingStatus } = docketEntry);
     }
   }
 
-  if (NON_MULTI_DOCKETABLE_EVENT_CODES.includes(eventCode)) {
-    return path.no();
+  const isLead = isLeadCase(caseDetail);
+
+  const checkAllTheCheckboxes = shouldAllowMultiDocket({
+    eventCode,
+    multiDocketedOn,
+    processingStatus,
+    isLead,
+  });
+
+  if (checkAllTheCheckboxes) {
+    return path.yes();
   }
 
-  return path.yes();
+  return path.no();
 };

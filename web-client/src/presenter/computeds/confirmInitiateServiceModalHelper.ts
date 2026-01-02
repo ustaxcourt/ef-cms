@@ -5,6 +5,7 @@ import {
   NON_MULTI_DOCKETABLE_EVENT_CODES,
   SERVICE_INDICATOR_TYPES,
   ROLES,
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
 } from '@shared/business/entities/EntityConstants';
 import { isLeadCase } from '@shared/business/entities/cases/Case';
 
@@ -18,7 +19,6 @@ export const confirmInitiateServiceModalHelper = (
   get: Get,
 ): {
   showCheckboxes: boolean;
-  canMultiDocket: boolean;
   confirmationText: string;
   paperFilingText: string;
   additionalServedCases: { docketNumber: string; caseTitle: string }[];
@@ -27,29 +27,24 @@ export const confirmInitiateServiceModalHelper = (
   const docketEntryId = get(state.docketEntryId);
   const formattedCaseDetail = get(state.formattedCaseDetail);
   const form = get(state.form);
-  let { eventCode, multiDocketedOn } = form;
+  let { eventCode, multiDocketedOn, processingStatus } = form;
 
   const currentDocketEntry = formattedCaseDetail.docketEntries.find(
     doc => doc.docketEntryId === docketEntryId,
   );
 
-  let isFiling = true;
-
   if (!eventCode) {
-    isFiling = false;
-    ({ eventCode, multiDocketedOn } = currentDocketEntry);
+    ({ eventCode, multiDocketedOn, processingStatus } = currentDocketEntry);
   }
 
   const isLead = isLeadCase(formattedCaseDetail);
 
-  const isMultiDocketed = multiDocketedOn?.length > 1;
-
-  const canMultiDocket =
-    isLead &&
-    !isMultiDocketed &&
-    !NON_MULTI_DOCKETABLE_EVENT_CODES.includes(eventCode);
-
-  const showCheckboxes = isLead && (isFiling || isMultiDocketed);
+  const showCheckboxes = shouldAllowMultiDocket({
+    eventCode,
+    multiDocketedOn,
+    processingStatus,
+    isLead,
+  });
 
   const checkedCases = (
     get(state.modal.form.consolidatedCasesToMultiDocketOn) || []
@@ -115,7 +110,6 @@ export const confirmInitiateServiceModalHelper = (
     : 'The following document will be served on all parties:';
 
   return {
-    canMultiDocket,
     showCheckboxes,
     confirmationText,
     paperFilingText,
@@ -135,4 +129,25 @@ const roleToDisplay = party => {
   } else {
     return CONTACT_TYPE_TITLES[party.contactType];
   }
+};
+
+export const shouldAllowMultiDocket = ({
+  eventCode,
+  multiDocketedOn,
+  processingStatus,
+  isLead,
+}) => {
+  const isFiled =
+    processingStatus !== DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING;
+  const isMultiDocketed = multiDocketedOn?.length > 1;
+  const isMultiDocketableEvent =
+    !NON_MULTI_DOCKETABLE_EVENT_CODES.includes(eventCode);
+
+  let shouldAllowMultiDocket = isLead && isMultiDocketableEvent;
+
+  if (isFiled && !isMultiDocketed) {
+    shouldAllowMultiDocket = false;
+  }
+
+  return shouldAllowMultiDocket;
 };
