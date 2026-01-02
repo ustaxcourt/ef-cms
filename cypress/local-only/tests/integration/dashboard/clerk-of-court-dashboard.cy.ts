@@ -49,13 +49,18 @@ describe('Clerk of Court Dashboard', () => {
       FORMATS.MMDDYYYY,
     );
 
+    cy.intercept('POST', '**/trial-sessions').as('createTrialSession');
     loginAsClerkOfCourt();
     cy.get('[data-testid="trial-session-link"]').click();
     cy.get('[data-testid="add-trial-session-button"]').click();
     cy.get('#standaloneRemote-session-scope-label').click();
+    cy.get('[data-testid="trial-session-meeting-id"]').should('be.visible');
+    cy.get('#start-date-picker').clear();
     cy.get('#start-date-picker').type(trialSessionStartDate);
+    cy.get('#estimated-end-date-picker').clear();
     cy.get('#estimated-end-date-picker').type(trialSessionEndDate);
     cy.get(`[data-testid="session-type-${SESSION_TYPES.regular}"]`).click();
+    cy.get('[data-testid="trial-session-meeting-id"]').should('be.visible');
     cy.get('[data-testid="trial-session-meeting-id"]').type('123456789Meet');
     cy.get('[data-testid="trial-session-password"]').type('testPassword123');
     cy.get('[data-testid="trial-session-join-phone-number"]').type(
@@ -68,9 +73,10 @@ describe('Clerk of Court Dashboard', () => {
     cy.get('[data-testid="trial-session-trial-clerk"]').select(
       'Test trialclerk1',
     );
-    cy.intercept('POST', '**/trial-sessions').as('createTrialSession');
+    cy.get('[data-testid="submit-trial-session"]').should('not.be.disabled');
     cy.get('[data-testid="submit-trial-session"]').click();
-    cy.wait('@createTrialSession').then(() => {
+    cy.wait('@createTrialSession', { timeout: 60000 }).then(() => {
+      cy.get('[data-testid="success-alert"]').should('exist');
       cy.intercept('GET', '**/trial-sessions').as('getTrialSessions');
       cy.visit('/');
       cy.wait('@getTrialSessions');

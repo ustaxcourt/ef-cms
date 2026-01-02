@@ -1,8 +1,10 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
+import { Icon } from '../../ustc-ui/Icon/Icon';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const RecentMessagesInboxCotCDashboard = connect(
   {
@@ -31,6 +33,7 @@ export const RecentMessagesInboxCotCDashboard = connect(
                   Received
                 </div>
               </th>
+              <th className="message-unread-column"></th>
               <th>
                 <div className="sortable-header-button margin-right-0 usa-button margin-right-205 usa-button--unstyled ustc-button--unstyled">
                   Message
@@ -75,11 +78,24 @@ export const RecentMessagesInboxCotCDashboard = connect(
                     {item.docketNumberWithSuffix}
                   </td>
                   <td>{item.createdAtFormatted}</td>
+                  <td className="message-unread-column">
+                    {!item.isRead && (
+                      <Icon
+                        aria-label="Unread message"
+                        className="fa-icon-blue"
+                        icon="envelope"
+                        size="1x"
+                      />
+                    )}
+                  </td>
                   <td>
                     <div className="message-document-title">
                       <Button
                         link
-                        className="padding-0 no-underline"
+                        className={classNames(
+                          'padding-0',
+                          item.isRead ? '' : 'text-bold',
+                        )}
                         data-testid="message-header-link"
                         href={item.messageDetailLink}
                       >
