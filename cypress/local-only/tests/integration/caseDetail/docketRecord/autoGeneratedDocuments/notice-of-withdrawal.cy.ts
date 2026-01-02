@@ -483,7 +483,7 @@ describe('Notice of Withdrawal', () => {
         cy.get('[data-testid="auto-generated-filing-parties"]').contains(
           'Petitioner',
         );
-        cy.get('[data-testid="submit-entry-of-appearance-button"]').click();
+        cy.get('[data-testid="submit-auto-generated-document-button"]').click();
         cy.get('[data-testid="success-alert"]').should('be.visible');
       });
     });
@@ -509,7 +509,7 @@ describe('Notice of Withdrawal', () => {
         cy.get('[data-testid="party-irs-practitioner-label"]').click();
         cy.get('[data-testid="allPartiesConsent-yes-label"]').click();
         cy.get('[data-testid="file-document-submit-document"]').click();
-        cy.get('[data-testid="submit-entry-of-appearance-button"]').click();
+        cy.get('[data-testid="submit-auto-generated-document-button"]').click();
 
         // check to make sure filed by is test irs practitioner1 instead of resp.
         cy.get('[data-testid="docket-record-table"] tr')
