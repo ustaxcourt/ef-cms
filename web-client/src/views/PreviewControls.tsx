@@ -16,7 +16,18 @@ const props = cerebralProps as unknown as {
   totalPages: number;
 };
 
-export const PreviewControls = connect(
+type PreviewControlsProps = {
+  currentPage: number
+  disableLeftButtons: boolean;
+  disableRightButtons: boolean;
+  totalPages: number;
+  onFirstPage: (e: any) => void;
+  onLastPage: (e: any) => void;
+  onNextPage: (e: any) => void;
+  onPreviousPage: (e: any) => void;
+}
+
+export const PreviewControls: React.FC<PreviewControlsProps> = connect(
   {
     currentPage: props.currentPage,
     disableLeftButtons: props.disableLeftButtons,

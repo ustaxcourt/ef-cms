@@ -3,7 +3,6 @@
 export AWS_ACCESS_KEY_ID=S3RVER
 export AWS_SECRET_ACCESS_KEY=S3RVER
 export AWS_REGION=us-east-1
-export DYNAMODB_TABLE_NAME=efcms-local
 export EFCMS_DOMAIN=localhost
 export ELASTICSEARCH_HOST=localhost
 export ELASTICSEARCH_ENDPOINT=http://localhost:9200

@@ -3,9 +3,14 @@ import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
+import { TextField } from '@web-client/dawson-ui/ui/input';
 import React from 'react';
 
-export const CaseSearchByDocketNumber = connect(
+type CaseSearchByDocketNumberProps = {
+  submitDocketNumberSearchSequence: Function
+}
+
+export const CaseSearchByDocketNumber: React.FC<CaseSearchByDocketNumberProps> = connect(
   {
     advancedSearchForm: state.advancedSearchForm,
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
@@ -43,37 +48,33 @@ export const CaseSearchByDocketNumber = connect(
             <div className="grid-row">
               <div className="tablet:grid-col-6">
                 <FormGroup errorText={validationErrors.docketNumber}>
-                  <label
-                    className="usa-label margin-bottom-0"
-                    htmlFor="docket-number"
-                  >
-                    Docket number <span className="usa-hint">(required)</span>
-                  </label>
-                  <span className="usa-hint">
-                    Example of docket number format: 123-19
-                  </span>
-                  <input
-                    aria-describedby="search-by-docket-number"
-                    className="usa-input"
-                    data-testid="docket-number"
-                    id="docket-number"
-                    name="docketNumber"
-                    type="text"
-                    value={
-                      advancedSearchForm.caseSearchByDocketNumber
-                        .docketNumber || ''
-                    }
-                    onBlur={() => {
-                      validateCaseDocketNumberSearchFormSequence();
-                    }}
-                    onChange={e => {
-                      updateAdvancedSearchFormValueSequence({
-                        formType: 'caseSearchByDocketNumber',
-                        key: e.target.name,
-                        value: e.target.value.toUpperCase(),
-                      });
-                    }}
-                  />
+                  <div className="max-xs:tw:w-full tw:mt-4">
+                    <TextField
+                      aria-describedby="search-by-docket-number"
+                      data-testid="docket-number"
+                      id="docket-number"
+                      name="docketNumber"
+                      icon={false}
+                      label="Docket number"
+                      helpText="Example of docket number format: 123-19"
+                      placeholder=""
+                      required={true}
+                      value={
+                        advancedSearchForm.caseSearchByDocketNumber
+                          .docketNumber || ''
+                      }
+                      onBlur={() => {
+                        validateCaseDocketNumberSearchFormSequence();
+                      }}
+                      onChange={e => {
+                        updateAdvancedSearchFormValueSequence({
+                          formType: 'caseSearchByDocketNumber',
+                          key: e.target.name,
+                          value: e.target.value.toUpperCase(),
+                        });
+                      }}
+                    />
+                  </div>
                 </FormGroup>
               </div>
             </div>

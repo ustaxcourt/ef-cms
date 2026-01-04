@@ -1,22 +1,22 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props as cerebralProps } from 'cerebral';
+import { props } from 'cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import { RunableSequence as RunnableSequence } from 'cerebral';
 
-const props = cerebralProps as unknown as {
-  bind: string;
+type PaperPetitionEmailProps = {
+  bind: any;
   contactType: string;
   onBlur: () => void;
-};
+}
 
-export const PaperPetitionEmail = connect(
+export const PaperPetitionEmail: React.FC<PaperPetitionEmailProps> = connect(
   {
     bind: props.bind,
-    contactType: props.contactType,
-    data: state[props.bind],
-    onBlur: props.onBlur,
+    contactType: props`contactType`,
+    data: state[props`bind`],
+    onBlur: props`onBlur`,
     updateFormValueAndSecondaryContactInfoSequence:
       sequences.updateFormValueAndSecondaryContactInfoSequence,
     validationErrors: state.validationErrors,
