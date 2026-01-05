@@ -169,3 +169,16 @@
 
   /* --spacing: 4px; */
 }
+
+/* Font face */
+@font-face {
+  font-family: 'Noto Serif';
+  font-style: normal;
+  font-weight: 700;
+  src: url('fonts/noto-serif-jp/noto-serif-jp-v4-latin-700.woff2') format('woff2');
+}
+
+/* Custom utility */
+.font-noto-serif {
+  font-family: 'Noto Serif', serif;
+}
