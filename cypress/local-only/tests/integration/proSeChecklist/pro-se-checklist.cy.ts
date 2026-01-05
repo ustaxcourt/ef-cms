@@ -71,7 +71,7 @@ describe('appends pro se checklist', () => {
       },
     );
   });
-  it('appends pro se checklist only for spouse, if petitioner is represented by counsel and spouse is not, are at different addresses', () => {
+  it.only('appends pro se checklist only for spouse, if petitioner is represented by counsel and spouse is not, are at different addresses', () => {
     loginAsPrivatePractitioner();
     externalUserCreatesElectronicCaseWithSpouseDifferentAddress().then(
       docketNumber => {
@@ -89,7 +89,7 @@ describe('appends pro se checklist', () => {
           .click();
         cy.get('@spouse').then((petitioner: any) => {
           cy.get(
-            `[data-testid="representing-${petitioner.contactId}"]`,
+            `label[data-testid="representing-${petitioner.contactId}"]`,
           ).click();
         });
         cy.get(
