@@ -1,4 +1,5 @@
-import { Button as DawsonUiButton } from '@web-client/dawson-ui/ui/button';
+import { Button } from '@web-client/dawson-ui/ui/button';
+import { ButtonSmall } from '@web-client/dawson-ui/ui/buttonSmall';
 import { InfoNotificationComponent } from '@web-client/views/InfoNotification';
 import { SuccessNotification } from '@web-client/views/SuccessNotification';
 import { WarningNotification } from '@web-client/views/WarningNotification';
@@ -59,17 +60,17 @@ export const Login = connect(
                 />
               </div>
 
-              <div className="grid-container bg-white tw:p-12 border border-base-lighter login tw:rounded-2xl tw:max-[33.75rem]:rounded-none">
+              <div className="grid-container bg-white tw:xs:p-12 tw:px-3 tw:py-8 border border-base-lighter login tw:rounded-2xl tw:max-[33.75rem]:rounded-none">
                 <div className="display-flex flex-column">
                   <div className="flex-align-center">
                     <h1
-                      className="tw:mb-0 tw:font-bold tw:font-['Noto_Serif_JP'] inherit-body-font-family tw:xs:text-[2rem] tw:text-[1.5rem]"
+                      className=" tw:xs:mb-12 tw:mb-8  tw:font-noto-serif tw:font-bold tw:xs:text-[2rem] tw:text-[1.5rem]"
                       data-testid="login-header"
                     >
                       Log in to DAWSON
                     </h1>
                     <form
-                      className="usa-form tw:mt-8 max-width-unset"
+                      className="usa-form max-width-unset"
                       onSubmit={e => {
                         e.preventDefault();
                         submitLoginSequence();
@@ -105,13 +106,13 @@ export const Login = connect(
                           });
                         }}
                       />
-                      <div className="tw:mt-2 tw:text-right">
-                        <DawsonUiButton
+                      <div className="tw:mt-2 tw:flex tw:w-full">
+                        <ButtonSmall
                           variant="primaryTertiary"
                           type="button"
                           data-hide-text="Hide password"
                           data-show-text="Show password"
-                          className="tw:text-base"
+                          className="tw:text-base tw:ml-auto tw:w-auto"
                           onClick={() =>
                             toggleShowPasswordSequence({
                               passwordType: 'showPassword',
@@ -119,40 +120,45 @@ export const Login = connect(
                           }
                         >
                           {showPassword ? 'Hide password' : 'Show password'}
-                        </DawsonUiButton>
+                        </ButtonSmall>
                       </div>
-                      <div className="tw:mt-3 tw:mb-4">
-                        <DawsonUiButton
+                      <div className="tw:mt-3 tw:xs:mb-8 tw:mb-5">
+                        <Button
                           aria-label="Login"
                           data-testid="login-button"
                           variant="primary"
                         >
                           Log in
-                        </DawsonUiButton>
+                        </Button>
                       </div>
                     </form>
-                    <div className="tw:my-4">
-                      <DawsonUiButton
+                    <div className="tw:xs:mb-8 tw:mb-5 tw:flex tw:w-full">
+                      <Button
                         aria-label="Forgot password"
                         variant="primaryTertiary"
                         data-testid="forgot-password-button"
+                        className="tw:mr-auto tw:w-auto"
                         onClick={() => navigateToForgotPasswordSequence()}
                       >
                         Forgot password?
-                      </DawsonUiButton>
+                      </Button>
                     </div>
-                    <div>Don&apos;t have an account? </div>
-                    <DawsonUiButton
-                      className="tw:block tw:pt-0 tw:pl-0 tw:mt-2"
-                      variant="primaryTertiary"
-                      type="button"
-                      onClick={e => {
-                        e.preventDefault();
-                        navigateToCreatePetitionerAccountSequence();
-                      }}
-                    >
-                      Create your account now.
-                    </DawsonUiButton>
+                    <div className="'tw:text-4 tw:xs:text-[18px]">
+                      Don&apos;t have an account?{' '}
+                    </div>
+                    <div className="tw:mt-2 tw:flex tw:w-full">
+                      <Button
+                        className="tw:pt-0 tw:pl-0 tw:mr-auto tw:w-auto"
+                        variant="primaryTertiary"
+                        type="button"
+                        onClick={e => {
+                          e.preventDefault();
+                          navigateToCreatePetitionerAccountSequence();
+                        }}
+                      >
+                        Create your account now.
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </div>
