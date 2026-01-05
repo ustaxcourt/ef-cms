@@ -4,7 +4,13 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const ArchiveDraftDocumentModal = connect(
+type ArchiveDraftDocumentModalProps = {
+  message?: string;
+  showDocumentTitle?: boolean;
+  title?: string;
+}
+
+export const ArchiveDraftDocumentModal: React.FC<ArchiveDraftDocumentModalProps> = connect(
   {
     archiveDraftDocument: state.archiveDraftDocument,
     cancelSequence: sequences.dismissModalSequence,

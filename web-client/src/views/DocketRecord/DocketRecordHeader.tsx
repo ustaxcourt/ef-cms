@@ -18,9 +18,7 @@ export const DocketRecordMobileHeader = ({
 }: {
   docketNumber: string;
   filterOptions: Record<string, string>;
-  gotoPrintableDocketRecordSequence: (options: {
-    docketNumber: string;
-  }) => void;
+  gotoPrintableDocketRecordSequence: Function;
   docketRecordTableSortData: {
     sortField: string;
     sortOrder: 'asc' | 'desc';
@@ -114,6 +112,9 @@ export const NonMobileHeaderControls = ({
   filterOptions,
 }: {
   filterOptions: Record<string, string>;
+  docketNumber?: any;
+  sessionMetadata?: any;
+  updateSessionMetadataSequence?: (props: { key: string; value: string }) => void;
 }) => {
   return (
     <>
