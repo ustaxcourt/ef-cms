@@ -121,7 +121,7 @@ describe('Docket Clerk Multi-Dockets a Court Issued Order in a Consolidated Grou
         formattedContactType: 'Petitioner',
       }),
     ]);
-    expect(modalHelper.canFileAcrossGroup).toEqual(true);
+    expect(modalHelper.shouldAllowMultiDocketing).toEqual(true);
 
     await cerebralTest.runSequence(
       'fileAndServeCourtIssuedDocumentFromDocketEntrySequence',

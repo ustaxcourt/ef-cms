@@ -33,7 +33,7 @@ export const ConfirmInitiateServiceModal: React.FC<ConfirmInitiateServiceModalPr
       cancelSequence: Function;
       confirmInitiateServiceModalHelper: {
         additionalServedCases: { docketNumber: string; caseTitle: string }[];
-        showCheckboxes: boolean;
+        shouldAllowMultiDocketing: boolean;
         confirmationText: string;
         contactsNeedingPaperService?: ContactsNeedingPaperService;
         paperFilingText: string;
@@ -103,7 +103,7 @@ export const ConfirmInitiateServiceModal: React.FC<ConfirmInitiateServiceModalPr
                     {confirmInitiateServiceModalHelper.contactsNeedingPaperService.map(
                       contact => (
                         <span key={`${contact.docketNumber}-${contact.name}`}>
-                          {confirmInitiateServiceModalHelper.showCheckboxes &&
+                          {confirmInitiateServiceModalHelper.shouldAllowMultiDocketing &&
                             `${contact.docketNumber} - `}
                           {contact.name}, {contact.formattedContactType}
                           <br />
@@ -117,7 +117,7 @@ export const ConfirmInitiateServiceModal: React.FC<ConfirmInitiateServiceModalPr
               scrollToTop={false}
             />
           )}
-          {confirmInitiateServiceModalHelper.showCheckboxes && (
+          {confirmInitiateServiceModalHelper.shouldAllowMultiDocketing && (
             <ConsolidatedCasesCheckboxes />
           )}
         </ModalDialog>

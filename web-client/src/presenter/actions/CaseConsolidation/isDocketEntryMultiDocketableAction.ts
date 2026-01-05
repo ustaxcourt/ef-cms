@@ -8,14 +8,24 @@ export const isDocketEntryMultiDocketableAction = ({
 }: ActionProps) => {
   const caseDetail = get(state.caseDetail);
   const docketEntryId = get(state.docketEntryId);
-  let { eventCode, multiDocketedOn, processingStatus } = get(state.form);
+  let {
+    eventCode,
+    multiDocketedOn,
+    multiDocketedOriginalDocketNumber,
+    processingStatus,
+  } = get(state.form);
 
   if (!eventCode) {
     const docketEntry = caseDetail.docketEntries.find(
       doc => doc.docketEntryId === docketEntryId,
     );
     if (docketEntry) {
-      ({ eventCode, multiDocketedOn, processingStatus } = docketEntry);
+      ({
+        eventCode,
+        multiDocketedOn,
+        multiDocketedOriginalDocketNumber,
+        processingStatus,
+      } = docketEntry);
     }
   }
 
@@ -24,6 +34,7 @@ export const isDocketEntryMultiDocketableAction = ({
   const checkAllTheCheckboxes = shouldAllowMultiDocket({
     eventCode,
     multiDocketedOn,
+    multiDocketedOriginalDocketNumber,
     processingStatus,
     isLead,
   });

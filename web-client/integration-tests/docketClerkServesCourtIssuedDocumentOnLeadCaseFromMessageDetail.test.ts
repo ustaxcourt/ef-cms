@@ -216,7 +216,7 @@ describe('Docket Clerk Serves Paper Filed Document On Lead Case From Message Det
       },
     );
 
-    expect(modalHelper.showCheckboxes).toBe(true);
+    expect(modalHelper.shouldAllowMultiDocketing).toBe(true);
     expect(cerebralTest.getState('modal.showModal')).toBe(
       'ConfirmInitiateCourtIssuedFilingServiceModal',
     );

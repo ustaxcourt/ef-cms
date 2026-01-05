@@ -5,7 +5,6 @@ import {
   NON_MULTI_DOCKETABLE_EVENT_CODES,
   SERVICE_INDICATOR_TYPES,
   ROLES,
-  DOCUMENT_PROCESSING_STATUS_OPTIONS,
 } from '@shared/business/entities/EntityConstants';
 import { isLeadCase } from '@shared/business/entities/cases/Case';
 
@@ -18,7 +17,7 @@ export type ContactsNeedingPaperService = {
 export const confirmInitiateServiceModalHelper = (
   get: Get,
 ): {
-  showCheckboxes: boolean;
+  shouldAllowMultiDocketing: boolean;
   confirmationText: string;
   paperFilingText: string;
   additionalServedCases: { docketNumber: string; caseTitle: string }[];
@@ -27,21 +26,32 @@ export const confirmInitiateServiceModalHelper = (
   const docketEntryId = get(state.docketEntryId);
   const formattedCaseDetail = get(state.formattedCaseDetail);
   const form = get(state.form);
-  let { eventCode, multiDocketedOn, processingStatus } = form;
+  let {
+    eventCode,
+    multiDocketedOn,
+    multiDocketedOriginalDocketNumber,
+    processingStatus,
+  } = form;
 
   const currentDocketEntry = formattedCaseDetail.docketEntries.find(
     doc => doc.docketEntryId === docketEntryId,
   );
 
   if (!eventCode) {
-    ({ eventCode, multiDocketedOn, processingStatus } = currentDocketEntry);
+    ({
+      eventCode,
+      multiDocketedOn,
+      multiDocketedOriginalDocketNumber,
+      processingStatus,
+    } = currentDocketEntry);
   }
 
   const isLead = isLeadCase(formattedCaseDetail);
 
-  const showCheckboxes = shouldAllowMultiDocket({
+  const shouldAllowMultiDocketing = shouldAllowMultiDocket({
     eventCode,
     multiDocketedOn,
+    multiDocketedOriginalDocketNumber,
     processingStatus,
     isLead,
   });
@@ -55,7 +65,7 @@ export const confirmInitiateServiceModalHelper = (
   let additionalServedCases: { docketNumber: string; caseTitle: string }[] = [];
   let casesToIterateOver: any[] = [];
 
-  if (showCheckboxes) {
+  if (shouldAllowMultiDocketing) {
     additionalServedCases = formattedCaseDetail.consolidatedCases
       .filter(c => checkedCases.includes(c.docketNumber))
       .filter(c => c.docketNumber !== formattedCaseDetail.docketNumber)
@@ -101,16 +111,16 @@ export const confirmInitiateServiceModalHelper = (
       });
   }
 
-  const paperFilingText = showCheckboxes
+  const paperFilingText = shouldAllowMultiDocketing
     ? 'Paper service is required for these parties:'
     : 'This case has parties receiving paper service:';
 
-  const confirmationText = showCheckboxes
+  const confirmationText = shouldAllowMultiDocketing
     ? 'The following document will be served on all parties in selected cases:'
     : 'The following document will be served on all parties:';
 
   return {
-    showCheckboxes,
+    shouldAllowMultiDocketing,
     confirmationText,
     paperFilingText,
     additionalServedCases,
@@ -134,12 +144,15 @@ const roleToDisplay = party => {
 export const shouldAllowMultiDocket = ({
   eventCode,
   multiDocketedOn,
+  multiDocketedOriginalDocketNumber,
   processingStatus,
   isLead,
 }) => {
-  const wasFiledExternallyButNotServed = processingStatus
-    ? processingStatus === DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE
-    : false;
+  const isSavedForLater =
+    !multiDocketedOriginalDocketNumber && !!processingStatus;
+
+  const isBeingFiledOrServed =
+    !multiDocketedOriginalDocketNumber && !processingStatus;
 
   const isMultiDocketed = multiDocketedOn?.length > 1;
 
@@ -148,7 +161,7 @@ export const shouldAllowMultiDocket = ({
 
   let shouldAllowMultiDocket = isLead && isMultiDocketableEvent;
 
-  if (wasFiledExternallyButNotServed && !isMultiDocketed) {
+  if (!isSavedForLater && !isMultiDocketed && !isBeingFiledOrServed) {
     shouldAllowMultiDocket = false;
   }
 
