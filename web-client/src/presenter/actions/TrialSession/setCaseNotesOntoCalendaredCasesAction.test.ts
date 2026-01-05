@@ -31,4 +31,30 @@ describe('setCaseNotesOntoCalendaredCasesAction', () => {
       },
     ]);
   });
+
+  it('should skip notes when no matching calendared case is found', async () => {
+    const result = await runAction(setCaseNotesOntoCalendaredCasesAction, {
+      props: {
+        notes: [
+          {
+            docketNumber: '999-99',
+            note: 'this case does not exist',
+            userId: 'user-id-123',
+          },
+        ],
+      },
+      state: {
+        trialSession: {
+          calendaredCases: [{ docketNumber: '123-45' }],
+        },
+      },
+    });
+
+    expect(result.state.trialSession.calendaredCases).toMatchObject([
+      {
+        docketNumber: '123-45',
+      },
+    ]);
+    expect(result.state.trialSession.calendaredCases[0].notes).toBeUndefined();
+  });
 });

@@ -59,7 +59,7 @@ export const prepareDateFromEST = (dateString: string, inputFormat: string) => {
   const result = DateTime.fromFormat(dateString, inputFormat, {
     zone: USTC_TZ,
   })
-    .setZone(0)
+    .setZone('utc')
     .toISO();
 
   return result;
@@ -245,7 +245,7 @@ export const createEndOfDayISO = (params?: {
       )
     : DateTime.now().setZone(USTC_TZ);
 
-  return dateObject.endOf('day').setZone('utc').toISO();
+  return dateObject.endOf('day').setZone('utc').toISO() || '';
 };
 
 export const createStartOfDayISO = (params?: {
@@ -264,7 +264,7 @@ export const createStartOfDayISO = (params?: {
       )
     : DateTime.now().setZone(USTC_TZ);
 
-  return dateObject.startOf('day').setZone('utc').toISO();
+  return dateObject.startOf('day').setZone('utc').toISO() || '';
 };
 
 // expects a date string like 2025-09-18
@@ -780,4 +780,8 @@ export const roundDateDownToNearestHour = (isoDateString: string) => {
   formattedDate.setSeconds(0);
   formattedDate.setMilliseconds(0);
   return formattedDate;
+};
+
+export const getCurrentDateTimeInMillis = (): number => {
+  return Number(formatNow(FORMATS.UNIX_TIMESTAMP_MS));
 };

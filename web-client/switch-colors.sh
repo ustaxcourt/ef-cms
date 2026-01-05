@@ -7,8 +7,6 @@
 [ -z "${DEPLOYING_COLOR}" ] && echo "You must have DEPLOYING_COLOR set in your environment" && exit 1
 [ -z "${EFCMS_DOMAIN}" ] && echo "You must have EFCMS_DOMAIN set in your environment" && exit 1
 
-MIGRATE_FLAG=$(./scripts/migration/get-migrate-flag.sh "${ENV}")
-
 # disabling aws pager https://github.com/aws/aws-cli/pull/4702#issue-344978525
 export AWS_PAGER=""
 # disable pager to newer cli version
@@ -16,17 +14,6 @@ export PAGER=""
 
 # exit on any failure
 set -eo pipefail
-
-# turn off the old stream if we are not doing a migration so we do not
-# have 2 streams processing the same stuff
-if [[ "${MIGRATE_FLAG}" == "false" ]]; then
-  UUID=$(aws lambda list-event-source-mappings --function-name "arn:aws:lambda:us-east-1:${AWS_ACCOUNT_ID}:function:streams_${ENV}_${CURRENT_COLOR}" --region us-east-1 | jq -r ".EventSourceMappings[0].UUID")
-  aws lambda update-event-source-mapping --uuid "${UUID}" --region us-east-1 --no-enabled
-fi
-
-# explicitly turn on deploying color stream, just in case
-UUID=$(aws lambda list-event-source-mappings --function-name "arn:aws:lambda:us-east-1:${AWS_ACCOUNT_ID}:function:streams_${ENV}_${DEPLOYING_COLOR}" --region us-east-1 | jq -r ".EventSourceMappings[0].UUID")
-aws lambda update-event-source-mapping --uuid "${UUID}" --region us-east-1 --enabled
 
 # Enable traffic on the deploying color
 ./web-api/terraform/bin/edit-lambda-environment.sh -l "api_async_${ENV}_${DEPLOYING_COLOR}" -k DISABLE_HTTP_TRAFFIC -v false
@@ -44,20 +31,3 @@ npx ts-node --transpile-only ./web-api/switch-bounce-handler-colors.ts
 ./web-api/terraform/bin/edit-lambda-environment.sh -l "api_public_${ENV}_${CURRENT_COLOR}" -k DISABLE_HTTP_TRAFFIC -v true
 
 aws ssm put-parameter --region us-east-1 --name "/DAWSON/${ENV}/current-color" --value "${DEPLOYING_COLOR}" --type "String" --overwrite
-
-# check if both streams are disabled
-UUID=$(aws lambda list-event-source-mappings --function-name "arn:aws:lambda:us-east-1:${AWS_ACCOUNT_ID}:function:streams_${ENV}_${CURRENT_COLOR}" --region us-east-1 | jq -r ".EventSourceMappings[0].UUID")
-CURRENT_STATE=$(aws lambda get-event-source-mapping --uuid "${UUID}" --region us-east-1 | jq ".State")
-
-UUID=$(aws lambda list-event-source-mappings --function-name "arn:aws:lambda:us-east-1:${AWS_ACCOUNT_ID}:function:streams_${ENV}_${DEPLOYING_COLOR}" --region us-east-1 | jq -r ".EventSourceMappings[0].UUID")
-DEPLOYING_STATE=$(aws lambda get-event-source-mapping --uuid "${UUID}" --region us-east-1 | jq ".State")
-
-echo "CURRENT COLOR dynamodb stream is currently ${CURRENT_STATE}";
-echo "DEPLOYING COLOR dynamodb stream is currently ${DEPLOYING_STATE}";
-
-if [[ "${CURRENT_STATE}" == "\"Disabled\"" && "${DEPLOYING_STATE}" == "\"Disabled\"" ]]; then
-  echo "ERROR"
-  echo "ERROR: Both streams were disabled!  Something went wrong when switching colors!"
-  echo "ERROR"
-  exit 1;
-fi

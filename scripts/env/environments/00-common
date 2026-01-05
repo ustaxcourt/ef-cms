@@ -57,7 +57,6 @@ RUM_IDENTITY_POOL_ID=$(aws rum get-app-monitor \
   echo "DB_HOST='${DB_HOST}'"
   echo "DB_NAME='${ENV}_dawson'"
   echo "DB_USER='${ENV}_developers'"
-  echo "DYNAMODB_TABLE_NAME='${SOURCE_TABLE}'"
   echo "ELASTICSEARCH_ENDPOINT='${ELASTICSEARCH_ENDPOINT}'"
   echo "EMAIL_CHANGE_VERIFICATION_TEMPLATE='email_change_verification_${ENV}'"
   echo "EMAIL_DOCUMENT_SERVED_TEMPLATE='document_served_${ENV}'"

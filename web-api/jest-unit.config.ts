@@ -29,7 +29,6 @@ const config: Config = {
     '!src/persistence/sqs/deleteMessage.ts',
     '!src/persistence/sqs/getMessages.ts',
     '!src/persistence/messages/*.ts',
-    '!src/persistence/dynamo/**/*.ts',
     '!src/persistence/postgres/**/*.ts',
     '!src/lambdas/websockets/websockets.ts',
     '!src/lambdas/websockets/switch-colors-cron.ts',
@@ -68,7 +67,7 @@ const config: Config = {
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
-  transformIgnorePatterns: ['node_modules/(?!(uuid)/)'],
+  transformIgnorePatterns: ['node_modules/(?!(uuid|p-queue|p-timeout)/)'],
   verbose: false,
   setupFilesAfterEnv: [
     '<rootDir>/src/persistence/postgres/featureFlag/mocks.jest.ts',

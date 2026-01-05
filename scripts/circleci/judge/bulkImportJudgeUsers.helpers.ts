@@ -5,7 +5,6 @@ import { createOrUpdateUser } from '../../../shared/admin-tools/user/admin';
 import { environment } from '@web-api/environment';
 import { gatherRecords, getCsvOptions } from '@shared/tools/helpers';
 import {
-  getDestinationTableInfo,
   getUserPoolId,
 } from '../../../shared/admin-tools/util';
 import { parse } from 'csv-parse';
@@ -29,9 +28,7 @@ export const init = async () => {
   const filePath = './scripts/circleci/judge/judge_users.csv';
   const csvOptions = getCsvOptions(CSV_HEADERS);
   const userPoolId = await getUserPoolId();
-  const { tableName } = await getDestinationTableInfo();
   environment.userPoolId = userPoolId;
-  environment.dynamoDbTableName = tableName;
   const applicationContext = createApplicationContext({});
 
   const output: RawUser[] = [];

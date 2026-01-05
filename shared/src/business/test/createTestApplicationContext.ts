@@ -42,7 +42,6 @@ import {
 } from '@shared/business/utilities/sortFunctions';
 import { copyPagesAndAppendToTargetPdf } from '@shared/business/utilities/copyPagesAndAppendToTargetPdf';
 import { createCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/createCaseAndAssociations';
-import { createMockDocumentClient } from './createMockDocumentClient';
 import { documentUrlTranslator } from '@web-api/utilities/documentUrlTranslator';
 import { filterEmptyStrings } from '@shared/business/utilities/filterEmptyStrings';
 import { formatAttachments } from '@shared/business/utilities/formatAttachments';
@@ -82,7 +81,6 @@ import { getSealedDocketEntryTooltip } from '@shared/business/utilities/getSeale
 import { getStampBoxCoordinates } from '@shared/business/utilities/getStampBoxCoordinates';
 import { getTextByCount } from '@shared/test/getTextByCount';
 import { getUserIdForNote } from '@web-api/business/useCaseHelper/getUserIdForNote';
-import { incrementCounter } from '@web-api/persistence/dynamo/helpers/incrementCounter';
 import { removeCounselFromRemovedPetitioner } from '@web-api/business/useCaseHelper/caseAssociation/removeCounselFromRemovedPetitioner';
 import { removeItem } from '@web-client/persistence/localStorage/removeItem';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
@@ -453,7 +451,6 @@ export const createTestApplicationContext = () => {
     getTrialSessionProcessingStatus: jest.fn(),
     getUserCaseMappingsByDocketNumber: jest.fn().mockReturnValue([]),
     getWorkItemsByDocketNumber: jest.fn().mockReturnValue([]),
-    incrementCounter,
     isEmailAvailable: jest.fn(),
     isFileExists: jest.fn(),
     persistUser: jest.fn(),
@@ -481,8 +478,6 @@ export const createTestApplicationContext = () => {
     }),
   };
 
-  const mockDocumentClient = createMockDocumentClient();
-
   const mockCreateDocketNumberGenerator = {
     createDocketNumber: jest.fn().mockImplementation(generateDocketNumber),
   };
@@ -508,7 +503,6 @@ export const createTestApplicationContext = () => {
     environment: {
       appEndpoint: 'localhost:1234',
       cognitoClientId: 'bvjrggnd3co403c0aahscinne',
-      dynamoDbTableName: 'efcms-local',
       stage: 'local',
       tempDocumentsBucketName: 'MockDocumentBucketName',
       userPoolId: 'local_2pHzece7',
@@ -539,7 +533,6 @@ export const createTestApplicationContext = () => {
       sendNotificationOfSealing: jest.fn(),
       sendSlackNotification: jest.fn(),
     }),
-    getDocumentClient: jest.fn().mockImplementation(() => mockDocumentClient),
     getDocumentGenerators: jest
       .fn()
       .mockReturnValue(getDocumentGeneratorsReturnMock),

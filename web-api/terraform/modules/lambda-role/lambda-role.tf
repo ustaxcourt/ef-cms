@@ -138,27 +138,6 @@ resource "aws_iam_role_policy" "lambda_policy" {
         },
         {
             "Action": [
-                "dynamodb:BatchGetItem",
-                "dynamodb:BatchWriteItem",
-                "dynamodb:DeleteItem",
-                "dynamodb:DescribeStream",
-                "dynamodb:DescribeTable",
-                "dynamodb:GetItem",
-                "dynamodb:GetRecords",
-                "dynamodb:GetShardIterator",
-                "dynamodb:ListStreams",
-                "dynamodb:PutItem",
-                "dynamodb:Query",
-                "dynamodb:UpdateItem"
-            ],
-            "Resource": [
-                "arn:aws:dynamodb:us-east-1:${data.aws_caller_identity.current.account_id}:table/efcms-${var.environment}-*",
-                "arn:aws:dynamodb:us-west-1:${data.aws_caller_identity.current.account_id}:table/efcms-${var.environment}-*"
-            ],
-            "Effect": "Allow"
-        },
-        {
-            "Action": [
                 "ses:SendBulkTemplatedEmail",
                 "ses:SendEmail"
             ],

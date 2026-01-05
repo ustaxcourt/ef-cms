@@ -26,7 +26,10 @@ import { todaysOrdersHelper } from './computeds/Public/todaysOrdersHelper';
 type PublicAdvancedSearchForm = { caseSearchByName: { petitionerName: string }; opinionSearch?: Record<string, boolean>; orderSearch?: Record<string, boolean> };
 
 const computeds = {
-  advancedDocumentSearchHelper,
+  advancedDocumentSearchHelper:
+    advancedDocumentSearchHelper as unknown as ReturnType<
+      typeof advancedDocumentSearchHelper
+    >,
   advancedSearchHelper,
   alertHelper: publicAlertHelper,
   caseSearchByNameHelper,
