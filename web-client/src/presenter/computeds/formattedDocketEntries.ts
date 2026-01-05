@@ -179,13 +179,14 @@ export const getFormattedDocketEntry = ({
             visibilityPolicyDateFormatted,
           );
 
-        affectedEntry.docketEntryIndex = index;
-        affectedEntry.showDocumentViewerLink = showDocumentViewerLink;
-        affectedEntry.showDownloadLink = showDownloadLink;
-        affectedEntry.disposition =
-          MOTION_DISPOSITION_VERBIAGE[affectedEntry.disposition].MOTION;
-
-        return affectedEntry;
+        return {
+          ...affectedEntry,
+          docketEntryIndex: index,
+          showDocumentViewerLink,
+          showDownloadLink,
+          disposition:
+            MOTION_DISPOSITION_VERBIAGE[affectedEntry.disposition].MOTION,
+        };
       }),
     );
   }
@@ -204,13 +205,14 @@ export const getFormattedDocketEntry = ({
             visibilityPolicyDateFormatted,
           );
 
-        affectedEntry.docketEntryIndex = index;
-        affectedEntry.showDocumentViewerLink = showDocumentViewerLink;
-        affectedEntry.showDownloadLink = showDownloadLink;
-        affectedEntry.disposition =
-          MOTION_DISPOSITION_VERBIAGE[affectedEntry.disposition].ORDER;
-
-        return affectedEntry;
+        return {
+          ...affectedEntry,
+          docketEntryIndex: index,
+          showDocumentViewerLink,
+          showDownloadLink,
+          disposition:
+            MOTION_DISPOSITION_VERBIAGE[affectedEntry.disposition].ORDER,
+        };
       }),
     );
   }
