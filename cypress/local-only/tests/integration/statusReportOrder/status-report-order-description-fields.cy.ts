@@ -108,7 +108,7 @@ describe('should default status report order descriptions', () => {
     );
     cy.get('[data-testid="document-description-input"]').should(
       'have.value',
-      `. Parties by ${today} shall file a status report. Case is stricken from the current trial session.`,
+      `Order - . Parties by ${today} shall file a status report. Case is stricken from the current trial session.`,
     );
     cy.get('[data-testid="judge-select"]').should('have.value', 'Colvin');
     cy.get('[data-testid="docket-entry-preview-text"]').should(
