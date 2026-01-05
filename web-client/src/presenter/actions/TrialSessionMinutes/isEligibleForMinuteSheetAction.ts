@@ -8,7 +8,6 @@ export const isEligibleForMinuteSheetAction = ({ get, path, store }) => {
   const aCase = get(state.caseDetail);
   const trialSession = get(state.trialSession);
 
-  // Check if case is in the trial session's caseOrder (scheduled case)
   const caseOrderEntry = trialSession.caseOrder?.find(
     caseOrder => caseOrder.docketNumber === aCase.docketNumber,
   );
@@ -16,7 +15,6 @@ export const isEligibleForMinuteSheetAction = ({ get, path, store }) => {
   const isScheduledCase = !!caseOrderEntry;
 
   if (isScheduledCase) {
-    // For scheduled cases, use existing logic
     const isEligibleForMinuteSheet = caseIsEligibleForMinuteSheet(
       {
         ...caseOrderEntry,
@@ -32,7 +30,6 @@ export const isEligibleForMinuteSheetAction = ({ get, path, store }) => {
     return path.no();
   }
 
-  // For unscheduled cases, check eligibility without caseOrder-specific checks
   const isEligibleUnscheduledCase = isEligibleUnscheduledCaseForMinuteSheet(
     aCase,
     trialSession,

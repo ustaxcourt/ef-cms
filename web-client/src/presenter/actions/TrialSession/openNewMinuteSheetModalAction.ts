@@ -28,7 +28,6 @@ export const openNewMinuteSheetModalAction = async ({
 
     store.set(state.modal.editUnscheduledMinutesList, unscheduledMinuteSheets);
   } catch (error) {
-    // If fetching fails, just set an empty list - don't block opening the modal
     store.set(state.modal.editUnscheduledMinutesList, []);
   }
 };

@@ -23,12 +23,10 @@ export const searchNewMinuteSheetCaseAction = async ({
     return path.success({ caseInfo: result });
   } catch (error: any) {
     if (error.responseCode === 400) {
-      // Case is already on this trial session
       return path.caseAlreadyOnTrialSession({
         errorType: 'caseAlreadyOnTrialSession',
       });
     }
-    // Case not found or other error
     return path.error({ errorType: 'noResultsFound' });
   }
 };

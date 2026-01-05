@@ -24,11 +24,9 @@ export const newMinuteSheetModalHelper = (
   const trialSession = get(state.trialSession);
   const trialSessionId = trialSession?.trialSessionId || '';
 
-  // Get list of previously edited unscheduled minute sheets from state
   const editUnscheduledMinutesList =
     get(state.modal.editUnscheduledMinutesList) || [];
 
-  // Show case confirmation only if we have case info and it's not already on the trial session
   const showCaseConfirmation =
     hasSearched && !!caseInfo && !noResultsFound && !isCaseAlreadyOnTrialSession;
 

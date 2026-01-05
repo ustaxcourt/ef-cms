@@ -24,16 +24,14 @@ describe('validateCaseForNewMinuteSheetInteractor', () => {
 
   const mockTrialSessionId = MOCK_TRIAL_REGULAR.trialSessionId!;
 
-  // Create a mock trial session WITHOUT the test case in caseOrder (for testing unscheduled cases)
   const mockTrialSessionWithoutCase = {
     ...MOCK_TRIAL_REGULAR,
-    caseOrder: [], // Empty caseOrder means case is NOT on the session
+    caseOrder: [],
   };
 
   beforeEach(() => {
     jest.clearAllMocks();
     getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
-    // Default to trial session without the case (for unscheduled case testing)
     getTrialSessionById.mockResolvedValue(mockTrialSessionWithoutCase);
     getConsolidatedCases.mockResolvedValue([]);
   });
@@ -99,7 +97,6 @@ describe('validateCaseForNewMinuteSheetInteractor', () => {
   });
 
   it('should throw InvalidRequest when case is already calendared on the trial session', async () => {
-    // Set up trial session WITH the case in caseOrder (case IS on the session)
     getTrialSessionById.mockResolvedValue({
       ...MOCK_TRIAL_REGULAR,
       caseOrder: [
@@ -135,7 +132,6 @@ describe('validateCaseForNewMinuteSheetInteractor', () => {
   });
 
   it('should return case info when case is valid and NOT on the trial session (unscheduled case)', async () => {
-    // Default mock has empty caseOrder (case NOT on session)
     const result = await validateCaseForNewMinuteSheetInteractor(
       {
         docketNumber: MOCK_CASE.docketNumber,
