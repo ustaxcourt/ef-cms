@@ -64,7 +64,14 @@ const scanBatchPreviewerDeps = {
   validationErrors: state.validationErrors,
 };
 
-export const ScanBatchPreviewer = connect(
+type ScanBatchPreviewerProps = {
+  documentType: string | null;
+  documentTabs?: any;
+  title: string;
+  validateSequence: Function;
+}
+
+export const ScanBatchPreviewer: React.FC<ScanBatchPreviewerProps> = connect(
   scanBatchPreviewerDeps,
   function ScanBatchPreviewer({
     constants,
