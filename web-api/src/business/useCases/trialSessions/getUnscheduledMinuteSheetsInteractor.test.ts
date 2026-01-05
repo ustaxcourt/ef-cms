@@ -70,7 +70,7 @@ describe('getUnscheduledMinuteSheetsInteractor', () => {
       ...MOCK_TRIAL_REGULAR,
       caseOrder: [
         {
-          docketNumber: '100-20', // This case IS on the calendar
+          docketNumber: '100-20',
           isHearing: false,
           isManuallyAdded: false,
           removedFromTrial: false,
@@ -79,8 +79,8 @@ describe('getUnscheduledMinuteSheetsInteractor', () => {
     });
 
     getMinuteSheetsByTrialSession.mockResolvedValue([
-      { docketNumber: '100-20', trialSessionId: mockTrialSessionId, content: {} as any }, // Scheduled
-      { docketNumber: unscheduledDocketNumber, trialSessionId: mockTrialSessionId, content: {} as any }, // Unscheduled
+      { docketNumber: '100-20', trialSessionId: mockTrialSessionId, content: {} as any },
+      { docketNumber: unscheduledDocketNumber, trialSessionId: mockTrialSessionId, content: {} as any },
     ]);
 
     getCaseByDocketNumber.mockResolvedValue({
@@ -109,7 +109,6 @@ describe('getUnscheduledMinuteSheetsInteractor', () => {
       { docketNumber: '200-20', trialSessionId: mockTrialSessionId, content: {} as any },
     ]);
 
-    // First case exists, second does not
     getCaseByDocketNumber
       .mockResolvedValueOnce({
         ...MOCK_CASE,

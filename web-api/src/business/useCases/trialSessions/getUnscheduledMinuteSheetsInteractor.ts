@@ -41,7 +41,6 @@ export const getUnscheduledMinuteSheetsInteractor = async (
 
   const trialSessionEntity = new TrialSession(trialSession);
 
-  // Get all minute sheets for this trial session
   const allMinuteSheets = await getMinuteSheetsByTrialSession({
     trialSessionId,
   });
@@ -50,14 +49,12 @@ export const getUnscheduledMinuteSheetsInteractor = async (
     return [];
   }
 
-  // Filter to only unscheduled minute sheets (cases NOT on the trial session calendar)
   const unscheduledMinuteSheets = allMinuteSheets.filter(minuteSheet => {
     return !trialSessionEntity.isCaseAlreadyCalendared({
       docketNumber: minuteSheet.docketNumber,
     });
   });
 
-  // Get case info for each unscheduled minute sheet
   const unscheduledMinuteSheetInfoPromises = unscheduledMinuteSheets.map(
     async minuteSheet => {
       const caseDetails = await getCaseByDocketNumber({
@@ -66,7 +63,6 @@ export const getUnscheduledMinuteSheetsInteractor = async (
       });
 
       if (!caseDetails) {
-        // If case no longer exists, skip it
         return null;
       }
 
@@ -83,7 +79,6 @@ export const getUnscheduledMinuteSheetsInteractor = async (
 
   const results = await Promise.all(unscheduledMinuteSheetInfoPromises);
 
-  // Filter out nulls (cases that no longer exist)
   return results.filter(
     (result): result is UnscheduledMinuteSheetInfo => result !== null,
   );

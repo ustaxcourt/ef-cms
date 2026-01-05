@@ -71,8 +71,6 @@ export const validateCaseForNewMinuteSheetInteractor = async (
   const isCaseCalendared =
     trialSessionEntity.isCaseAlreadyCalendared(caseEntity);
 
-  // For NEW minute sheets, we want cases that are NOT already on the trial session
-  // If the case IS already calendared, throw an error (use InvalidRequest for 400 status)
   if (isCaseCalendared) {
     throw new InvalidRequest(
       `Case ${formattedDocketNumber} is already associated with this trial session.`,

@@ -268,12 +268,11 @@ describe('isEligibleUnscheduledCaseForMinuteSheet', () => {
   });
 
   it('should NOT check removedFromTrialDate for unscheduled cases (since they are not calendared)', () => {
-    // Unscheduled cases should not have removedFromTrialDate checks since they were never on the calendar
     const mockCase = {
       ...MOCK_CASE,
       docketNumber: '123-45',
       leadDocketNumber: undefined,
-      removedFromTrialDate: '2020-01-01', // This should be ignored for unscheduled cases
+      removedFromTrialDate: '2020-01-01',
     };
     const mockTrialSession = {
       ...MOCK_TRIAL_REGULAR,
@@ -287,7 +286,6 @@ describe('isEligibleUnscheduledCaseForMinuteSheet', () => {
       mockTrialSession,
     );
 
-    // Should still be eligible since removedFromTrialDate is not relevant for unscheduled cases
     expect(result).toBe(true);
   });
 });
