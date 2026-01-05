@@ -40,7 +40,10 @@ export function Alerts() {
           className="tw:mb-4"
         ></AlertInfo>
       ) : (
-        <Button onClick={() => setAlert({ ...alert, info: true })}>
+        <Button
+          onClick={() => setAlert({ ...alert, info: true })}
+          variant="primary"
+        >
           Display Info Alert
         </Button>
       )}
@@ -65,6 +68,7 @@ export function Alerts() {
         <Button
           className="tw:mb-4 tw:mr-4"
           onClick={() => setAlert({ ...alert, warning: true })}
+          variant="primary"
         >
           Display Warning Alert
         </Button>
@@ -86,6 +90,7 @@ export function Alerts() {
         <Button
           onClick={() => setAlert({ ...alert, error: true })}
           className="tw:mb-4 tw:mr-4"
+          variant="primary"
         >
           Display Error Alert
         </Button>
@@ -104,6 +109,7 @@ export function Alerts() {
         <Button
           onClick={() => setAlert({ ...alert, success: true })}
           className="tw:mb-4 tw:mr-4"
+          variant="primary"
         >
           Display Success Alert
         </Button>
@@ -123,6 +129,7 @@ export function Alerts() {
       ) : (
         <Button
           onClick={() => setStaticAlerts({ ...staticAlerts, info: true })}
+          variant="primary"
         >
           Show Info Static Alert
         </Button>
@@ -141,6 +148,7 @@ export function Alerts() {
         <Button
           onClick={() => setStaticAlerts({ ...staticAlerts, warning: true })}
           className="tw:mb-4 tw:mr-4"
+          variant="primary"
         >
           Show Warning Static Alert
         </Button>
@@ -160,6 +168,7 @@ export function Alerts() {
         <Button
           onClick={() => setStaticAlerts({ ...staticAlerts, error: true })}
           className="tw:mb-4 tw:mr-4"
+          variant="primary"
         >
           Show Error Static Alert
         </Button>
@@ -178,6 +187,7 @@ export function Alerts() {
         <Button
           onClick={() => setStaticAlerts({ ...staticAlerts, success: true })}
           className="tw:mb-4 tw:mr-4"
+          variant="primary"
         >
           Show Success Static Alert
         </Button>

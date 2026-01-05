@@ -12,7 +12,6 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
-import { RawEligibleCase } from '../../entities/cases/EligibleCase';
 import { isLeadCase } from '../../entities/cases/Case';
 import { RawIrsCalendarAdministratorInfo } from '@shared/business/entities/trialSessions/IrsCalendarAdministratorInfo';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
@@ -79,7 +78,7 @@ export const formatCaseForTrialSession = ({
 }: {
   applicationContext: IApplicationContext | ClientApplicationContext;
   caseItem: CalendaredCaseItemType;
-  eligibleCases?: RawEligibleCase[];
+  eligibleCases?: CalendaredCaseItemType[];
   setFilingPartiesCode?: boolean;
 }): FormattedTrialSessionCase => {
   let removedFromTrialDateFormatted = '';

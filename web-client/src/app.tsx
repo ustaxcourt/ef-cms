@@ -121,7 +121,7 @@ import { presenter } from './presenter/presenter';
 import { socketProvider } from './providers/socket';
 import { socketRouter } from './providers/socketRouter';
 import { withAppContextDecorator } from './withAppContext';
-import App from 'cerebral';
+import App, { ModuleDefinition } from 'cerebral';
 import React from 'react';
 
 /**
@@ -264,7 +264,7 @@ const app = {
     });
     presenter.providers.socket = { start, stop };
 
-    const cerebralApp = App(presenter, {
+    const cerebralApp = App(presenter as ModuleDefinition, {
       returnSequencePromise: true,
     });
 
@@ -273,20 +273,22 @@ const app = {
     });
 
     const container = window.document.querySelector('#app');
-    const root = createRoot(container);
+    if (container) {
+      const root = createRoot(container);
 
-    root.render(
-      <Container app={cerebralApp}>
-        <>
-          <IdleActivityMonitor />
-          <AppInstanceManager />
-          <GlobalModalWrapper />
-        </>
-        <AppComponent />
+      root.render(
+        <Container app={cerebralApp}>
+          <>
+            <IdleActivityMonitor />
+            <AppInstanceManager />
+            <GlobalModalWrapper />
+          </>
+          <AppComponent />
 
-        {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
-      </Container>,
-    );
+          {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
+        </Container>,
+      );
+    }
 
     await cerebralApp.getSequence('initAppSequence')();
 

@@ -1,19 +1,21 @@
+import { formattedCaseDetail } from '@web-client/presenter/computeds/formattedCaseDetail';
 import { Button } from '../../../ustc-ui/Button/Button';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props as cerebralProps } from 'cerebral';
+import { props } from 'cerebral';
 import React from 'react';
+import { caseInformationHelper } from '@web-client/presenter/computeds/caseInformationHelper';
 
-const props = cerebralProps as unknown as {
-  caseDetail: unknown;
-  caseInformationHelper: unknown;
-  openCleanModalSequence: unknown;
+type CaseDetailsProps = {
+  caseDetail: ReturnType<typeof formattedCaseDetail>;
+  caseInformationHelper: ReturnType<typeof caseInformationHelper>;
+  openCleanModalSequence: Function;
 };
 
-export const CaseDetails = connect(
+export const CaseDetails: React.FC<CaseDetailsProps> = connect(
   {
-    caseDetail: props.caseDetail,
-    caseInformationHelper: props.caseInformationHelper,
-    openCleanModalSequence: props.openCleanModalSequence,
+    caseDetail: props`caseDetail`,
+    caseInformationHelper: props`caseInformationHelper`,
+    openCleanModalSequence: props`openCleanModalSequence`,
   },
   function CaseDetails({
     caseDetail,

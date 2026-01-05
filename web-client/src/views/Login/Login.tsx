@@ -129,6 +129,7 @@ export const Login = connect(
                         <DawsonUiButton
                           aria-label="Login"
                           data-testid="login-button"
+                          variant="primary"
                         >
                           Log in
                         </DawsonUiButton>
@@ -153,6 +154,7 @@ export const Login = connect(
                         e.preventDefault();
                         navigateToCreatePetitionerAccountSequence();
                       }}
+                      variant="primary"
                     >
                       Create your account now.
                     </Button>
