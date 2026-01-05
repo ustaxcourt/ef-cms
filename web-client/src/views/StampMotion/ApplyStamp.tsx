@@ -87,8 +87,10 @@ export const ApplyStamp = connect(
         stampApplied: true,
       });
 
-      sigEl.style.top = '500px';
-      sigEl.style.left = '148px';
+      if(sigEl) {
+        sigEl.style.top = '500px';
+        sigEl.style.left = '148px';
+      }
     };
 
     let hasStarted = false;
