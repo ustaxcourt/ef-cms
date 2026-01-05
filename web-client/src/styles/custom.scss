@@ -1693,9 +1693,15 @@ button.change-scanner-button {
 }
 
 .trial-sessions-scrollable {
-  max-height: 400px;
+  max-height: 335px;
   padding-right: 10px;
   overflow-y: auto;
+
+  @media (width <= 640px) {
+    max-height: 600px;
+    padding-right: 0;
+    overflow-y: auto;
+  }
 }
 
 .represented-text {
