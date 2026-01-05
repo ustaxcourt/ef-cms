@@ -43,7 +43,7 @@ const renderTrialSessionMobile = (
     <div
       key={session.trialSessionId}
       data-testid={`${weekType}-week-session-${session.trialSessionId}`}
-      className="margin-3"
+      className="margin-y-3 margin-x-2"
       role="listitem"
     >
       <div className="grid-row grid-gap-2">
@@ -61,11 +61,11 @@ const renderTrialSessionMobile = (
         </div>
       </div>
       <div className="grid-row grid-gap-2">
-        <div className="grid-col-12">
+        <div className="grid-col-12 margin-top-2">
           <div>
             <strong>{CLERK_OF_COURT_DASHBOARD_LABELS.FIELD_CITY}</strong>
           </div>
-          <div className="margin-top-05">
+          <div className="margin-top-05 no-wrap">
             <a
               aria-label={getTrialLocationAriaLabel(session.trialLocation)}
               data-testid={`trial-location-link-${session.trialSessionId}`}
@@ -79,7 +79,7 @@ const renderTrialSessionMobile = (
           </div>
         </div>
       </div>
-      <div className="grid-row grid-gap-2">
+      <div className="grid-row grid-gap-2 margin-top-2">
         <div className="grid-col-6">
           <div>
             <strong>
@@ -103,7 +103,7 @@ const renderTrialSessionMobile = (
         </div>
       </div>
       <div className="grid-row grid-gap-2">
-        <div className="grid-col-6">
+        <div className="grid-col-6 margin-top-2">
           <div>
             <strong>{CLERK_OF_COURT_DASHBOARD_LABELS.FIELD_JUDGE}</strong>
           </div>
@@ -114,7 +114,7 @@ const renderTrialSessionMobile = (
             )}
           </div>
         </div>
-        <div className="grid-col-6">
+        <div className="grid-col-6 margin-top-2">
           <div>
             <strong>{CLERK_OF_COURT_DASHBOARD_LABELS.FIELD_CLERK}</strong>
           </div>
@@ -150,7 +150,7 @@ const renderTrialSession = (
       <NonMobile>
         <div
           data-testid={`${weekType}-week-session-${session.trialSessionId}`}
-          className="margin-3"
+          className="margin-y-3 margin-x-2"
           role="listitem"
         >
           <div className="grid-row grid-gap-2">
@@ -174,7 +174,7 @@ const renderTrialSession = (
               <div>
                 <strong>{CLERK_OF_COURT_DASHBOARD_LABELS.FIELD_CITY}</strong>
               </div>
-              <div className="margin-top-05">
+              <div className="margin-top-05 no-wrap">
                 <a
                   aria-label={getTrialLocationAriaLabel(session.trialLocation)}
                   data-testid={`trial-location-link-${session.trialSessionId}`}
@@ -187,7 +187,7 @@ const renderTrialSession = (
             </div>
             <div className="tablet:grid-col-3"></div>
           </div>
-          <div className="grid-row grid-gap-2">
+          <div className="grid-row grid-gap-2 margin-top-2">
             <div className="tablet:grid-col-3">
               <div>
                 <strong>
