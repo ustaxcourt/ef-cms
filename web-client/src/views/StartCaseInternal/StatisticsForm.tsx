@@ -133,7 +133,7 @@ export const StatisticsForm = connect(
                   <input
                     className="usa-input usa-input-inline"
                     id={`year-${index}`}
-                    maxLength="4"
+                    maxLength={4}
                     name={`statistics.${index}.year`}
                     placeholder="YYYY"
                     value={form.statistics[index].year || ''}

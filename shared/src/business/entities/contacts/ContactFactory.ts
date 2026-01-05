@@ -164,7 +164,16 @@ export function ContactFactory({
         throw new Error(`Unrecognized party type "${partyType}"`);
       }
       return {
-        primary: {},
+        primary: {
+          address1: '',
+          city: '',
+          contactId: '',
+          contactType: '',
+          countryType: '',
+          isAddressSealed: false,
+          name: '',
+          phone: '',
+          postalCode: ''},
         secondary: null,
       };
   }

@@ -8,6 +8,7 @@ import {
   faArrowRightArrowLeft,
   faArrowUpLong,
 } from '@fortawesome/free-solid-svg-icons';
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 
 const { ASCENDING, DESCENDING } = getConstants();
 
@@ -127,7 +128,7 @@ const getFontAwesomeIcon = ({
   descText: string;
   isActiveColumn: boolean;
 }) => {
-  let fontAwesomeIcon =
+  let fontAwesomeIcon: IconDefinition =
     direction === DESCENDING ? faArrowDownLong : faArrowUpLong;
   let tooltipText = direction === ASCENDING ? ascText : descText;
 
