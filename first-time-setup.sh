@@ -119,13 +119,33 @@ brew link zlib --force
 echo "node-canvas dependencies installed!"
 
 # Docker Desktop
-echo "Installing Docker Desktop..."
-brew install --cask docker
+if ! brew list --cask docker &> /dev/null; then
+    echo "Installing/adopting Docker Desktop..."
+    brew install --cask docker --adopt
+else
+    echo "Docker Desktop already managed by brew, skipping..."
+fi
 
 echo ""
 echo "Please launch Docker Desktop from Applications and complete the setup."
 echo "Press Enter when Docker is running..."
 read -r
+
+# Chrome Install
+if ! brew list --cask google-chrome &> /dev/null; then
+    echo "Installing Chrome..."
+    brew install --cask google-chrome --adopt
+else
+    echo "Chrome already installed, skipping..."
+fi
+
+# Pop App Install
+if ! brew list --cask pop-app &> /dev/null; then
+    echo "Installing Pop (Paired Programming App)"
+    brew install --cask pop-app --adopt
+else
+    echo "Pop already installed, skipping..."
+fi
 
 # Install project dependencies
 echo "Installing project dependencies..."
