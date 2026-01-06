@@ -70,15 +70,17 @@ export const fetchEventCodesCountForJudges = async ({
     },
     {},
   );
+  const documentEventCodes = Array.isArray(params.documentEventCodes)
+    ? params.documentEventCodes
+    : Object.values(params.documentEventCodes);
 
-  const computedAggregatedEventCodes = params.documentEventCodes.map(
-    eventCode => {
-      return {
-        count: bucketCountAggs[eventCode] || 0,
-        eventCode,
-      };
-    },
-  );
+  const computedAggregatedEventCodes = documentEventCodes.map(eventCode => {
+    return {
+      count: bucketCountAggs[eventCode] || 0,
+      documentType: undefined,
+      eventCode,
+    };
+  });
 
   return { aggregations: computedAggregatedEventCodes, total };
 };
