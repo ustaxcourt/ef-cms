@@ -48,8 +48,8 @@ export const NoticeOfWithdrawal = ({
             More than one counsel has entered an appearance for {filersString}.
           </li>
           <li>
-            At least one counsel will continue to serve as counsel for that
-            party.
+            At least one counsel of record will continue to represent the{' '}
+            {filers.length > 1 ? 'parties' : 'party'}.
           </li>
           <li>
             This notice of withdrawal is being filed no later than 30 days

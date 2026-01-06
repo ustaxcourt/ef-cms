@@ -904,6 +904,7 @@ jobs:
             fi
       - run:
           name: Restore Postgres Data
+          no_output_timeout: 40m
           command: |
             TARGET_ENV="$LOWER_ENV" TARGET_ACCOUNT_ID="$LOWER_ENV_ACCOUNT_ID" ./scripts/postgres/restoreDbFromSource.ts
 
