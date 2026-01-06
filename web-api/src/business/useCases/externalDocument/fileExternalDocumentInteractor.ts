@@ -31,8 +31,6 @@ export const fileExternalDocument = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  console.time('fileExternalDocument')
-
   const user = await getUserById({ userId: authorizedUser.userId });
 
   if (!user) {
@@ -219,9 +217,6 @@ export const fileExternalDocument = async (
   await upsertWorkItems({
     workItems,
   });
-
-  console.timeEnd('fileExternalDocument')
-
 
   return resolvedCaseEntities.find(
     caseEntity => caseEntity.docketNumber === docketNumber,
