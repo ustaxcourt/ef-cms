@@ -1,18 +1,18 @@
 import { ModalDialog } from '../ModalDialog';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props as cerebralProps } from 'cerebral';
+import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import { RunableSequence as RunnableSequence } from 'cerebral';
 
-const props = cerebralProps as unknown as {
+type StrikeDocketEntryModalProps = {
   confirmSequence: string;
 };
 
-export const StrikeDocketEntryModal = connect(
+export const StrikeDocketEntryModal: React.FC<StrikeDocketEntryModalProps> = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
-    confirmSequence: sequences[props.confirmSequence],
+    confirmSequence: sequences[props`confirmSequence`],
   },
   function StrikeDocketEntryModal({
     cancelSequence,

@@ -4,11 +4,13 @@ import { getFakeFile } from '../../shared/src/business/test/getFakeFile';
 import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter-public';
 import { withAppContextDecorator } from '../src/withAppContext';
+import { ModuleDefinition } from 'cerebral';
 
 export const fakeFile = getFakeFile();
 
 export const setupTest = ({ useCases = {} } = {}) => {
-  let cerebralTest;
+  // eslint-disable-next-line prefer-const
+  let cerebralTest: any;
 
   presenter.providers.applicationContext = applicationContext;
   const originalUseCases = applicationContext.getUseCases();
@@ -51,7 +53,7 @@ export const setupTest = ({ useCases = {} } = {}) => {
     return value;
   });
 
-  cerebralTest = CerebralTest(presenter);
+  cerebralTest = CerebralTest(presenter as ModuleDefinition);
   cerebralTest.closeSocket = () => {
     /* no-op */
   };

@@ -23,7 +23,7 @@ export const aggregateStatisticsErrors = ({
     const formStatistics = get(state.form.statistics);
 
     if (formStatistics.length) {
-      formStatistics.forEach((formStatistic, index) => {
+      formStatistics.forEach((formStatistic: any, index: number) => {
         const errorStatistic = purgedErrors.statistics.find(
           s => s.index === index,
         );

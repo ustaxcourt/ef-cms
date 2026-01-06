@@ -62,7 +62,7 @@ export const CaseListTable = connect(
     }: {
       cases: TAssociatedCaseFormatted[];
       showLoadMore: boolean;
-      showMoreResultsSequence: boolean;
+      showMoreResultsSequence: Function;
       tabName: string;
       isMobile: boolean;
     }) => {
