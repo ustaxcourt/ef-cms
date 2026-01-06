@@ -2,87 +2,100 @@ import {
   MOCK_CASE,
   MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
   MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-} from '@shared/test/mockCase';
+} from '../../../../shared/src/test/mockCase';
 import {
   MULTI_DOCKET_FILING_EVENT_CODES,
   NON_MULTI_DOCKETABLE_EVENT_CODES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
   SIMULTANEOUS_DOCUMENT_EVENT_CODES,
-} from '@shared/business/entities/EntityConstants';
-import { applicationContext } from '@web-client/applicationContext';
+} from '../../../../shared/src/business/entities/EntityConstants';
+import { applicationContext } from '../../applicationContext';
 import { cloneDeep } from 'lodash';
 import { confirmInitiateServiceModalHelper as confirmInitiateServiceModalHelperComputed } from './confirmInitiateServiceModalHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
-import { MOCK_CONSOLIDATED_CASE } from '@shared/test/mockConsolidatedCase';
 
 describe('confirmInitiateServiceModalHelper', () => {
-  const mockNonMultiDocketableEventCode = 'ODJ';
-  const mockMultiDocketableEventCode = 'MOTN';
+  const mockEventCode = 'OSC';
 
   const confirmInitiateServiceModalHelper = withAppContextDecorator(
     confirmInitiateServiceModalHelperComputed,
     applicationContext,
   );
 
-  describe('caseOrGroup', () => {
-    it('should populate the paperFilingText with the correct text when a document cannot be filed across a group', () => {
+  describe('shouldAllowMultiDocketing', () => {
+    it('should be false when the docket entry is being served on a non-consolidated case', () => {
       const result = runCompute(confirmInitiateServiceModalHelper, {
         state: {
           form: {
-            eventCode: mockNonMultiDocketableEventCode,
+            eventCode: mockEventCode,
           },
-          formattedCaseDetail: {
-            ...MOCK_CASE,
-            isLeadCase: false,
-          },
+          formattedCaseDetail: MOCK_CASE,
+
           modal: {},
         },
       });
 
-      expect(result.paperFilingText).toEqual(
-        'This case has parties receiving paper service:',
-      );
+      expect(result.shouldAllowMultiDocketing).toEqual(false);
     });
 
-    it('should populate the paperFilingText with the correct text when a document can be filed across a group', () => {
+    it('should be "case" when the docket entry is being served on a consolidated group and only one case in the group is selected for service', () => {
       const result = runCompute(confirmInitiateServiceModalHelper, {
         state: {
-          form: {
-            eventCode: mockMultiDocketableEventCode,
-          },
+          form: { eventCode: mockEventCode },
           formattedCaseDetail: {
-            ...MOCK_CONSOLIDATED_CASE,
+            ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+            consolidatedCases: [MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE],
             isLeadCase: true,
           },
           modal: {
             form: {
               consolidatedCasesToMultiDocketOn: [
-                { docketNumber: '103-67', checked: true },
+                {
+                  checked: true,
+                  docketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+                },
+                {
+                  checked: false,
+                  docketNumber:
+                    MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+                },
               ],
             },
           },
         },
       });
 
-      expect(result.paperFilingText).toEqual(
-        'Paper service is required for these parties:',
-      );
+      expect(result.caseOrGroup).toEqual('case');
+    });
+
+    it.only('should be "group" when the docket entry is being served on a consolidated group', () => {
+      const result = runCompute(confirmInitiateServiceModalHelper, {
+        state: {
+          form: {
+            eventCode: mockEventCode,
+            multiDocketedOn: ['101-18', '101-19'],
+          },
+          formattedCaseDetail: {
+            ...MOCK_CASE,
+            leadDocketNumber: MOCK_CASE.docketNumber,
+          },
+        },
+      });
+
+      expect(result.shouldAllowMultiDocketing).toEqual(true);
     });
   });
 
   describe('confirmationText', () => {
-    it('should NOT include "selected cases" when the docket entry cannot be filed across a group', () => {
+    it('should NOT include "selected cases" when the docket entry is NOT being served on a consolidated group', () => {
       const result = runCompute(confirmInitiateServiceModalHelper, {
         state: {
           form: {
-            eventCode: mockNonMultiDocketableEventCode,
+            eventCode: mockEventCode,
           },
-          formattedCaseDetail: {
-            ...MOCK_CASE,
-            isLeadCase: false,
-          },
+          formattedCaseDetail: { ...MOCK_CASE, isLeadCase: false },
           modal: {},
         },
       });
@@ -92,11 +105,11 @@ describe('confirmInitiateServiceModalHelper', () => {
       );
     });
 
-    it('should include "selected cases" when the docket entry can be served across a consolidated group', () => {
+    it('should include "selected cases" when the docket entry is being served on a consolidated group', () => {
       const result = runCompute(confirmInitiateServiceModalHelper, {
         state: {
           form: {
-            eventCode: mockMultiDocketableEventCode,
+            eventCode: mockEventCode,
           },
           formattedCaseDetail: {
             ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
@@ -128,11 +141,40 @@ describe('confirmInitiateServiceModalHelper', () => {
   });
 
   describe('contactsNeedingPaperService', () => {
-    it('should be undefined when no parties have paper service', () => {
+    it('should be true when there is at least one party being served that has paper service', () => {
+      const result = runCompute(confirmInitiateServiceModalHelper, {
+        state: {
+          ...baseState,
+          formattedCaseDetail: {
+            petitioners: [
+              { serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER },
+            ],
+          },
+        },
+      });
+
+      expect(result.showPaperAlert).toEqual(true);
+    });
+
+    it('should be false when none of the parties being served have paper service', () => {
+      const result = runCompute(confirmInitiateServiceModalHelper, {
+        state: {
+          ...baseState,
+          formattedCaseDetail: {
+            petitioners: [
+              { serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC },
+            ],
+          },
+        },
+      });
+
+      expect(result.showPaperAlert).toEqual(false);
+    });
+    it('should be an empty list when there aren`t any parties being served that have paper service', () => {
       const result = runCompute(confirmInitiateServiceModalHelper, {
         state: {
           form: {
-            eventCode: mockNonMultiDocketableEventCode,
+            eventCode: mockEventCode,
           },
           formattedCaseDetail: {
             ...MOCK_CASE,
@@ -148,16 +190,16 @@ describe('confirmInitiateServiceModalHelper', () => {
         },
       });
 
-      expect(result.contactsNeedingPaperService).not.toBeDefined();
+      expect(result.contactsNeedingPaperService).toEqual([]);
     });
 
-    it('should list paper service parties with correct docket number and role labels', () => {
+    it('should return the list of paper service parties when the docket entry is being served on a non-consolidated case', () => {
       const mockPrivatePractitionerName = 'Attorney McGurney';
 
       const result = runCompute(confirmInitiateServiceModalHelper, {
         state: {
           form: {
-            eventCode: NON_MULTI_DOCKETABLE_EVENT_CODES,
+            eventCode: mockEventCode,
           },
           formattedCaseDetail: {
             ...MOCK_CASE,
@@ -180,49 +222,23 @@ describe('confirmInitiateServiceModalHelper', () => {
       });
 
       expect(result.contactsNeedingPaperService).toEqual([
-        {
-          name: mockPrivatePractitionerName,
-          formattedContactType: 'Petitioner Counsel',
-          docketNumber: MOCK_CASE.docketNumber,
-        },
+        { name: `${mockPrivatePractitionerName}, Petitioner Counsel` },
       ]);
     });
 
-    it('should return paper service parties from consolidated group', () => {
+    it('should return the list of paper service parties when the docket entry is being served on a consolidated group', () => {
       const mockPrivatePractitionerName = 'Attorney McGurney';
+      const mockPetitionerName = 'Petitioner Dawn';
       const mockIrsPractitionerName = 'IRS Macbeth';
-
-      const mockLeadCase = {
-        ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-        irsPractitioners: [
-          {
-            name: mockIrsPractitionerName,
-            role: ROLES.irsPractitioner,
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-            userId: '3dfe8d03-0034-4e38-9f8f-67b478430330',
-          },
-        ],
-        isLeadCase: true,
-        petitioners: [],
-        privatePractitioners: [
-          {
-            name: mockPrivatePractitionerName,
-            role: ROLES.privatePractitioner,
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-            userId: '63356468-ed6a-47e8-8fac-07c7ab750dfa',
-          },
-        ],
-      };
 
       const result = runCompute(confirmInitiateServiceModalHelper, {
         state: {
           form: {
-            eventCode: mockMultiDocketableEventCode,
+            eventCode: mockEventCode,
           },
           formattedCaseDetail: {
-            ...mockLeadCase,
+            ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
             consolidatedCases: [
-              mockLeadCase,
               {
                 ...MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
                 irsPractitioners: [
@@ -230,11 +246,33 @@ describe('confirmInitiateServiceModalHelper', () => {
                     name: mockIrsPractitionerName,
                     role: ROLES.irsPractitioner,
                     serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-                    userId: '3dfe8d03-0034-4e38-9f8f-67b478430330',
+                    userId: '6f97c469-4f05-4c65-b88d-3fb02c728cc3',
                   },
                 ],
-                petitioners: [],
+                petitioners: [
+                  {
+                    contactId: '4ec5f36a-d58b-4c0d-9118-3e0ff5a4bc78',
+                    contactType: ROLES.petitioner,
+                    name: mockPetitionerName,
+                    serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+                  },
+                ],
                 privatePractitioners: [],
+              },
+            ],
+            irsPractitioners: [
+              { serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC },
+            ],
+            isLeadCase: true,
+            petitioners: [
+              { serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE },
+            ],
+            privatePractitioners: [
+              {
+                name: mockPrivatePractitionerName,
+                role: ROLES.privatePractitioner,
+                serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+                userId: '9899623c-7955-4e28-be57-c1eb0315ad42',
               },
             ],
           },
@@ -257,26 +295,97 @@ describe('confirmInitiateServiceModalHelper', () => {
       });
 
       expect(result.contactsNeedingPaperService).toEqual([
-        {
-          docketNumber: '109-19',
-          formattedContactType: 'Respondent Counsel',
-          name: 'IRS Macbeth',
-        },
-        {
-          docketNumber: '109-19',
-          formattedContactType: 'Petitioner Counsel',
-          name: 'Attorney McGurney',
-        },
-        {
-          docketNumber: '110-19',
-          formattedContactType: 'Respondent Counsel',
-          name: 'IRS Macbeth',
-        },
+        { name: `${mockPetitionerName}, Petitioner` },
+        { name: `${mockPrivatePractitionerName}, Petitioner Counsel` },
+        { name: `${mockIrsPractitionerName}, Respondent Counsel` },
       ]);
+    });
+
+    it('should return a unique list of paper service parties when the docket entry is being served on a consolidated group', () => {
+      const mockPrivatePractitionerName = 'Attorney McGurney';
+      const mockPetitionerName = 'Petitioner Dawn';
+      const mockIrsPractitionerName = 'IRS Macbeth';
+
+      const result = runCompute(confirmInitiateServiceModalHelper, {
+        state: {
+          form: {
+            eventCode: mockEventCode,
+          },
+          formattedCaseDetail: {
+            ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+            consolidatedCases: [
+              {
+                ...MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
+                irsPractitioners: [
+                  {
+                    name: mockIrsPractitionerName,
+                    role: ROLES.irsPractitioner,
+                    serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+                    userId: '3dfe8d03-0034-4e38-9f8f-67b478430330',
+                  },
+                ],
+                petitioners: [
+                  {
+                    contactId: '65a8d3d5-1b41-4d04-a591-de6327b7c1f4',
+                    contactType: ROLES.petitioner,
+                    name: mockPetitionerName,
+                    serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+                  },
+                ],
+                privatePractitioners: [],
+              },
+            ],
+            irsPractitioners: [
+              { serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC },
+              {
+                name: mockIrsPractitionerName,
+                role: ROLES.irsPractitioner,
+                serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+                userId: '3dfe8d03-0034-4e38-9f8f-67b478430330',
+              },
+            ],
+            isLeadCase: true,
+            petitioners: [
+              { serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE },
+            ],
+            privatePractitioners: [
+              {
+                name: mockPrivatePractitionerName,
+                role: ROLES.privatePractitioner,
+                serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+                userId: '63356468-ed6a-47e8-8fac-07c7ab750dfa',
+              },
+            ],
+          },
+          modal: {
+            form: {
+              consolidatedCasesToMultiDocketOn: [
+                {
+                  checked: true,
+                  docketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+                },
+                {
+                  checked: true,
+                  docketNumber:
+                    MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+                },
+              ],
+            },
+          },
+        },
+      });
+
+      expect(result.contactsNeedingPaperService).toEqual(
+        expect.arrayContaining([
+          { name: `${mockPetitionerName}, Petitioner` },
+          { name: `${mockPrivatePractitionerName}, Petitioner Counsel` },
+          { name: `${mockIrsPractitionerName}, Respondent Counsel` },
+        ]),
+      );
     });
   });
 
-  describe('canFileAcrossGroup', () => {
+  describe('showConsolidatedCasesForService', () => {
     let baseState;
 
     beforeEach(() => {
@@ -294,26 +403,24 @@ describe('confirmInitiateServiceModalHelper', () => {
       });
     });
 
-    it('should be false when the case is not a lead case', () => {
-      const { canFileAcrossGroup } = runCompute(
+    it('should be false when the docket entry is being filed on a consolidated case that is NOT the lead case', () => {
+      const { showConsolidatedCasesForService } = runCompute(
         confirmInitiateServiceModalHelper,
         {
           state: {
             ...baseState,
             formattedCaseDetail: {
-              ...MOCK_CONSOLIDATED_CASE,
-              docketNumber:
-                MOCK_CONSOLIDATED_CASE.consolidatedCases[1].docketNumber,
+              isLeadCase: false,
             },
           },
         },
       );
 
-      expect(canFileAcrossGroup).toEqual(false);
+      expect(showConsolidatedCasesForService).toEqual(false);
     });
 
-    it('should be false when the document type cannot be multi-docketed', () => {
-      const { canFileAcrossGroup } = runCompute(
+    it('should be false when the the docket entry is NOT a document type that can be multi-docketed', () => {
+      const { showConsolidatedCasesForService } = runCompute(
         confirmInitiateServiceModalHelper,
         {
           state: {
@@ -321,193 +428,114 @@ describe('confirmInitiateServiceModalHelper', () => {
             form: {
               eventCode: NON_MULTI_DOCKETABLE_EVENT_CODES[0],
             },
-            formattedCaseDetail: MOCK_CONSOLIDATED_CASE,
+            formattedCaseDetail: {
+              isLeadCase: true,
+            },
           },
         },
       );
 
-      expect(canFileAcrossGroup).toEqual(false);
+      expect(showConsolidatedCasesForService).toEqual(false);
     });
 
-    it('should be true for lead case with multi-docketable document type', () => {
-      const { canFileAcrossGroup } = runCompute(
+    it('should be false when the docket entry is being served from a message', () => {
+      const { showConsolidatedCasesForService } = runCompute(
+        confirmInitiateServiceModalHelper,
+        {
+          state: {
+            ...baseState,
+            currentPage: 'MessageDetail',
+            formattedCaseDetail: {
+              isLeadCase: true,
+            },
+          },
+        },
+      );
+
+      expect(showConsolidatedCasesForService).toEqual(false);
+    });
+
+    it('should be true when the docket entry is being filed on a lead case, and the docket entry is a document type that can be multi-docketed', () => {
+      const { showConsolidatedCasesForService } = runCompute(
         confirmInitiateServiceModalHelper,
         {
           state: {
             ...baseState,
             form: {
+              documentTitle: 'Answer',
               eventCode: MULTI_DOCKET_FILING_EVENT_CODES[0],
-            },
-            formattedCaseDetail: MOCK_CONSOLIDATED_CASE,
-          },
-        },
-      );
-
-      expect(canFileAcrossGroup).toEqual(true);
-    });
-  });
-
-  describe('canServeAcrossGroup', () => {
-    let baseState;
-
-    beforeEach(() => {
-      baseState = cloneDeep({
-        form: {
-          documentTitle: 'Answer',
-          eventCode: MULTI_DOCKET_FILING_EVENT_CODES[0],
-        },
-        formattedCaseDetail: MOCK_CASE,
-        modal: {
-          form: {
-            consolidatedCasesToMultiDocketOn: [],
-          },
-        },
-      });
-    });
-
-    it('should be true for lead case with multi-docketable document type', () => {
-      const { canServeAcrossGroup } = runCompute(
-        confirmInitiateServiceModalHelper,
-        {
-          state: {
-            ...baseState,
-            form: {
-              eventCode: MULTI_DOCKET_FILING_EVENT_CODES[0],
-            },
-            formattedCaseDetail: MOCK_CONSOLIDATED_CASE,
-          },
-        },
-      );
-
-      expect(canServeAcrossGroup).toEqual(true);
-    });
-
-    it('should be true if document has been filed across a group', () => {
-      const { canServeAcrossGroup } = runCompute(
-        confirmInitiateServiceModalHelper,
-        {
-          state: {
-            form: {
-              eventCode: mockMultiDocketableEventCode,
-              isFiledAcrossAllCases: true,
             },
             formattedCaseDetail: {
-              ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-              consolidatedCases: [
-                {
-                  ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-                  caseTitle: 'Same case',
-                },
-                {
-                  ...MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
-                  caseTitle: 'Different case',
-                },
-              ],
+              isLeadCase: true,
             },
-
-            modal: {},
           },
         },
       );
 
-      expect(canServeAcrossGroup).toEqual(true);
+      expect(showConsolidatedCasesForService).toEqual(true);
     });
-  });
 
-  describe('additionalServedCases', () => {
-    it('should be empty when hasFiledAcrossGroup is false', () => {
-      const result = runCompute(confirmInitiateServiceModalHelper, {
-        state: {
-          form: {
-            eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
-          },
-          formattedCaseDetail: {
-            ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-            consolidatedCases: [MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE],
-          },
-          modal: {
+    it('should be true when the docket entry is being filed on a lead case, the docket entry is a paper filed, simultaneous document', () => {
+      const { showConsolidatedCasesForService } = runCompute(
+        confirmInitiateServiceModalHelper,
+        {
+          state: {
+            ...baseState,
             form: {
-              consolidatedCasesToMultiDocketOn: [],
+              eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
+              isPaper: true,
+            },
+            formattedCaseDetail: {
+              isLeadCase: true,
             },
           },
         },
-      });
+      );
 
-      expect(result.additionalServedCases).toEqual([]);
+      expect(showConsolidatedCasesForService).toEqual(true);
     });
 
-    it('should include consolidated cases if hasFiledAcrossGroup is true on form', () => {
-      const result = runCompute(confirmInitiateServiceModalHelper, {
-        state: {
-          form: {
-            eventCode: mockMultiDocketableEventCode,
-            isFiledAcrossAllCases: true,
-          },
-          formattedCaseDetail: {
-            ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-            consolidatedCases: [
-              {
-                ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-                caseTitle: 'Same case',
-              },
-              {
-                ...MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
-                caseTitle: 'Different case',
-              },
-            ],
-          },
-
-          modal: {},
-        },
-      });
-
-      expect(result.additionalServedCases).toEqual([
+    it('should be false when the docket entry is being filed on a lead case, the docket entry is a simultaneous document that is NOT paper filed', () => {
+      const { showConsolidatedCasesForService } = runCompute(
+        confirmInitiateServiceModalHelper,
         {
-          docketNumber:
-            MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
-          caseTitle: 'Different case',
+          state: {
+            ...baseState,
+            form: {
+              documentTitle: 'Simultaneous Answering Memorandum Brief',
+              eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
+              isPaper: false,
+            },
+            formattedCaseDetail: {
+              isLeadCase: true,
+            },
+          },
         },
-      ]);
+      );
+
+      expect(showConsolidatedCasesForService).toEqual(false);
     });
 
-    it('should include consolidated cases if hasFiledAcrossGroup is true on currentDocketEntry', () => {
-      const mockDocketEntryId = '78ef43a5-b29b-4ab6-9924-545598fd1d63';
-      const result = runCompute(confirmInitiateServiceModalHelper, {
-        state: {
-          docketEntryId: mockDocketEntryId,
-          form: {},
-          formattedCaseDetail: {
-            ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-            docketEntries: [
-              ...MOCK_CONSOLIDATED_CASE.docketEntries,
-              {
-                ...MOCK_CONSOLIDATED_CASE.docketEntries[4],
-                docketEntryId: mockDocketEntryId,
-                isFiledAcrossAllCases: true,
-              },
-            ],
-            consolidatedCases: [
-              {
-                ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-                caseTitle: 'Same case',
-              },
-              {
-                ...MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
-                caseTitle: 'Different case',
-              },
-            ],
-          },
-          modal: {},
-        },
-      });
-
-      expect(result.additionalServedCases).toEqual([
+    it('should be false when the docket entry is being filed on a lead case, the docket entry has "simultaneous" in the document title and is NOT paper filed', () => {
+      const { showConsolidatedCasesForService } = runCompute(
+        confirmInitiateServiceModalHelper,
         {
-          docketNumber:
-            MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
-          caseTitle: 'Different case',
+          state: {
+            ...baseState,
+            form: {
+              documentTitle:
+                'Motion for Leave to File Simultaneous Answering Memorandum Brief',
+              eventCode: 'AMAT',
+              isPaper: false,
+            },
+            formattedCaseDetail: {
+              isLeadCase: true,
+            },
+          },
         },
-      ]);
+      );
+
+      expect(showConsolidatedCasesForService).toEqual(false);
     });
   });
 });

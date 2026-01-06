@@ -7,6 +7,7 @@ import {
   ROLES,
 } from '@shared/business/entities/EntityConstants';
 import { isLeadCase } from '@shared/business/entities/cases/Case';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 
 export type ContactsNeedingPaperService = {
   name: string;
@@ -26,33 +27,20 @@ export const confirmInitiateServiceModalHelper = (
   const docketEntryId = get(state.docketEntryId);
   const formattedCaseDetail = get(state.formattedCaseDetail);
   const form = get(state.form);
-  let {
-    eventCode,
-    multiDocketedOn,
-    multiDocketedOriginalDocketNumber,
-    processingStatus,
-  } = form;
+  let docketEntry = form;
 
   const currentDocketEntry = formattedCaseDetail.docketEntries.find(
     doc => doc.docketEntryId === docketEntryId,
   );
 
-  if (!eventCode) {
-    ({
-      eventCode,
-      multiDocketedOn,
-      multiDocketedOriginalDocketNumber,
-      processingStatus,
-    } = currentDocketEntry);
+  if (!docketEntry.eventCode) {
+    docketEntry = currentDocketEntry;
   }
 
   const isLead = isLeadCase(formattedCaseDetail);
 
   const shouldAllowMultiDocketing = shouldAllowMultiDocket({
-    eventCode,
-    multiDocketedOn,
-    multiDocketedOriginalDocketNumber,
-    processingStatus,
+    docketEntry,
     isLead,
   });
 
@@ -141,23 +129,20 @@ const roleToDisplay = party => {
   }
 };
 
-export const shouldAllowMultiDocket = ({
-  eventCode,
-  multiDocketedOn,
-  multiDocketedOriginalDocketNumber,
-  processingStatus,
-  isLead,
-}) => {
+export const shouldAllowMultiDocket = ({ docketEntry, isLead }) => {
   const isSavedForLater =
-    !multiDocketedOriginalDocketNumber && !!processingStatus;
+    !docketEntry.multiDocketedOriginalDocketNumber &&
+    !!docketEntry.processingStatus;
 
   const isBeingFiledOrServed =
-    !multiDocketedOriginalDocketNumber && !processingStatus;
+    !docketEntry.multiDocketedOriginalDocketNumber &&
+    !docketEntry.processingStatus;
 
-  const isMultiDocketed = multiDocketedOn?.length > 1;
+  const isMultiDocketed = DocketEntry.isMultiDocketed(docketEntry);
 
-  const isMultiDocketableEvent =
-    !NON_MULTI_DOCKETABLE_EVENT_CODES.includes(eventCode);
+  const isMultiDocketableEvent = !NON_MULTI_DOCKETABLE_EVENT_CODES.includes(
+    docketEntry.eventCode,
+  );
 
   let shouldAllowMultiDocket = isLead && isMultiDocketableEvent;
 
