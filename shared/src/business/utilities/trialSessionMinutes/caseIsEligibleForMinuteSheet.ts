@@ -31,7 +31,26 @@ export const caseIsEligibleForMinuteSheet = (
   return true;
 };
 
-const isEligibleConsolidatedCase = (aCase: RawCase & TCaseOrder): boolean => {
+export const isEligibleUnscheduledCaseForMinuteSheet = (
+  aCase: RawCase,
+  trialSession: RawTrialSession,
+): boolean => {
+  if (!trialSession.isCalendared) {
+    return false;
+  }
+
+  if (isClosed(aCase)) {
+    return false;
+  }
+
+  if (!isEligibleConsolidatedCase(aCase)) {
+    return false;
+  }
+
+  return true;
+};
+
+const isEligibleConsolidatedCase = (aCase: RawCase): boolean => {
   if (!aCase.leadDocketNumber) {
     return true;
   }
