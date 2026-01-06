@@ -24,8 +24,8 @@ app.use((req, _res, next) => {
   return next();
 });
 app.use(async (_req, _res, next) => {
-  // This code is here so that we have a way to mock out the terminal user
-  // via using dynamo locally.  This is only ran locally and on CI/CD which is
+  // This code is here so that we have a way to mock out the terminal user.
+  // This is only ran locally and on CI/CD which is
   // why we also lazy require some of these packages.  See story 8955 for more info.
   if (process.env.NODE_ENV !== 'production') {
     const currentInvoke = getCurrentInvoke();
@@ -91,6 +91,7 @@ import { orderPublicSearchLambda } from './lambdas/public-api/orderPublicSearchL
 import { todaysOpinionsLambda } from './lambdas/public-api/todaysOpinionsLambda';
 import { todaysOrdersLambda } from './lambdas/public-api/todaysOrdersLambda';
 import { getDbReader } from '@web-api/database';
+import { verifyUserPendingEmailLambda } from './lambdas/public-api/verifyUserPendingEmailLambda';
 
 /** Case */
 {
@@ -177,4 +178,11 @@ app.get('/public-api/judges', lambdaWrapper(getPublicJudgesLambda));
  */
 {
   app.get('/system/feature-flag', lambdaWrapper(getAllFeatureFlagsLambda));
+}
+
+{
+  app.put(
+    '/public-api/verify-email',
+    lambdaWrapper(verifyUserPendingEmailLambda),
+  );
 }

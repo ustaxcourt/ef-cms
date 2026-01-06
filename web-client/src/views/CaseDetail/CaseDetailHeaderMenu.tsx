@@ -65,7 +65,7 @@ export const CaseDetailHeaderMenu = connect(
     updateCaseNoteSequence,
     validateAddToTrialSessionSequence,
   }) {
-    const menuRef = useRef(null);
+    const menuRef = useRef<HTMLDivElement | null>(null);
     const keydown = event => {
       const pressedESC = event.keyCode === 27;
       if (pressedESC) {
@@ -74,7 +74,7 @@ export const CaseDetailHeaderMenu = connect(
     };
 
     const reset = e => {
-      const clickedWithinComponent = menuRef.current.contains(e.target);
+      const clickedWithinComponent = menuRef.current?.contains(e.target);
       const clickedOnMenuButton = e.target.closest('.usa-accordion__button');
       const clickedOnSubNav = e.target.closest('.usa-nav__primary-item');
       if (!clickedWithinComponent) {

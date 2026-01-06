@@ -3,21 +3,30 @@ import {
   decorateWithPostCallback,
   useCerebralStateFactory,
 } from '../Utils/useCerebralState';
-import { props as cerebralProps } from 'cerebral';
+import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useState } from 'react';
 import classNames from 'classnames';
 
-const props = cerebralProps as unknown as {
-  bind: string;
+type BindedSelectProps = {
+  children: React.ReactNode;
+  bind?: string,
+  className?: string;
+  onChange?: ((value: any) => void) | Function;
+  id?: string;
+  name?: string;
+  style?: any;
+  placeholder?: string;
+  value?: any;
+  disabled?: boolean
 };
 
-export const BindedSelect = connect(
+export const BindedSelect: React.FC<BindedSelectProps> = connect(
   {
-    bind: props.bind,
+    bind: props`bind`,
     simpleSetter: sequences.cerebralBindSimpleSetStateSequence,
-    value: state[props.bind],
+    value: state[props`bind`],
   },
   function BindedSelect(componentProps: {
     bind: string;
@@ -25,7 +34,7 @@ export const BindedSelect = connect(
     value: unknown;
     children?: React.ReactNode;
     className?: string;
-    onChange?: (value: string) => void;
+    onChange?: ((value: string) => void) | Function;
     [key: string]: unknown;
   }) {
     const { bind, children, className, onChange, simpleSetter, value } =

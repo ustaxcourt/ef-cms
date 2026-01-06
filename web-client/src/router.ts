@@ -369,7 +369,6 @@ const router = {
         });
       }),
     );
-
     registerRoute(
       '/case-detail/*/documents/*/edit-court-issued..',
       ifHasAccess({ app }, (docketNumber, docketEntryId) => {
@@ -793,7 +792,6 @@ const router = {
         });
       }),
     );
-
     registerRoute(
       '/case-detail/*/documents/*/add-court-issued-docket-entry/*',
       ifHasAccess({ app }, (docketNumber, docketEntryId, parentMessageId) => {
@@ -940,14 +938,6 @@ const router = {
         return app.getSequence('gotoMyAccountSequence')();
       }),
     );
-
-    registerRoute('/verify-email..', () => {
-      setPageTitle('Verify Email');
-      const { token } = route.query();
-      return app.getSequence('gotoVerifyEmailSequence')({
-        token,
-      });
-    });
 
     registerRoute(
       '/document-qc/my',
@@ -1118,7 +1108,7 @@ const router = {
     );
 
     registerRoute(
-      '/trial-session-detail/*/case/*/minutes',
+      '/trial-session-detail/*/case/*/minutes..',
       ifHasAccess(
         { app, permissionToCheck: ROLE_PERMISSIONS.MANAGE_MINUTE_SHEET },
         (trialSessionId, docketNumber) => {

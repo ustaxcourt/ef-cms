@@ -1,23 +1,26 @@
 import { DropdownMenu } from '../../../ustc-ui/DropdownMenu/DropdownMenu';
 import { PreformattedText } from '@web-client/ustc-ui/PreformatedText/PreformattedText';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props as cerebralProps } from 'cerebral';
+import { props } from 'cerebral';
 import React from 'react';
+import { caseDetailHelper } from '@web-client/presenter/computeds/caseDetailHelper';
 
-const props = cerebralProps as unknown as {
-  caseDetailHelper: unknown;
-  hearings: unknown;
-  openAddEditHearingNoteModalSequence: unknown;
-  removeHearingSequence: unknown;
-};
+type DisplayHearingsProps = {
+  hearings: any;
+  caseDetailHelper: ReturnType<
+    typeof caseDetailHelper
+  >;
+  openAddEditHearingNoteModalSequence: Function;
+  removeHearingSequence: Function
+}
 
-export const DisplayHearings = connect(
+export const DisplayHearings: React.FC<DisplayHearingsProps> = connect(
   {
-    caseDetailHelper: props.caseDetailHelper,
-    hearings: props.hearings,
+    caseDetailHelper: props`caseDetailHelper`,
+    hearings: props`hearings`,
     openAddEditHearingNoteModalSequence:
-      props.openAddEditHearingNoteModalSequence,
-    removeHearingSequence: props.removeHearingSequence,
+      props`openAddEditHearingNoteModalSequence`,
+    removeHearingSequence: props`removeHearingSequence`,
   },
   function DisplayHearings({
     caseDetailHelper,
@@ -39,7 +42,7 @@ export const DisplayHearings = connect(
     }>;
     openAddEditHearingNoteModalSequence: (args: {
       docketNumber: string;
-      note: string;
+      note?: string;
       trialSessionId: string;
     }) => void;
     removeHearingSequence: (args: { trialSessionId: string }) => void;

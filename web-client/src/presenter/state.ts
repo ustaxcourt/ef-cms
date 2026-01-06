@@ -79,6 +79,7 @@ import { emptyUserState } from '@web-client/presenter/state/userState';
 import { externalConsolidatedCaseGroupHelper } from './computeds/externalConsolidatedCaseGroupHelper';
 import { externalUserCasesHelper } from './computeds/Dashboard/externalUserCasesHelper';
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
+import { noticeOfWithdrawalHelper } from './computeds/noticeOfWithdrawalHelper';
 import { filePetitionHelper } from '@web-client/presenter/computeds/filePetitionHelper';
 import { fileUploadStatusHelper } from './computeds/fileUploadStatusHelper';
 import { filingPartiesFormHelper } from './computeds/filingPartiesFormHelper';
@@ -119,6 +120,7 @@ import { messagesHelper } from './computeds/messagesHelper';
 import { messagesIndividualInboxHelper } from './computeds/messagesIndividualInboxHelper';
 import { motionOrderResponseFormHelper } from './computeds/motionOrderResponseFormHelper';
 import { myAccountHelper } from './computeds/myAccountHelper';
+import { newMinuteSheetModalHelper } from './computeds/newMinuteSheetModalHelper';
 import { noticeStatusHelper } from './computeds/noticeStatusHelper';
 import { orderTypesHelper } from './computeds/orderTypesHelper';
 import { paperDocketEntryHelper } from './computeds/paperDocketEntryHelper';
@@ -349,6 +351,9 @@ export const computeds = {
   fileDocumentHelper: fileDocumentHelper as unknown as ReturnType<
     typeof fileDocumentHelper
   >,
+  noticeOfWithdrawalHelper: noticeOfWithdrawalHelper as unknown as ReturnType<
+    typeof noticeOfWithdrawalHelper
+  >,
   filePetitionHelper: filePetitionHelper as unknown as ReturnType<
     typeof filePetitionHelper
   >,
@@ -441,6 +446,10 @@ export const computeds = {
   myAccountHelper: myAccountHelper as unknown as ReturnType<
     typeof myAccountHelper
   >,
+  newMinuteSheetModalHelper:
+    newMinuteSheetModalHelper as unknown as ReturnType<
+      typeof newMinuteSheetModalHelper
+    >,
   noticeStatusHelper: noticeStatusHelper as unknown as ReturnType<
     typeof noticeStatusHelper
   >,
@@ -822,6 +831,7 @@ export const baseState = {
   messagesSectionCount: 0,
   minuteSheetForm: cloneDeep(initialMinuteSheetFormState),
   minuteSheetFormSnapshot: '',
+  isUnscheduledMinuteSheet: false,
   messageViewerDocumentToDisplay: undefined as unknown as ViewerDocument,
   modal: {
     calendarNotes: undefined as string | undefined,
@@ -853,6 +863,9 @@ export const baseState = {
   },
   openCases: [] as TAssociatedCase[],
   openCasesCurrentPage: undefined as number | undefined,
+  openClosedCases: {
+    caseType: undefined as string | undefined
+  },
   paperServiceStatusState: {
     pdfsAppended: 0,
     totalPdfs: 0,

@@ -136,6 +136,7 @@ export const MOCK_NEW_TRIAL_REMOTE: RawNewTrialSession = {
   caseOrder: [],
   chambersPhoneNumber: '4509876612',
   entityName: 'TrialSession',
+  estimatedEndDate: '2027-11-15T00:00:00.000Z',
   hasNottBeenServed: false,
   isCalendared: false,
   joinPhoneNumber: '8737762291',

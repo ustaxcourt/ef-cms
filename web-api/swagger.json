@@ -7772,19 +7772,6 @@
           "type": "boolean",
           "description": "the status of cognito ui"
         },
-        "dynamo": {
-          "type": "object",
-          "properties": {
-            "efcms": {
-              "type": "boolean",
-              "description": "the status of main dynamo table"
-            },
-            "efcmsDeploy": {
-              "type": "boolean",
-              "description": "the status of deploy dynamo table"
-            }
-          }
-        },
         "elasticsearch": {
           "type": "boolean",
           "description": "the status of elasticsearch"

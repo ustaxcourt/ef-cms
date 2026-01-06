@@ -1,9 +1,6 @@
 /* eslint-disable max-lines */
-import * as client from '../../web-api/src/persistence/dynamodbClientService';
 import { Agent } from 'http';
 import { CerebralTest } from 'cerebral/test';
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { FORMATS } from '../../shared/src/business/utilities/DateHandler';
 import {
   back,
@@ -34,12 +31,13 @@ import { socketRouter } from '../src/providers/socketRouter';
 import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import { withAppContextDecorator } from '../src/withAppContext';
 import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/computeds/workQueueHelper';
-import FormDataHelper from 'form-data';
 import axios, { AxiosError } from 'axios';
 import jwt from 'jsonwebtoken';
 import qs from 'qs';
 import riotRoute from 'riot-route';
 import { getDbReader } from '@web-api/database';
+import { ModuleDefinition } from 'cerebral';
+import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 
 const applicationContext = clientApplicationContext as any;
 
@@ -56,25 +54,10 @@ const formattedCaseMessages = withAppContextDecorator(
 const workQueueHelper = withAppContextDecorator(workQueueHelperComputed);
 const formattedMessages = withAppContextDecorator(formattedMessagesComputed);
 
-let dynamoDbCache;
 let httpCache;
 
 Object.assign(applicationContext, {
-  getDocumentClient: () => {
-    if (!dynamoDbCache) {
-      const dynamoDbClient = new DynamoDBClient({
-        endpoint: 'http://localhost:8000',
-        region: 'us-east-1',
-      });
-      dynamoDbCache = DynamoDBDocument.from(dynamoDbClient, {
-        marshallOptions: { removeUndefinedValues: true },
-      });
-    }
-
-    return dynamoDbCache;
-  },
   getEnvironment: () => ({
-    dynamoDbTableName: 'efcms-local',
     stage: 'local',
   }),
   getScanner: getScannerMockInterface,
@@ -156,14 +139,16 @@ export const getConnection = async connectionId => {
   );
 };
 
-export const setOpinionSearchEnabled = (isEnabled, keyPrefix) => {
-  return client.put({
-    Item: {
-      current: isEnabled,
-      pk: `${keyPrefix}-opinion-search-enabled`,
-      sk: `${keyPrefix}-opinion-search-enabled`,
-    },
-    applicationContext,
+export const setOpinionSearchEnabled = async (isEnabled, keyPrefix) => {
+  return await pgInsertInto({
+    table: 'dwFeatureFlag',
+    values: [
+      {
+        name: `${keyPrefix}-opinion-search-enabled`,
+        value: { current: isEnabled },
+      },
+    ],
+    onConflictColumns: ['name'],
   });
 };
 
@@ -172,13 +157,15 @@ export const setOrderSearchEnabled = async (isEnabled, keyPrefix) => {
 };
 
 export const setFeatureFlag = async (isEnabled, key) => {
-  return await client.put({
-    Item: {
-      current: isEnabled,
-      pk: key,
-      sk: key,
-    },
-    applicationContext,
+  return await pgInsertInto({
+    table: 'dwFeatureFlag',
+    values: [
+      {
+        name: key,
+        value: { current: isEnabled },
+      },
+    ],
+    onConflictColumns: ['name'],
   });
 };
 
@@ -552,7 +539,7 @@ export const uploadPetition = async (
     headers: {
       Authorization: `Bearer ${userToken}`,
     },
-    httpAgent: new Agent({ keepAlive: false })
+    httpAgent: new Agent({ keepAlive: false }),
   });
 
   cerebralTest.setState('caseDetail', response.data);
@@ -579,13 +566,11 @@ export const loginAs = (cerebralTest, email, password = 'Testing1234$') =>
 export const setupTest = ({ constantsOverrides = {} } = {}) => {
   // eslint-disable-next-line prefer-const
   let cerebralTest;
-  global.FormData = FormDataHelper;
-  global.Blob = () => {
-    return fakeFile;
-  };
-  global.File = () => {
-    return fakeFile;
-  };
+  global.FormData = require('form-data');
+  // @ts-expect-error
+  global.Blob = () => fakeFile;
+  // @ts-expect-error
+  global.File = () => fakeFile;
   global.WebSocket = require('websocket').w3cwebsocket;
 
   presenter.providers.applicationContext = applicationContext;
@@ -698,7 +683,7 @@ export const setupTest = ({ constantsOverrides = {} } = {}) => {
     return value;
   });
 
-  const routes = [];
+  const routes: { route: any; cb: any }[] = [];
 
   presenter.providers.router = {
     back,
@@ -709,7 +694,7 @@ export const setupTest = ({ constantsOverrides = {} } = {}) => {
     route: (routeToGoTo = '/') => gotoRoute(routes, routeToGoTo),
   };
 
-  cerebralTest = CerebralTest(presenter);
+  cerebralTest = CerebralTest(presenter as ModuleDefinition);
   cerebralTest.getSequence = seqName => obj =>
     cerebralTest.runSequence(seqName, obj);
   const oldRunSequence = cerebralTest.runSequence;
@@ -751,7 +736,7 @@ export const setupTest = ({ constantsOverrides = {} } = {}) => {
     });
   });
 
-  initializeSocketProvider(cerebralTest);
+  initializeSocketProvider(cerebralTest, applicationContext);
 
   return cerebralTest;
 };
@@ -892,14 +877,7 @@ export const waitUntil = cb => {
 };
 
 export const refreshElasticsearchIndex = async (time = 2000) => {
-  // refresh all ES indices:
   // https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-refresh.html#refresh-api-all-ex
-  await waitUntil(async () => {
-    const value = await axios
-      .get('http://localhost:5005/isDone')
-      .then(response => response.data);
-    return value === true;
-  });
   await axios.post('http://localhost:9200/_refresh');
   await axios.post('http://localhost:9200/_flush');
   return await wait(time);

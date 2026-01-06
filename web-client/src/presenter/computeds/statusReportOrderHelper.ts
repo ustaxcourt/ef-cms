@@ -2,6 +2,7 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
+import { isLeadCase } from '@shared/business/entities/cases/Case';
 
 export const statusReportOrderHelper = (
   get: Get,
@@ -17,7 +18,7 @@ export const statusReportOrderHelper = (
 } => {
   const caseDetail = get(state.caseDetail);
 
-  const isLeadCase = caseDetail.leadDocketNumber === caseDetail.docketNumber;
+  const isLeadCaseResult = isLeadCase(caseDetail);
 
   const { DATE_FORMATS } = applicationContext.getConstants();
 
@@ -52,7 +53,7 @@ export const statusReportOrderHelper = (
     dueDateErrorClass,
     dueDateErrorText,
     isCalendared,
-    isLeadCase,
+    isLeadCase: isLeadCaseResult,
     jurisdictionErrorClass,
     jurisdictionErrorText,
     minDate,

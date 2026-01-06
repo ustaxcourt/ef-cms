@@ -30,7 +30,12 @@ if [[ -n $LOCAL_IMAGE_EXISTS ]]; then
 
   [[ ! $REPLY =~ ^[Yy]$ ]] && BUILD_IMAGE=0
 fi
-[[ "$BUILD_IMAGE" -eq 1 ]] && docker build --platform=linux/amd64 --no-cache -t "$LOCAL_IMAGE_NAME" -f Dockerfile .
+if [[ "$BUILD_IMAGE" -eq 1 ]]; then
+  if ! docker build --platform=linux/amd64 --no-cache -t "$LOCAL_IMAGE_NAME" -f Dockerfile . ; then
+    echo "Docker build failed. Exiting without pushing to ECR."
+    exit 1
+  fi
+fi
 
 # shellcheck disable=SC2091
 aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com"

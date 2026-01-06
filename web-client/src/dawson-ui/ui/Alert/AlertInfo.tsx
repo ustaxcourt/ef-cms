@@ -121,7 +121,7 @@ function Message({
     <p className={additionalClassname}>
       {beforeLink}
       <a
-        className="tw:text-primary-darker tw:underline"
+        className="tw:text-blue-darker tw:underline"
         href={inlineLinkUrl}
         rel="noreferrer"
         target="_blank"

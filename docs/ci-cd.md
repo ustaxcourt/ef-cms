@@ -64,12 +64,10 @@ The other executor is the `docker` executor.  When using this executor, you can 
 e2e-cypress-public:
     docker:
         - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
-        - image: amazon/dynamodb-local
-            command: ['-jar', 'DynamoDBLocal.jar', '-inMemory']
         - image: elastic/elasticsearch:7.8.1
 ```
 
-This first image is where job steps will execute and the other two images are used for hosting dynamodb and elasticsearch their own containers.  We use these pre-existing containers to speed up our build process instead of having to download and install dynamo and elasticsearch on every build ourselves.
+This first image is where job steps will execute and the other image is used for hosting elasticsearch in its own container.  We use these pre-existing containers to speed up our build process instead of having to download and install elasticsearch on every build ourselves.
 
 ### Permissions
 
