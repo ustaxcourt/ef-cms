@@ -6,8 +6,15 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const CaseSearchForm = connect(
-  { advancedSearchForm: state.advancedSearchForm },
+type CaseSearchFormProps = {
+  submitAdvancedSearchSequence: any;
+  submitDocketNumberSearchSequence: any;
+};
+
+export const CaseSearchForm: React.FC<CaseSearchFormProps> = connect(
+  {
+    advancedSearchForm: state.advancedSearchForm,
+  },
   function CaseSearchForm({
     advancedSearchForm,
     submitAdvancedSearchSequence,
