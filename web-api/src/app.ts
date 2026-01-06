@@ -104,6 +104,7 @@ import { getMaintenanceModeLambda } from './lambdas/maintenance/getMaintenanceMo
 import { getMessageThreadLambda } from './lambdas/messages/getMessageThreadLambda';
 import { getMessagesForCaseLambda } from './lambdas/messages/getMessagesForCaseLambda';
 import { getMinuteSheetLambda } from './lambdas/trialSessionMinutes/getMinuteSheetLambda';
+import { getUnscheduledMinuteSheetsLambda } from './lambdas/trialSessionMinutes/getUnscheduledMinuteSheetsLambda';
 import { getNotificationsLambda } from './lambdas/users/getNotificationsLambda';
 import { getOutboxMessagesForSectionLambda } from './lambdas/messages/getOutboxMessagesForSectionLambda';
 import { getOutboxMessagesForUserLambda } from './lambdas/messages/getOutboxMessagesForUserLambda';
@@ -201,7 +202,6 @@ import { getDocumentDownloadUrlLambda as v2GetDocumentDownloadUrlLambda } from '
 import { getReconciliationReportLambda as v2GetReconciliationReportLambda } from './lambdas/v2/getReconciliationReportLambda';
 import { validatePdfLambda } from './lambdas/documents/validatePdfLambda';
 import { verifyPendingCaseForUserLambda } from './lambdas/cases/verifyPendingCaseForUserLambda';
-import { verifyUserPendingEmailLambda } from './lambdas/users/verifyUserPendingEmailLambda';
 import cors from 'cors';
 import express from 'express';
 import { getTrialSessionOpenCasesCountLambda } from '@web-api/lambdas/trialSessions/getTrialSessionOpenCasesCountLambda';
@@ -211,6 +211,8 @@ import { getRecentFilingsForUserLambda } from './lambdas/recentFilings/getRecent
 import { deactivateUserLambda } from '@web-api/lambdas/automations/deactivateUserLambda';
 import { removeUserPendingEmailLambda } from '@web-api/lambdas/automations/removeUserPendingEmailLambda';
 import { saveMinuteSheetToDraftsLambda } from './lambdas/trialSessionMinutes/saveMinuteSheetToDraftsLambda';
+import { generateNoticeOfWithdrawalPdfLambda } from './lambdas/cases/generateNoticeOfWithdrawalPdfLambda';
+import { validateCaseForNewMinuteSheetLambda } from './lambdas/trialSessions/validateCaseForNewMinuteSheetLambda';
 
 export const app = express();
 
@@ -670,6 +672,10 @@ app.use(expressLogger);
     lambdaWrapper(generateEntryOfAppearancePdfLambda),
   );
   app.post(
+    '/cases/:docketNumber/generate-notice-of-withdrawal',
+    lambdaWrapper(generateNoticeOfWithdrawalPdfLambda),
+  );
+  app.post(
     '/cases/generate-petition',
     lambdaWrapper(generatePetitionPdfLambda),
   );
@@ -909,6 +915,10 @@ app.delete(
  */
 {
   app.get('/trial-sessions/minutes', lambdaWrapper(getMinuteSheetLambda));
+  app.get(
+    '/trial-sessions/minutes/unscheduled',
+    lambdaWrapper(getUnscheduledMinuteSheetsLambda),
+  );
   app.put('/trial-sessions/minutes', lambdaWrapper(updateMinuteSheetLambda));
   app.post(
     '/trial-sessions/:trialSessionId/case/:docketNumber/minutes',
@@ -965,6 +975,10 @@ app.delete(
   app.put(
     '/trial-sessions/:trialSessionId/set-calendar-note',
     lambdaWrapper(saveCalendarNoteLambda),
+  );
+  app.get(
+    '/trial-sessions/:trialSessionId/validate-case-for-minute-sheet',
+    lambdaWrapper(validateCaseForNewMinuteSheetLambda),
   );
   app.get(
     '/trial-sessions/:trialSessionId',
@@ -1056,7 +1070,6 @@ app.delete(
     lambdaWrapper(getUserPendingEmailStatusLambda),
   );
   app.put('/users/pending-email', lambdaWrapper(updateUserPendingEmailLambda));
-  app.put('/users/verify-email', lambdaWrapper(verifyUserPendingEmailLambda));
   app.get(
     '/users/email-availability',
     lambdaWrapper(checkEmailAvailabilityLambda),

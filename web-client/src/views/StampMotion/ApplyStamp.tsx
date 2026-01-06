@@ -48,36 +48,34 @@ export const ApplyStamp = connect(
     validateStampSequence,
     validationErrors,
   }) {
-    const canvasRef = useRef(null) as React.RefObject<HTMLCanvasElement | null>;
-    const signatureRef = useRef(
-      null,
-    ) as React.RefObject<HTMLSpanElement | null>;
+    const canvasRef = useRef<HTMLCanvasElement | null>(null);
+    const signatureRef = useRef<HTMLSpanElement | null>(null);
 
     const renderPDFPage = () => {
       const canvas = canvasRef.current;
       const canvasContext = canvas?.getContext('2d');
-      if (canvasContext) {
-        pdfObj
-          ?.getPage(1)
-          .then(page => {
-            const scale = 1;
-            const viewport: PageViewport = page.getViewport({ scale });
-            if (canvas) {
-              canvas.height = viewport.height;
-              canvas.width = viewport.width;
 
-              const renderContext: RenderParameters = {
-                canvas,
-                canvasContext,
-                viewport,
-              };
-              return page.render(renderContext);
-            }
-          })
-          .catch(() => {
-            /* no-op*/
-          });
+      if (!canvas || !canvasContext) {
+        return;
       }
+
+      pdfObj
+        ?.getPage(1)
+        .then(page => {
+          const scale = 1;
+          const viewport: PageViewport = page.getViewport({ scale });
+          canvas.height = viewport.height;
+          canvas.width = viewport.width;
+
+          const renderContext: RenderParameters = {
+            canvasContext,
+            viewport,
+          };
+          return page.render(renderContext);
+        })
+        .catch(() => {
+          /* no-op*/
+        });
     };
 
     const start = () => {

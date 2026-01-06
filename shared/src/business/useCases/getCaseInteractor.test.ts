@@ -616,9 +616,17 @@ describe('getCaseInteractor', () => {
       }
     });
   });
-  it('should not return email address in servedParties user is not docketClerk or admissionsClerk', async () => {
+  it('should not return email address in docket record for user if they are not a docketClerk or admissionsClerk', async () => {
     getCaseByDocketNumber.mockResolvedValue({
       ...MOCK_CASE,
+      petitioners: [
+        {
+          ...MOCK_CASE.petitioners[0],
+          email: 'bernardlowe@example.com',
+          isAddressSealed: true,
+          sealedAndUnavailable: true,
+        },
+      ],
       docketEntries: [MOCK_ANSWER_2],
     });
 
@@ -629,10 +637,14 @@ describe('getCaseInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    for (const docketEntry of result.docketEntries) {
-      for (const party of docketEntry.servedParties!) {
-        expect(party.email).not.toBeDefined();
-      }
-    }
+    expect(result.docketEntries[0].servedParties).toEqual([
+      {
+        name: 'Bernard Lowe',
+      },
+      {
+        name: 'IRS',
+        role: 'irsSuperuser',
+      },
+    ]);
   });
 });

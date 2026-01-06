@@ -21,6 +21,7 @@ import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/get
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { CaseFactory } from '@shared/business/entities/cases/CaseFactory';
 
 export const fileExternalDocument = async (
   applicationContext: ServerApplicationContext,
@@ -218,9 +219,16 @@ export const fileExternalDocument = async (
     workItems,
   });
 
-  return resolvedCaseEntities.find(
+  const theCase = resolvedCaseEntities.find(
     caseEntity => caseEntity.docketNumber === docketNumber,
   );
+
+  const filteredCase = CaseFactory.getCase({
+    rawCase: theCase,
+    user: authorizedUser,
+  });
+
+  return filteredCase;
 };
 
 export const fileExternalDocumentInteractor = withLocking(

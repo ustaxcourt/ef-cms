@@ -77,6 +77,7 @@ const renderTabFactory = (params: {
 export function Tab(properties: {
   children?: React.ReactNode;
   className?: string;
+  'data-testid'?: string;
   disabled?: boolean;
   icon?: React.JSX.Element | boolean;
   id?: string;
@@ -242,7 +243,7 @@ export function TabsComponent({
 
 export const Tabs: React.FC<TabsProps> = connect(
   {
-    bind: props.bind,
+    bind: props`bind`,
     simpleSetter: sequences.cerebralBindSimpleSetStateSequence,
     value: state[props`bind`],
   },

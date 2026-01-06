@@ -24,7 +24,7 @@ type BindedSelectProps = {
 
 export const BindedSelect: React.FC<BindedSelectProps> = connect(
   {
-    bind: props.bind,
+    bind: props`bind`,
     simpleSetter: sequences.cerebralBindSimpleSetStateSequence,
     value: state[props`bind`],
   },

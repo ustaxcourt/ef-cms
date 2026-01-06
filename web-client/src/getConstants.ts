@@ -128,13 +128,11 @@ import {
   UNSERVABLE_EVENT_CODES,
   US_STATES,
   US_STATES_OTHER,
+  ENTERED_AND_SERVED_EVENT_CODES,
 } from '../../shared/src/business/entities/EntityConstants';
 import { CaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { DocketEntryWorksheet } from '@shared/business/entities/docketEntryWorksheet/DocketEntryWorksheet';
-import {
-  ENTERED_AND_SERVED_EVENT_CODES,
-  SERVICE_STAMP_OPTIONS,
-} from '../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import { SERVICE_STAMP_OPTIONS } from '../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import { ERROR_429 } from '../../shared/src/sharedAppContext';
 import { FORMATS } from '../../shared/src/business/utilities/DateHandler';
 import { ROLE_PERMISSIONS } from '../../shared/src/authorization/authorizationClientService';

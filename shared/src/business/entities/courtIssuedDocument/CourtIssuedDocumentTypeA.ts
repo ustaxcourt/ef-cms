@@ -4,16 +4,15 @@ import {
   GENERIC_ORDER_DOCUMENT_TYPE,
   SERVICE_STAMP_OPTIONS,
 } from './CourtIssuedDocumentConstants';
-import { CourtIssuedDocumentBase } from './CourtIssuedDocumentBase';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
 import joi from 'joi';
 
 export class CourtIssuedDocumentTypeA extends CourtIssuedDocument {
   public attachments: boolean;
-  public documentTitle?: string;
+  public documentTitle: string;
   public documentType: string;
-  public eventCode?: string;
+  public eventCode: string;
   public filingDate?: string;
   public freeText?: string;
   public isLegacy: boolean;
@@ -21,7 +20,7 @@ export class CourtIssuedDocumentTypeA extends CourtIssuedDocument {
 
   constructor(rawProps) {
     super('CourtIssuedDocumentTypeA');
-
+    this.affectedDocketEntries = rawProps.affectedDocketEntries;
     this.attachments = rawProps.attachments || false;
     this.documentTitle = rawProps.documentTitle;
     this.documentType = rawProps.documentType;
@@ -33,7 +32,7 @@ export class CourtIssuedDocumentTypeA extends CourtIssuedDocument {
   }
 
   static VALIDATION_RULES = {
-    ...CourtIssuedDocumentBase.VALIDATION_RULES,
+    ...CourtIssuedDocument.VALIDATION_RULES,
     freeText: JoiValidationConstants.STRING.max(1000)
       .when('documentType', {
         is: joi.exist().valid(...DOCUMENT_TYPES_REQUIRING_DESCRIPTION),
@@ -63,7 +62,7 @@ export class CourtIssuedDocumentTypeA extends CourtIssuedDocument {
   }
 
   getDocumentTitle() {
-    return replaceBracketed(this.documentTitle, this.freeText);
+    return replaceBracketed(this.documentTitle, this.freeText ?? '');
   }
 }
 
