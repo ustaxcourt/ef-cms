@@ -23,7 +23,6 @@ const EVENT_CODES_WITH_NO_ORDER = [
   'NOTT',
   'NOTW',
   'NOU',
-  'O',
   'OBJ',
   'OBJE',
   'OBJN',
