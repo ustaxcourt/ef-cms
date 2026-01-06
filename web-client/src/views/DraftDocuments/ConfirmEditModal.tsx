@@ -9,7 +9,11 @@ const props = cerebralProps as unknown as {
   confirmSequence: string;
 };
 
-export const ConfirmEditModal = connect(
+type ConfirmEditModalProps = {
+  confirmSequence: string;
+}
+
+export const ConfirmEditModal: React.FC<ConfirmEditModalProps> = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
     confirmSequence: sequences[props.confirmSequence],

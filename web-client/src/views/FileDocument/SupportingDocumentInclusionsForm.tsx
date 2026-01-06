@@ -2,33 +2,33 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props as cerebralProps } from 'cerebral';
+import { props } from 'cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 import { RunableSequence as RunnableSequence } from 'cerebral';
 
-const props = cerebralProps as unknown as {
+type SupportingDocumentInclusionsForm = {
   bind: string;
   index: number;
   type: string;
   validationBind: string;
 };
 
-export const SupportingDocumentInclusionsForm = connect(
+export const SupportingDocumentInclusionsForm: React.FC<SupportingDocumentInclusionsForm> = connect(
   {
     DATE_FORMATS: state.constants.DATE_FORMATS,
-    data: state[props.bind],
+    data: state[props`bind`],
     formatAndUpdateDateFromDatePickerSequence:
       sequences.formatAndUpdateDateFromDatePickerSequence,
-    index: props.index,
+    index: props`index`,
     openCleanModalSequence: sequences.openCleanModalSequence,
-    type: props.type,
+    type: props`type`,
     updateFileDocumentWizardFormValueSequence:
       sequences.updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence:
       sequences.validateExternalDocumentInformationSequence,
-    validationData: state[props.validationBind],
+    validationData: state[props`validationBind`],
   },
   function SupportingDocumentInclusionsForm({
     data,
