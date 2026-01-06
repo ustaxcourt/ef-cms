@@ -286,7 +286,10 @@ export const FileDocumentReview = connect(
                 </div>
 
                 <div className="tablet:grid-col-5 margin-bottom-4">
-                  <div className="card height-full margin-bottom-0">
+                  <div
+                    className="card height-full margin-bottom-0"
+                    data-testid="filing-parties-card"
+                  >
                     <div className="content-wrapper">
                       <h3 className="underlined">
                         Parties Filing The Document(s)
