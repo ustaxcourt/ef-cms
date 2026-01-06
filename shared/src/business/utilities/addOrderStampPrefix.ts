@@ -8,9 +8,12 @@ export const addOrderStampPrefix = (
   eventCode: string | undefined,
   text: string | undefined,
 ): string | undefined => {
-  if (eventCode?.includes('O') && text !== undefined && eventCode !== 'NOT') {
+  if (
+    text !== undefined &&
+    eventCode?.includes('O') &&
+    !(['NOT', 'SOP', 'NOTT', 'ROA', 'TCOP', 'OCS'].includes(eventCode))
+  ) {
     return text.startsWith('Order') ? text : `Order - ${text}`;
   }
   return text;
 };
-
