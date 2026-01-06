@@ -71,7 +71,7 @@ describe('appends pro se checklist', () => {
       },
     );
   });
-  it.only('appends pro se checklist only for spouse, if petitioner is represented by counsel and spouse is not, are at different addresses', () => {
+  it('appends pro se checklist only for spouse, if petitioner is represented by counsel and spouse is not, are at different addresses', () => {
     loginAsPrivatePractitioner();
     externalUserCreatesElectronicCaseWithSpouseDifferentAddress().then(
       docketNumber => {
