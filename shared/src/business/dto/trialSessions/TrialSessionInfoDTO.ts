@@ -1,6 +1,7 @@
 import {
   RawTrialSession,
   TJudge,
+  TTrialClerk,
 } from '../../entities/trialSessions/TrialSession';
 import { TrialSessionProceedingType } from '@shared/business/entities/EntityConstants';
 
@@ -21,6 +22,7 @@ export class TrialSessionInfoDTO {
   public sessionStatus: string;
   public swingSession?: boolean;
   public dismissedAlertForNott?: boolean;
+  public trialClerk?: TTrialClerk;
 
   constructor(rawTrialSession: RawTrialSession) {
     this.estimatedEndDate = rawTrialSession.estimatedEndDate;
@@ -39,5 +41,6 @@ export class TrialSessionInfoDTO {
     this.sessionStatus = rawTrialSession.sessionStatus;
     this.swingSession = rawTrialSession.swingSession;
     this.dismissedAlertForNott = rawTrialSession.dismissedAlertForNott;
+    this.trialClerk = rawTrialSession.trialClerk;
   }
 }
