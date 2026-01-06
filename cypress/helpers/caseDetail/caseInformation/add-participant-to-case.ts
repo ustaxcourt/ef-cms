@@ -1,10 +1,10 @@
 import { faker } from '@faker-js/faker';
 
-export function addIntervenorAsPartyToCase() {
+export function addParticipantAsPartyToCase() {
   cy.get('[data-testid="tab-case-information"] > .button-text').click();
   cy.get('[data-testid="tab-parties"] > .button-text').click();
   cy.get('.grid-gap > .grid-col-3 > .margin-right-0').click();
-  cy.get('[data-testid="add-petitioner-contact-type"]').select('intervenor');
+  cy.get('[data-testid="add-petitioner-contact-type"]').select('participant');
   cy.get('[data-testid="add-petitioner-name"]').type(faker.person.firstName());
   cy.get('[data-testid="contact.address1"]').type('123 Main St');
   cy.get('[data-testid="contact.city"]').type('Charlotte');
