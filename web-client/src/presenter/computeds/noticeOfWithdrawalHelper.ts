@@ -12,6 +12,7 @@ export const noticeOfWithdrawalHelper = (
 ): {
   filingParties: TPetitioner[];
   partiesWithPaperService: TPetitioner[];
+  showConsolidatedCaseAlertWarning: boolean;
   showEditContactInformation: boolean;
   showRespondant: boolean;
 } => {
@@ -35,9 +36,13 @@ export const noticeOfWithdrawalHelper = (
     p => p.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
   );
 
+  const showConsolidatedCaseAlertWarning =
+    caseDetail.consolidatedCases?.length > 0;
+
   return {
     filingParties,
     partiesWithPaperService,
+    showConsolidatedCaseAlertWarning,
     showEditContactInformation,
     showRespondant,
   };
