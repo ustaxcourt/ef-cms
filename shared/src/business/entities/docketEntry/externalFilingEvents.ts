@@ -2109,10 +2109,10 @@ export const EXTERNAL_FILING_EVENTS: AllExternalFilingEvents = {
       allowOrderResponse: true,
     },
     {
-      documentTitle: 'Motion to Withdraw Counsel by Party',
-      documentType: 'Motion to Withdraw Counsel by Party',
+      documentTitle: 'Motion to Withdraw Counsel',
+      documentType: 'Motion to Withdraw Counsel (filed by petitioner)',
       category: 'Motion',
-      eventCode: 'M116', 
+      eventCode: 'M116',
       scenario: 'Standard',
       labelPreviousDocument: '',
       labelFreeText: '',
