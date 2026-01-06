@@ -16,7 +16,7 @@ export const setValidationAlertErrorsAction = ({
   let errorKeys = Object.keys(props.errors);
 
   const getErrorKeys = keys => {
-    const filteredErrorKeys = [];
+    const filteredErrorKeys: string[] = [];
     keys.forEach(key => {
       let topLevelKey = key;
       if (key.includes('.')) {
@@ -30,7 +30,7 @@ export const setValidationAlertErrorsAction = ({
     // Since this only returns error keys provided in an ordered array, it's
     // possible something is missed. We should ensure all error messages get
     // returned, regardless of the order.
-    let skippedKeys = [];
+    let skippedKeys: string[] = [];
 
     if (filteredErrorKeys.length < errorKeys.length) {
       skippedKeys = errorKeys.filter(

@@ -2,22 +2,22 @@ import { ConsolidatedCasesCheckboxes } from './ConsolidatedCasesCheckboxes';
 import { Hint } from '../ustc-ui/Hint/Hint';
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props as cerebralProps } from 'cerebral';
+import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-const props = cerebralProps as unknown as {
-  confirmSequence: unknown;
-  documentTitle: unknown;
-};
+type ConfirmInitiateServiceModalProps = {
+  confirmSequence: Function;
+  documentTitle?: string;
+}
 
-export const ConfirmInitiateServiceModal = connect(
+export const ConfirmInitiateServiceModal: React.FC<ConfirmInitiateServiceModalProps> = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
     confirmInitiateServiceModalHelper: state.confirmInitiateServiceModalHelper,
-    confirmSequence: props.confirmSequence,
-    documentTitle: props.documentTitle,
+    confirmSequence: props`confirmSequence`,
+    documentTitle: props`documentTitle`,
     waitingForResponse: state.progressIndicator.waitingForResponse,
   },
   function ConfirmInitiateServiceModal({
@@ -27,7 +27,7 @@ export const ConfirmInitiateServiceModal = connect(
     documentTitle,
     waitingForResponse,
   }: {
-    cancelSequence: () => void;
+    cancelSequence: Function;
     confirmInitiateServiceModalHelper: {
       confirmationText: string;
       showPaperAlert: boolean;
@@ -35,7 +35,7 @@ export const ConfirmInitiateServiceModal = connect(
       contactsNeedingPaperService: Array<{ name: string }>;
       showConsolidatedCasesForService: boolean;
     };
-    confirmSequence: () => void;
+    confirmSequence: Function;
     documentTitle: string;
     waitingForResponse: boolean;
   }) {
