@@ -4,11 +4,13 @@ import {
   createISODateString,
   formatDateString,
   prepareDateFromString,
-} from '../../../../../shared/src/business/utilities/DateHandler';
-import { SESSION_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { loginAsClerkOfCourt } from '../../../../helpers/authentication/login-as-helpers';
-import { loginAsPetitionsClerk1 } from '../../../../helpers/authentication/login-as-helpers';
-import { createAndServePaperPetition } from '../../../../helpers/fileAPetition/create-and-serve-paper-petition';
+} from '@shared/business/utilities/DateHandler';
+import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
+import {
+  loginAsClerkOfCourt,
+  loginAsPetitionsClerk1,
+} from 'cypress/helpers/authentication/login-as-helpers';
+import { createAndServePaperPetition } from 'cypress/helpers/fileAPetition/create-and-serve-paper-petition';
 import {
   createMessage,
   enterSubject,
