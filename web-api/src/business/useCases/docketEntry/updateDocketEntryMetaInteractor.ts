@@ -19,6 +19,9 @@ import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseA
 import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import diff from 'diff-arrays-of-objects';
+import { upsertDocketEntryRelatedEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntryRelatedEntries';
+import { concat } from 'lodash';
 
 export const updateDocketEntryMeta = async (
   applicationContext: ServerApplicationContext,
@@ -60,6 +63,16 @@ export const updateDocketEntryMeta = async (
   if (isUnservedAndNotExempt) {
     throw new Error('Unable to update unserved docket entry.');
   }
+
+  if (
+    docketEntryMeta.affectedDocketEntries ||
+    originalDocketEntry.affectedDocketEntries
+  )
+    await handleRelatedDocketEntries(
+      originalDocketEntry,
+      docketEntryMeta,
+      docketNumber,
+    );
 
   const editableFields = {
     action: docketEntryMeta.action,
@@ -278,3 +291,36 @@ export const updateDocketEntryMetaInteractor = withLocking(
     identifiers: [`case|${docketNumber}`],
   }),
 );
+
+const handleRelatedDocketEntries = async (
+  originalDocketEntry: DocketEntry,
+  docketEntryMeta: any,
+  docketNumber: string,
+) => {
+  {
+    const { added, updated, removed } = diff(
+      originalDocketEntry.affectedDocketEntries,
+      docketEntryMeta.affectedDocketEntries,
+      'docketEntryId',
+    );
+
+    if (added.length > 0 || updated.length > 0) {
+      await upsertDocketEntryRelatedEntries({
+        orderDocketEntry: docketEntryMeta,
+        motionDocketEntries: concat(added ?? [], updated ?? []).map(m => ({
+          docketNumber,
+          ...m,
+        })),
+        served: true,
+      });
+    }
+
+    if (removed.length > 0) {
+      await upsertDocketEntryRelatedEntries({
+        orderDocketEntry: docketEntryMeta,
+        motionDocketEntries: removed.map(m => ({ docketNumber, ...m })),
+        served: false,
+      });
+    }
+  }
+};

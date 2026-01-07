@@ -222,7 +222,7 @@ describe('DocketEntry entity', () => {
       );
 
       expect(createdDocketEntry.getFormattedValidationErrors()).toEqual({
-        'filers[1]': '"filers[1]" must be a valid GUID',
+        'filers-1': '"filers[1]" must be a valid GUID',
       });
     });
   });
@@ -313,7 +313,10 @@ describe('DocketEntry entity', () => {
         Object.keys(
           createdDocketEntry.getFormattedValidationErrors() as object,
         ),
-      ).toEqual(['documentType', 'eventCode']);
+      ).toEqual([
+        'secondaryDocument-documentType',
+        'secondaryDocument-eventCode',
+      ]);
     });
 
     it('should filter out unnecessary values from servedParties', () => {

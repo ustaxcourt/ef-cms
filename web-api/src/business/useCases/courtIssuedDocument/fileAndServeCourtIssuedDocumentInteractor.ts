@@ -29,6 +29,8 @@ import {
   RawCaseDeadline,
 } from '@shared/business/entities/CaseDeadline';
 import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
+import { CourtIssuedDocumentAnyType } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import { addAssociatedDocketEntries } from '@web-api/business/useCaseHelper/docketEntry/addAssociatedDocketEntries';
 
 export const fileAndServeCourtIssuedDocument = async (
   applicationContext: ServerApplicationContext,
@@ -42,7 +44,7 @@ export const fileAndServeCourtIssuedDocument = async (
     clientConnectionId: string;
     docketEntryId: string;
     docketNumbers: string[];
-    form: any;
+    form: CourtIssuedDocumentAnyType;
     subjectCaseDocketNumber: string;
   },
   authorizedUser: UnknownAuthUser,
@@ -249,6 +251,15 @@ export const fileAndServeCourtIssuedDocument = async (
         });
       }),
     );
+
+    if (form.affectedDocketEntries) {
+      await addAssociatedDocketEntries(
+        casesToUpdate,
+        form,
+        docketEntryToServe,
+        true,
+      );
+    }
 
     serviceResults = await applicationContext
       .getUseCaseHelpers()
