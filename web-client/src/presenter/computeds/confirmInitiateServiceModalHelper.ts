@@ -134,19 +134,19 @@ export const shouldAllowMultiDocketing = ({ docketEntry, isLead }) => {
     !docketEntry.multiDocketedOriginalDocketNumber &&
     !!docketEntry.processingStatus;
 
-  const isBeingFiledOrServed =
+  const isFiled =
     !docketEntry.multiDocketedOriginalDocketNumber &&
     !docketEntry.processingStatus;
 
   const isMultiDocketed = DocketEntry.isMultiDocketed(docketEntry);
 
-  const isMultiDocketableEvent = !NON_MULTI_DOCKETABLE_EVENT_CODES.includes(
+  const isMultiDocketable = !NON_MULTI_DOCKETABLE_EVENT_CODES.includes(
     docketEntry.eventCode,
   );
 
-  let shouldAllowMultiDocketing = isLead && isMultiDocketableEvent;
+  let shouldAllowMultiDocketing = isLead && isMultiDocketable;
 
-  if (!isSavedForLater && !isMultiDocketed && !isBeingFiledOrServed) {
+  if (!isSavedForLater && !isMultiDocketed && !isFiled) {
     shouldAllowMultiDocketing = false;
   }
 
