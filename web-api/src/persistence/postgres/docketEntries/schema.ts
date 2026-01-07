@@ -120,3 +120,24 @@ export const DW_DOCKET_ENTRY_COLUMNS = Object.keys(
 
 export type DocketEntryKysely = Selectable<DocketEntryTable>;
 export type NewDocketEntryKysely = Insertable<DocketEntryTable>;
+
+///////////////////////////////////
+
+export const docketEntryRelatedDocketEntryTableDefinition = {
+  docketNumber: DEFAULT as string,
+  primaryDocketEntryId: DEFAULT as string,
+  secondaryDocketEntryId: DEFAULT as string,
+  disposition: DEFAULT as string,
+  served: DEFAULT as boolean,
+};
+
+export type DocketEntryRelatedDocketEntryTable =
+  typeof docketEntryRelatedDocketEntryTableDefinition;
+export const DW_DOCKET_ENTRY_ORDER_MOTION_COLUMNS = Object.keys(
+  docketEntryRelatedDocketEntryTableDefinition,
+) as Array<keyof DocketEntryRelatedDocketEntryTable>;
+
+export type DocketEntryOrderMotionKysely =
+  Selectable<DocketEntryRelatedDocketEntryTable>;
+export type NewDocketEntryOrderMotionKysely =
+  Insertable<DocketEntryRelatedDocketEntryTable>;
