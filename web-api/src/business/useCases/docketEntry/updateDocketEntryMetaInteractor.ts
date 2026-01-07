@@ -19,7 +19,7 @@ import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import diff from 'diff-arrays-of-objects';
 import { upsertDocketEntryRelatedEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntryRelatedEntries';
-import _ from 'lodash';
+import { concat } from 'lodash';
 
 export const updateDocketEntryMeta = async (
   applicationContext: ServerApplicationContext,
@@ -238,7 +238,7 @@ const handleRelatedDocketEntries = async (
     if (added.length > 0 || updated.length > 0) {
       await upsertDocketEntryRelatedEntries({
         orderDocketEntry: docketEntryMeta,
-        motionDocketEntries: _.concat(added ?? [], updated ?? []).map(m => ({
+        motionDocketEntries: concat(added ?? [], updated ?? []).map(m => ({
           docketNumber,
           ...m,
         })),

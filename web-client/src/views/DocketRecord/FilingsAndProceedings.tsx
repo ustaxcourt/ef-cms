@@ -6,7 +6,6 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
-import _ from 'lodash';
 
 type FilingsAndProceedingsProps = {
   entry: {

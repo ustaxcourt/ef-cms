@@ -81,7 +81,6 @@ export const ModalDialog = ({
   };
 
   const runConfirmSequence = evt => {
-    console.log(`runConfirmSequence was triggered`);
     evt.stopPropagation();
     confirmSequence.call();
   };
