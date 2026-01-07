@@ -11,7 +11,7 @@
     "@sparticuz/chromium": "143.0.0",
     "pug": "3.0.3",
     "puppeteer-core": "24.32.1",
-    "sass": "1.96.0"
+    "sass": "1.97.2"
   },
   "scripts": {},
   "main": "index.js",
