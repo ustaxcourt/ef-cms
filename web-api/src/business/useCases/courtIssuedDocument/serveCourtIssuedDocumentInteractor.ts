@@ -19,6 +19,7 @@ import {
   asyncHandleLockError,
   withLocking,
 } from '@web-api/persistence/postgres/utils/mutex';
+import { updateDocketEntryRelatedEntryServed } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryRelatedEntryServed';
 
 export const serveCourtIssuedDocument = async (
   applicationContext: ServerApplicationContext,
@@ -141,6 +142,13 @@ export const serveCourtIssuedDocument = async (
         });
       }),
     );
+
+    if (DocketEntry.isOrder(docketEntryToServe.eventCode)) {
+      await updateDocketEntryRelatedEntryServed({
+        orderDocketEntry: docketEntryToServe,
+        served: true,
+      });
+    }
 
     serviceResults = await applicationContext
       .getUseCaseHelpers()
