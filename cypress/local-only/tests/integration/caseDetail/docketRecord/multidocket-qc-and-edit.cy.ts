@@ -227,24 +227,49 @@ describe('Multidocket QC Process and Edit Docket Entry', () => {
     });
 
     describe('Member Case', () => {
-      it('should display help text and disable Document Info tab fields when editing a multidocketed entry in a member case', () => {
+      it('should allow editing a multidocketed docket entry in a member case and display help text', () => {
         loginAsDocketClerk1();
         goToCase(consolidatedGroupInfo.memberDocketNumbers[0]);
 
-        cy.get('[data-testid="document-viewer-link-RPT"]')
-          .closest('tr')
-          .find('[data-testid="edit-RPT"]')
-          .click();
+        cy.get('[data-testid="edit-RPT"]').click();
 
         cy.get('[data-testid="alert-info"]').should('exist');
         cy.get('[data-testid="alert-info"]').should(
           'contain',
-          'Edits to Document Info can only be done from the lead case in a consolidated group. This is a member case.',
+          'Edits to Document Info will also be edited for:',
+        );
+        cy.get('[data-testid="alert-info"]').should(
+          'contain',
+          'Service and Action edits will only apply to this case.',
         );
 
+        cy.get('#document-type').should('exist');
         cy.get('#document-type').should(
-          'have.class',
+          'not.have.class',
           'select-react-element--is-disabled',
+        );
+      });
+
+      it('should propagate document edits from member case to all consolidated cases', () => {
+        loginAsDocketClerk1();
+        goToCase(consolidatedGroupInfo.memberDocketNumbers[0]);
+
+        cy.get('[data-testid="edit-RPT"]').click();
+
+        cy.get('#document-type').click();
+        cy.get('#document-type').type('Administrative Record{enter}');
+
+        cy.get('[data-testid="save-edit-docket-entry-meta"]').click();
+        cy.get('[data-testid="success-alert"]').should('exist');
+
+        goToCase(consolidatedGroupInfo.leadDocketNumber);
+        cy.get('[data-testid="document-viewer-link-ADMR"]').should('exist');
+
+        consolidatedGroupInfo.memberDocketNumbers.forEach(
+          memberDocketNumber => {
+            goToCase(memberDocketNumber);
+            cy.get('[data-testid="document-viewer-link-ADMR"]').should('exist');
+          },
         );
       });
 
@@ -252,9 +277,9 @@ describe('Multidocket QC Process and Edit Docket Entry', () => {
         loginAsDocketClerk1();
         goToCase(consolidatedGroupInfo.memberDocketNumbers[0]);
 
-        cy.get('[data-testid="document-viewer-link-RPT"]')
+        cy.get('[data-testid="document-viewer-link-ADMR"]')
           .closest('tr')
-          .find('[data-testid="edit-RPT"]')
+          .find('[data-testid="edit-ADMR"]')
           .click();
 
         cy.get('#tab-service').click();
@@ -266,14 +291,14 @@ describe('Multidocket QC Process and Edit Docket Entry', () => {
         cy.get('[data-testid="save-edit-docket-entry-meta"]').click();
         cy.get('[data-testid="success-alert"]').should('exist');
 
-        cy.get('[data-testid="document-viewer-link-RPT"]')
+        cy.get('[data-testid="document-viewer-link-ADMR"]')
           .closest('tr')
           .find('[data-testid^="docket-entry-servedPartiesCode-"]')
           .should('contain', 'P');
 
         goToCase(consolidatedGroupInfo.leadDocketNumber);
 
-        cy.get('[data-testid="document-viewer-link-RPT"]')
+        cy.get('[data-testid="document-viewer-link-ADMR"]')
           .closest('tr')
           .find('[data-testid^="docket-entry-servedPartiesCode-"]')
           .should('contain', 'B');
@@ -283,9 +308,9 @@ describe('Multidocket QC Process and Edit Docket Entry', () => {
         loginAsDocketClerk1();
         goToCase(consolidatedGroupInfo.memberDocketNumbers[0]);
 
-        cy.get('[data-testid="document-viewer-link-RPT"]')
+        cy.get('[data-testid="document-viewer-link-ADMR"]')
           .closest('tr')
-          .find('[data-testid="edit-RPT"]')
+          .find('[data-testid="edit-ADMR"]')
           .click();
 
         cy.get('#tab-action').click();
@@ -297,9 +322,9 @@ describe('Multidocket QC Process and Edit Docket Entry', () => {
         loginAsDocketClerk1();
         goToCase(consolidatedGroupInfo.memberDocketNumbers[0]);
 
-        cy.get('[data-testid="document-viewer-link-RPT"]')
+        cy.get('[data-testid="document-viewer-link-ADMR"]')
           .closest('tr')
-          .find('[data-testid="edit-RPT"]')
+          .find('[data-testid="edit-ADMR"]')
           .click();
 
         cy.get('#tab-action').click();
@@ -311,7 +336,7 @@ describe('Multidocket QC Process and Edit Docket Entry', () => {
         loginAsDocketClerk1();
         goToCase(consolidatedGroupInfo.memberDocketNumbers[0]);
 
-        cy.get('[data-testid="document-viewer-link-RPT"]')
+        cy.get('[data-testid="document-viewer-link-ADMR"]')
           .closest('tr')
           .find('[data-testid^="seal-docket-entry-button-"]')
           .should('not.be.disabled');

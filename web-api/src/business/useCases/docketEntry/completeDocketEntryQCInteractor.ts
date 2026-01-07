@@ -208,7 +208,7 @@ const completeDocketEntryQC = async (
       petitioners: currentCase.petitioners,
     });
 
-    // extract to helper function?
+    // 8477 TODO: extract to helper function?
     if (
       currentDocketEntry.multiDocketedOriginalDocketNumber ===
         currentDocketEntry.docketNumber ||
@@ -224,7 +224,6 @@ const completeDocketEntryQC = async (
       applicationContext,
       docketEntry: updatedDocketEntry,
     });
-
     const currentDocumentTitle = getDocumentTitleForNoticeOfChange({
       applicationContext,
       docketEntry: currentDocketEntry,
@@ -407,7 +406,7 @@ const completeDocketEntryQC = async (
         docketEntryId: noticeUpdatedDocketEntry.docketEntryId,
       });
 
-      // this is bad, I do not like it Sam I Am
+      // 8477 TODO this is bad, I do not like it Sam I Am
       if (
         currentDocketEntry.multiDocketedOriginalDocketNumber ===
           currentDocketEntry.docketNumber ||
@@ -442,6 +441,8 @@ const completeDocketEntryQC = async (
     }
   }
 
+  await settlePromises(updatePersistencePromises);
+
   if (isNewCoverSheetNeeded) {
     await applicationContext.getUseCases().addCoversheetInteractor(
       applicationContext,
@@ -452,8 +453,6 @@ const completeDocketEntryQC = async (
       authorizedUser,
     );
   }
-
-  await settlePromises(updatePersistencePromises);
 
   const { currentCase: filingCase } = casesWithWorkItems.find(co => {
     return co.currentCase.docketNumber === docketNumber;
