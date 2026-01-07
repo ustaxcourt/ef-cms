@@ -837,7 +837,7 @@ export class DocketEntry extends JoiValidationEntity {
   }
 
   static isMultiDocketed(originalDocketEntry: RawDocketEntry) {
-    return originalDocketEntry.multiDocketedOn.length > 1;
+    return originalDocketEntry.multiDocketedOn?.length > 1;
   }
 
   static isMinuteEntry({

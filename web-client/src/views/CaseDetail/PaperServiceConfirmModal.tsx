@@ -67,7 +67,7 @@ export const PaperServiceConfirmModal = connect(
                     {confirmInitiateServiceModalHelper.contactsNeedingPaperService.map(
                       contact => (
                         <div key={`${contact.docketNumber}-${contact.name}`}>
-                          {confirmInitiateServiceModalHelper.shouldAllowMultiDocketing &&
+                          {confirmInitiateServiceModalHelper.allowMultiDocketing &&
                             `${contact.docketNumber} - `}
                           {contact.name}, {contact.formattedContactType}
                         </div>

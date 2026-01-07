@@ -18,7 +18,7 @@ export type ContactsNeedingPaperService = {
 export const confirmInitiateServiceModalHelper = (
   get: Get,
 ): {
-  shouldAllowMultiDocketing: boolean;
+  allowMultiDocketing: boolean;
   confirmationText: string;
   paperFilingText: string;
   additionalServedCases: { docketNumber: string; caseTitle: string }[];
@@ -39,7 +39,7 @@ export const confirmInitiateServiceModalHelper = (
 
   const isLead = isLeadCase(formattedCaseDetail);
 
-  const shouldAllowMultiDocketing = shouldAllowMultiDocket({
+  const allowMultiDocketing = allowMultiDocketing({
     docketEntry,
     isLead,
   });
@@ -53,7 +53,7 @@ export const confirmInitiateServiceModalHelper = (
   let additionalServedCases: { docketNumber: string; caseTitle: string }[] = [];
   let casesToIterateOver: any[] = [];
 
-  if (shouldAllowMultiDocketing) {
+  if (allowMultiDocketing) {
     additionalServedCases = formattedCaseDetail.consolidatedCases
       .filter(c => checkedCases.includes(c.docketNumber))
       .filter(c => c.docketNumber !== formattedCaseDetail.docketNumber)
@@ -99,16 +99,16 @@ export const confirmInitiateServiceModalHelper = (
       });
   }
 
-  const paperFilingText = shouldAllowMultiDocketing
+  const paperFilingText = allowMultiDocketing
     ? 'Paper service is required for these parties:'
     : 'This case has parties receiving paper service:';
 
-  const confirmationText = shouldAllowMultiDocketing
+  const confirmationText = allowMultiDocketing
     ? 'The following document will be served on all parties in selected cases:'
     : 'The following document will be served on all parties:';
 
   return {
-    shouldAllowMultiDocketing,
+    allowMultiDocketing,
     confirmationText,
     paperFilingText,
     additionalServedCases,
@@ -129,7 +129,7 @@ const roleToDisplay = party => {
   }
 };
 
-export const shouldAllowMultiDocket = ({ docketEntry, isLead }) => {
+export const allowMultiDocketing = ({ docketEntry, isLead }) => {
   const isSavedForLater =
     !docketEntry.multiDocketedOriginalDocketNumber &&
     !!docketEntry.processingStatus;
@@ -144,11 +144,11 @@ export const shouldAllowMultiDocket = ({ docketEntry, isLead }) => {
     docketEntry.eventCode,
   );
 
-  let shouldAllowMultiDocket = isLead && isMultiDocketableEvent;
+  let allowMultiDocketing = isLead && isMultiDocketableEvent;
 
   if (!isSavedForLater && !isMultiDocketed && !isBeingFiledOrServed) {
-    shouldAllowMultiDocket = false;
+    allowMultiDocketing = false;
   }
 
-  return shouldAllowMultiDocket;
+  return allowMultiDocketing;
 };
