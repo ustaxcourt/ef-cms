@@ -206,6 +206,7 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 - As of [this release](https://github.com/mozilla/pdf.js/releases/tag/v5.1.91), and I think [this PR](https://github.com/mozilla/pdf.js/pull/19689), pdfjs seems to expect certain browser-side API functionality when loaded. This causes issues with our Cypress tests. The best way to fix this is worth investigating further. Perhaps we could polyfill, or even consider creating an issue in the pdfjs repo.
 - Look at `shared/src/business/utilities/pdfs/getPdfJs.ts`
+- As 0f 01/05/2026 `pdfjs-dist` is still causing Cypress Test to fail randomly
 
 ### DWT
 

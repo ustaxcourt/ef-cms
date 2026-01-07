@@ -252,11 +252,11 @@ describe('fetchEventCodesCountForJudges', () => {
   it('returns the documentEventCodes as an Array when the documentEventCodes is Array', () => {
     expect(
       parseDocumentEventCodes(OPINION_EVENT_CODES_WITH_BENCH_OPINION),
-    ).toMatchObject({
-      '0': 'MOP',
-      '1': 'SOP',
-      '2': 'TCOP',
-      '3': 'OST',
-    });
+    ).toMatchObject([
+      'MOP',
+      'SOP',
+      'TCOP',
+      'OST',
+    ]);
   });
 });
