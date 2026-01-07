@@ -1,6 +1,6 @@
 import {
   getOriginalNoticeValues,
-  buildUpdatedPrimaryDocketEntry,
+  buildUpdatedDocketEntry,
   needsNewCoversheet,
 } from './noticeOfDocketChangeHelper';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
@@ -199,7 +199,7 @@ describe('noticeOfDocketChangeHelper', () => {
         additionalInfo: 'Additional Info',
       };
 
-      const result = buildUpdatedPrimaryDocketEntry({
+      const result = buildUpdatedDocketEntry({
         authorizedUser: mockDocketClerkUser,
         docketEntry: mockDocketEntry,
         editableFields,
