@@ -437,6 +437,14 @@ app.use(expressLogger);
     lambdaWrapper(fileExternalDocumentToCaseLambda),
   );
   app.post(
+    '/async/case-documents/:docketNumber/external-document',
+    lambdaWrapper(
+      fileExternalDocumentToCaseLambda,
+      { isAsyncSync: true },
+      applicationContext,
+    ),
+  );
+  app.post(
     '/async/case-documents/:docketNumber/paper-filing',
     lambdaWrapper(addPaperFilingLambda, { isAsync: true }),
   );
