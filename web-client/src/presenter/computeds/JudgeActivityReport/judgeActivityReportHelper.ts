@@ -8,6 +8,7 @@ import {
 } from '@shared/business/utilities/DateHandler';
 import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
+import { isLeadCase } from '@shared/business/entities/cases/Case';
 
 function calculateStatisticsTotal(
   casesClosedByJudge,
@@ -71,13 +72,13 @@ export const judgeActivityReportHelper = (
     judgeActivityReportData.submittedAndCavCasesByJudge || []
   ).map(aCase => {
     let consolidatedIconTooltipText = '';
-    let isLeadCase = false;
+    let isLeadCaseResult = false;
     let inConsolidatedGroup = false;
     let formattedFinalBriefDueDate = '';
 
-    if (aCase.leadDocketNumber === aCase.docketNumber) {
+    if (isLeadCase(aCase)) {
       consolidatedIconTooltipText = 'Lead case';
-      isLeadCase = true;
+      isLeadCaseResult = true;
       inConsolidatedGroup = true;
     }
 
@@ -103,7 +104,7 @@ export const judgeActivityReportHelper = (
       consolidatedIconTooltipText,
       daysElapsedSinceLastStatusChange,
       inConsolidatedGroup,
-      isLeadCase,
+      isLeadCase: isLeadCaseResult,
       statusDate,
     };
   });

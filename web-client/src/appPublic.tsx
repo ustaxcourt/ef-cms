@@ -50,7 +50,7 @@ import { faUser } from '@fortawesome/free-regular-svg-icons/faUser';
 import { isFunction, mapValues } from 'lodash';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { presenter } from './presenter/presenter-public';
-import App from 'cerebral';
+import App, { ModuleDefinition } from 'cerebral';
 import React from 'react';
 
 import { faFile } from '@fortawesome/free-solid-svg-icons/faFile';
@@ -147,7 +147,7 @@ const appPublic = {
       route,
     };
 
-    const cerebralApp = App(presenter, debugTools);
+    const cerebralApp = App(presenter as ModuleDefinition, debugTools);
 
     applicationContext.setForceRefreshCallback(async () => {
       await cerebralApp.getSequence('handleAppHasUpdatedSequence')();
@@ -156,15 +156,17 @@ const appPublic = {
     router.initialize(cerebralApp);
 
     const container = window.document.querySelector('#app-public');
-    const root = createRoot(container);
+    if (container) {
+      const root = createRoot(container);
 
-    root.render(
-      <Container app={cerebralApp}>
-        <AppComponentPublic />
-        <GlobalModalWrapper />
-        {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
-      </Container>,
-    );
+      root.render(
+        <Container app={cerebralApp}>
+          <AppComponentPublic />
+          <GlobalModalWrapper />
+          {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
+        </Container>,
+      );
+    }
   },
 };
 

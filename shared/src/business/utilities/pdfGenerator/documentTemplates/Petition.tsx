@@ -221,6 +221,18 @@ export const Petition = ({
                 {contactPrimary.email}
               </div>
             )}
+            {contactPrimary.preferredLanguage && (
+              <div>
+                <b>Preferred language: </b>
+                {contactPrimary.preferredLanguage}
+              </div>
+            )}
+            {contactPrimary.preferredCommunicationMethod && (
+              <div>
+                <b>Preferred method of communication: </b>
+                {contactPrimary.preferredCommunicationMethod}
+              </div>
+            )}
           </div>
           <div className="petition-contact-info">
             {contactSecondary && (
@@ -272,6 +284,18 @@ export const Petition = ({
                   <div>
                     <b>Place of legal residence: </b>
                     {ALL_STATE_OPTIONS[contactSecondary.placeOfLegalResidence]}
+                  </div>
+                )}
+                {contactSecondary.preferredLanguage && (
+                  <div>
+                    <b>Preferred language: </b>
+                    {contactSecondary.preferredLanguage}
+                  </div>
+                )}
+                {contactSecondary.preferredCommunicationMethod && (
+                  <div>
+                    <b>Preferred method of communication: </b>
+                    {contactSecondary.preferredCommunicationMethod}
                   </div>
                 )}
               </div>

@@ -1,27 +1,3 @@
-module "dynamo_table_alpha" {
-  source = "../dynamo-table"
-
-  environment = var.environment
-  table_name  = "efcms-${var.environment}-alpha"
-
-  providers = {
-    aws           = aws
-    aws.us-west-1 = aws.us-west-1
-  }
-}
-
-module "dynamo_table_beta" {
-  source = "../dynamo-table"
-
-  environment = var.environment
-  table_name  = "efcms-${var.environment}-beta"
-
-  providers = {
-    aws           = aws
-    aws.us-west-1 = aws.us-west-1
-  }
-}
-
 module "elasticsearch_alpha" {
   source = "../elasticsearch"
 
