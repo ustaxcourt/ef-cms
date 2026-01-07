@@ -39,7 +39,7 @@ export const confirmInitiateServiceModalHelper = (
 
   const isLead = isLeadCase(formattedCaseDetail);
 
-  const allowMultiDocketing = allowMultiDocketing({
+  const allowMultiDocketing = shouldAllowMultiDocketing({
     docketEntry,
     isLead,
   });
@@ -129,7 +129,7 @@ const roleToDisplay = party => {
   }
 };
 
-export const allowMultiDocketing = ({ docketEntry, isLead }) => {
+export const shouldAllowMultiDocketing = ({ docketEntry, isLead }) => {
   const isSavedForLater =
     !docketEntry.multiDocketedOriginalDocketNumber &&
     !!docketEntry.processingStatus;
@@ -144,11 +144,11 @@ export const allowMultiDocketing = ({ docketEntry, isLead }) => {
     docketEntry.eventCode,
   );
 
-  let allowMultiDocketing = isLead && isMultiDocketableEvent;
+  let shouldAllowMultiDocketing = isLead && isMultiDocketableEvent;
 
   if (!isSavedForLater && !isMultiDocketed && !isBeingFiledOrServed) {
-    allowMultiDocketing = false;
+    shouldAllowMultiDocketing = false;
   }
 
-  return allowMultiDocketing;
+  return shouldAllowMultiDocketing;
 };

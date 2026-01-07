@@ -1,6 +1,6 @@
 import { isLeadCase } from '@shared/business/entities/cases/Case';
 import { state } from '@web-client/presenter/app.cerebral';
-import { allowMultiDocketing } from '@web-client/presenter/computeds/confirmInitiateServiceModalHelper';
+import { shouldAllowMultiDocketing } from '@web-client/presenter/computeds/confirmInitiateServiceModalHelper';
 
 export const isDocketEntryMultiDocketableAction = ({
   get,
@@ -18,7 +18,7 @@ export const isDocketEntryMultiDocketableAction = ({
 
   const isLead = isLeadCase(caseDetail);
 
-  const checkAllTheCheckboxes = allowMultiDocketing({
+  const checkAllTheCheckboxes = shouldAllowMultiDocketing({
     docketEntry,
     isLead,
   });
