@@ -70,9 +70,7 @@ export const fetchEventCodesCountForJudges = async ({
     },
     {},
   );
-  const documentEventCodes = Array.isArray(params.documentEventCodes)
-    ? params.documentEventCodes
-    : Object.values(params.documentEventCodes);
+  const documentEventCodes = parseDocumentEventCodes(params.documentEventCodes);
 
   const computedAggregatedEventCodes = documentEventCodes.map(eventCode => {
     return {
@@ -83,4 +81,10 @@ export const fetchEventCodesCountForJudges = async ({
   });
 
   return { aggregations: computedAggregatedEventCodes, total };
+};
+
+export const parseDocumentEventCodes = documentEventCodes => {
+  return Array.isArray(documentEventCodes)
+    ? documentEventCodes
+    : Object.values(documentEventCodes);
 };
