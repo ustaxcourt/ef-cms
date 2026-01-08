@@ -433,10 +433,6 @@ app.use(expressLogger);
     lambdaWrapper(serveExternallyFiledDocumentLambda, { isAsync: true }),
   );
   app.post(
-    '/case-documents/:docketNumber/external-document',
-    lambdaWrapper(fileExternalDocumentToCaseLambda),
-  );
-  app.post(
     '/async/case-documents/:docketNumber/external-document',
     lambdaWrapper(
       fileExternalDocumentToCaseLambda,
