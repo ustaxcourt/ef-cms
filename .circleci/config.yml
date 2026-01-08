@@ -629,10 +629,6 @@ jobs:
           command: |
             cd ./scripts/postgres
             DB_HOST="$POSTGRES_HOST" ./create-rds-users.sh
-      - run:
-          name: Set MIGRATE_FLAG to "true" to Force Cases and Docket Entries to Index
-          command: |
-            ./scripts/migration/toggle-migrate-flag.sh --on
 
   index-cases:
     docker:
@@ -649,21 +645,17 @@ jobs:
           command: |
             ./scripts/env/env-for-circle.sh
             source $BASH_ENV
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
-              ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
-                --domain-name "${DESTINATION_DOMAIN}" \
-                --region "us-east-1" \
-                --query 'DomainStatus.Endpoint' \
-                --output text)
-              echo "export ELASTICSEARCH_ENDPOINT=${ELASTICSEARCH_ENDPOINT}" >> $BASH_ENV
-            fi
+            DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
+            ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
+              --domain-name "${DESTINATION_DOMAIN}" \
+              --region "us-east-1" \
+              --query 'DomainStatus.Endpoint' \
+              --output text)
+            echo "export ELASTICSEARCH_ENDPOINT=${ELASTICSEARCH_ENDPOINT}" >> $BASH_ENV
       - run:
           name: Index Cases
           command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              NODE_ENV=production ./scripts/reindex/index-cases/index-cases.ts 5
-            fi
+            ./scripts/reindex/index-cases/index-cases.ts 5
 
   index-users:
     docker:
@@ -680,21 +672,17 @@ jobs:
           command: |
             ./scripts/env/env-for-circle.sh
             source $BASH_ENV
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
-              ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
-                --domain-name "${DESTINATION_DOMAIN}" \
-                --region "us-east-1" \
-                --query 'DomainStatus.Endpoint' \
-                --output text)
-              echo "export ELASTICSEARCH_ENDPOINT=${ELASTICSEARCH_ENDPOINT}" >> $BASH_ENV
-            fi
+            DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
+            ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
+              --domain-name "${DESTINATION_DOMAIN}" \
+              --region "us-east-1" \
+              --query 'DomainStatus.Endpoint' \
+              --output text)
+            echo "export ELASTICSEARCH_ENDPOINT=${ELASTICSEARCH_ENDPOINT}" >> $BASH_ENV
       - run:
           name: Index Users
           command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              NODE_ENV=production ./scripts/reindex/index-users/index-users.ts 5
-            fi
+            ./scripts/reindex/index-users/index-users.ts 5
 
   index-docket-entries:
     docker:
@@ -711,21 +699,17 @@ jobs:
           command: |
             ./scripts/env/env-for-circle.sh
             source $BASH_ENV
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
-              ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
-                --domain-name "${DESTINATION_DOMAIN}" \
-                --region "us-east-1" \
-                --query 'DomainStatus.Endpoint' \
-                --output text)
-              echo "export ELASTICSEARCH_ENDPOINT=${ELASTICSEARCH_ENDPOINT}" >> $BASH_ENV
-            fi
+            DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
+            ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
+              --domain-name "${DESTINATION_DOMAIN}" \
+              --region "us-east-1" \
+              --query 'DomainStatus.Endpoint' \
+              --output text)
+            echo "export ELASTICSEARCH_ENDPOINT=${ELASTICSEARCH_ENDPOINT}" >> $BASH_ENV
       - run:
           name: Index Docket Entries
           command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              NODE_ENV=production ./scripts/reindex/index-docket-entries/index-docket-entries.ts 5
-            fi
+            ./scripts/reindex/index-docket-entries/index-docket-entries.ts 5
 
   cleanup-glue-job:
     docker:
@@ -1040,17 +1024,16 @@ workflows:
           <<: *only-test
           type: approval
           requires:
-            - delete-and-recreate-elasticsearch-cluster
             - initiate-glue-job
       - wait-for-glue-workflow:
           <<: *only-test
           type: approval
           requires:
-            - delete-and-recreate-elasticsearch-cluster
             - initiate-glue-job
       - migrate-restored-postgres-data:
           <<: *only-test
           requires:
+            - delete-and-recreate-elasticsearch-cluster
             - wait-for-glue-workflow
       - index-cases:
           <<: *only-test
