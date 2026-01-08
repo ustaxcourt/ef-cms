@@ -1,6 +1,5 @@
 import {
   FORMATS,
-  createDateAtStartOfWeekEST,
   createISODateString,
   formatDateString,
   prepareDateFromString,
@@ -36,22 +35,19 @@ describe('Clerk of Court Dashboard', () => {
 
   it('should display all required trial session fields when sessions exist', () => {
     const today = createISODateString();
-    const currentWeekStart = createDateAtStartOfWeekEST(today, FORMATS.ISO);
-    const currentWeekStartDateTime = prepareDateFromString(currentWeekStart);
-    const sessionDate = currentWeekStartDateTime.plus({ days: 3 });
+    const todayDateTime = prepareDateFromString(today);
+    // Use tomorrow to ensure the date is always in the future
+    const sessionDate = todayDateTime.plus({ days: 1 });
     const trialSessionStartDate = formatDateString(
       sessionDate.toISO()!,
       FORMATS.MMDDYYYY,
     );
 
     const trialSessionEndDate = formatDateString(
-      prepareDateFromString(trialSessionStartDate, FORMATS.MMDDYYYY)
-        .plus({ days: 2 })
-        .toISO()!,
+      sessionDate.plus({ days: 2 }).toISO()!,
       FORMATS.MMDDYYYY,
     );
 
-    cy.intercept('POST', '**/trial-sessions').as('createTrialSession');
     loginAsClerkOfCourt();
     cy.get('[data-testid="trial-session-link"]').click();
     cy.get('[data-testid="add-trial-session-button"]').click();
@@ -76,6 +72,7 @@ describe('Clerk of Court Dashboard', () => {
       'Test trialclerk1',
     );
     cy.get('[data-testid="submit-trial-session"]').should('not.be.disabled');
+    cy.intercept('POST', '**/trial-sessions').as('createTrialSession');
     cy.get('[data-testid="submit-trial-session"]').click();
     cy.wait('@createTrialSession', { timeout: 60000 }).then(() => {
       cy.get('[data-testid="success-alert"]').should('exist');
