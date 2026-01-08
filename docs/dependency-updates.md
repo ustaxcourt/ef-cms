@@ -245,9 +245,6 @@ The major version of this package should match our major version of Node. At the
 - [Dependencies 12 01 2025](https://github.com/ustaxcourt/ef-cms/pull/9465/files), Node.js was updated to v24.11.1, successfully updated @types/node to 24.10.2 to match Node.js v24.11.1
 
 ### TypeScript
-
-We cannot update TypeScript version beyond v5.8.3 until ts-jest supports it
-
 - On September 19th, 2025, tried to update to 5.9.2, the highest non-beta version but we would need to address the Typescript issues. I ran out of time to do so. Refer to this PR. https://github.com/ustaxcourt/ef-cms/pull/9164
 - On October 27th, 2025, tried to update to 5.9.3. The update introduced 116+ new TypeScript errors due to stricter type checking:
   - 35 null-checking errors (`TS18047` "possibly null") from stricter null-checking on DOM elements, refs, and properties
