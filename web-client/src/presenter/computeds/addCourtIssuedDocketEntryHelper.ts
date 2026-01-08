@@ -1,6 +1,7 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { Get } from 'cerebral';
+import { addOrderStampPrefix } from '@shared/business/utilities/addOrderStampPrefix';
 import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
 import { state } from '@web-client/presenter/app.cerebral';
 import { find, filter, orderBy, flow } from 'lodash';
@@ -77,7 +78,10 @@ export const addCourtIssuedDocketEntryHelper = (
   const showServiceStamp =
     selectedEventCode === 'O' && user.role !== USER_ROLES.petitionsClerk;
 
-  const formattedDocumentTitle = `${form.generatedDocumentTitle || ''}${
+  const formattedTitle =
+    addOrderStampPrefix(selectedEventCode, form.generatedDocumentTitle) ||
+    '';
+  const formattedDocumentTitle = `${formattedTitle}${
     form.attachments ? ' (Attachment(s))' : ''
   }`;
 
