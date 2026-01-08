@@ -37,7 +37,7 @@ export const PetitionFactOrReason = connect<
     updateFormValueSequence,
     validationErrors,
   }) {
-    const KEY = `${textName}[${factOrReasonCount}]`;
+    const KEY = `${textName}-${factOrReasonCount}`;
     const ERROR_KEY_ID = `error_message_${KEY}`;
 
     return (

@@ -10,7 +10,10 @@ import {
   loginAsPetitionsClerk1,
 } from '../../../helpers/authentication/login-as-helpers';
 import { selectTypeaheadInput } from '../../../helpers/components/typeAhead/select-typeahead-input';
-import { CASE_TYPES_MAP } from '@shared/business/entities/EntityConstants';
+import {
+  ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE,
+  CASE_TYPES_MAP,
+} from '@shared/business/entities/EntityConstants';
 import { v4 } from 'uuid';
 import { createOrderAndDecision } from '../../../helpers/caseDetail/docketRecord/courtIssuedFiling/create-order-and-decision';
 
@@ -131,12 +134,18 @@ describe('Advanced Search', () => {
         cy.get('[data-testid="search-link"]').click();
         cy.get('[data-testid="order-search-tab"]').click();
         cy.get('[data-testid="keyword-search-input"]').type(orderContents);
+        let count: number;
         retry(() => {
+          cy.intercept('GET', '**/order-search**').as('orderSearch');
           cy.get(
             '[data-testid="submit-order-advanced-search-button"], [data-testid="advanced-search-button"], button#advanced-search-button, form[data-testid="order-search-container"] button[type=submit]',
           )
             .first()
             .click();
+
+          cy.wait('@orderSearch').then(({ response }) => {
+            count = response?.body?.results?.length || 0;
+          });
 
           cy.get('.search-results').should('exist');
           return assertExists(
@@ -162,6 +171,18 @@ describe('Advanced Search', () => {
         /** Act */
         // Click the Filed Date header to toggle sorting
         cy.get('[data-testid="sort-button-filed-date"]').click();
+
+        // click the paginator if needed
+        cy.then(() => {
+          if (count && count > ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE) {
+            const lastPage = Math.ceil(
+              count / ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE,
+            );
+            cy.get(`[data-testid="paginator-page-${lastPage}"]`)
+              .first()
+              .click();
+          }
+        });
 
         /** Assert */
         // After sorting, ensure the created order is present in the last row
@@ -214,13 +235,17 @@ describe('Advanced Search', () => {
         cy.get('[data-testid="opinion-search-tab"]').click();
         cy.get('[data-testid="keyword-search-input"]').type(opinionTitle);
         // need to wait for elasticsearch potentially
+        let count: number;
         retry(() => {
+          cy.intercept('GET', '**/opinion-search**').as('opinionSearch');
           cy.get(
             '[data-testid="submit-opinion-advanced-search-button"], [data-testid="advanced-search-button"], button#advanced-search-button, form[data-testid="opinion-search-container"] button[type=submit]',
           )
             .first()
             .click();
-
+          cy.wait('@opinionSearch').then(({ response }) => {
+            count = response?.body?.results?.length || 0;
+          });
           cy.get('.search-results').should('exist');
           return assertExists(
             `[data-testid="docket-number-link-${docketNumber}"]`,
@@ -244,6 +269,18 @@ describe('Advanced Search', () => {
         /** Act */
         // Click the Filed Date header to toggle sorting
         cy.get('[data-testid="sort-button-filed-date"]').click();
+
+        // click the paginator if needed
+        cy.then(() => {
+          if (count && count > ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE) {
+            const lastPage = Math.ceil(
+              count / ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE,
+            );
+            cy.get(`[data-testid="paginator-page-${lastPage}"]`)
+              .first()
+              .click();
+          }
+        });
 
         /** Assert */
         // After sorting, ensure the created opinion is present in the last row

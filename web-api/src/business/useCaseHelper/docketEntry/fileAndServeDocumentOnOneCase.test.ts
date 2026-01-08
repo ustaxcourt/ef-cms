@@ -13,11 +13,11 @@ jest.mock(
 import {
   COURT_ISSUED_EVENT_CODES,
   DOCKET_SECTION,
+  ENTERED_AND_SERVED_EVENT_CODES,
   ROLES,
 } from '@shared/business/entities/EntityConstants';
 import { Case } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
-import { ENTERED_AND_SERVED_EVENT_CODES } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import {
   MOCK_CASE,
   MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
