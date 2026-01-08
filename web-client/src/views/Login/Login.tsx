@@ -41,7 +41,7 @@ export const Login = connect(
       <>
         <section className="grid-container tw:px-0 tw:pb-16 tw:pt-0">
           <div className="grid-row flex-justify-center">
-            <div className="tw:w-full tw:xs:w-33.75">
+            <div className="tw:w-full tw:xs:w-135">
               <SuccessNotification isDismissible={false} />
               <WarningNotification isDismissible={false} />
               {alertInfo && (
