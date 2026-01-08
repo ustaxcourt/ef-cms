@@ -2,6 +2,8 @@ import { applicationContext } from '../../applicationContext';
 import { editDocketEntryMetaHelper as editDocketEntryMetaHelperComputed } from './editDocketEntryMetaHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { ATP_DOCKET_ENTRY } from '@shared/test/mockDocketEntry';
 
 const editDocketEntryMetaHelper = withAppContextDecorator(
   editDocketEntryMetaHelperComputed,
@@ -142,6 +144,68 @@ describe('editDocketEntryMetaHelper', () => {
     expect(result.primary.showSecondaryDocumentForm).toBeFalsy();
   });
 
+  it('should use caseDetail to calculate option categories when multiDocketedOriginalCaseDetail is undefined', () => {
+    const MOCK_PREV_FILED_DOCKET_ENTRY = {
+      ...ATP_DOCKET_ENTRY,
+      docketNumber: MOCK_CASE.docketNumber,
+    };
+    const MOCK_PREV_FILED_DOCKET_ENTRY_ID =
+      '9878f7f8-7152-4bca-9e26-9fff2e3ee3bc';
+
+    const result = runCompute(editDocketEntryMetaHelper, {
+      state: {
+        caseDetail: {
+          ...MOCK_CASE,
+          docketEntries: [MOCK_PREV_FILED_DOCKET_ENTRY],
+        },
+        docketEntryId: MOCK_PREV_FILED_DOCKET_ENTRY_ID,
+        form: {
+          docketEntryId: MOCK_PREV_FILED_DOCKET_ENTRY_ID,
+          documentType: 'Notice of No Objection',
+          eventCode: 'NNOB',
+        },
+        multiDocketedOriginalCaseDetail: undefined,
+      },
+    });
+
+    expect(result.primary.previouslyFiledDocuments).toEqual([
+      expect.objectContaining({
+        documentTitle: MOCK_PREV_FILED_DOCKET_ENTRY.documentTitle,
+      }),
+    ]);
+  });
+
+  it('should use multiDocketedOriginalCaseDetail to calculate option categories when multiDocketedOriginalCaseDetail is defined', () => {
+    const MOCK_PREV_FILED_DOCKET_ENTRY = {
+      ...ATP_DOCKET_ENTRY,
+      docketNumber: MOCK_CASE.docketNumber,
+    };
+    const MOCK_PREV_FILED_DOCKET_ENTRY_ID =
+      '9878f7f8-7152-4bca-9e26-9fff2e3ee3bc';
+
+    const result = runCompute(editDocketEntryMetaHelper, {
+      state: {
+        caseDetail: {},
+        docketEntryId: MOCK_PREV_FILED_DOCKET_ENTRY_ID,
+        form: {
+          docketEntryId: MOCK_PREV_FILED_DOCKET_ENTRY_ID,
+          documentType: 'Notice of No Objection',
+          eventCode: 'NNOB',
+        },
+        multiDocketedOriginalCaseDetail: {
+          ...MOCK_CASE,
+          docketEntries: [MOCK_PREV_FILED_DOCKET_ENTRY],
+        },
+      },
+    });
+
+    expect(result.primary.previouslyFiledDocuments).toEqual([
+      expect.objectContaining({
+        documentTitle: MOCK_PREV_FILED_DOCKET_ENTRY.documentTitle,
+      }),
+    ]);
+  });
+
   describe('consolidatedCasesToDisplay', () => {
     it('should return an empty array when there are no consolidated cases', () => {
       const result = runCompute(editDocketEntryMetaHelper, {
@@ -192,6 +256,7 @@ describe('editDocketEntryMetaHelper', () => {
             documentType: 'Answer',
           },
           formattedCaseDetail: {
+            docketNumber: '101-20',
             consolidatedCases: [
               {
                 caseCaption: 'Lead Case Caption',
@@ -239,6 +304,7 @@ describe('editDocketEntryMetaHelper', () => {
             documentType: 'Answer',
           },
           formattedCaseDetail: {
+            docketNumber: '101-20',
             consolidatedCases: [
               {
                 caseCaption: 'Lead Case Caption',
@@ -281,6 +347,7 @@ describe('editDocketEntryMetaHelper', () => {
             documentType: 'Answer',
           },
           formattedCaseDetail: {
+            docketNumber: '101-20',
             consolidatedCases: [
               {
                 docketNumber: '101-20',

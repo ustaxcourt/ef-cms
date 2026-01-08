@@ -158,6 +158,7 @@ export const getOrdinalValuesForUploadIteration = (): string[] => {
 };
 
 export const MAX_TITLE_LENGTH = 100;
+
 export const getValidPreviouslyFiledDocuments = ({
   caseDetail,
   selectedDocketEntryId,
