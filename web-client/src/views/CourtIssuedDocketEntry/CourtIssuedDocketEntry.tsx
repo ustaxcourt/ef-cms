@@ -18,7 +18,7 @@ import { reactSelectValue } from '@web-client/ustc-ui/Utils/documentTypeSelectHe
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
-import _ from 'lodash';
+import { pullAt } from 'lodash';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { Button } from '@web-client/dawson-ui/ui/button';
 
@@ -292,7 +292,7 @@ export const CourtIssuedDocketEntry = connect(
                                     const motions = [
                                       ...form.affectedDocketEntries,
                                     ];
-                                    _.pullAt(motions, i);
+                                    pullAt(motions, i);
                                     updateCourtIssuedDocketEntryFormValueSequence(
                                       {
                                         key: 'affectedDocketEntries',

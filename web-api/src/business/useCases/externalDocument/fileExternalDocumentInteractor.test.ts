@@ -401,34 +401,6 @@ describe('fileExternalDocumentInteractor', () => {
         }),
       ]),
     );
-    //   {}, // first 4 docs were already on the case
-    //   {},
-    //   {},
-    //   {},
-    //   {},
-    //   {
-    //     eventCode: 'M115',
-    //     isOnDocketRecord: true,
-    //     // primary document
-    //     lodged: undefined,
-    //   },
-    //   {
-    //     eventCode: 'CIVP',
-    //     isOnDocketRecord: true,
-    //     // supporting document
-    //     lodged: undefined,
-    //   },
-    //   {
-    //     eventCode: 'M121', //secondary document
-    //     isOnDocketRecord: true,
-    //     lodged: true,
-    //   },
-    //   {
-    //     eventCode: 'M135', // secondary supporting document
-    //     isOnDocketRecord: true,
-    //     lodged: true,
-    //   },
-    // ]);
   });
 
   it('should add documents and workitems but NOT auto-serve Simultaneous documents on the parties', async () => {
