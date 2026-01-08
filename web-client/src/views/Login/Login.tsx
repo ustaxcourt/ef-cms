@@ -41,7 +41,7 @@ export const Login = connect(
       <>
         <section className="grid-container tw:px-0 tw:pb-16 tw:pt-0">
           <div className="grid-row flex-justify-center">
-            <div className="tw:w-full tw:xs:w-135">
+            <div className="tw:w-full tw:xs:w-33.75">
               <SuccessNotification isDismissible={false} />
               <WarningNotification isDismissible={false} />
               {alertInfo && (
@@ -64,7 +64,7 @@ export const Login = connect(
                 <div className="display-flex flex-column">
                   <div className="flex-align-center">
                     <h1
-                      className=" tw:xs:mb-12 tw:mb-8 tw:font-noto-serif tw:font-bold tw:xs:text-[2rem] tw:text-[1.5rem]"
+                      className="tw:xs:mb-12 tw:mb-8 tw:font-noto-serif tw:font-bold tw:xs:text-[2rem] tw:text-[1.5rem]"
                       data-testid="login-header"
                     >
                       Log in to DAWSON
@@ -143,7 +143,7 @@ export const Login = connect(
                         Forgot password?
                       </Button>
                     </div>
-                    <div className="'tw:text-4 tw:xs:text-[18px]">
+                    <div className="'tw:text-4 tw:xs:text-[1.125rem]">
                       Don&apos;t have an account?{' '}
                     </div>
                     <div className="tw:mt-2 tw:flex tw:w-full">

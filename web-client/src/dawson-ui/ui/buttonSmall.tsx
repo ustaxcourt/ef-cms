@@ -20,16 +20,27 @@ const primaryColors = cn(
 
 const buttonVariants = cva(
   cn(
-    'tw:text-[14px] tw:xs:text-[16px] tw:font-normal tw:outline-none tw:border-none tw:cursor-pointer tw:inline-flex tw:items-center tw:justify-center tw:whitespace-nowrap tw:rounded-[8px] tw:transition-all tw:disabled:pointer-events-none tw:disabled:opacity-50 tw:[&_svg]:pointer-events-none tw:[&_svg:not([class*=size-])]:size-4 tw:shrink-0 tw:[&_svg]:shrink-0',
-    'tw:focus-visible:ring-[4px] tw:focus-visible:ring-offset-[4px] tw:focus-visible:ring-ring tw:focus-visible:outline-none', // focus-visible
-    'tw:aria-invalid:ring-red-primary/20 tw:aria-invalid:border-red-primary', // aria
-    'tw:w-full tw:xs:w-auto tw:px-[16px] tw:py-[8px]', // small & greater
+    'tw:text-[0.875rem] tw:xs:text-base tw:font-normal tw:outline-none tw:border-none tw:cursor-pointer',
+    'tw:inline-flex tw:items-center tw:justify-center tw:whitespace-nowrap',
+    'tw:rounded-lg tw:transition-all',
+    'tw:disabled:pointer-events-none tw:disabled:opacity-50',
+    'tw:[&_svg]:pointer-events-none tw:[&_svg:not([class*=size-])]:size-4',
+    'tw:shrink-0 tw:[&_svg]:shrink-0',
+
+    // focus-visible
+    'tw:focus-visible:ring-1 tw:focus-visible:ring-offset-1 tw:focus-visible:ring-ring tw:focus-visible:outline-none',
+
+    // aria
+    'tw:aria-invalid:ring-red-primary/20 tw:aria-invalid:border-red-primary',
+
+    // layout
+    'tw:w-full tw:xs:w-auto tw:px-4 tw:py-2',
   ),
   {
     variants: {
       variant: {
         destructiveTertiary: cn(
-          'tw:px-0 tw:py-0 tw:bg-transparent tw:text-red-primary tw:fill-red-primary tw:font-[400] tw:underline', // standard,
+          'tw:px-0 tw:py-0 tw:bg-transparent tw:text-red-primary tw:fill-red-primary tw:font-[400] tw:underline', // standard
           'tw:hover:text-red-dark', // hover
           'tw:focus-visible:bg-white', // focus-visible
           'tw:active:text-red-darker', // active
@@ -62,10 +73,14 @@ export function ButtonSmall({
 
   const Icon = icon ? (
     <FontAwesomeIcon
-      className={`${iconPosition === 'left' ? 'tw:mr-[8px]' : 'tw:flex-row-reverse tw:ml-[8px]'} tw:xs:!w-[18px] tw:!w-[16px] tw:xs:!h-[18px] tw:!h-[16px]`}
+      className={cn(
+        iconPosition === 'left' ? 'tw:mr-2' : 'tw:flex-row-reverse tw:ml-2',
+        'tw:w-4! tw:h-4!',
+        'tw:xs:w-4.5! tw:xs:h-4.5!',
+      )}
       icon={icon}
       role="img"
-      aria-label={'icon'}
+      aria-label="icon"
     />
   ) : null;
 
