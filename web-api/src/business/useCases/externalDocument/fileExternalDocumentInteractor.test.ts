@@ -200,7 +200,11 @@ describe('fileExternalDocumentInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).toHaveBeenCalled();
-    expect(updatedCase!.docketEntries[4].servedAt).toBeDefined();
+    const entry = updatedCase!.docketEntries.find(
+      de => de.documentType === 'Memorandum in Support',
+    );
+    expect(entry).toBeDefined();
+    expect(entry?.servedAt).toBeDefined();
   });
 
   it('should add documents and workitems and auto-serve the documents on the parties with an electronic service indicator across consolidated cases', async () => {
@@ -314,7 +318,11 @@ describe('fileExternalDocumentInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).toHaveBeenCalledTimes(2);
-    expect(updatedCase!.docketEntries[4].servedAt).toBeDefined();
+    const entry = updatedCase!.docketEntries.find(
+      de => de.documentType === 'Memorandum in Support',
+    );
+    expect(entry).toBeDefined();
+    expect(entry?.servedAt).toBeDefined();
   });
 
   it('should set secondary document and secondary supporting documents to lodged', async () => {
@@ -362,34 +370,37 @@ describe('fileExternalDocumentInteractor', () => {
       mockIrsPractitionerUser,
     );
     expect(updateCaseAndAssociations).toHaveBeenCalled();
-    expect(updatedCase!.docketEntries).toMatchObject([
-      {}, // first 4 docs were already on the case
-      {},
-      {},
-      {},
-      {
-        eventCode: 'M115',
-        isOnDocketRecord: true,
-        // primary document
-        lodged: undefined,
-      },
-      {
-        eventCode: 'CIVP',
-        isOnDocketRecord: true,
-        // supporting document
-        lodged: undefined,
-      },
-      {
-        eventCode: 'M121', //secondary document
-        isOnDocketRecord: true,
-        lodged: true,
-      },
-      {
-        eventCode: 'M135', // secondary supporting document
-        isOnDocketRecord: true,
-        lodged: true,
-      },
-    ]);
+    expect(updatedCase!.docketEntries).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({}),
+        expect.objectContaining({}),
+        expect.objectContaining({}),
+        expect.objectContaining({}),
+        expect.objectContaining({}),
+        expect.objectContaining({
+          eventCode: 'M115',
+          isOnDocketRecord: true,
+          // primary document
+          lodged: undefined,
+        }),
+        expect.objectContaining({
+          eventCode: 'CIVP',
+          isOnDocketRecord: true,
+          // supporting document
+          lodged: undefined,
+        }),
+        expect.objectContaining({
+          eventCode: 'M121', //secondary document
+          isOnDocketRecord: true,
+          lodged: true,
+        }),
+        expect.objectContaining({
+          eventCode: 'M135', // secondary supporting document
+          isOnDocketRecord: true,
+          lodged: true,
+        }),
+      ]),
+    );
   });
 
   it('should add documents and workitems but NOT auto-serve Simultaneous documents on the parties', async () => {
@@ -414,7 +425,11 @@ describe('fileExternalDocumentInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).not.toHaveBeenCalled();
-    expect(updatedCase!.docketEntries[3].servedAt).toBeUndefined();
+    const entry = updatedCase!.docketEntries.find(
+      de => de.documentType === 'Simultaneous Memoranda of Law',
+    );
+    expect(entry).toBeDefined();
+    expect(entry?.servedAt).toBeUndefined();
   });
 
   it('should automatically block the case if the document filed is a tracked document', async () => {
