@@ -60,11 +60,11 @@ export const Login = connect(
                 />
               </div>
 
-              <div className="grid-container bg-white tw:xs:p-12 tw:px-3 tw:py-8 border border-base-lighter login tw:rounded-2xl tw:max-[33.75rem]:rounded-none">
+              <div className="grid-container bg-white tw:xs:p-12 tw:px-3 tw:py-8 border border-base-lighter login tw:rounded-2xl tw:max-[540px]:rounded-none">
                 <div className="display-flex flex-column">
                   <div className="flex-align-center">
                     <h1
-                      className=" tw:xs:mb-12 tw:mb-8 tw:font-noto-serif tw:font-bold tw:xs:text-[2rem] tw:text-[1.5rem]"
+                      className=" tw:xs:mb-12 tw:mb-8 tw:font-noto-serif tw:font-bold tw:xs:text-[32px] tw:text-[24px]"
                       data-testid="login-header"
                     >
                       Log in to DAWSON
