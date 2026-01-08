@@ -10,35 +10,21 @@
     "inlineSourceMap": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "typeRoots": [
-      "./node_modules/@types",
-      "./types"
-    ],
-    "types": [
-      "jest",
-      "node"
-    ],
-    "target": "ES2020",
+    "typeRoots": ["./node_modules/@types", "./types"],
+    "types": ["jest", "node"],
+    "target": "ES2022",
     "jsx": "react",
     "strict": true,
     "baseUrl": "./",
     "paths": {
-      "@web-client/*": [
-        "web-client/src/*"
-      ],
-      "@web-api/*": [
-        "web-api/src/*"
-      ],
-      "@shared/*": [
-        "shared/src/*"
-      ]
+      "@web-client/*": ["web-client/src/*"],
+      "@web-api/*": ["web-api/src/*"],
+      "@shared/*": ["shared/src/*"]
     }
   },
   "ts-node": {
     "files": true,
-    "require": [
-      "tsconfig-paths/register"
-    ]
+    "require": ["tsconfig-paths/register"]
   },
   "include": ["./**/*.ts", "./**/*.tsx", "./eslint.config.mjs"],
   "exclude": [
