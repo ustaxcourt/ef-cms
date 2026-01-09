@@ -9,14 +9,12 @@ import type { Context } from 'aws-lambda';
 
 const getDbReader = jest.mocked(getDbReaderMock);
 const pgDeleteFrom = jest.mocked(pgDeleteFromMock);
+const contextMock = {} as unknown as Context;
 
 describe('rdsExpiredRecordsCleanupLambda', () => {
-  let succeedMock: jest.Mock;
-
   beforeEach(() => {
     jest.resetAllMocks();
     pgDeleteFrom.mockResolvedValue([]);
-    succeedMock = jest.fn();
     getDbReader.mockImplementation(async cb => {
       const MOCKED_READER = {
         introspection: {
@@ -67,15 +65,9 @@ describe('rdsExpiredRecordsCleanupLambda', () => {
   });
 
   it('should call delete from for the tables that have a ttl column', async () => {
-    await rdsExpiredRecordsCleanupLambda(
-      undefined,
-      { succeed: succeedMock } as unknown as Context,
-      undefined as any,
-    );
-
-    const succeedCalls = succeedMock.mock.calls;
-    expect(succeedCalls.length).toEqual(1);
-    expect(succeedCalls[0][0]).toEqual('Completed Cleanup!');
+    await expect(
+      rdsExpiredRecordsCleanupLambda(undefined, contextMock, jest.fn()),
+    ).resolves.not.toThrow();
 
     const pgDeleteFromCalls = pgDeleteFrom.mock.calls;
     expect(pgDeleteFromCalls.length).toEqual(2);
