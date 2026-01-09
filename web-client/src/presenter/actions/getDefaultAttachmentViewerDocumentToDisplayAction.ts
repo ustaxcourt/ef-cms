@@ -19,7 +19,6 @@ export const getDefaultAttachmentViewerDocumentToDisplayAction = ({
   if (!documentId) {
     ({ documentId } = props);
   }
-
   const existingDocumentId = viewerDocumentToDisplayFromState?.documentId;
 
   if (
@@ -60,6 +59,6 @@ export const getDefaultAttachmentViewerDocumentToDisplayAction = ({
   }
 
   return {
-    messageViewerDocumentToDisplay,
+    messageViewerDocumentToDisplay: messageViewerDocumentToDisplay || {},
   };
 };
