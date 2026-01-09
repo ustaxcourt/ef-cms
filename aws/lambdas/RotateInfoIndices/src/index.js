@@ -7,7 +7,7 @@ const { SignatureV4 } = require('@smithy/signature-v4');
 
 const EXPIRATION = process.env.expiration; // days
 
-exports.handler = async (input, context) => {
+exports.handler = async () => {
   const responses = { createSnapshot: [], deleteIndices: [] };
   let anyError = false;
 
@@ -44,9 +44,11 @@ exports.handler = async (input, context) => {
     }
   }
 
-  return anyError
-    ? context.fail(JSON.stringify(responses))
-    : context.succeed(JSON.stringify(responses));
+  if (anyError) {
+    console.error('Error', responses);
+    throw new Error(JSON.stringify(responses));
+  }
+  console.log('Success', responses);
 };
 
 /**
