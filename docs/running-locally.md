@@ -103,6 +103,8 @@ All application dependencies are managed via our `package.json` and `package-loc
 
 `npm ci`
 
+Note: ef-cms includes `@ustaxcourt/payment-portal` and `@ustaxcourt/pay-gov-test-server` as devDependencies to support payment portal / Pay.gov integration development and testing. See [Dependency Updates](./dependency-updates.md) for Node.js version upgrade guidance and compatibility considerations for `@ustaxcourt/payment-portal`. See below for how to run `@ustaxcourt/pay-gov-test-server`
+
 ### 🏃 Starting the Services
 
 Once you've installed the dependencies, you should be able to run the npm scripts to start up the API, private UI, and public UI.  We recommend you have three separate terminals open and run each of the following commands in a separate terminal:
@@ -159,3 +161,16 @@ colvinschambers@example.com
 ## Troubleshooting
 
 Hopefully everything will work fine, but if you have issues logging in, double check that your API didn't throw errors when trying to initialize.  Check your network tab or browser console for any errors when trying to access the localhost:4000 API.  Also verify you are on the correct branch. `ustaxcourt/staging` is recommended.
+
+## Running the USTC pay.gov test server
+When testing interactions with pay.gov locally or in a pipeline, the USTC pay.gov test server needs to be started. The test server has been installed as a dev dependency. To run it, use the following command: 
+
+```
+npm run start:pay-gov-test-server
+```
+
+When initially running the server with this command, you will be prompted to enter a port for the test server to run on and an access token that will authenticate requests with the test server. To update these variables, run the following command:
+
+```
+npm run start:pay-gov-test-server:update-env
+```
