@@ -65,11 +65,6 @@ const expiredIndicesResponse = {
   statusCode: 200,
 };
 
-const mockContext = {
-  fail: res => res,
-  success: res => res,
-};
-
 describe('getIndexNameForDaysAgo', () => {
   it('should determine the name of the index from 90 days ago', () => {
     const res = rotateLogs.getIndexNameForDaysAgo(90);
@@ -204,7 +199,7 @@ describe('handler', () => {
       jest.spyOn(rotateLogs, 'snapshotForIndexName');
 
       // run the rotation job and verify the results
-      const res = await rotateLogs.handler(mockContext);
+      const res = await rotateLogs.handler({});
       expect(rotateLogs.req).toHaveBeenCalledTimes(7);
       expect(rotateLogs.getExpiredIndices).toHaveBeenCalledTimes(1);
       expect(rotateLogs.snapshotExists).toHaveBeenCalledTimes(4);
