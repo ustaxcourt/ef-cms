@@ -28,8 +28,6 @@ export const setDocketEntryMetaFormForEditAction = ({
     );
   }
 
-  // store.set(state.docketRecordIndex, docketRecordIndex);
-
   const filersMap = {};
   documentDetail.filers.forEach(filer => (filersMap[filer] = true));
 

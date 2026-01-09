@@ -7,6 +7,7 @@ describe('getDocumentUrlForPreviewAction', () => {
   const mockUrl = 'www.example.com';
   const mockDocketNumber = '123-45';
   const mockDocketEntryId = applicationContext.getUniqueId();
+  const mockDocumentStorageId = applicationContext.getUniqueId();
 
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
@@ -24,7 +25,10 @@ describe('getDocumentUrlForPreviewAction', () => {
         presenter,
       },
       props: {
-        documentInS3: { docketEntryId: mockDocketEntryId },
+        documentInS3: {
+          docketEntryId: mockDocketEntryId,
+          documentStorageId: mockDocumentStorageId,
+        },
       },
       state: {
         form: {
@@ -38,7 +42,7 @@ describe('getDocumentUrlForPreviewAction', () => {
         .calls[0][1],
     ).toMatchObject({
       docketNumber: mockDocketNumber,
-      key: mockDocketEntryId,
+      key: mockDocumentStorageId,
     });
   });
 
@@ -48,6 +52,7 @@ describe('getDocumentUrlForPreviewAction', () => {
         presenter,
       },
       props: {
+        documentStorageId: mockDocumentStorageId,
         documentInS3: { docketEntryId: mockDocketEntryId },
       },
       state: {
