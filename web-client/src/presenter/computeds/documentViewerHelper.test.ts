@@ -390,7 +390,7 @@ describe('documentViewerHelper', () => {
   });
 
   describe('showLeadCaseBanner', () => {
-    it('should be true when viewing an unserved simultaneous document on a member case that is filed across all cases', () => {
+    it('should be true when viewing an unserved simultaneous document on a member case that is filed across the group', () => {
       const result = runCompute(documentViewerHelper, {
         state: {
           ...getBaseState(docketClerkUser),
@@ -400,6 +400,7 @@ describe('documentViewerHelper', () => {
                 ...baseDocketEntry,
                 documentTitle: 'Simultaneous Answering Memorandum Brief',
                 eventCode: 'SAMB',
+                multiDocketedOn: ['101-20', '102-20'],
                 servedAt: undefined,
               },
             ],
@@ -407,7 +408,6 @@ describe('documentViewerHelper', () => {
             leadDocketNumber: '101-20',
             status: CASE_STATUS_TYPES.generalDocket,
           },
-          isFiledAcrossAllCases: true,
           viewerDocumentToDisplay: {
             docketEntryId: DOCKET_ENTRY_ID,
             documentTitle: 'Simultaneous Answering Memorandum Brief',
@@ -428,6 +428,7 @@ describe('documentViewerHelper', () => {
               {
                 ...baseDocketEntry,
                 documentTitle: 'Simultaneous Answering Memorandum Brief',
+                multiDocketedOn: ['101-20', '102-20'],
                 eventCode: 'SAMB',
                 servedAt: '2019-03-01T21:40:46.415Z',
               },
@@ -436,7 +437,6 @@ describe('documentViewerHelper', () => {
             leadDocketNumber: '101-20',
             status: CASE_STATUS_TYPES.generalDocket,
           },
-          isFiledAcrossAllCases: true,
           viewerDocumentToDisplay: {
             docketEntryId: DOCKET_ENTRY_ID,
             documentTitle: 'Simultaneous Answering Memorandum Brief',
@@ -458,6 +458,7 @@ describe('documentViewerHelper', () => {
                 ...baseDocketEntry,
                 documentTitle: 'Simultaneous Answering Memorandum Brief',
                 eventCode: 'SAMB',
+                multiDocketedOn: ['101-20', '102-20'],
                 servedAt: undefined,
               },
             ],
@@ -465,7 +466,6 @@ describe('documentViewerHelper', () => {
             leadDocketNumber: '101-20',
             status: CASE_STATUS_TYPES.generalDocket,
           },
-          isFiledAcrossAllCases: true,
           viewerDocumentToDisplay: {
             docketEntryId: DOCKET_ENTRY_ID,
             documentTitle: 'Simultaneous Answering Memorandum Brief',
@@ -487,6 +487,7 @@ describe('documentViewerHelper', () => {
                 ...baseDocketEntry,
                 documentType: 'Answer',
                 eventCode: 'A',
+                multiDocketedOn: ['101-20', '102-20'],
                 servedAt: undefined,
               },
             ],
@@ -494,7 +495,6 @@ describe('documentViewerHelper', () => {
             leadDocketNumber: '101-20',
             status: CASE_STATUS_TYPES.generalDocket,
           },
-          isFiledAcrossAllCases: true,
           viewerDocumentToDisplay: {
             docketEntryId: DOCKET_ENTRY_ID,
             documentType: 'Answer',
@@ -506,7 +506,7 @@ describe('documentViewerHelper', () => {
       expect(result.showLeadCaseBanner).toBe(false);
     });
 
-    it('should be false when isFiledAcrossAllCases is false', () => {
+    it('should be false when it was not multi-docketed', () => {
       const result = runCompute(documentViewerHelper, {
         state: {
           ...getBaseState(docketClerkUser),
@@ -515,6 +515,7 @@ describe('documentViewerHelper', () => {
               {
                 ...baseDocketEntry,
                 documentTitle: 'Simultaneous Answering Memorandum Brief',
+                multiDocketedOn: [],
                 eventCode: 'SAMB',
                 servedAt: undefined,
               },
@@ -523,7 +524,6 @@ describe('documentViewerHelper', () => {
             leadDocketNumber: '101-20',
             status: CASE_STATUS_TYPES.generalDocket,
           },
-          isFiledAcrossAllCases: false,
           viewerDocumentToDisplay: {
             docketEntryId: DOCKET_ENTRY_ID,
             documentTitle: 'Simultaneous Answering Memorandum Brief',
@@ -551,6 +551,7 @@ describe('documentViewerHelper', () => {
               {
                 ...baseDocketEntry,
                 documentTitle: 'Simultaneous Answering Memorandum Brief',
+                multiDocketedOn: ['101-20', '102-20'],
                 eventCode: 'SAMB',
                 servedAt: undefined,
               },
@@ -559,7 +560,6 @@ describe('documentViewerHelper', () => {
             leadDocketNumber: '101-20',
             status: CASE_STATUS_TYPES.generalDocket,
           },
-          isFiledAcrossAllCases: true,
           viewerDocumentToDisplay: {
             docketEntryId: DOCKET_ENTRY_ID,
             documentTitle: 'Simultaneous Answering Memorandum Brief',
