@@ -2302,8 +2302,8 @@ export const INTERNAL_FILING_EVENTS: AllInteralFilingEvents = {
       allowOrderResponse: true,
     },
     {
-      documentTitle: 'Motion to Withdraw Counsel',
-      documentType: 'Motion to Withdraw Counsel (filed by petitioner)',
+      documentTitle: 'Motion to Withdraw Counsel by Party',
+      documentType: 'Motion to Withdraw Counsel by Party',
       category: 'Motion',
       eventCode: 'M116',
       scenario: 'Standard',
