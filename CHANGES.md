@@ -1,3 +1,14 @@
+<details><summary>BUG 9609</summary>
+
+## Manual Deployment Steps
+
+#### Run an account-specific terraform deployment
+
+```bash
+. scripts/env/set-env.zsh expN
+npm run deploy:account-specific
+```
+</details>
 <details><summary>Dependency Updates - Week of 2025-12-15</summary>
 
 ## Manual Deployment Steps

@@ -30,6 +30,8 @@ import {
 } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
+import { CourtIssuedDocumentAnyType } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import { upsertDocketEntryRelatedEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntryRelatedEntries';
 
 const updateDocketEntryPendingServiceStatus = jest.mocked(
   updateDocketEntryPendingServiceStatusMock,
@@ -117,13 +119,24 @@ describe('consolidated cases', () => {
       },
     ];
 
-    consolidatedCase1DocketEntries = MOCK_DOCUMENTS.map(docketEntry => {
-      return {
-        ...docketEntry,
-        docketEntryId: uuidv4(),
-        docketNumber: MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
-      };
-    });
+    consolidatedCase1DocketEntries = [
+      ...MOCK_DOCUMENTS.map(docketEntry => {
+        return {
+          ...docketEntry,
+          docketEntryId: uuidv4(),
+          docketNumber:
+            MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+        };
+      }),
+      {
+        docketEntryId: '7f61161c-ede8-43ba-8fab-69e15d057012',
+        docketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+        documentTitle: 'Transcript of [anything] on [date]',
+        documentType: 'Transcript',
+        eventCode: TRANSCRIPT_EVENT_CODE,
+        userId: docketClerkUser.userId,
+      },
+    ];
 
     getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
       switch (docketNumber) {
@@ -264,5 +277,56 @@ describe('consolidated cases', () => {
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).toHaveBeenCalledTimes(2);
+  });
+
+  it('should make call to related order to motion in multiple cases', async () => {
+    const mockOrderForm: CourtIssuedDocumentAnyType = {
+      date: '2030-01-20T00:00:00.000Z',
+      documentType: 'Order for Filing Fee',
+      docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+      eventCode: 'O',
+      attachments: false,
+      documentTitle: '',
+      affectedDocketEntries: [
+        {
+          disposition: 'GRANTED',
+          docketEntryId: '7f61161c-ede8-43ba-8fab-69e15d057012',
+        },
+      ],
+    };
+
+    await fileAndServeCourtIssuedDocumentInteractor(
+      applicationContext,
+      {
+        clientConnectionId,
+        docketEntryId: mockOrderForm.docketEntryId,
+        docketNumbers: [
+          MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+          MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
+        ],
+        form: mockOrderForm,
+        subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(upsertDocketEntryRelatedEntries).toHaveBeenCalledWith({
+      motionDocketEntries: expect.arrayContaining([
+        {
+          disposition: 'GRANTED',
+          docketEntryId: '7f61161c-ede8-43ba-8fab-69e15d057012',
+          docketNumber: '109-19',
+        },
+        {
+          disposition: 'GRANTED',
+          docketEntryId: '7f61161c-ede8-43ba-8fab-69e15d057012',
+          docketNumber: '110-19',
+        },
+      ]),
+      orderDocketEntry: expect.objectContaining({
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+      }),
+      served: true,
+    });
   });
 });

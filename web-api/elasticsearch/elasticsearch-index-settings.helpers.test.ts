@@ -124,4 +124,22 @@ describe('deleteUnaliasedIndices', () => {
       index: mockUnaliasedIndices,
     });
   });
+
+  it('does NOT delete a protected index even if it is unaliased', async () => {
+    const mockProtectedIndices = mockIndices
+      .map(i => i.index)
+      .filter(i => i.includes('efcms'));
+    expect(mockProtectedIndices.length).toBeGreaterThan(0);
+
+    aliases.mockReturnValue({ body: [], statusCode: 200 }); // mock no aliases (the protected indices are unaliased)
+    await deleteUnaliasedIndices({ client: mockedClient });
+
+    expect(mockedClient.indices.delete).toHaveBeenCalledTimes(1);
+    expect(mockedClient.indices.delete).toHaveBeenCalledWith({
+      index: mockUnaliasedIndices, // the protected indices are not included in this mock
+    });
+    expect(mockedClient.indices.delete).not.toHaveBeenCalledWith({
+      index: expect.arrayContaining(mockProtectedIndices), // explicitly ensure the protected indices are not deleted
+    });
+  });
 });
