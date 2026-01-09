@@ -13,7 +13,9 @@ describe('reloadPageAction', () => {
   });
 
   it('should call location reload api', async () => {
-    await runAction(reloadPageAction);
+    await runAction(reloadPageAction, {
+      state: {},
+    });
     expect(reload).toHaveBeenCalled();
   });
 });
