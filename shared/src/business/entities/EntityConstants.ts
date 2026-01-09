@@ -501,11 +501,6 @@ export const INTERNAL_DOCUMENT_TYPES = flatten(
   Object.values(INTERNAL_FILING_EVENTS),
 ).map(t => t.documentType);
 
-// Part 1 of migration related to 9266
-EXTERNAL_DOCUMENT_TYPES.push("Motion to Withdraw Counsel by Party")
-INTERNAL_DOCUMENT_TYPES.push("Motion to Withdraw Counsel by Party")
-
-
 export const COURT_ISSUED_DOCUMENT_TYPES = COURT_ISSUED_EVENT_CODES.map(
   t => t.documentType,
 );
