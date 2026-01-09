@@ -64,7 +64,7 @@ export const Login = connect(
                 <div className="display-flex flex-column">
                   <div className="flex-align-center">
                     <h1
-                      className="tw:xs:mb-12 tw:mb-8 tw:font-noto-serif tw:font-bold tw:xs:text-[2rem] tw:text-[1.5rem]"
+                      className="tw:xs:mb-12 tw:mb-8 tw:font-noto-serif tw:font-bold tw:xs:text-4xl tw:text-[1.5rem]"
                       data-testid="login-header"
                     >
                       Log in to DAWSON
