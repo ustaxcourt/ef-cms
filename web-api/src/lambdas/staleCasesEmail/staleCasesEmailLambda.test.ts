@@ -24,10 +24,7 @@ jest.mock('fs', () => {
 });
 const mockExistsSync = existsSync as jest.Mock;
 
-const mockContext = {
-  fail: jest.fn(),
-  succeed: jest.fn(),
-} as unknown as Context;
+const mockContext = {} as unknown as Context;
 
 describe('staleCasesEmailLambda', () => {
   console.log = () => null;
@@ -48,55 +45,49 @@ describe('staleCasesEmailLambda', () => {
     jest.clearAllMocks();
   });
 
-  it('returns immediately if no recipients are defined', async () => {
+  it('throws an error if no recipients are defined', async () => {
     delete process.env.INACTIVITY_REPORT_RECIPIENTS;
-    await handler({}, mockContext, () => {});
+    await expect(handler({}, mockContext, () => {})).rejects.toThrow(
+      'No Recipients found.',
+    );
     expect(generateStaleCasesReport).not.toHaveBeenCalled();
-    expect(mockContext.fail).toHaveBeenCalledWith('No Recipients found.');
   });
 
   it('catches errors thrown by generateStaleCasesReport', async () => {
     generateStaleCasesReport.mockRejectedValueOnce('Some error');
-    await handler({}, mockContext, () => {});
-    expect(generateStaleCasesReport).toHaveBeenCalledTimes(1);
-    expect(existsSync).not.toHaveBeenCalled();
-    expect(mockContext.fail).toHaveBeenCalledWith(
+    await expect(handler({}, mockContext, () => {})).rejects.toThrow(
       'Unable to generate stale cases report.',
     );
+    expect(generateStaleCasesReport).toHaveBeenCalledTimes(1);
+    expect(existsSync).not.toHaveBeenCalled();
   });
 
-  it('returns if the stale cases report was unable to be generated', async () => {
+  it('throws an error if the stale cases report was unable to be generated', async () => {
     mockExistsSync.mockReturnValueOnce(false);
-    await handler({}, mockContext, () => {});
+    await expect(handler({}, mockContext, () => {})).rejects.toThrow(
+      'Unable to generate stale cases report.',
+    );
     expect(generateStaleCasesReport).toHaveBeenCalledTimes(1);
     expect(existsSync).toHaveBeenCalledTimes(1);
     expect(sendEmailWithAttachment).not.toHaveBeenCalled();
-    expect(mockContext.fail).toHaveBeenCalledWith(
-      'Unable to generate stale cases report.',
-    );
   });
 
   it('catches errors thrown by sendEmailWithAttachment', async () => {
     sendEmailWithAttachment.mockRejectedValueOnce('Some error');
-    await handler({}, mockContext, () => {});
+    await expect(handler({}, mockContext, () => {})).rejects.toThrow(
+      JSON.stringify({ 'jest@example.com': 'error' }),
+    );
     expect(generateStaleCasesReport).toHaveBeenCalledTimes(1);
     expect(existsSync).toHaveBeenCalledTimes(1);
     expect(sendEmailWithAttachment).toHaveBeenCalledTimes(1);
-    expect(mockContext.fail).toHaveBeenCalledWith({
-      'jest@example.com': 'error',
-    });
   });
 
   it('sends emails to all of the defined recipients', async () => {
     process.env.INACTIVITY_REPORT_RECIPIENTS =
       'jest@example.com,alsojest@example.com';
-    await handler({}, mockContext, () => {});
+    await expect(handler({}, mockContext, () => {})).resolves.not.toThrow();
     expect(generateStaleCasesReport).toHaveBeenCalledTimes(1);
     expect(existsSync).toHaveBeenCalledTimes(1);
     expect(sendEmailWithAttachment).toHaveBeenCalledTimes(2);
-    expect(mockContext.succeed).toHaveBeenCalledWith({
-      'jest@example.com': 'sent',
-      'alsojest@example.com': 'sent',
-    });
   });
 });
