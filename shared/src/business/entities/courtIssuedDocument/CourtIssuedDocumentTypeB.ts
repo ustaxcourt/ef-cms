@@ -1,12 +1,11 @@
 import { CourtIssuedDocument } from './CourtIssuedDocumentConstants';
-import { CourtIssuedDocumentBase } from './CourtIssuedDocumentBase';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
 export class CourtIssuedDocumentTypeB extends CourtIssuedDocument {
   public attachments: boolean;
-  public documentTitle?: string;
+  public documentTitle: string;
   public documentType: string;
-  public eventCode?: string;
+  public eventCode: string;
   public filingDate?: string;
   public freeText?: string;
   public judge: string;
@@ -14,7 +13,7 @@ export class CourtIssuedDocumentTypeB extends CourtIssuedDocument {
 
   constructor(rawProps) {
     super('CourtIssuedDocumentTypeB');
-
+    this.affectedDocketEntries = rawProps.affectedDocketEntries;
     this.attachments = rawProps.attachments || false;
     this.documentTitle = rawProps.documentTitle;
     this.documentType = rawProps.documentType;
@@ -26,7 +25,7 @@ export class CourtIssuedDocumentTypeB extends CourtIssuedDocument {
   }
 
   static VALIDATION_RULES = {
-    ...CourtIssuedDocumentBase.VALIDATION_RULES,
+    ...CourtIssuedDocument.VALIDATION_RULES,
     freeText: JoiValidationConstants.STRING.max(1000).optional().messages({
       'string.max': 'Limit is 1000 characters. Enter 1000 or fewer characters.',
     }),
@@ -42,7 +41,7 @@ export class CourtIssuedDocumentTypeB extends CourtIssuedDocument {
 
   getDocumentTitle() {
     const judge = this.judgeWithTitle || this.judge;
-    return replaceBracketed(this.documentTitle, judge, this.freeText);
+    return replaceBracketed(this.documentTitle, judge, this.freeText ?? '');
   }
 }
 
