@@ -30,7 +30,7 @@ describe('admissions clerk adds an email to a petitioner who already exists in t
   loginAs(cerebralTest, OLD_EMAIL);
 
   userSuccessfullyUpdatesEmailAddress(cerebralTest, 'petitioner', NEW_EMAIL);
-  userVerifiesUpdatedEmailAddress(cerebralTest);
+  userVerifiesUpdatedEmailAddress(cerebralTest, '');
 
   loginAs(cerebralTest, 'docketclerk@example.com');
 
