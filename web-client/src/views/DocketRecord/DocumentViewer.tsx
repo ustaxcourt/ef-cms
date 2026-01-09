@@ -124,6 +124,17 @@ export const DocumentViewer = connect(
                               )}
                             >
                               {entry.descriptionDisplay}
+                              {entry.relatedDocketEntries?.map(
+                                affectedEntry => {
+                                  return (
+                                    <>
+                                      <br />
+                                      --- {affectedEntry.disposition} #
+                                      {affectedEntry.docketEntryIndex}
+                                    </>
+                                  );
+                                },
+                              )}
                             </span>
                             <span
                               className={classNames(

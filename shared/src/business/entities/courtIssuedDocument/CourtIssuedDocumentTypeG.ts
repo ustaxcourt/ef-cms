@@ -1,5 +1,4 @@
 import { CourtIssuedDocument } from './CourtIssuedDocumentConstants';
-import { CourtIssuedDocumentBase } from './CourtIssuedDocumentBase';
 import { FORMATS, formatDateString } from '../../utilities/DateHandler';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { TRIAL_SESSION_SCOPE_TYPES } from '../EntityConstants';
@@ -8,9 +7,9 @@ import { replaceBracketed } from '../../utilities/replaceBracketed';
 
 export class CourtIssuedDocumentTypeG extends CourtIssuedDocument {
   public attachments: boolean;
-  public documentTitle?: string;
+  public documentTitle: string;
   public documentType: string;
-  public eventCode?: string;
+  public eventCode: string;
   public filingDate?: string;
   public date: string;
   public trialLocation: string;
@@ -28,7 +27,7 @@ export class CourtIssuedDocumentTypeG extends CourtIssuedDocument {
   }
 
   static VALIDATION_RULES = {
-    ...CourtIssuedDocumentBase.VALIDATION_RULES,
+    ...CourtIssuedDocument.VALIDATION_RULES,
     date: JoiValidationConstants.ISO_DATE.required().messages({
       '*': 'Enter a date',
     }),
