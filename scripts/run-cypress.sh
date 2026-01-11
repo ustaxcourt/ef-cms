@@ -39,9 +39,10 @@ PORT=1234
 NON_PUBLIC=app-
 BROWSER=edge
 RUN_SPECIFIC_TEST=""
+REAL_USER_TESTS=false
 
 # Get the options
-while getopts ":chloprst:" option; do
+while getopts ":chloprst:u" option; do
    case $option in
       c) # run against currently deployed color
          CURRENT=true
@@ -73,6 +74,10 @@ while getopts ":chloprst:" option; do
       t) # run a speecific test
          RUN_SPECIFIC_TEST=$OPTARG
          ;;
+      u) # run real user tests
+         unset INTEGRATION
+         REAL_USER_TESTS=true
+         ;;
       \?) # Invalid option
          echo "An unsupported option was used. Run with the -h option to see supported options."
          ;;
@@ -87,6 +92,11 @@ else
 fi
 
 CONFIG_FILE="cypress${SMOKETESTS}${READONLY}${PUBLIC}.config.ts"
+
+if [[ "$REAL_USER_TESTS" == "true" ]]; then
+  CONFIG_FILE="cypress-real-user-tests.config.ts"
+fi
+
 echo "${CONFIG_FILE}"
 
 export CYPRESS_TARGET_ENV=$ENV
@@ -120,15 +130,13 @@ else
   export CYPRESS_USTC_ADMIN_PASS=$USTC_ADMIN_PASS
   export CYPRESS_BASE_URL="https://${NON_PUBLIC}${CYPRESS_DEPLOYING_COLOR}.${EFCMS_DOMAIN}"
   export CYPRESS_SMOKETEST_BUCKET="${EFCMS_DOMAIN}-email-inbox-${ENV}-us-east-1"
-  DYNAMODB_TABLE_NAME=$(./scripts/ssm/get-destination-table.sh "${ENV}")
-  export CYPRESS_DYNAMODB_TABLE_NAME=$DYNAMODB_TABLE_NAME
   CYPRESS_MIGRATE=$(./scripts/migration/get-migrate-flag.sh "${ENV}")
   export CYPRESS_MIGRATE=$CYPRESS_MIGRATE
   export CYPRESS_DATABASE_NAME=$DATABASE_NAME
   export CYPRESS_POSTGRES_HOST=$POSTGRES_HOST
   export CYPRESS_POSTGRES_PASSWORD=$POSTGRES_PASSWORD
   export CYPRESS_POSTGRES_USER=$POSTGRES_USER
-fi	
+fi
 
 if [ -n "${OPEN}" ]; then
   ./node_modules/.bin/cypress open --browser "${BROWSER}" -C "${CONFIG_FILE}"

@@ -1,5 +1,5 @@
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
-import { Case } from '@shared/business/entities/cases/Case';
+import { Case, isLeadCase } from '@shared/business/entities/cases/Case';
 import { NotFoundError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
@@ -124,7 +124,7 @@ const updateCaseContext = async (
 
       const LEAD_CASE_DEADLINES = caseDeadlines.map(cd => cd.caseDeadlineId);
       if (
-        oldCase.docketNumber === oldCase.leadDocketNumber &&
+        isLeadCase(oldCase) &&
         caseDeadlines.length &&
         LEAD_CASE_DEADLINES.length
       ) {

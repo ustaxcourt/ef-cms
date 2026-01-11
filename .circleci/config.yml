@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   git-shallow-clone: guitarrapc/git-shallow-clone@2.8.0
 
-efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.61
+efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.62
 
 parameters:
   run_build_and_deploy:
@@ -25,6 +25,18 @@ parameters:
     default: false
     type: boolean
 
+  run_reindex_opensearch:
+    default: false
+    type: boolean
+
+  run_sync_s3_to_lower_env:
+    default: false
+    type: boolean
+
+  run_real_user_tests:
+    default: false
+    type: boolean
+
   lower_env:
     default: test
     type: string
@@ -32,14 +44,6 @@ parameters:
   lower_env_account_id:
     default: ''
     type: string
-
-  sync_early:
-    default: false
-    type: boolean
-
-  run_sync_s3_to_lower_env:
-    default: false
-    type: boolean
 
   referrer:
     default: ''
@@ -182,10 +186,7 @@ jobs:
               echo "skipping…"
               exit 0
             fi
-            if [ "${CIRCLE_BRANCH}" == "test" ]; then
-              export REGION="us-east-1"
-              ./scripts/user/setup-glued-users.ts
-            else
+            if [ "${CIRCLE_BRANCH}" != "test" ]; then
               npx ts-node --transpile-only ./scripts/circleci/judge/bulkImportJudgeUsers.ts | tee bulk-import-log.txt
             fi
       - run:
@@ -493,6 +494,42 @@ jobs:
 
   ######################## GLUE JOB: Jobs that run in a lower environment ########################
 
+  delete-and-recreate-elasticsearch-cluster:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+      - run:
+          name: Setup SSM
+          command: |
+            ./scripts/circleci/setup-ssm-for-glue-job.sh
+      - run:
+          name: 'Delete OpenSearch alpha/beta clusters'
+          command: |
+            ./scripts/elasticsearch/delete-alpha-and-beta-clusters.sh
+      - run:
+          no_output_timeout: 20m
+          name: 'Recreate the alpha OpenSearch cluster'
+          command: |
+            npm run deploy:allColors $ENV
+      - run:
+          name: Setup OpenSearch Index Settings and Mappings
+          command: |
+            ./web-api/setup-elasticsearch-index.sh $ENV
+      - run:
+          name: Setup OpenSearch Aliases
+          command: |
+            npx ts-node --transpile-only ./web-api/elasticsearch/elasticsearch-alias-settings.ts
+
   initiate-glue-job:
     docker:
       - image: *efcms-docker-image
@@ -500,8 +537,6 @@ jobs:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     resource_class: medium+
-    environment:
-      SYNC_EARLY: << pipeline.parameters.sync_early >>
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -520,16 +555,12 @@ jobs:
             echo "export SOURCE_BUCKET=${PROD_DOCUMENTS_BUCKET_NAME}" >> $BASH_ENV
             echo "export DESTINATION_BUCKET=${EFCMS_DOMAIN}-documents-${ENV}-us-east-1" >> $BASH_ENV
       - run:
-          name: Setup SSM for a glue job
+          name: 'Delete Cognito users'
           command: |
-            ./scripts/circleci/setup-ssm-for-glue-job.sh
+            REGION=us-east-1 ./scripts/user/clear-all-cognito-users.ts
       - run:
-          name: Kick off the sync-s3-to-lower-env workflow if syncing early
+          name: Kick off the sync-s3-to-lower-env workflow
           command: |
-            if [ "$SYNC_EARLY" != "true" ]; then
-              echo "skipping…"
-              exit 0
-            fi
             curl --request POST \
               --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
               --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
@@ -540,23 +571,6 @@ jobs:
                 \"referrer\":\"${CIRCLE_WORKFLOW_ID}\", \
                 \"source_bucket\":\"${SOURCE_BUCKET}\", \
                 \"destination_bucket\":\"${DESTINATION_BUCKET}\"}}"
-      - run:
-          name: 'Delete OpenSearch alpha/beta clusters'
-          command: |
-            ./scripts/elasticsearch/delete-alpha-and-beta-clusters.sh
-      - run:
-          no_output_timeout: 20m
-          name: 'Recreate the alpha OpenSearch cluster'
-          command: |
-            npm run deploy:allColors $ENV
-      - run:
-          name: Setup OpenSearch Index Settings and Mappings
-          command: |
-            ./web-api/setup-elasticsearch-index.sh $ENV
-      - run:
-          name: Setup OpenSearch Aliases
-          command: |
-            npx ts-node --transpile-only ./web-api/elasticsearch/elasticsearch-alias-settings.ts
       - run:
           name: Kick off the glue-to-lower-env workflow
           command: |
@@ -579,23 +593,6 @@ jobs:
           name: Enable Wait for Workflow Cron
           command: |
             ./scripts/wait-for-workflow/enable-wait-for-workflow-cron.sh
-      - run:
-          name: Kick off the sync-s3-to-lower-env workflow if not syncing early
-          command: |
-            if [ "$SYNC_EARLY" == "true" ]; then
-              echo "skipping…"
-              exit 0
-            fi
-            curl --request POST \
-              --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
-              --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
-              --header "content-type: application/json" \
-              --data "{\"branch\":\"${CIRCLE_BRANCH}\", \"parameters\":{ \
-                \"run_build_and_deploy\":false, \
-                \"run_sync_s3_to_lower_env\":true, \
-                \"referrer\":\"${CIRCLE_WORKFLOW_ID}\", \
-                \"source_bucket\":\"${SOURCE_BUCKET}\", \
-                \"destination_bucket\":\"${DESTINATION_BUCKET}\"}}"
 
   migrate-restored-postgres-data:
     docker:
@@ -632,10 +629,6 @@ jobs:
           command: |
             cd ./scripts/postgres
             DB_HOST="$POSTGRES_HOST" ./create-rds-users.sh
-      - run:
-          name: Set MIGRATE_FLAG to "true" to Force Cases and Docket Entries to Index
-          command: |
-            ./scripts/migration/toggle-migrate-flag.sh --on
 
   index-cases:
     docker:
@@ -643,7 +636,7 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: xlarge
+    resource_class: medium+
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -652,21 +645,17 @@ jobs:
           command: |
             ./scripts/env/env-for-circle.sh
             source $BASH_ENV
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
-              ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
-                --domain-name "${DESTINATION_DOMAIN}" \
-                --region "us-east-1" \
-                --query 'DomainStatus.Endpoint' \
-                --output text)
-              echo "export ELASTICSEARCH_ENDPOINT=${ELASTICSEARCH_ENDPOINT}" >> $BASH_ENV
-            fi
+            DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
+            ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
+              --domain-name "${DESTINATION_DOMAIN}" \
+              --region "us-east-1" \
+              --query 'DomainStatus.Endpoint' \
+              --output text)
+            echo "export ELASTICSEARCH_ENDPOINT=${ELASTICSEARCH_ENDPOINT}" >> $BASH_ENV
       - run:
           name: Index Cases
           command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              NODE_ENV=production ./scripts/reindex/index-cases/index-cases.ts 5
-            fi
+            ./scripts/reindex/index-cases/index-cases.ts 5
 
   index-users:
     docker:
@@ -674,7 +663,7 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: xlarge
+    resource_class: medium+
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -683,21 +672,17 @@ jobs:
           command: |
             ./scripts/env/env-for-circle.sh
             source $BASH_ENV
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
-              ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
-                --domain-name "${DESTINATION_DOMAIN}" \
-                --region "us-east-1" \
-                --query 'DomainStatus.Endpoint' \
-                --output text)
-              echo "export ELASTICSEARCH_ENDPOINT=${ELASTICSEARCH_ENDPOINT}" >> $BASH_ENV
-            fi
+            DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
+            ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
+              --domain-name "${DESTINATION_DOMAIN}" \
+              --region "us-east-1" \
+              --query 'DomainStatus.Endpoint' \
+              --output text)
+            echo "export ELASTICSEARCH_ENDPOINT=${ELASTICSEARCH_ENDPOINT}" >> $BASH_ENV
       - run:
           name: Index Users
           command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              NODE_ENV=production ./scripts/reindex/index-users/index-users.ts 5
-            fi
+            ./scripts/reindex/index-users/index-users.ts 5
 
   index-docket-entries:
     docker:
@@ -705,7 +690,7 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: xlarge
+    resource_class: medium+
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -714,21 +699,17 @@ jobs:
           command: |
             ./scripts/env/env-for-circle.sh
             source $BASH_ENV
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
-              ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
-                --domain-name "${DESTINATION_DOMAIN}" \
-                --region "us-east-1" \
-                --query 'DomainStatus.Endpoint' \
-                --output text)
-              echo "export ELASTICSEARCH_ENDPOINT=${ELASTICSEARCH_ENDPOINT}" >> $BASH_ENV
-            fi
+            DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
+            ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
+              --domain-name "${DESTINATION_DOMAIN}" \
+              --region "us-east-1" \
+              --query 'DomainStatus.Endpoint' \
+              --output text)
+            echo "export ELASTICSEARCH_ENDPOINT=${ELASTICSEARCH_ENDPOINT}" >> $BASH_ENV
       - run:
           name: Index Docket Entries
           command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              NODE_ENV=production ./scripts/reindex/index-docket-entries/index-docket-entries.ts 5
-            fi
+            ./scripts/reindex/index-docket-entries/index-docket-entries.ts 5
 
   cleanup-glue-job:
     docker:
@@ -751,6 +732,10 @@ jobs:
           name: Cleanup Deploy Table
           command: |
             npm run migration:cleanup -- $ENV
+      - run:
+          name: Populate test users in Cognito
+          command: |
+            REGION="us-east-1" ./scripts/user/setup-glued-users.ts
       - run:
           name: Kick off a deployment
           command: |
@@ -837,6 +822,39 @@ jobs:
                 \"source_bucket\":\"${SOURCE_BUCKET}\", \
                 \"destination_bucket\":\"${DESTINATION_BUCKET}\"}}"
 
+  cypress-real-user-tests:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-and-cypress-install
+      - run:
+          name: Create Cypress Artifacts Directory
+          command: mkdir /tmp/cypress
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+      - run:
+          name: 'Cypress Real User Tests'
+          command: |
+            set +e
+            npm run cypress:real-users
+            echo "export REAL_USERS_TEST_RESULT=$?" >> $BASH_ENV
+            set -e
+      - run:
+          name: Kill Build if Smoketests Failed
+          command: |
+            if [ "${REAL_USERS_TEST_RESULT}" -ne 0 ]; then
+              exit 1
+            fi
+      - store_artifacts:
+          path: /root/project/cypress/real-users/videos/
+
   ######################## GLUE JOB: Jobs that run in prod ########################
 
   restore-postgres:
@@ -863,6 +881,7 @@ jobs:
       - run:
           no_output_timeout: 40m
           name: Restore Postgres Data
+          no_output_timeout: 40m
           command: |
             TARGET_ENV="$LOWER_ENV" TARGET_ACCOUNT_ID="$LOWER_ENV_ACCOUNT_ID" ./scripts/postgres/restoreDbFromSource.ts
 
@@ -998,6 +1017,8 @@ workflows:
         - equal: [glue-to-test-schedule, << pipeline.schedule.name >>]
         - << pipeline.parameters.run_glue_to_test >>
     jobs:
+      - delete-and-recreate-elasticsearch-cluster:
+          <<: *only-test
       - initiate-glue-job:
           <<: *only-test
       - wait-for-s3-sync-workflow:
@@ -1013,6 +1034,7 @@ workflows:
       - migrate-restored-postgres-data:
           <<: *only-test
           requires:
+            - delete-and-recreate-elasticsearch-cluster
             - wait-for-glue-workflow
       - index-cases:
           <<: *only-test
@@ -1054,3 +1076,27 @@ workflows:
     jobs:
       - sync-s3-buckets-with-timeout:
           <<: *only-deployed-lower-environments
+
+  reindex-opensearch:
+    when: << pipeline.parameters.run_reindex_opensearch >>
+    jobs:
+      - delete-and-recreate-elasticsearch-cluster:
+          <<: *only-deployed-lower-environments
+      - index-cases:
+          <<: *only-deployed-lower-environments
+          requires:
+            - delete-and-recreate-elasticsearch-cluster
+      - index-users:
+          <<: *only-deployed-lower-environments
+          requires:
+            - index-cases
+      - index-docket-entries:
+          <<: *only-deployed-lower-environments
+          requires:
+            - index-users
+
+  real-user-tests:
+    when: << pipeline.parameters.run_real_user_tests >>
+    jobs:
+      - cypress-real-user-tests:
+          <<: *only-test

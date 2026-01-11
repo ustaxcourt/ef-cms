@@ -72,7 +72,7 @@ describe('CustomCaseReportSearch', () => {
     });
 
     expect(
-      customCaseReportSearch.getFormattedValidationErrors()?.['caseTypes[0]'],
+      customCaseReportSearch.getFormattedValidationErrors()?.['caseTypes-0'],
     ).toBeDefined();
   });
 
@@ -82,9 +82,7 @@ describe('CustomCaseReportSearch', () => {
     });
 
     expect(
-      customCaseReportSearch.getFormattedValidationErrors()?.[
-        'caseStatuses[0]'
-      ],
+      customCaseReportSearch.getFormattedValidationErrors()?.['caseStatuses-0'],
     ).toBeDefined();
   });
 
