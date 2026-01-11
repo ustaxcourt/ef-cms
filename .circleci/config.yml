@@ -879,7 +879,6 @@ jobs:
               exit 1
             fi
       - run:
-          no_output_timeout: 40m
           name: Restore Postgres Data
           no_output_timeout: 40m
           command: |
