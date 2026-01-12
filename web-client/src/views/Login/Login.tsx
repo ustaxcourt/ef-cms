@@ -64,7 +64,7 @@ export const Login = connect(
                 <div className="display-flex flex-column">
                   <div className="flex-align-center">
                     <h1
-                      className="tw:xs:mb-8 tw:mb-8 tw:font-noto-serif tw:font-bold tw:xs:text-4xl tw:text-2xl"
+                      className="tw:xs:mb-8 tw:mb-5 tw:font-noto-serif tw:font-bold tw:xs:text-4xl tw:text-2xl"
                       data-testid="login-header"
                     >
                       Log in to DAWSON
@@ -80,7 +80,7 @@ export const Login = connect(
                         required
                         autoCapitalize="off"
                         autoCorrect="off"
-                        className="usa-input tw:mb-4"
+                        className="usa-input tw:mb-3"
                         data-testid="email-input"
                         id="email"
                         name="email"
