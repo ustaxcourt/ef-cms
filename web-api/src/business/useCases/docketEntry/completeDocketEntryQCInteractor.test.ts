@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
@@ -16,7 +17,10 @@ import {
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { completeDocketEntryQCInteractor } from './completeDocketEntryQCInteractor';
-import { docketClerkUser } from '@shared/test/mockUsers';
+import {
+  caseServicesSupervisorUser,
+  docketClerkUser,
+} from '@shared/test/mockUsers';
 import {
   mockCaseServicesSupervisorUser,
   mockDocketClerkUser,
@@ -30,13 +34,14 @@ import { WorkItem } from '@shared/business/entities/WorkItem';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
-
-const getUserById = jest.mocked(getUserByIdMock);
+import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 
 describe('completeDocketEntryQCInteractor', () => {
   let caseRecord;
+  const getUserById = jest.mocked(getUserByIdMock);
   const getFeatureFlagValues = jest.mocked(getFeatureFlagValuesMock);
   const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
+  const upsertWorkItems = jest.mocked(upsertWorkItemsMock);
   const updateCaseAndAssociations = jest
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
@@ -724,19 +729,53 @@ describe('completeDocketEntryQCInteractor', () => {
       ),
     ).rejects.toThrow('The document is currently being updated');
   });
-  it('should generate new covershete and document title when you cannot use original filing case docket entry', async () => {
-    // const originalDocketNumber = MOCK_CASE.docketNumber;
-    // const servedDocketNumbers = ['101-18', '101-20'];
+
+  it('should still generate new coversheet when original filing case docket entry cannot be used', async () => {
+    getCasesByDocketNumbers.mockResolvedValueOnce([
+      {
+        ...caseRecord,
+        docketEntries: [
+          {
+            ...caseRecord.docketEntries[0],
+            multiDocketedOriginalDocketNumber: '102-18',
+          },
+        ],
+      },
+    ]);
 
     await completeDocketEntryQCInteractor(
       applicationContext,
       {
         entryMetadata: {
           ...caseRecord.docketEntries[0],
-          receivedAt: '2021-01-01', // date only
+          documentTitle: 'different title',
+          multiDocketedOn: undefined,
         },
       },
       mockDocketClerkUser,
     );
+
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).toHaveBeenCalled();
+  });
+
+  it('should assign Work Item to selectedSection when user is Case Services', async () => {
+    getUserById.mockResolvedValueOnce(caseServicesSupervisorUser as DbUser);
+
+    await completeDocketEntryQCInteractor(
+      applicationContext,
+      {
+        entryMetadata: {
+          ...caseRecord.docketEntries[0],
+          selectedSection: DOCKET_SECTION,
+        },
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(upsertWorkItems).toHaveBeenCalledWith({
+      workItems: [expect.objectContaining({ section: DOCKET_SECTION })],
+    });
   });
 });
