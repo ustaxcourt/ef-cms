@@ -122,7 +122,7 @@ export const Login = connect(
                           {showPassword ? 'Hide password' : 'Show password'}
                         </ButtonSmall>
                       </div>
-                      <div className="tw:mt-4 tw:xs:mb-4 tw:mb-3">
+                      <div className="tw:xs:my-4 tw:my-3">
                         <Button
                           aria-label="Login"
                           data-testid="login-button"
