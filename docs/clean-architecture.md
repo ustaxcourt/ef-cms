@@ -83,7 +83,7 @@ Basically, the presenter depends on and invokes the interactor, the interactor d
 
 ## Application Context
 
-The Dawson project has different implmentations of applicationContext, so be sure to watch which directory you are modifying when needing to add new methods.
+The DAWSON project has different implementations of applicationContext, so be sure to watch which directory you are modifying when needing to add new methods.
 
 - The Private UI uses the application context located at web-client/src/applicationContext
 - The Public UI uses the application context located at web-client/src/applicationContextPublic
