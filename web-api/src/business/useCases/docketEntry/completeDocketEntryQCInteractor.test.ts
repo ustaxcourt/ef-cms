@@ -92,6 +92,7 @@ describe('completeDocketEntryQCInteractor', () => {
           servedAt: '2019-08-25T05:00:00.000Z',
           servedParties: [{ name: 'Bernard Lowe' }],
         },
+        MOCK_CASE.docketEntries[1],
       ],
     };
 
@@ -232,16 +233,17 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('serves the document for electronic-only parties if a notice of docket change is generated', async () => {
+    const mockDocketNumber = '102-20';
     getCasesByDocketNumbers.mockResolvedValueOnce([
-      { ...caseRecord, docketNumber: '101-20', docketEntries: [] },
-      { ...caseRecord, docketNumber: '102-20' },
+      { ...caseRecord, docketNumber: caseRecord.docketNumber },
+      { ...caseRecord, docketNumber: mockDocketNumber },
     ]);
     const result = await completeDocketEntryQCInteractor(
       applicationContext,
       {
         entryMetadata: {
           ...caseRecord.docketEntries[0],
-          multiDocketedOn: ['101-20', '102-20'],
+          multiDocketedOn: [caseRecord.docketNumber, mockDocketNumber],
         },
       },
       mockDocketClerkUser,
@@ -721,5 +723,20 @@ describe('completeDocketEntryQCInteractor', () => {
         mockCaseServicesSupervisorUser,
       ),
     ).rejects.toThrow('The document is currently being updated');
+  });
+  it('should generate new covershete and document title when you cannot use original filing case docket entry', async () => {
+    // const originalDocketNumber = MOCK_CASE.docketNumber;
+    // const servedDocketNumbers = ['101-18', '101-20'];
+
+    await completeDocketEntryQCInteractor(
+      applicationContext,
+      {
+        entryMetadata: {
+          ...caseRecord.docketEntries[0],
+          receivedAt: '2021-01-01', // date only
+        },
+      },
+      mockDocketClerkUser,
+    );
   });
 });

@@ -649,7 +649,7 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should propagate docket entry updates to all consolidated cases', async () => {
-    mockDocketEntries[0].isFiledAcrossAllCases = true;
+    mockDocketEntries[0].multiDocketedOn = ['101-18', '102-20', '103-20'];
 
     const consolidatedCase1 = {
       ...MOCK_CASE,
