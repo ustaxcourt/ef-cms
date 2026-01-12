@@ -64,7 +64,7 @@ export const Login = connect(
                 <div className="display-flex flex-column">
                   <div className="flex-align-center">
                     <h1
-                      className="tw:xs:mb-12 tw:mb-8 tw:font-noto-serif tw:font-bold tw:xs:text-4xl tw:text-[1.5rem]"
+                      className="tw:xs:mb-8 tw:mb-8 tw:font-noto-serif tw:font-bold tw:xs:text-4xl tw:text-2xl"
                       data-testid="login-header"
                     >
                       Log in to DAWSON
@@ -122,7 +122,7 @@ export const Login = connect(
                           {showPassword ? 'Hide password' : 'Show password'}
                         </ButtonSmall>
                       </div>
-                      <div className="tw:mt-3 tw:xs:mb-8 tw:mb-5">
+                      <div className="tw:mt-4 tw:xs:mb-4 tw:mb-3">
                         <Button
                           aria-label="Login"
                           data-testid="login-button"
@@ -132,7 +132,7 @@ export const Login = connect(
                         </Button>
                       </div>
                     </form>
-                    <div className="tw:xs:mb-8 tw:mb-5 tw:flex tw:w-full">
+                    <div className="tw:xs:mb-4 tw:mb-3 tw:flex tw:w-full">
                       <Button
                         aria-label="Forgot password"
                         variant="primaryTertiary"
@@ -143,10 +143,10 @@ export const Login = connect(
                         Forgot password?
                       </Button>
                     </div>
-                    <div className="'tw:text-4 tw:xs:text-[1.125rem]">
+                    <div className="'tw:text-base tw:xs:text-lg">
                       Don&apos;t have an account?{' '}
                     </div>
-                    <div className="tw:mt-2 tw:flex tw:w-full">
+                    <div className="tw:flex tw:w-full">
                       <Button
                         className="tw:pt-0 tw:pl-0 tw:mr-auto tw:w-auto"
                         variant="primaryTertiary"

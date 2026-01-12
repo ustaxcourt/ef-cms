@@ -20,7 +20,7 @@ const primaryColors = cn(
 
 const buttonVariants = cva(
   cn(
-    'tw:text-[0.875rem] tw:xs:text-base tw:font-normal tw:outline-none tw:border-none tw:cursor-pointer',
+    'tw:text-sm tw:xs:text-base tw:font-normal tw:outline-none tw:border-none tw:cursor-pointer',
     'tw:inline-flex tw:items-center tw:justify-center tw:whitespace-nowrap',
     'tw:rounded-lg tw:transition-all',
     'tw:disabled:pointer-events-none tw:disabled:opacity-50',
@@ -40,7 +40,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         destructiveTertiary: cn(
-          'tw:px-0 tw:py-0 tw:bg-transparent tw:text-red-primary tw:fill-red-primary tw:font-[400] tw:underline', // standard
+          'tw:px-0 tw:py-0 tw:bg-transparent tw:text-red-primary tw:fill-red-primary tw:font-normal tw:underline', // standard
           'tw:hover:text-red-dark', // hover
           'tw:focus-visible:bg-white', // focus-visible
           'tw:active:text-red-darker', // active

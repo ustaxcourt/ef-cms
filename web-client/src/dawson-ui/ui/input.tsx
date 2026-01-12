@@ -27,14 +27,13 @@ const styles = {
     'tw:block tw:w-full tw:rounded-md tw:border-[0.0625rem] tw:border-grey-base tw:bg-white',
   focus:
     'tw:focus-visible:ring-4 tw:focus-visible:ring-offset-[0.25rem] tw:focus-visible:ring-ring tw:focus-visible:outline-none',
-  icon: 'tw:ml-1 tw:text-[1rem] tw:xs:text-[1.125rem] tw:text-primary',
-  label:
-    'tw:text-[1rem] tw:xs:text-[1.125rem] !tw:font-semibold !tw:text-grey-base',
+  icon: 'tw:ml-1 tw:text-base tw:xs:text-lg tw:text-primary',
+  label: 'tw:text-base tw:xs:text-lg !tw:font-semibold !tw:text-grey-base',
   optional:
-    'tw:text-grey-dark tw:ml-1 tw:font-normal tw:text-[0.875rem] tw:xs:text-[1rem]',
+    'tw:text-grey-dark tw:ml-1 tw:font-normal tw:text-sm tw:xs:text-base',
   text: {
-    base: 'tw:xs:text-[1.125rem] tw:text-[1rem] tw:outline-none tw:cursor-text',
-    help: 'tw:xs:mb-[0.8125rem] tw:text-[0.875rem] tw:xs:text-[1rem] tw:text-grey-dark', // must add conditional
+    base: 'tw:xs:text-lg tw:text-base tw:outline-none tw:cursor-text',
+    help: 'tw:xs:mb-[0.8125rem] tw:text-sm tw:xs:text-base tw:text-grey-dark', // must add conditional
   },
   states: {
     disabled:
@@ -83,9 +82,9 @@ const InputError = ({ error }) => (
       <div className="tw:absolute tw:mt-1.25 tw:xs:mt-2.25 tw:gap-2 tw:text-red-primary">
         <FontAwesomeIcon
           icon={faInfoCircle}
-          className="tw-text-[1rem] tw:xs:text-[1.125rem] tw:mr-1"
+          className="tw-text-base tw:xs:text-lg tw:mr-1"
         />
-        <span className="tw-text-[1rem] tw:xs:text-[1.125rem]">{error}</span>
+        <span className="tw-text-base tw:xs:text-lg">{error}</span>
       </div>
     )}
   </>
@@ -139,7 +138,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
           <label
             id={labelId}
             htmlFor={inputId}
-            className={`${flexDirection === 'horizontal' && !helpText ? 'tw:mb-0! ' : ''} ${flexDirection === 'horizontal' ? 'tw:xs:mr-4 tw:mr-3' : ''} tw:shrink-0 ${!helpText ? 'tw:mb-2 tw:xs:mb-3' : 'tw:mb-0'}`}
+            className={`${flexDirection === 'horizontal' && !helpText ? 'tw:mb-0! ' : ''} ${flexDirection === 'horizontal' ? 'tw:xs:mr-4 tw:mr-3' : ''} tw:shrink-0 ${!helpText ? 'tw:mb-2 tw:xs:mb-2' : 'tw:mb-0'}`}
           >
             <div className="tw:flex tw:flex-col">
               <div className="tw:flex tw:items-center">
@@ -251,7 +250,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
                   />
                 )}
                 {showReqOptionalText && !props.required && (
-                  <span className="tw:text-grey-dark tw:ml-1 tw:font-normal tw:text-[0.875rem] tw:xs:text-[1rem]">
+                  <span className="tw:text-grey-dark tw:ml-1 tw:font-normal tw:text-sm tw:xs:text-base">
                     (optional) Jake
                   </span>
                 )}

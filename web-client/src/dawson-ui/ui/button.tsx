@@ -21,7 +21,7 @@ const primaryColors = cn(
 
 const buttonVariants = cva(
   cn(
-    'tw:text-4 tw:xs:text-[1.125rem] tw:font-normal tw:outline-none tw:border-none tw:cursor-pointer tw:inline-flex tw:items-center tw:justify-center tw:whitespace-nowrap tw:rounded-md tw:transition-all tw:disabled:pointer-events-none tw:disabled:opacity-50 tw:[&_svg]:pointer-events-none tw:[&_svg:not([class*=size-])]:size-4 tw:shrink-0 tw:[&_svg]:shrink-0',
+    'tw:text-base tw:xs:text-lg tw:font-normal tw:outline-none tw:border-none tw:cursor-pointer tw:inline-flex tw:items-center tw:justify-center tw:whitespace-nowrap tw:rounded-md tw:transition-all tw:disabled:pointer-events-none tw:disabled:opacity-50 tw:[&_svg]:pointer-events-none tw:[&_svg:not([class*=size-])]:size-4 tw:shrink-0 tw:[&_svg]:shrink-0',
     'tw:focus-visible:ring-1 tw:focus-visible:ring-offset-1 tw:focus-visible:ring-ring tw:focus-visible:outline-none', // focus-visible
     'tw:aria-invalid:ring-red-primary/20 tw:aria-invalid:border-red-primary', // aria
     'tw:w-full tw:xs:w-auto tw:px-4 tw:py-2', // small & greater
@@ -59,7 +59,7 @@ const buttonVariants = cva(
         terminatorButton: cn(
           tertiaryBaseStyles,
           primaryColors,
-          'tw:xs:text-4 tw:text-[0.875rem]',
+          'tw:xs:text-base tw:text-sm',
           'tw:[&_span]:mr-2',
           'tw:[&_div]:flex tw:[&_div]:items-center',
           'tw:[&_svg]:h-3.5! tw:[&_svg]:w-3.5! tw:xs:[&_svg]:h-4! tw:xs:[&_svg]:w-4!',
