@@ -1725,77 +1725,6 @@
         }
       }
     },
-    "/case-meta/{docketNumber}/high-priority": {
-      "parameters": [
-        {
-          "name": "docketNumber",
-          "in": "path",
-          "required": true,
-          "type": "string"
-        }
-      ],
-      "post": {
-        "tags": ["cases"],
-        "summary": "sets a case as high priority",
-        "description": "sets a case as high priority.\n",
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/case"
-            }
-          }
-        },
-        "security": [
-          {
-            "CognitoUserPool": []
-          }
-        ]
-      },
-      "delete": {
-        "tags": ["cases"],
-        "summary": "removes the high priority from a case",
-        "description": "removes the high priority from a case.\n",
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/case"
-            }
-          }
-        },
-        "security": [
-          {
-            "CognitoUserPool": []
-          }
-        ]
-      },
-      "options": {
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Methods": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Credentials": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Headers": {
-                "type": "string"
-              }
-            }
-          }
-        }
-      }
-    },
     "/case-meta/{docketNumber}/other-statistics": {
       "parameters": [
         {
@@ -7842,23 +7771,6 @@
         "cognito": {
           "type": "boolean",
           "description": "the status of cognito ui"
-        },
-        "dynamo": {
-          "type": "object",
-          "properties": {
-            "efcms": {
-              "type": "boolean",
-              "description": "the status of main dynamo table"
-            },
-            "efcmsDeploy": {
-              "type": "boolean",
-              "description": "the status of deploy dynamo table"
-            }
-          }
-        },
-        "dynamsoft": {
-          "type": "boolean",
-          "description": "the status of static hosted dynamsoft files"
         },
         "elasticsearch": {
           "type": "boolean",

@@ -3,14 +3,11 @@ import { createAndServePaperPetition } from '../../../helpers/fileAPetition/crea
 import { getCypressEnv } from '../../../helpers/env/cypressEnvironment';
 import { logout } from '../../../helpers/authentication/logout';
 import { v4 } from 'uuid';
+import { loginAsAdmissionsClerk } from 'cypress/helpers/authentication/login-as-helpers';
 
 describe('login', () => {
   beforeEach(() => {
     Cypress.session.clearCurrentSessionData();
-  });
-
-  after(() => {
-    cy.task('deleteAllCypressTestAccounts');
   });
 
   /*
@@ -32,10 +29,7 @@ describe('login', () => {
       getCypressEnv().defaultAccountPass,
     );
     cy.get('[data-testid="login-button"]').click();
-    cy.get('[data-testid="error-alert"]').should(
-      'contain',
-      'Email address not verified',
-    );
+    cy.get('[data-testid^="error-alert"]').should('contain', 'The email address is associated with an account but is not verified. We sent an email with a link to verify the email address. If you don’t see it, check your spam folder. If you’re still having trouble, email dawson.support@ustaxcourt.gov.');
   });
 
   /*
@@ -49,10 +43,7 @@ describe('login', () => {
     cy.get('[data-testid="password-input"]').type('totallyIncorrectPassword');
     cy.get('[data-testid="login-button"]').click();
 
-    cy.get('[data-testid="error-alert"]').should(
-      'contain',
-      'The email address or password you entered is invalid',
-    );
+    cy.get('[data-testid^="error-alert"]').should('contain', 'The email address or password you entered is invalid.');
   });
 
   /*
@@ -65,7 +56,7 @@ describe('login', () => {
     const practitionerEmail = `${practitionerUserName}@example.com`;
 
     createAndServePaperPetition().then(({ docketNumber }) => {
-      cy.login('admissionsclerk1');
+      loginAsAdmissionsClerk('admissionsclerk1@example.com');
       cy.get('[data-testid="messages-banner"]');
       cy.get('[data-testid="docket-number-search-input"]').type(docketNumber);
       cy.get('[data-testid="search-docket-number"]').click();
@@ -84,7 +75,7 @@ describe('login', () => {
 
       cy.get('[data-testid="modal-button-confirm"]').click();
 
-      cy.get('[data-testid="success-alert"]').contains('Changes saved');
+      cy.get('[data-testid^="success-alert"]').should('contain', "Changes saved");
 
       logout();
     });
@@ -96,9 +87,9 @@ describe('login', () => {
     );
     cy.get('[data-testid="login-button"]').click();
 
-    cy.get('[data-testid="new-password-input"]').type(
-      getCypressEnv().defaultAccountPass,
-    );
+    cy.get('[data-testid="new-password-input"]')
+      .should('be.visible')
+      .type(getCypressEnv().defaultAccountPass);
     cy.get('[data-testid="confirm-new-password-input"]').type(
       getCypressEnv().defaultAccountPass,
     );

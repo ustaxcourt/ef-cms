@@ -1,12 +1,13 @@
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { associatePrivatePractitionerToCase } from '../../useCaseHelper/caseAssociation/associatePrivatePractitionerToCase';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * associatePrivatePractitionerWithCaseInteractor
@@ -19,7 +20,7 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  * @returns {*} the result
  */
 export const associatePrivatePractitionerWithCase = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   {
     docketNumber,
     representing,
@@ -32,19 +33,16 @@ export const associatePrivatePractitionerWithCase = async (
     userId: string;
   },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<RawCase> => {
   if (
     !isAuthorized(authorizedUser, ROLE_PERMISSIONS.ASSOCIATE_USER_WITH_CASE)
   ) {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId });
+  const user = await getUserById({ userId });
 
   return await associatePrivatePractitionerToCase({
-    applicationContext,
     authorizedUser,
     docketNumber,
     representing,

@@ -1,9 +1,10 @@
 import {
   CASE_TYPES_MAP,
+  SESSION_TYPES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
-} from '../../shared/src/business/entities/EntityConstants';
-import { FORMATS } from '@shared/business/utilities/DateHandler';
+} from '@shared/business/entities/EntityConstants';
+import { FORMATS, getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import {
@@ -21,11 +22,12 @@ import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsC
 describe('petitions clerk sets a remote trial session calendar', () => {
   const cerebralTest = setupTest();
 
-  const trialLocation = `Denver, Colorado, ${Date.now()}`;
+  const trialLocation = `Denver, Colorado, ${getCurrentDateTimeInMillis()}`;
+
   const overrides = {
     maxCases: 2,
     preferredTrialCity: trialLocation,
-    sessionType: 'Small',
+    sessionType: SESSION_TYPES.small,
     trialLocation,
   };
 
@@ -57,7 +59,7 @@ describe('petitions clerk sets a remote trial session calendar', () => {
       {
         key: 'startDate',
         toFormat: FORMATS.ISO,
-        value: '12/12/2025',
+        value: '12/12/2099',
       },
     );
 
@@ -166,9 +168,9 @@ describe('petitions clerk sets a remote trial session calendar', () => {
     await waitForExpectedItem({
       cerebralTest,
       currentItem: 'currentPage',
-      expectedItem: 'TrialSessionDetail',
+      expectedItem: 'TrialSessionDetails',
     });
-    expect(cerebralTest.getState('currentPage')).toBe('TrialSessionDetail');
+    expect(cerebralTest.getState('currentPage')).toBe('TrialSessionDetails');
   });
 
   it('Petitions clerk verifies NOIP docket entries for open cases', async () => {

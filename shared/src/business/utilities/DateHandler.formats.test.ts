@@ -1,3 +1,4 @@
+/* eslint-disable custom-rules-plugin/no-dates*/
 import { FORMATS, createISODateString, formatDateString } from './DateHandler';
 import { JoiValidationConstants } from '../entities/JoiValidationConstants';
 
@@ -7,12 +8,14 @@ describe('DateHandler', () => {
     const mockTimeValue = 1530518207007; // '2018-07-02T07:56:47.007Z'
 
     const FORMATS_EXPECTED_OUTPUT = {
+      CURRENT_AS_OF_TIMESTAMP: '07/02/18 3:56 am Eastern',
       DATE_TIME: '07/02/18 03:56 am',
       DATE_TIME_TZ: '07/02/18 3:56 am ET',
       DAY_OF_WEEK: '1',
       FILENAME_DATE: 'July_2_2018',
       ISO: '2018-07-02T03:56:47.007-04:00',
       LOG_TIMESTAMP: '2018/07/02 03:56:47.007 ET',
+      MD: '7/2',
       MDYY: '7/2/18',
       MDYYYY: '7/2/2018',
       MDYYYY_DASHED: '7-2-2018',
@@ -29,6 +32,7 @@ describe('DateHandler', () => {
       TIME_TZ: '3:56 am ET',
       TRIAL_SORT_TAG: '20180702035647',
       TRIAL_TIME: '2018-07-02 3:56',
+      UNIX_TIMESTAMP_MS: '1530518207007',
       UNIX_TIMESTAMP_SECONDS: '1530518207',
       WEEK: '27',
       YEAR: '2018',

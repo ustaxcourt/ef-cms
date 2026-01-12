@@ -1,6 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
-import { saveCaseDetailInternalEditInteractor } from '@shared/business/useCases/saveCaseDetailInternalEditInteractor';
+import { saveCaseDetailInternalEditInteractor } from '@web-api/business/useCases/saveCaseDetailInternalEditInteractor';
 
 /**
  * used for updating a case

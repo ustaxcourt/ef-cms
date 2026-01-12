@@ -33,6 +33,7 @@ export const PublicFilingsAndProceedings = connect<
             link
             aria-label={`View PDF: ${entry.descriptionDisplay}`}
             className={classNames('text-left', 'view-pdf-link')}
+            data-testid="Filing-and-Proceedings-link-to-docket-entry"
             onClick={() => {
               openCaseDocumentDownloadUrlSequence({
                 docketEntryId: entry.docketEntryId,
@@ -45,7 +46,6 @@ export const PublicFilingsAndProceedings = connect<
             {entry.descriptionDisplay}
           </Button>
         )}
-
         <span
           className={classNames(entry.isStricken && 'stricken-docket-record')}
         >
@@ -56,8 +56,44 @@ export const PublicFilingsAndProceedings = connect<
 
           <span>{entry.signatory}</span>
         </span>
-
         {entry.isStricken && <span> (STRICKEN)</span>}
+
+        {entry.relatedDocketEntries?.map(affectedEntry => {
+          return (
+            <span key={affectedEntry.docketEntryId}>
+              <br></br>
+              <span className="display-inline-block">
+                <span> --- </span>
+                {affectedEntry.showDownloadLink && (
+                  <Button
+                    link
+                    className={classNames('text-right', 'view-pdf-link')}
+                    data-testid={`related-document-viewer-link-${affectedEntry.docketEntryIndex}`}
+                    arial-label={`View PDF for: ${affectedEntry.docketEntryIndex}`}
+                    onClick={() =>
+                      openCaseDocumentDownloadUrlSequence({
+                        docketEntryId: affectedEntry.docketEntryId,
+                        docketNumber: caseDetail.docketNumber,
+                        isPublic: true,
+                        useSameTab: entry.openInSameTab,
+                      })
+                    }
+                  >
+                    {affectedEntry?.disposition} #
+                    {affectedEntry.docketEntryIndex}
+                  </Button>
+                )}
+                {!affectedEntry.showDownloadLink && (
+                  <span>
+                    {' '}
+                    {affectedEntry?.disposition} #
+                    {affectedEntry.docketEntryIndex}{' '}
+                  </span>
+                )}
+              </span>
+            </span>
+          );
+        })}
       </React.Fragment>
     );
   },

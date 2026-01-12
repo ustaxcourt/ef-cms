@@ -15,6 +15,7 @@ export const InfoNotificationComponent = function InfoNotificationComponent({
 }: {
   alertInfo: {
     title?: string;
+    linkText?: string;
     linkUrl?: string;
     inlineLinkUrl?: string;
     inlineLinkText?: string;
@@ -29,7 +30,7 @@ export const InfoNotificationComponent = function InfoNotificationComponent({
   iconRight?: boolean;
 }) {
   const notificationRef = useRef(null);
-  const isMessageOnly = alertInfo && alertInfo.message && !alertInfo.title;
+  const isMessageOnly = !!alertInfo && !!alertInfo.message && !alertInfo.title;
 
   useEffect(() => {
     const notification = notificationRef.current;
@@ -48,7 +49,7 @@ export const InfoNotificationComponent = function InfoNotificationComponent({
             'usa-alert--info',
             isMessageOnly && 'usa-alert-info-message-only',
           )}
-          data-testid="info-alert"
+          data-testid="alert-info"
           ref={notificationRef}
           role="alert"
         >

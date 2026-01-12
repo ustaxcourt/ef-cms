@@ -1,6 +1,8 @@
+import { loginAsPetitionsClerk } from 'cypress/helpers/authentication/login-as-helpers';
+
 describe('Petitions clerk views case detail', function () {
   beforeEach(() => {
-    cy.login('petitionsclerk');
+    loginAsPetitionsClerk();
   });
 
   describe('case information tab', () => {

@@ -2,6 +2,17 @@ name: Typescript Reduce Type Errors
 
 on:
   pull_request:
+    paths-ignore:
+      - '**.md'
+      - '**/.gitignore'
+      - '.nvmrc'
+      - '.circleci/config.yml'
+      - 'docs/**'
+      - 'scripts/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: true
 
 jobs:
   ReduceTypeErrors:
@@ -20,7 +31,7 @@ jobs:
           path: branchToBeCompared
       - uses: actions/setup-node@v4
         with:
-          node-version: '20.14.0'
+          node-version-file: 'branchToBeCompared/.nvmrc'
       - name: NPM Install in your branch
         working-directory: ./branchToBeCompared
         run: npm ci

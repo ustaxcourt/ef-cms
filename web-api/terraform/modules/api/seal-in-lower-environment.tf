@@ -15,7 +15,7 @@ resource "terraform_data" "zip_seal_last_modified" {
 
 resource "aws_lambda_permission" "allow_topic_to_seal" {
   count         = var.create_seal_in_lower
-  statement_id  = "AllowExecutionFromSNS"
+  statement_id  = "AllowExecutionFromSNS_${var.environment}_${var.current_color}"
   action        = "lambda:InvokeFunction"
   function_name = module.zip_seal.function_name
   principal     = "sns.amazonaws.com"

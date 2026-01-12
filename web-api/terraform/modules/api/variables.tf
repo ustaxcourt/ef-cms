@@ -34,21 +34,8 @@ variable "lambda_bucket_id" {
   type = string
 }
 
-
-variable "create_health_check_cron" {
-  type = number
-}
-
 variable "create_check_case_cron" {
   type = number
-}
-
-variable "create_streams" {
-  type = number
-}
-
-variable "stream_arn" {
-  type = string
 }
 
 variable "create_triggers" {
@@ -72,15 +59,7 @@ variable "create_bounce_handler" {
   type = number
 }
 
-variable "enable_health_checks" {
-  // e.g. "1" or "0"
-  type = string
-}
-
-variable "health_check_id" {
-  type = string
-}
-
 variable "alert_sns_topic_arn" {
   type = string
 }
+

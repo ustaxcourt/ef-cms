@@ -1,6 +1,6 @@
 import { CourtIssuedDocumentFactory } from './CourtIssuedDocumentFactory';
 import { calculateISODate } from '../../utilities/DateHandler';
-import { getTextByCount } from '../../utilities/getTextByCount';
+import { getTextByCount } from '@shared/test/getTextByCount';
 
 describe('CourtIssuedDocumentTypeH', () => {
   describe('constructor', () => {

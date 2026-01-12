@@ -88,6 +88,7 @@ export const CaseDetailInternal = connect(
                 <CaseDeadlinesInternal />
               </Tab>
               <Tab
+                data-testid="pending-report-tab"
                 id="tab-pending-report"
                 tabName="pendingReport"
                 title="Pending Report"
@@ -98,7 +99,7 @@ export const CaseDetailInternal = connect(
           )}
           {caseDetailInternalTabs.drafts && (
             <>
-              <div className="title">
+              <div className="title" data-testid="drafts-tab-title">
                 <h1>Drafts</h1>
               </div>
               <DraftDocuments />
@@ -138,7 +139,12 @@ export const CaseDetailInternal = connect(
               bind="currentViewMetadata.caseDetail.caseInformationTab"
               className="classic-horizontal-header3 tab-border"
             >
-              <Tab id="tab-overview" tabName="overview" title="Overview">
+              <Tab
+                id="tab-overview"
+                data-testid="case-overview-tab"
+                tabName="overview"
+                title="Overview"
+              >
                 <CaseInformationInternal />
               </Tab>
               <Tab
@@ -149,7 +155,12 @@ export const CaseDetailInternal = connect(
               >
                 <PartiesInformation />
               </Tab>
-              <Tab id="tab-statistics" tabName="statistics" title="Statistics">
+              <Tab
+                id="tab-statistics"
+                data-testid="case-statistics-tab"
+                tabName="statistics"
+                title="Statistics"
+              >
                 <Statistics />
               </Tab>
               <Tab

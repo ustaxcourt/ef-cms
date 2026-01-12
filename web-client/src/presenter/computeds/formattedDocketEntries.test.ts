@@ -2,23 +2,24 @@
 
 import {
   ALLOWLIST_FEATURE_FLAGS,
-  DOCKET_ENTRY_SEALED_TO_TYPES,
   DOCKET_RECORD_FILTER_OPTIONS,
+  DOCKET_ENTRY_SEALED_TO_TYPES,
   ROLES,
-} from '../../../../shared/src/business/entities/EntityConstants';
-import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+  STATE_KEYS,
+} from '@shared/business/entities/EntityConstants';
+import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import {
   casePetitioner,
   docketClerkUser,
   petitionerUser,
   petitionsClerkUser,
-} from '../../../../shared/src/test/mockUsers';
+} from '@shared/test/mockUsers';
 import {
   formattedDocketEntries as formattedDocketEntriesComputed,
   setupIconsToDisplay,
 } from './formattedDocketEntries';
-import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
+import { getUserPermissions } from '@shared/authorization/getUserPermissions';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
@@ -911,10 +912,9 @@ describe('formattedDocketEntries', () => {
             docketEntries: [
               {
                 ...mockDocketEntry,
-                workItem: {
-                  completedAt: undefined,
-                  isRead: false,
-                },
+                qcViewed: false,
+                qcComplete: false,
+                workItemId: 'someId',
               },
             ],
           },
@@ -990,6 +990,7 @@ describe('formattedDocketEntries', () => {
           className: 'sealed-docket-entry',
           icon: 'lock',
           title: expect.anything(),
+          size: 'lg',
         },
       ]);
     });
@@ -1000,6 +1001,7 @@ describe('formattedDocketEntries', () => {
           ...mockDocketEntry,
           isPaper: true,
           qcNeeded: true,
+          className: 'fa-icon-blue',
           showLoadingIcon: true,
         },
         isExternalUser: false,
@@ -1008,7 +1010,9 @@ describe('formattedDocketEntries', () => {
       expect(result).toEqual([
         {
           icon: ['fas', 'file-alt'],
-          title: 'is paper',
+          title: 'Is paper',
+          className: 'fa-icon-blue',
+          size: 'lg',
         },
       ]);
     });
@@ -1026,8 +1030,10 @@ describe('formattedDocketEntries', () => {
 
       expect(result).toEqual([
         {
+          className: 'fa-icon-gold',
           icon: ['fas', 'thumbtack'],
-          title: 'in progress',
+          title: 'In progress',
+          size: 'lg',
         },
       ]);
     });
@@ -1044,8 +1050,10 @@ describe('formattedDocketEntries', () => {
 
       expect(result).toEqual([
         {
+          className: 'fa-icon-red',
           icon: ['fa', 'star'],
-          title: 'is untouched',
+          title: 'Is untouched',
+          size: 'lg',
         },
       ]);
     });
@@ -1063,8 +1071,128 @@ describe('formattedDocketEntries', () => {
         {
           className: 'fa-spin spinner',
           icon: ['fa-spin', 'spinner'],
-          title: 'is loading',
+          title: 'Is loading',
+          size: 'lg',
         },
+      ]);
+    });
+  });
+
+  describe('sorting', () => {
+    it('should return the entries on docket record sorted by default sort', () => {
+      const TEST_DOCKET_ENTRIES = [
+        {
+          filingDate: '2019-02-28T21:14:39.488Z',
+          index: 5,
+          isOnDocketRecord: true,
+          testProp: 'E',
+        },
+        {
+          filingDate: '2019-02-28T21:14:39.488Z',
+          index: 2,
+          isOnDocketRecord: true,
+          testProp: 'B',
+        },
+        {
+          filingDate: '2019-02-28T21:14:39.488Z',
+          index: 3,
+          isOnDocketRecord: true,
+          testProp: 'C',
+        },
+        {
+          filingDate: '2019-02-28T21:14:39.488Z',
+          index: 1,
+          isOnDocketRecord: true,
+          testProp: 'A',
+        },
+        {
+          filingDate: '2019-02-28T21:14:39.488Z',
+          index: 4,
+          isOnDocketRecord: true,
+          testProp: 'D',
+        },
+      ];
+
+      const result = runCompute(formattedDocketEntries, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail: {
+            ...MOCK_CASE,
+            docketEntries: TEST_DOCKET_ENTRIES,
+          },
+        },
+      });
+
+      expect(result.formattedDocketEntriesOnDocketRecord).toMatchObject([
+        { testProp: 'A' },
+        { testProp: 'B' },
+        { testProp: 'C' },
+        { testProp: 'D' },
+        { testProp: 'E' },
+      ]);
+    });
+
+    it('should return the entries on docket record sorted by provided sort field and sort order', () => {
+      const TEST_DOCKET_ENTRIES = [
+        {
+          filingDate: '2019-02-28T21:14:39.488Z',
+          index: 5,
+          isOnDocketRecord: true,
+          testProp: 'E',
+        },
+        {
+          filingDate: '2019-02-28T21:14:39.488Z',
+          index: 2,
+          isOnDocketRecord: true,
+          testProp: 'B',
+        },
+        {
+          filingDate: '2019-02-28T21:14:39.488Z',
+          index: 6,
+          isOnDocketRecord: true,
+          testProp: 'B',
+        },
+        {
+          filingDate: '2019-02-28T21:14:39.488Z',
+          index: 3,
+          isOnDocketRecord: true,
+          testProp: 'C',
+        },
+        {
+          filingDate: '2019-02-28T21:14:39.488Z',
+          index: 1,
+          isOnDocketRecord: true,
+          testProp: 'A',
+        },
+        {
+          filingDate: '2019-02-28T21:14:39.488Z',
+          index: 4,
+          isOnDocketRecord: true,
+          testProp: 'D',
+        },
+      ];
+
+      const result = runCompute(formattedDocketEntries, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail: {
+            ...MOCK_CASE,
+            docketEntries: TEST_DOCKET_ENTRIES,
+          },
+          [STATE_KEYS.DOCKET_RECORD_TABLE_SORT]: {
+            sortField: 'testProp',
+            sortOrder: 'desc',
+          },
+        },
+      });
+
+      expect(result.formattedDocketEntriesOnDocketRecord).toMatchObject([
+        { testProp: 'E' },
+        { testProp: 'D' },
+        { testProp: 'C' },
+        { index: 6, testProp: 'B' },
+        { index: 2, testProp: 'B' },
+        { testProp: 'A' },
       ]);
     });
   });

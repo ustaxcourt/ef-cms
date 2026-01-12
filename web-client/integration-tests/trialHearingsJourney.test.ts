@@ -9,7 +9,6 @@ import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTria
 import { judgeViewsTrialSessionWorkingCopy } from './journey/judgeViewsTrialSessionWorkingCopy';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkBlocksCase } from './journey/petitionsClerkBlocksCase';
-import { petitionsClerkPrioritizesCase } from './journey/petitionsClerkPrioritizesCase';
 
 describe('trial hearings journey', () => {
   const cerebralTest = setupTest();
@@ -73,7 +72,6 @@ describe('trial hearings journey', () => {
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkPrioritizesCase(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkAddsCaseToHearing(cerebralTest, 'Test hearing note two.');
@@ -104,8 +102,6 @@ describe('trial hearings journey', () => {
     'Test hearing note three.',
   );
 
-  loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkAddsCaseToHearing(cerebralTest, 'Test hearing note four.');
-  docketClerkEditsHearingNote(cerebralTest, 'Updated test hearing note four.');
+  docketClerkEditsHearingNote(cerebralTest, 'Updated test hearing note three.');
   docketClerkRemovesCaseFromHearing(cerebralTest);
 });

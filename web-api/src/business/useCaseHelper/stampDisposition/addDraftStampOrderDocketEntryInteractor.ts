@@ -1,22 +1,24 @@
 import {
   COURT_ISSUED_EVENT_CODES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
-import { Message } from '../../../../../shared/src/business/entities/Message';
+} from '@shared/business/entities/EntityConstants';
+import { Case } from '@shared/business/entities/cases/Case';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { Message } from '@shared/business/entities/Message';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { Stamp } from '../../../../../shared/src/business/entities/Stamp';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { Stamp } from '@shared/business/entities/Stamp';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
 import { orderBy } from 'lodash';
-import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
 
 /**
  * addDraftStampOrderDocketEntryInteractor
@@ -55,41 +57,43 @@ export const addDraftStampOrderDocketEntry = async (
     throw new UnauthorizedError('Unauthorized to update docket entry');
   }
 
-  const caseRecord = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const caseRecord = await getCaseByDocketNumber({
+    docketNumber,
+  });
   const caseEntity = new Case(caseRecord, { authorizedUser });
-  const originalDocketEntryEntity = caseEntity.docketEntries.find(
+  const originalDocketEntry = caseEntity.docketEntries.find(
     docketEntry => docketEntry.docketEntryId === originalDocketEntryId,
   );
 
-  let stampedDocketEntryEntity;
+  if (!originalDocketEntry) {
+    throw new NotFoundError(
+      `Could not find docket entry with id ${originalDocketEntryId} on case ${docketNumber}`,
+    );
+  }
+
   const orderDocumentInfo = COURT_ISSUED_EVENT_CODES.find(
     doc => doc.eventCode === 'O',
   );
 
   const validatedStampData = new Stamp(stampData);
 
-  stampedDocketEntryEntity = new DocketEntry(
+  const stampedDocketEntryEntity = new DocketEntry(
     {
       createdAt: applicationContext.getUtilities().createISODateString(),
       docketEntryId: stampedDocketEntryId,
       docketNumber: caseRecord.docketNumber,
-      documentTitle: `${originalDocketEntryEntity.documentType} ${formattedDraftDocumentTitle}`,
+      documentTitle: `${originalDocketEntry.documentType} ${formattedDraftDocumentTitle}`,
       documentType: orderDocumentInfo?.documentType,
       draftOrderState: {
         docketNumber: caseEntity.docketNumber,
         documentTitle: formattedDraftDocumentTitle,
         documentType: orderDocumentInfo?.documentType,
         eventCode: orderDocumentInfo?.eventCode,
-        freeText: `${originalDocketEntryEntity.documentType} ${formattedDraftDocumentTitle}`,
+        freeText: `${originalDocketEntry.documentType} ${formattedDraftDocumentTitle}`,
       },
       eventCode: orderDocumentInfo?.eventCode,
       filedBy: authorizedUser.name,
-      freeText: `${originalDocketEntryEntity.documentType} ${formattedDraftDocumentTitle}`,
+      freeText: `${originalDocketEntry.documentType} ${formattedDraftDocumentTitle}`,
       isDraft: true,
       isFileAttached: true,
       isPaper: false,
@@ -121,13 +125,10 @@ export const addDraftStampOrderDocketEntry = async (
       documentTitle: stampedDocketEntryEntity.documentTitle,
     });
 
-    await updateMessage({
-      message: messageEntity.validate().toRawObject(),
-    });
+    await upsertMessages([messageEntity.validate().toRawObject()]);
   }
 
-  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-    applicationContext,
+  await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
   });

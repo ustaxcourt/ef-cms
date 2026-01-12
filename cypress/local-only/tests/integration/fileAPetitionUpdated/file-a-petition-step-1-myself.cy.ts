@@ -48,7 +48,7 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
         cy.get('[data-testid="filing-type-0"]').click();
         cy.get('[data-testid="contact-primary-name-label"]').should(
           'have.text',
-          'Full Name',
+          'Full name',
         );
       });
 
@@ -177,6 +177,22 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
         cy.get('[data-testid="step-1-next-button"]').click();
         cy.get('[data-testid="step-indicator-current-step-2-icon"]');
       });
+
+      it('should allow input into preferred language and communication method fields', () => {
+        cy.get('[data-testid="contact-primary-preferred-language"]').type(
+          'Spanish',
+        );
+        cy.get('[data-testid="contact-primary-preferred-language"]').should(
+          'have.value',
+          'Spanish',
+        );
+        cy.get(
+          '[data-testid="contact-primary-preferred-communication-method"]',
+        ).type('ASL');
+        cy.get(
+          '[data-testid="contact-primary-preferred-communication-method"]',
+        ).should('have.value', 'ASL');
+      });
     });
   });
 
@@ -212,6 +228,23 @@ describe('File a petition: Step 1 - Petitioner Information', () => {
         cy.get('[data-testid="contact-primary-paper-petition-email"]').should(
           'exist',
         );
+      });
+
+      it('should allow input into preferred language and communication method fields for practitioner', () => {
+        cy.get('[data-testid="filing-type-0"]').click();
+        cy.get('[data-testid="contact-primary-preferred-language"]').type(
+          'Spanish',
+        );
+        cy.get('[data-testid="contact-primary-preferred-language"]').should(
+          'have.value',
+          'Spanish',
+        );
+        cy.get(
+          '[data-testid="contact-primary-preferred-communication-method"]',
+        ).type('ASL');
+        cy.get(
+          '[data-testid="contact-primary-preferred-communication-method"]',
+        ).should('have.value', 'ASL');
       });
     });
   });

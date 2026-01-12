@@ -1,13 +1,12 @@
 terraform {
   required_providers {
     aws = {
-      source                = "hashicorp/aws"
-      version               = ">= 5.52.0"
-      configuration_aliases = [aws.us-west-1]
+      source  = "hashicorp/aws"
+      version = "6.27.0"
     }
     opensearch = {
       source  = "opensearch-project/opensearch"
-      version = "2.2.0"
+      version = "2.3.2"
     }
   }
 }

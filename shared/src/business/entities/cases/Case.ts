@@ -22,7 +22,6 @@ import {
   PETITIONER_CONTACT_TYPES,
   PROCEDURE_TYPES,
   ROLES,
-  Role,
   SYSTEM_ROLE,
   TRIAL_CITY_STRINGS,
   TRIAL_LOCATION_MATCHER,
@@ -32,6 +31,8 @@ import {
   UnknownAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
 import {
+  CASE_AUTOMATIC_BLOCKED_RULE,
+  CASE_BLOCKED_RULE,
   CASE_CAPTION_RULE,
   CASE_DOCKET_NUMBER_RULE,
   CASE_IRS_PRACTITIONERS_RULE,
@@ -48,16 +49,14 @@ import {
   RawConsolidatedCaseSummary,
 } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
 import { ContactFactory } from '../contacts/ContactFactory';
-import { Correspondence } from '../Correspondence';
+import { Correspondence, RawCorrespondence } from '../Correspondence';
 import { DocketEntry } from '../DocketEntry';
 import {
-  FORMATS,
   PATTERNS,
   calculateDifferenceInDays,
   calculateISODate,
   createISODateString,
   dateStringsCompared,
-  formatDateString,
   prepareDateFromString,
 } from '../../utilities/DateHandler';
 import { IrsPractitioner } from '../IrsPractitioner';
@@ -66,15 +65,16 @@ import { JoiValidationEntity } from '../JoiValidationEntity';
 import { Petitioner } from '../contacts/Petitioner';
 import { PrivatePractitioner } from '../PrivatePractitioner';
 import { PublicCase } from '@shared/business/entities/cases/PublicCase';
-import { Statistic } from '../Statistic';
+import { RawStatistic, Statistic } from '../Statistic';
 import { TrialSession } from '../trialSessions/TrialSession';
 import { UnprocessableEntityError } from '../../../../../web-api/src/errors/errors';
 import { User } from '../User';
-import { clone, compact, includes, isEmpty, startCase } from 'lodash';
+import { clone, compact, includes, startCase } from 'lodash';
 import { compareStrings } from '../../utilities/sortFunctions';
 import { getDocketNumberSuffix } from '../../utilities/getDocketNumberSuffix';
 import { shouldGenerateDocketRecordIndex } from '../../utilities/shouldGenerateDocketRecordIndex';
 import joi from 'joi';
+import { getUniqueId } from '@shared/sharedAppContext';
 
 export class Case extends JoiValidationEntity {
   public associatedJudge?: string;
@@ -85,12 +85,9 @@ export class Case extends JoiValidationEntity {
   public blocked?: boolean;
   public blockedDate?: string;
   public blockedReason?: string;
-  public caseStatusHistory: CaseStatusChange[];
+  public caseStatusHistory?: CaseStatusChange[];
   public caseNote?: string;
   public damages?: number;
-  public highPriority?: boolean;
-  public highPriorityReason?: string;
-  public judgeUserId?: string;
   public litigationCosts?: number;
   public qcCompleteForTrial?: Record<string, any>;
   public noticeOfAttachments?: boolean;
@@ -102,12 +99,12 @@ export class Case extends JoiValidationEntity {
   public orderForRatification?: boolean;
   public orderToShowCause?: boolean;
   public petitioners: TPetitioner[];
-  public caseCaption: string;
+  public caseCaption: string='';
   public caseType: CaseType;
   public closedDate?: string;
-  public createdAt: string;
-  public docketNumber: string;
-  public docketNumberSuffix?: string;
+  public createdAt?: string;
+  public docketNumber: string='';
+  public docketNumberSuffix?: string | null;
   public filingType?: string;
   public hasVerifiedIrsNotice?: boolean;
   public irsNoticeDate?: string;
@@ -120,8 +117,10 @@ export class Case extends JoiValidationEntity {
   public petitionPaymentStatus: string;
   public petitionPaymentWaivedDate?: string;
   public preferredTrialCity?: string;
+  public remoteTrialGranted?: boolean;
+  public remoteTrialGrantedDate?: string | null;
   public procedureType: string;
-  public receivedAt: string;
+  public receivedAt?: string;
   public sealedDate?: string;
   public status: CaseStatus;
   public sortableDocketNumber: number;
@@ -129,23 +128,23 @@ export class Case extends JoiValidationEntity {
   public trialLocation?: string;
   public trialSessionId?: string;
   public trialTime?: string;
-  public useSameAsPrimary?: string;
+  public useSameAsPrimary?: boolean;
   public initialDocketNumberSuffix?: string;
   public noticeOfTrialDate?: string;
-  public docketNumberWithSuffix?: string;
+  public docketNumberWithSuffix!: string;
   public canAllowDocumentService?: boolean;
-  public canAllowPrintableDocketRecord!: boolean;
+  public canAllowPrintableDocketRecord?: boolean;
   public canDojPractitionersRepresentParty?: boolean;
   public archivedDocketEntries?: RawDocketEntry[];
-  public docketEntries: any[];
+  public docketEntries: DocketEntry[]= [];
   public isSealed?: boolean;
-  public hearings: any[];
-  public privatePractitioners?: any[];
+  public hearings: any[]= [];
+  public privatePractitioners?: any[]= [];
   public initialCaption?: string;
   public irsPractitioners?: any[];
-  public statistics?: any[];
-  public correspondence: any[];
-  public archivedCorrespondences?: any[];
+  public statistics?: RawStatistic[];
+  public correspondence: RawCorrespondence[];
+  public archivedCorrespondences?: RawCorrespondence[];
   public hasPendingItems?: boolean;
   public consolidatedCases: RawConsolidatedCaseSummary[] = [];
 
@@ -172,6 +171,17 @@ export class Case extends JoiValidationEntity {
         rawCase,
       });
     }
+
+    // assigning some fields here to avoid type error
+    this.caseType = rawCase.caseType;
+    this.partyType = rawCase.partyType;
+    this.procedureType = rawCase.procedureType;
+    this.petitionPaymentStatus =
+      rawCase.petitionPaymentStatus || PAYMENT_STATUS.UNPAID;
+    this.status = rawCase.status || CASE_STATUS_TYPES.new;
+    this.sortableDocketNumber =
+      rawCase.sortableDocketNumber ||
+      Case.getSortableDocketNumber(rawCase.docketNumber);
 
     // assignContacts needs to come first before assignDocketEntries
     this.assignConsolidatedCases({ rawCase });
@@ -218,9 +228,13 @@ export class Case extends JoiValidationEntity {
     const oldestYear = 65;
 
     const [sequentialNumber, yearFiled] = docketNumber.split('-');
+    const yearSansSuffix = yearFiled.replace(/\D+$/, '');
+
     const sequentialNumberPadded = sequentialNumber.padStart(6, '0');
     const yearFiledAdjusted =
-      parseInt(yearFiled) >= oldestYear ? `19${yearFiled}` : `20${yearFiled}`;
+      parseInt(yearSansSuffix) >= oldestYear
+        ? `19${yearSansSuffix}`
+        : `20${yearSansSuffix}`;
 
     return parseInt(`${yearFiledAdjusted}${sequentialNumberPadded}`);
   }
@@ -230,7 +244,7 @@ export class Case extends JoiValidationEntity {
    * @param {Array} cases the cases to check for lead case computation
    * @returns {Case} the lead Case entity
    */
-  static sortByDocketNumber(cases) {
+  static sortByDocketNumber<T>(cases: (T & { docketNumber: string })[]): T[] {
     return cases.sort((a, b) => {
       return Case.docketNumberSort(a.docketNumber, b.docketNumber);
     });
@@ -243,13 +257,57 @@ export class Case extends JoiValidationEntity {
     );
   }
 
+  static sortByDocketNumberAndGroupConsolidatedCases<
+    T extends { leadDocketNumber?: string; docketNumber: string },
+  >(cases: T[]): T[] {
+    const nonMemberCases: T[] = [];
+    const memberCases: { [key: string]: T[] } = {};
+
+    // Create a set of docket numbers for quick lookup
+    const docketNumbers = new Set(cases.map(c => c.docketNumber));
+
+    // Group cases into 1) "top-level" lead or non-member cases and 2) valid non-lead, member cases
+    for (const c of cases) {
+      if (
+        c.leadDocketNumber &&
+        !isLeadCase(c) &&
+        docketNumbers.has(c.leadDocketNumber) // Check if the lead case exists; if not, treat this case as a non-member case
+      ) {
+        (memberCases[c.leadDocketNumber] ||= []).push(c);
+      } else {
+        nonMemberCases.push(c);
+      }
+    }
+
+    // Sort the lead/non-member cases
+    Case.sortByDocketNumber(nonMemberCases);
+
+    // Then, sort and interpolate the non-lead, member cases
+    const interpolatedCases: T[] = [];
+    for (const caseItem of nonMemberCases) {
+      interpolatedCases.push(caseItem);
+
+      // Append and sort member cases inline if applicable
+      if (memberCases[caseItem.docketNumber]) {
+        interpolatedCases.push(
+          ...Case.sortByDocketNumber(memberCases[caseItem.docketNumber]),
+        );
+      }
+    }
+
+    return interpolatedCases;
+  }
+
   /**
    * return the lead case for the given set of cases based on createdAt
    * (does NOT evaluate leadDocketNumber)
    * @param {Array} cases the cases to check for lead case computation
    * @returns {Case} the lead Case entity
    */
-  static findLeadCaseForCases(cases) {
+  static findLeadCaseForCases<T>(
+    cases: (T & { docketNumber: string })[],
+  ): T | undefined {
+    if (!cases.length) return undefined;
     const casesOrdered = Case.sortByDocketNumber([...cases]);
     return casesOrdered.shift();
   }
@@ -311,9 +369,6 @@ export class Case extends JoiValidationEntity {
     this.caseStatusHistory = rawCase.caseStatusHistory || [];
     this.caseNote = rawCase.caseNote;
     this.damages = rawCase.damages;
-    this.highPriority = rawCase.highPriority;
-    this.highPriorityReason = rawCase.highPriorityReason;
-    this.judgeUserId = rawCase.judgeUserId;
     this.litigationCosts = rawCase.litigationCosts;
     this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
     this.noticeOfAttachments = rawCase.noticeOfAttachments || false;
@@ -326,6 +381,8 @@ export class Case extends JoiValidationEntity {
     this.orderForCds = rawCase.orderForCds || false;
     this.orderForRatification = rawCase.orderForRatification || false;
     this.orderToShowCause = rawCase.orderToShowCause || false;
+    this.remoteTrialGranted = rawCase.remoteTrialGranted;
+    this.remoteTrialGrantedDate = rawCase.remoteTrialGrantedDate;
 
     this.assignArchivedDocketEntries({
       authorizedUser,
@@ -359,12 +416,7 @@ export class Case extends JoiValidationEntity {
         then: JoiValidationConstants.UUID.optional(),
       })
       .description('Judge ID assigned to this case.'),
-    automaticBlocked: joi
-      .boolean()
-      .optional()
-      .description(
-        'Temporarily blocked from trial due to a pending item or due date.',
-      ),
+    automaticBlocked: CASE_AUTOMATIC_BLOCKED_RULE,
     automaticBlockedDate: JoiValidationConstants.ISO_DATE.when(
       'automaticBlocked',
       {
@@ -382,16 +434,7 @@ export class Case extends JoiValidationEntity {
         otherwise: joi.optional().allow(null),
         then: joi.required(),
       }),
-    blocked: joi
-      .boolean()
-      .optional()
-      .meta({ tags: ['Restricted'] })
-      .when('status', {
-        is: CASE_STATUS_TYPES.calendared,
-        otherwise: joi.optional(),
-        then: joi.invalid(true),
-      })
-      .description('Temporarily blocked from trial.'),
+    blocked: CASE_BLOCKED_RULE,
     blockedDate: JoiValidationConstants.ISO_DATE.when('blocked', {
       is: true,
       otherwise: joi.optional().allow(null),
@@ -450,7 +493,6 @@ export class Case extends JoiValidationEntity {
       .optional()
       .allow(null)
       .description('Damages for the case.'),
-    // docketEntries: 'At least one valid docket entry is required',
     docketEntries: joi
       .array()
       .items(DOCKET_ENTRY_VALIDATION_RULES)
@@ -465,7 +507,7 @@ export class Case extends JoiValidationEntity {
     docketNumberWithSuffix:
       JoiValidationConstants.STRING.optional().description(
         'Auto-generated from docket number and the suffix.',
-      ),
+      ).min(0),
     entityName: JoiValidationConstants.STRING.valid('Case').required(),
     filingType: JoiValidationConstants.STRING.valid(
       ...FILING_TYPES[ROLES.petitioner],
@@ -482,17 +524,6 @@ export class Case extends JoiValidationEntity {
         'Whether the petitioner received an IRS notice, verified by the petitions clerk.',
       )
       .messages({ '*': 'Indicate whether you received an IRS notice' }),
-    highPriority: joi
-      .boolean()
-      .optional()
-      .meta({ tags: ['Restricted'] }),
-    highPriorityReason: JoiValidationConstants.STRING.max(250)
-      .when('highPriority', {
-        is: true,
-        otherwise: joi.optional().allow(null),
-        then: joi.required(),
-      })
-      .meta({ tags: ['Restricted'] }),
     initialCaption: JoiValidationConstants.CASE_CAPTION.allow(null)
       .optional()
       .description('Case caption before modification.'),
@@ -515,9 +546,6 @@ export class Case extends JoiValidationEntity {
     irsPractitioners: CASE_IRS_PRACTITIONERS_RULE,
     isPaper: joi.boolean().optional(),
     isSealed: CASE_IS_SEALED_RULE,
-    judgeUserId: JoiValidationConstants.UUID.optional().description(
-      'Unique ID for the associated judge.',
-    ),
     leadDocketNumber: CASE_LEAD_DOCKET_NUMBER_RULE,
     litigationCosts: joi
       .number()
@@ -638,6 +666,18 @@ export class Case extends JoiValidationEntity {
       .required()
       .description('Procedure type of the case.')
       .messages({ '*': 'Select a case procedure' }),
+    remoteTrialGranted: joi
+      .boolean()
+      .optional()
+      .description(
+        'Whether the case has been granted a motion to proceed remotely.',
+      )
+      .meta({ tags: ['Restricted'] }),
+    remoteTrialGrantedDate: JoiValidationConstants.ISO_DATE.optional()
+      .allow(null)
+      .description(
+        'A date stamp indicating the date permission was granted to proceed remotely.',
+      ),
     qcCompleteForTrial: joi
       .object()
       .optional()
@@ -723,7 +763,6 @@ export class Case extends JoiValidationEntity {
 
   assignFieldsForAllUsers({ rawCase }) {
     this.caseCaption = rawCase.caseCaption;
-    this.caseType = rawCase.caseType;
     this.closedDate = rawCase.closedDate;
     this.createdAt = rawCase.createdAt || createISODateString();
     if (rawCase.docketNumber) {
@@ -736,20 +775,12 @@ export class Case extends JoiValidationEntity {
     this.isPaper = rawCase.isPaper;
     this.leadDocketNumber = rawCase.leadDocketNumber;
     this.mailingDate = rawCase.mailingDate;
-    this.partyType = rawCase.partyType;
     this.petitionPaymentDate = rawCase.petitionPaymentDate;
     this.petitionPaymentMethod = rawCase.petitionPaymentMethod;
-    this.petitionPaymentStatus =
-      rawCase.petitionPaymentStatus || PAYMENT_STATUS.UNPAID;
     this.petitionPaymentWaivedDate = rawCase.petitionPaymentWaivedDate;
     this.preferredTrialCity = rawCase.preferredTrialCity;
-    this.procedureType = rawCase.procedureType;
     this.receivedAt = rawCase.receivedAt || createISODateString();
     this.sealedDate = rawCase.sealedDate;
-    this.status = rawCase.status || CASE_STATUS_TYPES.new;
-    this.sortableDocketNumber =
-      rawCase.sortableDocketNumber ||
-      Case.getSortableDocketNumber(rawCase.docketNumber);
     this.trialDate = rawCase.trialDate;
     this.trialLocation = rawCase.trialLocation;
     this.trialSessionId = rawCase.trialSessionId;
@@ -769,8 +800,10 @@ export class Case extends JoiValidationEntity {
 
     this.noticeOfTrialDate = rawCase.noticeOfTrialDate;
 
-    this.docketNumberWithSuffix =
-      this.docketNumber + (this.docketNumberSuffix || '');
+    this.docketNumberWithSuffix = Case.getDocketNumberWithSuffix({
+      docketNumber: this.docketNumber,
+      docketNumberSuffix: this.docketNumberSuffix,
+    });
 
     this.canAllowDocumentService = rawCase.canAllowDocumentService;
     this.canAllowPrintableDocketRecord = rawCase.canAllowPrintableDocketRecord;
@@ -912,7 +945,13 @@ export class Case extends JoiValidationEntity {
   assignCorrespondences({ rawCase }) {
     if (Array.isArray(rawCase.correspondence)) {
       this.correspondence = rawCase.correspondence
-        .map(correspondence => new Correspondence(correspondence))
+        .map(
+          correspondence =>
+            new Correspondence({
+              ...correspondence,
+              docketNumber: rawCase.docketNumber,
+            }),
+        )
         .sort((a, b) => compareStrings(a.filingDate, b.filingDate));
     } else {
       this.correspondence = [];
@@ -920,7 +959,11 @@ export class Case extends JoiValidationEntity {
 
     if (Array.isArray(rawCase.archivedCorrespondences)) {
       this.archivedCorrespondences = rawCase.archivedCorrespondences.map(
-        correspondence => new Correspondence(correspondence),
+        correspondence =>
+          new Correspondence({
+            ...correspondence,
+            docketNumber: rawCase.docketNumber,
+          }),
       );
     } else {
       this.archivedCorrespondences = [];
@@ -956,14 +999,17 @@ export class Case extends JoiValidationEntity {
     });
   }
 
-  toRawObject(processPendingItems = true) {
+  //@ts-ignore
+  toRawObject(options: { processPendingItems?: boolean } = {}): RawCase {
+    const { processPendingItems = true } = options;
     const result = this.toRawObjectFromJoi();
 
     if (processPendingItems) {
       (result as any).hasPendingItems = this.doesHavePendingItems();
     }
 
-    return result;
+    // @ts-ignore
+    return result as RawCase;
   }
 
   doesHavePendingItems() {
@@ -979,6 +1025,16 @@ export class Case extends JoiValidationEntity {
    */
   static getCaseTitle(caseCaption): string {
     return caseCaption.replace(/\s*,\s*Petitioner(s|\(s\))?\s*$/, '').trim();
+  }
+
+  static getDocketNumberWithSuffix({
+    docketNumber,
+    docketNumberSuffix,
+  }: {
+    docketNumber: string;
+    docketNumberSuffix: string | undefined | null;
+  }): string {
+    return docketNumber + (docketNumberSuffix || '');
   }
 
   /**
@@ -1065,7 +1121,7 @@ export class Case extends JoiValidationEntity {
    * @param {string} practitionerToRemove the practitioner user object to remove from the case
    */
   removePrivatePractitioner(practitionerToRemove) {
-    const index = this.privatePractitioners.findIndex(
+    const index = (this.privatePractitioners || []).findIndex(
       practitioner => practitioner.userId === practitionerToRemove.userId,
     );
     if (index > -1) this.privatePractitioners?.splice(index, 1);
@@ -1075,7 +1131,7 @@ export class Case extends JoiValidationEntity {
    *
    * @param {object} docketEntryEntity the docket entry to add to the case
    */
-  addDocketEntry(docketEntryEntity) {
+  addDocketEntry(docketEntryEntity: DocketEntry) {
     docketEntryEntity.docketNumber = this.docketNumber;
 
     if (docketEntryEntity.isOnDocketRecord) {
@@ -1186,7 +1242,10 @@ export class Case extends JoiValidationEntity {
         ? this.initialDocketNumberSuffix
         : '');
 
-    const newDocketNumber = this.docketNumber + (this.docketNumberSuffix || '');
+    const newDocketNumber = Case.getDocketNumberWithSuffix({
+      docketNumber: this.docketNumber,
+      docketNumberSuffix: this.docketNumberSuffix,
+    });
 
     this.docketEntries.forEach(docketEntry => {
       const result = docketNumberRegex.exec(docketEntry.documentTitle);
@@ -1227,7 +1286,7 @@ export class Case extends JoiValidationEntity {
    * @params {string} params.docketEntryId the id of the docketEntry to retrieve
    * @returns {object} the retrieved docketEntry
    */
-  getDocketEntryById({ docketEntryId }) {
+  getDocketEntryById({ docketEntryId }: { docketEntryId: string }) {
     return this.docketEntries.find(
       docketEntry => docketEntry.docketEntryId === docketEntryId,
     );
@@ -1277,7 +1336,7 @@ export class Case extends JoiValidationEntity {
   removeRepresentingFromPractitioners(petitionerContactId) {
     this.privatePractitioners?.forEach(practitioner => {
       const representingArrayIndex =
-        practitioner.representing.indexOf(petitionerContactId);
+        practitioner.representing?.indexOf(petitionerContactId);
       if (representingArrayIndex >= 0) {
         practitioner.representing.splice(representingArrayIndex, 1);
       }
@@ -1344,7 +1403,7 @@ export class Case extends JoiValidationEntity {
   }
 
   getPetitionDocketEntry() {
-    return getPetitionDocketEntry(this);
+    return getPetitionDocketEntry(this) as DocketEntry; // We know it is a DocketEntry not RawDocketEntry because this is the Case entity
   }
 
   getIrsSendDate() {
@@ -1360,14 +1419,14 @@ export class Case extends JoiValidationEntity {
    * @param {object} caseDeadlines - the case deadlines
    * @returns {Case} the updated case entity
    */
-  updateAutomaticBlocked({ caseDeadlines }) {
+  updateAutomaticBlocked({ hasCaseDeadline }: { hasCaseDeadline: boolean }) {
     const hasPendingItems = this.doesHavePendingItems();
     let automaticBlockedReason;
-    if (hasPendingItems && !isEmpty(caseDeadlines)) {
+    if (hasPendingItems && hasCaseDeadline) {
       automaticBlockedReason = AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate;
     } else if (hasPendingItems) {
       automaticBlockedReason = AUTOMATIC_BLOCKED_REASONS.pending;
-    } else if (!isEmpty(caseDeadlines)) {
+    } else if (hasCaseDeadline) {
       automaticBlockedReason = AUTOMATIC_BLOCKED_REASONS.dueDate;
     }
     if (automaticBlockedReason) {
@@ -1379,27 +1438,13 @@ export class Case extends JoiValidationEntity {
       this.automaticBlockedDate = undefined;
       this.automaticBlockedReason = undefined;
     }
-    return this;
-  }
 
-  /**
-   * set as high priority with a highPriorityReason
-   * @param {string} highPriorityReason - the reason the case was set to high priority
-   * @returns {Case} the updated case entity
-   */
-  setAsHighPriority(highPriorityReason) {
-    this.highPriority = true;
-    this.highPriorityReason = highPriorityReason;
-    return this;
-  }
+    this.consolidatedCases.forEach(c => {
+      if (c.docketNumber === this.docketNumber) {
+        c.automaticBlocked = this.automaticBlocked;
+      }
+    });
 
-  /**
-   * unset as high priority and remove the highPriorityReason
-   * @returns {Case} the updated case entity
-   */
-  unsetAsHighPriority() {
-    this.highPriority = false;
-    this.highPriorityReason = undefined;
     return this;
   }
 
@@ -1493,7 +1538,7 @@ export class Case extends JoiValidationEntity {
     const date = createISODateString();
 
     this.status = updatedCaseStatus;
-    this.caseStatusHistory.push({
+    this.caseStatusHistory?.push({
       changedBy,
       date,
       updatedCaseStatus,
@@ -1512,7 +1557,6 @@ export class Case extends JoiValidationEntity {
     if (isClosedStatus(updatedCaseStatus)) {
       this.closedDate = date;
       this.unsetAsBlocked();
-      this.unsetAsHighPriority();
     } else {
       if (isClosedStatus(previousCaseStatus)) {
         this.closedDate = undefined;
@@ -1529,7 +1573,22 @@ export class Case extends JoiValidationEntity {
    */
   setCaseCaption(caseCaption) {
     this.caseCaption = caseCaption;
+
+    if (this.consolidatedCases && this.consolidatedCases.length > 0) {
+      this.setCaseCaptionInSingleCase();
+    }
+
     return this;
+  }
+
+  setCaseCaptionInSingleCase() {
+    const currentCase = this.consolidatedCases.find(
+      c => c.docketNumber === this.docketNumber,
+    );
+
+    if (currentCase) {
+      currentCase.caseCaption = this.caseCaption;
+    }
   }
 
   /**
@@ -1659,6 +1718,7 @@ export class Case extends JoiValidationEntity {
     const nextIndex =
       this.docketEntries
         .filter(d => d.isOnDocketRecord && d.index !== undefined)
+        // @ts-ignore
         .sort((a, b) => a.index - b.index).length + 1;
     return nextIndex;
   }
@@ -1730,61 +1790,6 @@ export class Case extends JoiValidationEntity {
   }
 
   /**
-   * generates sort tags used for sorting trials for calendaring
-   * @returns {object} the sort tags
-   */
-  generateTrialSortTags() {
-    const {
-      caseType,
-      docketNumber,
-      highPriority,
-      preferredTrialCity,
-      procedureType,
-      receivedAt,
-    } = this;
-
-    const caseProcedureSymbol =
-      procedureType.toLowerCase() === 'regular' ? 'R' : 'S';
-
-    let casePrioritySymbol = 'D';
-
-    if (highPriority === true) {
-      casePrioritySymbol = 'A';
-    } else if (caseType.toLowerCase() === 'cdp (lien/levy)') {
-      casePrioritySymbol = 'B';
-    } else if (caseType.toLowerCase() === 'passport') {
-      casePrioritySymbol = 'C';
-    }
-
-    const formattedFiledTime = formatDateString(
-      receivedAt,
-      FORMATS.TRIAL_SORT_TAG,
-    );
-    const formattedTrialCity = preferredTrialCity?.replace(/[\s.,]/g, '');
-
-    const nonHybridSortKey = [
-      formattedTrialCity,
-      caseProcedureSymbol,
-      casePrioritySymbol,
-      formattedFiledTime,
-      docketNumber,
-    ].join('-');
-
-    const hybridSortKey = [
-      formattedTrialCity,
-      'H', // Hybrid Tag
-      casePrioritySymbol,
-      formattedFiledTime,
-      docketNumber,
-    ].join('-');
-
-    return {
-      hybrid: hybridSortKey,
-      nonHybrid: nonHybridSortKey,
-    };
-  }
-
-  /**
    * set as calendared
    * @param {object} trialSessionEntity - the trial session that is associated with the case
    * @returns {Case} the updated case entity
@@ -1827,8 +1832,28 @@ export class Case extends JoiValidationEntity {
    * Updates the specified contact object in the case petitioner's array
    * @param {object} arguments.updatedPetitioner the updated petitioner object
    */
-  updatePetitioner(updatedPetitioner) {
-    updatePetitioner(this, updatedPetitioner);
+  updatePetitioner({
+    updatedPetitioner,
+    assignNewId = false,
+  }: {
+    updatedPetitioner: any;
+    assignNewId?: boolean;
+  }) {
+    const petitionerIndex = this.petitioners.findIndex(
+      p => p.contactId === updatedPetitioner.contactId,
+    );
+
+    if (petitionerIndex === -1) {
+      throw new Error(`Petitioner was not found on case ${this.docketNumber}.`);
+    }
+
+    // reassign contactId to disassociate old contactId from login userId
+    if (assignNewId) {
+      updatedPetitioner.contactId = getUniqueId();
+    }
+
+    this.petitioners[petitionerIndex] = updatedPetitioner;
+    return updatedPetitioner;
   }
 
   /**
@@ -1848,14 +1873,10 @@ export class Case extends JoiValidationEntity {
     return this.status === CASE_STATUS_TYPES.calendared;
   }
 
-  /**
-   * returns true if the case status is ready for trial
-   * @returns {boolean} if the case is calendared
-   */
-  isReadyForTrial() {
+  isReadyForTrial(): boolean {
     return (
       this.status === CASE_STATUS_TYPES.generalDocketReadyForTrial &&
-      this.preferredTrialCity &&
+      !!this.preferredTrialCity &&
       !this.blocked &&
       !this.automaticBlocked
     );
@@ -1870,6 +1891,11 @@ export class Case extends JoiValidationEntity {
     this.blocked = true;
     this.blockedReason = blockedReason;
     this.blockedDate = createISODateString();
+    this.consolidatedCases.forEach(c => {
+      if (c.docketNumber === this.docketNumber) {
+        c.blocked = true;
+      }
+    });
     return this;
   }
 
@@ -1881,6 +1907,11 @@ export class Case extends JoiValidationEntity {
     this.blocked = false;
     this.blockedReason = undefined;
     this.blockedDate = undefined;
+    this.consolidatedCases.forEach(c => {
+      if (c.docketNumber === this.docketNumber) {
+        c.blocked = false;
+      }
+    });
     return this;
   }
 
@@ -1895,7 +1926,7 @@ export class Case extends JoiValidationEntity {
 
   static isPetitionerRepresented(rawCase, userId: string): boolean {
     return !!rawCase.privatePractitioners?.find(practitioner =>
-      practitioner.representing.find(id => id === userId),
+      practitioner.representing?.find(id => id === userId),
     );
   }
 
@@ -1905,6 +1936,22 @@ export class Case extends JoiValidationEntity {
    */
   setNoticeOfTrialDate() {
     this.noticeOfTrialDate = createISODateString();
+    return this;
+  }
+
+  /**
+   * sets the remote trial granted date and boolean flag
+   * @param {string | null | undefined} remoteTrialGrantedDate the date when motion to proceed remotely was granted, or null/undefined to clear
+   * @returns {Case} this case entity
+   */
+  setRemoteTrialGrantedDate(remoteTrialGrantedDate?: string | null): Case {
+    const hasDate = Boolean(
+      remoteTrialGrantedDate &&
+        typeof remoteTrialGrantedDate === 'string' &&
+        remoteTrialGrantedDate.trim() !== '',
+    );
+    this.remoteTrialGranted = hasDate;
+    this.remoteTrialGrantedDate = hasDate ? remoteTrialGrantedDate : null;
     return this;
   }
 
@@ -2008,9 +2055,7 @@ export class Case extends JoiValidationEntity {
     const statisticToUpdate = this.statistics?.find(
       statistic => statistic.statisticId === statisticId,
     );
-
     if (statisticToUpdate) Object.assign(statisticToUpdate, statisticEntity);
-
     return this;
   }
 
@@ -2019,14 +2064,10 @@ export class Case extends JoiValidationEntity {
    * @param {string} statisticId the id of the statistic to delete
    * @returns {Case} this case entity
    */
-  deleteStatistic(statisticId) {
-    const statisticIndexToDelete = this.statistics?.findIndex(
-      statistic => statistic.statisticId === statisticId,
+  deleteStatistic(statisticId: string) {
+    this.statistics = this.statistics?.filter(
+      s => !(s.statisticId === statisticId),
     );
-
-    if (statisticIndexToDelete !== -1) {
-      this.statistics!.splice(statisticIndexToDelete, 1);
-    }
 
     return this;
   }
@@ -2046,21 +2087,20 @@ export class Case extends JoiValidationEntity {
    */
   getShouldHaveTrialSortMappingRecords() {
     return !!(
-      (this.highPriority ||
-        this.status === CASE_STATUS_TYPES.generalDocketReadyForTrial) &&
+      this.status === CASE_STATUS_TYPES.generalDocketReadyForTrial &&
       this.preferredTrialCity &&
       !this.blocked &&
-      (!this.automaticBlocked || (this.automaticBlocked && this.highPriority))
+      !this.automaticBlocked
     );
   }
 
-  userHasAccessToCase(user: { userId: string; role: Role }): boolean {
+  userHasAccessToCase(user: AuthUser): boolean {
     return Case.userHasAccessToCase(this, user);
   }
 
   static userHasAccessToCase(
     rawCase: RawCase | RawPublicCase,
-    user: { userId: string; role: Role },
+    user: AuthUser,
   ): boolean {
     return rawCase.leadDocketNumber
       ? isUserPartOfGroup({
@@ -2103,7 +2143,7 @@ export const caseHasServedDocketEntries = rawCase => {
 };
 
 export const isInConsolidatedGroup = (caseInfo: {
-  leadDocketNumber: string;
+  leadDocketNumber?: string;
 }) => {
   return !!caseInfo.leadDocketNumber;
 };
@@ -2144,11 +2184,11 @@ export const shouldGenerateNoticesForCase = rawCase => {
 
 /**
  *  determines whether or not we should show the printable docket record
- * @param {Object} rawCase  the case we are using to determine whether we should show the printable docket record
+ * @param {Object} rawCase the case we are using to determine whether we should show the printable docket record
  * @returns {Boolean} whether or not we should show the printable docket record
  */
 export const canAllowPrintableDocketRecord = rawCase => {
-  if (typeof rawCase.canAllowPrintableDocketRecord !== 'undefined') {
+  if (rawCase.canAllowPrintableDocketRecord !== undefined) {
     return rawCase.canAllowPrintableDocketRecord;
   }
   return rawCase.status !== CASE_STATUS_TYPES.new;
@@ -2209,11 +2249,13 @@ export const getPractitionersRepresenting = function (
   petitionerContactId: string,
 ) {
   return rawCase.privatePractitioners?.filter(practitioner =>
-    practitioner.representing.includes(petitionerContactId),
+    practitioner.representing?.includes(petitionerContactId),
   );
 };
 
-export const getPetitionDocketEntry = function (rawCase) {
+export const getPetitionDocketEntry = function (
+  rawCase: RawCase | RawPublicCase,
+) {
   return rawCase.docketEntries?.find(
     docketEntry =>
       docketEntry.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
@@ -2237,8 +2279,11 @@ export const isAssociatedUser = function ({
   user,
 }: {
   caseRaw: any;
-  user: { userId: string; role: Role };
+  user: UnknownAuthUser;
 }) {
+  if (!user) {
+    return false;
+  }
   const isIrsPractitioner =
     caseRaw.irsPractitioners &&
     caseRaw.irsPractitioners.find(r => r.userId === user.userId);
@@ -2407,27 +2452,10 @@ export const getOtherFilers = function (rawCase) {
   );
 };
 
-/**
- * Updates the specified contact object in the case petitioner's array
- * @param {object} arguments.rawCase the raw case object
- * @param {object} arguments.updatedPetitioner the updated petitioner object
- */
-export const updatePetitioner = function (rawCase, updatedPetitioner) {
-  const petitionerIndex = rawCase.petitioners.findIndex(
-    p => p.contactId === updatedPetitioner.contactId,
-  );
-
-  if (petitionerIndex !== -1) {
-    rawCase.petitioners[petitionerIndex] = updatedPetitioner;
-  } else {
-    throw new Error(
-      `Petitioner was not found on case ${rawCase.docketNumber}.`,
-    );
-  }
-};
-
 declare global {
-  type RawCase = ExcludeMethods<Case>;
+  type RawCase = Omit<ExcludeMethods<Case>, 'docketEntries'> & {
+    docketEntries: RawDocketEntry[];
+  };
 }
 
 const generateCaptionFromContacts = ({
@@ -2494,6 +2522,7 @@ const generateCaptionFromContacts = ({
 };
 
 export type CaseStatusChange = {
+  statusUpdateId?: string; // db creates this if not set thus ensuring ability to insert duplicate status (which isn't ideal but possible)
   changedBy: string;
   date: string;
   updatedCaseStatus: string;

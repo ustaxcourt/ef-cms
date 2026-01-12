@@ -1,12 +1,15 @@
-import { Case } from '../entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
+import { CaseFactory } from '@shared/business/entities/cases/CaseFactory';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * unsealCase
@@ -16,7 +19,7 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  * @returns {Promise<object>} the updated case data
  */
 export const unsealCase = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   { docketNumber }: { docketNumber: string },
   authorizedUser: UnknownAuthUser,
 ) => {
@@ -24,23 +27,26 @@ export const unsealCase = async (
     throw new UnauthorizedError('Unauthorized for unsealing cases');
   }
 
-  const oldCase = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({ applicationContext, docketNumber });
+  const rawCaseToUpdate = await getCaseByDocketNumber({
+    docketNumber,
+  });
 
-  const newCase = new Case(oldCase, { authorizedUser });
+  if (!rawCaseToUpdate) {
+    throw new NotFoundError(`Case ${docketNumber} was not found.`);
+  }
 
-  newCase.setAsUnsealed();
+  const caseToUpdate = new Case(rawCaseToUpdate, { authorizedUser });
 
-  const updatedCase = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
-      authorizedUser,
-      caseToUpdate: newCase,
-    });
+  caseToUpdate.setAsUnsealed();
 
-  return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
+  const updatedCase = await updateCaseAndAssociations({
+    authorizedUser,
+    caseToUpdate,
+  });
+
+  return CaseFactory.getFullCase({ rawCase: updatedCase, user: authorizedUser })
+    .validate()
+    .toRawObject();
 };
 
 export const unsealCaseInteractor = withLocking(

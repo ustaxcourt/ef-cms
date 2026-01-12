@@ -1,10 +1,13 @@
-import { CaseAdvancedSearchParamsRequestType } from '@web-api/business/useCases/caseAdvancedSearchInteractor';
-import { CasePublicSearchResultsType } from '@web-api/persistence/elasticsearch/casePublicSearch';
+import {
+  CaseAdvancedSearchParamsRequestType,
+  CaseSearchResult,
+} from '@web-api/business/useCases/caseAdvancedSearchInteractor';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import {
   createEndOfDayISO,
   createStartOfDayISO,
-} from '../../../../../shared/src/business/utilities/DateHandler';
+} from '@shared/business/utilities/DateHandler';
+import { casePublicSearch } from '@web-api/persistence/elasticsearch/casePublicSearch';
 
 export const casePublicSearchInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -14,8 +17,10 @@ export const casePublicSearchInteractor = async (
     petitionerName,
     petitionerState,
     startDate,
+    caseTypes,
+    procedureType,
   }: CaseAdvancedSearchParamsRequestType,
-): Promise<{ results: CasePublicSearchResultsType }> => {
+): Promise<{ results: CaseSearchResult[] }> => {
   let searchStartDate;
   let searchEndDate;
 
@@ -39,7 +44,7 @@ export const casePublicSearchInteractor = async (
     });
   }
 
-  return await applicationContext.getPersistenceGateway().casePublicSearch({
+  return await casePublicSearch({
     applicationContext,
     searchTerms: {
       countryType,
@@ -47,6 +52,8 @@ export const casePublicSearchInteractor = async (
       petitionerName,
       petitionerState,
       startDate: searchStartDate,
+      caseTypes,
+      procedureType,
     },
   });
 };

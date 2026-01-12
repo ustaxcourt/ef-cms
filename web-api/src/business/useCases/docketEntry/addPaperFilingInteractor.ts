@@ -1,23 +1,28 @@
-import {
-  Case,
-  isLeadCase,
-} from '../../../../../shared/src/business/entities/cases/Case';
+import { Case, isLeadCase } from '@shared//business/entities/cases/Case';
 import {
   DOCUMENT_RELATIONSHIPS,
   DOCUMENT_SERVED_MESSAGES,
+  INITIAL_DOCUMENT_TYPES,
   ROLES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
+} from '@shared/business/entities/EntityConstants';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
-import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { WorkItem } from '@shared/business/entities/WorkItem';
+import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import {
+  asyncHandleLockError,
+  withLocking,
+} from '@web-api/persistence/postgres/utils/mutex';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 export const addPaperFiling = async (
   applicationContext: ServerApplicationContext,
@@ -66,21 +71,22 @@ export const addPaperFiling = async (
   const docketRecordEditState =
     documentMetadata.isFileAttached === false ? documentMetadata : {};
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
 
-  let caseEntities: Case[] = [];
+  if (!user) {
+    throw new NotFoundError(
+      `User not found with user id ${authorizedUser.userId}`,
+    );
+  }
+
+  const caseEntities: Case[] = [];
   let filedByFromLeadCase;
 
-  for (const docketNumber of consolidatedGroupDocketNumbers) {
-    const rawCase = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      });
+  const consolidatedGroupCases = await getCasesByDocketNumbers({
+    docketNumbers: consolidatedGroupDocketNumbers,
+  });
 
+  for (const rawCase of consolidatedGroupCases) {
     let caseEntity = new Case(rawCase, { authorizedUser });
 
     const docketEntryEntity = new DocketEntry(
@@ -110,31 +116,21 @@ export const addPaperFiling = async (
       docketEntryEntity.filedBy = filedByFromLeadCase;
     }
 
-    const workItem = new WorkItem(
-      {
-        assigneeId: user.userId,
-        assigneeName: user.name,
-        associatedJudge: caseEntity.associatedJudge,
-        associatedJudgeId: caseEntity.associatedJudgeId,
-        caseStatus: caseEntity.status,
-        caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
-        docketEntry: {
-          ...docketEntryEntity.toRawObject(),
-          createdAt: docketEntryEntity.createdAt,
-        },
-        docketNumber: caseEntity.docketNumber,
-        docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
-        inProgress: isSavingForLater,
-        isRead: user.role !== ROLES.privatePractitioner,
+    const workItem = new WorkItem({
+      assigneeId: user.userId,
+      assigneeName: user.name,
+      docketNumber: caseEntity.docketNumber,
+      docketEntryId: docketEntryEntity.docketEntryId,
+      inProgress: isSavingForLater,
+      isRead: user.role !== ROLES.privatePractitioner,
+      section: WorkItem.getWorkItemSectionFromUserSection({
         section: user.section,
-        sentBy: user.name,
-        sentBySection: user.section,
-        sentByUserId: user.userId,
-        trialDate: caseEntity.trialDate,
-        trialLocation: caseEntity.trialLocation,
-      },
-      { caseEntity },
-    );
+        documentTitle: docketEntryEntity.documentTitle,
+      }),
+      sentBy: user.name,
+      sentBySection: user.section,
+      sentByUserId: user.userId,
+    });
 
     if (isReadyForService) {
       workItem.setAsCompleted({
@@ -145,13 +141,9 @@ export const addPaperFiling = async (
       docketEntryEntity.setAsServed(servedParties.all);
     }
 
-    await saveWorkItem({
-      applicationContext,
-      isReadyForService,
+    await saveWorkItemInternal({
       workItem,
     });
-
-    docketEntryEntity.setWorkItem(workItem);
 
     if (isFileAttached) {
       docketEntryEntity.numberOfPages = await applicationContext
@@ -168,14 +160,12 @@ export const addPaperFiling = async (
     caseEntity = await applicationContext
       .getUseCaseHelpers()
       .updateCaseAutomaticBlock({
-        applicationContext,
         caseEntity,
       });
 
     caseEntities.push(caseEntity);
 
-    await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-      applicationContext,
+    await updateCaseAndAssociations({
       authorizedUser,
       caseToUpdate: caseEntity.validate().toRawObject(),
     });
@@ -188,7 +178,10 @@ export const addPaperFiling = async (
       docketEntryId,
     });
     const electronicParties =
-      currentDocketEntry.eventCode === 'ATP' ? [] : undefined;
+      currentDocketEntry?.eventCode ===
+      INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode
+        ? []
+        : undefined;
 
     const paperServiceResult = await applicationContext
       .getUseCaseHelpers()
@@ -232,25 +225,11 @@ export const addPaperFiling = async (
  * @param {boolean} providers.isSavingForLater Whether or not we are saving these work items for later
  * @param {object} providers.workItem The work item we are saving
  */
-const saveWorkItem = async ({
-  applicationContext,
-  isReadyForService,
-  workItem,
-}) => {
+const saveWorkItemInternal = async ({ workItem }) => {
   const workItemRaw = workItem.validate().toRawObject();
 
-  if (isReadyForService) {
-    await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
-      applicationContext,
-      section: workItem.section,
-      userId: workItem.assigneeId,
-      workItem: workItemRaw,
-    });
-  }
-
-  await applicationContext.getPersistenceGateway().saveWorkItem({
-    applicationContext,
-    workItem: workItemRaw,
+  await upsertWorkItems({
+    workItems: [workItemRaw],
   });
 };
 
@@ -286,27 +265,8 @@ export const determineEntitiesToLock = (
   ttl: 900,
 });
 
-export const handleLockError = async (
-  applicationContext,
-  originalRequest,
-  authorizedUser: UnknownAuthUser,
-) => {
-  if (authorizedUser?.userId) {
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      clientConnectionId: originalRequest.clientConnectionId,
-      message: {
-        action: 'retry_async_request',
-        originalRequest,
-        requestToRetry: 'add_paper_filing',
-      },
-      userId: authorizedUser.userId,
-    });
-  }
-};
-
 export const addPaperFilingInteractor = withLocking(
   addPaperFiling,
   determineEntitiesToLock,
-  handleLockError,
+  asyncHandleLockError,
 );

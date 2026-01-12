@@ -5,7 +5,7 @@ import {
   PARTY_TYPES,
   PAYMENT_STATUS,
   PROCEDURE_TYPES_MAP,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generateCaseInventoryReportPdf } from './generateCaseInventoryReportPdf';
 import {
@@ -26,6 +26,7 @@ describe('generateCaseInventoryReportPdf', () => {
       createdAt: '2018-11-21T20:49:28.192Z',
       docketEntries: [],
       docketNumber: '101-19',
+      docketNumberWithSuffix: '101-19',
       entityName: 'Case',
       hearings: [],
       partyType: PARTY_TYPES.donor,
@@ -35,6 +36,7 @@ describe('generateCaseInventoryReportPdf', () => {
       receivedAt: '2018-11-20T20:49:28.192Z',
       sortableDocketNumber: 2001000101,
       status: CASE_STATUS_TYPES.new,
+      privatePractitioners: []
     },
     {
       associatedJudge: CHIEF_JUDGE,
@@ -47,6 +49,7 @@ describe('generateCaseInventoryReportPdf', () => {
       createdAt: '2020-07-21T20:49:28.192Z',
       docketEntries: [],
       docketNumber: '101-20',
+      docketNumberWithSuffix: '101-20',
       entityName: 'Case',
       hearings: [],
       partyType: PARTY_TYPES.petitioner,
@@ -56,6 +59,7 @@ describe('generateCaseInventoryReportPdf', () => {
       receivedAt: '2020-06-29T20:49:28.192Z',
       sortableDocketNumber: 2001000111,
       status: CASE_STATUS_TYPES.new,
+      privatePractitioners: []
     },
   ];
 

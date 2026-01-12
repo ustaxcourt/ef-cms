@@ -1,3 +1,4 @@
+import { Practitioner } from '@shared/business/entities/Practitioner';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -13,7 +14,11 @@ export const updatePractitionerUserAction = async ({
   get,
   path,
 }: ActionProps) => {
-  const user = get(state.form);
+  const formState = get(state.form);
+  const user = new Practitioner(formState, {
+    applicationContext,
+  }).toRawObject({ removeValidationProperties: false });
+  const clientConnectionId = get(state.clientConnectionId);
 
   try {
     await applicationContext
@@ -21,12 +26,9 @@ export const updatePractitionerUserAction = async ({
       .updatePractitionerUserInteractor(applicationContext, {
         barNumber: user.barNumber,
         user,
+        clientConnectionId,
       });
-    return path.success({
-      alertSuccess: {
-        message: 'Practitioner updated.',
-      },
-    });
+    return path.success({ alertSuccess: { message: 'Practitioner updated.' } });
   } catch (err) {
     return path.error({
       alertError: {

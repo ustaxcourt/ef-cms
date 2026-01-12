@@ -15,7 +15,13 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-const SingleMessage = ({ indent, message }) => (
+const SingleMessage = ({
+  indent,
+  message,
+}: {
+  indent?: boolean;
+  message: any;
+}) => (
   <>
     <div className={classNames('grid-row', indent && 'padding-left-5')}>
       <div className="grid-col-2">
@@ -113,9 +119,11 @@ export const MessageDetail = connect(
               role="alert"
             >
               <div className="usa-alert__body">
-                Message completed on{' '}
-                {formattedMessageDetail.currentMessage.completedAtFormatted} by{' '}
-                {formattedMessageDetail.currentMessage.completedBy}
+                <p className="usa-alert__text">
+                  Message completed on{' '}
+                  {formattedMessageDetail.currentMessage.completedAtFormatted}{' '}
+                  by {formattedMessageDetail.currentMessage.completedBy}
+                </p>
               </div>
             </div>
           )}

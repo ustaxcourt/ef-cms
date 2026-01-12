@@ -1,3 +1,4 @@
+import { selectTypeaheadInput } from 'cypress/helpers/components/typeAhead/select-typeahead-input';
 import { isValidRequest } from '../../../../readonly/support/helpers';
 
 describe('Public User - Search', () => {
@@ -42,6 +43,18 @@ describe('Public User - Search', () => {
       cy.get('input#bar-number').type('test');
       cy.get('button#practitioner-search-by-bar-number-button').click();
       cy.wait('@getPractitionerByBarNumber').then(isValidRequest);
+    });
+
+    it('should filter by Original Bar State', () => {
+      cy.get('input#practitioner-name').type('test');
+      selectTypeaheadInput('original-bar-state-filter', 'California');
+      cy.get('[data-testid="practitioner-search-by-name-button"]').click();
+
+      cy.get('[data-testid^="practitioner-row-"]')
+        .should('have.length.greaterThan', 0)
+        .each($row => {
+          cy.wrap($row).should('contain.text', 'California');
+        });
     });
   });
 });

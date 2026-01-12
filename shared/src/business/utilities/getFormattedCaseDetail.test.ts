@@ -449,23 +449,6 @@ describe('getFormattedCaseDetail', () => {
       expect(result.showScheduled).toBeTruthy();
     });
 
-    it('should set defaults for formattedTrialDate and formattedAssociatedJudge and show the prioritized section if case is high priority', () => {
-      const result = formatCase(
-        applicationContext,
-        {
-          ...MOCK_CASE,
-          highPriority: true,
-        },
-        mockDocketClerkUser,
-      );
-
-      expect(result).toMatchObject({
-        formattedAssociatedJudge: 'Not assigned',
-        formattedTrialDate: 'Not scheduled',
-        showPrioritized: true,
-      });
-    });
-
     it("should set lead case attributes when the leadDocketNumber matches the current case's docketNumber", () => {
       const result = formatCase(
         applicationContext,
@@ -581,11 +564,11 @@ describe('getFormattedCaseDetail', () => {
         caseDetail: {
           ...MOCK_CASE,
           docketEntries: [
-            orderDocketEntry,
-            stipulatedDecisionDocketEntry,
-            miscellaneousDocketEntry,
-            miscellaneousDocketEntryWithUndefinedDocumentType,
-            statusReportOrderDocketEntry,
+            orderDocketEntry as RawDocketEntry,
+            stipulatedDecisionDocketEntry as RawDocketEntry,
+            miscellaneousDocketEntry as RawDocketEntry,
+            miscellaneousDocketEntryWithUndefinedDocumentType as RawDocketEntry,
+            statusReportOrderDocketEntry as RawDocketEntry,
           ],
         },
         docketRecordSort: 'byDate',
@@ -632,19 +615,19 @@ describe('getFormattedCaseDetail', () => {
               documentType: 'Order',
               isDraft: true,
               receivedAt: '2019-08-03T06:26:44.000Z',
-            },
+            } as RawDocketEntry,
             {
               docketEntryId: 'd-2-3-4',
               documentType: 'Stipulated Decision',
               isDraft: true,
               receivedAt: '2019-08-03T06:10:44.000Z',
-            },
+            } as RawDocketEntry,
             {
               docketEntryId: 'd-3-4-5',
               documentType: 'Miscellaneous',
               isDraft: true,
               receivedAt: '2018-07-03T06:26:44.000Z',
-            },
+            } as RawDocketEntry,
           ],
         },
       });

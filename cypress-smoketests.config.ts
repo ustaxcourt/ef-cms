@@ -16,18 +16,17 @@ import {
   fileExists,
 } from './cypress/local-only/support/database';
 import {
-  expireUserConfirmationCode,
-  getEmailVerificationToken,
-  getFeatureFlagValue,
-  getNewAccountVerificationCode,
   getRawFeatureFlagValue,
   toggleFeatureFlag,
-} from './cypress/helpers/cypressTasks/dynamo/dynamo-helpers';
+} from './cypress/helpers/cypressTasks/postgres/featureFlagsCypress';
+import {
+  expireUserConfirmationCode,
+  getEmailVerificationToken,
+  getNewAccountVerificationCode,
+} from './cypress/helpers/cypressTasks/postgres/postgres-helpers';
 import { unzipFile } from './cypress/helpers/file/unzip-file';
 import { waitForNoce } from './cypress/helpers/cypressTasks/wait-for-noce';
-import { waitForPractitionerEmailUpdate } from './cypress/helpers/cypressTasks/wait-for-practitioner-email-update';
 
-// eslint-disable-next-line import/no-default-export
 export default defineConfig({
   chromeWebSecurity: false,
   defaultCommandTimeout: 60000,
@@ -89,9 +88,6 @@ export default defineConfig({
         getEmailVerificationToken({ email }) {
           return getEmailVerificationToken({ email });
         },
-        getFeatureFlagValue({ flag }) {
-          return getFeatureFlagValue({ flag });
-        },
         getIrsBearerToken({ password, userName }) {
           return getIrsBearerToken({
             password,
@@ -124,18 +120,6 @@ export default defineConfig({
         },
         waitForNoce({ docketNumber }: { docketNumber: string }) {
           return waitForNoce({ docketNumber });
-        },
-        waitForPractitionerEmailUpdate({
-          docketNumber,
-          practitionerEmail,
-        }: {
-          docketNumber: string;
-          practitionerEmail: string;
-        }) {
-          return waitForPractitionerEmailUpdate({
-            docketNumber,
-            practitionerEmail,
-          });
         },
       });
     },

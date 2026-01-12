@@ -9,9 +9,8 @@ import { replyToMessageInteractor } from '@web-api/business/useCases/messages/re
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 export const replyToMessageLambda = (event, authorizedUser: UnknownAuthUser) =>
-  genericHandler(event, async ({ applicationContext }) => {
+  genericHandler(event, async () => {
     return await replyToMessageInteractor(
-      applicationContext,
       {
         parentMessageId: event.pathParameters.parentMessageId,
         ...JSON.parse(event.body),

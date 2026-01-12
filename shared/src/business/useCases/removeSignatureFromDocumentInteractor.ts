@@ -1,9 +1,12 @@
-import { Case } from '../entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import {
   UnknownAuthUser,
   isAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { NotFoundError } from '@web-api/errors/errors';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 /**
  * Removes a signature from a document
@@ -24,18 +27,22 @@ export const removeSignatureFromDocumentInteractor = async (
       'User attempting to remove signature from document is not an auth user',
     );
   }
-  const caseRecord = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const caseRecord = await getCaseByDocketNumber({
+    docketNumber,
+  });
   const caseEntity = new Case(caseRecord, {
     authorizedUser,
   });
+
   const docketEntryToUnsign = caseEntity.getDocketEntryById({
     docketEntryId,
   });
+
+  if (!docketEntryToUnsign) {
+    throw new NotFoundError(
+      `Could not find docket entry with id ${docketEntryId} on case ${docketNumber}`,
+    );
+  }
 
   docketEntryToUnsign.unsignDocument();
 
@@ -43,18 +50,17 @@ export const removeSignatureFromDocumentInteractor = async (
     .getPersistenceGateway()
     .getDocument({
       applicationContext,
+      // @ts-ignore
       key: docketEntryToUnsign.documentIdBeforeSignature,
       useTempBucket: false,
     });
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    applicationContext,
     document: originalPdfNoSignature,
     key: docketEntryId,
   });
 
-  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-    applicationContext,
+  await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
   });

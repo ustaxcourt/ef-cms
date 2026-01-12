@@ -84,7 +84,7 @@ export const generateDocumentIds = async (
       });
   }
 
-  let attachmentToPetitionUploadPromises: Promise<string>[] = [];
+  const attachmentToPetitionUploadPromises: Promise<string>[] = [];
 
   if (attachmentToPetitionUploadProgress) {
     attachmentToPetitionUploadProgress.forEach(progress => {

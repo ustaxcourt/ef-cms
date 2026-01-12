@@ -15,9 +15,6 @@
 * The "System blocked from trial mm/dd/yy" displays the date the deadline or pending item was added.
 * Users can add and remove manual blocks independent of any system blocks
 
-#### System block on "High Priority" case
-* If a case has been set as High Priority for a trial session, and then receives a system block, once the system block is removed, the case should return to [High Priority](https://github.com/flexion/ef-cms/wiki/Setting-a-Case-for-Trial) status
-
 ## Viewing Blocked Cases
 * "Blocked" indicator (red label) displays in docket header
 * Case is excluded from eligible cases for any trial session

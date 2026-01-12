@@ -8,7 +8,7 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {object} providers.store the cerebral store
  * @returns {object} the new documentUploadMode
  */
-export const removeScannedPdfAction = ({
+export const removeScannedPdfAction = async ({
   applicationContext,
   get,
   store,
@@ -17,7 +17,7 @@ export const removeScannedPdfAction = ({
   const docketNumber = get(state.caseDetail.docketNumber);
   const documentSelectedForScan = get(
     state.currentViewMetadata.documentSelectedForScan,
-  );
+  )!;
 
   store.unset(state.form[documentSelectedForScan]);
   store.unset(state.form[`${documentSelectedForScan}Size`]);
@@ -28,7 +28,7 @@ export const removeScannedPdfAction = ({
   const isFileAttached = get(state.form.isFileAttached);
 
   if (isFileAttached) {
-    applicationContext
+    await applicationContext
       .getUseCases()
       .removePdfFromDocketEntryInteractor(applicationContext, {
         docketEntryId,

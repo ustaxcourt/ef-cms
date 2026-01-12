@@ -1,5 +1,5 @@
 provider "aws" {
-  region = var.aws_region
+  region = "us-east-1"
 }
 
 terraform {
@@ -7,13 +7,16 @@ terraform {
   }
 
   required_providers {
-    aws = "5.74.0"
+    aws = {
+      source  = "hashicorp/aws"
+      version = "6.27.0"
+    }
   }
 }
 
 module "reindex-cron" {
   source                    = "../../modules/reindex-cron"
-  aws_region                = var.aws_region
+  aws_region                = "us-east-1"
   environment               = var.environment
   destination_table         = var.destination_table
   source_table              = var.source_table

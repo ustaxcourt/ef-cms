@@ -1,4 +1,6 @@
+jest.mock('@web-api/persistence/postgres/users/createNewPetitionerUser');
 import {
+  ACCOUNT_STATUS,
   CONTACT_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
@@ -8,25 +10,21 @@ import {
   getContactPrimary,
 } from '../../../../../shared/src/business/entities/cases/Case';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { createUserForContact } from './createUserForContact';
 import {
   mockAdmissionsClerkUser,
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { createNewPetitionerUser as createNewPetitionerUserMock } from '@web-api/persistence/postgres/users/createNewPetitionerUser';
 
 describe('createUserForContact', () => {
   const USER_ID = '674fdded-1d17-4081-b9fa-950abc677cee';
-
-  beforeEach(() => {
-    applicationContext.getUniqueId.mockReturnValue(USER_ID);
-  });
+  const createNewPetitionerUser = jest.mocked(createNewPetitionerUserMock);
 
   it('should throw an unauthorized error for non admissionsclerk users', async () => {
     await expect(
       createUserForContact({
-        applicationContext,
         authorizedUser: mockPetitionerUser,
         caseEntity: new Case(MOCK_CASE, {
           authorizedUser: mockDocketClerkUser,
@@ -58,7 +56,6 @@ describe('createUserForContact', () => {
     );
 
     await createUserForContact({
-      applicationContext,
       authorizedUser: mockAdmissionsClerkUser,
       caseEntity,
       contactId: USER_ID,
@@ -66,15 +63,13 @@ describe('createUserForContact', () => {
       name: 'Bob Ross',
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().createNewPetitionerUser.mock
-        .calls[0][0].user,
-    ).toMatchObject({
+    expect(createNewPetitionerUser.mock.calls[0][0].user).toMatchObject({
       contact: {},
       name: 'Bob Ross',
       pendingEmail: UPDATED_EMAIL,
       role: ROLES.petitioner,
       userId: USER_ID,
+      accountStatus: ACCOUNT_STATUS.active
     });
   });
 
@@ -97,7 +92,6 @@ describe('createUserForContact', () => {
     );
 
     const updatedCase = await createUserForContact({
-      applicationContext,
       authorizedUser: mockAdmissionsClerkUser,
       caseEntity,
       contactId: USER_ID,
@@ -106,41 +100,5 @@ describe('createUserForContact', () => {
     });
 
     expect(updatedCase).toMatchObject(caseEntity);
-  });
-
-  it('should call associateUserWithCase', async () => {
-    const UPDATED_EMAIL = 'testing@example.com';
-    const caseEntity = new Case(
-      {
-        ...MOCK_CASE,
-        petitioners: [
-          {
-            ...getContactPrimary(MOCK_CASE),
-            contactId: USER_ID,
-            email: undefined,
-            name: 'Bob Ross',
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-          },
-        ],
-      },
-      { authorizedUser: mockAdmissionsClerkUser },
-    );
-
-    await createUserForContact({
-      applicationContext,
-      authorizedUser: mockAdmissionsClerkUser,
-      caseEntity,
-      contactId: USER_ID,
-      email: UPDATED_EMAIL,
-      name: 'Bob Ross',
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().associateUserWithCase.mock
-        .calls[0][0],
-    ).toMatchObject({
-      docketNumber: caseEntity.docketNumber,
-      userId: USER_ID,
-    });
   });
 });

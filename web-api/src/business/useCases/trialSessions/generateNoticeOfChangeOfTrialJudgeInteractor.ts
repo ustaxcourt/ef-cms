@@ -1,13 +1,15 @@
 import {
   FORMATS,
   formatDateString,
-} from '../../../../../shared/src/business/utilities/DateHandler';
+} from '@shared/business/utilities/DateHandler';
 import { FormattedTrialInfoType } from '@web-api/business/useCases/trialSessions/generateNoticeOfTrialIssuedInteractor';
-import { RawTrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
+import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { TRIAL_SESSION_SCOPE_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { formatPhoneNumber } from '../../../../../shared/src/business/utilities/formatPhoneNumber';
-import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
+import { TRIAL_SESSION_SCOPE_TYPES } from '@shared/business/entities/EntityConstants';
+import { formatPhoneNumber } from '@shared/business/utilities/formatPhoneNumber';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
+import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 
 export const generateNoticeOfChangeOfTrialJudgeInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -41,22 +43,22 @@ export const generateNoticeOfChangeOfTrialJudgeInteractor = async (
     trialLocationAndProceedingType,
   };
 
-  const caseDetail = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const caseDetail = await getCaseByDocketNumber({
+    docketNumber,
+  });
 
-  const { name, title } = await applicationContext
-    .getPersistenceGateway()
-    .getConfigurationItemValue({
-      applicationContext,
-      configurationItemKey:
-        applicationContext.getConstants().CLERK_OF_THE_COURT_CONFIGURATION,
-    });
+  const { CLERK_OF_THE_COURT_CONFIGURATION } =
+    applicationContext.getConstants();
 
-  const { docketNumberWithSuffix } = caseDetail;
+  const [CLERK_OF_THE_COURT_RECORD] = await getFeatureFlagValues([
+    CLERK_OF_THE_COURT_CONFIGURATION,
+  ]);
+
+  const { name, title } = CLERK_OF_THE_COURT_RECORD.value.current as {
+    name: string;
+    title: string;
+  };
+
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
 
   return await applicationContext
@@ -66,7 +68,7 @@ export const generateNoticeOfChangeOfTrialJudgeInteractor = async (
       data: {
         caseCaptionExtension,
         caseTitle,
-        docketNumberWithSuffix,
+        docketNumberWithSuffix: caseDetail.docketNumberWithSuffix,
         nameOfClerk: name,
         titleOfClerk: title,
         trialInfo,

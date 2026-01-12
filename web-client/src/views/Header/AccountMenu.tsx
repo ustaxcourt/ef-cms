@@ -6,13 +6,19 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-export const AccountMenu = connect(
-  {
-    headerHelper: state.headerHelper,
-    navigateToPathSequence: sequences.navigateToPathSequence,
-    signOutUserInitiatedSequence: sequences.signOutUserInitiatedSequence,
-    toggleMenuSequence: sequences.toggleMenuSequence,
-  },
+type AccountMenuProps = {
+  isExpanded: boolean;
+};
+
+const accountMenuDeps = {
+  headerHelper: state.headerHelper,
+  navigateToPathSequence: sequences.navigateToPathSequence,
+  signOutUserInitiatedSequence: sequences.signOutUserInitiatedSequence,
+  toggleMenuSequence: sequences.toggleMenuSequence,
+};
+
+export const AccountMenu = connect<AccountMenuProps, typeof accountMenuDeps>(
+  accountMenuDeps,
   function AccountMenu({
     headerHelper,
     isExpanded,
@@ -22,7 +28,7 @@ export const AccountMenu = connect(
   }) {
     return (
       <>
-        <ul className="usa-nav__primary usa-accordion nav-large">
+        <ul className="usa-nav__primary usa-accordion nav-large ustc-account">
           <li
             className={classNames(
               'usa-nav__primary-item',

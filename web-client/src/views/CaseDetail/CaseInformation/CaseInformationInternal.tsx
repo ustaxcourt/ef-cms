@@ -8,8 +8,7 @@ import { SetForHearingModal } from '../SetForHearingModal';
 import { TrialInformation } from './TrialInformation';
 import { UnconsolidateCasesModal } from '../UnconsolidateCasesModal';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const CaseInformationInternal = connect(
@@ -26,14 +25,11 @@ export const CaseInformationInternal = connect(
     openAddToTrialModalSequence: sequences.openAddToTrialModalSequence,
     openBlockFromTrialModalSequence: sequences.openBlockFromTrialModalSequence,
     openCleanModalSequence: sequences.openCleanModalSequence,
-    openPrioritizeCaseModalSequence: sequences.openPrioritizeCaseModalSequence,
     openRemoveFromTrialSessionModalSequence:
       sequences.openRemoveFromTrialSessionModalSequence,
     openSetForHearingModalSequence: sequences.openSetForHearingModalSequence,
     openUnblockFromTrialModalSequence:
       sequences.openUnblockFromTrialModalSequence,
-    openUnprioritizeCaseModalSequence:
-      sequences.openUnprioritizeCaseModalSequence,
     openUpdateCaseModalSequence: sequences.openUpdateCaseModalSequence,
     resetCaseMenuSequence: sequences.resetCaseMenuSequence,
     showModal: state.modal.showModal,
@@ -52,11 +48,9 @@ export const CaseInformationInternal = connect(
     openAddToTrialModalSequence,
     openBlockFromTrialModalSequence,
     openCleanModalSequence,
-    openPrioritizeCaseModalSequence,
     openRemoveFromTrialSessionModalSequence,
     openSetForHearingModalSequence,
     openUnblockFromTrialModalSequence,
-    openUnprioritizeCaseModalSequence,
     openUpdateCaseModalSequence,
     resetCaseMenuSequence,
     showModal,
@@ -108,6 +102,7 @@ export const CaseInformationInternal = connect(
                     )}
                     {caseDetailHelper.showEditCaseDetailsButton && (
                       <Button
+                        data-testid="edit-case-details-button"
                         link
                         className="float-right margin-right-0 margin-top-1 padding-0"
                         href={`/case-detail/${formattedCaseDetail.docketNumber}/edit-details`}
@@ -139,17 +134,11 @@ export const CaseInformationInternal = connect(
                     openBlockFromTrialModalSequence={
                       openBlockFromTrialModalSequence
                     }
-                    openPrioritizeCaseModalSequence={
-                      openPrioritizeCaseModalSequence
-                    }
                     openRemoveFromTrialSessionModalSequence={
                       openRemoveFromTrialSessionModalSequence
                     }
                     openUnblockFromTrialModalSequence={
                       openUnblockFromTrialModalSequence
-                    }
-                    openUnprioritizeCaseModalSequence={
-                      openUnprioritizeCaseModalSequence
                     }
                     trialSessionJudge={trialSessionJudge}
                   />
@@ -226,6 +215,7 @@ export const CaseInformationInternal = connect(
                         aria-label="set hearing for trial sessions"
                         className="margin-right-0 margin-top-1 padding-0 float-right"
                         icon="plus-circle"
+                        data-testid="set-for-hearing-button"
                         onClick={() => {
                           openSetForHearingModalSequence();
                         }}

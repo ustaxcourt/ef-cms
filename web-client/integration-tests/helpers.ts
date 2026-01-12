@@ -1,11 +1,7 @@
 /* eslint-disable max-lines */
-import * as client from '../../web-api/src/persistence/dynamodbClientService';
 import { Agent } from 'http';
 import { CerebralTest } from 'cerebral/test';
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { FORMATS } from '../../shared/src/business/utilities/DateHandler';
-import { JSDOM } from 'jsdom';
 import {
   back,
   createObjectURL,
@@ -35,11 +31,13 @@ import { socketRouter } from '../src/providers/socketRouter';
 import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import { withAppContextDecorator } from '../src/withAppContext';
 import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/computeds/workQueueHelper';
-import FormDataHelper from 'form-data';
 import axios, { AxiosError } from 'axios';
 import jwt from 'jsonwebtoken';
 import qs from 'qs';
 import riotRoute from 'riot-route';
+import { getDbReader } from '@web-api/database';
+import { ModuleDefinition } from 'cerebral';
+import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 
 const applicationContext = clientApplicationContext as any;
 
@@ -56,25 +54,10 @@ const formattedCaseMessages = withAppContextDecorator(
 const workQueueHelper = withAppContextDecorator(workQueueHelperComputed);
 const formattedMessages = withAppContextDecorator(formattedMessagesComputed);
 
-let dynamoDbCache;
 let httpCache;
 
 Object.assign(applicationContext, {
-  getDocumentClient: () => {
-    if (!dynamoDbCache) {
-      const dynamoDbClient = new DynamoDBClient({
-        endpoint: 'http://localhost:8000',
-        region: 'us-east-1',
-      });
-      dynamoDbCache = DynamoDBDocument.from(dynamoDbClient, {
-        marshallOptions: { removeUndefinedValues: true },
-      });
-    }
-
-    return dynamoDbCache;
-  },
   getEnvironment: () => ({
-    dynamoDbTableName: 'efcms-local',
     stage: 'local',
   }),
   getScanner: getScannerMockInterface,
@@ -107,6 +90,22 @@ export const getFormattedDocketEntriesForTest = async cerebralTest => {
   });
 };
 
+export const getFilteredFormattedDocketEntriesForTest = async (
+  cerebralTest,
+  documentTypeFilter: string,
+) => {
+  await cerebralTest.runSequence('gotoCaseDetailSequence', {
+    docketNumber: cerebralTest.docketNumber,
+  });
+  await cerebralTest.runSequence('cerebralBindSimpleSetStateSequence', {
+    key: 'sessionMetadata.docketRecordFilter',
+    value: documentTypeFilter,
+  });
+  return runCompute(formattedDocketEntries, {
+    state: cerebralTest.getState(),
+  });
+};
+
 export const contactPrimaryFromState = cerebralTest => {
   return cerebralTest.getState('caseDetail.petitioners.0');
 };
@@ -121,88 +120,35 @@ export const getCaseMessagesForCase = cerebralTest => {
   });
 };
 
-export const getConnectionsByUserId = userId => {
-  return client.query({
-    ExpressionAttributeNames: {
-      '#pk': 'pk',
-      '#sk': 'sk',
-    },
-    ExpressionAttributeValues: {
-      ':pk': `user|${userId}`,
-      ':prefix': 'connection',
-    },
-    KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
-    applicationContext,
-  });
+export const getConnectionsByUserId = async userId =>
+  await getDbReader(reader =>
+    reader
+      .selectFrom('dwConnection')
+      .where('userId', '=', userId)
+      .selectAll()
+      .execute(),
+  );
+
+export const getConnection = async connectionId => {
+  return await getDbReader(reader =>
+    reader
+      .selectFrom('dwConnection')
+      .where('connectionId', '=', connectionId)
+      .selectAll()
+      .execute(),
+  );
 };
 
-export const getConnection = connectionId => {
-  return client.get({
-    Key: {
-      pk: `connection|${connectionId}`,
-      sk: `connection|${connectionId}`,
-    },
-    applicationContext,
-  });
-};
-
-export const getUserRecordById = (userId: string) => {
-  return client.get({
-    Key: {
-      pk: `user|${userId}`,
-      sk: `user|${userId}`,
-    },
-    applicationContext,
-  });
-};
-
-export const setOpinionSearchEnabled = (isEnabled, keyPrefix) => {
-  return client.put({
-    Item: {
-      current: isEnabled,
-      pk: `${keyPrefix}-opinion-search-enabled`,
-      sk: `${keyPrefix}-opinion-search-enabled`,
-    },
-    applicationContext,
-  });
-};
-
-export const setTerminalUserIps = (ips: string[]) => {
-  return client.put({
-    Item: {
-      ips,
-      pk: 'allowed-terminal-ips',
-      sk: 'allowed-terminal-ips',
-    },
-    applicationContext,
-  });
-};
-
-export const setChiefJudgeNameFlagValue = newJudgeName => {
-  return client.put({
-    Item: {
-      current: newJudgeName,
-      pk: 'chief-judge-name',
-      sk: 'chief-judge-name',
-    },
-    applicationContext,
-  });
-};
-
-export const setJudgeTitle = (judgeUserId, newJudgeTitle) => {
-  return client.update({
-    ExpressionAttributeNames: {
-      '#judgeTitle': 'judgeTitle',
-    },
-    ExpressionAttributeValues: {
-      ':judgeTitle': newJudgeTitle,
-    },
-    Key: {
-      pk: `user|${judgeUserId}`,
-      sk: `user|${judgeUserId}`,
-    },
-    UpdateExpression: 'SET #judgeTitle = :judgeTitle',
-    applicationContext,
+export const setOpinionSearchEnabled = async (isEnabled, keyPrefix) => {
+  return await pgInsertInto({
+    table: 'dwFeatureFlag',
+    values: [
+      {
+        name: `${keyPrefix}-opinion-search-enabled`,
+        value: { current: isEnabled },
+      },
+    ],
+    onConflictColumns: ['name'],
   });
 };
 
@@ -211,13 +157,15 @@ export const setOrderSearchEnabled = async (isEnabled, keyPrefix) => {
 };
 
 export const setFeatureFlag = async (isEnabled, key) => {
-  return await client.put({
-    Item: {
-      current: isEnabled,
-      pk: key,
-      sk: key,
-    },
-    applicationContext,
+  return await pgInsertInto({
+    table: 'dwFeatureFlag',
+    values: [
+      {
+        name: key,
+        value: { current: isEnabled },
+      },
+    ],
+    onConflictColumns: ['name'],
   });
 };
 
@@ -412,7 +360,7 @@ export const assignWorkItems = async (cerebralTest, to, workItems) => {
     assigneeId: users[to].userId,
     assigneeName: users[to].name,
   });
-  for (let workItem of workItems) {
+  for (const workItem of workItems) {
     await cerebralTest.runSequence('selectWorkItemSequence', {
       workItem,
     });
@@ -591,6 +539,7 @@ export const uploadPetition = async (
     headers: {
       Authorization: `Bearer ${userToken}`,
     },
+    httpAgent: new Agent({ keepAlive: false })
   });
 
   cerebralTest.setState('caseDetail', response.data);
@@ -615,25 +564,14 @@ export const loginAs = (cerebralTest, email, password = 'Testing1234$') =>
   });
 
 export const setupTest = ({ constantsOverrides = {} } = {}) => {
+  // eslint-disable-next-line prefer-const
   let cerebralTest;
-  global.FormData = FormDataHelper;
-  global.Blob = () => {
-    return fakeFile;
-  };
-  global.File = () => {
-    return fakeFile;
-  };
+  global.FormData = require('form-data');
+  // @ts-expect-error
+  global.Blob = (() => fakeFile);
+  // @ts-expect-error
+  global.File = (() => fakeFile);
   global.WebSocket = require('websocket').w3cwebsocket;
-
-  const dom = new JSDOM(
-    `<!DOCTYPE html>
-<body>
-  <input type="file" />
-</body>`,
-    {
-      url: 'http://localhost',
-    },
-  );
 
   presenter.providers.applicationContext = applicationContext;
 
@@ -668,7 +606,6 @@ export const setupTest = ({ constantsOverrides = {} } = {}) => {
   presenter.providers.socket = { start, stop: stopSocket };
 
   global.window ??= Object.create({
-    ...dom.window,
     DOMParser: () => {
       return {
         parseFromString: () => {
@@ -690,6 +627,16 @@ export const setupTest = ({ constantsOverrides = {} } = {}) => {
       revokeObjectURL: () => {},
     },
     document: {},
+    history: {
+      pushState: jest.fn(),
+      replaceState: jest.fn(),
+      back: jest.fn(),
+      forward: jest.fn(),
+      go: jest.fn(),
+      length: 0,
+      scrollRestoration: 'auto',
+      state: null,
+    },
     localStorage: {
       getItem: () => null,
       removeItem: () => null,
@@ -736,7 +683,7 @@ export const setupTest = ({ constantsOverrides = {} } = {}) => {
     return value;
   });
 
-  const routes = [];
+  const routes: { route: any; cb: any }[] = [];
 
   presenter.providers.router = {
     back,
@@ -747,7 +694,7 @@ export const setupTest = ({ constantsOverrides = {} } = {}) => {
     route: (routeToGoTo = '/') => gotoRoute(routes, routeToGoTo),
   };
 
-  cerebralTest = CerebralTest(presenter);
+  cerebralTest = CerebralTest(presenter as ModuleDefinition);
   cerebralTest.getSequence = seqName => obj =>
     cerebralTest.runSequence(seqName, obj);
   const oldRunSequence = cerebralTest.runSequence;
@@ -780,6 +727,7 @@ export const setupTest = ({ constantsOverrides = {} } = {}) => {
   cerebralTest.applicationContext = applicationContext;
 
   cerebralTest.setState('constants', applicationContext.getConstants());
+  cerebralTest.setState('clientConnectionId', applicationContext.getUniqueId());
 
   router.initialize(cerebralTest, (route, cb) => {
     routes.push({
@@ -788,7 +736,7 @@ export const setupTest = ({ constantsOverrides = {} } = {}) => {
     });
   });
 
-  initializeSocketProvider(cerebralTest);
+  initializeSocketProvider(cerebralTest, applicationContext);
 
   return cerebralTest;
 };
@@ -799,8 +747,7 @@ const mockQuery = routeToGoTo => {
 };
 
 export const gotoRoute = (routes, routeToGoTo) => {
-  for (let route of routes) {
-    // eslint-disable-next-line security/detect-non-literal-regexp
+  for (const route of routes) {
     const regex = new RegExp(
       route.route.replace(/\*/g, '([a-z\\-A-Z0-9]+)').replace(/\.\./g, '(.*)') +
         '$',
@@ -930,14 +877,7 @@ export const waitUntil = cb => {
 };
 
 export const refreshElasticsearchIndex = async (time = 2000) => {
-  // refresh all ES indices:
   // https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-refresh.html#refresh-api-all-ex
-  await waitUntil(async () => {
-    const value = await axios
-      .get('http://localhost:5005/isDone')
-      .then(response => response.data);
-    return value === true;
-  });
   await axios.post('http://localhost:9200/_refresh');
   await axios.post('http://localhost:9200/_flush');
   return await wait(time);
@@ -957,7 +897,7 @@ export const setBatchPages = ({ cerebralTest }) => {
   const selectedDocumentType = cerebralTest.getState(
     'currentViewMetadata.documentSelectedForScan',
   );
-  let batches = cerebralTest.getState(
+  const batches = cerebralTest.getState(
     `scanner.batches.${selectedDocumentType}`,
   );
 
@@ -977,21 +917,25 @@ export const getPetitionDocumentForCase = caseDetail => {
   return caseDetail.docketEntries.find(doc => doc.documentType === 'Petition');
 };
 
-export const getPetitionWorkItemForCase = caseDetail => {
+export const getPetitionWorkItemInfoForCase = caseDetail => {
   const petitionDocument = getPetitionDocumentForCase(caseDetail);
-  return petitionDocument.workItem;
+  return {
+    workItemId: petitionDocument.workItemId,
+    qcViewed: petitionDocument.qcViewed,
+    qcComplete: petitionDocument.qcComplete,
+  };
 };
 
 export const embedWithLegalIpsumText = (phrase = '') => {
   return `While this license do not apply to, the licenses granted by such Contributor under Sections 2.1(b) and 2.2(b) are revoked effective as of the provisions set forth in the case of each Contributor, changes to the Recipient. The term of this Agreement, and b) allow the Commercial Contributor in writing by the Licensor accepting any such claim at its own expense. For example, a Contributor might include the Contribution, nor to (ii) Contributions of other Contributors.
 
   Therefore, if a Contributor with respect to some or all of the Standard Version. ${phrase} You may Distribute your Modified Version complies with the preceding Paragraph, for commercial or non-commercial purposes, provided that you duplicate all of the General Public License applies to text developed by openSEAL (http://www.openseal.org/)." Alternately, this acknowledgment may appear in the form of the <ORGANIZATION> nor the names of the Agreement will not have their licenses terminated so long as the Derived Program to replace the Derived Program from a web site). Distribution of Modified Versions is governed by the Copyright Holder may not change the License at http://www.opensource.apple.com/apsl/ and read it before using this software for any purpose, but the Licensor except as expressly stated in Sections 2(a) and 2(b) above, Recipient receives no rights or otherwise.
-  
+
   As a condition to exercising the rights set forth in the documentation and/or other rights consistent with the Work can be reasonably considered independent and separate works in conjunction with the library. If this is to make arrangements wholly outside of your status as Current Maintainer. If the Recipient shall meet all of the initial Contributor, the initial Contributor, the initial grant or subsequently acquired, any and all related documents be drafted in English.`;
 };
 
 export const updateForm = async (cerebralTest, formValues, sequenceName) => {
-  for (let [key, value] of Object.entries(formValues)) {
+  for (const [key, value] of Object.entries(formValues)) {
     await cerebralTest.runSequence(sequenceName, {
       key,
       value,
@@ -1024,14 +968,13 @@ export const updateOrderForm = async (cerebralTest, formValues) => {
 };
 
 export const verifySortedReceivedAtDateOfPendingItems = pendingItems => {
-  return pendingItems.every((elm, i, arr) =>
+  return pendingItems.every((_elm, i, arr) =>
     i === 0 ? true : arr[i - 1].receivedAt <= arr[i].receivedAt,
   );
 };
 
 export const docketClerkLoadsPendingReportOnChiefJudgeSelection = async ({
   cerebralTest,
-  shouldLoadMore = false,
 }) => {
   await refreshElasticsearchIndex();
 
@@ -1040,7 +983,4 @@ export const docketClerkLoadsPendingReportOnChiefJudgeSelection = async ({
   await cerebralTest.runSequence('setPendingReportSelectedJudgeSequence', {
     judge: 'Chief Judge',
   });
-
-  shouldLoadMore &&
-    (await cerebralTest.runSequence('loadMorePendingItemsSequence'));
 };

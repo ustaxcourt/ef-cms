@@ -23,6 +23,6 @@ export const docketClerkViewsTrialSessionWithNote = cerebralTest => {
 
     expect(foundCase).toBeTruthy();
 
-    expect(foundCase.calendarNotes).toEqual(cerebralTest.calendarNote);
+    expect(foundCase?.calendarNotes).toEqual(cerebralTest.calendarNote);
   });
 };

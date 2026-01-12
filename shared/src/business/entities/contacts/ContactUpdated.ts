@@ -2,6 +2,8 @@ import {
   CONTACT_TYPES,
   COUNTRY_TYPES,
   CountryTypes,
+  MAX_PREFERRED_COMMUNICATION_METHOD_CHARACTERS,
+  MAX_PREFERRED_LANGUAGE_CHARACTERS,
   STATE_NOT_AVAILABLE,
   US_STATES,
   US_STATES_OTHER,
@@ -29,7 +31,9 @@ export class ContactUpdated extends JoiValidationEntity {
   public state?: string;
   public petitionType: string;
   public partyType: string;
-  public hasConsentedToEService?: boolean;
+  public hasConsentedToElectronicService?: boolean;
+  public preferredLanguage?: string;
+  public preferredCommunicationMethod?: string;
   public secondaryName?: string;
   public title?: string;
 
@@ -57,7 +61,11 @@ export class ContactUpdated extends JoiValidationEntity {
     this.state = rawContact.state;
     this.petitionType = petitionType;
     this.partyType = partyType;
-    this.hasConsentedToEService = rawContact.hasConsentedToEService;
+    this.hasConsentedToElectronicService =
+      rawContact.hasConsentedToElectronicService;
+    this.preferredLanguage = rawContact.preferredLanguage?.trim() || undefined;
+    this.preferredCommunicationMethod =
+      rawContact.preferredCommunicationMethod?.trim() || undefined;
     this.secondaryName = rawContact.secondaryName;
     this.title = rawContact.title;
   }
@@ -92,6 +100,12 @@ export class ContactUpdated extends JoiValidationEntity {
         'Other',
       )
       .messages({ '*': 'Enter a place of legal residence' }),
+    preferredLanguage: JoiValidationConstants.STRING.max(
+      MAX_PREFERRED_LANGUAGE_CHARACTERS,
+    ).optional(),
+    preferredCommunicationMethod: JoiValidationConstants.STRING.max(
+      MAX_PREFERRED_COMMUNICATION_METHOD_CHARACTERS,
+    ).optional(),
   } as const;
 
   static DOMESTIC_VALIDATION_RULES = {

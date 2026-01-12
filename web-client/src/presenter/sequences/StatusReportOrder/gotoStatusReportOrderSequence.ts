@@ -2,7 +2,7 @@ import { clearPdfPreviewUrlAction } from '@web-client/presenter/actions/clearPdf
 import { clearStatusReportOrderFormAction } from '@web-client/presenter/actions/StatusReportOrder/clearStatusReportOrderFormAction';
 import { getCaseAction } from '../../actions/getCaseAction';
 import { getStatusReportOrderDocketNumbersToDisplayAction } from '@web-client/presenter/actions/StatusReportOrder/getStatusReportOrderDocketNumbersToDisplayAction';
-import { isEditStatusReportOrderAction } from '@web-client/presenter/actions/StatusReportOrder/isEditStatusReportOrderAction';
+import { isEditOrderResponseAction } from '@web-client/presenter/actions/StatusReportOrder/isEditOrderResponseAction';
 import { setCaseAction } from '../../actions/setCaseAction';
 import { setDocketEntryIdAction } from '../../actions/setDocketEntryIdAction';
 import { setDocketEntrySelectedFromMessageAction } from '../../actions/setDocketEntrySelectedFromMessageAction';
@@ -23,7 +23,7 @@ export const gotoStatusReportOrderSequence = [
   setDocketEntryIdAction,
   setDocketEntrySelectedFromMessageAction,
   setRedirectUrlAction,
-  isEditStatusReportOrderAction,
+  isEditOrderResponseAction,
   {
     create: [
       setStatusReportOrderFormAction,

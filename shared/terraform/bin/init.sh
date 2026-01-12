@@ -9,7 +9,8 @@ EFCMS_ROOT=$(realpath "$(dirname "$0")/../../..")
 
 "${EFCMS_ROOT}/scripts/verify-terraform-version.sh"
 
-BUCKET="${ZONE_NAME}.terraform.deploys"
+BUCKET="${EFCMS_DOMAIN}.terraform.deploys"
+[ -n "$ZONE_NAME" ] && BUCKET="${ZONE_NAME}.terraform.deploys"
 KEY="${SLUG}-${ENVIRONMENT}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
 REGION=us-east-1

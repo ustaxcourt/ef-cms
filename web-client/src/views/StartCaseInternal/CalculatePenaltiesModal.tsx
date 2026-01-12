@@ -35,6 +35,15 @@ export const CalculatePenaltiesModal = connect(
     title,
     updateModalValueSequence,
   }) {
+    // Type casts for confirmationText and penalties to avoid repeated inline type assertions
+    const penaltiesConfirmation = confirmationText as {
+      penalties?: Array<{ penaltyAmount?: string }>;
+    };
+    const typedPenalties = penalties as Array<{
+      name: string;
+      penaltyAmount?: string;
+    }>;
+
     return (
       <ModalDialog
         cancelLabel="Cancel"
@@ -52,11 +61,11 @@ export const CalculatePenaltiesModal = connect(
             );
           })}
         {penalties &&
-          penalties.map((penalty, index) => (
+          typedPenalties.map((penalty, index) => (
             <FormGroup
               className="margin-top-3"
               confirmationText={
-                confirmationText?.penalties[index]?.penaltyAmount
+                penaltiesConfirmation?.penalties?.[index]?.penaltyAmount
               }
               key={penalty.name}
             >
@@ -66,6 +75,7 @@ export const CalculatePenaltiesModal = connect(
               <DollarsInput
                 className="usa-input"
                 id={`penalty_${index}`}
+                data-testid={`penalty_${index}`}
                 name={`penalties.${index}`}
                 value={penalties[index].penaltyAmount}
                 onValueChange={values => {

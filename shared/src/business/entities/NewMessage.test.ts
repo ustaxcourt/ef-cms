@@ -1,6 +1,6 @@
 import { NewMessage } from './NewMessage';
 import { PETITIONS_SECTION } from './EntityConstants';
-import { getTextByCount } from '../utilities/getTextByCount';
+import { getTextByCount } from '@shared/test/getTextByCount';
 
 describe('NewMessage', () => {
   describe('isValid', () => {

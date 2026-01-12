@@ -50,6 +50,7 @@ export const DeficiencyStatisticsForm = connect(
                   checked={form.yearOrPeriod === option}
                   className="usa-radio__input"
                   id={`year-or-period-${option}`}
+                  data-testid={`year-or-period-${option}`}
                   name="yearOrPeriod"
                   type="radio"
                   value={option}
@@ -81,7 +82,8 @@ export const DeficiencyStatisticsForm = connect(
                   <input
                     className="usa-input usa-input-inline year-small"
                     id="year"
-                    maxLength="4"
+                    data-testid="deficiency-statistic-year"
+                    maxLength={4}
                     name="year"
                     placeholder="YYYY"
                     value={form.year || ''}
@@ -118,7 +120,13 @@ export const DeficiencyStatisticsForm = connect(
           <div className="grid-row grid-gap-2">
             <div className="grid-col-3">
               <FormGroup
-                confirmationText={confirmationText?.irsDeficiencyAmount}
+                confirmationText={
+                  typeof confirmationText === 'object' &&
+                  confirmationText &&
+                  'irsDeficiencyAmount' in confirmationText
+                    ? confirmationText.irsDeficiencyAmount
+                    : undefined
+                }
                 errorText={validationErrors.irsDeficiencyAmount}
               >
                 <label className="usa-label" htmlFor="irs-deficiency-amount">
@@ -127,6 +135,7 @@ export const DeficiencyStatisticsForm = connect(
                 <DollarsInput
                   className="usa-input usa-input-inline input-medium"
                   id="irs-deficiency-amount"
+                  data-testid="irs-deficiency-amount"
                   name="irsDeficiencyAmount"
                   value={form.irsDeficiencyAmount || ''}
                   onBlur={() => validateAddDeficiencyStatisticsSequence()}
@@ -182,7 +191,11 @@ export const DeficiencyStatisticsForm = connect(
             <div className="grid-col-3">
               <FormGroup
                 confirmationText={
-                  confirmationText?.determinationDeficiencyAmount
+                  typeof confirmationText === 'object' &&
+                  confirmationText &&
+                  'determinationDeficiencyAmount' in confirmationText
+                    ? confirmationText.determinationDeficiencyAmount
+                    : undefined
                 }
                 errorText={validationErrors.determinationDeficiencyAmount}
               >
@@ -195,6 +208,7 @@ export const DeficiencyStatisticsForm = connect(
                 <DollarsInput
                   className="usa-input usa-input-inline input-medium"
                   id="determination-deficiency-amount"
+                  data-testid="determination-deficiency-amount"
                   name="determinationDeficiencyAmount"
                   value={form.determinationDeficiencyAmount || ''}
                   onBlur={() => validateAddDeficiencyStatisticsSequence()}

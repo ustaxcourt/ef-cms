@@ -2,18 +2,20 @@ import {
   AMICUS_BRIEF_DOCUMENT_TYPE,
   AMICUS_BRIEF_EVENT_CODE,
   AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES,
+  AUTO_GENERATED_STATUS_REPORT_ORDER_DESCRIPTIONS,
   BRIEF_EVENTCODES,
   CORRECTED_TRANSCRIPT_EVENT_CODE,
   COURT_ISSUED_EVENT_CODES,
   DECISION_EVENT_CODE,
   DOCKET_ENTRY_SEALED_TO_TYPES,
-  DOCUMENT_EXTERNAL_CATEGORIES_MAP,
+  DocketEntryRelation,
   DOCUMENT_NOTICE_EVENT_CODES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   EXTERNAL_DOCUMENT_TYPES,
   MINUTE_ENTRIES_MAP,
+  MINUTE_SHEET_EVENT_CODES,
   MOTION_EVENT_CODES,
-  NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES,
+  NOTICE_EVENT_CODES,
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
   ORDER_EVENT_CODES,
   PARTIES_CODES,
@@ -34,15 +36,19 @@ import {
 } from '@shared/business/entities/cases/Case';
 import { DOCKET_ENTRY_VALIDATION_RULES } from './EntityValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
-import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import {
+  AuthUser,
+  UnknownAuthUser,
+} from '@shared/business/entities/authUser/AuthUser';
 import { User } from './User';
-import { WorkItem } from './WorkItem';
 import {
   calculateISODate,
   createISODateAtStartOfDayEST,
   createISODateString,
 } from '../utilities/DateHandler';
 import { getUniqueId } from '@shared/sharedAppContext';
+import { EXTERNAL_FILING_EVENTS } from '@shared/business/entities/docketEntry/externalFilingEvents';
+import { generateFiledBy } from './docketEntry/generateFiledBy';
 
 type PractitionerRole = 'irsPractitioner' | 'privatePractitioner';
 
@@ -80,7 +86,7 @@ export class DocketEntry extends JoiValidationEntity {
   public additionalInfo2?: string;
   public addToCoversheet?: boolean;
   public archived?: boolean;
-  public attachments?: string;
+  public attachments?: boolean;
   public caseType?: string;
   public taxYear?: string;
   public noticeIssuedDate?: string;
@@ -94,13 +100,12 @@ export class DocketEntry extends JoiValidationEntity {
   public documentContentsId?: string;
   public documentIdBeforeSignature?: string;
   public documentTitle: string;
-  public documentType: string;
-  public eventCode: string;
+  public documentType?: string;
+  public eventCode: string; // technically optional as draft docketEntry does not require it
   public filedBy?: string;
   public filedByRole?: string;
   public filingDate: string;
   public freeText?: string;
-  public freeText2?: string;
   public hasOtherFilingParty?: boolean;
   public hasSupportingDocuments?: boolean;
   public index?: number;
@@ -131,7 +136,7 @@ export class DocketEntry extends JoiValidationEntity {
   public scenario?: string;
   public secondaryDocument?: {
     secondaryDocumentInfo: string;
-  };
+  } & any;
   public servedAt?: string;
   public servedPartiesCode?: string;
   public serviceDate?: string;
@@ -140,7 +145,10 @@ export class DocketEntry extends JoiValidationEntity {
   public trialLocation?: string;
   public supportingDocument?: string;
   public userId?: string;
-  public privatePractitioners?: any[];
+  public privatePractitioners?: {
+    name: string;
+    partyPrivatePractitioner?: boolean;
+  }[];
   public servedParties?: any[];
   public signedAt?: string;
   public draftOrderState?: {
@@ -165,25 +173,27 @@ export class DocketEntry extends JoiValidationEntity {
     statusReportIndex?: string;
     strickenFromTrialSessions?: boolean;
   };
-  public stampData!: object;
+  public stampData!: Record<string, any>;
   public isDraft?: boolean;
   public redactionAcknowledgement?: boolean;
   public judge?: string;
-  public judgeUserId?: string;
   public pending?: boolean;
   public previousDocument?: {
-    docketEntryId: string;
+    docketEntryId?: string;
     documentTitle: string;
     documentType: string;
   };
-  public qcAt?: string;
-  public qcByUserId?: string;
   public signedByUserId?: string;
   public signedJudgeName?: string;
-  public signedJudgeUserId?: string;
   public strickenBy?: string;
   public strickenByUserId?: string;
-  public workItem?: any;
+  public affectedDocketEntries?: DocketEntryRelation[];
+  public affectedByDocketEntries?: DocketEntryRelation[];
+
+  // These are optional fields set solely for the UI in certain cases.
+  public qcComplete?: boolean;
+  public qcViewed?: boolean;
+  public workItemId?: string;
 
   // Keeping this constructor setup like this so we get the typescript safety, but the
   // joi validation proxy invokes init on behalf of the constructor, so we keep these unused arguments.
@@ -230,7 +240,6 @@ export class DocketEntry extends JoiValidationEntity {
     this.filedByRole = rawDocketEntry.filedByRole;
     this.filingDate = rawDocketEntry.filingDate || createISODateString();
     this.freeText = rawDocketEntry.freeText;
-    this.freeText2 = rawDocketEntry.freeText2;
     this.hasOtherFilingParty = rawDocketEntry.hasOtherFilingParty;
     this.hasSupportingDocuments = rawDocketEntry.hasSupportingDocuments;
     this.index = rawDocketEntry.index;
@@ -269,6 +278,8 @@ export class DocketEntry extends JoiValidationEntity {
     this.strickenAt = rawDocketEntry.strickenAt;
     this.supportingDocument = rawDocketEntry.supportingDocument;
     this.trialLocation = rawDocketEntry.trialLocation;
+    this.affectedDocketEntries = rawDocketEntry.affectedDocketEntries;
+    this.affectedByDocketEntries = rawDocketEntry.affectedByDocketEntries;
     // only share the userId with an external user if it is the logged in user
     if (authorizedUser?.userId === rawDocketEntry.userId) {
       this.userId = rawDocketEntry.userId;
@@ -302,7 +313,11 @@ export class DocketEntry extends JoiValidationEntity {
       this.signedAt = rawDocketEntry.signedAt || createISODateString();
     }
 
-    this.generateFiledBy(petitioners);
+    const filedBy = generateFiledBy({
+      docketEntry: this,
+      petitioners,
+    });
+    if (filedBy) this.filedBy = filedBy;
   }
 
   private initForUnfilteredForInternalUsers(rawDocketEntry) {
@@ -311,7 +326,6 @@ export class DocketEntry extends JoiValidationEntity {
     this.stampData = rawDocketEntry.stampData || {};
     this.isDraft = rawDocketEntry.isDraft || false;
     this.judge = rawDocketEntry.judge;
-    this.judgeUserId = rawDocketEntry.judgeUserId;
     this.pending =
       rawDocketEntry.pending === undefined
         ? DocketEntry.isPendingOnCreation(rawDocketEntry)
@@ -323,26 +337,16 @@ export class DocketEntry extends JoiValidationEntity {
         documentType: rawDocketEntry.previousDocument.documentType,
       };
     }
-    this.qcAt = rawDocketEntry.qcAt;
-    this.qcByUserId = rawDocketEntry.qcByUserId;
     this.signedAt = rawDocketEntry.signedAt;
     this.signedByUserId = rawDocketEntry.signedByUserId;
     this.signedJudgeName = rawDocketEntry.signedJudgeName;
-    this.signedJudgeUserId = rawDocketEntry.signedJudgeUserId;
     this.strickenBy = rawDocketEntry.strickenBy;
     this.strickenByUserId = rawDocketEntry.strickenByUserId;
     this.userId = rawDocketEntry.userId;
-    this.workItem = rawDocketEntry.workItem
-      ? new WorkItem(rawDocketEntry.workItem)
-      : undefined;
-  }
 
-  /**
-   *
-   * @param {WorkItem} workItem the work item to add to the document
-   */
-  setWorkItem(workItem) {
-    this.workItem = workItem;
+    this.qcViewed = rawDocketEntry.qcViewed;
+    this.qcComplete = rawDocketEntry.qcComplete;
+    this.workItemId = rawDocketEntry.workItemId;
   }
 
   /**
@@ -386,9 +390,11 @@ export class DocketEntry extends JoiValidationEntity {
    * @returns {Boolean} true or false if the deadline should be auto-generated
    */
   shouldAutoGenerateDeadline() {
-    return AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES.some(
-      item => item.eventCode === this.eventCode,
-    );
+    const inAutoGenDeadlineDocType =
+      AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES.some(
+        item => item.eventCode === this.eventCode,
+      );
+    return inAutoGenDeadlineDocType || this.isStatusReport();
   }
 
   /**
@@ -396,80 +402,14 @@ export class DocketEntry extends JoiValidationEntity {
    * @returns {String} the deadline description
    */
   getAutoGeneratedDeadlineDescription() {
+    if (this.isStatusReport()) {
+      return AUTO_GENERATED_STATUS_REPORT_ORDER_DESCRIPTIONS[
+        this.draftOrderState?.orderType || 'statusReport'
+      ]; // if this doesn't exist, default to the basic status report
+    }
     return AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES.find(
       item => item.eventCode === this.eventCode,
     )?.deadlineDescription;
-  }
-
-  /**
-   * generates the filedBy string from parties selected for the document
-   * and contact info from the raw docket entry
-   * @param {Array} petitioners the petitioners on the case the docket entry belongs
-   * to
-   */
-  generateFiledBy(petitioners) {
-    const isNoticeOfContactChange =
-      NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES.includes(this.eventCode);
-
-    const shouldGenerateFiledBy =
-      !(isNoticeOfContactChange && this.isAutoGenerated) &&
-      !DocketEntry.isServed(this);
-
-    if (shouldGenerateFiledBy) {
-      let partiesArray: string[] = [];
-      const privatePractitionerIsFiling = this.privatePractitioners?.some(
-        practitioner => practitioner.partyPrivatePractitioner,
-      );
-
-      if (privatePractitionerIsFiling) {
-        Array.isArray(this.privatePractitioners) &&
-          this.privatePractitioners.forEach(practitioner => {
-            practitioner.partyPrivatePractitioner &&
-              partiesArray.push(practitioner.name);
-          });
-      } else {
-        this.partyIrsPractitioner && partiesArray.push('Resp.');
-
-        const petitionersArray: string[] = [];
-        const intervenorsArray: string[] = [];
-        this.filers.forEach(contactId =>
-          petitioners.forEach(p => {
-            if (p.contactId === contactId) {
-              if (p.contactType == 'intervenor') {
-                intervenorsArray.push(p.name);
-              } else {
-                petitionersArray.push(p.name);
-              }
-            }
-          }),
-        );
-
-        if (petitionersArray.length === 1) {
-          partiesArray.push(`Petr. ${petitionersArray[0]}`);
-        } else if (petitionersArray.length > 1) {
-          partiesArray.push(`Petrs. ${petitionersArray.join(' & ')}`);
-        }
-
-        if (intervenorsArray.length === 1) {
-          partiesArray.push(`Intv. ${intervenorsArray[0]}`);
-        } else if (intervenorsArray.length > 1) {
-          partiesArray.push(`Intvs. ${intervenorsArray.join(' & ')}`);
-        }
-      }
-
-      const filedByArray: string[] = [];
-      if (partiesArray.length) {
-        filedByArray.push(partiesArray.join(' & '));
-      }
-      if (this.otherFilingParty) {
-        filedByArray.push(this.otherFilingParty);
-      }
-
-      const filedByString = filedByArray.join(', ');
-      if (filedByString) {
-        this.filedBy = filedByString;
-      }
-    }
   }
 
   /**
@@ -484,21 +424,11 @@ export class DocketEntry extends JoiValidationEntity {
   }
 
   /**
-   * attaches a qc date and a user to the document
-   * @param {object} user the user completing QC process
-   */
-  setQCed(user) {
-    this.qcByUserId = user.userId;
-    this.qcAt = createISODateString();
-  }
-
-  /**
    * Unsets signature related fields on the docket entry
    */
   unsignDocument() {
     this.signedAt = undefined;
     this.signedJudgeName = undefined;
-    this.signedJudgeUserId = undefined;
     this.signedByUserId = undefined;
   }
 
@@ -538,6 +468,18 @@ export class DocketEntry extends JoiValidationEntity {
 
   isCourtIssued(): boolean {
     return DocketEntry.isCourtIssued({ eventCode: this.eventCode });
+  }
+
+  isStatusReport(): boolean {
+    if (!this.draftOrderState) return false;
+    return (
+      this.draftOrderState.orderType === 'statusReport' ||
+      this.draftOrderState.orderType === 'statusReportStipulatedDecision'
+    );
+  }
+
+  static hasWorkItemInfo(docketEntry: RawDocketEntry) {
+    return !!docketEntry.workItemId;
   }
 
   static TRANSCRIPT_AGE_DAYS_MIN = 90;
@@ -652,6 +594,14 @@ export class DocketEntry extends JoiValidationEntity {
     return ORDER_EVENT_CODES.includes(eventCode);
   }
 
+  static isNotice(eventCode: string): boolean {
+    return NOTICE_EVENT_CODES.includes(eventCode);
+  }
+
+  static isMinuteSheet(eventCode: string): boolean {
+    return MINUTE_SHEET_EVENT_CODES.includes(eventCode);
+  }
+
   static isSearchable(eventCode: string): boolean {
     return DocketEntry.isOpinion(eventCode) || DocketEntry.isOrder(eventCode);
   }
@@ -680,8 +630,8 @@ export class DocketEntry extends JoiValidationEntity {
     const documentTypes = [
       AMICUS_BRIEF_DOCUMENT_TYPE,
       ...[
-        ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Simultaneous Brief'],
-        ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Seriatim Brief'],
+        ...EXTERNAL_FILING_EVENTS['Simultaneous Brief'],
+        ...EXTERNAL_FILING_EVENTS['Seriatim Brief'],
       ].map(document => document.documentType),
     ];
 
@@ -753,14 +703,14 @@ export class DocketEntry extends JoiValidationEntity {
       visibilityChangeDate,
     }: {
       rawCase: RawCase | RawPublicCase;
-      user: { userId: string; role: Role };
+      user: AuthUser;
       isTerminalUser: boolean;
       visibilityChangeDate: string;
     },
   ): boolean => {
     if (!entry.isFileAttached) return false;
 
-    const petitionDocketEntry = getPetitionDocketEntry(rawCase);
+    const petitionDocketEntry = getPetitionDocketEntry(rawCase)!;
 
     //Only allow STIN download if:
     //  - role Petition Clerk & entry not served, or
@@ -798,6 +748,10 @@ export class DocketEntry extends JoiValidationEntity {
       return DocketEntry.isTranscriptOldEnoughToUnseal(entry);
     return true;
   };
+
+  setDraftOrderState(draftOrderState) {
+    this.draftOrderState = draftOrderState;
+  }
 
   /**
    * sets the number of pages for the docket entry

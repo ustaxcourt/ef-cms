@@ -77,10 +77,11 @@ import { PrintPaperService } from './PrintPaperService';
 import { PrintPaperTrialNotices } from './PrintPaperTrialNotices';
 import { PrintableCaseInventoryReport } from './CaseInventoryReport/PrintableCaseInventoryReport';
 import { PrintableDocketRecord } from './DocketRecord/PrintableDocketRecord';
-import { PrintableTrialCalendar } from './TrialSessionDetail/PrintableTrialCalendar';
+import { PrintableTrialCalendar } from './TrialSessionDetails/PrintableTrialCalendar';
 import { PrintableTrialSessionWorkingCopyModal } from './TrialSessionWorkingCopy/PrintableTrialSessionWorkingCopyModal';
 import { PrintableTrialSessionWorkingCopyPreviewPage } from './TrialSessionWorkingCopy/PrintableTrialSessionWorkingCopyPreviewPage';
 import { Privacy } from './Privacy';
+import { RecentFilings } from './RecentFilings/RecentFilings';
 import { ReviewSavedPetition } from './CaseDetailEdit/ReviewSavedPetition';
 import { SealedCaseDetail } from './CaseDetail/SealedCaseDetail';
 import { SelectDocumentType } from './FileDocument/SelectDocumentType';
@@ -89,9 +90,11 @@ import { SimplePdfPreviewPage } from './PendingReport/SimplePdfPreviewPage';
 import { StartCaseInternal } from './StartCaseInternal/StartCaseInternal';
 import { StatusReportOrder } from './StatusReportOrder';
 import { StyleGuide } from './StyleGuide/StyleGuide';
-import { TrialSessionDetail } from './TrialSessionDetail/TrialSessionDetail';
+import { TrialLocation } from '@web-client/views/TrialSessions/TrialLocation';
+import { TrialSessionDetails } from './TrialSessionDetails/TrialSessionDetails';
+import { TrialSessionMinutesPage } from '@web-client/views/TrialSessionMinutes/TrialSessionMinutesPage';
 import { TrialSessionPlanningModal } from './TrialSessionPlanningModal';
-import { TrialSessionPlanningReport } from './TrialSessions/TrialSessionPlanningReport';
+import { TrialSessionPlanningReportView } from '@web-client/views/TrialSessions/TrialSessionPlanningReportView';
 import { TrialSessionWorkingCopy } from './TrialSessionWorkingCopy/TrialSessionWorkingCopy';
 import { TrialSessions } from './TrialSessions/TrialSessions';
 import { UploadCourtIssuedDocument } from './UploadCourtIssuedDocument/UploadCourtIssuedDocument';
@@ -106,6 +109,10 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect } from 'react';
 import classNames from 'classnames';
+import { TermBuilderView } from '@web-client/views/TermBuilderView';
+import { AsyncServiceUnavailableModal } from '@web-client/views/AsyncServiceUnavailableModal';
+import { OrderResponse } from './OrderResponse/OrderResponse';
+import { RemovePetitionerEmailModal } from '@web-client/views/CaseDetail/RemovePetitionerEmailModal';
 
 const pages = {
   AccessibilityStatement,
@@ -168,6 +175,7 @@ const pages = {
   MessageDetail,
   Messages,
   MyAccount,
+  OrderResponse,
   PaperFiling,
   PendingReport,
   PetitionQc,
@@ -181,6 +189,7 @@ const pages = {
   PrintableTrialCalendar,
   PrintableTrialSessionWorkingCopyPreviewPage,
   Privacy,
+  RecentFilings,
   ReviewSavedPetition,
   SealedCaseDetail,
   SelectDocumentType,
@@ -189,9 +198,12 @@ const pages = {
   StartCaseInternal,
   StatusReportOrder,
   StyleGuide,
-  TrialSessionDetail,
-  TrialSessionPlanningReport,
+  TrialLocation,
+  TrialSessionDetails,
+  TrialSessionMinutesPage,
+  TrialSessionPlanningReportView,
   TrialSessionWorkingCopy,
+  TermBuilderView,
   TrialSessions,
   UploadCourtIssuedDocument,
   UserContactEdit,
@@ -224,7 +236,7 @@ export const AppComponent = connect(
     zipInProgress,
   }) {
     const focusMain = (e?: any) => {
-      e && e.preventDefault();
+      e?.preventDefault();
       const header = window.document.querySelector(
         '#main-content h1',
       ) as HTMLElement;
@@ -241,7 +253,7 @@ export const AppComponent = connect(
       }
     }, [currentPage]);
 
-    let showHeaderAndFooter = currentPage !== 'AppMaintenance';
+    const showHeaderAndFooter = currentPage !== 'AppMaintenance';
 
     const CurrentPage = pages[currentPage];
     const IsPageWithBlueBackground = pagesWithBlueBackground[currentPage];
@@ -280,7 +292,9 @@ export const AppComponent = connect(
           <>
             <Footer />
             {zipInProgress && <BatchDownloadProgress />}
-
+            {showModal === 'AsyncServiceUnavailableModal' && (
+              <AsyncServiceUnavailableModal />
+            )}
             {showModal === 'TrialSessionPlanningModal' && (
               <TrialSessionPlanningModal />
             )}
@@ -304,6 +318,9 @@ export const AppComponent = connect(
         {showModal === 'GenericErrorModal' && <GenericErrorModal />}
         {showModal === 'FileUploadErrorModal' && <FileUploadErrorModal />}
         {showModal === 'VerifyNewEmailModal' && <VerifyNewEmailModal />}
+        {showModal === 'RemovePetitionerEmailModal' && (
+          <RemovePetitionerEmailModal />
+        )}
       </>
     );
   },

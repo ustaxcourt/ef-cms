@@ -94,7 +94,7 @@ The example above is used specifically when we want to use a majority of the ori
 
 ## Integration Testing
 
-Since we know unit tests are not perfect and will miss potential bugs, we incorporate a lot of integration tests against Dawson to verify our code.  Our integration tests test at the presenter level (i.e. we test the Cerebral sequences which will hit our API, Dynamo, and Elasticsearch).  We try to avoid testing at the React level due to additional complexity, brittleness, and slowness.
+Since we know unit tests are not perfect and will miss potential bugs, we incorporate a lot of integration tests against Dawson to verify our code.  Our integration tests test at the presenter level (i.e. we test the Cerebral sequences which will hit our API and Elasticsearch).  We try to avoid testing at the React level due to additional complexity, brittleness, and slowness.
 
 You can run the all of the integration tests locally with the following command, but they will take **a long time**.
 
@@ -262,12 +262,16 @@ If you want to replace the expected output images with the images created during
 ```cp -r shared/test-output/*.png shared/test-pdf-expected-images/```
 
 ### M1 Users
+
 Before running the commands above:
 - turn on the setting for Rosetta emulation in Docker Desktop (don't forget to apply and restart)
 - add the line `export DOCKER_DEFAULT_PLATFORM=linux/amd64` to your `.zshrc`
 
-
 If you're getting errors, try running `docker system prune -af` and run the commands again.
+
+### Container Resource Recommendations
+
+If you receive an out-of-memory error when running PDF tests locally, it is likely because your container environment (podman machine or docker equivalent) does not have sufficient resources to run the tests. 6 GB of memory and 200 GB of storage are recommended.
 
 ## Client Integration Testing
 If you want to be able to run `build-client-integration` tests within a Docker container locally for debugging purposes without deploying, you could use these commands.

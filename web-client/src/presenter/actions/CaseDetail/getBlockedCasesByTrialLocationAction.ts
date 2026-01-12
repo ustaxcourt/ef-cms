@@ -1,5 +1,3 @@
-import { state } from '@web-client/presenter/app.cerebral';
-
 /**
  * gets blocked cases by the trial location set on the form
  * @param {object} providers the providers object
@@ -9,15 +7,16 @@ import { state } from '@web-client/presenter/app.cerebral';
  */
 export const getBlockedCasesByTrialLocationAction = async ({
   applicationContext,
-  get,
+  props,
 }: ActionProps) => {
-  const trialLocation = get(state.blockedCaseReportFilter.trialLocationFilter);
+  const { trialLocation, blockedCaseFilter } = props;
   if (!trialLocation) return { blockedCases: [] };
 
   const blockedCases = await applicationContext
     .getUseCases()
     .getBlockedCasesInteractor(applicationContext, {
       trialLocation,
+      blockedCaseFilter,
     });
 
   return { blockedCases };

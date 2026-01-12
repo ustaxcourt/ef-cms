@@ -12,6 +12,10 @@ export const presenter = {
     applicationContext: ClientApplicationContext;
     path: any;
     router: any;
+    socket?: {
+      start?: jest.Mock;
+      stop?: jest.Mock;
+    };
   };
   sequences: any;
   state: typeof baseState;

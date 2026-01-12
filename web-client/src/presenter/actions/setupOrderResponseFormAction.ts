@@ -1,0 +1,14 @@
+import { MOTION_ORDER_RESPONSE_OPTIONS } from '@shared/business/entities/EntityConstants';
+import { state } from '@web-client/presenter/app.cerebral';
+import { isLeadCase } from '@shared/business/entities/cases/Case';
+
+export const setupOrderResponseFormAction = ({ store, get }: ActionProps) => {
+  const caseDetail = get(state.caseDetail);
+  const isOnLeadCase = isLeadCase(caseDetail);
+  const consolidatedFiling = isOnLeadCase
+    ? MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.ALL_CASES
+    : MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.THIS_CASE_ONLY;
+
+  store.set(state.form.issueOrderFor, consolidatedFiling);
+  store.set(state.form.isOnLeadCase, isOnLeadCase);
+};

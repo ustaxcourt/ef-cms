@@ -122,7 +122,7 @@ export const docketClerkEditsDocketEntryNonstandardC = cerebralTest => {
       additionalInfo2: 'some additional info pt 2',
       attachments: true,
       certificateOfService: true,
-      certificateOfServiceDate: '2011-01-01T00:00:00.000-05:00',
+      certificateOfServiceDate: '2011-01-01T05:00:00.000Z',
       documentTitle: 'Declaration of Bob Barker in Support of Petition',
       documentType: 'Declaration in Support',
       eventCode: 'MISCL',

@@ -1,13 +1,15 @@
-import { DateTime, DurationLike, Interval } from 'luxon';
+import { DateTime, DurationLike, Interval, type ToObjectOutput } from 'luxon';
 import fedHolidays from '@18f/us-federal-holidays';
 
 export const FORMATS = {
+  CURRENT_AS_OF_TIMESTAMP: "MM/dd/yy h:mm a 'Eastern'",
   DATE_TIME: 'MM/dd/yy hh:mm a',
   DATE_TIME_TZ: "MM/dd/yy h:mm a 'ET'",
   DAY_OF_WEEK: 'c',
   FILENAME_DATE: 'MMMM_d_yyyy',
   ISO: "yyyy-MM-dd'T'HH:mm:ss.SSSZZ",
   LOG_TIMESTAMP: "yyyy/MM/dd HH:mm:ss.SSS 'ET'",
+  MD: 'M/d',
   MDYY: 'M/d/yy',
   MDYYYY: 'M/d/yyyy',
   MDYYYY_DASHED: 'M-d-yyyy',
@@ -24,6 +26,7 @@ export const FORMATS = {
   TIME_TZ: "h:mm a 'ET'",
   TRIAL_SORT_TAG: 'yyyyMMddHHmmss',
   TRIAL_TIME: 'yyyy-MM-dd H:mm',
+  UNIX_TIMESTAMP_MS: 'x',
   UNIX_TIMESTAMP_SECONDS: 'X',
   WEEK: 'W',
   YEAR: 'yyyy',
@@ -56,7 +59,7 @@ export const prepareDateFromEST = (dateString: string, inputFormat: string) => {
   const result = DateTime.fromFormat(dateString, inputFormat, {
     zone: USTC_TZ,
   })
-    .setZone(0)
+    .setZone('utc')
     .toISO();
 
   return result;
@@ -94,7 +97,7 @@ export const prepareDateFromString = (
   dateString?: string,
   inputFormat?: TimeFormats,
 ): DateTime => {
-  let dateToFormat: string = dateString || createISODateString();
+  const dateToFormat: string = dateString || createISODateString();
   let result: DateTime;
   if (inputFormat === FORMATS.ISO) {
     result = DateTime.fromISO(dateToFormat, { zone: 'utc' });
@@ -108,6 +111,18 @@ export const prepareDateFromString = (
     }).setZone('utc');
   }
   return result;
+};
+
+export const getJsDateFromIso = (isoDate: string): Date => {
+  return prepareDateFromString(isoDate, FORMATS.ISO).toJSDate();
+};
+
+export const getIsoFromJsDate = (jsDate: Date): string | null => {
+  return DateTime.fromJSDate(jsDate).toISO();
+};
+
+export const getNowObject = (): ToObjectOutput => {
+  return DateTime.now().toObject();
 };
 
 export const calculateISODate = ({
@@ -139,6 +154,22 @@ export const calculateDate = ({
 
   return prepareDateFromString(dateString)
     .plus({ [units]: howMuch })
+    .toJSDate();
+};
+
+export const calculateDateAtStartOfDayEST = ({
+  dateString = undefined,
+  howMuch = 0,
+  units = 'days',
+}: {
+  dateString?: string;
+  howMuch?: number;
+  units?: string;
+}): Date => {
+  return prepareDateFromString(dateString)
+    .setZone(USTC_TZ)
+    .plus({ [units]: howMuch })
+    .startOf('day')
     .toJSDate();
 };
 
@@ -187,12 +218,12 @@ export const createDateAtStartOfWeekEST = (
   dateString: string,
   format: TimeFormats,
 ): string => {
-  const dtObj = DateTime.fromISO(dateString, { zone: USTC_TZ });
+  const dtObj = DateTime.fromISO(dateString, { setZone: true });
 
   const dateOutput = dtObj
+    .setZone(USTC_TZ)
     .startOf('week')
     .startOf('day')
-    .setZone('utc')
     .toFormat(format);
 
   return dateOutput;
@@ -214,7 +245,7 @@ export const createEndOfDayISO = (params?: {
       )
     : DateTime.now().setZone(USTC_TZ);
 
-  return dateObject.endOf('day').setZone('utc').toISO();
+  return dateObject.endOf('day').setZone('utc').toISO() || '';
 };
 
 export const createStartOfDayISO = (params?: {
@@ -233,7 +264,25 @@ export const createStartOfDayISO = (params?: {
       )
     : DateTime.now().setZone(USTC_TZ);
 
-  return dateObject.startOf('day').setZone('utc').toISO();
+  return dateObject.startOf('day').setZone('utc').toISO() || '';
+};
+
+// expects a date string like 2025-09-18
+export const createStartOfDayISOUtc = (dateString: string): string => {
+  return DateTime.fromFormat(dateString, FORMATS.YYYYMMDD, {
+    zone: 'utc',
+  })
+    .startOf('day')
+    .toISO()!;
+};
+
+// expects a date string like 2025-09-18
+export const createEndOfDayISOUtc = (dateString: string): string => {
+  return DateTime.fromFormat(dateString, FORMATS.YYYYMMDD, {
+    zone: 'utc',
+  })
+    .endOf('day')
+    .toISO()!;
 };
 
 /**
@@ -254,7 +303,7 @@ export const formatDateString = (
   formatArg: TimeFormatNames | TimeFormats = FORMATS.ISO,
 ): string => {
   if (!dateString) return '';
-  let formatString = FORMATS[formatArg] || formatArg;
+  const formatString = FORMATS[formatArg] || formatArg;
 
   if (!Object.values(FORMATS).includes(formatString)) {
     throw new Error(`Must use a formatting constant: "${formatString}"`); // TODO: test coverage
@@ -265,6 +314,7 @@ export const formatDateString = (
     .toFormat(formatString);
 
   const formatWithAMPM = [
+    FORMATS.CURRENT_AS_OF_TIMESTAMP,
     FORMATS.DATE_TIME,
     FORMATS.DATE_TIME_TZ,
     FORMATS.TIME,
@@ -280,6 +330,9 @@ export const formatDateString = (
 };
 
 export const formatNow = (formatStr?: TimeFormats | TimeFormatNames) => {
+  // if (formatStr === FORMATS.UNIX_TIMESTAMP_MS) return DateTime.now().toMillis();
+  // if (formatStr === FORMATS.UNIX_TIMESTAMP_SECONDS) return DateTime.now().toSeconds();
+
   const now = createISODateString();
   return formatDateString(now, formatStr);
 };
@@ -548,9 +601,11 @@ export const subtractISODates = (
  */
 export const getBusinessDateInFuture = ({
   numberOfDays,
+  outputFormat = FORMATS.MONTH_DAY_YEAR,
   startDate,
 }: {
   numberOfDays: number;
+  outputFormat?: TimeFormats;
   startDate: string;
 }): string => {
   let laterDate = prepareDateFromString(startDate).plus({
@@ -577,26 +632,34 @@ export const getBusinessDateInFuture = ({
     );
   }
 
-  return laterDate.toFormat(FORMATS.MONTH_DAY_YEAR);
+  return laterDate.toFormat(outputFormat);
 };
 
-/**
- * Returns whether or not the current date falls within the given date time range
- * @param {string} intervalStartDate the interval start ISO date string
- * @param {string} intervalEndDate the interval end ISO date string
- * @returns {boolean} whether or not the current date falls within the given date time range
- */
-export const isTodayWithinGivenInterval = ({
+type IsoDateString = string;
+export const isDateWithinGivenInterval = ({
+  date = createISODateString(),
   intervalEndDate,
   intervalStartDate,
+}: {
+  date?: IsoDateString;
+  intervalEndDate: IsoDateString;
+  intervalStartDate: IsoDateString;
 }): boolean => {
-  const today = DateTime.now().setZone(USTC_TZ);
-  const dateRangeInterval = Interval.fromDateTimes(
+  const dateToCheck = prepareDateFromString(date, FORMATS.ISO);
+  const intervalStartDateTime = prepareDateFromString(
     intervalStartDate,
+    FORMATS.ISO,
+  );
+  const intervalEndDateTime = prepareDateFromString(
     intervalEndDate,
+    FORMATS.ISO,
+  );
+  const dateRangeInterval = Interval.fromDateTimes(
+    intervalStartDateTime,
+    intervalEndDateTime,
   );
 
-  return dateRangeInterval.contains(today);
+  return dateRangeInterval.contains(dateToCheck);
 };
 
 export type IsoDateRange = {
@@ -625,6 +688,23 @@ export const isValidReconciliationDate = dateString => {
   const todayDate = formatNow(FORMATS.YYYYMMDD);
   const dateLessthanOrEqualToToday = dateString <= todayDate;
   return dateInputValid && dateLessthanOrEqualToToday;
+};
+
+/**
+ * Return true when the provided ISO date is valid and is not in the future.
+ * @param {string} dateString any valid  ISO-8601 date string
+ * @returns {boolean} when date is in the past will return true
+ */
+export const isValidPastDate = dateString => {
+  const dateInputValid = isValidISODate(dateString);
+  if (!dateInputValid) return false;
+
+  const formattedDate = prepareDateFromString(dateString, FORMATS.ISO)
+    .setZone(USTC_TZ)
+    .toFormat(FORMATS.YYYYMMDD);
+  const todayDate = formatNow(FORMATS.YYYYMMDD);
+
+  return formattedDate <= todayDate;
 };
 
 /**
@@ -669,3 +749,39 @@ export function normalizeIsoDateRange(
   //validate time string
   //create IsoDateRange from day + time range
 }
+
+export const getWeeksInRange = ({
+  endDate,
+  startDate,
+}: {
+  startDate: string;
+  endDate: string;
+}): IsoDateRange[] => {
+  let start = DateTime.fromISO(startDate).startOf('week');
+  const end = DateTime.fromISO(endDate).startOf('week');
+
+  const weeks: IsoDateRange[] = [];
+
+  // Loop through each week, adding each Monday to the array
+  while (start <= end) {
+    const isoStart = start.toISODate();
+    const isoEnd = start.plus({ days: 4 }).toISODate();
+    if (isoStart !== null && isoEnd !== null) {
+      weeks.push({ start: isoStart, end: isoEnd });
+    }
+    start = start.plus({ weeks: 1 });
+  }
+  return weeks;
+};
+
+export const roundDateDownToNearestHour = (isoDateString: string) => {
+  const formattedDate = calculateDate({ dateString: isoDateString });
+  formattedDate.setMinutes(0);
+  formattedDate.setSeconds(0);
+  formattedDate.setMilliseconds(0);
+  return formattedDate;
+};
+
+export const getCurrentDateTimeInMillis = (): number => {
+  return Number(formatNow(FORMATS.UNIX_TIMESTAMP_MS));
+};

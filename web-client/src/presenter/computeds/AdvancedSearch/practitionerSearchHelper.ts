@@ -15,11 +15,13 @@ export type FormattedPractitionerSearchResultType = {
   contact?: { state: string; stateFullName?: string };
   formattedAdmissionsDate: string;
   name: string;
+  originalBarState: string;
   practiceType: string;
   practitionerType: string;
-  state?: string;
   sort?: (number | string)[];
+  state?: string;
   stateFullName?: string;
+  originalBarStateFullName?: string;
 };
 
 type PractitionerSearchHelperResult = {
@@ -32,7 +34,7 @@ type PractitionerSearchHelperResult = {
   pageSize: number;
   showPaginator: boolean;
   isPublicUser: boolean;
-  stateHeaderText: string;
+  showStateColumn: boolean;
 };
 
 export const practitionerSearchHelper = (
@@ -52,7 +54,7 @@ export const practitionerSearchHelper = (
     showNoMatches: false,
     showPaginator: false,
     showSearchResults: false,
-    stateHeaderText: isPublicUser ? 'Original Bar State' : 'State',
+    showStateColumn: !isPublicUser,
   };
 
   if (searchResults && !searchResults.total) {
@@ -108,12 +110,8 @@ export const formatPractitionerSearchResultRecord = (
     });
   }
 
-  if (result.contact?.state) {
-    result.contact.stateFullName =
-      US_STATES[result.contact.state] ||
-      US_STATES_OTHER[result.contact.state] ||
-      result.contact.state;
-  }
+  result.stateFullName = getFullState(result.state);
+  result.originalBarStateFullName = getFullState(result.originalBarState);
 
   result.formattedAdmissionsDate = applicationContext
     .getUtilities()
@@ -121,3 +119,8 @@ export const formatPractitionerSearchResultRecord = (
 
   return result;
 };
+
+function getFullState(state: string): string | undefined {
+  if (!state) return;
+  return US_STATES[state] || US_STATES_OTHER[state] || state;
+}

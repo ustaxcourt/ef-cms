@@ -5,6 +5,7 @@ import {
   COUNTRY_TYPES,
   PARTY_TYPES,
   PAYMENT_STATUS,
+  PROCEDURE_TYPES_MAP,
   SERVICE_INDICATOR_TYPES,
 } from '../business/entities/EntityConstants';
 import {
@@ -13,10 +14,15 @@ import {
 } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
 import { MOCK_DOCUMENTS } from './mockDocketEntry';
 import { docketClerkUser, judgeUser } from './mockUsers';
+import { RawEligibleCase } from '@shared/business/entities/cases/EligibleCase';
 
 export const MOCK_CASE: RawCase = {
   archivedDocketEntries: [],
+  associatedJudge: undefined,
+  associatedJudgeId: undefined,
+  canAllowPrintableDocketRecord: undefined,
   caseCaption: 'Test Petitioner, Petitioner',
+  caseStatusHistory: undefined,
   caseType: CASE_TYPES_MAP.other,
   consolidatedCases: [],
   correspondence: [],
@@ -125,6 +131,7 @@ export const MOCK_CASE_WITH_SECONDARY_OTHERS = {
   caseType: CASE_TYPES_MAP.other,
   docketEntries: MOCK_DOCUMENTS,
   docketNumber: '109-19',
+  docketNumberWithSuffix: '109-19',
   entityName: 'Case',
   filingType: 'Myself',
   partyType: PARTY_TYPES.petitionerDeceasedSpouse,
@@ -229,6 +236,7 @@ export const MOCK_LEAD_CASE_WITH_PAPER_SERVICE = {
   caseType: CASE_TYPES_MAP.other,
   docketEntries: MOCK_DOCUMENTS,
   docketNumber: '109-19',
+  docketNumberWithSuffix: '109-19',
   entityName: 'Case',
   filingType: 'Myself',
   irsPractitioners: [],
@@ -401,14 +409,19 @@ export const MOCK_CASE_WITH_TRIAL_SESSION = {
   trialTime: '10:00',
 };
 
-export const MOCK_ELIGIBLE_CASE = {
+export const MOCK_ELIGIBLE_CASE: RawEligibleCase = {
   caseCaption: 'Roslindis Angelino & Saturnino Nao, Petitioner',
   caseType: CASE_TYPES_MAP.other,
   docketNumber: '321-21',
+  docketNumberWithSuffix: '321-21W',
+  isSealed: false,
+  procedureType: PROCEDURE_TYPES_MAP.regular,
   docketNumberSuffix: 'W',
-  highPriority: true,
+  isAgedCase: false,
   irsPractitioners: [],
   privatePractitioners: [],
+  remoteTrialGranted: false,
+  inConsolidatedGroup: false,
 };
 
 export const MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS = {
@@ -416,7 +429,6 @@ export const MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS = {
   caseType: CASE_TYPES_MAP.other,
   docketNumber: '321-21',
   docketNumberSuffix: 'W',
-  highPriority: true,
   irsPractitioners: [
     {
       barNumber: 'VS0062',
@@ -512,4 +524,12 @@ export const MOCK_CAV_CONSOLIDATED_MEMBER_CASE = {
   ],
   sortableDocketNumber: 2019000110,
   status: CASE_STATUS_TYPES.cav,
+};
+
+export const MOCK_CASE_READY_FOR_TRIAL_SESSION_SCHEDULING: RawCase = {
+  ...MOCK_SUBMITTED_CASE,
+  leadDocketNumber: undefined,
+  preferredTrialCity: 'Washington, District of Columbia',
+  procedureType: PROCEDURE_TYPES_MAP.regular,
+  status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
 };

@@ -1,18 +1,20 @@
 import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
 import {
-  AuthUser,
+  isAuthUser,
   UnknownAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import { NotFoundError } from '../../../errors/errors';
 import { ProgressData } from '@web-api/persistence/s3/zipDocuments';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { generateValidDocketEntryFilename } from '@web-api/business/useCases/trialSessions/batchDownloadTrialSessionInteractor';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { pollAWSBatchProgress } from '@web-api/dispatchers/batch/pollAWSBatchProgress';
 
 export type DownloadDocketEntryRequestType = {
   documentsSelectedForDownload: string[];
@@ -33,7 +35,6 @@ export const batchDownloadDocketEntriesInteractor = async (
       authorizedUser,
     );
   } catch (error: any) {
-    const { userId } = authorizedUser;
     const { clientConnectionId, docketNumber } = downloadDocketEntryRequestInfo;
 
     const erMsg = error.message || 'unknown error';
@@ -41,15 +42,18 @@ export const batchDownloadDocketEntriesInteractor = async (
       `Error batch-downloading documents from case: ${docketNumber} - ${erMsg}`,
       { error },
     );
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      clientConnectionId,
-      message: {
-        action: 'batch_download_error',
-        error,
-      },
-      userId,
-    });
+    if (isAuthUser(authorizedUser)) {
+      const { userId } = authorizedUser;
+      await applicationContext.getNotificationGateway().sendNotificationToUser({
+        applicationContext,
+        clientConnectionId,
+        message: {
+          action: 'batch_download_error',
+          error,
+        },
+        userId,
+      });
+    }
   }
 };
 
@@ -72,12 +76,9 @@ const batchDownloadDocketEntriesHelper = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const caseToBatch = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const caseToBatch = await getCaseByDocketNumber({
+    docketNumber,
+  });
 
   if (!caseToBatch) {
     throw new NotFoundError(`Case: ${docketNumber} was not found.`);
@@ -99,6 +100,12 @@ const batchDownloadDocketEntriesHelper = async (
     const docInfo = caseEntity.getDocketEntryById({
       docketEntryId,
     });
+
+    if (!docInfo) {
+      throw new NotFoundError(
+        `Could not find docket entry with id ${docketEntryId} on case ${caseEntity.docketNumber}`,
+      );
+    }
 
     const { documentTitle, filingDate, index } = docInfo;
     const filename = generateValidDocketEntryFilename({
@@ -141,6 +148,19 @@ const batchDownloadDocketEntriesHelper = async (
     !!awsBatchMinimumCount &&
     documentsToZip.length > awsBatchMinimumCount;
 
+  const onProgress = async (progressData: ProgressData) => {
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      clientConnectionId,
+      message: {
+        action: 'batch_download_progress',
+        filesCompleted: progressData.filesCompleted,
+        totalFiles: progressData.totalFiles,
+      },
+      userId: authorizedUser.userId,
+    });
+  };
+
   if (useAwsBatchMechanism) {
     const UUID = applicationContext.getUniqueId();
     await applicationContext.getPersistenceGateway().uploadDocument({
@@ -150,7 +170,7 @@ const batchDownloadDocketEntriesHelper = async (
       useTempBucket: true,
     });
 
-    await applicationContext
+    const response = await applicationContext
       .getDispatchers()
       .sendZipperBatchJob(
         applicationContext,
@@ -160,11 +180,11 @@ const batchDownloadDocketEntriesHelper = async (
         authorizedUser.userId,
       );
 
-    await displayFakeProgressBarUntilBatchBootsUp(
+    await pollAWSBatchProgress({
       applicationContext,
-      clientConnectionId,
-      authorizedUser,
-    );
+      jobId: response.jobId as string,
+      onProgress,
+    });
 
     return;
   }
@@ -179,19 +199,6 @@ const batchDownloadDocketEntriesHelper = async (
     },
     userId: authorizedUser.userId,
   });
-
-  const onProgress = async (progressData: ProgressData) => {
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      clientConnectionId,
-      message: {
-        action: 'batch_download_progress',
-        filesCompleted: progressData.filesCompleted,
-        totalFiles: progressData.totalFiles,
-      },
-      userId: authorizedUser.userId,
-    });
-  };
 
   await applicationContext
     .getPersistenceGateway()
@@ -219,24 +226,3 @@ const batchDownloadDocketEntriesHelper = async (
     userId: authorizedUser.userId,
   });
 };
-
-async function displayFakeProgressBarUntilBatchBootsUp(
-  applicationContext: ServerApplicationContext,
-  clientConnectionId: string,
-  authorizedUser: AuthUser,
-) {
-  const FAKE_NUMBER = 45;
-  for (let index = 0; index < FAKE_NUMBER; index++) {
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      clientConnectionId,
-      message: {
-        action: 'aws_batch_download_progress',
-        filesCompleted: index,
-        totalFiles: FAKE_NUMBER,
-      },
-      userId: authorizedUser.userId,
-    });
-    await new Promise(resolve => setTimeout(() => resolve(null), 1000));
-  }
-}

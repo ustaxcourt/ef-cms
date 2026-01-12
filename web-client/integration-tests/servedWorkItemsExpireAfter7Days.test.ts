@@ -1,3 +1,8 @@
+import {
+  CASE_STATUS_TYPES,
+  CHIEF_JUDGE,
+  PETITIONS_SECTION,
+} from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { createApplicationContext as applicationContextFactory } from '../../web-api/src/applicationContext';
 import {
@@ -8,19 +13,15 @@ import {
   uploadPetition,
 } from './helpers';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
-
-const {
-  IRS_SYSTEM_SECTION,
-  PETITIONS_SECTION,
-  STATUS_TYPES: CASE_STATUS_TYPES,
-} = applicationContext.getConstants();
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 
 const cerebralTest = setupTest();
 
 describe('verify old served work items do not show up in the outbox', () => {
-  let workItem6Days;
-  let workItem7Days;
   let workItem8Days;
+  let workItem7Days;
+  let workItem6Days;
   let caseDetail;
 
   let workItemId6;
@@ -43,7 +44,6 @@ describe('verify old served work items do not show up in the outbox', () => {
     };
 
     const appContext = applicationContextFactory(mockUser);
-    appContext.environment.dynamoDbTableName = 'efcms-local';
 
     const CREATED_8_DAYS_AGO = applicationContext
       .getUtilities()
@@ -59,22 +59,33 @@ describe('verify old served work items do not show up in the outbox', () => {
     workItemId7 = appContext.getUniqueId();
     workItemId8 = appContext.getUniqueId();
 
+    const docketEntry: RawDocketEntry = {
+      docketEntryId: '01174a9a-7ac4-43ff-a163-8ed421f9612d',
+      docketNumber: caseDetail.docketNumber,
+      createdAt: '2019-06-25T15:14:11.924Z',
+      documentType: 'Petition',
+      eventCode: 'O',
+      documentTitle: 'Test',
+      filingDate: '2018-06-26T16:31:17.643Z',
+      isOnDocketRecord: true,
+      filers: [],
+      processingStatus: '',
+      receivedAt: '2018-06-25T16:31:17.643Z',
+      stampData: {},
+    };
+
     workItem8Days = {
       assigneeId: mockUser.userId,
       assigneeName: 'Test petitionsclerk1',
+      associatedJudge: CHIEF_JUDGE,
       caseStatus: CASE_STATUS_TYPES.new,
       completedAt: '2019-06-26T16:31:17.643Z',
       completedByUserId: mockUser.userId,
       createdAt: CREATED_8_DAYS_AGO,
-      docketEntry: {
-        createdAt: '2019-06-25T15:14:11.924Z',
-        docketEntryId: '01174a9a-7ac4-43ff-a163-8ed421f9612d',
-        documentType: 'Petition',
-      },
+      docketEntryId: docketEntry.docketEntryId,
       docketNumber: caseDetail.docketNumber,
       docketNumberSuffix: null,
-      isInitializeCase: false,
-      section: IRS_SYSTEM_SECTION,
+      section: PETITIONS_SECTION,
       sentBy: 'Test petitionsclerk1',
       sentBySection: PETITIONS_SECTION,
       sentByUserId: mockUser.userId,
@@ -96,22 +107,9 @@ describe('verify old served work items do not show up in the outbox', () => {
       workItemId: `${workItemId6}`,
     };
 
-    await appContext.getPersistenceGateway().putWorkItemInOutbox({
-      applicationContext: appContext,
-      authorizedUser: mockUser,
-      workItem: workItem8Days,
-    });
-
-    await appContext.getPersistenceGateway().putWorkItemInOutbox({
-      applicationContext: appContext,
-      authorizedUser: mockUser,
-      workItem: workItem7Days,
-    });
-
-    await appContext.getPersistenceGateway().putWorkItemInOutbox({
-      applicationContext: appContext,
-      authorizedUser: mockUser,
-      workItem: workItem6Days,
+    await upsertDocketEntries([docketEntry]);
+    await upsertWorkItems({
+      workItems: [workItem8Days, workItem7Days, workItem6Days],
     });
   });
 

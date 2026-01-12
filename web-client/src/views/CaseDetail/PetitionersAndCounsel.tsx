@@ -17,6 +17,8 @@ export const PetitionersAndCounsel = connect(
     showModal: state.modal.showModal,
     showViewPetitionerCounselModalSequence:
       sequences.showViewPetitionerCounselModalSequence,
+    showRemovePetitionerEmailModalSequence:
+      sequences.showRemovePetitionerEmailModalSequence,
   },
   function PetitionersAndCounsel({
     caseDetail,
@@ -24,6 +26,7 @@ export const PetitionersAndCounsel = connect(
     partiesInformationHelper,
     showModal,
     showViewPetitionerCounselModalSequence,
+    showRemovePetitionerEmailModalSequence,
   }) {
     return (
       <>
@@ -59,26 +62,63 @@ export const PetitionersAndCounsel = connect(
                     }}
                     showEmail={false}
                   />
-                  <span className="address-line" data-testid="petitioner-email">
-                    {petitioner.formattedEmail}
-                    {petitioner.showEAccessFlag && (
-                      <FontAwesomeIcon
-                        aria-label="has e-access"
-                        className="margin-left-05 fa-icon-blue"
-                        icon="flag"
-                        size="1x"
-                      />
-                    )}
-                  </span>
-                  <span data-testid="petitioner-pending-email">
-                    {petitioner.formattedPendingEmail}
-                  </span>
+
+                  {!petitioner.sealedAndUnavailable && (
+                    <span
+                      className={classNames({
+                        'margin-left-205': petitioner.isAddressSealed,
+                        'sealed-address': petitioner.isAddressSealed,
+                        'address-line': true,
+                      })}
+                      data-testid="petitioner-email"
+                    >
+                      <span>{petitioner.formattedEmail}</span>
+                      {petitioner.showEAccessFlag && (
+                        <FontAwesomeIcon
+                          aria-label="has e-access"
+                          className="margin-left-05 fa-icon-blue"
+                          icon="flag"
+                          size="1x"
+                        />
+                      )}
+                    </span>
+                  )}
+
+                  {petitioner.showRemoveEmailButton && (
+                    <Button
+                      link
+                      className="text-secondary-dark underline-secondary-dark padding-0 margin-top-05"
+                      data-testid="remove-email-button"
+                      icon="trash"
+                      overrideMargin={true}
+                      onClick={() => {
+                        showRemovePetitionerEmailModalSequence({
+                          email: petitioner.formattedEmail,
+                        });
+                      }}
+                    >
+                      Remove Email
+                    </Button>
+                  )}
+                  {!petitioner.sealedAndUnavailable && (
+                    <div
+                      data-testid="petitioner-pending-email"
+                      className={classNames(
+                        petitioner.isAddressSealed &&
+                          'margin-left-205 sealed-address',
+                      )}
+                    >
+                      {petitioner.formattedPendingEmail}
+                    </div>
+                  )}
+
                   {petitioner.showPaperPetitionEmail && (
                     <>
                       <p className="semi-bold margin-bottom-0">
                         Petition email address
                       </p>
                       <span
+                        data-testid="petitioner-paper-petition-email"
                         className={classNames(
                           petitioner.isAddressSealed &&
                             'margin-left-205 sealed-address',

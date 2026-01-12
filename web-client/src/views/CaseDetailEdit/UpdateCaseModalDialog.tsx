@@ -1,10 +1,10 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { Hint } from '../../ustc-ui/Hint/Hint';
 import { ModalDialog } from '../ModalDialog';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import { InfoNotificationComponent } from '../InfoNotification';
 
 export const UpdateCaseModalDialog = connect(
   {
@@ -45,6 +45,7 @@ export const UpdateCaseModalDialog = connect(
             <textarea
               aria-labelledby="caption-label"
               className="caption usa-textarea textarea-resize-vertical"
+              data-testid="edit-case-caption-textarea"
               id="caption"
               name="caseCaption"
               value={modal.caseCaption}
@@ -62,10 +63,14 @@ export const UpdateCaseModalDialog = connect(
           </FormGroup>
         </div>
         {updateCaseModalHelper.showCalendaredAlert && (
-          <Hint>
-            This case is Calendared for trial. Remove the case from its trial
-            session to update the case status.
-          </Hint>
+          <InfoNotificationComponent
+            alertInfo={{
+              message: `This case is Calendared for trial. Remove the case from its trial
+            session to update the case status.`,
+            }}
+            dismissible={false}
+            scrollToTop={false}
+          />
         )}
         {updateCaseModalHelper.showCaseStatusDropdown && (
           <div className="margin-bottom-4">

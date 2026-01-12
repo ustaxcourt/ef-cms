@@ -2,17 +2,22 @@ import { Case } from '@shared/business/entities/cases/Case';
 import {
   CaseInventory,
   CustomCaseReportFilters,
-  CustomCaseReportSearchAfter,
-  GetCustomCaseReportResponse,
+  getCustomCaseReportInteractor,
 } from '@web-api/business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
-import { FORMATS } from '@shared/business/utilities/DateHandler';
+import {
+  FORMATS,
+  formatDateString,
+  formatNow,
+} from '@shared/business/utilities/DateHandler';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { applicationContext } from '@web-api/applicationContext';
+import { getNotificationGateway } from '@web-api/notifications/notificationClient/getNotificationGateway';
+import { saveFileAndGenerateUrl } from '@web-api/business/useCaseHelper/saveFileAndGenerateUrl';
 import { stringify } from 'csv-stringify/sync';
 
 export type CustomCaseReportCsvRequest = CustomCaseReportFilters & {
@@ -21,14 +26,12 @@ export type CustomCaseReportCsvRequest = CustomCaseReportFilters & {
 };
 
 export const createCsvCustomCaseReportFileInteractor = async (
-  applicationContext: ServerApplicationContext,
   {
     caseStatuses,
     caseTypes,
     clientConnectionId,
     endDate,
     filingMethod,
-    highPriority,
     judges,
     preferredTrialCities,
     procedureType,
@@ -41,17 +44,14 @@ export const createCsvCustomCaseReportFileInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  let searchAfter: CustomCaseReportSearchAfter = {
-    pk: null,
-    receivedAt: null,
-  };
+  let page = 0;
   const pageSize = 9000;
 
   const loops = Math.floor(totalCount / pageSize) + 1;
   const WAIT_TIME = 1500;
   const cases: CaseInventory[] = [];
 
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
+  await getNotificationGateway().sendNotificationToUser({
     applicationContext,
     clientConnectionId,
     message: {
@@ -64,35 +64,32 @@ export const createCsvCustomCaseReportFileInteractor = async (
 
   for (let index = 0; index < loops; index++) {
     if (index && index % 10 === 0) {
+      // Need to throttle every 10th call
       await new Promise(resolve => {
-        applicationContext.setTimeout(() => resolve(null), WAIT_TIME);
+        setTimeout(() => resolve(null), WAIT_TIME);
       });
     }
 
-    const iterationData: GetCustomCaseReportResponse = await applicationContext
-      .getUseCases()
-      .getCustomCaseReportInteractor(
-        applicationContext,
-        {
-          caseStatuses,
-          caseTypes,
-          endDate,
-          filingMethod,
-          highPriority,
-          judges,
-          pageSize,
-          preferredTrialCities,
-          procedureType,
-          searchAfter,
-          startDate,
-        },
-        authorizedUser,
-      );
+    const iterationData = await getCustomCaseReportInteractor(
+      {
+        caseStatuses,
+        caseTypes,
+        endDate,
+        filingMethod,
+        judges,
+        page,
+        pageSize,
+        preferredTrialCities,
+        procedureType,
+        startDate,
+      },
+      authorizedUser,
+    );
 
     cases.push(...iterationData.foundCases);
-    searchAfter = iterationData.lastCaseId;
+    page += pageSize;
 
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
+    await getNotificationGateway().sendNotificationToUser({
       applicationContext,
       clientConnectionId,
       message: {
@@ -106,31 +103,24 @@ export const createCsvCustomCaseReportFileInteractor = async (
 
   const formattedCases = cases.map(aCase => ({
     ...aCase,
-    calendaringHighPriority: aCase.highPriority ? 'yes' : '',
     caseCaption: Case.getCaseTitle(aCase.caseCaption),
-    receivedAt: applicationContext
-      .getUtilities()
-      .formatDateString(aCase.receivedAt, FORMATS.MMDDYY),
+    receivedAt: formatDateString(aCase.receivedAt, FORMATS.MMDDYY),
   }));
 
   const csvString = getCsvString(formattedCases);
   const csvBuffer = Buffer.from(csvString);
 
-  const today = applicationContext
-    .getUtilities()
-    .formatNow(FORMATS.MMDDYYYY_UNDERSCORED);
-  const fileName = 'Custom Case Report - ' + today;
+  const today = formatNow(FORMATS.MMDDYYYY_UNDERSCORED);
+  const fileName: string = 'Custom Case Report - ' + today;
 
-  const fileInfo = await applicationContext
-    .getUseCaseHelpers()
-    .saveFileAndGenerateUrl({
-      applicationContext,
-      contentType: 'text/csv',
-      file: csvBuffer,
-      useTempBucket: true,
-    });
+  const fileInfo = await saveFileAndGenerateUrl({
+    applicationContext,
+    contentType: 'text/csv',
+    file: csvBuffer,
+    useTempBucket: true,
+  });
 
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
+  await getNotificationGateway().sendNotificationToUser({
     applicationContext,
     clientConnectionId,
     message: {
@@ -146,14 +136,13 @@ export const createCsvCustomCaseReportFileInteractor = async (
 
 const getCsvString = (records: any[]) => {
   const CSV_DICTIONARY = [
-    { header: 'Docket No.', key: 'docketNumber' },
+    { header: 'Docket No.', key: 'docketNumberWithSuffix' },
     { header: 'Date Created', key: 'receivedAt' },
     { header: 'Case Title', key: 'caseCaption' },
     { header: 'Case Status', key: 'status' },
     { header: 'Case Type', key: 'caseType' },
     { header: 'Judge', key: 'associatedJudge' },
     { header: 'Requested Place of Trial', key: 'preferredTrialCity' },
-    { header: 'Calendaring High Priority', key: 'calendaringHighPriority' },
   ];
 
   const updatedRecords = records.map(record => {

@@ -6,7 +6,9 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * updateQcCompleteForTrial
@@ -20,7 +22,7 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  */
 
 export const updateQcCompleteForTrial = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   {
     docketNumber,
     qcCompleteForTrial,
@@ -38,21 +40,18 @@ export const updateQcCompleteForTrial = async (
     throw new UnauthorizedError('Unauthorized for trial session QC complete');
   }
 
-  const oldCase = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({ applicationContext, docketNumber });
+  const oldCase = await getCaseByDocketNumber({
+    docketNumber,
+  });
 
   const newCase = new Case(oldCase, { authorizedUser });
 
   newCase.setQcCompleteForTrial({ qcCompleteForTrial, trialSessionId });
 
-  const updatedCase = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
-      authorizedUser,
-      caseToUpdate: newCase,
-    });
+  const updatedCase = await updateCaseAndAssociations({
+    authorizedUser,
+    caseToUpdate: newCase,
+  });
 
   return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };

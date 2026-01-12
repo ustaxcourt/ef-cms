@@ -11,7 +11,7 @@ describe('Logged In User Can See Un-Served Petition Document', () => {
     loginAsPetitioner();
     petitionerCreatesElectronicCaseForBusiness().as('DOCKET_NUMBER');
 
-    loginAsPetitioner('petitioner1');
+    loginAsPetitioner('petitioner1@example.com');
     cy.get<string>('@DOCKET_NUMBER').then(docketNumber => {
       externalUserSearchesDocketNumber(docketNumber);
     });
@@ -21,7 +21,7 @@ describe('Logged In User Can See Un-Served Petition Document', () => {
     cy.get('[data-testid="document-download-link-DISC"]').should('exist');
     cy.get('[data-testid="document-download-link-ATP"]').should('exist');
 
-    loginAsPetitioner('petitioner2');
+    loginAsPetitioner('petitioner2@example.com');
     cy.get<string>('@DOCKET_NUMBER').then(docketNumber => {
       externalUserSearchesDocketNumber(docketNumber);
     });
@@ -47,7 +47,7 @@ describe('Logged In User Can See Un-Served Petition Document', () => {
     loginAsPrivatePractitioner();
     petitionerCreatesElectronicCaseForBusiness().as('DOCKET_NUMBER');
 
-    loginAsPrivatePractitioner('privatePractitioner1');
+    loginAsPrivatePractitioner('privatePractitioner1@example.com');
     cy.get<string>('@DOCKET_NUMBER').then(docketNumber => {
       externalUserSearchesDocketNumber(docketNumber);
     });
@@ -57,7 +57,7 @@ describe('Logged In User Can See Un-Served Petition Document', () => {
     cy.get('[data-testid="document-download-link-DISC"]').should('exist');
     cy.get('[data-testid="document-download-link-ATP"]').should('exist');
 
-    loginAsPrivatePractitioner('privatePractitioner2');
+    loginAsPrivatePractitioner('privatePractitioner2@example.com');
     cy.get<string>('@DOCKET_NUMBER').then(docketNumber => {
       externalUserSearchesDocketNumber(docketNumber);
     });

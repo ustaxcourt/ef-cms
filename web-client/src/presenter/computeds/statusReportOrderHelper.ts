@@ -1,6 +1,8 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
+import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
+import { isLeadCase } from '@shared/business/entities/cases/Case';
 
 export const statusReportOrderHelper = (
   get: Get,
@@ -8,6 +10,7 @@ export const statusReportOrderHelper = (
 ): {
   dueDateErrorClass: string;
   dueDateErrorText: string;
+  isCalendared: boolean;
   isLeadCase: boolean;
   jurisdictionErrorClass: string;
   jurisdictionErrorText: string;
@@ -15,7 +18,7 @@ export const statusReportOrderHelper = (
 } => {
   const caseDetail = get(state.caseDetail);
 
-  const isLeadCase = caseDetail.leadDocketNumber === caseDetail.docketNumber;
+  const isLeadCaseResult = isLeadCase(caseDetail);
 
   const { DATE_FORMATS } = applicationContext.getConstants();
 
@@ -44,10 +47,13 @@ export const statusReportOrderHelper = (
     ? 'status-report-order-form-group'
     : 'status-report-order-form-group-error';
 
+  const isCalendared = caseDetail.status === CASE_STATUS_TYPES.calendared;
+
   return {
     dueDateErrorClass,
     dueDateErrorText,
-    isLeadCase,
+    isCalendared,
+    isLeadCase: isLeadCaseResult,
     jurisdictionErrorClass,
     jurisdictionErrorText,
     minDate,

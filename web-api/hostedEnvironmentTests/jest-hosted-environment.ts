@@ -1,6 +1,10 @@
 import { pathsToModuleNameMapper } from 'ts-jest';
-import tsconfig from '../../tsconfig.json';
 import type { Config } from 'jest';
+import fs from 'node:fs';
+import path from 'node:path';
+
+const tsconfigPath = path.resolve(process.cwd(), './tsconfig.json');
+const tsconfig = JSON.parse(fs.readFileSync(tsconfigPath, 'utf8'));
 
 const config: Config = {
   clearMocks: true,
@@ -19,5 +23,4 @@ const config: Config = {
   verbose: false,
 };
 
-// eslint-disable-next-line import/no-default-export
 export default config;

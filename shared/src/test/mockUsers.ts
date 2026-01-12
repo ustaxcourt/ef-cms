@@ -1,4 +1,5 @@
 import {
+  ACCOUNT_STATUS,
   ADC_SECTION,
   ADMISSIONS_SECTION,
   CASE_SERVICES_SUPERVISOR_SECTION,
@@ -32,6 +33,7 @@ export const adminUser: RawUser = {
   name: 'Test admin',
   role: ROLES.admin,
   userId: 'ad5b7d39-8fae-4c2f-893c-3c829598bc71',
+  accountStatus: ACCOUNT_STATUS.active,
 };
 
 export const adcUser = {
@@ -40,6 +42,7 @@ export const adcUser = {
   role: ROLES.adc,
   section: ADC_SECTION,
   userId: '9f357f78-a8fa-40bf-83db-8144ddf14047',
+  accountStatus: ACCOUNT_STATUS.active,
 };
 
 export const colvinsChambersUser = {
@@ -48,6 +51,7 @@ export const colvinsChambersUser = {
   role: ROLES.chambers,
   section: COLVINS_CHAMBERS_SECTION,
   userId: '3d9fa032-ad00-475a-9183-8aa0229a31eb',
+  accountStatus: ACCOUNT_STATUS.active,
 };
 
 export const clerkOfCourtUser = {
@@ -55,11 +59,13 @@ export const clerkOfCourtUser = {
   name: 'Caster Clerk',
   role: ROLES.clerkOfCourt,
   userId: 'b6e4a5ac-c006-4b47-a5f0-67028372cd63',
+  accountStatus: ACCOUNT_STATUS.active,
 };
 
 export const generalUser = {
   role: ROLES.general,
   userId: '2806fccc-1432-4fcc-8a8d-5943edf07284',
+  accountStatus: ACCOUNT_STATUS.active,
 };
 
 export const irsPractitionerUser: RawIrsPractitioner = {
@@ -82,13 +88,14 @@ export const irsPractitionerUser: RawIrsPractitioner = {
   section: 'irsPractitioner',
   serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
   userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
+  accountStatus: ACCOUNT_STATUS.active,
 };
 
 export const dojPractitionerUser: RawPractitioner = {
   admissionsDate: '',
   admissionsStatus: '',
   barNumber: 'BN2345',
-  birthYear: '',
+  birthYear: 1970,
   contact: {
     address1: '234 Main St',
     address2: 'Apartment 4',
@@ -112,6 +119,7 @@ export const dojPractitionerUser: RawPractitioner = {
   section: ROLES.irsPractitioner,
   serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
   userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
+  accountStatus: ACCOUNT_STATUS.active,
 };
 
 export const irsSuperuserUser = {
@@ -119,6 +127,7 @@ export const irsSuperuserUser = {
   role: ROLES.irsSuperuser,
   section: 'irsSuperuser',
   userId: '2eee98ac-613f-46bc-afd5-2574d1b15664',
+  accountStatus: ACCOUNT_STATUS.active,
 };
 
 export const judgeUser: RawUser = {
@@ -130,6 +139,7 @@ export const judgeUser: RawUser = {
   name: 'Sotomayor',
   role: ROLES.judge,
   userId: '43b00e5f-b78c-476c-820e-5d6ed1d58828',
+  accountStatus: ACCOUNT_STATUS.active,
 };
 
 export const legacyJudgeUser: RawUser = {
@@ -138,6 +148,7 @@ export const legacyJudgeUser: RawUser = {
   role: ROLES.legacyJudge,
   section: LEGACY_CHAMBERS_SECTION,
   userId: 'dc67e189-cf3e-4ca3-a33f-91db111ec270',
+  accountStatus: ACCOUNT_STATUS.active,
 };
 
 export const judgeColvin: RawUser = {
@@ -148,7 +159,8 @@ export const judgeColvin: RawUser = {
   name: 'Colvin',
   role: ROLES.judge,
   section: COLVINS_CHAMBERS_SECTION,
-  userId: 'd17b07dc-6455-447e-bea3-f91d12ac5a6a',
+  userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
+  accountStatus: ACCOUNT_STATUS.active,
 };
 
 export const petitionerUser: RawUser = {
@@ -158,6 +170,7 @@ export const petitionerUser: RawUser = {
   role: ROLES.petitioner,
   section: 'petitioner',
   userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
+  accountStatus: ACCOUNT_STATUS.active,
 };
 
 export const privatePractitionerUser: RawPrivatePractitioner = {
@@ -170,6 +183,7 @@ export const privatePractitionerUser: RawPrivatePractitioner = {
   role: ROLES.privatePractitioner,
   serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
   userId: '330d4b65-620a-489d-8414-6623653ebc4f',
+  accountStatus: ACCOUNT_STATUS.active,
 };
 
 export const trialClerkUser: RawUser = {
@@ -179,6 +193,7 @@ export const trialClerkUser: RawUser = {
   role: ROLES.trialClerk,
   section: TRIAL_CLERKS_SECTION,
   userId: '4b1bb9ca-c997-4356-9682-2bca88fb048d',
+  accountStatus: ACCOUNT_STATUS.active,
 };
 
 export const caseServicesSupervisorUser = {
@@ -187,6 +202,7 @@ export const caseServicesSupervisorUser = {
   role: ROLES.caseServicesSupervisor,
   section: CASE_SERVICES_SUPERVISOR_SECTION,
   userId: '4562df8a-5c98-49a0-9c53-d8e4ff3b76bb',
+  accountStatus: ACCOUNT_STATUS.active,
 };
 
 export const docketClerkUser = {
@@ -195,6 +211,7 @@ export const docketClerkUser = {
   role: ROLES.docketClerk,
   section: DOCKET_SECTION,
   userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
+  accountStatus: ACCOUNT_STATUS.active,
 };
 
 export const docketClerk1User: RawUser = {
@@ -204,6 +221,7 @@ export const docketClerk1User: RawUser = {
   role: ROLES.docketClerk,
   section: DOCKET_SECTION,
   userId: 'b7d90c05-f6cd-442c-a168-202db587f16f',
+  accountStatus: ACCOUNT_STATUS.active,
 };
 
 export const petitionsClerkUser: RawUser = {
@@ -213,6 +231,7 @@ export const petitionsClerkUser: RawUser = {
   role: ROLES.petitionsClerk,
   section: PETITIONS_SECTION,
   userId: 'e7d90c05-f6cd-442c-a168-202db587f16f',
+  accountStatus: ACCOUNT_STATUS.active,
 };
 
 export const admissionsClerkUser = {
@@ -221,6 +240,7 @@ export const admissionsClerkUser = {
   role: ROLES.admissionsClerk,
   section: ADMISSIONS_SECTION,
   userId: '07d90c05-f6cd-442c-a168-202db587f16f',
+  accountStatus: ACCOUNT_STATUS.active,
 };
 
 export const MOCK_USERS = {
@@ -251,7 +271,7 @@ export const MOCK_PRACTITIONER: RawPractitioner = {
   admissionsDate: '2019-03-01',
   admissionsStatus: 'Active',
   barNumber: 'AB1111',
-  birthYear: '2019',
+  birthYear: 2019,
   contact: {
     address1: '234 Main St',
     address2: 'Apartment 4',
@@ -276,6 +296,7 @@ export const MOCK_PRACTITIONER: RawPractitioner = {
   section: 'privatePractitioner',
   serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
   userId: 'df56e4f8-b302-46ec-b9b3-a6a5e2142092',
+  accountStatus: ACCOUNT_STATUS.active,
 };
 
 export const validUser: RawUser = {
@@ -295,6 +316,7 @@ export const validUser: RawUser = {
   name: 'Saul Goodman',
   role: ROLES.petitioner,
   userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
+  accountStatus: ACCOUNT_STATUS.active,
 };
 
 export const casePetitioner: TPetitioner = {

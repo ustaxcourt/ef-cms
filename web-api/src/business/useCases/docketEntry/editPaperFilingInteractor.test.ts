@@ -1,22 +1,58 @@
+import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
+);
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import {
   DOCKET_SECTION,
   DOCUMENT_SERVED_MESSAGES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
+} from '@shared/business/entities/EntityConstants';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { docketClerkUser } from '@shared/test/mockUsers';
 import { editPaperFilingInteractor } from './editPaperFilingInteractor';
-import { getContactPrimary } from '../../../../../shared/src/business/entities/cases/Case';
+import { getContactPrimary } from '@shared/business/entities/cases/Case';
 import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
+import { updateDocketEntryPendingServiceStatus as updateDocketEntryPendingServiceStatusMock } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus';
+import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
+import { getWorkItemByDocketNumberAndDocketEntryId as getWorkItemByDocketNumberAndDocketEntryIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
+import { WorkItem } from '@shared/business/entities/WorkItem';
 
 describe('editPaperFilingInteractor', () => {
   let caseRecord;
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const updateDocketEntryPendingServiceStatus = jest.mocked(
+    updateDocketEntryPendingServiceStatusMock,
+  );
+  const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
+  const updateCaseAndAssociations = jest
+    .mocked(updateCaseAndAssociationsMock)
+    .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
+  const getWorkItemByDocketNumberAndDocketEntryId = jest.mocked(
+    getWorkItemByDocketNumberAndDocketEntryIdMock,
+  );
+  const fileAndServeDocumentOnOneCase = jest.mocked(
+    fileAndServeDocumentOnOneCaseMock,
+  );
+  const getUserById = jest.mocked(getUserByIdMock);
 
   const mockDocketEntryId = '50107716-6d08-4693-bfd5-a07a4e6eadce';
   const mockServedDocketEntryId = '08ecbf7e-b316-46bb-9a66-b7474823d202';
@@ -26,12 +62,7 @@ describe('editPaperFilingInteractor', () => {
   const mockPrimaryId = getContactPrimary(MOCK_CASE).contactId;
 
   const workItem = {
-    docketEntry: {
-      docketEntryId: mockDocketEntryId,
-      documentType: 'Answer',
-      eventCode: 'A',
-      userId: mockDocketEntryId,
-    } as any,
+    docketEntryId: mockDocketEntryId,
     docketNumber: '45678-18',
     section: DOCKET_SECTION,
     sentBy: mockDocketEntryId,
@@ -52,7 +83,6 @@ describe('editPaperFilingInteractor', () => {
           filedBy: 'Test Petitioner',
           filedByRole: ROLES.petitioner,
           userId: mockDocketEntryId,
-          workItem,
         },
         {
           docketEntryId: mockServedDocketEntryId,
@@ -70,18 +100,18 @@ describe('editPaperFilingInteractor', () => {
             },
           ],
           userId: mockDocketEntryId,
-          workItem,
         },
       ],
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(docketClerkUser);
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(caseRecord);
+    getUserById.mockResolvedValue(docketClerkUser as DbUser);
+    getWorkItemByDocketNumberAndDocketEntryId.mockResolvedValue(
+      new WorkItem(workItem),
+    );
+    getCaseByDocketNumber.mockResolvedValue(caseRecord);
+    fileAndServeDocumentOnOneCase.mockImplementation(
+      ({ caseEntity }) => caseEntity,
+    );
   });
 
   describe('Save For Later or Serve Agnostic', () => {
@@ -122,9 +152,7 @@ describe('editPaperFilingInteractor', () => {
             },
             mockDocketClerkUser,
           ),
-        ).rejects.toThrow(
-          `Docket entry ${notFoundDocketEntryId} was not found.`,
-        );
+        ).rejects.toThrow();
       });
 
       it('should throw an error when the docket entry has already been served', async () => {
@@ -195,17 +223,12 @@ describe('editPaperFilingInteractor', () => {
           mockDocketClerkUser,
         );
 
-        const updatedDocketEntry = applicationContext
-          .getUseCaseHelpers()
-          .updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
+        const updatedDocketEntry =
+          updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
             doc => doc.docketEntryId === mockDocketEntryId,
           );
-        expect(
-          applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-        ).toHaveBeenCalled();
-        expect(
-          applicationContext.getPersistenceGateway().saveWorkItem,
-        ).toHaveBeenCalled();
+        expect(getCaseByDocketNumber).toHaveBeenCalled();
+        expect(upsertWorkItems).toHaveBeenCalled();
         expect(updatedDocketEntry.numberOfPages).toEqual(2);
       });
 
@@ -228,15 +251,9 @@ describe('editPaperFilingInteractor', () => {
           mockDocketClerkUser,
         );
 
-        expect(
-          applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-        ).toHaveBeenCalled();
-        expect(
-          applicationContext.getPersistenceGateway().saveWorkItem,
-        ).toHaveBeenCalled();
-        expect(
-          applicationContext.getPersistenceGateway().updateCase,
-        ).toHaveBeenCalled();
+        expect(getCaseByDocketNumber).toHaveBeenCalled();
+        expect(upsertWorkItems).toHaveBeenCalled();
+        expect(updateCaseAndAssociations).toHaveBeenCalled();
         expect(
           applicationContext.getUseCaseHelpers().countPagesInDocument,
         ).not.toHaveBeenCalled();
@@ -254,10 +271,7 @@ describe('editPaperFilingInteractor', () => {
           mockDocketClerkUser,
         );
 
-        expect(
-          applicationContext.getPersistenceGateway()
-            .updateDocketEntryPendingServiceStatus,
-        ).not.toHaveBeenCalled();
+        expect(updateDocketEntryPendingServiceStatus).not.toHaveBeenCalled();
       });
 
       it('should not generate a paper service url', async () => {
@@ -338,11 +352,8 @@ describe('editPaperFilingInteractor', () => {
             mockDocketClerkUser,
           );
 
-          const updatedDocketEntry = applicationContext
-            .getPersistenceGateway()
-            .updateCase.mock.calls[0][0].caseToUpdate.docketEntries.find(
-              d => d.docketEntryId === mockDocketEntryId,
-            );
+          const updatedDocketEntry =
+            fileAndServeDocumentOnOneCase.mock.calls[0][0].docketEntryEntity;
 
           expect(updatedDocketEntry).toMatchObject({
             docketEntryId: mockDocketEntryId,
@@ -367,11 +378,9 @@ describe('editPaperFilingInteractor', () => {
           );
 
           const firstStatusCall =
-            applicationContext.getPersistenceGateway()
-              .updateDocketEntryPendingServiceStatus.mock.calls[0][0].status;
+            updateDocketEntryPendingServiceStatus.mock.calls[0][0].status;
           const secondStatusCall =
-            applicationContext.getPersistenceGateway()
-              .updateDocketEntryPendingServiceStatus.mock.calls[1][0].status;
+            updateDocketEntryPendingServiceStatus.mock.calls[1][0].status;
           expect(firstStatusCall).toEqual(true);
           expect(secondStatusCall).toEqual(false);
         });
@@ -444,11 +453,9 @@ describe('editPaperFilingInteractor', () => {
           ).rejects.toThrow('whoops, that is an error!');
 
           const firstStatusCall =
-            applicationContext.getPersistenceGateway()
-              .updateDocketEntryPendingServiceStatus.mock.calls[0][0];
+            updateDocketEntryPendingServiceStatus.mock.calls[0][0];
           const secondStatusCall =
-            applicationContext.getPersistenceGateway()
-              .updateDocketEntryPendingServiceStatus.mock.calls[1][0];
+            updateDocketEntryPendingServiceStatus.mock.calls[1][0];
           expect(firstStatusCall).toMatchObject({
             docketEntryId: mockDocketEntryId,
             docketNumber: caseRecord.docketNumber,
@@ -466,13 +473,23 @@ describe('editPaperFilingInteractor', () => {
     describe('Multi Docketing', () => {
       describe('Happy Path', () => {
         it('should file and serve the docket entry on all provided docket numbers', async () => {
-          applicationContext
-            .getPersistenceGateway()
-            .getCaseByDocketNumber.mockResolvedValue({
-              ...caseRecord,
-              leadDocketNumber: caseRecord.docketNumber,
-            });
+          getCaseByDocketNumber.mockResolvedValue({
+            ...caseRecord,
+            leadDocketNumber: caseRecord.docketNumber,
+          });
           const mockConsolidatedGroupDocketNumbers = ['101-23', '101-24'];
+          getCasesByDocketNumbers.mockResolvedValue([
+            {
+              ...caseRecord,
+              docketNumber: '101-23',
+              leadDocketNumber: caseRecord.docketNumber,
+            },
+            {
+              ...caseRecord,
+              docketNumber: '101-24',
+              leadDocketNumber: caseRecord.docketNumber,
+            },
+          ]);
 
           await editPaperFilingInteractor(
             applicationContext,
@@ -496,29 +513,38 @@ describe('editPaperFilingInteractor', () => {
             caseRecord.docketNumber,
             ...mockConsolidatedGroupDocketNumbers,
           ].length;
-          expect(
-            applicationContext.getUseCaseHelpers()
-              .fileAndServeDocumentOnOneCase,
-          ).toHaveBeenCalledTimes(expectedCount);
+          expect(fileAndServeDocumentOnOneCase).toHaveBeenCalledTimes(
+            expectedCount,
+          );
         });
 
         it('should send a message to the user with a paper service pdf url when at least one party in the consolidated group has paper service', async () => {
           const mockedPaperServicePdfUrl = 'www.example.com';
-          applicationContext
-            .getPersistenceGateway()
-            .getCaseByDocketNumber.mockImplementation(({ docketNumber }) =>
-              Promise.resolve({
-                ...caseRecord,
-                docketNumber,
-                leadDocketNumber: caseRecord.docketNumber,
-                petitioners: [
-                  {
-                    ...caseRecord.petitioners[0],
-                    serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-                  },
-                ],
-              }),
-            );
+          getCaseByDocketNumber.mockImplementation(({ docketNumber }) =>
+            Promise.resolve({
+              ...caseRecord,
+              docketNumber,
+              leadDocketNumber: caseRecord.docketNumber,
+              petitioners: [
+                {
+                  ...caseRecord.petitioners[0],
+                  serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+                },
+              ],
+            }),
+          );
+          getCasesByDocketNumbers.mockResolvedValue([
+            {
+              ...caseRecord,
+              docketNumber: '101-23',
+              leadDocketNumber: caseRecord.docketNumber,
+            },
+            {
+              ...caseRecord,
+              docketNumber: '101-24',
+              leadDocketNumber: caseRecord.docketNumber,
+            },
+          ]);
           applicationContext
             .getUseCaseHelpers()
             .fileAndServeDocumentOnOneCase.mockImplementation(
@@ -576,21 +602,19 @@ describe('editPaperFilingInteractor', () => {
         });
 
         it('should send a message to the user without a paper service pdf url when no party in the consolidated group has paper service', async () => {
-          applicationContext
-            .getPersistenceGateway()
-            .getCaseByDocketNumber.mockImplementation(({ docketNumber }) =>
-              Promise.resolve({
-                ...caseRecord,
-                docketNumber,
-                leadDocketNumber: caseRecord.docketNumber,
-                petitioners: [
-                  {
-                    ...caseRecord.petitioners[0],
-                    serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-                  },
-                ],
-              }),
-            );
+          getCaseByDocketNumber.mockImplementation(({ docketNumber }) =>
+            Promise.resolve({
+              ...caseRecord,
+              docketNumber,
+              leadDocketNumber: caseRecord.docketNumber,
+              petitioners: [
+                {
+                  ...caseRecord.petitioners[0],
+                  serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+                },
+              ],
+            }),
+          );
           applicationContext
             .getUseCaseHelpers()
             .fileAndServeDocumentOnOneCase.mockImplementation(
@@ -641,18 +665,16 @@ describe('editPaperFilingInteractor', () => {
       describe('Sad Path', () => {
         it('should throw an error when a docket number included in the request is NOT a member of the consolidated group', async () => {
           const nonConsolidatedDocketNumber = '101-19';
-          applicationContext
-            .getPersistenceGateway()
-            .getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
-              if (docketNumber === caseRecord.docketNumber) {
-                return {
-                  ...caseRecord,
-                  leadDocketNumber: caseRecord.docketNumber,
-                };
-              } else if (docketNumber === nonConsolidatedDocketNumber) {
-                return { leadDocketNumber: undefined };
-              }
-            });
+          getCaseByDocketNumber.mockResolvedValue({
+            ...caseRecord,
+            leadDocketNumber: caseRecord.docketNumber,
+          });
+          getCasesByDocketNumbers.mockResolvedValue([
+            {
+              ...caseRecord,
+              leadDocketNumber: undefined,
+            },
+          ]);
 
           await expect(
             editPaperFilingInteractor(
@@ -672,12 +694,16 @@ describe('editPaperFilingInteractor', () => {
         });
 
         it('should throw an error when the requested subject case is NOT consolidated', async () => {
-          applicationContext
-            .getPersistenceGateway()
-            .getCaseByDocketNumber.mockResolvedValue({
+          getCaseByDocketNumber.mockResolvedValue({
+            ...caseRecord,
+            leadDocketNumber: undefined,
+          });
+          getCasesByDocketNumbers.mockResolvedValue([
+            {
               ...caseRecord,
               leadDocketNumber: undefined,
-            });
+            },
+          ]);
 
           await expect(
             editPaperFilingInteractor(

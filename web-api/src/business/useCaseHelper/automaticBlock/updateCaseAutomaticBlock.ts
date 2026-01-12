@@ -1,43 +1,33 @@
-/**
- * updateCaseAutomaticBlock
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {object} providers.caseEntity the case entity to update
- * @returns {object} the updated case entity
- */
+import { Case } from '@shared/business/entities/cases/Case';
+import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
+import { isEmpty } from 'lodash';
+import { SIGNED_DOCUMENT_TYPES } from '@shared/business/entities/EntityConstants';
+
 export const updateCaseAutomaticBlock = async ({
-  applicationContext,
   caseEntity,
+  hasCaseDeadline,
+}: {
+  caseEntity: Case;
+  hasCaseDeadline?: boolean;
 }) => {
-  if (caseEntity.trialDate || caseEntity.highPriority) {
-    return caseEntity;
-  }
-  const caseDeadlines = await applicationContext
-    .getPersistenceGateway()
-    .getCaseDeadlinesByDocketNumber({
-      applicationContext,
-      docketNumber: caseEntity.docketNumber,
-    });
+  const docketedStipulatedDecision = caseEntity.docketEntries.find(
+    de =>
+      de.eventCode ===
+        SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.eventCode &&
+      de.isOnDocketRecord,
+  );
 
-  caseEntity.updateAutomaticBlocked({ caseDeadlines });
+  if (caseEntity.trialDate && !docketedStipulatedDecision) return caseEntity;
 
-  if (caseEntity.automaticBlocked) {
-    await applicationContext
-      .getPersistenceGateway()
-      .deleteCaseTrialSortMappingRecords({
-        applicationContext,
+  if (hasCaseDeadline === undefined) {
+    hasCaseDeadline = !isEmpty(
+      await getCaseDeadlinesByDocketNumber({
         docketNumber: caseEntity.docketNumber,
-      });
-  } else if (caseEntity.isReadyForTrial()) {
-    await applicationContext
-      .getPersistenceGateway()
-      .createCaseTrialSortMappingRecords({
-        applicationContext,
-        caseSortTags: caseEntity.generateTrialSortTags(),
-        docketNumber: caseEntity.docketNumber,
-      });
+      }),
+    );
   }
+
+  caseEntity.updateAutomaticBlocked({ hasCaseDeadline });
 
   return caseEntity;
 };

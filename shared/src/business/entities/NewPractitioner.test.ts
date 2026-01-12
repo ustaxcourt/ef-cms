@@ -1,4 +1,5 @@
 import {
+  ACCOUNT_STATUS,
   COUNTRY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
@@ -9,7 +10,7 @@ describe('NewPractitioner', () => {
   const mockPractitioner: RawNewPractitioner = {
     admissionsDate: '2019-03-01',
     admissionsStatus: 'Active',
-    birthYear: '2019',
+    birthYear: 2019,
     confirmEmail: 'test@example.com',
     contact: {
       address1: '234 Main St',
@@ -31,6 +32,10 @@ describe('NewPractitioner', () => {
     practiceType: 'Private',
     practitionerType: 'Attorney',
     role: ROLES.privatePractitioner,
+    accountStatus: ACCOUNT_STATUS.active,
+    barNumber: 'BT4392',
+    name: 'Bob',
+    userId: '5ed76c7b-eac4-4da6-a860-c3b334fba175',
     serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
   };
 
@@ -48,7 +53,7 @@ describe('NewPractitioner', () => {
 
     expect(user.isValid()).toBeFalsy();
     expect(user.getFormattedValidationErrors()).toMatchObject({
-      email: 'Enter email address',
+      email: 'Enter a valid email address',
     });
   });
 
@@ -92,7 +97,7 @@ describe('NewPractitioner', () => {
       expect(validNewPractitioner.isValid()).toBeFalsy();
       expect(validNewPractitioner.getFormattedValidationErrors()).toEqual({
         confirmEmail: 'Enter a valid email address',
-        email: 'Enter email address',
+        email: 'Enter email address in format: yourname@example.com',
       });
     });
 
@@ -112,7 +117,7 @@ describe('NewPractitioner', () => {
 
       expect(validNewPractitioner.isValid()).toBeFalsy();
       expect(validNewPractitioner.getFormattedValidationErrors()).toEqual({
-        confirmEmail: 'Enter a valid email address',
+        confirmEmail: 'Enter email address in format: yourname@example.com',
       });
     });
 

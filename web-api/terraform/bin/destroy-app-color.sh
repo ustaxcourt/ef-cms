@@ -1,0 +1,135 @@
+#!/bin/bash -e
+
+ENV=$1
+
+DEPLOYING_COLOR=$(../../../../scripts/dynamo/get-deploying-color.sh "${ENV}")
+MIGRATE_FLAG=$(../../../../scripts/migration/get-migrate-flag.sh "${ENV}")
+
+export DEPLOYING_COLOR
+export MIGRATE_FLAG
+
+# Getting the environment-specific deployment settings and injecting them into the shell environment
+if [ -z "${SECRETS_LOADED}" ]; then
+  pushd ../../../../
+  # shellcheck disable=SC1091
+  . ./scripts/load-environment-from-secrets.sh
+  popd
+fi
+
+[ -z "${COGNITO_SUFFIX}" ] && echo "You must have COGNITO_SUFFIX set in your environment" && exit 1
+[ -z "${COLOR}" ] && echo "You must have COLOR set in your environment" && exit 1
+[ -z "${DEFAULT_ACCOUNT_PASS}" ] && echo "You must have DEFAULT_ACCOUNT_PASS set in your environment" && exit 1
+[ -z "${DEPLOYING_COLOR}" ] && echo "You must have DEPLOYING_COLOR set in your environment" && exit 1
+[ -z "${DISABLE_EMAILS}" ] && echo "You must have DISABLE_EMAILS set in your environment" && exit 1
+[ -z "${EFCMS_DOMAIN}" ] && echo "You must have EFCMS_DOMAIN set in your environment" && exit 1
+[ -z "${ENABLE_HEALTH_CHECKS}" ] && echo "You must have ENABLE_HEALTH_CHECKS set in your environment" && exit 1
+[ -z "${ENV}" ] && echo "You must pass in ENVIRONMENT as command line argument 1" && exit 1
+[ -z "${IRS_SUPERUSER_EMAIL}" ] && echo "You must have IRS_SUPERUSER_EMAIL set in your environment" && exit 1
+[ -z "${MIGRATE_FLAG}" ] && echo "You must have MIGRATE_FLAG set in your environment" && exit 1
+[ -z "$PROD_ENV_ACCOUNT_ID" ] && echo "You must have PROD_ENV_ACCOUNT_ID set in your environment" && exit 1
+
+echo "Running terraform with the following environment configs:"
+echo "  - BOUNCE_ALERT_RECIPIENTS=${BOUNCE_ALERT_RECIPIENTS}"
+echo "  - BOUNCED_EMAIL_RECIPIENT=${BOUNCED_EMAIL_RECIPIENT}"
+echo "  - CIRCLE_BRANCH=${CIRCLE_BRANCH}"
+echo "  - COGNITO_SUFFIX=${COGNITO_SUFFIX}"
+echo "  - COLOR=${COLOR}"
+echo "  - DEFAULT_ACCOUNT_PASS=${DEFAULT_ACCOUNT_PASS}"
+echo "  - DEPLOYING_COLOR=${DEPLOYING_COLOR}"
+echo "  - DISABLE_EMAILS=${DISABLE_EMAILS}"
+echo "  - EFCMS_DOMAIN=${EFCMS_DOMAIN}"
+echo "  - ENABLE_HEALTH_CHECKS=${ENABLE_HEALTH_CHECKS}"
+echo "  - ENV=${ENV}"
+echo "  - IRS_SUPERUSER_EMAIL=${IRS_SUPERUSER_EMAIL}"
+echo "  - MIGRATE_FLAG=${MIGRATE_FLAG}"
+echo "  - PROD_ENV_ACCOUNT_ID=${PROD_ENV_ACCOUNT_ID}"
+echo "  - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL}"
+
+../../../../scripts/verify-terraform-version.sh
+
+BUCKET="${EFCMS_DOMAIN}.terraform.deploys"
+ALL_COLORS_KEY="documents-${ENV}.tfstate"
+KEY="documents-${ENV}-${COLOR}.tfstate"
+LOCK_TABLE=efcms-terraform-lock
+REGION=us-east-1
+
+# ZONE_NAME is deprecated and will only be set in legacy accounts
+DNS_DOMAIN="$EFCMS_DOMAIN"
+if [[ -n "$ZONE_NAME" ]]; then
+  BUCKET="${ZONE_NAME}.terraform.deploys"
+  DNS_DOMAIN="$ZONE_NAME"
+fi
+
+rm -rf .terraform
+rm -f .terraform.lock.hcl
+
+echo "Initiating provisioning for environment [${ENV}] in AWS region [${REGION}]"
+sh ../../bin/create-bucket.sh "${BUCKET}" "${KEY}" "${REGION}"
+
+echo "checking for the dynamodb lock table..."
+aws dynamodb list-tables --output json --region "${REGION}" --query "contains(TableNames, '${LOCK_TABLE}')" | grep 'true'
+result=$?
+if [ ${result} -ne 0 ]; then
+  echo "dynamodb lock does not exist, creating"
+  sh ../../bin/create-dynamodb.sh "${LOCK_TABLE}" "${REGION}"
+else
+  echo "dynamodb lock table already exists"
+fi
+
+npm run build:assets
+
+# exit on any failure
+set -eo pipefail
+
+if [ -z "${CIRCLE_BRANCH}" ]; then # Build lambda layer for generating pdfs.
+  pushd ../../../runtimes/puppeteer/
+  sh build-local.sh
+  popd
+fi
+
+if [ "${MIGRATE_FLAG}" == 'false' ]; then
+  DESTINATION_DOMAIN=$(../../../../scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
+  BLUE_ELASTICSEARCH_DOMAIN="${DESTINATION_DOMAIN}"
+  GREEN_ELASTICSEARCH_DOMAIN="${DESTINATION_DOMAIN}"
+else
+  if [ "${DEPLOYING_COLOR}" == 'blue' ]; then
+    BLUE_ELASTICSEARCH_DOMAIN=$(../../../../scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
+    GREEN_ELASTICSEARCH_DOMAIN=$(../../../../scripts/elasticsearch/get-source-elasticsearch.sh "${ENV}")
+  else
+    GREEN_ELASTICSEARCH_DOMAIN=$(../../../../scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
+    BLUE_ELASTICSEARCH_DOMAIN=$(../../../../scripts/elasticsearch/get-source-elasticsearch.sh "${ENV}")
+  fi
+fi
+
+DEPLOYMENT_TIMESTAMP=$(date "+%s")
+
+export TF_VAR_all_colors_tfstate_bucket=$BUCKET
+export TF_VAR_all_colors_tfstate_key=$ALL_COLORS_KEY
+export TF_VAR_environment=$ENV
+export TF_VAR_zone_name=$DNS_DOMAIN
+export TF_VAR_dns_domain=$EFCMS_DOMAIN
+export TF_VAR_blue_elasticsearch_domain=$BLUE_ELASTICSEARCH_DOMAIN
+export TF_VAR_enable_health_checks=$ENABLE_HEALTH_CHECKS
+export TF_VAR_prod_env_account_id=$PROD_ENV_ACCOUNT_ID
+export TF_VAR_deployment_timestamp=$DEPLOYMENT_TIMESTAMP
+export TF_VAR_bounce_alert_recipients=$BOUNCE_ALERT_RECIPIENTS
+export TF_VAR_bounced_email_recipient=$BOUNCED_EMAIL_RECIPIENT
+export TF_VAR_cognito_suffix=$COGNITO_SUFFIX
+export TF_VAR_default_account_pass=$DEFAULT_ACCOUNT_PASS
+export TF_VAR_disable_emails=$DISABLE_EMAILS
+export TF_VAR_irs_superuser_email=$IRS_SUPERUSER_EMAIL
+export TF_VAR_slack_webhook_url=$SLACK_WEBHOOK_URL
+export TF_VAR_green_elasticsearch_domain=$GREEN_ELASTICSEARCH_DOMAIN
+
+if [[ -n "${CW_VIEWER_PROTOCOL_POLICY}" ]]
+then
+  export TF_VAR_viewer_protocol_policy=$CW_VIEWER_PROTOCOL_POLICY
+fi
+
+terraform init -upgrade -backend=true \
+ -backend-config=bucket="$BUCKET" \
+ -backend-config=key="$KEY" \
+ -backend-config=dynamodb_table="$LOCK_TABLE" \
+ -backend-config=region="$REGION"
+terraform plan -destroy -out execution-plan
+terraform destroy -auto-approve

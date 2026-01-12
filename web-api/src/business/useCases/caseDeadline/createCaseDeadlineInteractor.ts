@@ -1,66 +1,113 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { CaseDeadline } from '../../../../../shared/src/business/entities/CaseDeadline';
+import { Case, isLeadCase } from '@shared/business/entities/cases/Case';
+import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 export const createCaseDeadline = async (
   applicationContext: ServerApplicationContext,
-  { caseDeadline }: { caseDeadline: CaseDeadline },
+  {
+    caseDeadline,
+    handlingConsolidatedCases = false,
+  }: {
+    caseDeadline: CaseDeadline;
+    handlingConsolidatedCases?: boolean;
+  },
   authorizedUser: UnknownAuthUser,
 ) => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_DEADLINE)) {
     throw new UnauthorizedError('Unauthorized for create case deadline');
   }
 
-  const caseDetail = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber: caseDeadline.docketNumber,
-    });
-  let caseEntity = new Case(caseDetail, { authorizedUser });
-
-  const newCaseDeadline = new CaseDeadline(
-    {
-      ...caseDeadline,
-      associatedJudge: caseEntity.associatedJudge,
-      associatedJudgeId: caseEntity.associatedJudgeId,
-    },
-    {
-      applicationContext,
-    },
-  );
-
-  await applicationContext.getPersistenceGateway().createCaseDeadline({
-    applicationContext,
-    caseDeadline: newCaseDeadline.validate().toRawObject(),
+  const caseDetail = await getCaseByDocketNumber({
+    docketNumber: caseDeadline.docketNumber,
   });
 
-  caseEntity = await applicationContext
+  const currentCaseEntity = new Case(caseDetail, { authorizedUser });
+  const newCaseDeadline = new CaseDeadline({
+    ...caseDeadline,
+    associatedJudge: currentCaseEntity.associatedJudge,
+    associatedJudgeId: currentCaseEntity.associatedJudgeId,
+  });
+
+  await upsertCaseDeadlines([newCaseDeadline.validate().toRawObject()]);
+
+  const updatedCaseEntity = await applicationContext
     .getUseCaseHelpers()
     .updateCaseAutomaticBlock({
-      applicationContext,
-      caseEntity,
+      caseEntity: currentCaseEntity,
+      hasCaseDeadline: true,
     });
 
-  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-    applicationContext,
+  const result = await updateCaseAndAssociations({
     authorizedUser,
-    caseToUpdate: caseEntity,
+    caseToUpdate: updatedCaseEntity,
   });
 
-  return newCaseDeadline;
+  const { docketNumber, leadDocketNumber, consolidatedCases } = caseDetail;
+  if (!handlingConsolidatedCases && isLeadCase({ docketNumber, leadDocketNumber })) {
+    const ADD_DEADLINE_TO_CONSOLIDATED_CASES = consolidatedCases
+      .filter(
+        ({ docketNumber: ccDocketNumber }) => ccDocketNumber !== docketNumber,
+      )
+      .map(({ docketNumber: ccDocketNumber }) => {
+        return createCaseDeadline(
+          applicationContext,
+          {
+            caseDeadline: {
+              ...caseDeadline,
+              docketNumber: ccDocketNumber,
+              consolidatedCaseDeadlineId: newCaseDeadline.caseDeadlineId,
+            } as CaseDeadline,
+            handlingConsolidatedCases: true,
+          },
+          authorizedUser,
+        );
+      });
+
+    await Promise.all(ADD_DEADLINE_TO_CONSOLIDATED_CASES);
+  }
+
+  return new Case(result, { authorizedUser }).validate().toRawObject();
 };
+
+export async function getcreateCaseDeadlineLockInfo(
+  _applicationContext: ServerApplicationContext,
+  { caseDeadline }: { caseDeadline: CaseDeadline },
+): Promise<{
+  identifiers: string[];
+  ttl?: number;
+}> {
+  const { docketNumber, leadDocketNumber, consolidatedCases } =
+    await getCaseByDocketNumber({
+      docketNumber: caseDeadline.docketNumber,
+    });
+
+  const IDENTIFIERS = [`case|${caseDeadline.docketNumber}`];
+  if (!isLeadCase({ docketNumber, leadDocketNumber })) {
+    return {
+      identifiers: IDENTIFIERS,
+    };
+  }
+
+  consolidatedCases.forEach(({ docketNumber }) => {
+    IDENTIFIERS.push(`case|${docketNumber}`);
+  });
+
+  return {
+    identifiers: [...new Set(IDENTIFIERS)],
+  };
+}
 
 export const createCaseDeadlineInteractor = withLocking(
   createCaseDeadline,
-  (_applicationContext, { caseDeadline }) => ({
-    identifiers: [`case|${caseDeadline.docketNumber}`],
-  }),
+  getcreateCaseDeadlineLockInfo,
 );

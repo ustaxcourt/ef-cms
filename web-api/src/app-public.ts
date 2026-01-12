@@ -1,7 +1,5 @@
-import { createApplicationContext } from './applicationContext';
 import { expressLogger } from './logger';
-import { get } from './persistence/dynamodbClientService';
-import { getCurrentInvoke } from '@vendia/serverless-express';
+import { getCurrentInvoke } from '@codegenie/serverless-express';
 import { json, urlencoded } from 'body-parser';
 import { lambdaWrapper } from './lambdaWrapper';
 import { set } from 'lodash';
@@ -10,12 +8,13 @@ import express from 'express';
 
 export const app = express();
 
-const applicationContext = createApplicationContext({});
+// This was default in express 4.x. The default changed in express 5.x, so we have to specify it here
+app.set('query parser', 'extended');
 
 app.use(cors());
 app.use(json());
 app.use(urlencoded({ extended: true }));
-app.use((req, res, next) => {
+app.use((req, _res, next) => {
   if (process.env.NODE_ENV !== 'production') {
     // we added this to suppress error `Missing x-apigateway-event or x-apigateway-context header(s)` locally
     // aws-serverless-express/middleware plugin is looking for these headers, which are needed on the lambdas
@@ -24,30 +23,33 @@ app.use((req, res, next) => {
   }
   return next();
 });
-app.use(async (req, res, next) => {
-  // This code is here so that we have a way to mock out the terminal user
-  // via using dynamo locally.  This is only ran locally and on CI/CD which is
+app.use(async (_req, _res, next) => {
+  // This code is here so that we have a way to mock out the terminal user.
+  // This is only ran locally and on CI/CD which is
   // why we also lazy require some of these packages.  See story 8955 for more info.
   if (process.env.NODE_ENV !== 'production') {
     const currentInvoke = getCurrentInvoke();
     set(currentInvoke, 'event.requestContext.identity.sourceIp', 'localhost');
-    const allowlist = await get({
-      Key: {
-        pk: 'allowed-terminal-ips',
-        sk: 'allowed-terminal-ips',
-      },
-      applicationContext,
-    });
-    const ips = allowlist?.ips ?? [];
+
+    const [IPS_RECORD] = await getDbReader(reader =>
+      reader
+        .selectFrom('dwFeatureFlag')
+        .select(['value'])
+        .where('name', '=', 'allowed-terminal-ips')
+        .execute(),
+    );
+
+    const IPS = IPS_RECORD ? (IPS_RECORD.value.current as string[]) : [];
 
     set(
       currentInvoke,
       'event.requestContext.authorizer.isTerminalUser',
-      ips.includes('localhost') ? 'true' : 'false',
+      IPS.includes('localhost') ? 'true' : 'false',
     );
   }
   return next();
 });
+
 app.use((req, res, next) => {
   /**
    * This environment variable is set to true by default on deployment of the API lambdas
@@ -67,27 +69,28 @@ app.use((req, res, next) => {
 
   next();
 });
+
 app.use(expressLogger);
 
-import { advancedQueryLimiter } from './middleware/advancedQueryLimiter';
 import { casePublicSearchLambda } from './lambdas/public-api/casePublicSearchLambda';
 import { generatePublicDocketRecordPdfLambda } from './lambdas/public-api/generatePublicDocketRecordPdfLambda';
 import { getAllFeatureFlagsLambda } from './lambdas/featureFlag/getAllFeatureFlagsLambda';
-import { getCachedHealthCheckLambda } from '@web-api/lambdas/health/getCachedHealthCheckLambda';
-import { getCaseForPublicDocketSearchLambda } from './lambdas/public-api/getCaseForPublicDocketSearchLambda';
 import { getHealthCheckLambda } from './lambdas/health/getHealthCheckLambda';
 import { getMaintenanceModeLambda } from './lambdas/maintenance/getMaintenanceModeLambda';
 import { getPractitionerByBarNumberLambda } from '@web-api/lambdas/practitioners/getPractitionerByBarNumberLambda';
 import { getPractitionersByNameLambda } from '@web-api/lambdas/practitioners/getPractitionersByNameLambda';
 import { getPublicCaseExistsLambda } from './lambdas/public-api/getPublicCaseExistsLambda';
-import { getPublicCaseLambda } from './lambdas/public-api/getPublicCaseLambda';
+import { getPublicCaseLambda } from '@web-api/lambdas/public-api/getPublicCaseLambda';
 import { getPublicDocumentDownloadUrlLambda } from './lambdas/public-api/getPublicDocumentDownloadUrlLambda';
 import { getPublicJudgesLambda } from './lambdas/public-api/getPublicJudgesLambda';
-import { ipLimiter } from './middleware/ipLimiter';
+import { getPublicTrialSessionDetailsLambda } from '@web-api/lambdas/public-api/getPublicTrialSessionDetailsLambda';
+import { getPublicTrialSessionsLambda } from '@web-api/lambdas/trialSessions/getPublicTrialSessionsLambda';
+import { getUsersInSectionLambda } from '@web-api/lambdas/users/getUsersInSectionLambda';
 import { opinionPublicSearchLambda } from './lambdas/public-api/opinionPublicSearchLambda';
 import { orderPublicSearchLambda } from './lambdas/public-api/orderPublicSearchLambda';
 import { todaysOpinionsLambda } from './lambdas/public-api/todaysOpinionsLambda';
 import { todaysOrdersLambda } from './lambdas/public-api/todaysOrdersLambda';
+import { getDbReader } from '@web-api/database';
 
 /** Case */
 {
@@ -125,33 +128,10 @@ app.get('/public-api/judges', lambdaWrapper(getPublicJudgesLambda));
 /** Search */
 {
   app.get('/public-api/search', lambdaWrapper(casePublicSearchLambda));
-  app.get(
-    '/public-api/order-search',
-    ipLimiter({
-      applicationContext,
-      key: applicationContext.getConstants().ADVANCED_DOCUMENT_IP_LIMITER_KEY,
-    }),
-    advancedQueryLimiter({
-      applicationContext,
-      key: applicationContext.getConstants().ADVANCED_DOCUMENT_LIMITER_KEY,
-    }),
-    lambdaWrapper(orderPublicSearchLambda),
-  );
+  app.get('/public-api/order-search', lambdaWrapper(orderPublicSearchLambda));
   app.get(
     '/public-api/opinion-search',
-    ipLimiter({
-      applicationContext,
-      key: applicationContext.getConstants().ADVANCED_DOCUMENT_IP_LIMITER_KEY,
-    }),
-    advancedQueryLimiter({
-      applicationContext,
-      key: applicationContext.getConstants().ADVANCED_DOCUMENT_LIMITER_KEY,
-    }),
     lambdaWrapper(opinionPublicSearchLambda),
-  );
-  app.get(
-    '/public-api/docket-number-search/:docketNumber',
-    lambdaWrapper(getCaseForPublicDocketSearchLambda),
   );
   app.get(
     '/public-api/practitioners',
@@ -169,12 +149,26 @@ app.get('/public-api/judges', lambdaWrapper(getPublicJudgesLambda));
 {
   app.get('/public-api/health', lambdaWrapper(getHealthCheckLambda));
   app.get(
-    '/public-api/cached-health',
-    lambdaWrapper(getCachedHealthCheckLambda),
-  );
-  app.get(
     '/public-api/maintenance-mode',
     lambdaWrapper(getMaintenanceModeLambda),
+  );
+}
+
+/**
+ * Trial sessions
+ */
+{
+  app.get(
+    '/public-api/trial-sessions',
+    lambdaWrapper(getPublicTrialSessionsLambda),
+  );
+  app.get(
+    '/public-api/sections/:section/users',
+    lambdaWrapper(getUsersInSectionLambda),
+  );
+  app.get(
+    '/public-api/trial-sessions/:trialSessionId',
+    lambdaWrapper(getPublicTrialSessionDetailsLambda),
   );
 }
 

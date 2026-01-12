@@ -1,30 +1,27 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
-import { STANDING_PRETRIAL_EVENT_CODES } from '../../../../../shared/src/business/entities/EntityConstants';
+import {
+  DESCENDING,
+  STANDING_PRETRIAL_EVENT_CODES,
+} from '../../../../../shared/src/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app-public.cerebral';
+import { Case } from '@shared/business/entities/cases/Case';
+import {
+  SUPPORTED_SORT_FIELDS_FOR_TODAYS_ORDERS,
+  sortOptions,
+} from '@web-client/views/Public/TodaysOrdersConstants';
 
 export const todaysOrdersHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ) => {
-  const { TODAYS_ORDERS_SORT_DEFAULT, TODAYS_ORDERS_SORTS } =
-    applicationContext.getConstants();
+  const { TODAYS_ORDERS_SORT_DEFAULT } = applicationContext.getConstants();
 
-  const sortOptions = [
-    { label: 'newest', value: TODAYS_ORDERS_SORTS.FILING_DATE_DESC }, // equal to TODAYS_ORDERS_SORT_DEFAULT
-    {
-      label: 'oldest',
-      value: TODAYS_ORDERS_SORTS.FILING_DATE_ASC,
-    },
-    {
-      label: 'pages (ascending)',
-      value: TODAYS_ORDERS_SORTS.NUMBER_OF_PAGES_ASC,
-    },
-    {
-      label: 'pages (descending)',
-      value: TODAYS_ORDERS_SORTS.NUMBER_OF_PAGES_DESC,
-    },
-  ];
+  // Use sortField from sortOptions for columnData
+  const columnData = sortOptions.map(option => ({
+    columnName: option.label,
+    sortFieldInfo: { sortField: option.sortField, sortType: 'string' }, // adjust sortType as needed
+  }));
 
   const todaysOrders = get(state.todaysOrders.results);
   const totalCount = get(state.todaysOrders.totalCount);
@@ -51,15 +48,43 @@ export const todaysOrdersHelper = (
     };
   });
 
-  const hasResults = formattedOrders.length > 0;
+  const tableSort = get(state.tableSort);
 
-  const showLoadMoreButton = formattedOrders.length < totalCount;
+  const sortedFormattedOrders = formattedOrders.sort((orderA, orderB) => {
+    if (!tableSort) return 0;
+
+    let sortNumber = 0;
+
+    const compare1 = tableSort?.sortOrder === DESCENDING ? orderB : orderA;
+    const compare2 = tableSort?.sortOrder === DESCENDING ? orderA : orderB;
+
+    if (tableSort.sortField === 'docketNumber') {
+      sortNumber = Case.docketNumberSort(
+        compare1.docketNumber,
+        compare2.docketNumber,
+      );
+    } else if (
+      SUPPORTED_SORT_FIELDS_FOR_TODAYS_ORDERS.includes(tableSort.sortField)
+    ) {
+      const compare1SortField = compare1[tableSort.sortField] || '';
+      const compare2SortField = compare2[tableSort.sortField] || '';
+
+      sortNumber = compare1SortField
+        .toString()
+        .localeCompare(compare2SortField.toString());
+    }
+    return sortNumber;
+  });
+  const hasResults = sortedFormattedOrders.length > 0;
+
+  const showLoadMoreButton = sortedFormattedOrders.length < totalCount;
   const todaysOrdersSort =
     get(state.sessionMetadata.todaysOrdersSort) || TODAYS_ORDERS_SORT_DEFAULT;
 
   return {
+    columnData,
     formattedCurrentDate,
-    formattedOrders,
+    formattedOrders: sortedFormattedOrders,
     hasResults,
     showLoadMoreButton,
     sortOptions,

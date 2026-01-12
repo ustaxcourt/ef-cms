@@ -20,6 +20,6 @@ describe('getCreateTrialSessionAlertSuccessAction', () => {
         trialSession: '123',
       },
     });
-    expect(result.state.lastCreatedTrialSessionId).toEqual('123');
+    expect(result.state).toHaveProperty('lastCreatedTrialSessionId', '123');
   });
 });

@@ -1,12 +1,19 @@
+jest.mock('@web-api/persistence/elasticsearch/elasticSearchHealthCheck.ts');
 import { S3 } from '@aws-sdk/client-s3';
 import { getHealthCheckInteractor } from './getHealthCheckInteractor';
+import { elasticSearchHealthCheck as elasticSearchHealthCheckMock } from '@web-api/persistence/elasticsearch/elasticSearchHealthCheck';
+import { SearchClientResultsType } from '@web-api/persistence/elasticsearch/searchClient';
 
 const mockListObjectsV2 = jest
   .spyOn(S3.prototype, 'listObjectsV2')
   .mockResolvedValue({} as never);
 
+const elasticSearchHealthCheck = jest.mocked(elasticSearchHealthCheckMock);
+
 describe('getHealthCheckInteractor', () => {
   it('should return the expected true statuses for all services', async () => {
+    elasticSearchHealthCheck.mockResolvedValue({} as SearchClientResultsType);
+
     const statusResult = await getHealthCheckInteractor({
       environment: {
         stage: 'dev',
@@ -27,13 +34,10 @@ describe('getHealthCheckInteractor', () => {
       getPersistenceGateway() {
         return {
           getClientId: () => 'a',
-          getDeployTableStatus: () => 'ACTIVE',
           getFirstSingleCaseRecord: () => true,
           getSesStatus: () => true,
-          getTableStatus: () => 'ACTIVE',
         };
       },
-      getScannerResourceUri: () => '',
       logger: {
         error: () => {},
       },
@@ -41,11 +45,6 @@ describe('getHealthCheckInteractor', () => {
 
     expect(statusResult).toEqual({
       cognito: true,
-      dynamo: {
-        efcms: true,
-        efcmsDeploy: true,
-      },
-      dynamsoft: true,
       elasticsearch: true,
       emailService: true,
       s3: {
@@ -62,6 +61,7 @@ describe('getHealthCheckInteractor', () => {
   });
 
   it('should return false for all services when services are down', async () => {
+    elasticSearchHealthCheck.mockRejectedValue(false);
     mockListObjectsV2.mockRejectedValue(new Error('S3 is down') as never);
     const status = await getHealthCheckInteractor({
       environment: {
@@ -74,15 +74,12 @@ describe('getHealthCheckInteractor', () => {
               cancel: () => null,
             }),
           },
-          get: () => Promise.reject(true),
+          get: () => Promise.reject(new Error('broken')),
         };
       },
       getPersistenceGateway() {
         return {
           getClientId: () => {
-            throw new Error();
-          },
-          getDeployTableStatus: () => {
             throw new Error();
           },
           getFirstSingleCaseRecord: () => {
@@ -91,12 +88,8 @@ describe('getHealthCheckInteractor', () => {
           getSesStatus: () => {
             throw new Error();
           },
-          getTableStatus: () => {
-            throw new Error();
-          },
         };
       },
-      getScannerResourceUri: () => '',
       logger: {
         error: () => {},
       },
@@ -104,11 +97,6 @@ describe('getHealthCheckInteractor', () => {
 
     expect(status).toEqual({
       cognito: false,
-      dynamo: {
-        efcms: false,
-        efcmsDeploy: false,
-      },
-      dynamsoft: false,
       elasticsearch: false,
       emailService: false,
       s3: {
@@ -153,10 +141,8 @@ describe('getHealthCheckInteractor', () => {
         getPersistenceGateway() {
           return {
             getClientId: () => 'a',
-            getDeployTableStatus: () => 'ACTIVE',
             getFirstSingleCaseRecord: () => true,
             getSesStatus: () => true,
-            getTableStatus: () => 'ACTIVE',
           };
         },
         logger: {

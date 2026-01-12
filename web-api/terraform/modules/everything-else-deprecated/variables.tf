@@ -42,8 +42,8 @@ variable "prod_env_account_id" {
   type = string
 }
 
-variable "lower_env_account_id" {
-  type = string
+variable "lower_env_principal_identifiers" {
+  type = set(string)
 }
 
 variable "should_es_alpha_exist" {
@@ -54,7 +54,6 @@ variable "should_es_beta_exist" {
   type = bool
 }
 
-variable "enable_health_checks" {
-  // e.g. "1" or "0"
+variable "es_engine_version" {
   type = string
 }

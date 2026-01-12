@@ -1,12 +1,25 @@
-import { PrimaryHeader } from '../components/PrimaryHeader.tsx';
+import { PrimaryHeader } from '../components/PrimaryHeader';
 import React from 'react';
+
+type CaseInfo = {
+  docketNumberWithSuffix: string;
+  caseTitle: string;
+  status: string;
+};
+
+export type PractitionerCaseListParams = {
+  barNumber: string;
+  closedCases: CaseInfo[];
+  openCases: CaseInfo[];
+  practitionerName: string;
+};
 
 export const PractitionerCaseList = ({
   barNumber,
   closedCases,
   openCases,
   practitionerName,
-}) => {
+}: PractitionerCaseListParams) => {
   return (
     <>
       <PrimaryHeader />

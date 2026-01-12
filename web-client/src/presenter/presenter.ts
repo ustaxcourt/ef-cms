@@ -10,6 +10,7 @@ import { UnidentifiedUserError } from './errors/UnidentifiedUserError';
 import { addAnotherIrsNoticeToFormSequence } from '@web-client/presenter/sequences/addAnotherIrsNoticeToFormSequence';
 import { addCaseToTrialSessionSequence } from './sequences/addCaseToTrialSessionSequence';
 import { addFactOrReasonSequence } from '@web-client/presenter/sequences/addFactOrReasonSequence';
+import { addMinuteSheetFormRowSequence } from './sequences/TrialSessionMinutes/addMinuteSheetFormRowSequence';
 import { addPenaltyInputSequence } from './sequences/addPenaltyInputSequence';
 import { addStatisticToFormSequence } from './sequences/addStatisticToFormSequence';
 import { addSupportingDocumentToFormSequence } from './sequences/addSupportingDocumentToFormSequence';
@@ -34,9 +35,8 @@ import { batchDownloadErrorSequence } from './sequences/batchDownloadErrorSequen
 import { batchDownloadReadySequence } from './sequences/batchDownloadReadySequence';
 import { batchDownloadTrialSessionSequence } from './sequences/batchDownloadTrialSessionSequence';
 import { blockCaseFromTrialSequence } from './sequences/blockCaseFromTrialSequence';
-import { broadcastIdleStatusActiveSequence } from './sequences/broadcastIdleStatusActiveSequence';
+import { editRemoteStatusSequence } from './sequences/editRemoteStatusSequence';
 import { broadcastLogoutSequence } from './sequences/broadcastLogoutSequence';
-import { broadcastStayLoggedInSequence } from './sequences/broadcastStayLoggedInSequence';
 import { calculatePenaltiesSequence } from './sequences/calculatePenaltiesSequence';
 import { canEditContactInformationSequence } from './sequences/canEditContactInformationSequence';
 import { cancelAddDraftDocumentSequence } from './sequences/cancelAddDraftDocumentSequence';
@@ -44,7 +44,6 @@ import { cancelAddStatisticSequence } from './sequences/cancelAddStatisticSequen
 import { cancelAndNavigateToCorrespondenceSequence } from './sequences/cancelAndNavigateToCorrespondenceSequence';
 import { cancelRemovePetitionerSequence } from './sequences/cancelRemovePetitionerSequence';
 import { caseDetailPrimaryTabChangeSequence } from './sequences/caseDetailPrimaryTabChangeSequence';
-import { caseInventoryReportLoadMoreSequence } from './sequences/caseInventoryReportLoadMoreSequence';
 import { cerebralBindSimpleSetStateSequence } from './sequences/cerebralBindSimpleSetStateSequence';
 import { changeTabAndSetViewerDocumentToDisplaySequence } from './sequences/changeTabAndSetViewerDocumentToDisplaySequence';
 import { checkForNegativeValueSequence } from './sequences/checkForNegativeValueSequence';
@@ -55,9 +54,11 @@ import { clearAdvancedSearchFormSequence } from './sequences/clearAdvancedSearch
 import { clearAlertSequence } from './sequences/clearAlertSequence';
 import { clearDropDownMenuStateSequence } from './sequences/clearDropDownMenuStateSequence';
 import { clearDueDateSequence } from './sequences/clearDueDateSequence';
+import { clearRemoteStatusSequence } from './sequences/clearRemoteStatusSequence';
 import { clearExistingDocumentSequence } from './sequences/clearExistingDocumentSequence';
 import { clearModalFormSequence } from './sequences/clearModalFormSequence';
 import { clearModalSequence } from './sequences/clearModalSequence';
+import { clearMotionOrderResponseFormSequence } from './sequences/MotionOrderResponse/clearMotionOrderResponseFormSequence';
 import { clearOpenClosedCasesCurrentPageSequence } from './sequences/clearOpenClosedCasesCurrentPageSequence';
 import { clearOptionalCustomCaseReportFilterSequence } from './sequences/clearOptionalCustomCaseReportFilterSequence';
 import { clearOptionalFieldsStampFormSequence } from './sequences/clearOptionalFieldsStampFormSequence';
@@ -86,7 +87,6 @@ import { completeMessageSequence } from './sequences/completeMessageSequence';
 import { completePrintPaperPetitionReceiptSequence } from './sequences/completePrintPaperPetitionReceiptSequence';
 import { completeTrialSessionCalendarSequence } from '@web-client/presenter/sequences/completeTrialSessionCalendarSequence';
 import { confirmSignUpSequence } from './sequences/Login/confirmSignUpSequence';
-import { confirmStayLoggedInSequence } from './sequences/confirmStayLoggedInSequence';
 import { confirmWorkItemAlreadyCompleteSequence } from './sequences/confirmWorkItemAlreadyCompleteSequence';
 import { consolidatedCaseCheckboxAllChangeSequence } from './sequences/consolidatedCaseCheckboxAllChangeSequence';
 import { contactPrimaryCountryTypeChangeSequence } from './sequences/contactPrimaryCountryTypeChangeSequence';
@@ -113,12 +113,16 @@ import { dismissAddEditCaseWorksheetModalSequence } from '@web-client/presenter/
 import { dismissAlertSequence } from './sequences/dismissAlertSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
 import { dismissThirtyDayTrialAlertSequence } from './sequences/dismissThirtyDayTrialAlertSequence';
+import { displayProgressSpinnerSequence } from '@web-client/presenter/sequences/displayProgressSpinnerSequence';
+import { handleEditedTrialSessionSequence } from '@web-client/presenter/sequences/handleEditedTrialSessionSequence';
 import { downloadCsvFileSequence } from '@web-client/presenter/sequences/downloadCsvFileSequence';
+import { downloadMinuteSheetFormPdfSequence } from './sequences/TrialSessionMinutes/downloadMinuteSheetFormPdfSequence';
 import { editCorrespondenceDocumentSequence } from './sequences/editCorrespondenceDocumentSequence';
 import { editUnsignedDraftDocumentSequence } from '@web-client/presenter/sequences/editUnsignedDraftDocumentSequence';
 import { editUploadCourtIssuedDocumentSequence } from './sequences/editUploadCourtIssuedDocumentSequence';
 import { exportCsvCustomCaseReportSequence } from '@web-client/presenter/sequences/exportCsvCustomCaseReportSequence';
 import { exportPendingReportSequence } from '@web-client/presenter/sequences/exportPendingReportSequence';
+import { exportTrialLocationToCsvSequence } from '@web-client/presenter/sequences/exportTrialLocationToCsvSequence';
 import { fetchUserNotificationsSequence } from './sequences/fetchUserNotificationsSequence';
 import { fileAndServeCourtIssuedDocumentFromDocketEntrySequence } from './sequences/fileAndServeCourtIssuedDocumentFromDocketEntrySequence';
 import { filePetitionCompleteStep1Sequence } from './sequences/filePetitionCompleteStep1Sequence';
@@ -140,9 +144,11 @@ import { getCaseInventoryReportSequence } from './sequences/getCaseInventoryRepo
 import { getCustomCaseReportSequence } from './sequences/getCustomCaseReportSequence';
 import { getUsersInSectionSequence } from './sequences/getUsersInSectionSequence';
 import { goToApplyStampSequence } from './sequences/gotoApplyStampSequence';
+import { goToOrderResponseSequence } from './sequences/gotoOrderResponseSequence';
 import { goToChangePasswordSequence } from '@web-client/presenter/sequences/Login/goToChangePasswordSequence';
 import { goToCreatePetitionerAccountSequence } from '@web-client/presenter/sequences/Public/goToCreatePetitionerAccountSequence';
 import { goToForgotPasswordSequence } from '@web-client/presenter/sequences/Login/goToForgotPasswordSequence';
+import { goToTrialSessionMinutesSequence } from '@web-client/presenter/sequences/TrialSessionMinutes/goToTrialSessionMinutesSequence';
 import { goToVerificationSentSequence } from '@web-client/presenter/sequences/goToVerificationSentSequence';
 import { gotoAccessibilityStatementSequence } from './sequences/gotoAccessibilityStatementSequence';
 import { gotoAddCourtIssuedDocketEntrySequence } from './sequences/gotoAddCourtIssuedDocketEntrySequence';
@@ -185,6 +191,7 @@ import { gotoEditRespondentCounselSequence } from './sequences/gotoEditResponden
 import { gotoEditTrialSessionSequence } from './sequences/gotoEditTrialSessionSequence';
 import { gotoEditUploadCourtIssuedDocumentSequence } from './sequences/gotoEditUploadCourtIssuedDocumentSequence';
 import { gotoFileDocumentSequence } from './sequences/gotoFileDocumentSequence';
+import { gotoIdleLogoutSequence } from '@web-client/presenter/sequences/goToIdleLogoutSequence';
 import { gotoJudgeActivityReportSequence } from './sequences/JudgeActivityReport/gotoJudgeActivityReportSequence';
 import { gotoLoginSequence } from '@web-client/presenter/sequences/Login/gotoLoginSequence';
 import { gotoMaintenanceSequence } from './sequences/gotoMaintenanceSequence';
@@ -214,8 +221,9 @@ import { gotoSignOrderSequence } from './sequences/gotoSignOrderSequence';
 import { gotoStartCaseWizardSequence } from './sequences/gotoStartCaseWizardSequence';
 import { gotoStatusReportOrderSequence } from './sequences/StatusReportOrder/gotoStatusReportOrderSequence';
 import { gotoStyleGuideSequence } from './sequences/gotoStyleGuideSequence';
-import { gotoTrialSessionDetailSequence } from './sequences/gotoTrialSessionDetailSequence';
-import { gotoTrialSessionPlanningReportSequence } from './sequences/gotoTrialSessionPlanningReportSequence';
+import { gotoTrialLocationSequence } from '@web-client/presenter/sequences/gotoTrialLocationSequence';
+import { gotoTrialSessionDetailsSequence } from './sequences/gotoTrialSessionDetailsSequence';
+import { gotoTrialSessionPlanningReportViewSequence } from '@web-client/presenter/sequences/gotoTrialSessionPlanningReportViewSequence';
 import { gotoTrialSessionWorkingCopySequence } from './sequences/gotoTrialSessionWorkingCopySequence';
 import { gotoTrialSessionsSequence } from './sequences/gotoTrialSessionsSequence';
 import { gotoUploadCorrespondenceDocumentSequence } from './sequences/gotoUploadCorrespondenceDocumentSequence';
@@ -223,17 +231,17 @@ import { gotoUploadCourtIssuedDocumentSequence } from './sequences/gotoUploadCou
 import { gotoUserContactEditSequence } from './sequences/gotoUserContactEditSequence';
 import { gotoVerifyEmailSequence } from './sequences/gotoVerifyEmailSequence';
 import { gotoWorkQueueSequence } from './sequences/gotoWorkQueueSequence';
+import { gotoRecentFilingsSequence } from './sequences/gotoRecentFilingsSequence';
 import { handleAppHasUpdatedSequence } from './sequences/handleAppHasUpdatedSequence';
-import { handleIdleLogoutSequence } from './sequences/handleIdleLogoutSequence';
 import { initAppSequence } from '@web-client/presenter/sequences/Init/initAppSequence';
 import { initialState } from '@web-client/presenter/state';
 import { leaveCaseForLaterServiceSequence } from './sequences/leaveCaseForLaterServiceSequence';
 import { loadDefaultDocketViewerDocumentToDisplaySequence } from './sequences/DocketEntry/loadDefaultDocketViewerDocumentToDisplaySequence';
 import { loadDefaultDraftViewerDocumentToDisplaySequence } from './sequences/DocketEntry/loadDefaultDraftViewerDocumentToDisplaySequence';
 import { loadDefaultViewerCorrespondenceSequence } from './sequences/loadDefaultViewerCorrespondenceSequence';
-import { loadMoreCaseDeadlinesSequence } from './sequences/loadMoreCaseDeadlinesSequence';
-import { loadMorePendingItemsSequence } from './sequences/loadMorePendingItemsSequence';
-import { loadPdfSequence } from './sequences/PDFPreviewModal/loadPdfSequence';
+import { loadPdfForTabSequence } from './sequences/PDFPreviewTab/loadPdfForTabSequence';
+import { loadRecentFilingsSequence } from './sequences/loadRecentFilingsSequence';
+import { motionOrderResponsePdfPreviewSequence } from './sequences/MotionOrderResponse/motionOrderResponsePdfPreviewSequence';
 import { navigateBackSequence } from './sequences/navigateBackSequence';
 import { navigateToCaseDetailFromPaperServiceSequence } from './sequences/navigateToCaseDetailFromPaperServiceSequence';
 import { navigateToCaseDetailSequence } from './sequences/navigateToCaseDetailSequence';
@@ -247,6 +255,7 @@ import { navigateToPathSequence } from './sequences/navigateToPathSequence';
 import { navigateToPrintPaperServiceSequence } from './sequences/navigateToPrintPaperServiceSequence';
 import { navigateToPrintableCaseConfirmationSequence } from './sequences/navigateToPrintableCaseConfirmationSequence';
 import { navigateToStatusReportOrderSequence } from './sequences/StatusReportOrder/navigateToStatusReportOrderSequence';
+import { navigateToTrialSessionPlanningReportSequence } from '@web-client/presenter/sequences/navigateToTrialSessionPlanningReportViewSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { noticeGenerationCompleteSequence } from './sequences/noticeGenerationCompleteSequence';
 import { onPractitionerInformationTabSelectSequence } from './sequences/onPractitionerInformationTabSelectSequence';
@@ -263,8 +272,10 @@ import { openAddIrsPractitionerModalSequence } from './sequences/openAddIrsPract
 import { openAddPrivatePractitionerModalSequence } from './sequences/openAddPrivatePractitionerModalSequence';
 import { openAddToTrialModalSequence } from './sequences/openAddToTrialModalSequence';
 import { openAppMaintenanceModalSequence } from './sequences/openAppMaintenanceModalSequence';
+import { openEditRemoteTrialModalSequence } from './sequences/openEditRemoteTrialModalSequence';
 import { openAppUpdatedModalSequence } from './sequences/openAppUpdatedModalSequence';
 import { openBlockFromTrialModalSequence } from './sequences/openBlockFromTrialModalSequence';
+import { openEditRemoteStatusModalSequence } from './sequences/openEditRemoteStatusModalSequence';
 import { openCancelDraftDocumentModalSequence } from './sequences/openCancelDraftDocumentModalSequence';
 import { openCaseDocumentDownloadUrlSequence } from './sequences/openCaseDocumentDownloadUrlSequence';
 import { openCaseInNewTabSequence } from './sequences/openCaseInNewTabSequence';
@@ -293,6 +304,7 @@ import { openConfirmServeToIrsModalSequence } from './sequences/openConfirmServe
 import { openCreateCaseDeadlineModalSequence } from './sequences/openCreateCaseDeadlineModalSequence';
 import { openCreateMessageModalSequence } from './sequences/openCreateMessageModalSequence';
 import { openCreateOrderChooseTypeModalSequence } from './sequences/openCreateOrderChooseTypeModalSequence';
+import { openCreateTermModalSequence } from '@web-client/presenter/sequences/TrialSessions/openCreateTermModalSequence';
 import { openDeleteCaseDeadlineModalSequence } from './sequences/openDeleteCaseDeadlineModalSequence';
 import { openDeleteCaseNoteConfirmModalSequence } from './sequences/openDeleteCaseNoteConfirmModalSequence';
 import { openDeletePractitionerDocumentConfirmModalSequence } from './sequences/openDeletePractitionerDocumentConfirmModalSequence';
@@ -304,11 +316,9 @@ import { openEditOrderTitleModalSequence } from './sequences/openEditOrderTitleM
 import { openForwardMessageModalSequence } from './sequences/openForwardMessageModalSequence';
 import { openGainElectronicAccessToCaseModalSequence } from './sequences/openGainElectronicAccessToCaseModalSequence';
 import { openItemizedPenaltiesModalSequence } from './sequences/openItemizedPenaltiesModalSequence';
-import { openPdfPreviewModalSequence } from './sequences/openPdfPreviewModalSequence';
 import { openPractitionerDocumentDownloadUrlSequence } from './sequences/openPractitionerDocumentDownloadUrlSequence';
 import { openPrintGeneratedPaperServiceSequence } from '@web-client/presenter/sequences/openPrintGeneratedPaperServiceSequence';
 import { openPrintableTrialSessionWorkingCopyModalSequence } from './sequences/openPrintableTrialSessionWorkingCopyModalSequence';
-import { openPrioritizeCaseModalSequence } from './sequences/openPrioritizeCaseModalSequence';
 import { openRemoveFromTrialSessionModalSequence } from './sequences/openRemoveFromTrialSessionModalSequence';
 import { openRemovePetitionerCounselModalSequence } from './sequences/openRemovePetitionerCounselModalSequence';
 import { openRemovePetitionerModalSequence } from './sequences/openRemovePetitionerModalSequence';
@@ -322,14 +332,12 @@ import { openSetForHearingModalSequence } from './sequences/openSetForHearingMod
 import { openStrikeDocketEntryModalSequence } from './sequences/openStrikeDocketEntryModalSequence';
 import { openTrialSessionPlanningModalSequence } from './sequences/openTrialSessionPlanningModalSequence';
 import { openUnblockFromTrialModalSequence } from './sequences/openUnblockFromTrialModalSequence';
-import { openUnprioritizeCaseModalSequence } from './sequences/openUnprioritizeCaseModalSequence';
 import { openUnsealDocketEntryModalSequence } from './sequences/openUnsealDocketEntryModalSequence';
 import { openUpdateCaseModalSequence } from './sequences/openUpdateCaseModalSequence';
 import { paperServiceCompleteSequence } from './sequences/paperServiceCompleteSequence';
 import { petitionGenerationLiveValidationSequence } from '@web-client/presenter/sequences/petitionGenerationLiveValidationSequence';
 import { printPaperServiceForTrialCompleteSequence } from './sequences/printPaperServiceForTrialCompleteSequence';
 import { printTrialCalendarSequence } from './sequences/printTrialCalendarSequence';
-import { prioritizeCaseSequence } from './sequences/prioritizeCaseSequence';
 import { redirectToDashboardSequence } from './sequences/redirectToDashboardSequence';
 import { refreshPdfSequence } from './sequences/refreshPdfSequence';
 import { refreshStatisticsSequence } from './sequences/refreshStatisticsSequence';
@@ -338,6 +346,7 @@ import { removeCaseDetailPendingItemSequence } from './sequences/removeCaseDetai
 import { removeCaseFromTrialSequence } from './sequences/removeCaseFromTrialSequence';
 import { removeFactOrReasonSequence } from '@web-client/presenter/sequences/removeFactOrReasonSequence';
 import { removeIrsNoticeFromFormSequence } from '@web-client/presenter/sequences/removeIrsNoticeFromFormSequence';
+import { removeMinuteSheetFormRowSequence } from './sequences/TrialSessionMinutes/removeMinuteSheetFormRowSequence';
 import { removePetitionForReplacementSequence } from './sequences/removePetitionForReplacementSequence';
 import { removePetitionerAndUpdateCaptionSequence } from './sequences/removePetitionerAndUpdateCaptionSequence';
 import { removePetitionerCounselFromCaseSequence } from './sequences/removePetitionerCounselFromCaseSequence';
@@ -351,11 +360,9 @@ import { rescanBatchSequence } from './sequences/rescanBatchSequence';
 import { resendVerifyPendingUserEmailSequence } from '@web-client/presenter/sequences/resendVerifyPendingUserEmailSequence';
 import { resetCaseMenuSequence } from './sequences/resetCaseMenuSequence';
 import { resetHeaderAccordionsSequence } from './sequences/resetHeaderAccordionsSequence';
-import { resetIdleTimerSequence } from './sequences/resetIdleTimerSequence';
 import { resetPasswordSequence } from '@web-client/presenter/sequences/Login/resetPasswordSequence';
 import { resetSecondaryAddressSequence } from './sequences/resetSecondaryAddressSequence';
 import { resetTrialSessionsFiltersSequence } from '@web-client/presenter/sequences/resetTrialSessionsFiltersSequence';
-import { retryAsyncRequestSequence } from './sequences/retryAsyncRequestSequence';
 import { reviewCaseAssociationRequestSequence } from './sequences/reviewCaseAssociationRequestSequence';
 import { reviewExternalDocumentInformationSequence } from './sequences/reviewExternalDocumentInformationSequence';
 import { runTrialSessionPlanningReportSequence } from './sequences/runTrialSessionPlanningReportSequence';
@@ -387,13 +394,14 @@ import { setCaseDetailPrimaryTabSequence } from './sequences/setCaseDetailPrimar
 import { setCaseTypeToDisplaySequence } from './sequences/setCaseTypeToDisplaySequence';
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
 import { setCurrentPageIndexSequence } from './sequences/setCurrentPageIndexSequence';
+import { setCurrentPaginationPageSequence } from './sequences/setCurrentPaginationPageSequence';
+import { setCurrentTabSequence } from '@web-client/presenter/sequences/setCurrentTabSequence';
 import { setCustomCaseReportFiltersSequence } from './sequences/setCustomCaseReportFiltersSequence';
 import { setDocumentForPreviewSequence } from './sequences/setDocumentForPreviewSequence';
 import { setDocumentForUploadSequence } from './sequences/setDocumentForUploadSequence';
 import { setDocumentUploadModeSequence } from './sequences/setDocumentUploadModeSequence';
 import { setForHearingSequence } from './sequences/setForHearingSequence';
 import { setHasIrsNoticeSequence } from '@web-client/presenter/sequences/setHasIrsNoticeSequence';
-import { setIdleStatusActiveSequence } from './sequences/setIdleStatusActiveSequence';
 import { setIrsNoticeFalseSequence } from './sequences/setIrsNoticeFalseSequence';
 import { setIsLoadingSequence } from '@web-client/presenter/sequences/setIsLoadingSequence';
 import { setIsNotLoadingSequence } from '@web-client/presenter/sequences/setIsNotLoadingSequence';
@@ -417,6 +425,7 @@ import { setTrialSessionsFiltersSequence } from '@web-client/presenter/sequences
 import { setViewerCorrespondenceToDisplaySequence } from './sequences/setViewerCorrespondenceToDisplaySequence';
 import { setViewerDocumentToDisplaySequence } from './sequences/setViewerDocumentToDisplaySequence';
 import { setViewerDraftDocumentToDisplaySequence } from './sequences/setViewerDraftDocumentToDisplaySequence';
+import { setRecentFilingsTableSortSequence } from './sequences/setRecentFilingsTableSortSequence';
 import { showCalculatePenaltiesModalSequence } from './sequences/showCalculatePenaltiesModalSequence';
 import { showDocketRecordDetailModalSequence } from './sequences/showDocketRecordDetailModalSequence';
 import { showFileUploadErrorModalSequence } from '@web-client/presenter/sequences/showFileUploadErrorModalSequence';
@@ -427,7 +436,7 @@ import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
 import { showPaperServiceProgressSequence } from './sequences/showPaperServiceProgressSequence';
 import { showThirtyDayNoticeModalSequence } from './sequences/showThirtyDayNoticeModalSequence';
 import { showViewPetitionerCounselModalSequence } from './sequences/showViewPetitionerCounselModalSequence';
-import { signOutIdleSequence } from './sequences/signOutIdleSequence';
+
 import { signOutSequence } from './sequences/signOutSequence';
 import { signOutUserInitiatedSequence } from './sequences/signOutUserInitiatedSequence';
 import { skipSigningOrderSequence } from './sequences/skipSigningOrderSequence';
@@ -454,6 +463,7 @@ import { submitCourtIssuedDocketEntrySequence } from './sequences/submitCourtIss
 import { submitCourtIssuedOrderSequence } from './sequences/submitCourtIssuedOrderSequence';
 import { submitCreateOrderModalSequence } from './sequences/submitCreateOrderModalSequence';
 import { submitCreatePetitionerAccountFormSequence } from '@web-client/presenter/sequences/submitCreatePetitionerAccountFormSequence';
+import { submitCreateTermFormSequence } from '@web-client/presenter/sequences/TrialSessions/submitCreateTermFormSequence';
 import { submitEditContactSequence } from './sequences/submitEditContactSequence';
 import { submitEditDeficiencyStatisticSequence } from './sequences/submitEditDeficiencyStatisticSequence';
 import { submitEditDocketEntryMetaSequence } from './sequences/submitEditDocketEntryMetaSequence';
@@ -470,6 +480,7 @@ import { submitJudgeActivityStatisticsReportSequence } from './sequences/JudgeAc
 import { submitLoginSequence } from '@web-client/presenter/sequences/Login/submitLoginSequence';
 import { submitOpinionAdvancedSearchSequence } from './sequences/submitOpinionAdvancedSearchSequence';
 import { submitOrderAdvancedSearchSequence } from './sequences/submitOrderAdvancedSearchSequence';
+import { submitMotionOrderResponseSequence } from './sequences/MotionOrderResponse/submitMotionOrderResponseSequence';
 import { submitPaperFilingSequence } from './sequences/submitPaperFilingSequence';
 import { submitPetitionFromPaperSequence } from './sequences/submitPetitionFromPaperSequence';
 import { submitPractitionerBarNumberSearchSequence } from './sequences/submitPractitionerBarNumberSearchSequence';
@@ -498,7 +509,6 @@ import { toggleWorkingCopySortSequence } from './sequences/toggleWorkingCopySort
 import { unauthorizedErrorSequence } from './sequences/unauthorizedErrorSequence';
 import { unblockCaseFromTrialSequence } from './sequences/unblockCaseFromTrialSequence';
 import { unidentifiedUserErrorSequence } from './sequences/unidentifiedUserErrorSequence';
-import { unprioritizeCaseSequence } from './sequences/unprioritizeCaseSequence';
 import { unsealCaseSequence } from './sequences/unsealCaseSequence';
 import { unsealDocketEntrySequence } from './sequences/unsealDocketEntrySequence';
 import { updateAddDeficiencyFormValueSequence } from './sequences/updateAddDeficiencyFormValueSequence';
@@ -512,6 +522,7 @@ import { updateCaseAdvancedSearchByNameFormValueSequence } from './sequences/upd
 import { updateCaseAssociationFormValueSequence } from './sequences/updateCaseAssociationFormValueSequence';
 import { updateCaseCheckboxSequence } from './sequences/updateCaseCheckboxSequence';
 import { updateCaseDeadlineSequence } from './sequences/updateCaseDeadlineSequence';
+import { updateCaseDeadlineReportPageSequence } from './sequences/updateCaseDeadlineReportPageSequence';
 import { updateCaseDetailsSequence } from './sequences/updateCaseDetailsSequence';
 import { updateCaseNoteSequence } from './sequences/updateCaseNoteSequence';
 import { updateCasePartyTypeSequence } from './sequences/updateCasePartyTypeSequence';
@@ -556,6 +567,7 @@ import { updateStatusReportOrderFormValueSequence } from './sequences/StatusRepo
 import { updateStepIndicatorSequence } from '@web-client/presenter/sequences/updateStepIndicatorSequence';
 import { updateTrialSessionCompleteSequence } from './sequences/updateTrialSessionCompleteSequence';
 import { updateTrialSessionFormDataSequence } from './sequences/updateTrialSessionFormDataSequence';
+import { updateTrialSessionMinutesFormSequence } from '@web-client/presenter/sequences/TrialSessionMinutes/updateTrialSessionMinutesFormSequence';
 import { updateTrialSessionSequence } from './sequences/updateTrialSessionSequence';
 import { updateUserCaseNoteOnWorkingCopySequence } from './sequences/updateUserCaseNoteOnWorkingCopySequence';
 import { updateWorkingCopySessionNoteSequence } from './sequences/updateWorkingCopySessionNoteSequence';
@@ -573,6 +585,7 @@ import { validateAddPractitionerSequence } from './sequences/validateAddPractiti
 import { validateAddPrivatePractitionerSequence } from './sequences/CaseAssociation/validateAddPrivatePractitionerSequence';
 import { validateAddToTrialSessionSequence } from './sequences/validateAddToTrialSessionSequence';
 import { validateBlockFromTrialSequence } from './sequences/validateBlockFromTrialSequence';
+import { validateEditRemoteStatusSequence } from './sequences/validateEditRemoteStatusSequence';
 import { validateCaseAdvancedSearchFormSequence } from './sequences/validateCaseAdvancedSearchFormSequence';
 import { validateCaseAssociationRequestSequence } from './sequences/validateCaseAssociationRequestSequence';
 import { validateCaseDeadlineSequence } from './sequences/validateCaseDeadlineSequence';
@@ -590,10 +603,12 @@ import { validateDocketEntrySequence } from './sequences/validateDocketEntrySequ
 import { validateDocketEntryWorksheetSequence } from '@web-client/presenter/sequences/validateDocketEntryWorksheetSequence';
 import { validateDocumentSequence } from './sequences/validateDocumentSequence';
 import { validateEditPetitionerCounselSequence } from './sequences/CaseAssociation/validateEditPetitionerCounselSequence';
+import { validateEditRemoteTrialModalSequence } from './sequences/validateEditRemoteTrialModalSequence';
 import { validateEditRespondentCounselSequence } from './sequences/CaseAssociation/validateEditRespondentCounselSequence';
 import { validateExternalDocumentInformationSequence } from './sequences/validateExternalDocumentInformationSequence';
 import { validateFilePetitionStep2Sequence } from '@web-client/presenter/sequences/validateFilePetitionStep2Sequence';
 import { validateFilePetitionStep5Sequence } from '@web-client/presenter/sequences/validateFilePetitionStep5Sequence';
+import { validateMotionOrderResponseSequence } from './sequences/MotionOrderResponse/validateMotionOrderResponseSequence';
 import { validateNoteSequence } from './sequences/validateNoteSequence';
 import { validateOpinionSearchSequence } from './sequences/validateOpinionSearchSequence';
 import { validateOrderSearchSequence } from './sequences/validateOrderSearchSequence';
@@ -602,7 +617,6 @@ import { validatePetitionFromPaperSequence } from './sequences/validatePetitionF
 import { validatePetitionerSequence } from './sequences/validatePetitionerSequence';
 import { validatePractitionerSearchByBarNumberFormSequence } from './sequences/validatePractitionerSearchByBarNumberFormSequence';
 import { validatePractitionerSearchByNameFormSequence } from './sequences/validatePractitionerSearchByNameFormSequence';
-import { validatePrioritizeCaseSequence } from './sequences/validatePrioritizeCaseSequence';
 import { validateRemoveFromTrialSessionSequence } from './sequences/validateRemoveFromTrialSessionSequence';
 import { validateSelectDocumentTypeSequence } from './sequences/validateSelectDocumentTypeSequence';
 import { validateSetForHearingSequence } from './sequences/validateSetForHearingSequence';
@@ -617,12 +631,21 @@ import { validateUpdatePractitionerSequence } from './sequences/validateUpdatePr
 import { validateUploadCorrespondenceDocumentSequence } from './sequences/validateUploadCorrespondenceDocumentSequence';
 import { validateUploadCourtIssuedDocumentSequence } from './sequences/validateUploadCourtIssuedDocumentSequence';
 import { validateUserContactSequence } from './sequences/validateUserContactSequence';
+import { autosaveTrialSessionMinuteSheetSequence } from '@web-client/presenter/sequences/TrialSessionMinutes/autosaveTrialSessionMinuteSheetSequence';
+import { navigateToTermBuilderPageSequence } from '@web-client/presenter/sequences/TrialSessions/navigateToTermBuilderPageSequence';
+import { gotoTrialSessionTermBuilderSequence } from '@web-client/presenter/sequences/gotoTrialSessionTermBuilderSequence';
+import { asyncServiceUnavailablrHandlerSequence } from '@web-client/presenter/sequences/asyncServiceUnavailablrHandlerSequence';
+import { showRemovePetitionerEmailModalSequence } from '@web-client/presenter/sequences/showRemovePetitionerEmailModalSequence';
+import { removePetitionerEmailSequence } from '@web-client/presenter/sequences/removePetitionerEmailSequence';
+import { updateDocumentSearchResultsSequence } from './sequences/updateDocumentSearchResultsSequence';
+import { saveMinuteSheetToDraftsSequence } from './sequences/TrialSessionMinutes/saveMinuteSheetToDraftsSequence';
 
 export const presenterSequences = {
   addAnotherIrsNoticeToFormSequence,
   addCaseToTrialSessionSequence:
     addCaseToTrialSessionSequence as unknown as Function,
   addFactOrReasonSequence,
+  addMinuteSheetFormRowSequence,
   addPenaltyInputSequence: addPenaltyInputSequence as unknown as Function,
   addStatisticToFormSequence: addStatisticToFormSequence as unknown as Function,
   addSupportingDocumentToFormSequence:
@@ -647,6 +670,9 @@ export const presenterSequences = {
     associateIrsPractitionerWithCaseSequence as unknown as Function,
   associatePrivatePractitionerWithCaseSequence:
     associatePrivatePractitionerWithCaseSequence as unknown as Function,
+  autosaveTrialSessionMinuteSheetSequence,
+  asyncServiceUnavailablrHandlerSequence:
+    asyncServiceUnavailablrHandlerSequence as unknown as Function,
   autoSaveTrialSessionWorkingCopySequence:
     autoSaveTrialSessionWorkingCopySequence as unknown as Function,
   batchCompleteMessageSequence:
@@ -657,11 +683,8 @@ export const presenterSequences = {
   batchDownloadTrialSessionSequence:
     batchDownloadTrialSessionSequence as unknown as Function,
   blockCaseFromTrialSequence: blockCaseFromTrialSequence as unknown as Function,
-  broadcastIdleStatusActiveSequence:
-    broadcastIdleStatusActiveSequence as unknown as Function,
+  editRemoteStatusSequence: editRemoteStatusSequence as unknown as Function,
   broadcastLogoutSequence: broadcastLogoutSequence as unknown as Function,
-  broadcastStayLoggedInSequence:
-    broadcastStayLoggedInSequence as unknown as Function,
   calculatePenaltiesSequence: calculatePenaltiesSequence as unknown as Function,
   canEditContactInformationSequence:
     canEditContactInformationSequence as unknown as Function,
@@ -674,8 +697,6 @@ export const presenterSequences = {
     cancelRemovePetitionerSequence as unknown as Function,
   caseDetailPrimaryTabChangeSequence:
     caseDetailPrimaryTabChangeSequence as unknown as Function,
-  caseInventoryReportLoadMoreSequence:
-    caseInventoryReportLoadMoreSequence as unknown as Function,
   cerebralBindSimpleSetStateSequence:
     cerebralBindSimpleSetStateSequence as unknown as Function,
   changeTabAndSetViewerDocumentToDisplaySequence:
@@ -692,10 +713,12 @@ export const presenterSequences = {
   clearDropDownMenuStateSequence:
     clearDropDownMenuStateSequence as unknown as Function,
   clearDueDateSequence: clearDueDateSequence as unknown as Function,
+  clearRemoteStatusSequence: clearRemoteStatusSequence as unknown as Function,
   clearExistingDocumentSequence:
     clearExistingDocumentSequence as unknown as Function,
   clearModalFormSequence: clearModalFormSequence as unknown as Function,
   clearModalSequence: clearModalSequence as unknown as Function,
+  clearMotionOrderResponseFormSequence,
   clearOpenClosedCasesCurrentPageSequence:
     clearOpenClosedCasesCurrentPageSequence as unknown as Function,
   clearOptionalCustomCaseReportFilterSequence,
@@ -744,8 +767,6 @@ export const presenterSequences = {
     completePrintPaperPetitionReceiptSequence as unknown as Function,
   completeTrialSessionCalendarSequence,
   confirmSignUpSequence,
-  confirmStayLoggedInSequence:
-    confirmStayLoggedInSequence as unknown as Function,
   confirmWorkItemAlreadyCompleteSequence:
     confirmWorkItemAlreadyCompleteSequence as unknown as Function,
   consolidatedCaseCheckboxAllChangeSequence:
@@ -786,7 +807,11 @@ export const presenterSequences = {
   dismissModalSequence: dismissModalSequence as unknown as Function,
   dismissThirtyDayTrialAlertSequence:
     dismissThirtyDayTrialAlertSequence as unknown as Function,
+  displayProgressSpinnerSequence,
+  handleEditedTrialSessionSequence,
   downloadCsvFileSequence: downloadCsvFileSequence as unknown as Function,
+  downloadMinuteSheetFormPdfSequence,
+  saveMinuteSheetToDraftsSequence,
   editCorrespondenceDocumentSequence:
     editCorrespondenceDocumentSequence as unknown as Function,
   editUnsignedDraftDocumentSequence,
@@ -796,6 +821,7 @@ export const presenterSequences = {
     exportCsvCustomCaseReportSequence as unknown as Function,
   exportPendingReportSequence:
     exportPendingReportSequence as unknown as Function,
+  exportTrialLocationToCsvSequence,
   fetchUserNotificationsSequence:
     fetchUserNotificationsSequence as unknown as Function,
   fileAndServeCourtIssuedDocumentFromDocketEntrySequence:
@@ -827,6 +853,8 @@ export const presenterSequences = {
   goToChangePasswordSequence,
   goToCreatePetitionerAccountSequence,
   goToForgotPasswordSequence,
+  goToTrialSessionMinutesSequence,
+  goToOrderResponseSequence,
   goToVerificationSentSequence:
     goToVerificationSentSequence as unknown as Function,
   gotoAccessibilityStatementSequence:
@@ -900,6 +928,7 @@ export const presenterSequences = {
   gotoEditUploadCourtIssuedDocumentSequence:
     gotoEditUploadCourtIssuedDocumentSequence as unknown as Function,
   gotoFileDocumentSequence: gotoFileDocumentSequence as unknown as Function,
+  gotoIdleLogoutSequence,
   gotoJudgeActivityReportSequence:
     gotoJudgeActivityReportSequence as unknown as Function,
   gotoLoginSequence,
@@ -945,10 +974,10 @@ export const presenterSequences = {
     gotoStartCaseWizardSequence as unknown as Function,
   gotoStatusReportOrderSequence,
   gotoStyleGuideSequence: gotoStyleGuideSequence as unknown as Function,
-  gotoTrialSessionDetailSequence:
-    gotoTrialSessionDetailSequence as unknown as Function,
-  gotoTrialSessionPlanningReportSequence:
-    gotoTrialSessionPlanningReportSequence as unknown as Function,
+  gotoTrialLocationSequence,
+  gotoTrialSessionDetailSequence: gotoTrialSessionDetailsSequence,
+  gotoTrialSessionPlanningReportViewSequence,
+  gotoTrialSessionTermBuilderSequence,
   gotoTrialSessionWorkingCopySequence:
     gotoTrialSessionWorkingCopySequence as unknown as Function,
   gotoTrialSessionsSequence,
@@ -960,8 +989,8 @@ export const presenterSequences = {
     gotoUserContactEditSequence as unknown as Function,
   gotoVerifyEmailSequence,
   gotoWorkQueueSequence: gotoWorkQueueSequence as unknown as Function,
+  gotoRecentFilingsSequence: gotoRecentFilingsSequence as unknown as Function,
   handleAppHasUpdatedSequence,
-  handleIdleLogoutSequence: handleIdleLogoutSequence as unknown as Function,
   initAppSequence,
   leaveCaseForLaterServiceSequence:
     leaveCaseForLaterServiceSequence as unknown as Function,
@@ -971,11 +1000,9 @@ export const presenterSequences = {
     loadDefaultDraftViewerDocumentToDisplaySequence as unknown as Function,
   loadDefaultViewerCorrespondenceSequence:
     loadDefaultViewerCorrespondenceSequence as unknown as Function,
-  loadMoreCaseDeadlinesSequence:
-    loadMoreCaseDeadlinesSequence as unknown as Function,
-  loadMorePendingItemsSequence:
-    loadMorePendingItemsSequence as unknown as Function,
-  loadPdfSequence: loadPdfSequence as unknown as Function,
+  loadPdfForTabSequence: loadPdfForTabSequence as unknown as Function,
+  loadRecentFilingsSequence: loadRecentFilingsSequence as unknown as Function,
+  motionOrderResponsePdfPreviewSequence,
   navigateBackSequence: navigateBackSequence as unknown as Function,
   navigateToCaseDetailFromPaperServiceSequence:
     navigateToCaseDetailFromPaperServiceSequence as unknown as Function,
@@ -995,6 +1022,8 @@ export const presenterSequences = {
   navigateToPrintableCaseConfirmationSequence:
     navigateToPrintableCaseConfirmationSequence as unknown as Function,
   navigateToStatusReportOrderSequence,
+  navigateToTermBuilderPageSequence,
+  navigateToTrialSessionPlanningReportSequence,
   notFoundErrorSequence: notFoundErrorSequence as unknown as Function,
   noticeGenerationCompleteSequence:
     noticeGenerationCompleteSequence as unknown as Function,
@@ -1026,9 +1055,13 @@ export const presenterSequences = {
     openAddToTrialModalSequence as unknown as Function,
   openAppMaintenanceModalSequence:
     openAppMaintenanceModalSequence as unknown as Function,
+  openEditRemoteTrialModalSequence:
+    openEditRemoteTrialModalSequence as unknown as Function,
   openAppUpdatedModalSequence,
   openBlockFromTrialModalSequence:
     openBlockFromTrialModalSequence as unknown as Function,
+  openEditRemoteStatusModalSequence:
+    openEditRemoteStatusModalSequence as unknown as Function,
   openCancelDraftDocumentModalSequence:
     openCancelDraftDocumentModalSequence as unknown as Function,
   openCaseDocumentDownloadUrlSequence:
@@ -1082,6 +1115,8 @@ export const presenterSequences = {
     openCreateMessageModalSequence as unknown as Function,
   openCreateOrderChooseTypeModalSequence:
     openCreateOrderChooseTypeModalSequence as unknown as Function,
+  openCreateTermModalSequence:
+    openCreateTermModalSequence as unknown as Function,
   openDeleteCaseDeadlineModalSequence:
     openDeleteCaseDeadlineModalSequence as unknown as Function,
   openDeleteCaseNoteConfirmModalSequence:
@@ -1104,16 +1139,12 @@ export const presenterSequences = {
     openGainElectronicAccessToCaseModalSequence as unknown as Function,
   openItemizedPenaltiesModalSequence:
     openItemizedPenaltiesModalSequence as unknown as Function,
-  openPdfPreviewModalSequence:
-    openPdfPreviewModalSequence as unknown as Function,
   openPractitionerDocumentDownloadUrlSequence:
     openPractitionerDocumentDownloadUrlSequence as unknown as Function,
   openPrintGeneratedPaperServiceSequence:
     openPrintGeneratedPaperServiceSequence as unknown as Function,
   openPrintableTrialSessionWorkingCopyModalSequence:
     openPrintableTrialSessionWorkingCopyModalSequence as unknown as Function,
-  openPrioritizeCaseModalSequence:
-    openPrioritizeCaseModalSequence as unknown as Function,
   openRemoveFromTrialSessionModalSequence:
     openRemoveFromTrialSessionModalSequence as unknown as Function,
   openRemovePetitionerCounselModalSequence:
@@ -1140,8 +1171,6 @@ export const presenterSequences = {
     openTrialSessionPlanningModalSequence as unknown as Function,
   openUnblockFromTrialModalSequence:
     openUnblockFromTrialModalSequence as unknown as Function,
-  openUnprioritizeCaseModalSequence:
-    openUnprioritizeCaseModalSequence as unknown as Function,
   openUnsealDocketEntryModalSequence:
     openUnsealDocketEntryModalSequence as unknown as Function,
   openUpdateCaseModalSequence:
@@ -1152,7 +1181,6 @@ export const presenterSequences = {
   printPaperServiceForTrialCompleteSequence:
     printPaperServiceForTrialCompleteSequence as unknown as Function,
   printTrialCalendarSequence: printTrialCalendarSequence as unknown as Function,
-  prioritizeCaseSequence: prioritizeCaseSequence as unknown as Function,
   redirectToDashboardSequence:
     redirectToDashboardSequence as unknown as Function,
   refreshPdfSequence: refreshPdfSequence as unknown as Function,
@@ -1164,12 +1192,14 @@ export const presenterSequences = {
     removeCaseFromTrialSequence as unknown as Function,
   removeFactOrReasonSequence,
   removeIrsNoticeFromFormSequence,
+  removeMinuteSheetFormRowSequence,
   removePetitionForReplacementSequence:
     removePetitionForReplacementSequence as unknown as Function,
   removePetitionerAndUpdateCaptionSequence:
     removePetitionerAndUpdateCaptionSequence as unknown as Function,
   removePetitionerCounselFromCaseSequence:
     removePetitionerCounselFromCaseSequence as unknown as Function,
+  removePetitionerEmailSequence,
   removeRespondentCounselFromCaseSequence:
     removeRespondentCounselFromCaseSequence as unknown as Function,
   removeScannedPdfSequence: removeScannedPdfSequence as unknown as Function,
@@ -1184,17 +1214,14 @@ export const presenterSequences = {
   resetCaseMenuSequence: resetCaseMenuSequence as unknown as Function,
   resetHeaderAccordionsSequence:
     resetHeaderAccordionsSequence as unknown as Function,
-  resetIdleTimerSequence: resetIdleTimerSequence as unknown as Function,
   resetPasswordSequence,
   resetSecondaryAddressSequence,
   resetTrialSessionsFiltersSequence,
-  retryAsyncRequestSequence: retryAsyncRequestSequence as unknown as Function,
   reviewCaseAssociationRequestSequence:
     reviewCaseAssociationRequestSequence as unknown as Function,
   reviewExternalDocumentInformationSequence:
     reviewExternalDocumentInformationSequence as unknown as Function,
-  runTrialSessionPlanningReportSequence:
-    runTrialSessionPlanningReportSequence as unknown as Function,
+  runTrialSessionPlanningReportSequence,
   saveCourtIssuedDocketEntrySequence:
     saveCourtIssuedDocketEntrySequence as unknown as Function,
   saveDocketEntryForLaterCompleteSequence:
@@ -1215,7 +1242,7 @@ export const presenterSequences = {
   selectDocumentForScanSequence:
     selectDocumentForScanSequence as unknown as Function,
   selectScannerSequence: selectScannerSequence as unknown as Function,
-  selectWorkItemSequence: selectWorkItemSequence as unknown as Function,
+  selectWorkItemSequence,
   serveCaseToIrsSequence: serveCaseToIrsSequence as unknown as Function,
   serveCourtIssuedDocumentSequence:
     serveCourtIssuedDocumentSequence as unknown as Function,
@@ -1237,6 +1264,10 @@ export const presenterSequences = {
     setCaseTypeToDisplaySequence as unknown as Function,
   setCurrentPageIndexSequence:
     setCurrentPageIndexSequence as unknown as Function,
+  setCurrentTabSequence,
+  setCurrentPaginationPageSequence:
+    setCurrentPaginationPageSequence as unknown as Function,
+
   setCustomCaseReportFiltersSequence,
   setDocumentForPreviewSequence:
     setDocumentForPreviewSequence as unknown as Function,
@@ -1246,8 +1277,6 @@ export const presenterSequences = {
     setDocumentUploadModeSequence as unknown as Function,
   setForHearingSequence: setForHearingSequence as unknown as Function,
   setHasIrsNoticeSequence,
-  setIdleStatusActiveSequence:
-    setIdleStatusActiveSequence as unknown as Function,
   setIrsNoticeFalseSequence: setIrsNoticeFalseSequence as unknown as Function,
   setIsLoadingSequence,
   setIsNotLoadingSequence,
@@ -1265,6 +1294,8 @@ export const presenterSequences = {
   setPetitionTypeSequence,
   setPractitionerClosedCasesPageSequence,
   setPractitionerOpenCasesPageSequence,
+  setRecentFilingsTableSortSequence:
+    setRecentFilingsTableSortSequence as unknown as Function,
   setSelectedAddressOnFormSequence:
     setSelectedAddressOnFormSequence as unknown as Function,
   setSelectedBatchIndexSequence:
@@ -1291,13 +1322,13 @@ export const presenterSequences = {
     showMoreClosedCasesSequence as unknown as Function,
   showMoreOpenCasesSequence: showMoreOpenCasesSequence as unknown as Function,
   showMoreResultsSequence: showMoreResultsSequence as unknown as Function,
+  showRemovePetitionerEmailModalSequence,
   showPaperServiceProgressSequence:
     showPaperServiceProgressSequence as unknown as Function,
   showThirtyDayNoticeModalSequence:
     showThirtyDayNoticeModalSequence as unknown as Function,
   showViewPetitionerCounselModalSequence:
     showViewPetitionerCounselModalSequence as unknown as Function,
-  signOutIdleSequence,
   signOutSequence: signOutSequence as unknown as Function,
   signOutUserInitiatedSequence,
   skipSigningOrderSequence: skipSigningOrderSequence as unknown as Function,
@@ -1341,6 +1372,8 @@ export const presenterSequences = {
     submitCreateOrderModalSequence as unknown as Function,
   submitCreatePetitionerAccountFormSequence:
     submitCreatePetitionerAccountFormSequence as unknown as Function,
+  submitCreateTermFormSequence:
+    submitCreateTermFormSequence as unknown as Function,
   submitEditContactSequence: submitEditContactSequence as unknown as Function,
   submitEditDeficiencyStatisticSequence:
     submitEditDeficiencyStatisticSequence as unknown as Function,
@@ -1366,6 +1399,7 @@ export const presenterSequences = {
   submitJudgeActivityStatisticsReportSequence:
     submitJudgeActivityStatisticsReportSequence as unknown as Function,
   submitLoginSequence,
+  submitMotionOrderResponseSequence,
   submitOpinionAdvancedSearchSequence:
     submitOpinionAdvancedSearchSequence as unknown as Function,
   submitOrderAdvancedSearchSequence:
@@ -1415,7 +1449,6 @@ export const presenterSequences = {
     unblockCaseFromTrialSequence as unknown as Function,
   unidentifiedUserErrorSequence:
     unidentifiedUserErrorSequence as unknown as Function,
-  unprioritizeCaseSequence: unprioritizeCaseSequence as unknown as Function,
   unsealCaseSequence: unsealCaseSequence as unknown as Function,
   unsealDocketEntrySequence: unsealDocketEntrySequence as unknown as Function,
   updateAddDeficiencyFormValueSequence:
@@ -1436,6 +1469,7 @@ export const presenterSequences = {
     updateCaseAssociationFormValueSequence as unknown as Function,
   updateCaseCheckboxSequence: updateCaseCheckboxSequence as unknown as Function,
   updateCaseDeadlineSequence: updateCaseDeadlineSequence as unknown as Function,
+  updateCaseDeadlineReportPageSequence,
   updateCaseDetailsSequence: updateCaseDetailsSequence as unknown as Function,
   updateCaseNoteSequence: updateCaseNoteSequence as unknown as Function,
   updateCasePartyTypeSequence:
@@ -1460,6 +1494,8 @@ export const presenterSequences = {
     updateDocketEntryWorksheetSequence as unknown as Function,
   updateDocketNumberSearchFormSequence:
     updateDocketNumberSearchFormSequence as unknown as Function,
+  updateDocumentSearchResultsSequence:
+    updateDocumentSearchResultsSequence as unknown as Function,
   updateFileDocumentWizardFormValueSequence:
     updateFileDocumentWizardFormValueSequence as unknown as Function,
   updateFilePetitionSequence,
@@ -1469,7 +1505,7 @@ export const presenterSequences = {
   updateFormValueAndSecondaryContactInfoSequence:
     updateFormValueAndSecondaryContactInfoSequence as unknown as Function,
   updateFormValueCountryTypeSequence,
-  updateFormValueSequence: updateFormValueSequence as unknown as Function,
+  updateFormValueSequence,
   updateFormValueUpdatedSequence,
   updateGenerateNoticesProgressSequence:
     updateGenerateNoticesProgressSequence as unknown as Function,
@@ -1507,6 +1543,7 @@ export const presenterSequences = {
     updateTrialSessionCompleteSequence as unknown as Function,
   updateTrialSessionFormDataSequence:
     updateTrialSessionFormDataSequence as unknown as Function,
+  updateTrialSessionMinutesFormSequence,
   updateTrialSessionSequence: updateTrialSessionSequence as unknown as Function,
   updateUserCaseNoteOnWorkingCopySequence:
     updateUserCaseNoteOnWorkingCopySequence as unknown as Function,
@@ -1540,6 +1577,8 @@ export const presenterSequences = {
     validateAddToTrialSessionSequence as unknown as Function,
   validateBlockFromTrialSequence:
     validateBlockFromTrialSequence as unknown as Function,
+  validateEditRemoteStatusSequence:
+    validateEditRemoteStatusSequence as unknown as Function,
   validateCaseAdvancedSearchFormSequence:
     validateCaseAdvancedSearchFormSequence as unknown as Function,
   validateCaseAssociationRequestSequence:
@@ -1570,12 +1609,16 @@ export const presenterSequences = {
   validateDocumentSequence: validateDocumentSequence as unknown as Function,
   validateEditPetitionerCounselSequence:
     validateEditPetitionerCounselSequence as unknown as Function,
+  validateEditRemoteTrialModalSequence:
+    validateEditRemoteTrialModalSequence as unknown as Function,
   validateEditRespondentCounselSequence:
     validateEditRespondentCounselSequence as unknown as Function,
   validateExternalDocumentInformationSequence:
     validateExternalDocumentInformationSequence as unknown as Function,
   validateFilePetitionStep2Sequence,
   validateFilePetitionStep5Sequence,
+  validateMotionOrderResponseSequence:
+    validateMotionOrderResponseSequence as unknown as Function,
   validateNoteSequence: validateNoteSequence as unknown as Function,
   validateOpinionSearchSequence:
     validateOpinionSearchSequence as unknown as Function,
@@ -1590,8 +1633,6 @@ export const presenterSequences = {
     validatePractitionerSearchByBarNumberFormSequence as unknown as Function,
   validatePractitionerSearchByNameFormSequence:
     validatePractitionerSearchByNameFormSequence as unknown as Function,
-  validatePrioritizeCaseSequence:
-    validatePrioritizeCaseSequence as unknown as Function,
   validateRemoveFromTrialSessionSequence:
     validateRemoveFromTrialSessionSequence as unknown as Function,
   validateSelectDocumentTypeSequence:
@@ -1604,8 +1645,7 @@ export const presenterSequences = {
     validateTrialSessionHearingNoteSequence as unknown as Function,
   validateTrialSessionNoteSequence:
     validateTrialSessionNoteSequence as unknown as Function,
-  validateTrialSessionPlanningSequence:
-    validateTrialSessionPlanningSequence as unknown as Function,
+  validateTrialSessionPlanningSequence,
   validateTrialSessionSequence:
     validateTrialSessionSequence as unknown as Function,
   validateUpdateCaseModalSequence:
@@ -1634,7 +1674,12 @@ export const presenter = {
     [GatewayTimeoutError, gatewayTimeoutErrorSequence], //504
     [ActionError, setCurrentPageErrorSequence], // generic error handler
   ],
-  providers: {} as { applicationContext: ClientApplicationContext; router: {} },
+  providers: {} as {
+    applicationContext: ClientApplicationContext;
+    router: {};
+  } & { socket: { start: () => void; stop: () => void } } & {
+    path: any;
+  },
   sequences: presenterSequences,
   state: cloneDeep(initialState),
 };
@@ -1653,6 +1698,7 @@ declare global {
       set: (key: any, value: any) => void;
       merge: (key: any, value: any) => void;
       unset: (key: any) => void;
+      increment: (key: any) => void;
     };
     path: any;
     props: Props;

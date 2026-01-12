@@ -1,88 +1,50 @@
-import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
+import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
+import { Case } from '@shared/business/entities/cases/Case';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
-import { createISODateString } from '../../../../shared/src/business/utilities/DateHandler';
+import { createISODateString } from '@shared/business/utilities/DateHandler';
+import { getReadyForTrialCases } from '@web-api/persistence/postgres/cases/reports/getReadyForTrialCases';
 import { uniqBy } from 'lodash';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { settlePromises } from '@web-api/utilities/settlePromises';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
 
-/**
- * @param {object} applicationContext the application context
- */
 export const checkForReadyForTrialCasesInteractor = async (
   applicationContext: ServerApplicationContext,
 ) => {
   applicationContext.logger.debug('Time', createISODateString());
 
-  const docketNumbers: { docketNumber: string }[] = await applicationContext
-    .getPersistenceGateway()
-    .getReadyForTrialCases({ applicationContext });
+  const docketNumbers: { docketNumber: string }[] =
+    await getReadyForTrialCases();
 
-  const caseCatalog = uniqBy(docketNumbers, 'docketNumber');
+  const caseCatalogDocketNumbers = uniqBy(docketNumbers, 'docketNumber').map(
+    caseRecord => caseRecord.docketNumber,
+  );
 
   const updateForTrial = async entity => {
     // assuming we want these done serially; if first fails, promise is rejected and error thrown
     const caseEntity = entity.validate();
-    await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-      applicationContext,
+    await updateCaseAndAssociations({
       authorizedUser: undefined,
       caseToUpdate: caseEntity,
     });
-
-    if (caseEntity.isReadyForTrial()) {
-      await applicationContext
-        .getPersistenceGateway()
-        .createCaseTrialSortMappingRecords({
-          applicationContext,
-          caseSortTags: caseEntity.generateTrialSortTags(),
-          docketNumber: caseEntity.docketNumber,
-        });
-    }
   };
 
-  const acquireLockForCase = async ({
-    docketNumber,
-    retry = 0,
-  }: {
-    docketNumber: string;
-    retry?: number;
-  }) => {
-    const maxRetries = 20;
-    try {
-      await acquireLock({
-        applicationContext,
-        authorizedUser: undefined,
-        identifiers: [`case|${docketNumber}`],
-        onLockError: new ServiceUnavailableError(
-          `${docketNumber} is currently being updated`,
-        ),
-        ttl: 900,
-      });
-    } catch (err) {
-      if (retry < maxRetries && err instanceof ServiceUnavailableError) {
-        await applicationContext.getUtilities().sleep(5000);
-        return acquireLockForCase({
-          docketNumber,
-          retry: retry + 1,
-        });
-      }
-      throw err;
-    }
-  };
-
-  const checkReadyForTrial = async caseRecord => {
+  const checkReadyForTrial = async (
+    caseRecord: Omit<RawCase, 'consolidatedCases'>,
+  ) => {
     const { docketNumber } = caseRecord;
-    await acquireLockForCase({ docketNumber });
 
-    const caseToCheck = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      });
+    const removeLockFunction = await acquireLock({
+      applicationContext,
+      authorizedUser: undefined,
+      identifiers: [`case|${docketNumber}`],
+      retries: 20,
+      waitTime: 5000,
+    });
 
-    if (caseToCheck) {
-      const caseEntity = new Case(caseToCheck, {
+    if (caseRecord) {
+      const caseEntity = new Case(caseRecord, {
         authorizedUser: undefined,
       });
       if (caseEntity.status === CASE_STATUS_TYPES.generalDocket) {
@@ -95,16 +57,15 @@ export const checkForReadyForTrialCasesInteractor = async (
         }
       }
     }
-    await applicationContext.getPersistenceGateway().removeLock({
-      applicationContext,
-      identifiers: [`case|${docketNumber}`],
-    });
+
+    await removeLockFunction();
   };
 
-  const caseUpdatePromises: Promise<void>[] =
-    caseCatalog.map(checkReadyForTrial);
+  const casesToUpdate = await getCasesByDocketNumbers({
+    docketNumbers: caseCatalogDocketNumbers,
+  });
 
-  await Promise.all(caseUpdatePromises);
+  await settlePromises(casesToUpdate.map(aCase => checkReadyForTrial(aCase)));
 
   applicationContext.logger.debug('Time', createISODateString());
 };

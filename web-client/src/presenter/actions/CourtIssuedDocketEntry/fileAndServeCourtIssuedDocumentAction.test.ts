@@ -7,10 +7,22 @@ describe('submitCourtIssuedDocketEntryAction', () => {
   presenter.providers.applicationContext = applicationContext;
   const clientConnectionId = 'ABC123';
   const docketNumbers = ['123-20'];
-
   it('should call the interactor for filing and serving court-issued documents and pass the current clientConnectionId', async () => {
-    const thisDocketNumber = '123-20';
-
+    const mockDocketEntryId = 'abc';
+    const mockCaseDetail = {
+      docketNumber: '123-20',
+      docketEntries: [],
+    }
+    const mockForm = {
+      attachments: false,
+      date: '2019-01-01T00:00:00.000Z',
+      documentTitle: '[Anything]',
+      documentType: 'Order',
+      eventCode: 'O',
+      freeText: 'Testing',
+      generatedDocumentTitle: 'Order F',
+      scenario: 'Type A',
+    };
     await runAction(fileAndServeCourtIssuedDocumentAction, {
       modules: {
         presenter,
@@ -19,21 +31,10 @@ describe('submitCourtIssuedDocketEntryAction', () => {
         docketNumbers,
       },
       state: {
-        caseDetail: {
-          docketNumber: thisDocketNumber,
-        },
+        caseDetail: mockCaseDetail,
         clientConnectionId,
-        docketEntryId: 'abc',
-        form: {
-          attachments: false,
-          date: '2019-01-01T00:00:00.000Z',
-          documentTitle: '[Anything]',
-          documentType: 'Order',
-          eventCode: 'O',
-          freeText: 'Testing',
-          generatedDocumentTitle: 'Order F',
-          scenario: 'Type A',
-        },
+        docketEntryId: mockDocketEntryId,
+        form: mockForm,
       },
     });
 
@@ -45,6 +46,84 @@ describe('submitCourtIssuedDocketEntryAction', () => {
     expect(
       applicationContext.getUseCases().fileAndServeCourtIssuedDocumentInteractor
         .mock.calls[0][1],
-    ).toMatchObject({ clientConnectionId, docketNumbers: [thisDocketNumber] });
+    ).toEqual({
+      clientConnectionId,
+      docketEntryId: 'abc',
+      docketNumbers: ['123-20'],
+      form: {
+        attachments: false,
+        date: '2019-01-01T00:00:00.000Z',
+        documentTitle: '[Anything]',
+        documentType: 'Order',
+        eventCode: 'O',
+        freeText: 'Testing',
+        generatedDocumentTitle: 'Order F',
+        scenario: 'Type A',
+      },
+      subjectCaseDocketNumber: '123-20',
+    });
+  })
+  it('should call the interactor for filing and serving court-issued documents for status reports', async () => {
+    const mockDocketEntryId = 'abc';
+    const mockCaseDetail = {
+      docketNumber: '123-20',
+      docketEntries: [
+        {
+          docketEntryId: 'abc',
+          draftOrderState: {
+            dueDate: '2021-01-01',
+            orderType: 'statusReport',
+          }
+        },
+        {
+          docketEntryId: 'def',
+        }
+      ],
+    }
+    const mockForm = {
+      attachments: false,
+      documentTitle: '[Anything]',
+      documentType: 'Order',
+      eventCode: 'O',
+      freeText: 'Testing',
+      generatedDocumentTitle: 'Order F',
+      scenario: 'Type A',
+    };
+
+    await runAction(fileAndServeCourtIssuedDocumentAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        docketNumbers,
+      },
+      state: {
+        caseDetail: mockCaseDetail,
+        clientConnectionId,
+        docketEntryId: mockDocketEntryId,
+        form: mockForm,
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().fileAndServeCourtIssuedDocumentInteractor
+        .mock.calls[0][1],
+    ).toEqual({
+      clientConnectionId,
+      docketEntryId: 'abc',
+      docketNumbers: ['123-20'],
+      form: {
+        attachments: false,
+        date: '2021-01-01T05:00:00.000Z',
+        documentTitle: '[Anything]',
+        documentType: 'Order',
+        eventCode: 'O',
+        freeText: 'Testing',
+        generatedDocumentTitle: 'Order F',
+        orderType: 'statusReport',
+        scenario: 'Type A',
+      },
+      subjectCaseDocketNumber: '123-20',
+    });
   });
 });

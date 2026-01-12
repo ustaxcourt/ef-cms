@@ -4,9 +4,12 @@ import {
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { RawPractitioner } from '@shared/business/entities/Practitioner';
+import { CaseFactory } from '@shared/business/entities/cases/CaseFactory';
 
 /**
  * submitCaseAssociationRequestInteractor
@@ -34,33 +37,45 @@ const submitCaseAssociationRequest = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
+
+  if (!user) {
+    throw new NotFoundError(`Could not find user ${authorizedUser.userId}`);
+  }
 
   const isPrivatePractitioner =
     authorizedUser.role === ROLES.privatePractitioner;
   const isIrsPractitioner = authorizedUser.role === ROLES.irsPractitioner;
 
   if (isPrivatePractitioner && filers) {
-    return await applicationContext
+    const theCase = await applicationContext
       .getUseCaseHelpers()
       .associatePrivatePractitionerToCase({
-        applicationContext,
         authorizedUser,
         docketNumber,
         representing: filers,
-        user,
+        user: user as RawPractitioner,
       });
-  } else if (isIrsPractitioner) {
-    return await applicationContext
+
+    return CaseFactory.getCase({
+      rawCase: theCase,
+      user: authorizedUser,
+    });
+  }
+
+  if (isIrsPractitioner) {
+    const theCase = await applicationContext
       .getUseCaseHelpers()
       .associateIrsPractitionerToCase({
-        applicationContext,
         authorizedUser,
         docketNumber,
         user,
       });
+
+    return CaseFactory.getCase({
+      rawCase: theCase,
+      user: authorizedUser,
+    });
   }
 };
 

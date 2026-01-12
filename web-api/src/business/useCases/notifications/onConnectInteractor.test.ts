@@ -43,7 +43,7 @@ describe('onConnectInteractor', () => {
   });
 
   it('should add https protocol to the endpoint when the endpoint does not have a protocol', async () => {
-    let endpoint = 'somedomain.hello.org';
+    const endpoint = 'somedomain.hello.org';
     await onConnectInteractor(
       applicationContext,
       {
@@ -57,7 +57,6 @@ describe('onConnectInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().saveUserConnection,
     ).toHaveBeenCalledWith({
-      applicationContext,
       clientConnectionId: mockClientConnectionId,
       connectionId: mockConnectionId,
       endpoint: 'https://' + endpoint,
@@ -66,7 +65,7 @@ describe('onConnectInteractor', () => {
   });
 
   it('should not add https protocol when endpoint already has a protocol', async () => {
-    let endpoint = 'https://somedomain.hello.org';
+    const endpoint = 'https://somedomain.hello.org';
     await onConnectInteractor(
       applicationContext,
       {
@@ -80,7 +79,6 @@ describe('onConnectInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().saveUserConnection,
     ).toHaveBeenCalledWith({
-      applicationContext,
       clientConnectionId: mockClientConnectionId,
       connectionId: mockConnectionId,
       endpoint,

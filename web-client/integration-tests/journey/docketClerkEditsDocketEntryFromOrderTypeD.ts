@@ -81,7 +81,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeD = (
     );
 
     expect(updatedOrderDocument).toMatchObject({
-      date: '2002-01-01T00:00:00.000-05:00',
+      date: '2002-01-01T05:00:00.000Z',
       documentTitle: 'Order for Filing Fee on 01-01-2002',
       documentType: 'Order for Filing Fee',
       eventCode: 'OF',
@@ -93,7 +93,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeD = (
     });
 
     expect(cerebralTest.getState('form')).toMatchObject({
-      date: '2002-01-01T00:00:00.000-05:00',
+      date: '2002-01-01T05:00:00.000Z',
       documentTitle: 'Order for Filing Fee on 01-01-2002',
       documentType: 'Order for Filing Fee',
       eventCode: 'OF',

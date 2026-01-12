@@ -52,7 +52,7 @@ export const Statistics = connect(
           <div className="grid-row grid-gap flex-justify">
             <div className="grid-col-6">
               <h4>Deficiency</h4>
-              <table className="usa-table ustc-table responsive-table">
+              <table data-testid="statistics-deficiencies-table" className="usa-table ustc-table responsive-table">
                 <thead>
                   <tr>
                     <th>Year/Period</th>
@@ -76,7 +76,7 @@ export const Statistics = connect(
 
             <div className="grid-col-6">
               <h4>Penalties</h4>
-              <table className="usa-table ustc-table responsive-table ">
+              <table data-testid="statistics-penalties-table" className="usa-table ustc-table responsive-table ">
                 <thead>
                   <tr>
                     <th>IRS Notice</th>
@@ -85,38 +85,43 @@ export const Statistics = connect(
                   </tr>
                 </thead>
                 <tbody>
-                  {statisticsHelper.formattedStatistics.map(statistic => (
-                    <tr key={statistic.statisticId}>
-                      <td>{statistic.formattedIrsTotalPenalties}</td>
-                      <td>{statistic.formattedDeterminationTotalPenalties}</td>
-                      <td>
-                        {statisticsHelper.showEditButtons && (
+                  {statisticsHelper.formattedStatistics.map(
+                    (statistic, index) => (
+                      <tr key={statistic.statisticId}>
+                        <td>{statistic.formattedIrsTotalPenalties}</td>
+                        <td>
+                          {statistic.formattedDeterminationTotalPenalties}
+                        </td>
+                        <td>
+                          {statisticsHelper.showEditButtons && (
+                            <Button
+                              link
+                              className="padding-0 margin-left-2"
+                              href={statistic.editStatisticLink}
+                              icon="edit"
+                            >
+                              Edit Year/Period
+                            </Button>
+                          )}
                           <Button
                             link
+                            data-testid={`view-itemized-penalties-button-${index}`}
                             className="padding-0 margin-left-2"
-                            href={statistic.editStatisticLink}
-                            icon="edit"
+                            onClick={() => {
+                              openItemizedPenaltiesModalSequence({
+                                determinationTotalPenalties:
+                                  statistic.determinationTotalPenalties,
+                                irsTotalPenalties: statistic.irsTotalPenalties,
+                                penalties: statistic.penalties,
+                              });
+                            }}
                           >
-                            Edit Year/Period
+                            View Itemized Penalties
                           </Button>
-                        )}
-                        <Button
-                          link
-                          className="padding-0 margin-left-2"
-                          onClick={() => {
-                            openItemizedPenaltiesModalSequence({
-                              determinationTotalPenalties:
-                                statistic.determinationTotalPenalties,
-                              irsTotalPenalties: statistic.irsTotalPenalties,
-                              penalties: statistic.penalties,
-                            });
-                          }}
-                        >
-                          View Itemized Penalties
-                        </Button>
-                      </td>
-                    </tr>
-                  ))}
+                        </td>
+                      </tr>
+                    ),
+                  )}
                 </tbody>
               </table>
             </div>

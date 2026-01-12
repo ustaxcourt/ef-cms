@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Usage
-#   used for running the API and necessary services (dynamo, s3, elasticsearch) locally
+#   used for running the API and necessary services (s3, elasticsearch) locally
 
 npm run build:assets
 
@@ -28,18 +28,11 @@ npm run seed:s3
 
 
 if [ -n "${RESUME}" ]; then
-  echo "Resuming operation with previous s3 and dynamo data"
-else
-  echo "creating & seeding dynamo tables"
-  npm run seed:db
-  exitCode=$?
-fi
-
-if [ "${exitCode}" != 0 ]; then                   
-  echo "Failed to seed data!". 1>&2 && exit 1
+  echo "Resuming operation with previous s3 data"
 fi
 
 npm run migration:postgres
+npm run migration:postgres:contract
 npm run seed:postgres
 
 if [[ -z "${RUN_DIR}" ]]; then
@@ -49,8 +42,7 @@ fi
 nodemon -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore local-only/ --ignore deployed-and-local/ --ignore readonly --exec "npx ts-node --transpile-only web-api/src/app-local.ts"
 
 if [ ! -e "$CI" ]; then
-  echo "killing dynamodb local"
-  pkill -P "${DYNAMO_PID}"
+  echo "killing opensearch"
   pkill -P "${ESEARCH_PID}"
 fi
 

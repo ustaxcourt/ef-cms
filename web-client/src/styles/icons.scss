@@ -138,10 +138,10 @@ button:not(.ustc-button--unstyled) .fa-file-pdf {
 
 .lead-case-icon-text {
   position: absolute;
-  top: 42%;
-  left: 58%;
+  top: 35%;
+  left: 60%;
   cursor: default;
-  font-size: 14px;
+  font-size: 12px;
   transform: translate(-50%, -50%);
   transform-origin: center center;
 }
@@ -193,15 +193,15 @@ button:not(.ustc-button--unstyled) .fa-file-pdf {
   width: 18px;
   height: 18px;
   padding-top: 4px;
-  border: 1px solid #005ea2;
-  border-color: #005ea2;
+  border: 1px solid $color-blue;
+  border-color: $color-blue;
   border-radius: 50%;
   background: url('data:image/svg+xml;utf8,<svg aria-labelledby="svg-inline--fa-title-DIDdjAjqj8je" data-prefix="fa" data-icon="circle" class="svg-inline--fa fa-circle fa-w-16 " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" aria-label="unread messages" color="white" aria-hidden="false"><title id="svg-inline--fa-title-DIDdjAjqj8je">unread messages</title><path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"/></svg>');
 
   .icon-tab-unread-messages-count {
     position: relative;
     bottom: 9px;
-    color: #005ea2;
+    color: $color-blue;
     font-family: 'Source Sans Pro', Times, serif;
     font-size: 13px;
     font-weight: 600;
@@ -215,3 +215,8 @@ button:not(.ustc-button--unstyled) .fa-file-pdf {
 .active .icon-tab-notification .icon-tab-notification-exclamation {
   color: white;
 }
+
+.icon-spacing-4 {
+  margin-right: 4px; 
+}
+

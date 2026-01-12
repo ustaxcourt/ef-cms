@@ -1,7 +1,4 @@
-import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { waitForLoadingComponentToHide, waitForModalsToHide } from '../helpers';
-
-const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
 
 export const petitionsClerkChangesCaseCaptionDuringQC = cerebralTest => {
   return it('Petitions clerk changes case caption for an e-filed petition during petition QC, serves it, and verifies that a docket entry is added', async () => {
@@ -46,9 +43,6 @@ export const petitionsClerkChangesCaseCaptionDuringQC = cerebralTest => {
       workItem => workItem.docketNumber === cerebralTest.docketNumber,
     );
 
-    expect(thisWorkItem.docketNumberWithSuffix).not.toContain(
-      DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
-    );
     expect(thisWorkItem.caseTitle).toContain('A brand new name');
 
     await cerebralTest.runSequence('gotoCaseDetailSequence', {

@@ -1,7 +1,8 @@
-import { navigateTo } from '../../local-only/support/pages/petition-qc';
+import { loginAsPetitionsClerk1 } from 'cypress/helpers/authentication/login-as-helpers';
 
 export function petitionsClerkQcsAndServesElectronicCase(docketNumber: string) {
-  navigateTo('petitionsclerk1', docketNumber);
+  loginAsPetitionsClerk1();
+  cy.visit(`/case-detail/${docketNumber}/petition-qc`)
 
   cy.get('[data-testid="tab-case-info"]').click();
 

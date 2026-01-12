@@ -15,7 +15,7 @@ export const validateCaseDocketNumberSearchAction = ({
   const { docketNumber } = get(
     state.advancedSearchForm.caseSearchByDocketNumber,
   );
-  const errors = {};
+  const errors: { docketNumber?: string } = {};
 
   if (!docketNumber) {
     errors.docketNumber = 'Enter a docket number';

@@ -1,18 +1,39 @@
+import { formattedCaseDetail } from '@web-client/presenter/computeds/formattedCaseDetail';
 import { Button } from '../../../ustc-ui/Button/Button';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
 import React from 'react';
+import { caseInformationHelper } from '@web-client/presenter/computeds/caseInformationHelper';
 
-export const CaseDetails = connect(
+type CaseDetailsProps = {
+  caseDetail: ReturnType<typeof formattedCaseDetail>;
+  caseInformationHelper: ReturnType<typeof caseInformationHelper>;
+  openCleanModalSequence: Function;
+};
+
+export const CaseDetails: React.FC<CaseDetailsProps> = connect(
   {
-    caseDetail: props.caseDetail,
-    caseInformationHelper: props.caseInformationHelper,
-    openCleanModalSequence: props.openCleanModalSequence,
+    caseDetail: props`caseDetail`,
+    caseInformationHelper: props`caseInformationHelper`,
+    openCleanModalSequence: props`openCleanModalSequence`,
   },
   function CaseDetails({
     caseDetail,
     caseInformationHelper,
     openCleanModalSequence,
+  }: {
+    caseDetail: {
+      caseType: string;
+      procedureType: string;
+      irsNoticeDateFormatted: string;
+      filingFee: string;
+      formattedPreferredTrialCity: string;
+    };
+    caseInformationHelper: {
+      showSealCaseButton: boolean;
+      showUnsealCaseButton: boolean;
+    };
+    openCleanModalSequence: (args: { showModal: string }) => void;
   }) {
     return (
       <>

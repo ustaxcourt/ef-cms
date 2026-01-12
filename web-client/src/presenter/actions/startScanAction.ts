@@ -1,5 +1,7 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
+type ScanSessionResult = { scannedBuffer: Uint8Array[] };
+
 /**
  * starts scanning documents based on current data source
  * @param {object} providers the providers object
@@ -20,13 +22,13 @@ export const startScanAction = async ({
   const scanner = await applicationContext.getScanner();
   scanner.setSourceByIndex(props.scannerSourceIndex);
   try {
-    const { scannedBuffer: pages } = await scanner.startScanSession({
+    const { scannedBuffer: pages } = (await scanner.startScanSession({
       applicationContext,
       scanMode,
-    });
+    })) as ScanSessionResult;
     const documentSelectedForScan = get(
       state.currentViewMetadata.documentSelectedForScan,
-    );
+    )!;
     const batches = get(state.scanner.batches[documentSelectedForScan]) || [];
     const nextIndex = batches.length
       ? Math.max(...batches.map(b => b.index)) + 1
@@ -34,13 +36,11 @@ export const startScanAction = async ({
 
     store.set(state.scanner.batches[documentSelectedForScan], [
       ...batches,
-      ...[
-        {
-          index: nextIndex,
-          pages,
-          scanMode,
-        },
-      ],
+      {
+        index: nextIndex,
+        pages,
+        scanMode,
+      },
     ]);
     store.set(state.scanner.selectedBatchIndex, nextIndex);
     store.set(state.scanner.currentPageIndex, 0);

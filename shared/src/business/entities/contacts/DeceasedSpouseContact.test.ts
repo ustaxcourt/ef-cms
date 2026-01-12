@@ -26,11 +26,11 @@ describe('DeceasedSpouseContact', () => {
 
   describe('VALIDATION', () => {
     describe('paperPetitionEmail', () => {
-      it('should return an error message for "paperPetitionEmail" when "hasConsentedToEService" is true', () => {
+      it('should return an error message for "paperPetitionEmail" when "hasConsentedToElectronicService" is true', () => {
         const entity = new DeceasedSpouseContact(
           {
             ...VALID_ENTITY,
-            hasConsentedToEService: true,
+            hasConsentedToElectronicService: true,
             paperPetitionEmail: undefined,
           },
           TEST_PETITION_TYPE,
@@ -44,11 +44,11 @@ describe('DeceasedSpouseContact', () => {
         });
       });
 
-      it('should not return an error message for "email" when "hasConsentedToEService" is false', () => {
+      it('should not return an error message for "email" when "hasConsentedToElectronicService" is false', () => {
         const entity = new DeceasedSpouseContact(
           {
             ...VALID_ENTITY,
-            hasConsentedToEService: false,
+            hasConsentedToElectronicService: false,
             paperPetitionEmail: undefined,
           },
           TEST_PETITION_TYPE,
@@ -63,7 +63,7 @@ describe('DeceasedSpouseContact', () => {
         const entity = new DeceasedSpouseContact(
           {
             ...VALID_ENTITY,
-            hasConsentedToEService: true,
+            hasConsentedToElectronicService: true,
             paperPetitionEmail: 'not a valid email string',
           },
           TEST_PETITION_TYPE,
@@ -78,12 +78,12 @@ describe('DeceasedSpouseContact', () => {
       });
     });
 
-    describe('hasConsentedToEService', () => {
-      it('should not return an error message for "hasConsentedToEService" when it is undefined', () => {
+    describe('hasConsentedToElectronicService', () => {
+      it('should not return an error message for "hasConsentedToElectronicService" when it is undefined', () => {
         const entity = new DeceasedSpouseContact(
           {
             ...VALID_ENTITY,
-            hasConsentedToEService: undefined,
+            hasConsentedToElectronicService: undefined,
           },
           TEST_PETITION_TYPE,
           PARTY_TYPE,

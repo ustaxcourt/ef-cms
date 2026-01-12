@@ -1,5 +1,5 @@
-import { CompressedDocketHeader } from '../components/CompressedDocketHeader.tsx';
-import { PrimaryHeader } from '../components/PrimaryHeader.tsx';
+import { CompressedDocketHeader } from '@shared/business/utilities/pdfGenerator/components/CompressedDocketHeader';
+import { PrimaryHeader } from '@shared/business/utilities/pdfGenerator/components/PrimaryHeader';
 import React from 'react';
 import classNames from 'classnames';
 
@@ -71,14 +71,6 @@ const RenderContact = ({ contact, countryTypes, showContactDetails }) => {
 };
 
 const RecordDescription = ({ entry }) => {
-  let additionalDescription = entry.filingsAndProceedings
-    ? ` ${entry.filingsAndProceedings}`
-    : '';
-
-  if (entry.additionalInfo2) {
-    additionalDescription += ` ${entry.additionalInfo2}`;
-  }
-
   return (
     <>
       <span
@@ -87,8 +79,15 @@ const RecordDescription = ({ entry }) => {
           entry.isStricken && 'stricken-docket-record',
         )}
       >
-        <strong>{entry.descriptionDisplay}</strong>
-        {additionalDescription}
+        {entry.descriptionDisplay}
+        {entry.relatedDocketEntries?.map(affectedEntry => {
+          return (
+            <>
+              <br />
+              --- {affectedEntry.disposition} #{affectedEntry.docketEntryIndex}
+            </>
+          );
+        })}
       </span>
       {entry.isStricken && <span> (STRICKEN)</span>}
     </>

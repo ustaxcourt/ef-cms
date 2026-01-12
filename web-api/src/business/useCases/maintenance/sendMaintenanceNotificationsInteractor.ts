@@ -6,12 +6,7 @@ export const sendMaintenanceNotificationsInteractor = async (
 ) => {
   const allWebsocketConnections = await applicationContext
     .getPersistenceGateway()
-    .getAllWebSocketConnections({ applicationContext });
-
-  await applicationContext.getPersistenceGateway().updateMaintenanceMode({
-    applicationContext,
-    maintenanceMode,
-  });
+    .getAllWebSocketConnections();
 
   const maintenanceModeMessage = maintenanceMode
     ? 'maintenance_mode_engaged'

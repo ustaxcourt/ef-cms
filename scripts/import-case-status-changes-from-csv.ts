@@ -1,84 +1,74 @@
-// Ingests case status changes from a CSV and then inserts entries into each case's caseStatusHistory array
-//
-//  Example CSV content:
-//     Docket,Date,Status
-//     23887-13L,3/24/2022,CAV
-//     22570-18W,3/9/2020,CAV
-//
-// usage: npx ts-node --transpile-only scripts/import-case-status-changes-from-csv.ts
+#!/usr/bin/env -S npx ts-node --transpile-only
 
-import { requireEnvVars } from '../shared/admin-tools/util';
-requireEnvVars(['ENV', 'HOME', 'REGION']);
-
-import {
-  AttributeValue,
-  DynamoDBClient,
-  GetItemCommand,
-  PutItemCommand,
-} from '@aws-sdk/client-dynamodb';
 import {
   FORMATS,
   prepareDateFromEST,
 } from '@shared/business/utilities/DateHandler';
-import { createApplicationContext } from '@web-api/applicationContext';
-// eslint-disable-next-line import/no-unresolved
 import { SYSTEM_ROLE } from '@shared/business/entities/EntityConstants';
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from './helpers/parseArgsAndEnvVars';
 import { parse } from 'csv-parse/sync';
 import fs from 'fs';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 
-const dynamodbClient = new DynamoDBClient({ region: process.env.REGION });
-const INPUT_FILE = `${process.env.HOME!}/Downloads/case-status-changes.csv`;
+const scriptConfig: ScriptConfig = {
+  description:
+    'import-case-status-changes-from-csv - Ingests case status changes from ' +
+    "a CSV and inserts entries into each case's caseStatusHistory array.",
+  environment: {
+    env: 'ENV',
+    home: 'HOME',
+  },
+  requireActiveAwsSession: true,
+};
+const { home } = parseArgsAndEnvVars(scriptConfig) as {
+  home: string;
+};
+
+//  Example CSV content:
+//     Docket,Date,Status
+//     23887-13L,3/24/2022,CAV
+//     22570-18W,3/9/2020,CAV
+const INPUT_FILE = `${home}/Downloads/case-status-changes.csv`;
 
 const getCaseRecord = async ({
-  applicationContext,
   docketNumber,
 }: {
-  applicationContext: IApplicationContext;
   docketNumber: string;
-}): Promise<Record<string, AttributeValue> | undefined> => {
-  const getCaseCommand = new GetItemCommand({
-    Key: {
-      pk: { S: `case|${docketNumber}` },
-      sk: { S: `case|${docketNumber}` },
-    },
-    TableName: applicationContext.environment.dynamoDbTableName,
+}): Promise<Omit<RawCase, 'consolidatedCases'> | undefined> => {
+  const cases = await getCasesByDocketNumbers({
+    docketNumbers: [docketNumber],
   });
-  const result = await dynamodbClient.send(getCaseCommand);
-  return result?.Item;
+  return cases[0];
 };
 
 const putCaseStatusHistoryRecord = async ({
-  applicationContext,
   caseRecord,
   date,
   updatedCaseStatus,
 }: {
-  applicationContext: IApplicationContext;
-  caseRecord: Record<string, AttributeValue>;
+  caseRecord: Omit<RawCase, 'consolidatedCases'>;
   date: string;
   updatedCaseStatus: string;
 }): Promise<boolean> => {
-  if (
-    !('caseStatusHistory' in caseRecord) ||
-    typeof caseRecord.caseStatusHistory.L === 'undefined'
-  ) {
-    caseRecord.caseStatusHistory = { L: [] };
+  if (!caseRecord.caseStatusHistory) {
+    caseRecord.caseStatusHistory = [];
   }
-  caseRecord.caseStatusHistory.L.push({
-    M: {
-      changedBy: { S: SYSTEM_ROLE },
-      date: { S: date },
-      updatedCaseStatus: { S: updatedCaseStatus },
-    },
+  caseRecord.caseStatusHistory.push({
+    changedBy: SYSTEM_ROLE,
+    date,
+    updatedCaseStatus,
   });
 
-  const putCaseCommand = new PutItemCommand({
-    Item: caseRecord,
-    TableName: applicationContext.environment.dynamoDbTableName,
-  });
   let result = false;
   try {
-    await dynamodbClient.send(putCaseCommand);
+    // Add consolidatedCases as empty array to satisfy RawCase type requirement
+    await upsertCases([
+      caseRecord as RawCase,
+    ]);
     result = true;
   } catch (error) {
     console.log(error);
@@ -98,19 +88,14 @@ const parseCsv = (): Array<any> => {
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const applicationContext = createApplicationContext({});
   const statusChangesToLog = parseCsv();
   for (const statusChange of statusChangesToLog) {
     const { updatedCaseStatus } = statusChange;
     const date = prepareDateFromEST(statusChange.date, FORMATS.MDYYYY);
     const docketNumber = statusChange.docketNumber.replace(/[^\d-]/g, '');
-    const caseRecord = await getCaseRecord({
-      applicationContext,
-      docketNumber,
-    });
+    const caseRecord = await getCaseRecord({ docketNumber });
     if (caseRecord && date) {
       const caseStatusHistoryUpdated = await putCaseStatusHistoryRecord({
-        applicationContext,
         caseRecord,
         date,
         updatedCaseStatus,

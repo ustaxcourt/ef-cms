@@ -1,45 +1,49 @@
 import {
   Case,
   getPractitionersRepresenting,
-} from '../../../../shared/src/business/entities/cases/Case';
+} from '@shared/business/entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { getCaseCaptionMeta } from '../../../../shared/src/business/utilities/getCaseCaptionMeta';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
+import { sortDocketEntryTable } from '@web-client/presenter/computeds/formattedDocketEntries';
+import { verifyCaseForUser } from '@web-api/persistence/postgres/cases/userOnCase/verifyCaseForUser';
+import {
+  DocketEntryRelation,
+  MOTION_DISPOSITION_VERBIAGE,
+} from '@shared/business/entities/EntityConstants';
+import { concat } from 'lodash';
 
 export const generateDocketRecordPdfInteractor = async (
   applicationContext: ServerApplicationContext,
   {
     docketNumber,
     docketRecordSort,
+    docketRecordTableSort,
     includePartyDetail = false,
     isIndirectlyAssociated = false,
   }: {
     docketNumber: string;
     docketRecordSort?: string;
+    docketRecordTableSort?: { sortField: string; sortOrder: 'asc' | 'desc' };
     includePartyDetail: boolean;
     isIndirectlyAssociated?: boolean;
   },
   authorizedUser: UnknownAuthUser,
 ) => {
-  const isDirectlyAssociated = await applicationContext
-    .getPersistenceGateway()
-    .verifyCaseForUser({
-      applicationContext,
-      docketNumber,
-      userId: authorizedUser?.userId,
-    });
+  const isDirectlyAssociated = await verifyCaseForUser({
+    docketNumber,
+    userId: authorizedUser?.userId,
+  });
 
-  const caseSource = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const caseSource = await getCaseByDocketNumber({
+    docketNumber,
+  });
 
   let caseEntity;
 
@@ -71,7 +75,6 @@ export const generateDocketRecordPdfInteractor = async (
   } else {
     caseEntity = new Case(caseSource, { authorizedUser });
   }
-
   const formattedCaseDetail = applicationContext
     .getUtilities()
     .getFormattedCaseDetail({
@@ -80,6 +83,44 @@ export const generateDocketRecordPdfInteractor = async (
       caseDetail: caseEntity,
       docketRecordSort,
     });
+
+  formattedCaseDetail.formattedDocketEntries =
+    formattedCaseDetail.formattedDocketEntries.map(docketEntry => {
+      const formattedDocketEntry = {
+        ...docketEntry,
+        numberOfPages: docketEntry.numberOfPages || 0,
+      };
+
+      formattedDocketEntry.relatedDocketEntries = [];
+      if (docketEntry.affectedByDocketEntries) {
+        formattedDocketEntry.relatedDocketEntries = processRelatedDocketEntries(
+          docketEntry.affectedByDocketEntries,
+          caseEntity,
+          'MOTION',
+        );
+      }
+
+      if (docketEntry.affectedDocketEntries) {
+        formattedDocketEntry.relatedDocketEntries = concat(
+          formattedDocketEntry.relatedDocketEntries,
+          processRelatedDocketEntries(
+            docketEntry.affectedDocketEntries,
+            caseEntity,
+            'ORDER',
+          ),
+        );
+      }
+
+      return formattedDocketEntry;
+    });
+
+  const sortedDocketEntries = sortDocketEntryTable(
+    formattedCaseDetail.formattedDocketEntries,
+    docketRecordTableSort && docketRecordTableSort.sortField,
+    docketRecordTableSort && docketRecordTableSort.sortOrder,
+  );
+
+  formattedCaseDetail.formattedDocketEntries = sortedDocketEntries;
 
   formattedCaseDetail.petitioners.forEach(petitioner => {
     petitioner.counselDetails = [];
@@ -111,9 +152,10 @@ export const generateDocketRecordPdfInteractor = async (
       caseCaptionExtension,
       caseDetail: formattedCaseDetail,
       caseTitle,
-      docketNumberWithSuffix: `${caseEntity.docketNumber}${
-        caseEntity.docketNumberSuffix || ''
-      }`,
+      docketNumberWithSuffix: Case.getDocketNumberWithSuffix({
+        docketNumber: caseEntity.docketNumber,
+        docketNumberSuffix: caseEntity.docketNumberSuffix,
+      }),
       entries: formattedCaseDetail.formattedDocketEntries.filter(
         d => d.isOnDocketRecord,
       ),
@@ -125,5 +167,25 @@ export const generateDocketRecordPdfInteractor = async (
     applicationContext,
     file: pdf,
     useTempBucket: true,
+  });
+};
+
+const processRelatedDocketEntries = (
+  relatedDocketEntries: DocketEntryRelation[],
+  caseEntity: RawCase,
+  relationshipType: 'ORDER' | 'MOTION',
+) => {
+  return relatedDocketEntries.map(affectedEntry => {
+    const relatedEntry = caseEntity.docketEntries.find(
+      entry => entry.docketEntryId === affectedEntry.docketEntryId,
+    );
+
+    return {
+      docketEntryIndex: relatedEntry?.index,
+      disposition:
+        MOTION_DISPOSITION_VERBIAGE[affectedEntry.disposition][
+          relationshipType
+        ],
+    };
   });
 };

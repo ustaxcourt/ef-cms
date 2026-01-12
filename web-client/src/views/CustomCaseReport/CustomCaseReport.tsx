@@ -2,11 +2,13 @@ import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseInventory } from '@web-api/business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
-import { CaseType } from '@shared/business/entities/EntityConstants';
+import {
+  CaseType,
+  MULTI_SELECT_PLACEHOLDER,
+} from '@shared/business/entities/EntityConstants';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
-import { Icon } from '../../ustc-ui/Icon/Icon';
 import { Paginator } from '../../ustc-ui/Pagination/Paginator';
 import { PillButton } from '@web-client/ustc-ui/Button/PillButton';
 import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
@@ -258,8 +260,8 @@ export const CustomCaseReport = connect(
                   id="case-status"
                   name="caseStatus"
                   options={customCaseReportHelper.caseStatuses}
-                  placeholder="- Select one or more -"
-                  value={{ label: '- Select one or more -', value: '' }}
+                  placeholder={MULTI_SELECT_PLACEHOLDER}
+                  value={{ label: MULTI_SELECT_PLACEHOLDER, value: '' }}
                   onChange={inputValue => {
                     if (inputValue) {
                       setCustomCaseReportFiltersSequence({
@@ -287,9 +289,9 @@ export const CustomCaseReport = connect(
                   id="case-type"
                   name="eventCode"
                   options={customCaseReportHelper.caseTypes}
-                  placeholder="- Select one or more -"
+                  placeholder={MULTI_SELECT_PLACEHOLDER}
                   value={{
-                    label: '- Select one or more -',
+                    label: MULTI_SELECT_PLACEHOLDER,
                     value: '' as CaseType,
                   }}
                   onChange={inputValue => {
@@ -320,8 +322,8 @@ export const CustomCaseReport = connect(
                   id="judges"
                   name="judges"
                   options={customCaseReportHelper.judges}
-                  placeholder="- Select one or more -"
-                  value={{ label: '- Select one or more -', value: '' }}
+                  placeholder={MULTI_SELECT_PLACEHOLDER}
+                  value={{ label: MULTI_SELECT_PLACEHOLDER, value: '' }}
                   onChange={inputValue => {
                     if (inputValue) {
                       setCustomCaseReportFiltersSequence({
@@ -349,8 +351,8 @@ export const CustomCaseReport = connect(
                   id="trial-location"
                   name="requestedPlaceOfTrial"
                   options={customCaseReportHelper.trialCitiesByState}
-                  placeholder="- Select one or more -"
-                  value={{ label: '- Select one or more -', value: '' }}
+                  placeholder={MULTI_SELECT_PLACEHOLDER}
+                  value={{ label: MULTI_SELECT_PLACEHOLDER, value: '' }}
                   onChange={inputValue => {
                     if (inputValue) {
                       setCustomCaseReportFiltersSequence({
@@ -433,51 +435,31 @@ export const CustomCaseReport = connect(
               })}
             </div>
           </div>
-          <div className="usa-checkbox">
-            <input
-              aria-label="Select calendaring high priority"
-              checked={customCaseReportFilters.highPriority}
-              className="usa-checkbox__input"
-              id="high-priority-checkbox"
-              type="checkbox"
-              onChange={() => {
-                setCustomCaseReportFiltersSequence({
-                  highPriority: true,
-                });
+          <div className="button-container">
+            <Button
+              data-testid="submit-custom-case-report-button"
+              tooltip="Run Report"
+              onClick={async () => {
+                setHasRunCustomCaseReport(true);
+                await getCustomCaseReportSequence({ selectedPage: 0 });
+                setActivePage(0);
               }}
-            />
-            <label
-              className="usa-checkbox__label desktop:grid-col-2 tablet:grid-col-6 padding-bottom-1"
-              htmlFor="high-priority-checkbox"
-              id={'label-high-priority'}
             >
-              Calendaring high priority
-            </label>
+              Run Report
+            </Button>
+            <Button
+              link
+              disabled={customCaseReportHelper.clearFiltersIsDisabled}
+              tooltip="Clear Filters"
+              onClick={() => clearOptionalCustomCaseReportFilterSequence()}
+            >
+              Clear Filters
+            </Button>
           </div>
-          <Button
-            data-testid="submit-custom-case-report-button"
-            tooltip="Run Report"
-            onClick={async () => {
-              setHasRunCustomCaseReport(true);
-              await getCustomCaseReportSequence({ selectedPage: 0 });
-              setActivePage(0);
-            }}
-          >
-            Run Report
-          </Button>
-          <Button
-            link
-            disabled={customCaseReportHelper.clearFiltersIsDisabled}
-            tooltip="Clear Filters"
-            onClick={() => clearOptionalCustomCaseReportFilterSequence()}
-          >
-            Clear Filters
-          </Button>
           <hr className="margin-top-3 margin-bottom-3 border-top-1px border-base-lighter" />
           <div ref={paginatorTop}>
             <Paginator
               currentPageIndex={activePage}
-              showSinglePage={true}
               totalPages={customCaseReportHelper.pageCount}
               onPageChange={async pageChange => {
                 setActivePage(pageChange);
@@ -520,7 +502,6 @@ export const CustomCaseReport = connect(
           {customCaseReportHelper.pageCount > 1 && (
             <Paginator
               currentPageIndex={activePage}
-              showSinglePage={true}
               totalPages={customCaseReportHelper.pageCount}
               onPageChange={async pageChange => {
                 setActivePage(pageChange);
@@ -570,10 +551,6 @@ const ReportTable = ({
             <th>
               Requested Place <br /> of Trial
             </th>
-            <th>
-              Calendaring <br />
-              High Priority
-            </th>
           </tr>
         </thead>
         {cases.length !== 0 && (
@@ -605,16 +582,6 @@ const ReportTable = ({
                 <td>{entry.caseType}</td>
                 <td>{entry.associatedJudge}</td>
                 <td>{entry.preferredTrialCity}</td>
-                <td>
-                  {entry.highPriority && (
-                    <Icon
-                      aria-label={'High priority calendaring'}
-                      className="margin-left-5 mini-success margin-top-1"
-                      icon="check"
-                      size="1x"
-                    />
-                  )}
-                </td>
               </tr>
             ))}
           </tbody>

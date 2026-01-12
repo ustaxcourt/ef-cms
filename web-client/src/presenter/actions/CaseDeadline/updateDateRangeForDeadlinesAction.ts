@@ -25,7 +25,4 @@ export const updateDateRangeForDeadlinesAction = ({
 
   store.set(state.screenMetadata.filterStartDate, startDate);
   store.set(state.screenMetadata.filterEndDate, endDate);
-
-  store.set(state.screenMetadata.filterStartDateState, '');
-  store.set(state.screenMetadata.filterEndDateState, '');
 };

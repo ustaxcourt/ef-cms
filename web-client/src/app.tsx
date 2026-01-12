@@ -1,5 +1,5 @@
 import './index.scss';
-
+import './tailwind.css';
 import '../../node_modules/@fortawesome/fontawesome-svg-core/styles.css';
 
 import { AppComponent } from './views/AppComponent';
@@ -7,6 +7,7 @@ import { AppInstanceManager } from './AppInstanceManager';
 import { Container } from '@cerebral/react';
 import { GlobalModalWrapper } from './views/GlobalModalWrapper';
 import { IdleActivityMonitor } from './views/IdleActivityMonitor';
+import { initializeRealUserMonitoring } from '@web-client/providers/realUserMonitoring';
 import {
   back,
   createObjectURL,
@@ -19,6 +20,8 @@ import {
 
 import { faAddressCard } from '@fortawesome/free-regular-svg-icons/faAddressCard';
 import { faArrowAltCircleLeft as faArrowAltCircleLeftRegular } from '@fortawesome/free-regular-svg-icons/faArrowAltCircleLeft';
+import { faCalendar } from '@fortawesome/free-regular-svg-icons/faCalendar';
+import { faCalendarTimes } from '@fortawesome/free-regular-svg-icons';
 import { faCheckCircle as faCheckCircleRegular } from '@fortawesome/free-regular-svg-icons/faCheckCircle';
 import { faClock } from '@fortawesome/free-regular-svg-icons/faClock';
 import { faClone } from '@fortawesome/free-regular-svg-icons/faClone';
@@ -31,7 +34,6 @@ import { faTimesCircle as faTimesCircleRegular } from '@fortawesome/free-regular
 import { faUser } from '@fortawesome/free-regular-svg-icons/faUser';
 
 //if you see a console error saying could not get icon, make sure the prefix matches the import (eg fas should be imported from free-solid-svg-icons)
-import { ITestableWindow } from '../../cypress/helpers/ITestableWindow';
 import { config, library } from '@fortawesome/fontawesome-svg-core';
 import { createRoot } from 'react-dom/client';
 import { faArrowAltCircleLeft as faArrowAltCircleLeftSolid } from '@fortawesome/free-solid-svg-icons/faArrowAltCircleLeft';
@@ -119,7 +121,7 @@ import { presenter } from './presenter/presenter';
 import { socketProvider } from './providers/socket';
 import { socketRouter } from './providers/socketRouter';
 import { withAppContextDecorator } from './withAppContext';
-import App from 'cerebral';
+import App, { ModuleDefinition } from 'cerebral';
 import React from 'react';
 
 /**
@@ -127,6 +129,7 @@ import React from 'react';
  */
 const app = {
   initialize: async applicationContext => {
+    initializeRealUserMonitoring();
     const scannerSourceName = await applicationContext
       .getUseCases()
       .getItemInteractor(applicationContext, { key: 'scannerSourceName' });
@@ -153,10 +156,12 @@ const app = {
       faAddressCard,
       faExchangeAlt,
       faCalculator,
+      faCalendar,
       faCalendarAlt,
       faTimes,
       faCalendarCheck,
       faCalendarPlus,
+      faCalendarTimes,
       faCaretDown,
       faCaretLeft,
       faCaretRight,
@@ -259,34 +264,31 @@ const app = {
     });
     presenter.providers.socket = { start, stop };
 
-    const cerebralApp = App(presenter, {
+    const cerebralApp = App(presenter as ModuleDefinition, {
       returnSequencePromise: true,
     });
-
-    // Expose Cerebral for testing
-    if (process.env.ENV === 'local' || process.env.ENV === 'test') {
-      (window as unknown as ITestableWindow).cerebral = cerebralApp;
-    }
 
     applicationContext.setForceRefreshCallback(async () => {
       await cerebralApp.getSequence('handleAppHasUpdatedSequence')();
     });
 
     const container = window.document.querySelector('#app');
-    const root = createRoot(container);
+    if (container) {
+      const root = createRoot(container);
 
-    root.render(
-      <Container app={cerebralApp}>
-        <>
-          <IdleActivityMonitor />
-          <AppInstanceManager />
-          <GlobalModalWrapper />
-        </>
-        <AppComponent />
+      root.render(
+        <Container app={cerebralApp}>
+          <>
+            <IdleActivityMonitor />
+            <AppInstanceManager />
+            <GlobalModalWrapper />
+          </>
+          <AppComponent />
 
-        {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
-      </Container>,
-    );
+          {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
+        </Container>,
+      );
+    }
 
     await cerebralApp.getSequence('initAppSequence')();
 
@@ -304,7 +306,7 @@ const app = {
     const wrappedRoute = (path, cb) => {
       route(path, function () {
         return (processQueue = processQueue.then(() => {
-          // eslint-disable-next-line promise/no-callback-in-promise
+          // eslint-disable-next-line prefer-rest-params
           return cb(...arguments);
         }));
       });

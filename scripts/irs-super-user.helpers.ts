@@ -1,12 +1,5 @@
 // Usage: see ../docs/additional-resources/irs-super-user.md for detailed instructions
 
-import { askQuestion, requireEnvVars } from '../shared/admin-tools/util';
-requireEnvVars([
-  'DEFAULT_ACCOUNT_PASS',
-  'IRS_CLIENT_ID',
-  'IRS_SUPERUSER_EMAIL',
-]);
-
 import {
   AssociateSoftwareTokenCommand,
   CognitoIdentityProviderClient,
@@ -14,14 +7,35 @@ import {
   RespondToAuthChallengeCommand,
   VerifySoftwareTokenCommand,
 } from '@aws-sdk/client-cognito-identity-provider';
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from './helpers/parseArgsAndEnvVars';
+import { askQuestion } from '../shared/admin-tools/util';
+
+const scriptConfig: ScriptConfig = {
+  description:
+    'irs-super-user - Enrolls an IRS superuser in Cognito MFA and generates a bearer token.',
+  environment: {
+    ClientId: 'IRS_CLIENT_ID',
+    defaultPassword: 'DEFAULT_ACCOUNT_PASS',
+    email: 'IRS_SUPERUSER_EMAIL',
+  },
+  requireActiveAwsSession: true,
+};
+const { ClientId, defaultPassword, email } = parseArgsAndEnvVars(
+  scriptConfig,
+) as {
+  ClientId: string;
+  defaultPassword: string;
+  email: string;
+};
+
+const password = process.env.IRS_SUPERUSER_PASS || defaultPassword;
 
 const cognito = new CognitoIdentityProviderClient({
   region: 'us-east-1',
 });
-
-const ClientId = process.env.IRS_CLIENT_ID;
-const email = process.env.IRS_SUPERUSER_EMAIL!;
-const password = process.env.DEFAULT_ACCOUNT_PASS!;
 
 const initiateAuthCommand = new InitiateAuthCommand({
   AuthFlow: 'USER_PASSWORD_AUTH',

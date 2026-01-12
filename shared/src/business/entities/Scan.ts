@@ -1,7 +1,6 @@
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { createISODateString } from '../utilities/DateHandler';
-import { remove } from 'lodash';
 import joi from 'joi';
 
 /**
@@ -44,9 +43,7 @@ export class Scan extends JoiValidationEntity {
   removeBatch(batchEntity) {
     const { batchId } = batchEntity;
 
-    remove(this.batches, batch => {
-      return batchId === batch.batchId;
-    });
+    this.batches = this.batches.filter((batch) => batch.batchId !== batchId);
 
     return this;
   }

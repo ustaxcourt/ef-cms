@@ -27,6 +27,7 @@ export const formatAttachments = ({
         archived: !!doc.archived,
         documentId,
         documentTitle: generatedDocumentTitle || doc.documentType,
+        index: doc.index,
       };
     } else {
       return {

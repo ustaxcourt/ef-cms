@@ -1,19 +1,16 @@
 import { get } from '../requests';
+import { applicationContext } from '@web-client/applicationContext';
+import { GetDocumentQCInboxForSectionRequest } from '@web-api/business/useCases/workItems/getDocumentQCInboxForSectionInteractor';
+import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
 
-/**
- * getDocumentQCInboxForSectionInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.section the section to get the document qc
- * @returns {Promise<*>} the promise of the api call
- */
-export const getDocumentQCInboxForSectionInteractor = (
-  applicationContext,
-  { judgeUser, section },
-) => {
-  const queryParams =
-    judgeUser && judgeUser.name ? { judgeUserName: judgeUser.name } : {};
+export const getDocumentQCInboxForSectionInteractor = ({
+  judgeId,
+  section,
+  selectedSection,
+}: GetDocumentQCInboxForSectionRequest): Promise<
+  RawWorkItemWithCaseAndDocketEntryInfo[]
+> => {
+  const queryParams = { judgeId, section, selectedSection };
 
   return get({
     applicationContext,

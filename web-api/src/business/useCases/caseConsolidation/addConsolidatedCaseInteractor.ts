@@ -1,12 +1,16 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { settlePromises } from '@web-api/utilities/settlePromises';
+import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 /**
  * addConsolidatedCase
@@ -18,7 +22,7 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  * @returns {object} the updated case data
  */
 export const addConsolidatedCase = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   {
     docketNumber,
     docketNumberToConsolidateWith,
@@ -29,20 +33,17 @@ export const addConsolidatedCase = async (
     throw new UnauthorizedError('Unauthorized for case consolidation');
   }
 
-  const caseToUpdate = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({ applicationContext, docketNumber });
+  const caseToUpdate = await getCaseByDocketNumber({
+    docketNumber,
+  });
 
   if (!caseToUpdate) {
     throw new NotFoundError(`Case ${docketNumber} was not found.`);
   }
 
-  const caseToConsolidateWith = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber: docketNumberToConsolidateWith,
-    });
+  const caseToConsolidateWith = await getCaseByDocketNumber({
+    docketNumber: docketNumberToConsolidateWith,
+  });
 
   if (!caseToConsolidateWith) {
     throw new NotFoundError(
@@ -50,35 +51,29 @@ export const addConsolidatedCase = async (
     );
   }
 
-  let allCasesToConsolidate: RawCase[] = [];
+  let allCasesToConsolidate: Omit<RawCase, 'consolidatedCases'>[] = [];
 
   if (
     caseToUpdate.leadDocketNumber &&
     caseToUpdate.leadDocketNumber !== caseToConsolidateWith.leadDocketNumber
   ) {
-    allCasesToConsolidate = await applicationContext
-      .getPersistenceGateway()
-      .getCasesByLeadDocketNumber({
-        applicationContext,
-        leadDocketNumber: caseToUpdate.leadDocketNumber,
-      });
+    allCasesToConsolidate = await getConsolidatedCases({
+      leadDocketNumber: caseToUpdate.leadDocketNumber,
+    });
   } else {
     allCasesToConsolidate = [caseToUpdate];
   }
 
   if (caseToConsolidateWith.leadDocketNumber) {
-    const casesConsolidatedWithLeadCase = await applicationContext
-      .getPersistenceGateway()
-      .getCasesByLeadDocketNumber({
-        applicationContext,
-        leadDocketNumber: caseToConsolidateWith.leadDocketNumber,
-      });
+    const casesConsolidatedWithLeadCase = await getConsolidatedCases({
+      leadDocketNumber: caseToConsolidateWith.leadDocketNumber,
+    });
     allCasesToConsolidate.push(...casesConsolidatedWithLeadCase);
   } else {
     allCasesToConsolidate.push(caseToConsolidateWith);
   }
 
-  const newLeadCase = Case.findLeadCaseForCases(allCasesToConsolidate);
+  const newLeadCase = Case.findLeadCaseForCases(allCasesToConsolidate)!;
 
   const casesToUpdate = allCasesToConsolidate.filter(filterCaseToUpdate => {
     return filterCaseToUpdate.leadDocketNumber !== newLeadCase.docketNumber;
@@ -92,15 +87,14 @@ export const addConsolidatedCase = async (
     caseEntity.setLeadCase(newLeadCase.docketNumber);
 
     updateCasePromises.push(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-        applicationContext,
+      updateCaseAndAssociations({
         authorizedUser,
         caseToUpdate: caseEntity,
       }),
     );
   });
 
-  await Promise.all(updateCasePromises);
+  await settlePromises(updateCasePromises);
 };
 
 export const determineEntitiesToLock = (
@@ -111,7 +105,7 @@ export const determineEntitiesToLock = (
     item => `case|${item}`,
   ),
 });
-
+// 10505: this replicates the existing functionality, but may need to account for `allCasesToConsolidate`?
 export const addConsolidatedCaseInteractor = withLocking(
   addConsolidatedCase,
   determineEntitiesToLock,

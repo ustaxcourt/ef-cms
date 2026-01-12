@@ -1,16 +1,18 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import {
   CONTACT_TYPES,
   COUNTRY_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   PARTY_TYPES,
-} from '../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import {
   MOCK_PRACTITIONER,
   petitionerUser,
   privatePractitionerUser,
-} from '../../../../shared/src/test/mockUsers';
+} from '@shared/test/mockUsers';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { generateDocketRecordPdfInteractor } from './generateDocketRecordPdfInteractor';
 import {
   mockDocketClerkUser,
@@ -18,10 +20,12 @@ import {
   mockPetitionsClerkUser,
   mockPrivatePractitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 describe('generateDocketRecordPdfInteractor', () => {
   const mockId = '12345';
   const mockPdfUrlAndID = { fileId: mockId, url: 'www.example.com' };
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
   let caseDetail;
 
@@ -65,9 +69,7 @@ describe('generateDocketRecordPdfInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(true);
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(() => ({ ...caseDetail }));
+    getCaseByDocketNumber.mockResolvedValue(caseDetail);
     applicationContext
       .getUseCases()
       .generatePdfFromHtmlInteractor.mockImplementation(({ contentHtml }) => {
@@ -183,14 +185,12 @@ describe('generateDocketRecordPdfInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(false);
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...caseDetail,
-        isSealed: true,
-        privatePractitioners: [],
-        sealedDate: '2019-09-19T16:42:00.000Z',
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...caseDetail,
+      isSealed: true,
+      privatePractitioners: [],
+      sealedDate: '2019-09-19T16:42:00.000Z',
+    });
 
     await expect(
       generateDocketRecordPdfInteractor(
@@ -207,12 +207,10 @@ describe('generateDocketRecordPdfInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(false);
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...caseDetail,
-        sealedDate: '2019-08-25T05:00:00.000Z',
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...caseDetail,
+      sealedDate: '2019-08-25T05:00:00.000Z',
+    });
 
     await expect(
       generateDocketRecordPdfInteractor(
@@ -229,12 +227,10 @@ describe('generateDocketRecordPdfInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(false);
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...caseDetail,
-        sealedDate: '2019-08-25T05:00:00.000Z',
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...caseDetail,
+      sealedDate: '2019-08-25T05:00:00.000Z',
+    });
 
     const result = await generateDocketRecordPdfInteractor(
       applicationContext,
@@ -251,12 +247,10 @@ describe('generateDocketRecordPdfInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(true);
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...caseDetail,
-        userId: petitionerUser.userId,
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...caseDetail,
+      userId: petitionerUser.userId,
+    });
 
     const result = await generateDocketRecordPdfInteractor(
       applicationContext,
@@ -273,12 +267,10 @@ describe('generateDocketRecordPdfInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(false);
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...caseDetail,
-        userId: petitionerUser.userId,
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...caseDetail,
+      userId: petitionerUser.userId,
+    });
 
     const result = await generateDocketRecordPdfInteractor(
       applicationContext,
@@ -290,5 +282,126 @@ describe('generateDocketRecordPdfInteractor', () => {
     );
 
     expect(result).toEqual(mockPdfUrlAndID);
+  });
+
+  describe('sorting', () => {
+    it('should pass in entries sorted by the provided property and orderType "asc"', async () => {
+      caseDetail.docketEntries = [
+        {
+          eventCode: 'D',
+          isOnDocketRecord: true,
+        },
+        { eventCode: 'B', isOnDocketRecord: true },
+        { eventCode: 'C', isOnDocketRecord: true },
+        { eventCode: 'A', isOnDocketRecord: true },
+      ];
+
+      await generateDocketRecordPdfInteractor(
+        applicationContext,
+        {
+          docketNumber: caseDetail.docketNumber,
+          docketRecordTableSort: { sortField: 'eventCode', sortOrder: 'asc' },
+          isIndirectlyAssociated: true,
+        } as any,
+        mockPetitionerUser,
+      );
+
+      const docketRecordCalls =
+        applicationContext.getDocumentGenerators().docketRecord.mock.calls;
+      expect(docketRecordCalls.length).toEqual(1);
+
+      const {
+        data: { entries },
+      } = docketRecordCalls[0][0];
+      expect(entries).toMatchObject([
+        {
+          eventCode: 'A',
+        },
+        { eventCode: 'B' },
+        { eventCode: 'C' },
+        { eventCode: 'D' },
+      ]);
+    });
+
+    it('should pass in entries sorted by the provided property and orderType "des"', async () => {
+      caseDetail.docketEntries = [
+        {
+          attachments: 'TEST_attachments',
+          documentTitle: 'TEST_D',
+          eventCode: 'D',
+          filingDate: '2019-08-25T05:00:00.000Z',
+          isOnDocketRecord: true,
+          isUnservable: true,
+        },
+        { eventCode: 'B', isOnDocketRecord: true },
+        { eventCode: 'C', isOnDocketRecord: true },
+        { eventCode: 'A', isOnDocketRecord: true },
+      ];
+
+      await generateDocketRecordPdfInteractor(
+        applicationContext,
+        {
+          docketNumber: caseDetail.docketNumber,
+          docketRecordTableSort: { sortField: 'eventCode', sortOrder: 'desc' },
+          isIndirectlyAssociated: true,
+        } as any,
+        mockPetitionerUser,
+      );
+
+      const docketRecordCalls =
+        applicationContext.getDocumentGenerators().docketRecord.mock.calls;
+      expect(docketRecordCalls.length).toEqual(1);
+
+      const {
+        data: { entries },
+      } = docketRecordCalls[0][0];
+      expect(entries).toMatchObject([
+        {
+          createdAtFormatted: '08/25/19',
+          descriptionDisplay: 'TEST_D (Attachment(s))',
+          eventCode: 'D',
+          filingsAndProceedings: '(Attachment(s))',
+        },
+        { eventCode: 'C' },
+        { eventCode: 'B' },
+        {
+          eventCode: 'A',
+        },
+      ]);
+    });
+
+    it('should default numberOfPages to 0 to correctly sort the docket entries', async () => {
+      caseDetail.docketEntries = [
+        { index: 1, isOnDocketRecord: true, numberOfPages: 1 },
+        { index: 2, isOnDocketRecord: true, numberOfPages: 3 },
+        { index: 3, isOnDocketRecord: true, numberOfPages: undefined },
+      ];
+
+      await generateDocketRecordPdfInteractor(
+        applicationContext,
+        {
+          docketNumber: caseDetail.docketNumber,
+          docketRecordTableSort: {
+            sortField: 'numberOfPages',
+            sortOrder: 'asc',
+          },
+          isIndirectlyAssociated: true,
+        } as any,
+        mockPetitionerUser,
+      );
+
+      const docketRecordCalls =
+        applicationContext.getDocumentGenerators().docketRecord.mock.calls;
+      expect(docketRecordCalls.length).toEqual(1);
+
+      const {
+        data: { entries },
+      } = docketRecordCalls[0][0];
+      expect(entries).toMatchObject([
+        { index: 3, isOnDocketRecord: true, numberOfPages: 0 },
+        { index: 1, isOnDocketRecord: true, numberOfPages: 1 },
+        { index: 2, isOnDocketRecord: true, numberOfPages: 3 },
+      ]);
+    });
   });
 });

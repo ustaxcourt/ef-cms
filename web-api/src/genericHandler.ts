@@ -1,6 +1,6 @@
 import {
   ServerApplicationContext,
-  createApplicationContext,
+  applicationContext,
 } from './applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import {
@@ -8,23 +8,21 @@ import {
   getUserFromAuthHeader,
   handle,
 } from './middleware/apiGatewayHelper';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
+import { getMaintenanceMode } from '@web-api/persistence/postgres/featureFlag/getMaintenanceMode';
+import { getEntityByName } from '@web-api/business/getEntityByName';
 
 export const dataSecurityFilter = (
   data,
   {
-    applicationContext,
     authorizedUser,
   }: {
-    applicationContext: ServerApplicationContext;
     authorizedUser: UnknownAuthUser;
   },
 ) => {
   let returnData = data;
   if (data && Array.isArray(data) && data.length && data[0].entityName) {
-    const entityConstructor = applicationContext.getEntityByName(
-      data[0].entityName,
-    );
+    const entityConstructor = getEntityByName(data[0].entityName);
     if (entityConstructor) {
       returnData = data.map(
         result =>
@@ -36,9 +34,7 @@ export const dataSecurityFilter = (
       );
     }
   } else if (data && data.entityName) {
-    const entityConstructor = applicationContext.getEntityByName(
-      data.entityName,
-    );
+    const entityConstructor = getEntityByName(data.entityName);
     if (entityConstructor) {
       returnData = new entityConstructor(data, {
         applicationContext,
@@ -50,10 +46,8 @@ export const dataSecurityFilter = (
   return returnData;
 };
 
-export const checkMaintenanceMode = async ({ applicationContext }) => {
-  const maintenanceRecord = await applicationContext
-    .getPersistenceGateway()
-    .getMaintenanceMode({ applicationContext });
+export const checkMaintenanceMode = async () => {
+  const maintenanceRecord = await getMaintenanceMode();
 
   const maintenanceMode = !!(maintenanceRecord && maintenanceRecord.current);
 
@@ -86,13 +80,12 @@ export const genericHandler = (
   return handle(awsEvent, async () => {
     const user = getUserFromAuthHeader(awsEvent);
     const clientConnectionId = getConnectionIdFromEvent(awsEvent);
-    const applicationContext = createApplicationContext();
-    getLogger().addUser({ user });
+    getDawsonLogger().addUser({ user });
 
     delete awsEvent.logger;
 
     try {
-      applicationContext.logger.debug('Request:', {
+      getDawsonLogger().debug('Request:', {
         request: awsEvent,
         user,
       });
@@ -100,7 +93,7 @@ export const genericHandler = (
       const { bypassMaintenanceCheck } = options;
 
       if (!bypassMaintenanceCheck) {
-        await checkMaintenanceMode({ applicationContext });
+        await checkMaintenanceMode();
       }
 
       const results = await cb({
@@ -109,12 +102,11 @@ export const genericHandler = (
       });
 
       const returnResults = dataSecurityFilter(results, {
-        applicationContext,
         authorizedUser: user,
       });
 
       if (options.logResults !== false) {
-        applicationContext.logger.debug('Results:', {
+        getDawsonLogger().debug('Results:', {
           results: returnResults,
         });
       }
@@ -123,7 +115,7 @@ export const genericHandler = (
     } catch (e) {
       if (!e.skipLogging) {
         // we don't want email alerts to be sent out just because someone searched for a non-existing case
-        applicationContext.logger.error(e);
+        getDawsonLogger().error(e);
       }
       throw e;
     }

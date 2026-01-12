@@ -1,16 +1,19 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * updateCounselOnCase
@@ -23,14 +26,14 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  * @returns {Promise} the promise of the update case call
  */
 const updateCounselOnCase = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   {
     docketNumber,
     userData,
     userId,
   }: { docketNumber: string; userData: any; userId: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<RawCase> => {
   const editableFields = {
     representing: userData.representing,
     serviceIndicator: userData.serviceIndicator,
@@ -42,19 +45,17 @@ const updateCounselOnCase = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const caseToUpdate = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const caseToUpdate = await getCaseByDocketNumber({
+    docketNumber,
+  });
 
-  const userToUpdate = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({
-      applicationContext,
-      userId,
-    });
+  const userToUpdate = await getUserById({
+    userId,
+  });
+
+  if (!userToUpdate) {
+    throw new NotFoundError(`Could not find user ${userId}`);
+  }
 
   const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
@@ -85,13 +86,10 @@ const updateCounselOnCase = async (
     throw new Error('User is not a practitioner');
   }
 
-  const updatedCase = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
-      authorizedUser,
-      caseToUpdate: caseEntity,
-    });
+  const updatedCase = await updateCaseAndAssociations({
+    authorizedUser,
+    caseToUpdate: caseEntity,
+  });
 
   return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };

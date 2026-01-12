@@ -36,8 +36,9 @@ describe('router', () => {
     });
 
     it('attaches a function __cy_route to the window object and fires the default route of "/"', () => {
-      // eslint-disable-next-line no-underscore-dangle
-      expect(window.__cy_route).toBeDefined();
+      expect(
+        (window as Window & { __cy_route?: (path: string) => void }).__cy_route,
+      ).toBeDefined();
       expect(window.location.pathname).toBe('/');
       expect(window.document.title).toEqual(expect.stringMatching('Dashboard'));
     });

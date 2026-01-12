@@ -84,11 +84,12 @@ export const EditDocketEntryMeta = connect(
                 </Tab>
               </Tabs>
 
-              <div className="margin-top-3">
+              <div className="margin-top-3 button-container">
                 <Button
                   onClick={() => {
                     submitEditDocketEntryMetaSequence();
                   }}
+                  data-testid="save-edit-docket-entry-meta"
                 >
                   Save
                 </Button>

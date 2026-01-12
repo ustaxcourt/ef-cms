@@ -1,17 +1,38 @@
-// usage: npx ts-node --transpile-only scripts/download-all-case-documents.js "453-17"
+#!/usr/bin/env -S npx ts-node --transpile-only
 
-import { createApplicationContext } from '@web-api/applicationContext';
-import { getCaseByDocketNumber } from '@web-api/persistence/dynamo/cases/getCaseByDocketNumber';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from './helpers/parseArgsAndEnvVars';
+import {
+  type ServerApplicationContext,
+  createApplicationContext,
+} from '@web-api/applicationContext';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import fs from 'fs';
 
-const DOCKET_NUMBER = process.argv[2];
+const scriptConfig: ScriptConfig = {
+  description:
+    'download-all-case-documents - Downloads all docket entries for the given docket number.',
+  parameters: {
+    docketNumber: {
+      position: 0,
+      required: true,
+      type: 'string',
+    },
+  },
+  requireActiveAwsSession: true,
+  environment: {
+    efcmsDomain: 'EFCMS_DOMAIN',
+    env: 'ENV',
+  },
+};
+const { docketNumber } = parseArgsAndEnvVars(scriptConfig) as {
+  docketNumber: string;
+};
 
-if (!DOCKET_NUMBER) {
-  console.error('Error: please provide a docket number.');
-  process.exit(1);
-}
-
-const OUTPUT_DIR = `${process.env.HOME}/Downloads/${DOCKET_NUMBER}`;
+const OUTPUT_DIR = `${process.env.HOME}/Downloads/${docketNumber}`;
 
 const downloadPdf = async ({
   applicationContext,
@@ -19,7 +40,7 @@ const downloadPdf = async ({
   filename,
   path,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   docketEntryId: string;
   filename: string;
   path: string;
@@ -42,10 +63,10 @@ const downloadPdf = async ({
 
 const generateFilename = ({
   caseCaption,
-  docketEntry: { docketNumber, documentType, index },
+  docketEntry: { documentType, index },
 }: {
   caseCaption: string;
-  docketEntry: { docketNumber: string; documentType: string; index: number };
+  docketEntry: { documentType: string; index: number };
 }): string => {
   const MAX_OVERALL_FILE_LENGTH = 64;
   const EXT = '.pdf';
@@ -69,12 +90,14 @@ const generateFilename = ({
     fs.mkdirSync(unsealedDir);
   }
   const caseEntity = await getCaseByDocketNumber({
-    applicationContext,
-    docketNumber: DOCKET_NUMBER,
+    docketNumber,
   });
   let numSealed = 0;
   let numError = 0;
-  for (const docketEntry of caseEntity.docketEntries) {
+  for (const docketEntryRaw of caseEntity.docketEntries) {
+    const docketEntry = new DocketEntry(docketEntryRaw, {
+      authorizedUser: undefined,
+    });
     if (!docketEntry.isFileAttached || !docketEntry.index) {
       console.log('did not download docket entry', docketEntry);
       continue;
@@ -83,6 +106,7 @@ const generateFilename = ({
       docketEntry.isSealed ||
       docketEntry.isLegacySealed ||
       docketEntry.documentTitle.indexOf('(SEALED)') > -1 ||
+      // @ts-ignore
       docketEntry.additionalInfo2?.indexOf('(SEALED)') > -1;
     if (sealed) {
       numSealed++;
@@ -90,6 +114,7 @@ const generateFilename = ({
     try {
       const filename = generateFilename({
         caseCaption: caseEntity.caseCaption,
+        // @ts-ignore
         docketEntry,
       });
       await downloadPdf({

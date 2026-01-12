@@ -172,7 +172,9 @@ describe('generateDocumentIds', () => {
   it('throws an error if there is an error uploading documents', async () => {
     applicationContext
       .getUseCases()
-      .uploadDocumentAndMakeSafeInteractor.mockRejectedValue('something wrong');
+      .uploadDocumentAndMakeSafeInteractor.mockRejectedValueOnce(
+        'something wrong',
+      );
 
     await expect(
       generateDocumentIds(
@@ -187,5 +189,57 @@ describe('generateDocumentIds', () => {
         mockPetitionerUser,
       ),
     ).rejects.toThrow('Error generating document Ids');
+  });
+
+  it('uploads a requestForPlaceOfTrial file if provided', async () => {
+    await generateDocumentIds(
+      applicationContext,
+      {
+        stinUploadProgress: {
+          file: mockFile,
+          uploadProgress: jest.fn(),
+        },
+        requestForPlaceOfTrialUploadProgress: {
+          file: mockFile,
+          uploadProgress: jest.fn(),
+        },
+      } as any,
+      mockPetitionerUser,
+    );
+
+    expect(
+      applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
+        .calls.length,
+    ).toBe(2);
+    expect(
+      applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
+        .calls[1][1].document,
+    ).toBe(mockFile);
+  });
+
+  it('uploads an applicationForWaiverOfFilingFee file if provided', async () => {
+    await generateDocumentIds(
+      applicationContext,
+      {
+        stinUploadProgress: {
+          file: mockFile,
+          uploadProgress: jest.fn(),
+        },
+        applicationForWaiverOfFilingFeeUploadProgress: {
+          file: mockFile,
+          uploadProgress: jest.fn(),
+        },
+      } as any,
+      mockPetitionerUser,
+    );
+
+    expect(
+      applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
+        .calls.length,
+    ).toBe(2);
+    expect(
+      applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
+        .calls[1][1].document,
+    ).toBe(mockFile);
   });
 });

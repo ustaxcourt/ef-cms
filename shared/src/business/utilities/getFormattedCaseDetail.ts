@@ -17,6 +17,18 @@ import {
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { cloneDeep, isEmpty, sortBy } from 'lodash';
 import { isMiscellaneousDocketEntry } from '@shared/business/utilities/isMiscellaneousDocketEntry';
+import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
+
+export type FormattedCaseInventoryReportEntry = {
+  docketNumber: string;
+  caseTitle: string;
+  consolidatedIconTooltipText: string;
+  inConsolidatedGroup: boolean;
+  isLeadCase: boolean;
+  associatedJudge?: string;
+  status: string;
+  [key: string]: unknown;
+};
 
 const computeIsInProgress = ({ formattedEntry }) => {
   return (
@@ -77,9 +89,10 @@ export const formatDocketEntry = (applicationContext, docketEntry) => {
     ({ eventCode }) => eventCode,
   ).includes(formattedEntry.eventCode);
 
-  const qcWorkItem = formattedEntry.workItem;
+  const hasWorkItemInfo = DocketEntry.hasWorkItemInfo(formattedEntry);
 
-  formattedEntry.qcWorkItemsCompleted = !qcWorkItem || !!qcWorkItem.completedAt;
+  formattedEntry.qcWorkItemsCompleted =
+    !hasWorkItemInfo || !!formattedEntry.qcComplete;
 
   formattedEntry.isUnservable = DocketEntry.isUnservable(formattedEntry);
 
@@ -95,7 +108,8 @@ export const formatDocketEntry = (applicationContext, docketEntry) => {
   formattedEntry.isStipDecision =
     formattedEntry.eventCode === STIPULATED_DECISION_EVENT_CODE;
 
-  formattedEntry.qcWorkItemsUntouched = qcWorkItem && !qcWorkItem.completedAt;
+  formattedEntry.qcWorkItemsUntouched =
+    hasWorkItemInfo && !formattedEntry.qcComplete;
 
   formattedEntry.qcNeeded =
     formattedEntry.qcWorkItemsUntouched && !formattedEntry.isInProgress;
@@ -111,10 +125,16 @@ export const formatDocketEntry = (applicationContext, docketEntry) => {
     formattedEntry.createdAtFormatted = applicationContext
       .getUtilities()
       .formatDateString(formattedEntry.filingDate, 'MMDDYY');
+    formattedEntry.sortingFilingDate = applicationContext
+      .getUtilities()
+      .formatDateString(formattedEntry.filingDate, 'YYYYMMDD_NUMERIC');
   } else {
     formattedEntry.createdAtFormatted = applicationContext
       .getUtilities()
       .formatDateString(formattedEntry.createdAt, 'MMDDYY');
+    formattedEntry.sortingFilingDate = applicationContext
+      .getUtilities()
+      .formatDateString(formattedEntry.createdAt, 'YYYYMMDD_NUMERIC');
   }
 
   formattedEntry.filingsAndProceedings =
@@ -126,6 +146,14 @@ export const formatDocketEntry = (applicationContext, docketEntry) => {
 
   if (formattedEntry.lodged) {
     formattedEntry.eventCode = 'MISCL';
+  }
+
+  if (formattedEntry.isSealed) {
+    formattedEntry.sealedToTooltip = applicationContext
+      .getUtilities()
+      .getSealedDocketEntryTooltip(applicationContext, formattedEntry);
+  } else if (formattedEntry.isLegacySealed) {
+    formattedEntry.sealedToTooltip = 'Sealed in Blackstone';
   }
 
   return formattedEntry;
@@ -169,12 +197,10 @@ const formattedTrialSessionDetails = ({
   trialLocation,
   trialTime,
 }) => {
-  let formattedTrialCity;
-  let formattedAssociatedJudge;
   let formattedTrialDate;
 
-  formattedTrialCity = trialLocation || 'Not assigned';
-  formattedAssociatedJudge = judgeName || 'Not assigned';
+  const formattedTrialCity = trialLocation || 'Not assigned';
+  const formattedAssociatedJudge = judgeName || 'Not assigned';
 
   if (!trialDate) {
     formattedTrialDate = 'Not scheduled';
@@ -225,10 +251,6 @@ const formatTrialSessionScheduling = ({
     formattedCase.blockedDateFormatted = applicationContext
       .getUtilities()
       .formatDateString(formattedCase.blockedDate, 'MMDDYY');
-  } else if (formattedCase.highPriority) {
-    formattedCase.formattedTrialDate = 'Not scheduled';
-    formattedCase.formattedAssociatedJudge = 'Not assigned';
-    formattedCase.showPrioritized = true;
   } else {
     formattedCase.showNotScheduled = true;
   }
@@ -375,7 +397,7 @@ export const formatCase = (
   const caseEntity = new Case(caseDetail, {
     authorizedUser,
   });
-  result.canConsolidate = caseEntity.canConsolidate();
+  result.canConsolidate = caseEntity.canConsolidate(caseEntity);
   result.canUnconsolidate = !!caseEntity.leadDocketNumber;
   result.irsSendDate = caseEntity.getIrsSendDate();
   result.showPrintConfirmationLink =
@@ -450,8 +472,8 @@ const formatCounsel = ({ caseDetail, counsel }) => {
 
 // sort items that do not display a filingDate (based on createdAtFormatted) at the bottom
 export const sortUndefined = (
-  a: { createdAtFormatted: string },
-  b: { createdAtFormatted: string },
+  a: { createdAtFormatted?: string },
+  b: { createdAtFormatted?: string },
 ) => {
   if (a.createdAtFormatted && !b.createdAtFormatted) {
     return -1;
@@ -460,6 +482,8 @@ export const sortUndefined = (
   if (!a.createdAtFormatted && b.createdAtFormatted) {
     return 1;
   }
+
+  return 0;
 };
 
 export const sortDocketEntries = (
@@ -491,9 +515,7 @@ export const getFormattedCaseDetail = ({
   authorizedUser: UnknownAuthUser;
 }) => {
   const result = {
-    ...applicationContext
-      .getUtilities()
-      .setServiceIndicatorsForCase(caseDetail),
+    ...setServiceIndicatorsForPetitionersOnCase(caseDetail),
     ...formatCase(applicationContext, caseDetail, authorizedUser),
   };
   result.formattedDocketEntries = sortDocketEntries(

@@ -26,11 +26,10 @@ export const docketClerkViewsAssignedWorkItemEditLink = cerebralTest => {
     });
 
     const inboxWorkItem = workQueueFormatted.find(
-      workItem =>
-        workItem.docketEntry.docketEntryId === cerebralTest.docketEntryId,
+      workItem => workItem.docketEntryId === cerebralTest.docketEntryId,
     );
 
-    expect(inboxWorkItem.editLink).toContain('/edit');
+    expect(inboxWorkItem!.editLink).toContain('/edit');
 
     await cerebralTest.runSequence('gotoDocketEntryQcSequence', {
       docketEntryId: cerebralTest.docketEntryId,

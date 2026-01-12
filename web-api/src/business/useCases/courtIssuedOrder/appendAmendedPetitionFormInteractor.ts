@@ -37,7 +37,6 @@ export const appendAmendedPetitionFormInteractor = async (
     });
 
   const combinedPdf = await applicationContext.getUtilities().combineTwoPdfs({
-    applicationContext,
     firstPdf: orderDocument,
     secondPdf: amendedPetitionFormData,
   });

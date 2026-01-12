@@ -1,11 +1,11 @@
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
+} from '@shared/authorization/authorizationClientService';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { associateIrsPractitionerToCase } from '../../useCaseHelper/caseAssociation/associateIrsPractitionerToCase';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 /**
  * associateIrsPractitionerWithCaseInteractor
@@ -18,26 +18,28 @@ import { associateIrsPractitionerToCase } from '../../useCaseHelper/caseAssociat
  * @returns {*} the result
  */
 export const associateIrsPractitionerWithCaseInteractor = async (
-  applicationContext: ServerApplicationContext,
   {
     docketNumber,
     serviceIndicator,
     userId,
   }: { docketNumber: string; serviceIndicator: string; userId: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<RawCase> => {
   if (
     !isAuthorized(authorizedUser, ROLE_PERMISSIONS.ASSOCIATE_USER_WITH_CASE)
   ) {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId });
+  const user = await getUserById({ userId });
+
+  if (!user) {
+    throw new NotFoundError(
+      `User not found with user id ${authorizedUser.userId}`,
+    );
+  }
 
   return await associateIrsPractitionerToCase({
-    applicationContext,
     authorizedUser,
     docketNumber,
     serviceIndicator,

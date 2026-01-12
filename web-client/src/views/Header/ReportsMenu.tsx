@@ -5,17 +5,23 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-export const ReportsMenu = connect(
-  {
-    openCaseInventoryReportModalSequence:
-      sequences.openCaseInventoryReportModalSequence,
-    openTrialSessionPlanningModalSequence:
-      sequences.openTrialSessionPlanningModalSequence,
-    reportMenuHelper: state.reportMenuHelper,
-    resetHeaderAccordionsSequence: sequences.resetHeaderAccordionsSequence,
-    toggleMenuSequence: sequences.toggleMenuSequence,
-    toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
-  },
+type ReportsMenuProps = {
+  isExpanded: boolean;
+};
+
+const reportsMenuDeps = {
+  openCaseInventoryReportModalSequence:
+    sequences.openCaseInventoryReportModalSequence,
+  openTrialSessionPlanningModalSequence:
+    sequences.openTrialSessionPlanningModalSequence,
+  reportMenuHelper: state.reportMenuHelper,
+  resetHeaderAccordionsSequence: sequences.resetHeaderAccordionsSequence,
+  toggleMenuSequence: sequences.toggleMenuSequence,
+  toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
+};
+
+export const ReportsMenu = connect<ReportsMenuProps, typeof reportsMenuDeps>(
+  reportsMenuDeps,
   function ReportsMenu({
     isExpanded,
     openCaseInventoryReportModalSequence,
@@ -138,6 +144,7 @@ export const ReportsMenu = connect(
             <li className="usa-nav__submenu-item" id="reports-nav">
               <Button
                 link
+                data-testid="trial-session-planning-btn"
                 id="trial-session-planning-btn"
                 onClick={() => {
                   resetHeaderAccordionsSequence();

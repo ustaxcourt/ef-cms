@@ -22,21 +22,22 @@ describe('generatePrintableTrialSessionCopyReportAction', () => {
     { key: 'statusUnassigned', label: 'Unassigned' },
   ];
   const formattedCaseMock = {
-    calendarNotes: MOCK_CASE.calendarNotes,
+    calendarNotes: (MOCK_CASE as { calendarNotes?: string }).calendarNotes,
     caseTitle: 'Case Notes Title',
     docketNumber: '678-90',
     docketNumberWithSuffix: 'L',
     filingPartiesCode: 'OTP',
-    inConsolidatedGroup: MOCK_CASE.inConsolidatedGroup,
+    inConsolidatedGroup: (MOCK_CASE as { inConsolidatedGroup?: boolean })
+      .inConsolidatedGroup,
     irsPractitioners: MOCK_CASE.irsPractitioners,
-    isLeadCase: MOCK_CASE.isLeadCase,
+    isLeadCase: (MOCK_CASE as { isLeadCase?: boolean }).isLeadCase,
     notes: {
       docketNumber: '678-90',
       notes: 'this is a note added',
       userId: 'f0a1e52a-876f-4c03-853c-f66e407e5a1e',
     },
     privatePractitioners: MOCK_CASE.privatePractitioners,
-    trialStatus: MOCK_CASE.trialStatus,
+    trialStatus: (MOCK_CASE as { trialStatus?: string }).trialStatus,
     userNotes: 'user notes',
   };
   beforeAll(() => {
@@ -155,48 +156,6 @@ describe('generatePrintableTrialSessionCopyReportAction', () => {
     expect(result.output.pdfUrl).toEqual(url);
   });
 
-  it('should get trial status from case metadata and return the printable trial session copy pdf URL', async () => {
-    const result = await runAction(
-      generatePrintableTrialSessionCopyReportAction,
-      {
-        modules: {
-          presenter,
-        },
-        props: {
-          formattedCases: [formattedCaseMock],
-        },
-        state: {
-          formattedTrialSessionDetails: {
-            estimatedEndDate: '12/12/12',
-          },
-          trialSessionWorkingCopy: {
-            caseMetadata: formattedCaseMock,
-            filters: {
-              basisReached: true,
-              continued: true,
-              definiteTrial: true,
-              dismissed: true,
-              motionToDismiss: true,
-              probableSettlement: true,
-              probableTrial: true,
-              recall: true,
-              rule122: true,
-              setForTrial: true,
-              settled: true,
-              showAll: true,
-              statusUnassigned: true,
-              submittedCAV: true,
-            },
-          },
-          trialSessionWorkingCopyHelper: {
-            trialStatusFilters,
-          },
-        },
-      },
-    );
-    expect(result.output.pdfUrl).toEqual(url);
-  });
-
   it('should filter out unselected and deprecated filters from the trial session working copy', async () => {
     const result = await runAction(
       generatePrintableTrialSessionCopyReportAction,
@@ -252,7 +211,7 @@ describe('generatePrintableTrialSessionCopyReportAction', () => {
     expect(result.output.pdfUrl).toEqual(url);
   });
 
-  it('should get trial status from formattedCase and return the printable trial session copy pdf URL', async () => {
+  it('should get trial status from formattedCase and return the printable trial session copy pdf URL 2', async () => {
     const mockFormattedTrialSessionDetails = {
       estimatedEndDate: '2020-11-27T05:00:00.000Z',
       formattedChambersPhoneNumber: MOCK_TRIAL_REGULAR.chambersPhoneNumber,

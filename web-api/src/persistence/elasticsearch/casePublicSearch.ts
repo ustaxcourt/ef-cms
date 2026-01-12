@@ -1,30 +1,22 @@
-import { CaseAdvancedSearchParamsRequestType } from '@web-api/business/useCases/caseAdvancedSearchInteractor';
-import { MAX_SEARCH_RESULTS } from '../../../../shared/src/business/entities/EntityConstants';
-import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
-import { aggregateCommonQueryParams } from '../../../../shared/src/business/utilities/aggregateCommonQueryParams';
+import {
+  CaseAdvancedSearchParamsRequestType,
+  CaseSearchResult,
+} from '@web-api/business/useCases/caseAdvancedSearchInteractor';
+import {
+  MAX_CASE_SEARCH_RESULTS,
+  US_STATES,
+} from '@shared/business/entities/EntityConstants';
+import { aggregateCommonQueryParams } from '@shared/business/utilities/aggregateCommonQueryParams';
 import { search } from './searchClient';
-
-export type CasePublicSearchResultsType = {
-  caseCaption?: string;
-  contactId?: string;
-  docketNumber: string;
-  docketNumberSuffix?: string;
-  docketNumberWithSuffix: string;
-  irsPractitioners: RawIrsPractitioner[];
-  partyType: string;
-  petitioners: TPetitioner[];
-  receivedAt: string;
-  sealedDate?: string;
-  isSealed: boolean;
-};
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const casePublicSearch = async ({
   applicationContext,
   searchTerms,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   searchTerms: CaseAdvancedSearchParamsRequestType;
-}): Promise<{ results: CasePublicSearchResultsType }> => {
+}): Promise<{ results: CaseSearchResult[] }> => {
   const { commonQuery, exactMatchesQuery } =
     aggregateCommonQueryParams(searchTerms);
 
@@ -46,36 +38,37 @@ export const casePublicSearch = async ({
     bool: {
       must: [...exactMatchesQuery, ...commonQuery],
       must_not: [
-        {
-          exists: {
-            field: 'sealedDate',
-          },
-        },
-        {
-          bool: {
-            must: [
-              {
-                term: {
-                  'isSealed.BOOL': true,
-                },
-              },
-            ],
-          },
-        },
+        { exists: { field: 'sealedDate' } },
+        { bool: { must: [{ term: { 'isSealed.BOOL': true } }] } },
       ],
     },
   };
 
-  return await search({
+  const cases = await search({
     applicationContext,
     searchParameters: {
       body: {
         _source: sourceFields,
         min_score: 0.1,
         query,
-        size: MAX_SEARCH_RESULTS,
+        size: MAX_CASE_SEARCH_RESULTS,
       },
       index: 'efcms-case',
     },
   });
+
+  return {
+    results: cases.results.map(c => {
+      return {
+        caseCaption: c.caseCaption,
+        docketNumber: c.docketNumber,
+        docketNumberWithSuffix: c.docketNumberWithSuffix,
+        petitionerNames: c.petitioners?.map(p => p.name),
+        petitionerStateNames: c.petitioners?.map(
+          p => US_STATES[p.state] || p.state,
+        ),
+        receivedAt: c.receivedAt,
+      };
+    }),
+  };
 };

@@ -1,7 +1,3 @@
-export const navigateTo = (username, docketNumber) => {
-  cy.login(username, `/case-detail/${docketNumber}`);
-};
-
 export const getActionMenuButton = () => {
   return cy.get('button.case-detail-menu__button');
 };

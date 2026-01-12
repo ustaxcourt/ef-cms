@@ -8,10 +8,12 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
+import { Tag } from '@web-client/dawson-ui/ui/tag';
 
 type CaseDetailHeaderProps = {
   hideActionButtons?: boolean;
   className?: string;
+  openCaseInNewTab?: boolean;
 };
 
 const caseDetailHeaderDeps = {
@@ -31,6 +33,7 @@ export const CaseDetailHeader = connect<
     className,
     formattedCaseDetail,
     hideActionButtons,
+    openCaseInNewTab,
   }) {
     const consolidatedCasesString = formattedCaseDetail.consolidatedCases
       .map(eachCase => eachCase.docketNumberWithSuffix)
@@ -153,7 +156,7 @@ export const CaseDetailHeader = connect<
           <div className="grid-container">
             <div className="display-flex flex-row flex-justify">
               <div className="tablet:grid-col-10">
-                <div className="margin-bottom-1">
+                <div className="margin-bottom-1 line-height-mono-4">
                   <h1
                     className="heading-2 captioned docket-number-header"
                     data-testid="docket-number-header"
@@ -168,7 +171,12 @@ export const CaseDetailHeader = connect<
                         size="1x"
                       />
                     )}
-                    <CaseLink formattedCase={formattedCaseDetail}>
+                    <CaseLink
+                      formattedCase={formattedCaseDetail}
+                      rel={openCaseInNewTab ? 'noreferrer noopener' : ''}
+                      target={openCaseInNewTab ? '_blank' : ''}
+                      className="mobile-text-wrap"
+                    >
                       Docket Number:{' '}
                       {formattedCaseDetail.docketNumberWithSuffix}
                     </CaseLink>
@@ -176,51 +184,42 @@ export const CaseDetailHeader = connect<
                   {caseDetailHeaderHelper.hidePublicCaseInformation && (
                     <>
                       {formattedCaseDetail.isLeadCase && (
-                        <span
+                        <Tag
                           aria-label={`isLeadCase: ${formattedCaseDetail.isLeadCase}`}
-                          className="usa-tag"
                           id="lead-case-tag"
                           role="note"
+                          className="margin-right-1 text-tbottom"
                         >
-                          <span aria-hidden="true">Lead case</span>
-                        </span>
+                          Lead case
+                        </Tag>
                       )}
-                      <label
+                      <Tag
+                        className="margin-right-1 text-tbottom"
                         aria-label={`status: ${formattedCaseDetail.status}`}
-                        className={classNames(
-                          'usa-tag',
-                          formattedCaseDetail.isLeadCase ? 'margin-left-1' : '',
-                        )}
-                        data-testid="case-status"
-                        htmlFor="case-status"
+                        dataTestId="case-status"
+                        id="case-status"
                       >
-                        <span aria-hidden="true" id="case-status">
-                          {formattedCaseDetail.status}
-                        </span>
-                      </label>
+                        {formattedCaseDetail.status}
+                      </Tag>
                       {formattedCaseDetail.associatedJudge && (
-                        <span
+                        <Tag
                           aria-label="associated judge"
-                          className="margin-left-1 usa-tag"
+                          className="margin-right-1 text-tbottom"
                           role="note"
+                          iconProps={{ icon: 'gavel' }}
                         >
-                          <FontAwesomeIcon
-                            className="margin-right-05"
-                            icon="gavel"
-                            size="1x"
-                          />
                           {formattedCaseDetail.associatedJudge}
-                        </span>
+                        </Tag>
                       )}
                       {caseDetailHeaderHelper.showBlockedTag && (
-                        <span className="margin-left-1 usa-tag red-tag">
-                          <FontAwesomeIcon
-                            className="margin-right-1"
-                            icon="hand-paper"
-                            size="1x"
-                          />
+                        <Tag
+                          className="margin-right-1 text-tbottom"
+                          dataTestId="blocked-case-icon"
+                          iconProps={{ icon: 'hand-paper' }}
+                          variant="destructive"
+                        >
                           BLOCKED
-                        </span>
+                        </Tag>
                       )}
                     </>
                   )}

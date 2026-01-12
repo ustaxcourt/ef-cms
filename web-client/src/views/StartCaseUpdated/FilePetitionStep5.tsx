@@ -1,6 +1,6 @@
 import { FilePetitionButtons } from '@web-client/views/StartCaseUpdated/FilePetitionButtons';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
-import { InfoNotificationComponent } from '@web-client/views/InfoNotification';
+import { AlertInfo } from '@web-client/dawson-ui/ui/Alert/AlertInfo';
 import { InlineLink } from '@web-client/ustc-ui/InlineLink/InlineLink';
 import { ROLES } from '@shared/business/entities/EntityConstants';
 import { StateDrivenFileInput } from '@web-client/views/FileDocument/StateDrivenFileInput';
@@ -19,7 +19,7 @@ export const FilePetitionStep5 = connect(
     return (
       <>
         <div className="margin-bottom-5">
-          <InfoNotificationComponent
+          <AlertInfo
             alertInfo={{
               message: (
                 <>
@@ -32,8 +32,9 @@ export const FilePetitionStep5 = connect(
                 </>
               ),
             }}
-            dismissible={false}
+            isDismissible={false}
             scrollToTop={false}
+            className="tw:mb-4"
           />
           <div style={{ fontSize: '18px', marginBottom: '3px' }}>
             Download and fill out the form if you haven&apos;t already done so:

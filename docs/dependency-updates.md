@@ -1,103 +1,267 @@
 # Dependency Updates
 
+## Overview
+
 Each week we rotate a few of the routine process and maintenance chores between team members. This is tracked using a schedule posted to the USTC out of office calendar.
 
 At the moment, the only task we rotate is updating dependencies. As an open-source project, we rely on external libraries which get updates frequently. These include JavaScript Library Updates and Infrastructure as Code Libraries as described below. Follow the [PR workflow](./pr-workflow.md) like any other change.
 
 > After changes are made to any dependencies, deploy to an experimental environment to verify that all tests pass!
 
-## Library Update Steps
+## Dependency Update Steps
 
-### Do the following for all package.json files
+### 1. Update all package.json files
 
-note: we have 3 package.json files, be sure to update them all
-  - ./package.json
-  - ./web-api/runtimes/puppeteer/package.json
-  - ./web-api/terraform/modules/batch/docker-image/package.json
+**Note**: The DAWSON repository contains three package.json files that must be updated. They are:
 
-1. `npm outdated`: Informs us of minor and major version updates that we need to update manually. For major updates, there are often breaking API changes that require refactoring.
+- `./package.json`
+- `./web-api/runtimes/puppeteer/package.json`
+- `./web-api/terraform/modules/batch/docker-image/package.json`
 
-2. `npm audit`: Informs us of known security vulnerabilities. If transitive dependencies are vulnerable, use the overrides block in `package.json` to specify version overrides. If a dependency is vulnerable and has no fix, consider replacing it with an alternative.
+1. You can use the `upgrade-npm-packages.ts` script for this process if you would like:
+   ```bash
+   scripts/npm/upgrade-npm-packages.ts
+   ```
+1. After running, ensure all three package.json files are updated.
 
-   > **Why am I seeing a medium severity for `quill`?**
-   > Quill is used as our rich text editor for open text submissions. It currently has a potential XSS vulnerability if used incorrectly. This vulnerability can be avoided by using getContents/setContents in combination with the quill delta. Currently we are not at risk for how we are using Quill and this vulnerability is actively being disputed: https://github.com/quilljs/quill/issues/3364
+#### 1.1 Run `npm outdated`
 
-3. Check if there are updates to either of the following in the main `Dockerfile`. Changing the `Dockerfile` requires publishing a new ECR image which is used as the docker image in CircleCI.
+This command informs us of minor and major version updates that we need to update manually. For major updates, there are often breaking API changes that require refactoring.
 
-    - `terraform`: check for a newer version on the [Terraform site](https://www.terraform.io/downloads).
-      - Change the version of the `terraform.zip` that we retrieve in `./Dockerfile`
-      - Change the version in `scripts/verify-terraform-version.sh`
-    - `aws-cli`: check for a newer version on [AWS CLI](https://github.com/aws/aws-cli/tags) and use the latest version you can find for 2.x, replace it in the DockerFile
-    - `docker cypress/base image`: [Check DockerHub](https://hub.docker.com/r/cypress/browsers/tags?page=1&name=node-20) if an update is available for the current node version the project is using.
+#### 1.2 Run `npm audit`
 
-   To publish a new ECR docker image:
+This command informs us of known security vulnerabilities. If transitive dependencies are vulnerable, use the overrides block in `package.json` to specify version overrides. If a dependency is vulnerable and has no fix, consider replacing it with an alternative.
 
-   - Increment the docker image version being used in `.circleci/config.yml` in the docker variable:
-   `efcms-docker-image: &efcms-docker-image`. e.g. `ef-cms-us-east-1:3.1.6` -> `ef-cms-us-east-1:3.1.7`
-   - Publish a docker image tagged with the incremented version number to ECR with the command: `export DESTINATION_TAG=[INSERT NEW DOCKER IMAGE VERSION] && npm run deploy:ci-image`. Do this for both the USTC account AND the Flexion account (using environment switcher).
-     - example: `export DESTINATION_TAG=3.1.6 && npm run deploy:ci-image`
-		 - you can verify the image deployed on AWS ECR repository "ef-cms-us-east-1"
-     - if you run into any errors similar to 'At least one invalid signature was encountered', try running  `docker builder prune` or `docker system prune` on your local machine. https://stackoverflow.com/questions/62473932/at-least-one-invalid-signature-was-encountered
+> **Why am I seeing a medium severity for `quill`?**
+> Quill is used as our rich text editor for open text submissions. It currently has a potential XSS vulnerability if used incorrectly. This vulnerability can be avoided by using getContents/setContents in combination with the quill delta. Currently we are not at risk for how we are using Quill and this vulnerability is actively being disputed: https://github.com/quilljs/quill/issues/3364
 
-     > Refer to [ci-cd.md](ci-cd.md#docker) for more info on this as needed
+> **Why am I seeing a high severity for `ws`?**
+> [See below](#ws-3rd-party-dependency-of-cerebral).
 
-4. Check if there is an update to the Terraform AWS provider and update all of the following files to use the [latest version](https://registry.terraform.io/providers/hashicorp/aws/latest) of the provider.
+> **Why am I seeing a high severity for `tar-fs`?**
+> [See below](#puppeteer-and-sparticuzchromium).
 
-regex search the entire project for `aws = "\d+.\d+.\d+"` and make sure it's to the latest version.  For example, some of these files have the providers defined:
+> **Why am I seeing a vulnerability for `fast-redact`?**
+> On November 19th, 2025. Unsuccessfully rolled back cognito-local to 3.7.1
 
- - ./shared/admin-tools/glue/glue_migrations/main.tf
- - ./shared/admin-tools/glue/remote_role/main.tf
- - ./web-api/terraform/applyables/account-specific/account-specific.tf
- - ./web-api/terraform/applyables/allColors/allColors.tf
- - ./web-api/terraform/applyables/blue/blue.tf
- - ./web-api/terraform/applyables/glue-cron/glue-cron-applyable.tf
- - ./web-api/terraform/applyables/green/green.tf
- - ./web-api/terraform/applyables/migration/migration-applyable.tf
- - ./web-api/terraform/applyables/migration-cron/migration-cron-applyable.tf
- - ./web-api/terraform/applyables/reindex-cron/reindex-cron-applyable.tf
- - ./web-api/terraform/applyables/switch-colors-cron/switch-colors-cron-applyable.tf
- - ./web-api/terraform/applyables/wait-for-workflow/wait-for-workflow-cron-applyable.tf
+### 2. Update third-party dependencies
 
-	> aws = "<LATEST_VERSION>"
+#### 2.1 Update Node.js version
 
-5. Check through the list of caveats to see if any of the documented issues have been resolved.
+DAWSON uses the version of Node.js specified in `.nvmrc`. Consult the [documentation](https://nodejs.org/en/about/previous-releases) to determine if an upgrade is required.
 
-6. Validate updates by deploying, with a [migration](./additional-resources/blue-green-migration.md#manual-migration-steps), to an experimental environment. This helps us verify that the package updates don't affect the migration workflow.
+When updating Node.js, keep in mind:
+
+- Only update to newer patch or minor versions within the current major version
+- Do not update to odd-numbered releases since they become unsupported after six months
+- Do not update to the next even-numbered major version until it enters Active LTS status
+- Do not update to the next even-numbered major version until it is offically supported by AWS Lambda. [Supported Runtimes](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html)
+
+To update Node.js:
+
+1. Update the version in `.nvmrc`.
+1. Manually update the `"engines"` property in:
+   - `./package.json`
+   - `./web-api/runtimes/puppeteer/package.json`
+1. Manually update the images in:
+   - `./Dockerfile`
+   - `./web-api/runtimes/puppeteer/Dockerfile`
+1. Manually update the Node.js version in:
+   - `./.circleci/config.yml`
+1. Update the node version used by our lambdas.
+   - `web-api/terraform/modules/lambda/lambda.tf`
+   - `web-api/terraform/modules/api/layers.tf`
+1. Update the `CHANGES.md` file with instructions for installing this NodeJS version locally. See [df83cf3](https://github.com/ustaxcourt/ef-cms/commit/df83cf3db69f2c6149cbef3ae213db488822cc2b) for an example.
+
+#### 2.2 Update `Dockerfile` as needed
+
+Check if updates are necessary for the main `Dockerfile`. We base this image on `cypress/browsers`, a debian linux image that contains the latest (headless) versions of Chrome, Firefox, and Edge.
+
+- Base image - `cypress/browsers`
+  - Check [DockerHub](https://hub.docker.com/r/cypress/browsers/tags?page=1&name=node-24) if an update is available for the current node version the project is using
+  - Change the `FROM` line in the `Dockerfile` to use the new version
+- `terraform`
+  - Check the [Terraform site](https://developer.hashicorp.com/terraform/install) if an update is available
+  - Change the version of the `terraform.zip` that we retrieve in `./Dockerfile`
+  - Change the version in `scripts/verify-terraform-version.sh`
+- `aws-cli`
+  - Check for the latest 2.x version of the [AWS CLI](https://github.com/aws/aws-cli/tags)
+  - Change the version of the `awscliv2.zip` that we retrieve in `./DockerFile`
+
+#### 2.3 Publish new ECR docker image if needed
+
+If the `Dockerfile` has changed, you will need to build a new docker image and publish it to an experimental environment's ECR.
+
+1. Increment the docker image version being used in `.circleci/config.yml` in the `&efcms-docker-image` variable. See [PR #5980](https://github.com/ustaxcourt/ef-cms/pull/5980/files#diff-78a8a19706dbd2a4425dd72bdab0502ed7a2cef16365ab7030a5a0588927bf47) for an example.
+1. Use the [environment switcher](./additional-resources/environment-switcher.md) to point to an experimental environment:
+   ```bash
+   . scripts/env/set-env.zsh expN
+   ```
+1. Publish a docker image tagged with the incremented version number to ECR:
+   ```bash
+   npm run deploy:ci-image
+   ```
+1. To verify the image was published, run:
+   ```bash
+   aws ecr describe-images --repository-name ef-cms-us-east-1 --query 'sort_by(imageDetails,& imagePushedAt)[-1].imageTags[0]'
+   ```
+1. If you run into any errors similar to 'At least one invalid signature was encountered', try running `docker builder prune` or `docker system prune` on your local machine. https://stackoverflow.com/questions/62473932/at-least-one-invalid-signature-was-encountered
+
+   > Refer to [ci-cd.md](ci-cd.md#docker) for more info on this as needed
+
+1. Update the `CHANGES.md` file with instructions for deploying this new docker image to other environments. Be sure to indicate the experimental environment to which you just deployed the image. See [df83cf3](https://github.com/ustaxcourt/ef-cms/commit/df83cf3db69f2c6149cbef3ae213db488822cc2b) for an example.
+
+### 3. Update Terraform AWS provider
+
+Check if there is an update to the Terraform AWS provider and update our `.tf` files to use the [latest version](https://registry.terraform.io/providers/hashicorp/aws/latest) of the provider.
+
+1. Search the entire project for `source  = "hashicorp/aws"` and make sure it's set to the latest version. For example, some of these files have the AWS provider defined:
+   - `./web-api/terraform/modules/worker/providers.tf`
+1. Change the version of the AWS provider using two decimal notation (e.g. `6.19.0`) to ensure providers only increment patch versions automatically
+
+### 4. Update Terraform OpenSearch provider
+
+Check if there is an update to the Terraform OpenSearch provider and update our `.tf` files to use the [latest version](https://registry.terraform.io/providers/opensearch-project/opensearch/latest) of the provider.
+
+1. Search the entire project for `source  = "opensearch-project/opensearch"` and make sure it's set to the latest version. For example, these files have the OpenSearch provider defined:
+   - `web-api/terraform/applyables/account-specific/account-specific.tf`
+   - `web-api/terraform/modules/kibana/providers.tf`
+1. Change the version of the OpenSearch provider
+
+### 5. Update OpenSearch
+
+Check to see if there is an updated version of OpenSearch available. If an update is available, we'll need to update OpenSearch locally, in github actions, and in deployed environments.
+
+1. Use the [environment switcher](./additional-resources/environment-switcher.md) to point to an experimental environment and to retrieve a fresh AWS access key:
+   ```bash
+   . scripts/env/set-env.zsh expN
+   ```
+1. Determine the current OpenSearch engine version in this environment:
+   ```bash
+   aws opensearch describe-domain --domain-name "efcms-search-${ENV}-${SOURCE_TABLE_VERSION}" --query "DomainStatus.EngineVersion" --output text
+   ```
+1. Use the AWS CLI to list the available versions of OpenSearch:
+   ```bash
+   aws opensearch list-versions
+   ```
+
+#### 5.1 Update OpenSearch to the latest version in a deployed environment
+
+If an OpenSearch update is available, we'll need to update OpenSearch in deployed environments.
+
+1. Run the OpenSearch indices report and note the indices and aliases in this deployed environment:
+   ```bash
+   scripts/reports/indices.ts
+   ```
+1. Set the value of the `ES_ENGINE_VERSION` secret in the `[env]_deploy` secrets in Secrets Manager:
+   ```bash
+   scripts/secrets/update-secret.ts --key "ES_ENGINE_VERSION" --value "OpenSearch_99.9"
+   ```
+1. Run a deployment to the experimental environment.
+1. While the OpenSearch upgrade is being performed (during the `allColors` terraform deployment), verify cluster is still functional by running search smoketests against current color:
+   ```bash
+   scripts/run-cypress.sh -sct cypress/deployed-and-local/integration/advancedSearch/search.cy.ts
+   ```
+1. After the deployment's `cleanup` job is finished, rerun the OpenSearch indices report and ensure that all indices are present and populated, and that the aliases are configured as expected:
+   ```bash
+   scripts/reports/indices.ts
+   ```
+1. Describe the required manual steps in the dependency updates pull request. Be sure to indicate that `test` and `prod` will also need an `account-specific` deployment to update their `info` clusters' OpenSearch engine version as well. See [PR #9427](https://github.com/ustaxcourt/ef-cms/pull/9189) for an example.
+1. Describe the same manual steps in the `CHANGES.md` file. See [c702a02](https://github.com/ustaxcourt/ef-cms/commit/c702a02cd267d0325884febc739c04ceb6b0e0d2) for an example.
+
+#### 5.2 Update OpenSearch to the latest version locally
+
+If an OpenSearch update is available, we'll need to update OpenSearch locally.
+
+1. Set the value of the `image` property in `web-api/elasticsearch/docker-compose.yml` to correspond to the new version number.
+1. Run the api locally to verify:
+   ```bash
+   npm run start:api
+   ```
+
+#### 5.3 Update OpenSearch to the latest version in github actions
+
+If an OpenSearch update is available, we'll need to update OpenSearch in github actions.
+
+1. Search the project for `opensearch-version:` and make sure it's set to the latest version. For example, some of the files in the `.github/workflows` directory will need to be updated.
+
+### 6. Wrap up
+
+- Check through the list of caveats to see if any of the documented issues have been resolved.
+
+- Validate updates by deploying to an experimental environment
 
 ## Do Not Upgrade
 
-### @fortawesome
+### cerebral and @cerebral/react
 
-- fortawesome packages are locked down to pre-6.x.x to maintain consistency of icon styling until there is usability feedback and research that determines we should change them. This includes `@fortawesome/free-solid-svg-icons`, `@fortawesome/free-regular-svg-icons`, and `@fortawesome/fontawesome-svg-core`.
+- New versions of cerebral (5.2.1 to 5.2.4) and @cerebral/react (4.2.1 to 4.2.2) were released on February 27, 2025. These upgrades are the first since spring 2020. The new versions do not work with the import syntax used in `web-client/src/presenter/test.cerebral.ts` for `runAction` and `runCompute`, so keep these pinned to 5.2.1 and "github:ustaxcourt/cerebral-react#main" respectively for the time being.
+- Will eventually need to decide to maintain our forked version `github:ustaxcourt/cerebral-react#main` or switch back to original repo now that it is started to be maintained again
 
 ## Caveats
 
 Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Try to update these items but please be aware of the issue that's documented and ensure it's been resolved.
 
-### puppeteer and @sparticuz/chromium
-
-- When updating puppeteer or puppeteer core in the project, make sure to also match versions in `web-api/runtimes/puppeteer/package.json` as this is our lambda layer which we use to generate pdfs. Puppeteer and chromium versions should always match between package.json and web-api/runtimes/puppeteer/package.json.  Remember to run `npm install --prefix web-api/runtimes/puppeteer` to install and update the package-lock file.
-- Puppeteer also has recommended versions of Chromium, so we should make sure to use the recommended version of chromium for the version of puppeteer that we are on. The chromium versions supported by puppeteer can be found [here](https://pptr.dev/supported-browsers)
-- There is a high-severity security issue with ws (ws affected by a DoS when handling a request with many HTTP headers - https://github.com/advisories/GHSA-3h5v-q93c-6h6q); however, we only use ws on the client side, so this should not be an issue. (We tried to upgrade puppeteer anyway, but unsurprisingly the PDF tests failed because there is no newer version of Chromium that supports puppeteer.)
-- Note that we tried and failed to upgrade puppeteer-core from 23.0.0 to 23.6.0 and @sparticuz/chromium from 127.0.0 to 130.0.0 on October 24-25, 2024. There were substantial differences in the layouts of the expected PDF images versus the PDF images generated by a local test run.
-
 ### pdfjs-dist
 
-- `pdfjs-dist` has a major version update to ^3.x,x. A devex card has been created to track work being done towards updating the package. Please add notes and comments to [this card](https://trello.com/c/gjDzhUkb/1111-upgrade-pdfjs-dist).
-- The high-severity security issue "vulnerable to arbitrary JavaScript execution" has been addressed by us here: https://app.zenhub.com/workspaces/flexionef-cms-5bbe4bed4b5806bc2bec65d3/issues/gh/flexion/ef-cms/10407 and can therefore be ignored.
+- As of [this release](https://github.com/mozilla/pdf.js/releases/tag/v5.1.91), and I think [this PR](https://github.com/mozilla/pdf.js/pull/19689), pdfjs seems to expect certain browser-side API functionality when loaded. This causes issues with our Cypress tests. The best way to fix this is worth investigating further. Perhaps we could polyfill, or even consider creating an issue in the pdfjs repo.
+- Look at `shared/src/business/utilities/pdfs/getPdfJs.ts`
+- As 0f 01/05/2026 `pdfjs-dist` is still causing Cypress Test to fail randomly
 
-### @uswds/uswds
-- Keep pinned on 3.7.1, upgrading to 3.8.0+ will cause DAWSON UI issues with icon spacing and break Cypress Snapshots in the Cypress UI (as you hover over each step after initial run, it loses styles, making it harder to debug issues).
+### DWT
 
-### eslint
-- Keep pinned to 8.57.0 as most plugins are not yet compatible with v9.0.0: https://eslint.org/blog/2023/09/preparing-custom-rules-eslint-v9/
-See: https://github.com/jsx-eslint/eslint-plugin-react/issues/3699
-- Keep eslint-plugin-cypress pinned to 3.5.0 due do the aforementioned compatibility issues.
+- Minor versions of DWT _should_ be updated, but require that Court IT update the Windows clients in concert with our app. Do not update without coordinating.
+- Stay at DWT v19.2.0, wait until January to update to 19.3.0
+
+### puppeteer and @sparticuz/chromium
+
+- When updating puppeteer or puppeteer core in the project, make sure to also match versions in `web-api/runtimes/puppeteer/package.json` as this is our lambda layer which we use to generate pdfs. Puppeteer and chromium versions should always match between package.json and web-api/runtimes/puppeteer/package.json. Remember to run `npm install --prefix web-api/runtimes/puppeteer` to install and update the package-lock file.
+- Puppeteer also has recommended versions of Chromium, so we should make sure to use the recommended version of chromium for the version of puppeteer that we are on. The chromium versions supported by puppeteer can be found [here](https://pptr.dev/supported-browsers)
+- There is a high-severity security issue with ws (ws affected by a DoS when handling a request with many HTTP headers - https://github.com/advisories/GHSA-3h5v-q93c-6h6q); however, we only use ws on the client side, so this should not be an issue. (Only @cypress/puppeteer depends on vulnerable version of puppeteer-core)
+- As of 15 April 2025, there is a high-security vulnerability for tar-fs < 3.0.7, which our current version of puppeteer relies on. As far as I can tell, this should not affect our use case since we are downloading from a trusted source (chromium). Hopefully the update to tar-fs will make its way into the next version of puppeteer we update to.
+- Peer-dependency tar-fs has high security vulnerability but this shouldn't affect us as far as we are aware of.
+- On October 27th, 2025, successfully updated @types/aws-lambda from 8.10.155 to 8.10.156. This required changing `AttributeValueWithName` in `processStreamUtilities.ts` from an `interface extends` to a `type` with intersection (`&`) because the new version of `AttributeValue` is no longer extendable by interfaces.
 
 ### ws, 3rd party dependency of Cerebral
+
 - When running npm audit, you'll see a high severity issue with ws, 'affected by a DoS when handling a request with many HTTP headers - https://github.com/advisories/GHSA-3h5v-q93c-6h6q'. This doesn't affect us as the vulnerability is on the server side and we're not using this package on the server. We tried to override this to 5.2.4 and 8.18.0 and weren't able to make this work as import paths have changed. In the mean time, we recommend skipping this issue. We could always fork the cerebral repo in the future if needed.
 
-## Incrementing the Node Cache Key Version
+### quill
+**Updated to 2.0.3**
+
+- Quill released version 2 in April 2024. It includes substantial changes. Because the focus is currently on Postgres, we have left it at a previous version.
+- January 9th, 2026: We successfully updated Quill from 1.4.3 to 2.0.3. The way Quill handles imports and props in function calls changed, requiring changes to our Quill.tsx and TextEditor.tsx.
+
+
+### babel-jest, babel-core
+
+- June 6th, 2025: Tried to update to 30.0.0-beta.3 from 29.7.0 on Friday, June 06, 2025, we weren't able to update it because it conflicts with ts-jest 29.3.4.
+- June 26 2025: newer versions of babel-core and jest core also started to cause issues with ts-jest. Once ts-jest is updated these issues should all clear up.
+- September 19th, 2025: babel-jest was successfully updated to 30.0.0 from 29.7.0.
+- September 19th, 2025: babel/core was successfully updated to 7.28..4 from 7.28.3, had some issues with Github Actions checks running all the way through, but Github still gave the commit a check. Refer to this PR for more info. https://github.com/ustaxcourt/ef-cms/pull/9164
+
+### @types/node
+
+The major version of this package should match our major version of Node. At the moment that we are using Node v24.11.1 so we should use a package that starts with 24.
+
+- [Dependencies 12 01 2025](https://github.com/ustaxcourt/ef-cms/pull/9465/files), Node.js was updated to v24.11.1, successfully updated @types/node to 24.10.2 to match Node.js v24.11.1
+- [Dependencies 01 05 2026](https://github.com/ustaxcourt/ef-cms/pull/9595/files), @Types/Node.js was updated from v24.10.2 to v24.10.4. Node.js version was left unchanged as the next available is Node 25+.
+
+### TypeScript
+
+**When upgrading TypeScript, make sure that the new version is supported by ts-jest.**
+
+### Commander override for s3rver
+
+- On 12/16/25 we added an version override for the commander package for s3rver. It was failing to start up the test server with our command after s3rver started using 14.0.2 of commander. We reverted it to the previous working version 12.1.0.
+
+```
+npm run start:s3rver
+error: too many arguments. Expected 0 arguments but got 2.
+```
+
+## Troubleshooting
+
+### Incrementing the Node Cache Key Version
 
 It's rare to need modify cache key. One reason you may want to do so is if a package fails to install properly, and CircleCI, unaware of the failed installation, stores the corrupted cache. In this case, we will need to increment the cache key version so that CircleCI is forced to reinstall the node dependencies and save them using the new key. To update the cache key, locate `vX-npm` and `vX-cypress` (where X represents the current cache key version) in the config.yml file, and then increment the identified version.
-

@@ -1,0 +1,3 @@
+export const DEFAULT_FORGOT_PASSWORD_CODE = '385030';
+
+

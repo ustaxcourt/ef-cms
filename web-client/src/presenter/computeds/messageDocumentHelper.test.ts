@@ -1285,27 +1285,31 @@ describe('messageDocumentHelper', () => {
         ...getBaseState(petitionsClerkUser),
         caseDetail: {
           ...baseCaseDetail,
+          docketNumber: '101-20',
         },
       },
     });
 
     expect(result.addDocketEntryLink).toEqual(
-      `/case-detail/${baseCaseDetail.docketNumber}/documents/${mockDocumentId}/add-court-issued-docket-entry/${mockParentMessageId}`,
+      `/case-detail/101-20/documents/${mockDocumentId}/add-court-issued-docket-entry/${mockParentMessageId}`,
     );
     expect(result.applyStampFromMessagesLink).toEqual(
-      `/messages/${baseCaseDetail.docketNumber}/message-detail/${mockParentMessageId}/${mockDocumentId}/apply-stamp`,
+      `/messages/101-20/message-detail/${mockParentMessageId}/${mockDocumentId}/apply-stamp`,
     );
     expect(result.editCorrespondenceLink).toEqual(
-      `/case-detail/${baseCaseDetail.docketNumber}/edit-correspondence/${mockDocumentId}/${mockParentMessageId}`,
+      `/case-detail/101-20/edit-correspondence/${mockDocumentId}/${mockParentMessageId}`,
     );
     expect(result.messageDetailLink).toEqual(
-      `/messages/${baseCaseDetail.docketNumber}/message-detail/${mockParentMessageId}`,
+      `/messages/101-20/message-detail/${mockParentMessageId}`,
     );
     expect(result.servePetitionLink).toEqual(
-      `/case-detail/${baseCaseDetail.docketNumber}/petition-qc/${mockParentMessageId}`,
+      `/case-detail/101-20/petition-qc/${mockParentMessageId}`,
     );
     expect(result.applySignatureLink).toEqual(
-      `/case-detail/${baseCaseDetail.docketNumber}/edit-order/${mockDocumentId}/sign/${mockParentMessageId}`,
+      `/case-detail/101-20/edit-order/${mockDocumentId}/sign/${mockParentMessageId}`,
+    );
+    expect(result.motionOrderResponseFromMessagesLink).toEqual(
+      `/messages/101-20/message-detail/${mockParentMessageId}/${mockDocumentId}/motion-order-response-create`,
     );
   });
 });

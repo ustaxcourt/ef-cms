@@ -6,7 +6,7 @@ import { isEmpty, isEqual } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 import { thirtyDaysBeforeTrial } from '@web-client/presenter/computeds/trialSessionsHelper';
 
-type FormatTrialSessionHelperType = FormattedTrialSessionDetailsType & {
+export type FormatTrialSessionHelperType = FormattedTrialSessionDetailsType & {
   alertMessageForNOTT?: string;
   canClose?: boolean;
   canDelete?: boolean;
@@ -14,6 +14,7 @@ type FormatTrialSessionHelperType = FormattedTrialSessionDetailsType & {
   chambersPhoneNumber?: string;
   disableHybridFilter?: boolean;
   isHybridSession?: boolean;
+  isRemoteSession: boolean;
   showAlertForNOTTReminder?: boolean;
   showOnlyClosedCases?: boolean;
   showOpenCases?: boolean;
@@ -36,11 +37,13 @@ export const formattedTrialSessionDetails = (
   let chambersPhoneNumber: string | undefined;
 
   const trialSession = get(state.trialSession);
+  const currentUser = get(state.user);
 
   const formattedTrialSession = applicationContext
     .getUtilities()
     .getFormattedTrialSessionDetails({
       applicationContext,
+      currentUser,
       trialSession,
     });
 
@@ -59,7 +62,7 @@ export const formattedTrialSessionDetails = (
     formattedTrialSession.sessionStatus === SESSION_STATUS_GROUPS.closed;
 
   showAlertForNOTTReminder =
-    !formattedTrialSession.dismissedAlertForNOTT &&
+    !formattedTrialSession.dismissedAlertForNott &&
     TrialSession.isStartDateWithinNOTTReminderRange({
       isCalendared: formattedTrialSession.isCalendared,
       startDate: formattedTrialSession.startDate,
@@ -76,7 +79,10 @@ export const formattedTrialSessionDetails = (
       .formatPhoneNumber(formattedTrialSession.chambersPhoneNumber);
   }
 
-  isHybridSession = Object.values(HYBRID_SESSION_TYPES).includes(
+  const HYBRID_SESSION_TYPES_ARRAY: string[] =
+    Object.values(HYBRID_SESSION_TYPES);
+
+  isHybridSession = HYBRID_SESSION_TYPES_ARRAY.includes(
     formattedTrialSession.sessionType,
   );
 
@@ -93,6 +99,7 @@ export const formattedTrialSessionDetails = (
 
     const user = get(state.user);
     const isChambersUser = user.role === USER_ROLES.chambers;
+    const isJudgeUser = user.role === USER_ROLES.judge;
     const trialDateInFuture = trialDateFormatted > nowDateFormatted;
     const docketClerkCanEditCheck = sessionType => {
       const editableSessionTypes = ['Special', 'Motion/Hearing'];
@@ -103,7 +110,8 @@ export const formattedTrialSessionDetails = (
     canEdit =
       trialDateInFuture &&
       formattedTrialSession.sessionStatus !== SESSION_STATUS_GROUPS.closed &&
-      !isChambersUser;
+      !isChambersUser &&
+      !isJudgeUser;
 
     if (user.role === USER_ROLES.docketClerk && canEdit) {
       canEdit = docketClerkCanEditCheck(formattedTrialSession.sessionType);

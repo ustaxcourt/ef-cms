@@ -1,8 +1,13 @@
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
-import { SIMULTANEOUS_DOCUMENT_EVENT_CODES } from '../../../../shared/src/business/entities/EntityConstants';
+import { Case } from '@shared/business/entities/cases/Case';
+import { SIMULTANEOUS_DOCUMENT_EVENT_CODES } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { addCoverToPdf } from './addCoverToPdf';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { NotFoundError } from '@web-api/errors/errors';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 
 /**
  * addCoversheetInteractor
@@ -35,12 +40,9 @@ export const addCoversheetInteractor = async (
   authorizedUser: UnknownAuthUser,
 ) => {
   if (!caseEntity) {
-    const caseRecord = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      });
+    const caseRecord = await getCaseByDocketNumber({
+      docketNumber,
+    });
 
     caseEntity = new Case(caseRecord, {
       authorizedUser,
@@ -55,6 +57,12 @@ export const addCoversheetInteractor = async (
   const docketEntryEntity = caseEntity.getDocketEntryById({
     docketEntryId,
   });
+
+  if (!docketEntryEntity) {
+    throw new NotFoundError(
+      `Could not find docket entry with id ${docketEntryId} on case ${docketNumber}`,
+    );
+  }
 
   const {
     consolidatedCases, // if feature flag is off, this will always be null
@@ -71,7 +79,6 @@ export const addCoversheetInteractor = async (
   });
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    applicationContext,
     document: newPdfData,
     key: docketEntryId,
   });
@@ -84,41 +91,41 @@ export const addCoversheetInteractor = async (
       .map(({ docketNumber: caseDocketNumber }) => caseDocketNumber);
   }
 
-  const updatedDocketEntries = await Promise.all(
-    docketNumbersToUpdate.map(async caseDocketNumber => {
-      // in one instance, we pass in the caseEntity which we don't want to refetch
-      let consolidatedCaseEntity = caseEntity;
-      if (caseEntity && caseDocketNumber !== docketNumber) {
-        const caseRecord = await applicationContext
-          .getPersistenceGateway()
-          .getCaseByDocketNumber({
-            applicationContext,
-            docketNumber: caseDocketNumber,
-          });
-        consolidatedCaseEntity = new Case(caseRecord, {
-          authorizedUser,
-        });
-      }
+  const casesToUpdate = await getCasesByDocketNumbers({
+    docketNumbers: docketNumbersToUpdate,
+  });
 
-      const consolidatedCaseDocketEntryEntity =
+  const updatedDocketEntries = casesToUpdate
+    .map(caseRecord => {
+      const consolidatedCaseEntity =
+        caseRecord.docketNumber === docketNumber
+          ? caseEntity
+          : new Case(caseRecord, {
+              authorizedUser,
+            });
+
+      const consolidatedCaseDocketEntry =
         consolidatedCaseEntity!.getDocketEntryById({
           docketEntryId,
         });
 
-      if (consolidatedCaseDocketEntryEntity) {
+      if (consolidatedCaseDocketEntry) {
         const isSimultaneousDocType =
           SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(
-            consolidatedCaseDocketEntryEntity.eventCode,
+            consolidatedCaseDocketEntry.eventCode,
           ) ||
-          consolidatedCaseDocketEntryEntity.documentTitle?.includes(
-            'Simultaneous',
-          );
+          consolidatedCaseDocketEntry.documentTitle?.includes('Simultaneous');
+
+        const consolidatedCaseDocketEntryEntity = new DocketEntry(
+          consolidatedCaseDocketEntry,
+          { authorizedUser },
+        );
 
         if (
           !isSimultaneousDocType ||
           (isSimultaneousDocType &&
             caseEntity &&
-            caseDocketNumber === docketNumber)
+            caseRecord.docketNumber === docketNumber)
         ) {
           consolidatedCaseDocketEntryEntity.setAsProcessingStatusAsCompleted();
         }
@@ -129,18 +136,14 @@ export const addCoversheetInteractor = async (
           .validate()
           .toRawObject();
 
-        await applicationContext.getPersistenceGateway().updateDocketEntry({
-          applicationContext,
-          docketEntryId,
-          docketNumber: caseDocketNumber,
-          document: updateConsolidatedDocketEntry,
-        });
         return updateConsolidatedDocketEntry;
       }
-    }),
-  );
+    })
+    .filter(docketEntry => docketEntry !== undefined);
 
-  return updatedDocketEntries
-    .filter(Boolean)
-    .find(entry => entry.docketNumber === docketNumber);
+  await upsertDocketEntries(updatedDocketEntries);
+
+  return updatedDocketEntries.find(
+    entry => entry.docketNumber === docketNumber,
+  );
 };

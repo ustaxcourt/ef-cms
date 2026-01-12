@@ -1,10 +1,10 @@
-/* eslint-disable @miovision/disallow-date/no-new-date */
 import { cloneDeep, get } from 'lodash';
-import { getCurrentInvoke } from '@vendia/serverless-express';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { getCurrentInvoke } from '@codegenie/serverless-express';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
+import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
 
 export const expressLogger = (req, res, next) => {
-  const logger = getLogger();
+  const logger = getDawsonLogger();
   if (process.env.NODE_ENV === 'production') {
     const requestBody = cloneDeep(req.body);
 
@@ -31,25 +31,29 @@ export const expressLogger = (req, res, next) => {
     });
   }
 
-  logger.debug(`Request started: ${req.method} ${req.url}`);
+  logger.info(`Request started: ${req.method} ${req.url}`);
 
   req.locals = req.locals || {};
   req.locals.logger = logger;
-  req.locals.startTime = new Date();
+  req.locals.startTime = Number(formatNow(FORMATS.UNIX_TIMESTAMP_MS));
 
   const { end } = res;
 
   res.end = function () {
+    // eslint-disable-next-line prefer-rest-params
     end.apply(this, arguments);
-    const responseTimeMs = new Date() - req.locals.startTime;
+    const nowMillis = Number(formatNow(FORMATS.UNIX_TIMESTAMP_MS));
+    const responseTimeMs = nowMillis - req.locals.startTime;
 
-    logger.info(`Request ended: ${req.method} ${req.url}`, {
+    logger.addContext({
       response: {
         responseSize: parseInt(res.get('content-length') ?? '0'),
         responseTimeMs,
         statusCode: res.statusCode,
       },
     });
+
+    logger.info(`Request ended: ${req.method} ${req.url}`);
     logger.clearContext();
   };
 

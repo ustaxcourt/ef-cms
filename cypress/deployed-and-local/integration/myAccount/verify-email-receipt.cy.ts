@@ -5,7 +5,7 @@ import {
   confirmEmailPendingAlert,
   goToMyAccount,
 } from '../../../local-only/support/pages/my-account';
-import { navigateTo } from '../../../local-only/support/pages/maintenance';
+import { loginAsPetitioner } from 'cypress/helpers/authentication/login-as-helpers';
 
 if (
   !Cypress.env('SMOKETESTS_LOCAL') &&
@@ -30,7 +30,7 @@ if (
     });
 
     it('should update petitioner email and confirm that a verification email is received by the updated email address', () => {
-      navigateTo('petitioner9');
+      loginAsPetitioner('petitioner9@example.com');
       goToMyAccount();
       clickChangeEmail();
       changeEmailTo(testEmailAddress);

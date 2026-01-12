@@ -7,10 +7,12 @@ describe('resetToBaseStateAction', () => {
     const stateThatShouldNotBeReset = {
       featureFlags: {},
       header: {},
-      idleLogoutState: {},
-      idleStatus: {},
-      lastIdleAction: {},
       maintenanceMode: {},
+      caseDetail: {},
+      pendingReports: {},
+      scanner: {},
+      constants: {},
+      clientConnectionId: '',
     };
 
     const result = await runAction(resetToBaseStateAction, {

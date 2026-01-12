@@ -1,18 +1,32 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
+jest.mock('@web-api/persistence/postgres/users/getUserById');
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { strikeDocketEntryInteractor } from './strikeDocketEntryInteractor';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('strikeDocketEntryInteractor', () => {
   let caseRecord;
   const mockUserId = applicationContext.getUniqueId();
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const getUserById = jest.mocked(getUserByIdMock);
+  const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
 
   beforeEach(() => {
     caseRecord = {
@@ -55,20 +69,18 @@ describe('strikeDocketEntryInteractor', () => {
       userId: '8100e22a-c7f2-4574-b4f6-eb092fca9f35',
     };
 
-    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+    getUserById.mockResolvedValue({
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
+      role: 'admin',
+    } as DbUser);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(caseRecord);
+    getCaseByDocketNumber.mockReturnValue(caseRecord);
   });
 
-  it('should throw an error if not authorized', async () => {
+  it('should throw an error when not authorized', async () => {
     await expect(
       strikeDocketEntryInteractor(
-        applicationContext,
         {
           docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
           docketNumber: caseRecord.docketNumber,
@@ -78,10 +90,9 @@ describe('strikeDocketEntryInteractor', () => {
     ).rejects.toThrow('Unauthorized');
   });
 
-  it('should throw an error if the docket record is not found on the case', async () => {
+  it('should throw an error when the docket record is not found on the case', async () => {
     await expect(
       strikeDocketEntryInteractor(
-        applicationContext,
         {
           docketEntryId: 'does-not-exist',
           docketNumber: caseRecord.docketNumber,
@@ -91,37 +102,34 @@ describe('strikeDocketEntryInteractor', () => {
     ).rejects.toThrow('Docket entry not found');
   });
 
-  it('should call getCaseByDocketNumber, getUserById, and updateDocketEntry', async () => {
+  it('should call getCaseByDocketNumber, getUserById, and upsertDocketEntries', async () => {
+    const docketNumberId = '8675309b-18d0-43ec-bafb-654e83405411';
     await strikeDocketEntryInteractor(
-      applicationContext,
       {
-        docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
+        docketEntryId: docketNumberId,
         docketNumber: caseRecord.docketNumber,
       },
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().getUserById,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateDocketEntry,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateDocketEntry.mock
-        .calls[0][0].document,
-    ).toMatchObject({ strickenAt: expect.anything() });
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
+    expect(getUserById).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
+
+    const [{ caseToUpdate }] = updateCaseAndAssociations.mock.calls[0];
+    const docketEntry = caseToUpdate.getDocketEntryById({
+      docketEntryId: docketNumberId,
+    });
+    expect(docketEntry).toMatchObject({
+      strickenAt: expect.anything(),
+    });
   });
 
-  it('should throw an error if the document is not on the docket record', async () => {
+  it('should throw an error when the document is not on the docket record', async () => {
     caseRecord.docketEntries[0].isOnDocketRecord = false;
 
     await expect(
       strikeDocketEntryInteractor(
-        applicationContext,
         {
           docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
           docketNumber: caseRecord.docketNumber,
@@ -131,8 +139,6 @@ describe('strikeDocketEntryInteractor', () => {
     ).rejects.toThrow(
       'Cannot strike a document that is not on the docket record.',
     );
-    expect(
-      applicationContext.getPersistenceGateway().updateDocketEntry,
-    ).not.toHaveBeenCalled();
+    expect(updateCaseAndAssociations).not.toHaveBeenCalled();
   });
 });

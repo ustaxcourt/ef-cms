@@ -1,7 +1,6 @@
 import {
   ADVANCED_SEARCH_OPINION_TYPES,
   ADVANCED_SEARCH_OPINION_TYPES_LIST,
-  ALLOWLIST_FEATURE_FLAGS,
   BENCH_OPINION_EVENT_CODE,
   BRIEF_EVENTCODES,
   CASE_CAPTION_POSTFIX,
@@ -12,7 +11,8 @@ import {
   DOCKET_NUMBER_SUFFIXES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   INITIAL_DOCUMENT_TYPES,
-  MAX_SEARCH_RESULTS,
+  MAX_ELASTICSEARCH_PAGINATION,
+  MAX_DOCUMENT_SEARCH_RESULTS,
   MOTION_EVENT_CODES,
   OBJECTIONS_OPTIONS_MAP,
   OPINION_EVENT_CODES_WITHOUT_BENCH_OPINION,
@@ -36,7 +36,7 @@ import {
   getContactSecondary,
 } from '../../shared/src/business/entities/cases/Case';
 import {
-  ERROR_MAP_429,
+  ERROR_429,
   getEnvironment,
   getPublicSiteUrl,
 } from '../../shared/src/sharedAppContext';
@@ -56,7 +56,6 @@ import {
 } from '../../shared/src/business/utilities/getFormattedCaseDetail';
 import { generatePublicDocketRecordPdfInteractor } from '../../shared/src/proxies/public/generatePublicDocketRecordPdfProxy';
 import { getAllFeatureFlagsInteractor } from '../../shared/src/proxies/featureFlag/getAllFeatureFlagsProxy';
-import { getCaseForPublicDocketSearchInteractor } from '../../shared/src/proxies/public/getCaseForPublicDocketNumberSearchProxy';
 import { getCurrentVersionInteractor } from '../../shared/src/proxies/getCurrentVersionProxy';
 import { getDescriptionDisplay } from '../../shared/src/business/utilities/getDescriptionDisplay';
 import { getDocumentDownloadUrlInteractor } from '../../shared/src/proxies/getDocumentDownloadUrlProxy';
@@ -68,10 +67,13 @@ import { getItemInteractor } from '../../shared/src/business/useCases/getItemInt
 import { getJudgeLastName } from '../../shared/src/business/utilities/getFormattedJudgeName';
 import { getMaintenanceModePublicInteractor } from '../../shared/src/proxies/maintenance/getMaintenanceModePublicProxy';
 import { getPublicCaseExistsInteractor } from '../../shared/src/proxies/getPublicCaseExistsProxy';
-import { getPublicCaseInteractor } from '../../shared/src/proxies/getPublicCaseProxy';
+import { getPublicCaseInteractor } from '@shared/proxies/getPublicCaseProxy';
 import { getPublicJudgesInteractor } from '../../shared/src/proxies/public/getPublicJudgesProxy';
 import { getPublicPractitionerByBarNumberInteractor } from '@shared/proxies/public/getPublicPractitionerByBarNumberProxy';
 import { getPublicPractitionersByNameInteractor } from '@shared/proxies/public/getPublicPractitionersByNameProxy';
+import { getPublicTrialSessionDetailsInteractor } from '@shared/proxies/trialSessions/getPublicTrialSessionDetailsProxy';
+import { getPublicTrialSessionsInteractor } from '@shared/proxies/trialSessions/getPublicTrialSessionsProxy';
+import { getPublicUsersInSectionInteractor } from '@shared/proxies/users/getPublicUsersInSectionProxy';
 import { getSealedDocketEntryTooltip } from '../../shared/src/business/utilities/getSealedDocketEntryTooltip';
 import { getTodaysOpinionsInteractor } from '../../shared/src/proxies/public/getTodaysOpinionsProxy';
 import { getTodaysOrdersInteractor } from '../../shared/src/proxies/public/getTodaysOrdersProxy';
@@ -102,7 +104,6 @@ const allUseCases = {
   generatePublicDocketRecordPdfInteractor,
   getAllFeatureFlagsInteractor,
   getCaseExistsInteractor: getPublicCaseExistsInteractor,
-  getCaseForPublicDocketSearchInteractor,
   getCaseInteractor: getPublicCaseInteractor,
   getCurrentVersionInteractor,
   getDocumentDownloadUrlInteractor,
@@ -113,8 +114,11 @@ const allUseCases = {
     getPublicPractitionerByBarNumberInteractor,
   getPractitionersByNameInteractor: getPublicPractitionersByNameInteractor,
   getPublicJudgesInteractor,
+  getPublicTrialSessionDetailsInteractor,
   getTodaysOpinionsInteractor,
   getTodaysOrdersInteractor,
+  getTrialSessionsInteractor: getPublicTrialSessionsInteractor,
+  getUsersInSectionInteractor: getPublicUsersInSectionInteractor,
   opinionPublicSearchInteractor,
   orderPublicSearchInteractor,
   removeItemInteractor,
@@ -130,7 +134,6 @@ const frozenConstants = deepFreeze({
   ADVANCED_SEARCH_OPINION_TYPES,
   ADVANCED_SEARCH_OPINION_TYPES_LIST,
   ADVANCED_SEARCH_TABS,
-  ALLOWLIST_FEATURE_FLAGS,
   BENCH_OPINION_EVENT_CODE,
   BRIEF_EVENTCODES,
   CASE_CAPTION_POSTFIX,
@@ -140,9 +143,9 @@ const frozenConstants = deepFreeze({
   DOCKET_ENTRY_SEALED_TO_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
-  ERROR_MAP_429,
+  ERROR_429,
   INITIAL_DOCUMENT_TYPES,
-  MAX_SEARCH_RESULTS,
+  MAX_DOCUMENT_SEARCH_RESULTS,
   MOTION_EVENT_CODES,
   OBJECTIONS_OPTIONS_MAP,
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
@@ -159,13 +162,14 @@ const frozenConstants = deepFreeze({
   US_STATES,
   US_STATES_OTHER,
   USER_ROLES: ROLES,
+  MAX_ELASTICSEARCH_PAGINATION,
 });
 
 let forceRefreshCallback: () => {};
 
 const applicationContextPublic = {
   getBaseUrl: () => {
-    return process.env.API_URL || 'http://localhost:5000';
+    return process.env.API_URL || 'http://localhost:4001';
   },
   getCaseTitle: Case.getCaseTitle,
   getConstants: () => frozenConstants,
@@ -178,19 +182,15 @@ const applicationContextPublic = {
   },
   getLogger: () => ({
     error: () => {
-      // eslint-disable-next-line no-console
       // console.error(value);
     },
     info: (key, value) => {
-      // eslint-disable-next-line no-console
       console.info(key, JSON.stringify(value));
     },
     time: key => {
-      // eslint-disable-next-line no-console
       console.time(key);
     },
     timeEnd: key => {
-      // eslint-disable-next-line no-console
       console.timeEnd(key);
     },
   }),

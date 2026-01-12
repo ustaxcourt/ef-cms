@@ -1,18 +1,21 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   DOCUMENT_RELATIONSHIPS,
   ORDER_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
+} from '@shared/business/entities/EntityConstants';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { get } from 'lodash';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 export const updateCourtIssuedOrder = async (
   applicationContext: ServerApplicationContext,
@@ -25,16 +28,15 @@ export const updateCourtIssuedOrder = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
 
-  const caseToUpdate = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  if (!user) {
+    throw new NotFoundError(`Could not find user ${authorizedUser.userId}`);
+  }
+
+  const caseToUpdate = await getCaseByDocketNumber({
+    docketNumber,
+  });
 
   const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
@@ -67,8 +69,13 @@ export const updateCourtIssuedOrder = async (
       richText: documentMetadata.draftOrderState.richText,
     };
 
+    if (!documentContentsId) {
+      throw new NotFoundError(
+        `Could not find documentContentsId associated with docket entry ${currentDocument.docketEntryId} on case ${docketNumber}`,
+      );
+    }
+
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-      applicationContext,
       document: Buffer.from(JSON.stringify(contentToStore)),
       key: documentContentsId,
       useTempBucket: false,
@@ -120,13 +127,10 @@ export const updateCourtIssuedOrder = async (
 
   caseEntity.updateDocketEntry(docketEntryEntity);
 
-  const result = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
-      authorizedUser,
-      caseToUpdate: caseEntity,
-    });
+  const result = await updateCaseAndAssociations({
+    authorizedUser,
+    caseToUpdate: caseEntity,
+  });
 
   return new Case(result, { authorizedUser }).validate().toRawObject();
 };

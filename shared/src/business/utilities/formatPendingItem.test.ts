@@ -4,7 +4,6 @@ import {
   DOCKET_NUMBER_SUFFIXES,
 } from '@shared/business/entities/EntityConstants';
 import { PendingItem } from '@web-api/business/useCases/pendingItems/fetchPendingItemsInteractor';
-import { applicationContext } from '../test/createTestApplicationContext';
 import { formatPendingItem } from '@shared/business/utilities/formatPendingItem';
 
 describe('formatPendingItem', () => {
@@ -34,6 +33,7 @@ describe('formatPendingItem', () => {
         caseCaption: '',
         docketEntryId: '33ddbf4f-90f8-417c-8967-57851b0b9069',
         docketNumber: '101-19',
+        docketNumberWithSuffix: '101-19',
         docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
         documentTitle: 'Bop dop baboo',
         documentType: 'Administrative Record',
@@ -45,6 +45,7 @@ describe('formatPendingItem', () => {
         caseCaption: '',
         docketEntryId: 'dd956ab1-5cde-4e78-bae0-fff4aee40426',
         docketNumber: '101-19',
+        docketNumberWithSuffix: '101-19',
         docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
         documentTitle: 'Affidavit of Sally in Support of Petition',
         documentType: 'Affidavit in Support',
@@ -56,6 +57,7 @@ describe('formatPendingItem', () => {
         caseCaption: '',
         docketEntryId: 'dd956ab1-5cde-4e78-bae0-ac7faee40426',
         docketNumber: '103-19',
+        docketNumberWithSuffix: '101-19',
         docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
         documentTitle: 'Affidavit of Bob in Support of Petition',
         documentType: 'Affidavit in Support',
@@ -65,12 +67,8 @@ describe('formatPendingItem', () => {
     ];
   });
 
-  it('should return a list of formatted pending items', () => {
-    const result = mockPendingItems.map(item =>
-      formatPendingItem(item, {
-        applicationContext,
-      }),
-    );
+  it('should return a list of formatted pending items with correct display properties', () => {
+    const result = mockPendingItems.map(item => formatPendingItem(item));
 
     expect(result).toMatchObject([
       {
@@ -100,11 +98,22 @@ describe('formatPendingItem', () => {
   it('should add consolidated properties to a pending item in a consolidated group', () => {
     pendingItem.leadDocketNumber = '100-19';
 
-    const result = formatPendingItem(pendingItem, { applicationContext });
+    const result = formatPendingItem(pendingItem);
 
     expect(result).toMatchObject({
       inConsolidatedGroup: true,
       isLeadCase: false,
     });
+  });
+
+  it('should use documentType when documentTitle not available', () => {
+    pendingItem.leadDocketNumber = '100-19';
+
+    const result = formatPendingItem({
+      ...pendingItem,
+      documentTitle: '',
+    });
+
+    expect(result.formattedName).toBe(pendingItem.documentType);
   });
 });

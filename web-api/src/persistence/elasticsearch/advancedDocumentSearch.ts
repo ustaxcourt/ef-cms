@@ -1,9 +1,10 @@
 import { DocketEntryMapping } from '../../../elasticsearch/index-types';
 import { MAX_SEARCH_CLIENT_RESULTS } from '../../../../shared/src/business/entities/EntityConstants';
-import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 import { getSealedQuery } from './advancedDocumentSearchHelpers/getSealedQuery';
 import { getSortQuery } from './advancedDocumentSearchHelpers/getSortQuery';
 import { search } from './searchClient';
+import { QueryContainer } from '@opensearch-project/opensearch/api/_types/_common.query_dsl';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
 const simpleQueryFlags = 'OR|AND|ESCAPE|PHRASE'; // OR|AND|NOT|PHRASE|ESCAPE|PRECEDENCE', // https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html#supported-flags
 
@@ -14,6 +15,7 @@ export const advancedDocumentSearch = async ({
   documentEventCodes,
   endDate,
   from = 0,
+  searchAfter,
   isExternalUser,
   isOpinionSearch = false,
   judge,
@@ -23,12 +25,13 @@ export const advancedDocumentSearch = async ({
   sortField,
   startDate,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   caseTitleOrPetitioner?: string;
   docketNumber?: string;
   documentEventCodes: string[];
   endDate?: string;
   from?: number;
+  searchAfter?: any[];
   isExternalUser?: boolean;
   isOpinionSearch?: boolean;
   judge?: string;
@@ -60,7 +63,7 @@ export const advancedDocumentSearch = async ({
     'signedJudgeName',
   ];
 
-  const documentMust: QueryDslQueryContainer[] = [];
+  const documentMust: QueryContainer[] = [];
 
   if (keyword) {
     documentMust.push({
@@ -73,7 +76,7 @@ export const advancedDocumentSearch = async ({
     });
   }
 
-  let caseQueryParams: any = {
+  const caseQueryParams: any = {
     has_parent: {
       inner_hits: {
         _source: {
@@ -91,7 +94,7 @@ export const advancedDocumentSearch = async ({
     },
   };
 
-  let documentMustNot: QueryDslQueryContainer[] = [
+  let documentMustNot: QueryContainer[] = [
     { term: { 'isStricken.BOOL': true } },
   ];
   if (omitSealed) {
@@ -133,7 +136,7 @@ export const advancedDocumentSearch = async ({
     ];
   }
 
-  const documentFilter: QueryDslQueryContainer[] = [
+  const documentFilter: QueryContainer[] = [
     { term: { 'entityName.S': 'DocketEntry' } },
     {
       exists: {
@@ -186,20 +189,31 @@ export const advancedDocumentSearch = async ({
     });
   }
 
-  const documentQuery = {
-    body: {
-      _source: sourceFields,
-      from,
-      query: {
-        bool: {
-          filter: documentFilter,
-          must: documentMust,
-          must_not: documentMustNot,
-        },
+  const primarySort = getSortQuery(sortField);
+  const tieBreaker = { 'docketEntryId.S': 'asc' };
+  const fullSort = [...primarySort, tieBreaker];
+
+  const body: any = {
+    _source: sourceFields,
+    query: {
+      bool: {
+        filter: documentFilter,
+        must: documentMust,
+        must_not: documentMustNot,
       },
-      size: overrideResultSize || MAX_SEARCH_CLIENT_RESULTS,
-      sort: getSortQuery(sortField),
     },
+    size: overrideResultSize || MAX_SEARCH_CLIENT_RESULTS,
+    sort: fullSort,
+  };
+
+  if (searchAfter && Array.isArray(searchAfter)) {
+    body.search_after = searchAfter;
+  } else if (!searchAfter) {
+    body.from = from;
+  }
+
+  const documentQuery = {
+    body,
     index: 'efcms-docket-entry',
   };
 

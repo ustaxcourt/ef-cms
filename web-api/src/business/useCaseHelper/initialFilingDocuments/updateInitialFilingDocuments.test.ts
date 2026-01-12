@@ -1,15 +1,14 @@
 import {
   CONTACT_TYPES,
   INITIAL_DOCUMENT_TYPES,
+  INITIAL_DOCUMENT_TYPES_MAP,
   PARTY_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import {
-  Case,
-  getContactPrimary,
-} from '../../../../../shared/src/business/entities/cases/Case';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { MOCK_DOCUMENTS } from '../../../../../shared/src/test/mockDocketEntry';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+} from '@shared/business/entities/EntityConstants';
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
+import { Case, getContactPrimary } from '@shared/business/entities/cases/Case';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
 import { updateInitialFilingDocuments } from './updateInitialFilingDocuments';
 
@@ -160,6 +159,45 @@ describe('addNewInitialFilingToCase', () => {
       getContactPrimary(mockCaseToUpdate).contactId,
       mockSecondaryId,
     ]);
+  });
+
+  it('should throw when the document type cannot be mapped to an event code', async () => {
+    const mockKey = 'mockInitialDocument';
+    const mockDocumentType = 'Mock Initial Document';
+
+    try {
+      INITIAL_DOCUMENT_TYPES_MAP[mockKey] = mockDocumentType;
+
+      mockOriginalCase = new Case(
+        { ...MOCK_CASE, docketEntries: [mockPetition] },
+        { authorizedUser: mockPetitionsClerkUser },
+      );
+
+      mockCaseToUpdate = {
+        ...MOCK_CASE,
+        docketEntries: [
+          ...MOCK_CASE.docketEntries,
+          {
+            ...mockRQT,
+            docketEntryId: applicationContext.getUniqueId(),
+            documentType: mockDocumentType,
+          },
+        ],
+      };
+
+      await expect(
+        updateInitialFilingDocuments({
+          applicationContext,
+          authorizedUser: mockPetitionsClerkUser,
+          caseEntity: mockOriginalCase,
+          caseToUpdate: mockCaseToUpdate,
+        }),
+      ).rejects.toThrow(
+        `No event code found for document type: ${mockDocumentType}`,
+      );
+    } finally {
+      delete INITIAL_DOCUMENT_TYPES_MAP[mockKey];
+    }
   });
 
   it('should remove a new initial filing document from the case when the document does not exist on the case from the form', async () => {

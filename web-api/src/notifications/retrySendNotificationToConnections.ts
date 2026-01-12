@@ -1,4 +1,4 @@
-import { Connection } from '@web-api/notifications/sendNotificationToConnection';
+import { ConnectionKysely } from '@web-api/persistence/postgres/connections/schema';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const retrySendNotificationToConnections = async ({
@@ -8,13 +8,13 @@ export const retrySendNotificationToConnections = async ({
   messageStringified,
 }: {
   applicationContext: ServerApplicationContext;
-  connections: Connection[];
+  connections: ConnectionKysely[];
   deleteGoneConnections?: boolean;
   messageStringified: string;
 }) => {
   const maxRetries = 1;
 
-  for (let connection of connections) {
+  for (const connection of connections) {
     for (let retryCount = 0; retryCount <= maxRetries; retryCount++) {
       try {
         await applicationContext
@@ -36,12 +36,11 @@ export const retrySendNotificationToConnections = async ({
               await applicationContext
                 .getPersistenceGateway()
                 .deleteUserConnection({
-                  applicationContext,
                   connectionId: connection.connectionId,
                 });
             } catch (error) {
               applicationContext.logger.error(
-                'An error occurred while attempting to clean up the connection, it will be cleared via the dynamo TTL',
+                'An error occurred while attempting to clean up the connection, it will be cleared via the TTL',
                 { error },
               );
             }

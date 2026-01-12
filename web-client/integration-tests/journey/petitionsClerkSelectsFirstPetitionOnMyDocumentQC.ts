@@ -8,8 +8,6 @@ export const petitionsClerkSelectsFirstPetitionOnMyDocumentQC =
             workItemInQueue.docketNumber === cerebralTest.docketNumber,
         );
 
-      const { docketEntryId } = workItem.docketEntry;
-
-      cerebralTest.docketEntryId = docketEntryId;
+      cerebralTest.docketEntryId = workItem.docketEntryId;
     });
   };

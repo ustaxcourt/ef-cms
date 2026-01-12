@@ -5,12 +5,21 @@ import { TrialCity } from '../StartCase/TrialCity';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { get } from 'lodash';
 import { props } from 'cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect } from 'react';
 import classNames from 'classnames';
+import { RunableSequence as RunnableSequence } from 'cerebral';
 
-export const NonstandardForm = connect(
+type NonstandardFormProps = {
+  helper: string;
+  level: string;
+  namespace?: string;
+  updateSequence: string;
+  validateSequence: string;
+  validationErrors: string;
+};
+
+export const NonstandardForm: React.FC<NonstandardFormProps> = connect(
   {
     DATE_FORMATS: state.constants.DATE_FORMATS,
     caseDetail: state.caseDetail,
@@ -19,13 +28,13 @@ export const NonstandardForm = connect(
       sequences.formatAndUpdateDateFromDatePickerSequence,
     getOrdinalValuesForUploadIteration:
       state.getOrdinalValuesForUploadIteration,
-    helper: state[props.helper],
-    level: props.level,
-    namespace: props.namespace,
+    helper: state[props`helper`],
+    level: props`level`,
+    namespace: props`namespace`,
     trialCitiesHelper: state.trialCitiesHelper,
-    updateSequence: sequences[props.updateSequence],
-    validateSequence: sequences[props.validateSequence],
-    validationErrors: state[props.validationErrors],
+    updateSequence: sequences[props`updateSequence`],
+    validateSequence: sequences[props`validateSequence`],
+    validationErrors: state[props`validationErrors`],
   },
   function NonstandardForm({
     caseDetail,
@@ -39,6 +48,20 @@ export const NonstandardForm = connect(
     updateSequence,
     validateSequence,
     validationErrors,
+    showIndex = false
+  }: {
+    caseDetail: { procedureType?: string };
+    DATE_FORMATS: { ISO: string };
+    form: Record<string, any>;
+    formatAndUpdateDateFromDatePickerSequence: Function | RunnableSequence;
+    getOrdinalValuesForUploadIteration: string[];
+    helper: Record<string, any>;
+    level: string;
+    namespace: string;
+    updateSequence: Function | RunnableSequence;
+    validateSequence: Function | RunnableSequence;
+    validationErrors: Record<string, any>;
+    showIndex?: boolean
   }) {
     useEffect(() => {
       const input = window.document.getElementById('other-iteration');
@@ -71,6 +94,7 @@ export const NonstandardForm = connect(
             <select
               className="usa-select"
               id={`${namespace}ordinal-field-select`}
+              data-testid={`${namespace}ordinal-field-select-search`}
               name={`${namespace}ordinalValue`}
               value={get(form, `${namespace}ordinalValue`)}
               onChange={e => {
@@ -151,30 +175,6 @@ export const NonstandardForm = connect(
             />
           </FormGroup>
         )}
-        {helper[level].showTextInput2 && (
-          <FormGroup errorText={validationErrors?.freeText2}>
-            <label className="usa-label" htmlFor={`${namespace}free-text2`}>
-              {helper[level].textInputLabel2}
-            </label>
-            <input
-              autoCapitalize="none"
-              className="usa-input"
-              id={`${namespace}free-text2`}
-              name={`${namespace}freeText2`}
-              type="text"
-              value={get(form, `${namespace}freeText2`, '')}
-              onBlur={() => {
-                validateSequence();
-              }}
-              onChange={e => {
-                updateSequence({
-                  key: e.target.name,
-                  value: e.target.value,
-                });
-              }}
-            />
-          </FormGroup>
-        )}
         {helper[level].previousDocumentSelectLabel && (
           <FormGroup errorText={validationErrors?.previousDocument}>
             <label
@@ -190,6 +190,7 @@ export const NonstandardForm = connect(
                 validationErrors?.previousDocument && 'usa-select--error',
               )}
               id={`${namespace}previous-document`}
+              data-testid={`${namespace}previous-document-search`}
               name={`${namespace}previousDocument`}
               value={get(
                 form,
@@ -211,8 +212,7 @@ export const NonstandardForm = connect(
                     key={previousDocument.docketEntryId}
                     value={previousDocument.docketEntryId}
                   >
-                    {previousDocument.documentTitle ||
-                      previousDocument.documentType}
+                    {`${showIndex ? `${previousDocument.index} - ${previousDocument.createdAtFormatted} - ` : ''}${previousDocument.documentTitle || previousDocument.documentType}`}
                   </option>
                 );
               })}

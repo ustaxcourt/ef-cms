@@ -1,20 +1,28 @@
-import { MOCK_TRIAL_REGULAR } from '../../../../../shared/src/test/mockTrial';
-import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import '@web-api/persistence/postgres/trialSessions/mocks.jest';
+import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
+import {
+  SESSION_TYPES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} from '@shared/business/entities/EntityConstants';
+import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { associateSwingTrialSessions } from '@web-api/business/useCaseHelper/trialSessions/associateSwingTrialSessions';
 import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
+import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { updateTrialSession as updateTrialSessionMock} from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
 
 describe('associateSwingTrialSessions', () => {
   let mockCurrentTrialSessionEntity;
 
+  const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
+  const updateTrialSession = jest.mocked(updateTrialSessionMock);
+
   const MOCK_TRIAL_SESSION = {
     ...MOCK_TRIAL_REGULAR,
     proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
-    sessionType: 'Regular',
+    sessionType: SESSION_TYPES.regular,
     startDate: '3000-03-01T00:00:00.000Z',
     term: 'Fall',
     termYear: '3000',
@@ -23,7 +31,7 @@ describe('associateSwingTrialSessions', () => {
 
   const MOCK_TRIAL_SESSION_FOR_ASSOCIATION = {
     ...MOCK_TRIAL_REGULAR,
-    sessionType: 'Small',
+    sessionType: SESSION_TYPES.small,
     startDate: '3000-03-03T00:00:00.000Z',
     term: 'Fall',
     termYear: '3000',
@@ -31,9 +39,7 @@ describe('associateSwingTrialSessions', () => {
   };
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockReturnValue(MOCK_TRIAL_SESSION_FOR_ASSOCIATION);
+    getTrialSessionById.mockResolvedValue(MOCK_TRIAL_SESSION_FOR_ASSOCIATION);
 
     mockCurrentTrialSessionEntity = new TrialSession(MOCK_TRIAL_SESSION);
   });
@@ -41,7 +47,6 @@ describe('associateSwingTrialSessions', () => {
   it('throws an error if user is unauthorized to associate swing sessions', async () => {
     await expect(
       associateSwingTrialSessions(
-        applicationContext,
         {
           swingSessionId: MOCK_TRIAL_SESSION_FOR_ASSOCIATION.trialSessionId,
           trialSessionEntity: mockCurrentTrialSessionEntity,
@@ -53,7 +58,6 @@ describe('associateSwingTrialSessions', () => {
 
   it('retrieves the swing session to be associated with the current session from persistence', async () => {
     await associateSwingTrialSessions(
-      applicationContext,
       {
         swingSessionId: MOCK_TRIAL_SESSION_FOR_ASSOCIATION.trialSessionId,
         trialSessionEntity: mockCurrentTrialSessionEntity,
@@ -62,14 +66,13 @@ describe('associateSwingTrialSessions', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway().getTrialSessionById.mock
+      getTrialSessionById.mock
         .calls[0][0].trialSessionId,
     ).toEqual(MOCK_TRIAL_SESSION_FOR_ASSOCIATION.trialSessionId);
   });
 
   it('updates the trial session to be associated with swing session information', async () => {
     await associateSwingTrialSessions(
-      applicationContext,
       {
         swingSessionId: MOCK_TRIAL_SESSION_FOR_ASSOCIATION.trialSessionId,
         trialSessionEntity: mockCurrentTrialSessionEntity,
@@ -78,7 +81,7 @@ describe('associateSwingTrialSessions', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway().updateTrialSession.mock
+      updateTrialSession.mock
         .calls[0][0].trialSessionToUpdate,
     ).toMatchObject({
       ...MOCK_TRIAL_SESSION_FOR_ASSOCIATION,
@@ -89,7 +92,6 @@ describe('associateSwingTrialSessions', () => {
 
   it('sets swing session information on the current trial session', async () => {
     const updatedTrialSession = await associateSwingTrialSessions(
-      applicationContext,
       {
         swingSessionId: MOCK_TRIAL_SESSION_FOR_ASSOCIATION.trialSessionId,
         trialSessionEntity: mockCurrentTrialSessionEntity,

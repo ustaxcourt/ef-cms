@@ -1,23 +1,31 @@
-// usage: npx ts-node --transpile-only scripts/judgeUpdates/update-judge-isSeniorJudge.ts
+#!/usr/bin/env -S npx ts-node --transpile-only
 
-import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
-import { User } from '@shared/business/entities/User';
-import { createApplicationContext } from '@web-api/applicationContext';
-import { requireEnvVars } from '../../shared/admin-tools/util';
-import { search } from '@web-api/persistence/elasticsearch/searchClient';
+import { ROLES } from '@shared/business/entities/EntityConstants';
+import { RawUser, User } from '@shared/business/entities/User';
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
+import { fromKyselyUser } from '@web-api/persistence/postgres/users/mapper';
+import { getDbReader } from '@web-api/database';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
 
-requireEnvVars([
-  'DYNAMODB_TABLE_NAME',
-  'ELASTICSEARCH_ENDPOINT',
-  'ENV',
-  'REGION',
-]);
+const scriptConfig: ScriptConfig = {
+  description:
+    "update-judge-isSeniorJudge - Sets Judges' isSeniorJudge attribute",
+  environment: {
+    env: 'ENV',
+    region: 'REGION',
+  },
+  requireActiveAwsSession: true,
+};
+parseArgsAndEnvVars(scriptConfig);
 
 // WARNING: this list is subject to change! check https://www.ustaxcourt.gov/judges.html
 const seniorJudges = [
   'Cohen',
-  'Colvin',
-  'Gale',
+  'Foley',
   'Goeke',
   'Gustafson',
   'Halpern',
@@ -30,43 +38,24 @@ const seniorJudges = [
   'Vasquez',
 ];
 
-const getJudges = async ({
-  applicationContext,
-}: {
-  applicationContext: IApplicationContext;
-}) => {
+const getJudges = async () => {
   return (
-    await search({
-      applicationContext,
-      searchParameters: {
-        body: {
-          from: 0,
-          query: {
-            bool: {
-              must: [
-                {
-                  terms: {
-                    'role.S': ['judge', 'legacyJudge'],
-                  },
-                },
-              ],
-            },
-          },
-          size: MAX_ELASTICSEARCH_PAGINATION,
-        },
-        index: 'efcms-user',
-      },
-    })
-  )?.results;
+    await getDbReader(reader =>
+      reader
+        .selectFrom('dwUser as u')
+        .selectAll('u')
+        .where('u.role', 'in', [ROLES.judge, ROLES.legacyJudge])
+        .orderBy('u.lastName', 'asc')
+        .execute(),
+    )
+  ).map(fromKyselyUser) as RawUser[];
 };
 
 let judgesToUpdateIds: { userId: string; isSeniorJudge: boolean }[];
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const applicationContext = createApplicationContext({});
-
-  const allJudges = await getJudges({ applicationContext });
+  const allJudges = await getJudges();
   judgesToUpdateIds = allJudges.map(
     (judge: { name: string; userId: string }) => ({
       isSeniorJudge: seniorJudges.includes(judge.name),
@@ -74,18 +63,13 @@ let judgesToUpdateIds: { userId: string; isSeniorJudge: boolean }[];
     }),
   );
 
-  for (let judge of judgesToUpdateIds) {
+  for (const judge of judgesToUpdateIds) {
     const { userId } = judge;
 
-    const userToUpdate = await applicationContext
-      .getPersistenceGateway()
-      .getUserById({ applicationContext, userId });
+    const userToUpdate = await getUserById({ userId });
     const userEntity = new User(userToUpdate);
     userEntity.isSeniorJudge = judge.isSeniorJudge;
 
-    await applicationContext.getPersistenceGateway().updateUser({
-      applicationContext,
-      user: userEntity.validate().toRawObject(),
-    });
+    await upsertUsers([userEntity.validate().toRawObject()]);
   }
 })();

@@ -3,7 +3,7 @@ import { loginAsPetitioner } from '../../../../helpers/authentication/login-as-h
 
 describe('Petition generation - intro pages', () => {
   it('welcome to dawson: should be free of a11y issues', () => {
-    loginAsPetitioner('petitioner7');
+    loginAsPetitioner('petitioner7@example.com');
     checkA11y();
   });
 

@@ -1,8 +1,12 @@
 import { MOCK_WORK_ITEM } from '@shared/test/mockWorkItem';
-import { RawWorkItem } from '@shared/business/entities/WorkItem';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { docketClerkUser } from '../../../../shared/src/test/mockUsers';
 import { formatWorkItem } from './formattedWorkQueue';
+import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
+import { WorkItem } from '@shared/business/entities/WorkItem';
+import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
+
+jest.mock('@shared/business/entities/WorkItem');
 
 describe('formatWorkItem', () => {
   const currentTime = applicationContext.getUtilities().createISODateString();
@@ -12,7 +16,7 @@ describe('formatWorkItem', () => {
 
   const { DOCKET_SECTION, STATUS_TYPES } = applicationContext.getConstants();
 
-  const baseWorkItem: RawWorkItem = {
+  const baseWorkItem: RawWorkItemWithCaseAndDocketEntryInfo = {
     ...MOCK_WORK_ITEM,
     assigneeId: docketClerkUser.userId,
     assigneeName: '',
@@ -23,9 +27,9 @@ describe('formatWorkItem', () => {
       createdAt: '2018-12-27T18:05:54.164Z',
       docketEntryId: '8eef49b4-9d40-4773-84ab-49e1e59e49cd',
       documentType: 'Answer',
-    },
+    } as RawDocketEntry,
+    docketEntryId: '8eef49b4-9d40-4773-84ab-49e1e59e49cd',
     docketNumber: '101-18',
-    docketNumberWithSuffix: '101-18S',
     section: DOCKET_SECTION,
     sentBy: 'respondent',
     updatedAt: '2018-12-27T18:05:54.164Z',
@@ -39,26 +43,9 @@ describe('formatWorkItem', () => {
       createdAtFormatted: undefined,
     };
 
-    const result = formatWorkItem({ applicationContext, workItem });
+    const result = formatWorkItem({ workItem });
 
     expect(result.createdAtFormatted).toEqual('02/28/19');
-  });
-
-  it('should coerce the value of highPriority to a boolean', () => {
-    const workItem: RawWorkItem = {
-      ...baseWorkItem,
-      highPriority: 1 as unknown as boolean,
-    };
-
-    let result = formatWorkItem({ applicationContext, workItem });
-
-    expect(result.highPriority).toEqual(true);
-
-    workItem.highPriority = undefined as unknown as boolean;
-
-    result = formatWorkItem({ applicationContext, workItem });
-
-    expect(result.highPriority).toEqual(false);
   });
 
   it('should capitalize sentBySection', () => {
@@ -67,7 +54,7 @@ describe('formatWorkItem', () => {
       sentBySection: 'section',
     };
 
-    const result = formatWorkItem({ applicationContext, workItem });
+    const result = formatWorkItem({ workItem });
 
     expect(result.sentBySection).toEqual('Section');
   });
@@ -79,7 +66,7 @@ describe('formatWorkItem', () => {
       completedAtFormatted: undefined,
     };
 
-    const result = formatWorkItem({ applicationContext, workItem });
+    const result = formatWorkItem({ workItem });
 
     expect(result.completedAtFormatted).toEqual('02/28/19');
   });
@@ -91,7 +78,7 @@ describe('formatWorkItem', () => {
       completedAtFormatted: undefined,
     };
 
-    const result = formatWorkItem({ applicationContext, workItem });
+    const result = formatWorkItem({ workItem });
 
     expect(result.completedAtFormatted).toEqual('Yesterday');
   });
@@ -103,7 +90,7 @@ describe('formatWorkItem', () => {
       completedAtFormatted: undefined,
     };
 
-    const result = formatWorkItem({ applicationContext, workItem });
+    const result = formatWorkItem({ workItem });
 
     expect(result.completedAtFormatted).toContain(':');
     expect(result.completedAtFormatted).toContain('ET');
@@ -117,7 +104,7 @@ describe('formatWorkItem', () => {
       completedAtFormattedTZ: undefined,
     };
 
-    const result = formatWorkItem({ applicationContext, workItem });
+    const result = formatWorkItem({ workItem });
 
     expect(result.completedAtFormattedTZ).toEqual('02/28/19 4:14 pm ET');
   });
@@ -128,25 +115,26 @@ describe('formatWorkItem', () => {
       assigneeName: '',
     };
 
-    const result = formatWorkItem({ applicationContext, workItem });
+    const result = formatWorkItem({ workItem });
 
     expect(result.assigneeName).toEqual('Unassigned');
   });
 
   it('should show the high priority icon when the work item is high priority', () => {
-    const workItem = {
-      ...baseWorkItem,
-      highPriority: false,
-      showHighPriorityIcon: undefined,
-    };
+    WorkItem.isHighPriority = jest.fn().mockReturnValue(false);
 
-    let result = formatWorkItem({ applicationContext, workItem });
+    let result = formatWorkItem({ workItem: baseWorkItem });
 
     expect(result.showHighPriorityIcon).toEqual(false);
 
-    workItem.highPriority = true;
+    WorkItem.isHighPriority = jest.fn().mockReturnValue(true);
 
-    result = formatWorkItem({ applicationContext, workItem });
+    const highPriorityWorkItem = {
+      ...baseWorkItem,
+      status: CASE_STATUS_TYPES.calendared,
+    };
+
+    result = formatWorkItem({ workItem: highPriorityWorkItem });
 
     expect(result.showHighPriorityIcon).toEqual(true);
   });
@@ -157,13 +145,13 @@ describe('formatWorkItem', () => {
       isRead: false,
     };
 
-    let result = formatWorkItem({ applicationContext, workItem });
+    let result = formatWorkItem({ workItem });
 
     expect(result.showUnreadIndicators).toEqual(true);
 
     workItem.isRead = true;
 
-    result = formatWorkItem({ applicationContext, workItem });
+    result = formatWorkItem({ workItem });
 
     expect(result.showUnreadIndicators).toEqual(false);
   });
@@ -175,45 +163,56 @@ describe('formatWorkItem', () => {
       isRead: false,
     };
 
-    let result = formatWorkItem({ applicationContext, workItem });
+    WorkItem.isHighPriority = jest.fn().mockReturnValue(false);
+
+    let result = formatWorkItem({ workItem });
 
     expect(result.showUnreadStatusIcon).toEqual(true);
 
     workItem.isRead = true;
 
-    result = formatWorkItem({ applicationContext, workItem });
+    result = formatWorkItem({ workItem });
 
     expect(result.showUnreadStatusIcon).toEqual(false);
 
     workItem.isRead = false;
-    workItem.highPriority = true;
+    WorkItem.isHighPriority = jest.fn().mockReturnValue(true);
 
-    result = formatWorkItem({ applicationContext, workItem });
+    result = formatWorkItem({ workItem });
 
     expect(result.showUnreadStatusIcon).toEqual(false);
   });
 
   it('should return showUnassignedIcon as true when assigneeName is falsy and highPriority is false', () => {
+    WorkItem.isHighPriority = jest.fn().mockReturnValue(false);
+
     const workItem = {
       ...baseWorkItem,
       assigneeName: '',
-      highPriority: false,
     };
 
-    let result = formatWorkItem({ applicationContext, workItem });
+    let result = formatWorkItem({ workItem });
 
     expect(result.showUnassignedIcon).toEqual(true);
 
-    workItem.highPriority = true;
+    const highPriorityWorkItem = {
+      ...baseWorkItem,
+    };
 
-    result = formatWorkItem({ applicationContext, workItem });
+    WorkItem.isHighPriority = jest.fn().mockReturnValue(true);
+
+    result = formatWorkItem({ workItem: highPriorityWorkItem });
 
     expect(result.showUnassignedIcon).toBeFalsy();
 
-    workItem.highPriority = false;
-    workItem.assigneeName = 'Not Unassigned';
+    const unassignedWorkItem = {
+      ...baseWorkItem,
+      assigneeName: 'Not Unassigned',
+    };
 
-    result = formatWorkItem({ applicationContext, workItem });
+    WorkItem.isHighPriority = jest.fn().mockReturnValue(false);
+
+    result = formatWorkItem({ workItem: unassignedWorkItem });
 
     expect(result.showUnassignedIcon).toBeFalsy();
   });
@@ -225,7 +224,6 @@ describe('formatWorkItem', () => {
     };
 
     let result = formatWorkItem({
-      applicationContext,
       isSelected: undefined,
       workItem,
     });
@@ -235,7 +233,6 @@ describe('formatWorkItem', () => {
     workItem.workItemId = '234';
 
     result = formatWorkItem({
-      applicationContext,
       isSelected: true,
       workItem,
     });
@@ -254,7 +251,6 @@ describe('formatWorkItem', () => {
     };
 
     const result = formatWorkItem({
-      applicationContext,
       workItem,
     });
 
@@ -272,7 +268,6 @@ describe('formatWorkItem', () => {
     };
 
     const result = formatWorkItem({
-      applicationContext,
       workItem,
     });
 
@@ -290,7 +285,6 @@ describe('formatWorkItem', () => {
     };
 
     const result = formatWorkItem({
-      applicationContext,
       workItem,
     });
 
@@ -307,7 +301,7 @@ describe('formatWorkItem', () => {
       },
     };
 
-    const result = formatWorkItem({ applicationContext, workItem });
+    const result = formatWorkItem({ workItem });
 
     expect(result.isCourtIssuedDocument).toBeFalsy();
   });
@@ -322,7 +316,7 @@ describe('formatWorkItem', () => {
       },
     };
 
-    const result = formatWorkItem({ applicationContext, workItem });
+    const result = formatWorkItem({ workItem });
 
     expect(result.isCourtIssuedDocument).toBeTruthy();
   });
@@ -336,13 +330,13 @@ describe('formatWorkItem', () => {
       },
     };
 
-    let result = formatWorkItem({ applicationContext, workItem });
+    let result = formatWorkItem({ workItem });
 
     expect(result.isOrder).toEqual(false);
 
     workItem.docketEntry.documentType = 'Order';
 
-    result = formatWorkItem({ applicationContext, workItem });
+    result = formatWorkItem({ workItem });
 
     expect(result.isOrder).toEqual(true);
   });
@@ -352,12 +346,12 @@ describe('formatWorkItem', () => {
       ...baseWorkItem,
       docketEntry: {
         ...baseWorkItem.docketEntry,
-        documentTitle: undefined,
+        documentTitle: '',
         documentType: 'Document Type',
       },
     };
 
-    const result = formatWorkItem({ applicationContext, workItem });
+    const result = formatWorkItem({ workItem });
 
     expect(result.docketEntry.descriptionDisplay).toEqual('Document Type');
   });
@@ -371,7 +365,7 @@ describe('formatWorkItem', () => {
       },
     };
 
-    const result = formatWorkItem({ applicationContext, workItem });
+    const result = formatWorkItem({ workItem });
 
     expect(result.docketEntry.descriptionDisplay).toEqual('Document Title');
   });
@@ -386,7 +380,7 @@ describe('formatWorkItem', () => {
       },
     };
 
-    const result = formatWorkItem({ applicationContext, workItem });
+    const result = formatWorkItem({ workItem });
 
     expect(result.docketEntry.descriptionDisplay).toEqual(
       'Document Title with Additional Info',

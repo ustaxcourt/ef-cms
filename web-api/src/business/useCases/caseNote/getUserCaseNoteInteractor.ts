@@ -1,11 +1,11 @@
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { UserCaseNote } from '../../../../../shared/src/business/entities/notes/UserCaseNote';
+import { getUserCaseNotes } from '@web-api/persistence/postgres/userCaseNotes/getUserCaseNotes';
 
 /**
  * getUserCaseNoteInteractor
@@ -32,15 +32,12 @@ export const getUserCaseNoteInteractor = async (
       userIdMakingRequest: authorizedUser.userId,
     });
 
-  const caseNote = await applicationContext
-    .getPersistenceGateway()
-    .getUserCaseNote({
-      applicationContext,
-      docketNumber,
-      userId,
-    });
+  const caseNotes = await getUserCaseNotes({
+    docketNumbers: [docketNumber],
+    userId,
+  });
 
-  if (caseNote) {
-    return new UserCaseNote(caseNote).validate().toRawObject();
+  if (caseNotes?.length) {
+    return caseNotes[0].validate();
   }
 };

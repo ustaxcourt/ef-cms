@@ -1,29 +1,28 @@
-import { OutboxItem } from '../../../../../shared/src/business/entities/OutboxItem';
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import {
-  calculateISODate,
+  calculateDate,
   createISODateAtStartOfDayEST,
-} from '../../../../../shared/src/business/utilities/DateHandler';
+} from '@shared/business/utilities/DateHandler';
+import { getDocumentQCServedForSection } from '@web-api/persistence/postgres/workitems/getDocumentQCServedForSection';
+import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
+import {
+  DOCKET_SECTION,
+  PETITIONS_SECTION,
+  ROLES,
+} from '@shared/business/entities/EntityConstants';
+import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
 
-/**
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.section the section to get the document qc served box
- * @returns {object} the work items in the section document served inbox
- */
 export const getDocumentQCServedForSectionInteractor = async (
   applicationContext: ServerApplicationContext,
-  { section }: { section: string },
+  { section }: { section: typeof DOCKET_SECTION | typeof PETITIONS_SECTION },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<RawWorkItemWithCaseAndDocketEntryInfo[]> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.WORKITEM)) {
     throw new UnauthorizedError(
       'Unauthorized for getting completed work items',
@@ -31,42 +30,39 @@ export const getDocumentQCServedForSectionInteractor = async (
   }
 
   const afterDate = await calculateAfterDate(applicationContext);
-  const workItems = await applicationContext
-    .getPersistenceGateway()
-    .getDocumentQCServedForSection({
-      afterDate,
-      applicationContext,
-      section,
-    });
-
-  const filteredWorkItems = workItems
-    .filter(workItem =>
-      authorizedUser.role === ROLES.petitionsClerk ? !!workItem.section : true,
-    )
-    .map(workItem => new OutboxItem(workItem, { applicationContext }));
-
-  return OutboxItem.validateRawCollection(filteredWorkItems, {
-    applicationContext,
+  const workItems = await getDocumentQCServedForSection({
+    afterDate,
+    section,
   });
+
+  const filteredWorkItems = workItems.filter(workItem =>
+    authorizedUser.role === ROLES.petitionsClerk ? !!workItem.section : true,
+  );
+
+  return filteredWorkItems;
 };
 
-export const calculateAfterDate = async applicationContext => {
+async function getDaysToRetrieve(
+  applicationContext: ServerApplicationContext,
+): Promise<number> {
+  const { CONFIGURATION_ITEM_KEYS } = applicationContext.getConstants();
   const daysToRetrieveKey =
-    applicationContext.getConstants().CONFIGURATION_ITEM_KEYS
-      .SECTION_OUTBOX_NUMBER_OF_DAYS.key;
-  let daysToRetrieve = await applicationContext
-    .getPersistenceGateway()
-    .getConfigurationItemValue({
-      applicationContext,
-      configurationItemKey: daysToRetrieveKey,
-    });
-  if (!daysToRetrieve || !Number.isInteger(daysToRetrieve)) {
-    daysToRetrieve = 7;
-  }
-  daysToRetrieve = Math.abs(daysToRetrieve);
+    CONFIGURATION_ITEM_KEYS.SECTION_OUTBOX_NUMBER_OF_DAYS.key;
 
+  const daysToRetrieveRecord = await getFeatureFlagValues([daysToRetrieveKey]);
+  if (!daysToRetrieveRecord || daysToRetrieveRecord.length === 0) return 7;
+
+  const { current } = daysToRetrieveRecord[0].value;
+  if (!current || !Number.isInteger(current)) {
+    return 7;
+  }
+  return Math.abs(current);
+}
+
+export const calculateAfterDate = async applicationContext => {
+  const daysToRetrieve = await getDaysToRetrieve(applicationContext);
   const startOfDay = createISODateAtStartOfDayEST();
-  const afterDate = calculateISODate({
+  const afterDate = calculateDate({
     dateString: startOfDay,
     howMuch: daysToRetrieve * -1,
     units: 'days',

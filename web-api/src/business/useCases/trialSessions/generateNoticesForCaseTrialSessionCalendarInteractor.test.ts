@@ -1,34 +1,54 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/trialSessions/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
+jest.mock('@shared/business/utilities/shouldAppendClinicLetter');
 import {
   MOCK_CASE,
   MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
-} from '../../../../../shared/src/test/mockCase';
-import { MOCK_TRIAL_REGULAR } from '../../../../../shared/src/test/mockTrial';
+} from '@shared/test/mockCase';
+import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
 import { PDFDocument } from 'pdf-lib';
 import {
   SERVICE_INDICATOR_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { combineTwoPdfs } from '../../../../../shared/src/business/utilities/documentGenerators/combineTwoPdfs';
-import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
-import {
-  fakeData,
-  testPdfDoc,
-} from '../../../../../shared/src/business/test/getFakeFile';
+} from '@shared/business/entities/EntityConstants';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { combineTwoPdfs } from '@shared/business/utilities/pdfs/combineTwoPdfs';
+import { docketClerkUser } from '@shared/test/mockUsers';
+import { fakeData, testPdfDoc } from '@shared/business/test/getFakeFile';
 import { generateNoticesForCaseTrialSessionCalendarInteractor } from './generateNoticesForCaseTrialSessionCalendarInteractor';
 import { shouldAppendClinicLetter } from '@shared/business/utilities/shouldAppendClinicLetter';
-
-jest.mock('@shared/business/utilities/shouldAppendClinicLetter');
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { getTrialSessionNotificationProcessing as getTrialSessionNotificationProcessingMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionNotificationProcessing';
+import { updateTrialSessionNotificationProcessing as updateTrialSessionNotificationProcessingMock } from '@web-api/persistence/postgres/trialSessions/updateTrialSessionNotificationProcessing';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const getUserById = jest.mocked(getUserByIdMock);
+  const updateCaseAndAssociations = jest
+    .mocked(updateCaseAndAssociationsMock)
+    .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
+  const getTrialSessionNotificationProcessing = jest.mocked(
+    getTrialSessionNotificationProcessingMock,
+  );
+  const updateTrialSessionNotificationProcessing = jest.mocked(
+    updateTrialSessionNotificationProcessingMock,
+  );
+
   const trialSession = {
     ...MOCK_TRIAL_REGULAR,
     proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
   };
 
   const twoPageClinicLetter = combineTwoPdfs({
-    applicationContext,
     firstPdf: testPdfDoc,
     secondPdf: testPdfDoc,
   });
@@ -43,14 +63,12 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   const clinicLetterKey = 'I am a key';
 
   beforeAll(() => {
-    shouldAppendClinicLetter.mockResolvedValue({
+    (shouldAppendClinicLetter as jest.Mock).mockResolvedValue({
       appendClinicLetter: true,
       clinicLetterKey,
     });
 
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockResolvedValue(docketClerkUser);
+    getUserById.mockResolvedValue(docketClerkUser as DbUser);
     applicationContext
       .getPersistenceGateway()
       .getDocument.mockResolvedValue(fakeData);
@@ -60,9 +78,7 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
     applicationContext
       .getUseCases()
       .generateStandingPretrialOrderInteractor.mockResolvedValue(testPdfDoc);
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
+    getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
 
     applicationContext
       .getUseCases()
@@ -74,24 +90,28 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
         testPdfDoc,
       );
 
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionJobStatusForCase.mockResolvedValue({});
+    getTrialSessionNotificationProcessing.mockResolvedValue({
+      status: '',
+      trialSessionId: 'number',
+      caseStatuses: {},
+      unfinishedCases: 10,
+    });
   });
 
   it('should return and do nothing if the job is already processed', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionJobStatusForCase.mockResolvedValueOnce({
+    getTrialSessionNotificationProcessing.mockResolvedValueOnce({
+      status: '',
+      trialSessionId: 'number',
+      caseStatuses: {
         [docketNumber]: 'processed',
-      });
+      },
+      unfinishedCases: 10,
+    });
     await generateNoticesForCaseTrialSessionCalendarInteractor(
       applicationContext,
       interactorParamObject,
     );
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).not.toHaveBeenCalled();
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
   it('should set the job status to processing the first time the job executes', async () => {
@@ -100,8 +120,9 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
       interactorParamObject,
     );
     expect(
-      applicationContext.getPersistenceGateway().setTrialSessionJobStatusForCase
-        .mock.calls[0][0].status,
+      updateTrialSessionNotificationProcessing.mock.calls[0][0].caseStatus?.[
+        docketNumber
+      ],
     ).toEqual('processing');
   });
 
@@ -110,9 +131,7 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
       applicationContext,
       interactorParamObject,
     );
-    expect(
-      applicationContext.getPersistenceGateway().decrementJobCounter,
-    ).toHaveBeenCalled();
+    expect(updateTrialSessionNotificationProcessing).toHaveBeenCalled();
   });
 
   it('should save a copy of the combined notice of trial issued letter and a clinic letter for pro se petitioners', async () => {
@@ -161,7 +180,7 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   });
 
   it('should only save a notice of trial order and NOT a clinic letter for practitioners', async () => {
-    shouldAppendClinicLetter.mockResolvedValueOnce({
+    (shouldAppendClinicLetter as jest.Mock).mockResolvedValueOnce({
       appendClinicLetter: false,
     });
     await generateNoticesForCaseTrialSessionCalendarInteractor(
@@ -186,21 +205,18 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   });
 
   it('should save only a notice of trial order for practitioners but save a combined document for pro se petitioners, even when the clinic letter has multiple pages', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValueOnce({
-        ...MOCK_CASE,
-        irsPractitioners:
-          MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.irsPractitioners,
-        petitioners: [
-          {
-            ...MOCK_CASE.petitioners[0],
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-          },
-        ],
-        privatePractitioners:
-          MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.privatePractitioners,
-      });
+    getCaseByDocketNumber.mockResolvedValueOnce({
+      ...MOCK_CASE,
+      irsPractitioners: MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.irsPractitioners,
+      petitioners: [
+        {
+          ...MOCK_CASE.petitioners[0],
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+        },
+      ],
+      privatePractitioners:
+        MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.privatePractitioners,
+    });
 
     applicationContext
       .getPersistenceGateway()
@@ -234,12 +250,10 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   });
 
   it('should generate a standing pretrial for small cases if the procedure type is Small', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        procedureType: 'Small',
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      procedureType: 'Small',
+    });
 
     await generateNoticesForCaseTrialSessionCalendarInteractor(
       applicationContext,
@@ -256,12 +270,10 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   });
 
   it('should generate a standing pretrial order for proecedure types other than small', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        procedureType: 'Regular',
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      procedureType: 'Regular',
+    });
 
     await generateNoticesForCaseTrialSessionCalendarInteractor(
       applicationContext,
@@ -316,23 +328,21 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   });
 
   it('should save the final pdf copy of notices, standing pretrial and the address page to S3 for represented petitioners', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValueOnce({
-        ...MOCK_CASE,
-        petitioners: [
-          {
-            ...MOCK_CASE.petitioners[0],
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-          },
-        ],
-        privatePractitioners: [
-          {
-            ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.privatePractitioners[0],
-            representing: [MOCK_CASE.petitioners[0].contactId],
-          },
-        ],
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      petitioners: [
+        {
+          ...MOCK_CASE.petitioners[0],
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+        },
+      ],
+      privatePractitioners: [
+        {
+          ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.privatePractitioners[0],
+          representing: [MOCK_CASE.petitioners[0].contactId],
+        },
+      ],
+    });
 
     await generateNoticesForCaseTrialSessionCalendarInteractor(
       applicationContext,
@@ -348,17 +358,15 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   });
 
   it('should save the final pdf copy of notices, standing pretrial and the address page to S3 for pro se petitioner', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValueOnce({
-        ...MOCK_CASE,
-        petitioners: [
-          {
-            ...MOCK_CASE.petitioners[0],
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-          },
-        ],
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      petitioners: [
+        {
+          ...MOCK_CASE.petitioners[0],
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+        },
+      ],
+    });
 
     await generateNoticesForCaseTrialSessionCalendarInteractor(
       applicationContext,
@@ -374,15 +382,21 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   });
 
   it('should re-attempt the job after a previous failure that was never set to processed', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionJobStatusForCase.mockResolvedValueOnce('processing');
+    getTrialSessionNotificationProcessing.mockResolvedValueOnce({
+      status: '',
+      trialSessionId: 'number',
+      caseStatuses: {
+        [docketNumber]: 'processing',
+      },
+      unfinishedCases: 10,
+    });
 
     await generateNoticesForCaseTrialSessionCalendarInteractor(
       applicationContext,
       interactorParamObject,
     );
 
+    console.log(JSON.stringify(updateTrialSessionNotificationProcessing.mock));
     expect(
       applicationContext.getUseCases().generateNoticeOfTrialIssuedInteractor,
     ).toHaveBeenCalled();
@@ -390,8 +404,9 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
       applicationContext.getUseCases().generateStandingPretrialOrderInteractor,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().setTrialSessionJobStatusForCase
-        .mock.calls[1][0].status,
+      updateTrialSessionNotificationProcessing.mock.calls[1][0].caseStatus?.[
+        docketNumber
+      ],
     ).toEqual('processed');
   });
 
@@ -401,9 +416,8 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
       interactorParamObject,
     );
 
-    const generatedTrialNotice = applicationContext
-      .getUseCaseHelpers()
-      .updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
+    const generatedTrialNotice =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
         entry => entry.eventCode === 'SPTO',
       );
     expect(generatedTrialNotice).toMatchObject({

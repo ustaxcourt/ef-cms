@@ -2,6 +2,7 @@ import { applicationContextForClient as applicationContext } from '@web-client/t
 import { getBlockedCasesByTrialLocationAction } from './getBlockedCasesByTrialLocationAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
+import { DEFAULT_FILTERED_BLOCKED_CASE_STATUSES } from '@shared/business/entities/EntityConstants';
 
 describe('getBlockedCasesByTrialLocationAction', () => {
   presenter.providers.applicationContext = applicationContext;
@@ -18,14 +19,12 @@ describe('getBlockedCasesByTrialLocationAction', () => {
       ];
     });
 
-  it('should not call getBlockedCasesInteractor if the trialLocation is not on the form', async () => {
+  it('should not call getBlockedCasesInteractor if the trialLocation is not in props', async () => {
     await runAction(getBlockedCasesByTrialLocationAction, {
       modules: {
         presenter,
       },
-      state: {
-        blockedCaseReportFilter: {},
-      },
+      props: { blockedCaseFilter: DEFAULT_FILTERED_BLOCKED_CASE_STATUSES },
     });
 
     expect(
@@ -38,10 +37,9 @@ describe('getBlockedCasesByTrialLocationAction', () => {
       modules: {
         presenter,
       },
-      state: {
-        blockedCaseReportFilter: {
-          trialLocationFilter: 'Boise, Idaho',
-        },
+      props: {
+        trialLocation: 'Boise, Idaho',
+        blockedCaseFilter: DEFAULT_FILTERED_BLOCKED_CASE_STATUSES,
       },
     });
 

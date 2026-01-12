@@ -23,7 +23,7 @@ data "archive_file" "lambda_function_zip" {
 resource "aws_lambda_function" "lambda_function" {
   function_name    = var.lambda_name
   handler          = "lambda.${var.handler_method}"
-  runtime          = "nodejs20.x"
+  runtime          = "nodejs24.x"
   role             = var.role
   filename         = data.archive_file.lambda_function_zip.output_path
   source_code_hash = data.archive_file.lambda_function_zip.output_base64sha256
@@ -37,7 +37,7 @@ resource "aws_lambda_function" "lambda_function" {
   }
 
   environment {
-    variables = var.use_source_maps ? merge(var.environment, { NODE_OPTIONS = "--enable-source-maps" }) : var.environment
+    variables = merge(var.environment, { NODE_OPTIONS = var.use_source_maps ? "--enable-source-maps" : null })
   }
 
 }

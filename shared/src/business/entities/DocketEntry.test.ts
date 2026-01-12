@@ -1,37 +1,21 @@
 import {
+  AUTO_GENERATED_STATUS_REPORT_ORDER_DESCRIPTIONS,
   DOCUMENT_RELATIONSHIPS,
   INITIAL_DOCUMENT_TYPES,
+  NOTICE_EVENT_CODES,
   ROLES,
 } from './EntityConstants';
 import { DocketEntry } from './DocketEntry';
 import { MOCK_WORK_ITEM } from '@shared/test/mockWorkItem';
-import { WorkItem } from '@shared/business/entities/WorkItem';
 import { applicationContext } from '../test/createTestApplicationContext';
 import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
-
-export const mockPrimaryId = '7111b30b-ad38-42c8-9db0-d938cb2cb16b';
-export const mockSecondaryId = '55e5129c-ab54-4a9d-a8cf-5a4479ec08b6';
-
-export const A_VALID_DOCKET_ENTRY = {
-  createdAt: '2020-07-17T19:28:29.675Z',
-  docketEntryId: '0f5e035c-efa8-49e4-ba69-daf8a166a98f',
-  docketNumber: '101-21',
-  documentType: 'Petition',
-  eventCode: 'A',
-  filedBy: 'Test Petitioner',
-  filedByRole: ROLES.petitioner,
-  filers: [mockPrimaryId],
-  receivedAt: '2020-07-17T19:28:29.675Z',
-  userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
-};
-
-export const MOCK_PETITIONERS = [
-  { contactId: mockPrimaryId, name: 'Bob' },
-  { contactId: mockSecondaryId, name: 'Bill' },
-];
+import {
+  A_VALID_DOCKET_ENTRY,
+  MOCK_PETITIONERS,
+} from '@shared/business/entities/DocketEntryTestFixtures';
 
 describe('DocketEntry entity', () => {
   it('defaults stampData to an empty object when no stamp data is passed in', () => {
@@ -215,7 +199,7 @@ describe('DocketEntry entity', () => {
       );
 
       expect(createdDocketEntry.getFormattedValidationErrors()).toEqual({
-        'filers[1]': '"filers[1]" must be a valid GUID',
+        'filers-1': '"filers[1]" must be a valid GUID',
       });
     });
   });
@@ -306,7 +290,10 @@ describe('DocketEntry entity', () => {
         Object.keys(
           createdDocketEntry.getFormattedValidationErrors() as object,
         ),
-      ).toEqual(['documentType', 'eventCode']);
+      ).toEqual([
+        'secondaryDocument-documentType',
+        'secondaryDocument-eventCode',
+      ]);
     });
 
     it('should filter out unnecessary values from servedParties', () => {
@@ -378,45 +365,13 @@ describe('DocketEntry entity', () => {
     });
   });
 
-  describe('judgeUserId', () => {
-    it('sets the judgeUserId property when a value is passed in', () => {
-      const mockJudgeUserId = 'f5aa0760-9fee-4a58-9658-d043b01f2fb0';
-      const docketEntry = new DocketEntry(
-        {
-          ...A_VALID_DOCKET_ENTRY,
-          judgeUserId: mockJudgeUserId,
-        },
-        { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
-      );
-
-      expect(docketEntry).toMatchObject({
-        judgeUserId: mockJudgeUserId,
-      });
-      expect(docketEntry.isValid()).toBeTruthy();
-    });
-
-    it('does not fail validation without a judgeUserId', () => {
-      const docketEntry = new DocketEntry(
-        {
-          ...A_VALID_DOCKET_ENTRY,
-          judgeUserId: undefined,
-        },
-        { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
-      );
-      expect(docketEntry.judgeUserId).toBeUndefined();
-      expect(docketEntry.isValid()).toBeTruthy();
-    });
-  });
-
   describe('eventCode', () => {
     it('when isDraft is true, the eventCode should be optional (thus allowing undefined)', () => {
-      const mockJudgeUserId = 'f5aa0760-9fee-4a58-9658-d043b01f2fb0';
       const docketEntry = new DocketEntry(
         {
           ...A_VALID_DOCKET_ENTRY,
           eventCode: undefined,
           isDraft: true,
-          judgeUserId: mockJudgeUserId,
         },
         { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
       );
@@ -425,13 +380,11 @@ describe('DocketEntry entity', () => {
     });
 
     it('when isDraft is true, the eventCode should be optional (thus allowing null)', () => {
-      const mockJudgeUserId = 'f5aa0760-9fee-4a58-9658-d043b01f2fb0';
       const docketEntry = new DocketEntry(
         {
           ...A_VALID_DOCKET_ENTRY,
           eventCode: null,
           isDraft: true,
-          judgeUserId: mockJudgeUserId,
         },
         { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
       );
@@ -440,13 +393,11 @@ describe('DocketEntry entity', () => {
     });
 
     it('eventCode should be required if isDraft is false', () => {
-      const mockJudgeUserId = 'f5aa0760-9fee-4a58-9658-d043b01f2fb0';
       const docketEntry = new DocketEntry(
         {
           ...A_VALID_DOCKET_ENTRY,
           eventCode: null,
           isDraft: false,
-          judgeUserId: mockJudgeUserId,
         },
         { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
       );
@@ -457,13 +408,11 @@ describe('DocketEntry entity', () => {
 
   describe('documentType', () => {
     it('when isDraft is true, the documentType should be optional (thus allowing undefined)', () => {
-      const mockJudgeUserId = 'f5aa0760-9fee-4a58-9658-d043b01f2fb0';
       const docketEntry = new DocketEntry(
         {
           ...A_VALID_DOCKET_ENTRY,
           documentType: undefined,
           isDraft: true,
-          judgeUserId: mockJudgeUserId,
         },
         { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
       );
@@ -472,13 +421,11 @@ describe('DocketEntry entity', () => {
     });
 
     it('when isDraft is true, the documentType should be optional (thus allowing null)', () => {
-      const mockJudgeUserId = 'f5aa0760-9fee-4a58-9658-d043b01f2fb0';
       const docketEntry = new DocketEntry(
         {
           ...A_VALID_DOCKET_ENTRY,
           documentType: null,
           isDraft: true,
-          judgeUserId: mockJudgeUserId,
         },
         { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
       );
@@ -487,13 +434,11 @@ describe('DocketEntry entity', () => {
     });
 
     it('documentType should be required if isDraft is false', () => {
-      const mockJudgeUserId = 'f5aa0760-9fee-4a58-9658-d043b01f2fb0';
       const docketEntry = new DocketEntry(
         {
           ...A_VALID_DOCKET_ENTRY,
           documentType: null,
           isDraft: false,
-          judgeUserId: mockJudgeUserId,
         },
         { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
       );
@@ -504,14 +449,12 @@ describe('DocketEntry entity', () => {
 
   describe('judge', () => {
     it('judge should be optional when documentType is undefined', () => {
-      const mockJudgeUserId = 'f5aa0760-9fee-4a58-9658-d043b01f2fb0';
       const docketEntry = new DocketEntry(
         {
           ...A_VALID_DOCKET_ENTRY,
           documentType: undefined,
           eventCode: undefined,
           isDraft: true,
-          judgeUserId: mockJudgeUserId,
         },
         { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
       );
@@ -527,24 +470,19 @@ describe('DocketEntry entity', () => {
         editState: 'editing',
         isDraft: false,
         judge: 'Buch',
-        judgeUserId: '5c9685be-6cbc-4c00-bf26-c2b59f31a0d7',
         pending: false,
         previousDocument: {
           docketEntryId: '6adff7fc-ba8d-4f32-89b5-18f340b22b6e',
           documentTitle: 'Hello',
           documentType: 'O',
         },
-        qcAt: '2023-11-21T20:49:28.192Z',
-        qcByUserId: '196d8891-9863-4530-af23-e385e6bf071c',
         signedAt: '2022-10-21T20:49:28.192Z',
         signedByUserId: '384906db-2f1d-4fdf-941e-41fe800e14db',
         signedJudgeName: 'Buch',
-        signedJudgeUserId: '5c9685be-6cbc-4c00-bf26-c2b59f31a0d7',
         stampData: {},
         strickenBy: 'Talon',
         strickenByUserId: '3c620b4a-e12b-47b7-835c-1d873401f732',
         userId: 'a9ea9ac7-ebd4-43d6-9d40-d21a3cfd71f7',
-        workItem: MOCK_WORK_ITEM,
       };
 
       const docketEntryEntity = new DocketEntry(docketEntry, {
@@ -559,13 +497,10 @@ describe('DocketEntry entity', () => {
       expect(docketEntryEntity.editState).toEqual(docketEntry.editState);
       expect(docketEntryEntity.isDraft).toEqual(docketEntry.isDraft);
       expect(docketEntryEntity.judge).toEqual(docketEntry.judge);
-      expect(docketEntryEntity.judgeUserId).toEqual(docketEntry.judgeUserId);
       expect(docketEntryEntity.pending).toEqual(docketEntry.pending);
       expect(docketEntryEntity.previousDocument).toEqual(
         docketEntry.previousDocument,
       );
-      expect(docketEntryEntity.qcAt).toEqual(docketEntry.qcAt);
-      expect(docketEntryEntity.qcByUserId).toEqual(docketEntry.qcByUserId);
       expect(docketEntryEntity.signedAt).toEqual(docketEntry.signedAt);
       expect(docketEntryEntity.signedByUserId).toEqual(
         docketEntry.signedByUserId,
@@ -573,40 +508,30 @@ describe('DocketEntry entity', () => {
       expect(docketEntryEntity.signedJudgeName).toEqual(
         docketEntry.signedJudgeName,
       );
-      expect(docketEntryEntity.signedJudgeUserId).toEqual(
-        docketEntry.signedJudgeUserId,
-      );
       expect(docketEntryEntity.stampData).toEqual(docketEntry.stampData);
       expect(docketEntryEntity.strickenBy).toEqual(docketEntry.strickenBy);
       expect(docketEntryEntity.strickenByUserId).toEqual(
         docketEntry.strickenByUserId,
       );
       expect(docketEntryEntity.userId).toEqual(docketEntry.userId);
-      expect(docketEntryEntity.workItem).toEqual(
-        new WorkItem(docketEntry.workItem),
-      );
     });
 
-    it('should show fields for internal users', () => {
+    it('should not show fields for internal users', () => {
       const docketEntry = {
         ...A_VALID_DOCKET_ENTRY,
         draftOrderState: {},
         editState: 'editing',
         isDraft: false,
         judge: 'Buch',
-        judgeUserId: '5c9685be-6cbc-4c00-bf26-c2b59f31a0d7',
         pending: false,
         previousDocument: {
           docketEntryId: '6adff7fc-ba8d-4f32-89b5-18f340b22b6e',
           documentTitle: 'Hello',
           documentType: 'O',
         },
-        qcAt: '2023-11-21T20:49:28.192Z',
-        qcByUserId: '196d8891-9863-4530-af23-e385e6bf071c',
         signedAt: '2022-10-21T20:49:28.192Z',
         signedByUserId: '384906db-2f1d-4fdf-941e-41fe800e14db',
         signedJudgeName: 'Buch',
-        signedJudgeUserId: '5c9685be-6cbc-4c00-bf26-c2b59f31a0d7',
         stampData: {},
         strickenBy: 'Talon',
         strickenByUserId: '3c620b4a-e12b-47b7-835c-1d873401f732',
@@ -624,20 +549,136 @@ describe('DocketEntry entity', () => {
       expect(docketEntryEntity.editState).toBeFalsy();
       expect(docketEntryEntity.isDraft).toBeFalsy();
       expect(docketEntryEntity.judge).toBeFalsy();
-      expect(docketEntryEntity.judgeUserId).toBeFalsy();
       expect(docketEntryEntity.pending).toBeFalsy();
       expect(docketEntryEntity.previousDocument).toBeFalsy();
-      expect(docketEntryEntity.qcAt).toBeFalsy();
-      expect(docketEntryEntity.qcByUserId).toBeFalsy();
       expect(docketEntryEntity.signedAt).toBeFalsy();
       expect(docketEntryEntity.signedByUserId).toBeFalsy();
       expect(docketEntryEntity.signedJudgeName).toBeFalsy();
-      expect(docketEntryEntity.signedJudgeUserId).toBeFalsy();
       expect(docketEntryEntity.stampData).toBeFalsy();
       expect(docketEntryEntity.strickenBy).toBeFalsy();
       expect(docketEntryEntity.strickenByUserId).toBeFalsy();
       expect(docketEntryEntity.userId).toBeFalsy();
-      expect(docketEntryEntity.workItem).toBeFalsy();
+    });
+  });
+
+  describe('isNotice', () => {
+    it.each(NOTICE_EVENT_CODES)(
+      'should return true when the eventCode is a notice type',
+      eventCode => {
+        const result = DocketEntry.isNotice(eventCode);
+        expect(result).toBe(true);
+      },
+    );
+
+    it('should return false when the eventCode is not a notice type', () => {
+      const result = DocketEntry.isNotice('O');
+      expect(result).toBe(false);
+    });
+
+    it('should return false when the eventCode is empty', () => {
+      const result = DocketEntry.isNotice('');
+      expect(result).toBe(false);
+    });
+  });
+
+  describe('isMinuteSheet', () => {
+    it('should return true when the eventCode is a minute sheet type', () => {
+      const result = DocketEntry.isMinuteSheet('TRL');
+      expect(result).toBe(true);
+    });
+
+    it('should return false when the eventCode is not a minute sheet type', () => {
+      const result = DocketEntry.isMinuteSheet('O');
+      expect(result).toBe(false);
+    });
+  });
+
+  describe('isStatusReport', () => {
+    it('should return false if draftOrderState does not exist', () => {
+      const doc = new DocketEntry(
+        {
+          ...A_VALID_DOCKET_ENTRY,
+        },
+        { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
+      );
+      expect(doc.isStatusReport()).toEqual(false);
+    });
+    it('should return true if orderType is of statusReport', () => {
+      const doc = new DocketEntry(
+        {
+          ...A_VALID_DOCKET_ENTRY,
+          draftOrderState: {
+            orderType: 'statusReport',
+          },
+        },
+        { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
+      );
+      expect(doc.isStatusReport()).toEqual(true);
+    });
+    it('should return true if orderType is of statusReportStipulatedDecision', () => {
+      const doc = new DocketEntry(
+        {
+          ...A_VALID_DOCKET_ENTRY,
+          draftOrderState: {
+            orderType: 'statusReportStipulatedDecision',
+          },
+        },
+        { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
+      );
+      expect(doc.isStatusReport()).toEqual(true);
+    });
+    it('should return false if orderType is not statusReport or statusReportStipulatedDecision', () => {
+      const doc = new DocketEntry(
+        {
+          ...A_VALID_DOCKET_ENTRY,
+          draftOrderState: {
+            orderType: 'hello',
+          },
+        },
+        { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
+      );
+      expect(doc.isStatusReport()).toEqual(false);
+    });
+  });
+  describe('getAutoGeneratedDeadlineDescription', () => {
+    it('should return the status report description', () => {
+      const doc = new DocketEntry(
+        {
+          ...A_VALID_DOCKET_ENTRY,
+          draftOrderState: {
+            orderType: 'statusReport',
+          },
+        },
+        { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
+      );
+      expect(doc.getAutoGeneratedDeadlineDescription()).toEqual(
+        AUTO_GENERATED_STATUS_REPORT_ORDER_DESCRIPTIONS.statusReport,
+      );
+    });
+    it('should return the description based on eventcode', () => {
+      const doc = new DocketEntry(
+        {
+          ...A_VALID_DOCKET_ENTRY,
+          eventCode: 'OF',
+        },
+        { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
+      );
+      expect(doc.getAutoGeneratedDeadlineDescription()).toEqual(
+        'Filing Fee Due',
+      );
+    });
+  });
+  describe('setDraftOrderState', () => {
+    it('should set the draft order state', () => {
+      const doc = new DocketEntry(
+        {
+          ...A_VALID_DOCKET_ENTRY,
+        },
+        { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
+      );
+      const expected = { orderType: 'hello' };
+      doc.setDraftOrderState(expected);
+      expect(doc.draftOrderState).toEqual(expected);
     });
   });
 });

@@ -3,7 +3,6 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 /**
@@ -15,17 +14,15 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
  * @param {string} options.petitionerContactId the contactId of the petitioner being removed from the case
  * @returns {Case} the updated case entity
  */
-export const removeCounselFromRemovedPetitioner = async ({
-  applicationContext,
+export const removeCounselFromRemovedPetitioner = ({
   authorizedUser,
   caseEntity,
   petitionerContactId,
 }: {
-  applicationContext: ServerApplicationContext;
   caseEntity: Case;
   petitionerContactId: string;
   authorizedUser: UnknownAuthUser;
-}) => {
+}): Case => {
   if (
     !isAuthorized(authorizedUser, ROLE_PERMISSIONS.QC_PETITION) &&
     !isAuthorized(authorizedUser, ROLE_PERMISSIONS.REMOVE_PETITIONER)
@@ -41,12 +38,6 @@ export const removeCounselFromRemovedPetitioner = async ({
   for (const practitioner of practitioners) {
     if (practitioner.representing.length === 0) {
       caseEntity.removePrivatePractitioner(practitioner);
-
-      await applicationContext.getPersistenceGateway().deleteUserFromCase({
-        applicationContext,
-        docketNumber: caseEntity.docketNumber,
-        userId: practitioner.userId,
-      });
     }
   }
 

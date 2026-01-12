@@ -1,28 +1,30 @@
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import '@web-api/persistence/postgres/cases/mocks.jest';
-import { MOCK_CASE } from '../../test/mockCase';
-import { MOCK_LOCK } from '../../test/mockLock';
-import { ServiceUnavailableError } from '@web-api/errors/errors';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
+import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { NotFoundError, ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '../test/createTestApplicationContext';
 import {
   mockDocketClerkUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { unsealCaseInteractor } from './unsealCaseInteractor';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('unsealCaseInteractor', () => {
-  let mockLock;
-
-  beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockImplementation(() => mockLock);
-  });
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  jest
+    .mocked(updateCaseAndAssociationsMock)
+    .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
+  const tryGetLocks = jest.mocked(tryGetLocksMock);
 
   beforeEach(() => {
-    mockLock = undefined;
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+    getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
   });
 
   it('should throw an error if the user is unauthorized to unseal a case', async () => {
@@ -51,7 +53,9 @@ describe('unsealCaseInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    mockLock = MOCK_LOCK;
+    tryGetLocks.mockResolvedValueOnce([
+      { successfullyLocked: false, identifier: 'abc' },
+    ]);
 
     await expect(
       unsealCaseInteractor(
@@ -63,12 +67,10 @@ describe('unsealCaseInteractor', () => {
       ),
     ).rejects.toThrow(ServiceUnavailableError);
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).not.toHaveBeenCalled();
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
-  it('should acquire and remove the lock on the case', async () => {
+  it('should acquire a lock on the case', async () => {
     await unsealCaseInteractor(
       applicationContext,
       {
@@ -77,19 +79,39 @@ describe('unsealCaseInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().createLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifier: `case|${MOCK_CASE.docketNumber}`,
-      ttl: 30,
-    });
+    expect(tryGetLocks).toHaveBeenCalledWith(
+      expect.objectContaining({
+        identifiers: [`case|${MOCK_CASE.docketNumber}`],
+      }),
+    );
+  });
 
-    expect(
-      applicationContext.getPersistenceGateway().removeLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifiers: [`case|${MOCK_CASE.docketNumber}`],
-    });
+  it('should throw a NotFoundError if the case cannot be found', async () => {
+    getCaseByDocketNumber.mockResolvedValueOnce(undefined);
+
+    await expect(
+      unsealCaseInteractor(
+        applicationContext,
+        {
+          docketNumber: '999-99',
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow(NotFoundError);
+  });
+
+  it('should bubble up an error thrown by getCaseByDocketNumber', async () => {
+    const mockError = new Error('DB is unreachable');
+    getCaseByDocketNumber.mockRejectedValueOnce(mockError);
+
+    await expect(
+      unsealCaseInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow('DB is unreachable');
   });
 });

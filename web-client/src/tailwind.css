@@ -1,0 +1,167 @@
+@layer theme, components, utilities;
+@import "tailwindcss/theme.css" layer(theme) prefix(tw);
+@import "tailwindcss/utilities.css" layer(utilities) prefix(tw);
+@import "tw-animate-css";
+
+
+
+:root {
+  --background: rgb(255 255 255 / 100%);
+  --foreground: rgb(37 37 37 / 100%);
+  --card: rgb(255 255 255 / 100%);
+  --card-foreground: rgb(37 37 37 / 100%);
+  --popover: rgb(255 255 255 / 100%);
+  --popover-foreground: rgb(37 37 37 / 100%);
+  --primary: rgb(0 94 162 / 100%);
+  --primary-darker: rgb(22 46 81 / 100%);
+  --primary-dark: rgb(26 68 128 / 100%);
+  --primary-foreground: rgb(255 255 255 / 100%);
+  --secondary: rgb(248 248 248 / 100%);
+  --secondary-foreground: rgb(52 52 52 / 100%);
+  --muted: rgb(248 248 248 / 100%);
+  --muted-foreground: rgb(142 142 142 / 100%);
+  --accent: rgb(248 248 248 / 100%);
+  --accent-foreground: rgb(52 52 52 / 100%);
+  --destructive: rgb(196 65 44 / 100%);
+  --destructive-dark: rgb(181 9 9 / 100%);
+  --destructive-darker: rgb(139 19 3 / 100%);
+  --destructive-foreground: rgb(185 58 33 / 100%);
+  --border: rgb(235 235 235 / 100%);
+  --input: rgb(235 235 235 / 100%);
+  --ring: rgb(36 145 255 / 100%);
+  --chart-1: rgb(208 118 50 / 100%);
+  --chart-2: rgb(71 156 185 / 100%);
+  --chart-3: rgb(60 76 152 / 100%);
+  --chart-4: rgb(151 200 65 / 100%);
+  --chart-5: rgb(206 184 57 / 100%);
+  --radius: 0.625rem;
+  --sidebar: rgb(250 250 250 / 100%);
+  --sidebar-foreground: rgb(37 37 37 / 100%);
+  --sidebar-primary: rgb(52 52 52 / 100%);
+  --sidebar-primary-foreground: rgb(250 250 250 / 100%);
+  --sidebar-accent: rgb(248 248 248 / 100%);
+  --sidebar-accent-foreground: rgb(52 52 52 / 100%);
+  --sidebar-border: rgb(235 235 235 / 100%);
+  --sidebar-ring: rgb(181 181 181 / 100%);
+  --green: rgb(46 133 64 / 100%);
+
+  /**** DAWSON-UI COLORS ****/
+
+  /* Blue */
+  --blue-primary: rgb(0 94 162 / 100%);
+  --blue-dark: rgb(26 68 128 / 100%);
+  --blue-darker: rgb(22 46 81 / 100%);
+  --blue-lightest: rgb(231 246 248 / 100%);
+  --blue-docket-hover: rgb(97 229 255 / 100%);
+  --blue-accent: rgb(0 189 227 / 100%);
+  --blue-focus: rgb(36 145 255 / 100%);
+  --blue-vivid: rgb(0 80 216 / 100%);
+  --blue-cool-light: rgb(151 212 234 / 100%);
+  --blue-cool-dark: rgb(40 160 203 / 100%);
+  --blue-cool-darker: rgb(7 100 141 / 100%);
+  --blue-search-box: rgb(232 240 254 / 100%);
+
+  /* Red */
+  --red-primary: rgb(216 57 51 / 100%);
+  --red-dark: rgb(181 9 9 / 100%);
+  --red-darker: rgb(139 19 3 / 100%);
+  --red-vivid: rgb(228 29 61 / 100%);
+  --red-light: rgb(242 147 140 / 100%);
+  --red-error: rgb(244 227 219 / 100%);
+
+  /* Grey Scale */
+  --grey-darkest: rgb(27 27 27 / 100%);
+  --grey-dark: rgb(86 92 101 / 100%);
+  --grey-base: rgb(113 118 122 / 100%);
+  --grey-light: rgb(169 174 177 / 100%);
+  --grey-lighter: rgb(220 222 224 / 100%);
+  --grey-lightest: rgb(240 240 240 / 100%);
+  --white: rgb(255 255 255 / 100%);
+
+  /* Yellow, Green, Purple */
+  --yellow-warning: rgb(255 190 46 / 100%);
+  --yellow-darker: rgb(229 160 0 / 100%);
+  --yellow-lighter: rgb(250 243 209 / 100%);
+  --green-primary: rgb(46 133 64 / 100%);
+  --green-success: rgb(231 244 228 / 100%);
+  --purple-visited-link: rgb(84 39 143 / 100%);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-darker: var(--primary-darker);
+  --color-primary-dark: var(--primary-dark);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-tertiary-darker: var(--tertiary-darker);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-dark: var(--destructive-dark);
+  --color-destructive-darker: var(--destructive-darker);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-green: var(--green);
+  --breakpoint-xs: 30rem;
+
+  /* DAWSON UI palette -> semantic color mappings */
+  --color-blue-primary: var(--blue-primary);
+  --color-blue-dark: var(--blue-dark);
+  --color-blue-darker: var(--blue-darker);
+  --color-blue-lightest: var(--blue-lightest);
+  --color-blue-docket-hover: var(--blue-docket-hover);
+  --color-blue-accent: var(--blue-accent);
+  --color-blue-focus: var(--blue-focus);
+  --color-blue-vivid: var(--blue-vivid);
+  --color-blue-cool-light: var(--blue-cool-light);
+  --color-blue-cool-dark: var(--blue-cool-dark);
+  --color-blue-cool-darker: var(--blue-cool-darker);
+  --color-blue-search-box: var(--blue-search-box);
+  --color-red-primary: var(--red-primary);
+  --color-red-dark: var(--red-dark);
+  --color-red-darker: var(--red-darker);
+  --color-red-vivid: var(--red-vivid);
+  --color-red-light: var(--red-light);
+  --color-red-error: var(--red-error);
+  --color-grey-darkest: var(--grey-darkest);
+  --color-grey-dark: var(--grey-dark);
+  --color-grey-base: var(--grey-base);
+  --color-grey-light: var(--grey-light);
+  --color-grey-lighter: var(--grey-lighter);
+  --color-grey-lightest: var(--grey-lightest);
+  --color-white: var(--white);
+  --color-yellow-warning: var(--yellow-warning);
+  --color-yellow-darker: var(--yellow-darker);
+  --color-yellow-lighter: var(--yellow-lighter);
+  --color-green-primary: var(--green-primary);
+  --color-green-success: var(--green-success);
+  --color-purple-visited-link: var(--purple-visited-link);
+}

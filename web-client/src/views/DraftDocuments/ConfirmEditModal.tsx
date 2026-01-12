@@ -1,15 +1,30 @@
 import { ModalDialog } from '../ModalDialog';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
+import { props as cerebralProps } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import { RunableSequence as RunnableSequence } from 'cerebral';
 
-export const ConfirmEditModal = connect(
+const props = cerebralProps as unknown as {
+  confirmSequence: string;
+};
+
+type ConfirmEditModalProps = {
+  confirmSequence: string;
+}
+
+export const ConfirmEditModal: React.FC<ConfirmEditModalProps> = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
     confirmSequence: sequences[props.confirmSequence],
   },
-  function ConfirmEditModal({ cancelSequence, confirmSequence }) {
+  function ConfirmEditModal({
+    cancelSequence,
+    confirmSequence,
+  }: {
+    cancelSequence: Function | RunnableSequence;
+    confirmSequence: Function | RunnableSequence;
+  }) {
     return (
       <ModalDialog
         cancelLabel="No, Take Me Back"

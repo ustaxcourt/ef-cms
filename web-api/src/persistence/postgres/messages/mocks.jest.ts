@@ -14,10 +14,6 @@ jest.mock(
   () => mockFactory('getCompletedUserInboxMessages'),
 );
 
-jest.mock('@web-api/persistence/postgres/messages/getMessageById', () =>
-  mockFactory('getMessageById'),
-);
-
 jest.mock(
   '@web-api/persistence/postgres/messages/getMessagesByDocketNumber',
   () => mockFactory('getMessagesByDocketNumber'),
@@ -51,12 +47,12 @@ jest.mock(
   () => mockFactory('markMessageThreadRepliedTo'),
 );
 
-jest.mock('@web-api/persistence/postgres/messages/setMessageAsRead', () =>
-  mockFactory('setMessageAsRead'),
+jest.mock('@web-api/persistence/postgres/messages/createMessageAsReply', () =>
+  mockFactory('createMessageAsReply'),
 );
 
-jest.mock('@web-api/persistence/postgres/messages/updateMessage', () =>
-  mockFactory('updateMessage'),
+jest.mock('@web-api/persistence/postgres/messages/setMessageAsRead', () =>
+  mockFactory('setMessageAsRead'),
 );
 
 jest.mock('@web-api/persistence/postgres/messages/upsertMessages', () =>

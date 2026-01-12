@@ -21,7 +21,7 @@ export const pdfSignerHelper = (
 
   const showSkipSignatureButton =
     !isPlaced &&
-    caseDocument.eventCode !== PROPOSED_STIPULATED_DECISION_EVENT_CODE;
+    caseDocument?.eventCode !== PROPOSED_STIPULATED_DECISION_EVENT_CODE;
 
   const cursorClass =
     !signatureData && signatureApplied ? 'cursor-grabbing ' : 'cursor-grab ';

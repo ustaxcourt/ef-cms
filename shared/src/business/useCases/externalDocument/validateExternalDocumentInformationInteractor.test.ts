@@ -1,9 +1,11 @@
+import { ROLES } from '@shared/business/entities/EntityConstants';
 import { validateExternalDocumentInformationInteractor } from './validateExternalDocumentInformationInteractor';
 
 describe('validateExternalDocumentInformationInteractor', () => {
   it('should return the expected validation errors object when the external document is NOT valid', () => {
     const errors = validateExternalDocumentInformationInteractor({
       documentMetadata: { filers: [] },
+      currentUser: { userId: 'userId', role: ROLES.irsPractitioner },
     });
 
     expect(errors).toEqual({
@@ -26,6 +28,8 @@ describe('validateExternalDocumentInformationInteractor', () => {
         hasSupportingDocuments: false,
         primaryDocumentFile: { file: 'yes!' },
       },
+
+      currentUser: { userId: 'userId', role: ROLES.irsPractitioner },
     });
 
     expect(errors).toEqual(null);

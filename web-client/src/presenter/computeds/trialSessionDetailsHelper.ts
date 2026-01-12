@@ -9,7 +9,7 @@ export const trialSessionDetailsHelper = (
   const { DOCKET_NUMBER_SUFFIXES, HYBRID_SESSION_TYPES } =
     applicationContext.getConstants();
 
-  const { eligibleCases, hasNOTTBeenServed, sessionType, trialSessionId } = get(
+  const { eligibleCases, hasNottBeenServed, sessionType, trialSessionId } = get(
     state.trialSession,
   );
   const permissions = get(state.permissions);
@@ -29,7 +29,7 @@ export const trialSessionDetailsHelper = (
   const eligibleRegularCaseQcTotalCompleteCount = (eligibleCases || []).filter(
     eligibleCase =>
       eligibleCase.qcCompleteForTrial?.[trialSessionId] &&
-      (eligibleCase.docketNumberSuffix === null ||
+      (!eligibleCase.docketNumberSuffix ||
         (eligibleCase.docketNumberSuffix !== DOCKET_NUMBER_SUFFIXES.SMALL &&
           eligibleCase.docketNumberSuffix !==
             DOCKET_NUMBER_SUFFIXES.SMALL_LIEN_LEVY)),
@@ -39,7 +39,7 @@ export const trialSessionDetailsHelper = (
   const showSmallAndRegularQcComplete =
     Object.values(HYBRID_SESSION_TYPES).includes(sessionType) && showQcComplete;
 
-  const nottReminderAction = hasNOTTBeenServed
+  const nottReminderAction = hasNottBeenServed
     ? 'Yes, Dismiss'
     : 'Serve/Dismiss';
 

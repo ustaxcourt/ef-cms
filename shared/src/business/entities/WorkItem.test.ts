@@ -2,10 +2,10 @@ import {
   CASE_STATUS_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   DOCKET_SECTION,
+  INITIAL_DOCUMENT_TYPES,
+  PETITIONS_SECTION,
 } from './EntityConstants';
-import { MOCK_CASE } from '../../test/mockCase';
 import { WorkItem } from './WorkItem';
-import { cloneDeep } from 'lodash';
 
 describe('WorkItem', () => {
   describe('isValid', () => {
@@ -17,7 +17,7 @@ describe('WorkItem', () => {
         assigneeName: 'bob',
         caseStatus: CASE_STATUS_TYPES.new,
         caseTitle: 'Johnny Joe Jacobson',
-        docketEntry: {},
+        docketEntryId: '9b4cd447-6278-461b-b62b-d9e357eea62c',
         docketNumber: '101-18',
         docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
         section: DOCKET_SECTION,
@@ -30,29 +30,13 @@ describe('WorkItem', () => {
       expect(workItem.isValid()).toBeTruthy();
     });
 
-    it('Creates a valid workitem when using setStatus', () => {
-      const workItem = new WorkItem({
-        assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
-        assigneeName: 'bob',
-        caseTitle: 'Johnny Joe Jacobson',
-        docketEntry: {},
-        docketNumber: '101-18',
-        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-        section: DOCKET_SECTION,
-        sentBy: 'bob',
-      });
-      workItem.setStatus(CASE_STATUS_TYPES.new);
-      expect(workItem.caseStatus).toEqual(CASE_STATUS_TYPES.new);
-      expect(workItem.isValid()).toBeTruthy();
-    });
-
     it('Update a valid workitem with a workItemId', () => {
       const workItem = new WorkItem({
         assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
         assigneeName: 'bob',
         caseStatus: CASE_STATUS_TYPES.new,
         caseTitle: 'Johnny Joe Jacobson',
-        docketEntry: {},
+        docketEntryId: '9b4cd447-6278-461b-b62b-d9e357eea62c',
         docketNumber: '101-18',
         docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
         section: DOCKET_SECTION,
@@ -62,13 +46,13 @@ describe('WorkItem', () => {
       expect(workItem.isValid()).toBeTruthy();
     });
 
-    it('Update a valid workitem with a isRead', () => {
+    it('Update a valid workitem with an isRead', () => {
       const workItem = new WorkItem({
         assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
         assigneeName: 'bob',
         caseStatus: CASE_STATUS_TYPES.new,
         caseTitle: 'Johnny Joe Jacobson',
-        docketEntry: {},
+        docketEntryId: '9b4cd447-6278-461b-b62b-d9e357eea62c',
         docketNumber: '101-18',
         docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
         isRead: true,
@@ -85,7 +69,7 @@ describe('WorkItem', () => {
         assigneeName: 'bob',
         caseStatus: CASE_STATUS_TYPES.calendared,
         caseTitle: 'Johnny Joe Jacobson',
-        docketEntry: {},
+        docketEntryId: '9b4cd447-6278-461b-b62b-d9e357eea62c',
         docketNumber: '101-18',
         docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
         isRead: true,
@@ -96,37 +80,6 @@ describe('WorkItem', () => {
         workItemId: '9de27a7d-7c6b-434b-803b-7655f82d5e07',
       });
       expect(workItem.isValid()).toBe(true);
-    });
-
-    it('should set properties on WorkItem that pertain to the Case when a Case entity is passed into the constructor', () => {
-      aValidWorkItem.associatedJudge = 'This should be overwritten';
-      aValidWorkItem.associatedJudgeId = 'This Id should be overwritten';
-      aValidWorkItem.caseStatus = CASE_STATUS_TYPES.closed;
-      aValidWorkItem.leadDocketNumber = '100-23';
-      aValidWorkItem.docketNumberWithSuffix = '123-23';
-      aValidWorkItem.trialDate = 'This should be overwritten';
-      aValidWorkItem.trialLocation = 'This should be overwritten';
-      const mockCase = cloneDeep(MOCK_CASE);
-      mockCase.associatedJudge = 'Some Judge';
-      mockCase.associatedJudgeId = '71a7c6d4-3e37-4f9f-87b0-1e6714bb43a9';
-      mockCase.status = CASE_STATUS_TYPES.generalDocket;
-      mockCase.leadDocketNumber = undefined;
-      mockCase.docketNumberWithSuffix = '123-23S';
-      mockCase.trialDate = '2018-11-21T20:49:28.192Z';
-      mockCase.trialLocation = 'Seattle, WA';
-
-      const workItem = new WorkItem(aValidWorkItem, { caseEntity: mockCase });
-
-      expect(workItem.isValid()).toBeTruthy();
-      expect(workItem.associatedJudge).toBe(mockCase.associatedJudge);
-      expect(workItem.associatedJudgeId).toBe(mockCase.associatedJudgeId);
-      expect(workItem.caseStatus).toBe(mockCase.status);
-      expect(workItem.leadDocketNumber).toBe(mockCase.leadDocketNumber);
-      expect(workItem.docketNumberWithSuffix).toBe(
-        mockCase.docketNumberWithSuffix,
-      );
-      expect(workItem.trialDate).toBe(mockCase.trialDate);
-      expect(workItem.trialLocation).toBe(mockCase.trialLocation);
     });
   });
 
@@ -145,91 +98,13 @@ describe('WorkItem', () => {
     const assignment = {
       assigneeId: '111cd447-6278-461b-b62b-d9e357eea62c',
       assigneeName: 'Joe',
-      section: 'Some Section',
+      section: DOCKET_SECTION as typeof DOCKET_SECTION,
       sentBy: 'Sender Name',
       sentBySection: 'Sender Section',
       sentByUserId: '222cd447-6278-461b-b62b-d9e357eea62c',
     };
     workItem.assignToUser(assignment);
     expect(workItem.toRawObject()).toMatchObject(assignment);
-  });
-
-  it('is set high priority if case is calendared or overridden', () => {
-    let workItem = new WorkItem({
-      assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
-      assigneeName: 'bob',
-      caseStatus: CASE_STATUS_TYPES.new,
-      caseTitle: 'Johnny Joe Jacobson',
-      docketEntry: {},
-      docketNumber: '101-18',
-      docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-      section: DOCKET_SECTION,
-      sentBy: 'bob',
-    });
-    expect(workItem.highPriority).toBe(false);
-
-    workItem = new WorkItem({
-      assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
-      assigneeName: 'bob',
-      caseStatus: CASE_STATUS_TYPES.calendared,
-      caseTitle: 'Johnny Joe Jacobson',
-      docketEntry: {},
-      docketNumber: '101-18',
-      docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-      section: DOCKET_SECTION,
-      sentBy: 'bob',
-    });
-    expect(workItem.highPriority).toBe(true);
-
-    workItem = new WorkItem({
-      assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
-      assigneeName: 'bob',
-      caseStatus: CASE_STATUS_TYPES.new,
-      caseTitle: 'Johnny Joe Jacobson',
-      docketEntry: {},
-      docketNumber: '101-18',
-      docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-      highPriority: true,
-      section: DOCKET_SECTION,
-      sentBy: 'bob',
-    });
-    expect(workItem.highPriority).toBe(true);
-  });
-
-  it('creates a workItem containing a docketEntry with only the picked fields', () => {
-    const workItem = new WorkItem({
-      assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
-      assigneeName: 'bob',
-      caseStatus: CASE_STATUS_TYPES.new,
-      caseTitle: 'Johnny Joe Jacobson',
-      docketEntry: {
-        createdAt: '2018-11-21T20:49:28.192Z',
-        docketEntryId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
-        docketNumber: '101-18',
-        documentTitle: 'Proposed Stipulated Decision',
-        documentType: 'Proposed Stipulated Decision',
-        editState: {},
-        eventCode: 'PSDE',
-        filedBy: 'Test Petitioner',
-        filingDate: '2018-03-01T00:01:00.000Z',
-        index: 5,
-        isFileAttached: true,
-        processingStatus: 'pending',
-        receivedAt: '2018-03-01T00:01:00.000Z',
-        servedAt: '2019-08-25T05:00:00.000Z',
-      },
-      docketNumber: '101-18',
-      docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-      leadDocketNumber: '101-18',
-      section: DOCKET_SECTION,
-      sentBy: 'bob',
-    });
-    expect(workItem.docketEntry.docketNumber).toBeUndefined();
-    expect(workItem.docketEntry.editState).toBeUndefined();
-    expect(workItem.docketEntry.processingStatus).toBeUndefined();
-    expect(workItem.docketEntry.documentTitle).toEqual(
-      'Proposed Stipulated Decision',
-    );
   });
 
   describe('markAsRead', () => {
@@ -251,6 +126,51 @@ describe('WorkItem', () => {
       workItem.markAsRead();
 
       expect(workItem.isRead).toBeTruthy();
+    });
+  });
+
+  describe('isHighPriority', () => {
+    it('should be a highPriority work item when the case is calendared', () => {
+      expect(
+        WorkItem.isHighPriority({ status: CASE_STATUS_TYPES.calendared }),
+      ).toEqual(true);
+    });
+
+    it('should not be a highPriority work item when the case is not calendared', () => {
+      expect(
+        WorkItem.isHighPriority({ status: CASE_STATUS_TYPES.assignedCase }),
+      ).toEqual(false);
+    });
+  });
+
+  describe('getWorkItemSectionFromUserSection', () => {
+    it('should return docket section when section is docket', () => {
+      const result = WorkItem.getWorkItemSectionFromUserSection({
+        section: DOCKET_SECTION,
+        documentTitle: 'N/A',
+      });
+      expect(result).toEqual(DOCKET_SECTION);
+    });
+    it('should return petitions section when section is petitions', () => {
+      const result = WorkItem.getWorkItemSectionFromUserSection({
+        section: PETITIONS_SECTION,
+        documentTitle: 'N/A',
+      });
+      expect(result).toEqual(PETITIONS_SECTION);
+    });
+    it('should return petitions section when section is not petitions or docket and document is a petition', () => {
+      const result = WorkItem.getWorkItemSectionFromUserSection({
+        section: 'some other user section',
+        documentTitle: INITIAL_DOCUMENT_TYPES.petition.documentTitle,
+      });
+      expect(result).toEqual(PETITIONS_SECTION);
+    });
+    it('should return docket section when section is not petitions or docket and document is not a petition', () => {
+      const result = WorkItem.getWorkItemSectionFromUserSection({
+        section: 'some other user section',
+        documentTitle: 'This is a good document',
+      });
+      expect(result).toEqual(DOCKET_SECTION);
     });
   });
 });

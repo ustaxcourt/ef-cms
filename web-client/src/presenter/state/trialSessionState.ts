@@ -1,13 +1,20 @@
 import { RawCalendaredCase } from '@shared/business/entities/cases/CalendaredCase';
 import { RawEligibleCase } from '@shared/business/entities/cases/EligibleCase';
+import { RawUserCaseNote } from '@shared/business/entities/notes/UserCaseNote';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import {
   SESSION_STATUS_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
   TRIAL_SESSION_SCOPE_TYPES,
+  TrialSessionTypes,
 } from '@shared/business/entities/EntityConstants';
 
-export type CalendaredCaseItemType = (RawCase | RawCalendaredCase) & {
+export type CalendaredCaseItemType = (
+  | RawCase
+  | RawCalendaredCase
+  | RawEligibleCase
+) & {
+  notes?: RawUserCaseNote;
   removedFromTrial?: boolean;
   removedFromTrialDate?: string;
 };
@@ -24,7 +31,7 @@ export const initialTrialSessionState: TrialSessionState = {
   caseOrder: [],
   eligibleCases: [],
   entityName: 'TrialSession',
-  hasNOTTBeenServed: false,
+  hasNottBeenServed: false,
   isCalendared: false,
   judge: {
     name: '',
@@ -35,7 +42,7 @@ export const initialTrialSessionState: TrialSessionState = {
   proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
   sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
   sessionStatus: SESSION_STATUS_TYPES.open,
-  sessionType: '',
+  sessionType: '' as TrialSessionTypes,
   startDate: '',
   term: '',
   termYear: '',

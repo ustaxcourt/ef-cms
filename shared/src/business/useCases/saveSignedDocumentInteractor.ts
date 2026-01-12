@@ -1,18 +1,22 @@
-import { Case } from '../entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import {
+  ACTION_DOCUMENT_TYPE_OPTIONS,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   SIGNED_DOCUMENT_TYPES,
-} from '../entities/EntityConstants';
-import { DocketEntry } from '../entities/DocketEntry';
-import { Message } from '../entities/Message';
+} from '@shared/business/entities/EntityConstants';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { Message } from '@shared/business/entities/Message';
+import { NotFoundError } from '@web-api/errors/errors';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import {
   UnknownAuthUser,
   isAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
 import { orderBy } from 'lodash';
-import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
 
 const saveOriginalDocumentWithNewId = async ({
   applicationContext,
@@ -28,7 +32,6 @@ const saveOriginalDocumentWithNewId = async ({
 
   const documentIdBeforeSignature = applicationContext.getUniqueId();
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    applicationContext,
     document: originalDocument,
     key: documentIdBeforeSignature,
   });
@@ -50,7 +53,6 @@ const replaceOriginalWithSignedDocument = async ({
     });
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    applicationContext,
     document: signedDocument,
     key: originalDocketEntryId,
   });
@@ -84,20 +86,22 @@ export const saveSignedDocumentInteractor = async (
       'User attempting to save signed document is not an auth user',
     );
   }
-  const caseRecord = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const caseRecord = await getCaseByDocketNumber({
+    docketNumber,
+  });
+
+  if (!caseRecord) {
+    throw new NotFoundError(`Case ${docketNumber} not found`);
+  }
+
   const caseEntity = new Case(caseRecord, { authorizedUser });
-  const originalDocketEntryEntity = caseEntity.docketEntries.find(
-    docketEntry => docketEntry.docketEntryId === originalDocketEntryId,
-  );
+  const originalDocketEntryEntity = caseEntity.getDocketEntryById({
+    docketEntryId: originalDocketEntryId,
+  });
 
   let signedDocketEntryEntity;
   if (
-    originalDocketEntryEntity.documentType === 'Proposed Stipulated Decision'
+    originalDocketEntryEntity?.documentType === ACTION_DOCUMENT_TYPE_OPTIONS.proposedStipulatedDecision
   ) {
     signedDocketEntryEntity = new DocketEntry(
       {
@@ -137,9 +141,7 @@ export const saveSignedDocumentInteractor = async (
         documentTitle: signedDocketEntryEntity.documentTitle,
       });
 
-      await updateMessage({
-        message: messageEntity.validate().toRawObject(),
-      });
+      await upsertMessages([messageEntity.validate().toRawObject()]);
     }
   } else {
     const documentIdBeforeSignature = await saveOriginalDocumentWithNewId({
@@ -171,8 +173,7 @@ export const saveSignedDocumentInteractor = async (
     caseEntity.updateDocketEntry(signedDocketEntryEntity);
   }
 
-  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-    applicationContext,
+  await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
   });

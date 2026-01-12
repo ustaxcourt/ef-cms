@@ -1,4 +1,4 @@
-import { navigateTo as navigateToDashboard } from '../../../support/pages/dashboard';
+import { loginAsPrivatePractitioner } from 'cypress/helpers/authentication/login-as-helpers';
 
 describe('Private practitioner mobile', () => {
   beforeEach(() => {
@@ -6,7 +6,7 @@ describe('Private practitioner mobile', () => {
   });
 
   it('should have access to case, order, and opinion advanced searches (and NOT practitioner advanced search)', () => {
-    navigateToDashboard('privatePractitioner');
+    loginAsPrivatePractitioner();
 
     cy.get('[data-testid="advanced-search-link"]').click();
 

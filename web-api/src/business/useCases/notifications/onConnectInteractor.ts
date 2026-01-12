@@ -19,7 +19,6 @@ export const onConnectInteractor = async (
     endpoint.slice(0, 8) === 'https://' ? endpoint : `https://${endpoint}`;
 
   await applicationContext.getPersistenceGateway().saveUserConnection({
-    applicationContext,
     clientConnectionId,
     connectionId,
     endpoint: endpointWProtocol,

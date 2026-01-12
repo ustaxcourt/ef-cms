@@ -7,12 +7,15 @@ import {
   createEndOfDayISO,
   createISODateString,
   createStartOfDayISO,
+  deconstructDate,
   formatDateString,
   formatNow,
   prepareDateFromString,
+  isValidPastDate
 } from '../../shared/src/business/utilities/DateHandler';
 import { caseStatusWithTrialInformation } from '@shared/business/utilities/caseStatusWithTrialInformation';
-import { combineTwoPdfs } from '../../shared/src/business/utilities/documentGenerators/combineTwoPdfs';
+import { combineAllPdfDocuments } from '@shared/business/utilities/pdfs/combineAllPdfDocuments';
+import { combineTwoPdfs } from '../../shared/src/business/utilities/pdfs/combineTwoPdfs';
 import {
   compareCasesByDocketNumber,
   getFormattedTrialSessionDetails,
@@ -32,13 +35,10 @@ import {
 import { getCaseDocumentsIdsFilteredByDocumentType } from '@shared/business/utilities/getCaseDocumentsIdsFilteredByDocumentType';
 import { getCropBox } from '../../shared/src/business/utilities/getCropBox';
 import { getDescriptionDisplay } from '../../shared/src/business/utilities/getDescriptionDisplay';
-import {
-  getDocQcSectionForUser,
-  getWorkQueueFilters,
-} from '../../shared/src/business/utilities/getWorkQueueFilters';
 import { getDocketEntriesByFilter } from '@shared/business/utilities/getDocketEntriesByFilter';
 import { getDocumentTitleWithAdditionalInfo } from '../../shared/src/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { getFormattedCaseDetail } from '../../shared/src/business/utilities/getFormattedCaseDetail';
+import { getSealedDocketEntryTooltip } from '../../shared/src/business/utilities/getSealedDocketEntryTooltip';
 import { getStampBoxCoordinates } from '../../shared/src/business/utilities/getStampBoxCoordinates';
 import {
   isLeadCase,
@@ -47,7 +47,6 @@ import {
 import { scrapePdfContents } from '../../shared/src/business/utilities/scrapePdfContents';
 import { serveCaseDocument } from '../../shared/src/business/utilities/serveCaseDocument';
 import { setConsolidationFlagsForDisplay } from '../../shared/src/business/utilities/setConsolidationFlagsForDisplay';
-import { setServiceIndicatorsForCase } from '../../shared/src/business/utilities/setServiceIndicatorsForCase';
 import { setupPdfDocument } from '../../shared/src/business/utilities/setupPdfDocument';
 import { sleep } from '@shared/tools/helpers';
 
@@ -57,6 +56,7 @@ const utilities = {
   calculateDifferenceInDays,
   calculateISODate,
   caseStatusWithTrialInformation,
+  combineAllPdfDocuments,
   combineTwoPdfs,
   compareCasesByDocketNumber,
   compareISODateStrings,
@@ -65,6 +65,7 @@ const utilities = {
   createEndOfDayISO,
   createISODateString,
   createStartOfDayISO,
+  deconstructDate,
   documentUrlTranslator,
   formatDateString,
   formatJudgeName,
@@ -74,22 +75,21 @@ const utilities = {
   getCaseDocumentsIdsFilteredByDocumentType,
   getCropBox,
   getDescriptionDisplay,
-  getDocQcSectionForUser,
   getDocketEntriesByFilter,
   getDocumentTitleWithAdditionalInfo,
   getDocumentTypeForAddressChange,
   getFormattedCaseDetail,
   getFormattedTrialSessionDetails,
+  getSealedDocketEntryTooltip,
   getStampBoxCoordinates,
-  getWorkQueueFilters,
   isLeadCase,
   isPending: DocketEntry.isPending,
   isSealedCase,
+  isValidPastDate,
   prepareDateFromString,
   scrapePdfContents,
   serveCaseDocument,
   setConsolidationFlagsForDisplay,
-  setServiceIndicatorsForCase,
   setupPdfDocument,
   sleep,
 };

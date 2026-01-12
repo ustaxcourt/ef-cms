@@ -214,8 +214,8 @@ export const EditPetitionerInformationInternal = connect(
                       });
                     }}
                   />
-                  <label className="usa-checkbox__label" htmlFor="seal-address">
-                    Seal address
+                  <label className="usa-checkbox__label" htmlFor="seal-address" data-testid="seal-address-label">
+                    Seal contact information
                   </label>
                 </div>
               </FormGroup>
@@ -315,29 +315,32 @@ export const EditPetitionerInformationInternal = connect(
               )}
           </div>
 
-          <div>
-            <Button
-              data-testid="submit-edit-petitioner-information-button"
-              onClick={() => {
-                submitEditPetitionerSequence({ contactToSeal: form.contact });
-              }}
-            >
-              Save
-            </Button>
-            <Button
-              link
-              onClick={() => {
-                formCancelToggleCancelSequence();
-                return false;
-              }}
-            >
-              Cancel
-            </Button>
-
+          <div className="display-flex flex-column mobile-lg:flex-row flex-justify flex-align-center text-align-center">
+            <div>
+              <Button
+                data-testid="submit-edit-petitioner-information-button"
+                onClick={() => {
+                  submitEditPetitionerSequence({
+                    contactToSeal: form.contact,
+                  });
+                }}
+              >
+                Save
+              </Button>
+              <Button
+                link
+                onClick={() => {
+                  formCancelToggleCancelSequence();
+                  return false;
+                }}
+              >
+                Cancel
+              </Button>
+            </div>
             {editPetitionerInformationHelper.showRemovePetitionerButton && (
               <Button
                 link
-                className="red-warning no-wrap float-right"
+                className="red-warning"
                 data-testid="remove-petitioner-button"
                 icon="trash"
                 onClick={() => {

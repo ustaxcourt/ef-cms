@@ -1,13 +1,131 @@
 import { mockFactory } from '@shared/test/mockFactory';
 
+jest.mock('@web-api/persistence/postgres/cases/createCase', () =>
+  mockFactory('createCase'),
+);
+
+jest.mock('@web-api/persistence/postgres/cases/generateDocketNumber', () =>
+  mockFactory('generateDocketNumber'),
+);
+
+jest.mock('@web-api/persistence/postgres/cases/getCaseExists', () =>
+  mockFactory('getCaseExists', true),
+);
+
 jest.mock('@web-api/persistence/postgres/cases/getCaseByDocketNumber', () =>
   mockFactory('getCaseByDocketNumber'),
 );
 
-jest.mock('@web-api/persistence/postgres/cases/upsertCase', () =>
-  mockFactory('upsertCase'),
+jest.mock(
+  '@web-api/persistence/postgres/cases/pendingCases/verifyPendingCaseForUser',
+  () => mockFactory('verifyPendingCaseForUser'),
+);
+
+jest.mock(
+  '@web-api/persistence/postgres/cases/pendingCases/associateUsersWithCasesPending',
+  () => mockFactory('associateUsersWithCasesPending'),
+);
+
+jest.mock('@web-api/persistence/postgres/cases/getCasesByDocketNumbers', () =>
+  mockFactory('getCasesByDocketNumbers'),
+);
+
+jest.mock('@web-api/persistence/postgres/cases/getConsolidatedCases', () =>
+  mockFactory('getConsolidatedCases'),
+);
+
+jest.mock('@web-api/persistence/postgres/cases/getConsolidatedCasesCount', () =>
+  mockFactory('getConsolidatedCasesCount'),
 );
 
 jest.mock('@web-api/persistence/postgres/cases/upsertCases', () =>
   mockFactory('upsertCases'),
+);
+
+jest.mock(
+  '@web-api/persistence/postgres/cases/reports/getReadyForTrialCases',
+  () => mockFactory('getReadyForTrialCases'),
+);
+
+jest.mock(
+  '@web-api/persistence/postgres/cases/getEligibleCasesForTrialCity',
+  () => mockFactory('getEligibleCasesForTrialCity'),
+);
+
+jest.mock(
+  '@web-api/persistence/postgres/cases/getEligibleCasesForTrialSession',
+  () => mockFactory('getEligibleCasesForTrialSession'),
+);
+
+jest.mock('@web-api/persistence/postgres/cases/getEligibleCasesCount', () =>
+  mockFactory('getEligibleCasesCount'),
+);
+
+jest.mock(
+  '@web-api/persistence/postgres/cases/reports/getBlockedCasesCount',
+  () => mockFactory('getBlockedCasesCount'),
+);
+
+// Reports
+
+jest.mock('@web-api/persistence/postgres/cases/reports/fetchPendingItems', () =>
+  mockFactory('fetchPendingItems'),
+);
+
+jest.mock(
+  '@web-api/persistence/postgres/cases/reports/getBlockedCasesForTrialLocation',
+  () => mockFactory('getBlockedCasesForTrialLocation'),
+);
+
+jest.mock(
+  '@web-api/persistence/postgres/cases/reports/getCaseInventoryReport',
+  () => mockFactory('getCaseInventoryReport', { foundCases: [], total: 0 }),
+);
+
+jest.mock('@web-api/persistence/postgres/cases/reports/getCasesByFilters', () =>
+  mockFactory('getCasesByFilters'),
+);
+
+jest.mock(
+  '@web-api/persistence/postgres/cases/reports/getCasesClosedCountByJudge',
+  () => mockFactory('getCasesClosedCountByJudge'),
+);
+
+jest.mock(
+  '@web-api/persistence/postgres/cases/reports/getDocketNumbersByStatusAndByJudge',
+  () => mockFactory('getDocketNumbersByStatusAndByJudge'),
+);
+
+jest.mock(
+  '@web-api/persistence/postgres/cases/reports/getSuggestedCalendarCases',
+  () => mockFactory('getSuggestedCalendarCases'),
+);
+
+jest.mock(
+  '@web-api/persistence/postgres/cases/userOnCase/disassociateUsersFromCases',
+  () => mockFactory('disassociateUsersFromCases'),
+);
+
+jest.mock(
+  '@web-api/persistence/postgres/cases/userOnCase/associateUsersWithCases',
+  () => mockFactory('associateUsersWithCases'),
+);
+
+jest.mock(
+  '@web-api/persistence/postgres/cases/userOnCase/verifyCaseForUser',
+  () => mockFactory('verifyCaseForUser'),
+);
+
+jest.mock('@web-api/persistence/postgres/cases/getCaseByDocketNumber', () =>
+  mockFactory('getCaseByDocketNumber'),
+);
+
+jest.mock(
+  '@web-api/persistence/postgres/jobs/changeOfAddress/setChangeOfAddressCaseAsDone',
+  () => mockFactory('setChangeOfAddressCaseAsDone'),
+);
+
+jest.mock(
+  '@web-api/persistence/postgres/jobs/changeOfAddress/deleteChangeOfAddressCaseRecord',
+  () => mockFactory('deleteChangeOfAddressCaseRecord'),
 );

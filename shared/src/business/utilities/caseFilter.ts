@@ -1,22 +1,12 @@
-import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { cloneDeep, pick } from 'lodash';
 import { isAssociatedUser, isSealedCase } from '../entities/cases/Case';
 
-const CASE_ATTRIBUTE_WHITELIST = [
-  'docketNumber',
-  'docketNumberSuffix',
-  'isPaper',
-  'isSealed',
-  'sealedDate',
-] as const;
-
-type CaseAttributeWhitelistKeys = (typeof CASE_ATTRIBUTE_WHITELIST)[number];
-
-const CASE_CONTACT_ATTRIBUTE_WHITELIST = [
+const CASE_CONTACT_ATTRIBUTE_ALLOWLIST = [
   'additionalName',
   'contactId',
   'contactType',
@@ -29,24 +19,10 @@ const CASE_CONTACT_ATTRIBUTE_WHITELIST = [
   'title',
 ];
 
-export type SealedCase = Record<CaseAttributeWhitelistKeys, any>;
-
-export const caseSealedFormatter = caseRaw => {
-  return pick(caseRaw, CASE_ATTRIBUTE_WHITELIST) as SealedCase;
-};
-
-/**
- * caseContactAddressSealedFormatter
- * Modifies raw case data if a contact address is sealed
- * and user does not have permission to view sealed addresses.
- * When sealed addresses are being formatted, the contact objects are
- * emptied of all entries, then assigned key/value pairs from a whitelist.
- *
- * @param {object} caseRaw the raw case detail
- * @param {object} currentUser the current
- * @returns {object} reference to modified raw case detail
- */
-export const caseContactAddressSealedFormatter = (caseRaw, currentUser) => {
+export const formatSealedAddresses = (
+  caseRaw: any,
+  currentUser: UnknownAuthUser,
+) => {
   const userCanViewSealedAddresses = isAuthorized(
     currentUser,
     ROLE_PERMISSIONS.VIEW_SEALED_ADDRESS,
@@ -58,7 +34,7 @@ export const caseContactAddressSealedFormatter = (caseRaw, currentUser) => {
   const formattedCase = cloneDeep(caseRaw);
 
   const formatSealedAddress = contactRaw => {
-    const result = pick(contactRaw, CASE_CONTACT_ATTRIBUTE_WHITELIST);
+    const result = pick(contactRaw, CASE_CONTACT_ATTRIBUTE_ALLOWLIST);
     result.sealedAndUnavailable = true;
     return result;
   };
@@ -66,6 +42,20 @@ export const caseContactAddressSealedFormatter = (caseRaw, currentUser) => {
   const caseContactsToBeSealed = (formattedCase.petitioners || []).filter(
     caseContact => caseContact && caseContact.isAddressSealed,
   );
+
+  // Seal emails in docket entries
+  const emailsToBeSealed = caseContactsToBeSealed.map(caseContact => {
+    if (caseContact.email) {
+      return caseContact.email;
+    }
+  });
+  formattedCase.docketEntries?.forEach(docketEntry => {
+    docketEntry.servedParties?.forEach(party => {
+      if (emailsToBeSealed.includes(party.email)) {
+        party.email = undefined;
+      }
+    });
+  });
 
   caseContactsToBeSealed.forEach(caseContact => {
     const sealedContactAddress = formatSealedAddress(caseContact);
@@ -76,7 +66,10 @@ export const caseContactAddressSealedFormatter = (caseRaw, currentUser) => {
   return formattedCase;
 };
 
-export const caseSearchFilter = (searchResults, currentUser: AuthUser) => {
+export const filterCaseSearchResultsNotAccessibleToUser = (
+  searchResults,
+  currentUser: UnknownAuthUser,
+) => {
   return searchResults
     .filter(
       searchResult =>
@@ -88,7 +81,5 @@ export const caseSearchFilter = (searchResults, currentUser: AuthUser) => {
         isAssociatedUser({ caseRaw: searchResult, user: currentUser }) ||
         isAuthorized(currentUser, ROLE_PERMISSIONS.VIEW_SEALED_CASE),
     )
-    .map(filteredCase =>
-      caseContactAddressSealedFormatter(filteredCase, currentUser),
-    );
+    .map(c => formatSealedAddresses(c, currentUser));
 };

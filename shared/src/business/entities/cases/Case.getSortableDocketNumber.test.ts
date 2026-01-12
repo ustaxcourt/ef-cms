@@ -21,4 +21,12 @@ describe('getSortableDocketNumber', () => {
 
     expect(result).toBeUndefined();
   });
+
+  it('should ignore a single trailing letter after the year', () => {
+    expect(Case.getSortableDocketNumber('19844-12S')).toEqual(
+      Case.getSortableDocketNumber('19844-12'),
+    );
+
+    expect(Case.getSortableDocketNumber('5520-08x')).toBe(2008005520);
+  });
 });

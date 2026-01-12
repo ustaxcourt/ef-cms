@@ -1,6 +1,5 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-// eslint-disable-next-line spellcheck/spell-checker
 /**
  * Determines if the docket entry event code is one that can be multi-docketed
  * @param {object} providers the providers object
@@ -24,9 +23,12 @@ export const isDocketEntryMultiDocketableAction = ({
   let { eventCode } = get(state.form);
 
   if (!eventCode) {
-    ({ eventCode } = caseDetail.docketEntries.find(
+    const docketEntry = caseDetail.docketEntries.find(
       doc => doc.docketEntryId === docketEntryId,
-    ));
+    );
+    if (docketEntry) {
+      ({ eventCode } = docketEntry);
+    }
   }
 
   if (

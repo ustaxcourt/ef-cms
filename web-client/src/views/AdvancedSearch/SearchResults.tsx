@@ -3,6 +3,7 @@ import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { WarningNotificationComponent } from '../WarningNotification';
+import { MAX_CASE_SEARCH_RESULTS } from '@shared/business/entities/EntityConstants';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -10,15 +11,10 @@ import React from 'react';
 
 export const SearchResults = connect(
   {
-    MAX_SEARCH_RESULTS: state.constants.MAX_SEARCH_RESULTS,
     advancedSearchHelper: state.advancedSearchHelper,
     showMoreResultsSequence: sequences.showMoreResultsSequence,
   },
-  function SearchResults({
-    advancedSearchHelper,
-    MAX_SEARCH_RESULTS,
-    showMoreResultsSequence,
-  }) {
+  function SearchResults({ advancedSearchHelper, showMoreResultsSequence }) {
     return (
       <div aria-live="polite">
         {advancedSearchHelper.showSearchResults && (
@@ -28,7 +24,7 @@ export const SearchResults = connect(
                 <WarningNotificationComponent
                   alertWarning={{
                     message: 'Narrow your search by adding search terms.',
-                    title: `Displaying the first ${MAX_SEARCH_RESULTS} matches of your search.`,
+                    title: `Displaying the first ${MAX_CASE_SEARCH_RESULTS} matches of your search.`,
                   }}
                   dismissible={false}
                   messageNotBold={true}
@@ -71,11 +67,18 @@ export const SearchResults = connect(
                       data-testid={`advanced-case-search-result-${result.docketNumber}`}
                       key={result.docketNumber}
                     >
-                      <td className="center-column">{idx + 1}</td>
+                      <td
+                        className="center-column"
+                        data-testid={`advanced-case-search-result-order-${idx}`}
+                      >
+                        {idx + 1}
+                      </td>
                       <NonMobile>
                         <td>
-                          {result.petitioners.map(p => (
-                            <div key={p.contactId}>{p.name}</div>
+                          {result.petitionerNames.map((name, index) => (
+                            // No need to have a better key here since the data does not need to re-render
+
+                            <div key={index}>{name}</div>
                           ))}
                         </td>
                       </NonMobile>
@@ -86,9 +89,13 @@ export const SearchResults = connect(
                         <td>{result.formattedFiledDate}</td>
                         <td>{result.caseTitle}</td>
                         <td>
-                          {result.petitionerFullStateNames.map(p => (
-                            <div key={p.contactId}>{p.state}</div>
-                          ))}
+                          {result.petitionerStateNames.map(
+                            (stateName, index) => (
+                              // No need to have a better key here since the data does not need to re-render
+
+                              <div key={index}>{stateName}</div>
+                            ),
+                          )}
                         </td>
                       </NonMobile>
                       <Mobile>
@@ -112,7 +119,7 @@ export const SearchResults = connect(
           </Button>
         )}
         {advancedSearchHelper.showNoMatches && (
-          <div id="no-search-results">
+          <div id="no-search-results" data-testid="no-search-results">
             <h1 className="margin-top-4">No Matches Found</h1>
             <Hint wider>
               Tips for improving your search:

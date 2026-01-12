@@ -1,5 +1,12 @@
-import { AddressLabel } from '../components/AddressLabel.tsx';
+import {
+  AddressLabel,
+  AddressLabelParams,
+} from '@shared/business/utilities/pdfGenerator/components/AddressLabel';
 import React from 'react';
+
+export type AddressLabelCoverSheetParams = AddressLabelParams & {
+  docketNumberWithSuffix: string;
+};
 
 export const AddressLabelCoverSheet = ({
   additionalName,
@@ -16,7 +23,7 @@ export const AddressLabelCoverSheet = ({
   secondaryName,
   state,
   title,
-}) => {
+}: AddressLabelCoverSheetParams) => {
   return (
     <div id="address-label-cover-sheet">
       <div className="docket">Docket {docketNumberWithSuffix}</div>

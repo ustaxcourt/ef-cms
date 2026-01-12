@@ -1,27 +1,24 @@
 import { pathsToModuleNameMapper } from 'ts-jest';
-import tsconfig from '../tsconfig.json';
 import type { Config } from 'jest';
+import { loadTsConfig } from '../utils/load-tsconfig.mjs';
+
+const tsconfig = loadTsConfig('tsconfig.json');
 
 const config: Config = {
   clearMocks: true,
   collectCoverage: true,
   collectCoverageFrom: [
     '**/*.{js,ts}',
+    '!archived/**',
     '!checkAllFilesForTypeErrorCount.ts',
     '!circleci/*.ts',
-    '!circleci/judge/bulkImportJudgeUsers.ts',
     '!circleci/judge/bulkImportJudgeUsers.helpers.ts',
+    '!circleci/judge/bulkImportJudgeUsers.ts',
+    '!cloudwatch/perform-query.ts',
     '!compareTypescriptErrors.ts',
     '!coverage/**',
     '!download-all-case-documents.ts',
-    '!dynamo/archive-outboxes.ts',
-    '!dynamo/fix-race-condition-served-in-drafts.ts',
-    '!migration/is-migration-needed.ts',
-    '!migration/migrationFilesHelper.ts',
-    '!migration/read-segment.ts',
-    '!migration/set-local-migration-complete-marker.ts',
-    '!migration/track-successful-migrations.ts',
-    '!dynamo/set-maintenance-mode.ts',
+    '!ecr/**',
     '!elasticsearch/create-temporary-indices.ts',
     '!elasticsearch/docket-entry-search.ts',
     '!elasticsearch/docket-inbox.ts',
@@ -29,19 +26,32 @@ const config: Config = {
     '!elasticsearch/health-migration.ts',
     '!elasticsearch/ready-cluster-for-migration.ts',
     '!elasticsearch/reindex.ts',
+    '!elasticsearch/retry-ocr-failures.ts',
     '!email/**',
-    '!glue/**',
+    '!generate-uuid.ts',
+    '!helpers/runCommand.ts',
     '!import-case-status-changes-from-csv.ts',
     '!irs-super-user.ts',
     '!jest-scripts.config.ts',
     '!judge/update-judge-isSeniorJudge.ts',
     '!judge/update-judge-titles.ts',
+    '!migration/is-migration-needed.ts',
+    '!migration/migrationFilesHelper.ts',
+    '!migration/read-segment.ts',
+    '!migration/set-local-migration-complete-marker.ts',
+    '!migration/track-successful-migrations.ts',
+    '!npm/upgrade-npm-packages.ts',
+    '!postgres/**',
+    '!reindex/**',
     '!reports/**',
     '!run-once-scripts/**',
-    '!set-maintenance-mode-locally.ts',
+    '!secrets/**',
+    '!send-maintenance-mode-notifications-locally.ts',
+    '!template.ts',
+    '!judge/get-judge-name.ts',
+    '!judge/set-judge-title.ts',
     '!upload-practitioner-application-packages.ts',
     '!user/**',
-    '!postgres/**',
   ],
   coverageDirectory: './coverage',
   coverageProvider: 'babel',
@@ -58,7 +68,7 @@ const config: Config = {
     ...pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
       prefix: '<rootDir>/../',
     }),
-    uuid: require.resolve('uuid'),
+    '^uuid$': 'uuid',
   },
   testEnvironment: 'node',
   testMatch: ['**/scripts/**/?(*.)+(spec|test).[jt]s?(x)'],
@@ -69,5 +79,4 @@ const config: Config = {
   verbose: false,
 };
 
-// eslint-disable-next-line import/no-default-export
 export default config;

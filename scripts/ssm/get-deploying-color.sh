@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# Returns the next color to deploy (blue or green) for the environment
+
+# Usage
+#   ./get-deploying-color.sh dev
+
+# Arguments
+#   - $1 - the environment to check
+
+[ -z "$1" ] && echo "The environment to check must be provided as the \$1 argument." && exit 1
+[ -z "${AWS_ACCESS_KEY_ID}" ] && echo "You must have AWS_ACCESS_KEY_ID set in your environment" && exit 1
+[ -z "${AWS_SECRET_ACCESS_KEY}" ] && echo "You must have AWS_SECRET_ACCESS_KEY set in your environment" && exit 1
+
+ENV=$1
+
+CURRENT_COLOR=$(aws ssm get-parameter --region us-east-1 --name "/DAWSON/${ENV}/current-color" --with-decryption --query "Parameter.Value" --output text 2>/dev/null)
+[ -z "$CURRENT_COLOR" ] && CURRENT_COLOR="green"
+
+if  [[ $CURRENT_COLOR == "green" ]] ; then
+  echo "blue"
+else
+  echo "green"
+fi

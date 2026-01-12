@@ -1,13 +1,18 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
+import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
+import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { deleteTrialSession } from '@web-api/persistence/postgres/trialSessions/deleteTrialSession';
+import { deleteTrialSessionWorkingCopy } from '@web-api/persistence/postgres/trialSessions/deleteTrialSessionWorkingCopy';
 
 /**
  * deleteTrialSession
@@ -25,10 +30,7 @@ export const deleteTrialSessionInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const trialSession = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById({
-      applicationContext,
+  const trialSession = await getTrialSessionById({
       trialSessionId,
     });
 
@@ -54,64 +56,38 @@ export const deleteTrialSessionInteractor = async (
       ({ docketNumber }) => docketNumber,
     );
 
-    await acquireLock({
+    const removeLockFunction = await acquireLock({
       applicationContext,
       authorizedUser,
       identifiers: docketNumbers?.map(item => `case|${item}`),
     });
 
-    for (const order of trialSessionEntity.caseOrder) {
-      const myCase = await applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber({
-          applicationContext,
-          docketNumber: order.docketNumber,
-        });
+    const casesToUpdate = await getCasesByDocketNumbers({ docketNumbers });
 
+    for (const myCase of casesToUpdate) {
       const caseEntity = new Case(myCase, { authorizedUser });
 
       caseEntity.removeFromTrial({});
 
-      if (caseEntity.isReadyForTrial()) {
-        await applicationContext
-          .getPersistenceGateway()
-          .createCaseTrialSortMappingRecords({
-            applicationContext,
-            caseSortTags: caseEntity.generateTrialSortTags(),
-            docketNumber: caseEntity.docketNumber,
-          });
-      }
-
-      await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-        applicationContext,
+      await updateCaseAndAssociations({
         authorizedUser,
         caseToUpdate: caseEntity,
       });
     }
 
-    await Promise.all(
-      docketNumbers.map(docketNumber =>
-        applicationContext.getPersistenceGateway().removeLock({
-          applicationContext,
-          identifiers: [`case|${docketNumber}`],
-        }),
-      ),
-    );
+    await removeLockFunction();
   }
 
-  await applicationContext.getPersistenceGateway().deleteTrialSession({
-    applicationContext,
-    trialSessionId,
-  });
-
   if (trialSessionEntity.judge) {
-    await applicationContext
-      .getPersistenceGateway()
-      .deleteTrialSessionWorkingCopy({
-        applicationContext,
+    await deleteTrialSessionWorkingCopy({
         trialSessionId,
         userId: trialSessionEntity.judge.userId,
       });
   }
+
+  await deleteTrialSession({
+    trialSessionId,
+  });
+
   return trialSessionEntity.toRawObject();
 };

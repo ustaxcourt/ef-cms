@@ -81,31 +81,6 @@ describe('Statistic', () => {
       });
     });
 
-    it('should be invalid when one of the penalties in the statistic is NOT valid', () => {
-      const statistic = new Statistic({
-        irsDeficiencyAmount: 1,
-        irsTotalPenalties: 1,
-        penalties: [
-          {
-            name: 'Penalty 1(IRS)',
-            penaltyAmount: undefined, // This is a required field
-            penaltyType: 'irsPenaltyAmount',
-          },
-        ],
-        year: '2001',
-        yearOrPeriod: 'Year',
-      });
-
-      expect(statistic.getFormattedValidationErrors()!).toEqual({
-        penalties: [
-          {
-            index: 0,
-            penaltyAmount: 'Enter penalty amount.',
-          },
-        ],
-      });
-    });
-
     it('fails validation if a lastDateOfPeriod is a date in the future', () => {
       const statistic = new Statistic({
         irsDeficiencyAmount: 1,
@@ -230,7 +205,7 @@ describe('Statistic', () => {
 
   describe('Penalties', () => {
     let statistic;
-    let statisticId = getUniqueId();
+    const statisticId = getUniqueId();
     let penaltyArrayLength;
     const MOCK_PENALTY_WITH_STATISTIC_ID = {
       entityName: 'Penalty',
@@ -246,14 +221,6 @@ describe('Statistic', () => {
       penaltyAmount: 200,
       penaltyId: '081108f8-8b01-4e49-b437-781a581a16ac',
       penaltyType: 'determinationPenaltyAmount',
-    };
-    const MOCK_UPDATED_PENALTY = {
-      entityName: 'Penalty',
-      name: 'I am an updated penalty!',
-      penaltyAmount: 250,
-      penaltyId: '123408f8-8b01-4e49-b437-123a581a12bb',
-      penaltyType: 'irsPenaltyAmount',
-      statisticId,
     };
 
     beforeEach(() => {
@@ -294,15 +261,6 @@ describe('Statistic', () => {
         ...MOCK_PENALTY_WITHOUT_STATISTIC_ID,
         statisticId,
       });
-    });
-
-    it('should update the penalty in the penalties array', () => {
-      expect(statistic.penalties.length).toEqual(penaltyArrayLength);
-
-      statistic.updatePenalty(MOCK_UPDATED_PENALTY);
-
-      expect(statistic.penalties.length).toEqual(penaltyArrayLength);
-      expect(statistic.penalties[0]).toEqual(MOCK_UPDATED_PENALTY);
     });
 
     it('should itemize both determinationTotalPenalties and irsTotalPenalties created prior to penalty itemization', () => {

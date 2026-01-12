@@ -1,13 +1,12 @@
 import { PROCEDURE_TYPES_MAP } from '../../../../shared/src/business/entities/EntityConstants';
 import { attachFile } from '../../../helpers/file/upload-file';
 import { faker } from '@faker-js/faker';
-import {
-  getCreateACaseButton,
-  navigateTo as navigateToDocumentQC,
-} from './document-qc';
+import { getCreateACaseButton } from './document-qc';
+import { loginAsPetitionsClerk } from 'cypress/helpers/authentication/login-as-helpers';
 
 export const createPaperPetition = () => {
-  navigateToDocumentQC('petitionsclerk');
+  loginAsPetitionsClerk();
+  cy.visit('/document-qc');
 
   getCreateACaseButton().click();
   cy.get('#tab-parties').should('have.attr', 'aria-selected');
@@ -21,13 +20,13 @@ export const postPaperPetition = () => {
   cy.get('#submit-case').click();
 
   return cy.wait('@postPaperCase').then(({ response }) => {
-    if (!response || !response.body?.docketNumber) {
+    if (!response || !response.body?.caseDetail.docketNumber) {
       throw new Error(
         'Unable to get docket number from postPaperCase HTTP request',
       );
     }
-    expect(response.body).to.have.property('docketNumber');
-    return cy.wrap({ docketNumber: response.body.docketNumber! });
+    expect(response.body.caseDetail).to.have.property('docketNumber');
+    return cy.wrap({ docketNumber: response.body.caseDetail.docketNumber! });
   });
 };
 

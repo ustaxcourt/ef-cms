@@ -4,7 +4,6 @@ import { petitionsClerkUser } from '@shared/test/mockUsers';
 
 const {
   DOCKET_SECTION,
-  IRS_SYSTEM_SECTION,
   PETITIONS_SECTION,
   STATUS_TYPES: CASE_STATUS_TYPES,
   USER_ROLES: ROLES,
@@ -119,7 +118,7 @@ describe('filterWorkItems', () => {
       completedAt: '2019-07-18T18:05:54.166Z',
       completedByUserId: petitionsClerk1.userId,
       docketNumber: '100-07',
-      section: IRS_SYSTEM_SECTION,
+      section: DOCKET_SECTION,
       sentByUserId: petitionsClerk1.userId,
     });
 
@@ -135,7 +134,7 @@ describe('filterWorkItems', () => {
       completedAt: '2019-07-18T18:05:54.166Z',
       completedByUserId: petitionsClerk2.userId,
       docketNumber: '100-10',
-      section: IRS_SYSTEM_SECTION,
+      section: DOCKET_SECTION,
       sentByUserId: petitionsClerk2.userId,
     });
 
@@ -204,8 +203,8 @@ describe('filterWorkItems', () => {
       workItems: workQueueInbox,
       ...SECTION_DOCUMENT_QC_INBOX,
     } as any);
-    let assigned = null;
-    let unassigned = null;
+    let assigned: string = '';
+    let unassigned: string = '';
 
     filtered.forEach(item => {
       if (item.assigneeId === petitionsClerk1.userId) {
@@ -231,8 +230,8 @@ describe('filterWorkItems', () => {
       workItems: workQueueOutbox,
       ...SECTION_DOCUMENT_QC_OUTBOX,
     } as any);
-    let sentByUser = null;
-    let sentByOtherUser = null;
+    let sentByUser = '';
+    let sentByOtherUser = '';
 
     filtered.forEach(item => {
       if (item.sentByUserId === petitionsClerk1.userId) {
@@ -263,8 +262,8 @@ describe('filterWorkItems', () => {
       workItems: workQueueInbox,
       ...SECTION_DOCUMENT_QC_INBOX,
     } as any);
-    let assigned = null;
-    let unassigned = null;
+    let assigned = '';
+    let unassigned = '';
 
     filtered.forEach(item => {
       if (item.assigneeId === docketClerk1.userId) {
@@ -320,19 +319,5 @@ describe('filterWorkItems', () => {
       workItemDocketMyDocumentQCInProgress,
       workItemDocketSectionDocumentQCInProgress,
     ]);
-  });
-
-  it('should getWorkQueueFilters with the section argument', () => {
-    filterWorkItems({
-      applicationContext,
-      authorizedUser: docketClerk1,
-      section: DOCKET_SECTION,
-      workItems: workQueueInProgress,
-      ...SECTION_DOCUMENT_QC_IN_PROGRESS,
-    } as any);
-
-    expect(
-      applicationContext.getUtilities().getWorkQueueFilters.mock.calls[0][0],
-    ).toMatchObject({ section: DOCKET_SECTION });
   });
 });

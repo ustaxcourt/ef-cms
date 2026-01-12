@@ -1,29 +1,27 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TROUBLESHOOTING_INFO } from '@shared/business/entities/EntityConstants';
 import qs from 'qs';
+import { generateUserConfirmationCode } from '@web-api/persistence/postgres/users/confirmationCodes/generateUserConfirmationCode';
+import { getUserConfirmationCode } from '@web-api/persistence/postgres/users/confirmationCodes/getUserConfirmationCode';
+import { refreshUserConfirmationCodeExpiration } from '@web-api/persistence/postgres/users/confirmationCodes/refreshUserConfirmationCodeExpiration';
 
 export async function createUserConfirmation(
   applicationContext: ServerApplicationContext,
   { email, userId }: { email: string; userId: string },
 ): Promise<{ confirmationCode: string }> {
-  const existingConfirmationCode = await applicationContext
-    .getPersistenceGateway()
-    .getAccountConfirmationCode(applicationContext, { userId });
+  const existingConfirmationCode = await getUserConfirmationCode({ userId });
 
   let code: string;
 
   if (!existingConfirmationCode) {
-    const { confirmationCode: newConfirmationCode } = await applicationContext
-      .getPersistenceGateway()
-      .generateAccountConfirmationCode(applicationContext, { userId });
+    const { confirmationCode: newConfirmationCode } =
+      await generateUserConfirmationCode({ userId });
     code = newConfirmationCode;
   } else {
-    await applicationContext
-      .getPersistenceGateway()
-      .refreshConfirmationCodeExpiration(applicationContext, {
-        confirmationCode: existingConfirmationCode,
-        userId,
-      });
+    await refreshUserConfirmationCodeExpiration({
+      confirmationCode: existingConfirmationCode,
+      userId,
+    });
     code = existingConfirmationCode;
   }
 
@@ -47,6 +45,9 @@ export async function createUserConfirmation(
   </div>
     <div style="margin-top: 20px;">
       <span>If you did not create an account with DAWSON, please contact support at <a href="mailto:${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}">${TROUBLESHOOTING_INFO.APP_SUPPORT_EMAIL}</a>.</span>
+    </div>
+    <div style="margin-top: 20px;">
+      <span><strong>IMPORTANT:</strong> If you are filing a petition electronically, you must complete the process of filing your petition no later than <strong>11:59 pm Eastern time</strong> on the last date to file. Petitions received by the Court after this time may be untimely and your case may be dismissed.</span>
     </div>
     <hr style="margin-top: 20px; border-top:1px solid #000000;">
     <div style="margin-top: 20px;">

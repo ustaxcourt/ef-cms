@@ -1,0 +1,197 @@
+erDiagram
+    %% EF-CMS DAWSON Database Entity Relationship Diagram
+
+    dwCase {
+        string docketNumber PK "The docket number of the case"
+        string associatedJudgeId FK "Current associated Judge user ID"
+        string trialSessionId FK "Trial session identifier"
+    }
+
+    dwDocketEntry {
+        string docketEntryId PK "Unique docket entry identifier"
+        string docketNumber PK,FK "Associated case docket number"
+        string filedBy FK "ID(s) of user/users who filed the document"
+        string signedByUserId FK "ID of the user who applied the signature"
+        string strikenByUserId FK "ID of the user who struck the document"
+        string userId FK "ID of the user who created the document"
+    }
+
+    dwUser {
+        string userId PK "Unique user identifier"
+    }
+
+    dwWorkItem {
+        string workItemId PK "ID of the Work Item"
+        string assigneeId FK "ID of the clerk user who is assigned to the work item"
+        string completedByUserId FK "ID of the user who completed the work item"
+        string docketEntryId FK "ID of the document that is in QC"
+        string docketNumber FK "Docket number of the Case"
+        string sentByUserId FK "ID of the user who sent the work item last"
+    }
+
+    dwUserOnCase {
+        string docketNumber PK,FK "Case docket number"
+        string userId PK,FK "User ID"
+    }
+
+    dwUserOnCasePending {
+        string docketNumber PK,FK "Case docket number"
+        string userId PK,FK "User ID"
+    }
+
+    dwCaseWorksheet {
+        string docketNumber PK,FK "Case docket number"
+        string judgeUserId FK "Judge's user ID"
+    }
+
+    dwCaseDeadline {
+        string caseDeadlineId PK "Unique case deadline identifier"
+        string docketNumber FK "Associated case docket number"
+        string associatedJudgeId FK "Judge user ID"
+    }
+
+    dwCaseCorrespondence {
+        string correspondenceId PK "Unique correspondence identifier"
+        string docketNumber FK "Associated case docket number"
+        string userId FK "ID of the user who created the correspondence"
+    }
+
+    dwMinuteSheet {
+        string minuteSheetId PK "Unique minute sheet identifier"
+        string docketNumber FK "Associated case docket number"
+    }
+
+    dwUserCaseNote {
+        string docketNumber PK,FK "Case docket number"
+        string userId PK,FK "ID of the user who created the note"
+    }
+
+    dwBarNumber {
+        string barNumber PK "Bar admission number"
+        string userId FK "Associated user ID"
+    }
+
+    dwUserConfirmationCode {
+        string confirmationCode PK "Confirmation code"
+        string userId FK "Associated user ID"
+    }
+
+    dwDocketEntryWorksheet {
+        string docketEntryId PK,FK "Associated docket entry ID"
+    }
+
+    dwMessage {
+        string messageId PK "Unique message identifier"
+        string docketNumber FK "Associated case docket number"
+        string fromUserId FK "User ID of sender"
+        string toUserId FK "User ID of recipient"
+    }
+
+    dwNotification {
+        number id PK "Primary key"
+    }
+
+    dwConnection {
+        string connectionId PK "Primary key"
+        string userId FK "User ID"
+    }
+
+    dwResponseString {
+        number id PK "Primary key"
+        string responseString PK "Response string"
+        string userId FK "User ID"
+    }
+
+    dwChangeOfAddress {
+        string changeOfAddressId PK "Primary key"
+        string userId FK "User ID"
+    }
+
+    dwFeatureFlag {
+        string name PK "Feature flag name"
+    }
+
+    dwPractitionerDocuments {
+        string practitionerDocumentFileId PK "Document file ID"
+        string barNumber FK "Practitioner bar number"
+    }
+
+    dwTrialSession {
+        string trialSessionId PK "System-generated ID for the trial session"
+        string judgeUserId FK "Assigned Judge's system-generated user id"
+        string swingSessionId FK "Trial session ID of the session identified as the swing session"
+        string trialClerkUserId FK "User ID of the trial clerk selected by the user"
+    }
+
+    dwTrialSessionCase {
+        string docketNumber PK,FK "Docket number of the case assigned to a trial session"
+        string trialSessionId PK,FK "System-generated ID for the trial session"
+    }
+
+    dwTrialSessionNotificationProcessing {
+        string trialSessionId PK,FK "System-generated ID for the trial session"
+    }
+
+    dwTrialSessionPaperPdf {
+        string fileId PK "Id of the document that was available for printing of service"
+        string trialSessionId PK,FK "System-generated ID for the trial session"
+    }
+
+    dwTrialSessionWorkingCopy {
+        string trialSessionId PK,FK "System-generated ID for the trial session"
+        string userId PK,FK "Judge user ID or trial clerk user ID"
+    }
+
+    %% Case relationships
+    dwCase ||--o{ dwDocketEntry : "has"
+    dwCase ||--o{ dwUserOnCase : "has"
+    dwCase ||--o{ dwUserOnCasePending : "has"
+    dwCase ||--|| dwCaseWorksheet : "has"
+    dwCase ||--o{ dwCaseDeadline : "has"
+    dwCase ||--o{ dwCaseCorrespondence : "has"
+    dwCase ||--o{ dwMinuteSheet : "has"
+    dwCase ||--o{ dwWorkItem : "has"
+    dwCase ||--o{ dwUserCaseNote : "has"
+    dwCase ||--o{ dwMessage : "has"
+    dwCase }o--|| dwTrialSession : "assigned_to"
+    dwCase ||--o{ dwTrialSessionCase : "has"
+    dwCase }o--|| dwUser : "associated_judge"
+
+    dwCaseWorksheet }o--|| dwUser : "judge"
+    dwCaseDeadline }o--|| dwUser : "associated_judge"
+
+    %% User relationships
+    dwUser ||--o{ dwUserOnCase : "on"
+    dwUser ||--o{ dwUserOnCasePending : "on"
+    dwUser ||--o{ dwBarNumber : "has"
+    dwUser ||--o{ dwUserConfirmationCode : "has"
+    dwUser ||--o{ dwUserCaseNote : "creates"
+    dwUser ||--o{ dwMessage : "sends"
+    dwUser ||--o{ dwMessage : "receives"
+    dwUser ||--o{ dwConnection : "has"
+    dwUser ||--o{ dwChangeOfAddress : "has"
+    dwUser ||--o{ dwWorkItem : "assigned"
+    dwUser ||--o{ dwWorkItem : "sent_by"
+    dwUser ||--o{ dwWorkItem : "completed_by"
+    dwUser ||--o{ dwResponseString : "has"
+    dwUser ||--o{ dwDocketEntry : "filed_by"
+    dwUser ||--o{ dwCaseCorrespondence : "creates"
+    dwUser ||--o{ dwTrialSessionWorkingCopy : "has"
+
+    %% Docket entry relationships
+    dwDocketEntry ||--|| dwDocketEntryWorksheet : "has"
+    dwDocketEntry ||--o{ dwWorkItem : "has"
+    dwDocketEntry }o--|| dwUser : "signed_by"
+    dwDocketEntry }o--|| dwUser : "striken_by"
+
+    %% Bar number relationships
+    dwBarNumber ||--o{ dwPractitionerDocuments : "has"
+
+    %% Trial session relationships
+    dwTrialSession ||--o{ dwTrialSessionCase : "includes"
+    dwTrialSession ||--o{ dwTrialSessionNotificationProcessing : "has"
+    dwTrialSession ||--o{ dwTrialSessionPaperPdf : "has"
+    dwTrialSession ||--o{ dwTrialSessionWorkingCopy : "has"
+    dwTrialSession }o--|| dwTrialSession : "swing_of"
+    dwTrialSession }o--|| dwUser : "judge"
+    dwTrialSession }o--|| dwUser : "clerk"

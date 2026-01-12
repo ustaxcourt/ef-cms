@@ -1,9 +1,9 @@
+import { loginAsPrivatePractitioner } from 'cypress/helpers/authentication/login-as-helpers';
 import { generateRandomPhoneNumber } from '../../../support/helpers';
-import { navigateTo as loginAs } from '../../../support/pages/maintenance';
 
 describe('Practitioners with no cases', () => {
   it('should allow the practitioner to edit their phone number multiple times', () => {
-    loginAs('privatePractitioner4');
+    loginAsPrivatePractitioner('privatePractitioner4@example.com');
     cy.get('[data-testid="account-menu-button"]').click();
     cy.get('[data-testid="my-account-link"]').click();
     cy.get('[data-testid="edit-contact-info"]').click();

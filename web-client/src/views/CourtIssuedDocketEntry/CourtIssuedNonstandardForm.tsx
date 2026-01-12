@@ -6,32 +6,44 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-const NonstandardDateInput = ({
-  addCourtIssuedDocketEntryNonstandardHelper,
-  DATE_FORMATS,
-  form,
-  formatAndUpdateDateFromDatePickerSequence,
-  updateCourtIssuedDocketEntryTitleSequence,
-  validateCourtIssuedDocketEntrySequence,
-  validationErrors,
-}) => (
-  <DateSelector
-    defaultValue={form.date}
-    errorText={validationErrors.date}
-    id="date"
-    label={addCourtIssuedDocketEntryNonstandardHelper.dateLabel}
-    minDate={addCourtIssuedDocketEntryNonstandardHelper.minDate}
-    onChange={e => {
-      formatAndUpdateDateFromDatePickerSequence({
-        key: 'date',
-        toFormat: DATE_FORMATS.ISO,
-        value: e.target.value,
-      });
-      updateCourtIssuedDocketEntryTitleSequence();
-      validateCourtIssuedDocketEntrySequence();
-    }}
-  />
-);
+const NonstandardDateInput = (props: {
+  addCourtIssuedDocketEntryNonstandardHelper: any;
+  DATE_FORMATS: typeof state.constants.DATE_FORMATS;
+  form: any;
+  formatAndUpdateDateFromDatePickerSequence: Function;
+  updateCourtIssuedDocketEntryTitleSequence: Function;
+  validateCourtIssuedDocketEntrySequence: Function;
+  validationErrors: Record<string, any>;
+}) => {
+  const {
+    addCourtIssuedDocketEntryNonstandardHelper,
+    DATE_FORMATS,
+    form,
+    formatAndUpdateDateFromDatePickerSequence,
+    updateCourtIssuedDocketEntryTitleSequence,
+    validateCourtIssuedDocketEntrySequence,
+    validationErrors,
+  } = props;
+
+  return (
+    <DateSelector
+      defaultValue={form.date}
+      errorText={validationErrors.date}
+      id="date"
+      label={addCourtIssuedDocketEntryNonstandardHelper.dateLabel}
+      minDate={addCourtIssuedDocketEntryNonstandardHelper.minDate}
+      onChange={e => {
+        formatAndUpdateDateFromDatePickerSequence({
+          key: 'date',
+          toFormat: DATE_FORMATS.ISO,
+          value: e.target.value,
+        });
+        updateCourtIssuedDocketEntryTitleSequence();
+        validateCourtIssuedDocketEntrySequence();
+      }}
+    />
+  );
+};
 
 export const CourtIssuedNonstandardForm = connect(
   {

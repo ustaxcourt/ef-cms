@@ -13,24 +13,26 @@ type TPetitioner = {
   city: string;
   contactId: string;
   contactType: string;
+  country?: string;
   countryType: string;
-  entityName: string;
+  entityName?: string;
   isAddressSealed: boolean;
+  inCareOf?: string;
   name: string;
   paperPetitionEmail?: string;
   phone: string;
   postalCode: string;
-  sealedAndUnavailable: boolean;
+  sealedAndUnavailable?: boolean;
+  secondaryName?: string;
   serviceIndicator?: string;
-  state: string;
+  state?: string;
   title?: string;
-  hasConsentedToEService?: boolean;
-};
-
-type TCaseNote = {
-  userId: string;
-  docketNumber: string;
-  notes: string;
+  hasConsentedToElectronicService?: boolean;
+  hasElectronicAccess?: boolean;
+  formattedTitle?: string;
+  formattedPendingEmail?: string;
+  formattedEmail?: string;
+  formattedPaperPetitionEmail?: string;
 };
 
 interface IValidateRawCollection<I> {

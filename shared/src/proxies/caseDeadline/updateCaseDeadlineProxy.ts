@@ -1,4 +1,5 @@
-import { put } from '../requests';
+import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
+import { asyncSyncHandler, put } from '../requests';
 
 /**
  * updateCaseDeadlineInteractorProxy
@@ -11,10 +12,15 @@ import { put } from '../requests';
 export const updateCaseDeadlineInteractor = (
   applicationContext,
   { caseDeadline },
-) => {
-  return put({
+): Promise<RawCaseDeadline> => {
+  return asyncSyncHandler(
     applicationContext,
-    body: { caseDeadline },
-    endpoint: `/case-deadlines/${caseDeadline.docketNumber}/${caseDeadline.caseDeadlineId}`,
-  });
+    async asyncSyncId =>
+      await put({
+        applicationContext,
+        body: { caseDeadline },
+        asyncSyncId,
+        endpoint: `/async/case-deadlines/${caseDeadline.docketNumber}/${caseDeadline.caseDeadlineId}`,
+      }),
+  ) as Promise<RawCaseDeadline>;
 };

@@ -1,5 +1,6 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 /**
  * sealInLowerEnvironment
@@ -13,14 +14,15 @@ export const sealInLowerEnvironment = async (
   records,
   authorizedUser: UnknownAuthUser,
 ) => {
-  const isCurrentColorActive =
-    await applicationContext.isCurrentColorActive(applicationContext);
+  const isCurrentColorActive = await applicationContext
+    .getConfigurationGateway()
+    .isCurrentColorActive(applicationContext);
 
   if (!isCurrentColorActive) {
     return records.map(() => {});
   }
 
-  return Promise.all(
+  return settlePromises(
     records.map(record => {
       const { docketEntryId, docketNumber } = record;
       if (docketEntryId && docketNumber) {

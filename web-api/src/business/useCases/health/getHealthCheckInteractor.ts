@@ -1,16 +1,9 @@
 import { S3 } from '@aws-sdk/client-s3';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { elasticSearchHealthCheck } from '@web-api/persistence/elasticsearch/elasticSearchHealthCheck';
 
 const regionEast = 'us-east-1';
 const regionWest = 'us-west-1';
-
-const handleAxiosTimeout = axios => {
-  let source = axios.CancelToken.source();
-  setTimeout(() => {
-    source.cancel();
-  }, 1000);
-  return source;
-};
 
 type S3BucketsStatus = {
   app: boolean;
@@ -23,15 +16,8 @@ type S3BucketsStatus = {
   westTempDocuments: boolean;
 };
 
-type DynamoTablesStatus = {
-  efcms: boolean;
-  efcmsDeploy: boolean;
-};
-
 export type ApplicationHealth = {
   cognito: boolean;
-  dynamo: DynamoTablesStatus;
-  dynamsoft: boolean;
   elasticsearch: boolean;
   emailService: boolean;
   s3: S3BucketsStatus;
@@ -43,75 +29,13 @@ const getElasticSearchStatus = async ({
   applicationContext: ServerApplicationContext;
 }): Promise<boolean> => {
   try {
-    await applicationContext.getPersistenceGateway().getFirstSingleCaseRecord({
-      applicationContext,
-    });
+    await elasticSearchHealthCheck({ applicationContext });
   } catch (e) {
     applicationContext.logger.error('Elasticsearch health check failed. ', e);
     return false;
   }
 
   return true;
-};
-
-const getDynamoStatus = async ({
-  applicationContext,
-}: {
-  applicationContext: ServerApplicationContext;
-}): Promise<boolean> => {
-  try {
-    const dynamoStatus = await applicationContext
-      .getPersistenceGateway()
-      .getTableStatus({ applicationContext });
-    return dynamoStatus === 'ACTIVE';
-  } catch (e) {
-    applicationContext.logger.error('Dynamo health check failed. ', e);
-    return false;
-  }
-};
-
-const getDeployDynamoStatus = async ({
-  applicationContext,
-}: {
-  applicationContext: ServerApplicationContext;
-}): Promise<boolean> => {
-  try {
-    const deployDynamoStatus = await applicationContext
-      .getPersistenceGateway()
-      .getDeployTableStatus({ applicationContext });
-    return deployDynamoStatus === 'ACTIVE';
-  } catch (e) {
-    applicationContext.logger.error('Dynamo deploy health check failed. ', e);
-    return false;
-  }
-};
-
-const getDynamsoftStatus = async ({
-  applicationContext,
-}: {
-  applicationContext: ServerApplicationContext;
-}): Promise<boolean> => {
-  const axios = applicationContext.getHttpClient();
-
-  const source = handleAxiosTimeout(axios);
-
-  try {
-    const scannerResourceUri = applicationContext.getScannerResourceUri();
-    await Promise.all(
-      [
-        `${scannerResourceUri}/dynamsoft.webtwain.initiate.js`,
-        `${scannerResourceUri}/dynamsoft.webtwain.config.js`,
-        `${scannerResourceUri}/dynamsoft.webtwain.install.js`,
-        `${scannerResourceUri}/src/dynamsoft.webtwain.css`,
-      ].map(url => {
-        return axios.get(url, { cancelToken: source.token, timeout: 1000 });
-      }),
-    );
-    return true;
-  } catch (e) {
-    applicationContext.logger.error('Dynamsoft health check failed. ', e);
-    return false;
-  }
 };
 
 const checkS3BucketsStatus = async ({
@@ -190,7 +114,7 @@ const getS3BucketStatus = async ({
     westTempDocuments: westS3TempBucketName,
   };
 
-  let bucketStatus: S3BucketsStatus = {
+  const bucketStatus: S3BucketsStatus = {
     app: false,
     appFailover: false,
     eastDocuments: false,
@@ -248,9 +172,6 @@ export const getHealthCheckInteractor = async (
 ): Promise<ApplicationHealth> => {
   const [
     elasticSearchStatus,
-    dynamoStatus,
-    deployDynamoStatus,
-    dynamsoftStatus,
     s3BucketStatus,
     cognitoStatus,
     emailServiceStatus,
@@ -258,24 +179,15 @@ export const getHealthCheckInteractor = async (
     getElasticSearchStatus({
       applicationContext,
     }),
-    getDynamoStatus({ applicationContext }),
-    getDeployDynamoStatus({
-      applicationContext,
-    }),
-    getDynamsoftStatus({ applicationContext }),
     getS3BucketStatus({ applicationContext }),
     getCognitoStatus({ applicationContext }),
     getEmailServiceStatus({
       applicationContext,
     }),
   ]);
+
   return {
     cognito: cognitoStatus,
-    dynamo: {
-      efcms: dynamoStatus,
-      efcmsDeploy: deployDynamoStatus,
-    },
-    dynamsoft: dynamsoftStatus,
     elasticsearch: elasticSearchStatus,
     emailService: emailServiceStatus,
     s3: s3BucketStatus,

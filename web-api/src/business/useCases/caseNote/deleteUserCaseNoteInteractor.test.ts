@@ -1,15 +1,23 @@
+import '@web-api/persistence/postgres/userCaseNotes/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '../../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { deleteUserCaseNoteInteractor } from './deleteUserCaseNoteInteractor';
+import { deleteUserCaseNote as deleteUserCaseNoteMock } from '@web-api/persistence/postgres/userCaseNotes/deleteUserCaseNote';
 import { mockJudgeUser } from '@shared/test/mockAuthUsers';
 import { omit } from 'lodash';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('deleteUserCaseNoteInteractor', () => {
+  const deleteUserCaseNote = deleteUserCaseNoteMock as jest.Mock;
+  const getUserById = jest.mocked(getUserByIdMock);
+
   it('throws an error if the user is not valid or authorized', async () => {
-    let user = {} as UnknownAuthUser;
+    const user = {} as UnknownAuthUser;
 
     await expect(
       deleteUserCaseNoteInteractor(
@@ -30,10 +38,8 @@ describe('deleteUserCaseNoteInteractor', () => {
       section: 'colvinChambers',
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     }) as UnknownAuthUser;
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(mockUser);
-    applicationContext.getPersistenceGateway().deleteUserCaseNote = v => v;
+    getUserById.mockResolvedValue(mockUser as DbUser);
+    deleteUserCaseNote.mockImplementation(v => v);
     applicationContext
       .getUseCaseHelpers()
       .getJudgeInSectionHelper.mockReturnValue({
@@ -57,10 +63,7 @@ describe('deleteUserCaseNoteInteractor', () => {
       ...mockJudgeUser,
       section: 'colvinChambers',
     } as UnknownAuthUser;
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(mockUser);
-    applicationContext.getPersistenceGateway().deleteUserCaseNote = jest.fn();
+    getUserById.mockResolvedValue(mockUser as DbUser);
     applicationContext
       .getUseCaseHelpers()
       .getJudgeInSectionHelper.mockReturnValue(null);
@@ -72,9 +75,8 @@ describe('deleteUserCaseNoteInteractor', () => {
       omit(mockUser, 'section'),
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().deleteUserCaseNote.mock
-        .calls[0][0].userId,
-    ).toEqual(mockJudgeUser.userId);
+    expect(deleteUserCaseNote.mock.calls[0][0].userId).toEqual(
+      mockJudgeUser.userId,
+    );
   });
 });

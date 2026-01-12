@@ -30,15 +30,11 @@ export class CustomCaseReportSearch extends JoiValidationEntity {
   public caseTypes: CaseType[];
   public endDate: string;
   public filingMethod: CustomCaseFilingMethods;
-  public highPriority: boolean;
   public judges: string[];
   public pageSize: number;
   public preferredTrialCities: string[];
   public procedureType: CustomCaseProcedureTypes;
-  public searchAfter: {
-    receivedAt: number;
-    pk: string;
-  };
+  public page: number;
   public startDate: string;
 
   constructor(rawProps) {
@@ -47,12 +43,11 @@ export class CustomCaseReportSearch extends JoiValidationEntity {
     this.caseTypes = rawProps.caseTypes;
     this.endDate = rawProps.endDate;
     this.filingMethod = rawProps.filingMethod;
-    this.highPriority = rawProps.highPriority;
     this.judges = rawProps.judges;
     this.pageSize = rawProps.pageSize;
     this.preferredTrialCities = rawProps.preferredTrialCities;
     this.procedureType = rawProps.procedureType;
-    this.searchAfter = rawProps.searchAfter;
+    this.page = rawProps.page || 0;
     this.startDate = rawProps.startDate;
   }
 
@@ -87,20 +82,13 @@ export class CustomCaseReportSearch extends JoiValidationEntity {
         .string()
         .valid(...CUSTOM_CASE_REPORT_FILING_METHODS)
         .required(),
-      highPriority: joi.boolean(),
       judges: joi.array().items(joi.string()),
+      page: joi.number().optional(),
       pageSize: joi.number().required(),
       preferredTrialCities: joi.array().items(joi.string()),
       procedureType: joi
         .string()
         .valid(...CUSTOM_CASE_REPORT_PROCEDURE_TYPES)
-        .required(),
-      searchAfter: joi
-        .object()
-        .keys({
-          pk: joi.string().allow(null).required(),
-          receivedAt: joi.number().allow(null).required(),
-        })
         .required(),
       startDate: JoiValidationConstants.ISO_DATE.max('now')
         .description(

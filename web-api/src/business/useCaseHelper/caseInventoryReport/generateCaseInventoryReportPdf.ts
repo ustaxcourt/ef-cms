@@ -1,7 +1,7 @@
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
@@ -13,7 +13,14 @@ export const generateCaseInventoryReportPdf = async ({
   filters,
 }: {
   applicationContext: ServerApplicationContext;
-  cases: RawCase[];
+  cases: Omit<
+    RawCase,
+    | 'consolidatedCases'
+    | 'correspondence'
+    | 'docketEntries'
+    | 'hearings'
+    | 'petitioners'
+  >[];
   filters: {
     associatedJudge?: string;
     status?: string;

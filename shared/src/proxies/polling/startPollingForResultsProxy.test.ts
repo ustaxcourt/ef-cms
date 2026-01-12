@@ -1,5 +1,6 @@
 jest.mock('../requests');
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
 import { get } from '../requests';
 import { startPollingForResultsInteractor } from '@shared/proxies/polling/startPollingForResultsProxy';
 
@@ -7,7 +8,9 @@ describe('startPollingForResultsProxy', () => {
   let GET_RESPONSES: any[] = [];
   let iteration = 0;
   const TEST_REQUEST_ID = 'TEST_REQUEST_ID';
-  const TEST_EXP_DATE = Math.floor(Date.now() / 1000) + 60 * 60;
+  const nowSeconds = Number(formatNow(FORMATS.UNIX_TIMESTAMP_SECONDS));
+  const oneHourInSeconds = 60 * 60;
+  const TEST_EXP_DATE = nowSeconds + oneHourInSeconds;
   let RESOLVER_MOCK;
 
   beforeEach(() => {
@@ -68,11 +71,7 @@ describe('startPollingForResultsProxy', () => {
     expect(get).toHaveBeenCalledTimes(3);
   });
 
-  it('should resolve the request when it gets the status code 200 response in the third try even when we got a 503 in the second iteration', async () => {
-    const responseObj = {
-      statusCode: 200,
-    };
-
+  it('should resolve the request when it gets the status code 503 in the second iteration', async () => {
     GET_RESPONSES = [
       undefined,
       {
@@ -81,7 +80,9 @@ describe('startPollingForResultsProxy', () => {
         }),
       },
       {
-        response: JSON.stringify(responseObj),
+        response: JSON.stringify({
+          statusCode: 200,
+        }),
       },
     ];
     await startPollingForResultsInteractor(
@@ -91,8 +92,10 @@ describe('startPollingForResultsProxy', () => {
       RESOLVER_MOCK,
     );
 
-    expect(RESOLVER_MOCK).toHaveBeenCalledWith(responseObj);
-    expect(get).toHaveBeenCalledTimes(3);
+    expect(RESOLVER_MOCK).toHaveBeenCalledWith({
+      statusCode: 503,
+    });
+    expect(get).toHaveBeenCalledTimes(2);
   });
 
   it('should resolve the request with 504 status code when expiration time has passed', async () => {

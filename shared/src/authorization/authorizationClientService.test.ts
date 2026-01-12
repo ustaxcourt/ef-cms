@@ -1,3 +1,4 @@
+import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import {
   AUTHORIZATION_MAP,
   ROLE_PERMISSIONS,
@@ -8,7 +9,6 @@ import {
   mockCaseServicesSupervisorUser,
   mockChambersUser,
   mockDocketClerkUser,
-  mockIrsPractitionerUser,
   mockJudgeUser,
   mockPetitionerUser,
   mockPetitionsClerkUser,
@@ -16,19 +16,7 @@ import {
 
 describe('Authorization client service', () => {
   it('should return false when the user is undefined', () => {
-    expect(
-      isAuthorized(undefined, 'unknown action' as any, 'someUser'),
-    ).toBeFalsy();
-  });
-
-  it('should return true for any user whose userId matches the 3rd owner argument, in this case "someUser" === "someUser"', () => {
-    expect(
-      isAuthorized(
-        mockPetitionerUser,
-        'unknown action' as any,
-        mockPetitionerUser.userId,
-      ),
-    ).toBeTruthy();
+    expect(isAuthorized(undefined, 'unknown action' as any)).toBeFalsy();
   });
 
   it('should return false when the role provided is not found in the AUTHORIZATION_MAP', () => {
@@ -45,6 +33,48 @@ describe('Authorization client service', () => {
     });
   });
 
+  it('should return false if user is missing role property, even if permission might match', () => {
+    const userWithoutRole = {
+      name: 'No Role Provided',
+      userId: 'abc-123',
+    };
+    const result = isAuthorized(
+      userWithoutRole as any,
+      ROLE_PERMISSIONS.WORKITEM,
+    );
+    expect(result).toBe(false);
+  });
+
+  it('should return false if user has a recognized role, but the permission is not in the role array', () => {
+    const permissionNotInDocketClerk = ROLE_PERMISSIONS.CREATE_USER;
+
+    const result = isAuthorized(
+      mockDocketClerkUser,
+      permissionNotInDocketClerk,
+    );
+    expect(result).toBe(false);
+  });
+
+  it('should return false when a role is recognized in AUTHORIZATION_MAP but grants zero permissions', () => {
+    const legacyJudgeUser = {
+      name: 'Ancient Judge',
+      role: 'legacyJudge',
+      userId: 'legacy-666',
+    } as AuthUser;
+    const somePermission = ROLE_PERMISSIONS.ADD_CASE_TO_TRIAL_SESSION;
+
+    const result = isAuthorized(legacyJudgeUser, somePermission);
+    expect(result).toBe(false);
+  });
+
+  it('should return false if the permission is definitely not in the user`s permission array', () => {
+    const result = isAuthorized(
+      mockPetitionsClerkUser,
+      ROLE_PERMISSIONS.UNSEAL_CASE,
+    );
+    expect(result).toBe(false);
+  });
+
   describe('adc role', () => {
     it('should be authorized for the WORK_ITEM permission', () => {
       expect(isAuthorized(mockAdcUser, ROLE_PERMISSIONS.WORKITEM)).toBeTruthy();
@@ -55,12 +85,24 @@ describe('Authorization client service', () => {
         isAuthorized(mockAdcUser, ROLE_PERMISSIONS.STAMP_MOTION),
       ).toBeTruthy();
     });
+
+    it('should be authorized for motion order response', () => {
+      expect(
+        isAuthorized(mockAdcUser, ROLE_PERMISSIONS.MOTION_ORDER_RESPONSE),
+      ).toBeTruthy();
+    });
   });
 
   describe('chambers role', () => {
     it('should be authorized to stamp a motion', () => {
       expect(
         isAuthorized(mockChambersUser, ROLE_PERMISSIONS.STAMP_MOTION),
+      ).toBeTruthy();
+    });
+
+    it('should be authorized for motion order response', () => {
+      expect(
+        isAuthorized(mockChambersUser, ROLE_PERMISSIONS.MOTION_ORDER_RESPONSE),
       ).toBeTruthy();
     });
   });
@@ -108,26 +150,27 @@ describe('Authorization client service', () => {
     });
   });
 
-  describe('irsPractitioner', () => {
-    it('should be authorized to get a case', () => {
-      expect(
-        isAuthorized(mockIrsPractitionerUser, ROLE_PERMISSIONS.GET_CASE),
-      ).toBeTruthy();
-    });
-  });
-
   describe('judge role', () => {
     it('should be authorized to stamp a motion', () => {
       expect(
         isAuthorized(mockJudgeUser, ROLE_PERMISSIONS.STAMP_MOTION),
       ).toBeTruthy();
     });
+
+    it('should be authorized for motion order response', () => {
+      expect(
+        isAuthorized(mockJudgeUser, ROLE_PERMISSIONS.MOTION_ORDER_RESPONSE),
+      ).toBeTruthy();
+    });
   });
 
   describe('petitionsClerk role', () => {
-    it('should be authorized to get a case', () => {
+    it('should be authorized to get case data', () => {
       expect(
-        isAuthorized(mockPetitionsClerkUser, ROLE_PERMISSIONS.GET_CASE),
+        isAuthorized(
+          mockPetitionsClerkUser,
+          ROLE_PERMISSIONS.GET_ALL_CASE_DATA,
+        ),
       ).toBeTruthy();
     });
 

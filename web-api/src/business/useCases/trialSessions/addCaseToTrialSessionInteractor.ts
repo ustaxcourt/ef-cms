@@ -1,14 +1,18 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { NotFoundError } from '../../../errors/errors';
+import { Case } from '@shared/business/entities/cases/Case';
+import { NotFoundError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
+import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { createOrUpdateTrialSessionCases } from '@web-api/persistence/postgres/trialSessions/createOrUpdateTrialSessionCases';
 
 /**
  * addCaseToTrialSession
@@ -19,8 +23,8 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  * @param {string} providers.docketNumber the docket number of the case
  * @returns {Promise} the promise of the addCaseToTrialSession call
  */
-export const addCaseToTrialSession = async (
-  applicationContext: ServerApplicationContext,
+const addCaseToTrialSession = async (
+  _applicationContext: ServerApplicationContext,
   {
     calendarNotes,
     docketNumber,
@@ -38,23 +42,17 @@ export const addCaseToTrialSession = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const trialSession = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById({
-      applicationContext,
-      trialSessionId,
-    });
+  const trialSession = await getTrialSessionById({
+    trialSessionId,
+  });
 
   if (!trialSession) {
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
   }
 
-  const caseDetails = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const caseDetails = await getCaseByDocketNumber({
+    docketNumber,
+  });
 
   const caseEntity = new Case(caseDetails, { authorizedUser });
 
@@ -68,39 +66,32 @@ export const addCaseToTrialSession = async (
     throw new Error('The case is already part of this trial session.');
   }
 
-  trialSessionEntity
-    .deleteCaseFromCalendar({ docketNumber: caseEntity.docketNumber }) // we delete because it might have been manually removed
-    .manuallyAddCaseToCalendar({ calendarNotes, caseEntity });
+  // Removing and adding the case in memory to match the change we will make in the DB
+  trialSessionEntity.deleteCaseFromCalendar({
+    docketNumber: caseEntity.docketNumber,
+  });
+  const caseOrder = trialSessionEntity.manuallyAddCaseToCalendar({
+    calendarNotes,
+    caseEntity,
+    isHearing: false,
+  });
 
   caseEntity.setAsCalendared(trialSessionEntity);
 
-  await applicationContext
-    .getPersistenceGateway()
-    .deleteCaseTrialSortMappingRecords({
-      applicationContext,
-      docketNumber: caseEntity.docketNumber,
-    });
+  const updatedCase = await updateCaseAndAssociations({
+    authorizedUser,
+    caseToUpdate: caseEntity,
+  });
 
-  if (trialSessionEntity.isCalendared) {
-    await applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems({
-      applicationContext,
-      docketNumber: caseEntity.docketNumber,
-      highPriority: true,
-      trialDate: caseEntity.trialDate,
-    });
-  }
-
-  const updatedCase = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
-      authorizedUser,
-      caseToUpdate: caseEntity,
-    });
-
-  await applicationContext.getPersistenceGateway().updateTrialSession({
-    applicationContext,
-    trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+  await createOrUpdateTrialSessionCases({
+    trialSessionCases: [
+      {
+        caseOrder,
+        docketNumber,
+        isHearing: false,
+        trialSessionId,
+      },
+    ],
   });
 
   return new Case(updatedCase, { authorizedUser }).validate().toRawObject();

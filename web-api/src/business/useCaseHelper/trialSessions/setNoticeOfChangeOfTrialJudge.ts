@@ -9,13 +9,11 @@ export const setNoticeOfChangeOfTrialJudge = async (
   authorizedUser: AuthUser,
 ) => {
   const priorJudgeTitleWithFullName = await getJudgeWithTitle({
-    applicationContext,
     judgeUserName: currentTrialSession.judge.name,
     useFullName: true,
   });
 
   const updatedJudgeTitleWithFullName = await getJudgeWithTitle({
-    applicationContext,
     judgeUserName: newTrialSessionEntity.judge.name,
     useFullName: true,
   });

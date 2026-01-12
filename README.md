@@ -4,9 +4,9 @@
 
 ## DAWSON Environments
 
-| irs | prod | staging | test | migration |
+| prod | staging | test | irs | develop |
 | ------- | ------ | ------- | ---- | ---- |
-| [![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/irs.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/irs) | [![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/prod.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/prod) | [![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/staging.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/staging) | [![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/test.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/test) | [![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/migration.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/migration) |
+| [![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/prod.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/prod) | [![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/staging.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/staging) | [![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/test.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/test) | [![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/irs.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/irs) | [![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/develop.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/develop) |
 
 ## Documentation
 

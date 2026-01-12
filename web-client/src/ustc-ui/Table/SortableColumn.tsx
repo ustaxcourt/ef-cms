@@ -1,25 +1,29 @@
+import { WrappedIcon } from '../Icon/Icon';
 import { Button } from '../Button/Button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getConstants } from '../../getConstants';
 import React from 'react';
 import classNames from 'classnames';
+import { IconName } from '@fortawesome/fontawesome-svg-core';
 
 const { ASCENDING, DESCENDING } = getConstants();
 
 export const SortableColumn = ({
-  ascText = 'in ascending order',
+  ascText = 'In ascending order',
+  className,
   currentlySortedField,
   currentlySortedOrder,
   defaultSortOrder = 'desc',
-  descText = 'in descending order',
+  descText = 'In descending order',
   hasRows,
   onClickSequence,
+  screenReaderTitle,
   sortField,
   title,
   ...props
 }: {
   ascText: string;
   defaultSortOrder?: 'asc' | 'desc';
+  className?: string;
   currentlySortedField: string;
   descText: string;
   hasRows: boolean;
@@ -27,6 +31,7 @@ export const SortableColumn = ({
     sortField: string;
     sortOrder: 'asc' | 'desc';
   }) => void;
+  screenReaderTitle?: string;
   sortField: string;
   title: string;
   currentlySortedOrder: 'asc' | 'desc';
@@ -40,6 +45,7 @@ export const SortableColumn = ({
   } else {
     sortOrder = defaultSortOrder;
   }
+  <span className="usa-sr-only">Number</span>;
 
   return (
     <Button
@@ -52,19 +58,29 @@ export const SortableColumn = ({
           // we invoke the click sequence AFTER the next animation frame to give
           // the browser time to display the spinner in the header before it tries to fetch
           // and re-render the 3000 messages in the message table.
-          requestAnimationFrame(() => {
-            onClickSequence({
+          requestAnimationFrame(async () => {
+            await onClickSequence({
               sortField,
               sortOrder,
-            }).then(() => setIsLoading(false));
+            });
+
+            setIsLoading(false);
           });
         }
       }}
     >
+      {screenReaderTitle && (
+        <span className="usa-sr-only">{screenReaderTitle}</span>
+      )}
       <span
-        className={classNames('margin-right-1', {
-          sortActive: isActive,
-        })}
+        aria-hidden={!!screenReaderTitle}
+        className={classNames(
+          'margin-right-1',
+          {
+            sortActive: isActive,
+          },
+          className,
+        )}
       >
         {title}
       </span>
@@ -74,12 +90,7 @@ export const SortableColumn = ({
         {/* We fix the icon width so that switching from double arrow to smaller single arrow icon does not affect line-breaking behavior */}
         <span className="display-inline-block width-205">
           {isLoading && (
-            <FontAwesomeIcon
-              className="fa-spin spinner"
-              icon="sync"
-              size="sm"
-              title="sorting results"
-            />
+            <WrappedIcon iconClass="fa-spin spinner" icon="sync" size="sm" title="sorting results" />
           )}
           {!isLoading &&
             getFontAwesomeIcon({
@@ -107,7 +118,7 @@ const getFontAwesomeIcon = ({
   descText: string;
   isActiveColumn: boolean;
 }) => {
-  let fontAwesomeIcon =
+  let fontAwesomeIcon: IconName =
     direction === DESCENDING ? 'long-arrow-alt-down' : 'long-arrow-alt-up';
   let tooltipText = direction === ASCENDING ? ascText : descText;
 
@@ -117,12 +128,11 @@ const getFontAwesomeIcon = ({
   }
 
   return (
-    <FontAwesomeIcon
-      className={
+    <WrappedIcon
+      iconClass={
         isActiveColumn ? 'icon-sortable-header-active' : 'icon-sortable-header'
       }
       icon={fontAwesomeIcon}
-      title={tooltipText}
-    />
+      title={tooltipText} />
   );
 };

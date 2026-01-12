@@ -1,12 +1,16 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { Correspondence } from '@shared/business/entities/Correspondence';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 export const archiveCorrespondenceDocument = async (
   applicationContext: ServerApplicationContext,
@@ -15,7 +19,7 @@ export const archiveCorrespondenceDocument = async (
     docketNumber,
   }: { correspondenceId: string; docketNumber: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<RawCase> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_CORRESPONDENCE)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -25,25 +29,28 @@ export const archiveCorrespondenceDocument = async (
     key: correspondenceId,
   });
 
-  const caseToUpdate = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({ applicationContext, docketNumber });
+  const caseToUpdate = await getCaseByDocketNumber({
+    docketNumber,
+  });
 
   const caseEntity = new Case(caseToUpdate, { authorizedUser });
   const correspondenceToArchiveEntity = caseEntity.correspondence.find(
     c => c.correspondenceId === correspondenceId,
   );
 
+  if (!correspondenceToArchiveEntity) {
+    throw new NotFoundError(
+      `Unable to find correspondence to archive for correspondenceId: ${correspondenceId}`,
+    );
+  }
+
   caseEntity.archiveCorrespondence(correspondenceToArchiveEntity);
 
-  await applicationContext.getPersistenceGateway().updateCaseCorrespondence({
-    applicationContext,
-    correspondence: correspondenceToArchiveEntity.validate().toRawObject(),
-    docketNumber,
-  });
+  await upsertCaseCorrespondences([
+    (correspondenceToArchiveEntity as Correspondence).validate().toRawObject(),
+  ]);
 
-  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-    applicationContext,
+  return updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
   });

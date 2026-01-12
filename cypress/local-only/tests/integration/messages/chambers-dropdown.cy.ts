@@ -56,7 +56,8 @@ describe('BUG: chambers dropdown should be populated in message modals', () => {
   });
 
   it('should have nonempty chambers sections in docket QC complete and send message modal', () => {
-    cy.login('docketclerk', '/document-qc/section/inbox');
+    loginAsDocketClerk();
+    cy.visit('/document-qc/section/inbox');
     cy.get('.big-blue-header').should('exist');
     goToDocumentNeedingQC();
     openCompleteAndSendMessageDialog();

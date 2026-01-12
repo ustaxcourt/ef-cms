@@ -27,19 +27,4 @@ describe('updateDateRangeForDeadlinesAction', () => {
       '2021-02-06T04:59:59.999Z',
     );
   });
-
-  it('should set screenMetadata.filterStartDateState and screenMetadata.filterEndDateState to empty strings', async () => {
-    const result = await runAction(updateDateRangeForDeadlinesAction, {
-      modules: { presenter },
-      state: {
-        screenMetadata: {
-          filterEndDateState: mockEndDate,
-          filterStartDateState: mockStartDate,
-        },
-      },
-    });
-
-    expect(result.state.screenMetadata.filterStartDateState).toEqual('');
-    expect(result.state.screenMetadata.filterEndDateState).toEqual('');
-  });
 });

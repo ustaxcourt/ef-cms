@@ -321,6 +321,15 @@ button {
   }
 }
 
+.create-term-modal {
+  min-width: 550px;
+  overflow-y: visible;
+
+  .usa-form-group--error {
+    max-width: 40rem;
+  }
+}
+
 .add-consolidated-case-search-modal {
   .usa-button {
     &.ustc-search-button {
@@ -338,5 +347,13 @@ button {
 #confirm-modal-delete-btn {
   svg {
     margin-right: 5px;
+  }
+}
+
+.edit-remote-status-modal {
+  overflow: visible;
+
+  .usa-date-picker__calendar {
+    z-index: 9999;
   }
 }

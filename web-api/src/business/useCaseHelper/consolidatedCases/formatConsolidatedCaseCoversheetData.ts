@@ -1,5 +1,6 @@
-import { Case } from '@shared/business/entities/cases/Case';
+import { Case, isLeadCase } from '@shared/business/entities/cases/Case';
 import { formatCaseTitle } from '@web-api/business/useCases/generateCoverSheetData';
+import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
 
 /**
  * Formats consolidated cases coversheet data
@@ -16,24 +17,17 @@ export const formatConsolidatedCaseCoversheetData = async ({
   docketEntryEntity,
   useInitialData,
 }) => {
-  let consolidatedCases = await applicationContext
-    .getPersistenceGateway()
-    .getCasesByLeadDocketNumber({
-      applicationContext,
-      leadDocketNumber: caseEntity.leadDocketNumber,
-    });
+  let consolidatedCases = await getConsolidatedCases({
+    leadDocketNumber: caseEntity.leadDocketNumber,
+  });
 
-  consolidatedCases.sort(
-    (a, b) =>
-      Case.getSortableDocketNumber(a.docketNumber) -
-      Case.getSortableDocketNumber(b.docketNumber),
-  );
+  consolidatedCases = Case.sortByDocketNumber(consolidatedCases);
 
   let caseTitle;
   let caseCaptionExtension;
-  consolidatedCases = consolidatedCases
-    .map(consolidatedCase => {
-      if (consolidatedCase.docketNumber === caseEntity.leadDocketNumber) {
+  const consolidatedCasesFiltered = consolidatedCases
+    ?.map(consolidatedCase => {
+      if (isLeadCase({docketNumber: consolidatedCase.docketNumber, leadDocketNumber: caseEntity.leadDocketNumber})) {
         ({ caseCaptionExtension, caseTitle } = formatCaseTitle({
           applicationContext,
           caseEntity: consolidatedCase,
@@ -52,8 +46,8 @@ export const formatConsolidatedCaseCoversheetData = async ({
     })
     .filter(consolidatedCase => consolidatedCase.documentNumber !== undefined);
 
-  if (consolidatedCases.length > 1) {
-    coverSheetData.consolidatedCases = consolidatedCases;
+  if (consolidatedCasesFiltered.length > 1) {
+    coverSheetData.consolidatedCases = consolidatedCasesFiltered;
     coverSheetData.caseTitle = caseTitle;
     coverSheetData.caseCaptionExtension = caseCaptionExtension;
   }

@@ -10,7 +10,7 @@ Error response from daemon: repository xxxxx.dkr.ecr.us-east-1.amazonaws.com/ef-
 
 Solution:
 
-- This issue is due to a deletion of our ECR repository. We aren't sure the cause of the deletion yet, but the fix is to recreate the ECR repository (name it `ef-cms-us-east-1`) and run `./docker-to-ecr.sh` to rebuild the Docker container and send it to the repository.
+- This issue is due to a deletion of our ECR repository. We aren't sure the cause of the deletion yet, but the fix is to recreate the ECR repository (name it `ef-cms-us-east-1`) and run `./scripts/ecr/docker-to-ecr.sh` to rebuild the Docker container and send it to the repository.
   
 ## IAM permissions errors
 
@@ -107,7 +107,7 @@ Solution:
 
 Problem:
 
-- When updating the environment variables, `ZONE_NAME` and `EFCMS_DOMAIN`, we ran into this error:
+- When updating the environment variable `EFCMS_DOMAIN`, we ran into this error:
 
 ```text
 An error occurred (UsernameExistsException) when calling the SignUp operation: An account with the given email already exists.
@@ -225,10 +225,10 @@ Problem:
 
 Solution:
 
-- This solution should only be used on non-prod environments. Clear the dynamo tables and recreate the users and judges.
+- This solution should only be used on non-prod environments. Clear the database tables and recreate the users and judges.
 
   ```bash
-  npx ts-node --transpile-only scripts/user/setup-test-users.ts
+  ./scripts/user/setup-test-users.ts
   ```
 
   ```bash
@@ -293,9 +293,9 @@ Solution:
 
 - These are also known as a Gateway Timeout. In our case, it usually means that AWS Lambda took too long (29 seconds) to execute. It could also mean that AWS is experiencing a service disruption. You have a few options to try and troubleshoot:
 
-  - Refer to the [AWS Service Dashboard](https://health.aws.amazon.com/health/status) to check if there are any current issues with AWS Lambda in `us-east-1` or `us-west-1`. It's not uncommon for them to be experiencing issues and not reporting them.
+  - Refer to the [AWS Service Dashboard](https://health.aws.amazon.com/health/status) to check if there are any current issues with AWS Lambda in `us-east-1`. It's not uncommon for them to be experiencing issues and not reporting them.
   - Query Kibana to see the APIs that are returning a Status Code of 504. If it's an unusual amount of them, higher than historical activity, then it's quite likely that there's an AWS outage. Consider opening up a ticket with AWS Support. Ideally, we shouldn't be seeing any.
-  - If it's consistently the same endpoint, then perhaps one of its downstream dependencies is not healthy (e.g., DynamoDB for database reads or writes).
+  - If it's consistently the same endpoint, then perhaps one of its downstream dependencies is not healthy (e.g., the database for reads or writes).
   - Navigate to the current color's `api_<env>_<color>` Lambda, and click the Monitor tab. See if you notice any Lambda invocations that are hitting the 29s limit.
   - Go to Cloudwatch > Log Insights, and query the log group for reports that mention a duration greater than 28000ms:
 
@@ -317,3 +317,23 @@ Solution:
 - These are also known as an **Internal Server Error**. In our case, it often means that Lambda is trying to return too much information (6mb) to API Gateway. When each request ends, Lambda logs `Request ended: ${req.method} ${req.url}` and additional context that includes the `response.responseSize`. If those are approaching 6 megabytes, this is likely the cause of the problem. We will need to refactor our endpoint to return less information to the client via API Gateway. Does the client really need all of that information to do its job? Perhaps we can write a Data Transfer Object (DTO) to reduce what we return to the client and keep the `responseSize` in check.
 - Additionally, we include the `request.url` in the API Gateway logs for each request. In Kibana, filter `response.statusCode` = `502`, and find the log entries to identify the offending URLs by `request.url` or the Lambda invocation by `requestId.lambda` to attain additional information about what Lambda returned to API Gateway that triggered the `502` error.
 - `Amazon-Route53-Health-Check-Service` can also trigger a `502` status code if it fails. Most of these failures are false positives as AWS is throttling our requests for whether an AWS Service is healthy. [opex card to address](https://trello.com/c/wcGB8sO5/1124-amazon-route53-health-check-service-are-returning-erroneous-502-errors-because-they-are-throttling-our-requests)
+
+## NPM Install Errors
+
+- When trying to install node modules, you get an error involving node-gyp
+
+Solution:
+
+- You may be running into this because you're running on an M1, M2, M3, or M4 Apple chip. The error might look something like this:
+
+    ```text
+    npm error code 1
+    npm error path /Users/Michael.Marcotte/Documents/git/ustaxcourt/ef-cms/node_modules/canvas
+    npm error command failed
+    npm error command sh -c node-pre-gyp install --fallback-to-build --update-binary
+    npm error Failed to execute ...
+    ...
+    npm error gyp: Call to 'pkg-config pixman-1 --libs' returned exit status 127 while in binding.gyp. while trying to load binding.gyp
+    ```
+
+    Refer to the section on running locally to [install the node-canvas depdencies globally](https://github.com/ustaxcourt/ef-cms/blob/staging/docs/running-locally.md#m1-macs---non-docker-method).

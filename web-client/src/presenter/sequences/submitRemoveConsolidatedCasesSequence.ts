@@ -1,11 +1,12 @@
 import { canUnconsolidateAction } from '../actions/CaseConsolidation/canUnconsolidateAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
-import { refreshCaseAction } from '../actions/refreshCaseAction';
 import { removeConsolidatedCasesAction } from '../actions/CaseConsolidation/removeConsolidatedCasesAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setModalErrorAction } from '../actions/setModalErrorAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
+import { getCaseAction } from '@web-client/presenter/actions/getCaseAction';
+import { setCaseAction } from '@web-client/presenter/actions/setCaseAction';
 
 export const submitRemoveConsolidatedCasesSequence = [
   canUnconsolidateAction,
@@ -13,7 +14,8 @@ export const submitRemoveConsolidatedCasesSequence = [
     error: [setModalErrorAction],
     success: showProgressSequenceDecorator([
       removeConsolidatedCasesAction,
-      refreshCaseAction,
+      getCaseAction,
+      setCaseAction,
       clearModalAction,
       clearModalStateAction,
       setAlertSuccessAction,

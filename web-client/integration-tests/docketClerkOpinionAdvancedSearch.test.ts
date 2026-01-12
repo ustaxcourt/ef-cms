@@ -77,7 +77,7 @@ describe('Docket clerk opinion advanced search', () => {
     await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
 
     expect(cerebralTest.getState('alertError')).toEqual({
-      messages: ['Start date cannot be in the future. Enter valid start date.'],
+      messages: ['Start date cannot be in the future. Enter a valid date.'],
       scrollToErrorNotification: true,
       title: 'Please correct the following errors on the page:',
     });
@@ -316,8 +316,6 @@ describe('Docket clerk opinion advanced search', () => {
             docketNumberWithSuffix: '313-21',
             documentTitle:
               'Summary Opinion Judge Ashford An opinion for testing',
-            documentType: 'Summary Opinion',
-            entityName: 'InternalDocumentSearchResult',
             eventCode: 'SOP',
             filingDate: '2021-10-25T18:57:31.742Z',
             isCaseSealed: false,

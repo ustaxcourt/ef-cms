@@ -1,15 +1,23 @@
+import { NotFoundError } from '@web-api/errors/errors';
 import '@web-api/persistence/postgres/cases/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import { MOCK_CASE } from '../../test/mockCase';
-import { ROLES } from '../entities/EntityConstants';
+import { ROLES } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { removeSignatureFromDocumentInteractor } from './removeSignatureFromDocumentInteractor';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 describe('removeSignatureFromDocumentInteractor', () => {
+
   let mockCase;
 
   const mockDocketEntryId = 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
   const mockDocumentIdBeforeSignature = 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3858';
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
   beforeAll(() => {
     mockCase = {
@@ -32,9 +40,7 @@ describe('removeSignatureFromDocumentInteractor', () => {
       ],
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockCase);
+    getCaseByDocketNumber.mockResolvedValue(mockCase);
   });
 
   it('should throw an error when user is undefined', async () => {
@@ -106,5 +112,19 @@ describe('removeSignatureFromDocumentInteractor', () => {
       signedByUserId: undefined,
       signedJudgeName: undefined,
     });
+  });
+
+    it('throws NotFoundError if docket entry is not found', async () => {
+
+    await expect(
+      removeSignatureFromDocumentInteractor(
+        applicationContext,
+        {
+          docketEntryId: 'non-existent-id',
+          docketNumber: mockCase.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow(NotFoundError);
   });
 });

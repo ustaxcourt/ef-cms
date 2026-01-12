@@ -1,30 +1,23 @@
-import { CASE_STATUS_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
-import {
-  CasesClosedReturnType,
-  getCasesClosedByJudgeInteractor,
-} from './getCasesClosedByJudgeInteractor';
+import '@web-api/persistence/postgres/users/mocks.jest';
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import { getCasesClosedByJudgeInteractor } from './getCasesClosedByJudgeInteractor';
 import { JudgeActivityStatisticsRequest } from '@web-api/business/useCases/judgeActivityReport/getCountOfCaseDocumentsFiledByJudgesInteractor';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import {
   createEndOfDayISO,
   createStartOfDayISO,
-} from '../../../../../shared/src/business/utilities/DateHandler';
-import { judgeUser } from '../../../../../shared/src/test/mockUsers';
+} from '@shared/business/utilities/DateHandler';
+import { getCasesClosedCountByJudge as getCasesClosedCountByJudgeMock } from '@web-api/persistence/postgres/cases/reports/getCasesClosedCountByJudge';
+import { judgeUser } from '@shared/test/mockUsers';
 import {
   mockJudgeUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
+import { casesClosedResults } from '@web-api/business/useCases/judgeActivityReport/mockCasesClosedResults';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
-const mockClosedCases = 3;
-const mockClosedDismissedCases = 2;
-
-export const casesClosedResults: CasesClosedReturnType = {
-  aggregations: {
-    [CASE_STATUS_TYPES.closed]: mockClosedCases,
-    [CASE_STATUS_TYPES.closedDismissed]: mockClosedDismissedCases,
-  },
-  total: 5,
-};
+const getCasesClosedCountByJudge = getCasesClosedCountByJudgeMock as jest.Mock;
+const getUserById = jest.mocked(getUserByIdMock);
 
 describe('getCasesClosedByJudgeInteractor', () => {
   const mockEndDate = '03/21/2020';
@@ -51,29 +44,19 @@ describe('getCasesClosedByJudgeInteractor', () => {
   };
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(judgeUser);
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesClosedCountByJudge.mockResolvedValue(casesClosedResults);
+    getUserById.mockResolvedValue(judgeUser as DbUser);
+    getCasesClosedCountByJudge.mockResolvedValue(casesClosedResults);
   });
 
   it('should return an error when the user is not authorized to generate the report', async () => {
     await expect(
-      getCasesClosedByJudgeInteractor(
-        applicationContext,
-        mockValidRequest,
-        mockPetitionsClerkUser,
-      ),
+      getCasesClosedByJudgeInteractor(mockValidRequest, mockPetitionsClerkUser),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('should return an error when the search parameters are not valid', async () => {
     await expect(
       getCasesClosedByJudgeInteractor(
-        applicationContext,
         {
           endDate: 'baddabingbaddaboom',
           judges: [judgeUser.name],
@@ -86,15 +69,11 @@ describe('getCasesClosedByJudgeInteractor', () => {
 
   it('should return cases closed count organized by each closed status for selected judges', async () => {
     const closedCases = await getCasesClosedByJudgeInteractor(
-      applicationContext,
       mockValidRequest,
       mockJudgeUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getCasesClosedCountByJudge.mock
-        .calls[0][0],
-    ).toMatchObject({
+    expect(getCasesClosedCountByJudge.mock.calls[0][0]).toMatchObject({
       endDate: calculatedEndDate,
       judges: [judgeUser.name],
       startDate: calculatedStartDate,

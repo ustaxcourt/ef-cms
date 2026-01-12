@@ -1,7 +1,14 @@
+import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import {
   AUTOMATIC_BLOCKED_REASONS,
-  CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
@@ -11,29 +18,43 @@ import {
   SERVICE_INDICATOR_TYPES,
   SIMULTANEOUS_DOCUMENT_EVENT_CODES,
 } from '@shared/business/entities/EntityConstants';
-import { MOCK_LOCK } from '@shared/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { fileExternalDocumentInteractor } from './fileExternalDocumentInteractor';
+import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import {
   mockDocketClerkUser,
   mockIrsPractitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { MOCK_CASE_DEADLINE } from '@shared/test/mockCaseDeadline';
+import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
+
+const getUserById = jest.mocked(getUserByIdMock);
 
 describe('fileExternalDocumentInteractor', () => {
+  const getCaseDeadlinesByDocketNumber = jest.mocked(
+    getCaseDeadlinesByDocketNumberMock,
+  );
+
+  const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
   const mockDocketEntryId = applicationContext.getUniqueId();
+  const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
+  const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
+  const updateCaseAndAssociations = jest
+    .mocked(updateCaseAndAssociationsMock)
+    .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
+  const tryGetLocks = jest.mocked(tryGetLocksMock);
 
   let caseRecord;
-  let mockLock;
-
-  beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockImplementation(() => mockLock);
-  });
 
   beforeEach(() => {
-    mockLock = undefined;
     caseRecord = {
       caseCaption: 'Caption',
       caseType: CASE_TYPES_MAP.deficiency,
@@ -106,13 +127,10 @@ describe('fileExternalDocumentInteractor', () => {
       userId: '0e97c6b4-d299-44f5-af99-2ce905d520f2',
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(mockIrsPractitionerUser);
+    getUserById.mockResolvedValue(mockIrsPractitionerUser as DbUser);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(caseRecord);
+    getCaseByDocketNumber.mockResolvedValue(caseRecord);
+    getCasesByDocketNumbers.mockResolvedValue([caseRecord]);
   });
 
   it('should throw an error when the user is not authorized to file an external document on a case', async () => {
@@ -152,15 +170,9 @@ describe('fileExternalDocumentInteractor', () => {
       ),
     ).rejects.toThrow('The DocketEntry entity was invalid.');
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).not.toHaveBeenCalled();
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
+    expect(upsertWorkItems).not.toHaveBeenCalled();
+    expect(updateCaseAndAssociations).not.toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).not.toHaveBeenCalled();
@@ -182,19 +194,17 @@ describe('fileExternalDocumentInteractor', () => {
       mockIrsPractitionerUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
+    expect(upsertWorkItems).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).toHaveBeenCalled();
-    expect(updatedCase!.docketEntries[4].servedAt).toBeDefined();
+    const entry = updatedCase!.docketEntries.find(
+      de => de.documentType === 'Memorandum in Support',
+    );
+    expect(entry).toBeDefined();
+    expect(entry?.servedAt).toBeDefined();
   });
 
   it('should add documents and workitems and auto-serve the documents on the parties with an electronic service indicator across consolidated cases', async () => {
@@ -270,10 +280,11 @@ describe('fileExternalDocumentInteractor', () => {
       userId: '0e97c6b4-d299-44f5-af99-2ce905d520f2',
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValueOnce(caseRecord)
-      .mockReturnValueOnce(consolidatedCase);
+    getCaseByDocketNumber.mockResolvedValueOnce(caseRecord);
+    getCasesByDocketNumbers.mockResolvedValueOnce([
+      caseRecord,
+      consolidatedCase as any,
+    ]);
 
     const updatedCase = await fileExternalDocumentInteractor(
       applicationContext,
@@ -300,46 +311,18 @@ describe('fileExternalDocumentInteractor', () => {
       mockIrsPractitionerUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalledTimes(5);
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalledTimes(4);
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalledTimes(2);
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).toHaveBeenCalledTimes(2);
+    expect(getCaseByDocketNumber).toHaveBeenCalledTimes(1);
+    expect(getCasesByDocketNumbers).toHaveBeenCalledTimes(1);
+    expect(upsertWorkItems).toHaveBeenCalledTimes(1);
+    expect(updateCaseAndAssociations).toHaveBeenCalledTimes(2);
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).toHaveBeenCalledTimes(2);
-    expect(updatedCase!.docketEntries[4].servedAt).toBeDefined();
-  });
-
-  it('should use original case caption to create case title when creating work item', async () => {
-    await fileExternalDocumentInteractor(
-      applicationContext,
-      {
-        documentMetadata: {
-          docketNumber: caseRecord.docketNumber,
-          documentTitle: 'Memorandum in Support',
-          documentType: 'Memorandum in Support',
-          eventCode: 'A',
-          filedBy: 'Test Petitioner',
-          primaryDocumentId: mockDocketEntryId,
-        },
-      },
-      mockIrsPractitionerUser,
+    const entry = updatedCase!.docketEntries.find(
+      de => de.documentType === 'Memorandum in Support',
     );
-
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
-        .workItem,
-    ).toMatchObject({
-      caseTitle: caseRecord.caseCaption,
-    });
+    expect(entry).toBeDefined();
+    expect(entry?.servedAt).toBeDefined();
   });
 
   it('should set secondary document and secondary supporting documents to lodged', async () => {
@@ -386,37 +369,38 @@ describe('fileExternalDocumentInteractor', () => {
       },
       mockIrsPractitionerUser,
     );
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
-    expect(updatedCase!.docketEntries).toMatchObject([
-      {}, // first 4 docs were already on the case
-      {},
-      {},
-      {},
-      {
-        eventCode: 'M115',
-        isOnDocketRecord: true,
-        // primary document
-        lodged: undefined,
-      },
-      {
-        eventCode: 'CIVP',
-        isOnDocketRecord: true,
-        // supporting document
-        lodged: undefined,
-      },
-      {
-        eventCode: 'M121', //secondary document
-        isOnDocketRecord: true,
-        lodged: true,
-      },
-      {
-        eventCode: 'M135', // secondary supporting document
-        isOnDocketRecord: true,
-        lodged: true,
-      },
-    ]);
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
+    expect(updatedCase!.docketEntries).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({}),
+        expect.objectContaining({}),
+        expect.objectContaining({}),
+        expect.objectContaining({}),
+        expect.objectContaining({}),
+        expect.objectContaining({
+          eventCode: 'M115',
+          isOnDocketRecord: true,
+          // primary document
+          lodged: undefined,
+        }),
+        expect.objectContaining({
+          eventCode: 'CIVP',
+          isOnDocketRecord: true,
+          // supporting document
+          lodged: undefined,
+        }),
+        expect.objectContaining({
+          eventCode: 'M121', //secondary document
+          isOnDocketRecord: true,
+          lodged: true,
+        }),
+        expect.objectContaining({
+          eventCode: 'M135', // secondary supporting document
+          isOnDocketRecord: true,
+          lodged: true,
+        }),
+      ]),
+    );
   });
 
   it('should add documents and workitems but NOT auto-serve Simultaneous documents on the parties', async () => {
@@ -435,78 +419,17 @@ describe('fileExternalDocumentInteractor', () => {
       mockIrsPractitionerUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
+    expect(upsertWorkItems).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).not.toHaveBeenCalled();
-    expect(updatedCase!.docketEntries[3].status).toBeUndefined();
-    expect(updatedCase!.docketEntries[3].servedAt).toBeUndefined();
-  });
-
-  it('should create a high-priority work item if the case status is calendared', async () => {
-    caseRecord.status = CASE_STATUS_TYPES.calendared;
-    caseRecord.trialDate = '2019-03-01T21:40:46.415Z';
-    caseRecord.trialSessionId = 'c54ba5a9-b37b-479d-9201-067ec6e335bc';
-
-    await fileExternalDocumentInteractor(
-      applicationContext,
-      {
-        documentMetadata: {
-          docketNumber: caseRecord.docketNumber,
-          documentTitle: 'Simultaneous Memoranda of Law',
-          documentType: 'Simultaneous Memoranda of Law',
-          eventCode: 'A',
-          filedBy: 'Test Petitioner',
-          primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        },
-      },
-      mockIrsPractitionerUser,
+    const entry = updatedCase!.docketEntries.find(
+      de => de.documentType === 'Simultaneous Memoranda of Law',
     );
-
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0],
-    ).toMatchObject({
-      workItem: { highPriority: true, trialDate: '2019-03-01T21:40:46.415Z' },
-    });
-  });
-
-  it('should create a not-high-priority work item if the case status is not calendared', async () => {
-    caseRecord.status = CASE_STATUS_TYPES.new;
-
-    await fileExternalDocumentInteractor(
-      applicationContext,
-      {
-        documentMetadata: {
-          docketNumber: caseRecord.docketNumber,
-          documentTitle: 'Simultaneous Memoranda of Law',
-          documentType: 'Simultaneous Memoranda of Law',
-          eventCode: 'A',
-          filedBy: 'test Petitioner',
-          primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        },
-      },
-      mockIrsPractitionerUser,
-    );
-
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0],
-    ).toMatchObject({
-      workItem: { highPriority: false },
-    });
+    expect(entry).toBeDefined();
+    expect(entry?.servedAt).toBeUndefined();
   });
 
   it('should automatically block the case if the document filed is a tracked document', async () => {
@@ -527,27 +450,18 @@ describe('fileExternalDocumentInteractor', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate,
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
     ).toMatchObject({
       automaticBlocked: true,
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
     });
-    expect(
-      applicationContext.getPersistenceGateway()
-        .deleteCaseTrialSortMappingRecords,
-    ).toHaveBeenCalled();
   });
 
   it('should automatically block the case with deadlines if the document filed is a tracked document and the case has a deadline', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseDeadlinesByDocketNumber.mockReturnValue([
-        {
-          deadlineDate: 'something',
-        },
-      ]);
+    getCaseDeadlinesByDocketNumber.mockResolvedValue([
+      new CaseDeadline(MOCK_CASE_DEADLINE),
+    ]);
 
     await fileExternalDocumentInteractor(
       applicationContext,
@@ -566,17 +480,12 @@ describe('fileExternalDocumentInteractor', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate,
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
     ).toMatchObject({
       automaticBlocked: true,
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate,
     });
-    expect(
-      applicationContext.getPersistenceGateway()
-        .deleteCaseTrialSortMappingRecords,
-    ).toHaveBeenCalled();
   });
 
   it('should not sendServedPartiesEmails if docketEntryId is undefined', async () => {
@@ -604,7 +513,9 @@ describe('fileExternalDocumentInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    mockLock = MOCK_LOCK;
+    tryGetLocks.mockResolvedValueOnce([
+      { successfullyLocked: false, identifier: 'abc' },
+    ]);
 
     await expect(
       fileExternalDocumentInteractor(
@@ -629,7 +540,7 @@ describe('fileExternalDocumentInteractor', () => {
     ).not.toHaveBeenCalled();
   });
 
-  it('should acquire and remove the lock on the case', async () => {
+  it('should acquire a lock on the case', async () => {
     await fileExternalDocumentInteractor(
       applicationContext,
       {
@@ -646,19 +557,10 @@ describe('fileExternalDocumentInteractor', () => {
       mockIrsPractitionerUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().createLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifier: `case|${caseRecord.docketNumber}`,
-      ttl: 30,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().removeLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifiers: [`case|${caseRecord.docketNumber}`],
-    });
+    expect(tryGetLocks).toHaveBeenCalledWith(
+      expect.objectContaining({
+        identifiers: [`case|${caseRecord.docketNumber}`],
+      }),
+    );
   });
 });

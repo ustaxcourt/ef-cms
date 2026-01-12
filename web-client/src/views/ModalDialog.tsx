@@ -15,12 +15,15 @@ export const ModalDialog = ({
   closeLink = true,
   confirmHref,
   confirmLabel,
+  clearLabel,
+  clearSequence,
   confirmSequence,
   confirmTarget = '_self',
   dataTestId = 'modal-dialog',
   disableSubmit = false,
   message,
   messageClass = 'margin-bottom-5',
+  onModalMount,
   preventScrolling,
   showButtons = true,
   title,
@@ -29,25 +32,29 @@ export const ModalDialog = ({
   cancelLabel?: string;
   cancelLink?: boolean;
   messageClass?: string;
-  cancelSequence: any;
+  cancelSequence?: any;
   children?: ReactNode;
   className?: string;
   closeLink?: boolean;
   confirmHref?: string;
   confirmLabel?: string;
-  confirmSequence: any;
+  clearLabel?: string;
+  clearSequence?: any;
+  confirmSequence?: any;
   confirmTarget?: string;
   dataTestId?: string;
   disableSubmit?: boolean;
   message?: string;
+  onModalMount?: () => void;
   preventScrolling?: boolean;
   showButtons?: boolean;
-  title: string;
+  title?: string;
   useRunConfirmSequence?: boolean;
+  preventCancelOnBlur?: any;
 }) => {
   preventScrolling = preventScrolling !== undefined ? preventScrolling : true;
 
-  const elRef = useRef(null);
+  const elRef = useRef<HTMLDivElement | null>(null);
 
   const getEl = () => {
     if (!elRef.current) {
@@ -64,9 +71,7 @@ export const ModalDialog = ({
       });
     } else {
       window.document.body.classList.remove('no-scroll');
-      window.document.removeEventListener('touchmove', touchmoveTriggered, {
-        passive: false,
-      });
+      window.document.removeEventListener('touchmove', touchmoveTriggered);
     }
   };
 
@@ -80,16 +85,25 @@ export const ModalDialog = ({
     confirmSequence.call();
   };
 
+  const runClearSequence = evt => {
+    evt.stopPropagation();
+    clearSequence?.call();
+  };
+
   const touchmoveTriggered = evt => {
     return evt.preventDefault();
   };
 
   useEffect(() => {
-    modalRoot.appendChild(getEl());
+    if (onModalMount) {
+      onModalMount();
+    }
+
+    modalRoot?.appendChild(getEl());
     toggleNoScroll(true);
 
     return () => {
-      modalRoot.removeChild(getEl());
+      modalRoot?.removeChild(getEl());
       toggleNoScroll(false);
     };
   }, []);
@@ -99,11 +113,10 @@ export const ModalDialog = ({
       <FocusLock>
         <dialog
           open
+          aria-label={title}
           aria-modal="true"
           className="modal-screen"
           data-testid={dataTestId}
-          role="dialog"
-          title={title}
         >
           <div className={classNames('modal-dialog padding-205', className)}>
             <div className="modal-header grid-container padding-x-0">
@@ -127,6 +140,7 @@ export const ModalDialog = ({
                     <Button
                       iconRight
                       link
+                      aria-label="Close modal"
                       className="text-no-underline hide-on-mobile float-right margin-right-0 padding-top-0"
                       data-testid="close-modal-button"
                       icon="times-circle"
@@ -148,6 +162,7 @@ export const ModalDialog = ({
             {showButtons && (
               <div className="margin-top-5">
                 <Button
+                  aria-label={`${confirmLabel} submit button`}
                   className="modal-button-confirm"
                   data-testid="modal-button-confirm"
                   disabled={disableSubmit}
@@ -161,11 +176,22 @@ export const ModalDialog = ({
                 {cancelLabel && (
                   <Button
                     secondary
+                    aria-label="Cancel"
                     className="modal-button-cancel"
                     link={cancelLink}
                     onClick={runCancelSequence}
                   >
                     {cancelLabel}
+                  </Button>
+                )}
+                {clearLabel && (
+                  <Button
+                    link
+                    aria-label="Clear"
+                    className="modal-button-clear"
+                    onClick={runClearSequence}
+                  >
+                    {clearLabel}
                   </Button>
                 )}
               </div>

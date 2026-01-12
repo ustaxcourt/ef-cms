@@ -24,8 +24,7 @@ export const docketClerkVerifiesConsolidatedGroupInformationForDocumentQC = (
     });
 
     const foundWorkItem = sectionDocumentQCInbox.find(
-      workItem =>
-        workItem.docketEntry.docketEntryId === cerebralTest.docketEntryId,
+      workItem => workItem.docketEntryId === cerebralTest.docketEntryId,
     );
 
     expect(foundWorkItem).toMatchObject({

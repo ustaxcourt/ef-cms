@@ -21,8 +21,10 @@ export const paperDocketEntryHelper = (
   ];
 
   const doc = allCaseDocuments.find(
+    // @ts-ignore
     item => item.docketEntryId === docketEntryId,
   );
+  // @ts-ignore
   const docketEntryHasDocument = !!(doc && doc.isFileAttached);
   const showAddDocumentWarning =
     isEditingDocketEntry &&

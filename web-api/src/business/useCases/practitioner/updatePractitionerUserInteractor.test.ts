@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/users/mocks.jest';
 import { MOCK_PRACTITIONER } from '../../../../../shared/src/test/mockUsers';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { SERVICE_INDICATOR_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
@@ -7,39 +8,52 @@ import {
   mockAdmissionsClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
-import { updatePractitionerUserInteractor } from './updatePractitionerUserInteractor';
+import { updatePractitionerUser } from './updatePractitionerUserInteractor';
+import { getPractitionerByBarNumber as getPractitionerByBarNumberMock } from '@web-api/persistence/postgres/users/getPractitionerByBarNumber';
 jest.mock('@web-api/business/useCases/user/generateChangeOfAddress');
+import { upsertUsers as upsertUsersMock } from '@web-api/persistence/postgres/users/upsertUsers';
+import { getDocketNumbersByUser as getDocketNumbersByUserMock } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
+import { upsertPractitioner as upsertPractitionerMock } from '@web-api/persistence/postgres/users/upsertPractitioner';
 
-describe('updatePractitionerUserInteractor', () => {
+describe('updatePractitionerUser', () => {
   let mockPractitioner = MOCK_PRACTITIONER;
+  const clientConnectionId = 'c05024b1-f746-4360-a294-29179ac24ccd';
+  const getPractitionerByBarNumber = jest.mocked(
+    getPractitionerByBarNumberMock,
+  );
+  const upsertUsers = jest.mocked(upsertUsersMock);
+  const getDocketNumbersByUser = jest.mocked(getDocketNumbersByUserMock);
+  const upsertPractitioner = jest.mocked(upsertPractitionerMock);
 
   beforeEach(() => {
     mockPractitioner = { ...MOCK_PRACTITIONER };
-    applicationContext
-      .getPersistenceGateway()
-      .getDocketNumbersByUser.mockReturnValue(['123-23']);
-
-    applicationContext
-      .getPersistenceGateway()
-      .getPractitionerByBarNumber.mockImplementation(() => mockPractitioner);
+    getDocketNumbersByUser.mockResolvedValue(['123-23']);
+    getPractitionerByBarNumber.mockResolvedValue(mockPractitioner);
+    upsertPractitioner.mockImplementation(({ user }) =>
+      Promise.resolve({ ...user, userId: 'theId' }),
+    );
     applicationContext
       .getPersistenceGateway()
       .updatePractitionerUser.mockImplementation(({ user }) => user);
     applicationContext
       .getPersistenceGateway()
-      .createNewPractitionerUser.mockImplementation(({ user }) => user);
-    applicationContext
-      .getPersistenceGateway()
       .isEmailAvailable.mockReturnValue(true);
+    applicationContext
+      .getUseCases()
+      .getPractitionerCasesInteractor.mockReturnValue({
+        closedCases: [],
+        openCases: [],
+      });
   });
 
   it('should throw an unauthorized error when the user does not have permission to update the practitioner user', async () => {
     await expect(
-      updatePractitionerUserInteractor(
+      updatePractitionerUser(
         applicationContext,
         {
           barNumber: 'pt101',
           user: mockPractitioner,
+          clientConnectionId,
         },
         mockPetitionerUser,
       ),
@@ -47,16 +61,15 @@ describe('updatePractitionerUserInteractor', () => {
   });
 
   it('throws a NotFoundError if the barNumber passed in does not find a user in the database', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getPractitionerByBarNumber.mockResolvedValue(undefined);
+    getPractitionerByBarNumber.mockResolvedValue(undefined);
 
     await expect(
-      updatePractitionerUserInteractor(
+      updatePractitionerUser(
         applicationContext,
         {
           barNumber: 'AB1111',
           bypassDocketEntry: false,
+          clientConnectionId,
           user: {
             ...mockPractitioner,
             barNumber: 'AB1111',
@@ -70,19 +83,18 @@ describe('updatePractitionerUserInteractor', () => {
   });
 
   it('throws an error if the barNumber/userId combo passed in does not match the user retrieved from getPractitionerByBarNumber', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getPractitionerByBarNumber.mockResolvedValue({
-        ...mockPractitioner,
-        userId: '2c14ebbc-a6e1-4267-b6b7-e329e592ec93',
-      });
+    getPractitionerByBarNumber.mockResolvedValue({
+      ...mockPractitioner,
+      userId: '2c14ebbc-a6e1-4267-b6b7-e329e592ec93',
+    });
 
     await expect(
-      updatePractitionerUserInteractor(
+      updatePractitionerUser(
         applicationContext,
         {
           barNumber: 'AB1111',
           bypassDocketEntry: false,
+          clientConnectionId,
           user: {
             ...mockPractitioner,
             barNumber: 'AB1111',
@@ -102,10 +114,11 @@ describe('updatePractitionerUserInteractor', () => {
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     };
 
-    await updatePractitionerUserInteractor(
+    await updatePractitionerUser(
       applicationContext,
       {
         barNumber: 'AB1111',
+        clientConnectionId,
         user: {
           ...mockPractitioner,
           barNumber: 'AB2222',
@@ -117,7 +130,7 @@ describe('updatePractitionerUserInteractor', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway().createNewPractitionerUser.mock
+      applicationContext.getPersistenceGateway().updatePractitionerUser.mock
         .calls[0][0].user,
     ).toMatchObject({
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
@@ -125,10 +138,11 @@ describe('updatePractitionerUserInteractor', () => {
   });
 
   it('updates the practitioner user and does NOT override a bar number or email when the original user had an email', async () => {
-    await updatePractitionerUserInteractor(
+    await updatePractitionerUser(
       applicationContext,
       {
         barNumber: 'AB1111',
+        clientConnectionId,
         user: {
           ...mockPractitioner,
           barNumber: 'AB2222',
@@ -140,22 +154,20 @@ describe('updatePractitionerUserInteractor', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway().updatePractitionerUser,
-    ).toHaveBeenCalled();
-    expect(
       applicationContext.getPersistenceGateway().updatePractitionerUser.mock
-        .calls[0][0],
-    ).toMatchObject({ user: mockPractitioner });
+        .calls[0][0].user,
+    ).toMatchObject(mockPractitioner);
   });
 
   it('updates the practitioner user and does NOT override a bar number when the original user has a pending email', async () => {
     mockPractitioner.email = undefined;
     mockPractitioner.pendingEmail = 'pendingEmail@example.com';
 
-    await updatePractitionerUserInteractor(
+    await updatePractitionerUser(
       applicationContext,
       {
         barNumber: 'AB1111',
+        clientConnectionId,
         user: {
           ...mockPractitioner,
           barNumber: 'AB2222',
@@ -167,26 +179,22 @@ describe('updatePractitionerUserInteractor', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway().updatePractitionerUser,
-    ).toHaveBeenCalled();
-    expect(
       applicationContext.getPersistenceGateway().updatePractitionerUser.mock
-        .calls[0][0],
-    ).toMatchObject({ user: mockPractitioner });
+        .calls[0][0].user,
+    ).toMatchObject(mockPractitioner);
   });
 
   it('creates and updates the practitioner user and adds a pending email when the original user did not have an email', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getPractitionerByBarNumber.mockResolvedValue({
-        ...mockPractitioner,
-        email: undefined,
-      });
+    getPractitionerByBarNumber.mockResolvedValue({
+      ...mockPractitioner,
+      email: undefined,
+    });
 
-    await updatePractitionerUserInteractor(
+    await updatePractitionerUser(
       applicationContext,
       {
         barNumber: 'AB1111',
+        clientConnectionId,
         user: {
           ...mockPractitioner,
           confirmEmail: 'admissionsclerk@example.com',
@@ -196,27 +204,22 @@ describe('updatePractitionerUserInteractor', () => {
       mockAdmissionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().createNewPractitionerUser,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().createNewPractitionerUser.mock
-        .calls[0][0].user.pendingEmail,
-    ).toEqual('admissionsclerk@example.com');
+    expect(upsertPractitioner.mock.calls[0][0].user.pendingEmail).toEqual(
+      'admissionsclerk@example.com',
+    );
   });
 
   it('should update practitioner information when the practitioner does not have an email and is not updating their email', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getPractitionerByBarNumber.mockResolvedValue({
-        ...mockPractitioner,
-        email: undefined,
-      });
+    getPractitionerByBarNumber.mockResolvedValue({
+      ...mockPractitioner,
+      email: undefined,
+    });
 
-    await updatePractitionerUserInteractor(
+    await updatePractitionerUser(
       applicationContext,
       {
         barNumber: 'AB1111',
+        clientConnectionId,
         user: {
           ...mockPractitioner,
           email: undefined,
@@ -226,27 +229,25 @@ describe('updatePractitionerUserInteractor', () => {
       mockAdmissionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().updateUserRecords.mock
-        .calls[0][0],
-    ).toMatchObject({
-      updatedUser: {
+    expect(upsertUsers.mock.calls[0][0]).toMatchObject([
+      {
         ...mockPractitioner,
         email: undefined,
         firstName: 'Donna',
         name: 'Donna Attorney',
       },
-    });
+    ]);
   });
 
   describe('updating email', () => {
     it('should throw unauthorized error when the logged in user does not have permission to manage emails', async () => {
       await expect(
-        updatePractitionerUserInteractor(
+        updatePractitionerUser(
           applicationContext,
           {
             barNumber: 'pt101',
             user: mockPractitioner,
+            clientConnectionId,
           },
           mockPetitionerUser,
         ),
@@ -259,10 +260,11 @@ describe('updatePractitionerUserInteractor', () => {
         .isEmailAvailable.mockReturnValue(false);
 
       await expect(
-        updatePractitionerUserInteractor(
+        updatePractitionerUser(
           applicationContext,
           {
             barNumber: 'pt101',
+            clientConnectionId,
             user: {
               ...mockPractitioner,
               confirmEmail: 'exists@example.com',
@@ -275,10 +277,11 @@ describe('updatePractitionerUserInteractor', () => {
     });
 
     it('should update the user with the new user.updatedEmail value', async () => {
-      await updatePractitionerUserInteractor(
+      await updatePractitionerUser(
         applicationContext,
         {
           barNumber: 'pt101',
+          clientConnectionId,
           user: {
             ...mockPractitioner,
             confirmEmail: 'free-email-to-use@example.com',
@@ -298,10 +301,11 @@ describe('updatePractitionerUserInteractor', () => {
     });
 
     it("should send the verification email when the user's email is being changed", async () => {
-      await updatePractitionerUserInteractor(
+      await updatePractitionerUser(
         applicationContext,
         {
           barNumber: 'pt101',
+          clientConnectionId,
           user: {
             ...mockPractitioner,
             confirmEmail: 'free-email-to-use@example.com',
@@ -322,10 +326,11 @@ describe('updatePractitionerUserInteractor', () => {
 
     it("should NOT send the verification email when the user's email is being added for the first time", async () => {
       mockPractitioner.email = undefined;
-      await updatePractitionerUserInteractor(
+      await updatePractitionerUser(
         applicationContext,
         {
           barNumber: 'pt101',
+          clientConnectionId,
           user: {
             ...mockPractitioner,
             confirmEmail: 'free-email-to-use@example.com',
@@ -341,10 +346,11 @@ describe('updatePractitionerUserInteractor', () => {
     });
 
     it('should NOT call generateChangeOfAddress if ONLY the email is being updated', async () => {
-      await updatePractitionerUserInteractor(
+      await updatePractitionerUser(
         applicationContext,
         {
           barNumber: 'pt101',
+          clientConnectionId,
           user: {
             ...mockPractitioner,
             confirmEmail: 'free-email-to-use@example.com',
@@ -358,10 +364,11 @@ describe('updatePractitionerUserInteractor', () => {
     });
 
     it('should NOT call generateChangeOfAddress if ONLY the notes are being updated', async () => {
-      await updatePractitionerUserInteractor(
+      await updatePractitionerUser(
         applicationContext,
         {
           barNumber: 'pt101',
+          clientConnectionId,
           user: {
             ...mockPractitioner,
             practitionerNotes: 'wow, real good notes',
@@ -374,10 +381,11 @@ describe('updatePractitionerUserInteractor', () => {
     });
 
     it('should NOT call generateChangeOfAddress if ONLY the notes and email are being updated', async () => {
-      await updatePractitionerUserInteractor(
+      await updatePractitionerUser(
         applicationContext,
         {
           barNumber: 'pt101',
+          clientConnectionId,
           user: {
             ...mockPractitioner,
             confirmEmail: 'free-email-to-use@example.com',
@@ -392,10 +400,11 @@ describe('updatePractitionerUserInteractor', () => {
     });
 
     it('should call generateChangeOfAddress if the email is being updated along with the address1', async () => {
-      await updatePractitionerUserInteractor(
+      await updatePractitionerUser(
         applicationContext,
         {
           barNumber: 'pt101',
+          clientConnectionId,
           user: {
             ...mockPractitioner,
             confirmEmail: 'free-email-to-use@example.com',
@@ -413,10 +422,12 @@ describe('updatePractitionerUserInteractor', () => {
     });
 
     it('should call generateChangeOfAddress if the email is being updated along with the practitioner name', async () => {
-      await updatePractitionerUserInteractor(
+      getPractitionerByBarNumber.mockResolvedValue(mockPractitioner);
+      await updatePractitionerUser(
         applicationContext,
         {
           barNumber: 'pt101',
+          clientConnectionId,
           user: {
             ...mockPractitioner,
             confirmEmail: 'free-email-to-use@example.com',
@@ -429,6 +440,72 @@ describe('updatePractitionerUserInteractor', () => {
       );
 
       expect(generateChangeOfAddress).toHaveBeenCalled();
+    });
+  });
+
+  describe('update practiceType', () => {
+    it('should throw error when practitioner has open cases and practice type has been changed', async () => {
+      getPractitionerByBarNumber.mockResolvedValue({
+        ...mockPractitioner,
+        userId: 'dabbad03-18d0-43ec-bafb-654e83405416',
+        practiceType: 'DOJ',
+      });
+      applicationContext
+        .getUseCases()
+        .getPractitionerCasesInteractor.mockReturnValue({
+          closedCases: [],
+          openCases: ['practitioner'],
+        });
+      await expect(
+        updatePractitionerUser(
+          applicationContext,
+          {
+            barNumber: 'AB1111',
+            bypassDocketEntry: false,
+            clientConnectionId,
+            user: {
+              ...mockPractitioner,
+              barNumber: 'AB1111',
+              updatedEmail: 'bc@example.com',
+              userId: 'dabbad03-18d0-43ec-bafb-654e83405416',
+              practiceType: 'IRS',
+            },
+          },
+          mockAdmissionsClerkUser,
+        ),
+      ).rejects.toThrow(
+        'Practitioner is associated with one or more open cases. Practitioner has to be withdrawn from all open cases to change practice type.',
+      );
+    });
+    it('should not throw an error when the practice type changed and there are no open cases', async () => {
+      getPractitionerByBarNumber.mockResolvedValue({
+        ...mockPractitioner,
+        userId: '9ea9732c-9751-4159-9619-bd27556eb9bc',
+        practiceType: 'DOJ',
+      });
+      applicationContext
+        .getUseCases()
+        .getPractitionerCasesInteractor.mockReturnValue({
+          closedCases: ['practitioner'],
+          openCases: [],
+        });
+      await expect(
+        updatePractitionerUser(
+          applicationContext,
+          {
+            barNumber: 'AB1111',
+            bypassDocketEntry: false,
+            clientConnectionId,
+            user: {
+              ...mockPractitioner,
+              barNumber: 'AB1111',
+              userId: '9ea9732c-9751-4159-9619-bd27556eb9bc',
+              practiceType: 'IRS',
+            },
+          },
+          mockAdmissionsClerkUser,
+        ),
+      ).resolves.not.toThrow();
     });
   });
 });

@@ -14,7 +14,7 @@ describe('DOJ Practitioners - File First IRS Document', () => {
       docketNumber => {
         petitionsClerkServesPetition(docketNumber);
 
-        loginAsIrsPractitioner('irsPractitioner2');
+        loginAsIrsPractitioner('irsPractitioner2@example.com');
         externalUserSearchesDocketNumber(docketNumber);
 
         cy.get('[data-testid="docket-number-header"]').should('exist');

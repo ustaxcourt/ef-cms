@@ -2,15 +2,18 @@ import { handler } from './websocket-authorizer';
 import axios from 'axios';
 import jwk from 'jsonwebtoken';
 
+jest.mock('axios');
+const mockAxios = jest.mocked(axios, { shallow: false });
+
 const mockLogger = {
   addContext: jest.fn(),
   clearContext: jest.fn(),
   info: jest.fn(),
   warn: jest.fn(),
 };
-jest.mock('@web-api/utilities/logger/getLogger', () => {
+jest.mock('@web-api/utilities/logger/getDawsonLogger', () => {
   return {
-    getLogger: () => mockLogger,
+    getDawsonLogger: () => mockLogger,
   };
 });
 jest.mock('jsonwebtoken', () => {
@@ -34,7 +37,7 @@ describe('websocket-authorizer', () => {
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWlzc2lvbnNjbGVya0BleGFtcGxlLmNvbSIsIm5hbWUiOiJUZXN0IEFkbWlzc2lvbnMgQ2xlcmsiLCJyb2xlIjoiYWRtaXNzaW9uc2NsZXJrIiwic2VjdGlvbiI6ImFkbWlzc2lvbnMiLCJ1c2VySWQiOiI5ZDdkNjNiNy1kN2E1LTQ5MDUtYmE4OS1lZjcxYmYzMDA1N2YiLCJjdXN0b206cm9sZSI6ImFkbWlzc2lvbnNjbGVyayIsInN1YiI6IjlkN2Q2M2I3LWQ3YTUtNDkwNS1iYTg5LWVmNzFiZjMwMDU3ZiIsImlhdCI6MTYwOTQ0NTUyNn0.kow3pAUloDseD3isrxgtKBpcKsjMktbRBzY41c1NRqA';
 
   const setupHappyPath = verifyObject => {
-    axios.get.mockImplementation(() => {
+    mockAxios.get.mockImplementation(() => {
       return Promise.resolve({
         data: { keys: [{ kid: 'key-identifier' }] },
       });
@@ -68,8 +71,6 @@ describe('websocket-authorizer', () => {
       logLevel: 'debug',
     };
 
-    jest.spyOn(axios, 'get');
-
     jwk.decode.mockReturnValue({
       header: { kid: 'key-identifier' },
       payload: { iss: `issuer-url-${Math.random()}` },
@@ -87,7 +88,7 @@ describe('websocket-authorizer', () => {
   });
 
   it('returns unauthorized if there is an error in contacting the issuer', async () => {
-    axios.get.mockImplementation(() => {
+    mockAxios.get.mockImplementation(() => {
       throw new Error('any error');
     });
 
@@ -99,8 +100,8 @@ describe('websocket-authorizer', () => {
     );
   });
 
-  it('returns unauthorized if the issuer doesn’t return data in expected format', async () => {
-    axios.get.mockImplementation(() => {
+  it('returns unauthorized if the issuer does not return data in expected format', async () => {
+    mockAxios.get.mockImplementation(() => {
       return Promise.resolve({ data: null });
     });
 
@@ -113,7 +114,7 @@ describe('websocket-authorizer', () => {
   });
 
   it('returns unauthorized if issuer is not the cognito user pools', async () => {
-    axios.get.mockImplementation(() => {
+    mockAxios.get.mockImplementation(() => {
       return Promise.resolve({
         data: { keys: [{ kid: 'not-expected-key-identifier' }] },
       });
@@ -132,7 +133,7 @@ describe('websocket-authorizer', () => {
   });
 
   it('returns unauthorized if token is not verified', async () => {
-    axios.get.mockImplementation(() => {
+    mockAxios.get.mockImplementation(() => {
       return Promise.resolve({
         data: { keys: [{ kid: 'key-identifier' }] },
       });
@@ -217,13 +218,13 @@ describe('websocket-authorizer', () => {
       };
     });
 
-    axios.get.mockImplementation(() => {
+    mockAxios.get.mockImplementation(() => {
       return Promise.resolve({
         data: { keys: [{ kid: 'identifier-to-cache' }] },
       });
     });
 
-    jwk.verify.mockImplementation((token, pem, options, callback) => {
+    jwk.verify.mockImplementation((_token, _pem, _options, callback) => {
       callback(null, { 'custom:userId': 'test-custom:userId' });
     });
 

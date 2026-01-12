@@ -1,12 +1,24 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
+import { getCaseDeadlinesByConsolidatedCaseDeadlineIds } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds';
+import {
+  CaseDeadline,
+  RawCaseDeadline,
+} from '@shared/business/entities/CaseDeadline';
+import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { settlePromises } from '@web-api/utilities/settlePromises';
+import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 /**
  * removeConsolidatedCases
@@ -17,8 +29,8 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  * @param {Array} providers.docketNumbersToRemove the docket numbers of the cases to remove from consolidation
  * @returns {object} the updated case data
  */
-export const removeConsolidatedCases = async (
-  applicationContext: ServerApplicationContext,
+const removeConsolidatedCases = async (
+  _applicationContext: ServerApplicationContext,
   {
     docketNumber,
     docketNumbersToRemove,
@@ -29,9 +41,9 @@ export const removeConsolidatedCases = async (
     throw new UnauthorizedError('Unauthorized for case consolidation');
   }
 
-  const caseToUpdate = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({ applicationContext, docketNumber });
+  const caseToUpdate = await getCaseByDocketNumber({
+    docketNumber,
+  });
 
   if (!caseToUpdate || !caseToUpdate?.leadDocketNumber) {
     throw new NotFoundError(`Case ${docketNumber} was not found.`);
@@ -41,12 +53,9 @@ export const removeConsolidatedCases = async (
 
   const { leadDocketNumber } = caseToUpdate;
 
-  const allConsolidatedCases = await applicationContext
-    .getPersistenceGateway()
-    .getCasesByLeadDocketNumber({
-      applicationContext,
-      leadDocketNumber,
-    });
+  const allConsolidatedCases = await getConsolidatedCases({
+    leadDocketNumber,
+  });
 
   const newConsolidatedCases = allConsolidatedCases.filter(
     consolidatedCase =>
@@ -57,17 +66,23 @@ export const removeConsolidatedCases = async (
     docketNumbersToRemove.includes(leadDocketNumber) &&
     newConsolidatedCases.length > 1
   ) {
-    const newLeadCase = Case.findLeadCaseForCases(newConsolidatedCases);
+    const newLeadCase = Case.findLeadCaseForCases(newConsolidatedCases)!;
 
-    for (let newConsolidatedCaseToUpdate of newConsolidatedCases) {
+    updateCasePromises.push(
+      updateConsolidatedCaseDeadlineReferenceId(
+        leadDocketNumber,
+        newLeadCase.docketNumber,
+      ),
+    );
+
+    for (const newConsolidatedCaseToUpdate of newConsolidatedCases) {
       const caseEntity = new Case(newConsolidatedCaseToUpdate, {
         authorizedUser,
       });
       caseEntity.setLeadCase(newLeadCase.docketNumber);
 
       updateCasePromises.push(
-        applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-          applicationContext,
+        updateCaseAndAssociations({
           authorizedUser,
           caseToUpdate: caseEntity,
         }),
@@ -81,42 +96,102 @@ export const removeConsolidatedCases = async (
     caseEntity.removeConsolidation();
 
     updateCasePromises.push(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-        applicationContext,
+      updateCaseAndAssociations({
         authorizedUser,
         caseToUpdate: caseEntity,
       }),
     );
   }
 
-  for (let docketNumberToRemove of docketNumbersToRemove) {
-    const caseToRemove = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({
-        applicationContext,
-        docketNumber: docketNumberToRemove,
-      });
+  // TODO: I am pretty sure getCasesByDocketNumbers here (which mimics preexisting logic) is unnecessary and, in fact, dangerous.
+  // We already got the case information above via getCasesByLeadDocketNumber.
+  // The call here allows a request to remove consolidation on arbitrary docket numbers unrelated to the lead case.
+  const casesToRemove = await getCasesByDocketNumbers({
+    docketNumbers: docketNumbersToRemove,
+  });
 
-    if (!caseToRemove) {
-      throw new NotFoundError(
-        `Case to consolidate with (${docketNumberToRemove}) was not found.`,
-      );
-    }
-
+  for (const caseToRemove of casesToRemove) {
     const caseEntity = new Case(caseToRemove, { authorizedUser });
     caseEntity.removeConsolidation();
 
     updateCasePromises.push(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-        applicationContext,
+      updateCaseAndAssociations({
         authorizedUser,
         caseToUpdate: caseEntity,
       }),
     );
+
+    updateCasePromises.push(
+      removeConsolidatedCaseReferences(caseToRemove.docketNumber),
+    );
   }
 
-  await Promise.all(updateCasePromises);
+  await settlePromises(updateCasePromises);
 };
+
+async function removeConsolidatedCaseReferences(docketNumber: string) {
+  const CASE_DEADLINES = await getCaseDeadlinesByDocketNumber({
+    docketNumber,
+  });
+
+  const UPDATED_CASE_DEADLINES = CASE_DEADLINES.map(
+    (cd: CaseDeadline) =>
+      ({
+        ...cd,
+        consolidatedCaseDeadlineId: undefined,
+      }) as CaseDeadline,
+  );
+
+  await upsertCaseDeadlines(UPDATED_CASE_DEADLINES);
+}
+
+async function updateConsolidatedCaseDeadlineReferenceId(
+  oldLeadDocketNumber: string,
+  newLeadDocketNumber: string,
+): Promise<void> {
+  const LEAD_DEADLINES = await getCaseDeadlinesByDocketNumber({
+    docketNumber: oldLeadDocketNumber,
+  });
+
+  const DEADLINES_TO_UPDATE: RawCaseDeadline[] = [];
+
+  const results = await Promise.allSettled(
+    LEAD_DEADLINES.map(async leadCaseDeadline => {
+      const { caseDeadlineId: oldLeadCaseDeadlineId } = leadCaseDeadline;
+      const CHILD_DEADLINES =
+        await getCaseDeadlinesByConsolidatedCaseDeadlineIds([
+          oldLeadCaseDeadlineId,
+        ]);
+
+      if (!CHILD_DEADLINES.length) return;
+
+      const NEW_LEAD_CASE_DEADLINE = CHILD_DEADLINES.find(
+        ({ docketNumber }) => docketNumber === newLeadDocketNumber,
+      );
+
+      const newLeadCaseDeadlineId =
+        NEW_LEAD_CASE_DEADLINE?.caseDeadlineId || undefined;
+
+      const updatedDeadlines = CHILD_DEADLINES.map(childCaseDeadline => ({
+        ...childCaseDeadline,
+        consolidatedCaseDeadlineId:
+          childCaseDeadline.docketNumber === newLeadDocketNumber
+            ? undefined
+            : newLeadCaseDeadlineId,
+      }));
+
+      DEADLINES_TO_UPDATE.push(...updatedDeadlines);
+    }),
+  );
+
+  // Optional: Log any rejected results for debugging
+  const rejected = results.filter(r => r.status === 'rejected');
+  if (rejected.length > 0) {
+    console.warn('Some deadline updates failed:', rejected);
+  }
+
+  await upsertCaseDeadlines(DEADLINES_TO_UPDATE);
+}
 
 const determineEntitiesToLock = (
   _applicationContext,

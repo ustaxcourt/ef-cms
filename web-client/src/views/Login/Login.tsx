@@ -1,13 +1,16 @@
+import { Button as DawsonUiButton } from '@web-client/dawson-ui/ui/button';
 import { Button } from '@web-client/ustc-ui/Button/Button';
-import { ErrorNotification } from '@web-client/views/ErrorNotification';
+import { InfoNotificationComponent } from '@web-client/views/InfoNotification';
 import { SuccessNotification } from '@web-client/views/SuccessNotification';
 import { WarningNotification } from '@web-client/views/WarningNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import { AlertError } from '@web-client/dawson-ui/ui/Alert/AlertError';
 
 export const Login = connect(
   {
+    alertInfo: state.alertInfo,
     navigateToCreatePetitionerAccountSequence:
       sequences.navigateToCreatePetitionerAccountSequence,
     navigateToForgotPasswordSequence:
@@ -17,14 +20,21 @@ export const Login = connect(
     toggleShowPasswordSequence: sequences.toggleShowPasswordSequence,
     updateAuthenticationFormValueSequence:
       sequences.updateAuthenticationFormValueSequence,
+    alertError: state.alertError,
+    alertHelper: state.alertHelper,
+    dismissAlertSequence: sequences.dismissAlertSequence,
   },
   ({
+    alertInfo,
     navigateToCreatePetitionerAccountSequence,
     navigateToForgotPasswordSequence,
     showPassword,
     submitLoginSequence,
     toggleShowPasswordSequence,
     updateAuthenticationFormValueSequence,
+    alertError,
+    alertHelper,
+    dismissAlertSequence,
   }) => {
     return (
       <>
@@ -33,10 +43,25 @@ export const Login = connect(
             <div className="grid-col-12 desktop:grid-col-4 tablet:grid-col-7">
               <SuccessNotification isDismissible={false} />
               <WarningNotification isDismissible={false} />
-              <ErrorNotification />
+              {alertInfo && (
+                <InfoNotificationComponent
+                  alertInfo={alertInfo}
+                  dismissible={false}
+                ></InfoNotificationComponent>
+              )}
+
+              <div className="tw:mb-4">
+                <AlertError
+                  alertError={alertError}
+                  alertHelper={alertHelper}
+                  closeButtonOnClick={() => dismissAlertSequence()}
+                  isDismissible={false}
+                />
+              </div>
+
               <div className="grid-container bg-white padding-y-3 border border-base-lighter login">
                 <div className="display-flex flex-column">
-                  <div className="flex-align-self-center">
+                  <div className="flex-align-center">
                     <h1
                       className="margin-bottom-1 inherit-body-font-family"
                       data-testid="login-header"
@@ -100,36 +125,39 @@ export const Login = connect(
                       >
                         {showPassword ? 'Hide password' : 'Show password'}
                       </button>
-                      <Button
-                        className="usa-button margin-top-3"
-                        data-testid="login-button"
-                      >
-                        Log in
-                      </Button>
+                      <div className="tw:my-4">
+                        <DawsonUiButton
+                          aria-label="Login"
+                          data-testid="login-button"
+                          variant="primary"
+                        >
+                          Log in
+                        </DawsonUiButton>
+                      </div>
                     </form>
-                    <Button
-                      className="margin-top-1 display-block"
-                      data-testid="forgot-password-button"
-                      link={true}
-                      type="button"
-                      onClick={() => navigateToForgotPasswordSequence()}
-                    >
-                      Forgot password?
-                    </Button>
-                    <span>
-                      Don&apos;t have an account?{' '}
-                      <Button
-                        className="padding-top-0"
-                        link={true}
-                        type="button"
-                        onClick={e => {
-                          e.preventDefault();
-                          navigateToCreatePetitionerAccountSequence();
-                        }}
+                    <div className="tw:my-4">
+                      <DawsonUiButton
+                        aria-label="Forgot password"
+                        variant="primaryTertiary"
+                        data-testid="forgot-password-button"
+                        onClick={() => navigateToForgotPasswordSequence()}
                       >
-                        Create your account now.
-                      </Button>
-                    </span>
+                        Forgot password?
+                      </DawsonUiButton>
+                    </div>
+                    Don&apos;t have an account?{' '}
+                    <Button
+                      link={true}
+                      className="tw:block padding-top-0 pl-0"
+                      type="button"
+                      onClick={e => {
+                        e.preventDefault();
+                        navigateToCreatePetitionerAccountSequence();
+                      }}
+                      variant="primary"
+                    >
+                      Create your account now.
+                    </Button>
                   </div>
                 </div>
               </div>

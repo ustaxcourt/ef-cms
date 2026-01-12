@@ -2,17 +2,14 @@ import {
   FORMATS,
   prepareDateFromString,
 } from '../../../shared/src/business/utilities/DateHandler';
-import { caseDeadlineReportHelper as caseDeadlineReportHelperComputed } from '../../src/presenter/computeds/caseDeadlineReportHelper';
-import { runCompute } from '@web-client/presenter/test.cerebral';
-import { withAppContextDecorator } from '../../src/withAppContext';
-
-const caseDeadlineReportHelper = withAppContextDecorator(
-  caseDeadlineReportHelperComputed,
-);
 
 export const petitionsClerkViewsDeadlineReportForSingleCase = (
   cerebralTest,
-  overrides = {},
+  overrides: {
+    day?: string;
+    month?: string;
+    year?: string;
+  } = {},
 ) => {
   return it('Petitions clerk views deadline report for a single case', async () => {
     await cerebralTest.runSequence('gotoCaseDeadlineReportSequence');
@@ -39,36 +36,16 @@ export const petitionsClerkViewsDeadlineReportForSingleCase = (
 
     await cerebralTest.runSequence('updateDateRangeForDeadlinesSequence');
 
-    let deadlines = cerebralTest.getState('caseDeadlineReport.caseDeadlines');
-
-    let deadlinesForThisCase = deadlines.filter(
-      d => d.docketNumber === cerebralTest.docketNumber,
+    const deadlines = cerebralTest.getState(
+      'caseDeadlineReport.caseDeadlinesForCurrentPage',
     );
 
-    expect(deadlinesForThisCase.length).toEqual(1);
-
-    expect(deadlinesForThisCase[0].deadlineDate).toBeDefined();
-
-    let helper = runCompute(caseDeadlineReportHelper, {
-      state: cerebralTest.getState(),
-    });
-
-    expect(helper.showLoadMoreButton).toBeTruthy();
-
-    await cerebralTest.runSequence('loadMoreCaseDeadlinesSequence');
-
-    deadlines = cerebralTest.getState('caseDeadlineReport.caseDeadlines');
-
-    deadlinesForThisCase = deadlines.filter(
+    const deadlinesForThisCase = deadlines.filter(
       d => d.docketNumber === cerebralTest.docketNumber,
     );
 
     expect(deadlinesForThisCase.length).toEqual(2);
-
-    helper = runCompute(caseDeadlineReportHelper, {
-      state: cerebralTest.getState(),
-    });
-
-    expect(helper.showLoadMoreButton).toBeFalsy();
+    expect(deadlinesForThisCase[0].deadlineDate).toBeDefined();
+    expect(deadlinesForThisCase[1].deadlineDate).toBeDefined();
   });
 };

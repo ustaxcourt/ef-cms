@@ -1,18 +1,14 @@
-import { MOTION_EVENT_CODES } from '@shared/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { RawDocketEntryWorksheet } from '@shared/business/entities/docketEntryWorksheet/DocketEntryWorksheet';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import {
-  calculateDifferenceInDays,
-  prepareDateFromString,
-} from '@shared/business/utilities/DateHandler';
+import { getAllPendingMotionDocketEntriesForJudge } from '@web-api/persistence/postgres/docketEntries/reports/getAllPendingMotionDocketEntriesForJudge';
 import { isLeadCase } from '@shared/business/entities/cases/Case';
 import { partition } from 'lodash';
+import { getDocketEntryWorksheetsByDocketEntryIds } from '@web-api/persistence/postgres/docketEntryWorksheets/getDocketEntryWorksheetsByDocketEntryIds';
 
 export type FormattedPendingMotion = {
   docketNumber: string;
@@ -33,7 +29,6 @@ export type FormattedPendingMotionWithWorksheet = FormattedPendingMotion & {
 };
 
 export const getPendingMotionDocketEntriesForCurrentJudgeInteractor = async (
-  applicationContext: ServerApplicationContext,
   params: { judgeIds: string[] },
   authorizedUser: UnknownAuthUser,
 ): Promise<{
@@ -44,32 +39,13 @@ export const getPendingMotionDocketEntriesForCurrentJudgeInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const {
-    results: allPendingMotionDocketEntriesOlderThan180DaysFromElasticSearch,
-  } = await applicationContext
-    .getPersistenceGateway()
-    .getAllPendingMotionDocketEntriesForJudge({ applicationContext, judgeIds });
-
-  const currentDate = prepareDateFromString().toISO()!;
-  const pendingMotionDocketEntriesOlderThan180DaysFromDynamo =
-    await Promise.all(
-      allPendingMotionDocketEntriesOlderThan180DaysFromElasticSearch.map(
-        async (docketEntry: RawDocketEntry) =>
-          await getLatestDataForPendingMotions(
-            docketEntry,
-            applicationContext,
-            currentDate,
-          ),
-      ),
-    );
-
-  const judgePendingMotions =
-    pendingMotionDocketEntriesOlderThan180DaysFromDynamo.filter(
-      removeMotionsThatHaveBeenHandledInDynamo,
-    );
+  const { results: allPendingMotionDocketEntriesOlderThan180Days } =
+    await getAllPendingMotionDocketEntriesForJudge({ judgeIds });
 
   const judgePendingMotionsWithWorksheet: FormattedPendingMotionWithWorksheet[] =
-    await attachDocketEntryWorkSheets(applicationContext, judgePendingMotions);
+    await attachDocketEntryWorkSheets(
+      allPendingMotionDocketEntriesOlderThan180Days,
+    );
 
   const uniquePendingMotions: FormattedPendingMotionWithWorksheet[] =
     removeDuplicateDocketEntries(judgePendingMotionsWithWorksheet);
@@ -80,19 +56,15 @@ export const getPendingMotionDocketEntriesForCurrentJudgeInteractor = async (
 };
 
 async function attachDocketEntryWorkSheets(
-  applicationContext: ServerApplicationContext,
   docketEntries: FormattedPendingMotion[],
 ): Promise<FormattedPendingMotionWithWorksheet[]> {
   const docketEntryIds = docketEntries.map(
     docketEntry => docketEntry.docketEntryId,
   );
 
-  const docketEntryWorksheets = await applicationContext
-    .getPersistenceGateway()
-    .getDocketEntryWorksheetsByDocketEntryIds({
-      applicationContext,
-      docketEntryIds,
-    });
+  const docketEntryWorksheets = await getDocketEntryWorksheetsByDocketEntryIds({
+    docketEntryIds,
+  });
 
   const docketEntryWorksheetDictionary = docketEntryWorksheets.reduce(
     (accumulator, docketEntryWorksheet) => {
@@ -140,76 +112,4 @@ function removeDuplicateDocketEntries(
   );
 
   return [...soloDocketEntries, ...Object.values(uniqueDocketEntryDictionary)];
-}
-
-function removeMotionsThatHaveBeenHandledInDynamo(
-  docketEntry: FormattedPendingMotion,
-) {
-  return (
-    docketEntry.pending &&
-    MOTION_EVENT_CODES.includes(docketEntry.eventCode) &&
-    docketEntry.daysSinceCreated >= 180
-  );
-}
-
-async function getLatestDataForPendingMotions(
-  docketEntry: RawDocketEntry,
-  applicationContext: ServerApplicationContext,
-  currentDate: string,
-): Promise<FormattedPendingMotion> {
-  const [caseMetadata, latestDocketEntry] = await Promise.all([
-    getCaseMetadata(applicationContext, docketEntry),
-    applicationContext.getPersistenceGateway().getDocketEntryOnCase({
-      applicationContext,
-      docketEntryId: docketEntry.docketEntryId,
-      docketNumber: docketEntry.docketNumber,
-    }),
-  ]);
-
-  const dayDifference = calculateDifferenceInDays(
-    currentDate,
-    latestDocketEntry.filingDate,
-  );
-
-  const updatedDocketEntry: FormattedPendingMotion = {
-    caseCaption: caseMetadata.caseCaption,
-    consolidatedGroupCount: caseMetadata.consolidatedCaseCount,
-    daysSinceCreated: dayDifference,
-    docketEntryId: latestDocketEntry.docketEntryId,
-    docketNumber: caseMetadata.docketNumber,
-    docketNumberWithSuffix: caseMetadata.docketNumberWithSuffix,
-    eventCode: latestDocketEntry.eventCode,
-    filingDate: latestDocketEntry.filingDate,
-    judge: caseMetadata.associatedJudge,
-    leadDocketNumber: caseMetadata.leadDocketNumber,
-    pending: latestDocketEntry.pending || false,
-  };
-
-  return updatedDocketEntry;
-}
-
-async function getCaseMetadata(
-  applicationContext: ServerApplicationContext,
-  docketEntry: RawDocketEntry,
-): Promise<RawCase & { consolidatedCaseCount: number }> {
-  const caseMetadata: RawCase = await applicationContext
-    .getPersistenceGateway()
-    .getCaseMetadataByDocketNumber({
-      applicationContext,
-      docketNumber: docketEntry.docketNumber,
-    });
-
-  const consolidatedCaseCount = caseMetadata.leadDocketNumber
-    ? await applicationContext
-        .getPersistenceGateway()
-        .getConsolidatedCasesCount({
-          applicationContext,
-          leadDocketNumber: caseMetadata.leadDocketNumber,
-        })
-    : 1;
-
-  return {
-    ...caseMetadata,
-    consolidatedCaseCount,
-  };
 }

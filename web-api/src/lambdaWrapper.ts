@@ -1,7 +1,7 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { get } from 'lodash';
-import { getCurrentInvoke } from '@vendia/serverless-express';
+import { getCurrentInvoke } from '@codegenie/serverless-express';
 import { getUserFromAuthHeader } from '@web-api/middleware/apiGatewayHelper';
 
 export const headerOverride = {
@@ -12,8 +12,6 @@ export const headerOverride = {
   Vary: 'Authorization',
   'X-Content-Type-Options': 'nosniff',
 };
-
-export const CHUNK_SIZE = 4000;
 
 const defaultOptions: {
   isAsync?: boolean;
@@ -35,7 +33,7 @@ export const lambdaWrapper = (
 
     // If you'd like to test the terminal user functionality locally, make this boolean true
     const { event: currentInvokeEvent } = getCurrentInvoke();
-    let isTerminalUser =
+    const isTerminalUser =
       get(currentInvokeEvent, 'requestContext.authorizer.isTerminalUser') ===
       'true';
 
@@ -76,20 +74,13 @@ export const lambdaWrapper = (
           body: response.body ? JSON.parse(response.body) : response.body,
         };
         const responseString = JSON.stringify(fullResponse);
-        const chunks = chunkString(responseString);
-        const totalNumberOfChunks = chunks.length;
-        for (let index = 0; index < totalNumberOfChunks; index++) {
-          await applicationContext
+        await applicationContext
             .getNotificationGateway()
             .saveRequestResponse({
-              applicationContext,
-              chunk: chunks[index],
-              index,
+              responseString,
               requestId: asyncsyncid,
-              totalNumberOfChunks,
               userId: user.userId,
             });
-        }
       } catch (errorAsyncSync) {
         console.log('Error: async sync if condition', errorAsyncSync);
       }
@@ -125,14 +116,3 @@ export const lambdaWrapper = (
     }
   };
 };
-
-function chunkString(str) {
-  const chunkedArray: string[] = [];
-  let index = 0;
-  while (index < str.length) {
-    chunkedArray.push(str.substring(index, index + CHUNK_SIZE));
-    index += CHUNK_SIZE;
-  }
-
-  return chunkedArray;
-}

@@ -1,10 +1,11 @@
 import { Button } from '../ustc-ui/Button/Button';
+import { DateTime } from 'luxon';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import React from 'react';
+
 const seal = require('../images/ustc_seal.svg') as string;
 
-// eslint-disable-next-line @miovision/disallow-date/no-new-date
-const updateTime = `${new Date().toLocaleString('en-US', {
+const updateTime = `${DateTime.now().toJSDate().toLocaleString('en-US', {
   day: 'numeric',
   hour: 'numeric',
   minute: 'numeric',

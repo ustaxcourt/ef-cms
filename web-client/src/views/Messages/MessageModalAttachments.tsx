@@ -15,6 +15,7 @@ const getDocumentOption = doc => {
       key={doc.docketEntryId}
       value={`${doc.docketEntryId}`}
     >
+      {doc.index != null ? `${doc.index} - ` : ''}
       {doc.createdAtFormatted} - {documentTitle}
     </option>
   );
@@ -67,7 +68,10 @@ export const MessageModalAttachments = connect(
               return (
                 <div className="margin-top-1" key={doc.documentId}>
                   <div className="grid-row">
-                    <div className="grid-col-9">{doc.documentTitle}</div>
+                    <div className="grid-col-9">
+                      {doc.index != null ? `${doc.index} - ` : ''}
+                      {doc.documentTitle}
+                    </div>
                   </div>
                 </div>
               );
@@ -75,15 +79,18 @@ export const MessageModalAttachments = connect(
             {form.draftAttachments.map(doc => {
               return (
                 <div className="margin-top-1" key={doc.documentId}>
-                  <div className="grid-row">
-                    <div className="grid-col-10">{doc.documentTitle}</div>
+                  <div className="grid-row message-modal-add-document-form">
+                    <div className="grid-col-9">
+                      {doc.index != null ? `${doc.index} - ` : ''}
+                      {doc.documentTitle}
+                    </div>
+                    <div className="grid-col-1"></div>
                     <div className="grid-col-2">
                       <Button
+                        iconRight
                         link
-                        aria-label={`remove ${doc.documentTitle} selection`}
-                        className="modal-button-link"
-                        icon="times"
-                        style={{ lineHeight: '0', padding: '0' }}
+                        className="text-no-underline hide-on-mobile margin-right-0 padding-top-0 message-modal-remove-button"
+                        icon="times-circle"
                         onClick={() => {
                           updateMessageModalAttachmentsSequence({
                             action: 'remove',

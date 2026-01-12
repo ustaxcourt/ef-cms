@@ -1,6 +1,16 @@
-import { DOCKET_ENTRY_SEALED_TO_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
+
+jest.mock(
+  '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumberAndDocketEntryId',
+);
+jest.mock(
+  '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId',
+);
+import { DOCKET_ENTRY_SEALED_TO_TYPES } from '@shared/business/entities/EntityConstants';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getDocketEntriesByDocketNumberAndDocketEntryId as getDocketEntriesByDocketNumberAndDocketEntryIdMock } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumberAndDocketEntryId';
 import {
   mockDocketClerkUser,
   mockPetitionsClerkUser,
@@ -9,11 +19,14 @@ import { sealDocketEntryInteractor } from './sealDocketEntryInteractor';
 
 describe('sealDocketEntryInteractor', () => {
   const answerDocketEntryId = 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const getDocketEntriesByDocketNumberAndDocketEntryId =
+    getDocketEntriesByDocketNumberAndDocketEntryIdMock as jest.Mock;
+  getCaseByDocketNumber.mockResolvedValue({});
 
   it('should require a value for dockeEntrySealedTo', async () => {
     await expect(
       sealDocketEntryInteractor(
-        applicationContext,
         {
           docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
           //@ts-ignore this error is intentional
@@ -28,7 +41,6 @@ describe('sealDocketEntryInteractor', () => {
   it('should only allow docket clerks to seal a docket entry', async () => {
     await expect(
       sealDocketEntryInteractor(
-        applicationContext,
         {
           docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
           docketEntrySealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
@@ -40,9 +52,11 @@ describe('sealDocketEntryInteractor', () => {
   });
 
   it('should throw an error when the docket entry is not found', async () => {
+    getCaseByDocketNumber.mockReturnValueOnce(MOCK_CASE);
+    getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValueOnce([]);
+
     await expect(
       sealDocketEntryInteractor(
-        applicationContext,
         {
           docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
           docketEntrySealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
@@ -54,13 +68,13 @@ describe('sealDocketEntryInteractor', () => {
   });
 
   it('should throw an error when an invalid option is provided for docketEntrySealedTo', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+    getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
+    getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([
+      MOCK_CASE.docketEntries[0],
+    ]);
 
     await expect(
       sealDocketEntryInteractor(
-        applicationContext,
         {
           docketEntryId: answerDocketEntryId,
           docketEntrySealedTo: 'invalid',
@@ -74,11 +88,12 @@ describe('sealDocketEntryInteractor', () => {
   });
 
   it('should mark the docket entry as sealed and save', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+    getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+    getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([
+      MOCK_CASE.docketEntries[0],
+    ]);
+
     const sealedDocketEntry = await sealDocketEntryInteractor(
-      applicationContext,
       {
         docketEntryId: answerDocketEntryId,
         docketEntrySealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,

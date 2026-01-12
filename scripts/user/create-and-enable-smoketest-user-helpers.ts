@@ -1,19 +1,20 @@
+import { RawUser } from '@shared/business/entities/User';
 import { createApplicationContext } from '@web-api/applicationContext';
 import {
   createOrUpdateUser,
   enableUser,
 } from '../../shared/admin-tools/user/admin';
-import { environment } from '@web-api/environment';
-import {
-  getDestinationTableInfo,
-  getUserPoolId,
-} from 'shared/admin-tools/util';
+import { getEnvironmentVariables } from '../helpers/parseArgsAndEnvVars';
+import { ACCOUNT_STATUS } from '@shared/business/entities/EntityConstants';
+import { getUniqueId } from '@shared/sharedAppContext';
 
-const { DEFAULT_ACCOUNT_PASS } = process.env;
+const { password } = getEnvironmentVariables({
+  password: 'DEFAULT_ACCOUNT_PASS',
+});
 
-const baseUser = {
-  birthYear: '1950',
+const user: RawUser = {
   contact: {
+    country: 'United States',
     address1: '234 Main St',
     address2: 'Apartment 4',
     address3: 'Under the stairs',
@@ -23,37 +24,27 @@ const baseUser = {
     postalCode: '61234',
     state: 'IL',
   },
-  lastName: 'Test',
-  password: DEFAULT_ACCOUNT_PASS,
-  practiceType: '',
-  suffix: '',
-};
-
-const user = {
-  ...baseUser,
   email: 'testAdmissionsClerk@example.com',
   name: 'Test admissionsclerk',
   role: 'admissionsclerk',
   section: 'admissions',
+  accountStatus: ACCOUNT_STATUS.active,
+  userId: getUniqueId(),
 };
 
 export const createAndEnableSmoketestUser = async () => {
-  const userPoolId = await getUserPoolId();
-  const { tableName } = await getDestinationTableInfo();
-  environment.userPoolId = userPoolId;
-  environment.dynamoDbTableName = tableName;
   const applicationContext = createApplicationContext({});
 
   try {
     console.log('About to create test user!');
     await createOrUpdateUser(applicationContext, {
-      password: DEFAULT_ACCOUNT_PASS!,
+      password,
       setPasswordAsPermanent: true,
       user,
     });
     console.log('Successfully created test user!');
 
-    await enableUser(user.email);
+    await enableUser(user.email!);
     console.log('Successfully enabled test user!');
   } catch (e) {
     console.log('Unable to create and enable test user. Error was: ', e);

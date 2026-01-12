@@ -1,3 +1,5 @@
+#!/usr/bin/env -S npx ts-node --transpile-only
+
 import { spawnSync } from 'child_process';
 
 function runTypescriptCommand(cwd: string): { stdout: string } {
@@ -59,7 +61,7 @@ function getFilesToCheck(
   return fileToCheck;
 }
 
-const branchDirPath = './';
+const branchDirPath = './currentBranch';
 const targetDirPath = './targetBranch';
 const branchTypescriptErrorMap = getTypescriptErrorMap(branchDirPath);
 const targetTypescriptErrorMap = getTypescriptErrorMap(targetDirPath);

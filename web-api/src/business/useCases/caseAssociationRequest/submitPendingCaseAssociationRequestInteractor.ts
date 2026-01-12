@@ -2,9 +2,12 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { verifyCaseForUser } from '@web-api/persistence/postgres/cases/userOnCase/verifyCaseForUser';
+import { associateUsersWithCasesPending } from '@web-api/persistence/postgres/cases/pendingCases/associateUsersWithCasesPending';
+import { verifyPendingCaseForUser } from '@web-api/persistence/postgres/cases/pendingCases/verifyPendingCaseForUser';
 
 /**
  * submitPendingCaseAssociationRequestInteractor
@@ -15,7 +18,6 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
  * @returns {Promise<*>} the promise of the pending case association request
  */
 export const submitPendingCaseAssociationRequestInteractor = async (
-  applicationContext: ServerApplicationContext,
   { docketNumber }: { docketNumber: string },
   authorizedUser: UnknownAuthUser,
 ) => {
@@ -25,33 +27,28 @@ export const submitPendingCaseAssociationRequestInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
 
-  const isAssociated = await applicationContext
-    .getPersistenceGateway()
-    .verifyCaseForUser({
-      applicationContext,
-      docketNumber,
-      userId: user.userId,
-    });
+  if (!user) {
+    throw new NotFoundError(`Could not find user ${authorizedUser.userId}`);
+  }
 
-  const isAssociationPending = await applicationContext
-    .getPersistenceGateway()
-    .verifyPendingCaseForUser({
-      applicationContext,
-      docketNumber,
-      userId: user.userId,
-    });
+  const isAssociated = await verifyCaseForUser({
+    docketNumber,
+    userId: user.userId,
+  });
+
+  const isAssociationPending = await verifyPendingCaseForUser({
+    docketNumber,
+    userId: user.userId,
+  });
 
   if (!isAssociated && !isAssociationPending) {
-    await applicationContext
-      .getPersistenceGateway()
-      .associateUserWithCasePending({
-        applicationContext,
+    await associateUsersWithCasesPending([
+      {
         docketNumber,
         userId: user.userId,
-      });
+      },
+    ]);
   }
 };

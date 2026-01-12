@@ -23,8 +23,9 @@ const router = {
   initialize: app => {
     window.document.title = 'U.S. Tax Court';
     // expose route function on window for use with cypress
-    // eslint-disable-next-line no-underscore-dangle
-    window.__cy_route = path => router.route(path || '/');
+
+    (window as Window & { __cy_route?: (path: string) => void }).__cy_route =
+      path => route(path || '/');
 
     route('/case-detail/*', docketNumber => {
       setPageTitle(`Docket ${docketNumber}`);
@@ -82,6 +83,29 @@ const router = {
 
     route('/login', () => {
       return app.getSequence('redirectToLoginSequence')();
+    });
+
+    route('/trial-sessions', () => {
+      setPageTitle('Trial sessions');
+      return app.getSequence('gotoPublicTrialSessionsSequence')();
+    });
+
+    route('/trial-session-detail/*', trialSessionId => {
+      setPageTitle('Trial session information');
+      return app.getSequence('gotoPublicTrialSessionDetailsSequence')({
+        trialSessionId,
+      });
+    });
+
+    // only visible on lower envs
+    route('/dawson-library', () => {
+      if (process.env.ENV === 'prod') {
+        return app.getSequence('notFoundErrorSequence')({
+          error: {},
+        });
+      }
+      setPageTitle('Dawson Library');
+      return app.getSequence('gotoDawsonLibrarySequence')();
     });
 
     route('..', () => {

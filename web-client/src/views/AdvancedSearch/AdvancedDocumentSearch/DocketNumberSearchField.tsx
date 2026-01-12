@@ -2,11 +2,17 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
 import React from 'react';
 
-export const DocketNumberSearchField = connect(
+type DocketNumberSearchFieldProps = {
+  searchValue: string;
+  updateSequence: Function;
+  validateSequence: Function;
+}
+
+export const DocketNumberSearchField: React.FC<DocketNumberSearchFieldProps> = connect(
   {
-    searchValue: props.searchValue,
-    updateSequence: props.updateSequence,
-    validateSequence: props.validateSequence,
+    searchValue: props`searchValue`,
+    updateSequence: props`updateSequence`,
+    validateSequence: props`validateSequence`,
   },
   function DocketNumberSearchField({
     searchValue,

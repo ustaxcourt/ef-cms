@@ -1,18 +1,59 @@
-/* eslint-disable complexity */
 import {
   ALLOWLIST_FEATURE_FLAGS,
+  MOTION_DISPOSITION_VERBIAGE,
   PUBLIC_DOCKET_RECORD_FILTER,
   PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
   ROLES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+  STATE_KEYS,
+} from '@shared/business/entities/EntityConstants';
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { Get } from 'cerebral';
 import {
   computeIsNotServedDocument,
   getFilingsAndProceedings,
-} from '../../../../../shared/src/business/utilities/getFormattedCaseDetail';
+} from '@shared/business/utilities/getFormattedCaseDetail';
+import { sortDocketEntryTable } from '@web-client/presenter/computeds/formattedDocketEntries';
 import { state } from '@web-client/presenter/app-public.cerebral';
+import { formatDateString } from '@shared/business/utilities/DateHandler';
+import { concat } from 'lodash';
+
+const getRelatedDocketEntryDetails = (
+  motionEntry: RawDocketEntry,
+  rawCase: RawPublicCase,
+  targetDocketEntryId: string,
+  visibilityPolicyDate: any,
+  isTerminalUser: boolean,
+) => {
+  const relatedOrder = rawCase.docketEntries.find(
+    entry => entry.docketEntryId === targetDocketEntryId,
+  );
+
+  if (!relatedOrder) {
+    throw new Error(
+      `Related order not found for motion with id ${motionEntry.docketEntryId} and targetDocketEntryId ${targetDocketEntryId} and title ${
+        motionEntry.documentTitle
+      }`,
+    );
+  }
+
+  const isDownloadable = DocketEntry.isDownloadable(relatedOrder, {
+    isTerminalUser,
+    rawCase,
+    user: {
+      role: ROLES.petitioner,
+      userId: '',
+      email: '',
+      name: '',
+    },
+    visibilityChangeDate: visibilityPolicyDate,
+  });
+  const showDownloadLink = isDownloadable;
+  return {
+    index: relatedOrder.index,
+    showDownloadLink,
+  };
+};
 
 export const formatDocketEntryOnDocketRecord = (
   applicationContext,
@@ -34,6 +75,7 @@ export const formatDocketEntryOnDocketRecord = (
   const isCourtIssued = DocketEntry.isCourtIssued(entry);
 
   let createdAtFormatted;
+  let sortingFilingDate;
   if (
     isCourtIssued &&
     !DocketEntry.isServed(entry) &&
@@ -45,10 +87,16 @@ export const formatDocketEntryOnDocketRecord = (
     createdAtFormatted = applicationContext
       .getUtilities()
       .formatDateString(entry.filingDate, 'MMDDYY');
+    sortingFilingDate = applicationContext
+      .getUtilities()
+      .formatDateString(entry.filingDate, 'YYYYMMDD_NUMERIC');
   } else {
     createdAtFormatted = applicationContext
       .getUtilities()
       .formatDateString(entry.createdAt, 'MMDDYY');
+    sortingFilingDate = applicationContext
+      .getUtilities()
+      .formatDateString(entry.createdAt, 'YYYYMMDD_NUMERIC');
   }
 
   if (entry.lodged) {
@@ -59,6 +107,57 @@ export const formatDocketEntryOnDocketRecord = (
     .getUtilities()
     .formatDateString(entry.servedAt, 'MMDDYY');
 
+  if (entry.certificateOfService) {
+    entry.certificateOfServiceDateFormatted = formatDateString(
+      entry.certificateOfServiceDate,
+      'MMDDYY',
+    );
+  }
+
+  let relatedDocketEntries: any[] = [];
+  if (entry.affectedByDocketEntries) {
+    relatedDocketEntries = entry.affectedByDocketEntries.map(affectedEntry => {
+      const { index, showDownloadLink } = getRelatedDocketEntryDetails(
+        entry,
+        rawCase,
+        affectedEntry.docketEntryId,
+        visibilityPolicyDate,
+        isTerminalUser,
+      );
+
+      return {
+        ...affectedEntry,
+        docketEntryIndex: index,
+        showDownloadLink,
+        disposition:
+          MOTION_DISPOSITION_VERBIAGE[affectedEntry.disposition]?.MOTION,
+      };
+    });
+  }
+
+  if (entry.affectedDocketEntries) {
+    relatedDocketEntries = concat(
+      relatedDocketEntries,
+      entry.affectedDocketEntries.map(affectedEntry => {
+        const { index, showDownloadLink } = getRelatedDocketEntryDetails(
+          entry,
+          rawCase,
+          affectedEntry.docketEntryId,
+          visibilityPolicyDate,
+          isTerminalUser,
+        );
+
+        return {
+          ...affectedEntry,
+          docketEntryIndex: index,
+          showDownloadLink,
+          disposition:
+            MOTION_DISPOSITION_VERBIAGE[affectedEntry.disposition]?.ORDER,
+        };
+      }),
+    );
+  }
+
   entry.filingsAndProceedings = getFilingsAndProceedings(entry);
 
   const canPublicUserSeeLink = DocketEntry.isDownloadable(entry, {
@@ -67,6 +166,8 @@ export const formatDocketEntryOnDocketRecord = (
     user: {
       role: ROLES.petitioner,
       userId: '',
+      email: '',
+      name: '',
     },
     visibilityChangeDate: visibilityPolicyDate,
   });
@@ -102,6 +203,7 @@ export const formatDocketEntryOnDocketRecord = (
     isStricken: entry.isStricken,
     numberOfPages: entry.numberOfPages || 0,
     openInSameTab: !isTerminalUser,
+    relatedDocketEntries,
     sealedToTooltip: entry.sealedToTooltip,
     servedAtFormatted: entry.servedAtFormatted,
     servedPartiesCode: entry.servedPartiesCode,
@@ -110,6 +212,7 @@ export const formatDocketEntryOnDocketRecord = (
     showNotServed: computeIsNotServedDocument({ formattedEntry: entry }),
     showServed: DocketEntry.isServed(entry),
     signatory: entry.signatory,
+    sortingFilingDate,
   };
 };
 
@@ -153,6 +256,12 @@ export type PublicFormattedDocketEntryInfo = {
   showDocumentDescriptionWithoutLink: boolean;
   signatory?: string;
   hasDocument: boolean;
+  relatedDocketEntries: {
+    disposition?: string;
+    docketEntryId?: string;
+    docketEntryIndex?: number;
+    showDownloadLink: boolean;
+  }[];
 };
 
 export type PublicCaseDetailHelperResults = {
@@ -167,14 +276,12 @@ export const publicCaseDetailHelper = (
 ): PublicCaseDetailHelperResults => {
   const rawCase = get(state.caseDetail);
 
-  const {
-    canAllowPrintableDocketRecord,
-    docketEntries,
-    docketNumber,
-    isSealed,
-  } = rawCase;
+  const { canAllowPrintableDocketRecord, docketEntries, isSealed } = rawCase;
 
   const isTerminalUser = get(state.isTerminalUser);
+  const { sortField, sortOrder } = get(
+    state[STATE_KEYS.DOCKET_RECORD_TABLE_SORT],
+  );
 
   const { docketRecordFilter } = get(state.sessionMetadata);
 
@@ -184,7 +291,7 @@ export const publicCaseDetailHelper = (
     ],
   );
 
-  let formattedDocketEntriesOnDocketRecord = docketEntries.map(entry => {
+  const formattedDocketEntriesOnDocketRecord = docketEntries?.map(entry => {
     return formatDocketEntryOnDocketRecord(applicationContext, {
       entry,
       isTerminalUser,
@@ -193,20 +300,21 @@ export const publicCaseDetailHelper = (
     });
   });
 
-  const { docketRecordSort } = get(state.sessionMetadata);
-  const sortOrder = docketRecordSort[docketNumber];
-
-  const sortedFormattedDocketRecords = applicationContext
-    .getUtilities()
-    .sortDocketEntries(formattedDocketEntriesOnDocketRecord as any, sortOrder);
-
-  formattedDocketEntriesOnDocketRecord = filterDocketEntries(
-    sortedFormattedDocketRecords,
+  const filteredFormattedDocketEntriesOnDocketRecord = filterDocketEntries(
+    formattedDocketEntriesOnDocketRecord,
     docketRecordFilter,
   );
 
+  const sortedAndFilteredFormattedDocketEntriesOnDocketRecord =
+    sortDocketEntryTable<PublicFormattedDocketEntryInfo>(
+      filteredFormattedDocketEntriesOnDocketRecord,
+      sortField,
+      sortOrder,
+    );
+
   return {
-    formattedDocketEntriesOnDocketRecord,
+    formattedDocketEntriesOnDocketRecord:
+      sortedAndFilteredFormattedDocketEntriesOnDocketRecord,
     isCaseSealed: !!isSealed,
     showPrintableDocketRecord: canAllowPrintableDocketRecord,
   };

@@ -12,11 +12,10 @@ export const setWorkItemAsReadLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(event, async ({ applicationContext }) => {
+  genericHandler(event, async () => {
     const { workItemId } = event.pathParameters || {};
 
     return await setWorkItemAsReadInteractor(
-      applicationContext,
       {
         workItemId,
       },

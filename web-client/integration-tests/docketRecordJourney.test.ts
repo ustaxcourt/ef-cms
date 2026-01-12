@@ -471,9 +471,9 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
   const [todayMonth, todayDay, todayYear] = today.split('/');
 
   docketClerkAddsDocketEntryWithoutFile(cerebralTest, {
-    dateReceivedDay: todayDay,
-    dateReceivedMonth: todayMonth,
-    dateReceivedYear: todayYear,
+    receivedAtDay: todayDay,
+    receivedAtMonth: todayMonth,
+    receivedAtYear: todayYear,
   });
 
   it('verifies the docket record after filing a paper document without a file', async () => {

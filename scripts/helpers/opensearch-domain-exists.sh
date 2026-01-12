@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 
 function check_opensearch_domain_exists() {
   OPENSEARCH_DOMAIN=$1

@@ -1,19 +1,39 @@
+import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { MOCK_LOCK } from '@shared/test/mockLock';
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
+import { MOCK_CASE } from '@shared/test/mockCase';
 import {
   NotFoundError,
   ServiceUnavailableError,
   UnauthorizedError,
 } from '@web-api/errors/errors';
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { ROLES } from '@shared/business/entities/EntityConstants';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { getContactPrimary } from '../../../../../shared/src/business/entities/cases/Case';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { getContactPrimary } from '@shared/business/entities/cases/Case';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { updateDocketEntryMetaInteractor } from './updateDocketEntryMetaInteractor';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { upsertDocketEntries as upsertDocketEntriesMock } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
+import { upsertDocketEntryRelatedEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntryRelatedEntries';
 
 describe('updateDocketEntryMetaInteractor', () => {
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
+  const upsertDocketEntries = jest.mocked(upsertDocketEntriesMock);
+  const updateCaseAndAssociations = jest
+    .mocked(updateCaseAndAssociationsMock)
+    .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
+  const tryGetLocks = jest.mocked(tryGetLocksMock);
+
   let mockDocketEntries;
 
   const mockUserId = 'c99dfb85-867d-436b-8b12-1fcb547d490a';
@@ -26,17 +46,8 @@ describe('updateDocketEntryMetaInteractor', () => {
     filingDate: '2011-02-22T00:01:00.000Z',
     userId: mockUserId,
   };
-  let mockLock;
-
-  beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockImplementation(() => mockLock);
-  });
 
   beforeEach(() => {
-    mockLock = undefined;
-
     mockDocketEntries = [
       {
         ...baseDocketEntry,
@@ -122,12 +133,10 @@ describe('updateDocketEntryMetaInteractor', () => {
         judge: 'Buch',
       },
     ];
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        docketEntries: mockDocketEntries,
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      docketEntries: mockDocketEntries,
+    });
 
     applicationContext
       .getUseCases()
@@ -151,8 +160,9 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    mockLock = MOCK_LOCK;
-
+    tryGetLocks.mockResolvedValueOnce([
+      { successfullyLocked: false, identifier: 'abc' },
+    ]);
     await expect(
       updateDocketEntryMetaInteractor(
         applicationContext,
@@ -164,12 +174,10 @@ describe('updateDocketEntryMetaInteractor', () => {
       ),
     ).rejects.toThrow(ServiceUnavailableError);
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).not.toHaveBeenCalled();
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
-  it('should acquire and remove the lock on the case', async () => {
+  it('should acquire a lock on the case', async () => {
     await updateDocketEntryMetaInteractor(
       applicationContext,
       {
@@ -179,20 +187,11 @@ describe('updateDocketEntryMetaInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().createLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifier: `case|${MOCK_CASE.docketNumber}`,
-      ttl: 30,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().removeLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifiers: [`case|${MOCK_CASE.docketNumber}`],
-    });
+    expect(tryGetLocks).toHaveBeenCalledWith(
+      expect.objectContaining({
+        identifiers: [`case|${MOCK_CASE.docketNumber}`],
+      }),
+    );
   });
 
   it('should throw an Unauthorized error if the user is not authorized', async () => {
@@ -209,9 +208,7 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should throw a Not Found error if the case does not exist', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(undefined);
+    getCaseByDocketNumber.mockResolvedValueOnce(undefined);
     await expect(
       updateDocketEntryMetaInteractor(
         applicationContext,
@@ -291,9 +288,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
   });
 
   it('should update editable fields including action, documentTitle, filedBy, filingDate, servedAt, hasOtherFilingParty, and otherFilingParty', async () => {
@@ -341,7 +336,8 @@ describe('updateDocketEntryMetaInteractor', () => {
     const updatedDocketEntry = result.docketEntries.find(
       record => record.index === 1,
     );
-    expect(updatedDocketEntry.freeText).toBeUndefined();
+    expect(updatedDocketEntry).toBeDefined();
+    expect(updatedDocketEntry!.freeText).toBeUndefined();
   });
 
   it('should generate a new coversheet for the document if the servedAt field is changed', async () => {
@@ -402,7 +398,7 @@ describe('updateDocketEntryMetaInteractor', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should generate a new coversheet for the document if the filingDate field is changed on a document that requires a coversheet', async () => {
+  it('should generate a new coversheet for the document if the filingDate field is changed on a document that requires a coversheet 2', async () => {
     await updateDocketEntryMetaInteractor(
       applicationContext,
       {
@@ -499,13 +495,14 @@ describe('updateDocketEntryMetaInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().updateDocketEntry.mock
-        .calls[0][0],
-    ).toMatchObject({
-      docketNumber: MOCK_CASE.docketNumber,
-      document: { filingDate: '2020-08-01T00:01:00.000Z' },
-    });
+    const updatedEntries = upsertDocketEntries.mock.calls[0][0];
+
+    expect(updatedEntries).toMatchObject([
+      expect.objectContaining({
+        docketNumber: MOCK_CASE.docketNumber,
+        filingDate: '2020-08-01T00:01:00.000Z',
+      }),
+    ]);
   });
 
   it('should add a new coversheet when filingDate field is changed', async () => {
@@ -579,9 +576,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
   });
 
   it('should not throw an error when a null certificate of service date is passed for a docket entry without an associated document', async () => {
@@ -605,6 +600,7 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should update the document pending status and the automatic blocked status of the case when setting pending to true', async () => {
+    getCasesByDocketNumbers.mockResolvedValueOnce([MOCK_CASE]);
     const result = await updateDocketEntryMetaInteractor(
       applicationContext,
       {
@@ -620,7 +616,7 @@ describe('updateDocketEntryMetaInteractor', () => {
     const updatedDocketEntry = result.docketEntries.find(
       record => record.index === 1,
     );
-    expect(updatedDocketEntry.pending).toBeTruthy();
+    expect(updatedDocketEntry?.pending).toBeTruthy();
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAutomaticBlock,
     ).toHaveBeenCalled();
@@ -644,7 +640,94 @@ describe('updateDocketEntryMetaInteractor', () => {
     const updatedDocketEntry = result.docketEntries.find(
       record => record.index === 1,
     );
-    expect(updatedDocketEntry.previousDocument).toBeDefined();
-    expect(updatedDocketEntry.previousDocument.documentType).toEqual('Order');
+    expect(updatedDocketEntry?.previousDocument).toBeDefined();
+    expect(updatedDocketEntry?.previousDocument?.documentType).toEqual('Order');
+  });
+
+  it('should add affected docket entries if body has new records', async () => {
+    await updateDocketEntryMetaInteractor(
+      applicationContext,
+      {
+        docketEntryMeta: {
+          ...mockDocketEntries[0],
+          affectedDocketEntries: [
+            {
+              docketEntryId: '111ba5a9-b37b-479d-9201-067ec6e33111',
+              disposition: 'GRANTED',
+            },
+          ],
+        },
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(upsertDocketEntryRelatedEntries).toHaveBeenCalled();
+  });
+
+  it('should delete affected docket entries if body has none and original has some', async () => {
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      docketEntries: [
+        {
+          ...mockDocketEntries[0],
+          affectedDocketEntries: [
+            {
+              docketEntryId: '111ba5a9-b37b-479d-9201-067ec6e33111',
+              disposition: 'GRANTED',
+            },
+          ],
+        },
+      ],
+    });
+
+    await updateDocketEntryMetaInteractor(
+      applicationContext,
+      {
+        docketEntryMeta: {
+          ...mockDocketEntries[0],
+        },
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(upsertDocketEntryRelatedEntries).toHaveBeenCalled();
+  });
+
+  it('should not update affected docket entries if both body and original match', async () => {
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      docketEntries: [
+        {
+          ...mockDocketEntries[0],
+          affectedDocketEntries: [
+            {
+              docketEntryId: '111ba5a9-b37b-479d-9201-067ec6e33111',
+              disposition: 'GRANTED',
+            },
+          ],
+        },
+      ],
+    });
+
+    await updateDocketEntryMetaInteractor(
+      applicationContext,
+      {
+        docketEntryMeta: {
+          ...mockDocketEntries[0],
+          affectedDocketEntries: [
+            {
+              docketEntryId: '111ba5a9-b37b-479d-9201-067ec6e33111',
+              disposition: 'GRANTED',
+            },
+          ],
+        },
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(upsertDocketEntryRelatedEntries).not.toHaveBeenCalled();
   });
 });

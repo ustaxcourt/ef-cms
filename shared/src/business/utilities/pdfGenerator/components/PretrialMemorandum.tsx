@@ -1,12 +1,29 @@
 import React from 'react';
 
-export const PretrialMemorandum = ({ trialInfo }) => {
+export type PretrialMemorandumTrialInfo = {
+  formattedTrialLocation: string;
+  formattedStartDate: string;
+  formattedJudgeName: string;
+  chambersPhoneNumber: string;
+};
+
+export type PretrialMemorandumParams = {
+  trialInfo: PretrialMemorandumTrialInfo;
+};
+
+export const PretrialMemorandum = ({ trialInfo }: PretrialMemorandumParams) => {
+  const {
+    formattedTrialLocation,
+    formattedStartDate,
+    formattedJudgeName,
+    chambersPhoneNumber,
+  } = trialInfo;
   return (
     <div>
       <p style={{ marginBottom: '20px', textAlign: 'right' }}>
-        Trial Calendar: {trialInfo.formattedTrialLocation}
+        Trial Calendar: {formattedTrialLocation}
         <br />
-        <span>Date: {trialInfo.formattedStartDate}</span>
+        <span>Date: {formattedStartDate}</span>
       </p>
 
       <p className="text-center" style={{ marginBottom: '10px' }}>
@@ -160,7 +177,7 @@ export const PretrialMemorandum = ({ trialInfo }) => {
 
         <p style={{ float: 'left', width: '70%' }}>
           <strong>
-            {trialInfo.formattedJudgeName}
+            {formattedJudgeName}
             <br />
             United States Tax Court
             <br />
@@ -168,7 +185,7 @@ export const PretrialMemorandum = ({ trialInfo }) => {
             <br />
             Washington, D.C. 20217
             <br />
-            {trialInfo.chambersPhoneNumber}
+            {chambersPhoneNumber}
           </strong>
         </p>
 

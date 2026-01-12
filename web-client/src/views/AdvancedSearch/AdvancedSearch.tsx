@@ -38,6 +38,7 @@ export const AdvancedSearch = connect(
       sequences.submitPractitionerBarNumberSearchSequence,
     submitPractitionerNameSearchSequence:
       sequences.submitPractitionerNameSearchSequence,
+    user: state.user,
   },
   function AdvancedSearch({
     advancedSearchHelper,
@@ -51,6 +52,7 @@ export const AdvancedSearch = connect(
     submitOrderAdvancedSearchSequence,
     submitPractitionerBarNumberSearchSequence,
     submitPractitionerNameSearchSequence,
+    user,
   }) {
     return (
       <>
@@ -70,7 +72,7 @@ export const AdvancedSearch = connect(
               }}
             >
               <Tab id="tab-case" tabName={searchTabs.CASE} title="Case">
-                <SearchBoilerplateText formTypeText="a case" />
+                <SearchBoilerplateText formTypeText="a case" user={user} />
                 <CaseSearchForm
                   submitAdvancedSearchSequence={
                     submitCaseAdvancedSearchSequence
@@ -86,7 +88,7 @@ export const AdvancedSearch = connect(
                 tabName={searchTabs.ORDER}
                 title={'Order'}
               >
-                <SearchBoilerplateText formTypeText="an order" />
+                <SearchBoilerplateText formTypeText="an order" user={user} />
                 <OrderSearchForm
                   submitAdvancedSearchSequence={
                     submitOrderAdvancedSearchSequence
@@ -102,6 +104,7 @@ export const AdvancedSearch = connect(
                 <SearchBoilerplateText
                   formTypeText="an opinion"
                   isOpinion={true}
+                  user={user}
                 />
                 <OpinionSearchForm
                   submitAdvancedSearchSequence={
@@ -116,6 +119,7 @@ export const AdvancedSearch = connect(
                   tabName={searchTabs.PRACTITIONER}
                   title="Practitioner"
                 >
+                  <PractitionerInformationalText />
                   <PractitionerSearchForm
                     submitPractitionerBarNumberSearchSequence={
                       submitPractitionerBarNumberSearchSequence
@@ -154,7 +158,7 @@ export const AdvancedSearch = connect(
             </div>
             {(!advancedSearchTab || advancedSearchTab === searchTabs.CASE) && (
               <>
-                <SearchBoilerplateText formTypeText="a case" />
+                <SearchBoilerplateText formTypeText="a case" user={user} />
 
                 <CaseSearchForm
                   submitAdvancedSearchSequence={
@@ -169,6 +173,11 @@ export const AdvancedSearch = connect(
             )}
             {advancedSearchTab === searchTabs.ORDER && (
               <>
+                <SearchBoilerplateText
+                  formTypeText="an order"
+                  isOpinion={false}
+                  user={user}
+                />
                 <OrderSearchForm
                   submitAdvancedSearchSequence={
                     submitOrderAdvancedSearchSequence
@@ -182,6 +191,7 @@ export const AdvancedSearch = connect(
                 <SearchBoilerplateText
                   formTypeText="an opinion"
                   isOpinion={true}
+                  user={user}
                 />
                 <OpinionSearchForm
                   submitAdvancedSearchSequence={
@@ -194,6 +204,7 @@ export const AdvancedSearch = connect(
             {advancedSearchHelper.showPractitionerSearch &&
               advancedSearchTab === searchTabs.PRACTITIONER && (
                 <>
+                  <PractitionerInformationalText />
                   <PractitionerSearchForm
                     submitPractitionerBarNumberSearchSequence={
                       submitPractitionerBarNumberSearchSequence
@@ -213,3 +224,28 @@ export const AdvancedSearch = connect(
 );
 
 AdvancedSearch.displayName = 'AdvancedSearch';
+
+function PractitionerInformationalText() {
+  return (
+    <div>
+      <p className="margin-top-0">
+        The information in the search results below is maintained by the
+        Admissions Clerk of the U.S. Tax Court. Practitioners may:
+      </p>
+      <ul>
+        <li>
+          Update their contact information by logging into DAWSON and updating
+          their practitioner accounts.
+        </li>{' '}
+        <li>
+          Change their practitioner type, practice type, or admission status by
+          contacting the Admissions Clerk at{' '}
+          <a href="mailto:admissions@ustaxcourt.gov">
+            admissions@ustaxcourt.gov
+          </a>
+          .
+        </li>
+      </ul>
+    </div>
+  );
+}

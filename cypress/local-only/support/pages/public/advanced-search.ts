@@ -44,17 +44,13 @@ export const getDocketNumberInput = () => {
 };
 
 export const unselectOpinionTypesExceptBench = () => {
-  let opinionTypes = Object.keys(ADVANCED_SEARCH_OPINION_TYPES).filter(
+  const opinionTypes = Object.keys(ADVANCED_SEARCH_OPINION_TYPES).filter(
     type => type !== 'Bench',
   );
 
   opinionTypes.forEach(opinionType => {
     cy.get('label').contains(opinionType).click();
   });
-};
-
-export const searchForCaseByPetitionerInformation = () => {
-  cy.get('button#advanced-search-button').click();
 };
 
 export const searchForDocuments = () => {
@@ -82,7 +78,7 @@ export const searchForOrderByJudge = judge => {
 };
 
 export const publicHeader = () => {
-  return cy.get('h1.header-welcome-public');
+  return cy.get('div.header-welcome-public');
 };
 
 export const petitionHyperlink = () => {

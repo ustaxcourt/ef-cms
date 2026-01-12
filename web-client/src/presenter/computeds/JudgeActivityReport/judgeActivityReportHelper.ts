@@ -1,9 +1,14 @@
 import { ASCENDING } from '@shared/business/entities/EntityConstants';
 import { CaseDocumentsCountType } from '@web-api/persistence/elasticsearch/fetchEventCodesCountForJudges';
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { FORMATS } from '@shared/business/utilities/DateHandler';
+import {
+  FORMATS,
+  formatDateString,
+  formatNow,
+} from '@shared/business/utilities/DateHandler';
 import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
+import { isLeadCase } from '@shared/business/entities/cases/Case';
 
 function calculateStatisticsTotal(
   casesClosedByJudge,
@@ -59,12 +64,7 @@ export const judgeActivityReportHelper = (
 
   const showResultsTables = hasFormBeenSubmitted && totalResults > 0;
 
-  const currentDate: string = applicationContext
-    .getUtilities()
-    .formatDateString(
-      applicationContext.getUtilities().prepareDateFromString(),
-      applicationContext.getConstants().DATE_FORMATS.MMDDYY,
-    );
+  const currentDate: string = formatNow(FORMATS.MMDDYY);
 
   const reportHeader: string = `${judgeName} ${currentDate}`;
 
@@ -72,30 +72,28 @@ export const judgeActivityReportHelper = (
     judgeActivityReportData.submittedAndCavCasesByJudge || []
   ).map(aCase => {
     let consolidatedIconTooltipText = '';
-    let isLeadCase = false;
+    let isLeadCaseResult = false;
     let inConsolidatedGroup = false;
     let formattedFinalBriefDueDate = '';
 
-    if (aCase.leadDocketNumber === aCase.docketNumber) {
+    if (isLeadCase(aCase)) {
       consolidatedIconTooltipText = 'Lead case';
-      isLeadCase = true;
+      isLeadCaseResult = true;
       inConsolidatedGroup = true;
     }
 
     if (aCase.caseWorksheet) {
       formattedFinalBriefDueDate = aCase.caseWorksheet.finalBriefDueDate
-        ? applicationContext
-            .getUtilities()
-            .formatDateString(
-              aCase.caseWorksheet.finalBriefDueDate,
-              applicationContext.getConstants().DATE_FORMATS.MMDDYY,
-            )
+        ? formatDateString(
+            aCase.caseWorksheet.finalBriefDueDate,
+            FORMATS.MMDDYY,
+          )
         : '';
     }
 
     const { daysElapsedSinceLastStatusChange, statusDate } = applicationContext
       .getUtilities()
-      .calculateDaysElapsedSinceLastStatusChange(applicationContext, aCase);
+      .calculateDaysElapsedSinceLastStatusChange(aCase.statusDate);
 
     return {
       ...aCase,
@@ -106,7 +104,7 @@ export const judgeActivityReportHelper = (
       consolidatedIconTooltipText,
       daysElapsedSinceLastStatusChange,
       inConsolidatedGroup,
-      isLeadCase,
+      isLeadCase: isLeadCaseResult,
       statusDate,
     };
   });
@@ -129,7 +127,7 @@ export const judgeActivityReportHelper = (
     return 0;
   });
 
-  const today = applicationContext.getUtilities().formatNow(FORMATS.YYYYMMDD);
+  const today = formatNow(FORMATS.YYYYMMDD);
 
   const ordersToDisplay = judgeActivityReportData.orders
     ? judgeActivityReportData.orders.aggregations?.filter(agg => agg.count)

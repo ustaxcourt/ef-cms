@@ -1,14 +1,11 @@
 import { clone } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 import { trimDocketNumberSearch } from '../setDocketNumberFromSearchAction';
+import {
+  DATE_RANGE_SEARCH_OPTIONS,
+  MAX_DOCUMENT_SEARCH_RESULTS,
+} from '@shared/business/entities/EntityConstants';
 
-/**
- * submit advanced search form to search for opinions
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {Function} providers.get the cerebral get function
- * @returns {Promise} async action
- */
 export const submitOpinionAdvancedSearchAction = async ({
   applicationContext,
   get,
@@ -27,27 +24,30 @@ export const submitOpinionAdvancedSearchAction = async ({
     opinionType => searchParams.opinionTypes[opinionType] === true,
   );
 
+  const baseParams = {
+    ...searchParams,
+    opinionTypes,
+    dateRange:
+      searchParams.startDate || searchParams.endDate
+        ? DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES
+        : DATE_RANGE_SEARCH_OPTIONS.ALL_DATES,
+  };
+
   try {
-    const searchResults = await applicationContext
+    const opinionSearch = await applicationContext
       .getUseCases()
       .opinionAdvancedSearchInteractor(applicationContext, {
         searchParams: {
-          ...searchParams,
-          opinionTypes,
+          ...baseParams,
+          limit: MAX_DOCUMENT_SEARCH_RESULTS,
         },
       });
-
-    return { searchResults };
-  } catch (err) {
+    return { searchResults: opinionSearch.results };
+  } catch (err: any) {
     if (err.responseCode === 429) {
-      const message =
-        applicationContext.getConstants().ERROR_MAP_429[
-          err.originalError.response.data.type
-        ];
-      store.set(state.alertError, message);
+      store.set(state.alertError, applicationContext.getConstants().ERROR_429);
       return { searchResults: [] };
-    } else {
-      throw err;
     }
+    throw err;
   }
 };

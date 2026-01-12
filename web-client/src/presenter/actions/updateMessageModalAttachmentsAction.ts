@@ -1,4 +1,6 @@
 import { state } from '@web-client/presenter/app.cerebral';
+import { MAX_MESSAGE_SUBJECT_CHARACTERS } from '@shared/business/entities/EntityConstants';
+type DraftMessageAttachment = { documentId: string; documentTitle: string; index: string };
 
 export const updateMessageModalAttachmentsAction = ({
   applicationContext,
@@ -6,9 +8,14 @@ export const updateMessageModalAttachmentsAction = ({
   props,
   store,
 }: ActionProps) => {
-  const { attachments, draftAttachments } = get(state.modal.form);
+  const { attachments, draftAttachments, subject }: {
+    attachments?: unknown[];
+    draftAttachments?: DraftMessageAttachment[];
+    subject?: string;
+  } = get(state.modal.form);
   const caseDetail = get(state.caseDetail);
   const documentId = props.documentId || get(state.docketEntryId);
+  const showModal = get(state.modal.showModal);
 
   if (documentId) {
     const document = applicationContext
@@ -22,16 +29,36 @@ export const updateMessageModalAttachmentsAction = ({
       .getUtilities()
       .getDescriptionDisplay(document);
 
-    if (attachments.length + draftAttachments.length === 0) {
-      // This is the first attachment, so we should update the subject
-      store.set(state.modal.form.subject, documentTitle.slice(0, 250));
+    const isSubjectEmpty = !subject || subject.trim() === '';
+
+    // Extract attachment calculations for better readability
+    const attachmentCount = attachments?.length || 0;
+    const draftAttachmentCount = draftAttachments?.length || 0;
+    const hasNoAttachments = attachmentCount + draftAttachmentCount === 0;
+
+    if (isSubjectEmpty && hasNoAttachments) {
+      store.set(
+        state.modal.form.subject,
+        documentTitle.slice(0, MAX_MESSAGE_SUBJECT_CHARACTERS),
+      );
     }
-    if (props.action === 'add') {
+    if (props.action === 'add' && draftAttachments) {
       draftAttachments.push({
         documentId,
         documentTitle,
+        index: document.index,
       });
-    } else if (props.action === 'remove') {
+
+      if (
+        showModal === 'CreateMessageModal' &&
+        !get(state.modal.form.subject)
+      ) {
+        store.set(
+          state.modal.form.subject,
+          documentTitle.slice(0, MAX_MESSAGE_SUBJECT_CHARACTERS),
+        );
+      }
+    } else if (props.action === 'remove' && draftAttachments) {
       const foundIndex = draftAttachments.findIndex(
         attachment => attachment.documentId == props.documentId,
       );

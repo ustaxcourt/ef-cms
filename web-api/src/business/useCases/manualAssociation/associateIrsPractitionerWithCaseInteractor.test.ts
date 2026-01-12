@@ -1,4 +1,9 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
@@ -6,14 +11,21 @@ import {
   PARTY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+} from '@shared/business/entities/EntityConstants';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { associateIrsPractitionerWithCaseInteractor } from './associateIrsPractitionerWithCaseInteractor';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { mockAdcUser, mockPetitionerUser } from '@shared/test/mockAuthUsers';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 
 describe('associateIrsPractitionerWithCaseInteractor', () => {
-  let caseRecord = {
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
+  const getUserById = jest.mocked(getUserByIdMock);
+
+  const caseRecord = {
     caseCaption: 'Caption',
     caseType: CASE_TYPES_MAP.deficiency,
     docketEntries: MOCK_CASE.docketEntries,
@@ -41,19 +53,13 @@ describe('associateIrsPractitionerWithCaseInteractor', () => {
   let mockUserById;
 
   beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockImplementation(() => mockUserById);
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(() => caseRecord);
+    getUserById.mockImplementation(() => mockUserById);
+    getCaseByDocketNumber.mockImplementation(() => caseRecord);
   });
 
   it('should throw an error when not authorized', async () => {
     await expect(
       associateIrsPractitionerWithCaseInteractor(
-        applicationContext,
         {
           docketNumber: caseRecord.docketNumber,
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
@@ -76,7 +82,6 @@ describe('associateIrsPractitionerWithCaseInteractor', () => {
       .verifyCaseForUser.mockReturnValue(false);
 
     await associateIrsPractitionerWithCaseInteractor(
-      applicationContext,
       {
         docketNumber: caseRecord.docketNumber,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
@@ -85,8 +90,6 @@ describe('associateIrsPractitionerWithCaseInteractor', () => {
       mockAdcUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
   });
 });

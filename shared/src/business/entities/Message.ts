@@ -4,6 +4,7 @@ import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEnti
 import { createISODateString } from '../utilities/DateHandler';
 import { getUniqueId } from '@shared/sharedAppContext';
 import joi from 'joi';
+import { Case } from '@shared/business/entities/cases/Case';
 
 export class Message extends JoiValidationEntity {
   public attachments?: {
@@ -15,12 +16,13 @@ export class Message extends JoiValidationEntity {
   public completedBy?: string;
   public completedBySection?: string;
   public completedByUserId?: string;
-  public completedMessage?: string;
+  public completedMessage?: string | null;
   public createdAt: string;
   public docketNumber: string;
   public docketNumberWithSuffix: string;
   public from: string;
   public fromSection: string;
+  public fromSectionFormatted?: string;
   public fromUserId: string;
   public isCompleted: boolean;
   public isRead: boolean;
@@ -50,9 +52,10 @@ export class Message extends JoiValidationEntity {
     this.createdAt = rawMessage.createdAt || createISODateString();
     this.leadDocketNumber = rawMessage.leadDocketNumber;
     this.docketNumber = rawMessage.docketNumber;
-    this.docketNumberWithSuffix = `${rawMessage.docketNumber}${
-      rawMessage.docketNumberSuffix ? rawMessage.docketNumberSuffix : ''
-    }`;
+    this.docketNumberWithSuffix = Case.getDocketNumberWithSuffix({
+      docketNumber: rawMessage.docketNumber,
+      docketNumberSuffix: rawMessage.docketNumberSuffix,
+    });
     this.from = rawMessage.from;
     this.fromSection = rawMessage.fromSection;
     this.fromUserId = rawMessage.fromUserId;
@@ -188,7 +191,7 @@ export class Message extends JoiValidationEntity {
     user: {
       name: string;
       userId: string;
-      section: string;
+      section?: string;
     };
   }): Message {
     this.isCompleted = true;

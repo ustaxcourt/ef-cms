@@ -1,20 +1,55 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
+);
 import {
   DOCKET_SECTION,
   TRANSCRIPT_EVENT_CODE,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import {
   MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
   MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE,
   MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-} from '../../../../../shared/src/test/mockCase';
-import { MOCK_DOCUMENTS } from '../../../../../shared/src/test/mockDocketEntry';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
+} from '@shared/test/mockCase';
+import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { docketClerkUser } from '@shared/test/mockUsers';
 import { fileAndServeCourtIssuedDocumentInteractor } from './fileAndServeCourtIssuedDocumentInteractor';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { v4 as uuidv4 } from 'uuid';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateDocketEntryPendingServiceStatus as updateDocketEntryPendingServiceStatusMock } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus';
+import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
+import { Case } from '@shared/business/entities/cases/Case';
+import {
+  getCasesByDocketNumbers as getCasesByDocketNumbersMock,
+  OmittableCaseFields,
+} from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
+import { CourtIssuedDocumentAnyType } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import { upsertDocketEntryRelatedEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntryRelatedEntries';
+
+const updateDocketEntryPendingServiceStatus = jest.mocked(
+  updateDocketEntryPendingServiceStatusMock,
+);
+const getUserById = jest.mocked(getUserByIdMock);
 
 describe('consolidated cases', () => {
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const getCasesByDocketNumbers =
+    getCasesByDocketNumbersMock as jest.MockedFunction<
+      (args: {
+        docketNumbers: string[];
+        excludeFields?: OmittableCaseFields[];
+      }) => Promise<Omit<RawCase, 'consolidatedCases'>[]>
+    >;
+  const fileAndServeDocumentOnOneCase = jest.mocked(
+    fileAndServeDocumentOnOneCaseMock,
+  );
   const mockPdfUrl = 'www.example.com';
   const mockWorkItem = {
     docketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
@@ -49,19 +84,17 @@ describe('consolidated cases', () => {
         pdfUrl: mockPdfUrl,
       });
 
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(docketClerkUser);
+    getUserById.mockResolvedValue(docketClerkUser as DbUser);
 
     applicationContext
       .getUseCaseHelpers()
       .countPagesInDocument.mockReturnValue(1);
 
-    applicationContext
-      .getUseCaseHelpers()
-      .fileAndServeDocumentOnOneCase.mockReturnValue(
-        MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-      );
+    fileAndServeDocumentOnOneCase.mockResolvedValue(
+      new Case(MOCK_LEAD_CASE_WITH_PAPER_SERVICE, {
+        authorizedUser: undefined,
+      }),
+    );
 
     leadCaseDocketEntries = [
       mockDocketEntryWithWorkItem,
@@ -86,43 +119,74 @@ describe('consolidated cases', () => {
       },
     ];
 
-    consolidatedCase1DocketEntries = MOCK_DOCUMENTS.map(docketEntry => {
-      return {
-        ...docketEntry,
-        docketEntryId: uuidv4(),
-        docketNumber: MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
-      };
-    });
+    consolidatedCase1DocketEntries = [
+      ...MOCK_DOCUMENTS.map(docketEntry => {
+        return {
+          ...docketEntry,
+          docketEntryId: uuidv4(),
+          docketNumber:
+            MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+        };
+      }),
+      {
+        docketEntryId: '7f61161c-ede8-43ba-8fab-69e15d057012',
+        docketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+        documentTitle: 'Transcript of [anything] on [date]',
+        documentType: 'Transcript',
+        eventCode: TRANSCRIPT_EVENT_CODE,
+        userId: docketClerkUser.userId,
+      },
+    ];
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
+    getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
+      switch (docketNumber) {
+        case MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber:
+          return {
+            ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+            docketEntries: leadCaseDocketEntries,
+          };
+        case MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber:
+          return {
+            ...MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
+            docketEntries: consolidatedCase1DocketEntries,
+          };
+        default:
+          return {
+            ...MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE,
+            docketEntries: [],
+          };
+      }
+    });
+    getCasesByDocketNumbers.mockImplementation(({ docketNumbers }) => {
+      const doStuff = docketNumber => {
         switch (docketNumber) {
           case MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber:
             return {
               ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
               docketEntries: leadCaseDocketEntries,
-            };
+            } as any;
           case MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber:
             return {
               ...MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
               docketEntries: consolidatedCase1DocketEntries,
-            };
+            } as any;
           default:
             return {
               ...MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE,
               docketEntries: [],
-            };
+            } as any;
         }
-      });
+      };
+
+      return Promise.resolve(docketNumbers.map(doStuff));
+    });
   });
 
   it('should set each docketEntry`s pendingStatus to false even when an error occurs while filing the docket entries', async () => {
     const expectedErrorString = 'expected error';
-    applicationContext
-      .getUseCaseHelpers()
-      .fileAndServeDocumentOnOneCase.mockImplementationOnce(() => {})
-      .mockImplementationOnce(() => {})
+    fileAndServeDocumentOnOneCase
+      .mockImplementationOnce(() => undefined as any)
+      .mockImplementationOnce(() => undefined as any)
       .mockRejectedValueOnce(new Error(expectedErrorString));
 
     await expect(
@@ -146,58 +210,50 @@ describe('consolidated cases', () => {
     const initialCall = 1;
     const finallyBlockCalls = 3;
 
-    expect(
-      applicationContext.getPersistenceGateway()
-        .updateDocketEntryPendingServiceStatus,
-    ).toHaveBeenCalledTimes(finallyBlockCalls + initialCall);
+    expect(updateDocketEntryPendingServiceStatus).toHaveBeenCalledTimes(
+      finallyBlockCalls + initialCall,
+    );
   });
 
   it('should log the failure to call updateDocketEntryPendingServiceStatus in the finally block', async () => {
     const expectedErrorString = 'expected error';
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementationOnce(() => {
-        return {
-          ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-          docketEntries: leadCaseDocketEntries,
-        };
-      })
-      .mockImplementationOnce(() => {
-        return {
-          ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-          docketEntries: leadCaseDocketEntries,
-        };
-      })
-      .mockRejectedValueOnce(new Error(expectedErrorString));
+    const innerError = new Error(expectedErrorString);
 
-    const innerError = new Error('something else');
+    getCaseByDocketNumber.mockResolvedValueOnce({
+      ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+      docketEntries: leadCaseDocketEntries,
+    });
 
-    applicationContext
-      .getPersistenceGateway()
-      .updateDocketEntryPendingServiceStatus.mockImplementationOnce(() => {})
+    getCasesByDocketNumbers.mockResolvedValueOnce([
+      // @ts-ignore // This is a bad mock. MOCK_LEAD_CASE_WITH_PAPER_SERVICE should be properly typed.
+      {
+        ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+        docketEntries: leadCaseDocketEntries,
+      },
+    ]);
+
+    updateDocketEntryPendingServiceStatus
+      .mockImplementationOnce(async () => {})
       .mockRejectedValueOnce(innerError);
 
-    await expect(
-      fileAndServeCourtIssuedDocumentInteractor(
-        applicationContext,
-        {
-          clientConnectionId,
-          docketEntryId: leadCaseDocketEntries[0].docketEntryId,
-          docketNumbers: [
-            MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
-            MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
-          ],
-          form: leadCaseDocketEntries[0],
-          subjectCaseDocketNumber:
-            MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-        },
-        mockDocketClerkUser,
-      ),
-    ).rejects.toThrow(expectedErrorString);
+    await fileAndServeCourtIssuedDocumentInteractor(
+      applicationContext,
+      {
+        clientConnectionId,
+        docketEntryId: leadCaseDocketEntries[0].docketEntryId,
+        docketNumbers: [
+          MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+          MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
+        ],
+        form: leadCaseDocketEntries[0],
+        subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
-    expect(applicationContext.logger.error).toHaveBeenCalledTimes(1);
-    expect(applicationContext.logger.error.mock.calls[0][1]).toEqual(
+    expect(applicationContext.logger.error).toHaveBeenCalledWith(
+      `Encountered an exception trying to reset isPendingService on Docket Number ${MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber}.`,
       innerError,
     );
   });
@@ -221,5 +277,56 @@ describe('consolidated cases', () => {
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).toHaveBeenCalledTimes(2);
+  });
+
+  it('should make call to related order to motion in multiple cases', async () => {
+    const mockOrderForm: CourtIssuedDocumentAnyType = {
+      date: '2030-01-20T00:00:00.000Z',
+      documentType: 'Order for Filing Fee',
+      docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+      eventCode: 'O',
+      attachments: false,
+      documentTitle: '',
+      affectedDocketEntries: [
+        {
+          disposition: 'GRANTED',
+          docketEntryId: '7f61161c-ede8-43ba-8fab-69e15d057012',
+        },
+      ],
+    };
+
+    await fileAndServeCourtIssuedDocumentInteractor(
+      applicationContext,
+      {
+        clientConnectionId,
+        docketEntryId: mockOrderForm.docketEntryId,
+        docketNumbers: [
+          MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+          MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
+        ],
+        form: mockOrderForm,
+        subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(upsertDocketEntryRelatedEntries).toHaveBeenCalledWith({
+      motionDocketEntries: expect.arrayContaining([
+        {
+          disposition: 'GRANTED',
+          docketEntryId: '7f61161c-ede8-43ba-8fab-69e15d057012',
+          docketNumber: '109-19',
+        },
+        {
+          disposition: 'GRANTED',
+          docketEntryId: '7f61161c-ede8-43ba-8fab-69e15d057012',
+          docketNumber: '110-19',
+        },
+      ]),
+      orderDocketEntry: expect.objectContaining({
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+      }),
+      served: true,
+    });
   });
 });

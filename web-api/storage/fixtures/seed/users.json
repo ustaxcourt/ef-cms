@@ -785,5 +785,13 @@
     "userId": "02c9b614-e498-4dae-b0f5-751b9ab5e8b3",
     "email": "irssuperuser@example.com",
     "entityName": "User"
+  },
+  {
+    "role": "docketclerk",
+    "name": "User Who Will Be Disabled",
+    "section": "docketclerk",
+    "userId": "2588602c-101b-41ef-8d33-84715fc0e643",
+    "email": "disablemedocketclerk@example.com",
+    "entityName": "User"
   }
 ]

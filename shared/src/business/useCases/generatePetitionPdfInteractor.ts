@@ -32,12 +32,14 @@ export interface Contact {
   phone: string;
   state: string;
   placeOfLegalResidence?: string;
+  preferredLanguage?: string;
+  preferredCommunicationMethod?: string;
   contactType: 'primary' | 'secondary';
   email: string;
 }
 
 export type ContactSecondary = Contact & {
-  hasConsentedToEService?: boolean;
+  hasConsentedToElectronicService?: boolean;
   phone?: string;
   paperPetitionEmail?: string;
 };
@@ -99,7 +101,7 @@ export const generatePetitionPdfInteractor = async (
   }
   const caseDescription = getCaseDescription(hasIrsNotice, originalCaseType);
 
-  let pdfFile = await applicationContext.getDocumentGenerators().petition({
+  const pdfFile = await applicationContext.getDocumentGenerators().petition({
     applicationContext,
     data: {
       caseCaptionExtension,
@@ -127,7 +129,6 @@ export const generatePetitionPdfInteractor = async (
   const fileId = applicationContext.getUniqueId();
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    applicationContext,
     document: pdfFile,
     key: fileId,
   });

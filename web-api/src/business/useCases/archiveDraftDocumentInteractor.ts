@@ -1,15 +1,19 @@
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { deleteWorkItem } from '@web-api/persistence/postgres/workitems/deleteWorkItem';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 export const archiveDraftDocument = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   {
     docketEntryId,
     docketNumber,
@@ -20,12 +24,9 @@ export const archiveDraftDocument = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const caseToUpdate = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const caseToUpdate = await getCaseByDocketNumber({
+    docketNumber,
+  });
 
   const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
@@ -33,24 +34,29 @@ export const archiveDraftDocument = async (
     docketEntryId,
   });
 
+  if (!docketEntryToArchive) {
+    throw new NotFoundError(
+      `Could not find docket entry ${docketEntryId} on case ${docketNumber}`,
+    );
+  }
+
   caseEntity.archiveDocketEntry(docketEntryToArchive);
 
-  const { workItem } = docketEntryToArchive;
+  const workItem = await getWorkItemByDocketNumberAndDocketEntryId({
+    docketNumber,
+    docketEntryId,
+  });
 
   if (workItem) {
-    await applicationContext.getPersistenceGateway().deleteWorkItem({
-      applicationContext,
+    await deleteWorkItem({
       workItem,
     });
   }
 
-  const updatedCase = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
-      authorizedUser,
-      caseToUpdate: caseEntity,
-    });
+  const updatedCase = await updateCaseAndAssociations({
+    authorizedUser,
+    caseToUpdate: caseEntity,
+  });
 
   return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };

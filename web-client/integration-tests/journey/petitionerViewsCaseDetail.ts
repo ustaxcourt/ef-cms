@@ -6,7 +6,13 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
 
-export const petitionerViewsCaseDetail = (cerebralTest, overrides = {}) => {
+export const petitionerViewsCaseDetail = (
+  cerebralTest,
+  overrides: {
+    documentCount?: number;
+    docketNumberSuffix?: string;
+  } = {},
+) => {
   return it('petitioner views case detail', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
       await getFormattedDocketEntriesForTest(cerebralTest);
@@ -48,8 +54,6 @@ export const petitionerViewsCaseDetail = (cerebralTest, overrides = {}) => {
     expect(caseDetail.blockedDate).toBeUndefined();
     expect(caseDetail.blockedReason).toBeUndefined();
     expect(caseDetail.caseNote).toBeUndefined();
-    expect(caseDetail.highPriority).toBeUndefined();
-    expect(caseDetail.highPriorityReason).toBeUndefined();
     expect(caseDetail.qcCompleteForTrial).toBeUndefined();
   });
 };

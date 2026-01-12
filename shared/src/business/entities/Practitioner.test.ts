@@ -1,19 +1,21 @@
 import {
+  ACCOUNT_STATUS,
   COUNTRY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } from './EntityConstants';
 import { Practitioner, RawPractitioner } from './Practitioner';
-import { getTextByCount } from '../utilities/getTextByCount';
+import { getTextByCount } from '@shared/test/getTextByCount';
 
 describe('Practitioner', () => {
   let validPractitioner;
 
   const mockPractitioner: RawPractitioner = {
+    accountStatus: ACCOUNT_STATUS.active,
     admissionsDate: '2019-03-01',
     admissionsStatus: 'Active',
     barNumber: 'PT20001',
-    birthYear: '2019',
+    birthYear: 2019,
     contact: {
       address1: '234 Main St',
       address2: 'Apartment 4',
@@ -137,6 +139,16 @@ describe('Practitioner', () => {
     expect(user.role).toEqual(ROLES.irsPractitioner);
   });
 
+  it('should set the section to match the computed role when practiceType changes from Private to IRS and admissionsStatus is Active', () => {
+    const user = new Practitioner({
+      ...mockPractitioner,
+      practiceType: 'IRS',
+    });
+
+    expect(user.role).toEqual(ROLES.irsPractitioner);
+    expect(user.section).toEqual(ROLES.irsPractitioner);
+  });
+
   it('should set the role to "irsPractitioner" when practiceType is "DOJ" and admissionsStatus is Active', () => {
     const user = new Practitioner({
       admissionsStatus: 'Active',
@@ -254,7 +266,7 @@ describe('Practitioner', () => {
       expect(validPractitioner.isValid()).toBeFalsy();
       expect(validPractitioner.getFormattedValidationErrors()).toEqual({
         confirmEmail: 'Email addresses do not match',
-        updatedEmail: 'Enter a valid email address',
+        updatedEmail: 'Enter email address in format: yourname@example.com',
       });
     });
 
@@ -274,7 +286,7 @@ describe('Practitioner', () => {
 
       expect(validPractitioner.isValid()).toBeFalsy();
       expect(validPractitioner.getFormattedValidationErrors()).toEqual({
-        confirmEmail: 'Enter a valid email address',
+        confirmEmail: 'Enter email address in format: yourname@example.com',
       });
     });
 
@@ -305,7 +317,7 @@ describe('Practitioner', () => {
       expect(validPractitioner.isValid()).toBeFalsy();
       expect(validPractitioner.getFormattedValidationErrors()).toEqual({
         confirmEmail: 'Enter a valid email address',
-        updatedEmail: 'Enter a valid email address',
+        updatedEmail: 'Enter email address in format: yourname@example.com',
       });
     });
   });

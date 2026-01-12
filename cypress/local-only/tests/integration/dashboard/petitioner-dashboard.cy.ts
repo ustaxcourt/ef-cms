@@ -1,9 +1,9 @@
+import { loginAsPetitioner } from 'cypress/helpers/authentication/login-as-helpers';
 import { externalUserCreatesElectronicCase } from '../../../../helpers/fileAPetition/petitioner-creates-electronic-case';
-import { navigateTo as loginAs } from '../../../support/pages/maintenance';
 
 describe('Petitioner views dashboard', () => {
   it('should display filing fee column', () => {
-    loginAs('petitioner');
+    loginAsPetitioner('petitioner@example.com');
     cy.get('[data-testid="case-list-table"]');
     cy.get('[data-testid="filing-fee"]');
     externalUserCreatesElectronicCase().then(docketNumber => {

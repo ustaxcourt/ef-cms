@@ -1,30 +1,45 @@
-// Usage: npx ts-node --transpile-only scripts/user/revoke-e-access.ts 432143213-4321-1234-4321-432143214321 101-23
+#!/usr/bin/env -S npx ts-node --transpile-only
 
 import { Case } from '@shared/business/entities/cases/Case';
-import { createApplicationContext } from '@web-api/applicationContext';
-import { getCaseByDocketNumber } from '@web-api/persistence/dynamo/cases/getCaseByDocketNumber';
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getUniqueId } from '@shared/sharedAppContext';
-import { requireEnvVars } from '../../shared/admin-tools/util';
-import { upsertCase } from '@web-api/persistence/postgres/cases/upsertCase';
+import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
+import { disassociateUsersFromCases } from '@web-api/persistence/postgres/cases/userOnCase/disassociateUsersFromCases';
+import { ROLES, SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstants';
+import { associateUsersWithCases } from '@web-api/persistence/postgres/cases/userOnCase/associateUsersWithCases';
 
-const userId = process.argv[2];
-const docketNumber = process.argv[3];
-
-if (!userId || !docketNumber) {
-  console.error('Error: missing docket number or user id.');
-  console.log(
-    'Usage:\nnpx ts-node --transpile-only scripts/user/revoke-e-access.ts 432143213-4321-1234-4321-432143214321 101-23',
-  );
-  process.exit(1);
-}
-requireEnvVars(['AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY', 'ENV']);
+const scriptConfig: ScriptConfig = {
+  description:
+    'revoke-e-access - Switches the provided petitioner to paper service in the provided case.',
+  environment: {
+    env: 'ENV',
+  },
+  parameters: {
+    docketNumber: {
+      position: 1,
+      required: true,
+      type: 'string',
+    },
+    userId: {
+      position: 0,
+      required: true,
+      type: 'string',
+    },
+  },
+  requireActiveAwsSession: true,
+};
+const { docketNumber, userId } = parseArgsAndEnvVars(scriptConfig) as {
+  docketNumber: string;
+  userId: string;
+};
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const applicationContext = createApplicationContext({});
-
   const rawCase = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
   if (!rawCase.docketNumber) {
@@ -43,21 +58,17 @@ requireEnvVars(['AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY', 'ENV']);
   }
 
   offendingPetitioner.contactId = getUniqueId();
-  offendingPetitioner.serviceIndicator = 'Paper';
+  offendingPetitioner.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_PAPER;
+  offendingPetitioner.hasElectronicAccess = false;
   delete offendingPetitioner.email;
   const caseToUpdate = new Case(rawCase, { authorizedUser: undefined })
     .validate()
     .toRawObject();
 
-  await upsertCase({ rawCase: caseToUpdate });
+  await upsertCases([caseToUpdate]);
 
-  await applicationContext
-    .getPersistenceGateway()
-    .updateCase({ applicationContext, caseToUpdate });
-
-  await applicationContext
-    .getPersistenceGateway()
-    .deleteUserFromCase({ applicationContext, docketNumber, userId });
+  await disassociateUsersFromCases([{ docketNumber, userId }]);
+  await associateUsersWithCases([{ docketNumber, userId, actingAsRole: ROLES.petitioner }]);
 
   console.log(
     `Electronic access to case ${docketNumber} has been revoked for ${offendingPetitioner.name}.`,

@@ -4,8 +4,21 @@ import { externalUserCreatesElectronicCase } from '../../../../../helpers/fileAP
 import { externalUserSearchesDocketNumber } from '../../../../../helpers/advancedSearch/external-user-searches-docket-number';
 import { goToCase } from '../../../../../helpers/caseDetail/go-to-case';
 import {
+  loginAsAdc,
+  loginAsAdmissionsClerk,
+  loginAsCaseServicesSupervisor,
+  loginAsClerkOfCourt,
+  loginAsColvin,
+  loginAsColvinChambers,
   loginAsDocketClerk,
+  loginAsFloater,
+  loginAsGeneral,
+  loginAsIrsPractitioner,
   loginAsPetitioner,
+  loginAsPetitionsClerk,
+  loginAsPrivatePractitioner,
+  loginAsReportersOffice,
+  loginAsTrialClerk,
 } from '../../../../../helpers/authentication/login-as-helpers';
 import { petitionsClerkQcsAndServesElectronicCase } from '../../../../../helpers/documentQC/petitions-clerk-qcs-and-serves-electronic-case';
 
@@ -69,20 +82,20 @@ describe('Batch Download Documents', () => {
     createAndServePaperPetition().then(({ docketNumber, documentsCreated }) => {
       // check for all internal roles
       [
-        'adc',
-        'admissionsclerk',
-        'caseservicessupervisor',
-        'clerkofcourt',
-        'colvinschambers',
-        'docketclerk',
-        'floater',
-        'general',
-        'judgecolvin',
-        'petitionsclerk',
-        'reportersoffice',
-        'trialclerk',
-      ].forEach(account => {
-        cy.login(account);
+        loginAsAdc,
+        loginAsAdmissionsClerk,
+        loginAsCaseServicesSupervisor,
+        loginAsClerkOfCourt,
+        loginAsColvinChambers,
+        loginAsDocketClerk,
+        loginAsFloater,
+        loginAsGeneral,
+        loginAsColvin,
+        loginAsPetitionsClerk,
+        loginAsReportersOffice,
+        loginAsTrialClerk,
+      ].forEach(loginFunction => {
+        loginFunction();
         goToCase(docketNumber);
         confirmCountOfDocumentsToDownload(documentsCreated.length);
         includePrintableDocketRecord();
@@ -90,14 +103,16 @@ describe('Batch Download Documents', () => {
       });
 
       // check for external roles
-      ['privatePractitioner', 'petitioner', 'irspractitioner'].forEach(
-        account => {
-          cy.login(account);
-          cy.get('[data-testid="download-docket-records-button"]').should(
-            'not.exist',
-          );
-        },
-      );
+      [
+        loginAsPrivatePractitioner,
+        loginAsPetitioner,
+        loginAsIrsPractitioner,
+      ].forEach(loginFunction => {
+        loginFunction();
+        cy.get('[data-testid="download-docket-records-button"]').should(
+          'not.exist',
+        );
+      });
     });
   });
 
@@ -236,14 +251,19 @@ describe('Batch Download Documents', () => {
     createAndServePaperPetition().then(({ docketNumber, name }) => {
       const zipName = `${docketNumber}, ${name}.zip`;
       const documentsFilteredByDocumentType = [{ eventCode: 'O' }];
-      let expectedFileCount = 1;
-      let expectedSealedCount = 0;
-      let expectedStrickenCount = 0;
+      const expectedFileCount = 1;
+      const expectedSealedCount = 0;
+      const expectedStrickenCount = 0;
       const today = createISODateString();
       loginAsDocketClerk();
       goToCase(docketNumber);
       cy.get('[data-testid="tab-drafts"] > .button-text').click();
-      cy.get('[data-testid="docket-entry-description-1"]').click();
+      cy.get('button.attachment-viewer-button')
+        .filter((_, el) => {
+          return Cypress.$(el).find('*').text().includes('Order');
+        })
+        .first()
+        .click();
       cy.get('#apply-signature').click();
       cy.get('[data-testid="sign-pdf-canvas"]').click();
       cy.get('[data-testid="save-signature-button"]').click();

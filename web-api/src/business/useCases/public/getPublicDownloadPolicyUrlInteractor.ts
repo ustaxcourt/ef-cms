@@ -1,15 +1,13 @@
 import {
   ALLOWLIST_FEATURE_FLAGS,
   ROLES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import {
-  Case,
-  isSealedCase,
-} from '../../../../../shared/src/business/entities/cases/Case';
+} from '@shared/business/entities/EntityConstants';
+import { Case, isSealedCase } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 export const getPublicDownloadPolicyUrlInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -20,12 +18,9 @@ export const getPublicDownloadPolicyUrlInteractor = async (
   }: { docketNumber: string; isTerminalUser: boolean; key: string },
   authorizdeUser: UnknownAuthUser,
 ): Promise<{ url: string }> => {
-  const caseToCheck: any = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const caseToCheck: any = await getCaseByDocketNumber({
+    docketNumber,
+  });
 
   if (!caseToCheck.docketNumber && !caseToCheck.entityName) {
     throw new NotFoundError(`Case ${docketNumber} was not found.`);
@@ -76,6 +71,8 @@ export const getPublicDownloadPolicyUrlInteractor = async (
       user: {
         role: ROLES.petitioner,
         userId: '',
+        email: '',
+        name: '',
       },
       visibilityChangeDate: documentVisibilityChangeDate,
     })

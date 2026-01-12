@@ -3,13 +3,24 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import { RunableSequence as RunnableSequence } from 'cerebral';
 
-export const StrikeDocketEntryModal = connect(
+type StrikeDocketEntryModalProps = {
+  confirmSequence: string;
+};
+
+export const StrikeDocketEntryModal: React.FC<StrikeDocketEntryModalProps> = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
-    confirmSequence: sequences[props.confirmSequence],
+    confirmSequence: sequences[props`confirmSequence`],
   },
-  function StrikeDocketEntryModal({ cancelSequence, confirmSequence }) {
+  function StrikeDocketEntryModal({
+    cancelSequence,
+    confirmSequence,
+  }: {
+    cancelSequence: Function | RunnableSequence;
+    confirmSequence: Function | RunnableSequence;
+  }) {
     return (
       <ModalDialog
         cancelLabel="No, Cancel"

@@ -1,16 +1,14 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import {
-  Message,
-  RawMessage,
-} from '../../../../../shared/src/business/entities/Message';
+import { Case } from '@shared/business/entities/cases/Case';
+import { Message, RawMessage } from '@shared/business/entities/Message';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
+} from '@shared/authorization/authorizationClientService';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { createMessage } from '@web-api/persistence/postgres/messages/createMessage';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 export type MessageType = {
   attachments: {
@@ -32,7 +30,6 @@ export type ReplyMessageType = MessageType & {
 };
 
 export const createMessageInteractor = async (
-  applicationContext: ServerApplicationContext,
   {
     attachments,
     docketNumber,
@@ -47,17 +44,31 @@ export const createMessageInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { caseCaption, status } = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({ applicationContext, docketNumber });
+  const associatedCase = await getCaseByDocketNumber({
+    docketNumber,
+  });
 
-  const fromUser = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  if (!associatedCase) {
+    throw new NotFoundError(`Case ${docketNumber} not found`);
+  }
 
-  const toUser = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: toUserId });
+  const { caseCaption, status } = associatedCase;
+
+  const fromUser = await getUserById({ userId: authorizedUser.userId });
+
+  if (!fromUser) {
+    throw new NotFoundError(
+      `User not found with user id ${authorizedUser.userId}`,
+    );
+  }
+
+  const toUser = await getUserById({ userId: toUserId });
+
+  if (!toUser) {
+    throw new NotFoundError(
+      `User not found with user id ${authorizedUser.userId}`,
+    );
+  }
 
   const validatedRawMessage = new Message({
     attachments,

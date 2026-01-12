@@ -35,7 +35,7 @@ const {
   ZIP_FILE_NAME,
 } = process.env as {
   [key: string]: string;
-  AWS_REGION: 'us-east-1' | 'us-west-1';
+  AWS_REGION: 'us-east-1';
 };
 
 const S3_REGION = 'us-east-1';
@@ -135,7 +135,7 @@ export async function zipDocuments({
   });
 
   const writable = new Writable({
-    write(chunk, encoding, callback) {
+    write(_chunk, _encoding, callback) {
       callback();
     },
   });
@@ -238,9 +238,9 @@ export async function app({
     Key: UNIQUE_ZIP_NAME,
   });
 
-  const EXPIRATION_TIME_IN_MINUTES = 10 * 60;
+  const EXPIRATION_TIME_IN_SECONDS = 10 * 60;
   const url = await getSignedUrl(zipStorageClient, command, {
-    expiresIn: EXPIRATION_TIME_IN_MINUTES,
+    expiresIn: EXPIRATION_TIME_IN_SECONDS,
   });
 
   console.log('Sending link to user');
@@ -256,10 +256,10 @@ export async function app({
   console.log('Zip and upload complete, link sent to client.');
 }
 
-app({
+void app({
   connectionId: WEBSOCKET_CONNECTION_ID!,
   documentsReference: DOCKET_ENTRY_FILES_REFRENCE!,
   s3Client: storageClient,
   wsClient: notificationClient,
   zipName: ZIP_FILE_NAME!,
-}).catch(console.error);
+});

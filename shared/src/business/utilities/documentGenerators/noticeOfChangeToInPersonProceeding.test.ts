@@ -24,7 +24,6 @@ describe('noticeOfChangeToInPersonProceeding', () => {
             formattedJudge: 'Chief Special Trial Judge Carluzzo',
             formattedStartDate: '01/01/2001',
             formattedStartTime: '12:00 am',
-            judgeName: 'Judge Judy',
             state: 'Alaska',
             trialLocation: 'Birmingham, Alabama',
             zip: '33333',

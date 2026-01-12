@@ -3,13 +3,21 @@ import {
   TrialSessionState,
 } from '@web-client/presenter/state/trialSessionState';
 import {
-  DOCKET_NUMBER_SUFFIXES,
+  HIGH_PRIORITY_SUFFIXES,
   PARTIES_CODES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../entities/EntityConstants';
 import { FORMATS } from '../DateHandler';
-import { RawEligibleCase } from '../../entities/cases/EligibleCase';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '@shared/authorization/authorizationClientService';
+import { isLeadCase } from '../../entities/cases/Case';
 import { RawIrsCalendarAdministratorInfo } from '@shared/business/entities/trialSessions/IrsCalendarAdministratorInfo';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { compact, partition } from 'lodash';
+import { caseIsEligibleForMinuteSheet } from '@shared/business/utilities/trialSessionMinutes/caseIsEligibleForMinuteSheet';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
 export const setPretrialMemorandumFiler = ({ caseItem }): string => {
   if (caseItem.PMTServedPartiesCode !== undefined) {
@@ -68,9 +76,9 @@ export const formatCaseForTrialSession = ({
   eligibleCases = [],
   setFilingPartiesCode = false,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: IApplicationContext | ClientApplicationContext;
   caseItem: CalendaredCaseItemType;
-  eligibleCases?: RawEligibleCase[];
+  eligibleCases?: CalendaredCaseItemType[];
   setFilingPartiesCode?: boolean;
 }): FormattedTrialSessionCase => {
   let removedFromTrialDateFormatted = '';
@@ -83,12 +91,7 @@ export const formatCaseForTrialSession = ({
       .formatDateString(caseItem.removedFromTrialDate, FORMATS.MMDDYY);
   }
 
-  const highPrioritySuffixes = [
-    DOCKET_NUMBER_SUFFIXES.LIEN_LEVY, // L
-    DOCKET_NUMBER_SUFFIXES.PASSPORT, // P
-    DOCKET_NUMBER_SUFFIXES.SMALL_LIEN_LEVY, // SL
-  ];
-  const isDocketSuffixHighPriority = highPrioritySuffixes.includes(
+  const isDocketSuffixHighPriority = HIGH_PRIORITY_SUFFIXES.includes(
     caseItem.docketNumberSuffix!,
   );
 
@@ -120,7 +123,7 @@ const getDocketNumberSortString = ({ allCases = [], theCase }) => {
 
   return `${getSortableDocketNumber(
     isLeadCaseInList
-      ? theCase.docketNumber === theCase.leadDocketNumber
+      ? isLeadCase(theCase)
         ? theCase.docketNumber
         : theCase.leadDocketNumber
       : theCase.docketNumber,
@@ -168,6 +171,7 @@ export type FormattedTrialSessionDetailsType = TrialSessionState & {
   formattedTerm: string;
   formattedTrialClerk: string;
   inactiveCases: any;
+  isRemoteSession: boolean;
   noLocationEntered: boolean;
   openCases: any;
   showSwingSession: boolean;
@@ -176,9 +180,11 @@ export type FormattedTrialSessionDetailsType = TrialSessionState & {
 
 export const getFormattedTrialSessionDetails = ({
   applicationContext,
+  currentUser,
   trialSession,
 }: {
   applicationContext: any;
+  currentUser: UnknownAuthUser;
   trialSession: TrialSessionState;
 }): FormattedTrialSessionDetailsType => {
   const allCases = (trialSession.calendaredCases || []).map(caseItem =>
@@ -193,13 +199,34 @@ export const getFormattedTrialSessionDetails = ({
     allCases,
     item => item.removedFromTrial === true,
   );
-
+  const isUserEligableForMinuteSheet = !!isAuthorized(
+    currentUser,
+    ROLE_PERMISSIONS.MANAGE_MINUTE_SHEET,
+  );
   const openCasesFormatted = openCases
     .map(caseItem =>
       applicationContext
         .getUtilities()
         .setConsolidationFlagsForDisplay(caseItem, openCases),
     )
+    .map(caseItem => {
+      let displayMinuteSheetFormButton = false;
+      let minuteSheetRoute;
+
+      if (
+        isUserEligableForMinuteSheet &&
+        caseIsEligibleForMinuteSheet(caseItem, trialSession)
+      ) {
+        displayMinuteSheetFormButton = true;
+        minuteSheetRoute = `/trial-session-detail/${trialSession.trialSessionId}/case/${caseItem.docketNumber}/minutes`;
+      }
+
+      return {
+        ...caseItem,
+        displayMinuteSheetFormButton,
+        minuteSheetRoute,
+      };
+    })
     .sort(compareCasesByDocketNumberFactory({ allCases: openCases }));
 
   const inactiveCasesFormatted = inactiveCases
@@ -208,6 +235,23 @@ export const getFormattedTrialSessionDetails = ({
         .getUtilities()
         .setConsolidationFlagsForDisplay(caseItem, inactiveCases),
     )
+    .map(caseItem => {
+      let displayMinuteSheetFormButton = false;
+      let minuteSheetRoute;
+      if (
+        isUserEligableForMinuteSheet &&
+        caseIsEligibleForMinuteSheet(caseItem, trialSession)
+      ) {
+        displayMinuteSheetFormButton = true;
+        minuteSheetRoute = `/trial-session-detail/${trialSession.trialSessionId}/case/${caseItem.docketNumber}/minutes`;
+      }
+
+      return {
+        ...caseItem,
+        displayMinuteSheetFormButton,
+        minuteSheetRoute,
+      };
+    })
     .sort(
       compareCasesByDocketNumberFactory({
         allCases: inactiveCases,
@@ -242,9 +286,9 @@ export const getFormattedTrialSessionDetails = ({
     .getUtilities()
     .formatDateString(trialSession.startDate, 'MONTH_DAY_YEAR');
 
-  let [hour, min] = trialSession.startTime!.split(':');
+  const [hour, min] = trialSession.startTime!.split(':');
   let hourNumber = +hour;
-  let startTimeExtension = hourNumber >= 12 ? 'pm' : 'am';
+  const startTimeExtension = hourNumber >= 12 ? 'pm' : 'am';
 
   if (hourNumber > 12) {
     hourNumber = hourNumber - 12;
@@ -300,6 +344,9 @@ export const getFormattedTrialSessionDetails = ({
     .replace(/\s/g, '_')
     .replace(/,/g, '');
 
+  const isRemoteSession =
+    trialSession.proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.remote;
+
   return {
     ...trialSession,
     allCases: allCasesFormatted,
@@ -317,6 +364,7 @@ export const getFormattedTrialSessionDetails = ({
     formattedTerm,
     formattedTrialClerk,
     inactiveCases: inactiveCasesFormatted,
+    isRemoteSession,
     noLocationEntered,
     openCases: openCasesFormatted,
     showSwingSession,

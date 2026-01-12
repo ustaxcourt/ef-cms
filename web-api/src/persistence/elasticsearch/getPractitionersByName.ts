@@ -1,6 +1,8 @@
 import { IS_PRACTITIONER } from './helpers/searchClauses';
 import { PRACTITIONER_SEARCH_PAGE_SIZE } from '@shared/business/entities/EntityConstants';
 import { search } from './searchClient';
+import { ServerApplicationContext } from '@web-api/applicationContext';
+import { Search_Request } from '@opensearch-project/opensearch/api';
 
 export type PractitionerSearchResultType = {
   admissionsStatus: string;
@@ -25,14 +27,63 @@ export type PractitionerSearchResultType = {
 };
 
 export const getPractitionersByName = async (
-  applicationContext: IApplicationContext,
-  { name, searchAfter },
+  applicationContext: ServerApplicationContext,
+  {
+    name,
+    practitionerType,
+    practiceType,
+    admissionStatus,
+    originalBarState,
+    searchAfter,
+  }: {
+    name?: string;
+    practitionerType?: string;
+    practiceType?: string[];
+    admissionStatus?: string[];
+    originalBarState?: string[];
+    searchAfter?: string[];
+  },
 ): Promise<{
   lastKey: (string | number)[];
   total: number;
   results: PractitionerSearchResultType[];
 }> => {
-  const searchParameters = {
+  const searchClause: Record<string, any>[] = [
+    ...IS_PRACTITIONER,
+    {
+      simple_query_string: {
+        default_operator: 'and',
+        fields: ['name.S'],
+        query: name,
+      },
+    },
+  ];
+
+  if (practitionerType) {
+    searchClause.push({
+      term: { 'practitionerType.S': practitionerType },
+    });
+  }
+
+  if (practiceType) {
+    searchClause.push({
+      terms: { 'practiceType.S': practiceType },
+    });
+  }
+
+  if (admissionStatus) {
+    searchClause.push({
+      terms: { 'admissionsStatus.S': admissionStatus },
+    });
+  }
+
+  if (originalBarState) {
+    searchClause.push({
+      terms: { 'originalBarState.S': originalBarState },
+    });
+  }
+
+  const searchParameters: Search_Request = {
     body: {
       _source: [
         'admissionsStatus',
@@ -46,16 +97,7 @@ export const getPractitionersByName = async (
       ],
       query: {
         bool: {
-          must: [
-            ...IS_PRACTITIONER,
-            {
-              simple_query_string: {
-                default_operator: 'and',
-                fields: ['name.S'],
-                query: name,
-              },
-            },
-          ],
+          must: searchClause,
         },
       },
       search_after: searchAfter,

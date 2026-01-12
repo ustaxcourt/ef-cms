@@ -6,10 +6,12 @@ describe('formatAttachments', () => {
     {
       docketEntryId: '1',
       documentTitle: 'Test Document One',
+      index: 1,
     },
     {
       docketEntryId: '2',
       documentType: 'Test Document Two',
+      index: 2,
     },
   ];
 
@@ -17,10 +19,12 @@ describe('formatAttachments', () => {
     {
       correspondenceId: '3',
       documentTitle: 'Test Correspondence One',
+      index: 3,
     },
     {
       correspondenceId: '4',
       documentType: 'Test Correspondence Two',
+      index: 4,
     },
   ];
 
@@ -29,11 +33,13 @@ describe('formatAttachments', () => {
       archived: true,
       docketEntryId: '5',
       documentTitle: 'Test Archived One',
+      index: 5,
     },
     {
       archived: true,
       docketEntryId: '6',
       documentType: 'Test Archived Two',
+      index: 6,
     },
   ];
 
@@ -42,11 +48,13 @@ describe('formatAttachments', () => {
       archived: true,
       correspondenceId: '7',
       documentTitle: 'Test Archived Correspondence One',
+      index: 7,
     },
     {
       archived: true,
       correspondenceId: '8',
       documentType: 'Test Archived Correspondence Two',
+      index: 8,
     },
   ];
 
@@ -82,17 +90,29 @@ describe('formatAttachments', () => {
     });
 
     expect(result).toEqual([
-      { archived: false, documentId: '1', documentTitle: firstGeneratedTitle },
+      {
+        archived: false,
+        documentId: '1',
+        documentTitle: firstGeneratedTitle,
+        index: 1,
+      },
       {
         archived: false,
         documentId: '3',
         documentTitle: secondGeneratedTitle,
+        index: 3,
       },
-      { archived: true, documentId: '5', documentTitle: thirdGeneratedTitle },
+      {
+        archived: true,
+        documentId: '5',
+        documentTitle: thirdGeneratedTitle,
+        index: 5,
+      },
       {
         archived: true,
         documentId: '7',
         documentTitle: fourthGeneratedTitle,
+        index: 7,
       },
     ]);
   });
@@ -115,17 +135,29 @@ describe('formatAttachments', () => {
     });
 
     expect(result).toEqual([
-      { archived: false, documentId: '2', documentTitle: 'Test Document Two' },
+      {
+        archived: false,
+        documentId: '2',
+        documentTitle: 'Test Document Two',
+        index: 2,
+      },
       {
         archived: false,
         documentId: '4',
         documentTitle: 'Test Correspondence Two',
+        index: 4,
       },
-      { archived: true, documentId: '6', documentTitle: 'Test Archived Two' },
+      {
+        archived: true,
+        documentId: '6',
+        documentTitle: 'Test Archived Two',
+        index: 6,
+      },
       {
         archived: true,
         documentId: '8',
         documentTitle: 'Test Archived Correspondence Two',
+        index: 8,
       },
     ]);
   });

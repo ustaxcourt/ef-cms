@@ -2,27 +2,26 @@ import {
   CHIEF_JUDGE,
   CUSTOM_CASE_REPORT_PAGE_SIZE,
 } from '@shared/business/entities/EntityConstants';
+import {
+  createEndOfDayISO,
+  createStartOfDayISO,
+} from '@shared/business/utilities/DateHandler';
+import { getCustomCaseReportInteractor } from '@shared/proxies/reports/getCustomCaseReportProxy';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const getCustomCaseReportAction = async ({
-  applicationContext,
   get,
   props,
   store,
 }: ActionProps<{ selectedPage: number }>) => {
   const filterValues = get(state.customCaseReport.filters);
   const currentJudges = get(state.judges);
-  const lastIdsOfPages = get(state.customCaseReport.lastIdsOfPages);
-  const searchAfter = lastIdsOfPages[props.selectedPage];
-
-  if (!filterValues.highPriority) {
-    delete filterValues.highPriority;
-  }
+  const page = props.selectedPage;
 
   let formattedStartDate: string | undefined;
   if (filterValues.startDate) {
     const [startMonth, startDay, startYear] = filterValues.startDate.split('/');
-    formattedStartDate = applicationContext.getUtilities().createStartOfDayISO({
+    formattedStartDate = createStartOfDayISO({
       day: startDay,
       month: startMonth,
       year: startYear,
@@ -32,9 +31,11 @@ export const getCustomCaseReportAction = async ({
   let formattedEndDate: string | undefined;
   if (filterValues.endDate) {
     const [endMonth, endDay, endYear] = filterValues.endDate.split('/');
-    formattedEndDate = applicationContext
-      .getUtilities()
-      .createEndOfDayISO({ day: endDay, month: endMonth, year: endYear });
+    formattedEndDate = createEndOfDayISO({
+      day: endDay,
+      month: endMonth,
+      year: endYear,
+    });
   }
 
   let judgesIds: string[] | undefined;
@@ -48,21 +49,14 @@ export const getCustomCaseReportAction = async ({
     });
   }
 
-  const reportData = await applicationContext
-    .getUseCases()
-    .getCustomCaseReportInteractor(applicationContext, {
-      ...filterValues,
-      endDate: formattedEndDate,
-      judges: judgesIds!,
-      pageSize: CUSTOM_CASE_REPORT_PAGE_SIZE,
-      searchAfter,
-      startDate: formattedStartDate,
-    });
-
-  store.set(
-    state.customCaseReport.lastIdsOfPages[props.selectedPage + 1],
-    reportData.lastCaseId,
-  );
+  const reportData = await getCustomCaseReportInteractor({
+    ...filterValues,
+    endDate: formattedEndDate,
+    judges: judgesIds!,
+    page,
+    pageSize: CUSTOM_CASE_REPORT_PAGE_SIZE,
+    startDate: formattedStartDate,
+  });
 
   store.set(state.customCaseReport.cases, reportData.foundCases);
   store.set(state.customCaseReport.totalCases, reportData.totalCount);

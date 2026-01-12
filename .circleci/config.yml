@@ -2,22 +2,22 @@ version: 2.1
 orbs:
   git-shallow-clone: guitarrapc/git-shallow-clone@2.8.0
 
-efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.17
+efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.63
 
 parameters:
   run_build_and_deploy:
     default: true
     type: boolean
 
-  run_build_and_deploy_with_context:
+  run_build_and_deploy_to_prod:
     default: true
     type: boolean
 
-  run_build_and_deploy_empty:
+  run_glue_to_test:
     default: false
     type: boolean
 
-  run_glue_to_test:
+  run_s3_to_test:
     default: false
     type: boolean
 
@@ -25,13 +25,25 @@ parameters:
     default: false
     type: boolean
 
-  lower_env:
-    default: test
-    type: string
+  run_reindex_opensearch:
+    default: false
+    type: boolean
 
   run_sync_s3_to_lower_env:
     default: false
     type: boolean
+
+  run_real_user_tests:
+    default: false
+    type: boolean
+
+  lower_env:
+    default: test
+    type: string
+
+  lower_env_account_id:
+    default: ''
+    type: string
 
   referrer:
     default: ''
@@ -44,6 +56,10 @@ parameters:
   destination_bucket:
     default: ''
     type: string
+
+  force_all_migrations:
+    default: false
+    type: boolean
 
 commands:
   npm-and-cypress-install:
@@ -112,9 +128,10 @@ jobs:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     resource_class: xlarge
-    environment:
-      DEPLOY_EMPTY_PERSISTENCE: << pipeline.parameters.run_build_and_deploy_empty >>
     steps:
+      - setup_remote_docker:
+          version: docker23
+          docker_layer_caching: true
       - git-shallow-clone/checkout
       - npm-install
       - run:
@@ -126,13 +143,16 @@ jobs:
           command: |
             cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
       - run:
-          name: Setup Blue Green Migration If Needed
+          name: Engage maintenance mode if we are upgrading or downgrading the RDS engine version
           command: |
-            if [ "$DEPLOY_EMPTY_PERSISTENCE" == "true" ]; then
+            CURRENT_RDS_ENGINE_VERSION=$(aws rds describe-db-clusters --db-cluster-identifier "${ENV}-dawson-cluster" --query "DBClusters[0].EngineVersion" --region us-east-1 --output text)
+            if [ -n "$CURRENT_RDS_ENGINE_VERSION" ] && [ "$CURRENT_RDS_ENGINE_VERSION" != "$RDS_ENGINE_VERSION" ]; then
+              npm run maintenance:engage
+              # NOTE: the lack of a companion "disengage" is intentional!
+              # maintenance mode is color-specific so when we switch colors it'll be off
+            else
               echo "skipping…"
-              exit 0
             fi
-            ./setup-for-blue-green-migration.sh
       - run:
           no_output_timeout: 20m
           name: 'Deploy - All Color Terraform'
@@ -154,28 +174,19 @@ jobs:
       - run:
           name: Test Users Setup
           command: |
-            if [ "${CIRCLE_BRANCH}" != "prod" ] && [ "$DEPLOY_EMPTY_PERSISTENCE" != "true" ]; then
-              npx ts-node --transpile-only scripts/user/setup-test-users.ts
+            if [ "${CIRCLE_BRANCH}" != "prod" ]; then
+              ./scripts/user/setup-test-users.ts
             else
               echo "skipping…"
             fi
       - run:
-          name: Judge Users Setup
+          name: Users Setup
           command: |
-            if [ "${CIRCLE_BRANCH}" == "prod" ] || [ "$DEPLOY_EMPTY_PERSISTENCE" == "true" ]; then
+            if [ "${CIRCLE_BRANCH}" == "prod" ]; then
               echo "skipping…"
               exit 0
             fi
-            if [ "${CIRCLE_BRANCH}" == "test" ]; then
-              SOURCE_DOMAIN=$(./scripts/elasticsearch/get-source-elasticsearch.sh "${ENV}")
-              ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
-                --domain-name "${SOURCE_DOMAIN}" \
-                --region "us-east-1" \
-                --query 'DomainStatus.Endpoint' \
-                --output text)
-              export ELASTICSEARCH_ENDPOINT="$ELASTICSEARCH_ENDPOINT"
-              npx ts-node --transpile-only ./scripts/user/setup-glued-judges.ts
-            else
+            if [ "${CIRCLE_BRANCH}" != "test" ]; then
               npx ts-node --transpile-only ./scripts/circleci/judge/bulkImportJudgeUsers.ts | tee bulk-import-log.txt
             fi
       - run:
@@ -187,6 +198,22 @@ jobs:
           command: |
             ./web-client/deploy-public.sh
       - run:
+          name: 'Deploy - Inactive Cases Email Lambda and Monthly Cron Trigger'
+          command: |
+            if [ -n "$INACTIVITY_REPORT_RECIPIENTS" ]; then
+              ES_DOMAIN="$SOURCE_ELASTICSEARCH"
+              if [ "$MIGRATE_FLAG" == "true" ]; then
+                ES_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "$ENV")
+              fi
+              ES_ENDPOINT=$(aws es describe-elasticsearch-domain \
+                --domain-name "$ES_DOMAIN" \
+                --region "us-east-1" \
+                --query 'DomainStatus.Endpoint' \
+                --output text)
+              export ELASTICSEARCH_ENDPOINT="$ES_ENDPOINT"
+              npm run deploy:stale-cases-email-cron -- $ENV
+            fi
+      - run:
           name: 'Deploy - Authorizer Smoke Tests'
           command: |
             npm run verify-authorizers -- $ENV
@@ -194,13 +221,10 @@ jobs:
           name: 'Deploy - Verify Private Elasticsearch'
           command: |
             npm run verify-private-elasticsearch -- $ENV
-      - run:
-          name: 'Deploy - Pending Color Switch'
-          command: npm run pending-color-switch
 
   docker-image-zipper:
     docker:
-      - image: cimg/node:20.14
+      - image: cimg/node:24.12.0
     resource_class: xlarge
     steps:
       - git-shallow-clone/checkout
@@ -228,8 +252,11 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
+    resource_class: xlarge
     steps:
+      - setup_remote_docker:
+          version: docker23
+          docker_layer_caching: true
       - git-shallow-clone/checkout
       - npm-install
       - run:
@@ -237,124 +264,45 @@ jobs:
           command: |
             ./scripts/env/env-for-circle.sh
       - run:
-          name: Deploy Check Migration Status Cron Lambda
-          command: |
-            npm run deploy:migration-cron -- $ENV
-      - run:
-          name: Setup Migration Infrastructure
-          command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              npm run deploy:migration -- $ENV
-            fi
-      - run:
-          name: Disable Destination Table Stream
-          command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              ./web-api/disable-deploying-dynamo-stream-trigger.sh
-            fi
-      - run:
-          name: Run Migration
-          command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              npm run start:migration -- $ENV
-            fi
-      - run:
+          no_output_timeout: 30m
           name: Run Postgres Migration
           command: |
-            NODE_ENV=production npm run migration:postgres
+            npm run migration:postgres
+      - when:
+          condition: << pipeline.parameters.force_all_migrations >>
+          no_output_timeout: 30m
+          steps:
+            - run:
+                name: Run Postgres Deprecated Migration
+                command: npm run migration:postgres:deprecated
       - run:
-          name: Enable Check Migration Status Cron
+          name: Restore Postgres User Permissions
           command: |
-            ./scripts/migration/enable-migration-cron.sh
-
-  prepare-for-reindex:
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
+            cd ./scripts/postgres
+            DB_HOST="$POSTGRES_HOST" ./create-rds-users.sh
       - run:
-          name: Setup Env
+          name: Migrate Trial Sessions
           command: |
-            ./scripts/env/env-for-circle.sh
-            source $BASH_ENV
-            if [ "$MIGRATE_FLAG" == "false" ]; then
-              DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
-              ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
-                --domain-name "${DESTINATION_DOMAIN}" \
-                --region "us-east-1" \
-                --query 'DomainStatus.Endpoint' \
-                --output text)
-              echo "export ELASTICSEARCH_ENDPOINT=${ELASTICSEARCH_ENDPOINT}" >> $BASH_ENV
+            NUM_TRIAL_SESSIONS=$(./scripts/postgres/connect.sh --quiet --yes \
+              --command="SELECT COUNT(*) FROM dw_trial_session;")
+            if [[ "$NUM_TRIAL_SESSIONS" -ne 0 ]]; then
+              echo "Already migrated trial sessions"
+              exit 0
             fi
-      - run:
-          name: Disable Check Migration Status Cron
-          command: |
-            ./scripts/migration/disable-migration-cron.sh
-      - run:
-          name: Track successful migrations
-          command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              npx ts-node --transpile-only ./scripts/migration/track-successful-migrations.ts
-            fi
-      - run:
-          name: Set Marker to Indicate Migration is Complete
-          command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              COLOR="$DEPLOYING_COLOR" JOB_NAME="wait-for-reindex" ./scripts/migration/set-migration-complete-marker.sh
-            fi
-      - run:
-          name: Begin Reindexing
-          command: |
-            if [ "$MIGRATE_FLAG" == "false" ]; then
-              npx ts-node --transpile-only ./scripts/elasticsearch/reindex.ts
-            fi
-      - run:
-          name: Deploy Check Reindex Status Cron Lambda
-          command: |
-            npm run deploy:reindex-cron -- $ENV
-      - run:
-          name: Enable Check Reindex Status Cron
-          command: |
-            ./scripts/reindex/enable-reindex-cron.sh
-      - run:
-          name: Enable Destination Table Stream
-          command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              ./web-api/enable-deploying-dynamo-stream-trigger.sh
-            fi
-
-  disable-reindex-cron:
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-      - run:
-          name: Disable Check Reindex Status Cron
-          command: |
-            ./scripts/reindex/disable-reindex-cron.sh
+            ./scripts/run-once-scripts/postgres-migration/migrate-trial-session-information.ts
 
   smoketests:
+    parallelism: 9
     docker:
       - image: *efcms-docker-image
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
+    resource_class: large
     steps:
+      - setup_remote_docker:
+          version: docker23
+          docker_layer_caching: true
       - git-shallow-clone/checkout
       - npm-and-cypress-install
       - run:
@@ -366,7 +314,7 @@ jobs:
             ./scripts/env/env-for-circle.sh
       - run:
           name: 'Cypress Smoke Tests'
-          command: npm run cypress:smoketests
+          command: find cypress/deployed-and-local/integration -type f -name "*.cy.ts" | circleci tests run --split-by=timings --command 'paste -sd, - | xargs -I {} ./scripts/run-cypress.sh -s -t {}'
       - store_artifacts:
           path: /root/project/cypress/deployed-and-local/videos/
 
@@ -389,7 +337,7 @@ jobs:
             ./scripts/env/env-for-circle.sh
       - run:
           name: Create and Enable Test User
-          command: npx ts-node --transpile-only ./scripts/user/create-and-enable-smoketest-user.ts
+          command: ./scripts/user/create-and-enable-smoketest-user.ts
       - run:
           name: 'Cypress Readonly Smoke Tests'
           command: |
@@ -399,7 +347,7 @@ jobs:
             set -e
       - run:
           name: Disable Test User
-          command: npx ts-node --transpile-only ./scripts/user/disable-smoketest-user.ts
+          command: ./scripts/user/disable-smoketest-user.ts
       - run:
           name: Kill Build if Smoketests Failed
           command: |
@@ -502,34 +450,13 @@ jobs:
           name: 'Switch Colors'
           command: npm run switch-colors
 
-  backup-source-dynamo-table:
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: small
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-      - run:
-          name: Backup Source DynamoDB table
-          command: |
-            if [ $MIGRATE_FLAG == true ]; then
-              npm run backup:dynamo-table -- $SOURCE_TABLE
-            fi
-
   cleanup:
     docker:
       - image: *efcms-docker-image
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium
+    resource_class: medium+
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -538,19 +465,8 @@ jobs:
           command: |
             ./scripts/env/env-for-circle.sh
       - run:
-          name: Destroy Migration Infrastructure
-          command: |
-            if [ $MIGRATE_FLAG == true ]; then
-              npm run destroy:migration -- $ENV
-            fi
-      - run:
-          name: Destroy Check Migration Status Cron Infrastructure
-          command: |
-            npm run destroy:migration-cron -- $ENV
-      - run:
-          name: Destroy Check Reindex Status Cron Infrastructure
-          command: |
-            npm run destroy:reindex-cron -- $ENV
+          name: Run Postgres Contract Migration
+          command: npm run migration:postgres:contract
       - run:
           name: Setup Elasticsearch Aliases
           command: |
@@ -566,21 +482,19 @@ jobs:
               npm run delete:elasticsearch-cluster -- $SOURCE_ELASTICSEARCH
             fi
       - run:
-          name: Delete Source Dynamo table
-          command: |
-            if [ $MIGRATE_FLAG == true ]; then
-              npm run delete:dynamo-table -- $SOURCE_TABLE
-            fi
-      - run:
           name: Cleanup Deploy Table After Migration
           command: |
             if [ $MIGRATE_FLAG == true ]; then
               npm run migration:cleanup -- $ENV
             fi
+      - run:
+          name: Cleanup Cypress Test Accounts
+          command: |
+            npm run cleanup:cypress-test-accounts
 
   ######################## GLUE JOB: Jobs that run in a lower environment ########################
 
-  delete-existing-data:
+  delete-and-recreate-elasticsearch-cluster:
     docker:
       - image: *efcms-docker-image
         aws_auth:
@@ -595,51 +509,26 @@ jobs:
           command: |
             ./scripts/env/env-for-circle.sh
       - run:
-          name: Setup the deploy table for a glue job
+          name: Setup SSM
           command: |
-            ./scripts/circleci/setup-deploy-table-for-glue-job.sh
+            ./scripts/circleci/setup-ssm-for-glue-job.sh
       - run:
-          name: Delete all existing dynamodb tables and elasticsearch clusters
+          name: 'Delete OpenSearch alpha/beta clusters'
           command: |
-            ./scripts/delete-all-persistence.sh
-
-  redeploy-environment:
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
+            ./scripts/elasticsearch/delete-alpha-and-beta-clusters.sh
       - run:
-          name: Setup Env
+          no_output_timeout: 20m
+          name: 'Recreate the alpha OpenSearch cluster'
           command: |
-            ./scripts/env/env-for-circle.sh
-            VCS=<< pipeline.project.type >>
-            CIRCLE_PROJECT_SLUG="${VCS}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
-            echo "export CIRCLE_PROJECT_SLUG=${CIRCLE_PROJECT_SLUG}" >> $BASH_ENV
+            npm run deploy:allColors $ENV
       - run:
-          name: Kick off a deployment
+          name: Setup OpenSearch Index Settings and Mappings
           command: |
-            CIRCLE_PIPELINE_ID=$(curl --request POST \
-              --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
-              --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
-              --header "content-type: application/json" \
-              --data "{\"branch\":\"${CIRCLE_BRANCH}\", \"parameters\":{ \
-                \"run_build_and_deploy\":false, \
-                \"run_build_and_deploy_empty\":true}}" | jq -r '.id')
-            echo "export CIRCLE_PIPELINE_ID=${CIRCLE_PIPELINE_ID}" >> $BASH_ENV
+            ./web-api/setup-elasticsearch-index.sh $ENV
       - run:
-          name: Deploy Wait for Workflow Cron Lambda
+          name: Setup OpenSearch Aliases
           command: |
-            export APPROVAL_JOB_NAME=wait-for-deployment-workflow
-            npm run deploy:wait-for-workflow-cron -- $ENV
-      - run:
-          name: Enable Wait for Workflow Cron
-          command: |
-            ./scripts/wait-for-workflow/enable-wait-for-workflow-cron.sh
+            npx ts-node --transpile-only ./web-api/elasticsearch/elasticsearch-alias-settings.ts
 
   initiate-glue-job:
     docker:
@@ -666,40 +555,9 @@ jobs:
             echo "export SOURCE_BUCKET=${PROD_DOCUMENTS_BUCKET_NAME}" >> $BASH_ENV
             echo "export DESTINATION_BUCKET=${EFCMS_DOMAIN}-documents-${ENV}-us-east-1" >> $BASH_ENV
       - run:
-          name: Disable Wait for Workflow Cron
+          name: 'Delete Cognito users'
           command: |
-            ./scripts/wait-for-workflow/disable-wait-for-workflow-cron.sh
-      - run:
-          name: Destroy Wait for Workflow Lambda
-          command: |
-            export APPROVAL_JOB_NAME=wait-for-deployment-workflow
-            export CIRCLE_PIPELINE_ID=noop
-            npm run destroy:wait-for-workflow-cron -- $ENV
-      - run:
-          name: Disable Dynamodb Streams
-          command: |
-            ./scripts/migration/toggle-streams.sh --off
-      - run:
-          name: Kick off the glue-to-lower-env workflow
-          command: |
-            CIRCLE_PIPELINE_ID=$(curl --request POST \
-              --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
-              --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
-              --header "content-type: application/json" \
-              --data "{\"branch\":\"prod\", \"parameters\":{ \
-                \"run_build_and_deploy_with_context\":false, \
-                \"run_glue_to_lower_env\":true, \
-                \"lower_env\":\"${ENV}\"}}" | jq -r '.id')
-            echo "export CIRCLE_PIPELINE_ID=${CIRCLE_PIPELINE_ID}" >> $BASH_ENV
-      - run:
-          name: Deploy Wait for Workflow Cron Lambda
-          command: |
-            export APPROVAL_JOB_NAME=wait-for-glue-workflow
-            npm run deploy:wait-for-workflow-cron -- $ENV
-      - run:
-          name: Enable Wait for Workflow Cron
-          command: |
-            ./scripts/wait-for-workflow/enable-wait-for-workflow-cron.sh
+            REGION=us-east-1 ./scripts/user/clear-all-cognito-users.ts
       - run:
           name: Kick off the sync-s3-to-lower-env workflow
           command: |
@@ -713,8 +571,30 @@ jobs:
                 \"referrer\":\"${CIRCLE_WORKFLOW_ID}\", \
                 \"source_bucket\":\"${SOURCE_BUCKET}\", \
                 \"destination_bucket\":\"${DESTINATION_BUCKET}\"}}"
+      - run:
+          name: Kick off the glue-to-lower-env workflow
+          command: |
+            CIRCLE_PIPELINE_ID=$(curl --request POST \
+              --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
+              --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
+              --header "content-type: application/json" \
+              --data "{\"branch\":\"prod\", \"parameters\":{ \
+                \"run_build_and_deploy_to_prod\":false, \
+                \"run_glue_to_lower_env\":true, \
+                \"lower_env\":\"${ENV}\", \
+                \"lower_env_account_id\":\"${AWS_ACCOUNT_ID}\"}}" | jq -r '.id')
+            echo "export CIRCLE_PIPELINE_ID=${CIRCLE_PIPELINE_ID}" >> $BASH_ENV
+      - run:
+          name: Deploy Wait for Workflow Cron Lambda
+          command: |
+            export APPROVAL_JOB_NAME=wait-for-glue-workflow
+            npm run deploy:wait-for-workflow-cron -- $ENV
+      - run:
+          name: Enable Wait for Workflow Cron
+          command: |
+            ./scripts/wait-for-workflow/enable-wait-for-workflow-cron.sh
 
-  index-glued-data:
+  migrate-restored-postgres-data:
     docker:
       - image: *efcms-docker-image
         aws_auth:
@@ -739,13 +619,97 @@ jobs:
             export CIRCLE_PIPELINE_ID=noop
             npm run destroy:wait-for-workflow-cron -- $ENV
       - run:
-          name: Set Marker to Indicate Data is Finished Gluing
+          no_output_timeout: 30m
+          name: Migrate Postgres Data Schema
           command: |
-            COLOR="$CURRENT_COLOR" JOB_NAME="wait-for-glued-data-to-index" ./scripts/migration/set-migration-complete-marker.sh
+            npm run migration:postgres
+            npm run migration:postgres:contract
       - run:
-          name: Enable Dynamodb Streams
+          name: Restore Postgres User Permissions
           command: |
-            ./scripts/migration/toggle-streams.sh --on
+            cd ./scripts/postgres
+            DB_HOST="$POSTGRES_HOST" ./create-rds-users.sh
+
+  index-cases:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+            source $BASH_ENV
+            DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
+            ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
+              --domain-name "${DESTINATION_DOMAIN}" \
+              --region "us-east-1" \
+              --query 'DomainStatus.Endpoint' \
+              --output text)
+            echo "export ELASTICSEARCH_ENDPOINT=${ELASTICSEARCH_ENDPOINT}" >> $BASH_ENV
+      - run:
+          name: Index Cases
+          command: |
+            ./scripts/reindex/index-cases/index-cases.ts 5
+
+  index-users:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+            source $BASH_ENV
+            DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
+            ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
+              --domain-name "${DESTINATION_DOMAIN}" \
+              --region "us-east-1" \
+              --query 'DomainStatus.Endpoint' \
+              --output text)
+            echo "export ELASTICSEARCH_ENDPOINT=${ELASTICSEARCH_ENDPOINT}" >> $BASH_ENV
+      - run:
+          name: Index Users
+          command: |
+            ./scripts/reindex/index-users/index-users.ts 5
+
+  index-docket-entries:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+            source $BASH_ENV
+            DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
+            ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
+              --domain-name "${DESTINATION_DOMAIN}" \
+              --region "us-east-1" \
+              --query 'DomainStatus.Endpoint' \
+              --output text)
+            echo "export ELASTICSEARCH_ENDPOINT=${ELASTICSEARCH_ENDPOINT}" >> $BASH_ENV
+      - run:
+          name: Index Docket Entries
+          command: |
+            ./scripts/reindex/index-docket-entries/index-docket-entries.ts 5
 
   cleanup-glue-job:
     docker:
@@ -765,13 +729,21 @@ jobs:
             CIRCLE_PROJECT_SLUG="${VCS}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
             echo "export CIRCLE_PROJECT_SLUG=${CIRCLE_PROJECT_SLUG}" >> $BASH_ENV
       - run:
+          name: Cleanup Deploy Table
+          command: |
+            npm run migration:cleanup -- $ENV
+      - run:
+          name: Populate test users in Cognito
+          command: |
+            REGION="us-east-1" ./scripts/user/setup-glued-users.ts
+      - run:
           name: Kick off a deployment
           command: |
             CIRCLE_PIPELINE_ID=$(curl --request POST \
               --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
               --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
               --header "content-type: application/json" \
-              --data "{\"branch\":\"${CIRCLE_BRANCH}\"}")
+              --data "{\"branch\":\"${CIRCLE_BRANCH}\"}" | jq -r '.id')
 
   sync-s3-buckets-with-timeout:
     docker:
@@ -779,7 +751,7 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
+    resource_class: xlarge
     environment:
       REFERRER: << pipeline.parameters.referrer >>
       SOURCE_BUCKET: << pipeline.parameters.source_bucket >>
@@ -812,17 +784,13 @@ jobs:
           command: |
             ./scripts/circleci/sync-s3-buckets-with-timeout.sh 175m
 
-  ######################## GLUE JOB: Jobs that run in prod ########################
-
-  start-glue-job:
+  initiate-s3-sync:
     docker:
       - image: *efcms-docker-image
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     resource_class: medium+
-    environment:
-      LOWER_ENV: << pipeline.parameters.lower_env >>
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -830,22 +798,64 @@ jobs:
           name: Setup Env
           command: |
             ./scripts/env/env-for-circle.sh
-            if [[ -z "$LOWER_ENV" ]]; then
-              echo "Error: no lower environment was provided"
+            source $BASH_ENV
+            VCS=<< pipeline.project.type >>
+            CIRCLE_PROJECT_SLUG="${VCS}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
+            echo "export CIRCLE_PROJECT_SLUG=${CIRCLE_PROJECT_SLUG}" >> $BASH_ENV
+            if [[ -z "$PROD_DOCUMENTS_BUCKET_NAME" ]]; then
+              echo "Error: expected PROD_DOCUMENTS_BUCKET_NAME environment variable"
               exit 1
             fi
+            echo "export SOURCE_BUCKET=${PROD_DOCUMENTS_BUCKET_NAME}" >> $BASH_ENV
+            echo "export DESTINATION_BUCKET=${EFCMS_DOMAIN}-documents-${ENV}-us-east-1" >> $BASH_ENV
       - run:
-          name: Deploy Check Glue Job Run State Cron Lambda
+          name: Kick off the sync-s3-to-lower-env workflow
           command: |
-            npm run deploy:glue-cron -- $ENV
+            curl --request POST \
+              --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
+              --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
+              --header "content-type: application/json" \
+              --data "{\"branch\":\"${CIRCLE_BRANCH}\", \"parameters\":{ \
+                \"run_build_and_deploy\":false, \
+                \"run_sync_s3_to_lower_env\":true, \
+                \"referrer\":\"${CIRCLE_WORKFLOW_ID}\", \
+                \"source_bucket\":\"${SOURCE_BUCKET}\", \
+                \"destination_bucket\":\"${DESTINATION_BUCKET}\"}}"
+
+  cypress-real-user-tests:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-and-cypress-install
       - run:
-          name: Start Glue Job
-          command: |
-            npx ts-node --transpile-only scripts/glue/start-glue-job.ts "efcms-${LOWER_ENV}-alpha"
+          name: Create Cypress Artifacts Directory
+          command: mkdir /tmp/cypress
       - run:
-          name: Enable Check Glue Job Run State Cron
+          name: Setup Env
           command: |
-            ./scripts/glue/enable-glue-cron.sh
+            ./scripts/env/env-for-circle.sh
+      - run:
+          name: 'Cypress Real User Tests'
+          command: |
+            set +e
+            npm run cypress:real-users
+            echo "export REAL_USERS_TEST_RESULT=$?" >> $BASH_ENV
+            set -e
+      - run:
+          name: Kill Build if Smoketests Failed
+          command: |
+            if [ "${REAL_USERS_TEST_RESULT}" -ne 0 ]; then
+              exit 1
+            fi
+      - store_artifacts:
+          path: /root/project/cypress/real-users/videos/
+
+  ######################## GLUE JOB: Jobs that run in prod ########################
 
   restore-postgres:
     docker:
@@ -856,6 +866,7 @@ jobs:
     resource_class: medium+
     environment:
       LOWER_ENV: << pipeline.parameters.lower_env >>
+      LOWER_ENV_ACCOUNT_ID: << pipeline.parameters.lower_env_account_id >>
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -863,37 +874,15 @@ jobs:
           name: Setup Env
           command: |
             ./scripts/env/env-for-circle.sh
-            if [[ -z "$LOWER_ENV" ]]; then
+            if [[ -z "$LOWER_ENV" ]] || [[ -z "$LOWER_ENV_ACCOUNT_ID" ]]; then
               echo "Error: no lower environment was provided"
               exit 1
             fi
       - run:
-          name: Restore Postgres
+          name: Restore Postgres Data
+          no_output_timeout: 40m
           command: |
-            TARGET_ENV=$LOWER_ENV TARGET_ACCOUNT_ID="${LOWER_ENV_ACCOUNT_ID}" npx ts-node --transpileOnly scripts/postgres/restoreDbFromSource.ts
-
-  finish-glue-job:
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-      - run:
-          name: Disable Check Glue Job Run State Cron
-          command: |
-            ./scripts/glue/disable-glue-cron.sh
-      - run:
-          name: Destroy Check Glue Job Run State Cron Lambda
-          command: |
-            npm run destroy:glue-cron -- $ENV
+            TARGET_ENV="$LOWER_ENV" TARGET_ACCOUNT_ID="$LOWER_ENV_ACCOUNT_ID" ./scripts/postgres/restoreDbFromSource.ts
 
 only-prod: &only-prod
   context: efcms-<< pipeline.git.branch >>
@@ -903,12 +892,14 @@ only-prod: &only-prod
         - prod
 
 only-test: &only-test
+  context: efcms-<< pipeline.git.branch >>
   filters:
     branches:
       only:
         - test
 
 only-deployed-lower-environments: &only-deployed-lower-environments
+  context: efcms-<< pipeline.git.branch >>
   filters:
     branches:
       only:
@@ -918,6 +909,10 @@ only-deployed-lower-environments: &only-deployed-lower-environments
         - experimental3
         - experimental4
         - experimental5
+        - experimental6
+        - experimental7
+        - experimental8
+        - experimental9
         - irs
         - migration
         - staging
@@ -941,41 +936,23 @@ workflows:
       - migrate:
           <<: *only-deployed-lower-environments
           requires:
-            - docker-image-zipper
-      - wait-for-migration:
-          <<: *only-deployed-lower-environments
-          type: approval
-          requires:
-            - migrate
-      - prepare-for-reindex:
-          <<: *only-deployed-lower-environments
-          requires:
-            - wait-for-migration
-      - wait-for-reindex:
-          <<: *only-deployed-lower-environments
-          type: approval
-          requires:
-            - prepare-for-reindex
-      - disable-reindex-cron:
-          <<: *only-deployed-lower-environments
-          requires:
-            - wait-for-reindex
+            - deploy
       - smoketests:
           <<: *only-deployed-lower-environments
           requires:
-            - disable-reindex-cron
+            - migrate
       - loadtests:
           <<: *only-deployed-lower-environments
           requires:
-            - disable-reindex-cron
+            - migrate
       - smoketests-readonly:
           <<: *only-deployed-lower-environments
           requires:
-            - disable-reindex-cron
+            - migrate
       - api-hosted-environment-tests:
           <<: *only-deployed-lower-environments
           requires:
-            - disable-reindex-cron
+            - migrate
       - switch-colors:
           <<: *only-deployed-lower-environments
           requires:
@@ -988,8 +965,8 @@ workflows:
           requires:
             - switch-colors
 
-  build-and-deploy-with-context:
-    when: << pipeline.parameters.run_build_and_deploy_with_context >>
+  build-and-deploy-to-prod:
+    when: << pipeline.parameters.run_build_and_deploy_to_prod >>
     jobs:
       - deploy:
           <<: *only-prod
@@ -1000,36 +977,19 @@ workflows:
       - migrate:
           <<: *only-prod
           requires:
-            - docker-image-zipper
-      - wait-for-migration:
-          <<: *only-prod
-          type: approval
-          requires:
-            - migrate
-      - prepare-for-reindex:
-          <<: *only-prod
-          requires:
-            - wait-for-migration
-      - wait-for-reindex:
-          <<: *only-prod
-          type: approval
-          requires:
-            - prepare-for-reindex
-      - disable-reindex-cron:
-          <<: *only-prod
-          requires:
-            - wait-for-reindex
+            - deploy
       - loadtests:
           <<: *only-prod
           requires:
-            - disable-reindex-cron
+            - migrate
       - smoketests-readonly:
           <<: *only-prod
           requires:
-            - loadtests
+            - migrate
       - deploy-switch-colors-cron:
           <<: *only-prod
           requires:
+            - loadtests
             - smoketests-readonly
       - wait-for-switch:
           <<: *only-prod
@@ -1043,28 +1003,11 @@ workflows:
       - switch-colors:
           <<: *only-prod
           requires:
+            - wait-for-switch
+      - cleanup:
+          <<: *only-prod
+          requires:
             - disable-switch-colors-cron
-      - backup-source-dynamo-table:
-          <<: *only-prod
-          requires:
-            - switch-colors
-      - cleanup:
-          <<: *only-prod
-          requires:
-            - backup-source-dynamo-table
-
-  build-and-deploy-empty:
-    when: << pipeline.parameters.run_build_and_deploy_empty >>
-    jobs:
-      - deploy:
-          <<: *only-deployed-lower-environments
-      - switch-colors:
-          <<: *only-deployed-lower-environments
-          requires:
-            - deploy
-      - cleanup:
-          <<: *only-deployed-lower-environments
-          requires:
             - switch-colors
 
   glue-to-test:
@@ -1073,68 +1016,86 @@ workflows:
         - equal: [glue-to-test-schedule, << pipeline.schedule.name >>]
         - << pipeline.parameters.run_glue_to_test >>
     jobs:
-      - delete-existing-data:
+      - delete-and-recreate-elasticsearch-cluster:
           <<: *only-test
-      - redeploy-environment:
-          <<: *only-test
-          requires:
-            - delete-existing-data
-      - wait-for-deployment-workflow:
-          <<: *only-test
-          type: approval
-          requires:
-            - redeploy-environment
       - initiate-glue-job:
           <<: *only-test
-          requires:
-            - wait-for-deployment-workflow
-      - wait-for-glue-workflow:
-          <<: *only-test
-          type: approval
-          requires:
-            - initiate-glue-job
       - wait-for-s3-sync-workflow:
           <<: *only-test
           type: approval
           requires:
             - initiate-glue-job
-      - index-glued-data:
-          <<: *only-test
-          requires:
-            - wait-for-glue-workflow
-            - wait-for-s3-sync-workflow
-      - wait-for-glued-data-to-index:
+      - wait-for-glue-workflow:
           <<: *only-test
           type: approval
           requires:
-            - index-glued-data
+            - initiate-glue-job
+      - migrate-restored-postgres-data:
+          <<: *only-test
+          requires:
+            - delete-and-recreate-elasticsearch-cluster
+            - wait-for-glue-workflow
+      - index-cases:
+          <<: *only-test
+          requires:
+            - migrate-restored-postgres-data
+      - index-users:
+          <<: *only-test
+          requires:
+            - index-cases
+      - index-docket-entries:
+          <<: *only-test
+          requires:
+            - wait-for-s3-sync-workflow
+            - index-users
       - cleanup-glue-job:
           <<: *only-test
           requires:
-            - wait-for-glued-data-to-index
+            - index-docket-entries
 
   glue-to-lower-env:
     when: << pipeline.parameters.run_glue_to_lower_env >>
     jobs:
-      - start-glue-job:
-          <<: *only-prod
-      - wait-for-glue-job:
-          <<: *only-prod
-          type: approval
-          requires:
-            - start-glue-job
       - restore-postgres:
           <<: *only-prod
+
+  s3-to-test:
+    when: << pipeline.parameters.run_s3_to_test >>
+    jobs:
+      - initiate-s3-sync:
+          <<: *only-test
+      - wait-for-s3-sync-workflow:
+          <<: *only-test
+          type: approval
           requires:
-            - start-glue-job
-      - finish-glue-job:
-          <<: *only-prod
-          requires:
-            - restore-postgres
-            - wait-for-glue-job
+            - initiate-s3-sync
 
   sync-s3-to-lower-env:
     when: << pipeline.parameters.run_sync_s3_to_lower_env >>
     jobs:
       - sync-s3-buckets-with-timeout:
           <<: *only-deployed-lower-environments
+
+  reindex-opensearch:
+    when: << pipeline.parameters.run_reindex_opensearch >>
+    jobs:
+      - delete-and-recreate-elasticsearch-cluster:
+          <<: *only-deployed-lower-environments
+      - index-cases:
+          <<: *only-deployed-lower-environments
+          requires:
+            - delete-and-recreate-elasticsearch-cluster
+      - index-users:
+          <<: *only-deployed-lower-environments
+          requires:
+            - index-cases
+      - index-docket-entries:
+          <<: *only-deployed-lower-environments
+          requires:
+            - index-users
+
+  real-user-tests:
+    when: << pipeline.parameters.run_real_user_tests >>
+    jobs:
+      - cypress-real-user-tests:
+          <<: *only-test

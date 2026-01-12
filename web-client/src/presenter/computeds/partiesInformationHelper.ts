@@ -1,5 +1,12 @@
 import { capitalize } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+import {
+  NOT_PROVIDED,
+  ROLES,
+  SERVICE_INDICATOR_TYPES,
+} from '@shared/business/entities/EntityConstants';
 
 export const formatCounsel = ({ counsel, screenMetadata }) => {
   const counselPendingEmail = screenMetadata.pendingEmails
@@ -22,22 +29,19 @@ export const formatCounsel = ({ counsel, screenMetadata }) => {
 };
 
 export const getCanEditPetitioner = ({
-  applicationContext,
   permissions,
   petitioner,
   petitionIsServed,
   user,
   userAssociatedWithCase,
 }) => {
-  const { USER_ROLES } = applicationContext.getConstants();
-
   if (!petitionIsServed) return false;
 
-  if (user.role === USER_ROLES.petitioner) {
+  if (user.role === ROLES.petitioner) {
     return petitioner.contactId === user.userId;
   }
 
-  if (user.role === USER_ROLES.privatePractitioner) {
+  if (user.role === ROLES.privatePractitioner) {
     return !!userAssociatedWithCase;
   }
 
@@ -48,8 +52,6 @@ export const getCanEditPetitioner = ({
   return false;
 };
 
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const partiesInformationHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -103,7 +105,7 @@ export const partiesInformationHelper = (
     }
 
     petitioner.formattedPaperPetitionEmail =
-      petitioner.paperPetitionEmail ?? 'Not provided';
+      petitioner.paperPetitionEmail ?? NOT_PROVIDED;
 
     if (petitioner.email) {
       petitioner.formattedEmail = petitioner.email;
@@ -116,7 +118,7 @@ export const partiesInformationHelper = (
     const userAssociatedWithCase = !!formattedPrivatePractitioners.find(
       practitioner =>
         user.barNumber === practitioner.barNumber &&
-        practitioner.representing.includes(petitioner.contactId),
+        practitioner.representing?.includes(petitioner.contactId),
     );
 
     const canAllowDocumentServiceForCase = !!applicationContext
@@ -124,7 +126,6 @@ export const partiesInformationHelper = (
       .canAllowDocumentServiceForCase(caseDetail);
 
     const canEditPetitioner = getCanEditPetitioner({
-      applicationContext,
       permissions,
       petitionIsServed: canAllowDocumentServiceForCase,
       petitioner,
@@ -147,6 +148,11 @@ export const partiesInformationHelper = (
       !petitioner.sealedAndUnavailable &&
       !isExternalUser;
 
+    const showRemoveEmailButton =
+      permissions.REMOVE_PETITIONER_EMAIL &&
+      !!petitioner.email &&
+      petitioner.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
+
     return {
       ...petitioner,
       canEditPetitioner,
@@ -155,6 +161,7 @@ export const partiesInformationHelper = (
       representingPractitioners,
       showExternalHeader: isExternalUser,
       showPaperPetitionEmail,
+      showRemoveEmailButton,
     };
   });
 

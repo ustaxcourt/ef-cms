@@ -2,6 +2,8 @@ import { ProgressBar } from '../../ustc-ui/ProgressBar/ProgressBar';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect } from 'react';
+import classNames from 'classnames';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const BatchDownloadProgress = connect(
   {
@@ -35,6 +37,14 @@ export const BatchDownloadProgress = connect(
               >
                 {batchDownloadHelper.progressDescription}
               </h3>
+              <div
+                aria-label="please wait"
+                aria-live="polite"
+                className={classNames('progress-indicator inline-block')}
+                data-testid="loading-overlay"
+              >
+                <FontAwesomeIcon className="fa-spin" icon="sync" />
+              </div>
               <ProgressBar
                 aria-labelledby="progress-description"
                 value={batchDownloadHelper.percentComplete}

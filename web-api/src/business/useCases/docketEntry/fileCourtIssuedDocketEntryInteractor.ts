@@ -1,16 +1,24 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { DOCKET_SECTION } from '../../../../../shared/src/business/entities/EntityConstants';
-import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
+import { Case } from '@shared/business/entities/cases/Case';
+import { DOCKET_SECTION } from '@shared/business/entities/EntityConstants';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { omit } from 'lodash';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { settlePromises } from '@web-api/utilities/settlePromises';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { CourtIssuedDocumentAnyType } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import { addAssociatedDocketEntries } from '@web-api/business/useCaseHelper/docketEntry/addAssociatedDocketEntries';
 
 /**
  *
@@ -27,7 +35,7 @@ export const fileCourtIssuedDocketEntry = async (
     subjectDocketNumber,
   }: {
     docketNumbers: string[];
-    documentMeta: any;
+    documentMeta: CourtIssuedDocumentAnyType;
     subjectDocketNumber: string;
   },
   authorizedUser: UnknownAuthUser,
@@ -42,14 +50,11 @@ export const fileCourtIssuedDocketEntry = async (
 
   const { docketEntryId } = documentMeta;
 
-  const subjectCaseToUpdate = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber: subjectDocketNumber,
-    });
+  const subjectCaseToUpdate = await getCaseByDocketNumber({
+    docketNumber: subjectDocketNumber,
+  });
 
-  let subjectCaseToUpdateEntity = new Case(subjectCaseToUpdate, {
+  const subjectCaseToUpdateEntity = new Case(subjectCaseToUpdate, {
     authorizedUser,
   });
 
@@ -69,22 +74,21 @@ export const fileCourtIssuedDocketEntry = async (
     .getUseCaseHelpers()
     .countPagesInDocument({ applicationContext, docketEntryId });
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
 
-  const isUnservable = DocketEntry.isUnservable(documentMeta);
+  if (!user) {
+    throw new NotFoundError(
+      `User not found with user id ${authorizedUser.userId}`,
+    );
+  }
 
-  await Promise.all(
-    [subjectDocketNumber, ...docketNumbers].map(async docketNumber => {
-      const caseToUpdate = await applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber({
-          applicationContext,
-          docketNumber,
-        });
+  const casesToUpdate = await getCasesByDocketNumbers({
+    docketNumbers: [subjectDocketNumber, ...docketNumbers],
+  });
 
-      let caseEntity = new Case(caseToUpdate, { authorizedUser });
+  await settlePromises(
+    casesToUpdate.map(async caseToUpdate => {
+      const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
       const docketEntryEntity = new DocketEntry(
         {
@@ -95,7 +99,10 @@ export const fileCourtIssuedDocketEntry = async (
           documentTitle: documentMeta.generatedDocumentTitle,
           documentType: documentMeta.documentType,
           draftOrderState: null,
-          editState: JSON.stringify({ ...documentMeta, docketNumber }),
+          editState: JSON.stringify({
+            ...documentMeta,
+            docketNumber: caseToUpdate.docketNumber,
+          }),
           eventCode: documentMeta.eventCode,
           filingDate: documentMeta.filingDate,
           freeText: documentMeta.freeText,
@@ -113,36 +120,20 @@ export const fileCourtIssuedDocketEntry = async (
 
       docketEntryEntity.setFiledBy(user);
 
-      const workItem = new WorkItem(
-        {
-          assigneeId: null,
-          assigneeName: null,
-          associatedJudge: caseEntity.associatedJudge,
-          associatedJudgeId: caseEntity.associatedJudgeId,
-          caseStatus: caseEntity.status,
-          caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
-          docketEntry: {
-            ...docketEntryEntity.toRawObject(),
-            createdAt: docketEntryEntity.createdAt,
-          },
-          docketNumber: caseEntity.docketNumber,
-          docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
-          hideFromPendingMessages: true,
-          inProgress: true,
-          section: DOCKET_SECTION,
-          sentBy: user.name,
-          sentByUserId: user.userId,
-          trialDate: caseEntity.trialDate,
-          trialLocation: caseEntity.trialLocation,
-        },
-        { caseEntity },
-      );
+      const workItem = new WorkItem({
+        assigneeId: null,
+        assigneeName: null,
+        docketEntryId: docketEntryEntity.docketEntryId,
+        docketNumber: caseEntity.docketNumber,
+        inProgress: true,
+        section: DOCKET_SECTION,
+        sentBy: user.name,
+        sentByUserId: user.userId,
+      });
 
-      if (isUnservable) {
+      if (DocketEntry.isUnservable(documentMeta)) {
         workItem.setAsCompleted({ message: 'completed', user });
       }
-
-      docketEntryEntity.setWorkItem(workItem);
 
       const isDocketEntryAlreadyOnCase = !!caseEntity.getDocketEntryById({
         docketEntryId,
@@ -157,49 +148,46 @@ export const fileCourtIssuedDocketEntry = async (
       workItem.assignToUser({
         assigneeId: user.userId,
         assigneeName: user.name,
-        section: user.section,
+        section: WorkItem.getWorkItemSectionFromUserSection({
+          section: user.section,
+          documentTitle: docketEntryEntity.documentTitle,
+        }),
         sentBy: user.name,
         sentBySection: user.section,
         sentByUserId: user.userId,
       });
 
-      const saveItems = [
-        applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-          applicationContext,
+      const saveItems: Promise<any>[] = [
+        updateCaseAndAssociations({
           authorizedUser,
           caseToUpdate: caseEntity,
         }),
       ];
 
       const rawValidWorkItem = workItem.validate().toRawObject();
-      if (isUnservable) {
-        saveItems.push(
-          applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
-            applicationContext,
-            section: user.section,
-            userId: user.userId,
-            workItem: rawValidWorkItem,
-          }),
-        );
-      } else {
-        saveItems.push(
-          applicationContext.getPersistenceGateway().saveWorkItem({
-            applicationContext,
-            workItem: rawValidWorkItem,
-          }),
-        );
-      }
 
-      return Promise.all(saveItems);
+      saveItems.push(
+        upsertWorkItems({
+          workItems: [rawValidWorkItem],
+        }),
+      );
+
+      return settlePromises(saveItems);
     }),
   );
 
-  const rawSubjectCase = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber: subjectDocketNumber,
-    });
+  if (documentMeta.affectedDocketEntries) {
+    await addAssociatedDocketEntries(
+      casesToUpdate,
+      documentMeta,
+      subjectDocketEntry,
+      false,
+    );
+  }
+
+  const rawSubjectCase = await getCaseByDocketNumber({
+    docketNumber: subjectDocketNumber,
+  });
 
   const subjectCase = new Case(rawSubjectCase, {
     authorizedUser,

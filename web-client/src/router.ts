@@ -91,6 +91,7 @@ const ifHasAccess = (
     }
 
     app.getSequence('clearAlertSequence')();
+    // eslint-disable-next-line prefer-spread, prefer-rest-params
     return cb.apply(null, arguments);
   };
 };
@@ -99,8 +100,9 @@ const router = {
   initialize: (app, registerRoute) => {
     setPageTitle('U.S. Tax Court');
     // expose route function on window for use with cypress
-    // eslint-disable-next-line no-underscore-dangle
-    window.__cy_route = path => route(path || '/');
+
+    (window as Window & { __cy_route?: (path: string) => void }).__cy_route =
+      path => route(path || '/');
     const { ROLE_PERMISSIONS } = app.getState('constants');
 
     registerRoute(
@@ -367,7 +369,6 @@ const router = {
         });
       }),
     );
-
     registerRoute(
       '/case-detail/*/documents/*/edit-court-issued..',
       ifHasAccess({ app }, (docketNumber, docketEntryId) => {
@@ -407,6 +408,39 @@ const router = {
           docketNumber,
         });
       }),
+    );
+
+    registerRoute(
+      '/case-detail/*/documents/*/motion-order-response',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.MOTION_ORDER_RESPONSE },
+        (docketNumber, docketEntryId) => {
+          setPageTitle(
+            `${getPageTitleDocketPrefix(docketNumber)} Order Response`,
+          );
+          return app.getSequence('goToOrderResponseSequence')({
+            docketEntryId,
+            docketNumber,
+          });
+        },
+      ),
+    );
+
+    registerRoute(
+      '/case-detail/*/documents/*/motion-order-response-edit',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.MOTION_ORDER_RESPONSE },
+        (docketNumber, docketEntryIdToEdit) => {
+          setPageTitle(
+            `${getPageTitleDocketPrefix(docketNumber)} Order Response`,
+          );
+          return app.getSequence('goToOrderResponseSequence')({
+            docketEntryIdToEdit,
+            docketNumber,
+            isEditing: true,
+          });
+        },
+      ),
     );
 
     registerRoute(
@@ -758,7 +792,6 @@ const router = {
         });
       }),
     );
-
     registerRoute(
       '/case-detail/*/documents/*/add-court-issued-docket-entry/*',
       ifHasAccess({ app }, (docketNumber, docketEntryId, parentMessageId) => {
@@ -1083,6 +1116,20 @@ const router = {
     );
 
     registerRoute(
+      '/trial-session-detail/*/case/*/minutes',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.MANAGE_MINUTE_SHEET },
+        (trialSessionId, docketNumber) => {
+          setPageTitle('Trial session minutes');
+          return app.getSequence('goToTrialSessionMinutesSequence')({
+            docketNumber,
+            trialSessionId,
+          });
+        },
+      ),
+    );
+
+    registerRoute(
       '/trial-session-detail/*',
       ifHasAccess(
         { app, permissionToCheck: ROLE_PERMISSIONS.TRIAL_SESSIONS },
@@ -1109,11 +1156,28 @@ const router = {
     );
 
     registerRoute(
-      '/trial-session-planning-report',
-      ifHasAccess({ app }, () => {
-        setPageTitle('Trial session planning report');
-        return app.getSequence('gotoTrialSessionPlanningReportSequence')();
-      }),
+      '/trial-session-planning-report/*/*',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.TRIAL_SESSIONS },
+        (term: string, year: string) => {
+          setPageTitle('Trial session planning report');
+          return app.getSequence('gotoTrialSessionPlanningReportViewSequence')({
+            term: term.toLocaleLowerCase(),
+            year,
+          });
+        },
+      ),
+    );
+
+    registerRoute(
+      '/trial-session/term-builder',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.TRIAL_SESSIONS },
+        () => {
+          setPageTitle('Trial session term generator');
+          return app.getSequence('gotoTrialSessionTermBuilderSequence')();
+        },
+      ),
     );
 
     registerRoute(
@@ -1136,15 +1200,23 @@ const router = {
       ),
     );
 
+    registerRoute(
+      '/trial-location/*/*/*',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.TRIAL_SESSIONS },
+        (trialLocation: string, term: string, year: string) => {
+          setPageTitle('Trial location');
+          return app.getSequence('gotoTrialLocationSequence')({
+            trialLocation: decodeURIComponent(trialLocation),
+            redirectUrl: `/trial-session-planning-report/${term}/${year}`,
+          });
+        },
+      ),
+    );
+
     registerRoute('/idle-logout', () => {
-      if (app.getState('token')) {
-        return app.getSequence('signOutIdleSequence')();
-      } else {
-        // If not signed in, saying "we logged you off" doesn't make sense
-        return app.getSequence('navigateToPathSequence')({
-          path: BASE_ROUTE,
-        });
-      }
+      setPageTitle('Idle Logout');
+      return app.getSequence('gotoIdleLogoutSequence')();
     });
 
     registerRoute('/login', () => {
@@ -1326,6 +1398,41 @@ const router = {
     );
 
     registerRoute(
+      '/messages/*/message-detail/*/*/motion-order-response-create',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.MOTION_ORDER_RESPONSE },
+        (docketNumber, parentMessageId, docketEntryId) => {
+          setPageTitle(
+            `${getPageTitleDocketPrefix(docketNumber)} Order Motion Response`,
+          );
+          return app.getSequence('goToOrderResponseSequence')({
+            docketEntryId,
+            docketNumber,
+            parentMessageId,
+          });
+        },
+      ),
+    );
+
+    registerRoute(
+      '/messages/*/message-detail/*/*/motion-order-response-edit',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.MOTION_ORDER_RESPONSE },
+        (docketNumber, parentMessageId, docketEntryIdToEdit) => {
+          setPageTitle(
+            `${getPageTitleDocketPrefix(docketNumber)} Order Motion Response`,
+          );
+          return app.getSequence('goToOrderResponseSequence')({
+            docketEntryIdToEdit,
+            docketNumber,
+            isEditing: true,
+            parentMessageId,
+          });
+        },
+      ),
+    );
+
+    registerRoute(
       '/messages/*/message-detail/*/*/status-report-order-create..',
       ifHasAccess(
         { app, permissionToCheck: ROLE_PERMISSIONS.STATUS_REPORT_ORDER },
@@ -1376,10 +1483,12 @@ const router = {
     registerRoute(
       '/reports/pending-report/printable..',
       ifHasAccess({ app }, () => {
-        const { judgeFilter } = route.query();
+        const { judgeFilter, sortField, sortOrder } = route.query();
         setPageTitle('Pending report');
         return app.getSequence('gotoPrintablePendingReportSequence')({
           judgeFilter: decodeURIComponent(judgeFilter),
+          sortField: decodeURIComponent(sortField),
+          sortOrder: decodeURIComponent(sortOrder),
         });
       }),
     );
@@ -1443,6 +1552,11 @@ const router = {
     registerRoute('/contact', () => {
       setPageTitle('Contact');
       return app.getSequence('gotoContactSequence')();
+    });
+
+    registerRoute('/cases/recent-filings', () => {
+      setPageTitle('Recent Filings');
+      return app.getSequence('gotoRecentFilingsSequence')();
     });
 
     registerRoute('/maintenance', () => {

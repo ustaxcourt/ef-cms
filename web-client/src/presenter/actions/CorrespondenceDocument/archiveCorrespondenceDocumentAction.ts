@@ -19,14 +19,14 @@ export const archiveCorrespondenceDocumentAction = async ({
   );
 
   try {
-    await applicationContext
+    const caseDetail = await applicationContext
       .getUseCases()
       .archiveCorrespondenceDocumentInteractor(applicationContext, {
         correspondenceId,
         docketNumber,
       });
 
-    return path.success();
+    return path.success({ caseDetail });
   } catch (err) {
     return path.error();
   }

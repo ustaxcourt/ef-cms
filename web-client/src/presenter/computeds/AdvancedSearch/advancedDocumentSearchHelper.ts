@@ -4,20 +4,34 @@ import { Get } from 'cerebral';
 import { capitalize } from 'lodash';
 import { paginationHelper } from './advancedSearchHelper';
 import { state } from '@web-client/presenter/app.cerebral';
+import {
+  calculateISODate,
+  FORMATS,
+} from '@shared/business/utilities/DateHandler';
+import { dateStringsCompared } from '@shared/business/utilities/DateHandler';
+import { Case } from '@shared/business/entities/cases/Case';
 
 export const advancedDocumentSearchHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): any => {
-  let paginatedResults = {};
+  let paginatedResults: any = {};
   const { role } = get(state.user);
   const advancedSearchTab = get(state.advancedSearchTab);
   const searchResults = get(state.searchResults[advancedSearchTab]);
+  // use per-tab sort state so order/opinion do not share
+  const sortStateKey =
+    advancedSearchTab ===
+    applicationContext.getConstants().ADVANCED_SEARCH_TABS.OPINION
+      ? 'opinionDocumentSearchSort'
+      : 'orderDocumentSearchSort';
+  const sortColumn = get(state[sortStateKey].sortColumn);
+  const sortDirection = get(state[sortStateKey].sortDirection);
 
   const {
     ADVANCED_SEARCH_TABS,
     DATE_RANGE_SEARCH_OPTIONS,
-    MAX_SEARCH_RESULTS,
+    MAX_DOCUMENT_SEARCH_RESULTS,
   } = applicationContext.getConstants();
 
   const isInternalUser = applicationContext.getUtilities().isInternalUser(role);
@@ -31,8 +45,8 @@ export const advancedDocumentSearchHelper = (
 
   let documentTypeVerbiage = capitalize(advancedSearchTab);
 
-  let formattedJudges = get(state.legacyAndCurrentJudges);
-  formattedJudges.forEach(judge => {
+  const formattedJudges = get(state.legacyAndCurrentJudges) as any[];
+  formattedJudges.forEach((judge: any) => {
     judge.lastName = applicationContext
       .getUtilities()
       .getJudgeLastName(judge.judgeFullName);
@@ -48,7 +62,7 @@ export const advancedDocumentSearchHelper = (
     paginatedResults = paginationHelper(
       searchResults,
       get(state.advancedSearchForm.currentPage),
-      applicationContext.getConstants().CASE_SEARCH_PAGE_SIZE,
+      applicationContext.getConstants().MAX_ELASTICSEARCH_PAGINATION,
     );
 
     paginatedResults.formattedSearchResults =
@@ -57,21 +71,63 @@ export const advancedDocumentSearchHelper = (
           applicationContext,
         }),
       );
+
+    // Sorting logic
+    paginatedResults.formattedSearchResults =
+      paginatedResults.formattedSearchResults.sort((a, b) => {
+        let aValue = a[sortColumn];
+        let bValue = b[sortColumn];
+
+        const direction = sortDirection === 'asc' ? 1 : -1;
+
+        if (sortColumn === 'docketNumber') {
+          // Use custom docket number sorting
+          return Case.docketNumberSort(aValue, bValue) * direction;
+        }
+
+        if (sortColumn === 'formattedFiledDate') {
+          // Use date comparison for filingDate
+          return dateStringsCompared(a.filingDate, b.filingDate) * direction;
+        }
+
+        if (sortColumn === 'numberOfPages') {
+          return (Number(aValue ?? 0) - Number(bValue ?? 0)) * direction;
+        }
+
+        // Fallback to string comparison, guard against undefined/null
+        aValue = aValue == null ? '' : String(aValue);
+        bValue = bValue == null ? '' : String(bValue);
+        aValue = aValue.toLowerCase();
+        bValue = bValue.toLowerCase();
+
+        if (aValue < bValue) return -1 * direction;
+        if (aValue > bValue) return direction;
+
+        return 0; // Values are equal
+      });
   }
 
   const showManyResultsMessage = !!(
-    searchResults && searchResults.length >= MAX_SEARCH_RESULTS
+    searchResults && searchResults.length >= MAX_DOCUMENT_SEARCH_RESULTS
   );
 
   return {
     numberOfResults: searchResults?.length,
     ...paginatedResults,
+    formattedSearchResults: paginatedResults.formattedSearchResults,
     documentTypeVerbiage,
     formattedJudges,
     isInternalUser,
-    manyResults: MAX_SEARCH_RESULTS,
+    manyResults: MAX_DOCUMENT_SEARCH_RESULTS,
     showDateRangePicker,
     showManyResultsMessage,
+    maxDate: calculateISODate({
+      dateString: applicationContext.getUtilities().createISODateString(),
+      howMuch: 0,
+      units: 'days',
+    }),
+    sortColumn,
+    sortDirection,
   };
 };
 
@@ -89,7 +145,7 @@ export const formatDocumentSearchResultRecord = (
 
   result.formattedFiledDate = applicationContext
     .getUtilities()
-    .formatDateString(result.filingDate, 'MMDDYY');
+    .formatDateString(result.filingDate, FORMATS.MMDDYYYY);
 
   result.caseTitle = applicationContext.getCaseTitle(result.caseCaption || '');
 

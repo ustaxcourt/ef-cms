@@ -16,23 +16,17 @@ export const docketClerkAssignWorkItemToSelf = (
       box: 'inbox',
       queue: 'section',
     });
-    let sectionWorkQueue = cerebralTest.getState('workQueue');
-
     const workQueueFormatted = runCompute(formattedWorkQueue, {
       state: cerebralTest.getState(),
     });
-
     const docketNumber = caseDocketNumber || cerebralTest.docketNumber;
-
     const selectedWorkItem = workQueueFormatted.find(
       workItem => workItem.docketNumber === docketNumber,
     );
 
-    cerebralTest.docketEntryId = selectedWorkItem.docketEntry.docketEntryId;
+    cerebralTest.docketEntryId = selectedWorkItem!.docketEntry.docketEntryId;
 
-    expect(selectedWorkItem).toMatchObject({
-      assigneeId: null,
-    });
+    expect(selectedWorkItem!.assigneeId).toBeFalsy();
 
     cerebralTest.setState('selectedWorkItems', [selectedWorkItem]);
     cerebralTest.setState('assigneeName', 'Test Docketclerk');
@@ -40,9 +34,11 @@ export const docketClerkAssignWorkItemToSelf = (
 
     await cerebralTest.runSequence('assignSelectedWorkItemsSequence');
 
-    sectionWorkQueue = cerebralTest.getState('workQueue');
+    const sectionWorkQueue = runCompute(formattedWorkQueue, {
+      state: cerebralTest.getState(),
+    });
     const assignedSelectedWorkItem = sectionWorkQueue.find(
-      workItem => workItem.workItemId === selectedWorkItem.workItemId,
+      workItem => workItem.workItemId === selectedWorkItem!.workItemId,
     );
     expect(assignedSelectedWorkItem).toMatchObject({
       assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',

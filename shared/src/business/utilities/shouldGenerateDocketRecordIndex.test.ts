@@ -298,4 +298,27 @@ describe('shouldGenerateDocketRecordIndex', () => {
 
     expect(result).toEqual(true);
   });
+
+  it('returns true for non-petition initial document filed after petition that has not been served', () => {
+    const caseDetail = {
+      docketEntries: [
+        {
+          docketEntryId: 'pet-001',
+          eventCode: 'P',
+          isPaper: true,
+          // servedAt intentionally missing
+        },
+      ],
+    };
+    const docketEntry = {
+      docketEntryId: 'abc-456',
+      documentType: 'Corporate Disclosure Statement',
+      eventCode: 'DISC',
+      isPaper: true,
+    };
+
+    const result = shouldGenerateDocketRecordIndex({ caseDetail, docketEntry });
+
+    expect(result).toEqual(true);
+  });
 });

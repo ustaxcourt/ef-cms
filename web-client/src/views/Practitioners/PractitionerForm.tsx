@@ -5,11 +5,16 @@ import { PractitionerContactForm } from './PractitionerContactForm';
 import { PractitionerLoginServiceEmailForm } from './PractitionerLoginServiceEmailForm';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import { WarningNotificationComponent } from '../WarningNotification';
+import { RunableSequence as RunnableSequence } from 'cerebral';
 
-export const PractitionerForm = connect(
+type PractitionerFormProps = {
+  validateSequenceName: string;
+};
+
+export const PractitionerForm: React.FC<PractitionerFormProps> = connect(
   {
     constants: state.constants,
     createPractitionerUserHelper: state.createPractitionerUserHelper,
@@ -17,8 +22,9 @@ export const PractitionerForm = connect(
     formatAndUpdateDateFromDatePickerSequence:
       sequences.formatAndUpdateDateFromDatePickerSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    validateSequence: sequences[props.validateSequenceName],
+    validateSequence: sequences[props`validateSequenceName`],
     validationErrors: state.validationErrors,
+    practitionerInformationHelper: state.practitionerInformationHelper,
   },
   function PractitionerForm({
     constants,
@@ -29,6 +35,17 @@ export const PractitionerForm = connect(
     validateSequence,
     validateSequenceName,
     validationErrors,
+    practitionerInformationHelper,
+  }: {
+    constants: Record<string, any>;
+    createPractitionerUserHelper: Record<string, any>;
+    form: Record<string, any>;
+    formatAndUpdateDateFromDatePickerSequence: Function | RunnableSequence;
+    updateFormValueSequence: Function | RunnableSequence;
+    validateSequence: Function | RunnableSequence;
+    validateSequenceName: string;
+    validationErrors: Record<string, any>;
+    practitionerInformationHelper: Record<string, any>;
   }) {
     return (
       <>
@@ -219,6 +236,10 @@ export const PractitionerForm = connect(
                             id={`practiceType-${option}`}
                             name="practiceType"
                             type="radio"
+                            disabled={
+                              !!practitionerInformationHelper.openCasesTotal &&
+                              form.practiceType !== option
+                            }
                             value={option}
                             onChange={e => {
                               updateFormValueSequence({
@@ -239,6 +260,23 @@ export const PractitionerForm = connect(
                       ))}
                     </fieldset>
                   </FormGroup>
+                  {!!practitionerInformationHelper.openCasesTotal && (
+                    <WarningNotificationComponent
+                      alertWarning={{
+                        message: (
+                          <>
+                            Practitioner is associated with one or more open
+                            cases. Practitioner has to be withdrawn from all
+                            open cases to change practice type.
+                          </>
+                        ),
+                        title: `Practice type cannot be changed.`,
+                      }}
+                      dismissible={false}
+                      messageNotBold={true}
+                      scrollToTop={false}
+                    />
+                  )}
                 </div>
               </div>
             </div>

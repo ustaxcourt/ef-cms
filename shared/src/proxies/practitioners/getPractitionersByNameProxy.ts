@@ -5,10 +5,18 @@ import { get } from '../requests';
 export const getPractitionersByNameInteractor = (
   applicationContext: ClientApplicationContext,
   {
+    admissionStatus,
     name,
+    originalBarState,
     searchAfter,
+    practiceType,
+    practitionerType,
   }: {
+    admissionStatus?: string;
     name: string;
+    originalBarState?: string;
+    practiceType?: string;
+    practitionerType?: string;
     searchAfter: (string | number)[];
   },
 ): Promise<PractitionersByName> => {
@@ -16,8 +24,12 @@ export const getPractitionersByNameInteractor = (
     applicationContext,
     endpoint: '/practitioners',
     params: {
+      admissionStatus,
       name,
+      originalBarState,
       searchAfter,
+      practiceType,
+      practitionerType,
     },
   });
 };

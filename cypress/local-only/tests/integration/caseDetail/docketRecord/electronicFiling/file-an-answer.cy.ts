@@ -1,10 +1,11 @@
 import { attachFile } from '../../../../../../helpers/file/upload-file';
-import { navigateTo as navigateToDashboard } from '../../../../../support/pages/dashboard';
 import { selectTypeaheadInput } from '../../../../../../helpers/components/typeAhead/select-typeahead-input';
+import { loginAsIrsPractitioner } from 'cypress/helpers/authentication/login-as-helpers';
 
 describe('Filing an Answer', function () {
   it('should have a file first IRS document button', () => {
-    cy.login('irspractitioner', '/case-detail/104-18');
+    loginAsIrsPractitioner();
+    cy.visit('/case-detail/104-18');
     cy.get('#button-first-irs-document').click();
   });
 
@@ -47,7 +48,7 @@ describe('Filing an Answer', function () {
     // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.wait(SLEEP);
 
-    navigateToDashboard('irspractitioner');
+    loginAsIrsPractitioner('irsPractitioner@example.com');
     cy.get('table#case-list').find('a').should('contain', '104-18');
   });
 });

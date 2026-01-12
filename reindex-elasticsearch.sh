@@ -11,9 +11,7 @@
 
 ./check-env-variables.sh \
   "ENV" \
-  "DYNAMODB_TABLE_NAME" \
   "ELASTICSEARCH_ENDPOINT" \
-  "ZONE_NAME" \
   "EFCMS_DOMAIN" \
   "USTC_ADMIN_PASS" \
   "AWS_ACCESS_KEY_ID" \
@@ -22,5 +20,3 @@
 npx ts-node --transpile-only ./web-api/delete-elasticsearch-index.ts
 ./web-api/setup-elasticsearch-index.sh "${ENV}"
 npx ts-node --transpile-only ./web-api/elasticsearch/elasticsearch-alias-settings.ts
-
-npx ts-node --transpile-only ./web-api/reindex-dynamodb-records.ts "${DYNAMODB_TABLE_NAME}"

@@ -1,3 +1,4 @@
+jest.mock('@shared/proxies/reports/getCustomCaseReportProxy');
 import {
   CHIEF_JUDGE,
   CUSTOM_CASE_REPORT_PAGE_SIZE,
@@ -6,15 +7,17 @@ import {
   CustomCaseReportFilters,
   GetCustomCaseReportRequest,
   GetCustomCaseReportResponse,
-} from '../../../../../web-api/src/business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
-import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
+} from '@web-api/business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
 import { getCustomCaseReportAction } from './getCustomCaseReportAction';
+import { getCustomCaseReportInteractor as getCustomCaseReportInteractorMock } from '@shared/proxies/reports/getCustomCaseReportProxy';
 import { judgeUser } from '@shared/test/mockUsers';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getCustomCaseReportAction', () => {
-  const lastCaseId = { pk: 'lastCaseId', receivedAt: 8394 };
+  const getCustomCaseReportInteractor = jest.mocked(
+    getCustomCaseReportInteractorMock,
+  );
   let mockCustomCaseReportResponse: GetCustomCaseReportResponse;
   let filterValues: CustomCaseReportFilters;
   let expectedRequest: GetCustomCaseReportRequest;
@@ -22,23 +25,18 @@ describe('getCustomCaseReportAction', () => {
   beforeEach(() => {
     mockCustomCaseReportResponse = {
       foundCases: [],
-      lastCaseId,
       totalCount: 0,
     };
 
-    applicationContext
-      .getUseCases()
-      .getCustomCaseReportInteractor.mockResolvedValue(
-        mockCustomCaseReportResponse,
-      );
+    getCustomCaseReportInteractor.mockResolvedValue(
+      mockCustomCaseReportResponse,
+    );
 
-    presenter.providers.applicationContext = applicationContext;
     filterValues = {
       caseStatuses: ['Assigned - Case'],
       caseTypes: ['Deficiency'],
       endDate: '05/14/2022',
       filingMethod: 'electronic',
-      highPriority: true,
       judges: [CHIEF_JUDGE],
       preferredTrialCities: ['Jackson, Mississippi'],
       procedureType: 'All',
@@ -49,8 +47,8 @@ describe('getCustomCaseReportAction', () => {
       ...filterValues,
       endDate: '2022-05-15T03:59:59.999Z',
       pageSize: CUSTOM_CASE_REPORT_PAGE_SIZE,
-      searchAfter: { pk: null, receivedAt: null },
       startDate: '2022-05-10T04:00:00.000Z',
+      page: 0,
     };
   });
 
@@ -65,42 +63,30 @@ describe('getCustomCaseReportAction', () => {
       state: {
         customCaseReport: {
           filters: filterValues,
-          lastIdsOfPages: [{ pk: null, receivedAt: null }],
         },
       },
     });
 
-    expect(
-      applicationContext.getUseCases().getCustomCaseReportInteractor,
-    ).toHaveBeenCalledWith(expect.anything(), expectedRequest);
+    expect(getCustomCaseReportInteractor).toHaveBeenCalledWith(expectedRequest);
     expect(result.state.customCaseReport.cases).toEqual(
       mockCustomCaseReportResponse.foundCases,
     );
     expect(result.state.customCaseReport.totalCases).toEqual(
       mockCustomCaseReportResponse.totalCount,
     );
-    expect(result.state.customCaseReport.lastIdsOfPages).toMatchObject([
-      { pk: null, receivedAt: null },
-      lastCaseId,
-    ]);
   });
 
-  it('should populate page ID tracking array when navigating to later pages', async () => {
-    const page2SearchId = { pk: 'page2', receivedAt: 890 };
+  it('should paginate properly', async () => {
     mockCustomCaseReportResponse = {
       foundCases: [],
-      lastCaseId: page2SearchId,
       totalCount: 0,
     };
-    applicationContext
-      .getUseCases()
-      .getCustomCaseReportInteractor.mockResolvedValue(
-        mockCustomCaseReportResponse,
-      );
-    const page1SearchId = { pk: 'page1', receivedAt: 123 };
+    getCustomCaseReportInteractor.mockResolvedValue(
+      mockCustomCaseReportResponse,
+    );
     const expectedRequestWithSearchAfter = {
       ...expectedRequest,
-      searchAfter: page1SearchId,
+      page: 1,
     };
 
     const result = await runAction(getCustomCaseReportAction, {
@@ -113,49 +99,19 @@ describe('getCustomCaseReportAction', () => {
       state: {
         customCaseReport: {
           filters: filterValues,
-          lastIdsOfPages: [{ pk: null, receivedAt: null }, page1SearchId],
         },
       },
     });
 
-    expect(
-      applicationContext.getUseCases().getCustomCaseReportInteractor,
-    ).toHaveBeenCalledWith(expect.anything(), expectedRequestWithSearchAfter);
+    expect(getCustomCaseReportInteractor).toHaveBeenCalledWith(
+      expectedRequestWithSearchAfter,
+    );
     expect(result.state.customCaseReport.cases).toEqual(
       mockCustomCaseReportResponse.foundCases,
     );
     expect(result.state.customCaseReport.totalCases).toEqual(
       mockCustomCaseReportResponse.totalCount,
     );
-    expect(result.state.customCaseReport.lastIdsOfPages).toMatchObject([
-      { pk: null, receivedAt: null },
-      page1SearchId,
-      page2SearchId,
-    ]);
-  });
-
-  it('should remove the high priority filter when the value is false', async () => {
-    await runAction(getCustomCaseReportAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        selectedPage: 0,
-      },
-      state: {
-        customCaseReport: {
-          filters: { ...filterValues, highPriority: false },
-          lastIdsOfPages: [{ pk: null, receivedAt: null }],
-        },
-      },
-    });
-
-    expect(
-      applicationContext.getUseCases().getCustomCaseReportInteractor,
-    ).toHaveBeenCalledWith(expect.anything(), {
-      ...expectedRequest,
-      highPriority: undefined,
-    });
   });
 
   it('should not format the start or end date if they have not been selected', async () => {
@@ -174,14 +130,11 @@ describe('getCustomCaseReportAction', () => {
       state: {
         customCaseReport: {
           filters: filterValues,
-          lastIdsOfPages: [{ pk: null, receivedAt: null }],
         },
       },
     });
 
-    expect(
-      applicationContext.getUseCases().getCustomCaseReportInteractor,
-    ).toHaveBeenCalledWith(expect.anything(), expectedRequest);
+    expect(getCustomCaseReportInteractor).toHaveBeenCalledWith(expectedRequest);
   });
 
   it('should get the custom case report with judges ids if judges names have been selected', async () => {
@@ -209,14 +162,11 @@ describe('getCustomCaseReportAction', () => {
       state: {
         customCaseReport: {
           filters: filterValues,
-          lastIdsOfPages: [{ pk: null, receivedAt: null }],
         },
         judges: [judgeSotomayor, judgeColvin],
       },
     });
 
-    expect(
-      applicationContext.getUseCases().getCustomCaseReportInteractor,
-    ).toHaveBeenCalledWith(expect.anything(), expectedRequest);
+    expect(getCustomCaseReportInteractor).toHaveBeenCalledWith(expectedRequest);
   });
 });

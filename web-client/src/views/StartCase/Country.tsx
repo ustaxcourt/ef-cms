@@ -1,19 +1,28 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
-import React from 'react';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
+import React, { Ref } from 'react';
+import { RunableSequence as RunnableSequence } from 'cerebral';
 
-export const Country = connect(
+type CountryProps = {
+  bind: string;
+  onBlur?: Function;
+  type: string;
+  clearTypeOnCountryChange?: boolean;
+  onChange: any;
+  onChangeCountryType?: string;
+}
+
+export const Country: React.FC<CountryProps> = connect(
   {
     constants: state.constants,
-    data: state[props.bind],
-    onBlur: props.onBlur,
-    onChangeCountryType: sequences[props.onChangeCountryType],
-    registerRef: props.registerRef,
-    type: props.type,
-    updateFormValueSequence: sequences[props.onChange],
+    data: state[props`bind`],
+    onBlur: props`onBlur`,
+    onChangeCountryType: sequences[props`onChangeCountryType`],
+    registerRef: props`registerRef`,
+    type: props`type`,
+    updateFormValueSequence: sequences[props`onChange`],
     validationErrors: state.validationErrors,
   },
   function Country({
@@ -25,10 +34,23 @@ export const Country = connect(
     type,
     updateFormValueSequence,
     validationErrors,
+  }: {
+    constants: Record<string, any>;
+    data: Record<string, any>;
+    onBlur: (args: Record<string, any>) => void;
+    onChangeCountryType: Function | RunnableSequence;
+    registerRef: (param: string) => Ref<HTMLInputElement>;
+    type: string;
+    updateFormValueSequence: Function | RunnableSequence;
+    validationErrors: Record<string, any>;
   }) {
     return (
       <React.Fragment>
-        <FormGroup errorText={validationErrors?.[type]?.countryType}>
+        <FormGroup
+          errorText={
+            (validationErrors?.[type] as Record<string, any>)?.countryType
+          }
+        >
           <label className="usa-label" htmlFor={`${type}.countryType`}>
             Country
           </label>
@@ -101,7 +123,9 @@ export const Country = connect(
         {data[type].countryType === constants.COUNTRY_TYPES.INTERNATIONAL && (
           <FormGroup
             errorMessageId="country-error-message"
-            errorText={validationErrors?.[type]?.country}
+            errorText={
+              (validationErrors?.[type] as Record<string, any>)?.country
+            }
           >
             <label className="usa-label" htmlFor={`${type}.country`}>
               Country name

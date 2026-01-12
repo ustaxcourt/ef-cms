@@ -1,17 +1,22 @@
 /* eslint-disable max-lines */
+/* eslint-disable custom-rules-plugin/no-dates*/
 import { DateTime, Settings } from 'luxon';
 import {
   FORMATS,
   PATTERNS,
   USTC_TZ,
+  calculateDate,
+  calculateDateAtStartOfDayEST,
   calculateDifferenceInDays,
   calculateDifferenceInHours,
   calculateISODate,
   castToISO,
   checkDate,
   combineISOandEasternTime,
+  createDateAtStartOfWeekEST,
   createEndOfDayISO,
   createISODateAtStartOfDayEST,
+  createISODateStringFromObject,
   createStartOfDayISO,
   dateStringsCompared,
   deconstructDate,
@@ -20,13 +25,19 @@ import {
   getBusinessDateInFuture,
   getDateFormat,
   getMonthDayYearInETObj,
+  getWeeksInRange,
+  isDateWithinGivenInterval,
   isStringISOFormatted,
-  isTodayWithinGivenInterval,
   isValidDateString,
+  isValidISODate,
+  isValidReconciliationDate,
   normalizeIsoDateRange,
+  prepareDateFromEST,
   prepareDateFromString,
+  roundDateDownToNearestHour,
   subtractISODates,
   validateDateAndCreateISO,
+  isValidPastDate,
 } from './DateHandler';
 
 describe('DateHandler', () => {
@@ -48,7 +59,6 @@ describe('DateHandler', () => {
     const dateNowMock = jest.fn();
 
     const setDateMockValue = timestamp => {
-      // eslint-disable-next-line @miovision/disallow-date/no-new-date
       dateNowMock.mockReturnValue(new Date(timestamp).valueOf());
     };
     const setupDateMock = () => {
@@ -68,6 +78,26 @@ describe('DateHandler', () => {
       const inputTimeInEst = '14:00'; //2:00 pm
 
       const outputString = '2021-11-11T19:00:00.000Z';
+
+      const result = combineISOandEasternTime(inputISO, inputTimeInEst);
+      expect(result).toEqual(outputString);
+    });
+
+    it('should combine ISO datestamp and a string representing hours and minutes in Eastern time when the time is in the morning', () => {
+      const inputISO = '2021-11-11T05:00:00.000Z';
+      const inputTimeInEst = '09:00'; // 9:00 am
+
+      const outputString = '2021-11-11T14:00:00.000Z';
+
+      const result = combineISOandEasternTime(inputISO, inputTimeInEst);
+      expect(result).toEqual(outputString);
+    });
+
+    it('should combine ISO datestamp and a string representing hours and minutes in Eastern time when the input ISO is not midnight Eastern', () => {
+      const inputISO = '2021-11-11T15:30:00.000Z'; // 10:30am Eastern
+      const inputTimeInEst = '16:00'; // 4:00 pm
+
+      const outputString = '2021-11-11T21:00:00.000Z';
 
       const result = combineISOandEasternTime(inputISO, inputTimeInEst);
       expect(result).toEqual(outputString);
@@ -219,7 +249,6 @@ describe('DateHandler', () => {
     timeZones.forEach(timeZone => {
       it(`should create a timestamp exactly at midnight of today, the first moment of the day in Eastern Time, when the system time zone is ${timeZone}`, () => {
         Settings.defaultZone = timeZone; // Mock the system timezone.
-        // eslint-disable-next-line @miovision/disallow-date/no-new-date
         Settings.now = () => new Date('2021-10-07T00:31:51.621Z').getTime(); // Mock the system time.
 
         const startOfDay = createStartOfDayISO();
@@ -253,7 +282,6 @@ describe('DateHandler', () => {
     timeZones.forEach(timeZone => {
       it(`should create a timestamp one millisecond before midnight of today, the last moment of the day according to Eastern Timezone, when the system time zone is ${timeZone}`, () => {
         Settings.defaultZone = timeZone; // Mock the system timezone.
-        // eslint-disable-next-line @miovision/disallow-date/no-new-date
         Settings.now = () => new Date('2021-10-07T00:31:51.621Z').getTime(); // Mock the system time.
 
         const startOfDay = createEndOfDayISO();
@@ -361,7 +389,7 @@ describe('DateHandler', () => {
       expect(result).toBe('8:40 pm ET');
     });
 
-    it('creates a formatted EST time using DateHandler internal format "TIME_TZ"', () => {
+    it('creates a formatted EST time using DateHandler internal format "TIME_TZ" 2', () => {
       const dateRetrievedFromStorage = '2001-01-01';
       const result = formatDateString(
         dateRetrievedFromStorage,
@@ -386,7 +414,7 @@ describe('DateHandler', () => {
       const result = formatNow('yy');
       expect(result).toEqual('96');
     });
-    it('formats current time stamp using requested format', () => {
+    it('formats current time stamp using requested format in YEAR', () => {
       const result = formatNow(FORMATS.YEAR);
       const numericType = +result;
       expect(result).toEqual('1996');
@@ -408,38 +436,34 @@ describe('DateHandler', () => {
     });
 
     it('should return a non-zero if two calendar-dates appear to be the same but are different according to EST', () => {
-      let result;
       const date1 = '2001-01-02'; // i.e. Jan 2, midnight EST
       const date2 = '2001-01-02T02:40:55.007Z'; // Jan 1, 9:40m EST
 
-      result = dateStringsCompared(date1, date2);
+      const result = dateStringsCompared(date1, date2);
       expect(result).not.toEqual(0);
     });
 
     it('should return zero if two calendar-dates are the same, even if formatted differently', () => {
-      let result;
       const date1 = '2001-01-01';
       const date2 = '2001-01-01T08:40:55.007Z';
 
-      result = dateStringsCompared(date1, date2);
+      const result = dateStringsCompared(date1, date2);
       expect(result).toEqual(0);
     });
 
     it('should by default return zero if provided two ISO timestamps within 30 seconds of each other', () => {
-      let result;
       const date1 = '2001-01-01T08:40:26.007Z';
       const date2 = '2001-01-01T08:40:55.007Z';
 
-      result = dateStringsCompared(date1, date2);
+      const result = dateStringsCompared(date1, date2);
       expect(result).toEqual(0);
     });
 
     it('should not return zero if provided two ISO timestamps within 30 seconds of each other and options specify exact is true', () => {
-      let result;
       const date1 = '2001-01-01T08:40:26.007Z';
       const date2 = '2001-01-01T08:40:55.007Z';
 
-      result = dateStringsCompared(date1, date2, { exact: true });
+      const result = dateStringsCompared(date1, date2, { exact: true });
       expect(result).not.toEqual(0);
       expect(result).toEqual(-29000);
     });
@@ -590,7 +614,7 @@ describe('DateHandler', () => {
       expect(result).toBe('1993-03-09T05:00:00.000Z');
     });
 
-    it('should return undefined when year, month, or day is not provided', () => {
+    it('should return undefined when year, month, or day is not provided 2', () => {
       const result = validateDateAndCreateISO({
         day: '5',
         month: '11',
@@ -707,18 +731,12 @@ describe('DateHandler', () => {
     });
   });
 
-  describe('isTodayWithinGivenInterval', () => {
+  describe('isDateWithinGivenInterval', () => {
     it('should return false when the current date does not fall within the specified date time range', () => {
-      const mockPastStartDate = prepareDateFromString(
-        '10/10/2020',
-        FORMATS.MMDDYY,
-      );
-      const mockPastEndDate = prepareDateFromString(
-        '12/12/2020',
-        FORMATS.MMDDYY,
-      );
+      const mockPastStartDate = '2020-10-10T00:00:00.000Z';
+      const mockPastEndDate = '2020-12-12T00:00:00.000Z';
 
-      const result = isTodayWithinGivenInterval({
+      const result = isDateWithinGivenInterval({
         intervalEndDate: mockPastEndDate,
         intervalStartDate: mockPastStartDate,
       });
@@ -727,15 +745,19 @@ describe('DateHandler', () => {
     });
 
     it('should return true when the current date falls within the specified date time range', () => {
-      const mockPastStartDate = prepareDateFromString().minus({
-        ['days']: 2,
-      });
+      const mockPastStartDate = prepareDateFromString()
+        .minus({
+          ['days']: 2,
+        })
+        .toISO()!;
 
-      const mockPastEndDate = prepareDateFromString().plus({
-        ['days']: 2,
-      });
+      const mockPastEndDate = prepareDateFromString()
+        .plus({
+          ['days']: 2,
+        })
+        .toISO()!;
 
-      const result = isTodayWithinGivenInterval({
+      const result = isDateWithinGivenInterval({
         intervalEndDate: mockPastEndDate,
         intervalStartDate: mockPastStartDate,
       });
@@ -810,6 +832,267 @@ describe('DateHandler', () => {
       const dt2 = dt.plus({ days: 1 });
       const diff = calculateDifferenceInHours(dt2.toISO()!, dt.toISO()!);
       expect(diff).toBe(23);
+    });
+  });
+
+  describe('createDateAtStartOfWeekEST', () => {
+    it('should return a valid date at the start of the week of the date passed in when said date is in Eastern time (with offset)', () => {
+      const dateString = '2025-05-07T00:00:00.000-04:00';
+      const result = createDateAtStartOfWeekEST(dateString, FORMATS.YYYYMMDD);
+
+      expect(result).toEqual('2025-05-05');
+    });
+
+    it('should return a valid date at the start of the week of the date passed in when said date is UTC', () => {
+      const dateString = '2025-05-07T04:00:00.000Z';
+      const result = createDateAtStartOfWeekEST(dateString, FORMATS.YYYYMMDD);
+
+      expect(result).toEqual('2025-05-05');
+    });
+
+    it('should return a valid date at the start of the week of the date passed in when said date is a Monday in Eastern time (with offset)', () => {
+      const dateString = '2024-11-18T00:00:00.000-05:00';
+      const result = createDateAtStartOfWeekEST(dateString, FORMATS.YYYYMMDD);
+
+      expect(result).toEqual('2024-11-18');
+    });
+
+    it('should return a valid date at the start of the week of the date passed in when said date a Monday is UTC', () => {
+      const dateString = '2024-11-18T05:00:00.000Z';
+      const result = createDateAtStartOfWeekEST(dateString, FORMATS.YYYYMMDD);
+
+      expect(result).toEqual('2024-11-18');
+    });
+  });
+
+  describe('calculateDateAtStartOfDayEST', () => {
+    const getActualAndExpectedDate = ({
+      dateString = undefined,
+      howMuch = 0,
+      units = 'days',
+    }: {
+      dateString?: string;
+      howMuch?: number;
+      units?: string;
+    }) => {
+      const actual = calculateDateAtStartOfDayEST({
+        dateString,
+        howMuch,
+        units,
+      }).toISOString();
+
+      const expected = calculateDate({
+        dateString: createISODateAtStartOfDayEST(
+          calculateDate({ dateString, howMuch, units }).toISOString(),
+        ),
+      }).toISOString();
+      return { actual, expected };
+    };
+
+    const scenarios = [
+      {
+        dateString: undefined,
+        expectedISO: null,
+        howMuch: 0,
+        testName: 'handles howMuch=0 (default units=days) with no dateString',
+        units: 'days',
+      },
+      {
+        dateString: undefined,
+        expectedISO: null,
+        howMuch: 0,
+        testName: 'handles howMuch=0 with units=hours',
+        units: 'hours',
+      },
+      {
+        dateString: '2024-03-02',
+        expectedISO: '2024-03-02T05:00:00.000Z',
+        howMuch: 0,
+        testName: 'handles howMuch=0 with explicit date',
+        units: 'days',
+      },
+      {
+        dateString: undefined,
+        expectedISO: null,
+        howMuch: 67,
+        testName: 'handles howMuch>0 (67 days), no dateString',
+        units: 'days',
+      },
+      {
+        dateString: undefined,
+        expectedISO: null,
+        howMuch: 67,
+        testName: 'handles howMuch>0 (67 hours), no dateString',
+        units: 'hours',
+      },
+      {
+        dateString: '2024-03-02',
+        expectedISO: '2024-05-08T04:00:00.000Z',
+        howMuch: 67,
+        testName: 'handles howMuch>0 (67 days) with explicit date',
+        units: 'days',
+      },
+      {
+        dateString: undefined,
+        expectedISO: null,
+        howMuch: -44,
+        testName: 'handles howMuch<0 (-44 days), no dateString',
+        units: 'days',
+      },
+      {
+        dateString: undefined,
+        expectedISO: null,
+        howMuch: -44,
+        testName: 'handles howMuch<0 (-44 hours), no dateString',
+        units: 'hours',
+      },
+      {
+        dateString: '2024-03-02',
+        expectedISO: '2024-01-18T05:00:00.000Z',
+        howMuch: -44,
+        testName: 'handles howMuch<0 (-44 days) with explicit date',
+        units: 'days',
+      },
+    ];
+
+    it.each(scenarios)(
+      '$testName (dateString=$dateString, howMuch=$howMuch, units=$units)',
+      ({ dateString, expectedISO, howMuch, units }) => {
+        const { actual, expected } = getActualAndExpectedDate({
+          dateString,
+          howMuch,
+          units,
+        });
+
+        if (expectedISO) {
+          // If there's an exact expectedISO, make sure the expected matches exactly
+          // eslint-disable-next-line jest/no-conditional-expect
+          expect(expected).toEqual(expectedISO);
+        }
+        // Regardless, actual should match the expected from our helper
+        expect(actual).toEqual(expected);
+      },
+    );
+  });
+
+  describe('prepareDateFromEST', () => {
+    it('converts a date/time string in Eastern Time to a UTC (GMT) ISO string', () => {
+      const easternTimeString = '01/01/25 10:00 am';
+      const inputFormat = 'MM/dd/yy hh:mm a';
+
+      const result = prepareDateFromEST(easternTimeString, inputFormat);
+      expect(result).toBe('2025-01-01T15:00:00.000Z');
+    });
+  });
+
+  describe('isValidISODate', () => {
+    it('returns true if provided a valid ISO date string', () => {
+      const validIso = '2025-01-01T00:00:00.000Z';
+      expect(isValidISODate(validIso)).toBe(true);
+    });
+
+    it('returns false if provided an invalid ISO date string', () => {
+      const invalidIso = '2025-13-40T99:99:99.999Z';
+      expect(isValidISODate(invalidIso)).toBe(false);
+    });
+  });
+
+  describe('isValidReconciliationDate', () => {
+    it('returns true if the date is valid ISO and <= today', () => {
+      const isoPastDate = '2000-01-01T00:00:00.000Z';
+      expect(isValidReconciliationDate(isoPastDate)).toBe(true);
+    });
+
+    it('returns false if the date is not a valid ISO date', () => {
+      expect(isValidReconciliationDate('some-random-string')).toBe(false);
+    });
+
+    it('returns false if the date is valid ISO but is in the future', () => {
+      const futureIso = '2999-01-01T00:00:00.000Z';
+      expect(isValidReconciliationDate(futureIso)).toBe(false);
+    });
+  });
+
+  describe('createISODateStringFromObject', () => {
+    it('creates an ISO date string (UTC) from an object { year, month, day } in EST', () => {
+      const dateObj = { year: 2023, month: 2, day: 1 };
+      const result = createISODateStringFromObject(dateObj);
+      expect(result).toBe('2023-02-01T05:00:00.000Z');
+    });
+  });
+
+  describe('getWeeksInRange', () => {
+    it('returns an array of ISO week-start dates for each Monday between startDate and endDate (inclusive)', () => {
+      const start = '2023-01-03T05:00:00.000Z';
+      const end = '2023-01-31T05:00:00.000Z';
+
+      const weeks = getWeeksInRange({ startDate: start, endDate: end });
+
+      expect(weeks).toEqual([
+        { start: '2023-01-02', end: '2023-01-06' },
+        { start: '2023-01-09', end: '2023-01-13' },
+        { start: '2023-01-16', end: '2023-01-20' },
+        { start: '2023-01-23', end: '2023-01-27' },
+        { start: '2023-01-30', end: '2023-02-03' },
+      ]);
+    });
+
+    it('returns an empty array if startDate > endDate', () => {
+      const start = '2023-02-01T05:00:00.000Z';
+      const end = '2023-01-01T05:00:00.000Z';
+
+      const weeks = getWeeksInRange({ startDate: start, endDate: end });
+      expect(weeks).toEqual([]);
+    });
+  });
+
+  describe('roundDateDownToNearestHour', () => {
+    it('rounds a date down to the nearest hour', () => {
+      const inputISO = '2025-03-01T09:35:17.555Z';
+
+      const resultDate = roundDateDownToNearestHour(inputISO);
+      expect(resultDate.toISOString()).toBe('2025-03-01T09:00:00.000Z');
+    });
+
+    it('keeps the same hour if the minutes are already zero', () => {
+      const inputISO = '2025-03-01T09:00:00.000Z';
+
+      const resultDate = roundDateDownToNearestHour(inputISO);
+      expect(resultDate.toISOString()).toBe(inputISO);
+    });
+  });
+
+  describe('isValidPastDate', () => {
+    const originalNow = Settings.now.bind(Settings);
+    const originalDefaultZone = Settings.defaultZone;
+    beforeAll(() => {
+      // Mock current time to 2024-10-30T12:00:00.000Z (1730289600000 ms)
+      Settings.now = () => 1730289600000;
+      Settings.defaultZone = 'system';
+    });
+
+    afterAll(() => {
+      Settings.now = originalNow;
+      Settings.defaultZone = originalDefaultZone;
+    });
+
+    it('returns true for today', () => {
+      const iso = '2024-10-30T12:00:00.000Z';
+      expect(isValidPastDate(iso)).toBe(true);
+    });
+
+    it('returns true for a past date', () => {
+      const iso = '2024-10-29T12:00:00.000Z';
+      expect(isValidPastDate(iso)).toBe(true);
+    });
+
+    it('returns false for a future date', () => {
+      const iso = '2024-10-31T12:00:00.000Z';
+      expect(isValidPastDate(iso)).toBe(false);
+    });
+
+    it('returns false for invalid input', () => {
+      expect(isValidPastDate('not-a-date')).toBe(false);
     });
   });
 });

@@ -1,79 +1,80 @@
 /* eslint-disable max-lines */
+import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
+jest.mock('@shared/sharedAppContext');
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
 import {
-  CASE_STATUS_TYPES,
   CONTACT_TYPES,
   COUNTRY_TYPES,
-  DOCKET_NUMBER_SUFFIXES,
   DOCKET_SECTION,
+  AUTOMATIC_BLOCKED_REASONS,
   INITIAL_DOCUMENT_TYPES,
   PARTY_TYPES,
   PAYMENT_STATUS,
   ROLES,
   SERVICE_INDICATOR_TYPES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import {
-  Case,
-  getContactPrimary,
-} from '../../../../../shared/src/business/entities/cases/Case';
+} from '@shared/business/entities/EntityConstants';
+import { Case, getContactPrimary } from '@shared/business/entities/cases/Case';
 import {
   FORMATS,
   formatDateString,
   formatNow,
   getBusinessDateInFuture,
-} from '../../../../../shared/src/business/utilities/DateHandler';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
+} from '@shared/business/utilities/DateHandler';
+import { MOCK_CASE } from '@shared/test/mockCase';
 import {
   ServiceUnavailableError,
   UnauthorizedError,
 } from '@web-api/errors/errors';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import {
-  getFakeFile,
-  testPdfDoc,
-} from '../../../../../shared/src/business/test/getFakeFile';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { getFakeFile, testPdfDoc } from '@shared/business/test/getFakeFile';
 import {
   mockDocketClerkUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { serveCaseToIrsInteractor } from './serveCaseToIrsInteractor';
+import { getFeatureFlagValues as getFeatureFlagValuesMock } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { getUniqueId as getUniqueIdMock } from '@shared/sharedAppContext';
+import { RawWorkItem, WorkItem } from '@shared/business/entities/WorkItem';
+import { getWorkItemByDocketNumberAndDocketEntryId as getWorkItemByDocketNumberAndDocketEntryIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 
 describe('serveCaseToIrsInteractor', () => {
+  const getFeatureFlagValues = jest.mocked(getFeatureFlagValuesMock);
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const updateCaseAndAssociations = jest
+    .mocked(updateCaseAndAssociationsMock)
+    .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
+  const getUniqueId = jest
+    .mocked(getUniqueIdMock)
+    .mockImplementation(() => '7805d1ab-18d0-43ec-bafb-654e83405416');
+  const getWorkItemByDocketNumberAndDocketEntryId = jest.mocked(
+    getWorkItemByDocketNumberAndDocketEntryIdMock,
+  );
+  const tryGetLocks = jest.mocked(tryGetLocksMock);
   const clientConnectionId = '6805d1ab-18d0-43ec-bafb-654e83405416';
   const mockParams = {
     clientConnectionId,
     docketNumber: MOCK_CASE.docketNumber,
   };
-  const MOCK_WORK_ITEM = {
-    assigneeId: null,
+  const MOCK_WORK_ITEM: RawWorkItem = {
+    assigneeId: undefined,
     assigneeName: 'IRSBatchSystem',
-    caseStatus: CASE_STATUS_TYPES.new,
     completedAt: '2018-12-27T18:06:02.968Z',
     completedBy: PARTY_TYPES.petitioner,
     completedByUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     createdAt: '2018-12-27T18:06:02.971Z',
-    docketEntry: {
-      createdAt: '2018-12-27T18:06:02.968Z',
-      docketEntryId: 'b6238482-5f0e-48a8-bb8e-da2957074a08',
-      documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
-    },
+    docketEntryId: 'b6238482-5f0e-48a8-bb8e-da2957074a08',
     docketNumber: '101-18',
-    docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-    isInitializeCase: true,
-    messages: [
-      {
-        createdAt: '2018-12-27T18:06:02.968Z',
-        from: PARTY_TYPES.petitioner,
-        fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        message: 'Petition ready for review',
-        messageId: '343f5b21-a3a9-4657-8e2b-df782f920e45',
-        role: ROLES.petitioner,
-        to: null,
-      },
-    ],
     section: DOCKET_SECTION,
     sentBy: 'petitioner',
     updatedAt: '2018-12-27T18:06:02.968Z',
@@ -81,47 +82,44 @@ describe('serveCaseToIrsInteractor', () => {
   };
 
   let mockCase;
-  let getObjectMock = () => {
+  const getObjectMock = () => {
     return {
       promise: () => ({
         Body: testPdfDoc,
       }),
     };
   };
-  let mockLock;
-
-  beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockImplementation(() => mockLock);
-
-    applicationContext
-      .getPersistenceGateway()
-      .getConfigurationItemValue.mockResolvedValue({
-        name: 'James Bond',
-        title: 'Clerk of the Court (Interim)',
-      });
-  });
 
   beforeEach(() => {
-    mockLock = undefined;
     mockCase = { ...MOCK_CASE };
-    mockCase.docketEntries[0].workItem = { ...MOCK_WORK_ITEM };
     applicationContext.getPersistenceGateway().updateWorkItem = jest.fn();
 
-    applicationContext.getStorageClient.mockReturnValue({
+    applicationContext.getStorageClient.mockResolvedValue({
       getObject: getObjectMock,
-      upload: (params, cb) => {
+      upload: (_params, cb) => {
         return cb(null, true);
       },
     });
     applicationContext
       .getPersistenceGateway()
-      .getDownloadPolicyUrl.mockReturnValue({ url: 'www.example.com' });
+      .getDownloadPolicyUrl.mockResolvedValue({ url: 'www.example.com' });
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(() => mockCase);
+    getCaseByDocketNumber.mockImplementation(() => mockCase);
+    getWorkItemByDocketNumberAndDocketEntryId.mockResolvedValue(
+      new WorkItem(MOCK_WORK_ITEM),
+    );
+
+    getFeatureFlagValues.mockResolvedValue([
+      {
+        name: 'entity-locking-feature-flag',
+        value: {
+          current: {
+            name: 'James Bond',
+            title: 'Clerk of the Court (Interim)',
+          },
+        },
+      },
+    ]);
 
     applicationContext
       .getUseCases()
@@ -130,9 +128,11 @@ describe('serveCaseToIrsInteractor', () => {
           caseEntity.docketEntries.find(d => d.docketEntryId === docketEntryId),
       );
 
+    applicationContext.getPersistenceGateway().isFileExists = jest.fn();
+
     applicationContext
       .getPersistenceGateway()
-      .getDocument.mockReturnValue(testPdfDoc);
+      .getDocument.mockResolvedValue(testPdfDoc);
   });
 
   it('should throw unauthorized error when user is unauthorized', async () => {
@@ -325,14 +325,14 @@ describe('serveCaseToIrsInteractor', () => {
       isPaper: false,
       partyType: PARTY_TYPES.petitionerSpouse,
       petitioners: [
-        { ...MOCK_CASE.petitioners[0], hasConsentedToEService: false },
+        { ...MOCK_CASE.petitioners[0], hasConsentedToElectronicService: false },
         {
           ...MOCK_CASE.petitioners[0],
           contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
           contactType: CONTACT_TYPES.secondary,
           countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'petitioner@example.com',
-          hasConsentedToEService: true,
+          hasConsentedToElectronicService: true,
           name: 'Test Petitioner Secondary',
           paperPetitionEmail: 'testing@example.com',
           phone: '1234547',
@@ -384,7 +384,7 @@ describe('serveCaseToIrsInteractor', () => {
       petitioners: [
         {
           ...MOCK_CASE.petitioners[0],
-          hasConsentedToEService: true,
+          hasConsentedToElectronicService: true,
           paperPetitionEmail: 'testing@example.com',
         },
         {
@@ -393,7 +393,7 @@ describe('serveCaseToIrsInteractor', () => {
           contactType: CONTACT_TYPES.secondary,
           countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'petitioner@example.com',
-          hasConsentedToEService: false,
+          hasConsentedToElectronicService: false,
           name: 'Test Petitioner Secondary',
           paperPetitionEmail: undefined,
           phone: '1234547',
@@ -423,7 +423,7 @@ describe('serveCaseToIrsInteractor', () => {
       petitioners: [
         {
           ...MOCK_CASE.petitioners[0],
-          hasConsentedToEService: true,
+          hasConsentedToElectronicService: true,
           paperPetitionEmail: 'testing@example.com',
         },
         {
@@ -431,7 +431,7 @@ describe('serveCaseToIrsInteractor', () => {
           contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
           contactType: CONTACT_TYPES.secondary,
           email: 'petitioner@example.com',
-          hasConsentedToEService: true,
+          hasConsentedToElectronicService: true,
           name: 'Test Petitioner Secondary',
           paperPetitionEmail: 'testing@example.com',
           phone: '1234547',
@@ -469,7 +469,7 @@ describe('serveCaseToIrsInteractor', () => {
       petitioners: [
         {
           ...MOCK_CASE.petitioners[0],
-          hasConsentedToEService: true,
+          hasConsentedToElectronicService: true,
           paperPetitionEmail: 'testing@example.com',
         },
         {
@@ -479,7 +479,7 @@ describe('serveCaseToIrsInteractor', () => {
           contactType: CONTACT_TYPES.secondary,
           countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'petitioner@example.com',
-          hasConsentedToEService: true,
+          hasConsentedToElectronicService: true,
           name: 'Test Petitioner Secondary',
           paperPetitionEmail: 'testing@example.com',
           phone: '1234547',
@@ -517,7 +517,7 @@ describe('serveCaseToIrsInteractor', () => {
       petitioners: [
         {
           ...MOCK_CASE.petitioners[0],
-          hasConsentedToEService: true,
+          hasConsentedToElectronicService: true,
           paperPetitionEmail: 'testing1@example.com',
         },
         {
@@ -526,7 +526,7 @@ describe('serveCaseToIrsInteractor', () => {
           contactType: CONTACT_TYPES.secondary,
           countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'petitioner@example.com',
-          hasConsentedToEService: true,
+          hasConsentedToElectronicService: true,
           name: 'Test Petitioner Secondary',
           paperPetitionEmail: 'testing@example.com',
           phone: '1234547',
@@ -556,16 +556,31 @@ describe('serveCaseToIrsInteractor', () => {
   });
 
   it('should generate the receipt like normal even if a trial city is undefined', async () => {
+    const secondaryContactId = 'f30c6634-4c3d-4cda-874c-d9a9387e00e2';
     mockCase = {
       ...MOCK_CASE,
       contactSecondary: {
         ...getContactPrimary(MOCK_CASE),
-        contactId: 'f30c6634-4c3d-4cda-874c-d9a9387e00e2',
+        contactId: secondaryContactId,
         name: 'Test Petitioner Secondary',
       },
       isPaper: false,
       partyType: PARTY_TYPES.petitionerSpouse,
       preferredTrialCity: null,
+      privatePractitioners: [
+        {
+          barNumber: '123456789',
+          name: 'Test Private Practitioner',
+          practitionerId: '123456789',
+          practitionerType: 'privatePractitioner',
+          representing: [
+            getContactPrimary(MOCK_CASE).contactId,
+            secondaryContactId,
+          ],
+          role: 'privatePractitioner',
+          userId: '130c6634-4c3d-4cda-874c-d9a9387e00e2',
+        },
+      ],
       procedureType: 'Regular',
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     };
@@ -638,11 +653,269 @@ describe('serveCaseToIrsInteractor', () => {
     );
   });
 
+  describe('pro se checklist', () => {
+    it('should append the pro se checklist if the petitioner is pro se', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .isFileExists.mockResolvedValueOnce(true) // pro se checklist
+        .mockResolvedValueOnce(false); // clinic letter
+      mockCase = {
+        ...MOCK_CASE,
+        isPaper: false,
+        partyType: PARTY_TYPES.petitioner,
+        preferredTrialCity: 'Los Angeles, California',
+        procedureType: 'Regular',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+      };
+
+      await serveCaseToIrsInteractor(
+        applicationContext,
+        mockParams,
+        mockPetitionsClerkUser,
+      );
+
+      expect(
+        applicationContext.getPersistenceGateway().getDocument,
+      ).toHaveBeenCalledTimes(1);
+      expect(
+        applicationContext.getUtilities().combineTwoPdfs,
+      ).toHaveBeenCalledTimes(1);
+      expect(
+        applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
+      ).toHaveBeenCalledTimes(1);
+    });
+    it('should append the pro se checklist each for the petitioner and spouse with different addresses if they are pro se', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .isFileExists.mockResolvedValueOnce(true) // pro se checklist
+        .mockResolvedValueOnce(false); // clinic letter
+      const primaryContactNotr = getFakeFile(true, true);
+      const secondaryContactNotr = getFakeFile(true);
+
+      applicationContext
+        .getDocumentGenerators()
+        .noticeOfReceiptOfPetition.mockReturnValueOnce(primaryContactNotr);
+
+      mockCase = {
+        ...MOCK_CASE,
+        contactSecondary: {
+          ...getContactPrimary(MOCK_CASE),
+          address1: '123 A Different Street',
+          contactId: 'f30c6634-4c3d-4cda-874c-d9a9387e00e2',
+          contactSecondary: CONTACT_TYPES.secondary,
+          name: 'Test Petitioner Secondary',
+        },
+        isPaper: false,
+        partyType: PARTY_TYPES.petitionerSpouse,
+        preferredTrialCity: 'Los Angeles, California',
+        procedureType: 'Regular',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+      };
+      await serveCaseToIrsInteractor(
+        applicationContext,
+        mockParams,
+        mockPetitionsClerkUser,
+      );
+
+      expect(
+        applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
+      ).toHaveBeenCalledTimes(2);
+
+      expect(
+        applicationContext.getUtilities().combineTwoPdfs,
+      ).toHaveBeenCalledTimes(3);
+
+      const actualPrimaryContactNotr =
+        applicationContext.getUtilities().combineTwoPdfs.mock.calls[0][0]
+          .firstPdf;
+      expect(actualPrimaryContactNotr).toEqual(primaryContactNotr);
+
+      const actualSecondaryContactNotr =
+        applicationContext.getUtilities().combineTwoPdfs.mock.calls[1][0]
+          .firstPdf;
+      expect(actualSecondaryContactNotr).toEqual(secondaryContactNotr);
+    });
+    it('should append the pro se checklist once if the petitioner and spouse have the same address and are pro se', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .isFileExists.mockResolvedValueOnce(true) // pro se checklist
+        .mockResolvedValueOnce(false); // clinic letter
+
+      mockCase = {
+        ...MOCK_CASE,
+        contactSecondary: {
+          ...getContactPrimary(MOCK_CASE),
+          contactId: 'f30c6634-4c3d-4cda-874c-d9a9387e00e2',
+          name: 'Test Petitioner Secondary',
+        },
+        isPaper: false,
+        partyType: PARTY_TYPES.petitionerSpouse,
+        preferredTrialCity: 'Los Angeles, California',
+        procedureType: 'Regular',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+      };
+
+      await serveCaseToIrsInteractor(
+        applicationContext,
+        mockParams,
+        mockPetitionsClerkUser,
+      );
+
+      expect(
+        applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
+      ).toHaveBeenCalledTimes(1);
+
+      expect(
+        applicationContext.getUtilities().combineTwoPdfs,
+      ).toHaveBeenCalledTimes(1);
+    });
+    it('should not append the pro se checklist if the petitioner for the petition is represented by counsel', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .isFileExists.mockResolvedValueOnce(false); // clinic letter
+
+      mockCase = {
+        ...MOCK_CASE,
+        isPaper: false,
+        partyType: PARTY_TYPES.petitioner,
+        preferredTrialCity: 'Los Angeles, California',
+        privatePractitioners: [
+          {
+            barNumber: '123456789',
+            name: 'Test Private Practitioner',
+            practitionerId: '123456789',
+            practitionerType: 'privatePractitioner',
+            representing: [getContactPrimary(MOCK_CASE).contactId],
+            role: 'privatePractitioner',
+            userId: '130c6634-4c3d-4cda-874c-d9a9387e00e2',
+          },
+        ],
+        procedureType: 'Regular',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+      };
+
+      await serveCaseToIrsInteractor(
+        applicationContext,
+        mockParams,
+        mockPetitionsClerkUser,
+      );
+      expect(
+        applicationContext.getPersistenceGateway().isFileExists,
+      ).not.toHaveBeenCalled();
+      expect(
+        applicationContext.getUtilities().combineTwoPdfs,
+      ).not.toHaveBeenCalled();
+      expect(
+        applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
+      ).toHaveBeenCalledTimes(1);
+    });
+    it('should not append the pro se checklist if the petitioner and spouse of different addresses are represented by counsel', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .isFileExists.mockResolvedValueOnce(false); // clinic letter
+
+      const secondaryContactId = 'f30c6634-4c3d-4cda-874c-d9a9387e00e2';
+      mockCase = {
+        ...MOCK_CASE,
+        contactSecondary: {
+          ...getContactPrimary(MOCK_CASE),
+          address1: '123 A Different Street',
+          contactId: secondaryContactId,
+          contactSecondary: CONTACT_TYPES.secondary,
+          name: 'Test Petitioner Secondary',
+        },
+        isPaper: false,
+        partyType: PARTY_TYPES.petitionerSpouse,
+        preferredTrialCity: null,
+        privatePractitioners: [
+          {
+            barNumber: '123456789',
+            name: 'Test Private Practitioner',
+            practitionerId: '123456789',
+            practitionerType: 'privatePractitioner',
+            representing: [
+              getContactPrimary(MOCK_CASE).contactId,
+              secondaryContactId,
+            ],
+            role: 'privatePractitioner',
+            userId: '130c6634-4c3d-4cda-874c-d9a9387e00e2',
+          },
+        ],
+        procedureType: 'Regular',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+      };
+
+      await serveCaseToIrsInteractor(
+        applicationContext,
+        mockParams,
+        mockPetitionsClerkUser,
+      );
+
+      expect(
+        applicationContext.getPersistenceGateway().isFileExists,
+      ).not.toHaveBeenCalled();
+      expect(
+        applicationContext.getUtilities().combineTwoPdfs,
+      ).toHaveBeenCalledTimes(1);
+      expect(
+        applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
+      ).toHaveBeenCalledTimes(2);
+    });
+    it('should append the pro se checklist to only petitioner 2 when petitioner 1 is represented by counsel and petitioner 2 is pro se', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .isFileExists.mockResolvedValueOnce(true) // pro se checklist
+        .mockResolvedValueOnce(false); // clinic letter
+
+      const secondaryContactId = 'f30c6634-4c3d-4cda-874c-d9a9387e00e2';
+      mockCase = {
+        ...MOCK_CASE,
+        contactSecondary: {
+          ...getContactPrimary(MOCK_CASE),
+          address1: '123 A Different Street',
+          contactId: secondaryContactId,
+          contactSecondary: CONTACT_TYPES.secondary,
+          name: 'Test Petitioner Secondary',
+        },
+        isPaper: false,
+        partyType: PARTY_TYPES.petitionerSpouse,
+        preferredTrialCity: null,
+        privatePractitioners: [
+          {
+            barNumber: '123456789',
+            name: 'Test Private Practitioner',
+            practitionerId: '123456789',
+            practitionerType: 'privatePractitioner',
+            representing: [getContactPrimary(MOCK_CASE).contactId],
+            role: 'privatePractitioner',
+            userId: '130c6634-4c3d-4cda-874c-d9a9387e00e2',
+          },
+        ],
+        procedureType: 'Regular',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+      };
+
+      await serveCaseToIrsInteractor(
+        applicationContext,
+        mockParams,
+        mockPetitionsClerkUser,
+      );
+
+      expect(
+        applicationContext.getUtilities().combineTwoPdfs,
+      ).toHaveBeenCalledTimes(2);
+      expect(
+        applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
+      ).toHaveBeenCalledTimes(2);
+    });
+  });
+
   describe('clinic letters', () => {
     it('should append a clinic letter to the notice of receipt of petition when one exists for the requested place of trial and petition is pro se', async () => {
       applicationContext
         .getPersistenceGateway()
-        .isFileExists.mockReturnValueOnce(true);
+        .isFileExists.mockResolvedValueOnce(false) // pro se checklist
+        .mockResolvedValueOnce(true); // clinic letter
 
       mockCase = {
         ...MOCK_CASE,
@@ -682,7 +955,8 @@ describe('serveCaseToIrsInteractor', () => {
     it('should NOT append a clinic letter to the notice of receipt of petition if it does NOT exist and petition is pro se', async () => {
       applicationContext
         .getPersistenceGateway()
-        .isFileExists.mockReturnValueOnce(false);
+        .isFileExists.mockResolvedValueOnce(false) // pro se checklist
+        .mockResolvedValueOnce(false); // clinic letter
 
       mockCase = {
         ...MOCK_CASE,
@@ -763,7 +1037,8 @@ describe('serveCaseToIrsInteractor', () => {
     it('should append a clinic letter to both notice of receipt of petitions when there are two pro se petitioners at different addresses', async () => {
       applicationContext
         .getPersistenceGateway()
-        .isFileExists.mockReturnValueOnce(true);
+        .isFileExists.mockResolvedValueOnce(false) // pro se checklist
+        .mockResolvedValueOnce(true); // clinic letter
 
       const primaryContactNotr = getFakeFile(true, true);
       const secondaryContactNotr = getFakeFile(true);
@@ -816,7 +1091,8 @@ describe('serveCaseToIrsInteractor', () => {
     it('should append a clinic letter to one notice of receipt of petition when there are two petitioners at different addresses but one has representation', async () => {
       applicationContext
         .getPersistenceGateway()
-        .isFileExists.mockReturnValueOnce(true);
+        .isFileExists.mockResolvedValueOnce(false) // pro se checklist
+        .mockResolvedValueOnce(true); // clinic letter
 
       const secondaryContactId = 'f30c6634-4c3d-4cda-874c-d9a9387e00e2';
       mockCase = {
@@ -863,7 +1139,8 @@ describe('serveCaseToIrsInteractor', () => {
     it('should append a clinic letter to the one notice of receipt of petition when there are two pro se petitioners at the same addresses', async () => {
       applicationContext
         .getPersistenceGateway()
-        .isFileExists.mockReturnValueOnce(true);
+        .isFileExists.mockResolvedValueOnce(false) // pro se checklist
+        .mockResolvedValueOnce(true); // clinic letter
 
       mockCase = {
         ...MOCK_CASE,
@@ -897,9 +1174,9 @@ describe('serveCaseToIrsInteractor', () => {
     it('should not append a clinic letter to the one notice of receipt of petition when there are two petitioners at the same addresses with one having representation', async () => {
       applicationContext
         .getPersistenceGateway()
-        .isFileExists.mockReturnValueOnce(true);
+        .isFileExists.mockResolvedValueOnce(false); // pro se checklist
 
-      let secondaryContactId = 'f30c6634-4c3d-4cda-874c-d9a9387e00e2';
+      const secondaryContactId = 'f30c6634-4c3d-4cda-874c-d9a9387e00e2';
       mockCase = {
         ...MOCK_CASE,
         contactSecondary: {
@@ -954,8 +1231,8 @@ describe('serveCaseToIrsInteractor', () => {
     );
 
     expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0].caseToUpdate.petitioners[0].contactId,
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.petitioners[0]
+        .contactId,
     ).toBe(MOCK_CASE.petitioners[0].contactId);
   });
 
@@ -1073,9 +1350,7 @@ describe('serveCaseToIrsInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    const updatedCase =
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0].caseToUpdate;
+    const updatedCase = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
     expect(
       updatedCase.docketEntries.find(p => p.eventCode === 'P').servedAt,
     ).toBeDefined();
@@ -1127,14 +1402,10 @@ describe('serveCaseToIrsInteractor', () => {
       ],
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValueOnce(
-        mockCaseWithoutServedDocketEntries,
-      )
-      .mockReturnValueOnce(mockCase)
-      .mockReturnValueOnce(mockCaseWithServedDocketEntries)
-      .mockReturnValueOnce(mockCaseWithServedDocketEntries);
+    getCaseByDocketNumber
+      .mockResolvedValueOnce(mockCaseWithoutServedDocketEntries)
+      .mockResolvedValueOnce(mockCase)
+      .mockResolvedValueOnce(mockCaseWithServedDocketEntries);
 
     await serveCaseToIrsInteractor(
       applicationContext,
@@ -1143,8 +1414,7 @@ describe('serveCaseToIrsInteractor', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries,
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries,
     ).toMatchObject([
       {
         documentTitle: INITIAL_DOCUMENT_TYPES.petition.documentTitle,
@@ -1180,15 +1450,17 @@ describe('serveCaseToIrsInteractor', () => {
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     };
     const MOCK_NOTR_ID = 'ea10afeb-f189-4657-a862-c607a091beaa';
-    applicationContext.getUniqueId.mockReturnValue(MOCK_NOTR_ID);
+    getUniqueId.mockReturnValue(MOCK_NOTR_ID);
+
     await serveCaseToIrsInteractor(
       applicationContext,
       mockParams,
       mockPetitionsClerkUser,
     );
+
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails.mock
-        .calls[0][0].docketEntryId,
+        .calls[1][0].docketEntryId,
     ).toEqual(MOCK_NOTR_ID);
   });
 
@@ -1235,6 +1507,44 @@ describe('serveCaseToIrsInteractor', () => {
     expect(
       applicationContext.getUtilities().serveCaseDocument,
     ).toHaveBeenCalledTimes(Object.keys(INITIAL_DOCUMENT_TYPES).length);
+  });
+
+  it('should automatically block the case when an Application for Waiver (APW) is pending on a paper petition', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      docketEntries: [
+        ...MOCK_CASE.docketEntries,
+        {
+          createdAt: '2018-11-21T20:49:28.192Z',
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          docketNumber: MOCK_CASE.docketNumber,
+          documentTitle: 'Application for Waiver of Filing Fee',
+          documentType: 'Application for Waiver of Filing Fee',
+          eventCode: 'APW',
+          filedBy: 'Test Petitioner',
+          filedByRole: ROLES.petitioner,
+          isOnDocketRecord: true,
+          processingStatus: 'pending',
+          userId: 'b88a8284-b859-4641-a270-b3ee26c6c068',
+        },
+      ],
+      isPaper: true,
+      mailingDate: 'some day',
+    };
+
+    await serveCaseToIrsInteractor(
+      applicationContext,
+      mockParams,
+      mockPetitionsClerkUser,
+    );
+
+    expect(
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
+    ).toMatchObject({
+      automaticBlocked: true,
+      automaticBlockedDate: expect.anything(),
+      automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
+    });
   });
 
   it('should generate an order and upload it to s3 for noticeOfAttachments', async () => {
@@ -1541,7 +1851,9 @@ describe('serveCaseToIrsInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    mockLock = MOCK_LOCK;
+    tryGetLocks.mockResolvedValueOnce([
+      { successfullyLocked: false, identifier: 'abc' },
+    ]);
 
     await expect(
       serveCaseToIrsInteractor(
@@ -1551,32 +1863,21 @@ describe('serveCaseToIrsInteractor', () => {
       ),
     ).rejects.toThrow(ServiceUnavailableError);
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).not.toHaveBeenCalled();
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
-  it('should acquire and remove the lock on the case', async () => {
+  it('should acquire a lock on the case', async () => {
     await serveCaseToIrsInteractor(
       applicationContext,
       mockParams,
       mockPetitionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().createLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifier: `case|${MOCK_CASE.docketNumber}`,
-      ttl: 30,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().removeLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifiers: [`case|${MOCK_CASE.docketNumber}`],
-    });
+    expect(tryGetLocks).toHaveBeenCalledWith(
+      expect.objectContaining({
+        identifiers: [`case|${MOCK_CASE.docketNumber}`],
+      }),
+    );
   });
 
   it('should generate a notice of receipt of petition with the name and title of the clerk of the court', async () => {

@@ -1,6 +1,8 @@
 import { DateServedFooter } from '@shared/business/utilities/pdfGenerator/components/DateServedFooter';
-import { FormattedTrialInfoType } from '@web-api/business/useCases/trialSessions/generateNoticeOfTrialIssuedInteractor';
-import { NoticeOfChangeToInPersonProceeding } from '@shared/business/utilities/pdfGenerator/documentTemplates/NoticeOfChangeToInPersonProceeding';
+import {
+  NoticeOfChangeToInPersonProceeding,
+  NoticeOfChangeToInPersonTrialInfo,
+} from '@shared/business/utilities/pdfGenerator/documentTemplates/NoticeOfChangeToInPersonProceeding';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
 import React from 'react';
@@ -17,7 +19,7 @@ export const noticeOfChangeToInPersonProceeding = async ({
     docketNumberWithSuffix: string;
     nameOfClerk: string;
     titleOfClerk: string;
-    trialInfo: FormattedTrialInfoType;
+    trialInfo: NoticeOfChangeToInPersonTrialInfo;
   };
 }): Promise<Uint8Array> => {
   const noticeOfChangeToInPersonProceedingTemplate = ReactDOM.renderToString(

@@ -1,75 +1,68 @@
-/**
- * This script is to help search for users belonging to a certain role in the
- * environment designated by the ENV environment variable
- *
- * You must have the following Environment variables set:
- * - ENV: The name of the environment you are working with (mig)
- *
- * Example usage:
- *
- * $ npm run admin:lookup-user docketClerk "Beth"
- */
+#!/usr/bin/env -S npx ts-node --transpile-only
 
-import { getClient } from '../../web-api/elasticsearch/client';
-import { requireEnvVars } from '../../shared/admin-tools/util';
+import { ROLES } from '@shared/business/entities/EntityConstants';
+import { RawUser } from '@shared/business/entities/User';
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
+import { fromKyselyUser } from '@web-api/persistence/postgres/users/mapper';
+import { getDbReader } from '@web-api/database';
 
-requireEnvVars(['ENV']);
+const scriptConfig: ScriptConfig = {
+  description:
+    'lookup-user - Looks up users and roles in a deployed DAWSON environment.',
+  environment: {
+    environmentName: 'ENV',
+  },
+  parameters: {
+    role: {
+      position: 0,
+      required: true,
+      type: 'string',
+    },
+    userName: {
+      position: 1,
+      type: 'string',
+    },
+  },
+  requireActiveAwsSession: true,
+};
+const { role, userName } = parseArgsAndEnvVars(scriptConfig) as {
+  role: string;
+  userName: string;
+};
 
-const environmentName = process.env.ENV!;
-
-if (process.argv.length < 3) {
-  console.log(`Lookup User IDs and roles for the specified environment.
-  
-  Usage:
-
-  $ npm run admin:lookup-user -- <ROLE> [<NAME>]
-  
-  - ROLE: The role to find
-  - NAME: The name of the user you're looking for (optional)
-
-  Example:
-
-  $ npm run admin:lookup-user -- admissionsClerk "Joe Burns"
-
-`);
-  process.exit();
-}
-
-const role = process.argv[2];
-const userName = process.argv[3];
-
-const lookupUsers = async () => {
-  const esClient = await getClient({ environmentName });
-  const query = userName
-    ? {
-        bool: {
-          must: [
-            { match: { 'role.S': role } },
-            { match: { 'name.S': userName } },
-          ],
-        },
+const lookupUsers = async (): Promise<{ [k: string]: string }[]> => {
+  const results = (
+    await getDbReader(reader => {
+      let query = reader
+        .selectFrom('dwUser as u')
+        .selectAll('u')
+        .where('u.role', '=', ROLES[role]);
+      if (userName) {
+        if (userName.includes(' ')) {
+          query = query.where(eb =>
+            eb.and(
+              userName
+                .split(' ')
+                .map(term => eb('u.name', 'ilike', `%${term}%`)),
+            ),
+          );
+        } else {
+          query = query.where('u.name', 'ilike', `%${userName}%`);
+        }
       }
-    : {
-        match: { 'role.S': role },
-      };
+      return query.selectAll('u').execute();
+    })
+  ).map(fromKyselyUser) as RawUser[];
 
-  try {
-    const results = await esClient.search({
-      body: { query },
-      index: 'efcms-user',
-    });
-
-    return results.body.hits.hits.map(hit => {
-      return {
-        Email: hit['_source']['email'].S,
-        Name: hit['_source']['name'].S,
-        Role: hit['_source']['role'].S,
-        UserId: hit['_source']['userId'].S,
-      };
-    });
-  } catch (err) {
-    console.error(err);
-  }
+  return results.map((hit: RawUser) => ({
+    Email: hit.email || '',
+    Name: hit.name,
+    Role: hit.role,
+    UserId: hit.userId,
+  }));
 };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises

@@ -1,18 +1,27 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const PractitionerLoginServiceEmailForm = connect(
-  {
-    createPractitionerUserHelper: state.createPractitionerUserHelper,
-    form: state.form,
-    updateFormValueSequence: sequences.updateFormValueSequence,
-    validateSequence: sequences[props.validateSequenceName],
-    validationErrors: state.validationErrors,
-  },
+type PractitionerLoginServiceEmailFormProps = {
+  emailFormName: string;
+  validateSequenceName: string;
+};
+
+const practitionerLoginServiceEmailFormDependencies = {
+  createPractitionerUserHelper: state.createPractitionerUserHelper,
+  form: state.form,
+  updateFormValueSequence: sequences.updateFormValueSequence,
+  validateSequence: sequences[props`validateSequenceName`],
+  validationErrors: state.validationErrors,
+};
+
+export const PractitionerLoginServiceEmailForm = connect<
+  PractitionerLoginServiceEmailFormProps,
+  typeof practitionerLoginServiceEmailFormDependencies
+>(
+  practitionerLoginServiceEmailFormDependencies,
   function PractitionerLoginServiceEmailForm({
     createPractitionerUserHelper,
     emailFormName,
@@ -25,31 +34,35 @@ export const PractitionerLoginServiceEmailForm = connect(
       <div className="margin-bottom-4">
         <h2>Login & Service Email</h2>
         <div className="blue-container">
-          <div className="grid-row margin-bottom-6">
-            <div className="desktop:grid-col-3">
-              <p className="usa-label margin-bottom-05">
-                Current email address
-              </p>
-              {createPractitionerUserHelper.formattedOriginalEmail}
-            </div>
-            {form.pendingEmail && (
-              <div className="desktop:grid-col-3 padding-top-2 desktop:padding-top-0">
-                <p className="usa-label margin-bottom-05">
-                  Pending email address
-                </p>
-                {form.pendingEmail}
+          {emailFormName === 'updatedEmail' && (
+            <>
+              <div className="grid-row margin-bottom-6">
+                <div className="desktop:grid-col-3">
+                  <p className="usa-label margin-bottom-05">
+                    Current email address
+                  </p>
+                  {createPractitionerUserHelper.formattedOriginalEmail}
+                </div>
+                {form.pendingEmail && (
+                  <div className="desktop:grid-col-3 padding-top-2 desktop:padding-top-0">
+                    <p className="usa-label margin-bottom-05">
+                      Pending email address
+                    </p>
+                    {form.pendingEmail}
+                  </div>
+                )}
               </div>
-            )}
-          </div>
+              <h4>Change Login & Service Email</h4>
+            </>
+          )}
           <div>
-            <h4>Change Login & Service Email</h4>
             <FormGroup
               errorText={
                 validationErrors.updatedEmail || validationErrors.email
               }
             >
               <label className="usa-label" htmlFor="updatedEmail">
-                New email address
+                Email address
               </label>
               <input
                 aria-label={emailFormName}
@@ -71,7 +84,7 @@ export const PractitionerLoginServiceEmailForm = connect(
             </FormGroup>
             <FormGroup errorText={validationErrors.confirmEmail}>
               <label className="usa-label" htmlFor="confirm-email">
-                Re-enter new email address
+                Re-enter email address
               </label>
               <input
                 aria-label="confirmEmail"

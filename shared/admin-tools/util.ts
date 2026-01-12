@@ -1,74 +1,60 @@
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import readline from 'readline';
+import { getSSMItem } from '../admin-tools/aws/ssmHelper';
 
 const { ENV } = process.env;
 const UserPoolCache: Record<string, string> = {};
 
-export const getSourceTableInfo = async (): Promise<{
-  tableName: string;
+export const getSourceVersionInfo = async (): Promise<{
   version: 'alpha' | 'beta';
 }> => {
   requireEnvVars(['ENV']);
 
-  const dynamodbClient = new DynamoDBClient({ region: 'us-east-1' });
-  const documentClient = DynamoDBDocument.from(dynamodbClient, {
-    marshallOptions: { removeUndefinedValues: true },
-  });
-  const result = await documentClient.get({
-    Key: {
-      pk: 'source-table-version',
-      sk: 'source-table-version',
-    },
-    TableName: `efcms-deploy-${ENV}`,
-  });
+  const version = (await getSSMItem('source-table-version')) as
+    | 'alpha'
+    | 'beta';
 
-  const version = result?.Item?.current;
   if (version) {
-    return { tableName: `efcms-${ENV}-${version}`, version };
+    return { version };
   } else {
     throw 'Could not determine the current version';
   }
 };
 
-export const getDestinationTableInfo = async (): Promise<{
-  tableName: string;
+export const getDestinationVersionInfo = async (): Promise<{
   version: 'alpha' | 'beta';
 }> => {
   requireEnvVars(['ENV']);
 
-  const dynamodbClient = new DynamoDBClient({ region: 'us-east-1' });
-  const documentClient = DynamoDBDocument.from(dynamodbClient, {
-    marshallOptions: { removeUndefinedValues: true },
-  });
-  const result = await documentClient.get({
-    Key: {
-      pk: 'destination-table-version',
-      sk: 'destination-table-version',
-    },
-    TableName: `efcms-deploy-${ENV}`,
-  });
+  const version = (await getSSMItem('destination-table-version')) as
+    | 'alpha'
+    | 'beta';
 
-  const version = result?.Item?.current;
   if (version) {
-    return { tableName: `efcms-${ENV}-${version}`, version };
+    return {  version };
   } else {
     throw 'Could not determine the current version';
   }
+};
+
+export const missingEnvironmentVariables = (
+  requiredEnvVars: string[],
+): string[] => {
+  const envVars = Object.keys(process.env);
+  const missing: string[] = [];
+  for (const key of requiredEnvVars) {
+    if (!envVars.includes(key) || !process.env[key]) {
+      missing.push(key);
+    }
+  }
+  return missing;
 };
 
 // Exit if any of the provided strings are not set as environment variables
-export const requireEnvVars = (requiredEnvVars: Array<string>): void => {
-  const envVars = Object.keys(process.env);
-  let missing = '';
-  for (const key of requiredEnvVars) {
-    if (!envVars.includes(key) || !process.env[key]) {
-      missing += `${missing.length > 0 ? ', ' : ''}${key}`;
-    }
-  }
-  if (missing) {
-    console.error(`Missing environment variable(s): ${missing}`);
+export const requireEnvVars = (requiredEnvVars: string[]): void => {
+  const missing = missingEnvironmentVariables(requiredEnvVars);
+  if (missing.length > 0) {
+    console.error(`Missing environment variable(s): ${missing.join(', ')}`);
     process.exit(1);
   }
 };

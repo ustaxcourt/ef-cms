@@ -5,7 +5,11 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-export const PartiesInformationContentHeader = connect(
+type PartiesInformationContentHeaderProps = {
+  title: string;
+}
+
+export const PartiesInformationContentHeader: React.FC<PartiesInformationContentHeaderProps> = connect(
   {
     caseInformationHelper: state.caseInformationHelper,
     form: state.form,
@@ -21,6 +25,17 @@ export const PartiesInformationContentHeader = connect(
     title,
     updateFormValueSequence,
     validationErrors,
+  }: {
+    caseInformationHelper: {
+      showAddCounsel: boolean;
+    };
+    form: {
+      practitionerSearch?: string;
+    };
+    openAddPrivatePractitionerModalSequence: () => void;
+    title?: string;
+    updateFormValueSequence: (args: { key: string; value: string }) => void;
+    validationErrors: Record<string, string | undefined>;
   }) {
     return (
       <>

@@ -1,6 +1,6 @@
 import { MessageResult } from '@shared/business/entities/MessageResult';
 import { getDbReader } from '@web-api/database';
-import { messageResultEntity } from '@web-api/persistence/postgres/messages/mapper';
+import { fromKyselyMessage } from '@web-api/persistence/postgres/messages/mapper';
 
 export const getUserInboxMessages = async ({
   userId,
@@ -15,10 +15,17 @@ export const getUserInboxMessages = async ({
       .where('m.isCompleted', '=', false)
       .where('m.isRepliedTo', '=', false)
       .where('m.toUserId', '=', userId)
-      .selectAll()
-      .select('m.docketNumber')
+      .selectAll('m')
+      .select([
+        'c.status',
+        'c.trialDate',
+        'c.trialLocation',
+        'c.docketNumberSuffix',
+        'c.leadDocketNumber',
+        'c.caption',
+      ])
       .execute(),
   );
 
-  return messages.map(message => messageResultEntity(message));
+  return messages.map(message => fromKyselyMessage(message));
 };

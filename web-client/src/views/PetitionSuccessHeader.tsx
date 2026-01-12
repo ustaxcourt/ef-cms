@@ -13,7 +13,7 @@ export const PetitionSuccessHeader = connect(
     caseDetail,
   }: {
     CASE_CAPTION_POSTFIX: string;
-    caseDetail: object;
+    caseDetail: RawCase;
   }) {
     return (
       <div className="big-blue-header">
@@ -29,13 +29,13 @@ export const PetitionSuccessHeader = connect(
             >
               Docket Number:{' '}
               <span className="no-wrap" data-testid="case-link-docket-number">
-                {caseDetail.docketNumberWithSuffix}
+                {caseDetail?.docketNumberWithSuffix}
               </span>
             </CaseLink>
           </h1>
           <p className="margin-y-0" id="case-title">
             <span>
-              {caseDetail.caseCaption} {CASE_CAPTION_POSTFIX}
+              {caseDetail?.caseCaption} {CASE_CAPTION_POSTFIX}
             </span>
           </p>
         </div>

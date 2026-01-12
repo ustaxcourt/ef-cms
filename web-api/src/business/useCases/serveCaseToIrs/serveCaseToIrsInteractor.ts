@@ -1,37 +1,43 @@
-/* eslint-disable complexity */
 import {
   AuthUser,
   UnknownAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
+import { Case } from '@shared/business/entities/cases/Case';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import {
   FORMATS,
   formatDateString,
   formatNow,
   getBusinessDateInFuture,
-} from '../../../../../shared/src/business/utilities/DateHandler';
+} from '@shared/business/utilities/DateHandler';
 import {
   INITIAL_DOCUMENT_TYPES,
   INITIAL_DOCUMENT_TYPES_MAP,
   MINUTE_ENTRIES_MAP,
   PARTIES_CODES,
   PAYMENT_STATUS,
-  PETITIONS_SECTION,
+  PRO_SE_CHECKLIST,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
-import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
+import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { generateDraftDocument } from './generateDraftDocument';
-import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
-import { getClinicLetterKey } from '../../../../../shared/src/business/utilities/getClinicLetterKey';
-import { random, remove } from 'lodash';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
+import { getClinicLetterKey } from '@shared/business/utilities/getClinicLetterKey';
+import { random } from 'lodash';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { settlePromises } from '@web-api/utilities/settlePromises';
+import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { getUniqueId } from '@shared/sharedAppContext';
 
 export const addDocketEntryForPaymentStatus = ({ caseEntity, user }) => {
   if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.PAID) {
@@ -74,16 +80,13 @@ export const addDocketEntryForPaymentStatus = ({ caseEntity, user }) => {
 const addDocketEntries = ({ caseEntity }) => {
   const initialDocumentTypesListRequiringDocketEntry = Object.values(
     INITIAL_DOCUMENT_TYPES_MAP,
-  );
-
-  remove(
-    initialDocumentTypesListRequiringDocketEntry,
+  ).filter(
     doc =>
-      doc === INITIAL_DOCUMENT_TYPES.petition.documentType ||
-      doc === INITIAL_DOCUMENT_TYPES.stin.documentType,
+      doc !== INITIAL_DOCUMENT_TYPES.petition.documentType &&
+      doc !== INITIAL_DOCUMENT_TYPES.stin.documentType,
   );
 
-  for (let documentType of initialDocumentTypesListRequiringDocketEntry) {
+  for (const documentType of initialDocumentTypesListRequiringDocketEntry) {
     const foundDocketEntry = caseEntity.docketEntries.find(
       caseDocument => caseDocument.documentType === documentType,
     );
@@ -96,35 +99,38 @@ const addDocketEntries = ({ caseEntity }) => {
 };
 
 const createPetitionWorkItems = async ({
-  applicationContext,
   caseEntity,
   user,
+}: {
+  caseEntity: Case;
+  user: AuthUser;
 }) => {
-  const petitionDocument = caseEntity.docketEntries.find(
-    doc => doc.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
-  );
-  const initializeCaseWorkItem = petitionDocument.workItem;
+  const petitionDocument = caseEntity.getPetitionDocketEntry();
 
-  initializeCaseWorkItem.docketEntry.servedAt = petitionDocument.servedAt;
-  initializeCaseWorkItem.caseTitle = Case.getCaseTitle(caseEntity.caseCaption);
-  initializeCaseWorkItem.docketNumberWithSuffix =
-    caseEntity.docketNumberWithSuffix;
+  if (!petitionDocument) {
+    throw new NotFoundError(
+      `Could not find the petitioner associated with case ${caseEntity.docketNumber}`,
+    );
+  }
 
-  initializeCaseWorkItem.setAsCompleted({
+  const initialCaseWorkItem = await getWorkItemByDocketNumberAndDocketEntryId({
+    docketNumber: caseEntity.docketNumber,
+    docketEntryId: petitionDocument?.docketEntryId,
+  });
+
+  if (!initialCaseWorkItem) {
+    throw new NotFoundError(
+      `Could not find the work item associated with the petition on ${caseEntity.docketNumber}`,
+    );
+  }
+
+  initialCaseWorkItem.setAsCompleted({
     message: 'Served to IRS',
     user,
   });
 
-  await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
-    applicationContext,
-    section: PETITIONS_SECTION,
-    userId: user.userId,
-    workItem: initializeCaseWorkItem.validate().toRawObject(),
-  });
-
-  await applicationContext.getPersistenceGateway().saveWorkItem({
-    applicationContext,
-    workItem: initializeCaseWorkItem.validate().toRawObject(),
+  await upsertWorkItems({
+    workItems: [initialCaseWorkItem.validate().toRawObject()],
   });
 };
 
@@ -152,13 +158,17 @@ const generateNoticeOfReceipt = async ({
 
   let accessCode = generateAccessCode();
 
-  const { name, title } = await applicationContext
-    .getPersistenceGateway()
-    .getConfigurationItemValue({
-      applicationContext,
-      configurationItemKey:
-        applicationContext.getConstants().CLERK_OF_THE_COURT_CONFIGURATION,
-    });
+  const { CLERK_OF_THE_COURT_CONFIGURATION } =
+    applicationContext.getConstants();
+
+  const [CLERK_OF_THE_COURT_RECORD] = await getFeatureFlagValues([
+    CLERK_OF_THE_COURT_CONFIGURATION,
+  ]);
+
+  const { name, title }: {
+    name: string;
+    title: string;
+  } = CLERK_OF_THE_COURT_RECORD.value.current;
 
   let primaryContactNotrPdfData = await applicationContext
     .getDocumentGenerators()
@@ -191,7 +201,8 @@ const generateNoticeOfReceipt = async ({
 
   const isSetupForEService = contactInfo => {
     return (
-      contactInfo.hasConsentedToEService && !!contactInfo.paperPetitionEmail
+      contactInfo.hasConsentedToElectronicService &&
+      !!contactInfo.paperPetitionEmail
     );
   };
 
@@ -234,7 +245,6 @@ const generateNoticeOfReceipt = async ({
       });
   }
 
-  let clinicLetter;
   const isPrimaryContactProSe = !Case.isPetitionerRepresented(
     caseEntity,
     contactPrimary.contactId,
@@ -243,6 +253,41 @@ const generateNoticeOfReceipt = async ({
     !!contactSecondary &&
     !Case.isPetitionerRepresented(caseEntity, contactSecondary.contactId);
 
+  if (isPrimaryContactProSe || isSecondaryContactProSe) {
+    const doesProSeChecklistExist = await applicationContext
+      .getPersistenceGateway()
+      .isFileExists({
+        applicationContext,
+        key: PRO_SE_CHECKLIST,
+      });
+    if (doesProSeChecklistExist) {
+      const proSeChecklist = await applicationContext
+        .getPersistenceGateway()
+        .getDocument({
+          applicationContext,
+          key: PRO_SE_CHECKLIST,
+          useTempBucket: false,
+        });
+      if (isPrimaryContactProSe && primaryContactNotrPdfData) {
+        primaryContactNotrPdfData = await applicationContext
+          .getUtilities()
+          .combineTwoPdfs({
+            firstPdf: primaryContactNotrPdfData,
+            secondPdf: proSeChecklist,
+          });
+      }
+      if (isSecondaryContactProSe && secondaryContactNotrPdfData) {
+        secondaryContactNotrPdfData = await applicationContext
+          .getUtilities()
+          .combineTwoPdfs({
+            firstPdf: secondaryContactNotrPdfData,
+            secondPdf: proSeChecklist,
+          });
+      }
+    }
+  }
+
+  let clinicLetter;
   if (
     shouldIncludeClinicLetter(
       preferredTrialCity,
@@ -279,7 +324,6 @@ const generateNoticeOfReceipt = async ({
     primaryContactNotrPdfData = await applicationContext
       .getUtilities()
       .combineTwoPdfs({
-        applicationContext,
         firstPdf: primaryContactNotrPdfData,
         secondPdf: clinicLetter,
       });
@@ -289,7 +333,6 @@ const generateNoticeOfReceipt = async ({
     secondaryContactNotrPdfData = await applicationContext
       .getUtilities()
       .combineTwoPdfs({
-        applicationContext,
         firstPdf: secondaryContactNotrPdfData,
         secondPdf: clinicLetter,
       });
@@ -300,7 +343,6 @@ const generateNoticeOfReceipt = async ({
     combinedNotrPdfData = await applicationContext
       .getUtilities()
       .combineTwoPdfs({
-        applicationContext,
         firstPdf: primaryContactNotrPdfData,
         secondPdf: secondaryContactNotrPdfData,
       });
@@ -315,7 +357,7 @@ const generateNoticeOfReceipt = async ({
     pdfName: caseConfirmationPdfName,
   });
 
-  const notrDocketEntryId = applicationContext.getUniqueId();
+  const notrDocketEntryId = getUniqueId();
   await applicationContext.getPersistenceGateway().uploadDocument({
     applicationContext,
     pdfData: Buffer.from(combinedNotrPdfData),
@@ -422,7 +464,7 @@ const createCoversheetsForServedEntries = async ({
   caseEntity: Case;
   authorizedUser: AuthUser;
 }) => {
-  return await Promise.all(
+  return await settlePromises(
     caseEntity.docketEntries.map(async doc => {
       if (doc.isFileAttached && !doc.isDraft) {
         const updatedDocketEntry = await applicationContext
@@ -488,14 +530,11 @@ export const serveCaseToIrs = async (
       throw new UnauthorizedError('Unauthorized');
     }
 
-    const caseToBatch = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      });
+    const caseToBatch = await getCaseByDocketNumber({
+      docketNumber,
+    });
 
-    let caseEntity = new Case(caseToBatch, { authorizedUser });
+    const caseEntity = new Case(caseToBatch, { authorizedUser });
 
     caseEntity.markAsSentToIRS();
 
@@ -515,6 +554,8 @@ export const serveCaseToIrs = async (
       caseEntity,
       user: authorizedUser,
     });
+
+    caseEntity.updateAutomaticBlocked({ hasCaseDeadline: false });
 
     caseEntity
       .updateCaseCaptionDocketRecord({ authorizedUser })
@@ -538,9 +579,13 @@ export const serveCaseToIrs = async (
       );
     }
 
-    const petitionDocument = caseEntity.docketEntries.find(
-      doc => doc.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
-    );
+    const petitionDocument = caseEntity.getPetitionDocketEntry();
+
+    if (!petitionDocument) {
+      throw new Error(
+        `Could not find petitioner document on case ${caseEntity.docketNumber}`,
+      );
+    }
 
     const formattedFiledDate = formatDateString(
       petitionDocument.filingDate,
@@ -632,10 +677,9 @@ export const serveCaseToIrs = async (
       );
     }
 
-    await Promise.all(generatedDocuments);
+    await settlePromises(generatedDocuments);
 
     await createPetitionWorkItems({
-      applicationContext,
       caseEntity,
       user: authorizedUser,
     });
@@ -652,8 +696,7 @@ export const serveCaseToIrs = async (
       userServingPetition: authorizedUser,
     });
 
-    await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-      applicationContext,
+    await updateCaseAndAssociations({
       authorizedUser,
       caseToUpdate: caseEntity,
     });

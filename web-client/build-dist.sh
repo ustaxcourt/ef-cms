@@ -17,22 +17,29 @@ USER_POOL_ID=$(aws cognito-idp list-user-pools --query "UserPools[?Name == 'efcm
 
 CLIENT_ID=$(aws cognito-idp list-user-pool-clients --user-pool-id "${USER_POOL_ID}" --query "UserPoolClients[?ClientName == 'client'].ClientId | [0]" --max-results 30 --region "${REGION}" --output text)
 
-if [[ -z "${DYNAMSOFT_URL_OVERRIDE}" ]]; then
-  SCANNER_RESOURCE_URI="https://dynamsoft-lib.${EFCMS_DOMAIN}/Dynamic%20Web%20TWAIN%20SDK%2018.5/Resources"
-else
-  SCANNER_RESOURCE_URI="${DYNAMSOFT_URL_OVERRIDE}/Dynamic%20Web%20TWAIN%20SDK%2018.5/Resources"
-fi
+RUM_APP_MONITOR_ID=$(aws rum list-app-monitors \
+  --query "AppMonitorSummaries[?Name == '${ENV}_dawson_rum_app_monitor'].Id | [0]" \
+  --region "us-east-1" \
+  --output text)
+RUM_IDENTITY_POOL_ID=$(aws rum get-app-monitor \
+  --name "${ENV}_dawson_rum_app_monitor" \
+  --query 'AppMonitor.AppMonitorConfiguration.IdentityPoolId' \
+  --region "us-east-1" \
+  --output text)
 
-STAGE="${CLIENT_STAGE}" \
+STAGE="${ENV}" \
   CIRCLE_SHA1="${CIRCLE_SHA1}" \
   EFCMS_DOMAIN="${EFCMS_DOMAIN}" \
   SESSION_TIMEOUT="${SESSION_TIMEOUT}" \
   SESSION_MODAL_TIMEOUT="${SESSION_MODAL_TIMEOUT}" \
   COGNITO_CLIENT_ID="${CLIENT_ID}" \
-  SCANNER_RESOURCE_URI="${SCANNER_RESOURCE_URI}" \
   PDF_EXPRESS_LICENSE_KEY="${PDF_EXPRESS_LICENSE_KEY}" \
   WS_URL="${WS_URL}" \
   API_URL="${API_URL}" \
   PUBLIC_SITE_URL="${PUBLIC_SITE_URL}" \
   CI="" \
+  RUM_APP_MONITOR_ID="${RUM_APP_MONITOR_ID}" \
+  RUM_IDENTITY_POOL_ID="${RUM_IDENTITY_POOL_ID}" \
+  RUM_SAMPLE_RATE="${RUM_SAMPLE_RATE}" \
+  DYNAMSOFT_PRODUCT_KEYS="${DYNAMSOFT_PRODUCT_KEYS}" \
   npm run build:client

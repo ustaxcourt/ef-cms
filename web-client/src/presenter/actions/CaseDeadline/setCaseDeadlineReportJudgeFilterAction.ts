@@ -11,5 +11,9 @@ export const setCaseDeadlineReportJudgeFilterAction = ({
   props,
   store,
 }: ActionProps) => {
-  store.set(state.caseDeadlineReport.judgeFilter, props.judge);
+  if (props.selectedJudgeId === '') {
+    store.unset(state.caseDeadlineReport.judgeIdFilter);
+  } else {
+    store.set(state.caseDeadlineReport.judgeIdFilter, props.selectedJudgeId);
+  }
 };

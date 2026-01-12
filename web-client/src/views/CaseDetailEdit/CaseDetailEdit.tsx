@@ -23,7 +23,7 @@ export const CaseDetailEdit = connect(
     validateCaseDetailSequence,
   }) {
     return (
-      <div noValidate id="case-edit-form" role="form">
+      <form noValidate id="case-edit-form">
         <Tabs
           boxed
           bind="currentViewMetadata.documentDetail.tab"
@@ -53,26 +53,28 @@ export const CaseDetailEdit = connect(
           </Tab>
         </Tabs>
 
-        <Button
-          data-testid="submit-case"
-          id="submit-case"
-          type="button"
-          onClick={() => {
-            saveSavedCaseForLaterSequence();
-          }}
-        >
-          Review Petition
-        </Button>
-        <Button link onClick={() => navigateBackSequence()}>
-          Cancel
-        </Button>
+        <div className="button-container">
+          <Button
+            data-testid="submit-case"
+            id="submit-case"
+            type="button"
+            onClick={() => {
+              saveSavedCaseForLaterSequence();
+            }}
+          >
+            Review Petition
+          </Button>
+          <Button link onClick={() => navigateBackSequence()}>
+            Cancel
+          </Button>
+        </div>
         {screenMetadata.showSaveSuccess && (
           <span aria-live="polite" className="mini-success" role="alert">
             <FontAwesomeIcon icon="check-circle" size="sm" />
             Your changes have been saved.
           </span>
         )}
-      </div>
+      </form>
     );
   },
 );

@@ -1,19 +1,23 @@
 import {
-  ALLOWLIST_FEATURE_FLAGS,
   CONTACT_TYPES,
+  ALLOWLIST_FEATURE_FLAGS,
   ROLES,
+  SERVICE_INDICATOR_TYPES,
   UNIQUE_OTHER_FILER_TYPE,
-} from '../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
+
 import {
+  admissionsClerkUser,
+  clerkOfCourtUser,
   docketClerkUser,
-  petitionerUser,
   petitionsClerkUser,
-} from '../../../../shared/src/test/mockUsers';
-import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
+  petitionerUser,
+} from '@shared/test/mockUsers';
+import { getUserPermissions } from '@shared/authorization/getUserPermissions';
 import { partiesInformationHelper as partiesInformationHelperComputed } from './partiesInformationHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
-import { withAppContextDecorator } from '../../withAppContext';
+import { withAppContextDecorator } from '@web-client/withAppContext';
 
 describe('partiesInformationHelper', () => {
   const mockEmail = 'test@example.com';
@@ -371,7 +375,7 @@ describe('partiesInformationHelper', () => {
       });
 
       expect(result.formattedPetitioners[0].formattedPaperPetitionEmail).toBe(
-        'Not provided',
+        'Not Provided',
       );
     });
 
@@ -492,6 +496,80 @@ describe('partiesInformationHelper', () => {
       });
 
       expect(result.formattedPetitioners[0].showPaperPetitionEmail).toBe(false);
+    });
+
+    describe('showRemoveEmailButton', () => {
+      it('should set showRemoveEmailButton to true when the user is an admissions clerk and the petitioner has electronic service', () => {
+        const result = runCompute(partiesInformationHelper, {
+          state: {
+            ...getBaseState(admissionsClerkUser),
+            caseDetail: {
+              petitioners: [
+                {
+                  ...mockPetitioner,
+                  email: 'test@example.com',
+                  serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+                },
+              ],
+            },
+          },
+        });
+        expect(result.formattedPetitioners[0].showRemoveEmailButton).toBe(true);
+      });
+      it('should set showRemoveEmailButton to true when the user is a clerk of the court and the petitioner has electronic service', () => {
+        const result = runCompute(partiesInformationHelper, {
+          state: {
+            ...getBaseState(clerkOfCourtUser),
+            caseDetail: {
+              petitioners: [
+                {
+                  ...mockPetitioner,
+                  email: 'test@example.com',
+                  serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+                },
+              ],
+            },
+          },
+        });
+        expect(result.formattedPetitioners[0].showRemoveEmailButton).toBe(true);
+      });
+      it('should set showRemoveEmailButton to false when the user is a not authorized to remove emails', () => {
+        const result = runCompute(partiesInformationHelper, {
+          state: {
+            ...getBaseState(docketClerkUser),
+            caseDetail: {
+              petitioners: [
+                {
+                  ...mockPetitioner,
+                  email: 'test@example.com',
+                  serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+                },
+              ],
+            },
+          },
+        });
+        expect(result.formattedPetitioners[0].showRemoveEmailButton).toBe(
+          false,
+        );
+      });
+      it('should set showRemoveEmailButton to false when the petitioner does not have electronic service', () => {
+        const result = runCompute(partiesInformationHelper, {
+          state: {
+            ...getBaseState(docketClerkUser),
+            caseDetail: {
+              petitioners: [
+                {
+                  ...mockPetitioner,
+                  serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+                },
+              ],
+            },
+          },
+        });
+        expect(result.formattedPetitioners[0].showRemoveEmailButton).toBe(
+          false,
+        );
+      });
     });
   });
 

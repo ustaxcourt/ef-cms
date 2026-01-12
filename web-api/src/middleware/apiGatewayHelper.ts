@@ -1,13 +1,18 @@
 import {
+  ErrorWithStatusCode,
   NotFoundError,
   UnauthorizedError,
   UnsanitizedEntityError,
 } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { createApplicationContext } from '../applicationContext';
 import { headerOverride } from '../lambdaWrapper';
 import { pick } from 'lodash';
 import jwt from 'jsonwebtoken';
+type LoggedError = ErrorWithStatusCode & {
+  toResponseBody?: () => any;
+  toJSON?: () => any;
+  skipLogging?: boolean;
+};
 
 /**
  * invokes the param fun and returns a lambda specific object containing error messages and status codes depending on any caught exceptions (or none)
@@ -17,7 +22,6 @@ import jwt from 'jsonwebtoken';
  * @returns {object} the api gateway response object containing the statusCode, body, and headers
  */
 export const handle = async (event, fun) => {
-  const applicationContext = createApplicationContext({});
   try {
     let response = await fun();
     // Check to see if the server responded with a pdf buffer
@@ -46,7 +50,7 @@ export const handle = async (event, fun) => {
         statusCode: 200,
       };
     } else {
-      const privateKeys = applicationContext.getPersistencePrivateKeys();
+      const privateKeys = ['pk', 'sk', 'gsi1pk'];
       (Array.isArray(response) ? response : [response]).forEach(item => {
         if (item && Object.keys(item).some(key => privateKeys.includes(key))) {
           throw new UnsanitizedEntityError();
@@ -65,17 +69,18 @@ export const handle = async (event, fun) => {
       return sendOk(response);
     }
   } catch (err) {
-    if (!process.env.CI && !err.skipLogging) {
-      console.error('err', err);
+    const error = err as LoggedError;
+    if (!process.env.CI && !error.skipLogging) {
+      console.error('err', error);
     }
-    if (err instanceof NotFoundError) {
-      err.statusCode = 404;
-      return sendError(err);
-    } else if (err instanceof UnauthorizedError) {
-      err.statusCode = 403;
-      return sendError(err);
+    if (error instanceof NotFoundError) {
+      error.statusCode = 404;
+      return sendError(error);
+    } else if (error instanceof UnauthorizedError) {
+      error.statusCode = 403;
+      return sendError(error);
     } else {
-      return sendError(err);
+      return sendError(error);
     }
   }
 };
@@ -86,7 +91,7 @@ export const handle = async (event, fun) => {
  * @param {number} statusCode the statusCode to return in the api gateway response object (defaults to 302)
  * @returns {object} the api gateway response object with the Location set to the url returned from fun
  */
-export const redirect = async (event, fun, statusCode = 302) => {
+export const redirect = async (_event, fun, statusCode = 302) => {
   try {
     const { url } = await fun();
     return {
@@ -96,7 +101,7 @@ export const redirect = async (event, fun, statusCode = 302) => {
       statusCode,
     };
   } catch (err) {
-    return sendError(err);
+    return sendError(err as LoggedError);
   }
 };
 
@@ -106,9 +111,19 @@ export const redirect = async (event, fun, statusCode = 302) => {
  * @param {Error} err the error to convert to the api gateway response event
  * @returns {object} an api gateway response object
  */
-export const sendError = err => {
+export const sendError = (err: LoggedError) => {
+  let errorPayload;
+
+  if (err.toResponseBody) {
+    errorPayload = err.toResponseBody();
+  } else if (err.toJSON) {
+    errorPayload = err.toJSON();
+  } else {
+    errorPayload = err.message;
+  }
+
   return {
-    body: JSON.stringify(err.message),
+    body: JSON.stringify(errorPayload),
     headers: headerOverride,
     statusCode: err.statusCode || '400',
   };

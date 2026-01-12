@@ -201,10 +201,9 @@ describe('formatDocketEntry', () => {
         isLegacySealed: true,
         isOnDocketRecord: true,
         servedAt: '2019-03-01T21:40:46.415Z',
-        workItem: {
-          completedAt: undefined,
-          isRead: false,
-        },
+        workItemId: '6d96bdfd-dc10-40db-b640-ef10c2591b6a',
+        qcViewed: false,
+        qcComplete: false,
       });
       expect(result.qcNeeded).toBeTruthy();
     });
@@ -215,10 +214,9 @@ describe('formatDocketEntry', () => {
         isLegacySealed: true,
         isOnDocketRecord: true,
         servedAt: '2019-03-01T21:40:46.415Z',
-        workItem: {
-          completedAt: undefined,
-          isRead: false,
-        },
+        workItemId: '6d96bdfd-dc10-40db-b640-ef10c2591b6a',
+        qcViewed: false,
+        qcComplete: false,
       });
 
       expect(result.qcNeeded).toBeFalsy();
@@ -309,5 +307,25 @@ describe('formatDocketEntry', () => {
         });
       },
     );
+  });
+
+  describe('sortingFilingDate', () => {
+    it('should set the property "sortingFilingDate" correctly using filingDate', () => {
+      const result = formatDocketEntry(applicationContext, {
+        createdAt: '2020-03-01T21:40:46.415Z',
+        filingDate: '2019-03-01T21:40:46.415Z',
+        isOnDocketRecord: true,
+        isUnservable: true,
+      });
+      expect(result.sortingFilingDate).toEqual('20190301');
+    });
+    it('should set the property "sortingFilingDate" correctly using createdAt', () => {
+      const result = formatDocketEntry(applicationContext, {
+        createdAt: '2020-03-01T21:40:46.415Z',
+        filingDate: '2019-03-01T21:40:46.415Z',
+        isOnDocketRecord: false,
+      });
+      expect(result.sortingFilingDate).toEqual('20200301');
+    });
   });
 });

@@ -1,22 +1,35 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import '@web-api/persistence/postgres/users/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import {
   DOCKET_SECTION,
   ROLES,
   TRANSCRIPT_EVENT_CODE,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import {
   MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
   MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-} from '../../../../../shared/src/test/mockCase';
-import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
+} from '@shared/test/mockCase';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { fileCourtIssuedDocketEntryInteractor } from './fileCourtIssuedDocketEntryInteractor';
 import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
+import { upsertDocketEntryRelatedEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntryRelatedEntries';
 
 describe('fileCourtIssuedDocketEntryInteractor', () => {
   let caseRecord;
@@ -27,19 +40,16 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     section: DOCKET_SECTION,
     userId: mockUserId,
   };
-  let mockLock;
-
-  beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockImplementation(() => mockLock);
-  });
+  const getUserById = jest.mocked(getUserByIdMock);
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
+  const updateCaseAndAssociations = jest
+    .mocked(updateCaseAndAssociationsMock)
+    .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
+  const tryGetLocks = jest.mocked(tryGetLocksMock);
 
   beforeEach(() => {
-    mockLock = undefined;
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(docketClerkUser);
+    getUserById.mockResolvedValue(docketClerkUser as DbUser);
 
     caseRecord = {
       ...MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
@@ -80,9 +90,8 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       ],
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValue(caseRecord);
+    getCaseByDocketNumber.mockResolvedValue(caseRecord);
+    getCasesByDocketNumbers.mockResolvedValue([caseRecord]);
   });
 
   it('should throw an error if not authorized', async () => {
@@ -155,41 +164,8 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
-  });
-
-  it('should call putWorkItemInUsersOutbox with correct leadDocketNumber when documentType is unservable', async () => {
-    await fileCourtIssuedDocketEntryInteractor(
-      applicationContext,
-      {
-        docketNumbers: [],
-        documentMeta: {
-          docketEntryId: caseRecord.docketEntries[0].docketEntryId,
-          documentTitle: 'Hearing Exhibits for [anything]',
-          documentType: 'Hearing Exhibits',
-          eventCode: 'HE',
-          generatedDocumentTitle: 'Hearing Exhibits for meeeeeee',
-        },
-        subjectDocketNumber: caseRecord.docketNumber,
-      } as any,
-      mockDocketClerkUser,
-    );
-
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox.mock
-        .calls[0][0].workItem.leadDocketNumber,
-    ).toEqual('109-19');
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
+    expect(upsertWorkItems).toHaveBeenCalled();
   });
 
   it('should call updateCase with the docket entry set as pending if the document is a tracked document', async () => {
@@ -210,11 +186,8 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
-    const { caseToUpdate } =
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0];
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
+    const { caseToUpdate } = updateCaseAndAssociations.mock.calls[0][0];
     const docketEntryInCaseToUpdate = caseToUpdate.docketEntries.find(
       d => d.docketEntryId === caseRecord.docketEntries[1].docketEntryId,
     );
@@ -246,12 +219,13 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     );
 
     const lastDocumentIndex =
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries.length - 1;
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries
+        .length - 1;
 
     const newlyFiledDocument =
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries[lastDocumentIndex];
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries[
+        lastDocumentIndex
+      ];
 
     expect(newlyFiledDocument).toMatchObject({
       isDraft: false,
@@ -279,41 +253,12 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       mockDocketClerkUser,
     );
 
-    const updatedDocketEntry = applicationContext
-      .getUseCaseHelpers()
-      .updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
+    const updatedDocketEntry =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
         d => d.docketEntryId === docketEntryToUpdate.docketEntryId,
       );
 
     expect(updatedDocketEntry).toMatchObject({ draftOrderState: null });
-  });
-
-  it('should use original case caption to create case title when creating work item', async () => {
-    await fileCourtIssuedDocketEntryInteractor(
-      applicationContext,
-      {
-        docketNumbers: [],
-        documentMeta: {
-          date: '2019-03-01T21:40:46.415Z',
-          docketEntryId: caseRecord.docketEntries[0].docketEntryId,
-          documentTitle: 'Order',
-          documentType: 'Order',
-          eventCode: 'O',
-          freeText: 'Dogs',
-          generatedDocumentTitle: 'Transcript of Dogs on 03-01-19',
-          serviceStamp: 'Served',
-        },
-        subjectDocketNumber: caseRecord.docketNumber,
-      } as any,
-      mockDocketClerkUser,
-    );
-
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
-        .workItem,
-    ).toMatchObject({
-      caseTitle: Case.getCaseTitle(caseRecord.caseCaption),
-    });
   });
 
   it('should add docketEntry to caseEntity when not already on caseEntity', async () => {
@@ -335,18 +280,12 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       ],
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValueOnce(LEAD_CASE);
+    getCaseByDocketNumber.mockResolvedValueOnce(LEAD_CASE);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValueOnce(
-        MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
-      );
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValueOnce(LEAD_CASE);
+    getCasesByDocketNumbers.mockResolvedValueOnce([
+      MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
+      LEAD_CASE as any,
+    ]);
 
     await fileCourtIssuedDocketEntryInteractor(
       applicationContext,
@@ -356,7 +295,8 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
         ],
         documentMeta: {
           docketEntryId: LEAD_CASE.docketEntries[0].docketEntryId,
-
+          attachments: false,
+          documentTitle: '',
           documentType: 'Trial Exhibits',
           eventCode: 'TE',
           freeText: 'free text testing',
@@ -366,18 +306,16 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       mockDocketClerkUser,
     );
 
-    const docketEntryOnNonLead = applicationContext
-      .getUseCaseHelpers()
-      .updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
+    const docketEntryOnNonLead =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
         entry => entry.eventCode === 'TE',
       );
     expect(docketEntryOnNonLead).toMatchObject({
       docketNumber: MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
       freeText: 'free text testing',
     });
-    const docketEntryOnLead = applicationContext
-      .getUseCaseHelpers()
-      .updateCaseAndAssociations.mock.calls[1][0].caseToUpdate.docketEntries.find(
+    const docketEntryOnLead =
+      updateCaseAndAssociations.mock.calls[1][0].caseToUpdate.docketEntries.find(
         entry => entry.eventCode === 'TE',
       );
     expect(docketEntryOnLead).toMatchObject({
@@ -387,7 +325,9 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    mockLock = MOCK_LOCK;
+    tryGetLocks.mockResolvedValueOnce([
+      { successfullyLocked: false, identifier: 'abc' },
+    ]);
 
     await expect(
       fileCourtIssuedDocketEntryInteractor(
@@ -407,12 +347,10 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       ),
     ).rejects.toThrow(ServiceUnavailableError);
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).not.toHaveBeenCalled();
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
-  it('should acquire and remove the lock on the case', async () => {
+  it('should acquire a lock on the case', async () => {
     await fileCourtIssuedDocketEntryInteractor(
       applicationContext,
       {
@@ -429,20 +367,11 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().createLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifier: `case|${caseRecord.docketNumber}`,
-      ttl: 30,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().removeLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifiers: [`case|${caseRecord.docketNumber}`],
-    });
+    expect(tryGetLocks).toHaveBeenCalledWith(
+      expect.objectContaining({
+        identifiers: [`case|${caseRecord.docketNumber}`],
+      }),
+    );
   });
 
   it('should acquire and remove the lock for every case', async () => {
@@ -467,27 +396,94 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       docketNumber => `case|${docketNumber}`,
     );
     expectedIdentifiers.unshift(`case|${caseRecord.docketNumber}`);
-    expect(
-      applicationContext.getPersistenceGateway().createLock,
-    ).toHaveBeenCalledTimes(3);
-    expect(
-      applicationContext.getPersistenceGateway().removeLock,
-    ).toHaveBeenCalledTimes(1);
-    expect(
-      applicationContext.getPersistenceGateway().removeLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifiers: expectedIdentifiers,
-    });
 
-    [caseRecord.docketNumber, '888-88', '999-99'].forEach(docketNumber => {
-      expect(
-        applicationContext.getPersistenceGateway().createLock,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        identifier: `case|${docketNumber}`,
-        ttl: 30,
-      });
+    expect(tryGetLocks).toHaveBeenCalledTimes(1);
+
+    expect(tryGetLocks).toHaveBeenCalledWith(
+      expect.objectContaining({
+        identifiers: expectedIdentifiers,
+      }),
+    );
+  });
+
+  it('should associate docket entries related to our court issued document', async () => {
+    const motionEntryId = 'b01afa63-931e-4999-99f0-c892c51292b7';
+    const orderEntryId = 'b01afa63-931e-4999-99f0-c892c51292d6';
+    const LEAD_CASE = {
+      ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+      docketEntries: [
+        {
+          docketEntryId: motionEntryId,
+          docketNumber: '109-19',
+          documentTitle: 'Some Motion',
+          documentType: 'Motion',
+          eventCode: 'M',
+          filedByRole: ROLES.docketClerk,
+          signedAt: '2019-03-01T21:40:46.415Z',
+          signedByUserId: mockUserId,
+          signedJudgeName: 'Dredd',
+          userId: mockUserId,
+        },
+        {
+          docketEntryId: orderEntryId,
+          docketNumber: '109-19',
+          documentTitle: 'Some Order',
+          documentType: 'Order',
+          eventCode: 'O',
+          filedByRole: ROLES.docketClerk,
+          signedAt: '2019-03-01T21:40:46.415Z',
+          signedByUserId: mockUserId,
+          signedJudgeName: 'Dredd',
+          userId: mockUserId,
+        },
+      ],
+    };
+
+    getCaseByDocketNumber.mockResolvedValueOnce(LEAD_CASE);
+
+    getCasesByDocketNumbers.mockResolvedValueOnce([
+      MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
+      LEAD_CASE as any,
+    ]);
+
+    await fileCourtIssuedDocketEntryInteractor(
+      applicationContext,
+      {
+        docketNumbers: [
+          MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+        ],
+        documentMeta: {
+          docketEntryId: LEAD_CASE.docketEntries[1].docketEntryId,
+          attachments: false,
+          documentTitle: 'Some Order',
+          documentType: 'Order',
+          eventCode: 'O',
+          freeText: 'free text testing',
+          affectedDocketEntries: [
+            {
+              disposition: 'GRANTED',
+              docketEntryId: motionEntryId,
+            },
+          ],
+        },
+        subjectDocketNumber: LEAD_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    // Assert that update docket relations table function was called with proper body
+    expect(upsertDocketEntryRelatedEntries).toHaveBeenCalledWith({
+      motionDocketEntries: [
+        {
+          disposition: 'GRANTED',
+          docketEntryId: motionEntryId,
+          docketNumber: '109-19',
+        },
+      ],
+      orderDocketEntry: expect.objectContaining({
+        docketEntryId: orderEntryId,
+      }),
+      served: false,
     });
   });
 });

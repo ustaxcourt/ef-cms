@@ -1,58 +1,62 @@
-// usage: npx ts-node --transpile-only scripts/reports/practitioner-stats.ts 2022
+#!/usr/bin/env -S npx ts-node --transpile-only
 
-import { getUniqueValues } from './trial-sessions-report-helpers';
-import { requireEnvVars } from '../../shared/admin-tools/util';
-requireEnvVars(['ENV', 'REGION']);
-
-import { DateTime } from 'luxon';
-import { createApplicationContext } from '@web-api/applicationContext';
-import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
-import { validateDateAndCreateISO } from '@shared/business/utilities/DateHandler';
 import type { RawPractitioner } from '@shared/business/entities/Practitioner';
+import {
+  type ScriptConfig,
+  getTimeframeForYear,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
+import { fromKyselyUser } from '@web-api/persistence/postgres/users/mapper';
+import { getDbReader } from '@web-api/database';
+import { getUniqueValues } from './trial-sessions-report-helpers';
+import { getNowObject } from '@shared/business/utilities/DateHandler';
 
-const year = Number(process.argv[2]) || Number(DateTime.now().toObject().year);
-
-const fromDate = validateDateAndCreateISO({
-  day: '1',
-  month: '1',
-  year: `${year}`,
-});
-const toDate = validateDateAndCreateISO({
-  day: '1',
-  month: '1',
-  year: `${year + 1}`,
-});
-
-const getAllPractitioners = async (
-  applicationContext: IApplicationContext,
-): Promise<Array<RawPractitioner>> => {
-  const { results } = await searchAll({
-    applicationContext,
-    searchParameters: {
-      body: {
-        query: {
-          bool: {
-            filter: {
-              exists: {
-                field: 'barNumber.S',
-              },
-            },
-          },
-        },
-      },
-      index: 'efcms-user',
+const thisYear = getNowObject().year;
+const scriptConfig: ScriptConfig = {
+  description:
+    'practitioner-stats - Outputs practitioner stats over a given year',
+  environment: {
+    env: 'ENV',
+  },
+  parameters: {
+    fiscal: {
+      default: false,
+      short: 'f',
+      type: 'boolean',
     },
-  });
-  return results;
+    year: {
+      default: `${thisYear}`,
+      position: 0,
+      type: 'string',
+    },
+  },
+  requireActiveAwsSession: true,
+};
+const { fiscal, year } = parseArgsAndEnvVars(scriptConfig) as {
+  fiscal: boolean;
+  year: string;
+};
+const { begin: fromDate, end: toDate } = getTimeframeForYear({ fiscal, year });
+
+const getAllPractitioners = async (): Promise<RawPractitioner[]> => {
+  return (
+    await getDbReader(reader =>
+      reader
+        .selectFrom('dwUser as u')
+        .selectAll('u')
+        // .where('u.admissionsStatus', '=', 'Active')
+        .where('u.barNumber', 'is not', null)
+        .orderBy('u.admissionsDate', 'asc')
+        .execute(),
+    )
+  ).map(fromKyselyUser) as RawPractitioner[];
 };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const applicationContext = createApplicationContext({});
-  const allPractitioners: RawPractitioner[] =
-    await getAllPractitioners(applicationContext);
+  const allPractitioners: RawPractitioner[] = await getAllPractitioners();
   const admittedInYear = allPractitioners.filter(p => {
-    return p.admissionsDate >= fromDate! && p.admissionsDate < toDate!;
+    return p.admissionsDate >= fromDate && p.admissionsDate < toDate;
   });
   const uniquePracticeTypes = getUniqueValues({
     arrayOfObjects: admittedInYear,

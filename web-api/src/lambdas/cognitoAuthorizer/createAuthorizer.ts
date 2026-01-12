@@ -4,7 +4,7 @@ import {
 } from 'aws-lambda';
 import { createPublicKey } from 'crypto';
 import { environment } from '@web-api/environment';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import axios from 'axios';
 import jwk from 'jsonwebtoken';
 
@@ -16,7 +16,7 @@ const decodeToken = requestToken => {
   return { iss: payload.iss, kid: header.kid };
 };
 
-let keyCache = {};
+const keyCache = {};
 const getKeysForIssuer = async iss => {
   if (keyCache[iss]) {
     return keyCache[iss];
@@ -40,6 +40,7 @@ const verify = (key, token) =>
 
     jwk.verify(token, pem, options, (err, payload) => {
       if (err) {
+        // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
         reject(err);
       } else {
         resolve(payload);
@@ -53,7 +54,7 @@ const throw401GatewayError = () => {
 
 export const createAuthorizer =
   getToken => async (event: APIGatewayRequestAuthorizerEvent, context) => {
-    const logger = getLogger();
+    const logger = getDawsonLogger();
     logger.clearContext();
     logger.addContext({
       environment: {

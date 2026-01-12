@@ -1,37 +1,66 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { presenter } from '../../presenter-public';
+import { presenter } from '@web-client/presenter/presenter-public';
 import { runAction } from '@web-client/presenter/test.cerebral';
+import { MAX_DOCUMENT_SEARCH_RESULTS } from '@shared/business/entities/EntityConstants';
 import { submitPublicOrderAdvancedSearchAction } from './submitPublicOrderAdvancedSearchAction';
 
 describe('submitPublicOrderAdvancedSearchAction', () => {
-  beforeAll(() => {
-    presenter.providers.applicationContext = applicationContext;
-  });
-
-  it('gets the public order information', async () => {
+  it('should call orderPublicSearchInteractor only once', async () => {
+    applicationContext
+      .getUseCases()
+      .orderPublicSearchInteractor.mockReturnValue({
+        results: Array(MAX_DOCUMENT_SEARCH_RESULTS).fill({}),
+      });
     await runAction(submitPublicOrderAdvancedSearchAction, {
-      modules: {
-        presenter,
-      },
+      modules: { presenter },
       state: {
         advancedSearchForm: {
           orderSearch: {
-            keyword: 'a',
+            keyword: 'keyword',
           },
         },
       },
     });
+    expect(
+      applicationContext.getUseCases().orderPublicSearchInteractor.mock.calls
+        .length,
+    ).toBe(1);
+  });
+  beforeEach(() => {
+    applicationContext
+      .getUseCases()
+      .orderPublicSearchInteractor.mockReturnValue({
+        results: [],
+      });
+  });
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+  });
 
+  it('gets the public order information with correct searchParams', async () => {
+    await runAction(submitPublicOrderAdvancedSearchAction, {
+      modules: { presenter },
+      state: {
+        advancedSearchForm: {
+          orderSearch: {
+            keyword: 'a',
+            startDate: '2020-01-01',
+            endDate: '2020-12-31',
+          },
+        },
+      },
+    });
     expect(
       applicationContext.getUseCases().orderPublicSearchInteractor,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().orderPublicSearchInteractor.mock
-        .calls[0][1],
+        .calls[0][1].searchParams,
     ).toMatchObject({
-      searchParams: {
-        keyword: 'a',
-      },
+      keyword: 'a',
+      startDate: '2020-01-01',
+      endDate: '2020-12-31',
+      dateRange: expect.any(String),
     });
   });
 
@@ -70,21 +99,11 @@ describe('submitPublicOrderAdvancedSearchAction', () => {
       .getUseCases()
       .orderPublicSearchInteractor.mockImplementation(() => {
         const e = new Error();
-        e.originalError = {
-          response: {
-            data: {
-              type: 'ip-limiter',
-            },
-          },
-        };
-        e.responseCode = 429;
+        (e as any).responseCode = 429;
         throw e;
       });
-
     const { state } = await runAction(submitPublicOrderAdvancedSearchAction, {
-      modules: {
-        presenter,
-      },
+      modules: { presenter },
       state: {
         advancedSearchForm: {
           orderSearch: {
@@ -94,10 +113,8 @@ describe('submitPublicOrderAdvancedSearchAction', () => {
         },
       },
     });
-
-    expect(state.alertError).toEqual({
-      message: 'Please wait 1 minute before trying your search again.',
-      title: "You've reached your search limit",
-    });
+    expect(state.alertError).toEqual(
+      applicationContext.getConstants().ERROR_429,
+    );
   });
 });

@@ -41,10 +41,7 @@ describe('sendSlackNotification', () => {
 
     expect(
       applicationContext.getPersistenceGateway().getDispatchNotification,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      topic: 'test-topic',
-    });
+    ).toHaveBeenCalledWith('test-topic');
   });
 
   it('saves a record to persistence to signal that we have recently messaged the specified topic', async () => {
@@ -56,10 +53,7 @@ describe('sendSlackNotification', () => {
 
     expect(
       applicationContext.getPersistenceGateway().saveDispatchNotification,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      topic: 'test-topic',
-    });
+    ).toHaveBeenCalledWith('test-topic');
   });
 
   it('does not call slack webhook if persistence check says that we notified the topic', async () => {

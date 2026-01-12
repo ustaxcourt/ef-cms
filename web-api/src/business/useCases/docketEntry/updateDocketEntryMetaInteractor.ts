@@ -1,19 +1,25 @@
 import {
   COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
   UNSERVABLE_EVENT_CODES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
+} from '@shared/business/entities/EntityConstants';
+import { Case } from '@shared/business/entities/cases/Case';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { createISODateString } from '../../../../../shared/src/business/utilities/DateHandler';
-import { getDocumentTitleWithAdditionalInfo } from '../../../../../shared/src/business/utilities/getDocumentTitleWithAdditionalInfo';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { createISODateString } from '@shared/business/utilities/DateHandler';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getDocumentTitleWithAdditionalInfo } from '@shared/business/utilities/getDocumentTitleWithAdditionalInfo';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import diff from 'diff-arrays-of-objects';
+import { upsertDocketEntryRelatedEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntryRelatedEntries';
+import { concat } from 'lodash';
 
 export const updateDocketEntryMeta = async (
   applicationContext: ServerApplicationContext,
@@ -27,12 +33,9 @@ export const updateDocketEntryMeta = async (
     throw new UnauthorizedError('Unauthorized to update docket entry');
   }
 
-  const caseToUpdate = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const caseToUpdate = await getCaseByDocketNumber({
+    docketNumber,
+  });
 
   if (!caseToUpdate) {
     throw new NotFoundError(`Case ${docketNumber} was not found.`);
@@ -40,7 +43,7 @@ export const updateDocketEntryMeta = async (
 
   let caseEntity = new Case(caseToUpdate, { authorizedUser });
 
-  const originalDocketEntry: RawDocketEntry = caseEntity.getDocketEntryById({
+  const originalDocketEntry = caseEntity.getDocketEntryById({
     docketEntryId: docketEntryMeta.docketEntryId,
   });
 
@@ -57,6 +60,16 @@ export const updateDocketEntryMeta = async (
   ) {
     throw new Error('Unable to update unserved docket entry.');
   }
+
+  if (
+    docketEntryMeta.affectedDocketEntries ||
+    originalDocketEntry.affectedDocketEntries
+  )
+    await handleRelatedDocketEntries(
+      originalDocketEntry,
+      docketEntryMeta,
+      docketNumber,
+    );
 
   const editableFields = {
     action: docketEntryMeta.action,
@@ -75,7 +88,6 @@ export const updateDocketEntryMeta = async (
     filers: docketEntryMeta.filers,
     filingDate: docketEntryMeta.filingDate,
     freeText: docketEntryMeta.freeText,
-    freeText2: docketEntryMeta.freeText2,
     hasOtherFilingParty: docketEntryMeta.hasOtherFilingParty,
     judge: docketEntryMeta.judge,
     lodged: docketEntryMeta.lodged,
@@ -146,15 +158,10 @@ export const updateDocketEntryMeta = async (
 
   caseEntity = await applicationContext
     .getUseCaseHelpers()
-    .updateCaseAutomaticBlock({ applicationContext, caseEntity });
+    .updateCaseAutomaticBlock({ caseEntity });
 
   if (shouldGenerateCoversheet) {
-    await applicationContext.getPersistenceGateway().updateDocketEntry({
-      applicationContext,
-      docketEntryId: docketEntryEntity.docketEntryId,
-      docketNumber,
-      document: docketEntryEntity.validate(),
-    });
+    await upsertDocketEntries([docketEntryEntity.validate()]);
 
     const updatedDocketEntry = await applicationContext
       .getUseCases()
@@ -181,13 +188,10 @@ export const updateDocketEntryMeta = async (
     caseEntity.updateDocketEntry(docketEntryEntity);
   }
 
-  const result = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
-      authorizedUser,
-      caseToUpdate: caseEntity,
-    });
+  const result = await updateCaseAndAssociations({
+    authorizedUser,
+    caseToUpdate: caseEntity,
+  });
 
   return new Case(result, { authorizedUser }).validate().toRawObject();
 };
@@ -218,3 +222,36 @@ export const updateDocketEntryMetaInteractor = withLocking(
     identifiers: [`case|${docketNumber}`],
   }),
 );
+
+const handleRelatedDocketEntries = async (
+  originalDocketEntry: DocketEntry,
+  docketEntryMeta: any,
+  docketNumber: string,
+) => {
+  {
+    const { added, updated, removed } = diff(
+      originalDocketEntry.affectedDocketEntries,
+      docketEntryMeta.affectedDocketEntries,
+      'docketEntryId',
+    );
+
+    if (added.length > 0 || updated.length > 0) {
+      await upsertDocketEntryRelatedEntries({
+        orderDocketEntry: docketEntryMeta,
+        motionDocketEntries: concat(added ?? [], updated ?? []).map(m => ({
+          docketNumber,
+          ...m,
+        })),
+        served: true,
+      });
+    }
+
+    if (removed.length > 0) {
+      await upsertDocketEntryRelatedEntries({
+        orderDocketEntry: docketEntryMeta,
+        motionDocketEntries: removed.map(m => ({ docketNumber, ...m })),
+        served: false,
+      });
+    }
+  }
+};

@@ -42,19 +42,21 @@ describe('setDocketEntryFormForDocketEditAction', () => {
       },
     });
 
-    const expectedResult = {
+    const expectedDocketEntry = {
       date: '2020-01-01T05:00:00.000Z',
       docketEntryId: '123-abc-123-abc',
       docketNumber: '123-45',
       eventCode: 'OPP',
       filers: [],
-      filersMap: {},
       lodged: true,
       testKey: 'testValue',
     };
 
-    expect(result.state.form).toEqual(expectedResult);
-    expect(result.output.docketEntry).toEqual(expectedResult);
+    expect(result.state.form).toEqual({
+      ...expectedDocketEntry,
+      filersMap: {},
+    });
+    expect(result.output.docketEntry).toEqual(expectedDocketEntry);
   });
 
   it("does not set the given document's edit state on form.state if the docketRecord editState does not contain a docketNumber", async () => {
@@ -91,17 +93,19 @@ describe('setDocketEntryFormForDocketEditAction', () => {
       },
     });
 
-    const expectedResult = {
+    const expectedDocketEntry = {
       docketEntryId: '123-abc-123-abc',
       editState: JSON.stringify(editState),
       eventCode: 'OPP',
       filers: [],
-      filersMap: {},
       lodged: true,
     };
 
-    expect(result.state.form).toEqual(expectedResult);
-    expect(result.output.docketEntry).toEqual(expectedResult);
+    expect(result.state.form).toEqual({
+      ...expectedDocketEntry,
+      filersMap: {},
+    });
+    expect(result.output.docketEntry).toEqual(expectedDocketEntry);
   });
 
   it('sets an empty object on form.state if no document matches the given docketEntryId', async () => {
@@ -126,13 +130,15 @@ describe('setDocketEntryFormForDocketEditAction', () => {
       },
     });
 
-    const expectedResult = {
-      filersMap: {},
+    const expectedDocketEntry = {
       lodged: false,
     };
 
-    expect(result.state.form).toEqual(expectedResult);
-    expect(result.output.docketEntry).toEqual(expectedResult);
+    expect(result.state.form).toEqual({
+      ...expectedDocketEntry,
+      filersMap: {},
+    });
+    expect(result.output.docketEntry).toEqual(expectedDocketEntry);
   });
 
   it('sets filersMap from the filers array of the docket entry', async () => {
@@ -158,14 +164,16 @@ describe('setDocketEntryFormForDocketEditAction', () => {
       },
     });
 
-    const expectedResult = {
+    const expectedDocketEntry = {
       docketEntryId: '123-abc-123-abc',
       filers: ['123', '456'],
-      filersMap: { 123: true, 456: true },
       lodged: false,
     };
 
-    expect(result.state.form).toEqual(expectedResult);
-    expect(result.output.docketEntry).toEqual(expectedResult);
+    expect(result.state.form).toEqual({
+      ...expectedDocketEntry,
+      filersMap: { 123: true, 456: true },
+    });
+    expect(result.output.docketEntry).toEqual(expectedDocketEntry);
   });
 });

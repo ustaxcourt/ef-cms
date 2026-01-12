@@ -21,7 +21,6 @@ export const removeCoversheet = async (
     const pdfWithoutCoversheet = await pdfDoc.save();
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-      applicationContext,
       document: pdfWithoutCoversheet,
       key: docketEntryId,
     });

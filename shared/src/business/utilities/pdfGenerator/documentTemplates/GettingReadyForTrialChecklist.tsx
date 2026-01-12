@@ -1,8 +1,15 @@
-import { PretrialMemorandum } from '../components/PretrialMemorandum.tsx';
-import { PrimaryHeader } from '../components/PrimaryHeader.tsx';
+import {
+  PretrialMemorandum,
+  PretrialMemorandumTrialInfo,
+} from '@shared/business/utilities/pdfGenerator/components/PretrialMemorandum';
+import { PrimaryHeader } from '@shared/business/utilities/pdfGenerator/components/PrimaryHeader';
 import React from 'react';
 
-export const GettingReadyForTrialChecklist = ({ trialInfo }) => {
+export const GettingReadyForTrialChecklist = ({
+  trialInfo,
+}: {
+  trialInfo: PretrialMemorandumTrialInfo;
+}) => {
   return (
     <div id="getting-ready-checklist">
       <PrimaryHeader />

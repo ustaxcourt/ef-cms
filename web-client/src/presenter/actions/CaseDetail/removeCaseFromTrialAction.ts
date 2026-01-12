@@ -12,7 +12,6 @@ export const removeCaseFromTrialAction = async ({
   get,
   path,
 }: ActionProps) => {
-  let trialSessionId;
   const { docketNumber, trialSessionId: stateTrialSessionId } = get(
     state.caseDetail,
   );
@@ -24,7 +23,7 @@ export const removeCaseFromTrialAction = async ({
     trialSessionId: modalTrialSessionId,
   } = get(state.modal);
 
-  trialSessionId = modalTrialSessionId || stateTrialSessionId;
+  const trialSessionId = modalTrialSessionId || stateTrialSessionId;
   try {
     const caseDetail = await applicationContext
       .getUseCases()

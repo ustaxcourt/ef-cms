@@ -2,10 +2,11 @@ import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { caseWorksheetsHelper as caseWorksheetsHelperComputed } from './caseWorksheetsHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../../withAppContext';
+import { GetCasesByStatusAndByJudgeResponse } from '@web-api/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
 
 describe('caseWorksheetsHelper', () => {
   let baseState;
-  let submittedAndCavCasesByJudge;
+  let submittedAndCavCasesByJudge: GetCasesByStatusAndByJudgeResponse[];
 
   const caseWorksheetsHelper = withAppContextDecorator(
     caseWorksheetsHelperComputed,
@@ -15,67 +16,35 @@ describe('caseWorksheetsHelper', () => {
     submittedAndCavCasesByJudge = [
       {
         caseCaption: 'Scooby Doo, Petitioner',
-        caseStatusHistory: [
-          {
-            date: '2002-02-15T05:00:00.000Z',
-            updatedCaseStatus: CASE_STATUS_TYPES.generalDocket,
-          },
-          {
-            date: '2002-02-16T05:00:00.000Z',
-            updatedCaseStatus: CASE_STATUS_TYPES.submitted,
-          },
-        ],
+        statusDate: '2002-02-16T05:00:00.000Z',
         docketNumber: '101-20',
+        docketNumberWithSuffix: '101-20',
         formattedCaseCount: 1,
         leadDocketNumber: '101-20',
         status: CASE_STATUS_TYPES.submitted,
       },
       {
         caseCaption: 'Velma Jinkies, Petitioner',
-        caseStatusHistory: [
-          {
-            date: '2022-02-15T05:00:00.000Z',
-            updatedCaseStatus: CASE_STATUS_TYPES.generalDocket,
-          },
-          {
-            date: '2022-02-26T05:00:00.000Z',
-            updatedCaseStatus: CASE_STATUS_TYPES.submitted,
-          },
-        ],
+        statusDate: '2022-02-26T05:00:00.000Z',
         caseWorksheet: { docketNumber: '110-15', primaryIssue: 'ZOINKS!' },
         docketNumber: '110-15',
+        docketNumberWithSuffix: '110-15',
         formattedCaseCount: 1,
         status: CASE_STATUS_TYPES.submitted,
       },
       {
         caseCaption: 'Fred Dude, Petitioner',
-        caseStatusHistory: [
-          {
-            date: '1987-02-04T05:00:00.000Z',
-            updatedCaseStatus: CASE_STATUS_TYPES.generalDocket,
-          },
-          {
-            date: '1987-02-15T05:00:00.000Z',
-            updatedCaseStatus: CASE_STATUS_TYPES.cav,
-          },
-        ],
+        statusDate: '1987-02-15T05:00:00.000Z',
         docketNumber: '202-87',
+        docketNumberWithSuffix: '202-87',
         formattedCaseCount: 1,
         status: CASE_STATUS_TYPES.cav,
       },
       {
         caseCaption: 'Shaggy Guy, Petitioner',
-        caseStatusHistory: [
-          {
-            date: '2022-02-15T05:00:00.000Z',
-            updatedCaseStatus: CASE_STATUS_TYPES.generalDocket,
-          },
-          {
-            date: '2022-02-16T05:00:00.000Z',
-            updatedCaseStatus: CASE_STATUS_TYPES.submittedRule122,
-          },
-        ],
+        statusDate: '2022-02-16T05:00:00.000Z',
         docketNumber: '303-11',
+        docketNumberWithSuffix: '303-11',
         formattedCaseCount: 1,
         status: CASE_STATUS_TYPES.submittedRule122,
       },
@@ -99,7 +68,7 @@ describe('caseWorksheetsHelper', () => {
         consolidatedIconTooltipText: '',
         daysSinceLastStatusChange: expect.anything(),
         docketNumber: '202-87',
-        docketNumberWithSuffix: undefined,
+        docketNumberWithSuffix: '202-87',
         finalBriefDueDateFormatted: '',
         formattedCaseCount: 1,
         formattedSubmittedCavStatusDate: '02/15/87',
@@ -113,7 +82,7 @@ describe('caseWorksheetsHelper', () => {
         consolidatedIconTooltipText: 'Lead case',
         daysSinceLastStatusChange: expect.anything(),
         docketNumber: '101-20',
-        docketNumberWithSuffix: undefined,
+        docketNumberWithSuffix: '101-20',
         finalBriefDueDateFormatted: '',
         formattedCaseCount: 1,
         formattedSubmittedCavStatusDate: '02/16/02',
@@ -127,7 +96,7 @@ describe('caseWorksheetsHelper', () => {
         consolidatedIconTooltipText: '',
         daysSinceLastStatusChange: expect.anything(),
         docketNumber: '303-11',
-        docketNumberWithSuffix: undefined,
+        docketNumberWithSuffix: '303-11',
         finalBriefDueDateFormatted: '',
         formattedCaseCount: 1,
         formattedSubmittedCavStatusDate: '02/16/22',
@@ -141,7 +110,7 @@ describe('caseWorksheetsHelper', () => {
         consolidatedIconTooltipText: '',
         daysSinceLastStatusChange: expect.anything(),
         docketNumber: '110-15',
-        docketNumberWithSuffix: undefined,
+        docketNumberWithSuffix: '110-15',
         finalBriefDueDateFormatted: '',
         formattedCaseCount: 1,
         formattedSubmittedCavStatusDate: '02/26/22',

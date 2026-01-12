@@ -10,7 +10,7 @@ const tabbableSelector =
 export const FocusLock = ({ children }) => {
   const el = useRef(null);
 
-  const previousElementWithFocus =
+  const previousElementWithFocus: { focus?: () => void } =
     (window.document.hasFocus() &&
       window.document.activeElement !== window.document.body &&
       window.document.activeElement !== window.document.documentElement &&
@@ -56,6 +56,7 @@ export const FocusLock = ({ children }) => {
       appRoot.inert = false;
       appRoot.setAttribute('aria-hidden', 'false');
       window.document.removeEventListener('keydown', onKey);
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       previousElementWithFocus.focus && previousElementWithFocus.focus();
     };
   }, []);

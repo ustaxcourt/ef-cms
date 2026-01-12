@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { InvalidEntityError } from '../../../../web-api/src/errors/errors';
-import { isEmpty } from 'lodash';
+import { isEmpty, join } from 'lodash';
 import joi from 'joi';
 
 const setIsValidated = obj => {
@@ -19,7 +18,7 @@ const setIsValidated = obj => {
 function toRawObject(entity) {
   const keys = Object.keys(entity);
   const obj = {};
-  for (let key of keys) {
+  for (const key of keys) {
     const value = entity[key];
     if (Array.isArray(value)) {
       obj[key] = value.map(v => {
@@ -60,7 +59,7 @@ function getFormattedValidationErrors(entity): Record<string, any> | null {
     }
     Object.assign(obj, errors);
   }
-  for (let key of keys) {
+  for (const key of keys) {
     const value = entity[key];
     if (errors && errors[key]) {
       continue;
@@ -87,7 +86,7 @@ function getFormattedValidationErrors(entity): Record<string, any> | null {
 }
 
 export abstract class JoiValidationEntity {
-  public entityName: string;
+  public entityName?: string;
 
   constructor(entityName: string) {
     this.entityName = entityName;
@@ -105,7 +104,9 @@ export abstract class JoiValidationEntity {
     if (!error) return null;
     const errors = {};
     error.details.forEach(detail => {
-      if (!Number.isInteger(detail.context.key)) {
+      if (detail.path.length > 1) {
+        errors[join(detail.path, '-')] = detail.message;
+      } else if (!Number.isInteger(detail.context.key)) {
         errors[detail.context.key || detail.type] = detail.message;
       } else {
         errors[detail.context.label] = detail.message;
@@ -168,7 +169,7 @@ export abstract class JoiValidationEntity {
   validateForMigration() {
     const rules = this.getValidationRules();
     const schema = rules.validate ? rules : joi.object().keys(rules);
-    let { error } = schema.validate(this, {
+    const { error } = schema.validate(this, {
       abortEarly: false,
       allowUnknown: true,
     });

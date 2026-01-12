@@ -1,3 +1,4 @@
+import { loginAsPetitionsClerk1 } from 'cypress/helpers/authentication/login-as-helpers';
 import {
   CASE_TYPES_MAP,
   PARTY_TYPES,
@@ -10,7 +11,7 @@ export function createAndServePaperPetitionMultipleParties(
 ) {
   const name = 'Zofia Olszewska ' + Date.now();
   const spouseName = 'Jaylin Olszewska ' + Date.now();
-  cy.login('petitionsclerk1');
+  loginAsPetitionsClerk1();
   cy.get('[data-testid="inbox-tab-content"]').should('exist');
   cy.get('[data-testid="document-qc-nav-item"]').click();
   cy.get('[data-testid="start-a-petition"]').click();

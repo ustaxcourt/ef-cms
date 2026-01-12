@@ -1,6 +1,5 @@
 # Domain Identity, Verification and From
 resource "aws_ses_domain_identity" "main" {
-  provider = aws.us-east-1
   domain   = var.dns_domain
 }
 
@@ -41,10 +40,10 @@ resource "aws_ses_domain_dkim" "main" {
 resource "aws_route53_record" "dkim" {
   count   = 3
   zone_id = data.aws_route53_zone.zone.id
-  name    = format("%s._domainkey.%s", element(aws_ses_domain_dkim.main.dkim_tokens, count.index), aws_ses_domain_identity.main.domain)
+  name    = format("%s._domainkey.%s", aws_ses_domain_dkim.main.dkim_tokens[count.index], aws_ses_domain_identity.main.domain)
   type    = "CNAME"
   ttl     = "600"
-  records = ["${element(aws_ses_domain_dkim.main.dkim_tokens, count.index)}.dkim.amazonses.com"]
+  records = ["${aws_ses_domain_dkim.main.dkim_tokens[count.index]}.dkim.amazonses.com"]
 }
 
 # SPF Validation Record

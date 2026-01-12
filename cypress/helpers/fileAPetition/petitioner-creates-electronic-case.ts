@@ -1,8 +1,9 @@
 import { PROCEDURE_TYPES_MAP } from '../../../shared/src/business/entities/EntityConstants';
 import { attachSamplePdfFile } from '../file/upload-file';
+import { faker } from '@faker-js/faker';
 
 export function externalUserCreatesElectronicCase(
-  primaryFilerName: string = 'John',
+  primaryFilerName: string = faker.person.firstName(),
 ) {
   cy.get('[data-testid="file-a-petition"]').click();
   cy.get('[data-testid="go-to-step-1"]').click();
@@ -43,6 +44,7 @@ export function externalUserCreatesElectronicCase(
 
   return cy
     .get('[data-testid="case-link-docket-number"]')
+    .should('be.visible')
     .invoke('text')
     .then(docketNumberWithSuffix => {
       cy.get('[data-testid="button-back-to-dashboard"]').click();
@@ -51,8 +53,8 @@ export function externalUserCreatesElectronicCase(
 }
 
 export function petitionerCreatesElectronicCaseWithDeceasedSpouse(
-  primaryFilerName: string = 'John',
-  secondaryFilerName: string = 'Sally',
+  primaryFilerName: string = faker.person.firstName(),
+  secondaryFilerName: string = faker.person.firstName(),
 ) {
   cy.get('[data-testid="file-a-petition"]').click();
   cy.get('[data-testid="go-to-step-1"]').click();
@@ -103,8 +105,8 @@ export function petitionerCreatesElectronicCaseWithDeceasedSpouse(
 }
 
 export function petitionerCreatesElectronicCaseWithSpouse(
-  primaryFilerName: string = 'John',
-  secondaryFilerName: string = 'Sally',
+  primaryFilerName: string = faker.person.firstName(),
+  secondaryFilerName: string = faker.person.firstName(),
 ) {
   cy.get('[data-testid="file-a-petition"]').click();
   cy.get('[data-testid="go-to-step-1"]').click();
@@ -119,6 +121,69 @@ export function petitionerCreatesElectronicCaseWithSpouse(
   cy.get('[data-testid="contactPrimary.state"]').select('AL');
   cy.get('[data-testid="contactPrimary.postalCode"]').type('12345');
   cy.get('[data-testid="contact-primary-phone"]').type('1111111111');
+  cy.get('[data-testid="step-1-next-button"]').click();
+
+  cy.get('[data-testid="petition-reason--1"]').type('First reason goes here');
+  cy.get('[data-testid="petition-fact--1"]').type('First fact goes here');
+  cy.get('[data-testid="step-2-next-button"]').click();
+
+  cy.get('[data-testid="irs-notice-Yes"]').click();
+  cy.get('[data-testid="case-type-select"]').select('Notice of Deficiency');
+  attachSamplePdfFile('irs-notice-upload-0');
+  cy.get('[data-testid="redaction-acknowledgement-label"]').click();
+  cy.get('[data-testid="step-3-next-button"]').click();
+
+  cy.get(
+    `[data-testid="procedure-type-${PROCEDURE_TYPES_MAP.regular}-radio"]`,
+  ).click();
+  cy.get('[data-testid="preferred-trial-city"]').select('Mobile, Alabama');
+  cy.get('[data-testid="step-4-next-button"]').click();
+
+  attachSamplePdfFile('stin-file');
+  cy.get('[data-testid="step-5-next-button"]').click();
+
+  cy.get('[data-testid="atp-preview-button"]').should('exist');
+  cy.get('[data-testid="stin-preview-button"]').should('exist');
+
+  cy.get('[data-testid="step-6-next-button"]').click();
+
+  return cy
+    .get('[data-testid="case-link-docket-number"]')
+    .invoke('text')
+    .then(docketNumberWithSuffix => {
+      cy.get('[data-testid="case-link"]').click();
+      return cy.wrap<string>(docketNumberWithSuffix);
+    });
+}
+
+export function externalUserCreatesElectronicCaseWithSpouseDifferentAddress(
+  primaryFilerName: string = faker.person.firstName(),
+  secondaryFilerName: string = faker.person.firstName(),
+) {
+  cy.get('[data-testid="file-a-petition"]').click();
+  cy.get('[data-testid="go-to-step-1"]').click();
+
+  cy.get('[data-testid="filing-type-1"]').click();
+  cy.get('[data-testid="is-spouse-deceased-1"]').click();
+  cy.get('body').then($body => {
+    if ($body.find('[data-testid="have-spouse-consent-label"]').length > 0) {
+      cy.get('[data-testid="have-spouse-consent-label"]').click();
+    }
+  });
+  cy.get('[data-testid="contact-primary-name"]').type(primaryFilerName);
+  cy.get('[data-testid="contact-secondary-name"]').type(secondaryFilerName);
+  cy.get('[data-testid="contactPrimary.address1"]').type('111 South West St.');
+  cy.get('[data-testid="contactPrimary.city"]').type('Orlando');
+  cy.get('[data-testid="contactPrimary.state"]').select('AL');
+  cy.get('[data-testid="contactPrimary.postalCode"]').type('12345');
+  cy.get('[data-testid="contact-primary-phone"]').type('1111111111');
+  cy.get('[data-testid="use-same-address-above-label"]').click();
+  cy.get('[data-testid="contactSecondary.address1"]').type(
+    '222 North East St.',
+  );
+  cy.get('[data-testid="contactSecondary.city"]').type('Richmond');
+  cy.get('[data-testid="contactSecondary.state"]').select('VA');
+  cy.get('[data-testid="contactSecondary.postalCode"]').type('23456');
   cy.get('[data-testid="step-1-next-button"]').click();
 
   cy.get('[data-testid="petition-reason--1"]').type('First reason goes here');

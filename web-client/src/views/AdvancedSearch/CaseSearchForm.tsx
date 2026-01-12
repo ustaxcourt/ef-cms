@@ -6,12 +6,23 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const CaseSearchForm = connect(
-  { advancedSearchForm: state.advancedSearchForm },
+type CaseSearchFormProps = {
+  submitAdvancedSearchSequence: any;
+  submitDocketNumberSearchSequence: any;
+};
+
+export const CaseSearchForm: React.FC<CaseSearchFormProps> = connect(
+  {
+    advancedSearchForm: state.advancedSearchForm,
+  },
   function CaseSearchForm({
     advancedSearchForm,
     submitAdvancedSearchSequence,
     submitDocketNumberSearchSequence,
+  }: {
+    advancedSearchForm: { searchMode: string };
+    submitAdvancedSearchSequence: Function;
+    submitDocketNumberSearchSequence: Function;
   }) {
     return (
       <>
@@ -41,13 +52,13 @@ export const CaseSearchForm = connect(
 
         <NonMobile>
           <div className="grid-row grid-gap-6">
-            <div className="grid-col-6 right-gray-border">
+            <div className="grid-col-6 right-gray-border display-flex flex-column">
               <CaseSearchByName
                 submitAdvancedSearchSequence={submitAdvancedSearchSequence}
               />
             </div>
 
-            <div className="grid-col-6">
+            <div className="grid-col-6 display-flex flex-column">
               <CaseSearchByDocketNumber
                 submitDocketNumberSearchSequence={
                   submitDocketNumberSearchSequence

@@ -13,7 +13,7 @@ type CaseWorksheetTableRow = {
   daysSinceLastStatusChange: string;
   caseCaption: string;
   docketNumber: string;
-  docketNumberWithSuffix: string;
+  docketNumberWithSuffix?: string;
   formattedSubmittedCavStatusDate: string;
   finalBriefDueDateFormatted: string;
   status: string;
@@ -36,7 +36,7 @@ export const caseWorksheetsHelper = (
       const { daysElapsedSinceLastStatusChange, statusDate } =
         applicationContext
           .getUtilities()
-          .calculateDaysElapsedSinceLastStatusChange(applicationContext, aCase);
+          .calculateDaysElapsedSinceLastStatusChange(aCase.statusDate);
 
       const finalBriefDueDateFormatted = aCase.caseWorksheet?.finalBriefDueDate
         ? applicationContext
@@ -58,7 +58,7 @@ export const caseWorksheetsHelper = (
         formattedSubmittedCavStatusDate: statusDate,
         inConsolidatedGroup: !!isLeadCase(aCase),
         isLeadCase: isLeadCase(aCase),
-        status: aCase.status,
+        status: aCase.status || '',
         worksheet: aCase.caseWorksheet,
       };
     })

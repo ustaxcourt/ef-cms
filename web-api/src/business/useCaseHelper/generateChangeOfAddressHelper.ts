@@ -3,7 +3,7 @@ import { Case } from '@shared/business/entities/cases/Case';
 import {
   Practitioner,
   RawPractitioner,
-} from '../../../../shared/src/business/entities/Practitioner';
+} from '@shared/business/entities/Practitioner';
 import {
   ROLES,
   SERVICE_INDICATOR_TYPES,
@@ -13,6 +13,11 @@ import { TUserContact } from '@web-api/business/useCases/user/generateChangeOfAd
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { clone } from 'lodash';
 import { generateAndServeDocketEntry } from '@web-api/business/useCaseHelper/service/createChangeItems';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { deleteChangeOfAddressCaseRecord } from '@web-api/persistence/postgres/jobs/changeOfAddress/deleteChangeOfAddressCaseRecord';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
+import { RawUser } from '@shared/business/entities/User';
 
 /**
  * generateChangeOfAddressHelper
@@ -28,8 +33,8 @@ export const generateChangeOfAddressHelper = async ({
   bypassDocketEntry,
   contactInfo,
   docketNumber,
-  firmName,
   jobId,
+  oldUser,
   requestUserId,
   updatedEmail,
   updatedName,
@@ -41,49 +46,41 @@ export const generateChangeOfAddressHelper = async ({
   docketNumber: string;
   bypassDocketEntry: boolean;
   contactInfo: TUserContact;
-  firmName: string;
   updatedEmail?: string;
   updatedName?: string;
   jobId: string;
+  oldUser: RawUser;
   user: RawPractitioner;
   requestUserId?: string;
-  websocketMessagePrefix: string;
+  websocketMessagePrefix: 'user' | 'admin';
 }) => {
   try {
     const newData = contactInfo;
 
-    const userCase = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      });
-    let caseEntity = new Case(userCase, {
+    const userCase = await getCaseByDocketNumber({
+      docketNumber,
+    });
+    const caseEntity = new Case(userCase, {
       authorizedUser,
     });
 
     const practitionerName = updatedName || user.name;
-    const practitionerObject = caseEntity.privatePractitioners
+    const practitionerObject = (caseEntity.privatePractitioners || [])
       .concat(caseEntity.irsPractitioners)
       .find(practitioner => practitioner.userId === user.userId);
 
     if (!practitionerObject) {
       throw new Error(
-        `Could not find user|${user.userId} barNumber: ${user.barNumber} on ${docketNumber}`,
+        `Could not find ${user.userId} barNumber: ${user.barNumber} on ${docketNumber}`,
       );
     }
 
-    const oldData = clone(practitionerObject.contact);
+    const oldData = clone(oldUser.contact);
 
-    // This updates the case by reference!
-    practitionerObject.contact = contactInfo;
-    practitionerObject.firmName = firmName;
-    practitionerObject.name = practitionerName;
-
-    if (!oldData.email && updatedEmail) {
+    if (updatedEmail) {
+      // This updates the case by reference!
       practitionerObject.serviceIndicator =
         SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
-      practitionerObject.email = updatedEmail;
     }
 
     if (!bypassDocketEntry && caseEntity.shouldGenerateNoticesForCase()) {
@@ -98,8 +95,7 @@ export const generateChangeOfAddressHelper = async ({
       });
     }
 
-    await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-      applicationContext,
+    await updateCaseAndAssociations({
       authorizedUser,
       caseToUpdate: caseEntity,
     });
@@ -107,21 +103,27 @@ export const generateChangeOfAddressHelper = async ({
     applicationContext.logger.error(error);
   }
 
+  const NOTIFICATION_ACTION:
+    | 'user_contact_update_progress'
+    | 'admin_contact_update_progress' =
+    `${websocketMessagePrefix}_contact_update_progress`;
+
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
     message: {
-      action: `${websocketMessagePrefix}_contact_update_progress`,
+      action: NOTIFICATION_ACTION,
     },
     userId: requestUserId || user.userId,
   });
 
-  const updatedJob = await applicationContext
+  const [updatedJob] = await applicationContext
     .getPersistenceGateway()
-    .setChangeOfAddressCaseAsDone({ applicationContext, docketNumber, jobId });
-
+    .setChangeOfAddressCaseAsDone(jobId);
   const isDoneProcessing = updatedJob.remaining === 0;
 
   if (isDoneProcessing) {
+    await deleteChangeOfAddressCaseRecord(jobId);
+
     applicationContext.logger.info(
       `"change-of-address-job|${jobId}" job finished`,
     );
@@ -132,16 +134,18 @@ export const generateChangeOfAddressHelper = async ({
         isUpdatingInformation: false,
       });
 
-      await applicationContext.getPersistenceGateway().updateUser({
-        applicationContext,
-        user: userEntity.validate().toRawObject(),
-      });
+      await upsertUsers([userEntity.validate().toRawObject()]);
     }
+
+    const CONTACT_UPDATE_COMPLETE_ACTION:
+      | 'user_contact_full_update_complete'
+      | 'admin_contact_full_update_complete' =
+      `${websocketMessagePrefix}_contact_full_update_complete`;
 
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: {
-        action: `${websocketMessagePrefix}_contact_full_update_complete`,
+        action: CONTACT_UPDATE_COMPLETE_ACTION,
         user,
       },
       userId: requestUserId || user.userId,
@@ -201,18 +205,16 @@ const prepareToGenerateAndServeDocketEntry = async ({
   }
 
   newData.name = practitionerName;
-  const { changeOfAddressDocketEntry } = await generateAndServeDocketEntry({
+  await generateAndServeDocketEntry({
     applicationContext,
     authorizedUser,
-    barNumber: user.barNumber,
     caseEntity,
     docketMeta,
     documentType,
     newData,
     oldData,
+    privatePractitionersRepresentingContact: undefined,
     servedParties,
     user,
   });
-
-  caseEntity.updateDocketEntry(changeOfAddressDocketEntry);
 };

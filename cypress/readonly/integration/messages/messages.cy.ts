@@ -11,7 +11,7 @@ describe('Messages UI Smoketests', () => {
       method: 'GET',
       url: '/messages/inbox/*',
     }).as('getMyMessages');
-    loginAsAdmissionsClerk('testAdmissionsClerk');
+    loginAsAdmissionsClerk('testAdmissionsClerk@example.com');
     cy.wait('@getMyMessages').then(isValidRequest);
 
     cy.intercept({

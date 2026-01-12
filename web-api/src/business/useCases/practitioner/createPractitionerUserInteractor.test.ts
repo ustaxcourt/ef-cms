@@ -1,22 +1,26 @@
+jest.mock('@shared/business/utilities/createPractitionerUser');
+jest.mock('@web-api/persistence/postgres/users/upsertPractitioner')
 import {
+  ACCOUNT_STATUS,
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { createPractitionerUserInteractor } from './createPractitionerUserInteractor';
 import {
   mockAdmissionsClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { createPractitionerUser as createPractitionerUserMock } from '@shared/business/utilities/createPractitionerUser';
 
 describe('createPractitionerUserInteractor', () => {
   const mockUser: RawPractitioner = {
+    accountStatus: ACCOUNT_STATUS.active,
     admissionsDate: '2019-03-01',
     admissionsStatus: 'Active',
     barNumber: 'AT5678',
-    birthYear: '2019',
+    birthYear: 2019,
     entityName: 'Practitioner',
     firmName: 'GW Law Offices',
     firstName: 'bob',
@@ -29,17 +33,14 @@ describe('createPractitionerUserInteractor', () => {
     serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     userId: '07044afe-641b-4d75-a84f-0698870b7650',
   };
-
+  const createPractitionerUser = jest.mocked(createPractitionerUserMock);
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .createOrUpdatePractitionerUser.mockResolvedValue(mockUser);
+    createPractitionerUser.mockResolvedValue(mockUser);
   });
 
   it('should throw an error when the user is unauthorized to create a practitioner user', async () => {
     await expect(
       createPractitionerUserInteractor(
-        applicationContext,
         {
           user: mockUser,
         },
@@ -50,7 +51,6 @@ describe('createPractitionerUserInteractor', () => {
 
   it('should return the practitioner`s bar number', async () => {
     const { barNumber } = await createPractitionerUserInteractor(
-      applicationContext,
       {
         user: mockUser,
       },
@@ -64,7 +64,6 @@ describe('createPractitionerUserInteractor', () => {
     const mockEmail = 'testing@example.com';
 
     await createPractitionerUserInteractor(
-      applicationContext,
       {
         user: {
           ...mockUser,
@@ -74,9 +73,7 @@ describe('createPractitionerUserInteractor', () => {
       mockAdmissionsClerkUser,
     );
 
-    const mockUserCall =
-      applicationContext.getPersistenceGateway().createOrUpdatePractitionerUser
-        .mock.calls[0][0].user;
+    const mockUserCall = createPractitionerUser.mock.calls[0][0].user;
     expect(mockUserCall.email).toBeUndefined();
     expect(mockUserCall.pendingEmail).toEqual(mockEmail);
     expect(mockUserCall.serviceIndicator).toEqual(

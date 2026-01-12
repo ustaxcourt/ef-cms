@@ -6,7 +6,7 @@ import {
   genericOnValidationErrorHandler,
   validateFileOnSelect,
 } from '@web-client/views/FileHandlingHelpers/fileValidation';
-import { props } from 'cerebral';
+import { props as cerebralProps } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useState } from 'react';
@@ -21,6 +21,11 @@ type StateDriveFileInputProps = {
   accept?: string;
   ignoreSizeKey?: boolean;
   skipFileTypeValidation?: boolean;
+};
+
+const props = cerebralProps as unknown as {
+  updateFormValueSequence: string;
+  validationSequence: string;
 };
 
 const deps = {
@@ -117,7 +122,9 @@ export const StateDrivenFileInput = connect<
           data-testid={id}
           id={id}
           name={fileInputName}
-          ref={ref => (inputRef = ref)}
+          ref={ref => {
+            inputRef = ref;
+          }}
           style={{
             display: fileOnForm || selectedFilename ? 'none' : 'block',
           }}

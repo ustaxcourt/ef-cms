@@ -47,21 +47,22 @@ export const WarningNotificationComponent =
             className={classNames(
               'usa-alert',
               'usa-alert--warning',
-              isMessageOnly && 'usa-alert-warning-message-only',
+              isMessageOnly ? 'usa-alert-warning-message-only' : null,
             )}
             data-testid="warning-alert"
             ref={notificationRef}
             role="alert"
           >
-            <div
-              className={classNames(
-                'usa-alert__body',
-                alertWarning.dismissText && 'padding-right-6',
-              )}
-            >
+            <div className="usa-alert__body">
               <div className="grid-container padding-x-0">
                 <div className="grid-row">
-                  <div className="tablet:grid-col-10">
+                  <div
+                    className={classNames(
+                      dismissible
+                        ? 'tablet:grid-col-9 grid-col-8'
+                        : 'tablet:grid-col-12 grid-col-10',
+                    )}
+                  >
                     {alertWarning.title && (
                       <p
                         className="usa-alert__heading padding-top-0"
@@ -91,19 +92,19 @@ export const WarningNotificationComponent =
                       </Button>
                     )}
                   </div>
-                  <div className="tablet:grid-col-2 usa-alert__action">
-                    {dismissible && (
+                  {dismissible && (
+                    <div className="tablet:grid-col-3 grid-col-4 usa-alert__action display-flex flex-justify-end padding-right-105 no-wrap-white-space">
                       <Button
                         link
-                        className="no-underline padding-0"
+                        className="no-underline padding-0 no-wrap-white-space"
                         icon={alertWarning.dismissIcon || 'times-circle'}
                         iconRight={iconRight}
                         onClick={() => dismissAlertSequence()}
                       >
                         {alertWarning.dismissText || 'Clear'}
                       </Button>
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

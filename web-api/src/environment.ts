@@ -5,6 +5,28 @@ const currentColor = process.env.CURRENT_COLOR || 'green';
 const emailFromAddress =
   process.env.EMAIL_SOURCE ||
   `U.S. Tax Court <noreply@${process.env.EFCMS_DOMAIN}>`;
+const isRunningOnLambda = !!process.env.LAMBDA_TASK_ROOT;
+
+function getJestDBConnectionError(): string {
+  const error = new Error();
+
+  const message = [
+    '',
+    'Hello Developer',
+    'You should not connect to the Database when running JEST tests',
+    'Something was not mocked out',
+    'If you are running Integration tests and need a Database connection,',
+    'set the environment variable "NODE_ENV" to "integration".',
+    '',
+    'Call Stack:',
+  ];
+
+  // Include stack trace but strip the first line (which is the error message itself)
+  const stack =
+    error.stack?.split('\n').slice(1).join('\n') ?? 'No stack trace available.';
+
+  return [...message, stack].join('\n');
+}
 
 export const environment = {
   appEndpoint: process.env.EFCMS_DOMAIN
@@ -18,27 +40,26 @@ export const environment = {
   documentsBucketName: isLocal
     ? 'noop-documents-local-us-east-1'
     : `${process.env.EFCMS_DOMAIN}-documents-${stage}-us-east-1`,
-  dynamoDbTableName: process.env.DYNAMODB_TABLE_NAME || 'efcms-local',
   efcmsDomain: process.env.EFCMS_DOMAIN || 'localhost',
   elasticsearchEndpoint:
     process.env.ELASTICSEARCH_ENDPOINT || 'http://localhost:9200',
   emailFromAddress,
-  isRunningOnLambda: !!process.env.LAMBDA_TASK_ROOT,
-  masterRegion: process.env.MASTER_REGION || 'us-east-1',
-  nodeEnv: process.env.NODE_ENV,
+  isRunningOnLambda,
   rds: {
     pool: {
       database: process.env.DATABASE_NAME || 'postgres',
-      host: process.env.POSTGRES_HOST || 'localhost',
-      idleTimeoutMillis: 1000,
+      host:
+        process.env.POSTGRES_HOST ||
+        (process.env.NODE_ENV !== 'test'
+          ? 'localhost'
+          : getJestDBConnectionError()),
+      idleTimeoutMillis: isRunningOnLambda ? null : 1000, // null idleTimeoutMillis means the db connection is never closed.
       max: 1,
       password: process.env.POSTGRES_PASSWORD || 'example',
       port: 5432,
       user: process.env.POSTGRES_USER || 'postgres',
     },
-    readHost: process.env.POSTGRES_READ_HOST!,
-    useGlobalCert:
-      process.env.NODE_ENV === 'production' || process.env.CIRCLE_BRANCH,
+    useGlobalCert: !isLocal,
   },
   region,
   s3Endpoint: isLocal
@@ -50,8 +71,7 @@ export const environment = {
     : `${process.env.EFCMS_DOMAIN}-temp-documents-${stage}-us-east-1`,
   userPoolId: process.env.USER_POOL_ID || 'local_2pHzece7',
   userPoolIrsId: process.env.USER_POOL_IRS_ID || 'NOT_REAL_USER_POOL_ID',
-  workerQueueUrl:
-    `https://sqs.${process.env.AWS_REGION}.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/worker_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}` ||
-    '',
+  workerQueueUrl: `https://sqs.${region}.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/worker_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}`,
+  opensearchQueueUrl: `https://sqs.${region}.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/opensearch_sync_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}`,
   wsEndpoint: process.env.WS_ENDPOINT || 'http://localhost:3011',
 };

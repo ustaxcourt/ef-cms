@@ -18,7 +18,7 @@ describe('getNotificationsAction', () => {
         presenter,
       },
       state: {
-        user: {},
+        user: { section: DOCKET_SECTION },
       },
     });
 
@@ -28,57 +28,36 @@ describe('getNotificationsAction', () => {
   });
 
   it('makes a call to fetch notifications with a judgeUserId when state.judgeUser is defined', async () => {
+    const judgeId = '123456';
     await runAction(getNotificationsAction, {
       modules: {
         presenter,
       },
       state: {
         judgeUser: {
-          userId: '123',
+          userId: judgeId,
         },
-        state: {
-          user: {},
-        },
-      },
-    });
-
-    expect(
-      applicationContext.getUseCases().getNotificationsInteractor.mock
-        .calls[0][1].judgeUserId,
-    ).toEqual('123');
-  });
-
-  it('makes a call to fetch notifications with case services supervisor information when state.messageBoxToDisplay.section is defined', async () => {
-    const userId = 'this is a user id';
-    await runAction(getNotificationsAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        messageBoxToDisplay: {
+        user: {
           section: DOCKET_SECTION,
         },
-        user: { userId },
       },
     });
 
     expect(
       applicationContext.getUseCases().getNotificationsInteractor.mock
-        .calls[0][1].caseServicesSupervisorData,
-    ).toEqual({
-      section: DOCKET_SECTION,
-      userId,
-    });
+        .calls[0][1].judgeId,
+    ).toEqual(judgeId);
   });
 
   it('makes a call to fetch notifications with case services supervisor information when state.workQueueToDisplay.section is defined', async () => {
     const userId = 'this is a user id';
+    const section = 'section';
     await runAction(getNotificationsAction, {
       modules: {
         presenter,
       },
       state: {
-        user: { userId },
+        user: { userId, section },
         workQueueToDisplay: {
           section: DOCKET_SECTION,
         },
@@ -87,10 +66,23 @@ describe('getNotificationsAction', () => {
 
     expect(
       applicationContext.getUseCases().getNotificationsInteractor.mock
-        .calls[0][1].caseServicesSupervisorData,
+        .calls[0][1],
     ).toEqual({
-      section: DOCKET_SECTION,
-      userId,
+      section,
+      selectedSection: DOCKET_SECTION,
     });
+  });
+
+  it('should throw an error if the logged-in user does not have a section', async () => {
+    await expect(
+      runAction(getNotificationsAction, {
+        modules: {
+          presenter,
+        },
+        state: {
+          user: { userId: '123' },
+        },
+      }),
+    ).rejects.toThrow('Unable to fetch work items without a section');
   });
 });

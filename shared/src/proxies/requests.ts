@@ -1,7 +1,6 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import moize from 'moize';
-
-const MAX_RETRIES = 10;
+import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
 
 let token: string = '';
 export const getCurrentUserToken = (): string => {
@@ -113,36 +112,19 @@ export const post = async ({
   endpoint,
   headers = {},
   options = {},
-  retry = 0,
 }) => {
   getMemoized.clear();
-  try {
-    return await applicationContext
-      .getHttpClient()
-      .post(`${applicationContext.getBaseUrl()}${endpoint}`, body, {
-        headers: {
-          ...getDefaultHeaders(getCurrentUserToken()),
-          ...headers,
-          Asyncsyncid: asyncSyncId,
-        },
-        ...options,
-      })
-      .then(response => response.data);
-  } catch (err) {
-    if (isRetryableError({ err, retry })) {
-      await applicationContext
-        .getUtilities()
-        .sleep(err.response?.headers['Retry-After'] || 5000);
-      return post({
-        applicationContext,
-        asyncSyncId,
-        body,
-        endpoint,
-        retry: retry + 1,
-      });
-    }
-    throw err;
-  }
+  return await applicationContext
+    .getHttpClient()
+    .post(`${applicationContext.getBaseUrl()}${endpoint}`, body, {
+      headers: {
+        ...getDefaultHeaders(getCurrentUserToken()),
+        ...headers,
+        Asyncsyncid: asyncSyncId,
+      },
+      ...options,
+    })
+    .then(response => response.data);
 };
 
 export const asyncSyncHandler = (
@@ -157,13 +139,16 @@ export const asyncSyncHandler = (
       if (+results.statusCode === 200) {
         resolve(results.body);
       } else {
+        // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
         reject(results);
       }
     };
 
     request(asyncSyncId);
 
-    const expirationTimestamp = Math.floor(Date.now() / 1000) + 16 * 60;
+    const nowSeconds = Number(formatNow(FORMATS.UNIX_TIMESTAMP_SECONDS));
+    const futureSeconds = 16 * 60;
+    const expirationTimestamp = nowSeconds + futureSeconds;
     applicationContext
       .getUseCases()
       .startPollingForResultsInteractor(
@@ -190,36 +175,19 @@ export const put = async ({
   asyncSyncId = undefined,
   body,
   endpoint,
-  retry = 0,
 }) => {
   getMemoized.clear();
-  try {
-    const res = await applicationContext
-      .getHttpClient()
-      .put(`${applicationContext.getBaseUrl()}${endpoint}`, body, {
-        headers: {
-          ...getDefaultHeaders(getCurrentUserToken()),
-          Asyncsyncid: asyncSyncId,
-        },
-      })
-      .then(response => response.data);
+  const res = await applicationContext
+    .getHttpClient()
+    .put(`${applicationContext.getBaseUrl()}${endpoint}`, body, {
+      headers: {
+        ...getDefaultHeaders(getCurrentUserToken()),
+        Asyncsyncid: asyncSyncId,
+      },
+    })
+    .then(response => response.data);
 
-    return res;
-  } catch (err) {
-    if (isRetryableError({ err, retry })) {
-      await applicationContext
-        .getUtilities()
-        .sleep(err.response?.headers['Retry-After'] || 5000);
-      return put({
-        applicationContext,
-        asyncSyncId,
-        body,
-        endpoint,
-        retry: retry + 1,
-      });
-    }
-    throw err;
-  }
+  return res;
 };
 /**
  *
@@ -234,54 +202,37 @@ export const put = async ({
 export const remove = async ({
   applicationContext,
   endpoint,
+  asyncSyncId = undefined,
   options = {},
   params = {},
-  retry = 0,
 }: {
   applicationContext: any;
   endpoint: string;
   options?: any;
+  asyncSyncId?: string;
   params?: any;
-  retry?: number;
 }) => {
   getMemoized.clear();
-  try {
-    return await applicationContext
-      .getHttpClient()
-      .delete(`${applicationContext.getBaseUrl()}${endpoint}`, {
-        headers: getDefaultHeaders(getCurrentUserToken()),
-        params,
-        ...options,
-      })
-      .then(response => response.data);
-  } catch (err) {
-    if (isRetryableError({ err, retry })) {
-      await applicationContext
-        .getUtilities()
-        .sleep(err.response?.headers['Retry-After'] || 5000);
-      return remove({
-        applicationContext,
-        endpoint,
-        params,
-        ...options,
-        retry: retry + 1,
-      });
-    }
-    throw err;
-  }
+  return await applicationContext
+    .getHttpClient()
+    .delete(`${applicationContext.getBaseUrl()}${endpoint}`, {
+      headers: {
+        ...getDefaultHeaders(getCurrentUserToken()),
+        Asyncsyncid: asyncSyncId,
+      },
+      params,
+      ...options,
+    })
+    .then(response => response.data);
 };
 
 const getDefaultHeaders = userToken => {
   const authorization = userToken ? `Bearer ${userToken}` : undefined;
 
-  let authorizationHeaderObject = {};
+  const authorizationHeaderObject = {};
   if (authorization) {
     authorizationHeaderObject['Authorization'] = authorization;
   }
 
   return authorizationHeaderObject;
-};
-
-const isRetryableError = ({ err, retry }) => {
-  return err.response && err.response.status === 503 && retry < MAX_RETRIES;
 };

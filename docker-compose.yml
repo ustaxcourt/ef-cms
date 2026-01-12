@@ -58,38 +58,18 @@ services:
     ports:
       - '3011:3011'
       - '4000:4000'
-      - '5000:5000'
+      - '4001:4001'
       - '9001:9001'
     volumes:
       - .:/home/app
       - node_modules:/home/app/node_modules
     depends_on:
-      - dynamodb-local
       - elasticsearch
 
-  dynamodb-local:
-    image: amazon/dynamodb-local:latest
-    container_name: dynamodb-local
-    ports:
-      - '8000:8000'
-
-  dynamodb-admin:
-    image: aaronshaf/dynamodb-admin
-    ports:
-      - '8001:8001'
-    environment:
-      DYNAMO_ENDPOINT: 'http://dynamodb-local:8000'
-      AWS_REGION: 'us-east-1'
-      AWS_ACCESS_KEY_ID: S3RVER
-      AWS_SECRET_ACCESS_KEY: S3RVER
-    depends_on:
-      - dynamodb-local
-
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.2
+  opensearch-node:
+    image: opensearchproject/opensearch:2.19.0
     volumes:
-      - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro,z
-      - elasticsearch:/usr/share/elasticsearch/data:z
+      - opensearch-data:/usr/share/opensearch/data
     ports:
       - '9200:9200'
     environment:
@@ -98,4 +78,4 @@ services:
 
 volumes:
   node_modules:
-  elasticsearch:
+  opensearch-data:

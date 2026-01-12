@@ -92,7 +92,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeG = (
     );
 
     expect(updatedOrderDocument).toMatchObject({
-      date: '2002-01-01T00:00:00.000-05:00',
+      date: '2002-01-01T05:00:00.000Z',
       documentTitle: 'Notice of Trial on 01-01-2002 at Boise, Idaho',
       documentType: 'Notice of Trial',
       eventCode: 'NTD',
@@ -105,7 +105,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeG = (
     });
 
     expect(cerebralTest.getState('form')).toMatchObject({
-      date: '2002-01-01T00:00:00.000-05:00',
+      date: '2002-01-01T05:00:00.000Z',
       documentTitle: 'Notice of Trial on 01-01-2002 at Boise, Idaho',
       documentType: 'Notice of Trial',
       eventCode: 'NTD',

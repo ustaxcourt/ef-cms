@@ -17,11 +17,18 @@ module.exports = {
     'function-no-unknown': [
       true,
       {
-        ignoreFunctions: ['units', 'line-height'],
+        ignoreFunctions: ['units', 'line-height', 'color'],
       },
     ],
+    'declaration-property-value-no-unknown': null,
     'no-descending-specificity': null,
     'selector-class-pattern': null,
     'shorthand-property-no-redundant-values': null,
+    'scss/at-rule-no-unknown': [true, {
+      ignoreAtRules: [
+        'custom-variant',
+        'theme',
+      ],
+    }],
   },
 };

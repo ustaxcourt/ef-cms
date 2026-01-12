@@ -1,15 +1,31 @@
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
-import { MOCK_TRIAL_REGULAR } from '../../../../../shared/src/test/mockTrial';
+import '@web-api/persistence/postgres/utils/mocks.jest';
+import '@web-api/persistence/postgres/trialSessions/mocks.jest';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   determineEntitiesToLock,
-  handleLockError,
   setNoticesForCalendaredTrialSessionInteractor,
 } from './setNoticesForCalendaredTrialSessionInteractor';
 import { mockTrialClerkUser } from '@shared/test/mockAuthUsers';
+import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
+import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import {
+  getCalendaredCasesForTrialSession as getCalendaredCasesForTrialSessionMock,
+  RawCaseAndCaseOrder,
+} from '@web-api/persistence/postgres/trialSessions/getCalendaredCasesForTrialSession';
+import { getTrialSessionNotificationProcessing as getTrialSessionNotificationProcessingMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionNotificationProcessing';
+
+const tryGetLocks = jest.mocked(tryGetLocksMock);
+const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
+const getCalendaredCasesForTrialSession = jest.mocked(
+  getCalendaredCasesForTrialSessionMock,
+);
+const getTrialSessionNotificationProcessing = jest.mocked(
+  getTrialSessionNotificationProcessingMock,
+);
 
 describe('determineEntitiesToLock', () => {
   const trialSessionId = '6805d1ab-18d0-43ec-bafb-654e83405416';
@@ -17,25 +33,19 @@ describe('determineEntitiesToLock', () => {
     MOCK_CASE,
     { ...MOCK_CASE, docketNumber: '100-23' },
     { ...MOCK_CASE, docketNumber: '101-23' },
-  ];
+  ] as unknown as RawCaseAndCaseOrder[];
   let mockParams;
 
   beforeEach(() => {
     mockParams = {
       trialSessionId,
     };
-    applicationContext
-      .getPersistenceGateway()
-      .getCalendaredCasesForTrialSession.mockReturnValue(mockCases);
+    getCalendaredCasesForTrialSession.mockResolvedValue(mockCases);
   });
 
   it('should lookup the docket numbers for the specified trial session', async () => {
     await determineEntitiesToLock(applicationContext, mockParams);
-    expect(
-      applicationContext.getPersistenceGateway()
-        .getCalendaredCasesForTrialSession,
-    ).toHaveBeenCalledWith({
-      applicationContext,
+    expect(getCalendaredCasesForTrialSession).toHaveBeenCalledWith({
       trialSessionId,
     });
   });
@@ -52,76 +62,43 @@ describe('determineEntitiesToLock', () => {
   });
 });
 
-describe('handleLockError', () => {
-  it('should send a notification to the user with "retry_async_request" and the originalRequest', async () => {
-    const mockOriginalRequest = {
-      foo: 'bar',
-    };
-
-    await handleLockError(
-      applicationContext,
-      mockOriginalRequest,
-      mockTrialClerkUser,
-    );
-
-    expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[0][0].message,
-    ).toMatchObject({
-      action: 'retry_async_request',
-      originalRequest: mockOriginalRequest,
-      requestToRetry: 'set_notices_for_calendared_trial_session',
-    });
-  });
-});
-
 describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   const trialSessionId = '6805d1ab-18d0-43ec-bafb-654e83405416';
   const mockCases = [
     MOCK_CASE,
     { ...MOCK_CASE, docketNumber: '100-23' },
     { ...MOCK_CASE, docketNumber: '101-23' },
-  ];
-  let mockRequest = {
+  ] as unknown as RawCaseAndCaseOrder[];
+  const mockRequest = {
     clientConnectionId: '8916f743-a22d-4946-ab06-57ddcf386912',
     trialSessionId,
   };
-  let mockLock;
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionJobStatusForCase.mockReturnValue({
-        unfinishedCases: 0,
-      });
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockImplementation(() => mockLock);
+    getTrialSessionNotificationProcessing.mockResolvedValue({
+      unfinishedCases: 0,
+      status: 'complete',
+      trialSessionId,
+      caseStatuses: {},
+    });
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCalendaredCasesForTrialSession.mockReturnValue(mockCases);
+    getCalendaredCasesForTrialSession.mockResolvedValue(mockCases);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockResolvedValue({
-        ...MOCK_TRIAL_REGULAR,
-        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
-      });
+    getTrialSessionById.mockResolvedValue({
+      ...MOCK_TRIAL_REGULAR,
+      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+    });
     applicationContext
       .getPersistenceGateway()
       .isFileExists.mockResolvedValue(true);
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionProcessingStatus.mockResolvedValue(undefined);
   });
 
   describe('is locked', () => {
-    beforeEach(() => {
-      mockLock = MOCK_LOCK; // locked
-    });
-
     it('should throw a ServiceUnavailableError if a Case is currently locked', async () => {
+      tryGetLocks.mockResolvedValueOnce([
+        { successfullyLocked: false, identifier: 'abc' },
+      ]);
+
       await expect(
         setNoticesForCalendaredTrialSessionInteractor(
           applicationContext,
@@ -134,57 +111,10 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
         applicationContext.getPersistenceGateway().updateCaseAndAssociations,
       ).not.toHaveBeenCalled();
     });
-
-    it('should return a "retry_async_request" notification with the original request', async () => {
-      await expect(
-        setNoticesForCalendaredTrialSessionInteractor(
-          applicationContext,
-          mockRequest,
-          mockTrialClerkUser,
-        ),
-      ).rejects.toThrow(ServiceUnavailableError);
-
-      expect(
-        applicationContext.getNotificationGateway().sendNotificationToUser,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        clientConnectionId: mockRequest.clientConnectionId,
-        message: {
-          action: 'retry_async_request',
-          originalRequest: mockRequest,
-          requestToRetry: 'set_notices_for_calendared_trial_session',
-        },
-        userId: mockTrialClerkUser.userId,
-      });
-
-      expect(
-        applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-      ).not.toHaveBeenCalled();
-    });
   });
 
   describe('is not locked', () => {
-    beforeEach(() => {
-      mockLock = undefined; // unlocked
-    });
-
-    it('should acquire a lock that lasts for 15 minutes', async () => {
-      await setNoticesForCalendaredTrialSessionInteractor(
-        applicationContext,
-        mockRequest,
-        mockTrialClerkUser,
-      );
-
-      expect(
-        applicationContext.getPersistenceGateway().createLock,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        identifier: `case|${MOCK_CASE.docketNumber}`,
-        ttl: 900,
-      });
-    });
-
-    it('should remove the lock', async () => {
+    it('should acquire locks on the cases', async () => {
       await setNoticesForCalendaredTrialSessionInteractor(
         applicationContext,
         mockRequest,
@@ -194,12 +124,12 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       const expectedIdentifiers = mockCases.map(
         aCase => `case|${aCase.docketNumber}`,
       );
-      expect(
-        applicationContext.getPersistenceGateway().removeLock,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        identifiers: expectedIdentifiers,
-      });
+
+      expect(tryGetLocks).toHaveBeenCalledWith(
+        expect.objectContaining({
+          identifiers: expectedIdentifiers,
+        }),
+      );
     });
   });
 });

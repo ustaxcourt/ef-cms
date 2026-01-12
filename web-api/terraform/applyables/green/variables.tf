@@ -14,10 +14,6 @@ variable "zone_name" {
   type = string
 }
 
-variable "green_table_name" {
-  type = string
-}
-
 variable "dns_domain" {
   type = string
 }
@@ -37,10 +33,6 @@ variable "prod_env_account_id" {
 
 variable "deployment_timestamp" {
   type = number
-}
-
-variable "lower_env_account_id" {
-  type = string
 }
 
 variable "bounce_alert_recipients" {
@@ -64,10 +56,6 @@ variable "disable_emails" {
 }
 
 variable "irs_superuser_email" {
-  type = string
-}
-
-variable "scanner_resource_uri" {
   type = string
 }
 

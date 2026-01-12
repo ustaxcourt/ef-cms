@@ -17,7 +17,7 @@ export const submitEditPetitionerCounselAction = async ({
   const caseDetail = get(state.caseDetail);
   const { docketNumber } = caseDetail;
 
-  await applicationContext
+  const updatedCaseDetail = await applicationContext
     .getUseCases()
     .updateCounselOnCaseInteractor(applicationContext, {
       docketNumber,
@@ -29,5 +29,6 @@ export const submitEditPetitionerCounselAction = async ({
     alertSuccess: {
       message: 'Petitioner counsel updated.',
     },
+    caseDetail: updatedCaseDetail,
   });
 };

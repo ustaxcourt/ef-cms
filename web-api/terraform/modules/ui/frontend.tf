@@ -1,5 +1,6 @@
 data "aws_acm_certificate" "private_certificate" {
   domain = "*.${var.dns_domain}"
+  most_recent = true
 }
 
 resource "aws_s3_bucket" "frontend" {
@@ -34,6 +35,15 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "frontend_sse" {
       sse_algorithm = "AES256"
     }
   }
+}
+
+resource "aws_s3_bucket_public_access_block" "unblock_frontend" {
+  bucket = aws_s3_bucket.frontend.id
+
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
 }
 
 resource "aws_s3_bucket" "failover" {
@@ -72,6 +82,16 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "failover_sse" {
       sse_algorithm = "AES256"
     }
   }
+}
+
+resource "aws_s3_bucket_public_access_block" "unblock_failover" {
+  bucket = aws_s3_bucket.failover.id
+  provider = aws.us-west-1
+
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
 }
 
 data "aws_iam_policy_document" "allow_public" {

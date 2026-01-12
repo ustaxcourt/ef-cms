@@ -22,7 +22,7 @@ export class PractitionerDocument extends JoiValidationEntity {
 
     this.categoryName = rawDocument.categoryName;
     this.categoryType = rawDocument.categoryType;
-    this.description = rawDocument.description;
+    this.description = rawDocument.description || null;
     this.fileName = rawDocument.fileName;
     this.location = rawDocument.location;
     this.practitionerDocumentFileId =
@@ -43,8 +43,7 @@ export class PractitionerDocument extends JoiValidationEntity {
     description: JoiValidationConstants.STRING.max(
       MAX_PRACTITIONER_DOCUMENT_DESCRIPTION_CHARACTERS,
     )
-      .optional()
-      .allow(''),
+      .optional().allow(null),
     fileName: JoiValidationConstants.STRING.required(),
     location: JoiValidationConstants.STRING.when('categoryType', {
       is: PRACTITIONER_DOCUMENT_TYPES_MAP.CERTIFICATE_OF_GOOD_STANDING,

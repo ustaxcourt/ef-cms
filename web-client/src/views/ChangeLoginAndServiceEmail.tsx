@@ -11,7 +11,6 @@ export const ChangeLoginAndServiceEmail = connect(
   {
     form: state.form,
     navigateToPathSequence: sequences.navigateToPathSequence,
-    showModal: state.modal.showModal,
     submitChangeLoginAndServiceEmailSequence:
       sequences.submitChangeLoginAndServiceEmailSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
@@ -104,7 +103,7 @@ export const ChangeLoginAndServiceEmail = connect(
             </div>
           </div>
           <div className="grid-row margin-bottom-6">
-            <div className="grid-col-12">
+            <div className="grid-col-12 button-container">
               <Button
                 data-testid="save-change-login-email-button"
                 onClick={() => submitChangeLoginAndServiceEmailSequence()}

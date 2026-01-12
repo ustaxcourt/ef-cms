@@ -7,7 +7,7 @@ export const viewCounselHelper = (get: Get): any => {
 
   const representingNames = privatePractitioner.representing.map(
     representingId =>
-      caseDetail.petitioners.find(p => p.contactId === representingId).name,
+      caseDetail.petitioners.find(p => p.contactId === representingId)?.name,
   );
 
   return {

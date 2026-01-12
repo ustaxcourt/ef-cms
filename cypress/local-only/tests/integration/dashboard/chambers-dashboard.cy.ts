@@ -8,11 +8,12 @@ import {
   selectSection,
   sendMessage,
 } from '../../../support/pages/document-qc';
-import { loginAsColvinChambers } from '../../../../helpers/authentication/login-as-helpers';
+import { loginAsColvinChambers, loginAsDocketClerk } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Message Count', () => {
   it("should display the message count on the Chamber's dashboard", () => {
-    cy.login('docketclerk', '/case-detail/103-20');
+    loginAsDocketClerk();
+    cy.visit('/case-detail/103-20')
     createMessage();
     selectSection('Chambers');
     selectChambers('colvinsChambers');

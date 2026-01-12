@@ -76,12 +76,12 @@ export const ReviewSavedPetition = connect(
                     </h3>
                     <div className="grid-row grid-gap">
                       <div className="tablet:grid-col-4 margin-bottom-1">
-                        <span
+                        <label
                           className="usa-label usa-label-display"
                           htmlFor="filing-parties"
                         >
                           Party type
-                        </span>
+                        </label>
                         {form.partyType}
                       </div>
                       <div className="tablet:grid-col-4 margin-bottom-1">
@@ -184,12 +184,12 @@ export const ReviewSavedPetition = connect(
                           {form.caseCaption} {constants.CASE_CAPTION_POSTFIX}
                         </div>
                         <div className="margin-top-3 margin-bottom-2">
-                          <span
+                          <label
                             className="usa-label usa-label-display"
                             htmlFor="filing-location"
                           >
                             Requested trial location
-                          </span>
+                          </label>
                           {
                             reviewSavedPetitionHelper.preferredTrialCityFormatted
                           }
@@ -198,33 +198,33 @@ export const ReviewSavedPetition = connect(
                       <div className="tablet:grid-col-6 margin-bottom-1">
                         {form.mailingDate && (
                           <div className="margin-bottom-2">
-                            <span
+                            <label
                               className="usa-label usa-label-display"
                               htmlFor="mailing-date"
                             >
                               Mailing date
-                            </span>
+                            </label>
                             {form.mailingDate}
                           </div>
                         )}
 
                         <div className="margin-top-3 margin-bottom-2">
-                          <span
+                          <label
                             className="usa-label usa-label-display"
                             htmlFor="filing-procedure"
                           >
                             Case procedure
-                          </span>
+                          </label>
                           {form.procedureType}
                         </div>
 
                         <div className="margin-top-3 margin-bottom-2">
-                          <span
+                          <label
                             className="usa-label usa-label-display"
                             htmlFor="filing-fee"
                           >
                             Filing fee
-                          </span>
+                          </label>
                           {
                             reviewSavedPetitionHelper.petitionPaymentStatusFormatted
                           }
@@ -244,7 +244,7 @@ export const ReviewSavedPetition = connect(
             </div>
           </div>
 
-          <div className="margin-top-5">
+          <div className="margin-top-5 button-container">
             <Button
               data-testid="serve-case-to-irs"
               id="submit-case"

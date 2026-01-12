@@ -1,26 +1,19 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import { NotFoundError } from '../../../errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
+import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { createOrUpdateTrialSessionCases } from '@web-api/persistence/postgres/trialSessions/createOrUpdateTrialSessionCases';
 
-/**
- * setForHearingInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.calendarNotes notes for why the trial session/hearing was added
- * @param {string} providers.trialSessionId the id of the trial session
- * @param {string} providers.docketNumber the docket number of the case
- * @returns {Promise} the promise of the setForHearingInteractor call
- */
 export const setForHearingInteractor = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   {
     calendarNotes,
     docketNumber,
@@ -32,29 +25,23 @@ export const setForHearingInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const trialSession = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById({
-      applicationContext,
-      trialSessionId,
-    });
+  const trialSession = await getTrialSessionById({
+    trialSessionId,
+  });
 
   if (!trialSession) {
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
   }
 
-  const caseDetails = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const caseDetails = await getCaseByDocketNumber({
+    docketNumber,
+  });
 
   const caseEntity = new Case(caseDetails, { authorizedUser });
 
   const trialSessionEntity = new TrialSession(trialSession);
 
-  const existingTrialSessionIds = [];
+  const existingTrialSessionIds: string[] = [];
   if (caseEntity.trialSessionId) {
     existingTrialSessionIds.push(caseEntity.trialSessionId);
     caseEntity.hearings.forEach(_trialSession => {
@@ -66,23 +53,31 @@ export const setForHearingInteractor = async (
     throw new Error('That Hearing is already assigned to the Case');
   }
 
-  trialSessionEntity
-    .deleteCaseFromCalendar({ docketNumber: caseEntity.docketNumber }) // we delete because it might have been manually removed
-    .manuallyAddCaseToCalendar({ calendarNotes, caseEntity });
+  // Removing and adding the case in memory to match the change we will make in the DB
+  trialSessionEntity.deleteCaseFromCalendar({
+    docketNumber: caseEntity.docketNumber,
+  });
+  const caseOrder = trialSessionEntity.manuallyAddCaseToCalendar({
+    calendarNotes,
+    caseEntity,
+    isHearing: true,
+  });
 
-  await applicationContext.getPersistenceGateway().addCaseToHearing({
-    applicationContext,
-    docketNumber,
-    trialSession: trialSessionEntity.validate().toRawObject(),
+  await createOrUpdateTrialSessionCases({
+    trialSessionCases: [
+      {
+        docketNumber,
+        caseOrder,
+        trialSessionId,
+        isHearing: true,
+      },
+    ],
   });
 
   // retrieve the case again since we've added the mapped hearing record :)
-  const updatedCase = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const updatedCase = await getCaseByDocketNumber({
+    docketNumber,
+  });
 
   return updatedCase;
 };

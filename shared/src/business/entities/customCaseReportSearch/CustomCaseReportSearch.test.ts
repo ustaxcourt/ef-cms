@@ -72,7 +72,7 @@ describe('CustomCaseReportSearch', () => {
     });
 
     expect(
-      customCaseReportSearch.getFormattedValidationErrors()?.['caseTypes[0]'],
+      customCaseReportSearch.getFormattedValidationErrors()?.['caseTypes-0'],
     ).toBeDefined();
   });
 
@@ -82,9 +82,7 @@ describe('CustomCaseReportSearch', () => {
     });
 
     expect(
-      customCaseReportSearch.getFormattedValidationErrors()?.[
-        'caseStatuses[0]'
-      ],
+      customCaseReportSearch.getFormattedValidationErrors()?.['caseStatuses-0'],
     ).toBeDefined();
   });
 
@@ -136,16 +134,6 @@ describe('CustomCaseReportSearch', () => {
     expect(
       customCaseReportSearch.getFormattedValidationErrors()?.procedureType,
     ).toBeUndefined();
-  });
-
-  it('should not allow high priority to be undefined', () => {
-    const customCaseReportSearch = new CustomCaseReportSearch({
-      procedureType: 'Big',
-    });
-
-    expect(
-      customCaseReportSearch.getFormattedValidationErrors()?.procedureType,
-    ).toBeDefined();
   });
 
   it('should not have validation errors when searchAfter contains a pk and receivedAt value', () => {

@@ -16,6 +16,20 @@ export const canConsolidateInteractor = (
     currentCase,
   }: { caseToConsolidate: Case; currentCase: Case },
 ) => {
+  if (!caseToConsolidate) {
+    return {
+      canConsolidate: false,
+      reason: ['Case to consolidate is not found'],
+    };
+  }
+
+  if (!currentCase) {
+    return {
+      canConsolidate: false,
+      reason: ['Current case is not found'],
+    };
+  }
+
   const caseEntity = new Case(currentCase, {
     authorizedUser,
   });

@@ -1,8 +1,9 @@
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
-import { Icon } from '../../ustc-ui/Icon/Icon';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseIcon';
+import { isLeadCase } from '@shared/business/entities/cases/Case';
 
 export const IndividualWorkQueueOutbox = connect(
   {
@@ -37,25 +38,17 @@ export const IndividualWorkQueueOutbox = connect(
           </thead>
           {formattedWorkQueue.map(item => (
             <tbody key={item.workItemId}>
-              <tr>
+              <tr data-testid={`work-item-outbox-row-${item.docketNumber}`}>
                 <td className="consolidated-case-column">
-                  {item.inConsolidatedGroup && (
-                    <span
-                      className="fa-layers fa-fw"
-                      title={item.consolidatedIconTooltipText}
-                    >
-                      <Icon
-                        aria-label={item.consolidatedIconTooltipText}
-                        className="fa-icon-blue"
-                        icon="copy"
-                      />
-                      {item.inLeadCase && (
-                        <span className="fa-inverse lead-case-icon-text">
-                          L
-                        </span>
-                      )}
-                    </span>
-                  )}
+                  <ConsolidatedCaseIcon
+                    consolidatedIconTooltipText={
+                      item.consolidatedIconTooltipText
+                    }
+                    inConsolidatedGroup={item.inConsolidatedGroup}
+                    showLeadCaseIcon={
+                      isLeadCase(item)
+                    }
+                  />
                 </td>
                 <td
                   className="message-queue-row small"
@@ -68,7 +61,11 @@ export const IndividualWorkQueueOutbox = connect(
                 </td>
                 <td className="message-queue-row message-queue-document">
                   <div className="message-document-title">
-                    <a className="case-link" href={item.editLink}>
+                    <a
+                      className="case-link"
+                      data-testid="work-item-outbox-document-link"
+                      href={item.editLink}
+                    >
                       {item.docketEntry.descriptionDisplay ||
                         item.docketEntry.documentType}
                     </a>
@@ -82,11 +79,6 @@ export const IndividualWorkQueueOutbox = connect(
                 {!workQueueHelper.hideCaseStatusColumn && (
                   <td className="message-queue-row">
                     {item.formattedCaseStatus}
-                  </td>
-                )}
-                {workQueueHelper.showAssignedToColumn && (
-                  <td className="to message-queue-row">
-                    {item.currentMessage.to}
                   </td>
                 )}
                 <td className="message-queue-row">

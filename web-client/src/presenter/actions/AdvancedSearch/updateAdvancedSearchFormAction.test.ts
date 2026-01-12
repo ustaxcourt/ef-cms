@@ -56,4 +56,58 @@ describe('updateAdvancedSearchFormAction', () => {
       opinionSearch: {},
     });
   });
+
+  it('should set state.advancedSearchForm property if the value passed in is an array', async () => {
+    const result = await runAction(
+      updateAdvancedSearchFormAction('practitionerSearchByName'),
+      {
+        props: {
+          formType: 'practitionerSearchByName',
+          key: 'practiceType',
+          value: 'Non-Attorney',
+          isMultiSelect: true,
+        },
+        state: {
+          advancedSearchForm: {
+            practitionerSearchByName: {
+              practiceType: ['Attorney'],
+            },
+          },
+        },
+      },
+    );
+
+    expect(result.state.advancedSearchForm).toEqual({
+      practitionerSearchByName: {
+        practiceType: ['Attorney', 'Non-Attorney'],
+      },
+    });
+  });
+
+  it('should unset state.advancedSearchForm property if the value passed in already in the array', async () => {
+    const result = await runAction(
+      updateAdvancedSearchFormAction('practitionerSearchByName'),
+      {
+        props: {
+          formType: 'practitionerSearchByName',
+          key: 'practiceType',
+          value: 'Attorney',
+          isMultiSelect: true,
+        },
+        state: {
+          advancedSearchForm: {
+            practitionerSearchByName: {
+              practiceType: ['Attorney'],
+            },
+          },
+        },
+      },
+    );
+
+    expect(result.state.advancedSearchForm).toEqual({
+      practitionerSearchByName: {
+        practiceType: undefined,
+      },
+    });
+  });
 });

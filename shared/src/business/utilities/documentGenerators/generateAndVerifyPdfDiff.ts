@@ -3,7 +3,7 @@ import { applicationContext } from '../../test/createTestApplicationContext';
 import { fromPath } from 'pdf2pic';
 import { generatePdfFromHtmlHelper } from '../../../../../web-api/src/business/useCaseHelper/generatePdfFromHtmlHelper';
 import { generatePdfFromHtmlInteractor } from '../../../../../web-api/src/business/useCases/pdf/generatePdfFromHtmlInteractor';
-import { getChromiumBrowser } from '../getChromiumBrowser';
+import { getChromiumBrowser } from '../chromium/getChromiumBrowser';
 import fs from 'fs';
 import path from 'path';
 import pixelmatch from 'pixelmatch';
@@ -11,7 +11,7 @@ import pixelmatch from 'pixelmatch';
 const convertPdfPageToImageFile = async ({ fileName, pageNumber }) => {
   const outputPath = './shared/test-output/document-generation';
   const storeOutputImage = fromPath(path.join(outputPath, fileName), {
-    density: 100,
+    density: 300,
     format: 'png',
     height: 1000,
     saveFilename: fileName,

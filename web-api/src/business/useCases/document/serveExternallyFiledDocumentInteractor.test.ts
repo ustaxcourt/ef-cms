@@ -1,18 +1,43 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
+);
+jest.mock('../addCoverToPdf');
+jest.mock(
+  '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus',
+);
 import {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_SERVED_MESSAGES,
   SIMULTANEOUS_DOCUMENT_EVENT_CODES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+} from '@shared/business/entities/EntityConstants';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { serveExternallyFiledDocumentInteractor } from './serveExternallyFiledDocumentInteractor';
-jest.mock('../addCoverToPdf');
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { MOCK_CASE } from '@shared/test/mockCase';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
+import { docketClerkUser } from '@shared/test/mockUsers';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
+import { updateDocketEntryPendingServiceStatus as updateDocketEntryPendingServiceStatusMock } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
+
+const getUserById = jest.mocked(getUserByIdMock);
 
 describe('serveExternallyFiledDocumentInteractor', () => {
-  let mockCase;
+  const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
+  const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
+  let mockCase: RawCase;
+  const fileAndServeDocumentOnOneCase = jest.mocked(
+    fileAndServeDocumentOnOneCaseMock,
+  );
+  const updateDocketEntryPendingServiceStatus = jest.mocked(
+    updateDocketEntryPendingServiceStatusMock,
+  );
 
   const mockClientConnectionId = '987654';
   const mockDocketEntryId = '225d5474-b02b-4137-a78e-2043f7a0f806';
@@ -22,33 +47,31 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   beforeAll(() => {
     applicationContext
       .getUseCaseHelpers()
-      .countPagesInDocument.mockReturnValue(mockNumberOfPages);
+      .countPagesInDocument.mockResolvedValue(mockNumberOfPages);
   });
 
   beforeEach(() => {
     mockCase = {
       ...MOCK_CASE,
       docketEntries: [
-        { docketEntryId: mockDocketEntryId, documentTitle: 'something cool' },
+        {
+          docketEntryId: mockDocketEntryId,
+          documentTitle: 'something cool',
+        } as RawDocketEntry,
       ],
     };
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockCase);
+    getCaseByDocketNumber.mockResolvedValue(mockCase);
+    getCasesByDocketNumbers.mockResolvedValue([mockCase]);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(docketClerkUser);
+    getUserById.mockResolvedValue(docketClerkUser as DbUser);
 
-    applicationContext
-      .getUseCaseHelpers()
-      .fileAndServeDocumentOnOneCase.mockImplementation(
-        ({ caseEntity }) => caseEntity,
-      );
+    fileAndServeDocumentOnOneCase.mockImplementation(
+      ({ caseEntity }) => caseEntity,
+    );
 
     applicationContext
       .getUseCaseHelpers()
-      .serveDocumentAndGetPaperServicePdf.mockReturnValue({
+      .serveDocumentAndGetPaperServicePdf.mockResolvedValue({
         pdfUrl: mockPdfUrl,
       });
   });
@@ -86,17 +109,15 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   });
 
   it('should throw an error when the docket entry has already been served', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...mockCase,
-        docketEntries: [
-          {
-            docketEntryId: mockDocketEntryId,
-            servedAt: '2018-03-01T05:00:00.000Z',
-          },
-        ],
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...mockCase,
+      docketEntries: [
+        {
+          docketEntryId: mockDocketEntryId,
+          servedAt: '2018-03-01T05:00:00.000Z',
+        } as RawDocketEntry,
+      ],
+    });
 
     await expect(
       serveExternallyFiledDocumentInteractor(
@@ -113,17 +134,15 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   });
 
   it('should throw an error when the docket entry is already pending service', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...mockCase,
-        docketEntries: [
-          {
-            docketEntryId: mockDocketEntryId,
-            isPendingService: true,
-          },
-        ],
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...mockCase,
+      docketEntries: [
+        {
+          docketEntryId: mockDocketEntryId,
+          isPendingService: true,
+        } as RawDocketEntry,
+      ],
+    });
 
     await expect(
       serveExternallyFiledDocumentInteractor(
@@ -144,18 +163,16 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   });
 
   it('should set the docket entry`s draftOrderState to null', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...mockCase,
-        docketEntries: [
-          {
-            docketEntryId: mockDocketEntryId,
-            documentTitle: 'fake title',
-            draftOrderState: 'abc',
-          },
-        ],
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...mockCase,
+      docketEntries: [
+        {
+          docketEntryId: mockDocketEntryId,
+          documentTitle: 'fake title',
+          draftOrderState: {},
+        } as RawDocketEntry,
+      ],
+    });
 
     await serveExternallyFiledDocumentInteractor(
       applicationContext,
@@ -169,8 +186,8 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     );
 
     expect(
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
-        .calls[0][0].docketEntryEntity.draftOrderState,
+      fileAndServeDocumentOnOneCase.mock.calls[0][0].docketEntryEntity
+        .draftOrderState,
     ).toBeNull();
   });
 
@@ -180,19 +197,17 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       .getUtilities()
       .createISODateString.mockReturnValue(mockToday);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...mockCase,
-        docketEntries: [
-          {
-            docketEntryId: mockDocketEntryId,
-            documentTitle: 'fake title',
-            eventCode: 'A',
-            filingDate: 'abc',
-          },
-        ],
-      });
+    getCaseByDocketNumber.mockResolvedValueOnce({
+      ...mockCase,
+      docketEntries: [
+        {
+          docketEntryId: mockDocketEntryId,
+          documentTitle: 'fake title',
+          eventCode: 'A',
+          filingDate: 'abc',
+        } as RawDocketEntry,
+      ],
+    });
 
     await serveExternallyFiledDocumentInteractor(
       applicationContext,
@@ -206,26 +221,24 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     );
 
     expect(
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
-        .calls[0][0].docketEntryEntity.filingDate,
+      fileAndServeDocumentOnOneCase.mock.calls[0][0].docketEntryEntity
+        .filingDate,
     ).toBe(mockToday);
   });
 
   it('should retain the docket entry`s filing date when the document is a simultaneous document type', async () => {
     const mockOriginalFilingDate = '1993/02/05';
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...mockCase,
-        docketEntries: [
-          {
-            docketEntryId: mockDocketEntryId,
-            eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
-            filingDate: mockOriginalFilingDate,
-          },
-        ],
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...mockCase,
+      docketEntries: [
+        {
+          docketEntryId: mockDocketEntryId,
+          eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
+          filingDate: mockOriginalFilingDate,
+        } as RawDocketEntry,
+      ],
+    });
 
     await serveExternallyFiledDocumentInteractor(
       applicationContext,
@@ -239,24 +252,22 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     );
 
     expect(
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
-        .calls[0][0].docketEntryEntity.filingDate,
+      fileAndServeDocumentOnOneCase.mock.calls[0][0].docketEntryEntity
+        .filingDate,
     ).toBe(mockOriginalFilingDate);
   });
 
   it('should mark the docket entry as NOT a draft', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...mockCase,
-        docketEntries: [
-          {
-            docketEntryId: mockDocketEntryId,
-            documentTitle: 'fake title',
-            isDraft: true,
-          },
-        ],
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...mockCase,
+      docketEntries: [
+        {
+          docketEntryId: mockDocketEntryId,
+          documentTitle: 'fake title',
+          isDraft: true,
+        } as RawDocketEntry,
+      ],
+    });
 
     await serveExternallyFiledDocumentInteractor(
       applicationContext,
@@ -270,24 +281,21 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     );
 
     expect(
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
-        .calls[0][0].docketEntryEntity.isDraft,
+      fileAndServeDocumentOnOneCase.mock.calls[0][0].docketEntryEntity.isDraft,
     ).toBe(false);
   });
 
   it('should set isFileAttached to true on the docket entry', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...mockCase,
-        docketEntries: [
-          {
-            docketEntryId: mockDocketEntryId,
-            documentTitle: 'fake title',
-            isFileAttached: false,
-          },
-        ],
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...mockCase,
+      docketEntries: [
+        {
+          docketEntryId: mockDocketEntryId,
+          documentTitle: 'fake title',
+          isFileAttached: false,
+        } as RawDocketEntry,
+      ],
+    });
 
     await serveExternallyFiledDocumentInteractor(
       applicationContext,
@@ -301,24 +309,22 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     );
 
     expect(
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
-        .calls[0][0].docketEntryEntity.isFileAttached,
+      fileAndServeDocumentOnOneCase.mock.calls[0][0].docketEntryEntity
+        .isFileAttached,
     ).toBe(true);
   });
 
   it('should mark the docket entry as on the docket record', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...mockCase,
-        docketEntries: [
-          {
-            docketEntryId: mockDocketEntryId,
-            documentTitle: 'fake title',
-            isOnDocketRecord: false,
-          },
-        ],
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...mockCase,
+      docketEntries: [
+        {
+          docketEntryId: mockDocketEntryId,
+          documentTitle: 'fake title',
+          isOnDocketRecord: false,
+        } as RawDocketEntry,
+      ],
+    });
 
     await serveExternallyFiledDocumentInteractor(
       applicationContext,
@@ -332,8 +338,8 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     );
 
     expect(
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
-        .calls[0][0].docketEntryEntity.isOnDocketRecord,
+      fileAndServeDocumentOnOneCase.mock.calls[0][0].docketEntryEntity
+        .isOnDocketRecord,
     ).toBe(true);
   });
 
@@ -350,24 +356,22 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     );
 
     expect(
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
-        .calls[0][0].docketEntryEntity.numberOfPages,
+      fileAndServeDocumentOnOneCase.mock.calls[0][0].docketEntryEntity
+        .numberOfPages,
     ).toBe(mockNumberOfPages + 1);
   });
 
   it('should set the docket entry`s processing status as completed', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...mockCase,
-        docketEntries: [
-          {
-            docketEntryId: mockDocketEntryId,
-            documentTitle: 'fake title',
-            processingStatus: 'abc',
-          },
-        ],
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...mockCase,
+      docketEntries: [
+        {
+          docketEntryId: mockDocketEntryId,
+          documentTitle: 'fake title',
+          processingStatus: 'abc',
+        } as RawDocketEntry,
+      ],
+    });
 
     await serveExternallyFiledDocumentInteractor(
       applicationContext,
@@ -381,26 +385,24 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     );
 
     expect(
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
-        .calls[0][0].docketEntryEntity.processingStatus,
+      fileAndServeDocumentOnOneCase.mock.calls[0][0].docketEntryEntity
+        .processingStatus,
     ).toBe(DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE);
   });
 
   it('should only serve the docket entry on the subjectCase when the subject docket entry is a simultaneous document type', async () => {
     const mockMemberCaseDocketNumber = '999-15';
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...mockCase,
-        docketEntries: [
-          {
-            docketEntryId: mockDocketEntryId,
-            documentTitle: 'fake title',
-            eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
-          },
-        ],
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...mockCase,
+      docketEntries: [
+        {
+          docketEntryId: mockDocketEntryId,
+          documentTitle: 'fake title',
+          eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
+        } as RawDocketEntry,
+      ],
+    });
 
     await serveExternallyFiledDocumentInteractor(
       applicationContext,
@@ -413,29 +415,24 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       mockDocketClerkUser,
     );
 
+    expect(fileAndServeDocumentOnOneCase).toHaveBeenCalledTimes(1);
     expect(
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase,
-    ).toHaveBeenCalledTimes(1);
-    expect(
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
-        .calls[0][0].caseEntity.docketNumber,
+      fileAndServeDocumentOnOneCase.mock.calls[0][0].caseEntity.docketNumber,
     ).toBe(mockCase.docketNumber);
   });
 
   it('should only serve the docket entry on the subjectCase when the subject docket entry has a simultaneous document title', async () => {
     const mockMemberCaseDocketNumber = '999-15';
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...mockCase,
-        docketEntries: [
-          {
-            docketEntryId: mockDocketEntryId,
-            documentTitle: 'Simultaneous doc title',
-          },
-        ],
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...mockCase,
+      docketEntries: [
+        {
+          docketEntryId: mockDocketEntryId,
+          documentTitle: 'Simultaneous doc title',
+        } as RawDocketEntry,
+      ],
+    });
 
     await serveExternallyFiledDocumentInteractor(
       applicationContext,
@@ -448,26 +445,22 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       mockDocketClerkUser,
     );
 
+    expect(fileAndServeDocumentOnOneCase).toHaveBeenCalledTimes(1);
     expect(
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase,
-    ).toHaveBeenCalledTimes(1);
-    expect(
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
-        .calls[0][0].caseEntity.docketNumber,
+      fileAndServeDocumentOnOneCase.mock.calls[0][0].caseEntity.docketNumber,
     ).toBe(mockCase.docketNumber);
   });
 
   it('should add a coversheet to the docket entry', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValueOnce(mockCase)
-      .mockReturnValueOnce({
+    getCaseByDocketNumber
+      .mockResolvedValueOnce(mockCase)
+      .mockResolvedValueOnce({
         ...mockCase,
         docketEntries: [
           {
             docketEntryId: mockDocketEntryId,
             documentTitle: 'fake title',
-          },
+          } as RawDocketEntry,
         ],
       });
 
@@ -490,14 +483,12 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   it('should set isPendingService to truthy when filing the subject docket entry', async () => {
     const memberCaseDocketNumber = '999-16';
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValueOnce(mockCase)
-      .mockReturnValueOnce(mockCase)
-      .mockReturnValueOnce({
-        ...mockCase,
-        docketNumber: memberCaseDocketNumber,
-      });
+    getCaseByDocketNumber.mockResolvedValueOnce(mockCase);
+
+    getCasesByDocketNumbers.mockResolvedValueOnce([
+      mockCase,
+      { ...mockCase, docketNumber: memberCaseDocketNumber },
+    ]);
 
     await serveExternallyFiledDocumentInteractor(
       applicationContext,
@@ -511,13 +502,13 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     );
 
     expect(
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
-        .calls[0][0].docketEntryEntity.isPendingService,
+      fileAndServeDocumentOnOneCase.mock.calls[0][0].docketEntryEntity
+        .isPendingService,
     ).toBeTruthy();
 
     expect(
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
-        .calls[1][0].docketEntryEntity.isPendingService,
+      fileAndServeDocumentOnOneCase.mock.calls[1][0].docketEntryEntity
+        .isPendingService,
     ).toBeFalsy();
   });
 
@@ -535,24 +526,13 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway()
-        .updateDocketEntryPendingServiceStatus,
-    ).toHaveBeenCalledTimes(2);
-    expect(
-      applicationContext.getPersistenceGateway()
-        .updateDocketEntryPendingServiceStatus,
-    ).toHaveBeenCalledWith({
-      applicationContext,
+    expect(updateDocketEntryPendingServiceStatus).toHaveBeenCalledTimes(2);
+    expect(updateDocketEntryPendingServiceStatus).toHaveBeenCalledWith({
       docketEntryId: mockDocketEntryId,
       docketNumber: mockCase.docketNumber,
       status: true,
     });
-    expect(
-      applicationContext.getPersistenceGateway()
-        .updateDocketEntryPendingServiceStatus,
-    ).toHaveBeenCalledWith({
-      applicationContext,
+    expect(updateDocketEntryPendingServiceStatus).toHaveBeenCalledWith({
       docketEntryId: mockDocketEntryId,
       docketNumber: mockCase.docketNumber,
       status: false,
@@ -580,21 +560,16 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       ),
     ).rejects.toThrow(mockErrorText);
 
+    expect(updateDocketEntryPendingServiceStatus).toHaveBeenCalledTimes(2);
     expect(
-      applicationContext.getPersistenceGateway()
-        .updateDocketEntryPendingServiceStatus,
-    ).toHaveBeenCalledTimes(2);
-    expect(
-      applicationContext.getPersistenceGateway()
-        .updateDocketEntryPendingServiceStatus.mock.calls[0][0],
+      updateDocketEntryPendingServiceStatus.mock.calls[0][0],
     ).toMatchObject({
       docketEntryId: mockDocketEntryId,
       docketNumber: mockCase.docketNumber,
       status: true,
     });
     expect(
-      applicationContext.getPersistenceGateway()
-        .updateDocketEntryPendingServiceStatus.mock.calls[1][0],
+      updateDocketEntryPendingServiceStatus.mock.calls[1][0],
     ).toMatchObject({
       docketEntryId: mockDocketEntryId,
       docketNumber: mockCase.docketNumber,
@@ -705,7 +680,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   it('should send a serve_document_complete notification WITHOUT a paper service url when none of the served cases have paper service parties', async () => {
     applicationContext
       .getUseCaseHelpers()
-      .serveDocumentAndGetPaperServicePdf.mockReturnValue({
+      .serveDocumentAndGetPaperServicePdf.mockResolvedValue({
         pdfUrl: undefined,
       });
 

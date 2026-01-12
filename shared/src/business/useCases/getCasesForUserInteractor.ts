@@ -3,7 +3,7 @@ import {
   isClosed,
   isLeadCase,
   userIsDirectlyAssociated,
-} from '../entities/cases/Case';
+} from '@shared/business/entities/cases/Case';
 import { PaymentStatusTypes } from '@shared/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import {
@@ -11,12 +11,15 @@ import {
   isAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
 import { compareISODateStrings } from '../utilities/sortFunctions';
+import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
 import { partition, uniqBy } from 'lodash';
+import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 interface UserCaseDTO {
   caseCaption: string;
   closedDate?: string;
-  createdAt: string;
+  createdAt?: string;
   docketNumber: string;
   docketNumberWithSuffix?: string;
   leadDocketNumber?: string;
@@ -31,7 +34,6 @@ export type TAssociatedCase = {
 } & UserCaseDTO;
 
 export const getCasesForUserInteractor = async (
-  applicationContext: IApplicationContext,
   authorizedUser: UnknownAuthUser,
 ): Promise<{
   openCaseList: TAssociatedCase[];
@@ -43,24 +45,24 @@ export const getCasesForUserInteractor = async (
 
   const { userId } = authorizedUser;
 
-  const docketNumbers = (
-    await applicationContext.getPersistenceGateway().getCasesForUser({
-      applicationContext,
-      userId,
-    })
-  ).map(c => c.docketNumber);
+  const docketNumbers = await getDocketNumbersByUser({ userId });
 
   const allUserCases: TAssociatedCase[] = (
-    (await applicationContext.getPersistenceGateway().getCasesByDocketNumbers({
-      applicationContext,
+    await getCasesByDocketNumbers({
       docketNumbers,
-    })) as unknown as RawCase[]
+      excludeFields: [
+        'docketEntries',
+        'hearings',
+        'correspondence',
+        'privatePractitioners',
+        'irsPractitioners',
+      ],
+    })
   ).map(c => {
     return { ...convertCaseToUserCaseDTO(c), isRequestingUserAssociated: true };
   });
 
   const nestedCases = await fetchConsolidatedGroupsAndNest({
-    applicationContext,
     cases: allUserCases,
     userId,
   });
@@ -104,19 +106,13 @@ export const getCasesForUserInteractor = async (
  * ]
  */
 async function fetchConsolidatedGroupsAndNest({
-  applicationContext,
   cases,
   userId,
 }: {
-  applicationContext: IApplicationContext;
   cases: TAssociatedCase[];
   userId: string;
 }): Promise<TAssociatedCase[]> {
-  const consolidatedGroups = await getAllConsolidatedCases(
-    applicationContext,
-    cases,
-    userId,
-  );
+  const consolidatedGroups = await getAllConsolidatedCases(cases, userId);
 
   // Combine open cases and consolidated cases and remove duplicates
   const allCasesAndConsolidatedCases = uniqBy(
@@ -124,7 +120,7 @@ async function fetchConsolidatedGroupsAndNest({
     aCase => aCase.docketNumber,
   ).map(aCase => ({
     ...aCase,
-    consolidatedCases: (aCase.consolidatedCases || []) as TAssociatedCase[],
+    consolidatedCases: [] as TAssociatedCase[],
   }));
 
   const [topLevelCases, memberConsolidatedCases] = partition(
@@ -201,10 +197,16 @@ function convertCaseToUserCaseDTO(rawCase: UserCaseDTO): UserCaseDTO {
 }
 
 async function getAllConsolidatedCases(
-  applicationContext: IApplicationContext,
   cases: TAssociatedCase[],
   userId: string,
-): Promise<(RawCase & { isRequestingUserAssociated: boolean })[]> {
+): Promise<
+  (Omit<
+    RawCase,
+    'consolidatedCases' | 'correspondence' | 'hearings' | 'docketEntries'
+  > & {
+    isRequestingUserAssociated: boolean;
+  })[]
+> {
   const uniqueLeadDocketNumbers = uniqBy(
     cases.filter(aCase => aCase.leadDocketNumber),
     'leadDocketNumber',
@@ -213,12 +215,10 @@ async function getAllConsolidatedCases(
   return (
     await Promise.all(
       uniqueLeadDocketNumbers.map(aCase =>
-        applicationContext
-          .getPersistenceGateway()
-          .getCasesMetadataByLeadDocketNumber({
-            applicationContext,
-            leadDocketNumber: aCase.leadDocketNumber!,
-          }),
+        getConsolidatedCases({
+          leadDocketNumber: aCase.leadDocketNumber!,
+          excludeFields: ['correspondence', 'docketEntries', 'hearings'],
+        }),
       ),
     )
   )

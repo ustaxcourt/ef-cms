@@ -1,5 +1,5 @@
 export const useCerebralStateFactory =
-  (simpleSetter, value) => (bind, defaultValue) => {
+  (simpleSetter, value) => (bind, defaultValue?) => {
     let getter = value;
 
     const setter = newValue => {

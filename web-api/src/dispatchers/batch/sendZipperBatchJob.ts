@@ -1,5 +1,6 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { SubmitJobCommand, SubmitJobCommandInput } from '@aws-sdk/client-batch';
+import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
 
 export const sendZipperBatchJob = async (
   applicationContext: ServerApplicationContext,
@@ -11,10 +12,7 @@ export const sendZipperBatchJob = async (
   const [currentConnection] = (
     await applicationContext
       .getPersistenceGateway()
-      .getWebSocketConnectionsByUserId({
-        applicationContext,
-        userId,
-      })
+      .getWebSocketConnectionsByUserId(userId)
   ).filter(connection => {
     return connection.clientConnectionId === clientConnectionId;
   });
@@ -22,7 +20,7 @@ export const sendZipperBatchJob = async (
 
   const { currentColor, efcmsDomain, region, stage } =
     applicationContext.environment;
-  const awsRegion = region as 'us-east-1' | 'us-west-1';
+  const awsRegion = region as 'us-east-1';
   const params: SubmitJobCommandInput = {
     containerOverrides: {
       environment: [
@@ -49,10 +47,10 @@ export const sendZipperBatchJob = async (
       ],
     },
     jobDefinition: `s3-zip-job-${stage}-${currentColor}-${awsRegion}`,
-    jobName: `batch-docket-entries-download-${Date.now()}`,
+    jobName: `batch-docket-entries-download-${formatNow(FORMATS.UNIX_TIMESTAMP_MS)}`,
     jobQueue: `aws-batch-job-queue-${stage}-${currentColor}-${awsRegion}`,
   };
 
   const command = new SubmitJobCommand(params);
-  await applicationContext.getBatchClient(awsRegion).send(command);
+  return await applicationContext.getBatchClient(awsRegion).send(command);
 };

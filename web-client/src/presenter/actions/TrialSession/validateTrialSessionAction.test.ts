@@ -1,3 +1,4 @@
+import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
@@ -9,7 +10,7 @@ describe('validateTrialSessionAction', () => {
 
   const MOCK_TRIAL = {
     maxCases: 100,
-    sessionType: 'Regular',
+    sessionType: SESSION_TYPES.regular,
     startDate: '2019-12-01T00:00:00.000Z',
     term: 'Fall',
     trialLocation: 'Birmingham, Alabama',
@@ -80,6 +81,43 @@ describe('validateTrialSessionAction', () => {
 
     expect(errorStub.mock.calls.length).toEqual(1);
   });
+
+    it('should not return the term and termYear validation errors', async () => {
+    applicationContext
+      .getUseCases()
+      .validateTrialSessionInteractor.mockReturnValue({
+        startDate: 'Enter a valid start date',
+        term: 'Term session is not valid',
+        termYear: 'Term year is required'
+      });
+    await runAction(validateTrialSessionAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: { ...MOCK_TRIAL, term: 'Summer' },
+      },
+    });
+    expect(presenter.providers.path.error).toHaveBeenCalledWith({
+      alertError: {
+        title: 'Errors were found. Please correct your form and resubmit.',
+      },
+      errorDisplayOrder: [
+        'startDate',
+        'startTime',
+        'estimatedEndDate',
+        'swingSessionId',
+        'sessionType',
+        'maxCases',
+        'trialLocation',
+        'postalCode',
+        'alternateTrialClerkName',
+      ],
+      errors: {
+        startDate: 'Enter a valid start date'
+      }
+    });
+  })
 
   it('should consider the form valid with valid data', async () => {
     applicationContext

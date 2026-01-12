@@ -13,7 +13,7 @@ describe('isWorkItemAlreadyCompletedAction', () => {
     presenter.providers.path = { no: mockNoPath, yes: mockYesPath };
   });
 
-  it('should return the yes path when the docket entry`s work item has a completed at timestamp', async () => {
+  it('should return the yes path when the docket entry has been qced', async () => {
     const mockDocketEntryId: string = '2f951ec9-d9db-46a0-b468-ca53e301fd02';
 
     await runAction(isWorkItemAlreadyCompletedAction, {
@@ -25,9 +25,7 @@ describe('isWorkItemAlreadyCompletedAction', () => {
           docketEntries: [
             {
               docketEntryId: mockDocketEntryId,
-              workItem: {
-                completedAt: '2018-11-21T20:49:28.192Z',
-              },
+              qcComplete: true,
             },
           ],
         },
@@ -50,9 +48,6 @@ describe('isWorkItemAlreadyCompletedAction', () => {
           docketEntries: [
             {
               docketEntryId: mockDocketEntryId,
-              workItem: {
-                completedAt: undefined,
-              },
             },
           ],
         },

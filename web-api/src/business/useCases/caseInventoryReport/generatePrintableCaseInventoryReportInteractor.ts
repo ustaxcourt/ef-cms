@@ -1,10 +1,11 @@
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getCaseInventoryReport } from '@web-api/persistence/postgres/cases/reports/getCaseInventoryReport';
 
 export const generatePrintableCaseInventoryReportInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -22,14 +23,46 @@ export const generatePrintableCaseInventoryReportInteractor = async (
   applicationContext.logger.info(
     'generatePrintableCaseInventoryReportInteractor - authorized',
   );
-  const { foundCases } = await applicationContext
-    .getPersistenceGateway()
-    .getCaseInventoryReport({ applicationContext, associatedJudge, status });
+
+  // Fetch all cases across all pages since we want to print a complete report
+  const allCases: Omit<
+    RawCase,
+    | 'petitioners'
+    | 'docketEntries'
+    | 'hearings'
+    | 'correspondence'
+    | 'consolidatedCases'
+  >[] = [];
+  let page = 0;
+  let hasMorePages = true;
+
+  while (hasMorePages) {
+    const { foundCases, totalCount } = await getCaseInventoryReport({
+      associatedJudge,
+      page,
+      status,
+    });
+
+    allCases.push(...foundCases);
+    page++;
+    hasMorePages = allCases.length < totalCount;
+
+    applicationContext.logger.debug(
+      'generatePrintableCaseInventoryReportInteractor - fetched page',
+      {
+        page,
+        casesThisPage: foundCases.length,
+        totalFetched: allCases.length,
+        totalCount,
+      },
+    );
+  }
 
   applicationContext.logger.info(
-    'generatePrintableCaseInventoryReportInteractor - fetched cases',
+    'generatePrintableCaseInventoryReportInteractor - fetched all cases',
     {
-      foundCases: foundCases.length,
+      foundCases: allCases.length,
+      totalPages: page,
     },
   );
 
@@ -38,7 +71,7 @@ export const generatePrintableCaseInventoryReportInteractor = async (
     .generateCaseInventoryReportPdf({
       applicationContext,
       authorizedUser,
-      cases: foundCases,
+      cases: allCases,
       filters: { associatedJudge, status },
     });
 

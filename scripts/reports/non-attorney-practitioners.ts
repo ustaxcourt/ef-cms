@@ -1,67 +1,65 @@
-// usages:
-// npx ts-node --transpile-only scripts/reports/non-attorney-practitioners.ts > ~/Desktop/non-attorney-practitioners.csv
-// npx ts-node --transpile-only scripts/reports/non-attorney-practitioners.ts --stats > ~/Desktop/non-attorney-practitioners-stats.csv
+#!/usr/bin/env -S npx ts-node --transpile-only
 
+// usages:
+// scripts/reports/non-attorney-practitioners.ts > ~/Desktop/non-attorney-practitioners.csv
+// scripts/reports/non-attorney-practitioners.ts --stats > ~/Desktop/non-attorney-practitioners-stats.csv
+
+import type { RawPractitioner } from '@shared/business/entities/Practitioner';
 import {
-  ServerApplicationContext,
-  createApplicationContext,
-} from '@web-api/applicationContext';
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import {
   calculateDifferenceInDays,
   formatDateString,
 } from '@shared/business/utilities/DateHandler';
+import { fromKyselyUser } from '@web-api/persistence/postgres/users/mapper';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { getDbReader } from '@web-api/database';
 import { pick, sortBy } from 'lodash';
-import { requireEnvVars } from '../../shared/admin-tools/util';
-import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
 import { substantiveEventCodes } from './non-attorney-practitioners-constants';
-import type { RawPractitioner } from '@shared/business/entities/Practitioner';
 
-requireEnvVars(['ENV', 'REGION']);
-const stats: boolean = !!(process.argv[2] && process.argv[2] === '--stats');
+const scriptConfig: ScriptConfig = {
+  description:
+    'non-attorney-practitioners - Generates a spreadsheet of cases in which ' +
+    'a non-attorney practitioner appears or a spreadsheet of non-attorney ' +
+    'practitioner statistics.',
+  environment: {
+    environmentName: 'ENV',
+  },
+  parameters: {
+    stats: {
+      default: false,
+      short: 's',
+      type: 'boolean',
+    },
+  },
+  requireActiveAwsSession: true,
+};
+const { stats } = parseArgsAndEnvVars(scriptConfig) as { stats: boolean };
 
-type tCase = {
-  caseCaption: string;
-  closedDate: string;
-  closedDateFormatted: string;
-  docketEntries?: tDocketEntry[];
-  docketNumber: string;
-  docketNumberSuffix: string;
-  noticeOfTrialDate: string;
-  noticeOfTrialDateFormatted: string;
-  privatePractitioners: RawPractitioner[];
-  receivedAt: string;
-  receivedAtFormatted: string;
-  status: string;
-  trialDate: string;
-  trialDateFormatted: string;
-  trialSessionId: string;
-};
-type tDocketEntry = {
-  docketNumber: string;
-  eventCode: string;
-  index: number;
-  receivedAt: string;
-  receivedAtFormatted: string;
-  userId: string;
-};
+type tCase = Omit<
+  RawCase,
+  'hearings' | 'irsPractitioners' | 'correspondence' | 'consolidatedCases'
+>;
 type tUsersCase = {
   caseCaption: string;
   closedByStipulatedDecision: boolean;
-  closedDate: string;
+  closedDate?: string;
   closedDateFormatted: string;
   docketNumber: string;
-  docketNumberSuffix: string;
   duration: number;
   hasNoticeOfAppeal: boolean;
-  noticeOfTrialDate: string;
+  noticeOfTrialDate?: string;
   noticeOfTrialDateFormatted: string;
-  privatePractitioners: RawPractitioner[];
-  receivedAt: string;
+  privatePractitioners?: RawPractitioner[];
+  procedureType: string;
+  receivedAt?: string;
   receivedAtFormatted: string;
   status: string;
-  trialDate: string;
+  trialDate?: string;
   trialDateFormatted: string;
-  trialSessionId: string;
+  trialSessionId?: string;
   userFiledPretrialMemorandum: boolean;
   usersDocumentsCount: number;
   usersSubstantiveDocumentsCount: number;
@@ -88,216 +86,93 @@ const formatNonAttorneys = ({
 }): { [key: string]: tNonAttorney } => {
   const nonAttorneys = {};
   for (const hit of results) {
-    const userId = hit.pk?.replace('user|', '');
-    if (userId) {
-      nonAttorneys[userId] = {
-        barNumber: hit.barNumber,
-        name: hit.name,
-        userId,
+    if (hit.userId) {
+      nonAttorneys[hit.userId] = {
+        ...pick(hit, ['barNumber', 'name']),
+        userId: hit.userId,
       };
     }
   }
   return nonAttorneys;
 };
 
-const retrieveNonAttorneys = async ({
-  applicationContext,
-}: {
-  applicationContext: ServerApplicationContext;
-}): Promise<{
+const retrieveNonAttorneys = async (): Promise<{
   [key: string]: tNonAttorney;
 }> => {
-  const searchParameters = {
-    body: {
-      _source: ['barNumber.S', 'name.S', 'pk.S'],
-      query: {
-        bool: {
-          must: [
-            {
-              term: {
-                'practitionerType.S': 'Non-Attorney',
-              },
-            },
-          ],
-        },
-      },
-    },
-    index: 'efcms-user',
-  };
-
-  const { results } = await searchAll({ applicationContext, searchParameters });
+  const results = (
+    await getDbReader(reader =>
+      reader
+        .selectFrom('dwUser as u')
+        .selectAll('u')
+        // .where('u.admissionsStatus', '=', 'Active')
+        .where('u.practitionerType', '=', 'Non-Attorney')
+        .orderBy('u.admissionsDate', 'asc')
+        .execute(),
+    )
+  ).map(fromKyselyUser) as RawPractitioner[];
   return formatNonAttorneys({ results });
 };
 
-// const retrieveNonAttorneysByBarNos = async ({
-//   applicationContext,
-//   barNos,
-// }: {
-//   applicationContext: IApplicationContext;
-//   barNos: string[];
-// }): Promise<{
-//   [key: string]: { barNumber: string; name: string; userId: string };
-// }> => {
-//   const searchParameters = {
-//     body: {
-//       _source: ['barNumber.S', 'name.S', 'pk.S'],
-//       from: 0,
-//       query: {
-//         bool: {
-//           must: [
-//             {
-//               terms: {
-//                 'barNumber.S': barNos,
-//               },
-//             },
-//           ],
-//         },
-//       },
-//       size: 10000,
-//     },
-//     index: 'efcms-user',
-//   };
-//
-//   const { results } = await search({ applicationContext, searchParameters });
-//   return formatNonAttorneys({ results });
-// };
-
-const retrieveCases = async ({
-  applicationContext,
-  userIds,
-}: {
-  applicationContext: ServerApplicationContext;
-  userIds: string[];
-}): Promise<tCase[]> => {
-  const searchParameters = {
-    body: {
-      _source: [
-        'caseCaption.S',
-        'closedDate.S',
-        'docketNumber.S',
-        'docketNumberSuffix.S',
-        'noticeOfTrialDate.S',
-        'privatePractitioners.L.M.userId.S',
-        'receivedAt.S',
-        'status.S',
-        'trialDate.S',
-        'trialSessionId.S',
-      ],
-      query: {
-        bool: {
-          must: [
-            {
-              terms: {
-                'privatePractitioners.L.M.userId.S': userIds,
-              },
-            },
-          ],
-        },
-      },
-    },
-    index: 'efcms-case',
-  };
-  const { results } = await searchAll({ applicationContext, searchParameters });
-  return results.map((hit: RawCase) => {
-    return {
-      ...pick(hit, [
-        'caseCaption',
-        'closedDate',
-        'docketNumber',
-        'docketNumberSuffix',
-        'noticeOfTrialDate',
-        'privatePractitioners',
-        'receivedAt',
-        'status',
-        'trialDate',
-        'trialSessionId',
-      ]),
-      closedDateFormatted: hit.closedDate
-        ? formatDateString(hit.closedDate, 'MMDDYYYY')
-        : '',
-      noticeOfTrialDateFormatted: hit.noticeOfTrialDate
-        ? formatDateString(hit.noticeOfTrialDate, 'MMDDYYYY')
-        : '',
-      receivedAtFormatted: hit.receivedAt
-        ? formatDateString(hit.receivedAt, 'MMDDYYYY')
-        : '',
-      trialDateFormatted: hit.trialDate
-        ? formatDateString(hit.trialDate, 'MMDDYYYY')
-        : '',
-    };
-  });
-};
-
-const retrieveDocketEntries = async ({
-  applicationContext,
-  docketNumbers,
-}: {
-  applicationContext: ServerApplicationContext;
-  docketNumbers: string[];
-}): Promise<tDocketEntry[]> => {
-  const searchParameters = {
-    body: {
-      _source: [
-        'docketNumber.S',
-        'eventCode.S',
-        'index.N',
-        'receivedAt.S',
-        'userId.S',
-      ],
-      query: {
-        bool: {
-          must: [
-            {
-              terms: {
-                'docketNumber.S': docketNumbers,
-              },
-            },
-          ],
-        },
-      },
-    },
-    index: 'efcms-docket-entry',
-  };
-  const { results } = await searchAll({ applicationContext, searchParameters });
-  return results.map((hit: RawDocketEntry) => {
-    return {
-      ...pick(hit, [
-        'docketNumber',
-        'eventCode',
-        'index',
-        'receivedAt',
-        'userId',
-      ]),
-      receivedAtFormatted: hit.receivedAt
-        ? formatDateString(hit.receivedAt, 'MMDDYYYY')
-        : '',
-    };
+const retrieveNonAttorneysCases = async (): Promise<tCase[]> => {
+  const docketNumbers = (
+    await getDbReader(reader =>
+      reader
+        .selectFrom('dwCase as c')
+        .innerJoin('dwUserOnCase as uc', 'c.docketNumber', 'uc.docketNumber')
+        .innerJoin('dwUser as u', 'uc.userId', 'u.userId')
+        .select('c.docketNumber')
+        .where('u.practitionerType', '=', 'Non-Attorney')
+        .orderBy('c.sortableDocketNumber', 'asc')
+        .execute(),
+    )
+  ).map(c => c.docketNumber);
+  return await getCasesByDocketNumbers({
+    docketNumbers,
+    excludeFields: ['irsPractitioners', 'correspondence', 'hearings'],
   });
 };
 
 const getUsersCases = ({
   cases,
-  docketEntries,
   userId,
 }: {
   cases: tCase[];
-  docketEntries: tDocketEntry[];
   userId: string;
 }): tUsersCase[] => {
   const usersCases: tUsersCase[] = [];
   const casesFiltered = cases.filter(c => {
-    const privatePractitionerIds = c.privatePractitioners.map(pp => pp.userId);
+    const privatePractitionerIds =
+      c.privatePractitioners?.map(pp => pp.userId) ?? [];
     return privatePractitionerIds.includes(userId);
   });
   for (const caseRecord of casesFiltered) {
-    caseRecord.docketEntries = docketEntries.filter(de => {
-      return de.docketNumber === caseRecord.docketNumber;
-    });
     usersCases.push({
-      ...caseRecord,
+      ...pick(caseRecord, [
+        'caseCaption',
+        'closedDate',
+        'docketNumber',
+        'noticeOfTrialDate',
+        'procedureType',
+        'receivedAt',
+        'status',
+        'trialDate',
+        'trialSessionId',
+      ]),
       closedByStipulatedDecision: closedByStipulatedDecision(caseRecord),
+      closedDateFormatted: caseRecord.closedDate
+        ? formatDateString(caseRecord.closedDate, 'MMDDYYYY')
+        : '',
       duration: calculateCaseDuration(caseRecord),
       hasNoticeOfAppeal: hasNoticeOfAppeal(caseRecord),
+      noticeOfTrialDateFormatted: caseRecord.noticeOfTrialDate
+        ? formatDateString(caseRecord.noticeOfTrialDate, 'MMDDYYYY')
+        : '',
+      receivedAtFormatted: caseRecord.receivedAt
+        ? formatDateString(caseRecord.receivedAt, 'MMDDYYYY')
+        : '',
+      trialDateFormatted: caseRecord.trialDate
+        ? formatDateString(caseRecord.trialDate, 'MMDDYYYY')
+        : '',
       userFiledPretrialMemorandum: userFiledPretrialMemorandum(
         caseRecord,
         userId,
@@ -317,7 +192,7 @@ const calculateCaseDuration = (caseRecord: tCase): number => {
   if (!caseRecord.receivedAt) {
     return 0;
   }
-  let initialClosureDate = determineInitialClosureDate(caseRecord);
+  const initialClosureDate = determineInitialClosureDate(caseRecord);
   if (!initialClosureDate) {
     return 0;
   }
@@ -393,7 +268,7 @@ const determineInitialClosureDate = (caseRecord: tCase): string => {
       'OAD',
       'SDEC',
     ]);
-  return firstDecisionDocReceivedDate || caseRecord.closedDate;
+  return firstDecisionDocReceivedDate || caseRecord.closedDate || '';
 };
 
 const hasDocumentWithEventCodes = (
@@ -473,7 +348,7 @@ const generateCompositeStatistics = ({
 
 const outputHeader = (): void => {
   console.log(
-    '"Bar Number","Name","Docket Number","Case Type","Case Caption","Case Status","Documents Filed",' +
+    '"Bar Number","Name","Docket Number","Procedure Type","Case Caption","Case Status","Documents Filed",' +
       '"Substantive Documents Filed","Filed Pretrial Memorandum","Closed by Stipulated Decision","Went to Trial",' +
       '"Date of Receipt of Petition","Date of Notice of Trial","Date Closed","Total Duration in Days",' +
       '"Trial Date","Has Notice of Appeal"',
@@ -489,7 +364,7 @@ const outputRow = ({
 }): void => {
   console.log(
     `"${nonAttorney.barNumber}","${nonAttorney.name}","${usersCase.docketNumber}",` +
-      `"${usersCase.docketNumberSuffix || ''}","${usersCase.caseCaption}","${usersCase.status}",` +
+      `"${usersCase.procedureType || ''}","${usersCase.caseCaption}","${usersCase.status}",` +
       `"${usersCase.usersDocumentsCount}","${usersCase.usersSubstantiveDocumentsCount}",` +
       `"${usersCase.userFiledPretrialMemorandum}","${usersCase.closedByStipulatedDecision}",` +
       `"${usersCase.wentToTrial}","${usersCase.receivedAtFormatted}","${usersCase.noticeOfTrialDateFormatted}",` +
@@ -522,25 +397,15 @@ const outputStatsRow = ({
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const applicationContext: ServerApplicationContext = createApplicationContext(
-    {},
-  );
-  const nonAttorneys = await retrieveNonAttorneys({ applicationContext });
-  const cases = await retrieveCases({
-    applicationContext,
-    userIds: Object.keys(nonAttorneys),
-  });
-  const docketEntries = await retrieveDocketEntries({
-    applicationContext,
-    docketNumbers: cases.map(c => c.docketNumber),
-  });
+  const nonAttorneys = await retrieveNonAttorneys();
+  const cases = await retrieveNonAttorneysCases();
   if (stats) {
     outputStatsHeader();
   } else {
     outputHeader();
   }
   for (const userId of Object.keys(nonAttorneys)) {
-    const usersCases = getUsersCases({ cases, docketEntries, userId });
+    const usersCases = getUsersCases({ cases, userId });
     if (stats) {
       const nonAttorneyStats = generateCompositeStatistics({ usersCases });
       outputStatsRow({ nonAttorney: nonAttorneys[userId], nonAttorneyStats });

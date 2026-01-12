@@ -1,14 +1,21 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { NotFoundError } from '../../../errors/errors';
+import { Case } from '@shared/business/entities/cases/Case';
+import { NotFoundError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
+import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { CaseStatus } from '@shared/business/entities/EntityConstants';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { updateTrialSession } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
+import { removeCaseFromTrialSession } from '@web-api/persistence/postgres/trialSessions/removeCaseFromTrialSession';
+import { deleteCasesFromTrialSession } from '@web-api/persistence/postgres/trialSessions/deleteCasesFromTrialSession';
 
 export const removeCaseFromTrial = async (
   applicationContext: ServerApplicationContext,
@@ -22,7 +29,7 @@ export const removeCaseFromTrial = async (
   }: {
     associatedJudge: string;
     associatedJudgeId: string;
-    caseStatus: string;
+    caseStatus: CaseStatus;
     disposition: string;
     docketNumber: string;
     trialSessionId: string;
@@ -33,12 +40,9 @@ export const removeCaseFromTrial = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const trialSession = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById({
-      applicationContext,
-      trialSessionId,
-    });
+  const trialSession = await getTrialSessionById({
+    trialSessionId,
+  });
 
   if (!trialSession) {
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
@@ -46,25 +50,29 @@ export const removeCaseFromTrial = async (
 
   const trialSessionEntity = new TrialSession(trialSession);
 
-  if (trialSessionEntity.isCalendared) {
-    trialSessionEntity.removeCaseFromCalendar({ disposition, docketNumber });
-  } else {
-    trialSessionEntity.deleteCaseFromCalendar({ docketNumber });
-  }
-
-  await applicationContext.getPersistenceGateway().updateTrialSession({
-    applicationContext,
-    trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+  const myCase = await getCaseByDocketNumber({
+    docketNumber,
   });
 
-  const myCase = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
-
   const caseEntity = new Case(myCase, { authorizedUser });
+
+  if (trialSessionEntity.isCalendared) {
+    trialSessionEntity.removeCaseFromCalendar({ disposition, docketNumber });
+    await removeCaseFromTrialSession({
+      disposition,
+      docketNumber,
+      trialSessionId,
+    });
+    await updateTrialSession({
+      trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+    });
+  } else {
+    trialSessionEntity.deleteCaseFromCalendar({ docketNumber });
+    await deleteCasesFromTrialSession({
+      docketNumbers: [docketNumber],
+      trialSessionId,
+    });
+  }
 
   if (!caseEntity.isHearing(trialSessionId)) {
     caseEntity.removeFromTrial({
@@ -74,36 +82,17 @@ export const removeCaseFromTrial = async (
       updatedCaseStatus: caseStatus,
     });
 
-    await applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems({
-      applicationContext,
-      docketNumber: caseEntity.docketNumber,
-      highPriority: false,
-    });
-
-    if (caseEntity.isReadyForTrial()) {
-      await applicationContext
-        .getPersistenceGateway()
-        .createCaseTrialSortMappingRecords({
-          applicationContext,
-          caseSortTags: caseEntity.generateTrialSortTags(),
-          docketNumber: caseEntity.docketNumber,
-        });
-    }
-
     await applicationContext
       .getUseCaseHelpers()
-      .updateCaseAutomaticBlock({ applicationContext, caseEntity });
+      .updateCaseAutomaticBlock({ caseEntity });
   } else {
     caseEntity.removeFromHearing(trialSessionId);
   }
 
-  const updatedCase = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
-      authorizedUser,
-      caseToUpdate: caseEntity,
-    });
+  const updatedCase = await updateCaseAndAssociations({
+    authorizedUser,
+    caseToUpdate: caseEntity,
+  });
 
   return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };

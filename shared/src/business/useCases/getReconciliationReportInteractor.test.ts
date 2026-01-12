@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import {
   FORMATS,
   createEndOfDayISO,
@@ -10,21 +11,21 @@ import {
   mockDocketClerkUser,
   mockIrsSuperuser,
 } from '@shared/test/mockAuthUsers';
+import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 describe('getReconciliationReportInteractor', () => {
   const mockCaseCaption = 'Kaitlin Chaney, Petitioner';
+  const getCasesByDocketNumbers = getCasesByDocketNumbersMock as jest.Mock;
 
   beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesByDocketNumbers.mockReturnValue([
-        {
-          caseCaption: mockCaseCaption,
-          docketNumber: '135-20',
-          pk: 'case|135-20',
-          sk: 'case|135-20',
-        },
-      ]);
+    getCasesByDocketNumbers.mockResolvedValue([
+      {
+        caseCaption: mockCaseCaption,
+        docketNumber: '135-20',
+        pk: 'case|135-20',
+        sk: 'case|135-20',
+      },
+    ]);
   });
 
   it('should throw unauthorized error if user does not have permission', async () => {
@@ -32,7 +33,7 @@ describe('getReconciliationReportInteractor', () => {
       getReconciliationReportInteractor(
         applicationContext,
         {
-          reconciliationDate: undefined,
+          reconciliationDate: '',
         },
         mockDocketClerkUser,
       ),
@@ -44,7 +45,7 @@ describe('getReconciliationReportInteractor', () => {
       getReconciliationReportInteractor(
         applicationContext,
         {
-          reconciliationDate: undefined,
+          reconciliationDate: '',
         },
         mockIrsSuperuser,
       ),
@@ -156,7 +157,7 @@ describe('getReconciliationReportInteractor', () => {
     });
   });
 
-  it('should call the getCasesByDocketNumbers method with a docket number extracted from pk if the record has no defined value for the docketNumber attribute', async () => {
+  it('should call the getCasesMetadataByDocketNumbers method with a docket number extracted from pk if the record has no defined value for the docketNumber attribute', async () => {
     const docketEntries = [
       {
         docketEntryId: '3d27e02e-6954-4595-8b3f-0e91bbc1b51e',
@@ -183,10 +184,9 @@ describe('getReconciliationReportInteractor', () => {
       mockIrsSuperuser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getCasesByDocketNumbers.mock
-        .calls[0][0].docketNumbers,
-    ).toEqual(['135-20']);
+    expect(getCasesByDocketNumbers.mock.calls[0][0].docketNumbers).toEqual([
+      '135-20',
+    ]);
   });
 
   //Given date may contain ISO time component

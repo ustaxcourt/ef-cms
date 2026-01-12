@@ -1,3 +1,4 @@
+import { deleteDocketEntry } from '@web-api/persistence/postgres/docketEntries/deleteDocketEntry';
 import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
 import {
   INITIAL_DOCUMENT_TYPES,
@@ -26,9 +27,13 @@ const addNewInitialFilingToCase = ({
       },
     );
   } else {
-    const { eventCode } = Object.values(INITIAL_DOCUMENT_TYPES).find(
+    const eventCode = Object.values(INITIAL_DOCUMENT_TYPES).find(
       dt => dt.documentType === documentType,
-    );
+    )?.eventCode;
+
+    if (!eventCode) {
+      throw new Error(`No event code found for document type: ${documentType}`);
+    }
 
     const contactSecondary = caseEntity.getContactSecondary();
 
@@ -71,8 +76,7 @@ const deleteInitialFilingFromCase = async ({
     docketEntryId: originalCaseDocument.docketEntryId,
   });
 
-  await applicationContext.getPersistenceGateway().deleteDocketEntry({
-    applicationContext,
+  await deleteDocketEntry({
     docketEntryId: originalCaseDocument.docketEntryId,
     docketNumber: caseEntity.docketNumber,
   });

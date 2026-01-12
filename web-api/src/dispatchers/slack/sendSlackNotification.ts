@@ -1,3 +1,5 @@
+import { ServerApplicationContext } from '@web-api/applicationContext';
+
 /**
  * sendSlackNotification
  *
@@ -10,6 +12,10 @@ export const sendSlackNotification = async ({
   applicationContext,
   text,
   topic,
+}: {
+  applicationContext: ServerApplicationContext;
+  text: string;
+  topic: string;
 }) => {
   const slackWebhookUrl = applicationContext.getSlackWebhookUrl();
   if (!slackWebhookUrl) {
@@ -21,10 +27,7 @@ export const sendSlackNotification = async ({
 
   const recentNotifications = await applicationContext
     .getPersistenceGateway()
-    .getDispatchNotification({
-      applicationContext,
-      topic,
-    });
+    .getDispatchNotification(topic);
 
   if (recentNotifications.length) {
     // topic has recently been notified; ignore this request
@@ -35,8 +38,7 @@ export const sendSlackNotification = async ({
     text,
   });
 
-  await applicationContext.getPersistenceGateway().saveDispatchNotification({
-    applicationContext,
-    topic,
-  });
+  await applicationContext
+    .getPersistenceGateway()
+    .saveDispatchNotification(topic);
 };

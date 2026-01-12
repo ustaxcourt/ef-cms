@@ -8,6 +8,8 @@ export type WorkerMessage = {
 };
 
 export const MESSAGE_TYPES = {
+  SCRAPE_DOCUMENT_CONTENTS: 'SCRAPE_DOCUMENT_CONTENTS',
+  QUEUE_EMAIL_UPDATE_ASSOCIATED_CASES: 'QUEUE_EMAIL_UPDATE_ASSOCIATED_CASES',
   QUEUE_UPDATE_ASSOCIATED_CASES: 'QUEUE_UPDATE_ASSOCIATED_CASES',
   UPDATE_ASSOCIATED_CASE: 'UPDATE_ASSOCIATED_CASE',
 } as const;
@@ -24,6 +26,15 @@ export const workerRouter = async (
   { message }: { message: WorkerMessage },
 ): Promise<void> => {
   switch (message.type) {
+    case MESSAGE_TYPES.SCRAPE_DOCUMENT_CONTENTS:
+      await applicationContext
+        .getUseCases()
+        .scrapeDocumentContentsWorker(
+          applicationContext,
+          message.payload,
+          message.authorizedUser,
+        );
+      break;
     case MESSAGE_TYPES.UPDATE_ASSOCIATED_CASE:
       await applicationContext
         .getUseCases()
@@ -37,6 +48,15 @@ export const workerRouter = async (
       await applicationContext
         .getUseCases()
         .queueUpdateAssociatedCasesWorker(
+          applicationContext,
+          message.payload,
+          message.authorizedUser,
+        );
+      break;
+    case MESSAGE_TYPES.QUEUE_EMAIL_UPDATE_ASSOCIATED_CASES:
+      await applicationContext
+        .getUseCases()
+        .queueEmailUpdateAssociatedCasesWorker(
           applicationContext,
           message.payload,
           message.authorizedUser,

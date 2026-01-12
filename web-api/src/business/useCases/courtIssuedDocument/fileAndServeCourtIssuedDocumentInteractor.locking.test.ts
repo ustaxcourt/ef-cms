@@ -1,24 +1,54 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
+);
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
+import { MOCK_CASE } from '@shared/test/mockCase';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   determineEntitiesToLock,
   fileAndServeCourtIssuedDocumentInteractor,
-  handleLockError,
 } from './fileAndServeCourtIssuedDocumentInteractor';
-import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
+import { docketClerkUser } from '@shared/test/mockUsers';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
+import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
+
+const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+const getCasesByDocketNumber = jest.mocked(getCasesByDocketNumbersMock);
+jest
+  .mocked(updateCaseAndAssociationsMock)
+  .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
+const tryGetLocks = jest.mocked(tryGetLocksMock);
+const getUserById = jest.mocked(getUserByIdMock);
 
 describe('determineEntitiesToLock', () => {
   let mockParams;
+  const fileAndServeDocumentOnOneCase = jest.mocked(
+    fileAndServeDocumentOnOneCaseMock,
+  );
   beforeEach(() => {
     mockParams = {
       applicationContext,
       docketNumbers: [],
       subjectCaseDocketNumber: '123-20',
     };
+
+    fileAndServeDocumentOnOneCase.mockImplementation(({ caseEntity }) =>
+      Promise.resolve(caseEntity),
+    );
   });
 
   it('should return an object that includes the documentMetadata.docketNumber in the identifiers', () => {
@@ -42,37 +72,6 @@ describe('determineEntitiesToLock', () => {
   });
 });
 
-describe('handleLockError', () => {
-  const mockClientConnectionId = '987654';
-
-  it('should not send a notification if there is no authorizedUser', async () => {
-    await handleLockError(applicationContext, { foo: 'bar' }, undefined);
-    expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser,
-    ).not.toHaveBeenCalled();
-  });
-
-  it('should send a notification to the user with "retry_file_and_serve_court_issued_document" and the originalRequest', async () => {
-    const mockOriginalRequest = {
-      clientConnectionId: mockClientConnectionId,
-      foo: 'bar',
-    };
-    await handleLockError(
-      applicationContext,
-      mockOriginalRequest,
-      mockDocketClerkUser,
-    );
-    expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[0][0].message,
-    ).toMatchObject({
-      action: 'retry_async_request',
-      originalRequest: mockOriginalRequest,
-      requestToRetry: 'file_and_serve_court_issued_document',
-    });
-  });
-});
-
 describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   const mockClientConnectionId = '2810-happydoo';
   const mockDocketEntryId = '50107716-6d08-4693-bfd5-a07a4e6eadce';
@@ -90,23 +89,15 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
         signedByUserId: docketClerkUser.userId,
         signedJudgeName: 'Judge Dredd',
         userId: docketClerkUser.userId,
-      },
+      } as RawDocketEntry,
     ],
   };
   let mockRequest;
-  let mockLock;
 
   beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockImplementation(() => mockLock);
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(docketClerkUser);
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(() => mockCase);
+    getUserById.mockResolvedValue(docketClerkUser as DbUser);
+    getCasesByDocketNumber.mockResolvedValue([mockCase]);
+    getCaseByDocketNumber.mockResolvedValue(mockCase);
   });
 
   beforeEach(() => {
@@ -125,93 +116,32 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     };
   });
 
-  describe('is locked', () => {
-    beforeEach(() => {
-      mockLock = MOCK_LOCK; // locked
-    });
-
-    it('should throw a ServiceUnavailableError if a Case is currently locked', async () => {
-      await expect(
-        fileAndServeCourtIssuedDocumentInteractor(
-          applicationContext,
-          mockRequest,
-          mockDocketClerkUser,
-        ),
-      ).rejects.toThrow(ServiceUnavailableError);
-
-      expect(
-        applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-      ).not.toHaveBeenCalled();
-    });
-
-    it('should return a "retry_async_request" notification with the original request', async () => {
-      await expect(
-        fileAndServeCourtIssuedDocumentInteractor(
-          applicationContext,
-          mockRequest,
-          mockDocketClerkUser,
-        ),
-      ).rejects.toThrow(ServiceUnavailableError);
-
-      expect(
-        applicationContext.getNotificationGateway().sendNotificationToUser,
-      ).toHaveBeenCalledWith({
+  it('should throw a ServiceUnavailableError if a Case is currently locked', async () => {
+    tryGetLocks.mockResolvedValueOnce([
+      { successfullyLocked: false, identifier: 'abc' },
+    ]);
+    await expect(
+      fileAndServeCourtIssuedDocumentInteractor(
         applicationContext,
-        clientConnectionId: mockClientConnectionId,
-        message: {
-          action: 'retry_async_request',
-          originalRequest: mockRequest,
-          requestToRetry: 'file_and_serve_court_issued_document',
-        },
-        userId: mockDocketClerkUser.userId,
-      });
+        mockRequest,
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow(ServiceUnavailableError);
 
-      expect(
-        applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-      ).not.toHaveBeenCalled();
-    });
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
-  describe('is not locked', () => {
-    beforeEach(() => {
-      mockLock = undefined; // unlocked
-    });
+  it('should acquire a lock and remove a lock', async () => {
+    await fileAndServeCourtIssuedDocumentInteractor(
+      applicationContext,
+      mockRequest,
+      mockDocketClerkUser,
+    );
 
-    it('should acquire a lock that lasts for 15 minutes', async () => {
-      await fileAndServeCourtIssuedDocumentInteractor(
-        applicationContext,
-        mockRequest,
-        mockDocketClerkUser,
-      );
-
-      expect(
-        applicationContext.getPersistenceGateway().createLock,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        identifier: `case|${MOCK_CASE.docketNumber}`,
-        ttl: 900,
-      });
-
-      expect(
-        applicationContext.getPersistenceGateway().removeLock,
-      ).toHaveBeenCalledWith({
-        applicationContext,
+    expect(tryGetLocks).toHaveBeenCalledWith(
+      expect.objectContaining({
         identifiers: [`case|${MOCK_CASE.docketNumber}`],
-      });
-    });
-
-    it('should remove the lock', async () => {
-      await fileAndServeCourtIssuedDocumentInteractor(
-        applicationContext,
-        mockRequest,
-        mockDocketClerkUser,
-      );
-      expect(
-        applicationContext.getPersistenceGateway().removeLock,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        identifiers: [`case|${MOCK_CASE.docketNumber}`],
-      });
-    });
+      }),
+    );
   });
 });

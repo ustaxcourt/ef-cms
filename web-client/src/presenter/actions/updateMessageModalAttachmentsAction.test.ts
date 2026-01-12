@@ -125,7 +125,7 @@ describe('updateMessageModalAttachmentsAction', () => {
     expect(result.state.modal.form.draftAttachments).toEqual([]);
   });
 
-  it('sets the form subject field if this is the first attachment to be added', async () => {
+  it('sets the form subject field if creating message and subject line is empty', async () => {
     const result = await runAction(updateMessageModalAttachmentsAction, {
       modules: { presenter },
       props: {
@@ -139,6 +139,7 @@ describe('updateMessageModalAttachmentsAction', () => {
             attachments: [],
             draftAttachments: [],
           },
+          showModal: 'CreateMessageModal',
         },
       },
     });
@@ -228,6 +229,32 @@ describe('updateMessageModalAttachmentsAction', () => {
     expect(result.state.modal.form.subject).toEqual('Petition');
   });
 
+  it('does not update the subject field on first attachment if the subject field is already set', async () => {
+    const existingSubject = 'My Custom Subject';
+    const result = await runAction(updateMessageModalAttachmentsAction, {
+      modules: { presenter },
+      props: {
+        action: 'add',
+        documentId: '123',
+      },
+      state: {
+        caseDetail,
+        modal: {
+          form: {
+            attachments: [],
+            draftAttachments: [],
+            subject: existingSubject,
+          },
+        },
+      },
+    });
+
+    expect(result.state.modal.form.subject).toEqual(existingSubject);
+    expect(result.state.modal.form.draftAttachments).toEqual([
+      { documentId: '123', documentTitle: 'Petition' },
+    ]);
+  });
+
   it('truncates the document title to 250 characters when updating the subject field', async () => {
     const result = await runAction(updateMessageModalAttachmentsAction, {
       modules: { presenter },
@@ -242,6 +269,7 @@ describe('updateMessageModalAttachmentsAction', () => {
             attachments: [],
             draftAttachments: [],
           },
+          showModal: 'CreateMessageModal',
         },
       },
     });

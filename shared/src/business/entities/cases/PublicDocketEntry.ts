@@ -8,6 +8,7 @@ import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEnti
 import joi from 'joi';
 
 export class PublicDocketEntry extends JoiValidationEntity {
+  public action?: string;
   public additionalInfo?: string;
   public additionalInfo2?: string;
   public attachments?: boolean;
@@ -37,6 +38,8 @@ export class PublicDocketEntry extends JoiValidationEntity {
   public sealedTo?: string;
   public servedAt?: string;
   public servedPartiesCode?: string;
+  public affectedByDocketEntries?: any[];
+  public affectedDocketEntries?: any[];
   public previousDocument?: {
     docketEntryId: string;
     documentTitle: string;
@@ -45,6 +48,7 @@ export class PublicDocketEntry extends JoiValidationEntity {
 
   constructor(rawProps) {
     super('PublicDocketEntry');
+    this.action = rawProps.action;
     this.additionalInfo = rawProps.additionalInfo;
     this.additionalInfo2 = rawProps.additionalInfo2;
     this.attachments = rawProps.attachments;
@@ -74,6 +78,8 @@ export class PublicDocketEntry extends JoiValidationEntity {
     this.sealedTo = rawProps.sealedTo;
     this.servedAt = rawProps.servedAt;
     this.servedPartiesCode = rawProps.servedPartiesCode;
+    this.affectedByDocketEntries = rawProps.affectedByDocketEntries;
+    this.affectedDocketEntries = rawProps.affectedDocketEntries;
     if (rawProps.previousDocument) {
       this.previousDocument = {
         docketEntryId: rawProps.previousDocument.docketEntryId,

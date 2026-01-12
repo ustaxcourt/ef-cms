@@ -1,3 +1,4 @@
+import { setAutomaticBlockedFieldsOnState } from '@web-client/presenter/actions/CaseDeadline/deleteCaseDeadlineAction';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -13,6 +14,7 @@ export const createCaseDeadlineAction = async ({
   applicationContext,
   get,
   path,
+  store,
 }: ActionProps) => {
   const { associatedJudge, docketNumber, leadDocketNumber } = get(
     state.caseDetail,
@@ -25,16 +27,17 @@ export const createCaseDeadlineAction = async ({
     leadDocketNumber,
   };
 
-  let createCaseDeadlineResult = await applicationContext
+  const updatedCase = await applicationContext
     .getUseCases()
     .createCaseDeadlineInteractor(applicationContext, {
       caseDeadline,
     });
 
+  setAutomaticBlockedFieldsOnState(updatedCase, store);
+
   return path.success({
     alertSuccess: {
       message: 'Deadline saved.',
     },
-    caseDeadline: createCaseDeadlineResult,
   });
 };

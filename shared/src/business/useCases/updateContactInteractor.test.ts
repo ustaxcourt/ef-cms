@@ -1,4 +1,10 @@
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
+import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import {
   CASE_STATUS_TYPES,
   COUNTRY_TYPES,
@@ -9,26 +15,27 @@ import {
   MOCK_CASE,
   MOCK_CASE_WITH_SECONDARY_OTHERS,
 } from '../../test/mockCase';
-import { MOCK_LOCK } from '../../test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { fakeData } from '../test/getFakeFile';
 import { getContactPrimary } from '../entities/cases/Case';
 import { mockPetitionerUser } from '@shared/test/mockAuthUsers';
 import { updateContactInteractor } from './updateContactInteractor';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('updates the contact on a case', () => {
   let mockCase;
   let mockCaseContactPrimary;
-  let mockLock;
-  beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockImplementation(() => mockLock);
-  });
+
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const updateCaseAndAssociations = jest
+    .mocked(updateCaseAndAssociationsMock)
+    .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
+  const tryGetLocks = jest.mocked(tryGetLocksMock);
 
   beforeEach(() => {
-    mockLock = undefined;
     mockCase = {
       ...MOCK_CASE,
       status: CASE_STATUS_TYPES.generalDocket,
@@ -37,9 +44,7 @@ describe('updates the contact on a case', () => {
     mockCaseContactPrimary.contactType = 'petitioner';
     mockCaseContactPrimary.contactId = mockPetitionerUser.userId;
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(() => mockCase);
+    getCaseByDocketNumber.mockResolvedValue(mockCase);
 
     applicationContext
       .getUseCases()
@@ -93,9 +98,7 @@ describe('updates the contact on a case', () => {
       mockPetitionerUser,
     );
 
-    const updatedCase =
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate;
+    const updatedCase = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
     const changeOfAddressDocument = updatedCase.docketEntries.find(
       d => d.documentType === 'Notice of Change of Address',
     );
@@ -133,22 +136,24 @@ describe('updates the contact on a case', () => {
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).toHaveBeenCalled();
-    expect(caseDetail.docketEntries[4].servedAt).toBeDefined();
-    expect(caseDetail.docketEntries[4].filedBy).toBeUndefined();
+    const docketEntry = caseDetail.docketEntries.find(
+      d => d.documentType === 'Notice of Change of Address',
+    );
+    expect(docketEntry).toBeDefined();
+    expect(docketEntry?.servedAt).toBeDefined();
+    expect(docketEntry?.filedBy).toBeUndefined();
   });
 
   it('creates a work item if the contact is not represented by a privatePractitioner and there is no paper service on the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...mockCase,
-        petitioners: [
-          {
-            ...mockCaseContactPrimary,
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-          },
-        ],
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...mockCase,
+      petitioners: [
+        {
+          ...mockCaseContactPrimary,
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        },
+      ],
+    });
 
     await updateContactInteractor(
       applicationContext,
@@ -162,33 +167,29 @@ describe('updates the contact on a case', () => {
       mockPetitionerUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
+    expect(upsertWorkItems).toHaveBeenCalled();
   });
 
   it('creates a work item if the contact is represented by a privatePractitioner and there is paper service on the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...mockCase,
-        petitioners: [
-          {
-            ...mockCaseContactPrimary,
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-          },
-        ],
-        privatePractitioners: [
-          {
-            barNumber: '1111',
-            name: 'Bob Practitioner',
-            representing: [mockCaseContactPrimary.contactId],
-            role: ROLES.privatePractitioner,
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-            userId: '5b992eca-8573-44ff-a33a-7796ba0f201c',
-          },
-        ],
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...mockCase,
+      petitioners: [
+        {
+          ...mockCaseContactPrimary,
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+        },
+      ],
+      privatePractitioners: [
+        {
+          barNumber: '1111',
+          name: 'Bob Practitioner',
+          representing: [mockCaseContactPrimary.contactId],
+          role: ROLES.privatePractitioner,
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+          userId: '5b992eca-8573-44ff-a33a-7796ba0f201c',
+        },
+      ],
+    });
 
     await updateContactInteractor(
       applicationContext,
@@ -202,33 +203,29 @@ describe('updates the contact on a case', () => {
       mockPetitionerUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
+    expect(upsertWorkItems).toHaveBeenCalled();
   });
 
   it('does not create a work item if the contact is represented by a privatePractitioner and there is no paper service on the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...mockCase,
-        petitioners: [
-          {
-            ...mockCaseContactPrimary,
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-          },
-        ],
-        privatePractitioners: [
-          {
-            barNumber: '1111',
-            name: 'Bob Practitioner',
-            representing: [mockCaseContactPrimary.contactId],
-            role: ROLES.privatePractitioner,
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-            userId: '5b992eca-8573-44ff-a33a-7796ba0f201c',
-          },
-        ],
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...mockCase,
+      petitioners: [
+        {
+          ...mockCaseContactPrimary,
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        },
+      ],
+      privatePractitioners: [
+        {
+          barNumber: '1111',
+          name: 'Bob Practitioner',
+          representing: [mockCaseContactPrimary.contactId],
+          role: ROLES.privatePractitioner,
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+          userId: '5b992eca-8573-44ff-a33a-7796ba0f201c',
+        },
+      ],
+    });
 
     await updateContactInteractor(
       applicationContext,
@@ -242,15 +239,11 @@ describe('updates the contact on a case', () => {
       mockPetitionerUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).not.toHaveBeenCalled();
+    expect(upsertWorkItems).not.toHaveBeenCalled();
   });
 
   it('throws an error if the case was not found', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValue(null);
+    getCaseByDocketNumber.mockResolvedValue(null);
 
     await expect(
       updateContactInteractor(
@@ -281,7 +274,10 @@ describe('updates the contact on a case', () => {
   });
 
   it('throws an error if the user to update is not found on the case', async () => {
-    mockCase = { ...MOCK_CASE_WITH_SECONDARY_OTHERS, petitioners: [] };
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE_WITH_SECONDARY_OTHERS,
+      petitioners: [],
+    });
 
     await expect(
       updateContactInteractor(
@@ -309,9 +305,7 @@ describe('updates the contact on a case', () => {
       mockPetitionerUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).not.toHaveBeenCalled();
@@ -359,11 +353,7 @@ describe('updates the contact on a case', () => {
       ],
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(
-        () => mockCaseWithSealedAddress,
-      );
+    getCaseByDocketNumber.mockResolvedValue(mockCaseWithSealedAddress);
 
     await updateContactInteractor(
       applicationContext,
@@ -377,9 +367,7 @@ describe('updates the contact on a case', () => {
       mockPetitionerUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).not.toHaveBeenCalled();
@@ -391,27 +379,6 @@ describe('updates the contact on a case', () => {
     ).not.toHaveBeenCalled();
   });
 
-  it('should use original case caption to create case title when creating work item', async () => {
-    await updateContactInteractor(
-      applicationContext,
-      {
-        contactInfo: {
-          ...mockCaseContactPrimary,
-          address1: '453 Electric Ave',
-        },
-        docketNumber: mockCase.docketNumber,
-      },
-      mockPetitionerUser,
-    );
-
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
-        .workItem,
-    ).toMatchObject({
-      caseTitle: 'Test Petitioner',
-    });
-  });
-
   it('should NOT generate a notice if the case was closed over 6 months ago', async () => {
     const mockClosedCase = {
       ...mockCase,
@@ -419,9 +386,7 @@ describe('updates the contact on a case', () => {
       status: CASE_STATUS_TYPES.closed,
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(() => mockClosedCase);
+    getCaseByDocketNumber.mockResolvedValue(mockClosedCase);
 
     await updateContactInteractor(
       applicationContext,
@@ -464,7 +429,9 @@ describe('updates the contact on a case', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    mockLock = MOCK_LOCK;
+    tryGetLocks.mockResolvedValueOnce([
+      { successfullyLocked: false, identifier: 'abc' },
+    ]);
 
     await expect(
       updateContactInteractor(
@@ -480,12 +447,10 @@ describe('updates the contact on a case', () => {
       ),
     ).rejects.toThrow(ServiceUnavailableError);
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).not.toHaveBeenCalled();
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
-  it('should acquire and remove the lock on the case', async () => {
+  it('should acquire a lock on the case', async () => {
     await updateContactInteractor(
       applicationContext,
       {
@@ -498,19 +463,10 @@ describe('updates the contact on a case', () => {
       mockPetitionerUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().createLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifier: `case|${MOCK_CASE.docketNumber}`,
-      ttl: 30,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().removeLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifiers: [`case|${MOCK_CASE.docketNumber}`],
-    });
+    expect(tryGetLocks).toHaveBeenCalledWith(
+      expect.objectContaining({
+        identifiers: [`case|${MOCK_CASE.docketNumber}`],
+      }),
+    );
   });
 });

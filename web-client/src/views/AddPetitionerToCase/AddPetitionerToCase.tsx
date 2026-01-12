@@ -12,6 +12,7 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import { TextArea } from '@web-client/dawson-ui/ui/input';
 
 export const AddPetitionerToCase = connect(
   {
@@ -256,11 +257,8 @@ export const AddPetitionerToCase = connect(
           <h2>Case Caption</h2>
           <div className="blue-container margin-bottom-5">
             <FormGroup errorText={validationErrors?.caseCaption}>
-              <label className="usa-label" htmlFor="case-caption">
-                Case caption
-              </label>
-              <textarea
-                className="usa-textarea textarea-resize-vertical"
+              <TextArea
+                label={'Case caption'}
                 id="case-caption"
                 name="caseCaption"
                 value={form.contact.caseCaption || ''}
@@ -277,25 +275,26 @@ export const AddPetitionerToCase = connect(
               </span>
             </FormGroup>
           </div>
-
-          <Button
-            data-testid="add-petitioner-submit-button"
-            id="submit-edit-petitioner-information"
-            onClick={() => {
-              submitAddPetitionerSequence();
-            }}
-          >
-            Save
-          </Button>
-          <Button
-            link
-            onClick={() => {
-              formCancelToggleCancelSequence();
-              return false;
-            }}
-          >
-            Cancel
-          </Button>
+          <div className="button-container">
+            <Button
+              data-testid="add-petitioner-submit-button"
+              id="submit-edit-petitioner-information"
+              onClick={() => {
+                submitAddPetitionerSequence();
+              }}
+            >
+              Save
+            </Button>
+            <Button
+              link
+              onClick={() => {
+                formCancelToggleCancelSequence();
+                return false;
+              }}
+            >
+              Cancel
+            </Button>
+          </div>
         </section>
 
         {showModal === 'FormCancelModalDialog' && (

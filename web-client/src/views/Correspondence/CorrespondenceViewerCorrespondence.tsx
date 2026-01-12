@@ -24,6 +24,25 @@ export const CorrespondenceViewerCorrespondence = connect(
     openCaseDocumentDownloadUrlSequence,
     openConfirmDeleteCorrespondenceModalSequence,
     viewerCorrespondenceToDisplay,
+  }: {
+    caseDetail: {
+      docketNumber: string;
+    };
+    correspondenceViewerHelper: {
+      showEditCorrespondenceButton: boolean;
+      editCorrespondenceLink: string;
+      showDeleteCorrespondenceButton: boolean;
+    };
+    iframeSrc: string;
+    openCaseDocumentDownloadUrlSequence: Function;
+    openConfirmDeleteCorrespondenceModalSequence: Function;
+    viewerCorrespondenceToDisplay?:
+      | {
+          correspondenceId: string;
+          documentTitle?: string;
+          filedBy?: string;
+        }
+      | null;
   }) {
     return (
       <div
@@ -98,7 +117,7 @@ export const CorrespondenceViewerCorrespondence = connect(
             {!process.env.CI && (
               <PdfViewer
                 src={iframeSrc}
-                title={viewerCorrespondenceToDisplay.documentTitle}
+                title={viewerCorrespondenceToDisplay.documentTitle || ''}
               />
             )}
           </>

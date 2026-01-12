@@ -12,11 +12,10 @@ export const getUsersInSectionLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(event, async ({ applicationContext }) => {
+  genericHandler(event, async () => {
     const { section } = event.pathParameters || {};
 
     return await getUsersInSectionInteractor(
-      applicationContext,
       {
         section,
       },

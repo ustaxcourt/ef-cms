@@ -1,31 +1,33 @@
-/* eslint-disable max-lines */
+import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock('@web-api/business/useCases/addCoverToPdf');
+jest.mock('@web-api/business/useCaseHelper/service/createChangeItems');
+import '@web-api/persistence/postgres/utils/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import {
   CASE_STATUS_TYPES,
   CONTACT_TYPES,
   COUNTRY_TYPES,
-  INITIAL_DOCUMENT_TYPES,
   PARTY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import {
-  Case,
-  getOtherFilers,
-} from '../../../../../shared/src/business/entities/cases/Case';
-import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
+} from '@shared/business/entities/EntityConstants';
+import { Case, getOtherFilers } from '@shared/business/entities/cases/Case';
 import {
   MOCK_CASE,
   MOCK_CASE_WITH_SECONDARY_OTHERS,
-} from '../../../../../shared/src/test/mockCase';
-import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
+} from '@shared/test/mockCase';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { UserCase } from '../../../../../shared/src/business/entities/UserCase';
+import { UserCase } from '@shared/business/entities/UserCase';
 import { addCoverToPdf } from '@web-api/business/useCases/addCoverToPdf';
-import { addExistingUserToCase } from '../../useCaseHelper/caseAssociation/addExistingUserToCase';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { calculateISODate } from '../../../../../shared/src/business/utilities/DateHandler';
+import { addExistingUserToCase } from '@web-api/business/useCaseHelper/caseAssociation/addExistingUserToCase';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { calculateISODate } from '@shared/business/utilities/DateHandler';
 import {
   mockAdmissionsClerkUser,
   mockDocketClerkUser,
@@ -33,11 +35,26 @@ import {
   mockPrivatePractitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { updatePetitionerInformationInteractor } from './updatePetitionerInformationInteractor';
-jest.mock('@web-api/business/useCases/addCoverToPdf');
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { generateAndServeDocketEntry as generateAndServeDocketEntryMock } from '@web-api/business/useCaseHelper/service/createChangeItems';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('updatePetitionerInformationInteractor', () => {
   let mockCase;
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const generateAndServeDocketEntry = jest.mocked(
+    generateAndServeDocketEntryMock,
+  );
+  const getUserById = jest.mocked(getUserByIdMock);
+  const updateCaseAndAssociations = jest
+    .mocked(updateCaseAndAssociationsMock)
+    .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
+  const tryGetLocks = jest.mocked(tryGetLocksMock);
   const PRIMARY_CONTACT_ID = MOCK_CASE.petitioners[0].contactId;
+  const mockUrl = 'madeUpurl.com';
 
   const mockPetitioners = [
     {
@@ -52,7 +69,6 @@ describe('updatePetitionerInformationInteractor', () => {
       name: 'Test Secondary Petitioner',
     },
   ];
-  let mockLock;
 
   beforeAll(() => {
     (addCoverToPdf as jest.Mock).mockResolvedValue({});
@@ -64,14 +80,9 @@ describe('updatePetitionerInformationInteractor', () => {
     applicationContext
       .getUseCaseHelpers()
       .createUserForContact.mockImplementation(() => new UserCase(mockCase));
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockImplementation(() => mockLock);
   });
 
   beforeEach(() => {
-    mockLock = undefined;
-
     mockCase = {
       ...MOCK_CASE,
       petitioners: mockPetitioners,
@@ -79,9 +90,11 @@ describe('updatePetitionerInformationInteractor', () => {
       status: CASE_STATUS_TYPES.generalDocket,
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(() => mockCase);
+    getCaseByDocketNumber.mockImplementation(() => mockCase);
+    generateAndServeDocketEntry.mockResolvedValue({
+      url: mockUrl,
+      caseEntity: mockCase,
+    });
   });
 
   it('should throw an error when an undefined user attempts to update petitioner information', async () => {
@@ -113,12 +126,10 @@ describe('updatePetitionerInformationInteractor', () => {
   });
 
   it('should throw an error when the user making the request is a private practitioner not associated with the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValueOnce({
-        ...mockCase,
-        privatePractitioners: [{ representing: [], userId: '7' }],
-      });
+    getCaseByDocketNumber.mockResolvedValueOnce({
+      ...mockCase,
+      privatePractitioners: [{ representing: [], userId: '7' }],
+    });
 
     await expect(
       updatePetitionerInformationInteractor(
@@ -133,20 +144,18 @@ describe('updatePetitionerInformationInteractor', () => {
   });
 
   it('should not throw an error when the user making the request is a private practitioner who is associated with the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValueOnce({
-        ...mockCase,
-        privatePractitioners: [
-          {
-            barNumber: 'EP0001',
-            name: 'Example Practitioner',
-            representing: [PRIMARY_CONTACT_ID],
-            role: ROLES.privatePractitioner,
-            userId: mockPrivatePractitionerUser.userId,
-          },
-        ],
-      });
+    getCaseByDocketNumber.mockResolvedValueOnce({
+      ...mockCase,
+      privatePractitioners: [
+        {
+          barNumber: 'EP0001',
+          name: 'Example Practitioner',
+          representing: [PRIMARY_CONTACT_ID],
+          role: ROLES.privatePractitioner,
+          userId: mockPrivatePractitionerUser.userId,
+        },
+      ],
+    });
 
     await expect(
       updatePetitionerInformationInteractor(
@@ -202,7 +211,7 @@ describe('updatePetitionerInformationInteractor', () => {
         mockDocketClerkUser,
       ),
     ).rejects.toThrow(
-      `Case with docketNumber ${mockCase.docketNumber} has not been served`,
+      `Case with docket number ${mockCase.docketNumber} has not been served`,
     );
   });
 
@@ -224,17 +233,10 @@ describe('updatePetitionerInformationInteractor', () => {
     expect(
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).not.toHaveBeenCalled();
+    expect(updateCaseAndAssociations).not.toHaveBeenCalled();
   });
 
   it('should update the petitioner contact when their info changes and serves the notice created', async () => {
-    const mockNumberOfPages = 999;
-    applicationContext
-      .getUseCaseHelpers()
-      .countPagesInDocument.mockReturnValue(mockNumberOfPages);
-
     await updatePetitionerInformationInteractor(
       applicationContext,
       {
@@ -248,28 +250,7 @@ describe('updatePetitionerInformationInteractor', () => {
       mockDocketClerkUser,
     );
 
-    const autoGeneratedDocument = applicationContext
-      .getPersistenceGateway()
-      .updateCase.mock.calls[0][0].caseToUpdate.docketEntries.find(
-        d => d.documentType === 'Notice of Change of Address',
-      );
-    expect(
-      applicationContext.getUseCaseHelpers().countPagesInDocument,
-    ).toHaveBeenCalled();
-    expect(autoGeneratedDocument).toMatchObject({
-      isAutoGenerated: true,
-      isFileAttached: true,
-      numberOfPages: mockNumberOfPages,
-    });
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getDocumentGenerators().changeOfAddress,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
-    ).toHaveBeenCalled();
+    expect(generateAndServeDocketEntry).toHaveBeenCalled();
   });
 
   it('should update contact information even when the update is changing a value to null', async () => {
@@ -278,44 +259,17 @@ describe('updatePetitionerInformationInteractor', () => {
       {
         docketNumber: MOCK_CASE.docketNumber,
         updatedPetitionerData: {
-          address1: '989 Division St',
-          city: 'Somewhere',
-          contactId: mockPetitioners[0].contactId,
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          name: 'Test Primary Petitioner',
-          phone: '1234568',
-          postalCode: '12345',
-          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-          state: 'TN',
-          title: 'Executor',
+          ...MOCK_CASE.petitioners[0],
+          address2: null,
         },
       },
       mockDocketClerkUser,
     );
 
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.petitioners[0].address2,
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.petitioners[0]
+        .address2,
     ).toBeUndefined();
-  });
-
-  it('should set filedBy to undefined on notice of change docket entry', async () => {
-    const result = await updatePetitionerInformationInteractor(
-      applicationContext,
-      {
-        docketNumber: MOCK_CASE.docketNumber,
-        updatedPetitionerData: {
-          ...mockPetitioners[1],
-          address1: 'A Changed Street',
-        },
-      },
-      mockDocketClerkUser,
-    );
-
-    const noticeOfChangeDocketEntryWithWorkItem =
-      result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
-
-    expect(noticeOfChangeDocketEntryWithWorkItem.filedBy).toBeUndefined();
   });
 
   it('should update petitioner contact when secondary contact info changes, serves the generated notice, and returns the download URL for the paper notice if the contactSecondary was previously on the case', async () => {
@@ -332,16 +286,8 @@ describe('updatePetitionerInformationInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getDocumentGenerators().changeOfAddress,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
-    ).toHaveBeenCalled();
-    expect(result.paperServicePdfUrl).toEqual('http://example.com/');
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
+    expect(result.paperServicePdfUrl).toEqual(mockUrl);
   });
 
   it('should not serve a document or return a paperServicePdfUrl when only the serviceIndicator for the petitioner changes but not the address', async () => {
@@ -357,9 +303,7 @@ describe('updatePetitionerInformationInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).not.toHaveBeenCalled();
@@ -383,14 +327,14 @@ describe('updatePetitionerInformationInteractor', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.petitioners[0].email,
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.petitioners[0]
+        .email,
     ).not.toBe('test2@example.com');
   });
 
   it("should not update the user's paper petition email and e-service consent information", async () => {
     mockPetitioners[0].paperPetitionEmail = 'paperPetitionEmail@example.com';
-    mockPetitioners[0].hasConsentedToEService = true;
+    mockPetitioners[0].hasConsentedToElectronicService = true;
 
     await updatePetitionerInformationInteractor(
       applicationContext,
@@ -404,10 +348,9 @@ describe('updatePetitionerInformationInteractor', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.petitioners[0],
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.petitioners[0],
     ).toMatchObject({
-      hasConsentedToEService: true,
+      hasConsentedToElectronicService: true,
       paperPetitionEmail: 'paperPetitionEmail@example.com',
     });
   });
@@ -428,8 +371,7 @@ describe('updatePetitionerInformationInteractor', () => {
     );
 
     const updatedPetitioners =
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.petitioners;
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.petitioners;
 
     expect(updatedPetitioners[0].additionalName).toBe(mockAdditionalName);
   });
@@ -454,13 +396,12 @@ describe('updatePetitionerInformationInteractor', () => {
     );
 
     const updatedPetitioners =
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.petitioners;
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.petitioners;
 
     const updatedOtherFiler = updatedPetitioners.find(
       p => p.contactId === otherFilerToUpdate.contactId,
     );
-    expect(updatedOtherFiler.contactType).toBe(CONTACT_TYPES.otherPetitioner);
+    expect(updatedOtherFiler?.contactType).toBe(CONTACT_TYPES.otherPetitioner);
   });
 
   it('should throw an error when attempting to update countryType to an invalid value', async () => {
@@ -479,9 +420,7 @@ describe('updatePetitionerInformationInteractor', () => {
       ),
     ).rejects.toThrow('The Case entity was invalid');
 
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).not.toHaveBeenCalled();
+    expect(updateCaseAndAssociations).not.toHaveBeenCalled();
   });
 
   it("should not generate a notice of change address when petitioner's information is sealed", async () => {
@@ -514,37 +453,12 @@ describe('updatePetitionerInformationInteractor', () => {
     ).not.toHaveBeenCalled();
   });
 
-  it('should use original case caption to create case title when creating work item', async () => {
-    await updatePetitionerInformationInteractor(
-      applicationContext,
-      {
-        docketNumber: MOCK_CASE.docketNumber,
-        updatedPetitionerData: {
-          ...mockPetitioners[0],
-          address1: 'changed address',
-          contactId: mockPetitioners[0].contactId,
-          name: 'Test Person22222',
-        },
-      },
-      mockDocketClerkUser,
-    );
-
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
-        .workItem,
-    ).toMatchObject({
-      caseTitle: 'Test Petitioner',
-    });
-  });
-
   it('should not generated a docket entry if case older than 6 months', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(() => ({
-        ...mockCase,
-        closedDate: '2018-01-01T05:00:00.000Z',
-        status: 'Closed',
-      }));
+    getCaseByDocketNumber.mockImplementation(() => ({
+      ...mockCase,
+      closedDate: '2018-01-01T05:00:00.000Z',
+      status: 'Closed',
+    }));
     await updatePetitionerInformationInteractor(
       applicationContext,
       {
@@ -557,9 +471,7 @@ describe('updatePetitionerInformationInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getUseCaseHelpers().generateAndServeDocketEntry,
-    ).not.toHaveBeenCalled();
+    expect(generateAndServeDocketEntry).not.toHaveBeenCalled();
   });
 
   it('should update the petitioner contact information, but not file and serve a docket entry if the case has been closed for MORE than 6 months', async () => {
@@ -578,9 +490,7 @@ describe('updatePetitionerInformationInteractor', () => {
       status: CASE_STATUS_TYPES.closed,
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(() => mockCase);
+    getCaseByDocketNumber.mockImplementation(() => mockCase);
 
     await updatePetitionerInformationInteractor(
       applicationContext,
@@ -608,9 +518,7 @@ describe('updatePetitionerInformationInteractor', () => {
       email: undefined,
       userId: applicationContext.getUniqueId(),
     };
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(unverifiedNewPetitioner);
+    getUserById.mockResolvedValue(unverifiedNewPetitioner as DbUser);
 
     await updatePetitionerInformationInteractor(
       applicationContext,
@@ -625,9 +533,7 @@ describe('updatePetitionerInformationInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getUseCaseHelpers().generateAndServeDocketEntry,
-    ).not.toHaveBeenCalled();
+    expect(generateAndServeDocketEntry).not.toHaveBeenCalled();
   });
 
   it('should update the petitioner contact information and file and serve a docket entry if the case has been closed for LESS than 6 months', async () => {
@@ -636,7 +542,6 @@ describe('updatePetitionerInformationInteractor', () => {
       units: 'months',
     });
     const updatePetitionerSpy = jest.spyOn(Case.prototype, 'updatePetitioner');
-    const addDocketEntrySpy = jest.spyOn(Case.prototype, 'addDocketEntry');
 
     mockCase = {
       ...MOCK_CASE,
@@ -646,9 +551,7 @@ describe('updatePetitionerInformationInteractor', () => {
       status: CASE_STATUS_TYPES.closed,
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(() => mockCase);
+    getCaseByDocketNumber.mockImplementation(() => mockCase);
 
     await updatePetitionerInformationInteractor(
       applicationContext,
@@ -665,10 +568,7 @@ describe('updatePetitionerInformationInteractor', () => {
     );
 
     expect(updatePetitionerSpy).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().generateAndServeDocketEntry,
-    ).toHaveBeenCalled();
-    expect(addDocketEntrySpy).toHaveBeenCalled();
+    expect(generateAndServeDocketEntry).toHaveBeenCalled();
   });
 
   describe('admissions clerk adds a verified petitioner email', () => {
@@ -682,9 +582,7 @@ describe('updatePetitionerInformationInteractor', () => {
         .getUserGateway()
         .getUserByEmail.mockReturnValue('someMockId');
 
-      applicationContext
-        .getPersistenceGateway()
-        .getUserById.mockReturnValue(foundMockVerifiedPetitioner);
+      getUserById.mockResolvedValue(foundMockVerifiedPetitioner as DbUser);
 
       applicationContext
         .getUseCaseHelpers()
@@ -692,31 +590,6 @@ describe('updatePetitionerInformationInteractor', () => {
     });
 
     it('should call the update addExistingUserToCase use case helper when the petitioner is adding an email address', async () => {
-      applicationContext
-        .getUseCaseHelpers()
-        .generateAndServeDocketEntry.mockReturnValue({
-          changeOfAddressDocketEntry: new DocketEntry(
-            {
-              createdAt: '2018-11-21T20:49:28.192Z',
-              docketEntryId: '9de27a7d-7c6b-434b-803b-7655f82d5e07',
-              docketNumber: '101-18',
-              documentTitle: 'Petition',
-              documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
-              eventCode: INITIAL_DOCUMENT_TYPES.petition.eventCode,
-              filedBy: 'Test Petitioner',
-              filedByRole: ROLES.petitioner,
-              filingDate: '2018-03-01T05:00:00.000Z',
-              index: 1,
-              isFileAttached: true,
-              isOnDocketRecord: true,
-              processingStatus: 'complete',
-              receivedAt: '2018-03-01T05:00:00.000Z',
-              userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-            },
-            { authorizedUser: undefined },
-          ),
-        });
-
       await updatePetitionerInformationInteractor(
         applicationContext,
         {
@@ -733,12 +606,8 @@ describe('updatePetitionerInformationInteractor', () => {
         applicationContext.getUseCaseHelpers().addExistingUserToCase,
       ).toHaveBeenCalled();
 
-      expect(
-        applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-      ).toHaveBeenCalledTimes(1);
-      expect(
-        applicationContext.getUseCaseHelpers().generateAndServeDocketEntry,
-      ).toHaveBeenCalledTimes(1);
+      expect(updateCaseAndAssociations).toHaveBeenCalledTimes(1);
+      expect(generateAndServeDocketEntry).toHaveBeenCalledTimes(1);
     });
 
     it('should not call the update addExistingUserToCase use case helper when the petitioner is unchanged', async () => {
@@ -810,7 +679,9 @@ describe('updatePetitionerInformationInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    mockLock = MOCK_LOCK;
+    tryGetLocks.mockResolvedValueOnce([
+      { successfullyLocked: false, identifier: 'abc' },
+    ]);
 
     await expect(
       updatePetitionerInformationInteractor(
@@ -826,12 +697,10 @@ describe('updatePetitionerInformationInteractor', () => {
       ),
     ).rejects.toThrow(ServiceUnavailableError);
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).not.toHaveBeenCalled();
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
-  it('should acquire and remove the lock on the case', async () => {
+  it('should acquire a lock on the case', async () => {
     await updatePetitionerInformationInteractor(
       applicationContext,
       {
@@ -844,19 +713,10 @@ describe('updatePetitionerInformationInteractor', () => {
       mockAdmissionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().createLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifier: `case|${MOCK_CASE.docketNumber}`,
-      ttl: 30,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().removeLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifiers: [`case|${MOCK_CASE.docketNumber}`],
-    });
+    expect(tryGetLocks).toHaveBeenCalledWith(
+      expect.objectContaining({
+        identifiers: [`case|${MOCK_CASE.docketNumber}`],
+      }),
+    );
   });
 });

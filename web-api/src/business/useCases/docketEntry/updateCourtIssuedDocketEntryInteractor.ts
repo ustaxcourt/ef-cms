@@ -1,16 +1,22 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
+import { Case } from '@shared/business/entities/cases/Case';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { settlePromises } from '@web-api/utilities/settlePromises';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 export const updateCourtIssuedDocketEntry = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   { documentMeta }: { documentMeta: any },
   authorizedUser: UnknownAuthUser,
 ) => {
@@ -24,12 +30,21 @@ export const updateCourtIssuedDocketEntry = async (
 
   const { docketEntryId, docketNumber } = documentMeta;
 
-  const caseToUpdate = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
+  const [caseToUpdate, workItem] = await Promise.all([
+    getCaseByDocketNumber({
       docketNumber,
-    });
+    }),
+    getWorkItemByDocketNumberAndDocketEntryId({
+      docketNumber,
+      docketEntryId,
+    }),
+  ]);
+
+  if (!workItem) {
+    throw new NotFoundError(
+      `Could not find work item associated with ${docketNumber} document ${docketEntryId}`,
+    );
+  }
 
   const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
@@ -41,9 +56,13 @@ export const updateCourtIssuedDocketEntry = async (
     throw new NotFoundError('Document not found');
   }
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
+
+  if (!user) {
+    throw new NotFoundError(
+      `User not found with user id ${authorizedUser.userId}`,
+    );
+  }
 
   const editableFields = {
     attachments: documentMeta.attachments,
@@ -74,33 +93,19 @@ export const updateCourtIssuedDocketEntry = async (
 
   caseEntity.updateDocketEntry(docketEntryEntity);
 
-  const { workItem } = docketEntryEntity;
-
-  Object.assign(workItem, {
-    docketEntry: {
-      ...docketEntryEntity.toRawObject(),
-
-      createdAt: docketEntryEntity.createdAt,
-    },
-  });
-
-  docketEntryEntity.setWorkItem(workItem);
-
   const rawValidWorkItem = workItem.validate().toRawObject();
 
   const saveItems = [
-    applicationContext.getPersistenceGateway().saveWorkItem({
-      applicationContext,
-      workItem: rawValidWorkItem,
+    upsertWorkItems({
+      workItems: [rawValidWorkItem],
     }),
-    applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-      applicationContext,
+    updateCaseAndAssociations({
       authorizedUser,
       caseToUpdate: caseEntity,
     }),
   ];
 
-  await Promise.all(saveItems);
+  await settlePromises(saveItems);
 
   return caseEntity.toRawObject();
 };

@@ -1,7 +1,7 @@
 import { MessageResult } from '@shared/business/entities/MessageResult';
 import { calculateDate } from '@shared/business/utilities/DateHandler';
 import { getDbReader } from '@web-api/database';
-import { messageResultEntity } from '@web-api/persistence/postgres/messages/mapper';
+import { fromKyselyMessage } from '@web-api/persistence/postgres/messages/mapper';
 
 export const getSectionOutboxMessages = async ({
   section,
@@ -17,10 +17,17 @@ export const getSectionOutboxMessages = async ({
       .leftJoin('dwCase as c', 'c.docketNumber', 'm.docketNumber')
       .where('m.fromSection', '=', section)
       .where('m.createdAt', '>=', filterDate)
-      .selectAll()
-      .select('m.docketNumber')
+      .selectAll('m')
+      .select([
+        'c.status',
+        'c.trialDate',
+        'c.trialLocation',
+        'c.docketNumberSuffix',
+        'c.leadDocketNumber',
+        'c.caption',
+      ])
       .execute(),
   );
 
-  return messages.map(message => messageResultEntity(message));
+  return messages.map(message => fromKyselyMessage(message));
 };

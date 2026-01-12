@@ -1,4 +1,6 @@
-.order-court-header, .petition-court-header {
+.minute-sheet-header,
+.order-court-header,
+.petition-court-header {
   margin-bottom: 30px;
   line-height: 160%;
   text-align: center;
@@ -12,5 +14,14 @@
 
   .court-address {
     font-size: 13px;
+  }
+
+  .trial-session-location {
+    margin-top: 1rem;
+    font-size: 20px;
+  }
+
+  .trial-session-date {
+    font-size: 16px;
   }
 }

@@ -1,9 +1,8 @@
-/* eslint-disable complexity */
 import {
   FORMATS,
   createISODateString,
   formatDateString,
-  isTodayWithinGivenInterval,
+  isDateWithinGivenInterval,
   prepareDateFromString,
 } from '../../utilities/DateHandler';
 import {
@@ -23,6 +22,7 @@ import {
   TRIAL_SESSION_SCOPE_TYPES,
   TrialSessionProceedingType,
   TrialSessionScope,
+  TrialSessionTypes,
   US_STATES,
   US_STATES_OTHER,
 } from '../EntityConstants';
@@ -65,9 +65,10 @@ export type TCaseOrder = {
   calendarNotes?: string;
   disposition?: string;
   docketNumber: string;
-  isManuallyAdded?: boolean;
-  removedFromTrial?: boolean;
+  isManuallyAdded: boolean;
+  removedFromTrial: boolean;
   removedFromTrialDate?: string;
+  isHearing: boolean;
 };
 
 export class TrialSession extends JoiValidationEntity {
@@ -80,13 +81,12 @@ export class TrialSession extends JoiValidationEntity {
   public courthouseName?: string;
   public courtReporter?: string;
   public createdAt?: string;
-  public dismissedAlertForNOTT?: boolean;
-  public hasNOTTBeenServed: boolean;
+  public dismissedAlertForNott?: boolean;
+  public hasNottBeenServed: boolean;
   public estimatedEndDate?: string;
   public irsCalendarAdministrator?: string;
   public irsCalendarAdministratorInfo?: RawIrsCalendarAdministratorInfo;
   public isCalendared: boolean;
-  public isClosed?: boolean;
   public joinPhoneNumber?: string;
   public judge?: TJudge;
   public maxCases?: number;
@@ -98,7 +98,7 @@ export class TrialSession extends JoiValidationEntity {
   public proceedingType: TrialSessionProceedingType;
   public sessionScope: TrialSessionScope;
   public sessionStatus: string;
-  public sessionType: string;
+  public sessionType: TrialSessionTypes;
   public startDate: string;
   public startTime?: string;
   public state?: string;
@@ -108,7 +108,7 @@ export class TrialSession extends JoiValidationEntity {
   public termYear: string;
   public trialClerk?: TTrialClerk;
   public trialLocation?: string;
-  public trialSessionId?: string;
+  public trialSessionId: string;
   public paperServicePdfs: { fileId: string; title: string }[];
 
   public static PAPER_SERVICE_PDF_TTL = 60 * 60 * 24 * 3; // 3 days
@@ -142,6 +142,7 @@ export class TrialSession extends JoiValidationEntity {
       calendarNotes: caseOrder.calendarNotes,
       disposition: caseOrder.disposition,
       docketNumber: caseOrder.docketNumber,
+      isHearing: caseOrder.isHearing,
       isManuallyAdded: caseOrder.isManuallyAdded,
       removedFromTrial: caseOrder.removedFromTrial,
       removedFromTrialDate: caseOrder.removedFromTrialDate,
@@ -151,13 +152,12 @@ export class TrialSession extends JoiValidationEntity {
     this.courtReporter = rawSession.courtReporter;
     this.courthouseName = rawSession.courthouseName;
     this.createdAt = rawSession.createdAt || createISODateString();
-    this.dismissedAlertForNOTT = rawSession.dismissedAlertForNOTT || false;
+    this.dismissedAlertForNott = rawSession.dismissedAlertForNott || false;
     this.sessionStatus = rawSession.sessionStatus || SESSION_STATUS_TYPES.new;
     this.estimatedEndDate = rawSession.estimatedEndDate || null;
     this.irsCalendarAdministrator = rawSession.irsCalendarAdministrator;
     this.irsCalendarAdministratorInfo = rawSession.irsCalendarAdministratorInfo;
     this.isCalendared = rawSession.isCalendared || false;
-    this.isClosed = rawSession.isClosed || false;
     this.joinPhoneNumber = rawSession.joinPhoneNumber;
     this.maxCases = rawSession.maxCases;
     this.meetingId = rawSession.meetingId;
@@ -165,7 +165,7 @@ export class TrialSession extends JoiValidationEntity {
     this.noticeIssuedDate = rawSession.noticeIssuedDate;
     this.password = rawSession.password;
     this.postalCode = rawSession.postalCode;
-    this.hasNOTTBeenServed = rawSession.hasNOTTBeenServed || false;
+    this.hasNottBeenServed = rawSession.hasNottBeenServed || false;
     this.sessionScope =
       rawSession.sessionScope || TRIAL_SESSION_SCOPE_TYPES.locationBased;
     this.sessionType = rawSession.sessionType;
@@ -225,13 +225,17 @@ export class TrialSession extends JoiValidationEntity {
       FORMATS.MMDDYY,
     );
 
-    return isTodayWithinGivenInterval({
-      intervalEndDate: trialStartDateString.minus({
-        ['days']: 24, // luxon's interval end date is not inclusive
-      }),
-      intervalStartDate: trialStartDateString.minus({
-        ['days']: 34,
-      }),
+    return isDateWithinGivenInterval({
+      intervalEndDate: trialStartDateString
+        .minus({
+          ['days']: 24, // luxon's interval end date is not inclusive
+        })
+        .toISO()!,
+      intervalStartDate: trialStartDateString
+        .minus({
+          ['days']: 34,
+        })
+        .toISO()!,
     });
   }
 
@@ -251,7 +255,7 @@ export class TrialSession extends JoiValidationEntity {
         .allow('')
         .optional(),
       createdAt: JoiValidationConstants.ISO_DATE.optional(),
-      dismissedAlertForNOTT: joi.boolean().optional(),
+      dismissedAlertForNott: joi.boolean().optional(),
       entityName:
         JoiValidationConstants.STRING.valid('TrialSession').required(),
       estimatedEndDate: joi
@@ -266,9 +270,9 @@ export class TrialSession extends JoiValidationEntity {
           '*': 'Enter a valid estimated end date',
           'date.max': 'Enter a valid estimated end date',
         }),
-      hasNOTTBeenServed: joi.boolean().required(),
+      hasNottBeenServed: joi.boolean().required(),
       irsCalendarAdministrator:
-        JoiValidationConstants.STRING.max(100).optional(),
+        JoiValidationConstants.STRING.max(300).optional(),
       irsCalendarAdministratorInfo: joi
         .object(IrsCalendarAdministratorInfo.VALIDATIONS)
         .optional(),
@@ -288,7 +292,7 @@ export class TrialSession extends JoiValidationEntity {
         })
         .messages({ '*': 'Enter a valid number of maximum cases' }),
       meetingId: stringRequiredForRemoteProceedings,
-      notes: JoiValidationConstants.STRING.max(400).optional(),
+      notes: JoiValidationConstants.STRING.max(450).optional(),
       noticeIssuedDate: JoiValidationConstants.ISO_DATE.optional(),
       paperServicePdfs: joi
         .array()
@@ -410,19 +414,17 @@ export class TrialSession extends JoiValidationEntity {
     return this;
   }
 
-  generateSortKeyPrefix() {
-    const { sessionType, trialLocation } = this;
-    const caseProcedureSymbol =
-      {
-        Regular: 'R',
-        Small: 'S',
-      }[sessionType] || 'H';
-
-    const formattedTrialCity = trialLocation?.replace(/[\s.,]/g, '');
-
-    const skPrefix = [formattedTrialCity, caseProcedureSymbol].join('-');
-
-    return skPrefix;
+  getCaseProcedureForTrial() {
+    const { sessionType } = this;
+    if (
+      [SESSION_TYPES.regular, SESSION_TYPES.small].some(
+        type => type === sessionType,
+      )
+    ) {
+      return sessionType;
+    } else {
+      return SESSION_TYPES.hybrid;
+    }
   }
 
   setAsCalendared() {
@@ -434,26 +436,40 @@ export class TrialSession extends JoiValidationEntity {
   addCaseToCalendar(caseEntity) {
     const { docketNumber } = caseEntity;
 
-    const caseExists = (this.caseOrder || []).find(
+    let caseOrderObject = (this.caseOrder || []).find(
       _caseOrder => _caseOrder.docketNumber === docketNumber,
     );
 
-    if (!caseExists) {
-      this.caseOrder.push({ docketNumber });
+    if (!caseOrderObject) {
+      caseOrderObject = {
+        docketNumber,
+        isManuallyAdded: false,
+        removedFromTrial: false,
+        isHearing: false,
+        addedToSessionAt: createISODateString(),
+      };
+      this.caseOrder.push(caseOrderObject);
     }
 
-    return this;
+    return caseOrderObject;
   }
 
-  manuallyAddCaseToCalendar({ calendarNotes, caseEntity }) {
+  manuallyAddCaseToCalendar({
+    calendarNotes,
+    caseEntity,
+    isHearing,
+  }): TCaseOrder {
     const { docketNumber } = caseEntity;
-    this.caseOrder.push({
+    const caseOrderObject = {
       addedToSessionAt: createISODateString(),
       calendarNotes,
       docketNumber,
       isManuallyAdded: true,
-    });
-    return this;
+      removedFromTrial: false,
+      isHearing,
+    };
+    this.caseOrder.push(caseOrderObject);
+    return caseOrderObject;
   }
 
   isCaseAlreadyCalendared(caseEntity) {
@@ -487,20 +503,21 @@ export class TrialSession extends JoiValidationEntity {
       this.sessionStatus = SESSION_STATUS_GROUPS.closed;
     }
 
-    return this;
+    return caseToUpdate;
   }
 
   /**
    * removes the case totally from the trial session
    */
-  deleteCaseFromCalendar({ docketNumber }) {
+  deleteCaseFromCalendar({ docketNumber }): TCaseOrder | undefined {
     const index = (this.caseOrder || []).findIndex(
       trialCase => trialCase.docketNumber === docketNumber,
     );
+    let caseOrderObject: TCaseOrder | undefined = undefined;
     if (index >= 0) {
-      this.caseOrder!.splice(index, 1);
+      caseOrderObject = this.caseOrder!.splice(index, 1)[0];
     }
-    return this;
+    return caseOrderObject;
   }
 
   /**
@@ -540,6 +557,27 @@ export class TrialSession extends JoiValidationEntity {
   addPaperServicePdf(fileId: string, title: string): void {
     this.paperServicePdfs.push({ fileId, title });
   }
+
+  isClosed(): boolean {
+    return this.sessionStatus === SESSION_STATUS_TYPES.closed;
+  }
 }
 
 export type RawTrialSession = ExcludeMethods<TrialSession>;
+
+export const TRIAL_SESSION_ADDRESS_PROPERTIES = [
+  'proceedingType',
+  'trialLocation',
+  'courthouseName',
+  'address1',
+  'address2',
+  'city',
+  'state',
+  'postalCode',
+] as const;
+
+type AddressProperties = (typeof TRIAL_SESSION_ADDRESS_PROPERTIES)[number];
+
+export type TrialSessionLocationInfo = {
+  [P in AddressProperties]: RawTrialSession[P];
+};

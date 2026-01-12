@@ -9,6 +9,12 @@ module "api_async_lambda" {
   memory_size    = "7000"
 }
 
+// Do not auto retry requests: https://docs.aws.amazon.com/lambda/latest/dg/invocation-async-error-handling.html
+resource "aws_lambda_function_event_invoke_config" "disable_auto_retries" {
+  function_name          = module.api_async_lambda.function_name
+  maximum_retry_attempts = 0
+}
+
 resource "aws_api_gateway_resource" "api_async_base_resource" {
   rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
   parent_id   = aws_api_gateway_rest_api.gateway_for_api.root_resource_id
@@ -51,9 +57,20 @@ resource "aws_api_gateway_method" "api_async_method_get" {
   authorizer_id = aws_api_gateway_authorizer.custom_authorizer.id
 }
 
-resource "aws_api_gateway_method" "api_async_method_options" {
+resource "aws_api_gateway_method" "api_async_method_delete" {
   depends_on = [
     aws_api_gateway_method.api_async_method_get
+  ]
+  rest_api_id   = aws_api_gateway_rest_api.gateway_for_api.id
+  resource_id   = aws_api_gateway_resource.api_async_resource.id
+  http_method   = "DELETE"
+  authorization = "CUSTOM"
+  authorizer_id = aws_api_gateway_authorizer.custom_authorizer.id
+}
+
+resource "aws_api_gateway_method" "api_async_method_options" {
+  depends_on = [
+    aws_api_gateway_method.api_async_method_delete
   ]
   rest_api_id   = aws_api_gateway_rest_api.gateway_for_api.id
   resource_id   = aws_api_gateway_resource.api_async_resource.id
@@ -229,9 +246,70 @@ EOF
   passthrough_behavior = "WHEN_NO_MATCH"
 }
 
-resource "aws_api_gateway_integration" "api_async_integration_options" {
+resource "aws_api_gateway_integration" "api_async_integration_delete" {
   depends_on = [
     aws_api_gateway_integration.api_async_integration_get
+  ]
+  rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
+  resource_id = aws_api_gateway_method.api_async_method_delete.resource_id
+  http_method = aws_api_gateway_method.api_async_method_delete.http_method
+
+  request_parameters = {
+    "integration.request.header.X-Amz-Invocation-Type" = "'Event'"
+  }
+
+  integration_http_method = "POST"
+  type                    = "AWS"
+  uri                     = module.api_async_lambda.invoke_arn
+
+  request_templates = {
+    "application/json" = <<EOF
+{
+  "body" : $input.json('$'),
+  "path" : "$context.path",
+  "httpMethod" : "$context.httpMethod",
+  "headers" : {
+    "Authorization": "$input.params('Authorization')",
+    "asyncsyncid": "$input.params('Asyncsyncid')",
+    "content-type": "$input.params('Content-Type')",
+    "x-test-user": "$input.params('x-test-user')"
+  },
+  "queryStringParameters": {
+    #foreach($param in $input.params().querystring.keySet())
+      "$param": "$util.escapeJavaScript($input.params().querystring.get($param))"
+      #if($foreach.hasNext),#end
+    #end
+  },
+  "requestContext" : {
+    "account-id" : "$context.identity.accountId",
+    "api-id" : "$context.apiId",
+    "api-key" : "$context.identity.apiKey",
+    "authorizer-principal-id" : "$context.authorizer.principalId",
+    "caller" : "$context.identity.caller",
+    "cognito-authentication-provider" : "$context.identity.cognitoAuthenticationProvider",
+    "cognito-authentication-type" : "$context.identity.cognitoAuthenticationType",
+    "cognito-identity-id" : "$context.identity.cognitoIdentityId",
+    "cognito-identity-pool-id" : "$context.identity.cognitoIdentityPoolId",
+    "http-method" : "$context.httpMethod",
+    "stage" : "$context.stage",
+    "source-ip" : "$context.identity.sourceIp",
+    "user" : "$context.identity.user",
+    "user-agent" : "$context.identity.userAgent",
+    "user-arn" : "$context.identity.userArn",
+    "request-id" : "$context.requestId",
+    "resource-id" : "$context.resourceId",
+    "resource-path" : "$context.resourcePath"
+  }
+}
+EOF
+  }
+
+  passthrough_behavior = "WHEN_NO_MATCH"
+}
+
+resource "aws_api_gateway_integration" "api_async_integration_options" {
+  depends_on = [
+    aws_api_gateway_integration.api_async_integration_delete
   ]
   rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
   resource_id = aws_api_gateway_method.api_async_method_options.resource_id
@@ -312,6 +390,18 @@ resource "aws_api_gateway_method_response" "async_method_response_get" {
   }
 }
 
+resource "aws_api_gateway_method_response" "async_method_response_delete" {
+  rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
+  resource_id = aws_api_gateway_resource.api_async_resource.id
+  http_method = aws_api_gateway_method.api_async_method_delete.http_method
+  status_code = "200"
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin"  = true
+    "method.response.header.Access-Control-Allow-Headers" = true
+    "method.response.header.Access-Control-Allow-Methods" = true
+  }
+}
+
 resource "aws_api_gateway_integration_response" "async_response_get" {
   depends_on = [
     aws_api_gateway_integration.api_async_integration_get,
@@ -329,12 +419,29 @@ resource "aws_api_gateway_integration_response" "async_response_get" {
   }
 }
 
+resource "aws_api_gateway_integration_response" "async_response_delete" {
+  depends_on = [
+    aws_api_gateway_integration.api_async_integration_delete,
+    aws_api_gateway_method.api_async_method_delete,
+    aws_api_gateway_resource.api_async_resource
+  ]
+  rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
+  resource_id = aws_api_gateway_resource.api_async_resource.id
+  http_method = aws_api_gateway_method.api_async_method_delete.http_method
+  status_code = aws_api_gateway_method_response.async_method_response_delete.status_code
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Origin"  = "'*'",
+    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Requested-With,X-Force-Refresh'",
+    "method.response.header.Access-Control-Allow-Methods" = "'DELETE'"
+  }
+}
+
 resource "terraform_data" "api_async_lambda_last_modified" {
   input = module.api_async_lambda.last_modified
 }
 
 resource "aws_lambda_permission" "apigw_async_lambda" {
-  statement_id  = "AllowExecutionFromAPIGateway"
+  statement_id  = "AllowExecutionFromAPIGateway_${var.environment}_${var.current_color}"
   action        = "lambda:InvokeFunction"
   function_name = module.api_async_lambda.function_name
   principal     = "apigateway.amazonaws.com"

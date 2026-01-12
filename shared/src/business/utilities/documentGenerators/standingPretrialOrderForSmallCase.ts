@@ -1,7 +1,7 @@
 import { GettingReadyForTrialChecklist } from '@shared/business/utilities/pdfGenerator/documentTemplates/GettingReadyForTrialChecklist';
 import { PageMetaHeaderDocket } from '@shared/business/utilities/pdfGenerator/components/PageMetaHeaderDocket';
 import { StandingPretrialOrderForSmallCase } from '@shared/business/utilities/pdfGenerator/documentTemplates/StandingPretrialOrderForSmallCase';
-import { combineTwoPdfs } from './combineTwoPdfs';
+import { combineTwoPdfs } from '../pdfs/combineTwoPdfs';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
@@ -48,11 +48,6 @@ export const standingPretrialOrderForSmallCase = async ({
 
   const reactGettingReadyForTrialChecklistTemplate = ReactDOM.renderToString(
     React.createElement(GettingReadyForTrialChecklist, {
-      options: {
-        caseCaptionExtension,
-        caseTitle,
-        docketNumberWithSuffix,
-      },
       trialInfo,
     }),
   );
@@ -71,7 +66,6 @@ export const standingPretrialOrderForSmallCase = async ({
     });
 
   return await combineTwoPdfs({
-    applicationContext,
     firstPdf: new Uint8Array(pdfWithHeader),
     secondPdf: new Uint8Array(pdfWithoutHeader),
   });

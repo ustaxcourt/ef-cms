@@ -1,3 +1,4 @@
+import { TrialSessionTypes } from '@shared/business/entities/EntityConstants';
 import { MOCK_NEW_TRIAL_REMOTE } from '../../../test/mockTrial';
 import { NewTrialSession } from './NewTrialSession';
 
@@ -21,7 +22,7 @@ describe('NewTrialSession entity', () => {
     it('should be false when the trial session type is not valid', () => {
       const trialSession = new NewTrialSession({
         ...MOCK_NEW_TRIAL_REMOTE,
-        sessionType: 'Something Else',
+        sessionType: 'Something Else' as TrialSessionTypes,
       });
 
       expect(trialSession.isValid()).toEqual(false);

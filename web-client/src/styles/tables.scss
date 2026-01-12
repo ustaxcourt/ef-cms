@@ -40,6 +40,50 @@ table,
       vertical-align: top;
     }
   }
+
+  tr.aged-cases {
+    background: $red-error;
+    
+    &:hover {
+      background: $red-error;
+      box-shadow: 5px 0 0 0 $red-primary inset;
+    }
+  }
+}
+
+.min-width-150 {
+  min-width: 150px;
+}
+
+.usa-table.todays-orders-mobile {
+  button {
+    padding: 0;
+  }
+
+  th {
+    padding: 24px 0 8px 16px;
+  }
+
+  td {
+    padding: 0 0 24px 16px;
+  }
+
+  tr:hover {
+    background: inherit;
+    box-shadow: none;
+  }
+
+  td.docket-number-head {
+    padding: 16px;
+    border-top: 3px solid color($theme-color-base-darkest);
+    border-bottom: 2px solid color($theme-color-base-light);
+    background-color: color($theme-color-base-lighter);
+    font-weight: bold;
+  }
+
+  td.divider {
+    border-bottom: 2px solid color($theme-color-base-light);
+  }
 }
 
 .usa-table.ustc-table table {
@@ -86,6 +130,8 @@ table,
     border: 0;
 
     .sortable-header-button {
+      display: inline-block;
+      align-items: flex-start;
       color: color($theme-color-base-darkest);
       font-weight: $font-semibold;
       text-decoration: none;
@@ -135,7 +181,9 @@ table,
     &.message-queue-row {
       padding-top: 14px;
       overflow-wrap: break-word;
+      /* stylelint-disable declaration-property-value-keyword-no-deprecated */
       word-break: break-word; // fallback
+      /* stylelint-enable declaration-property-value-keyword-no-deprecated */
     }
 
     &.message-queue-case-title {
@@ -220,6 +268,7 @@ table,
   td.consolidated-case-column {
     width: 20px;
     padding-right: 1px;
+    white-space: nowrap;
   }
 
   th.message-unread-column,
@@ -306,6 +355,10 @@ table,
       margin-top: 4px;
       margin-right: 0;
       gap: 1rem;
+    }
+
+    .fa-file-lines {
+      color: color($theme-color-primary);
     }
 
     tr.in-progress {
@@ -487,6 +540,17 @@ table.row-border-only {
   thead tr,
   tbody tr {
     border: 1px solid color($theme-color-base-lighter);
+  }
+}
+
+table.row-only {
+  th {
+    background-color: inherit;
+  }
+
+  th,
+  td {
+    border: none;
   }
 }
 

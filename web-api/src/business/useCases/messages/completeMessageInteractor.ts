@@ -4,12 +4,13 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
 import { markMessageThreadRepliedTo } from '@web-api/persistence/postgres/messages/markMessageThreadRepliedTo';
 import { orderBy } from 'lodash';
-import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
 
 export const completeMessageInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -22,11 +23,15 @@ export const completeMessageInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
 
-  let completedMessageIds: string[] = [];
+  if (!user) {
+    throw new NotFoundError(
+      `User not found with user id ${authorizedUser.userId}`,
+    );
+  }
+
+  const completedMessageIds: string[] = [];
 
   try {
     for (const message of messages) {
@@ -46,9 +51,7 @@ export const completeMessageInteractor = async (
 
       const validatedRawMessage = updatedMessage.validate().toRawObject();
 
-      await updateMessage({
-        message: validatedRawMessage,
-      });
+      await upsertMessages([validatedRawMessage]);
 
       completedMessageIds.push(validatedRawMessage.messageId);
     }

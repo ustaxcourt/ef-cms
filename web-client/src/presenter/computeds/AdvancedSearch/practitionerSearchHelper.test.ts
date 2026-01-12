@@ -7,7 +7,7 @@ import { withAppContextDecorator } from '../../../withAppContext';
 describe('practitionerSearchHelper', () => {
   const { USER_ROLES } = applicationContext.getConstants();
 
-  let pageSizeOverride = 5;
+  const pageSizeOverride = 5;
   let globalUser;
 
   const getBaseState = user => {
@@ -50,7 +50,7 @@ describe('practitionerSearchHelper', () => {
     showNoMatches: false,
     showPaginator: false,
     showSearchResults: false,
-    stateHeaderText: 'State',
+    showStateColumn: true,
   };
 
   beforeEach(() => {
@@ -96,7 +96,7 @@ describe('practitionerSearchHelper', () => {
     expect(result).toEqual({
       ...defaultResult,
       isPublicUser: true,
-      stateHeaderText: 'Original Bar State',
+      showStateColumn: false,
     });
   });
 
@@ -163,7 +163,7 @@ describe('practitionerSearchHelper', () => {
 
   describe('practitioner search', () => {
     it('formats results that should be currently shown based on form.currentPage for a practitioner search', () => {
-      let result = runCompute(practitionerSearchHelper, {
+      const result = runCompute(practitionerSearchHelper, {
         state: {
           ...getBaseState(globalUser),
           advancedSearchForm: { currentPage: 1 },
@@ -174,14 +174,16 @@ describe('practitionerSearchHelper', () => {
                 {
                   admissionsDate: '2012-03-13',
                   barNumber: '1111',
-                  contact: { state: 'WA' },
+                  originalBarState: 'NJ',
+                  state: 'WA',
                   name: 'pablo escobar',
                   petitioners: [mockPetitionerOne],
                 },
                 {
                   admissionsDate: '1980-02-03',
                   barNumber: '2222',
-                  contact: { state: 'Hawaii' },
+                  originalBarState: 'NJ',
+                  state: 'WA',
                   formattedAdmissionsDate: '02/03/1980',
                   name: 'ricardo diaz',
                   petitioners: [{ ...mockPetitionerTwo, state: 'Alabama' }],
@@ -198,7 +200,10 @@ describe('practitionerSearchHelper', () => {
         {
           admissionsDate: '2012-03-13',
           barNumber: '1111',
-          contact: { state: 'WA', stateFullName: 'Washington' },
+          state: 'WA',
+          originalBarState: 'NJ',
+          stateFullName: 'Washington',
+          originalBarStateFullName: 'New Jersey',
           formattedAdmissionsDate: '03/13/2012',
           name: 'pablo escobar',
           petitionerFullStateNames: [
@@ -212,7 +217,10 @@ describe('practitionerSearchHelper', () => {
         {
           admissionsDate: '1980-02-03',
           barNumber: '2222',
-          contact: { state: 'Hawaii', stateFullName: 'Hawaii' },
+          state: 'WA',
+          stateFullName: 'Washington',
+          originalBarState: 'NJ',
+          originalBarStateFullName: 'New Jersey',
           formattedAdmissionsDate: '02/03/1980',
           name: 'ricardo diaz',
           petitionerFullStateNames: [
@@ -227,7 +235,7 @@ describe('practitionerSearchHelper', () => {
     });
 
     it('sorts practitioner results based on name and then by bar number if name is identical', () => {
-      let result = runCompute(practitionerSearchHelper, {
+      const result = runCompute(practitionerSearchHelper, {
         state: {
           ...getBaseState(globalUser),
           advancedSearchForm: { currentPage: 1 },

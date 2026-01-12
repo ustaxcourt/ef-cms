@@ -7,6 +7,7 @@ import { Case } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { getCaseCaptionMeta } from '../../../../shared/src/business/utilities/getCaseCaptionMeta';
+import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 
 export const addDocketEntryForSystemGeneratedOrder = async ({
   applicationContext,
@@ -49,23 +50,28 @@ export const addDocketEntryForSystemGeneratedOrder = async ({
   let nameOfClerk = '';
   let titleOfClerk = '';
   if (isNotice) {
-    const { name, title } = await applicationContext
-      .getPersistenceGateway()
-      .getConfigurationItemValue({
-        applicationContext,
-        configurationItemKey:
-          applicationContext.getConstants().CLERK_OF_THE_COURT_CONFIGURATION,
-      });
+    const { CLERK_OF_THE_COURT_CONFIGURATION } =
+      applicationContext.getConstants();
+
+    const [CLERK_OF_THE_COURT_RECORD] = await getFeatureFlagValues([
+      CLERK_OF_THE_COURT_CONFIGURATION,
+    ]);
+
+    const { name, title } = CLERK_OF_THE_COURT_RECORD.value.current as {
+      name: string;
+      title: string;
+    };
     nameOfClerk = name;
     titleOfClerk = title;
   }
 
-  let orderPdfData = await applicationContext.getDocumentGenerators().order({
+  const orderPdfData = await applicationContext.getDocumentGenerators().order({
     applicationContext,
     data: {
       caseCaptionExtension,
       caseTitle,
       docketNumberWithSuffix,
+      addedDocketNumbers: [],
       nameOfClerk,
       orderContent: systemGeneratedDocument.content,
       orderTitle: systemGeneratedDocument.documentTitle.toUpperCase(),
@@ -89,7 +95,6 @@ export const addDocketEntryForSystemGeneratedOrder = async ({
       });
 
     const returnVal = await applicationContext.getUtilities().combineTwoPdfs({
-      applicationContext,
       firstPdf: combinedPdf,
       secondPdf: amendedPetitionFormData,
     });
@@ -110,7 +115,6 @@ export const addDocketEntryForSystemGeneratedOrder = async ({
   };
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    applicationContext,
     contentType: 'application/json',
     document: Buffer.from(JSON.stringify(contentToStore)),
     key: documentContentsId,

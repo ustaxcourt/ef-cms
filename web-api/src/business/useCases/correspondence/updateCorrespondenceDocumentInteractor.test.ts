@@ -1,24 +1,33 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/caseCorrespondences/mocks.jest';
 import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { Correspondence } from '../../../../../shared/src/business/entities/Correspondence';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { createISODateString } from '../../../../../shared/src/business/utilities/DateHandler';
+} from '@shared/business/entities/EntityConstants';
+import { Correspondence } from '@shared/business/entities/Correspondence';
+import { createISODateString } from '@shared/business/utilities/DateHandler';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { updateCorrespondenceDocumentInteractor } from './updateCorrespondenceDocumentInteractor';
+import { upsertCaseCorrespondences as upsertCaseCorrespondencesMock } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
+
+const upsertCaseCorrespondences = upsertCaseCorrespondencesMock as jest.Mock;
 
 describe('updateCorrespondenceDocumentInteractor', () => {
   const mockDocketEntryId = 'cf105788-5d34-4451-aa8d-dfd9a851b675';
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+
+  const docketNumber = '123-45';
 
   const mockCorrespondence = new Correspondence({
     correspondenceId: '74e36bf7-dcbd-4ee7-a9ec-6d7446096df8',
+    docketNumber,
     documentTitle: 'old document title',
     filedBy: 'docket clerk',
     userId: '5980d666-641d-455a-8386-18908d50c98e',
@@ -31,7 +40,7 @@ describe('updateCorrespondenceDocumentInteractor', () => {
     docketEntries: [
       {
         docketEntryId: mockDocketEntryId,
-        docketNumber: '123-45',
+        docketNumber,
         documentTitle: 'Docket Record 1',
         documentType: 'Order that case is assigned',
         eventCode: 'OAJ',
@@ -44,7 +53,7 @@ describe('updateCorrespondenceDocumentInteractor', () => {
         userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
       },
     ],
-    docketNumber: '123-45',
+    docketNumber,
     filingType: 'Myself',
     partyType: PARTY_TYPES.petitioner,
     petitioners: [
@@ -65,15 +74,12 @@ describe('updateCorrespondenceDocumentInteractor', () => {
   };
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockCase);
+    getCaseByDocketNumber.mockReturnValue(mockCase);
   });
 
-  it('should throw an Unauthorized error if the user role does not have the CASE_CORRESPONDENCE permission', async () => {
+  it('should throw an Unauthorized error when the user role does not have the CASE_CORRESPONDENCE permission', async () => {
     await expect(
       updateCorrespondenceDocumentInteractor(
-        applicationContext,
         {
           documentMetadata: { docketNumber: mockCase.docketNumber } as any,
         },
@@ -84,7 +90,6 @@ describe('updateCorrespondenceDocumentInteractor', () => {
 
   it('should update the specified correspondence document title when the case entity is valid', async () => {
     await updateCorrespondenceDocumentInteractor(
-      applicationContext,
       {
         documentMetadata: {
           correspondenceId: mockCorrespondence.correspondenceId,
@@ -95,21 +100,16 @@ describe('updateCorrespondenceDocumentInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().updateCaseCorrespondence.mock
-        .calls[0][0],
-    ).toMatchObject({
-      correspondence: {
+    expect(upsertCaseCorrespondences.mock.calls[0][0]).toMatchObject([
+      {
         ...mockCorrespondence,
         documentTitle: 'A title that has been updated',
       },
-      docketNumber: mockCase.docketNumber,
-    });
+    ]);
   });
 
   it('should return an updated raw case object', async () => {
     const result = await updateCorrespondenceDocumentInteractor(
-      applicationContext,
       {
         documentMetadata: {
           correspondenceId: mockCorrespondence.correspondenceId,

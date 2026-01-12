@@ -1,14 +1,13 @@
-/* eslint-disable complexity */
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { Get } from 'cerebral';
+import {
+  MOTION_DISPOSITION_VERBIAGE,
+  STATE_KEYS,
+} from '@shared/business/entities/EntityConstants';
 import { computeIsNotServedDocument } from '@shared/business/utilities/getFormattedCaseDetail';
+import { concat, sortBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
-
-type DocketEntriesSelectionType = (RawDocketEntry & {
-  createdAtFormatted: string;
-  isDocumentSelected?: boolean;
-})[];
 
 export const isSelectableForDownload = (entry: RawDocketEntry) => {
   return (
@@ -19,13 +18,14 @@ export const isSelectableForDownload = (entry: RawDocketEntry) => {
 };
 
 export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
-  let iconsToDisplay: any[] = [];
+  const iconsToDisplay: any[] = [];
 
   if (formattedResult.sealedTo) {
     iconsToDisplay.push({
       className: 'sealed-docket-entry',
       icon: 'lock',
       title: formattedResult.sealedToTooltip,
+      size: 'lg',
     });
   }
 
@@ -33,24 +33,31 @@ export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
     return iconsToDisplay;
   } else if (formattedResult.isPaper) {
     iconsToDisplay.push({
+      className: 'fa-icon-blue',
       icon: ['fas', 'file-alt'],
-      title: 'is paper',
+      title: 'Is paper',
+      size: 'lg',
     });
   } else if (formattedResult.isInProgress) {
     iconsToDisplay.push({
+      className: 'fa-icon-gold',
       icon: ['fas', 'thumbtack'],
-      title: 'in progress',
+      title: 'In progress',
+      size: 'lg',
     });
   } else if (formattedResult.qcNeeded) {
     iconsToDisplay.push({
+      className: 'fa-icon-red',
       icon: ['fa', 'star'],
-      title: 'is untouched',
+      title: 'Is untouched',
+      size: 'lg',
     });
   } else if (formattedResult.showLoadingIcon) {
     iconsToDisplay.push({
       className: 'fa-spin spinner',
       icon: ['fa-spin', 'spinner'],
-      title: 'is loading',
+      title: 'Is loading',
+      size: 'lg',
     });
   }
 
@@ -99,6 +106,42 @@ export const getShowSealDocketRecordEntry = ({ applicationContext, entry }) => {
   return !docketEntryIsOpinion;
 };
 
+const getRelatedDocketEntryDetails = (
+  motionEntry: RawDocketEntry,
+  rawCase: RawCase,
+  targetDocketEntryId: string,
+  isExternalUser: boolean,
+  user: any,
+  visibilityPolicyDateFormatted: any,
+) => {
+  const relatedOrder = rawCase.docketEntries.find(
+    entry => entry.docketEntryId === targetDocketEntryId,
+  );
+
+  if (!relatedOrder) {
+    throw new Error(
+      `Related order not found for motion with id ${motionEntry.docketEntryId} and targetDocketEntryId ${targetDocketEntryId} and title ${
+        motionEntry.documentTitle
+      }`,
+    );
+  }
+
+  const isDownloadable = DocketEntry.isDownloadable(relatedOrder, {
+    isTerminalUser: false,
+    rawCase,
+    user,
+    visibilityChangeDate: visibilityPolicyDateFormatted,
+  });
+
+  const showDocumentViewerLink = isDownloadable && !isExternalUser;
+  const showDownloadLink = isDownloadable && isExternalUser;
+  return {
+    index: relatedOrder.index,
+    showDocumentViewerLink,
+    showDownloadLink,
+  };
+};
+
 export const getFormattedDocketEntry = ({
   applicationContext,
   docketNumber,
@@ -120,6 +163,59 @@ export const getFormattedDocketEntry = ({
     ...entry,
     createdAtFormatted: entry.createdAtFormatted,
   };
+
+  formattedResult.relatedDocketEntries = [];
+  if (entry.affectedByDocketEntries) {
+    formattedResult.relatedDocketEntries = concat(
+      formattedResult.relatedDocketEntries,
+      entry.affectedByDocketEntries.map(affectedEntry => {
+        const { index, showDocumentViewerLink, showDownloadLink } =
+          getRelatedDocketEntryDetails(
+            entry,
+            rawCase,
+            affectedEntry.docketEntryId,
+            isExternalUser,
+            user,
+            visibilityPolicyDateFormatted,
+          );
+
+        return {
+          ...affectedEntry,
+          docketEntryIndex: index,
+          showDocumentViewerLink,
+          showDownloadLink,
+          disposition:
+            MOTION_DISPOSITION_VERBIAGE[affectedEntry.disposition].MOTION,
+        };
+      }),
+    );
+  }
+
+  if (entry.affectedDocketEntries) {
+    formattedResult.relatedDocketEntries = concat(
+      formattedResult.relatedDocketEntries,
+      entry.affectedDocketEntries.map(affectedEntry => {
+        const { index, showDocumentViewerLink, showDownloadLink } =
+          getRelatedDocketEntryDetails(
+            entry,
+            rawCase,
+            affectedEntry.docketEntryId,
+            isExternalUser,
+            user,
+            visibilityPolicyDateFormatted,
+          );
+
+        return {
+          ...affectedEntry,
+          docketEntryIndex: index,
+          showDocumentViewerLink,
+          showDownloadLink,
+          disposition:
+            MOTION_DISPOSITION_VERBIAGE[affectedEntry.disposition].ORDER,
+        };
+      }),
+    );
+  }
 
   if (!isExternalUser) {
     formattedResult.showLoadingIcon =
@@ -210,12 +306,20 @@ export const formattedDocketEntries = (
   const caseDetail = get(state.caseDetail);
   const { docketNumber } = caseDetail;
   let docketRecordSort;
-  const { formatCase, sortDocketEntries } = applicationContext.getUtilities();
+  const { formatCase } = applicationContext.getUtilities();
   if (docketNumber) {
     docketRecordSort = get(
       state.sessionMetadata.docketRecordSort[docketNumber],
     );
   }
+
+  const docketRecordSortField = get(
+    state[STATE_KEYS.DOCKET_RECORD_TABLE_SORT].sortField,
+  );
+  const docketRecordSortOrder = get(
+    state[STATE_KEYS.DOCKET_RECORD_TABLE_SORT].sortOrder,
+  );
+
   const DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE = get(
     state.featureFlags[
       ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key
@@ -235,12 +339,7 @@ export const formattedDocketEntries = (
       docketRecordFilter,
     });
 
-  let docketEntriesFormatted: DocketEntriesSelectionType = sortDocketEntries(
-    result.formattedDocketEntries,
-    docketRecordSort,
-  );
-
-  docketEntriesFormatted = docketEntriesFormatted
+  let docketEntriesFormatted = result.formattedDocketEntries
     .map(entry =>
       getFormattedDocketEntry({
         applicationContext,
@@ -261,6 +360,12 @@ export const formattedDocketEntries = (
         isSelectableForDownload: isSelectableForDownload(docketEntry),
       };
     });
+
+  docketEntriesFormatted = sortDocketEntryTable(
+    docketEntriesFormatted,
+    docketRecordSortField,
+    docketRecordSortOrder,
+  );
 
   const selectableDocumentsCount = docketEntriesFormatted.filter(entry =>
     isSelectableForDownload(entry),
@@ -309,3 +414,33 @@ export const formattedDocketEntries = (
   result.docketRecordSort = docketRecordSort;
   return result;
 };
+
+export function sortDocketEntryTable<T>(
+  docketEntries: (T & { sortingFilingDate: string | undefined })[] = [],
+  docketRecordSortField: string | undefined,
+  docketRecordSortOrder: 'asc' | 'desc' | undefined,
+): T[] {
+  if (!docketRecordSortField || !docketRecordSortOrder) {
+    return sortBy(docketEntries, ['sortingFilingDate', 'index']);
+  }
+
+  const sortedDocketEntries = sortBy(docketEntries, [
+    docketRecordSortField,
+    'index',
+  ]);
+
+  if (docketRecordSortOrder === 'desc') {
+    return sortedDocketEntries.reverse().sort(sortUndefined);
+  }
+
+  return sortedDocketEntries.sort(sortUndefined);
+}
+
+function sortUndefined(
+  a: { sortingFilingDate: string | undefined },
+  b: { sortingFilingDate: string | undefined },
+): number {
+  if (a.sortingFilingDate && !b.sortingFilingDate) return -1;
+  if (!a.sortingFilingDate && b.sortingFilingDate) return 1;
+  return 0;
+}

@@ -11,7 +11,7 @@ const createWebSocketClient = ({ clientConnectionId, token }) => {
 export const socketProvider = ({ socketRouter }) => {
   let app;
   let applicationContext;
-  let socket: WebSocket;
+  let socket: WebSocket | null;
   let pingInterval;
   let reconnectAttempt = 0;
   // API Gateway is 10 minute idle timeout, so let's just do 1 minute ping interval
@@ -37,6 +37,7 @@ export const socketProvider = ({ socketRouter }) => {
 
           socket.onerror = error => {
             console.error(error);
+            // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
             return reject(error);
           };
 
@@ -47,10 +48,11 @@ export const socketProvider = ({ socketRouter }) => {
               const timeToWaitBeforeReconnect = 1000 * 2 ** reconnectAttempt;
 
               if (reconnectAttempt > 4) {
-                reject();
+                reject(
+                  new Error('Error connecting within 4 attempts to websocket'),
+                );
                 return;
               }
-              // eslint-disable-next-line promise/param-names
               await applicationContext
                 .getUtilities()
                 .sleep(timeToWaitBeforeReconnect);
@@ -68,14 +70,14 @@ export const socketProvider = ({ socketRouter }) => {
             }, 300);
 
             pingInterval = setInterval(() => {
-              socket.send('ping');
+              socket?.send('ping');
             }, PING_INTERVAL);
           };
         } catch (e) {
           if (applicationContext) {
             console.error(e);
           }
-          reject();
+          reject(new Error('Error starting socket'));
         }
       });
     }

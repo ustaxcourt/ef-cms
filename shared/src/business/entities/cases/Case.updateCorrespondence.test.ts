@@ -7,6 +7,7 @@ describe('updateCorrespondence', () => {
   it('should update a correspondence document', () => {
     const mockCorrespondence = new Correspondence({
       correspondenceId: '123-abc',
+      docketNumber: '101-23',
       documentTitle: 'My Correspondence',
       filedBy: 'Docket clerk',
     });
@@ -25,13 +26,14 @@ describe('updateCorrespondence', () => {
     expect(
       myCase.correspondence.find(
         d => d.correspondenceId === mockCorrespondence.correspondenceId,
-      ).documentTitle,
+      )?.documentTitle,
     ).toEqual('updated title');
   });
 
   it('should not throw an exception when the specified correspondence document is not found', () => {
     const mockCorrespondence = new Correspondence({
       correspondenceId: '123-abc',
+      docketNumber: '101-23',
       documentTitle: 'My Correspondence',
       filedBy: 'Docket clerk',
     });
@@ -50,7 +52,7 @@ describe('updateCorrespondence', () => {
     expect(
       myCase.correspondence.find(
         d => d.correspondenceId === mockCorrespondence.correspondenceId,
-      ).documentTitle,
+      )?.documentTitle,
     ).toEqual('My Correspondence');
   });
 });

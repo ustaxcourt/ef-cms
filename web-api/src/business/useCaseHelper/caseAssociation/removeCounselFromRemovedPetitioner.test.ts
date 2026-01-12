@@ -5,7 +5,6 @@ import {
 import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOCK_PRACTITIONER } from '../../../../../shared/src/test/mockUsers';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
@@ -18,20 +17,19 @@ describe('removeCounselFromRemovedPetitioner', () => {
   const mockSecondPractitionerUserId = '5dde0389-6e09-4e2f-a7f4-34e4f2a534a8';
   const mockThirdPractitionerUserId = '0bd63272-781f-4cbd-8b7d-7cb649ca255d';
 
-  it('throws an unauthorized error if user does not have correct permissions', async () => {
-    await expect(
+  it('throws an unauthorized error if user does not have correct permissions', () => {
+    expect(() =>
       removeCounselFromRemovedPetitioner({
-        applicationContext,
         authorizedUser: mockPetitionerUser,
         caseEntity: new Case(MOCK_CASE, {
           authorizedUser: mockPetitionerUser,
         }),
         petitionerContactId: mockContactPrimaryId,
       }),
-    ).rejects.toThrow('Unauthorized');
+    ).toThrow('Unauthorized');
   });
 
-  it('should remove the petitioner from privatePractitioner representing array but not remove them completely from the case if another petitioner is also represented', async () => {
+  it('should remove the petitioner from privatePractitioner representing array but not remove them completely from the case if another petitioner is also represented', () => {
     const caseEntity = new Case(
       {
         ...MOCK_CASE,
@@ -54,8 +52,7 @@ describe('removeCounselFromRemovedPetitioner', () => {
       { authorizedUser: mockPetitionsClerkUser },
     );
 
-    const updatedCase = await removeCounselFromRemovedPetitioner({
-      applicationContext,
+    const updatedCase = removeCounselFromRemovedPetitioner({
       authorizedUser: mockPetitionsClerkUser,
       caseEntity,
       petitionerContactId: mockContactSecondaryId,
@@ -64,12 +61,9 @@ describe('removeCounselFromRemovedPetitioner', () => {
     expect(updatedCase.privatePractitioners?.[0].representing).toEqual([
       mockContactPrimaryId,
     ]);
-    expect(
-      applicationContext.getPersistenceGateway().deleteUserFromCase,
-    ).not.toHaveBeenCalled();
   });
 
-  it('should remove the privatePractitioner from the case privatePractitioner if they are only representing the petitioner being removed', async () => {
+  it('should remove the privatePractitioner from the case privatePractitioner if they are only representing the petitioner being removed', () => {
     const caseEntity = new Case(
       {
         ...MOCK_CASE,
@@ -98,24 +92,19 @@ describe('removeCounselFromRemovedPetitioner', () => {
       { authorizedUser: mockPetitionsClerkUser },
     );
 
-    const updatedCase = await removeCounselFromRemovedPetitioner({
-      applicationContext,
+    const updatedCase = removeCounselFromRemovedPetitioner({
       authorizedUser: mockPetitionsClerkUser,
       caseEntity,
       petitionerContactId: mockContactSecondaryId,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().deleteUserFromCase.mock
-        .calls[0][0].userId,
-    ).toEqual(mockSecondPractitionerUserId);
     expect(updatedCase.privatePractitioners?.length).toEqual(1);
     expect(updatedCase.privatePractitioners?.[0].representing).toEqual([
       mockContactPrimaryId,
     ]);
   });
 
-  it('should not remove the privatePracitioner if they represent both the petitioner being removed and a remaining petitioner', async () => {
+  it('should not remove the privatePracitioner if they represent both the petitioner being removed and a remaining petitioner', () => {
     const caseEntity = new Case(
       {
         ...MOCK_CASE,
@@ -144,16 +133,12 @@ describe('removeCounselFromRemovedPetitioner', () => {
       { authorizedUser: mockPetitionsClerkUser },
     );
 
-    const updatedCase = await removeCounselFromRemovedPetitioner({
-      applicationContext,
+    const updatedCase = removeCounselFromRemovedPetitioner({
       authorizedUser: mockPetitionsClerkUser,
       caseEntity,
       petitionerContactId: mockContactSecondaryId,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().deleteUserFromCase,
-    ).not.toHaveBeenCalled();
     expect(updatedCase.privatePractitioners?.length).toEqual(2);
     expect(updatedCase.privatePractitioners?.[0].representing).toEqual([
       mockContactPrimaryId,

@@ -7,12 +7,17 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const ConfirmInitiateServiceModal = connect(
+type ConfirmInitiateServiceModalProps = {
+  confirmSequence: Function;
+  documentTitle?: string;
+}
+
+export const ConfirmInitiateServiceModal: React.FC<ConfirmInitiateServiceModalProps> = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
     confirmInitiateServiceModalHelper: state.confirmInitiateServiceModalHelper,
-    confirmSequence: props.confirmSequence,
-    documentTitle: props.documentTitle,
+    confirmSequence: props`confirmSequence`,
+    documentTitle: props`documentTitle`,
     waitingForResponse: state.progressIndicator.waitingForResponse,
   },
   function ConfirmInitiateServiceModal({
@@ -21,6 +26,18 @@ export const ConfirmInitiateServiceModal = connect(
     confirmSequence,
     documentTitle,
     waitingForResponse,
+  }: {
+    cancelSequence: Function;
+    confirmInitiateServiceModalHelper: {
+      confirmationText: string;
+      showPaperAlert: boolean;
+      caseOrGroup: string;
+      contactsNeedingPaperService: Array<{ name: string }>;
+      showConsolidatedCasesForService: boolean;
+    };
+    confirmSequence: Function;
+    documentTitle: string;
+    waitingForResponse: boolean;
   }) {
     let isSubmitDebounced = false;
 
@@ -50,7 +67,9 @@ export const ConfirmInitiateServiceModal = connect(
           {confirmInitiateServiceModalHelper.confirmationText}
         </p>
         <p className="margin-top-0 margin-bottom-2">
-          <strong>{documentTitle}</strong>
+          <strong data-testid="confirm-modal-document-title">
+            {documentTitle}
+          </strong>
         </p>
         {confirmInitiateServiceModalHelper.showPaperAlert && (
           <Hint fullWidth className="block">

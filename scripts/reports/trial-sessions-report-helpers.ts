@@ -2,7 +2,10 @@ import {
   FORMATS,
   formatDateString,
 } from '@shared/business/utilities/DateHandler';
-import type { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+import { type RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+import { generateCsv } from '../helpers/generate-csv';
+import { pick } from 'lodash';
+import { getTrialSessions } from '@web-api/persistence/postgres/trialSessions/getTrialSessions';
 
 let trialSessionsCache: RawTrialSession[] = [];
 
@@ -26,36 +29,26 @@ export const getUniqueValues = ({
   return uniqueValues;
 };
 
-const getTrialSessions = async ({
-  applicationContext,
-}: {
-  applicationContext: IApplicationContext;
-}): Promise<RawTrialSession[]> => {
+const getTrialSessionsCache = async (): Promise<RawTrialSession[]> => {
   if (trialSessionsCache.length === 0) {
-    trialSessionsCache = await applicationContext
-      .getPersistenceGateway()
-      .getTrialSessions({
-        applicationContext,
-      });
+    trialSessionsCache = await getTrialSessions();
   }
 
   return trialSessionsCache;
 };
 
 const getTrialSessionsInTimeframe = async ({
-  applicationContext,
+  begin,
   end,
-  start,
 }: {
-  applicationContext: IApplicationContext;
+  begin: string;
   end: string;
-  start: string;
 }): Promise<RawTrialSession[]> => {
-  const trialSessions = await getTrialSessions({ applicationContext });
+  const trialSessions = await getTrialSessionsCache();
   const yearSessions = trialSessions.filter(
     session =>
       session.startDate &&
-      session.startDate >= start &&
+      session.startDate >= begin &&
       session.startDate <= end,
   );
   yearSessions.sort((a, b) => a.startDate.localeCompare(b.startDate));
@@ -63,14 +56,21 @@ const getTrialSessionsInTimeframe = async ({
 };
 
 const outputTrialSessionsReport = ({
+  filename,
   trialSessions,
 }: {
+  filename: string;
   trialSessions: RawTrialSession[];
 }): void => {
-  console.log(
-    'Start Date,Location,Session Type,Proceeding Type,Judge,Trial Clerk',
-  );
-  for (const s of trialSessions) {
+  const columns = [
+    { header: 'Start Date', key: 'startDate' },
+    { header: 'Location', key: 'trialLocation' },
+    { header: 'Session Type', key: 'sessionType' },
+    { header: 'Proceeding Type', key: 'proceedingType' },
+    { header: 'Judge', key: 'judge' },
+    { header: 'Trial Clerk', key: 'trialClerk' },
+  ];
+  const rows = trialSessions.map(s => {
     const startDate = formatDateString(s.startDate, FORMATS['MMDDYYYY_DASHED']);
     let trialClerk = '';
     if (s.trialClerk && 'name' in s.trialClerk && s.trialClerk.name) {
@@ -78,12 +78,16 @@ const outputTrialSessionsReport = ({
     } else if (s.alternateTrialClerkName) {
       trialClerk = s.alternateTrialClerkName;
     }
-    const judgeName =
-      s.judge && 'name' in s.judge && s.judge.name ? s.judge.name : '';
-    console.log(
-      `"${startDate}","${s.trialLocation}","${s.sessionType}","${s.proceedingType}","${judgeName}","${trialClerk}"`,
-    );
-  }
+    const judge = s.judge?.name ?? '';
+    return {
+      ...pick(s, ['proceedingType', 'sessionType', 'trialLocation']),
+      judge,
+      startDate,
+      trialClerk,
+    };
+  });
+  generateCsv({ columns, filename, rows });
+  console.log(`Generated ${filename}`);
 };
 
 const outputTrialSessionsStats = ({
@@ -119,24 +123,23 @@ const outputTrialSessionsStats = ({
 };
 
 export const trialSessionsReport = async ({
-  applicationContext,
+  begin,
   end,
-  start,
+  filename,
   stats,
 }: {
-  applicationContext: IApplicationContext;
+  begin: string;
   end: string;
-  start: string;
+  filename: string;
   stats: boolean;
 }): Promise<void> => {
   const trialSessions = await getTrialSessionsInTimeframe({
-    applicationContext,
+    begin,
     end,
-    start,
   });
   if (stats) {
     outputTrialSessionsStats({ trialSessions });
   } else {
-    outputTrialSessionsReport({ trialSessions });
+    outputTrialSessionsReport({ filename, trialSessions });
   }
 };

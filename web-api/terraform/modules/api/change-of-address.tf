@@ -4,7 +4,7 @@ locals {
 
 module "change_of_address_lambda" {
   source         = "../lambda"
-  handler_file   = "./web-api/src/lambdas/pdfGeneration/pdf-generation.ts"
+  handler_file   = "./web-api/src/lambdas/changeOfAddress/changeOfAddressLambda.ts"
   handler_method = "changeOfAddressHandler"
   lambda_name    = "change_of_address_${var.environment}_${var.current_color}"
   role           = var.lambda_role_arn

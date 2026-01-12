@@ -1,4 +1,3 @@
-import { PractitionerDocument } from '../../../../../shared/src/business/entities/PractitionerDocument';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -6,15 +5,12 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getPractitionerDocumentByFileId } from '@web-api/persistence/postgres/practitionerDocuments/getPractitionerDocumentByFileId';
+import {
+  PractitionerDocument,
+  RawPractitionerDocument,
+} from '@shared/business/entities/PractitionerDocument';
 
-/**
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.barNumber the bar number of the practitioner
- * @param {string} providers.practitionerDocumentFileId the key of the document
- * @returns {Array<string>} the filing type options based on user role
- */
 export const getPractitionerDocumentInteractor = async (
   applicationContext: ServerApplicationContext,
   {
@@ -25,17 +21,15 @@ export const getPractitionerDocumentInteractor = async (
     practitionerDocumentFileId: string;
   },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<RawPractitionerDocument> => {
   if (
     !isAuthorized(authorizedUser, ROLE_PERMISSIONS.UPLOAD_PRACTITIONER_DOCUMENT)
   ) {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  let practitionerDocument = await applicationContext
-    .getPersistenceGateway()
-    .getPractitionerDocumentByFileId({
-      applicationContext,
+  let practitionerDocument: RawPractitionerDocument =
+    await getPractitionerDocumentByFileId({
       barNumber,
       fileId: practitionerDocumentFileId,
     });

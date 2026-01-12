@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/users/mocks.jest';
 import { type AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import {
   MOCK_PRACTITIONER,
@@ -11,6 +12,8 @@ import {
   mockIrsPractitionerUser,
   mockPrivatePractitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('generateEntryOfAppearancePdfInteractor', () => {
   const mockFile = {
@@ -28,10 +31,10 @@ describe('generateEntryOfAppearancePdfInteractor', () => {
     { contactId: validUser.userId, name: validUser.name },
   ];
 
+  const getUserById = jest.mocked(getUserByIdMock);
+
   beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(MOCK_PRACTITIONER);
+    getUserById.mockResolvedValue(MOCK_PRACTITIONER as DbUser);
     applicationContext
       .getDocumentGenerators()
       .entryOfAppearance.mockReturnValue(mockFile);
@@ -41,7 +44,7 @@ describe('generateEntryOfAppearancePdfInteractor', () => {
   });
 
   it('should throw an unauthorized error if the user has no access to associate self with case', async () => {
-    let bogusUser = {
+    const bogusUser = {
       role: 'nope',
       userId: 'nope',
     } as unknown as AuthUser;
@@ -101,9 +104,7 @@ describe('generateEntryOfAppearancePdfInteractor', () => {
   });
 
   it('should use Respondent as the filer name when an IRS practitioner is filing an entry of appearance', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValueOnce(irsPractitionerUser);
+    getUserById.mockResolvedValueOnce(irsPractitionerUser as unknown as DbUser);
 
     const expectedFilerNames = ['Respondent'];
     const result = await generateEntryOfAppearancePdfInteractor(

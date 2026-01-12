@@ -35,7 +35,8 @@ resource "aws_iam_role_policy" "lambda_policy" {
                 "logs:CreateLogGroup",
                 "logs:CreateLogStream",
                 "logs:PutLogEvents",
-                "logs:DescribeLogStreams"
+                "logs:DescribeLogStreams",
+                "logs:GetLogEvents"
             ],
             "Resource": [
                 "arn:aws:logs:*:*:*"
@@ -53,7 +54,8 @@ resource "aws_iam_role_policy" "lambda_policy" {
         },
         {
             "Action": [
-                "batch:SubmitJob"
+                "batch:SubmitJob",
+                "batch:DescribeJobs"
             ],
             "Resource": [
                 "*"
@@ -136,49 +138,19 @@ resource "aws_iam_role_policy" "lambda_policy" {
         },
         {
             "Action": [
-                "dynamodb:BatchGetItem",
-                "dynamodb:BatchWriteItem",
-                "dynamodb:DeleteItem",
-                "dynamodb:DescribeStream",
-                "dynamodb:DescribeTable",
-                "dynamodb:GetItem",
-                "dynamodb:GetRecords",
-                "dynamodb:GetShardIterator",
-                "dynamodb:ListStreams",
-                "dynamodb:PutItem",
-                "dynamodb:Query",
-                "dynamodb:UpdateItem"
-            ],
-            "Resource": [
-                "arn:aws:dynamodb:us-east-1:${data.aws_caller_identity.current.account_id}:table/efcms-${var.environment}-*",
-                "arn:aws:dynamodb:us-west-1:${data.aws_caller_identity.current.account_id}:table/efcms-${var.environment}-*"
-            ],
-            "Effect": "Allow"
-        },
-        {
-            "Action": [
-                "dynamodb:GetItem",
-                "dynamodb:Query",
-                "dynamodb:DescribeTable",
-                "dynamodb:UpdateItem",
-                "dynamodb:PutItem"
-            ],
-            "Resource": "arn:aws:dynamodb:us-east-1:${data.aws_caller_identity.current.account_id}:table/efcms-deploy-${var.environment}",
-            "Effect": "Allow"
-        },
-        {
-            "Action": [
                 "ses:SendBulkTemplatedEmail",
                 "ses:SendEmail"
             ],
             "Resource": [
-                "arn:aws:ses:us-east-1:${data.aws_caller_identity.current.account_id}:identity/noreply@${var.dns_domain}"
+                "arn:aws:ses:us-east-1:${data.aws_caller_identity.current.account_id}:identity/noreply@${var.dns_domain}",
+                "arn:aws:ses:us-east-1:${data.aws_caller_identity.current.account_id}:template/*"
             ],
             "Effect": "Allow"
         },
         {
             "Action": [
-                "ses:GetSendStatistics"
+                "ses:GetSendStatistics",
+                "ses:GetSuppressedDestination"
             ],
             "Resource": [
                 "*"
@@ -231,6 +203,16 @@ resource "aws_iam_role_policy" "lambda_policy" {
             "Resource": [
                 "arn:aws:sqs:us-east-1:${data.aws_caller_identity.current.account_id}:*",
                 "arn:aws:sqs:us-west-1:${data.aws_caller_identity.current.account_id}:*"
+            ],
+            "Effect": "Allow"
+        },
+        {
+            "Action": [
+            "ssm:GetParameter",
+            "ssm:PutParameter"
+            ],
+            "Resource": [
+            "arn:aws:ssm:us-east-1:${data.aws_caller_identity.current.account_id}:parameter/DAWSON/${var.environment}/*"
             ],
             "Effect": "Allow"
         }

@@ -1,36 +1,55 @@
-/* eslint-disable max-lines */
+import '@web-api/persistence/postgres/caseCorrespondences/mocks.jest';
+import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
-jest.mock('@shared/business/entities/Message.ts');
+import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
+import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 jest.mock('@shared/business/entities/CaseDeadline');
 jest.mock('@web-api/persistence/postgres/messages/getMessagesByDocketNumber');
-jest.mock('@web-api/persistence/postgres/messages/updateMessage');
-import {
-  CASE_STATUS_TYPES,
-  CASE_TYPES_MAP,
-  DOCKET_NUMBER_SUFFIXES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { CaseDeadline } from '../../../../../shared/src/business/entities/CaseDeadline';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { MOCK_DOCUMENTS } from '../../../../../shared/src/test/mockDocketEntry';
-import { MOCK_TRIAL_INPERSON } from '../../../../../shared/src/test/mockTrial';
-import { MOCK_WORK_ITEM } from '../../../../../shared/src/test/mockWorkItem';
-import { Message } from '../../../../../shared/src/business/entities/Message';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { cloneDeep } from 'lodash';
-import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
+jest.mock('@web-api/persistence/postgres/messages/upsertMessages');
+jest.mock(
+  '@web-api/persistence/postgres/cases/userOnCase/disassociateUsersFromCases',
+);
+import { removeCasesFromHearings as removeCasesFromHearingsMock } from '@web-api/persistence/postgres/trialSessions/removeCasesFromHearings';
+import { Case } from '@shared/business/entities/cases/Case';
+import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
+import { CASE_TYPES_MAP } from '@shared/business/entities/EntityConstants';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
+import { MOCK_TRIAL_INPERSON } from '@shared/test/mockTrial';
+import { docketClerkUser } from '@shared/test/mockUsers';
+import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { getMessagesByDocketNumber as getMessagesByDocketNumberMock } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { updateCaseAndAssociations } from './updateCaseAndAssociations';
-import { updateMessage as updateMessageMock } from '@web-api/persistence/postgres/messages/updateMessage';
-import { v4 as uuidv4 } from 'uuid';
-
-const getMessagesByDocketNumber = getMessagesByDocketNumberMock as jest.Mock;
-const updateMessage = updateMessageMock as jest.Mock;
+import { upsertMessages as upsertMessagesMock } from '@web-api/persistence/postgres/messages/upsertMessages';
+import { upsertCaseCorrespondences as upsertCaseCorrespondencesMock } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
+import { upsertCaseDeadlines as upsertCaseDeadlinesMock } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { MOCK_MESSAGE } from '@shared/test/mockMessage';
+import { upsertCases as upsertCasesMock } from '@web-api/persistence/postgres/cases/upsertCases';
+import { getUniqueId } from '@shared/sharedAppContext';
+import { upsertDocketEntries as upsertDocketEntriesMock } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
+import { disassociateUsersFromCases as disassociateUsersFromCasesMock } from '@web-api/persistence/postgres/cases/userOnCase/disassociateUsersFromCases';
+import { associateUsersWithCases as associateUsersWithCasesMock } from '@web-api/persistence/postgres/cases/userOnCase/associateUsersWithCases';
 
 describe('updateCaseAndAssociations', () => {
-  let updateCaseMock = jest.fn();
   let validMockCase;
+
+  const disassociateUsersFromCases = jest.mocked(
+    disassociateUsersFromCasesMock,
+  );
+  const associateUsersWithCases = jest.mocked(associateUsersWithCasesMock);
+  const upsertDocketEntries = jest.mocked(upsertDocketEntriesMock);
+  const removeCasesFromHearings = jest.mocked(removeCasesFromHearingsMock);
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const upsertCases = jest.mocked(upsertCasesMock);
+  const getMessagesByDocketNumber = getMessagesByDocketNumberMock as jest.Mock;
+  const upsertMessages = upsertMessagesMock as jest.Mock;
+  const upsertCaseDeadlines = upsertCaseDeadlinesMock as jest.Mock;
+  const getCaseDeadlinesByDocketNumber =
+    getCaseDeadlinesByDocketNumberMock as jest.Mock;
+  const upsertCaseCorrespondences = upsertCaseCorrespondencesMock as jest.Mock;
 
   beforeAll(() => {
     validMockCase = new Case(
@@ -39,6 +58,7 @@ describe('updateCaseAndAssociations', () => {
         archivedCorrespondences: [
           {
             correspondenceId: '95a84f02-23e6-4fff-9770-41f655f972a3',
+            docketNumber: MOCK_CASE.docketNumber,
             documentTitle: 'Inverted Yield Curve',
             filedByRole: docketClerkUser.role,
             userId: docketClerkUser.userId,
@@ -47,6 +67,7 @@ describe('updateCaseAndAssociations', () => {
         correspondence: [
           {
             correspondenceId: 'b7a6b14a-e4bd-4a20-9b6a-83674b36a162',
+            docketNumber: MOCK_CASE.docketNumber,
             documentTitle: 'Deflationary Spending',
             filedByRole: docketClerkUser.role,
             userId: docketClerkUser.userId,
@@ -61,17 +82,11 @@ describe('updateCaseAndAssociations', () => {
     (CaseDeadline.validateRawCollection as jest.Mock).mockReturnValue([
       { some: 'deadline' },
     ]);
-    (Message.validateRawCollection as jest.Mock).mockImplementation(
-      collection => collection,
-    );
+    getCaseByDocketNumber.mockResolvedValue(validMockCase);
+  });
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(validMockCase);
-
-    applicationContext
-      .getPersistenceGateway()
-      .updateCase.mockImplementation(updateCaseMock);
+  beforeEach(() => {
+    getCaseDeadlinesByDocketNumber.mockResolvedValue([]);
   });
 
   it('gets the old case before passing it to updateCase persistence method', async () => {
@@ -81,53 +96,40 @@ describe('updateCaseAndAssociations', () => {
     const oldCase = {
       ...validMockCase,
     };
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(oldCase);
+    getCaseByDocketNumber.mockResolvedValue(oldCase);
 
     await updateCaseAndAssociations({
-      applicationContext,
       authorizedUser: undefined,
       caseToUpdate,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
+    expect(upsertCases).toHaveBeenCalled();
 
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0],
-    ).toMatchObject({ applicationContext, caseToUpdate });
+    expect(upsertCases.mock.calls[0][0]).toMatchObject([caseToUpdate]);
   });
 
   it('always sends valid entities to the updateCase persistence method', async () => {
     await updateCaseAndAssociations({
-      applicationContext,
       authorizedUser: mockDocketClerkUser,
       caseToUpdate: validMockCase,
     });
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
-    expect(updateCaseMock).toHaveBeenCalled();
-    const updateArgs = updateCaseMock.mock.calls[0][0];
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
+    expect(upsertCases).toHaveBeenCalled();
+    const updatedCase = upsertCases.mock.calls[0][0][0];
 
-    expect(updateArgs.caseToUpdate.isValidated).toBe(true);
+    // TODO: isValidated is not typed
+    // @ts-ignore
+    expect(updatedCase.isValidated).toBe(true);
   });
 
   it('does not attempt to make any update calls to persistence if any queries to persistence fail', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseDeadlinesByDocketNumber.mockRejectedValueOnce(
-        new Error('query problem'),
-      );
+    getCaseDeadlinesByDocketNumber.mockRejectedValue(
+      new Error('query problem'),
+    );
 
     await expect(
       updateCaseAndAssociations({
-        applicationContext,
         authorizedUser: mockDocketClerkUser,
         caseToUpdate: {
           ...validMockCase,
@@ -138,68 +140,30 @@ describe('updateCaseAndAssociations', () => {
     ).rejects.toThrow('query problem');
 
     // updateCaseDocketEntries
-    expect(
-      applicationContext.getPersistenceGateway().updateDocketEntry,
-    ).not.toHaveBeenCalled();
+    expect(upsertDocketEntries).not.toHaveBeenCalled();
 
     // updateCaseMessages
-    expect(updateMessage).not.toHaveBeenCalled();
+    expect(upsertMessages).not.toHaveBeenCalled();
 
     // updateCorrespondence
-    expect(
-      applicationContext.getPersistenceGateway().updateCaseCorrespondence,
-    ).not.toHaveBeenCalled();
+    expect(upsertCaseCorrespondences).not.toHaveBeenCalled();
 
     // updateHearings
-    expect(
-      applicationContext.getPersistenceGateway().removeCaseFromHearing,
-    ).not.toHaveBeenCalled();
+    expect(removeCasesFromHearings).not.toHaveBeenCalled();
 
-    // updateIrsPractitioners
-    expect(
-      applicationContext.getPersistenceGateway().removeIrsPractitionerOnCase,
-    ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateIrsPractitionerOnCase,
-    ).not.toHaveBeenCalled();
-
-    // updatePrivatePractitioners
-    expect(
-      applicationContext.getPersistenceGateway()
-        .removePrivatePractitionerOnCase,
-    ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway()
-        .updatePrivatePractitionerOnCase,
-    ).not.toHaveBeenCalled();
-
-    // updateCaseWorkItems
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).not.toHaveBeenCalled();
-
-    // updateUserCaseMappings
-    expect(
-      applicationContext.getPersistenceGateway().updateUserCaseMapping,
-    ).not.toHaveBeenCalled();
+    // users
+    expect(associateUsersWithCases).not.toHaveBeenCalled();
+    expect(disassociateUsersFromCases).not.toHaveBeenCalled();
 
     // updateCaseDeadlines
-    expect(
-      applicationContext.getPersistenceGateway().createCaseDeadline,
-    ).not.toHaveBeenCalled();
+    expect(upsertCaseDeadlines).not.toHaveBeenCalled();
 
     // update the case itself, final persistence call
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).not.toHaveBeenCalled();
+    expect(upsertCases).not.toHaveBeenCalled();
   });
 
   it('updates hearings, removing old ones from the given case', async () => {
-    const trialSessionIds = [
-      applicationContext.getUniqueId(),
-      applicationContext.getUniqueId(),
-      applicationContext.getUniqueId(),
-    ];
+    const trialSessionIds = [getUniqueId(), getUniqueId(), getUniqueId()];
 
     const { docketNumber } = validMockCase;
     const caseToUpdate = {
@@ -219,33 +183,25 @@ describe('updateCaseAndAssociations', () => {
       ],
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(oldCase);
+    getCaseByDocketNumber.mockResolvedValue(oldCase);
 
     await updateCaseAndAssociations({
-      applicationContext,
       authorizedUser: mockDocketClerkUser,
       caseToUpdate,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0],
-    ).toMatchObject({ applicationContext, caseToUpdate });
-    expect(
-      applicationContext.getPersistenceGateway().removeCaseFromHearing,
-    ).toHaveBeenCalledTimes(2);
-    expect(
-      applicationContext.getPersistenceGateway().removeCaseFromHearing.mock
-        .calls,
-    ).toMatchObject([
-      [{ docketNumber, trialSessionId: trialSessionIds[1] }],
-      [{ docketNumber, trialSessionId: trialSessionIds[2] }],
-    ]);
+    expect(upsertCases.mock.calls[0][0]).toMatchObject([caseToUpdate]);
+    expect(removeCasesFromHearings).toHaveBeenCalled();
+    expect(removeCasesFromHearings.mock.calls[0][0]).toMatchObject({
+      trialSessionCases: [
+        { docketNumber, trialSessionId: trialSessionIds[1] },
+        { docketNumber, trialSessionId: trialSessionIds[2] },
+      ],
+    });
   });
 
   describe('docket entries', () => {
-    it('does not call updateDocketEntry if all docket entries are unchanged', async () => {
+    it('does not call upsertDocketEntries if all docket entries are unchanged', async () => {
       const oldCase = {
         ...validMockCase,
         archivedDocketEntries: MOCK_DOCUMENTS,
@@ -257,25 +213,18 @@ describe('updateCaseAndAssociations', () => {
         docketEntries: MOCK_DOCUMENTS,
       };
 
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(caseToUpdate);
+      getCaseByDocketNumber.mockResolvedValue(caseToUpdate);
 
       await updateCaseAndAssociations({
-        applicationContext,
         authorizedUser: mockDocketClerkUser,
         caseToUpdate,
       });
 
-      expect(
-        applicationContext.getPersistenceGateway().updateDocketEntry,
-      ).not.toHaveBeenCalled();
-      expect(
-        applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0],
-      ).toMatchObject({ applicationContext, caseToUpdate });
+      expect(upsertDocketEntries).toHaveBeenCalledWith([]);
+      expect(upsertCases.mock.calls[0][0]).toMatchObject([caseToUpdate]);
     });
 
-    it('calls updateDocketEntry for each docket entry which has been added or changed', async () => {
+    it('calls upsertDocketEntries for each docket entry which has been added or changed', async () => {
       const oldCase = {
         ...MOCK_CASE,
         archivedDocketEntries: [MOCK_DOCUMENTS[0]],
@@ -294,278 +243,63 @@ describe('updateCaseAndAssociations', () => {
         ],
       };
 
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(oldCase);
+      getCaseByDocketNumber.mockResolvedValue(oldCase);
 
       await updateCaseAndAssociations({
-        applicationContext,
         authorizedUser: mockDocketClerkUser,
         caseToUpdate,
       });
 
+      expect(upsertCases.mock.calls[0][0][0].docketEntries).toMatchObject(
+        caseToUpdate.docketEntries,
+      );
       expect(
-        applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-          .caseToUpdate.docketEntries,
-      ).toMatchObject(caseToUpdate.docketEntries);
-      expect(
-        applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-          .caseToUpdate.archivedDocketEntries,
+        upsertCases.mock.calls[0][0][0].archivedDocketEntries,
       ).toMatchObject(caseToUpdate.archivedDocketEntries);
-      expect(
-        applicationContext.getPersistenceGateway().updateDocketEntry,
-      ).toHaveBeenCalledTimes(4);
-    });
-  });
-
-  describe('work items', () => {
-    let updatedCase: Case;
-    beforeAll(() => {
-      applicationContext
-        .getPersistenceGateway()
-        .getWorkItemsByDocketNumber.mockReturnValue([
-          {
-            pk: 'abc|987',
-            sk: `workitem|${MOCK_WORK_ITEM.workItemId}`,
-            ...MOCK_WORK_ITEM,
-          },
-        ]);
+      expect(upsertDocketEntries).toHaveBeenCalledTimes(1);
     });
 
-    beforeEach(() => {
-      updatedCase = cloneDeep(validMockCase);
-    });
-
-    it('does not call saveWorkItem if nothing on the case changes that requires a work item to be updated', async () => {
-      updatedCase.mailingDate = '2025-01-05T05:22:16.001Z';
-      await updateCaseAndAssociations({
-        applicationContext,
-        authorizedUser: mockDocketClerkUser,
-        caseToUpdate: updatedCase,
-      });
-      expect(
-        applicationContext.getPersistenceGateway().saveWorkItem,
-      ).not.toHaveBeenCalled();
-    });
-
-    it('the associated judge has been updated', async () => {
-      updatedCase.associatedJudge = 'Judge Dredd';
-      updatedCase.associatedJudgeId = '2f46a889-901c-4e8b-b2bb-c3994e2c75c1';
-      await updateCaseAndAssociations({
-        applicationContext,
-        authorizedUser: mockDocketClerkUser,
-        caseToUpdate: updatedCase,
-      });
-      const { workItem } =
-        applicationContext.getPersistenceGateway().saveWorkItem.mock
-          .calls[0][0];
-      expect(workItem.associatedJudge).toBe('Judge Dredd');
-      expect(workItem.associatedJudgeId).toBe(
-        '2f46a889-901c-4e8b-b2bb-c3994e2c75c1',
-      );
-    });
-
-    it('the docket docketNumberWithSuffix is updated because the case type has changed', async () => {
-      updatedCase.caseType = CASE_TYPES_MAP.whistleblower;
-
-      await updateCaseAndAssociations({
-        applicationContext,
-        authorizedUser: mockDocketClerkUser,
-        caseToUpdate: updatedCase,
-      });
-
-      expect(
-        applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
-          .workItem.docketNumberWithSuffix,
-      ).toBe(
-        `${updatedCase.docketNumber}${DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER}`,
-      );
-    });
-
-    it('the case caption has been updated', async () => {
-      updatedCase.caseCaption = 'Some caption changed';
-      await updateCaseAndAssociations({
-        applicationContext,
-        authorizedUser: mockDocketClerkUser,
-        caseToUpdate: updatedCase,
-      });
-
-      expect(
-        applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
-          .workItem.caseTitle,
-      ).toBe(Case.getCaseTitle('Some caption changed'));
-    });
-
-    it('the case status has been updated', async () => {
-      updatedCase.status = CASE_STATUS_TYPES.generalDocket;
-      await updateCaseAndAssociations({
-        applicationContext,
-        authorizedUser: mockDocketClerkUser,
-        caseToUpdate: updatedCase,
-      });
-
-      expect(
-        applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
-          .workItem.caseStatus,
-      ).toBe(CASE_STATUS_TYPES.generalDocket);
-    });
-
-    it('the trial date has been updated', async () => {
-      updatedCase.trialDate = '2021-01-02T05:22:16.001Z';
-      updatedCase.trialSessionId = uuidv4();
-
-      await updateCaseAndAssociations({
-        applicationContext,
-        authorizedUser: mockDocketClerkUser,
-        caseToUpdate: updatedCase,
-      });
-
-      expect(
-        applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
-          .workItem.trialDate,
-      ).toBe('2021-01-02T05:22:16.001Z');
-    });
-
-    it('the trial date has been removed', async () => {
+    it('should not compare work item differences when comparing docket entries', async () => {
       const oldCase = {
         ...validMockCase,
-        trialDate: '2021-01-02T05:22:16.001Z',
-        trialSessionId: uuidv4(),
+        archivedDocketEntries: MOCK_DOCUMENTS,
+        docketEntries: MOCK_DOCUMENTS.map(d => ({
+          ...d,
+          workItemId: 'someId',
+          qcComplete: false,
+          qcViewed: false,
+        })),
+      };
+      const caseToUpdate = {
+        ...oldCase,
+        archivedDocketEntries: MOCK_DOCUMENTS,
+        docketEntries: MOCK_DOCUMENTS.map(d => ({
+          ...d,
+          workItemId: 'someOtherId',
+          qcComplete: true,
+          qcViewed: true,
+        })),
       };
 
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(oldCase);
+      getCaseByDocketNumber.mockResolvedValue(caseToUpdate);
 
       await updateCaseAndAssociations({
-        applicationContext,
         authorizedUser: mockDocketClerkUser,
-        caseToUpdate: {
-          ...validMockCase,
-          trialDate: undefined,
-          trialSessionId: undefined,
-        },
+        caseToUpdate,
       });
 
-      expect(
-        applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
-          .workItem.trialDate,
-      ).toBe(null);
-    });
-    it('the trial location has been updated', async () => {
-      await updateCaseAndAssociations({
-        applicationContext,
-        authorizedUser: mockDocketClerkUser,
-        caseToUpdate: {
-          ...validMockCase,
-          trialDate: '2021-01-02T05:22:16.001Z',
-          trialLocation: 'Lubbock, Texas',
-          trialSessionId: uuidv4(),
-        },
-      });
-
-      expect(
-        applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
-          .workItem.trialLocation,
-      ).toBe('Lubbock, Texas');
-    });
-
-    it('the trial location has been removed', async () => {
-      const oldCase = {
-        ...validMockCase,
-        trialDate: '2021-01-02T05:22:16.001Z',
-        trialLocation: 'Lubbock, Texas',
-        trialSessionId: uuidv4(),
-      };
-
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(oldCase);
-
-      await updateCaseAndAssociations({
-        applicationContext,
-        authorizedUser: mockDocketClerkUser,
-        caseToUpdate: {
-          ...validMockCase,
-          trialLocation: undefined,
-        },
-      });
-
-      expect(
-        applicationContext.getPersistenceGateway().saveWorkItem.mock
-          .calls[0][0],
-      ).toMatchObject({
-        workItem: {
-          trialLocation: null,
-          workItemId: MOCK_WORK_ITEM.workItemId,
-        },
-      });
-    });
-
-    it('the lead docket number has been removed', async () => {
-      const oldCase = {
-        ...validMockCase,
-        leadDocketNumber: '101-20',
-      };
-
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(oldCase);
-
-      await updateCaseAndAssociations({
-        applicationContext,
-        authorizedUser: mockDocketClerkUser,
-        caseToUpdate: {
-          ...validMockCase,
-          leadDocketNumber: undefined,
-        },
-      });
-
-      expect(
-        applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
-          .workItem.leadDocketNumber,
-      ).toBeUndefined();
-    });
-
-    it('the lead docket number has been changed', async () => {
-      const oldCase = {
-        ...validMockCase,
-        leadDocketNumber: '101-20',
-      };
-
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(oldCase);
-
-      await updateCaseAndAssociations({
-        applicationContext,
-        authorizedUser: mockDocketClerkUser,
-        caseToUpdate: {
-          ...validMockCase,
-          leadDocketNumber: '202-20',
-        },
-      });
-
-      expect(
-        applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
-          .workItem.leadDocketNumber,
-      ).toBe('202-20');
+      expect(upsertDocketEntries).toHaveBeenCalledWith([]);
     });
   });
 
   describe('correspondences', () => {
     it('does not call updateCaseCorrespondence if all correspondences are unchanged', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(validMockCase);
+      getCaseByDocketNumber.mockResolvedValue(validMockCase);
       await updateCaseAndAssociations({
-        applicationContext,
         authorizedUser: mockDocketClerkUser,
         caseToUpdate: validMockCase,
       });
-      expect(
-        applicationContext.getPersistenceGateway().updateCaseCorrespondence,
-      ).not.toHaveBeenCalled();
+      expect(upsertCaseCorrespondences).toHaveBeenCalledWith([]);
     });
 
     it('calls updateCaseCorrespondence for each correspondence which has been added or changed', async () => {
@@ -574,41 +308,42 @@ describe('updateCaseAndAssociations', () => {
         archivedCorrespondences: [
           {
             ...validMockCase.archivedCorrespondences[0],
+            docketNumber: validMockCase.docketNumber,
             documentTitle: 'Updated Archived Correspondence',
           },
           {
-            correspondenceId: applicationContext.getUniqueId(),
+            correspondenceId: getUniqueId(),
+            docketNumber: validMockCase.docketNumber,
             documentTitle: 'New Archived Correspondence',
-            userId: applicationContext.getUniqueId(),
+            userId: getUniqueId(),
           },
         ],
         correspondence: [
           {
             ...validMockCase.correspondence[0],
+            docketNumber: validMockCase.docketNumber,
             documentTitle: 'Updated Correspondence',
           },
           {
-            correspondenceId: applicationContext.getUniqueId(),
+            correspondenceId: getUniqueId(),
+            docketNumber: validMockCase.docketNumber,
             documentTitle: 'New Correspondence',
-            userId: applicationContext.getUniqueId(),
+            userId: getUniqueId(),
           },
         ],
       };
 
       await updateCaseAndAssociations({
-        applicationContext,
         authorizedUser: mockDocketClerkUser,
         caseToUpdate,
       });
 
-      expect(
-        applicationContext.getPersistenceGateway().updateCaseCorrespondence,
-      ).toHaveBeenCalledTimes(4);
+      expect(upsertCaseCorrespondences).toHaveBeenCalledTimes(1);
     });
   });
 
   describe('IRS practitioners', () => {
-    const practitionerId = applicationContext.getUniqueId();
+    const practitionerId = getUniqueId();
     const mockCaseWithIrsPractitioners = new Case(
       {
         ...MOCK_CASE,
@@ -625,23 +360,16 @@ describe('updateCaseAndAssociations', () => {
     );
 
     beforeAll(() => {
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(mockCaseWithIrsPractitioners);
+      getCaseByDocketNumber.mockResolvedValue(mockCaseWithIrsPractitioners);
     });
 
     it('does not call updateIrsPractitionerOnCase or removeIrsPractitionerOnCase if all IRS practitioners are unchanged', async () => {
       await updateCaseAndAssociations({
-        applicationContext,
         authorizedUser: mockDocketClerkUser,
         caseToUpdate: mockCaseWithIrsPractitioners,
       });
-      expect(
-        applicationContext.getPersistenceGateway().updateIrsPractitionerOnCase,
-      ).not.toHaveBeenCalled();
-      expect(
-        applicationContext.getPersistenceGateway().removeIrsPractitionerOnCase,
-      ).not.toHaveBeenCalled();
+      expect(disassociateUsersFromCases).toHaveBeenCalledWith([]);
+      expect(associateUsersWithCases).toHaveBeenCalledWith([]);
     });
 
     it('calls updateIrsPractitionerOnCase on changed entries in irsPractitioners', async () => {
@@ -652,7 +380,6 @@ describe('updateCaseAndAssociations', () => {
         userId: practitionerId,
       };
       await updateCaseAndAssociations({
-        applicationContext,
         authorizedUser: mockDocketClerkUser,
         caseToUpdate: {
           ...mockCaseWithIrsPractitioners,
@@ -660,25 +387,16 @@ describe('updateCaseAndAssociations', () => {
         },
       });
 
-      expect(
-        applicationContext.getPersistenceGateway().removeIrsPractitionerOnCase,
-      ).not.toHaveBeenCalled();
-      expect(
-        applicationContext.getPersistenceGateway().updateIrsPractitionerOnCase,
-      ).toHaveBeenCalled();
-      expect(
-        applicationContext.getPersistenceGateway().updateIrsPractitionerOnCase
-          .mock.calls[0][0],
-      ).toMatchObject({
+      expect(disassociateUsersFromCases).toHaveBeenCalledWith([]);
+      expect(associateUsersWithCases).toHaveBeenCalled();
+      expect(associateUsersWithCases.mock.calls[0][0][0]).toMatchObject({
         docketNumber: validMockCase.docketNumber,
-        practitioner: updatedPractitioner,
         userId: practitionerId,
       });
     });
 
     it('removes an irsPractitioner from a case with existing irsPractitioners', async () => {
       await updateCaseAndAssociations({
-        applicationContext,
         authorizedUser: mockDocketClerkUser,
         caseToUpdate: {
           ...mockCaseWithIrsPractitioners,
@@ -686,51 +404,17 @@ describe('updateCaseAndAssociations', () => {
         },
       });
 
-      expect(
-        applicationContext.getPersistenceGateway().updateIrsPractitionerOnCase,
-      ).not.toHaveBeenCalled();
-      expect(
-        applicationContext.getPersistenceGateway().removeIrsPractitionerOnCase,
-      ).toHaveBeenCalled();
-      expect(
-        applicationContext.getPersistenceGateway().removeIrsPractitionerOnCase
-          .mock.calls[0][0],
-      ).toMatchObject({
+      expect(associateUsersWithCases).toHaveBeenCalledWith([]);
+      expect(disassociateUsersFromCases).toHaveBeenCalled();
+      expect(disassociateUsersFromCases.mock.calls[0][0][0]).toMatchObject({
         docketNumber: validMockCase.docketNumber,
-        userId: practitionerId,
-      });
-    });
-
-    it('calls updateIrsPractitionerOnCase to update gsi1pk for unchanged irsPractitioners when the case is part of a consolidated group', async () => {
-      await updateCaseAndAssociations({
-        applicationContext,
-        authorizedUser: mockDocketClerkUser,
-        caseToUpdate: {
-          ...mockCaseWithIrsPractitioners,
-          leadDocketNumber: '101-23',
-        },
-      });
-
-      expect(
-        applicationContext.getPersistenceGateway()
-          .removePrivatePractitionerOnCase,
-      ).not.toHaveBeenCalled();
-      expect(
-        applicationContext.getPersistenceGateway().updateIrsPractitionerOnCase,
-      ).toHaveBeenCalled();
-      expect(
-        applicationContext.getPersistenceGateway().updateIrsPractitionerOnCase
-          .mock.calls[0][0],
-      ).toMatchObject({
-        docketNumber: validMockCase.docketNumber,
-        practitioner: mockCaseWithIrsPractitioners.irsPractitioners![0],
         userId: practitionerId,
       });
     });
   });
 
   describe('Private practitioners', () => {
-    const practitionerId = applicationContext.getUniqueId();
+    const practitionerId = getUniqueId();
     const mockCaseWithIrsAndPrivatePractitioners = new Case(
       {
         ...MOCK_CASE,
@@ -747,27 +431,18 @@ describe('updateCaseAndAssociations', () => {
     );
 
     beforeAll(() => {
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(
-          mockCaseWithIrsAndPrivatePractitioners,
-        );
+      getCaseByDocketNumber.mockResolvedValue(
+        mockCaseWithIrsAndPrivatePractitioners,
+      );
     });
 
     it('does not call updatePrivatePractitionerOnCase or removePrivatePractitionerOnCase if all private practitioners are unchanged', async () => {
       await updateCaseAndAssociations({
-        applicationContext,
         authorizedUser: mockDocketClerkUser,
         caseToUpdate: mockCaseWithIrsAndPrivatePractitioners,
       });
-      expect(
-        applicationContext.getPersistenceGateway()
-          .updatePrivatePractitionerOnCase,
-      ).not.toHaveBeenCalled();
-      expect(
-        applicationContext.getPersistenceGateway()
-          .removePrivatePractitionerOnCase,
-      ).not.toHaveBeenCalled();
+      expect(associateUsersWithCases).toHaveBeenCalledWith([]);
+      expect(disassociateUsersFromCases).toHaveBeenCalledWith([]);
     });
 
     it('calls updatePrivatePractitionerOnCase on changed entries in privatePractitioners', async () => {
@@ -778,7 +453,6 @@ describe('updateCaseAndAssociations', () => {
         userId: practitionerId,
       };
       await updateCaseAndAssociations({
-        applicationContext,
         authorizedUser: mockDocketClerkUser,
         caseToUpdate: {
           ...mockCaseWithIrsAndPrivatePractitioners,
@@ -786,56 +460,16 @@ describe('updateCaseAndAssociations', () => {
         },
       });
 
-      expect(
-        applicationContext.getPersistenceGateway()
-          .removePrivatePractitionerOnCase,
-      ).not.toHaveBeenCalled();
-      expect(
-        applicationContext.getPersistenceGateway()
-          .updatePrivatePractitionerOnCase,
-      ).toHaveBeenCalled();
-      expect(
-        applicationContext.getPersistenceGateway()
-          .updatePrivatePractitionerOnCase.mock.calls[0][0],
-      ).toMatchObject({
+      expect(disassociateUsersFromCases).toHaveBeenCalledWith([]);
+      expect(associateUsersWithCases).toHaveBeenCalled();
+      expect(associateUsersWithCases.mock.calls[0][0][0]).toMatchObject({
         docketNumber: validMockCase.docketNumber,
-        practitioner: updatedPractitioner,
-        userId: practitionerId,
-      });
-    });
-
-    it('calls updatePrivatePractitionerOnCase to update gsi1pk for unchanged privatePractitioners when the case is part of a consolidated group', async () => {
-      await updateCaseAndAssociations({
-        applicationContext,
-        authorizedUser: mockDocketClerkUser,
-        caseToUpdate: {
-          ...mockCaseWithIrsAndPrivatePractitioners,
-          leadDocketNumber: '101-23',
-        },
-      });
-
-      expect(
-        applicationContext.getPersistenceGateway()
-          .removePrivatePractitionerOnCase,
-      ).not.toHaveBeenCalled();
-      expect(
-        applicationContext.getPersistenceGateway()
-          .updatePrivatePractitionerOnCase,
-      ).toHaveBeenCalled();
-      expect(
-        applicationContext.getPersistenceGateway()
-          .updatePrivatePractitionerOnCase.mock.calls[0][0],
-      ).toMatchObject({
-        docketNumber: validMockCase.docketNumber,
-        practitioner:
-          mockCaseWithIrsAndPrivatePractitioners.privatePractitioners![0],
         userId: practitionerId,
       });
     });
 
     it('removes an privatePractitioner from a case with existing privatePractitioners', async () => {
       await updateCaseAndAssociations({
-        applicationContext,
         authorizedUser: mockDocketClerkUser,
         caseToUpdate: {
           ...mockCaseWithIrsAndPrivatePractitioners,
@@ -843,18 +477,9 @@ describe('updateCaseAndAssociations', () => {
         },
       });
 
-      expect(
-        applicationContext.getPersistenceGateway()
-          .updatePrivatePractitionerOnCase,
-      ).not.toHaveBeenCalled();
-      expect(
-        applicationContext.getPersistenceGateway()
-          .removePrivatePractitionerOnCase,
-      ).toHaveBeenCalled();
-      expect(
-        applicationContext.getPersistenceGateway()
-          .removePrivatePractitionerOnCase.mock.calls[0][0],
-      ).toMatchObject({
+      expect(associateUsersWithCases).toHaveBeenCalledWith([]);
+      expect(disassociateUsersFromCases).toHaveBeenCalled();
+      expect(disassociateUsersFromCases.mock.calls[0][0][0]).toMatchObject({
         docketNumber: validMockCase.docketNumber,
         userId: practitionerId,
       });
@@ -863,77 +488,59 @@ describe('updateCaseAndAssociations', () => {
 
   describe('user case messages', () => {
     beforeAll(() => {
-      const mockMessages = [{ messageId: 'abc' }];
-      updateMessage.mockResolvedValue(true);
+      const mockMessages = [MOCK_MESSAGE];
+      upsertMessages.mockResolvedValue(true);
       getMessagesByDocketNumber.mockResolvedValue(mockMessages);
     });
     it('completes without altering message records if no message updates are necessary', async () => {
       await updateCaseAndAssociations({
-        applicationContext,
         authorizedUser: mockDocketClerkUser,
         caseToUpdate: validMockCase,
       });
       expect(getMessagesByDocketNumber).not.toHaveBeenCalled();
-      expect(updateMessage).not.toHaveBeenCalled();
+      expect(upsertMessages).toHaveBeenCalledWith([]);
     });
 
     it('gets messages and throws validation errors if updates are not valid', async () => {
-      const mockValidatorRejects = () => {
-        throw new Error('Message entity was invalid mock-implementation');
-      };
-      (Message.validateRawCollection as jest.Mock).mockImplementationOnce(
-        mockValidatorRejects,
-      );
+      getMessagesByDocketNumber.mockResolvedValue([
+        { isValidMessage: 'Nope!' },
+      ]);
       await expect(
         updateCaseAndAssociations({
-          applicationContext,
           authorizedUser: mockDocketClerkUser,
           caseToUpdate: {
             ...validMockCase,
-            caseCaption: 'Some other caption',
-            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
-            status: 'Submitted',
+            caseType: CASE_TYPES_MAP.whistleblower, // This will change the docketNumberSuffix
           },
         }),
       ).rejects.toThrow('entity was invalid');
       expect(getMessagesByDocketNumber).toHaveBeenCalled();
-      expect(updateMessage).not.toHaveBeenCalled();
+      expect(upsertMessages).not.toHaveBeenCalled();
     });
 
     it('gets messages and persists them if valid', async () => {
-      await expect(
-        updateCaseAndAssociations({
-          applicationContext,
-          authorizedUser: mockDocketClerkUser,
-          caseToUpdate: {
-            ...validMockCase,
-            caseCaption: 'Some other caption',
-            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
-            status: 'Submitted',
-          },
-        }),
-      ).resolves.not.toThrow();
+      getCaseByDocketNumber.mockResolvedValue({ ...MOCK_CASE });
+      getMessagesByDocketNumber.mockResolvedValue([MOCK_MESSAGE]);
+
+      await updateCaseAndAssociations({
+        authorizedUser: mockDocketClerkUser,
+        caseToUpdate: {
+          ...MOCK_CASE,
+          caseType: CASE_TYPES_MAP.whistleblower, // This will change the docketNumberSuffix
+        },
+      });
       expect(getMessagesByDocketNumberMock).toHaveBeenCalled();
-      expect(updateMessage).toHaveBeenCalled();
+      expect(upsertMessages).toHaveBeenCalled();
     });
   });
 
   describe('case deadlines', () => {
-    const mockDeadline = new CaseDeadline(
-      {},
-      {
-        applicationContext,
-      },
-    );
+    const mockDeadline = new CaseDeadline({});
     beforeAll(() => {
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(validMockCase);
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseDeadlinesByDocketNumber.mockReturnValue([
-          { ...mockDeadline, pk: 'abc|987', sk: 'user-case|123' },
-        ]);
+      getCaseByDocketNumber.mockResolvedValue(validMockCase);
+      getCaseDeadlinesByDocketNumber.mockReturnValue([
+        { ...mockDeadline, pk: 'abc|987', sk: 'user-case|123' },
+      ]);
     });
 
     it('should not fetch or persist any case deadline data if associated judge is unchanged', async () => {
@@ -941,17 +548,11 @@ describe('updateCaseAndAssociations', () => {
         ...validMockCase,
       };
       await updateCaseAndAssociations({
-        applicationContext,
         authorizedUser: mockDocketClerkUser,
         caseToUpdate: updatedCase,
       });
-      expect(
-        applicationContext.getPersistenceGateway()
-          .getCaseDeadlinesByDocketNumber,
-      ).not.toHaveBeenCalled();
-      expect(
-        applicationContext.getPersistenceGateway().createCaseDeadline,
-      ).not.toHaveBeenCalled();
+      expect(getCaseDeadlinesByDocketNumber).not.toHaveBeenCalled();
+      expect(upsertCaseDeadlines).toHaveBeenCalledWith([]);
     });
 
     it('should fetch and persist case deadline data when associated judge has changed', async () => {
@@ -961,21 +562,12 @@ describe('updateCaseAndAssociations', () => {
         associatedJudgeId: '5f38a63a-17c9-4c02-b376-8123b0f26d9a',
       };
       await updateCaseAndAssociations({
-        applicationContext,
         authorizedUser: mockDocketClerkUser,
         caseToUpdate: updatedCase,
       });
-      expect(
-        applicationContext.getPersistenceGateway()
-          .getCaseDeadlinesByDocketNumber,
-      ).toHaveBeenCalled();
+      expect(getCaseDeadlinesByDocketNumber).toHaveBeenCalled();
       expect(CaseDeadline.validateRawCollection).toHaveBeenCalled();
-      expect(
-        applicationContext.getPersistenceGateway().createCaseDeadline,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        caseDeadline: { some: 'deadline' },
-      });
+      expect(upsertCaseDeadlines).toHaveBeenCalledWith([{ some: 'deadline' }]);
     });
   });
 });

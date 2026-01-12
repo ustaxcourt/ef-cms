@@ -1,12 +1,15 @@
-import { COUNTRY_TYPES, US_STATES, US_STATES_OTHER } from '../EntityConstants';
+import {
+  ALL_SELECTION,
+  COUNTRY_TYPES,
+  US_STATES,
+  US_STATES_OTHER,
+} from '../EntityConstants';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import joiDate from '@joi/date';
 import joiImported, { Root } from 'joi';
 
 const joi: Root = joiImported.extend(joiDate);
-
-export const ALL_COUNTRY_TYPE = 'all';
 
 export class CaseSearch extends JoiValidationEntity {
   countryType?: string;
@@ -29,15 +32,11 @@ export class CaseSearch extends JoiValidationEntity {
 
   static VALIDATION_RULES = {
     countryType: JoiValidationConstants.STRING.valid(
-      ALL_COUNTRY_TYPE,
+      ALL_SELECTION,
       COUNTRY_TYPES.DOMESTIC,
       COUNTRY_TYPES.INTERNATIONAL,
     ).optional(),
-    endDate: joi
-      .date()
-      .iso()
-      .format(CaseSearch.JOI_VALID_DATE_SEARCH_FORMAT)
-      .max('now')
+    endDate: JoiValidationConstants.DATE_RANGE_PICKER_DATE.max('now')
       .allow(null)
       .optional()
       .when('startDate', {
@@ -63,11 +62,7 @@ export class CaseSearch extends JoiValidationEntity {
       ...Object.keys(US_STATES),
       ...Object.keys(US_STATES_OTHER),
     ).optional(),
-    startDate: joi
-      .date()
-      .iso()
-      .format(CaseSearch.JOI_VALID_DATE_SEARCH_FORMAT)
-      .max('now')
+    startDate: JoiValidationConstants.DATE_RANGE_PICKER_DATE.max('now')
       .description(
         'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
       )

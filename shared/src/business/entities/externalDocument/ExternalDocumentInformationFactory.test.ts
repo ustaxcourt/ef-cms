@@ -1,6 +1,6 @@
 import { ExternalDocumentInformationFactory } from './ExternalDocumentInformationFactory';
 import { GENERATION_TYPES } from '@web-client/getConstants';
-import { OBJECTIONS_OPTIONS_MAP } from '../EntityConstants';
+import { OBJECTIONS_OPTIONS_MAP, ROLES } from '../EntityConstants';
 import {
   calculateISODate,
   createISODateString,
@@ -25,6 +25,10 @@ describe('ExternalDocumentInformationFactory', () => {
       hasSupportingDocuments: true,
       primaryDocumentFile: {},
       scenario: 'Standard',
+      currentUser: {
+        userId: 'd85d07b7-fdb8-4f94-9a09-69c2a38e95d4',
+        role: ROLES.petitioner,
+      },
     };
 
     beforeEach(() => {
@@ -34,6 +38,10 @@ describe('ExternalDocumentInformationFactory', () => {
         documentType: 'Application for Waiver of Filing Fee',
         filers: ['d85d07b7-fdb8-4f94-9a09-69c2a38e95d4'],
         scenario: 'Standard',
+        currentUser: {
+          userId: 'd85d07b7-fdb8-4f94-9a09-69c2a38e95d4',
+          role: ROLES.petitioner,
+        },
       };
     });
 
@@ -107,6 +115,10 @@ describe('ExternalDocumentInformationFactory', () => {
           category: 'Motion',
           documentType: 'Motion for Continuance',
           filers: ['d85d07b7-fdb8-4f94-9a09-69c2a38e95d4'],
+          currentUser: {
+            userId: 'd85d07b7-fdb8-4f94-9a09-69c2a38e95d4',
+            role: ROLES.petitioner,
+          },
         };
       });
 
@@ -126,6 +138,10 @@ describe('ExternalDocumentInformationFactory', () => {
           previousDocument: {
             documentType: 'Motion for Continuance',
           },
+          currentUser: {
+            userId: 'd85d07b7-fdb8-4f94-9a09-69c2a38e95d4',
+            role: ROLES.petitioner,
+          },
         };
 
         expect(errors().objections).toEqual('Enter selection for Objections.');
@@ -141,6 +157,10 @@ describe('ExternalDocumentInformationFactory', () => {
           filers: ['d85d07b7-fdb8-4f94-9a09-69c2a38e95d4'],
           previousDocument: {
             documentType: 'Answer',
+          },
+          currentUser: {
+            userId: 'd85d07b7-fdb8-4f94-9a09-69c2a38e95d4',
+            role: ROLES.petitioner,
           },
         };
 
@@ -431,11 +451,23 @@ describe('ExternalDocumentInformationFactory', () => {
       });
     });
 
-    it('should require one of [filers, partyIrsPractitioner] to be selected', () => {
+    it('should require one of [filers, partyIrsPractitioner] to be selected when user is IRS Practitioner', () => {
       baseDoc.filers = [];
+      baseDoc.currentUser = {
+        ...baseDoc.currentUser,
+        role: ROLES.irsPractitioner,
+      };
       expect(errors().filers).toEqual('Select a filing party');
       baseDoc.partyIrsPractitioner = true;
       expect(errors().filers).toEqual(undefined);
+    });
+
+    it('should require filers to include the current user when the current user is a petitioner', () => {
+      baseDoc.filers = [];
+      baseDoc.partyIrsPractitioner = true;
+      expect(errors().filers).toEqual(
+        'You must include yourself as a filing party',
+      );
     });
 
     describe('Consolidated Case filing to multiple cases', () => {

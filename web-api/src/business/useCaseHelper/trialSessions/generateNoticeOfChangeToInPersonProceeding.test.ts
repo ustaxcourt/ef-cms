@@ -1,15 +1,47 @@
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { MOCK_TRIAL_INPERSON } from '../../../../../shared/src/test/mockTrial';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { generateNoticeOfChangeToInPersonProceeding } from './generateNoticeOfChangeToInPersonProceeding';
+import '@web-api/persistence/postgres/cases/mocks.jest';
+jest.mock('@web-api/persistence/postgres/users/getUsersInSections');
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_TRIAL_INPERSON } from '@shared/test/mockTrial';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import {
+  generateNoticeOfChangeToInPersonProceeding,
+  GenerateNoticeOfChangeToInPersonTrialInfo,
+} from './generateNoticeOfChangeToInPersonProceeding';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getFeatureFlagValues as getFeatureFlagValuesMock } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
+import { getUsersInSections as getUsersInSectionsMock } from '@web-api/persistence/postgres/users/getUsersInSections';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
+
+const getFeatureFlagValues = getFeatureFlagValuesMock as jest.Mock;
+getFeatureFlagValues.mockResolvedValue([
+  {
+    name: 'clerk-of-court-configuration',
+    value: {
+      current: {
+        name: 'James Bond',
+        title: 'Clerk of the Court (Interim)',
+      },
+    },
+  },
+]);
 
 describe('generateNoticeOfChangeToInPersonProceeding', () => {
-  const mockTrialSessionInformation = {
-    ...MOCK_TRIAL_INPERSON,
-    chambersPhoneNumber: '203-456-9888',
-    courthouseName: 'A Court Of Law',
-    judgeName: 'Batman',
-  };
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const getUsersInSections = jest.mocked(getUsersInSectionsMock);
+  const mockTrialSessionInformation: GenerateNoticeOfChangeToInPersonTrialInfo =
+    {
+      address1: MOCK_TRIAL_INPERSON.address1!,
+      address2: MOCK_TRIAL_INPERSON.address2!,
+      city: MOCK_TRIAL_INPERSON.city!,
+      state: MOCK_TRIAL_INPERSON.state!,
+      zip: MOCK_TRIAL_INPERSON.postalCode!,
+      trialLocation: MOCK_TRIAL_INPERSON.trialLocation!,
+      startDate: MOCK_TRIAL_INPERSON.startDate!,
+      startTime: MOCK_TRIAL_INPERSON.startTime!,
+      chambersPhoneNumber: '203-456-9888',
+      courthouseName: 'A Court Of Law',
+      judgeName: 'Batman',
+    };
 
   const mockJudge = {
     judgeTitle: 'Judge',
@@ -17,20 +49,9 @@ describe('generateNoticeOfChangeToInPersonProceeding', () => {
   };
 
   it('should call the document generator to generate the NOIP', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUsersInSection.mockReturnValue([mockJudge]);
+    getUsersInSections.mockResolvedValue([mockJudge as DbUser]);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
-
-    applicationContext
-      .getPersistenceGateway()
-      .getConfigurationItemValue.mockResolvedValue({
-        name: 'James Bond',
-        title: 'Clerk of the Court (Interim)',
-      });
+    getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
 
     await generateNoticeOfChangeToInPersonProceeding(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,

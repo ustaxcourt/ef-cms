@@ -1,3 +1,3 @@
-variable "lower_env_account_id" {
-  type = string
+variable "lower_env_restore_roles" {
+  type = set(string)
 }

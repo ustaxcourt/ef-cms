@@ -3,29 +3,40 @@ import {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_RELATIONSHIPS,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
+} from '@shared/business/entities/EntityConstants';
+import { Case } from '@shared/business/entities/cases/Case';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import {
   FORMATS,
   dateStringsCompared,
   formatDateString,
-} from '../../../../../shared/src/business/utilities/DateHandler';
-import { InvalidRequest, UnauthorizedError } from '@web-api/errors/errors';
+} from '@shared/business/utilities/DateHandler';
+import {
+  InvalidRequest,
+  NotFoundError,
+  UnauthorizedError,
+} from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { User } from '../../../../../shared/src/business/entities/User';
+import { User } from '@shared/business/entities/User';
 import { addServedStampToDocument } from '@web-api/business/useCases/courtIssuedDocument/addServedStampToDocument';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { generateNoticeOfDocketChangePdf } from '@web-api/business/useCaseHelper/noticeOfDocketChange/generateNoticeOfDocketChangePdf';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
 import { getDocumentTitleForNoticeOfChange } from '@shared/business/utilities/getDocumentTitleForNoticeOfChange';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { WorkItem } from '@shared/business/entities/WorkItem';
 
 const completeDocketEntryQC = async (
   applicationContext: ServerApplicationContext,
@@ -41,32 +52,48 @@ const completeDocketEntryQC = async (
   const {
     docketEntryId,
     docketNumber,
-    leadDocketNumber,
     overridePaperServiceAddress,
     selectedSection,
   } = entryMetadata;
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
 
-  const caseToUpdate = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
+  if (!user) {
+    throw new NotFoundError(
+      `User not found with user id ${authorizedUser.userId}`,
+    );
+  }
+
+  const [caseToUpdate, workItem] = await Promise.all([
+    getCaseByDocketNumber({
       docketNumber,
-    });
+    }),
+    getWorkItemByDocketNumberAndDocketEntryId({
+      docketNumber,
+      docketEntryId,
+    }),
+  ]);
+
+  if (!workItem) {
+    throw new NotFoundError(
+      `Could not find work item associated with ${docketNumber} document ${docketEntryId}`,
+    );
+  }
 
   let caseEntity = new Case(caseToUpdate, { authorizedUser });
-  const { index: docketRecordIndexUpdated } = caseEntity.docketEntries.find(
-    record => record.docketEntryId === docketEntryId,
-  );
-
   const currentDocketEntry = caseEntity.getDocketEntryById({
     docketEntryId,
   });
 
-  if (currentDocketEntry.workItem.isCompleted()) {
+  if (!currentDocketEntry) {
+    throw new NotFoundError(
+      `Could not find docket entry with id ${docketEntryId} on case ${docketNumber}`,
+    );
+  }
+
+  const { index: docketRecordIndexUpdated } = currentDocketEntry;
+
+  if (workItem.isCompleted()) {
     throw new InvalidRequest('The work item was already completed');
   }
 
@@ -83,7 +110,6 @@ const completeDocketEntryQC = async (
     filedBy: entryMetadata.filedBy,
     filers: entryMetadata.filers,
     freeText: entryMetadata.freeText,
-    freeText2: entryMetadata.freeText2,
     hasOtherFilingParty: entryMetadata.hasOtherFilingParty,
     isFileAttached: true,
     lodged: entryMetadata.lodged,
@@ -94,6 +120,7 @@ const completeDocketEntryQC = async (
     otherIteration: entryMetadata.otherIteration,
     partyIrsPractitioner: entryMetadata.partyIrsPractitioner,
     pending: entryMetadata.pending,
+    previousDocument: entryMetadata.previousDocument,
     receivedAt: entryMetadata.receivedAt,
     scenario: entryMetadata.scenario,
     secondaryDocument: entryMetadata.secondaryDocument,
@@ -107,23 +134,16 @@ const completeDocketEntryQC = async (
       documentTitle: editableFields.documentTitle,
       editState: '{}',
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
-      workItem: {
-        ...currentDocketEntry.workItem,
-        leadDocketNumber,
-        trialDate: caseEntity.trialDate,
-        trialLocation: caseEntity.trialLocation,
-      },
     },
     { authorizedUser, petitioners: caseToUpdate.petitioners },
   ).validate();
-  updatedDocketEntry.setQCed(user);
 
-  let updatedDocumentTitle = getDocumentTitleForNoticeOfChange({
+  const updatedDocumentTitle = getDocumentTitleForNoticeOfChange({
     applicationContext,
     docketEntry: updatedDocketEntry,
   });
 
-  let currentDocumentTitle = getDocumentTitleForNoticeOfChange({
+  const currentDocumentTitle = getDocumentTitleForNoticeOfChange({
     applicationContext,
     docketEntry: currentDocketEntry,
   });
@@ -140,21 +160,26 @@ const completeDocketEntryQC = async (
 
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
 
-  const { name, title } = await applicationContext
-    .getPersistenceGateway()
-    .getConfigurationItemValue({
-      applicationContext,
-      configurationItemKey:
-        applicationContext.getConstants().CLERK_OF_THE_COURT_CONFIGURATION,
-    });
+  const { CLERK_OF_THE_COURT_CONFIGURATION } =
+    applicationContext.getConstants();
+
+  const [CLERK_OF_THE_COURT_RECORD] = await getFeatureFlagValues([
+    CLERK_OF_THE_COURT_CONFIGURATION,
+  ]);
+
+  const { name, title } = CLERK_OF_THE_COURT_RECORD.value.current as {
+    name: string;
+    title: string;
+  };
 
   const docketChangeInfo = {
     caseCaptionExtension,
     caseTitle,
     docketEntryIndex: docketRecordIndexUpdated,
-    docketNumber: `${caseToUpdate.docketNumber}${
-      caseToUpdate.docketNumberSuffix || ''
-    }`,
+    docketNumber: Case.getDocketNumberWithSuffix({
+      docketNumber: caseToUpdate.docketNumber,
+      docketNumberSuffix: caseToUpdate.docketNumberSuffix,
+    }),
     filingParties: {
       after: updatedDocketEntry.filedBy,
       before: currentDocketEntry.filedBy,
@@ -171,18 +196,9 @@ const completeDocketEntryQC = async (
 
   caseEntity = await applicationContext
     .getUseCaseHelpers()
-    .updateCaseAutomaticBlock({ applicationContext, caseEntity });
+    .updateCaseAutomaticBlock({ caseEntity });
 
-  const workItemToUpdate = updatedDocketEntry.workItem;
-
-  Object.assign(workItemToUpdate, {
-    docketEntry: {
-      ...updatedDocketEntry.toRawObject(),
-      createdAt: updatedDocketEntry.createdAt,
-    },
-  });
-
-  workItemToUpdate.setAsCompleted({
+  workItem.setAsCompleted({
     message: 'completed',
     user,
   });
@@ -191,26 +207,26 @@ const completeDocketEntryQC = async (
     section: user.section || '',
   });
 
-  let sectionToAssignTo =
+  const sectionToAssignTo =
     userIsCaseServices && selectedSection ? selectedSection : user.section;
 
-  workItemToUpdate.assignToUser({
+  workItem.assignToUser({
     assigneeId: user.userId,
     assigneeName: user.name,
-    section: sectionToAssignTo,
+    section: WorkItem.getWorkItemSectionFromUserSection({
+      section: sectionToAssignTo,
+      documentTitle: updatedDocketEntry.documentTitle,
+    }),
     sentBy: user.name,
     sentBySection: user.section,
     sentByUserId: user.userId,
   });
 
-  await applicationContext
-    .getPersistenceGateway()
-    .saveWorkItemForDocketClerkFilingExternalDocument({
-      applicationContext,
-      workItem: workItemToUpdate.validate().toRawObject(),
-    });
+  await upsertWorkItems({
+    workItems: [workItem.validate().toRawObject()],
+  });
 
-  let servedParties = aggregatePartiesForService(caseEntity);
+  const servedParties = aggregatePartiesForService(caseEntity);
   let paperServicePdfUrl;
   let paperServiceDocumentTitle;
 
@@ -228,7 +244,7 @@ const completeDocketEntryQC = async (
 
       const noticeDoc = await PDFDocument.load(pdfData);
 
-      let newPdfDoc = await PDFDocument.create();
+      const newPdfDoc = await PDFDocument.create();
 
       await applicationContext
         .getUseCaseHelpers()
@@ -245,7 +261,6 @@ const completeDocketEntryQC = async (
       const paperServicePdfId = applicationContext.getUniqueId();
 
       await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-        applicationContext,
         document: paperServicePdfData,
         key: paperServicePdfId,
         useTempBucket: true,
@@ -266,15 +281,17 @@ const completeDocketEntryQC = async (
     const noticeDocketEntryId = await generateNoticeOfDocketChangePdf({
       applicationContext,
       authorizedUser,
+      // @ts-ignore
       docketChangeInfo,
     });
 
-    let noticeUpdatedDocketEntry = new DocketEntry(
+    const noticeUpdatedDocketEntry = new DocketEntry(
       {
         ...SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange,
         docketEntryId: noticeDocketEntryId,
         documentTitle: replaceBracketed(
           SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange.documentTitle,
+          // @ts-ignore
           docketChangeInfo.docketEntryIndex,
         ),
         isFileAttached: true,
@@ -316,7 +333,6 @@ const completeDocketEntryQC = async (
     });
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-      applicationContext,
       document: newPdfData,
       key: noticeUpdatedDocketEntry.docketEntryId,
     });
@@ -335,8 +351,7 @@ const completeDocketEntryQC = async (
     }
   }
 
-  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-    applicationContext,
+  await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
   });

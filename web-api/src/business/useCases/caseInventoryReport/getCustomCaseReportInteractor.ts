@@ -11,9 +11,9 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getCasesByFilters } from '@web-api/persistence/postgres/cases/reports/getCasesByFilters';
 
 export type CustomCaseReportFilters = {
   caseStatuses: CaseStatus[];
@@ -22,19 +22,17 @@ export type CustomCaseReportFilters = {
   startDate?: string;
   filingMethod: CustomCaseFilingMethods;
   preferredTrialCities: string[];
-  highPriority?: boolean;
   procedureType: CustomCaseProcedureTypes;
   judges: string[];
 };
 
 export type GetCustomCaseReportRequest = CustomCaseReportFilters & {
   pageSize: number;
-  searchAfter: CustomCaseReportSearchAfter;
+  page: number;
 };
 
 export type GetCustomCaseReportResponse = {
   foundCases: CaseInventory[];
-  lastCaseId: { receivedAt: number; pk: string };
   totalCount: number;
 };
 
@@ -46,20 +44,14 @@ export type CaseInventory = Pick<
   | 'caseCaption'
   | 'caseType'
   | 'docketNumber'
+  | 'docketNumberWithSuffix'
   | 'leadDocketNumber'
   | 'preferredTrialCity'
   | 'receivedAt'
   | 'status'
-  | 'highPriority'
 >;
 
-export type CustomCaseReportSearchAfter = {
-  pk: string | null;
-  receivedAt: number | null;
-};
-
 export const getCustomCaseReportInteractor = async (
-  applicationContext: ServerApplicationContext,
   params: GetCustomCaseReportRequest,
   authorizedUser: UnknownAuthUser,
 ): Promise<GetCustomCaseReportResponse> => {
@@ -71,15 +63,11 @@ export const getCustomCaseReportInteractor = async (
   params.caseTypes = params.caseTypes || [];
   params.judges = params.judges || [];
   params.preferredTrialCities = params.preferredTrialCities || [];
-  params.searchAfter = params.searchAfter || {
-    pk: null,
-    receivedAt: null,
-  };
+  params.page = params.page || 0;
 
   new CustomCaseReportSearch(params).validate();
 
-  return await applicationContext.getPersistenceGateway().getCasesByFilters({
-    applicationContext,
+  return await getCasesByFilters({
     params,
   });
 };

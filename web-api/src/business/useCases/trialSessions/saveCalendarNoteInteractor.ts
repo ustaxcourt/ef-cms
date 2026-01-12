@@ -1,12 +1,14 @@
-import { NotFoundError } from '../../../errors/errors';
+import { NotFoundError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
+import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { createOrUpdateTrialSessionCases } from '@web-api/persistence/postgres/trialSessions/createOrUpdateTrialSessionCases';
 
 /**
  * saveCalendarNoteInteractor
@@ -19,7 +21,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
  * @returns {object} trial session entity
  */
 export const saveCalendarNoteInteractor = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   {
     calendarNote,
     docketNumber,
@@ -33,12 +35,9 @@ export const saveCalendarNoteInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const trialSession = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById({
-      applicationContext,
-      trialSessionId,
-    });
+  const trialSession = await getTrialSessionById({
+    trialSessionId,
+  });
 
   if (!trialSession) {
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
@@ -53,35 +52,15 @@ export const saveCalendarNoteInteractor = async (
   const rawTrialSessionEntity = new TrialSession(trialSession)
     .validate()
     .toRawObject();
-
-  await applicationContext.getPersistenceGateway().updateTrialSession({
-    applicationContext,
-    trialSessionToUpdate: rawTrialSessionEntity,
+  await createOrUpdateTrialSessionCases({
+    trialSessionCases: rawTrialSessionEntity.caseOrder.map(caseOrder => ({
+      docketNumber: caseOrder.docketNumber,
+      caseOrder,
+      isHearing: caseOrder.isHearing,
+      trialSessionId: rawTrialSessionEntity.trialSessionId,
+    })),
   });
 
-  const caseDetail = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
-
-  if (
-    caseDetail.trialSessionId !== trialSessionId &&
-    caseDetail.hearings?.length
-  ) {
-    const hearing = caseDetail.hearings.find(
-      caseHearing => caseHearing.trialSessionId === trialSessionId,
-    );
-
-    if (hearing) {
-      await applicationContext.getPersistenceGateway().updateCaseHearing({
-        applicationContext,
-        docketNumber,
-        hearingToUpdate: rawTrialSessionEntity,
-      });
-    }
-  }
 
   return rawTrialSessionEntity;
 };

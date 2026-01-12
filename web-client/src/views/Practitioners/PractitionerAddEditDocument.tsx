@@ -22,7 +22,6 @@ export const PractitionerAddEditDocument = connect(
     documentTypes: state.constants.PRACTITIONER_DOCUMENT_TYPES,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    isEditingPractitionerDocument: state.isEditingPractitionerDocument,
     practitionerDocumentationFormHelper:
       state.practitionerDocumentationFormHelper,
     showModal: state.modal.showModal,
@@ -197,7 +196,7 @@ export const PractitionerAddEditDocument = connect(
                 </div>
               </div>
               <div className="grid-row margin-bottom-6 margin-top-5">
-                <div className="grid-col-12">
+                <div className="grid-col-12 button-container">
                   {form.isEditingDocument ? (
                     <Button
                       onClick={() => {

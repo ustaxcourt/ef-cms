@@ -38,22 +38,6 @@ export const HealthCheck = connect(
           requiresMargin={true}
         />
       ),
-      dynamoEfcms: (
-        <RenderHealthStatus id="dynamoEfcms" item={health.dynamo.efcms} />
-      ),
-      dynamoEfcmsDeploy: (
-        <RenderHealthStatus
-          id="dynamo-deploy-table"
-          item={health.dynamo.efcmsDeploy}
-        />
-      ),
-      dynamsoft: (
-        <RenderHealthStatus
-          id="dynamsoft"
-          item={health.dynamsoft}
-          requiresMargin={true}
-        />
-      ),
       elasticsearch: (
         <RenderHealthStatus
           id="elasticsearch"
@@ -114,26 +98,6 @@ export const HealthCheck = connect(
                     <div className="grid-col-9">Cognito</div>
                     {components.cognito}
                   </h2>
-                </div>
-                <div className="card height-8">
-                  <h2 className="margin-top-2 margin-left-205 grid-row">
-                    <div className="grid-col-9"> Dynamsoft</div>
-                    {components.dynamsoft}
-                  </h2>
-                </div>
-                <div className="card">
-                  <h2 className="margin-top-2 margin-left-205">DynamoDB</h2>
-                  <hr />
-                  <div className="margin-left-205 margin-top-negative grid-row">
-                    <div className="health-check-text grid-col-9">efcms</div>
-                    {components.dynamoEfcms}
-                  </div>
-                  <div className="margin-left-205 margin-bottom-205 grid-row">
-                    <div className="health-check-text grid-col-9">
-                      efcmsDeploy
-                    </div>
-                    {components.dynamoEfcmsDeploy}
-                  </div>
                 </div>
                 <div className="card height-8">
                   <h2 className="margin-top-2 margin-left-2 grid-row">
@@ -222,28 +186,8 @@ export const HealthCheck = connect(
                   {components.cognito}
                 </h2>
               </div>
-              <div className="card height-8 width-full">
-                <h2 className="margin-top-2 margin-left-205 grid-row">
-                  <div className="grid-col-9"> Dynamsoft</div>
-                  {components.dynamsoft}
-                </h2>
-              </div>
             </div>
             <div className="grid-row">
-              <div className="card width-full">
-                <h2 className="margin-top-2 margin-left-205">DynamoDB</h2>
-                <hr />
-                <div className="margin-left-205 margin-top-negative grid-row">
-                  <div className="health-check-text grid-col-9">efcms</div>
-                  {components.dynamoEfcms}
-                </div>
-                <div className="margin-left-205 margin-bottom-205 grid-row">
-                  <div className="health-check-text grid-col-9">
-                    efcmsDeploy
-                  </div>
-                  {components.dynamoEfcmsDeploy}
-                </div>
-              </div>
 
               <div className="card height-8 width-full">
                 <h2 className="margin-top-2 margin-left-2 grid-row">

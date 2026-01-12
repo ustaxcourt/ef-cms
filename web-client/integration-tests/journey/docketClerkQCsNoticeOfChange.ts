@@ -31,7 +31,7 @@ export const docketClerkQCsNoticeOfChange = ({
     });
     const noticeOfChangeQCItem = workQueueFormatted.find(
       workItem => workItem.docketNumber === cerebralTest.docketNumber,
-    );
+    ) as any;
 
     expect(noticeOfChangeQCItem).toMatchObject({
       docketEntry: { documentTitle },

@@ -4,7 +4,11 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const ServeCaseToIrsErrorModal = connect(
+type ServeCaseToIrsErrorModalProps = {
+  onCancelSequence: string;
+}
+
+export const ServeCaseToIrsErrorModal: React.FC<ServeCaseToIrsErrorModalProps> = connect(
   {
     cancelSequence: sequences.clearModalSequence,
   },

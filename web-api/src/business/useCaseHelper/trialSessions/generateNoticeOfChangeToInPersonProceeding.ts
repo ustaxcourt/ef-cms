@@ -2,18 +2,33 @@ import {
   FORMATS,
   createISODateString,
   formatDateString,
-} from '../../../../../shared/src/business/utilities/DateHandler';
+} from '@shared/business/utilities/DateHandler';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { formatPhoneNumber } from '../../../../../shared/src/business/utilities/formatPhoneNumber';
-import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
-import { getJudgeWithTitle } from '../../../../../shared/src/business/utilities/getJudgeWithTitle';
+import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
+import { formatPhoneNumber } from '@shared/business/utilities/formatPhoneNumber';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
+import { getJudgeWithTitle } from '@shared/business/utilities/getJudgeWithTitle';
+import { NoticeOfChangeToInPersonTrialInfo } from '@shared/business/utilities/pdfGenerator/documentTemplates/NoticeOfChangeToInPersonProceeding';
+
+export type GenerateNoticeOfChangeToInPersonTrialInfo = Omit<
+  NoticeOfChangeToInPersonTrialInfo,
+  'formattedJudge' | 'formattedStartDate' | 'formattedStartTime'
+> & {
+  startDate: string;
+  startTime: string;
+  judgeName: string;
+};
 
 export const generateNoticeOfChangeToInPersonProceeding = async (
   applicationContext: ServerApplicationContext,
   {
     docketNumber,
     trialSessionInformation,
-  }: { docketNumber: string; trialSessionInformation: any },
+  }: {
+    docketNumber: string;
+    trialSessionInformation: GenerateNoticeOfChangeToInPersonTrialInfo;
+  },
 ): Promise<Uint8Array> => {
   const formattedStartDate = formatDateString(
     trialSessionInformation.startDate,
@@ -27,11 +42,10 @@ export const generateNoticeOfChangeToInPersonProceeding = async (
   const formattedStartTime = formatDateString(trialStartTimeIso, FORMATS.TIME);
 
   const judgeWithTitle = await getJudgeWithTitle({
-    applicationContext,
     judgeUserName: trialSessionInformation.judgeName,
   });
 
-  const trialInfo = {
+  const trialInfo: NoticeOfChangeToInPersonTrialInfo = {
     ...trialSessionInformation,
     chambersPhoneNumber: formatPhoneNumber(
       trialSessionInformation.chambersPhoneNumber,
@@ -39,27 +53,25 @@ export const generateNoticeOfChangeToInPersonProceeding = async (
     formattedJudge: judgeWithTitle,
     formattedStartDate,
     formattedStartTime,
-    joinPhoneNumber: formatPhoneNumber(trialSessionInformation.joinPhoneNumber),
   };
 
-  const caseDetail = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const caseDetail = await getCaseByDocketNumber({
+    docketNumber,
+  });
 
   const { docketNumberWithSuffix } = caseDetail;
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
-  const clerkOftheCourtConfigurationKey: string =
-    applicationContext.getConstants().CLERK_OF_THE_COURT_CONFIGURATION;
+  const { CLERK_OF_THE_COURT_CONFIGURATION } =
+    applicationContext.getConstants();
 
-  const { name, title } = await applicationContext
-    .getPersistenceGateway()
-    .getConfigurationItemValue({
-      applicationContext,
-      configurationItemKey: clerkOftheCourtConfigurationKey,
-    });
+  const [CLERK_OF_THE_COURT_RECORD] = await getFeatureFlagValues([
+    CLERK_OF_THE_COURT_CONFIGURATION,
+  ]);
+
+  const { name, title } = CLERK_OF_THE_COURT_RECORD.value.current as {
+    name: string;
+    title: string;
+  };
 
   return await applicationContext
     .getDocumentGenerators()
@@ -68,7 +80,7 @@ export const generateNoticeOfChangeToInPersonProceeding = async (
       data: {
         caseCaptionExtension,
         caseTitle,
-        docketNumberWithSuffix,
+        docketNumberWithSuffix: docketNumberWithSuffix || docketNumber,
         nameOfClerk: name,
         titleOfClerk: title,
         trialInfo,

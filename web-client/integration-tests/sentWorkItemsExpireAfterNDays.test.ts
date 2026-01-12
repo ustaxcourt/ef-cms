@@ -1,4 +1,5 @@
-import { CASE_STATUS_TYPES } from '../../shared/src/business/entities/EntityConstants';
+import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
+import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { createApplicationContext as applicationContextFactory } from '../../web-api/src/applicationContext';
 import {
   getFormattedDocumentQCMyOutbox,
@@ -8,10 +9,11 @@ import {
   uploadPetition,
 } from './helpers';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 
 describe('verify old sent work items do not show up in the outbox', () => {
   const cerebralTest = setupTest();
-
   let workItemNMinus1Days;
   let workItemNDays;
   let workItemNPlus1Days;
@@ -35,16 +37,14 @@ describe('verify old sent work items do not show up in the outbox', () => {
     };
 
     const applicationContext = applicationContextFactory(mockUser);
-    applicationContext.environment.dynamoDbTableName = 'efcms-local';
     const daysToRetrieveKey =
       applicationContext.getConstants().CONFIGURATION_ITEM_KEYS
         .SECTION_OUTBOX_NUMBER_OF_DAYS.key;
-    let daysToRetrieve = await applicationContext
-      .getPersistenceGateway()
-      .getConfigurationItemValue({
-        applicationContext,
-        configurationItemKey: daysToRetrieveKey,
-      });
+
+    const daysToRetrieveRecord = await getFeatureFlagValues([
+      daysToRetrieveKey,
+    ]);
+    const { current: daysToRetrieve } = daysToRetrieveRecord[0].value;
 
     const CREATED_N_PLUS_1_DAYS_AGO = applicationContext
       .getUtilities()
@@ -60,22 +60,33 @@ describe('verify old sent work items do not show up in the outbox', () => {
     workItemIdN = applicationContext.getUniqueId();
     workItemIdNPlus1 = applicationContext.getUniqueId();
 
+    const docketEntry: RawDocketEntry = {
+      docketEntryId: '01174a9a-7ac4-43ff-a163-8ed421f9612d',
+      docketNumber: caseDetail.docketNumber,
+      createdAt: '2019-06-25T15:14:11.924Z',
+      documentType: 'Petition',
+      eventCode: 'O',
+      documentTitle: 'Test',
+      filingDate: '2018-06-26T16:31:17.643Z',
+      isOnDocketRecord: true,
+      filers: [],
+      processingStatus: '',
+      receivedAt: '2018-06-25T16:31:17.643Z',
+      stampData: {},
+    };
+
     workItemNPlus1Days = {
       assigneeId: mockUser.userId,
       assigneeName: 'Test petitionsclerk1',
+      associatedJudge: 'Chief Judge',
       caseStatus: CASE_STATUS_TYPES.new,
       completedAt: CREATED_N_PLUS_1_DAYS_AGO,
       completedBy: 'Test Petitionsclerk',
       completedByUserId: mockUser.userId,
       createdAt: CREATED_N_PLUS_1_DAYS_AGO,
-      docketEntry: {
-        createdAt: '2019-06-25T15:14:11.924Z',
-        docketEntryId: '01174a9a-7ac4-43ff-a163-8ed421f9612d',
-        documentType: 'Petition',
-      },
+      docketEntryId: docketEntry.docketEntryId,
       docketNumber: caseDetail.docketNumber,
       docketNumberSuffix: null,
-      isInitializeCase: false,
       section: 'petitions',
       sentBy: 'Test petitionsclerk1',
       sentBySection: 'petitions',
@@ -98,22 +109,9 @@ describe('verify old sent work items do not show up in the outbox', () => {
       workItemId: `${workItemIdNMinus1}`,
     };
 
-    await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
-      applicationContext,
-      authorizedUser: mockUser,
-      workItem: workItemNPlus1Days,
-    });
-
-    await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
-      applicationContext,
-      authorizedUser: mockUser,
-      workItem: workItemNDays,
-    });
-
-    await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
-      applicationContext,
-      authorizedUser: mockUser,
-      workItem: workItemNMinus1Days,
+    await upsertDocketEntries([docketEntry]);
+    await upsertWorkItems({
+      workItems: [workItemNPlus1Days, workItemNDays, workItemNMinus1Days],
     });
   });
 

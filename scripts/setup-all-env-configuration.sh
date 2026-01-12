@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-# Creates all missing feature flag items in the dynamo deploy table
+# Creates all missing feature flag items in the database
 
 # Usage
 #   ENV=dev ./setup-all-env-configuration.sh
@@ -10,11 +10,11 @@
   "AWS_SECRET_ACCESS_KEY" \
   "AWS_ACCESS_KEY_ID"
 
-./scripts/dynamo/setup-document-search-limiter-limits.sh
-./scripts/dynamo/setup-terminal-ip-allowlist.sh
-./scripts/dynamo/setup-maintenance-mode-flag.sh
-./scripts/dynamo/setup-section-outbox-retrieval-days.sh
-./scripts/dynamo/setup-add-docket-numbers-to-orders-flag.sh
-./scripts/dynamo/setup-updated-trial-session-types-flag.sh
-./scripts/dynamo/setup-consolidated-cases-group-access-petitioner-flag.sh
-./scripts/dynamo/setup-aws-batch-zipper-minimum-count.sh
+./scripts/postgres/featureFlags/setup-aws-batch-zipper-minimum-count.ts
+./scripts/postgres/featureFlags/setup-chief-judge-name-flag.ts
+./scripts/postgres/featureFlags/setup-clerk-of-court-config.ts
+./scripts/postgres/featureFlags/setup-document-visibility-policy-change-date.ts
+./scripts/postgres/featureFlags/setup-e-consent-fields-enabled-feature-flag.ts
+./scripts/postgres/featureFlags/setup-section-outbox-retrieval-days.ts
+./scripts/postgres/featureFlags/setup-terminal-ip-allowlist.ts
+./scripts/postgres/featureFlags/setup-use-change-of-address-lambda-flag.ts

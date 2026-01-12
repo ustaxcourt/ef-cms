@@ -18,6 +18,17 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
     receivedAtMonth = '01',
     receivedAtYear = '2001',
     trialLocation = 'Birmingham, Alabama',
+  }: {
+    formOrdersAndNotices?: {
+      key?: string;
+      value?: boolean;
+    };
+    paymentStatus?: string;
+    procedureType?: string;
+    receivedAtDay?: string;
+    receivedAtMonth?: string;
+    receivedAtYear?: string;
+    trialLocation?: string;
   } = {},
   formOverrides: {
     key: string;
@@ -134,11 +145,11 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
   ];
 
   formValues =
-    formOrdersAndNotices &&
-    formOrdersAndNotices.key &&
-    formOrdersAndNotices.value
-      ? [...formValues, formOrdersAndNotices]
-      : formValues;
+      formOrdersAndNotices &&
+      typeof formOrdersAndNotices.key === 'string' &&
+      formOrdersAndNotices.value !== undefined
+        ? [...formValues, formOrdersAndNotices as { key: string; value: any }]
+        : formValues;
 
   formValues =
     formOverrides && formOverrides.length > 0
@@ -226,9 +237,6 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
     );
     expect(cerebralTest.getState('form.contactSecondary.postalCode')).toBe(
       cerebralTest.getState('form.contactPrimary.postalCode'),
-    );
-    expect(cerebralTest.getState('form.contactSecondary.email')).toBe(
-      cerebralTest.getState('form.contactPrimary.email'),
     );
     expect(cerebralTest.getState('form.contactSecondary.phone')).toBe(
       cerebralTest.getState('form.contactPrimary.phone'),

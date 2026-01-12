@@ -1,13 +1,26 @@
 import {
   AMENDED_PETITION_FORM_NAME,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
-} from '../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { addDocketEntryForSystemGeneratedOrder } from './addDocketEntryForSystemGeneratedOrder';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { testPdfDoc } from '@shared/business/test/getFakeFile';
+import { getFeatureFlagValues as getFeatureFlagValuesMock } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
+const getFeatureFlagValues = getFeatureFlagValuesMock as jest.Mock;
+getFeatureFlagValues.mockResolvedValue([
+  {
+    name: 'clerk-of-court-configuration',
+    value: {
+      current: {
+        name: 'James Bond',
+        title: 'Clerk of the Court (Interim)',
+      },
+    },
+  },
+]);
 
 describe('addDocketEntryForSystemGeneratedOrder', () => {
   const caseEntity = new Case(MOCK_CASE, { authorizedUser: undefined });
@@ -18,15 +31,6 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
     orderForAmendedPetitionAndFilingFee,
     orderForFilingFee,
   } = SYSTEM_GENERATED_DOCUMENT_TYPES;
-
-  beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getConfigurationItemValue.mockResolvedValue({
-        name: 'James Bond',
-        title: 'Clerk of the Court (Interim)',
-      });
-  });
 
   it('should add a draft docket entry for a system generated order', async () => {
     const newDocketEntriesFromNewCaseCount =
@@ -46,7 +50,7 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
     const naneDocketEntry = caseEntity.docketEntries.find(
       entry => entry.eventCode === 'NOT',
     );
-    expect(naneDocketEntry.isDraft).toEqual(true);
+    expect(naneDocketEntry?.isDraft).toEqual(true);
 
     const passedInNoticeTitle =
       applicationContext.getDocumentGenerators().order.mock.calls[0][0].data
@@ -67,7 +71,7 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
       caseEntity.docketEntries[caseEntity.docketEntries.length - 1];
 
     expect('freeText' in mostRecentDocketEntry).toEqual(true);
-    expect('freeText' in mostRecentDocketEntry.draftOrderState).toEqual(true);
+    expect('freeText' in mostRecentDocketEntry!.draftOrderState!).toEqual(true);
   });
 
   it('should set the title and the name of clerk for notices', async () => {

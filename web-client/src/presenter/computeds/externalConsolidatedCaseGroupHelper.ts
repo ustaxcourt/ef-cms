@@ -12,7 +12,7 @@ export const externalConsolidatedCaseGroupHelper = (
 
   let formattedCurrentCasePetitionerNames;
   let formattedConsolidatedCaseList: string[] = [];
-  let consolidatedGroupServiceParties: any[] = [];
+  const consolidatedGroupServiceParties: any[] = [];
 
   if (caseDetail.consolidatedCases) {
     const currentCasePetitioners = caseDetail.petitioners
@@ -26,7 +26,9 @@ export const externalConsolidatedCaseGroupHelper = (
         if (!currentCase.petitioners?.length && currentCase.isSealed) {
           return `${currentCase.docketNumber} Sealed Case`;
         }
-        const formattedPetitioners = currentCase.petitioners
+        const formattedPetitioners = (
+          currentCase.petitioners as { name: string }[]
+        )
           .map(ptr => ptr.name)
           .join(' & ');
 
@@ -55,7 +57,7 @@ export const externalConsolidatedCaseGroupHelper = (
         consolidatedGroupServiceParties[i] = ['Sealed Case'];
       } else {
         consolidatedGroupServiceParties[i] = [];
-        combinedPartiesList.forEach(party => {
+        combinedPartiesList.forEach((party: { name?: string }) => {
           consolidatedGroupServiceParties[i].push(
             `${party.name}, ${roleToDisplay(party)}`,
           );

@@ -130,10 +130,6 @@ describe('socketRouter', () => {
       sequence: 'serveDocumentErrorSequence',
     },
     {
-      message: { action: 'retry_async_request' },
-      sequence: 'retryAsyncRequestSequence',
-    },
-    {
       message: { action: 'download_csv_file' },
       sequence: 'downloadCsvFileSequence',
     },
@@ -144,6 +140,7 @@ describe('socketRouter', () => {
     {
       args: {
         alertError: {
+          scrollToErrorNotification: true,
           message:
             'We could not set the trial session calendar. Please contact support.',
           title: 'Error setting trial session calendar.',

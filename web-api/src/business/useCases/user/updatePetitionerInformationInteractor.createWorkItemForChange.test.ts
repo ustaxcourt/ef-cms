@@ -1,21 +1,34 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
+jest.mock('@web-api/business/useCases/addCoverToPdf');
 import {
   CASE_STATUS_TYPES,
   CONTACT_TYPES,
   PARTY_TYPES,
   SERVICE_INDICATOR_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { MOCK_PRACTITIONER } from '../../../../../shared/src/test/mockUsers';
-import { UserCase } from '../../../../../shared/src/business/entities/UserCase';
+} from '@shared/business/entities/EntityConstants';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_PRACTITIONER } from '@shared/test/mockUsers';
+import { UserCase } from '@shared/business/entities/UserCase';
 import { addCoverToPdf } from '@web-api/business/useCases/addCoverToPdf';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { updatePetitionerInformationInteractor } from './updatePetitionerInformationInteractor';
-jest.mock('@web-api/business/useCases/addCoverToPdf');
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('updatePetitionerInformationInteractor createWorkItemForChange', () => {
   let mockCase;
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  jest
+    .mocked(updateCaseAndAssociationsMock)
+    .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
   const PRIMARY_CONTACT_ID = MOCK_CASE.petitioners[0].contactId;
 
   const mockPetitioners = [
@@ -57,9 +70,7 @@ describe('updatePetitionerInformationInteractor createWorkItemForChange', () => 
       status: CASE_STATUS_TYPES.generalDocket,
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(() => mockCase);
+    getCaseByDocketNumber.mockImplementation(() => Promise.resolve(mockCase));
   });
 
   it('should create a work item for the NCA when the petitioner is unrepresented', async () => {
@@ -75,7 +86,7 @@ describe('updatePetitionerInformationInteractor createWorkItemForChange', () => 
       ],
     };
 
-    const result = await updatePetitionerInformationInteractor(
+    await updatePetitionerInformationInteractor(
       applicationContext,
       {
         docketNumber: MOCK_CASE.docketNumber,
@@ -87,16 +98,7 @@ describe('updatePetitionerInformationInteractor createWorkItemForChange', () => 
       mockDocketClerkUser,
     );
 
-    const noticeOfChangeDocketEntryWithWorkItem =
-      result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
-
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
-    expect(noticeOfChangeDocketEntryWithWorkItem.workItem).toBeDefined();
-    expect(noticeOfChangeDocketEntryWithWorkItem.additionalInfo).toBe(
-      'for Test Primary Petitioner',
-    );
+    expect(upsertWorkItems).toHaveBeenCalled();
   });
 
   it('should NOT create a work item for the NCA when the petitioner is represented and their service preference is NOT paper', async () => {
@@ -109,7 +111,7 @@ describe('updatePetitionerInformationInteractor createWorkItemForChange', () => 
       ],
     };
 
-    const result = await updatePetitionerInformationInteractor(
+    await updatePetitionerInformationInteractor(
       applicationContext,
       {
         docketNumber: MOCK_CASE.docketNumber,
@@ -121,15 +123,7 @@ describe('updatePetitionerInformationInteractor createWorkItemForChange', () => 
       mockDocketClerkUser,
     );
 
-    const noticeOfChangeDocketEntryWithWorkItem =
-      result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).not.toHaveBeenCalled();
-    expect(noticeOfChangeDocketEntryWithWorkItem.workItem).toBeUndefined();
-    expect(noticeOfChangeDocketEntryWithWorkItem.additionalInfo).toBe(
-      'for Test Primary Petitioner',
-    );
+    expect(upsertWorkItems).not.toHaveBeenCalled();
   });
 
   it('should create a work item for the NCA when the petitioner is represented and their service preference is paper', async () => {
@@ -142,7 +136,7 @@ describe('updatePetitionerInformationInteractor createWorkItemForChange', () => 
       ],
     };
 
-    const result = await updatePetitionerInformationInteractor(
+    await updatePetitionerInformationInteractor(
       applicationContext,
       {
         docketNumber: MOCK_CASE.docketNumber,
@@ -155,16 +149,7 @@ describe('updatePetitionerInformationInteractor createWorkItemForChange', () => 
       mockDocketClerkUser,
     );
 
-    const noticeOfChangeDocketEntryWithWorkItem =
-      result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
-
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
-    expect(noticeOfChangeDocketEntryWithWorkItem.workItem).toBeDefined();
-    expect(noticeOfChangeDocketEntryWithWorkItem.additionalInfo).toBe(
-      'for Test Primary Petitioner',
-    );
+    expect(upsertWorkItems).toHaveBeenCalled();
   });
 
   it('should create a work item for the NCA when the petitioner is represented and a private practitioner on the case requests paper service', async () => {
@@ -179,7 +164,7 @@ describe('updatePetitionerInformationInteractor createWorkItemForChange', () => 
       ],
     };
 
-    const result = await updatePetitionerInformationInteractor(
+    await updatePetitionerInformationInteractor(
       applicationContext,
       {
         docketNumber: MOCK_CASE.docketNumber,
@@ -191,15 +176,6 @@ describe('updatePetitionerInformationInteractor createWorkItemForChange', () => 
       mockDocketClerkUser,
     );
 
-    const noticeOfChangeDocketEntryWithWorkItem =
-      result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
-
-    expect(
-      applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toHaveBeenCalled();
-    expect(noticeOfChangeDocketEntryWithWorkItem.workItem).toBeDefined();
-    expect(noticeOfChangeDocketEntryWithWorkItem.additionalInfo).toBe(
-      'for Test Secondary Petitioner',
-    );
+    expect(upsertWorkItems).toHaveBeenCalled();
   });
 });

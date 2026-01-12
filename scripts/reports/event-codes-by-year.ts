@@ -1,206 +1,130 @@
-#!/usr/bin/env npx ts-node --transpile-only
+#!/usr/bin/env -S npx ts-node --transpile-only
 
-// usage: scripts/reports/event-codes-by-year.ts M071,M074 [-y 2021-2022] > ~/Desktop/m071s-and-m074s-filed-2021-2022.csv
-
-import { DateTime } from 'luxon';
-import { createApplicationContext } from '@web-api/applicationContext';
-import { parseArgs } from 'node:util';
-import { parseIntsArg } from './reportUtils';
-import { requireEnvVars } from '../../shared/admin-tools/util';
 import {
-  search,
-  searchAll,
-} from '@web-api/persistence/elasticsearch/searchClient';
-import { validateDateAndCreateISO } from '@shared/business/utilities/DateHandler';
+  type EventCodeReportDocketEntry,
+  getDocketEntriesByEventCodesAndYears,
+} from './event-codes-by-year-helpers';
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
+import { generateCsv } from '../helpers/generate-csv';
+import {
+  getIsoFromJsDate,
+  getNowObject,
+} from '@shared/business/utilities/DateHandler';
+import { pick } from 'lodash';
 
-requireEnvVars(['ENV', 'REGION']);
-let positionals, values;
-
-const config = {
-  allowPositionals: true,
-  options: {
+const thisYear = getNowObject().year;
+const scriptConfig: ScriptConfig = {
+  description:
+    'event-codes-by-year - Generate a CSV of instances of documents with the ' +
+    'given event code(s) filed within the given duration.',
+  environment: {
+    env: 'ENV',
+  },
+  parameters: {
+    count: {
+      default: false,
+      short: 'c',
+      type: 'boolean',
+    },
+    eventCodes: {
+      commaDelimited: true,
+      position: 0,
+      required: true,
+      transform: 'toUpperCase',
+      type: 'string',
+    },
+    fiscal: {
+      default: false,
+      short: 'f',
+      type: 'boolean',
+    },
+    stricken: {
+      default: false,
+      short: 's',
+      type: 'boolean',
+    },
     years: {
-      default: `${DateTime.now().toObject().year}`,
+      default: [`${thisYear}`],
+      multiple: true,
       short: 'y',
+      transform: 'number',
       type: 'string',
     },
   },
-  strict: true,
-} as const;
-
-function usage(warning: string | undefined) {
-  if (warning) {
-    console.log(warning);
-  }
-  console.log(`Usage: ${process.argv[1]} M071,m074 [-y 2023,2024]`);
-  console.log('Options:', JSON.stringify(config, null, 4));
-}
-
-const cachedCases: { [key: string]: RawCase } = {};
-
-const getCase = async ({
-  applicationContext,
-  docketNumber,
-}: {
-  applicationContext: IApplicationContext;
-  docketNumber: string;
-}): Promise<RawCase | undefined> => {
-  if (docketNumber in cachedCases) {
-    return cachedCases[docketNumber];
-  }
-  const { results } = await search({
-    applicationContext,
-    searchParameters: {
-      body: {
-        from: 0,
-        query: {
-          bool: {
-            must: {
-              term: {
-                'docketNumber.S': docketNumber,
-              },
-            },
-          },
-        },
-        size: 1,
-      },
-      index: 'efcms-case',
-    },
-  });
-  if (!results) {
-    return;
-  }
-  cachedCases[docketNumber] = results[0];
-  return cachedCases[docketNumber];
+  requireActiveAwsSession: true,
+};
+const { count, eventCodes, fiscal, stricken, years } = parseArgsAndEnvVars(
+  scriptConfig,
+) as {
+  count: boolean;
+  eventCodes: string[];
+  fiscal: boolean;
+  stricken: boolean;
+  years: number[];
 };
 
-const getDocketEntriesByEventCodesAndYears = async ({
-  applicationContext,
-  eventCodes,
-  years,
+const OUTPUT_DIR = `${process.env.HOME}/Documents`;
+
+const outputCsv = ({
+  docketEntries,
 }: {
-  applicationContext: IApplicationContext;
-  eventCodes: string[];
-  years?: number[];
-}): Promise<RawDocketEntry[]> => {
-  const must: {}[] = [
-    {
-      bool: {
-        should: eventCodes.map(eventCode => {
-          return {
-            term: {
-              'eventCode.S': eventCode,
-            },
-          };
-        }),
-      },
-    },
+  docketEntries: EventCodeReportDocketEntry[];
+}) => {
+  const columns = [
+    { header: 'Docket Number', key: 'docketNumber' },
+    { header: 'Date Filed', key: 'filed' },
+    { header: 'Document Type', key: 'documentType' },
+    { header: 'Judge', key: 'judge' },
+    { header: 'Status', key: 'status' },
+    { header: 'Case Title', key: 'caption' },
   ];
-  if (years && years.length) {
-    if (years.length === 1) {
-      must.push({
-        range: {
-          'receivedAt.S': {
-            gte: validateDateAndCreateISO({
-              day: '1',
-              month: '1',
-              year: String(years[0]),
-            }),
-            lt: validateDateAndCreateISO({
-              day: '1',
-              month: '1',
-              year: String(years[0] + 1),
-            }),
-          },
-        },
-      });
-    } else {
-      must.push({
-        bool: {
-          should: years.map(year => {
-            return {
-              range: {
-                'receivedAt.S': {
-                  gte: validateDateAndCreateISO({
-                    day: '1',
-                    month: '1',
-                    year: String(year),
-                  }),
-                  lt: validateDateAndCreateISO({
-                    day: '1',
-                    month: '1',
-                    year: String(year + 1),
-                  }),
-                },
-              },
-            };
-          }),
-        },
-      });
-    }
-  }
-  const { results } = await searchAll({
-    applicationContext,
-    searchParameters: {
-      body: {
-        query: {
-          bool: {
-            must,
-          },
-        },
-        sort: [{ 'receivedAt.S': 'asc' }],
-      },
-      index: 'efcms-docket-entry',
-    },
-  });
-  return results;
+  const filename =
+    `${OUTPUT_DIR}/${eventCodes.map(ec => ec.toLowerCase()).join('-')}-filed-` +
+    `in-${fiscal ? 'fy-' : ''}${years.join('-')}.csv`;
+  const rows = docketEntries.map(de => ({
+    ...pick(de, ['docketNumber', 'documentType', 'status']),
+    caption: de.caption.replace(/\r\n|\r|\n/g, ' ').trim(),
+    filed: getIsoFromJsDate(de.receivedAt)?.split('T')[0] || '',
+    judge:
+      de.associatedJudge
+        ?.replace('Chief Special Trial ', '')
+        .replace('Special Trial ', '')
+        .replace('Judge ', '') || '',
+  }));
+  generateCsv({ columns, filename, rows });
+  console.log(`Generated ${filename}`);
 };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  try {
-    ({ positionals, values } = parseArgs(config));
-  } catch (ex) {
-    usage(`Error: ${ex}`);
-    process.exit(1);
-  }
-  if (positionals.length === 0) {
-    usage('invalid input: expected event codes');
-    process.exit(1);
-  }
-  const eventCodes = positionals[0].split(',').map(s => s.toUpperCase());
-  const years: number[] = parseIntsArg(values.years);
-  const applicationContext = createApplicationContext({});
-
-  const docketEntries = await getDocketEntriesByEventCodesAndYears({
-    applicationContext,
-    eventCodes,
-    years,
-  });
-
-  console.log(
-    '"Docket Number","Date Filed","Document Type","Associated Judge",' +
-      '"Case Status","Case Caption"',
-  );
-  for (const de of docketEntries) {
-    if (!('docketNumber' in de)) {
-      continue;
-    }
-    const c = await getCase({
-      applicationContext,
-      docketNumber: de.docketNumber,
-    });
-    if (!c) {
-      continue;
-    }
-    const associatedJudge = c.associatedJudge
-      ?.replace('Chief Special Trial ', '')
-      .replace('Special Trial ', '')
-      .replace('Judge ', '');
+  if (count) {
+    const docCount: number = (await getDocketEntriesByEventCodesAndYears({
+      count,
+      eventCodes,
+      fiscal,
+      onlyNonStricken: !stricken,
+      years,
+    })) as number;
     console.log(
-      `"${c.docketNumberWithSuffix}","${de.receivedAt.split('T')[0]}",` +
-        `"${de.documentType}","${associatedJudge}","${c.status}",` +
-        `"${c.caseCaption}"`,
+      `Found ${docCount} ${stricken ? '' : 'non-stricken '}` +
+        `${eventCodes.join(',')} documents filed in ${fiscal ? 'fy' : ''} ` +
+        `${years.join(',')}`,
     );
+    return;
   }
+  const docketEntries = (await getDocketEntriesByEventCodesAndYears({
+    eventCodes,
+    fiscal,
+    onlyNonStricken: !stricken,
+    years,
+  })) as EventCodeReportDocketEntry[];
+  console.log(
+    `Found ${docketEntries.length} ${stricken ? '' : 'non-stricken '}` +
+      `${eventCodes.join(',')} documents filed in ${fiscal ? 'fy' : ''} ` +
+      `${years.join(',')}`,
+  );
+  outputCsv({ docketEntries });
 })();

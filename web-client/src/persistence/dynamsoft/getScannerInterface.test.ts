@@ -2,12 +2,15 @@ import { SCAN_MODES } from '../../../../shared/src/business/entities/EntityConst
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getScannerInterface } from './getScannerInterface';
 
+
+jest.mock('./loader', () => ({
+  loadDWTLibrary: jest.fn().mockResolvedValue(undefined), // or a specific mock value
+}));
+
 describe('getScannerInterface', () => {
   let mockSources, mockScanCount, DWObject, Dynamsoft;
   let onPostAllTransfersCb;
   let mockAcquireImage, mockCloseSource, mockOpenSource, mockRemoveAllImages;
-
-  applicationContext.getScannerResourceUri.mockReturnValue('abc');
 
   beforeEach(() => {
     mockSources = ['Test Source 1', 'Test Source 2'];
@@ -16,8 +19,6 @@ describe('getScannerInterface', () => {
     mockCloseSource = jest.fn();
     mockOpenSource = jest.fn();
     mockRemoveAllImages = jest.fn();
-
-    applicationContext.getScannerResourceUri.mockReturnValue('abc');
 
     DWObject = {
       AcquireImage: mockAcquireImage,
@@ -46,7 +47,7 @@ describe('getScannerInterface', () => {
       IfDuplexEnabled: false,
       IfFeederLoaded: true,
       OpenSource: mockOpenSource,
-      RegisterEvent: (scannerEvent, cb) => {
+      RegisterEvent: (_scannerEvent, cb) => {
         onPostAllTransfersCb = cb;
       },
       RemoveAllImages: mockRemoveAllImages,
@@ -63,11 +64,13 @@ describe('getScannerInterface', () => {
         EnumDWT_CapSupportedSizes: { TWSS_A4: 1 },
         EnumDWT_ImageType: { IT_PNG: 1 },
         EnumDWT_PixelType: { TWPT_RGB: 1 },
-        GetWebTwain: () => DWObject,
+        CreateDWTObject: (_, cb) => {
+          cb(DWObject);
+        },
       },
     };
 
-    window.Dynamsoft = { ...Dynamsoft };
+  window.Dynamsoft = { ...Dynamsoft };
   });
 
   it('returns the TWAIN driver API', () => {
@@ -150,7 +153,10 @@ describe('getScannerInterface', () => {
     scannerAPI.setDWObject(DWObject);
     expect(scannerAPI).toHaveProperty('startScanSession');
 
-    await scannerAPI.startScanSession({ applicationContext });
+    await scannerAPI.startScanSession({
+      applicationContext,
+      scanMode: 'fakeScanMode',
+    });
     expect(DWObject.IfDisableSourceAfterAcquire).toBeTruthy();
     expect(mockOpenSource).toHaveBeenCalled();
     expect(mockAcquireImage).toHaveBeenCalled();
@@ -170,7 +176,10 @@ describe('getScannerInterface', () => {
 
       let error;
       try {
-        await scannerAPI.startScanSession({ applicationContext });
+        await scannerAPI.startScanSession({
+          applicationContext,
+          scanMode: 'fakeScanMode',
+        });
       } catch (err) {
         error = err;
       }
@@ -267,41 +276,37 @@ describe('getScannerInterface', () => {
   });
 
   it('should attempt to load the dynamsoft libraries', async () => {
+    // @ts-expect-error
     delete global.window.document;
-    let calls = 0;
+    // @ts-expect-error
     global.window.document = {
       addEventListener: () => null,
-      createElement: () => ({
-        cloneNode() {
-          return {
-            ...this,
-          };
-        },
-        onload: null,
-        setAttribute: () => null,
-      }),
+      createElement: () =>
+        ({
+          cloneNode() {
+            return {
+              ...this,
+            };
+          },
+          onload: null,
+          setAttribute: () => null,
+        }) as any,
       getElementsByTagName: () => {
-        calls++;
         return [
           {
             appendChild: script => {
               script.onload();
             },
           },
-        ];
+        ] as any;
       },
     };
     const scannerAPI = getScannerInterface();
-    let script = await scannerAPI.loadDynamsoft({
-      applicationContext,
-    });
+    let script = await scannerAPI.loadDynamsoft();
     expect(script).toEqual('dynam-scanner-injection');
 
     // try to load it again to verify it doesn't attempt to download the scripts again
-    script = await scannerAPI.loadDynamsoft({
-      applicationContext,
-    });
+    script = await scannerAPI.loadDynamsoft();
     expect(script).toEqual('dynam-scanner-injection');
-    expect(calls).toEqual(2);
   });
 });

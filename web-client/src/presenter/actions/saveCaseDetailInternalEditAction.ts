@@ -8,11 +8,8 @@ export const saveCaseDetailInternalEditAction = async ({
 }: ActionProps<{
   fileUploadProgressMap: Record<string, FileUploadProgressType>;
 }>) => {
-  const {
-    INITIAL_DOCUMENT_TYPES,
-    INITIAL_DOCUMENT_TYPES_FILE_MAP,
-    STATUS_TYPES,
-  } = applicationContext.getConstants();
+  const { INITIAL_DOCUMENT_TYPES, INITIAL_DOCUMENT_TYPES_FILE_MAP } =
+    applicationContext.getConstants();
   const originalCase = get(state.caseDetail);
   const { fileUploadProgressMap } = props;
   const caseToUpdate = get(state.form);
@@ -29,6 +26,12 @@ export const saveCaseDetailInternalEditAction = async ({
             document.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode,
         );
 
+        if (!oldPetitionDocument) {
+          throw new Error(
+            `Unable to find existing petition document on case ${caseToUpdate.docketNumber}`,
+          );
+        }
+
         await applicationContext
           .getUseCases()
           .uploadDocumentAndMakeSafeInteractor(applicationContext, {
@@ -44,6 +47,7 @@ export const saveCaseDetailInternalEditAction = async ({
             onUploadProgress: fileUploadProgressMap[key].uploadProgress,
           });
 
+        // eslint-disable-next-line prefer-const
         let { documentTitle, documentType } = INITIAL_DOCUMENT_TYPES[key];
 
         if (
@@ -68,14 +72,6 @@ export const saveCaseDetailInternalEditAction = async ({
     .saveCaseDetailInternalEditInteractor(applicationContext, {
       caseToUpdate,
     });
-
-  if (caseDetail.status === STATUS_TYPES.generalDocketReadyForTrial) {
-    await applicationContext
-      .getUseCases()
-      .updateCaseTrialSortTagsInteractor(applicationContext, {
-        docketNumber: caseDetail.docketNumber,
-      });
-  }
 
   return {
     alertSuccess: {

@@ -61,7 +61,6 @@ describe('checkForReadyForTrial', () => {
   });
 
   it("should NOT change the status to 'Ready for Trial' when an answer document has been filed on the cutoff", () => {
-    // eslint-disable-next-line spellcheck/spell-checker
     /*
     Note: As of this writing on 2020-03-20, there may be a bug in the `moment` library as it pertains to
     leap-years and/or leap-days and maybe daylight saving time, too. Meaning that if *this* test runs

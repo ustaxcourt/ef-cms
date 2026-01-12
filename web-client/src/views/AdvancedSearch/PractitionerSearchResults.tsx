@@ -17,8 +17,8 @@ export const PractitionerSearchResults = connect(
     practitionerSearchHelper,
     submitPractitionerNameSearchSequence,
   }) {
-    const paginatorTop = useRef(null);
-    const paginatorBottom = useRef(null);
+    const paginatorTop = useRef<HTMLDivElement>(null);
+    const paginatorBottom = useRef<HTMLDivElement>(null);
     return (
       <>
         {practitionerSearchHelper.showSearchResults && (
@@ -28,7 +28,6 @@ export const PractitionerSearchResults = connect(
               {practitionerSearchHelper.showPaginator && (
                 <Paginator
                   currentPageIndex={practitionerSearchHelper.activePage}
-                  showSinglePage={true}
                   totalPages={practitionerSearchHelper.pageCount}
                   onPageChange={pageChange => {
                     submitPractitionerNameSearchSequence({
@@ -56,8 +55,11 @@ export const PractitionerSearchResults = connect(
                   <tr>
                     <th aria-label="bar number">Bar No.</th>
                     <th data-testid="results-table-header-name">Name</th>
+                    {practitionerSearchHelper.showStateColumn && (
+                      <th data-testid="results-table-header-state">State</th>
+                    )}
                     <th data-testid="results-table-header-state">
-                      {practitionerSearchHelper.stateHeaderText}
+                      Original Bar State
                     </th>
                     <th data-testid="results-table-header-admission-status">
                       Admission Status
@@ -93,7 +95,10 @@ export const PractitionerSearchResults = connect(
                           )}
                         </td>
                         <td>{result.name}</td>
-                        <td>{result.contact?.stateFullName}</td>
+                        {practitionerSearchHelper.showStateColumn && (
+                          <td>{result.stateFullName}</td>
+                        )}
+                        <td>{result.originalBarStateFullName}</td>
                         <td>{result.admissionsStatus}</td>
                         <td>{result.formattedAdmissionsDate}</td>
                         <td>{result.practitionerType}</td>
@@ -119,7 +124,7 @@ export const PractitionerSearchResults = connect(
                       <div>
                         <b>Original Bar State</b>
                         <p className="margin-top-1 margin-bottom-1">
-                          {result.contact?.stateFullName}
+                          {result.originalBarStateFullName}
                         </p>
                       </div>
                       <div>
@@ -139,7 +144,10 @@ export const PractitionerSearchResults = connect(
                       <div>
                         <b>Bar No.</b>
                         <p className="margin-top-1 margin-bottom-1">
-                          {result.barNumber}
+                          {practitionerSearchHelper.isPublicUser ?
+                            (<span>{result.barNumber}</span>) :
+                            (<a href={`/practitioner-detail/${result.barNumber}`}> {result.barNumber} </a>)
+                          }
                         </p>
                       </div>
                       <div>
@@ -163,7 +171,6 @@ export const PractitionerSearchResults = connect(
               {practitionerSearchHelper.showPaginator && (
                 <Paginator
                   currentPageIndex={practitionerSearchHelper.activePage}
-                  showSinglePage={true}
                   totalPages={practitionerSearchHelper.pageCount}
                   onPageChange={pageChange => {
                     submitPractitionerNameSearchSequence({

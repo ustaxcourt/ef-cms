@@ -78,7 +78,7 @@ describe('Docket clerk multi-dockets court issued document journey', () => {
     });
 
     it('Docket Clerk adds a docket entry and saves without serving', async () => {
-      let caseDetailFormatted = runCompute(
+      const caseDetailFormatted = runCompute(
         withAppContextDecorator(formattedCaseDetail),
         {
           state: cerebralTest.getState(),
@@ -154,7 +154,7 @@ describe('Docket clerk multi-dockets court issued document journey', () => {
       );
 
       await cerebralTest.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
-        docketEntryId: savedDocument.docketEntry.docketEntryId,
+        docketEntryId: savedDocument?.docketEntry.docketEntryId,
         docketNumber: cerebralTest.leadDocketNumber,
       });
 

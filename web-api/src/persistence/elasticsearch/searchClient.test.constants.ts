@@ -1,7 +1,6 @@
-/* eslint-disable max-lines */
+import { Search_Request } from '@opensearch-project/opensearch/api';
 import { efcmsCaseIndex } from '../../../elasticsearch/efcms-case-mappings';
 import { efcmsDocketEntryIndex } from '../../../elasticsearch/efcms-docket-entry-mappings';
-import { efcmsWorkItemIndex } from '../../../elasticsearch/efcms-work-item-mappings';
 
 export const emptyResults = {
   body: {
@@ -233,124 +232,6 @@ export const mockDocketEntrySearchResult = {
   },
 };
 
-export const mockWorkItemSearchResult = {
-  body: {
-    _shards: {
-      failed: 0,
-      skipped: 0,
-      successful: 1,
-      total: 1,
-    },
-    hits: {
-      hits: [
-        {
-          _id: 'case|312-work-item|7ab75b20-0127-4fff-a4e2-1b839585e668',
-          _index: efcmsWorkItemIndex,
-          _routing: 'case|312-21_case|312-21|mapping',
-          _score: null,
-          _source: {
-            assigneeId: {
-              S: 'f50fbb1e-e0c9-47f5-aae7-aa221bdd364a',
-            },
-            assigneeName: {
-              S: 'Docket Clerk 1',
-            },
-            case_relations: {
-              name: 'workItem',
-              parent:
-                'user-outbox|f50fbb1e-e0c9-47f5-aae7-aa221bdd364a|2021-w6_user-outbox|f50fbb1e-e0c9-47f5-aae7-aa221bdd364a|2021-w6|mapping',
-            },
-            completedAt: {
-              S: '2021-02-12T20:05:52.401Z',
-            },
-            completedBy: {
-              S: 'Docket Clerk 1',
-            },
-            completedByUserId: {
-              S: 'f50fbb1e-e0c9-47f5-aae7-aa221bdd364a',
-            },
-            completedMessage: {
-              S: 'completed',
-            },
-            createdAt: {
-              S: '2021-02-11T16:50:30.851Z',
-            },
-            docketNumber: {
-              S: '312-21',
-            },
-            docketNumberWithSuffix: {
-              S: '312-21',
-            },
-            entityName: {
-              S: 'WorkItem',
-            },
-            gsi1pk: {
-              S: 'work-item|7ab75b20-0127-4fff-a4e2-1b839585e668',
-            },
-            highPriority: {
-              BOOL: false,
-            },
-            pk: {
-              S: 'user-outbox|f50fbb1e-e0c9-47f5-aae7-aa221bdd364a|2021-w6',
-            },
-            sentBy: {
-              S: 'docketclerk1@example.com',
-            },
-            sentBySection: {
-              S: 'docket',
-            },
-            sentByUserId: {
-              S: 'f50fbb1e-e0c9-47f5-aae7-aa221bdd364a',
-            },
-            sk: {
-              S: '2021-02-12T20:05:52.401Z',
-            },
-            updatedAt: {
-              S: '2021-02-11T16:50:30.851Z',
-            },
-            workItemId: {
-              S: '7ab75b20-0127-4fff-a4e2-1b839585e668',
-            },
-          },
-          _type: '_doc',
-          inner_hits: {
-            'case-mappings': {
-              hits: {
-                hits: [
-                  {
-                    _id: 'case|312-21_case|312-21|mapping',
-                    _index: efcmsWorkItemIndex,
-                    _score: 1,
-                    _source: {
-                      leadDocketNumber: {
-                        S: '312-21',
-                      },
-                    },
-                    _type: '_doc',
-                  },
-                ],
-                max_score: 1,
-                total: {
-                  relation: 'eq',
-                  value: 1,
-                },
-              },
-            },
-          },
-          sort: [1629483399420],
-        },
-      ],
-      max_score: null,
-      total: {
-        relation: 'eq',
-        value: 1,
-      },
-    },
-    timed_out: false,
-    took: 5,
-  },
-};
-
 export const mockMalformedQueryResult = {
   error: {
     reason: 'query malformed, empty clause found at [5:3]',
@@ -423,7 +304,7 @@ export const mockPractitionerRoleAggregationResult = {
   },
 };
 
-export const openCasesReceivedOnJulyFourthSearchParameters = {
+export const openCasesReceivedOnJulyFourthSearchParameters: Search_Request = {
   body: {
     _source: ['docketNumber.S', 'receivedAt.S'],
     query: {

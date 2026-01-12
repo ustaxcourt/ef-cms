@@ -43,6 +43,7 @@ export const trialSessionsHelper = (
   }[];
   trialSessionsCount: number;
   endDateErrorMessage?: string;
+  showCreateTermButton: boolean;
   startDateErrorMessage?: string;
   totalPages: number;
 } => {
@@ -135,6 +136,7 @@ export const trialSessionsHelper = (
     endDateErrorMessage,
     isResetFiltersDisabled: !userHasSelectedAFilter,
     sessionTypeOptions,
+    showCreateTermButton: permissions.SET_TRIAL_SESSION_CALENDAR,
     showNewTrialSession: permissions.CREATE_TRIAL_SESSION,
     showNoticeIssued: filters.currentTab === 'calendared',
     showSessionStatus: filters.currentTab === 'calendared',
@@ -225,7 +227,7 @@ const filterAndSortTrialSessions = ({
     });
 };
 
-const formatTrialSessions = ({
+export const formatTrialSessions = ({
   judgeAssociatedToUser,
   trialSessions,
 }: {
@@ -235,7 +237,7 @@ const formatTrialSessions = ({
   const trialSessionRows: TrialSessionRow[] = trialSessions.map(
     trialSession => {
       const showAlertForNOTTReminder =
-        !trialSession.dismissedAlertForNOTT &&
+        !trialSession.dismissedAlertForNott &&
         TrialSession.isStartDateWithinNOTTReminderRange({
           isCalendared: trialSession.isCalendared,
           startDate: trialSession.startDate,
@@ -268,6 +270,7 @@ const formatTrialSessions = ({
 
       return {
         alertMessageForNOTT,
+        estimatedEndDate: trialSession.estimatedEndDate,
         formattedEstimatedEndDate,
         formattedNoticeIssuedDate,
         formattedStartDate,
@@ -322,12 +325,13 @@ export const thirtyDaysBeforeTrial = (startDate?: string): string => {
   return formatDateString(thirtyDaysBeforeTrialIso, FORMATS.MMDDYY);
 };
 
-type TrialSessionRow = {
+export type TrialSessionRow = {
   trialSessionId: string;
   showAlertForNOTTReminder: boolean;
   alertMessageForNOTT: string;
   formattedStartDate: string; //MM/DD/YYYY
   formattedEstimatedEndDate: string;
+  estimatedEndDate?: string; // ISO format
   swingSession: boolean;
   userIsAssignedToSession: boolean;
   trialLocation: string;
@@ -342,7 +346,7 @@ export function isTrialSessionRow(item: any): item is TrialSessionRow {
   return !!item?.trialSessionId;
 }
 
-type TrialSessionWeek = {
+export type TrialSessionWeek = {
   sessionWeekStartDate: string;
   formattedSessionWeekStartDate: string;
 };

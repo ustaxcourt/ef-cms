@@ -1,6 +1,6 @@
 import { createHash } from 'crypto';
 
-export const efcmsCaseMappings = {
+export const efcmsCaseMappings: Record<string, Object> = {
   properties: {
     'associatedJudge.S': {
       fields: {
@@ -58,11 +58,8 @@ export const efcmsCaseMappings = {
     'hasPendingItems.BOOL': {
       type: 'boolean',
     },
-    'highPriority.BOOL': {
-      type: 'boolean',
-    },
-    'indexedTimestamp.N': {
-      type: 'text',
+    'irsPractitioners.L.M.email.S': {
+      type: 'keyword',
     },
     'irsPractitioners.L.M.userId.S': {
       type: 'keyword',
@@ -83,6 +80,9 @@ export const efcmsCaseMappings = {
     'petitioners.L.M.countryType.S': {
       type: 'keyword',
     },
+    'petitioners.L.M.email.S': {
+      type: 'keyword',
+    },
     'petitioners.L.M.name.S': {
       type: 'text',
     },
@@ -96,6 +96,9 @@ export const efcmsCaseMappings = {
       type: 'keyword',
     },
     'preferredTrialCity.S': {
+      type: 'keyword',
+    },
+    'privatePractitioners.L.M.email.S': {
       type: 'keyword',
     },
     'privatePractitioners.L.M.userId.S': {
@@ -119,7 +122,7 @@ export const efcmsCaseMappings = {
           type: 'keyword',
         },
       },
-      type: 'integer',
+      type: 'long',
     },
     'status.S': {
       type: 'keyword',

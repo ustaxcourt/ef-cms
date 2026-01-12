@@ -1,47 +1,66 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/trialSessions/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
 import {
   FORMATS,
   formatDateString,
-} from '../../../../../shared/src/business/utilities/DateHandler';
+} from '@shared/business/utilities/DateHandler';
 import { InvalidRequest, UnauthorizedError } from '@web-api/errors/errors';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { MOCK_TRIAL_INPERSON } from '../../../../../shared/src/test/mockTrial';
-import { RawTrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
-import { SERVICE_INDICATOR_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { ThirtyDayNoticeOfTrialRequiredInfo } from '../../../../../shared/src/business/utilities/pdfGenerator/documentTemplates/ThirtyDayNoticeOfTrial';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_TRIAL_INPERSON } from '@shared/test/mockTrial';
+import { RawTrialSession, TCaseOrder } from '@shared/business/entities/trialSessions/TrialSession';
+import { SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstants';
+import { ThirtyDayNoticeOfTrialRequiredInfo } from '@shared/business/utilities/pdfGenerator/documentTemplates/ThirtyDayNoticeOfTrial';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import {
   mockDocketClerkUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { serveThirtyDayNoticeInteractor } from './serveThirtyDayNoticeInteractor';
-import { testPdfDoc } from '../../../../../shared/src/business/test/getFakeFile';
+import { testPdfDoc } from '@shared/business/test/getFakeFile';
+import { getFeatureFlagValues as getFeatureFlagValuesMock } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
+import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { updateTrialSession as updateTrialSessionMock } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
 
 describe('serveThirtyDayNoticeInteractor', () => {
+  const getFeatureFlagValues = jest.mocked(getFeatureFlagValuesMock);
+  getFeatureFlagValues.mockResolvedValue([
+    {
+      name: 'clerk-of-court-configuration',
+      value: {
+        current: {
+          name: 'bob',
+          title: 'clerk of court',
+        },
+      },
+    },
+  ]);
+  const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
+  const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
+  const updateTrialSession = jest.mocked(updateTrialSessionMock);
+
+
   let trialSession: RawTrialSession;
   const TEST_CLIENT_CONNECTION_ID = 'TEST_CLIENT_CONNECTION_ID';
 
   beforeEach(() => {
     trialSession = {
       ...MOCK_TRIAL_INPERSON,
-      caseOrder: [{ docketNumber: '101-31' }, { docketNumber: '103-20' }],
+      caseOrder: [{ docketNumber: '101-31' }, { docketNumber: '103-20' }] as TCaseOrder[],
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getConfigurationItemValue.mockImplementation(() => ({
-        name: 'bob',
-        title: 'clerk of court',
-      }));
-
     applicationContext.getUtilities().formatNow.mockReturnValue('02/23/2023');
-
-    applicationContext
-      .getUseCaseHelpers()
-      .updateCaseAndAssociations.mockResolvedValue(null);
   });
 
   it('should throw an unauthorized error when the user is not authorized to serve 30 day notices', async () => {
+    getTrialSessionById.mockResolvedValueOnce(trialSession);
+
     await expect(
       serveThirtyDayNoticeInteractor(
         applicationContext,
@@ -55,6 +74,8 @@ describe('serveThirtyDayNoticeInteractor', () => {
   });
 
   it('should throw an invalid request error when no trial session id is provided', async () => {
+    getTrialSessionById.mockResolvedValue(trialSession);
+
     await expect(
       serveThirtyDayNoticeInteractor(
         applicationContext,
@@ -76,13 +97,9 @@ describe('serveThirtyDayNoticeInteractor', () => {
     beforeEach(() => {
       mockCase = cloneDeep(MOCK_CASE);
 
-      applicationContext
-        .getPersistenceGateway()
-        .getTrialSessionById.mockResolvedValue(trialSession);
+      getTrialSessionById.mockResolvedValue(trialSession);
 
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockResolvedValue(mockCase);
+      getCasesByDocketNumbers.mockResolvedValue([mockCase]);
 
       applicationContext
         .getUseCaseHelpers()
@@ -105,12 +122,10 @@ describe('serveThirtyDayNoticeInteractor', () => {
       ];
       const caseWithProSePetitioner = cloneDeep(mockCase);
       caseWithProSePetitioner.privatePractitioners = [];
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockResolvedValueOnce(
-          caseWithRepresentedPetitioner,
-        )
-        .mockResolvedValueOnce(caseWithProSePetitioner);
+      getCasesByDocketNumbers.mockResolvedValueOnce([
+        caseWithRepresentedPetitioner,
+        caseWithProSePetitioner,
+      ]);
 
       await serveThirtyDayNoticeInteractor(
         applicationContext,
@@ -185,6 +200,10 @@ describe('serveThirtyDayNoticeInteractor', () => {
         'paper_service_updated',
         'thirty_day_notice_paper_service_complete',
       ];
+      getCasesByDocketNumbers.mockResolvedValueOnce([
+        { ...mockCase, docketNumber: '101-31' },
+        { ...mockCase, docketNumber: '103-20' },
+      ]);
 
       await serveThirtyDayNoticeInteractor(
         applicationContext,
@@ -228,9 +247,8 @@ describe('serveThirtyDayNoticeInteractor', () => {
         fileNamePrefix: 'paper-service-pdf/',
       });
       expect(
-        applicationContext.getPersistenceGateway().updateTrialSession,
+        updateTrialSession,
       ).toHaveBeenCalledWith({
-        applicationContext: expect.anything(),
         trialSessionToUpdate: expect.objectContaining({
           paperServicePdfs: [
             {
@@ -344,10 +362,10 @@ describe('serveThirtyDayNoticeInteractor', () => {
       caseWithProSePetitioner2.docketNumberWithSuffix = '732-34';
       caseWithProSePetitioner2.privatePractitioners = [];
 
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockResolvedValueOnce(caseWithProSePetitioner)
-        .mockResolvedValueOnce(caseWithProSePetitioner2);
+      getCasesByDocketNumbers.mockResolvedValueOnce([
+        caseWithProSePetitioner,
+        caseWithProSePetitioner2,
+      ]);
 
       trialSession.caseOrder = [
         {
@@ -364,7 +382,7 @@ describe('serveThirtyDayNoticeInteractor', () => {
           docketNumber: caseWithProSePetitioner2.docketNumber,
           removedFromTrial: undefined, // Has not been explicitly removed from trial
         },
-      ];
+      ] as TCaseOrder[];
 
       await serveThirtyDayNoticeInteractor(
         applicationContext,

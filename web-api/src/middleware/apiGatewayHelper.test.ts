@@ -9,6 +9,8 @@ import {
 } from './apiGatewayHelper';
 import jwt from 'jsonwebtoken';
 
+type CustomError = Error & { skipLogging?: boolean };
+
 const EXPECTED_HEADERS = {
   'Access-Control-Expose-Headers': 'X-Terminal-User',
   'Cache-Control': 'max-age=0, private, no-cache, no-store, must-revalidate',
@@ -60,27 +62,27 @@ describe('handle', () => {
 
   it('should skip logging an error if skipLogging is true', async () => {
     await handle({}, () => {
-      const e = new Error();
+      const e = new Error() as CustomError;
       e.skipLogging = true;
       throw e;
     });
     expect(console.error).not.toHaveBeenCalled();
   });
 
-  it('should log an error if skipLogging is false and CI is false', async () => {
+  it('should not log an error if skipLogging is false and CI is true', async () => {
     process.env.CI = 'true';
     await handle({}, () => {
-      const e = new Error();
+      const e = new Error() as CustomError;
       e.skipLogging = false;
       throw e;
     });
     expect(console.error).not.toHaveBeenCalled();
   });
 
-  it('should log an error if skipLogging is false and CI is false', async () => {
+  it('should not log an error if skipLogging is true and CI is true', async () => {
     process.env.CI = 'true';
     await handle({}, () => {
-      const e = new Error();
+      const e = new Error() as CustomError;
       e.skipLogging = true;
       throw e;
     });
@@ -90,7 +92,7 @@ describe('handle', () => {
   it('should log an error if skipLogging is false and CI is false', async () => {
     delete process.env.CI;
     await handle({}, () => {
-      const e = new Error();
+      const e = new Error() as CustomError;
       e.skipLogging = false;
       throw e;
     });
@@ -365,13 +367,13 @@ describe('getAuthHeader', () => {
 });
 
 describe('getUserFromAuthHeader', () => {
-  let mockUser = {
+  const mockUser = {
     'custom:role': ROLES.privatePractitioner,
     'custom:userId': '188a5b0f-e7ae-4647-98a1-43a0d4d00eee',
     name: 'Test Petitioner',
   };
 
-  let token = jwt.sign(mockUser, 'secret');
+  const token = jwt.sign(mockUser, 'secret');
 
   it('should return the user from the authorization header', () => {
     const user = getUserFromAuthHeader({

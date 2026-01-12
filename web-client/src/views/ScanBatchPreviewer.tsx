@@ -18,42 +18,61 @@ import {
   genericOnValidationErrorHandler,
   validateFileOnSelect,
 } from '@web-client/views/FileHandlingHelpers/fileValidation';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { props as cerebralProps } from 'cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
 
-export const ScanBatchPreviewer = connect(
-  {
-    constants: state.constants,
-    generatePdfFromScanSessionSequence:
-      sequences.generatePdfFromScanSessionSequence,
-    openChangeScannerSourceModalSequence:
-      sequences.openChangeScannerSourceModalSequence,
-    openConfirmDeleteBatchModalSequence:
-      sequences.openConfirmDeleteBatchModalSequence,
-    openConfirmDeletePDFModalSequence:
-      sequences.openConfirmDeletePDFModalSequence,
-    openConfirmRescanBatchModalSequence:
-      sequences.openConfirmRescanBatchModalSequence,
-    removeScannedPdfSequence: sequences.removeScannedPdfSequence,
-    scanBatchPreviewerHelper: state.scanBatchPreviewerHelper,
-    scanHelper: state.scanHelper,
-    scannerStartupSequence: sequences.scannerStartupSequence,
-    selectDocumentForScanSequence: sequences.selectDocumentForScanSequence,
-    selectedBatchIndex: state.scanner.selectedBatchIndex,
-    setCurrentPageIndexSequence: sequences.setCurrentPageIndexSequence,
-    setDocumentForUploadSequence: sequences.setDocumentForUploadSequence,
-    setDocumentUploadModeSequence: sequences.setDocumentUploadModeSequence,
-    setIsLoadingSequence: sequences.setIsLoadingSequence,
-    setIsNotLoadingSequence: sequences.setIsNotLoadingSequence,
-    setSelectedBatchIndexSequence: sequences.setSelectedBatchIndexSequence,
-    showFileUploadErrorModalSequence:
-      sequences.showFileUploadErrorModalSequence,
-    showModal: state.modal.showModal,
-    startScanSequence: sequences.startScanSequence,
-    validationErrors: state.validationErrors,
-  },
+const props = cerebralProps as unknown as {
+  documentTabs: Record<string, any>[];
+  documentType: string;
+  title: string;
+  validateSequence?: () => void;
+};
+
+const scanBatchPreviewerDeps = {
+  constants: state.constants,
+  documentTabs: props.documentTabs,
+  documentType: props.documentType,
+  generatePdfFromScanSessionSequence:
+    sequences.generatePdfFromScanSessionSequence,
+  openChangeScannerSourceModalSequence:
+    sequences.openChangeScannerSourceModalSequence,
+  openConfirmDeleteBatchModalSequence:
+    sequences.openConfirmDeleteBatchModalSequence,
+  openConfirmDeletePDFModalSequence:
+    sequences.openConfirmDeletePDFModalSequence,
+  openConfirmRescanBatchModalSequence:
+    sequences.openConfirmRescanBatchModalSequence,
+  removeScannedPdfSequence: sequences.removeScannedPdfSequence,
+  scanBatchPreviewerHelper: state.scanBatchPreviewerHelper,
+  scanHelper: state.scanHelper,
+  scannerStartupSequence: sequences.scannerStartupSequence,
+  selectDocumentForScanSequence: sequences.selectDocumentForScanSequence,
+  selectedBatchIndex: state.scanner.selectedBatchIndex,
+  setCurrentPageIndexSequence: sequences.setCurrentPageIndexSequence,
+  setDocumentForUploadSequence: sequences.setDocumentForUploadSequence,
+  setDocumentUploadModeSequence: sequences.setDocumentUploadModeSequence,
+  setIsLoadingSequence: sequences.setIsLoadingSequence,
+  setIsNotLoadingSequence: sequences.setIsNotLoadingSequence,
+  setSelectedBatchIndexSequence: sequences.setSelectedBatchIndexSequence,
+  showFileUploadErrorModalSequence: sequences.showFileUploadErrorModalSequence,
+  showModal: state.modal.showModal,
+  startScanSequence: sequences.startScanSequence,
+  title: props.title,
+  validateSequence: props.validateSequence,
+  validationErrors: state.validationErrors,
+};
+
+type ScanBatchPreviewerProps = {
+  documentType: string | null;
+  documentTabs?: any;
+  title: string;
+  validateSequence: Function;
+}
+
+export const ScanBatchPreviewer: React.FC<ScanBatchPreviewerProps> = connect(
+  scanBatchPreviewerDeps,
   function ScanBatchPreviewer({
     constants,
     documentTabs,
@@ -86,7 +105,7 @@ export const ScanBatchPreviewer = connect(
       scannerStartupSequence();
     }, []);
 
-    const batchWrapperRef = useRef(null);
+    const batchWrapperRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
       if (batchWrapperRef.current)
@@ -98,15 +117,15 @@ export const ScanBatchPreviewer = connect(
       return (
         <>
           <div className="grid-container padding-x-0">
-            <div className="grid-row grid-gap">
-              <div className="grid-col-6">
+            <div className="grid-row space-between">
+              <div>
                 <h4 className="margin-bottom-0 margin-top-2">
                   Scan Preview: Batch{' '}
                   {scanBatchPreviewerHelper.selectedBatch.index + 1}
                 </h4>
               </div>
 
-              <div className="grid-col-6 text-right margin-bottom-2">
+              <div className="margin-bottom-2">
                 <PreviewControls
                   currentPage={scanBatchPreviewerHelper.currentPage + 1}
                   disableLeftButtons={

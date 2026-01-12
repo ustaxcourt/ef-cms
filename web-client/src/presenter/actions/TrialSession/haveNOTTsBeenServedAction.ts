@@ -1,9 +1,9 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const haveNOTTsBeenServedAction = ({ get, path }: ActionProps) => {
-  const { hasNOTTBeenServed } = get(state.trialSession);
+  const { hasNottBeenServed } = get(state.trialSession);
 
-  if (hasNOTTBeenServed) {
+  if (hasNottBeenServed) {
     return path.yes();
   } else {
     return path.no();

@@ -7,12 +7,12 @@ import {
   RawTrialSession,
   TrialSession,
 } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { updateTrialSession } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
 
 export const associateSwingTrialSessions = async (
-  applicationContext: ServerApplicationContext,
   {
     swingSessionId,
     trialSessionEntity,
@@ -23,10 +23,7 @@ export const associateSwingTrialSessions = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const swingTrialSession = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById({
-      applicationContext,
+  const swingTrialSession = await getTrialSessionById({
       trialSessionId: swingSessionId,
     });
 
@@ -39,8 +36,7 @@ export const associateSwingTrialSessions = async (
   trialSessionEntity.setAsSwingSession(swingSessionId);
   swingSessionEntity.setAsSwingSession(trialSessionEntity.trialSessionId);
 
-  await applicationContext.getPersistenceGateway().updateTrialSession({
-    applicationContext,
+  await updateTrialSession({
     trialSessionToUpdate: swingSessionEntity.validate().toRawObject(),
   });
 

@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/practitionerDocuments/mocks.jest';
 import { InvalidEntityError, UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { editPractitionerDocumentInteractor } from './editPractitionerDocumentInteractor';

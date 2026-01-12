@@ -1,6 +1,5 @@
 import '../../support/commands/keepAliases';
 import 'cypress-file-upload';
-import { getCypressEnv } from '../../helpers/env/cypressEnvironment';
 
 Cypress.Commands.add('showsErrorMessage', (shows = true) => {
   if (shows) {
@@ -26,27 +25,9 @@ Cypress.Commands.add('showsSuccessMessage', (shows = true) => {
   }
 });
 
-Cypress.Commands.add('login', (username, route = '/') => {
-  Cypress.session.clearCurrentSessionData();
-
-  cy.visit('/login');
-  cy.get('[data-testid="email-input"]').type(`${username}@example.com`);
-  cy.get('[data-testid="password-input"]').type(
-    getCypressEnv().defaultAccountPass,
-  );
-  cy.get('[data-testid="login-button"]').click();
-  cy.get('[data-testid="account-menu-button"]');
-  cy.visit(route);
-
-  cy.window().then(win =>
-    win.localStorage.setItem('__cypressOrderInSameTab', 'true'),
-  );
-});
-
 Cypress.Commands.add('goToRoute', (...args) => {
   cy.get('.progress-indicator').should('not.exist');
   return cy.window().then(w => {
-    // eslint-disable-next-line no-underscore-dangle
     w.__cy_route(...args);
   });
 });
@@ -104,10 +85,6 @@ export {};
 declare global {
   namespace Cypress {
     interface Chainable {
-      login: (
-        username: string,
-        path?: string,
-      ) => Chainable<JQuery<HTMLElement>>;
       waitUntilSettled: (maxTries?: number) => void;
       showsErrorMessage: (shows?: boolean) => void;
       showsSuccessMessage: (shows?: boolean) => void;

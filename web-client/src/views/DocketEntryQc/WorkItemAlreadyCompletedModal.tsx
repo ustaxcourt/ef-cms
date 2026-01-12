@@ -2,9 +2,12 @@ import { ModalDialog } from '../ModalDialog';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import React from 'react';
 
-export const WorkItemAlreadyCompletedModal = connect(
-  {},
-  function WorkItemAlreadyCompletedModal({ confirmSequence }) {
+type WorkItemAlreadyCompletedModalProps = {
+  confirmSequence: Function;
+};
+
+export const WorkItemAlreadyCompletedModal: React.FC<WorkItemAlreadyCompletedModalProps> =
+  connect({}, function WorkItemAlreadyCompletedModal({ confirmSequence }) {
     return (
       <ModalDialog
         cancelLink={false}
@@ -18,7 +21,6 @@ export const WorkItemAlreadyCompletedModal = connect(
         or workflow.
       </ModalDialog>
     );
-  },
-);
+  });
 
 WorkItemAlreadyCompletedModal.displayName = 'WorkItemAlreadyCompletedModal';

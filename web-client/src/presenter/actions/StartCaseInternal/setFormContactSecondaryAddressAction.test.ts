@@ -7,7 +7,7 @@ describe('setFormContactSecondaryAddressAction', () => {
       props: {
         contact: {
           city: 'Flavortown',
-          hasConsentedToEService: true,
+          hasConsentedToElectronicService: true,
           name: 'Roslindis Angelino',
           paperPetitionEmail: 'petitioner@example.com',
         },
@@ -17,14 +17,15 @@ describe('setFormContactSecondaryAddressAction', () => {
           contactPrimary: {
             city: 'Flavortown',
             contactId: '123abc',
-            hasConsentedToEService: true,
+            hasConsentedToElectronicService: true,
             name: 'Roslindis Angelino',
             paperPetitionEmail: 'petitioner@example.com',
+            email: 'contact@example.com',
           },
           contactSecondary: {
             city: 'Greenbough',
             contactId: 'abc123',
-            hasConsentedToEService: false,
+            hasConsentedToElectronicService: false,
             inCareOf: 'Jennay',
             name: 'Forrest',
             paperPetitionEmail: 'notacopy@example.com',
@@ -36,17 +37,19 @@ describe('setFormContactSecondaryAddressAction', () => {
     expect(result.state.form.contactPrimary).toMatchObject({
       city: 'Flavortown',
       contactId: '123abc',
-      hasConsentedToEService: true,
+      hasConsentedToElectronicService: true,
       name: 'Roslindis Angelino',
       paperPetitionEmail: 'petitioner@example.com',
+      email: 'contact@example.com',
     });
     expect(result.state.form.contactSecondary).toMatchObject({
       city: 'Flavortown',
       contactId: 'abc123',
-      hasConsentedToEService: false,
+      hasConsentedToElectronicService: false,
       inCareOf: 'Jennay',
       name: 'Forrest',
       paperPetitionEmail: 'notacopy@example.com',
     });
+    expect(result.state.form.contactSecondary.email).toBeUndefined();
   });
 });

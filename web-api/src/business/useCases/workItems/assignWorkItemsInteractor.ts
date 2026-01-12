@@ -1,12 +1,16 @@
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
+import { RawWorkItem, WorkItem } from '@shared/business/entities/WorkItem';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { User } from '../../../../../shared/src/business/entities/User';
-import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
+import { User } from '@shared/business/entities/User';
+import { getWorkItemById } from '@web-api/persistence/postgres/workitems/getWorkItemById';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { getDocketEntriesByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumberAndDocketEntryId';
 
 /**
  * getWorkItem
@@ -18,15 +22,17 @@ import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
  * @param {string} providers.workItemId the id of the work item to assign
  */
 export const assignWorkItemsInteractor = async (
-  applicationContext: ServerApplicationContext,
+  _: ServerApplicationContext,
   {
     assigneeId,
     assigneeName,
+    workItem,
     workItemId,
   }: {
     assigneeId: string;
     assigneeName: string;
-    workItemId: string;
+    workItemId?: string;
+    workItem?: RawWorkItem;
   },
   authorizedUser: UnknownAuthUser,
 ) => {
@@ -34,26 +40,55 @@ export const assignWorkItemsInteractor = async (
     throw new UnauthorizedError('Unauthorized to assign work item');
   }
 
-  const user = await applicationContext.getPersistenceGateway().getUserById({
-    applicationContext,
+  const user = await getUserById({
     userId: authorizedUser.userId,
   });
 
-  const userBeingAssigned = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({
-      applicationContext,
-      userId: assigneeId,
-    });
+  if (!user) {
+    throw new NotFoundError(
+      `User not found with user id ${authorizedUser.userId}`,
+    );
+  }
 
-  const workItemRecord = await applicationContext
-    .getPersistenceGateway()
-    .getWorkItemById({
-      applicationContext,
+  const userBeingAssigned = await getUserById({
+    userId: assigneeId,
+  });
+
+  if (!userBeingAssigned) {
+    throw new NotFoundError(
+      `User not found with user id ${assigneeId}`,
+    );
+  }
+
+  let workItemEntity: WorkItem | undefined;
+  if (!workItem && workItemId) {
+    workItemEntity = await getWorkItemById({
       workItemId,
     });
+    if (!workItemEntity) {
+      throw new NotFoundError(`WorkItem ${workItemId} was not found.`);
+    }
+  } else {
+    workItemEntity = new WorkItem(workItem);
+  }
 
-  const workItemEntity = new WorkItem(workItemRecord);
+  const docketEntry = (
+    await getDocketEntriesByDocketNumberAndDocketEntryId({
+      docketNumbersAndIds: [
+        {
+          docketNumber: workItemEntity.docketNumber,
+          docketEntryId: workItemEntity.docketEntryId,
+        },
+      ],
+    })
+  ).at(0);
+
+  if (!docketEntry) {
+    throw new NotFoundError(
+      `Docket entry associated with work item ${workItemId} was not found.`,
+    );
+  }
+
   const userIsCaseServices = User.isCaseServicesUser({ section: user.section });
   const userBeingAssignedIsCaseServices = User.isCaseServicesUser({
     section: userBeingAssigned.section,
@@ -71,14 +106,16 @@ export const assignWorkItemsInteractor = async (
   workItemEntity.assignToUser({
     assigneeId,
     assigneeName,
-    section: sectionToAssignTo,
+    section: WorkItem.getWorkItemSectionFromUserSection({
+      section: sectionToAssignTo,
+      documentTitle: docketEntry.documentTitle,
+    }),
     sentBy: user.name,
     sentBySection: user.section,
     sentByUserId: user.userId,
   });
 
-  await applicationContext.getPersistenceGateway().saveWorkItem({
-    applicationContext,
-    workItem: workItemEntity.validate().toRawObject(),
+  await upsertWorkItems({
+    workItems: [workItemEntity.validate().toRawObject()],
   });
 };

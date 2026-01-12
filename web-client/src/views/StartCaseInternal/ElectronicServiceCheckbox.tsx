@@ -1,9 +1,14 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@web-client/presenter/shared.cerebral';
-import { props } from 'cerebral';
+import { props as cerebralProps } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+
+const props = cerebralProps as unknown as {
+  bind: string;
+  contactType: string;
+};
 
 export const ElectronicServiceConsentCheckbox = connect(
   {
@@ -23,10 +28,10 @@ export const ElectronicServiceConsentCheckbox = connect(
         omitFormGroupClass={true}
       >
         <input
-          checked={data[contactType].hasConsentedToEService || false}
+          checked={data[contactType].hasConsentedToElectronicService || false}
           className="usa-checkbox__input"
           id={`electronic-service-consent-${contactType}`}
-          name={`${contactType}.hasConsentedToEService`}
+          name={`${contactType}.hasConsentedToElectronicService`}
           type="checkbox"
           onChange={e => {
             updateFormValueSequence({

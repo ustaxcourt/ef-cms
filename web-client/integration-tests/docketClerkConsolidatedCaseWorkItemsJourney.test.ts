@@ -69,7 +69,7 @@ describe('Docket clerk consolidated case work item journey', () => {
 
   loginAs(cerebralTest, 'privatePractitioner@example.com');
 
-  it('sets the docketNumber', () => {
+  it('sets the docketNumber 1', () => {
     cerebralTest.docketNumber = consolidatedCaseDocketNumber;
   });
 
@@ -81,36 +81,32 @@ describe('Docket clerk consolidated case work item journey', () => {
 
   loginAs(cerebralTest, 'docketclerk@example.com');
 
-  docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCSection(
-    cerebralTest,
-    consolidatedCaseDocketNumber,
-    { box: 'inbox', queue: 'section' },
-  );
+  docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCSection(cerebralTest, {
+    box: 'inbox',
+    queue: 'section',
+  });
   docketClerkAssignWorkItemToSelf(cerebralTest, consolidatedCaseDocketNumber);
 
-  docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCSection(
-    cerebralTest,
-    consolidatedCaseDocketNumber,
-    { box: 'inbox', queue: 'my' },
-  );
+  docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCSection(cerebralTest, {
+    box: 'inbox',
+    queue: 'my',
+  });
 
   docketClerkQCsDocketEntry(cerebralTest);
 
-  docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCSection(
-    cerebralTest,
-    consolidatedCaseDocketNumber,
-    { box: 'outbox', queue: 'my' },
-  );
+  docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCSection(cerebralTest, {
+    box: 'outbox',
+    queue: 'my',
+  });
 
-  docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCSection(
-    cerebralTest,
-    consolidatedCaseDocketNumber,
-    { box: 'outbox', queue: 'section' },
-  );
+  docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCSection(cerebralTest, {
+    box: 'outbox',
+    queue: 'section',
+  });
 
   // Document QC Internal filed document on Lead Case
 
-  it('sets the docketNumber', () => {
+  it('sets the docketNumber 2', () => {
     cerebralTest.docketNumber = leadCaseDocketNumber;
   });
 
@@ -133,7 +129,7 @@ describe('Docket clerk consolidated case work item journey', () => {
 
   // Document QC Internal filed document on Non-lead Case
 
-  it('sets the docketNumber', () => {
+  it('sets the docketNumber 3', () => {
     cerebralTest.docketNumber = consolidatedCaseDocketNumber;
   });
 
@@ -144,15 +140,13 @@ describe('Docket clerk consolidated case work item journey', () => {
     consolidatedCaseDocketNumber,
   );
 
-  docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCSection(
-    cerebralTest,
-    consolidatedCaseDocketNumber,
-    { box: 'inProgress', queue: 'section' },
-  );
+  docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCSection(cerebralTest, {
+    box: 'inProgress',
+    queue: 'section',
+  });
 
-  docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCSection(
-    cerebralTest,
-    consolidatedCaseDocketNumber,
-    { box: 'inProgress', queue: 'my' },
-  );
+  docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCSection(cerebralTest, {
+    box: 'inProgress',
+    queue: 'my',
+  });
 });

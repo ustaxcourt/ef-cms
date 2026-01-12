@@ -1,6 +1,6 @@
 import { MessageResult } from '@shared/business/entities/MessageResult';
 import { getDbReader } from '@web-api/database';
-import { messageResultEntity } from '@web-api/persistence/postgres/messages/mapper';
+import { fromKyselyMessage } from '@web-api/persistence/postgres/messages/mapper';
 
 export const getMessagesByDocketNumber = async ({
   docketNumber,
@@ -12,12 +12,17 @@ export const getMessagesByDocketNumber = async ({
       .selectFrom('dwMessage as m')
       .leftJoin('dwCase as c', 'c.docketNumber', 'm.docketNumber')
       .where('m.docketNumber', '=', docketNumber)
-      .selectAll()
-      .select('m.docketNumber')
+      .selectAll('m')
+      .select([
+        'c.status',
+        'c.trialDate',
+        'c.trialLocation',
+        'c.docketNumberSuffix',
+        'c.leadDocketNumber',
+        'c.caption',
+      ])
       .execute(),
   );
 
-  console.log('*** messages', messages);
-
-  return messages.map(message => messageResultEntity(message));
+  return messages.map(message => fromKyselyMessage(message));
 };

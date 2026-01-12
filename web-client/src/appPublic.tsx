@@ -1,9 +1,11 @@
+import './tailwind.css';
 import './index.scss';
 
 import '../../node_modules/@fortawesome/fontawesome-svg-core/styles.css';
 
 import { AppComponentPublic } from './views/AppComponentPublic';
 import { Container } from '@cerebral/react';
+import { initializeRealUserMonitoring } from '@web-client/providers/realUserMonitoring';
 import {
   back,
   createObjectURL,
@@ -17,6 +19,8 @@ import {
 import { faArrowAltCircleLeft as faArrowAltCircleLeftSolid } from '@fortawesome/free-solid-svg-icons/faArrowAltCircleLeft';
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons/faCheckCircle';
 import { faChevronUp } from '@fortawesome/free-solid-svg-icons/faChevronUp';
+import { faCopy } from '@fortawesome/free-regular-svg-icons/faCopy';
+import { faCopy as faCopySolid } from '@fortawesome/free-solid-svg-icons/faCopy';
 import { faEnvelope as faEnvelopeSolid } from '@fortawesome/free-solid-svg-icons/faEnvelope';
 import { faFileAlt as faFileAltSolid } from '@fortawesome/free-solid-svg-icons/faFileAlt';
 import { faFilePdf } from '@fortawesome/free-solid-svg-icons/faFilePdf';
@@ -34,22 +38,31 @@ import { faTimesCircle } from '@fortawesome/free-solid-svg-icons/faTimesCircle';
 import { GlobalModalWrapper } from '@web-client/views/GlobalModalWrapper';
 import { createRoot } from 'react-dom/client';
 import { faArrowAltCircleLeft as faArrowAltCircleLeftRegular } from '@fortawesome/free-regular-svg-icons/faArrowAltCircleLeft';
+import { faExchangeAlt } from '@fortawesome/free-solid-svg-icons/faExchangeAlt';
 import { faExclamation } from '@fortawesome/free-solid-svg-icons/faExclamation';
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons/faExclamationCircle';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons/faExclamationTriangle';
+import { faLink } from '@fortawesome/free-solid-svg-icons/faLink';
+import { faLongArrowAltDown } from '@fortawesome/free-solid-svg-icons/faLongArrowAltDown';
+import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { faTimesCircle as faTimesCircleRegular } from '@fortawesome/free-regular-svg-icons/faTimesCircle';
 import { faUser } from '@fortawesome/free-regular-svg-icons/faUser';
 import { isFunction, mapValues } from 'lodash';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { presenter } from './presenter/presenter-public';
-import App from 'cerebral';
+import App, { ModuleDefinition } from 'cerebral';
 import React from 'react';
+
+import { faFile } from '@fortawesome/free-solid-svg-icons/faFile';
+import { faGavel } from '@fortawesome/free-solid-svg-icons/faGavel';
+import { faHandPaper } from '@fortawesome/free-solid-svg-icons';
 
 /**
  * Instantiates the Cerebral app with React
  */
 const appPublic = {
   initialize: (applicationContext, debugTools) => {
+    initializeRealUserMonitoring();
     const withAppContextDecorator = (f, context) => {
       return get => f(get, context || applicationContext);
     };
@@ -63,27 +76,37 @@ const appPublic = {
     });
 
     library.add(
-      faFileAltSolid,
-      faLock,
-      faLongArrowAltUp,
-      faPrint,
-      faFilePdf,
-      faSearch,
-      faSync,
-      faSort,
-      faTimesCircle,
-      faInfoCircle,
+      faArrowAltCircleLeftRegular,
+      faArrowAltCircleLeftSolid,
       faCheckCircle,
+      faChevronUp,
+      faCopy,
+      faCopySolid,
+      faEnvelopeSolid,
+      faExchangeAlt,
       faExclamation,
       faExclamationCircle,
       faExclamationTriangle,
-      faChevronUp,
-      faEnvelopeSolid,
+      faFileAltSolid,
+      faFilePdf,
+      faFile,
+      faInfoCircle,
+      faLink,
+      faLink,
+      faLock,
+      faLongArrowAltDown,
+      faLongArrowAltUp,
       faPhone,
+      faPrint,
+      faSearch,
+      faSort,
+      faSync,
+      faTimes,
+      faTimesCircle,
       faTimesCircleRegular,
-      faArrowAltCircleLeftSolid,
-      faArrowAltCircleLeftRegular,
       faUser,
+      faGavel,
+      faHandPaper,
     );
 
     presenter.providers.applicationContext = applicationContext;
@@ -124,7 +147,7 @@ const appPublic = {
       route,
     };
 
-    const cerebralApp = App(presenter, debugTools);
+    const cerebralApp = App(presenter as ModuleDefinition, debugTools);
 
     applicationContext.setForceRefreshCallback(async () => {
       await cerebralApp.getSequence('handleAppHasUpdatedSequence')();
@@ -133,15 +156,17 @@ const appPublic = {
     router.initialize(cerebralApp);
 
     const container = window.document.querySelector('#app-public');
-    const root = createRoot(container);
+    if (container) {
+      const root = createRoot(container);
 
-    root.render(
-      <Container app={cerebralApp}>
-        <AppComponentPublic />
-        <GlobalModalWrapper />
-        {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
-      </Container>,
-    );
+      root.render(
+        <Container app={cerebralApp}>
+          <AppComponentPublic />
+          <GlobalModalWrapper />
+          {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
+        </Container>,
+      );
+    }
   },
 };
 

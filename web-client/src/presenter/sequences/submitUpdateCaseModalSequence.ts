@@ -8,6 +8,7 @@ import { showProgressSequenceDecorator } from '../utilities/showProgressSequence
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { submitUpdateCaseModalAction } from '../actions/CaseDetail/submitUpdateCaseModalAction';
 import { validateUpdateCaseModalAction } from '../actions/CaseDetail/validateUpdateCaseModalAction';
+import { getCaseDeadlinesForCaseAction } from '@web-client/presenter/actions/CaseDeadline/getCaseDeadlinesForCaseAction';
 
 export const submitUpdateCaseModalSequence = showProgressSequenceDecorator([
   clearAlertsAction,
@@ -18,6 +19,7 @@ export const submitUpdateCaseModalSequence = showProgressSequenceDecorator([
       stopShowValidationAction,
       submitUpdateCaseModalAction,
       setCaseAction,
+      getCaseDeadlinesForCaseAction,
       setAlertSuccessAction,
       clearModalAction,
       clearModalStateAction,

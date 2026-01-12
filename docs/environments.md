@@ -46,10 +46,8 @@ This document covers the initial setup needed to get EF-CMS continuous integrati
   ../bin/deploy-app.sh prod
   ```
 
-- Configure the Dynamsoft TWAIN library, which is used to enable scanning from EF-CMS:
-  - Upload the library `.tar.gz` to a folder called Dynamsoft in the S3 bucket named `${EFCMS_DOMAIN}-software`. Note its ARN for CircleCI setup later.
-  - Deploy Docker images to Amazon ECR with `./docker-to-ecr.sh`. This will build an image per the `Dockerfile` config, tag it as `latest`, and push it to the repo in ECR.
-    - Both Flexion and USTC AWS accounts have container registries, so the image needs to be published to both registries.
+- Deploy Docker images to Amazon ECR with `./scripts/ecr/docker-to-ecr.sh`. This will build an image per the `Dockerfile` config, tag it as `latest`, and push it to the repo in ECR.
+  - Both Flexion and USTC AWS accounts have container registries, so the image needs to be published to both registries.
 
 ### 4. Configure CircleCI to test and release code to this environment.
 
@@ -65,7 +63,6 @@ A prerequisite for a successful build within CircleCI is [access to CircleCI’s
   | `AWS_ACCESS_KEY_ID` | AWS access key for the AWS CircleCI user |
   | `AWS_SECRET_ACCESS_KEY` | AWS secret access key for the AWS CircleCI user |
   | `DYNAMSOFT_PRODUCT_KEYS`* | Dynamsoft Web TWAIN product key used |
-  | `DYNAMSOFT_S3_ZIP_PATH`* | Dynamsoft Web TWAIN full S3 path ZIP configured above, e.g. `s3://bucketname/Dynamsoft/dynamic-web-twain-sdk-18.5.tar.gz` |
   | `EFCMS_DOMAIN`* | Domain name chosen above |
   | `COGNITO_SUFFIX`* | Suffix of your choice for the Cognito URL |
   | `USTC_ADMIN_USER` | Username of your choice used by the Cognito admin user |
@@ -78,7 +75,6 @@ A prerequisite for a successful build within CircleCI is [access to CircleCI’s
   | `CLIENT_STAGE` | The `process.env.STAGE` for the React application |
   | `BOUNCED_EMAIL_RECIPIENT`* | An email to which email bounced should be sent (defaults to noreply@`EFCMS_DOMAIN`) |
   | `PROD_ENV_ACCOUNT_ID` | The account ID of the AWS account with Production Data |
-  | `LOWER_ENV_ACCOUNT_ID` | The account ID of the AWS account where copies of Production Data might live |
   | `SLACK_WEBHOOK_URL` | Optional URL to send POST requests to notify a Slack App |
   | `BOUNCE_ALERT_RECIPIENTS` | Optional comma separated list of Email addresses to be notified when email bounces to the `IRS_SUPERUSER_EMAIL` |
 
@@ -129,12 +125,12 @@ EF-CMS currently has both the concept of a deployment at a domain as well as a n
 
 11. Setup the environment's migrate flag:
     ```bash
-    aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENVIRONMENT}" --item '{"pk":{"S":"migrate"},"sk":{"S":"migrate"},"current":{"BOOL":true}}'
+    aws ssm put-parameter --region us-east-1 --name "/DAWSON/${ENV}/migrate" --value "true" --type "String" --overwrite
     ```
 
 12. Setup the environment's current color:
     ```bash
-    aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENVIRONMENT}" --item '{"pk":{"S":"current-color"},"sk":{"S":"current-color"},"current":{"S":"blue"}}'
+    aws ssm put-parameter --region us-east-1 --name "/DAWSON/${ENV}/current-color" --value "blue" --type "String" --overwrite
     ```
 
 13. Setup all database configuration flags:
@@ -143,28 +139,21 @@ EF-CMS currently has both the concept of a deployment at a domain as well as a n
     ```
 14. Setup the environment's source table version:
     ```bash
-    aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENVIRONMENT}" --item '{"pk":{"S":"source-table-version"},"sk":{"S":"source-table-version"},"current":{"S":"alpha"}}'
+    aws ssm put-parameter --region us-east-1 --name "/DAWSON/${ENV}/source-table-version" --value "alpha" --type "String" --overwrite
     ```
 
 15. Setup the environment's destination table version:
     ```bash
-    aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENVIRONMENT}" --item '{"pk":{"S":"destination-table-version"},"sk":{"S":"destination-table-version"},"current":{"S":"beta"}}'
+		aws ssm put-parameter --region us-east-1 --name "/DAWSON/${ENV}/destination-table-version" --value "alpha" --type "String" --overwrite
     ```
 
-16. Set the environment's maintenance-mode flag to **false**:
+16. Delete the destination ElasticSearch cluster from us-east-1.
+
+17. Rerun the circle deploy from step 10.
+
+18. If the environment is a test environment, setup test users and judges so smoketests will pass:
     ```bash
-    aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENVIRONMENT}" --item '{"pk":{"S":"maintenance-mode"},"sk":{"S":"maintenance-mode"},"current":{"BOOL": false}}'
-    ```
-
-17. Delete the destination DynamoDB tables from us-east-1 and us-west-1. 
-
-18. Delete the destination ElasticSearch cluster from us-east-1.
-
-19. Rerun the circle deploy from step 10.
-
-20. If the environment is a test environment, setup test users and judges so smoketests will pass:
-    ```bash
-    npx ts-node --transpile-only scripts/user/setup-test-users.ts
+    ./scripts/user/setup-test-users.ts
     ```
     ```bash
     ENV=exp5 npx ts-node --transpile-only ./scripts/circleci/judge/bulkImportJudgeUsers.ts
@@ -220,8 +209,15 @@ Sometimes you'll find the need to remove an environment to start from a fresh st
 npm run destroy:env <ENV>
 npm run destroy:client <ENV>
 npm run destroy:api <ENV>
+npm run destroy:allColors <ENV>
+npm run destroy:blue <ENV>
+npm run destroy:green <ENV>
 npm run destroy:migration <ENV>
 npm run destroy:migration-cron <ENV>
+npm run destroy:reindex-cron <ENV>
+npm run destroy:stale-cases-email-cron <ENV>
+npm run destroy:switch-colors-cron <ENV>
+npm run destroy:wait-for-workflow-cron <ENV>
 ```
 
 See [the troubleshooting guide](/additional-resources/troubleshooting) for solutions to problems that may arise during the teardown process.

@@ -1,4 +1,7 @@
 /* eslint-disable max-lines */
+import '@web-api/persistence/postgres/caseCorrespondences/mocks.jest';
+import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import {
   AUTOMATIC_BLOCKED_REASONS,
   CASE_STATUS_TYPES,
@@ -11,9 +14,11 @@ import {
   PARTY_TYPES,
   PAYMENT_STATUS,
   SERVICE_INDICATOR_TYPES,
+  SESSION_TYPES,
   UNIQUE_OTHER_FILER_TYPE,
 } from '../EntityConstants';
 import { Case, getContactPrimary } from './Case';
+import { isMemberCase } from '../../utilities/generateSelectedFilterList';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_DOCUMENTS } from '../../../test/mockDocketEntry';
 import { createISODateString } from '../../utilities/DateHandler';
@@ -126,7 +131,9 @@ describe('Case entity', () => {
   });
 
   it('defaults the orders to false', () => {
-    const myCase = new Case(MOCK_CASE, { authorizedUser: mockDocketClerkUser });
+    const myCase = new Case(MOCK_CASE, {
+      authorizedUser: mockDocketClerkUser,
+    });
 
     expect(myCase).toMatchObject({
       isSealed: false,
@@ -239,7 +246,7 @@ describe('Case entity', () => {
       const mockhearing1 = {
         createdAt: '2024-03-01T00:00:00.000Z',
         maxCases: 100,
-        sessionType: 'Regular',
+        sessionType: SESSION_TYPES.regular,
         startDate: '2025-03-01T00:00:00.000Z',
         term: 'Fall',
         termYear: '2025',
@@ -501,7 +508,7 @@ describe('Case entity', () => {
       const errors = myCase.getFormattedValidationErrors();
 
       expect(errors).toMatchObject({
-        'petitioners[2]':
+        'petitioners-2':
           'Only one (1) Intervenor is allowed per case. Please select a different Role.',
       });
     });
@@ -826,35 +833,6 @@ describe('Case entity', () => {
       );
 
       expect(myCase.isValid()).toBeFalsy();
-    });
-
-    it('Creates an invalid case with highPriority set to true but no highPriorityReason', () => {
-      const myCase = new Case(
-        {
-          ...MOCK_CASE,
-          highPriority: true,
-        },
-        {
-          authorizedUser: mockDocketClerkUser,
-        },
-      );
-
-      expect(myCase.isValid()).toBeFalsy();
-    });
-
-    it('Creates a valid case with highPriority set to true and a highPriorityReason', () => {
-      const myCase = new Case(
-        {
-          ...MOCK_CASE,
-          highPriority: true,
-          highPriorityReason: 'something',
-        },
-        {
-          authorizedUser: mockDocketClerkUser,
-        },
-      );
-
-      expect(myCase.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('Creates an invalid case with closed status and no closed date', () => {
@@ -1361,31 +1339,6 @@ describe('Case entity', () => {
     });
   });
 
-  describe('judgeUserId', () => {
-    it('sets the judgeUserId property when a value is passed in', () => {
-      const mockJudgeUserId = 'f5aa0760-9fee-4a58-9658-d043b01f2fb0';
-
-      const myCase = new Case(
-        { ...MOCK_CASE, judgeUserId: mockJudgeUserId },
-        { authorizedUser: mockDocketClerkUser },
-      );
-
-      expect(myCase).toMatchObject({
-        judgeUserId: mockJudgeUserId,
-      });
-      expect(myCase.getFormattedValidationErrors()).toEqual(null);
-    });
-
-    it('does not fail validation without a judgeUserId', () => {
-      const myCase = new Case(MOCK_CASE, {
-        authorizedUser: mockDocketClerkUser,
-      });
-
-      expect(myCase.judgeUserId).toBeUndefined();
-      expect(myCase.getFormattedValidationErrors()).toEqual(null);
-    });
-  });
-
   describe('blocked status validation for calendared cases', () => {
     const mockTrialSessionId = '9e29b116-58a0-40f5-afe6-e3a0ba4f226a';
 
@@ -1441,6 +1394,75 @@ describe('Case entity', () => {
       });
 
       expect(myCase.getFormattedValidationErrors()).toBe(null);
+    });
+  });
+
+  describe('isMemberCase', () => {
+    it('should return true when case is a member of a consolidated group', () => {
+      const result = isMemberCase({
+        inConsolidatedGroup: true,
+        isLeadCase: false,
+      });
+
+      expect(result).toBe(true);
+    });
+
+    it('should return false when case is the lead case', () => {
+      const result = isMemberCase({
+        inConsolidatedGroup: true,
+        isLeadCase: true,
+      });
+
+      expect(result).toBe(false);
+    });
+
+    it('should return false when case is not consolidated', () => {
+      const result = isMemberCase({
+        inConsolidatedGroup: false,
+        isLeadCase: false,
+      });
+
+      expect(result).toBe(false);
+    });
+  });
+
+  describe('setRemoteTrialGrantedDate', () => {
+    it('sets remoteTrialGranted and remoteTrialGrantedDate when a valid date string is provided', () => {
+      const mockDate = '2025-10-28T12:00:00.000Z';
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+        },
+        { authorizedUser: mockDocketClerkUser },
+      );
+
+      myCase.setRemoteTrialGrantedDate(mockDate);
+
+      expect(myCase.remoteTrialGranted).toBe(true);
+      expect(myCase.remoteTrialGrantedDate).toBe(mockDate);
+    });
+
+    it('clears remoteTrialGranted and remoteTrialGrantedDate when null or blank values are provided', () => {
+      const myCase = new Case(
+        {
+          ...MOCK_CASE,
+          remoteTrialGranted: true,
+          remoteTrialGrantedDate: '2024-01-01T00:00:00.000Z',
+        },
+        { authorizedUser: mockDocketClerkUser },
+      );
+
+      myCase.setRemoteTrialGrantedDate(null);
+      expect(myCase.remoteTrialGranted).toBe(false);
+      expect(myCase.remoteTrialGrantedDate).toBeNull();
+
+      myCase.setRemoteTrialGrantedDate('');
+      expect(myCase.remoteTrialGranted).toBe(false);
+      expect(myCase.remoteTrialGrantedDate).toBeNull();
+
+      myCase.setRemoteTrialGrantedDate('   ');
+      expect(myCase.remoteTrialGranted).toBe(false);
+      expect(myCase.remoteTrialGrantedDate).toBeNull();
     });
   });
 });

@@ -1,14 +1,16 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
+} from '@shared/authorization/authorizationClientService';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { applicationContext } from '@web-api/applicationContext';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 export const strikeDocketEntryInteractor = async (
-  applicationContext: ServerApplicationContext,
   {
     docketEntryId,
     docketNumber,
@@ -24,36 +26,42 @@ export const strikeDocketEntryInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const caseToUpdate = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const caseToUpdate = await getCaseByDocketNumber({
+    docketNumber,
+  });
 
-  const caseEntity = new Case(caseToUpdate, { authorizedUser });
+  let caseEntity = new Case(caseToUpdate, { authorizedUser });
 
-  const docketEntryEntity = caseEntity.getDocketEntryById({
+  const docketEntry = caseEntity.getDocketEntryById({
     docketEntryId,
   });
 
-  if (!docketEntryEntity) {
+  if (!docketEntry) {
     throw new NotFoundError('Docket entry not found');
   }
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
 
-  docketEntryEntity.strikeEntry({ name: user.name, userId: user.userId });
+  if (!user) {
+    throw new NotFoundError(
+      `User not found with user id ${authorizedUser.userId}`,
+    );
+  }
 
-  caseEntity.updateDocketEntry(docketEntryEntity);
+  docketEntry.strikeEntry({ name: user.name, userId: user.userId });
+  docketEntry.pending = false;
+  const validatedDocketEntry = docketEntry.validate().toRawObject();
+  caseEntity.updateDocketEntry(validatedDocketEntry);
 
-  await applicationContext.getPersistenceGateway().updateDocketEntry({
-    applicationContext,
-    docketEntryId,
-    docketNumber,
-    document: docketEntryEntity.validate().toRawObject(),
+  caseEntity = await applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAutomaticBlock({
+      caseEntity,
+    });
+
+  await updateCaseAndAssociations({
+    authorizedUser,
+    caseToUpdate: caseEntity,
   });
 
   return caseEntity.toRawObject();

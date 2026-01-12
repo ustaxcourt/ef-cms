@@ -109,64 +109,6 @@ describe('saveCaseDetailInternalEditAction', () => {
     });
   });
 
-  it('should call the updateCaseTrialSortTags use case if case status is ready for trial', async () => {
-    const caseDetail = {
-      ...MOCK_CASE,
-      createdAt: '2019-03-01T21:40:46.415Z',
-      status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
-    };
-    applicationContext
-      .getUseCases()
-      .saveCaseDetailInternalEditInteractor.mockReturnValue(caseDetail);
-
-    await runAction(saveCaseDetailInternalEditAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        fileUploadProgressMap: {
-          corporateDisclosure: uploadProgressInfo,
-        },
-      },
-      state: {
-        caseDetail,
-        form: caseDetail,
-      },
-    });
-    expect(
-      applicationContext.getUseCases().updateCaseTrialSortTagsInteractor.mock
-        .calls[0][1].docketNumber,
-    ).toEqual(MOCK_CASE.docketNumber);
-  });
-
-  it('should not call the updateCaseTrialSortTags use case if case status is not ready for trial', async () => {
-    const caseDetail = {
-      ...MOCK_CASE,
-      status: CASE_STATUS_TYPES.new,
-    };
-    applicationContext
-      .getUseCases()
-      .saveCaseDetailInternalEditInteractor.mockReturnValue(caseDetail);
-
-    await runAction(saveCaseDetailInternalEditAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        fileUploadProgressMap: {
-          corporateDisclosure: uploadProgressInfo,
-        },
-      },
-      state: {
-        caseDetail,
-        form: caseDetail,
-      },
-    });
-    expect(
-      applicationContext.getUseCases().updateCaseTrialSortTagsInteractor,
-    ).not.toHaveBeenCalled();
-  });
-
   it('should upload initial filing documents if they exist on the case', async () => {
     const mockRqtFile = {
       docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3850',

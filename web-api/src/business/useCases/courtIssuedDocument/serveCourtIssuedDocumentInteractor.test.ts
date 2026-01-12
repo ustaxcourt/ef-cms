@@ -1,34 +1,47 @@
-import { AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { MOCK_DOCUMENTS } from '../../../../../shared/src/test/mockDocketEntry';
-import { MOCK_TRIAL_REGULAR } from '../../../../../shared/src/test/mockTrial';
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
+);
+import { AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES } from '@shared/business/entities/EntityConstants';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
+import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import {
-  docketClerkUser,
-  judgeUser,
-} from '../../../../../shared/src/test/mockUsers';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { docketClerkUser, judgeUser } from '@shared/test/mockUsers';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { serveCourtIssuedDocumentInteractor } from './serveCourtIssuedDocumentInteractor';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
+import { updateDocketEntryPendingServiceStatus as updateDocketEntryPendingServiceStatusMock } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('serveCourtIssuedDocumentInteractor', () => {
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const updateDocketEntryPendingServiceStatus = jest.mocked(
+    updateDocketEntryPendingServiceStatusMock,
+  );
+  const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
   const mockDocketEntryId = 'cf105788-5d34-4451-aa8d-dfd9a851b675';
   const mockClientConnectionId = 'ABC123';
+  const fileAndServeDocumentOnOneCase = jest.mocked(
+    fileAndServeDocumentOnOneCaseMock,
+  );
+  const getUserById = jest.mocked(getUserByIdMock);
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(docketClerkUser);
+    getUserById.mockResolvedValue(docketClerkUser as DbUser);
+    getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
+    getCasesByDocketNumbers.mockResolvedValue([MOCK_CASE]);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
-
-    applicationContext
-      .getUseCaseHelpers()
-      .fileAndServeDocumentOnOneCase.mockImplementation(
-        ({ caseEntity }) => caseEntity,
-      );
+    fileAndServeDocumentOnOneCase.mockImplementation(
+      ({ caseEntity }) => caseEntity,
+    );
 
     applicationContext
       .getPersistenceGateway()
@@ -57,9 +70,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   });
 
   it('should throw an error when the case can not be found', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({});
+    getCaseByDocketNumber.mockResolvedValue({});
 
     await expect(
       serveCourtIssuedDocumentInteractor(
@@ -76,12 +87,10 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   });
 
   it('should throw an error when the docket entry was not found on the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        docketEntries: [],
-        docketNumber: MOCK_CASE.docketNumber,
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      docketEntries: [],
+      docketNumber: MOCK_CASE.docketNumber,
+    });
 
     await expect(
       serveCourtIssuedDocumentInteractor(
@@ -98,17 +107,15 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   });
 
   it('should throw an error when the docket entry has already been served', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        docketEntries: [
-          {
-            docketEntryId: mockDocketEntryId,
-            servedAt: '2018-03-01T05:00:00.000Z',
-          },
-        ],
-        docketNumber: MOCK_CASE.docketNumber,
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      docketEntries: [
+        {
+          docketEntryId: mockDocketEntryId,
+          servedAt: '2018-03-01T05:00:00.000Z',
+        },
+      ],
+      docketNumber: MOCK_CASE.docketNumber,
+    });
 
     await expect(
       serveCourtIssuedDocumentInteractor(
@@ -125,17 +132,15 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   });
 
   it('should throw an error when the document is already pending service', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        docketEntries: [
-          {
-            docketEntryId: mockDocketEntryId,
-            isPendingService: true,
-          },
-        ],
-        docketNumber: MOCK_CASE.docketNumber,
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      docketEntries: [
+        {
+          docketEntryId: mockDocketEntryId,
+          isPendingService: true,
+        },
+      ],
+      docketNumber: MOCK_CASE.docketNumber,
+    });
 
     await expect(
       serveCourtIssuedDocumentInteractor(
@@ -157,18 +162,16 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
   it('should calculate and set the number of pages in the document on the docket entry', async () => {
     const mockNumberOfPages = 3256;
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        docketEntries: [
-          {
-            ...MOCK_DOCUMENTS[0],
-            docketEntryId: mockDocketEntryId,
-            numberOfPages: undefined,
-          },
-        ],
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      docketEntries: [
+        {
+          ...MOCK_DOCUMENTS[0],
+          docketEntryId: mockDocketEntryId,
+          numberOfPages: undefined,
+        },
+      ],
+    });
     applicationContext
       .getUseCaseHelpers()
       .countPagesInDocument.mockReturnValue(3256);
@@ -185,24 +188,21 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     );
 
     const servedDocketEntry =
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
-        .calls[0][0].docketEntryEntity;
+      fileAndServeDocumentOnOneCase.mock.calls[0][0].docketEntryEntity;
     expect(servedDocketEntry.numberOfPages).toBe(mockNumberOfPages);
   });
 
   it('should NOT create a deadline on the subject case when docket entry is NOT one of AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        associatedJudge: judgeUser.name,
-        docketEntries: [
-          {
-            docketEntryId: mockDocketEntryId,
-            eventCode: 'O',
-          },
-        ],
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      associatedJudge: judgeUser.name,
+      docketEntries: [
+        {
+          docketEntryId: mockDocketEntryId,
+          eventCode: 'O',
+        },
+      ],
+    });
 
     await serveCourtIssuedDocumentInteractor(
       applicationContext,
@@ -231,18 +231,16 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       signedJudgeName: judgeUser.name,
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        associatedJudge: judgeUser.name,
-        docketEntries: [
-          {
-            ...mockAutoGeneratedDeadlineDocketEntry,
-            docketEntryId: mockDocketEntryId,
-          },
-        ],
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      associatedJudge: judgeUser.name,
+      docketEntries: [
+        {
+          ...mockAutoGeneratedDeadlineDocketEntry,
+          docketEntryId: mockDocketEntryId,
+        },
+      ],
+    });
 
     await serveCourtIssuedDocumentInteractor(
       applicationContext,
@@ -266,19 +264,22 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   });
 
   it('should serve the docketEntry on every case provided in the list of docketNumbers', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        docketEntries: [
-          {
-            ...MOCK_DOCUMENTS[0],
-            docketEntryId: mockDocketEntryId,
-            filingDate: undefined,
-            servedAt: undefined,
-          },
-        ],
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      docketEntries: [
+        {
+          ...MOCK_DOCUMENTS[0],
+          docketEntryId: mockDocketEntryId,
+          filingDate: undefined,
+          servedAt: undefined,
+        },
+      ],
+    });
+
+    getCasesByDocketNumbers.mockResolvedValue([
+      { ...MOCK_CASE, docketNumber: '200-21' },
+      { ...MOCK_CASE, docketNumber: '300-33' },
+    ]);
 
     await serveCourtIssuedDocumentInteractor(
       applicationContext,
@@ -291,24 +292,20 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase,
-    ).toHaveBeenCalledTimes(3);
+    expect(fileAndServeDocumentOnOneCase).toHaveBeenCalledTimes(3);
   });
 
   it('should set the docket entry`s filing date as today', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        docketEntries: [
-          {
-            ...MOCK_DOCUMENTS[0],
-            docketEntryId: mockDocketEntryId,
-            filingDate: undefined,
-          },
-        ],
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      docketEntries: [
+        {
+          ...MOCK_DOCUMENTS[0],
+          docketEntryId: mockDocketEntryId,
+          filingDate: undefined,
+        },
+      ],
+    });
 
     await serveCourtIssuedDocumentInteractor(
       applicationContext,
@@ -322,23 +319,20 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     );
 
     const expectedDocketEntry =
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
-        .calls[0][0].docketEntryEntity;
+      fileAndServeDocumentOnOneCase.mock.calls[0][0].docketEntryEntity;
     expect(expectedDocketEntry.filingDate).toBeDefined();
   });
 
   it('should mark the docketEntry as pending service while processing is ongoing and unset pending when processing has completed', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        docketEntries: [
-          {
-            ...MOCK_DOCUMENTS[0],
-            docketEntryId: mockDocketEntryId,
-          },
-        ],
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      docketEntries: [
+        {
+          ...MOCK_DOCUMENTS[0],
+          docketEntryId: mockDocketEntryId,
+        },
+      ],
+    });
 
     await serveCourtIssuedDocumentInteractor(
       applicationContext,
@@ -351,20 +345,12 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway()
-        .updateDocketEntryPendingServiceStatus,
-    ).toHaveBeenCalledWith({
-      applicationContext,
+    expect(updateDocketEntryPendingServiceStatus).toHaveBeenCalledWith({
       docketEntryId: mockDocketEntryId,
       docketNumber: MOCK_CASE.docketNumber,
       status: true,
     });
-    expect(
-      applicationContext.getPersistenceGateway()
-        .updateDocketEntryPendingServiceStatus,
-    ).toHaveBeenCalledWith({
-      applicationContext,
+    expect(updateDocketEntryPendingServiceStatus).toHaveBeenCalledWith({
       docketEntryId: mockDocketEntryId,
       docketNumber: MOCK_CASE.docketNumber,
       status: false,
@@ -372,17 +358,15 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   });
 
   it('should unset the pending service status on the document when there is an error when serving', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        docketEntries: [
-          {
-            ...MOCK_DOCUMENTS[0],
-            docketEntryId: mockDocketEntryId,
-          },
-        ],
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      docketEntries: [
+        {
+          ...MOCK_DOCUMENTS[0],
+          docketEntryId: mockDocketEntryId,
+        },
+      ],
+    });
     applicationContext
       .getUseCaseHelpers()
       .serveDocumentAndGetPaperServicePdf.mockRejectedValueOnce(
@@ -403,8 +387,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     ).rejects.toThrow('whoops, that is an error!');
 
     expect(
-      applicationContext.getPersistenceGateway()
-        .updateDocketEntryPendingServiceStatus.mock.calls[1][0],
+      updateDocketEntryPendingServiceStatus.mock.calls[1][0],
     ).toMatchObject({
       docketEntryId: mockDocketEntryId,
       docketNumber: MOCK_CASE.docketNumber,

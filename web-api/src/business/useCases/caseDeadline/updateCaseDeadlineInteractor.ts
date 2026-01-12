@@ -1,14 +1,17 @@
-import { CaseDeadline } from '../../../../../shared/src/business/entities/CaseDeadline';
 import {
-  ROLE_PERMISSIONS,
+  CaseDeadline,
+  RawCaseDeadline,
+} from '@shared/business/entities/CaseDeadline';
+import {
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
+  ROLE_PERMISSIONS,
+} from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
+import { getCaseDeadlinesByConsolidatedCaseDeadlineIds } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds';
 
 export const updateCaseDeadlineInteractor = async (
-  applicationContext: ServerApplicationContext,
   { caseDeadline }: { caseDeadline: CaseDeadline },
   authorizedUser: UnknownAuthUser,
 ) => {
@@ -16,22 +19,36 @@ export const updateCaseDeadlineInteractor = async (
     throw new UnauthorizedError('Unauthorized for updating case deadline');
   }
 
-  const caseDeadlineToUpdate = new CaseDeadline(caseDeadline, {
-    applicationContext,
-  })
+  const caseDeadlineToUpdate = new CaseDeadline(caseDeadline)
     .validate()
     .toRawObject();
 
-  await applicationContext.getPersistenceGateway().deleteCaseDeadline({
-    applicationContext,
-    caseDeadlineId: caseDeadlineToUpdate.caseDeadlineId,
-    docketNumber: caseDeadlineToUpdate.docketNumber,
-  });
+  const consolidatedCaseDeadlines: RawCaseDeadline[] =
+    await getCaseDeadlinesByConsolidatedCaseDeadlineIds([
+      caseDeadlineToUpdate.caseDeadlineId,
+    ]);
 
-  await applicationContext.getPersistenceGateway().createCaseDeadline({
-    applicationContext,
-    caseDeadline: caseDeadlineToUpdate,
-  });
+  const updatedConsolidatedCaseDeadlines: RawCaseDeadline[] =
+    consolidatedCaseDeadlines
+      .filter(
+        ({ docketNumber: ccDocketNumber }) =>
+          ccDocketNumber !== caseDeadlineToUpdate.docketNumber,
+      )
+      .map(ccd =>
+        new CaseDeadline({
+          ...ccd,
+          createdAt: caseDeadlineToUpdate.createdAt,
+          deadlineDate: caseDeadlineToUpdate.deadlineDate,
+          description: caseDeadlineToUpdate.description,
+        })
+          .validate()
+          .toRawObject(),
+      );
+
+  await upsertCaseDeadlines([
+    caseDeadlineToUpdate,
+    ...updatedConsolidatedCaseDeadlines,
+  ]);
 
   return caseDeadlineToUpdate;
 };

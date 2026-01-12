@@ -1,13 +1,15 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { Statistic } from '../../../../../shared/src/business/entities/Statistic';
+import { Statistic } from '@shared/business/entities/Statistic';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 
 /**
  * updateDeficiencyStatistic
@@ -26,7 +28,7 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  * @returns {object} the updated case
  */
 export const updateDeficiencyStatistic = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   {
     determinationDeficiencyAmount,
     determinationTotalPenalties,
@@ -61,9 +63,9 @@ export const updateDeficiencyStatistic = async (
     throw new UnauthorizedError('Unauthorized for editing statistics');
   }
 
-  const oldCase = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({ applicationContext, docketNumber });
+  const oldCase = await getCaseByDocketNumber({
+    docketNumber,
+  });
 
   const statisticEntity = new Statistic({
     determinationDeficiencyAmount,
@@ -79,16 +81,11 @@ export const updateDeficiencyStatistic = async (
 
   const newCase = new Case(oldCase, { authorizedUser });
   newCase.updateStatistic(statisticEntity, statisticId);
+  const validRawCase = newCase.validate().toRawObject();
 
-  const updatedCase = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
-      authorizedUser,
-      caseToUpdate: newCase,
-    });
+  await upsertCases([validRawCase]);
 
-  return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
+  return validRawCase;
 };
 
 export const updateDeficiencyStatisticInteractor = withLocking(

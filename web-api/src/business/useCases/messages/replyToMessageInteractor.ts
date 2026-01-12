@@ -1,21 +1,17 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import {
-  Message,
-  RawMessage,
-} from '../../../../../shared/src/business/entities/Message';
+import { Case } from '@shared/business/entities/cases/Case';
+import { Message, RawMessage } from '@shared/business/entities/Message';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ReplyMessageType } from '@web-api/business/useCases/messages/createMessageInteractor';
-import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { createMessage } from '@web-api/persistence/postgres/messages/createMessage';
-import { markMessageThreadRepliedTo } from '@web-api/persistence/postgres/messages/markMessageThreadRepliedTo';
+import { createMessageAsReply } from '@web-api/persistence/postgres/messages/createMessageAsReply';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 export const replyToMessage = async (
-  applicationContext: ServerApplicationContext,
   {
     attachments,
     docketNumber,
@@ -31,22 +27,26 @@ export const replyToMessage = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  await markMessageThreadRepliedTo({
-    parentMessageId,
+  const associatedCase = await getCaseByDocketNumber({
+    docketNumber,
   });
 
-  const { caseCaption, docketNumberWithSuffix, status } =
-    await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({ applicationContext, docketNumber });
+  if (!associatedCase) {
+    throw new NotFoundError(`Case ${docketNumber} not found`);
+  }
 
-  const fromUser = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const { caseCaption, docketNumberWithSuffix, status } = associatedCase;
 
-  const toUser = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: toUserId });
+  const fromUser = await getUserById({ userId: authorizedUser.userId });
+
+  const toUser = await getUserById({ userId: toUserId });
+
+  if (!fromUser) {
+    throw new NotFoundError(`Could not find user ${authorizedUser.userId}`);
+  }
+  if (!toUser) {
+    throw new NotFoundError(`Could not find user ${toUserId}`);
+  }
 
   const validatedRawMessage = new Message({
     attachments,
@@ -67,15 +67,15 @@ export const replyToMessage = async (
     .validate()
     .toRawObject();
 
-  await createMessage({
-    message: validatedRawMessage,
+  await createMessageAsReply({
+    newMessage: validatedRawMessage,
+    parentMessageId,
   });
 
   return validatedRawMessage;
 };
 
 export const replyToMessageInteractor = (
-  applicationContext: ServerApplicationContext,
   {
     attachments,
     docketNumber,
@@ -88,7 +88,6 @@ export const replyToMessageInteractor = (
   authorizedUser: UnknownAuthUser,
 ): Promise<RawMessage> => {
   return replyToMessage(
-    applicationContext,
     {
       attachments,
       docketNumber,

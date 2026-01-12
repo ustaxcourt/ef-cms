@@ -8,9 +8,9 @@ const mockLogger = {
   info: jest.fn(),
   warn: jest.fn(),
 };
-jest.mock('@web-api/utilities/logger/getLogger', () => {
+jest.mock('@web-api/utilities/logger/getDawsonLogger', () => {
   return {
-    getLogger: () => mockLogger,
+    getDawsonLogger: () => mockLogger,
   };
 });
 jest.mock('jsonwebtoken', () => {
@@ -221,7 +221,7 @@ describe('cognito-authorizer', () => {
       });
     });
 
-    jwk.verify.mockImplementation((token, pem, options, callback) => {
+    jwk.verify.mockImplementation((_token, _pem, _options, callback) => {
       callback(null, { 'custom:userId': 'test-custom:userId' });
     });
 

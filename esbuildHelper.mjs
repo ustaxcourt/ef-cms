@@ -11,6 +11,8 @@ import livereload from 'livereload';
 import postcss from 'postcss';
 import postcssPresetEnv from 'postcss-preset-env';
 import resolve from 'esbuild-plugin-resolve';
+import tailwindcssPlugin from '@tailwindcss/postcss';
+import fs from 'fs';
 
 const watch = !!process.env.WATCH;
 
@@ -23,7 +25,6 @@ const env = {
   CIRCLE_SHA1: process.env.CIRCLE_SHA1,
   COGNITO_CLIENT_ID: process.env.COGNITO_CLIENT_ID,
   COGNITO_SUFFIX: process.env.COGNITO_SUFFIX,
-  DYNAMODB_TABLE_NAME: process.env.DYNAMODB_TABLE_NAME,
   EFCMS_DOMAIN: process.env.EFCMS_DOMAIN,
   ENV: process.env.ENV,
   FILE_UPLOAD_MODAL_TIMEOUT: process.env.FILE_UPLOAD_MODAL_TIMEOUT,
@@ -31,12 +32,15 @@ const env = {
   NODE_DEBUG: process.env.NODE_DEBUG,
   PDF_EXPRESS_LICENSE_KEY: process.env.PDF_EXPRESS_LICENSE_KEY,
   PUBLIC_SITE_URL: process.env.PUBLIC_SITE_URL,
-  SCANNER_RESOURCE_URI: process.env.SCANNER_RESOURCE_URI,
+  RUM_APP_MONITOR_ID: process.env.RUM_APP_MONITOR_ID,
+  RUM_IDENTITY_POOL_ID: process.env.RUM_IDENTITY_POOL_ID,
+  RUM_SAMPLE_RATE: process.env.RUM_SAMPLE_RATE,
   SESSION_MODAL_TIMEOUT: process.env.SESSION_MODAL_TIMEOUT,
   SESSION_TIMEOUT: process.env.SESSION_TIMEOUT,
   STAGE: process.env.STAGE,
   USTC_ENV: process.env.USTC_ENV,
   WS_URL: process.env.WS_URL,
+  DYNAMSOFT_PRODUCT_KEYS: process.env.DYNAMSOFT_PRODUCT_KEYS,
 };
 
 /**
@@ -53,6 +57,7 @@ export default async function ({
     server = livereload.createServer({ port: reloadServerPort });
   }
   const sassMap = new Map();
+  const cssMap = new Map();
   const buildOptions = {
     bundle: true,
     define: {
@@ -87,6 +92,32 @@ export default async function ({
         crypto: 'crypto-browserify',
         stream: 'stream-browserify',
       }),
+      {
+        name: 'postcss-tailwind',
+        setup(build) {
+          // Watch for changes in TSX/TS/JS files and invalidate CSS cache
+          build.onLoad({ filter: /\.(tsx|ts|js|jsx)$/ }, async args => {
+            // Invalidate CSS cache when TSX/TS/JS files change
+            cssMap.clear();
+            return null; // Let esbuild handle these files normally
+          });
+
+          build.onLoad({ filter: /\.css$/ }, async args => {
+            const source = await fs.promises.readFile(args.path, 'utf8');
+            let value = cssMap.get(args.path);
+            if (!value || value.source !== source) {
+              const { css } = await postcss([
+                tailwindcssPlugin(),
+                autoprefixer,
+                postcssPresetEnv({ stage: 0 }),
+              ]).process(source, { from: args.path });
+              value = { css, source };
+              cssMap.set(args.path, value);
+            }
+            return { contents: value.css, loader: 'css' };
+          });
+        },
+      },
       sassPlugin({
         loadPaths: [
           './node_modules/@uswds',
@@ -149,6 +180,11 @@ export default async function ({
           },
           {
             from: [`web-client/src/${indexName}`],
+            keepStructure: true,
+            to: ['.'],
+          },
+          {
+            from: ['node_modules/pdfjs-dist/legacy/build/pdf.worker.mjs'],
             keepStructure: true,
             to: ['.'],
           },

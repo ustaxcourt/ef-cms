@@ -1,14 +1,15 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
+} from '@shared/authorization/authorizationClientService';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
+import { getDocketEntriesByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumberAndDocketEntryId';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 
 export const sealDocketEntryInteractor = async (
-  applicationContext: ServerApplicationContext,
   {
     docketEntryId,
     docketEntrySealedTo,
@@ -19,7 +20,7 @@ export const sealDocketEntryInteractor = async (
     docketNumber: string;
   },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<RawDocketEntry> => {
   if (!docketEntrySealedTo) {
     throw new Error('Docket entry sealed to is required');
   }
@@ -33,31 +34,36 @@ export const sealDocketEntryInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const caseToUpdate = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const docketEntry = (
+    await getDocketEntriesByDocketNumberAndDocketEntryId({
+      docketNumbersAndIds: [{ docketEntryId, docketNumber }],
+    })
+  )[0];
 
-  const caseEntity = new Case(caseToUpdate, { authorizedUser });
-
-  const docketEntryEntity = caseEntity.getDocketEntryById({
+  const workItem = await getWorkItemByDocketNumberAndDocketEntryId({
     docketEntryId,
+    docketNumber,
   });
 
-  if (!docketEntryEntity) {
+  const docketEntryEntity = new DocketEntry(
+    {
+      ...docketEntry,
+      qcComplete: !!workItem?.completedAt,
+      qcViewed: !!workItem?.isRead,
+      workItemId: workItem?.workItemId,
+    },
+    { authorizedUser },
+  );
+
+  if (!docketEntry) {
     throw new NotFoundError('Docket entry not found');
   }
 
   docketEntryEntity.sealEntry({ sealedTo: docketEntrySealedTo });
 
-  await applicationContext.getPersistenceGateway().updateDocketEntry({
-    applicationContext,
-    docketEntryId,
-    docketNumber,
-    document: docketEntryEntity.validate().toRawObject(),
-  });
+  const validatedDocketEntry = docketEntryEntity.validate().toRawObject();
 
-  return docketEntryEntity.toRawObject();
+  await upsertDocketEntries([validatedDocketEntry]);
+
+  return validatedDocketEntry;
 };

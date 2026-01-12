@@ -1,34 +1,34 @@
 /* eslint-disable max-lines */
-import { ENTERED_AND_SERVED_EVENT_CODES } from './courtIssuedDocument/CourtIssuedDocumentConstants';
 import { FORMATS, formatNow } from '../utilities/DateHandler';
-import { flatten, omit, pick, sortBy, union, uniq, without } from 'lodash';
-import courtIssuedEventCodesJson from '../../tools/courtIssuedEventCodes.json';
-import externalFilingEventsJson from '../../tools/externalFilingEvents.json';
-import internalFilingEventsJson from '../../tools/internalFilingEvents.json';
+import {
+  flatten,
+  invert,
+  omit,
+  pick,
+  sortBy,
+  union,
+  uniq,
+  without,
+} from 'lodash';
+import { COURT_ISSUED_EVENTS } from '@shared/business/entities/docketEntry/courtIssuedEventCodes';
+import { EXTERNAL_FILING_EVENTS } from '@shared/business/entities/docketEntry/externalFilingEvents';
+import { INTERNAL_FILING_EVENTS } from '@shared/business/entities/docketEntry/internalFilingEvents';
+
+export const STATE_KEYS = {
+  DOCKET_RECORD_TABLE_SORT: 'DOCKET_RECORD_TABLE_SORT',
+  TERM_BUILDER_INFORMATION: 'TERM_BUILDER_INFORMATION',
+  PENDING_REPORT_TABLE_SORT: 'PENDING_REPORT_TABLE_SORT',
+  RECENT_FILINGS_TABLE_SORT: 'RECENT_FILINGS_TABLE_SORT',
+  CONSOLIDATED_CASE_DEADLINES: 'CONSOLIDATED_CASE_DEADLINES',
+} as const;
 
 export const DEBOUNCE_TIME_MILLISECONDS = 500;
 
-interface FilingEvent {
-  documentTitle: string;
-  documentType: string;
-  category: string;
-  eventCode: string;
-  scenario: string;
-  labelPreviousDocument: string;
-  labelFreeText: string;
-  labelFreeText2?: string;
-  ordinalField: string;
-}
-
 // if repeatedly using the same rules to validate how an input should be formatted, capture it here.
 // a number (100 to 99999) followed by a - and a 2 digit year
-export const DOCUMENT_INTERNAL_CATEGORIES_MAP: {
-  [key: string]: FilingEvent[];
-} = internalFilingEventsJson;
-export const DOCUMENT_EXTERNAL_CATEGORIES_MAP: {
-  [key: string]: FilingEvent[];
-} = externalFilingEventsJson;
-export const COURT_ISSUED_EVENT_CODES = courtIssuedEventCodesJson;
+export const COURT_ISSUED_EVENT_CODES = COURT_ISSUED_EVENTS;
+
+export const EVENT_CODES_THAT_ALLOW_FREE_TEXT = ['O', 'NOT', 'OJR'];
 
 export const DOCKET_NUMBER_MATCHER = /^([1-9]\d{2,4}-\d{2})$/;
 
@@ -40,7 +40,12 @@ export const COLD_CASE_LOOKBACK_IN_DAYS = 120;
 
 export const MAX_PRACTITIONER_DOCUMENT_DESCRIPTION_CHARACTERS = 1000;
 
+export const MAX_PREFERRED_LANGUAGE_CHARACTERS = 20;
+export const MAX_PREFERRED_COMMUNICATION_METHOD_CHARACTERS = 20;
+
 export const MAX_STAMP_CUSTOM_TEXT_CHARACTERS = 60;
+
+export const MAX_MESSAGE_SUBJECT_CHARACTERS = 250;
 
 export const EXHIBIT_EVENT_CODES = ['EXH', 'PTE', 'HE', 'TE', 'M123', 'STIP'];
 
@@ -50,12 +55,10 @@ export const STANDING_PRETRIAL_EVENT_CODES = ['SPOS', 'SPTO'];
 
 export const CLERK_OF_THE_COURT_CONFIGURATION = 'clerk-of-court-configuration';
 
-export const LEGACY_DOCUMENT_TYPES = [
-  {
-    documentType: 'Designation of Counsel to Receive Service',
-    eventCode: 'DSC',
-  },
-];
+export const FETCHED_TRIAL_SESSIONS_TIMESTAMP_KEY =
+  'FetchedTrialSessionsTimestamp';
+
+export const PUBLIC_TRIAL_SESSIONS_DATA_KEY = 'publicTrialSessionsData';
 
 // city, state, optional unique ID (generated automatically in testing files)
 export const TRIAL_LOCATION_MATCHER = /^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/;
@@ -63,6 +66,10 @@ export const TRIAL_LOCATION_MATCHER = /^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/;
 export const PARTIES_CODES = { BOTH: 'B', PETITIONER: 'P', RESPONDENT: 'R' };
 
 export const AMENDED_PETITION_FORM_NAME = 'amended-petition-form.pdf';
+
+export const ALL_SELECTION = 'all';
+
+export const MULTI_SELECT_PLACEHOLDER = '- Select one or more -';
 
 export const TRIAL_SESSION_PROCEEDING_TYPES = {
   inPerson: 'In Person',
@@ -83,7 +90,31 @@ export const JURISDICTIONAL_OPTIONS = {
   undersigned: 'Jurisdiction is retained by the undersigned',
 };
 
-export const MOTION_DISPOSITIONS = { DENIED: 'Denied', GRANTED: 'Granted' };
+export type DocketEntryRelation = {
+  disposition: string;
+  docketEntryId: string;
+};
+
+export const MOTION_DISPOSITIONS = {
+  DENIED: 'DENIED',
+  GRANTED: 'GRANTED',
+  GRANTED_IN_PART: 'GRANTED IN PART',
+};
+
+export const MOTION_DISPOSITION_VERBIAGE = {
+  DENIED: {
+    MOTION: 'DENIED BY',
+    ORDER: 'DENYING',
+  },
+  GRANTED: {
+    MOTION: 'GRANTED BY',
+    ORDER: 'GRANTING',
+  },
+  'GRANTED IN PART': {
+    MOTION: 'GRANTED IN PART BY',
+    ORDER: 'GRANTING IN PART',
+  },
+};
 
 export const STRICKEN_FROM_TRIAL_SESSION_MESSAGE =
   'This case is stricken from the trial session';
@@ -107,15 +138,15 @@ export const ALLOWLIST_FEATURE_FLAGS = {
   E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG: {
     key: 'e-consent-fields-enabled-feature-flag',
   },
-  ENTITY_LOCKING_FEATURE_FLAG: {
-    key: 'entity-locking-feature-flag',
-  },
   USE_CHANGE_OF_ADDRESS_LAMBDA: {
     disabledMessage:
       'A flag to know when to use the change of address lambda for processing.',
     key: 'use-change-of-address-lambda',
   },
 };
+
+type FeatureFlags = typeof ALLOWLIST_FEATURE_FLAGS;
+export type FeatureFlagKeys = FeatureFlags[keyof FeatureFlags]['key'];
 
 export const CONFIGURATION_ITEM_KEYS = {
   SECTION_OUTBOX_NUMBER_OF_DAYS: {
@@ -129,7 +160,7 @@ export const SERVICE_INDICATOR_TYPES = {
   SI_ELECTRONIC: 'Electronic',
   SI_NONE: 'None',
   SI_PAPER: 'Paper',
-};
+} as const;
 
 export const DOCUMENT_PROCESSING_STATUS_OPTIONS = {
   COMPLETE: 'complete',
@@ -175,6 +206,12 @@ export const DOCKET_NUMBER_SUFFIXES = {
   WHISTLEBLOWER: 'W',
 };
 
+export const HIGH_PRIORITY_SUFFIXES = [
+  DOCKET_NUMBER_SUFFIXES.LIEN_LEVY, // L
+  DOCKET_NUMBER_SUFFIXES.PASSPORT, // P
+  DOCKET_NUMBER_SUFFIXES.SMALL_LIEN_LEVY, // SL
+];
+
 export const CASE_STATUS_TYPES = {
   assignedCase: 'Assigned - Case', // Case has been assigned to a judge
   assignedMotion: 'Assigned - Motion', // Someone has requested a judge for the case
@@ -207,6 +244,20 @@ export const CLOSED_CASE_STATUSES = [
   CASE_STATUS_TYPES.closed,
   CASE_STATUS_TYPES.closedDismissed,
 ];
+
+export const DEFAULT_FILTERED_BLOCKED_CASE_STATUSES = [
+  CASE_STATUS_TYPES.generalDocket,
+  CASE_STATUS_TYPES.generalDocketReadyForTrial,
+  CASE_STATUS_TYPES.assignedCase,
+  CASE_STATUS_TYPES.assignedMotion,
+];
+
+export const SUGGESTED_TRIAL_SESSION_TITLES = {
+  invalid: 'Unable to create term',
+  success: 'Successfully generated suggested term.',
+  warning: 'Successfully generated suggested term with warnings',
+  validation: 'Please correct the following errors on the page:',
+};
 
 export const DOCUMENT_RELATIONSHIPS = {
   PRIMARY: 'primaryDocument',
@@ -395,7 +446,6 @@ export const ADVANCED_SEARCH_OPINION_TYPES_LIST = [
     label: 'Bench Opinion (Order of Service of Transcript)',
   },
 ];
-
 export const ORDER_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(
   d => d.isOrder && d.eventCode !== BENCH_OPINION_EVENT_CODE,
 ).map(pickEventCode);
@@ -420,12 +470,8 @@ export const OPINION_EVENT_CODES_WITH_BENCH_OPINION = [
   BENCH_OPINION_EVENT_CODE,
 ];
 
-export const DOCUMENT_EXTERNAL_CATEGORIES = Object.keys(
-  DOCUMENT_EXTERNAL_CATEGORIES_MAP,
-);
-export const DOCUMENT_INTERNAL_CATEGORIES = Object.keys(
-  DOCUMENT_INTERNAL_CATEGORIES_MAP,
-);
+export const DOCUMENT_EXTERNAL_CATEGORIES = Object.keys(EXTERNAL_FILING_EVENTS);
+export const DOCUMENT_INTERNAL_CATEGORIES = Object.keys(INTERNAL_FILING_EVENTS);
 export const COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET =
   COURT_ISSUED_EVENT_CODES.filter(d => d.requiresCoversheet).map(pickEventCode);
 
@@ -448,11 +494,11 @@ export const JUDGE_ACTIVITY_REPORT_ORDER_EVENT_CODES = ORDER_EVENT_CODES.filter(
 );
 
 export const EXTERNAL_DOCUMENT_TYPES = flatten(
-  Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
+  Object.values(EXTERNAL_FILING_EVENTS),
 ).map(t => t.documentType);
 
 export const INTERNAL_DOCUMENT_TYPES = flatten(
-  Object.values(DOCUMENT_INTERNAL_CATEGORIES_MAP),
+  Object.values(INTERNAL_FILING_EVENTS),
 ).map(t => t.documentType);
 
 export const COURT_ISSUED_DOCUMENT_TYPES = COURT_ISSUED_EVENT_CODES.map(
@@ -460,39 +506,51 @@ export const COURT_ISSUED_DOCUMENT_TYPES = COURT_ISSUED_EVENT_CODES.map(
 );
 
 export const AUTOGENERATED_EXTERNAL_DOCUMENT_TYPES = flatten(
-  Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
+  Object.values(EXTERNAL_FILING_EVENTS),
 )
   .filter((d: Record<string, any>) => d.isAutogenerated)
   .map(d => d.documentType);
 
 export const AUTOGENERATED_INTERNAL_DOCUMENT_TYPES = flatten(
-  Object.values(DOCUMENT_INTERNAL_CATEGORIES_MAP),
+  Object.values(INTERNAL_FILING_EVENTS),
 )
   .filter((d: Record<string, any>) => d.isAutogenerated)
   .map(d => d.documentType);
 
 export const EXTERNAL_DOCUMENTS_ARRAY = flatten(
-  Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
+  Object.values(EXTERNAL_FILING_EVENTS),
 );
 
 export const INTERNAL_DOCUMENTS_ARRAY = flatten(
-  Object.values(DOCUMENT_INTERNAL_CATEGORIES_MAP),
+  Object.values(INTERNAL_FILING_EVENTS),
 );
 
+export const MINUTE_SHEET_EVENT_CODES = [
+  ...COURT_ISSUED_EVENTS.filter(d => d.scenario === 'Type F').map(
+    d => d.eventCode,
+  ),
+];
+
 export const MOTION_EVENT_CODES = [
-  ...DOCUMENT_INTERNAL_CATEGORIES_MAP['Motion'].map(entry => {
+  ...INTERNAL_FILING_EVENTS['Motion'].map(entry => {
+    return entry.eventCode;
+  }),
+];
+
+export const NOTICE_EVENT_CODES = [
+  ...INTERNAL_FILING_EVENTS['Notice'].map(entry => {
     return entry.eventCode;
   }),
 ];
 
 export const SIMULTANEOUS_DOCUMENT_EVENT_CODES = [
-  ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Simultaneous Brief'].map(entry => {
+  ...EXTERNAL_FILING_EVENTS['Simultaneous Brief'].map(entry => {
     return entry.eventCode;
   }),
 ];
 
 export const SERIATIM_DOCUMENT_EVENT_CODES = [
-  ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Seriatim Brief'].map(entry => {
+  ...EXTERNAL_FILING_EVENTS['Seriatim Brief'].map(entry => {
     return entry.eventCode;
   }),
 ];
@@ -532,7 +590,6 @@ export const SCENARIOS = [
   'Nonstandard G',
   'Nonstandard H',
   'Nonstandard I',
-  'Nonstandard J',
   'Type A',
   'Type B',
   'Type C',
@@ -550,7 +607,6 @@ export const DECISION_EVENT_CODE = 'DEC';
 
 export const LODGED_EVENT_CODE = 'MISCL';
 
-/* eslint-disable sort-keys-fix/sort-keys-fix */
 export const OBJECTIONS_OPTIONS_MAP = {
   YES: 'Yes',
   NO: 'No',
@@ -559,17 +615,15 @@ export const OBJECTIONS_OPTIONS_MAP = {
 export const OBJECTIONS_OPTIONS = [...Object.values(OBJECTIONS_OPTIONS_MAP)];
 
 export const INTERNAL_DOCUMENT_TYPES_REQUIRING_OBJECTION = new Set([
-  ...DOCUMENT_INTERNAL_CATEGORIES_MAP['Motion'].map(entry => {
+  ...INTERNAL_FILING_EVENTS['Motion'].map(entry => {
     return entry.documentType;
   }),
   'Application to Take Deposition',
 ]);
 
 const EXTERNAL_DOCUMENTS_REQUIRING_OBJECTION = [
-  ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Motion'],
-  DOCUMENT_EXTERNAL_CATEGORIES_MAP['Application'].find(
-    doc => doc.eventCode === 'APLD',
-  )!,
+  ...EXTERNAL_FILING_EVENTS['Motion'],
+  EXTERNAL_FILING_EVENTS['Application'].find(doc => doc.eventCode === 'APLD')!,
 ];
 
 export const EXTERNAL_DOCUMENT_TYPES_REQUIRING_OBJECTION = new Set(
@@ -581,7 +635,7 @@ export const EXTERNAL_DOCUMENT_CODES_REQUIRING_OBJECTION = new Set(
 );
 
 export const CONTACT_CHANGE_DOCUMENT_TYPES = flatten(
-  Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
+  Object.values(EXTERNAL_FILING_EVENTS),
 )
   .filter((d: Record<string, any>) => d.isContactChange)
   .map(d => d.documentType);
@@ -628,10 +682,19 @@ export const TRACKED_DOCUMENT_TYPES_EVENT_CODES = union(
 );
 
 export const SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES = flatten([
-  ...Object.values(DOCUMENT_INTERNAL_CATEGORIES_MAP),
+  ...Object.values(INTERNAL_FILING_EVENTS),
 ])
   .filter((internalEvent: Record<string, any>) => internalEvent.caseDecision)
   .map(x => x.eventCode);
+
+export const ENTERED_AND_SERVED_EVENT_CODES = [
+  'ODJ',
+  'OD',
+  'ODD',
+  'OAD',
+  'DEC',
+  'SDEC',
+];
 
 export const NON_MULTI_DOCKETABLE_EVENT_CODES = [
   ...ENTERED_AND_SERVED_EVENT_CODES,
@@ -639,10 +702,16 @@ export const NON_MULTI_DOCKETABLE_EVENT_CODES = [
 ];
 
 export const MULTI_DOCKET_FILING_EVENT_CODES = flatten([
-  ...Object.values(DOCUMENT_INTERNAL_CATEGORIES_MAP),
+  ...Object.values(INTERNAL_FILING_EVENTS),
 ])
   .filter((internalEvent: Record<string, any>) => !internalEvent.caseDecision)
   .map(x => x.eventCode);
+
+export const ORDER_RESPONSE_DOCUMENTS_ALLOWLIST = uniq(
+  [...EXTERNAL_DOCUMENTS_ARRAY, ...INTERNAL_DOCUMENTS_ARRAY]
+    .filter((doc: Record<string, any>) => doc.allowOrderResponse)
+    .map(x => x.eventCode),
+);
 
 export const STAMPED_DOCUMENTS_ALLOWLIST = uniq(
   [...EXTERNAL_DOCUMENTS_ARRAY, ...INTERNAL_DOCUMENTS_ARRAY]
@@ -751,6 +820,12 @@ export const SPOS_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
   doc => doc.eventCode === 'SPOS',
 )!;
 
+export const AUTO_GENERATED_STATUS_REPORT_ORDER_DESCRIPTIONS = {
+  statusReport: 'Status Report Due',
+  statusReportStipulatedDecision:
+    'Status Report or Proposed Stipulated Decision Due',
+};
+
 const AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES_WITH_NAMES = {
   orderForFilingFee: {
     content:
@@ -844,6 +919,11 @@ export const SYSTEM_GENERATED_DOCUMENT_TYPES = {
     documentType: 'Notice of Change to In Person Proceeding',
     eventCode: 'NOIP',
   },
+  noticeOfChangeOfTrialLocation: {
+    documentTitle: 'Notice of Change of Trial Location',
+    documentType: 'Notice of Change of Trial Location',
+    eventCode: 'NCTL',
+  },
   noticeOfTrial: {
     documentTitle: 'Notice of Trial on [Date] at [Time]',
     documentType: 'Notice of Trial',
@@ -872,12 +952,25 @@ export const SYSTEM_GENERATED_DOCUMENT_TYPES = {
   ...AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES_WITH_NAMES,
 };
 
+export const INTERNAL_DOCUMENT_TYPES_AND_NOTR = [
+  ...INTERNAL_DOCUMENTS_ARRAY.map(doc => ({
+    ...doc,
+    label: doc.documentType,
+    value: doc.eventCode,
+  })),
+  {
+    ...SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfReceiptOfPetition,
+    label:
+      SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfReceiptOfPetition.documentType,
+  },
+];
+
 export const AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES = flatten(
   Object.values(AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES_WITH_NAMES),
 );
 
 export const PROPOSED_STIPULATED_DECISION_EVENT_CODE = flatten(
-  Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
+  Object.values(EXTERNAL_FILING_EVENTS),
 ).find(d => d.documentType === 'Proposed Stipulated Decision')!.eventCode;
 export const STIPULATED_DECISION_EVENT_CODE = COURT_ISSUED_EVENT_CODES.find(
   d => d.documentType === 'Stipulated Decision',
@@ -1091,20 +1184,42 @@ export const ROLES = {
   privatePractitioner: 'privatePractitioner',
   reportersOffice: 'reportersOffice',
   trialClerk: 'trialclerk',
+  zendesk: 'zendesk',
 } as const;
 export type Role = (typeof ROLES)[keyof typeof ROLES];
+
+export const ACCOUNT_STATUS = {
+  active: 'active',
+  inactive: 'inactive',
+};
+export type AccountStatus =
+  (typeof ACCOUNT_STATUS)[keyof typeof ACCOUNT_STATUS];
 
 // this isn't a real role someone can login with, which is why
 // it's a separate constant.
 export const SYSTEM_ROLE = 'System';
 
+export const FILING_TYPES_DICT = {
+  MYSELF: 'Myself',
+  MYSELF_AND_SPOUSE: 'Myself and my spouse',
+  BUSINESS: 'A business',
+  OTHER: 'Other',
+  PETITIONER: 'Individual petitioner',
+  PETITIONER_SPOUSE: 'Petitioner and spouse',
+};
+
 export const FILING_TYPES = {
-  [ROLES.petitioner]: ['Myself', 'Myself and my spouse', 'A business', 'Other'],
+  [ROLES.petitioner]: [
+    FILING_TYPES_DICT.MYSELF,
+    FILING_TYPES_DICT.MYSELF_AND_SPOUSE,
+    FILING_TYPES_DICT.BUSINESS,
+    FILING_TYPES_DICT.OTHER,
+  ],
   [ROLES.privatePractitioner]: [
-    'Individual petitioner',
-    'Petitioner and spouse',
-    'A business',
-    'Other',
+    FILING_TYPES_DICT.PETITIONER,
+    FILING_TYPES_DICT.PETITIONER_SPOUSE,
+    FILING_TYPES_DICT.BUSINESS,
+    FILING_TYPES_DICT.OTHER,
   ],
 } as const;
 
@@ -1196,7 +1311,7 @@ export const ALL_STATE_OPTIONS = {
   Other: 'Other',
 };
 
-export type AbbrevatedStates =
+export type AbbreviatedStates =
   | keyof typeof US_STATES
   | keyof typeof US_STATES_OTHER;
 
@@ -1379,11 +1494,34 @@ export const TRIAL_CITY_STRINGS = SMALL_CITIES.map(
   trialLocation => `${trialLocation.city}, ${trialLocation.state}`,
 );
 
+export const REGULAR_TRIAL_CITY_STRINGS = COMMON_CITIES.map(
+  trialLocation => `${trialLocation.city}, ${trialLocation.state}`,
+);
+
 export const LEGACY_TRIAL_CITY_STRINGS = LEGACY_TRIAL_CITIES.map(
   trialLocation => `${trialLocation.city}, ${trialLocation.state}`,
 );
 
-export const SESSION_TERMS = ['Winter', 'Fall', 'Spring', 'Summer'];
+export const SESSION_TERMS_DICT = {
+  WINTER: 'Winter',
+  FALL: 'Fall',
+  SPRING: 'Spring',
+  SUMMER: 'Summer',
+} as const;
+
+export const SESSION_TERMS = [
+  SESSION_TERMS_DICT.WINTER,
+  SESSION_TERMS_DICT.FALL,
+  SESSION_TERMS_DICT.SPRING,
+  SESSION_TERMS_DICT.SUMMER,
+];
+
+export const SESSION_TERMS_BY_MONTH = {
+  fall: [9, 10, 11, 12],
+  spring: [4, 5, 6],
+  summer: [7, 8],
+  winter: [1, 2, 3],
+};
 
 export const SESSION_TYPES = {
   regular: 'Regular',
@@ -1424,7 +1562,6 @@ export const CHAMBERS_SECTION = 'chambers';
 export const CLERK_OF_COURT_SECTION = 'clerkofcourt';
 export const DOCKET_SECTION = 'docket';
 export const FLOATER_SECTION = 'floater';
-export const IRS_SYSTEM_SECTION = 'irsSystem';
 export const PETITIONS_SECTION = 'petitions';
 export const REPORTERS_OFFICE_SECTION = 'reportersOffice';
 export const TRIAL_CLERKS_SECTION = 'trialClerks';
@@ -1555,18 +1692,20 @@ export const ADMISSIONS_STATUS_OPTIONS = [
 
 export const DEFAULT_PROCEDURE_TYPE = PROCEDURE_TYPES[0];
 
-export const CASE_SEARCH_MIN_YEAR = 1986;
 export const CASE_SEARCH_PAGE_SIZE = 25; // number of results returned for each page when searching for a case
-export const CASE_INVENTORY_PAGE_SIZE = 25; // number of results returned for each page in the case inventory report
 export const CASE_LIST_PAGE_SIZE = 20; // number of results returned for each page for the external user dashboard case list
-export const DEADLINE_REPORT_PAGE_SIZE = 100; // number of results returned for each page for the case deadline report
 export const TODAYS_ORDERS_PAGE_SIZE = 100; // number of results returned for each page for the today's orders page
 export const PRACTITIONER_SEARCH_PAGE_SIZE = 100; // number of results returned for each page for the practitioner search page
+export const CASE_INVENTORY_PAGE_SIZE = 100; // number of results returned for each page in the case inventory report when rendered in the browser
+export const CASE_INVENTORY_PRINT_REPORT_MAX_SIZE = 20000; // number of results to include in the printed version of the case inventory report
+export const PENDING_REPORT_PAGE_SIZE = 100; // number of results displayed for each page in the pending report
+export const COLD_CASE_REPORT_PAGE_SIZE = 100; // number of results displayed for each page in the cold case report
+export const CASE_DEADLINES_REPORT_PAGE_SIZE = 100; // number of results displayed for each page in the case deadlines report
 
 // TODO: event codes need to be reorganized
 export const ALL_EVENT_CODES = flatten([
-  ...Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
-  ...Object.values(DOCUMENT_INTERNAL_CATEGORIES_MAP),
+  ...Object.values(EXTERNAL_FILING_EVENTS),
+  ...Object.values(INTERNAL_FILING_EVENTS),
   ...Object.values(INITIAL_DOCUMENT_TYPES),
   ...Object.values(MINUTE_ENTRIES_MAP),
   ...Object.values(SYSTEM_GENERATED_DOCUMENT_TYPES),
@@ -1577,8 +1716,8 @@ export const ALL_EVENT_CODES = flatten([
 
 export const ALL_DOCUMENT_TYPES_MAP = (() => {
   const allFilingEvents = flatten([
-    ...Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
-    ...Object.values(DOCUMENT_INTERNAL_CATEGORIES_MAP),
+    ...Object.values(EXTERNAL_FILING_EVENTS),
+    ...Object.values(INTERNAL_FILING_EVENTS),
   ]);
   const filingEventTypes = allFilingEvents;
   const orderDocTypes = ORDER_TYPES;
@@ -1639,10 +1778,15 @@ export const DOCKET_ENTRY_SEALED_TO_TYPES = {
 export const ASCENDING: 'asc' = 'asc';
 export const DESCENDING: 'desc' = 'desc';
 
-export const CHRONOLOGICALLY_ASCENDING = 'Oldest to newest';
-export const CHRONOLOGICALLY_DESCENDING = 'Newest to oldest';
-export const ALPHABETICALLY_ASCENDING = 'In A-Z ascending order';
-export const ALPHABETICALLY_DESCENDING = 'In Z-A descending order';
+export const SORT_ASCENDING_TEXT = {
+  date: 'Oldest to newest',
+  string: 'In A-Z ascending order',
+};
+
+export const SORT_DESCENDING_TEXT = {
+  date: 'Newest to oldest',
+  string: 'In Z-A descending order',
+};
 
 export const PRACTITIONER_DOCUMENT_TYPES_MAP = {
   APPLICATION_PACKAGE: 'Application Package',
@@ -1669,7 +1813,9 @@ export const PENALTY_TYPES = {
 
 export const MAX_ELASTICSEARCH_PAGINATION = 10000;
 export const MAX_SEARCH_CLIENT_RESULTS = 200;
-export const MAX_SEARCH_RESULTS = 100;
+export const MAX_CASE_SEARCH_RESULTS = 100;
+export const MAX_DOCUMENT_SEARCH_RESULTS = 5000;
+export const ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE = 100;
 
 export const JUDGE_TITLES = [
   'Judge',
@@ -1736,26 +1882,19 @@ export type CreatedCaseType = {
   };
 };
 
+export const USER_MESSAGE_TYPES = {
+  error: 'ERROR',
+  success: 'SUCCESS',
+  warning: 'WARNING',
+};
+
+export type UserMessageType =
+  (typeof USER_MESSAGE_TYPES)[keyof typeof USER_MESSAGE_TYPES];
+
 export const BROADCAST_MESSAGES = {
   appHasUpdated: 'appHasUpdated',
   userLogout: 'userLogout',
-  idleLogout: 'idleLogout',
-  idleStatusActive: 'idleStatusActive',
-  stayLoggedIn: 'stayLoggedIn',
 };
-
-export const IDLE_LOGOUT_STATES = {
-  INITIAL: 'INITIAL',
-  MONITORING: 'MONITORING',
-  COUNTDOWN: 'COUNTDOWN',
-};
-
-export type IdleLogoutStateType =
-  (typeof IDLE_LOGOUT_STATES)[keyof typeof IDLE_LOGOUT_STATES];
-
-export type IdleLogoutType =
-  | (typeof BROADCAST_MESSAGES)['idleLogout']
-  | (typeof BROADCAST_MESSAGES)['userLogout'];
 
 export const STATUS_REPORT_ORDER_OPTIONS = {
   issueOrderOptions: {
@@ -1777,3 +1916,231 @@ export const TROUBLESHOOTING_INFO = {
   FILE_UPLOAD_TROUBLESHOOTING_LINK:
     'https://ustaxcourt.gov/dawson_faqs_case_management.html#FileUpload',
 };
+
+export const MINUTE_SHEET_FORM_SECTION_MAP = {
+  actionsAndFilingsSection: 'actionsAndFilingsSection',
+  caseMetadataSection: 'caseMetadataSection',
+  exhibitsSection: 'exhibitsSection',
+  jurisdictionSection: 'jurisdictionSection',
+  motionsSection: 'motionsSection',
+  ordersSection: 'ordersSection',
+  petitionersSection: 'petitionersSection',
+  respondentsSection: 'respondentsSection',
+  trialBriefSection: 'trialBriefSection',
+  trialSessionMetadataSection: 'trialSessionMetadataSection',
+  witnessesSection: 'witnessesSection',
+} as const;
+
+export const TRIAL_OPTIONS = {
+  trial: 'Trial',
+  partialTrial: 'Partial Trial',
+  furtherTrial: 'Further Trial',
+} as const;
+export type TrialOption = keyof typeof TRIAL_OPTIONS;
+
+export const HEARING_OPTIONS = {
+  hearing: 'Hearing',
+  motionHearing: 'Motion Hearing',
+  furtherHearing: 'Further Hearing',
+} as const;
+export type HearingOption = keyof typeof HEARING_OPTIONS;
+
+export const TRIAL_HEARING_OPTIONS = {
+  ...TRIAL_OPTIONS,
+  ...HEARING_OPTIONS,
+} as const;
+export type TrialHearingOption = keyof typeof TRIAL_HEARING_OPTIONS;
+
+export const STATUS_REPORT_ORDERED_FOR_OPTIONS = {
+  petitioner: 'Petitioner',
+  respondent: 'Respondent',
+  joint: 'Joint',
+  other: 'Other',
+} as const;
+export type StatusReportOrderedForOption =
+  | keyof typeof STATUS_REPORT_ORDERED_FOR_OPTIONS
+  | '';
+
+export const MOTION_FILED_BY_OPTIONS = {
+  intervenor: 'Intervenor',
+  joint: 'Joint',
+  petitioner: 'Petitioner',
+  respondent: 'Respondent',
+  thirdParty: 'Third Party',
+} as const;
+export type MotionFiledByOption = keyof typeof MOTION_FILED_BY_OPTIONS;
+
+export const MOTION_STATUS_OPTIONS = {
+  seeOrder: 'See Order',
+  cav: 'CAV',
+  denied: 'Denied',
+  granted: 'Granted',
+  filed: 'Filed',
+  lodged: 'Lodged',
+} as const;
+export type MotionStatusOption = keyof typeof MOTION_STATUS_OPTIONS;
+
+export const MOTION_TYPE_OPTIONS = {
+  motionToDismissLackOfProsecution: 'Motion to Dismiss - Lack of Prosecution',
+  motionToDismissLackOfJurisdiction: 'Motion to Dismiss - Lack of Jurisdiction',
+  motionToDismissFailureToProperlyProsecute:
+    'Motion to Dismiss - Failure to Properly Prosecute',
+  motionToDismiss: 'Motion to Dismiss',
+  motionForContinuance: 'Motion for Continuance',
+  motionForGeneralContinuance: 'Motion for General Continuance',
+} as const;
+export type MotionTypeOption = keyof typeof MOTION_TYPE_OPTIONS;
+
+export const MOTION_OBJECTION_OPTIONS = {
+  noObjection: 'No Objection',
+  objection: 'Objection',
+  unknown: 'Unknown',
+} as const;
+export type MotionObjectionOption = keyof typeof MOTION_OBJECTION_OPTIONS;
+export const MOTION_OBJECTION_OPTIONS_INVERTED = invert(
+  MOTION_OBJECTION_OPTIONS,
+);
+
+export const ACTION_DOCUMENT_TYPE_OPTIONS = {
+  entryOfAppearance: 'Entry of Appearance',
+  limitedEntryOfAppearance: 'Limited Entry of Appearance',
+  proposedStipulatedDecision: 'Proposed Stipulated Decision',
+  orderToShowCause: 'Order to Show Cause',
+  filing: 'Filing',
+  motion: 'Motion',
+  notice: 'Notice',
+  order: 'Order',
+  other: 'Other',
+} as const;
+export type ActionDocumentTypeOption =
+  keyof typeof ACTION_DOCUMENT_TYPE_OPTIONS;
+export const ACTION_DOCUMENT_TYPE_OPTIONS_INVERTED = invert(
+  ACTION_DOCUMENT_TYPE_OPTIONS,
+);
+
+export const ACTION_FILED_BY_OPTIONS = {
+  petitioner: 'Petitioner',
+  respondent: 'Respondent',
+  practitioner: 'Practitioner',
+  joint: 'Joint',
+  other: 'Other',
+  court: 'Court',
+} as const;
+export type ActionFiledByOption = keyof typeof ACTION_FILED_BY_OPTIONS;
+export const ACTION_FILED_BY_OPTIONS_INVERTED = invert(ACTION_FILED_BY_OPTIONS);
+
+export const ACTION_STATUS_OPTIONS = {
+  seeOrder: 'See Order',
+  cav: 'CAV',
+  denied: 'Denied',
+  deniedAsMoot: 'Denied as Moot',
+  granted: 'Granted',
+  filed: 'Filed',
+  lodged: 'Lodged',
+} as const;
+export type ActionStatusOption = keyof typeof ACTION_STATUS_OPTIONS;
+
+export const BRIEF_TYPE_OPTIONS = {
+  seriatimBrief: 'Seriatim Brief',
+  simultaneous: 'Simultaneous Brief',
+  simultaneousMemoranda: 'Simultaneous Memoranda of Law',
+  simultaneousSupplemental: 'Simultaneous Supplemental Brief',
+} as const;
+export type BriefTypeOption = keyof typeof BRIEF_TYPE_OPTIONS;
+
+export const EXHIBIT_STATUS_OPTIONS = {
+  admitted: 'Admitted',
+  notAdmitted: 'Not admitted',
+  withdrawn: 'Withdrawn',
+  notOffered: 'Not offered',
+  reserved: 'Reserved',
+  identificationOnly: 'Identification only',
+  demonstrative: 'Demonstrative',
+  otherSeeNote: 'Other - see note',
+} as const;
+export type ExhibitStatusOption = keyof typeof EXHIBIT_STATUS_OPTIONS;
+
+export const PARTY_TYPE_OPTIONS_MAP = {
+  petitioner: 'Petitioner',
+  respondent: 'Respondent',
+} as const;
+export type PartyTypeOption = keyof typeof PARTY_TYPE_OPTIONS_MAP;
+
+export const BRIEF_SUBTYPE = {
+  answering: 'Answering',
+  memoranda: 'Memoranda',
+  opening: 'Opening',
+  reply: 'Reply',
+  simultaneousSupplemental: '',
+  surReply: 'Sur-reply',
+} as const;
+
+export const PETITIONER_ROLE_OPTIONS = {
+  counsel: 'Counsel',
+  proSe: 'Pro Se',
+  proSeSe: 'Pro Se Se',
+  intervenor: 'Intervenor',
+  participant: 'Participant',
+  translator: 'Translator',
+  studentIntern: 'Student Intern',
+  thirdParty: 'Third Party',
+  other: 'Other',
+} as const;
+export type PetitionerRoleOption = keyof typeof PETITIONER_ROLE_OPTIONS;
+export const PETITIONER_ROLE_OPTIONS_INVERTED = invert(PETITIONER_ROLE_OPTIONS);
+
+export const RESPONDENT_ROLE_OPTIONS = {
+  counsel: 'Counsel',
+  thirdParty: 'Third Party',
+  other: 'Other',
+} as const;
+export type RespondentRoleOption = keyof typeof RESPONDENT_ROLE_OPTIONS;
+export const RESPONDENT_ROLE_OPTIONS_INVERTED = invert(RESPONDENT_ROLE_OPTIONS);
+export const MAX_NUMBER_DEFICIENCY_STATISTICS = 12;
+export const MAX_NUMBER_DEFICIENCY_STATISTIC_PENALTIES = 10;
+
+export const MOTION_ORDER_RESPONSE_OPTIONS = {
+  issueOrderOptions: {
+    ALL_CASES: 'All cases in this group',
+    THIS_CASE_ONLY: 'Just this case',
+  },
+  orderType: 'motionOrderResponse',
+};
+
+export const MAX_ORDER_RESPONSE_TEXT_CHARACTERS = 240;
+
+export const TERM_GENERATOR_DEFAULT_VALUES = {
+  MAX_SESSIONS_PER_WEEK: 6,
+  MAX_SESSIONS_PER_LOCATION: 5,
+  REGULAR_CASE_MINIMUM_QUANTITY: 40,
+  REGULAR_CASE_MAX_QUANTITY: 100,
+  SMALL_CASE_MINIMUM_QUANTITY: 40,
+  SMALL_CASE_MAX_QUANTITY: 125,
+  HYBRID_CASE_MINIMUM_QUANTITY: 50,
+  HYBRID_CASE_MAX_QUANTITY: 100,
+} as const;
+
+export const MOBILE_SCREEN_BREAKPOINT = 640;
+
+export const ALLOWED_EVENT_CODES = [
+  'P',
+  'ATP',
+  'DISC',
+  'NOT',
+  'NOTR',
+  'NTD',
+  'SPOS',
+  'SPTO',
+  'TCRP',
+  'NORP',
+  'NOIP',
+  'NCTL',
+  'NODC',
+];
+export const PRO_SE_CHECKLIST = 'pro-se-checklist';
+
+export const NOT_PROVIDED = 'Not Provided';
+
+export const AWS_BATCH_POLLING_INTERVAL = 5000;
+
+export const AWS_BATCH_POLLING_TIMEOUT = 600000;

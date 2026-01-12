@@ -8,9 +8,14 @@ import classNames from 'classnames';
 
 const modalRoot = window.document.getElementById('modal-root');
 
-const OverlayUnRef = connect(
+type OverlayUnRefProps = {
+  onEscSequence: string;
+  className: string;
+};
+
+const OverlayUnRef: React.FC<OverlayUnRefProps> = connect(
   {
-    onEscSequence: sequences[props.onEscSequence],
+    onEscSequence: sequences[props`onEscSequence`],
   },
   function OverlayUnRef({
     children,
@@ -19,10 +24,17 @@ const OverlayUnRef = connect(
     onEscSequence,
     preventEsc,
     preventScrolling,
+  }: {
+    onEscSequence?: (event: Event) => void | boolean;
+    children?: React.ReactNode;
+    className?: string;
+    forwardedRef?: React.Ref<HTMLDialogElement>;
+    preventEsc?: boolean;
+    preventScrolling?: boolean;
   }) {
     if (!onEscSequence) onEscSequence = () => {};
 
-    const elRef = React.useRef(null);
+    const elRef = React.useRef(null) as React.RefObject<HTMLDivElement | null>;
 
     const getEl = () => {
       if (!elRef.current) {
@@ -40,9 +52,7 @@ const OverlayUnRef = connect(
           });
         } else {
           window.document.body.classList.remove('no-scroll');
-          window.document.removeEventListener('touchmove', touchmoveTriggered, {
-            passive: false,
-          });
+          window.document.removeEventListener('touchmove', touchmoveTriggered);
         }
       };
 
@@ -63,11 +73,11 @@ const OverlayUnRef = connect(
         return onEscSequence(event);
       };
 
-      modalRoot.appendChild(getEl());
+      modalRoot?.appendChild(getEl());
       window.document.addEventListener('keydown', keydownTriggered, false);
       toggleNoScroll(true);
       return () => {
-        modalRoot.removeChild(getEl());
+        modalRoot?.removeChild(getEl());
         window.document.removeEventListener('keydown', keydownTriggered, false);
         toggleNoScroll(false);
       };

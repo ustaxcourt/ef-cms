@@ -1,15 +1,22 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import { RunableSequence as RunnableSequence } from 'cerebral';
 
-export const PaperPetitionEmail = connect(
+type PaperPetitionEmailProps = {
+  bind: any;
+  contactType: string;
+  onBlur: () => void;
+}
+
+export const PaperPetitionEmail: React.FC<PaperPetitionEmailProps> = connect(
   {
     bind: props.bind,
-    contactType: props.contactType,
-    data: state[props.bind],
+    contactType: props`contactType`,
+    data: state[props`bind`],
+    onBlur: props`onBlur`,
     updateFormValueAndSecondaryContactInfoSequence:
       sequences.updateFormValueAndSecondaryContactInfoSequence,
     validationErrors: state.validationErrors,
@@ -17,9 +24,15 @@ export const PaperPetitionEmail = connect(
   function PaperPetitionEmail({
     contactType,
     data,
-    onBlurSequence,
+    onBlur,
     updateFormValueAndSecondaryContactInfoSequence,
     validationErrors = {},
+  }: {
+    contactType: string;
+    data: Record<string, Record<string, any>>;
+    onBlur: () => void;
+    updateFormValueAndSecondaryContactInfoSequence: Function | RunnableSequence;
+    validationErrors: Record<string, Record<string, any>>;
   }) {
     return (
       <>
@@ -40,9 +53,9 @@ export const PaperPetitionEmail = connect(
             id={`paper-petition-email-${contactType}`}
             name={`${contactType}.paperPetitionEmail`}
             type="email"
-            value={data[contactType].paperPetitionEmail || ''}
+            value={(data[contactType]?.paperPetitionEmail as string) || ''}
             onBlur={() => {
-              onBlurSequence();
+              onBlur();
             }}
             onChange={e => {
               updateFormValueAndSecondaryContactInfoSequence({

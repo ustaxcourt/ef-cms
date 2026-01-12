@@ -2,11 +2,12 @@ import { NotFoundError } from '../../../errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
-import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
+} from '@shared/authorization/authorizationClientService';
+import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { UnknownAuthUser } from '../../../../../shared/src/business/entities/authUser/AuthUser';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { updateTrialSession } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
 
 /**
  * dismissNOTTReminderForTrialInteractor
@@ -15,7 +16,6 @@ import { UnknownAuthUser } from '../../../../../shared/src/business/entities/aut
  * @param {object} providers.trialSessionId the trial session ID
  */
 export const dismissNOTTReminderForTrialInteractor = async (
-  applicationContext: ServerApplicationContext,
   { trialSessionId }: { trialSessionId: string },
   authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
@@ -23,10 +23,7 @@ export const dismissNOTTReminderForTrialInteractor = async (
     throw new UnauthorizedError('Unauthorized to dismiss NOTT reminder');
   }
 
-  const currentTrialSession = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById({
-      applicationContext,
+  const currentTrialSession = await getTrialSessionById({
       trialSessionId,
     });
 
@@ -36,11 +33,10 @@ export const dismissNOTTReminderForTrialInteractor = async (
 
   const updatedTrialSessionEntity: TrialSession = new TrialSession({
     ...currentTrialSession,
-    dismissedAlertForNOTT: true,
+    dismissedAlertForNott: true,
   });
 
-  await applicationContext.getPersistenceGateway().updateTrialSession({
-    applicationContext,
+  await updateTrialSession({
     trialSessionToUpdate: updatedTrialSessionEntity.validate().toRawObject(),
   });
 };

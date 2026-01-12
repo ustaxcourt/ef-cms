@@ -1,4 +1,12 @@
-import { PUBLIC_DOCKET_RECORD_FILTER_OPTIONS } from '../../../shared/src/business/entities/EntityConstants';
+import {
+  DESCENDING,
+  PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
+  PUBLIC_TRIAL_SESSIONS_DATA_KEY,
+  STATE_KEYS,
+} from '../../../shared/src/business/entities/EntityConstants';
+import { PublicTrialSessionDetails } from '@web-api/business/useCases/trialSessions/getPublicTrialSessionDetailsInteractor';
+import { RawUser } from '@shared/business/entities/User';
+import { TrialSessionInfoDTO } from '@shared/business/dto/trialSessions/TrialSessionInfoDTO';
 import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advancedDocumentSearchHelper';
 import { advancedSearchHelper } from './computeds/AdvancedSearch/advancedSearchHelper';
 import { caseSearchByNameHelper } from './computeds/AdvancedSearch/CaseSearchByNameHelper';
@@ -10,12 +18,18 @@ import { practitionerSearchHelper } from '@web-client/presenter/computeds/Advanc
 import { publicAlertHelper } from './computeds/Public/publicAlertHelper';
 import { publicCaseDetailHeaderHelper } from './computeds/Public/publicCaseDetailHeaderHelper';
 import { publicCaseDetailHelper } from './computeds/Public/publicCaseDetailHelper';
+import { publicTrialSessionDetailsHelper } from '@web-client/presenter/computeds/Public/publicTrialSessionDetailsHelper';
+import { publicTrialSessionsHelper } from '@web-client/presenter/computeds/Public/publicTrialSessionsHelper';
 import { templateHelper } from './computeds/templateHelper';
 import { todaysOpinionsHelper } from './computeds/Public/todaysOpinionsHelper';
 import { todaysOrdersHelper } from './computeds/Public/todaysOrdersHelper';
+type PublicAdvancedSearchForm = { caseSearchByName: { petitionerName: string }; opinionSearch?: Record<string, boolean>; orderSearch?: Record<string, boolean> };
 
 const computeds = {
-  advancedDocumentSearchHelper,
+  advancedDocumentSearchHelper:
+    advancedDocumentSearchHelper as unknown as ReturnType<
+      typeof advancedDocumentSearchHelper
+    >,
   advancedSearchHelper,
   alertHelper: publicAlertHelper,
   caseSearchByNameHelper,
@@ -30,15 +44,42 @@ const computeds = {
   publicCaseDetailHelper: publicCaseDetailHelper as unknown as ReturnType<
     typeof publicCaseDetailHelper
   >,
+  publicTrialSessionDetailsHelper:
+    publicTrialSessionDetailsHelper as unknown as ReturnType<
+      typeof publicTrialSessionDetailsHelper
+    >,
+  publicTrialSessionsHelper: publicTrialSessionsHelper as unknown as ReturnType<
+    typeof publicTrialSessionsHelper
+  >,
   templateHelper,
-  todaysOpinionsHelper,
-  todaysOrdersHelper,
+  todaysOpinionsHelper: todaysOpinionsHelper as unknown as ReturnType<
+    typeof todaysOpinionsHelper
+  >,
+  todaysOrdersHelper: todaysOrdersHelper as unknown as ReturnType<
+    typeof todaysOrdersHelper
+  >,
 };
 
 export const baseState = {
-  advancedSearchForm: {},
+  [STATE_KEYS.DOCKET_RECORD_TABLE_SORT]: {} as {
+    sortField: string;
+    sortOrder: 'asc' | 'desc';
+  },
+  [PUBLIC_TRIAL_SESSIONS_DATA_KEY]: {} as {
+    judges?: { [key: string]: string };
+    locations?: { [key: string]: string };
+    sessionTypes?: { [key: string]: string };
+    pageNumber?: number;
+    proceedingType?: string;
+  },
+  advancedSearchForm: undefined as PublicAdvancedSearchForm | undefined,
   advancedSearchTab: 'case',
-  alertError: null,
+  alertError: null as null | {
+    title?: string;
+    message?: string;
+    messages?: string[];
+    responseCode?: number;
+  },
   alertSuccess: null,
   caseDetail: {} as RawPublicCase,
   cognitoResendVerificationLinkUrl: '',
@@ -47,7 +88,18 @@ export const baseState = {
     showMobileMenu: false,
     showUsaBannerDetails: false,
   },
+  constants: {} as Record<string, any>,
   currentPage: 'Interstitial',
+  orderCurrentPaginationPage: 0,
+  opinionCurrentPaginationPage: 0,
+  orderDocumentSearchSort: {
+    sortColumn: 'formattedFiledDate',
+    sortDirection: 'desc' as 'asc' | 'desc',
+  },
+  opinionDocumentSearchSort: {
+    sortColumn: 'formattedFiledDate',
+    sortDirection: 'desc' as 'asc' | 'desc',
+  },
   featureFlags: undefined as unknown as { [key: string]: string },
   form: {} as Record<string, any>,
   header: {
@@ -58,22 +110,47 @@ export const baseState = {
   },
   isPublic: true,
   isTerminalUser: false,
+  judges: [] as RawUser[],
   modal: {},
   progressIndicator: {
     // used for the spinner that shows when waiting for network responses
     waitingForResponse: false,
     waitingForResponseRequests: 0,
   },
+
   sessionMetadata: {
     docketRecordFilter: PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
     docketRecordSort: {},
     todaysOrdersSort: '',
   },
   showPassword: false,
-  todaysOpinions: [],
+  tableSort: {
+    sortField: 'filingDate',
+    sortOrder: DESCENDING,
+  },
+  todaysOpinions: [] as Array<{
+    filingDate: string;
+    judge?: string;
+    signedJudgeName?: string;
+    numberOfPages?: number;
+  }>,
   todaysOrders: {
-    results: [],
+    page: 1,
+    results: [] as Array<{
+      eventCode: string;
+      judge?: string;
+      signedJudgeName?: string;
+      filingDate: string;
+      numberOfPages?: number;
+      docketNumber: string;
+    }>,
     totalCount: 0,
+  },
+  trialSessionDetailsPage: {
+    trialSession: {} as PublicTrialSessionDetails,
+  },
+  trialSessionsPage: { trialSessions: [] } as {
+    trialSessions: TrialSessionInfoDTO[];
   },
   user: {},
   validationErrors: {},
@@ -84,4 +161,5 @@ export const initialPublicState = {
   ...computeds,
 };
 
+// @ts-expect-error
 export type PublicClientState = typeof initialPublicState;

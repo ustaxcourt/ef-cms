@@ -40,8 +40,8 @@ variable "prod_env_account_id" {
   type = string
 }
 
-variable "lower_env_account_id" {
-  type = string
+variable "lower_env_principal_identifiers" {
+  type = set(string)
 }
 
 variable "should_es_alpha_exist" {
@@ -54,22 +54,6 @@ variable "should_es_beta_exist" {
 
 variable "enable_health_checks" {
   // e.g. "1" or "0"
-  type = string
-}
-
-variable "is_dynamsoft_enabled" {
-  type = string
-}
-
-variable "dynamsoft_s3_zip_path" {
-  type = string
-}
-
-variable "dynamsoft_url" {
-  type = string
-}
-
-variable "dynamsoft_product_keys" {
   type = string
 }
 
@@ -97,5 +81,18 @@ variable "rds_min_capacity" {
 }
 
 variable "restoring_aws_account_id" {
+  type = string
+}
+
+variable "rum_sample_rate" {
+  type = number
+}
+
+variable "rds_engine_version" {
+  type    = string
+  default = "15.4"
+}
+
+variable "es_engine_version" {
   type = string
 }

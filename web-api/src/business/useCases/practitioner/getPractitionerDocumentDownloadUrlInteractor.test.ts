@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/practitionerDocuments/mocks.jest';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getPractitionerDocumentDownloadUrlInteractor } from './getPractitionerDocumentDownloadUrlInteractor';
@@ -5,6 +6,8 @@ import {
   mockAdmissionsClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { getPractitionerDocumentByFileId as getPractitionerDocumentByFileIdMock } from '@web-api/persistence/postgres/practitionerDocuments/getPractitionerDocumentByFileId';
+import { RawPractitionerDocument } from '@shared/business/entities/PractitionerDocument';
 
 describe('getPractitionerDocumentDownloadUrlInteractor', () => {
   const mockDocumentMetadata = {
@@ -18,12 +21,14 @@ describe('getPractitionerDocumentDownloadUrlInteractor', () => {
 
   const mockPractitioner = { barNumber: 'PT1234' };
 
+  const getPractitionerDocumentByFileId = jest.mocked(
+    getPractitionerDocumentByFileIdMock,
+  );
+
   beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getPractitionerDocumentByFileId.mockReturnValue({
-        fileName: 'SomeFile.pdf',
-      });
+    getPractitionerDocumentByFileId.mockResolvedValue({
+      fileName: 'SomeFile.pdf',
+    } as RawPractitionerDocument);
   });
 
   it('should throw an unauthorized error when the user does not have permission to download the practitioner documentation file', async () => {

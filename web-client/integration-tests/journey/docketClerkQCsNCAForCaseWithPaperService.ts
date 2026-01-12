@@ -38,7 +38,7 @@ export const docketClerkQCsNCAForCaseWithPaperService = cerebralTest => {
 
     const noticeOfChangeOfAddressQCItem = workQueueFormatted.find(
       workItem => workItem.docketNumber === cerebralTest.docketNumber,
-    );
+    ) as any;
 
     expect(noticeOfChangeOfAddressQCItem).toMatchObject({
       docketEntry: { documentTitle: 'Notice of Change of Address' },

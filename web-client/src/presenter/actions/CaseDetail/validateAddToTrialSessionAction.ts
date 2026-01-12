@@ -9,9 +9,15 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @returns {object} the next path based on if validation was successful or error
  */
 export const validateAddToTrialSessionAction = ({ get, path }: ActionProps) => {
-  const { calendarNotes, trialSessionId } = get(state.modal);
+  const {
+    calendarNotes,
+    trialSessionId,
+  }: {
+    calendarNotes?: string;
+    trialSessionId?: string;
+  } = get(state.modal);
 
-  let errors = {};
+  const errors: { trialSessionId?: string; calendarNotes?: string } = {};
   if (!trialSessionId) {
     errors.trialSessionId = 'Select a Trial Session';
   }

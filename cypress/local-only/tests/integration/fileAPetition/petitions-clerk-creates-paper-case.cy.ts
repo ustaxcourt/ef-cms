@@ -4,10 +4,7 @@ import {
   postPaperPetition,
 } from '../../../support/pages/create-paper-petition';
 
-import {
-  getCreateACaseButton,
-  navigateTo as navigateToDocumentQC,
-} from '../../../support/pages/document-qc';
+import { getCreateACaseButton } from '../../../support/pages/document-qc';
 
 import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
 
@@ -16,11 +13,18 @@ import {
   createAndServePaperPetitionMyselfAndSpouse,
 } from '../../../../helpers/fileAPetition/create-and-serve-paper-petition';
 import { unchecksOrdersAndNoticesBoxesInCase } from '../../../support/pages/unchecks-orders-and-notices-boxes-in-case';
+import { loginAsPetitionsClerk } from 'cypress/helpers/authentication/login-as-helpers';
 
 describe('Petition clerk creates a paper filing', function () {
   describe('Create and submit a paper petition', () => {
+    beforeEach(() => {
+      cy.window().then(win => {
+        cy.stub(win, 'open').as('windowOpen');
+      });
+    });
     it('should create a paper petition', () => {
-      navigateToDocumentQC('petitionsclerk');
+      loginAsPetitionsClerk();
+      cy.visit('/document-qc');
 
       getCreateACaseButton().click();
       cy.get('#tab-parties').should('have.attr', 'aria-selected');
@@ -43,8 +47,6 @@ describe('Petition clerk creates a paper filing', function () {
     it('should display attachment links in the attachment section', () => {
       cy.get('[data-testid="petitionFileButton"]').should('be.visible');
       cy.get('[data-testid="petitionFileButton"]').click();
-      cy.get('[data-testid="modal-dialog-header"]').should('be.visible');
-      cy.get('[data-testid="close-modal-button"]').click();
       cy.get('[data-testid="stinFileDisplay"]').should('be.visible');
       cy.get('[data-testid="stinFileDisplay"]').should('not.be.enabled');
 
@@ -52,14 +54,10 @@ describe('Petition clerk creates a paper filing', function () {
         'be.visible',
       );
       cy.get('[data-testid="requestForPlaceOfTrialFileButton"]').click();
-      cy.get('[data-testid="modal-dialog-header"]').should('be.visible');
-      cy.get('[data-testid="close-modal-button"]').click();
       cy.get('[data-testid="attachmentToPetitionFileButton"]').should(
         'be.visible',
       );
       cy.get('[data-testid="attachmentToPetitionFileButton"]').click();
-      cy.get('[data-testid="modal-dialog-header"]').should('be.visible');
-      cy.get('[data-testid="close-modal-button"]').click();
     });
 
     it('should display Orders/Notices Automatically Created notification', () => {
@@ -83,9 +81,11 @@ describe('Petition clerk creates a paper filing', function () {
   describe('Cancel case', () => {
     it('should route to the Document QC inbox when user confirms to cancel', () => {
       createPaperPetition().then(() => {
-        cy.get('button#cancel-create-case').scrollIntoView().click();
+        cy.get('button#cancel-create-case').scrollIntoView();
+        cy.get('button#cancel-create-case').click();
         cy.get('div.modal-header').should('exist');
-        cy.get('button.modal-button-confirm').scrollIntoView().click();
+        cy.get('button.modal-button-confirm').scrollIntoView();
+        cy.get('button.modal-button-confirm').click();
         cy.url().should('include', 'document-qc/my/inbox');
       });
     });
@@ -137,7 +137,7 @@ describe('Petition clerk creates a paper filing', function () {
     });
 
     it('should submit case when secondary contact phone number is not provided', () => {
-      createAndServePaperPetitionMyselfAndSpouse().then(docketNumber => {
+      createAndServePaperPetitionMyselfAndSpouse().then(({ docketNumber }) => {
         cy.get('[data-testid="case-link"]').should(
           'have.text',
           `Docket Number: ${docketNumber}`,

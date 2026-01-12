@@ -1,5 +1,3 @@
-/* eslint-disable complexity */
-
 import { Button } from '../../ustc-ui/Button/Button';
 import { ExternalConsolidatedGroupCards } from './ExternalConsolidatedGroupCards';
 import { FileEntryOfAppearanceReview } from '@web-client/views/FileDocument/FileEntryOfAppearanceReview';
@@ -403,7 +401,7 @@ export const FileDocumentReview = connect(
                 </div>
               </div>
             </div>
-            <div className="margin-top-2">
+            <div className="margin-top-2 button-container">
               <Button
                 className="margin-bottom-1"
                 data-testid="file-document-review-submit-document"

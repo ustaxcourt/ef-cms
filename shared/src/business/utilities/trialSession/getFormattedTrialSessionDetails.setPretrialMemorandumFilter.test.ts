@@ -27,6 +27,18 @@ describe('getFormattedTrialSessionDetails', () => {
 
     let mockCase;
 
+    it('should return PMTServedPartiesCode if it exists', () => {
+      const exists = 'EXISTS';
+      mockCase = {
+        ...MOCK_CASE,
+        PMTServedPartiesCode: exists,
+      };
+      const result = setPretrialMemorandumFiler({
+        caseItem: mockCase,
+      });
+      expect(result).toEqual(exists);
+    });
+
     it('should set the pretrialMemorandumStatus to "P" when the filer is the petitioner', () => {
       mockCase = {
         ...MOCK_CASE,

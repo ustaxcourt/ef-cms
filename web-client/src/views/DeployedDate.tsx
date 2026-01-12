@@ -7,11 +7,12 @@ export const DeployedDate = connect(
     showDeployedDate: state.templateHelper.showDeployedDate,
   },
   function DeployedDate({ showDeployedDate }) {
-    const [displayDate, setDisplayDate] = useState(null);
+    const [displayDate, setDisplayDate] = useState<string | null>(null);
 
     useEffect(() => {
-      const deployedAt =
-        window.document.getElementById('last-deployed').content;
+      const deployedAt = (
+        window.document.getElementById('last-deployed') as HTMLMetaElement
+      ).content;
       setDisplayDate(deployedAt);
     }, []);
 

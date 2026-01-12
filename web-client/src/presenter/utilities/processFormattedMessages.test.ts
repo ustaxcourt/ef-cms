@@ -1,4 +1,5 @@
 /* eslint-disable max-lines */
+import { RawMessage } from '@shared/business/entities/Message';
 import {
   SUPPORTED_SORT_FIELDS,
   applyFiltersToCompletedMessages,
@@ -23,12 +24,11 @@ describe('processFormattedMessages', () => {
     PETITIONS_SECTION,
   } = applicationContext.getConstants();
 
-  const mockMessage = {
+  const mockMessage: RawMessage = {
     caseStatus: 'Ready for trial',
     completedAt: '2019-05-01T17:29:13.122Z',
     createdAt: '2019-01-01T17:29:13.122Z',
     docketNumber: '123-45',
-    docketNumberSuffix: '',
     from: 'Test Sender',
     fromSection: DOCKET_SECTION,
     fromUserId: '11181f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -39,6 +39,11 @@ describe('processFormattedMessages', () => {
     to: 'Test Recipient',
     toSection: PETITIONS_SECTION,
     toUserId: '33331f4d-1e47-423a-8caf-6d2fdc3d3859',
+    caseTitle: 'Test title',
+    docketNumberWithSuffix: '123-45',
+    isCompleted: true,
+    isRead: true,
+    isRepliedTo: true,
   };
 
   let messages;
@@ -200,24 +205,37 @@ describe('processFormattedMessages', () => {
       ]);
     });
 
-    it('should reverse the order of messages if sortOrder is descending', () => {
-      const result = sortFormattedMessages(messages, {
-        sortField: 'UNKNOWN',
+    it('should maintain the same order when the docket numbers are the same', () => {
+      const aMessage = {
+        completedAt: '2019-01-02T16:29:13.122Z',
+        createdAt: '2019-01-01T16:29:13.122Z',
+        docketNumber: DOCKET_NUMBER_1,
+        message: 'Message 1 sameDocket',
+        parentMessageId: PARENT_MESSAGE_ID,
+        subject: 'AAAA',
+      };
+      messages = [
+        aMessage,
+        { ...aMessage, message: 'Message 2 sameDocket' },
+        { ...aMessage, message: 'Message 3 sameDocket' },
+      ];
+
+      const result1 = sortFormattedMessages(messages, {
+        sortField: 'docketNumber',
         sortOrder: DESCENDING,
       });
 
-      expect(result).toMatchObject([
+      expect(result1).toMatchObject([
         {
-          createdAt: '2019-01-01T17:29:13.122Z',
-          docketNumber: DOCKET_NUMBER_2,
+          message: 'Message 1 sameDocket',
+          docketNumber: DOCKET_NUMBER_1,
         },
         {
-          createdAt: '2019-01-02T17:29:13.122Z',
-          docketNumber: DOCKET_NUMBER_3,
-          parentMessageId: PARENT_MESSAGE_ID,
+          message: 'Message 2 sameDocket',
+          docketNumber: DOCKET_NUMBER_1,
         },
         {
-          createdAt: '2019-01-01T16:29:13.122Z',
+          message: 'Message 3 sameDocket',
           docketNumber: DOCKET_NUMBER_1,
         },
       ]);
@@ -309,6 +327,26 @@ describe('processFormattedMessages', () => {
         },
       ]);
     });
+
+    it('should consistently return messages sorted in descending order when provided with desc as the sort direction', () => {
+      const formattedCaseMessages = [
+        { createdAt: '2025-02-14T18:13:48.341Z', docketNumber: '101-25' },
+        { createdAt: '2020-08-18T18:07:36.333Z', docketNumber: '104-19' },
+        { createdAt: '2025-02-14T18:14:32.069Z', docketNumber: '101-25' },
+      ];
+
+      const firstSort = sortFormattedMessages(formattedCaseMessages, {
+        sortField: 'createdAt',
+        sortOrder: 'desc',
+      });
+
+      const secondSort = sortFormattedMessages(formattedCaseMessages, {
+        sortField: 'createdAt',
+        sortOrder: 'desc',
+      });
+
+      expect(secondSort).toEqual(firstSort);
+    });
   });
 
   describe('getFormattedMessages', () => {
@@ -351,7 +389,6 @@ describe('processFormattedMessages', () => {
             completedAt: '2019-05-01T17:29:13.122Z',
             createdAt: '2019-01-01T17:29:13.122Z',
             docketNumber: '123-45',
-            docketNumberSuffix: '',
             from: 'Test Sender',
             fromSection: DOCKET_SECTION,
             fromUserId: '11181f4d-1e47-423a-8caf-6d2fdc3d3859',
@@ -362,6 +399,11 @@ describe('processFormattedMessages', () => {
             to: 'Test Recipient',
             toSection: PETITIONS_SECTION,
             toUserId: '33331f4d-1e47-423a-8caf-6d2fdc3d3859',
+            caseTitle: 'Test title',
+            docketNumberWithSuffix: '123-45',
+            isCompleted: true,
+            isRead: true,
+            isRepliedTo: true,
           },
         ],
       });
@@ -382,6 +424,20 @@ describe('processFormattedMessages', () => {
             docketNumber: '101-20',
             isCompleted: true,
             message: 'This is a test message',
+            caseStatus: 'Ready for trial',
+            from: 'Test Sender',
+            fromSection: DOCKET_SECTION,
+            fromUserId: '11181f4d-1e47-423a-8caf-6d2fdc3d3859',
+            messageId: '22281f4d-1e47-423a-8caf-6d2fdc3d3859',
+            parentMessageId: PARENT_MESSAGE_ID,
+            subject: 'Test subject...',
+            to: 'Test Recipient',
+            toSection: PETITIONS_SECTION,
+            toUserId: '33331f4d-1e47-423a-8caf-6d2fdc3d3859',
+            caseTitle: 'Test title',
+            docketNumberWithSuffix: '101-20',
+            isRead: true,
+            isRepliedTo: true,
           },
           {
             completedAt: '2019-01-01T16:29:13.122Z',
@@ -390,6 +446,20 @@ describe('processFormattedMessages', () => {
             docketNumber: '102-20',
             isCompleted: true,
             message: 'This is a test message',
+            caseStatus: 'Ready for trial',
+            from: 'Test Sender',
+            fromSection: DOCKET_SECTION,
+            fromUserId: '11181f4d-1e47-423a-8caf-6d2fdc3d3859',
+            messageId: '22281f4d-1e47-423a-8caf-6d2fdc3d3859',
+            parentMessageId: PARENT_MESSAGE_ID,
+            subject: 'Test subject...',
+            to: 'Test Recipient',
+            toSection: PETITIONS_SECTION,
+            toUserId: '33331f4d-1e47-423a-8caf-6d2fdc3d3859',
+            caseTitle: 'Test title',
+            docketNumberWithSuffix: '102-20',
+            isRead: true,
+            isRepliedTo: true,
           },
           {
             completedAt: '2019-01-02T16:29:13.122Z',
@@ -398,6 +468,20 @@ describe('processFormattedMessages', () => {
             docketNumber: '103-20',
             isCompleted: true,
             message: 'This is a test message',
+            caseStatus: 'Ready for trial',
+            from: 'Test Sender',
+            fromSection: DOCKET_SECTION,
+            fromUserId: '11181f4d-1e47-423a-8caf-6d2fdc3d3859',
+            messageId: '22281f4d-1e47-423a-8caf-6d2fdc3d3859',
+            parentMessageId: PARENT_MESSAGE_ID,
+            subject: 'Test subject...',
+            to: 'Test Recipient',
+            toSection: PETITIONS_SECTION,
+            toUserId: '33331f4d-1e47-423a-8caf-6d2fdc3d3859',
+            caseTitle: 'Test title',
+            docketNumberWithSuffix: '103-20',
+            isRead: true,
+            isRepliedTo: true,
           },
         ],
       });
@@ -436,6 +520,20 @@ describe('processFormattedMessages', () => {
             docketNumber: '101-20',
             message: 'This is a test message one',
             parentMessageId: PARENT_MESSAGE_ID,
+            caseStatus: 'Ready for trial',
+            from: 'Test Sender',
+            fromSection: DOCKET_SECTION,
+            fromUserId: '11181f4d-1e47-423a-8caf-6d2fdc3d3859',
+            messageId: '22281f4d-1e47-423a-8caf-6d2fdc3d3859',
+            subject: 'Test subject...',
+            to: 'Test Recipient',
+            toSection: PETITIONS_SECTION,
+            toUserId: '33331f4d-1e47-423a-8caf-6d2fdc3d3859',
+            caseTitle: 'Test title',
+            docketNumberWithSuffix: '101-20',
+            isCompleted: false,
+            isRead: true,
+            isRepliedTo: false,
           },
           {
             createdAt: '2019-01-02T17:29:13.122Z',
@@ -443,12 +541,40 @@ describe('processFormattedMessages', () => {
             isRepliedTo: true,
             message: 'This is a test message two',
             parentMessageId: PARENT_MESSAGE_ID,
+            caseStatus: 'Ready for trial',
+            completedAt: '2019-05-01T17:29:13.122Z',
+            from: 'Test Sender',
+            fromSection: DOCKET_SECTION,
+            fromUserId: '11181f4d-1e47-423a-8caf-6d2fdc3d3859',
+            messageId: '22281f4d-1e47-423a-8caf-6d2fdc3d3859',
+            subject: 'Test subject...',
+            to: 'Test Recipient',
+            toSection: PETITIONS_SECTION,
+            toUserId: '33331f4d-1e47-423a-8caf-6d2fdc3d3859',
+            caseTitle: 'Test title',
+            docketNumberWithSuffix: '101-20',
+            isCompleted: false,
+            isRead: false,
           },
           {
             createdAt: '2019-01-01T17:29:13.122Z',
             docketNumber: '101-20',
             message: 'This is a test message three',
             parentMessageId: PARENT_MESSAGE_ID,
+            caseStatus: 'Ready for trial',
+            from: 'Test Sender',
+            fromSection: DOCKET_SECTION,
+            fromUserId: '11181f4d-1e47-423a-8caf-6d2fdc3d3859',
+            messageId: '22281f4d-1e47-423a-8caf-6d2fdc3d3859',
+            subject: 'Test subject...',
+            to: 'Test Recipient',
+            toSection: PETITIONS_SECTION,
+            toUserId: '33331f4d-1e47-423a-8caf-6d2fdc3d3859',
+            caseTitle: 'Test title',
+            docketNumberWithSuffix: '101-20',
+            isCompleted: false,
+            isRead: true,
+            isRepliedTo: false,
           },
           {
             completedAt: '2019-01-03T16:29:13.122Z',
@@ -457,6 +583,19 @@ describe('processFormattedMessages', () => {
             isCompleted: true,
             message: 'This is a test message four',
             parentMessageId: PARENT_MESSAGE_ID,
+            caseStatus: 'Ready for trial',
+            from: 'Test Sender',
+            fromSection: DOCKET_SECTION,
+            fromUserId: '11181f4d-1e47-423a-8caf-6d2fdc3d3859',
+            messageId: '22281f4d-1e47-423a-8caf-6d2fdc3d3859',
+            subject: 'Test subject...',
+            to: 'Test Recipient',
+            toSection: PETITIONS_SECTION,
+            toUserId: '33331f4d-1e47-423a-8caf-6d2fdc3d3859',
+            caseTitle: 'Test title',
+            docketNumberWithSuffix: '101-20',
+            isRead: true,
+            isRepliedTo: true,
           },
         ],
       });
@@ -474,6 +613,21 @@ describe('processFormattedMessages', () => {
           messageDetailLink: `/messages/101-20/message-detail/${PARENT_MESSAGE_ID}`,
           parentMessageId: PARENT_MESSAGE_ID,
           shouldIndent: false,
+          caseStatus: 'Ready for trial',
+          from: 'Test Sender',
+          fromSection: DOCKET_SECTION,
+          fromSectionFormatted: DOCKET_SECTION,
+          fromUserId: '11181f4d-1e47-423a-8caf-6d2fdc3d3859',
+          messageId: '22281f4d-1e47-423a-8caf-6d2fdc3d3859',
+          subject: 'Test subject...',
+          to: 'Test Recipient',
+          toSection: PETITIONS_SECTION,
+          toUserId: '33331f4d-1e47-423a-8caf-6d2fdc3d3859',
+          caseTitle: 'Test title',
+          docketNumberWithSuffix: '101-20',
+          isCompleted: false,
+          isRead: true,
+          isRepliedTo: false,
         },
         {
           completedAtFormatted: '',
@@ -487,6 +641,21 @@ describe('processFormattedMessages', () => {
           messageDetailLink: `/messages/101-20/message-detail/${PARENT_MESSAGE_ID}`,
           parentMessageId: PARENT_MESSAGE_ID,
           shouldIndent: false,
+          caseStatus: 'Ready for trial',
+          from: 'Test Sender',
+          fromSection: DOCKET_SECTION,
+          fromSectionFormatted: DOCKET_SECTION,
+          fromUserId: '11181f4d-1e47-423a-8caf-6d2fdc3d3859',
+          messageId: '22281f4d-1e47-423a-8caf-6d2fdc3d3859',
+          subject: 'Test subject...',
+          to: 'Test Recipient',
+          toSection: PETITIONS_SECTION,
+          toUserId: '33331f4d-1e47-423a-8caf-6d2fdc3d3859',
+          caseTitle: 'Test title',
+          docketNumberWithSuffix: '101-20',
+          isCompleted: false,
+          isRead: true,
+          isRepliedTo: false,
         },
       ]);
     });

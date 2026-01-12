@@ -3,20 +3,49 @@ import { PreformattedText } from '@web-client/ustc-ui/PreformatedText/Preformatt
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
 import React from 'react';
+import { caseDetailHelper } from '@web-client/presenter/computeds/caseDetailHelper';
 
-export const DisplayHearings = connect(
+type DisplayHearingsProps = {
+  hearings: any;
+  caseDetailHelper: ReturnType<
+    typeof caseDetailHelper
+  >;
+  openAddEditHearingNoteModalSequence: Function;
+  removeHearingSequence: Function
+}
+
+export const DisplayHearings: React.FC<DisplayHearingsProps> = connect(
   {
-    caseDetailHelper: props.caseDetailHelper,
-    hearings: props.hearings,
+    caseDetailHelper: props`caseDetailHelper`,
+    hearings: props`hearings`,
     openAddEditHearingNoteModalSequence:
-      props.openAddEditHearingNoteModalSequence,
-    removeHearingSequence: props.removeHearingSequence,
+      props`openAddEditHearingNoteModalSequence`,
+    removeHearingSequence: props`removeHearingSequence`,
   },
   function DisplayHearings({
     caseDetailHelper,
     hearings,
     openAddEditHearingNoteModalSequence,
     removeHearingSequence,
+  }: {
+    caseDetailHelper: {
+      showAddRemoveFromHearingButtons: boolean;
+      docketNumber: string;
+    };
+    hearings: Array<{
+      trialSessionId: string;
+      userIsAssignedToSession: boolean;
+      formattedTrialCity: string;
+      formattedTrialDate: string;
+      formattedAssociatedJudge: string;
+      calendarNotes?: string;
+    }>;
+    openAddEditHearingNoteModalSequence: (args: {
+      docketNumber: string;
+      note?: string;
+      trialSessionId: string;
+    }) => void;
+    removeHearingSequence: (args: { trialSessionId: string }) => void;
   }) {
     return hearings.map(hearing => (
       <tbody className="hoverable" key={hearing.trialSessionId}>
@@ -37,6 +66,7 @@ export const DisplayHearings = connect(
           {caseDetailHelper.showAddRemoveFromHearingButtons && (
             <td>
               <DropdownMenu
+                id={`hearing-edit-menu-${hearing.trialSessionId}`}
                 menuItems={[
                   {
                     click: () => {
@@ -55,6 +85,7 @@ export const DisplayHearings = connect(
                       });
                     },
                     label: 'Remove from Hearing',
+                    id: `remove-hearing-button-${hearing.trialSessionId}`,
                   },
                 ]}
                 menuState={`caseInformationHearingsEdit-${hearing.trialSessionId}`}

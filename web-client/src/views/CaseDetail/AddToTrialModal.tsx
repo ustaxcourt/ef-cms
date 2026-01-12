@@ -8,7 +8,26 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const AddToTrialModal = connect(
+type AddToTrialModalProps = {
+  confirmSequence: Function;
+  isNoteRequired?: boolean;
+  modalHelper?: {
+      trialSessionsFormatted: Array<{
+        trialSessionId: string;
+        optionText: string;
+      }>;
+      trialSessionStatesSorted: string[];
+      trialSessionsFormattedByState: Record<
+        string,
+        Array<{ trialSessionId: string; optionText: string }>
+      >;
+      showSessionNotSetAlert: boolean;
+    };
+  modalTitle?: string;
+  validateSequence: Function;
+}
+
+export const AddToTrialModal: React.FC<AddToTrialModalProps> = connect(
   {
     cancelSequence: sequences.clearModalSequence,
     modal: state.modal,
@@ -25,6 +44,31 @@ export const AddToTrialModal = connect(
     updateModalValueSequence,
     validateSequence,
     validationErrors,
+  }: {
+    cancelSequence: Function;
+    confirmSequence: Function;
+    isNoteRequired?: boolean;
+    modal: Record<string, any> & {
+      showAllLocations?: boolean;
+      trialSessionId?: string;
+      calendarNotes?: string;
+    };
+    modalHelper?: {
+      trialSessionsFormatted: Array<{
+        trialSessionId: string;
+        optionText: string;
+      }>;
+      trialSessionStatesSorted: string[];
+      trialSessionsFormattedByState: Record<
+        string,
+        Array<{ trialSessionId: string; optionText: string }>
+      >;
+      showSessionNotSetAlert: boolean;
+    };
+    modalTitle?: string;
+    updateModalValueSequence: Function;
+    validateSequence: Function;
+    validationErrors: Record<string, any>;
   }) {
     return (
       <ModalDialog
@@ -92,6 +136,7 @@ export const AddToTrialModal = connect(
             </label>
             <BindedSelect
               bind="modal.trialSessionId"
+              data-testid="trial-session-select"
               id="trial-session"
               name="trialSessionId"
               onChange={() => {
@@ -100,7 +145,7 @@ export const AddToTrialModal = connect(
             >
               <option value="">- Select -</option>
               {!modal.showAllLocations &&
-                modalHelper.trialSessionsFormatted.map(trialSession => (
+                modalHelper?.trialSessionsFormatted.map(trialSession => (
                   <option
                     key={trialSession.trialSessionId}
                     value={trialSession.trialSessionId}
@@ -109,7 +154,7 @@ export const AddToTrialModal = connect(
                   </option>
                 ))}
               {modal.showAllLocations &&
-                modalHelper.trialSessionStatesSorted.map(stateName => (
+                modalHelper?.trialSessionStatesSorted.map(stateName => (
                   <optgroup key={stateName} label={stateName}>
                     {modalHelper.trialSessionsFormattedByState[stateName].map(
                       trialSession => (
@@ -126,7 +171,7 @@ export const AddToTrialModal = connect(
             </BindedSelect>
           </FormGroup>
 
-          {modalHelper.showSessionNotSetAlert && (
+          {modalHelper?.showSessionNotSetAlert && (
             <Hint>
               This trial session has not been set. This case will be added to
               the eligible cases for this session and prioritized when the

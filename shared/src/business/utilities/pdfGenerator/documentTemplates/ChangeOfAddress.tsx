@@ -1,9 +1,14 @@
-import { COUNTRY_TYPES } from '../../../entities/EntityConstants';
-import { DocketHeader } from '../components/DocketHeader.tsx';
-import { PrimaryHeader } from '../components/PrimaryHeader.tsx';
+import { COUNTRY_TYPES } from '@shared/business/entities/EntityConstants';
+import { DocketHeader } from '@shared/business/utilities/pdfGenerator/components/DocketHeader';
+import { PrimaryHeader } from '@shared/business/utilities/pdfGenerator/components/PrimaryHeader';
 import React from 'react';
 
-const renderTable = ({ data, label, options }) => {
+type RenderTableParams = {
+  data: ChangeOfAddressContactInfo;
+  label: string;
+  options: ChangeOfAddressOptions;
+};
+const renderTable = ({ data, label, options }: RenderTableParams) => {
   return (
     <table id={`contact_info_${label}`}>
       <thead>
@@ -14,7 +19,9 @@ const renderTable = ({ data, label, options }) => {
       <tbody>
         <tr>
           {options.isEmailChange && (
-            <td>{data.email || 'No email provided'}</td>
+            <td>
+              {data.email || <span>&nbsp;</span>}
+            </td>
           )}
           {options.isPhoneChangeOnly && <td>{data.phone}</td>}
           {options.isAddressChange && (
@@ -40,7 +47,44 @@ const renderTable = ({ data, label, options }) => {
   );
 };
 
-export const ChangeOfAddress = ({ name, newData, oldData, options }) => {
+type ChangeOfAddressOptions = {
+  caseCaptionExtension: string;
+  caseTitle: string;
+  docketNumberWithSuffix: string;
+  h3: string;
+  isEmailChange: boolean;
+  isPhoneChangeOnly: boolean;
+  isAddressChange: boolean;
+  isAddressAndPhoneChange: boolean;
+};
+
+type ChangeOfAddressContactInfo = {
+  email?: string;
+  phone?: string;
+  inCareOf?: string;
+  address1: string;
+  address2?: string;
+  address3?: string;
+  city?: string;
+  state: string;
+  postalCode: string;
+  countryType?: string;
+  country?: string;
+};
+
+export type ChangeOfAddressParams = {
+  name: string;
+  options: ChangeOfAddressOptions;
+  newData: ChangeOfAddressContactInfo;
+  oldData: ChangeOfAddressContactInfo;
+};
+
+export const ChangeOfAddress = ({
+  name,
+  newData,
+  oldData,
+  options,
+}: ChangeOfAddressParams) => {
   return (
     <>
       <PrimaryHeader />

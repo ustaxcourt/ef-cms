@@ -1,57 +1,54 @@
-// usage: npx ts-node --transpile-only scripts/reports/petition-counts.js 2022
+#!/usr/bin/env -S npx ts-node --transpile-only
 
 import { DateTime } from 'luxon';
-import { createApplicationContext } from '@web-api/applicationContext';
 import {
-  dateStringsCompared,
-  validateDateAndCreateISO,
-} from '@shared/business/utilities/DateHandler';
-import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
+  type ScriptConfig,
+  getJsTimeframeForYear,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
+import { dateStringsCompared } from '@shared/business/utilities/DateHandler';
+import { fromKyselyDocketEntry } from '@web-api/persistence/postgres/docketEntries/mapper';
+import { getDbReader } from '@web-api/database';
 
-const year = process.argv[2] || String(DateTime.now().toObject().year);
-
-const getAllPetitions = async ({
-  applicationContext,
-}: {
-  applicationContext: IApplicationContext;
-}): Promise<RawDocketEntry[]> => {
-  const { results } = await searchAll({
-    applicationContext,
-    searchParameters: {
-      body: {
-        query: {
-          bool: {
-            must: [
-              {
-                match: {
-                  'eventCode.S': 'P',
-                },
-              },
-              {
-                range: {
-                  'receivedAt.S': {
-                    gte: validateDateAndCreateISO({
-                      day: '1',
-                      month: '1',
-                      year,
-                    }),
-                    lt: validateDateAndCreateISO({
-                      day: '1',
-                      month: '1',
-                      year: String(Number(year) + 1),
-                    }),
-                  },
-                },
-              },
-            ],
-          },
-        },
-        sort: [{ 'receivedAt.S': 'asc' }],
-      },
-      index: 'efcms-docket-entry',
+const scriptConfig: ScriptConfig = {
+  description:
+    'petition-counts - Generates a table of petition counts in each month of the given year',
+  environment: {
+    env: 'ENV',
+  },
+  parameters: {
+    fiscal: {
+      default: false,
+      short: 'f',
+      type: 'boolean',
     },
-  });
-  return results;
+    year: {
+      default: `${DateTime.now().toObject().year}`,
+      position: 0,
+      type: 'string',
+    },
+  },
+  requireActiveAwsSession: true,
+};
+const { fiscal, year } = parseArgsAndEnvVars(scriptConfig) as {
+  fiscal: boolean;
+  year: string;
+};
+const { begin, end } = getJsTimeframeForYear({ fiscal, year });
+
+const getAllPetitions = async (): Promise<RawDocketEntry[]> => {
+  return (
+    await getDbReader(reader =>
+      reader
+        .selectFrom('dwDocketEntry as de')
+        .selectAll('de')
+        .where('de.eventCode', '=', 'P')
+        .where('de.receivedAt', '>=', begin)
+        .where('de.receivedAt', '<', end)
+        .orderBy('de.receivedAt', 'asc')
+        .execute(),
+    )
+  ).map(fromKyselyDocketEntry) as RawDocketEntry[];
 };
 
 const getCounts = ({
@@ -80,9 +77,8 @@ const getCounts = ({
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const applicationContext = createApplicationContext({});
-  const petitions = await getAllPetitions({ applicationContext });
-  const start = DateTime.fromISO(`${year}-01-01`);
+  const petitions = await getAllPetitions();
+  const start = DateTime.fromJSDate(begin);
 
   for (let month = 0; month < 12; month++) {
     const [gte, lt] = [

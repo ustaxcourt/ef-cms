@@ -1,7 +1,7 @@
 import {
   COUNTRY_TYPES,
   PARTY_TYPES,
-} from '../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { adcViewsPractitionerOnCaseAfterPetitionerRemoved } from './journey/adcViewsPractitionerOnCaseAfterPetitionerRemoved';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkEditsPetitionInQCPartyType } from './journey/petitionsClerkEditsPetitionInQCPartyType';

@@ -53,7 +53,7 @@ export const petitionsClerkAddsDocketEntryForOrderAndSavesForLater =
         docketEntry: {
           documentTitle: 'Order to keep the free text',
         },
-        editLink: `/case-detail/${cerebralTest.docketNumber}/document-view?docketEntryId=${inboxWorkItem.docketEntry.docketEntryId}`,
+        editLink: `/case-detail/${cerebralTest.docketNumber}/document-view?docketEntryId=${inboxWorkItem!.docketEntry.docketEntryId}`,
         inProgress: true,
       });
     });

@@ -1,34 +1,22 @@
-import {
-  image1,
-  image2,
-} from '../../../../shared/src/business/useCases/scannerMockFiles';
+import { image1, image2 } from '@shared/business/useCases/scannerMockFiles';
 
 let scanBuffer: Blob[] = [];
 
 const DWObject = {
+  IfDisableSourceAfterAcquire: false,
+  IfDuplexEnabled: false,
+  IfFeederEnabled: false,
   AcquireImage: () => {
-    const b64toBlob = (b64Data, contentType = '', sliceSize = 512) => {
+    const b64toBlob = (b64Data: string, contentType = ''): Blob => {
       const byteCharacters = atob(b64Data);
-      const byteArrays: Uint8Array[] = [];
+      const arrayBuffer = new ArrayBuffer(byteCharacters.length);
+      const byteArray = new Uint8Array(arrayBuffer);
 
-      for (
-        let offset = 0;
-        offset < byteCharacters.length;
-        offset += sliceSize
-      ) {
-        const slice = byteCharacters.slice(offset, offset + sliceSize);
-
-        const byteNumbers = new Array(slice.length);
-        for (let i = 0; i < slice.length; i++) {
-          byteNumbers[i] = slice.charCodeAt(i);
-        }
-
-        const byteArray = new Uint8Array(byteNumbers);
-        byteArrays.push(byteArray);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteArray[i] = byteCharacters.charCodeAt(i);
       }
 
-      const blob = new Blob(byteArrays, { type: contentType });
-      return blob;
+      return new Blob([byteArray], { type: contentType });
     };
 
     scanBuffer.push(b64toBlob(image1, 'image/jpeg'));
@@ -36,7 +24,7 @@ const DWObject = {
     DWObject.HowManyImagesInBuffer += 2;
   },
   CloseSource: () => null,
-  ConvertToBlob: (indicies, type, resolve) => {
+  ConvertToBlob: (indicies, _type, resolve) => {
     const blob = scanBuffer[indicies[0]];
     resolve(blob);
   },
@@ -49,7 +37,7 @@ const DWObject = {
     scanBuffer = [];
     DWObject.HowManyImagesInBuffer = 0;
   },
-  SelectSourceByIndex: () => null,
+  SelectSourceByIndex: index => index,
 };
 
 export const getScannerMockInterface = () => {
@@ -113,12 +101,13 @@ export const getScannerMockInterface = () => {
     DWObject.AcquireImage();
 
     const count = DWObject.HowManyImagesInBuffer;
-    const promises = [];
-    const response = { error: null, scannedBuffer: null };
+    const promises: Promise<unknown>[] = [];
+    const response: { error: string | null; scannedBuffer: unknown[] | null } =
+      { error: null, scannedBuffer: null };
     for (let index = 0; index < count; index++) {
       promises.push(
-        new Promise((resolve, reject) => {
-          DWObject.ConvertToBlob([index], null, resolve, reject);
+        new Promise(resolve => {
+          DWObject.ConvertToBlob([index], null, resolve);
         }),
       );
     }

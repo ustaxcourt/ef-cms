@@ -1,12 +1,12 @@
 import {
+  CASE_AUTOMATIC_BLOCKED_RULE,
+  CASE_BLOCKED_RULE,
   CASE_CAPTION_RULE,
   CASE_DOCKET_NUMBER_RULE,
   CASE_DOCKET_NUMBER_WITH_SUFFIX_RULE,
-  CASE_IRS_PRACTITIONERS_RULE,
   CASE_IS_SEALED_RULE,
   CASE_LEAD_DOCKET_NUMBER_RULE,
   CASE_PETITIONERS_RULE,
-  CASE_PRIVATE_PRACTITIONERS_RULE,
   CASE_SORTABLE_DOCKET_NUMBER_RULE,
   CASE_STATUS_RULE,
 } from '@shared/business/entities/EntityValidationConstants';
@@ -24,6 +24,8 @@ export class ConsolidatedCaseSummary extends JoiValidationEntity {
   public privatePractitioners: object[];
   public sortableDocketNumber: number;
   public status: CaseStatus;
+  public blocked?: boolean;
+  public automaticBlocked?: boolean;
 
   constructor(rawCase: any) {
     super('ConsolidatedCaseSummary');
@@ -38,17 +40,19 @@ export class ConsolidatedCaseSummary extends JoiValidationEntity {
     this.privatePractitioners = rawCase.privatePractitioners || [];
     this.sortableDocketNumber = rawCase.sortableDocketNumber;
     this.status = rawCase.status;
+    this.blocked = rawCase.blocked;
+    this.automaticBlocked = rawCase.automaticBlocked;
   }
 
   static VALIDATION_RULES = {
+    automaticBlocked: CASE_AUTOMATIC_BLOCKED_RULE,
+    blocked: CASE_BLOCKED_RULE,
     caseCaption: CASE_CAPTION_RULE,
     docketNumber: CASE_DOCKET_NUMBER_RULE,
     docketNumberWithSuffix: CASE_DOCKET_NUMBER_WITH_SUFFIX_RULE,
-    irsPractitioners: CASE_IRS_PRACTITIONERS_RULE,
     isSealed: CASE_IS_SEALED_RULE,
     leadDocketNumber: CASE_LEAD_DOCKET_NUMBER_RULE,
     petitioners: CASE_PETITIONERS_RULE,
-    privatePractitioners: CASE_PRIVATE_PRACTITIONERS_RULE,
     sortableDocketNumber: CASE_SORTABLE_DOCKET_NUMBER_RULE,
     status: CASE_STATUS_RULE,
   } as const;

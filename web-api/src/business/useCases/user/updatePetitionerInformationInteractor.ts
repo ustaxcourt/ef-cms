@@ -7,35 +7,39 @@ import {
   CASE_STATUS_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import {
   Case,
   getPetitionerById,
   getPractitionersRepresenting,
-} from '../../../../../shared/src/business/entities/cases/Case';
+} from '@shared/business/entities/cases/Case';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
+import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { defaults, pick } from 'lodash';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { generateAndServeDocketEntry } from '@web-api/business/useCaseHelper/service/createChangeItems';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 export const getIsUserAuthorized = ({
-  oldCase,
+  petitionerCaseRaw,
   updatedPetitionerData,
   user,
 }) => {
   let isRepresentingCounsel = false;
   if (user.role === ROLES.privatePractitioner) {
     const practitioners = getPractitionersRepresenting(
-      oldCase,
+      petitionerCaseRaw,
       updatedPetitionerData?.contactId,
     );
 
-    isRepresentingCounsel = practitioners.find(
+    isRepresentingCounsel = practitioners?.find(
       practitioner => practitioner.userId === user.userId,
     );
   }
@@ -89,36 +93,24 @@ const updateCaseEntityAndGenerateChange = async ({
     .getDocumentTypeForAddressChange({ newData, oldData });
 
   if (userHasAnEmail && caseEntity.shouldGenerateNoticesForCase()) {
-    const { changeOfAddressDocketEntry } = await applicationContext
-      .getUseCaseHelpers()
-      .generateAndServeDocketEntry({
-        applicationContext,
-        authorizedUser,
-        caseEntity,
-        documentType,
-        newData,
-        oldData,
-        privatePractitionersRepresentingContact,
-        servedParties,
-        user,
-      });
-    caseEntity.addDocketEntry(changeOfAddressDocketEntry);
+    await generateAndServeDocketEntry({
+      applicationContext,
+      authorizedUser,
+      caseEntity,
+      docketMeta: undefined,
+      documentType,
+      newData,
+      oldData,
+      privatePractitionersRepresentingContact,
+      servedParties,
+      user,
+    });
   }
 
   return caseEntity.validate();
 };
 
-/**
- * updatePetitionerInformation
- *
- * this interactor is invoked when an internal user updates the petitioner information from the parties tab.
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketNumber the docket number of the case to update
- * @param {string} providers.updatedPetitionerData the updatedPetitionerData to update
- * @returns {object} the updated case data
- */
+// this interactor is invoked when an internal user updates the petitioner information from the parties tab.
 export const updatePetitionerInformation = async (
   applicationContext: ServerApplicationContext,
   { docketNumber, updatedPetitionerData },
@@ -130,12 +122,22 @@ export const updatePetitionerInformation = async (
     );
   }
 
-  const oldCase = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({ applicationContext, docketNumber });
+  const petitionerCaseRaw = await getCaseByDocketNumber({
+    docketNumber,
+  });
+
+  if (!petitionerCaseRaw) {
+    throw new Error(`Case with docket number ${docketNumber} was not found`);
+  }
+
+  if (petitionerCaseRaw.status === CASE_STATUS_TYPES.new) {
+    throw new Error(
+      `Case with docket number ${docketNumber} has not been served`,
+    );
+  }
 
   const hasAuthorization = getIsUserAuthorized({
-    oldCase,
+    petitionerCaseRaw,
     updatedPetitionerData,
     user: authorizedUser,
   });
@@ -144,19 +146,49 @@ export const updatePetitionerInformation = async (
     throw new UnauthorizedError('Unauthorized for editing petition details');
   }
 
-  if (oldCase.status === CASE_STATUS_TYPES.new) {
-    throw new Error(
-      `Case with docketNumber ${oldCase.docketNumber} has not been served`,
-    );
-  }
-  const oldCaseContact = getPetitionerById(
-    oldCase,
+  const existingPetitionerInfo = getPetitionerById(
+    petitionerCaseRaw,
     updatedPetitionerData.contactId,
   );
 
-  if (!oldCaseContact) {
+  if (!existingPetitionerInfo) {
     throw new NotFoundError(
       `Case contact with id ${updatedPetitionerData.contactId} was not found on the case`,
+    );
+  }
+
+  const { updatedEmail } = updatedPetitionerData;
+
+  const { petitioners } = petitionerCaseRaw;
+
+  const contactIdArray = petitioners.map(p => p.contactId);
+
+  // Returns as object {id#: email}, will put values into an array
+  const allUsers =
+    (await applicationContext.getUseCases().getUsersPendingEmailInteractor(
+      {
+        userIds: contactIdArray,
+      },
+      authorizedUser,
+    )) || {};
+
+  const allPendingEmails: string[] = Object.values(allUsers);
+
+  const pendingMatchesUpdated: boolean = allPendingEmails
+    .map(email => (email || '').toLowerCase())
+    .includes((updatedEmail || '').toLowerCase());
+
+  if (allPendingEmails.length > 0 && updatedEmail && pendingMatchesUpdated) {
+    throw new Error(`Email ${updatedEmail} is pending for another petitioner`);
+  }
+
+  const currentMatchesUpdated = petitionerCaseRaw.petitioners
+    .map(p => (p.email || '').toLowerCase())
+    .includes((updatedEmail || '').toLowerCase());
+
+  if (updatedEmail && currentMatchesUpdated) {
+    throw new Error(
+      `Email ${updatedPetitionerData.updatedEmail} is already in use by another petitioner`,
     );
   }
 
@@ -188,34 +220,34 @@ export const updatePetitionerInformation = async (
     .getUtilities()
     .getDocumentTypeForAddressChange({
       newData: editableFields,
-      oldData: oldCaseContact,
+      oldData: existingPetitionerInfo,
     });
+  const hasPetitionerInfoChanged = !!documentTypeToGenerate;
 
-  const caseToUpdateContacts = new Case(
+  const petitionerCase = new Case(
     {
-      ...oldCase,
+      ...petitionerCaseRaw,
     },
     { authorizedUser },
   );
 
-  caseToUpdateContacts.updatePetitioner({
-    additionalName: oldCaseContact.additionalName,
-    contactId: oldCaseContact.contactId,
-    contactType: oldCaseContact.contactType,
-    email: oldCaseContact.email,
-    hasConsentedToEService: oldCaseContact.hasConsentedToEService,
-    hasEAccess: oldCaseContact.hasEAccess,
-    isAddressSealed: oldCaseContact.isAddressSealed,
-    paperPetitionEmail: oldCaseContact.paperPetitionEmail,
-    sealedAndUnavailable: oldCaseContact.sealedAndUnavailable,
-    ...editableFields,
+  petitionerCase.updatePetitioner({
+    updatedPetitioner: {
+      contactId: existingPetitionerInfo.contactId,
+      email: existingPetitionerInfo.email,
+      hasConsentedToElectronicService:
+        existingPetitionerInfo.hasConsentedToElectronicService,
+      hasElectronicAccess: existingPetitionerInfo.hasElectronicAccess,
+      isAddressSealed: existingPetitionerInfo.isAddressSealed,
+      paperPetitionEmail: existingPetitionerInfo.paperPetitionEmail,
+      sealedAndUnavailable: existingPetitionerInfo.sealedAndUnavailable,
+      ...editableFields,
+    },
   });
 
   //send back through the constructor so the contacts are created with the contact constructor
   let caseEntity = new Case(
-    {
-      ...caseToUpdateContacts.toRawObject(),
-    },
+    { ...petitionerCase.toRawObject() },
     { authorizedUser },
   ).validate();
 
@@ -227,8 +259,6 @@ export const updatePetitionerInformation = async (
     updatedPetitionerData.contactId,
   );
 
-  const hasPetitionerInfoChanged = !!documentTypeToGenerate;
-
   const updateAddressOrPhone =
     hasPetitionerInfoChanged &&
     !updatedCaseContact.isAddressSealed &&
@@ -236,30 +266,29 @@ export const updatePetitionerInformation = async (
 
   if (updateAddressOrPhone) {
     const privatePractitionersRepresentingContact =
-      Case.isPetitionerRepresented(caseEntity, oldCaseContact.contactId);
-
-    const newData = editableFields;
-    const oldData = oldCaseContact;
-
-    const { url } = await applicationContext
-      .getUseCaseHelpers()
-      .generateAndServeDocketEntry({
-        applicationContext,
-        authorizedUser,
+      Case.isPetitionerRepresented(
         caseEntity,
-        documentType: documentTypeToGenerate,
-        newData,
-        oldData,
-        privatePractitionersRepresentingContact,
-        servedParties,
-        user: authorizedUser,
-      });
+        existingPetitionerInfo.contactId,
+      );
+
+    const { url } = await generateAndServeDocketEntry({
+      applicationContext,
+      authorizedUser,
+      caseEntity,
+      docketMeta: undefined,
+      documentType: documentTypeToGenerate,
+      newData: editableFields,
+      oldData: existingPetitionerInfo,
+      privatePractitionersRepresentingContact,
+      servedParties,
+      user: authorizedUser,
+    });
     serviceUrl = url;
   }
 
   const shouldUpdateEmailAddress =
     updatedPetitionerData.updatedEmail &&
-    updatedPetitionerData.updatedEmail !== oldCaseContact.email;
+    updatedPetitionerData.updatedEmail !== existingPetitionerInfo.email;
 
   if (shouldUpdateEmailAddress) {
     const isEmailAvailable = await applicationContext
@@ -272,12 +301,11 @@ export const updatePetitionerInformation = async (
       caseEntity = await applicationContext
         .getUseCaseHelpers()
         .createUserForContact({
-          applicationContext,
           authorizedUser,
           caseEntity,
           contactId: updatedPetitionerData.contactId,
           email: updatedPetitionerData.updatedEmail,
-          name: oldCaseContact.name,
+          name: existingPetitionerInfo.name,
         });
     } else {
       const contactId = await applicationContext
@@ -288,38 +316,37 @@ export const updatePetitionerInformation = async (
           caseEntity,
           contactId: updatedPetitionerData.contactId,
           email: updatedPetitionerData.updatedEmail,
-          name: oldCaseContact.name,
+          name: existingPetitionerInfo.name,
         });
 
-      oldCaseContact.oldEmail = oldCaseContact.email;
-      oldCaseContact.newEmail = updatedPetitionerData.updatedEmail;
-      oldCaseContact.contactId = contactId;
+      updatedCaseContact.oldEmail = existingPetitionerInfo.email;
+      updatedCaseContact.newEmail = updatedPetitionerData.updatedEmail;
 
-      const userToUpdate = await applicationContext
-        .getPersistenceGateway()
-        .getUserById({
-          applicationContext,
-          userId: oldCaseContact.contactId,
-        });
+      const userToUpdate = await getUserById({
+        userId: contactId,
+      });
+
+      if (!userToUpdate) {
+        throw new NotFoundError(
+          `User not found with user id ${authorizedUser.userId}`,
+        );
+      }
 
       await updateCaseEntityAndGenerateChange({
         applicationContext,
         authorizedUser,
         caseEntity,
-        petitionerOnCase: oldCaseContact,
+        petitionerOnCase: updatedCaseContact,
         user: authorizedUser,
         userHasAnEmail: userToUpdate.email,
       });
     }
   }
 
-  const updatedCase = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
-      authorizedUser,
-      caseToUpdate: caseEntity,
-    });
+  const updatedCase = await updateCaseAndAssociations({
+    authorizedUser,
+    caseToUpdate: caseEntity,
+  });
 
   return {
     paperServiceParties: servedParties.paper,

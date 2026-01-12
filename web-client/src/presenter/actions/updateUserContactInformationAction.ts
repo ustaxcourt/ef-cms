@@ -13,6 +13,7 @@ export const updateUserContactInformationAction = async ({
 }: ActionProps) => {
   const formUser = get(state.form);
   const currentUser = get(state.user);
+  const clientConnectionId = get(state.clientConnectionId);
 
   store.set(state.userContactEditProgress.inProgress, true);
 
@@ -22,5 +23,6 @@ export const updateUserContactInformationAction = async ({
       contactInfo: formUser.contact,
       firmName: formUser.firmName,
       userId: currentUser.userId,
+      clientConnectionId,
     });
 };

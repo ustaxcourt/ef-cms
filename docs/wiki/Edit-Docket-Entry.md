@@ -33,8 +33,8 @@ After the item is marked as pending it has all the same logic as any other pendi
 * It blocks a case from being eligible for trial
 * It can be removed as pending
 
-If the case is Calendared, Scheduled for Trial, or marked High Priority:
+If the case is Calendared or Scheduled for Trial:
 * the item displays on Pending Report on the case
 * the item displays on Pending Report on the judge's Pending Report
-* the case remains on the trial session or with high priority status
-* the case does not get blocked unless it is removed from the trial session or removed from high priority
+* the case remains on the trial session
+* the case does not get blocked unless it is removed from the trial session

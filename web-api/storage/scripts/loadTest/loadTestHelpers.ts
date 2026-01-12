@@ -11,7 +11,7 @@ const getClientId = async ({
     MaxResults: 60,
     UserPoolId: userPoolId,
   });
-  const clientId = results.UserPoolClients[0].ClientId;
+  const clientId = results.UserPoolClients?.[0].ClientId;
   return clientId;
 };
 
@@ -25,9 +25,9 @@ const getUserPoolId = async ({
   const results = await cognito.listUserPools({
     MaxResults: 50,
   });
-  const userPoolId = results.UserPools.find(
+  const userPoolId = results.UserPools?.find(
     pool => pool.Name === `efcms-${env}`,
-  ).Id;
+  )?.Id;
   return userPoolId;
 };
 
@@ -74,5 +74,5 @@ export const getUserToken = async ({
     UserPoolId: userPoolId,
   });
 
-  return response.AuthenticationResult.IdToken;
+  return response.AuthenticationResult?.IdToken;
 };

@@ -1,3 +1,4 @@
+import { NotificationMessage } from '@web-api/notifications/sendNotificationToUserTypes';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const sendNotificationToUser = async ({
@@ -8,15 +9,12 @@ export const sendNotificationToUser = async ({
 }: {
   applicationContext: ServerApplicationContext;
   clientConnectionId?: string;
-  message: any;
+  message: NotificationMessage;
   userId: string;
 }) => {
   let connections = await applicationContext
     .getPersistenceGateway()
-    .getWebSocketConnectionsByUserId({
-      applicationContext,
-      userId,
-    });
+    .getWebSocketConnectionsByUserId(userId);
 
   if (clientConnectionId) {
     connections = connections.filter(connection => {

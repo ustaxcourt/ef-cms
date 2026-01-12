@@ -16,7 +16,7 @@ export const switchApiColors = async ({
   environmentName: string;
   publicApi: boolean;
 }) => {
-  const regions = ['us-east-1', 'us-west-1'];
+  const regions = ['us-east-1'];
   const apiGatewayRecordName = publicApi
     ? `gateway_api_public_${environmentName}_${deployingColor}`
     : `gateway_api_${environmentName}_${deployingColor}`;

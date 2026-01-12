@@ -29,6 +29,7 @@ export const headerHelper = (
   const isTrialSessions = currentPage.includes('TrialSession');
   const isWorkQueue = currentPage.startsWith('WorkQueue');
   const pageIsMessages = currentPage.startsWith('Messages');
+  const pageIsRecentFilings = currentPage === 'RecentFilings';
   const pageIsHome =
     isDashboard ||
     ([
@@ -52,6 +53,7 @@ export const headerHelper = (
     pageIsHome,
     pageIsMessages,
     pageIsMyCases: isDashboard && isExternalUser,
+    pageIsRecentFilings,
     pageIsTrialSessions: isTrialSessions && isInternalUser,
     showAccountMenu: isLoggedIn,
     showDocumentQC: isInternalUser && !isCaseServicesSupervisor,

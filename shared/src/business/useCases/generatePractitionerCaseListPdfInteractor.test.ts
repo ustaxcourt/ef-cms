@@ -1,25 +1,30 @@
+import '@web-api/persistence/postgres/users/mocks.jest';
 import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { generatePractitionerCaseListPdfInteractor } from './generatePractitionerCaseListPdfInteractor';
 import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('generatePractitionerCaseListPdfInteractor', () => {
+  const getUserById = jest.mocked(getUserByIdMock);
   beforeEach(() => {
-    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
+    getUserById.mockResolvedValue({
       barNumber: 'PT1234',
       name: 'Ben Matlock',
-    });
+    } as DbUser);
   });
 
   it('returns an unauthorized error on non internal users', async () => {
     applicationContext
       .getUseCases()
       .getPractitionerCasesInteractor.mockImplementation(() => {
-        throw new Error('Unauthorized');
+        throw new UnauthorizedError('Unauthorized to view practitioners cases');
       });
     await expect(
       generatePractitionerCaseListPdfInteractor(
@@ -29,7 +34,7 @@ describe('generatePractitionerCaseListPdfInteractor', () => {
         },
         mockPetitionerUser,
       ),
-    ).rejects.toThrow('Unauthorized');
+    ).rejects.toThrow('Unauthorized to view practitioners cases');
   });
 
   it('looks up the practitioner by the given userId', async () => {
@@ -66,19 +71,16 @@ describe('generatePractitionerCaseListPdfInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getUserById,
-    ).toHaveBeenCalledWith({
-      applicationContext,
+    expect(getUserById).toHaveBeenCalledWith({
       userId: 'a54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
   });
 
   it('throws an error if a practitioner user with the given userId does not exist', async () => {
-    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
+    getUserById.mockResolvedValue({
       firstName: 'Nadia',
       lastName: 'Practitioner',
-    });
+    } as unknown as DbUser);
 
     await expect(
       generatePractitionerCaseListPdfInteractor(

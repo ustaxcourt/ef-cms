@@ -8,12 +8,14 @@ import { setAllAndCurrentJudgesAction } from '../actions/setAllAndCurrentJudgesA
 import { setOpinionTypesAction } from '../actions/setOpinionTypesAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
+import { clearSearchResultsAction } from '@web-client/presenter/actions/AdvancedSearch/clearSearchResultsAction';
 
 export const gotoAdvancedSearchSequence =
   startWebSocketConnectionSequenceDecorator([
     setupCurrentPageAction('Interstitial'),
     clearScreenMetadataAction,
     closeMobileMenuAction,
+    clearSearchResultsAction,
     defaultAdvancedSearchFormAction,
     parallel([
       [

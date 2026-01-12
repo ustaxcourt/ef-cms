@@ -1,15 +1,18 @@
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { MOCK_TRIAL_REGULAR } from '../../../../../shared/src/test/mockTrial';
+import '@web-api/persistence/postgres/trialSessions/mocks.jest';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
 import {
   TRIAL_SESSION_PROCEEDING_TYPES,
   TRIAL_SESSION_SCOPE_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+} from '@shared/business/entities/EntityConstants';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { closeTrialSessionInteractor } from './closeTrialSessionInteractor';
 import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { updateTrialSession as updateTrialSessionMock } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
 
 describe('closeTrialSessionInteractor', () => {
   let mockTrialSession;
@@ -17,14 +20,15 @@ describe('closeTrialSessionInteractor', () => {
   const FUTURE_DATE = '2090-11-25T15:00:00.000Z';
   const PAST_DATE = '2000-11-25T15:00:00.000Z';
 
+  const updateTrialSession = jest.mocked(updateTrialSessionMock);
+  const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
+
   beforeEach(() => {
     mockTrialSession = MOCK_TRIAL_REGULAR;
 
     applicationContext.environment.stage = 'local';
 
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockImplementation(() => mockTrialSession);
+    getTrialSessionById.mockImplementation(() => mockTrialSession);
   });
 
   it('throws error if user is unauthorized', async () => {
@@ -121,18 +125,24 @@ describe('closeTrialSessionInteractor', () => {
       ...MOCK_TRIAL_REGULAR,
       caseOrder: undefined,
       sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
-      startDate: '2025-03-01T00:00:00.000Z',
+      startDate: FUTURE_DATE,
     };
 
-    await expect(
-      closeTrialSessionInteractor(
-        applicationContext,
-        {
-          trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        },
-        mockDocketClerkUser,
-      ),
-    ).rejects.not.toThrow('Trial session cannot be closed with open cases');
+    const closeTrialSessionPromise = closeTrialSessionInteractor(
+      applicationContext,
+      {
+        trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      },
+      mockDocketClerkUser,
+    );
+
+    await expect(closeTrialSessionPromise).rejects.not.toThrow(
+      'Trial session cannot be closed with open cases',
+    );
+
+    await expect(closeTrialSessionPromise).rejects.toThrow(
+      'Trial session cannot be closed until after its start date',
+    );
   });
 
   it('should not close the trial session and throws an error instead', async () => {
@@ -188,7 +198,7 @@ describe('closeTrialSessionInteractor', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway().updateTrialSession.mock
+      updateTrialSession.mock
         .calls[0][0].trialSessionToUpdate.sessionStatus,
     ).toBe('Closed');
   });

@@ -66,7 +66,7 @@ describe('submitUnsealDocketEntryAction', () => {
     const updatedDocketEntryInState =
       result.state.caseDetail.docketEntries.find(
         entry => entry.docketEntryId === mockDocketEntryId,
-      );
+      )!;
     expect(updatedDocketEntryInState.isSealed).toBe(false);
     expect(updatedDocketEntryInState.sealedTo).toBe(undefined);
   });

@@ -1,4 +1,12 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
+jest.mock('@web-api/persistence/postgres/cases/userOnCase/verifyCaseForUser');
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
@@ -6,17 +14,27 @@ import {
   PARTY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { MOCK_PRACTITIONER } from '@shared/test/mockUsers';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { associatePrivatePractitionerToCase } from './associatePrivatePractitionerToCase';
 import {
   getContactPrimary,
   getContactSecondary,
-} from '../../../../../shared/src/business/entities/cases/Case';
+} from '@shared/business/entities/cases/Case';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { verifyCaseForUser as verifyCaseForUserMock } from '@web-api/persistence/postgres/cases/userOnCase/verifyCaseForUser';
 
 describe('associatePrivatePractitionerToCase', () => {
+  const logger = getDawsonLogger();
+  const errorSpy = jest.spyOn(logger, 'error');
+
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
+  const verifyCaseForUser = jest.mocked(verifyCaseForUserMock);
+
   let caseRecord;
 
   beforeEach(() => {
@@ -84,60 +102,39 @@ describe('associatePrivatePractitionerToCase', () => {
       userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValue(caseRecord);
+    getCaseByDocketNumber.mockResolvedValue(caseRecord);
   });
 
   it('should not add mapping if already there', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .verifyCaseForUser.mockReturnValue(true);
+    verifyCaseForUser.mockResolvedValue(true);
 
     await associatePrivatePractitionerToCase({
-      applicationContext,
       authorizedUser: mockDocketClerkUser,
       docketNumber: caseRecord.docketNumber,
       representing: [caseRecord.petitioners[0].contactId],
       user: MOCK_PRACTITIONER,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().associateUserWithCase,
-    ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).not.toHaveBeenCalled();
+    expect(updateCaseAndAssociations).not.toHaveBeenCalled();
   });
 
   it('should add mapping for a practitioner', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .verifyCaseForUser.mockReturnValue(false);
+    verifyCaseForUser.mockResolvedValue(false);
 
     await associatePrivatePractitionerToCase({
-      applicationContext,
       authorizedUser: mockDocketClerkUser,
       docketNumber: caseRecord.docketNumber,
       representing: [caseRecord.petitioners[0].contactId],
       user: MOCK_PRACTITIONER,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().associateUserWithCase,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
   });
 
   it('should set petitioners to receive no service if the practitioner is representing them', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .verifyCaseForUser.mockReturnValue(false);
+    verifyCaseForUser.mockResolvedValue(false);
 
     await associatePrivatePractitionerToCase({
-      applicationContext,
       authorizedUser: mockDocketClerkUser,
       docketNumber: caseRecord.docketNumber,
       representing: [
@@ -148,15 +145,8 @@ describe('associatePrivatePractitionerToCase', () => {
       user: MOCK_PRACTITIONER,
     });
 
-    const updatedCase =
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0].caseToUpdate;
-    expect(
-      applicationContext.getPersistenceGateway().associateUserWithCase,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).toHaveBeenCalled();
+    const updatedCase = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
     updatedCase.petitioners.forEach(petitioner => {
       expect(petitioner.serviceIndicator).toEqual(
         SERVICE_INDICATOR_TYPES.SI_NONE,
@@ -165,27 +155,17 @@ describe('associatePrivatePractitionerToCase', () => {
   });
 
   it('should only set a petitioner to receive no service if the practitioner is only representing that petitioner', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .verifyCaseForUser.mockReturnValue(false);
+    verifyCaseForUser.mockResolvedValue(false);
 
     await associatePrivatePractitionerToCase({
-      applicationContext,
       authorizedUser: mockDocketClerkUser,
       docketNumber: caseRecord.docketNumber,
       representing: [caseRecord.petitioners[1].contactId],
       user: MOCK_PRACTITIONER,
     });
 
-    const updatedCase =
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0].caseToUpdate;
-    expect(
-      applicationContext.getPersistenceGateway().associateUserWithCase,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).toHaveBeenCalled();
+    const updatedCase = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(getContactSecondary(updatedCase)).toMatchObject({
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
     });
@@ -195,58 +175,40 @@ describe('associatePrivatePractitionerToCase', () => {
   });
 
   it('BUG 9323: should create log if practitioner is already associated with case but does not appear in the privatePractitioners array', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .verifyCaseForUser.mockResolvedValueOnce(true);
+    verifyCaseForUser.mockResolvedValueOnce(true);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValueOnce({
-        ...caseRecord,
-        privatePractitioners: [],
-      });
+    getCaseByDocketNumber.mockResolvedValueOnce({
+      ...caseRecord,
+      privatePractitioners: [],
+    });
 
     await associatePrivatePractitionerToCase({
-      applicationContext,
       authorizedUser: mockDocketClerkUser,
       docketNumber: caseRecord.docketNumber,
       representing: [],
       user: MOCK_PRACTITIONER,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().associateUserWithCase,
-    ).not.toHaveBeenCalled();
-
-    expect(applicationContext.logger.error).toHaveBeenCalled();
-    expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
+    expect(errorSpy).toHaveBeenCalledWith(
       `BUG 9323: Private Practitioner with userId: ${MOCK_PRACTITIONER.userId} was already associated with case ${caseRecord.docketNumber} but did not appear in the privatePractitioners array.`,
     );
   });
 
   it('BUG 9323: should create NO log if practitioner is already associated with case and DOES appear in the privatePractitioners array', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .verifyCaseForUser.mockResolvedValueOnce(true);
+    verifyCaseForUser.mockResolvedValueOnce(true);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValueOnce({
-        ...caseRecord,
-        privatePractitioners: [{ userId: MOCK_PRACTITIONER.userId }],
-      });
+    getCaseByDocketNumber.mockResolvedValueOnce({
+      ...caseRecord,
+      privatePractitioners: [{ userId: MOCK_PRACTITIONER.userId }],
+    });
 
     await associatePrivatePractitionerToCase({
-      applicationContext,
       authorizedUser: mockDocketClerkUser,
       docketNumber: caseRecord.docketNumber,
       representing: [caseRecord.petitioners[0].contactId],
       user: MOCK_PRACTITIONER,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().associateUserWithCase,
-    ).not.toHaveBeenCalled();
     expect(applicationContext.logger.error).not.toHaveBeenCalled();
   });
 });

@@ -13,6 +13,8 @@ export function createTrialSession(
     sessionType = SESSION_TYPES.hybrid,
     startDate = '02/02/2099',
     trialLocation = 'Anchorage, Alaska',
+    maxCases = '10',
+    associatedSwingTrialSessionId = '',
   }: Partial<{
     trialLocation: string;
     endDate: string;
@@ -20,6 +22,8 @@ export function createTrialSession(
     sessionType: TrialSessionTypes;
     proceedingType: TrialSessionProceedingType;
     judge: string;
+    maxCases: string;
+    associatedSwingTrialSessionId: string;
   }> = {
     endDate: '02/02/2100',
     judge: 'Carluzzo',
@@ -27,17 +31,26 @@ export function createTrialSession(
     sessionType: SESSION_TYPES.hybrid,
     startDate: '02/02/2099',
     trialLocation: 'Anchorage, Alaska',
+    maxCases: '10',
+    associatedSwingTrialSessionId: '',
   },
 ): Cypress.Chainable<{
   trialSessionId: string;
 }> {
-  cy.get('[data-testid="inbox-tab-content"]').should('exist');
   cy.get('[data-testid="trial-session-link"]').click();
   cy.get('[data-testid="add-trial-session-button"]').click();
   cy.get('#start-date-picker').type(startDate);
   cy.get('#estimated-end-date-picker').type(endDate);
   cy.get(`[data-testid="session-type-${sessionType}"]`).click();
-  cy.get('[data-testid="trial-session-number-of-cases-allowed"]').type('10');
+
+  if (associatedSwingTrialSessionId) {
+    cy.get('[data-testid="swing-session-label"]').click();
+    cy.get('#swing-session-id').select(associatedSwingTrialSessionId);
+  }
+
+  cy.get('[data-testid="trial-session-number-of-cases-allowed"]').type(
+    maxCases,
+  );
   cy.get(`[data-testid="${proceedingType}-proceeding-label"]`).click();
   cy.get('[data-testid="trial-session-trial-location"]').select(trialLocation);
   cy.get('[data-testid="trial-session-courthouse-name"]').type('a courthouse');
@@ -54,6 +67,7 @@ export function createTrialSession(
   cy.intercept('POST', '**/trial-sessions').as('createTrialSession');
   cy.get('[data-testid="submit-trial-session"]').click();
   cy.get('[data-testid="success-alert"]').should('exist');
+  cy.get('[data-testid="tabs-menu"]').find('li:first-child').should('have.class', 'active');
 
   return cy
     .wait('@createTrialSession')

@@ -1,22 +1,21 @@
+import { getDocumentQCServedForSectionInteractor } from '@shared/proxies/workitems/getDocumentQCServedForSectionProxy';
+import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
 import { state } from '@web-client/presenter/app.cerebral';
 
-/**
- * fetches the document qc served items in a section.
- * @param {object} applicationContext object that contains all the context specific methods
- * @param {Function} providers.get the cerebral get helper function
- * @returns {Promise<{workItems: Array}>} a list of work items
- */
 export const getDocumentQCServedForSectionAction = async ({
   applicationContext,
   get,
-}: ActionProps) => {
+}: ActionProps): Promise<{
+  workItems: RawWorkItemWithCaseAndDocketEntryInfo[];
+}> => {
   const selectedSection = get(state.workQueueToDisplay.section);
 
   const user = get(state.user);
-  const workItems = await applicationContext
-    .getUseCases()
-    .getDocumentQCServedForSectionInteractor(applicationContext, {
+  const workItems = await getDocumentQCServedForSectionInteractor(
+    applicationContext,
+    {
       section: selectedSection || user.section,
-    });
+    },
+  );
   return { workItems };
 };

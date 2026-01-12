@@ -3,13 +3,15 @@ import {
   createISODateString,
   formatDateString,
   formatNow,
-} from '../../../../../shared/src/business/utilities/DateHandler';
+} from '@shared/business/utilities/DateHandler';
 import { NotFoundError } from '@web-api/errors/errors';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { formatPhoneNumber } from '../../../../../shared/src/business/utilities/formatPhoneNumber';
-import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
-import { getJudgeWithTitle } from '../../../../../shared/src/business/utilities/getJudgeWithTitle';
+import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
+import { formatPhoneNumber } from '@shared/business/utilities/formatPhoneNumber';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
+import { getJudgeWithTitle } from '@shared/business/utilities/getJudgeWithTitle';
+import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 
 /**
  * generateStandingPretrialOrderInteractor
@@ -27,10 +29,7 @@ export const generateStandingPretrialOrderInteractor = async (
     trialSessionId,
   }: { docketNumber: string; trialSessionId: string },
 ) => {
-  const trialSession = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById({
-      applicationContext,
+  const trialSession = await getTrialSessionById({
       trialSessionId,
     });
 
@@ -38,12 +37,9 @@ export const generateStandingPretrialOrderInteractor = async (
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
   }
 
-  const caseDetail = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const caseDetail = await getCaseByDocketNumber({
+    docketNumber,
+  });
 
   const { startDate } = trialSession;
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
@@ -59,8 +55,7 @@ export const generateStandingPretrialOrderInteractor = async (
   );
 
   const formattedJudgeName = await getJudgeWithTitle({
-    applicationContext,
-    judgeUserName: trialSession.judge.name,
+    judgeUserName: trialSession.judge?.name,
   });
 
   const trialStartTimeIso = createISODateString(

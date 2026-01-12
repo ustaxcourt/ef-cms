@@ -4,12 +4,14 @@ import { createAndServePaperPetitionMultipleParties } from '../../../../helpers/
 import { getCypressEnv } from '../../../../helpers/env/cypressEnvironment';
 import { logout } from '../../../../helpers/authentication/logout';
 import { v4 } from 'uuid';
+import {
+  loginAsAdmissionsClerk,
+  loginAsDocketClerk1,
+  loginAsPrivatePractitioner,
+} from 'cypress/helpers/authentication/login-as-helpers';
 
 describe('Admissions Clerk Grants E-Access', () => {
   const password = getCypressEnv().defaultAccountPass;
-  after(() => {
-    cy.task('deleteAllCypressTestAccounts');
-  });
 
   beforeEach(() => {
     Cypress.session.clearCurrentSessionData();
@@ -25,7 +27,7 @@ describe('Admissions Clerk Grants E-Access', () => {
     createAndServePaperPetition().then(({ docketNumber, name }) => {
       const petitionerUsername = `cypress_test_account+${v4()}`;
       const petitionerEmail = `${petitionerUsername}@example.com`;
-      cy.login('admissionsclerk1');
+      loginAsAdmissionsClerk('admissionsclerk1@example.com');
       cy.get('[data-testid="messages-banner"]');
       cy.get('[data-testid="docket-number-search-input"]').type(docketNumber);
       cy.get('[data-testid="search-docket-number"]').click();
@@ -74,7 +76,7 @@ describe('Admissions Clerk Grants E-Access', () => {
       ).should('not.contain.text');
       logout();
 
-      cy.login('docketclerk1');
+      loginAsDocketClerk1();
       cy.get('[data-testid="messages-banner"]');
       cy.get('[data-testid="document-qc-nav-item"]').click();
       cy.get('[data-testid="switch-to-section-document-qc-button"]').click();
@@ -97,7 +99,7 @@ describe('Admissions Clerk Grants E-Access', () => {
       ({ docketNumber, spouseName }) => {
         const petitionerUsername = `cypress_test_account+${v4()}`;
         const petitionerEmail = `${petitionerUsername}@example.com`;
-        cy.login('admissionsclerk1');
+        loginAsAdmissionsClerk('admissionsclerk1@example.com');
         cy.get('[data-testid="messages-banner"]');
         cy.get('[data-testid="docket-number-search-input"]').type(docketNumber);
         cy.get('[data-testid="search-docket-number"]').click();
@@ -152,7 +154,7 @@ describe('Admissions Clerk Grants E-Access', () => {
         ).should('not.contain.text');
         logout();
 
-        cy.login('docketclerk1');
+        loginAsDocketClerk1();
         cy.get('[data-testid="messages-banner"]');
         cy.get('[data-testid="document-qc-nav-item"]').click();
         cy.get('[data-testid="switch-to-section-document-qc-button"]').click();
@@ -170,9 +172,8 @@ describe('Admissions Clerk Grants E-Access', () => {
     And view their case
   */
   it('should allow a practitioner to login and view their case when an admissions clerk grants e-access to a practitioner', () => {
-    const practitionerUserName = `cypress_test_account+${v4()}`;
-    const practitionerEmail = `${practitionerUserName}@example.com`;
-    cy.login('admissionsclerk1');
+    const practitionerEmail = `cypress_test_account+${v4()}@example.com`;
+    loginAsAdmissionsClerk('admissionsclerk1@example.com');
     cy.get('[data-testid="messages-banner"]');
     cy.get('[data-testid="search-link"]').click();
     cy.get('[data-testid="practitioner-search-tab"]').click();
@@ -218,7 +219,7 @@ describe('Admissions Clerk Grants E-Access', () => {
         cy.get('[data-testid="change-password-button"]').click();
         cy.get('[data-testid="petition-welcome-text"]');
         createAndServePaperPetition().then(({ docketNumber }) => {
-          cy.login('admissionsclerk1');
+          loginAsAdmissionsClerk('admissionsclerk1@example.com');
           cy.get('[data-testid="messages-banner"]');
           cy.get('[data-testid="docket-number-search-input"]').type(
             docketNumber,
@@ -233,8 +234,7 @@ describe('Admissions Clerk Grants E-Access', () => {
           cy.get('[data-testid="practitioner-representing-0"]').click();
           cy.get('[data-testid="modal-button-confirm"]').click();
           logout();
-          cy.login(practitionerUserName);
-          cy.get('[data-testid="my-cases-link"]');
+          loginAsPrivatePractitioner(practitionerEmail);
           cy.get(`[data-testid="${docketNumber}"]`)
             .contains(docketNumber)
             .click();
@@ -267,7 +267,7 @@ describe('Admissions Clerk Grants E-Access', () => {
         password: getCypressEnv().defaultAccountPass,
       });
 
-      cy.login('admissionsclerk1');
+      loginAsAdmissionsClerk('admissionsclerk1@example.com');
       cy.get('[data-testid="messages-banner"]');
       cy.get('[data-testid="docket-number-search-input"]').type(docketNumber);
       cy.get('[data-testid="search-docket-number"]').click();

@@ -3,23 +3,16 @@ import {
   createISODateString,
   formatDateString,
   formatNow,
-} from '../../../../../shared/src/business/utilities/DateHandler';
+} from '@shared/business/utilities/DateHandler';
 import { NotFoundError } from '@web-api/errors/errors';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { formatPhoneNumber } from '../../../../../shared/src/business/utilities/formatPhoneNumber';
-import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
-import { getJudgeWithTitle } from '../../../../../shared/src/business/utilities/getJudgeWithTitle';
+import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
+import { formatPhoneNumber } from '@shared/business/utilities/formatPhoneNumber';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
+import { getJudgeWithTitle } from '@shared/business/utilities/getJudgeWithTitle';
+import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 
-/**
- * generateStandingPretrialOrderForSmallCaseInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketNumber the docketNumber for the case
- * @param {string} providers.trialSessionId the id for the trial session
- * @returns {Uint8Array} notice of trial session pdf
- */
 export const generateStandingPretrialOrderForSmallCaseInteractor = async (
   applicationContext: ServerApplicationContext,
   {
@@ -27,10 +20,7 @@ export const generateStandingPretrialOrderForSmallCaseInteractor = async (
     trialSessionId,
   }: { docketNumber: string; trialSessionId: string },
 ) => {
-  const trialSession = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById({
-      applicationContext,
+  const trialSession = await getTrialSessionById({
       trialSessionId,
     });
 
@@ -38,12 +28,9 @@ export const generateStandingPretrialOrderForSmallCaseInteractor = async (
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
   }
 
-  const caseDetail = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const caseDetail = await getCaseByDocketNumber({
+    docketNumber,
+  });
 
   const { docketNumberWithSuffix } = caseDetail;
 
@@ -58,8 +45,7 @@ export const generateStandingPretrialOrderForSmallCaseInteractor = async (
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
 
   const formattedJudgeName = await getJudgeWithTitle({
-    applicationContext,
-    judgeUserName: trialSession.judge.name,
+    judgeUserName: trialSession.judge?.name,
   });
 
   const formattedChambersPhoneNumber = formatPhoneNumber(

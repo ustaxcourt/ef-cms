@@ -11,8 +11,15 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React, { ReactNode, useState } from 'react';
 import classNames from 'classnames';
 
-const renderTabFactory = ({ activeKey, asSwitch, boxed, setTab }) =>
-  function TabComponent(child) {
+const renderTabFactory = (params: {
+  activeKey: any;
+  asSwitch?: boolean;
+  boxed?: boolean;
+  setTab: any;
+}) => {
+  const { activeKey, asSwitch, boxed, setTab } = params || {};
+
+  return function TabComponent(child: any) {
     const {
       children: tabChildren,
       className: childClassName,
@@ -42,7 +49,7 @@ const renderTabFactory = ({ activeKey, asSwitch, boxed, setTab }) =>
       role: 'presentation',
     };
 
-    const buttonProps = {
+    const buttonProps: React.ButtonHTMLAttributes<HTMLButtonElement> = {
       'aria-controls': tabContentId,
       'aria-selected': isActiveTab,
       className: childClassName,
@@ -62,6 +69,7 @@ const renderTabFactory = ({ activeKey, asSwitch, boxed, setTab }) =>
       </li>
     );
   };
+};
 /**
  * Tab //: This is a strange hollow component that is being used in renderTabFactory + TabsComponent to make a styled component
  */
@@ -70,7 +78,7 @@ export function Tab(properties: {
   children?: React.ReactNode;
   className?: string;
   disabled?: boolean;
-  icon?: JSX.Element;
+  icon?: React.JSX.Element | boolean;
   id?: string;
   tabName?: string;
   title?: string;
@@ -79,7 +87,10 @@ export function Tab(properties: {
 }
 
 // Tabs convey the document headings implicitly, but we also add an invisible header for accessibility reasons
-const HeadingElement = ({ children, level }) => {
+const HeadingElement: React.FC<{
+  children: ReactNode;
+  level: string | number;
+}> = ({ children, level }) => {
   return React.createElement(
     `h${level}`,
     { 'aria-hidden': 'false', className: 'sr-only' },
@@ -90,6 +101,21 @@ const HeadingElement = ({ children, level }) => {
 const getTabHeadingTitle = word => {
   return word.charAt(0).toUpperCase() + word.slice(1);
 };
+
+export interface TabsProps {
+  asSwitch?: boolean;
+  bind?: string;
+  boxed?: boolean;
+  children?: ReactNode;
+  className?: string;
+  defaultActiveTab?: string;
+  headingLevel?: string;
+  id?: string;
+  marginBottom?: boolean;
+  onSelect?: any;
+  simpleSetter?: any;
+  value?: string;
+}
 
 /**
  * TabsComponent
@@ -110,20 +136,7 @@ export function TabsComponent({
   onSelect,
   simpleSetter,
   value,
-}: {
-  asSwitch?: boolean;
-  bind?: string;
-  boxed?: any;
-  children: ReactNode;
-  className?: string;
-  defaultActiveTab?: string;
-  headingLevel?: string;
-  id?: string;
-  marginBottom?: boolean;
-  onSelect?: any;
-  simpleSetter?: any;
-  value?: any;
-}) {
+}: TabsProps) {
   // TODO - Refactor how tab selection sets documentSelectedForScan
   let activeKey, setTab;
 
@@ -147,15 +160,13 @@ export function TabsComponent({
     const isActiveTab = tabName === activeKey;
     const tabContentId = `tabContent-${camelCase(tabName)}`;
 
-    let contentProps = {
-      className: 'tab-content',
-      id: tabContentId,
-      role: 'tabpanel',
-    };
-
-    if (asSwitch) {
-      contentProps = {};
-    }
+    const contentProps = asSwitch
+      ? {}
+      : {
+          className: 'tab-content',
+          id: tabContentId,
+          role: 'tabpanel',
+        };
 
     if (tabName && isActiveTab && tabChildren) {
       return (
@@ -192,21 +203,17 @@ export function TabsComponent({
     hasNav && `ustc-num-tabs-${navItems.length}`,
   );
 
-  let baseProps = {
-    className: tabsClass,
-    id,
-  };
-
-  if (asSwitch) {
-    baseProps = {};
-  }
+  const baseProps = asSwitch
+    ? {}
+    : {
+        className: tabsClass,
+        id,
+      };
 
   const TabComponent = renderTabFactory({
     activeKey,
     asSwitch,
     boxed,
-    headingLevel,
-    marginBottom,
     setTab,
   });
 
@@ -233,11 +240,11 @@ export function TabsComponent({
   );
 }
 
-export const Tabs = connect(
+export const Tabs: React.FC<TabsProps> = connect(
   {
     bind: props.bind,
     simpleSetter: sequences.cerebralBindSimpleSetStateSequence,
-    value: state[props.bind],
+    value: state[props`bind`],
   },
   TabsComponent,
 );

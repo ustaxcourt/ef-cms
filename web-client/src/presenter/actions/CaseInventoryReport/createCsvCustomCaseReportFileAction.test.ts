@@ -1,17 +1,19 @@
-import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
+jest.mock(
+  '@shared/proxies/customCaseReport/createCsvCustomCaseReportFileProxy',
+);
 import { cloneDeep } from 'lodash';
 import { createCsvCustomCaseReportFileAction } from '@web-client/presenter/actions/CaseInventoryReport/createCsvCustomCaseReportFileAction';
+import { createCsvCustomCaseReportFileInteractor as createCsvCustomCaseReportFileInteractorMock } from '@shared/proxies/customCaseReport/createCsvCustomCaseReportFileProxy';
 import { initialCustomCaseReportState } from '../../customCaseReportState';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
+const createCsvCustomCaseReportFileInteractor =
+  createCsvCustomCaseReportFileInteractorMock as jest.Mock;
+
 describe('createCsvCustomCaseReportFileAction', () => {
   beforeEach(() => {
-    applicationContext
-      .getUseCases()
-      .createCsvCustomCaseReportFileInteractor.mockResolvedValue(null);
-
-    presenter.providers.applicationContext = applicationContext;
+    createCsvCustomCaseReportFileInteractor.mockResolvedValue(null);
   });
   it('should call createCsvCustomCaseReportFileInteractor with correct parameters', async () => {
     const CustomCaseReportState = cloneDeep(initialCustomCaseReportState);
@@ -40,17 +42,15 @@ describe('createCsvCustomCaseReportFileAction', () => {
     });
 
     const createCsvCustomCaseReportCall =
-      applicationContext.getUseCases().createCsvCustomCaseReportFileInteractor
-        .mock.calls;
+      createCsvCustomCaseReportFileInteractor.mock.calls;
 
     expect(createCsvCustomCaseReportCall.length).toEqual(1);
-    expect(createCsvCustomCaseReportCall[0][1]).toEqual({
+    expect(createCsvCustomCaseReportCall[0][0]).toEqual({
       caseStatuses: ['CAV'],
       caseTypes: ['CDP (Lien/Levy)'],
       clientConnectionId: 'TEST_CLIENT_CONNECTION_ID',
       endDate: '2024-03-13T03:59:59.999Z',
       filingMethod: 'all',
-      highPriority: false,
       judges: ['user-id-buch'],
       preferredTrialCities: ['Detroit, Michigan'],
       procedureType: 'All',

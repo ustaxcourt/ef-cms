@@ -88,7 +88,8 @@ export const AddIrsPractitionerModal = connect(
                             aria-describedby="counsel-matches-legend"
                             checked={
                               (modal.user &&
-                                modal.user.userId === counsel.userId) ||
+                                (modal.user as { userId?: string }).userId ===
+                                  counsel.userId) ||
                               false
                             }
                             className="usa-radio__input"

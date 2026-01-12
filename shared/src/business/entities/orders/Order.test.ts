@@ -1,5 +1,5 @@
 import { Order } from './Order';
-import { getTextByCount } from '../../utilities/getTextByCount';
+import { getTextByCount } from '@shared/test/getTextByCount';
 
 describe('Order', () => {
   describe('validation', () => {

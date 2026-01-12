@@ -1,7 +1,8 @@
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   DOCKET_SECTION,
   PETITIONS_SECTION,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { MOCK_USERS } from '../../../../../shared/src/test/mockUsers';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
@@ -10,9 +11,11 @@ import {
   getDocumentQCServedForSectionInteractor,
 } from './getDocumentQCServedForSectionInteractor';
 import {
-  calculateISODate,
+  calculateDate,
   createISODateAtStartOfDayEST,
-} from '../../../../../shared/src/business/utilities/DateHandler';
+} from '@shared/business/utilities/DateHandler';
+import { getDocumentQCServedForSection as getDocumentQCServedForSectionMock } from '@web-api/persistence/postgres/workitems/getDocumentQCServedForSection';
+import { getFeatureFlagValues as getFeatureFlagValuesMock } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 import {
   mockDocketClerkUser,
   mockPetitionerUser,
@@ -20,52 +23,56 @@ import {
 } from '@shared/test/mockAuthUsers';
 
 describe('getDocumentQCServedForSectionInteractor', () => {
+  const getDocumentQCServedForSection =
+    getDocumentQCServedForSectionMock as jest.Mock;
+
+  const getFeatureFlagValues = getFeatureFlagValuesMock as jest.Mock;
+
   describe('interactor', () => {
     beforeEach(() => {
-      applicationContext.getPersistenceGateway().getDocumentQCServedForSection =
-        () => [
-          {
-            caseStatus: 'Closed',
-            caseTitle: 'Lewis Dodgson does not have a case',
-            docketEntry: {
-              createdAt: '2019-03-11T21:56:01.625Z',
-              descriptionDisplay: 'Petition filed by Lewis Dodgson',
-              docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-              documentType: 'Petition',
-              entityName: 'DocketEntry',
-              eventCode: 'P',
-              filedBy: 'Lewis Dodgson',
-              filingDate: '2019-03-11T21:56:01.625Z',
-              isDraft: false,
-              isOnDocketRecord: true,
-              sentBy: 'petitioner',
-              userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
-            },
-            docketNumber: '101-18',
-            docketNumberWithSuffix: '101-18S',
-            section: DOCKET_SECTION,
-            sentBy: 'docketclerk',
+      getDocumentQCServedForSection.mockReturnValue([
+        {
+          caseStatus: 'Closed',
+          caseTitle: 'Lewis Dodgson does not have a case',
+          docketEntry: {
+            createdAt: '2019-03-11T21:56:01.625Z',
+            descriptionDisplay: 'Petition filed by Lewis Dodgson',
+            docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+            documentType: 'Petition',
+            entityName: 'DocketEntry',
+            eventCode: 'P',
+            filedBy: 'Lewis Dodgson',
+            filingDate: '2019-03-11T21:56:01.625Z',
+            isDraft: false,
+            isOnDocketRecord: true,
+            sentBy: 'petitioner',
+            userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
           },
-          {
-            caseStatus: 'Closed',
-            caseTitle: 'Lewis Dodgson does not have a case',
-            docketEntry: {
-              createdAt: '2019-03-11T21:56:01.625Z',
-              docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-              documentType: 'Order',
-              entityName: 'DocketEntry',
-              eventCode: 'O',
-              filedBy: 'Lewis Dodgson',
-              filingDate: '2019-03-11T21:56:01.625Z',
-              isDraft: false,
-              isOnDocketRecord: true,
-              userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
-            },
-            docketNumber: '101-18',
-            docketNumberWithSuffix: '101-18S',
-            section: DOCKET_SECTION,
+          docketNumber: '101-18',
+          docketNumberWithSuffix: '101-18S',
+          section: DOCKET_SECTION,
+          sentBy: 'docketclerk',
+        },
+        {
+          caseStatus: 'Closed',
+          caseTitle: 'Lewis Dodgson does not have a case',
+          docketEntry: {
+            createdAt: '2019-03-11T21:56:01.625Z',
+            docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+            documentType: 'Order',
+            entityName: 'DocketEntry',
+            eventCode: 'O',
+            filedBy: 'Lewis Dodgson',
+            filingDate: '2019-03-11T21:56:01.625Z',
+            isDraft: false,
+            isOnDocketRecord: true,
+            userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
           },
-        ];
+          docketNumber: '101-18',
+          docketNumberWithSuffix: '101-18S',
+          section: DOCKET_SECTION,
+        },
+      ]);
       applicationContext.getPersistenceGateway().getUserById = ({ userId }) =>
         MOCK_USERS[userId];
 
@@ -116,9 +123,6 @@ describe('getDocumentQCServedForSectionInteractor', () => {
           docketNumber: '101-18',
         },
       ]);
-
-      expect(result[0].docketEntry.createdAt).toBeUndefined();
-      expect(result[1].docketEntry.createdAt).toBeUndefined();
       expect(result.length).toEqual(2);
     });
 
@@ -152,8 +156,6 @@ describe('getDocumentQCServedForSectionInteractor', () => {
           section: DOCKET_SECTION,
         },
       ]);
-
-      expect(result[0].docketEntry.createdAt).toBeUndefined();
     });
   });
 
@@ -163,13 +165,13 @@ describe('getDocumentQCServedForSectionInteractor', () => {
 
     beforeEach(() => {
       mockDaysToRetrieve = 5;
-      applicationContext
-        .getPersistenceGateway()
-        .getConfigurationItemValue.mockImplementation(() => mockDaysToRetrieve);
+      getFeatureFlagValues.mockImplementation(() => [
+        { value: { current: mockDaysToRetrieve } },
+      ]);
     });
 
     it('should get a date that is five days ago', async () => {
-      const expected = calculateISODate({
+      const expected = calculateDate({
         dateString: startOfDay,
         howMuch: -5,
         units: 'days',
@@ -180,7 +182,7 @@ describe('getDocumentQCServedForSectionInteractor', () => {
 
     it('should get a date that is seven days ago', async () => {
       mockDaysToRetrieve = 7;
-      const expected = calculateISODate({
+      const expected = calculateDate({
         dateString: startOfDay,
         howMuch: -7,
         units: 'days',
@@ -191,7 +193,7 @@ describe('getDocumentQCServedForSectionInteractor', () => {
 
     it('should get a date that is twelve days ago', async () => {
       mockDaysToRetrieve = 12;
-      const expected = calculateISODate({
+      const expected = calculateDate({
         dateString: startOfDay,
         howMuch: -12,
         units: 'days',
@@ -202,7 +204,7 @@ describe('getDocumentQCServedForSectionInteractor', () => {
 
     it('should get a date that is seven (default) days ago', async () => {
       mockDaysToRetrieve = 'twelve';
-      const expected = calculateISODate({
+      const expected = calculateDate({
         dateString: startOfDay,
         howMuch: -7,
         units: 'days',

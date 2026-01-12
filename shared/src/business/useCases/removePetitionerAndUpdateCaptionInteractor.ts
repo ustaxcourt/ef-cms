@@ -1,13 +1,15 @@
-import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
-import { Case } from '../entities/cases/Case';
+import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
+import { Case } from '@shared/business/entities/cases/Case';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * used to remove a petitioner from a case
@@ -35,9 +37,13 @@ export const removePetitionerAndUpdateCaption = async (
     );
   }
 
-  const caseToUpdate = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({ applicationContext, docketNumber });
+  const caseToUpdate = await getCaseByDocketNumber({
+    docketNumber,
+  });
+
+  if (!caseToUpdate) {
+    throw new NotFoundError(`Case ${docketNumber} not found`);
+  }
 
   let caseEntity = new Case(caseToUpdate, { authorizedUser });
 
@@ -56,7 +62,6 @@ export const removePetitionerAndUpdateCaption = async (
   caseEntity = await applicationContext
     .getUseCaseHelpers()
     .removeCounselFromRemovedPetitioner({
-      applicationContext,
       authorizedUser,
       caseEntity,
       petitionerContactId,
@@ -64,21 +69,12 @@ export const removePetitionerAndUpdateCaption = async (
 
   caseEntity.removePetitioner(petitionerContactId);
 
-  await applicationContext.getPersistenceGateway().deleteUserFromCase({
-    applicationContext,
-    docketNumber,
-    userId: petitionerContactId,
-  });
-
   caseEntity.caseCaption = caseCaption;
 
-  const updatedCase = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
-      authorizedUser,
-      caseToUpdate: caseEntity,
-    });
+  const updatedCase = await updateCaseAndAssociations({
+    authorizedUser,
+    caseToUpdate: caseEntity,
+  });
 
   return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };

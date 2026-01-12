@@ -4,10 +4,11 @@ import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('generatePrintablePendingReportAction', () => {
-  let resultUrl;
+  const resultUrl = 'https://example.com';
+  const TEST_SORT_FIELD = 'TEST_SORT_FIELD';
+  const TEST_SORT_ORDER = 'asc';
 
   beforeAll(() => {
-    resultUrl = 'https://example.com';
     presenter.providers.applicationContext = applicationContextForClient;
 
     applicationContextForClient
@@ -26,46 +27,71 @@ describe('generatePrintablePendingReportAction', () => {
       state: {},
     });
 
-    expect(
+    const printableCalls = (
       applicationContextForClient.getUseCases()
-        .generatePrintablePendingReportInteractor,
-    ).toHaveBeenCalled();
+        .generatePrintablePendingReportInteractor as jest.Mock
+    ).mock.calls;
+
+    expect(printableCalls.length).toEqual(1);
+    expect(printableCalls[0][1]).toEqual({});
     expect(result.output).toEqual({
       pdfUrl: resultUrl,
     });
   });
 
-  it('should call generatePrintablePendingReportInteractor and return caseDetail', async () => {
+  it('should call generatePrintablePendingReportInteractor and return caseDetail 2', async () => {
     const result = await runAction(generatePrintablePendingReportAction, {
       modules: {
         presenter,
       },
-      props: { docketNumberFilter: '123-20' },
+      props: {
+        docketNumberFilter: '123-20',
+        sortField: TEST_SORT_FIELD,
+        sortOrder: TEST_SORT_ORDER,
+      },
       state: {},
     });
 
-    expect(
+    const printableCalls = (
       applicationContextForClient.getUseCases()
-        .generatePrintablePendingReportInteractor,
-    ).toHaveBeenCalled();
+        .generatePrintablePendingReportInteractor as jest.Mock
+    ).mock.calls;
+
+    expect(printableCalls.length).toEqual(1);
+    expect(printableCalls[0][1]).toEqual({
+      docketNumber: '123-20',
+    });
     expect(result.output).toEqual({
       pdfUrl: resultUrl,
     });
   });
 
-  it('should call generatePrintablePendingReportInteractor and return caseDetail', async () => {
+  it('should call generatePrintablePendingReportInteractor and return caseDetail 3', async () => {
+    const TEST_JUDGE = 'Judge Colvin';
+
     const result = await runAction(generatePrintablePendingReportAction, {
       modules: {
         presenter,
       },
-      props: { judgeFilter: 'Judge Colvin' },
+      props: {
+        judgeFilter: TEST_JUDGE,
+        sortField: TEST_SORT_FIELD,
+        sortOrder: TEST_SORT_ORDER,
+      },
       state: {},
     });
 
-    expect(
+    const printableCalls = (
       applicationContextForClient.getUseCases()
-        .generatePrintablePendingReportInteractor,
-    ).toHaveBeenCalled();
+        .generatePrintablePendingReportInteractor as jest.Mock
+    ).mock.calls;
+
+    expect(printableCalls.length).toEqual(1);
+    expect(printableCalls[0][1]).toEqual({
+      judge: TEST_JUDGE,
+      sortField: TEST_SORT_FIELD,
+      sortOrder: TEST_SORT_ORDER,
+    });
     expect(result.output).toEqual({
       pdfUrl: resultUrl,
     });

@@ -1,44 +1,71 @@
-if (!process.argv[2] || !process.argv[3]) {
-  console.log('please specify start and end timestamps in ISO-8601 format');
-  console.log('');
-  console.log(
-    '$ npx ts-node --transpile-only scripts/email/resend-service-email.ts [startTimestamp] [endTimestamp]',
-  );
-  process.exit();
-}
+#!/usr/bin/env -S npx ts-node --transpile-only
 
 import { Case } from '@shared/business/entities/cases/Case';
 import { INITIAL_DOCUMENT_TYPES } from '@shared/business/entities/EntityConstants';
-import { createApplicationContext } from '@web-api/applicationContext';
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
+import {
+  type ServerApplicationContext,
+  createApplicationContext,
+} from '@web-api/applicationContext';
 import { sendIrsSuperuserPetitionEmail } from '@web-api/business/useCaseHelper/service/sendIrsSuperuserPetitionEmail';
 import { sendServedPartiesEmails } from '@web-api/business/useCaseHelper/service/sendServedPartiesEmails';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
-const getCase = async (
-  applicationContext: IApplicationContext,
-  { docketNumber }: { docketNumber: string },
-): Promise<Case> => {
-  const caseToBatch = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+const scriptConfig: ScriptConfig = {
+  description:
+    'resend-service-email-to-irs-superuser - Resends service email for all documents filed within the given timeframe',
+  environment: {
+    env: 'ENV',
+    region: 'REGION',
+  },
+  parameters: {
+    endTimestamp: {
+      description: 'Timestamp in ISO-8601 format',
+      position: 1,
+      required: true,
+      type: 'string',
+    },
+    startTimestamp: {
+      description: 'Timestamp in ISO-8601 format',
+      position: 0,
+      required: true,
+      type: 'string',
+    },
+  },
+  requireActiveAwsSession: true,
+};
+const { endTimestamp, startTimestamp } = parseArgsAndEnvVars(scriptConfig) as {
+  endTimestamp: string;
+  startTimestamp: string;
+};
+
+const getCase = async ({
+  docketNumber,
+}: {
+  docketNumber: string;
+}): Promise<Case> => {
+  const caseToBatch = await getCaseByDocketNumber({
+    docketNumber,
+  });
 
   return new Case(caseToBatch, { authorizedUser: undefined });
 };
 
 const resendServiceEmail = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     docketEntryId,
     docketNumber,
   }: { docketEntryId: string; docketNumber: string },
 ): Promise<void> => {
-  const caseEntity = await getCase(applicationContext, { docketNumber });
+  const caseEntity = await getCase({ docketNumber });
   const docketEntryEntity = caseEntity.getDocketEntryById({ docketEntryId });
 
   if (
-    docketEntryEntity.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode
+    docketEntryEntity!.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode
   ) {
     await sendIrsSuperuserPetitionEmail({
       applicationContext,
@@ -50,7 +77,7 @@ const resendServiceEmail = async (
       applicationContext,
       caseEntity,
       docketEntryId,
-      servedParties: { electronic: [] },
+      servedParties: { electronic: [], all: [], paper: [] },
     });
   }
 };
@@ -62,8 +89,8 @@ const resendServiceEmail = async (
     .getPersistenceGateway()
     .getDocketEntriesServedWithinTimeframe({
       applicationContext,
-      endTimestamp: process.argv[3],
-      startTimestamp: process.argv[2],
+      endTimestamp,
+      startTimestamp,
     });
   for (const docketEntryToReServe of docketEntriesToReServe) {
     await resendServiceEmail(applicationContext, docketEntryToReServe);

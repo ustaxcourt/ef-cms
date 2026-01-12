@@ -1,121 +1,85 @@
-/**
- * INITIAL SETUP:
- *   npx ts-node --transpile-only scripts/run-once-scripts/create-efcms-user-practitioner-firm-index.ts
- *
- * USAGE:
- *   npx ts-node --transpile-only scripts/reports/firms-cases.ts Firm Search Terms > ~/Desktop/firms-cases.csv
- *
- * CLEANUP:
- *   npx ts-node --transpile-only scripts/run-once-scripts/delete-efcms-user-practitioner-firm-index.ts
- */
+#!/usr/bin/env -S npx ts-node --transpile-only
 
-import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
-import { Search } from '@opensearch-project/opensearch/api/requestParams';
-import { createApplicationContext } from '@web-api/applicationContext';
-import { search } from '@web-api/persistence/elasticsearch/searchClient';
+import type { RawPractitioner } from '@shared/business/entities/Practitioner';
+import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
+import { fromKyselyUser } from '@web-api/persistence/postgres/users/mapper';
+import { generateCsv } from '../helpers/generate-csv';
+import { getDbReader } from '@web-api/database';
+import { pick } from 'lodash';
+import { requireEnvVars } from '../../shared/admin-tools/util';
+
+requireEnvVars(['ENV']);
+
+const OUTPUT_DIR = `${process.env.HOME}/Documents`;
 
 const firmTerms: string[] = process.argv.slice(2);
 if (!firmTerms.length) {
-  console.error(
-    'usage: npx ts-node --transpile-only scripts/reports/find-firms-cases.ts Firm Search Terms > ~/Desktop/firms-cases.csv',
-  );
+  console.error('usage: scripts/reports/find-firms-cases.ts Firm Search Terms');
   process.exit(1);
 }
 
-const getFirmsPractitioners = async ({
-  applicationContext,
-}: {
-  applicationContext: IApplicationContext;
-}): Promise<{ userId: string }[]> => {
-  const must: {}[] = [
-    {
-      term: {
-        'admissionsStatus.S': 'Active',
-      },
-    },
-    {
-      term: {
-        'role.S': 'privatePractitioner',
-      },
-    },
-  ];
-  for (const firmTerm of firmTerms) {
-    must.push({
-      wildcard: {
-        'firmName.S': {
-          value: `*${firmTerm}*`,
-        },
-      },
-    });
-  }
-  const searchParameters: Search = {
-    body: {
-      query: {
-        bool: {
-          must,
-        },
-      },
-    },
-    from: 0,
-    index: 'efcms-user-practitioner-firm',
-    size: MAX_ELASTICSEARCH_PAGINATION,
-  };
-  return (await search({ applicationContext, searchParameters }))?.results;
+const getFirmsPractitioners = async (): Promise<RawPractitioner[]> => {
+  return (
+    await getDbReader(reader =>
+      reader
+        .selectFrom('dwUser as u')
+        .selectAll('u')
+        .where('u.admissionsStatus', '=', 'Active')
+        .where('u.role', '=', 'privatePractitioner')
+        .where(eb =>
+          eb.and(firmTerms.map(term => eb('u.firmName', 'ilike', `%${term}%`))),
+        )
+        .orderBy('u.admissionsDate', 'asc')
+        .execute(),
+    )
+  ).map(fromKyselyUser) as RawPractitioner[];
 };
 
 const getFirmsCases = async ({
-  applicationContext,
   firmsPractitionerIds,
 }: {
-  applicationContext: IApplicationContext;
   firmsPractitionerIds: string[];
-}): Promise<
-  {
-    associatedJudge: string;
-    caseCaption: string;
-    docketNumber: string;
-    status: string;
-  }[]
-> => {
-  const searchParameters: Search = {
-    body: {
-      query: {
-        bool: {
-          must: [
-            {
-              terms: {
-                'privatePractitioners.L.M.userId.S': firmsPractitionerIds,
-              },
-            },
-          ],
-        },
-      },
-    },
-    from: 0,
-    index: 'efcms-case',
-    size: MAX_ELASTICSEARCH_PAGINATION,
-  };
-  return (await search({ applicationContext, searchParameters }))?.results;
+}): Promise<RawCase[]> => {
+  return (
+    await getDbReader(reader =>
+      reader
+        .selectFrom('dwCase as c')
+        .leftJoin('dwUserOnCase as uc', 'c.docketNumber', 'uc.docketNumber')
+        .selectAll('c')
+        .where('uc.userId', 'in', firmsPractitionerIds)
+        .where('uc.actingAsRole', '=', 'privatePractitioner')
+        .orderBy('c.sortableDocketNumber', 'asc')
+        .execute(),
+    )
+  ).map(fromKyselyCase) as RawCase[];
 };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const applicationContext: IApplicationContext = createApplicationContext({});
-  const firmsPractitionerIds = (
-    await getFirmsPractitioners({
-      applicationContext,
-    })
-  ).map(p => p.userId);
+  const firmsPractitionerIds = (await getFirmsPractitioners()).map(
+    p => p.userId,
+  );
   const firmsCases = await getFirmsCases({
-    applicationContext,
     firmsPractitionerIds,
   });
-  console.log(
-    '"Docket Number","Associated Judge","Case Status","Case Caption"',
-  );
-  for (const firmsCase of firmsCases) {
-    console.log(
-      `"${firmsCase.docketNumber}","${firmsCase.associatedJudge}","${firmsCase.status}","${firmsCase.caseCaption}"`,
-    );
-  }
+  const filename = `${OUTPUT_DIR}/${firmTerms.map(ft => ft.toLowerCase()).join('-')}-cases.csv`;
+  const columns = [
+    { header: 'Docket Number', key: 'docketNumber' },
+    { header: 'Judge', key: 'judge' },
+    { header: 'Case Status', key: 'status' },
+    { header: 'Case Title', key: 'caseCaption' },
+  ];
+  const rows = firmsCases.map(fc => {
+    const judge =
+      fc.associatedJudge
+        ?.replace('Chief Special Trial ', '')
+        .replace('Special Trial ', '')
+        .replace('Judge ', '') || '';
+    return {
+      ...pick(fc, ['caseCaption', 'docketNumber', 'status']),
+      judge,
+    };
+  });
+  generateCsv({ columns, filename, rows });
+  console.log(`Generated ${filename}`);
 })();

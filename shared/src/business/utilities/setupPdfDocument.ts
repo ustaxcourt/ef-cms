@@ -1,14 +1,8 @@
-export const setupPdfDocument = async ({
-  alternateFont = false,
-  applicationContext,
-  pdfData,
-}) => {
+export const setupPdfDocument = async ({ applicationContext, pdfData }) => {
   const { PDFDocument, StandardFonts } = await applicationContext.getPdfLib();
   const pdfDoc = await PDFDocument.load(pdfData);
 
-  const textFont = !alternateFont
-    ? pdfDoc.embedStandardFont(StandardFonts.TimesRomanBold)
-    : pdfDoc.embedFont(StandardFonts.CourierBold);
+  const textFont = pdfDoc.embedStandardFont(StandardFonts.TimesRomanBold);
 
   return { pdfDoc, textFont };
 };

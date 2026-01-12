@@ -1,4 +1,5 @@
 import { parse, serialize } from 'cookie';
+import { DateTime } from 'luxon';
 
 export const createCookieString = (
   cookieKey: string,
@@ -10,8 +11,7 @@ export const createCookieString = (
 ) => {
   return serialize(cookieKey, cookieValue, {
     domain,
-    // eslint-disable-next-line @miovision/disallow-date/no-new-date
-    expires: new Date(expiresDateTime),
+    expires: DateTime.fromISO(expiresDateTime).toJSDate(),
     httpOnly,
     secure,
   });
@@ -25,8 +25,7 @@ export const deleteCookieString = (
 ) => {
   return serialize(cookieKey, 'deleted', {
     domain,
-    // eslint-disable-next-line @miovision/disallow-date/no-new-date
-    expires: new Date('Thu, 01 Jan 1970 00:00:00 GMT'),
+    expires: DateTime.fromMillis(1).toJSDate(),
     httpOnly,
     secure,
   });

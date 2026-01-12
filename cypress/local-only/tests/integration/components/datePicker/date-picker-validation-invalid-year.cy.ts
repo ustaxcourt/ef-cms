@@ -1,6 +1,8 @@
+import { loginAsDocketClerk } from 'cypress/helpers/authentication/login-as-helpers';
+
 describe('Date selector', () => {
   before(() => {
-    cy.login('docketclerk');
+    loginAsDocketClerk();
   });
 
   it('should display `Enter a valid date` message when the user does not enter a 4 digit year', () => {

@@ -16,7 +16,7 @@ export const petitionsClerkBulkAssignsCases = (cerebralTest, createdCases) => {
       );
 
       return {
-        workItemId: workItem.workItemId,
+        workItemId: workItem!.workItemId,
       };
     });
 

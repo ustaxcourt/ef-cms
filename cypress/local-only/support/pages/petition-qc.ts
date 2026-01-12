@@ -1,11 +1,3 @@
-export const navigateTo = (username, docketNumber) => {
-  cy.login(username, `/case-detail/${docketNumber}/petition-qc`);
-};
-
-export const navigateToCase = (username, docketNumber) => {
-  cy.login(username, `/case-detail/${docketNumber}`);
-};
-
 export const getCaseInfoTab = () => {
   return cy.get('button#tab-case-info');
 };

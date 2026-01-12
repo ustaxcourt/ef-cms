@@ -1,8 +1,13 @@
-import { CASE_TYPES, DOCKET_NUMBER_SUFFIXES } from '../EntityConstants';
+import {
+  CASE_TYPES,
+  DOCKET_NUMBER_SUFFIXES,
+  PROCEDURE_TYPES,
+} from '../EntityConstants';
 import { IrsPractitioner } from '../IrsPractitioner';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { PrivatePractitioner } from '../PrivatePractitioner';
+import { Case, isSealedCase } from '@shared/business/entities/cases/Case';
 import joi from 'joi';
 
 export class EligibleCase extends JoiValidationEntity {
@@ -10,12 +15,16 @@ export class EligibleCase extends JoiValidationEntity {
   public caseType: string;
   public docketNumber: string;
   public docketNumberSuffix?: string;
-  public docketNumberWithSuffix?: string;
-  public highPriority?: boolean;
+  public docketNumberWithSuffix: string;
   public leadDocketNumber?: string;
+  public procedureType: string;
   public irsPractitioners?: IrsPractitioner[];
   public privatePractitioners?: PrivatePractitioner[];
   public qcCompleteForTrial?: Record<string, any>;
+  public isSealed: boolean;
+  public isAgedCase: boolean;
+  public inConsolidatedGroup: boolean;
+  public remoteTrialGranted: boolean;
 
   constructor(rawProps) {
     super('EligibleCase');
@@ -24,11 +33,17 @@ export class EligibleCase extends JoiValidationEntity {
     this.docketNumber = rawProps.docketNumber;
     this.leadDocketNumber = rawProps.leadDocketNumber;
     this.docketNumberSuffix = rawProps.docketNumberSuffix;
-    this.docketNumberWithSuffix =
-      rawProps.docketNumber + (rawProps.docketNumberSuffix || '');
-    this.highPriority = rawProps.highPriority;
+    this.docketNumberWithSuffix = Case.getDocketNumberWithSuffix({
+      docketNumber: rawProps.docketNumber,
+      docketNumberSuffix: rawProps.docketNumberSuffix,
+    });
+    this.procedureType = rawProps.procedureType;
     this.caseType = rawProps.caseType;
     this.qcCompleteForTrial = rawProps.qcCompleteForTrial || {};
+    this.isSealed = isSealedCase(rawProps);
+    this.isAgedCase = !!rawProps.isAgedCase;
+    this.inConsolidatedGroup = !!rawProps.leadDocketNumber;
+    this.remoteTrialGranted = !!rawProps.remoteTrialGranted;
 
     if (Array.isArray(rawProps.privatePractitioners)) {
       this.privatePractitioners = rawProps.privatePractitioners.map(
@@ -60,10 +75,6 @@ export class EligibleCase extends JoiValidationEntity {
       JoiValidationConstants.STRING.optional().description(
         'Auto-generated from docket number and the suffix.',
       ),
-    highPriority: joi
-      .boolean()
-      .optional()
-      .meta({ tags: ['Restricted'] }),
     irsPractitioners: joi
       .array()
       .items(IrsPractitioner.VALIDATION_RULES)
@@ -76,6 +87,10 @@ export class EligibleCase extends JoiValidationEntity {
       .items(PrivatePractitioner.VALIDATION_RULES)
       .optional()
       .description('List of private practitioners associated with the case.'),
+    procedureType: JoiValidationConstants.STRING.valid(...PROCEDURE_TYPES)
+      .required()
+      .description('Procedure type of the case.')
+      .messages({ '*': 'Select a case procedure' }),
     qcCompleteForTrial: joi
       .object()
       .optional()

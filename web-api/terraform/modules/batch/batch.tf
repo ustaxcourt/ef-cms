@@ -103,7 +103,7 @@ EOF
 }
 
 resource "aws_batch_compute_environment" "aws_batch_compute_environment" {
-  compute_environment_name = "compute_environment_${var.environment}_${var.current_color}_${var.region}"
+  name = "compute_environment_${var.environment}_${var.current_color}_${var.region}"
   service_role             = aws_iam_role.batch_service_role.arn
   type                     = "MANAGED"
 
@@ -119,7 +119,11 @@ resource "aws_batch_job_queue" "example_aws_batch_job_queue" {
   name                 = "aws-batch-job-queue-${var.environment}-${var.current_color}-${var.region}"
   state                = "ENABLED"
   priority             = 1
-  compute_environments = [aws_batch_compute_environment.aws_batch_compute_environment.arn]
+
+  compute_environment_order {
+    compute_environment = aws_batch_compute_environment.aws_batch_compute_environment.arn
+    order = 1
+  }
 }
 
 

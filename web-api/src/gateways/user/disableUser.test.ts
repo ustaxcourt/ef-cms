@@ -1,18 +1,29 @@
-import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { disableUser } from '@web-api/gateways/user/disableUser';
+
+jest.mock('@web-api/environment', () => ({
+  environment: {
+    userPoolId: 'test',
+  },
+}));
+
+const mockAdminDisableUser = jest.fn();
+jest.mock('@web-api/persistence/cognito/getCognito', () => ({
+  getCognito: () => ({
+    adminDisableUser: mockAdminDisableUser,
+  }),
+}));
 
 describe('disableUser', () => {
   it('should make a call to disable the user with the provided email, lowercased', async () => {
     const mockEmail = 'TeST@example.com';
     const mockUserPoolId = 'test';
-    applicationContext.environment.userPoolId = mockUserPoolId;
 
-    await disableUser(applicationContext, {
+    await disableUser({
       email: mockEmail,
     });
 
     expect(
-      applicationContext.getCognito().adminDisableUser,
+      mockAdminDisableUser
     ).toHaveBeenCalledWith({
       UserPoolId: mockUserPoolId,
       Username: 'test@example.com',

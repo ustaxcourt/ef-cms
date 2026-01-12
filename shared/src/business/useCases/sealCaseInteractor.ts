@@ -1,12 +1,15 @@
-import { Case } from '../entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
+import { CaseFactory } from '@shared/business/entities/cases/CaseFactory';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * sealCase
@@ -24,27 +27,26 @@ export const sealCase = async (
     throw new UnauthorizedError('Unauthorized for sealing cases');
   }
 
-  const oldCase = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({ applicationContext, docketNumber });
+  const rawCaseToUpdate = await getCaseByDocketNumber({
+    docketNumber,
+  });
 
-  const newCase = new Case(oldCase, { authorizedUser });
+  const caseToUpdate = new Case(rawCaseToUpdate, { authorizedUser });
 
-  newCase.setAsSealed();
+  caseToUpdate.setAsSealed();
 
-  const updatedCase = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
-      authorizedUser,
-      caseToUpdate: newCase,
-    });
+  const updatedCase = await updateCaseAndAssociations({
+    authorizedUser,
+    caseToUpdate,
+  });
 
   await applicationContext
     .getDispatchers()
     .sendNotificationOfSealing(applicationContext, { docketNumber });
 
-  return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
+  return CaseFactory.getFullCase({ rawCase: updatedCase, user: authorizedUser })
+    .validate()
+    .toRawObject();
 };
 
 export const sealCaseInteractor = withLocking(

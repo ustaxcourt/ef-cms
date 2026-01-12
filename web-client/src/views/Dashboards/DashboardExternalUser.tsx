@@ -1,4 +1,5 @@
 import { BigHeader } from '../BigHeader';
+import { Button } from '@web-client/ustc-ui/Button/Button';
 import { CaseListTable } from '../CaseListTable';
 import { CaseSearchBox } from '../CaseSearchBox';
 import { ErrorNotification } from '../ErrorNotification';
@@ -9,6 +10,7 @@ import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import { Mobile, NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
 
 export const DashboardExternalUser = connect(
   {
@@ -16,12 +18,33 @@ export const DashboardExternalUser = connect(
     user: state.user,
   },
   function DashboardExternalUser({ dashboardExternalHelper, user }) {
+    const renderRecentFilingsButton = () => (
+      <Button
+        link
+        className="mobile-header-button"
+        data-testid="view-recent-filings-button"
+        href="/cases/recent-filings"
+        overrideMargin={true}
+      >
+        View Recent Filings
+      </Button>
+    );
+
     return (
       <React.Fragment>
-        <BigHeader
-          className="petitioner-welcome-name"
-          text={`Welcome, ${user.name}`}
-        />
+        <NonMobile>
+          <BigHeader
+            className="petitioner-welcome-name"
+            text={`Welcome, ${user.name}`}
+          />
+        </NonMobile>
+        <Mobile>
+          <BigHeader
+            className="petitioner-welcome-name"
+            text={`My Cases`}
+            button={renderRecentFilingsButton()}
+          />
+        </Mobile>
         <section className="usa-section grid-container">
           <SuccessNotification />
           <ErrorNotification />

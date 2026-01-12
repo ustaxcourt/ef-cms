@@ -22,12 +22,16 @@ export const setDocketEntryMetaFormForEditAction = ({
     ({ index }) => index === docketRecordIndex,
   );
 
+  if (!documentDetail) {
+    throw new Error(
+      `Could not find docket entry with index ${docketRecordIndex}`,
+    );
+  }
+
   store.set(state.docketRecordIndex, docketRecordIndex);
 
-  documentDetail.filersMap = {};
-  documentDetail.filers.forEach(
-    filer => (documentDetail.filersMap[filer] = true),
-  );
+  const filersMap = {};
+  documentDetail.filers.forEach(filer => (filersMap[filer] = true));
 
   documentDetail.servedPartiesCode =
     documentDetail.servedPartiesCode ||
@@ -37,6 +41,7 @@ export const setDocketEntryMetaFormForEditAction = ({
 
   store.set(state.form, {
     ...documentDetail,
+    filersMap,
     lodged: !!documentDetail.lodged,
   });
 

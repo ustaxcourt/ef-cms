@@ -1,9 +1,9 @@
 import { advancedDocumentSearchHelper as advancedDocumentSearchComputed } from '../src/presenter/computeds/AdvancedSearch/advancedDocumentSearchHelper';
 import { caseDeadlineReportHelper as caseDeadlineReportComputed } from '../src/presenter/computeds/caseDeadlineReportHelper';
 import { caseInventoryReportHelper as caseInventoryReportComputed } from '../src/presenter/computeds/caseInventoryReportHelper';
-import { formattedPendingItemsHelper as formattedPendingItemsComputed } from '../src/presenter/computeds/formattedPendingItems';
 import { loginAs, setupTest } from './helpers';
 import { messageModalHelper as messageModalHelperComputed } from '../src/presenter/computeds/messageModalHelper';
+import { pendingReportListHelper as pendingReportListComputed } from '../src/presenter/computeds/pendingReportListHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../src/withAppContext';
 
@@ -42,7 +42,7 @@ describe('Petitions clerk verifies offboarded judge journey', () => {
         state: cerebralTest.getState(),
       });
 
-      expect(caseDeadlineReportHelper.judges).not.toContain(judgeName);
+      expect(caseDeadlineReportHelper.judgeOptions).not.toContain(judgeName);
     });
 
     it(`petitions clerk verifies judge ${judgeName} does not appear in the case inventory report judge dropdown`, () => {
@@ -58,15 +58,15 @@ describe('Petitions clerk verifies offboarded judge journey', () => {
     });
 
     it(`petitions clerk verifies judge ${judgeName} does not appear in the pending report judge dropdown`, () => {
-      const formattedPendingItems = withAppContextDecorator(
-        formattedPendingItemsComputed,
+      const pendingReportList = withAppContextDecorator(
+        pendingReportListComputed,
       );
 
-      const formattedPendingItemsHelper = runCompute(formattedPendingItems, {
+      const pendingReportListHelper = runCompute(pendingReportList, {
         state: cerebralTest.getState(),
       });
 
-      expect(formattedPendingItemsHelper.judges).not.toContain(judgeName);
+      expect(pendingReportListHelper.judges).not.toContain(judgeName);
     });
 
     it(`petitions clerk verifies judge ${judgeName} does not appear in the add trial session judge drop down`, async () => {

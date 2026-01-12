@@ -1,24 +1,17 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { getPdfJs } from '@shared/business/utilities/pdfs/getPdfJs';
 import { isEmpty } from 'lodash';
+import { TextItem } from 'pdfjs-dist/types/src/display/api';
 
-/**
- * scrapes the text content out of a pdf
- *
- * @param {string} pdfBuffer the buffer for the pdf content
- * @returns {Promise} the template with the brackets replaced with replacement values
- */
 export const scrapePdfContents = async ({
-  applicationContext,
   pdfBuffer,
 }: {
   applicationContext: ServerApplicationContext;
-  pdfBuffer: Buffer;
-}) => {
-  let pdfjsLib;
+  pdfBuffer: Uint8Array;
+}): Promise<string> => {
+  const pdfjsLib = await getPdfJs();
 
   try {
-    pdfjsLib = await applicationContext.getPdfJs();
-
     const document = await pdfjsLib.getDocument({
       data: pdfBuffer,
       isEvalSupported: false,
@@ -29,14 +22,13 @@ export const scrapePdfContents = async ({
     for (let i = 1; i <= document.numPages; i++) {
       const page = await document.getPage(i);
       const pageTextContent = await page.getTextContent({
-        disableCombineTextItems: false,
-        normalizeWhitespace: false,
+        includeMarkedContent: false,
       });
 
       let lastY = null,
         pageText = '';
-
-      for (let item of pageTextContent.items) {
+      // should be a TextItem when includeMarkedContent is false
+      for (const item of pageTextContent.items as TextItem[]) {
         if (lastY === item.transform[5] || !lastY) {
           pageText += '' + item.str;
         } else {
@@ -51,10 +43,10 @@ export const scrapePdfContents = async ({
     }
 
     return scrapedText;
-  } catch (e) {
+  } catch (e: any) {
     const pdfjsVersion = pdfjsLib && pdfjsLib.version;
     throw new Error(
-      `Error scraping PDF with PDF.JS v${pdfjsVersion} ${e.message}`,
+      `Error scraping PDF with PDF.JS v${pdfjsVersion} ${e?.message}`,
     );
   }
 };

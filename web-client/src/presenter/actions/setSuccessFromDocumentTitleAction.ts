@@ -29,8 +29,10 @@ export const setSuccessFromDocumentTitleAction = ({
   const docketEntryId = get(state.docketEntryId);
   const order = docketEntries.find(d => d.docketEntryId === docketEntryId);
 
+  // @ts-ignore
   let successMessage = `${order.documentTitle || order.documentType} updated.`;
 
+  // @ts-ignore
   if (order.eventCode === PROPOSED_STIPULATED_DECISION_EVENT_CODE) {
     successMessage = 'Stipulated Decision signed and saved.';
   }

@@ -1,123 +1,79 @@
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   CreatedCaseType,
   INITIAL_DOCUMENT_TYPES,
   PETITIONS_SECTION,
   ROLES,
-} from '../../../../shared/src/business/entities/EntityConstants';
-import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
+} from '@shared/business/entities/EntityConstants';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { ElectronicPetition } from '@shared/business/entities/cases/ElectronicPetition';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
-import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { UserCase } from '../../../../shared/src/business/entities/UserCase';
-import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
-import { WorkItem } from '../../../../shared/src/business/entities/WorkItem';
-import { setServiceIndicatorsForCase } from '../../../../shared/src/business/utilities/setServiceIndicatorsForCase';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
+import {
+  AuthUser,
+  UnknownAuthUser,
+} from '@shared/business/entities/authUser/AuthUser';
+import { WorkItem } from '@shared/business/entities/WorkItem';
+import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
+import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
+import { RawUser } from '@shared/business/entities/User';
+import { cloneDeep } from 'lodash';
+import { RawPrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 
 export type ElectronicCreatedCaseType = Omit<CreatedCaseType, 'trialCitiies'>;
+export const CREATE_CASE_LOCK_IDENTIFIER = 'CREATE_CASE_LOCK_IDENTIFIER';
 
 const addPetitionDocketEntryToCase = ({
   caseToAdd,
   docketEntryEntity,
   user,
 }) => {
-  const workItemEntity = new WorkItem(
-    {
-      assigneeId: null,
-      assigneeName: null,
-      associatedJudge: caseToAdd.associatedJudge,
-      associatedJudgeId: caseToAdd.associatedJudgeId,
-      caseStatus: caseToAdd.status,
-      caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseToAdd)),
-      docketEntry: {
-        ...docketEntryEntity.toRawObject(),
-        createdAt: docketEntryEntity.createdAt,
-      },
-      docketNumber: caseToAdd.docketNumber,
-      docketNumberWithSuffix: caseToAdd.docketNumberWithSuffix,
-      isInitializeCase: true,
-      section: PETITIONS_SECTION,
-      sentBy: user.name,
-      sentByUserId: user.userId,
-      trialDate: caseToAdd.trialDate,
-      trialLocation: caseToAdd.trialLocation,
-    },
-    { caseEntity: caseToAdd },
-  );
+  const workItemEntity = new WorkItem({
+    assigneeId: null,
+    assigneeName: null,
+    docketEntryId: docketEntryEntity.docketEntryId,
+    docketNumber: caseToAdd.docketNumber,
+    section: PETITIONS_SECTION,
+    sentBy: user.name,
+    sentByUserId: user.userId,
+  });
 
-  docketEntryEntity.setWorkItem(workItemEntity);
   caseToAdd.addDocketEntry(docketEntryEntity);
 
   return workItemEntity;
 };
 
-export const createCaseInteractor = async (
+const createCaseMetadata = async (
   applicationContext: ServerApplicationContext,
   {
     attachmentToPetitionFileIds,
     corporateDisclosureFileId,
+    petitionEntity,
     petitionFileId,
     petitionMetadata,
+    privatePractitioners,
     stinFileId,
+    user,
   }: {
     attachmentToPetitionFileIds?: string[];
     corporateDisclosureFileId?: string;
+    petitionEntity: ElectronicPetition;
     petitionFileId: string;
     petitionMetadata: any;
+    privatePractitioners: RawUser[];
     stinFileId: string;
+    user: RawUser;
   },
-  authorizedUser: UnknownAuthUser,
+  authorizedUser: AuthUser,
 ) => {
-  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PETITION)) {
-    throw new UnauthorizedError('Unauthorized');
-  }
-
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
-
-  const petitionEntity = new ElectronicPetition(petitionMetadata).validate();
-
-  const docketNumber =
-    await applicationContext.docketNumberGenerator.createDocketNumber({
-      applicationContext,
-    });
-
-  let privatePractitioners: UserRecord[] = [];
-  if (user.role === ROLES.privatePractitioner) {
-    const practitionerUser = await applicationContext
-      .getPersistenceGateway()
-      .getUserById({
-        applicationContext,
-        userId: user.userId,
-      });
-
-    practitionerUser.representing = [
-      petitionEntity.getContactPrimary().contactId,
-    ];
-
-    if (
-      petitionMetadata.contactSecondary &&
-      petitionMetadata.contactSecondary.name
-    ) {
-      practitionerUser.representing.push(
-        petitionEntity.getContactSecondary().contactId,
-      );
-    }
-
-    // remove the email from contactPrimary
-    // since the practitioners array should have a service email
-    // and paperPetitionEmail is used as email for the petitioner
-    delete petitionEntity.getContactPrimary().email;
-    delete petitionEntity.getContactPrimary().serviceIndicator;
-
-    privatePractitioners = [practitionerUser];
-  }
+  const docketNumber = await generateDocketNumber({});
 
   const caseToAdd = new Case(
     {
@@ -133,7 +89,7 @@ export const createCaseInteractor = async (
     },
   );
 
-  setServiceIndicatorsForCase(caseToAdd);
+  setServiceIndicatorsForPetitionersOnCase(caseToAdd);
 
   if (user.role === ROLES.petitioner) {
     caseToAdd.getContactPrimary().contactId = user.userId;
@@ -280,23 +236,104 @@ export const createCaseInteractor = async (
   }
 
   await applicationContext.getUseCaseHelpers().createCaseAndAssociations({
-    applicationContext,
     authorizedUser,
     caseToCreate: caseToAdd.validate().toRawObject(),
   });
 
-  const userCaseEntity = new UserCase(caseToAdd);
+  return { caseToAdd, workItem: newWorkItem };
+};
 
-  await applicationContext.getPersistenceGateway().associateUserWithCase({
+export const createCaseInteractor = async (
+  applicationContext: ServerApplicationContext,
+  {
+    attachmentToPetitionFileIds,
+    corporateDisclosureFileId,
+    petitionFileId,
+    petitionMetadata,
+    stinFileId,
+  }: {
+    attachmentToPetitionFileIds?: string[];
+    corporateDisclosureFileId?: string;
+    petitionFileId: string;
+    petitionMetadata: any;
+    stinFileId: string;
+  },
+  authorizedUser: UnknownAuthUser,
+) => {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PETITION)) {
+    throw new UnauthorizedError('Unauthorized');
+  }
+
+  const user = await getUserById({ userId: authorizedUser.userId });
+
+  if (!user) {
+    throw new NotFoundError(
+      `User not found with user id ${authorizedUser.userId}`,
+    );
+  }
+
+  const petitionEntity = new ElectronicPetition(petitionMetadata).validate();
+
+  let privatePractitioners: RawUser[] = [];
+  if (user.role === ROLES.privatePractitioner) {
+    const practitionerUser = cloneDeep(
+      user,
+    ) as unknown as RawPrivatePractitioner; // Doing a type conversion because we know in this instance their role is a private practitioner
+
+    practitionerUser.representing = [
+      petitionEntity.getContactPrimary().contactId,
+    ];
+
+    if (
+      petitionMetadata.contactSecondary &&
+      petitionMetadata.contactSecondary.name
+    ) {
+      practitionerUser.representing.push(
+        petitionEntity.getContactSecondary().contactId,
+      );
+    }
+
+    // remove the email from contactPrimary
+    // since the practitioners array should have a service email
+    // and paperPetitionEmail is used as email for the petitioner
+    delete petitionEntity.getContactPrimary().email;
+    delete petitionEntity.getContactPrimary().serviceIndicator;
+
+    privatePractitioners = [practitionerUser];
+  }
+
+  const removeLockFunction = await acquireLock({
     applicationContext,
-    docketNumber: caseToAdd.docketNumber,
-    userCase: userCaseEntity.validate().toRawObject(),
-    userId: user.userId,
+    authorizedUser,
+    identifiers: [CREATE_CASE_LOCK_IDENTIFIER],
+    retries: 25,
+    waitTime: 500,
   });
 
-  await applicationContext.getPersistenceGateway().saveWorkItem({
-    applicationContext,
-    workItem: newWorkItem.validate().toRawObject(),
+  let caseToAdd: Case;
+  let workItem: WorkItem;
+
+  try {
+    ({ caseToAdd, workItem } = await createCaseMetadata(
+      applicationContext,
+      {
+        attachmentToPetitionFileIds,
+        corporateDisclosureFileId,
+        petitionEntity,
+        petitionFileId,
+        petitionMetadata,
+        privatePractitioners,
+        stinFileId,
+        user,
+      },
+      authorizedUser,
+    ));
+  } finally {
+    await removeLockFunction();
+  }
+
+  await upsertWorkItems({
+    workItems: [workItem.validate().toRawObject()],
   });
 
   applicationContext.logger.info('filed a new petition', {

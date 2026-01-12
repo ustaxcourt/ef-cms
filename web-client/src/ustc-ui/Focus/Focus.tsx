@@ -12,18 +12,20 @@ export const Focus = ({
   className?: string;
 }) => {
   const [focused, setFocused] = useState(false);
-  const node = useRef(null);
+  const node = useRef<HTMLDivElement | null>(null);
 
   const setFocus = e => {
-    e && e.preventDefault();
-    const focusEl = node?.current?.querySelector(focusableChildren);
-    if (focusEl?.focus) focusEl.focus();
+    e?.preventDefault();
+    const focusEl = node?.current?.querySelector(
+      focusableChildren,
+    ) as HTMLElement | null;
+    if (focusEl) focusEl.focus();
     setFocused(true);
     return false;
   };
 
   useEffect(() => {
-    focused || setTimeout(setFocus, 50);
+    if (!focused) setTimeout(setFocus, 50);
   }, []);
 
   const focusClassName = classNames('focus-component', className);

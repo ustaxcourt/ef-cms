@@ -24,6 +24,7 @@ export const getGeneratePrintableTrialSessionCopyReportLambda = (
         showCaseNotes: body.showCaseNotes,
         sort: body.sort,
         userHeading: body.userHeading,
+        trialStatusCounts: body.trialStatusCounts
       },
       authorizedUser,
     );
