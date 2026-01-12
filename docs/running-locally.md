@@ -163,6 +163,7 @@ colvinschambers@example.com
 Hopefully everything will work fine, but if you have issues logging in, double check that your API didn't throw errors when trying to initialize.  Check your network tab or browser console for any errors when trying to access the localhost:4000 API.  Also verify you are on the correct branch. `ustaxcourt/staging` is recommended.
 
 ## Running the USTC pay.gov test server
+
 When testing interactions with pay.gov locally or in a pipeline, the USTC pay.gov test server needs to be started. The test server has been installed as a dev dependency. To run it, use the following command: 
 
 ```
@@ -174,3 +175,5 @@ When initially running the server with this command, you will be prompted to ent
 ```
 npm run start:pay-gov-test-server:update-env
 ```
+
+For further information, please see the [readme](https://www.npmjs.com/package/@ustaxcourt/ustc-pay-gov-test-server) for this repo. 
