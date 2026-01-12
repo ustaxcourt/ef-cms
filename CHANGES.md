@@ -1,3 +1,24 @@
+<details><summary>Dependency Updates - Week of 2026-01-05</summary>
+
+## Local
+
+#### Upgrade Terraform to `1.14.3`
+
+```bash
+tfswitch 1.14.3
+```
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Docker container `4.3.63` - choose exp2
+
+```bash
+. scripts/env/set-env.zsh expN
+npm run ecr:check-version
+```
+</details>
 <details><summary>BUG 9609</summary>
 
 ## Manual Deployment Steps
