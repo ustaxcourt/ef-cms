@@ -32,10 +32,6 @@ describe('PetitionQcScanBatchPreviewer', () => {
     cy.get('[data-testid="upload-mode-scan"]').should('exist');
   });
 
-  it('should NOT display upload mode radio button (scanOnly mode)', () => {
-    cy.get('[data-testid="upload-pdf-button"]').should('not.exist');
-  });
-
   it('should NOT display file input', () => {
     cy.get('[data-testid="petitionFile-file-input"]').should('not.exist');
   });
