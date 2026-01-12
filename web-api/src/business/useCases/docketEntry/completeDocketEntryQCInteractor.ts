@@ -83,6 +83,7 @@ const completeDocketEntryQC = async (
   const docketNumbers = multiDocketedOn?.length
     ? multiDocketedOn
     : [docketNumber];
+
   const allCases = await getCasesByDocketNumbers({
     docketNumbers,
   });

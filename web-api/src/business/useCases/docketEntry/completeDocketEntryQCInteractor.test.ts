@@ -22,7 +22,7 @@ import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
-import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { getFeatureFlagValues as getFeatureFlagValuesMock } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getWorkItemByDocketNumberAndDocketEntryId as getWorkItemByDocketNumberAndDocketEntryIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
@@ -36,11 +36,7 @@ const getUserById = jest.mocked(getUserByIdMock);
 describe('completeDocketEntryQCInteractor', () => {
   let caseRecord;
   const getFeatureFlagValues = jest.mocked(getFeatureFlagValuesMock);
-
-  const mockPrimaryId = MOCK_CASE.petitioners[0].contactId;
-  const mockDocketEntryId = MOCK_CASE.docketEntries[0].docketEntryId;
-
-  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
   const updateCaseAndAssociations = jest
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
@@ -48,6 +44,18 @@ describe('completeDocketEntryQCInteractor', () => {
     getWorkItemByDocketNumberAndDocketEntryIdMock,
   );
   const tryGetLocks = jest.mocked(tryGetLocksMock);
+
+  const mockPrimaryId = MOCK_CASE.petitioners[0].contactId;
+  const mockDocketEntryId = MOCK_CASE.docketEntries[0].docketEntryId;
+  const workItem = {
+    docketEntryId: mockDocketEntryId,
+    docketNumber: '45678-18',
+    section: DOCKET_SECTION,
+    sentBy: 'Test User',
+    sentByUserId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    updatedAt: applicationContext.getUtilities().createISODateString(),
+    workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+  };
 
   beforeEach(() => {
     getFeatureFlagValues.mockResolvedValue([
@@ -61,15 +69,6 @@ describe('completeDocketEntryQCInteractor', () => {
         },
       },
     ]);
-    const workItem = {
-      docketEntryId: mockDocketEntryId,
-      docketNumber: '45678-18',
-      section: DOCKET_SECTION,
-      sentBy: 'Test User',
-      sentByUserId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      updatedAt: applicationContext.getUtilities().createISODateString(),
-      workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    };
 
     getWorkItemByDocketNumberAndDocketEntryId.mockResolvedValue(
       new WorkItem(workItem),
@@ -98,7 +97,7 @@ describe('completeDocketEntryQCInteractor', () => {
 
     getUserById.mockResolvedValue(docketClerkUser as DbUser);
 
-    getCaseByDocketNumber.mockResolvedValue(caseRecord);
+    getCasesByDocketNumbers.mockResolvedValue([caseRecord]);
 
     applicationContext.getChromiumBrowser().newPage.mockReturnValue({
       addStyleTag: () => {},
@@ -136,6 +135,84 @@ describe('completeDocketEntryQCInteractor', () => {
     ).rejects.toThrow('Unauthorized');
   });
 
+  it('should throw an error if user not found', async () => {
+    getUserById.mockResolvedValueOnce(undefined);
+    await expect(
+      completeDocketEntryQCInteractor(
+        applicationContext,
+        {
+          entryMetadata: {
+            ...caseRecord.docketEntries[0],
+            leadDocketNumber: caseRecord.docketNumber,
+          },
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow(
+      `User not found with user id ${mockDocketClerkUser.userId}`,
+    );
+  });
+
+  it('should throw an error if currentDocketEntry is not found', async () => {
+    const notFoundId = '2f73eb0c-6820-4534-98b9-a1359ef49305';
+    await expect(
+      completeDocketEntryQCInteractor(
+        applicationContext,
+        {
+          entryMetadata: {
+            ...caseRecord.docketEntries[0],
+            leadDocketNumber: caseRecord.docketNumber,
+            docketEntryId: notFoundId,
+          },
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow(
+      `Could not find docket entry with id ${notFoundId} on case ${caseRecord.docketNumber}`,
+    );
+  });
+
+  it('should throw an error if workItem is not found', async () => {
+    getWorkItemByDocketNumberAndDocketEntryId.mockResolvedValueOnce(undefined);
+    await expect(
+      completeDocketEntryQCInteractor(
+        applicationContext,
+        {
+          entryMetadata: {
+            ...caseRecord.docketEntries[0],
+            leadDocketNumber: caseRecord.docketNumber,
+          },
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow(
+      `Could not find work item associated with ${caseRecord.docketNumber} document ${caseRecord.docketEntries[0].docketEntryId}`,
+    );
+  });
+
+  it('should throw an error if workItem is already completed', async () => {
+    getWorkItemByDocketNumberAndDocketEntryId.mockResolvedValueOnce(
+      new WorkItem({
+        ...workItem,
+        completedAt: 'this is a completed date',
+      }),
+    );
+    await expect(
+      completeDocketEntryQCInteractor(
+        applicationContext,
+        {
+          entryMetadata: {
+            ...caseRecord.docketEntries[0],
+            leadDocketNumber: caseRecord.docketNumber,
+          },
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow(
+      `The work item was already completed on case ${caseRecord.docketNumber}`,
+    );
+  });
+
   it('adds documents and workitems', async () => {
     await expect(
       completeDocketEntryQCInteractor(
@@ -150,20 +227,27 @@ describe('completeDocketEntryQCInteractor', () => {
       ),
     ).resolves.not.toThrow();
 
-    expect(getCaseByDocketNumber).toHaveBeenCalled();
+    expect(getCasesByDocketNumbers).toHaveBeenCalled();
     expect(updateCaseAndAssociations).toHaveBeenCalled();
   });
 
   it('serves the document for electronic-only parties if a notice of docket change is generated', async () => {
+    getCasesByDocketNumbers.mockResolvedValueOnce([
+      { ...caseRecord, docketNumber: '101-20', docketEntries: [] },
+      { ...caseRecord, docketNumber: '102-20' },
+    ]);
     const result = await completeDocketEntryQCInteractor(
       applicationContext,
       {
-        entryMetadata: caseRecord.docketEntries[0],
+        entryMetadata: {
+          ...caseRecord.docketEntries[0],
+          multiDocketedOn: ['101-20', '102-20'],
+        },
       },
       mockDocketClerkUser,
     );
 
-    expect(getCaseByDocketNumber).toHaveBeenCalled();
+    expect(getCasesByDocketNumbers).toHaveBeenCalled();
     expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(result.paperServicePdfUrl).toBeUndefined();
     expect(result.paperServiceParties.length).toEqual(0);
@@ -428,17 +512,19 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('serves the document for parties with paper service if a notice of docket change is generated', async () => {
-    getCaseByDocketNumber.mockResolvedValue({
-      ...caseRecord,
-      isPaper: true,
-      mailingDate: '2019-03-01T21:40:46.415Z',
-      petitioners: [
-        {
-          ...caseRecord.petitioners[0],
-          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-        },
-      ],
-    });
+    getCasesByDocketNumbers.mockResolvedValue([
+      {
+        ...caseRecord,
+        isPaper: true,
+        mailingDate: '2019-03-01T21:40:46.415Z',
+        petitioners: [
+          {
+            ...caseRecord.petitioners[0],
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
+      },
+    ]);
 
     const mockNumberOfPages = 999;
     applicationContext
@@ -473,24 +559,26 @@ describe('completeDocketEntryQCInteractor', () => {
       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
     });
 
-    expect(getCaseByDocketNumber).toHaveBeenCalled();
+    expect(getCasesByDocketNumbers).toHaveBeenCalled();
     expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(result.paperServicePdfUrl).toEqual('www.example.com');
     expect(result.paperServiceParties.length).toEqual(1);
   });
 
   it('generates a document for paper service if the document is a Notice of Change of Address and the case has paper service parties', async () => {
-    getCaseByDocketNumber.mockReturnValue({
-      ...caseRecord,
-      isPaper: true,
-      mailingDate: '2019-03-01T21:40:46.415Z',
-      petitioners: [
-        {
-          ...caseRecord.petitioners[0],
-          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-        },
-      ],
-    });
+    getCasesByDocketNumbers.mockResolvedValueOnce([
+      {
+        ...caseRecord,
+        isPaper: true,
+        mailingDate: '2019-03-01T21:40:46.415Z',
+        petitioners: [
+          {
+            ...caseRecord.petitioners[0],
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
+      },
+    ]);
 
     const result = await completeDocketEntryQCInteractor(
       applicationContext,
@@ -504,7 +592,7 @@ describe('completeDocketEntryQCInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(getCaseByDocketNumber).toHaveBeenCalled();
+    expect(getCasesByDocketNumbers).toHaveBeenCalled();
     expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(result.paperServicePdfUrl).toEqual('www.example.com');
     expect(result.paperServiceParties.length).toEqual(1);
@@ -523,7 +611,7 @@ describe('completeDocketEntryQCInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(getCaseByDocketNumber).toHaveBeenCalled();
+    expect(getCasesByDocketNumbers).toHaveBeenCalled();
     expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(result.paperServicePdfUrl).toEqual(undefined);
     expect(result.paperServiceParties.length).toEqual(0);
