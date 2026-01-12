@@ -22,6 +22,7 @@ export const PetitionQcDocumentPreview = connect(
         <PetitionQcScanBatchPreviewer
           documentTabs={petitionQcHelper.documentTabsToDisplay}
           documentType={documentSelectedForPreview}
+          scanOnly={false}
           title="Add Document(s)"
         />
       </>

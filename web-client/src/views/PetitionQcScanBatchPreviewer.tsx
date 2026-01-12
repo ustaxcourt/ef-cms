@@ -5,6 +5,7 @@ import {
   ScanErrorModal,
   UnfinishedScansModal,
 } from './ScanBatchPreviewer/ScanBatchModals';
+import { ScanBatchFileInput } from './ScanBatchPreviewer/ScanBatchFileInput';
 import { ScanBatchesTable } from './ScanBatchPreviewer/ScanBatchesTable';
 import { ScanDocumentTabs } from './ScanBatchPreviewer/ScanDocumentTabs';
 import { ScanModeRadios } from './ScanBatchPreviewer/ScanModeRadios';
@@ -46,7 +47,7 @@ const petitionQcScanBatchPreviewerDeps = {
   scanBatchPreviewerHelper: state.scanBatchPreviewerHelper,
   scanHelper: state.scanHelper,
   scannerStartupSequence: sequences.scannerStartupSequence,
-  scanOnly: props.scanOnly ?? true,
+  scanOnly: props.scanOnly ?? false,
   selectedBatchIndex: state.scanner.selectedBatchIndex,
   setCurrentPageIndexSequence: sequences.setCurrentPageIndexSequence,
   setDocumentForPreviewSequence: sequences.setDocumentForPreviewSequence,
@@ -80,7 +81,7 @@ export const PetitionQcScanBatchPreviewer = connect<
     scanBatchPreviewerHelper,
     scanHelper,
     scannerStartupSequence,
-    scanOnly = true,
+    scanOnly = false,
     selectedBatchIndex,
     setCurrentPageIndexSequence,
     setDocumentForPreviewSequence,
@@ -195,6 +196,14 @@ export const PetitionQcScanBatchPreviewer = connect<
               selectedBatchIndex={selectedBatchIndex}
             />
           )}
+
+          {!scanOnly &&
+            scanBatchPreviewerHelper.uploadMode === 'upload' && (
+              <ScanBatchFileInput
+                documentType={documentType}
+                validateSequence={validateSequence}
+              />
+            )}
 
           {scanBatchPreviewerHelper.uploadMode === 'preview' && (
             <ScanPdfPreview
