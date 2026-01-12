@@ -19,11 +19,11 @@ describe('File a petition', () => {
         it('should display error messages when user presses "Next" button without filling reason and fact', () => {
           cy.get('[data-testid="step-2-next-button"]').click();
 
-          cy.get('[data-testid="error_message_petitionReasons[0]"]').should(
+          cy.get('[data-testid="error_message_petitionReasons-0"]').should(
             'exist',
           );
 
-          cy.get('[data-testid="error_message_petitionFacts[0]"]').should(
+          cy.get('[data-testid="error_message_petitionFacts-0"]').should(
             'exist',
           );
         });
@@ -31,25 +31,25 @@ describe('File a petition', () => {
         it('should remove any error message when the user starts typing/changing the input', () => {
           cy.get('[data-testid="step-2-next-button"]').click();
 
-          cy.get('[data-testid="error_message_petitionReasons[0]"]').should(
+          cy.get('[data-testid="error_message_petitionReasons-0"]').should(
             'exist',
           );
 
-          cy.get('[data-testid="error_message_petitionFacts[0]"]').should(
+          cy.get('[data-testid="error_message_petitionFacts-0"]').should(
             'exist',
           );
 
           cy.get('[data-testid="petition-reason--1"]').focus();
           cy.get('[data-testid="petition-reason--1"]').type('REASON 1');
 
-          cy.get('[data-testid="error_message_petitionReasons[0]"]').should(
+          cy.get('[data-testid="error_message_petitionReasons-0"]').should(
             'not.exist',
           );
 
           cy.get('[data-testid="petition-fact--1"]').focus();
           cy.get('[data-testid="petition-fact--1"]').type('FACT 1');
 
-          cy.get('[data-testid="error_message_petitionFacts[0]"]').should(
+          cy.get('[data-testid="error_message_petitionFacts-0"]').should(
             'not.exist',
           );
         });
@@ -58,7 +58,7 @@ describe('File a petition', () => {
           cy.get('[data-testid="petition-reason--1"]').focus();
           cy.get('[data-testid="petition-reason--1"]').type('REASON 1');
 
-          cy.get('[data-testid="error_message_petitionReasons[0]"]').should(
+          cy.get('[data-testid="error_message_petitionReasons-0"]').should(
             'not.exist',
           );
 

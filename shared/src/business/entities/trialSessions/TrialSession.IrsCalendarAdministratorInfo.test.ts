@@ -30,7 +30,8 @@ describe('TrialSession.IrsCalendarAdministratorInfo', () => {
 
     const validationErrors = entity.getFormattedValidationErrors();
     expect(validationErrors).toEqual({
-      name: '"irsCalendarAdministratorInfo.name" length must be less than or equal to 100 characters long',
+      'irsCalendarAdministratorInfo-name':
+        '"irsCalendarAdministratorInfo.name" length must be less than or equal to 100 characters long',
     });
   });
 
@@ -44,7 +45,7 @@ describe('TrialSession.IrsCalendarAdministratorInfo', () => {
 
     const validationErrors = entity.getFormattedValidationErrors();
     expect(validationErrors).toEqual({
-      email:
+      'irsCalendarAdministratorInfo-email':
         '"irsCalendarAdministratorInfo.email" length must be less than or equal to 100 characters long',
     });
   });
@@ -59,7 +60,7 @@ describe('TrialSession.IrsCalendarAdministratorInfo', () => {
 
     const validationErrors = entity.getFormattedValidationErrors();
     expect(validationErrors).toEqual({
-      phone:
+      'irsCalendarAdministratorInfo-phone':
         '"irsCalendarAdministratorInfo.phone" length must be less than or equal to 100 characters long',
     });
   });

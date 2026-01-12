@@ -1,5 +1,4 @@
 /* eslint-disable max-lines */
-import { ENTERED_AND_SERVED_EVENT_CODES } from './courtIssuedDocument/CourtIssuedDocumentConstants';
 import { FORMATS, formatNow } from '../utilities/DateHandler';
 import {
   flatten,
@@ -111,7 +110,31 @@ export const JURISDICTIONAL_OPTIONS = {
   undersigned: 'Jurisdiction is retained by the undersigned',
 };
 
-export const MOTION_DISPOSITIONS = { DENIED: 'Denied', GRANTED: 'Granted' };
+export type DocketEntryRelation = {
+  disposition: string;
+  docketEntryId: string;
+};
+
+export const MOTION_DISPOSITIONS = {
+  DENIED: 'DENIED',
+  GRANTED: 'GRANTED',
+  GRANTED_IN_PART: 'GRANTED IN PART',
+};
+
+export const MOTION_DISPOSITION_VERBIAGE = {
+  DENIED: {
+    MOTION: 'DENIED BY',
+    ORDER: 'DENYING',
+  },
+  GRANTED: {
+    MOTION: 'GRANTED BY',
+    ORDER: 'GRANTING',
+  },
+  'GRANTED IN PART': {
+    MOTION: 'GRANTED IN PART BY',
+    ORDER: 'GRANTING IN PART',
+  },
+};
 
 export const STRICKEN_FROM_TRIAL_SESSION_MESSAGE =
   'This case is stricken from the trial session';
@@ -443,7 +466,6 @@ export const ADVANCED_SEARCH_OPINION_TYPES_LIST = [
     label: 'Bench Opinion (Order of Service of Transcript)',
   },
 ];
-
 export const ORDER_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(
   d => d.isOrder && d.eventCode !== BENCH_OPINION_EVENT_CODE,
 ).map(pickEventCode);
@@ -684,6 +706,15 @@ export const SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES = flatten([
 ])
   .filter((internalEvent: Record<string, any>) => internalEvent.caseDecision)
   .map(x => x.eventCode);
+
+export const ENTERED_AND_SERVED_EVENT_CODES = [
+  'ODJ',
+  'OD',
+  'ODD',
+  'OAD',
+  'DEC',
+  'SDEC',
+];
 
 export const NON_MULTI_DOCKETABLE_EVENT_CODES = [
   ...ENTERED_AND_SERVED_EVENT_CODES,

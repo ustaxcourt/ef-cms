@@ -30,7 +30,8 @@ export const validateOrderAdvancedSearchAction = ({
     return path.error({
       alertError: {
         messages: Object.values(errors),
-        title: 'Errors were found. Please correct the date range selection and resubmit.',
+        title:
+          'Errors were found. Please correct the date range selection and resubmit.',
       },
       errors,
     });
