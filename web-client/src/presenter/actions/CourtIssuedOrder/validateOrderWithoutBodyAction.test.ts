@@ -1,6 +1,7 @@
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { validateOrderWithoutBodyAction } from './validateOrderWithoutBodyAction';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 
 describe('validateOrderWithoutBodyAction', () => {
   const validateOrderWithoutBodyStub = jest.fn();
@@ -12,11 +13,9 @@ describe('validateOrderWithoutBodyAction', () => {
   };
 
   beforeAll(() => {
-    presenter.providers.applicationContext = {
-      getUseCases: () => ({
-        validateOrderWithoutBodyInteractor: validateOrderWithoutBodyStub,
-      }),
-    };
+    presenter.providers.applicationContext = applicationContext;
+    presenter.providers.applicationContext.getUseCases().validateOrderWithoutBodyInteractor =
+      validateOrderWithoutBodyStub;
 
     presenter.providers.path = {
       error: jest.fn(),
