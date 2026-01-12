@@ -1,5 +1,13 @@
 <details><summary>Dependency Updates - Week of 2026-01-05</summary>
 
+## Local
+
+#### Upgrade Terraform to `1.14.3`
+
+```bash
+tfswitch 1.14.3
+```
+
 ## Manual Deployment Steps
 
 ### Before Deployment
