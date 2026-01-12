@@ -24,7 +24,11 @@ describe('noticeOfChangeToRemoteProceeding', () => {
             meetingId: 'sdsd',
             password: '123',
             trialLocation: 'Birmingham, Alabama',
+            startDate: '2001-01-01T05:00:00.000Z',
+            startTime: '2001-01-01T05:00:00.000Z',
+            judgeName: 'Carluzzo',
           },
+
         },
       });
     },

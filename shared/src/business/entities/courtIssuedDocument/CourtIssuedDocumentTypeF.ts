@@ -1,5 +1,4 @@
 import { CourtIssuedDocument } from './CourtIssuedDocumentConstants';
-import { CourtIssuedDocumentBase } from './CourtIssuedDocumentBase';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { TRIAL_SESSION_SCOPE_TYPES } from '../EntityConstants';
 import { getStandaloneRemoteDocumentTitle } from '../../utilities/getStandaloneRemoteDocumentTitle';
@@ -7,9 +6,9 @@ import { replaceBracketed } from '../../utilities/replaceBracketed';
 
 export class CourtIssuedDocumentTypeF extends CourtIssuedDocument {
   public attachments: boolean;
-  public documentTitle?: string;
+  public documentTitle: string;
   public documentType: string;
-  public eventCode?: string;
+  public eventCode: string;
   public filingDate?: string;
   public freeText?: string;
   public judge: string;
@@ -19,6 +18,7 @@ export class CourtIssuedDocumentTypeF extends CourtIssuedDocument {
   constructor(rawProps) {
     super('CourtIssuedDocumentTypeF');
 
+    this.affectedDocketEntries = rawProps.affectedDocketEntries;
     this.attachments = rawProps.attachments || false;
     this.documentTitle = rawProps.documentTitle;
     this.documentType = rawProps.documentType;
@@ -31,7 +31,7 @@ export class CourtIssuedDocumentTypeF extends CourtIssuedDocument {
   }
 
   static VALIDATION_RULES = {
-    ...CourtIssuedDocumentBase.VALIDATION_RULES,
+    ...CourtIssuedDocument.VALIDATION_RULES,
     freeText: JoiValidationConstants.STRING.max(1000).optional().messages({
       'string.max': 'Limit is 1000 characters. Enter 1000 or fewer characters.',
     }),
@@ -56,14 +56,14 @@ export class CourtIssuedDocumentTypeF extends CourtIssuedDocument {
         documentTitle: this.documentTitle,
       });
 
-      return replaceBracketed(this.documentTitle, judge, this.freeText);
+      return replaceBracketed(this.documentTitle, judge, this.freeText ?? '');
     }
 
     return replaceBracketed(
       this.documentTitle,
       judge,
       this.trialLocation,
-      this.freeText,
+      this.freeText ?? '',
     );
   }
 }

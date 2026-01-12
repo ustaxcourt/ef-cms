@@ -108,8 +108,8 @@ export const formattedWorkQueue = (
   const sortDirection =
     sortDirections[workQueueToDisplay.queue][workQueueToDisplay.box];
 
-  let highPriorityField = [];
-  let highPriorityDirection = [];
+  let highPriorityField = [] as (string | ((workItemToSort: any) => any))[];
+  let highPriorityDirection = [] as string[];;
   if (workQueueToDisplay.box == 'inbox') {
     const caseStatusSortRank = {
       [STATUS_TYPES.submitted]: 1,
@@ -155,8 +155,8 @@ export const workQueueItemsAreEqual = (first, second) => {
  */
 export const formatDateIfToday = (
   date,
-  now = null,
-  yesterday = null,
+  now: string | null = null,
+  yesterday: string | null = null,
 ): string => {
   const then = formatDateString(date, 'MMDDYY');
   now = now || formatNow('MMDDYY');
