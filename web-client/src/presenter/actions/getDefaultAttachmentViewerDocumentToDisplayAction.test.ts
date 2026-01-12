@@ -82,7 +82,7 @@ describe('getDefaultAttachmentViewerDocumentToDisplayAction', () => {
     });
   });
 
-  it('returns messageViewerDocumentToDisplay null if there are no attachments on the message', async () => {
+  it('returns messageViewerDocumentToDisplay empty object if there are no attachments on the message', async () => {
     const result = await runAction(
       getDefaultAttachmentViewerDocumentToDisplayAction,
       {
@@ -97,7 +97,7 @@ describe('getDefaultAttachmentViewerDocumentToDisplayAction', () => {
       },
     );
     expect(result.output).toEqual({
-      messageViewerDocumentToDisplay: null,
+      messageViewerDocumentToDisplay: {},
     });
   });
 
