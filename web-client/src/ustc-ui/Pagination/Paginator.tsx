@@ -90,6 +90,7 @@ const PageButton = ({
             selected && 'paginator-current',
             !selected && 'background-none',
           )}
+          data-testid={`paginator-page-${pageNumber + 1}`}
           onClick={() => onClick(pageNumber)}
         >
           {pageNumber + 1}
@@ -108,7 +109,7 @@ const PreviousPage = ({
 }) => {
   return (
     <>
-      <li className="usa-pagination__item" >
+      <li className="usa-pagination__item">
         <button
           aria-label="Previous page"
           className={classNames(
