@@ -36,10 +36,9 @@ export const trialSessionDetailsHelper = (
   ).length;
 
   const showQcComplete = permissions.TRIAL_SESSION_QC_COMPLETE;
-  const HYBRID_SESSION_TYPES_ARRAY: string[] =
-    Object.values(HYBRID_SESSION_TYPES);
   const showSmallAndRegularQcComplete =
-    HYBRID_SESSION_TYPES_ARRAY.includes(sessionType) && showQcComplete;
+    (Object.values(HYBRID_SESSION_TYPES) as string[]).includes(sessionType) &&
+    showQcComplete;
 
   const nottReminderAction = hasNottBeenServed
     ? 'Yes, Dismiss'

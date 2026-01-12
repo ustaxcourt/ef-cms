@@ -10,10 +10,6 @@ import React, { useEffect, useRef } from 'react';
 import { RenderParameters } from 'pdfjs-dist/types/src/display/api';
 import { PageViewport } from 'pdfjs-dist/types/src/display/display_utils';
 
-type RenderParametersWithCanvas = RenderParameters & {
-  canvas?: HTMLCanvasElement;
-};
-
 export const ApplyStamp = connect(
   {
     applyStampFormChangeSequence: sequences.applyStampFormChangeSequence,
@@ -71,7 +67,7 @@ export const ApplyStamp = connect(
           canvas.height = viewport.height;
           canvas.width = viewport.width;
 
-          const renderContext: RenderParametersWithCanvas = {
+          const renderContext: RenderParameters = {
             canvasContext,
             viewport,
           };
