@@ -3,7 +3,10 @@ import {
   ORDER_EVENT_CODES,
 } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { fetchEventCodesCountForJudges } from './fetchEventCodesCountForJudges';
+import {
+  fetchEventCodesCountForJudges,
+  parseDocumentEventCodes,
+} from './fetchEventCodesCountForJudges';
 import { judgeUser } from '@shared/test/mockUsers';
 import { search } from './searchClient';
 jest.mock('./searchClient');
@@ -224,5 +227,36 @@ describe('fetchEventCodesCountForJudges', () => {
       });
     });
     expect(total).toEqual(8);
+  });
+
+  it('returns the documentEventCodes as an Array when the documentEventCodes is array like', () => {
+    const OPINION_EVENT_CODES_WITH_BENCH_OPINION_OBJECT =
+      OPINION_EVENT_CODES_WITH_BENCH_OPINION.reduce(
+        (code: any, current, index) => {
+          code[index] = current;
+          return code;
+        },
+        {} as any,
+      );
+
+    expect(
+      parseDocumentEventCodes(OPINION_EVENT_CODES_WITH_BENCH_OPINION_OBJECT),
+    ).toMatchObject({
+      '0': 'MOP',
+      '1': 'SOP',
+      '2': 'TCOP',
+      '3': 'OST',
+    });
+  });
+
+  it('returns the documentEventCodes as an Array when the documentEventCodes is Array', () => {
+    expect(
+      parseDocumentEventCodes(OPINION_EVENT_CODES_WITH_BENCH_OPINION),
+    ).toMatchObject([
+      'MOP',
+      'SOP',
+      'TCOP',
+      'OST',
+    ]);
   });
 });
