@@ -23,7 +23,7 @@ export const Typography = () => (
         out what they need to know.
       </p>
       <p>
-        <a href="#a" name="a">
+        <a href="#a">
           This
         </a>{' '}
         is a text link on a light background.

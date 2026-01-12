@@ -5,6 +5,7 @@ import { serveCourtIssuedDocumentAction } from './serveCourtIssuedDocumentAction
 
 describe('serveCourtIssuedDocumentAction', () => {
   global.window ??= Object.create(global);
+  // @ts-expect-error
   global.Blob = () => {};
   const mockPdfUrl = { pdfUrl: 'www.example.com' };
   const clientConnectionId = 'ABC123';

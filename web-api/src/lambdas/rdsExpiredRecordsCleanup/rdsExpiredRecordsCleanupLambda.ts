@@ -6,7 +6,7 @@ import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
 
 const TIME_TO_LIVE_COLUMN = 'ttl';
 
-export const handler: Handler = async (_event, context) => {
+export const handler: Handler = async (_event, _context) => {
   await getDbReader(async reader => {
     const ALL_TABLES = await reader.introspection.getTables();
     const TABLES_WITH_TTLS = ALL_TABLES.filter(tableMetaData => {
@@ -27,5 +27,5 @@ export const handler: Handler = async (_event, context) => {
     );
   });
 
-  context.succeed('Completed Cleanup!');
+  console.log('Completed Cleanup!');
 };
