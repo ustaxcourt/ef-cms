@@ -59,7 +59,7 @@ export const Button = (props: {
   if (isActive && !isLink && remainingProps['aria-pressed'] === undefined) {
     remainingProps['aria-pressed'] = true;
   }
-  const type = (remainingProps['type'] ?? isLink) ? undefined : 'button';
+  const type = remainingProps['type'] ?? (isLink ? undefined : 'button');
 
   const classes = classNames(
     className,
