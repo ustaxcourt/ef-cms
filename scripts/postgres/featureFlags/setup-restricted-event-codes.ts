@@ -3,7 +3,7 @@
 import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 
 async function setupRestrictedEventCodes() {
-  const VALUE = "M116";
+  const VALUE = 'M116';
 
   await pgInsertInto({
     table: 'dwFeatureFlag',

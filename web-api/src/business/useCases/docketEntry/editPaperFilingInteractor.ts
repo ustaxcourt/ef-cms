@@ -31,7 +31,10 @@ import {
   withLocking,
 } from '@web-api/persistence/postgres/utils/mutex';
 import { WorkItem } from '@shared/business/entities/WorkItem';
-import { AllFeatureFlags, getAllFeatureFlagsInteractor } from '../featureFlag/getAllFeatureFlagsInteractor';
+import {
+  AllFeatureFlags,
+  getAllFeatureFlagsInteractor,
+} from '../featureFlag/getAllFeatureFlagsInteractor';
 
 interface IEditPaperFilingRequest {
   documentMetadata: any;
@@ -59,7 +62,10 @@ export const editPaperFiling = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const featureFlags: AllFeatureFlags = await getAllFeatureFlagsInteractor(applicationContext, true);
+  const featureFlags: AllFeatureFlags = await getAllFeatureFlagsInteractor(
+    applicationContext,
+    true,
+  );
 
   const restrictedEventCodes =
     featureFlags[ALLOWLIST_FEATURE_FLAGS.RESTRICTED_EVENT_CODES.key];
@@ -70,11 +76,9 @@ export const editPaperFiling = async (
     docketNumber: request.documentMetadata.docketNumber,
   });
 
-  
-  const { eventCode } = docketEntryEntity
+  const { eventCode } = docketEntryEntity;
 
-    // the value at the restrictedEventCodes is an array of strings
-  if (eventCode && restrictedEventCodes.split(',').includes(eventCode) ) {
+  if (eventCode && restrictedEventCodes.split(',').includes(eventCode)) {
     throw new UnauthorizedError('Unauthorized to edit this document type');
   }
 

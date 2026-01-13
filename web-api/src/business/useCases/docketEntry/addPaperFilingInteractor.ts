@@ -1,5 +1,6 @@
 import { Case, isLeadCase } from '@shared//business/entities/cases/Case';
 import {
+  ALLOWLIST_FEATURE_FLAGS,
   DOCUMENT_RELATIONSHIPS,
   DOCUMENT_SERVED_MESSAGES,
   INITIAL_DOCUMENT_TYPES,
@@ -23,6 +24,10 @@ import {
 } from '@web-api/persistence/postgres/utils/mutex';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import {
+  AllFeatureFlags,
+  getAllFeatureFlagsInteractor,
+} from '../featureFlag/getAllFeatureFlagsInteractor';
 
 export const addPaperFiling = async (
   applicationContext: ServerApplicationContext,
@@ -43,6 +48,21 @@ export const addPaperFiling = async (
 ) => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY)) {
     throw new UnauthorizedError('Unauthorized');
+  }
+
+  const featureFlags: AllFeatureFlags = await getAllFeatureFlagsInteractor(
+    applicationContext,
+    true,
+  );
+
+  const restrictedEventCodes =
+    featureFlags[ALLOWLIST_FEATURE_FLAGS.RESTRICTED_EVENT_CODES.key];
+
+  if (
+    documentMetadata.eventCode &&
+    restrictedEventCodes.split(',').includes(documentMetadata.eventCode)
+  ) {
+    throw new UnauthorizedError('Unauthorized to edit this document type');
   }
 
   if (!docketEntryId) {
