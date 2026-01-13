@@ -86,6 +86,7 @@ export const Login = connect(
                         name="email"
                         type="email"
                         label="Email address"
+                        showReqOptionalText={false}
                         onChange={e => {
                           updateAuthenticationFormValueSequence({
                             email: e.target.value,
@@ -100,6 +101,7 @@ export const Login = connect(
                         name="password"
                         type={showPassword ? 'text' : 'password'}
                         label="Password"
+                        showReqOptionalText={false}
                         onChange={e => {
                           updateAuthenticationFormValueSequence({
                             password: e.target.value,

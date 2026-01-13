@@ -13,6 +13,7 @@ interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   optional?: boolean;
   required?: boolean;
   flexDirection?: 'vertical' | 'horizontal';
+  showReqOptionalText?: boolean;
 }
 
 interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -103,6 +104,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
       required,
       type = 'text',
       flexDirection = 'vertical',
+      showReqOptionalText = true,
       ...props
     },
     ref,
@@ -157,9 +159,11 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                     aria-label={typeof helpText === 'string' ? helpText : ''}
                   />
                 )}
-                <span className={cn(styles.optional)}>
-                  {!required ? '(optional)' : '(required)'}
-                </span>
+                {showReqOptionalText && (
+                  <span className={cn(styles.optional)}>
+                    {!required ? '(optional)' : '(required)'}
+                  </span>
+                )}
               </div>
               {helpText && (
                 <div
@@ -251,7 +255,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
                 )}
                 {showReqOptionalText && !props.required && (
                   <span className="tw:text-grey-dark tw:ml-1 tw:font-normal tw:text-sm tw:xs:text-base">
-                    (optional) Jake
+                    (optional)
                   </span>
                 )}
               </div>
