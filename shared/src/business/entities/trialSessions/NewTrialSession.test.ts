@@ -1,4 +1,5 @@
 import { TrialSessionTypes } from '@shared/business/entities/EntityConstants';
+import { calculateISODate } from '../../utilities/DateHandler';
 import { MOCK_NEW_TRIAL_REMOTE } from '../../../test/mockTrial';
 import { NewTrialSession } from './NewTrialSession';
 
@@ -49,6 +50,58 @@ describe('NewTrialSession entity', () => {
       });
 
       expect(() => trialSession.validate()).toThrow();
+    });
+  });
+
+  describe('estimatedEndDate', () => {
+    it('should be invalid when estimatedEndDate is not provided', () => {
+      const trialSession = new NewTrialSession({
+        ...MOCK_NEW_TRIAL_REMOTE,
+        estimatedEndDate: undefined,
+      });
+
+      expect(trialSession.isValid()).toEqual(false);
+      expect(trialSession.getFormattedValidationErrors()).toMatchObject({
+        estimatedEndDate: 'Enter a valid estimated end date',
+      });
+    });
+
+    it('should be invalid when estimatedEndDate is before startDate', () => {
+      const startDate = calculateISODate({ howMuch: 10, units: 'days' });
+      const estimatedEndDate = calculateISODate({ howMuch: 1, units: 'days' });
+      const trialSession = new NewTrialSession({
+        ...MOCK_NEW_TRIAL_REMOTE,
+        estimatedEndDate,
+        startDate,
+      });
+
+      expect(trialSession.isValid()).toEqual(false);
+      expect(trialSession.getFormattedValidationErrors()).toMatchObject({
+        estimatedEndDate: 'Enter a valid estimated end date',
+      });
+    });
+
+    it('should be valid when estimatedEndDate is equal to startDate', () => {
+      const startDate = calculateISODate({ howMuch: 10, units: 'days' });
+      const trialSession = new NewTrialSession({
+        ...MOCK_NEW_TRIAL_REMOTE,
+        estimatedEndDate: startDate,
+        startDate,
+      });
+
+      expect(trialSession.isValid()).toEqual(true);
+    });
+
+    it('should be valid when estimatedEndDate is after startDate', () => {
+      const startDate = calculateISODate({ howMuch: 10, units: 'days' });
+      const estimatedEndDate = calculateISODate({ howMuch: 15, units: 'days' });
+      const trialSession = new NewTrialSession({
+        ...MOCK_NEW_TRIAL_REMOTE,
+        estimatedEndDate,
+        startDate,
+      });
+
+      expect(trialSession.isValid()).toEqual(true);
     });
   });
 });
