@@ -170,7 +170,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                   id={helpTextId}
                   className={cn(
                     styles.text.help,
-                    'tw:font-normal tw:mt-1.25 tw:xs:mt-3 tw:mb-2 tw:xs:mb-3',
+                    'tw:font-normal tw:mb-2 tw:xs:mb-3',
                     flexDirection === 'horizontal' &&
                       'tw:mt-0 tw:xs:mt-0 tw:mb-0!',
                   )}

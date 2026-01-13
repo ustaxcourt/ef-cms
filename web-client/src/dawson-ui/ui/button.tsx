@@ -43,7 +43,7 @@ const buttonVariants = cva(
         ),
         secondary: cn(
           primaryColors,
-          'tw:h-10 tw:shadow-none tw:bg-background tw:border-blue-primary tw:border-2 tw:border-solid tw:font-bold', // standard
+          'tw:h-10 tw:shadow-none tw:bg-background tw:border-blue-primary tw:border-[0.125rem] tw:border-solid tw:font-bold', // standard
           'tw:hover:border-blue-dark', // hover
           'tw:active:border-blue-darker', // active
           'tw:invalid:border-grey-light', // invalid
