@@ -704,4 +704,39 @@ describe('DocketEntry entity', () => {
       expect(doc.draftOrderState).toEqual(expected);
     });
   });
+
+  describe('documentTypeForStampedDocketEntry', () => {
+    it('should get the document title if the document type contains a placeholder', () => {
+      const documentTitle =
+        'Motion to Dismiss for Lack of Jurisdiction as to John Doe';
+      const documentType =
+        'Motion to Dismiss for Lack of Jurisdiction as to [person, notice, or year]';
+      const docketEntry = new DocketEntry(
+        {
+          ...A_VALID_DOCKET_ENTRY,
+          documentTitle,
+          documentType,
+        },
+        { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
+      );
+      expect(docketEntry.documentTypeForStampedDocketEntry()).toEqual(
+        documentTitle,
+      );
+    });
+
+    it('should get the document type if the document type does not contain a placeholder', () => {
+      const documentTitleAndType = 'Agreed Computation for Entry of Decision';
+      const docketEntry = new DocketEntry(
+        {
+          ...A_VALID_DOCKET_ENTRY,
+          documentTitle: documentTitleAndType,
+          documentType: documentTitleAndType,
+        },
+        { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
+      );
+      expect(docketEntry.documentTypeForStampedDocketEntry()).toEqual(
+        documentTitleAndType,
+      );
+    });
+  });
 });

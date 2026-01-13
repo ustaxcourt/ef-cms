@@ -883,6 +883,15 @@ export class DocketEntry extends JoiValidationEntity {
 
     return DocketEntry.fetchRootDocument(previousEntry, docketEntries);
   };
+
+  documentTypeForStampedDocketEntry(): string {
+    const documentTypeIncludesPlaceholder =
+      this.documentType?.includes('[') && this.documentType?.includes(']');
+
+    return documentTypeIncludesPlaceholder || !this.documentType
+      ? this.documentTitle
+      : this.documentType;
+  }
 }
 
 /**
