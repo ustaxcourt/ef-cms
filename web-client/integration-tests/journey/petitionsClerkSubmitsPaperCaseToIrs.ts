@@ -83,7 +83,7 @@ export const petitionsClerkSubmitsPaperCaseToIrs = cerebralTest => {
         expect(docketEntry.servedPartiesCode).toEqual(PARTIES_CODES.RESPONDENT);
       } else if (docketEntry.eventCode === 'NOTR') {
         expect(docketEntry.servedAt).toBeDefined();
-        expect(docketEntry.servedPartiesCode).toEqual('');
+        expect(docketEntry.servedPartiesCode).toEqual(PARTIES_CODES.PETITIONER);
       }
     }
   });
