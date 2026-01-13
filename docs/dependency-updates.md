@@ -57,21 +57,26 @@ When updating Node.js, keep in mind:
 - Do not update to the next even-numbered major version until it enters Active LTS status
 - Do not update to the next even-numbered major version until it is offically supported by AWS Lambda. [Supported Runtimes](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html)
 
-To update Node.js:
-
-1. Update the version in `.nvmrc`.
-1. Manually update the `"engines"` property in:
+ To update Node.js:
+ 
+ 1. Update the version in `.nvmrc`.
+ 1. Manually update the `"engines"` property in:
    - `./package.json`
    - `./web-api/runtimes/puppeteer/package.json`
-1. Manually update the images in:
+ 1. Manually update the images in:
    - `./Dockerfile`
    - `./web-api/runtimes/puppeteer/Dockerfile`
-1. Manually update the Node.js version in:
+ 1. Manually update the Node.js version in:
    - `./.circleci/config.yml`
-1. Update the node version used by our lambdas.
+ 1. Update the node version used by our lambdas.
    - `web-api/terraform/modules/lambda/lambda.tf`
    - `web-api/terraform/modules/api/layers.tf`
-1. Update the `CHANGES.md` file with instructions for installing this NodeJS version locally. See [df83cf3](https://github.com/ustaxcourt/ef-cms/commit/df83cf3db69f2c6149cbef3ae213db488822cc2b) for an example.
+ 1. Update the `CHANGES.md` file with instructions for installing this NodeJS version locally. See [df83cf3](https://github.com/ustaxcourt/ef-cms/commit/df83cf3db69f2c6149cbef3ae213db488822cc2b) for an example.
+
+ When updating Node.js, also consider `@ustaxcourt/payment-portal`:
+
+ - If the Node.js upgrade stays within the published `@ustaxcourt/payment-portal` `engines.node` range (for example, a patch/minor update within the same major version), no `payment-portal` update is required.
+ - If the Node.js upgrade falls outside the published `engines.node` range (for example, moving to a new major version), then `@ustaxcourt/payment-portal` must be updated and published with a compatible `engines.node` range before `npm ci` in ef-cms will succeed without engine workarounds.
 
 #### 2.2 Update `Dockerfile` as needed
 
