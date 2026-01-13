@@ -1,6 +1,6 @@
 import {
   CASE_STATUS_TYPES,
-  ROLES,
+  PARTIES_CODES,
 } from '../../../shared/src/business/entities/EntityConstants';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
@@ -80,14 +80,10 @@ export const petitionsClerkSubmitsPaperCaseToIrs = cerebralTest => {
         !docketEntry.isDraft
       ) {
         expect(docketEntry.servedAt).toBeDefined();
-        expect(docketEntry.servedParties.length).toEqual(1);
-        expect(docketEntry.servedParties[0].role).toEqual(ROLES.irsSuperuser);
+        expect(docketEntry.servedPartiesCode).toEqual(PARTIES_CODES.RESPONDENT);
       } else if (docketEntry.eventCode === 'NOTR') {
         expect(docketEntry.servedAt).toBeDefined();
-        expect(docketEntry.servedParties.length).toBeGreaterThan(0);
-        for (const party of docketEntry.servedParties) {
-          expect(party.role).toBeUndefined();
-        }
+        expect(docketEntry.servedPartiesCode).toEqual('');
       }
     }
   });
