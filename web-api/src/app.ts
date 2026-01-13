@@ -288,6 +288,7 @@ app.use((req, res, next) => {
 
   next();
 });
+// removes servedParties from the docket entries in API responses
 app.use((_req, res, next) => {
   const originalSend = res.send.bind(res);
   res.send = (body: any) => {
