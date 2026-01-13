@@ -1,6 +1,6 @@
-import { createAndServePaperPetition } from '../../../../helpers/fileAPetition/create-and-serve-paper-petition';
-import { loginAsPetitionsClerk } from '../../../../helpers/authentication/login-as-helpers';
-import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
+import { createAndServePaperPetition } from 'cypress/helpers/fileAPetition/create-and-serve-paper-petition';
+import { loginAsPetitionsClerk } from 'cypress/helpers/authentication/login-as-helpers';
+import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
 
 describe('PetitionQcScanBatchPreviewer', () => {
   beforeEach(() => {
