@@ -48,6 +48,7 @@ export const addOrderStampPrefix = (
 ): string | undefined => {
   if (
     text !== undefined &&
+    eventCode !== undefined &&
     eventCode?.includes('O') &&
     !EVENT_CODES_WITH_NO_ORDER.includes(eventCode)
   ) {
