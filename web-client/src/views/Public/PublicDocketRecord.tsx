@@ -127,7 +127,7 @@ export const PublicDocketRecord = connect(
                     return (
                       <tr
                         data-testid={`public-docket-record-no-${entry.index}`}
-                        key={entry.index}
+                        key={entry.docketEntryId}
                       >
                         <td className="center-column hide-on-mobile">
                           {entry.index}
@@ -151,7 +151,8 @@ export const PublicDocketRecord = connect(
                               iconClass="sealed-in-blackstone icon-sealed"
                               icon="lock"
                               size="1x"
-                              title={entry.sealedToTooltip} />
+                              title={entry.sealedToTooltip}
+                            />
                           )}
                         </td>
                         <td data-label="Filings and Proceedings">

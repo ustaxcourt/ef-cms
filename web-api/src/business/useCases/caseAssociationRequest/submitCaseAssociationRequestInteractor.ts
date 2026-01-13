@@ -9,6 +9,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
+import { CaseFactory } from '@shared/business/entities/cases/CaseFactory';
 
 /**
  * submitCaseAssociationRequestInteractor
@@ -47,7 +48,7 @@ const submitCaseAssociationRequest = async (
   const isIrsPractitioner = authorizedUser.role === ROLES.irsPractitioner;
 
   if (isPrivatePractitioner && filers) {
-    return await applicationContext
+    const theCase = await applicationContext
       .getUseCaseHelpers()
       .associatePrivatePractitionerToCase({
         authorizedUser,
@@ -55,14 +56,26 @@ const submitCaseAssociationRequest = async (
         representing: filers,
         user: user as RawPractitioner,
       });
-  } else if (isIrsPractitioner) {
-    return await applicationContext
+
+    return CaseFactory.getCase({
+      rawCase: theCase,
+      user: authorizedUser,
+    });
+  }
+
+  if (isIrsPractitioner) {
+    const theCase = await applicationContext
       .getUseCaseHelpers()
       .associateIrsPractitionerToCase({
         authorizedUser,
         docketNumber,
         user,
       });
+
+    return CaseFactory.getCase({
+      rawCase: theCase,
+      user: authorizedUser,
+    });
   }
 };
 

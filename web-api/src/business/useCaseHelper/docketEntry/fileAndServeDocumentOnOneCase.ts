@@ -1,6 +1,8 @@
 import { Case } from '@shared/business/entities/cases/Case';
-import { DOCKET_SECTION } from '@shared/business/entities/EntityConstants';
-import { ENTERED_AND_SERVED_EVENT_CODES } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import {
+  DOCKET_SECTION,
+  ENTERED_AND_SERVED_EVENT_CODES,
+} from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '@web-api/applicationContext';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';

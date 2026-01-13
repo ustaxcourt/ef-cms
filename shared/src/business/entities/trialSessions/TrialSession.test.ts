@@ -505,8 +505,8 @@ describe('TrialSession entity', () => {
       });
 
       expect(trialSession.getFormattedValidationErrors()).toEqual({
-        fileId: '"paperServicePdfs[0].fileId" is required',
-        title: '"paperServicePdfs[0].title" is required',
+        'paperServicePdfs-0-fileId': '"paperServicePdfs[0].fileId" is required',
+        'paperServicePdfs-0-title': '"paperServicePdfs[0].title" is required',
       });
     });
   });
