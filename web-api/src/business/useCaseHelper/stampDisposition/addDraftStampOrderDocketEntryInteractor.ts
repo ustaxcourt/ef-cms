@@ -20,7 +20,6 @@ import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseA
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
 
-
 /**
  * addDraftStampOrderDocketEntryInteractor
  * @param {object} applicationContext the application context
@@ -83,18 +82,18 @@ export const addDraftStampOrderDocketEntry = async (
       createdAt: applicationContext.getUtilities().createISODateString(),
       docketEntryId: stampedDocketEntryId,
       docketNumber: caseRecord.docketNumber,
-      documentTitle: `Order - ${originalDocketEntry.documentType} ${formattedDraftDocumentTitle}`,
+      documentTitle: `Order - ${originalDocketEntry.documentTypeForStampedDocketEntry()} ${formattedDraftDocumentTitle}`,
       documentType: orderDocumentInfo?.documentType,
       draftOrderState: {
         docketNumber: caseEntity.docketNumber,
         documentTitle: `Order - ${formattedDraftDocumentTitle}`,
         documentType: orderDocumentInfo?.documentType,
         eventCode: orderDocumentInfo?.eventCode,
-        freeText: `Order - ${originalDocketEntry.documentType} ${formattedDraftDocumentTitle}`,
+        freeText: `Order - ${originalDocketEntry.documentTypeForStampedDocketEntry()} ${formattedDraftDocumentTitle}`,
       },
       eventCode: orderDocumentInfo?.eventCode,
       filedBy: authorizedUser.name,
-      freeText: `Order - ${originalDocketEntry.documentType} ${formattedDraftDocumentTitle}`,
+      freeText: `Order - ${originalDocketEntry.documentTypeForStampedDocketEntry()} ${formattedDraftDocumentTitle}`,
       isDraft: true,
       isFileAttached: true,
       isPaper: false,
