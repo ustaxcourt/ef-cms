@@ -103,6 +103,8 @@ All application dependencies are managed via our `package.json` and `package-loc
 
 `npm ci`
 
+Note: ef-cms includes `@ustaxcourt/payment-portal` as a devDependency to support payment portal / Pay.gov integration development and testing. See [Dependency Updates](./dependency-updates.md) for Node.js version upgrade guidance and compatibility considerations.
+
 ### 🏃 Starting the Services
 
 Once you've installed the dependencies, you should be able to run the npm scripts to start up the API, private UI, and public UI.  We recommend you have three separate terminals open and run each of the following commands in a separate terminal:
