@@ -113,7 +113,7 @@ describe('Notice of Withdrawal', () => {
         cy.get('[data-testid="error-alert"]').should('be.visible');
         cy.get('[data-testid="error-alert"]').contains('Select a filing party');
         cy.get('[data-testid="error-alert"]').contains(
-          'All parties have not consented to your withdrawal as counsel.',
+          'All parties have not consented to your withdrawal as counsel',
         );
       });
     });
@@ -138,7 +138,7 @@ describe('Notice of Withdrawal', () => {
         cy.get('[data-testid="error-alert"]').should('be.visible');
         cy.get('[data-testid="error-alert"]').contains('Select a filing party');
         cy.get('[data-testid="error-alert"]').contains(
-          'All parties have not consented to your withdrawal as counsel.',
+          'All parties have not consented to your withdrawal as counsel',
         );
       });
     });
