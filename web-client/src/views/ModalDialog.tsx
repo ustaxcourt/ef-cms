@@ -71,9 +71,7 @@ export const ModalDialog = ({
       });
     } else {
       window.document.body.classList.remove('no-scroll');
-      window.document.removeEventListener('touchmove', touchmoveTriggered, {
-        passive: false,
-      } as EventListenerOptions);
+      window.document.removeEventListener('touchmove', touchmoveTriggered);
     }
   };
 

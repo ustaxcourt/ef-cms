@@ -52,9 +52,7 @@ const OverlayUnRef: React.FC<OverlayUnRefProps> = connect(
           });
         } else {
           window.document.body.classList.remove('no-scroll');
-          window.document.removeEventListener('touchmove', touchmoveTriggered, {
-            passive: false,
-          } as EventListenerOptions);
+          window.document.removeEventListener('touchmove', touchmoveTriggered);
         }
       };
 

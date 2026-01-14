@@ -13,12 +13,13 @@ describe('validateTrialSessionInteractor', () => {
       trialSession: {} as RawNewTrialSession,
     });
 
-    expect(Object.keys(errors).length).toBeGreaterThan(0);
+    expect(Object.keys({ ...errors }).length).toBeGreaterThan(0);
   });
 
   it('returns null for a valid trial session', () => {
     const nextYear = (parseInt(formatNow(FORMATS.YEAR)) + 1).toString();
     const MOCK_TRIAL = {
+      estimatedEndDate: `${nextYear}-12-05T00:00:00.000Z`,
       maxCases: 100,
       proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
       sessionType: SESSION_TYPES.regular,

@@ -23,6 +23,7 @@ import { upsertDocketEntries as upsertDocketEntriesMock } from '@web-api/persist
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
+import { upsertDocketEntryRelatedEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntryRelatedEntries';
 
 describe('updateDocketEntryMetaInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
@@ -641,5 +642,92 @@ describe('updateDocketEntryMetaInteractor', () => {
     );
     expect(updatedDocketEntry?.previousDocument).toBeDefined();
     expect(updatedDocketEntry?.previousDocument?.documentType).toEqual('Order');
+  });
+
+  it('should add affected docket entries if body has new records', async () => {
+    await updateDocketEntryMetaInteractor(
+      applicationContext,
+      {
+        docketEntryMeta: {
+          ...mockDocketEntries[0],
+          affectedDocketEntries: [
+            {
+              docketEntryId: '111ba5a9-b37b-479d-9201-067ec6e33111',
+              disposition: 'GRANTED',
+            },
+          ],
+        },
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(upsertDocketEntryRelatedEntries).toHaveBeenCalled();
+  });
+
+  it('should delete affected docket entries if body has none and original has some', async () => {
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      docketEntries: [
+        {
+          ...mockDocketEntries[0],
+          affectedDocketEntries: [
+            {
+              docketEntryId: '111ba5a9-b37b-479d-9201-067ec6e33111',
+              disposition: 'GRANTED',
+            },
+          ],
+        },
+      ],
+    });
+
+    await updateDocketEntryMetaInteractor(
+      applicationContext,
+      {
+        docketEntryMeta: {
+          ...mockDocketEntries[0],
+        },
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(upsertDocketEntryRelatedEntries).toHaveBeenCalled();
+  });
+
+  it('should not update affected docket entries if both body and original match', async () => {
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      docketEntries: [
+        {
+          ...mockDocketEntries[0],
+          affectedDocketEntries: [
+            {
+              docketEntryId: '111ba5a9-b37b-479d-9201-067ec6e33111',
+              disposition: 'GRANTED',
+            },
+          ],
+        },
+      ],
+    });
+
+    await updateDocketEntryMetaInteractor(
+      applicationContext,
+      {
+        docketEntryMeta: {
+          ...mockDocketEntries[0],
+          affectedDocketEntries: [
+            {
+              docketEntryId: '111ba5a9-b37b-479d-9201-067ec6e33111',
+              disposition: 'GRANTED',
+            },
+          ],
+        },
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(upsertDocketEntryRelatedEntries).not.toHaveBeenCalled();
   });
 });
