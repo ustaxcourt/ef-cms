@@ -72,10 +72,10 @@ describe('Notice of Withdrawal', () => {
         enterNoticeOfWithdrawalFormType(docketNumber);
         cy.get('[data-testid="error-alert"]').should('be.visible');
         cy.get('[data-testid="error-alert"]').contains(
-          'You are the only counsel representing a party on this case.',
+          'You are the only counsel representing your party on this case.',
         );
         cy.get('[data-testid="error-alert"]').contains(
-          'The case is scheduled for trial in less than 30 days.',
+          'This case is scheduled for trial in less than 30 days.',
         );
       });
     });
@@ -89,10 +89,10 @@ describe('Notice of Withdrawal', () => {
         enterNoticeOfWithdrawalFormType(docketNumber);
         cy.get('[data-testid="error-alert"]').should('be.visible');
         cy.get('[data-testid="error-alert"]').contains(
-          'You are the only counsel representing a party on this case.',
+          'You are the only counsel representing your party on this case.',
         );
         cy.get('[data-testid="error-alert"]').contains(
-          'The case is scheduled for trial in less than 30 days.',
+          'This case is scheduled for trial in less than 30 days.',
         );
       });
     });

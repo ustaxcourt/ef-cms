@@ -163,8 +163,7 @@ export const NoticeOfWithdrawalForm = connect(
             <FormGroup>
               <legend className="with-hint">
                 Is petitioner&apos;s contact information in the record of the
-                case current?
-                <span className="usa-hint">(Optional)</span>
+                case current? <span className="usa-hint">(Optional)</span>
               </legend>
               <div
                 className="tw:flex tw:flex-wrap tw:justify-between"
