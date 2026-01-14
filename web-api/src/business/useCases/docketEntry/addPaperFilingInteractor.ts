@@ -1,5 +1,4 @@
-/* eslint-disable complexity */
-import { Case, isLeadCase } from '@shared/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   DOCUMENT_RELATIONSHIPS,
   DOCUMENT_SERVED_MESSAGES,
@@ -60,7 +59,7 @@ export const addPaperFiling = async (
   const { docketNumber: subjectCaseDocketNumber, isFileAttached } =
     documentMetadata;
 
-  const incomingGroupDocketNumbers = consolidatedGroupDocketNumbers || [];
+  const incomingGroupDocketNumbers = consolidatedGroupDocketNumbers;
 
   let effectiveConsolidatedGroupDocketNumbers: string[] = [];
 
@@ -88,7 +87,6 @@ export const addPaperFiling = async (
   }
 
   const caseEntities: Case[] = [];
-  let filedByFromLeadCase;
 
   const consolidatedGroupCases = await getCasesByDocketNumbers({
     docketNumbers: effectiveConsolidatedGroupDocketNumbers,
@@ -121,14 +119,6 @@ export const addPaperFiling = async (
     docketEntryEntity.setFiledBy(user);
 
     const servedParties: any = aggregatePartiesForService(caseEntity);
-
-    if (isLeadCase(caseEntity)) {
-      filedByFromLeadCase = docketEntryEntity.filedBy;
-    }
-
-    if (filedByFromLeadCase) {
-      docketEntryEntity.filedBy = filedByFromLeadCase;
-    }
 
     const workItem = new WorkItem({
       assigneeId: user.userId,
@@ -247,7 +237,7 @@ const saveWorkItemInternal = async ({ workItem }) => {
   });
 };
 
-type DocumentMetadata = {
+export type DocumentMetadata = {
   docketNumber: string;
   isFileAttached: boolean;
   documentTitle: string;

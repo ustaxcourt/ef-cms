@@ -11,6 +11,7 @@ jest.mock(
 jest.mock('@shared/sharedAppContext.ts');
 import {
   AUTOMATIC_BLOCKED_REASONS,
+  DOCUMENT_SERVED_MESSAGES,
   SERVICE_INDICATOR_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import {
@@ -20,7 +21,10 @@ import {
   MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
 } from '@shared/test/mockCase';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { addPaperFilingInteractor } from './addPaperFilingInteractor';
+import {
+  addPaperFilingInteractor,
+  DocumentMetadata,
+} from './addPaperFilingInteractor';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { docketClerkUser } from '@shared/test/mockUsers';
 import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
@@ -53,7 +57,7 @@ describe('addPaperFilingInteractor', () => {
     clientConnectionId: string;
     consolidatedGroupDocketNumbers: string[];
     documentStorageId: string;
-    documentMetadata: any;
+    documentMetadata: DocumentMetadata;
     isSavingForLater: boolean;
   };
 
@@ -64,6 +68,12 @@ describe('addPaperFilingInteractor', () => {
       documentStorageId: '75f5376d-5d0c-40c5-ba23-9e61d5d702a4',
       documentMetadata: {
         docketNumber: MOCK_CASE.docketNumber,
+        documentType: 'Memorandum in Support',
+        documentTitle: 'Memorandum in Support',
+        eventCode: 'MISP',
+        filedBy: 'Test Petitioner',
+        isFileAttached: true,
+        isPaper: true,
       },
       isSavingForLater: false,
     };
@@ -124,14 +134,14 @@ describe('addPaperFilingInteractor', () => {
   });
 
   it('should add documents and send service emails for electronic service parties', async () => {
-    const mockdocketEntryId = 'c54ba5a9-b37b-479d-9201-067ec6e335bb';
+    const mockDocumentStorageId = 'c54ba5a9-b37b-479d-9201-067ec6e335bb';
 
     await addPaperFilingInteractor(
       applicationContext,
       {
         clientConnectionId: mockClientConnectionId,
         consolidatedGroupDocketNumbers: [],
-        docketEntryId: mockdocketEntryId,
+        documentStorageId: mockDocumentStorageId,
         documentMetadata: {
           docketNumber: mockCase.docketNumber,
           documentTitle: 'Memorandum in Support',
@@ -154,7 +164,7 @@ describe('addPaperFilingInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf
         .mock.calls[0][0].docketEntryId,
-    ).toEqual(mockdocketEntryId);
+    ).toEqual(mockDocumentStorageId);
   });
 
   it('should return paper service url as part of the "serve_document_complete" message when the case has paper service parties', async () => {
@@ -162,7 +172,7 @@ describe('addPaperFilingInteractor', () => {
     mockCase.petitioners[0].serviceIndicator = SERVICE_INDICATOR_TYPES.SI_PAPER;
     applicationContext
       .getUseCaseHelpers()
-      .serveDocumentAndGetPaperServicePdf.mockReturnValue({
+      .serveDocumentAndGetPaperServicePdf.mockReturnValueOnce({
         pdfUrl: mockPdfUrl,
       });
 
@@ -171,7 +181,7 @@ describe('addPaperFilingInteractor', () => {
       {
         clientConnectionId: mockClientConnectionId,
         consolidatedGroupDocketNumbers: [],
-        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentStorageId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentMetadata: {
           docketNumber: mockCase.docketNumber,
           documentTitle: 'Memorandum in Support',
@@ -192,29 +202,19 @@ describe('addPaperFilingInteractor', () => {
     ).toEqual(mockPdfUrl);
   });
 
-  it('should return paper service url as part of the "serve_document_complete" message when the document is filed on a lead case and one of the member cases has a party with paper service', async () => {
-    const mockPdfUrl = 'www.example.com';
-    getCasesByDocketNumbers.mockResolvedValue([
-      {
-        ...(MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE as any),
-        leadDocketNumber: mockCase.docketNumber,
-      },
+  it('should add documents and workItem to inbox on all cases in the group when NOT saving for later', async () => {
+    getCasesByDocketNumbers.mockResolvedValueOnce([
+      mockCase,
+      { ...mockCase, docketNumber: '123-20' },
+      { ...mockCase, docketNumber: '124-20' },
     ]);
-
-    applicationContext
-      .getUseCaseHelpers()
-      .serveDocumentAndGetPaperServicePdf.mockReturnValue({
-        pdfUrl: mockPdfUrl,
-      });
 
     await addPaperFilingInteractor(
       applicationContext,
       {
         clientConnectionId: mockClientConnectionId,
-        consolidatedGroupDocketNumbers: [
-          MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
-        ],
-        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        consolidatedGroupDocketNumbers: ['123-20', '124-20'],
+        documentStorageId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentMetadata: {
           docketNumber: mockCase.docketNumber,
           documentTitle: 'Memorandum in Support',
@@ -229,10 +229,25 @@ describe('addPaperFilingInteractor', () => {
       mockDocketClerkUser,
     );
 
+    expect(upsertWorkItems.mock.calls[0][0].workItems).toMatchObject([
+      {
+        docketNumber: mockCase.docketNumber,
+      },
+    ]);
+    expect(upsertWorkItems.mock.calls[1][0].workItems).toMatchObject([
+      {
+        docketNumber: '123-20',
+      },
+    ]);
+    expect(upsertWorkItems.mock.calls[2][0].workItems).toMatchObject([
+      {
+        docketNumber: '124-20',
+      },
+    ]);
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[0][0].message.pdfUrl,
-    ).toEqual(mockPdfUrl);
+      applicationContext.getUseCaseHelpers().countPagesInDocument,
+    ).toHaveBeenCalled();
   });
 
   it('should add documents and workItem to inbox when saving for later when a document is attached', async () => {
@@ -241,7 +256,7 @@ describe('addPaperFilingInteractor', () => {
       {
         clientConnectionId: mockClientConnectionId,
         consolidatedGroupDocketNumbers: [],
-        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentStorageId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentMetadata: {
           docketNumber: mockCase.docketNumber,
           documentTitle: 'Memorandum in Support',
@@ -273,7 +288,7 @@ describe('addPaperFilingInteractor', () => {
       {
         clientConnectionId: mockClientConnectionId,
         consolidatedGroupDocketNumbers: [],
-        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentStorageId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentMetadata: {
           docketNumber: mockCase.docketNumber,
           documentTitle: 'Memorandum in Support',
@@ -295,37 +310,13 @@ describe('addPaperFilingInteractor', () => {
     ).not.toHaveBeenCalled();
   });
 
-  it('should add workItem to the user outbox when NOT saving for later if a document is attached', async () => {
-    await addPaperFilingInteractor(
-      applicationContext,
-      {
-        clientConnectionId: undefined as any,
-        consolidatedGroupDocketNumbers: [],
-        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        documentMetadata: {
-          docketNumber: mockCase.docketNumber,
-          documentTitle: 'Memorandum in Support',
-          documentType: 'Memorandum in Support',
-          eventCode: 'MISP',
-          filedBy: 'Test Petitioner',
-          isFileAttached: true,
-          isPaper: true,
-        },
-        isSavingForLater: false,
-      },
-      mockDocketClerkUser,
-    );
-
-    expect(upsertWorkItems).toHaveBeenCalled();
-  });
-
   it('sets the case as blocked if the document filed is a tracked document type', async () => {
     await addPaperFilingInteractor(
       applicationContext,
       {
         clientConnectionId: mockClientConnectionId,
         consolidatedGroupDocketNumbers: [],
-        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentStorageId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentMetadata: {
           category: 'Application',
           docketNumber: mockCase.docketNumber,
@@ -361,7 +352,7 @@ describe('addPaperFilingInteractor', () => {
       {
         clientConnectionId: mockClientConnectionId,
         consolidatedGroupDocketNumbers: [],
-        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentStorageId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentMetadata: {
           category: 'Application',
           docketNumber: mockCase.docketNumber,
@@ -396,7 +387,7 @@ describe('addPaperFilingInteractor', () => {
         {
           clientConnectionId: mockClientConnectionId,
           consolidatedGroupDocketNumbers: [],
-          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          documentStorageId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           documentMetadata: {
             docketNumber: mockCase.docketNumber,
             documentTitle: 'Memorandum in Support',
@@ -423,7 +414,7 @@ describe('addPaperFilingInteractor', () => {
       {
         clientConnectionId: mockClientConnectionId,
         consolidatedGroupDocketNumbers: [],
-        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentStorageId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentMetadata: {
           docketNumber: mockCase.docketNumber,
           documentTitle: 'Memorandum in Support',
@@ -447,7 +438,7 @@ describe('addPaperFilingInteractor', () => {
       message: expect.objectContaining({
         action: 'serve_document_complete',
         alertSuccess: {
-          message: 'Your entry has been added to the docket record.',
+          message: DOCUMENT_SERVED_MESSAGES.ENTRY_ADDED,
           overwritable: false,
         },
       }),
@@ -460,7 +451,7 @@ describe('addPaperFilingInteractor', () => {
       {
         clientConnectionId: mockClientConnectionId,
         consolidatedGroupDocketNumbers: [],
-        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentStorageId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentMetadata: {
           docketNumber: mockCase.docketNumber,
           documentTitle: 'Memorandum in Support',
@@ -487,7 +478,7 @@ describe('addPaperFilingInteractor', () => {
       {
         clientConnectionId: mockClientConnectionId,
         consolidatedGroupDocketNumbers: [],
-        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentStorageId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentMetadata: {
           docketNumber: mockCase.docketNumber,
           documentTitle: 'Memorandum in Support',
@@ -548,6 +539,18 @@ describe('addPaperFilingInteractor', () => {
         MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
         MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
       ];
+
+      getCasesByDocketNumbers.mockResolvedValueOnce([
+        mockCase,
+        {
+          ...MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
+          ...mockCase,
+        },
+        {
+          ...MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE,
+          ...mockCase,
+        },
+      ]);
       mockConsolidatedGroupRequest.isSavingForLater = false;
       mockConsolidatedGroupRequest.consolidatedGroupDocketNumbers =
         mockConsolidatedGroup;
@@ -557,6 +560,8 @@ describe('addPaperFilingInteractor', () => {
         mockConsolidatedGroupRequest,
         mockDocketClerkUser,
       );
+
+      expect(updateCaseAndAssociations).toHaveBeenCalledTimes(3);
 
       expect(
         applicationContext.getUseCaseHelpers()
@@ -573,7 +578,7 @@ describe('addPaperFilingInteractor', () => {
       {
         clientConnectionId: mockClientConnectionId,
         consolidatedGroupDocketNumbers: [],
-        docketEntryId: mockdocketEntryId,
+        documentStorageId: mockdocketEntryId,
         documentMetadata: {
           docketNumber: mockCase.docketNumber,
           documentTitle: 'Memorandum in Support',
