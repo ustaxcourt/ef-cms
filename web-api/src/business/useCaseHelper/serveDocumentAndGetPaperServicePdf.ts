@@ -40,7 +40,6 @@ export const serveDocumentAndGetPaperServicePdf = async ({
           const { documentStorageId } = caseEntity.docketEntries.find(de => {
             return de.docketEntryId === caseSpecificDocketEntryId;
           })!;
-
           return await applicationContext.getPersistenceGateway().getDocument({
             applicationContext,
             key: documentStorageId,
@@ -61,35 +60,31 @@ export const serveDocumentAndGetPaperServicePdf = async ({
         docketEntryId,
         electronicParties,
         loadPdfDocument: async () => {
-          if (!cachedPdfData) {
-            if (stampedPdf) {
-              cachedPdfData = stampedPdf;
-            } else {
-              const { documentStorageId } = caseEntity.docketEntries.find(
-                de => {
-                  return de.docketEntryId === docketEntryId;
-                },
-              )!;
+          if (stampedPdf) {
+            return stampedPdf;
+          }
 
-              if (!cachedDocumentStorageId) {
-                cachedDocumentStorageId = documentStorageId;
-                cachedPdfData = await applicationContext
-                  .getPersistenceGateway()
-                  .getDocument({
-                    applicationContext,
-                    key: documentStorageId,
-                  });
-              }
+          const { documentStorageId } = caseEntity.docketEntries.find(de => {
+            return de.docketEntryId === docketEntryId;
+          })!;
 
-              if (cachedDocumentStorageId !== documentStorageId) {
-                cachedPdfData = await applicationContext
-                  .getPersistenceGateway()
-                  .getDocument({
-                    applicationContext,
-                    key: documentStorageId,
-                  });
-              }
-            }
+          if (!cachedDocumentStorageId) {
+            cachedDocumentStorageId = documentStorageId;
+            cachedPdfData = await applicationContext
+              .getPersistenceGateway()
+              .getDocument({
+                applicationContext,
+                key: documentStorageId,
+              });
+          }
+
+          if (cachedDocumentStorageId !== documentStorageId) {
+            cachedPdfData = await applicationContext
+              .getPersistenceGateway()
+              .getDocument({
+                applicationContext,
+                key: documentStorageId,
+              });
           }
           return cachedPdfData;
         },
