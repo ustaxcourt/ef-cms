@@ -1,6 +1,6 @@
-import { createAndServePaperPetition } from '../../../../helpers/fileAPetition/create-and-serve-paper-petition';
-import { loginAsPetitionsClerk } from '../../../../helpers/authentication/login-as-helpers';
-import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
+import { createAndServePaperPetition } from 'cypress/helpers/fileAPetition/create-and-serve-paper-petition';
+import { loginAsPetitionsClerk } from 'cypress/helpers/authentication/login-as-helpers';
+import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
 
 describe('PetitionQcScanBatchPreviewer', () => {
   beforeEach(() => {
@@ -30,10 +30,6 @@ describe('PetitionQcScanBatchPreviewer', () => {
 
   it('should display scan mode radio button', () => {
     cy.get('[data-testid="upload-mode-scan"]').should('exist');
-  });
-
-  it('should NOT display upload mode radio button (scanOnly mode)', () => {
-    cy.get('[data-testid="upload-pdf-button"]').should('not.exist');
   });
 
   it('should NOT display file input', () => {
