@@ -60,6 +60,7 @@ export const addPaperFiling = async (
 
   if (
     documentMetadata.eventCode &&
+    typeof restrictedEventCodes === 'string' &&
     restrictedEventCodes.split(',').includes(documentMetadata.eventCode)
   ) {
     throw new UnauthorizedError('Unauthorized to edit this document type');

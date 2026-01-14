@@ -78,7 +78,11 @@ export const editPaperFiling = async (
 
   const { eventCode } = docketEntryEntity;
 
-  if (eventCode && restrictedEventCodes.split(',').includes(eventCode)) {
+  if (
+    eventCode &&
+    typeof restrictedEventCodes === 'string' &&
+    restrictedEventCodes.split(',').includes(eventCode)
+  ) {
     throw new UnauthorizedError('Unauthorized to edit this document type');
   }
 
