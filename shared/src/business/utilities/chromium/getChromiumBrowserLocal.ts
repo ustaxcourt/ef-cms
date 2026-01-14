@@ -6,10 +6,6 @@ export const getChromiumBrowserLocal = async (): Promise<Browser> => {
     // Extra flags keep Chrome stable in constrained/dev-shm-poor environments (e.g. Docker/Jest)
     args: [
       '--no-sandbox',
-      '--disable-setuid-sandbox',
-      '--disable-dev-shm-usage',
-      '--single-process',
-      '--disable-gpu',
     ],
   });
 

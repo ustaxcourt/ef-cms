@@ -25,6 +25,7 @@ describe('generatePdfFromHtmlHelper', () => {
       return {
         pdf: pdfMock,
         setContent: setContentMock,
+        evaluateHandle: jest.fn().mockResolvedValue({}),
         close() {},
       };
     },
