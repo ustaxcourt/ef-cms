@@ -124,24 +124,33 @@ export const formattedClerkOfCourtDashboardTrialSessions = (
 
   const formatSession = (
     session: TrialSessionInfoDTO,
-  ): FormattedTrialSession => ({
-    trialSessionId: session.trialSessionId,
-    formattedStartDate: applicationContext
-      .getUtilities()
-      .formatDateString(session.startDate, 'MMDDYY'),
-    formattedEstimatedEndDate: session.estimatedEndDate
-      ? applicationContext
-          .getUtilities()
-          .formatDateString(session.estimatedEndDate, 'MMDDYY')
-      : '',
-    trialLocation: session.trialLocation || '',
-    proceedingType: session.proceedingType || '',
-    sessionType: session.sessionType || '',
-    judge: session.judge || { name: 'Unassigned', userId: '' },
-    trialClerk: session.trialClerk,
-    startDate: session.startDate,
-    estimatedEndDate: session.estimatedEndDate,
-  });
+  ): FormattedTrialSession => {
+    const trialClerk =
+      session.trialClerk && session.trialClerk.name
+        ? session.trialClerk
+        : session.alternateTrialClerkName
+          ? { name: session.alternateTrialClerkName, userId: '' }
+          : undefined;
+
+    return {
+      trialSessionId: session.trialSessionId,
+      formattedStartDate: applicationContext
+        .getUtilities()
+        .formatDateString(session.startDate, 'MMDDYY'),
+      formattedEstimatedEndDate: session.estimatedEndDate
+        ? applicationContext
+            .getUtilities()
+            .formatDateString(session.estimatedEndDate, 'MMDDYY')
+        : '',
+      trialLocation: session.trialLocation || '',
+      proceedingType: session.proceedingType || '',
+      sessionType: session.sessionType || '',
+      judge: session.judge || { name: 'Unassigned', userId: '' },
+      trialClerk,
+      startDate: session.startDate,
+      estimatedEndDate: session.estimatedEndDate,
+    };
+  };
 
   const formattedCurrentWeek = currentWeekSessions
     .map(formatSession)
