@@ -26,6 +26,7 @@ export const PetitionQcDocumentPreview: React.FC<PetitionQcDocumentPreviewProps>
         <PetitionQcScanBatchPreviewer
           documentTabs={petitionQcHelper.documentTabsToDisplay}
           documentType={documentSelectedForPreview}
+          scanOnly={false}
           title="Add Document(s)"
         />
       </>
