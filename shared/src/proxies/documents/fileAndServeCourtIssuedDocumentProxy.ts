@@ -1,4 +1,4 @@
-import { post } from '../requests';
+import { asyncSyncHandler, post } from '../requests';
 
 /**
  * fileAndServeCourtIssuedDocumentInteractor
@@ -13,9 +13,14 @@ export const fileAndServeCourtIssuedDocumentInteractor = (
   data,
 ) => {
   const { subjectCaseDocketNumber } = data;
-  return post({
+  return asyncSyncHandler(
     applicationContext,
-    body: data,
-    endpoint: `/async/case-documents/${subjectCaseDocketNumber}/file-and-serve-court-issued-docket-entry`,
-  });
+    async asyncSyncId =>
+      await post({
+        applicationContext,
+        asyncSyncId,
+        body: data,
+        endpoint: `/async/case-documents/${subjectCaseDocketNumber}/file-and-serve-court-issued-docket-entry`,
+      }),
+  );
 };
