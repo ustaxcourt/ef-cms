@@ -41,6 +41,7 @@ export const docketClerkCreatesATrialSession = (
     await cerebralTest.runSequence('submitTrialSessionSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
+      estimatedEndDate: 'Enter a valid estimated end date',
       maxCases: 'Enter a valid number of maximum cases',
       sessionType: 'Select a session type',
       startDate: 'Enter a valid start date',

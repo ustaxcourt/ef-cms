@@ -10,19 +10,12 @@ const gunzip = promisify(zlib.gunzip);
 // to CloudWatch Logs.
 const logFailedResponses = true;
 
-exports.handler = async (input, context) => {
-  let payload;
-
-  try {
-    payload = await decompressAndParse(input.awslogs.data);
-  } catch (error) {
-    context.fail(error);
-    return;
-  }
+exports.handler = async input => {
+  const payload = await decompressAndParse(input.awslogs.data);
 
   if (payload.messageType === 'CONTROL_MESSAGE') {
     console.log('Received a control message');
-    context.succeed('Control message handled successfully');
+    console.log('Control message handled successfully');
     return;
   }
 
@@ -45,10 +38,9 @@ exports.handler = async (input, context) => {
 
   if (error) {
     logFailure(error, failedItems);
-    context.fail(JSON.stringify(error));
+    throw new Error(JSON.stringify(error));
   } else {
     console.log(`Success: ${JSON.stringify(success)}`);
-    context.succeed('Success');
   }
 };
 

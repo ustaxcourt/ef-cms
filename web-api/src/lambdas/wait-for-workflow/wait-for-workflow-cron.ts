@@ -10,7 +10,7 @@ const workflowId = process.env.CIRCLE_WORKFLOW_ID!;
 const jobName = process.env.APPROVAL_JOB_NAME!;
 const pipelineId = process.env.CIRCLE_PIPELINE_ID!;
 
-export const handler: Handler = async (_event, context) => {
+export const handler: Handler = async (_event, _context) => {
   const pipelineStatus = await getPipelineStatus({ apiToken, pipelineId });
   const results = { pipelineStatus };
 
@@ -19,7 +19,7 @@ export const handler: Handler = async (_event, context) => {
     pipelineStatus === 'running' ||
     pipelineStatus === 'on_hold'
   ) {
-    return succeed({ context, results });
+    return succeed(results);
   }
 
   if (pipelineStatus === 'success') {
@@ -28,10 +28,10 @@ export const handler: Handler = async (_event, context) => {
     await cancelWorkflow({ apiToken, workflowId });
   }
 
-  return succeed({ context, results });
+  return succeed(results);
 };
 
-const succeed = ({ context, results }) => {
+const succeed = (results: { [k: string]: string | undefined }) => {
   console.log(results);
-  return context.succeed(results);
+  return results;
 };
