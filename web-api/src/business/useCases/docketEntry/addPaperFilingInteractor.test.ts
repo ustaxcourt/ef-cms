@@ -535,22 +535,16 @@ describe('addPaperFilingInteractor', () => {
     });
 
     it('should still save only one copy of the document to s3', async () => {
+      getCasesByDocketNumbers.mockResolvedValueOnce([
+        MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+        MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
+        MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE,
+      ] as any[]);
+
       const mockConsolidatedGroup = [
         MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
         MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
       ];
-
-      getCasesByDocketNumbers.mockResolvedValueOnce([
-        mockCase,
-        {
-          ...MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
-          ...mockCase,
-        },
-        {
-          ...MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE,
-          ...mockCase,
-        },
-      ]);
       mockConsolidatedGroupRequest.isSavingForLater = false;
       mockConsolidatedGroupRequest.consolidatedGroupDocketNumbers =
         mockConsolidatedGroup;
