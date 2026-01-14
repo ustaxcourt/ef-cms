@@ -82,9 +82,13 @@ export const deleteUnaliasedIndices = async ({
     })
     .map(a => a.index)
     .filter(i => typeof i === 'string');
+  const aliasedAndProtectedIndices = [
+    ...aliasedIndices,
+    ...elasticsearchIndexes,
+  ];
   const unaliasedIndices =
     indices.filter(index => {
-      return !aliasedIndices.includes(index);
+      return !aliasedAndProtectedIndices.includes(index);
     }) || [];
   if (unaliasedIndices.length) {
     try {

@@ -88,6 +88,7 @@ export const EditPetitionerCounsel = connect(
                           form.representingMap[petitioner.contactId] || false
                         }
                         className="usa-checkbox__input"
+                        data-testid={`representing-${petitioner.contactId}`}
                         id={`representing-${petitioner.contactId}`}
                         name={`representingMap.${petitioner.contactId}`}
                         type="checkbox"

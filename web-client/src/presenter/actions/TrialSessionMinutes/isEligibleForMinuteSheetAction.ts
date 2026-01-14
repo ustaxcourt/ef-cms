@@ -36,10 +36,6 @@ export const isEligibleForMinuteSheetAction = ({
     return path.no();
   }
 
-  // Case is either:
-  // 1. In caseOrder but removed (inactive) - accessed via modal with isUnscheduledCase=true
-  // 2. Not in caseOrder at all (truly unscheduled)
-  // For both cases, use the unscheduled eligibility check
   const isEligibleUnscheduledCase = isEligibleUnscheduledCaseForMinuteSheet(
     aCase,
     trialSession,

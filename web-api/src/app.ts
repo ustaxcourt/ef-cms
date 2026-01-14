@@ -202,7 +202,6 @@ import { getDocumentDownloadUrlLambda as v2GetDocumentDownloadUrlLambda } from '
 import { getReconciliationReportLambda as v2GetReconciliationReportLambda } from './lambdas/v2/getReconciliationReportLambda';
 import { validatePdfLambda } from './lambdas/documents/validatePdfLambda';
 import { verifyPendingCaseForUserLambda } from './lambdas/cases/verifyPendingCaseForUserLambda';
-import { verifyUserPendingEmailLambda } from './lambdas/users/verifyUserPendingEmailLambda';
 import cors from 'cors';
 import express from 'express';
 import { getTrialSessionOpenCasesCountLambda } from '@web-api/lambdas/trialSessions/getTrialSessionOpenCasesCountLambda';
@@ -212,6 +211,7 @@ import { getRecentFilingsForUserLambda } from './lambdas/recentFilings/getRecent
 import { deactivateUserLambda } from '@web-api/lambdas/automations/deactivateUserLambda';
 import { removeUserPendingEmailLambda } from '@web-api/lambdas/automations/removeUserPendingEmailLambda';
 import { saveMinuteSheetToDraftsLambda } from './lambdas/trialSessionMinutes/saveMinuteSheetToDraftsLambda';
+import { generateNoticeOfWithdrawalPdfLambda } from './lambdas/cases/generateNoticeOfWithdrawalPdfLambda';
 import { validateCaseForNewMinuteSheetLambda } from './lambdas/trialSessions/validateCaseForNewMinuteSheetLambda';
 
 export const app = express();
@@ -433,8 +433,12 @@ app.use(expressLogger);
     lambdaWrapper(serveExternallyFiledDocumentLambda, { isAsync: true }),
   );
   app.post(
-    '/case-documents/:docketNumber/external-document',
-    lambdaWrapper(fileExternalDocumentToCaseLambda),
+    '/async/case-documents/:docketNumber/external-document',
+    lambdaWrapper(
+      fileExternalDocumentToCaseLambda,
+      { isAsyncSync: true },
+      applicationContext,
+    ),
   );
   app.post(
     '/async/case-documents/:docketNumber/paper-filing',
@@ -670,6 +674,10 @@ app.use(expressLogger);
   app.post(
     '/cases/:docketNumber/generate-entry-of-appearance',
     lambdaWrapper(generateEntryOfAppearancePdfLambda),
+  );
+  app.post(
+    '/cases/:docketNumber/generate-notice-of-withdrawal',
+    lambdaWrapper(generateNoticeOfWithdrawalPdfLambda),
   );
   app.post(
     '/cases/generate-petition',
@@ -1066,7 +1074,6 @@ app.delete(
     lambdaWrapper(getUserPendingEmailStatusLambda),
   );
   app.put('/users/pending-email', lambdaWrapper(updateUserPendingEmailLambda));
-  app.put('/users/verify-email', lambdaWrapper(verifyUserPendingEmailLambda));
   app.get(
     '/users/email-availability',
     lambdaWrapper(checkEmailAvailabilityLambda),

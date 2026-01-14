@@ -21,6 +21,7 @@ import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/get
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { CaseFactory } from '@shared/business/entities/cases/CaseFactory';
 
 export const fileExternalDocument = async (
   applicationContext: ServerApplicationContext,
@@ -125,6 +126,21 @@ export const fileExternalDocument = async (
   );
   const casesToUpdate = await getCasesByDocketNumbers({ docketNumbers });
 
+  const pageCountsByDocketEntryId: Map<string, number> = new Map();
+  const pageCountPromises = documentsToAdd
+    .filter(([docketEntryId]) => docketEntryId)
+    .map(async ([docketEntryId]) => {
+      const numberOfPages = await applicationContext
+        .getUseCaseHelpers()
+        .countPagesInDocument({ applicationContext, docketEntryId });
+      return [docketEntryId, numberOfPages] as [string, number];
+    });
+
+  const pageCounts = await Promise.all(pageCountPromises);
+  for (const [docketEntryId, numberOfPages] of pageCounts) {
+    pageCountsByDocketEntryId.set(docketEntryId, numberOfPages);
+  }
+
   const consolidatedCaseEntities: Promise<RawCase>[] = casesToUpdate.map(
     async caseToUpdate => {
       let caseEntity = new Case(caseToUpdate, { authorizedUser });
@@ -133,9 +149,7 @@ export const fileExternalDocument = async (
 
       for (const [docketEntryId, metadata, relationship] of documentsToAdd) {
         if (docketEntryId && metadata) {
-          const numberOfPages = await applicationContext
-            .getUseCaseHelpers()
-            .countPagesInDocument({ applicationContext, docketEntryId });
+          const numberOfPages = pageCountsByDocketEntryId.get(docketEntryId);
           const docketEntryEntity = new DocketEntry(
             {
               ...baseMetadata,
@@ -210,9 +224,16 @@ export const fileExternalDocument = async (
     workItems,
   });
 
-  return resolvedCaseEntities.find(
+  const theCase = resolvedCaseEntities.find(
     caseEntity => caseEntity.docketNumber === docketNumber,
   );
+
+  const filteredCase = CaseFactory.getCase({
+    rawCase: theCase,
+    user: authorizedUser,
+  });
+
+  return filteredCase;
 };
 
 export const fileExternalDocumentInteractor = withLocking(

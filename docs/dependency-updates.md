@@ -57,21 +57,26 @@ When updating Node.js, keep in mind:
 - Do not update to the next even-numbered major version until it enters Active LTS status
 - Do not update to the next even-numbered major version until it is offically supported by AWS Lambda. [Supported Runtimes](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html)
 
-To update Node.js:
-
-1. Update the version in `.nvmrc`.
-1. Manually update the `"engines"` property in:
+ To update Node.js:
+ 
+ 1. Update the version in `.nvmrc`.
+ 1. Manually update the `"engines"` property in:
    - `./package.json`
    - `./web-api/runtimes/puppeteer/package.json`
-1. Manually update the images in:
+ 1. Manually update the images in:
    - `./Dockerfile`
    - `./web-api/runtimes/puppeteer/Dockerfile`
-1. Manually update the Node.js version in:
+ 1. Manually update the Node.js version in:
    - `./.circleci/config.yml`
-1. Update the node version used by our lambdas.
+ 1. Update the node version used by our lambdas.
    - `web-api/terraform/modules/lambda/lambda.tf`
    - `web-api/terraform/modules/api/layers.tf`
-1. Update the `CHANGES.md` file with instructions for installing this NodeJS version locally. See [df83cf3](https://github.com/ustaxcourt/ef-cms/commit/df83cf3db69f2c6149cbef3ae213db488822cc2b) for an example.
+ 1. Update the `CHANGES.md` file with instructions for installing this NodeJS version locally. See [df83cf3](https://github.com/ustaxcourt/ef-cms/commit/df83cf3db69f2c6149cbef3ae213db488822cc2b) for an example.
+
+ When updating Node.js, also consider `@ustaxcourt/payment-portal`:
+
+ - If the Node.js upgrade stays within the published `@ustaxcourt/payment-portal` `engines.node` range (for example, a patch/minor update within the same major version), no `payment-portal` update is required.
+ - If the Node.js upgrade falls outside the published `engines.node` range (for example, moving to a new major version), then `@ustaxcourt/payment-portal` must be updated and published with a compatible `engines.node` range before `npm ci` in ef-cms will succeed without engine workarounds.
 
 #### 2.2 Update `Dockerfile` as needed
 
@@ -206,6 +211,7 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 - As of [this release](https://github.com/mozilla/pdf.js/releases/tag/v5.1.91), and I think [this PR](https://github.com/mozilla/pdf.js/pull/19689), pdfjs seems to expect certain browser-side API functionality when loaded. This causes issues with our Cypress tests. The best way to fix this is worth investigating further. Perhaps we could polyfill, or even consider creating an issue in the pdfjs repo.
 - Look at `shared/src/business/utilities/pdfs/getPdfJs.ts`
+- As 0f 01/05/2026 `pdfjs-dist` is still causing Cypress Test to fail randomly
 
 ### DWT
 
@@ -226,37 +232,29 @@ Below is a list of dependencies that are locked down due to known issues with se
 - When running npm audit, you'll see a high severity issue with ws, 'affected by a DoS when handling a request with many HTTP headers - https://github.com/advisories/GHSA-3h5v-q93c-6h6q'. This doesn't affect us as the vulnerability is on the server side and we're not using this package on the server. We tried to override this to 5.2.4 and 8.18.0 and weren't able to make this work as import paths have changed. In the mean time, we recommend skipping this issue. We could always fork the cerebral repo in the future if needed.
 
 ### quill
+**Updated to 2.0.3**
 
 - Quill released version 2 in April 2024. It includes substantial changes. Because the focus is currently on Postgres, we have left it at a previous version.
+- January 9th, 2026: We successfully updated Quill from 1.4.3 to 2.0.3. The way Quill handles imports and props in function calls changed, requiring changes to our Quill.tsx and TextEditor.tsx.
+
 
 ### babel-jest, babel-core
 
-Tried to update to 30.0.0-beta.3 from 29.7.0 on Friday, June 06, 2025, we weren't able to update it because it conflicts with ts-jest 29.3.4.
-On June 26 2025, newer versions of babel-core and jest core also started to cause issues with ts-jest. Once ts-jest is updated these issues should all clear up.
-
-- On September 19th, 2025, babel-jest was successfully updated to 30.0.0 from 29.7.0.
-- On September 19th, 2025, babel/core was successfully updated to 7.28..4 from 7.28.3, had some issues with Github Actions checks running all the way through, but Github still gave the commit a check. Refer to this PR for more info. https://github.com/ustaxcourt/ef-cms/pull/9164
+- June 6th, 2025: Tried to update to 30.0.0-beta.3 from 29.7.0 on Friday, June 06, 2025, we weren't able to update it because it conflicts with ts-jest 29.3.4.
+- June 26 2025: newer versions of babel-core and jest core also started to cause issues with ts-jest. Once ts-jest is updated these issues should all clear up.
+- September 19th, 2025: babel-jest was successfully updated to 30.0.0 from 29.7.0.
+- September 19th, 2025: babel/core was successfully updated to 7.28..4 from 7.28.3, had some issues with Github Actions checks running all the way through, but Github still gave the commit a check. Refer to this PR for more info. https://github.com/ustaxcourt/ef-cms/pull/9164
 
 ### @types/node
 
 The major version of this package should match our major version of Node. At the moment that we are using Node v24.11.1 so we should use a package that starts with 24.
 
 - [Dependencies 12 01 2025](https://github.com/ustaxcourt/ef-cms/pull/9465/files), Node.js was updated to v24.11.1, successfully updated @types/node to 24.10.2 to match Node.js v24.11.1
+- [Dependencies 01 05 2026](https://github.com/ustaxcourt/ef-cms/pull/9595/files), @Types/Node.js was updated from v24.10.2 to v24.10.4. Node.js version was left unchanged as the next available is Node 25+.
 
 ### TypeScript
 
-We cannot update TypeScript version beyond v5.8.3 until ts-jest supports it
-
-- On September 19th, 2025, tried to update to 5.9.2, the highest non-beta version but we would need to address the Typescript issues. I ran out of time to do so. Refer to this PR. https://github.com/ustaxcourt/ef-cms/pull/9164
-- On October 27th, 2025, tried to update to 5.9.3. The update introduced 116+ new TypeScript errors due to stricter type checking:
-  - 35 null-checking errors (`TS18047` "possibly null") from stricter null-checking on DOM elements, refs, and properties
-  - 49 "never" type inference errors where TypeScript more aggressively infers `never` type for uninitialized or narrowed types
-  - 55 `IApplicationContext` type errors related to stricter type checking on mock vs. real application context objects
-  - Additional errors in test files and UI components
-
-The decision was made to revert back to 5.8.3 as the migration would require multiple days of dedicated work.
-
-- On November 19th, 2025, updated to typescript 5.9.3 and as a result resolved many of the typing issues involved in pdf buffers, applicationContext between client, shared, and api.
+**When upgrading TypeScript, make sure that the new version is supported by ts-jest.**
 
 ### Commander override for s3rver
 

@@ -14,7 +14,7 @@ export const navigateToReviewFileADocumentAction = async ({
 }: ActionProps) => {
   if (
     get(state.form.generationType) === GENERATION_TYPES.AUTO &&
-    get(state.form.eventCode) === 'EA'
+    (get(state.form.eventCode) === 'EA' || get(state.form.eventCode) === 'NOTW')
   ) {
     store.unset(state.form.redactionAcknowledgement);
   } else {
