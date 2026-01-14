@@ -38,6 +38,8 @@ export class PublicDocketEntry extends JoiValidationEntity {
   public sealedTo?: string;
   public servedAt?: string;
   public servedPartiesCode?: string;
+  public affectedByDocketEntries?: any[];
+  public affectedDocketEntries?: any[];
   public previousDocument?: {
     docketEntryId: string;
     documentTitle: string;
@@ -76,6 +78,8 @@ export class PublicDocketEntry extends JoiValidationEntity {
     this.sealedTo = rawProps.sealedTo;
     this.servedAt = rawProps.servedAt;
     this.servedPartiesCode = rawProps.servedPartiesCode;
+    this.affectedByDocketEntries = rawProps.affectedByDocketEntries;
+    this.affectedDocketEntries = rawProps.affectedDocketEntries;
     if (rawProps.previousDocument) {
       this.previousDocument = {
         docketEntryId: rawProps.previousDocument.docketEntryId,
