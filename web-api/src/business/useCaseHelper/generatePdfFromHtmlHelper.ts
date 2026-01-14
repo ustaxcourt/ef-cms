@@ -43,6 +43,9 @@ export const generatePdfFromHtmlHelper = async (
 
     await page.setContent(contentHtml);
 
+    // Wait for fonts to load to prevent rasterization and ensure searchable text layer
+    await page.evaluateHandle('document.fonts.ready');
+
     if (headerHtml === undefined) {
       headerHtml = ReactDOM.renderToString(
         React.createElement(PageMetaHeaderDocket, {
@@ -73,7 +76,9 @@ export const generatePdfFromHtmlHelper = async (
         top: '80px',
       },
       pageRanges: '1',
+      preferCSSPageSize: true,
       printBackground: true,
+      tagged: false,
     });
 
     let remainingPages: any;
@@ -88,7 +93,9 @@ export const generatePdfFromHtmlHelper = async (
           top: '80px',
         },
         pageRanges: '2-',
+        preferCSSPageSize: true,
         printBackground: true,
+        tagged: false,
       });
     } catch (err) {
       // this was probably a 1 page document
