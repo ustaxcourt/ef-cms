@@ -208,11 +208,12 @@ If an OpenSearch update is available, we'll need to update OpenSearch in github 
 Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Try to update these items but please be aware of the issue that's documented and ensure it's been resolved.
 
 ### pdfjs-dist
-**Current Version Installed: 5.4.530**
+**Current Version Installed: 5.0.375**
 
 - As of [this release](https://github.com/mozilla/pdf.js/releases/tag/v5.1.91), and I think [this PR](https://github.com/mozilla/pdf.js/pull/19689), pdfjs seems to expect certain browser-side API functionality when loaded. This causes issues with our Cypress tests. The best way to fix this is worth investigating further. Perhaps we could polyfill, or even consider creating an issue in the pdfjs repo.
 - Look at `shared/src/business/utilities/pdfs/getPdfJs.ts`
 - As 0f 01/05/2026 `pdfjs-dist` is still causing Cypress Test to fail randomly
+- 01/15/2026: Search.cy.ts always has a test failure if we upgrade to 5.4+. We decided to stick with the current 5.0.375.
 
 ### DWT
 **Current Installed DWT: 19.3.0**
