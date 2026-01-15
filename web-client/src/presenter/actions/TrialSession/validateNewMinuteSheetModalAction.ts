@@ -15,8 +15,17 @@ export const validateNewMinuteSheetModalAction = ({
   const form = get(state.modal.form) || {};
   const caseInfo = get(state.modal.caseInfo);
 
+  // Check if user has searched for a case
+  if (!caseInfo) {
+    return path.error({
+      errors: {
+        caseSelected: 'Search for a case',
+      },
+    });
+  }
+
   // Check if case is selected via checkbox
-  if (!form.caseSelected || !caseInfo) {
+  if (!form.caseSelected) {
     return path.error({
       errors: {
         caseSelected: 'Select a case',
