@@ -119,6 +119,13 @@ describe('Advanced Search', () => {
         // Works like 'Plump Priest' get detected, but 'Plump Priesthood' does not.
         const orderContents = `${faker.word.adjective()} ${faker.word.noun()}`;
 
+        // Connect to WebSocket to listen for serve_document_complete
+        cy.window().then(win => {
+          const token = win.localStorage.getItem('token');
+          const clientConnectionId = `cypress-${v4()}`;
+          cy.task('connectWebSocket', { token, clientConnectionId });
+        });
+
         createOrderAndDecision(orderContents);
 
         // Add the order to the docket entry and perform a non-paper (electronic) service
@@ -134,13 +141,22 @@ describe('Advanced Search', () => {
         cy.get('[data-testid="serve-to-parties-btn"]').click();
         cy.get('[data-testid="modal-button-confirm"]').click();
 
+        // Wait for WebSocket notification that document was served and indexed
+        cy.task('waitForWebSocketMessage', { action: 'serve_document_complete', timeout: 20000 })
+          .then((message) => {
+            console.log('Document served notification received:', message);
+          });
+
+        // Cleanup WebSocket connection
+        cy.task('disconnectWebSocket');
+
         /** Act */
         cy.get('[data-testid="search-link"]').click();
         cy.get('[data-testid="order-search-tab"]').click();
         cy.get('[data-testid="keyword-search-input"]').type(orderContents);
         let count: number;
+        cy.intercept('GET', '**/order-search**').as('orderSearch');
         retry(() => {
-          cy.intercept('GET', '**/order-search**').as('orderSearch');
           cy.get(
             '[data-testid="submit-order-advanced-search-button"], [data-testid="advanced-search-button"], button#advanced-search-button, form[data-testid="order-search-container"] button[type=submit]',
           )
@@ -240,8 +256,8 @@ describe('Advanced Search', () => {
         cy.get('[data-testid="keyword-search-input"]').type(opinionTitle);
         // need to wait for elasticsearch potentially
         let count: number;
+        cy.intercept('GET', '**/opinion-search**').as('opinionSearch');
         retry(() => {
-          cy.intercept('GET', '**/opinion-search**').as('opinionSearch');
           cy.get(
             '[data-testid="submit-opinion-advanced-search-button"], [data-testid="advanced-search-button"], button#advanced-search-button, form[data-testid="opinion-search-container"] button[type=submit]',
           )

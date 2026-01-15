@@ -21,6 +21,7 @@ import { waitForNoce } from './cypress/helpers/cypressTasks/wait-for-noce';
 import type { Page } from 'puppeteer-core';
 import { retry, setup } from '@cypress/puppeteer';
 import { toggleFeatureFlag } from './cypress/helpers/cypressTasks/postgres/featureFlagsCypress';
+import WebSocket from 'ws';
 
 export default defineConfig({
   chromeWebSecurity: false,
@@ -29,7 +30,73 @@ export default defineConfig({
     baseUrl: 'http://localhost:1234',
     experimentalStudio: true,
     setupNodeEvents(on) {
+      let wsClient: WebSocket | null = null;
+      const messageQueue: any[] = [];
+
       on('task', {
+        connectWebSocket({ token, clientConnectionId }: { token: string; clientConnectionId: string }) {
+          return new Promise((resolve, reject) => {
+            const wsUrl = `ws://localhost:3011/?token=${token}&clientConnectionId=${clientConnectionId}`;
+            wsClient = new WebSocket(wsUrl);
+            
+            wsClient.on('open', () => {
+              console.log('WebSocket connected to port 3011');
+              resolve(true);
+            });
+
+            wsClient.on('message', (data: string | Buffer) => {
+              try {
+                const message = JSON.parse(data.toString());
+                console.log('WebSocket message received:', message);
+                messageQueue.push(message);
+              } catch (e) {
+                console.error('Failed to parse WebSocket message:', e);
+              }
+            });
+
+            wsClient.on('error', (error) => {
+              console.error('WebSocket error:', error);
+              reject(error);
+            });
+
+            wsClient.on('close', () => {
+              console.log('WebSocket connection closed');
+            });
+          });
+        },
+
+        waitForWebSocketMessage({ action, timeout = 15000 }: { action: string; timeout?: number }) {
+          return new Promise((resolve, reject) => {
+            const startTime = performance.now();
+            
+            const checkQueue = () => {
+              const messageIndex = messageQueue.findIndex(m => m.action === action);
+              if (messageIndex !== -1) {
+                const message = messageQueue[messageIndex];
+                messageQueue.splice(messageIndex, 1);
+                console.log(`Found WebSocket message with action: ${action}`, message);
+                resolve(message);
+              } else if (performance.now() - startTime > timeout) {
+                reject(new Error(`Timeout waiting for WebSocket message with action: ${action}. Queue: ${JSON.stringify(messageQueue)}`));
+              } else {
+                setTimeout(checkQueue, 100);
+              }
+            };
+
+            checkQueue();
+          });
+        },
+
+        disconnectWebSocket() {
+          if (wsClient) {
+            wsClient.close();
+            wsClient = null;
+            messageQueue.length = 0;
+            console.log('WebSocket disconnected and queue cleared');
+          }
+          return null;
+        },
+
         confirmUser({ email }) {
           return confirmUser({ email });
         },
@@ -88,7 +155,7 @@ export default defineConfig({
           async closeTab(browser: any, url: string) {
             const desiredPage = await retry<Promise<Page>>(async () => {
               const pages = await browser.pages();
-              const page = pages.find(p => p.url().includes(url));
+              const page = pages.find((p: Page) => p.url().includes(url));
               if (!page) throw new Error('Could not find page');
               return page;
             });
