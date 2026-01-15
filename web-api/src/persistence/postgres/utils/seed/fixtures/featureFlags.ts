@@ -30,8 +30,4 @@ export const featureFlags: FeatureFlagTable[] = [
       },
     },
   },
-  {
-    name: 'restricted-event-codes',
-    value: { current: 'M116' },
-  },
 ];
