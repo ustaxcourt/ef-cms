@@ -21,8 +21,6 @@ import { waitForNoce } from './cypress/helpers/cypressTasks/wait-for-noce';
 import type { Page } from 'puppeteer-core';
 import { retry, setup } from '@cypress/puppeteer';
 import { toggleFeatureFlag } from './cypress/helpers/cypressTasks/postgres/featureFlagsCypress';
-import WebSocket from 'ws';
-import { environment } from './web-api/src/environment';
 
 export default defineConfig({
   chromeWebSecurity: false,
@@ -31,75 +29,7 @@ export default defineConfig({
     baseUrl: 'http://localhost:1234',
     experimentalStudio: true,
     setupNodeEvents(on) {
-      let wsClient: WebSocket | undefined;
-      const messageQueue: any[] = [];
-
       on('task', {
-        connectWebSocket({ token, clientConnectionId }: { token: string; clientConnectionId: string }) {
-          return new Promise((resolve, reject) => {
-            const host = environment.wsEndpoint.replace(/^https?:\/\//, '');
-            const protocol = host.startsWith('localhost') ? 'ws' : 'wss';
-            const wsUrl = `${protocol}://${host}/?token=${token}&clientConnectionId=${clientConnectionId}`;
-            wsClient = new WebSocket(wsUrl);
-            
-            wsClient.on('open', () => {
-              console.log(`WebSocket connected to ${wsUrl}`);
-              resolve(true);
-            });
-
-            wsClient.on('message', (data: string | Buffer) => {
-              try {
-                const message = JSON.parse(data.toString());
-                console.log('WebSocket message received:', message);
-                messageQueue.push(message);
-              } catch (e) {
-                console.error('Failed to parse WebSocket message:', e);
-              }
-            });
-
-            wsClient.on('error', (error) => {
-              console.error('WebSocket error:', error);
-              reject(error);
-            });
-
-            wsClient.on('close', () => {
-              console.log('WebSocket connection closed');
-            });
-          });
-        },
-
-        waitForWebSocketMessage({ action, timeout = 15000 }: { action: string; timeout?: number }) {
-          return new Promise((resolve, reject) => {
-            const startTime = performance.now();
-            
-            const checkQueue = () => {
-              const messageIndex = messageQueue.findIndex(m => m.action === action);
-              if (messageIndex !== -1) {
-                const message = messageQueue[messageIndex];
-                messageQueue.splice(messageIndex, 1);
-                console.log(`Found WebSocket message with action: ${action}`, message);
-                resolve(message);
-              } else if (performance.now() - startTime > timeout) {
-                reject(new Error(`Timeout waiting for WebSocket message with action: ${action}. Queue: ${JSON.stringify(messageQueue)}`));
-              } else {
-                setTimeout(checkQueue, 100);
-              }
-            };
-
-            checkQueue();
-          });
-        },
-
-        disconnectWebSocket() {
-          if (wsClient) {
-            wsClient.close();
-            wsClient = undefined;
-            messageQueue.length = 0;
-            console.log('WebSocket disconnected and queue cleared');
-          }
-          return null;
-        },
-
         confirmUser({ email }) {
           return confirmUser({ email });
         },
