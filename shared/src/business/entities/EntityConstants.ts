@@ -520,9 +520,13 @@ export const EXTERNAL_DOCUMENT_TYPES = flatten(
   Object.values(EXTERNAL_FILING_EVENTS),
 ).map(t => t.documentType);
 
+EXTERNAL_DOCUMENT_TYPES.push('Motion to Withdraw Counsel by Party');
+
 export const INTERNAL_DOCUMENT_TYPES = flatten(
   Object.values(INTERNAL_FILING_EVENTS),
 ).map(t => t.documentType);
+
+INTERNAL_DOCUMENT_TYPES.push('Motion to Withdraw Counsel by Party');
 
 export const COURT_ISSUED_DOCUMENT_TYPES = COURT_ISSUED_EVENT_CODES.map(
   t => t.documentType,
