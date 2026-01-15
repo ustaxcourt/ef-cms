@@ -22,6 +22,7 @@ import type { Page } from 'puppeteer-core';
 import { retry, setup } from '@cypress/puppeteer';
 import { toggleFeatureFlag } from './cypress/helpers/cypressTasks/postgres/featureFlagsCypress';
 import WebSocket from 'ws';
+import { environment } from './web-api/src/environment';
 
 export default defineConfig({
   chromeWebSecurity: false,
@@ -30,17 +31,19 @@ export default defineConfig({
     baseUrl: 'http://localhost:1234',
     experimentalStudio: true,
     setupNodeEvents(on) {
-      let wsClient: WebSocket | null = null;
+      let wsClient: WebSocket | undefined;
       const messageQueue: any[] = [];
 
       on('task', {
         connectWebSocket({ token, clientConnectionId }: { token: string; clientConnectionId: string }) {
           return new Promise((resolve, reject) => {
-            const wsUrl = `ws://localhost:3011/?token=${token}&clientConnectionId=${clientConnectionId}`;
+            const host = environment.wsEndpoint.replace(/^https?:\/\//, '');
+            const protocol = host.startsWith('localhost') ? 'ws' : 'wss';
+            const wsUrl = `${protocol}://${host}/?token=${token}&clientConnectionId=${clientConnectionId}`;
             wsClient = new WebSocket(wsUrl);
             
             wsClient.on('open', () => {
-              console.log('WebSocket connected to port 3011');
+              console.log(`WebSocket connected to ${wsUrl}`);
               resolve(true);
             });
 
@@ -90,7 +93,7 @@ export default defineConfig({
         disconnectWebSocket() {
           if (wsClient) {
             wsClient.close();
-            wsClient = null;
+            wsClient = undefined;
             messageQueue.length = 0;
             console.log('WebSocket disconnected and queue cleared');
           }
