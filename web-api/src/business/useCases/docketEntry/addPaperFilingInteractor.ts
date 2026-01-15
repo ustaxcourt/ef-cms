@@ -50,6 +50,14 @@ export const addPaperFiling = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
+  if (!docketEntryId) {
+    throw new Error('Did not receive a docketEntryId');
+  }
+
+  if (!documentMetadata) {
+    throw new Error('Did not receive meta data for docket entry');
+  }
+
   const featureFlags: AllFeatureFlags = await getAllFeatureFlagsInteractor(
     applicationContext,
     true,
@@ -64,14 +72,6 @@ export const addPaperFiling = async (
     restrictedEventCodes.split(',').includes(documentMetadata.eventCode)
   ) {
     throw new UnauthorizedError('Unauthorized to edit this document type');
-  }
-
-  if (!docketEntryId) {
-    throw new Error('Did not receive a docketEntryId');
-  }
-
-  if (!documentMetadata) {
-    throw new Error('Did not receive meta data for docket entry');
   }
 
   const { docketNumber: subjectCaseDocketNumber, isFileAttached } =
