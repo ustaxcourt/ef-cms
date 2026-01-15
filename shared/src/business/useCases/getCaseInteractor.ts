@@ -7,11 +7,14 @@ import {
 } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
+import { CaseDTO } from '../dto/docketEntries/CaseDTO';
+import { RestrictedCaseDTO } from '../dto/docketEntries/RestrictedCaseDTO';
+import { PublicCaseDTO } from '../dto/docketEntries/PublicCaseDTO';
 
 export const getCaseInteractor = async (
   { docketNumber }: { docketNumber: string },
   authorizedUser: UnknownAuthUser,
-): Promise<RawCase> => {
+): Promise<CaseDTO | RestrictedCaseDTO | PublicCaseDTO> => {
   if (!isAuthUser(authorizedUser)) {
     throw new UnauthorizedError(
       `Invalid User attempting to view docket Number: ${docketNumber}`,
@@ -55,8 +58,22 @@ export const getCaseInteractor = async (
       workItemId: workItem?.workItemId,
     };
   });
-  return {
-    ...theCase.toRawObject(),
+
+  if (theCase.entityName === 'PublicCase') {
+    return new PublicCaseDTO({
+      ...(theCase.toRawObject() as RawPublicCase),
+      docketEntries: docketEntriesWithUIInfo,
+    });
+  } else if (theCase.entityName === 'RestrictedCase') {
+    return new RestrictedCaseDTO({
+      ...(theCase.toRawObject() as RawRestrictedCase),
+      docketEntries: docketEntriesWithUIInfo,
+    });
+  }
+
+  // should return as a 'Case'
+  return new CaseDTO({
+    ...(theCase.toRawObject() as RawCase),
     docketEntries: docketEntriesWithUIInfo,
-  } as RawCase;
+  });
 };

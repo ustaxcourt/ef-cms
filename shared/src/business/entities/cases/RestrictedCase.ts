@@ -25,3 +25,11 @@ export class RestrictedCase extends JoiValidationEntity {
     return Case.VALIDATION_RULES;
   }
 }
+declare global {
+  type RawRestrictedCase = Omit<
+    ExcludeMethods<RestrictedCase>,
+    'docketEntries'
+  > & {
+    docketEntries: RawDocketEntry[];
+  };
+}
