@@ -55,28 +55,29 @@ export const ApplyStamp = connect(
 
     const renderPDFPage = () => {
       const canvas = canvasRef.current;
-      if (!canvas) {
-        return;
+      const canvasContext = canvas?.getContext('2d');
+      if (canvasContext) {
+        pdfObj
+          ?.getPage(1)
+          .then(page => {
+            const scale = 1;
+            const viewport: PageViewport = page.getViewport({ scale });
+            if (canvas) {
+              canvas.height = viewport.height;
+              canvas.width = viewport.width;
+
+              const renderContext: RenderParameters = {
+                canvas,
+                canvasContext,
+                viewport,
+              };
+              return page.render(renderContext);
+            }
+          })
+          .catch(() => {
+            /* no-op*/
+          });
       }
-
-      pdfObj
-        ?.getPage(1)
-        .then(page => {
-          const scale = 1;
-          const viewport: PageViewport = page.getViewport({ scale });
-          canvas.height = viewport.height;
-          canvas.width = viewport.width;
-
-          const renderContext: RenderParameters = {
-            canvas,
-            viewport,
-          };
-
-          return page.render(renderContext);
-        })
-        .catch(() => {
-          /* no-op*/
-        });
     };
 
     const start = () => {

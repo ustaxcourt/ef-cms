@@ -113,10 +113,6 @@ describe('Advanced Search', () => {
 
         goToCase(docketNumber);
 
-        // Jan 14th, 2026: NOTE: There's a weird bug with how OpenSearch indexs search keywords, you might
-        // see searchResults assert fail not because the order doesn't exist, but because the search doesn't find it.
-        // If this happens, rerun smoketests until it passes. (until we can figure out a fix)
-        // Works like 'Plump Priest' get detected, but 'Plump Priesthood' does not.
         const orderContents = `${faker.word.adjective()} ${faker.word.noun()}`;
 
         createOrderAndDecision(orderContents);
