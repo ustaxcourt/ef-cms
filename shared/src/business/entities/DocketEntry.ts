@@ -316,6 +316,7 @@ export class DocketEntry extends JoiValidationEntity {
     const filedBy = generateFiledBy({
       docketEntry: this,
       petitioners,
+      filedBy: rawDocketEntry.filedBy,
     });
     if (filedBy) this.filedBy = filedBy;
   }
@@ -879,6 +880,15 @@ export class DocketEntry extends JoiValidationEntity {
 
     return DocketEntry.fetchRootDocument(previousEntry, docketEntries);
   };
+
+  documentTypeForStampedDocketEntry(): string {
+    const documentTypeIncludesPlaceholder =
+      this.documentType?.includes('[') && this.documentType?.includes(']');
+
+    return documentTypeIncludesPlaceholder || !this.documentType
+      ? this.documentTitle
+      : this.documentType;
+  }
 }
 
 /**

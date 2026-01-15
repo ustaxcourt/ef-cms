@@ -127,13 +127,18 @@ export const fileExternalDocument = async (
   const casesToUpdate = await getCasesByDocketNumbers({ docketNumbers });
 
   const pageCountsByDocketEntryId: Map<string, number> = new Map();
-  for (const [docketEntryId] of documentsToAdd) {
-    if (docketEntryId) {
+  const pageCountPromises = documentsToAdd
+    .filter(([docketEntryId]) => docketEntryId)
+    .map(async ([docketEntryId]) => {
       const numberOfPages = await applicationContext
         .getUseCaseHelpers()
         .countPagesInDocument({ applicationContext, docketEntryId });
-      pageCountsByDocketEntryId.set(docketEntryId, numberOfPages);
-    }
+      return [docketEntryId, numberOfPages] as [string, number];
+    });
+
+  const pageCounts = await Promise.all(pageCountPromises);
+  for (const [docketEntryId, numberOfPages] of pageCounts) {
+    pageCountsByDocketEntryId.set(docketEntryId, numberOfPages);
   }
 
   const consolidatedCaseEntities: Promise<RawCase>[] = casesToUpdate.map(

@@ -88,7 +88,7 @@ describe('Judge`s chambers stamps an order', () => {
           return Cypress.$(el)
             .find('*')
             .text()
-            .includes('Motion for Continuance GRANTED');
+            .includes('Order - Motion for Continuance GRANTED');
         })
         .should('have.length.at.least', 1);
     });
@@ -135,7 +135,7 @@ describe('Judge`s chambers stamps an order', () => {
             .contains('Motion to Proceed Remotely')
             .should('be.visible');
           cy.get('.attachment-viewer-button')
-            .contains('Motion to Proceed Remotely GRANTED')
+            .contains('Order - Motion to Proceed Remotely GRANTED')
             .should('be.visible');
         });
     });
