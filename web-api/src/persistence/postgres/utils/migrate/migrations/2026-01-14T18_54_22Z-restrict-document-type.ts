@@ -1,6 +1,25 @@
-import { Kysely } from 'kysely';
+import { Kysely, sql } from 'kysely';
 
 export async function up(db: Kysely<any>): Promise<void> {
+  // Update previousDocument.documentType where it matches
+  await db
+    .updateTable('dwDocketEntry')
+    .set({
+      previousDocument: sql`jsonb_set(
+        "previousDocument",
+        '{documentType}',
+        '"Motion to Withdraw Counsel by Party"'
+      )`,
+    })
+    .where(
+      sql`"previousDocument"->>'documentType'`,
+      '=',
+      'Motion to Withdraw Counsel (filed by petitioner)',
+    )
+    .where(sql`"previousDocument" ? 'documentType'`.$castTo<boolean>())
+    .execute();
+
+  // Update documentType column where it matches
   await db
     .updateTable('dwDocketEntry')
     .set({
@@ -15,6 +34,25 @@ export async function up(db: Kysely<any>): Promise<void> {
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
+  // Update previousDocument.documentType where it matches
+  await db
+    .updateTable('dwDocketEntry')
+    .set({
+      previousDocument: sql`jsonb_set(
+        "previousDocument",
+        '{documentType}',
+        '"Motion to Withdraw Counsel (filed by petitioner)"'
+      )`,
+    })
+    .where(
+      sql`"previousDocument"->>'documentType'`,
+      '=',
+      'Motion to Withdraw Counsel by Party',
+    )
+    .where(sql`"previousDocument" ? 'documentType'`.$castTo<boolean>())
+    .execute();
+
+  // Update documentType column where it matches
   await db
     .updateTable('dwDocketEntry')
     .set({
