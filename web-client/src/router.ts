@@ -1112,9 +1112,11 @@ const router = {
       ifHasAccess(
         { app, permissionToCheck: ROLE_PERMISSIONS.MANAGE_MINUTE_SHEET },
         (trialSessionId, docketNumber) => {
+          const { isUnscheduledCase } = route.query();
           setPageTitle('Trial session minutes');
           return app.getSequence('goToTrialSessionMinutesSequence')({
             docketNumber,
+            isUnscheduledCase: isUnscheduledCase === 'true',
             trialSessionId,
           });
         },
