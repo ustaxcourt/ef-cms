@@ -71,6 +71,21 @@ export const NewMinuteSheetModal = connect(
           </Button>
         </form>
 
+        {validationErrors.caseSelected &&
+          !newMinuteSheetModalHelper.caseInfo &&
+          !newMinuteSheetModalHelper.noResultsFound &&
+          !newMinuteSheetModalHelper.isCaseAlreadyOnTrialSession && (
+            <div className="margin-top-2" data-testid="search-error-message">
+              <span className="usa-error-message">
+                <FontAwesomeIcon
+                  className="margin-right-05"
+                  icon="exclamation-circle"
+                />
+                {validationErrors.caseSelected}
+              </span>
+            </div>
+          )}
+
         {newMinuteSheetModalHelper.noResultsFound && (
           <div className="margin-top-2" data-testid="no-results-found-message">
             <span className="usa-error-message">No results found</span>
@@ -182,9 +197,9 @@ export const NewMinuteSheetModal = connect(
                       target="_blank"
                     >
                       <FontAwesomeIcon
-                        className="margin-right-05"
                         icon="pencil-alt"
                         size="1x"
+                        style={{ marginRight: '4px' }}
                       />
                       {caseItem.docketNumberWithSuffix ||
                         caseItem.docketNumber}{' '}

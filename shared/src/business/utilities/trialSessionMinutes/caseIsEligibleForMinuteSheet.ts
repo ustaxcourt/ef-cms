@@ -39,10 +39,6 @@ export const isEligibleUnscheduledCaseForMinuteSheet = (
     return false;
   }
 
-  if (isClosed(aCase)) {
-    return false;
-  }
-
   if (!isEligibleConsolidatedCase(aCase)) {
     return false;
   }
