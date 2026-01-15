@@ -288,6 +288,7 @@ export const PetitionQcScanBatchPreviewer: React.FC<PetitionQcScanBatchPreviewer
                 <Button
                   link
                   className="red-warning push-right remove-pdf-button"
+                  data-testid="remove-pdf"
                   onClick={() => {
                     if (petitionQcHelper.isPetitionFile) {
                       openConfirmReplacePetitionPdfSequence();
