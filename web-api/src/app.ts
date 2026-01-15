@@ -286,42 +286,7 @@ app.use((req, res, next) => {
 
   next();
 });
-// removes servedParties from the docket entries in API responses
-app.use((_req, res, next) => {
-  const originalSend = res.send.bind(res);
-  res.send = (body: any) => {
-    if (body && typeof body === 'object') {
-      const { docketEntries, response } = body;
-      if (docketEntries) {
-        const docketEntriesWithoutServedParties = docketEntries?.map(entry => {
-          delete entry.servedParties;
-          return entry;
-        });
-        body = {
-          ...body,
-          docketEntries: docketEntriesWithoutServedParties,
-        };
-      } else if (response) {
-        const parsedResponse = JSON.parse(response);
-        if (parsedResponse?.body?.docketEntries) {
-          const docketEntriesWithoutServedParties =
-            parsedResponse?.body?.docketEntries?.map(entry => {
-              delete entry.servedParties;
-              return entry;
-            });
-          body = {
-            response: JSON.stringify({
-              ...parsedResponse,
-              docketEntries: docketEntriesWithoutServedParties,
-            }),
-          };
-        }
-      }
-    }
-    return originalSend.call(res, body);
-  };
-  next();
-});
+
 app.use(expressLogger);
 
 /**
