@@ -23,7 +23,6 @@ export type ScanBatchPreviewerProps = {
   documentType: string | null;
   title: string;
   validateSequence?: Function;
-  scanOnly?: boolean;
   deletePdfSequence?: string;
   showRemovePdfButton?: boolean;
   isPetitionFile?: boolean;
@@ -177,7 +176,6 @@ export const ScanBatchPreviewer = connect<
                 e.preventDefault();
                 startScanSequence();
               }}
-              scanOnly={false}
               scannerSource={scanBatchPreviewerHelper.scannerSource}
               uploadMode={scanBatchPreviewerHelper.uploadMode}
             />
@@ -222,7 +220,6 @@ export const ScanBatchPreviewer = connect<
               }}
               onConfirmDelete={openConfirmDeletePDFModalSequence}
               pdfPreviewUrl={scanBatchPreviewerHelper.pdfPreviewUrl}
-              scanOnly={false}
               showModal={showModal}
             />
           )}
