@@ -1,7 +1,7 @@
 import React from 'react';
 
 export const OrderDocketHeader = ({
-  addedDocketNumbers,
+  addedDocketNumbers = [],
   caseCaptionExtension,
   caseTitle,
   docketNumberWithSuffix,
@@ -11,9 +11,9 @@ export const OrderDocketHeader = ({
   caseTitle: string;
   docketNumberWithSuffix: string;
   orderTitle?: string;
-  addedDocketNumbers: string[];
+  addedDocketNumbers?: string[];
 }) => {
-  const isEtAlOrder = addedDocketNumbers?.length > 1;
+  const isEtAlOrder = addedDocketNumbers.length > 1;
 
   return (
     <div className="order-docket-header">
