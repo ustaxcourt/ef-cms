@@ -112,7 +112,7 @@ describe('confirmInitiateServiceModalHelper', () => {
           ...baseState,
           form: {
             ...baseState.form,
-            multiDocketedOriginalDocketNumber: '101-20',
+            originallyFiledDocketNumber: '101-20',
           },
           formattedCaseDetail: {
             ...baseState.formattedCaseDetail,

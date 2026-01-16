@@ -153,7 +153,7 @@ const removeConsolidatedCases = async (
       );
     } else {
       docketEntry.multiDocketedOn = [];
-      docketEntry.multiDocketedOriginalDocketNumber = undefined;
+      docketEntry.originallyFiledDocketNumber = undefined;
       const newStorageId = getUniqueId();
       const oldStorageId = docketEntry.documentStorageId;
       const storageCommand = new CopyObjectCommand({

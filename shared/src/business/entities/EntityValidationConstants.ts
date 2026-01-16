@@ -265,7 +265,7 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     .array()
     .items(JoiValidationConstants.DOCKET_NUMBER)
     .required(),
-  multiDocketedOriginalDocketNumber:
+  originallyFiledDocketNumber:
     JoiValidationConstants.DOCKET_NUMBER.optional().description(
       'Docket Number of the Case originally filed on in XXXXX-YY format.',
     ),

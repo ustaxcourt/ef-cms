@@ -737,7 +737,7 @@ describe('completeDocketEntryQCInteractor', () => {
         docketEntries: [
           {
             ...caseRecord.docketEntries[0],
-            multiDocketedOriginalDocketNumber: '102-18',
+            originallyFiledDocketNumber: '102-18',
           },
         ],
       },

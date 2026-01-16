@@ -125,7 +125,7 @@ export class DocketEntry extends JoiValidationEntity {
   public lodged?: boolean;
   public mailingDate?: string;
   public multiDocketedOn: string[];
-  public multiDocketedOriginalDocketNumber?: string;
+  public originallyFiledDocketNumber?: string;
   public numberOfPages?: number;
   public objections?: string;
   public sealedTo?: string;
@@ -262,8 +262,8 @@ export class DocketEntry extends JoiValidationEntity {
     this.lodged = rawDocketEntry.lodged;
     this.mailingDate = rawDocketEntry.mailingDate;
     this.multiDocketedOn = rawDocketEntry.multiDocketedOn || [];
-    this.multiDocketedOriginalDocketNumber =
-      rawDocketEntry.multiDocketedOriginalDocketNumber;
+    this.originallyFiledDocketNumber =
+      rawDocketEntry.originallyFiledDocketNumber;
     this.numberOfPages = rawDocketEntry.numberOfPages;
     this.objections = rawDocketEntry.objections;
     this.redactionAcknowledgement = rawDocketEntry.redactionAcknowledgement;

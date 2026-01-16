@@ -126,7 +126,7 @@ export const serveExternallyFiledDocument = async (
             isOnDocketRecord: true,
             isPendingService: isSubjectCase,
             multiDocketedOn: docketNumbers,
-            multiDocketedOriginalDocketNumber: subjectCaseDocketNumber,
+            originallyFiledDocketNumber: subjectCaseDocketNumber,
             numberOfPages: numberOfPages + coversheetLength,
             processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
           },

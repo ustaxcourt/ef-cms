@@ -71,13 +71,13 @@ const completeDocketEntryQC = async (
     docketNumber,
     selectedSection,
     multiDocketedOn,
-    multiDocketedOriginalDocketNumber,
+    originallyFiledDocketNumber,
   }: {
     docketEntryId: string;
     docketNumber: string;
     selectedSection: any;
     multiDocketedOn?: string[];
-    multiDocketedOriginalDocketNumber?: string;
+    originallyFiledDocketNumber?: string;
   } = entryMetadata;
 
   const docketNumbers = multiDocketedOn?.length
@@ -192,7 +192,7 @@ const completeDocketEntryQC = async (
 
   const cannotUseOriginalFilingCase = !canUseOriginalFilingCase({
     multiDocketedOn,
-    multiDocketedOriginalDocketNumber,
+    originallyFiledDocketNumber,
   });
 
   for (const caseWithWorkItem of casesWithWorkItems) {
@@ -211,7 +211,7 @@ const completeDocketEntryQC = async (
 
     // 8477 TODO: extract to helper function?
     if (
-      currentDocketEntry.multiDocketedOriginalDocketNumber ===
+      currentDocketEntry.originallyFiledDocketNumber ===
         currentDocketEntry.docketNumber ||
       cannotUseOriginalFilingCase
     ) {
@@ -409,7 +409,7 @@ const completeDocketEntryQC = async (
 
       // 8477 TODO this is bad, I do not like it Sam I Am
       if (
-        currentDocketEntry.multiDocketedOriginalDocketNumber ===
+        currentDocketEntry.originallyFiledDocketNumber ===
           currentDocketEntry.docketNumber ||
         cannotUseOriginalFilingCase
       ) {
@@ -477,15 +477,15 @@ export const completeDocketEntryQCInteractor = withLocking(
 
 const canUseOriginalFilingCase = ({
   multiDocketedOn,
-  multiDocketedOriginalDocketNumber,
+  originallyFiledDocketNumber,
 }: {
   multiDocketedOn: string[] | undefined;
-  multiDocketedOriginalDocketNumber: string | undefined;
+  originallyFiledDocketNumber: string | undefined;
 }) => {
   let canUseOriginalFilingCase = true;
-  if (!multiDocketedOriginalDocketNumber || !multiDocketedOn) {
+  if (!originallyFiledDocketNumber || !multiDocketedOn) {
     canUseOriginalFilingCase = false;
-  } else if (!multiDocketedOn.includes(multiDocketedOriginalDocketNumber)) {
+  } else if (!multiDocketedOn.includes(originallyFiledDocketNumber)) {
     canUseOriginalFilingCase = false;
   }
   return canUseOriginalFilingCase;

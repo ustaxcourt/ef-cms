@@ -110,7 +110,7 @@ export const addPaperFiling = async (
         multiDocketedOn: isSavingForLater
           ? []
           : effectiveConsolidatedGroupDocketNumbers,
-        multiDocketedOriginalDocketNumber: isSavingForLater
+        originallyFiledDocketNumber: isSavingForLater
           ? undefined
           : subjectCaseDocketNumber,
         relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,

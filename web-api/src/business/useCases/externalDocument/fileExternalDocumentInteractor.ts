@@ -148,7 +148,7 @@ export const fileExternalDocument = async (
               docketEntryId,
               documentStorageId: docketEntryId,
               multiDocketedOn: docketNumbers.length > 1 ? docketNumbers : [],
-              multiDocketedOriginalDocketNumber: docketNumber,
+              originallyFiledDocketNumber: docketNumber,
               documentType: metadata.documentType,
               isOnDocketRecord: true,
               relationship,

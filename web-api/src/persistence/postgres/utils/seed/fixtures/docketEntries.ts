@@ -90,7 +90,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
       '318-21',
       '319-21',
     ],
-    multiDocketedOriginalDocketNumber: '103-22',
+    originallyFiledDocketNumber: '103-22',
     documentStorageId: '25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
   },
   {
@@ -512,7 +512,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
       '318-21',
       '319-21',
     ],
-    multiDocketedOriginalDocketNumber: '103-22',
+    originallyFiledDocketNumber: '103-22',
     documentStorageId: '25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
   },
   {
@@ -5043,7 +5043,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
       '318-21',
       '319-21',
     ],
-    multiDocketedOriginalDocketNumber: '103-22',
+    originallyFiledDocketNumber: '103-22',
     documentStorageId: '25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
   },
   {
@@ -5629,7 +5629,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '102-20',
     stampData: {},
     multiDocketedOn: ['102-20', '103-20', '999-15'],
-    multiDocketedOriginalDocketNumber: '102-20',
+    originallyFiledDocketNumber: '102-20',
     documentStorageId: '6d83425c-8ef3-4c66-b776-6c7957c53f4d',
   },
   {
@@ -5779,7 +5779,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2023-08-08T17:32:21.434Z',
     docketNumber: '102-67',
     multiDocketedOn: ['102-67', '103-67', '104-67', '105-67'],
-    multiDocketedOriginalDocketNumber: '102-67',
+    originallyFiledDocketNumber: '102-67',
     documentStorageId: '10af43a5-b29b-4ab6-9924-545598fd12c8',
   },
   {
@@ -5856,7 +5856,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2024-06-28T19:55:09.127Z',
     docketNumber: '102-67',
     multiDocketedOn: ['102-67', '103-67', '104-67', '105-67'],
-    multiDocketedOriginalDocketNumber: '102-67',
+    originallyFiledDocketNumber: '102-67',
     documentStorageId: '7be2dea1-4428-4917-a66d-0d474e57ee02',
   },
   {
@@ -6107,7 +6107,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '103-19',
     stampData: {},
     multiDocketedOn: ['103-19', '124-20'],
-    multiDocketedOriginalDocketNumber: '103-19',
+    originallyFiledDocketNumber: '103-19',
     documentStorageId: 'dc2664a1-f552-418f-bcc7-8a67f4246568',
   },
   {
@@ -6176,7 +6176,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '103-20',
     stampData: {},
     multiDocketedOn: ['103-20', '105-20'],
-    multiDocketedOriginalDocketNumber: '103-20',
+    originallyFiledDocketNumber: '103-20',
     documentStorageId: '06f60736-5f37-4590-b62a-5c7edf84ffc6',
   },
   {
@@ -6312,7 +6312,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '103-20',
     stampData: {},
     multiDocketedOn: ['102-20', '103-20', '999-15'],
-    multiDocketedOriginalDocketNumber: '102-20',
+    originallyFiledDocketNumber: '102-20',
     documentStorageId: '6d83425c-8ef3-4c66-b776-6c7957c53f4d',
   },
   {
@@ -6438,7 +6438,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2023-08-08T17:32:21.452Z',
     docketNumber: '103-67',
     multiDocketedOn: ['102-67', '103-67', '104-67', '105-67'],
-    multiDocketedOriginalDocketNumber: '102-67',
+    originallyFiledDocketNumber: '102-67',
     documentStorageId: '10af43a5-b29b-4ab6-9924-545598fd12c8',
   },
   {
@@ -6538,7 +6538,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2024-06-28T19:55:09.130Z',
     docketNumber: '103-67',
     multiDocketedOn: ['102-67', '103-67', '104-67', '105-67'],
-    multiDocketedOriginalDocketNumber: '102-67',
+    originallyFiledDocketNumber: '102-67',
     documentStorageId: '7be2dea1-4428-4917-a66d-0d474e57ee02',
   },
   {
@@ -6667,7 +6667,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '104-17',
     stampData: {},
     multiDocketedOn: ['104-17', '104-18', '104-20'],
-    multiDocketedOriginalDocketNumber: '104-17',
+    originallyFiledDocketNumber: '104-17',
     documentStorageId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
   },
   {
@@ -6791,7 +6791,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '104-18',
     stampData: {},
     multiDocketedOn: ['104-17', '104-18', '104-20'],
-    multiDocketedOriginalDocketNumber: '104-17',
+    originallyFiledDocketNumber: '104-17',
     documentStorageId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
   },
   {
@@ -7024,7 +7024,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '104-20',
     stampData: {},
     multiDocketedOn: ['104-17', '104-18', '104-20'],
-    multiDocketedOriginalDocketNumber: '104-17',
+    originallyFiledDocketNumber: '104-17',
     documentStorageId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
   },
   {
@@ -7275,7 +7275,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2023-08-08T17:32:21.459Z',
     docketNumber: '104-67',
     multiDocketedOn: ['102-67', '103-67', '104-67', '105-67'],
-    multiDocketedOriginalDocketNumber: '102-67',
+    originallyFiledDocketNumber: '102-67',
     documentStorageId: '10af43a5-b29b-4ab6-9924-545598fd12c8',
   },
   {
@@ -7410,7 +7410,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2024-06-28T19:55:09.122Z',
     docketNumber: '104-67',
     multiDocketedOn: ['102-67', '103-67', '104-67', '105-67'],
-    multiDocketedOriginalDocketNumber: '102-67',
+    originallyFiledDocketNumber: '102-67',
     documentStorageId: '7be2dea1-4428-4917-a66d-0d474e57ee02',
   },
   {
@@ -7607,7 +7607,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '105-20',
     stampData: {},
     multiDocketedOn: ['103-20', '105-20'],
-    multiDocketedOriginalDocketNumber: '103-20',
+    originallyFiledDocketNumber: '103-20',
     documentStorageId: '06f60736-5f37-4590-b62a-5c7edf84ffc6',
   },
   {
@@ -7658,7 +7658,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
       '320-21',
       '999-15',
     ],
-    multiDocketedOriginalDocketNumber: '105-20',
+    originallyFiledDocketNumber: '105-20',
     documentStorageId: '1a92894e-83a5-48ba-9994-3ada44235deb',
   },
   {
@@ -9312,7 +9312,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2023-08-08T17:32:21.464Z',
     docketNumber: '105-67',
     multiDocketedOn: ['102-67', '103-67', '104-67', '105-67'],
-    multiDocketedOriginalDocketNumber: '102-67',
+    originallyFiledDocketNumber: '102-67',
     documentStorageId: '10af43a5-b29b-4ab6-9924-545598fd12c8',
   },
   {
@@ -9357,7 +9357,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2024-06-28T19:55:09.125Z',
     docketNumber: '105-67',
     multiDocketedOn: ['102-67', '103-67', '104-67', '105-67'],
-    multiDocketedOriginalDocketNumber: '102-67',
+    originallyFiledDocketNumber: '102-67',
     documentStorageId: '7be2dea1-4428-4917-a66d-0d474e57ee02',
   },
   {
@@ -9546,7 +9546,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
       '320-21',
       '999-15',
     ],
-    multiDocketedOriginalDocketNumber: '105-20',
+    originallyFiledDocketNumber: '105-20',
     documentStorageId: '1a92894e-83a5-48ba-9994-3ada44235deb',
   },
   {
@@ -9877,7 +9877,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
       '320-21',
       '999-15',
     ],
-    multiDocketedOriginalDocketNumber: '105-20',
+    originallyFiledDocketNumber: '105-20',
     documentStorageId: '1a92894e-83a5-48ba-9994-3ada44235deb',
   },
   {
@@ -9938,7 +9938,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
       '318-21',
       '319-21',
     ],
-    multiDocketedOriginalDocketNumber: '103-22',
+    originallyFiledDocketNumber: '103-22',
     documentStorageId: '25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
   },
   {
@@ -10329,7 +10329,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
       '318-21',
       '319-21',
     ],
-    multiDocketedOriginalDocketNumber: '103-22',
+    originallyFiledDocketNumber: '103-22',
     documentStorageId: '25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
   },
   {
@@ -10470,7 +10470,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
       '318-21',
       '319-21',
     ],
-    multiDocketedOriginalDocketNumber: '103-22',
+    originallyFiledDocketNumber: '103-22',
     documentStorageId: '25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
   },
   {
@@ -10587,7 +10587,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
       '318-21',
       '319-21',
     ],
-    multiDocketedOriginalDocketNumber: '103-22',
+    originallyFiledDocketNumber: '103-22',
     documentStorageId: '25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
   },
   {
@@ -11521,7 +11521,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '124-20',
     stampData: {},
     multiDocketedOn: ['124-20', '129-20', '999-15'],
-    multiDocketedOriginalDocketNumber: '124-20',
+    originallyFiledDocketNumber: '124-20',
     documentStorageId: 'c611ee2e-a270-4dcd-a7bd-b8b9062db630',
   },
   {
@@ -11556,7 +11556,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '124-20',
     stampData: {},
     multiDocketedOn: ['103-19', '124-20'],
-    multiDocketedOriginalDocketNumber: '103-19',
+    originallyFiledDocketNumber: '103-19',
     documentStorageId: 'dc2664a1-f552-418f-bcc7-8a67f4246568',
   },
   {
@@ -12009,7 +12009,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '129-20',
     stampData: {},
     multiDocketedOn: ['124-20', '129-20', '999-15'],
-    multiDocketedOriginalDocketNumber: '124-20',
+    originallyFiledDocketNumber: '124-20',
     documentStorageId: 'c611ee2e-a270-4dcd-a7bd-b8b9062db630',
   },
   {
@@ -12092,7 +12092,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '150-12',
     stampData: {},
     multiDocketedOn: ['150-12', '151-12', '152-12', '69312-87'],
-    multiDocketedOriginalDocketNumber: '150-12',
+    originallyFiledDocketNumber: '150-12',
     documentStorageId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
   },
   {
@@ -12124,7 +12124,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '150-12',
     stampData: {},
     multiDocketedOn: ['150-12', '151-12', '152-12', '69312-87'],
-    multiDocketedOriginalDocketNumber: '150-12',
+    originallyFiledDocketNumber: '150-12',
     documentStorageId: 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
   },
   {
@@ -12207,7 +12207,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '151-12',
     stampData: {},
     multiDocketedOn: ['150-12', '151-12', '152-12', '69312-87'],
-    multiDocketedOriginalDocketNumber: '150-12',
+    originallyFiledDocketNumber: '150-12',
     documentStorageId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
   },
   {
@@ -12239,7 +12239,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '151-12',
     stampData: {},
     multiDocketedOn: ['150-12', '151-12', '152-12', '69312-87'],
-    multiDocketedOriginalDocketNumber: '150-12',
+    originallyFiledDocketNumber: '150-12',
     documentStorageId: 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
   },
   {
@@ -12322,7 +12322,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '152-12',
     stampData: {},
     multiDocketedOn: ['150-12', '151-12', '152-12', '69312-87'],
-    multiDocketedOriginalDocketNumber: '150-12',
+    originallyFiledDocketNumber: '150-12',
     documentStorageId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
   },
   {
@@ -12354,7 +12354,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '152-12',
     stampData: {},
     multiDocketedOn: ['150-12', '151-12', '152-12', '69312-87'],
-    multiDocketedOriginalDocketNumber: '150-12',
+    originallyFiledDocketNumber: '150-12',
     documentStorageId: 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
   },
   {
@@ -12583,7 +12583,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
       '318-21',
       '319-21',
     ],
-    multiDocketedOriginalDocketNumber: '103-22',
+    originallyFiledDocketNumber: '103-22',
     documentStorageId: '25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
   },
   {
@@ -12731,7 +12731,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
       '318-21',
       '319-21',
     ],
-    multiDocketedOriginalDocketNumber: '103-22',
+    originallyFiledDocketNumber: '103-22',
     documentStorageId: '25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
   },
   {
@@ -12879,7 +12879,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
       '318-21',
       '319-21',
     ],
-    multiDocketedOriginalDocketNumber: '103-22',
+    originallyFiledDocketNumber: '103-22',
     documentStorageId: '25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
   },
   {
@@ -13027,7 +13027,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
       '318-21',
       '319-21',
     ],
-    multiDocketedOriginalDocketNumber: '103-22',
+    originallyFiledDocketNumber: '103-22',
     documentStorageId: '25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
   },
   {
@@ -13175,7 +13175,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
       '318-21',
       '319-21',
     ],
-    multiDocketedOriginalDocketNumber: '103-22',
+    originallyFiledDocketNumber: '103-22',
     documentStorageId: '25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
   },
   {
@@ -13323,7 +13323,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
       '318-21',
       '319-21',
     ],
-    multiDocketedOriginalDocketNumber: '103-22',
+    originallyFiledDocketNumber: '103-22',
     documentStorageId: '25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
   },
   {
@@ -13471,7 +13471,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
       '318-21',
       '319-21',
     ],
-    multiDocketedOriginalDocketNumber: '103-22',
+    originallyFiledDocketNumber: '103-22',
     documentStorageId: '25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
   },
   {
@@ -13647,7 +13647,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
       '318-21',
       '319-21',
     ],
-    multiDocketedOriginalDocketNumber: '103-22',
+    originallyFiledDocketNumber: '103-22',
     documentStorageId: '25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
   },
   {
@@ -13767,7 +13767,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
       '318-21',
       '319-21',
     ],
-    multiDocketedOriginalDocketNumber: '103-22',
+    originallyFiledDocketNumber: '103-22',
     documentStorageId: '25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
   },
   {
@@ -13915,7 +13915,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
       '318-21',
       '319-21',
     ],
-    multiDocketedOriginalDocketNumber: '103-22',
+    originallyFiledDocketNumber: '103-22',
     documentStorageId: '25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
   },
   {
@@ -14064,7 +14064,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
       '318-21',
       '319-21',
     ],
-    multiDocketedOriginalDocketNumber: '103-22',
+    originallyFiledDocketNumber: '103-22',
     documentStorageId: '25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
   },
   {
@@ -14196,7 +14196,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
       '320-21',
       '999-15',
     ],
-    multiDocketedOriginalDocketNumber: '105-20',
+    originallyFiledDocketNumber: '105-20',
     documentStorageId: '1a92894e-83a5-48ba-9994-3ada44235deb',
   },
   {
@@ -14385,7 +14385,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
       '318-21',
       '319-21',
     ],
-    multiDocketedOriginalDocketNumber: '103-22',
+    originallyFiledDocketNumber: '103-22',
     documentStorageId: '25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
   },
   {
@@ -14509,7 +14509,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
       '318-21',
       '319-21',
     ],
-    multiDocketedOriginalDocketNumber: '103-22',
+    originallyFiledDocketNumber: '103-22',
     documentStorageId: '25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
   },
   {
@@ -14658,7 +14658,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
       '318-21',
       '319-21',
     ],
-    multiDocketedOriginalDocketNumber: '103-22',
+    originallyFiledDocketNumber: '103-22',
     documentStorageId: '25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
   },
   {
@@ -14807,7 +14807,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
       '318-21',
       '319-21',
     ],
-    multiDocketedOriginalDocketNumber: '103-22',
+    originallyFiledDocketNumber: '103-22',
     documentStorageId: '25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
   },
   {
@@ -14981,7 +14981,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
       '318-21',
       '319-21',
     ],
-    multiDocketedOriginalDocketNumber: '103-22',
+    originallyFiledDocketNumber: '103-22',
     documentStorageId: '25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
   },
   {
@@ -15105,7 +15105,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
       '318-21',
       '319-21',
     ],
-    multiDocketedOriginalDocketNumber: '103-22',
+    originallyFiledDocketNumber: '103-22',
     documentStorageId: '25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
   },
   {
@@ -15236,7 +15236,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
       '320-21',
       '999-15',
     ],
-    multiDocketedOriginalDocketNumber: '105-20',
+    originallyFiledDocketNumber: '105-20',
     documentStorageId: '1a92894e-83a5-48ba-9994-3ada44235deb',
   },
   {
@@ -15347,7 +15347,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '320-21',
     stampData: {},
     multiDocketedOn: ['320-21', '999-15'],
-    multiDocketedOriginalDocketNumber: '320-21',
+    originallyFiledDocketNumber: '320-21',
     documentStorageId: '9de27a7d-7c6b-434b-803b-7655f82d5e07',
   },
   {
@@ -15728,7 +15728,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2023-11-22T01:17:49.177Z',
     docketNumber: '404-22',
     multiDocketedOn: ['404-22', '405-22'],
-    multiDocketedOriginalDocketNumber: '404-22',
+    originallyFiledDocketNumber: '404-22',
     documentStorageId: '86aa1097-53ee-48d8-aeae-25ed4d81248a',
   },
   {
@@ -15821,7 +15821,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2023-11-22T01:17:49.334Z',
     docketNumber: '405-22',
     multiDocketedOn: ['404-22', '405-22'],
-    multiDocketedOriginalDocketNumber: '404-22',
+    originallyFiledDocketNumber: '404-22',
     documentStorageId: '86aa1097-53ee-48d8-aeae-25ed4d81248a',
   },
   {
@@ -16082,7 +16082,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2023-11-22T01:20:35.162Z',
     docketNumber: '409-22',
     multiDocketedOn: ['409-22', '411-22', '413-22'],
-    multiDocketedOriginalDocketNumber: '409-22',
+    originallyFiledDocketNumber: '409-22',
     documentStorageId: '6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d',
   },
   {
@@ -16231,7 +16231,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2023-11-22T01:20:35.395Z',
     docketNumber: '411-22',
     multiDocketedOn: ['409-22', '411-22', '413-22'],
-    multiDocketedOriginalDocketNumber: '409-22',
+    originallyFiledDocketNumber: '409-22',
     documentStorageId: '6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d',
   },
   {
@@ -16380,7 +16380,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedAt: '2023-11-22T01:20:35.518Z',
     docketNumber: '413-22',
     multiDocketedOn: ['409-22', '411-22', '413-22'],
-    multiDocketedOriginalDocketNumber: '409-22',
+    originallyFiledDocketNumber: '409-22',
     documentStorageId: '6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d',
   },
   {
@@ -18733,7 +18733,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '69312-87',
     stampData: {},
     multiDocketedOn: ['150-12', '151-12', '152-12', '69312-87'],
-    multiDocketedOriginalDocketNumber: '150-12',
+    originallyFiledDocketNumber: '150-12',
     documentStorageId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
   },
   {
@@ -18765,7 +18765,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '69312-87',
     stampData: {},
     multiDocketedOn: ['150-12', '151-12', '152-12', '69312-87'],
-    multiDocketedOriginalDocketNumber: '150-12',
+    originallyFiledDocketNumber: '150-12',
     documentStorageId: 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
   },
   {
@@ -18862,7 +18862,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
       '320-21',
       '999-15',
     ],
-    multiDocketedOriginalDocketNumber: '105-20',
+    originallyFiledDocketNumber: '105-20',
     documentStorageId: '1a92894e-83a5-48ba-9994-3ada44235deb',
   },
   {
@@ -18904,7 +18904,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '999-15',
     stampData: {},
     multiDocketedOn: ['102-20', '103-20', '999-15'],
-    multiDocketedOriginalDocketNumber: '102-20',
+    originallyFiledDocketNumber: '102-20',
     documentStorageId: '6d83425c-8ef3-4c66-b776-6c7957c53f4d',
   },
   {
@@ -18954,7 +18954,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '999-15',
     stampData: {},
     multiDocketedOn: ['320-21', '999-15'],
-    multiDocketedOriginalDocketNumber: '320-21',
+    originallyFiledDocketNumber: '320-21',
     documentStorageId: '9de27a7d-7c6b-434b-803b-7655f82d5e07',
   },
   {
@@ -18997,7 +18997,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     docketNumber: '999-15',
     stampData: {},
     multiDocketedOn: ['124-20', '129-20', '999-15'],
-    multiDocketedOriginalDocketNumber: '124-20',
+    originallyFiledDocketNumber: '124-20',
     documentStorageId: 'c611ee2e-a270-4dcd-a7bd-b8b9062db630',
   },
   {

@@ -52,7 +52,7 @@ export const docketEntryTableDefinition = {
   lodged: DEFAULT as boolean | null,
   mailingDate: DEFAULT as string | null,
   multiDocketedOn: DEFAULT as ColumnType<string[], string, string>,
-  multiDocketedOriginalDocketNumber: DEFAULT as string | null,
+  originallyFiledDocketNumber: DEFAULT as string | null,
   noticeIssuedDate: DEFAULT as Date | null,
   numberOfPages: DEFAULT as number | null,
   objections: DEFAULT as string | null,

@@ -10,7 +10,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 
   await db.schema
     .alterTable('dwDocketEntry')
-    .addColumn('multiDocketedOriginalDocketNumber', 'varchar')
+    .addColumn('originallyFiledDocketNumber', 'varchar')
     .execute();
 }
 
@@ -22,6 +22,6 @@ export async function down(db: Kysely<any>): Promise<void> {
 
   await db.schema
     .alterTable('dwDocketEntry')
-    .dropColumn('multiDocketedOriginalDocketNumber')
+    .dropColumn('originallyFiledDocketNumber')
     .execute();
 }

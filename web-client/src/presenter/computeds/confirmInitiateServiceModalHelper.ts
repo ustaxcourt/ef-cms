@@ -131,12 +131,10 @@ const roleToDisplay = party => {
 
 export const shouldAllowMultiDocketing = ({ docketEntry, isLead }) => {
   const isSavedForLater =
-    !docketEntry.multiDocketedOriginalDocketNumber &&
-    !!docketEntry.processingStatus;
+    !docketEntry.originallyFiledDocketNumber && !!docketEntry.processingStatus;
 
   const isFiled =
-    !docketEntry.multiDocketedOriginalDocketNumber &&
-    !docketEntry.processingStatus;
+    !docketEntry.originallyFiledDocketNumber && !docketEntry.processingStatus;
 
   const isMultiDocketed = DocketEntry.isMultiDocketed(docketEntry);
 

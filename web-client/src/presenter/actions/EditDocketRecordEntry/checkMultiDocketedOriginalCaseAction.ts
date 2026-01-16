@@ -20,12 +20,10 @@ export const checkMultiDocketedOriginalCaseAction = ({
 
   if (
     DocketEntry.isMultiDocketed(documentDetail) &&
-    documentDetail.docketNumber !==
-      documentDetail.multiDocketedOriginalDocketNumber
+    documentDetail.docketNumber !== documentDetail.originallyFiledDocketNumber
   ) {
     return {
-      multiDocketedOriginalDocketNumber:
-        documentDetail.multiDocketedOriginalDocketNumber,
+      originallyFiledDocketNumber: documentDetail.originallyFiledDocketNumber,
     };
   }
 };
