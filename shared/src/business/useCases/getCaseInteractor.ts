@@ -39,7 +39,7 @@ export const getCaseInteractor = async (
     throw error;
   }
 
-  const theCase = CaseFactory.getCase({
+  const theCase = CaseFactory.getCaseDTO({
     rawCase: caseRecord,
     user: authorizedUser,
   });
@@ -59,21 +59,8 @@ export const getCaseInteractor = async (
     };
   });
 
-  if (theCase.entityName === 'PublicCase') {
-    return new PublicCaseDTO({
-      ...(theCase.toRawObject() as RawPublicCase),
-      docketEntries: docketEntriesWithUIInfo,
-    });
-  } else if (theCase.entityName === 'RestrictedCase') {
-    return new RestrictedCaseDTO({
-      ...(theCase.toRawObject() as RawRestrictedCase),
-      docketEntries: docketEntriesWithUIInfo,
-    });
-  }
-
-  // should return as a 'Case'
-  return new CaseDTO({
-    ...(theCase.toRawObject() as RawCase),
-    docketEntries: docketEntriesWithUIInfo,
-  });
+  return { ...theCase, docketEntries: docketEntriesWithUIInfo } as
+    | CaseDTO
+    | RestrictedCaseDTO
+    | PublicCaseDTO;
 };

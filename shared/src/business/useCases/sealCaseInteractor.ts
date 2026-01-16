@@ -10,6 +10,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { CaseDTO } from '../dto/docketEntries/CaseDTO';
 
 /**
  * sealCase
@@ -22,7 +23,7 @@ export const sealCase = async (
   applicationContext: ServerApplicationContext,
   { docketNumber }: { docketNumber: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<CaseDTO> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.SEAL_CASE)) {
     throw new UnauthorizedError('Unauthorized for sealing cases');
   }
@@ -44,9 +45,11 @@ export const sealCase = async (
     .getDispatchers()
     .sendNotificationOfSealing(applicationContext, { docketNumber });
 
-  return CaseFactory.getFullCase({ rawCase: updatedCase, user: authorizedUser })
-    .validate()
-    .toRawObject();
+  return new CaseDTO(
+    CaseFactory.getFullCase({ rawCase: updatedCase, user: authorizedUser })
+      .validate()
+      .toRawObject(),
+  );
 };
 
 export const sealCaseInteractor = withLocking(

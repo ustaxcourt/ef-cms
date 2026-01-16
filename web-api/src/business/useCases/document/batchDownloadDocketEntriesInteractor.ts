@@ -111,7 +111,7 @@ const batchDownloadDocketEntriesHelper = async (
     const filename = generateValidDocketEntryFilename({
       documentTitle,
       filingDate,
-      index,
+      index: index ? `${index}` : '',
     });
 
     const fileDirectory =
