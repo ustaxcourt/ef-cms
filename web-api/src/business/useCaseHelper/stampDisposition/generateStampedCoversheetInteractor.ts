@@ -18,6 +18,7 @@ const createStampedCoversheetPdf = async ({
   caseEntity,
   docketEntryEntity,
   stampData,
+  filingDateUpdated = false,
 }) => {
   docketEntryEntity.servedAt = undefined;
 
@@ -26,6 +27,7 @@ const createStampedCoversheetPdf = async ({
     caseEntity,
     docketEntryEntity,
     stampData,
+    filingDateUpdated,
   });
 
   const { PDFDocument } = await applicationContext.getPdfLib();
@@ -48,7 +50,13 @@ const createStampedCoversheetPdf = async ({
 
 export const generateStampedCoversheetInteractor = async (
   applicationContext,
-  { docketEntryId, docketNumber, stampData, stampedDocketEntryId },
+  {
+    docketEntryId,
+    docketNumber,
+    stampData,
+    stampedDocketEntryId,
+    filingDateUpdated = false,
+  },
   authorizedUser: UnknownAuthUser,
 ) => {
   const caseRecord = await getCaseByDocketNumber({
@@ -68,6 +76,7 @@ export const generateStampedCoversheetInteractor = async (
     caseEntity,
     docketEntryEntity: motionDocketEntryEntity,
     stampData,
+    filingDateUpdated,
   });
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({

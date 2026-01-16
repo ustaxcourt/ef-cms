@@ -27,7 +27,7 @@ export const batchDownloadDocketEntriesInteractor = async (
   applicationContext: ServerApplicationContext,
   downloadDocketEntryRequestInfo: DownloadDocketEntryRequestType,
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<void> => {
   try {
     await batchDownloadDocketEntriesHelper(
       applicationContext,
