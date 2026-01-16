@@ -21,7 +21,6 @@ import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/get
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { CaseFactory } from '@shared/business/entities/cases/CaseFactory';
 
 export const fileExternalDocument = async (
   applicationContext: ServerApplicationContext,
@@ -141,7 +140,7 @@ export const fileExternalDocument = async (
     pageCountsByDocketEntryId.set(docketEntryId, numberOfPages);
   }
 
-  const consolidatedCaseEntities: Promise<RawCase>[] = casesToUpdate.map(
+  const consolidatedCaseEntities = casesToUpdate.map(
     async caseToUpdate => {
       let caseEntity = new Case(caseToUpdate, { authorizedUser });
 
@@ -216,24 +215,13 @@ export const fileExternalDocument = async (
     },
   );
 
-  const resolvedCaseEntities: RawCase[] = await settlePromises(
-    consolidatedCaseEntities,
-  );
+  await settlePromises(consolidatedCaseEntities);
 
   await upsertWorkItems({
     workItems,
   });
 
-  const theCase = resolvedCaseEntities.find(
-    caseEntity => caseEntity.docketNumber === docketNumber,
-  );
-
-  const filteredCase = CaseFactory.getCase({
-    rawCase: theCase,
-    user: authorizedUser,
-  });
-
-  return filteredCase;
+  return { docketNumber };
 };
 
 export const fileExternalDocumentInteractor = withLocking(
