@@ -15,7 +15,7 @@ describe('getDocumentStorageIdAction', () => {
     ],
   };
 
-  it('should make a call to edit a paper filed docket entry and include consolidated group docket numbers when user has opted to multi-docket the paper filing', async () => {
+  it('should return documentStorageId when docketEntryId is provided in props', async () => {
     const result = await runAction(getDocumentStorageIdAction, {
       modules: {
         presenter,
@@ -27,6 +27,53 @@ describe('getDocumentStorageIdAction', () => {
         caseDetail: mockCaseDetail,
       },
     });
+
     expect(result.output.documentStorageId).toEqual(mockDocumentStorageId);
+  });
+
+  it('should return documentStorageId when docketEntryId is provided on props.file', async () => {
+    const result = await runAction(getDocumentStorageIdAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        file: { docketEntryId: mockDocketEntryId },
+      },
+      state: {
+        caseDetail: mockCaseDetail,
+      },
+    });
+
+    expect(result.output.documentStorageId).toEqual(mockDocumentStorageId);
+  });
+
+  it('should return an empty object if docketEntryId is undefined due to uploading a new document', async () => {
+    const result = await runAction(getDocumentStorageIdAction, {
+      modules: {
+        presenter,
+      },
+      props: {},
+      state: {
+        caseDetail: mockCaseDetail,
+      },
+    });
+
+    expect(result.output).toEqual({});
+  });
+
+  it('should return an empty object if docket entry is not found in docketEntries', async () => {
+    const result = await runAction(getDocumentStorageIdAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        docketEntryId: 'non-existent-id',
+      },
+      state: {
+        caseDetail: mockCaseDetail,
+      },
+    });
+
+    expect(result.output).toEqual({});
   });
 });
