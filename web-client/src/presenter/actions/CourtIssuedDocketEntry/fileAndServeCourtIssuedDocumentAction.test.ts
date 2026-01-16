@@ -2,6 +2,7 @@ import { applicationContextForClient as applicationContext } from '@web-client/t
 import { fileAndServeCourtIssuedDocumentAction } from './fileAndServeCourtIssuedDocumentAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
+import { MOCK_ANSWER } from '@shared/test/mockDocketEntry';
 
 describe('submitCourtIssuedDocketEntryAction', () => {
   presenter.providers.applicationContext = applicationContext;
@@ -12,7 +13,7 @@ describe('submitCourtIssuedDocketEntryAction', () => {
     const mockCaseDetail = {
       docketNumber: '123-20',
       docketEntries: [],
-    }
+    };
     const mockForm = {
       attachments: false,
       date: '2019-01-01T00:00:00.000Z',
@@ -62,7 +63,44 @@ describe('submitCourtIssuedDocketEntryAction', () => {
       },
       subjectCaseDocketNumber: '123-20',
     });
-  })
+  });
+
+  it('should handle a docket entry that exists but has no draftOrderState', async () => {
+    const mockCaseDetail = {
+      docketNumber: '123-20',
+      docketEntries: [{ ...MOCK_ANSWER, draftOrderState: undefined }],
+    };
+    const mockForm = {
+      attachments: false,
+      date: '2019-01-01T00:00:00.000Z',
+      documentTitle: '[Anything]',
+      documentType: 'Order',
+      eventCode: 'O',
+      freeText: 'Testing',
+      generatedDocumentTitle: 'Order F',
+      scenario: 'Type A',
+    };
+    await runAction(fileAndServeCourtIssuedDocumentAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        docketNumbers,
+      },
+      state: {
+        caseDetail: mockCaseDetail,
+        clientConnectionId,
+        docketEntryId: MOCK_ANSWER.docketEntryId,
+        form: mockForm,
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().fileAndServeCourtIssuedDocumentInteractor
+        .mock.calls[0][1].form.orderType,
+    ).toBeUndefined();
+  });
+
   it('should call the interactor for filing and serving court-issued documents for status reports', async () => {
     const mockDocketEntryId = 'abc';
     const mockCaseDetail = {
@@ -73,13 +111,13 @@ describe('submitCourtIssuedDocketEntryAction', () => {
           draftOrderState: {
             dueDate: '2021-01-01',
             orderType: 'statusReport',
-          }
+          },
         },
         {
           docketEntryId: 'def',
-        }
+        },
       ],
-    }
+    };
     const mockForm = {
       attachments: false,
       documentTitle: '[Anything]',
