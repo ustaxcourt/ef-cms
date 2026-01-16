@@ -135,8 +135,8 @@ describe('Advanced Search', () => {
         cy.get('[data-testid="order-search-tab"]').click();
         cy.get('[data-testid="keyword-search-input"]').type(orderContents);
         let count: number;
+        cy.intercept('GET', '**/order-search**').as('orderSearch');
         retry(() => {
-          cy.intercept('GET', '**/order-search**').as('orderSearch');
           cy.get(
             '[data-testid="submit-order-advanced-search-button"], [data-testid="advanced-search-button"], button#advanced-search-button, form[data-testid="order-search-container"] button[type=submit]',
           )
@@ -236,8 +236,8 @@ describe('Advanced Search', () => {
         cy.get('[data-testid="keyword-search-input"]').type(opinionTitle);
         // need to wait for elasticsearch potentially
         let count: number;
+        cy.intercept('GET', '**/opinion-search**').as('opinionSearch');
         retry(() => {
-          cy.intercept('GET', '**/opinion-search**').as('opinionSearch');
           cy.get(
             '[data-testid="submit-opinion-advanced-search-button"], [data-testid="advanced-search-button"], button#advanced-search-button, form[data-testid="opinion-search-container"] button[type=submit]',
           )
