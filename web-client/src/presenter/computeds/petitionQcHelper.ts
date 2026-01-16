@@ -73,6 +73,7 @@ export const petitionQcHelper = (
   return {
     documentTabsToDisplay,
     isPetitionFile,
+    scanOnly: false,
     showRemovePdfButton: isPaper,
   };
 };

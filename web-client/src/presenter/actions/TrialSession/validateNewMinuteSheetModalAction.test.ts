@@ -73,7 +73,7 @@ describe('validateNewMinuteSheetModalAction', () => {
     expect(successStub).not.toHaveBeenCalled();
   });
 
-  it('should call path.error when caseInfo is null', async () => {
+  it('should call path.error with "Search for a case" when caseInfo is null', async () => {
     await runAction(validateNewMinuteSheetModalAction, {
       modules: {
         presenter,
@@ -90,13 +90,13 @@ describe('validateNewMinuteSheetModalAction', () => {
 
     expect(errorStub).toHaveBeenCalledWith({
       errors: {
-        caseSelected: 'Select a case',
+        caseSelected: 'Search for a case',
       },
     });
     expect(successStub).not.toHaveBeenCalled();
   });
 
-  it('should call path.error when form is empty', async () => {
+  it('should call path.error with "Search for a case" when form is empty and no search performed', async () => {
     await runAction(validateNewMinuteSheetModalAction, {
       modules: {
         presenter,
@@ -108,7 +108,7 @@ describe('validateNewMinuteSheetModalAction', () => {
 
     expect(errorStub).toHaveBeenCalledWith({
       errors: {
-        caseSelected: 'Select a case',
+        caseSelected: 'Search for a case',
       },
     });
     expect(successStub).not.toHaveBeenCalled();

@@ -172,7 +172,7 @@ describe('caseIsEligibleForMinuteSheet', () => {
 });
 
 describe('isEligibleUnscheduledCaseForMinuteSheet', () => {
-  it('should return true when unscheduled case is eligible (not closed, not a non-lead consolidated case)', () => {
+  it('should return true when unscheduled case is eligible (not a non-lead consolidated case)', () => {
     const mockCase = {
       ...MOCK_CASE,
       leadDocketNumber: undefined,
@@ -210,7 +210,7 @@ describe('isEligibleUnscheduledCaseForMinuteSheet', () => {
     expect(result).toBe(false);
   });
 
-  it('should return false when case is closed', () => {
+  it('should return true when case is closed (closed cases are allowed for unscheduled minute sheets)', () => {
     const mockCase = {
       ...MOCK_CASE,
       status: CASE_STATUS_TYPES.closed,
@@ -226,7 +226,7 @@ describe('isEligibleUnscheduledCaseForMinuteSheet', () => {
       mockTrialSession,
     );
 
-    expect(result).toBe(false);
+    expect(result).toBe(true);
   });
 
   it('should return false when case is part of consolidated group but not lead case', () => {

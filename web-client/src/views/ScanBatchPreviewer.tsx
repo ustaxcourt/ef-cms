@@ -23,7 +23,6 @@ export type ScanBatchPreviewerProps = {
   documentType: string | null;
   title: string;
   validateSequence?: Function;
-  scanOnly?: boolean;
   deletePdfSequence?: string;
   showRemovePdfButton?: boolean;
   isPetitionFile?: boolean;
@@ -55,37 +54,33 @@ const ScanSelectModal: React.FC<ScanSelectModalProps> = ({ showModal }) => {
 };
 
 const scanBatchPreviewerDeps = {
-  deletePdfSequence: props.deletePdfSequence
-    ? sequences[props.deletePdfSequence]
-    : sequences.removeScannedPdfSequence,
+  constants: state.constants,
   documentTabs: props.documentTabs,
   documentType: props.documentType,
   generatePdfFromScanSessionSequence:
     sequences.generatePdfFromScanSessionSequence,
-  isPetitionFile: props.isPetitionFile,
   openChangeScannerSourceModalSequence:
     sequences.openChangeScannerSourceModalSequence,
   openConfirmDeleteBatchModalSequence:
     sequences.openConfirmDeleteBatchModalSequence,
   openConfirmDeletePDFModalSequence:
     sequences.openConfirmDeletePDFModalSequence,
-  openConfirmReplacePetitionPdfSequence:
-    sequences.openConfirmReplacePetitionPdfSequence,
   openConfirmRescanBatchModalSequence:
     sequences.openConfirmRescanBatchModalSequence,
-  pdfPreviewUrl: state.pdfPreviewUrl,
+  removeScannedPdfSequence: sequences.removeScannedPdfSequence,
   scanBatchPreviewerHelper: state.scanBatchPreviewerHelper,
   scanHelper: state.scanHelper,
   scannerStartupSequence: sequences.scannerStartupSequence,
-  scanOnly: props.scanOnly,
   selectDocumentForScanSequence: sequences.selectDocumentForScanSequence,
   selectedBatchIndex: state.scanner.selectedBatchIndex,
   setCurrentPageIndexSequence: sequences.setCurrentPageIndexSequence,
-  setDocumentForPreviewSequence: sequences.setDocumentForPreviewSequence,
+  setDocumentForUploadSequence: sequences.setDocumentForUploadSequence,
   setDocumentUploadModeSequence: sequences.setDocumentUploadModeSequence,
+  setIsLoadingSequence: sequences.setIsLoadingSequence,
+  setIsNotLoadingSequence: sequences.setIsNotLoadingSequence,
   setSelectedBatchIndexSequence: sequences.setSelectedBatchIndexSequence,
+  showFileUploadErrorModalSequence: sequences.showFileUploadErrorModalSequence,
   showModal: state.modal.showModal,
-  showRemovePdfButton: props.showRemovePdfButton,
   startScanSequence: sequences.startScanSequence,
   title: props.title,
   validateSequence: props.validateSequence,
@@ -98,29 +93,23 @@ export const ScanBatchPreviewer = connect<
 >(
   scanBatchPreviewerDeps,
   function ScanBatchPreviewer({
-    deletePdfSequence,
     documentTabs,
     documentType,
     generatePdfFromScanSessionSequence,
-    isPetitionFile = false,
     openChangeScannerSourceModalSequence,
     openConfirmDeleteBatchModalSequence,
     openConfirmDeletePDFModalSequence,
-    openConfirmReplacePetitionPdfSequence,
     openConfirmRescanBatchModalSequence,
-    pdfPreviewUrl,
+    removeScannedPdfSequence,
     scanBatchPreviewerHelper,
     scanHelper,
     scannerStartupSequence,
-    scanOnly = false,
     selectDocumentForScanSequence,
     selectedBatchIndex,
     setCurrentPageIndexSequence,
-    setDocumentForPreviewSequence,
     setDocumentUploadModeSequence,
     setSelectedBatchIndexSequence,
     showModal,
-    showRemovePdfButton = true,
     startScanSequence,
     title,
     validateSequence,
@@ -161,16 +150,9 @@ export const ScanBatchPreviewer = connect<
             isFileUploaded={eventCode =>
               !!scanHelper[`${eventCode}FileCompleted`]
             }
-            onSelect={
-              scanOnly
-                ? documentId => {
-                    setDocumentForPreviewSequence({ documentId });
-                  }
-                : () => {
-                    selectDocumentForScanSequence();
-                  }
-            }
-            scanOnly={scanOnly}
+            onSelect={() => {
+              selectDocumentForScanSequence();
+            }}
           />
           {scanBatchPreviewerHelper.uploadMode !== 'preview' && (
             <ScanModeRadios
@@ -194,7 +176,6 @@ export const ScanBatchPreviewer = connect<
                 e.preventDefault();
                 startScanSequence();
               }}
-              scanOnly={scanOnly}
               scannerSource={scanBatchPreviewerHelper.scannerSource}
               uploadMode={scanBatchPreviewerHelper.uploadMode}
             />
@@ -224,27 +205,22 @@ export const ScanBatchPreviewer = connect<
             />
           )}
 
-          {!scanOnly &&
-            scanBatchPreviewerHelper.uploadMode === 'upload' && (
-              <ScanBatchFileInput
-                documentType={documentType}
-                validateSequence={validateSequence}
-              />
-            )}
+          {scanBatchPreviewerHelper.uploadMode === 'upload' && (
+            <ScanBatchFileInput
+              documentType={documentType}
+              validateSequence={validateSequence}
+            />
+          )}
 
           {scanBatchPreviewerHelper.uploadMode === 'preview' && (
             <ScanPdfPreview
               confirmSequence={() => {
-                deletePdfSequence();
+                removeScannedPdfSequence();
                 if (validateSequence) validateSequence();
               }}
-              isPetitionFile={isPetitionFile}
               onConfirmDelete={openConfirmDeletePDFModalSequence}
-              onConfirmReplace={openConfirmReplacePetitionPdfSequence}
-              pdfPreviewUrl={pdfPreviewUrl}
-              scanOnly={scanOnly}
+              pdfPreviewUrl={scanBatchPreviewerHelper.pdfPreviewUrl}
               showModal={showModal}
-              showRemovePdfButton={showRemovePdfButton}
             />
           )}
         </div>
