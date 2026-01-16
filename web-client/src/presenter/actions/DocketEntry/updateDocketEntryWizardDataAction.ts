@@ -49,10 +49,10 @@ export const updateDocketEntryWizardDataAction = ({
       if (!supporting) {
         store.unset(state.form.previousDocument);
       } else {
-        //if there is only one previously selected doc, default that selection on the form
         const filedDocketEntryIds = get(
           state.screenMetadata.filedDocketEntryIds,
         );
+        //if there is only one previously selected document, then default that selection on the form
         if (filedDocketEntryIds.length === 1) {
           const caseDetail =
             get(state.multiDocketedOriginalCaseDetail) ?? get(state.caseDetail);
