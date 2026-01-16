@@ -39,7 +39,12 @@ export class PublicCaseDTO {
     this.docketNumberSuffix = rawPublicCase.docketNumberSuffix;
     this.docketNumberWithSuffix = rawPublicCase.docketNumberWithSuffix;
     this.hasIrsPractitioner = rawPublicCase.hasIrsPractitioner;
-    this.docketEntries = rawPublicCase.docketEntries;
+    this.docketEntries = rawPublicCase.docketEntries.map(de => {
+      return {
+        ...de,
+        servedParties: undefined,
+      };
+    });
     this.isPaper = rawPublicCase.isPaper;
     this.partyType = rawPublicCase.partyType;
     this.receivedAt = rawPublicCase.receivedAt;

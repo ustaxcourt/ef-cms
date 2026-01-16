@@ -12,6 +12,11 @@ export class RestrictedCaseDTO {
     this.isPaper = rawRestrictedCase.isPaper;
     this.isSealed = rawRestrictedCase.isSealed;
     this.leadDocketNumber = rawRestrictedCase.leadDocketNumber;
-    this.docketEntries = rawRestrictedCase.docketEntries;
+    this.docketEntries = rawRestrictedCase.docketEntries.map(de => {
+      return {
+        ...de,
+        servedParties: undefined,
+      };
+    });
   }
 }
