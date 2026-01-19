@@ -26,6 +26,8 @@ import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseA
 import { generateAndServeDocketEntry } from '@web-api/business/useCaseHelper/service/createChangeItems';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { geocodeAddress } from '@web-api/business/useCases/geocoding/getAddressGeocode';
+import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
 
 export const getIsUserAuthorized = ({
   petitionerCaseRaw,
@@ -284,6 +286,25 @@ export const updatePetitionerInformation = async (
       user: authorizedUser,
     });
     serviceUrl = url;
+
+    // Geocode updated address
+    if (editableFields.address1 && editableFields.city && editableFields.postalCode) {
+      const geocodeResult = await geocodeAddress(applicationContext, {
+        address: {
+          address1: editableFields.address1,
+          city: editableFields.city,
+          postalCode: editableFields.postalCode,
+          state: editableFields.state,
+        },
+      });
+
+      if (geocodeResult) {
+        const userToGeocode = await getUserById({ userId: updatedPetitionerData.contactId });
+        if (userToGeocode) {
+          await upsertUsers([{ ...userToGeocode, lat: geocodeResult.lat, lng: geocodeResult.lng }]);
+        }
+      }
+    }
   }
 
   const shouldUpdateEmailAddress =

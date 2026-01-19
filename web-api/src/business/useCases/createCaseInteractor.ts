@@ -27,6 +27,9 @@ import { RawUser } from '@shared/business/entities/User';
 import { cloneDeep } from 'lodash';
 import { RawPrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 
+import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
+import { geocodeAddress } from './geocoding/getAddressGeocode';
+
 export type ElectronicCreatedCaseType = Omit<CreatedCaseType, 'trialCitiies'>;
 export const CREATE_CASE_LOCK_IDENTIFIER = 'CREATE_CASE_LOCK_IDENTIFIER';
 
@@ -339,6 +342,55 @@ export const createCaseInteractor = async (
   applicationContext.logger.info('filed a new petition', {
     docketNumber: caseToAdd.docketNumber,
   });
+
+  // Geocode primary petitioner address
+  const contactPrimary = caseToAdd.getContactPrimary();
+  if (contactPrimary?.address1 && contactPrimary?.city && contactPrimary?.postalCode) {
+    const geocodeResult = await geocodeAddress(applicationContext, {
+      address: {
+        address1: contactPrimary.address1,
+        city: contactPrimary.city,
+        postalCode: contactPrimary.postalCode,
+        state: contactPrimary.state,
+      },
+    });
+
+    if (geocodeResult) {
+      console.log('GeoCode Result', geocodeResult);
+      console.log('Address:', {
+        address1: contactPrimary.address1,
+        city: contactPrimary.city,
+        postalCode: contactPrimary.postalCode,
+        state: contactPrimary.state,
+      });
+      const primaryUser = await getUserById({ userId: contactPrimary.contactId });
+      if (primaryUser) {
+        await upsertUsers([{ ...primaryUser, lat: geocodeResult.lat, lng: geocodeResult.lng }]);
+      }
+    }
+  }
+
+  
+
+  // // Geocode secondary petitioner if exists
+  // const contactSecondary = caseToAdd.getContactSecondary?.();
+  // if (contactSecondary?.address1 && contactSecondary?.city && contactSecondary?.postalCode) {
+  //   const geocodeResult = await geocodeAddress(applicationContext, {
+  //     address: {
+  //       address1: contactSecondary.address1,
+  //       city: contactSecondary.city,
+  //       postalCode: contactSecondary.postalCode,
+  //       state: contactSecondary.state,
+  //     },
+  //   });
+
+  //   if (geocodeResult) {
+  //     const secondaryUser = await getUserById({ userId: contactSecondary.contactId });
+  //     if (secondaryUser) {
+  //       await upsertUsers([{ ...secondaryUser, lat: geocodeResult.lat, lng: geocodeResult.lng }]);
+  //     }
+  //   }
+  // }
 
   return new Case(caseToAdd, { authorizedUser }).toRawObject();
 };
