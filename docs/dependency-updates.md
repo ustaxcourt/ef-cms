@@ -21,7 +21,7 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
 1. You can use the `upgrade-npm-packages.ts` script for this process if you would like. Run the script in each directory containing a package.json:
    ```bash
    # Run these in order to avoid having to manually navigate to each package.json location
-   
+
    # Root package.json
    node scripts/npm/upgrade-npm-packages.ts
 
@@ -50,8 +50,14 @@ This command informs us of known security vulnerabilities. If transitive depende
 > **Why am I seeing a high severity for `tar-fs`?**
 > [See below](#puppeteer-and-sparticuzchromium).
 
-> **Why am I seeing a vulnerability for `fast-redact`?**
-> On November 19th, 2025. Unsuccessfully rolled back cognito-local to 3.7.1
+> **Why am I seeing a vulnerability for `diff` (jsdiff)?**
+> [See below](#diff-jsdiff).
+
+> **Why am I seeing a vulnerability for `elliptic`?**
+> [See below](#elliptic--crypto-browserify).
+
+> **Why am I seeing a vulnerability for `aws-sdk` v2 or `cognito-local`?**
+> These are dev dependencies with known vulnerabilities. On November 19th, 2025, we unsuccessfully attempted to roll back cognito-local to 3.7.1. The aws-sdk v2 vulnerability doesn't affect our use case as it's related to region parameter validation and we're only using it for local development/testing.
 
 ### 2. Update third-party dependencies
 
@@ -249,6 +255,7 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 - Quill released version 2 in April 2024. It includes substantial changes. Because the focus is currently on Postgres, we have left it at a previous version.
 - January 9th, 2026: We successfully updated Quill from 1.4.3 to 2.0.3. The way Quill handles imports and props in function calls changed, requiring changes to our Quill.tsx and TextEditor.tsx.
+- January 20th, 2026: There is an XSS vulnerability in Quill 2.0.3 (GHSA-v3m3-f69x-jf25). This vulnerability can be avoided by using getContents/setContents in combination with the quill delta. Currently we are not at risk for how we are using Quill and this vulnerability is actively being disputed: https://github.com/quilljs/quill/issues/3364. We will continue to monitor this issue.
 
 
 ### babel-jest, babel-core
@@ -281,6 +288,10 @@ The major version of this package should match our major version of Node. At the
 npm run start:s3rver
 error: too many arguments. Expected 0 arguments but got 2.
 ```
+
+### diff (jsdiff)
+
+- As of January 20th, 2026, there is a Denial of Service vulnerability in jsdiff's parsePatch and applyPatch functions (GHSA-73rr-hh4g-fpgx). This is a transitive dependency through sinon, ts-node, and jest. No fix is currently available as it would require updates to the entire testing stack. This vulnerability affects patch parsing/applying functionality that we don't use directly. We will monitor for updates to the dependency chain.
 
 ## Troubleshooting
 
