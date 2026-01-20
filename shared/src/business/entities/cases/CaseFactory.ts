@@ -69,7 +69,10 @@ export class CaseFactory {
   }
 
   static getCase({ rawCase, user }: { rawCase: any; user: UnknownAuthUser }) {
-    return constructCaseForUser({ rawCase, user });
+    return constructCaseForUser({ rawCase, user }) as
+      | Case
+      | PublicCase
+      | RestrictedCase;
   }
 
   static getCaseDTO({
@@ -115,9 +118,7 @@ function constructCaseForUser({
     isAuthorized(user, ROLE_PERMISSIONS.GET_ALL_CASE_DATA)
   ) {
     return useDTO
-      ? new CaseDTO(
-          new Case(rawCase, { authorizedUser: user }).validate().toRawObject(),
-        )
+      ? new CaseDTO(new Case(rawCase, { authorizedUser: user }).toRawObject())
       : new Case(rawCase, { authorizedUser: user });
   }
 
@@ -131,16 +132,12 @@ function constructCaseForUser({
   if (!userIsLoggedIn) {
     if (caseIsSealed) {
       return useDTO
-        ? new RestrictedCaseDTO(
-            new RestrictedCase(rawCase).validate().toRawObject(),
-          )
+        ? new RestrictedCaseDTO(new RestrictedCase(rawCase).toRawObject())
         : new RestrictedCase(rawCase);
     } else {
       return useDTO
         ? new PublicCaseDTO(
-            new PublicCase(rawCase, { authorizedUser: user })
-              .validate()
-              .toRawObject(),
+            new PublicCase(rawCase, { authorizedUser: user }).toRawObject(),
           )
         : new PublicCase(rawCase, { authorizedUser: user });
     }
@@ -153,9 +150,9 @@ function constructCaseForUser({
 
   // Petitioners and practitioners on a case have full read access to the case
   if (userIsAssociated) {
-    return new CaseDTO(
-      new Case(rawCase, { authorizedUser: user }).toRawObject(),
-    );
+    return useDTO
+      ? new CaseDTO(new Case(rawCase, { authorizedUser: user }).toRawObject())
+      : new Case(rawCase, { authorizedUser: user });
   }
 
   // IRS super users have full read access to all cases with served petitions
@@ -165,25 +162,21 @@ function constructCaseForUser({
       rawCase,
     })
   ) {
-    return new CaseDTO(
-      new Case(rawCase, { authorizedUser: user }).toRawObject(),
-    );
+    return useDTO
+      ? new CaseDTO(new Case(rawCase, { authorizedUser: user }).toRawObject())
+      : new Case(rawCase, { authorizedUser: user });
   }
 
   // User is logged in but neither has permissions to view all cases nor is associated with the case,
   // so they see whatever subset of data is allowed to the public
   if (caseIsSealed) {
     return useDTO
-      ? new RestrictedCaseDTO(
-          new RestrictedCase(rawCase).validate().toRawObject(),
-        )
+      ? new RestrictedCaseDTO(new RestrictedCase(rawCase).toRawObject())
       : new RestrictedCase(rawCase);
   } else {
     return useDTO
       ? new PublicCaseDTO(
-          new PublicCase(rawCase, { authorizedUser: user })
-            .validate()
-            .toRawObject(),
+          new PublicCase(rawCase, { authorizedUser: user }).toRawObject(),
         )
       : new PublicCase(rawCase, { authorizedUser: user });
   }
