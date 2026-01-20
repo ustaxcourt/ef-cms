@@ -91,17 +91,18 @@ export const getShowEditDocketRecordEntry = ({
   const eventCode = entry ? entry.eventCode : null;
 
   const restrictedEventCodes = get(
-    state.featureFlags[
-      ALLOWLIST_FEATURE_FLAGS.RESTRICTED_EVENT_CODES.key
-    ],
+    state.featureFlags[ALLOWLIST_FEATURE_FLAGS.RESTRICTED_EVENT_CODES.key],
   );
 
-  const isRestrictedEventCode = typeof restrictedEventCodes === "string" && 
-    restrictedEventCodes.includes(eventCode);
-  
+  const restrictedEventCodesArray =
+    typeof restrictedEventCodes === 'string'
+      ? restrictedEventCodes.split(',').map(code => code.trim())
+      : [];
+
+  const isRestrictedEventCode = restrictedEventCodesArray.includes(eventCode);
 
   return (
-    !isRestrictedEventCode && 
+    !isRestrictedEventCode &&
     userPermissions.EDIT_DOCKET_ENTRY &&
     (hasSystemGeneratedDocument ||
       DocketEntry.isMinuteEntry(entry) ||

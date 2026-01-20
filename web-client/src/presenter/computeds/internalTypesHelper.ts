@@ -48,21 +48,25 @@ export const getDocumentTypesForSelect = <T>(
   label: string;
   value: string;
 })[] => {
-
   const filteredTypeList = documents.map(t => {
     return { ...t, label: t.documentType, value: t.eventCode };
   });
 
   const restrictedEventCodes = get(
-    state.featureFlags[
-      ALLOWLIST_FEATURE_FLAGS.RESTRICTED_EVENT_CODES.key
-    ],
+    state.featureFlags[ALLOWLIST_FEATURE_FLAGS.RESTRICTED_EVENT_CODES.key],
   );
 
-  const finalFilteredTypeList = typeof restrictedEventCodes === 'string' 
-    ? filteredTypeList.filter(d => !restrictedEventCodes.includes(d.eventCode))
-    : filteredTypeList;
+  const restrictedEventCodesArray =
+    typeof restrictedEventCodes === 'string'
+      ? restrictedEventCodes.split(',').map(code => code.trim())
+      : [];
 
+  const finalFilteredTypeList =
+    restrictedEventCodesArray.length > 0
+      ? filteredTypeList.filter(
+          d => !restrictedEventCodesArray.includes(d.eventCode),
+        )
+      : filteredTypeList;
 
   return orderBy(finalFilteredTypeList, ['label'], ['asc']);
 };
