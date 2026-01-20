@@ -2164,3 +2164,38 @@ export const NOT_PROVIDED = 'Not Provided';
 export const AWS_BATCH_POLLING_INTERVAL = 5000;
 
 export const AWS_BATCH_POLLING_TIMEOUT = 600000;
+
+export const EVENT_CODES_WITH_NO_ORDER = [
+  'COED',
+  'MEMO',
+  'MOP',
+  'MOTR',
+  'NCON',
+  'NOA',
+  'NOB',
+  'NOC',
+  'NOCE',
+  'NOEI',
+  'NOEP',
+  'NOI',
+  'NOST',
+  'NOT',
+  'NOTT',
+  'NOTW',
+  'NOU',
+  'OBJ',
+  'OBJE',
+  'OBJN',
+  'OCS',
+  'OP',
+  'OPPO',
+  'RCOM',
+  'ROA',
+  'SEOB',
+  'SIOB',
+  'SIOM',
+  'SOMB',
+  'SOP',
+  'SORI',
+  'TCOP',
+];
