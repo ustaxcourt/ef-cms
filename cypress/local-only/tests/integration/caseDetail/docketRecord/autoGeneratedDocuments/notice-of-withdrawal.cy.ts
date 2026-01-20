@@ -72,10 +72,10 @@ describe('Notice of Withdrawal', () => {
         enterNoticeOfWithdrawalFormType(docketNumber);
         cy.get('[data-testid="error-alert"]').should('be.visible');
         cy.get('[data-testid="error-alert"]').contains(
-          'You are the only counsel representing a party on this case.',
+          'You are the only counsel representing your party on this case.',
         );
         cy.get('[data-testid="error-alert"]').contains(
-          'The case is scheduled for trial in less than 30 days.',
+          'This case is scheduled for trial in less than 30 days.',
         );
       });
     });
@@ -89,10 +89,10 @@ describe('Notice of Withdrawal', () => {
         enterNoticeOfWithdrawalFormType(docketNumber);
         cy.get('[data-testid="error-alert"]').should('be.visible');
         cy.get('[data-testid="error-alert"]').contains(
-          'You are the only counsel representing a party on this case.',
+          'You are the only counsel representing your party on this case.',
         );
         cy.get('[data-testid="error-alert"]').contains(
-          'The case is scheduled for trial in less than 30 days.',
+          'This case is scheduled for trial in less than 30 days.',
         );
       });
     });
@@ -111,9 +111,11 @@ describe('Notice of Withdrawal', () => {
         enterNoticeOfWithdrawalFormType(docketNumber);
         cy.get('[data-testid="file-document-submit-document"]').click();
         cy.get('[data-testid="error-alert"]').should('be.visible');
-        cy.get('[data-testid="error-alert"]').contains('Select a filing party');
         cy.get('[data-testid="error-alert"]').contains(
-          'All parties have not consented to your withdrawal as counsel.',
+          'Select a party from whom are you removing yourself as counsel of record',
+        );
+        cy.get('[data-testid="error-alert"]').contains(
+          'All parties have not consented to your withdrawal as counsel',
         );
       });
     });
@@ -136,9 +138,11 @@ describe('Notice of Withdrawal', () => {
         enterNoticeOfWithdrawalFormType(docketNumber);
         cy.get('[data-testid="file-document-submit-document"]').click();
         cy.get('[data-testid="error-alert"]').should('be.visible');
-        cy.get('[data-testid="error-alert"]').contains('Select a filing party');
         cy.get('[data-testid="error-alert"]').contains(
-          'All parties have not consented to your withdrawal as counsel.',
+          'Select a party from whom are you removing yourself as counsel of record',
+        );
+        cy.get('[data-testid="error-alert"]').contains(
+          'All parties have not consented to your withdrawal as counsel',
         );
       });
     });

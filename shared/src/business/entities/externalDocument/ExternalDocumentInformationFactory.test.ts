@@ -482,7 +482,7 @@ describe('ExternalDocumentInformationFactory', () => {
           role: ROLES.irsPractitioner,
         };
         expect(errors().allPartiesConsent).toEqual(
-          'All parties have not consented to your withdrawal as counsel.',
+          'All parties have not consented to your withdrawal as counsel',
         );
       });
       it('should not require all parties consent if the document private practitioner', () => {
@@ -492,7 +492,7 @@ describe('ExternalDocumentInformationFactory', () => {
           role: ROLES.privatePractitioner,
         };
         expect(errors().allPartiesConsent).toEqual(
-          'All parties have not consented to your withdrawal as counsel.',
+          'All parties have not consented to your withdrawal as counsel',
         );
       });
       it('should require paper service acknowledgement if the field exists', () => {
@@ -502,7 +502,7 @@ describe('ExternalDocumentInformationFactory', () => {
         };
         baseDoc.paperServiceAcknowledgement = false;
         expect(errors().paperServiceAcknowledgement).toEqual(
-          'You do not certify to serve the above parties who do not receive electronic service a copy of your withdrawal by mail today.',
+          'You do not certify to serve the above parties who do not receive electronic service a copy of your withdrawal by mail today',
         );
       });
     });

@@ -283,14 +283,20 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
       addProperty(
         'allPartiesConsent',
         joi.boolean().valid(true).required().messages({
-          '*': 'All parties have not consented to your withdrawal as counsel.',
+          '*': 'All parties have not consented to your withdrawal as counsel',
+        }),
+      );
+      addProperty(
+        'filers',
+        joi.array().items(joi.string().required()).messages({
+          '*': 'Select a party from whom are you removing yourself as counsel of record',
         }),
       );
       if (this.paperServiceAcknowledgement !== undefined) {
         addProperty(
           'paperServiceAcknowledgement',
           joi.boolean().valid(true).required().messages({
-            '*': 'You do not certify to serve the above parties who do not receive electronic service a copy of your withdrawal by mail today.',
+            '*': 'You do not certify to serve the above parties who do not receive electronic service a copy of your withdrawal by mail today',
           }),
         );
       }
