@@ -8,6 +8,7 @@ import {
   COURT_ISSUED_EVENT_CODES,
   DECISION_EVENT_CODE,
   DOCKET_ENTRY_SEALED_TO_TYPES,
+  DocketEntryRelation,
   DOCUMENT_NOTICE_EVENT_CODES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   EXTERNAL_DOCUMENT_TYPES,
@@ -186,6 +187,8 @@ export class DocketEntry extends JoiValidationEntity {
   public signedJudgeName?: string;
   public strickenBy?: string;
   public strickenByUserId?: string;
+  public affectedDocketEntries?: DocketEntryRelation[];
+  public affectedByDocketEntries?: DocketEntryRelation[];
 
   // These are optional fields set solely for the UI in certain cases.
   public qcComplete?: boolean;
@@ -275,6 +278,8 @@ export class DocketEntry extends JoiValidationEntity {
     this.strickenAt = rawDocketEntry.strickenAt;
     this.supportingDocument = rawDocketEntry.supportingDocument;
     this.trialLocation = rawDocketEntry.trialLocation;
+    this.affectedDocketEntries = rawDocketEntry.affectedDocketEntries;
+    this.affectedByDocketEntries = rawDocketEntry.affectedByDocketEntries;
     // only share the userId with an external user if it is the logged in user
     if (authorizedUser?.userId === rawDocketEntry.userId) {
       this.userId = rawDocketEntry.userId;
@@ -875,6 +880,15 @@ export class DocketEntry extends JoiValidationEntity {
 
     return DocketEntry.fetchRootDocument(previousEntry, docketEntries);
   };
+
+  documentTypeForStampedDocketEntry(): string {
+    const documentTypeIncludesPlaceholder =
+      this.documentType?.includes('[') && this.documentType?.includes(']');
+
+    return documentTypeIncludesPlaceholder || !this.documentType
+      ? this.documentTitle
+      : this.documentType;
+  }
 }
 
 /**

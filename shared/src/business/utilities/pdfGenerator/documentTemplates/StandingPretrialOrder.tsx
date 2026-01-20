@@ -207,26 +207,24 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
                     </span>
                   </p>
                 </li>
+                <li>
+                  <p>
+                    <span className="text-underline text-bold">
+                      {' '}
+                      Expert Report
+                    </span>
+                    <span className="text-normal">
+                      . If a party plans to call an expert witness at trial,
+                      that party must file an Expert Report (that is, submit
+                      separately through DAWSON if registered for eFiling or
+                      otherwise submit in paper). An expert witness’s testimony
+                      may be excluded if the party fails to comply with this
+                      Order and Rule 143(g).
+                    </span>
+                  </p>
+                </li>
               </ol>
             </div>
-          </li>
-          <li>
-            <p>
-              <span className="text-bold">
-                No later than{' '}
-                <span className="text-underline">
-                  30 days before the first day of the trial session
-                </span>
-                :{' '}
-              </span>
-              <span className="text-normal">
-                If a party plans to call an expert witness at trial, that party
-                must file an Expert Report (that is, submit separately through
-                DAWSON if registered for eFiling or otherwise submit in paper)
-                the expert report. An expert witness’s testimony may be excluded
-                if the party fails to comply with this Order and Rule 143(g).
-              </span>
-            </p>
           </li>
           <li>
             <p>
