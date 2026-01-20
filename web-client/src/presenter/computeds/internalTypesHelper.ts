@@ -2,6 +2,7 @@ import { Get } from 'cerebral';
 import { orderBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 import {
+  ALLOWLIST_FEATURE_FLAGS,
   INTERNAL_DOCUMENTS_ARRAY,
   LODGED_EVENT_CODE,
 } from '@shared/business/entities/EntityConstants';
@@ -22,6 +23,7 @@ export const internalTypesHelper = (
   const searchText = get(state.screenMetadata.searchText) || '';
 
   const internalDocumentTypesForSelect = getDocumentTypesForSelect(
+    get,
     INTERNAL_DOCUMENTS_ARRAY,
   );
 
@@ -40,15 +42,29 @@ export const internalTypesHelper = (
 };
 
 export const getDocumentTypesForSelect = <T>(
+  get,
   documents: ({ documentType: string; eventCode: string } & T)[],
 ): (T & {
   label: string;
   value: string;
 })[] => {
+
   const filteredTypeList = documents.map(t => {
     return { ...t, label: t.documentType, value: t.eventCode };
   });
-  return orderBy(filteredTypeList, ['label'], ['asc']);
+
+  const restrictedEventCodes = get(
+    state.featureFlags[
+      ALLOWLIST_FEATURE_FLAGS.RESTRICTED_EVENT_CODES.key
+    ],
+  );
+
+  const finalFilteredTypeList = typeof restrictedEventCodes === 'string' 
+    ? filteredTypeList.filter(d => !restrictedEventCodes.includes(d.eventCode))
+    : filteredTypeList;
+
+
+  return orderBy(finalFilteredTypeList, ['label'], ['asc']);
 };
 
 export const getSortFunction = searchText => {
