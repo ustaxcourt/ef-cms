@@ -1991,8 +1991,8 @@ export const EXTERNAL_FILING_EVENTS: AllExternalFilingEvents = {
       allowOrderResponse: true,
       deprecated: {
         deprecatedOn: '01/2025',
-        deprecationReson: `10578: The Pro Se committee has recommended that we re-characterize M129 to indicate 
-          that it can be used to either complete OR supplement the administrative record. 
+        deprecationReson: `10578: The Pro Se committee has recommended that we re-characterize M129 to indicate
+          that it can be used to either complete OR supplement the administrative record.
           M129 is being deprecated in favor of M129A to reflect this recharacterization.`,
       },
     },
@@ -2109,8 +2109,8 @@ export const EXTERNAL_FILING_EVENTS: AllExternalFilingEvents = {
       allowOrderResponse: true,
     },
     {
-      documentTitle: 'Motion to Withdraw Counsel',
-      documentType: 'Motion to Withdraw Counsel (filed by petitioner)',
+      documentTitle: 'Motion to Withdraw Counsel by Party',
+      documentType: 'Motion to Withdraw Counsel by Party',
       category: 'Motion',
       eventCode: 'M116',
       scenario: 'Standard',
