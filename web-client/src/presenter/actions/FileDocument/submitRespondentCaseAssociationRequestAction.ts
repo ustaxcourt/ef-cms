@@ -1,3 +1,6 @@
+import { CaseDTO } from '@shared/business/dto/docketEntries/CaseDTO';
+import { PublicCaseDTO } from '@shared/business/dto/docketEntries/PublicCaseDTO';
+import { RestrictedCaseDTO } from '@shared/business/dto/docketEntries/RestrictedCaseDTO';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -10,7 +13,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const submitRespondentCaseAssociationRequestAction = async ({
   applicationContext,
   get,
-}: ActionProps) => {
+}: ActionProps): Promise<CaseDTO | PublicCaseDTO | RestrictedCaseDTO> => {
   const { docketNumber } = get(state.caseDetail);
 
   const user = get(state.user);
@@ -25,4 +28,6 @@ export const submitRespondentCaseAssociationRequestAction = async ({
         userId: user.userId,
       });
   }
+
+  throw new Error('User is not of role IRS Practitioner.');
 };

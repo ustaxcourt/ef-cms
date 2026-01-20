@@ -15,6 +15,7 @@ import {
 import { MOCK_DOCUMENTS } from './mockDocketEntry';
 import { docketClerkUser, judgeUser } from './mockUsers';
 import { RawEligibleCase } from '@shared/business/entities/cases/EligibleCase';
+import { CaseDTO } from '@shared/business/dto/docketEntries/CaseDTO';
 
 export const MOCK_CASE: RawCase = {
   archivedDocketEntries: [],
@@ -63,6 +64,14 @@ export const MOCK_CASE: RawCase = {
   receivedAt: '2018-03-01T21:40:46.415Z',
   sortableDocketNumber: 2018000101,
   status: CASE_STATUS_TYPES.new,
+};
+
+export const MOCK_CASE_DTO: CaseDTO = {
+  ...MOCK_CASE,
+  docketEntries: MOCK_CASE.docketEntries.map(d => ({
+    ...d,
+    servedParties: undefined,
+  })),
 };
 
 export const MOCK_CONSOLIDATED_CASE_SUMMARY: RawConsolidatedCaseSummary =

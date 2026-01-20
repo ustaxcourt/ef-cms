@@ -13,6 +13,7 @@ import { updateCaseAutomaticBlock } from '@web-api/business/useCaseHelper/automa
 import { getCaseDeadlinesByConsolidatedCaseDeadlineIds } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { CaseDTO } from '@shared/business/dto/docketEntries/CaseDTO';
 
 export const deleteCaseDeadline = async (
   _applicationContext: ServerApplicationContext,
@@ -24,7 +25,7 @@ export const deleteCaseDeadline = async (
     docketNumber: string;
   },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<CaseDTO> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_DEADLINE)) {
     throw new UnauthorizedError('Unauthorized for deleting case deadline');
   }
@@ -89,7 +90,9 @@ export const deleteCaseDeadline = async (
 
   await Promise.all(DELETE_DEADLINE_TO_CONSOLIDATED_CASES);
 
-  return new Case(result, { authorizedUser }).validate().toRawObject();
+  const theCase = new Case(result, { authorizedUser }).validate().toRawObject();
+  const caseDTO = new CaseDTO(theCase);
+  return caseDTO;
 };
 
 export async function getDeleteCaseDeadlineInteractorLockInfo(

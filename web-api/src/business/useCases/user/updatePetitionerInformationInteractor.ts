@@ -26,6 +26,7 @@ import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseA
 import { generateAndServeDocketEntry } from '@web-api/business/useCaseHelper/service/createChangeItems';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { CaseDTO } from '@shared/business/dto/docketEntries/CaseDTO';
 
 export const getIsUserAuthorized = ({
   petitionerCaseRaw,
@@ -115,7 +116,11 @@ export const updatePetitionerInformation = async (
   applicationContext: ServerApplicationContext,
   { docketNumber, updatedPetitionerData },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<{
+  updatedCase: CaseDTO;
+  paperServiceParties: any[];
+  paperServicePdfUrl: any;
+}> => {
   if (!isAuthUser(authorizedUser)) {
     throw new Error(
       'User attempting to update petitioner information is not an auth user',
@@ -351,7 +356,7 @@ export const updatePetitionerInformation = async (
   return {
     paperServiceParties: servedParties.paper,
     paperServicePdfUrl: serviceUrl,
-    updatedCase,
+    updatedCase: new CaseDTO(updatedCase),
   };
 };
 
