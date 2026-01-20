@@ -57,7 +57,7 @@ const submitCaseAssociationRequest = async (
         user: user as RawPractitioner,
       });
 
-    return CaseFactory.getCase({
+    return CaseFactory.getCaseDTO({
       rawCase: theCase,
       user: authorizedUser,
     });
@@ -72,7 +72,7 @@ const submitCaseAssociationRequest = async (
         user,
       });
 
-    return CaseFactory.getCase({
+    return CaseFactory.getCaseDTO({
       rawCase: theCase,
       user: authorizedUser,
     });
