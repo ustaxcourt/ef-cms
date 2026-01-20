@@ -91,7 +91,7 @@
     "parse-full-name": "1.2.6",
     "pdf-lib": "1.17.1",
     "pdfjs-dist": "5.4.530",
-    "pg": "8.17.1",
+    "pg": "8.17.2",
     "process": "0.11.10",
     "promise-retry": "2.0.1",
     "pug": "3.0.3",
@@ -343,10 +343,10 @@
     "sass-loader": "16.0.6",
     "shuffle-seed": "1.1.6",
     "stream-browserify": "3.0.0",
-    "stylelint": "17.0.0",
+    "stylelint": "16.26.1",
     "stylelint-config-idiomatic-order": "10.0.0",
-    "stylelint-config-standard": "40.0.0",
-    "stylelint-config-standard-scss": "17.0.0",
+    "stylelint-config-standard": "39.0.1",
+    "stylelint-config-standard-scss": "16.0.0",
     "swagger-cli": "4.0.4",
     "tailwindcss": "4.1.18",
     "tiff2pdf": "1.0.2",
@@ -355,6 +355,6 @@
     "ts-node": "10.9.2",
     "tsconfig-paths": "4.2.0",
     "typescript": "5.9.3",
-    "typescript-eslint": "8.52.0"
+    "typescript-eslint": "8.53.1"
   }
 }

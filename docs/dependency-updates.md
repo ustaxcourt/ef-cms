@@ -255,7 +255,6 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 - Quill released version 2 in April 2024. It includes substantial changes. Because the focus is currently on Postgres, we have left it at a previous version.
 - January 9th, 2026: We successfully updated Quill from 1.4.3 to 2.0.3. The way Quill handles imports and props in function calls changed, requiring changes to our Quill.tsx and TextEditor.tsx.
-- January 20th, 2026: There is an XSS vulnerability in Quill 2.0.3 (GHSA-v3m3-f69x-jf25). This vulnerability can be avoided by using getContents/setContents in combination with the quill delta. Currently we are not at risk for how we are using Quill and this vulnerability is actively being disputed: https://github.com/quilljs/quill/issues/3364. We will continue to monitor this issue.
 
 
 ### babel-jest, babel-core
@@ -288,10 +287,6 @@ The major version of this package should match our major version of Node. At the
 npm run start:s3rver
 error: too many arguments. Expected 0 arguments but got 2.
 ```
-
-### diff (jsdiff)
-
-- As of January 20th, 2026, there is a Denial of Service vulnerability in jsdiff's parsePatch and applyPatch functions (GHSA-73rr-hh4g-fpgx). This is a transitive dependency through sinon, ts-node, and jest. No fix is currently available as it would require updates to the entire testing stack. This vulnerability affects patch parsing/applying functionality that we don't use directly. We will monitor for updates to the dependency chain.
 
 ## Troubleshooting
 
