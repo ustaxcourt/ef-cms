@@ -18,9 +18,18 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
 - `./web-api/runtimes/puppeteer/package.json`
 - `./web-api/terraform/modules/batch/docker-image/package.json`
 
-1. You can use the `upgrade-npm-packages.ts` script for this process if you would like:
+1. You can use the `upgrade-npm-packages.ts` script for this process if you would like. Run the script in each directory containing a package.json:
    ```bash
-   scripts/npm/upgrade-npm-packages.ts
+   # Run these in order to avoid having to manually navigate to each package.json location
+   
+   # Root package.json
+   node scripts/npm/upgrade-npm-packages.ts
+
+   # web-api/runtimes/puppeteer/package.json
+   (cd web-api/runtimes/puppeteer && node ../../../scripts/npm/upgrade-npm-packages.ts)
+
+   # web-api/terraform/modules/batch/docker-image/package.json
+   (cd ../../terraform/modules/batch/docker-image  && node ../../../../../scripts/npm/upgrade-npm-packages.ts)
    ```
 1. After running, ensure all three package.json files are updated.
 
