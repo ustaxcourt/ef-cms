@@ -1,6 +1,6 @@
-import { Case } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
+import joi from 'joi';
 
 // An entity for case details for a case a user does not have access to
 export class RestrictedCase extends JoiValidationEntity {
@@ -21,8 +21,12 @@ export class RestrictedCase extends JoiValidationEntity {
     this.docketEntries = [];
   }
 
+  static VALIDATION_RULES = {
+    docketEntries: joi.array().max(0),
+  };
+
   getValidationRules() {
-    return Case.VALIDATION_RULES;
+    return RestrictedCase.VALIDATION_RULES;
   }
 }
 declare global {
