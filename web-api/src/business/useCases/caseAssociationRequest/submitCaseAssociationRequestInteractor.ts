@@ -10,6 +10,9 @@ import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { CaseFactory } from '@shared/business/entities/cases/CaseFactory';
+import { CaseDTO } from '@shared/business/dto/docketEntries/CaseDTO';
+import { PublicCaseDTO } from '@shared/business/dto/docketEntries/PublicCaseDTO';
+import { RestrictedCaseDTO } from '@shared/business/dto/docketEntries/RestrictedCaseDTO';
 
 /**
  * submitCaseAssociationRequestInteractor
@@ -18,7 +21,7 @@ import { CaseFactory } from '@shared/business/entities/cases/CaseFactory';
  * @param {array}  providers.consolidatedCasesDocketNumbers a list of the docketNumbers on which to file the case association document
  * @param {string} providers.docketNumber the docket number of the case
  * @param {string} providers.filers the parties represented by the practitioner
- * @returns {Promise<*>} the promise of the case association request
+ * @returns {Promise<CaseDTO | PublicCaseDTO | RestrictedCaseDTO>} the promise of the case association request
  */
 const submitCaseAssociationRequest = async (
   applicationContext: ServerApplicationContext,
@@ -30,7 +33,7 @@ const submitCaseAssociationRequest = async (
     filers: string[];
   },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<CaseDTO | PublicCaseDTO | RestrictedCaseDTO> => {
   if (
     !isAuthorized(authorizedUser, ROLE_PERMISSIONS.ASSOCIATE_SELF_WITH_CASE)
   ) {
@@ -77,6 +80,8 @@ const submitCaseAssociationRequest = async (
       user: authorizedUser,
     });
   }
+
+  throw new Error('No Valid User');
 };
 
 export const submitCaseAssociationRequestInteractor = withLocking(
