@@ -51,11 +51,8 @@ describe('uploadExternalDocumentsAction', () => {
     applicationContext
       .getUseCases()
       .uploadExternalDocumentsInteractor.mockReturnValue({
-        caseDetail: {
-          ...MOCK_CASE,
-          docketEntries: [mockAnswerDocketEntry],
-        },
         docketEntryIdsAdded: [mockAnswerDocketEntry.docketEntryId],
+        docketNumber: MOCK_CASE.docketNumber,
       });
 
     await runAction(uploadExternalDocumentsAction, {
@@ -113,11 +110,8 @@ describe('uploadExternalDocumentsAction', () => {
     applicationContext
       .getUseCases()
       .uploadExternalDocumentsInteractor.mockReturnValue({
-        caseDetail: {
-          ...testCase,
-          docketEntries: [mockAnswerDocketEntry],
-        },
         docketEntryIdsAdded: [mockAnswerDocketEntry.docketEntryId],
+        docketNumber: testCase.docketNumber,
       });
 
     await runAction(uploadExternalDocumentsAction, {
@@ -170,7 +164,10 @@ describe('uploadExternalDocumentsAction', () => {
   it('should call uploadExternalDocumentsInteractor for a primary and secondary document with multiple supporting documents', async () => {
     applicationContext
       .getUseCases()
-      .uploadExternalDocumentsInteractor.mockReturnValue(MOCK_CASE);
+      .uploadExternalDocumentsInteractor.mockReturnValue({
+        docketEntryIdsAdded: [],
+        docketNumber: MOCK_CASE.docketNumber,
+      });
 
     await runAction(uploadExternalDocumentsAction, {
       modules: {
@@ -255,11 +252,8 @@ describe('uploadExternalDocumentsAction', () => {
     applicationContext
       .getUseCases()
       .uploadExternalDocumentsInteractor.mockReturnValue({
-        caseDetail: {
-          ...MOCK_CASE,
-          docketEntries: [mockAnswerDocketEntry],
-        },
         docketEntryIdsAdded: [mockAnswerDocketEntry.docketEntryId],
+        docketNumber: MOCK_CASE.docketNumber,
       });
 
     await runAction(uploadExternalDocumentsAction, {
@@ -292,11 +286,8 @@ describe('uploadExternalDocumentsAction', () => {
     applicationContext
       .getUseCases()
       .uploadExternalDocumentsInteractor.mockReturnValue({
-        caseDetail: {
-          ...MOCK_CASE,
-          docketEntries: [mockAnswerDocketEntry],
-        },
         docketEntryIdsAdded: [mockAnswerDocketEntry.docketEntryId],
+        docketNumber: MOCK_CASE.docketNumber,
       });
 
     await runAction(uploadExternalDocumentsAction, {

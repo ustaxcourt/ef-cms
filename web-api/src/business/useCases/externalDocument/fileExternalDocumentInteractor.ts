@@ -144,80 +144,76 @@ export const fileExternalDocument = async (
     pageCountsByDocketEntryId.set(docketEntryId, numberOfPages);
   }
 
-  const consolidatedCaseEntities: Promise<RawCase>[] = casesToUpdate.map(
-    async caseToUpdate => {
-      let caseEntity = new Case(caseToUpdate, { authorizedUser });
+  const consolidatedCaseEntities = casesToUpdate.map(async caseToUpdate => {
+    let caseEntity = new Case(caseToUpdate, { authorizedUser });
 
-      const servedParties = aggregatePartiesForService(caseEntity);
+    const servedParties = aggregatePartiesForService(caseEntity);
 
-      for (const [docketEntryId, metadata, relationship] of documentsToAdd) {
-        if (docketEntryId && metadata) {
-          const numberOfPages = pageCountsByDocketEntryId.get(docketEntryId);
-          const docketEntryEntity = new DocketEntry(
-            {
-              ...baseMetadata,
-              ...metadata,
-              docketEntryId,
-              documentType: metadata.documentType,
-              isOnDocketRecord: true,
-              relationship,
-              numberOfPages,
-            },
-            {
-              authorizedUser,
-              petitioners: currentCaseEntity.petitioners,
-            },
-          );
+    for (const [docketEntryId, metadata, relationship] of documentsToAdd) {
+      if (docketEntryId && metadata) {
+        const numberOfPages = pageCountsByDocketEntryId.get(docketEntryId);
+        const docketEntryEntity = new DocketEntry(
+          {
+            ...baseMetadata,
+            ...metadata,
+            docketEntryId,
+            documentType: metadata.documentType,
+            isOnDocketRecord: true,
+            relationship,
+            numberOfPages,
+          },
+          {
+            authorizedUser,
+            petitioners: currentCaseEntity.petitioners,
+          },
+        );
 
-          docketEntryEntity.setFiledBy(user);
-          docketEntryEntity.validate();
+        docketEntryEntity.setFiledBy(user);
+        docketEntryEntity.validate();
 
-          const workItem = new WorkItem({
-            assigneeId: null,
-            assigneeName: null,
+        const workItem = new WorkItem({
+          assigneeId: null,
+          assigneeName: null,
+          docketEntryId: docketEntryEntity.docketEntryId,
+          docketNumber: caseToUpdate.docketNumber,
+          section: DOCKET_SECTION,
+          sentBy: user.name,
+          sentByUserId: user.userId,
+        }).validate();
+
+        workItems.push(workItem);
+        caseEntity.addDocketEntry(docketEntryEntity);
+
+        const isAutoServed = docketEntryEntity.isAutoServed();
+
+        if (isAutoServed) {
+          docketEntryEntity.setAsServed(servedParties.all);
+
+          await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+            applicationContext,
+            caseEntity,
             docketEntryId: docketEntryEntity.docketEntryId,
-            docketNumber: caseToUpdate.docketNumber,
-            section: DOCKET_SECTION,
-            sentBy: user.name,
-            sentByUserId: user.userId,
-          }).validate();
-
-          workItems.push(workItem);
-          caseEntity.addDocketEntry(docketEntryEntity);
-
-          const isAutoServed = docketEntryEntity.isAutoServed();
-
-          if (isAutoServed) {
-            docketEntryEntity.setAsServed(servedParties.all);
-
-            await applicationContext
-              .getUseCaseHelpers()
-              .sendServedPartiesEmails({
-                applicationContext,
-                caseEntity,
-                docketEntryId: docketEntryEntity.docketEntryId,
-                servedParties,
-              });
-          }
+            servedParties,
+          });
         }
       }
+    }
 
-      caseEntity = await applicationContext
-        .getUseCaseHelpers()
-        .updateCaseAutomaticBlock({
-          caseEntity,
-        });
-
-      await updateCaseAndAssociations({
-        authorizedUser,
-        caseToUpdate: caseEntity,
-        includeCorrespondence: false,
+    caseEntity = await applicationContext
+      .getUseCaseHelpers()
+      .updateCaseAutomaticBlock({
+        caseEntity,
       });
 
-      const rawCaseEntity = caseEntity.toRawObject();
-      return rawCaseEntity;
-    },
-  );
+    await updateCaseAndAssociations({
+      authorizedUser,
+      caseToUpdate: caseEntity,
+      includeCorrespondence: false,
+    });
+
+    const rawCaseEntity = caseEntity.toRawObject();
+    return rawCaseEntity;
+  });
 
   const resolvedCaseEntities: RawCase[] = await settlePromises(
     consolidatedCaseEntities,

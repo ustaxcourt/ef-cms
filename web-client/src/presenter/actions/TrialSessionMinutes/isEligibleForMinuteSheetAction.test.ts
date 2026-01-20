@@ -181,5 +181,78 @@ describe('isEligibleForMinuteSheetAction', () => {
       expect(mockYesPath).toHaveBeenCalled();
       expect(state.isUnscheduledMinuteSheet).toBe(true);
     });
+
+    it('should treat inactive case (removedFromTrial=true) as unscheduled and use unscheduled eligibility check', async () => {
+      (isEligibleUnscheduledCaseForMinuteSheet as jest.Mock).mockReturnValue(
+        true,
+      );
+
+      const mockTrialSession = {
+        caseOrder: [
+          {
+            docketNumber: MOCK_CASE.docketNumber,
+            removedFromTrial: true,
+            someOtherProperty: 'value',
+          },
+        ],
+        trialSessionId: 'trial-session-id-123',
+      };
+
+      const { state } = await runAction(isEligibleForMinuteSheetAction, {
+        modules: {
+          presenter,
+        },
+        props: {
+          isUnscheduledCase: true,
+        },
+        state: {
+          caseDetail: MOCK_CASE,
+          trialSession: mockTrialSession,
+        },
+      });
+
+      expect(isEligibleUnscheduledCaseForMinuteSheet).toHaveBeenCalledWith(
+        MOCK_CASE,
+        mockTrialSession,
+      );
+      expect(caseIsEligibleForMinuteSheet).not.toHaveBeenCalled();
+      expect(mockYesPath).toHaveBeenCalled();
+      expect(mockNoPath).not.toHaveBeenCalled();
+      expect(state.isUnscheduledMinuteSheet).toBe(true);
+    });
+
+    it('should return path.no when inactive case is not eligible for unscheduled minute sheet', async () => {
+      (isEligibleUnscheduledCaseForMinuteSheet as jest.Mock).mockReturnValue(
+        false,
+      );
+
+      const mockTrialSession = {
+        caseOrder: [
+          {
+            docketNumber: MOCK_CASE.docketNumber,
+            removedFromTrial: true,
+          },
+        ],
+        trialSessionId: 'trial-session-id-123',
+      };
+
+      await runAction(isEligibleForMinuteSheetAction, {
+        modules: {
+          presenter,
+        },
+        state: {
+          caseDetail: MOCK_CASE,
+          trialSession: mockTrialSession,
+        },
+      });
+
+      expect(isEligibleUnscheduledCaseForMinuteSheet).toHaveBeenCalledWith(
+        MOCK_CASE,
+        mockTrialSession,
+      );
+      expect(caseIsEligibleForMinuteSheet).not.toHaveBeenCalled();
+      expect(mockNoPath).toHaveBeenCalled();
+      expect(mockYesPath).not.toHaveBeenCalled();
+    });
   });
 });
