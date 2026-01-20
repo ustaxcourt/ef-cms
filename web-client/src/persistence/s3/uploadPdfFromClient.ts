@@ -1,6 +1,10 @@
 import promiseRetry from 'promise-retry';
 import { DateTime } from 'luxon';
 
+const resetIdleTimerDuringUpload = () => {
+  window.dispatchEvent(new Event('resetIdleTimer'));
+};
+
 function convertBytesToString(pdfBytes: number[]): string {
   const chunkSize = 10000;
   let resultString = '';
@@ -179,7 +183,10 @@ export const uploadPdfFromClient = async ({
               (formData as any)._boundary
             }`,
           },
-          onUploadProgress,
+          onUploadProgress: progressEvent => {
+            resetIdleTimerDuringUpload();
+            onUploadProgress(progressEvent);
+          },
         })
         .then(r => {
           onUploadProgress({ isDone: true });
