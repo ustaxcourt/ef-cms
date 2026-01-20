@@ -155,7 +155,7 @@ export const PrimaryDocumentGeneratedTypeForm = connect(
                     >
                       <FontAwesomeIcon
                         className="margin-right-05"
-                        icon="question-circle"
+                        icon="circle-info"
                         size="1x"
                       />
                       What can I include with my document?
