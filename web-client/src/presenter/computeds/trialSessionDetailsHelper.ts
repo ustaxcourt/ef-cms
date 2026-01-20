@@ -36,8 +36,10 @@ export const trialSessionDetailsHelper = (
   ).length;
 
   const showQcComplete = permissions.TRIAL_SESSION_QC_COMPLETE;
+  const HYBRID_SESSION_TYPES_ARRAY: string[] =
+    Object.values(HYBRID_SESSION_TYPES);
   const showSmallAndRegularQcComplete =
-    Object.values(HYBRID_SESSION_TYPES).includes(sessionType) && showQcComplete;
+    HYBRID_SESSION_TYPES_ARRAY.includes(sessionType) && showQcComplete;
 
   const nottReminderAction = hasNottBeenServed
     ? 'Yes, Dismiss'
@@ -49,6 +51,7 @@ export const trialSessionDetailsHelper = (
     eligibleSmallCaseQcTotalCompleteCount,
     eligibleTotalCaseQcCompleteCount,
     nottReminderAction,
+    showNewMinuteSheetButton: permissions.MANAGE_MINUTE_SHEET,
     showQcComplete,
     showSetCalendarButton: permissions.SET_TRIAL_SESSION_CALENDAR,
     showSmallAndRegularQcComplete,

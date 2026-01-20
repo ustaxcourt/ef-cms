@@ -939,14 +939,6 @@ const router = {
       }),
     );
 
-    registerRoute('/verify-email..', () => {
-      setPageTitle('Verify Email');
-      const { token } = route.query();
-      return app.getSequence('gotoVerifyEmailSequence')({
-        token,
-      });
-    });
-
     registerRoute(
       '/document-qc/my',
       ifHasAccess({ app }, () => {
@@ -1116,13 +1108,15 @@ const router = {
     );
 
     registerRoute(
-      '/trial-session-detail/*/case/*/minutes',
+      '/trial-session-detail/*/case/*/minutes..',
       ifHasAccess(
         { app, permissionToCheck: ROLE_PERMISSIONS.MANAGE_MINUTE_SHEET },
         (trialSessionId, docketNumber) => {
+          const { isUnscheduledCase } = route.query();
           setPageTitle('Trial session minutes');
           return app.getSequence('goToTrialSessionMinutesSequence')({
             docketNumber,
+            isUnscheduledCase: isUnscheduledCase === 'true',
             trialSessionId,
           });
         },

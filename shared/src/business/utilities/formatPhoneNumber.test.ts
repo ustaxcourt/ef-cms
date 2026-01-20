@@ -36,6 +36,7 @@ describe('formatPhoneNumber', () => {
   }
 
   it('should return undefined if nothing is passed in', () => {
+    // @ts-expect-error
     const result = formatPhoneNumber();
 
     expect(result).toBeUndefined();

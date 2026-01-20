@@ -21,7 +21,6 @@ import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/get
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { CaseFactory } from '@shared/business/entities/cases/CaseFactory';
 
 export const fileExternalDocument = async (
   applicationContext: ServerApplicationContext,
@@ -127,16 +126,21 @@ export const fileExternalDocument = async (
   const casesToUpdate = await getCasesByDocketNumbers({ docketNumbers });
 
   const pageCountsByDocketEntryId: Map<string, number> = new Map();
-  for (const [docketEntryId] of documentsToAdd) {
-    if (docketEntryId) {
+  const pageCountPromises = documentsToAdd
+    .filter(([docketEntryId]) => docketEntryId)
+    .map(async ([docketEntryId]) => {
       const numberOfPages = await applicationContext
         .getUseCaseHelpers()
         .countPagesInDocument({ applicationContext, docketEntryId });
-      pageCountsByDocketEntryId.set(docketEntryId, numberOfPages);
-    }
+      return [docketEntryId, numberOfPages] as [string, number];
+    });
+
+  const pageCounts = await Promise.all(pageCountPromises);
+  for (const [docketEntryId, numberOfPages] of pageCounts) {
+    pageCountsByDocketEntryId.set(docketEntryId, numberOfPages);
   }
 
-  const consolidatedCaseEntities: Promise<RawCase>[] = casesToUpdate.map(
+  const consolidatedCaseEntities = casesToUpdate.map(
     async caseToUpdate => {
       let caseEntity = new Case(caseToUpdate, { authorizedUser });
 
@@ -211,24 +215,13 @@ export const fileExternalDocument = async (
     },
   );
 
-  const resolvedCaseEntities: RawCase[] = await settlePromises(
-    consolidatedCaseEntities,
-  );
+  await settlePromises(consolidatedCaseEntities);
 
   await upsertWorkItems({
     workItems,
   });
 
-  const theCase = resolvedCaseEntities.find(
-    caseEntity => caseEntity.docketNumber === docketNumber,
-  );
-
-  const filteredCase = CaseFactory.getCase({
-    rawCase: theCase,
-    user: authorizedUser,
-  });
-
-  return filteredCase;
+  return { docketNumber };
 };
 
 export const fileExternalDocumentInteractor = withLocking(

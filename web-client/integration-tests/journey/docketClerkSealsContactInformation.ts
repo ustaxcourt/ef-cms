@@ -3,7 +3,7 @@ import { contactPrimaryFromState, contactSecondaryFromState } from '../helpers';
 export const docketClerkSealsContactInformation = (
   cerebralTest,
   contactType,
-  docketNumber,
+  docketNumber?,
 ) => {
   return it(`Docket clerk seals ${contactType} information`, async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
