@@ -82,18 +82,18 @@ export const addDraftStampOrderDocketEntry = async (
       createdAt: applicationContext.getUtilities().createISODateString(),
       docketEntryId: stampedDocketEntryId,
       docketNumber: caseRecord.docketNumber,
-      documentTitle: `${originalDocketEntry.documentTypeForStampedDocketEntry()} ${formattedDraftDocumentTitle}`,
+      documentTitle: `Order - ${originalDocketEntry.documentTypeForStampedDocketEntry()} ${formattedDraftDocumentTitle}`,
       documentType: orderDocumentInfo?.documentType,
       draftOrderState: {
         docketNumber: caseEntity.docketNumber,
-        documentTitle: formattedDraftDocumentTitle,
+        documentTitle: `Order - ${formattedDraftDocumentTitle}`,
         documentType: orderDocumentInfo?.documentType,
         eventCode: orderDocumentInfo?.eventCode,
-        freeText: `${originalDocketEntry.documentTypeForStampedDocketEntry()} ${formattedDraftDocumentTitle}`,
+        freeText: `Order - ${originalDocketEntry.documentTypeForStampedDocketEntry()} ${formattedDraftDocumentTitle}`,
       },
       eventCode: orderDocumentInfo?.eventCode,
       filedBy: authorizedUser.name,
-      freeText: `${originalDocketEntry.documentTypeForStampedDocketEntry()} ${formattedDraftDocumentTitle}`,
+      freeText: `Order - ${originalDocketEntry.documentTypeForStampedDocketEntry()} ${formattedDraftDocumentTitle}`,
       isDraft: true,
       isFileAttached: true,
       isPaper: false,
@@ -122,7 +122,7 @@ export const addDraftStampOrderDocketEntry = async (
     const messageEntity = new Message(mostRecentMessage).validate();
     messageEntity.addAttachment({
       documentId: stampedDocketEntryEntity.docketEntryId,
-      documentTitle: stampedDocketEntryEntity.documentTitle,
+      documentTitle: `Order - ${stampedDocketEntryEntity.documentTitle}`,
     });
 
     await upsertMessages([messageEntity.validate().toRawObject()]);
