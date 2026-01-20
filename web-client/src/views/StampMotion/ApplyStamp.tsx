@@ -67,7 +67,6 @@ export const ApplyStamp = connect(
               canvas.width = viewport.width;
 
               const renderContext: RenderParameters = {
-                canvas,
                 canvasContext,
                 viewport,
               };
