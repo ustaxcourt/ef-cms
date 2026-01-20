@@ -111,7 +111,9 @@ describe('Notice of Withdrawal', () => {
         enterNoticeOfWithdrawalFormType(docketNumber);
         cy.get('[data-testid="file-document-submit-document"]').click();
         cy.get('[data-testid="error-alert"]').should('be.visible');
-        cy.get('[data-testid="error-alert"]').contains('Select a filing party');
+        cy.get('[data-testid="error-alert"]').contains(
+          'Select a party from whom are you removing yourself as counsel of record',
+        );
         cy.get('[data-testid="error-alert"]').contains(
           'All parties have not consented to your withdrawal as counsel',
         );
@@ -136,7 +138,9 @@ describe('Notice of Withdrawal', () => {
         enterNoticeOfWithdrawalFormType(docketNumber);
         cy.get('[data-testid="file-document-submit-document"]').click();
         cy.get('[data-testid="error-alert"]').should('be.visible');
-        cy.get('[data-testid="error-alert"]').contains('Select a filing party');
+        cy.get('[data-testid="error-alert"]').contains(
+          'Select a party from whom are you removing yourself as counsel of record',
+        );
         cy.get('[data-testid="error-alert"]').contains(
           'All parties have not consented to your withdrawal as counsel',
         );

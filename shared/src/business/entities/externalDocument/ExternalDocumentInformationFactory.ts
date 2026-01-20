@@ -289,7 +289,7 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
       addProperty(
         'filers',
         joi.array().items(joi.string().required()).messages({
-          '*': 'Select a party',
+          '*': 'Select a party from whom are you removing yourself as counsel of record',
         }),
       );
       if (this.paperServiceAcknowledgement !== undefined) {

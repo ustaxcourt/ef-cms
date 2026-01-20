@@ -47,7 +47,7 @@ export const NoticeOfWithdrawalForm = connect(
         <fieldset className="usa-fieldset margin-bottom-0">
           <FormGroup errorText={validationErrors?.filers}>
             <legend>
-              Who are you removing yourself as counsel of record for?
+              From whom are you removing yourself as counsel of record?
             </legend>
             <span className="usa-hint">Check all that apply.</span>
             {noticeOfWithdrawalHelper.filingParties.map(party => (
@@ -215,7 +215,7 @@ export const NoticeOfWithdrawalForm = connect(
                           className="tw:mt-2"
                           data-testid={`edit-contact-information-button-${party.contactId}`}
                           variant="primaryTertiary"
-                          icon="pencil"
+                          icon="pen-to-square"
                           aria-label="Edit contact information"
                           onClick={() =>
                             openEditContactInformationModalSequence({
