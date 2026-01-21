@@ -9,19 +9,15 @@ describe('submitRespondentCaseAssociationRequestAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
   it('should not call submitCaseAssociationRequestInteractor when the logged in user is not an IRS practitioner', async () => {
-    try {
-      await runAction(submitRespondentCaseAssociationRequestAction, {
-        modules: { presenter },
-        state: {
-          caseDetail: {
-            docketNumber: MOCK_CASE.docketNumber,
-          },
-          user: docketClerkUser,
+    await runAction(submitRespondentCaseAssociationRequestAction, {
+      modules: { presenter },
+      state: {
+        caseDetail: {
+          docketNumber: MOCK_CASE.docketNumber,
         },
-      });
-    } catch (e) {
-      // we are expecting an error here
-    }
+        user: docketClerkUser,
+      },
+    });
 
     expect(
       applicationContext.getUseCases().submitCaseAssociationRequestInteractor,
