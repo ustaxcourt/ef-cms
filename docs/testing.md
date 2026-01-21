@@ -252,6 +252,8 @@ Since our system generates a lot of PDFs, we have a set of tests that verify the
 
 All of the expected output images are found in the `./shared/test-pdf-expected-images` directory.  If you want to run PDF tests locally, you will need to run the following command:
 
+Add `--no-cache` to the end of the two docker build commands below if you need to double check it's not trying to test an old version code.
+
 ```
 docker build --platform=linux/amd64 -t efcms -f Dockerfile . && \
 docker build --platform=linux/amd64 -t efcms-local -f Dockerfile-local . && \
@@ -272,6 +274,8 @@ If you're getting errors, try running `docker system prune -af` and run the comm
 ### Container Resource Recommendations
 
 If you receive an out-of-memory error when running PDF tests locally, it is likely because your container environment (podman machine or docker equivalent) does not have sufficient resources to run the tests. 6 GB of memory and 200 GB of storage are recommended.
+
+Chromium/Puppeteer uses the `--disable-dev-shm-usage` flag to avoid shared memory issues in Docker by writing to `/tmp` instead of `/dev/shm`.
 
 ## Client Integration Testing
 If you want to be able to run `build-client-integration` tests within a Docker container locally for debugging purposes without deploying, you could use these commands.
