@@ -8,6 +8,7 @@ import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserA
 import { getOpenAndClosedCasesForUserAction } from '../actions/Dashboard/getOpenAndClosedCasesForUserAction';
 import { getPendingMotionDocketEntriesForCurrentJudgeAction } from '@web-client/presenter/actions/PendingMotion/getPendingMotionDocketEntriesForCurrentJudgeAction';
 import { getSubmittedAndCavCasesForCurrentJudgeAction } from '@web-client/presenter/actions/CaseWorksheet/getSubmittedAndCavCasesForCurrentJudgeAction';
+import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
 import { getTrialSessionsForJudgeAction } from '../actions/TrialSession/getTrialSessionsForJudgeAction';
 import { navigateToMessagesAction } from '../actions/navigateToMessagesAction';
 import { navigateToSectionDocumentQCAction } from '../actions/navigateToSectionDocumentQCAction';
@@ -50,7 +51,6 @@ export const gotoDashboardSequence = [
             USER_ROLES.adc,
             USER_ROLES.admin,
             USER_ROLES.admissionsClerk,
-            USER_ROLES.clerkOfCourt,
             USER_ROLES.caseServicesSupervisor,
             USER_ROLES.docketClerk,
             USER_ROLES.floater,
@@ -60,6 +60,14 @@ export const gotoDashboardSequence = [
           ],
           proceedToMessages,
         ),
+        clerkofcourt: [
+          fetchUserNotificationsSequence,
+          parallel([
+            getMessages,
+            [getTrialSessionsAction, setTrialSessionsAction],
+          ]),
+          setupCurrentPageAction('DashboardClerkOfCourt'),
+        ],
         chambers: [
           fetchUserNotificationsSequence,
           getJudgeForCurrentUserAction,
