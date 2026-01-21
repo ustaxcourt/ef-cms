@@ -77,7 +77,7 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
       docketNumber: caseToUpdate.docketNumber,
       documentType: ORDER_TYPES[0].documentType,
       filedBy: mockJudgeUser.name,
-      freeText: `${motionDocumentType} some title with disposition and custom text`,
+      freeText: `Order - ${motionDocumentType} some title with disposition and custom text`,
       isDraft: true,
       signedJudgeName: mockSigningName,
     });
