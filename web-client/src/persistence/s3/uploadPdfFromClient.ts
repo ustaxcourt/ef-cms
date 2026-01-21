@@ -2,7 +2,9 @@ import promiseRetry from 'promise-retry';
 import { DateTime } from 'luxon';
 
 const resetIdleTimerDuringUpload = () => {
-  window.dispatchEvent(new Event('resetIdleTimer'));
+  if (typeof window !== 'undefined' && window.dispatchEvent) {
+    window.dispatchEvent(new Event('resetIdleTimer'));
+  }
 };
 
 function convertBytesToString(pdfBytes: number[]): string {
