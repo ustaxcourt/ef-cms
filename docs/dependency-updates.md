@@ -211,6 +211,12 @@ If an OpenSearch update is available, we'll need to update OpenSearch in github 
 
 - Validate updates by deploying to an experimental environment
 
+## Configurations
+**Safe to upgrade, but we use a non-standard configuration intentionally**
+
+### Husky
+- As of Jan 21st, 2026: If `husky install` runs on the `postinstall` script, Husky will throw a warning stating `Husky install in postinstall is deprecated, use prepare instead`. Installing husky via the `prepare` script is recommended by Husky as best practice, but doesn't apply to ef-cms since we don't publish this as an npm package, and Husky only exists for us as a devDependency. Having it in `prepare` can fail if there are network interruptions during npm install, since `prepare` runs during installation before all packages may be fully downloaded, causing `husky install` to fail. For now, please ignore Husky's deprecation warning in the logs and stick with `postinstall: husky install`.
+
 ## Do Not Upgrade
 
 ### cerebral and @cerebral/react

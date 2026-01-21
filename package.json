@@ -204,7 +204,7 @@
     "migration:postgres:contract": "npx ts-node --transpile-only ./web-api/src/persistence/postgres/utils/migrate/migrate.ts contract",
     "migration:postgres:deprecated": "npx ts-node --transpile-only ./web-api/src/persistence/postgres/utils/migrate/migrateDeprecated.ts",
     "migration:rollback:postgres": "npx ts-node --transpile-only ./web-api/src/persistence/postgres/utils/migrate/rollback.ts",
-    "prepare": "husky install",
+    "postinstall": "husky install",
     "print:success": "echo 'Build successful. You can access the site at http://localhost:1234'",
     "reindex:elasticsearch": "./reindex-elasticsearch.sh",
     "reset-cases": "./clear-env.sh",
