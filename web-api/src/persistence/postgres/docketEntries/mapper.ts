@@ -29,7 +29,8 @@ export function toKyselyNewDocketEntry(
     docketNumbers: docketEntry.docketNumbers ?? null,
     documentContentsId: docketEntry.documentContentsId ?? null,
     documentIdBeforeSignature: docketEntry.documentIdBeforeSignature ?? null,
-    documentStorageId: docketEntry.documentStorageId,
+    documentStorageId:
+      docketEntry.documentStorageId ?? docketEntry.docketEntryId, // 8477TODO: temp, remove after migration
     documentTitle: docketEntry.documentTitle,
     documentType: docketEntry.documentType ?? null,
     draftOrderState: docketEntry.draftOrderState
