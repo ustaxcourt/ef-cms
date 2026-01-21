@@ -136,6 +136,7 @@ export const PetitionQcScanBatchPreviewer = connect<
 
         <div className="document-select-container">
           <ScanDocumentTabs
+            bindTo="preview"
             documentTabs={documentTabs}
             isFileUploaded={eventCode =>
               !!scanHelper[`${eventCode}FileCompleted`]
@@ -144,6 +145,7 @@ export const PetitionQcScanBatchPreviewer = connect<
               setDocumentForPreviewSequence({ documentId });
             }}
             scanOnly={scanOnly}
+            tabNameKey="documentId"
           />
           {scanBatchPreviewerHelper.uploadMode !== 'preview' && (
             <ScanModeRadios
