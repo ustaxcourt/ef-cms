@@ -59,6 +59,7 @@ export const Button = (props: {
   if (isActive && !isLink && remainingProps['aria-pressed'] === undefined) {
     remainingProps['aria-pressed'] = true;
   }
+  const type = remainingProps['type'] ?? (isLink ? undefined : 'button');
 
   const classes = classNames(
     className,
@@ -82,6 +83,7 @@ export const Button = (props: {
       disabled={disableButton}
       {...remainingProps}
       title={tooltip}
+      type={type}
       onClick={getUpdatedOnClick(onClick, disableOnClick, setDisableButton)}
     >
       {icon && !iconRight && (
