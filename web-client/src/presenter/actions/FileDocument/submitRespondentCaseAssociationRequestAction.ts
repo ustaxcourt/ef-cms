@@ -13,7 +13,9 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const submitRespondentCaseAssociationRequestAction = async ({
   applicationContext,
   get,
-}: ActionProps): Promise<CaseDTO | PublicCaseDTO | RestrictedCaseDTO> => {
+}: ActionProps): Promise<
+  CaseDTO | PublicCaseDTO | RestrictedCaseDTO | undefined
+> => {
   const { docketNumber } = get(state.caseDetail);
 
   const user = get(state.user);
@@ -28,6 +30,4 @@ export const submitRespondentCaseAssociationRequestAction = async ({
         userId: user.userId,
       });
   }
-
-  throw new Error('User is not of role IRS Practitioner.');
 };
