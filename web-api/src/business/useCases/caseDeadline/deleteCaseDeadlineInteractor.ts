@@ -62,14 +62,20 @@ export const deleteCaseDeadline = async (
 
   const { leadDocketNumber } = caseToUpdate;
 
-  if (!leadDocketNumber)
-    return new Case(result, { authorizedUser }).validate().toRawObject();
+  if (!leadDocketNumber) {
+    const theCase = new Case(result, { authorizedUser }).validate().toRawObject();
+    const caseDTO = new CaseDTO(theCase);
+    return caseDTO;
+  }
 
   if (
     !HANDLED_CASE_DEADLINE ||
     HANDLED_CASE_DEADLINE?.consolidatedCaseDeadlineId
-  )
-    return new Case(result, { authorizedUser }).validate().toRawObject();
+  ) {
+    const theCase = new Case(result, { authorizedUser }).validate().toRawObject();
+    const caseDTO = new CaseDTO(theCase);
+    return caseDTO;
+  }
 
   const CONSOLIDATED_CASE_DEADLINE =
     await getCaseDeadlinesByConsolidatedCaseDeadlineIds([caseDeadlineId]);

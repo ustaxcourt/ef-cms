@@ -68,6 +68,7 @@ export const MOCK_CASE: RawCase = {
 
 export const MOCK_CASE_DTO: CaseDTO = {
   ...MOCK_CASE,
+  entityName: 'Case',
   docketEntries: MOCK_CASE.docketEntries.map(d => ({
     ...d,
     servedParties: undefined,
