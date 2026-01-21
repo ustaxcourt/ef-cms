@@ -50,14 +50,8 @@ This command informs us of known security vulnerabilities. If transitive depende
 > **Why am I seeing a high severity for `tar-fs`?**
 > [See below](#puppeteer-and-sparticuzchromium).
 
-> **Why am I seeing a vulnerability for `diff` (jsdiff)?**
-> [See below](#diff-jsdiff).
-
-> **Why am I seeing a vulnerability for `elliptic`?**
-> [See below](#elliptic--crypto-browserify).
-
 > **Why am I seeing a vulnerability for `aws-sdk` v2 or `cognito-local`?**
-> These are dev dependencies with known vulnerabilities. On November 19th, 2025, we unsuccessfully attempted to roll back cognito-local to 3.7.1. The aws-sdk v2 vulnerability doesn't affect our use case as it's related to region parameter validation and we're only using it for local development/testing.
+> These are dev dependencies with known vulnerabilities. The aws-sdk v2 vulnerability doesn't affect our use case as it's related to region parameter validation and we're only using it for local development/testing.
 
 ### 2. Update third-party dependencies
 
