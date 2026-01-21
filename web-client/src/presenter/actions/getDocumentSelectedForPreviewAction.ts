@@ -28,8 +28,7 @@ export const getDocumentSelectedForPreviewAction = ({
   }
 
   const documentFromDocketEntryId = get(docketEntries)?.find(
-    docketEntry =>
-      docketEntry.docketEntryId === documentSelectedForPreview,
+    docketEntry => docketEntry.docketEntryId === documentSelectedForPreview,
   );
 
   if (documentFromDocketEntryId) {
