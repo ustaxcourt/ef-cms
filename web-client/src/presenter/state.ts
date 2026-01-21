@@ -89,6 +89,7 @@ import {
   formattedOpenCases,
 } from './computeds/formattedCaseDetail';
 import { formattedCaseMessages } from './computeds/formattedCaseMessages';
+import { formattedClerkOfCourtDashboardTrialSessions } from './computeds/formattedClerkOfCourtDashboardTrialSessions';
 import { formattedDashboardTrialSessions } from './computeds/formattedDashboardTrialSessions';
 import { formattedDocketEntries } from './computeds/formattedDocketEntries';
 import { formattedDocument } from './computeds/formattedDocument';
@@ -368,6 +369,10 @@ export const computeds = {
   formattedCaseMessages: formattedCaseMessages as unknown as ReturnType<
     typeof formattedCaseMessages
   >,
+  formattedClerkOfCourtDashboardTrialSessions:
+    formattedClerkOfCourtDashboardTrialSessions as unknown as ReturnType<
+      typeof formattedClerkOfCourtDashboardTrialSessions
+    >,
   formattedClosedCases: formattedClosedCases as unknown as ReturnType<
     typeof formattedClosedCases
   >,
