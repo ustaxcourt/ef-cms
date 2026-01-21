@@ -14,6 +14,8 @@ type ScanDocumentTabsProps = {
   documentTabs?: DocumentTab[] | Record<string, any>[];
   isFileUploaded: (eventCode?: string) => boolean;
   onSelect: ((documentId?: string) => void) | (() => void) | Function;
+  bindTo?: 'preview' | 'scan';
+  tabNameKey?: 'documentId' | 'documentType';
   scanOnly?: boolean;
 };
 
@@ -21,19 +23,22 @@ export const ScanDocumentTabs = ({
   documentTabs,
   isFileUploaded,
   onSelect,
+  bindTo,
+  tabNameKey = 'documentType',
   scanOnly = false,
 }: ScanDocumentTabsProps) => {
   if (!documentTabs || documentTabs.length <= 1) {
     return null;
   }
 
+  const bindValue =
+    bindTo === 'preview' || scanOnly
+      ? 'currentViewMetadata.documentSelectedForPreview'
+      : 'currentViewMetadata.documentSelectedForScan';
+
   return (
     <Tabs
-      bind={
-        scanOnly
-          ? 'currentViewMetadata.documentSelectedForPreview'
-          : 'currentViewMetadata.documentSelectedForScan'
-      }
+      bind={bindValue}
       className="document-select container-tabs margin-top-neg-205 margin-x-neg-205"
       onSelect={onSelect}
     >
@@ -42,6 +47,10 @@ export const ScanDocumentTabs = ({
         const dataTestId = documentTab.documentType.includes(' ')
           ? documentTab.documentType
           : `tabButton-${documentTab.documentType}`;
+        const tabName =
+          tabNameKey === 'documentId'
+            ? documentTab.documentId
+            : documentTab.documentType;
         return (
           <Tab
             data-testid={dataTestId}
@@ -57,7 +66,7 @@ export const ScanDocumentTabs = ({
               ) : undefined
             }
             key={`tabButton-${documentTab.documentType}`}
-            tabName={documentTab.documentType}
+            tabName={tabName}
             title={documentTab.tabTitle}
           />
         );
