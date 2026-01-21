@@ -22,7 +22,7 @@ const primaryColors = cn(
 const buttonVariants = cva(
   cn(
     'tw:text-base tw:xs:text-lg tw:font-normal tw:outline-none tw:border-none tw:cursor-pointer tw:inline-flex tw:items-center tw:justify-center tw:whitespace-nowrap tw:rounded-md tw:transition-all tw:disabled:pointer-events-none tw:disabled:opacity-50 tw:[&_svg]:pointer-events-none tw:[&_svg:not([class*=size-])]:size-4 tw:shrink-0 tw:[&_svg]:shrink-0',
-    'tw:focus-visible:ring-1 tw:focus-visible:ring-offset-1 tw:focus-visible:ring-ring tw:focus-visible:outline-none', // focus-visible
+    'tw:focus-visible:ring-4 tw:focus-visible:ring-offset-4 tw:focus-visible:ring-ring tw:focus-visible:outline-none', // focus-visible
     'tw:aria-invalid:ring-red-primary/20 tw:aria-invalid:border-red-primary', // aria
     'tw:w-full tw:xs:w-auto tw:px-4 tw:py-2', // small & greater
   ),

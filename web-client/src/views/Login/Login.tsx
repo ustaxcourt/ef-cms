@@ -80,7 +80,7 @@ export const Login = connect(
                         required
                         autoCapitalize="off"
                         autoCorrect="off"
-                        className="usa-input tw:mb-3"
+                        className="usa-input tw:xs:mb-4 tw:mb-3"
                         data-testid="email-input"
                         id="email"
                         name="email"
@@ -108,7 +108,7 @@ export const Login = connect(
                           });
                         }}
                       />
-                      <div className="tw:mt-2 tw:flex tw:w-full">
+                      <div className="tw:xs:mt-2 tw:mt-1.5 tw:flex tw:w-full">
                         <ButtonSmall
                           variant="primaryTertiary"
                           type="button"
@@ -145,7 +145,7 @@ export const Login = connect(
                         Forgot password?
                       </Button>
                     </div>
-                    <div className="'tw:text-base tw:xs:text-lg">
+                    <div className="tw:my-0 tw:text-base tw:xs:text-lg">
                       Don&apos;t have an account?{' '}
                     </div>
                     <div className="tw:flex tw:w-full">
