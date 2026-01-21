@@ -33,7 +33,7 @@ const submitCaseAssociationRequest = async (
     filers: string[];
   },
   authorizedUser: UnknownAuthUser,
-): Promise<CaseDTO | PublicCaseDTO | RestrictedCaseDTO> => {
+): Promise<CaseDTO | PublicCaseDTO | RestrictedCaseDTO | undefined> => {
   if (
     !isAuthorized(authorizedUser, ROLE_PERMISSIONS.ASSOCIATE_SELF_WITH_CASE)
   ) {

@@ -346,8 +346,6 @@ describe('getCaseInteractor', () => {
       mockPetitionerUser,
     );
 
-    console.log(result.docketEntries.length);
-
     expect(result).toEqual(MOCK_CASE_DTO);
   });
 
@@ -574,7 +572,7 @@ describe('getCaseInteractor', () => {
 
   describe('decorateForCaseStatus', () => {
     it('sets the canAllowDocumentService on the given case record', () => {
-      const TEST_MOCK_CASE: CaseDTO = {
+      const TEST_MOCK_CASE: RawCase = {
         ...MOCK_CASE,
       };
 
@@ -585,7 +583,7 @@ describe('getCaseInteractor', () => {
     });
 
     it('should set "canDojPractitionersRepresentParty" when the case status is "On Appeal"', () => {
-      const TEST_MOCK_CASE: CaseDTO = {
+      const TEST_MOCK_CASE: RawCase = {
         ...MOCK_CASE,
         status: CASE_STATUS_TYPES.onAppeal,
       };
