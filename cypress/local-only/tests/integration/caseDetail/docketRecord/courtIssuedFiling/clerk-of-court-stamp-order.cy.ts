@@ -117,6 +117,7 @@ describe('Judge`s chambers stamps an order', () => {
           )
             .first()
             .click();
+          cy.get('[data-testid="message-detail-container"]').should('exist');
           cy.get('[data-testid="apply-stamp"]').click();
           cy.get('[data-testid="motion-disposition-GRANTED"]').click();
           cy.get('[data-testid="save-signature-button"]').click();
