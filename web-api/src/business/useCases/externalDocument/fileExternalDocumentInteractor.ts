@@ -130,18 +130,27 @@ export const fileExternalDocument = async (
   const casesToUpdate = await getCasesByDocketNumbers({ docketNumbers });
 
   const pageCountsByDocketEntryId: Map<string, number> = new Map();
-  const pageCountPromises = documentsToAdd
-    .filter(([docketEntryId]) => docketEntryId)
-    .map(async ([docketEntryId]) => {
+  // Process page counts in batches of 3 to balance speed and memory usage
+  // This prevents OutOfMemory errors when filing multiple large documents
+  // while being faster than sequential processing
+  const docketEntryIds = documentsToAdd
+    .map(([docketEntryId]) => docketEntryId)
+    .filter((id): id is string => !!id);
+
+  const BATCH_SIZE = 3;
+  for (let i = 0; i < docketEntryIds.length; i += BATCH_SIZE) {
+    const batch = docketEntryIds.slice(i, i + BATCH_SIZE);
+    const batchPromises = batch.map(async docketEntryId => {
       const numberOfPages = await applicationContext
         .getUseCaseHelpers()
         .countPagesInDocument({ applicationContext, docketEntryId });
-      return [docketEntryId, numberOfPages] as [string, number];
+      return { docketEntryId, numberOfPages };
     });
 
-  const pageCounts = await Promise.all(pageCountPromises);
-  for (const [docketEntryId, numberOfPages] of pageCounts) {
-    pageCountsByDocketEntryId.set(docketEntryId, numberOfPages);
+    const batchResults = await Promise.all(batchPromises);
+    for (const { docketEntryId, numberOfPages } of batchResults) {
+      pageCountsByDocketEntryId.set(docketEntryId, numberOfPages);
+    }
   }
 
   const consolidatedCaseEntities = casesToUpdate.map(async caseToUpdate => {
