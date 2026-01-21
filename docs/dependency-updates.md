@@ -143,7 +143,6 @@ Check if there is an update to the Terraform OpenSearch provider and update our 
 1. Change the version of the OpenSearch provider
 
 ### 5. Update OpenSearch
-
 Check to see if there is an updated version of OpenSearch available. If an update is available, we'll need to update OpenSearch locally, in github actions, and in deployed environments.
 
 1. Use the [environment switcher](./additional-resources/environment-switcher.md) to point to an experimental environment and to retrieve a fresh AWS access key:
