@@ -1,4 +1,4 @@
-import { CaseStatusChange } from '@shared/business/entities/cases/Case';
+import { Case, CaseStatusChange } from '@shared/business/entities/cases/Case';
 import { RawCorrespondence } from '@shared/business/entities/Correspondence';
 import {
   CaseType,
@@ -6,8 +6,10 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { RawStatistic } from '@shared/business/entities/Statistic';
 import { RawConsolidatedCaseSummary } from '../cases/ConsolidatedCaseSummary';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 export class CaseDTO {
+  public entityName = 'CaseDTO';
   public associatedJudge?: string;
   public associatedJudgeId?: string;
   public automaticBlocked?: boolean;
@@ -79,7 +81,18 @@ export class CaseDTO {
   public hasPendingItems?: boolean;
   public consolidatedCases: RawConsolidatedCaseSummary[];
 
-  constructor(rawCase: RawCase) {
+  constructor(
+    rawCase: RawCase,
+    rebuildCaseOptions?: {
+      authorizedUser: UnknownAuthUser;
+      filtered?: boolean;
+      isNewCase?: boolean;
+    },
+  ) {
+    if (rebuildCaseOptions) {
+      rawCase = new Case(rawCase, rebuildCaseOptions).toRawObject();
+    }
+
     this.associatedJudge = rawCase.associatedJudge;
     this.associatedJudgeId = rawCase.associatedJudgeId;
     this.automaticBlocked = rawCase.automaticBlocked;

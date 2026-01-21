@@ -80,8 +80,6 @@ const submitCaseAssociationRequest = async (
       user: authorizedUser,
     });
   }
-
-  throw new Error('No Valid User');
 };
 
 export const submitCaseAssociationRequestInteractor = withLocking(
