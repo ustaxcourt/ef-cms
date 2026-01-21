@@ -131,7 +131,10 @@ export const fileExternalDocument = async (
     if (docketEntryId) {
       const numberOfPages = await applicationContext
         .getUseCaseHelpers()
-        .countPagesInDocument({ applicationContext, docketEntryId });
+        .countPagesInDocument({
+          applicationContext,
+          documentStorageId: docketEntryId,
+        });
       pageCountsByDocketEntryId.set(docketEntryId, numberOfPages);
     }
   }
