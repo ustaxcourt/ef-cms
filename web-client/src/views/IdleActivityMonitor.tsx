@@ -80,6 +80,19 @@ export const IdleActivityMonitor = () => {
   }, []);
 
   useEffect(() => {
+    // Listen for reset events from file uploads to keep session alive during long uploads
+    const handleResetIdleTimer = () => {
+      activate();
+    };
+
+    window.addEventListener('resetIdleTimer', handleResetIdleTimer);
+
+    return () => {
+      window.removeEventListener('resetIdleTimer', handleResetIdleTimer);
+    };
+  }, [activate]);
+
+  useEffect(() => {
     let interval: NodeJS.Timeout;
     if (process.env.ENV !== 'prod') {
       interval = setInterval(() => {
