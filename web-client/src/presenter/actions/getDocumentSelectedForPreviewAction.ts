@@ -27,6 +27,17 @@ export const getDocumentSelectedForPreviewAction = ({
     return {};
   }
 
+  const documentFromDocketEntryId = get(docketEntries)?.find(
+    docketEntry =>
+      docketEntry.docketEntryId === documentSelectedForPreview,
+  );
+
+  if (documentFromDocketEntryId) {
+    return {
+      documentInS3: documentFromDocketEntryId,
+    };
+  }
+
   const file = get(state.form[documentSelectedForPreview]);
 
   if (file) {
