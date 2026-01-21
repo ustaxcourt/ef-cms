@@ -1,11 +1,13 @@
 import { WrappedIcon } from '../../ustc-ui/Icon/Icon';
 import { Button } from '../../ustc-ui/Button/Button';
-import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
+import { NonMobile, Phone } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { addOrderStampPrefix } from '@shared/business/utilities/addOrderStampPrefix';
 
 type FilingsAndProceedingsProps = {
   entry: {
@@ -26,6 +28,12 @@ type FilingsAndProceedingsProps = {
     showDocumentDescriptionWithoutLink: boolean;
     signatory: string;
     isPaper: boolean;
+    iconsToDisplay: {
+      className: string;
+      icon: IconProp;
+      title: string;
+      size?: string;
+    }[];
   };
 };
 
@@ -75,7 +83,19 @@ export const FilingsAndProceedings = connect<
               {entry.descriptionDisplay}
             </Button>
           </NonMobile>
-          <Mobile>
+          <Phone>
+            {entry.iconsToDisplay?.length > 0 && (
+              <span className="tw:inline-flex tw:flex-row tw:mr-2 tw:gap-1">
+                {entry.iconsToDisplay.map(({ icon, className, title }, index) => (
+                  <WrappedIcon
+                    key={index}
+                    icon={icon}
+                    iconClass={className}
+                    title={title}
+                  />
+                ))}
+              </span>
+            )}
             <Button
               link
               aria-roledescription="button to view document details"
@@ -93,9 +113,9 @@ export const FilingsAndProceedings = connect<
                 });
               }}
             >
-              {entry.descriptionDisplay}
+              {addOrderStampPrefix(entry.eventCode,entry.descriptionDisplay)}
             </Button>
-          </Mobile>
+          </Phone>
         </>
       );
     };
@@ -105,6 +125,20 @@ export const FilingsAndProceedings = connect<
         {entry.showLinkToDocument && renderDocumentLink()}
         {entry.showDocumentProcessing && (
           <>
+            <Phone>
+              {entry.iconsToDisplay?.length > 0 && (
+                <span className="tw:inline-flex tw:flex-row tw:mr-2 tw:gap-1">
+                  {entry.iconsToDisplay.map(({ icon, className, title }, index) => (
+                    <WrappedIcon
+                      key={index}
+                      icon={icon}
+                      iconClass={className}
+                      title={title}
+                    />
+                  ))}
+                </span>
+              )}
+            </Phone>
             {caseDetailHelper.showDocketRecordInProgressState && (
               <span aria-label="document uploading marker" className="usa-tag">
                 <span aria-hidden="true">Processing</span>
@@ -122,6 +156,20 @@ export const FilingsAndProceedings = connect<
         )}
         {entry.showDocumentViewerLink && (
           <>
+            <Phone>
+              {entry.iconsToDisplay?.length > 0 && (
+                <span className="tw:inline-flex tw:flex-row tw:mr-2 tw:gap-1">
+                  {entry.iconsToDisplay.map(({ icon, className, title }, index) => (
+                    <WrappedIcon
+                      key={index}
+                      icon={icon}
+                      iconClass={className}
+                      title={title}
+                    />
+                  ))}
+                </span>
+              )}
+            </Phone>
             <Button
               link
               aria-label="View PDF"
@@ -138,20 +186,35 @@ export const FilingsAndProceedings = connect<
                 })
               }
             >
-              {entry.isPaper && (
-                <span className="filing-type-icon-mobile">
-                  <WrappedIcon icon={['fas', 'file-alt']} title="Is paper" />
-                </span>
-              )}
               {entry.descriptionDisplay}
             </Button>
           </>
         )}
-        <span
-          className={classNames(entry.isStricken && 'stricken-docket-record')}
-        >
-          {entry.showDocumentDescriptionWithoutLink && entry.descriptionDisplay}
-        </span>
+        {entry.showDocumentDescriptionWithoutLink && (
+          <>
+            <Phone>
+              {entry.iconsToDisplay?.length > 0 && (
+                <span className="tw:inline-flex tw:flex-row tw:mr-2 tw:gap-1">
+                  {entry.iconsToDisplay.map(({ icon, className, title }, index) => (
+                    <WrappedIcon
+                      key={index}
+                      icon={icon}
+                      iconClass={className}
+                      title={title}
+                    />
+                  ))}
+                </span>
+              )}
+            </Phone>
+            <span
+              className={classNames(
+                entry.isStricken && 'stricken-docket-record',
+              )}
+            >
+              {entry.descriptionDisplay}
+            </span>
+          </>
+        )}
         <span> {entry.signatory}</span>
         {entry.isStricken && <span>(STRICKEN)</span>}
         {entry.relatedDocketEntries?.map(affectedEntry => {
