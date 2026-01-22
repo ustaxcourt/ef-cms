@@ -1,5 +1,5 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { ValidateCaseForNewMinuteSheetResult } from '@web-api/business/useCases/trialSessions/validateCaseForNewMinuteSheetInteractor';
+import { ValidateCaseForNewMinuteSheetResult } from '@web-api/business/useCases/trialSessionMinutes/validateCaseForNewMinuteSheetInteractor';
 import { get } from '../requests';
 
 /**
