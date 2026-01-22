@@ -28,10 +28,7 @@ const buttonVariants = cva(
     'tw:shrink-0 tw:[&_svg]:shrink-0',
 
     // focus-visible
-    'tw:focus-visible:ring-1 tw:focus-visible:ring-offset-1 tw:focus-visible:ring-ring tw:focus-visible:outline-none',
-
-    // aria
-    'tw:aria-invalid:ring-red-primary/20 tw:aria-invalid:border-red-primary',
+    'tw:focus-visible:ring-4 tw:focus-visible:ring-offset-4 tw:focus-visible:ring-ring tw:focus-visible:outline-none',
 
     // layout
     'tw:w-full tw:xs:w-auto tw:px-4 tw:py-2',
