@@ -2,6 +2,7 @@ import { RawPublicContact } from '@shared/business/entities/cases/PublicContact'
 import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { ConsolidatedCaseSummary } from '../cases/ConsolidatedCaseSummary';
+import { removeServedParties } from './CaseDTO';
 
 export class PublicCaseDTO {
   public entityName: string;
@@ -39,12 +40,7 @@ export class PublicCaseDTO {
     this.docketNumberSuffix = rawPublicCase.docketNumberSuffix;
     this.docketNumberWithSuffix = rawPublicCase.docketNumberWithSuffix;
     this.hasIrsPractitioner = rawPublicCase.hasIrsPractitioner;
-    this.docketEntries = rawPublicCase.docketEntries.map(de => {
-      return {
-        ...de,
-        servedParties: undefined,
-      };
-    });
+    this.docketEntries = removeServedParties(rawPublicCase.docketEntries ?? []);
     this.isPaper = rawPublicCase.isPaper;
     this.partyType = rawPublicCase.partyType;
     this.receivedAt = rawPublicCase.receivedAt;

@@ -153,18 +153,10 @@ export class CaseDTO {
     this.canAllowPrintableDocketRecord = rawCase.canAllowPrintableDocketRecord;
     this.canDojPractitionersRepresentParty =
       rawCase.canDojPractitionersRepresentParty;
-    this.archivedDocketEntries = rawCase.archivedDocketEntries?.map(de => {
-      return {
-        ...de,
-        servedParties: undefined,
-      };
-    });
-    this.docketEntries = rawCase.docketEntries.map(de => {
-      return {
-        ...de,
-        servedParties: undefined,
-      };
-    });
+    this.archivedDocketEntries = removeServedParties(
+      rawCase.archivedDocketEntries ?? [],
+    );
+    this.docketEntries = removeServedParties(rawCase.docketEntries ?? []);
     this.isSealed = rawCase.isSealed;
     this.hearings = rawCase.hearings;
     this.privatePractitioners = rawCase.privatePractitioners;
@@ -177,3 +169,24 @@ export class CaseDTO {
     this.consolidatedCases = rawCase.consolidatedCases;
   }
 }
+
+export const removeServedParties = (
+  docketEntries: RawDocketEntry[],
+): RawDocketEntry[] => {
+  return docketEntries.map(de => {
+    const result: RawDocketEntry = {
+      ...de,
+      servedParties: undefined,
+    };
+    if (de.secondaryDocument?.previousDocument?.servedParties) {
+      result.secondaryDocument = {
+        ...de.secondaryDocument,
+        previousDocument: {
+          ...de.secondaryDocument.previousDocument,
+          servedParties: undefined,
+        },
+      };
+    }
+    return result;
+  });
+};
