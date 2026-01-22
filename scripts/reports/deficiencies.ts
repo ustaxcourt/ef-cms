@@ -121,7 +121,7 @@ const getDeficiencyCases = async (): Promise<tDeficiencyCase[]> => {
     { header: 'Case Title', key: 'caption' },
     { header: 'Judge', key: 'judge' },
     { header: 'Case Status', key: 'status' },
-    { header: 'Preferred Trial City', key: 'preferredTrialCity' },
+    { header: 'Preferred Trial Location', key: 'preferredTrialCity' },
     {
       header: 'IRS Deficiency Amount',
       key: 'irsDeficiencyAmount',
@@ -129,12 +129,10 @@ const getDeficiencyCases = async (): Promise<tDeficiencyCase[]> => {
   ];
   const rows = [
     ...deficiencyCases.map(result => ({
-      ...pick(result, [
-        'caption',
-        'docketNumber',
-        'irsDeficiencyAmount',
-        'status',
-      ]),
+      ...pick(result, ['caption', 'docketNumber', 'status']),
+      irsDeficiencyAmount: result.irsDeficiencyAmount
+        ? `${result.irsDeficiencyAmount.toFixed(2)}`
+        : '0',
       judge:
         result.associatedJudge
           ?.replace('Chief Special Trial ', '')
@@ -144,9 +142,7 @@ const getDeficiencyCases = async (): Promise<tDeficiencyCase[]> => {
     })),
   ];
 
-  console.log(
-    `Found ${deficiencyCases.length} ${!closed ? 'open ' : ''}deficiency cases`,
-  );
+  console.log(`Found ${deficiencyCases.length} deficiency cases`);
   generateCsv({ columns, filename: OUTPUT_FILENAME, rows });
   console.log(`Generated ${OUTPUT_FILENAME}`);
 })();
