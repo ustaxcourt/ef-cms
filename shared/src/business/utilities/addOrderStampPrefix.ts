@@ -7,7 +7,6 @@ import { EVENT_CODES_WITH_NO_ORDER } from '@shared/business/entities/EntityConst
  * @returns {string} The formatted text with Order prefix if applicable
  */
 
-
 export const addOrderStampPrefix = (
   eventCode: string | undefined,
   text: string | undefined,

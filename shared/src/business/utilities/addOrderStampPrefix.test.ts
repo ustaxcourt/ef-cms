@@ -51,4 +51,3 @@ describe('addOrderStampPrefix', () => {
     expect(result).toBeUndefined();
   });
 });
-
