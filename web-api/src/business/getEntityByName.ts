@@ -11,10 +11,12 @@ import { TrialSessionWorkingCopy } from '@shared/business/entities/trialSessions
 import { User } from '@shared/business/entities/User';
 import { UserCase } from '@shared/business/entities/UserCase';
 import { UserCaseNote } from '@shared/business/entities/notes/UserCaseNote';
+import { CaseDTO } from '@shared/business/dto/docketEntries/CaseDTO';
 
 export const getEntityByName = (name: string) => {
   const entitiesByName = {
     Case,
+    CaseDTO,
     CaseDeadline,
     Correspondence,
     DocketEntry,

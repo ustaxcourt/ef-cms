@@ -2,6 +2,7 @@ import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
   COUNTRY_TYPES,
+  PARTIES_CODES,
   SERVICE_INDICATOR_TYPES,
   SESSION_TYPES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
@@ -24,6 +25,12 @@ import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsCle
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../src/withAppContext';
+import {
+  createISODateString,
+  formatDateString,
+  FORMATS,
+  getCurrentDateTimeInMillis,
+} from '@shared/business/utilities/DateHandler';
 
 describe('Trial Session Eligible Cases Journey', () => {
   const cerebralTest = setupTest();
@@ -32,9 +39,9 @@ describe('Trial Session Eligible Cases Journey', () => {
     addToTrialSessionModalHelperComputed,
   );
 
-  const trialLocation = `Madison, Wisconsin, ${Date.now()}`;
-  // eslint-disable-next-line custom-rules-plugin/no-new-dates
-  const currentYearPlusFive = new Date().getFullYear() + 5;
+  const trialLocation = `Madison, Wisconsin, ${getCurrentDateTimeInMillis()}`;
+  const currentYearPlusFive =
+    Number(formatDateString(createISODateString(), FORMATS.YEAR)) + 5;
   const overrides = {
     maxCases: 4,
     preferredTrialCity: trialLocation,
@@ -145,7 +152,7 @@ describe('Trial Session Eligible Cases Journey', () => {
     caseOverrides = {
       ...overrides,
       caseType: CASE_TYPES_MAP.cdp,
-      closedDate: Date.now(),
+      closedDate: getCurrentDateTimeInMillis(),
       procedureType: 'Small',
       status: CASE_STATUS_TYPES.closed,
     };
@@ -293,11 +300,7 @@ describe('Trial Session Eligible Cases Journey', () => {
       if (caseDetail.status !== CASE_STATUS_TYPES.closed) {
         // eslint-disable-next-line jest/no-conditional-expect
         expect(norpDocketEntry).toMatchObject({
-          servedParties: [
-            {
-              name: 'Mona Schultz',
-            },
-          ],
+          servedPartiesCode: PARTIES_CODES.BOTH,
         });
       } else {
         // eslint-disable-next-line jest/no-conditional-expect
