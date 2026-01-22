@@ -286,7 +286,7 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
           '*': 'All parties have not consented to your withdrawal as counsel',
         }),
       );
-      if (this.partyIrsPractitioner) {
+      if (!this.partyIrsPractitioner) {
         addProperty(
           'filers',
           joi.array().items(joi.string().required()).messages({
