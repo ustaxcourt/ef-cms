@@ -14,8 +14,6 @@ export class RestrictedCaseDTO {
     this.isPaper = rawRestrictedCase.isPaper;
     this.isSealed = rawRestrictedCase.isSealed;
     this.leadDocketNumber = rawRestrictedCase.leadDocketNumber;
-    this.docketEntries = removeServedParties(
-      rawRestrictedCase.docketEntries ?? [],
-    );
+    this.docketEntries = removeServedParties(rawRestrictedCase.docketEntries);
   }
 }

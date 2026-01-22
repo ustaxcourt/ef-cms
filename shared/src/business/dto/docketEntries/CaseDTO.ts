@@ -157,7 +157,7 @@ export class CaseDTO {
     this.archivedDocketEntries = rawCase.archivedDocketEntries
       ? removeServedParties(rawCase.archivedDocketEntries)
       : undefined;
-    this.docketEntries = removeServedParties(rawCase.docketEntries ?? []);
+    this.docketEntries = removeServedParties(rawCase.docketEntries);
     this.isSealed = rawCase.isSealed;
     this.hearings = rawCase.hearings;
     this.privatePractitioners = rawCase.privatePractitioners;
