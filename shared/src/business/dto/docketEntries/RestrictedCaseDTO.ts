@@ -1,4 +1,4 @@
-import { removeServedParties } from './CaseDTO';
+import { removeServedParties } from '../helpers/removeServedParties';
 
 export class RestrictedCaseDTO {
   public docketNumber?: string;

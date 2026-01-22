@@ -7,6 +7,7 @@ import {
 import { RawStatistic } from '@shared/business/entities/Statistic';
 import { RawConsolidatedCaseSummary } from '../cases/ConsolidatedCaseSummary';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { removeServedParties } from '../helpers/removeServedParties';
 
 export class CaseDTO {
   public entityName = 'CaseDTO';
@@ -169,24 +170,3 @@ export class CaseDTO {
     this.consolidatedCases = rawCase.consolidatedCases;
   }
 }
-
-export const removeServedParties = (
-  docketEntries: RawDocketEntry[],
-): RawDocketEntry[] => {
-  return docketEntries.map(de => {
-    const result: RawDocketEntry = {
-      ...de,
-      servedParties: undefined,
-    };
-    if (de.secondaryDocument?.previousDocument?.servedParties) {
-      result.secondaryDocument = {
-        ...de.secondaryDocument,
-        previousDocument: {
-          ...de.secondaryDocument.previousDocument,
-          servedParties: undefined,
-        },
-      };
-    }
-    return result;
-  });
-};
