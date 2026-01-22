@@ -154,9 +154,9 @@ export class CaseDTO {
     this.canAllowPrintableDocketRecord = rawCase.canAllowPrintableDocketRecord;
     this.canDojPractitionersRepresentParty =
       rawCase.canDojPractitionersRepresentParty;
-    this.archivedDocketEntries = removeServedParties(
-      rawCase.archivedDocketEntries ?? [],
-    );
+    this.archivedDocketEntries = rawCase.archivedDocketEntries
+      ? removeServedParties(rawCase.archivedDocketEntries)
+      : undefined;
     this.docketEntries = removeServedParties(rawCase.docketEntries ?? []);
     this.isSealed = rawCase.isSealed;
     this.hearings = rawCase.hearings;
