@@ -1,4 +1,7 @@
+import { CaseDTO } from '@shared/business/dto/docketEntries/CaseDTO';
 import { get } from './requests';
+import { PublicCaseDTO } from '@shared/business/dto/docketEntries/PublicCaseDTO';
+import { RestrictedCaseDTO } from '@shared/business/dto/docketEntries/RestrictedCaseDTO';
 
 /**
  * getCaseInteractor
@@ -8,7 +11,10 @@ import { get } from './requests';
  * @param {string} providers.docketNumber the id of the case to retrieve
  * @returns {Promise<*>} the promise of the api call
  */
-export const getCaseInteractor = (applicationContext, { docketNumber }) => {
+export const getCaseInteractor = (
+  applicationContext,
+  { docketNumber },
+): Promise<CaseDTO | RestrictedCaseDTO | PublicCaseDTO> => {
   return get({
     applicationContext,
     endpoint: `/cases/${docketNumber}`,

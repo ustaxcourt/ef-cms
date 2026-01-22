@@ -27,7 +27,7 @@ export const batchDownloadDocketEntriesInteractor = async (
   applicationContext: ServerApplicationContext,
   downloadDocketEntryRequestInfo: DownloadDocketEntryRequestType,
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<void> => {
   try {
     await batchDownloadDocketEntriesHelper(
       applicationContext,
@@ -111,7 +111,7 @@ const batchDownloadDocketEntriesHelper = async (
     const filename = generateValidDocketEntryFilename({
       documentTitle,
       filingDate,
-      index,
+      index: index ? `${index}` : '',
     });
 
     const fileDirectory =

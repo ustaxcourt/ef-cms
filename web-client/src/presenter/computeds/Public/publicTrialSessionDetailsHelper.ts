@@ -98,7 +98,7 @@ export const publicTrialSessionDetailsHelper = (
 };
 
 const formatPublicCase = (
-  calendaredCase: Omit<RawCase | RawPublicCase, 'consolidatedCases'>,
+  calendaredCase: CalendaredPublicCase,
 ): TrialSessionPublicCaseRow => {
   const { isSealed } = calendaredCase;
   const inConsolidatedGroup = isInConsolidatedGroup(calendaredCase);
