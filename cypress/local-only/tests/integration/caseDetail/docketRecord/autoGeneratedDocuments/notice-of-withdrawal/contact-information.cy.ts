@@ -14,7 +14,10 @@ import {
 import { addPetitionerAsPartyToCase } from 'cypress/helpers/caseDetail/caseInformation/add-petitioner-to-case';
 import { addPrivatePractitionerToCaseAndAllParties } from 'cypress/helpers/caseDetail/caseInformation/add-private-practitioner-to-case-and-all-parties';
 import { updateCaseStatus } from 'cypress/helpers/caseDetail/caseInformation/update-case-status';
-import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
+import {
+  goToCase,
+  goToCaseFromDashboard,
+} from 'cypress/helpers/caseDetail/go-to-case';
 import { selectTypeaheadInput } from 'cypress/helpers/components/typeAhead/select-typeahead-input';
 import { petitionsClerkServesPetition } from 'cypress/helpers/documentQC/petitionsclerk-serves-petition';
 import { externalUserCreatesElectronicCase } from 'cypress/helpers/fileAPetition/petitioner-creates-electronic-case';
@@ -79,9 +82,7 @@ describe('Notice of Withdrawal - Contact Information', () => {
       cy.get('[data-testid="contact.city"]').clear();
       cy.get('[data-testid="contact.city"]').type('new city');
       cy.get('[data-testid="modal-button-confirm"]').click();
-      cy.get('[data-testid^="edit-contact-"]')
-        .first()
-        .contains('new address1');
+      cy.get('[data-testid^="edit-contact-"]').first().contains('new address1');
       cy.get('[data-testid^="edit-contact-"]').first().contains('new city');
 
       cy.intercept(
@@ -212,7 +213,7 @@ describe('Notice of Withdrawal - Contact Information', () => {
 });
 
 const enterNoticeOfWithdrawalFormType = (docketNumber: string) => {
-  goToCase(docketNumber);
+  goToCaseFromDashboard(docketNumber);
   cy.get('[data-testid="button-file-document"]').click();
   cy.get('[data-testid="ready-to-file"]').click();
   selectTypeaheadInput(

@@ -11,7 +11,7 @@ import {
 } from 'cypress/helpers/authentication/login-as-helpers';
 import { addPrivatePractitionerToCaseAndAllParties } from 'cypress/helpers/caseDetail/caseInformation/add-private-practitioner-to-case-and-all-parties';
 import { petitionsClerkAddsRespondentToCase } from 'cypress/helpers/caseDetail/caseInformation/petitionsclerk-adds-respondent-to-case';
-import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
+import { goToCaseFromDashboard } from 'cypress/helpers/caseDetail/go-to-case';
 import { selectTypeaheadInput } from 'cypress/helpers/components/typeAhead/select-typeahead-input';
 import { createAndServeConsolidatedGroup } from 'cypress/helpers/fileAPetition/create-consolidated-case-group';
 import { calendarTrialSession } from 'cypress/helpers/trialSession/calendar-trial-session';
@@ -80,8 +80,14 @@ describe('Notice of Withdrawal - Consolidated Cases', () => {
 
       // Add respondents for IRS practitioner test
       loginAsDocketClerk1();
-      petitionsClerkAddsRespondentToCase(docketNumber, irsPractitionerBarNumber);
-      petitionsClerkAddsRespondentToCase(docketNumber, irsPractitioner2BarNumber);
+      petitionsClerkAddsRespondentToCase(
+        docketNumber,
+        irsPractitionerBarNumber,
+      );
+      petitionsClerkAddsRespondentToCase(
+        docketNumber,
+        irsPractitioner2BarNumber,
+      );
 
       // Test IRS practitioner alert
       loginAsIrsPractitioner1();
@@ -99,7 +105,7 @@ describe('Notice of Withdrawal - Consolidated Cases', () => {
 });
 
 const enterNoticeOfWithdrawalFormType = (docketNumber: string) => {
-  goToCase(docketNumber);
+  goToCaseFromDashboard(docketNumber);
   cy.get('[data-testid="button-file-document"]').click();
   cy.get('[data-testid="ready-to-file"]').click();
   selectTypeaheadInput(
