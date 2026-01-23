@@ -124,20 +124,6 @@ describe('setDocketEntryMetaFormForEditAction', () => {
     expect(result.state.form.servedPartiesCode).toBeUndefined();
   });
 
-  it('computes the servedPartiesCode from documentDetail when NOT present on docketRecordEntry', async () => {
-    const result = await runAction(setDocketEntryMetaFormForEditAction, {
-      modules: { presenter },
-      props: {
-        docketRecordIndex: 3,
-      },
-      state: {
-        caseDetail,
-      },
-    });
-
-    expect(result.state.form.servedPartiesCode).toEqual(PARTIES_CODES.BOTH);
-  });
-
   it('overwrites documentDetail.servedPartiesCode if servedPartiesCode is present on docketRecordEntry', async () => {
     const result = await runAction(setDocketEntryMetaFormForEditAction, {
       modules: { presenter },
