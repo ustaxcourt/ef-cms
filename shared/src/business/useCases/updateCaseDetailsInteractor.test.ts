@@ -11,7 +11,7 @@ import {
   MINUTE_ENTRIES_MAP,
   PAYMENT_STATUS,
 } from '../entities/EntityConstants';
-import { MOCK_CASE } from '../../test/mockCase';
+import { MOCK_CASE, MOCK_CASE_DTO } from '../../test/mockCase';
 import {
   ServiceUnavailableError,
   UnauthorizedError,
@@ -248,7 +248,7 @@ describe('updateCaseDetailsInteractor', () => {
     );
 
     expect(result).toMatchObject({
-      docketEntries: MOCK_CASE.docketEntries,
+      docketEntries: MOCK_CASE_DTO.docketEntries,
     });
   });
 
