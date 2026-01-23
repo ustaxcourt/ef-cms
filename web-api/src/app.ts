@@ -212,7 +212,7 @@ import { deactivateUserLambda } from '@web-api/lambdas/automations/deactivateUse
 import { removeUserPendingEmailLambda } from '@web-api/lambdas/automations/removeUserPendingEmailLambda';
 import { saveMinuteSheetToDraftsLambda } from './lambdas/trialSessionMinutes/saveMinuteSheetToDraftsLambda';
 import { generateNoticeOfWithdrawalPdfLambda } from './lambdas/cases/generateNoticeOfWithdrawalPdfLambda';
-import { validateCaseForNewMinuteSheetLambda } from './lambdas/trialSessions/validateCaseForNewMinuteSheetLambda';
+import { validateCaseForNewMinuteSheetLambda } from './lambdas/trialSessionMinutes/validateCaseForNewMinuteSheetLambda';
 
 export const app = express();
 
