@@ -11,7 +11,7 @@ export const getMaintenanceModeForPublicAction = async ({
   applicationContext,
   path,
   store,
-}: ActionProps) => {
+}: ActionProps<{}, ClientPublicApplicationContext>) => {
   const { data: maintenanceMode, headers } = await applicationContext
     .getUseCases()
     .getMaintenanceModePublicInteractor(applicationContext);
