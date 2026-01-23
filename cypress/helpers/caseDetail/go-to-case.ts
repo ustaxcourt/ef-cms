@@ -5,3 +5,11 @@ export function goToCase(docketNumber: string) {
   cy.get('[data-testid="search-docket-number"]').click();
   cy.get('[data-testid="case-detail-menu-button"]').should('exist');
 }
+
+export function goToCaseFromDashboard(docketNumber: string) {
+  cy.get('[data-testid="docket-search-field"]').scrollIntoView();
+  cy.get('[data-testid="docket-search-field"]').clear();
+  cy.get('[data-testid="docket-search-field"]').type(docketNumber);
+  cy.get('[data-testid="search-by-docket-number"]').click();
+  cy.get('[data-testid="tab-docket-record"]').should('be.visible');
+}
