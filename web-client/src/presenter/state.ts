@@ -859,7 +859,7 @@ export const baseState = {
   openCases: [] as TAssociatedCase[],
   openCasesCurrentPage: undefined as number | undefined,
   openClosedCases: {
-    caseType: undefined as string | undefined
+    caseType: undefined as string | undefined,
   },
   paperServiceStatusState: {
     pdfsAppended: 0,
@@ -1029,6 +1029,7 @@ export const baseState = {
   viewerDraftDocumentToDisplay: undefined as unknown as ViewerDocument,
   wizardStep: undefined as string | undefined,
   workItem: {},
+  workItemId: undefined as string | undefined,
   workItemActions: {},
   workItemMetadata: {},
   workQueue: [] as RawWorkItemWithCaseAndDocketEntryInfo[],
