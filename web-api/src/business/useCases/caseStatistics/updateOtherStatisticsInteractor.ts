@@ -9,6 +9,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { CaseDTO } from '@shared/business/dto/docketEntries/CaseDTO';
 
 /**
  * updateOtherStatistics
@@ -28,7 +29,7 @@ export const updateOtherStatistics = async (
     litigationCosts,
   }: { damages: number; docketNumber: string; litigationCosts: number },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<CaseDTO> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ADD_EDIT_STATISTICS)) {
     throw new UnauthorizedError('Unauthorized for editing statistics');
   }
@@ -47,7 +48,9 @@ export const updateOtherStatistics = async (
     caseToUpdate: newCase,
   });
 
-  return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
+  return new CaseDTO(
+    new Case(updatedCase, { authorizedUser }).validate().toRawObject(),
+  );
 };
 
 export const updateOtherStatisticsInteractor = withLocking(

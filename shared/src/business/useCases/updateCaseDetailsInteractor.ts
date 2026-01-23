@@ -14,6 +14,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { CaseDTO } from '../dto/docketEntries/CaseDTO';
 
 /**
  * updateCaseDetails
@@ -28,7 +29,7 @@ export const updateCaseDetails = async (
   _applicationContext: ServerApplicationContext,
   { caseDetails, docketNumber }: { caseDetails: any; docketNumber: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<CaseDTO> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.EDIT_CASE_DETAILS)) {
     throw new UnauthorizedError('Unauthorized for editing case details');
   }
@@ -125,7 +126,9 @@ export const updateCaseDetails = async (
     caseToUpdate: newCaseEntity,
   });
 
-  return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
+  return new CaseDTO(
+    new Case(updatedCase, { authorizedUser }).validate().toRawObject(),
+  );
 };
 
 export const updateCaseDetailsInteractor = withLocking(
