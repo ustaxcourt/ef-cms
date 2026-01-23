@@ -1,8 +1,8 @@
 import { associatedExternalUserViewsCaseDetailForOwnedCase } from './journey/associatedExternalUserViewsCaseDetailForOwnedCase';
 import { externalUserFilesDocumentForOwnedCase } from './journey/externalUserFilesDocumentForOwnedCase';
 import { fakeFile, loginAs, setupTest } from './helpers';
-import { getOtherFilers } from '../../shared/src/business/entities/cases/Case';
 import { userTriesToFileAnUnavailableDocumentType } from './journey/userTriesToFileAnUnavailableDocumentType';
+import { PARTIES_CODES } from '@shared/business/entities/EntityConstants';
 
 describe('an external user files a document for their legacy case', () => {
   const cerebralTest = setupTest();
@@ -38,13 +38,11 @@ describe('an external user files a document for their legacy case', () => {
       docketNumber: cerebralTest.docketNumber,
     });
 
-    const otherFilers = getOtherFilers(cerebralTest.getState('caseDetail'));
     const docketEntries = cerebralTest.getState('caseDetail.docketEntries');
     const lastServedDocument = docketEntries.pop();
 
-    const isOtherFilerServed = lastServedDocument.servedParties.find(
-      p => p.name === otherFilers[0].name && p.email === otherFilers[0].email,
-    );
+    const isOtherFilerServed =
+      lastServedDocument.servedPartiesCode === PARTIES_CODES.BOTH;
 
     expect(isOtherFilerServed).toBeTruthy();
   });

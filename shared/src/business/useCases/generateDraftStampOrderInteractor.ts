@@ -25,6 +25,7 @@ export const generateDraftStampOrderInteractor = async (
     parentMessageId,
     stampData,
     stampedDocketEntryId,
+    filingDateUpdated = false,
   }: {
     docketNumber: string;
     formattedDraftDocumentTitle: string;
@@ -32,6 +33,7 @@ export const generateDraftStampOrderInteractor = async (
     parentMessageId: string;
     stampData: any;
     stampedDocketEntryId: string;
+    filingDateUpdated?: boolean;
   },
   authorizedUser: UnknownAuthUser,
 ) => {
@@ -63,6 +65,7 @@ export const generateDraftStampOrderInteractor = async (
         docketNumber,
         stampData,
         stampedDocketEntryId,
+        filingDateUpdated,
       },
       authorizedUser,
     );
