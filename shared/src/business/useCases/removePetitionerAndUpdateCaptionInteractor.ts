@@ -10,6 +10,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { CaseDTO } from '../dto/docketEntries/CaseDTO';
 
 /**
  * used to remove a petitioner from a case
@@ -28,7 +29,7 @@ export const removePetitionerAndUpdateCaption = async (
     docketNumber,
   }: { caseCaption: string; contactId: string; docketNumber: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<CaseDTO> => {
   const petitionerContactId = contactId;
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.REMOVE_PETITIONER)) {
@@ -76,7 +77,9 @@ export const removePetitionerAndUpdateCaption = async (
     caseToUpdate: caseEntity,
   });
 
-  return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
+  return new CaseDTO(
+    new Case(updatedCase, { authorizedUser }).validate().toRawObject(),
+  );
 };
 
 export const removePetitionerAndUpdateCaptionInteractor = withLocking(
