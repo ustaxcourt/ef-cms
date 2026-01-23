@@ -10,7 +10,6 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { compareStrings } from '../../utilities/sortFunctions';
 import { Case, isSealedCase } from './Case';
 import joi from 'joi';
-import { DocketEntry } from '@shared/business/entities/DocketEntry';
 
 export class PublicCase extends JoiValidationEntity {
   public entityName: string;
@@ -24,7 +23,7 @@ export class PublicCase extends JoiValidationEntity {
   public docketNumberSuffix?: string;
   public docketNumberWithSuffix: string;
   public hasIrsPractitioner: boolean;
-  public docketEntries: DocketEntry[];
+  public docketEntries: PublicDocketEntry[];
   public isPaper?: boolean;
   public partyType: string;
   public receivedAt: string;
