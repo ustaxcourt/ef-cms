@@ -28,7 +28,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { getWorkItemsByDocketNumber as getWorkItemsByDocketNumberMock } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { docketClerk1User } from '@shared/test/mockUsers';
-import { MOCK_ANSWER_2 } from '@shared/test/mockDocketEntry';
+import { CaseDTO } from '../dto/docketEntries/CaseDTO';
 
 describe('getCaseInteractor', () => {
   const irsPractitionerId = '6cf19fba-18c6-467a-9ea6-7a14e42add2f';
@@ -42,6 +42,78 @@ describe('getCaseInteractor', () => {
 
   let testCase;
   let mockCaseContactPrimary;
+
+  const MOCK_CASE_DTO = {
+    entityName: 'PublicCase',
+    canAllowDocumentService: false,
+    canAllowPrintableDocketRecord: false,
+    canDojPractitionersRepresentParty: false,
+    caseCaption: 'Test Petitioner, Petitioner',
+    createdAt: '2018-03-01T21:40:46.415Z',
+    leadDocketNumber: undefined,
+    docketNumber: '101-18',
+    docketNumberSuffix: undefined,
+    docketNumberWithSuffix: '101-18',
+    hasIrsPractitioner: false,
+    docketEntries: [
+      {
+        entityName: 'PublicDocketEntry',
+        action: undefined,
+        additionalInfo: undefined,
+        additionalInfo2: undefined,
+        attachments: undefined,
+        certificateOfService: undefined,
+        certificateOfServiceDate: undefined,
+        docketEntryId: '9de27a7d-7c6b-434b-803b-7655f82d5e07',
+        docketNumber: '101-18',
+        documentTitle: 'Petition',
+        documentType: 'Petition',
+        eventCode: 'P',
+        filedBy: 'Test Petitioner',
+        filingDate: '2018-03-01T05:00:00.000Z',
+        freeText: undefined,
+        index: 1,
+        isFileAttached: true,
+        filedByRole: 'petitioner',
+        isLegacyServed: undefined,
+        isOnDocketRecord: true,
+        isPaper: undefined,
+        isSealed: false,
+        isStricken: undefined,
+        lodged: undefined,
+        numberOfPages: undefined,
+        objections: undefined,
+        processingStatus: 'complete',
+        receivedAt: '2018-03-01T05:00:00.000Z',
+        sealedTo: undefined,
+        servedAt: undefined,
+        servedPartiesCode: undefined,
+        affectedByDocketEntries: undefined,
+        affectedDocketEntries: undefined,
+        servedParties: undefined,
+        qcComplete: false,
+        qcViewed: false,
+        workItemId: undefined,
+      },
+    ],
+    isPaper: undefined,
+    partyType: 'Petitioner',
+    receivedAt: '2018-03-01T21:40:46.415Z',
+    isSealed: false,
+    petitioners: [
+      {
+        entityName: 'PublicContact',
+        contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+        contactType: 'primary',
+        name: 'Test Petitioner',
+        state: 'TN',
+        serviceIndicator: 'Electronic',
+      },
+    ],
+    irsPractitioners: [],
+    privatePractitioners: [],
+    consolidatedCases: undefined,
+  };
 
   beforeEach(() => {
     testCase = { ...MOCK_CASE };
@@ -228,11 +300,10 @@ describe('getCaseInteractor', () => {
         docketNumber: '00101-00',
       },
       mockPetitionerUser,
-    )) as RawCase;
+    )) as CaseDTO;
 
     expect(result.docketNumber).toEqual('101-00');
     expect(result.petitioners[0].address1).toBeDefined();
-    expect(result.entityName).toEqual('Case');
   });
 
   it('should return the case when the currentUser is the contactSecondary on the case', async () => {
@@ -259,31 +330,14 @@ describe('getCaseInteractor', () => {
         docketNumber: '00101-00',
       },
       mockPetitionerUser,
-    )) as RawCase;
+    )) as CaseDTO;
 
     expect(result.docketNumber).toEqual('101-00');
     expect(result.petitioners[0].address1).toBeDefined();
-    expect(result.entityName).toEqual('Case');
   });
 
   it('should return the full case (non public) when the user is part of the consolidated group', async () => {
-    getCaseByDocketNumber.mockReturnValue({
-      ...testCase,
-      consolidatedCases: [
-        { ...testCase, petitioners: [] },
-        {
-          ...testCase,
-          petitioners: [
-            {
-              ...testCase.petitioners[0],
-              contactId: mockPetitionerUser.userId,
-            },
-          ],
-        },
-        { ...testCase, petitioners: [] },
-      ],
-      leadDocketNumber: '101-20',
-    });
+    getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
 
     const result = await getCaseInteractor(
       {
@@ -292,7 +346,7 @@ describe('getCaseInteractor', () => {
       mockPetitionerUser,
     );
 
-    expect(result.entityName).toEqual('Case');
+    expect(result).toEqual(MOCK_CASE_DTO);
   });
 
   it('should throw UnauthorizedError if user is not a valid AuthUser', async () => {
@@ -346,7 +400,7 @@ describe('getCaseInteractor', () => {
           docketNumber: '101-18',
         },
         mockDocketClerkUser,
-      )) as RawCase;
+      )) as CaseDTO;
 
       const contactPrimary = result.petitioners[0];
       const contactSecondary = result.petitioners[1];
@@ -366,7 +420,7 @@ describe('getCaseInteractor', () => {
           docketNumber: '101-18',
         },
         mockPrivatePractitionerUser,
-      )) as RawCase;
+      )) as CaseDTO;
 
       expect(result.petitioners[0].city).toBeUndefined();
       expect(result.petitioners[1].city).toBeUndefined();
@@ -417,7 +471,6 @@ describe('getCaseInteractor', () => {
       expect(result).toEqual({
         docketEntries: [],
         docketNumber: '101-18',
-        entityName: 'RestrictedCase',
         isSealed: true,
       });
     });
@@ -428,7 +481,7 @@ describe('getCaseInteractor', () => {
           docketNumber: '101-18',
         },
         mockDocketClerkUser,
-      )) as RawCase;
+      )) as CaseDTO;
 
       const contactPrimary = result.petitioners[0];
       expect(contactPrimary.address1).toBeDefined();
@@ -446,7 +499,7 @@ describe('getCaseInteractor', () => {
           role: ROLES.privatePractitioner,
           userId: practitionerId,
         },
-      )) as RawCase;
+      )) as CaseDTO;
 
       const contactPrimary = result.petitioners[0];
       expect(contactPrimary.address1).toBeDefined();
@@ -477,7 +530,7 @@ describe('getCaseInteractor', () => {
           docketNumber: '101-18',
         },
         mockDocketClerkUser,
-      )) as RawCase;
+      )) as CaseDTO;
 
       const contactPrimary = result.petitioners[0];
       expect(contactPrimary.address1).toBeDefined();
@@ -509,7 +562,7 @@ describe('getCaseInteractor', () => {
           role: ROLES.privatePractitioner,
           userId: practitioner2Id,
         },
-      )) as RawCase;
+      )) as CaseDTO;
 
       const contactPrimary = result.petitioners[0];
       expect(contactPrimary.address1).toBeDefined();
@@ -606,7 +659,7 @@ describe('getCaseInteractor', () => {
           role: ROLES.docketClerk,
           userId: docketClerk1User.userId,
         },
-      )) as RawCase;
+      )) as CaseDTO;
       for (let i = 0; i < docketEntries.length; i++) {
         expect(result.docketEntries[i]).toMatchObject({
           workItemId: workItems[i].workItemId,
@@ -616,18 +669,9 @@ describe('getCaseInteractor', () => {
       }
     });
   });
-  it('should not return email address in docket record for user if they are not a docketClerk or admissionsClerk', async () => {
+  it('should not return servedParties', async () => {
     getCaseByDocketNumber.mockResolvedValue({
       ...MOCK_CASE,
-      petitioners: [
-        {
-          ...MOCK_CASE.petitioners[0],
-          email: 'bernardlowe@example.com',
-          isAddressSealed: true,
-          sealedAndUnavailable: true,
-        },
-      ],
-      docketEntries: [MOCK_ANSWER_2],
     });
 
     const result = await getCaseInteractor(
@@ -637,14 +681,6 @@ describe('getCaseInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(result.docketEntries[0].servedParties).toEqual([
-      {
-        name: 'Bernard Lowe',
-      },
-      {
-        name: 'IRS',
-        role: 'irsSuperuser',
-      },
-    ]);
+    expect(result.docketEntries[0].servedParties).toBeUndefined();
   });
 });

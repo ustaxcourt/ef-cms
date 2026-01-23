@@ -19,6 +19,7 @@ import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { CaseDTO } from '@shared/business/dto/docketEntries/CaseDTO';
 
 /**
  * saveCaseDetailInternalEdit
@@ -32,7 +33,7 @@ export const saveCaseDetailInternalEdit = async (
   applicationContext: ServerApplicationContext,
   { caseToUpdate, docketNumber },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<CaseDTO> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.UPDATE_CASE)) {
     throw new UnauthorizedError('Unauthorized for update case');
   }
@@ -160,7 +161,7 @@ export const saveCaseDetailInternalEdit = async (
       docketNumber,
       docketEntryId: petitionDocketEntry?.docketEntryId,
     });
-    
+
     if (!petitionWorkItem) {
       throw new NotFoundError(
         `Could not find work item associated with petition on case ${petitionDocketEntry}`,
@@ -184,7 +185,7 @@ export const saveCaseDetailInternalEdit = async (
     caseToUpdate: caseEntity,
   });
 
-  return new Case(updatedCase, { authorizedUser }).toRawObject();
+  return new CaseDTO(new Case(updatedCase, { authorizedUser }).toRawObject());
 };
 
 export const saveCaseDetailInternalEditInteractor = withLocking(
