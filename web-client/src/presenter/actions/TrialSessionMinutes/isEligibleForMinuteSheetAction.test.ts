@@ -1,7 +1,7 @@
 import { MOCK_CASE } from '@shared/test/mockCase';
 import {
   caseIsEligibleForMinuteSheet,
-  isEligibleUnscheduledCaseForMinuteSheet,
+  unscheduledCaseIsEligibleForMinuteSheet,
 } from '@shared/business/utilities/trialSessionMinutes/caseIsEligibleForMinuteSheet';
 import { isEligibleForMinuteSheetAction } from './isEligibleForMinuteSheetAction';
 import { presenter } from '@web-client/presenter/presenter-mock';
@@ -96,7 +96,7 @@ describe('isEligibleForMinuteSheetAction', () => {
 
   describe('unscheduled cases (case NOT in caseOrder)', () => {
     it('should return path.yes and set isUnscheduledMinuteSheet to true when unscheduled case is eligible', async () => {
-      (isEligibleUnscheduledCaseForMinuteSheet as jest.Mock).mockReturnValue(
+      (unscheduledCaseIsEligibleForMinuteSheet as jest.Mock).mockReturnValue(
         true,
       );
 
@@ -115,7 +115,7 @@ describe('isEligibleForMinuteSheetAction', () => {
         },
       });
 
-      expect(isEligibleUnscheduledCaseForMinuteSheet).toHaveBeenCalledWith(
+      expect(unscheduledCaseIsEligibleForMinuteSheet).toHaveBeenCalledWith(
         MOCK_CASE,
         mockTrialSession,
       );
@@ -126,7 +126,7 @@ describe('isEligibleForMinuteSheetAction', () => {
     });
 
     it('should return path.no when unscheduled case is not eligible', async () => {
-      (isEligibleUnscheduledCaseForMinuteSheet as jest.Mock).mockReturnValue(
+      (unscheduledCaseIsEligibleForMinuteSheet as jest.Mock).mockReturnValue(
         false,
       );
 
@@ -145,7 +145,7 @@ describe('isEligibleForMinuteSheetAction', () => {
         },
       });
 
-      expect(isEligibleUnscheduledCaseForMinuteSheet).toHaveBeenCalledWith(
+      expect(unscheduledCaseIsEligibleForMinuteSheet).toHaveBeenCalledWith(
         MOCK_CASE,
         mockTrialSession,
       );
@@ -155,7 +155,7 @@ describe('isEligibleForMinuteSheetAction', () => {
     });
 
     it('should check for unscheduled eligibility when caseOrder is undefined', async () => {
-      (isEligibleUnscheduledCaseForMinuteSheet as jest.Mock).mockReturnValue(
+      (unscheduledCaseIsEligibleForMinuteSheet as jest.Mock).mockReturnValue(
         true,
       );
 
@@ -174,7 +174,7 @@ describe('isEligibleForMinuteSheetAction', () => {
         },
       });
 
-      expect(isEligibleUnscheduledCaseForMinuteSheet).toHaveBeenCalledWith(
+      expect(unscheduledCaseIsEligibleForMinuteSheet).toHaveBeenCalledWith(
         MOCK_CASE,
         mockTrialSession,
       );
@@ -183,7 +183,7 @@ describe('isEligibleForMinuteSheetAction', () => {
     });
 
     it('should treat inactive case (removedFromTrial=true) as unscheduled and use unscheduled eligibility check', async () => {
-      (isEligibleUnscheduledCaseForMinuteSheet as jest.Mock).mockReturnValue(
+      (unscheduledCaseIsEligibleForMinuteSheet as jest.Mock).mockReturnValue(
         true,
       );
 
@@ -211,7 +211,7 @@ describe('isEligibleForMinuteSheetAction', () => {
         },
       });
 
-      expect(isEligibleUnscheduledCaseForMinuteSheet).toHaveBeenCalledWith(
+      expect(unscheduledCaseIsEligibleForMinuteSheet).toHaveBeenCalledWith(
         MOCK_CASE,
         mockTrialSession,
       );
@@ -222,7 +222,7 @@ describe('isEligibleForMinuteSheetAction', () => {
     });
 
     it('should return path.no when inactive case is not eligible for unscheduled minute sheet', async () => {
-      (isEligibleUnscheduledCaseForMinuteSheet as jest.Mock).mockReturnValue(
+      (unscheduledCaseIsEligibleForMinuteSheet as jest.Mock).mockReturnValue(
         false,
       );
 
@@ -246,7 +246,7 @@ describe('isEligibleForMinuteSheetAction', () => {
         },
       });
 
-      expect(isEligibleUnscheduledCaseForMinuteSheet).toHaveBeenCalledWith(
+      expect(unscheduledCaseIsEligibleForMinuteSheet).toHaveBeenCalledWith(
         MOCK_CASE,
         mockTrialSession,
       );
