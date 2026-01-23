@@ -948,6 +948,7 @@ export const baseState = {
     isScanning: false,
     scanMode: undefined,
     scannerSourceName: undefined,
+    scannerSourceIndex: undefined,
     selectedBatchIndex: 0,
     dynamScriptClass: null,
     initiateScriptLoaded: false,
