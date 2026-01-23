@@ -31,7 +31,7 @@ export const caseIsEligibleForMinuteSheet = (
   return true;
 };
 
-export const isEligibleUnscheduledCaseForMinuteSheet = (
+export const unscheduledCaseIsEligibleForMinuteSheet = (
   aCase: RawCase,
   trialSession: RawTrialSession,
 ): boolean => {
