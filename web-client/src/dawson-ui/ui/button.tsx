@@ -16,6 +16,7 @@ const primaryColors = cn(
   'tw:text-blue-primary tw:fill-blue-primary', // standard
   'tw:hover:text-blue-dark tw:hover:fill-blue-dark', // hover
   'tw:active:text-blue-darker tw:active:fill-blue-darker', // active
+  'tw:aria-invalid:ring-red-primary/20 tw:aria-invalid:border-red-primary', // aria
   'tw:invalid:text-grey-light tw:invalid:fill-grey-light', // invalid
 );
 
