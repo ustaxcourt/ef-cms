@@ -1,0 +1,23 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="API" type="NodeJSConfigurationType" path-to-js-file="web-api/src/app-local.ts" working-dir="$PROJECT_DIR$">
+    <envs>
+      <env name="AWS_ACCESS_KEY_ID" value="S3RVER" />
+      <env name="AWS_SECRET_ACCESS_KEY" value="S3RVER" />
+      <env name="AWS_REGION" value="us-east-1" />
+      <env name="EFCMS_DOMAIN" value="localhost" />
+      <env name="ELASTICSEARCH_HOST" value="localhost" />
+      <env name="ELASTICSEARCH_ENDPOINT" value="http://localhost:9200" />
+      <env name="IRS_SUPERUSER_EMAIL" value="irs-superuser@example.com" />
+      <env name="USER_POOL_ID" value="local_2pHzece7" />
+      <env name="COGNITO_CLIENT_ID" value="bvjrggnd3co403c0aahscinne" />
+      <env name="DISABLE_EMAILS" value="true" />
+      <env name="ENV" value="local" />
+      <env name="USTC_ENV" value="dev" />
+    </envs>
+    <node-interpreter value="project" />
+    <typescript-loader value="ts-node" />
+    <method v="2">
+      <option name="RunConfigurationTask" enabled="true" run_configuration_name="start:s3rver" run_configuration_type="js.build_tools.npm" />
+    </method>
+  </configuration>
+</component>
