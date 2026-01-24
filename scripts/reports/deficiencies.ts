@@ -1,6 +1,9 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
-import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
+import {
+  CASE_STATUS_TYPES,
+  TRIAL_CITY_STRINGS,
+} from '@shared/business/entities/EntityConstants';
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
@@ -10,14 +13,20 @@ import { sql } from 'kysely';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { generateCsv } from '../helpers/generate-csv';
 import { pick } from 'lodash';
+import { choose } from '../helpers/prompts';
 
 const scriptConfig: ScriptConfig = {
-  description: 'deficiencies - Outputs cases with IRS deficiencies',
+  description: 'deficiencies - Generates a CSV of cases with IRS deficiencies',
   environment: {
     env: 'ENV',
     home: 'HOME',
   },
   parameters: {
+    city: {
+      description: 'Filter results by preferred trial city',
+      short: 'c',
+      type: 'boolean',
+    },
     max: {
       default: '0',
       description: 'Maximum IRS deficiency amount to include in report',
@@ -37,7 +46,8 @@ const scriptConfig: ScriptConfig = {
   },
   requireActiveAwsSession: true,
 };
-const { home, max, min } = parseArgsAndEnvVars(scriptConfig) as {
+const { city, home, max, min } = parseArgsAndEnvVars(scriptConfig) as {
+  city: boolean;
   home: string;
   max: number;
   min: number;
@@ -51,24 +61,21 @@ type tDeficiencyCase = {
   preferredTrialCity: string;
 };
 
-const today = createISODateString().split('T')[0];
-const OUTPUT_DIR = `${home}/Documents`;
-let outputFilename = 'deficiencies_';
-if (min !== max) {
-  if (max === 0) {
-    outputFilename += `greater_than_${min}_`;
-  } else if (min === 0) {
-    outputFilename += `less_than_${max}_`;
-  } else {
-    outputFilename += `${min}-${max}_`;
-  }
-}
-outputFilename += `${today}.csv`;
-const OUTPUT_FILENAME = `${OUTPUT_DIR}/${outputFilename}`;
+const trialCityStrings = TRIAL_CITY_STRINGS.slice().sort((a, b) => {
+  const [aCity, aState] = a.split(', ');
+  const [bCity, bState] = b.split(', ');
 
-const getDeficiencyCases = async (): Promise<tDeficiencyCase[]> => {
+  if (aState !== bState) {
+    return aState.localeCompare(bState);
+  }
+  return aCity.localeCompare(bCity);
+});
+
+const getDeficiencyCases = async (
+  filterByTrialCity: string | undefined,
+): Promise<tDeficiencyCase[]> => {
   return (await getDbReader(reader => {
-    const cteQuery = reader
+    let cteQuery = reader
       .selectFrom('dwCase as c')
       .crossJoin(sql`LATERAL jsonb_array_elements(c.statistics)`.as('stats'))
       .select(({ fn }) => [
@@ -94,6 +101,9 @@ const getDeficiencyCases = async (): Promise<tDeficiencyCase[]> => {
         'c.preferredTrialCity',
         'c.status',
       ]);
+    if (filterByTrialCity) {
+      cteQuery = cteQuery.where('c.preferredTrialCity', '=', filterByTrialCity);
+    }
 
     let query = reader
       .with('deficiencyCteQuery', () => cteQuery)
@@ -114,7 +124,30 @@ const getDeficiencyCases = async (): Promise<tDeficiencyCase[]> => {
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const deficiencyCases = await getDeficiencyCases();
+  let filterByTrialCity: string | undefined;
+  if (city) {
+    filterByTrialCity = await choose('Trial location', trialCityStrings);
+  }
+
+  const today = createISODateString().split('T')[0];
+  const OUTPUT_DIR = `${home}/Documents`;
+  let outputFilename = 'deficiencies_';
+  if (min !== max) {
+    if (max === 0) {
+      outputFilename += `greater_than_${min}_`;
+    } else if (min === 0) {
+      outputFilename += `less_than_${max}_`;
+    } else {
+      outputFilename += `${min}-${max}_`;
+    }
+  }
+  if (filterByTrialCity) {
+    outputFilename += `${filterByTrialCity.split(',')[0].replace(' ', '_').replace('.', '').toLowerCase()}_`;
+  }
+  outputFilename += `${today}.csv`;
+  const filename = `${OUTPUT_DIR}/${outputFilename}`;
+
+  const deficiencyCases = await getDeficiencyCases(filterByTrialCity);
 
   const columns = [
     { header: 'Docket Number', key: 'docketNumber' },
@@ -122,10 +155,7 @@ const getDeficiencyCases = async (): Promise<tDeficiencyCase[]> => {
     { header: 'Judge', key: 'judge' },
     { header: 'Case Status', key: 'status' },
     { header: 'Preferred Trial Location', key: 'preferredTrialCity' },
-    {
-      header: 'IRS Deficiency Amount',
-      key: 'irsDeficiencyAmount',
-    },
+    { header: 'IRS Deficiency Amount', key: 'irsDeficiencyAmount' },
   ];
   const rows = [
     ...deficiencyCases.map(result => ({
@@ -143,6 +173,6 @@ const getDeficiencyCases = async (): Promise<tDeficiencyCase[]> => {
   ];
 
   console.log(`Found ${deficiencyCases.length} deficiency cases`);
-  generateCsv({ columns, filename: OUTPUT_FILENAME, rows });
-  console.log(`Generated ${OUTPUT_FILENAME}`);
+  generateCsv({ columns, filename, rows });
+  console.log(`Generated ${filename}`);
 })();
