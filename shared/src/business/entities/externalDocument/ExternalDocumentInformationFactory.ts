@@ -19,6 +19,7 @@ import { isEqual, reduce, some, sortBy, values } from 'lodash';
 import joi from 'joi';
 
 export class ExternalDocumentInformationFactory extends JoiValidationEntity {
+  public allPartiesConsent?: boolean;
   public attachments: string;
   public casesParties?: object;
   public certificateOfService: boolean;
@@ -32,6 +33,7 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
   public filers: string[];
   public objections: string;
   public ordinalValue?: string;
+  public paperServiceAcknowledgement?: boolean;
   public partyIrsPractitioner: boolean;
   public previousDocument?: ExternalDocumentBase;
   public primaryDocumentFile: object;
@@ -47,6 +49,7 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
 
   constructor(rawProps) {
     super('ExternalDocumentInformationFactory');
+    this.allPartiesConsent = rawProps.allPartiesConsent;
     this.attachments = rawProps.attachments || false;
     this.casesParties = rawProps.casesParties;
     this.certificateOfService = rawProps.certificateOfService;
@@ -61,6 +64,7 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
     this.filers = rawProps.filers;
     this.objections = rawProps.objections;
     this.ordinalValue = rawProps.ordinalValue;
+    this.paperServiceAcknowledgement = rawProps.paperServiceAcknowledgement;
     this.partyIrsPractitioner = rawProps.partyIrsPractitioner;
     this.previousDocument = rawProps.previousDocument;
     this.primaryDocumentFile = rawProps.primaryDocumentFile;
@@ -267,6 +271,35 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
               'array.includeCurrentUser':
                 'You must include yourself as a filing party',
             }),
+        );
+      }
+    }
+
+    if (
+      this.eventCode === 'NOTW' &&
+      (this.currentUser.role === ROLES.privatePractitioner ||
+        this.currentUser.role === ROLES.irsPractitioner)
+    ) {
+      addProperty(
+        'allPartiesConsent',
+        joi.boolean().valid(true).required().messages({
+          '*': 'All parties have not consented to your withdrawal as counsel',
+        }),
+      );
+      if (!this.partyIrsPractitioner) {
+        addProperty(
+          'filers',
+          joi.array().items(joi.string().required()).messages({
+            '*': 'Select a party from whom are you removing yourself as counsel of record',
+          }),
+        );
+      }
+      if (this.paperServiceAcknowledgement !== undefined) {
+        addProperty(
+          'paperServiceAcknowledgement',
+          joi.boolean().valid(true).required().messages({
+            '*': 'You do not certify to serve the above parties who do not receive electronic service a copy of your withdrawal by mail today',
+          }),
         );
       }
     }

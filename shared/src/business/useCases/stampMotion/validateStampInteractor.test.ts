@@ -1,10 +1,9 @@
 import { MOTION_DISPOSITIONS } from '../../entities/EntityConstants';
-import { applicationContext } from '../../test/createTestApplicationContext';
 import { validateStampInteractor } from '../stampMotion/validateStampInteractor';
 
 describe('validateStampInteractor', () => {
   it('returns the errors for required fields on an empty stamp form', () => {
-    const errors = validateStampInteractor(applicationContext, {
+    const errors = validateStampInteractor({
       stampMotionForm: {},
     });
 
@@ -16,7 +15,7 @@ describe('validateStampInteractor', () => {
   it('returns null when there are no errors', () => {
     const mockDisposition = MOTION_DISPOSITIONS.DENIED;
 
-    const errors = validateStampInteractor(applicationContext, {
+    const errors = validateStampInteractor({
       stampMotionForm: { disposition: mockDisposition },
     });
 

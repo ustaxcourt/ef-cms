@@ -8,7 +8,7 @@ import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { CircleXmark } from './icons';
 
 const tertiaryBaseStyles = cn(
-  'tw:px-0 tw:py-0 tw:bg-transparent tw:font-[400] tw:underline', // standard
+  'tw:px-0 tw:py-0 tw:bg-transparent tw:font-normal tw:underline', // standard
   'tw:focus-visible:bg-white', // focus-visible
 );
 
@@ -16,40 +16,40 @@ const primaryColors = cn(
   'tw:text-blue-primary tw:fill-blue-primary', // standard
   'tw:hover:text-blue-dark tw:hover:fill-blue-dark', // hover
   'tw:active:text-blue-darker tw:active:fill-blue-darker', // active
+  'tw:aria-invalid:ring-red-primary/20 tw:aria-invalid:border-red-primary', // aria
   'tw:invalid:text-grey-light tw:invalid:fill-grey-light', // invalid
 );
 
 const buttonVariants = cva(
   cn(
-    'tw:text-[16px] tw:xs:text-[18px] tw:font-normal tw:outline-none tw:border-none tw:cursor-pointer tw:inline-flex tw:items-center tw:justify-center tw:whitespace-nowrap tw:rounded-[8px] tw:transition-all tw:disabled:pointer-events-none tw:disabled:opacity-50 tw:[&_svg]:pointer-events-none tw:[&_svg:not([class*=size-])]:size-4 tw:shrink-0 tw:[&_svg]:shrink-0',
-    'tw:focus-visible:ring-[4px] tw:focus-visible:ring-offset-[4px] tw:focus-visible:ring-ring tw:focus-visible:outline-none', // focus-visible
-    'tw:aria-invalid:ring-red-primary/20 tw:aria-invalid:border-red-primary', // aria
-    'tw:w-full tw:xs:w-auto tw:px-[16px] tw:py-[8px]', // small & greater
+    'tw:text-base tw:xs:text-lg tw:font-normal tw:outline-none tw:border-none tw:cursor-pointer tw:inline-flex tw:items-center tw:justify-center tw:whitespace-nowrap tw:rounded-md tw:transition-all tw:disabled:pointer-events-none tw:disabled:opacity-50 tw:[&_svg]:pointer-events-none tw:[&_svg:not([class*=size-])]:size-4 tw:shrink-0 tw:[&_svg]:shrink-0',
+    'tw:focus-visible:ring-4 tw:focus-visible:ring-offset-4 tw:focus-visible:ring-ring tw:focus-visible:outline-none', // focus-visible
+    'tw:w-full tw:xs:w-auto tw:px-4 tw:py-2', // small & greater
   ),
   {
     variants: {
       variant: {
         primary: cn(
-          'tw:h-[40px] tw:bg-blue-primary tw:text-white tw:shadow-xs tw:font-bold', // standard
+          'tw:h-10 tw:bg-blue-primary tw:text-white tw:shadow-xs tw:font-bold', // standard
           'tw:hover:bg-blue-dark', // hover
           'tw:active:bg-blue-darker', // active
           'tw:invalid:bg-grey-light', // invalid
         ),
         destructive: cn(
-          'tw:h-[40px] tw:bg-red-primary tw:text-white tw:shadow-xs tw:font-bold', // standard
+          'tw:h-10 tw:bg-red-primary tw:text-white tw:shadow-xs tw:font-bold', // standard
           'tw:hover:bg-red-dark', // hover
           'tw:active:bg-red-darker', // active
           'tw:invalid:bg-grey-light', // invalid
         ),
         secondary: cn(
           primaryColors,
-          'tw:h-[40px] tw:shadow-none tw:bg-background tw:border-blue-primary tw:border-[2px] tw:border-solid tw:font-bold', // standard
+          'tw:h-10 tw:shadow-none tw:bg-background tw:border-blue-primary tw:border-[0.125rem] tw:border-solid tw:font-bold', // standard
           'tw:hover:border-blue-dark', // hover
           'tw:active:border-blue-darker', // active
           'tw:invalid:border-grey-light', // invalid
         ),
         destructiveTertiary: cn(
-          'tw:px-0 tw:py-0 tw:bg-transparent tw:text-red-primary tw:fill-red-primary tw:font-[400] tw:underline', // standard,
+          'tw:px-0 tw:py-0 tw:bg-transparent tw:text-red-primary tw:fill-red-primary tw:font-normal tw:underline', // standard,
           'tw:hover:text-red-dark', // hover
           'tw:focus-visible:bg-white', // focus-visible
           'tw:active:text-red-darker', // active
@@ -59,10 +59,10 @@ const buttonVariants = cva(
         terminatorButton: cn(
           tertiaryBaseStyles,
           primaryColors,
-          'tw:xs:text-[16px] tw:text-[14px]',
-          'tw:[&_span]:mr-[8px]',
+          'tw:xs:text-base tw:text-sm',
+          'tw:[&_span]:mr-2',
           'tw:[&_div]:flex tw:[&_div]:items-center',
-          'tw:[&_svg]:!h-[14px] tw:[&_svg]:!w-[14px] tw:xs:[&_svg]:!h-[16px] tw:xs:[&_svg]:!w-[16px]',
+          'tw:[&_svg]:h-3.5! tw:[&_svg]:w-3.5! tw:xs:[&_svg]:h-4! tw:xs:[&_svg]:w-4!',
         ),
       },
     },
@@ -90,7 +90,7 @@ export function Button({
 
   const Icon = icon ? (
     <FontAwesomeIcon
-      className={`${iconPosition === 'left' ? 'tw:mr-[8px]' : 'tw:flex-row-reverse tw:ml-[8px]'} tw:xs:!w-[18px] tw:!w-[16px] tw:xs:!h-[18px] tw:!h-[16px]`}
+      className={`${iconPosition === 'left' ? 'tw:mr-2' : 'tw:flex-row-reverse tw:ml-2'} tw:xs:w-4.5! tw:w-4! tw:xs:h-4.5! tw:h-4!`}
       icon={icon}
       role="img"
       aria-label={'icon'}

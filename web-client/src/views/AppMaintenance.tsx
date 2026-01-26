@@ -15,7 +15,7 @@ const updateTime = `${DateTime.now().toJSDate().toLocaleString('en-US', {
   year: 'numeric',
 })} EST`;
 
-export const AppMaintenance = connect(function AppMaintenance() {
+export const AppMaintenance = connect({}, function AppMaintenance() {
   return (
     <>
       <section

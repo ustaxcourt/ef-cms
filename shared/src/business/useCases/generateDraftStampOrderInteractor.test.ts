@@ -85,6 +85,7 @@ describe('generateDraftStampOrderInteractor', () => {
       docketNumber,
       stampData,
       stampedDocketEntryId,
+      filingDateUpdated: false,
     });
   });
 });

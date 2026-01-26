@@ -366,11 +366,7 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
         .optional()
         .description('Currently only required for the IRS'),
     })
-    .when('servedAt', {
-      is: joi.exist().not(null),
-      otherwise: joi.optional(),
-      then: joi.required(),
-    })
+    .optional()
     .description('The parties to whom the document has been served.'),
   servedPartiesCode: JoiValidationConstants.STRING.valid(
     ...Object.values(PARTIES_CODES),
