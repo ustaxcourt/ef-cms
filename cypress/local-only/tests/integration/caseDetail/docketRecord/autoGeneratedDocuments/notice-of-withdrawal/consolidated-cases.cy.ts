@@ -80,8 +80,14 @@ describe('Notice of Withdrawal - Consolidated Cases', () => {
 
       // Add respondents for IRS practitioner test
       loginAsDocketClerk1();
-      petitionsClerkAddsRespondentToCase(docketNumber, irsPractitionerBarNumber);
-      petitionsClerkAddsRespondentToCase(docketNumber, irsPractitioner2BarNumber);
+      petitionsClerkAddsRespondentToCase(
+        docketNumber,
+        irsPractitionerBarNumber,
+      );
+      petitionsClerkAddsRespondentToCase(
+        docketNumber,
+        irsPractitioner2BarNumber,
+      );
 
       // Test IRS practitioner alert
       loginAsIrsPractitioner1();

@@ -65,25 +65,28 @@ describe('Notice of Withdrawal - Validation Messages', () => {
       enterNoticeOfWithdrawalFormType(docketNumber);
       cy.get('[data-testid="error-alert"]').should('be.visible');
       cy.get('[data-testid="error-alert"]').contains(
-        'You are the only counsel representing a party on this case.',
+        'You are the only counsel representing your party on this case.',
       );
       cy.get('[data-testid="error-alert"]').contains(
-        'The case is scheduled for trial in less than 30 days.',
+        'This case is scheduled for trial in less than 30 days.',
       );
     });
   });
 
   it('should show validation messages for irs practitioners when selecting form type', () => {
     cy.get<string>('@docketNumber').then(docketNumber => {
-      petitionsClerkAddsRespondentToCase(docketNumber, irsPractitionerBarNumber);
+      petitionsClerkAddsRespondentToCase(
+        docketNumber,
+        irsPractitionerBarNumber,
+      );
       loginAsIrsPractitioner1();
       enterNoticeOfWithdrawalFormType(docketNumber);
       cy.get('[data-testid="error-alert"]').should('be.visible');
       cy.get('[data-testid="error-alert"]').contains(
-        'You are the only counsel representing a party on this case.',
+        'You are the only counsel representing your party on this case.',
       );
       cy.get('[data-testid="error-alert"]').contains(
-        'The case is scheduled for trial in less than 30 days.',
+        'This case is scheduled for trial in less than 30 days.',
       );
     });
   });
@@ -103,17 +106,25 @@ describe('Notice of Withdrawal - Validation Messages', () => {
       enterNoticeOfWithdrawalFormType(docketNumber);
       cy.get('[data-testid="file-document-submit-document"]').click();
       cy.get('[data-testid="error-alert"]').should('be.visible');
-      cy.get('[data-testid="error-alert"]').contains('Select a filing party');
       cy.get('[data-testid="error-alert"]').contains(
-        'All parties have not consented to your withdrawal as counsel.',
+        'Select a party from whom are you removing yourself as counsel of record',
+      );
+      cy.get('[data-testid="error-alert"]').contains(
+        'All parties have not consented to your withdrawal as counsel',
       );
     });
   });
 
   it('should show validation messages for irs practitioner when trying to review filing', () => {
     cy.get<string>('@docketNumber').then(docketNumber => {
-      petitionsClerkAddsRespondentToCase(docketNumber, irsPractitionerBarNumber);
-      petitionsClerkAddsRespondentToCase(docketNumber, irsPractitioner2BarNumber);
+      petitionsClerkAddsRespondentToCase(
+        docketNumber,
+        irsPractitionerBarNumber,
+      );
+      petitionsClerkAddsRespondentToCase(
+        docketNumber,
+        irsPractitioner2BarNumber,
+      );
 
       cy.get<string>('@trialSessionId').then(trialSessionId => {
         updateTrialSessionStartDate(trialSessionId, validFutureDate);
@@ -123,9 +134,11 @@ describe('Notice of Withdrawal - Validation Messages', () => {
       enterNoticeOfWithdrawalFormType(docketNumber);
       cy.get('[data-testid="file-document-submit-document"]').click();
       cy.get('[data-testid="error-alert"]').should('be.visible');
-      cy.get('[data-testid="error-alert"]').contains('Select a filing party');
       cy.get('[data-testid="error-alert"]').contains(
-        'All parties have not consented to your withdrawal as counsel.',
+        'Select a party from whom are you removing yourself as counsel of record',
+      );
+      cy.get('[data-testid="error-alert"]').contains(
+        'All parties have not consented to your withdrawal as counsel',
       );
     });
   });

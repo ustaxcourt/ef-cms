@@ -79,9 +79,7 @@ describe('Notice of Withdrawal - Contact Information', () => {
       cy.get('[data-testid="contact.city"]').clear();
       cy.get('[data-testid="contact.city"]').type('new city');
       cy.get('[data-testid="modal-button-confirm"]').click();
-      cy.get('[data-testid^="edit-contact-"]')
-        .first()
-        .contains('new address1');
+      cy.get('[data-testid^="edit-contact-"]').first().contains('new address1');
       cy.get('[data-testid^="edit-contact-"]').first().contains('new city');
 
       cy.intercept(
