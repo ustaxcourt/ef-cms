@@ -30,6 +30,7 @@ import { CreatePetitionerAccount } from '@web-client/views/CreatePetitionerAccou
 import { CreatePractitionerUser } from './Practitioners/CreatePractitionerUser';
 import { CustomCaseReport } from './CustomCaseReport/CustomCaseReport';
 import { DashboardChambers } from './Dashboards/DashboardChambers';
+import { DashboardClerkOfCourt } from './Dashboards/DashboardClerkOfCourt';
 import { DashboardExternalUser } from './Dashboards/DashboardExternalUser';
 import { DashboardInactive } from './Dashboards/DashboardInactive';
 import { DashboardIrsSuperuser } from './Dashboards/DashboardIrsSuperuser';
@@ -144,6 +145,7 @@ const pages = {
   CreatePractitionerUser,
   CustomCaseReport,
   DashboardChambers,
+  DashboardClerkOfCourt,
   DashboardExternalUser,
   DashboardInactive,
   DashboardIrsSuperuser,
