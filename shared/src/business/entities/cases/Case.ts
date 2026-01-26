@@ -99,11 +99,11 @@ export class Case extends JoiValidationEntity {
   public orderForRatification?: boolean;
   public orderToShowCause?: boolean;
   public petitioners: TPetitioner[];
-  public caseCaption: string='';
+  public caseCaption: string = '';
   public caseType: CaseType;
   public closedDate?: string;
   public createdAt?: string;
-  public docketNumber: string='';
+  public docketNumber: string = '';
   public docketNumberSuffix?: string | null;
   public filingType?: string;
   public hasVerifiedIrsNotice?: boolean;
@@ -136,10 +136,10 @@ export class Case extends JoiValidationEntity {
   public canAllowPrintableDocketRecord?: boolean;
   public canDojPractitionersRepresentParty?: boolean;
   public archivedDocketEntries?: RawDocketEntry[];
-  public docketEntries: DocketEntry[]= [];
+  public docketEntries: DocketEntry[] = [];
   public isSealed?: boolean;
-  public hearings: any[]= [];
-  public privatePractitioners?: any[]= [];
+  public hearings: any[] = [];
+  public privatePractitioners?: any[] = [];
   public initialCaption?: string;
   public irsPractitioners?: any[];
   public statistics?: RawStatistic[];
@@ -504,10 +504,9 @@ export class Case extends JoiValidationEntity {
     docketNumberSuffix: JoiValidationConstants.STRING.allow(null)
       .valid(...Object.values(DOCKET_NUMBER_SUFFIXES))
       .optional(),
-    docketNumberWithSuffix:
-      JoiValidationConstants.STRING.optional().description(
-        'Auto-generated from docket number and the suffix.',
-      ).min(0),
+    docketNumberWithSuffix: JoiValidationConstants.STRING.optional()
+      .description('Auto-generated from docket number and the suffix.')
+      .min(0),
     entityName: JoiValidationConstants.STRING.valid('Case').required(),
     filingType: JoiValidationConstants.STRING.valid(
       ...FILING_TYPES[ROLES.petitioner],
@@ -1947,8 +1946,8 @@ export class Case extends JoiValidationEntity {
   setRemoteTrialGrantedDate(remoteTrialGrantedDate?: string | null): Case {
     const hasDate = Boolean(
       remoteTrialGrantedDate &&
-        typeof remoteTrialGrantedDate === 'string' &&
-        remoteTrialGrantedDate.trim() !== '',
+      typeof remoteTrialGrantedDate === 'string' &&
+      remoteTrialGrantedDate.trim() !== '',
     );
     this.remoteTrialGranted = hasDate;
     this.remoteTrialGrantedDate = hasDate ? remoteTrialGrantedDate : null;

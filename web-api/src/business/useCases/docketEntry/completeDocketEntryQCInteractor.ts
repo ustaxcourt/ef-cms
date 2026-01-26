@@ -37,13 +37,19 @@ import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { WorkItem } from '@shared/business/entities/WorkItem';
+import { CaseDTO } from '@shared/business/dto/docketEntries/CaseDTO';
 import { countPagesInDocument } from '@web-api/business/useCaseHelper/countPagesInDocument';
 
 const completeDocketEntryQC = async (
   applicationContext: ServerApplicationContext,
   { entryMetadata }: { entryMetadata: any },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<{
+  caseDetail: CaseDTO;
+  paperServiceParties: any[];
+  paperServicePdfUrl: string;
+  paperServiceDocumentTitle: string;
+}> => {
   const { PDFDocument } = await applicationContext.getPdfLib();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY)) {
@@ -368,7 +374,7 @@ const completeDocketEntryQC = async (
   }
 
   return {
-    caseDetail: caseEntity.toRawObject(),
+    caseDetail: new CaseDTO(caseEntity.toRawObject()),
     paperServiceDocumentTitle,
     paperServiceParties: servedParties.paper,
     paperServicePdfUrl,

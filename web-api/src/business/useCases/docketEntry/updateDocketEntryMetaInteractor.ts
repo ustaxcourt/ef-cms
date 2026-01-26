@@ -20,6 +20,7 @@ import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import diff from 'diff-arrays-of-objects';
 import { upsertDocketEntryRelatedEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntryRelatedEntries';
 import { concat } from 'lodash';
+import { CaseDTO } from '@shared/business/dto/docketEntries/CaseDTO';
 
 export const updateDocketEntryMeta = async (
   applicationContext: ServerApplicationContext,
@@ -193,7 +194,9 @@ export const updateDocketEntryMeta = async (
     caseToUpdate: caseEntity,
   });
 
-  return new Case(result, { authorizedUser }).validate().toRawObject();
+  return new CaseDTO(
+    new Case(result, { authorizedUser }).validate().toRawObject(),
+  );
 };
 
 export const shouldGenerateCoversheetForDocketEntry = ({
