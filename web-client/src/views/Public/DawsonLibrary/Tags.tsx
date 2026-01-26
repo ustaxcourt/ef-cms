@@ -10,19 +10,19 @@ export function Tags() {
         <Tag
           variant="primary"
           aria-label="associated judge"
-          className="tw:mr-[10px]"
+          className="tw:mr-2.5"
           iconProps={{ icon: 'gavel' }}
         >
           Tag
         </Tag>
 
-        <Tag variant="primary" className="tw:mr-[10px]">
+        <Tag variant="primary" className="tw:mr-2.5">
           TAG
         </Tag>
 
         <Tag
           variant="destructive"
-          className="tw:mr-[10px]"
+          className="tw:mr-2.5"
           iconProps={{ icon: 'hand-paper' }}
           data-testid="blocked-case-icon"
         >
