@@ -28,6 +28,7 @@ import {
   formattedNewEmailForChangeOfAddress,
   formattedOldEmailForChangeOfAddress,
 } from '@shared/business/utilities/calculateEmail';
+import { CaseFactory } from '../entities/cases/CaseFactory';
 
 /**
  * updateContact
@@ -240,7 +241,12 @@ export const updateContact = async (
     });
   }
 
-  return caseEntity.toRawObject();
+  const filteredCase = CaseFactory.getCase({
+    rawCase: caseEntity,
+    user: authorizedUser,
+  });
+
+  return filteredCase.toRawObject();
 };
 
 export const updateContactInteractor = withLocking(

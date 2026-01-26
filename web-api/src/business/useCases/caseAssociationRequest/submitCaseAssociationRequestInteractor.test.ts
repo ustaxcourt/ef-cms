@@ -27,6 +27,18 @@ describe('submitCaseAssociationRequest', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockImplementation(() => MOCK_CASE);
+
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(false);
+
+    applicationContext
+      .getUseCaseHelpers()
+      .associatePrivatePractitionerToCase.mockResolvedValue(MOCK_CASE);
+
+    applicationContext
+      .getUseCaseHelpers()
+      .associateIrsPractitionerToCase.mockResolvedValue(MOCK_CASE);
   });
 
   it('should throw an error when not authorized', async () => {
@@ -78,9 +90,22 @@ describe('submitCaseAssociationRequest', () => {
   });
 
   it('should add mapping for a practitioner', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .verifyCaseForUser.mockReturnValue(false);
+    mockGetUserById = {
+      barNumber: 'BN1234',
+      contact: {
+        address1: '234 Main St',
+        address2: 'Apartment 4',
+        address3: 'Under the stairs',
+        city: 'Chicago',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        phone: '+1 (555) 555-5555',
+        postalCode: '61234',
+        state: 'IL',
+      },
+      name: mockPrivatePractitionerUser.name,
+      role: ROLES.privatePractitioner,
+      userId: mockPrivatePractitionerUser.userId,
+    };
 
     await submitCaseAssociationRequestInteractor(
       applicationContext,
@@ -113,9 +138,6 @@ describe('submitCaseAssociationRequest', () => {
       role: ROLES.irsPractitioner,
       userId: mockIrsPractitionerUser,
     };
-    applicationContext
-      .getPersistenceGateway()
-      .verifyCaseForUser.mockReturnValue(false);
 
     await submitCaseAssociationRequestInteractor(
       applicationContext,
