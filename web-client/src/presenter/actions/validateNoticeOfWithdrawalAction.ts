@@ -19,14 +19,14 @@ export const validateNoticeOfWithdrawalAction = ({ get, path }) => {
       const partiesToWithdrawFrom = getPartiesToWithrawFrom(caseDetail, user);
       if (partiesToWithdrawFrom.length === 0) {
         errors.push(
-          'You are the only counsel representing a party on this case.',
+          'You are the only counsel representing your party on this case.',
         );
       }
     } else if (user.role === ROLES.irsPractitioner) {
       const irsPractitionerCount = caseDetail.irsPractitioners?.length || 0;
       if (irsPractitionerCount <= 1) {
         errors.push(
-          'You are the only counsel representing a party on this case.',
+          'You are the only counsel representing your party on this case.',
         );
       }
     }
@@ -35,7 +35,7 @@ export const validateNoticeOfWithdrawalAction = ({ get, path }) => {
       calculateDifferenceInDays(caseDetail.trialDate, createISODateString()) <
         30
     ) {
-      errors.push('The case is scheduled for trial in less than 30 days.');
+      errors.push('This case is scheduled for trial in less than 30 days.');
     }
   }
 

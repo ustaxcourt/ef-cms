@@ -13,6 +13,7 @@ import { showProgressSequenceDecorator } from '@web-client/presenter/utilities/s
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validateExternalDocumentInformationAction } from '../actions/FileDocument/validateExternalDocumentInformationAction';
+import { setCustomValidationAlertErrorsFileDocumentAction } from '../actions/setCustomValidationAlertErrorsFileDocumentAction';
 
 export const reviewExternalDocumentInformationSequence =
   showProgressSequenceDecorator([
@@ -25,6 +26,7 @@ export const reviewExternalDocumentInformationSequence =
         setValidationErrorsAction,
         setScrollToErrorNotificationAction,
         setValidationAlertErrorsAction,
+        setCustomValidationAlertErrorsFileDocumentAction,
       ],
       success: [
         autoGenerateFilingPdfAction,
