@@ -13,6 +13,12 @@ fi
 echo "Starting postgres"
 $DOCKER_COMPOSE -f "$(pwd)/web-api/src/persistence/postgres/docker-compose.yml" up -d
 
+echo "Waiting for Postgres..."
+until docker exec dawson-db pg_isready -U postgres; do
+  echo "Postgres is unavailable - sleeping"
+  sleep 2
+done
+
 echo "Starting opensearch"
 $DOCKER_COMPOSE -f "$(pwd)/web-api/elasticsearch/docker-compose.yml" up -d
 
@@ -37,15 +43,15 @@ mkdir -p ./web-api/storage/s3
 rm -rf ./web-api/storage/s3/*
 
 echo "Starting background services (S3 and Cognito)"
-# Using nohup and direct paths to ensure services stay alive and binding to IPv4
-# Redirecting to /dev/null if you don't want logs, but we keep them for troubleshooting
-nohup ./node_modules/.bin/s3rver -d web-api/storage/s3 -a 0.0.0.0 -p 9001 --configure-bucket noop-documents-local-us-east-1 web-api/cors-policy.xml --configure-bucket noop-temp-documents-local-us-east-1 web-api/cors-policy.xml > s3rver.log 2>&1 &
-HOST=0.0.0.0 PORT=9229 CODE="385030" nohup ./node_modules/.bin/cognito-local > cognito.log 2>&1 &
+# Using nohup and redirection to ensure services stay alive after the script exits
+# We use /dev/null for stdin to fully detach
+nohup ./node_modules/.bin/s3rver -d web-api/storage/s3 -a 0.0.0.0 -p 9001 --configure-bucket noop-documents-local-us-east-1 web-api/cors-policy.xml --configure-bucket noop-temp-documents-local-us-east-1 web-api/cors-policy.xml > s3rver.log 2>&1 < /dev/null &
+nohup env HOST=0.0.0.0 PORT=9229 CODE="385030" ./node_modules/.bin/cognito-local > cognito.log 2>&1 < /dev/null &
 
 echo "Waiting for background services..."
 # S3rver takes a moment to initialize the buckets
-URL=http://127.0.0.1:9001/noop-documents-local-us-east-1 ./wait-until.sh
-URL=http://127.0.0.1:9229/ CHECK_CODE="404" ./wait-until.sh
+URL=http://localhost:9001/noop-documents-local-us-east-1 ./wait-until.sh
+URL=http://localhost:9229/ CHECK_CODE="404" ./wait-until.sh
 
 # Extra safety buffer to ensure background processes are fully initialized
 sleep 3
@@ -65,7 +71,12 @@ done
 
 echo "Seeding cognito-local users"
 for _ in {1..3}; do
-  if HOST=127.0.0.1 PORT=9229 npx ts-node .cognito/seedCognitoLocal.ts --transpile-only; then break; else echo "Cognito seeding failed, retrying in 2s..." && sleep 2; fi
+  if HOST=localhost PORT=9229 npx ts-node .cognito/seedCognitoLocal.ts --transpile-only; then break; else echo "Cognito seeding failed, retrying in 2s..." && sleep 2; fi
 done
 
-echo "Environment prepared and background services started!"
+# Kill the background services after seeding so that the API can start them itself and they stay in its process group
+echo "Seeding completed, stopping temporary background services..."
+pkill -f s3rver || true
+pkill -f cognito-local || true
+
+echo "Environment prepared!"

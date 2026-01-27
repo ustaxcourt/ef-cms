@@ -67,5 +67,6 @@ To debug the UI in your IDE:
 
 - **Docker Errors:** Ensure Docker Desktop is running. The **API** configuration will automatically attempt to start the necessary containers.
 - **Clean Slate:** If you need to reset your local data completely, stop all running processes, run `docker compose down` in your terminal, and then click **Debug** on the **API** configuration again to re-initialize everything.
+- **Cognito Connection Errors (Port 9229):** If you see `ECONNREFUSED` on port 9229, ensure no other process is using that port. The **API** configuration is now set up to automatically launch `cognito-local` and `s3rver` in the background when it starts. These services will stay alive as long as the API process is running.
 - **NoSuchKey Warnings:** During the `Prepare Local Environment` task, you may see some `NoSuchKey` errors in the logs during the Postgres seeding step. These are expected and relate to missing documents in the development data fixtures; they do not indicate a failure of the setup itself.
 - **Port Conflicts:** Ensure no other processes are using ports 4000 (API), 9200 (OpenSearch), 9001 (S3), or 5432 (Postgres).
