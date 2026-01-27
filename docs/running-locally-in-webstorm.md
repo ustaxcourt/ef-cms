@@ -1,72 +1,67 @@
 # Running Locally with IntelliJ IDEA / WebStorm
 
-This guide describes how to use the integrated run configurations to run and debug the DAWSON application within JetBrains IDEs (IntelliJ IDEA, WebStorm, etc.).
+This guide describes how to use integrated run configurations to run and debug the DAWSON application within JetBrains IDEs (IntelliJ IDEA, WebStorm, etc.).
 
-These configurations are stored in the `.run` directory and are automatically picked up by your IDE.
+These configurations are stored in the `.run` directory and are automatically picked up by JetBrains IDEs.
 
 ## Prerequisites
 
 Before using these run configurations, ensure you have:
 
 1.  Followed the general [Install Required Software](./running-locally.md#install-required-software) guide (Node.js, NVM, Docker Desktop, etc.).
-2.  Installed dependencies by running `npm ci` in your terminal.
-3.  Docker Desktop is running.
+1.  Installed dependencies by running `npm ci` in your terminal.
+1.  Docker running.
 
-## 🏃 Starting Infrastructure
+## 🚀 Running and Debugging the Application
 
-The application requires several Docker dependencies (like OpenSearch and S3rver) to be running.
+Each run configuration is a "single click" experience.
 
-### 1. Launch Docker and Wait
-Instead of starting everything manually, use the **Launch Docker and Wait** compound configuration.
-
-- **What it does:**
-    1.  Starts the `opensearch-node` service using `docker-compose`.
-    2.  Runs `wait-until-services.sh` to ensure all necessary endpoints (API and OpenSearch) are online.
+### 1. DAWSON local (Combined)
+- **What it does:** This is a Compound configuration that launches the `API`, `Client`, and `Public` configurations simultaneously.
 - **How to run:**
-    1.  Open the **Run/Debug Configurations** dropdown in the top-right toolbar.
-    2.  Select **Launch Docker and Wait**.
-    3.  Click the **Run** button (green arrow).
+  - **Run mode:** Select `DAWSON local` and click the **Run** button. This will start the API, Client, and Public servers.
+  - **Debug mode:** Select `DAWSON local` and click the **Debug** button. This will:
+    1. **Debug the API** (Backend).
+    2. **Run the Private Client** server.
+    3. **Run the Public Client** server.
+    4. **Debug the Private Client UI** (via Chrome).
+    5. **Debug the Public Client UI** (via Chrome).
+- **Note:** The IDE will open multiple tabs in the Run and Debug windows as necessary.
 
-## 🚀 Running the Application
-
-Once the infrastructure is ready, you can start the individual application components.
-
-### 2. API
-- **Configuration:** **API**
-- **What it does:** Starts the backend API using `ts-node` targeting `web-api/src/app-local.ts`. It also automatically triggers **start:s3rver** as a "Before Launch" task.
-- **How to run:** Select **API** from the run configurations and click **Run** (or **Debug** for step-through debugging).
+### 2. API (Backend)
+- **What it does:** 
+  1. **Preparation**: Runs `prepare-local-dev.sh` which starts Docker containers (OpenSearch, Postgres), waits for them, runs migrations, and seeds initial data.
+  2. **Background Services**: Launches `s3rver` and `cognito-local` in the background.
+  3. **App Launch**: Starts the backend API using `nodemon` for live reload.
+- **How to run:** Select `API` and click the **Debug** button (green bug).
+- **Live Reload:** Any changes you make in `web-api/` or `shared/` will trigger an automatic restart, and the debugger will re-attach.
 
 ### 3. Client (Private UI)
-- **Configuration:** **Client**
-- **What it does:** Runs `npm run start:client`.
+- **What it does:** Runs the (private) frontend server with live reload.
 - **How to run:** Select **Client** and click **Run**.
 - **Access:** [http://localhost:1234](http://localhost:1234)
 
 ### 4. Public (Public UI)
-- **Configuration:** **Public**
-- **What it does:** Runs `npm run start:public`.
+- **What it does:** Runs the (public) frontend server with live reload.
 - **How to run:** Select **Public** and click **Run**.
 - **Access:** [http://localhost:5678](http://localhost:5678)
 
 ---
 
-## 🐞 Debugging the UI
+## 🐞 Debugging only the backend or frontend
 
-We have provided specific configurations for debugging the frontend in Chrome. These allow you to set breakpoints directly in your IDE.
+### Backend Debugging
+Simply run the **API** configuration in **Debug** mode. You can set breakpoints in `web-api/src` or `shared/src`, and they will be hit during API requests.
 
-### Debug Client (Chrome)
-1.  Ensure the **Client** configuration is already running.
-2.  Select **Debug Client (Chrome)** from the run configurations.
-3.  Click the **Debug** button (green bug icon).
-4.  A new Chrome instance will open, and breakpoints in your IDE will now be hit.
-
-### Debug Public (Chrome)
-1.  Ensure the **Public** configuration is already running.
-2.  Select **Debug Public (Chrome)** from the run configurations.
-3.  Click the **Debug** button.
+### Frontend Debugging (Chrome)
+To debug the UI in your IDE:
+1. Ensure the **Client** (or **Public**) configuration is already running.
+2. Select **Debug Client (Chrome)** (or **Debug Public (Chrome)**).
+3. Click the **Debug** button.
+4. A new Chrome instance will open, and breakpoints set in your IDE will be hit as you interact with the app.
 
 ## 🛠 Troubleshooting
 
-- **Docker Errors:** If **Launch Docker and Wait** fails, ensure Docker Desktop is running and that no other processes are using ports 9200 (OpenSearch) or 9001 (S3rver).
-- **Environment Variables:** These configurations come pre-loaded with the necessary local environment variables (e.g., `AWS_ACCESS_KEY_ID=S3RVER`). If you need to customize them, you can edit the configuration in your IDE, but avoid committing sensitive changes to the `.run/*.xml` files.
-- **Fresh Start:** If things get stuck, you can run `docker compose down` in your terminal and then try **Launch Docker and Wait** again.
+- **Docker Errors:** Ensure Docker Desktop is running. The **API** configuration will automatically attempt to start the necessary containers.
+- **Clean Slate:** If you need to reset your local data completely, stop all running processes, run `docker compose down` in your terminal, and then click **Debug** on the **API** configuration again to re-initialize everything.
+- **Port Conflicts:** Ensure no other processes are using ports 4000 (API), 9200 (OpenSearch), 9001 (S3), or 5432 (Postgres).
