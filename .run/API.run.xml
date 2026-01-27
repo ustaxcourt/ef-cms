@@ -1,6 +1,7 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="API" type="NodeJSConfigurationType" path-to-js-file="web-api/src/app-local.ts" working-dir="$PROJECT_DIR$">
+  <configuration default="false" name="API" type="NodeJSConfigurationType" node-parameters="node_modules/nodemon/bin/nodemon.js -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress/ --exec &quot;node -r ts-node/register -r tsconfig-paths/register&quot;" path-to-js-file="web-api/src/app-local.ts" working-dir="$PROJECT_DIR$">
     <envs>
+      <env name="TS_NODE_TRANSPILE_ONLY" value="true" />
       <env name="AWS_ACCESS_KEY_ID" value="S3RVER" />
       <env name="AWS_SECRET_ACCESS_KEY" value="S3RVER" />
       <env name="AWS_REGION" value="us-east-1" />
@@ -13,11 +14,13 @@
       <env name="DISABLE_EMAILS" value="true" />
       <env name="ENV" value="local" />
       <env name="USTC_ENV" value="dev" />
+      <env name="POSTGRES_HOST" value="localhost" />
+      <env name="POSTGRES_USER" value="postgres" />
+      <env name="POSTGRES_PASSWORD" value="example" />
+      <env name="DATABASE_NAME" value="postgres" />
     </envs>
-    <node-interpreter value="project" />
-    <typescript-loader value="ts-node" />
     <method v="2">
-      <option name="RunConfigurationTask" enabled="true" run_configuration_name="start:s3rver" run_configuration_type="js.build_tools.npm" />
+      <option name="RunConfigurationTask" enabled="true" run_configuration_name="Prepare Local Environment" run_configuration_type="ShConfigurationType" />
     </method>
   </configuration>
 </component>
