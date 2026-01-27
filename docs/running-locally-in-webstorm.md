@@ -30,9 +30,12 @@ Each run configuration is a "single click" experience.
 
 ### 2. API (Backend)
 - **What it does:** 
-  1. **Preparation**: Runs `prepare-local-dev.sh` which starts Docker containers (OpenSearch, Postgres), waits for them, runs migrations, and seeds initial data.
-  2. **Background Services**: Launches `s3rver` and `cognito-local` in the background.
-  3. **App Launch**: Starts the backend API using `nodemon` for live reload.
+  1. **Preparation**: Runs `prepare-local-dev.sh` which:
+     - Starts Docker containers (OpenSearch, Postgres).
+     - Launches `s3rver` and `cognito-local` in the background.
+     - Waits for all services to be ready.
+     - Runs migrations and seeds data (Postgres, S3, OpenSearch, Cognito).
+  2. **App Launch**: Starts the backend API using `nodemon` for live reload.
 - **How to run:** Select `API` and click the **Debug** button (green bug).
 - **Live Reload:** Any changes you make in `web-api/` or `shared/` will trigger an automatic restart, and the debugger will re-attach.
 
@@ -64,4 +67,5 @@ To debug the UI in your IDE:
 
 - **Docker Errors:** Ensure Docker Desktop is running. The **API** configuration will automatically attempt to start the necessary containers.
 - **Clean Slate:** If you need to reset your local data completely, stop all running processes, run `docker compose down` in your terminal, and then click **Debug** on the **API** configuration again to re-initialize everything.
+- **NoSuchKey Warnings:** During the `Prepare Local Environment` task, you may see some `NoSuchKey` errors in the logs during the Postgres seeding step. These are expected and relate to missing documents in the development data fixtures; they do not indicate a failure of the setup itself.
 - **Port Conflicts:** Ensure no other processes are using ports 4000 (API), 9200 (OpenSearch), 9001 (S3), or 5432 (Postgres).
