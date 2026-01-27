@@ -10,7 +10,7 @@ const inlineStylesFontSizes = {};
 const fontSizes = ['10px', '12px', '14px', '16px', '18px', '20px'];
 
 const ReactQuill = React.lazy(async () => {
-  const Size = (await Quill.import('formats/size')) as any;
+  const Size = await Quill.import('attributors/style/size');
   Size.whitelist = fontSizes;
   Quill.register(Size, true);
   fontSizes.forEach(item => {
@@ -51,14 +51,14 @@ export const TextEditor = ({
   updateFormValueSequence,
   updateScreenMetadataSequence,
 }) => {
-  const quillEscapeRef = useRef<HTMLButtonElement>(null);
+  const quillEscapeRef = useRef(null);
   const defaultValueWithIndentation = addQuillIndentationClasses(defaultValue);
 
   const onKeyboard = event => {
     const pressedESC = event.keyCode === 27;
     const inEditor = event.target.classList.contains('ql-editor');
     if (pressedESC && inEditor) {
-      quillEscapeRef.current?.focus();
+      quillEscapeRef.current.focus();
     }
   };
 
