@@ -80,6 +80,11 @@ export const getResponse = ({
   asyncSyncId,
   endpoint,
   params,
+}: {
+  applicationContext: ClientApplicationContext;
+  endpoint: string;
+  asyncSyncId?: string;
+  params?: Record<string, any>;
 }) => {
   return applicationContext
     .getHttpClient()
