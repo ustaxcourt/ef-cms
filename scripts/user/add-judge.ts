@@ -1,6 +1,9 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
-import { ACCOUNT_STATUS, JudgeTitle } from '@shared/business/entities/EntityConstants';
+import {
+  ACCOUNT_STATUS,
+  JudgeTitle,
+} from '@shared/business/entities/EntityConstants';
 import { RawUser, User } from '@shared/business/entities/User';
 import {
   type ScriptConfig,
@@ -15,9 +18,9 @@ import {
   getChambersNameFromJudgeName,
   judgeTitleIsInExpectedFormat,
   phoneIsInExpectedFormat,
-  promptUser,
 } from 'scripts/user/add-or-update-judge-helpers';
 import { getNewPasswordForEnvironment } from './make-new-password';
+import { ask } from '../helpers/prompts';
 
 /**
  * This script will add a judge user to a deployed environment.
@@ -92,7 +95,7 @@ const scriptConfig: ScriptConfig = {
 
   // Check for mistaken emails
   if (!emailIsInExpectedFormat({ email, judgeName: name })) {
-    const userInput = await promptUser(
+    const userInput = await ask(
       `Warning: The email you entered does not match expected formats: ${expectedEmailFormats(name).join(', ')}. Continue anyway? y/n `,
     );
     if (userInput.toLowerCase() !== 'y') {
@@ -102,7 +105,7 @@ const scriptConfig: ScriptConfig = {
 
   // Check for mistaken phone numbers
   if (phone && !phoneIsInExpectedFormat(phone)) {
-    const userInput = await promptUser(
+    const userInput = await ask(
       'Warning: The phone number you entered does not match the expected format: (XXX) XXX-XXXX. Continue anyway? y/n ',
     );
     if (userInput.toLowerCase() !== 'y') {
@@ -112,7 +115,7 @@ const scriptConfig: ScriptConfig = {
 
   // Check for mistaken judgeTitle
   if (!judgeTitleIsInExpectedFormat(judgeTitle)) {
-    const userInput = await promptUser(
+    const userInput = await ask(
       `Warning: The judgeTitle you entered does not match expected values: ${expectedJudgeTitles.join(', ')}. Continue anyway? y/n `,
     );
     if (userInput.toLowerCase() !== 'y') {
@@ -135,7 +138,7 @@ const scriptConfig: ScriptConfig = {
     role,
     section,
     userId: applicationContext.getUniqueId(), // Silly as this will be overwritten, but we need one for validation
-    accountStatus: ACCOUNT_STATUS.active
+    accountStatus: ACCOUNT_STATUS.active,
   };
   const rawUser = new User(userInfo).validate().toRawObject();
 
