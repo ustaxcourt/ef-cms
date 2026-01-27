@@ -8,7 +8,7 @@ export const confirmSignUpLambda = (event: APIGatewayProxyEvent) =>
       return await applicationContext
         .getUseCases()
         .confirmSignUpInteractor(applicationContext, {
-          ...JSON.parse(event.body),
+          ...JSON.parse(event.body!),
         });
     },
     { logResults: true },
