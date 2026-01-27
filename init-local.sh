@@ -45,8 +45,8 @@ rm -rf ./web-api/storage/s3/*
 echo "Starting background services (S3 and Cognito)"
 # Using nohup and redirection to ensure services stay alive after the script exits
 # We use /dev/null for stdin to fully detach
-nohup ./node_modules/.bin/s3rver -d web-api/storage/s3 -a 0.0.0.0 -p 9001 --configure-bucket noop-documents-local-us-east-1 web-api/cors-policy.xml --configure-bucket noop-temp-documents-local-us-east-1 web-api/cors-policy.xml > s3rver.log 2>&1 < /dev/null &
-nohup env HOST=0.0.0.0 PORT=9229 CODE="385030" ./node_modules/.bin/cognito-local > cognito.log 2>&1 < /dev/null &
+nohup ./node_modules/.bin/s3rver -d web-api/storage/s3 -a 0.0.0.0 -p 9001 --configure-bucket noop-documents-local-us-east-1 web-api/cors-policy.xml --configure-bucket noop-temp-documents-local-us-east-1 web-api/cors-policy.xml > /dev/null 2>&1 < /dev/null &
+nohup env HOST=0.0.0.0 PORT=9229 CODE="385030" ./node_modules/.bin/cognito-local > /dev/null 2>&1 < /dev/null &
 
 echo "Waiting for background services..."
 # S3rver takes a moment to initialize the buckets
