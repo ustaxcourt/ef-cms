@@ -1,7 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Launch Docker and Wait" type="CompoundRunConfigurationType">
-    <toRun name="Docker Dependencies" type="docker-deploy" />
-    <toRun name="Wait for Services" type="ShConfigurationType" />
-    <method v="2" />
-  </configuration>
-</component>
