@@ -73,6 +73,9 @@ export const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
 
       if (useExternalValidation && onFileChange) {
         await onFileChange(changeEvent);
+        if (!changeEvent.target.value) {
+          setSelectedFilename('');
+        }
         return;
       }
 
