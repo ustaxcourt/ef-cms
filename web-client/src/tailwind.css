@@ -170,6 +170,25 @@
   /* --spacing: 4px; */
 }
 
+@layer components {
+  .background-blue {
+    background-color: var(--blue-darker);
+
+    @media (width >= 480px) {
+      padding-top: 3rem;
+    }
+
+    @media (width < 480px) {
+      padding-top: 2rem;
+    }
+
+    .usa-alert__body {
+      padding-right: 1rem !important;
+    }
+
+  }
+}
+
 /* Font face */
 @font-face {
   font-family: 'Noto Serif';
