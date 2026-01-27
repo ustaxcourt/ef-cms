@@ -102,7 +102,7 @@ export const initializeMinuteSheet = ({
 
   // Case metadata
   initializedMinuteSheet.caseMetadataSection = {
-    ...emptyMinuteSheet.caseMetadataSection,
+    ...initializedMinuteSheet.caseMetadataSection,
     recalled: {
       [recalledRowRenderKey]: {
         date: '',
