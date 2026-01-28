@@ -64,7 +64,7 @@ services:
       - .:/home/app
       - node_modules:/home/app/node_modules
     depends_on:
-      - elasticsearch
+      - opensearch-node
 
   opensearch-node:
     image: opensearchproject/opensearch:2.19.0
