@@ -120,6 +120,8 @@ Once you've started your services locally, you should be able to access them her
 
 Use one of the mock logins documented below to log in to the private UI.
 
+For IntelliJ IDEA or WebStorm users, see [Running Locally in IntelliJ/WebStorm](./running-locally-in-webstorm.md) for integrated run configurations.
+
 ![Mock Login Page](./images/mock-login.png)
 
 ## How to Login Locally
