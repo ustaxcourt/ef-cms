@@ -170,6 +170,7 @@
   /* --spacing: 4px; */
 }
 
+/* from custom.scss */
 @layer components {
   .background-blue {
     background-color: var(--blue-darker);
