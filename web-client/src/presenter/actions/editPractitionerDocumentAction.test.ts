@@ -38,7 +38,11 @@ describe('editPractitionerDocumentAction', () => {
     expect(
       applicationContext.getUseCases().uploadOrderDocumentInteractor.mock
         .calls[0][0],
-    ).toMatchObject(applicationContext, {
+    ).toMatchObject(applicationContext);
+    expect(
+      applicationContext.getUseCases().uploadOrderDocumentInteractor.mock
+        .calls[0][1],
+    ).toMatchObject({
       documentFile: { name: 'testing.pdf' },
       fileIdToOverwrite: practitionerDocumentFileId,
     });
