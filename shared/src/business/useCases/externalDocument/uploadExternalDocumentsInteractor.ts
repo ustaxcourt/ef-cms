@@ -15,7 +15,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
  * @param {Array} providers.documentFiles array of file objects
  * @param {object} providers.documentMetadata metadata associated with the documents/cases
  * @param {string} providers.fileUploadProgressMap callback functions for updating the progress indicator during file upload
- * @returns {Promise<Object>} the case details with the uploaded document(s) attached
+ * @returns {Promise<Object>} the docket entry IDs added and the docket number
  */
 export const uploadExternalDocumentsInteractor = async (
   applicationContext: ClientApplicationContext,
@@ -90,12 +90,14 @@ export const uploadExternalDocumentsInteractor = async (
     }
   }
 
+  await applicationContext
+    .getUseCases()
+    .fileExternalDocumentInteractor(applicationContext, {
+      documentMetadata,
+    });
+
   return {
-    caseDetail: await applicationContext
-      .getUseCases()
-      .fileExternalDocumentInteractor(applicationContext, {
-        documentMetadata,
-      }),
     docketEntryIdsAdded,
+    docketNumber: documentMetadata.docketNumber,
   };
 };
