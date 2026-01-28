@@ -1,5 +1,6 @@
 import { Case, isLeadCase } from '@shared//business/entities/cases/Case';
 import {
+  ALLOWLIST_FEATURE_FLAGS,
   DOCUMENT_RELATIONSHIPS,
   DOCUMENT_SERVED_MESSAGES,
   INITIAL_DOCUMENT_TYPES,
@@ -24,6 +25,10 @@ import {
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { getUniqueId } from '@shared/sharedAppContext';
+import {
+  AllFeatureFlags,
+  getAllFeatureFlagsInteractor,
+} from '../featureFlag/getAllFeatureFlagsInteractor';
 
 export const addPaperFiling = async (
   applicationContext: ServerApplicationContext,
@@ -54,6 +59,22 @@ export const addPaperFiling = async (
 
   if (!documentMetadata) {
     throw new Error('Did not receive meta data for docket entry');
+  }
+
+  const featureFlags: AllFeatureFlags = await getAllFeatureFlagsInteractor(
+    applicationContext,
+    true,
+  );
+
+  const restrictedEventCodes =
+    featureFlags[ALLOWLIST_FEATURE_FLAGS.RESTRICTED_EVENT_CODES.key];
+
+  if (
+    documentMetadata.eventCode &&
+    typeof restrictedEventCodes === 'string' &&
+    restrictedEventCodes.split(',').includes(documentMetadata.eventCode)
+  ) {
+    throw new UnauthorizedError('Unauthorized to edit this document type');
   }
 
   const { docketNumber: subjectCaseDocketNumber, isFileAttached } =
