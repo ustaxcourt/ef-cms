@@ -21,7 +21,6 @@ import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/get
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { CaseFactory } from '@shared/business/entities/cases/CaseFactory';
 
 export const fileExternalDocument = async (
   applicationContext: ServerApplicationContext,
@@ -127,16 +126,30 @@ export const fileExternalDocument = async (
   const casesToUpdate = await getCasesByDocketNumbers({ docketNumbers });
 
   const pageCountsByDocketEntryId: Map<string, number> = new Map();
-  for (const [docketEntryId] of documentsToAdd) {
-    if (docketEntryId) {
+  // Process page counts in batches of 3 to balance speed and memory usage
+  // This prevents OutOfMemory errors when filing multiple large documents
+  // while being faster than sequential processing
+  const docketEntryIds = documentsToAdd
+    .map(([docketEntryId]) => docketEntryId)
+    .filter((id): id is string => !!id);
+
+  const BATCH_SIZE = 3;
+  for (let i = 0; i < docketEntryIds.length; i += BATCH_SIZE) {
+    const batch = docketEntryIds.slice(i, i + BATCH_SIZE);
+    const batchPromises = batch.map(async docketEntryId => {
       const numberOfPages = await applicationContext
         .getUseCaseHelpers()
         .countPagesInDocument({ applicationContext, docketEntryId });
+      return { docketEntryId, numberOfPages };
+    });
+
+    const batchResults = await Promise.all(batchPromises);
+    for (const { docketEntryId, numberOfPages } of batchResults) {
       pageCountsByDocketEntryId.set(docketEntryId, numberOfPages);
     }
   }
 
-  const consolidatedCaseEntities: Promise<RawCase>[] = casesToUpdate.map(
+  const consolidatedCaseEntities = casesToUpdate.map(
     async caseToUpdate => {
       let caseEntity = new Case(caseToUpdate, { authorizedUser });
 
@@ -211,24 +224,13 @@ export const fileExternalDocument = async (
     },
   );
 
-  const resolvedCaseEntities: RawCase[] = await settlePromises(
-    consolidatedCaseEntities,
-  );
+  await settlePromises(consolidatedCaseEntities);
 
   await upsertWorkItems({
     workItems,
   });
 
-  const theCase = resolvedCaseEntities.find(
-    caseEntity => caseEntity.docketNumber === docketNumber,
-  );
-
-  const filteredCase = CaseFactory.getCase({
-    rawCase: theCase,
-    user: authorizedUser,
-  });
-
-  return filteredCase;
+  return { docketNumber };
 };
 
 export const fileExternalDocumentInteractor = withLocking(
