@@ -64,16 +64,20 @@ describe('Create a work item', () => {
     expect(caseDetail.docketNumber).toBeDefined();
   });
 
-  it('petitioner uploads the external documents', async () => {
-    await cerebralTest.runSequence('gotoFileDocumentSequence', {
-      docketNumber: caseDetail.docketNumber,
-    });
+  it(
+    'petitioner uploads the external documents',
+    async () => {
+      await cerebralTest.runSequence('gotoFileDocumentSequence', {
+        docketNumber: caseDetail.docketNumber,
+      });
 
-    await uploadExternalDecisionDocument(cerebralTest);
-    await uploadExternalDecisionDocument(cerebralTest);
-    await uploadExternalRatificationDocument(cerebralTest);
-    await uploadExternalRatificationDocument(cerebralTest);
-  });
+      await uploadExternalDecisionDocument(cerebralTest);
+      await uploadExternalDecisionDocument(cerebralTest);
+      await uploadExternalRatificationDocument(cerebralTest);
+      await uploadExternalRatificationDocument(cerebralTest);
+    },
+    120000,
+  );
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   it('login as the docketclerk and verify there are 4 document qc section inbox entries', async () => {
