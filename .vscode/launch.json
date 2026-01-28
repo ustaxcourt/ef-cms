@@ -1,6 +1,49 @@
 {
-  "version": "1.0.0",
+  "version": "0.2.0",
   "configurations": [
+    {
+      "name": "API",
+      "type": "node",
+      "request": "launch",
+      "preLaunchTask": "API",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Client",
+      "type": "node",
+      "request": "launch",
+      "preLaunchTask": "Client",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Public",
+      "type": "node",
+      "request": "launch",
+      "preLaunchTask": "Public",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Debug Client (Chrome)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:1234",
+      "webRoot": "${workspaceFolder}/web-client/src",
+      "pathMapping": {
+        "http://localhost:1234": "${workspaceFolder}/web-client/src",
+        "http://localhost:1234/web-client/src": "${workspaceFolder}/web-client/src"
+      }
+    },
+    {
+      "name": "Debug Public (Chrome)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:5678",
+      "webRoot": "${workspaceFolder}/web-client/src",
+      "pathMapping": {
+        "http://localhost:5678": "${workspaceFolder}/web-client/src",
+        "http://localhost:5678/web-client/src": "${workspaceFolder}/web-client/src"
+      }
+    },
     {
       "name": "Launch Edge",
       "request": "launch",
@@ -94,6 +137,10 @@
     }
   ],
   "compounds": [
+    {
+      "name": "DAWSON local",
+      "configurations": ["API", "Client", "Public"]
+    },
     {
       "name": "Run All",
       "configurations": [

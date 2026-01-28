@@ -1,0 +1,67 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Prepare Local Environment",
+      "type": "shell",
+      "command": "./init-local.sh",
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "API",
+      "type": "shell",
+      "command": "node_modules/nodemon/bin/nodemon.js -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress/ --exec \"bash -c ' (lsof -i :9001 || nohup ./node_modules/.bin/s3rver -d web-api/storage/s3 -a 0.0.0.0 -p 9001 --configure-bucket noop-documents-local-us-east-1 web-api/cors-policy.xml --configure-bucket noop-temp-documents-local-us-east-1 web-api/cors-policy.xml > /dev/null 2>&1 < /dev/null & ) && (lsof -i :9229 || nohup env HOST=0.0.0.0 PORT=9229 CODE=\\\"385030\\\" ./node_modules/.bin/cognito-local > /dev/null 2>&1 < /dev/null & ) && node -r ts-node/register -r tsconfig-paths/register web-api/src/app-local.ts'\"",
+      "options": {
+        "env": {
+          "TS_NODE_TRANSPILE_ONLY": "true",
+          "TS_NODE_COMPILER_OPTIONS": "{\"module\":\"commonjs\"}",
+          "AWS_ACCESS_KEY_ID": "S3RVER",
+          "AWS_SECRET_ACCESS_KEY": "S3RVER",
+          "AWS_REGION": "us-east-1",
+          "EFCMS_DOMAIN": "localhost",
+          "ELASTICSEARCH_HOST": "localhost",
+          "ELASTICSEARCH_ENDPOINT": "http://localhost:9200",
+          "IRS_SUPERUSER_EMAIL": "irs-superuser@example.com",
+          "USER_POOL_ID": "local_2pHzece7",
+          "COGNITO_CLIENT_ID": "bvjrggnd3co403c0aahscinne",
+          "DISABLE_EMAILS": "true",
+          "ENV": "local",
+          "USTC_ENV": "dev",
+          "POSTGRES_HOST": "localhost",
+          "POSTGRES_USER": "postgres",
+          "POSTGRES_PASSWORD": "example",
+          "DATABASE_NAME": "postgres"
+        }
+      },
+      "dependsOn": ["Prepare Local Environment"],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Client",
+      "type": "npm",
+      "script": "start:client",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Public",
+      "type": "npm",
+      "script": "start:public",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    }
+  ]
+}
