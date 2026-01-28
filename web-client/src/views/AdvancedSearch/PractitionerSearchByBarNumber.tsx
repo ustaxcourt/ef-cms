@@ -67,6 +67,7 @@ export const PractitionerSearchByBarNumber = connect(
               <div className="button-container">
                 <Button
                   overrideMargin
+                  type="submit"
                   className="margin-bottom-0"
                   data-testid="practitioner-search-by-bar-number-button"
                   id="practitioner-search-by-bar-number-button"
