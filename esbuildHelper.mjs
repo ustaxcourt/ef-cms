@@ -201,7 +201,7 @@ export default async function ({
         },
       },
     ],
-    sourcemap: process.env.USTC_ENV !== 'prod',
+    sourcemap: process.env.USTC_ENV !== 'prod' ? 'inline' : false,
     splitting: true,
   };
 
