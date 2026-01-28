@@ -136,8 +136,12 @@ describe('updates the contact on a case', () => {
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).toHaveBeenCalled();
-    expect(caseDetail.docketEntries[4].servedAt).toBeDefined();
-    expect(caseDetail.docketEntries[4].filedBy).toBeUndefined();
+    const docketEntry = caseDetail.docketEntries.find(
+      d => d.documentType === 'Notice of Change of Address',
+    );
+    expect(docketEntry).toBeDefined();
+    expect(docketEntry?.servedAt).toBeDefined();
+    expect(docketEntry?.filedBy).toBeUndefined();
   });
 
   it('creates a work item if the contact is not represented by a privatePractitioner and there is no paper service on the case', async () => {

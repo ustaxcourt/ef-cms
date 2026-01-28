@@ -36,6 +36,7 @@ describe('uploadExternalDocumentsInteractor', () => {
   });
 
   it('runs successfully with no errors with minimum data and valid user', async () => {
+    const mockDocketNumber = '123-45';
     const result = await uploadExternalDocumentsInteractor(
       applicationContext,
       {
@@ -43,6 +44,7 @@ describe('uploadExternalDocumentsInteractor', () => {
           primary: 'something',
         },
         documentMetadata: {
+          docketNumber: mockDocketNumber,
           primaryDocumentFile: {},
         },
         fileUploadProgressMap: {
@@ -55,8 +57,8 @@ describe('uploadExternalDocumentsInteractor', () => {
       mockIrsPractitionerUser,
     );
     expect(result).toMatchObject({
-      caseDetail: expect.anything(),
       docketEntryIdsAdded: expect.any(Array),
+      docketNumber: mockDocketNumber,
     });
   });
 

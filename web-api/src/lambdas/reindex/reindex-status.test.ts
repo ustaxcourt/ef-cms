@@ -12,10 +12,7 @@ jest.mock('axios');
 const axiosPost = jest.spyOn(axios, 'post').mockImplementation(jest.fn());
 const axiosGet = jest.spyOn(axios, 'get').mockImplementation(jest.fn());
 
-const mockContext = {
-  fail: jest.fn(),
-  succeed: jest.fn(),
-} as unknown as Context;
+const mockContext = {} as unknown as Context;
 
 describe('reindex-status', () => {
   const mockJobs = [

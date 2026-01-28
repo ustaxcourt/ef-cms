@@ -125,7 +125,31 @@ export const fileExternalDocument = async (
   );
   const casesToUpdate = await getCasesByDocketNumbers({ docketNumbers });
 
-  const consolidatedCaseEntities: Promise<RawCase>[] = casesToUpdate.map(
+  const pageCountsByDocketEntryId: Map<string, number> = new Map();
+  // Process page counts in batches of 3 to balance speed and memory usage
+  // This prevents OutOfMemory errors when filing multiple large documents
+  // while being faster than sequential processing
+  const docketEntryIds = documentsToAdd
+    .map(([docketEntryId]) => docketEntryId)
+    .filter((id): id is string => !!id);
+
+  const BATCH_SIZE = 3;
+  for (let i = 0; i < docketEntryIds.length; i += BATCH_SIZE) {
+    const batch = docketEntryIds.slice(i, i + BATCH_SIZE);
+    const batchPromises = batch.map(async docketEntryId => {
+      const numberOfPages = await applicationContext
+        .getUseCaseHelpers()
+        .countPagesInDocument({ applicationContext, docketEntryId });
+      return { docketEntryId, numberOfPages };
+    });
+
+    const batchResults = await Promise.all(batchPromises);
+    for (const { docketEntryId, numberOfPages } of batchResults) {
+      pageCountsByDocketEntryId.set(docketEntryId, numberOfPages);
+    }
+  }
+
+  const consolidatedCaseEntities = casesToUpdate.map(
     async caseToUpdate => {
       let caseEntity = new Case(caseToUpdate, { authorizedUser });
 
@@ -133,9 +157,7 @@ export const fileExternalDocument = async (
 
       for (const [docketEntryId, metadata, relationship] of documentsToAdd) {
         if (docketEntryId && metadata) {
-          const numberOfPages = await applicationContext
-            .getUseCaseHelpers()
-            .countPagesInDocument({ applicationContext, docketEntryId });
+          const numberOfPages = pageCountsByDocketEntryId.get(docketEntryId);
           const docketEntryEntity = new DocketEntry(
             {
               ...baseMetadata,
@@ -202,17 +224,13 @@ export const fileExternalDocument = async (
     },
   );
 
-  const resolvedCaseEntities: RawCase[] = await settlePromises(
-    consolidatedCaseEntities,
-  );
+  await settlePromises(consolidatedCaseEntities);
 
   await upsertWorkItems({
     workItems,
   });
 
-  return resolvedCaseEntities.find(
-    caseEntity => caseEntity.docketNumber === docketNumber,
-  );
+  return { docketNumber };
 };
 
 export const fileExternalDocumentInteractor = withLocking(

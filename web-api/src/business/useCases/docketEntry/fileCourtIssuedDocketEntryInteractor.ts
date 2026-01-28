@@ -17,6 +17,8 @@ import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/get
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { CourtIssuedDocumentAnyType } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import { addAssociatedDocketEntries } from '@web-api/business/useCaseHelper/docketEntry/addAssociatedDocketEntries';
 
 /**
  *
@@ -33,7 +35,7 @@ export const fileCourtIssuedDocketEntry = async (
     subjectDocketNumber,
   }: {
     docketNumbers: string[];
-    documentMeta: any;
+    documentMeta: CourtIssuedDocumentAnyType;
     subjectDocketNumber: string;
   },
   authorizedUser: UnknownAuthUser,
@@ -79,8 +81,6 @@ export const fileCourtIssuedDocketEntry = async (
       `User not found with user id ${authorizedUser.userId}`,
     );
   }
-
-  const isUnservable = DocketEntry.isUnservable(documentMeta);
 
   const casesToUpdate = await getCasesByDocketNumbers({
     docketNumbers: [subjectDocketNumber, ...docketNumbers],
@@ -131,7 +131,7 @@ export const fileCourtIssuedDocketEntry = async (
         sentByUserId: user.userId,
       });
 
-      if (isUnservable) {
+      if (DocketEntry.isUnservable(documentMeta)) {
         workItem.setAsCompleted({ message: 'completed', user });
       }
 
@@ -175,6 +175,15 @@ export const fileCourtIssuedDocketEntry = async (
       return settlePromises(saveItems);
     }),
   );
+
+  if (documentMeta.affectedDocketEntries) {
+    await addAssociatedDocketEntries(
+      casesToUpdate,
+      documentMeta,
+      subjectDocketEntry,
+      false,
+    );
+  }
 
   const rawSubjectCase = await getCaseByDocketNumber({
     docketNumber: subjectDocketNumber,

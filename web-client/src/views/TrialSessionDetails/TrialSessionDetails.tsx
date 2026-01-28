@@ -7,6 +7,7 @@ import { DismissThirtyDayNoticeModal } from './DismissThirtyDayNoticeModal';
 import { EligibleCases } from './EligibleCases';
 import { ErrorNotification } from '../ErrorNotification';
 import { InactiveCases } from './InactiveCases';
+import { NewMinuteSheetModal } from '@web-client/views/TrialSession/NewMinuteSheetModal';
 import { NoticeStatusModal } from '../NoticeStatusModal';
 import { OpenCases } from './OpenCases';
 import { PaperServiceStatusModal } from '../PaperServiceStatusModal';
@@ -32,6 +33,7 @@ export const TrialSessionDetails = connect(
     closeTrialSessionSequence: sequences.closeTrialSessionSequence,
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
     openConfirmModalSequence: sequences.openConfirmModalSequence,
+    openNewMinuteSheetModalSequence: sequences.openNewMinuteSheetModalSequence,
     openSetCalendarModalSequence: sequences.openSetCalendarModalSequence,
     showModal: state.modal.showModal,
     showThirtyDayNoticeModalSequence:
@@ -43,6 +45,7 @@ export const TrialSessionDetails = connect(
     closeTrialSessionSequence,
     formattedTrialSessionDetails,
     openConfirmModalSequence,
+    openNewMinuteSheetModalSequence,
     openSetCalendarModalSequence,
     showModal,
     showThirtyDayNoticeModalSequence,
@@ -148,6 +151,17 @@ export const TrialSessionDetails = connect(
                 bind="trialSessionDetailsTab.calendaredCaseList"
                 defaultActiveTab="OpenCases"
               >
+                {trialSessionDetailsHelper.showNewMinuteSheetButton && (
+                  <Button
+                    link
+                    className="ustc-ui-tabs ustc-ui-tabs--right-link-button margin-right-2"
+                    data-testid="new-minute-sheet-button"
+                    icon="plus-circle"
+                    onClick={() => openNewMinuteSheetModalSequence()}
+                  >
+                    Unscheduled Case Minutes Sheet
+                  </Button>
+                )}
                 {formattedTrialSessionDetails.canClose && (
                   <Button
                     link
@@ -235,6 +249,7 @@ export const TrialSessionDetails = connect(
           <ReprintPaperServiceDocumentsModal />
         )}
         {showModal === 'DeleteTrialSessionModal' && <DeleteTrialSessionModal />}
+        {showModal === 'NewMinuteSheetModal' && <NewMinuteSheetModal />}
       </>
     );
   },
