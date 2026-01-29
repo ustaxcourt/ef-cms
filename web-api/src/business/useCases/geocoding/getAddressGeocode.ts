@@ -12,7 +12,7 @@ export type AddressInput = {
   postalCode: string;
 };
 
-const CENSUS_GEOCODER_URL =
+const GEOCODE_GEOCODER_URL =
   'https://geocoding.geo.census.gov/geocoder/locations/address';
 
 
@@ -23,7 +23,7 @@ export const geocodeAddress = async (
   const http = applicationContext.getHttpClient();
 
     try {
-      const response = await http.get(CENSUS_GEOCODER_URL, {
+      const response = await http.get(GEOCODE_GEOCODER_URL, {
         params: {
           benchmark: 'Public_AR_Current',
           city: address.city,

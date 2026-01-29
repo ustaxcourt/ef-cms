@@ -17,6 +17,7 @@ type TPetitioner = {
   countryType: string;
   entityName?: string;
   isAddressSealed: boolean;
+  lat?: number | null;
   inCareOf?: string;
   name: string;
   paperPetitionEmail?: string;
@@ -27,6 +28,7 @@ type TPetitioner = {
   serviceIndicator?: string;
   state?: string;
   title?: string;
+  lng?: number | null;
   hasConsentedToElectronicService?: boolean;
   hasElectronicAccess?: boolean;
   formattedTitle?: string;

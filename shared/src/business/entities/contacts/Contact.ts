@@ -27,6 +27,7 @@ export class Contact extends JoiValidationEntity {
   public email?: string;
   public inCareOf?: string;
   public isAddressSealed: boolean;
+  public lat?: number | null;
   public sealedAndUnavailable?: boolean;
   public paperPetitionEmail?: string;
   public hasConsentedToElectronicService?: boolean;
@@ -39,6 +40,7 @@ export class Contact extends JoiValidationEntity {
   public title?: string;
   public additionalName?: string;
   public hasElectronicAccess?: boolean;
+  public lng?: number | null;
   public placeOfLegalResidence?: string;
   public preferredLanguage?: string;
   public preferredCommunicationMethod?: string;
@@ -57,6 +59,7 @@ export class Contact extends JoiValidationEntity {
     this.email = rawContact.email;
     this.inCareOf = rawContact.inCareOf;
     this.isAddressSealed = rawContact.isAddressSealed ?? false;
+    this.lat = rawContact.lat ?? null;
     this.sealedAndUnavailable = rawContact.sealedAndUnavailable ?? false;
     this.paperPetitionEmail = rawContact.paperPetitionEmail;
     this.hasConsentedToElectronicService =
@@ -70,6 +73,7 @@ export class Contact extends JoiValidationEntity {
     this.title = rawContact.title;
     this.additionalName = rawContact.additionalName;
     this.hasElectronicAccess = rawContact.hasElectronicAccess ?? undefined;
+    this.lng = rawContact.lng ?? null;
     this.placeOfLegalResidence = rawContact.placeOfLegalResidence || undefined;
     this.preferredLanguage = rawContact.preferredLanguage?.trim() || undefined;
     this.preferredCommunicationMethod =

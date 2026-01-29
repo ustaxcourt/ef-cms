@@ -22,6 +22,8 @@ export type UserContact = {
   city: string;
   country?: string;
   countryType: string;
+  lat?: number | null;
+  lng?: number | null;
   phone: string;
   postalCode: string;
   state: string;
@@ -90,6 +92,8 @@ export class User extends JoiValidationEntity {
         city: rawUser.contact.city,
         country: rawUser.contact.country,
         countryType: rawUser.contact.countryType,
+        lat: rawUser.contact.lat ?? null,
+        lng: rawUser.contact.lng ?? null,
         phone: formatPhoneNumber(rawUser.contact.phone),
         postalCode: rawUser.contact.postalCode,
         state: rawUser.contact.state,

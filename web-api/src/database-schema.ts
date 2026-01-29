@@ -107,9 +107,9 @@ import {
   DW_BAR_NUMBER_COLUMNS,
 } from '@web-api/persistence/postgres/users/barNumber/schema';
 import {
-  CENSUS_PLACE_DATA_COLUMNS,
-  CensusPlaceDataTable,
-} from '@web-api/persistence/postgres/censusPlaceData/schema';
+  GEOCODE_DATA_COLUMNS,
+  GeocodeDataTable,
+} from '@web-api/persistence/postgres/geocodeData/schema';
 
 const DEFAULT = {};
 
@@ -141,7 +141,7 @@ interface DatabaseSchemaType {
   dwUserOnCase: DatabaseTableMetadata<UserOnCaseTable>;
   dwUserOnCasePending: DatabaseTableMetadata<UserOnCasePendingTable>;
   dwWorkItem: DatabaseTableMetadata<WorkItemTable>;
-  censusPlaceData: DatabaseTableMetadata<CensusPlaceDataTable>;
+  geocodeData: DatabaseTableMetadata<GeocodeDataTable>;
 }
 
 // transformOpenSearchMessage takes in a message--a result from the DB--and gets it into the right format to pass into the queue
@@ -274,9 +274,9 @@ export const DatabaseSchema: DatabaseSchemaType = {
     table: DEFAULT as UserOnCasePendingTable,
     columns: DW_USER_ON_CASE_PENDING_COLUMNS,
   },
-  censusPlaceData: {
-    table: DEFAULT as CensusPlaceDataTable,
-    columns: CENSUS_PLACE_DATA_COLUMNS,
+  geocodeData: {
+    table: DEFAULT as GeocodeDataTable,
+    columns: GEOCODE_DATA_COLUMNS,
   },
 };
 
