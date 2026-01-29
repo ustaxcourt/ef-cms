@@ -3,7 +3,7 @@ import { contactPrimaryFromState, contactSecondaryFromState } from '../helpers';
 export const petitionsClerkViewsCaseWithSealedContact = (
   cerebralTest,
   contactType,
-  docketNumber,
+  docketNumber?,
 ) => {
   return it(`Petitions clerk views case with sealed ${contactType}`, async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
