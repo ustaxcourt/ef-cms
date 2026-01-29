@@ -17,7 +17,7 @@ export class PublicCaseDTO {
   public docketNumberSuffix?: string;
   public docketNumberWithSuffix: string;
   public hasIrsPractitioner: boolean;
-  public docketEntries: RawPublicDocketEntry[];
+  public docketEntries: RawDocketEntry[];
   public isPaper?: boolean;
   public partyType: string;
   public receivedAt: string;

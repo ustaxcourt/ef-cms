@@ -146,6 +146,3 @@ export class PublicDocketEntry extends JoiValidationEntity {
   }
 }
 
-declare global {
-  type RawPublicDocketEntry = ExcludeMethods<PublicDocketEntry>;
-}
