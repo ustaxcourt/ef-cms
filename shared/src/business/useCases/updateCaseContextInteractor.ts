@@ -20,7 +20,7 @@ import { updateTrialSession } from '@web-api/persistence/postgres/trialSessions/
 import { removeCaseFromTrialSession } from '@web-api/persistence/postgres/trialSessions/removeCaseFromTrialSession';
 import { getCaseDeadlinesByConsolidatedCaseDeadlineIds } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds';
 import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
-import { CaseDTO } from '../dto/docketEntries/CaseDTO';
+import { CaseDTO } from '../dto/cases/CaseDTO';
 
 const updateCaseContext = async (
   _applicationContext: ServerApplicationContext,

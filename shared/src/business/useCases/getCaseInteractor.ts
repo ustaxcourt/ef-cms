@@ -7,9 +7,9 @@ import {
 } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
-import { CaseDTO } from '../dto/docketEntries/CaseDTO';
-import { RestrictedCaseDTO } from '../dto/docketEntries/RestrictedCaseDTO';
-import { PublicCaseDTO } from '../dto/docketEntries/PublicCaseDTO';
+import { CaseDTO } from '../dto/cases/CaseDTO';
+import { RestrictedCaseDTO } from '../dto/cases/RestrictedCaseDTO';
+import { PublicCaseDTO } from '../dto/cases/PublicCaseDTO';
 
 export const getCaseInteractor = async (
   { docketNumber }: { docketNumber: string },

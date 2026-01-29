@@ -10,9 +10,9 @@ import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { CaseFactory } from '@shared/business/entities/cases/CaseFactory';
-import { CaseDTO } from '@shared/business/dto/docketEntries/CaseDTO';
-import { PublicCaseDTO } from '@shared/business/dto/docketEntries/PublicCaseDTO';
-import { RestrictedCaseDTO } from '@shared/business/dto/docketEntries/RestrictedCaseDTO';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
+import { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
+import { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO';
 
 /**
  * submitCaseAssociationRequestInteractor

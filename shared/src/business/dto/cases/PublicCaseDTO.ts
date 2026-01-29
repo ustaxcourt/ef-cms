@@ -1,7 +1,7 @@
 import { RawPublicContact } from '@shared/business/entities/cases/PublicContact';
 import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
-import { ConsolidatedCaseSummary } from '../cases/ConsolidatedCaseSummary';
+import { ConsolidatedCaseSummary } from './ConsolidatedCaseSummary';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { PublicCase } from '@shared/business/entities/cases/PublicCase';
 

@@ -5,7 +5,7 @@ import {
   CaseStatus,
 } from '@shared/business/entities/EntityConstants';
 import { RawStatistic } from '@shared/business/entities/Statistic';
-import { RawConsolidatedCaseSummary } from '../cases/ConsolidatedCaseSummary';
+import { RawConsolidatedCaseSummary } from './ConsolidatedCaseSummary';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { removeServedParties } from '../helpers/removeServedParties';
 
