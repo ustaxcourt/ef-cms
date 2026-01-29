@@ -778,4 +778,54 @@ describe('completeDocketEntryQCInteractor', () => {
       workItems: [expect.objectContaining({ section: DOCKET_SECTION })],
     });
   });
+
+  it('should add paper service parties with docket number', async () => {
+    getCasesByDocketNumbers.mockResolvedValueOnce([
+      {
+        ...caseRecord,
+        petitioners: [
+          {
+            ...caseRecord.petitioners[0],
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
+      },
+    ]);
+
+    const result = await completeDocketEntryQCInteractor(
+      applicationContext,
+      { entryMetadata: caseRecord.docketEntries[0] },
+      mockDocketClerkUser,
+    );
+
+    expect(result.paperServiceParties[0].docketNumber).toEqual(
+      caseRecord.docketNumber,
+    );
+  });
+
+  it('should add a consolidated cases array to the returned case detail', async () => {
+    const secondMockDocketNumber = '102-20';
+    getCasesByDocketNumbers.mockResolvedValueOnce([
+      caseRecord,
+      { ...caseRecord, docketNumber: secondMockDocketNumber },
+    ]);
+
+    const result = await completeDocketEntryQCInteractor(
+      applicationContext,
+      {
+        entryMetadata: {
+          ...caseRecord.docketEntries[0],
+          multiDocketedOn: [caseRecord.docketNumber, secondMockDocketNumber],
+        },
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(result.caseDetail.consolidatedCases[0].docketNumber).toEqual(
+      caseRecord.docketNumber,
+    );
+    expect(result.caseDetail.consolidatedCases[1].docketNumber).toEqual(
+      secondMockDocketNumber,
+    );
+  });
 });

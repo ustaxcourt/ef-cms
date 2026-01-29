@@ -8,7 +8,12 @@ describe('completeDocketEntryQCAction', () => {
 
   const caseDetail = {
     docketEntries: [
-      { docketEntryId: mockDocketEntryId, documentTitle: "bob's burgers" },
+      {
+        docketEntryId: mockDocketEntryId,
+        documentTitle: "bob's burgers",
+        addToCoversheet: false,
+        additionalInfo: '',
+      },
     ],
     docketNumber: '123-45',
   };
@@ -56,11 +61,11 @@ describe('completeDocketEntryQCAction', () => {
         title: 'QC Completed',
       },
       caseDetail,
+      docketEntryId: mockDocketEntryId,
       docketNumber: caseDetail.docketNumber,
-      updatedDocument: {
-        docketEntryId: mockDocketEntryId,
-        documentTitle: "bob's burgers",
-      },
+      paperServiceDocumentTitle: undefined,
+      paperServiceParties: undefined,
+      pdfUrl: undefined,
     });
   });
 
@@ -115,5 +120,25 @@ describe('completeDocketEntryQCAction', () => {
     expect(successMock.mock.calls[0][0].alertSuccess.message).toEqual(
       "bob's burgers More title information QC completed and message sent.",
     );
+  });
+
+  it('should return error path when an error is thrown', async () => {
+    const mockError = new Error('An error');
+    applicationContext
+      .getUseCases()
+      .completeDocketEntryQCInteractor.mockRejectedValueOnce(mockError);
+
+    await runAction(completeDocketEntryQCAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail,
+        docketEntryId: mockDocketEntryId,
+        form: {},
+      },
+    });
+
+    expect(errorMock).toHaveBeenCalledWith({ error: mockError });
   });
 });

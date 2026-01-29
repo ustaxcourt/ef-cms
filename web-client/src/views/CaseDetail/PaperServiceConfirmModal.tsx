@@ -7,17 +7,15 @@ import React from 'react';
 
 export const PaperServiceConfirmModal = connect(
   {
-    formattedCaseDetail: state.formattedCaseDetail,
     documentTitle: state.form.documentTitle,
-    confirmInitiateServiceModalHelper: state.confirmInitiateServiceModalHelper,
+    confirmPaperServiceModalHelper: state.confirmPaperServiceModalHelper,
     clearModalSequence: sequences.clearModalSequence,
     navigateToPrintPaperServiceSequence:
       sequences.navigateToPrintPaperServiceSequence,
   },
   function PaperServiceConfirmModal({
-    formattedCaseDetail,
     clearModalSequence,
-    confirmInitiateServiceModalHelper,
+    confirmPaperServiceModalHelper,
     documentTitle,
     navigateToPrintPaperServiceSequence,
   }) {
@@ -33,6 +31,8 @@ export const PaperServiceConfirmModal = connect(
           onCancelSequence={clearModalSequence}
           onConfirmSequence={navigateToPrintPaperServiceSequence}
         >
+          {/* 8477 TODO: Come back ask UX about this, make sure language works for both groups
+          and single cases */}
           <p className="margin-0">
             The following document was served on all cases:
           </p>
@@ -45,7 +45,7 @@ export const PaperServiceConfirmModal = connect(
           </p>
 
           <ul className="margin-0 padding-left-3">
-            {formattedCaseDetail.consolidatedCases.map(
+            {confirmPaperServiceModalHelper.multiDocketedOn.map(
               (c: { docketNumber: string; caseTitle: string }) => (
                 <li key={c.docketNumber}>
                   <span>{c.docketNumber}</span> - {c.caseTitle}
@@ -54,20 +54,20 @@ export const PaperServiceConfirmModal = connect(
             )}
           </ul>
 
-          {confirmInitiateServiceModalHelper.contactsNeedingPaperService && (
+          {confirmPaperServiceModalHelper.contactsNeedingPaperService && (
             <InfoNotificationComponent
               alertInfo={{
                 message: (
                   <>
                     <div>
                       <strong>
-                        {confirmInitiateServiceModalHelper.paperFilingText}
+                        {confirmPaperServiceModalHelper.paperFilingText}
                       </strong>
                     </div>
-                    {confirmInitiateServiceModalHelper.contactsNeedingPaperService.map(
+                    {confirmPaperServiceModalHelper.contactsNeedingPaperService.map(
                       contact => (
                         <div key={`${contact.docketNumber}-${contact.name}`}>
-                          {confirmInitiateServiceModalHelper.allowMultiDocketing &&
+                          {confirmPaperServiceModalHelper.wasMultiDocketed &&
                             `${contact.docketNumber} - `}
                           {contact.name}, {contact.formattedContactType}
                         </div>

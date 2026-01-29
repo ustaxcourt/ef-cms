@@ -21,6 +21,7 @@ import { startShowValidationAction } from '../actions/startShowValidationAction'
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { switchErrorActionFactory } from '../actions/switchErrorActionFactory';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
+import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 
 export const completeDocketEntryQCSequence = [
   getCaseAction,
@@ -61,6 +62,7 @@ export const completeDocketEntryQCSequence = [
             ],
             success: [
               setPdfPreviewUrlAction,
+              setDocketEntryIdAction,
               setCaseAction,
               setAlertSuccessAction,
               setPaperServicePartiesAction,

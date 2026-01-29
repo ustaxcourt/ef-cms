@@ -175,6 +175,7 @@ import { BlockedCaseData } from '@web-api/persistence/postgres/cases/reports/get
 import { RawGenerateSuggestedTermForm } from '@shared/business/entities/trialSessions/GenerateSuggestedTermForm';
 import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
 import { consolidateWorkQueueItemsOutboxHelper } from './computeds/consolidateWorkQueueItemsOutboxHelper';
+import { confirmPaperServiceModalHelper } from './computeds/confirmPaperServiceModalHelper';
 
 const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS } = getConstants();
 
@@ -283,6 +284,10 @@ export const computeds = {
   completeDocumentTypeSectionHelper:
     completeDocumentTypeSectionHelper as unknown as ReturnType<
       typeof completeDocumentTypeSectionHelper
+    >,
+  confirmPaperServiceModalHelper:
+    confirmPaperServiceModalHelper as unknown as ReturnType<
+      typeof confirmPaperServiceModalHelper
     >,
   confirmInitiateServiceModalHelper:
     confirmInitiateServiceModalHelper as unknown as ReturnType<
@@ -448,10 +453,9 @@ export const computeds = {
   myAccountHelper: myAccountHelper as unknown as ReturnType<
     typeof myAccountHelper
   >,
-  newMinuteSheetModalHelper:
-    newMinuteSheetModalHelper as unknown as ReturnType<
-      typeof newMinuteSheetModalHelper
-    >,
+  newMinuteSheetModalHelper: newMinuteSheetModalHelper as unknown as ReturnType<
+    typeof newMinuteSheetModalHelper
+  >,
   noticeStatusHelper: noticeStatusHelper as unknown as ReturnType<
     typeof noticeStatusHelper
   >,
@@ -871,8 +875,9 @@ export const baseState = {
   openCases: [] as TAssociatedCase[],
   openCasesCurrentPage: undefined as number | undefined,
   openClosedCases: {
-    caseType: undefined as string | undefined
+    caseType: undefined as string | undefined,
   },
+  paperServiceParties: [] as Array<RawUser & { docketNumber: string }>,
   paperServiceStatusState: {
     pdfsAppended: 0,
     totalPdfs: 0,

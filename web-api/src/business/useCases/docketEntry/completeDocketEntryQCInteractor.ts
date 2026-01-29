@@ -21,7 +21,7 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { User } from '@shared/business/entities/User';
+import { RawUser, User } from '@shared/business/entities/User';
 import { addServedStampToDocument } from '@web-api/business/useCases/courtIssuedDocument/addServedStampToDocument';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { generateNoticeOfDocketChangePdf } from '@web-api/business/useCaseHelper/noticeOfDocketChange/generateNoticeOfDocketChangePdf';
@@ -36,6 +36,7 @@ import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseA
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { ConsolidatedCaseSummary } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
 import {
   buildUpdatedDocketEntry,
   needsNewCoversheet,
@@ -183,7 +184,7 @@ const completeDocketEntryQC = async (
   let originalFilingCaseNoticeDocumentTitle: string | undefined;
   let isNewCoverSheetNeeded = false;
 
-  const paperServiceParties = new Set();
+  const paperServiceParties: Array<RawUser & { docketNumber: string }> = [];
   const caseSpecificNotices: Array<{
     caseEntity: Case;
     docketEntryId: string;
@@ -290,7 +291,10 @@ const completeDocketEntryQC = async (
     const servedParties = aggregatePartiesForService(currentCase);
 
     servedParties.paper?.forEach(sp => {
-      paperServiceParties.add(sp);
+      paperServiceParties.push({
+        ...sp,
+        docketNumber: currentCase.docketNumber,
+      });
     });
 
     if (
@@ -458,6 +462,10 @@ const completeDocketEntryQC = async (
   const { currentCase: filingCase } = casesWithWorkItems.find(co => {
     return co.currentCase.docketNumber === docketNumber;
   })!;
+
+  filingCase.consolidatedCases = casesWithWorkItems.map(
+    c => new ConsolidatedCaseSummary(c.currentCase),
+  );
 
   return {
     caseDetail: filingCase.toRawObject(),

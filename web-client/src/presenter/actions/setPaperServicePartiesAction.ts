@@ -14,5 +14,6 @@ export const setPaperServicePartiesAction = ({ props, store }: ActionProps) => {
   ) {
     store.set(state.modal.showModal, 'PaperServiceConfirmModal');
     store.set(state.form.documentTitle, props.paperServiceDocumentTitle);
+    store.set(state.paperServiceParties, props.paperServiceParties);
   }
 };

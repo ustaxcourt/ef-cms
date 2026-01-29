@@ -19,6 +19,7 @@ import { startShowValidationAction } from '../actions/startShowValidationAction'
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { switchErrorActionFactory } from '../actions/switchErrorActionFactory';
 import { validateCreateMessageAction } from '../actions/validateCreateMessageAction';
+import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 
 export const completeDocketEntryQCAndSendMessageSequence = [
   clearAlertsAction,
@@ -55,6 +56,7 @@ export const completeDocketEntryQCAndSendMessageSequence = [
           setAlertSuccessAction,
           getMessagesForCaseAction,
           setPdfPreviewUrlAction,
+          setDocketEntryIdAction,
           setPaperServicePartiesAction,
           navigateToDocumentQCAction,
           clearFormAction,

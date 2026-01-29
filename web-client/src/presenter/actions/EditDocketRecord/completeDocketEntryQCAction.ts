@@ -78,7 +78,7 @@ export const completeDocketEntryQCAction = async ({
       paperServiceDocumentTitle,
       paperServiceParties,
       pdfUrl: paperServicePdfUrl,
-      updatedDocument,
+      docketEntryId,
     });
   } catch (error) {
     return path.error({

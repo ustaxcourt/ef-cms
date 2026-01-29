@@ -119,7 +119,7 @@ export const confirmInitiateServiceModalHelper = (
   };
 };
 
-const roleToDisplay = party => {
+export const roleToDisplay = party => {
   if (party.role === ROLES.privatePractitioner) {
     return 'Petitioner Counsel';
   } else if (party.role === ROLES.irsPractitioner) {
