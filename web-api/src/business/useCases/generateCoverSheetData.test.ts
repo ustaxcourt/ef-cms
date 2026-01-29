@@ -21,7 +21,7 @@ describe('generateCoverSheetData', () => {
         eventCode: 'A',
         filingDate: '2019-04-19T14:45:15.595Z',
         isPaper: false,
-        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.pending,
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
       },
     ],
   };
