@@ -15,7 +15,7 @@ describe('getDocumentStorageIdAction', () => {
     ],
   };
 
-  it('should make a call to edit a paper filed docket entry and include consolidated group docket numbers when user has opted to multi-docket the paper filing', async () => {
+  it('should retrieve documentStorageId from state.caseDetail for a given docketEntryId', async () => {
     const result = await runAction(getDocumentStorageIdAction, {
       modules: {
         presenter,
@@ -27,6 +27,25 @@ describe('getDocumentStorageIdAction', () => {
         caseDetail: mockCaseDetail,
       },
     });
+
+    expect(result.output.documentStorageId).toEqual(mockDocumentStorageId);
+  });
+
+  it('should retrieve documentStorageId using props.file.docketEntryId when there is no props.docketEntryId', async () => {
+    const result = await runAction(getDocumentStorageIdAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        file: {
+          docketEntryId: mockDocketEntryId,
+        },
+      },
+      state: {
+        caseDetail: mockCaseDetail,
+      },
+    });
+
     expect(result.output.documentStorageId).toEqual(mockDocumentStorageId);
   });
 });
