@@ -6,7 +6,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { PublicCase } from '@shared/business/entities/cases/PublicCase';
 
 export class PublicCaseDTO {
-  public entityName = 'PublicCaseDTO';
+  public entityName: string;
   public canAllowDocumentService?: string;
   public canAllowPrintableDocketRecord?: string;
   public canDojPractitionersRepresentParty?: boolean;
@@ -35,6 +35,7 @@ export class PublicCaseDTO {
       rawPublicCase = new PublicCase(rawPublicCase, options).toRawObject();
     }
 
+    this.entityName = 'PublicCaseDTO';
     this.canAllowDocumentService = rawPublicCase.canAllowDocumentService;
     this.canAllowPrintableDocketRecord =
       rawPublicCase.canAllowPrintableDocketRecord;

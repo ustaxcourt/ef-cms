@@ -10,7 +10,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { removeServedParties } from '../helpers/removeServedParties';
 
 export class CaseDTO {
-  public entityName = 'CaseDTO';
+  public entityName: string;
   public associatedJudge?: string;
   public associatedJudgeId?: string;
   public automaticBlocked?: boolean;
@@ -94,6 +94,7 @@ export class CaseDTO {
       rawCase = new Case(rawCase, rebuildCaseOptions).toRawObject();
     }
 
+    this.entityName = 'CaseDTO';
     this.associatedJudge = rawCase.associatedJudge;
     this.associatedJudgeId = rawCase.associatedJudgeId;
     this.automaticBlocked = rawCase.automaticBlocked;
