@@ -66,6 +66,15 @@ describe('petitions clerk sets a remote trial session calendar', () => {
       },
     );
 
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'estimatedEndDate',
+        toFormat: FORMATS.ISO,
+        value: '12/15/2099',
+      },
+    );
+
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'trialLocation',
       value: overrides.trialLocation || 'Seattle, Washington',

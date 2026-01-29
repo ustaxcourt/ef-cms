@@ -1,4 +1,4 @@
-import { post } from '../requests';
+import { asyncSyncHandler, post } from '../requests';
 
 /**
  * fileExternalDocumentProxy
@@ -13,11 +13,16 @@ export const fileExternalDocumentInteractor = (
   { documentMetadata },
 ) => {
   const { docketNumber } = documentMetadata;
-  return post({
+  return asyncSyncHandler(
     applicationContext,
-    body: {
-      documentMetadata,
-    },
-    endpoint: `/case-documents/${docketNumber}/external-document`,
-  });
+    async asyncSyncId =>
+      await post({
+        applicationContext,
+        asyncSyncId,
+        body: {
+          documentMetadata,
+        },
+        endpoint: `/async/case-documents/${docketNumber}/external-document`,
+      }),
+  );
 };

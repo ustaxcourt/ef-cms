@@ -112,11 +112,13 @@ describe('Judge`s chambers stamps an order', () => {
           cy.get('[data-testid="select-document"]').select(docketEntryId!);
           sendMessage();
           loginAsClerkOfCourt();
+          cy.visit('/messages/my/inbox');
           cy.get(
             '.message-subject > .message-document-title > [data-testid="messages-individual-inbox-subject-cell"]',
           )
             .first()
             .click();
+          cy.get('[data-testid="message-detail-container"]').should('exist');
           cy.get('[data-testid="apply-stamp"]').click();
           cy.get('[data-testid="motion-disposition-GRANTED"]').click();
           cy.get('[data-testid="save-signature-button"]').click();
