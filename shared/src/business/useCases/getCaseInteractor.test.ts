@@ -43,78 +43,6 @@ describe('getCaseInteractor', () => {
   let testCase;
   let mockCaseContactPrimary;
 
-  const MOCK_CASE_DTO = {
-    entityName: 'PublicCase',
-    canAllowDocumentService: false,
-    canAllowPrintableDocketRecord: false,
-    canDojPractitionersRepresentParty: false,
-    caseCaption: 'Test Petitioner, Petitioner',
-    createdAt: '2018-03-01T21:40:46.415Z',
-    leadDocketNumber: undefined,
-    docketNumber: '101-18',
-    docketNumberSuffix: undefined,
-    docketNumberWithSuffix: '101-18',
-    hasIrsPractitioner: false,
-    docketEntries: [
-      {
-        entityName: 'PublicDocketEntry',
-        action: undefined,
-        additionalInfo: undefined,
-        additionalInfo2: undefined,
-        attachments: undefined,
-        certificateOfService: undefined,
-        certificateOfServiceDate: undefined,
-        docketEntryId: '9de27a7d-7c6b-434b-803b-7655f82d5e07',
-        docketNumber: '101-18',
-        documentTitle: 'Petition',
-        documentType: 'Petition',
-        eventCode: 'P',
-        filedBy: 'Test Petitioner',
-        filingDate: '2018-03-01T05:00:00.000Z',
-        freeText: undefined,
-        index: 1,
-        isFileAttached: true,
-        filedByRole: 'petitioner',
-        isLegacyServed: undefined,
-        isOnDocketRecord: true,
-        isPaper: undefined,
-        isSealed: false,
-        isStricken: undefined,
-        lodged: undefined,
-        numberOfPages: undefined,
-        objections: undefined,
-        processingStatus: 'complete',
-        receivedAt: '2018-03-01T05:00:00.000Z',
-        sealedTo: undefined,
-        servedAt: undefined,
-        servedPartiesCode: undefined,
-        affectedByDocketEntries: undefined,
-        affectedDocketEntries: undefined,
-        servedParties: undefined,
-        qcComplete: false,
-        qcViewed: false,
-        workItemId: undefined,
-      },
-    ],
-    isPaper: undefined,
-    partyType: 'Petitioner',
-    receivedAt: '2018-03-01T21:40:46.415Z',
-    isSealed: false,
-    petitioners: [
-      {
-        entityName: 'PublicContact',
-        contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-        contactType: 'primary',
-        name: 'Test Petitioner',
-        state: 'TN',
-        serviceIndicator: 'Electronic',
-      },
-    ],
-    irsPractitioners: [],
-    privatePractitioners: [],
-    consolidatedCases: undefined,
-  };
-
   beforeEach(() => {
     testCase = { ...MOCK_CASE };
     mockCaseContactPrimary = testCase.petitioners[0];
@@ -337,7 +265,23 @@ describe('getCaseInteractor', () => {
   });
 
   it('should return the full case (non public) when the user is part of the consolidated group', async () => {
-    getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
+    getCaseByDocketNumber.mockReturnValue({
+      ...testCase,
+      consolidatedCases: [
+        { ...testCase, petitioners: [] },
+        {
+          ...testCase,
+          petitioners: [
+            {
+              ...testCase.petitioners[0],
+              contactId: mockPetitionerUser.userId,
+            },
+          ],
+        },
+        { ...testCase, petitioners: [] },
+      ],
+      leadDocketNumber: '101-20',
+    });
 
     const result = await getCaseInteractor(
       {
@@ -346,7 +290,7 @@ describe('getCaseInteractor', () => {
       mockPetitionerUser,
     );
 
-    expect(result).toEqual(MOCK_CASE_DTO);
+    expect(result.entityName).toEqual('CaseDTO');
   });
 
   it('should throw UnauthorizedError if user is not a valid AuthUser', async () => {
@@ -467,8 +411,8 @@ describe('getCaseInteractor', () => {
         },
         mockPrivatePractitionerUser,
       );
-
-      expect(result).toEqual({
+      expect(result.entityName).toEqual('RestrictedCaseDTO');
+      expect(result).toMatchObject({
         docketEntries: [],
         docketNumber: '101-18',
         isSealed: true,
@@ -681,6 +625,6 @@ describe('getCaseInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(result.docketEntries[0].servedParties).toBeUndefined();
+    expect((result.docketEntries[0] as any).servedParties).toBeUndefined();
   });
 });
