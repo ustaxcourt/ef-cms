@@ -15,7 +15,7 @@ describe('getDocumentStorageIdAction', () => {
     ],
   };
 
-  it('should retrieve documentStorageId from state.caseDetail for a given docketEntryId', async () => {
+  it('should return documentStorageId when docketEntryId is provided in props', async () => {
     const result = await runAction(getDocumentStorageIdAction, {
       modules: {
         presenter,
@@ -27,25 +27,36 @@ describe('getDocumentStorageIdAction', () => {
         caseDetail: mockCaseDetail,
       },
     });
-
     expect(result.output.documentStorageId).toEqual(mockDocumentStorageId);
   });
 
-  it('should retrieve documentStorageId using props.file.docketEntryId when there is no props.docketEntryId', async () => {
+  it('should return an empty object if docketEntryId is undefined due to uploading a new document', async () => {
+    const result = await runAction(getDocumentStorageIdAction, {
+      modules: {
+        presenter,
+      },
+      props: {},
+      state: {
+        caseDetail: mockCaseDetail,
+      },
+    });
+
+    expect(result.output).toEqual({});
+  });
+
+  it('should return an empty object if docket entry is not found in docketEntries', async () => {
     const result = await runAction(getDocumentStorageIdAction, {
       modules: {
         presenter,
       },
       props: {
-        file: {
-          docketEntryId: mockDocketEntryId,
-        },
+        docketEntryId: 'non-existent-id',
       },
       state: {
         caseDetail: mockCaseDetail,
       },
     });
 
-    expect(result.output.documentStorageId).toEqual(mockDocumentStorageId);
+    expect(result.output).toEqual({});
   });
 });
