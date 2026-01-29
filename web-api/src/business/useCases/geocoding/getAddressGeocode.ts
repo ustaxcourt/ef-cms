@@ -9,7 +9,7 @@ export type AddressInput = {
   address1: string;
   city: string;
   state?: string;
-  postalCode: string;
+  postalCode?: string;
 };
 
 const GEOCODE_GEOCODER_URL =
@@ -23,15 +23,19 @@ export const geocodeAddress = async (
   const http = applicationContext.getHttpClient();
 
     try {
+      const params: Record<string, string> = {
+        benchmark: 'Public_AR_Current',
+        city: address.city,
+        format: 'json',
+        state: address.state || '',
+        street: address.address1,
+      };
+      if (address.postalCode) {
+        params.zip = address.postalCode;
+      }
+
       const response = await http.get(GEOCODE_GEOCODER_URL, {
-        params: {
-          benchmark: 'Public_AR_Current',
-          city: address.city,
-          format: 'json',
-          state: address.state || '',
-          street: address.address1,
-          zip: address.postalCode,
-        },
+        params,
         timeout: 15000,
       });
 
