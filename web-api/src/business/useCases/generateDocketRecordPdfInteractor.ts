@@ -38,7 +38,7 @@ export const generateDocketRecordPdfInteractor = async (
 ) => {
   const isDirectlyAssociated = await verifyCaseForUser({
     docketNumber,
-    userId: authorizedUser?.userId,
+    userId: authorizedUser?.userId || '',
   });
 
   const caseSource = await getCaseByDocketNumber({
