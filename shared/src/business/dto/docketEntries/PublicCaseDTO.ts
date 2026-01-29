@@ -29,7 +29,7 @@ export class PublicCaseDTO {
 
   constructor(
     rawPublicCase: RawPublicCase,
-    options: { authorizedUser: UnknownAuthUser },
+    options?: { authorizedUser: UnknownAuthUser },
   ) {
     if (options) {
       rawPublicCase = new PublicCase(rawPublicCase, options).toRawObject();
