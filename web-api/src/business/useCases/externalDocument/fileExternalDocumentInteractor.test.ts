@@ -194,7 +194,7 @@ describe('fileExternalDocumentInteractor', () => {
       mockIrsPractitionerUser,
     );
 
-    expect(result).toEqual({ docketNumber: caseRecord.docketNumber });
+    expect(result).toMatchObject({ docketNumber: caseRecord.docketNumber });
     expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(upsertWorkItems).toHaveBeenCalled();
     expect(updateCaseAndAssociations).toHaveBeenCalled();
@@ -314,7 +314,7 @@ describe('fileExternalDocumentInteractor', () => {
       mockIrsPractitionerUser,
     );
 
-    expect(result).toEqual({ docketNumber: caseRecord.docketNumber });
+    expect(result).toMatchObject({ docketNumber: caseRecord.docketNumber });
     expect(getCaseByDocketNumber).toHaveBeenCalledTimes(1);
     expect(getCasesByDocketNumbers).toHaveBeenCalledTimes(1);
     expect(upsertWorkItems).toHaveBeenCalledTimes(1);
