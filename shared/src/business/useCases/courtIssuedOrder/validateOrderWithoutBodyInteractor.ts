@@ -9,12 +9,9 @@ import { OrderWithoutBody } from '../../entities/orders/OrderWithoutBody';
  * @returns {object} errors (null if no errors)
  */
 export const validateOrderWithoutBodyInteractor = (
-  applicationContext: IApplicationContext,
   { orderMetadata }: { orderMetadata: any },
 ) => {
-  const orderWithoutBody = new OrderWithoutBody(orderMetadata, {
-    applicationContext,
-  });
+  const orderWithoutBody = new OrderWithoutBody(orderMetadata);
 
   return orderWithoutBody.getFormattedValidationErrors();
 };

@@ -785,3 +785,22 @@ export const roundDateDownToNearestHour = (isoDateString: string) => {
 export const getCurrentDateTimeInMillis = (): number => {
   return Number(formatNow(FORMATS.UNIX_TIMESTAMP_MS));
 };
+
+export const formatDateFromDatePicker = (
+  dateString: string,
+  toFormat: TimeFormats,
+) => {
+  let inputFormat: TimeFormats;
+
+  try {
+    inputFormat = getDateFormat(dateString, [FORMATS.MDYYYY, FORMATS.MMDDYYYY]);
+
+    const luxonDate = prepareDateFromString(dateString, inputFormat);
+
+    const formattedDate = formatDateString(luxonDate.toString(), toFormat);
+
+    return formattedDate;
+  } catch {
+    return dateString
+  }
+};
