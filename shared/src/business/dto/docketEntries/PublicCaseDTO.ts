@@ -2,10 +2,11 @@ import { RawPublicContact } from '@shared/business/entities/cases/PublicContact'
 import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { ConsolidatedCaseSummary } from '../cases/ConsolidatedCaseSummary';
-import { removeServedParties } from '../helpers/removeServedParties';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { PublicCase } from '@shared/business/entities/cases/PublicCase';
 
 export class PublicCaseDTO {
-  public entityName: string;
+  public entityName = 'PublicCaseDTO';
   public canAllowDocumentService?: string;
   public canAllowPrintableDocketRecord?: string;
   public canDojPractitionersRepresentParty?: boolean;
@@ -16,7 +17,7 @@ export class PublicCaseDTO {
   public docketNumberSuffix?: string;
   public docketNumberWithSuffix: string;
   public hasIrsPractitioner: boolean;
-  public docketEntries: RawDocketEntry[];
+  public docketEntries: RawPublicDocketEntry[];
   public isPaper?: boolean;
   public partyType: string;
   public receivedAt: string;
@@ -26,8 +27,14 @@ export class PublicCaseDTO {
   public privatePractitioners?: RawPublicContact[] | PrivatePractitioner[];
   public consolidatedCases?: ConsolidatedCaseSummary[];
 
-  constructor(rawPublicCase: RawPublicCase) {
-    this.entityName = rawPublicCase.entityName;
+  constructor(
+    rawPublicCase: RawPublicCase,
+    options: { authorizedUser: UnknownAuthUser },
+  ) {
+    if (options) {
+      rawPublicCase = new PublicCase(rawPublicCase, options).toRawObject();
+    }
+
     this.canAllowDocumentService = rawPublicCase.canAllowDocumentService;
     this.canAllowPrintableDocketRecord =
       rawPublicCase.canAllowPrintableDocketRecord;
@@ -40,7 +47,7 @@ export class PublicCaseDTO {
     this.docketNumberSuffix = rawPublicCase.docketNumberSuffix;
     this.docketNumberWithSuffix = rawPublicCase.docketNumberWithSuffix;
     this.hasIrsPractitioner = rawPublicCase.hasIrsPractitioner;
-    this.docketEntries = removeServedParties(rawPublicCase.docketEntries);
+    this.docketEntries = rawPublicCase.docketEntries;
     this.isPaper = rawPublicCase.isPaper;
     this.partyType = rawPublicCase.partyType;
     this.receivedAt = rawPublicCase.receivedAt;

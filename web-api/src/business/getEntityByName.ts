@@ -12,6 +12,8 @@ import { User } from '@shared/business/entities/User';
 import { UserCase } from '@shared/business/entities/UserCase';
 import { UserCaseNote } from '@shared/business/entities/notes/UserCaseNote';
 import { CaseDTO } from '@shared/business/dto/docketEntries/CaseDTO';
+import { PublicCaseDTO } from '@shared/business/dto/docketEntries/PublicCaseDTO';
+import { RestrictedCaseDTO } from '@shared/business/dto/docketEntries/RestrictedCaseDTO';
 
 export const getEntityByName = (name: string) => {
   const entitiesByName = {
@@ -24,6 +26,8 @@ export const getEntityByName = (name: string) => {
     Message,
     Practitioner,
     PrivatePractitioner,
+    PublicCaseDTO,
+    RestrictedCaseDTO,
     TrialSession,
     TrialSessionWorkingCopy,
     User,

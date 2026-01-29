@@ -185,6 +185,6 @@ export class PublicCase extends JoiValidationEntity {
 
 declare global {
   type RawPublicCase = Omit<ExcludeMethods<PublicCase>, 'docketEntries'> & {
-    docketEntries: RawDocketEntry[];
+    docketEntries: RawPublicDocketEntry[];
   };
 }
