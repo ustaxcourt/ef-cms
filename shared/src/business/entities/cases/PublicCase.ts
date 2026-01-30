@@ -33,8 +33,6 @@ export class PublicCase extends JoiValidationEntity {
   public privatePractitioners?: RawPublicContact[] | PrivatePractitioner[];
   public consolidatedCases?: ConsolidatedCaseSummary[];
 
-  private _score?: string;
-
   constructor(
     rawCase: any,
     {
