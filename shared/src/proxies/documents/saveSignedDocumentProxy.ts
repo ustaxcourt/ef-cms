@@ -18,7 +18,7 @@ export const saveSignedDocumentInteractor = (
     nameForSigning,
     originalDocketEntryId,
     parentMessageId,
-    signedDocumentStorageId,
+    signedDocketEntryId,
   },
 ) => {
   return post({
@@ -26,7 +26,7 @@ export const saveSignedDocumentInteractor = (
     body: {
       nameForSigning,
       parentMessageId,
-      signedDocumentStorageId,
+      signedDocketEntryId,
     },
     endpoint: `/case-documents/${docketNumber}/${originalDocketEntryId}/sign`,
   });

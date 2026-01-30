@@ -4,11 +4,11 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const stampDocumentForService = async ({
   applicationContext,
-  documentStorageId,
+  docketEntryId,
   documentToStamp,
 }: {
   applicationContext: ServerApplicationContext;
-  documentStorageId: string;
+  docketEntryId: string;
   documentToStamp: {
     documentType: string;
     eventCode: string;
@@ -32,7 +32,7 @@ export const stampDocumentForService = async ({
 
   const pdfData = await applicationContext.getPersistenceGateway().getDocument({
     applicationContext,
-    key: documentStorageId,
+    key: docketEntryId,
   });
 
   return await applicationContext.getUseCaseHelpers().addServedStampToDocument({

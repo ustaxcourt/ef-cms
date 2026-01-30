@@ -225,7 +225,7 @@ export const batchDownloadTrialSessionInteractorHelper = async (
       await applicationContext.getPersistenceGateway().uploadDocument({
         applicationContext,
         pdfData: JSON.stringify(documentsToZip),
-        key: UUID,
+        pdfName: UUID,
         useTempBucket: true,
       });
 

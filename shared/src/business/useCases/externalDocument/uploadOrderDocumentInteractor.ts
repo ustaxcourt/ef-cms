@@ -26,7 +26,7 @@ export const uploadOrderDocumentInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const orderDocumentStorageId = await applicationContext
+  const orderDocketEntryId = await applicationContext
     .getPersistenceGateway()
     .uploadDocumentFromClient({
       applicationContext,
@@ -34,5 +34,5 @@ export const uploadOrderDocumentInteractor = async (
       key: fileIdToOverwrite,
     });
 
-  return orderDocumentStorageId;
+  return orderDocketEntryId;
 };

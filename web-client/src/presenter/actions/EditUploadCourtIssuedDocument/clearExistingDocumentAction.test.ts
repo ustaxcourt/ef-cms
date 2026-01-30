@@ -8,11 +8,7 @@ describe('clearExistingDocumentAction', () => {
       modules: { presenter },
       state: {
         currentViewMetadata: { documentUploadMode: 'preview' },
-        form: {
-          docketEntryId: '123',
-          primaryDocumentFile: true,
-          documentStorageId: '456',
-        },
+        form: { docketEntryId: '123', primaryDocumentFile: true },
       },
     });
 
@@ -20,6 +16,5 @@ describe('clearExistingDocumentAction', () => {
     expect(result.state.form.primaryDocumentFile).toEqual(undefined);
     expect(result.state.currentViewMetadata.documentUploadMode).toEqual('scan');
     expect(result.state.documentToEdit.docketEntryId).toEqual('123');
-    expect(result.state.documentToEdit.documentStorageId).toEqual('456');
   });
 });

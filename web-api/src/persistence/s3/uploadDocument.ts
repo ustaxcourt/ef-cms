@@ -4,12 +4,12 @@ import { Upload } from '@aws-sdk/lib-storage';
 export const uploadDocument = async ({
   applicationContext,
   pdfData,
-  key,
+  pdfName,
   useTempBucket = false,
 }: {
   applicationContext: ServerApplicationContext;
   pdfData: any;
-  key: string;
+  pdfName: string;
   useTempBucket?: boolean;
 }): Promise<void> => {
   const bucketName = useTempBucket
@@ -23,14 +23,14 @@ export const uploadDocument = async ({
         Body: pdfData,
         Bucket: bucketName,
         ContentType: 'application/pdf',
-        Key: key,
+        Key: pdfName,
       },
     });
 
     await parallelUploadS3.done();
   } catch (e) {
     applicationContext.logger.error(
-      `Failed to upload document (${key}) to S3.`,
+      `Failed to upload document (${pdfName}) to S3.`,
     );
     throw e;
   }

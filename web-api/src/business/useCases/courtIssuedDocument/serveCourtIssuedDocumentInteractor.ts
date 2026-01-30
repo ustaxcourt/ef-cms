@@ -84,7 +84,7 @@ export const serveCourtIssuedDocument = async (
     .getUseCaseHelpers()
     .stampDocumentForService({
       applicationContext,
-      documentStorageId: docketEntryToServe.documentStorageId,
+      docketEntryId: docketEntryToServe.docketEntryId,
       // @ts-ignore
       documentToStamp: docketEntryToServe,
     });
@@ -101,10 +101,7 @@ export const serveCourtIssuedDocument = async (
 
   docketEntryToServe.numberOfPages = await applicationContext
     .getUseCaseHelpers()
-    .countPagesInDocument({
-      applicationContext,
-      documentStorageId: docketEntryToServe.documentStorageId,
-    });
+    .countPagesInDocument({ applicationContext, docketEntryId });
 
   const user = await getUserById({ userId: authorizedUser.userId });
 
@@ -177,7 +174,7 @@ export const serveCourtIssuedDocument = async (
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     document: stampedPdf,
-    key: docketEntryToServe.documentStorageId,
+    key: docketEntryId,
   });
 
   const successMessage =

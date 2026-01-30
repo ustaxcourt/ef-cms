@@ -256,45 +256,6 @@ describe('getDownloadPolicyUrlInteractor', () => {
       ).rejects.toThrow('Unauthorized to view document at this time');
     });
 
-    it('should pass in a key of docketEntryEntity.documentStorageId to getDownloadPolicyUrl', async () => {
-      await getDownloadPolicyUrlInteractor(
-        applicationContext,
-        {
-          docketNumber: MOCK_CASE.docketNumber,
-          key: baseDocketEntry.docketEntryId,
-        },
-        mockPetitionerUser,
-      );
-
-      expect(
-        applicationContext.getPersistenceGateway().getDownloadPolicyUrl.mock
-          .calls[0][0],
-      ).toMatchObject({
-        key: baseDocketEntry.documentStorageId,
-      });
-    });
-
-    it('should use key to look up docketEntry by documentStorage if lookup by docketEntryId fails', async () => {
-      baseDocketEntry.docketEntryId = 'different-id';
-      await expect(
-        getDownloadPolicyUrlInteractor(
-          applicationContext,
-          {
-            docketNumber: MOCK_CASE.docketNumber,
-            key: baseDocketEntry.documentStorageId,
-          },
-          mockPetitionerUser,
-        ),
-      ).resolves.not.toThrow();
-
-      expect(
-        applicationContext.getPersistenceGateway().getDownloadPolicyUrl.mock
-          .calls[0][0],
-      ).toMatchObject({
-        key: baseDocketEntry.documentStorageId,
-      });
-    });
-
     it('should NOT receive the policy url when the Non-Court issued document being viewed is sealed to all external users', async () => {
       mockCase.docketEntries[0] = {
         ...baseDocketEntry,

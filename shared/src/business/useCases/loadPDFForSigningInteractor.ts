@@ -1,19 +1,28 @@
 import { getPdfJs } from '@shared/business/utilities/pdfs/getPdfJs';
-import { ClientApplicationContext } from '@web-client/applicationContext';
 import { PDFDocumentProxy } from 'pdfjs-dist';
 
+/**
+ * loadPDFForSigningInteractor
+ *
+ * @param {string} applicationContext the application context
+ * @param {object} providers the params object
+ * @param {string} providers.docketNumber the docketNumber
+ * @param {string} providers.docketEntryId the docket entry id
+ * @param {boolean} providers.removeCover if saving should remove the cover sheet
+ * @returns {Promise<object>} the document data
+ */
 export const loadPDFForSigningInteractor = async (
-  applicationContext: ClientApplicationContext,
+  applicationContext: IApplicationContext,
   {
-    documentStorageId,
+    docketEntryId,
     docketNumber,
     onlyCover = false,
     removeCover = false,
   }: {
-    documentStorageId: string;
+    docketEntryId: string;
     docketNumber: string;
-    onlyCover?: boolean;
-    removeCover?: boolean;
+    onlyCover: boolean;
+    removeCover: boolean;
   },
 ): Promise<PDFDocumentProxy> => {
   const { PDFDocument } = await applicationContext.getPdfLib();
@@ -25,7 +34,7 @@ export const loadPDFForSigningInteractor = async (
       .getDocument({
         applicationContext: applicationContext as any,
         ...(docketNumber && { docketNumber }),
-        key: documentStorageId,
+        key: docketEntryId,
       });
 
     let formattedArrayBuffer;
@@ -54,6 +63,10 @@ export const loadPDFForSigningInteractor = async (
       isEvalSupported: false,
     }).promise;
   } catch (err) {
-    throw new Error(`error loading PDF for signing: ${documentStorageId}`);
+    applicationContext.logger.error(
+      `error loading PDF for signing with docketEntryId ${docketEntryId}`,
+      err,
+    );
+    throw new Error('error loading PDF for signing');
   }
 };

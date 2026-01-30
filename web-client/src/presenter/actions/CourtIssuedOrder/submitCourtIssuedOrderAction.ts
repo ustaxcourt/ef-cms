@@ -12,7 +12,7 @@ export const submitCourtIssuedOrderAction = async ({
 }>) => {
   let caseDetail;
   const { docketNumber } = get(state.caseDetail);
-  const { primaryDocumentFileId: documentStorageId } = props;
+  const { primaryDocumentFileId: docketEntryId } = props;
   const formData = get(state.form);
   const { docketEntryIdToEdit } = formData;
   const consolidatedCasesToMultiDocketOn =
@@ -36,6 +36,7 @@ export const submitCourtIssuedOrderAction = async ({
     'primaryDocumentFile',
     'docketEntryIdToEdit',
   ]);
+
   documentMetadata.docketNumber = docketNumber;
 
   documentMetadata.draftOrderState = {
@@ -46,7 +47,7 @@ export const submitCourtIssuedOrderAction = async ({
   await applicationContext
     .getUseCases()
     .validatePdfInteractor(applicationContext, {
-      key: documentStorageId,
+      key: docketEntryId,
     });
 
   if (docketEntryIdToEdit) {
@@ -61,13 +62,13 @@ export const submitCourtIssuedOrderAction = async ({
       .getUseCases()
       .fileCourtIssuedOrderInteractor(applicationContext, {
         documentMetadata,
-        primaryDocumentFileId: documentStorageId,
+        primaryDocumentFileId: docketEntryId,
       });
   }
 
   return {
     caseDetail,
-    docketEntryId: documentStorageId,
+    docketEntryId,
     docketNumber,
     eventCode: documentMetadata.eventCode,
   };

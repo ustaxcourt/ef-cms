@@ -12,10 +12,10 @@ import { removeSignatureFromDocumentInteractor } from './removeSignatureFromDocu
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 describe('removeSignatureFromDocumentInteractor', () => {
+
   let mockCase;
 
   const mockDocketEntryId = 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
-  const mockDocumentStorageId = 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
   const mockDocumentIdBeforeSignature = 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3858';
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
@@ -90,7 +90,7 @@ describe('removeSignatureFromDocumentInteractor', () => {
       applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
         .calls[0][0],
     ).toMatchObject({
-      key: mockDocumentStorageId,
+      key: mockDocketEntryId,
     });
   });
 
@@ -114,7 +114,8 @@ describe('removeSignatureFromDocumentInteractor', () => {
     });
   });
 
-  it('throws NotFoundError if docket entry is not found', async () => {
+    it('throws NotFoundError if docket entry is not found', async () => {
+
     await expect(
       removeSignatureFromDocumentInteractor(
         applicationContext,

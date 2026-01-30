@@ -10,7 +10,6 @@ import { setParentMessageIdAction } from '@web-client/presenter/actions/setParen
 import { setSignatureNameForPdfSigningAction } from '../actions/setSignatureNameForPdfSigningAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
-import { getDocumentStorageIdAction } from '../actions/DocketEntry/getDocumentStorageIdAction';
 
 export const goToApplyStampSequence = startWebSocketConnectionSequenceDecorator(
   [
@@ -23,7 +22,6 @@ export const goToApplyStampSequence = startWebSocketConnectionSequenceDecorator(
     clearPDFStampDataAction,
     clearFormAction,
     setSignatureNameForPdfSigningAction,
-    getDocumentStorageIdAction,
     setPDFForStampAction,
     setPDFPageForSigningAction,
     setupCurrentPageAction('ApplyStamp'),

@@ -83,7 +83,7 @@ const deleteInitialFilingFromCase = async ({
 
   await applicationContext.getPersistenceGateway().deleteDocumentFile({
     applicationContext,
-    key: originalCaseDocument.documentStorageId,
+    key: originalCaseDocument.docketEntryId,
   });
 };
 

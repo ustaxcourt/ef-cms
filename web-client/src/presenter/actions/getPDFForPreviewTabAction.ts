@@ -1,5 +1,4 @@
 import { state } from '@web-client/presenter/app.cerebral';
-import { getDocumentStorageId } from '@shared/business/utilities/getDocumentStorageId';
 
 export const getPDFForPreviewTabAction = async ({
   applicationContext,
@@ -9,18 +8,14 @@ export const getPDFForPreviewTabAction = async ({
   if (props.file.name) {
     return props;
   }
-  const caseDetail = get(state.caseDetail);
-
-  const documentStorageId = getDocumentStorageId({
-    caseDetail,
-    docketEntryId: props.file.docketEntryId,
-  });
+  const { docketEntryId } = props.file;
+  const docketNumber = get(state.caseDetail.docketNumber);
 
   const pdfObj = await applicationContext
     .getUseCases()
     .loadPDFForPreviewInteractor(applicationContext, {
-      documentStorageId,
-      docketNumber: caseDetail.docketNumber,
+      docketEntryId,
+      docketNumber,
     });
   return { file: pdfObj };
 };

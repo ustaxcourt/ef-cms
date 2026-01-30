@@ -1,4 +1,3 @@
-import { getDocumentStorageIdAction } from '../actions/DocketEntry/getDocumentStorageIdAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearPDFSignatureDataAction } from '../actions/clearPDFSignatureDataAction';
 import { getCaseAction } from '../actions/getCaseAction';
@@ -23,7 +22,6 @@ export const gotoSignOrderSequence = startWebSocketConnectionSequenceDecorator([
   clearPDFSignatureDataAction,
   clearFormAction,
   setSignatureNameForPdfSigningAction,
-  getDocumentStorageIdAction,
   setPDFForSigningAction,
   setPDFPageForSigningAction,
   setParentMessageIdAction,

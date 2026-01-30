@@ -5,9 +5,8 @@ import { setDocketEntryFormForDocketEditAction } from './setDocketEntryFormForDo
 
 describe('setDocketEntryFormForDocketEditAction', () => {
   presenter.providers.applicationContext = applicationContextForClient;
-  const mockDocumentStorageId = 'ce32b2ad-86fc-4e1c-8ab5-22548d470f8c';
 
-  it("sets the given document's edit state on form.state, preserving the documentStorageId from docket entry state value", async () => {
+  it("sets the given document's edit state on form.state", async () => {
     const editState = {
       date: '2020-01-01T05:00:00.000Z',
       docketEntryId: '123-abc-123-abc',
@@ -28,7 +27,6 @@ describe('setDocketEntryFormForDocketEditAction', () => {
           docketEntries: [
             {
               docketEntryId: '123-abc-123-abc',
-              documentStorageId: mockDocumentStorageId,
               editState: JSON.stringify(editState),
               eventCode: 'OPP',
               filers: [],
@@ -47,7 +45,6 @@ describe('setDocketEntryFormForDocketEditAction', () => {
     const expectedDocketEntry = {
       date: '2020-01-01T05:00:00.000Z',
       docketEntryId: '123-abc-123-abc',
-      documentStorageId: mockDocumentStorageId,
       docketNumber: '123-45',
       eventCode: 'OPP',
       filers: [],
@@ -154,7 +151,6 @@ describe('setDocketEntryFormForDocketEditAction', () => {
         caseDetail: {
           docketEntries: [
             {
-              documentStorageId: mockDocumentStorageId,
               docketEntryId: '123-abc-123-abc',
               filers: ['123', '456'],
             },
@@ -170,7 +166,6 @@ describe('setDocketEntryFormForDocketEditAction', () => {
 
     const expectedDocketEntry = {
       docketEntryId: '123-abc-123-abc',
-      documentStorageId: mockDocumentStorageId,
       filers: ['123', '456'],
       lodged: false,
     };

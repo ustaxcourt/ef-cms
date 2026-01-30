@@ -7,7 +7,6 @@ jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
 jest.mock('@shared/business/utilities/shouldAppendClinicLetter');
-jest.mock('@web-api/business/useCaseHelper/countPagesInDocument');
 import {
   MOCK_CASE,
   MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
@@ -23,19 +22,16 @@ import { combineTwoPdfs } from '@shared/business/utilities/pdfs/combineTwoPdfs';
 import { docketClerkUser } from '@shared/test/mockUsers';
 import { fakeData, testPdfDoc } from '@shared/business/test/getFakeFile';
 import { generateNoticesForCaseTrialSessionCalendarInteractor } from './generateNoticesForCaseTrialSessionCalendarInteractor';
-import { shouldAppendClinicLetter as shouldAppendClinicLetterMock } from '@shared/business/utilities/shouldAppendClinicLetter';
+import { shouldAppendClinicLetter } from '@shared/business/utilities/shouldAppendClinicLetter';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getTrialSessionNotificationProcessing as getTrialSessionNotificationProcessingMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionNotificationProcessing';
 import { updateTrialSessionNotificationProcessing as updateTrialSessionNotificationProcessingMock } from '@web-api/persistence/postgres/trialSessions/updateTrialSessionNotificationProcessing';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
-import { countPagesInDocument as countPagesInDocumentMock } from '@web-api/business/useCaseHelper/countPagesInDocument';
 
 describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
-  const countPagesInDocument = jest.mocked(countPagesInDocumentMock);
-  const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
-  const shouldAppendClinicLetter = jest.mocked(shouldAppendClinicLetterMock);
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const getUserById = jest.mocked(getUserByIdMock);
   const updateCaseAndAssociations = jest
     .mocked(updateCaseAndAssociationsMock)
@@ -67,7 +63,7 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   const clinicLetterKey = 'I am a key';
 
   beforeAll(() => {
-    shouldAppendClinicLetter.mockResolvedValue({
+    (shouldAppendClinicLetter as jest.Mock).mockResolvedValue({
       appendClinicLetter: true,
       clinicLetterKey,
     });
@@ -100,8 +96,6 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
       caseStatuses: {},
       unfinishedCases: 10,
     });
-
-    countPagesInDocument.mockResolvedValue(1);
   });
 
   it('should return and do nothing if the job is already processed', async () => {
@@ -186,9 +180,8 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   });
 
   it('should only save a notice of trial order and NOT a clinic letter for practitioners', async () => {
-    shouldAppendClinicLetter.mockResolvedValueOnce({
+    (shouldAppendClinicLetter as jest.Mock).mockResolvedValueOnce({
       appendClinicLetter: false,
-      clinicLetterKey,
     });
     await generateNoticesForCaseTrialSessionCalendarInteractor(
       applicationContext,
@@ -403,6 +396,7 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
       interactorParamObject,
     );
 
+    console.log(JSON.stringify(updateTrialSessionNotificationProcessing.mock));
     expect(
       applicationContext.getUseCases().generateNoticeOfTrialIssuedInteractor,
     ).toHaveBeenCalled();

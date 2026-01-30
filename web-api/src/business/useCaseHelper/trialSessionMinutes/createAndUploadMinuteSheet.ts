@@ -7,7 +7,7 @@ import { uploadDocument } from '@web-api/persistence/s3/uploadDocument';
 
 export const createAndUploadMinuteSheet = async (
   applicationContext: ServerApplicationContext,
-  { docketNumber, trialSessionId, aCase, trialSession, documentStorageId },
+  { docketNumber, trialSessionId, aCase, trialSession, docketEntryId },
 ) => {
   const minuteSheet = await getMinuteSheet({ docketNumber, trialSessionId });
 
@@ -32,7 +32,7 @@ export const createAndUploadMinuteSheet = async (
   await uploadDocument({
     applicationContext,
     pdfData: pdf,
-    key: documentStorageId,
+    pdfName: docketEntryId,
   });
 
   return pdf;

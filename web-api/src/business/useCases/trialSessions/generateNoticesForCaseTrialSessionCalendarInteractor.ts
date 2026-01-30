@@ -18,7 +18,6 @@ import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseA
 import { updateTrialSessionNotificationProcessing } from '@web-api/persistence/postgres/trialSessions/updateTrialSessionNotificationProcessing';
 import { getTrialSessionNotificationProcessing } from '@web-api/persistence/postgres/trialSessions/getTrialSessionNotificationProcessing';
 import { NotFoundError } from '@web-api/errors/errors';
-import { countPagesInDocument } from '@web-api/business/useCaseHelper/countPagesInDocument';
 
 /**
  * serves a notice of trial session and standing pretrial document on electronic
@@ -165,8 +164,7 @@ const setNoticeForCase = async ({
 
   let clinicLetter;
   let noticeOfTrialIssuedWithClinicLetter;
-  const newNoticeOfTrialIssuedDocumentStorageId =
-    applicationContext.getUniqueId();
+  const newNoticeOfTrialIssuedDocketEntryId = applicationContext.getUniqueId();
   if (appendClinicLetter) {
     clinicLetter = await applicationContext
       .getPersistenceGateway()
@@ -184,12 +182,12 @@ const setNoticeForCase = async ({
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       document: noticeOfTrialIssuedWithClinicLetter,
-      key: newNoticeOfTrialIssuedDocumentStorageId,
+      key: newNoticeOfTrialIssuedDocketEntryId,
     });
   } else {
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       document: noticeOfTrialIssued,
-      key: newNoticeOfTrialIssuedDocumentStorageId,
+      key: newNoticeOfTrialIssuedDocketEntryId,
     });
   }
 
@@ -202,8 +200,7 @@ const setNoticeForCase = async ({
   const noticeOfTrialDocketEntry = new DocketEntry(
     {
       date: trialSessionEntity.startDate,
-      docketEntryId: newNoticeOfTrialIssuedDocumentStorageId,
-      documentStorageId: newNoticeOfTrialIssuedDocumentStorageId,
+      docketEntryId: newNoticeOfTrialIssuedDocketEntryId,
       documentTitle: noticeOfTrialDocumentTitle,
       documentType: SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfTrial.documentType,
       eventCode: SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfTrial.eventCode,
@@ -218,10 +215,12 @@ const setNoticeForCase = async ({
 
   noticeOfTrialDocketEntry.setFiledBy(user);
 
-  noticeOfTrialDocketEntry.numberOfPages = await countPagesInDocument({
-    applicationContext,
-    documentStorageId: noticeOfTrialDocketEntry.documentStorageId,
-  });
+  noticeOfTrialDocketEntry.numberOfPages = await applicationContext
+    .getUseCaseHelpers()
+    .countPagesInDocument({
+      applicationContext,
+      docketEntryId: noticeOfTrialDocketEntry.docketEntryId,
+    });
 
   caseEntity.addDocketEntry(noticeOfTrialDocketEntry);
   caseEntity.setNoticeOfTrialDate();
@@ -258,19 +257,18 @@ const setNoticeForCase = async ({
       SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrder.eventCode;
   }
 
-  const newStandingPretrialDocumentStorageId = applicationContext.getUniqueId();
+  const newStandingPretrialDocketEntryId = applicationContext.getUniqueId();
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     document: standingPretrialFile,
-    key: newStandingPretrialDocumentStorageId,
+    key: newStandingPretrialDocketEntryId,
   });
 
   const standingPretrialDocketEntry = new DocketEntry(
     {
       attachments: false,
       description: standingPretrialDocumentTitle,
-      docketEntryId: newStandingPretrialDocumentStorageId,
-      documentStorageId: newStandingPretrialDocumentStorageId,
+      docketEntryId: newStandingPretrialDocketEntryId,
       documentTitle: standingPretrialDocumentTitle,
       documentType: standingPretrialDocumentTitle,
       eventCode: standingPretrialDocumentEventCode,
@@ -284,10 +282,12 @@ const setNoticeForCase = async ({
 
   standingPretrialDocketEntry.setFiledBy(user);
 
-  standingPretrialDocketEntry.numberOfPages = await countPagesInDocument({
-    applicationContext,
-    documentStorageId: standingPretrialDocketEntry.documentStorageId,
-  });
+  standingPretrialDocketEntry.numberOfPages = await applicationContext
+    .getUseCaseHelpers()
+    .countPagesInDocument({
+      applicationContext,
+      docketEntryId: standingPretrialDocketEntry.docketEntryId,
+    });
 
   caseEntity.addDocketEntry(standingPretrialDocketEntry);
 

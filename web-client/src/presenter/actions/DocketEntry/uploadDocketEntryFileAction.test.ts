@@ -4,7 +4,7 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 import { uploadDocketEntryFileAction } from './uploadDocketEntryFileAction';
 
 describe('uploadDocketEntryFileAction', () => {
-  const mockDocumentStorageId = '7dc7c871-6fc4-4274-85ed-63b0c14465bd';
+  const mockDocketEntryId = '7dc7c871-6fc4-4274-85ed-63b0c14465bd';
   const mockFile = {
     name: 'petition',
     size: 100,
@@ -33,17 +33,15 @@ describe('uploadDocketEntryFileAction', () => {
   beforeEach(() => {
     applicationContext
       .getUseCases()
-      .uploadDocumentInteractor.mockResolvedValue(mockDocumentStorageId);
+      .uploadDocumentInteractor.mockResolvedValue(mockDocketEntryId);
   });
 
-  it('should make a call to upload the selected document with documentStorageId from state.form', async () => {
+  it('should make a call to upload the selected document with docketEntryId from state', async () => {
     await runAction(uploadDocketEntryFileAction, {
       modules: { presenter },
       props: mockProps,
       state: {
-        form: {
-          documentStorageId: mockDocumentStorageId,
-        },
+        docketEntryId: mockDocketEntryId,
       },
     });
 
@@ -52,7 +50,7 @@ describe('uploadDocketEntryFileAction', () => {
         .calls[0][1],
     ).toMatchObject({
       documentFile: mockFile,
-      key: mockDocumentStorageId,
+      key: mockDocketEntryId,
       onUploadProgress: expect.any(Function),
     });
   });
@@ -70,42 +68,18 @@ describe('uploadDocketEntryFileAction', () => {
     expect(errorStub).toHaveBeenCalled();
   });
 
-  it('should return the success path with the documentStorageId when the document was uploaded successfully', async () => {
+  it('should return the success path with the docketEntryId when the document was uploaded successfully', async () => {
     await runAction(uploadDocketEntryFileAction, {
       modules: { presenter },
       props: mockProps,
       state: {
-        form: {
-          documentStorageId: mockDocumentStorageId,
-        },
+        docketEntryId: mockDocketEntryId,
       },
     });
 
     expect(successStub).toHaveBeenCalled();
     expect(successStub.mock.calls[0][0]).toMatchObject({
-      documentStorageId: mockDocumentStorageId,
-    });
-  });
-
-  it('should return the documentStorageId generated from uploadDocumentInteractor when documentStorageId is undefined', async () => {
-    const generatedMockDocumentStorageId =
-      '344b73eb-3883-45a8-b80f-b730e83b2790';
-
-    applicationContext
-      .getUseCases()
-      .uploadDocumentInteractor.mockResolvedValueOnce(
-        generatedMockDocumentStorageId,
-      );
-
-    await runAction(uploadDocketEntryFileAction, {
-      modules: { presenter },
-      props: mockProps,
-      state: { form: {} },
-    });
-
-    expect(successStub).toHaveBeenCalled();
-    expect(successStub.mock.calls[0][0]).toMatchObject({
-      documentStorageId: generatedMockDocumentStorageId,
+      docketEntryId: mockDocketEntryId,
     });
   });
 });

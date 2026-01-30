@@ -55,13 +55,13 @@ export const generateNoticeOfDocketChangePdf = async ({
       },
     });
 
-  const documentStorageId = applicationContext.getUniqueId();
+  const docketEntryId = applicationContext.getUniqueId();
 
   await applicationContext.getPersistenceGateway().uploadDocument({
     applicationContext,
     pdfData: noticePdf,
-    key: documentStorageId,
+    pdfName: docketEntryId,
   });
 
-  return documentStorageId;
+  return docketEntryId;
 };

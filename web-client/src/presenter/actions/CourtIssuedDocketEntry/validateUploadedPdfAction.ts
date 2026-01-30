@@ -8,11 +8,11 @@ export const validateUploadedPdfAction = async ({
   applicationContext,
   props,
 }: ActionProps) => {
-  const { documentStorageId } = props;
+  const { docketEntryId } = props;
 
   await applicationContext
     .getUseCases()
     .validatePdfInteractor(applicationContext, {
-      key: documentStorageId,
+      key: docketEntryId,
     });
 };

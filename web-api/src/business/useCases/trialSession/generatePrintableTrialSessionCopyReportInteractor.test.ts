@@ -2,12 +2,11 @@ import { Case } from '@shared/business/entities/cases/Case';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOCK_TRIAL_REGULAR } from '../../../../../shared/src/test/mockTrial';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-
+import { generatePrintableTrialSessionCopyReportInteractor } from './generatePrintableTrialSessionCopyReportInteractor';
 import {
   mockPetitionerUser,
   mockTrialClerkUser,
 } from '@shared/test/mockAuthUsers';
-import { generatePrintableTrialSessionCopyReportInteractor } from './generatePrintableTrialSessionCopyReportInteractor';
 
 describe('generatePrintableTrialSessionCopyReportInteractor', () => {
   let mockTrialSession;
@@ -50,7 +49,6 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
           sessionNotes: 'session notes',
           showCaseNotes: true,
           sort: 'docket',
-          trialStatusCounts: { basisReached: 3 },
           userHeading: 'Yggdrasil - Session Copy',
         },
         mockPetitionerUser,
@@ -81,7 +79,6 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
         sessionNotes: 'session notes',
         showCaseNotes: true,
         sort: 'docket',
-        trialStatusCounts: { basisReached: 3 },
         userHeading: 'Yggdrasil - Session Copy',
       },
       mockTrialClerkUser,
@@ -112,7 +109,6 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
         sessionNotes: 'session notes',
         showCaseNotes: true,
         sort: 'docket',
-        trialStatusCounts: { basisReached: 3 },
         userHeading: 'Yggdrasil - Session Copy',
       },
     });
@@ -141,7 +137,6 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
         sessionNotes: 'session notes',
         showCaseNotes: true,
         sort: 'docket',
-        trialStatusCounts: { basisReached: 3 },
         userHeading: 'Yggdrasil - Session Copy',
       },
       mockTrialClerkUser,
@@ -175,7 +170,6 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
         sessionNotes: 'session notes',
         showCaseNotes: true,
         sort: 'docket',
-        trialStatusCounts: { basisReached: 3 },
         userHeading: 'Yggdrasil - Session Copy',
       },
       mockTrialClerkUser,

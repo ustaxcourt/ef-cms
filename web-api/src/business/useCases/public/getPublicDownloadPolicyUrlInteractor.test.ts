@@ -48,7 +48,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
       {
         docketNumber: '123-20',
         isTerminalUser: true,
-        key: mockCase.docketEntries[0].docketEntryId,
+        key: '9de27a7d-7c6b-434b-803b-7655f82d5e07',
       },
       mockDocketClerkUser,
     );
@@ -57,7 +57,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
       applicationContext.getPersistenceGateway().getDownloadPolicyUrl.mock
         .calls[0][0],
     ).toMatchObject({
-      key: mockCase.docketEntries[0].documentStorageId,
+      key: '9de27a7d-7c6b-434b-803b-7655f82d5e07',
     });
     expect(result).toEqual({ url: 'localhost' });
   });

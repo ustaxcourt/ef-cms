@@ -9,7 +9,7 @@ import { testPdfDoc } from '@shared/business/test/getFakeFile';
 
 describe('appendAmendedPetitionFormInteractor', () => {
   const returnedCombinedPdf = 'ever';
-  const mockDocumentStorageId = 'd594360c-0514-4acd-a2ac-24a402060756';
+  const mockDocketEntryId = 'd594360c-0514-4acd-a2ac-24a402060756';
 
   beforeEach(() => {
     applicationContext
@@ -31,7 +31,7 @@ describe('appendAmendedPetitionFormInteractor', () => {
     await appendAmendedPetitionFormInteractor(
       applicationContext,
       {
-        documentStorageId: mockDocumentStorageId,
+        docketEntryId: mockDocketEntryId,
       },
       mockPetitionsClerkUser,
     );
@@ -39,14 +39,14 @@ describe('appendAmendedPetitionFormInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().getDocument.mock.calls[0][0]
         .key,
-    ).toEqual(mockDocumentStorageId);
+    ).toEqual(mockDocketEntryId);
   });
 
   it('should make a call to retrieve the amended petition form from s3', async () => {
     await appendAmendedPetitionFormInteractor(
       applicationContext,
       {
-        documentStorageId: mockDocumentStorageId,
+        docketEntryId: mockDocketEntryId,
       },
       mockPetitionsClerkUser,
     );
@@ -61,7 +61,7 @@ describe('appendAmendedPetitionFormInteractor', () => {
     await appendAmendedPetitionFormInteractor(
       applicationContext,
       {
-        documentStorageId: mockDocumentStorageId,
+        docketEntryId: mockDocketEntryId,
       },
       mockPetitionsClerkUser,
     );
@@ -78,7 +78,7 @@ describe('appendAmendedPetitionFormInteractor', () => {
     await appendAmendedPetitionFormInteractor(
       applicationContext,
       {
-        documentStorageId: mockDocumentStorageId,
+        docketEntryId: mockDocketEntryId,
       },
       mockPetitionsClerkUser,
     );
@@ -88,7 +88,7 @@ describe('appendAmendedPetitionFormInteractor', () => {
         .calls[0][0],
     ).toMatchObject({
       pdfData: Buffer.from(returnedCombinedPdf),
-      key: mockDocumentStorageId,
+      pdfName: mockDocketEntryId,
     });
   });
 });

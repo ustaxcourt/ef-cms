@@ -9,17 +9,17 @@ describe('removeCoversheet', () => {
 
     await expect(
       removeCoversheet(applicationContext, {
-        documentStorageId: 'does-not-exist',
+        docketEntryId: 'does-not-exist',
       }),
     ).rejects.toThrow();
   });
 
   it('should remove the coversheet from the provided docket entry`s pdf', async () => {
-    const mockDocumentStorageId = 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
+    const mockDocketEntryId = 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
     const numberOfPagesBeforeCoversheetRemoval = 2;
 
     const result = await removeCoversheet(applicationContext, {
-      documentStorageId: mockDocumentStorageId,
+      docketEntryId: mockDocketEntryId,
     });
 
     expect(result.numberOfPages).toBe(numberOfPagesBeforeCoversheetRemoval - 1);

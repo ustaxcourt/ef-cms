@@ -1,4 +1,3 @@
-/* eslint-disable complexity */
 import {
   AMICUS_BRIEF_DOCUMENT_TYPE,
   AMICUS_BRIEF_EVENT_CODE,
@@ -100,7 +99,7 @@ export class DocketEntry extends JoiValidationEntity {
   public docketNumbers?: string;
   public documentContentsId?: string;
   public documentIdBeforeSignature?: string;
-  public documentStorageId: string;
+  public documentStorageId?: string; // 8477TODO: make sure its not optional after migration
   public documentTitle: string;
   public documentType?: string;
   public eventCode: string; // technically optional as draft docketEntry does not require it
@@ -235,8 +234,6 @@ export class DocketEntry extends JoiValidationEntity {
     this.docketNumbers = rawDocketEntry.docketNumbers;
     this.documentContentsId = rawDocketEntry.documentContentsId;
     this.documentIdBeforeSignature = rawDocketEntry.documentIdBeforeSignature;
-    this.documentStorageId =
-      rawDocketEntry.documentStorageId || this.docketEntryId;
     this.documentTitle = rawDocketEntry.documentTitle;
     this.documentType = rawDocketEntry.documentType;
     this.eventCode = rawDocketEntry.eventCode;

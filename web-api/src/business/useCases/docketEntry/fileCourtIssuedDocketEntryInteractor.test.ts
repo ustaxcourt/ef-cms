@@ -6,7 +6,6 @@ import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
-jest.mock('@web-api/business/useCaseHelper/countPagesInDocument');
 import {
   DOCKET_SECTION,
   ROLES,
@@ -30,7 +29,6 @@ import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
-import { countPagesInDocument as countPagesInDocumentMock } from '@web-api/business/useCaseHelper/countPagesInDocument';
 import { upsertDocketEntryRelatedEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntryRelatedEntries';
 
 describe('fileCourtIssuedDocketEntryInteractor', () => {
@@ -49,7 +47,6 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
   const tryGetLocks = jest.mocked(tryGetLocksMock);
-  const countPagesInDocument = jest.mocked(countPagesInDocumentMock);
 
   beforeEach(() => {
     getUserById.mockResolvedValue(docketClerkUser as DbUser);
@@ -59,7 +56,6 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       docketEntries: [
         {
           docketEntryId: 'a01afa63-931e-4999-99f0-c892c51292d6',
-          documentStorageId: '86b9f1c4-93a7-4a06-ad61-d1d4dea12f15',
           docketNumber: '45678-18',
           documentTitle: 'Order',
           documentType: 'Order',
@@ -167,11 +163,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       } as any,
       mockDocketClerkUser,
     );
-    expect(countPagesInDocument).toHaveBeenCalledWith(
-      expect.objectContaining({
-        documentStorageId: caseRecord.docketEntries[0].documentStorageId,
-      }),
-    );
+
     expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(upsertWorkItems).toHaveBeenCalled();
   });

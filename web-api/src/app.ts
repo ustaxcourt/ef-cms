@@ -393,7 +393,7 @@ app.use(expressLogger);
   );
   // POST
   app.post(
-    '/async/case-documents/:documentStorageId/append-pdf',
+    '/async/case-documents/:docketEntryId/append-pdf',
     lambdaWrapper(
       appendAmendedPetitionFormLambda,
       { isAsyncSync: true },

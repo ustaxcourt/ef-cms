@@ -21,13 +21,13 @@ import { CaseDTO } from '../dto/docketEntries/CaseDTO';
 
 const saveOriginalDocumentWithNewId = async ({
   applicationContext,
-  originalDocumentStorageId,
+  originalDocketEntryId,
 }) => {
   const originalDocument = await applicationContext
     .getPersistenceGateway()
     .getDocument({
       applicationContext,
-      key: originalDocumentStorageId,
+      key: originalDocketEntryId,
       useTempBucket: false,
     });
 
@@ -42,23 +42,35 @@ const saveOriginalDocumentWithNewId = async ({
 
 const replaceOriginalWithSignedDocument = async ({
   applicationContext,
-  originalDocumentStorageId,
-  signedDocumentStorageId,
+  originalDocketEntryId,
+  signedDocketEntryId,
 }) => {
   const signedDocument = await applicationContext
     .getPersistenceGateway()
     .getDocument({
       applicationContext,
-      key: signedDocumentStorageId,
+      key: signedDocketEntryId,
       useTempBucket: false,
     });
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     document: signedDocument,
-    key: originalDocumentStorageId,
+    key: originalDocketEntryId,
   });
 };
 
+/**
+ * saveSignedDocumentInteractor
+ *
+ * @param {object} applicationContext the application context
+ * @param {object} providers the providers object
+ * @param {string} providers.docketNumber the docket number of the case on which to save the document
+ * @param {string} providers.nameForSigning the name on the signature of the signed document
+ * @param {string} providers.originalDocketEntryId the id of the original (unsigned) document
+ * @param {string} providers.parentMessageId the id of the parent message to add the signed document to
+ * @param {string} providers.signedDocketEntryId the id of the signed document
+ * @returns {object} an object containing the updated caseEntity and the signed document ID
+ */
 export const saveSignedDocumentInteractor = async (
   applicationContext: ServerApplicationContext,
   {
@@ -66,7 +78,7 @@ export const saveSignedDocumentInteractor = async (
     nameForSigning,
     originalDocketEntryId,
     parentMessageId,
-    signedDocumentStorageId,
+    signedDocketEntryId,
   },
   authorizedUser: UnknownAuthUser,
 ): Promise<{ caseEntity: CaseDTO; signedDocketEntryId: string }> => {
@@ -96,8 +108,7 @@ export const saveSignedDocumentInteractor = async (
     signedDocketEntryEntity = new DocketEntry(
       {
         createdAt: applicationContext.getUtilities().createISODateString(),
-        docketEntryId: signedDocumentStorageId,
-        documentStorageId: signedDocumentStorageId,
+        docketEntryId: signedDocketEntryId,
         docketNumber: caseRecord.docketNumber,
         documentTitle:
           SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.documentType,
@@ -137,13 +148,13 @@ export const saveSignedDocumentInteractor = async (
   } else {
     const documentIdBeforeSignature = await saveOriginalDocumentWithNewId({
       applicationContext,
-      originalDocumentStorageId: originalDocketEntryEntity?.documentStorageId,
+      originalDocketEntryId,
     });
 
     await replaceOriginalWithSignedDocument({
       applicationContext,
-      originalDocumentStorageId: originalDocketEntryEntity?.documentStorageId,
-      signedDocumentStorageId,
+      originalDocketEntryId,
+      signedDocketEntryId,
     });
 
     signedDocketEntryEntity = new DocketEntry(
