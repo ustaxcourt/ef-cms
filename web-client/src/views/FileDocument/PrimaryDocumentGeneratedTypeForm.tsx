@@ -26,8 +26,8 @@ export const PrimaryDocumentGeneratedTypeForm = connect(
     showModal: state.modal.showModal,
     updateCaseAssociationFormValueSequence:
       sequences.updateCaseAssociationFormValueSequence,
-    validateCaseAssociationRequestSequence:
-      sequences.validateCaseAssociationRequestSequence,
+    validateExternalDocumentInformationSequence:
+      sequences.validateExternalDocumentInformationSequence,
     validationErrors: state.validationErrors,
   },
   function PrimaryDocumentGeneratedTypeForm({
@@ -38,7 +38,7 @@ export const PrimaryDocumentGeneratedTypeForm = connect(
     openCleanModalSequence,
     showModal,
     updateCaseAssociationFormValueSequence,
-    validateCaseAssociationRequestSequence,
+    validateExternalDocumentInformationSequence,
     validationErrors,
   }) {
     return (
@@ -68,7 +68,7 @@ export const PrimaryDocumentGeneratedTypeForm = connect(
                         key: 'generationType',
                         value: constants.GENERATION_TYPES.AUTO,
                       });
-                      validateCaseAssociationRequestSequence();
+                      validateExternalDocumentInformationSequence();
                     }}
                   />
                   <label
@@ -93,7 +93,7 @@ export const PrimaryDocumentGeneratedTypeForm = connect(
                       key: 'generationType',
                       value: constants.GENERATION_TYPES.MANUAL,
                     });
-                    validateCaseAssociationRequestSequence();
+                    validateExternalDocumentInformationSequence();
                   }}
                 />
                 <label
@@ -136,7 +136,7 @@ export const PrimaryDocumentGeneratedTypeForm = connect(
                   id="primary-document"
                   name="primaryDocumentFile"
                   updateFormValueSequence="updateCaseAssociationFormValueSequence"
-                  validationSequence="validateCaseAssociationRequestSequence"
+                  validationSequence="validateExternalDocumentInformationSequence"
                 />
               </FormGroup>
 
@@ -155,7 +155,7 @@ export const PrimaryDocumentGeneratedTypeForm = connect(
                     >
                       <FontAwesomeIcon
                         className="margin-right-05"
-                        icon="question-circle"
+                        icon="circle-info"
                         size="1x"
                       />
                       What can I include with my document?
@@ -174,7 +174,7 @@ export const PrimaryDocumentGeneratedTypeForm = connect(
                           key: e.target.name,
                           value: e.target.checked,
                         });
-                        validateCaseAssociationRequestSequence();
+                        validateExternalDocumentInformationSequence();
                       }}
                     />
                     <label
@@ -196,7 +196,7 @@ export const PrimaryDocumentGeneratedTypeForm = connect(
                           key: e.target.name,
                           value: e.target.checked,
                         });
-                        validateCaseAssociationRequestSequence();
+                        validateExternalDocumentInformationSequence();
                       }}
                     />
                     <label
@@ -220,7 +220,7 @@ export const PrimaryDocumentGeneratedTypeForm = connect(
                         toFormat: constants.DATE_FORMATS.ISO,
                         value: e.target.value,
                       });
-                      validateCaseAssociationRequestSequence();
+                      validateExternalDocumentInformationSequence();
                     }}
                   />
                 )}
