@@ -1,6 +1,6 @@
 import {
   caseIsEligibleForMinuteSheet,
-  isEligibleUnscheduledCaseForMinuteSheet,
+  unscheduledCaseIsEligibleForMinuteSheet,
 } from './caseIsEligibleForMinuteSheet';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
@@ -171,7 +171,7 @@ describe('caseIsEligibleForMinuteSheet', () => {
   });
 });
 
-describe('isEligibleUnscheduledCaseForMinuteSheet', () => {
+describe('unscheduledCaseIsEligibleForMinuteSheet', () => {
   it('should return true when unscheduled case is eligible (not a non-lead consolidated case)', () => {
     const mockCase = {
       ...MOCK_CASE,
@@ -183,7 +183,7 @@ describe('isEligibleUnscheduledCaseForMinuteSheet', () => {
       isCalendared: true,
     };
 
-    const result = isEligibleUnscheduledCaseForMinuteSheet(
+    const result = unscheduledCaseIsEligibleForMinuteSheet(
       mockCase,
       mockTrialSession,
     );
@@ -202,7 +202,7 @@ describe('isEligibleUnscheduledCaseForMinuteSheet', () => {
       isCalendared: false,
     };
 
-    const result = isEligibleUnscheduledCaseForMinuteSheet(
+    const result = unscheduledCaseIsEligibleForMinuteSheet(
       mockCase,
       mockTrialSession,
     );
@@ -221,7 +221,7 @@ describe('isEligibleUnscheduledCaseForMinuteSheet', () => {
       isCalendared: true,
     };
 
-    const result = isEligibleUnscheduledCaseForMinuteSheet(
+    const result = unscheduledCaseIsEligibleForMinuteSheet(
       mockCase,
       mockTrialSession,
     );
@@ -240,7 +240,7 @@ describe('isEligibleUnscheduledCaseForMinuteSheet', () => {
       isCalendared: true,
     };
 
-    const result = isEligibleUnscheduledCaseForMinuteSheet(
+    const result = unscheduledCaseIsEligibleForMinuteSheet(
       mockCase,
       mockTrialSession,
     );
@@ -259,7 +259,7 @@ describe('isEligibleUnscheduledCaseForMinuteSheet', () => {
       isCalendared: true,
     };
 
-    const result = isEligibleUnscheduledCaseForMinuteSheet(
+    const result = unscheduledCaseIsEligibleForMinuteSheet(
       mockCase,
       mockTrialSession,
     );
@@ -281,7 +281,7 @@ describe('isEligibleUnscheduledCaseForMinuteSheet', () => {
       startTime: '10:00',
     };
 
-    const result = isEligibleUnscheduledCaseForMinuteSheet(
+    const result = unscheduledCaseIsEligibleForMinuteSheet(
       mockCase,
       mockTrialSession,
     );

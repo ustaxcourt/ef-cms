@@ -1,8 +1,8 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { clearNewMinuteSheetModalCaseInfoAction } from '../actions/TrialSession/clearNewMinuteSheetModalCaseInfoAction';
-import { searchNewMinuteSheetCaseAction } from '../actions/TrialSession/searchNewMinuteSheetCaseAction';
-import { setNewMinuteSheetModalCaseInfoAction } from '../actions/TrialSession/setNewMinuteSheetModalCaseInfoAction';
-import { setNewMinuteSheetModalSearchErrorAction } from '../actions/TrialSession/setNewMinuteSheetModalSearchErrorAction';
+import { clearNewMinuteSheetModalCaseInfoAction } from '../actions/TrialSessionMinutes/clearNewMinuteSheetModalCaseInfoAction';
+import { searchNewMinuteSheetCaseAction } from '../actions/TrialSessionMinutes/searchNewMinuteSheetCaseAction';
+import { setNewMinuteSheetModalCaseInfoAction } from '../actions/TrialSessionMinutes/setNewMinuteSheetModalCaseInfoAction';
+import { setNewMinuteSheetModalSearchErrorAction } from '../actions/TrialSessionMinutes/setNewMinuteSheetModalSearchErrorAction';
 
 export const searchNewMinuteSheetCaseSequence = [
   clearAlertsAction,

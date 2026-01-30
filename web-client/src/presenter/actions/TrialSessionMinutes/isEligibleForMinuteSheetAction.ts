@@ -1,14 +1,10 @@
 import {
   caseIsEligibleForMinuteSheet,
-  isEligibleUnscheduledCaseForMinuteSheet,
+  unscheduledCaseIsEligibleForMinuteSheet,
 } from '@shared/business/utilities/trialSessionMinutes/caseIsEligibleForMinuteSheet';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const isEligibleForMinuteSheetAction = ({
-  get,
-  path,
-  store,
-}) => {
+export const isEligibleForMinuteSheetAction = ({ get, path, store }) => {
   const aCase = get(state.caseDetail);
   const trialSession = get(state.trialSession);
 
@@ -36,7 +32,11 @@ export const isEligibleForMinuteSheetAction = ({
     return path.no();
   }
 
-  const isEligibleUnscheduledCase = isEligibleUnscheduledCaseForMinuteSheet(
+  // Case is either:
+  // 1. In caseOrder but removed (inactive) - accessed via modal with isUnscheduledCase=true
+  // 2. Not in caseOrder at all (truly unscheduled)
+  // For both cases, use the unscheduled eligibility check
+  const isEligibleUnscheduledCase = unscheduledCaseIsEligibleForMinuteSheet(
     aCase,
     trialSession,
   );
