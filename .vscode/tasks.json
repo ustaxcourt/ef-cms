@@ -12,41 +12,25 @@
       }
     },
     {
-      "label": "API",
-      "type": "shell",
-      "command": "node_modules/nodemon/bin/nodemon.js -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress/ --exec \"bash -c '. ./setup-local-env.sh && (lsof -ti :9001 > /dev/null || nohup ./node_modules/.bin/s3rver -d web-api/storage/s3 -a 0.0.0.0 -p 9001 --configure-bucket noop-documents-local-us-east-1 web-api/cors-policy.xml --configure-bucket noop-temp-documents-local-us-east-1 web-api/cors-policy.xml > /dev/null 2>&1 < /dev/null &) && (lsof -ti :9229 > /dev/null || nohup env HOST=0.0.0.0 CODE=\\\"385030\\\" ./node_modules/.bin/cognito-local > /dev/null 2>&1 < /dev/null &) && ./node_modules/.bin/ts-node --transpile-only web-api/src/app-local.ts'\"",
-      "options": {
-        "env": {
-          "TS_NODE_TRANSPILE_ONLY": "true",
-          "AWS_ACCESS_KEY_ID": "S3RVER",
-          "AWS_SECRET_ACCESS_KEY": "S3RVER",
-          "AWS_REGION": "us-east-1",
-          "EFCMS_DOMAIN": "localhost",
-          "ELASTICSEARCH_HOST": "localhost",
-          "ELASTICSEARCH_ENDPOINT": "http://localhost:9200",
-          "IRS_SUPERUSER_EMAIL": "irs-superuser@example.com",
-          "USER_POOL_ID": "local_2pHzece7",
-          "COGNITO_CLIENT_ID": "bvjrggnd3co403c0aahscinne",
-          "DISABLE_EMAILS": "true",
-          "ENV": "local",
-          "USTC_ENV": "dev",
-          "POSTGRES_HOST": "localhost",
-          "POSTGRES_USER": "postgres",
-          "POSTGRES_PASSWORD": "example",
-          "DATABASE_NAME": "postgres"
-        }
-      },
-      "dependsOn": ["Prepare Local Environment"],
-      "presentation": {
-        "reveal": "always",
-        "panel": "shared"
-      }
-    },
-    {
       "label": "Client",
       "type": "npm",
       "script": "start:client",
-      "problemMatcher": [],
+      "problemMatcher": {
+        "owner": "typescript",
+        "fileLocation": "relative",
+        "pattern": {
+          "regexp": ".*",
+          "file": 1,
+          "location": 2,
+          "message": 3
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".*",
+          "endsPattern": ".*"
+        }
+      },
+      "isBackground": true,
       "presentation": {
         "reveal": "always",
         "panel": "shared"
@@ -56,7 +40,22 @@
       "label": "Public",
       "type": "npm",
       "script": "start:public",
-      "problemMatcher": [],
+      "problemMatcher": {
+        "owner": "typescript",
+        "fileLocation": "relative",
+        "pattern": {
+          "regexp": ".*",
+          "file": 1,
+          "location": 2,
+          "message": 3
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".*",
+          "endsPattern": ".*"
+        }
+      },
+      "isBackground": true,
       "presentation": {
         "reveal": "always",
         "panel": "shared"
