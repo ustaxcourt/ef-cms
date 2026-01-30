@@ -1,3 +1,21 @@
+<details><summary>Dependency Updates - Week of 2026-01-27</summary>
+
+## Local
+- rerun `npm i` to get updated packages
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Docker container `4.3.65` in exp7
+
+```bash
+. scripts/env/set-env.zsh expN
+npm run deploy:ci-image:from exp7
+npm run ecr:check-version
+```
+</details>
+
 <details><summary>Dependency Updates - Week of 2026-01-20</summary>
 
 ## Local
