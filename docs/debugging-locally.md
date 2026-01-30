@@ -1,4 +1,4 @@
-# Running Locally with an IDE
+# Debugging Locally with an IDE
 
 This guide describes how to use integrated run configurations to run and debug the DAWSON application within your IDE (IntelliJ IDEA, WebStorm, VSCode, etc.).
 
