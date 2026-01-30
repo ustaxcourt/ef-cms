@@ -17,7 +17,7 @@ import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messag
 import { orderBy } from 'lodash';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
-import { CaseDTO } from '../dto/cases/CaseDTO';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 const saveOriginalDocumentWithNewId = async ({
   applicationContext,

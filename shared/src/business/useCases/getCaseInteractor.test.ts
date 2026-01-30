@@ -28,7 +28,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { getWorkItemsByDocketNumber as getWorkItemsByDocketNumberMock } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { docketClerk1User } from '@shared/test/mockUsers';
-import { CaseDTO } from '../dto/cases/CaseDTO';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 describe('getCaseInteractor', () => {
   const irsPractitionerId = '6cf19fba-18c6-467a-9ea6-7a14e42add2f';
