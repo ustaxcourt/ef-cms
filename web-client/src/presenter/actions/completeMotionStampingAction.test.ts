@@ -11,11 +11,13 @@ describe('completeMotionStampingAction', () => {
 
   const docketNumber = '123';
 
-  const mockNewDocketEntryId = applicationContext.getUniqueId();
+  const stampedDocketEntryId = applicationContext.getUniqueId();
 
   applicationContext
     .getUseCases()
-    .generateDraftStampOrderInteractor.mockResolvedValue(mockNewDocketEntryId);
+    .generateDraftStampOrderInteractor.mockResolvedValue({
+      stampedDocketEntryId,
+    });
 
   let mockState;
 
@@ -83,7 +85,7 @@ describe('completeMotionStampingAction', () => {
     });
 
     expect(result.output).toMatchObject({
-      redirectUrl: `/case-detail/${docketNumber}/draft-documents?docketEntryId=${mockNewDocketEntryId}`,
+      redirectUrl: `/case-detail/${docketNumber}/draft-documents?docketEntryId=${stampedDocketEntryId}`,
     });
   });
 
@@ -101,7 +103,7 @@ describe('completeMotionStampingAction', () => {
     });
 
     expect(result.output).toMatchObject({
-      redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}?documentId=${mockNewDocketEntryId}`,
+      redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}?documentId=${stampedDocketEntryId}`,
     });
   });
 
@@ -113,6 +115,6 @@ describe('completeMotionStampingAction', () => {
       state: mockState,
     });
 
-    expect(result.output.docketEntryId).toEqual(mockNewDocketEntryId);
+    expect(result.output.docketEntryId).toEqual(stampedDocketEntryId);
   });
 });
