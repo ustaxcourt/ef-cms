@@ -56,7 +56,7 @@ describe('submitAddPaperFilingAction', () => {
     });
   });
 
-  it('should use isFiledAttached form value instead of primaryDocumentFile form value to make a call to add a paper filed docket entry', async () => {
+  it('should use isFileAttached form value instead of primaryDocumentFile form value to make a call to add a paper filed docket entry', async () => {
     await runAction(submitAddPaperFilingAction, {
       modules: {
         presenter,
