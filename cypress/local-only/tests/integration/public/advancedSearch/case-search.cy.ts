@@ -99,7 +99,7 @@ describe('Case Search', () => {
     });
   });
 
-  describe('case - by docket number', () => {
+  describe('Case Search - by docket number', () => {
     it('should display "No Matches Found" when case search yields no results', () => {
       navigateToDashboard();
       searchForCaseByDocketNumber('999-99');
@@ -109,6 +109,13 @@ describe('Case Search', () => {
     it('should route to case detail when a case search match is found', () => {
       navigateToDashboard();
       searchForCaseByDocketNumber('103-20');
+      cy.get('table#docket-record-table');
+    });
+
+    it('should route to case detail when a case search match is found by hitting enter', () => {
+      navigateToDashboard();
+      cy.get('input#docket-number').type('103-20');
+      cy.get('input#docket-number').type('{enter}');
       cy.get('table#docket-record-table');
     });
   });

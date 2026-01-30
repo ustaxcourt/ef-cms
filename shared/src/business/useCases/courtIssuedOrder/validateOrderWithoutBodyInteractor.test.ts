@@ -14,15 +14,13 @@ describe('validateOrderWithoutBodyInteractor', () => {
   });
 
   it('returns no errors when a valid order object is passed through', async () => {
-    const errors = await validateOrderWithoutBodyInteractor(
-      {
-        orderMetadata: {
-          documentTitle: 'Order to Be Awesome',
-          documentType: 'Order',
-          eventCode: 'O',
-        },
+    const errors = await validateOrderWithoutBodyInteractor({
+      orderMetadata: {
+        documentTitle: 'Order to Be Awesome',
+        documentType: 'Order',
+        eventCode: 'O',
       },
-    );
+    });
 
     expect(errors).toEqual(null);
   });

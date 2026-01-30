@@ -14,14 +14,12 @@ export const loadCachedScannerSourceAction = async ({
   const scannerSourceName = await applicationContext
     .getPersistenceGateway()
     .getItem({
-      applicationContext,
       key: 'scannerSourceName',
     });
 
   const scannerSourceIndex = await applicationContext
     .getPersistenceGateway()
     .getItem({
-      applicationContext,
       key: 'scannerSourceIndex',
     });
 
