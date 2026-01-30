@@ -1,9 +1,8 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
 import { validateOrderWithoutBodyInteractor } from './validateOrderWithoutBodyInteractor';
 
 describe('validateOrderWithoutBodyInteractor', () => {
   it('returns the expected errors object on an empty order object', () => {
-    const errors = validateOrderWithoutBodyInteractor(applicationContext, {
+    const errors = validateOrderWithoutBodyInteractor({
       orderMetadata: {},
     });
 
@@ -16,7 +15,6 @@ describe('validateOrderWithoutBodyInteractor', () => {
 
   it('returns no errors when a valid order object is passed through', async () => {
     const errors = await validateOrderWithoutBodyInteractor(
-      applicationContext,
       {
         orderMetadata: {
           documentTitle: 'Order to Be Awesome',
