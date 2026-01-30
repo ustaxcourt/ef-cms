@@ -42,7 +42,6 @@ export const formattedWorkQueue = (
   const selectedWorkItemIds: string[] = selectedWorkItems.map(
     wi => wi.workItemId,
   );
-  // jake check the sectinos
   let { assignmentFilterValue } = get(state.screenMetadata);
   const { STATUS_TYPES } = applicationContext.getConstants();
   const users = get(state.users);

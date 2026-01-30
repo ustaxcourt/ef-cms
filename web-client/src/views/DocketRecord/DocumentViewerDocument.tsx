@@ -166,7 +166,6 @@ export const DocumentViewerDocument = connect(
               )}
 
               {documentViewerHelper.showCompleteQcButton && (
-                // jake
                 <Button
                   link
                   icon="star"
