@@ -62,7 +62,6 @@ export class PublicCase extends JoiValidationEntity {
     this.isPaper = rawCase.isPaper;
     this.partyType = rawCase.partyType;
     this.receivedAt = rawCase.receivedAt;
-    this._score = rawCase['_score'];
 
     this.isSealed = isSealedCase(rawCase);
     this.leadDocketNumber = rawCase.leadDocketNumber;
