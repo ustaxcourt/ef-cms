@@ -20,7 +20,7 @@ export const completeMotionStampingAction = async ({
     nameForSigningLine2,
   };
 
-  const newDocketEntryId = await applicationContext
+  const { stampedDocketEntryId } = await applicationContext
     .getUseCases()
     .generateDraftStampOrderInteractor(applicationContext, {
       docketNumber,
@@ -32,13 +32,13 @@ export const completeMotionStampingAction = async ({
 
   let redirectUrl;
   if (parentMessageId) {
-    redirectUrl = `/messages/${docketNumber}/message-detail/${parentMessageId}?documentId=${newDocketEntryId}`;
+    redirectUrl = `/messages/${docketNumber}/message-detail/${parentMessageId}?documentId=${stampedDocketEntryId}`;
   } else {
-    redirectUrl = `/case-detail/${docketNumber}/draft-documents?docketEntryId=${newDocketEntryId}`;
+    redirectUrl = `/case-detail/${docketNumber}/draft-documents?docketEntryId=${stampedDocketEntryId}`;
   }
 
   return {
-    docketEntryId: newDocketEntryId,
+    docketEntryId: stampedDocketEntryId,
     docketNumber,
     redirectUrl,
     tab: 'docketRecord',
