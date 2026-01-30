@@ -27,29 +27,21 @@
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:1234",
-      "webRoot": "${workspaceFolder}/web-client/src",
-      "pathMapping": {
-        "http://localhost:1234": "${workspaceFolder}/web-client/src",
-        "http://localhost:1234/web-client/src": "${workspaceFolder}/web-client/src"
-      }
+      "webRoot": "${workspaceFolder}/dist"
     },
     {
       "name": "Debug Public (Chrome)",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:5678",
-      "webRoot": "${workspaceFolder}/web-client/src",
-      "pathMapping": {
-        "http://localhost:5678": "${workspaceFolder}/web-client/src",
-        "http://localhost:5678/web-client/src": "${workspaceFolder}/web-client/src"
-      }
+      "webRoot": "${workspaceFolder}/dist-public"
     },
     {
       "name": "Launch Edge",
       "request": "launch",
       "type": "msedge",
       "url": "http://localhost:1234",
-      "webRoot": "${workspaceFolder}"
+      "webRoot": "${workspaceFolder}/dist"
     },
     {
       "name": "npm Start API",

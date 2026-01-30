@@ -14,11 +14,10 @@
     {
       "label": "API",
       "type": "shell",
-      "command": "node_modules/nodemon/bin/nodemon.js -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress/ --exec \"bash -c ' (lsof -i :9001 || nohup ./node_modules/.bin/s3rver -d web-api/storage/s3 -a 0.0.0.0 -p 9001 --configure-bucket noop-documents-local-us-east-1 web-api/cors-policy.xml --configure-bucket noop-temp-documents-local-us-east-1 web-api/cors-policy.xml > /dev/null 2>&1 < /dev/null & ) && (lsof -i :9229 || nohup env HOST=0.0.0.0 PORT=9229 CODE=\\\"385030\\\" ./node_modules/.bin/cognito-local > /dev/null 2>&1 < /dev/null & ) && node -r ts-node/register -r tsconfig-paths/register web-api/src/app-local.ts'\"",
+      "command": "node_modules/nodemon/bin/nodemon.js -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress/ --exec \"bash -c '. ./setup-local-env.sh && (lsof -ti :9001 > /dev/null || nohup ./node_modules/.bin/s3rver -d web-api/storage/s3 -a 0.0.0.0 -p 9001 --configure-bucket noop-documents-local-us-east-1 web-api/cors-policy.xml --configure-bucket noop-temp-documents-local-us-east-1 web-api/cors-policy.xml > /dev/null 2>&1 < /dev/null &) && (lsof -ti :9229 > /dev/null || nohup env HOST=0.0.0.0 CODE=\\\"385030\\\" ./node_modules/.bin/cognito-local > /dev/null 2>&1 < /dev/null &) && ./node_modules/.bin/ts-node --transpile-only web-api/src/app-local.ts'\"",
       "options": {
         "env": {
           "TS_NODE_TRANSPILE_ONLY": "true",
-          "TS_NODE_COMPILER_OPTIONS": "{\"module\":\"commonjs\"}",
           "AWS_ACCESS_KEY_ID": "S3RVER",
           "AWS_SECRET_ACCESS_KEY": "S3RVER",
           "AWS_REGION": "us-east-1",
