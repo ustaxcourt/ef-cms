@@ -5,7 +5,7 @@ import { addOrderStampPrefix } from '@shared/business/utilities/addOrderStampPre
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 const NonstandardDateInput = (props: {
   addCourtIssuedDocketEntryNonstandardHelper: any;
@@ -25,7 +25,6 @@ const NonstandardDateInput = (props: {
     validateCourtIssuedDocketEntrySequence,
     validationErrors,
   } = props;
-
   return (
     <DateSelector
       defaultValue={form.date}
@@ -54,6 +53,7 @@ export const CourtIssuedNonstandardForm = connect(
     form: state.form,
     formatAndUpdateDateFromDatePickerSequence:
       sequences.formatAndUpdateDateFromDatePickerSequence,
+    isEditingDocketEntry: state.isEditingDocketEntry,
     judgeUsers: state.judges,
     updateCourtIssuedDocketEntryFormValueSequence:
       sequences.updateCourtIssuedDocketEntryFormValueSequence,
@@ -68,12 +68,27 @@ export const CourtIssuedNonstandardForm = connect(
     DATE_FORMATS,
     form,
     formatAndUpdateDateFromDatePickerSequence,
+    isEditingDocketEntry,
     judgeUsers,
     updateCourtIssuedDocketEntryFormValueSequence,
     updateCourtIssuedDocketEntryTitleSequence,
     validateCourtIssuedDocketEntrySequence,
     validationErrors,
   }) {
+    useEffect(() => {
+      if (isEditingDocketEntry) {
+        return;
+      }
+
+      const prefixedValue = addOrderStampPrefix(form.eventCode, form.freeText);
+
+      if (prefixedValue && prefixedValue !== form.freeText) {
+        updateCourtIssuedDocketEntryFormValueSequence({
+          key: 'freeText',
+          value: prefixedValue,
+        });
+      }
+    }, []);
     return (
       <>
         {addCourtIssuedDocketEntryNonstandardHelper.showDateFirst && (
@@ -169,7 +184,7 @@ export const CourtIssuedNonstandardForm = connect(
               data-testid="document-description-input"
               id="free-text"
               name="freeText"
-              value={addOrderStampPrefix(form.eventCode, form.freeText) || ''}
+              value={form.freeText || ''}
               onBlur={() => validateCourtIssuedDocketEntrySequence()}
               onChange={e => {
                 updateCourtIssuedDocketEntryFormValueSequence({

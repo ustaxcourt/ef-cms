@@ -7,7 +7,6 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { addOrderStampPrefix } from '@shared/business/utilities/addOrderStampPrefix';
 
 type FilingsAndProceedingsProps = {
   entry: {
@@ -113,7 +112,7 @@ export const FilingsAndProceedings = connect<
                 });
               }}
             >
-              {addOrderStampPrefix(entry.eventCode,entry.descriptionDisplay)}
+              {entry.descriptionDisplay}
             </Button>
           </Phone>
         </>

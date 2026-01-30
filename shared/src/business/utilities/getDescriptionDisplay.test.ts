@@ -65,4 +65,15 @@ describe('getDescriptionDisplay', () => {
 
     expect(result).toEqual('free text - doc title');
   });
+
+  it('should add Order prefix for order event codes', () => {
+    baseDocketEntry = {
+      ...baseDocketEntry,
+      documentTitle,
+      eventCode: 'O',
+    };
+    const result = getDescriptionDisplay(baseDocketEntry);
+
+    expect(result).toEqual('Order - doc title');
+  });
 });
