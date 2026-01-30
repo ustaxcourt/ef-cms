@@ -15,12 +15,10 @@ import { upsertDocketEntries as upsertDocketEntriesMock } from '@web-api/persist
 
 const mockCaseCaption = MOCK_CASE.caseCaption;
 const mockDocketEntryId = '22258391-07c1-40ef-b44c-dbea49893a30';
-const mockDocumentStorageId = '5c07e592-4113-460b-b81e-ebf659b777ec';
 const mockDocketNumber = MOCK_CASE.docketNumber;
 const mockDocketNumberWithSuffix = MOCK_CASE.docketNumberWithSuffix;
 const mockDocketEntry = {
   docketEntryId: mockDocketEntryId,
-  documentStorageId: mockDocumentStorageId,
   docketNumber: MOCK_CASE.docketNumber,
   documentTitle: 'Order',
   documentType: 'Order',
@@ -134,9 +132,7 @@ describe('scrapeDocumentContentsWorker', () => {
     );
     expect(
       applicationContext.getPersistenceGateway().getDocument,
-    ).toHaveBeenCalledWith(
-      expect.objectContaining({ key: mockDocumentStorageId }),
-    );
+    ).toHaveBeenCalledWith(expect.objectContaining({ key: mockDocketEntryId }));
   });
 
   it('throws an error if the docket entry pdf could not be parsed', async () => {

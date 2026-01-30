@@ -2,14 +2,14 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const removeCoversheet = async (
   applicationContext: ServerApplicationContext,
-  { documentStorageId }: { documentStorageId: string },
+  { docketEntryId }: { docketEntryId: string },
 ) => {
   try {
     const pdfData = await applicationContext
       .getPersistenceGateway()
       .getDocument({
         applicationContext,
-        key: documentStorageId,
+        key: docketEntryId,
       });
 
     const { PDFDocument } = await applicationContext.getPdfLib();
@@ -22,13 +22,13 @@ export const removeCoversheet = async (
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       document: pdfWithoutCoversheet,
-      key: documentStorageId,
+      key: docketEntryId,
     });
 
     return { numberOfPages: pdfDoc.getPageCount() };
   } catch (err) {
     const error = err as Error;
-    error.message = `${error.message} documentStorageId is ${documentStorageId}`;
+    error.message = `${error.message} docket entry id is ${docketEntryId}`;
     throw error;
   }
 };

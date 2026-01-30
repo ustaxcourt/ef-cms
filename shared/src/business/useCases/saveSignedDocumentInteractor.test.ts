@@ -11,34 +11,27 @@ import {
   SIGNED_DOCUMENT_TYPES,
 } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
+import { MOCK_DOCUMENTS } from '../../test/mockDocketEntry';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { getMessageThreadByParentId as getMessageThreadByParentIdMock } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { saveSignedDocumentInteractor } from './saveSignedDocumentInteractor';
 import { upsertMessages as upsertMessagesMock } from '@web-api/persistence/postgres/messages/upsertMessages';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { Message } from '../entities/Message';
 
 describe('saveSignedDocumentInteractor', () => {
   let mockCase;
-  let mockDocketEntry;
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
   const mockSigningName = 'Roslindis Angelino';
   const mockDocumentIdBeforeSignature = 'abc81f4d-1e47-423a-8caf-6d2fdc3d3857';
-  const mockSignedDocumentStorageId = 'abc81f4d-1e47-423a-8caf-6d2fdc3d3858';
+  const mockSignedDocketEntryId = 'abc81f4d-1e47-423a-8caf-6d2fdc3d3858';
   const mockOriginalDocketEntryId = 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859';
   const mockParentMessageId = 'b3bc3773-6ddd-439d-a3c9-60d6beceff99';
 
   beforeAll(() => {
-    mockDocketEntry = {
-      ...MOCK_CASE.docketEntries[0],
-      docketEntryId: mockOriginalDocketEntryId,
-      documentStorageId: mockOriginalDocketEntryId,
-    };
     mockCase = {
       ...MOCK_CASE,
-      docketEntries: [...MOCK_CASE.docketEntries, mockDocketEntry],
       caseCaption: ',',
     };
 
@@ -48,10 +41,9 @@ describe('saveSignedDocumentInteractor', () => {
       mockDocumentIdBeforeSignature,
     );
 
-    const getMessageThreadByParentId = jest.mocked(
-      getMessageThreadByParentIdMock,
-    );
-    getMessageThreadByParentId.mockResolvedValue([
+    const getMessageThreadByParentId =
+      getMessageThreadByParentIdMock as jest.Mock;
+    getMessageThreadByParentId.mockReturnValue([
       {
         caseStatus: mockCase.status,
         caseTitle: 'Test Petitioner',
@@ -68,7 +60,7 @@ describe('saveSignedDocumentInteractor', () => {
         to: 'Test Petitionsclerk2',
         toSection: PETITIONS_SECTION,
         toUserId: '449b916e-3362-4a5d-bf56-b2b94ba29c12',
-      } as Message,
+      },
     ]);
   });
 
@@ -80,7 +72,7 @@ describe('saveSignedDocumentInteractor', () => {
           docketNumber: mockCase.docketNumber,
           nameForSigning: mockSigningName,
           originalDocketEntryId: mockOriginalDocketEntryId,
-          signedDocumentStorageId: mockSignedDocumentStorageId,
+          signedDocketEntryId: mockSignedDocketEntryId,
         } as any,
         undefined,
       ),
@@ -96,7 +88,7 @@ describe('saveSignedDocumentInteractor', () => {
         docketNumber: mockCase.docketNumber,
         nameForSigning: mockSigningName,
         originalDocketEntryId: mockOriginalDocketEntryId,
-        signedDocumentStorageId: mockSignedDocumentStorageId,
+        signedDocketEntryId: mockSignedDocketEntryId,
       } as any,
       mockDocketClerkUser,
     );
@@ -117,7 +109,7 @@ describe('saveSignedDocumentInteractor', () => {
         docketNumber: mockCase.docketNumber,
         nameForSigning: mockSigningName,
         originalDocketEntryId: mockOriginalDocketEntryId,
-        signedDocumentStorageId: mockSignedDocumentStorageId,
+        signedDocketEntryId: mockSignedDocketEntryId,
       } as any,
       mockDocketClerkUser,
     );
@@ -126,7 +118,7 @@ describe('saveSignedDocumentInteractor', () => {
       applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
         .calls[1][0],
     ).toMatchObject({
-      key: mockDocketEntry.documentStorageId,
+      key: mockOriginalDocketEntryId,
     });
   });
 
@@ -137,14 +129,12 @@ describe('saveSignedDocumentInteractor', () => {
         docketNumber: mockCase.docketNumber,
         nameForSigning: mockSigningName,
         originalDocketEntryId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
-        signedDocumentStorageId: mockSignedDocumentStorageId,
+        signedDocketEntryId: mockSignedDocketEntryId,
       } as any,
       mockDocketClerkUser,
     );
 
-    expect(caseEntity.docketEntries.length).toEqual(
-      mockCase.docketEntries.length + 1,
-    );
+    expect(caseEntity.docketEntries.length).toEqual(MOCK_DOCUMENTS.length + 1);
     const signedDocument = caseEntity.docketEntries.find(
       e =>
         e.documentType ===
@@ -155,13 +145,11 @@ describe('saveSignedDocumentInteractor', () => {
     const signedDocketEntry = caseEntity.docketEntries.find(
       doc =>
         doc.documentType === 'Stipulated Decision' &&
-        doc.documentStorageId === mockSignedDocumentStorageId,
+        doc.docketEntryId === mockSignedDocketEntryId,
     );
 
     expect(signedDocketEntry?.isPaper).toEqual(false);
-    expect(signedDocketEntry?.docketEntryId).toEqual(
-      mockSignedDocumentStorageId,
-    );
+    expect(signedDocketEntry?.docketEntryId).toEqual(mockSignedDocketEntryId);
     expect(signedDocketEntry?.isDraft).toEqual(true);
     expect(signedDocketEntry?.signedJudgeName).toEqual(mockSigningName);
     expect(signedDocketEntry?.documentType).toEqual('Stipulated Decision');
@@ -174,7 +162,7 @@ describe('saveSignedDocumentInteractor', () => {
         docketNumber: mockCase.docketNumber,
         nameForSigning: mockSigningName,
         originalDocketEntryId: mockOriginalDocketEntryId,
-        signedDocumentStorageId: mockSignedDocumentStorageId,
+        signedDocketEntryId: mockSignedDocketEntryId,
       } as any,
       mockDocketClerkUser,
     );
@@ -194,7 +182,7 @@ describe('saveSignedDocumentInteractor', () => {
         docketNumber: mockCase.docketNumber,
         nameForSigning: mockSigningName,
         originalDocketEntryId: mockOriginalDocketEntryId,
-        signedDocumentStorageId: mockSignedDocumentStorageId,
+        signedDocketEntryId: mockSignedDocketEntryId,
       } as any,
       mockDocketClerkUser,
     );
@@ -209,15 +197,14 @@ describe('saveSignedDocumentInteractor', () => {
 
   it('should add the signed document to the latest message in the message thread if parentMessageId is included and the original document is a Proposed Stipulated Decision', async () => {
     const upsertMessages = upsertMessagesMock as jest.Mock;
-    const originalDocketEntryId = 'def81f4d-1e47-423a-8caf-6d2fdc3d3859';
     await saveSignedDocumentInteractor(
       applicationContext,
       {
         docketNumber: mockCase.docketNumber,
         nameForSigning: mockSigningName,
-        originalDocketEntryId,
+        originalDocketEntryId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
         parentMessageId: mockParentMessageId,
-        signedDocumentStorageId: mockSignedDocumentStorageId,
+        signedDocketEntryId: mockSignedDocketEntryId,
       },
       mockDocketClerkUser,
     );
@@ -227,7 +214,7 @@ describe('saveSignedDocumentInteractor', () => {
       {
         attachments: [
           {
-            documentId: mockSignedDocumentStorageId,
+            documentId: mockSignedDocketEntryId,
             documentTitle: 'Stipulated Decision',
           },
         ],

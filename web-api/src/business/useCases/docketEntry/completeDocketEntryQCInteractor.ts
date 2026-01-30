@@ -38,7 +38,6 @@ import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseA
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { CaseDTO } from '@shared/business/dto/docketEntries/CaseDTO';
-import { countPagesInDocument } from '@web-api/business/useCaseHelper/countPagesInDocument';
 
 const completeDocketEntryQC = async (
   applicationContext: ServerApplicationContext,
@@ -246,7 +245,7 @@ const completeDocketEntryQC = async (
         .getPersistenceGateway()
         .getDocument({
           applicationContext,
-          key: updatedDocketEntry.documentStorageId,
+          key: updatedDocketEntry.docketEntryId,
         });
 
       const noticeDoc = await PDFDocument.load(pdfData);
@@ -285,7 +284,7 @@ const completeDocketEntryQC = async (
       paperServiceDocumentTitle = updatedDocketEntry.documentTitle;
     }
   } else if (needsNoticeOfDocketChange) {
-    const noticeDocumentStorageId = await generateNoticeOfDocketChangePdf({
+    const noticeDocketEntryId = await generateNoticeOfDocketChangePdf({
       applicationContext,
       authorizedUser,
       // @ts-ignore
@@ -295,8 +294,7 @@ const completeDocketEntryQC = async (
     const noticeUpdatedDocketEntry = new DocketEntry(
       {
         ...SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange,
-        docketEntryId: noticeDocumentStorageId,
-        documentStorageId: noticeDocumentStorageId,
+        docketEntryId: noticeDocketEntryId,
         documentTitle: replaceBracketed(
           SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange.documentTitle,
           // @ts-ignore
@@ -311,10 +309,12 @@ const completeDocketEntryQC = async (
 
     noticeUpdatedDocketEntry.setFiledBy(user);
 
-    noticeUpdatedDocketEntry.numberOfPages = await countPagesInDocument({
-      applicationContext,
-      documentStorageId: noticeUpdatedDocketEntry.documentStorageId,
-    });
+    noticeUpdatedDocketEntry.numberOfPages = await applicationContext
+      .getUseCaseHelpers()
+      .countPagesInDocument({
+        applicationContext,
+        docketEntryId: noticeUpdatedDocketEntry.docketEntryId,
+      });
 
     noticeUpdatedDocketEntry.setAsServed(servedParties.all);
 
@@ -329,7 +329,7 @@ const completeDocketEntryQC = async (
       .getPersistenceGateway()
       .getDocument({
         applicationContext,
-        key: noticeUpdatedDocketEntry.documentStorageId,
+        key: noticeUpdatedDocketEntry.docketEntryId,
       });
 
     const newPdfData = await addServedStampToDocument({
@@ -340,7 +340,7 @@ const completeDocketEntryQC = async (
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       document: newPdfData,
-      key: noticeUpdatedDocketEntry.documentStorageId,
+      key: noticeUpdatedDocketEntry.docketEntryId,
     });
 
     const paperServiceResult = await applicationContext

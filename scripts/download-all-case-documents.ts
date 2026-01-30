@@ -36,12 +36,12 @@ const OUTPUT_DIR = `${process.env.HOME}/Downloads/${docketNumber}`;
 
 const downloadPdf = async ({
   applicationContext,
-  documentStorageId,
+  docketEntryId,
   filename,
   path,
 }: {
   applicationContext: ServerApplicationContext;
-  documentStorageId: string;
+  docketEntryId: string;
   filename: string;
   path: string;
 }): Promise<void> => {
@@ -50,7 +50,7 @@ const downloadPdf = async ({
   // download pdf from S3
   const data = await applicationContext.getStorageClient().getObject({
     Bucket: applicationContext.environment.documentsBucketName,
-    Key: documentStorageId,
+    Key: docketEntryId,
   });
   if (data && 'Body' in data && data.Body) {
     // @ts-ignore
@@ -119,7 +119,7 @@ const generateFilename = ({
       });
       await downloadPdf({
         applicationContext,
-        documentStorageId: docketEntry.documentStorageId,
+        docketEntryId: docketEntry.docketEntryId,
         filename,
         path: sealed ? sealedDir : unsealedDir,
       });

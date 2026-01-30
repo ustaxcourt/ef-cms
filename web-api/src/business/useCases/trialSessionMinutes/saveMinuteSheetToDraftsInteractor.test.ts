@@ -85,7 +85,7 @@ describe('saveMinuteSheetToDraftsInteractor', () => {
         trialSessionId: mockParams.trialSessionId,
         aCase: MOCK_CASE,
         trialSession: MOCK_TRIAL_REGULAR,
-        documentStorageId: 'unique-id-abc',
+        docketEntryId: 'unique-id-abc',
       }),
     );
     expect(mockUpdateCaseAndAssociations).toHaveBeenCalledWith({

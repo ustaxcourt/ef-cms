@@ -135,14 +135,14 @@ describe('setPDFForSigningAction', () => {
   });
 
   it('calls loadPDFForSigningInteractor with expected params', async () => {
-    const documentStorageId = '123';
+    const docketEntryId = '123';
     await runAction(setPDFForSigningAction, {
       modules: {
         presenter,
       },
       props: {
         caseDetail: { docketNumber: '123-20' },
-        documentStorageId,
+        docketEntryId,
       },
       state: {
         pdfForSigning: {
@@ -156,7 +156,7 @@ describe('setPDFForSigningAction', () => {
       applicationContext.getUseCases().loadPDFForSigningInteractor.mock
         .calls[0][1],
     ).toMatchObject({
-      documentStorageId,
+      docketEntryId,
       docketNumber: '123-20',
       removeCover: false,
     });

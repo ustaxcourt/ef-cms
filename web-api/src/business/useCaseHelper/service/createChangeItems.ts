@@ -95,14 +95,13 @@ const createDocketEntryForChange = async ({
       },
     });
 
-  const newDocumentStorageId = applicationContext.getUniqueId();
+  const newDocketEntryId = applicationContext.getUniqueId();
 
   const changeOfAddressDocketEntry = new DocketEntry(
     {
       addToCoversheet: true,
       additionalInfo: `for ${contactName}`,
-      docketEntryId: newDocumentStorageId,
-      documentStorageId: newDocumentStorageId,
+      docketEntryId: newDocketEntryId,
       docketNumber: caseEntity.docketNumber,
       documentTitle: documentType.title,
       documentType: documentType.title,
@@ -137,13 +136,13 @@ const createDocketEntryForChange = async ({
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     document: changeOfAddressPdfWithCover,
-    key: newDocumentStorageId,
+    key: newDocketEntryId,
   });
   const { url } = await applicationContext
     .getPersistenceGateway()
     .getDownloadPolicyUrl({
       applicationContext,
-      key: newDocumentStorageId,
+      key: newDocketEntryId,
     });
 
   return {

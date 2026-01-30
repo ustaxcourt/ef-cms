@@ -19,7 +19,6 @@ import { orderBy } from 'lodash';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
-import { getUniqueId } from '@shared/sharedAppContext';
 
 /**
  * addDraftStampOrderDocketEntryInteractor
@@ -40,6 +39,7 @@ export const addDraftStampOrderDocketEntry = async (
     originalDocketEntryId,
     parentMessageId,
     stampData,
+    stampedDocketEntryId,
   }: {
     docketNumber: string;
     formattedDraftDocumentTitle: string;
@@ -49,9 +49,10 @@ export const addDraftStampOrderDocketEntry = async (
       disposition: string;
       nameForSigning: string;
     };
+    stampedDocketEntryId: string;
   },
   authorizedUser: UnknownAuthUser,
-): Promise<DocketEntry> => {
+) => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.STAMP_MOTION)) {
     throw new UnauthorizedError('Unauthorized to update docket entry');
   }
@@ -76,13 +77,10 @@ export const addDraftStampOrderDocketEntry = async (
 
   const validatedStampData = new Stamp(stampData);
 
-  const stampedDocketEntryId = getUniqueId();
-
   const stampedDocketEntryEntity = new DocketEntry(
     {
       createdAt: applicationContext.getUtilities().createISODateString(),
       docketEntryId: stampedDocketEntryId,
-      documentStorageId: stampedDocketEntryId,
       docketNumber: caseRecord.docketNumber,
       documentTitle: `Order - ${originalDocketEntry.documentTypeForStampedDocketEntry()} ${formattedDraftDocumentTitle}`,
       documentType: orderDocumentInfo?.documentType,
@@ -134,8 +132,6 @@ export const addDraftStampOrderDocketEntry = async (
     authorizedUser,
     caseToUpdate: caseEntity,
   });
-
-  return stampedDocketEntryEntity;
 };
 
 export const addDraftStampOrderDocketEntryInteractor = withLocking(

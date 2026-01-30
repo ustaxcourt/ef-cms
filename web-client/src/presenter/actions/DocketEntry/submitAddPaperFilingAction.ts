@@ -1,6 +1,14 @@
 import { omit } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
+/**
+ * calls interactor to add a paper filing
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {Function} providers.get the cerebral get function
+ * @param {object} providers.props the cerebral props object
+ * @returns {Promise} async action
+ */
 export const submitAddPaperFilingAction = async ({
   applicationContext,
   get,
@@ -12,7 +20,11 @@ export const submitAddPaperFilingAction = async ({
   const clientConnectionId = get(state.clientConnectionId);
   const isFileAttached = get(state.form.isFileAttached) || isFileAttachedNow;
 
-  const { documentStorageId } = props;
+  let { docketEntryId } = props;
+
+  if (!isFileAttached) {
+    docketEntryId = applicationContext.getUniqueId();
+  }
 
   let documentMetadata = omit(
     {
@@ -34,7 +46,7 @@ export const submitAddPaperFilingAction = async ({
     .addPaperFilingInteractor(applicationContext, {
       clientConnectionId,
       consolidatedGroupDocketNumbers: docketNumbers,
-      documentStorageId,
+      docketEntryId,
       documentMetadata,
       isSavingForLater,
     });

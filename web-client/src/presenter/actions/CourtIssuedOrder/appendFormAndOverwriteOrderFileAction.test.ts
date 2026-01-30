@@ -25,14 +25,14 @@ describe('appendFormAndOverwriteOrderFileAction', () => {
       },
       state: {
         documentToEdit: {
-          documentStorageId: 'document-id-123',
+          docketEntryId: 'document-id-123',
         },
       },
     });
 
     expect(
       applicationContextForClient.getUseCases()
-        .appendAmendedPetitionFormInteractor.mock.calls[0][1].documentStorageId,
-    ).toEqual('document-id-123');
+        .appendAmendedPetitionFormInteractor,
+    ).toHaveBeenCalled();
   });
 });

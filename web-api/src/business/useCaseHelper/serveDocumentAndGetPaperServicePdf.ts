@@ -38,15 +38,11 @@ export const serveDocumentAndGetPaperServicePdf = async ({
         if (stampedPdf) {
           originalPdfDoc = await PDFDocument.load(stampedPdf);
         } else {
-          const { documentStorageId } = caseEntity.docketEntries.find(de => {
-            return de.docketEntryId === docketEntryId;
-          })!;
-
           const pdfData = await applicationContext
             .getPersistenceGateway()
             .getDocument({
               applicationContext,
-              key: documentStorageId,
+              key: docketEntryId,
             });
           originalPdfDoc = await PDFDocument.load(pdfData);
         }

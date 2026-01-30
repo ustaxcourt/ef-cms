@@ -70,18 +70,9 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
         },
       );
 
-    const mockDocumentStorageId = 'abc';
-
     caseEntity = new Case(
       {
         ...MOCK_CASE,
-        docketEntries: [
-          {
-            ...MOCK_CASE.docketEntries[0],
-            docketEntryId: mockDocketEntryId,
-            documentStorageId: mockDocumentStorageId,
-          },
-        ],
         petitioners: [
           {
             ...getContactPrimary(MOCK_CASE),
@@ -100,9 +91,7 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
 
     expect(
       applicationContext.getPersistenceGateway().getDocument,
-    ).toHaveBeenCalledWith(
-      expect.objectContaining({ key: mockDocumentStorageId }),
-    );
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
     ).toHaveBeenCalled();

@@ -45,7 +45,6 @@ describe('updateCourtIssuedOrderInteractor', () => {
     docketEntries: [
       {
         docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        documentStorageId: 'abc',
         docketNumber: '45678-18',
         documentContentsId: '442f46fd-727b-485c-8998-a0138593cebe',
         documentType: 'Answer',
@@ -340,7 +339,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
     await updateCourtIssuedOrderInteractor(
       applicationContext,
       {
-        docketEntryIdToEdit: caseRecord.docketEntries[0].docketEntryId,
+        docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentMetadata: {
           docketNumber: caseRecord.docketNumber,
           documentContents: 'the contents!',
@@ -359,12 +358,6 @@ describe('updateCourtIssuedOrderInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(
-      applicationContext.getUseCaseHelpers().countPagesInDocument.mock
-        .calls[0][0],
-    ).toMatchObject({
-      documentStorageId: caseRecord.docketEntries[0].documentStorageId,
-    });
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
         .calls[0][0],

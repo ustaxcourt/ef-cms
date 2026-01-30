@@ -181,7 +181,7 @@ export const updateDocketEntryMeta = async (
     const { numberOfPages } = await applicationContext
       .getUseCaseHelpers()
       .removeCoversheet(applicationContext, {
-        documentStorageId: originalDocketEntry.documentStorageId,
+        docketEntryId: originalDocketEntry.docketEntryId,
       });
 
     docketEntryEntity.setNumberOfPages(numberOfPages);

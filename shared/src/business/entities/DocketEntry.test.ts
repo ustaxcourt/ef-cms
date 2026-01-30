@@ -16,7 +16,6 @@ import {
   A_VALID_DOCKET_ENTRY,
   MOCK_PETITIONERS,
 } from '@shared/business/entities/DocketEntryTestFixtures';
-import { omit } from 'lodash';
 
 describe('DocketEntry entity', () => {
   it('defaults stampData to an empty object when no stamp data is passed in', () => {
@@ -126,28 +125,6 @@ describe('DocketEntry entity', () => {
         { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
       );
       expect(myDoc.isValid()).toBeFalsy();
-    });
-
-    it('Defaults documentStorageId to docketEntryId if it is not passed in', () => {
-      const myDoc = new DocketEntry(
-        omit(A_VALID_DOCKET_ENTRY, 'docketEntryId'),
-        { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
-      );
-      expect(myDoc.isValid()).toBeTruthy();
-      expect(myDoc.documentStorageId).toEqual(myDoc.docketEntryId);
-    });
-
-    it('Sets documentStorageId to the passed in value if it was passed in', () => {
-      const mockDocumentStorageId = 'abcd';
-      const myDoc = new DocketEntry(
-        { ...A_VALID_DOCKET_ENTRY, documentStorageId: mockDocumentStorageId },
-        {
-          authorizedUser: undefined,
-          petitioners: MOCK_PETITIONERS,
-        },
-      );
-      expect(myDoc.isValid()).toBeTruthy();
-      expect(myDoc.documentStorageId).toEqual(mockDocumentStorageId);
     });
   });
 

@@ -9,21 +9,21 @@ describe('validateUploadedPdfAction', () => {
   });
 
   it('should make a call to validate the pdf using the docketEntryId from props', async () => {
-    const mockDocumentStorageId = '5f354717-f7cc-4817-9575-452b04b2ef09';
+    const mockDocketEntryId = '5f354717-f7cc-4817-9575-452b04b2ef09';
 
     await runAction(validateUploadedPdfAction, {
       modules: {
         presenter,
       },
       props: {
-        documentStorageId: mockDocumentStorageId,
+        docketEntryId: mockDocketEntryId,
       },
     });
 
     expect(
       applicationContext.getUseCases().validatePdfInteractor.mock.calls[0][1],
     ).toEqual({
-      key: mockDocumentStorageId,
+      key: mockDocketEntryId,
     });
   });
 });

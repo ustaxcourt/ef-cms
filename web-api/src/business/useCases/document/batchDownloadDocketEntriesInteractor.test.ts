@@ -207,19 +207,19 @@ describe('batchDownloadDocketEntriesInteractor', () => {
       documents: [
         {
           filePathInZip: '101-18, Test Petitioner/2018-03-01_0001_Petition.pdf',
-          key: PETITION_DOCKET_ENTRY.documentStorageId,
+          key: PETITION_DOCKET_ENTRY.docketEntryId,
           useTempBucket: false,
         },
         {
           filePathInZip:
             '101-18, Test Petitioner/2017-03-01_0004_Attachment to Petition.pdf',
-          key: ATP_DOCKET_ENTRY.documentStorageId,
+          key: ATP_DOCKET_ENTRY.docketEntryId,
           useTempBucket: false,
         },
         {
           filePathInZip:
             '101-18, Test Petitioner/2023-08-15_0006_Standing Pretrial Order.pdf',
-          key: STANDING_PRETRIAL_ORDER_ENTRY.documentStorageId,
+          key: STANDING_PRETRIAL_ORDER_ENTRY.docketEntryId,
           useTempBucket: false,
         },
         {
@@ -279,9 +279,13 @@ describe('batchDownloadDocketEntriesInteractor', () => {
 
     applicationContext.environment.stage = 'not-local';
 
-    applicationContext
-      .getDispatchers()
-      .sendZipperBatchJob.mockResolvedValueOnce({ jobId: '123' });
+    applicationContext.getPersistenceGateway().uploadDocument = jest.fn();
+
+    applicationContext.getDispatchers().sendZipperBatchJob = jest
+      .fn()
+      .mockResolvedValue({ jobId: '123' });
+
+    applicationContext.getPersistenceGateway().zipDocuments = jest.fn();
 
     await batchDownloadDocketEntriesInteractor(
       applicationContext,
