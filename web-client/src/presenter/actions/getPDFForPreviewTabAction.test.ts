@@ -27,14 +27,18 @@ describe('getPDFForPreviewTabAction', () => {
   });
 
   it('returns results from loadPDFForPreviewInteractor if provided a docketNumber and docketEntryId', async () => {
-    const props = { file: {}, documentStorageId: '456' };
     await runAction(getPDFForPreviewTabAction, {
       modules: {
         presenter,
       },
-      props,
+      props: {
+        file: {
+          docketEntryId: '789',
+        },
+      },
       state: {
         caseDetail: {
+          docketEntries: [{ docketEntryId: '789', documentStorageId: '456' }],
           docketNumber: '123-20',
         },
       },
