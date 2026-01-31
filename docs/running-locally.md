@@ -120,8 +120,6 @@ Once you've started your services locally, you should be able to access them her
 
 Use one of the mock logins documented below to log in to the private UI.
 
-For IntelliJ IDEA or WebStorm users, see [Running Locally in IntelliJ/WebStorm](./running-locally-in-webstorm.md) for integrated run configurations.
-
 ![Mock Login Page](./images/mock-login.png)
 
 ## How to Login Locally
@@ -163,6 +161,10 @@ colvinschambers@example.com
 ## Troubleshooting
 
 Hopefully everything will work fine, but if you have issues logging in, double check that your API didn't throw errors when trying to initialize.  Check your network tab or browser console for any errors when trying to access the localhost:4000 API.  Also verify you are on the correct branch. `ustaxcourt/staging` is recommended.
+
+## Debugging the Application
+
+When you are ready to set breakpoints and debug the application, see [Debugging Locally with an IDE](./debugging-locally.md) for instructions on using integrated run configurations to run and debug the application in JetBrains IDEs or VSCode.
 
 ## Running the USTC pay.gov test server
 

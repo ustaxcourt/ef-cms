@@ -1,7 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Debug Client (Chrome)" type="JavascriptDebugType" uri="http://localhost:1234">
-    <mapping url="http://localhost:1234" local-file="$PROJECT_DIR$/web-client/src" />
-    <mapping url="http://localhost:1234/web-client/src" local-file="$PROJECT_DIR$/web-client/src" />
+    <mapping url="http://localhost:1234" local-file="$PROJECT_DIR$/dist" />
     <method v="2" />
   </configuration>
 </component>
