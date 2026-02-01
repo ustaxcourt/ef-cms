@@ -25,7 +25,7 @@ export const uploadExternalDocumentsAction = async ({
   const user = get(state.user);
 
   try {
-    const { caseDetail, docketEntryIdsAdded } = await applicationContext
+    const { docketEntryIdsAdded } = await applicationContext
       .getUseCases()
       .uploadExternalDocumentsInteractor(
         applicationContext,
@@ -46,7 +46,6 @@ export const uploadExternalDocumentsAction = async ({
     }
 
     return path.success({
-      caseDetail,
       docketNumber,
       documentsFiled: documentMetadata,
       fileAcrossConsolidatedGroup: documentMetadata.fileAcrossConsolidatedGroup,
