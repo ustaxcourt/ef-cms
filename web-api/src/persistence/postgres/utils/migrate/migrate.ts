@@ -43,23 +43,40 @@ async function pruneDeprecatedMigrations(db: Kysely<any>) {
   );
 }
 
+function createMigrator({ disableTransactions = false, writer }) {
+  return new Migrator({
+    db: writer,
+    provider: new FileMigrationProvider({
+      fs,
+      migrationFolder: migrationsDirectory,
+      path,
+    }),
+    allowUnorderedMigrations: true,
+    disableTransactions,
+  });
+}
+
 async function migrateToLatest(migrationType = 'expand') {
   await getDbWriter({
     cb: async writer => {
       await pruneDeprecatedMigrations(writer);
 
-      const migrator = new Migrator({
-        db: writer,
-        provider: new FileMigrationProvider({
-          fs,
-          migrationFolder: migrationsDirectory,
-          path,
-        }),
-        allowUnorderedMigrations: true,
-      });
+      let hasCreatedNewMigrator = false;
+      let migrator = createMigrator({ writer });
 
       const migrations = await migrator.getMigrations();
+
       for (const migration of migrations) {
+        if (migration.name.includes('.heavy')) {
+          console.log('Created migrator with disabledTransactions');
+          migrator = createMigrator({ disableTransactions: true, writer });
+          hasCreatedNewMigrator = true;
+        } else if (hasCreatedNewMigrator) {
+          console.log('Created migrator with Transactions');
+          migrator = createMigrator({ writer });
+          hasCreatedNewMigrator = false;
+        }
+
         const isContractMigration = migration.name.includes('.contract');
         const shouldRunMigration =
           migrationType === 'contract'

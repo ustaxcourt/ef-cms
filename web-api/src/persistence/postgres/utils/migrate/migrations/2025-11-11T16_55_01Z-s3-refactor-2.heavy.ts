@@ -1,7 +1,7 @@
 import { Kysely, sql } from 'kysely';
 
 export async function up(db: Kysely<any>): Promise<void> {
-  const BATCH_SIZE = 25_000;
+  const BATCH_SIZE = 20_000;
   const PAUSE_MS = 150;
   const LOG_EVERY = 10;
 
@@ -13,26 +13,6 @@ export async function up(db: Kysely<any>): Promise<void> {
   await sql`set statement_timeout = '10min'`.execute(db);
 
   while (true) {
-    // const res = await sql<{ updated: number }>`
-    //   with batch as (
-    //     select ctid
-    //     from dw_docket_entry
-    //     where document_storage_id is null
-    //     limit ${BATCH_SIZE}
-    //     for update skip locked
-    //   ),
-    //   upd as (
-    //     update dw_docket_entry d
-    //     set document_storage_id = d.docket_entry_id
-    //     where d.ctid in (select ctid from batch)
-    //     returning 1
-    //   )
-    //   select count(*)::int as updated from upd
-    // `.execute(db);
-
-    // const updated = res.rows[0]?.updated ?? 0;
-    // if (updated === 0) break;
-
     const ctids = await db
       .selectFrom('dwDocketEntry')
       .select(sql`ctid`.as('ctid'))
@@ -52,7 +32,7 @@ export async function up(db: Kysely<any>): Promise<void> {
         'in',
         ctids.map(r => r.ctid),
       )
-      .returning(sql`1`.as('one'))
+      .returning('ctid')
       .execute();
 
     const updated = updatedRows.length;
@@ -62,7 +42,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 
     if (batches % LOG_EVERY === 0) {
       console.log(
-        `Backfill progress: ${total} rows updated (${batches} batches)`,
+        `Backfill progress: ${total} rows updated in ${batches} batches`,
       );
     }
 
