@@ -1,3 +1,5 @@
+import { addOrderStampPrefix } from './addOrderStampPrefix';
+
 /**
  * returns a modified document title when adding new information to a previous document title
  * especially in the case of qc'ing a docket entry
@@ -28,5 +30,5 @@ export const getDescriptionDisplay = docketEntry => {
     descriptionDisplay = `${docketEntry.freeText} - ${descriptionDisplay}`;
   }
 
-  return descriptionDisplay;
+  return addOrderStampPrefix(docketEntry.eventCode, descriptionDisplay);
 };

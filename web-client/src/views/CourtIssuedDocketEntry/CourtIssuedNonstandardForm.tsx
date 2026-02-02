@@ -1,7 +1,6 @@
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { TrialCityOptions } from '../TrialCityOptions';
-import { addOrderStampPrefix } from '@shared/business/utilities/addOrderStampPrefix';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -25,7 +24,6 @@ const NonstandardDateInput = (props: {
     validateCourtIssuedDocketEntrySequence,
     validationErrors,
   } = props;
-
   return (
     <DateSelector
       defaultValue={form.date}
@@ -54,6 +52,7 @@ export const CourtIssuedNonstandardForm = connect(
     form: state.form,
     formatAndUpdateDateFromDatePickerSequence:
       sequences.formatAndUpdateDateFromDatePickerSequence,
+    isEditingDocketEntry: state.isEditingDocketEntry,
     judgeUsers: state.judges,
     updateCourtIssuedDocketEntryFormValueSequence:
       sequences.updateCourtIssuedDocketEntryFormValueSequence,
@@ -169,7 +168,7 @@ export const CourtIssuedNonstandardForm = connect(
               data-testid="document-description-input"
               id="free-text"
               name="freeText"
-              value={addOrderStampPrefix(form.eventCode, form.freeText) || ''}
+              value={form.freeText || ''}
               onBlur={() => validateCourtIssuedDocketEntrySequence()}
               onChange={e => {
                 updateCourtIssuedDocketEntryFormValueSequence({
