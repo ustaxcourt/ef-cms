@@ -1,4 +1,5 @@
 import { state } from '@web-client/presenter/app.cerebral';
+import { EVENT_CODES_WITH_NO_ORDER } from '@shared/business/entities/EntityConstants';
 
 /**
  * defaults state.form.freeText if props.key is eventCode and props.value is NOT or O
@@ -21,8 +22,13 @@ export const setDefaultFreeTextForCourtIssuedDocketEntryAction = ({
 
     if (eventCode === 'NOT') {
       store.set(state.form.freeText, 'Notice');
-    } else if (eventCode === 'O') {
-      store.set(state.form.freeText, 'Order -');
+    } else if (!EVENT_CODES_WITH_NO_ORDER.includes(eventCode)) {
+      const text = get(state.form.freeText);
+
+      store.set(
+        state.form.freeText,
+        text.startsWith('Order') ? text : `Order - ${text}`,
+      );
     }
   }
 };

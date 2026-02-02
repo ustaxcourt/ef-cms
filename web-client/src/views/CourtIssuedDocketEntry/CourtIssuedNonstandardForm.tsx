@@ -1,11 +1,10 @@
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { TrialCityOptions } from '../TrialCityOptions';
-import { addOrderStampPrefix } from '@shared/business/utilities/addOrderStampPrefix';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React, { useEffect } from 'react';
+import React from 'react';
 
 const NonstandardDateInput = (props: {
   addCourtIssuedDocketEntryNonstandardHelper: any;
@@ -68,27 +67,12 @@ export const CourtIssuedNonstandardForm = connect(
     DATE_FORMATS,
     form,
     formatAndUpdateDateFromDatePickerSequence,
-    isEditingDocketEntry,
     judgeUsers,
     updateCourtIssuedDocketEntryFormValueSequence,
     updateCourtIssuedDocketEntryTitleSequence,
     validateCourtIssuedDocketEntrySequence,
     validationErrors,
   }) {
-    useEffect(() => {
-      if (isEditingDocketEntry) {
-        return;
-      }
-
-      const prefixedValue = addOrderStampPrefix(form.eventCode, form.freeText);
-
-      if (prefixedValue && prefixedValue !== form.freeText) {
-        updateCourtIssuedDocketEntryFormValueSequence({
-          key: 'freeText',
-          value: prefixedValue,
-        });
-      }
-    }, []);
     return (
       <>
         {addCourtIssuedDocketEntryNonstandardHelper.showDateFirst && (
