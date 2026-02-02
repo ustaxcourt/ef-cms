@@ -80,8 +80,6 @@ When updating Node.js, keep in mind:
  1. Update the node version used by our lambdas.
    - `web-api/terraform/modules/lambda/lambda.tf`
    - `web-api/terraform/modules/api/layers.tf`
-
-**You are expected to update `CHANGES.MD`, unless told otherwise by Tech Lead**
  1. Update the `CHANGES.md` file with instructions for installing this NodeJS version locally. See [df83cf3](https://github.com/ustaxcourt/ef-cms/commit/df83cf3db69f2c6149cbef3ae213db488822cc2b) for an example.
 
  When updating Node.js, also consider `@ustaxcourt/payment-portal`:
