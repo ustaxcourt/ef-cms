@@ -52,7 +52,6 @@ export const CourtIssuedNonstandardForm = connect(
     form: state.form,
     formatAndUpdateDateFromDatePickerSequence:
       sequences.formatAndUpdateDateFromDatePickerSequence,
-    isEditingDocketEntry: state.isEditingDocketEntry,
     judgeUsers: state.judges,
     updateCourtIssuedDocketEntryFormValueSequence:
       sequences.updateCourtIssuedDocketEntryFormValueSequence,
