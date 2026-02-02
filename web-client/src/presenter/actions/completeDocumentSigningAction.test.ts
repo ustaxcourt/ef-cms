@@ -187,4 +187,23 @@ describe('completeDocumentSigningAction', () => {
 
     expect(mockPdfjsObj.getData).toHaveBeenCalled();
   });
+
+  it('should throw error if pdfjsObj is null', async () => {
+    delete (global.window as Window & { pdfjsObj?: unknown }).pdfjsObj;
+
+    await expect(
+      runAction(completeDocumentSigningAction, {
+        modules: {
+          presenter,
+        },
+        state: {
+          ...mockState,
+          pdfForSigning: {
+            ...mockState.pdfForSigning,
+            pdfjsObj: undefined,
+          },
+        },
+      }),
+    ).rejects.toThrow('pdfjsObj is null!');
+  });
 });

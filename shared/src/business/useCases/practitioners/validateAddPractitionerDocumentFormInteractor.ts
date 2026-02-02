@@ -1,7 +1,8 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
 import { PractitionerDocument } from '../../entities/PractitionerDocument';
 
 export const validateAddPractitionerDocumentFormInteractor = (
-  applicationContext: IApplicationContext,
+  applicationContext: ClientApplicationContext,
   form,
 ) => {
   return new PractitionerDocument(

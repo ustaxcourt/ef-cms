@@ -109,7 +109,7 @@ export const formattedWorkQueue = (
     sortDirections[workQueueToDisplay.queue][workQueueToDisplay.box];
 
   let highPriorityField = [] as (string | ((workItemToSort: any) => any))[];
-  let highPriorityDirection = [] as string[];;
+  let highPriorityDirection = [] as string[];
   if (workQueueToDisplay.box == 'inbox') {
     const caseStatusSortRank = {
       [STATUS_TYPES.submitted]: 1,

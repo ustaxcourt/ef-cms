@@ -4,12 +4,11 @@ import {
   SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../entities/EntityConstants';
-import { applicationContext } from '../../test/createTestApplicationContext';
 import { validateTrialSessionInteractor } from './validateTrialSessionInteractor';
 
 describe('validateTrialSessionInteractor', () => {
   it('returns a list of errors when the trial session is invalid', () => {
-    const errors = validateTrialSessionInteractor(applicationContext, {
+    const errors = validateTrialSessionInteractor({
       trialSession: {} as RawNewTrialSession,
     });
 
@@ -29,7 +28,7 @@ describe('validateTrialSessionInteractor', () => {
       trialLocation: 'Birmingham, Alabama',
     };
 
-    const errors = validateTrialSessionInteractor(applicationContext, {
+    const errors = validateTrialSessionInteractor({
       trialSession: { ...MOCK_TRIAL } as RawNewTrialSession,
     });
 
