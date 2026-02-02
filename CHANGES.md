@@ -1,3 +1,16 @@
+<details><summary>Dependency Updates - Week of 2026-01-27</summary>
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Docker container `4.3.65` - choose exp7
+
+```bash
+. scripts/env/set-env.zsh expN
+npm run ecr:check-version
+```
+</details>
 <details><summary>Dependency Updates - Week of 2026-01-05</summary>
 
 ## Local
