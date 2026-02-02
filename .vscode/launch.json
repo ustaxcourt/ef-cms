@@ -2,14 +2,21 @@
   "version": "1.0.0",
   "configurations": [
     {
-      "name": "Launch Edge",
+      "name": "Debug Client (Chrome)",
+      "type": "chrome",
       "request": "launch",
-      "type": "msedge",
       "url": "http://localhost:1234",
-      "webRoot": "${workspaceFolder}"
+      "webRoot": "${workspaceFolder}/dist"
     },
     {
-      "name": "npm Start API",
+      "name": "Debug Public (Chrome)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:5678",
+      "webRoot": "${workspaceFolder}/dist-public"
+    },
+    {
+      "name": "API",
       "request": "launch",
       "runtimeArgs": ["run-script", "start:api"],
       "runtimeExecutable": "npm",
@@ -18,7 +25,7 @@
       "console": "integratedTerminal"
     },
     {
-      "name": "npm Start Client",
+      "name": "Client",
       "request": "launch",
       "runtimeArgs": ["run-script", "start:client"],
       "runtimeExecutable": "npm",
@@ -27,7 +34,7 @@
       "console": "integratedTerminal"
     },
     {
-      "name": "npm Start Public",
+      "name": "Public",
       "request": "launch",
       "runtimeArgs": ["run-script", "start:public"],
       "runtimeExecutable": "npm",
@@ -95,13 +102,8 @@
   ],
   "compounds": [
     {
-      "name": "Run All",
-      "configurations": [
-        "npm Start API",
-        "npm Start Client",
-        "npm Start Public",
-        "Launch Edge"
-      ]
+      "name": "DAWSON local",
+      "configurations": ["API", "Client", "Public"]
     }
   ]
 }
