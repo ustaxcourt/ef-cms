@@ -67,16 +67,6 @@ async function migrateToLatest(migrationType = 'expand') {
       const migrations = await migrator.getMigrations();
 
       for (const migration of migrations) {
-        if (migration.name.includes('.heavy')) {
-          console.log('Created migrator with disabledTransactions');
-          migrator = createMigrator({ disableTransactions: true, writer });
-          hasCreatedNewMigrator = true;
-        } else if (hasCreatedNewMigrator) {
-          console.log('Created migrator with Transactions');
-          migrator = createMigrator({ writer });
-          hasCreatedNewMigrator = false;
-        }
-
         const isContractMigration = migration.name.includes('.contract');
         const shouldRunMigration =
           migrationType === 'contract'
@@ -84,21 +74,31 @@ async function migrateToLatest(migrationType = 'expand') {
             : !isContractMigration;
 
         if (shouldRunMigration && migration.executedAt === undefined) {
+          if (migration.name.includes('.heavy')) {
+            console.log('Created migrator with disabledTransactions');
+            migrator = createMigrator({ disableTransactions: true, writer });
+            hasCreatedNewMigrator = true;
+          } else if (hasCreatedNewMigrator) {
+            console.log('Created migrator with Transactions');
+            migrator = createMigrator({ writer });
+            hasCreatedNewMigrator = false;
+          }
+          console.log(`Executing "${migration.name}"`);
           const { error, results } = await migrator.migrateTo(migration.name);
           results?.forEach(it => {
             if (it.status === 'Success') {
               console.log(
-                `migration "${it.migrationName}" was executed successfully`,
+                `Migration "${it.migrationName}" was executed successfully`,
               );
             } else if (it.status === 'Error') {
               console.error(
-                `failed to execute migration "${it.migrationName}"`,
+                `Failed to execute migration "${it.migrationName}"`,
               );
             }
           });
 
           if (error) {
-            console.error('failed to migrate');
+            console.error('Failed to migrate');
             console.error(error);
             process.exit(1);
           }

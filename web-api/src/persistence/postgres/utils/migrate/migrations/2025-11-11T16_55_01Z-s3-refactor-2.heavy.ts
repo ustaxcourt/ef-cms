@@ -1,8 +1,8 @@
 import { Kysely, sql } from 'kysely';
 
 export async function up(db: Kysely<any>): Promise<void> {
-  const BATCH_SIZE = 20_000;
-  const PAUSE_MS = 150;
+  const BATCH_SIZE = 5_000;
+  const PAUSE_MS = 250;
   const LOG_EVERY = 10;
 
   let total = 0;
