@@ -30,7 +30,6 @@ const config: Config = {
     '!email/**',
     '!generate-uuid.ts',
     '!helpers/prompts.ts',
-    '!helpers/runCommand.ts',
     '!import-case-status-changes-from-csv.ts',
     '!irs-super-user.ts',
     '!jest-scripts.config.ts',
