@@ -22,6 +22,7 @@ import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import diff from 'diff-arrays-of-objects';
 import { upsertDocketEntryRelatedEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntryRelatedEntries';
 import { concat } from 'lodash';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 export const updateDocketEntryMeta = async (
   applicationContext: ServerApplicationContext,
@@ -254,7 +255,65 @@ export const updateDocketEntryMeta = async (
     }
   }
 
-  return new Case(result, { authorizedUser }).validate().toRawObject();
+  if (DocketEntry.isMultiDocketed(originalDocketEntry)) {
+    const casesToUpdate = await getCasesByDocketNumbers({
+      docketNumbers: originalDocketEntry.multiDocketedOn,
+    });
+
+    const updatedDocketEntries = casesToUpdate
+      .map(caseRecord => {
+        const { docketNumber } = caseRecord;
+        if (docketNumber === caseToUpdate.docketNumber) {
+          return;
+        }
+        const consolidatedCaseEntity =
+          docketNumber === caseEntity.docketNumber
+            ? caseEntity
+            : new Case(caseRecord, { authorizedUser });
+
+        const consolidatedCaseDocketEntry =
+          consolidatedCaseEntity.getDocketEntryById({
+            docketEntryId: docketEntryMeta.docketEntryId,
+          });
+
+        if (
+          consolidatedCaseDocketEntry &&
+          DocketEntry.isMultiDocketed(consolidatedCaseDocketEntry)
+        ) {
+          const propagationFields: any = {};
+          DOCKET_ENTRY_DOCUMENT_INFO_FIELDS.forEach(field => {
+            if (Object.prototype.hasOwnProperty.call(editableFields, field)) {
+              propagationFields[field] = (editableFields as any)[field];
+            }
+          });
+
+          const merged = new DocketEntry(
+            {
+              ...consolidatedCaseDocketEntry,
+              ...propagationFields,
+            },
+            { authorizedUser, petitioners: consolidatedCaseEntity.petitioners },
+          );
+
+          if (updatedDocketEntry && updatedDocketEntry.numberOfPages) {
+            merged.setNumberOfPages(updatedDocketEntry.numberOfPages);
+          }
+
+          return merged.validate().toRawObject();
+        }
+
+        return undefined;
+      })
+      .filter(Boolean);
+
+    if (updatedDocketEntries.length > 0) {
+      await upsertDocketEntries(updatedDocketEntries as any[]);
+    }
+  }
+
+  return new CaseDTO(
+    new Case(result, { authorizedUser }).validate().toRawObject(),
+  );
 };
 
 export const shouldGenerateCoversheetForDocketEntry = ({

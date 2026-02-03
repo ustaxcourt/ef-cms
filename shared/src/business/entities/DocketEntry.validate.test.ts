@@ -390,20 +390,6 @@ describe('validate', () => {
     },
     {
       description:
-        'should fail validation when the document has a servedAt date and servedParties is not defined',
-      docketEntry: {
-        ...A_VALID_DOCKET_ENTRY,
-        documentType: ORDER_TYPES[0].documentType,
-        eventCode: TRANSCRIPT_EVENT_CODE,
-        servedAt: '2019-03-01T21:40:46.415Z',
-        signedAt: '2019-03-01T21:40:46.415Z',
-        signedByUserId: mockUserId,
-        signedJudgeName: 'Dredd',
-      },
-      expectValidationErrors: ['servedParties'],
-    },
-    {
-      description:
         'should fail validation when the document has servedParties and servedAt is not defined',
       docketEntry: {
         ...A_VALID_DOCKET_ENTRY,

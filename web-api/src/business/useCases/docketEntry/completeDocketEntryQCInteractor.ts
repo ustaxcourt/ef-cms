@@ -42,16 +42,17 @@ import {
   needsNewCoversheet,
 } from '@web-api/business/useCaseHelper/docketEntry/noticeOfDocketChangeHelper';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 const completeDocketEntryQC = async (
   applicationContext: ServerApplicationContext,
   { entryMetadata }: { entryMetadata: any },
   authorizedUser: UnknownAuthUser,
 ): Promise<{
-  caseDetail: RawCase;
-  paperServiceDocumentTitle: string | undefined;
+  caseDetail: CaseDTO;
   paperServiceParties: any[];
-  paperServicePdfUrl: string | undefined;
+  paperServicePdfUrl: string;
+  paperServiceDocumentTitle: string;
 }> => {
   const { PDFDocument } = await applicationContext.getPdfLib();
 
@@ -468,7 +469,7 @@ const completeDocketEntryQC = async (
   );
 
   return {
-    caseDetail: filingCase.toRawObject(),
+    caseDetail: new CaseDTO(filingCase.toRawObject()),
     paperServiceDocumentTitle,
     paperServiceParties: Array.from(paperServiceParties),
     paperServicePdfUrl,

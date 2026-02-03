@@ -97,6 +97,7 @@ describe('generateDraftStampOrderInteractor', () => {
       docketNumber,
       stampData,
       stampedDocumentStorageId: mockStampedDocketEntry.documentStorageId,
+      filingDateUpdated: false,
     });
   });
 });

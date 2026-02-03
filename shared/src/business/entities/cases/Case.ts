@@ -142,7 +142,6 @@ export class Case extends JoiValidationEntity {
   public privatePractitioners?: any[] = [];
   public initialCaption?: string;
   public irsPractitioners?: any[];
-  public hasIrsPractitioner?: boolean;
   public statistics?: RawStatistic[];
   public correspondence: RawCorrespondence[];
   public archivedCorrespondences?: RawCorrespondence[];
