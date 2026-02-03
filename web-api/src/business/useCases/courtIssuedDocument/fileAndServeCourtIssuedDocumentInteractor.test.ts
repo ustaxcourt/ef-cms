@@ -63,6 +63,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   const mockPdfUrl = 'www.example.com';
   const mockClientConnectionId = 'ABC123';
   const mockDocketEntryId = 'c54ba5a9-b37b-479d-9201-067ec6e335ba';
+  const mockDocumentStorageId = '067ec6e335bc-b37b-479d-9201-c54ba5a9';
 
   const defaultFormFields: CourtIssuedDocumentAnyType = {
     docketEntryId: mockDocketEntryId,
@@ -85,6 +86,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
     mockDocketEntryWithWorkItem = {
       docketEntryId: mockDocketEntryId,
+      documentStorageId: mockDocumentStorageId,
       docketNumber: MOCK_CASE.docketNumber,
       documentTitle: 'Order',
       documentType: 'Order',
@@ -102,7 +104,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       docketEntries: [
         mockDocketEntryWithWorkItem,
         {
-          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
+          docketEntryId: 'b54ba5a9-b37b-479d-9201-067ec6e335bc',
           docketNumber: MOCK_CASE.docketNumber,
           documentTitle: 'Order to Show Cause',
           documentType: 'Order to Show Cause',
@@ -365,7 +367,11 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
     expect(
       applicationContext.getUseCaseHelpers().stampDocumentForService,
-    ).toHaveBeenCalled();
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({
+        documentStorageId: caseRecord.docketEntries[0].documentStorageId,
+      }),
+    );
   });
 
   it('should count the number of pages in the document to be served', async () => {
@@ -390,7 +396,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       applicationContext.getUseCaseHelpers().countPagesInDocument.mock
         .calls[0][0],
     ).toMatchObject({
-      docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+      documentBytes: testPdfDoc,
     });
     expect(
       fileAndServeDocumentOnOneCase.mock.calls[0][0].docketEntryEntity
@@ -687,7 +693,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
         .calls[1][0],
     ).toMatchObject({
       document: expect.anything(),
-      key: mockDocketEntryId,
+      key: caseRecord.docketEntries[0].documentStorageId,
     });
   });
 
@@ -780,7 +786,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
         .calls[0][0],
     ).toMatchObject({
       document: expect.anything(),
-      key: mockDocketEntryId,
+      key: caseRecord.docketEntries[0].documentStorageId,
     });
   });
 
