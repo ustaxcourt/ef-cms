@@ -39,7 +39,7 @@ export const Login = connect(
   }) => {
     return (
       <>
-        <section className="grid-container tw:px-0 tw:pb-16 tw:pt-0">
+        <section className="grid-container tw:px-0 tw:xs:pb-12 tw:pb-8 tw:pt-0">
           <div className="grid-row flex-justify-center">
             <div className="tw:w-full tw:xs:w-135">
               <SuccessNotification isDismissible={false} />
@@ -51,14 +51,16 @@ export const Login = connect(
                 />
               )}
 
-              <div className="tw:mb-4">
-                <AlertError
-                  alertError={alertError}
-                  alertHelper={alertHelper}
-                  closeButtonOnClick={() => dismissAlertSequence()}
-                  isDismissible={false}
-                />
-              </div>
+              {alertError && alertHelper && (
+                <div className="tw:xs:mb-12 tw:mb-8">
+                  <AlertError
+                    alertError={alertError}
+                    alertHelper={alertHelper}
+                    closeButtonOnClick={() => dismissAlertSequence()}
+                    isDismissible={false}
+                  />
+                </div>
+              )}
 
               <div className="grid-container bg-white tw:xs:p-12 tw:px-3 tw:py-8 border border-base-lighter login tw:rounded-2xl tw:max-[33.75rem]:rounded-none">
                 <div className="display-flex flex-column">
