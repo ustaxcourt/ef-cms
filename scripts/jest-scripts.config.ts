@@ -14,7 +14,6 @@ const config: Config = {
     '!circleci/*.ts',
     '!circleci/judge/bulkImportJudgeUsers.helpers.ts',
     '!circleci/judge/bulkImportJudgeUsers.ts',
-    '!cloudwatch/perform-query.ts',
     '!compareTypescriptErrors.ts',
     '!coverage/**',
     '!download-all-case-documents.ts',
