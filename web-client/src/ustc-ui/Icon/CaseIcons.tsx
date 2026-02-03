@@ -4,6 +4,9 @@ import React from 'react';
 import classNames from 'classnames';
 
 export function CaseIcons({ formattedCase }: { formattedCase: any }) {
+  if (formattedCase.inConsolidatedGroup && !formattedCase.isLeadCase) {
+    formattedCase.consolidatedIconTooltipText = 'Consolidated case';
+  }
   return (
     <div
       className="multi-filing-type-icon"
@@ -30,7 +33,9 @@ export function CaseIcons({ formattedCase }: { formattedCase: any }) {
       />
       <WrappedIcon
         spanClass={
-          formattedCase.remoteTrialGranted ? 'visibility-visible' : 'visibility-hidden'
+          formattedCase.remoteTrialGranted
+            ? 'visibility-visible'
+            : 'visibility-hidden'
         }
         spanDataTestId="laptop"
         title="Motion to Proceed Remotely Granted"
