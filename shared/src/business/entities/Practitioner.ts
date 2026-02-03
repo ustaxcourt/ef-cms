@@ -182,18 +182,21 @@ export class Practitioner extends User {
       .optional()
       .allow('')
       .description('The name suffix of the practitioner.'),
-    updatedEmail: JoiValidationConstants.STRING.when('confirmEmail', {
-      is: joi.exist().not(null),
-      otherwise: JoiValidationConstants.EMAIL.optional().allow(null),
-      then: JoiValidationConstants.EMAIL.required(),
-    }).messages({
-      'any.required': 'Enter a valid email address',
-      'string.email': 'Enter email address in format: yourname@example.com',
-    }),
+    updatedEmail: joi
+      .alternatives()
+      .conditional('confirmEmail', {
+        is: joi.exist().not(null),
+        otherwise: JoiValidationConstants.EMAIL.optional().allow(null),
+        then: JoiValidationConstants.EMAIL.required(),
+      })
+      .messages({
+        'any.required': 'Enter a valid email address',
+        'string.email': 'Enter email address in format: yourname@example.com',
+      }) as joi.StringSchema | joi.AlternativesSchema,
   };
 
   getValidationRules() {
-    return Practitioner.VALIDATION_RULES as any;
+    return Practitioner.VALIDATION_RULES;
   }
 
   toRawObject(options: { removeValidationProperties?: boolean } = {}) {
