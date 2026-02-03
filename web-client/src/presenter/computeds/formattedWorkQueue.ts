@@ -73,14 +73,15 @@ export const formattedWorkQueue = (
     .map(workItem => {
       const { eventCode } = workItem.docketEntry;
 
-      const editLink = restrictedEventCodes.includes(eventCode)
-        ? null
-        : getWorkItemDocumentLink({
-            authorizedUser,
-            permissions,
-            workItem,
-            workQueueToDisplay,
-          });
+      const editLink =
+        restrictedEventCodes && restrictedEventCodes?.includes(eventCode)
+          ? null
+          : getWorkItemDocumentLink({
+              authorizedUser,
+              permissions,
+              workItem,
+              workQueueToDisplay,
+            });
       return {
         ...workItem,
         editLink,
