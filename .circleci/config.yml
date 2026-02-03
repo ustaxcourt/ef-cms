@@ -221,10 +221,6 @@ jobs:
           name: 'Deploy - Verify Private Elasticsearch'
           command: |
             npm run verify-private-elasticsearch -- $ENV
-      - run:
-          name: Setup Restricted Event Codes
-          command: |
-            ./scripts/postgres/featureFlags/setup-restricted-event-codes.ts "M116"
 
   docker-image-zipper:
     docker:
@@ -450,6 +446,10 @@ jobs:
           name: Setup Env
           command: |
             ./scripts/env/env-for-circle.sh
+      - run:
+          name: Setup Restricted Event Codes
+          command: |
+            ./scripts/postgres/featureFlags/setup-restricted-event-codes.ts ""
       - run:
           name: 'Switch Colors'
           command: npm run switch-colors
