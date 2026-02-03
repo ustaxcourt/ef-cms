@@ -194,20 +194,21 @@ export const ContactSecondary: React.FC<ContactSecondaryProps> = connect(
             />
           )}
 
-          {(contactsHelper.showPaperPetitionEmailFieldAndConsentBox ||
-            contactsHelper.showSecondaryContactEmailFieldAndConsentBox) && (
-            <>
-              <PaperPetitionEmail
-                bind={bind}
-                contactType="contactSecondary"
-                onBlur={onBlur}
-              />
-              <EConsent
-                bind={bind}
-                contactType="contactSecondary"
-                onBlur={onBlur}
-              />
-            </>
+          {(contactsHelper.showContactEmailField ||
+            contactsHelper.showSecondaryContactEmailField) && (
+            <PaperPetitionEmail
+              bind={bind}
+              contactType="contactSecondary"
+              onBlur={onBlur}
+            />
+          )}
+          {(contactsHelper.showEConsentCheckbox ||
+            contactsHelper.showSecondaryEConsentCheckbox) && (
+            <EConsent
+              bind={bind}
+              contactType="contactSecondary"
+              onBlur={onBlur}
+            />
           )}
 
           {contactsHelper.contactSecondary.displayPhone && (
