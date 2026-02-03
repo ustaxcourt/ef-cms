@@ -166,7 +166,7 @@ export class Practitioner extends User {
         'The type of practitioner - either Attorney or Non-Attorney.',
       )
       .messages({ '*': 'Select a practitioner type' }),
-    role: joi.alternatives().conditional('admissionsStatus', {
+    role: JoiValidationConstants.STRING.when('admissionsStatus', {
       is: joi.valid('Active'),
       otherwise: JoiValidationConstants.STRING.valid(
         ROLES.inactivePractitioner,
@@ -182,17 +182,14 @@ export class Practitioner extends User {
       .optional()
       .allow('')
       .description('The name suffix of the practitioner.'),
-    updatedEmail: joi
-      .alternatives()
-      .conditional('confirmEmail', {
-        is: joi.exist().not(null),
-        otherwise: JoiValidationConstants.EMAIL.optional().allow(null),
-        then: JoiValidationConstants.EMAIL.required(),
-      })
-      .messages({
-        'any.required': 'Enter a valid email address',
-        'string.email': 'Enter email address in format: yourname@example.com',
-      }),
+    updatedEmail: JoiValidationConstants.STRING.when('confirmEmail', {
+      is: joi.exist().not(null),
+      otherwise: JoiValidationConstants.EMAIL.optional().allow(null),
+      then: JoiValidationConstants.EMAIL.required(),
+    }).messages({
+      'any.required': 'Enter a valid email address',
+      'string.email': 'Enter email address in format: yourname@example.com',
+    }),
   };
 
   getValidationRules() {
