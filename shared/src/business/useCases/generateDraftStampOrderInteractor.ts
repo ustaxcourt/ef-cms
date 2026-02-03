@@ -13,12 +13,14 @@ export const generateDraftStampOrderInteractor = async (
     motionDocketEntryId,
     parentMessageId,
     stampData,
+    filingDateUpdated = false,
   }: {
     docketNumber: string;
     formattedDraftDocumentTitle: string;
     motionDocketEntryId: string;
     parentMessageId: string;
     stampData: any;
+    filingDateUpdated?: boolean;
   },
   authorizedUser: UnknownAuthUser,
 ): Promise<{ stampedDocketEntryId: string }> => {
@@ -49,6 +51,7 @@ export const generateDraftStampOrderInteractor = async (
         docketNumber,
         stampData,
         stampedDocumentStorageId: stampedDocketEntry.documentStorageId,
+        filingDateUpdated,
       },
       authorizedUser,
     );

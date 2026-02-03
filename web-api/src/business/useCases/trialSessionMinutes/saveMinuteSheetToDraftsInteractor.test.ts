@@ -42,6 +42,7 @@ describe('saveMinuteSheetToDraftsInteractor', () => {
     mockGetTrialSessionById.mockResolvedValue(MOCK_TRIAL_REGULAR);
     mockGetUniqueId.mockReturnValue('unique-id-abc');
     mockCreateAndUploadMinuteSheet.mockResolvedValue({ byteLength: 12345 });
+    mockUpdateCaseAndAssociations.mockResolvedValue(MOCK_CASE);
   });
 
   it('throws an unauthorized error when user lacks permission', async () => {
