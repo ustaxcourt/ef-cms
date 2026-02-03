@@ -17,7 +17,7 @@ const config: Config = {
     '!compareTypescriptErrors.ts',
     '!coverage/**',
     '!download-all-case-documents.ts',
-    '!ecr/**',
+    '!ecr/pull-and-tag.ts',
     '!elasticsearch/create-temporary-indices.ts',
     '!elasticsearch/docket-entry-search.ts',
     '!elasticsearch/docket-inbox.ts',
