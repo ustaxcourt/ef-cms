@@ -1,5 +1,5 @@
 import { MOCK_CASE } from '@shared/test/mockCase';
-import { CaseDTO } from './CaseDTO';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 import { Case } from '../../entities/cases/Case';
 
 describe('CaseDTO', () => {

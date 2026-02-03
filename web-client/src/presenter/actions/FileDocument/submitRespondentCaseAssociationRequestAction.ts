@@ -1,6 +1,6 @@
-import { CaseDTO } from '@shared/business/dto/docketEntries/CaseDTO';
-import { PublicCaseDTO } from '@shared/business/dto/docketEntries/PublicCaseDTO';
-import { RestrictedCaseDTO } from '@shared/business/dto/docketEntries/RestrictedCaseDTO';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
+import { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
+import { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
