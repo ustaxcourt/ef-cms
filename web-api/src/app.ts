@@ -104,6 +104,7 @@ import { getMaintenanceModeLambda } from './lambdas/maintenance/getMaintenanceMo
 import { getMessageThreadLambda } from './lambdas/messages/getMessageThreadLambda';
 import { getMessagesForCaseLambda } from './lambdas/messages/getMessagesForCaseLambda';
 import { getMinuteSheetLambda } from './lambdas/trialSessionMinutes/getMinuteSheetLambda';
+import { getUnscheduledMinuteSheetsLambda } from './lambdas/trialSessionMinutes/getUnscheduledMinuteSheetsLambda';
 import { getNotificationsLambda } from './lambdas/users/getNotificationsLambda';
 import { getOutboxMessagesForSectionLambda } from './lambdas/messages/getOutboxMessagesForSectionLambda';
 import { getOutboxMessagesForUserLambda } from './lambdas/messages/getOutboxMessagesForUserLambda';
@@ -210,6 +211,7 @@ import { getRecentFilingsForUserLambda } from './lambdas/recentFilings/getRecent
 import { deactivateUserLambda } from '@web-api/lambdas/automations/deactivateUserLambda';
 import { removeUserPendingEmailLambda } from '@web-api/lambdas/automations/removeUserPendingEmailLambda';
 import { saveMinuteSheetToDraftsLambda } from './lambdas/trialSessionMinutes/saveMinuteSheetToDraftsLambda';
+import { validateCaseForNewMinuteSheetLambda } from './lambdas/trialSessionMinutes/validateCaseForNewMinuteSheetLambda';
 
 export const app = express();
 
@@ -430,8 +432,12 @@ app.use(expressLogger);
     lambdaWrapper(serveExternallyFiledDocumentLambda, { isAsync: true }),
   );
   app.post(
-    '/case-documents/:docketNumber/external-document',
-    lambdaWrapper(fileExternalDocumentToCaseLambda),
+    '/async/case-documents/:docketNumber/external-document',
+    lambdaWrapper(
+      fileExternalDocumentToCaseLambda,
+      { isAsyncSync: true },
+      applicationContext,
+    ),
   );
   app.post(
     '/async/case-documents/:docketNumber/paper-filing',
@@ -908,6 +914,10 @@ app.delete(
  */
 {
   app.get('/trial-sessions/minutes', lambdaWrapper(getMinuteSheetLambda));
+  app.get(
+    '/trial-sessions/minutes/unscheduled',
+    lambdaWrapper(getUnscheduledMinuteSheetsLambda),
+  );
   app.put('/trial-sessions/minutes', lambdaWrapper(updateMinuteSheetLambda));
   app.post(
     '/trial-sessions/:trialSessionId/case/:docketNumber/minutes',
@@ -964,6 +974,10 @@ app.delete(
   app.put(
     '/trial-sessions/:trialSessionId/set-calendar-note',
     lambdaWrapper(saveCalendarNoteLambda),
+  );
+  app.get(
+    '/trial-sessions/:trialSessionId/validate-case-for-minute-sheet',
+    lambdaWrapper(validateCaseForNewMinuteSheetLambda),
   );
   app.get(
     '/trial-sessions/:trialSessionId',

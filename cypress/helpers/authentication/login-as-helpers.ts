@@ -149,9 +149,10 @@ function login({ email }: { email: string }) {
     getCypressEnv().defaultAccountPass,
   );
   cy.get('[data-testid="login-button"]').click();
-  cy.window().then(win =>
-    win.localStorage.setItem('__cypressOrderInSameTab', 'true'),
-  );
+  cy.window().then(win => {
+    win.localStorage.setItem('__cypressOrderInSameTab', 'true');
+    win.localStorage.setItem('__cypressMinuteSheetInSameTab', 'true');
+  });
   cy.get('.ustc-account').should('exist');
   mockDynamsoftLibrary();
 }
