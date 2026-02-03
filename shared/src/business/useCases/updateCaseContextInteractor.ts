@@ -20,6 +20,7 @@ import { updateTrialSession } from '@web-api/persistence/postgres/trialSessions/
 import { removeCaseFromTrialSession } from '@web-api/persistence/postgres/trialSessions/removeCaseFromTrialSession';
 import { getCaseDeadlinesByConsolidatedCaseDeadlineIds } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds';
 import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 const updateCaseContext = async (
   _applicationContext: ServerApplicationContext,
@@ -38,7 +39,7 @@ const updateCaseContext = async (
     docketNumber: string;
   },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<CaseDTO> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.UPDATE_CASE_CONTEXT)) {
     throw new UnauthorizedError('Unauthorized for update case');
   }
@@ -155,9 +156,11 @@ const updateCaseContext = async (
     caseToUpdate: newCase,
   });
 
-  return new Case(updatedCase, {
-    authorizedUser,
-  }).toRawObject();
+  return new CaseDTO(
+    new Case(updatedCase, {
+      authorizedUser,
+    }).toRawObject(),
+  );
 };
 
 export const updateCaseContextInteractor = withLocking(

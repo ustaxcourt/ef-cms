@@ -13,6 +13,7 @@ import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseA
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { createOrUpdateTrialSessionCases } from '@web-api/persistence/postgres/trialSessions/createOrUpdateTrialSessionCases';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 /**
  * addCaseToTrialSession
@@ -35,7 +36,7 @@ const addCaseToTrialSession = async (
     trialSessionId: string;
   },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<CaseDTO> => {
   if (
     !isAuthorized(authorizedUser, ROLE_PERMISSIONS.ADD_CASE_TO_TRIAL_SESSION)
   ) {
@@ -94,7 +95,9 @@ const addCaseToTrialSession = async (
     ],
   });
 
-  return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
+  return new CaseDTO(
+    new Case(updatedCase, { authorizedUser }).validate().toRawObject(),
+  );
 };
 
 export const addCaseToTrialSessionInteractor = withLocking(

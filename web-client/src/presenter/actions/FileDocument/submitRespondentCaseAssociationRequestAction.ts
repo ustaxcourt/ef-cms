@@ -1,3 +1,6 @@
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
+import { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
+import { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -10,7 +13,9 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const submitRespondentCaseAssociationRequestAction = async ({
   applicationContext,
   get,
-}: ActionProps) => {
+}: ActionProps): Promise<
+  CaseDTO | PublicCaseDTO | RestrictedCaseDTO | undefined
+> => {
   const { docketNumber } = get(state.caseDetail);
 
   const user = get(state.user);
