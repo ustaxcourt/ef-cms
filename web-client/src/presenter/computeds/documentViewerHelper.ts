@@ -99,9 +99,9 @@ export const documentViewerHelper = (
     state.featureFlags[ALLOWLIST_FEATURE_FLAGS.RESTRICTED_EVENT_CODES.key],
   );
 
-  const isRestricted = restrictedEventCodes?.includes(
-    formattedDocumentToDisplay.eventCode,
-  );
+  const isRestricted =
+    restrictedEventCodes &&
+    restrictedEventCodes?.includes(formattedDocumentToDisplay.eventCode);
 
   const showCompleteQcButton =
     permissions.EDIT_DOCKET_ENTRY &&

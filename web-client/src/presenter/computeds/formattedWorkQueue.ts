@@ -42,7 +42,6 @@ export const formattedWorkQueue = (
   const selectedWorkItemIds: string[] = selectedWorkItems.map(
     wi => wi.workItemId,
   );
-  // jake check the sectinos
   let { assignmentFilterValue } = get(state.screenMetadata);
   const { STATUS_TYPES } = applicationContext.getConstants();
   const users = get(state.users);
@@ -74,14 +73,15 @@ export const formattedWorkQueue = (
     .map(workItem => {
       const { eventCode } = workItem.docketEntry;
 
-      const editLink = restrictedEventCodes.includes(eventCode)
-        ? null
-        : getWorkItemDocumentLink({
-            authorizedUser,
-            permissions,
-            workItem,
-            workQueueToDisplay,
-          });
+      const editLink =
+        restrictedEventCodes && restrictedEventCodes?.includes(eventCode)
+          ? null
+          : getWorkItemDocumentLink({
+              authorizedUser,
+              permissions,
+              workItem,
+              workQueueToDisplay,
+            });
       return {
         ...workItem,
         editLink,
