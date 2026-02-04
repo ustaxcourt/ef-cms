@@ -1,17 +1,22 @@
-import { docketEntriesBaseQuery } from '@web-api/persistence/postgres/docketEntries/commonQueries';
+import {
+  DocketEntrySelectableField,
+  docketEntriesBaseQuery,
+} from '@web-api/persistence/postgres/docketEntries/commonQueries';
 import { fromKyselyDocketEntry } from '@web-api/persistence/postgres/docketEntries/mapper';
 
 // Batch size chosen to avoid Kysely's SnakeCaseTransformer stack overflow
 // when building deeply nested OR queries. 200 provides safety margin.
-const BATCH_SIZE = 500;
+const BATCH_SIZE = 2000;
 
 export const getDocketEntriesByDocketNumberAndDocketEntryId = async ({
   docketNumbersAndIds,
+  selectFields,
 }: {
   docketNumbersAndIds: {
     docketNumber: string;
     docketEntryId: string;
   }[];
+  selectFields?: DocketEntrySelectableField[];
 }): Promise<RawDocketEntry[]> => {
   if (docketNumbersAndIds.length === 0) {
     return [];
@@ -27,7 +32,10 @@ export const getDocketEntriesByDocketNumberAndDocketEntryId = async ({
     batches.map(async batch => {
       const batchDocketNumbers = [...new Set(batch.map(p => p.docketNumber))];
       const query = (
-        await docketEntriesBaseQuery({ docketNumbers: batchDocketNumbers })
+        await docketEntriesBaseQuery({
+          docketNumbers: batchDocketNumbers,
+          selectFields,
+        })
       ).where(qb =>
         qb.or(
           batch.map(pair =>
@@ -44,5 +52,5 @@ export const getDocketEntriesByDocketNumberAndDocketEntryId = async ({
     }),
   );
 
-  return results.flat().map(d => fromKyselyDocketEntry(d));
+  return results.flat().map(d => fromKyselyDocketEntry(d)) as RawDocketEntry[];
 };
