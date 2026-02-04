@@ -75,7 +75,7 @@ When updating Node.js, keep in mind:
  1. Manually update the images in:
    - `./Dockerfile`
    - `./web-api/runtimes/puppeteer/Dockerfile`
- 1. Manually update the Node.js version in:
+ 1. Manually update the Node.js version defined for the `docker-image-zipper` step in:
    - `./.circleci/config.yml`
  1. Update the node version used by our lambdas.
    - `web-api/terraform/modules/lambda/lambda.tf`
