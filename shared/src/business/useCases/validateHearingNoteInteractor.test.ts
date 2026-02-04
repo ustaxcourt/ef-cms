@@ -17,4 +17,14 @@ describe('validateHearingNoteInteractor', () => {
 
     expect(result).toEqual(null);
   });
+
+  it('returns null when note is undefined', () => {
+    const errors = validateHearingNoteInteractor({
+      note: '',
+    });
+
+    expect(errors).toEqual({
+      note: 'Add a note',
+    });
+  });
 });
