@@ -5,8 +5,8 @@ import { loadTsConfig } from '../utils/load-tsconfig.mjs';
 const tsconfig = loadTsConfig('tsconfig.json');
 
 const config: Config = {
+  displayName: 'scripts',
   clearMocks: true,
-  collectCoverage: true,
   collectCoverageFrom: [
     '**/*.{js,ts}',
     '!archived/**',
@@ -55,7 +55,6 @@ const config: Config = {
     '!user/**',
   ],
   coverageDirectory: './coverage',
-  coverageProvider: 'babel',
   coverageThreshold: {
     global: {
       branches: 97,
@@ -72,12 +71,11 @@ const config: Config = {
     '^uuid$': 'uuid',
   },
   testEnvironment: 'node',
-  testMatch: ['**/scripts/**/?(*.)+(spec|test).[jt]s?(x)'],
+  testMatch: ['<rootDir>/**/?(*.)+(spec|test).[jt]s?(x)'],
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
   transformIgnorePatterns: ['/node_modules/(?!uuid)'],
-  verbose: false,
 };
 
 export default config;
