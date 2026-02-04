@@ -281,6 +281,7 @@ export const MOCK_DOCKET_ENTRY_WITH_PREVIOUS_DOCUMENT: RawDocketEntry = {
   entityName: 'DocketEntry',
   filedBy: 'Petr. Yasir Oneal',
   docketEntryId: 'a61b57da-3931-47d5-8d5b-43e95d2829a3',
+  documentStorageId: 'a61b57da-3931-47d5-8d5b-43e95d2829a3',
   certificateOfService: false,
   documentTitle:
     'Motion for Leave to File Out of Time Brief in Support of First Amended AMBR',

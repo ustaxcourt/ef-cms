@@ -18,6 +18,50 @@ Use the Kysely query builder to add new columns, remove existing columns, and to
 
 To learn more about Kysely migrations and syntax, see [here](https://kysely.dev/docs/migrations).
 
+## Heavy Migrations (Disabling Transactions)
+
+Some migrations need to run outside of a database transaction to allow for proper autocommit behavior. This is particularly important for:
+- Large data backfill operations that need to commit in batches
+- Long-running migrations that could hold locks for extended periods
+- Migrations that use explicit lock timeouts and statement timeouts
+
+To create a heavy migration, add `.heavy` to the migration filename (e.g., `2025-11-11T16_55_01Z-s3-refactor-2.heavy.ts`).
+
+The migration runner in `migrate.ts` will automatically detect the `.heavy` suffix and create a migrator with `disableTransactions: true`. This allows the migration to:
+- Commit batches of updates independently
+- Implement custom pause/retry logic between batches
+- Set custom lock and statement timeouts within the migration
+
+**Example heavy migration pattern:**
+```typescript
+export async function up(db: Kysely<any>): Promise<void> {
+  const BATCH_SIZE = 5_000;
+  const PAUSE_MS = 250;
+  
+  await sql`set lock_timeout = '2s'`.execute(db);
+  await sql`set statement_timeout = '10min'`.execute(db);
+  
+  while (true) {
+    // Process batch with FOR UPDATE SKIP LOCKED
+    const batch = await db
+      .selectFrom('table')
+      .where('column', 'is', null)
+      .limit(BATCH_SIZE)
+      .forUpdate()
+      .skipLocked()
+      .execute();
+      
+    if (batch.length === 0) break;
+    
+    // Update batch (autocommits after each batch)
+    await db.updateTable('table').set({ column: value }).execute();
+    
+    // Pause between batches
+    await new Promise(r => setTimeout(r, PAUSE_MS));
+  }
+}
+```
+
 ## Creating New Expand/Contract Migrations
 
 For expand migrations: follow the same procedure as above, optionally adding `.expand` in the migration filename. `.expand` migrations will not be treated differently than regular migrations, but will be more easily identifiable. 
