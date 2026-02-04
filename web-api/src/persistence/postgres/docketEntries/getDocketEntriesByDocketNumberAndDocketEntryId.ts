@@ -2,7 +2,7 @@ import { docketEntriesBaseQuery } from '@web-api/persistence/postgres/docketEntr
 import { fromKyselyDocketEntry } from '@web-api/persistence/postgres/docketEntries/mapper';
 
 // Batch size chosen to avoid Kysely's SnakeCaseTransformer stack overflow
-// when building deeply nested OR queries. 200 provides safety margin.
+// when building deeply nested OR queries. 2000 provides safety margin.
 const BATCH_SIZE = 2000;
 
 export const getDocketEntriesByDocketNumberAndDocketEntryId = async ({
