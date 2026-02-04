@@ -39,14 +39,6 @@ export const getDocketEntriesByDocketNumberAndDocketEntryId = async ({
         ),
       );
 
-      // Log SQL for debugging - use .compile() to get SQL without executing
-      const compiled = query.compile();
-      console.log('=== SQL Query ===');
-      console.log(compiled.sql);
-      console.log('=== Parameters (first 10) ===');
-      console.log(compiled.parameters.slice(0, 10));
-      console.log(`=== Total parameters: ${compiled.parameters.length} ===`);
-
       const dbDocketEntries = await query.execute();
       return dbDocketEntries;
     }),
