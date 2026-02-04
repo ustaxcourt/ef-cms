@@ -7,7 +7,7 @@ import {
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { NotFoundError } from '@web-api/errors/errors';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { CaseDTO } from '../dto/docketEntries/CaseDTO';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 export const removeSignatureFromDocumentInteractor = async (
   applicationContext: ServerApplicationContext,

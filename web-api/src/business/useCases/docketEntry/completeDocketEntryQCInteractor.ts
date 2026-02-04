@@ -37,8 +37,8 @@ import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { WorkItem } from '@shared/business/entities/WorkItem';
-import { CaseDTO } from '@shared/business/dto/docketEntries/CaseDTO';
 import { countPagesInDocument } from '@web-api/business/useCaseHelper/countPagesInDocument';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 const completeDocketEntryQC = async (
   applicationContext: ServerApplicationContext,

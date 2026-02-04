@@ -20,7 +20,7 @@ import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseA
 import { countPagesInDocument } from '@web-api/business/useCaseHelper/countPagesInDocument';
 import { CourtIssuedDocumentAnyType } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import { addAssociatedDocketEntries } from '@web-api/business/useCaseHelper/docketEntry/addAssociatedDocketEntries';
-import { CaseDTO } from '@shared/business/dto/docketEntries/CaseDTO';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 /**
  *

@@ -11,7 +11,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { createOrUpdateTrialSessionCases } from '@web-api/persistence/postgres/trialSessions/createOrUpdateTrialSessionCases';
-import { CaseDTO } from '@shared/business/dto/docketEntries/CaseDTO';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 export const setForHearingInteractor = async (
   _applicationContext: ServerApplicationContext,

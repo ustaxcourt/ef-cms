@@ -29,9 +29,9 @@ import {
   formattedOldEmailForChangeOfAddress,
 } from '@shared/business/utilities/calculateEmail';
 import { CaseFactory } from '../entities/cases/CaseFactory';
-import { CaseDTO } from '../dto/docketEntries/CaseDTO';
-import { PublicCaseDTO } from '../dto/docketEntries/PublicCaseDTO';
-import { RestrictedCaseDTO } from '../dto/docketEntries/RestrictedCaseDTO';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
+import { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
+import { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO';
 
 /**
  * updateContact
