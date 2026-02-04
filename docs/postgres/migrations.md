@@ -28,9 +28,12 @@ Some migrations need to run outside of a database transaction to allow for prope
 To create a heavy migration, add `.heavy` to the migration filename (e.g., `2025-11-11T16_55_01Z-s3-refactor-2.heavy.ts`).
 
 The migration runner in `migrate.ts` will automatically detect the `.heavy` suffix and create a migrator with `disableTransactions: true`. This allows the migration to:
-- Commit batches of updates independently
+- Batch reads into configurable chunks and autocommit writes as the migration runs
+- Optionally implement custom transactions within the migration (these would otherwise be wrapped in the Kysely migration transaction)
 - Implement custom pause/retry logic between batches
 - Set custom lock and statement timeouts within the migration
+
+Special care should be taken if migrations are not easily reversible or remove/transform data. Standard migrations will not apply changes if an issue occurs during migration, a `.heavy` will. 
 
 **Example heavy migration pattern:**
 ```typescript
