@@ -17,7 +17,6 @@ const config: Config = {
     '<rootDir>/web-client/jest-unit.config.ts',
   ],
   clearMocks: true,
-  collectCoverage: false,
   coverageDirectory: './coverage',
   coverageProvider: 'babel',
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
@@ -36,7 +35,6 @@ const config: Config = {
   transformIgnorePatterns: [
     'node_modules/(?!(uuid|sinon|aws-sdk-client-mock)/)',
   ],
-  verbose: false,
   setupFilesAfterEnv: [
     '<rootDir>/web-api/src/persistence/postgres/featureFlag/mocks.jest.ts',
   ],
