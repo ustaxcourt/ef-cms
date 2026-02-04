@@ -28,7 +28,6 @@ const config: Config = {
     '!elasticsearch/retry-ocr-failures.ts',
     '!email/**',
     '!generate-uuid.ts',
-    '!helpers/runCommand.ts',
     '!import-case-status-changes-from-csv.ts',
     '!irs-super-user.ts',
     '!jest-scripts.config.ts',
