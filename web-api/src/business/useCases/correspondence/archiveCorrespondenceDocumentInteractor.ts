@@ -11,7 +11,7 @@ import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCor
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { Correspondence } from '@shared/business/entities/Correspondence';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { CaseDTO } from '@shared/business/dto/docketEntries/CaseDTO';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 export const archiveCorrespondenceDocument = async (
   applicationContext: ServerApplicationContext,

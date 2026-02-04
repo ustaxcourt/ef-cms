@@ -145,3 +145,4 @@ export class PublicDocketEntry extends JoiValidationEntity {
     return PublicDocketEntry.VALIDATION_RULES;
   }
 }
+

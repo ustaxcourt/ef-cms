@@ -15,7 +15,7 @@ import {
 import { MOCK_DOCUMENTS } from './mockDocketEntry';
 import { docketClerkUser, judgeUser } from './mockUsers';
 import { RawEligibleCase } from '@shared/business/entities/cases/EligibleCase';
-import { CaseDTO } from '@shared/business/dto/docketEntries/CaseDTO';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 export const MOCK_CASE: RawCase = {
   archivedDocketEntries: [],

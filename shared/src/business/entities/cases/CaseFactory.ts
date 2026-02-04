@@ -24,9 +24,9 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { RestrictedCase } from '@shared/business/entities/cases/RestrictedCase';
 import { formatSealedAddresses } from '@shared/business/utilities/caseFilter';
-import { CaseDTO } from '@shared/business/dto/docketEntries/CaseDTO';
-import { RestrictedCaseDTO } from '@shared/business/dto/docketEntries/RestrictedCaseDTO';
-import { PublicCaseDTO } from '@shared/business/dto/docketEntries/PublicCaseDTO';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
+import { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO';
+import { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
 
 function assertInstanceOf<T>(
   instance: any,
