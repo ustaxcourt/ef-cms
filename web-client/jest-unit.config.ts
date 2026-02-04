@@ -6,8 +6,8 @@ import path from 'node:path';
 const tsconfig = loadTsConfig('tsconfig.json');
 
 const config: Config = {
+  displayName: 'web-client-unit',
   clearMocks: true,
-  collectCoverage: true,
   collectCoverageFrom: [
     'src/**/*.{js,ts}',
     '!integration-tests/**/*.js',
@@ -27,7 +27,6 @@ const config: Config = {
     '!src/test/createClientTestApplicationContext.ts',
   ],
   coverageDirectory: './coverage-unit',
-  coverageProvider: 'babel',
   coverageReporters: ['json', 'lcov'],
   globals: {
     FileReader() {},
@@ -46,7 +45,7 @@ const config: Config = {
     process.cwd(),
     'web-client/JsdomWithTextEncoderEnvironment.ts',
   ),
-  // testMatch: ['**/web-client/src/**/?(*.)+(spec|test).[jt]s?(x)'], // Uncomment to run all local web-client unit tests.
+  testMatch: ['<rootDir>/src/**/?(*.)+(spec|test).[jt]s?(x)'],
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
     '^.+\\.html?$': path.resolve(process.cwd(), 'web-client/htmlLoader.js'), //this is to ignore imported html files
@@ -54,7 +53,6 @@ const config: Config = {
   transformIgnorePatterns: [
     '/node_modules/(?!uuid|sinon|aws-sdk-client-mock|export-to-csv)',
   ],
-  verbose: false,
   setupFilesAfterEnv: [
     '<rootDir>../web-api/src/persistence/postgres/featureFlag/mocks.jest.ts',
   ],
