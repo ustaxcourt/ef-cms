@@ -254,6 +254,7 @@
     "test:scripts": "jest --config scripts/jest-scripts.config.ts --coverage --coverageProvider=babel",
     "test:scripts:file": "jest --config scripts/jest-scripts.config.ts --coverage=false",
     "test:shared": "npm run build:assets && jest --config shared/jest-shared.config.ts --coverage --coverageProvider=babel",
+    "test:shared:ci": "npm run build:assets && jest --config shared/jest-shared.config.ts --coverage --coverageProvider=babel --coverageDirectory=./coverage/${NODE_INDEX} ${TESTFILES}",
     "test:shared:file": "npm run build:assets && jest --config shared/jest-shared.config.ts --coverage=false",
     "test:watch": "jest --watch .*test\\.js$",
     "verify-authorizers": "./scripts/circleci/verify-authorizers.sh",
