@@ -28,6 +28,9 @@ const DOCKET_ENTRY_FIELDS_FOR_WORK_ITEM_QC: DocketEntrySelectableField[] = [
   'isLegacySealed',
   'signedAt',
   'certificateOfServiceDate',
+  // Additional fields accessed by tests/UI
+  'userId',
+  'otherFilingParty',
 ];
 
 export const getDocumentQCInboxForUser = async ({
