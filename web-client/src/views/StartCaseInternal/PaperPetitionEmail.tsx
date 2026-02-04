@@ -46,7 +46,7 @@ export const PaperPetitionEmail: React.FC<PaperPetitionEmailProps> = connect(
             className="usa-label"
             htmlFor={`paper-petition-email-${contactType}`}
           >
-            Petition email address <span className="usa-hint">(optional)</span>
+            Contact email address <span className="usa-hint">(optional)</span>
           </label>
           <input
             className="usa-input"

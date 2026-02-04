@@ -222,19 +222,19 @@ export const ContactPrimary: React.FC<ContactsPrimaryProps> = connect(
             />
           )}
 
-          {contactsHelper.showPaperPetitionEmailFieldAndConsentBox && (
-            <>
-              <PaperPetitionEmail
-                bind={bind}
-                contactType="contactPrimary"
-                onBlur={onBlur}
-              />
-              <EConsent
-                bind={bind}
-                contactType="contactPrimary"
-                onBlur={onBlur}
-              />
-            </>
+          {contactsHelper.showContactEmailField && (
+            <PaperPetitionEmail
+              bind={bind}
+              contactType="contactPrimary"
+              onBlur={onBlur}
+            />
+          )}
+          {contactsHelper.showEConsentCheckbox && (
+            <EConsent
+              bind={bind}
+              contactType="contactPrimary"
+              onBlur={onBlur}
+            />
           )}
 
           <FormGroup

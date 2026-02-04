@@ -64,24 +64,29 @@ export const PetitionersAndCounsel = connect(
                   />
 
                   {!petitioner.sealedAndUnavailable && (
-                    <span
-                      className={classNames({
-                        'margin-left-205': petitioner.isAddressSealed,
-                        'sealed-address': petitioner.isAddressSealed,
-                        'address-line': true,
-                      })}
-                      data-testid="petitioner-email"
-                    >
-                      <span>{petitioner.formattedEmail}</span>
-                      {petitioner.showEAccessFlag && (
-                        <FontAwesomeIcon
-                          aria-label="has e-access"
-                          className="margin-left-05 fa-icon-blue"
-                          icon="flag"
-                          size="1x"
-                        />
-                      )}
-                    </span>
+                    <>
+                      <p className="semi-bold margin-bottom-0">
+                        Service email address
+                      </p>
+                      <span
+                        className={classNames({
+                          'margin-left-205': petitioner.isAddressSealed,
+                          'sealed-address': petitioner.isAddressSealed,
+                          'address-line': true,
+                        })}
+                        data-testid="petitioner-email"
+                      >
+                        <span>{petitioner.formattedEmail}</span>
+                        {petitioner.showEAccessFlag && (
+                          <FontAwesomeIcon
+                            aria-label="has e-access"
+                            className="margin-left-05 fa-icon-blue"
+                            icon="flag"
+                            size="1x"
+                          />
+                        )}
+                      </span>
+                    </>
                   )}
 
                   {petitioner.showRemoveEmailButton && (
@@ -115,7 +120,7 @@ export const PetitionersAndCounsel = connect(
                   {petitioner.showPaperPetitionEmail && (
                     <>
                       <p className="semi-bold margin-bottom-0">
-                        Petition email address
+                        Contact email address
                       </p>
                       <span
                         data-testid="petitioner-paper-petition-email"
