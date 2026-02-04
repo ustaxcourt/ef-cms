@@ -1,13 +1,18 @@
 import { getDbReader } from '@web-api/database';
 import { sql } from 'kysely';
 
-export const docketEntriesBaseQuery = () =>
+export const docketEntriesBaseQuery = ({
+  docketNumbers,
+}: {
+  docketNumbers: string[];
+}) =>
   getDbReader(reader =>
     reader
       .with('affectedDocketEntries', db =>
         db
           .selectFrom('dwDocketEntryRelatedDocketEntry')
           .where('served', 'is', true)
+          .where('docketNumber', 'in', docketNumbers)
           .select(['primaryDocketEntryId as docketEntryId', 'docketNumber'])
           .select(fn =>
             fn.fn
@@ -30,6 +35,7 @@ export const docketEntriesBaseQuery = () =>
         db
           .selectFrom('dwDocketEntryRelatedDocketEntry')
           .where('served', 'is', true)
+          .where('docketNumber', 'in', docketNumbers)
           .select(['secondaryDocketEntryId as docketEntryId', 'docketNumber'])
           .select(fn =>
             fn.fn
