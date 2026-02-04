@@ -86,14 +86,16 @@ export const FilingsAndProceedings = connect<
           <Phone>
             {entry.iconsToDisplay?.length > 0 && (
               <span className="tw:inline-flex tw:flex-row tw:mr-2 tw:gap-1">
-                {entry.iconsToDisplay.map(({ icon, className, title }, index) => (
-                  <WrappedIcon
-                    key={index}
-                    icon={icon}
-                    iconClass={className}
-                    title={title}
-                  />
-                ))}
+                {entry.iconsToDisplay.map(
+                  ({ icon, className, title }, index) => (
+                    <WrappedIcon
+                      key={index}
+                      icon={icon}
+                      iconClass={className}
+                      title={title}
+                    />
+                  ),
+                )}
               </span>
             )}
             <Button
@@ -113,7 +115,7 @@ export const FilingsAndProceedings = connect<
                 });
               }}
             >
-              {addOrderStampPrefix(entry.eventCode,entry.descriptionDisplay)}
+              {addOrderStampPrefix(entry.eventCode, entry.descriptionDisplay)}
             </Button>
           </Phone>
         </>
@@ -128,14 +130,16 @@ export const FilingsAndProceedings = connect<
             <Phone>
               {entry.iconsToDisplay?.length > 0 && (
                 <span className="tw:inline-flex tw:flex-row tw:mr-2 tw:gap-1">
-                  {entry.iconsToDisplay.map(({ icon, className, title }, index) => (
-                    <WrappedIcon
-                      key={index}
-                      icon={icon}
-                      iconClass={className}
-                      title={title}
-                    />
-                  ))}
+                  {entry.iconsToDisplay.map(
+                    ({ icon, className, title }, index) => (
+                      <WrappedIcon
+                        key={index}
+                        icon={icon}
+                        iconClass={className}
+                        title={title}
+                      />
+                    ),
+                  )}
                 </span>
               )}
             </Phone>
@@ -159,14 +163,16 @@ export const FilingsAndProceedings = connect<
             <Phone>
               {entry.iconsToDisplay?.length > 0 && (
                 <span className="tw:inline-flex tw:flex-row tw:mr-2 tw:gap-1">
-                  {entry.iconsToDisplay.map(({ icon, className, title }, index) => (
-                    <WrappedIcon
-                      key={index}
-                      icon={icon}
-                      iconClass={className}
-                      title={title}
-                    />
-                  ))}
+                  {entry.iconsToDisplay.map(
+                    ({ icon, className, title }, index) => (
+                      <WrappedIcon
+                        key={index}
+                        icon={icon}
+                        iconClass={className}
+                        title={title}
+                      />
+                    ),
+                  )}
                 </span>
               )}
             </Phone>
@@ -195,14 +201,16 @@ export const FilingsAndProceedings = connect<
             <Phone>
               {entry.iconsToDisplay?.length > 0 && (
                 <span className="tw:inline-flex tw:flex-row tw:mr-2 tw:gap-1">
-                  {entry.iconsToDisplay.map(({ icon, className, title }, index) => (
-                    <WrappedIcon
-                      key={index}
-                      icon={icon}
-                      iconClass={className}
-                      title={title}
-                    />
-                  ))}
+                  {entry.iconsToDisplay.map(
+                    ({ icon, className, title }, index) => (
+                      <WrappedIcon
+                        key={index}
+                        icon={icon}
+                        iconClass={className}
+                        title={title}
+                      />
+                    ),
+                  )}
                 </span>
               )}
             </Phone>
@@ -223,40 +231,11 @@ export const FilingsAndProceedings = connect<
               <br></br>
               <span className="display-inline-block">
                 <span> --- </span>
-                {(affectedEntry.showDocumentViewerLink ||
-                  affectedEntry.showDownloadLink) && (
-                  <Button
-                    link
-                    className={classNames('text-right', 'view-pdf-link')}
-                    data-testid={`related-document-viewer-link-${affectedEntry.docketEntryIndex}`}
-                    arial-label={`View PDF for: ${affectedEntry.docketEntryIndex}`}
-                    onClick={() =>
-                      affectedEntry.showDocumentViewerLink
-                        ? changeTabAndSetViewerDocumentToDisplaySequence({
-                            docketRecordTab: 'documentView',
-                            viewerDocumentToDisplay: {
-                              docketEntryId: affectedEntry.docketEntryId,
-                            },
-                          })
-                        : openCaseDocumentDownloadUrlSequence({
-                            docketEntryId: affectedEntry.docketEntryId,
-                            docketNumber: caseDetail.docketNumber,
-                          })
-                    }
-                  >
-                    {affectedEntry?.disposition} #
-                    {affectedEntry.docketEntryIndex}
-                  </Button>
-                )}
-                {!(
-                  affectedEntry.showDocumentViewerLink ||
-                  affectedEntry.showDownloadLink
-                ) && (
-                  <span>
-                    {' '}
-                    {affectedEntry?.disposition} #
-                    {affectedEntry.docketEntryIndex}{' '}
-                  </span>
+                {renderDispositionLinks(
+                  affectedEntry,
+                  caseDetail.docketNumber,
+                  changeTabAndSetViewerDocumentToDisplaySequence,
+                  openCaseDocumentDownloadUrlSequence,
                 )}
               </span>
             </span>
@@ -266,5 +245,44 @@ export const FilingsAndProceedings = connect<
     );
   },
 );
+
+const renderDispositionLinks = (
+  affectedEntry,
+  docketNumber,
+  changeTabSequence,
+  openDocumentDownloadSequence,
+) => {
+  return affectedEntry.dispositionLinkText.map(linkText => (
+    <span className="display-inline-block" key={linkText}>
+      {(affectedEntry.showDocumentViewerLink ||
+        affectedEntry.showDownloadLink) && (
+        <Button
+          link
+          className={classNames('text-right', 'view-pdf-link')}
+          data-testid={`related-document-viewer-link-${affectedEntry.docketEntryIndex}`}
+          arial-label={`View PDF for: ${affectedEntry.docketEntryIndex}`}
+          onClick={() =>
+            affectedEntry.showDocumentViewerLink
+              ? changeTabSequence({
+                  docketRecordTab: 'documentView',
+                  viewerDocumentToDisplay: {
+                    docketEntryId: affectedEntry.docketEntryId,
+                  },
+                })
+              : openDocumentDownloadSequence({
+                  docketEntryId: affectedEntry.docketEntryId,
+                  docketNumber,
+                })
+          }
+        >
+          {linkText}
+        </Button>
+      )}
+      {!(
+        affectedEntry.showDocumentViewerLink || affectedEntry.showDownloadLink
+      ) && <span> {linkText} </span>}
+    </span>
+  ));
+};
 
 FilingsAndProceedings.displayName = 'FilingsAndProceedings';

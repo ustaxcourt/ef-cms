@@ -179,13 +179,16 @@ export const getFormattedDocketEntry = ({
             visibilityPolicyDateFormatted,
           );
 
+        const dispositionLinkText = MOTION_DISPOSITION_VERBIAGE[
+          affectedEntry.disposition
+        ].MOTION.map(d => `${d} #${index}`);
+
         return {
           ...affectedEntry,
           docketEntryIndex: index,
           showDocumentViewerLink,
           showDownloadLink,
-          disposition:
-            MOTION_DISPOSITION_VERBIAGE[affectedEntry.disposition].MOTION,
+          dispositionLinkText,
         };
       }),
     );
@@ -205,13 +208,16 @@ export const getFormattedDocketEntry = ({
             visibilityPolicyDateFormatted,
           );
 
+        const dispositionLinkText = MOTION_DISPOSITION_VERBIAGE[
+          affectedEntry.disposition
+        ].ORDER.map(d => `${d} #${index}`);
+
         return {
           ...affectedEntry,
           docketEntryIndex: index,
           showDocumentViewerLink,
           showDownloadLink,
-          disposition:
-            MOTION_DISPOSITION_VERBIAGE[affectedEntry.disposition].ORDER,
+          dispositionLinkText,
         };
       }),
     );

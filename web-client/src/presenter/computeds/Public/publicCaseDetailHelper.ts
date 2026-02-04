@@ -125,12 +125,15 @@ export const formatDocketEntryOnDocketRecord = (
         isTerminalUser,
       );
 
+      const dispositionLinkText = MOTION_DISPOSITION_VERBIAGE[
+        affectedEntry.disposition
+      ].MOTION.map(d => `${d} #${index}`);
+
       return {
         ...affectedEntry,
         docketEntryIndex: index,
         showDownloadLink,
-        disposition:
-          MOTION_DISPOSITION_VERBIAGE[affectedEntry.disposition]?.MOTION,
+        dispositionLinkText,
       };
     });
   }
@@ -147,12 +150,15 @@ export const formatDocketEntryOnDocketRecord = (
           isTerminalUser,
         );
 
+        const dispositionLinkText = MOTION_DISPOSITION_VERBIAGE[
+          affectedEntry.disposition
+        ].ORDER.map(d => `${d} #${index}`);
+
         return {
           ...affectedEntry,
           docketEntryIndex: index,
           showDownloadLink,
-          disposition:
-            MOTION_DISPOSITION_VERBIAGE[affectedEntry.disposition]?.ORDER,
+          dispositionLinkText,
         };
       }),
     );
@@ -258,6 +264,7 @@ export type PublicFormattedDocketEntryInfo = {
   hasDocument: boolean;
   relatedDocketEntries: {
     disposition?: string;
+    dispositionLinkText?: string;
     docketEntryId?: string;
     docketEntryIndex?: number;
     showDownloadLink: boolean;
