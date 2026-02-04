@@ -3,7 +3,7 @@ import { fromKyselyDocketEntry } from '@web-api/persistence/postgres/docketEntri
 
 // Batch size chosen to avoid Kysely's SnakeCaseTransformer stack overflow
 // when building deeply nested OR queries. 200 provides safety margin.
-const BATCH_SIZE = 2000;
+const BATCH_SIZE = 500;
 
 export const getDocketEntriesByDocketNumberAndDocketEntryId = async ({
   docketNumbersAndIds,
