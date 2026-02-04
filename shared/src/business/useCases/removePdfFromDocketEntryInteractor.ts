@@ -9,6 +9,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 /**
  * removePdfFromDocketEntry
@@ -22,7 +23,7 @@ export const removePdfFromDocketEntry = async (
   applicationContext: ServerApplicationContext,
   { docketEntryId, docketNumber },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<CaseDTO | void> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.UPDATE_CASE)) {
     throw new UnauthorizedError('Unauthorized for update case');
   }
@@ -51,7 +52,9 @@ export const removePdfFromDocketEntry = async (
       caseToUpdate: caseEntity,
     });
 
-    return new Case(updatedCase, { authorizedUser }).toRawObject();
+    const theCase = new Case(updatedCase, { authorizedUser }).toRawObject();
+    const caseDTO = new CaseDTO(theCase);
+    return caseDTO;
   }
 };
 

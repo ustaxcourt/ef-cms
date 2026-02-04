@@ -843,7 +843,7 @@ describe('messageDocumentHelper', () => {
                 isDraft: false,
               },
             ],
-            status: CASE_STATUS_TYPES.generalDocument,
+            status: CASE_STATUS_TYPES.generalDocket,
           },
         },
       });
