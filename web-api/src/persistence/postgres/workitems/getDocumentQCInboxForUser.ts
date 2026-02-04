@@ -19,6 +19,15 @@ const DOCKET_ENTRY_FIELDS_FOR_WORK_ITEM_QC: DocketEntrySelectableField[] = [
   'receivedAt',
   'createdAt',
   'filedBy',
+  // Fields needed for DocketEntry.isServed() check
+  'servedAt',
+  'isLegacyServed',
+  // Fields needed for formatDocketEntry and getWorkItemDocumentLink
+  'isPaper',
+  'lodged',
+  'isLegacySealed',
+  'signedAt',
+  'certificateOfServiceDate',
 ];
 
 export const getDocumentQCInboxForUser = async ({
