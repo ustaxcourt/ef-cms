@@ -1,13 +1,12 @@
 import { Kysely } from 'kysely';
 
 export async function up(db: Kysely<any>): Promise<void> {
-  await db.schema
-    .alterTable('dwDocketEntry')
-    .addColumn('multiDocketedOn', 'jsonb', col =>
-      col.defaultTo(JSON.stringify([])).notNull(),
-    )
-    .execute();
-
+  // await db.schema
+  //   .alterTable('dwDocketEntry')
+  //   .addColumn('multiDocketedOn', 'jsonb', col =>
+  //     col.defaultTo(JSON.stringify([])).notNull(),
+  //   )
+  //   .execute();
   await db.schema
     .alterTable('dwDocketEntry')
     .addColumn('originallyFiledDocketNumber', 'varchar')
