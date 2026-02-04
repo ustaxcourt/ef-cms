@@ -57,7 +57,7 @@ export const generatePrintableFilingReceiptInteractor = async (
     fileAcrossConsolidatedGroup: boolean;
   },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<string> => {
   const caseRecord = await getCaseByDocketNumber({
     docketNumber,
   });
