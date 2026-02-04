@@ -128,8 +128,9 @@ export function createAndServePaperPetition(
   }
 
   cy.get('[data-testid="submit-paper-petition"]').click();
+  cy.get('[data-testid="header-text"]').should('be.visible');
   return cy
-    .get('.docket-number-header a')
+    .get('[data-testid="header-text"] [data-testid="case-link"]')
     .invoke('attr', 'href')
     .then(href => {
       const docketNumber = href!.split('/').pop();
@@ -278,9 +279,10 @@ export function createAndServePaperPetitionMyselfAndSpouse(
   });
 
   cy.get('[data-testid="submit-paper-petition"]').click();
+  cy.get('[data-testid="header-text"]').should('be.visible');
 
   return cy
-    .get('.docket-number-header a')
+    .get('[data-testid="header-text"] [data-testid="case-link"]')
     .invoke('attr', 'href')
     .then(href => {
       const docketNumber = href!.split('/').pop();
