@@ -13,6 +13,11 @@ import { sql } from 'kysely';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { generateCsv } from '../helpers/generate-csv';
 import { pick } from 'lodash';
+import {
+  alphabetizeCities,
+  formatCaseCaption,
+  formatJudgeName,
+} from '../helpers/formatters';
 import { choose } from '../helpers/prompts';
 
 const scriptConfig: ScriptConfig = {
@@ -61,15 +66,7 @@ type tDeficiencyCase = {
   preferredTrialCity: string;
 };
 
-const trialCityStrings = TRIAL_CITY_STRINGS.slice().sort((a, b) => {
-  const [aCity, aState] = a.split(', ');
-  const [bCity, bState] = b.split(', ');
-
-  if (aState !== bState) {
-    return aState.localeCompare(bState);
-  }
-  return aCity.localeCompare(bCity);
-});
+const trialCityStrings = alphabetizeCities(TRIAL_CITY_STRINGS);
 
 const getDeficiencyCases = async (
   filterByTrialCity: string | undefined,
@@ -159,15 +156,12 @@ const getDeficiencyCases = async (
   ];
   const rows = [
     ...deficiencyCases.map(result => ({
-      ...pick(result, ['caption', 'docketNumber', 'status']),
+      ...pick(result, ['docketNumber', 'status']),
+      caption: formatCaseCaption(result.caption),
       irsDeficiencyAmount: result.irsDeficiencyAmount
         ? `${result.irsDeficiencyAmount.toFixed(2)}`
         : '0',
-      judge:
-        result.associatedJudge
-          ?.replace('Chief Special Trial ', '')
-          .replace('Special Trial ', '')
-          .replace('Judge ', '') || '',
+      judge: formatJudgeName(result.associatedJudge),
       preferredTrialCity: result.preferredTrialCity || '',
     })),
   ];
