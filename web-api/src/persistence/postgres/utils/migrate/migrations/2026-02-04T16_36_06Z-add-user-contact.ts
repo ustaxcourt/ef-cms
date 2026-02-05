@@ -13,6 +13,7 @@ export const up = async (db: Kysely<any>): Promise<void> => {
     .addColumn('countryType', 'varchar', col => col.notNull())
     .addColumn('lat', 'decimal')
     .addColumn('lng', 'decimal')
+    .addColumn('geodataMatch', 'boolean')
     .addColumn('phone', 'varchar', col => col.notNull())
     .addColumn('postalCode', 'varchar', col => col.notNull())
     .addColumn('state', 'varchar')
