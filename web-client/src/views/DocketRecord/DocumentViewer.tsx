@@ -126,12 +126,18 @@ export const DocumentViewer = connect(
                               {entry.descriptionDisplay}
                               {entry.relatedDocketEntries?.map(
                                 affectedEntry => {
+                                  console.log(affectedEntry);
+
                                   return (
-                                    <>
+                                    <span key={affectedEntry.docketEntryId}>
                                       <br />
-                                      --- {affectedEntry.disposition} #
-                                      {affectedEntry.docketEntryIndex}
-                                    </>
+                                      ---{' '}
+                                      {affectedEntry.dispositionLinkText.map(
+                                        linkText => (
+                                          <div key={linkText}>{linkText}</div>
+                                        ),
+                                      )}
+                                    </span>
                                   );
                                 },
                               )}
