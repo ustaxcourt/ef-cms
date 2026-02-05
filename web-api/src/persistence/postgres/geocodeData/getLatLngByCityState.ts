@@ -1,7 +1,7 @@
 import { getDbReader } from '@web-api/database';
 import { sql } from 'kysely';
 
-export type CensusPlaceLatLng = {
+export type GeocodeDataLatLng = {
   lat: number;
   lng: number;
 };
@@ -12,7 +12,7 @@ export const getLatLngByCityState = async ({
 }: {
   city?: string | null;
   state?: string | null;
-}): Promise<CensusPlaceLatLng | null> => {
+}): Promise<GeocodeDataLatLng | null> => {
   const trimmedCity = city?.trim();
   const trimmedState = state?.trim();
 
