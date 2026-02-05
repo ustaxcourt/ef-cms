@@ -126,8 +126,6 @@ export const DocumentViewer = connect(
                               {entry.descriptionDisplay}
                               {entry.relatedDocketEntries?.map(
                                 affectedEntry => {
-                                  console.log(affectedEntry);
-
                                   return (
                                     <span key={affectedEntry.docketEntryId}>
                                       <br />
