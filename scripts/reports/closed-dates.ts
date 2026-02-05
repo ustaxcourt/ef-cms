@@ -5,6 +5,7 @@ import {
   getJsTimeframeForYear,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
+import { formatCaseCaption } from '../helpers/formatters';
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { generateCsv } from '../helpers/generate-csv';
 import { getDbReader } from '@web-api/database';
@@ -66,7 +67,7 @@ const getAllCasesOpenedInYear = async (): Promise<RawCase[]> => {
     { header: 'Case Type', key: 'caseType' },
   ];
   const rows = casesOpenedInYear.map(c => ({
-    caseCaption: c.caseCaption,
+    caseCaption: formatCaseCaption(c.caseCaption),
     caseType: c.caseType,
     closedHumanized: c.closedDate?.split('T')[0] || '',
     docketNumber: c.docketNumber,

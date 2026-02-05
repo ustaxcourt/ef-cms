@@ -13,6 +13,7 @@ import {
   calculateDifferenceInDays,
   formatDateString,
 } from '@shared/business/utilities/DateHandler';
+import { formatCaseCaption } from '../helpers/formatters';
 import { fromKyselyUser } from '@web-api/persistence/postgres/users/mapper';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { getDbReader } from '@web-api/database';
@@ -148,7 +149,6 @@ const getUsersCases = ({
   for (const caseRecord of casesFiltered) {
     usersCases.push({
       ...pick(caseRecord, [
-        'caseCaption',
         'closedDate',
         'docketNumber',
         'noticeOfTrialDate',
@@ -158,6 +158,7 @@ const getUsersCases = ({
         'trialDate',
         'trialSessionId',
       ]),
+      caseCaption: formatCaseCaption(caseRecord.caseCaption),
       closedByStipulatedDecision: closedByStipulatedDecision(caseRecord),
       closedDateFormatted: caseRecord.closedDate
         ? formatDateString(caseRecord.closedDate, 'MMDDYYYY')

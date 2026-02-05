@@ -14,6 +14,7 @@ import {
   getNowObject,
 } from '@shared/business/utilities/DateHandler';
 import { pick } from 'lodash';
+import { formatCaseCaption, formatJudgeName } from '../helpers/formatters';
 
 const thisYear = getNowObject().year;
 const scriptConfig: ScriptConfig = {
@@ -86,13 +87,9 @@ const outputCsv = ({
     `in-${fiscal ? 'fy-' : ''}${years.join('-')}.csv`;
   const rows = docketEntries.map(de => ({
     ...pick(de, ['docketNumber', 'documentType', 'status']),
-    caption: de.caption.replace(/\r\n|\r|\n/g, ' ').trim(),
+    caption: formatCaseCaption(de.caption),
     filed: getIsoFromJsDate(de.receivedAt)?.split('T')[0] || '',
-    judge:
-      de.associatedJudge
-        ?.replace('Chief Special Trial ', '')
-        .replace('Special Trial ', '')
-        .replace('Judge ', '') || '',
+    judge: formatJudgeName(de.associatedJudge),
   }));
   generateCsv({ columns, filename, rows });
   console.log(`Generated ${filename}`);
