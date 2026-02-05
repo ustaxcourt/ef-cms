@@ -282,12 +282,14 @@ async function getIrsPractitioners({
   return practitionerInfo;
 }
 
-async function getDocketEntries(docketNumbers: string[]) {
-  const dbDocketEntries = await (
+async function getDocketEntries(
+  docketNumbers: string[],
+): Promise<DocketEntryKysely[]> {
+  const dbDocketEntries = (await (
     await docketEntriesBaseQuery({ docketNumbers })
   )
     .where('de.docketNumber', 'in', docketNumbers)
-    .execute();
+    .execute()) as DocketEntryKysely[];
 
   return dbDocketEntries;
 }
@@ -306,9 +308,11 @@ async function getCasesMetadata(docketNumbers: string[]) {
 export async function getDocketEntriesOnCases(
   docketNumbers: string[],
 ): Promise<DocketEntryKysely[]> {
-  return (await docketEntriesBaseQuery({ docketNumbers }))
+  return (await (
+    await docketEntriesBaseQuery({ docketNumbers })
+  )
     .where('docketNumber', 'in', docketNumbers)
-    .execute();
+    .execute()) as DocketEntryKysely[];
 }
 
 async function getCaseCorrespondenceByDocketNumber(docketNumbers: string[]) {

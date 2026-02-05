@@ -1,4 +1,7 @@
-import { docketEntriesBaseQuery } from '@web-api/persistence/postgres/docketEntries/commonQueries';
+import {
+  DocketEntrySelectableField,
+  docketEntriesBaseQuery,
+} from '@web-api/persistence/postgres/docketEntries/commonQueries';
 import { fromKyselyDocketEntry } from '@web-api/persistence/postgres/docketEntries/mapper';
 
 // Batch size chosen to avoid Kysely's SnakeCaseTransformer stack overflow
@@ -7,11 +10,13 @@ const BATCH_SIZE = 2000;
 
 export const getDocketEntriesByDocketNumberAndDocketEntryId = async ({
   docketNumbersAndIds,
+  selectFields,
 }: {
   docketNumbersAndIds: {
     docketNumber: string;
     docketEntryId: string;
   }[];
+  selectFields?: DocketEntrySelectableField[];
 }): Promise<RawDocketEntry[]> => {
   if (docketNumbersAndIds.length === 0) {
     return [];
@@ -27,7 +32,10 @@ export const getDocketEntriesByDocketNumberAndDocketEntryId = async ({
     batches.map(async batch => {
       const batchDocketNumbers = [...new Set(batch.map(p => p.docketNumber))];
       const query = (
-        await docketEntriesBaseQuery({ docketNumbers: batchDocketNumbers })
+        await docketEntriesBaseQuery({
+          docketNumbers: batchDocketNumbers,
+          selectFields,
+        })
       ).where(qb =>
         qb.or(
           batch.map(pair =>
@@ -39,18 +47,10 @@ export const getDocketEntriesByDocketNumberAndDocketEntryId = async ({
         ),
       );
 
-      // Log SQL for debugging - use .compile() to get SQL without executing
-      const compiled = query.compile();
-      console.log('=== SQL Query ===');
-      console.log(compiled.sql);
-      console.log('=== Parameters (first 10) ===');
-      console.log(compiled.parameters.slice(0, 10));
-      console.log(`=== Total parameters: ${compiled.parameters.length} ===`);
-
       const dbDocketEntries = await query.execute();
       return dbDocketEntries;
     }),
   );
 
-  return results.flat().map(d => fromKyselyDocketEntry(d));
+  return results.flat().map(d => fromKyselyDocketEntry(d)) as RawDocketEntry[];
 };

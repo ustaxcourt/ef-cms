@@ -5,10 +5,11 @@ import {
   type ScriptConfig,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
+import { createISODateString } from '@shared/business/utilities/DateHandler';
+import { formatCurrency, formatDate } from '../helpers/formatters';
+import { generateCsv } from '../helpers/generate-csv';
 import { getDbReader } from '@web-api/database';
 import { sql } from 'kysely';
-import { createISODateString } from '@shared/business/utilities/DateHandler';
-import { generateCsv } from '../helpers/generate-csv';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -21,7 +22,7 @@ const scriptConfig: ScriptConfig = {
 };
 const { home } = parseArgsAndEnvVars(scriptConfig) as { home: string };
 
-const today = createISODateString().split('T')[0];
+const today = formatDate(createISODateString());
 const OUTPUT_DIR = `${home}/Documents`;
 const OUTPUT_FILENAME = `${OUTPUT_DIR}/deficiency-stats_${today}.csv`;
 
@@ -97,13 +98,15 @@ const aggregateDeficiencyAmounts = async (): Promise<
     ...aggregateResults.map(result => ({
       ...result,
       smallCasesPct: `${(result.smallCases / result.openCases) * 100}%`,
-      totalOutstandingDeficiency: result.totalOutstandingDeficiency.toFixed(2),
+      totalOutstandingDeficiency: formatCurrency(
+        result.totalOutstandingDeficiency,
+      ),
     })),
     {
       openCases: totalOpenCases,
       preferredTrialCity: 'Total',
       smallCasesPct: `${(totalSmallCases / totalOpenCases) * 100}%`,
-      totalOutstandingDeficiency: totalOutstandingDeficiency.toFixed(2),
+      totalOutstandingDeficiency: formatCurrency(totalOutstandingDeficiency),
     },
   ];
   generateCsv({ columns, filename: OUTPUT_FILENAME, rows });
