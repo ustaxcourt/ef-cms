@@ -1,6 +1,9 @@
 import { Stamp } from '@shared/business/entities/Stamp';
 
-export function setDocumentTitle(documentTitle: string, stampData: Stamp) {
+export function setDocumentTitle(
+  documentTitle: string,
+  stampData: Stamp,
+): string {
   const prefix = 'Order - ';
   return stampData.disposition
     ? documentTitle.startsWith(prefix)
