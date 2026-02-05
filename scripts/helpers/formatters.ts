@@ -38,14 +38,15 @@ export const alphabetizeCities = (
 
 export const formatDate = (date: string | Date | undefined): string => {
   if (!date) return '';
-  const isoDate = typeof date === 'string' ? date : getIsoFromJsDate(date);
+  const isoDate: string | null =
+    typeof date === 'string' ? date : getIsoFromJsDate(date);
   if (!isoDate) return '';
   return formatDateString(isoDate, 'YYYYMMDD');
 };
 
 export const formatCurrency = (amount: number | string | undefined): string => {
   if (!amount) return '0';
-  const numericAmount =
+  const numericAmount: number =
     typeof amount === 'string' ? parseFloat(amount) : amount;
   return numericAmount.toFixed(2);
 };

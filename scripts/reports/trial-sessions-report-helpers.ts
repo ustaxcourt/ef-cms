@@ -78,7 +78,7 @@ const outputTrialSessionsReport = ({
   const rows = trialSessions.map(s => {
     const startDate = formatDateString(s.startDate, FORMATS['MMDDYYYY_DASHED']);
     let trialClerk = '';
-    if (s.trialClerk && 'name' in s.trialClerk && s.trialClerk.name) {
+    if (s.trialClerk && s.trialClerk?.name) {
       trialClerk = s.trialClerk.name.trim();
     } else if (s.alternateTrialClerkName) {
       trialClerk = s.alternateTrialClerkName.trim();
@@ -120,7 +120,7 @@ const outputTrialSessionsStats = ({
   });
   const justClerks: { trialClerk: string }[] = trialSessions.map(s => {
     let trialClerk = '';
-    if (s.trialClerk && 'name' in s.trialClerk && s.trialClerk.name) {
+    if (s.trialClerk && s.trialClerk?.name) {
       trialClerk = s.trialClerk.name.trim();
     } else if (s.alternateTrialClerkName) {
       trialClerk = s.alternateTrialClerkName.trim();
