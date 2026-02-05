@@ -79,9 +79,9 @@ const outputTrialSessionsReport = ({
     const startDate = formatDateString(s.startDate, FORMATS['MMDDYYYY_DASHED']);
     let trialClerk = '';
     if (s.trialClerk && 'name' in s.trialClerk && s.trialClerk.name) {
-      trialClerk = s.trialClerk.name;
+      trialClerk = s.trialClerk.name.trim();
     } else if (s.alternateTrialClerkName) {
-      trialClerk = s.alternateTrialClerkName;
+      trialClerk = s.alternateTrialClerkName.trim();
     }
     const judge = formatJudgeName(s.judge?.name);
     return {
@@ -118,6 +118,19 @@ const outputTrialSessionsStats = ({
     })),
     keyToFilter: 'judgeName',
   });
+  const justClerks: { trialClerk: string }[] = trialSessions.map(s => {
+    let trialClerk = '';
+    if (s.trialClerk && 'name' in s.trialClerk && s.trialClerk.name) {
+      trialClerk = s.trialClerk.name.trim();
+    } else if (s.alternateTrialClerkName) {
+      trialClerk = s.alternateTrialClerkName.trim();
+    }
+    return { trialClerk };
+  });
+  const unsortedTrialClerks = getUniqueValues({
+    arrayOfObjects: justClerks,
+    keyToFilter: 'trialClerk',
+  });
 
   const locations = {};
   alphabetizeCities(Object.keys(unsortedLocations)).forEach(key => {
@@ -149,11 +162,23 @@ const outputTrialSessionsStats = ({
       judges[key] = unsortedJudges[key];
     });
 
+  const trialClerks = {};
+  Object.keys(unsortedTrialClerks)
+    .sort((a, b) => {
+      if (a === '') return 1;
+      if (b === '') return -1;
+      return a.localeCompare(b);
+    })
+    .forEach(key => {
+      trialClerks[key] = unsortedTrialClerks[key];
+    });
+
   console.log({
     judges,
     locations,
     proceedingTypes,
     sessionTypes,
+    trialClerks,
     total: trialSessions.length,
   });
 };
