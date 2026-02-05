@@ -51,8 +51,8 @@ export const upsertUsers = async (
         state: contact.state,
       });
 
-      const lat = geocode?.lat ?? null;
-      const lng = geocode?.lng ?? null;
+      const lat = geocode?.lat ?? undefined;
+      const lng = geocode?.lng ?? undefined;
 
       return {
         ...user,
