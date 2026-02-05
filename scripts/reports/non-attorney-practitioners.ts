@@ -9,11 +9,8 @@ import {
   type ScriptConfig,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
-import {
-  calculateDifferenceInDays,
-  formatDateString,
-} from '@shared/business/utilities/DateHandler';
-import { formatCaseCaption } from '../helpers/formatters';
+import { calculateDifferenceInDays } from '@shared/business/utilities/DateHandler';
+import { formatCaseCaption, formatMMDDYYYY } from '../helpers/formatters';
 import { fromKyselyUser } from '@web-api/persistence/postgres/users/mapper';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { getDbReader } from '@web-api/database';
@@ -160,20 +157,12 @@ const getUsersCases = ({
       ]),
       caseCaption: formatCaseCaption(caseRecord.caseCaption),
       closedByStipulatedDecision: closedByStipulatedDecision(caseRecord),
-      closedDateFormatted: caseRecord.closedDate
-        ? formatDateString(caseRecord.closedDate, 'MMDDYYYY')
-        : '',
+      closedDateFormatted: formatMMDDYYYY(caseRecord.closedDate),
       duration: calculateCaseDuration(caseRecord),
       hasNoticeOfAppeal: hasNoticeOfAppeal(caseRecord),
-      noticeOfTrialDateFormatted: caseRecord.noticeOfTrialDate
-        ? formatDateString(caseRecord.noticeOfTrialDate, 'MMDDYYYY')
-        : '',
-      receivedAtFormatted: caseRecord.receivedAt
-        ? formatDateString(caseRecord.receivedAt, 'MMDDYYYY')
-        : '',
-      trialDateFormatted: caseRecord.trialDate
-        ? formatDateString(caseRecord.trialDate, 'MMDDYYYY')
-        : '',
+      noticeOfTrialDateFormatted: formatMMDDYYYY(caseRecord.noticeOfTrialDate),
+      receivedAtFormatted: formatMMDDYYYY(caseRecord.receivedAt),
+      trialDateFormatted: formatMMDDYYYY(caseRecord.trialDate),
       userFiledPretrialMemorandum: userFiledPretrialMemorandum(
         caseRecord,
         userId,

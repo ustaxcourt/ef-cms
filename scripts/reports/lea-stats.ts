@@ -9,6 +9,7 @@ import { fromKyselyDocketEntry } from '@web-api/persistence/postgres/docketEntri
 import { generateCsv } from '../helpers/generate-csv';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { getDbReader } from '@web-api/database';
+import { formatDate } from '../helpers/formatters';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -105,9 +106,9 @@ const getNocFiledAfterLeaInCase = ({
     }
     rows.push({
       docketNumber: lea.docketNumber,
-      leaFiledDate: lea.receivedAt.split('T')[0],
+      leaFiledDate: formatDate(lea.receivedAt),
       leaIndex: lea.index,
-      nocFiledDate: subsequentNoc?.receivedAt.split('T')[0] ?? '',
+      nocFiledDate: formatDate(subsequentNoc?.receivedAt),
       nocIndex: subsequentNoc?.index ?? '',
       procedureType: caseCache[lea.docketNumber].procedureType,
     });

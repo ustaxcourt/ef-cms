@@ -16,6 +16,8 @@ import { pick } from 'lodash';
 import {
   alphabetizeCities,
   formatCaseCaption,
+  formatCurrency,
+  formatDate,
   formatJudgeName,
 } from '../helpers/formatters';
 import { choose } from '../helpers/prompts';
@@ -126,7 +128,7 @@ const getDeficiencyCases = async (
     filterByTrialCity = await choose('Trial location', trialCityStrings);
   }
 
-  const today = createISODateString().split('T')[0];
+  const today = formatDate(createISODateString());
   const OUTPUT_DIR = `${home}/Documents`;
   let outputFilename = 'deficiencies_';
   if (min !== max) {
@@ -158,9 +160,7 @@ const getDeficiencyCases = async (
     ...deficiencyCases.map(result => ({
       ...pick(result, ['docketNumber', 'status']),
       caption: formatCaseCaption(result.caption),
-      irsDeficiencyAmount: result.irsDeficiencyAmount
-        ? `${result.irsDeficiencyAmount.toFixed(2)}`
-        : '0',
+      irsDeficiencyAmount: formatCurrency(result.irsDeficiencyAmount),
       judge: formatJudgeName(result.associatedJudge),
       preferredTrialCity: result.preferredTrialCity || '',
     })),

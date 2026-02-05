@@ -12,7 +12,11 @@ import {
   getJsDateFromIso,
   getNowObject,
 } from '@shared/business/utilities/DateHandler';
-import { formatCaseCaption, formatJudgeName } from '../helpers/formatters';
+import {
+  formatCaseCaption,
+  formatDate,
+  formatJudgeName,
+} from '../helpers/formatters';
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { generateCsv } from '../helpers/generate-csv';
 import { getDbReader } from '@web-api/database';
@@ -164,11 +168,10 @@ const outputCsv = ({
         )?.date ||
       c.closedDate ||
       '';
-    const closedDateHumanized = closedDateISO.split('T')[0] || '';
+    const closedDateHumanized = formatDate(closedDateISO);
     const caption = formatCaseCaption(c.caseCaption);
     const petitionServedDateISO = petitionServiceDates.get(c.docketNumber)!;
-    const petitionServedDateHumanized =
-      petitionServedDateISO?.split('T')[0] || '';
+    const petitionServedDateHumanized = formatDate(petitionServedDateISO);
     const daysOpen = calculateDifferenceInDays(
       closedDateISO,
       petitionServedDateISO,

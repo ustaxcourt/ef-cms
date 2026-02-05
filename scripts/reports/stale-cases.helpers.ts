@@ -9,7 +9,11 @@ import {
   subtractISODates,
 } from '@shared/business/utilities/DateHandler';
 import { compareStrings } from '@shared/business/utilities/sortFunctions';
-import { formatCaseCaption, formatJudgeName } from '../helpers/formatters';
+import {
+  formatCaseCaption,
+  formatDate,
+  formatJudgeName,
+} from '../helpers/formatters';
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { generateCsv } from '../helpers/generate-csv';
 import { getDbReader } from '@web-api/database';
@@ -89,12 +93,12 @@ export const generateStaleCasesReport = async ({
         caption: formatCaseCaption(aCase.caseCaption),
         deAge,
         judge: formatJudgeName(aCase.associatedJudge),
-        lastFilingDate: deFiled!.split('T')[0],
+        lastFilingDate: formatDate(deFiled),
         preferredTrialCity: aCase.preferredTrialCity || '',
       });
       console.log(
         `Docket number ${aCase.docketNumber} is stale! Most recent document ` +
-          `is ${deAge} days old, last filed on ${deFiled!.split('T')[0]}`,
+          `is ${deAge} days old, last filed on ${formatDate(deFiled)}`,
       );
     }
   }

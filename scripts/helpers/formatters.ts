@@ -1,3 +1,7 @@
+import {
+  formatDateString,
+  getIsoFromJsDate,
+} from '@shared/business/utilities/DateHandler';
 import { TRIAL_CITY_STRINGS } from '@shared/business/entities/EntityConstants';
 
 export const formatJudgeName = (name: string | undefined): string => {
@@ -28,4 +32,21 @@ export const alphabetizeCities = (
     }
     return aCity.localeCompare(bCity);
   });
+};
+
+export const formatDate = (date: string | Date | undefined): string => {
+  if (!date) return '';
+  const isoDate = typeof date === 'string' ? date : getIsoFromJsDate(date);
+  return isoDate?.split('T')[0] || '';
+};
+
+export const formatCurrency = (amount: number | string | undefined): string => {
+  if (!amount) return '0';
+  const numericAmount =
+    typeof amount === 'string' ? parseFloat(amount) : amount;
+  return numericAmount.toFixed(2);
+};
+
+export const formatMMDDYYYY = (date: string | undefined): string => {
+  return date ? formatDateString(date, 'MMDDYYYY') : '';
 };
