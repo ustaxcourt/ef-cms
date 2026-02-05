@@ -112,7 +112,12 @@ const targetTableName = newTargetTableName || sourceTableName;
         [sourceTableName]: targetTableName,
         [sourceIndexPrefix]: targetIndexPrefix,
       });
-      await runCommand('sed', ['-i', '', sedExpression, backUpFileName]);
+      await runCommand(
+        'sed',
+        ['-i', '', sedExpression, backUpFileName],
+        undefined,
+        { captureStdout: false, streamStdout: true },
+      );
     }
 
     const sanitizedFileName = `sanitized-${backUpFileName}`;

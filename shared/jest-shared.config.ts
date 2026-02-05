@@ -6,8 +6,8 @@ import path from 'node:path';
 const tsconfig = loadTsConfig('tsconfig.json');
 
 const config: Config = {
+  displayName: 'shared',
   clearMocks: true,
-  collectCoverage: true,
   // type files ignored
   collectCoverageFrom: [
     'src/**/*.{js,ts}',
@@ -28,10 +28,13 @@ const config: Config = {
     '!src/business/entities/trialSessionMinutes/MinuteSheet.ts',
   ],
   coverageDirectory: './coverage',
-  coverageProvider: 'babel',
   coverageReporters: ['json', 'lcov'],
   maxWorkers: '50%',
   moduleFileExtensions: ['js', 'ts', 'tsx', 'jsx'],
+  testMatch: [
+    '<rootDir>/admin-tools/**/?(*.)+(spec|test).[jt]s?(x)',
+    '<rootDir>/src/**/?(*.)+(spec|test).[jt]s?(x)',
+  ],
   moduleNameMapper: {
     ...pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
       prefix: '<rootDir>/../',
@@ -51,7 +54,6 @@ const config: Config = {
     '/node_modules/(?!uuid|sinon|aws-sdk-client-mock|export-to-csv)',
   ],
   // After a jest runner uses X% of total system memory, recreate the runner.
-  verbose: false,
   workerIdleMemoryLimit: '20%',
   setupFilesAfterEnv: [
     '<rootDir>../web-api/src/persistence/postgres/featureFlag/mocks.jest.ts',

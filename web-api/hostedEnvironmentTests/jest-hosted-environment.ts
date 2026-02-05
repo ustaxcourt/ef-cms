@@ -8,7 +8,6 @@ const tsconfig = JSON.parse(fs.readFileSync(tsconfigPath, 'utf8'));
 
 const config: Config = {
   clearMocks: true,
-  collectCoverage: false,
   moduleNameMapper: pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
     prefix: '<rootDir>/../../',
   }),
@@ -20,7 +19,6 @@ const config: Config = {
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
-  verbose: false,
 };
 
 export default config;
