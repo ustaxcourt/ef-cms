@@ -35,7 +35,7 @@ export async function up(db: Kysely<any>): Promise<void> {
       computed_array jsonb;
     begin
       select case
-        when count(*) > 1 then array_agg(docket_number order by docket_number)::jsonb
+        when count(*) > 1 then to_jsonb(array_agg(docket_number order by docket_number))
         else '[]'::jsonb
       end
       into computed_array
@@ -74,7 +74,7 @@ export async function up(db: Kysely<any>): Promise<void> {
       end if;
 
       select case
-        when remaining_count > 1 then array_agg(docket_number order by docket_number)::jsonb
+        when remaining_count > 1 then to_jsonb(array_agg(docket_number order by docket_number))
         else '[]'::jsonb
       end
       into computed_array
@@ -107,7 +107,7 @@ export async function up(db: Kysely<any>): Promise<void> {
       computed_array jsonb;
     begin
       select case
-        when count(*) > 1 then array_agg(docket_number order by docket_number)::jsonb
+        when count(*) > 1 then to_jsonb(array_agg(docket_number order by docket_number))
         else '[]'::jsonb
       end
       into computed_array
@@ -146,7 +146,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     create temp table multi_docketed_lookup as
     select
       docket_entry_id,
-      array_agg(docket_number order by docket_number)::jsonb as multi_docketed_on
+      array_agg(docket_number order by docket_number) as multi_docketed_on
     from dw_docket_entry
     group by docket_entry_id
     having count(*) > 1
@@ -180,7 +180,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     // Entries not in lookup table (single-case) get '[]'::jsonb via COALESCE.
     const result = await sql`
       update dw_docket_entry as target
-      set multi_docketed_on = coalesce(lookup.multi_docketed_on, '[]'::jsonb)
+      set multi_docketed_on = coalesce(to_jsonb(lookup.multi_docketed_on), '[]'::jsonb)
       from (values ${sql.raw(pairs)}) as batch(docket_entry_id, docket_number)
       left join multi_docketed_lookup as lookup
         on lookup.docket_entry_id = batch.docket_entry_id
