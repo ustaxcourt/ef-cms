@@ -32,7 +32,7 @@ export const alphabetizeCities = (
       if (!bState) return -1;
       return aState.localeCompare(bState);
     }
-    return (aCity || '').localeCompare(bCity || '');
+    return aCity.localeCompare(bCity);
   });
 };
 
