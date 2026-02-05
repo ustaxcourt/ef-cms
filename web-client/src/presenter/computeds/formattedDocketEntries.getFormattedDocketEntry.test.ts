@@ -1,9 +1,10 @@
 import {
   BRIEF_EVENTCODES,
   DOCKET_ENTRY_SEALED_TO_TYPES,
+  MOTION_DISPOSITIONS,
   ROLES,
-} from '../../../../shared/src/business/entities/EntityConstants';
-import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+} from '@shared/business/entities/EntityConstants';
+import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import {
@@ -589,6 +590,131 @@ describe('getFormattedDocketEntry', () => {
       });
 
       expect(result.toolTipText).toBeUndefined();
+    });
+  });
+
+  describe('relatedDocketEntries', () => {
+    const mockMotionEntry = {
+      ...simpleDocketEntry,
+      docketEntryId: 'motion-123',
+      eventCode: 'M115',
+      index: 5,
+      documentTitle: 'Motion for Leave to File',
+    };
+
+    const mockOrderEntry = {
+      ...simpleDocketEntry,
+      docketEntryId: 'order-456',
+      eventCode: 'O',
+      index: 10,
+      documentTitle: 'Order',
+      isFileAttached: true,
+      isOnDocketRecord: true,
+      servedAt: '2019-03-01T21:00:00.000Z',
+    };
+
+    describe('affectedByDocketEntries - dispositionLinkText from MOTION perspective', () => {
+      it('should format dispositionLinkText as "GRANTED BY #[index]" when disposition is GRANTED', () => {
+        const entryWithAffectedBy = {
+          ...mockOrderEntry,
+          affectedByDocketEntries: [
+            {
+              docketEntryId: 'motion-123',
+              disposition: MOTION_DISPOSITIONS.GRANTED,
+            },
+          ],
+        };
+
+        mockCase.docketEntries = [mockMotionEntry, mockOrderEntry];
+
+        const result = getFormattedDocketEntry({
+          ...baseParams,
+          entry: entryWithAffectedBy,
+          rawCase: mockCase,
+        });
+
+        expect(result.relatedDocketEntries[0].dispositionLinkText).toEqual([
+          'GRANTED BY #5',
+        ]);
+      });
+
+      it('should format dispositionLinkText as array with both "GRANTED IN PART BY" and "DENIED IN PART BY" when disposition is GRANTED IN PART AND DENIED IN PART', () => {
+        const entryWithAffectedBy = {
+          ...mockOrderEntry,
+          affectedByDocketEntries: [
+            {
+              docketEntryId: 'motion-123',
+              disposition:
+                MOTION_DISPOSITIONS.GRANTED_IN_PART_AND_DENIED_IN_PART,
+            },
+          ],
+        };
+
+        mockCase.docketEntries = [mockMotionEntry, mockOrderEntry];
+
+        const result = getFormattedDocketEntry({
+          ...baseParams,
+          entry: entryWithAffectedBy,
+          rawCase: mockCase,
+        });
+
+        expect(result.relatedDocketEntries[0].dispositionLinkText).toEqual([
+          'GRANTED IN PART BY #5',
+          'DENIED IN PART BY #5',
+        ]);
+      });
+    });
+
+    describe('affectedDocketEntries - dispositionLinkText from ORDER perspective', () => {
+      it('should format dispositionLinkText as "GRANTING #[index]" when disposition is GRANTED', () => {
+        const entryWithAffected = {
+          ...mockMotionEntry,
+          affectedDocketEntries: [
+            {
+              docketEntryId: 'order-456',
+              disposition: MOTION_DISPOSITIONS.GRANTED,
+            },
+          ],
+        };
+
+        mockCase.docketEntries = [mockMotionEntry, mockOrderEntry];
+
+        const result = getFormattedDocketEntry({
+          ...baseParams,
+          entry: entryWithAffected,
+          rawCase: mockCase,
+        });
+
+        expect(result.relatedDocketEntries[0].dispositionLinkText).toEqual([
+          'GRANTING #10',
+        ]);
+      });
+
+      it('should format dispositionLinkText as array with both "GRANTING IN PART" and "DENYING IN PART" when disposition is GRANTED IN PART AND DENIED IN PART', () => {
+        const entryWithAffected = {
+          ...mockMotionEntry,
+          affectedDocketEntries: [
+            {
+              docketEntryId: 'order-456',
+              disposition:
+                MOTION_DISPOSITIONS.GRANTED_IN_PART_AND_DENIED_IN_PART,
+            },
+          ],
+        };
+
+        mockCase.docketEntries = [mockMotionEntry, mockOrderEntry];
+
+        const result = getFormattedDocketEntry({
+          ...baseParams,
+          entry: entryWithAffected,
+          rawCase: mockCase,
+        });
+
+        expect(result.relatedDocketEntries[0].dispositionLinkText).toEqual([
+          'GRANTING IN PART #10',
+          'DENYING IN PART #10',
+        ]);
+      });
     });
   });
 });
