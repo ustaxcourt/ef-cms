@@ -80,14 +80,13 @@ const RecordDescription = ({ entry }) => {
         )}
       >
         {entry.descriptionDisplay}
-        {entry.relatedDocketEntries?.map(affectedEntry => {
-          return (
-            <>
-              <br />
-              --- {affectedEntry.disposition} #{affectedEntry.docketEntryIndex}
-            </>
-          );
-        })}
+        <br />
+        ---
+        {entry.relatedDocketEntries?.map(affectedEntry =>
+          affectedEntry.dispositionText.map(dispositionText => (
+            <div key={dispositionText}>{dispositionText}</div>
+          )),
+        )}
       </span>
       {entry.isStricken && <span> (STRICKEN)</span>}
     </>
