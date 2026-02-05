@@ -10,7 +10,7 @@ import {
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
 import { calculateDifferenceInDays } from '@shared/business/utilities/DateHandler';
-import { formatCaseCaption, formatMMDDYYYY } from '../helpers/formatters';
+import { formatCaseCaption, formatDate } from '../helpers/formatters';
 import { fromKyselyUser } from '@web-api/persistence/postgres/users/mapper';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { getDbReader } from '@web-api/database';
@@ -157,12 +157,12 @@ const getUsersCases = ({
       ]),
       caseCaption: formatCaseCaption(caseRecord.caseCaption),
       closedByStipulatedDecision: closedByStipulatedDecision(caseRecord),
-      closedDateFormatted: formatMMDDYYYY(caseRecord.closedDate),
+      closedDateFormatted: formatDate(caseRecord.closedDate),
       duration: calculateCaseDuration(caseRecord),
       hasNoticeOfAppeal: hasNoticeOfAppeal(caseRecord),
-      noticeOfTrialDateFormatted: formatMMDDYYYY(caseRecord.noticeOfTrialDate),
-      receivedAtFormatted: formatMMDDYYYY(caseRecord.receivedAt),
-      trialDateFormatted: formatMMDDYYYY(caseRecord.trialDate),
+      noticeOfTrialDateFormatted: formatDate(caseRecord.noticeOfTrialDate),
+      receivedAtFormatted: formatDate(caseRecord.receivedAt),
+      trialDateFormatted: formatDate(caseRecord.trialDate),
       userFiledPretrialMemorandum: userFiledPretrialMemorandum(
         caseRecord,
         userId,

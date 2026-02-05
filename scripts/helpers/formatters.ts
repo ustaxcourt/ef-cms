@@ -39,6 +39,7 @@ export const alphabetizeCities = (
 export const formatDate = (date: string | Date | undefined): string => {
   if (!date) return '';
   const isoDate = typeof date === 'string' ? date : getIsoFromJsDate(date);
+  if (!isoDate) return '';
   return formatDateString(isoDate, 'YYYYMMDD');
 };
 
@@ -47,8 +48,4 @@ export const formatCurrency = (amount: number | string | undefined): string => {
   const numericAmount =
     typeof amount === 'string' ? parseFloat(amount) : amount;
   return numericAmount.toFixed(2);
-};
-
-export const formatMMDDYYYY = (date: string | undefined): string => {
-  return date ? formatDateString(date, 'MMDDYYYY') : '';
 };
