@@ -7,9 +7,8 @@ import {
 } from '../helpers/parseArgsAndEnvVars';
 import { fromKyselyDocketEntry } from '@web-api/persistence/postgres/docketEntries/mapper';
 import { generateCsv } from '../helpers/generate-csv';
-import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { getDbReader } from '@web-api/database';
-import PQueue from 'p-queue';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -38,7 +37,6 @@ const { begin, end } = getJsTimeframeForYear({ fiscal, year });
 
 const OUTPUT_DIR = `${process.env.HOME}/Documents`;
 const caseCache: { [k: string]: RawCase } = {};
-const concurrency = 50;
 
 const getLEAsFiledInYear = async (): Promise<RawDocketEntry[]> => {
   return (
@@ -53,20 +51,6 @@ const getLEAsFiledInYear = async (): Promise<RawDocketEntry[]> => {
         .execute(),
     )
   ).map(fromKyselyDocketEntry) as RawDocketEntry[];
-};
-
-const getCaseEntity = async ({
-  docketNumber,
-}: {
-  docketNumber: string;
-}): Promise<RawCase> => {
-  if (!(docketNumber in caseCache)) {
-    caseCache[docketNumber] = await getCaseByDocketNumber({
-      docketNumber,
-      includeConsolidatedCases: false,
-    });
-  }
-  return caseCache[docketNumber];
 };
 
 const getNocFiledAfterLeaInCase = ({
@@ -96,11 +80,11 @@ const getNocFiledAfterLeaInCase = ({
       `in ${fiscal ? 'fiscal' : 'calendar'} year ${year}.`,
   );
   const docketNumbers = [...new Set(leas.map(de => de.docketNumber))];
-  const queue = new PQueue({ concurrency });
-  const funcs = docketNumbers.map(
-    (docketNumber: string) => async () => await getCaseEntity({ docketNumber }),
-  );
-  await queue.addAll(funcs);
+
+  const cases = await getCasesByDocketNumbers({ docketNumbers });
+  cases.forEach(c => {
+    caseCache[c.docketNumber] = c;
+  });
 
   const procedureTypeAggs: { [k: string]: number } = {};
   for (const caseEntity of Object.values(caseCache)) {
