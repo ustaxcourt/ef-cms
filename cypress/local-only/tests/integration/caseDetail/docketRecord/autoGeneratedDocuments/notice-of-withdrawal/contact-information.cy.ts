@@ -22,6 +22,7 @@ import { calendarTrialSession } from 'cypress/helpers/trialSession/calendar-tria
 import { createTrialSession } from 'cypress/helpers/trialSession/create-trial-session';
 import { scheduleTrialSession } from 'cypress/helpers/trialSession/schedule-trial-session';
 import { updateTrialSessionStartDate } from 'cypress/helpers/trialSession/update-trial-session-start-date';
+import { faker } from '@faker-js/faker';
 
 describe('Notice of Withdrawal - Contact Information', () => {
   const privatePractitioner2BarNumber = 'PT9999';
@@ -58,6 +59,7 @@ describe('Notice of Withdrawal - Contact Information', () => {
   });
 
   it('should edit the contact information for petitioner in the auto generated form', () => {
+    const additionalName = faker.person.firstName();
     loginAsDocketClerk1();
     cy.get<string>('@docketNumber').then(docketNumber => {
       addPrivatePractitionerToCaseAndAllParties(
@@ -67,6 +69,17 @@ describe('Notice of Withdrawal - Contact Information', () => {
       cy.get<string>('@trialSessionId').then(trialSessionId => {
         updateTrialSessionStartDate(trialSessionId, validFutureDate);
       });
+
+      loginAsDocketClerk1();
+      goToCase(docketNumber);
+      cy.get('[data-testid="tab-case-information"]').click();
+      cy.get('[data-testid="tab-parties"]').click();
+      cy.get('[data-testid="edit-petitioner-button"]').first().click();
+      cy.get('[data-testid="additional-name-input"]').type(additionalName);
+      cy.get(
+        '[data-testid="submit-edit-petitioner-information-button"]',
+      ).click();
+
       loginAsPrivatePractitioner();
       enterNoticeOfWithdrawalFormType(docketNumber);
       cy.get('[data-testid^="party-label-"]').first().click();
@@ -79,6 +92,8 @@ describe('Notice of Withdrawal - Contact Information', () => {
       cy.get('[data-testid="contact.city"]').clear();
       cy.get('[data-testid="contact.city"]').type('new city');
       cy.get('[data-testid="modal-button-confirm"]').click();
+
+      cy.get('[data-testid^="edit-contact-"]').first().contains(additionalName);
       cy.get('[data-testid^="edit-contact-"]').first().contains('new address1');
       cy.get('[data-testid^="edit-contact-"]').first().contains('new city');
 
