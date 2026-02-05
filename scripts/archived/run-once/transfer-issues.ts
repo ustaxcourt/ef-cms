@@ -58,13 +58,17 @@ const transferIssues = async () => {
 
   for (const issue of [...issuesSet]) {
     console.log(`Transferring issue ${issue}...`);
-    const transferOutput = await runCommand('gh', [
-      'issue',
-      'transfer',
-      `https://github.com/ustaxcourt/ef-cms-flexion/issues/${issue}`,
-      'ustaxcourt/ef-cms',
-    ]);
-    console.log(transferOutput);
+    await runCommand(
+      'gh',
+      [
+        'issue',
+        'transfer',
+        `https://github.com/ustaxcourt/ef-cms-flexion/issues/${issue}`,
+        'ustaxcourt/ef-cms',
+      ],
+      undefined,
+      { captureStdout: false, streamStdout: true },
+    );
     await sleep(waitMillis);
   }
 };
