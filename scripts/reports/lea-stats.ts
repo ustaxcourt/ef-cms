@@ -37,7 +37,7 @@ const { fiscal, year } = parseArgsAndEnvVars(scriptConfig) as {
 const { begin, end } = getJsTimeframeForYear({ fiscal, year });
 
 const OUTPUT_DIR = `${process.env.HOME}/Documents`;
-const caseCache: { [k: string]: RawCase } = {};
+const caseCache: { [k: string]: Omit<RawCase, 'consolidatedCases'> } = {};
 
 const getLEAsFiledInYear = async (): Promise<RawDocketEntry[]> => {
   return (
