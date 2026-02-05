@@ -175,7 +175,12 @@ export const NoticeOfWithdrawalForm = connect(
                     data-testid={`edit-contact-${party.contactId}`}
                     key={`edit-contact-${party.contactId}`}
                   >
-                    <span className="tw:block tw:mb-[5px]">{party.name}</span>
+                    <span className="tw:block">{party.name}</span>
+                    {party.additionalName && (
+                      <span className="tw:block">
+                        c/o {party.additionalName}
+                      </span>
+                    )}
                     {party.isAddressSealed ? (
                       <span>ADDRESS SEALED BY COURT ORDER</span>
                     ) : (
@@ -185,7 +190,7 @@ export const NoticeOfWithdrawalForm = connect(
                         <span className="tw:block">{party.address3}</span>
                         <span className="tw:block">{`${party.city}, ${party.state} ${party.postalCode}`}</span>
                         {party.countryType === COUNTRY_TYPES.INTERNATIONAL && (
-                          <span className="tw-block">{party.country}</span>
+                          <span className="tw:block">{party.country}</span>
                         )}
                         <span className="tw:block">{party.phone}</span>
                         <input

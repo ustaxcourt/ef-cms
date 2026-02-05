@@ -40,10 +40,16 @@ export const EditContactInformationModal = connect(
         message="This form will automatically create and submit a change of contact
          information notification for this case. Please ensure the information is 
          accurate before submitting."
+        messageClass="tw:mb-4 tw:mt-4"
         title="Update Contact Information"
       >
+        <span className="tw:block tw:mb-4 tw:mt-4">{form.contact.name}</span>
+        {form.contact.additionalName && (
+          <span className="tw:block tw:mb-4 tw:mt-4">
+            c/o {form.contact.additionalName}
+          </span>
+        )}
         <fieldset className="usa-fieldset">
-          <span>{form.name}</span>
           <Country
             bind={bind}
             type={type}
