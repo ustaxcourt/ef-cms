@@ -65,6 +65,9 @@ describe('alphabetizeCities', () => {
 
 describe('formatDate', () => {
   it('should format date strings as YYYY-MM-DD', () => {
+    // 2020-01-01 01:00 UTC = 2019-12-31 20:00 EST
+    expect(formatDate('2020-01-01T01:00:00Z')).toBe('2019-12-31');
+    // 2020-01-01 05:00 UTC = 2020-01-01 00:00 EST
     expect(formatDate('2020-01-01T05:00:00Z')).toBe('2020-01-01');
   });
 

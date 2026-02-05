@@ -39,7 +39,7 @@ export const alphabetizeCities = (
 export const formatDate = (date: string | Date | undefined): string => {
   if (!date) return '';
   const isoDate = typeof date === 'string' ? date : getIsoFromJsDate(date);
-  return isoDate?.split('T')[0] || '';
+  return formatDateString(isoDate, 'YYYYMMDD');
 };
 
 export const formatCurrency = (amount: number | string | undefined): string => {
