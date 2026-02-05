@@ -17,7 +17,7 @@ export async function up(db: Kysely<any>): Promise<void> {
   // which we use to identify unprocessed rows during backfill.
   await db.schema
     .alterTable('dwDocketEntry')
-    .addColumn('multiDocketedOn', sql`varchar[]`)
+    .addColumn('multiDocketedOn', 'jsonb')
     .execute();
 
   // Create INSERT trigger to handle new docket entries during migration and blue-green deployment.
@@ -32,11 +32,11 @@ export async function up(db: Kysely<any>): Promise<void> {
     create or replace function dw_docket_entry_multi_docketed_insert_trigger()
     returns trigger as $$
     declare
-      computed_array varchar[];
+      computed_array jsonb;
     begin
       select case
-        when count(*) > 1 then array_agg(docket_number order by docket_number)
-        else '{}'::varchar[]
+        when count(*) > 1 then array_agg(docket_number order by docket_number)::jsonb
+        else '[]'::jsonb
       end
       into computed_array
       from dw_docket_entry
@@ -61,7 +61,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     create or replace function dw_docket_entry_multi_docketed_delete_trigger()
     returns trigger as $$
     declare
-      computed_array varchar[];
+      computed_array jsonb;
       remaining_count int;
     begin
       select count(*) into remaining_count
@@ -74,8 +74,8 @@ export async function up(db: Kysely<any>): Promise<void> {
       end if;
 
       select case
-        when remaining_count > 1 then array_agg(docket_number order by docket_number)
-        else '{}'::varchar[]
+        when remaining_count > 1 then array_agg(docket_number order by docket_number)::jsonb
+        else '[]'::jsonb
       end
       into computed_array
       from dw_docket_entry
@@ -104,11 +104,11 @@ export async function up(db: Kysely<any>): Promise<void> {
     create or replace function dw_docket_entry_multi_docketed_update_trigger()
     returns trigger as $$
     declare
-      computed_array varchar[];
+      computed_array jsonb;
     begin
       select case
-        when count(*) > 1 then array_agg(docket_number order by docket_number)
-        else '{}'::varchar[]
+        when count(*) > 1 then array_agg(docket_number order by docket_number)::jsonb
+        else '[]'::jsonb
       end
       into computed_array
       from dw_docket_entry
@@ -141,12 +141,12 @@ export async function up(db: Kysely<any>): Promise<void> {
 
   // Pre-compute arrays for multi-docketed entries only (entries on 2+ cases).
   // This temp table is much smaller than the full table and makes backfill lookups O(1).
-  // Single-case entries aren't included - they just get '{}' via COALESCE during backfill.
+  // Single-case entries aren't included - they just get '[]'::jsonb via COALESCE during backfill.
   await sql`
     create temp table multi_docketed_lookup as
     select
       docket_entry_id,
-      array_agg(docket_number order by docket_number) as multi_docketed_on
+      array_agg(docket_number order by docket_number)::jsonb as multi_docketed_on
     from dw_docket_entry
     group by docket_entry_id
     having count(*) > 1
@@ -177,10 +177,10 @@ export async function up(db: Kysely<any>): Promise<void> {
       .join(',');
 
     // Join with lookup table to get pre-computed array for multi-docketed entries.
-    // Entries not in lookup table (single-case) get '{}' via COALESCE.
+    // Entries not in lookup table (single-case) get '[]'::jsonb via COALESCE.
     const result = await sql`
       update dw_docket_entry as target
-      set multi_docketed_on = coalesce(lookup.multi_docketed_on, '{}')
+      set multi_docketed_on = coalesce(lookup.multi_docketed_on, '[]'::jsonb)
       from (values ${sql.raw(pairs)}) as batch(docket_entry_id, docket_number)
       left join multi_docketed_lookup as lookup
         on lookup.docket_entry_id = batch.docket_entry_id
@@ -236,11 +236,11 @@ export async function up(db: Kysely<any>): Promise<void> {
     drop constraint "dw_docket_entry_multi_docketed_on_nn"
   `.execute(db);
 
-  // Add default so new rows get '{}' automatically.
+  // Add default so new rows get '[]'::jsonb automatically.
   // The triggers will correct it if the entry is actually multi-docketed.
   await db.schema
     .alterTable('dwDocketEntry')
-    .alterColumn('multiDocketedOn', col => col.setDefault(sql`'{}'`))
+    .alterColumn('multiDocketedOn', col => col.setDefault(sql`'[]'::jsonb`))
     .execute();
 
   // Create UPDATE trigger AFTER backfill to avoid recomputing on every backfill update.
