@@ -5,7 +5,7 @@ const { NodeHttpHandler } = require('@smithy/node-http-handler');
 const { Sha256 } = require('@aws-crypto/sha256-browser');
 const { SignatureV4 } = require('@smithy/signature-v4');
 
-const EXPIRATION = process.env.expiration; // days
+const EXPIRATION = Number(process.env.expiration || 90); // days
 
 exports.handler = async () => {
   const responses = { createSnapshot: [], deleteIndices: [] };
@@ -49,6 +49,7 @@ exports.handler = async () => {
     throw new Error(JSON.stringify(responses));
   }
   console.log('Success', responses);
+  return JSON.stringify(responses);
 };
 
 /**
