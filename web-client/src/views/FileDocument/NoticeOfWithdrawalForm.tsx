@@ -177,9 +177,7 @@ export const NoticeOfWithdrawalForm = connect(
                   >
                     <span className="tw:block">{party.name}</span>
                     {party.additionalName && (
-                      <span className="tw:block">
-                        c/o {party.additionalName}
-                      </span>
+                      <span className="tw:block">{party.additionalName}</span>
                     )}
                     {party.isAddressSealed ? (
                       <span>ADDRESS SEALED BY COURT ORDER</span>
