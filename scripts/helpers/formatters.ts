@@ -28,9 +28,11 @@ export const alphabetizeCities = (
     const [bCity, bState] = b.split(', ');
 
     if (aState !== bState) {
+      if (!aState) return 1;
+      if (!bState) return -1;
       return aState.localeCompare(bState);
     }
-    return aCity.localeCompare(bCity);
+    return (aCity || '').localeCompare(bCity || '');
   });
 };
 
