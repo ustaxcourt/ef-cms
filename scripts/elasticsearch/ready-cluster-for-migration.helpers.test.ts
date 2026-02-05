@@ -117,6 +117,11 @@ describe('readyClusterForMigration', () => {
     expect(mockedClient.count).not.toHaveBeenCalled();
   });
 
+  it('does not check to see if the cluster is empty if a DomainName with no version is passed in', async () => {
+    await readyClusterForMigration('efcms-search-foo');
+    expect(mockedClient.count).not.toHaveBeenCalled();
+  });
+
   it('does not check to see if the cluster is empty if it does not exist', async () => {
     mockedOpenSearch.reset();
     mockedOpenSearch.on(DescribeDomainCommand).rejects({
@@ -170,6 +175,23 @@ describe('readyClusterForMigration', () => {
       );
     });
 
+    it('does not delete an alias if it is missing an index or alias name', async () => {
+      const mockAliases = [
+        {
+          alias: 'foo',
+          index: undefined,
+        },
+        {
+          alias: undefined,
+          index: 'bar',
+        },
+      ];
+      aliases.mockReturnValueOnce({ body: mockAliases, statusCode: 200 });
+
+      await readyClusterForMigration(mockedDomainName);
+      expect(mockedClient.indices.deleteAlias).not.toHaveBeenCalled();
+    });
+
     it('does not delete indices if none exist', async () => {
       await readyClusterForMigration(mockedDomainName);
       expect(mockedClient.indices.delete).not.toHaveBeenCalled();
@@ -186,6 +208,15 @@ describe('readyClusterForMigration', () => {
       expect(mockedClient.indices.delete).toHaveBeenCalledTimes(
         mockIndices.length,
       );
+    });
+
+    it('does not delete an index if it is missing an index name', async () => {
+      aliases.mockReturnValueOnce({ body: [], statusCode: 200 });
+      const mockIndices = [{ index: undefined }];
+      indices.mockReturnValueOnce({ body: mockIndices, statusCode: 200 });
+
+      await readyClusterForMigration(mockedDomainName);
+      expect(mockedClient.indices.delete).not.toHaveBeenCalled();
     });
   });
 });
