@@ -41,7 +41,7 @@ const scriptConfig: ScriptConfig = {
       type: 'string',
     },
   },
-  requireActiveAwsSession: true,
+  requireActiveAwsSession: false, // todo: put back
 };
 
 const { fromDate, home, toDate } = parseArgsAndEnvVars(scriptConfig) as {
@@ -100,10 +100,10 @@ const getPetitionerGeodata = async ({
       .crossJoin(
         sql`LATERAL jsonb_array_elements(c.petitioners)`.as('petitioner'),
       )
-      .innerJoin('censusPlaceData as usc', join =>
+      .innerJoin('dwUserContact as uc', join =>
         join
-          .on(sql`trim(petitioner->>'city')`, '=', sql`trim(usc.city)`)
-          .on(sql`trim(petitioner->>'state')`, '=', sql`trim(usc.state)`),
+          .onRef('uc.docketNumber', '=', 'c.docketNumber')
+          .on(sql`petitioner->>'contactId'`, '=', sql`uc.user_id`),
       )
       .select([
         sql<string>`c.docket_number`.as('docket_number'),
@@ -117,11 +117,11 @@ const getPetitionerGeodata = async ({
         sql<string>`c.preferred_trial_city`.as('preferred_trial_city'),
         sql<boolean>`c.remote_trial_granted`.as('remote_trial_granted'),
         sql<string>`petitioner->>'address1'`.as('address'),
-        sql<string>`usc.city`.as('city'),
-        sql<string>`usc.state`.as('state'),
+        sql<string>`petitioner->>'city'`.as('city'),
+        sql<string>`petitioner->>'state'`.as('state'),
         sql<string>`petitioner->>'postalCode'`.as('postalCode'),
-        sql<number>`usc.lat`.as('lat'),
-        sql<number>`usc.lng`.as('lng'),
+        sql<number>`uc.lat`.as('lat'),
+        sql<number>`uc.lng`.as('lng'),
         sql<string>`
           CASE
             WHEN EXISTS (
