@@ -141,7 +141,7 @@ export const PrimaryDocumentGeneratedTypeForm = connect(
               </FormGroup>
 
               <div className="usa-form-group margin-bottom-0">
-                <fieldset className="usa-fieldset margin-bottom-0">
+                <fieldset className="usa-fieldset tw:mb-8.75">
                   <legend>
                     Select extra items to include with your document
                     <Button
