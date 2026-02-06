@@ -4,6 +4,7 @@ import {
   EXPLICITLY_DENIED_CONSOLIDATED_GROUP_FILING_EVENT_CODES,
   EXTERNAL_DOCUMENT_TYPES_REQUIRING_OBJECTION,
   ROLES,
+  SERVICE_INDICATOR_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import { GENERATION_TYPES } from '@web-client/getConstants';
 import { Get } from 'cerebral';
@@ -120,6 +121,10 @@ export const fileDocumentHelper = (
     partiesLabelText = 'Parties';
   }
 
+  const showApplicableCOSText = caseDetail.petitioners.some(
+    p => p.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_PAPER,
+  );
+
   const exported = {
     EARedactionAcknowledgement,
     allowExternalConsolidatedGroupFiling,
@@ -133,6 +138,7 @@ export const fileDocumentHelper = (
     partyValidationError,
     primaryDocument,
     secondaryDocument,
+    showApplicableCOSText,
     showFilingIncludes,
     showGenerationTypeForm,
     showNoticeOfWithdrawal,
