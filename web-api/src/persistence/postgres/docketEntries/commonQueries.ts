@@ -55,6 +55,7 @@ export const docketEntriesBaseQuery = ({
           .groupBy(['secondaryDocketEntryId', 'docketNumber']),
       )
       .selectFrom('dwDocketEntry as de')
+      .where('de.docketNumber', 'in', docketNumbers)
       .leftJoin('affectedDocketEntries', join =>
         join
           .onRef('affectedDocketEntries.docketEntryId', '=', 'de.docketEntryId')

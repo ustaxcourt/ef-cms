@@ -26,28 +26,20 @@ export const getDocketEntriesByDocketNumberAndDocketEntryId = async ({
   const results = await Promise.all(
     batches.map(async batch => {
       const batchDocketNumbers = [...new Set(batch.map(p => p.docketNumber))];
-      const query = (
+      const dbDocketEntries = await (
         await docketEntriesBaseQuery({ docketNumbers: batchDocketNumbers })
-      ).where(qb =>
-        qb.or(
-          batch.map(pair =>
-            qb.and([
-              qb('de.docketEntryId', '=', pair.docketEntryId),
-              qb('de.docketNumber', '=', pair.docketNumber),
-            ]),
+      )
+        .where(qb =>
+          qb.or(
+            batch.map(pair =>
+              qb.and([
+                qb('de.docketEntryId', '=', pair.docketEntryId),
+                qb('de.docketNumber', '=', pair.docketNumber),
+              ]),
+            ),
           ),
-        ),
-      );
-
-      // Log SQL for debugging - use .compile() to get SQL without executing
-      const compiled = query.compile();
-      console.log('=== SQL Query ===');
-      console.log(compiled.sql);
-      console.log('=== Parameters (first 10) ===');
-      console.log(compiled.parameters.slice(0, 10));
-      console.log(`=== Total parameters: ${compiled.parameters.length} ===`);
-
-      const dbDocketEntries = await query.execute();
+        )
+        .execute();
       return dbDocketEntries;
     }),
   );
