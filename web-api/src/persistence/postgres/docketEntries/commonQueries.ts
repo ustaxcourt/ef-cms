@@ -1,8 +1,18 @@
 import { Database } from '@web-api/database-schema';
 import { getDbReader } from '@web-api/database';
 import { SelectQueryBuilder, sql } from 'kysely';
+import { DocketEntryKysely } from './schema';
 
 export type DocketEntrySelectableField = keyof Database['dwDocketEntry'];
+
+export type DocketEntryWithAffected = DocketEntryKysely & {
+  affectedDocketEntries:
+    | { docketEntryId: string; disposition: string }[]
+    | null;
+  affectedByDocketEntries:
+    | { docketEntryId: string; disposition: string }[]
+    | null;
+};
 
 export const docketEntriesBaseQuery = ({
   docketNumbers,
@@ -90,5 +100,7 @@ export const docketEntriesBaseQuery = ({
 
     return queryWithSelect
       .select('affectedDocketEntries.affectedDocketEntries')
-      .select('affectedByDocketEntries.affectedByDocketEntries');
+      .select(
+        'affectedByDocketEntries.affectedByDocketEntries',
+      ) as SelectQueryBuilder<any, any, DocketEntryWithAffected>;
   });
