@@ -34,7 +34,7 @@ export const NoticeOfWithdrawal = ({
         caseCaptionExtension={caseCaptionExtension}
         caseTitle={caseTitle}
         docketNumberWithSuffix={docketNumberWithSuffix}
-        documentTitle="Notice of Withdrawal"
+        documentTitle="Notice of Withdrawal as Counsel"
       />
 
       <div>
