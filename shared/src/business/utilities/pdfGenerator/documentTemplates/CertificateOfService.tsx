@@ -33,7 +33,7 @@ export const CertificateOfService = ({
 
   return (
     <div id="certificate-of-service-pdf">
-      <h2 className="cos-header">Certificate of Service</h2>
+      <h2 className="cos-header">CERTIFICATE OF SERVICE</h2>
       <p className="indent-paragraph cos-paragraph">
         This is to certify that a copy of the foregoing paper was served on{' '}
         {partyInformation.name} by (delivering the same to{' '}
