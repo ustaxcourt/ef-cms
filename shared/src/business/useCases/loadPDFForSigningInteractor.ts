@@ -25,7 +25,7 @@ export const loadPDFForSigningInteractor = async (
       .getDocument({
         applicationContext,
         docketNumber,
-        key: docketEntryId,
+        key: documentStorageId,
       });
 
     let formattedArrayBuffer;
