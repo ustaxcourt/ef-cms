@@ -10,6 +10,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const completeDocumentSigningAction = async ({
   applicationContext,
   get,
+  path,
 }: ActionProps) => {
   const originalDocketEntryId = get(state.pdfForSigning.docketEntryId);
   const { docketNumber } = get(state.caseDetail);
@@ -31,7 +32,11 @@ export const completeDocumentSigningAction = async ({
       windowWithPdfjs.pdfjsObj || get(state.pdfForSigning.pdfjsObj);
 
     if (!pdfjsObj) {
-      throw new Error('pdfjsObj is null!');
+      return path.error({
+        alertError: {
+          message: 'Unable to complete signing. Please try again.',
+        },
+      });
     }
 
     // generate signed document to bytes
@@ -80,10 +85,10 @@ export const completeDocumentSigningAction = async ({
     redirectUrl = `/case-detail/${docketNumber}/draft-documents?docketEntryId=${docketEntryId}`;
   }
 
-  return {
+  return path.success({
     docketEntryId,
     docketNumber,
     redirectUrl,
     tab: 'docketRecord',
-  };
+  });
 };
