@@ -287,9 +287,7 @@ async function getDocketEntries(
 ): Promise<DocketEntryKysely[]> {
   const dbDocketEntries = (await (
     await docketEntriesBaseQuery({ docketNumbers })
-  )
-    .where('de.docketNumber', 'in', docketNumbers)
-    .execute()) as DocketEntryKysely[];
+  ).execute()) as DocketEntryKysely[];
 
   return dbDocketEntries;
 }
@@ -310,9 +308,7 @@ export async function getDocketEntriesOnCases(
 ): Promise<DocketEntryKysely[]> {
   return (await (
     await docketEntriesBaseQuery({ docketNumbers })
-  )
-    .where('docketNumber', 'in', docketNumbers)
-    .execute()) as DocketEntryKysely[];
+  ).execute()) as DocketEntryKysely[];
 }
 
 async function getCaseCorrespondenceByDocketNumber(docketNumbers: string[]) {

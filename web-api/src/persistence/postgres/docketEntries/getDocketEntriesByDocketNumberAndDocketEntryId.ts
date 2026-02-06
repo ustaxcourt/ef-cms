@@ -5,7 +5,7 @@ import {
 import { fromKyselyDocketEntry } from '@web-api/persistence/postgres/docketEntries/mapper';
 
 // Batch size chosen to avoid Kysely's SnakeCaseTransformer stack overflow
-// when building deeply nested OR queries. 200 provides safety margin.
+// when building deeply nested OR queries. 2000 provides safety margin.
 const BATCH_SIZE = 2000;
 
 export const getDocketEntriesByDocketNumberAndDocketEntryId = async ({
@@ -31,23 +31,23 @@ export const getDocketEntriesByDocketNumberAndDocketEntryId = async ({
   const results = await Promise.all(
     batches.map(async batch => {
       const batchDocketNumbers = [...new Set(batch.map(p => p.docketNumber))];
-      const query = (
+      const dbDocketEntries = await (
         await docketEntriesBaseQuery({
           docketNumbers: batchDocketNumbers,
           selectFields,
         })
-      ).where(qb =>
-        qb.or(
-          batch.map(pair =>
-            qb.and([
-              qb('de.docketEntryId', '=', pair.docketEntryId),
-              qb('de.docketNumber', '=', pair.docketNumber),
-            ]),
+      )
+        .where(qb =>
+          qb.or(
+            batch.map(pair =>
+              qb.and([
+                qb('de.docketEntryId', '=', pair.docketEntryId),
+                qb('de.docketNumber', '=', pair.docketNumber),
+              ]),
+            ),
           ),
-        ),
-      );
-
-      const dbDocketEntries = await query.execute();
+        )
+        .execute();
       return dbDocketEntries;
     }),
   );

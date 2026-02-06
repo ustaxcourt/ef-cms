@@ -9,9 +9,7 @@ export const getDocketEntriesByDocketNumber = async ({
 }): Promise<RawDocketEntry[]> => {
   const dbDocketEntries = (await (
     await docketEntriesBaseQuery({ docketNumbers: [docketNumber] })
-  )
-    .where('docketNumber', '=', docketNumber)
-    .execute()) as DocketEntryKysely[];
+  ).execute()) as DocketEntryKysely[];
 
   return dbDocketEntries.map(d => fromKyselyDocketEntry(d));
 };
