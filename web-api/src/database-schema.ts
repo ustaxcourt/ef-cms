@@ -107,9 +107,9 @@ import {
   DW_BAR_NUMBER_COLUMNS,
 } from '@web-api/persistence/postgres/users/barNumber/schema';
 import {
-  GEOCODE_DATA_COLUMNS,
-  GeocodeDataTable,
-} from '@web-api/persistence/postgres/geocodeData/schema';
+  DW_USER_CONTACT_COLUMNS,
+  UserContactTable,
+} from '@web-api/persistence/postgres/userContact/schema';
 
 const DEFAULT = {};
 
@@ -138,6 +138,7 @@ interface DatabaseSchemaType {
   dwTrialSessionWorkingCopy: DatabaseTableMetadata<TrialSessionWorkingCopyTable>;
   dwUserCaseNote: DatabaseTableMetadata<UserCaseNoteTable>;
   dwUserConfirmationCode: DatabaseTableMetadata<UserConfirmationCodeTable>;
+  dwUserContact: DatabaseTableMetadata<UserContactTable>;
   dwUserOnCase: DatabaseTableMetadata<UserOnCaseTable>;
   dwUserOnCasePending: DatabaseTableMetadata<UserOnCasePendingTable>;
   dwWorkItem: DatabaseTableMetadata<WorkItemTable>;
@@ -264,6 +265,10 @@ export const DatabaseSchema: DatabaseSchemaType = {
     table: DEFAULT as UserConfirmationCodeTable,
     columns: DW_USER_CONFIRMATION_CODE_COLUMNS,
   },
+  dwUserContact: {
+    table: DEFAULT as UserContactTable,
+    columns: DW_USER_CONTACT_COLUMNS,
+  },
   dwUserOnCase: {
     table: DEFAULT as UserOnCaseTable,
     columns: DW_USER_ON_CASE_COLUMNS,
@@ -273,10 +278,6 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwUserOnCasePending: {
     table: DEFAULT as UserOnCasePendingTable,
     columns: DW_USER_ON_CASE_PENDING_COLUMNS,
-  },
-  geocodeData: {
-    table: DEFAULT as GeocodeDataTable,
-    columns: GEOCODE_DATA_COLUMNS,
   },
 };
 
