@@ -7,7 +7,6 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { addOrderStampPrefix } from '@shared/business/utilities/addOrderStampPrefix';
 
 type FilingsAndProceedingsProps = {
   entry: {
@@ -86,14 +85,16 @@ export const FilingsAndProceedings = connect<
           <Phone>
             {entry.iconsToDisplay?.length > 0 && (
               <span className="tw:inline-flex tw:flex-row tw:mr-2 tw:gap-1">
-                {entry.iconsToDisplay.map(({ icon, className, title }, index) => (
-                  <WrappedIcon
-                    key={index}
-                    icon={icon}
-                    iconClass={className}
-                    title={title}
-                  />
-                ))}
+                {entry.iconsToDisplay.map(
+                  ({ icon, className, title }, index) => (
+                    <WrappedIcon
+                      key={index}
+                      icon={icon}
+                      iconClass={className}
+                      title={title}
+                    />
+                  ),
+                )}
               </span>
             )}
             <Button
@@ -113,7 +114,7 @@ export const FilingsAndProceedings = connect<
                 });
               }}
             >
-              {addOrderStampPrefix(entry.eventCode,entry.descriptionDisplay)}
+              {entry.descriptionDisplay}
             </Button>
           </Phone>
         </>
@@ -128,14 +129,16 @@ export const FilingsAndProceedings = connect<
             <Phone>
               {entry.iconsToDisplay?.length > 0 && (
                 <span className="tw:inline-flex tw:flex-row tw:mr-2 tw:gap-1">
-                  {entry.iconsToDisplay.map(({ icon, className, title }, index) => (
-                    <WrappedIcon
-                      key={index}
-                      icon={icon}
-                      iconClass={className}
-                      title={title}
-                    />
-                  ))}
+                  {entry.iconsToDisplay.map(
+                    ({ icon, className, title }, index) => (
+                      <WrappedIcon
+                        key={index}
+                        icon={icon}
+                        iconClass={className}
+                        title={title}
+                      />
+                    ),
+                  )}
                 </span>
               )}
             </Phone>
@@ -159,14 +162,16 @@ export const FilingsAndProceedings = connect<
             <Phone>
               {entry.iconsToDisplay?.length > 0 && (
                 <span className="tw:inline-flex tw:flex-row tw:mr-2 tw:gap-1">
-                  {entry.iconsToDisplay.map(({ icon, className, title }, index) => (
-                    <WrappedIcon
-                      key={index}
-                      icon={icon}
-                      iconClass={className}
-                      title={title}
-                    />
-                  ))}
+                  {entry.iconsToDisplay.map(
+                    ({ icon, className, title }, index) => (
+                      <WrappedIcon
+                        key={index}
+                        icon={icon}
+                        iconClass={className}
+                        title={title}
+                      />
+                    ),
+                  )}
                 </span>
               )}
             </Phone>
@@ -195,14 +200,16 @@ export const FilingsAndProceedings = connect<
             <Phone>
               {entry.iconsToDisplay?.length > 0 && (
                 <span className="tw:inline-flex tw:flex-row tw:mr-2 tw:gap-1">
-                  {entry.iconsToDisplay.map(({ icon, className, title }, index) => (
-                    <WrappedIcon
-                      key={index}
-                      icon={icon}
-                      iconClass={className}
-                      title={title}
-                    />
-                  ))}
+                  {entry.iconsToDisplay.map(
+                    ({ icon, className, title }, index) => (
+                      <WrappedIcon
+                        key={index}
+                        icon={icon}
+                        iconClass={className}
+                        title={title}
+                      />
+                    ),
+                  )}
                 </span>
               )}
             </Phone>
