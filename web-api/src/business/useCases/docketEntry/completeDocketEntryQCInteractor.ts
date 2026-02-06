@@ -50,9 +50,9 @@ const completeDocketEntryQC = async (
   authorizedUser: UnknownAuthUser,
 ): Promise<{
   caseDetail: CaseDTO;
-  paperServiceParties: any[];
-  paperServicePdfUrl: string;
-  paperServiceDocumentTitle: string;
+  paperServiceParties: Array<RawUser & { docketNumber: string }>;
+  paperServicePdfUrl: string | undefined;
+  paperServiceDocumentTitle: string | undefined;
 }> => {
   const { PDFDocument } = await applicationContext.getPdfLib();
 
@@ -180,9 +180,9 @@ const completeDocketEntryQC = async (
   const sectionToAssignTo =
     userIsCaseServices && selectedSection ? selectedSection : user.section;
 
-  let paperServicePdfUrl: string | undefined;
-  let paperServiceDocumentTitle: string | undefined;
-  let originalFilingCaseNoticeDocumentTitle: string | undefined;
+  let paperServicePdfUrl;
+  let paperServiceDocumentTitle;
+  let originalFilingCaseNoticeDocumentTitle;
   let isNewCoverSheetNeeded = false;
 
   const paperServiceParties: Array<RawUser & { docketNumber: string }> = [];

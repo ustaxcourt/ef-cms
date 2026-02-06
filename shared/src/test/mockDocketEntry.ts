@@ -289,6 +289,7 @@ export const MOCK_DOCKET_ENTRY_WITH_PREVIOUS_DOCUMENT: RawDocketEntry = {
   addToCoversheet: false,
   hasSupportingDocuments: false,
   filedByRole: 'privatePractitioner',
+  multiDocketedOn: [],
   index: 27,
   isFileAttached: true,
   userId: 'ad07b846-8933-4778-9fe2-b5d8ac8ad728',
