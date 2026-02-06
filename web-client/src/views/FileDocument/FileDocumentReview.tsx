@@ -292,11 +292,13 @@ export const FileDocumentReview = connect(
                   >
                     <div className="content-wrapper">
                       <h3 className="underlined">
-                        Parties Filing The Document(s)
+                        {fileDocumentHelper.partiesHeaderText}
                       </h3>
                       <div className="grid-row grid-gap">
                         <div className="tablet:grid-col-12 margin-bottom-1">
-                          <h3 className="usa-label">Filing parties</h3>
+                          <h3 className="usa-label">
+                            {fileDocumentHelper.partiesLabelText}
+                          </h3>
                           <ul className="ustc-unstyled-list without-margins">
                             {fileDocumentHelper.formattedFilingParties.map(
                               party => (
