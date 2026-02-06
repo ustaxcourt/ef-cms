@@ -25,10 +25,10 @@ describe('Judge`s chambers stamps an order', () => {
     loginAsPetitioner();
     petitionerCreatesElectronicCaseWithSpouse().then(docketNumber => {
       petitionsClerkServesPetition(docketNumber);
-    
+
       loginAsDocketClerk1();
       cy.visit(`/case-detail/${docketNumber}`);
-    
+
       // File Motion for Continuance
       cy.get('[data-testid="case-detail-menu-button"]').click();
       cy.get('[data-testid="menu-button-add-paper-filing"]').click();
@@ -50,7 +50,7 @@ describe('Judge`s chambers stamps an order', () => {
         'contain',
         'Print and mail to complete paper service.',
       );
-    
+
       // Apply a stamp
       loginAsColvin();
       cy.get('.message-document-title > [data-testid="message-header-link"]')
@@ -73,12 +73,12 @@ describe('Judge`s chambers stamps an order', () => {
         'have.value',
         '',
       );
-    
+
       // Apply stamp
       cy.get('[data-testid="clear-optional-fields"]').click();
       cy.get('[data-testid="motion-disposition-GRANTED"]').click();
       cy.get('[data-testid="save-signature-button"]').click();
-    
+
       // Make sure it's there
       cy.get('[data-testid="success-alert"]').contains(
         'Motion for Continuance stamped successfully.',
@@ -88,7 +88,7 @@ describe('Judge`s chambers stamps an order', () => {
           return Cypress.$(el)
             .find('*')
             .text()
-            .includes('Order - Motion for Continuance GRANTED');
+            .includes('Motion for Continuance - GRANTED');
         })
         .should('have.length.at.least', 1);
     });
@@ -135,7 +135,7 @@ describe('Judge`s chambers stamps an order', () => {
             .contains('Motion to Proceed Remotely')
             .should('be.visible');
           cy.get('.attachment-viewer-button')
-            .contains('Order - Motion to Proceed Remotely GRANTED')
+            .contains('Motion to Proceed Remotely - GRANTED')
             .should('be.visible');
         });
     });
