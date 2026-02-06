@@ -175,9 +175,11 @@ export const NoticeOfWithdrawalForm = connect(
                     data-testid={`edit-contact-${party.contactId}`}
                     key={`edit-contact-${party.contactId}`}
                   >
-                    <span className="tw:block">{party.name}</span>
+                    <span className="tw:block tw:mb-1.25">{party.name}</span>
                     {party.additionalName && (
-                      <span className="tw:block">{party.additionalName}</span>
+                      <span className="tw:block tw:mb-1.25">
+                        {party.additionalName}
+                      </span>
                     )}
                     {party.isAddressSealed ? (
                       <span>ADDRESS SEALED BY COURT ORDER</span>
@@ -245,36 +247,36 @@ export const NoticeOfWithdrawalForm = connect(
               errorText={validationErrors?.paperServiceAcknowledgement}
             >
               <legend>Paper Service Acknowledgement</legend>
-
-              {noticeOfWithdrawalHelper.partiesWithPaperService.map(party => (
-                <div
-                  className="tw:w-sm"
-                  key={`paper-service-${party.contactId}`}
-                >
-                  <span
-                    className="tw:block tw:mb-[5px]"
-                    data-testid={`paper-service-acknowledgement-name-${party.contactId}`}
+              <div className="tw:flex tw:flex-wrap tw:justify-between">
+                {noticeOfWithdrawalHelper.partiesWithPaperService.map(party => (
+                  <div
+                    className="tw:w-[300px] tw:mb-5"
+                    key={`paper-service-${party.contactId}`}
                   >
-                    {party.name}
-                  </span>
-                  {party.isAddressSealed ? (
-                    <span>ADDRESS SEALED BY COURT ORDER</span>
-                  ) : (
-                    <div
-                      data-testid={`paper-service-acknowledgement-address-${party.contactId}`}
+                    <span
+                      className="tw:block tw:mb-1.25"
+                      data-testid={`paper-service-acknowledgement-name-${party.contactId}`}
                     >
-                      <span className="tw:block">{party.address1}</span>
-                      <span className="tw:block">{party.address2}</span>
-                      <span className="tw:block">{party.address3}</span>
-                      <span className="tw:block">{`${party.city}, ${party.state} ${party.postalCode}`}</span>
-                      {party.countryType === COUNTRY_TYPES.INTERNATIONAL && (
-                        <span className="tw-block">{party.country}</span>
-                      )}
-                    </div>
-                  )}
-                </div>
-              ))}
-
+                      {party.name}
+                    </span>
+                    {party.isAddressSealed ? (
+                      <span>ADDRESS SEALED BY COURT ORDER</span>
+                    ) : (
+                      <div
+                        data-testid={`paper-service-acknowledgement-address-${party.contactId}`}
+                      >
+                        <span className="tw:block">{party.address1}</span>
+                        <span className="tw:block">{party.address2}</span>
+                        <span className="tw:block">{party.address3}</span>
+                        <span className="tw:block">{`${party.city}, ${party.state} ${party.postalCode}`}</span>
+                        {party.countryType === COUNTRY_TYPES.INTERNATIONAL && (
+                          <span className="tw:block">{party.country}</span>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
               <input
                 checked={form.paperServiceAcknowledgement}
                 className="usa-checkbox__input"
