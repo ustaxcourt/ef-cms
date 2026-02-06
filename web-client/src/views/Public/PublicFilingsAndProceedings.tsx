@@ -91,7 +91,7 @@ export const PublicFilingsAndProceedings = connect<
 
 const renderDispositionLinks = (affectedEntry, docketNumber, sequence) => {
   return affectedEntry.dispositionLinkText.map(linkText => (
-    <span className="display-inline-block" key={linkText}>
+    <span className="display-block" key={linkText}>
       {affectedEntry.showDownloadLink && (
         <Button
           link

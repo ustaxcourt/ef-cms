@@ -253,7 +253,7 @@ const renderDispositionLinks = (
   openDocumentDownloadSequence,
 ) => {
   return affectedEntry.dispositionLinkText.map(linkText => (
-    <span className="display-inline-block" key={linkText}>
+    <span className="display-block" key={linkText}>
       {(affectedEntry.showDocumentViewerLink ||
         affectedEntry.showDownloadLink) && (
         <Button
