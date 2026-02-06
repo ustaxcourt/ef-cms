@@ -81,10 +81,9 @@ const RecordDescription = ({ entry }) => {
       >
         {entry.descriptionDisplay}
         <br />
-        ---
-        {entry.relatedDocketEntries?.map((affectedEntry, i) => (
+        {entry.relatedDocketEntries?.map(affectedEntry => (
           <>
-            {i > 0 && '---'}
+            ---
             {affectedEntry.dispositionText.map(dispositionText => (
               <div key={dispositionText}>{dispositionText}</div>
             ))}
