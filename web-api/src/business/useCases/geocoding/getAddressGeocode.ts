@@ -1,73 +1,96 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import FormData from 'form-data';
+import { parse } from 'csv-parse/sync';
 
-export type GeocodeResult = {
-  lat: number;
-  lng: number;
-} | null;
-
-export type AddressInput = {
-  address1: string;
-  city: string;
-  state?: string;
-  postalCode?: string;
-};
-
-const GEOCODE_GEOCODER_URL =
-  'https://geocoding.geo.census.gov/geocoder/locations/address';
-
-
-export const geocodeAddress = async (
+export const geocodeAddressBatch = async (
   applicationContext: ServerApplicationContext,
-  { address }: { address: AddressInput },
-): Promise<GeocodeResult> => {
+  csvBuffer: Buffer | string,
+): Promise<
+  Array<{
+    id: string;
+    lat: number | null;
+    lng: number | null;
+    matched: boolean;
+  }>
+> => {
   const http = applicationContext.getHttpClient();
 
-    try {
-      const params: Record<string, string> = {
-        benchmark: 'Public_AR_Current',
-        city: address.city,
-        format: 'json',
-        state: address.state || '',
-        street: address.address1,
-      };
-      if (address.postalCode) {
-        params.zip = address.postalCode;
-      }
+  try {
+    const form = new FormData();
+    form.append(
+      'addressFile',
+      Buffer.isBuffer(csvBuffer) ? csvBuffer : Buffer.from(csvBuffer),
+      {
+        filename: 'addresses.csv',
+        contentType: 'text/csv',
+      },
+    );
 
-      const response = await http.get(GEOCODE_GEOCODER_URL, {
-        params,
-        timeout: 15000,
-      });
+    const url =
+      'https://geocoding.geo.census.gov/geocoder/locations/addressbatch';
+    const headers = form.getHeaders();
+    const response = await http.post(url, form, {
+      headers,
+      responseType: 'arraybuffer',
+      timeout: 600000,
+    });
 
-      const matches = response.data?.result?.addressMatches;
-      if (!matches || matches.length === 0) {
-        applicationContext.logger.info('Geocoding: No address match found', {
-          address,
-        });
-        return null;
-      }
+    const text = Buffer.from(response.data).toString('utf8');
+    const rows = parse(text, {
+      columns: false,
+      skip_empty_lines: true,
+    }) as string[][];
 
-      const best = matches[0];
-      const lng = best?.coordinates?.x;
-      const lat = best?.coordinates?.y;
+    return rows.map(cols => {
+      const [
+        rawId = '',
+        ,
+        matchType = '',
+        matchedAddress = '',
+        rawLng = '',
+        rawLat = '',
+      ] = cols;
+      const id = rawId.replace(/^"|"$/g, '');
+      const lng = rawLng !== '' ? Number(rawLng) : null;
+      const lat = rawLat !== '' ? Number(rawLat) : null;
 
-      if (typeof lat !== 'number' || typeof lng !== 'number') {
+      if (
+        (lng != null && Number.isNaN(lng)) ||
+        (lat != null && Number.isNaN(lat))
+      ) {
         applicationContext.logger.warn(
-          'Geocoding: Invalid coordinates in response',
-          { address, coordinates: best?.coordinates },
+          'Geocoding: Invalid coordinates in batch response',
+          {
+            id,
+            matchedAddress,
+            matchType,
+          },
         );
-        return null;
+        return { id, lat: null, lng: null, matched: false };
       }
 
-      return { lat, lng };
-    } catch (error: any) {
-      const status = error?.response?.status;
-        // Non-retryable error
-        applicationContext.logger.error('Geocoding: API error', {
-          address,
-          error: error.message,
-          status,
-        });
-        return null;
-    }
+      const matched =
+        matchType.toLowerCase() === 'match' && lat != null && lng != null;
+
+      if (!matched) {
+        applicationContext.logger.info(
+          'Geocoding: No address match found (batch)',
+          {
+            id,
+            matchedAddress,
+            matchType,
+          },
+        );
+      }
+
+      return { id, lat, lng, matched };
+    });
+  } catch (error: any) {
+    const status = error?.response?.status;
+    applicationContext.logger.error('Geocoding: API error (batch)', {
+      error: error.message,
+      status,
+    });
+    return [];
+  }
 };

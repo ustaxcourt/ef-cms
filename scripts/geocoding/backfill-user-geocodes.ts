@@ -1,137 +1,94 @@
-#!/usr/bin/env -S npx ts-node --transpile-only
-
-import {
-  type ScriptConfig,
-  parseArgsAndEnvVars,
-} from '../helpers/parseArgsAndEnvVars';
 import { createApplicationContext } from '@web-api/applicationContext';
+import { geocodeAddressBatch } from '@web-api/business/useCases/geocoding/getAddressGeocode';
 import { getDbReader } from '@web-api/database';
-import { fromKyselyUser } from '@web-api/persistence/postgres/users/mapper';
-import { geocodeAddress } from '@web-api/business/useCases/geocoding/getAddressGeocode';
-import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
-import { RawUser } from '@shared/business/entities/User';
-import { sql } from 'kysely';
+import fs from 'fs';
+import os from 'os';
+import path from 'path';
+import { parse } from 'csv-parse/sync';
 
-const scriptConfig: ScriptConfig = {
-  description:
-    'backfill-user-geocodes - Geocode addresses for users missing lat/lng',
-  environment: {
-    env: 'ENV',
-    region: 'REGION',
-  },
-  parameters: {
-    batchSize: { default: 10000, type: 'number' },
-    delayMs: { default: 60000, type: 'number' },
-    dryRun: { default: false, type: 'boolean' },
-  },
-  requireActiveAwsSession: true,
-};
+function sleep(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
-const { batchSize, delayMs, dryRun } = parseArgsAndEnvVars(scriptConfig) as {
+function selectGeodataFields(record: any) {
+  const { userId, docketNumber, address, city, state, postalCode } = record;
+  return { userId: userId.toString(), docketNumber, address, city, state, postalCode };
+}
+
+function escapeCsv(value: unknown): string {
+  if (value === undefined || value === null) return '';
+  return String(value).replace(/"/g, '""');
+}
+
+function writeTempCsv(rows: any[]) {
+  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'geocode-'));
+  const filePath = path.join(tmpDir, 'addresses.csv');
+  const header = ['id', 'street', 'city', 'state', 'zip'].join(',') + '\n';
+  const body = rows
+    .map(record => {
+      const { userId, address, city, state, postalCode } = selectGeodataFields(record);
+      return `${userId},"${escapeCsv(address)}","${escapeCsv(city)}","${escapeCsv(state)}","${escapeCsv(postalCode)}"`;
+    })
+    .join('\n');
+  fs.writeFileSync(filePath, header + body, 'utf8');
+  return filePath;
+}
+
+async function applyUpdates(results: any[]) {
+  await getDbReader(async db => {
+    for (const record of results) {
+      const { userId, docketNumber, matched, lat, lng } = record;
+      const update = matched && lat != null && lng != null
+        ? { lat, lng, geodataMatch: true }
+        : { geodataMatch: false };
+
+      let query = db.updateTable('dwUserContact').set(update).where('userId', '=', userId);
+      if (docketNumber) {
+        query = query.where('docketNumber', '=', docketNumber);
+      }
+      await query.execute();
+    }
+  });
+}
+
+async function processCsv(csvPath: string, batchSize: number, delayMs: number, applicationContext: any) {
+  const csvRaw = fs.readFileSync(csvPath, 'utf8');
+  const records = parse(csvRaw, { columns: true, skip_empty_lines: true });
+  for (let index = 0; index < records.length; index += batchSize) {
+    const batch = records.slice(index, index + batchSize);
+    const tmpPath = writeTempCsv(batch);
+    const tmpDir = path.dirname(tmpPath);
+    let results: Array<{ id: string; lat: number | null; lng: number | null; matched: boolean }> = [];
+    try {
+      const batchBuffer = fs.readFileSync(tmpPath);
+      results = await geocodeAddressBatch(applicationContext, batchBuffer);
+    } catch (err: any) {
+      console.error('batch request failed', err.message ?? err);
+      await sleep(delayMs);
+      continue;
+    } finally {
+      fs.rmSync(tmpDir, { recursive: true, force: true });
+    }
+    const updates = results.map(({ id, lat, lng, matched }) => ({ userId: id, lat, lng, matched }));
+    await applyUpdates(updates);
+    await sleep(delayMs);
+  }
+}
+
+export async function backfillUserGeocodes({
+  csvPath,
+  batchSize,
+  delayMs,
+  applicationContext,
+}: {
+  csvPath: string;
   batchSize: number;
   delayMs: number;
-  dryRun: boolean;
-};
-
-const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-
-const getUsersMissingGeocode = async (limit: number) => {
-  return (
-    await getDbReader(db =>
-      db
-        .selectFrom('dwCase as c')
-        .crossJoin(
-          sql`LATERAL jsonb_array_elements(c.petitioners)`.as('petitioner'),
-        )
-        .innerJoin('dwUser as u', join =>
-          join.on(
-            sql`petitioner->>'contactId'`,
-            '=',
-            sql`u.user_id`,
-          ),
-        )
-        .innerJoin('dwUserContact as uc', join =>
-          join.on('u.userId', '=', 'uc.userId'),
-        )
-        .selectAll('u')
-        .where('c.status', 'not in', ['Closed', 'Dismissed'])
-        .where(qb =>
-          qb.or([qb('uc.lat', 'is', null), qb('uc.lng', 'is', null)]),
-        )
-        .where('uc.geodataMatch', 'is', null)
-        .where('u.contact', 'is not', null)
-        .limit(limit)
-        .execute(),
-    )
-  ).map(fromKyselyUser) as RawUser[];
-};
-
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
-(async () => {
-  const applicationContext = createApplicationContext({});
-  let totalProcessed = 0;
-  let totalGeocoded = 0;
-  let totalSkipped = 0;
-  let totalFailed = 0;
-
-  console.log(`Starting geocode backfill (dryRun=${dryRun}, batchSize=${batchSize}, delayMs=${delayMs})`);
-
-  while (true) {
-    const users = await getUsersMissingGeocode(batchSize);
-
-    if (users.length === 0) {
-      console.log('No more users to process');
-      break;
-    }
-
-    console.log(`Processing batch of ${users.length} users...`);
-
-    for (const user of users) {
-      totalProcessed++;
-
-      const contact = user.contact as any;
-
-      if (!contact?.address1 || !contact?.city || !contact?.postalCode) {
-        console.log(`Skipping user ${user.userId}: incomplete address`);
-        totalSkipped++;
-        continue;
-      }
-
-      if (dryRun) {
-        console.log(`[DRY RUN] Would geocode user ${user.userId}: ${contact.address1}, ${contact.city}, ${contact.state} ${contact.postalCode}`);
-        totalGeocoded++;
-      } else {
-        try {
-          const result = await geocodeAddress(applicationContext, {
-            address: {
-              address1: contact.address1,
-              city: contact.city,
-              postalCode: contact.postalCode,
-              state: contact.state,
-            },
-          });
-
-          if (result) {
-            await upsertUsers([{ ...user, lat: result.lat, lng: result.lng }]);
-            console.log(`Geocoded user ${user.userId}: lat=${result.lat}, lng=${result.lng}`);
-            totalGeocoded++;
-          } else {
-            console.log(`No geocode result for user ${user.userId}`);
-            totalFailed++;
-          }
-        } catch (error: any) {
-          console.error(`Error geocoding user ${user.userId}: ${error.message}`);
-          totalFailed++;
-        }
-
-        await sleep(delayMs);
-      }
-    }
+  applicationContext?: any;
+}): Promise<void> {
+  if (!csvPath) {
+    throw new Error('Missing csvPath');
   }
-
-  console.log(`\nBackfill complete:`);
-  console.log(`  Total processed: ${totalProcessed}`);
-  console.log(`  Total geocoded:  ${totalGeocoded}`);
-  console.log(`  Total skipped:   ${totalSkipped}`);
-  console.log(`  Total failed:    ${totalFailed}`);
-})();
+  const context = applicationContext ?? createApplicationContext({});
+  await processCsv(csvPath, batchSize, delayMs, context);
+}

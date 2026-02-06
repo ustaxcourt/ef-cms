@@ -4,6 +4,8 @@ import {
   type ScriptConfig,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
+import { backfillUserGeocodes } from '../geocoding/backfill-user-geocodes';
+import fs from 'fs';
 import { getDbReader } from '@web-api/database';
 import { generateCsv } from '../helpers/generate-csv';
 import {
@@ -68,6 +70,8 @@ type PetitionerGeoRow = {
   postalCode: string | null;
   lat: number | null;
   lng: number | null;
+  geodataMatch: boolean | null;
+  userId: string;
   is_represented: string;
 };
 
@@ -122,6 +126,7 @@ const getPetitionerGeodata = async ({
         sql<string>`petitioner->>'postalCode'`.as('postalCode'),
         sql<number>`uc.lat`.as('lat'),
         sql<number>`uc.lng`.as('lng'),
+        sql<boolean>`uc.geodataMatch`.as('geodataMatch'),
         sql<string>`
           CASE
             WHEN EXISTS (
@@ -141,35 +146,68 @@ const getPetitionerGeodata = async ({
 };
 
 const exportGeodata = async () => {
-  const filename = `${OUTPUT_DIR}/petitioner-geodata-${fromDate}-to-${toDate}.csv`;
+  const backfillCsv = `${OUTPUT_DIR}/petitioner-geodata-backfill-${fromDate}-to-${toDate}.csv`;
+  const outputCsv = `${OUTPUT_DIR}/petitioner-geodata-${fromDate}-to-${toDate}.csv`;
 
-  const rows = await getPetitionerGeodata({
-    fromDateIso: fromDate,
-    toDateIso: toDate,
-  });
-  const columns = [
-    { header: 'docket_number', key: 'docket_number' },
-    { header: 'docket_number_suffix', key: 'docket_number_suffix' },
-    { header: 'received_year', key: 'received_year' },
-    { header: 'procedure_type', key: 'procedure_type' },
-    { header: 'case_type', key: 'case_type' },
-    { header: 'party_type', key: 'party_type' },
-    { header: 'status', key: 'status' },
-    { header: 'is_paper', key: 'is_paper' },
-    { header: 'preferred_trial_city', key: 'preferred_trial_city' },
-    { header: 'remote_trial_granted', key: 'remote_trial_granted' },
-    { header: 'address', key: 'address' },
-    { header: 'city', key: 'city' },
-    { header: 'state', key: 'state' },
-    { header: 'postalCode', key: 'postalCode' },
-    { header: 'lat', key: 'lat' },
-    { header: 'lng', key: 'lng' },
-    { header: 'is_represented', key: 'is_represented' },
-  ];
+  try {
+    const rows = await getPetitionerGeodata({
+      fromDateIso: fromDate,
+      toDateIso: toDate,
+    });
 
-  console.log(`Found ${rows.length} petitioner rows`);
-  generateCsv({ columns, filename, rows });
-  console.log(`Generated ${filename}`);
+    const rowsNeedingBackfill = rows.filter(
+      row => row.lat == null && row.lng == null && row.geodataMatch == null,
+    );
+
+    const backfillColumns = [
+      { header: 'userId', key: 'userId' },
+      { header: 'docketNumber', key: 'docketNumber' },
+      { header: 'address', key: 'address' },
+      { header: 'city', key: 'city' },
+      { header: 'state', key: 'state' },
+      { header: 'postalCode', key: 'postalCode' },
+    ];
+
+    if (rowsNeedingBackfill.length > 0) {
+      const backfillRows = rowsNeedingBackfill.map(row => ({ ...row, docketNumber: row.docket_number }));
+      generateCsv({ columns: backfillColumns, filename: backfillCsv, rows: backfillRows });
+
+      await backfillUserGeocodes({
+        batchSize: 10000,
+        csvPath: backfillCsv,
+        delayMs: 60000,
+      });
+    }
+
+    const updatedRows = await getPetitionerGeodata({
+      fromDateIso: fromDate,
+      toDateIso: toDate,
+    });
+
+    const columns = [
+      { header: 'docket_number', key: 'docket_number' },
+      { header: 'docket_number_suffix', key: 'docket_number_suffix' },
+      { header: 'received_year', key: 'received_year' },
+      { header: 'procedure_type', key: 'procedure_type' },
+      { header: 'case_type', key: 'case_type' },
+      { header: 'party_type', key: 'party_type' },
+      { header: 'status', key: 'status' },
+      { header: 'is_paper', key: 'is_paper' },
+      { header: 'preferred_trial_city', key: 'preferred_trial_city' },
+      { header: 'remote_trial_granted', key: 'remote_trial_granted' },
+      { header: 'address', key: 'address' },
+      { header: 'city', key: 'city' },
+      { header: 'state', key: 'state' },
+      { header: 'postalCode', key: 'postalCode' },
+      { header: 'lat', key: 'lat' },
+      { header: 'lng', key: 'lng' },
+      { header: 'is_represented', key: 'is_represented' },
+    ];
+
+    generateCsv({ columns, filename: outputCsv, rows: updatedRows });
+  } finally {
+    fs.rmSync(backfillCsv, { force: true });
+  }
 };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
