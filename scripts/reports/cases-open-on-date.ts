@@ -13,6 +13,7 @@ import {
   getNowObject,
   validateDateAndCreateISO,
 } from '@shared/business/utilities/DateHandler';
+import { formatDate } from '../helpers/formatters';
 
 const nowObject = getNowObject();
 const scriptConfig: ScriptConfig = {
@@ -108,7 +109,7 @@ const generateCsv = ({
   for (let y = thisYear - 4; y <= thisYear; y++) {
     const year = `${y}`;
     const targetDate = validateDateAndCreateISO({ day, month, year })!;
-    const targetDateHumanized = targetDate.split('T')[0];
+    const targetDateHumanized = formatDate(targetDate);
     console.log(`Retrieving cases open on ${targetDateHumanized}...`);
     const casesPotentiallyOpenOnDate = await getAllCasesOpenOnDate({
       targetDate,
@@ -139,9 +140,10 @@ const generateCsv = ({
       })
       .map(c => ({
         docketNumber: c.docketNumber,
-        noaFiledOn: noasFiledAfterDate
-          .find(noa => noa.docketNumber === c.docketNumber)!
-          .receivedAt.split('T')[0],
+        noaFiledOn: formatDate(
+          noasFiledAfterDate.find(noa => noa.docketNumber === c.docketNumber)!
+            .receivedAt,
+        ),
       }));
     if (casesToExamineManually.length) {
       console.log(
@@ -157,7 +159,7 @@ const generateCsv = ({
   let totalsOutput = '"Date","Cases Open"';
   for (const year of Object.keys(totals)) {
     const targetDate = validateDateAndCreateISO({ day, month, year })!;
-    const date = targetDate.split('T')[0];
+    const date = formatDate(targetDate);
     totalsOutput += `\n"${date}","${totals[year]}"`;
   }
   const monthAndDay = validateDateAndCreateISO({
