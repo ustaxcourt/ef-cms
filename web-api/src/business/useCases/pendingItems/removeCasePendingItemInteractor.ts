@@ -9,7 +9,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
-import { CaseDTO } from '@shared/business/dto/docketEntries/CaseDTO';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 /**
  * removeCasePendingItem

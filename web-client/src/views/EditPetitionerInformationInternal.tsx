@@ -198,6 +198,30 @@ export const EditPetitionerInformationInternal = connect(
                 }}
               />
             </FormGroup>
+            <FormGroup errorText={validationErrors?.contact?.paperPetitionEmail}>
+              <label className="usa-label" htmlFor="paperPetitionEmail">
+                Contact email address{' '}
+                <span className="usa-hint">(optional)</span>
+              </label>
+              <input
+                autoCapitalize="none"
+                className="usa-input"
+                data-testid="contact-email-input"
+                id="paperPetitionEmail"
+                name="contact.paperPetitionEmail"
+                type="email"
+                value={form.contact.paperPetitionEmail || ''}
+                onBlur={() => {
+                  validatePetitionerSequence();
+                }}
+                onChange={e => {
+                  updateFormValueSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                }}
+              />
+            </FormGroup>
             {editPetitionerInformationHelper.showSealAddress && (
               <FormGroup>
                 <div className="usa-checkbox">

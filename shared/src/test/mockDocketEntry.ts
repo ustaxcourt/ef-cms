@@ -6,6 +6,7 @@ import {
 export const PENDING_DOCKET_ENTRY: RawDocketEntry = {
   createdAt: '2018-11-21T20:49:28.192Z',
   docketEntryId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
+  documentStorageId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
   docketNumber: '101-18',
   documentTitle: 'Proposed Stipulated Decision',
   documentType: 'Proposed Stipulated Decision',
@@ -40,6 +41,7 @@ export const MOCK_MINUTE_ENTRY: RawDocketEntry = {
   addToCoversheet: false,
   createdAt: '2023-02-08T16:15:08.500Z',
   docketEntryId: '4086b86c-161d-41f7-ac4f-da6bbb5f6f0f',
+  documentStorageId: '4086b86c-161d-41f7-ac4f-da6bbb5f6f0f',
   docketNumber: '983-23',
   documentTitle: 'Filing Fee Paid',
   documentType: 'Filing Fee Paid',
@@ -65,6 +67,7 @@ export const MOCK_ANSWER: RawDocketEntry = {
   addToCoversheet: false,
   createdAt: '2023-03-30T18:01:14.583Z',
   docketEntryId: 'd92514b3-8194-4d05-8292-0002ea11eef9',
+  documentStorageId: 'd92514b3-8194-4d05-8292-0002ea11eef9',
   docketNumber: '983-23',
   documentTitle: 'Answer',
   documentType: 'Answer',
@@ -105,6 +108,7 @@ export const MOCK_ANSWER: RawDocketEntry = {
 export const MOCK_PETITION: RawDocketEntry = {
   createdAt: '2018-11-21T20:49:28.192Z',
   docketEntryId: '9de27a7d-7c6b-434b-803b-7655f82d5e07',
+  documentStorageId: '9de27a7d-7c6b-434b-803b-7655f82d5e07',
   docketNumber: '101-18',
   documentTitle: 'Petition',
   documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
@@ -128,6 +132,7 @@ export const MOCK_PETITION: RawDocketEntry = {
 export const MOCK_STIN: RawDocketEntry = {
   createdAt: '2018-11-21T20:49:28.192Z',
   docketEntryId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
+  documentStorageId: 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',
   docketNumber: '101-18',
   documentTitle: 'Statement of Taxpayer Identification',
   documentType: INITIAL_DOCUMENT_TYPES.stin.documentType,
@@ -150,6 +155,7 @@ export const MOCK_STIN: RawDocketEntry = {
 export const MOCK_ANSWER_2: RawDocketEntry = {
   createdAt: '2018-11-21T20:49:28.192Z',
   docketEntryId: 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+  documentStorageId: 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
   docketNumber: '101-18',
   documentTitle: 'Answer',
   documentType: 'Answer',
@@ -263,6 +269,7 @@ export const MOCK_DOCKET_ENTRY_WITH_PREVIOUS_DOCUMENT: RawDocketEntry = {
   entityName: 'DocketEntry',
   filedBy: 'Petr. Yasir Oneal',
   docketEntryId: 'a61b57da-3931-47d5-8d5b-43e95d2829a3',
+  documentStorageId: 'a61b57da-3931-47d5-8d5b-43e95d2829a3',
   certificateOfService: false,
   documentTitle:
     'Motion for Leave to File Out of Time Brief in Support of First Amended AMBR',
@@ -284,6 +291,7 @@ export const MOCK_DOCKET_ENTRY_WITH_PREVIOUS_DOCUMENT: RawDocketEntry = {
 export const ATP_DOCKET_ENTRY: RawDocketEntry = {
   createdAt: '2019-11-21T21:49:28.192Z',
   docketEntryId: '062c9a5d-1a65-4273-965e-25d41607bc98',
+  documentStorageId: '062c9a5d-1a65-4273-965e-25d41607bc98',
   docketNumber: '101-18',
   documentTitle: 'Attachment to Petition',
   documentType: 'Attachment to Petition',
@@ -318,6 +326,7 @@ export const STANDING_PRETRIAL_ORDER_ENTRY: RawDocketEntry = {
   addToCoversheet: false,
   createdAt: '2023-08-15T16:47:51.688Z',
   docketEntryId: 'c7ea55fe-1716-47bb-b2c5-8112fea11d14',
+  documentStorageId: 'c7ea55fe-1716-47bb-b2c5-8112fea11d14',
   docketNumber: '102-67',
   documentContentsId: '20cdeb6a-5f13-48b0-b433-8c0b36be5eb1',
   documentTitle: 'Standing Pretrial Order',

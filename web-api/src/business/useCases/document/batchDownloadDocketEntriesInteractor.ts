@@ -121,7 +121,7 @@ const batchDownloadDocketEntriesHelper = async (
 
     documentsToZip.push({
       filePathInZip: `${fileDirectory}/${pdfTitle}`,
-      key: docketEntryId,
+      key: docInfo.documentStorageId,
       useTempBucket: false,
     });
   });
@@ -166,7 +166,7 @@ const batchDownloadDocketEntriesHelper = async (
     await applicationContext.getPersistenceGateway().uploadDocument({
       applicationContext,
       pdfData: JSON.stringify(documentsToZip),
-      pdfName: UUID,
+      key: UUID,
       useTempBucket: true,
     });
 

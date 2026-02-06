@@ -33,8 +33,6 @@ export class PublicCase extends JoiValidationEntity {
   public privatePractitioners?: RawPublicContact[] | PrivatePractitioner[];
   public consolidatedCases?: ConsolidatedCaseSummary[];
 
-  private _score?: string;
-
   constructor(
     rawCase: any,
     {
@@ -64,7 +62,6 @@ export class PublicCase extends JoiValidationEntity {
     this.isPaper = rawCase.isPaper;
     this.partyType = rawCase.partyType;
     this.receivedAt = rawCase.receivedAt;
-    this._score = rawCase['_score'];
 
     this.isSealed = isSealedCase(rawCase);
     this.leadDocketNumber = rawCase.leadDocketNumber;

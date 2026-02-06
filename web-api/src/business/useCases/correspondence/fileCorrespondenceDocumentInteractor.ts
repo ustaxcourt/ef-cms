@@ -9,7 +9,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
-import { CaseDTO } from '@shared/business/dto/docketEntries/CaseDTO';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 export const fileCorrespondenceDocumentInteractor = async (
   {

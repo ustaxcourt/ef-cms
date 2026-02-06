@@ -4,6 +4,7 @@ import '@web-api/persistence/postgres/workitems/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
+jest.mock('@shared/sharedAppContext');
 import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
 import { MOCK_CASE } from '@shared/test/mockCase';
@@ -26,11 +27,13 @@ import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMes
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
+import { getUniqueId as getUniqueIdMock } from '@shared/sharedAppContext';
 
 describe('addDraftStampOrderDocketEntryInteractor', () => {
   const tryGetLocks = jest.mocked(tryGetLocksMock);
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
+  const getUniqueId = jest.mocked(getUniqueIdMock);
   const mockSigningName = 'Roslindis Angelino';
   const mockStampedDocketEntryId = 'abc81f4d-1e47-423a-8caf-6d2fdc3d3858';
   const mockOriginalDocketEntryId = 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859';
@@ -43,15 +46,15 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
       disposition: MOTION_DISPOSITIONS.GRANTED,
       nameForSigning: mockSigningName,
     },
-    stampedDocketEntryId: mockStampedDocketEntryId,
   };
 
   beforeEach(() => {
     getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+    getUniqueId.mockReturnValue(mockStampedDocketEntryId);
   });
 
   it('should add a draft order docket entry to the case', async () => {
-    await addDraftStampOrderDocketEntryInteractor(
+    const result = await addDraftStampOrderDocketEntryInteractor(
       applicationContext,
       args,
       mockJudgeUser,
@@ -67,18 +70,13 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
       e => e.docketEntryId === mockOriginalDocketEntryId,
     )?.documentType;
 
-    const draftDocketEntryEntity = caseToUpdate.docketEntries.find(
-      doc =>
-        doc.documentType === ORDER_TYPES[0].documentType &&
-        doc.docketEntryId === mockStampedDocketEntryId,
-    );
-
-    expect(draftDocketEntryEntity).toMatchObject({
+    expect(result).toMatchObject({
       docketEntryId: mockStampedDocketEntryId,
+      documentStorageId: mockStampedDocketEntryId,
       docketNumber: caseToUpdate.docketNumber,
       documentType: ORDER_TYPES[0].documentType,
       filedBy: mockJudgeUser.name,
-      freeText: `Order - ${motionDocumentType} some title with disposition and custom text`,
+      freeText: `Order - ${motionDocumentType} - some title with disposition and custom text`,
       isDraft: true,
       signedJudgeName: mockSigningName,
     });

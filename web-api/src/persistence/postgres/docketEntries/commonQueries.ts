@@ -1,13 +1,23 @@
+import { Database } from '@web-api/database-schema';
 import { getDbReader } from '@web-api/database';
-import { sql } from 'kysely';
+import { SelectQueryBuilder, sql } from 'kysely';
 
-export const docketEntriesBaseQuery = () =>
-  getDbReader(reader =>
-    reader
+export type DocketEntrySelectableField = keyof Database['dwDocketEntry'];
+
+export const docketEntriesBaseQuery = ({
+  docketNumbers,
+  selectFields,
+}: {
+  docketNumbers: string[];
+  selectFields?: DocketEntrySelectableField[];
+}) =>
+  getDbReader(reader => {
+    const baseQuery = reader
       .with('affectedDocketEntries', db =>
         db
           .selectFrom('dwDocketEntryRelatedDocketEntry')
           .where('served', 'is', true)
+          .where('docketNumber', 'in', docketNumbers)
           .select(['primaryDocketEntryId as docketEntryId', 'docketNumber'])
           .select(fn =>
             fn.fn
@@ -30,6 +40,7 @@ export const docketEntriesBaseQuery = () =>
         db
           .selectFrom('dwDocketEntryRelatedDocketEntry')
           .where('served', 'is', true)
+          .where('docketNumber', 'in', docketNumbers)
           .select(['secondaryDocketEntryId as docketEntryId', 'docketNumber'])
           .select(fn =>
             fn.fn
@@ -66,8 +77,17 @@ export const docketEntriesBaseQuery = () =>
             '=',
             'de.docketNumber',
           ),
-      )
-      .selectAll('de')
+      );
+
+    let queryWithSelect: SelectQueryBuilder<any, any, any>;
+    if (selectFields && selectFields.length > 0) {
+      const prefixedFields = selectFields.map(field => `de.${String(field)}`);
+      queryWithSelect = (baseQuery as any).select(prefixedFields);
+    } else {
+      queryWithSelect = baseQuery.selectAll('de');
+    }
+
+    return queryWithSelect
       .select('affectedDocketEntries.affectedDocketEntries')
-      .select('affectedByDocketEntries.affectedByDocketEntries'),
-  );
+      .select('affectedByDocketEntries.affectedByDocketEntries');
+  });

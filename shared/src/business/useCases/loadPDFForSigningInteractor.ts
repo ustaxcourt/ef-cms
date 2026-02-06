@@ -2,26 +2,15 @@ import { getPdfJs } from '@shared/business/utilities/pdfs/getPdfJs';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { PDFDocumentProxy } from 'pdfjs-dist';
 
-/**
- * loadPDFForSigningInteractor
- *
- * @param {string} applicationContext the application context
- * @param {object} providers the params object
- * @param {string} providers.docketNumber the docketNumber
- * @param {string} providers.docketEntryId the docket entry id
- * @param {boolean} providers.removeCover if saving should remove the cover sheet
- * @returns {Promise<object>} the document data
- */
 export const loadPDFForSigningInteractor = async (
-  applicationContext: ClientApplicationContext
-  ,
+  applicationContext: ClientApplicationContext,
   {
-    docketEntryId,
+    documentStorageId,
     docketNumber,
     onlyCover = false,
     removeCover = false,
   }: {
-    docketEntryId: string;
+    documentStorageId: string;
     docketNumber: string;
     onlyCover?: boolean;
     removeCover?: boolean;
@@ -65,6 +54,6 @@ export const loadPDFForSigningInteractor = async (
       isEvalSupported: false,
     }).promise;
   } catch (err) {
-    throw new Error('error loading PDF for signing');
+    throw new Error(`error loading PDF for signing: ${documentStorageId}`);
   }
 };

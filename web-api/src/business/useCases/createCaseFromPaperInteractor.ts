@@ -24,7 +24,7 @@ import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertW
 import { CREATE_CASE_LOCK_IDENTIFIER } from '@web-api/business/useCases/createCaseInteractor';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
-import { CaseDTO } from '@shared/business/dto/docketEntries/CaseDTO';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 const addPetitionDocketEntryWithWorkItemToCase = ({
   caseToAdd,

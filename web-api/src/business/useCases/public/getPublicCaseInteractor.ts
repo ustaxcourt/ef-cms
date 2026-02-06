@@ -2,8 +2,8 @@ import { Case } from '@shared/business/entities/cases/Case';
 import { CaseFactory } from '@shared/business/entities/cases/CaseFactory';
 import { NotFoundError } from '@web-api/errors/errors';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { PublicCaseDTO } from '@shared/business/dto/docketEntries/PublicCaseDTO';
-import { RestrictedCaseDTO } from '@shared/business/dto/docketEntries/RestrictedCaseDTO';
+import { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
+import { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO';
 
 export const getPublicCaseInteractor = async ({
   docketNumber,
