@@ -7,6 +7,7 @@ const userContactTableDefinition = {
   docketNumber: DEFAULT as string,
   lat: DEFAULT as number | null,
   lng: DEFAULT as number | null,
+  geodataMatch: DEFAULT as boolean | null,
 };
 
 export type UserContactTable = typeof userContactTableDefinition;

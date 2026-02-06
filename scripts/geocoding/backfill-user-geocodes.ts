@@ -10,6 +10,7 @@ import { fromKyselyUser } from '@web-api/persistence/postgres/users/mapper';
 import { geocodeAddress } from '@web-api/business/useCases/geocoding/getAddressGeocode';
 import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
 import { RawUser } from '@shared/business/entities/User';
+import { sql } from 'kysely';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -19,8 +20,8 @@ const scriptConfig: ScriptConfig = {
     region: 'REGION',
   },
   parameters: {
-    batchSize: { default: 100, type: 'number' },
-    delayMs: { default: 200, type: 'number' },
+    batchSize: { default: 10000, type: 'number' },
+    delayMs: { default: 60000, type: 'number' },
     dryRun: { default: false, type: 'boolean' },
   },
   requireActiveAwsSession: true,
@@ -36,13 +37,28 @@ const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 const getUsersMissingGeocode = async (limit: number) => {
   return (
-    await getDbReader(reader =>
-      reader
-        .selectFrom('dwUser as u')
-        .selectAll('u')
-        .where(qb =>
-          qb.or([qb('u.lat', 'is', null), qb('u.lng', 'is', null)]),
+    await getDbReader(db =>
+      db
+        .selectFrom('dwCase as c')
+        .crossJoin(
+          sql`LATERAL jsonb_array_elements(c.petitioners)`.as('petitioner'),
         )
+        .innerJoin('dwUser as u', join =>
+          join.on(
+            sql`petitioner->>'contactId'`,
+            '=',
+            sql`u.user_id`,
+          ),
+        )
+        .innerJoin('dwUserContact as uc', join =>
+          join.on('u.userId', '=', 'uc.userId'),
+        )
+        .selectAll('u')
+        .where('c.status', 'not in', ['Closed', 'Dismissed'])
+        .where(qb =>
+          qb.or([qb('uc.lat', 'is', null), qb('uc.lng', 'is', null)]),
+        )
+        .where('uc.geodataMatch', 'is', null)
         .where('u.contact', 'is not', null)
         .limit(limit)
         .execute(),

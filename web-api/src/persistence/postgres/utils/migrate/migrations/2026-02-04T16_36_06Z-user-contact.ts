@@ -7,6 +7,7 @@ export const up = async (db: Kysely<any>): Promise<void> => {
     .addColumn('docketNumber', 'varchar', col => col.notNull())
     .addColumn('lat', 'decimal')
     .addColumn('lng', 'decimal')
+    .addColumn('geodataMatch', 'boolean')
     .addPrimaryKeyConstraint('pkUserContact', ['userId', 'docketNumber'])
     .addForeignKeyConstraint(
       'dwUserContactUserFK',
