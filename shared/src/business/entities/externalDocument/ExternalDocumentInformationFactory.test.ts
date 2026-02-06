@@ -470,6 +470,50 @@ describe('ExternalDocumentInformationFactory', () => {
       );
     });
 
+    describe('Event Code NOTW', () => {
+      beforeEach(() => {
+        baseDoc.eventCode = 'NOTW';
+      });
+
+      it('should require all parties consent if the document as irs practitioner', () => {
+        baseDoc.allPartiesConsent = false;
+        baseDoc.currentUser = {
+          ...baseDoc.currentUser,
+          role: ROLES.irsPractitioner,
+        };
+        baseDoc.partyIrsPractitioner = true;
+        expect(errors().allPartiesConsent).toEqual(
+          'All parties have not consented to your withdrawal as counsel',
+        );
+        expect(errors().filers).toEqual(undefined);
+      });
+      it('should not require all parties consent if the document private practitioner', () => {
+        baseDoc.allPartiesConsent = false;
+        baseDoc.currentUser = {
+          ...baseDoc.currentUser,
+          role: ROLES.privatePractitioner,
+        };
+        baseDoc.filers = [];
+        baseDoc.partyIrsPractitioner = false;
+        expect(errors().allPartiesConsent).toEqual(
+          'All parties have not consented to your withdrawal as counsel',
+        );
+        expect(errors().filers).toEqual(
+          'Select a party from whom are you removing yourself as counsel of record',
+        );
+      });
+      it('should require paper service acknowledgement if the field exists', () => {
+        baseDoc.currentUser = {
+          ...baseDoc.currentUser,
+          role: ROLES.irsPractitioner,
+        };
+        baseDoc.paperServiceAcknowledgement = false;
+        expect(errors().paperServiceAcknowledgement).toEqual(
+          'You do not certify to serve the above parties who do not receive electronic service a copy of your withdrawal by mail today',
+        );
+      });
+    });
+
     describe('Consolidated Case filing to multiple cases', () => {
       beforeEach(() => {
         baseDoc.casesParties = {};

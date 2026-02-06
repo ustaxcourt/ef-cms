@@ -4,11 +4,7 @@ import {
 } from '@shared/business/utilities/trialSessionMinutes/caseIsEligibleForMinuteSheet';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const isEligibleForMinuteSheetAction = ({
-  get,
-  path,
-  store,
-}) => {
+export const isEligibleForMinuteSheetAction = ({ get, path, store }) => {
   const aCase = get(state.caseDetail);
   const trialSession = get(state.trialSession);
 
