@@ -22,8 +22,6 @@ export type UserContact = {
   city: string;
   country?: string;
   countryType: string;
-  lat?: number | null;
-  lng?: number | null;
   phone: string;
   postalCode: string;
   state: string;
@@ -46,8 +44,6 @@ export class User extends JoiValidationEntity {
   public isSeniorJudge?: boolean;
   public judgePhoneNumber?: string;
   public accountStatus: AccountStatus;
-  public lat?: number;
-  public lng?: number;
 
   constructor(rawUser, { filtered = false } = {}) {
     super('User');
@@ -77,8 +73,6 @@ export class User extends JoiValidationEntity {
     }
 
     this.section = rawUser.section;
-    this.lat = rawUser.lat;
-    this.lng = rawUser.lng;
   }
 
   setContactInformation(rawUser) {
@@ -92,8 +86,6 @@ export class User extends JoiValidationEntity {
         city: rawUser.contact.city,
         country: rawUser.contact.country,
         countryType: rawUser.contact.countryType,
-        lat: rawUser.contact.lat ?? null,
-        lng: rawUser.contact.lng ?? null,
         phone: formatPhoneNumber(rawUser.contact.phone),
         postalCode: rawUser.contact.postalCode,
         state: rawUser.contact.state,
@@ -185,8 +177,6 @@ export class User extends JoiValidationEntity {
     accountStatus: JoiValidationConstants.STRING.valid(
       ...Object.values(ACCOUNT_STATUS),
     ).required(),
-    lat: joi.number().min(-90).max(90).optional().allow(null),
-    lng: joi.number().min(-180).max(180).optional().allow(null),
   };
 
   isChambersUser(): boolean {

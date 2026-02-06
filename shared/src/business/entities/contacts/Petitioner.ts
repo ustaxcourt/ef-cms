@@ -27,7 +27,6 @@ export class Petitioner extends JoiValidationEntity {
   public hasElectronicAccess?: boolean;
   public inCareOf?: string;
   public isAddressSealed: boolean;
-  public lat?: number | null;
   public name: string;
   public phone: string;
   public postalCode: string;
@@ -36,7 +35,6 @@ export class Petitioner extends JoiValidationEntity {
   public serviceIndicator?: string;
   public state?: string;
   public title?: string;
-  public lng?: number | null;
   public placeOfLegalResidence?: string;
   public preferredLanguage?: string;
   public preferredCommunicationMethod?: string;
@@ -60,7 +58,6 @@ export class Petitioner extends JoiValidationEntity {
     this.hasElectronicAccess = rawProps.hasElectronicAccess ?? undefined;
     this.inCareOf = rawProps.inCareOf;
     this.isAddressSealed = rawProps.isAddressSealed ?? false;
-    this.lat = rawProps.lat ?? null;
     this.name = rawProps.name;
     this.phone = formatPhoneNumber(rawProps.phone);
     this.postalCode = rawProps.postalCode;
@@ -70,7 +67,6 @@ export class Petitioner extends JoiValidationEntity {
     this.serviceIndicator = rawProps.serviceIndicator;
     this.state = rawProps.state;
     this.title = rawProps.title;
-    this.lng = rawProps.lng ?? null;
     this.preferredLanguage = rawProps.preferredLanguage?.trim() || undefined;
     this.preferredCommunicationMethod =
       rawProps.preferredCommunicationMethod?.trim() || undefined;

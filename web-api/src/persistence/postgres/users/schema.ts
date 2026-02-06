@@ -37,8 +37,6 @@ const userTableDefinition = {
   suffix: DEFAULT as string | null,
   updatedEmail: DEFAULT as string | null,
   accountStatus: DEFAULT as AccountStatus,
-  lat: DEFAULT as number | null,
-  lng: DEFAULT as number | null,
 };
 
 export type UserTable = typeof userTableDefinition;
