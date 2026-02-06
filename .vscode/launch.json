@@ -63,12 +63,28 @@
       "windows": {
         "program": "${workspaceFolder}/node_modules/jest/bin/jest"
       }
+    },
+    {
+      "name": "API Docker",
+      "type": "node",
+      "request": "attach",
+      "port": 9230,
+      "address": "localhost",
+      "localRoot": "${workspaceFolder}",
+      "remoteRoot": "/home/app",
+      "skipFiles": ["<node_internals>/**"],
+      "restart": true
     }
   ],
   "compounds": [
     {
       "name": "DAWSON local",
       "configurations": ["API", "Client", "Public"]
+    },
+    {
+      "name": "DAWSON Docker",
+      "configurations": ["API Docker"],
+      "preLaunchTask": "Start Docker"
     }
   ]
 }

@@ -216,7 +216,7 @@
     "seed:s3": "cp -R ./web-api/storage/fixtures/s3/* ./web-api/storage/s3",
     "shell": "docker compose run -it shell /bin/bash",
     "start:all:ci": "npm run start:api:ci & npm run start:client:ci & npm run start:public:ci",
-    "start:all:docker": "docker build -t efcms -f Dockerfile-local . && docker compose up",
+    "start:all:docker": "USTC_ENV=dev ./scripts/docker-local.sh",
     "start:api": "USTC_ENV=dev ./run-local.sh",
     "start:api:ci": "CI=true npm run start:api",
     "start:api:docker": "USTC_ENV=dev ./run-api.sh",

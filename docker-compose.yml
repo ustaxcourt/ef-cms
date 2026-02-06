@@ -55,27 +55,66 @@ services:
       AWS_SECRET_ACCESS_KEY: S3RVER
       ELASTICSEARCH_ENDPOINT: http://elasticsearch:9200
       ELASTICSEARCH_HOST: elasticsearch
+      POSTGRES_HOST: db
+      POSTGRES_PASSWORD: example
+      POSTGRES_USER: postgres
+      DATABASE_NAME: postgres
     ports:
       - '3011:3011'
       - '4000:4000'
       - '4001:4001'
       - '9001:9001'
+      - '9229:9229'
+      - '9230:9230'
     volumes:
       - .:/home/app
       - node_modules:/home/app/node_modules
     depends_on:
       - opensearch-node
+      - db
+
+  db:
+    image: postgres
+    container_name: dawson-db
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+      PGDATA: /data/postgres
+    volumes:
+      - dawson-db:/data/postgres
+    ports:
+      - '5432:5432'
 
   opensearch-node:
-    image: opensearchproject/opensearch:2.19.0
+    image: opensearchproject/opensearch:3.3.0
+    container_name: opensearch-node
+    networks:
+      default:
+        aliases:
+          - elasticsearch
     volumes:
       - opensearch-data:/usr/share/opensearch/data
     ports:
       - '9200:9200'
+      - '9600:9600'
     environment:
-      ES_JAVA_OPTS: -Xms512m -Xmx512m
-      discovery.type: single-node
+      - bootstrap.memory_lock=true
+      - cluster.initial_cluster_manager_nodes=opensearch-node
+      - cluster.name=opensearch-cluster
+      - discovery.seed_hosts=opensearch-node
+      - node.name=opensearch-node
+      - 'DISABLE_INSTALL_DEMO_CONFIG=true'
+      - 'DISABLE_SECURITY_PLUGIN=true'
+      - 'OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m'
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
 
 volumes:
   node_modules:
   opensearch-data:
+  dawson-db:
