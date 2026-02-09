@@ -22,6 +22,7 @@ import {
   asyncHandleLockError,
   withLocking,
 } from '@web-api/persistence/postgres/utils/mutex';
+import { countPagesInDocument } from '@web-api/business/useCaseHelper/countPagesInDocument';
 
 export const serveExternallyFiledDocument = async (
   applicationContext: ServerApplicationContext,
@@ -70,9 +71,10 @@ export const serveExternallyFiledDocument = async (
     throw new Error('Docket entry is already being served');
   }
 
-  const numberOfPages = await applicationContext
-    .getUseCaseHelpers()
-    .countPagesInDocument({ applicationContext, docketEntryId });
+  const numberOfPages = await countPagesInDocument({
+    applicationContext,
+    documentStorageId: originalSubjectDocketEntry.documentStorageId,
+  });
 
   await updateDocketEntryPendingServiceStatus({
     docketEntryId,

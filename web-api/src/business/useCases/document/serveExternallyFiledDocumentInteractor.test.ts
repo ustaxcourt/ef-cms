@@ -8,6 +8,7 @@ jest.mock('../addCoverToPdf');
 jest.mock(
   '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus',
 );
+jest.mock('@web-api/business/useCaseHelper/countPagesInDocument');
 import {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_SERVED_MESSAGES,
@@ -25,10 +26,12 @@ import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } fr
 import { updateDocketEntryPendingServiceStatus as updateDocketEntryPendingServiceStatusMock } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
+import { countPagesInDocument as countPagesInDocumentMock } from '@web-api/business/useCaseHelper/countPagesInDocument';
 
 const getUserById = jest.mocked(getUserByIdMock);
 
 describe('serveExternallyFiledDocumentInteractor', () => {
+  const countPagesInDocument = jest.mocked(countPagesInDocumentMock);
   const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
   const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
   let mockCase: RawCase;
@@ -41,13 +44,12 @@ describe('serveExternallyFiledDocumentInteractor', () => {
 
   const mockClientConnectionId = '987654';
   const mockDocketEntryId = '225d5474-b02b-4137-a78e-2043f7a0f806';
+  const mockDocumentStorageId = '970a7d2c-c631-444a-9c05-3fdee7148085';
   const mockNumberOfPages = 939;
   const mockPdfUrl = 'ayo.seankingston.com';
 
   beforeAll(() => {
-    applicationContext
-      .getUseCaseHelpers()
-      .countPagesInDocument.mockResolvedValue(mockNumberOfPages);
+    countPagesInDocument.mockResolvedValue(mockNumberOfPages);
   });
 
   beforeEach(() => {
@@ -56,6 +58,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       docketEntries: [
         {
           docketEntryId: mockDocketEntryId,
+          documentStorageId: mockDocumentStorageId,
           documentTitle: 'something cool',
         } as RawDocketEntry,
       ],
@@ -359,6 +362,10 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       fileAndServeDocumentOnOneCase.mock.calls[0][0].docketEntryEntity
         .numberOfPages,
     ).toBe(mockNumberOfPages + 1);
+
+    expect(countPagesInDocument.mock.calls[0][0].documentStorageId).toEqual(
+      mockDocumentStorageId,
+    );
   });
 
   it('should set the docket entry`s processing status as completed', async () => {

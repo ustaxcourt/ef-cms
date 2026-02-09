@@ -22,9 +22,9 @@ import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { CaseFactory } from '@shared/business/entities/cases/CaseFactory';
-import { CaseDTO } from '@shared/business/dto/docketEntries/CaseDTO';
-import { PublicCaseDTO } from '@shared/business/dto/docketEntries/PublicCaseDTO';
-import { RestrictedCaseDTO } from '@shared/business/dto/docketEntries/RestrictedCaseDTO';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
+import { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
+import { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO';
 
 export const fileExternalDocument = async (
   applicationContext: ServerApplicationContext,
@@ -143,7 +143,10 @@ export const fileExternalDocument = async (
     const batchPromises = batch.map(async docketEntryId => {
       const numberOfPages = await applicationContext
         .getUseCaseHelpers()
-        .countPagesInDocument({ applicationContext, docketEntryId });
+        .countPagesInDocument({
+          applicationContext,
+          documentStorageId: docketEntryId,
+        });
       return { docketEntryId, numberOfPages };
     });
 
@@ -166,6 +169,7 @@ export const fileExternalDocument = async (
             ...baseMetadata,
             ...metadata,
             docketEntryId,
+            documentStorageId: docketEntryId,
             documentType: metadata.documentType,
             isOnDocketRecord: true,
             relationship,

@@ -26,7 +26,7 @@ import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseA
 import { generateAndServeDocketEntry } from '@web-api/business/useCaseHelper/service/createChangeItems';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
-import { CaseDTO } from '@shared/business/dto/docketEntries/CaseDTO';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 export const getIsUserAuthorized = ({
   petitionerCaseRaw,
@@ -202,6 +202,7 @@ export const updatePetitionerInformation = async (
       additionalName: undefined,
       address2: undefined,
       address3: undefined,
+      paperPetitionEmail: undefined,
       title: undefined,
     }),
     [
@@ -213,6 +214,7 @@ export const updatePetitionerInformation = async (
       'country',
       'countryType',
       'name',
+      'paperPetitionEmail',
       'phone',
       'postalCode',
       'additionalName',
@@ -244,7 +246,6 @@ export const updatePetitionerInformation = async (
         existingPetitionerInfo.hasConsentedToElectronicService,
       hasElectronicAccess: existingPetitionerInfo.hasElectronicAccess,
       isAddressSealed: existingPetitionerInfo.isAddressSealed,
-      paperPetitionEmail: existingPetitionerInfo.paperPetitionEmail,
       sealedAndUnavailable: existingPetitionerInfo.sealedAndUnavailable,
       ...editableFields,
     },

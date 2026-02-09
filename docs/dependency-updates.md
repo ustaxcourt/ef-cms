@@ -18,9 +18,18 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
 - `./web-api/runtimes/puppeteer/package.json`
 - `./web-api/terraform/modules/batch/docker-image/package.json`
 
-1. You can use the `upgrade-npm-packages.ts` script for this process if you would like:
+1. You can use the `upgrade-npm-packages.ts` script for this process if you would like. Run the script in each directory containing a package.json:
    ```bash
-   scripts/npm/upgrade-npm-packages.ts
+   # Run these in order to avoid having to manually navigate to each package.json location
+
+   # Root package.json
+   node scripts/npm/upgrade-npm-packages.ts
+
+   # web-api/runtimes/puppeteer/package.json
+   (cd web-api/runtimes/puppeteer && node ../../../scripts/npm/upgrade-npm-packages.ts)
+
+   # web-api/terraform/modules/batch/docker-image/package.json
+   (cd ../../terraform/modules/batch/docker-image  && node ../../../../../scripts/npm/upgrade-npm-packages.ts)
    ```
 1. After running, ensure all three package.json files are updated.
 
@@ -41,8 +50,8 @@ This command informs us of known security vulnerabilities. If transitive depende
 > **Why am I seeing a high severity for `tar-fs`?**
 > [See below](#puppeteer-and-sparticuzchromium).
 
-> **Why am I seeing a vulnerability for `fast-redact`?**
-> On November 19th, 2025. Unsuccessfully rolled back cognito-local to 3.7.1
+> **Why am I seeing a vulnerability for `aws-sdk` v2 or `cognito-local`?**
+> These are dev dependencies with known vulnerabilities. The aws-sdk v2 vulnerability doesn't affect our use case as it's related to region parameter validation and we're only using it for local development/testing.
 
 ### 2. Update third-party dependencies
 
@@ -134,7 +143,6 @@ Check if there is an update to the Terraform OpenSearch provider and update our 
 1. Change the version of the OpenSearch provider
 
 ### 5. Update OpenSearch
-
 Check to see if there is an updated version of OpenSearch available. If an update is available, we'll need to update OpenSearch locally, in github actions, and in deployed environments.
 
 1. Use the [environment switcher](./additional-resources/environment-switcher.md) to point to an experimental environment and to retrieve a fresh AWS access key:
@@ -195,6 +203,12 @@ If an OpenSearch update is available, we'll need to update OpenSearch in github 
 - Check through the list of caveats to see if any of the documented issues have been resolved.
 
 - Validate updates by deploying to an experimental environment
+
+## Configurations
+**Safe to upgrade, but we use a non-standard configuration intentionally**
+
+### Husky
+- As of Jan 21st, 2026: If `husky install` runs on the `postinstall` script, Husky will throw a warning stating `Husky install in postinstall is deprecated, use prepare instead`. Installing husky via the `prepare` script is recommended by Husky as best practice, but doesn't apply to ef-cms since we don't publish this as an npm package, and Husky only exists for us as a devDependency. Having it in `prepare` can fail if there are network interruptions during npm install, since `prepare` runs during installation before all packages may be fully downloaded, causing `husky install` to fail. For now, please ignore Husky's deprecation warning in the logs and stick with `postinstall: husky install`.
 
 ## Do Not Upgrade
 

@@ -54,7 +54,7 @@ export const generateStampedCoversheetInteractor = async (
     docketEntryId,
     docketNumber,
     stampData,
-    stampedDocketEntryId,
+    stampedDocumentStorageId,
     filingDateUpdated = false,
   },
   authorizedUser: UnknownAuthUser,
@@ -81,6 +81,6 @@ export const generateStampedCoversheetInteractor = async (
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     document: newPdfData,
-    key: stampedDocketEntryId,
+    key: stampedDocumentStorageId,
   });
 };

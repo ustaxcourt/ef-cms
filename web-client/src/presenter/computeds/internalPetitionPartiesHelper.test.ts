@@ -458,7 +458,7 @@ describe('internalPetitionPartiesHelper', () => {
       expect(result.showPaperPetitionEmailFieldAndConsentBox).toEqual(true);
     });
 
-    it('should not show email and consent fields for an internal user with an electronic filing', () => {
+    it('should show Contact email field but NOT eConsent checkbox for an internal user with a pro-se electronic filing', () => {
       const result = runCompute(internalPetitionPartiesHelper, {
         state: {
           ...baseState,
@@ -473,6 +473,9 @@ describe('internalPetitionPartiesHelper', () => {
         },
       });
 
+      expect(result.showContactEmailField).toEqual(true);
+      expect(result.showEConsentCheckbox).toEqual(false);
+      // Legacy combined flag follows eConsent checkbox behavior
       expect(result.showPaperPetitionEmailFieldAndConsentBox).toEqual(false);
     });
 
@@ -497,7 +500,7 @@ describe('internalPetitionPartiesHelper', () => {
   });
 
   describe('showSecondaryContactEmailFieldAndConsentBox', () => {
-    it('should display secondary contact email field when petition is filed by a petitioner updating party type to petitioner and spouse', () => {
+    it('should display secondary contact email field but NOT eConsent checkbox for eFiled petitioner and spouse case', () => {
       const result = runCompute(internalPetitionPartiesHelper, {
         state: {
           featureFlags: {
@@ -513,7 +516,29 @@ describe('internalPetitionPartiesHelper', () => {
         },
       });
 
-      expect(result.showSecondaryContactEmailFieldAndConsentBox).toEqual(true);
+      expect(result.showSecondaryContactEmailField).toEqual(true);
+      expect(result.showSecondaryEConsentCheckbox).toEqual(false);
+      // Legacy combined flag follows eConsent checkbox behavior
+      expect(result.showSecondaryContactEmailFieldAndConsentBox).toEqual(false);
+    });
+
+    it('should display both secondary contact email field AND eConsent checkbox for paper filing with spouse', () => {
+      const result = runCompute(internalPetitionPartiesHelper, {
+        state: {
+          featureFlags: {
+            [ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]:
+              true,
+          },
+          form: {
+            partyType: PARTY_TYPES.petitionerSpouse,
+            isPaper: true,
+          },
+          user: petitionsClerkUser,
+        },
+      });
+
+      expect(result.showSecondaryContactEmailField).toEqual(true);
+      expect(result.showSecondaryEConsentCheckbox).toEqual(true);
     });
   });
 });

@@ -9,6 +9,7 @@ import {
   type ServerApplicationContext,
   createApplicationContext,
 } from '@web-api/applicationContext';
+import { formatCaseCaption } from './helpers/formatters';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import fs from 'fs';
 
@@ -36,12 +37,12 @@ const OUTPUT_DIR = `${process.env.HOME}/Downloads/${docketNumber}`;
 
 const downloadPdf = async ({
   applicationContext,
-  docketEntryId,
+  documentStorageId,
   filename,
   path,
 }: {
   applicationContext: ServerApplicationContext;
-  docketEntryId: string;
+  documentStorageId: string;
   filename: string;
   path: string;
 }): Promise<void> => {
@@ -50,7 +51,7 @@ const downloadPdf = async ({
   // download pdf from S3
   const data = await applicationContext.getStorageClient().getObject({
     Bucket: applicationContext.environment.documentsBucketName,
-    Key: docketEntryId,
+    Key: documentStorageId,
   });
   if (data && 'Body' in data && data.Body) {
     // @ts-ignore
@@ -113,13 +114,13 @@ const generateFilename = ({
     }
     try {
       const filename = generateFilename({
-        caseCaption: caseEntity.caseCaption,
+        caseCaption: formatCaseCaption(caseEntity.caseCaption),
         // @ts-ignore
         docketEntry,
       });
       await downloadPdf({
         applicationContext,
-        docketEntryId: docketEntry.docketEntryId,
+        documentStorageId: docketEntry.documentStorageId,
         filename,
         path: sealed ? sealedDir : unsealedDir,
       });

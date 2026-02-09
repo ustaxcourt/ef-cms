@@ -4,7 +4,7 @@ import {
   StartQueryCommand,
   type ResultField,
 } from '@aws-sdk/client-cloudwatch-logs';
-import { DateTime } from 'luxon';
+import { getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
 import { sleep } from '@shared/tools/helpers';
 
 export const performQuery = async ({
@@ -39,9 +39,9 @@ export const performQuery = async ({
   let results: ResultField[][] = [];
   const pollIntervalMs: number = 1500;
   const maxWaitMs: number = 60000; // 1 minute
-  const deadlineMs: number = DateTime.now().toMillis() + maxWaitMs;
+  const deadlineMs: number = getCurrentDateTimeInMillis() + maxWaitMs;
 
-  while (DateTime.now().toMillis() < deadlineMs) {
+  while (getCurrentDateTimeInMillis() < deadlineMs) {
     const resp = await cloudwatchClient.send(
       new GetQueryResultsCommand({ queryId }),
     );
