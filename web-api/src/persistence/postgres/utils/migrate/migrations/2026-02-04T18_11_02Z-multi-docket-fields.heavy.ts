@@ -156,40 +156,43 @@ export async function up(db: Kysely<any>): Promise<void> {
     create index on multi_docketed_lookup (docket_entry_id)
   `.execute(db);
 
-  // Backfill existing rows in batches.
+  // Backfill existing rows in batches using ctid for safe row identification.
   // - Small batches (5k) avoid long-running transactions and reduce lock contention
+  // - FOR UPDATE SKIP LOCKED prevents blocking concurrent operations
   // - Pauses between batches let replication catch up and reduce WAL pressure
-  // - Only INSERT/DELETE triggers exist (no UPDATE trigger needed)
   while (true) {
-    const batch = await db
+    const ctids = await db
       .selectFrom('dwDocketEntry')
-      .select(['docketEntryId', 'docketNumber'])
+      .select(sql`ctid`.as('ctid'))
       .where('multiDocketedOn', 'is', null)
       .limit(BATCH_SIZE)
+      .forUpdate()
+      .skipLocked()
       .execute();
 
-    if (batch.length === 0) break;
-
-    // Build VALUES list for batch update. Safe because UUIDs and docket numbers
-    // don't contain SQL injection characters, but ideally would use parameterized query.
-    const pairs = batch
-      .map(r => `('${r.docketEntryId}', '${r.docketNumber}')`)
-      .join(',');
+    if (ctids.length === 0) break;
 
     // Join with lookup table to get pre-computed array for multi-docketed entries.
     // Entries not in lookup table (single-case) get '[]'::jsonb via COALESCE.
-    const result = await sql`
-      update dw_docket_entry as target
-      set multi_docketed_on = coalesce(to_jsonb(lookup.multi_docketed_on), '[]'::jsonb)
-      from (values ${sql.raw(pairs)}) as batch(docket_entry_id, docket_number)
-      left join multi_docketed_lookup as lookup
-        on lookup.docket_entry_id = batch.docket_entry_id
-      where target.docket_entry_id = batch.docket_entry_id
-        and target.docket_number = batch.docket_number
-      returning target.docket_entry_id
-    `.execute(db);
+    const result = await db
+      .updateTable('dwDocketEntry')
+      .set({
+        multiDocketedOn: sql`coalesce(
+          (select to_jsonb(multi_docketed_on)
+           from multi_docketed_lookup
+           where docket_entry_id = dw_docket_entry.docket_entry_id),
+          '[]'::jsonb
+        )`,
+      })
+      .where(
+        sql`ctid`,
+        'in',
+        ctids.map(r => r.ctid),
+      )
+      .returning('docketEntryId')
+      .execute();
 
-    const updated = result.rows.length;
+    const updated = result.length;
     total += updated;
     batches += 1;
 
@@ -207,8 +210,6 @@ export async function up(db: Kysely<any>): Promise<void> {
   console.log(
     `multiDocketedOn backfill complete: ${total.toLocaleString()} rows updated in ${batches} batches`,
   );
-
-  await sql`drop table if exists multi_docketed_lookup`.execute(db);
 
   // Add NOT NULL constraint in phases to minimize locking:
   // 1. Add as NOT VALID - instant, doesn't scan table
@@ -244,31 +245,16 @@ export async function up(db: Kysely<any>): Promise<void> {
     .execute();
 
   // Create UPDATE trigger AFTER backfill to avoid recomputing on every backfill update.
-  // This trigger handles unconsolidation during blue-green deployment.
   await sql`
     create trigger dw_docket_entry_multi_docketed_before_update
     before update on dw_docket_entry
     for each row execute function dw_docket_entry_multi_docketed_update_trigger()
   `.execute(db);
-
-  // IMPORTANT: Triggers are intentionally left in place!
-  // During blue-green deployment, old code pods continue running and don't know
-  // about multiDocketedOn. The triggers ensure correct values until new code is
-  // fully deployed. Remove triggers in a follow-up migration:
-  //
-  //   DROP TRIGGER IF EXISTS dw_docket_entry_multi_docketed_after_insert ON dw_docket_entry;
-  //   DROP TRIGGER IF EXISTS dw_docket_entry_multi_docketed_after_delete ON dw_docket_entry;
-  //   DROP TRIGGER IF EXISTS dw_docket_entry_multi_docketed_before_update ON dw_docket_entry;
-  //   DROP FUNCTION IF EXISTS dw_docket_entry_multi_docketed_insert_trigger();
-  //   DROP FUNCTION IF EXISTS dw_docket_entry_multi_docketed_delete_trigger();
-  //   DROP FUNCTION IF EXISTS dw_docket_entry_multi_docketed_update_trigger();
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
-  // Clean up temp table if migration failed mid-way
   await sql`drop table if exists multi_docketed_lookup`.execute(db);
 
-  // Remove triggers and functions
   await sql`
     drop trigger if exists dw_docket_entry_multi_docketed_after_insert on dw_docket_entry
   `.execute(db);
