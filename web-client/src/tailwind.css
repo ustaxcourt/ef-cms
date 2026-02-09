@@ -164,4 +164,41 @@
   --color-green-primary: var(--green-primary);
   --color-green-success: var(--green-success);
   --color-purple-visited-link: var(--purple-visited-link);
+
+  /* spacing */
+
+  /* --spacing: 4px; */
+}
+
+/* from custom.scss */
+@layer components {
+  .background-blue {
+    background-color: var(--blue-darker);
+
+    @media (width >= 480px) {
+      padding-top: 3rem;
+    }
+
+    @media (width < 480px) {
+      padding-top: 2rem;
+    }
+
+    .usa-alert__body {
+      padding-right: 1rem !important;
+    }
+
+  }
+}
+
+/* Font face */
+@font-face {
+  font-family: 'Noto Serif';
+  font-style: normal;
+  font-weight: 700;
+  src: url('fonts/noto-serif-jp/noto-serif-jp-v4-latin-700.woff2') format('woff2');
+}
+
+/* Custom utility */
+.font-noto-serif {
+  font-family: 'Noto Serif', serif;
 }

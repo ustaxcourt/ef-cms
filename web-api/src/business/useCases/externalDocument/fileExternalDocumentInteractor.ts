@@ -143,7 +143,10 @@ export const fileExternalDocument = async (
     const batchPromises = batch.map(async docketEntryId => {
       const numberOfPages = await applicationContext
         .getUseCaseHelpers()
-        .countPagesInDocument({ applicationContext, docketEntryId });
+        .countPagesInDocument({
+          applicationContext,
+          documentStorageId: docketEntryId,
+        });
       return { docketEntryId, numberOfPages };
     });
 
@@ -166,6 +169,7 @@ export const fileExternalDocument = async (
             ...baseMetadata,
             ...metadata,
             docketEntryId,
+            documentStorageId: docketEntryId,
             documentType: metadata.documentType,
             isOnDocketRecord: true,
             relationship,
@@ -224,7 +228,9 @@ export const fileExternalDocument = async (
     return rawCaseEntity;
   });
 
-  const resolvedCaseEntities = await settlePromises(consolidatedCaseEntities);
+  const resolvedCaseEntities: RawCase[] = await settlePromises(
+    consolidatedCaseEntities,
+  );
 
   await upsertWorkItems({
     workItems,

@@ -104,7 +104,7 @@ export const fileAndServeCourtIssuedDocument = async (
     .getUseCaseHelpers()
     .stampDocumentForService({
       applicationContext,
-      docketEntryId: docketEntryToServe.docketEntryId,
+      documentStorageId: docketEntryToServe.documentStorageId,
       documentToStamp: form,
     });
 
@@ -112,7 +112,6 @@ export const fileAndServeCourtIssuedDocument = async (
     .getUseCaseHelpers()
     .countPagesInDocument({
       applicationContext,
-      docketEntryId,
       documentBytes: stampedPdf,
     });
 
@@ -287,7 +286,7 @@ export const fileAndServeCourtIssuedDocument = async (
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     document: stampedPdf,
-    key: docketEntryToServe.docketEntryId,
+    key: docketEntryToServe.documentStorageId,
   });
 
   const successMessage =

@@ -1,12 +1,5 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-/**
- * generates an action for completing document signing
- * @param {object} providers the providers object
- * @param {string} providers.get the cerebral get function
- * @param {string} providers.applicationContext the applicationContext
- * @returns {Function} the action to complete the document signing
- */
 export const completeDocumentSigningAction = async ({
   applicationContext,
   get,
@@ -64,7 +57,7 @@ export const completeDocumentSigningAction = async ({
         nameForSigning,
         originalDocketEntryId,
         parentMessageId,
-        signedDocketEntryId: signedDocumentFromUploadId,
+        signedDocumentStorageId: signedDocumentFromUploadId,
       }));
   }
 
