@@ -1,9 +1,8 @@
 import { getPdfJs } from '@shared/business/utilities/pdfs/getPdfJs';
-import { ClientApplicationContext } from '@web-client/applicationContext';
 import { PDFDocumentProxy } from 'pdfjs-dist';
 
 export const loadPDFForSigningInteractor = async (
-  applicationContext: ClientApplicationContext,
+  applicationContext,
   {
     documentStorageId,
     docketNumber,
@@ -23,8 +22,8 @@ export const loadPDFForSigningInteractor = async (
     const pdfData = await applicationContext
       .getPersistenceGateway()
       .getDocument({
-        applicationContext: applicationContext as any,
-        ...(docketNumber && { docketNumber }),
+        applicationContext,
+        docketNumber,
         key: documentStorageId,
       });
 
