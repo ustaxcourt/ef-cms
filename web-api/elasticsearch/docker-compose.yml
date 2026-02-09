@@ -8,6 +8,7 @@ services:
       - discovery.seed_hosts=opensearch-node # Nodes to look for when discovering the cluster
       - cluster.initial_cluster_manager_nodes=opensearch-node # Nodes eligibile to serve as cluster manager
       - bootstrap.memory_lock=true # Disable JVM heap memory swapping
+      - bootstrap.system_call_filter=false
       - 'OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m' # Set min and max JVM heap sizes to at least 50% of system RAM
       - 'DISABLE_INSTALL_DEMO_CONFIG=true' # Prevents execution of bundled demo script which installs demo certificates and security configurations to OpenSearch
       - 'DISABLE_SECURITY_PLUGIN=true' # Disables Security plugin

@@ -1,6 +1,7 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="API Docker" type="NodejsRemoteDebug" host="localhost" port="9230">
-    <mapping local-file="$PROJECT_DIR$" remote-file="/home/app" />
-    <method v="2" />
+  <configuration default="false" name="API Docker" type="ChromiumRemoteDebugType" factoryName="Chromium Remote" port="9231" restartOnDisconnect="true">
+    <method v="2">
+      <option name="RunConfigurationTask" enabled="true" run_configuration_name="Start Docker" run_configuration_type="ShConfigurationType" />
+    </method>
   </configuration>
 </component>

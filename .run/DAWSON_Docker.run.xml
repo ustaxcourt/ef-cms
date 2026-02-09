@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="DAWSON Docker" type="CompoundRunConfigurationType">
-    <toRun name="Start Docker" type="ShConfigurationType" />
-    <toRun name="API Docker" type="NodejsRemoteDebug" />
+    <toRun name="API Docker" type="ChromiumRemoteDebugType" />
+    <method v="2" />
   </configuration>
 </component>

@@ -7,19 +7,16 @@ if [ -z "$AWS_ACCESS_KEY_ID" ]; then
   . ./setup-local-env.sh
 fi
 
-# Ensure npm is in the path (useful for IDE run configurations)
 if ! command -v npm &> /dev/null; then
   # shellcheck disable=SC1091
   [ -s "$HOME/.nvm/nvm.sh" ] && . "$HOME/.nvm/nvm.sh" && nvm use --silent &> /dev/null || true
 fi
 
-# Determine if we are running inside a Docker container
 IN_DOCKER=false
 if [ -f /.dockerenv ]; then
   IN_DOCKER=true
 fi
 
-# Detect docker-compose command
 if command -v docker-compose &> /dev/null; then
   DOCKER_COMPOSE="docker-compose"
 else
@@ -42,7 +39,6 @@ done
 
 wait_for_opensearch() {
   echo "Waiting for OpenSearch..."
-  # If in docker, we might use a different host
   local os_url=${ELASTICSEARCH_ENDPOINT:-http://localhost:9200}
   URL="${os_url}/" ./wait-until.sh
 }
@@ -107,7 +103,6 @@ setup_s3() {
   fi
 
   URL=http://localhost:9001/ ./wait-until.sh
-  # Extra safety buffer
   sleep 2
 
   if [ -z "${RESUME}" ]; then
@@ -141,12 +136,13 @@ setup_cognito() {
   URL=http://localhost:9229/ CHECK_CODE="404" ./wait-until.sh
 }
 
-# Main Execution
 if [ "$SKIP_ASSETS" = "false" ]; then
   npm run build:assets
 fi
 
 start_docker_dependencies
+wait_for_opensearch
+wait_for_postgres
 setup_opensearch
 setup_s3
 setup_postgres

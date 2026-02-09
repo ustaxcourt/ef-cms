@@ -65,16 +65,19 @@ services:
       - '4001:4001'
       - '9001:9001'
       - '9229:9229'
-      - '9230:9230'
+      - '9231:9231'
     volumes:
       - .:/home/app
       - node_modules:/home/app/node_modules
     depends_on:
-      - opensearch-node
-      - db
+      opensearch-node:
+        condition: service_healthy
+      db:
+        condition: service_healthy
 
   db:
     image: postgres
+    platform: linux/amd64
     container_name: dawson-db
     restart: always
     environment:
@@ -84,9 +87,15 @@ services:
       - dawson-db:/data/postgres
     ports:
       - '5432:5432'
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   opensearch-node:
     image: opensearchproject/opensearch:3.3.0
+    platform: linux/amd64
     container_name: opensearch-node
     networks:
       default:
@@ -99,6 +108,7 @@ services:
       - '9600:9600'
     environment:
       - bootstrap.memory_lock=true
+      - bootstrap.system_call_filter=false
       - cluster.initial_cluster_manager_nodes=opensearch-node
       - cluster.name=opensearch-cluster
       - discovery.seed_hosts=opensearch-node
@@ -106,6 +116,11 @@ services:
       - 'DISABLE_INSTALL_DEMO_CONFIG=true'
       - 'DISABLE_SECURITY_PLUGIN=true'
       - 'OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m'
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s http://localhost:9200/_cluster/health | grep -qv '\"status\":\"red\"'"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
     ulimits:
       memlock:
         soft: -1
