@@ -20,6 +20,11 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('multiDocketedOn', 'jsonb')
     .execute();
 
+  await db.schema
+    .alterTable('dwDocketEntry')
+    .addColumn('originallyFiledDocketNumber', 'varchar')
+    .execute();
+
   // Create INSERT trigger to handle new docket entries during migration and blue-green deployment.
   // Old code doesn't know about multiDocketedOn, so when it inserts a row, this trigger
   // computes the correct value by finding all docketNumbers sharing the same docketEntryId.
@@ -27,7 +32,6 @@ export async function up(db: Kysely<any>): Promise<void> {
   // For entries filed on hundreds of cases:
   // - Computes array once into a variable (single query, not per-row)
   // - Only updates rows where value actually changes (IS DISTINCT FROM skips no-ops)
-  // - docket_entry_id is indexed (part of primary key), so lookups are fast
   await sql`
     create or replace function dw_docket_entry_multi_docketed_insert_trigger()
     returns trigger as $$
@@ -55,8 +59,6 @@ export async function up(db: Kysely<any>): Promise<void> {
   // Create DELETE trigger to update remaining rows when an entry is removed from a case.
   // Example: Entry on ['101-25', '102-25'] has row for 102-25 deleted.
   //          Remaining row for 101-25 needs updated to [] (no longer multi-docketed).
-  //
-  // NOTE: DELETE is rare - only happens when deleting initial filing documents.
   await sql`
     create or replace function dw_docket_entry_multi_docketed_delete_trigger()
     returns trigger as $$
@@ -142,15 +144,22 @@ export async function up(db: Kysely<any>): Promise<void> {
   // Pre-compute arrays for multi-docketed entries only (entries on 2+ cases).
   // This temp table is much smaller than the full table and makes backfill lookups O(1).
   // Single-case entries aren't included - they just get '[]'::jsonb via COALESCE during backfill.
-  await sql`
-    create temp table multi_docketed_lookup as
-    select
-      docket_entry_id,
-      array_agg(docket_number order by docket_number) as multi_docketed_on
-    from dw_docket_entry
-    group by docket_entry_id
-    having count(*) > 1
-  `.execute(db);
+  await db.schema
+    .createTable('multiDocketedLookup')
+    .temporary()
+    .as(
+      db
+        .selectFrom('dwDocketEntry')
+        .select([
+          'docketEntryId',
+          sql<string[]>`array_agg(docket_number order by docket_number)`.as(
+            'multiDocketedOn',
+          ),
+        ])
+        .groupBy('docketEntryId')
+        .having(db.fn.count('docketEntryId'), '>', 1),
+    )
+    .execute();
 
   await sql`
     create index on multi_docketed_lookup (docket_entry_id)
@@ -179,8 +188,8 @@ export async function up(db: Kysely<any>): Promise<void> {
       .set({
         multiDocketedOn: sql`coalesce(
           (select to_jsonb(multi_docketed_on)
-           from multi_docketed_lookup
-           where docket_entry_id = dw_docket_entry.docket_entry_id),
+            from multi_docketed_lookup
+            where docket_entry_id = dw_docket_entry.docket_entry_id),
           '[]'::jsonb
         )`,
       })
@@ -232,10 +241,10 @@ export async function up(db: Kysely<any>): Promise<void> {
     .alterColumn('multiDocketedOn', col => col.setNotNull())
     .execute();
 
-  await sql`
-    alter table "dw_docket_entry"
-    drop constraint "dw_docket_entry_multi_docketed_on_nn"
-  `.execute(db);
+  await db.schema
+    .alterTable('dwDocketEntry')
+    .dropConstraint('dwDocketEntry_multiDocketedOn_nn')
+    .execute();
 
   // Add default so new rows get '[]'::jsonb automatically.
   // The triggers will correct it if the entry is actually multi-docketed.
@@ -253,7 +262,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
-  await sql`drop table if exists multi_docketed_lookup`.execute(db);
+  await db.schema.dropTable('multiDocketedLookup').ifExists().execute();
 
   await sql`
     drop trigger if exists dw_docket_entry_multi_docketed_after_insert on dw_docket_entry
@@ -282,5 +291,10 @@ export async function down(db: Kysely<any>): Promise<void> {
   await db.schema
     .alterTable('dwDocketEntry')
     .dropColumn('multiDocketedOn')
+    .execute();
+
+  await db.schema
+    .alterTable('dwDocketEntry')
+    .dropColumn('originallyFiledDocketNumber')
     .execute();
 }

@@ -1,7 +1,7 @@
 import { Kysely, sql } from 'kysely';
 
 export async function up(db: Kysely<any>): Promise<void> {
-  await sql`drop table if exists multi_docketed_lookup`.execute(db);
+  await db.schema.dropTable('multiDocketedLookup').ifExists().execute();
 
   await sql`
     drop trigger if exists dw_docket_entry_multi_docketed_after_insert on dw_docket_entry
@@ -29,15 +29,22 @@ export async function up(db: Kysely<any>): Promise<void> {
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
-  await sql`
-    create temp table multi_docketed_lookup as
-    select
-      docket_entry_id,
-      array_agg(docket_number order by docket_number) as multi_docketed_on
-    from dw_docket_entry
-    group by docket_entry_id
-    having count(*) > 1
-  `.execute(db);
+  await db.schema
+    .createTable('multiDocketedLookup')
+    .temporary()
+    .as(
+      db
+        .selectFrom('dwDocketEntry')
+        .select([
+          'docketEntryId',
+          sql<string[]>`array_agg(docket_number order by docket_number)`.as(
+            'multiDocketedOn',
+          ),
+        ])
+        .groupBy('docketEntryId')
+        .having(db.fn.count('docketEntryId'), '>', 1),
+    )
+    .execute();
 
   await sql`
     create or replace function dw_docket_entry_multi_docketed_insert_trigger()

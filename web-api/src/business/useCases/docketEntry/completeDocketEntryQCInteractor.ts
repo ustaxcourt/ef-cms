@@ -412,7 +412,7 @@ const completeDocketEntryQC = async (
         docketEntryId: noticeUpdatedDocketEntry.docketEntryId,
       });
 
-      // 8477 TODO this is bad, I do not like it Sam I Am
+      // 8477 TODO: this is bad, I do not like it Sam I Am
       if (
         currentDocketEntry.originallyFiledDocketNumber ===
           currentDocketEntry.docketNumber ||
