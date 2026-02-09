@@ -59,6 +59,7 @@ services:
       POSTGRES_PASSWORD: example
       POSTGRES_USER: postgres
       DATABASE_NAME: postgres
+      IDE_DEBUGGING: ${IDE_DEBUGGING}
     ports:
       - '3011:3011'
       - '4000:4000'

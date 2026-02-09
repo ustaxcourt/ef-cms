@@ -13,6 +13,11 @@ export POSTGRES_HOST=db
 
 ./scripts/setup-local-services.sh --skip-docker
 
-nodemon -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress/ --exec "TS_NODE_TRANSPILE_ONLY=true node --inspect=0.0.0.0:9231 -r ts-node/register web-api/src/app-local.ts"
+INSPECT_FLAG=""
+if [[ -n "$IDE_DEBUGGING" ]]; then
+  INSPECT_FLAG="--inspect=0.0.0.0:9231"
+fi
+
+nodemon -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress/ --exec "TS_NODE_TRANSPILE_ONLY=true node $INSPECT_FLAG -r ts-node/register web-api/src/app-local.ts"
 
 echo "API running..."
