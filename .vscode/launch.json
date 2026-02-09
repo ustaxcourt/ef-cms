@@ -68,7 +68,7 @@
       "name": "API Docker",
       "type": "node",
       "request": "attach",
-      "port": 9230,
+      "port": 9231,
       "address": "localhost",
       "localRoot": "${workspaceFolder}",
       "remoteRoot": "/home/app",

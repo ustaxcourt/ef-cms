@@ -6,22 +6,17 @@
       "type": "shell",
       "command": "npm run start:all:docker",
       "isBackground": true,
-      "detail": "Runs the full DAWSON stack in Docker and waits for the API to be ready.",
+      "options": { "env": { "IDE_DEBUGGING": "true" } },
       "problemMatcher": {
         "owner": "custom",
-        "pattern": {
-          "regexp": "^$"
-        },
+        "pattern": { "regexp": "^$" },
         "background": {
           "activeOnStart": true,
           "beginsPattern": ".*",
-          "endsPattern": "api\\s+\\|.*Listening on http://localhost:4000"
+          "endsPattern": "Debugger port is open.*"
         }
       },
-      "presentation": {
-        "reveal": "always",
-        "panel": "new"
-      }
+      "presentation": { "reveal": "always", "panel": "new" }
     }
   ]
 }
