@@ -259,7 +259,7 @@ const renderDispositionLinks = (
           link
           className={classNames('text-right', 'view-pdf-link')}
           data-testid={`related-document-viewer-link-${affectedEntry.docketEntryIndex}`}
-          arial-label={`View PDF for: ${affectedEntry.docketEntryIndex}`}
+          aria-label={`View PDF for: ${affectedEntry.docketEntryIndex}`}
           onClick={() =>
             affectedEntry.showDocumentViewerLink
               ? changeTabSequence({
