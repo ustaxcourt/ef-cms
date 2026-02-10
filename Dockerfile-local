@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 ef-cms
+FROM --platform=linux/amd64 efcms-local
 
 WORKDIR /home/app
 
