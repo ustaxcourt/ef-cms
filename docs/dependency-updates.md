@@ -222,12 +222,13 @@ If an OpenSearch update is available, we'll need to update OpenSearch in github 
 Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Try to update these items but please be aware of the issue that's documented and ensure it's been resolved.
 
 ### pdfjs-dist
-**Current Version Installed: 5.0.375**
+**Current Version Installed: 5.4.624**
 
 - As of [this release](https://github.com/mozilla/pdf.js/releases/tag/v5.1.91), and I think [this PR](https://github.com/mozilla/pdf.js/pull/19689), pdfjs seems to expect certain browser-side API functionality when loaded. This causes issues with our Cypress tests. The best way to fix this is worth investigating further. Perhaps we could polyfill, or even consider creating an issue in the pdfjs repo.
 - Look at `shared/src/business/utilities/pdfs/getPdfJs.ts`
 - As 0f 01/05/2026 `pdfjs-dist` is still causing Cypress Test to fail randomly
 - 01/15/2026: Search.cy.ts always has a test failure if we upgrade to 5.4+. We decided to stick with the current 5.0.375.
+- Upgraded to version 5.4.624. The newer pdfjs-dist release relies on DOMMatrix, which caused errors in AWS Lambda when scraping text from PDFs. This worked locally but failed in the deployed environment because Lambda does not provide DOMMatrix. To resolve this, I added a polyfill using the `dommatrix` library that is used when DOMMatrix is undefined. See `getPdfJs.ts` and `parsePdf.ts` for details.
 
 ### DWT
 **Current Installed DWT: 19.3.0**
