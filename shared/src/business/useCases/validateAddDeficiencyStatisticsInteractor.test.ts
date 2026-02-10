@@ -1,10 +1,8 @@
-import { applicationContext } from '../test/createTestApplicationContext';
 import { validateAddDeficiencyStatisticsInteractor } from './validateAddDeficiencyStatisticsInteractor';
 
 describe('validateAddDeficiencyStatisticsInteractor', () => {
   it('should return validation errors when the statistic is empty', () => {
     const errors = validateAddDeficiencyStatisticsInteractor(
-      applicationContext,
       {
         statistic: {},
       },
@@ -15,7 +13,6 @@ describe('validateAddDeficiencyStatisticsInteractor', () => {
 
   it('should return null when the statistic is valid', () => {
     const result = validateAddDeficiencyStatisticsInteractor(
-      applicationContext,
       {
         statistic: {
           irsDeficiencyAmount: 100,
