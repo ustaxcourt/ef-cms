@@ -8,14 +8,16 @@ import { CaseCorrespondenceKysely } from '@web-api/persistence/postgres/caseCorr
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { CaseKysely } from '@web-api/persistence/postgres/cases/schema';
 import { fromKyselyDocketEntry } from '@web-api/persistence/postgres/docketEntries/mapper';
-import { DocketEntryKysely } from '@web-api/persistence/postgres/docketEntries/schema';
 import { difference, isEmpty, sortBy } from 'lodash';
 import { TrialSessionKysely } from '../trialSessions/schema';
 import { fromKyselyTrialSession } from '@web-api/persistence/postgres/trialSessions/mapper';
 import { UserKysely } from '../users/schema';
 import { fromKyselyUser } from '../users/mapper';
 import { UserOnCaseKysely } from '@web-api/persistence/postgres/cases/userOnCase/schema';
-import { docketEntriesBaseQuery } from '@web-api/persistence/postgres/docketEntries/commonQueries';
+import {
+  docketEntriesBaseQuery,
+  DocketEntryWithAffected,
+} from '@web-api/persistence/postgres/docketEntries/commonQueries';
 
 export const ALL_OMITTABLE_CASE_FIELDS = [
   'docketEntries',
@@ -284,12 +286,10 @@ async function getIrsPractitioners({
 
 async function getDocketEntries(
   docketNumbers: string[],
-): Promise<DocketEntryKysely[]> {
-  const dbDocketEntries = (await (
+): Promise<DocketEntryWithAffected[]> {
+  const dbDocketEntries = await (
     await docketEntriesBaseQuery({ docketNumbers })
-  )
-    .where('de.docketNumber', 'in', docketNumbers)
-    .execute()) as DocketEntryKysely[];
+  ).execute();
 
   return dbDocketEntries;
 }
@@ -307,12 +307,8 @@ async function getCasesMetadata(docketNumbers: string[]) {
 
 export async function getDocketEntriesOnCases(
   docketNumbers: string[],
-): Promise<DocketEntryKysely[]> {
-  return (await (
-    await docketEntriesBaseQuery({ docketNumbers })
-  )
-    .where('docketNumber', 'in', docketNumbers)
-    .execute()) as DocketEntryKysely[];
+): Promise<DocketEntryWithAffected[]> {
+  return (await docketEntriesBaseQuery({ docketNumbers })).execute();
 }
 
 async function getCaseCorrespondenceByDocketNumber(docketNumbers: string[]) {
@@ -368,8 +364,8 @@ async function getHearings(
 
 type EnrichedCaseRow = CaseKysely & {
   docketNumberWithSuffix: string;
-  docketEntries: DocketEntryKysely[];
-  archivedDocketEntries: DocketEntryKysely[];
+  docketEntries: DocketEntryWithAffected[];
+  archivedDocketEntries: DocketEntryWithAffected[];
   irsPractitioners: (UserKysely & UserOnCaseKysely)[];
   privatePractitioners: (UserKysely & UserOnCaseKysely)[];
   correspondence: CaseCorrespondenceKysely[];
