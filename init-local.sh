@@ -37,6 +37,8 @@ while [[ "$#" -gt 0 ]]; do
   shift
 done
 
+export POSTGRES_HOST="${POSTGRES_HOST:-localhost}"
+
 wait_for_opensearch() {
   echo "Waiting for OpenSearch..."
   local os_url=${ELASTICSEARCH_ENDPOINT:-http://localhost:9200}
@@ -46,15 +48,24 @@ wait_for_opensearch() {
 wait_for_postgres() {
   echo "Waiting for Postgres..."
   if [ "$IN_DOCKER" = "true" ]; then
-    until PGPASSWORD=example psql -h "${POSTGRES_HOST:-db}" -U postgres -c '\q' &> /dev/null; do
+    until PGPASSWORD="${POSTGRES_PASSWORD:-example}" psql -h "${POSTGRES_HOST:-db}" -U "${POSTGRES_USER:-postgres}" -c '\\q' &> /dev/null; do
       echo "Postgres is unavailable - sleeping"
       sleep 1
     done
   else
-    until docker exec dawson-db pg_isready -U postgres &> /dev/null; do
-      echo "Postgres is unavailable - sleeping"
-      sleep 2
-    done
+    if [ -n "$CI" ]; then
+      local host="${POSTGRES_HOST:-localhost}"
+      local port="${POSTGRES_PORT:-5432}"
+      until (echo > "/dev/tcp/${host}/${port}") > /dev/null 2>&1; do
+        echo "Postgres is unavailable - sleeping"
+        sleep 2
+      done
+    else
+      until docker exec dawson-db pg_isready -U "${POSTGRES_USER:-postgres}" &> /dev/null; do
+        echo "Postgres is unavailable - sleeping"
+        sleep 2
+      done
+    fi
   fi
 }
 
