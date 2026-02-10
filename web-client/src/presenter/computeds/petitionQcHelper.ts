@@ -6,9 +6,13 @@ export const petitionQcHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): any => {
-  const { INITIAL_DOCUMENT_TYPES, INITIAL_DOCUMENT_TYPES_FILE_MAP } =
-    applicationContext.getConstants();
-  const { isPaper } = get(state.form);
+  const {
+    INITIAL_DOCUMENT_TYPES,
+    INITIAL_DOCUMENT_TYPES_FILE_MAP,
+    INITIAL_DOCUMENT_TYPES_MAP,
+  } = applicationContext.getConstants();
+  const form = get(state.form);
+  const { isPaper } = form;
   const documents = get(state.caseDetail.docketEntries);
   const ATP_EVENT_CODE = INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode;
 
@@ -23,6 +27,21 @@ export const petitionQcHelper = (
 
   const isPetitionFile =
     documentSelectedForPreview === INITIAL_DOCUMENT_TYPES_FILE_MAP.petition;
+
+  const formKey =
+    documentSelectedForPreview in INITIAL_DOCUMENT_TYPES_MAP
+      ? documentSelectedForPreview
+      : Object.values(INITIAL_DOCUMENT_TYPES).find(
+          d => d.documentType === documentSelectedForPreview,
+        )?.fileName;
+  const documentTypeForTab =
+    INITIAL_DOCUMENT_TYPES_MAP[documentSelectedForPreview] ??
+    documentSelectedForPreview;
+  const selectedTabHasAttachment =
+    (!!formKey && !!form[formKey]) ||
+    !!documents.find(e => e.docketEntryId === documentSelectedForPreview) ||
+    (!!documentTypeForTab &&
+      !!documents.find(doc => doc.documentType === documentTypeForTab));
 
   let documentTabsToDisplay = Object.values(INITIAL_DOCUMENT_TYPES).map(
     docToDisplayMetaData => {
@@ -74,6 +93,7 @@ export const petitionQcHelper = (
     documentTabsToDisplay,
     isPetitionFile,
     scanOnly: false,
+    selectedTabHasAttachment,
     showRemovePdfButton: isPaper,
   };
 };

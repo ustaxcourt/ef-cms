@@ -45,6 +45,7 @@ const petitionQcScanBatchPreviewerDeps = {
     sequences.openConfirmRescanBatchModalSequence,
   pdfPreviewUrl: state.pdfPreviewUrl,
   scanBatchPreviewerHelper: state.scanBatchPreviewerHelper,
+  selectedTabHasAttachment: state.petitionQcHelper.selectedTabHasAttachment,
   scanHelper: state.scanHelper,
   scannerStartupSequence: sequences.scannerStartupSequence,
   scanOnly: props.scanOnly ?? false,
@@ -80,6 +81,7 @@ export const PetitionQcScanBatchPreviewer = connect<
     pdfPreviewUrl,
     scanBatchPreviewerHelper,
     scanHelper,
+    selectedTabHasAttachment = false,
     scannerStartupSequence,
     scanOnly = false,
     selectedBatchIndex,
@@ -147,7 +149,9 @@ export const PetitionQcScanBatchPreviewer = connect<
             scanOnly={scanOnly}
             tabNameKey="documentId"
           />
-          {scanBatchPreviewerHelper.uploadMode !== 'preview' && (
+          {(scanBatchPreviewerHelper.uploadMode !== 'preview' ||
+            !pdfPreviewUrl ||
+            !selectedTabHasAttachment) && (
             <ScanModeRadios
               errorText={[
                 validationErrors[documentType],
@@ -200,14 +204,18 @@ export const PetitionQcScanBatchPreviewer = connect<
           )}
 
           {!scanOnly &&
-            scanBatchPreviewerHelper.uploadMode === 'upload' && (
+            (scanBatchPreviewerHelper.uploadMode !== 'preview' ||
+              !pdfPreviewUrl ||
+              !selectedTabHasAttachment) && (
               <ScanBatchFileInput
                 documentType={documentType}
                 validateSequence={validateSequence}
               />
             )}
 
-          {scanBatchPreviewerHelper.uploadMode === 'preview' && (
+          {scanBatchPreviewerHelper.uploadMode === 'preview' &&
+            pdfPreviewUrl &&
+            selectedTabHasAttachment && (
             <ScanPdfPreview
               confirmSequence={() => {
                 deletePdfSequence();
