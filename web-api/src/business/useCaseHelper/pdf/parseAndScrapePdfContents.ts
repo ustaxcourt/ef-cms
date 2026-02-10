@@ -25,7 +25,7 @@ export const parseAndScrapePdfContents = async ({
   try {
     return await applicationContext
       .getUtilities()
-      .scrapePdfContents({ applicationContext, pdfBuffer: Buffer.from(arrayBuffer) });
+      .scrapePdfContents({ applicationContext, pdfBuffer: arrayBuffer });
   } catch (e) {
     applicationContext.logger.error('Failed to parse PDF', e);
     throw e;
