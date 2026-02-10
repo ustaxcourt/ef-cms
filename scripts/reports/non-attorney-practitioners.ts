@@ -9,10 +9,8 @@ import {
   type ScriptConfig,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
-import {
-  calculateDifferenceInDays,
-  formatDateString,
-} from '@shared/business/utilities/DateHandler';
+import { calculateDifferenceInDays } from '@shared/business/utilities/DateHandler';
+import { formatCaseCaption, formatDate } from '../helpers/formatters';
 import { fromKyselyUser } from '@web-api/persistence/postgres/users/mapper';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { getDbReader } from '@web-api/database';
@@ -148,7 +146,6 @@ const getUsersCases = ({
   for (const caseRecord of casesFiltered) {
     usersCases.push({
       ...pick(caseRecord, [
-        'caseCaption',
         'closedDate',
         'docketNumber',
         'noticeOfTrialDate',
@@ -158,21 +155,14 @@ const getUsersCases = ({
         'trialDate',
         'trialSessionId',
       ]),
+      caseCaption: formatCaseCaption(caseRecord.caseCaption),
       closedByStipulatedDecision: closedByStipulatedDecision(caseRecord),
-      closedDateFormatted: caseRecord.closedDate
-        ? formatDateString(caseRecord.closedDate, 'MMDDYYYY')
-        : '',
+      closedDateFormatted: formatDate(caseRecord.closedDate),
       duration: calculateCaseDuration(caseRecord),
       hasNoticeOfAppeal: hasNoticeOfAppeal(caseRecord),
-      noticeOfTrialDateFormatted: caseRecord.noticeOfTrialDate
-        ? formatDateString(caseRecord.noticeOfTrialDate, 'MMDDYYYY')
-        : '',
-      receivedAtFormatted: caseRecord.receivedAt
-        ? formatDateString(caseRecord.receivedAt, 'MMDDYYYY')
-        : '',
-      trialDateFormatted: caseRecord.trialDate
-        ? formatDateString(caseRecord.trialDate, 'MMDDYYYY')
-        : '',
+      noticeOfTrialDateFormatted: formatDate(caseRecord.noticeOfTrialDate),
+      receivedAtFormatted: formatDate(caseRecord.receivedAt),
+      trialDateFormatted: formatDate(caseRecord.trialDate),
       userFiledPretrialMemorandum: userFiledPretrialMemorandum(
         caseRecord,
         userId,
