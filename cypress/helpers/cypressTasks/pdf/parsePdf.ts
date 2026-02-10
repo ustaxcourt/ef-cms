@@ -2,7 +2,7 @@ import { readFile } from 'fs/promises';
 
 async function getPdfJs(): Promise<typeof pdfJs> {
   if (typeof DOMMatrix === 'undefined') {
-    global.DOMMatrix = require('canvas').DOMMatrix;
+    (global as any).DOMMatrix = require('canvas').DOMMatrix;
   }
   const pdfJs = await import('pdfjs-dist/legacy/build/pdf.mjs');
   pdfJs.GlobalWorkerOptions.workerSrc = './pdf.worker.mjs';
