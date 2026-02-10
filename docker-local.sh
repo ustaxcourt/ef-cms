@@ -9,6 +9,9 @@ else
   DOCKER_COMPOSE="docker compose"
 fi
 
+export CURRENT_UID=$(id -u)
+export CURRENT_GID=$(id -g)
+
 DESTINATION_TAG=$(grep 'docker-image:' .circleci/config.yml | awk -F':' '{print $3}')
 LOCAL_IMAGE_NAME="ef-cms:${DESTINATION_TAG}"
 

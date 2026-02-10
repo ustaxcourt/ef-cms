@@ -6,6 +6,7 @@ services:
       context: .
       dockerfile: ./Dockerfile-local
     container_name: shell
+    user: "${CURRENT_UID:-0}:${CURRENT_GID:-0}"
     command: bash -c "tail -f /dev/null"
     volumes:
       - .:/home/app
@@ -19,6 +20,7 @@ services:
       context: .
       dockerfile: ./Dockerfile-local
     container_name: client
+    user: "${CURRENT_UID:-0}:${CURRENT_GID:-0}"
     command: bash -c "npm run start:client"
     volumes:
       - .:/home/app
@@ -34,6 +36,7 @@ services:
       context: .
       dockerfile: ./Dockerfile-local
     container_name: public
+    user: "${CURRENT_UID:-0}:${CURRENT_GID:-0}"
     command: bash -c "npm run start:public"
     environment:
       AWS_ACCESS_KEY_ID: S3RVER
@@ -49,6 +52,7 @@ services:
       context: .
       dockerfile: ./Dockerfile-local
     container_name: api
+    user: "${CURRENT_UID:-0}:${CURRENT_GID:-0}"
     command: bash -c "npm run start:api:docker"
     environment:
       AWS_ACCESS_KEY_ID: S3RVER
