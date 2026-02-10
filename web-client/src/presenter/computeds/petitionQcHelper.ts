@@ -29,14 +29,16 @@ export const petitionQcHelper = (
     documentSelectedForPreview === INITIAL_DOCUMENT_TYPES_FILE_MAP.petition;
 
   const formKey =
+    documentSelectedForPreview != null &&
     documentSelectedForPreview in INITIAL_DOCUMENT_TYPES_MAP
       ? documentSelectedForPreview
       : Object.values(INITIAL_DOCUMENT_TYPES).find(
           d => d.documentType === documentSelectedForPreview,
         )?.fileName;
   const documentTypeForTab =
-    INITIAL_DOCUMENT_TYPES_MAP[documentSelectedForPreview] ??
-    documentSelectedForPreview;
+    (documentSelectedForPreview != null
+      ? INITIAL_DOCUMENT_TYPES_MAP[documentSelectedForPreview]
+      : undefined) ?? documentSelectedForPreview;
   const selectedTabHasAttachment =
     (!!formKey && !!form[formKey]) ||
     !!documents.find(e => e.docketEntryId === documentSelectedForPreview) ||

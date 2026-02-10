@@ -204,9 +204,9 @@ export const PetitionQcScanBatchPreviewer = connect<
           )}
 
           {!scanOnly &&
-            (scanBatchPreviewerHelper.uploadMode !== 'preview' ||
-              !pdfPreviewUrl ||
-              !selectedTabHasAttachment) && (
+            (scanBatchPreviewerHelper.uploadMode === 'upload' ||
+              (scanBatchPreviewerHelper.uploadMode === 'preview' &&
+                !selectedTabHasAttachment)) && (
               <ScanBatchFileInput
                 documentType={documentType}
                 validateSequence={validateSequence}
