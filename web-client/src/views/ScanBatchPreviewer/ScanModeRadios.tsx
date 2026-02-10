@@ -68,7 +68,7 @@ export const ScanModeRadios = ({
 
             <ScanUploadMode
               aria-describedby="scan-mode-radios-legend"
-              checked={uploadMode === 'upload'}
+              checked={uploadMode === 'upload' || uploadMode === 'preview'}
               onChange={onSetUploadMode}
               scanOnly={scanOnly}
             />
