@@ -12,7 +12,7 @@ describe('parseAndScrapePdfContents', () => {
 
     expect(
       applicationContext.getUtilities().scrapePdfContents.mock.calls[0][0]
-        .pdfBuffer instanceof Uint8Array,
+        .pdfBuffer instanceof ArrayBuffer,
     ).toEqual(true);
   });
 
