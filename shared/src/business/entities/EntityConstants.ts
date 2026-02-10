@@ -1728,6 +1728,7 @@ export const CASE_INVENTORY_PRINT_REPORT_MAX_SIZE = 20000; // number of results 
 export const PENDING_REPORT_PAGE_SIZE = 100; // number of results displayed for each page in the pending report
 export const COLD_CASE_REPORT_PAGE_SIZE = 100; // number of results displayed for each page in the cold case report
 export const CASE_DEADLINES_REPORT_PAGE_SIZE = 100; // number of results displayed for each page in the case deadlines report
+export const DOCKET_ENTRIES_PAGE_SIZE = 1000; // number of docket entries returned per page when paginating docket entries for a case
 
 // TODO: event codes need to be reorganized
 export const ALL_EVENT_CODES = flatten([
