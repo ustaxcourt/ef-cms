@@ -15,6 +15,7 @@ type FilingsAndProceedingsProps = {
     docketEntryId: string;
     relatedDocketEntries: {
       disposition?: string;
+      dispositionText?: [];
       docketEntryId?: string;
       docketEntryIndex?: number;
       showDocumentViewerLink: boolean;
@@ -251,14 +252,17 @@ const renderDispositionLinks = (
   changeTabSequence,
   openDocumentDownloadSequence,
 ) => {
-  return affectedEntry.dispositionLinkText.map(linkText => (
-    <span className="display-block" key={linkText}>
+  return affectedEntry.dispositionLinkText.map((linkText, index) => (
+    <span
+      className="display-block"
+      key={`${affectedEntry.docketEntryIndex}-${index}`}
+    >
       {(affectedEntry.showDocumentViewerLink ||
         affectedEntry.showDownloadLink) && (
         <Button
           link
           className={classNames('text-right', 'view-pdf-link')}
-          data-testid={`related-document-viewer-link-${affectedEntry.docketEntryIndex}`}
+          data-testid={`related-document-viewer-link-${affectedEntry.docketEntryIndex}-${index}`}
           aria-label={`View PDF for: ${affectedEntry.docketEntryIndex}`}
           onClick={() =>
             affectedEntry.showDocumentViewerLink
