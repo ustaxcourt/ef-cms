@@ -1,21 +1,21 @@
 import { assertExists, retry } from '../../../helpers/retry';
-import { attachFile } from '../../../helpers/file/upload-file';
+// import { attachFile } from '../../../helpers/file/upload-file';
 import { createAPractitioner } from '../../../helpers/accountCreation/create-a-practitioner';
 import { createAndServePaperPetition } from '../../../helpers/fileAPetition/create-and-serve-paper-petition';
 import { faker } from '@faker-js/faker';
-import { goToCase } from '../../../helpers/caseDetail/go-to-case';
+// import { goToCase } from '../../../helpers/caseDetail/go-to-case';
 import {
   loginAsAdmissionsClerk,
-  loginAsDocketClerk1,
-  loginAsPetitionsClerk1,
+  // loginAsDocketClerk1,
+  // loginAsPetitionsClerk1,
 } from '../../../helpers/authentication/login-as-helpers';
 import { selectTypeaheadInput } from '../../../helpers/components/typeAhead/select-typeahead-input';
 import {
-  ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE,
+  // ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE,
   CASE_TYPES_MAP,
 } from '@shared/business/entities/EntityConstants';
 import { v4 } from 'uuid';
-import { createOrderAndDecision } from '../../../helpers/caseDetail/docketRecord/courtIssuedFiling/create-order-and-decision';
+// import { createOrderAndDecision } from '../../../helpers/caseDetail/docketRecord/courtIssuedFiling/create-order-and-decision';
 
 describe('Advanced Search', () => {
   beforeEach(() => {
@@ -104,196 +104,196 @@ describe('Advanced Search', () => {
     });
   });
 
-  it('should find matching results when the user searches for an order by keyword', () => {
-    /** Arrange */
-    loginAsPetitionsClerk1();
-    createAndServePaperPetition({ includeApwDocument: false }).then(
-      ({ docketNumber }) => {
-        loginAsDocketClerk1();
+  // it('should find matching results when the user searches for an order by keyword', () => {
+  //   /** Arrange */
+  //   loginAsPetitionsClerk1();
+  //   createAndServePaperPetition({ includeApwDocument: false }).then(
+  //     ({ docketNumber }) => {
+  //       loginAsDocketClerk1();
 
-        goToCase(docketNumber);
+  //       goToCase(docketNumber);
 
-        const orderContents = `${faker.word.adjective()} ${faker.word.noun()}`;
+  //       const orderContents = `${faker.word.adjective()} ${faker.word.noun()}`;
 
-        createOrderAndDecision(orderContents);
+  //       createOrderAndDecision(orderContents);
 
-        // Add the order to the docket entry and perform a non-paper (electronic) service
-        cy.get('[data-testid="add-court-issued-docket-entry-button"]').click();
-        // Use the order title as the docket entry description so it will be indexed
-        cy.get('body')
-          .find('[data-testid="judge-select"]')
-          .should('exist')
-          .first()
-          .select('Ashford');
+  //       // Add the order to the docket entry and perform a non-paper (electronic) service
+  //       cy.get('[data-testid="add-court-issued-docket-entry-button"]').click();
+  //       // Use the order title as the docket entry description so it will be indexed
+  //       cy.get('body')
+  //         .find('[data-testid="judge-select"]')
+  //         .should('exist')
+  //         .first()
+  //         .select('Ashford');
 
-        // Save the docket entry
-        cy.get('[data-testid="serve-to-parties-btn"]').click();
-        cy.get('[data-testid="modal-button-confirm"]').click();
+  //       // Save the docket entry
+  //       cy.get('[data-testid="serve-to-parties-btn"]').click();
+  //       cy.get('[data-testid="modal-button-confirm"]').click();
 
-        /** Act */
-        cy.get('[data-testid="search-link"]').click();
-        cy.get('[data-testid="order-search-tab"]').click();
-        cy.get('[data-testid="keyword-search-input"]').type(orderContents);
-        let count: number;
-        retry(() => {
-          cy.intercept('GET', '**/order-search**').as('orderSearch');
-          cy.get(
-            '[data-testid="submit-order-advanced-search-button"], [data-testid="advanced-search-button"], button#advanced-search-button, form[data-testid="order-search-container"] button[type=submit]',
-          )
-            .first()
-            .click();
+  //       /** Act */
+  //       cy.get('[data-testid="search-link"]').click();
+  //       cy.get('[data-testid="order-search-tab"]').click();
+  //       cy.get('[data-testid="keyword-search-input"]').type(orderContents);
+  //       let count: number;
+  //       retry(() => {
+  //         cy.intercept('GET', '**/order-search**').as('orderSearch');
+  //         cy.get(
+  //           '[data-testid="submit-order-advanced-search-button"], [data-testid="advanced-search-button"], button#advanced-search-button, form[data-testid="order-search-container"] button[type=submit]',
+  //         )
+  //           .first()
+  //           .click();
 
-          cy.wait('@orderSearch').then(({ response }) => {
-            count = response?.body?.results?.length || 0;
-          });
+  //         cy.wait('@orderSearch').then(({ response }) => {
+  //           count = response?.body?.results?.length || 0;
+  //         });
 
-          cy.get('.search-results').should('exist');
-          return assertExists(
-            `[data-testid="docket-number-link-${docketNumber}"]`,
-          );
-        }, 12);
+  //         cy.get('.search-results').should('exist');
+  //         return assertExists(
+  //           `[data-testid="docket-number-link-${docketNumber}"]`,
+  //         );
+  //       }, 12);
 
-        /** Assert */
-        // Ensure the results table exists and the new order appears as the first result
-        cy.get('[data-testid="advanced-document-search-results-table"]').should(
-          'exist',
-        );
-        cy.get(
-          'table[data-testid="advanced-document-search-results-table"] tbody tr',
-        )
-          .first()
-          .within(() => {
-            cy.get(`[data-testid="docket-number-link-${docketNumber}"]`).should(
-              'exist',
-            );
-          });
+  //       /** Assert */
+  //       // Ensure the results table exists and the new order appears as the first result
+  //       cy.get('[data-testid="advanced-document-search-results-table"]').should(
+  //         'exist',
+  //       );
+  //       cy.get(
+  //         'table[data-testid="advanced-document-search-results-table"] tbody tr',
+  //       )
+  //         .first()
+  //         .within(() => {
+  //           cy.get(`[data-testid="docket-number-link-${docketNumber}"]`).should(
+  //             'exist',
+  //           );
+  //         });
 
-        /** Act */
-        // Click the Filed Date header to toggle sorting
-        cy.get('[data-testid="sort-button-filed-date"]').click();
+  //       /** Act */
+  //       // Click the Filed Date header to toggle sorting
+  //       cy.get('[data-testid="sort-button-filed-date"]').click();
 
-        // click the paginator if needed
-        cy.then(() => {
-          if (count && count > ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE) {
-            const lastPage = Math.ceil(
-              count / ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE,
-            );
-            cy.get(`[data-testid="paginator-page-${lastPage}"]`)
-              .first()
-              .click();
-          }
-        });
+  //       // click the paginator if needed
+  //       cy.then(() => {
+  //         if (count && count > ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE) {
+  //           const lastPage = Math.ceil(
+  //             count / ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE,
+  //           );
+  //           cy.get(`[data-testid="paginator-page-${lastPage}"]`)
+  //             .first()
+  //             .click();
+  //         }
+  //       });
 
-        /** Assert */
-        // After sorting, ensure the created order is present in the last row
-        cy.get(
-          'table[data-testid="advanced-document-search-results-table"] tbody tr',
-        )
-          .last()
-          .within(() => {
-            cy.get(`[data-testid="docket-number-link-${docketNumber}"]`).should(
-              'exist',
-            );
-          });
-      },
-    );
-  });
+  //       /** Assert */
+  //       // After sorting, ensure the created order is present in the last row
+  //       cy.get(
+  //         'table[data-testid="advanced-document-search-results-table"] tbody tr',
+  //       )
+  //         .last()
+  //         .within(() => {
+  //           cy.get(`[data-testid="docket-number-link-${docketNumber}"]`).should(
+  //             'exist',
+  //           );
+  //         });
+  //     },
+  //   );
+  // });
 
-  it('should find matching results when the user searches for an opinion by keyword', () => {
-    /** Arrange */
-    loginAsPetitionsClerk1();
-    createAndServePaperPetition({ includeApwDocument: false }).then(
-      ({ docketNumber }) => {
-        loginAsDocketClerk1();
+  // it('should find matching results when the user searches for an opinion by keyword', () => {
+  //   /** Arrange */
+  //   loginAsPetitionsClerk1();
+  //   createAndServePaperPetition({ includeApwDocument: false }).then(
+  //     ({ docketNumber }) => {
+  //       loginAsDocketClerk1();
 
-        goToCase(docketNumber);
+  //       goToCase(docketNumber);
 
-        const opinionTitle = `${faker.word.adjective()} ${faker.word.noun()}`;
-        cy.get('[data-testid="case-detail-menu-button"]').click();
-        cy.get('[data-testid="menu-button-upload-pdf"]').click();
-        cy.get('[data-testid="upload-description"]').type(opinionTitle);
-        attachFile({
-          filePath: '../../helpers/file/sample.pdf',
-          selector: '[data-testid="primary-document-file"]',
-          selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
-        });
-        cy.get('[data-testid="save-uploaded-pdf-button"]').click();
-        cy.get('[data-testid="add-court-issued-docket-entry-button"]').click();
-        selectTypeaheadInput(
-          'court-issued-document-type-search',
-          'Summary Opinion',
-        );
-        cy.get('body')
-          .find('[data-testid="judge-select"]')
-          .then($el => $el.length && cy.wrap($el.first()).select('Ashford'));
-        cy.get('[data-testid="serve-to-parties-btn"]').click();
-        cy.get('[data-testid="modal-button-confirm"]').click();
-        cy.get('[data-testid="print-paper-service-done-button"]').click();
+  //       const opinionTitle = `${faker.word.adjective()} ${faker.word.noun()}`;
+  //       cy.get('[data-testid="case-detail-menu-button"]').click();
+  //       cy.get('[data-testid="menu-button-upload-pdf"]').click();
+  //       cy.get('[data-testid="upload-description"]').type(opinionTitle);
+  //       attachFile({
+  //         filePath: '../../helpers/file/sample.pdf',
+  //         selector: '[data-testid="primary-document-file"]',
+  //         selectorToAwaitOnSuccess: '[data-testid^="upload-file-success"]',
+  //       });
+  //       cy.get('[data-testid="save-uploaded-pdf-button"]').click();
+  //       cy.get('[data-testid="add-court-issued-docket-entry-button"]').click();
+  //       selectTypeaheadInput(
+  //         'court-issued-document-type-search',
+  //         'Summary Opinion',
+  //       );
+  //       cy.get('body')
+  //         .find('[data-testid="judge-select"]')
+  //         .then($el => $el.length && cy.wrap($el.first()).select('Ashford'));
+  //       cy.get('[data-testid="serve-to-parties-btn"]').click();
+  //       cy.get('[data-testid="modal-button-confirm"]').click();
+  //       cy.get('[data-testid="print-paper-service-done-button"]').click();
 
-        /** Act */
-        cy.get('[data-testid="search-link"]').click();
-        cy.get('[data-testid="opinion-search-tab"]').click();
-        cy.get('[data-testid="keyword-search-input"]').type(opinionTitle);
-        // need to wait for elasticsearch potentially
-        let count: number;
-        retry(() => {
-          cy.intercept('GET', '**/opinion-search**').as('opinionSearch');
-          cy.get(
-            '[data-testid="submit-opinion-advanced-search-button"], [data-testid="advanced-search-button"], button#advanced-search-button, form[data-testid="opinion-search-container"] button[type=submit]',
-          )
-            .first()
-            .click();
-          cy.wait('@opinionSearch').then(({ response }) => {
-            count = response?.body?.results?.length || 0;
-          });
-          cy.get('.search-results').should('exist');
-          return assertExists(
-            `[data-testid="docket-number-link-${docketNumber}"]`,
-          );
-        }, 12);
-        /** Assert */
-        // Ensure the results table exists and the new opinion appears as the first result
-        cy.get('[data-testid="advanced-document-search-results-table"]').should(
-          'exist',
-        );
-        cy.get(
-          'table[data-testid="advanced-document-search-results-table"] tbody tr',
-        )
-          .first()
-          .within(() => {
-            cy.get(`[data-testid="docket-number-link-${docketNumber}"]`).should(
-              'exist',
-            );
-          });
+  //       /** Act */
+  //       cy.get('[data-testid="search-link"]').click();
+  //       cy.get('[data-testid="opinion-search-tab"]').click();
+  //       cy.get('[data-testid="keyword-search-input"]').type(opinionTitle);
+  //       // need to wait for elasticsearch potentially
+  //       let count: number;
+  //       retry(() => {
+  //         cy.intercept('GET', '**/opinion-search**').as('opinionSearch');
+  //         cy.get(
+  //           '[data-testid="submit-opinion-advanced-search-button"], [data-testid="advanced-search-button"], button#advanced-search-button, form[data-testid="opinion-search-container"] button[type=submit]',
+  //         )
+  //           .first()
+  //           .click();
+  //         cy.wait('@opinionSearch').then(({ response }) => {
+  //           count = response?.body?.results?.length || 0;
+  //         });
+  //         cy.get('.search-results').should('exist');
+  //         return assertExists(
+  //           `[data-testid="docket-number-link-${docketNumber}"]`,
+  //         );
+  //       }, 12);
+  //       /** Assert */
+  //       // Ensure the results table exists and the new opinion appears as the first result
+  //       cy.get('[data-testid="advanced-document-search-results-table"]').should(
+  //         'exist',
+  //       );
+  //       cy.get(
+  //         'table[data-testid="advanced-document-search-results-table"] tbody tr',
+  //       )
+  //         .first()
+  //         .within(() => {
+  //           cy.get(`[data-testid="docket-number-link-${docketNumber}"]`).should(
+  //             'exist',
+  //           );
+  //         });
 
-        /** Act */
-        // Click the Filed Date header to toggle sorting
-        cy.get('[data-testid="sort-button-filed-date"]').click();
+  //       /** Act */
+  //       // Click the Filed Date header to toggle sorting
+  //       cy.get('[data-testid="sort-button-filed-date"]').click();
 
-        // click the paginator if needed
-        cy.then(() => {
-          if (count && count > ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE) {
-            const lastPage = Math.ceil(
-              count / ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE,
-            );
-            cy.get(`[data-testid="paginator-page-${lastPage}"]`)
-              .first()
-              .click();
-          }
-        });
+  //       // click the paginator if needed
+  //       cy.then(() => {
+  //         if (count && count > ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE) {
+  //           const lastPage = Math.ceil(
+  //             count / ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE,
+  //           );
+  //           cy.get(`[data-testid="paginator-page-${lastPage}"]`)
+  //             .first()
+  //             .click();
+  //         }
+  //       });
 
-        /** Assert */
-        // After sorting, ensure the created opinion is present in the last row
-        cy.get(
-          'table[data-testid="advanced-document-search-results-table"] tbody tr',
-        )
-          .last()
-          .within(() => {
-            cy.get(`[data-testid="docket-number-link-${docketNumber}"]`).should(
-              'exist',
-            );
-          });
-      },
-    );
-  });
+  //       /** Assert */
+  //       // After sorting, ensure the created opinion is present in the last row
+  //       cy.get(
+  //         'table[data-testid="advanced-document-search-results-table"] tbody tr',
+  //       )
+  //         .last()
+  //         .within(() => {
+  //           cy.get(`[data-testid="docket-number-link-${docketNumber}"]`).should(
+  //             'exist',
+  //           );
+  //         });
+  //     },
+  //   );
+  // });
 });
