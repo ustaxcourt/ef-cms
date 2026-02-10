@@ -264,7 +264,7 @@ export type PublicFormattedDocketEntryInfo = {
   hasDocument: boolean;
   relatedDocketEntries: {
     disposition?: string;
-    dispositionLinkText?: string;
+    dispositionLinkText?: string[];
     docketEntryId?: string;
     docketEntryIndex?: number;
     showDownloadLink: boolean;
