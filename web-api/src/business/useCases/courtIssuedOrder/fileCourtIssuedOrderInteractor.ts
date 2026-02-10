@@ -25,8 +25,6 @@ import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
-import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
-
 export const fileCourtIssuedOrder = async (
   applicationContext: ServerApplicationContext,
   {
@@ -34,7 +32,7 @@ export const fileCourtIssuedOrder = async (
     primaryDocumentFileId,
   }: { documentMetadata: any; primaryDocumentFileId: string },
   authorizedUser: UnknownAuthUser,
-): Promise<CaseDTO> => {
+): Promise<{ docketNumber: string }> => {
   const { docketNumber } = documentMetadata;
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.COURT_ISSUED_DOCUMENT)) {
@@ -153,7 +151,7 @@ export const fileCourtIssuedOrder = async (
     await upsertMessages([messageEntity.validate().toRawObject()]);
   }
 
-  return new CaseDTO(caseEntity.toRawObject());
+  return { docketNumber: caseEntity.docketNumber };
 };
 
 export const fileCourtIssuedOrderInteractor = withLocking(
