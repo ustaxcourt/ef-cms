@@ -3,6 +3,10 @@
 import { readFileSync, existsSync, copyFileSync } from 'fs';
 import { join } from 'path';
 
+// Source ID (alternative source for missing IDs)
+const alternativeSourceId =
+  process.argv[2] ?? '26c93d0e-2568-468f-b117-2af9b17e475b';
+
 // Read the docketEntries.ts file
 const docketEntriesPath =
   'web-api/src/persistence/postgres/utils/seed/fixtures/docketEntries.ts';
@@ -18,9 +22,6 @@ while ((match = docketEntryIdRegex.exec(docketEntriesContent)) !== null) {
 
 // Create a set of unique IDs
 const uniqueIds = new Set(docketEntryIds);
-
-// Source ID (alternative source for missing IDs)
-const alternativeSourceId = '26c93d0e-2568-468f-b117-2af9b17e475b';
 
 // Target directory
 const targetDir = 'web-api/storage/fixtures/s3/noop-documents-local-us-east-1';
