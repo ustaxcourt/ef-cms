@@ -15,7 +15,7 @@ export const addPetitionerToCaseAction = async ({
   const { docketNumber } = get(state.caseDetail);
   const { contact } = get(state.form);
 
-  const updatedCase = await applicationContext
+  await applicationContext
     .getUseCases()
     .addPetitionerToCaseInteractor(applicationContext, {
       caseCaption: contact.caseCaption,
@@ -28,7 +28,6 @@ export const addPetitionerToCaseAction = async ({
     alertSuccess: {
       message: `${contactTypeDisplay} ${contact.name} has been added to the case.`,
     },
-    caseDetail: updatedCase,
     contactType: contact.contactType,
     docketNumber,
     tab: 'caseInfo',

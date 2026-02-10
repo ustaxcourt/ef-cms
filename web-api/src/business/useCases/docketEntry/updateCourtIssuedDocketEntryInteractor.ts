@@ -14,13 +14,11 @@ import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
-
 export const updateCourtIssuedDocketEntry = async (
   _applicationContext: ServerApplicationContext,
   { documentMeta }: { documentMeta: any },
   authorizedUser: UnknownAuthUser,
-): Promise<CaseDTO> => {
+): Promise<{ docketNumber: string }> => {
   const hasPermission =
     isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY) ||
     isAuthorized(authorizedUser, ROLE_PERMISSIONS.CREATE_ORDER_DOCKET_ENTRY);
@@ -108,7 +106,7 @@ export const updateCourtIssuedDocketEntry = async (
 
   await settlePromises(saveItems);
 
-  return new CaseDTO(caseEntity.toRawObject());
+  return { docketNumber };
 };
 
 export const updateCourtIssuedDocketEntryInteractor = withLocking(

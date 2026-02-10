@@ -14,7 +14,7 @@ export const blockCaseFromTrialAction = async ({
   const docketNumber = get(state.caseDetail.docketNumber);
   const reason = get(state.modal.reason);
 
-  const caseDetail = await applicationContext
+  await applicationContext
     .getUseCases()
     .blockCaseFromTrialInteractor(applicationContext, {
       docketNumber,
@@ -25,6 +25,5 @@ export const blockCaseFromTrialAction = async ({
     alertSuccess: {
       message: 'Case blocked from being set for trial.',
     },
-    caseDetail,
   };
 };

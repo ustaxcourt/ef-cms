@@ -7,9 +7,8 @@ export const archiveDraftDocumentAction = async ({
 }: ActionProps) => {
   const { docketEntryId, docketNumber } = get(state.archiveDraftDocument);
 
-  let updatedCase: RawCase;
   try {
-    updatedCase = await applicationContext
+    await applicationContext
       .getUseCases()
       .archiveDraftDocumentInteractor(applicationContext, {
         docketEntryId,
@@ -30,6 +29,6 @@ export const archiveDraftDocumentAction = async ({
     alertSuccess: {
       message: 'Document deleted.',
     },
-    caseDetail: updatedCase,
+    docketNumber,
   });
 };

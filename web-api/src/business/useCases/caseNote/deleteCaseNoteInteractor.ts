@@ -1,4 +1,3 @@
-import { Case } from '@shared/business/entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -9,7 +8,6 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
-import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 /**
  * deleteCaseNote
@@ -23,7 +21,7 @@ export const deleteCaseNote = async (
   _applicationContext: ServerApplicationContext,
   { docketNumber }: { docketNumber: string },
   authorizedUser: UnknownAuthUser,
-): Promise<CaseDTO> => {
+): Promise<{ docketNumber: string }> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_NOTES)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -34,14 +32,12 @@ export const deleteCaseNote = async (
 
   delete caseRecord.caseNote;
 
-  const result = await updateCaseAndAssociations({
+  await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseRecord,
   });
 
-  return new CaseDTO(
-    new Case(result, { authorizedUser }).validate().toRawObject(),
-  );
+  return { docketNumber };
 };
 
 export const deleteCaseNoteInteractor = withLocking(

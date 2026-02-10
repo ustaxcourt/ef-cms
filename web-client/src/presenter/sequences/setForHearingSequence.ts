@@ -1,6 +1,7 @@
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
+import { getCaseAction } from '../actions/getCaseAction';
 import { getTrialSessionsOnCaseAction } from '../actions/TrialSession/getTrialSessionsOnCaseAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
@@ -23,6 +24,7 @@ export const setForHearingSequence = [
         clearModalAction,
         setForHearingAction,
         clearModalStateAction,
+        getCaseAction,
         setCaseAction,
         setTrialSessionJudgeAction,
         getTrialSessionsOnCaseAction,

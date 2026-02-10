@@ -7,10 +7,12 @@ import { state } from '@web-client/presenter/app.cerebral';
  */
 export const navigateToReviewSavedPetitionAction = async ({
   get,
+  props,
   router,
 }: ActionProps) => {
   const docketEntryId = get(state.docketEntryId);
-  const docketNumber = get(state.caseDetail.docketNumber);
+  const docketNumber =
+    props.docketNumber || get(state.caseDetail.docketNumber);
 
   if (docketEntryId && docketNumber) {
     await router.route(

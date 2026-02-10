@@ -1,5 +1,6 @@
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
+import { getCaseAction } from '../actions/getCaseAction';
 import { removeCaseFromTrialAction } from '../actions/CaseDetail/removeCaseFromTrialAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
@@ -22,6 +23,7 @@ export const removeCaseFromTrialSequence = [
           setAlertSuccessAction,
           clearModalAction,
           clearModalStateAction,
+          getCaseAction,
           setCaseAction,
         ],
       },

@@ -23,7 +23,7 @@ export const addCaseToTrialSessionAction = async ({
   const sessionIsCalendared =
     selectedTrialSession && selectedTrialSession.isCalendared;
   try {
-    const caseDetail = await applicationContext
+    await applicationContext
       .getUseCases()
       .addCaseToTrialSessionInteractor(applicationContext, {
         calendarNotes,
@@ -44,7 +44,6 @@ export const addCaseToTrialSessionAction = async ({
     return path.success({
       alertSuccess,
       calendarNotes,
-      caseDetail,
       docketNumber,
       trialSessionId,
     });

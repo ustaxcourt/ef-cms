@@ -47,20 +47,22 @@ export const createCaseFromPaperAction = async ({
       user,
     );
 
-    const { caseDetail, workItem } = await applicationContext
-      .getUseCases()
-      .createCaseFromPaperInteractor(applicationContext, {
-        applicationForWaiverOfFilingFeeFileId,
-        attachmentToPetitionFileId: attachmentToPetitionFileIds[0],
-        corporateDisclosureFileId,
-        petitionFileId,
-        petitionMetadata,
-        requestForPlaceOfTrialFileId,
-        stinFileId,
-      });
+    const { docketNumber, petitionDocketEntryId, workItem } =
+      await applicationContext
+        .getUseCases()
+        .createCaseFromPaperInteractor(applicationContext, {
+          applicationForWaiverOfFilingFeeFileId,
+          attachmentToPetitionFileId: attachmentToPetitionFileIds[0],
+          corporateDisclosureFileId,
+          petitionFileId,
+          petitionMetadata,
+          requestForPlaceOfTrialFileId,
+          stinFileId,
+        });
 
     return path.success({
-      caseDetail,
+      docketNumber,
+      petitionDocketEntryId,
       workItem,
     });
   } catch (err) {

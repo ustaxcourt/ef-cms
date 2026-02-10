@@ -1,4 +1,5 @@
 import { clearModalAction } from '../actions/clearModalAction';
+import { getCaseAction } from '../actions/getCaseAction';
 import { sealCaseAction } from '../actions/CaseDetail/sealCaseAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
@@ -9,7 +10,7 @@ export const sealCaseSequence = showProgressSequenceDecorator([
   sealCaseAction,
   {
     error: [setAlertErrorAction],
-    success: [setAlertSuccessAction, setCaseAction],
+    success: [setAlertSuccessAction, getCaseAction, setCaseAction],
   },
   clearModalAction,
 ]);

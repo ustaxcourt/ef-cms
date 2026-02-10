@@ -1,6 +1,7 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
+import { getCaseAction } from '../actions/getCaseAction';
 import { removeSignatureAction } from '../actions/removeSignatureAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
@@ -15,6 +16,7 @@ export const removeSignatureSequence = showProgressSequenceDecorator([
   setAlertSuccessAction,
   clearModalAction,
   clearModalStateAction,
+  getCaseAction,
   setCaseAction,
   setViewerDraftDocumentToDisplayAction,
 ]);

@@ -1,6 +1,7 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { filterEmptyStatisticsAction } from '../actions/StartCaseInternal/filterEmptyStatisticsAction';
+import { getCaseAction } from '../actions/getCaseAction';
 import { getPetitionIdAction } from '../actions/getPetitionIdAction';
 import { navigateToReviewSavedPetitionAction } from '../actions/CaseDetailEdit/navigateToReviewSavedPetitionAction';
 import { saveCaseDetailInternalEditAction } from '../actions/saveCaseDetailInternalEditAction';
@@ -41,6 +42,7 @@ export const saveSavedCaseForLaterSequence = showProgressSequenceDecorator([
       setupFilesForCaseCreationAction,
       setProgressForFileUploadAction,
       saveCaseDetailInternalEditAction,
+      getCaseAction,
       setCaseAction,
       setCaseOnFormAction,
       setContactsOnFormAction,

@@ -25,7 +25,7 @@ export const removeCaseFromTrialAction = async ({
 
   const trialSessionId = modalTrialSessionId || stateTrialSessionId;
   try {
-    const caseDetail = await applicationContext
+    await applicationContext
       .getUseCases()
       .removeCaseFromTrialInteractor(applicationContext, {
         associatedJudge,
@@ -39,7 +39,7 @@ export const removeCaseFromTrialAction = async ({
       alertSuccess: {
         message: 'Case removed from trial.',
       },
-      caseDetail,
+      docketNumber,
     });
   } catch (e) {
     return path.error({
