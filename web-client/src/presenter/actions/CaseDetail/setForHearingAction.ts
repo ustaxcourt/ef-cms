@@ -16,7 +16,7 @@ export const setForHearingAction = async ({
 
   const alertSuccess = { message: 'Case set for hearing.' };
 
-  const caseDetail = await applicationContext
+  await applicationContext
     .getUseCases()
     .setForHearingInteractor(applicationContext, {
       calendarNotes,
@@ -26,7 +26,6 @@ export const setForHearingAction = async ({
 
   return {
     alertSuccess,
-    caseDetail,
     docketNumber,
     trialSessionId,
   };

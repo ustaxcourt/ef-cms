@@ -7,6 +7,13 @@ import { find } from 'lodash';
  * @returns {object} docket number and docketEntryId
  */
 export const getPetitionIdAction = ({ props }: ActionProps) => {
+  if (props.petitionDocketEntryId && props.docketNumber) {
+    return {
+      docketEntryId: props.petitionDocketEntryId,
+      docketNumber: props.docketNumber,
+    };
+  }
+
   const { docketNumber } = props.caseDetail;
   const { docketEntryId } = find(props.caseDetail.docketEntries, {
     documentType: 'Petition',

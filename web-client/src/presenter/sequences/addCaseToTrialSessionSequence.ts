@@ -2,6 +2,7 @@ import { addCaseToTrialSessionAction } from '../actions/CaseDetail/addCaseToTria
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
+import { getCaseAction } from '../actions/getCaseAction';
 import { getTrialSessionsOnCaseAction } from '../actions/TrialSession/getTrialSessionsOnCaseAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
@@ -14,6 +15,7 @@ import { startShowValidationAction } from '../actions/startShowValidationAction'
 import { validateAddToTrialSessionAction } from '../actions/CaseDetail/validateAddToTrialSessionAction';
 
 const successPath = [
+  getCaseAction,
   setCaseAction,
   getTrialSessionsOnCaseAction,
   setTrialSessionsAction,

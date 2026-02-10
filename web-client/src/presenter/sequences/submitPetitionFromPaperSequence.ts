@@ -8,7 +8,6 @@ import { filterEmptyStatisticsAction } from '../actions/StartCaseInternal/filter
 import { getPetitionIdAction } from '../actions/getPetitionIdAction';
 import { navigateToReviewSavedPetitionAction } from '../actions/CaseDetailEdit/navigateToReviewSavedPetitionAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
-import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseTypeAction } from '../actions/setCaseTypeAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setProgressForFileUploadAction } from '@web-client/presenter/actions/setProgressForFileUploadAction';
@@ -50,7 +49,6 @@ export const submitPetitionFromPaperSequence = [
               error: [openFileUploadErrorModal],
               success: [
                 clearConfirmationTextStatisticsAction,
-                setCaseAction,
                 assignPetitionToAuthenticatedUserAction,
                 getPetitionIdAction,
                 setDocketEntryIdAction,

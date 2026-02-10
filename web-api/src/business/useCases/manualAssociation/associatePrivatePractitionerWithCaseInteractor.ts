@@ -33,7 +33,7 @@ export const associatePrivatePractitionerWithCase = async (
     userId: string;
   },
   authorizedUser: UnknownAuthUser,
-): Promise<RawCase> => {
+): Promise<{ docketNumber: string }> => {
   if (
     !isAuthorized(authorizedUser, ROLE_PERMISSIONS.ASSOCIATE_USER_WITH_CASE)
   ) {
@@ -42,13 +42,15 @@ export const associatePrivatePractitionerWithCase = async (
 
   const user = await getUserById({ userId });
 
-  return await associatePrivatePractitionerToCase({
+  await associatePrivatePractitionerToCase({
     authorizedUser,
     docketNumber,
     representing,
     serviceIndicator,
     user,
   });
+
+  return { docketNumber };
 };
 
 export const associatePrivatePractitionerWithCaseInteractor = withLocking(

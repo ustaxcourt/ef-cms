@@ -17,7 +17,7 @@ export const associatePrivatePractitionerWithCaseAction = async ({
   const { representing, serviceIndicator } = get(state.modal);
   const docketNumber = get(state.caseDetail.docketNumber);
 
-  const caseDetail = await applicationContext
+  await applicationContext
     .getUseCases()
     .associatePrivatePractitionerWithCaseInteractor(applicationContext, {
       docketNumber,
@@ -30,6 +30,6 @@ export const associatePrivatePractitionerWithCaseAction = async ({
     alertSuccess: {
       message: 'Petitioner counsel added to case.',
     },
-    caseDetail,
+    docketNumber,
   });
 };

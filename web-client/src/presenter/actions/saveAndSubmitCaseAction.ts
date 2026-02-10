@@ -23,8 +23,12 @@ export const saveAndSubmitCaseAction = async ({
 
   const user = get(state.user);
 
-  let caseDetail;
-  let stinFile;
+  let createCaseResult: {
+    docketNumber: string;
+    docketNumberWithSuffix: string;
+    docketEntryIds: string[];
+  };
+  let stinFile: string;
 
   try {
     const {
@@ -49,7 +53,7 @@ export const saveAndSubmitCaseAction = async ({
 
     stinFile = stinFileId;
 
-    caseDetail = await applicationContext
+    createCaseResult = await applicationContext
       .getUseCases()
       .createCaseInteractor(applicationContext, {
         attachmentToPetitionFileIds,
@@ -70,13 +74,11 @@ export const saveAndSubmitCaseAction = async ({
       .getUseCases()
       .addCoversheetInteractor(applicationContext, {
         docketEntryId,
-        docketNumber: caseDetail.docketNumber,
+        docketNumber: createCaseResult.docketNumber,
       });
   };
 
-  const documentsThatNeedCoverSheet = caseDetail.docketEntries
-    .filter(d => d.isFileAttached)
-    .map(d => d.docketEntryId);
+  const documentsThatNeedCoverSheet = [...createCaseResult.docketEntryIds];
 
   // for security reasons, the STIN is not in the API response, but we already know the docketEntryId
   documentsThatNeedCoverSheet.push(stinFile);
@@ -84,7 +86,7 @@ export const saveAndSubmitCaseAction = async ({
   await Promise.all(documentsThatNeedCoverSheet.map(addCoversheet));
 
   const isPetitioner = user.role === ROLES.petitioner;
-  const successTitle = `${isPetitioner ? 'Your' : 'The'} case has been assigned docket number ${caseDetail.docketNumberWithSuffix || caseDetail.docketNumber}`;
+  const successTitle = `${isPetitioner ? 'Your' : 'The'} case has been assigned docket number ${createCaseResult.docketNumberWithSuffix || createCaseResult.docketNumber}`;
   const successMessage = `${isPetitioner ? 'Your' : 'The'} case has been created and${isPetitioner ? ' your' : ''} documents were sent to the U.S. Tax Court.`;
 
   return path.success({
@@ -92,6 +94,5 @@ export const saveAndSubmitCaseAction = async ({
       message: successMessage,
       title: successTitle,
     },
-    caseDetail,
   });
 };

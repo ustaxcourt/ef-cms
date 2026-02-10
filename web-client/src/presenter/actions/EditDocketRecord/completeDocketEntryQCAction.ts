@@ -40,28 +40,19 @@ export const completeDocketEntryQCAction = async ({
 
   try {
     const {
-      caseDetail,
       paperServiceDocumentTitle,
       paperServiceParties,
       paperServicePdfUrl,
-    } = (await applicationContext
+      updatedDocketEntry,
+    } = await applicationContext
       .getUseCases()
       .completeDocketEntryQCInteractor(applicationContext, {
         entryMetadata,
-      })) as {
-      caseDetail: RawCase;
-      paperServiceDocumentTitle: string;
-      paperServiceParties: string[];
-      paperServicePdfUrl: string;
-    };
-
-    const updatedDocument = caseDetail.docketEntries.filter(
-      doc => doc.docketEntryId === docketEntryId,
-    )[0];
+      });
 
     const descriptionDisplay = applicationContext
       .getUtilities()
-      .getDescriptionDisplay(updatedDocument);
+      .getDescriptionDisplay(updatedDocketEntry);
 
     const qcCompletedAndSentMessage = `${descriptionDisplay} QC completed and message sent.`;
     const completedMessage = `${descriptionDisplay} has been completed.`;
@@ -74,12 +65,10 @@ export const completeDocketEntryQCAction = async ({
         message,
         title: 'QC Completed',
       },
-      caseDetail,
       docketNumber,
       paperServiceDocumentTitle,
       paperServiceParties,
       pdfUrl: paperServicePdfUrl,
-      updatedDocument,
     });
   } catch (error) {
     return path.error({
