@@ -1,8 +1,6 @@
 FROM --platform=linux/amd64 efcms
 
-WORKDIR /home/app
-
-COPY package*.json ./
+COPY . /home/app
 
 RUN npm ci
 
