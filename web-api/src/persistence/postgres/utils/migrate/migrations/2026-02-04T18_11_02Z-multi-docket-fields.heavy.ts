@@ -220,6 +220,60 @@ export async function up(db: Kysely<any>): Promise<void> {
     `multiDocketedOn backfill complete: ${total.toLocaleString()} rows updated in ${batches} batches`,
   );
 
+  // Backfill originallyFiledDocketNumber using the leadDocketNumber from dwCase.
+  // For non-consolidated entries, use the entry's own docketNumber.
+  total = 0;
+  batches = 0;
+
+  while (true) {
+    const ctids = await db
+      .selectFrom('dwDocketEntry')
+      .select(sql`ctid`.as('ctid'))
+      .where('originallyFiledDocketNumber', 'is', null)
+      .limit(BATCH_SIZE)
+      .forUpdate()
+      .skipLocked()
+      .execute();
+
+    if (ctids.length === 0) break;
+
+    const result = await db
+      .updateTable('dwDocketEntry')
+      .set({
+        originallyFiledDocketNumber: sql`coalesce(
+          (select c.lead_docket_number
+            from dw_case c
+            where c.docket_number = dw_docket_entry.docket_number),
+          dw_docket_entry.docket_number
+        )`,
+      })
+      .where(
+        sql`ctid`,
+        'in',
+        ctids.map(r => r.ctid),
+      )
+      .returning('docketEntryId')
+      .execute();
+
+    const updated = result.length;
+    total += updated;
+    batches += 1;
+
+    if (batches % LOG_EVERY === 0) {
+      console.log(
+        `originallyFiledDocketNumber backfill progress: ${total.toLocaleString()} rows updated in ${batches} batches`,
+      );
+    }
+
+    if (PAUSE_MS > 0) {
+      await new Promise(r => setTimeout(r, PAUSE_MS));
+    }
+  }
+
+  console.log(
+    `originallyFiledDocketNumber backfill complete: ${total.toLocaleString()} rows updated in ${batches} batches`,
+  );
+
   // Add NOT NULL constraint in phases to minimize locking:
   // 1. Add as NOT VALID - instant, doesn't scan table
   // 2. Validate - scans table but allows concurrent reads/writes
