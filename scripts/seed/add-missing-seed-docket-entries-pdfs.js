@@ -1,11 +1,16 @@
 #!/usr/bin/env node
 
-const fs = require('fs');
-const path = require('path');
+import { readFileSync, existsSync, copyFileSync } from 'fs';
+import { join } from 'path';
+
+// Source ID (alternative source for missing IDs)
+const alternativeSourceId =
+  process.argv[2] ?? '26c93d0e-2568-468f-b117-2af9b17e475b';
 
 // Read the docketEntries.ts file
-const docketEntriesPath = 'web-api/src/persistence/postgres/utils/seed/fixtures/docketEntries.ts';
-const docketEntriesContent = fs.readFileSync(docketEntriesPath, 'utf8');
+const docketEntriesPath =
+  'web-api/src/persistence/postgres/utils/seed/fixtures/docketEntries.ts';
+const docketEntriesContent = readFileSync(docketEntriesPath, 'utf8');
 
 // Extract all docketEntryId values using regex
 const docketEntryIdRegex = /docketEntryId:\s*'([a-f0-9-]+)'/g;
@@ -18,9 +23,6 @@ while ((match = docketEntryIdRegex.exec(docketEntriesContent)) !== null) {
 // Create a set of unique IDs
 const uniqueIds = new Set(docketEntryIds);
 
-// Source ID (alternative source for missing IDs)
-const alternativeSourceId = '26c93d0e-2568-468f-b117-2af9b17e475b';
-
 // Target directory
 const targetDir = 'web-api/storage/fixtures/s3/noop-documents-local-us-east-1';
 
@@ -28,13 +30,13 @@ const targetDir = 'web-api/storage/fixtures/s3/noop-documents-local-us-east-1';
 const sourceFiles = [
   '._S3rver_metadata.json',
   '._S3rver_object',
-  '._S3rver_object.md5'
+  '._S3rver_object.md5',
 ];
 
 // Function to check if files exist for an ID
 function filesExist(id) {
-  const metadataFile = path.join(targetDir, `${id}._S3rver_metadata.json`);
-  return fs.existsSync(metadataFile);
+  const metadataFile = join(targetDir, `${id}._S3rver_metadata.json`);
+  return existsSync(metadataFile);
 }
 
 // Function to clone files
@@ -42,17 +44,17 @@ function cloneFiles(sourceId, targetId) {
   sourceFiles.forEach(suffix => {
     const sourceFile = `${sourceId}${suffix}`;
     const targetFile = `${targetId}${suffix}`;
-    const sourcePath = path.join(targetDir, sourceFile);
-    const targetPath = path.join(targetDir, targetFile);
+    const sourcePath = join(targetDir, sourceFile);
+    const targetPath = join(targetDir, targetFile);
 
     // Check if source file exists
-    if (!fs.existsSync(sourcePath)) {
+    if (!existsSync(sourcePath)) {
       console.error(`Source file not found: ${sourcePath}`);
       return;
     }
 
     // Copy the file
-    fs.copyFileSync(sourcePath, targetPath);
+    copyFileSync(sourcePath, targetPath);
     console.log(`Copied: ${sourceFile} -> ${targetFile}`);
   });
 }
@@ -80,6 +82,7 @@ uniqueIds.forEach(id => {
 
 console.log(`\nCompleted!`);
 console.log(`Processed ${uniqueIds.size} unique IDs.`);
-console.log(`Cloned from alternative source (${alternativeSourceId}): ${clonedCount} IDs`);
+console.log(
+  `Cloned from alternative source (${alternativeSourceId}): ${clonedCount} IDs`,
+);
 console.log(`Skipped (already exist): ${skippedCount} IDs`);
-
