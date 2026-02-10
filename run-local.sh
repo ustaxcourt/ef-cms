@@ -5,9 +5,9 @@
 . ./setup-local-env.sh
 
 if [[ -z "$CI" ]]; then
-  ./scripts/setup-local-services.sh
+  ./init-local.sh
 else
-  ./scripts/setup-local-services.sh --skip-docker
+  ./init-local.sh --skip-docker
 fi
 
 npm run dev:api-local

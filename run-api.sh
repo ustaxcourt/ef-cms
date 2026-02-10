@@ -11,7 +11,7 @@ export ELASTICSEARCH_HOST=elasticsearch
 export ELASTICSEARCH_ENDPOINT=http://elasticsearch:9200
 export POSTGRES_HOST=db
 
-./scripts/setup-local-services.sh --skip-docker
+./init-local.sh --skip-docker
 
 INSPECT_FLAG=""
 if [[ -n "$IDE_DEBUGGING" ]]; then
