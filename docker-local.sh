@@ -18,8 +18,10 @@ LOCAL_IMAGE_NAME="ef-cms:${DESTINATION_TAG}"
 $DOCKER_COMPOSE -f "$(pwd)/web-api/src/persistence/postgres/docker-compose.yml" down --volumes || true
 $DOCKER_COMPOSE -f "$(pwd)/web-api/elasticsearch/docker-compose.yml" down --volumes || true
 
-# ensure the container names are not in use
 docker rm -f shell api client public dawson-db opensearch-node &> /dev/null || true
+
+pkill -f s3rver || true
+pkill -f cognito-local || true
 
 docker build --platform=linux/amd64 -t "$LOCAL_IMAGE_NAME" -t "ef-cms:latest" -f Dockerfile .
 if [[ -z "$IDE_DEBUGGING" ]]; then
