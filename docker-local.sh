@@ -15,7 +15,8 @@ export CURRENT_UID="$current_uid"
 export CURRENT_GID="$current_gid"
 
 DESTINATION_TAG=$(grep 'docker-image:' .circleci/config.yml | awk -F':' '{print $3}')
-LOCAL_IMAGE_NAME="efcms-local:${DESTINATION_TAG}"
+LOCAL_NAME="ef-cms-us-east-1"
+LOCAL_IMAGE_NAME="${LOCAL_NAME}:${DESTINATION_TAG}"
 
 $DOCKER_COMPOSE -f "$(pwd)/web-api/src/persistence/postgres/docker-compose.yml" down --volumes || true
 $DOCKER_COMPOSE -f "$(pwd)/web-api/elasticsearch/docker-compose.yml" down --volumes || true
@@ -25,7 +26,8 @@ docker rm -f shell api client public dawson-db opensearch-node &> /dev/null || t
 pkill -f s3rver || true
 pkill -f cognito-local || true
 
-docker build --platform=linux/amd64 -t "$LOCAL_IMAGE_NAME" -t "efcms-local:latest" -f Dockerfile .
+docker build --platform=linux/amd64 -t "$LOCAL_IMAGE_NAME" -t "${LOCAL_NAME}:latest" -f Dockerfile .
+
 if [[ -z "$IDE_DEBUGGING" ]]; then
   $DOCKER_COMPOSE up --build
 else

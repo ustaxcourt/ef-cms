@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 efcms
+FROM --platform=linux/amd64 ef-cms-us-east-1
 
 COPY . /home/app
 
