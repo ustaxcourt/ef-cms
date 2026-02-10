@@ -13,7 +13,7 @@ if ! command -v npm &> /dev/null; then
 fi
 
 IN_DOCKER=false
-if [ -f /.dockerenv ]; then
+if [ -f /.dockerenv ] || [ -f /run/.containerenv ] || [ "$POSTGRES_HOST" = "db" ]; then
   IN_DOCKER=true
 fi
 
@@ -37,7 +37,23 @@ while [[ "$#" -gt 0 ]]; do
   shift
 done
 
-export POSTGRES_HOST="${POSTGRES_HOST:-localhost}"
+if [ -z "$POSTGRES_HOST" ]; then
+  if [ "$IN_DOCKER" = "true" ]; then
+    export POSTGRES_HOST="db"
+  else
+    export POSTGRES_HOST="localhost"
+  fi
+fi
+
+if [ -z "$ELASTICSEARCH_HOST" ]; then
+  if [ "$IN_DOCKER" = "true" ]; then
+    export ELASTICSEARCH_HOST="elasticsearch"
+    export ELASTICSEARCH_ENDPOINT="${ELASTICSEARCH_ENDPOINT:-http://elasticsearch:9200}"
+  else
+    export ELASTICSEARCH_HOST="localhost"
+    export ELASTICSEARCH_ENDPOINT="${ELASTICSEARCH_ENDPOINT:-http://localhost:9200}"
+  fi
+fi
 
 wait_for_opensearch() {
   echo "Waiting for OpenSearch..."
@@ -47,25 +63,25 @@ wait_for_opensearch() {
 
 wait_for_postgres() {
   echo "Waiting for Postgres..."
-  if [ "$IN_DOCKER" = "true" ]; then
-    until PGPASSWORD="${POSTGRES_PASSWORD:-example}" psql -h "${POSTGRES_HOST:-db}" -U "${POSTGRES_USER:-postgres}" -c '\\q' &> /dev/null; do
+  local host="${POSTGRES_HOST}"
+  local user="${POSTGRES_USER:-postgres}"
+  local port="${POSTGRES_PORT:-5432}"
+
+  if [ -n "$CI" ]; then
+    until (echo > "/dev/tcp/${host}/${port}") > /dev/null 2>&1; do
+      echo "Postgres is unavailable - sleeping"
+      sleep 2
+    done
+  elif [ "$host" != "localhost" ] || [ "$IN_DOCKER" = "true" ]; then
+    until pg_isready -h "$host" -p "$port" -U "$user" &> /dev/null; do
       echo "Postgres is unavailable - sleeping"
       sleep 1
     done
   else
-    if [ -n "$CI" ]; then
-      local host="${POSTGRES_HOST:-localhost}"
-      local port="${POSTGRES_PORT:-5432}"
-      until (echo > "/dev/tcp/${host}/${port}") > /dev/null 2>&1; do
-        echo "Postgres is unavailable - sleeping"
-        sleep 2
-      done
-    else
-      until docker exec dawson-db pg_isready -U "${POSTGRES_USER:-postgres}" &> /dev/null; do
-        echo "Postgres is unavailable - sleeping"
-        sleep 2
-      done
-    fi
+    until docker exec dawson-db pg_isready -U "$user" &> /dev/null; do
+      echo "Postgres is unavailable - sleeping"
+      sleep 2
+    done
   fi
 }
 
