@@ -89,7 +89,11 @@ export const PublicFilingsAndProceedings = connect<
   },
 );
 
-const renderDispositionLinks = (affectedEntry, docketNumber, sequence) => {
+const renderDispositionLinks = (
+  affectedEntry,
+  docketNumber,
+  openDocumentDownloadSequence,
+) => {
   return affectedEntry.dispositionLinkText.map(linkText => (
     <span className="display-block" key={linkText}>
       {affectedEntry.showDownloadLink && (
@@ -99,7 +103,7 @@ const renderDispositionLinks = (affectedEntry, docketNumber, sequence) => {
           data-testid={`related-document-viewer-link-${affectedEntry.docketEntryIndex}`}
           aria-label={`View PDF for: ${affectedEntry.docketEntryIndex}`}
           onClick={() =>
-            sequence({
+            openDocumentDownloadSequence({
               docketEntryId: affectedEntry.docketEntryId,
               docketNumber,
               isPublic: true,
