@@ -115,6 +115,7 @@ setup_opensearch() {
 setup_s3() {
   echo "Cleaning up old s3rver instance"
   pkill -f s3rver || true
+  pkill -f servor || true
   # Give the OS a moment to release ports
   sleep 2
 

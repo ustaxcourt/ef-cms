@@ -25,6 +25,7 @@ docker rm -f shell api client public dawson-db opensearch-node &> /dev/null || t
 
 pkill -f s3rver || true
 pkill -f cognito-local || true
+pkill -f servor || true
 
 docker build --platform=linux/amd64 -t "$LOCAL_IMAGE_NAME" -t "${LOCAL_NAME}:latest" -f Dockerfile .
 
