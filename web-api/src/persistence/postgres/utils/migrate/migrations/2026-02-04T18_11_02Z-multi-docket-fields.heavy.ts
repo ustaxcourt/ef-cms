@@ -36,20 +36,36 @@ export async function up(db: Kysely<any>): Promise<void> {
     create or replace function dw_docket_entry_multi_docketed_insert_trigger()
     returns trigger as $$
     declare
+      entry_count int;
       computed_array jsonb;
+      computed_original varchar;
     begin
-      select case
-        when count(*) > 1 then to_jsonb(array_agg(docket_number order by docket_number))
-        else '[]'::jsonb
-      end
-      into computed_array
+      select count(*),
+        case
+          when count(*) > 1 then to_jsonb(array_agg(docket_number order by docket_number))
+          else '[]'::jsonb
+        end,
+        case
+          when count(*) > 1 then (array_agg(docket_number order by
+            case when split_part(docket_number, '-', 2)::int >= 65
+              then 1900 + split_part(docket_number, '-', 2)::int
+              else 2000 + split_part(docket_number, '-', 2)::int
+            end,
+            split_part(docket_number, '-', 1)::int
+          ))[1]
+          else null
+        end
+      into entry_count, computed_array, computed_original
       from dw_docket_entry
       where docket_entry_id = new.docket_entry_id;
 
       update dw_docket_entry
-      set multi_docketed_on = computed_array
+      set multi_docketed_on = computed_array,
+          originally_filed_docket_number = computed_original
       where docket_entry_id = new.docket_entry_id
-        and (multi_docketed_on is null or multi_docketed_on is distinct from computed_array);
+        and (multi_docketed_on is null
+          or multi_docketed_on is distinct from computed_array
+          or originally_filed_docket_number is distinct from computed_original);
 
       return new;
     end;
@@ -64,6 +80,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     returns trigger as $$
     declare
       computed_array jsonb;
+      computed_original varchar;
       remaining_count int;
     begin
       select count(*) into remaining_count
@@ -76,17 +93,30 @@ export async function up(db: Kysely<any>): Promise<void> {
       end if;
 
       select case
-        when remaining_count > 1 then to_jsonb(array_agg(docket_number order by docket_number))
-        else '[]'::jsonb
-      end
-      into computed_array
+          when remaining_count > 1 then to_jsonb(array_agg(docket_number order by docket_number))
+          else '[]'::jsonb
+        end,
+        case
+          when remaining_count > 1 then (array_agg(docket_number order by
+            case when split_part(docket_number, '-', 2)::int >= 65
+              then 1900 + split_part(docket_number, '-', 2)::int
+              else 2000 + split_part(docket_number, '-', 2)::int
+            end,
+            split_part(docket_number, '-', 1)::int
+          ))[1]
+          else null
+        end
+      into computed_array, computed_original
       from dw_docket_entry
       where docket_entry_id = old.docket_entry_id;
 
       update dw_docket_entry
-      set multi_docketed_on = computed_array
+      set multi_docketed_on = computed_array,
+          originally_filed_docket_number = computed_original
       where docket_entry_id = old.docket_entry_id
-        and (multi_docketed_on is null or multi_docketed_on is distinct from computed_array);
+        and (multi_docketed_on is null
+          or multi_docketed_on is distinct from computed_array
+          or originally_filed_docket_number is distinct from computed_original);
 
       return old;
     end;
@@ -99,26 +129,41 @@ export async function up(db: Kysely<any>): Promise<void> {
   // leaving stale values. This trigger recomputes the correct array on any update.
   //
   // Performance notes:
-  // - Unconsolidation is relatively rare
   // - Trigger skips updates where value is already correct (IS DISTINCT FROM)
   // - docket_entry_id is indexed (part of primary key)
   await sql`
     create or replace function dw_docket_entry_multi_docketed_update_trigger()
     returns trigger as $$
     declare
+      entry_count int;
       computed_array jsonb;
+      computed_original varchar;
     begin
-      select case
-        when count(*) > 1 then to_jsonb(array_agg(docket_number order by docket_number))
-        else '[]'::jsonb
-      end
-      into computed_array
+      select count(*),
+        case
+          when count(*) > 1 then to_jsonb(array_agg(docket_number order by docket_number))
+          else '[]'::jsonb
+        end,
+        case
+          when count(*) > 1 then (array_agg(docket_number order by
+            case when split_part(docket_number, '-', 2)::int >= 65
+              then 1900 + split_part(docket_number, '-', 2)::int
+              else 2000 + split_part(docket_number, '-', 2)::int
+            end,
+            split_part(docket_number, '-', 1)::int
+          ))[1]
+          else null
+        end
+      into entry_count, computed_array, computed_original
       from dw_docket_entry
       where docket_entry_id = new.docket_entry_id;
 
-      -- Only update if value actually changed (avoids unnecessary writes)
+      -- Only update if values actually changed (avoids unnecessary writes)
       if new.multi_docketed_on is distinct from computed_array then
         new.multi_docketed_on := computed_array;
+      end if;
+      if new.originally_filed_docket_number is distinct from computed_original then
+        new.originally_filed_docket_number := computed_original;
       end if;
 
       return new;
@@ -142,8 +187,11 @@ export async function up(db: Kysely<any>): Promise<void> {
   // backfill update. The trigger is added at the end of the migration.
 
   // Pre-compute arrays for multi-docketed entries only (entries on 2+ cases).
-  // This temp table is much smaller than the full table and makes backfill lookups O(1).
   // Single-case entries aren't included - they just get '[]'::jsonb via COALESCE during backfill.
+  // Also captures the lowest docket number for originallyFiledDocketNumber.
+  // Docket numbers are formatted as caseNumber-year (e.g., "103-21", "101-22").
+  // Years >= 65 are 1900s (1965-1999), years < 65 are 2000s (2000-2064).
+  // This matches Case.getSortableDocketNumber logic.
   await db.schema
     .createTable('multiDocketedLookup')
     .temporary()
@@ -155,6 +203,13 @@ export async function up(db: Kysely<any>): Promise<void> {
           sql<string[]>`array_agg(docket_number order by docket_number)`.as(
             'multiDocketedOn',
           ),
+          sql<string>`(array_agg(docket_number order by
+            case when split_part(docket_number, '-', 2)::int >= 65
+              then 1900 + split_part(docket_number, '-', 2)::int
+              else 2000 + split_part(docket_number, '-', 2)::int
+            end,
+            split_part(docket_number, '-', 1)::int
+          ))[1]`.as('originallyFiledDocketNumber'),
         ])
         .groupBy('docketEntryId')
         .having(db.fn.count('docketEntryId'), '>', 1),
@@ -169,6 +224,9 @@ export async function up(db: Kysely<any>): Promise<void> {
   // - Small batches (5k) avoid long-running transactions and reduce lock contention
   // - FOR UPDATE SKIP LOCKED prevents blocking concurrent operations
   // - Pauses between batches let replication catch up and reduce WAL pressure
+  // Updates both columns in one pass:
+  // - multiDocketedOn: COALESCE to '[]' for non-multi-docketed entries
+  // - originallyFiledDocketNumber: null for non-multi-docketed
   while (true) {
     const ctids = await db
       .selectFrom('dwDocketEntry')
@@ -181,8 +239,8 @@ export async function up(db: Kysely<any>): Promise<void> {
 
     if (ctids.length === 0) break;
 
-    // Join with lookup table to get pre-computed array for multi-docketed entries.
-    // Entries not in lookup table (single-case) get '[]'::jsonb via COALESCE.
+    // Join with lookup table to get pre-computed values for multi-docketed entries.
+    // Entries not in lookup table (single-case) get '[]'::jsonb and null respectively.
     const result = await db
       .updateTable('dwDocketEntry')
       .set({
@@ -192,59 +250,10 @@ export async function up(db: Kysely<any>): Promise<void> {
             where docket_entry_id = dw_docket_entry.docket_entry_id),
           '[]'::jsonb
         )`,
-      })
-      .where(
-        sql`ctid`,
-        'in',
-        ctids.map(r => r.ctid),
-      )
-      .returning('docketEntryId')
-      .execute();
-
-    const updated = result.length;
-    total += updated;
-    batches += 1;
-
-    if (batches % LOG_EVERY === 0) {
-      console.log(
-        `multiDocketedOn backfill progress: ${total.toLocaleString()} rows updated in ${batches} batches`,
-      );
-    }
-
-    if (PAUSE_MS > 0) {
-      await new Promise(r => setTimeout(r, PAUSE_MS));
-    }
-  }
-
-  console.log(
-    `multiDocketedOn backfill complete: ${total.toLocaleString()} rows updated in ${batches} batches`,
-  );
-
-  // Backfill originallyFiledDocketNumber using the leadDocketNumber from dwCase.
-  // For non-consolidated entries, use the entry's own docketNumber.
-  total = 0;
-  batches = 0;
-
-  while (true) {
-    const ctids = await db
-      .selectFrom('dwDocketEntry')
-      .select(sql`ctid`.as('ctid'))
-      .where('originallyFiledDocketNumber', 'is', null)
-      .limit(BATCH_SIZE)
-      .forUpdate()
-      .skipLocked()
-      .execute();
-
-    if (ctids.length === 0) break;
-
-    const result = await db
-      .updateTable('dwDocketEntry')
-      .set({
-        originallyFiledDocketNumber: sql`coalesce(
-          (select c.lead_docket_number
-            from dw_case c
-            where c.docket_number = dw_docket_entry.docket_number),
-          dw_docket_entry.docket_number
+        originallyFiledDocketNumber: sql`(
+          select originally_filed_docket_number
+          from multi_docketed_lookup
+          where docket_entry_id = dw_docket_entry.docket_entry_id
         )`,
       })
       .where(
@@ -261,7 +270,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 
     if (batches % LOG_EVERY === 0) {
       console.log(
-        `originallyFiledDocketNumber backfill progress: ${total.toLocaleString()} rows updated in ${batches} batches`,
+        `backfill progress: ${total.toLocaleString()} rows updated in ${batches} batches`,
       );
     }
 
@@ -271,7 +280,7 @@ export async function up(db: Kysely<any>): Promise<void> {
   }
 
   console.log(
-    `originallyFiledDocketNumber backfill complete: ${total.toLocaleString()} rows updated in ${batches} batches`,
+    `backfill complete: ${total.toLocaleString()} rows updated in ${batches} batches`,
   );
 
   // Add NOT NULL constraint in phases to minimize locking:
