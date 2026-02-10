@@ -67,6 +67,7 @@
     "deep-freeze": "0.0.1",
     "diff-arrays-of-objects": "1.1.9",
     "dom-serializer": "2.0.0",
+    "dommatrix": "0.1.1",
     "dwt": "19.3.0",
     "english-ordinals": "3.4.0",
     "exceljs": "4.4.0",
