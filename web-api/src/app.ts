@@ -288,6 +288,7 @@ app.use((req, res, next) => {
 
   next();
 });
+
 app.use(expressLogger);
 
 /**
@@ -433,8 +434,12 @@ app.use(expressLogger);
     lambdaWrapper(serveExternallyFiledDocumentLambda, { isAsync: true }),
   );
   app.post(
-    '/case-documents/:docketNumber/external-document',
-    lambdaWrapper(fileExternalDocumentToCaseLambda),
+    '/async/case-documents/:docketNumber/external-document',
+    lambdaWrapper(
+      fileExternalDocumentToCaseLambda,
+      { isAsyncSync: true },
+      applicationContext,
+    ),
   );
   app.post(
     '/async/case-documents/:docketNumber/paper-filing',

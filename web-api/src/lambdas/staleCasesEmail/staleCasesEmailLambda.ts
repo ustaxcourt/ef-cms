@@ -1,11 +1,11 @@
 import type { Handler } from 'aws-lambda';
 import { applicationContext } from '@web-api/applicationContext';
-import { createISODateString } from '@shared/business/utilities/DateHandler';
+import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
 import { generateStaleCasesReport } from '../../../../scripts/reports/stale-cases.helpers';
 import { existsSync } from 'fs';
 import { sendEmailWithAttachment } from '@web-api/dispatchers/ses/sendEmailWithAttachment';
 
-const today = createISODateString().split('T')[0];
+const today = formatNow(FORMATS.YYYYMMDD);
 const filename = `/tmp/12-month-inactivity_${today}.csv`;
 const subject = `12 Month Inactivity List - ${today}`;
 const body =

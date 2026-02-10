@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="DAWSON local" type="CompoundRunConfigurationType">
+    <toRun name="API" type="NodeJSConfigurationType" />
+    <toRun name="Client" type="js.build_tools.npm" />
+    <toRun name="Public" type="js.build_tools.npm" />
+  </configuration>
+</component>

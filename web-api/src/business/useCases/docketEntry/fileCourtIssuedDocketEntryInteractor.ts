@@ -19,6 +19,7 @@ import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { CourtIssuedDocumentAnyType } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import { addAssociatedDocketEntries } from '@web-api/business/useCaseHelper/docketEntry/addAssociatedDocketEntries';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 /**
  *
@@ -39,7 +40,7 @@ export const fileCourtIssuedDocketEntry = async (
     subjectDocketNumber: string;
   },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<CaseDTO> => {
   const hasPermission =
     isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY) ||
     isAuthorized(authorizedUser, ROLE_PERMISSIONS.CREATE_ORDER_DOCKET_ENTRY);
@@ -192,7 +193,7 @@ export const fileCourtIssuedDocketEntry = async (
   const subjectCase = new Case(rawSubjectCase, {
     authorizedUser,
   }).validate();
-  return subjectCase.toRawObject();
+  return new CaseDTO(subjectCase.toRawObject());
 };
 
 export const fileCourtIssuedDocketEntryInteractor = withLocking(
