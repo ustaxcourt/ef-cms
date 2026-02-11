@@ -8,13 +8,10 @@ export async function up(db: Kysely<any>): Promise<void> {
   let total = 0;
   let batches = 0;
 
-  // Fail fast if we can't acquire locks within 2 seconds (avoids blocking other operations)
   await sql`set lock_timeout = '2s'`.execute(db);
-  // Allow up to 30 minutes for the entire migration (backfill can take a while)
-  await sql`set statement_timeout = '30min'`.execute(db);
 
-  // Add column WITHOUT a default value. This ensures existing rows have NULL,
-  // which we use to identify unprocessed rows during backfill.
+  await sql`set statement_timeout = '3min'`.execute(db);
+
   await db.schema
     .alterTable('dwDocketEntry')
     .addColumn('multiDocketedOn', 'jsonb')
@@ -72,57 +69,6 @@ export async function up(db: Kysely<any>): Promise<void> {
     $$ language plpgsql
   `.execute(db);
 
-  // Create DELETE trigger to update remaining rows when an entry is removed from a case.
-  // Example: Entry on ['101-25', '102-25'] has row for 102-25 deleted.
-  //          Remaining row for 101-25 needs updated to [] (no longer multi-docketed).
-  await sql`
-    create or replace function dw_docket_entry_multi_docketed_delete_trigger()
-    returns trigger as $$
-    declare
-      computed_array jsonb;
-      computed_original varchar;
-      remaining_count int;
-    begin
-      select count(*) into remaining_count
-      from dw_docket_entry
-      where docket_entry_id = old.docket_entry_id;
-
-      -- No rows remain with this docketEntryId, nothing to update
-      if remaining_count = 0 then
-        return old;
-      end if;
-
-      select case
-          when remaining_count > 1 then to_jsonb(array_agg(docket_number order by docket_number))
-          else '[]'::jsonb
-        end,
-        case
-          when remaining_count > 1 then (array_agg(docket_number order by
-            case when split_part(docket_number, '-', 2)::int >= 65
-              then 1900 + split_part(docket_number, '-', 2)::int
-              else 2000 + split_part(docket_number, '-', 2)::int
-            end,
-            split_part(docket_number, '-', 1)::int
-          ))[1]
-          else null
-        end
-      into computed_array, computed_original
-      from dw_docket_entry
-      where docket_entry_id = old.docket_entry_id;
-
-      update dw_docket_entry
-      set multi_docketed_on = computed_array,
-          originally_filed_docket_number = computed_original
-      where docket_entry_id = old.docket_entry_id
-        and (multi_docketed_on is null
-          or multi_docketed_on is distinct from computed_array
-          or originally_filed_docket_number is distinct from computed_original);
-
-      return old;
-    end;
-    $$ language plpgsql
-  `.execute(db);
-
   // Create UPDATE trigger to handle unconsolidation during blue-green deployment.
   // When old code unconsolidates cases, it uses pgInsertInto with ON CONFLICT DO UPDATE,
   // which only updates columns in the old schema. multiDocketedOn won't be touched,
@@ -175,12 +121,6 @@ export async function up(db: Kysely<any>): Promise<void> {
     create trigger dw_docket_entry_multi_docketed_after_insert
     after insert on dw_docket_entry
     for each row execute function dw_docket_entry_multi_docketed_insert_trigger()
-  `.execute(db);
-
-  await sql`
-    create trigger dw_docket_entry_multi_docketed_after_delete
-    after delete on dw_docket_entry
-    for each row execute function dw_docket_entry_multi_docketed_delete_trigger()
   `.execute(db);
 
   // NOTE: UPDATE trigger is created AFTER backfill to avoid recomputing on every
@@ -332,19 +272,11 @@ export async function down(db: Kysely<any>): Promise<void> {
   `.execute(db);
 
   await sql`
-    drop trigger if exists dw_docket_entry_multi_docketed_after_delete on dw_docket_entry
-  `.execute(db);
-
-  await sql`
     drop trigger if exists dw_docket_entry_multi_docketed_before_update on dw_docket_entry
   `.execute(db);
 
   await sql`
     drop function if exists dw_docket_entry_multi_docketed_insert_trigger()
-  `.execute(db);
-
-  await sql`
-    drop function if exists dw_docket_entry_multi_docketed_delete_trigger()
   `.execute(db);
 
   await sql`
