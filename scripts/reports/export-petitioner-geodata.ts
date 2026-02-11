@@ -4,7 +4,6 @@ import {
   type ScriptConfig,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
-import { backfillUserGeocodes } from '../geocoding/backfill-user-geocodes';
 import { getDbReader } from '@web-api/database';
 import { generateCsv } from '../helpers/generate-csv';
 import {
@@ -13,6 +12,7 @@ import {
   getJsDateFromIso,
 } from '@shared/business/utilities/DateHandler';
 import { sql } from 'kysely';
+import { backfillUserGeocodes } from 'scripts/helpers/backfillUserGeocodes';
 
 const todayDate = createISODateString().split('T')[0];
 const defaultFromDate = calculateISODate({
@@ -138,6 +138,7 @@ const getPetitionerGeodata = async ({
       ])
       .where('c.receivedAt', '>=', getJsDateFromIso(fromDateIso))
       .where('c.receivedAt', '<', getJsDateFromIso(toDateIso))
+      .where('uc.geodataMatch', 'is', true)
       .execute(),
   )) as PetitionerGeoRow[];
 };
@@ -147,32 +148,32 @@ const exportGeodata = async () => {
 
   await backfillUserGeocodes({});
 
-  const updatedRows = await getPetitionerGeodata({
+  const userGeodata = await getPetitionerGeodata({
     fromDateIso: fromDate,
     toDateIso: toDate,
   });
 
   const columns = [
-    { header: 'docket_number', key: 'docket_number' },
-    { header: 'docket_number_suffix', key: 'docket_number_suffix' },
-    { header: 'received_year', key: 'received_year' },
-    { header: 'procedure_type', key: 'procedure_type' },
-    { header: 'case_type', key: 'case_type' },
-    { header: 'party_type', key: 'party_type' },
+    { header: 'docket_number', key: 'docketNumber' },
+    { header: 'docket_number_suffix', key: 'docketNumberSuffix' },
+    { header: 'received_year', key: 'receivedYear' },
+    { header: 'procedure_type', key: 'procedureType' },
+    { header: 'case_type', key: 'caseType' },
+    { header: 'party_type', key: 'partyType' },
     { header: 'status', key: 'status' },
-    { header: 'is_paper', key: 'is_paper' },
-    { header: 'preferred_trial_city', key: 'preferred_trial_city' },
-    { header: 'remote_trial_granted', key: 'remote_trial_granted' },
+    { header: 'is_paper', key: 'isPaper' },
+    { header: 'preferred_trial_city', key: 'preferredTrialCity' },
+    { header: 'remote_trial_granted', key: 'remoteTrialGranted' },
     { header: 'address', key: 'address' },
     { header: 'city', key: 'city' },
     { header: 'state', key: 'state' },
     { header: 'postalCode', key: 'postalCode' },
     { header: 'lat', key: 'lat' },
     { header: 'lng', key: 'lng' },
-    { header: 'is_represented', key: 'is_represented' },
+    { header: 'is_represented', key: 'isRepresented' },
   ];
 
-  generateCsv({ columns, filename: outputCsv, rows: updatedRows });
+  generateCsv({ columns, filename: outputCsv, rows: userGeodata });
 };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
