@@ -237,7 +237,7 @@ Below is a list of dependencies that are locked down due to known issues with se
 - Stay at DWT v19.2.0, wait until January to update to 19.3.0
 
 ### puppeteer and @sparticuz/chromium
-**Current Installed Puppeteer/Puppeteer-core: 24.35.0**
+**Current Installed Puppeteer/Puppeteer-core: 24.37.2**
 **Current Installed @sparticuz/chromium: 143.0.4**
 
 - When updating puppeteer or puppeteer core in the project, make sure to also match versions in `web-api/runtimes/puppeteer/package.json` as this is our lambda layer which we use to generate pdfs. Puppeteer and chromium versions should always match between package.json and web-api/runtimes/puppeteer/package.json. Remember to run `npm install --prefix web-api/runtimes/puppeteer` to install and update the package-lock file.
