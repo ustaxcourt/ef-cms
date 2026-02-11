@@ -6,7 +6,6 @@ import {
 } from '../helpers/parseArgsAndEnvVars';
 import { getDbReader } from '@web-api/database';
 import { sql } from 'kysely';
-import { Uuid } from '@opensearch-project/opensearch/api/_types/_common';
 import { Geocoder } from 'us-census-geocoder';
 import { upsertUserContacts } from '@web-api/persistence/postgres/userContact/upsertUserContact';
 
@@ -33,7 +32,7 @@ const { batchSize, delayMs, dryRun } = parseArgsAndEnvVars(scriptConfig) as {
 
 type geoResults = {
   docketNumber: string;
-  userId: Uuid;
+  userId: string;
   address1: string;
   state?: string;
   city?: string;
@@ -55,11 +54,11 @@ const getUsersMissingGeocode = async (limit: number): Promise<geoResults[]> => {
       )
       .select([
         'c.docketNumber',
-        sql`petitioner ->> 'contactId'`.as('userId'),
-        sql`petitioner ->> 'address1'`.as('address1'),
-        sql`petitioner ->> 'state'`.as('state'),
-        sql`petitioner ->> 'city'`.as('city'),
-        sql`petitioner ->> 'postalCode'`.as('zip'),
+        sql<string>`petitioner ->> 'contactId'`.as('userId'),
+        sql<string>`petitioner ->> 'address1'`.as('address1'),
+        sql<string>`petitioner ->> 'state'`.as('state'),
+        sql<string>`petitioner ->> 'city'`.as('city'),
+        sql<string>`petitioner ->> 'postalCode'`.as('zip'),
       ])
       .where('c.status', 'not in', ['Closed', 'Dismissed'])
       .where(qb => qb.or([qb('uc.lat', 'is', null), qb('uc.lng', 'is', null)]))
@@ -67,13 +66,18 @@ const getUsersMissingGeocode = async (limit: number): Promise<geoResults[]> => {
       .where(sql`petitioner ->> 'address1'`, 'is not', null)
       .limit(limit),
   );
-  const querySQL = query.compile();
-  console.log(querySQL);
-  return (await query.execute()) as unknown as geoResults[];
+  return (await query.execute()) as geoResults[];
 };
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
-(async () => {
+export const backfillUserGeocodes = async ({
+  batchSize = 10000,
+  delayMs = 6000,
+  dryRun = false,
+}: {
+  batchSize?: number;
+  delayMs?: number;
+  dryRun?: boolean;
+}) => {
   let totalProcessed = 0;
   let totalGeocoded = 0;
 
@@ -86,10 +90,6 @@ const getUsersMissingGeocode = async (limit: number): Promise<geoResults[]> => {
 
     if (users.length === 0) {
       console.log('No more users to process');
-      break;
-    }
-    if (totalProcessed >= users.length) {
-      console.log('Weve been here too long');
       break;
     }
 
@@ -122,6 +122,7 @@ const getUsersMissingGeocode = async (limit: number): Promise<geoResults[]> => {
       }
     }
 
+    // Should dry run stop us from calling the API or just stop us from updating contacts?
     await geocoder.geocode();
 
     await upsertUserContacts(
@@ -138,4 +139,8 @@ const getUsersMissingGeocode = async (limit: number): Promise<geoResults[]> => {
   console.log(`\nBackfill complete:`);
   console.log(`  Total processed: ${totalProcessed}`);
   console.log(`  Total geocoded:  ${totalGeocoded}`);
+};
+
+void (async () => {
+  await backfillUserGeocodes({ batchSize, delayMs, dryRun });
 })();
