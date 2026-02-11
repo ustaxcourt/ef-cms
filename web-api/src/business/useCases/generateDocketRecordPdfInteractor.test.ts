@@ -4,6 +4,7 @@ import {
   CONTACT_TYPES,
   COUNTRY_TYPES,
   DOCKET_NUMBER_SUFFIXES,
+  MOTION_DISPOSITIONS,
   PARTY_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import {
@@ -402,6 +403,172 @@ describe('generateDocketRecordPdfInteractor', () => {
         { index: 1, isOnDocketRecord: true, numberOfPages: 1 },
         { index: 2, isOnDocketRecord: true, numberOfPages: 3 },
       ]);
+    });
+  });
+
+  describe('related docket entries', () => {
+    it('should process affectedByDocketEntries for motions', async () => {
+      caseDetail.docketEntries = [
+        {
+          docketEntryId: 'motion-id',
+          index: 1,
+          isOnDocketRecord: true,
+        },
+        {
+          affectedByDocketEntries: [
+            {
+              docketEntryId: 'motion-id',
+              disposition: MOTION_DISPOSITIONS.GRANTED,
+            },
+          ],
+          docketEntryId: 'order-id',
+          index: 2,
+          isOnDocketRecord: true,
+        },
+      ];
+
+      await generateDocketRecordPdfInteractor(
+        applicationContext,
+        {
+          docketNumber: caseDetail.docketNumber,
+        } as any,
+        mockDocketClerkUser,
+      );
+
+      const generatedData =
+        applicationContext.getDocumentGenerators().docketRecord.mock.calls[0][0]
+          .data;
+      const orderEntry = generatedData.caseDetail.formattedDocketEntries.find(
+        e => e.docketEntryId === 'order-id',
+      );
+
+      expect(orderEntry.relatedDocketEntries).toHaveLength(1);
+      expect(orderEntry.relatedDocketEntries[0].docketEntryIndex).toEqual(1);
+      expect(orderEntry.relatedDocketEntries[0].dispositionText[0]).toEqual(
+        'GRANTED BY #1',
+      );
+    });
+
+    it('should process affectedDocketEntries for orders', async () => {
+      caseDetail.docketEntries = [
+        {
+          affectedDocketEntries: [
+            {
+              docketEntryId: 'affected-order-id',
+              disposition: MOTION_DISPOSITIONS.GRANTED,
+            },
+          ],
+          docketEntryId: 'motion-id',
+          index: 1,
+          isOnDocketRecord: true,
+        },
+        {
+          docketEntryId: 'affected-order-id',
+          index: 2,
+          isOnDocketRecord: true,
+        },
+      ];
+
+      await generateDocketRecordPdfInteractor(
+        applicationContext,
+        {
+          docketNumber: caseDetail.docketNumber,
+        } as any,
+        mockDocketClerkUser,
+      );
+
+      const generatedData =
+        applicationContext.getDocumentGenerators().docketRecord.mock.calls[0][0]
+          .data;
+      const motionEntry = generatedData.caseDetail.formattedDocketEntries.find(
+        e => e.docketEntryId === 'motion-id',
+      );
+
+      expect(motionEntry.relatedDocketEntries).toHaveLength(1);
+      expect(motionEntry.relatedDocketEntries[0].docketEntryIndex).toEqual(2);
+      expect(motionEntry.relatedDocketEntries[0].dispositionText[0]).toEqual(
+        'GRANTING #2',
+      );
+    });
+
+    it('should combine both affectedByDocketEntries and affectedDocketEntries', async () => {
+      caseDetail.docketEntries = [
+        {
+          docketEntryId: 'motion-id',
+          index: 1,
+          isOnDocketRecord: true,
+        },
+        {
+          affectedByDocketEntries: [
+            {
+              docketEntryId: 'motion-id',
+              disposition: MOTION_DISPOSITIONS.GRANTED,
+            },
+          ],
+          affectedDocketEntries: [
+            {
+              docketEntryId: 'order-id',
+              disposition: MOTION_DISPOSITIONS.GRANTED,
+            },
+          ],
+          docketEntryId: 'entry-with-both',
+          index: 2,
+          isOnDocketRecord: true,
+        },
+        {
+          docketEntryId: 'order-id',
+          index: 3,
+          isOnDocketRecord: true,
+        },
+      ];
+
+      await generateDocketRecordPdfInteractor(
+        applicationContext,
+        {
+          docketNumber: caseDetail.docketNumber,
+        } as any,
+        mockDocketClerkUser,
+      );
+
+      const generatedData =
+        applicationContext.getDocumentGenerators().docketRecord.mock.calls[0][0]
+          .data;
+      const entry = generatedData.caseDetail.formattedDocketEntries.find(
+        e => e.docketEntryId === 'entry-with-both',
+      );
+
+      expect(entry.relatedDocketEntries).toHaveLength(2);
+      expect(entry.relatedDocketEntries[0].dispositionText[0]).toEqual(
+        'GRANTED BY #1',
+      );
+      expect(entry.relatedDocketEntries[1].dispositionText[0]).toEqual(
+        'GRANTING #3',
+      );
+    });
+
+    it('should initialize relatedDocketEntries as empty array when no related entries exist', async () => {
+      caseDetail.docketEntries = [
+        {
+          docketEntryId: 'simple-entry',
+          index: 1,
+          isOnDocketRecord: true,
+        },
+      ];
+
+      await generateDocketRecordPdfInteractor(
+        applicationContext,
+        {
+          docketNumber: caseDetail.docketNumber,
+        } as any,
+        mockDocketClerkUser,
+      );
+
+      const generatedData =
+        applicationContext.getDocumentGenerators().docketRecord.mock.calls[0][0]
+          .data;
+      const entry = generatedData.caseDetail.formattedDocketEntries[0];
+
+      expect(entry.relatedDocketEntries).toEqual([]);
     });
   });
 });
