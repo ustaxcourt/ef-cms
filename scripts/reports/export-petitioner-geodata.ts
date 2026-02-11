@@ -40,14 +40,24 @@ const scriptConfig: ScriptConfig = {
       short: 't',
       type: 'string',
     },
+    backfillData: {
+      default: true,
+      description:
+        'Whether or not we should try to populate any missing data for this date range',
+      short: 'b',
+      type: 'boolean',
+    },
   },
   requireActiveAwsSession: false, // todo: put back
 };
 
-const { fromDate, toDate } = parseArgsAndEnvVars(scriptConfig) as {
+const { fromDate, toDate, backfillData } = parseArgsAndEnvVars(
+  scriptConfig,
+) as {
   env: string;
   fromDate: string;
   toDate: string;
+  backfillData: boolean;
 };
 
 type PetitionerGeoRow = {
@@ -146,7 +156,8 @@ const getPetitionerGeodata = async ({
 const exportGeodata = async () => {
   const outputCsv = `${OUTPUT_DIR}/petitioner-geodata-${fromDate}-to-${toDate}.csv`;
 
-  await backfillUserGeocodes({});
+  if (backfillData)
+    await backfillUserGeocodes({ fromDateIso: fromDate, toDateIso: toDate });
 
   const userGeodata = await getPetitionerGeodata({
     fromDateIso: fromDate,
@@ -176,5 +187,6 @@ const exportGeodata = async () => {
   generateCsv({ columns, filename: outputCsv, rows: userGeodata });
 };
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises
-exportGeodata();
+exportGeodata().catch(e => {
+  throw e;
+});

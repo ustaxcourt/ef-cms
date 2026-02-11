@@ -1,3 +1,4 @@
+import { getJsDateFromIso } from '@shared/business/utilities/DateHandler';
 import { getDbReader } from '@web-api/database';
 import { upsertUserContacts } from '@web-api/persistence/postgres/userContact/upsertUserContact';
 import { sql } from 'kysely';
@@ -15,15 +16,21 @@ type geoResults = {
   match?: boolean;
 };
 
-const getUsersMissingGeocode = async (limit: number): Promise<geoResults[]> => {
-  const query = await getDbReader(db =>
+const getUsersMissingGeocode = async (
+  limit: number,
+  fromDateIso?: string,
+  toDateIso?: string,
+): Promise<geoResults[]> => {
+  let query = await getDbReader(db =>
     db
       .selectFrom('dwCase as c')
       .crossJoin(
         sql`LATERAL jsonb_array_elements(c.petitioners)`.as('petitioner'),
       )
       .leftJoin('dwUserContact as uc', join =>
-        join.on(sql`petitioner->>'contactId'`, '=', sql`uc.user_id`),
+        join
+          .onRef(sql`petitioner->>'contactId'`, '=', 'uc.userId')
+          .onRef('c.docketNumber', '=', 'uc.docketNumber'),
       )
       .select([
         'c.docketNumber',
@@ -39,6 +46,12 @@ const getUsersMissingGeocode = async (limit: number): Promise<geoResults[]> => {
       .where(sql`petitioner ->> 'address1'`, 'is not', null)
       .limit(limit),
   );
+  if (fromDateIso)
+    query = query.where('c.receivedAt', '>=', getJsDateFromIso(fromDateIso));
+
+  if (toDateIso)
+    query = query.where('c.receivedAt', '<', getJsDateFromIso(toDateIso));
+
   return (await query.execute()) as geoResults[];
 };
 
@@ -46,10 +59,14 @@ export const backfillUserGeocodes = async ({
   batchSize = 10000,
   delayMs = 6000,
   dryRun = false,
+  fromDateIso,
+  toDateIso,
 }: {
   batchSize?: number;
   delayMs?: number;
   dryRun?: boolean;
+  fromDateIso?: string;
+  toDateIso?: string;
 }) => {
   let totalProcessed = 0;
   let totalGeocoded = 0;
@@ -59,7 +76,11 @@ export const backfillUserGeocodes = async ({
   );
 
   while (true) {
-    const users = await getUsersMissingGeocode(batchSize);
+    const users = await getUsersMissingGeocode(
+      batchSize,
+      fromDateIso,
+      toDateIso,
+    );
 
     if (users.length === 0) {
       console.log('No more users to process');
