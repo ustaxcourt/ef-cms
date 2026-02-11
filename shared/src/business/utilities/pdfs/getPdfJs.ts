@@ -21,8 +21,9 @@ type PDFJSModule = typeof import('pdfjs-dist/legacy/build/pdf.mjs');
 export async function getPdfJs(): Promise<PDFJSModule> {
   try {
     if (typeof DOMMatrix === 'undefined') {
-      const DOMMatrixPolyfill = require('dommatrix');
-      (global as any).DOMMatrix = DOMMatrixPolyfill;
+      const DOMMatrixPolyfill = require('@thednp/dommatrix');
+      (global as any).DOMMatrix =
+        DOMMatrixPolyfill.default || DOMMatrixPolyfill;
     }
     const pdfJs = await import('pdfjs-dist/legacy/build/pdf.mjs');
 
