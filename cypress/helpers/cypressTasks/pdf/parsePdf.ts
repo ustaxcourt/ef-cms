@@ -2,8 +2,8 @@ import { readFile } from 'fs/promises';
 
 async function getPdfJs(): Promise<typeof pdfJs> {
   if (typeof DOMMatrix === 'undefined') {
-    const DOMMatrixPolyfill = require('dommatrix');
-    (global as any).DOMMatrix = DOMMatrixPolyfill;
+    const DOMMatrixPolyfill = require('@thednp/dommatrix');
+    (global as any).DOMMatrix = DOMMatrixPolyfill.default || DOMMatrixPolyfill;
   }
   const pdfJs = await import('pdfjs-dist/legacy/build/pdf.mjs');
 
