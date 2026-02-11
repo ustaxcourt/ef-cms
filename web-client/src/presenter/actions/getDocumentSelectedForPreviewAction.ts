@@ -6,10 +6,10 @@ export const getDocumentSelectedForPreviewAction = ({
   props,
 }: ActionProps) => {
   const { documentId } = props;
-  const { docketEntries } = get(state.form);
+  const { docketEntries = [] } = get(state.form);
 
   if (documentId) {
-    const selectedDocument = get(docketEntries).find(
+    const selectedDocument = docketEntries.find(
       docketEntry => docketEntry.docketEntryId === documentId,
     );
 
@@ -27,7 +27,7 @@ export const getDocumentSelectedForPreviewAction = ({
     return {};
   }
 
-  const documentFromDocketEntryId = get(docketEntries)?.find(
+  const documentFromDocketEntryId = docketEntries.find(
     docketEntry => docketEntry.docketEntryId === documentSelectedForPreview,
   );
 
@@ -46,7 +46,7 @@ export const getDocumentSelectedForPreviewAction = ({
   const documentTypeSelectedForPreview =
     INITIAL_DOCUMENT_TYPES_MAP[documentSelectedForPreview];
 
-  const selectedDocument = get(docketEntries).find(
+  const selectedDocument = docketEntries.find(
     document => document.documentType === documentTypeSelectedForPreview,
   );
 
