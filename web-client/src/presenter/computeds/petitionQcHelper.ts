@@ -28,7 +28,6 @@ export const petitionQcHelper = (
   const isPetitionFile =
     documentSelectedForPreview === INITIAL_DOCUMENT_TYPES_FILE_MAP.petition;
 
-  const formKey =
   const hasDocumentSelectedForPreviewKey =
     typeof documentSelectedForPreview === 'string' &&
     Object.prototype.hasOwnProperty.call(
