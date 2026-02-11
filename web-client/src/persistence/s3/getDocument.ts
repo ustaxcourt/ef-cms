@@ -1,12 +1,13 @@
 import { getCurrentUserToken } from '@shared/proxies/requests';
 import { getPdfFromUrl } from './getPdfFromUrl';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
 const getDownloadPolicy = async ({
   applicationContext,
   docketNumber,
   key,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ClientApplicationContext;
   docketNumber: string;
   key: string;
 }): Promise<string> => {
@@ -30,7 +31,7 @@ export const getDocument = async ({
   docketNumber,
   key,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ClientApplicationContext;
   docketNumber: string;
   key: string;
 }): Promise<Blob> => {

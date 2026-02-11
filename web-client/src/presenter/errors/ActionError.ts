@@ -8,9 +8,9 @@ export class ActionError extends CerebralError {
   get className() {
     return this.constructor.name;
   }
-  constructor(message) {
+  constructor(message: string) {
     // eslint-disable-next-line prefer-rest-params
-    super(arguments);
+    super(message, arguments);
     this.title = 'An error occurred';
     this.message = message || 'An unspecified error occurred.';
   }

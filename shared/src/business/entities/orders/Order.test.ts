@@ -14,6 +14,7 @@ describe('Order', () => {
     });
 
     it('returns false if nothing is passed in', () => {
+      // @ts-expect-error
       expect(new Order({}).isValid()).toBeFalsy();
     });
 

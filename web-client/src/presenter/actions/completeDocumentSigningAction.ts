@@ -3,6 +3,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const completeDocumentSigningAction = async ({
   applicationContext,
   get,
+  path,
 }: ActionProps) => {
   const originalDocketEntryId = get(state.pdfForSigning.docketEntryId);
   const { docketNumber } = get(state.caseDetail);
@@ -20,8 +21,16 @@ export const completeDocumentSigningAction = async ({
     const windowWithPdfjs = window as Window & {
       pdfjsObj?: { getData: () => Promise<unknown> };
     };
-    const pdfjsObj: { getData: () => Promise<unknown> } =
+    const pdfjsObj: { getData: () => Promise<unknown> } | null =
       windowWithPdfjs.pdfjsObj || get(state.pdfForSigning.pdfjsObj);
+
+    if (!pdfjsObj) {
+      return path.error({
+        alertError: {
+          message: 'Unable to complete signing. Please try again.',
+        },
+      });
+    }
 
     // generate signed document to bytes
     const signedPdfBytes = await applicationContext
@@ -69,10 +78,10 @@ export const completeDocumentSigningAction = async ({
     redirectUrl = `/case-detail/${docketNumber}/draft-documents?docketEntryId=${docketEntryId}`;
   }
 
-  return {
+  return path.success({
     docketEntryId,
     docketNumber,
     redirectUrl,
     tab: 'docketRecord',
-  };
+  });
 };
