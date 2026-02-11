@@ -10,15 +10,7 @@ describe('validateHearingNoteInteractor', () => {
     });
   });
 
-  it('returns null when note is defined', () => {
-    const result = validateHearingNoteInteractor({
-      note: 'this is a note',
-    });
-
-    expect(result).toEqual(null);
-  });
-
-  it('returns null when note is undefined', () => {
+  it('returns a defined errors object when note is empty', () => {
     const errors = validateHearingNoteInteractor({
       note: '',
     });
@@ -26,5 +18,13 @@ describe('validateHearingNoteInteractor', () => {
     expect(errors).toEqual({
       note: 'Add a note',
     });
+  });
+  
+  it('returns null when note is defined', () => {
+    const result = validateHearingNoteInteractor({
+      note: 'this is a note',
+    });
+
+    expect(result).toEqual(null);
   });
 });
