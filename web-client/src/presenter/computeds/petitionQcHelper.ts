@@ -28,13 +28,18 @@ export const petitionQcHelper = (
   const isPetitionFile =
     documentSelectedForPreview === INITIAL_DOCUMENT_TYPES_FILE_MAP.petition;
 
-  const formKey =
-    documentSelectedForPreview != null &&
-    documentSelectedForPreview in INITIAL_DOCUMENT_TYPES_MAP
-      ? documentSelectedForPreview
-      : Object.values(INITIAL_DOCUMENT_TYPES).find(
-          d => d.documentType === documentSelectedForPreview,
-        )?.fileName;
+  const hasDocumentSelectedForPreviewKey =
+    typeof documentSelectedForPreview === 'string' &&
+    Object.prototype.hasOwnProperty.call(
+      INITIAL_DOCUMENT_TYPES_MAP,
+      documentSelectedForPreview,
+    );
+
+  const formKey = hasDocumentSelectedForPreviewKey
+    ? documentSelectedForPreview
+    : Object.values(INITIAL_DOCUMENT_TYPES).find(
+        d => d.documentType === documentSelectedForPreview,
+      )?.fileName;
   const documentTypeForTab =
     (documentSelectedForPreview != null
       ? INITIAL_DOCUMENT_TYPES_MAP[documentSelectedForPreview]
