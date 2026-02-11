@@ -17,4 +17,6 @@ export const deleteCaseNoteAction = async ({
     .deleteCaseNoteInteractor(applicationContext, {
       docketNumber,
     });
+
+  return { caseDetail: { caseNote: '' } };
 };
