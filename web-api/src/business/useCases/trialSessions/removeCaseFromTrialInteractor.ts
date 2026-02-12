@@ -16,6 +16,7 @@ import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions
 import { updateTrialSession } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
 import { removeCaseFromTrialSession } from '@web-api/persistence/postgres/trialSessions/removeCaseFromTrialSession';
 import { deleteCasesFromTrialSession } from '@web-api/persistence/postgres/trialSessions/deleteCasesFromTrialSession';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 export const removeCaseFromTrial = async (
   applicationContext: ServerApplicationContext,
@@ -94,7 +95,9 @@ export const removeCaseFromTrial = async (
     caseToUpdate: caseEntity,
   });
 
-  return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
+  return new CaseDTO(
+    new Case(updatedCase, { authorizedUser }).validate().toRawObject(),
+  );
 };
 
 export const removeCaseFromTrialInteractor = withLocking(

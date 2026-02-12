@@ -19,6 +19,7 @@ import { orderBy } from 'lodash';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
+import { setDocumentTitle } from '@shared/business/utilities/setDocumentTitle';
 
 /**
  * addDraftStampOrderDocketEntryInteractor
@@ -82,18 +83,18 @@ export const addDraftStampOrderDocketEntry = async (
       createdAt: applicationContext.getUtilities().createISODateString(),
       docketEntryId: stampedDocketEntryId,
       docketNumber: caseRecord.docketNumber,
-      documentTitle: `${originalDocketEntry.documentTypeForStampedDocketEntry()} ${formattedDraftDocumentTitle}`,
+      documentTitle: `${setDocumentTitle(originalDocketEntry.documentTypeForStampedDocketEntry(), validatedStampData)} - ${formattedDraftDocumentTitle}`,
       documentType: orderDocumentInfo?.documentType,
       draftOrderState: {
         docketNumber: caseEntity.docketNumber,
-        documentTitle: formattedDraftDocumentTitle,
+        documentTitle: `${formattedDraftDocumentTitle}`,
         documentType: orderDocumentInfo?.documentType,
         eventCode: orderDocumentInfo?.eventCode,
-        freeText: `${originalDocketEntry.documentTypeForStampedDocketEntry()} ${formattedDraftDocumentTitle}`,
+        freeText: `${setDocumentTitle(originalDocketEntry.documentTypeForStampedDocketEntry(), validatedStampData)} - ${formattedDraftDocumentTitle}`,
       },
       eventCode: orderDocumentInfo?.eventCode,
       filedBy: authorizedUser.name,
-      freeText: `${originalDocketEntry.documentTypeForStampedDocketEntry()} ${formattedDraftDocumentTitle}`,
+      freeText: `${setDocumentTitle(originalDocketEntry.documentTypeForStampedDocketEntry(), validatedStampData)} - ${formattedDraftDocumentTitle}`,
       isDraft: true,
       isFileAttached: true,
       isPaper: false,
@@ -122,7 +123,7 @@ export const addDraftStampOrderDocketEntry = async (
     const messageEntity = new Message(mostRecentMessage).validate();
     messageEntity.addAttachment({
       documentId: stampedDocketEntryEntity.docketEntryId,
-      documentTitle: stampedDocketEntryEntity.documentTitle,
+      documentTitle: `${setDocumentTitle(stampedDocketEntryEntity.documentTitle, validatedStampData)}`,
     });
 
     await upsertMessages([messageEntity.validate().toRawObject()]);

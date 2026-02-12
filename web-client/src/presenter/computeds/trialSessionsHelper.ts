@@ -267,6 +267,7 @@ export const formatTrialSessions = ({
         Look at how formattedTrialSessions.ts calculates userIsAssignedToSession for reference
       */
       const userIsAssignedToSession = isJudgeUserAssigned;
+      const { trialClerk } = trialSession;
 
       return {
         alertMessageForNOTT,
@@ -281,6 +282,7 @@ export const formatTrialSessions = ({
         showAlertForNOTTReminder,
         startDate: trialSession.startDate,
         swingSession: !!trialSession.swingSession,
+        trialClerk,
         trialLocation: trialSession.trialLocation || '',
         trialSessionId: trialSession.trialSessionId || '',
         userIsAssignedToSession,
@@ -341,6 +343,7 @@ export type TrialSessionRow = {
   judge: { name: string; userId: string };
   formattedNoticeIssuedDate: string;
   sessionStatus: string;
+  trialClerk?: { name: string; userId: string };
 };
 export function isTrialSessionRow(item: any): item is TrialSessionRow {
   return !!item?.trialSessionId;

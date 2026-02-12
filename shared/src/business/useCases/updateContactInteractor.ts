@@ -29,6 +29,9 @@ import {
   formattedOldEmailForChangeOfAddress,
 } from '@shared/business/utilities/calculateEmail';
 import { CaseFactory } from '../entities/cases/CaseFactory';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
+import { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
+import { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO';
 
 /**
  * updateContact
@@ -44,7 +47,7 @@ export const updateContact = async (
   applicationContext: ServerApplicationContext,
   { contactInfo, docketNumber },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<CaseDTO | PublicCaseDTO | RestrictedCaseDTO> => {
   if (!isAuthUser(authorizedUser)) {
     throw new UnidentifiedUserError(
       'Unable to confirm user is an authenticated user',
@@ -241,12 +244,12 @@ export const updateContact = async (
     });
   }
 
-  const filteredCase = CaseFactory.getCase({
+  const filteredCase = CaseFactory.getCaseDTO({
     rawCase: caseEntity,
     user: authorizedUser,
   });
 
-  return filteredCase.toRawObject();
+  return filteredCase;
 };
 
 export const updateContactInteractor = withLocking(

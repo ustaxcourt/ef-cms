@@ -84,7 +84,7 @@ describe('Judge`s chambers stamps an order', () => {
           return Cypress.$(el)
             .find('*')
             .text()
-            .includes('Motion for Continuance GRANTED');
+            .includes('Motion for Continuance - GRANTED');
         })
         .should('have.length.at.least', 1);
     });
@@ -112,11 +112,13 @@ describe('Judge`s chambers stamps an order', () => {
           cy.get('[data-testid="select-document"]').select(docketEntryId!);
           sendMessage();
           loginAsClerkOfCourt();
+          cy.visit('/messages/my/inbox');
           cy.get(
             '.message-subject > .message-document-title > [data-testid="messages-individual-inbox-subject-cell"]',
           )
             .first()
             .click();
+          cy.get('[data-testid="message-detail-container"]').should('exist');
           cy.get('[data-testid="apply-stamp"]').click();
           cy.get('[data-testid="motion-disposition-GRANTED"]').click();
           cy.get('[data-testid="save-signature-button"]').click();
@@ -127,7 +129,7 @@ describe('Judge`s chambers stamps an order', () => {
             .contains('Motion to Proceed Remotely')
             .should('be.visible');
           cy.get('.attachment-viewer-button')
-            .contains('Motion to Proceed Remotely GRANTED')
+            .contains('Motion to Proceed Remotely - GRANTED')
             .should('be.visible');
         });
     });

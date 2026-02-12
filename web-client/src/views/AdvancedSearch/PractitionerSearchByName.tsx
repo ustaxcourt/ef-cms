@@ -275,6 +275,7 @@ export const PractitionerSearchByName = connect(
             <div className="grid-row">
               <div className="button-container">
                 <Button
+                  type="submit"
                   aria-describedby="search-by-name"
                   className="margin-bottom-0"
                   data-testid="practitioner-search-by-name-button"

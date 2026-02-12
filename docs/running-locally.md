@@ -162,6 +162,10 @@ colvinschambers@example.com
 
 Hopefully everything will work fine, but if you have issues logging in, double check that your API didn't throw errors when trying to initialize.  Check your network tab or browser console for any errors when trying to access the localhost:4000 API.  Also verify you are on the correct branch. `ustaxcourt/staging` is recommended.
 
+## Debugging the Application
+
+When you are ready to set breakpoints and debug the application, see [Debugging Locally with an IDE](./debugging-locally.md) for instructions on using integrated run configurations to run and debug the application in JetBrains IDEs or VSCode.
+
 ## Running the USTC pay.gov test server
 
 When testing interactions with pay.gov locally or in a pipeline, the USTC pay.gov test server needs to be started. The test server has been installed as a dev dependency. To run it, use the following command: 
