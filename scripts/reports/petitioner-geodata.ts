@@ -185,6 +185,8 @@ const exportGeodata = async () => {
   ];
 
   generateCsv({ columns, filename: outputCsv, rows: userGeodata });
+  console.log('Petitioner geocode report complete.');
+  console.log(`Report can be found at: ${outputCsv}`);
 };
 
 exportGeodata().catch(e => {

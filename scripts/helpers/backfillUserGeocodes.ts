@@ -2,6 +2,7 @@ import { getJsDateFromIso } from '@shared/business/utilities/DateHandler';
 import { getDbReader } from '@web-api/database';
 import { upsertUserContacts } from '@web-api/persistence/postgres/userContact/upsertUserContact';
 import { sql } from 'kysely';
+import { ask } from 'scripts/helpers/prompts';
 import { Geocoder } from 'us-census-geocoder';
 
 type geoResults = {
@@ -55,6 +56,36 @@ const getUsersMissingGeocode = async (
   return (await query.execute()) as geoResults[];
 };
 
+const getUserMissingGeocodeCount = async (
+  fromDateIso?: string,
+  toDateIso?: string,
+) => {
+  let query = await getDbReader(db =>
+    db
+      .selectFrom('dwCase as c')
+      .crossJoin(
+        sql`LATERAL jsonb_array_elements(c.petitioners)`.as('petitioner'),
+      )
+      .leftJoin('dwUserContact as uc', join =>
+        join
+          .onRef(sql`petitioner->>'contactId'`, '=', 'uc.userId')
+          .onRef('c.docketNumber', '=', 'uc.docketNumber'),
+      )
+      .select([sql<number>`count(1)`.as('count')])
+      .where('c.status', 'not in', ['Closed', 'Dismissed'])
+      .where(qb => qb.or([qb('uc.lat', 'is', null), qb('uc.lng', 'is', null)]))
+      .where('uc.geodataMatch', 'is', null)
+      .where(sql`petitioner ->> 'address1'`, 'is not', null),
+  );
+  if (fromDateIso)
+    query = query.where('c.receivedAt', '>=', getJsDateFromIso(fromDateIso));
+
+  if (toDateIso)
+    query = query.where('c.receivedAt', '<', getJsDateFromIso(toDateIso));
+
+  return await query.executeTakeFirst();
+};
+
 export const backfillUserGeocodes = async ({
   batchSize = 10000,
   delayMs = 6000,
@@ -69,7 +100,21 @@ export const backfillUserGeocodes = async ({
   toDateIso?: string;
 }) => {
   let totalProcessed = 0;
-  let totalGeocoded = 0;
+
+  const count = (await getUserMissingGeocodeCount(fromDateIso, toDateIso))
+    ?.count;
+
+  if (count == 0) {
+    console.log('There are no addresses to geocode in this range');
+    return;
+  }
+
+  const userInput = await ask(
+    `You are about to geocode ${count} addresses. Proceed? y/n `,
+  );
+  if (userInput.toLowerCase() !== 'y') {
+    return;
+  }
 
   console.log(
     `Starting geocode backfill (dryRun=${dryRun}, batchSize=${batchSize}, delayMs=${delayMs})`,
@@ -97,7 +142,6 @@ export const backfillUserGeocodes = async ({
         console.log(
           `[DRY RUN] Would geocode user ${user.userId}: ${user.address1}, ${user.city}, ${user.state} ${user.zip}`,
         );
-        totalGeocoded++;
       } else {
         geocoder.add(
           `${user.userId}-${user.docketNumber}`,
@@ -128,9 +172,10 @@ export const backfillUserGeocodes = async ({
         geodataMatch: contact.match || false,
       })),
     );
+
+    console.log(`Completed ${totalProcessed} / ${count}`);
   }
 
   console.log(`\nBackfill complete:`);
   console.log(`  Total processed: ${totalProcessed}`);
-  console.log(`  Total geocoded:  ${totalGeocoded}`);
 };
