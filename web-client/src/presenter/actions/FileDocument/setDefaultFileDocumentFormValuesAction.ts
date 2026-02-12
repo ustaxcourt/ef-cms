@@ -1,6 +1,8 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import { GENERATION_TYPES } from '@web-client/getConstants';
 import { state } from '@web-client/presenter/app.cerebral';
+import { showGenerationType } from '../setDefaultGenerationTypeAction';
+import { EXPLICITLY_DENIED_CONSOLIDATED_GROUP_FILING_EVENT_CODES } from '@shared/business/entities/EntityConstants';
 
 export const setDefaultFileDocumentFormValuesAction = ({
   applicationContext,
@@ -18,8 +20,14 @@ export const setDefaultFileDocumentFormValuesAction = ({
   const isMultiDocketableEventCode = !!applicationContext
     .getConstants()
     .MULTI_DOCKET_FILING_EVENT_CODES.includes(eventCode);
+  const isAllowedToFileInConsolidatedGroup =
+    !EXPLICITLY_DENIED_CONSOLIDATED_GROUP_FILING_EVENT_CODES.includes(
+      eventCode,
+    );
   const canFileInConsolidatedGroup =
-    isInConsolidatedGroup && isMultiDocketableEventCode;
+    isInConsolidatedGroup &&
+    isMultiDocketableEventCode &&
+    isAllowedToFileInConsolidatedGroup;
 
   const filersMap = {};
 
@@ -39,7 +47,11 @@ export const setDefaultFileDocumentFormValuesAction = ({
   store.set(state.form.certificateOfService, false);
   store.set(state.form.hasSupportingDocuments, false);
   store.set(state.form.hasSecondarySupportingDocuments, false);
-  store.set(state.form.generationType, GENERATION_TYPES.MANUAL);
+  if (showGenerationType(user, eventCode, caseDetail.petitioners)) {
+    store.set(state.form.generationType, GENERATION_TYPES.AUTO);
+  } else {
+    store.set(state.form.generationType, GENERATION_TYPES.MANUAL);
+  }
   store.set(state.form.practitioner, []);
   store.set(state.form.filersMap, filersMap);
 };

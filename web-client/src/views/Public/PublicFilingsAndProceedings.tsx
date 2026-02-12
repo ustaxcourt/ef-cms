@@ -75,35 +75,13 @@ export const PublicFilingsAndProceedings = connect<
           return (
             <span key={affectedEntry.docketEntryId}>
               <br></br>
-              <span className="display-inline-block">
-                <span> --- </span>
-                {affectedEntry.showDownloadLink && (
-                  <Button
-                    link
-                    className={classNames('text-right', 'view-pdf-link')}
-                    data-testid={`related-document-viewer-link-${affectedEntry.docketEntryIndex}`}
-                    arial-label={`View PDF for: ${affectedEntry.docketEntryIndex}`}
-                    onClick={() =>
-                      openCaseDocumentDownloadUrlSequence({
-                        docketEntryId: affectedEntry.docketEntryId,
-                        docketNumber: caseDetail.docketNumber,
-                        isPublic: true,
-                        useSameTab: entry.openInSameTab,
-                      })
-                    }
-                  >
-                    {affectedEntry?.disposition} #
-                    {affectedEntry.docketEntryIndex}
-                  </Button>
-                )}
-                {!affectedEntry.showDownloadLink && (
-                  <span>
-                    {' '}
-                    {affectedEntry?.disposition} #
-                    {affectedEntry.docketEntryIndex}{' '}
-                  </span>
-                )}
-              </span>
+              <span> --- </span>
+              {renderDispositionLinks(
+                entry,
+                affectedEntry,
+                caseDetail.docketNumber,
+                openCaseDocumentDownloadUrlSequence,
+              )}
             </span>
           );
         })}
@@ -112,4 +90,36 @@ export const PublicFilingsAndProceedings = connect<
   },
 );
 
-PublicFilingsAndProceedings.displayName = 'PublicFilingsAndProceedings';
+const renderDispositionLinks = (
+  docketEntry,
+  affectedEntry,
+  docketNumber,
+  openDocumentDownloadSequence,
+) => {
+  return affectedEntry.dispositionLinkText.map((linkText, index) => (
+    <span
+      className="display-block"
+      key={`${affectedEntry.docketEntryIndex}-${index}`}
+    >
+      {affectedEntry.showDownloadLink && (
+        <Button
+          link
+          className={classNames('text-right', 'view-pdf-link')}
+          data-testid={`related-document-viewer-link-${affectedEntry.docketEntryIndex}-${index}`}
+          aria-label={`View PDF for: ${affectedEntry.docketEntryIndex} (link ${index + 1})`}
+          onClick={() =>
+            openDocumentDownloadSequence({
+              docketEntryId: affectedEntry.docketEntryId,
+              docketNumber,
+              isPublic: true,
+              useSameTab: docketEntry.openInSameTab,
+            })
+          }
+        >
+          {linkText}
+        </Button>
+      )}
+      {!affectedEntry.showDownloadLink && <span> {linkText} </span>}
+    </span>
+  ));
+};

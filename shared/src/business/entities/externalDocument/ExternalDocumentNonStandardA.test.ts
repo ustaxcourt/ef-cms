@@ -87,5 +87,15 @@ describe('ExternalDocumentNonStandardA', () => {
         'Brief in Support of',
       );
     });
+
+    it('should generate a blank title when documentTitle is undefined', () => {
+      const externalDocumentA = ExternalDocumentFactory({
+        category: 'Supporting Document',
+        documentType: 'Brief in Support',
+        scenario: 'Nonstandard A',
+      });
+
+      expect(externalDocumentA.getDocumentTitle()).toEqual('');
+    });
   });
 });

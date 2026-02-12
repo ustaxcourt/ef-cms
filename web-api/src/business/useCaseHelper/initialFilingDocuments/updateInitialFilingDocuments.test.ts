@@ -15,6 +15,7 @@ import { updateInitialFilingDocuments } from './updateInitialFilingDocuments';
 describe('addNewInitialFilingToCase', () => {
   const mockRQT = {
     docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3850',
+    documentStorageId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3850',
     documentType: 'Request for Place of Trial',
     eventCode: 'RQT',
     filedBy: 'Test Petitioner',
@@ -23,6 +24,7 @@ describe('addNewInitialFilingToCase', () => {
   };
   const mockSTIN = {
     docketEntryId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3850',
+    documentStorageId: 'b6b81f4d-1e47-423a-8caf-6d2fdc3d3850',
     documentType: 'Statement of Taxpayer Identification',
     eventCode: 'STIN',
     filedBy: 'Test Petitioner',
@@ -249,6 +251,10 @@ describe('addNewInitialFilingToCase', () => {
       d => d.docketEntryId === mockRQT.docketEntryId,
     );
     expect(oldRqtFile).toBeUndefined();
+    expect(
+      applicationContext.getPersistenceGateway().deleteDocumentFile.mock
+        .calls[0][0],
+    ).toEqual(expect.objectContaining({ key: mockRQT.documentStorageId }));
     const newRqtFile = mockOriginalCase.docketEntries.find(
       d => d.docketEntryId === mockNewRQT.docketEntryId,
     );

@@ -225,41 +225,47 @@ export const internalPetitionPartiesHelper = (
     .getUtilities()
     .isExternalUser(user.role);
 
-  const showPaperPetitionEmailFieldAndConsentBox =
-    getShowPaperPetitionEmailFieldAndConsentBox({
-      eConsentFieldsEnabled: !!E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG,
-      isExternalUser,
-      isPaperFiling: isPaper,
-      petitionFiledByPrivatePractitioner: privatePractitioners?.length,
-    });
+  const showContactEmailField =
+    !!E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG && !isExternalUser;
 
-  const showSecondaryContactEmailFieldAndConsentBox =
-    E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG &&
-    !isPaper &&
+  const isPaperOrPractitionerFiled =
+    isPaper === true || (privatePractitioners?.length ?? 0) > 0;
+
+  // eFilers already consented by filing electronically with their DAWSON email
+  const showEConsentCheckbox =
+    !!E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG &&
+    !isExternalUser &&
+    isPaperOrPractitionerFiled;
+
+  // Legacy flag for backwards compatibility - now split into two separate concerns
+  const showPaperPetitionEmailFieldAndConsentBox = showEConsentCheckbox;
+
+  const showSecondaryContactEmailField =
+    !!E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG &&
     partyType === PARTY_TYPES.petitionerSpouse &&
     !isExternalUser;
+
+  // For eFiled petitions, the spouse email is provided by the filer, but consent checkbox is not needed
+  const showSecondaryEConsentCheckbox =
+    !!E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG &&
+    !isExternalUser &&
+    partyType === PARTY_TYPES.petitionerSpouse &&
+    isPaperOrPractitionerFiled;
+
+  // Legacy flag for backwards compatibility
+  const showSecondaryContactEmailFieldAndConsentBox =
+    showSecondaryEConsentCheckbox;
 
   const contacts = getOptionsForContact({ PARTY_TYPES, partyType });
 
   return {
     ...contacts,
+    showContactEmailField,
+    showEConsentCheckbox,
     showPaperPetitionEmailFieldAndConsentBox,
+    showSecondaryContactEmailField,
     showSecondaryContactEmailFieldAndConsentBox,
+    showSecondaryEConsentCheckbox,
   };
 };
 
-function getShowPaperPetitionEmailFieldAndConsentBox({
-  eConsentFieldsEnabled,
-  isExternalUser,
-  isPaperFiling,
-  petitionFiledByPrivatePractitioner,
-}: {
-  eConsentFieldsEnabled: boolean;
-  isExternalUser: boolean;
-  petitionFiledByPrivatePractitioner: boolean;
-  isPaperFiling: boolean;
-}) {
-  if (!eConsentFieldsEnabled || isExternalUser) return false;
-  if (petitionFiledByPrivatePractitioner || isPaperFiling) return true;
-  return false;
-}

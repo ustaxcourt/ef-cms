@@ -7,7 +7,7 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 describe('formatDateFromDatePicker', () => {
   presenter.providers.applicationContext = applicationContext;
 
-  it('should return a date, formatted using the pattern provided when the input date is valid', async () => {
+  it('should return a date, formatted using the pattern provided', async () => {
     const { output } = await runAction(formatDateFromDatePickerAction, {
       modules: {
         presenter,
@@ -25,24 +25,6 @@ describe('formatDateFromDatePicker', () => {
     });
   });
 
-  it('should return the exact date provided when the input date is invalid', async () => {
-    const { output } = await runAction(formatDateFromDatePickerAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        key: 'finalBriefDueDate',
-        toFormat: FORMATS.YYYYMMDD,
-        value: '08/xy/2023',
-      },
-    });
-
-    expect(output).toEqual({
-      key: 'finalBriefDueDate',
-      value: '08/xy/2023',
-    });
-  });
-
   it('should not attempt to format when the date has been cleared', async () => {
     const { output } = await runAction(formatDateFromDatePickerAction, {
       modules: {
@@ -56,23 +38,5 @@ describe('formatDateFromDatePicker', () => {
     });
 
     expect(output).toEqual(undefined);
-  });
-
-  it('should format the date when month and day is only one digit', async () => {
-    const { output } = await runAction(formatDateFromDatePickerAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        key: 'finalBriefDueDate',
-        toFormat: FORMATS.YYYYMMDD,
-        value: '9/9/2023',
-      },
-    });
-
-    expect(output).toEqual({
-      key: 'finalBriefDueDate',
-      value: '2023-09-09',
-    });
   });
 });

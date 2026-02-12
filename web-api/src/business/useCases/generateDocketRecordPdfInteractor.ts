@@ -180,12 +180,13 @@ const processRelatedDocketEntries = (
       entry => entry.docketEntryId === affectedEntry.docketEntryId,
     );
 
+    const dispositionText = MOTION_DISPOSITION_VERBIAGE[
+      affectedEntry.disposition
+    ][relationshipType].map(d => `${d} #${relatedEntry?.index}`);
+
     return {
       docketEntryIndex: relatedEntry?.index,
-      disposition:
-        MOTION_DISPOSITION_VERBIAGE[affectedEntry.disposition][
-          relationshipType
-        ],
+      dispositionText,
     };
   });
 };

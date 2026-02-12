@@ -2,7 +2,10 @@
 
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
-import { STATUS_REPORT_ORDER_OPTIONS } from '@shared/business/entities/EntityConstants';
+import {
+  ALLOWLIST_FEATURE_FLAGS,
+  STATUS_REPORT_ORDER_OPTIONS,
+} from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const draftDocumentViewerHelper = (
@@ -77,16 +80,37 @@ export const draftDocumentViewerHelper = (
     : '';
 
   const showEditButtonForRole = isInternalUser;
-  const showEditButtonSigned = isStatusReportOrder
-    ? permissions.STATUS_REPORT_ORDER && isSigned
-    : showEditButtonForRole &&
-      isSigned &&
-      !isNotice &&
-      !isDraftStampOrder &&
-      !isStipulatedDecision;
-  const showEditButtonNotSigned = isStatusReportOrder
-    ? permissions.STATUS_REPORT_ORDER && !isSigned
-    : showEditButtonForRole && (!isSigned || isNotice);
+
+  const eventCode = formattedDocumentToDisplay.eventCode
+    ? formattedDocumentToDisplay.eventCode
+    : null;
+
+  const restrictedEventCodes = get(
+    state.featureFlags[ALLOWLIST_FEATURE_FLAGS.RESTRICTED_EVENT_CODES.key],
+  );
+
+  const restrictedEventCodesArray =
+    typeof restrictedEventCodes === 'string'
+      ? restrictedEventCodes.split(',').map(code => code.trim())
+      : [];
+
+  const isRestrictedEventCode = restrictedEventCodesArray.includes(eventCode);
+
+  const showEditButtonSigned =
+    !isRestrictedEventCode &&
+    (isStatusReportOrder
+      ? permissions.STATUS_REPORT_ORDER && isSigned
+      : showEditButtonForRole &&
+        isSigned &&
+        !isNotice &&
+        !isDraftStampOrder &&
+        !isStipulatedDecision);
+
+  const showEditButtonNotSigned =
+    !isRestrictedEventCode &&
+    (isStatusReportOrder
+      ? permissions.STATUS_REPORT_ORDER && !isSigned
+      : showEditButtonForRole && (!isSigned || isNotice));
 
   const showAddDocketEntryButtonForDocument = isSigned || !requiresSignature;
   const showAddDocketEntryButton =

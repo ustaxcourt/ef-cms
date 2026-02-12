@@ -284,7 +284,9 @@ async function getIrsPractitioners({
   return practitionerInfo;
 }
 
-async function getDocketEntries(docketNumbers: string[]) {
+async function getDocketEntries(
+  docketNumbers: string[],
+): Promise<DocketEntryWithAffected[]> {
   const dbDocketEntries = await (
     await docketEntriesBaseQuery({ docketNumbers })
   ).execute();

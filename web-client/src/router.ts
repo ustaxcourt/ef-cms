@@ -188,7 +188,7 @@ const router = {
     registerRoute(
       '/case-detail/*/case-information',
       ifHasAccess({ app }, docketNumber => {
-        window.history.replaceState(null, null, `/case-detail/${docketNumber}`);
+        window.history.replaceState(null, '', `/case-detail/${docketNumber}`);
         setPageTitle(`Docket ${docketNumber}`);
         return app.getSequence('gotoCaseDetailSequence')({
           docketNumber,
@@ -201,7 +201,7 @@ const router = {
       '/case-detail/*/case-information?..',
       ifHasAccess({ app }, docketNumber => {
         const { caseInformationTab, partiesTab } = route.query();
-        window.history.replaceState(null, null, `/case-detail/${docketNumber}`);
+        window.history.replaceState(null, '', `/case-detail/${docketNumber}`);
         setPageTitle(`Docket ${docketNumber}`);
         return app.getSequence('gotoCaseDetailSequence')({
           caseInformationTab,
@@ -215,7 +215,7 @@ const router = {
     registerRoute(
       '/case-detail/*/draft-documents',
       ifHasAccess({ app }, docketNumber => {
-        window.history.replaceState(null, null, `/case-detail/${docketNumber}`);
+        window.history.replaceState(null, '', `/case-detail/${docketNumber}`);
         setPageTitle(`Docket ${docketNumber}`);
         return app.getSequence('gotoCaseDetailSequence')({
           docketNumber,
@@ -241,7 +241,7 @@ const router = {
       '/case-detail/*/document-view?..',
       ifHasAccess({ app }, docketNumber => {
         const { docketEntryId } = route.query();
-        window.history.replaceState(null, null, `/case-detail/${docketNumber}`);
+        window.history.replaceState(null, '', `/case-detail/${docketNumber}`);
         setPageTitle(`Docket ${docketNumber}`);
         return app.getSequence('gotoCaseDetailSequence')({
           docketEntryId,
@@ -938,14 +938,6 @@ const router = {
         return app.getSequence('gotoMyAccountSequence')();
       }),
     );
-
-    registerRoute('/verify-email..', () => {
-      setPageTitle('Verify Email');
-      const { token } = route.query();
-      return app.getSequence('gotoVerifyEmailSequence')({
-        token,
-      });
-    });
 
     registerRoute(
       '/document-qc/my',
