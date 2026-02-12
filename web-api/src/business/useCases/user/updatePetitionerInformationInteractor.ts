@@ -27,6 +27,7 @@ import { generateAndServeDocketEntry } from '@web-api/business/useCaseHelper/ser
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
+import { invalidateUserContactGeocode } from '@web-api/persistence/postgres/userContact/invalidateUserContactGeocode';
 
 export const getIsUserAuthorized = ({
   petitionerCaseRaw,
@@ -307,6 +308,10 @@ export const updatePetitionerInformation = async (
     });
     serviceUrl = url;
 
+    await invalidateUserContactGeocode(
+      docketNumber,
+      updatedPetitionerData.contactId,
+    );
   }
 
   const shouldUpdateEmailAddress =
