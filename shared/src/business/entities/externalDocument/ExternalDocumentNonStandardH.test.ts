@@ -114,5 +114,15 @@ describe('ExternalDocumentNonStandardH', () => {
         'Motion for Leave to File Brief in Support of Petition',
       );
     });
+
+    it('should generate a blank title when documentTitle is undefined', () => {
+      const externalDocumentH = ExternalDocumentFactory({
+        category: 'Motion',
+        documentType: 'Motion for Leave to File',
+        scenario: 'Nonstandard H',
+      });
+
+      expect(externalDocumentH.getDocumentTitle()).toEqual('');
+    });
   });
 });

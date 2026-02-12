@@ -38,6 +38,7 @@ import {
   subtractISODates,
   validateDateAndCreateISO,
   isValidPastDate,
+  formatDateFromDatePicker
 } from './DateHandler';
 
 describe('DateHandler', () => {
@@ -1093,6 +1094,26 @@ describe('DateHandler', () => {
 
     it('returns false for invalid input', () => {
       expect(isValidPastDate('not-a-date')).toBe(false);
+    });
+  });
+
+  describe('formatDateFromDatePicker', () => {
+    it('should return a date, formatted using the pattern provided when the input date is valid', () => {
+      const output = formatDateFromDatePicker('08/29/2023', FORMATS.YYYYMMDD);
+
+      expect(output).toEqual('2023-08-29');
+    });
+
+    it('should return the exact date provided when the input date is invalid', () => {
+      const output = formatDateFromDatePicker('08/xy/2023', FORMATS.YYYYMMDD);
+
+      expect(output).toEqual('08/xy/2023');
+    });
+
+    it('should format the date when month and day is only one digit', () => {
+      const output = formatDateFromDatePicker('9/9/2023', FORMATS.YYYYMMDD);
+
+      expect(output).toEqual('2023-09-09');
     });
   });
 });

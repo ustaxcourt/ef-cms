@@ -5,6 +5,7 @@ import { PDFSignerPageButtons } from './PDFSignerPageButtons';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
+import { ErrorNotification } from '@web-client/views/ErrorNotification';
 
 export const SignOrder = connect(
   {
@@ -179,6 +180,7 @@ export const SignOrder = connect(
           <div className="grid-row margin-bottom-1">
             <div className="grid-col-12">
               <h1>Apply Signature</h1>
+              <ErrorNotification />
             </div>
           </div>
           <div className="grid-row margin-bottom-1">

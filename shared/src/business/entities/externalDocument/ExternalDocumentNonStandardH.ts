@@ -32,7 +32,7 @@ export class ExternalDocumentNonStandardH extends ExternalDocumentBase {
 
   getDocumentTitle(): string {
     return replaceBracketed(
-      this.documentTitle,
+      this.documentTitle || '',
       this.secondaryDocument.getDocumentTitle(),
     );
   }

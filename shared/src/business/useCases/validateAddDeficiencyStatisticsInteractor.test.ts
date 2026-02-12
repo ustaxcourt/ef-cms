@@ -21,7 +21,7 @@ describe('validateAddDeficiencyStatisticsInteractor', () => {
           yearOrPeriod: 'Period',
         },
       },
-    );
+    });
 
     expect(result).toEqual(null);
   });

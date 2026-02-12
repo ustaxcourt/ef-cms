@@ -15,6 +15,14 @@ describe('completeDocumentSigningAction', () => {
 
   const mockDocketEntryId = applicationContext.getUniqueId();
 
+  const mockSuccessPath = jest.fn();
+  const mockErrorPath = jest.fn();
+
+  presenter.providers.path = {
+    success: mockSuccessPath,
+    error: mockErrorPath,
+  };
+
   applicationContext
     .getUseCases()
     .saveSignedDocumentInteractor.mockReturnValue({
@@ -81,7 +89,7 @@ describe('completeDocumentSigningAction', () => {
   });
 
   it('should sign a document via executing various use cases', async () => {
-    const result = await runAction(completeDocumentSigningAction, {
+    await runAction(completeDocumentSigningAction, {
       modules: {
         presenter,
       },
@@ -94,7 +102,9 @@ describe('completeDocumentSigningAction', () => {
       applicationContext.getUseCases().saveSignedDocumentInteractor.mock.calls
         .length,
     ).toBe(1);
-    expect(result.output).toMatchObject({
+    expect(mockErrorPath).not.toHaveBeenCalled();
+
+    expect(mockSuccessPath.mock.calls[0][0]).toMatchObject({
       docketNumber,
       redirectUrl: `/case-detail/${docketNumber}/draft-documents?docketEntryId=${mockDocketEntryId}`,
       tab: 'docketRecord',
@@ -102,7 +112,7 @@ describe('completeDocumentSigningAction', () => {
   });
 
   it('should NOT sign a document without signature data', async () => {
-    const result = await runAction(completeDocumentSigningAction, {
+    await runAction(completeDocumentSigningAction, {
       modules: {
         presenter,
       },
@@ -122,7 +132,10 @@ describe('completeDocumentSigningAction', () => {
       applicationContext.getUseCases().saveSignedDocumentInteractor.mock.calls
         .length,
     ).toBe(0);
-    expect(result.output).toMatchObject({
+
+    expect(mockErrorPath).not.toHaveBeenCalled();
+
+    expect(mockSuccessPath.mock.calls[0][0]).toMatchObject({
       docketNumber,
       tab: 'docketRecord',
     });
@@ -131,7 +144,7 @@ describe('completeDocumentSigningAction', () => {
   it('should construct a redirectUrl to the message detail document view if there is a parentMessageId present in state', async () => {
     const parentMessageId = applicationContext.getUniqueId();
 
-    const result = await runAction(completeDocumentSigningAction, {
+    await runAction(completeDocumentSigningAction, {
       modules: {
         presenter,
       },
@@ -141,33 +154,38 @@ describe('completeDocumentSigningAction', () => {
       },
     });
 
-    expect(result.output).toMatchObject({
+    expect(mockErrorPath).not.toHaveBeenCalled();
+
+    expect(mockSuccessPath.mock.calls[0][0]).toMatchObject({
       redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}?documentId=${mockDocketEntryId}`,
     });
   });
 
   it('should construct a redirectUrl to the draft documents view if there is no parentMessageId present in state', async () => {
-    const result = await runAction(completeDocumentSigningAction, {
+    await runAction(completeDocumentSigningAction, {
       modules: {
         presenter,
       },
       state: mockState,
     });
 
-    expect(result.output).toMatchObject({
+    expect(mockErrorPath).not.toHaveBeenCalled();
+
+    expect(mockSuccessPath.mock.calls[0][0]).toMatchObject({
       redirectUrl: `/case-detail/${docketNumber}/draft-documents?docketEntryId=${mockDocketEntryId}`,
     });
   });
 
   it('returns the updated documents docketEntryId as props', async () => {
-    const { output } = await runAction(completeDocumentSigningAction, {
+    await runAction(completeDocumentSigningAction, {
       modules: {
         presenter,
       },
       state: mockState,
     });
 
-    expect(output.docketEntryId).toBeDefined();
+    expect(mockErrorPath).not.toHaveBeenCalled();
+    expect(mockSuccessPath.mock.calls[0][0].docketEntryId).toBeDefined();
   });
 
   it('accesses pdfjsObj from state if not available on window', async () => {
@@ -186,5 +204,28 @@ describe('completeDocumentSigningAction', () => {
     });
 
     expect(mockPdfjsObj.getData).toHaveBeenCalled();
+  });
+
+  it('should throw error if pdfjsObj is null', async () => {
+    delete (global.window as Window & { pdfjsObj?: unknown }).pdfjsObj;
+
+    await runAction(completeDocumentSigningAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        ...mockState,
+        pdfForSigning: {
+          ...mockState.pdfForSigning,
+          pdfjsObj: undefined,
+        },
+      },
+    });
+
+    await expect(mockErrorPath).toHaveBeenCalledWith({
+      alertError: {
+        message: 'Unable to complete signing. Please try again.',
+      },
+    });
   });
 });
