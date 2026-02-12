@@ -43,6 +43,12 @@ const scriptConfig: ScriptConfig = {
       short: 'f',
       type: 'boolean',
     },
+    groupConsolidated: {
+      default: false,
+      long: 'group-consolidated',
+      short: 'g',
+      type: 'boolean',
+    },
     stricken: {
       default: false,
       short: 's',
@@ -58,15 +64,15 @@ const scriptConfig: ScriptConfig = {
   },
   requireActiveAwsSession: true,
 };
-const { count, eventCodes, fiscal, stricken, years } = parseArgsAndEnvVars(
-  scriptConfig,
-) as {
-  count: boolean;
-  eventCodes: string[];
-  fiscal: boolean;
-  stricken: boolean;
-  years: number[];
-};
+const { count, eventCodes, fiscal, groupConsolidated, stricken, years } =
+  parseArgsAndEnvVars(scriptConfig) as {
+    count: boolean;
+    eventCodes: string[];
+    fiscal: boolean;
+    groupConsolidated: boolean;
+    stricken: boolean;
+    years: number[];
+  };
 
 const OUTPUT_DIR = `${process.env.HOME}/Documents`;
 
@@ -84,7 +90,8 @@ const outputCsv = ({
     { header: 'Case Title', key: 'caption' },
   ];
   const filename =
-    `${OUTPUT_DIR}/${eventCodes.map(ec => ec.toLowerCase()).join('-')}-filed-` +
+    `${OUTPUT_DIR}/${groupConsolidated ? 'distinct-' : ''}` +
+    `${eventCodes.map(ec => ec.toLowerCase()).join('-')}-filed-` +
     `in-${fiscal ? 'fy-' : ''}${years.join('-')}.csv`;
   const rows = docketEntries.map(de => ({
     ...pick(de, ['docketNumber', 'documentType', 'status']),
@@ -103,12 +110,14 @@ const outputCsv = ({
       count,
       eventCodes,
       fiscal,
+      groupConsolidated,
       onlyNonStricken: !stricken,
       years,
     })) as number;
     console.log(
-      `Found ${docCount} ${stricken ? '' : 'non-stricken '}` +
-        `${eventCodes.join(',')} documents filed in ${fiscal ? 'fy' : ''} ` +
+      `Found ${docCount} ${groupConsolidated ? 'distinct ' : ''}` +
+        `${stricken ? '' : 'non-stricken '}` +
+        `${eventCodes.join(',')} documents filed in ${fiscal ? 'fy ' : ''}` +
         `${years.join(',')}`,
     );
     return;
@@ -116,13 +125,14 @@ const outputCsv = ({
   const docketEntries = (await getDocketEntriesByEventCodesAndYears({
     eventCodes,
     fiscal,
+    groupConsolidated,
     onlyNonStricken: !stricken,
     years,
   })) as EventCodeReportDocketEntry[];
   console.log(
-    `Found ${docketEntries.length} ${stricken ? '' : 'non-stricken '}` +
-      `${eventCodes.join(',')} documents filed in ${fiscal ? 'fy' : ''} ` +
-      `${years.join(',')}`,
+    `Found ${docketEntries.length} ${groupConsolidated ? 'distinct ' : ''}` +
+      `${stricken ? '' : 'non-stricken '}${eventCodes.join(',')} documents ` +
+      `filed in ${fiscal ? 'fy ' : ''}${years.join(',')}`,
   );
   outputCsv({ docketEntries });
 })();
