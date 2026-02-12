@@ -31,6 +31,11 @@ const scriptConfig: ScriptConfig = {
       short: 'c',
       type: 'boolean',
     },
+    distinct: {
+      default: false,
+      short: 'd',
+      type: 'boolean',
+    },
     eventCodes: {
       commaDelimited: true,
       position: 0,
@@ -58,15 +63,15 @@ const scriptConfig: ScriptConfig = {
   },
   requireActiveAwsSession: true,
 };
-const { count, eventCodes, fiscal, stricken, years } = parseArgsAndEnvVars(
-  scriptConfig,
-) as {
-  count: boolean;
-  eventCodes: string[];
-  fiscal: boolean;
-  stricken: boolean;
-  years: number[];
-};
+const { count, distinct, eventCodes, fiscal, stricken, years } =
+  parseArgsAndEnvVars(scriptConfig) as {
+    count: boolean;
+    distinct: boolean;
+    eventCodes: string[];
+    fiscal: boolean;
+    stricken: boolean;
+    years: number[];
+  };
 
 const OUTPUT_DIR = `${process.env.HOME}/Documents`;
 
@@ -84,7 +89,8 @@ const outputCsv = ({
     { header: 'Case Title', key: 'caption' },
   ];
   const filename =
-    `${OUTPUT_DIR}/${eventCodes.map(ec => ec.toLowerCase()).join('-')}-filed-` +
+    `${OUTPUT_DIR}/${distinct ? 'distinct-' : ''}` +
+    `${eventCodes.map(ec => ec.toLowerCase()).join('-')}-filed-` +
     `in-${fiscal ? 'fy-' : ''}${years.join('-')}.csv`;
   const rows = docketEntries.map(de => ({
     ...pick(de, ['docketNumber', 'documentType', 'status']),
@@ -101,28 +107,30 @@ const outputCsv = ({
   if (count) {
     const docCount: number = (await getDocketEntriesByEventCodesAndYears({
       count,
+      distinct,
       eventCodes,
       fiscal,
       onlyNonStricken: !stricken,
       years,
     })) as number;
     console.log(
-      `Found ${docCount} ${stricken ? '' : 'non-stricken '}` +
-        `${eventCodes.join(',')} documents filed in ${fiscal ? 'fy' : ''} ` +
-        `${years.join(',')}`,
+      `Found ${docCount} ${distinct ? 'distinct ' : ''}` +
+        `${stricken ? '' : 'non-stricken '} ${eventCodes.join(',')} ` +
+        `documents filed in ${fiscal ? 'fy ' : ''}${years.join(',')}`,
     );
     return;
   }
   const docketEntries = (await getDocketEntriesByEventCodesAndYears({
+    distinct,
     eventCodes,
     fiscal,
     onlyNonStricken: !stricken,
     years,
   })) as EventCodeReportDocketEntry[];
   console.log(
-    `Found ${docketEntries.length} ${stricken ? '' : 'non-stricken '}` +
-      `${eventCodes.join(',')} documents filed in ${fiscal ? 'fy' : ''} ` +
-      `${years.join(',')}`,
+    `Found ${docketEntries.length} ${distinct ? 'distinct ' : ''}` +
+      `${stricken ? '' : 'non-stricken '}${eventCodes.join(',')} ` +
+      `documents filed in ${fiscal ? 'fy ' : ''}${years.join(',')}`,
   );
   outputCsv({ docketEntries });
 })();
