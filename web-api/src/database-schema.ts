@@ -142,7 +142,6 @@ interface DatabaseSchemaType {
   dwUserOnCase: DatabaseTableMetadata<UserOnCaseTable>;
   dwUserOnCasePending: DatabaseTableMetadata<UserOnCasePendingTable>;
   dwWorkItem: DatabaseTableMetadata<WorkItemTable>;
-  geocodeData: DatabaseTableMetadata<GeocodeDataTable>;
 }
 
 // transformOpenSearchMessage takes in a message--a result from the DB--and gets it into the right format to pass into the queue
