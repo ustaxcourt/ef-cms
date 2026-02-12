@@ -16,7 +16,7 @@ const scriptConfig: ScriptConfig = {
 };
 parseArgsAndEnvVars(scriptConfig);
 
-const invalidMultiDocketedOnArrays = async () => {
+const multiDocketedOnArrays = async () => {
   return await getDbReader(reader =>
     reader
       .selectFrom(
@@ -37,29 +37,41 @@ const invalidMultiDocketedOnArrays = async () => {
   );
 };
 
-// const invalidMultiDocketedOnArrays = async (docketEntries) => {
-//   return await getDbReader(reader =>
-//     reader
-//       .selectFrom('dwDocketEntry')
-//       .select([
-//         'docketEntryId',
-//         sql<string[]>`array_agg(docket_number order by docket_number)`.as(
-//           'multiDocketedOn',
-//         ),
-//       ])
-//       .groupBy('docketEntryId')
-//       .having(reader.fn.count('docketEntryId'), '>', 1)
-//       .execute(),
-//   );
-// };
+const invalidMultiDocketedOnArrays = async rowsOfMultiDocketed => {
+  const invalidRows: {
+    multiDocketedOn: string[];
+  }[] = [];
+
+  for (const row of rowsOfMultiDocketed) {
+    const docketNumbers: string[] = row.multiDocketedOn;
+
+    const cases = await getDbReader(reader =>
+      reader
+        .selectFrom('dwCase')
+        .select(['docketNumber', 'leadDocketNumber'])
+        .where('docketNumber', 'in', docketNumbers)
+        .execute(),
+    );
+
+    for (const aCase of cases) {
+      if (
+        !aCase.leadDocketNumber ||
+        !row.multiDocketedOn.includes(aCase.leadDocketNumber)
+      ) {
+        invalidRows.push(row);
+        break;
+      }
+    }
+  }
+
+  return invalidRows;
+};
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const docketEntries = await invalidMultiDocketedOnArrays();
+  const rowsOfMultiDocketed = await multiDocketedOnArrays();
+  const invalidRows = await invalidMultiDocketedOnArrays(rowsOfMultiDocketed);
 
-  console.log('***Unique MultiDocketedOn Arrays: ', docketEntries);
-  console.log(
-    '***Unique MultiDocketedOn Arrays length: ',
-    docketEntries.length,
-  );
+  console.log('***Invalid MultiDocketedOn Arrays: ', invalidRows);
+  console.log('***Invalid MultiDocketedOn Arrays length: ', invalidRows.length);
 })();
