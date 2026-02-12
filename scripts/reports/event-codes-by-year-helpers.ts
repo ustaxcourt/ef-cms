@@ -13,16 +13,16 @@ export type EventCodeReportDocketEntry = {
 
 export const getDocketEntriesByEventCodesAndYears = async ({
   count,
+  distinct,
   eventCodes,
   fiscal,
-  groupConsolidated,
   onlyNonStricken,
   years,
 }: {
   count?: boolean;
+  distinct?: boolean;
   eventCodes: string[];
   fiscal: boolean;
-  groupConsolidated?: boolean;
   onlyNonStricken?: boolean;
   years?: number[];
 }): Promise<number | EventCodeReportDocketEntry[]> => {
@@ -30,7 +30,7 @@ export const getDocketEntriesByEventCodesAndYears = async ({
     await getDbReader(async reader => {
       let query = reader.selectFrom('dwDocketEntry as de');
       if (count) {
-        if (groupConsolidated) {
+        if (distinct) {
           query = query.select(({ ref }) =>
             sql<number>`count(distinct ${ref('de.docketEntryId')})`.as('count'),
           );
@@ -49,7 +49,7 @@ export const getDocketEntriesByEventCodesAndYears = async ({
             'c.status',
           ]);
 
-        if (groupConsolidated) {
+        if (distinct) {
           query = query
             .distinctOn('de.docketEntryId')
             .orderBy('de.servedAt', 'asc');
