@@ -254,16 +254,6 @@ Below is a list of dependencies that are locked down due to known issues with se
 - January 9th, 2026: We successfully updated Quill from 1.3.7 to 2.0.3. The way Quill handles imports and props in function calls changed, requiring changes to our Quill.tsx and TextEditor.tsx.
 - January 27th, 2026: The decision was made to revert us back to 1.3.7 due to a bug where line tabing would break upon edit. No further updates to Quill should be made - there is a plan in the pipeline to swap Quill out for an embedded Microsoft Office Editor.
 
-
-### babel-jest, babel-core
-**Installed Version for babel-jest: 30.2.0**
-**Installed Version for babel-core: 7.28.5**
-
-- June 6th, 2025: Tried to update to 30.0.0-beta.3 from 29.7.0 on Friday, June 06, 2025, we weren't able to update it because it conflicts with ts-jest 29.3.4.
-- June 26 2025: newer versions of babel-core and jest core also started to cause issues with ts-jest. Once ts-jest is updated these issues should all clear up.
-- September 19th, 2025: babel-jest was successfully updated to 30.0.0 from 29.7.0.
-- September 19th, 2025: babel/core was successfully updated to 7.28..4 from 7.28.3, had some issues with Github Actions checks running all the way through, but Github still gave the commit a check. Refer to this PR for more info. https://github.com/ustaxcourt/ef-cms/pull/9164
-
 ### @types/node
 **Installed Version: 24.10.4**
 The major version of this package should match our major version of Node. At the moment that we are using Node v24.11.1 so we should use a package that starts with 24.
