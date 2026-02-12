@@ -15,6 +15,10 @@ export async function down(db: Kysely<any>): Promise<void> {
   await sql`
     ALTER TABLE "dw_user"
     ALTER COLUMN "is_senior_judge" TYPE varchar
-    USING "is_senior_judge"::varchar
+    USING CASE
+      WHEN "is_senior_judge" IS TRUE THEN 'true'
+      WHEN "is_senior_judge" IS FALSE THEN 'false'
+      ELSE NULL
+    END
   `.execute(db);
 }
