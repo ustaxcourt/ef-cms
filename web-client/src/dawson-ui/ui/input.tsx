@@ -197,6 +197,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
             aria-describedby={cn(helpTextId, errorId)}
             aria-labelledby={labelId}
             className={inputClass}
+            required={required || undefined}
             {...props}
           />
           <InputError error={error} />
