@@ -13,7 +13,7 @@ describe('appInstanceManagerHelper', () => {
   );
 
   it('returns the broadcastChannel instance on the channelHandle property', () => {
-    const result = runCompute(appInstanceManagerHelper);
+    const result = runCompute(appInstanceManagerHelper, { state: {} });
 
     expect(result.channelHandle).toEqual('broadcast channel');
   });

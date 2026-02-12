@@ -5,8 +5,8 @@ import { loadTsConfig } from '../utils/load-tsconfig.mjs';
 const tsconfig = loadTsConfig('tsconfig.json');
 
 const config: Config = {
+  displayName: 'web-api',
   clearMocks: true,
-  collectCoverage: true,
   collectCoverageFrom: [
     'switch-environment-color.{js,ts}',
     'elasticsearch/*.test.{js,ts}',
@@ -47,7 +47,10 @@ const config: Config = {
     '!src/gateways/lambda/getLambdaClient.ts',
   ],
   coverageDirectory: './coverage',
-  coverageProvider: 'babel',
+  testMatch: [
+    '<rootDir>/elasticsearch/**/?(*.)+(spec|test).[jt]s?(x)',
+    '<rootDir>/src/**/?(*.)+(spec|test).[jt]s?(x)',
+  ],
   coverageThreshold: {
     global: {
       branches: 90,
@@ -68,7 +71,6 @@ const config: Config = {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
   transformIgnorePatterns: ['node_modules/(?!(uuid|p-queue|p-timeout)/)'],
-  verbose: false,
   setupFilesAfterEnv: [
     '<rootDir>/src/persistence/postgres/featureFlag/mocks.jest.ts',
   ],

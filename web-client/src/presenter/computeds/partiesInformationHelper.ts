@@ -78,16 +78,9 @@ export const partiesInformationHelper = (
   );
 
   const formattedParties = (caseDetail.petitioners || []).map(petitioner => {
-    const practitionersWithEmail = {
-      privatePractitioners: formattedPrivatePractitioners,
-    };
-
     const representingPractitioners = applicationContext
       .getUtilities()
-      .getPractitionersRepresenting(
-        practitionersWithEmail,
-        petitioner.contactId,
-      );
+      .getPractitionersRepresenting(caseDetail, petitioner.contactId);
 
     petitioner.formattedTitle = otherContactTypes.includes(
       petitioner.contactType,
@@ -157,7 +150,9 @@ export const partiesInformationHelper = (
       ...petitioner,
       canEditPetitioner,
       editPetitionerLink,
-      hasCounsel: representingPractitioners.length > 0,
+      hasCounsel: representingPractitioners
+        ? representingPractitioners.length > 0
+        : false,
       representingPractitioners,
       showExternalHeader: isExternalUser,
       showPaperPetitionEmail,

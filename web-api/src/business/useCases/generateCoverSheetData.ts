@@ -92,7 +92,7 @@ export const generateCoverSheetData = async ({
   }
 
   const docketNumberSuffixToUse = useInitialData
-    ? caseEntity.initialDocketNumberSuffix.replace('_', '')
+    ? caseEntity.initialDocketNumberSuffix?.replace('_', '')
     : caseEntity.docketNumberSuffix;
 
   const docketNumberWithSuffix =

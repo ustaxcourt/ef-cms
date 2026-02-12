@@ -17,7 +17,7 @@ export const validateOrderWithoutBodyAction = ({
 
   const errors = applicationContext
     .getUseCases()
-    .validateOrderWithoutBodyInteractor(applicationContext, {
+    .validateOrderWithoutBodyInteractor({
       orderMetadata,
     });
 
