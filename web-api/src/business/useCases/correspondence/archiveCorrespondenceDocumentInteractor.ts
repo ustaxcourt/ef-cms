@@ -11,6 +11,7 @@ import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCor
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { Correspondence } from '@shared/business/entities/Correspondence';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 export const archiveCorrespondenceDocument = async (
   applicationContext: ServerApplicationContext,
@@ -19,7 +20,7 @@ export const archiveCorrespondenceDocument = async (
     docketNumber,
   }: { correspondenceId: string; docketNumber: string },
   authorizedUser: UnknownAuthUser,
-): Promise<RawCase> => {
+): Promise<CaseDTO> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_CORRESPONDENCE)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -50,10 +51,12 @@ export const archiveCorrespondenceDocument = async (
     (correspondenceToArchiveEntity as Correspondence).validate().toRawObject(),
   ]);
 
-  return updateCaseAndAssociations({
+  const updatedCase = await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
   });
+
+  return new CaseDTO(updatedCase);
 };
 
 export const archiveCorrespondenceDocumentInteractor = withLocking(
