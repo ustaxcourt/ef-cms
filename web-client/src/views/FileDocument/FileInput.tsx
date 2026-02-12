@@ -130,7 +130,10 @@ export const FileInput = React.forwardRef<HTMLInputElement, FileInputProps>(
           name={name}
           ref={actualRef}
           style={{
-            display: fileOnForm || selectedFilename ? 'none' : 'block',
+            display:
+              showFileInfo && (fileOnForm || selectedFilename)
+                ? 'none'
+                : 'block',
           }}
           type="file"
           onChange={handleFileSelectionChange}

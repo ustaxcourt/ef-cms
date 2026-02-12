@@ -48,9 +48,9 @@ export const ScanDocumentTabs = ({
           ? documentTab.documentType
           : `tabButton-${documentTab.documentType}`;
         const tabName =
-          tabNameKey === 'documentId'
+          (tabNameKey === 'documentId'
             ? documentTab.documentId
-            : documentTab.documentType;
+            : documentTab.documentType) || documentTab.documentType;
         return (
           <Tab
             data-testid={dataTestId}

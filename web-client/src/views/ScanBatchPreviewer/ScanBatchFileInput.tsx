@@ -101,7 +101,7 @@ export const ScanBatchFileInput = connect<
               <FontAwesomeIcon icon="check-circle" size="1x" />
             </span>
           </label>
-          <span className="usa-hint">
+          <span className="usa-hint" id={`${documentType}-hint`}>
             File must be in PDF format (.pdf). Max file size{' '}
             {constants.MAX_FILE_SIZE_MB}MB.
           </span>

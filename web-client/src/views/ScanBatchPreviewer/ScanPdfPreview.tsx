@@ -10,7 +10,6 @@ type ScanPdfPreviewProps = {
   onConfirmDelete: (() => void) | Function;
   onConfirmReplace?: (() => void) | Function;
   pdfPreviewUrl?: string;
-  scanOnly?: boolean;
   showModal?: string;
   showRemovePdfButton?: boolean;
 };
@@ -21,7 +20,6 @@ export const ScanPdfPreview = ({
   onConfirmDelete,
   onConfirmReplace,
   pdfPreviewUrl,
-  scanOnly = false,
   showModal,
   showRemovePdfButton = true,
 }: ScanPdfPreviewProps) => {
@@ -51,13 +49,9 @@ export const ScanPdfPreview = ({
       {showModal === 'ConfirmDeletePDFModal' && (
         <ConfirmDeletePDFModal
           confirmSequence={confirmSequence}
-          confirmText={scanOnly ? 'Yes, Remove' : 'Yes, Delete'}
-          modalContent={
-            scanOnly
-              ? 'The current PDF will be permanently removed, and you will need to add a new PDF.'
-              : 'This action cannot be undone.'
-          }
-          title={`Are you sure you want to ${scanOnly ? 'remove' : 'delete'} this PDF`}
+          confirmText="Yes, Remove"
+          modalContent="The current PDF will be permanently removed, and you will need to add a new PDF."
+          title="Are you sure you want to remove this PDF?"
         />
       )}
 
