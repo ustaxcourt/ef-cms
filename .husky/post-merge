@@ -5,7 +5,7 @@ function is_ide_running() {
 }
 
 function open_vscode_diff() {
-  if [[ "$OSTYPE" == "darwin"* ]]; then
+  if [[ "$(uname -s)" == "Darwin" ]]; then
     VSCODE_APP="/Applications/Visual Studio Code.app"
     if [ ! -d "$VSCODE_APP" ]; then
       VSCODE_APP="$HOME/Applications/Visual Studio Code.app"
@@ -42,7 +42,7 @@ function open_jetbrains_diff() {
   ide="$1"
   temp_file="$2"
   current_file="$3"
-  if [[ "$OSTYPE" == "darwin"* ]]; then
+  if [[ "$(uname -s)" == "Darwin" ]]; then
     if [[ "$ide" == "idea" ]]; then
       open -a "IntelliJ IDEA Ultimate.app" --args diff "$temp_file" "$current_file" 2>/dev/null || open -a "IntelliJ IDEA.app" --args diff "$temp_file" "$current_file" 2>/dev/null
     elif [[ "$ide" == "webstorm" ]]; then
@@ -60,9 +60,11 @@ function open_jetbrains_diff() {
   fi
 }
 
+EFCMS_ROOT=$(realpath "$(dirname "$0")/..")
+
 if [ -f "CHANGES.md" ]; then
   CHANGES_DIFF=$(git diff ORIG_HEAD HEAD -- CHANGES.md 2>/dev/null)
-  ADDED_LINES=$(echo "$CHANGES_DIFF" | grep -E "^[\+]" | grep -v "^[\+][\+][\+]" | grep -v "No newline")
+  ADDED_LINES=$(printf "%s\n" "$CHANGES_DIFF" | grep "^+" | grep -v "^+++" | grep -v "No newline")
 
   if [ -n "$ADDED_LINES" ]; then
     {
@@ -79,11 +81,11 @@ if [ -f "CHANGES.md" ]; then
       echo ""
     } >&2
 
-    NO_IDE_POP="$(pwd)/.husky/.post-merge-no-ide-pop"
+    NO_IDE_POP="${EFCMS_ROOT}/.husky/.post-merge-no-ide-pop"
     [[ -f "$NO_IDE_POP" ]] && exit 0
 
     TEMP_FILE=$(mktemp /tmp/changes-old-XXXXXX.md 2>/dev/null || echo "/tmp/changes-old.md")
-    CURRENT_FILE="$(pwd)/CHANGES.md"
+    CURRENT_FILE="${EFCMS_ROOT}/CHANGES.md"
     git show ORIG_HEAD:CHANGES.md >"$TEMP_FILE" 2>/dev/null || touch "$TEMP_FILE"
 
     if is_ide_running "idea"; then
