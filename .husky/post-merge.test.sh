@@ -16,7 +16,7 @@ trap 'rm -rf "$TEST_DIR"' EXIT
 
 cd "$TEST_DIR"
 
-git init -q
+git init --initial-branch=main -q
 git config user.email "test@example.com"
 git config user.name "Test User"
 
@@ -27,7 +27,7 @@ git config user.name "Test User"
   echo "- It's good stuff"
 } > CHANGES.md
 git add CHANGES.md
-git commit -m "Initial commit to the master branch" -q
+git commit -m "Initial commit to the main branch" -q
 
 git checkout -b throwaway -q
 {
@@ -38,13 +38,13 @@ git checkout -b throwaway -q
 git add CHANGES.md
 git commit -m "Add new manual steps in the throwaway branch" -q
 
-git checkout master -q
+git checkout main -q
 mkdir -p .husky
 cp "${EFCMS_ROOT}/.husky/post-merge" .husky/post-merge
 chmod +x .husky/post-merge
 
 
-echo -e "${GREEN}Simulating merge of 'throwaway' into 'master'...${NC}"
+echo -e "${GREEN}Simulating merge of 'throwaway' into 'main'...${NC}"
 PRE_MERGE_HEAD=$(git rev-parse HEAD)
 git merge throwaway --no-edit -q
 git update-ref ORIG_HEAD "$PRE_MERGE_HEAD"
