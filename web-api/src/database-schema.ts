@@ -109,7 +109,7 @@ import {
 import {
   DW_USER_CONTACT_COLUMNS,
   UserContactTable,
-} from '@web-api/persistence/postgres/userContact/schema';
+} from '@web-api/persistence/postgres/userContacts/schema';
 
 const DEFAULT = {};
 
