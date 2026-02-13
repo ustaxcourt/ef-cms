@@ -42,9 +42,8 @@ describe('backfill-user-geocodes script', () => {
 
   it('passes custom batchSize and delayMs when provided via parseArgsAndEnvVars', async () => {
     jest.resetModules();
-    const parseArgsModule =
-      require('../helpers/parseArgsAndEnvVars') as typeof import('../helpers/parseArgsAndEnvVars');
-    parseArgsModule.parseArgsAndEnvVars.mockReturnValue({
+    const parseArgsModule = require('../helpers/parseArgsAndEnvVars');
+    jest.mocked(parseArgsModule.parseArgsAndEnvVars).mockReturnValue({
       batchSize: 500,
       delayMs: 1000,
     } as any);
@@ -52,9 +51,8 @@ describe('backfill-user-geocodes script', () => {
     await import('./backfill-user-geocodes');
     await new Promise(r => setImmediate(r));
 
-    const backfillModule =
-      require('scripts/helpers/backfillUserGeocodes') as typeof import('scripts/helpers/backfillUserGeocodes');
-    expect(backfillModule.backfillUserGeocodes).toHaveBeenCalledWith({
+    const backfillModule = require('scripts/helpers/backfillUserGeocodes');
+    expect(jest.mocked(backfillModule.backfillUserGeocodes)).toHaveBeenCalledWith({
       batchSize: 500,
       delayMs: 1000,
     });
