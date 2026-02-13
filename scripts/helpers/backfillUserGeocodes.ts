@@ -1,6 +1,6 @@
 import { getJsDateFromIso } from '@shared/business/utilities/DateHandler';
 import { getDbReader } from '@web-api/database';
-import { upsertUserContacts } from '@web-api/persistence/postgres/userContact/upsertUserContact';
+import { upsertUserContacts } from '@web-api/persistence/postgres/userContacts/upsertUserContacts';
 import { sql } from 'kysely';
 import { ask } from 'scripts/helpers/prompts';
 import { Geocoder } from 'us-census-geocoder';
