@@ -32,12 +32,12 @@ describe('validateFileAction', () => {
   });
 
   it('should return invalid path when no file is provided', async () => {
-    await (runAction(validateFileAction, {
+    await void runAction(validateFileAction, {
       modules: {
         presenter,
       },
       props: {},
-    }) as unknown as Promise<void>);
+    });
 
     expect(invalidStub).toHaveBeenCalledWith({
       errorInformation: {
@@ -51,14 +51,14 @@ describe('validateFileAction', () => {
   it('should return valid path with file when validation succeeds', async () => {
     (validateFile as jest.Mock).mockResolvedValue({ isValid: true });
 
-    await (runAction(validateFileAction, {
+    await void runAction(validateFileAction, {
       modules: {
         presenter,
       },
       props: {
         file: mockFile,
       },
-    }) as unknown as Promise<void>);
+    });
 
     expect(validateFile).toHaveBeenCalledWith({
       allowedFileExtensions: ['.pdf'],
@@ -82,14 +82,14 @@ describe('validateFileAction', () => {
       errorInformation: mockErrorInfo,
     });
 
-    await (runAction(validateFileAction, {
+    await void runAction(validateFileAction, {
       modules: {
         presenter,
       },
       props: {
         file: mockFile,
       },
-    }) as unknown as Promise<void>);
+    });
 
     expect(validateFile).toHaveBeenCalled();
     expect(invalidStub).toHaveBeenCalledWith({
@@ -101,7 +101,7 @@ describe('validateFileAction', () => {
   it('should use custom allowedFileExtensions when provided', async () => {
     (validateFile as jest.Mock).mockResolvedValue({ isValid: true });
 
-    await (runAction(validateFileAction, {
+    await void runAction(validateFileAction, {
       modules: {
         presenter,
       },
@@ -109,7 +109,7 @@ describe('validateFileAction', () => {
         allowedFileExtensions: ['.doc', '.docx'],
         file: mockFile,
       },
-    }) as unknown as Promise<void>);
+    });
 
     expect(validateFile).toHaveBeenCalledWith({
       allowedFileExtensions: ['.doc', '.docx'],
@@ -122,7 +122,7 @@ describe('validateFileAction', () => {
   it('should use custom megabyteLimit when provided', async () => {
     (validateFile as jest.Mock).mockResolvedValue({ isValid: true });
 
-    await (runAction(validateFileAction, {
+    await void runAction(validateFileAction, {
       modules: {
         presenter,
       },
@@ -130,7 +130,7 @@ describe('validateFileAction', () => {
         file: mockFile,
         megabyteLimit: 10,
       },
-    }) as unknown as Promise<void>);
+    });
 
     expect(validateFile).toHaveBeenCalledWith({
       allowedFileExtensions: ['.pdf'],
@@ -143,7 +143,7 @@ describe('validateFileAction', () => {
   it('should use skipFileTypeValidation when provided', async () => {
     (validateFile as jest.Mock).mockResolvedValue({ isValid: true });
 
-    await (runAction(validateFileAction, {
+    await void runAction(validateFileAction, {
       modules: {
         presenter,
       },
@@ -151,7 +151,7 @@ describe('validateFileAction', () => {
         file: mockFile,
         skipFileTypeValidation: true,
       },
-    }) as unknown as Promise<void>);
+    });
 
     expect(validateFile).toHaveBeenCalledWith({
       allowedFileExtensions: ['.pdf'],

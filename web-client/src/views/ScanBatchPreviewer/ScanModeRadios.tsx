@@ -26,19 +26,20 @@ export const ScanModeRadios = ({
   scannerSource,
   uploadMode,
 }: ScanModeRadiosProps) => {
-  const headerMargin = hasDocumentTabs ? 'margin-top-2' : 'margin-top-0';
-
   return (
-    <div className="grid-row">
-      <div className="grid-col-8">
+    <div className="tw:flex tw:flex-row">
+      <div className="tw:flex-8 tw:min-w-0">
         <FormGroup errorText={errorText}>
           <fieldset
             aria-label="scan mode selection"
-            className={classNames('usa-fieldset margin-bottom-3', headerMargin)}
+            className={classNames(
+              'usa-fieldset tw:mb-6',
+              hasDocumentTabs ? 'tw:mt-4' : 'tw:mt-0',
+            )}
             id="scan-mode-radios"
           >
             <legend
-              className="usa-legend with-hint margin-bottom-2"
+              className="usa-legend tw:mb-4"
               id="scan-mode-radios-legend"
             >
               How do you want to add this document?
@@ -76,7 +77,7 @@ export const ScanModeRadios = ({
         </FormGroup>
       </div>
 
-      <div className="grid-col-4 margin-top-4 text-align-right">
+      <div className="tw:flex-4 tw:min-w-0 tw:mt-8 tw:text-right">
         {uploadMode === 'scan' && scannerSource && (
           <Button data-testid="start-scan-button" onClick={onStartScan}>
             <FontAwesomeIcon icon={['fas', 'plus-circle']} />
