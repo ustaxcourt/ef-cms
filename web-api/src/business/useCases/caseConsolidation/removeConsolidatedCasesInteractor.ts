@@ -145,12 +145,12 @@ const removeConsolidatedCases = async (
   docketEntriesToUpdate.forEach(docketEntry => {
     // if this docket entry is on the cases still in the group
     if (!docketNumbersToRemove.includes(docketEntry.docketNumber)) {
-      // remove the unconsolidated docket number from its multiDocketedOn array
-      docketEntry.multiDocketedOn = docketEntry.multiDocketedOn.filter(
-        docketNumber => {
-          return !docketNumbersToRemove.includes(docketNumber);
-        },
+      // remove the unconsolidated docket numbers from its multiDocketedOn array
+      const filtered = (docketEntry.multiDocketedOn || []).filter(
+        docketNumber => !docketNumbersToRemove.includes(docketNumber),
       );
+      // if filtered only contains the docket number we/re on, then we set an empty array for the current
+      docketEntry.multiDocketedOn = filtered.length > 1 ? filtered : [];
     } else {
       docketEntry.multiDocketedOn = [];
       const newStorageId = getUniqueId();
