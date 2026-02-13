@@ -1,4 +1,3 @@
-version: '3.9'
 services:
   dawson-db:
     image: postgres:17.5-bookworm

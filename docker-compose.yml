@@ -1,5 +1,3 @@
-version: '3.7'
-
 services:
   shell:
     build:
@@ -85,7 +83,7 @@ services:
         condition: service_healthy
 
   db:
-    image: postgres
+    image: postgres:17.5-bookworm
     platform: linux/amd64
     container_name: dawson-db
     restart: always
