@@ -89,13 +89,11 @@ const getUserMissingGeocodeCount = async (
 export const backfillUserGeocodes = async ({
   batchSize = 10000,
   delayMs = 6000,
-  dryRun = false,
   fromDateIso,
   toDateIso,
 }: {
   batchSize?: number;
   delayMs?: number;
-  dryRun?: boolean;
   fromDateIso?: string;
   toDateIso?: string;
 }) => {
@@ -117,7 +115,7 @@ export const backfillUserGeocodes = async ({
   }
 
   console.log(
-    `Starting geocode backfill (dryRun=${dryRun}, batchSize=${batchSize}, delayMs=${delayMs})`,
+    `Starting geocode backfill (batchSize=${batchSize}, delayMs=${delayMs})`,
   );
 
   while (true) {
@@ -138,29 +136,21 @@ export const backfillUserGeocodes = async ({
     for (const user of users) {
       totalProcessed++;
 
-      if (dryRun) {
-        console.log(
-          `[DRY RUN] Would geocode user ${user.userId}: ${user.address1}, ${user.city}, ${user.state} ${user.zip}`,
-        );
-      } else {
-        geocoder.add(
-          `${user.userId}-${user.docketNumber}`,
-          {
-            address: user.address1,
-            city: user.city,
-            state: user.state,
-            zip: user.zip,
-          },
-          response => {
-            user.lat = response.lat;
-            user.lng = response.lon;
-            user.match = true;
-          },
-        );
-      }
+      geocoder.add(
+        `${user.userId}-${user.docketNumber}`,
+        {
+          address: user.address1,
+          city: user.city,
+          state: user.state,
+          zip: user.zip,
+        },
+        response => {
+          user.lat = response.lat;
+          user.lng = response.lon;
+          user.match = true;
+        },
+      );
     }
-
-    // Should dry run stop us from calling the API or just stop us from updating contacts?
     await geocoder.geocode();
 
     await upsertUserContacts(
