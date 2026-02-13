@@ -2,7 +2,7 @@ import { Kysely, sql } from 'kysely';
 
 export async function up(db: Kysely<any>): Promise<void> {
   await db.schema
-    .createTable('temp')
+    .createTable('multiDocketedLookup')
     // .temporary()
     .as(
       db
@@ -13,12 +13,10 @@ export async function up(db: Kysely<any>): Promise<void> {
               'docketEntryId',
               'docketNumber',
 
-              // Used to filter down to only "multi docketed" groups
-              sql<number>`
-                count(*) over (partition by docket_entry_id)
-              `.as('docketEntryCount'),
+              sql<number>`count(*) over (partition by docket_entry_id)`.as(
+                'docketEntryCount',
+              ),
 
-              // Full-partition array_agg, ordered by docket_number
               sql<string[]>`
                 array_agg(docket_number) over (
                   partition by docket_entry_id
@@ -27,7 +25,6 @@ export async function up(db: Kysely<any>): Promise<void> {
                 )
               `.as('multiDocketedOn'),
 
-              // Full-partition ordered array_agg with custom sort; take first element
               sql<string>`
                 (
                   array_agg(docket_number) over (
@@ -56,54 +53,59 @@ export async function up(db: Kysely<any>): Promise<void> {
     )
     .execute();
 
-  // “Key” temp table like dwDocketEntry PK
-  await sql`
-    create unique index on temp (docket_entry_id, docket_number)
-  `.execute(db);
+  await db.schema
+    .createIndex('temp_docket_entry_id_docket_number_uidx')
+    .on('multiDocketedLookup')
+    .columns(['docketEntryId', 'docketNumber'])
+    .unique()
+    .execute();
 
   await db.schema
     .createTable('consolidatedCaseGroups')
     // .temporary()
     .as(
       sql`
-    with dockets_of_interest as (
-      select distinct unnest(multi_docketed_on) as docket_number
-      from temp
-    ),
-    interest_with_lead as (
+      with dockets_of_interest as (
+        select distinct unnest(multi_docketed_on) as docket_number
+        from multi_docketed_lookup
+      ),
+      interest_with_lead as (
+        select
+          doi.docket_number,
+          c.lead_docket_number
+        from dockets_of_interest doi
+        join dw_case c
+          on c.docket_number = doi.docket_number
+      ),
+      group_members as (
+        select
+          c.lead_docket_number,
+          array_agg(c.docket_number order by c.docket_number) as members
+        from dw_case c
+        join (select distinct lead_docket_number from interest_with_lead) leads
+          on leads.lead_docket_number = c.lead_docket_number
+        group by c.lead_docket_number
+      )
       select
-        doi.docket_number,
-        c.lead_docket_number
-      from dockets_of_interest doi
-      join dw_case c
-        on c.docket_number = doi.docket_number
-    ),
-    group_members as (
-      select
-        c.lead_docket_number,
-        array_agg(c.docket_number order by c.docket_number) as members
-      from dw_case c
-      join (select distinct lead_docket_number from interest_with_lead) leads
-        on leads.lead_docket_number = c.lead_docket_number
-      group by c.lead_docket_number
-    )
-    select
-      iwl.docket_number,
-      iwl.lead_docket_number,
-      coalesce(to_jsonb(gm.members), '[]'::jsonb) as consolidated_with
-    from interest_with_lead iwl
-    join group_members gm
-      on gm.lead_docket_number = iwl.lead_docket_number
-  `,
+        iwl.docket_number,
+        iwl.lead_docket_number,
+        coalesce(to_jsonb(gm.members), '[]'::jsonb) as consolidated_with
+      from interest_with_lead iwl
+      join group_members gm
+        on gm.lead_docket_number = iwl.lead_docket_number
+    `,
     )
     .execute();
 
-  await sql`create unique index on consolidated_case_groups (docket_number)`.execute(
-    db,
-  );
+  await db.schema
+    .createIndex('consolidated_case_groups_docket_number_uidx')
+    .on('consolidatedCaseGroups')
+    .column('docketNumber')
+    .unique()
+    .execute();
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
-  await db.schema.dropTable('temp').ifExists().execute();
+  await db.schema.dropTable('multiDocketedLookup').ifExists().execute();
   await db.schema.dropTable('consolidatedCaseGroups').ifExists().execute();
 }
