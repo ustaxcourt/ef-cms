@@ -22,10 +22,10 @@ export const getAllPendingMotionDocketEntriesForJudge = async ({
       .where('d.pending', 'is', true)
       .where('c.associatedJudgeId', 'in', judgeIds)
       // sql.lit() is intentionally used here instead of parameterized values to
-      // avoid exceeding Postgres's bind parameter limit: when combined with the
-      // judgeIds array, MOTION_EVENT_CODES balloons the number of parameters to
-      // >100. This is safe because MOTION_EVENT_CODES is a static compile-time
-      // constant with no user input.
+      // work around a Kysely parameter-numbering/binding bug that occurs when
+      // many bound parameters are present (e.g., judgeIds plus MOTION_EVENT_CODES).
+      // This is safe because MOTION_EVENT_CODES is a static compile-time constant
+      // with no user input.
       .where(
         sql<SqlBool>`d."event_code" IN (${sql.join(
           MOTION_EVENT_CODES.map(code => sql.lit(code)),
