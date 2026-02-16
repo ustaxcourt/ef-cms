@@ -8,6 +8,7 @@ import {
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { getConsolidatedCasesCount } from '@web-api/persistence/postgres/cases/getConsolidatedCasesCount';
 import { getDbReader } from '@web-api/database';
+import { sql, SqlBool } from 'kysely';
 
 export const getAllPendingMotionDocketEntriesForJudge = async ({
   judgeIds,
@@ -20,7 +21,17 @@ export const getAllPendingMotionDocketEntriesForJudge = async ({
       .innerJoin('dwCase as c', 'd.docketNumber', 'c.docketNumber')
       .where('d.pending', 'is', true)
       .where('c.associatedJudgeId', 'in', judgeIds)
-      .where('d.eventCode', 'in', MOTION_EVENT_CODES)
+      // sql.lit() is intentionally used here instead of parameterized values to
+      // avoid exceeding Postgres's bind parameter limit: when combined with the
+      // judgeIds array, MOTION_EVENT_CODES balloons the number of parameters to
+      // >100. This is safe because MOTION_EVENT_CODES is a static compile-time
+      // constant with no user input.
+      .where(
+        sql<SqlBool>`d."eventCode" IN (${sql.join(
+          MOTION_EVENT_CODES.map(code => sql.lit(code)),
+          sql`, `,
+        )})`,
+      )
       .where(
         'd.filingDate',
         '<=',
