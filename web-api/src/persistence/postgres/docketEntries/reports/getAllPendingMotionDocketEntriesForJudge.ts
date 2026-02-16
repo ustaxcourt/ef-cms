@@ -27,7 +27,7 @@ export const getAllPendingMotionDocketEntriesForJudge = async ({
       // >100. This is safe because MOTION_EVENT_CODES is a static compile-time
       // constant with no user input.
       .where(
-        sql<SqlBool>`d."eventCode" IN (${sql.join(
+        sql<SqlBool>`d."event_code" IN (${sql.join(
           MOTION_EVENT_CODES.map(code => sql.lit(code)),
           sql`, `,
         )})`,
