@@ -69,7 +69,7 @@ describe('loadPDFForSigningInteractor', () => {
   });
 
   it('should throw an error if getDocument returns an error', async () => {
-    const mockId = '123456687875456';
+    const mockDocumentStorageId = '123456687875456';
     applicationContext
       .getPersistenceGateway()
       .getDocument.mockImplementation(() => {
@@ -78,8 +78,10 @@ describe('loadPDFForSigningInteractor', () => {
 
     await expect(
       loadPDFForSigningInteractor(applicationContext, {
-        documentStorageId: mockId,
+        documentStorageId: mockDocumentStorageId,
       } as any),
-    ).rejects.toThrow(new Error(`error loading PDF for signing: ${mockId}`));
+    ).rejects.toThrow(
+      new Error(`error loading PDF for signing: ${mockDocumentStorageId}`),
+    );
   });
 });
