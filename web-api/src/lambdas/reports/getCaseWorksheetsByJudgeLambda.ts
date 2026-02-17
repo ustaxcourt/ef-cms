@@ -9,16 +9,20 @@ export const getCaseWorksheetsByJudgeLambda = (
   const rawJudges = event.queryStringParameters?.judges;
   const judges = Array.isArray(rawJudges)
     ? rawJudges
-    : rawJudges
+    : typeof rawJudges === 'object' && rawJudges !== null
       ? Object.values(rawJudges)
-      : [];
+      : rawJudges
+        ? [rawJudges]
+        : [];
 
   const rawStatuses = event.queryStringParameters?.statuses;
   const statuses = Array.isArray(rawStatuses)
     ? rawStatuses
-    : rawStatuses
+    : typeof rawStatuses === 'object' && rawStatuses !== null
       ? Object.values(rawStatuses)
-      : [];
+      : rawStatuses
+        ? [rawStatuses]
+        : [];
 
   return genericHandler(
     event,
