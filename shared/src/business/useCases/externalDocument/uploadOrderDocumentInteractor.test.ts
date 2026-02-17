@@ -18,10 +18,10 @@ describe('uploadOrderDocumentInteractor', () => {
   });
 
   it('uploads documents on behalf of authorized users', async () => {
-    const mockId = 'abc123';
+    const mockDocumentStorageId = 'abc123';
     applicationContext
       .getPersistenceGateway()
-      .uploadDocumentFromClient.mockResolvedValueOnce(mockId);
+      .uploadDocumentFromClient.mockResolvedValueOnce(mockDocumentStorageId);
 
     const result = await uploadOrderDocumentInteractor(
       applicationContext,
@@ -43,6 +43,6 @@ describe('uploadOrderDocumentInteractor', () => {
       document: 'document file',
       key: '123',
     });
-    expect(result).toEqual(mockId);
+    expect(result).toEqual(mockDocumentStorageId);
   });
 });
