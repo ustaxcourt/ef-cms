@@ -9,9 +9,11 @@ export const getPendingMotionDocketEntriesForCurrentJudgeLambda = (
   const rawJudgeIds = event.queryStringParameters?.judgeIds;
   const judgeIds = Array.isArray(rawJudgeIds)
     ? rawJudgeIds
-    : rawJudgeIds
+    : typeof rawJudgeIds === 'object' && rawJudgeIds !== null
       ? Object.values(rawJudgeIds)
-      : [];
+      : rawJudgeIds
+        ? [rawJudgeIds]
+        : [];
 
   return genericHandler(event, () =>
     getPendingMotionDocketEntriesForCurrentJudgeInteractor(
