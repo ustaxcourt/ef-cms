@@ -6,18 +6,16 @@ export const getPendingMotionDocketEntriesForCurrentJudgeLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) => {
-  console.log(
-    '[9733] lambda event.queryStringParameters:',
-    JSON.stringify(event.queryStringParameters),
-  );
-  console.log(
-    '[9733] lambda event.multiValueQueryStringParameters:',
-    JSON.stringify(event.multiValueQueryStringParameters),
-  );
+  const rawJudgeIds = event.queryStringParameters?.judgeIds;
+  const judgeIds = Array.isArray(rawJudgeIds)
+    ? rawJudgeIds
+    : rawJudgeIds
+      ? Object.values(rawJudgeIds)
+      : [];
 
   return genericHandler(event, () =>
     getPendingMotionDocketEntriesForCurrentJudgeInteractor(
-      event.queryStringParameters,
+      { judgeIds },
       authorizedUser,
     ),
   );

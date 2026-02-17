@@ -5,15 +5,29 @@ import { getCaseWorksheetsByJudgeInteractor } from '@web-api/business/useCases/j
 export const getCaseWorksheetsByJudgeLambda = (
   event,
   authorizedUser: UnknownAuthUser,
-) =>
-  genericHandler(
-    event,
+) => {
+  const rawJudges = event.queryStringParameters?.judges;
+  const judges = Array.isArray(rawJudges)
+    ? rawJudges
+    : rawJudges
+      ? Object.values(rawJudges)
+      : [];
 
+  const rawStatuses = event.queryStringParameters?.statuses;
+  const statuses = Array.isArray(rawStatuses)
+    ? rawStatuses
+    : rawStatuses
+      ? Object.values(rawStatuses)
+      : [];
+
+  return genericHandler(
+    event,
     async () => {
       return await getCaseWorksheetsByJudgeInteractor(
-        event.queryStringParameters,
+        { judges, statuses },
         authorizedUser,
       );
     },
     { logResults: false },
   );
+};
