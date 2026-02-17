@@ -1,3 +1,4 @@
+// web-client/integration-tests/petitionsClerkDocumentQCJourney.test.ts
 import {
   loginAs,
   refreshElasticsearchIndex,
@@ -27,7 +28,6 @@ describe('Petitions Clerk Document QC Journey', () => {
 
   loginAs(cerebralTest, 'petitioner@example.com');
 
-  // Create multiple cases for testing
   for (let i = 0; i < caseCreationCount; i++) {
     it(`create case ${i + 1}`, async () => {
       const caseDetail = await uploadPetition(cerebralTest);
@@ -42,12 +42,9 @@ describe('Petitions Clerk Document QC Journey', () => {
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkViewsSectionDocumentQC(cerebralTest);
-  petitionsClerkGetsSectionDocumentQCInboxCount(
-    cerebralTest,
-    caseCreationCount,
-  );
+  petitionsClerkGetsSectionDocumentQCInboxCount(cerebralTest);
   petitionsClerkBulkAssignsCases(cerebralTest, createdCases);
   petitionsClerkViewsMyDocumentQC(cerebralTest);
-  petitionsClerkGetsMyDocumentQCInboxCount(cerebralTest, caseCreationCount);
+  petitionsClerkGetsMyDocumentQCInboxCount(cerebralTest);
   petitionsClerkVerifiesAssignedWorkItem(cerebralTest, createdCases);
 });

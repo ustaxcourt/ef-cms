@@ -9,6 +9,7 @@ export const petitionsClerkViewsMyDocumentQC = (cerebralTest, storeCount?) => {
     await cerebralTest.runSequence('navigateToPathSequence', {
       path: '/document-qc/my/inbox',
     });
+
     const workQueueToDisplay = cerebralTest.getState('workQueueToDisplay');
 
     expect(workQueueToDisplay.queue).toEqual('my');
@@ -18,6 +19,7 @@ export const petitionsClerkViewsMyDocumentQC = (cerebralTest, storeCount?) => {
       const helper = await runCompute(workQueueHelper, {
         state: cerebralTest.getState(),
       });
+
       cerebralTest.petitionsClerkMyDocumentQCInboxCount =
         helper.individualInboxCount;
     }
