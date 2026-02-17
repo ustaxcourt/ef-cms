@@ -14,8 +14,8 @@ const scriptConfig: ScriptConfig = {
     region: 'REGION',
   },
   parameters: {
-    batchSize: { default: '10000', type: 'string' },
-    delayMs: { default: '60000', type: 'string' },
+    batchSize: { default: '10000', transform: 'number', type: 'string' },
+    delayMs: { default: '60000', transform: 'number', type: 'string' },
   },
   requireActiveAwsSession: true,
 };
