@@ -1,11 +1,11 @@
 import { connect } from '@web-client/presenter/shared.cerebral';
 import React from 'react';
-import { ModalDialog } from '../ModalDialog';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { Country } from '../StartCase/Country';
 import { Address } from '../StartCase/Address';
 import { InternationalAddress } from '../StartCase/InternationalAddress';
+import { ConfirmModal } from '@web-client/ustc-ui/Modal/ConfirmModal';
 
 export const EditContactInformationModal = connect(
   {
@@ -32,23 +32,26 @@ export const EditContactInformationModal = connect(
     const onBlur = () => validatePetitionerInModalSequence();
 
     return (
-      <ModalDialog
+      <ConfirmModal
         cancelLabel="Cancel"
-        cancelSequence={cancelSequence}
         confirmLabel="Update Contact Information"
-        confirmSequence={confirmSequence}
-        message="This form will automatically create and submit a change of contact
-         information notification for this case. Please ensure the information is 
-         accurate before submitting."
-        messageClass="tw:mb-4 tw:mt-4"
+        onCancelSequence={cancelSequence}
+        onConfirmSequence={confirmSequence}
         title="Update Contact Information"
       >
-        <span className="tw:block tw:mb-4 tw:mt-4">{form.contact.name}</span>
-        {form.contact.additionalName && (
+        <div className="tw:xs:text-lg tw:text-base">
           <span className="tw:block tw:mb-4 tw:mt-4">
-            {form.contact.additionalName}
+            This form will automatically create and submit a change of contact
+            information notification for this case. Please ensure the
+            information is accurate before submitting.
           </span>
-        )}
+          <span className="tw:block tw:mb-4 tw:mt-4">{form.contact.name}</span>
+          {form.contact.additionalName && (
+            <span className="tw:block tw:mb-4 tw:mt-4">
+              {form.contact.additionalName}
+            </span>
+          )}
+        </div>
         <fieldset className="usa-fieldset">
           <Country
             bind={bind}
@@ -72,7 +75,10 @@ export const EditContactInformationModal = connect(
             />
           )}
 
-          <FormGroup errorText={validationErrors?.contact?.phone}>
+          <FormGroup
+            errorText={validationErrors?.contact?.phone}
+            className="tw:mb-0"
+          >
             <label className="usa-label" htmlFor="phone">
               Phone number
             </label>
@@ -99,7 +105,7 @@ export const EditContactInformationModal = connect(
             />
           </FormGroup>
         </fieldset>
-      </ModalDialog>
+      </ConfirmModal>
     );
   },
 );
