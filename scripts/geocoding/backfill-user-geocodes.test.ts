@@ -28,8 +28,8 @@ describe('backfill-user-geocodes script', () => {
           'backfill-user-geocodes - Geocode addresses for users missing lat/lng',
         environment: { env: 'ENV', region: 'REGION' },
         parameters: expect.objectContaining({
-          batchSize: { default: '10000', type: 'string' },
-          delayMs: { default: '60000', type: 'string' },
+          batchSize: { default: '10000', transform: 'number', type: 'string' },
+          delayMs: { default: '60000', transform: 'number', type: 'string' },
         }),
         requireActiveAwsSession: true,
       }),
