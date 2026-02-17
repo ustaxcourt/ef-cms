@@ -89,37 +89,21 @@ export const getNotificationsInteractor = async (
     },
   );
 
-  const isTableRecord = (row: any, _index: number, array: any[]) => {
-    const isNotConsolidated = !row.leadDocketNumber;
+  const qcIndividualInProgressCount = countUniqueWorkItems(
+    documentQCIndividualInbox.filter(filters.my.inProgress),
+  );
 
-    const isLeadCase = row.leadDocketNumber === row.docketNumber;
+  const qcIndividualInboxCount = countUniqueWorkItems(
+    documentQCIndividualInbox.filter(filters.my.inbox),
+  );
 
-    const isFirstOccurence =
-      !!row.leadDocketNumber &&
-      array.filter(r => {
-        return (
-          r.docketEntryId === row.docketEntryId &&
-          r.leadDocketNumber === row.leadDocketNumber &&
-          r !== row
-        );
-      }).length === 0;
+  const qcSectionInProgressCount = countUniqueWorkItems(
+    (documentQCSectionInbox ?? []).filter(filters.section.inProgress),
+  );
 
-    return isNotConsolidated || isLeadCase || isFirstOccurence;
-  };
-
-  const qcIndividualInProgressCount = documentQCIndividualInbox
-    .filter(filters['my']['inProgress'])
-    .filter(isTableRecord).length;
-  const qcIndividualInboxCount = documentQCIndividualInbox
-    .filter(filters['my']['inbox'])
-    .filter(isTableRecord).length;
-
-  const qcSectionInProgressCount = documentQCSectionInbox
-    ?.filter(filters['section']['inProgress'])
-    .filter(isTableRecord).length;
-  const qcSectionInboxCount = documentQCSectionInbox
-    ?.filter(filters['section']['inbox'])
-    .filter(isTableRecord).length;
+  const qcSectionInboxCount = countUniqueWorkItems(
+    (documentQCSectionInbox ?? []).filter(filters.section.inbox),
+  );
 
   const unreadMessageCount = userInbox.filter(
     message => !message.isRead,
@@ -136,10 +120,28 @@ export const getNotificationsInteractor = async (
   return {
     qcIndividualInProgressCount,
     qcIndividualInboxCount,
-    qcSectionInProgressCount: qcSectionInProgressCount || 0,
-    qcSectionInboxCount: qcSectionInboxCount || 0,
+    qcSectionInProgressCount,
+    qcSectionInboxCount,
     unreadMessageCount,
     userInboxCount: userInbox.length,
     userSectionCount: sectionInbox.length,
   };
+};
+
+const getWorkItemRowKey = workItem => {
+  if (!workItem.leadDocketNumber) {
+    return workItem.docketEntryId;
+  }
+
+  return `${workItem.leadDocketNumber}:${workItem.docketEntryId}`;
+};
+
+const countUniqueWorkItems = workItems => {
+  const seenWorkItems = new Set();
+
+  for (const workItem of workItems) {
+    seenWorkItems.add(getWorkItemRowKey(workItem));
+  }
+
+  return seenWorkItems.size;
 };
