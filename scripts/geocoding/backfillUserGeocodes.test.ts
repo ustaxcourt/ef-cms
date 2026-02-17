@@ -1,5 +1,5 @@
 jest.mock('@web-api/database');
-jest.mock('scripts/helpers/prompts', () => ({
+jest.mock('../helpers/prompts', () => ({
   ask: jest.fn(),
 }));
 jest.mock('us-census-geocoder');
@@ -7,10 +7,10 @@ jest.mock('@web-api/persistence/postgres/userContacts/upsertUserContacts');
 
 import { backfillUserGeocodes } from './backfillUserGeocodes';
 import { getDbReader as getDbReaderMock } from '@web-api/database';
-import { ask as askMock } from 'scripts/helpers/prompts';
+import { ask as askMock } from '../helpers/prompts';
 import { Geocoder as GeocoderConstructor } from 'us-census-geocoder';
 import { upsertUserContacts as upsertUserContactsMock } from '@web-api/persistence/postgres/userContacts/upsertUserContacts';
-import { createChainable } from './createChainable';
+import { createChainable } from '../helpers/createChainable';
 
 const getDbReader = jest.mocked(getDbReaderMock);
 const ask = jest.mocked(askMock);
