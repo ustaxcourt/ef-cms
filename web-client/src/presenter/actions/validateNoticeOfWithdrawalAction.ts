@@ -14,7 +14,11 @@ export const validateNoticeOfWithdrawalAction = ({ get, path }) => {
   const caseDetail = get(state.caseDetail);
 
   const errors: string[] = [];
-  if (documentMetadata.eventCode === 'NOTW') {
+  if (
+    documentMetadata.eventCode === 'NOTW' &&
+    (user.role === ROLES.privatePractitioner ||
+      user.role === ROLES.irsPractitioner)
+  ) {
     if (user.role === ROLES.privatePractitioner) {
       const partiesToWithdrawFrom = getPartiesToWithrawFrom(caseDetail, user);
       if (partiesToWithdrawFrom.length === 0) {

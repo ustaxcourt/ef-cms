@@ -3,6 +3,7 @@ import { GENERATION_TYPES } from '@web-client/getConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 import { showGenerationType } from '../setDefaultGenerationTypeAction';
 import { EXPLICITLY_DENIED_CONSOLIDATED_GROUP_FILING_EVENT_CODES } from '@shared/business/entities/EntityConstants';
+import { ROLES } from '@shared/business/entities/EntityConstants';
 
 export const setDefaultFileDocumentFormValuesAction = ({
   applicationContext,
@@ -20,14 +21,23 @@ export const setDefaultFileDocumentFormValuesAction = ({
   const isMultiDocketableEventCode = !!applicationContext
     .getConstants()
     .MULTI_DOCKET_FILING_EVENT_CODES.includes(eventCode);
-  const isAllowedToFileInConsolidatedGroup =
-    !EXPLICITLY_DENIED_CONSOLIDATED_GROUP_FILING_EVENT_CODES.includes(
-      eventCode,
-    );
+  const isAllowedToFileInConsolidatedGroup = () => {
+    if (
+      EXPLICITLY_DENIED_CONSOLIDATED_GROUP_FILING_EVENT_CODES.includes(
+        eventCode,
+      )
+    ) {
+      return !(
+        user.role === ROLES.privatePractitioner ||
+        user.role === ROLES.irsPractitioner
+      );
+    }
+    return true;
+  };
   const canFileInConsolidatedGroup =
     isInConsolidatedGroup &&
     isMultiDocketableEventCode &&
-    isAllowedToFileInConsolidatedGroup;
+    isAllowedToFileInConsolidatedGroup();
 
   const filersMap = {};
 

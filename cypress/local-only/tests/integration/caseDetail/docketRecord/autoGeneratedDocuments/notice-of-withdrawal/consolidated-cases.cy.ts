@@ -8,6 +8,8 @@ import {
   loginAsIrsPractitioner1,
   loginAsPetitionsClerk,
   loginAsPrivatePractitioner,
+  loginAsAdmissionsClerk,
+  loginAsPetitioner,
 } from 'cypress/helpers/authentication/login-as-helpers';
 import { addPrivatePractitionerToCaseAndAllParties } from 'cypress/helpers/caseDetail/caseInformation/add-private-practitioner-to-case-and-all-parties';
 import { petitionsClerkAddsRespondentToCase } from 'cypress/helpers/caseDetail/caseInformation/petitionsclerk-adds-respondent-to-case';
@@ -100,6 +102,71 @@ describe('Notice of Withdrawal - Consolidated Cases', () => {
       ).contains(
         'If you are withdrawing as counsel from more than one case you must file a Notice of Withdrawal as Counsel for each case.',
       );
+    });
+  });
+  it('should show consolidated group filing option for petitioners filing notw', () => {
+    // assign petitioner email to case
+    const petitionerEmail = 'petitioner1@example.com';
+    loginAsAdmissionsClerk();
+    cy.get<string>('@docketNumber').then(docketNumber => {
+      goToCase(docketNumber);
+      cy.get('[data-testid="tab-case-information"]').click();
+      cy.get('[data-testid="tab-parties"]').click();
+      cy.get('[data-testid="edit-petitioner-button"]').click();
+      cy.get('[data-testid="internal-edit-petitioner-email-input"]').type(
+        petitionerEmail,
+      );
+      cy.get('[data-testid="internal-confirm-petitioner-email-input"]').type(
+        petitionerEmail,
+      );
+      cy.get(
+        '[data-testid="submit-edit-petitioner-information-button"]',
+      ).click();
+      cy.get('[data-testid="modal-button-confirm"]').click();
+      loginAsPetitioner();
+      enterNoticeOfWithdrawalFormType(docketNumber);
+      cy.get('#consolidated-case-group-radios').should('be.visible');
+    });
+  });
+  it.only('should not show consolidated group filing option for practitioners filing notw', () => {
+    cy.get<string>('@docketNumber').then(docketNumber => {
+      // Setup for private practitioner test
+      loginAsDocketClerk1();
+      addPrivatePractitionerToCaseAndAllParties(
+        docketNumber,
+        privatePractitioner2BarNumber,
+      );
+      cy.get<string>('@trialSessionId').then(trialSessionId => {
+        updateTrialSessionStartDate(trialSessionId, validFutureDate);
+      });
+
+      // Test private practitioner alert
+      loginAsPrivatePractitioner();
+      enterNoticeOfWithdrawalFormType(docketNumber);
+      cy.get(
+        '[data-testid="alert-warning-consolidated-case-alert-warning"]',
+      ).should('be.visible');
+      cy.get(
+        '[data-testid="alert-warning-consolidated-case-alert-warning"]',
+      ).contains(
+        'If you are withdrawing as counsel from more than one case you must file a Notice of Withdrawal as Counsel for each case.',
+      );
+
+      // Add respondents for IRS practitioner test
+      loginAsDocketClerk1();
+      petitionsClerkAddsRespondentToCase(
+        docketNumber,
+        irsPractitionerBarNumber,
+      );
+      petitionsClerkAddsRespondentToCase(
+        docketNumber,
+        irsPractitioner2BarNumber,
+      );
+
+      // Test IRS practitioner alert
+      loginAsIrsPractitioner1();
+      enterNoticeOfWithdrawalFormType(docketNumber);
+      cy.get('#consolidated-case-group-radios').should('not.exist');
     });
   });
 });

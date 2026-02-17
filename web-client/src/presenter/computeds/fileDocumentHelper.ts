@@ -31,6 +31,7 @@ export const fileDocumentHelper = (
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
   const validationErrors = get(state.validationErrors);
+  const user = get(state.user);
 
   const supportingDocumentTypeList = getSupportingDocumentTypeList(
     EXTERNAL_FILING_EVENTS,
@@ -60,15 +61,24 @@ export const fileDocumentHelper = (
   const isMultiDocketableEventCode = !!applicationContext
     .getConstants()
     .MULTI_DOCKET_FILING_EVENT_CODES.includes(form.eventCode);
-  const isAllowedToFileInConsolidatedGroup =
-    !EXPLICITLY_DENIED_CONSOLIDATED_GROUP_FILING_EVENT_CODES.includes(
-      form.eventCode,
-    );
+  const isAllowedToFileInConsolidatedGroup = () => {
+    if (
+      EXPLICITLY_DENIED_CONSOLIDATED_GROUP_FILING_EVENT_CODES.includes(
+        form.eventCode,
+      )
+    ) {
+      return !(
+        user.role === ROLES.privatePractitioner ||
+        user.role === ROLES.irsPractitioner
+      );
+    }
+    return true;
+  };
   let allowExternalConsolidatedGroupFiling = false;
   if (
     isMultiDocketableEventCode &&
     isInConsolidatedGroup &&
-    isAllowedToFileInConsolidatedGroup
+    isAllowedToFileInConsolidatedGroup()
   ) {
     allowExternalConsolidatedGroupFiling = true;
   } else {
@@ -100,7 +110,6 @@ export const fileDocumentHelper = (
   const EARedactionAcknowledgement =
     form.generationType === GENERATION_TYPES.MANUAL && form.eventCode === 'EA';
 
-  const user = get(state.user);
   const showGenerationTypeForm = showGenerationType(
     user,
     form.eventCode,
