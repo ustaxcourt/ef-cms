@@ -45,12 +45,10 @@ const scriptConfig: ScriptConfig = {
       type: 'boolean',
     },
   },
-  requireActiveAwsSession: false, // todo: put back
+  requireActiveAwsSession: true,
 };
 
-const { years, fiscal, backfillData } = parseArgsAndEnvVars(
-  scriptConfig,
-) as {
+const { years, fiscal, backfillData } = parseArgsAndEnvVars(scriptConfig) as {
   env: string;
   years: number[];
   fiscal: boolean;
@@ -62,7 +60,10 @@ const timeframes = yearsToUse.map(y =>
   getTimeframeForYear({ fiscal, year: `${y}` }),
 );
 const fromDateIso = timeframes.map(t => t.begin).sort()[0];
-const toDateIso = timeframes.map(t => t.end).sort().reverse()[0];
+const toDateIso = timeframes
+  .map(t => t.end)
+  .sort()
+  .reverse()[0];
 
 type PetitionerGeoRow = {
   docket_number: string;
@@ -160,8 +161,7 @@ const getPetitionerGeodata = async ({
 const exportGeodata = async () => {
   const outputCsv = `${OUTPUT_DIR}/petitioner-geodata-${fiscal ? 'fy-' : ''}${yearsToUse.join('-')}.csv`;
 
-  if (backfillData)
-    await backfillUserGeocodes({ fromDateIso, toDateIso });
+  if (backfillData) await backfillUserGeocodes({ fromDateIso, toDateIso });
 
   const userGeodata = await getPetitionerGeodata({
     fromDateIso,
