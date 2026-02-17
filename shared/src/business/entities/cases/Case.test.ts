@@ -1397,10 +1397,10 @@ describe('Case entity', () => {
   });
 
   describe('isMemberCase', () => {
-    it('should return true when case is a member of a consolidated group', () => {
+    it('should return true when case is not the lead case', () => {
       const result = isMemberCase({
         docketNumber: '123-45',
-        leadDocketNumber: '678-90',
+        leadDocketNumber: '120-45',
       });
 
       expect(result).toBe(true);

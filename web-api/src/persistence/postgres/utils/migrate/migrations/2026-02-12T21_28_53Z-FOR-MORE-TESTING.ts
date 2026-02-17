@@ -17,7 +17,7 @@ export async function up(db: Kysely<any>): Promise<void> {
   from dw_docket_entry d
   join multi_docketed_lookup t
     on t.docket_entry_id = d.docket_entry_id
-   and t.docket_number  = d.docket_number
+    and t.docket_number  = d.docket_number
   join consolidated_case_groups c
     on c.docket_number = d.docket_number
 ),
@@ -47,7 +47,7 @@ scored as (
     from jsonb_array_elements_text(j.consolidated_with) as e(val)
   ) ca
 )
-   select
+  select
   count(*)::text as total,
   count(*) filter (
     where (
@@ -98,7 +98,7 @@ from scored
       overlapCount: number;
     }[]
   >`
-   with joined as (
+  with joined as (
   select
     d.docket_entry_id,
     d.docket_number,
@@ -107,7 +107,7 @@ from scored
   from dw_docket_entry d
   join multi_docketed_lookup t
     on t.docket_entry_id = d.docket_entry_id
-   and t.docket_number  = d.docket_number
+    and t.docket_number  = d.docket_number
   join consolidated_case_groups c
     on c.docket_number = d.docket_number
 ),
@@ -126,7 +126,7 @@ scored as (
       and
       j.multi_docketed_on::text[] @> ca.consolidated_arr
     ) as exact,
-     (j.multi_docketed_on::text[] <@ ca.consolidated_arr) as is_subset
+    (j.multi_docketed_on::text[] <@ ca.consolidated_arr) as is_subset
   from joined j
   cross join lateral (
     select coalesce(array_agg(e.val), '{}'::text[]) as consolidated_arr
@@ -162,7 +162,7 @@ limit 50
       overlapCount: number;
     }[]
   >`
-   with joined as (
+  with joined as (
   select
     d.docket_entry_id,
     d.docket_number,
@@ -171,7 +171,7 @@ limit 50
   from dw_docket_entry d
   join multi_docketed_lookup t
     on t.docket_entry_id = d.docket_entry_id
-   and t.docket_number  = d.docket_number
+    and t.docket_number  = d.docket_number
   join consolidated_case_groups c
     on c.docket_number = d.docket_number
 ),
@@ -190,7 +190,7 @@ scored as (
       and
       j.multi_docketed_on::text[] @> ca.consolidated_arr
     ) as exact,
-     (j.multi_docketed_on::text[] <@ ca.consolidated_arr) as is_subset
+    (j.multi_docketed_on::text[] <@ ca.consolidated_arr) as is_subset
   from joined j
   cross join lateral (
     select coalesce(array_agg(e.val), '{}'::text[]) as consolidated_arr
@@ -222,6 +222,5 @@ limit 50
   console.log('major sample (first 10):', majorSample.rows.slice(0, 10));
 }
 
-export async function down(db: Kysely<any>): Promise<void> {
-  // TODO
-}
+// export async function down(db: Kysely<any>): Promise<void> {
+// }
