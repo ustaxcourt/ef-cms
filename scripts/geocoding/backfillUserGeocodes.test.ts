@@ -1,5 +1,5 @@
 jest.mock('@web-api/database');
-jest.mock('scripts/helpers/prompts', () => ({
+jest.mock('../helpers/prompts', () => ({
   ask: jest.fn(),
 }));
 jest.mock('us-census-geocoder');
@@ -7,9 +7,10 @@ jest.mock('@web-api/persistence/postgres/userContacts/upsertUserContacts');
 
 import { backfillUserGeocodes } from './backfillUserGeocodes';
 import { getDbReader as getDbReaderMock } from '@web-api/database';
-import { ask as askMock } from 'scripts/helpers/prompts';
+import { ask as askMock } from '../helpers/prompts';
 import { Geocoder as GeocoderConstructor } from 'us-census-geocoder';
 import { upsertUserContacts as upsertUserContactsMock } from '@web-api/persistence/postgres/userContacts/upsertUserContacts';
+import { createChainable } from '../helpers/createChainable';
 
 const getDbReader = jest.mocked(getDbReaderMock);
 const ask = jest.mocked(askMock);
@@ -17,43 +18,6 @@ const Geocoder = jest.mocked(GeocoderConstructor);
 const upsertUserContacts = jest.mocked(upsertUserContactsMock);
 
 const mockConsoleLog = jest.spyOn(console, 'log').mockImplementation(jest.fn());
-
-const createChainable = (
-  executeResult: unknown,
-  executeTakeFirstResult?: unknown,
-) => {
-  const joinChain = {
-    onRef: () => joinChain,
-  };
-  const chain = {
-    crossJoin: () => chain,
-    leftJoin: (_table: string, joinCb: (j: typeof joinChain) => typeof joinChain) => {
-      joinCb(joinChain);
-      return chain;
-    },
-    limit: () => chain,
-    select: () => chain,
-    selectFrom: () => chain,
-    where: (a?: unknown, _b?: unknown, _c?: unknown) => {
-      if (typeof a === 'function') {
-        a(qb);
-      }
-      return chain;
-    },
-    execute: () => Promise.resolve(executeResult),
-    executeTakeFirst: () =>
-      Promise.resolve(
-        executeTakeFirstResult !== undefined
-          ? executeTakeFirstResult
-          : executeResult,
-      ),
-  };
-  const qb = Object.assign(() => chain, { or: () => chain }) as {
-    (): typeof chain;
-    or: () => typeof chain;
-  };
-  return chain;
-};
 
 describe('backfillUserGeocodes', () => {
   beforeEach(() => {
@@ -80,8 +44,7 @@ describe('backfillUserGeocodes', () => {
     let callCount = 0;
     getDbReader.mockImplementation(cb => {
       callCount++;
-      const result =
-        callCount === 1 ? { count: 5 } : [];
+      const result = callCount === 1 ? { count: 5 } : [];
       const chain = createChainable(result, result);
       const mockDb = { selectFrom: () => chain };
       return Promise.resolve(cb(mockDb as any));
@@ -100,8 +63,7 @@ describe('backfillUserGeocodes', () => {
     let callCount = 0;
     getDbReader.mockImplementation(cb => {
       callCount++;
-      const result =
-        callCount === 1 ? { count: 5 } : [];
+      const result = callCount === 1 ? { count: 5 } : [];
       const chain = createChainable(result, result);
       const mockDb = { selectFrom: () => chain };
       return Promise.resolve(cb(mockDb as any));
@@ -118,8 +80,7 @@ describe('backfillUserGeocodes', () => {
     let callCount = 0;
     getDbReader.mockImplementation(cb => {
       callCount++;
-      const result =
-        callCount === 1 ? { count: 5 } : [];
+      const result = callCount === 1 ? { count: 5 } : [];
       const chain = createChainable(result, result);
       const mockDb = { selectFrom: () => chain };
       return Promise.resolve(cb(mockDb as any));
@@ -135,8 +96,7 @@ describe('backfillUserGeocodes', () => {
     let callCount = 0;
     getDbReader.mockImplementation(cb => {
       callCount++;
-      const result =
-        callCount === 1 ? { count: 5 } : [];
+      const result = callCount === 1 ? { count: 5 } : [];
       const chain = createChainable(result, result);
       const mockDb = { selectFrom: () => chain };
       return Promise.resolve(cb(mockDb as any));
@@ -168,8 +128,7 @@ describe('backfillUserGeocodes', () => {
     let callCount = 0;
     getDbReader.mockImplementation(cb => {
       callCount++;
-      const result =
-        callCount === 1 ? { count: 2 } : [];
+      const result = callCount === 1 ? { count: 2 } : [];
       const chain = createChainable(result, result);
       const mockDb = { selectFrom: () => chain };
       return Promise.resolve(cb(mockDb as any));
@@ -194,8 +153,7 @@ describe('backfillUserGeocodes', () => {
     let callCount = 0;
     getDbReader.mockImplementation(cb => {
       callCount++;
-      const result =
-        callCount === 1 ? { count: 5 } : [];
+      const result = callCount === 1 ? { count: 5 } : [];
       const chain = createChainable(result, result);
       const mockDb = { selectFrom: () => chain };
       return Promise.resolve(cb(mockDb as any));
@@ -305,20 +263,18 @@ describe('backfillUserGeocodes', () => {
     getDbReader.mockImplementation(cb => {
       callCount++;
       const result =
-        callCount === 1
-          ? { count: 10 }
-          : callCount === 2
-            ? firstBatch
-            : [];
+        callCount === 1 ? { count: 10 } : callCount === 2 ? firstBatch : [];
       const chain = createChainable(result, result);
       const mockDb = { selectFrom: () => chain };
       return Promise.resolve(cb(mockDb as any));
     });
     ask.mockResolvedValue('y');
 
-    const mockAdd = jest.fn((_id, _addr, cb: (r: { lat: number; lon: number }) => void) => {
-      cb({ lat: 38.9, lon: -77.0 });
-    });
+    const mockAdd = jest.fn(
+      (_id, _addr, cb: (r: { lat: number; lon: number }) => void) => {
+        cb({ lat: 38.9, lon: -77.0 });
+      },
+    );
     Geocoder.mockImplementation(
       () =>
         ({
@@ -329,7 +285,9 @@ describe('backfillUserGeocodes', () => {
 
     await backfillUserGeocodes({});
 
-    expect(mockConsoleLog).toHaveBeenCalledWith('Processing batch of 3 users...');
+    expect(mockConsoleLog).toHaveBeenCalledWith(
+      'Processing batch of 3 users...',
+    );
     expect(mockConsoleLog).toHaveBeenCalledWith('Completed 3 / 10');
     expect(mockConsoleLog).toHaveBeenCalledWith('No more users to process');
     expect(mockConsoleLog).toHaveBeenCalledWith('\nBackfill complete:');
@@ -353,11 +311,7 @@ describe('backfillUserGeocodes', () => {
     getDbReader.mockImplementation(cb => {
       callCount++;
       const result =
-        callCount === 1
-          ? { count: 1 }
-          : callCount === 2
-            ? mockUsers
-            : [];
+        callCount === 1 ? { count: 1 } : callCount === 2 ? mockUsers : [];
       const chain = createChainable(result, result);
       (chain as any).where = whereSpy;
       const mockDb = { selectFrom: () => chain };
@@ -365,9 +319,11 @@ describe('backfillUserGeocodes', () => {
     });
     ask.mockResolvedValue('y');
 
-    const mockAdd = jest.fn((_id, _addr, cb: (r: { lat: number; lon: number }) => void) => {
-      cb({ lat: 38.9, lon: -77.0 });
-    });
+    const mockAdd = jest.fn(
+      (_id, _addr, cb: (r: { lat: number; lon: number }) => void) => {
+        cb({ lat: 38.9, lon: -77.0 });
+      },
+    );
     Geocoder.mockImplementation(
       () =>
         ({
@@ -397,8 +353,7 @@ describe('backfillUserGeocodes', () => {
     let callCount = 0;
     getDbReader.mockImplementation(cb => {
       callCount++;
-      const result =
-        callCount === 1 ? { count: 5 } : [];
+      const result = callCount === 1 ? { count: 5 } : [];
       const chain = createChainable(result, result);
       const mockDb = { selectFrom: () => chain };
       return Promise.resolve(cb(mockDb as any));
@@ -438,9 +393,11 @@ describe('backfillUserGeocodes', () => {
     });
     ask.mockResolvedValue('y');
 
-    const mockAdd = jest.fn((_id, _addr, cb: (r: { lat: number; lon: number }) => void) => {
-      cb({ lat: 38.9, lon: -77.0 });
-    });
+    const mockAdd = jest.fn(
+      (_id, _addr, cb: (r: { lat: number; lon: number }) => void) => {
+        cb({ lat: 38.9, lon: -77.0 });
+      },
+    );
     Geocoder.mockImplementation(
       () =>
         ({

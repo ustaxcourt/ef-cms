@@ -1,12 +1,12 @@
 jest.mock('../helpers/parseArgsAndEnvVars', () => ({
   parseArgsAndEnvVars: jest.fn(),
 }));
-jest.mock('scripts/helpers/backfillUserGeocodes', () => ({
+jest.mock('./backfillUserGeocodes', () => ({
   backfillUserGeocodes: jest.fn().mockResolvedValue(undefined),
 }));
 
 import { parseArgsAndEnvVars } from '../helpers/parseArgsAndEnvVars';
-import { backfillUserGeocodes } from 'scripts/helpers/backfillUserGeocodes';
+import { backfillUserGeocodes } from './backfillUserGeocodes';
 
 const parseArgsMock = jest.mocked(parseArgsAndEnvVars);
 const backfillMock = jest.mocked(backfillUserGeocodes);
@@ -51,8 +51,10 @@ describe('backfill-user-geocodes script', () => {
     await import('./backfill-user-geocodes');
     await new Promise(r => setImmediate(r));
 
-    const backfillModule = require('scripts/helpers/backfillUserGeocodes');
-    expect(jest.mocked(backfillModule.backfillUserGeocodes)).toHaveBeenCalledWith({
+    const backfillModule = require('./backfillUserGeocodes');
+    expect(
+      jest.mocked(backfillModule.backfillUserGeocodes),
+    ).toHaveBeenCalledWith({
       batchSize: 500,
       delayMs: 1000,
     });
