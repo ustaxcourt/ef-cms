@@ -35,6 +35,12 @@ export const getPendingMotionDocketEntriesForCurrentJudgeInteractor = async (
   docketEntries: FormattedPendingMotionWithWorksheet[];
 }> => {
   const { judgeIds } = params;
+
+  console.log(
+    '[9733] params received by getPendingMotionDocketEntriesForCurrentJudgeInteractor:',
+    JSON.stringify(params),
+  );
+
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PENDING_MOTIONS_TABLE)) {
     throw new UnauthorizedError('Unauthorized');
   }

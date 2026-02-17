@@ -15,6 +15,11 @@ export const getAllPendingMotionDocketEntriesForJudge = async ({
 }: {
   judgeIds: string[];
 }): Promise<{ results: FormattedPendingMotion[]; total: number }> => {
+  console.log(
+    '[9733] params received by getPendingMotionDocketEntriesForCurrentJudgeInteractor:',
+    JSON.stringify(judgeIds),
+  );
+
   const results = await getDbReader(async reader => {
     const query = reader
       .selectFrom('dwDocketEntry as d')
