@@ -45,5 +45,6 @@ As a _______, so that ________, I need ________.
  - [ ] Types have been added to all added and updated functions.
  - [ ] Code refactored for clarity and to remove any known technical debt.
  - [ ] Acceptance criteria for the story has been met.
+ - [ ] Schema changes are documented in the Entity Relationship Diagram (ERD).
  - [ ] If there are special deployment instructions, they have been added to the `CHANGES.md` file and the PR description.
  - [ ] Code that resides in the shared folder that only runs on the API or browser has been moved to either /web-client or /web-api.

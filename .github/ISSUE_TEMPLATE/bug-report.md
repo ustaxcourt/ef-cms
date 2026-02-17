@@ -102,4 +102,5 @@ If the Court is not able to reproduce the bug, add the “Unable to reproduce”
  - [ ] Interactors should validate entities before calling persistence methods.
  - [ ] Types have been added to all added and updated functions.
  - [ ] Code refactored for clarity and to remove any known technical debt.
+ - [ ] Schema changes are documented in the Entity Relationship Diagram (ERD).
  - [ ] If there are special deployment instructions, they have been added to the `CHANGES.md` file and the PR description.
