@@ -163,10 +163,15 @@ const exportGeodata = async () => {
 
   if (backfillData) await backfillUserGeocodes({ fromDateIso, toDateIso });
 
-  const userGeodata = await getPetitionerGeodata({
-    fromDateIso,
-    toDateIso,
-  });
+  const userGeodata = (
+    await getPetitionerGeodata({
+      fromDateIso,
+      toDateIso,
+    })
+  ).map(row => ({
+    ...row,
+    address: row.address?.replace(/\r\n|\r|\n/g, ' ').trim() ?? null,
+  }));
 
   const columns = [
     { header: 'docket_number', key: 'docketNumber' },
