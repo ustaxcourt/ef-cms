@@ -20,12 +20,17 @@ export const getAllPendingMotionDocketEntriesForJudge = async ({
       .selectFrom('dwDocketEntry as d')
       .innerJoin('dwCase as c', 'd.docketNumber', 'c.docketNumber')
       .where('d.pending', 'is', true)
-      .where('c.associatedJudgeId', 'in', judgeIds)
       // sql.lit() is intentionally used here instead of parameterized values to
-      // work around a Kysely parameter-numbering/binding bug that occurs when
-      // many bound parameters are present (e.g., judgeIds plus MOTION_EVENT_CODES).
-      // This is safe because MOTION_EVENT_CODES is a static compile-time constant
-      // with no user input.
+      // work around a bug wherein esbuild's minifySyntax optimization causes Kysely
+      // to bind arrays as a single parameter rather than expanding them. judgeIds
+      // is safe to inline because the values originate from the database.
+      // MOTION_EVENT_CODES is safe to inline because it is a static compile-time constant.
+      .where(
+        sql<SqlBool>`c."associated_judge_id" IN (${sql.join(
+          judgeIds.map(id => sql.lit(id)),
+          sql`, `,
+        )})`,
+      )
       .where(
         sql<SqlBool>`d."event_code" IN (${sql.join(
           MOTION_EVENT_CODES.map(code => sql.lit(code)),
