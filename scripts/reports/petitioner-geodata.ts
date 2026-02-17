@@ -2,25 +2,19 @@
 
 import {
   type ScriptConfig,
+  getTimeframeForYear,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
 import { getDbReader } from '@web-api/database';
 import { generateCsv } from '../helpers/generate-csv';
 import {
-  calculateISODate,
-  createISODateString,
   getJsDateFromIso,
+  getNowObject,
 } from '@shared/business/utilities/DateHandler';
 import { sql } from 'kysely';
 import { backfillUserGeocodes } from '../geocoding/backfillUserGeocodes';
 
-const todayDate = createISODateString().split('T')[0];
-const defaultFromDate = calculateISODate({
-  dateString: todayDate,
-  howMuch: -1,
-  units: 'years',
-}).split('T')[0];
-
+const thisYear = getNowObject().year;
 const scriptConfig: ScriptConfig = {
   description:
     'export-petitioner-geodata - Exports case petitioner geodata for QGIS',
@@ -28,17 +22,20 @@ const scriptConfig: ScriptConfig = {
     env: 'ENV',
   },
   parameters: {
-    fromDate: {
-      default: defaultFromDate,
-      description: 'Range start date (YYYY-MM-DD, inclusive)',
-      short: 'f',
+    years: {
+      default: `${thisYear}`,
+      description:
+        'Year(s): single year, comma-separated list, range, or mix (e.g. 2019,2021,2023-2025)',
+      short: 'y',
       type: 'string',
+      transform: 'number',
+      commaDelimited: true,
     },
-    toDate: {
-      default: todayDate,
-      description: 'Range end date (YYYY-MM-DD, exclusive)',
-      short: 't',
-      type: 'string',
+    fiscal: {
+      default: false,
+      description: 'Use fiscal year (starts 10/1) instead of calendar year',
+      short: 'f',
+      type: 'boolean',
     },
     backfillData: {
       default: true,
@@ -51,14 +48,21 @@ const scriptConfig: ScriptConfig = {
   requireActiveAwsSession: false, // todo: put back
 };
 
-const { fromDate, toDate, backfillData } = parseArgsAndEnvVars(
+const { years, fiscal, backfillData } = parseArgsAndEnvVars(
   scriptConfig,
 ) as {
   env: string;
-  fromDate: string;
-  toDate: string;
+  years: number[];
+  fiscal: boolean;
   backfillData: boolean;
 };
+
+const yearsToUse = years?.length ? years : [thisYear!];
+const timeframes = yearsToUse.map(y =>
+  getTimeframeForYear({ fiscal, year: `${y}` }),
+);
+const fromDateIso = timeframes.map(t => t.begin).sort()[0];
+const toDateIso = timeframes.map(t => t.end).sort().reverse()[0];
 
 type PetitionerGeoRow = {
   docket_number: string;
@@ -154,14 +158,14 @@ const getPetitionerGeodata = async ({
 };
 
 const exportGeodata = async () => {
-  const outputCsv = `${OUTPUT_DIR}/petitioner-geodata-${fromDate}-to-${toDate}.csv`;
+  const outputCsv = `${OUTPUT_DIR}/petitioner-geodata-${fiscal ? 'fy-' : ''}${yearsToUse.join('-')}.csv`;
 
   if (backfillData)
-    await backfillUserGeocodes({ fromDateIso: fromDate, toDateIso: toDate });
+    await backfillUserGeocodes({ fromDateIso, toDateIso });
 
   const userGeodata = await getPetitionerGeodata({
-    fromDateIso: fromDate,
-    toDateIso: toDate,
+    fromDateIso,
+    toDateIso,
   });
 
   const columns = [
