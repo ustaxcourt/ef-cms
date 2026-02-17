@@ -15,8 +15,8 @@ export const getAllPendingMotionDocketEntriesForJudge = async ({
 }: {
   judgeIds: string[];
 }): Promise<{ results: FormattedPendingMotion[]; total: number }> => {
-  const results = await getDbReader(async reader =>
-    reader
+  const results = await getDbReader(async reader => {
+    const query = reader
       .selectFrom('dwDocketEntry as d')
       .innerJoin('dwCase as c', 'd.docketNumber', 'c.docketNumber')
       .where('d.pending', 'is', true)
@@ -37,7 +37,6 @@ export const getAllPendingMotionDocketEntriesForJudge = async ({
         '<=',
         calculateDate({ howMuch: -180, units: 'days' }),
       )
-
       .select([
         'c.associatedJudge',
         'c.associatedJudgeId',
@@ -52,9 +51,15 @@ export const getAllPendingMotionDocketEntriesForJudge = async ({
         'd.eventCode',
         'd.filingDate',
         'd.pending',
-      ])
-      .execute(),
-  );
+      ]);
+
+    console.log(
+      '[9733] getAllPendingMotionDocketEntriesForJudge query: ',
+      query.compile(),
+    );
+
+    return query.execute();
+  });
 
   const mappedResults = await Promise.all(
     results.map(async r => {
