@@ -1130,17 +1130,25 @@ export class Case extends JoiValidationEntity {
    *
    * @param {object} docketEntryEntity the docket entry to add to the case
    */
-  addDocketEntry(docketEntryEntity: DocketEntry) {
+  addDocketEntry(
+    docketEntryEntity: DocketEntry,
+    {
+      nextIndex,
+      petitionServedAt,
+    }: { nextIndex?: number; petitionServedAt?: string | null } = {},
+  ) {
     docketEntryEntity.docketNumber = this.docketNumber;
 
     if (docketEntryEntity.isOnDocketRecord) {
       const updateIndex = shouldGenerateDocketRecordIndex({
         caseDetail: this,
         docketEntry: docketEntryEntity,
+        petitionServedAt,
       });
 
       if (updateIndex) {
-        docketEntryEntity.index = this.generateNextDocketRecordIndex();
+        docketEntryEntity.index =
+          nextIndex ?? this.generateNextDocketRecordIndex();
       } else if (
         docketEntryEntity.eventCode === INITIAL_DOCUMENT_TYPES.stin.eventCode
       ) {
@@ -1418,8 +1426,14 @@ export class Case extends JoiValidationEntity {
    * @param {object} caseDeadlines - the case deadlines
    * @returns {Case} the updated case entity
    */
-  updateAutomaticBlocked({ hasCaseDeadline }: { hasCaseDeadline: boolean }) {
-    const hasPendingItems = this.doesHavePendingItems();
+  updateAutomaticBlocked({
+    hasCaseDeadline,
+    hasPendingItems,
+  }: {
+    hasCaseDeadline: boolean;
+    hasPendingItems?: boolean;
+  }) {
+    hasPendingItems = hasPendingItems ?? this.doesHavePendingItems();
     let automaticBlockedReason;
     if (hasPendingItems && hasCaseDeadline) {
       automaticBlockedReason = AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate;

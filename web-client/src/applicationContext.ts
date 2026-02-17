@@ -163,6 +163,8 @@ import { getCaseDeadlinesInteractor } from '../../shared/src/proxies/caseDeadlin
 import { getCaseDocumentsIdsFilteredByDocumentType } from '@shared/business/utilities/getCaseDocumentsIdsFilteredByDocumentType';
 import { getCaseExistsInteractor } from '../../shared/src/proxies/getCaseExistsProxy';
 import { getCaseInteractor } from '../../shared/src/proxies/getCaseProxy';
+import { getCaseMetadataInteractor } from '../../shared/src/proxies/getCaseMetadataProxy';
+import { getSingleDocketEntryInteractor } from '../../shared/src/proxies/getSingleDocketEntryProxy';
 import { getCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/getCaseInventoryReportProxy';
 import { getCaseWorksheetsByJudgeInteractor } from '@shared/proxies/reports/getCaseWorksheetsByJudgeProxy';
 import { getCasesClosedByJudgeInteractor } from '../../shared/src/proxies/reports/getCasesClosedByJudgeProxy';
@@ -444,6 +446,7 @@ const allUseCases = {
   getConsolidatedCaseDeadlinesInteractor,
   getCaseExistsInteractor,
   getCaseInteractor,
+  getCaseMetadataInteractor,
   getCaseInventoryReportInteractor,
   getCaseWorksheetsByJudgeInteractor,
   getCasesClosedByJudgeInteractor,
@@ -477,6 +480,7 @@ const allUseCases = {
   getPractitionerDocumentsInteractor,
   getPractitionersByNameInteractor,
   getPrivatePractitionersBySearchKeyInteractor,
+  getSingleDocketEntryInteractor,
   getTrialSessionDetailsInteractor,
   getTrialSessionOpenCasesCountInteractor,
   getTrialSessionPlanningReportDataInteractor,

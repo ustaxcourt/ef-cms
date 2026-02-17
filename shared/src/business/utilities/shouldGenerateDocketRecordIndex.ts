@@ -20,6 +20,11 @@ const getIsInitialFilingType = docketEntry => {
 export const shouldGenerateDocketRecordIndex = ({
   caseDetail,
   docketEntry,
+  petitionServedAt,
+}: {
+  caseDetail: any;
+  docketEntry: any;
+  petitionServedAt?: string | null;
 }) => {
   if (docketEntry.index) {
     return false;
@@ -46,11 +51,14 @@ export const shouldGenerateDocketRecordIndex = ({
     if (docketEntry.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode) {
       return true;
     } else {
-      const petitionDocument = caseDetail.docketEntries.find(
-        d => d.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode,
-      );
+      const resolvedPetitionServedAt =
+        petitionServedAt !== undefined
+          ? petitionServedAt
+          : caseDetail.docketEntries.find(
+              d => d.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode,
+            )?.servedAt;
       // if the petition has a servedAt, then this non-petition initial document is being added after the fact (not filed at the same time)
-      if (petitionDocument.servedAt) {
+      if (resolvedPetitionServedAt) {
         // if this initial document is being served, it should have an index
         return !!docketEntry.servedAt;
       } else {

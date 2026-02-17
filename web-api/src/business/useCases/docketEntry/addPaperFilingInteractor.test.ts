@@ -6,13 +6,10 @@ import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
-  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+  '@web-api/business/useCaseHelper/docketEntry/addDocketEntryToCase',
 );
 jest.mock('@shared/sharedAppContext');
-import {
-  AUTOMATIC_BLOCKED_REASONS,
-  SERVICE_INDICATOR_TYPES,
-} from '@shared/business/entities/EntityConstants';
+import { SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstants';
 import {
   MOCK_CASE,
   MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
@@ -23,13 +20,10 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { addPaperFilingInteractor } from './addPaperFilingInteractor';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { docketClerkUser } from '@shared/test/mockUsers';
-import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
-import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
-import { MOCK_CASE_DEADLINE } from '@shared/test/mockCaseDeadline';
-import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { addDocketEntryToCase as addDocketEntrytoCaseMock } from '@web-api/business/useCaseHelper/docketEntry/addDocketEntryToCase';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { getUniqueId as getUniqueIdMock } from '@shared/sharedAppContext';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
@@ -38,14 +32,9 @@ const getUserById = jest.mocked(getUserByIdMock);
 
 describe('addPaperFilingInteractor', () => {
   const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
-  const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
+  const addDocketEntryToCase = jest.mocked(addDocketEntrytoCaseMock);
   const getUniqueId = jest.mocked(getUniqueIdMock);
-  updateCaseAndAssociations.mockImplementation(({ caseToUpdate }) =>
-    Promise.resolve(caseToUpdate),
-  );
-  const getCaseDeadlinesByDocketNumber = jest.mocked(
-    getCaseDeadlinesByDocketNumberMock,
-  );
+  addDocketEntryToCase.mockResolvedValue(undefined);
   const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
   const mockClientConnectionId = '987654';
   const mockCase = { ...MOCK_CASE, leadDocketNumber: MOCK_CASE.docketNumber };
@@ -137,7 +126,7 @@ describe('addPaperFilingInteractor', () => {
     );
 
     expect(upsertWorkItems).toHaveBeenCalled();
-    expect(updateCaseAndAssociations).toHaveBeenCalled();
+    expect(addDocketEntryToCase).toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
     ).toHaveBeenCalled();
@@ -251,7 +240,7 @@ describe('addPaperFilingInteractor', () => {
         docketNumber: mockCase.docketNumber,
       },
     ]);
-    expect(updateCaseAndAssociations).toHaveBeenCalled();
+    expect(addDocketEntryToCase).toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().countPagesInDocument,
     ).toHaveBeenCalled();
@@ -279,7 +268,7 @@ describe('addPaperFilingInteractor', () => {
     );
 
     expect(upsertWorkItems).toHaveBeenCalled();
-    expect(updateCaseAndAssociations).toHaveBeenCalled();
+    expect(addDocketEntryToCase).toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().countPagesInDocument,
     ).not.toHaveBeenCalled();
@@ -309,7 +298,7 @@ describe('addPaperFilingInteractor', () => {
     expect(upsertWorkItems).toHaveBeenCalled();
   });
 
-  it('sets the case as blocked if the document filed is a tracked document type', async () => {
+  it('calls addDocketEntryToCase with the correct docket entry when filing a tracked document type', async () => {
     await addPaperFilingInteractor(
       applicationContext,
       {
@@ -331,54 +320,14 @@ describe('addPaperFilingInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(updateCaseAndAssociations).toHaveBeenCalled();
+    expect(addDocketEntryToCase).toHaveBeenCalled();
     expect(
-      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
-    ).toMatchObject({
-      automaticBlocked: true,
-      automaticBlockedDate: expect.anything(),
-      automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
-    });
-  });
-
-  it('sets the case as blocked with due dates if the document filed is a tracked document type and the case has due dates', async () => {
-    getCaseDeadlinesByDocketNumber.mockResolvedValue([
-      new CaseDeadline(MOCK_CASE_DEADLINE),
-    ]);
-
-    await addPaperFilingInteractor(
-      applicationContext,
-      {
-        clientConnectionId: mockClientConnectionId,
-        consolidatedGroupDocketNumbers: [],
-        documentStorageId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        documentMetadata: {
-          category: 'Application',
-          docketNumber: mockCase.docketNumber,
-          documentTitle: 'Application for Examination Pursuant to Rule 73',
-          documentType: 'Application for Examination Pursuant to Rule 73',
-          eventCode: 'AFE',
-          filedBy: 'Test Petitioner',
-          isFileAttached: true,
-          isPaper: true,
-        },
-        isSavingForLater: false,
-      },
-      mockDocketClerkUser,
-    );
-
-    expect(updateCaseAndAssociations).toHaveBeenCalled();
-    expect(
-      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
-    ).toMatchObject({
-      automaticBlocked: true,
-      automaticBlockedDate: expect.anything(),
-      automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate,
-    });
+      addDocketEntryToCase.mock.calls[0][0].docketEntryEntity.eventCode,
+    ).toBe('AFE');
   });
 
   it('does not send the service email if an error occurs while updating the case', async () => {
-    updateCaseAndAssociations.mockRejectedValueOnce(new Error('bad!'));
+    addDocketEntryToCase.mockRejectedValueOnce(new Error('bad!'));
 
     await expect(
       addPaperFilingInteractor(
@@ -529,7 +478,7 @@ describe('addPaperFilingInteractor', () => {
         mockDocketClerkUser,
       );
 
-      expect(updateCaseAndAssociations).toHaveBeenCalledTimes(1);
+      expect(addDocketEntryToCase).toHaveBeenCalledTimes(1);
       expect(upsertWorkItems).toHaveBeenCalledTimes(1);
     });
 
