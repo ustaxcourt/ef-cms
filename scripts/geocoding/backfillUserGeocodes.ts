@@ -2,7 +2,7 @@ import { getJsDateFromIso } from '@shared/business/utilities/DateHandler';
 import { getDbReader } from '@web-api/database';
 import { upsertUserContacts } from '@web-api/persistence/postgres/userContacts/upsertUserContacts';
 import { sql } from 'kysely';
-import { ask } from 'scripts/helpers/prompts';
+import { ask } from '../helpers/prompts';
 import { Geocoder } from 'us-census-geocoder';
 
 type geoResults = {

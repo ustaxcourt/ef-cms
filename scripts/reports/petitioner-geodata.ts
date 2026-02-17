@@ -12,7 +12,7 @@ import {
   getJsDateFromIso,
 } from '@shared/business/utilities/DateHandler';
 import { sql } from 'kysely';
-import { backfillUserGeocodes } from 'scripts/helpers/backfillUserGeocodes';
+import { backfillUserGeocodes } from '../geocoding/backfillUserGeocodes';
 
 const todayDate = createISODateString().split('T')[0];
 const defaultFromDate = calculateISODate({

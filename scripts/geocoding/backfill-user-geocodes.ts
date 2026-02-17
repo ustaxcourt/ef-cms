@@ -4,7 +4,7 @@ import {
   type ScriptConfig,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
-import { backfillUserGeocodes } from 'scripts/helpers/backfillUserGeocodes';
+import { backfillUserGeocodes } from './backfillUserGeocodes';
 
 const scriptConfig: ScriptConfig = {
   description:
