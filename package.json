@@ -297,7 +297,7 @@
     "@types/jest": "30.0.0",
     "@types/lodash": "4.17.23",
     "@types/luxon": "3.7.1",
-    "@types/node": "24.10.9",
+    "@types/node": "24.10.13",
     "@types/promise-retry": "1.1.6",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",

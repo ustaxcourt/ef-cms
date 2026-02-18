@@ -228,7 +228,7 @@ Below is a list of dependencies that are locked down due to known issues with se
    - I debugged this by temporarily ignoring the smoketests in search.cy.ts in order for the build to pass and deploy to an exp environment. From there I ran the cypress smoketests on the exp environement locally, found the error in cloudwatch logs, tested multiple fixes and made the neccessary changes.
 
 ### DWT
-**Current Installed DWT: 19.3.0**
+**Current Installed DWT: 19.3.1**
 - Minor versions of DWT _should_ be updated, but require that Court IT update the Windows clients in concert with our app. Do not update without coordinating.
 
 ### puppeteer and @sparticuz/chromium
@@ -255,11 +255,12 @@ Below is a list of dependencies that are locked down due to known issues with se
 - January 27th, 2026: The decision was made to revert us back to 1.3.7 due to a bug where line tabing would break upon edit. No further updates to Quill should be made - there is a plan in the pipeline to swap Quill out for an embedded Microsoft Office Editor.
 
 ### @types/node
-**Installed Version: 24.10.4**
-The major version of this package should match our major version of Node. At the moment that we are using Node v24.11.1 so we should use a package that starts with 24.
+**Installed Version: 24.10.13**
+The major version of this package should match our major version of Node. At the moment that we are using Node v24.13.1 so we should use a package that starts with 24.
 
 - [Dependencies 12 01 2025](https://github.com/ustaxcourt/ef-cms/pull/9465/files), Node.js was updated to v24.11.1, successfully updated @types/node to 24.10.2 to match Node.js v24.11.1
 - [Dependencies 01 05 2026](https://github.com/ustaxcourt/ef-cms/pull/9595/files), @Types/Node.js was updated from v24.10.2 to v24.10.4. Node.js version was left unchanged as the next available is Node 25+.
+- [Dependencies 02 16 2026](), @Types/Node.js was updated from v24.10.9 to v24.10.13. Node.js version was left unchanged as the next available is Node 25+.
 
 ### TypeScript
 **Installed Version: 5.9.3**
