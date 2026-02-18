@@ -8,35 +8,25 @@ import {
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { getConsolidatedCasesCount } from '@web-api/persistence/postgres/cases/getConsolidatedCasesCount';
 import { getDbReader } from '@web-api/database';
-import { sql, SqlBool } from 'kysely';
 
 export const getAllPendingMotionDocketEntriesForJudge = async ({
   judgeIds,
 }: {
   judgeIds: string[];
 }): Promise<{ results: FormattedPendingMotion[]; total: number }> => {
-  const results = await getDbReader(async reader => {
-    const query = reader
+  const results = await getDbReader(async reader =>
+    reader
       .selectFrom('dwDocketEntry as d')
       .innerJoin('dwCase as c', 'd.docketNumber', 'c.docketNumber')
       .where('d.pending', 'is', true)
       .where('c.associatedJudgeId', 'in', judgeIds)
-      // sql.lit() is intentionally used here instead of parameterized values to
-      // work around a Kysely parameter-numbering/binding bug that occurs when
-      // many bound parameters are present (e.g., judgeIds plus MOTION_EVENT_CODES).
-      // This is safe because MOTION_EVENT_CODES is a static compile-time constant
-      // with no user input.
-      .where(
-        sql<SqlBool>`d."event_code" IN (${sql.join(
-          MOTION_EVENT_CODES.map(code => sql.lit(code)),
-          sql`, `,
-        )})`,
-      )
+      .where('d.eventCode', 'in', MOTION_EVENT_CODES)
       .where(
         'd.filingDate',
         '<=',
         calculateDate({ howMuch: -180, units: 'days' }),
       )
+
       .select([
         'c.associatedJudge',
         'c.associatedJudgeId',
@@ -51,15 +41,9 @@ export const getAllPendingMotionDocketEntriesForJudge = async ({
         'd.eventCode',
         'd.filingDate',
         'd.pending',
-      ]);
-
-    console.log(
-      '[9733] getAllPendingMotionDocketEntriesForJudge query: ',
-      query.compile(),
-    );
-
-    return query.execute();
-  });
+      ])
+      .execute(),
+  );
 
   const mappedResults = await Promise.all(
     results.map(async r => {
