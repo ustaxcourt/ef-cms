@@ -176,10 +176,19 @@ export const NoticeOfWithdrawalForm = connect(
                     key={`edit-contact-${party.contactId}`}
                   >
                     <span className="tw:block tw:mb-1.25">{party.name}</span>
-                    {party.additionalName && (
+                    {form.contact.secondaryName ? (
                       <span className="tw:block tw:mb-1.25">
-                        {party.additionalName}
+                        c/o {form.contact.secondaryName}
+                        {form.contact.title && (
+                          <span>, {form.contact.title}</span>
+                        )}
                       </span>
+                    ) : (
+                      form.contact.additionalName && (
+                        <span className="tw:block tw:mb-1.25">
+                          {form.contact.additionalName}
+                        </span>
+                      )
                     )}
                     {party.isAddressSealed ? (
                       <span>ADDRESS SEALED BY COURT ORDER</span>

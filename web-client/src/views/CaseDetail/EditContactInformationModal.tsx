@@ -46,10 +46,17 @@ export const EditContactInformationModal = connect(
             information is accurate before submitting.
           </span>
           <span className="tw:block tw:mb-4 tw:mt-4">{form.contact.name}</span>
-          {form.contact.additionalName && (
+          {form.contact.secondaryName ? (
             <span className="tw:block tw:mb-4 tw:mt-4">
-              {form.contact.additionalName}
+              c/o {form.contact.secondaryName}
+              {form.contact.title && <span>, {form.contact.title}</span>}
             </span>
+          ) : (
+            form.contact.additionalName && (
+              <span className="tw:block tw:mb-4 tw:mt-4">
+                {form.contact.additionalName}
+              </span>
+            )
           )}
         </div>
         <fieldset className="usa-fieldset">
