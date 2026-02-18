@@ -9,6 +9,12 @@ nvm use
 nvm alias default "$(cat .nvmrc)"
 ```
 
+#### Upgrade Terraform to `1.14.5`
+
+```bash
+tfswitch 1.14.5
+```
+
 ## Manual Deployment Steps
 
 ### Before Deployment
