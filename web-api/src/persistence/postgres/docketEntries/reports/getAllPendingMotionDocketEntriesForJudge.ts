@@ -8,40 +8,25 @@ import {
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { getConsolidatedCasesCount } from '@web-api/persistence/postgres/cases/getConsolidatedCasesCount';
 import { getDbReader } from '@web-api/database';
-import { sql, SqlBool } from 'kysely';
 
 export const getAllPendingMotionDocketEntriesForJudge = async ({
   judgeIds,
 }: {
   judgeIds: string[];
 }): Promise<{ results: FormattedPendingMotion[]; total: number }> => {
-  const results = await getDbReader(async reader => {
-    const query = reader
+  const results = await getDbReader(async reader =>
+    reader
       .selectFrom('dwDocketEntry as d')
       .innerJoin('dwCase as c', 'd.docketNumber', 'c.docketNumber')
       .where('d.pending', 'is', true)
-      // sql.lit() is intentionally used here instead of parameterized values to
-      // work around a bug wherein esbuild's minifySyntax optimization causes Kysely
-      // to bind arrays as a single parameter rather than expanding them. judgeIds
-      // is safe to inline because the values originate from the database.
-      // MOTION_EVENT_CODES is safe to inline because it is a static compile-time constant.
-      .where(
-        sql<SqlBool>`c."associated_judge_id" IN (${sql.join(
-          judgeIds.map(id => sql.lit(id)),
-          sql`, `,
-        )})`,
-      )
-      .where(
-        sql<SqlBool>`d."event_code" IN (${sql.join(
-          MOTION_EVENT_CODES.map(code => sql.lit(code)),
-          sql`, `,
-        )})`,
-      )
+      .where('c.associatedJudgeId', 'in', judgeIds)
+      .where('d.eventCode', 'in', MOTION_EVENT_CODES)
       .where(
         'd.filingDate',
         '<=',
         calculateDate({ howMuch: -180, units: 'days' }),
       )
+
       .select([
         'c.associatedJudge',
         'c.associatedJudgeId',
@@ -56,10 +41,9 @@ export const getAllPendingMotionDocketEntriesForJudge = async ({
         'd.eventCode',
         'd.filingDate',
         'd.pending',
-      ]);
-
-    return query.execute();
-  });
+      ])
+      .execute(),
+  );
 
   const mappedResults = await Promise.all(
     results.map(async r => {
