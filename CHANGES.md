@@ -1,3 +1,25 @@
+<details><summary>Dependency Updates - Week of 2026-02-16</summary>
+
+## Local
+
+#### Upgrade NodeJS to `24.13.1`
+```bash
+nvm install
+nvm use
+nvm alias default "$(cat .nvmrc)"
+```
+
+## Manual Deployment Steps
+
+### Before Deployment
+
+#### Docker container `4.3.68` - choose exp4
+
+```bash
+. scripts/env/set-env.zsh expN
+npm run ecr:check-version
+```
+</details>
 <details><summary>Dependency Updates - Week of 2026-02-09</summary>
 
 ## Manual Deployment Steps
