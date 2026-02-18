@@ -6,7 +6,7 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { get } from 'lodash';
 import { props } from 'cerebral';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import classNames from 'classnames';
 import { RunableSequence as RunnableSequence } from 'cerebral';
 
@@ -148,6 +148,19 @@ export const NonstandardForm: React.FC<NonstandardFormProps> = connect(
       );
     };
 
+    const previouslyFiledDocuments = helper[level]?.previouslyFiledDocuments;
+    const memoizedPreviousDocumentOptions = useMemo(() => {
+      if (!previouslyFiledDocuments) return null;
+      return previouslyFiledDocuments.map(previousDocument => (
+        <option
+          key={previousDocument.docketEntryId}
+          value={previousDocument.docketEntryId}
+        >
+          {`${showIndex ? `${previousDocument.index} - ${previousDocument.createdAtFormatted} - ` : ''}${previousDocument.documentTitle || previousDocument.documentType}`}
+        </option>
+      ));
+    }, [previouslyFiledDocuments, showIndex]);
+
     namespace = namespace ? `${namespace}.` : '';
     return (
       <div className="nonstandard-form">
@@ -206,16 +219,7 @@ export const NonstandardForm: React.FC<NonstandardFormProps> = connect(
               }}
             >
               <option value="">- Select -</option>
-              {helper[level].previouslyFiledDocuments.map(previousDocument => {
-                return (
-                  <option
-                    key={previousDocument.docketEntryId}
-                    value={previousDocument.docketEntryId}
-                  >
-                    {`${showIndex ? `${previousDocument.index} - ${previousDocument.createdAtFormatted} - ` : ''}${previousDocument.documentTitle || previousDocument.documentType}`}
-                  </option>
-                );
-              })}
+              {memoizedPreviousDocumentOptions}
             </select>
           </FormGroup>
         )}
