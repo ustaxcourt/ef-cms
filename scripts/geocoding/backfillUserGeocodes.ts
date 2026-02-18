@@ -17,12 +17,8 @@ type geoResults = {
   match?: boolean;
 };
 
-const getUsersMissingGeocode = async (
-  limit: number,
-  fromDateIso?: string,
-  toDateIso?: string,
-): Promise<geoResults[]> => {
-  let query = await getDbReader(db =>
+const userMissingGeocodesBaseQuery = async () =>
+  getDbReader(db =>
     db
       .selectFrom('dwCase as c')
       .crossJoin(
@@ -33,20 +29,27 @@ const getUsersMissingGeocode = async (
           .onRef(sql`petitioner->>'contactId'`, '=', 'uc.userId')
           .onRef('c.docketNumber', '=', 'uc.docketNumber'),
       )
-      .select([
-        'c.docketNumber',
-        sql<string>`petitioner ->> 'contactId'`.as('userId'),
-        sql<string>`petitioner ->> 'address1'`.as('address1'),
-        sql<string>`petitioner ->> 'state'`.as('state'),
-        sql<string>`petitioner ->> 'city'`.as('city'),
-        sql<string>`petitioner ->> 'postalCode'`.as('zip'),
-      ])
       .where('c.status', 'not in', ['Closed', 'Dismissed'])
       .where(qb => qb.or([qb('uc.lat', 'is', null), qb('uc.lng', 'is', null)]))
       .where('uc.geodataMatch', 'is', null)
-      .where(sql`petitioner ->> 'address1'`, 'is not', null)
-      .limit(limit),
+      .where(sql`petitioner ->> 'address1'`, 'is not', null),
   );
+
+const getUsersMissingGeocode = async (
+  limit: number,
+  fromDateIso?: string,
+  toDateIso?: string,
+): Promise<geoResults[]> => {
+  let query = (await userMissingGeocodesBaseQuery())
+    .select([
+      'c.docketNumber',
+      sql<string>`petitioner ->> 'contactId'`.as('userId'),
+      sql<string>`petitioner ->> 'address1'`.as('address1'),
+      sql<string>`petitioner ->> 'state'`.as('state'),
+      sql<string>`petitioner ->> 'city'`.as('city'),
+      sql<string>`petitioner ->> 'postalCode'`.as('zip'),
+    ])
+    .limit(limit);
   if (fromDateIso)
     query = query.where('c.receivedAt', '>=', getJsDateFromIso(fromDateIso));
 
@@ -60,23 +63,10 @@ const getUserMissingGeocodeCount = async (
   fromDateIso?: string,
   toDateIso?: string,
 ) => {
-  let query = await getDbReader(db =>
-    db
-      .selectFrom('dwCase as c')
-      .crossJoin(
-        sql`LATERAL jsonb_array_elements(c.petitioners)`.as('petitioner'),
-      )
-      .leftJoin('dwUserContact as uc', join =>
-        join
-          .onRef(sql`petitioner->>'contactId'`, '=', 'uc.userId')
-          .onRef('c.docketNumber', '=', 'uc.docketNumber'),
-      )
-      .select([sql<number>`count(1)`.as('count')])
-      .where('c.status', 'not in', ['Closed', 'Dismissed'])
-      .where(qb => qb.or([qb('uc.lat', 'is', null), qb('uc.lng', 'is', null)]))
-      .where('uc.geodataMatch', 'is', null)
-      .where(sql`petitioner ->> 'address1'`, 'is not', null),
-  );
+  let query = (await userMissingGeocodesBaseQuery()).select([
+    sql<number>`count(1)`.as('count'),
+  ]);
+
   if (fromDateIso)
     query = query.where('c.receivedAt', '>=', getJsDateFromIso(fromDateIso));
 
