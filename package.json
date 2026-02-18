@@ -57,7 +57,7 @@
     "axios": "1.13.5",
     "broadcast-channel": "7.3.0",
     "canvas": "3.2.1",
-    "cerebral": "5.2.5",
+    "cerebral": "5.2.1",
     "class-variance-authority": "0.7.1",
     "classnames": "2.5.1",
     "clsx": "2.1.1",
