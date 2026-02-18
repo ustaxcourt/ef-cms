@@ -1,4 +1,3 @@
-// web-client/integration-tests/petitionsClerkDocumentQCJourney.test.ts
 import {
   loginAs,
   refreshElasticsearchIndex,
@@ -42,9 +41,12 @@ describe('Petitions Clerk Document QC Journey', () => {
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkViewsSectionDocumentQC(cerebralTest);
-  petitionsClerkGetsSectionDocumentQCInboxCount(cerebralTest);
+  petitionsClerkGetsSectionDocumentQCInboxCount(
+    cerebralTest,
+    caseCreationCount,
+  );
   petitionsClerkBulkAssignsCases(cerebralTest, createdCases);
   petitionsClerkViewsMyDocumentQC(cerebralTest);
-  petitionsClerkGetsMyDocumentQCInboxCount(cerebralTest);
+  petitionsClerkGetsMyDocumentQCInboxCount(cerebralTest, caseCreationCount);
   petitionsClerkVerifiesAssignedWorkItem(cerebralTest, createdCases);
 });

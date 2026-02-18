@@ -12,14 +12,13 @@ export const petitionsClerkGetsMyDocumentQCInboxCount = (
     const helper = await runCompute(workQueueHelper, {
       state: cerebralTest.getState(),
     });
-
-    if (cerebralTest.petitionsClerkMyDocumentQCInboxCount !== undefined) {
-      expect(helper.individualInboxCount).toBeGreaterThanOrEqual(
+    if (cerebralTest.petitionsClerkMyDocumentQCInboxCount) {
+      expect(helper.individualInboxCount).toEqual(
         cerebralTest.petitionsClerkMyDocumentQCInboxCount +
           adjustExpectedCountBy,
       );
     } else {
-      expect(helper.individualInboxCount).toBeGreaterThanOrEqual(0);
+      expect(helper.individualInboxCount).toBeGreaterThan(0);
     }
   });
 };

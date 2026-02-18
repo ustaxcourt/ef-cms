@@ -90,19 +90,19 @@ export const getNotificationsInteractor = async (
   );
 
   const qcIndividualInProgressCount = countUniqueWorkItems(
-    documentQCIndividualInbox.filter(filters.my.inProgress),
+    documentQCIndividualInbox.filter(filters['my']['inProgress']),
   );
 
   const qcIndividualInboxCount = countUniqueWorkItems(
-    documentQCIndividualInbox.filter(filters.my.inbox),
+    documentQCIndividualInbox.filter(filters['my']['inbox']),
   );
 
   const qcSectionInProgressCount = countUniqueWorkItems(
-    (documentQCSectionInbox ?? []).filter(filters.section.inProgress),
+    (documentQCSectionInbox || []).filter(filters['section']['inProgress']),
   );
 
   const qcSectionInboxCount = countUniqueWorkItems(
-    (documentQCSectionInbox ?? []).filter(filters.section.inbox),
+    (documentQCSectionInbox || []).filter(filters['section']['inbox']),
   );
 
   const unreadMessageCount = userInbox.filter(
@@ -128,19 +128,11 @@ export const getNotificationsInteractor = async (
   };
 };
 
-const getWorkItemRowKey = workItem => {
-  if (!workItem.leadDocketNumber) {
-    return workItem.docketEntryId;
-  }
-
-  return `${workItem.leadDocketNumber}:${workItem.docketEntryId}`;
-};
-
 const countUniqueWorkItems = workItems => {
   const seenWorkItems = new Set();
 
   for (const workItem of workItems) {
-    seenWorkItems.add(getWorkItemRowKey(workItem));
+    seenWorkItems.add(workItem.docketEntryId);
   }
 
   return seenWorkItems.size;
