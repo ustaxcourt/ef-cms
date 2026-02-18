@@ -116,7 +116,7 @@ describe('Judge`s chambers stamps an order', () => {
           cy.get(
             '.message-subject > .message-document-title > [data-testid="messages-individual-inbox-subject-cell"]',
           )
-            .first()
+            .last()
             .click();
           cy.get('[data-testid="message-detail-container"]').should('exist');
           cy.get('[data-testid="apply-stamp"]').click();
