@@ -10,6 +10,7 @@ import { fromKyselyUser } from '@web-api/persistence/postgres/users/mapper';
 import { generateCsv } from '../helpers/generate-csv';
 import { getDbReader } from '@web-api/database';
 import { pick } from 'lodash';
+import { formatDate } from '../helpers/formatters';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -68,7 +69,7 @@ const getAttorneysAdmittedInYear = async (): Promise<RawPractitioner[]> => {
   ];
   const rows = attorneys.map(attorney => ({
     ...pick(attorney, ['barNumber', 'firmName', 'name', 'practiceType']),
-    admissionsDate: attorney.admissionsDate.split('T')[0],
+    admissionsDate: formatDate(attorney.admissionsDate),
   }));
   const filename = `${OUTPUT_DIR}/attorneys-admitted-in${fiscal ? '-fiscal-year' : ''}-${year}.csv`;
   generateCsv({ columns, filename, rows });
