@@ -16,7 +16,6 @@ const primaryColors = cn(
   'tw:text-blue-primary tw:fill-blue-primary', // standard
   'tw:hover:text-blue-dark tw:hover:fill-blue-dark', // hover
   'tw:active:text-blue-darker tw:active:fill-blue-darker', // active
-  'tw:aria-invalid:ring-red-primary/20 tw:aria-invalid:border-red-primary', // aria
   'tw:invalid:text-grey-light tw:invalid:fill-grey-light', // invalid
 );
 
@@ -24,6 +23,7 @@ const buttonVariants = cva(
   cn(
     'tw:text-base tw:xs:text-lg tw:font-normal tw:outline-none tw:border-none tw:cursor-pointer tw:inline-flex tw:items-center tw:justify-center tw:whitespace-nowrap tw:rounded-md tw:transition-all tw:disabled:pointer-events-none tw:disabled:opacity-50 tw:[&_svg]:pointer-events-none tw:[&_svg:not([class*=size-])]:size-4 tw:shrink-0 tw:[&_svg]:shrink-0',
     'tw:focus-visible:ring-4 tw:focus-visible:ring-offset-4 tw:focus-visible:ring-ring tw:focus-visible:outline-none', // focus-visible
+    'tw:aria-invalid:ring-red-primary/20 tw:aria-invalid:border-red-primary', // aria
     'tw:w-full tw:xs:w-auto tw:px-4 tw:py-2', // small & greater
   ),
   {

@@ -15,16 +15,17 @@ describe('setDefaultSealDocketEntryModalStateAction', () => {
     const { state } = await runAction(
       setDefaultSealDocketEntryModalStateAction,
       {
-        modal: {
-          docketEntrySealedTo: 'This is private!!!!!',
-        },
         modules: {
           presenter,
         },
         props: {
           docketEntryId: DOCKET_ENTRY_ID,
         },
-        state: {},
+        state: {
+          modal: {
+            docketEntrySealedTo: 'This is private!!!!!',
+          },
+        },
       },
     );
 

@@ -31,12 +31,17 @@ export const ScanBatchesTable = ({
 
   return (
     <>
-      <h5 className="header-scanned-batches">Scanned batches</h5>
-      <div className="batches-table-wrapper" ref={batchWrapperRef}>
-        <table className="batches-table">
+      <h5 className="tw:font-sans tw:text-[17px] tw:font-semibold">
+        Scanned batches
+      </h5>
+      <div className="tw:h-[160px] tw:overflow-y-auto" ref={batchWrapperRef}>
+        <table className="tw:w-full tw:[&_td]:py-[2px] tw:[&_td]:align-[inherit]">
           <tbody>
             {batches.map(batch => (
-              <tr className="no-blue-hover" key={batch.index}>
+              <tr
+                className="tw:hover:bg-transparent tw:hover:shadow-none"
+                key={batch.index}
+              >
                 <td>
                   {selectedBatchIndex !== batch.index && (
                     <Button
@@ -53,7 +58,7 @@ export const ScanBatchesTable = ({
                     </Button>
                   )}
                   {selectedBatchIndex === batch.index && (
-                    <span className="batch-index">
+                    <span className="tw:ml-[2px]">
                       Batch {batch.index + 1}
                     </span>
                   )}
@@ -69,7 +74,7 @@ export const ScanBatchesTable = ({
                   <Button
                     link
                     aria-label={`rescan batch ${batch.index + 1}`}
-                    className="no-underline"
+                    className="tw:no-underline"
                     onClick={e => {
                       e.preventDefault();
                       onRescanBatch(batch.index);
@@ -85,7 +90,7 @@ export const ScanBatchesTable = ({
                     aria-label={`delete batch ${batch.index + 1} - with ${
                       batch.pages.length
                     } total pages`}
-                    className="no-underline red-warning float-right"
+                    className="tw:no-underline tw:text-red-primary tw:hover:text-red-vivid tw:text-right"
                     onClick={e => {
                       e.preventDefault();
                       onDeleteBatch(batch.index, batch.pages.length);
@@ -101,7 +106,7 @@ export const ScanBatchesTable = ({
         </table>
       </div>
 
-      <hr className="lighter" />
+      <hr className="tw:border-t tw:border-grey-lighter" />
     </>
   );
 };
