@@ -98,11 +98,11 @@ export const getNotificationsInteractor = async (
   );
 
   const qcSectionInProgressCount = countUniqueWorkItems(
-    (documentQCSectionInbox || []).filter(filters['section']['inProgress']),
+    (documentQCSectionInbox ?? []).filter(filters['section']['inProgress']),
   );
 
   const qcSectionInboxCount = countUniqueWorkItems(
-    (documentQCSectionInbox || []).filter(filters['section']['inbox']),
+    (documentQCSectionInbox ?? []).filter(filters['section']['inbox']),
   );
 
   const unreadMessageCount = userInbox.filter(
