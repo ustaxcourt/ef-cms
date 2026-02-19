@@ -279,10 +279,10 @@ error: too many arguments. Expected 0 arguments but got 2.
 
 ### @fortawesome
 **Installed Versions:**
-**@fortawesome/fontawesome-svg-core": "7.1.0"**
-**@fortawesome/free-regular-svg-icons": "7.1.0"**
-**@fortawesome/free-solid-svg-icons": "7.1.0"**
-**@fortawesome/react-fontawesome": "3.1.1"**
+**@fortawesome/fontawesome-svg-core: 7.1.0**
+**@fortawesome/free-regular-svg-icons: 7.1.0**
+**@fortawesome/free-solid-svg-icons: 7.1.0**
+**@fortawesome/react-fontawesome: 3.1.1**
 
 - Updating minor or patch versions for fortawesome packages may include changes to icon names, breaking existing references causing tests that rely on these icons to fail as well as potentially being visually different from previous versions of the icon being updated. 
 - Updating these packages would require a greater level of granularity to identify and validate all existing icon usage and coordination with other parties to align on design changes as well as any output documentation such as screenshots before upgrading.
