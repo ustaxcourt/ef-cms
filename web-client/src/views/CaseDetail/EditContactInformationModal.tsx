@@ -41,9 +41,9 @@ export const EditContactInformationModal = connect(
       >
         <div className="tw:xs:text-lg tw:text-base">
           <span className="tw:block tw:mb-4 tw:mt-4">
-            This form will automatically create and submit a change of contact
-            information notification for this case. Please ensure the
-            information is accurate before submitting.
+            Completing this form will automatically create and file a notice
+            updating the contact information of the petitioner(s) you are
+            representing.
           </span>
           <span className="tw:block tw:mb-4 tw:mt-4">{form.contact.name}</span>
           {form.contact.secondaryName ? (
