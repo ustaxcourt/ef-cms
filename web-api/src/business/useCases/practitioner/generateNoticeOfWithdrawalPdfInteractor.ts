@@ -43,6 +43,10 @@ export const generateNoticeOfWithdrawalPdfInteractor = async (
     userId: authorizedUser.userId,
   });
 
+  if (!practitionerInformation) {
+    throw new Error('Practitioner information not found');
+  }
+
   const filerNames: string[] =
     authorizedUser.role === ROLES.irsPractitioner
       ? ['Respondent']

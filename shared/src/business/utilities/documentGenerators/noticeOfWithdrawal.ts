@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom/server';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
 import { NoticeOfWithdrawal } from '../pdfGenerator/documentTemplates/NoticeOfWithdrawal';
 import { FORMATS } from '../DateHandler';
+import { UserContact } from '@shared/business/entities/User';
 
 export const noticeOfWithdrawal = async ({
   applicationContext,
@@ -15,7 +16,12 @@ export const noticeOfWithdrawal = async ({
     caseTitle: string;
     docketNumberWithSuffix: string;
     filers: string[];
-    practitionerInformation: any; // change type later
+    practitionerInformation: {
+      contact?: UserContact;
+      barNumber?: string;
+      email?: string;
+      name: string;
+    };
   };
 }): Promise<Uint8Array> => {
   const {

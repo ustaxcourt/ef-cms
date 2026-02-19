@@ -18,9 +18,9 @@ export const NoticeOfWithdrawal = ({
   docketNumberWithSuffix: string;
   filers: string[];
   practitionerInformation: {
-    contact: UserContact;
-    barNumber: string;
-    email: string;
+    contact?: UserContact;
+    barNumber?: string;
+    email?: string;
     name: string;
   };
 }) => {
@@ -52,35 +52,30 @@ export const NoticeOfWithdrawal = ({
             {filers.length > 1 ? 'parties' : 'party'}.
           </li>
           <li>
-            This notice of withdrawal is being filed no later than 30 days
-            before the first day of the Court&apos;s session at which the case
-            is calendared for trial.
+            This notice of withdrawal is not being filed within 30 days of the
+            first day of a session of the Court at which the case is calendared.
           </li>
           <li>No party objects to this withdrawal.</li>
         </ol>
+      </div>
 
-        <div className="address-label">
+      <div className="signature-block">
+        <div className="width-50">Dated: {date}</div>
+        <div className="width-50">
           <AddressLabel
-            address1={practitionerInformation.contact.address1}
-            address2={practitionerInformation.contact.address2}
-            address3={practitionerInformation.contact.address3}
-            city={practitionerInformation.contact.city}
-            country={practitionerInformation.contact.country}
-            countryType={practitionerInformation.contact.countryType}
+            address1={practitionerInformation.contact!.address1}
+            address2={practitionerInformation.contact!.address2}
+            address3={practitionerInformation.contact!.address3}
+            city={practitionerInformation.contact!.city}
+            country={practitionerInformation.contact!.country}
+            countryType={practitionerInformation.contact!.countryType}
             name={practitionerInformation.name}
-            postalCode={practitionerInformation.contact.postalCode}
-            state={practitionerInformation.contact.state}
+            postalCode={practitionerInformation.contact!.postalCode}
+            state={practitionerInformation.contact!.state}
           />
-          <div>{practitionerInformation.contact.phone}</div>
+          <div>{practitionerInformation.contact!.phone}</div>
           <div>Tax Court Bar No. {practitionerInformation.barNumber}</div>
           <div>{practitionerInformation.email}</div>
-        </div>
-
-        <div className="dated">Dated: {date}</div>
-
-        <div className="notice-of-withdrawal-info">
-          A SEPARATE NOTICE OF WITHDRAWAL AS COUNSEL MUST BE FILED FOR EACH
-          DOCKET NUMBER.
         </div>
       </div>
     </div>

@@ -9,19 +9,16 @@
     }
   }
 
-  .address-label {
-    margin-top: 2rem;
-  }
-
-  .dated {
-    margin-top: 1rem;
-  }
-
-  .notice-of-withdrawal-info {
-    position: relative;
+  .signature-block {
+    display: flex;
     width: 100%;
-    margin-top: 100px;
+    justify-content: space-between;
+    margin-top: 60px;
     font-size: 16px;
-    text-align: center;
+    font-weight: 400;
+  }
+
+  .width-50 {
+    width: 50%;
   }
 }
