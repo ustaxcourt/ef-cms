@@ -176,17 +176,15 @@ export const NoticeOfWithdrawalForm = connect(
                     key={`edit-contact-${party.contactId}`}
                   >
                     <span className="tw:block tw:mb-1.25">{party.name}</span>
-                    {form.contact.secondaryName ? (
+                    {party.secondaryName ? (
                       <span className="tw:block tw:mb-1.25">
-                        c/o {form.contact.secondaryName}
-                        {form.contact.title && (
-                          <span>, {form.contact.title}</span>
-                        )}
+                        c/o {party.secondaryName}
+                        {party.title && <span>, {party.title}</span>}
                       </span>
                     ) : (
-                      form.contact.additionalName && (
+                      party.additionalName && (
                         <span className="tw:block tw:mb-1.25">
-                          {form.contact.additionalName}
+                          {party.additionalName}
                         </span>
                       )
                     )}
@@ -305,7 +303,7 @@ export const NoticeOfWithdrawalForm = connect(
               >
                 I certify that I will serve any party who does not receive
                 electronic service a copy of the Notice of Withdrawal of Counsel
-                by mail today.
+                by mail <span className="tw:font-bold">today</span>.
               </label>
             </FormGroup>
           )}
