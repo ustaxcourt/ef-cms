@@ -23,14 +23,14 @@ export const validateNoticeOfWithdrawalAction = ({ get, path }) => {
       const partiesToWithdrawFrom = getPartiesToWithrawFrom(caseDetail, user);
       if (partiesToWithdrawFrom.length === 0) {
         errors.push(
-          'You are the only counsel representing your party on this case.',
+          'You are the only counsel representing your party in this case.',
         );
       }
     } else if (user.role === ROLES.irsPractitioner) {
       const irsPractitionerCount = caseDetail.irsPractitioners?.length || 0;
       if (irsPractitionerCount <= 1) {
         errors.push(
-          'You are the only counsel representing your party on this case.',
+          'You are the only counsel representing your party in this case.',
         );
       }
     }

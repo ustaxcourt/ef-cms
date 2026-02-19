@@ -65,7 +65,7 @@ describe('Notice of Withdrawal - Validation Messages', () => {
       enterNoticeOfWithdrawalFormType(docketNumber);
       cy.get('[data-testid="error-alert"]').should('be.visible');
       cy.get('[data-testid="error-alert"]').contains(
-        'You are the only counsel representing your party on this case.',
+        'You are the only counsel representing your party in this case.',
       );
       cy.get('[data-testid="error-alert"]').contains(
         'This case is scheduled for trial in less than 30 days.',
@@ -83,7 +83,7 @@ describe('Notice of Withdrawal - Validation Messages', () => {
       enterNoticeOfWithdrawalFormType(docketNumber);
       cy.get('[data-testid="error-alert"]').should('be.visible');
       cy.get('[data-testid="error-alert"]').contains(
-        'You are the only counsel representing your party on this case.',
+        'You are the only counsel representing your party in this case.',
       );
       cy.get('[data-testid="error-alert"]').contains(
         'This case is scheduled for trial in less than 30 days.',

@@ -298,7 +298,7 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
         addProperty(
           'paperServiceAcknowledgement',
           joi.boolean().valid(true).required().messages({
-            '*': 'You do not certify to serve the above parties who do not receive electronic service a copy of your withdrawal by mail today',
+            '*': 'You do not certify to serve parties who do not receive electronic service a copy of your withdrawal by mail today',
           }),
         );
       }

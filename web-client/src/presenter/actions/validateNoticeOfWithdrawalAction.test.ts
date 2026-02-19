@@ -104,7 +104,7 @@ describe('validateNoticeOfWithdrawalAction', () => {
           'You must file a Motion to Withdraw as Counsel because of the following:',
         title: 'Cannot file Notice of Withdrawal as Counsel',
         messages: [
-          'You are the only counsel representing your party on this case.',
+          'You are the only counsel representing your party in this case.',
         ],
       },
     });
@@ -165,7 +165,7 @@ describe('validateNoticeOfWithdrawalAction', () => {
           'You must file a Motion to Withdraw as Counsel because of the following:',
         title: 'Cannot file Notice of Withdrawal as Counsel',
         messages: [
-          'You are the only counsel representing your party on this case.',
+          'You are the only counsel representing your party in this case.',
         ],
       },
     });
@@ -225,7 +225,7 @@ describe('validateNoticeOfWithdrawalAction', () => {
           'You must file a Motion to Withdraw as Counsel because of the following:',
         title: 'Cannot file Notice of Withdrawal as Counsel',
         messages: [
-          'You are the only counsel representing your party on this case.',
+          'You are the only counsel representing your party in this case.',
           'This case is scheduled for trial in less than 30 days.',
         ],
       },

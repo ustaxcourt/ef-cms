@@ -509,7 +509,7 @@ describe('ExternalDocumentInformationFactory', () => {
         };
         baseDoc.paperServiceAcknowledgement = false;
         expect(errors().paperServiceAcknowledgement).toEqual(
-          'You do not certify to serve the above parties who do not receive electronic service a copy of your withdrawal by mail today',
+          'You do not certify to serve parties who do not receive electronic service a copy of your withdrawal by mail today',
         );
       });
     });
