@@ -191,4 +191,37 @@ describe('updateDocketEntriesWithPageCount', () => {
 
     expect(result[0].docketNumber).toBe(mockDocketNumber);
   });
+
+  it('should filter out cases that do not have the passed in docket entry', async () => {
+    const caseEntity = new Case(testingCaseData, {
+      authorizedUser: mockDocketClerkUser,
+    });
+
+    const consolidatedCases = [
+      { docketNumber: mockDocketNumber, documentNumber: '1' },
+      { docketNumber: '102-20', documentNumber: '2' },
+    ];
+
+    getCasesByDocketNumbers.mockResolvedValueOnce([
+      testingCaseData,
+      {
+        ...MOCK_CASE,
+        docketNumber: '102-20',
+        docketEntries: [],
+      },
+    ]);
+
+    const result = await updateDocketEntriesWithPageCount({
+      authorizedUser: mockDocketClerkUser,
+      caseEntity,
+      consolidatedCases,
+      docketEntryId: mockDocketEntryId,
+      docketNumber: mockDocketNumber,
+      pageCount: mockPageCount,
+    });
+
+    console.log('result', result);
+
+    expect(result[0].docketNumber).toBe(mockDocketNumber);
+  });
 });
