@@ -29,7 +29,6 @@ const userMissingGeocodesBaseQuery = async () =>
           .onRef(sql`petitioner->>'contactId'`, '=', 'uc.userId')
           .onRef('c.docketNumber', '=', 'uc.docketNumber'),
       )
-      .where('c.status', 'not in', ['Closed', 'Dismissed'])
       .where(qb => qb.or([qb('uc.lat', 'is', null), qb('uc.lng', 'is', null)]))
       .where('uc.geodataMatch', 'is', null)
       .where(sql`petitioner ->> 'address1'`, 'is not', null),
