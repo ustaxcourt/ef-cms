@@ -9,6 +9,7 @@ import {
   type ServerApplicationContext,
   createApplicationContext,
 } from '@web-api/applicationContext';
+import { formatCaseCaption } from './helpers/formatters';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import fs from 'fs';
 
@@ -113,7 +114,7 @@ const generateFilename = ({
     }
     try {
       const filename = generateFilename({
-        caseCaption: caseEntity.caseCaption,
+        caseCaption: formatCaseCaption(caseEntity.caseCaption),
         // @ts-ignore
         docketEntry,
       });
