@@ -18,6 +18,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { cloneDeep, isEmpty, sortBy } from 'lodash';
 import { isMiscellaneousDocketEntry } from '@shared/business/utilities/isMiscellaneousDocketEntry';
 import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
 export type FormattedCaseInventoryReportEntry = {
   docketNumber: string;
@@ -149,9 +150,11 @@ export const formatDocketEntry = (applicationContext, docketEntry) => {
   }
 
   if (formattedEntry.isSealed) {
-    formattedEntry.sealedToTooltip = applicationContext.getUtilities().getSealedDocketEntryTooltip(applicationContext, formattedEntry);
+    formattedEntry.sealedToTooltip = applicationContext
+      .getUtilities()
+      .getSealedDocketEntryTooltip(applicationContext, formattedEntry);
   } else if (formattedEntry.isLegacySealed) {
-    formattedEntry.sealedToTooltip = "Sealed in Blackstone";
+    formattedEntry.sealedToTooltip = 'Sealed in Blackstone';
   }
 
   return formattedEntry;
@@ -470,8 +473,8 @@ const formatCounsel = ({ caseDetail, counsel }) => {
 
 // sort items that do not display a filingDate (based on createdAtFormatted) at the bottom
 export const sortUndefined = (
-  a: { createdAtFormatted: string },
-  b: { createdAtFormatted: string },
+  a: { createdAtFormatted?: string },
+  b: { createdAtFormatted?: string },
 ) => {
   if (a.createdAtFormatted && !b.createdAtFormatted) {
     return -1;
@@ -480,6 +483,8 @@ export const sortUndefined = (
   if (!a.createdAtFormatted && b.createdAtFormatted) {
     return 1;
   }
+
+  return 0;
 };
 
 export const sortDocketEntries = (
@@ -505,7 +510,7 @@ export const getFormattedCaseDetail = ({
   caseDetail,
   docketRecordSort,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: IApplicationContext | ClientApplicationContext;
   caseDetail: RawCase;
   docketRecordSort?: string;
   authorizedUser: UnknownAuthUser;

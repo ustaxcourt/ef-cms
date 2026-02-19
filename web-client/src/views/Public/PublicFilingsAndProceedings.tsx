@@ -1,5 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { Phone } from '../../ustc-ui/Responsive/Responsive';
 import { PublicFormattedDocketEntryInfo } from '@web-client/presenter/computeds/Public/publicCaseDetailHelper';
+import { WrappedIcon } from '../../ustc-ui/Icon/Icon';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -28,6 +30,17 @@ export const PublicFilingsAndProceedings = connect<
   }) {
     return (
       <React.Fragment>
+        <Phone>
+          {entry.isSealed && (
+            <span className="tw:inline-flex tw:mr-2">
+              <WrappedIcon
+                iconClass="sealed-in-blackstone icon-sealed"
+                icon="lock"
+                title={entry.sealedToTooltip}
+              />
+            </span>
+          )}
+        </Phone>
         {entry.showLinkToDocument && (
           <Button
             link
@@ -46,7 +59,6 @@ export const PublicFilingsAndProceedings = connect<
             {entry.descriptionDisplay}
           </Button>
         )}
-
         <span
           className={classNames(entry.isStricken && 'stricken-docket-record')}
         >
@@ -57,8 +69,44 @@ export const PublicFilingsAndProceedings = connect<
 
           <span>{entry.signatory}</span>
         </span>
-
         {entry.isStricken && <span> (STRICKEN)</span>}
+
+        {entry.relatedDocketEntries?.map(affectedEntry => {
+          return (
+            <span key={affectedEntry.docketEntryId}>
+              <br></br>
+              <span className="display-inline-block">
+                <span> --- </span>
+                {affectedEntry.showDownloadLink && (
+                  <Button
+                    link
+                    className={classNames('text-right', 'view-pdf-link')}
+                    data-testid={`related-document-viewer-link-${affectedEntry.docketEntryIndex}`}
+                    arial-label={`View PDF for: ${affectedEntry.docketEntryIndex}`}
+                    onClick={() =>
+                      openCaseDocumentDownloadUrlSequence({
+                        docketEntryId: affectedEntry.docketEntryId,
+                        docketNumber: caseDetail.docketNumber,
+                        isPublic: true,
+                        useSameTab: entry.openInSameTab,
+                      })
+                    }
+                  >
+                    {affectedEntry?.disposition} #
+                    {affectedEntry.docketEntryIndex}
+                  </Button>
+                )}
+                {!affectedEntry.showDownloadLink && (
+                  <span>
+                    {' '}
+                    {affectedEntry?.disposition} #
+                    {affectedEntry.docketEntryIndex}{' '}
+                  </span>
+                )}
+              </span>
+            </span>
+          );
+        })}
       </React.Fragment>
     );
   },

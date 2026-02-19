@@ -131,7 +131,7 @@ describe('UploadPetitionStep2', () => {
 
         const errors = entity.getFormattedValidationErrors()!;
         expect(errors).toEqual({
-          'petitionFacts[0]': 'Facts cannot exceed 9000 characters',
+          'petitionFacts-0': 'Facts cannot exceed 9000 characters',
         });
       });
 
@@ -143,7 +143,7 @@ describe('UploadPetitionStep2', () => {
 
         const errors = entity.getFormattedValidationErrors()!;
         expect(errors).toEqual({
-          'petitionFacts[0]': 'Add at least one fact',
+          'petitionFacts-0': 'Add at least one fact',
         });
       });
     });
@@ -183,7 +183,7 @@ describe('UploadPetitionStep2', () => {
 
         const errors = entity.getFormattedValidationErrors()!;
         expect(errors).toEqual({
-          'petitionReasons[0]': 'Reasons cannot exceed 9000 characters',
+          'petitionReasons-0': 'Reasons cannot exceed 9000 characters',
         });
       });
 
@@ -195,7 +195,7 @@ describe('UploadPetitionStep2', () => {
 
         const errors = entity.getFormattedValidationErrors()!;
         expect(errors).toEqual({
-          'petitionReasons[0]': 'Add at least one reason',
+          'petitionReasons-0': 'Add at least one reason',
         });
       });
     });

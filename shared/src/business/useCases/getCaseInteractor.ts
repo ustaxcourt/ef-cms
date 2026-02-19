@@ -7,13 +7,14 @@ import {
 } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
-import { ROLES } from '@shared/business/entities/EntityConstants';
-
+import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
+import { RestrictedCaseDTO } from '@shared/business/dto/cases/RestrictedCaseDTO';
+import { PublicCaseDTO } from '@shared/business/dto/cases/PublicCaseDTO';
 
 export const getCaseInteractor = async (
   { docketNumber }: { docketNumber: string },
   authorizedUser: UnknownAuthUser,
-): Promise<RawCase> => {
+): Promise<CaseDTO | RestrictedCaseDTO | PublicCaseDTO> => {
   if (!isAuthUser(authorizedUser)) {
     throw new UnauthorizedError(
       `Invalid User attempting to view docket Number: ${docketNumber}`,
@@ -38,7 +39,7 @@ export const getCaseInteractor = async (
     throw error;
   }
 
-  const theCase = CaseFactory.getCase({
+  const theCase = CaseFactory.getCaseDTO({
     rawCase: caseRecord,
     user: authorizedUser,
   });
@@ -50,13 +51,6 @@ export const getCaseInteractor = async (
   const docketEntriesWithUIInfo = theCase.docketEntries.map(docketEntry => {
     const workItem = workItemByDocketEntryId.get(docketEntry.docketEntryId);
 
-    docketEntry.servedParties?.forEach(party => {
-      if (!(authorizedUser.role === ROLES.docketClerk || authorizedUser.role === ROLES.admissionsClerk)) {
-        party.email = undefined
-      }
-      return party;
-    })
-
     return {
       ...docketEntry,
       qcComplete: !!workItem?.completedAt,
@@ -64,8 +58,9 @@ export const getCaseInteractor = async (
       workItemId: workItem?.workItemId,
     };
   });
-  return {
-    ...theCase.toRawObject(),
-    docketEntries: docketEntriesWithUIInfo,
-  } as RawCase;
+
+  return { ...theCase, docketEntries: docketEntriesWithUIInfo } as
+    | CaseDTO
+    | RestrictedCaseDTO
+    | PublicCaseDTO;
 };

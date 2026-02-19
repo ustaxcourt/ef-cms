@@ -57,7 +57,11 @@ export const headerHelper = (
     pageIsTrialSessions: isTrialSessions && isInternalUser,
     showAccountMenu: isLoggedIn,
     showDocumentQC: isInternalUser && !isCaseServicesSupervisor,
-    showHomeIcon: [USER_ROLES.judge, USER_ROLES.chambers].includes(userRole),
+    showHomeIcon: [
+      USER_ROLES.judge,
+      USER_ROLES.chambers,
+      USER_ROLES.clerkOfCourt,
+    ].includes(userRole),
     showMessages:
       isInternalUser &&
       userRole !== USER_ROLES.general &&

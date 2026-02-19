@@ -2,6 +2,12 @@ name: E2E Cypress
 
 on:
   pull_request:
+    paths-ignore:
+      - '**.md'
+      - '**/.gitignore'
+      - '.nvmrc'
+      - '.circleci/config.yml'
+      - 'docs/**'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}

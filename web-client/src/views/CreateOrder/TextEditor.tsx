@@ -51,14 +51,14 @@ export const TextEditor = ({
   updateFormValueSequence,
   updateScreenMetadataSequence,
 }) => {
-  const quillEscapeRef = useRef(null);
+  const quillEscapeRef = useRef<HTMLButtonElement>(null);
   const defaultValueWithIndentation = addQuillIndentationClasses(defaultValue);
 
   const onKeyboard = event => {
     const pressedESC = event.keyCode === 27;
     const inEditor = event.target.classList.contains('ql-editor');
     if (pressedESC && inEditor) {
-      quillEscapeRef.current.focus();
+      quillEscapeRef.current?.focus();
     }
   };
 

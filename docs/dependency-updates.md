@@ -18,9 +18,18 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
 - `./web-api/runtimes/puppeteer/package.json`
 - `./web-api/terraform/modules/batch/docker-image/package.json`
 
-1. You can use the `upgrade-npm-packages.ts` script for this process if you would like:
+1. You can use the `upgrade-npm-packages.ts` script for this process if you would like. Run the script in each directory containing a package.json:
    ```bash
-   scripts/npm/upgrade-npm-packages.ts
+   # Run these in order to avoid having to manually navigate to each package.json location
+
+   # Root package.json
+   node scripts/npm/upgrade-npm-packages.ts
+
+   # web-api/runtimes/puppeteer/package.json
+   (cd web-api/runtimes/puppeteer && node ../../../scripts/npm/upgrade-npm-packages.ts)
+
+   # web-api/terraform/modules/batch/docker-image/package.json
+   (cd ../../terraform/modules/batch/docker-image  && node ../../../../../scripts/npm/upgrade-npm-packages.ts)
    ```
 1. After running, ensure all three package.json files are updated.
 
@@ -41,8 +50,8 @@ This command informs us of known security vulnerabilities. If transitive depende
 > **Why am I seeing a high severity for `tar-fs`?**
 > [See below](#puppeteer-and-sparticuzchromium).
 
-> **Why am I seeing a vulnerability for `fast-redact`?**
-> On November 19th, 2025. Unsuccessfully rolled back cognito-local to 3.7.1
+> **Why am I seeing a vulnerability for `aws-sdk` v2 or `cognito-local`?**
+> These are dev dependencies with known vulnerabilities. The aws-sdk v2 vulnerability doesn't affect our use case as it's related to region parameter validation and we're only using it for local development/testing.
 
 ### 2. Update third-party dependencies
 
@@ -57,21 +66,26 @@ When updating Node.js, keep in mind:
 - Do not update to the next even-numbered major version until it enters Active LTS status
 - Do not update to the next even-numbered major version until it is offically supported by AWS Lambda. [Supported Runtimes](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html)
 
-To update Node.js:
-
-1. Update the version in `.nvmrc`.
-1. Manually update the `"engines"` property in:
+ To update Node.js:
+ 
+ 1. Update the version in `.nvmrc`.
+ 1. Manually update the `"engines"` property in:
    - `./package.json`
    - `./web-api/runtimes/puppeteer/package.json`
-1. Manually update the images in:
+ 1. Manually update the images in:
    - `./Dockerfile`
    - `./web-api/runtimes/puppeteer/Dockerfile`
-1. Manually update the Node.js version in:
+ 1. Manually update the Node.js version defined for the `docker-image-zipper` step in:
    - `./.circleci/config.yml`
-1. Update the node version used by our lambdas.
+ 1. Update the node version used by our lambdas.
    - `web-api/terraform/modules/lambda/lambda.tf`
    - `web-api/terraform/modules/api/layers.tf`
-1. Update the `CHANGES.md` file with instructions for installing this NodeJS version locally. See [df83cf3](https://github.com/ustaxcourt/ef-cms/commit/df83cf3db69f2c6149cbef3ae213db488822cc2b) for an example.
+ 1. Update the `CHANGES.md` file with instructions for installing this NodeJS version locally. See [df83cf3](https://github.com/ustaxcourt/ef-cms/commit/df83cf3db69f2c6149cbef3ae213db488822cc2b) for an example.
+
+ When updating Node.js, also consider `@ustaxcourt/payment-portal`:
+
+ - If the Node.js upgrade stays within the published `@ustaxcourt/payment-portal` `engines.node` range (for example, a patch/minor update within the same major version), no `payment-portal` update is required.
+ - If the Node.js upgrade falls outside the published `engines.node` range (for example, moving to a new major version), then `@ustaxcourt/payment-portal` must be updated and published with a compatible `engines.node` range before `npm ci` in ef-cms will succeed without engine workarounds.
 
 #### 2.2 Update `Dockerfile` as needed
 
@@ -129,7 +143,6 @@ Check if there is an update to the Terraform OpenSearch provider and update our 
 1. Change the version of the OpenSearch provider
 
 ### 5. Update OpenSearch
-
 Check to see if there is an updated version of OpenSearch available. If an update is available, we'll need to update OpenSearch locally, in github actions, and in deployed environments.
 
 1. Use the [environment switcher](./additional-resources/environment-switcher.md) to point to an experimental environment and to retrieve a fresh AWS access key:
@@ -191,6 +204,12 @@ If an OpenSearch update is available, we'll need to update OpenSearch in github 
 
 - Validate updates by deploying to an experimental environment
 
+## Configurations
+**Safe to upgrade, but we use a non-standard configuration intentionally**
+
+### Husky
+- As of Jan 21st, 2026: If `husky install` runs on the `postinstall` script, Husky will throw a warning stating `Husky install in postinstall is deprecated, use prepare instead`. Installing husky via the `prepare` script is recommended by Husky as best practice, but doesn't apply to ef-cms since we don't publish this as an npm package, and Husky only exists for us as a devDependency. Having it in `prepare` can fail if there are network interruptions during npm install, since `prepare` runs during installation before all packages may be fully downloaded, causing `husky install` to fail. For now, please ignore Husky's deprecation warning in the logs and stick with `postinstall: husky install`.
+
 ## Do Not Upgrade
 
 ### cerebral and @cerebral/react
@@ -203,16 +222,18 @@ If an OpenSearch update is available, we'll need to update OpenSearch in github 
 Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Try to update these items but please be aware of the issue that's documented and ensure it's been resolved.
 
 ### pdfjs-dist
+**Current Version Installed: 5.4.624**
 
-- As of [this release](https://github.com/mozilla/pdf.js/releases/tag/v5.1.91), and I think [this PR](https://github.com/mozilla/pdf.js/pull/19689), pdfjs seems to expect certain browser-side API functionality when loaded. This causes issues with our Cypress tests. The best way to fix this is worth investigating further. Perhaps we could polyfill, or even consider creating an issue in the pdfjs repo.
-- Look at `shared/src/business/utilities/pdfs/getPdfJs.ts`
+- Upgraded to version 5.4.624. The newer pdfjs-dist release relies on DOMMatrix, which caused errors in AWS Lambda when scraping text from PDFs. This worked locally but failed in the deployed environment because Lambda does not provide DOMMatrix. To resolve this, I added a polyfill using the `dommatrix` library that is used when DOMMatrix is undefined. See `getPdfJs.ts` and `parsePdf.ts` for details.
+   - I debugged this by temporarily ignoring the smoketests in search.cy.ts in order for the build to pass and deploy to an exp environment. From there I ran the cypress smoketests on the exp environement locally, found the error in cloudwatch logs, tested multiple fixes and made the neccessary changes.
 
 ### DWT
-
+**Current Installed DWT: 19.3.0**
 - Minor versions of DWT _should_ be updated, but require that Court IT update the Windows clients in concert with our app. Do not update without coordinating.
-- Stay at DWT v19.2.0, wait until January to update to 19.3.0
 
 ### puppeteer and @sparticuz/chromium
+**Current Installed Puppeteer/Puppeteer-core: 24.37.1**
+**Current Installed @sparticuz/chromium: 143.0.4**
 
 - When updating puppeteer or puppeteer core in the project, make sure to also match versions in `web-api/runtimes/puppeteer/package.json` as this is our lambda layer which we use to generate pdfs. Puppeteer and chromium versions should always match between package.json and web-api/runtimes/puppeteer/package.json. Remember to run `npm install --prefix web-api/runtimes/puppeteer` to install and update the package-lock file.
 - Puppeteer also has recommended versions of Chromium, so we should make sure to use the recommended version of chromium for the version of puppeteer that we are on. The chromium versions supported by puppeteer can be found [here](https://pptr.dev/supported-browsers)
@@ -226,39 +247,27 @@ Below is a list of dependencies that are locked down due to known issues with se
 - When running npm audit, you'll see a high severity issue with ws, 'affected by a DoS when handling a request with many HTTP headers - https://github.com/advisories/GHSA-3h5v-q93c-6h6q'. This doesn't affect us as the vulnerability is on the server side and we're not using this package on the server. We tried to override this to 5.2.4 and 8.18.0 and weren't able to make this work as import paths have changed. In the mean time, we recommend skipping this issue. We could always fork the cerebral repo in the future if needed.
 
 ### quill
+**Installed Version: 1.3.7**
+**DO NOT UPDATE - TO BE REPLACED BY EMBEDDED MICROSOFT WORD**
 
 - Quill released version 2 in April 2024. It includes substantial changes. Because the focus is currently on Postgres, we have left it at a previous version.
-
-### babel-jest, babel-core
-
-Tried to update to 30.0.0-beta.3 from 29.7.0 on Friday, June 06, 2025, we weren't able to update it because it conflicts with ts-jest 29.3.4.
-On June 26 2025, newer versions of babel-core and jest core also started to cause issues with ts-jest. Once ts-jest is updated these issues should all clear up.
-
-- On September 19th, 2025, babel-jest was successfully updated to 30.0.0 from 29.7.0.
-- On September 19th, 2025, babel/core was successfully updated to 7.28..4 from 7.28.3, had some issues with Github Actions checks running all the way through, but Github still gave the commit a check. Refer to this PR for more info. https://github.com/ustaxcourt/ef-cms/pull/9164
+- January 9th, 2026: We successfully updated Quill from 1.3.7 to 2.0.3. The way Quill handles imports and props in function calls changed, requiring changes to our Quill.tsx and TextEditor.tsx.
+- January 27th, 2026: The decision was made to revert us back to 1.3.7 due to a bug where line tabing would break upon edit. No further updates to Quill should be made - there is a plan in the pipeline to swap Quill out for an embedded Microsoft Office Editor.
 
 ### @types/node
-
+**Installed Version: 24.10.4**
 The major version of this package should match our major version of Node. At the moment that we are using Node v24.11.1 so we should use a package that starts with 24.
 
 - [Dependencies 12 01 2025](https://github.com/ustaxcourt/ef-cms/pull/9465/files), Node.js was updated to v24.11.1, successfully updated @types/node to 24.10.2 to match Node.js v24.11.1
+- [Dependencies 01 05 2026](https://github.com/ustaxcourt/ef-cms/pull/9595/files), @Types/Node.js was updated from v24.10.2 to v24.10.4. Node.js version was left unchanged as the next available is Node 25+.
 
 ### TypeScript
+**Installed Version: 5.9.3**
 
-We cannot update TypeScript version beyond v5.8.3 until ts-jest supports it
-
-- On September 19th, 2025, tried to update to 5.9.2, the highest non-beta version but we would need to address the Typescript issues. I ran out of time to do so. Refer to this PR. https://github.com/ustaxcourt/ef-cms/pull/9164
-- On October 27th, 2025, tried to update to 5.9.3. The update introduced 116+ new TypeScript errors due to stricter type checking:
-  - 35 null-checking errors (`TS18047` "possibly null") from stricter null-checking on DOM elements, refs, and properties
-  - 49 "never" type inference errors where TypeScript more aggressively infers `never` type for uninitialized or narrowed types
-  - 55 `IApplicationContext` type errors related to stricter type checking on mock vs. real application context objects
-  - Additional errors in test files and UI components
-
-The decision was made to revert back to 5.8.3 as the migration would require multiple days of dedicated work.
-
-- On November 19th, 2025, updated to typescript 5.9.3 and as a result resolved many of the typing issues involved in pdf buffers, applicationContext between client, shared, and api.
+**When upgrading TypeScript, make sure that the new version is supported by ts-jest.**
 
 ### Commander override for s3rver
+**Current Installed Version: 12.1.0 (Override Version, see notes below)**
 
 - On 12/16/25 we added an version override for the commander package for s3rver. It was failing to start up the test server with our command after s3rver started using 14.0.2 of commander. We reverted it to the previous working version 12.1.0.
 

@@ -15,11 +15,9 @@ export const validateStampAction = ({
 }: ActionProps) => {
   const stampMotionForm = get(state.form);
 
-  const errors = applicationContext
-    .getUseCases()
-    .validateStampInteractor(applicationContext, {
-      stampMotionForm,
-    });
+  const errors = applicationContext.getUseCases().validateStampInteractor({
+    stampMotionForm,
+  });
 
   if (!errors) {
     return path.success();

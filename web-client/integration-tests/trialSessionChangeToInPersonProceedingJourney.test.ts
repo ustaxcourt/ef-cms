@@ -4,7 +4,10 @@ import {
   SYSTEM_GENERATED_DOCUMENT_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '@shared/business/entities/EntityConstants';
-import { FORMATS, getCurrentDateTimeInMillis } from '@shared/business/utilities/DateHandler';
+import {
+  FORMATS,
+  getCurrentDateTimeInMillis,
+} from '@shared/business/utilities/DateHandler';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import {
@@ -60,6 +63,15 @@ describe('petitions clerk sets a remote trial session calendar', () => {
         key: 'startDate',
         toFormat: FORMATS.ISO,
         value: '12/12/2099',
+      },
+    );
+
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'estimatedEndDate',
+        toFormat: FORMATS.ISO,
+        value: '12/15/2099',
       },
     );
 
@@ -193,11 +205,7 @@ describe('petitions clerk sets a remote trial session calendar', () => {
 
     await waitForLoadingComponentToHide({ cerebralTest });
     expect(noipDocketEntry).toMatchObject({
-      servedParties: [
-        {
-          name: 'Mona Schultz',
-        },
-      ],
+      servedPartiesCode: 'B',
     });
   });
 });

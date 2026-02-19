@@ -33,7 +33,7 @@ export const sendIrsSuperuserPetitionEmail = async ({
 
   const { documentType, eventCode, filingDate, servedAt } = docketEntryEntity;
 
-  privatePractitioners.forEach(practitioner => {
+  (privatePractitioners ?? []).forEach(practitioner => {
     const representingFormatted = [];
 
     caseEntity.petitioners.forEach(p => {

@@ -3,6 +3,7 @@ import { makeMap } from './makeMap';
 describe('makeMap', () => {
   describe('collection is undefined', () => {
     it('should return an empty object', () => {
+      // @ts-expect-error testing that function still works without arguments
       expect(makeMap()).toEqual({});
     });
   });

@@ -1,13 +1,13 @@
-const { DateTime } = require('luxon');
-const { defaultProvider } = require('@aws-sdk/credential-provider-node');
-const { HttpRequest } = require('@smithy/protocol-http');
-const { NodeHttpHandler } = require('@smithy/node-http-handler');
-const { Sha256 } = require('@aws-crypto/sha256-browser');
-const { SignatureV4 } = require('@smithy/signature-v4');
+import { DateTime } from 'luxon';
+import { defaultProvider } from '@aws-sdk/credential-provider-node';
+import { HttpRequest } from '@smithy/protocol-http';
+import { NodeHttpHandler } from '@smithy/node-http-handler';
+import { Sha256 } from '@aws-crypto/sha256-browser';
+import { SignatureV4 } from '@smithy/signature-v4';
 
-const EXPIRATION = process.env.expiration; // days
+const EXPIRATION = Number(process.env.expiration || 90); // days
 
-exports.handler = async (input, context) => {
+exports.handler = async () => {
   const responses = { createSnapshot: [], deleteIndices: [] };
   let anyError = false;
 
@@ -44,9 +44,12 @@ exports.handler = async (input, context) => {
     }
   }
 
-  return anyError
-    ? context.fail(JSON.stringify(responses))
-    : context.succeed(JSON.stringify(responses));
+  if (anyError) {
+    console.error('Error', responses);
+    throw new Error(JSON.stringify(responses));
+  }
+  console.log('Success', responses);
+  return JSON.stringify(responses);
 };
 
 /**
@@ -203,6 +206,7 @@ exports.req = async (verb, path, body) => {
       }
       try {
         responseBody = JSON.parse(responseBody);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (e) {
         // do nothing
       }

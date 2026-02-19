@@ -1,4 +1,4 @@
-const rotateLogs = require('../src/index.js');
+import rotateLogs from '../src/index.js';
 
 /**
  * Returns a mocked response containing a snapshot for the given index name
@@ -63,11 +63,6 @@ const expiredIndicesResponse = {
     '                                                    ' +
     '4lsXn5EtRX-1N_Dxfy8e7g 5 1  161796     5 191.3mb  95.6mb\n',
   statusCode: 200,
-};
-
-const mockContext = {
-  fail: res => res,
-  success: res => res,
 };
 
 describe('getIndexNameForDaysAgo', () => {
@@ -204,7 +199,7 @@ describe('handler', () => {
       jest.spyOn(rotateLogs, 'snapshotForIndexName');
 
       // run the rotation job and verify the results
-      const res = await rotateLogs.handler(mockContext);
+      const res = await rotateLogs.handler({});
       expect(rotateLogs.req).toHaveBeenCalledTimes(7);
       expect(rotateLogs.getExpiredIndices).toHaveBeenCalledTimes(1);
       expect(rotateLogs.snapshotExists).toHaveBeenCalledTimes(4);

@@ -89,6 +89,7 @@ import {
   formattedOpenCases,
 } from './computeds/formattedCaseDetail';
 import { formattedCaseMessages } from './computeds/formattedCaseMessages';
+import { formattedClerkOfCourtDashboardTrialSessions } from './computeds/formattedClerkOfCourtDashboardTrialSessions';
 import { formattedDashboardTrialSessions } from './computeds/formattedDashboardTrialSessions';
 import { formattedDocketEntries } from './computeds/formattedDocketEntries';
 import { formattedDocument } from './computeds/formattedDocument';
@@ -119,6 +120,7 @@ import { messagesHelper } from './computeds/messagesHelper';
 import { messagesIndividualInboxHelper } from './computeds/messagesIndividualInboxHelper';
 import { motionOrderResponseFormHelper } from './computeds/motionOrderResponseFormHelper';
 import { myAccountHelper } from './computeds/myAccountHelper';
+import { newMinuteSheetModalHelper } from './computeds/newMinuteSheetModalHelper';
 import { noticeStatusHelper } from './computeds/noticeStatusHelper';
 import { orderTypesHelper } from './computeds/orderTypesHelper';
 import { paperDocketEntryHelper } from './computeds/paperDocketEntryHelper';
@@ -367,6 +369,10 @@ export const computeds = {
   formattedCaseMessages: formattedCaseMessages as unknown as ReturnType<
     typeof formattedCaseMessages
   >,
+  formattedClerkOfCourtDashboardTrialSessions:
+    formattedClerkOfCourtDashboardTrialSessions as unknown as ReturnType<
+      typeof formattedClerkOfCourtDashboardTrialSessions
+    >,
   formattedClosedCases: formattedClosedCases as unknown as ReturnType<
     typeof formattedClosedCases
   >,
@@ -441,6 +447,10 @@ export const computeds = {
   myAccountHelper: myAccountHelper as unknown as ReturnType<
     typeof myAccountHelper
   >,
+  newMinuteSheetModalHelper:
+    newMinuteSheetModalHelper as unknown as ReturnType<
+      typeof newMinuteSheetModalHelper
+    >,
   noticeStatusHelper: noticeStatusHelper as unknown as ReturnType<
     typeof noticeStatusHelper
   >,
@@ -822,6 +832,7 @@ export const baseState = {
   messagesSectionCount: 0,
   minuteSheetForm: cloneDeep(initialMinuteSheetFormState),
   minuteSheetFormSnapshot: '',
+  isUnscheduledMinuteSheet: false,
   messageViewerDocumentToDisplay: undefined as unknown as ViewerDocument,
   modal: {
     calendarNotes: undefined as string | undefined,
@@ -854,7 +865,7 @@ export const baseState = {
   openCases: [] as TAssociatedCase[],
   openCasesCurrentPage: undefined as number | undefined,
   openClosedCases: {
-    caseType: undefined as string | undefined
+    caseType: undefined as string | undefined,
   },
   paperServiceStatusState: {
     pdfsAppended: 0,
@@ -943,6 +954,7 @@ export const baseState = {
     isScanning: false,
     scanMode: undefined,
     scannerSourceName: undefined,
+    scannerSourceIndex: undefined,
     selectedBatchIndex: 0,
     dynamScriptClass: null,
     initiateScriptLoaded: false,
@@ -1024,6 +1036,7 @@ export const baseState = {
   viewerDraftDocumentToDisplay: undefined as unknown as ViewerDocument,
   wizardStep: undefined as string | undefined,
   workItem: {},
+  workItemId: undefined as string | undefined,
   workItemActions: {},
   workItemMetadata: {},
   workQueue: [] as RawWorkItemWithCaseAndDocketEntryInfo[],

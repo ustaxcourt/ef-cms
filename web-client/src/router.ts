@@ -369,7 +369,6 @@ const router = {
         });
       }),
     );
-
     registerRoute(
       '/case-detail/*/documents/*/edit-court-issued..',
       ifHasAccess({ app }, (docketNumber, docketEntryId) => {
@@ -793,7 +792,6 @@ const router = {
         });
       }),
     );
-
     registerRoute(
       '/case-detail/*/documents/*/add-court-issued-docket-entry/*',
       ifHasAccess({ app }, (docketNumber, docketEntryId, parentMessageId) => {
@@ -1110,13 +1108,15 @@ const router = {
     );
 
     registerRoute(
-      '/trial-session-detail/*/case/*/minutes',
+      '/trial-session-detail/*/case/*/minutes..',
       ifHasAccess(
         { app, permissionToCheck: ROLE_PERMISSIONS.MANAGE_MINUTE_SHEET },
         (trialSessionId, docketNumber) => {
+          const { isUnscheduledCase } = route.query();
           setPageTitle('Trial session minutes');
           return app.getSequence('goToTrialSessionMinutesSequence')({
             docketNumber,
+            isUnscheduledCase: isUnscheduledCase === 'true',
             trialSessionId,
           });
         },
