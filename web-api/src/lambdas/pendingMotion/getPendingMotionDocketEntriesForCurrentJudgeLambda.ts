@@ -5,20 +5,10 @@ import { getPendingMotionDocketEntriesForCurrentJudgeInteractor } from '@web-api
 export const getPendingMotionDocketEntriesForCurrentJudgeLambda = (
   event,
   authorizedUser: UnknownAuthUser,
-) => {
-  const rawJudgeIds = event.queryStringParameters?.judgeIds;
-  const judgeIds = Array.isArray(rawJudgeIds)
-    ? rawJudgeIds
-    : typeof rawJudgeIds === 'object' && rawJudgeIds !== null
-      ? Object.values(rawJudgeIds)
-      : rawJudgeIds
-        ? [rawJudgeIds]
-        : [];
-
-  return genericHandler(event, () =>
+) =>
+  genericHandler(event, () =>
     getPendingMotionDocketEntriesForCurrentJudgeInteractor(
-      { judgeIds },
+      event.queryStringParameters,
       authorizedUser,
     ),
   );
-};
