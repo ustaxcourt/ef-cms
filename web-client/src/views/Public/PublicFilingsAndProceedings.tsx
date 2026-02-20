@@ -75,7 +75,6 @@ export const PublicFilingsAndProceedings = connect<
           return (
             <span key={affectedEntry.docketEntryId}>
               <br></br>
-              <span> --- </span>
               {renderDispositionLinks(
                 entry,
                 affectedEntry,
@@ -97,11 +96,9 @@ const renderDispositionLinks = (
   openDocumentDownloadSequence,
 ) => {
   return affectedEntry.dispositionLinkText.map((linkText, index) => (
-    <span
-      className="display-block"
-      key={`${affectedEntry.docketEntryIndex}-${index}`}
-    >
-      {affectedEntry.showDownloadLink && (
+    <span key={`${affectedEntry.docketEntryIndex}-${index}`}>
+      <span> --- </span>
+      {affectedEntry.showDownloadLink ? (
         <Button
           link
           className={classNames('text-right', 'view-pdf-link')}
@@ -118,8 +115,10 @@ const renderDispositionLinks = (
         >
           {linkText}
         </Button>
+      ) : (
+        <span>{linkText}</span>
       )}
-      {!affectedEntry.showDownloadLink && <span> {linkText} </span>}
+      {index < affectedEntry.dispositionLinkText.length - 1 && <br />}
     </span>
   ));
 };

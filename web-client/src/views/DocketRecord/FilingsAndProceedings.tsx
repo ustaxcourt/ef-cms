@@ -230,7 +230,6 @@ export const FilingsAndProceedings = connect<
             <span key={affectedEntry.docketEntryId}>
               <br></br>
               <span className="display-inline-block">
-                <span> --- </span>
                 {renderDispositionLinks(
                   affectedEntry,
                   caseDetail.docketNumber,
@@ -252,13 +251,13 @@ const renderDispositionLinks = (
   changeTabSequence,
   openDocumentDownloadSequence,
 ) => {
+  const showLink =
+    affectedEntry.showDocumentViewerLink || affectedEntry.showDownloadLink;
+
   return affectedEntry.dispositionLinkText.map((linkText, index) => (
-    <span
-      className="display-block"
-      key={`${affectedEntry.docketEntryIndex}-${index}`}
-    >
-      {(affectedEntry.showDocumentViewerLink ||
-        affectedEntry.showDownloadLink) && (
+    <span key={`${affectedEntry.docketEntryIndex}-${index}`}>
+      <span> --- </span>
+      {showLink ? (
         <Button
           link
           className={classNames('text-right', 'view-pdf-link')}
@@ -280,10 +279,10 @@ const renderDispositionLinks = (
         >
           {linkText}
         </Button>
+      ) : (
+        <span>{linkText}</span>
       )}
-      {!(
-        affectedEntry.showDocumentViewerLink || affectedEntry.showDownloadLink
-      ) && <span> {linkText} </span>}
+      {index < affectedEntry.dispositionLinkText.length - 1 && <br />}
     </span>
   ));
 };
