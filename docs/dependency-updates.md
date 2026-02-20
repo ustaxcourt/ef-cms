@@ -131,6 +131,7 @@ Check if there is an update to the Terraform AWS provider and update our `.tf` f
 
 1. Search the entire project for `source  = "hashicorp/aws"` and make sure it's set to the latest version. For example, some of these files have the AWS provider defined:
    - `./web-api/terraform/modules/worker/providers.tf`
+
 1. Change the version of the AWS provider using two decimal notation (e.g. `6.19.0`) to ensure providers only increment patch versions automatically
 
 ### 4. Update Terraform OpenSearch provider
@@ -297,6 +298,11 @@ error: too many arguments. Expected 0 arguments but got 2.
 - Almost all packages affected that we use, are on minimatch version 9 or lower. Some of packages like eslint and eslint/js have recent major updates that may fix this issue for thier respective dependencies but some other dependencies don't readily support eslint version 10 yet and are unable to be successfully upgraded.
 - Other packages haven't seen an update in months, sometimes up to a year and discussions maybe needed to determine if alternitives are necessary to limit exposure until all affected packages can be upgraded.
 - For now leave these versions unchanged, and keep an eye on the packages listed in the command above until updates and testing are successful.
+
+### hashicorp/aws in .tf files
+**Installed Version: 6.32.1**
+- Updating hashicorp/aws version to 6.33.0 in .tf files caused failures during deployment to an experimental branch so it was reverted back to version 6.32.1.
+- upon updating please deploy to an experimental branch and confirm functionality.
 
 ## Troubleshooting
 
