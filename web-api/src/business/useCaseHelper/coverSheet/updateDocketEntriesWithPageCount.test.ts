@@ -220,8 +220,6 @@ describe('updateDocketEntriesWithPageCount', () => {
       pageCount: mockPageCount,
     });
 
-    console.log('result', result);
-
     expect(result[0].docketNumber).toBe(mockDocketNumber);
   });
 });

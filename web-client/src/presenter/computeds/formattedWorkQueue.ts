@@ -72,6 +72,7 @@ export const formattedWorkQueue = (
       string,
       RawWorkItemWithCaseAndDocketEntryInfo[]
     >();
+
     for (const wi of filtered) {
       const key = wi.docketEntryId;
       if (!docketEntryIdGroups.has(key)) docketEntryIdGroups.set(key, []);
@@ -83,7 +84,9 @@ export const formattedWorkQueue = (
         solo.push(group[0]);
       } else {
         group.forEach(g => {
-          if (g.leadDocketNumber) {
+          if (g.docketEntry.multiDocketedOn?.length < 2) {
+            solo.push(g);
+          } else if (g.leadDocketNumber) {
             consolidated.push(g);
           } else {
             solo.push(g);
