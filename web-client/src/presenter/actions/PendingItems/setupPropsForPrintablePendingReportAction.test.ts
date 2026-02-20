@@ -5,10 +5,11 @@ describe('setupPropsForPrintablePendingReportAction', () => {
   it('should update the props with docketNumber if docketNumberFilter is true', async () => {
     const result = await runAction<{ docketNumberFilter: string }>(setupPropsForPrintablePendingReportAction, {
       props: {
-        caseDetail: { docketNumber: '123-45' },
         docketNumberFilter: true,
       },
-      state: {},
+      state: {
+        caseDetail: { docketNumber: '123-45' },
+      },
     });
 
     const output = result.output as { docketNumberFilter: string };

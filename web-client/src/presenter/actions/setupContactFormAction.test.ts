@@ -12,10 +12,11 @@ describe('setupContactFormAction', () => {
     ({ PARTY_TYPES } = applicationContext.getConstants());
   });
 
-  it('should set contactPrimary, docketNumber, and partyType from props.caseDetail on form', async () => {
+  it('should set contactPrimary, docketNumber, and partyType from state.caseDetail on form', async () => {
     const result = await runAction(setupContactFormAction, {
       modules: { presenter },
-      props: {
+      props: {},
+      state: {
         caseDetail: {
           docketNumber: '101-20',
           partyType: PARTY_TYPES.petitioner,
@@ -26,8 +27,6 @@ describe('setupContactFormAction', () => {
             },
           ],
         },
-      },
-      state: {
         form: {},
       },
     });

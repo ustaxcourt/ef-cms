@@ -17,10 +17,14 @@ export const editDocketEntryMetaHelper = (
   strickenAtFormatted: string;
   strickenBy: string;
 } => {
-  const { eventCode, isStricken, strickenAt, strickenBy } = get(state.form);
+  const eventCode = get(state.form.eventCode);
+  const isStricken = get(state.form.isStricken);
+  const strickenAt = get(state.form.strickenAt);
+  const strickenBy = get(state.form.strickenBy);
+  const documentType = get(state.form.documentType);
+  const previousDocument = get(state.form.previousDocument);
 
   const caseDetail = get(state.caseDetail);
-  const form = get(state.form);
   const user = get(state.user);
 
   const categoryInformation = INTERNAL_DOCUMENTS_ARRAY.find(
@@ -44,10 +48,10 @@ export const editDocketEntryMetaHelper = (
   const strickenAtFormatted = formatDateString(strickenAt, 'MMDDYYYY');
 
   const showObjection =
-    INTERNAL_DOCUMENT_TYPES_REQUIRING_OBJECTION.has(form.documentType) ||
-    (AMENDMENT_EVENT_CODES.includes(form.eventCode) &&
+    INTERNAL_DOCUMENT_TYPES_REQUIRING_OBJECTION.has(documentType) ||
+    (AMENDMENT_EVENT_CODES.includes(eventCode) &&
       INTERNAL_DOCUMENT_TYPES_REQUIRING_OBJECTION.has(
-        form.previousDocument?.documentType,
+        previousDocument?.documentType,
       ));
 
   return {

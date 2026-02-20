@@ -20,6 +20,9 @@ describe('setDocumentToFormFromCorrespondenceAction', () => {
     const result = await runAction(setDocumentToFormFromCorrespondenceAction, {
       modules: { presenter },
       props: {
+        correspondenceId: documentIdToEdit,
+      },
+      state: {
         caseDetail: {
           correspondence: [mockCorrespondence],
           docketEntries: [
@@ -30,7 +33,6 @@ describe('setDocumentToFormFromCorrespondenceAction', () => {
           ],
           docketNumber: '123-45',
         },
-        correspondenceId: documentIdToEdit,
       },
     });
 
@@ -47,12 +49,14 @@ describe('setDocumentToFormFromCorrespondenceAction', () => {
     const result = await runAction(setDocumentToFormFromCorrespondenceAction, {
       modules: { presenter },
       props: {
+        correspondenceId: '890',
+      },
+      state: {
         caseDetail: {
           correspondence: [],
           docketEntries: [],
           docketNumber: '123-45',
         },
-        correspondenceId: '890',
       },
     });
 

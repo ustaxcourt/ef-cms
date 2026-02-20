@@ -1,7 +1,7 @@
 import { clearConfirmationTextAction } from '../actions/clearConfirmationTextAction';
 import { clearFormAction } from '../actions/clearFormAction';
-import { getCaseAction } from '../actions/getCaseAction';
-import { setCaseAction } from '../actions/setCaseAction';
+import { getCaseMetadataAction } from '../actions/getCaseMetadataAction';
+import { setCaseMetadataAction } from '../actions/setCaseMetadataAction';
 import { setEditDeficiencyStatisticFormAction } from '../actions/setEditDeficiencyStatisticFormAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
@@ -13,8 +13,8 @@ export const gotoEditDeficiencyStatisticSequence =
     stopShowValidationAction,
     clearFormAction,
     clearConfirmationTextAction,
-    getCaseAction,
-    setCaseAction,
+    getCaseMetadataAction,
+    setCaseMetadataAction,
     setEditDeficiencyStatisticFormAction,
     setupCurrentPageAction('EditDeficiencyStatistic'),
   ]);

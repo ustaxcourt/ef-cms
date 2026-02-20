@@ -20,10 +20,12 @@ import { removeServedParties } from '@shared/business/dto/helpers/removeServedPa
 export const getCaseDocketEntriesInteractor = async (
   {
     docketNumber,
+    eventCodes,
     page = 0,
     pageSize = DOCKET_ENTRIES_PAGE_SIZE,
   }: {
     docketNumber: string;
+    eventCodes?: string[];
     page?: number;
     pageSize?: number;
   },
@@ -46,17 +48,24 @@ export const getCaseDocketEntriesInteractor = async (
     ROLE_PERMISSIONS.GET_ALL_CASE_DATA,
   );
 
+  const hasEventCodesFilter = eventCodes && eventCodes.length > 0;
+
   const [paginatedResult, workItems, hasPendingItems] = await Promise.all([
     getDocketEntriesPaginated({
       docketNumber: formattedDocketNumber,
+      eventCodes,
       filterOnDocketRecord,
       page,
       pageSize,
     }),
-    getWorkItemsByDocketNumber({
-      docketNumber: formattedDocketNumber,
-    }),
-    computeHasPendingItems(formattedDocketNumber),
+    hasEventCodesFilter
+      ? Promise.resolve([])
+      : getWorkItemsByDocketNumber({
+          docketNumber: formattedDocketNumber,
+        }),
+    hasEventCodesFilter
+      ? Promise.resolve(false)
+      : computeHasPendingItems(formattedDocketNumber),
   ]);
 
   const workItemByDocketEntryId = new Map(

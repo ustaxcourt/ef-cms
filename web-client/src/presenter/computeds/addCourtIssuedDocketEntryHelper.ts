@@ -19,7 +19,10 @@ export const addCourtIssuedDocketEntryHelper = (
     ...get(state.caseDetail),
   });
 
-  const form = get(state.form);
+  const selectedEventCode = get(state.form.eventCode);
+  const affectedDocketEntries = get(state.form.affectedDocketEntries);
+  const generatedDocumentTitle = get(state.form.generatedDocumentTitle);
+  const attachments = get(state.form.attachments);
 
   const user = get(state.user);
 
@@ -49,7 +52,7 @@ export const addCourtIssuedDocketEntryHelper = (
           !d.isDraft &&
           !find(
             // Motions not already in the order
-            form.affectedDocketEntries ?? [],
+            affectedDocketEntries ?? [],
             am => am.docketEntryId === d.docketEntryId,
           ),
       ),
@@ -73,16 +76,15 @@ export const addCourtIssuedDocketEntryHelper = (
     })),
   ];
 
-  const selectedEventCode = get(state.form.eventCode);
   const showServiceStamp =
     selectedEventCode === 'O' && user.role !== USER_ROLES.petitionsClerk;
 
-  const formattedDocumentTitle = `${form.generatedDocumentTitle || ''}${
-    form.attachments ? ' (Attachment(s))' : ''
+  const formattedDocumentTitle = `${generatedDocumentTitle || ''}${
+    attachments ? ' (Attachment(s))' : ''
   }`;
 
   const eventCodeIsUnservable = DocketEntry.isUnservable({
-    eventCode: form.eventCode,
+    eventCode: selectedEventCode,
   });
 
   const eventCodesNotRequiringAttachmentsAndService = ['TCRP'];
@@ -99,7 +101,7 @@ export const addCourtIssuedDocketEntryHelper = (
     !eventCodeIsUnservable && canAllowDocumentServiceForCase;
 
   const showDocumentTypeDropdown =
-    form.eventCode !==
+    selectedEventCode !==
     SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange.eventCode;
 
   return {

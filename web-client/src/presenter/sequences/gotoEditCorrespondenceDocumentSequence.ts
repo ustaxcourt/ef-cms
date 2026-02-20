@@ -1,7 +1,7 @@
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
-import { getCaseAction } from '../actions/getCaseAction';
-import { setCaseAction } from '../actions/setCaseAction';
+import { getCaseMetadataAction } from '../actions/getCaseMetadataAction';
+import { setCaseMetadataAction } from '../actions/setCaseMetadataAction';
 import { setDocketEntryIdFromCorrespondenceAction } from '../actions/setDocketEntryIdFromCorrespondenceAction';
 import { setDocumentToFormFromCorrespondenceAction } from '../actions/EditUploadCourtIssuedDocument/setDocumentToFormFromCorrespondenceAction';
 import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
@@ -15,8 +15,8 @@ export const gotoEditCorrespondenceDocumentSequence =
     stopShowValidationAction,
     clearFormAction,
     clearScreenMetadataAction,
-    getCaseAction,
-    setCaseAction,
+    getCaseMetadataAction,
+    setCaseMetadataAction,
     setDocketEntryIdFromCorrespondenceAction,
     setDocumentToFormFromCorrespondenceAction,
     setRedirectUrlAction,

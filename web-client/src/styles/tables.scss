@@ -1,6 +1,11 @@
 @use '../uswds' as *;
 @use '../variables' as *;
 
+#docket-record-table tbody tr {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 50px;
+}
+
 table,
 .usa-table {
   * {

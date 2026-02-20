@@ -8,6 +8,7 @@ import { sql } from 'kysely';
 
 export const getDocketEntriesPaginated = async ({
   docketNumber,
+  eventCodes,
   filterOnDocketRecord = false,
   page = 0,
   pageSize,
@@ -15,6 +16,7 @@ export const getDocketEntriesPaginated = async ({
   docketNumber: string;
   page: number;
   pageSize: number;
+  eventCodes?: string[];
   filterOnDocketRecord?: boolean;
 }): Promise<{
   docketEntries: RawDocketEntry[];
@@ -29,6 +31,10 @@ export const getDocketEntriesPaginated = async ({
 
   if (filterOnDocketRecord) {
     activeQuery = activeQuery.where('de.isOnDocketRecord', '=', true);
+  }
+
+  if (eventCodes && eventCodes.length > 0) {
+    activeQuery = activeQuery.where('de.eventCode', 'in', eventCodes);
   }
 
   const paginatedQuery = activeQuery
@@ -47,13 +53,17 @@ export const getDocketEntriesPaginated = async ({
       q = q.where('de.isOnDocketRecord', '=', true);
     }
 
+    if (eventCodes && eventCodes.length > 0) {
+      q = q.where('de.eventCode', 'in', eventCodes);
+    }
+
     return q
       .select(sql<number>`count(*)::int`.as('count'))
       .executeTakeFirstOrThrow();
   });
 
   let archivedQuery: Promise<DocketEntryWithAffected[]>;
-  if (page === 0) {
+  if (page === 0 && !eventCodes) {
     archivedQuery = (async () => {
       const archiveBase = await docketEntriesBaseQuery({
         docketNumbers: [docketNumber],

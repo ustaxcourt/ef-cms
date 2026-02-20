@@ -151,6 +151,14 @@ type DocketRecordHeaderProps = {
   };
 };
 
+const PrintableDocketRecordModalWrapper = connect(
+  { showModal: state.modal.showModal },
+  function PrintableDocketRecordModalWrapper({ showModal }) {
+    if (showModal !== 'OpenPrintableDocketRecordModal') return null;
+    return <OpenPrintableDocketRecordModal />;
+  },
+);
+
 const DocketRecordHeaderDeps = {
   DOCKET_RECORD_FILTER_OPTIONS: state.constants.DOCKET_RECORD_FILTER_OPTIONS,
   docketRecordHelper: state.docketRecordHelper,
@@ -160,7 +168,6 @@ const DocketRecordHeaderDeps = {
     sequences.gotoPrintableDocketRecordSequence,
   openDownloadDocketEntriesModalSequence:
     sequences.openDownloadDocketEntriesModalSequence,
-  showModal: state.modal.showModal,
   sortTableSequence: sequences.sortTableSequence,
   toggleMobileDocketSortSequence: sequences.toggleMobileDocketSortSequence,
 };
@@ -178,7 +185,6 @@ export const DocketRecordHeader = connect<
     formattedDocketEntriesHelper,
     gotoPrintableDocketRecordSequence,
     openDownloadDocketEntriesModalSequence,
-    showModal,
     sortTableSequence,
   }) {
     return (
@@ -239,9 +245,7 @@ export const DocketRecordHeader = connect<
             />
           </Phone>
         </div>
-        {showModal === 'OpenPrintableDocketRecordModal' && (
-          <OpenPrintableDocketRecordModal />
-        )}
+        <PrintableDocketRecordModalWrapper />
       </React.Fragment>
     );
   },

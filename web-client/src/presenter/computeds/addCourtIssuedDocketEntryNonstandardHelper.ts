@@ -8,8 +8,8 @@ export const addCourtIssuedDocketEntryNonstandardHelper = (
   const { COURT_ISSUED_EVENT_CODES, TRANSCRIPT_EVENT_CODE } =
     applicationContext.getConstants();
 
-  const form = get(state.form);
-  const selectedEventCode = form.eventCode;
+  const selectedEventCode = get(state.form.eventCode);
+  const scenario = get(state.form.scenario);
 
   const selectedDocumentInformation = COURT_ISSUED_EVENT_CODES.find(
     entry => entry.eventCode === selectedEventCode,
@@ -72,7 +72,7 @@ export const addCourtIssuedDocketEntryNonstandardHelper = (
   let dateLabel = 'Date';
   if (selectedEventCode === TRANSCRIPT_EVENT_CODE) {
     dateLabel = 'Date of trial/hearing';
-  } else if (form.scenario === 'Type G') {
+  } else if (scenario === 'Type G') {
     dateLabel = 'Trial date';
   }
 

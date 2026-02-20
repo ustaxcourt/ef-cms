@@ -16,13 +16,13 @@ export const setCourtIssuedDocumentInitialDataAction = ({
   props,
   store,
 }: ActionProps) => {
-  const { docketEntries } = get(state.caseDetail);
-
   const judges = get(state.judges);
 
-  const docketEntry = docketEntries.find(
-    item => item.docketEntryId === props.docketEntryId,
-  );
+  const docketEntry =
+    props.docketEntry ||
+    get(state.caseDetail).docketEntries?.find(
+      item => item.docketEntryId === props.docketEntryId,
+    );
 
   if (docketEntry) {
     const { COURT_ISSUED_EVENT_CODES } = applicationContext.getConstants();

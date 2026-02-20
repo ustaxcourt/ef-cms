@@ -26,6 +26,22 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect } from 'react';
 
+const CaseDetailInternalModals = connect(
+  { showModal: state.modal.showModal },
+  function CaseDetailInternalModals({ showModal }) {
+    return (
+      <>
+        {showModal === 'PaperServiceConfirmModal' && (
+          <PaperServiceConfirmModal />
+        )}
+        {showModal === 'SealCaseModal' && <SealCaseModal />}
+        {showModal === 'SealAddressModal' && <SealAddressModal />}
+        {showModal === 'UnsealCaseModal' && <UnsealCaseModal />}
+      </>
+    );
+  },
+);
+
 export const CaseDetailInternal = connect(
   {
     caseDetailInternalTabs:
@@ -33,13 +49,11 @@ export const CaseDetailInternal = connect(
     clearViewerDocumentToDisplaySequence:
       sequences.clearViewerDocumentToDisplaySequence,
     showEditCase: state.currentViewMetadata.caseDetail.showEditCase,
-    showModal: state.modal.showModal,
   },
   function CaseDetailInternal({
     caseDetailInternalTabs,
     clearViewerDocumentToDisplaySequence,
     showEditCase,
-    showModal,
   }) {
     useEffect(() => {
       return () => clearViewerDocumentToDisplaySequence();
@@ -182,12 +196,7 @@ export const CaseDetailInternal = connect(
           )}
         </section>
 
-        {showModal === 'PaperServiceConfirmModal' && (
-          <PaperServiceConfirmModal />
-        )}
-        {showModal === 'SealCaseModal' && <SealCaseModal />}
-        {showModal === 'SealAddressModal' && <SealAddressModal />}
-        {showModal === 'UnsealCaseModal' && <UnsealCaseModal />}
+        <CaseDetailInternalModals />
       </>
     );
   },

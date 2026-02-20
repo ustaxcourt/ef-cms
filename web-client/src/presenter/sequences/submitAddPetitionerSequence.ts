@@ -2,7 +2,6 @@ import { addPetitionerToCaseAction } from '../actions/addPetitionerToCaseAction'
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { navigateToCaseDetailCaseInformationActionFactory } from '../actions/navigateToCaseDetailCaseInformationActionFactory';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setCaseDetailPageTabFrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabFrozenAction';
 import { setPartyViewTabAfterUpdatingPetitionersAction } from '../actions/setPartyViewTabAfterUpdatingPetitionersAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
@@ -26,7 +25,6 @@ export const submitAddPetitionerSequence = [
     success: showProgressSequenceDecorator([
       addPetitionerToCaseAction,
       setPartyViewTabAfterUpdatingPetitionersAction,
-      setCaseDetailPageTabFrozenAction,
       setSaveAlertsForNavigationAction,
       setAlertSuccessAction,
       setupCurrentPageAction('Interstitial'),

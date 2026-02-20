@@ -1,6 +1,6 @@
 import { clearFormAction } from '../actions/clearFormAction';
-import { getCaseAction } from '../actions/getCaseAction';
-import { setCaseAction } from '../actions/setCaseAction';
+import { getCaseMetadataAction } from '../actions/getCaseMetadataAction';
+import { setCaseMetadataAction } from '../actions/setCaseMetadataAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { setupEditPetitionDetailFormAction } from '../actions/setupEditPetitionDetailFormAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
@@ -10,8 +10,8 @@ export const gotoEditCaseDetailsSequence =
   startWebSocketConnectionSequenceDecorator([
     setupCurrentPageAction('Interstitial'),
     clearFormAction,
-    getCaseAction,
-    setCaseAction,
+    getCaseMetadataAction,
+    setCaseMetadataAction,
     stopShowValidationAction,
     setupEditPetitionDetailFormAction,
     setupCurrentPageAction('EditCaseDetails'),

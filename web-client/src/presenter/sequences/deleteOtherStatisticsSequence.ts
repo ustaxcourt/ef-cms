@@ -5,7 +5,6 @@ import { deleteOtherStatisticsAction } from '../actions/deleteOtherStatisticsAct
 import { navigateToCaseDetailCaseInformationActionFactory } from '../actions/navigateToCaseDetailCaseInformationActionFactory';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setCaseDetailPageTabFrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabFrozenAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 
@@ -18,10 +17,9 @@ export const deleteOtherStatisticsSequence = [
       success: [
         clearFormAction,
         setSaveAlertsForNavigationAction,
-        setCaseDetailPageTabFrozenAction,
         setAlertSuccessAction,
         clearModalAction,
-        navigateToCaseDetailCaseInformationActionFactory(),
+        navigateToCaseDetailCaseInformationActionFactory('statistics'),
       ],
     },
   ]),

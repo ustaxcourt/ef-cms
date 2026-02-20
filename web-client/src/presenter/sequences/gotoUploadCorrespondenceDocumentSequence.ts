@@ -1,9 +1,9 @@
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearScansAction } from '../actions/clearScansAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
-import { getCaseAction } from '../actions/getCaseAction';
+import { getCaseMetadataAction } from '../actions/getCaseMetadataAction';
 import { resetAddCorrespondenceAction } from '../actions/resetAddCorrespondenceAction';
-import { setCaseAction } from '../actions/setCaseAction';
+import { setCaseMetadataAction } from '../actions/setCaseMetadataAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
@@ -15,8 +15,8 @@ export const gotoUploadCorrespondenceDocumentSequence =
     clearScansAction,
     clearFormAction,
     clearScreenMetadataAction,
-    getCaseAction,
-    setCaseAction,
+    getCaseMetadataAction,
+    setCaseMetadataAction,
     resetAddCorrespondenceAction,
     setupCurrentPageAction('AddCorrespondenceDocument'),
   ]);

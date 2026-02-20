@@ -9,14 +9,26 @@ import { UnsealDocketEntryModal } from './UnsealDocketEntryModal';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import classNames from 'classnames';
 import { SortableHeader } from '@web-client/ustc-ui/Table/SortableHeader';
 import { WrappedIcon } from '@web-client/ustc-ui/Icon/Icon';
 
+const DocketRecordModals = connect(
+  { showModal: state.modal.showModal },
+  function DocketRecordModals({ showModal }) {
+    return (
+      <>
+        {showModal == 'DocketRecordOverlay' && <DocketRecordOverlay />}
+        {showModal == 'SealDocketEntryModal' && <SealDocketEntryModal />}
+        {showModal == 'UnsealDocketEntryModal' && <UnsealDocketEntryModal />}
+      </>
+    );
+  },
+);
+
 export const DocketRecord = connect(
   {
-    caseDetail: state.caseDetail,
     docketRecordHelper: state.docketRecordHelper,
     docketRecordTableSortData: state[STATE_KEYS.DOCKET_RECORD_TABLE_SORT],
     formattedDocketEntriesHelper: state.formattedDocketEntries,
@@ -26,7 +38,6 @@ export const DocketRecord = connect(
       sequences.openUnsealDocketEntryModalSequence,
     setSelectedDocumentsForDownloadSequence:
       sequences.setSelectedDocumentsForDownloadSequence,
-    showModal: state.modal.showModal,
     sortTableSequence: sequences.sortTableSequence,
   },
 
@@ -37,12 +48,185 @@ export const DocketRecord = connect(
     openSealDocketEntryModalSequence,
     openUnsealDocketEntryModalSequence,
     setSelectedDocumentsForDownloadSequence,
-    showModal,
     sortTableSequence,
   }) {
     const selectAllCheckboxRef = useRef<HTMLInputElement>(null);
 
     const noDocumentsMessage = 'There are no documents of that type.';
+
+    const memoizedDesktopRows = useMemo(
+      () =>
+        formattedDocketEntriesHelper.formattedDocketEntriesOnDocketRecord.map(
+          entry => (
+            <tr
+              className={classNames(
+                entry.isInProgress && 'in-progress',
+                entry.qcWorkItemsUntouched && 'qc-untouched',
+              )}
+              data-testid={entry.docketEntryId}
+              key={entry.docketEntryId}
+            >
+              {docketRecordHelper.showBatchDownloadControls && (
+                <td>
+                  {entry.isSelectableForDownload && (
+                    <input
+                      aria-label={`${entry.index}-${entry.documentTitle}`}
+                      checked={entry.isDocumentSelected}
+                      id={`${entry.index}-${entry.documentTitle}`}
+                      type="checkbox"
+                      onChange={() => {
+                        const documentIdSelected = {
+                          docketEntryId: entry.docketEntryId,
+                        };
+                        setSelectedDocumentsForDownloadSequence({
+                          documentIds: [documentIdSelected],
+                        });
+                      }}
+                    />
+                  )}
+                </td>
+              )}
+              <td
+                className="center-column hide-on-mobile"
+                data-testid={`docket-entry-index-${entry.index}`}
+              >
+                {entry.index}
+              </td>
+              <td>
+                <span
+                  className={classNames(
+                    entry.isStricken && 'stricken-docket-record',
+                    'no-wrap',
+                  )}
+                  data-testid={`docket-entry-filedDate-${entry.index}`}
+                >
+                  {entry.createdAtFormatted}
+                </span>
+              </td>
+              <td
+                className="center-column hide-on-mobile"
+                data-testid={`docket-entry-eventCode-${entry.index}`}
+              >
+                {entry.eventCode}
+              </td>
+              <td aria-hidden="true" className="filing-type-icon">
+                {entry.iconsToDisplay.map(
+                  ({ icon, className, title }, index) => (
+                    <WrappedIcon
+                      key={index}
+                      icon={icon}
+                      iconClass={className}
+                      title={title}
+                    />
+                  ),
+                )}
+              </td>
+              <td
+                data-testid={`docket-entry-filingsAndProceedings-${entry.index}`}
+              >
+                <FilingsAndProceedings entry={entry} />
+              </td>
+              <td
+                className="hide-on-mobile number-of-pages"
+                data-testid={`docket-entry-numberOfPages-${entry.docketNumber}`}
+              >
+                {entry.numberOfPages}
+              </td>
+              <td
+                className="hide-on-mobile"
+                data-testid="docket-entry-filedBy"
+              >
+                {entry.filedBy}
+              </td>
+              <td
+                className="hide-on-mobile"
+                data-testid="docket-entry-action"
+              >
+                {entry.action}
+              </td>
+              <td data-testid="docket-record-cell-not-served">
+                {entry.showNotServed && (
+                  <span className="text-semibold not-served">Not served</span>
+                )}
+                {entry.showServed && <span>{entry.servedAtFormatted}</span>}
+              </td>
+              <td
+                className="center-column hide-on-mobile"
+                data-testid={`docket-entry-servedPartiesCode-${entry.index}`}
+              >
+                {entry.showServed && entry.servedPartiesCode}
+              </td>
+              {docketRecordHelper.showEditOrSealDocketRecordEntry && (
+                <td className="seal-and-edit-col">
+                  {entry.showEditDocketRecordEntry && (
+                    <Button
+                      link
+                      data-testid={`edit-${entry.eventCode}`}
+                      href={entry.editDocketEntryMetaLink}
+                      icon="edit"
+                    >
+                      Edit
+                    </Button>
+                  )}
+                  {entry.showSealDocketRecordEntry && (
+                    <Button
+                      link
+                      className={entry.isSealed && 'red-warning'}
+                      data-testid={`seal-docket-entry-button-${entry.index}`}
+                      icon={entry.sealIcon}
+                      tooltip={entry.sealButtonTooltip}
+                      onClick={() => {
+                        if (entry.isSealed) {
+                          openUnsealDocketEntryModalSequence({
+                            docketEntryId: entry.docketEntryId,
+                            showModal: 'UnsealDocketEntryModal',
+                          });
+                        } else {
+                          openSealDocketEntryModalSequence({
+                            docketEntryId: entry.docketEntryId,
+                            showModal: 'SealDocketEntryModal',
+                          });
+                        }
+                      }}
+                    >
+                      {entry.sealButtonText}
+                    </Button>
+                  )}
+                </td>
+              )}
+            </tr>
+          ),
+        ),
+      [
+        formattedDocketEntriesHelper.formattedDocketEntriesOnDocketRecord,
+        docketRecordHelper.showBatchDownloadControls,
+        docketRecordHelper.showEditOrSealDocketRecordEntry,
+      ],
+    );
+
+    const memoizedMobileRows = useMemo(
+      () =>
+        formattedDocketEntriesHelper.formattedDocketEntriesOnDocketRecord.map(
+          entry => (
+            <tr key={entry.index}>
+              <td data-label="No.">{entry.index}</td>
+              <td data-label="Filed Date">{entry.createdAtFormatted}</td>
+              <td data-label="Filings and Proceedings">
+                <FilingsAndProceedings entry={entry} />
+              </td>
+              <td data-label="Served">
+                {entry.showNotServed && (
+                  <span className="text-secondary text-semibold">
+                    Not served
+                  </span>
+                )}
+                {entry.showServed && <span>{entry.servedAtFormatted}</span>}
+              </td>
+            </tr>
+          ),
+        ),
+      [formattedDocketEntriesHelper.formattedDocketEntriesOnDocketRecord],
+    );
 
     useEffect(() => {
       if (!docketRecordHelper.showBatchDownloadControls) return;
@@ -178,155 +362,7 @@ export const DocketRecord = connect(
                   )}
                 </tr>
               </thead>
-              <tbody>
-                {formattedDocketEntriesHelper.formattedDocketEntriesOnDocketRecord.map(
-                  entry => {
-                    return (
-                      <tr
-                        className={classNames(
-                          entry.isInProgress && 'in-progress',
-                          entry.qcWorkItemsUntouched && 'qc-untouched',
-                        )}
-                        data-testid={entry.docketEntryId}
-                        key={entry.docketEntryId}
-                      >
-                        {docketRecordHelper.showBatchDownloadControls && (
-                          <td>
-                            {entry.isSelectableForDownload && (
-                              <input
-                                aria-label={`${entry.index}-${entry.documentTitle}`}
-                                checked={entry.isDocumentSelected}
-                                id={`${entry.index}-${entry.documentTitle}`}
-                                type="checkbox"
-                                onChange={() => {
-                                  const documentIdSelected = {
-                                    docketEntryId: entry.docketEntryId,
-                                  };
-                                  setSelectedDocumentsForDownloadSequence({
-                                    documentIds: [documentIdSelected],
-                                  });
-                                }}
-                              />
-                            )}
-                          </td>
-                        )}
-                        <td
-                          className="center-column hide-on-mobile"
-                          data-testid={`docket-entry-index-${entry.index}`}
-                        >
-                          {entry.index}
-                        </td>
-                        <td>
-                          <span
-                            className={classNames(
-                              entry.isStricken && 'stricken-docket-record',
-                              'no-wrap',
-                            )}
-                            data-testid={`docket-entry-filedDate-${entry.index}`}
-                          >
-                            {entry.createdAtFormatted}
-                          </span>
-                        </td>
-                        <td
-                          className="center-column hide-on-mobile"
-                          data-testid={`docket-entry-eventCode-${entry.index}`}
-                        >
-                          {entry.eventCode}
-                        </td>
-                        <td aria-hidden="true" className="filing-type-icon">
-                          {entry.iconsToDisplay.map(
-                            ({ icon, className, title }, index) => (
-                              <WrappedIcon
-                                key={index}
-                                icon={icon}
-                                iconClass={className}
-                                title={title}
-                              />
-                            ),
-                          )}
-                        </td>
-                        <td
-                          data-testid={`docket-entry-filingsAndProceedings-${entry.index}`}
-                        >
-                          <FilingsAndProceedings entry={entry} />
-                        </td>
-                        <td
-                          className="hide-on-mobile number-of-pages"
-                          data-testid={`docket-entry-numberOfPages-${entry.docketNumber}`}
-                        >
-                          {entry.numberOfPages}
-                        </td>
-                        <td
-                          className="hide-on-mobile"
-                          data-testid="docket-entry-filedBy"
-                        >
-                          {entry.filedBy}
-                        </td>
-                        <td
-                          className="hide-on-mobile"
-                          data-testid="docket-entry-action"
-                        >
-                          {entry.action}
-                        </td>
-                        <td data-testid="docket-record-cell-not-served">
-                          {entry.showNotServed && (
-                            <span className="text-semibold not-served">
-                              Not served
-                            </span>
-                          )}
-                          {entry.showServed && (
-                            <span>{entry.servedAtFormatted}</span>
-                          )}
-                        </td>
-                        <td
-                          className="center-column hide-on-mobile"
-                          data-testid={`docket-entry-servedPartiesCode-${entry.index}`}
-                        >
-                          {entry.showServed && entry.servedPartiesCode}
-                        </td>
-                        {docketRecordHelper.showEditOrSealDocketRecordEntry && (
-                          <td className="seal-and-edit-col">
-                            {entry.showEditDocketRecordEntry && (
-                              <Button
-                                link
-                                data-testid={`edit-${entry.eventCode}`}
-                                href={entry.editDocketEntryMetaLink}
-                                icon="edit"
-                              >
-                                Edit
-                              </Button>
-                            )}
-                            {entry.showSealDocketRecordEntry && (
-                              <Button
-                                link
-                                className={entry.isSealed && 'red-warning'}
-                                data-testid={`seal-docket-entry-button-${entry.index}`}
-                                icon={entry.sealIcon}
-                                tooltip={entry.sealButtonTooltip}
-                                onClick={() => {
-                                  if (entry.isSealed) {
-                                    openUnsealDocketEntryModalSequence({
-                                      docketEntryId: entry.docketEntryId,
-                                      showModal: 'UnsealDocketEntryModal',
-                                    });
-                                  } else {
-                                    openSealDocketEntryModalSequence({
-                                      docketEntryId: entry.docketEntryId,
-                                      showModal: 'SealDocketEntryModal',
-                                    });
-                                  }
-                                }}
-                              >
-                                {entry.sealButtonText}
-                              </Button>
-                            )}
-                          </td>
-                        )}
-                      </tr>
-                    );
-                  },
-                )}
-              </tbody>
+              <tbody>{memoizedDesktopRows}</tbody>
             </table>
             {!formattedDocketEntriesHelper.formattedDocketEntriesOnDocketRecord
               .length && (
@@ -343,40 +379,12 @@ export const DocketRecord = connect(
                 <th scope="col">Served</th>
               </tr>
             </thead>
-            <tbody>
-              {formattedDocketEntriesHelper.formattedDocketEntriesOnDocketRecord.map(
-                entry => {
-                  return (
-                    <tr key={entry.index}>
-                      <td data-label="No.">{entry.index}</td>
-                      <td data-label="Filed Date">
-                        {entry.createdAtFormatted}
-                      </td>
-                      <td data-label="Filings and Proceedings">
-                        <FilingsAndProceedings entry={entry} />
-                      </td>
-                      <td data-label="Served">
-                        {entry.showNotServed && (
-                          <span className="text-secondary text-semibold">
-                            Not served
-                          </span>
-                        )}
-                        {entry.showServed && (
-                          <span>{entry.servedAtFormatted}</span>
-                        )}
-                      </td>
-                    </tr>
-                  );
-                },
-              )}
-            </tbody>
+            <tbody>{memoizedMobileRows}</tbody>
           </table>
           {!formattedDocketEntriesHelper.formattedDocketEntriesOnDocketRecord
             .length && <p className="margin-bottom-10">{noDocumentsMessage}</p>}
         </Phone>
-        {showModal == 'DocketRecordOverlay' && <DocketRecordOverlay />}
-        {showModal == 'SealDocketEntryModal' && <SealDocketEntryModal />}
-        {showModal == 'UnsealDocketEntryModal' && <UnsealDocketEntryModal />}
+        <DocketRecordModals />
       </>
     );
   },

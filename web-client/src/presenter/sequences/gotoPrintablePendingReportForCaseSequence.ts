@@ -1,6 +1,6 @@
 import { generatePrintablePendingReportAction } from '../actions/PendingItems/generatePrintablePendingReportAction';
-import { getCaseAction } from '../actions/getCaseAction';
-import { setCaseAction } from '../actions/setCaseAction';
+import { getCaseMetadataAction } from '../actions/getCaseMetadataAction';
+import { setCaseMetadataAction } from '../actions/setCaseMetadataAction';
 import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
 import { setTitleForGlobalReportFactoryAction } from '../actions/PendingItems/setTitleForGlobalReportFactoryAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
@@ -10,8 +10,8 @@ import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWeb
 export const gotoPrintablePendingReportForCaseSequence =
   startWebSocketConnectionSequenceDecorator([
     setupCurrentPageAction('Interstitial'),
-    getCaseAction,
-    setCaseAction,
+    getCaseMetadataAction,
+    setCaseMetadataAction,
     setupPropsForPrintablePendingReportAction,
     generatePrintablePendingReportAction,
     setPdfPreviewUrlSequence,

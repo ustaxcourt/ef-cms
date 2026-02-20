@@ -3,7 +3,6 @@ import { clearFormAction } from '../actions/clearFormAction';
 import { navigateToCaseDetailCaseInformationActionFactory } from '../actions/navigateToCaseDetailCaseInformationActionFactory';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setCaseDetailPageTabFrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabFrozenAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { submitOtherStatisticsAction } from '../actions/submitOtherStatisticsAction';
@@ -17,9 +16,8 @@ export const submitEditOtherStatisticsSequence = [
       success: [
         clearFormAction,
         setSaveAlertsForNavigationAction,
-        setCaseDetailPageTabFrozenAction,
         setAlertSuccessAction,
-        navigateToCaseDetailCaseInformationActionFactory(),
+        navigateToCaseDetailCaseInformationActionFactory('statistics'),
       ],
     },
   ]),

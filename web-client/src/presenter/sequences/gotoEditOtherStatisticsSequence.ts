@@ -1,6 +1,6 @@
 import { clearFormAction } from '../actions/clearFormAction';
-import { getCaseAction } from '../actions/getCaseAction';
-import { setCaseAction } from '../actions/setCaseAction';
+import { getCaseMetadataAction } from '../actions/getCaseMetadataAction';
+import { setCaseMetadataAction } from '../actions/setCaseMetadataAction';
 import { setEditOtherStatisticsFormAction } from '../actions/setEditOtherStatisticsFormAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
@@ -11,8 +11,8 @@ export const gotoEditOtherStatisticsSequence =
     setupCurrentPageAction('Interstitial'),
     stopShowValidationAction,
     clearFormAction,
-    getCaseAction,
-    setCaseAction,
+    getCaseMetadataAction,
+    setCaseMetadataAction,
     setEditOtherStatisticsFormAction,
     setupCurrentPageAction('EditOtherStatistics'),
   ]);

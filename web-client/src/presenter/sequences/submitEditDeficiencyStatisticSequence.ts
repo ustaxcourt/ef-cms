@@ -4,7 +4,6 @@ import { clearFormAction } from '../actions/clearFormAction';
 import { navigateToCaseDetailCaseInformationActionFactory } from '../actions/navigateToCaseDetailCaseInformationActionFactory';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setCaseDetailPageTabFrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabFrozenAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
@@ -33,7 +32,6 @@ export const submitEditDeficiencyStatisticSequence = [
             clearFormAction,
             clearConfirmationTextAction,
             setSaveAlertsForNavigationAction,
-            setCaseDetailPageTabFrozenAction,
             setAlertSuccessAction,
             navigateToCaseDetailCaseInformationActionFactory('statistics'),
           ],

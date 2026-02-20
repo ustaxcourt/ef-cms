@@ -10,6 +10,9 @@ export const getCaseDocketEntriesLambda = (
     getCaseDocketEntriesInteractor(
       {
         docketNumber: event.pathParameters.docketNumber,
+        eventCodes: event.queryStringParameters?.eventCodes
+          ? event.queryStringParameters.eventCodes.split(',')
+          : undefined,
         page: event.queryStringParameters?.page
           ? Number(event.queryStringParameters.page)
           : undefined,

@@ -197,7 +197,7 @@ export const CourtIssuedDocketEntry = connect(
                     <div>
                       {form.affectedDocketEntries.map((motion, i) => {
                         return (
-                          <div key={motion.arrayKey} className="tw:mb-[16px]">
+                          <div key={motion.arrayKey || i} className="tw:mb-[16px]">
                             <FormGroup
                               errorText={
                                 validationErrors[

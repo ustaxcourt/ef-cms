@@ -4,12 +4,14 @@ export const getCaseDocketEntriesInteractor = (
   applicationContext,
   {
     docketNumber,
+    eventCodes,
     page,
     pageSize,
   }: {
     docketNumber: string;
-    page: number;
-    pageSize: number;
+    eventCodes?: string[];
+    page?: number;
+    pageSize?: number;
   },
 ): Promise<{
   docketEntries: RawDocketEntry[];
@@ -21,5 +23,9 @@ export const getCaseDocketEntriesInteractor = (
     applicationContext,
     asyncSyncId: undefined,
     endpoint: `/cases/${docketNumber}/docket-entries`,
-    params: { page, pageSize },
+    params: {
+      eventCodes: eventCodes ? eventCodes.join(',') : undefined,
+      page,
+      pageSize,
+    },
   }).then(response => response.data);

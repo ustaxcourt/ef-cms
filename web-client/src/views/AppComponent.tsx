@@ -222,18 +222,61 @@ const pagesWithBlueBackground = {
   VerificationSent,
 };
 
+const AppModals = connect(
+  {
+    showHeaderAndFooter: state.currentPage,
+    showModal: state.modal.showModal,
+  },
+  function AppModals({ showHeaderAndFooter: currentPage, showModal }) {
+    const showFooterModals = currentPage !== 'AppMaintenance';
+    return (
+      <>
+        {showFooterModals && (
+          <>
+            {showModal === 'AsyncServiceUnavailableModal' && (
+              <AsyncServiceUnavailableModal />
+            )}
+            {showModal === 'TrialSessionPlanningModal' && (
+              <TrialSessionPlanningModal />
+            )}
+            {showModal === 'PrintableTrialSessionWorkingCopyModal' && (
+              <PrintableTrialSessionWorkingCopyModal />
+            )}
+            {showModal === 'CaseInventoryReportModal' && (
+              <CaseInventoryReportModal />
+            )}
+            {showModal === 'FileCompressionErrorModal' && (
+              <FileCompressionErrorModal />
+            )}
+            {showModal === 'WebSocketErrorModal' && <WebSocketErrorModal />}
+            {showModal === 'DownloadDocketEntriesModal' && (
+              <DownloadDocketEntriesModal />
+            )}
+          </>
+        )}
+        {showModal === 'WebSocketErrorModal' && <WebSocketErrorModal />}
+        {showModal === 'AppMaintenanceModal' && <AppMaintenanceModal />}
+        {showModal === 'GenericErrorModal' && <GenericErrorModal />}
+        {showModal === 'FileUploadErrorModal' && <FileUploadErrorModal />}
+        {showModal === 'VerifyNewEmailModal' && <VerifyNewEmailModal />}
+        {showModal === 'RemovePetitionerEmailModal' && (
+          <RemovePetitionerEmailModal />
+        )}
+      </>
+    );
+  },
+);
+
 let initialPageLoaded = false;
 
 export const AppComponent = connect(
   {
     currentPage: state.currentPage,
-    showModal: state.modal.showModal,
     userContactEditInProgress: state.userContactEditProgress.inProgress,
     zipInProgress: state.batchDownloads.zipInProgress,
   },
   function AppComponent({
     currentPage,
-    showModal,
     userContactEditInProgress,
     zipInProgress,
   }) {
@@ -294,35 +337,10 @@ export const AppComponent = connect(
           <>
             <Footer />
             {zipInProgress && <BatchDownloadProgress />}
-            {showModal === 'AsyncServiceUnavailableModal' && (
-              <AsyncServiceUnavailableModal />
-            )}
-            {showModal === 'TrialSessionPlanningModal' && (
-              <TrialSessionPlanningModal />
-            )}
-            {showModal === 'PrintableTrialSessionWorkingCopyModal' && (
-              <PrintableTrialSessionWorkingCopyModal />
-            )}
-            {showModal === 'CaseInventoryReportModal' && (
-              <CaseInventoryReportModal />
-            )}
-            {showModal === 'FileCompressionErrorModal' && (
-              <FileCompressionErrorModal />
-            )}
-            {showModal === 'WebSocketErrorModal' && <WebSocketErrorModal />}
-            {showModal === 'DownloadDocketEntriesModal' && (
-              <DownloadDocketEntriesModal />
-            )}
           </>
         )}
-        {showModal === 'WebSocketErrorModal' && <WebSocketErrorModal />}
-        {showModal === 'AppMaintenanceModal' && <AppMaintenanceModal />}
-        {showModal === 'GenericErrorModal' && <GenericErrorModal />}
-        {showModal === 'FileUploadErrorModal' && <FileUploadErrorModal />}
-        {showModal === 'VerifyNewEmailModal' && <VerifyNewEmailModal />}
-        {showModal === 'RemovePetitionerEmailModal' && (
-          <RemovePetitionerEmailModal />
-        )}
+
+        <AppModals />
       </>
     );
   },
