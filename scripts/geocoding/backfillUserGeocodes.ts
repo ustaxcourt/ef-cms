@@ -48,6 +48,7 @@ const getUsersMissingGeocode = async (
       sql<string>`petitioner ->> 'city'`.as('city'),
       sql<string>`petitioner ->> 'postalCode'`.as('zip'),
     ])
+    .distinct()
     .limit(limit);
   if (fromDateIso)
     query = query.where('c.receivedAt', '>=', getJsDateFromIso(fromDateIso));

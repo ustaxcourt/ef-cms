@@ -163,6 +163,7 @@ const exportGeodata = async () => {
 
   if (backfillData) await backfillUserGeocodes({ fromDateIso, toDateIso });
 
+  console.log('Generating report...');
   const userGeodata = (
     await getPetitionerGeodata({
       fromDateIso,
