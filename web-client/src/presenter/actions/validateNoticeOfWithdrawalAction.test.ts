@@ -6,12 +6,19 @@ import { calculateISODate } from '@shared/business/utilities/DateHandler';
 
 describe('validateNoticeOfWithdrawalAction', () => {
   const { CASE_STATUS_TYPES, USER_ROLES } = applicationContext.getConstants();
+
   beforeAll(() => {
     presenter.providers.path = {
       success: jest.fn(),
       error: jest.fn(),
     };
   });
+
+  beforeEach(() => {
+    presenter.providers.path.success.mockClear();
+    presenter.providers.path.error.mockClear();
+  });
+
   it('should have no errors if it is not a notice of withdrawal', () => {
     runAction(validateNoticeOfWithdrawalAction, {
       modules: { presenter },
@@ -33,10 +40,22 @@ describe('validateNoticeOfWithdrawalAction', () => {
           eventCode: 'NOTW',
         },
         user: {
-          role: USER_ROLES.petitioner,
+          role: USER_ROLES.privatePractitioner,
+          userId: 'practitioner-1',
         },
         caseDetail: {
           status: CASE_STATUS_TYPES.calendared,
+          petitioners: [{ contactId: 'petitioner-1' }],
+          privatePractitioners: [
+            {
+              userId: 'practitioner-1',
+              representing: ['petitioner-1'],
+            },
+            {
+              userId: 'practitioner-2',
+              representing: ['petitioner-1'],
+            },
+          ],
           trialDate: calculateISODate({ howMuch: 31, units: 'days' }),
         },
       },
@@ -53,17 +72,28 @@ describe('validateNoticeOfWithdrawalAction', () => {
           eventCode: 'NOTW',
         },
         user: {
-          role: USER_ROLES.petitioner,
+          role: USER_ROLES.privatePractitioner,
+          userId: 'practitioner-1',
         },
         caseDetail: {
           status: CASE_STATUS_TYPES.calendared,
+          petitioners: [{ contactId: 'petitioner-1' }],
+          privatePractitioners: [
+            {
+              userId: 'practitioner-1',
+              representing: ['petitioner-1'],
+            },
+            {
+              userId: 'practitioner-2',
+              representing: ['petitioner-1'],
+            },
+          ],
           trialDate: calculateISODate({ howMuch: 29, units: 'days' }),
-          petitioners: [],
-          irsPractitioners: [],
         },
       },
     });
 
+    expect(presenter.providers.path.success).toHaveBeenCalledTimes(0);
     expect(presenter.providers.path.error).toHaveBeenCalledWith({
       alertError: {
         message:
@@ -204,6 +234,7 @@ describe('validateNoticeOfWithdrawalAction', () => {
         },
         user: {
           role: USER_ROLES.privatePractitioner,
+          userId: 'practitioner-1',
         },
         caseDetail: {
           status: CASE_STATUS_TYPES.calendared,
@@ -230,10 +261,5 @@ describe('validateNoticeOfWithdrawalAction', () => {
         ],
       },
     });
-  });
-
-  beforeEach(() => {
-    presenter.providers.path.success.mockClear();
-    presenter.providers.path.error.mockClear();
   });
 });
