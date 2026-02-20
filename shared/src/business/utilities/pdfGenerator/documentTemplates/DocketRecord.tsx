@@ -88,7 +88,6 @@ const RecordDescription = ({ entry }) => {
                 {affectedEntry.dispositionText.map(dispositionText => (
                   <>
                     <div key={dispositionText}>--- {dispositionText}</div>
-                    {/* {index < affectedEntry.dispositionText.length - 1 && <br />} */}
                   </>
                 ))}
               </div>
