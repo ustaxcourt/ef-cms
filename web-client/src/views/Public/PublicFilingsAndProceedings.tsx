@@ -75,7 +75,6 @@ export const PublicFilingsAndProceedings = connect<
           return (
             <span key={affectedEntry.docketEntryId}>
               <br></br>
-              <span> --- </span>
               {renderDispositionLinks(
                 entry,
                 affectedEntry,
@@ -97,27 +96,28 @@ const renderDispositionLinks = (
   openDocumentDownloadSequence,
 ) => {
   return affectedEntry.dispositionLinkText.map((linkText, index) => (
-    <span
-      className="display-block"
-      key={`${affectedEntry.docketEntryIndex}-${index}`}
-    >
+    <span key={`${affectedEntry.docketEntryIndex}-${index}`}>
       {affectedEntry.showDownloadLink && (
-        <Button
-          link
-          className={classNames('text-right', 'view-pdf-link')}
-          data-testid={`related-document-viewer-link-${affectedEntry.docketEntryIndex}-${index}`}
-          aria-label={`View PDF for: ${affectedEntry.docketEntryIndex} (link ${index + 1})`}
-          onClick={() =>
-            openDocumentDownloadSequence({
-              docketEntryId: affectedEntry.docketEntryId,
-              docketNumber,
-              isPublic: true,
-              useSameTab: docketEntry.openInSameTab,
-            })
-          }
-        >
-          {linkText}
-        </Button>
+        <>
+          <span> --- </span>
+          <Button
+            link
+            className={classNames('text-right', 'view-pdf-link')}
+            data-testid={`related-document-viewer-link-${affectedEntry.docketEntryIndex}-${index}`}
+            aria-label={`View PDF for: ${affectedEntry.docketEntryIndex} (link ${index + 1})`}
+            onClick={() =>
+              openDocumentDownloadSequence({
+                docketEntryId: affectedEntry.docketEntryId,
+                docketNumber,
+                isPublic: true,
+                useSameTab: docketEntry.openInSameTab,
+              })
+            }
+          >
+            {linkText}
+          </Button>
+          {index < affectedEntry.dispositionLinkText.length - 1 && <br />}
+        </>
       )}
       {!affectedEntry.showDownloadLink && <span> {linkText} </span>}
     </span>

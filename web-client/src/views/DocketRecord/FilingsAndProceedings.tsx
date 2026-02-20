@@ -230,7 +230,6 @@ export const FilingsAndProceedings = connect<
             <span key={affectedEntry.docketEntryId}>
               <br></br>
               <span className="display-inline-block">
-                <span> --- </span>
                 {renderDispositionLinks(
                   affectedEntry,
                   caseDetail.docketNumber,
@@ -253,33 +252,34 @@ const renderDispositionLinks = (
   openDocumentDownloadSequence,
 ) => {
   return affectedEntry.dispositionLinkText.map((linkText, index) => (
-    <span
-      className="display-block"
-      key={`${affectedEntry.docketEntryIndex}-${index}`}
-    >
+    <span key={`${affectedEntry.docketEntryIndex}-${index}`}>
       {(affectedEntry.showDocumentViewerLink ||
         affectedEntry.showDownloadLink) && (
-        <Button
-          link
-          className={classNames('text-right', 'view-pdf-link')}
-          data-testid={`related-document-viewer-link-${affectedEntry.docketEntryIndex}-${index}`}
-          aria-label={`View PDF for: ${affectedEntry.docketEntryIndex}`}
-          onClick={() =>
-            affectedEntry.showDocumentViewerLink
-              ? changeTabSequence({
-                  docketRecordTab: 'documentView',
-                  viewerDocumentToDisplay: {
+        <>
+          <span> --- </span>
+          <Button
+            link
+            className={classNames('text-right', 'view-pdf-link')}
+            data-testid={`related-document-viewer-link-${affectedEntry.docketEntryIndex}-${index}`}
+            aria-label={`View PDF for: ${affectedEntry.docketEntryIndex}`}
+            onClick={() =>
+              affectedEntry.showDocumentViewerLink
+                ? changeTabSequence({
+                    docketRecordTab: 'documentView',
+                    viewerDocumentToDisplay: {
+                      docketEntryId: affectedEntry.docketEntryId,
+                    },
+                  })
+                : openDocumentDownloadSequence({
                     docketEntryId: affectedEntry.docketEntryId,
-                  },
-                })
-              : openDocumentDownloadSequence({
-                  docketEntryId: affectedEntry.docketEntryId,
-                  docketNumber,
-                })
-          }
-        >
-          {linkText}
-        </Button>
+                    docketNumber,
+                  })
+            }
+          >
+            {linkText}
+          </Button>
+          {index < affectedEntry.dispositionLinkText.length - 1 && <br />}
+        </>
       )}
       {!(
         affectedEntry.showDocumentViewerLink || affectedEntry.showDownloadLink
