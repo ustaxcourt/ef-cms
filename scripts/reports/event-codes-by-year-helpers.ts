@@ -1,5 +1,6 @@
 import { getDbReader } from '@web-api/database';
 import { getJsTimeframeForYear } from '../helpers/parseArgsAndEnvVars';
+import { sql } from 'kysely';
 
 export type EventCodeReportDocketEntry = {
   associatedJudge: string;
@@ -12,12 +13,14 @@ export type EventCodeReportDocketEntry = {
 
 export const getDocketEntriesByEventCodesAndYears = async ({
   count,
+  distinct,
   eventCodes,
   fiscal,
   onlyNonStricken,
   years,
 }: {
   count?: boolean;
+  distinct?: boolean;
   eventCodes: string[];
   fiscal: boolean;
   onlyNonStricken?: boolean;
@@ -27,7 +30,13 @@ export const getDocketEntriesByEventCodesAndYears = async ({
     await getDbReader(async reader => {
       let query = reader.selectFrom('dwDocketEntry as de');
       if (count) {
-        query = query.select(reader.fn.countAll().as('count'));
+        if (distinct) {
+          query = query.select(({ ref }) =>
+            sql<number>`count(distinct ${ref('de.docketEntryId')})`.as('count'),
+          );
+        } else {
+          query = query.select(reader.fn.countAll().as('count'));
+        }
       } else {
         query = query
           .innerJoin('dwCase as c', 'de.docketNumber', 'c.docketNumber')
@@ -39,6 +48,12 @@ export const getDocketEntriesByEventCodesAndYears = async ({
             'c.caption',
             'c.status',
           ]);
+
+        if (distinct) {
+          query = query
+            .distinctOn('de.docketEntryId')
+            .orderBy('de.servedAt', 'asc');
+        }
       }
       query = query.where('de.eventCode', 'in', eventCodes);
       if (onlyNonStricken) {
