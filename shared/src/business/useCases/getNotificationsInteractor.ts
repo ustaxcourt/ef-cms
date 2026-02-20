@@ -129,11 +129,32 @@ export const getNotificationsInteractor = async (
 };
 
 const countUniqueWorkItems = workItems => {
-  const seenWorkItems = new Set();
+  let count = 0;
+  const consolidatedGroups = new Map();
 
   for (const workItem of workItems) {
-    seenWorkItems.add(workItem.docketEntryId);
+    const multiDocketedOnLength =
+      workItem.docketEntry.multiDocketedOn?.length ?? 0;
+
+    if (multiDocketedOnLength < 2 || !workItem.leadDocketNumber) {
+      count += 1;
+    } else {
+      const key = workItem.docketEntryId;
+
+      if (!consolidatedGroups.has(key)) {
+        consolidatedGroups.set(key, []);
+      }
+
+      consolidatedGroups.get(key)!.push(workItem);
+    }
   }
 
-  return seenWorkItems.size;
+  for (const group of consolidatedGroups.values()) {
+    const hasLeadItem = group.some(
+      item => item.docketNumber === item.leadDocketNumber,
+    );
+    count += hasLeadItem ? 1 : group.length;
+  }
+
+  return count;
 };

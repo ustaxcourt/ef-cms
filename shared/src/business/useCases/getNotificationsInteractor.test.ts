@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
@@ -368,67 +369,7 @@ describe('getNotificationsInteractor', () => {
     expect(result.qcSectionInboxCount).toEqual(0);
   });
 
-  it('should return unreadMessageCount', async () => {
-    getUserInboxMessages.mockReturnValueOnce([
-      { isRead: false, messageId: 'message-id-1' },
-      { isRead: true, messageId: 'message-id-2' },
-    ]);
-
-    const result = await getNotificationsInteractor(
-      applicationContext,
-      { judgeId: '890809', section: DOCKET_SECTION },
-      mockDocketClerkUser,
-    );
-
-    expect(result.unreadMessageCount).toEqual(1);
-    expect(result.userInboxCount).toEqual(2);
-  });
-
-  it('should fetch qc section items for the provided judgeId', async () => {
-    await getNotificationsInteractor(
-      applicationContext,
-      {
-        judgeId: mockJudgeUser.userId,
-        section: DOCKET_SECTION,
-      },
-      mockDocketClerkUser,
-    );
-
-    expect(getDocumentQCInboxForSection.mock.calls[0][0]).toMatchObject({
-      judgeId: mockJudgeUser.userId,
-      section: DOCKET_SECTION,
-    });
-  });
-
-  it('should fetch qc section items without judgeId when not provided', async () => {
-    await getNotificationsInteractor(
-      applicationContext,
-      { judgeId: undefined, section: DOCKET_SECTION },
-      mockDocketClerkUser,
-    );
-
-    expect(getDocumentQCInboxForSection.mock.calls[0][0]).toMatchObject({
-      judgeId: undefined,
-      section: DOCKET_SECTION,
-    });
-  });
-
-  it('should fetch qc section items with null judgeId for ADC user', async () => {
-    getDocumentQCInboxForSection.mockReturnValueOnce([]);
-
-    await getNotificationsInteractor(
-      applicationContext,
-      { judgeId: mockJudgeUser.userId, section: DOCKET_SECTION },
-      mockAdcUser,
-    );
-
-    expect(getDocumentQCInboxForSection.mock.calls[0][0]).toMatchObject({
-      judgeId: null,
-      section: DOCKET_SECTION,
-    });
-  });
-
-  it('should fetch messages for selectedSection when specified', async () => {
+  it('should return messages for selectedSection when specified', async () => {
     const filteredWorkItem = {
       associatedJudge: 'Judge Barker',
       docketEntry: {
@@ -466,11 +407,74 @@ describe('getNotificationsInteractor', () => {
     expect(result.qcSectionInboxCount).toEqual(1);
   });
 
-  it('should count consolidated cases for qcSectionInboxCount', async () => {
+  it('should return unreadMessageCount', async () => {
+    getUserInboxMessages.mockReturnValueOnce([
+      { isRead: false, messageId: 'message-id-1' },
+      { isRead: true, messageId: 'message-id-2' },
+    ]);
+
+    const result = await getNotificationsInteractor(
+      applicationContext,
+      { judgeId: '890809', section: DOCKET_SECTION },
+      mockDocketClerkUser,
+    );
+
+    expect(result.unreadMessageCount).toEqual(1);
+    expect(result.userInboxCount).toEqual(2);
+  });
+
+  it('should return qc section items for the provided judgeId', async () => {
+    await getNotificationsInteractor(
+      applicationContext,
+      {
+        judgeId: mockJudgeUser.userId,
+        section: DOCKET_SECTION,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(getDocumentQCInboxForSection.mock.calls[0][0]).toMatchObject({
+      judgeId: mockJudgeUser.userId,
+      section: DOCKET_SECTION,
+    });
+  });
+
+  it('should return qc section items without judgeId when not provided', async () => {
+    await getNotificationsInteractor(
+      applicationContext,
+      { judgeId: undefined, section: DOCKET_SECTION },
+      mockDocketClerkUser,
+    );
+
+    expect(getDocumentQCInboxForSection.mock.calls[0][0]).toMatchObject({
+      judgeId: undefined,
+      section: DOCKET_SECTION,
+    });
+  });
+
+  it('should return qc section items with null judgeId for ADC user', async () => {
+    getDocumentQCInboxForSection.mockReturnValueOnce([]);
+
+    await getNotificationsInteractor(
+      applicationContext,
+      { judgeId: mockJudgeUser.userId, section: DOCKET_SECTION },
+      mockAdcUser,
+    );
+
+    expect(getDocumentQCInboxForSection.mock.calls[0][0]).toMatchObject({
+      judgeId: null,
+      section: DOCKET_SECTION,
+    });
+  });
+
+  it('should count one item per consolidated group with populated multiDocketedOn arrays in qcSectionInboxCount', async () => {
     getDocumentQCInboxForSection.mockReturnValueOnce([
       {
         associatedJudge: 'Judge Barker',
-        docketEntry: { isFileAttached: true },
+        docketEntry: {
+          isFileAttached: true,
+          multiDocketedOn: ['100-20', '101-20', '102-20'],
+        },
         docketEntryId: mockDocketEntryId1,
         docketNumber: '101-20',
         leadDocketNumber: '100-20',
@@ -479,7 +483,10 @@ describe('getNotificationsInteractor', () => {
       },
       {
         associatedJudge: 'Judge Barker',
-        docketEntry: { isFileAttached: true },
+        docketEntry: {
+          isFileAttached: true,
+          multiDocketedOn: ['100-20', '101-20', '102-20'],
+        },
         docketEntryId: mockDocketEntryId1,
         docketNumber: '100-20',
         leadDocketNumber: '100-20',
@@ -488,7 +495,10 @@ describe('getNotificationsInteractor', () => {
       },
       {
         associatedJudge: 'Judge Barker',
-        docketEntry: { isFileAttached: true },
+        docketEntry: {
+          isFileAttached: true,
+          multiDocketedOn: ['100-20', '101-20', '102-20'],
+        },
         docketEntryId: mockDocketEntryId1,
         docketNumber: '102-20',
         leadDocketNumber: '100-20',
@@ -517,11 +527,14 @@ describe('getNotificationsInteractor', () => {
     expect(result.qcSectionInboxCount).toEqual(2);
   });
 
-  it('should count consolidated cases for qcSectionInProgressCount', async () => {
+  it('should count one item per consolidated group with populated multiDocketedOn arrays in qcSectionInProgressCount', async () => {
     getDocumentQCInboxForSection.mockReturnValueOnce([
       {
         associatedJudge: 'Judge Barker',
-        docketEntry: { isFileAttached: true },
+        docketEntry: {
+          isFileAttached: true,
+          multiDocketedOn: ['100-20', '101-20', '102-20'],
+        },
         docketEntryId: mockDocketEntryId1,
         docketNumber: '101-20',
         leadDocketNumber: '100-20',
@@ -530,7 +543,10 @@ describe('getNotificationsInteractor', () => {
       },
       {
         associatedJudge: 'Judge Barker',
-        docketEntry: { isFileAttached: true },
+        docketEntry: {
+          isFileAttached: true,
+          multiDocketedOn: ['100-20', '101-20', '102-20'],
+        },
         docketEntryId: mockDocketEntryId1,
         docketNumber: '100-20',
         leadDocketNumber: '100-20',
@@ -539,7 +555,10 @@ describe('getNotificationsInteractor', () => {
       },
       {
         associatedJudge: 'Judge Barker',
-        docketEntry: { isFileAttached: true },
+        docketEntry: {
+          isFileAttached: true,
+          multiDocketedOn: ['100-20', '101-20', '102-20'],
+        },
         docketEntryId: mockDocketEntryId1,
         docketNumber: '102-20',
         leadDocketNumber: '100-20',
@@ -568,12 +587,15 @@ describe('getNotificationsInteractor', () => {
     expect(result.qcSectionInProgressCount).toEqual(2);
   });
 
-  it('should count consolidated cases for qcIndividualInboxCount', async () => {
+  it('should count one item per consolidated group with populated multiDocketedOn arrays in qcIndividualInboxCount', async () => {
     getDocumentQCInboxForUser.mockReturnValueOnce([
       {
         assigneeId: mockDocketClerkUser.userId,
         associatedJudge: 'Judge Barker',
-        docketEntry: { isFileAttached: true },
+        docketEntry: {
+          isFileAttached: true,
+          multiDocketedOn: ['100-20', '101-20', '102-20'],
+        },
         docketEntryId: mockDocketEntryId1,
         docketNumber: '101-20',
         leadDocketNumber: '100-20',
@@ -583,7 +605,10 @@ describe('getNotificationsInteractor', () => {
       {
         assigneeId: mockDocketClerkUser.userId,
         associatedJudge: 'Judge Barker',
-        docketEntry: { isFileAttached: true },
+        docketEntry: {
+          isFileAttached: true,
+          multiDocketedOn: ['100-20', '101-20', '102-20'],
+        },
         docketEntryId: mockDocketEntryId1,
         docketNumber: '100-20',
         leadDocketNumber: '100-20',
@@ -593,7 +618,10 @@ describe('getNotificationsInteractor', () => {
       {
         assigneeId: mockDocketClerkUser.userId,
         associatedJudge: 'Judge Barker',
-        docketEntry: { isFileAttached: true },
+        docketEntry: {
+          isFileAttached: true,
+          multiDocketedOn: ['100-20', '101-20', '102-20'],
+        },
         docketEntryId: mockDocketEntryId1,
         docketNumber: '102-20',
         leadDocketNumber: '100-20',
@@ -623,12 +651,15 @@ describe('getNotificationsInteractor', () => {
     expect(result.qcIndividualInboxCount).toEqual(2);
   });
 
-  it('should count consolidated cases for qcIndividualInProgressCount', async () => {
+  it('should count one item per consolidated group with populated multiDocketedOn arrays in qcIndividualInProgressCount', async () => {
     getDocumentQCInboxForUser.mockReturnValueOnce([
       {
         assigneeId: mockDocketClerkUser.userId,
         associatedJudge: 'Judge Barker',
-        docketEntry: { isFileAttached: true },
+        docketEntry: {
+          isFileAttached: true,
+          multiDocketedOn: ['100-20', '101-20', '102-20'],
+        },
         docketEntryId: mockDocketEntryId1,
         docketNumber: '101-20',
         leadDocketNumber: '100-20',
@@ -638,7 +669,10 @@ describe('getNotificationsInteractor', () => {
       {
         assigneeId: mockDocketClerkUser.userId,
         associatedJudge: 'Judge Barker',
-        docketEntry: { isFileAttached: true },
+        docketEntry: {
+          isFileAttached: true,
+          multiDocketedOn: ['100-20', '101-20', '102-20'],
+        },
         docketEntryId: mockDocketEntryId1,
         docketNumber: '100-20',
         leadDocketNumber: '100-20',
@@ -648,7 +682,10 @@ describe('getNotificationsInteractor', () => {
       {
         assigneeId: mockDocketClerkUser.userId,
         associatedJudge: 'Judge Barker',
-        docketEntry: { isFileAttached: true },
+        docketEntry: {
+          isFileAttached: true,
+          multiDocketedOn: ['100-20', '101-20', '102-20'],
+        },
         docketEntryId: mockDocketEntryId1,
         docketNumber: '102-20',
         leadDocketNumber: '100-20',
@@ -676,5 +713,108 @@ describe('getNotificationsInteractor', () => {
     );
 
     expect(result.qcIndividualInProgressCount).toEqual(2);
+  });
+
+  it('should count one item per case in a consolidated group with populated multiDocketedOn arrays but lead case is missing in qcSectionInboxCount', async () => {
+    getDocumentQCInboxForSection.mockReturnValueOnce([
+      {
+        associatedJudge: 'Judge Barker',
+        docketEntry: {
+          isFileAttached: true,
+          multiDocketedOn: ['100-20', '101-20', '102-20'],
+        },
+        docketEntryId: mockDocketEntryId1,
+        docketNumber: '101-20',
+        leadDocketNumber: '100-20',
+        inProgress: false,
+        section: DOCKET_SECTION,
+      },
+      {
+        associatedJudge: 'Judge Barker',
+        docketEntry: {
+          isFileAttached: true,
+          multiDocketedOn: ['100-20', '101-20', '102-20'],
+        },
+        docketEntryId: mockDocketEntryId1,
+        docketNumber: '102-20',
+        leadDocketNumber: '100-20',
+        inProgress: false,
+        section: DOCKET_SECTION,
+      },
+      {
+        associatedJudge: 'Judge Barker',
+        docketEntry: { isFileAttached: true },
+        docketEntryId: mockDocketEntryId2,
+        docketNumber: '103-20',
+        inProgress: false,
+        section: DOCKET_SECTION,
+      },
+    ]);
+
+    const result = await getNotificationsInteractor(
+      applicationContext,
+      {
+        judgeId: mockJudgeUser.userId,
+        section: DOCKET_SECTION,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(result.qcSectionInboxCount).toEqual(3);
+  });
+
+  it('should count one item per case in a legacy migrated consolidated group with empty multiDocketedOn arrays in qcIndividualInboxCount', async () => {
+    getDocumentQCInboxForUser.mockReturnValueOnce([
+      {
+        assigneeId: mockDocketClerkUser.userId,
+        associatedJudge: 'Judge Barker',
+        docketEntry: {
+          isFileAttached: true,
+          multiDocketedOn: [],
+        },
+        docketEntryId: mockDocketEntryId1,
+        docketNumber: '100-20',
+        leadDocketNumber: '100-20',
+        inProgress: false,
+        section: DOCKET_SECTION,
+      },
+      {
+        assigneeId: mockDocketClerkUser.userId,
+        associatedJudge: 'Judge Barker',
+        docketEntry: {
+          isFileAttached: true,
+          multiDocketedOn: [],
+        },
+        docketEntryId: mockDocketEntryId1,
+        docketNumber: '101-20',
+        leadDocketNumber: '100-20',
+        inProgress: false,
+        section: DOCKET_SECTION,
+      },
+      {
+        assigneeId: mockDocketClerkUser.userId,
+        associatedJudge: 'Judge Barker',
+        docketEntry: {
+          isFileAttached: true,
+          multiDocketedOn: [],
+        },
+        docketEntryId: mockDocketEntryId1,
+        docketNumber: '102-20',
+        leadDocketNumber: '100-20',
+        inProgress: false,
+        section: DOCKET_SECTION,
+      },
+    ]);
+
+    const result = await getNotificationsInteractor(
+      applicationContext,
+      {
+        judgeId: mockJudgeUser.userId,
+        section: DOCKET_SECTION,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(result.qcIndividualInboxCount).toEqual(3);
   });
 });

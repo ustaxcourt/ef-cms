@@ -12,7 +12,7 @@ export const petitionsClerkGetsSectionDocumentQCInboxCount = (
     const helper = await runCompute(workQueueHelper, {
       state: cerebralTest.getState(),
     });
-    if (cerebralTest.petitionsClerkSectionDocumentQCInboxCount !== undefined) {
+    if (cerebralTest.petitionsClerkSectionDocumentQCInboxCount) {
       expect(helper.sectionInboxCount).toEqual(
         cerebralTest.petitionsClerkSectionDocumentQCInboxCount +
           adjustExpectedCountBy,
