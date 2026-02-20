@@ -251,39 +251,38 @@ const renderDispositionLinks = (
   changeTabSequence,
   openDocumentDownloadSequence,
 ) => {
+  const showLink =
+    affectedEntry.showDocumentViewerLink || affectedEntry.showDownloadLink;
+
   return affectedEntry.dispositionLinkText.map((linkText, index) => (
     <span key={`${affectedEntry.docketEntryIndex}-${index}`}>
-      {(affectedEntry.showDocumentViewerLink ||
-        affectedEntry.showDownloadLink) && (
-        <>
-          <span> --- </span>
-          <Button
-            link
-            className={classNames('text-right', 'view-pdf-link')}
-            data-testid={`related-document-viewer-link-${affectedEntry.docketEntryIndex}-${index}`}
-            aria-label={`View PDF for: ${affectedEntry.docketEntryIndex}`}
-            onClick={() =>
-              affectedEntry.showDocumentViewerLink
-                ? changeTabSequence({
-                    docketRecordTab: 'documentView',
-                    viewerDocumentToDisplay: {
-                      docketEntryId: affectedEntry.docketEntryId,
-                    },
-                  })
-                : openDocumentDownloadSequence({
+      <span> --- </span>
+      {showLink ? (
+        <Button
+          link
+          className={classNames('text-right', 'view-pdf-link')}
+          data-testid={`related-document-viewer-link-${affectedEntry.docketEntryIndex}-${index}`}
+          aria-label={`View PDF for: ${affectedEntry.docketEntryIndex}`}
+          onClick={() =>
+            affectedEntry.showDocumentViewerLink
+              ? changeTabSequence({
+                  docketRecordTab: 'documentView',
+                  viewerDocumentToDisplay: {
                     docketEntryId: affectedEntry.docketEntryId,
-                    docketNumber,
-                  })
-            }
-          >
-            {linkText}
-          </Button>
-          {index < affectedEntry.dispositionLinkText.length - 1 && <br />}
-        </>
+                  },
+                })
+              : openDocumentDownloadSequence({
+                  docketEntryId: affectedEntry.docketEntryId,
+                  docketNumber,
+                })
+          }
+        >
+          {linkText}
+        </Button>
+      ) : (
+        <span>{linkText}</span>
       )}
-      {!(
-        affectedEntry.showDocumentViewerLink || affectedEntry.showDownloadLink
-      ) && <span> {linkText} </span>}
+      {index < affectedEntry.dispositionLinkText.length - 1 && <br />}
     </span>
   ));
 };
