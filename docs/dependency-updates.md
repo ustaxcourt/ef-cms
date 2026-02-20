@@ -287,6 +287,17 @@ error: too many arguments. Expected 0 arguments but got 2.
 - Updating minor or patch versions for fortawesome packages may include changes to icon names, breaking existing references causing tests that rely on these icons to fail as well as potentially being visually different from previous versions of the icon being updated. 
 - Updating these packages would require a greater level of granularity to identify and validate all existing icon usage and coordination with other parties to align on design changes as well as any output documentation such as screenshots before upgrading.
 
+### minimatch
+**Installed Versions: <10.0.0**
+- A high severity vulnerability was found affecting all minimatch versions below 10.2.2 outlined [here](https://github.com/advisories/GHSA-3ppc-4f35-3m26). This significantly increased the number vulnerabilities counted when running npm i  
+- minimatch is a dependency for glob which is a dependency of a handful of packages in our code base. The full list can be found by running:
+```bash
+   npm list minimatch
+```
+- Almost all packages affected that we use, are on minimatch version 9 or lower. Some of packages like eslint and eslint/js have recent major updates that may fix this issue for thier respective dependencies but some other dependencies don't readily support eslint version 10 yet and are unable to be successfully upgraded.
+- Other packages haven't seen an update in months, sometimes up to a year and discussions maybe needed to determine if alternitives are necessary to limit exposure until all affected packages can be upgraded.
+- For now leave these versions unchanged, and keep an eye on the packages listed in the command above until updates and testing are successful.
+
 ## Troubleshooting
 
 ### Incrementing the Node Cache Key Version
