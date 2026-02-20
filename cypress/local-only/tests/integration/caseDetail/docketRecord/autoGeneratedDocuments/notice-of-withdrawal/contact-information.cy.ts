@@ -91,7 +91,7 @@ describe('Notice of Withdrawal - Contact Information', () => {
       cy.get('[data-testid="contact.address1"]').type('new address1');
       cy.get('[data-testid="contact.city"]').clear();
       cy.get('[data-testid="contact.city"]').type('new city');
-      cy.get('[data-testid="modal-button-confirm"]').click();
+      cy.get('[data-testid="modal-confirm"]').click();
 
       cy.get('[data-testid^="edit-contact-"]').first().contains(additionalName);
       cy.get('[data-testid^="edit-contact-"]').first().contains('new address1');
@@ -207,7 +207,7 @@ describe('Notice of Withdrawal - Contact Information', () => {
         cy.get('[data-testid="contact.address1"]').type('new address1');
         cy.get('[data-testid="phone-number-input"]').clear();
         cy.get('[data-testid="phone-number-input"]').type('999-999-9999');
-        cy.get('[data-testid="modal-button-confirm"]').click();
+        cy.get('[data-testid="modal-confirm"]').click();
 
         cy.intercept(
           'POST',
