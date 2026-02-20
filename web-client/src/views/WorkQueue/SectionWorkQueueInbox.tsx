@@ -221,13 +221,20 @@ function SectionWorkQueueTableRow({
       )}
       <td className="message-queue-row max-width-25">
         <div className="message-document-title">
-          <a
-            className="case-link"
-            href={item.editLink}
-            data-testid={`work-item-document-link-${item.docketNumber}`}
-          >
-            {item.docketEntry.descriptionDisplay}
-          </a>
+          {item.editLink ? (
+            <a
+              className="case-link"
+              href={item.editLink}
+              data-testid={`work-item-document-link-${item.docketNumber}`}
+            >
+              {item.docketEntry.descriptionDisplay}
+            </a>
+          ) : (
+            <span>
+              {item.docketEntry.descriptionDisplay ||
+                item.docketEntry.documentType}
+            </span>
+          )}
         </div>
       </td>
       {showFiledByColumn && (

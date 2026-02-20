@@ -129,15 +129,22 @@ export const IndividualWorkQueueInbox = connect(
                   </td>
                   <td className="message-queue-row max-width-25">
                     <div className="message-document-title">
-                      <a
-                        className={
-                          item.isRead ? 'case-link' : 'link case-link-bold'
-                        }
-                        href={item.editLink}
-                      >
-                        {item.docketEntry.descriptionDisplay ||
-                          item.docketEntry.documentType}
-                      </a>
+                      {item.editLink ? (
+                        <a
+                          className={
+                            item.isRead ? 'case-link' : 'link case-link-bold'
+                          }
+                          href={item.editLink}
+                        >
+                          {item.docketEntry.descriptionDisplay ||
+                            item.docketEntry.documentType}
+                        </a>
+                      ) : (
+                        <span>
+                          {item.docketEntry.descriptionDisplay ||
+                            item.docketEntry.documentType}
+                        </span>
+                      )}
                     </div>
                   </td>
                   {workQueueHelper.showFiledByColumn && (

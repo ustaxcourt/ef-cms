@@ -7,6 +7,7 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import { isLeadCase, isMemberCase } from '@shared/business/entities/cases/Case';
 import {
+  ALLOWLIST_FEATURE_FLAGS,
   ORDER_RESPONSE_DOCUMENTS_ALLOWLIST,
   SIMULTANEOUS_DOCUMENT_EVENT_CODES,
 } from '@shared/business/entities/EntityConstants';
@@ -98,12 +99,22 @@ export const documentViewerHelper = (
       d => d.eventCode === STIPULATED_DECISION_EVENT_CODE && !d.archived,
     );
 
+  const restrictedEventCodes = get(
+    state.featureFlags[ALLOWLIST_FEATURE_FLAGS.RESTRICTED_EVENT_CODES.key],
+  );
+
+  const isRestricted =
+    restrictedEventCodes &&
+    restrictedEventCodes?.includes(formattedDocumentToDisplay.eventCode);
+
   const isDocumentUnserved = () => {
     return showNotServed || !servedLabel;
   };
 
   const showCompleteQcButton =
-    permissions.EDIT_DOCKET_ENTRY && formattedDocumentToDisplay.qcNeeded;
+    permissions.EDIT_DOCKET_ENTRY &&
+    formattedDocumentToDisplay.qcNeeded &&
+    !isRestricted;
 
   const showApplyStampButton =
     permissions.STAMP_MOTION &&

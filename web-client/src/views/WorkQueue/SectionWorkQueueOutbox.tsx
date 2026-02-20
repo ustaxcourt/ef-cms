@@ -123,16 +123,26 @@ export const SectionWorkQueueOutbox = connect(
                 </td>
                 <td className="message-queue-row">
                   <div className="message-document-title">
-                    <a
-                      className="case-link"
-                      href={workItem.leadItemForIcons.editLink}
-                    >
-                      {(workItem.leadItemForIcons.docketEntry &&
-                        workItem.leadItemForIcons.docketEntry
-                          .descriptionDisplay) ||
-                        (workItem.leadItemForIcons.docketEntry &&
-                          workItem.leadItemForIcons.docketEntry.documentType)}
-                    </a>
+                    {workItem.leadItemForIcons.editLink ? (
+                      <a
+                        className="case-link"
+                        href={workItem.leadItemForIcons.editLink}
+                      >
+                        {(workItem.leadItemForIcons.docketEntry &&
+                          workItem.leadItemForIcons.docketEntry
+                            .descriptionDisplay) ||
+                          (workItem.leadItemForIcons.docketEntry &&
+                            workItem.leadItemForIcons.docketEntry.documentType)}
+                      </a>
+                    ) : (
+                      <span>
+                        {(workItem.leadItemForIcons.docketEntry &&
+                          workItem.leadItemForIcons.docketEntry
+                            .descriptionDisplay) ||
+                          (workItem.leadItemForIcons.docketEntry &&
+                            workItem.leadItemForIcons.docketEntry.documentType)}
+                      </span>
+                    )}
                   </div>
                 </td>
                 {workQueueHelper.showFiledByColumn && (
