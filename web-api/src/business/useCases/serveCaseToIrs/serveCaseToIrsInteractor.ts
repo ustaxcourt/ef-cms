@@ -605,10 +605,8 @@ export const serveCaseToIrs = async (
         `Could not find petitioner document on case ${caseEntity.docketNumber}`,
       );
     }
-    if (petitionDocument.servedAt) {
+    if (!petitionDocument.servedAt) {
       await throwError(new Error('Petition has already been served'));
-    } else if (petitionDocument.isPendingService) {
-      await throwError(new Error('Petition is already being served'));
     }
 
     const formattedFiledDate = formatDateString(
