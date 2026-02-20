@@ -97,29 +97,28 @@ const renderDispositionLinks = (
 ) => {
   return affectedEntry.dispositionLinkText.map((linkText, index) => (
     <span key={`${affectedEntry.docketEntryIndex}-${index}`}>
-      {affectedEntry.showDownloadLink && (
-        <>
-          <span> --- </span>
-          <Button
-            link
-            className={classNames('text-right', 'view-pdf-link')}
-            data-testid={`related-document-viewer-link-${affectedEntry.docketEntryIndex}-${index}`}
-            aria-label={`View PDF for: ${affectedEntry.docketEntryIndex} (link ${index + 1})`}
-            onClick={() =>
-              openDocumentDownloadSequence({
-                docketEntryId: affectedEntry.docketEntryId,
-                docketNumber,
-                isPublic: true,
-                useSameTab: docketEntry.openInSameTab,
-              })
-            }
-          >
-            {linkText}
-          </Button>
-          {index < affectedEntry.dispositionLinkText.length - 1 && <br />}
-        </>
+      <span> --- </span>
+      {affectedEntry.showDownloadLink ? (
+        <Button
+          link
+          className={classNames('text-right', 'view-pdf-link')}
+          data-testid={`related-document-viewer-link-${affectedEntry.docketEntryIndex}-${index}`}
+          aria-label={`View PDF for: ${affectedEntry.docketEntryIndex} (link ${index + 1})`}
+          onClick={() =>
+            openDocumentDownloadSequence({
+              docketEntryId: affectedEntry.docketEntryId,
+              docketNumber,
+              isPublic: true,
+              useSameTab: docketEntry.openInSameTab,
+            })
+          }
+        >
+          {linkText}
+        </Button>
+      ) : (
+        <span>{linkText}</span>
       )}
-      {!affectedEntry.showDownloadLink && <span> {linkText} </span>}
+      {index < affectedEntry.dispositionLinkText.length - 1 && <br />}
     </span>
   ));
 };
