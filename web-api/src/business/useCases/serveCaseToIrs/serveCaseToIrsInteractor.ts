@@ -38,6 +38,7 @@ import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getUniqueId } from '@shared/sharedAppContext';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 export const addDocketEntryForPaymentStatus = ({ caseEntity, user }) => {
   if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.PAID) {
@@ -165,7 +166,10 @@ const generateNoticeOfReceipt = async ({
     CLERK_OF_THE_COURT_CONFIGURATION,
   ]);
 
-  const { name, title }: {
+  const {
+    name,
+    title,
+  }: {
     name: string;
     title: string;
   } = CLERK_OF_THE_COURT_RECORD.value.current;
@@ -578,6 +582,21 @@ export const serveCaseToIrs = async (
           }),
       );
     }
+    const user = await getUserById({ userId: authorizedUser.userId });
+
+    if (!user) {
+      throw new NotFoundError(`Could not find user ${authorizedUser.userId}`);
+    }
+    const throwError = async error => {
+      await applicationContext.getNotificationGateway().sendNotificationToUser({
+        applicationContext,
+        clientConnectionId,
+        message: { action: 'serve_document_error', error: error.message },
+        userId: user.userId,
+      });
+
+      throw error;
+    };
 
     const petitionDocument = caseEntity.getPetitionDocketEntry();
 
@@ -585,6 +604,11 @@ export const serveCaseToIrs = async (
       throw new Error(
         `Could not find petitioner document on case ${caseEntity.docketNumber}`,
       );
+    }
+    if (petitionDocument.servedAt) {
+      await throwError(new Error('Petition has already been served'));
+    } else if (petitionDocument.isPendingService) {
+      await throwError(new Error('Petition is already being served'));
     }
 
     const formattedFiledDate = formatDateString(
