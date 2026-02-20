@@ -2,6 +2,7 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { Get } from 'cerebral';
 import {
+  ALLOWLIST_FEATURE_FLAGS,
   MOTION_DISPOSITION_VERBIAGE,
   STATE_KEYS,
 } from '@shared/business/entities/EntityConstants';
@@ -67,6 +68,7 @@ export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
 export const getShowEditDocketRecordEntry = ({
   applicationContext,
   entry,
+  get,
   userPermissions,
 }) => {
   const { SYSTEM_GENERATED_DOCUMENT_TYPES, UNSERVABLE_EVENT_CODES } =
@@ -86,7 +88,21 @@ export const getShowEditDocketRecordEntry = ({
   const hasUnservableCourtIssuedDocument =
     entry && UNSERVABLE_EVENT_CODES.includes(entry.eventCode);
 
+  const eventCode = entry ? entry.eventCode : null;
+
+  const restrictedEventCodes = get(
+    state.featureFlags[ALLOWLIST_FEATURE_FLAGS.RESTRICTED_EVENT_CODES.key],
+  );
+
+  const restrictedEventCodesArray =
+    typeof restrictedEventCodes === 'string'
+      ? restrictedEventCodes.split(',').map(code => code.trim())
+      : [];
+
+  const isRestrictedEventCode = restrictedEventCodesArray.includes(eventCode);
+
   return (
+    !isRestrictedEventCode &&
     userPermissions.EDIT_DOCKET_ENTRY &&
     (hasSystemGeneratedDocument ||
       DocketEntry.isMinuteEntry(entry) ||
@@ -146,6 +162,7 @@ export const getFormattedDocketEntry = ({
   applicationContext,
   docketNumber,
   entry,
+  get,
   permissions,
   rawCase,
   user,
@@ -263,6 +280,7 @@ export const getFormattedDocketEntry = ({
   formattedResult.showEditDocketRecordEntry = getShowEditDocketRecordEntry({
     applicationContext,
     entry,
+    get,
     userPermissions: permissions,
   });
 
@@ -345,6 +363,7 @@ export const formattedDocketEntries = (
         applicationContext,
         docketNumber,
         entry,
+        get,
         permissions,
         rawCase: caseDetail,
         user,

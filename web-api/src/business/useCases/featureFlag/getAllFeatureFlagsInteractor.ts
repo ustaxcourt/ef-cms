@@ -6,7 +6,7 @@ import {
 import { isEmpty } from 'lodash';
 import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 
-type AllFeatureFlags = Partial<{ [K in FeatureFlagKeys]: any }>;
+export type AllFeatureFlags = Partial<{ [K in FeatureFlagKeys]: any }>;
 const allFeatureFlags: AllFeatureFlags = {};
 
 export const getAllFeatureFlagsInteractor = async (
