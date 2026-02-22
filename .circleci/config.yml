@@ -447,10 +447,6 @@ jobs:
           command: |
             ./scripts/env/env-for-circle.sh
       - run:
-          name: Setup Restricted Event Codes
-          command: |
-            ./scripts/postgres/featureFlags/setup-restricted-event-codes.ts ""
-      - run:
           name: 'Switch Colors'
           command: npm run switch-colors
 
