@@ -87,7 +87,7 @@ describe('getFormattedDocketEntry', () => {
           permissions: { UPDATE_CASE: false },
           user: docketClerk1User,
         }),
-      ) as unknown as { showLoadingIcon: boolean };
+      ) as ReturnType<typeof getFormattedDocketEntry>;
 
       expect(result.showLoadingIcon).toBeTruthy();
     });
@@ -104,7 +104,7 @@ describe('getFormattedDocketEntry', () => {
           permissions: { UPDATE_CASE: true },
           user: docketClerk1User,
         }),
-      ) as unknown as { showLoadingIcon: boolean };
+      ) as ReturnType<typeof getFormattedDocketEntry>;
 
       expect(result.showLoadingIcon).toBeFalsy();
     });
@@ -121,7 +121,7 @@ describe('getFormattedDocketEntry', () => {
           permissions: { UPDATE_CASE: false },
           user: docketClerk1User,
         }),
-      ) as unknown as { showLoadingIcon: boolean };
+      ) as ReturnType<typeof getFormattedDocketEntry>;
 
       expect(result.showLoadingIcon).toBeFalsy();
     });
@@ -138,7 +138,7 @@ describe('getFormattedDocketEntry', () => {
           permissions: { UPDATE_CASE: false },
           user: privatePractitionerUser,
         }),
-      ) as unknown as { showLoadingIcon: boolean };
+      ) as ReturnType<typeof getFormattedDocketEntry>;
 
       expect(result.showLoadingIcon).toBeFalsy();
     });
@@ -157,7 +157,7 @@ describe('getFormattedDocketEntry', () => {
             qcWorkItemsUntouched: false,
           },
         }),
-      ) as unknown as { isPaper: boolean };
+      ) as ReturnType<typeof getFormattedDocketEntry>;
 
       expect(result.isPaper).toBeTruthy();
     });
@@ -174,7 +174,7 @@ describe('getFormattedDocketEntry', () => {
             qcWorkItemsUntouched: false,
           },
         }),
-      ) as unknown as { isPaper: boolean };
+      ) as ReturnType<typeof getFormattedDocketEntry>;
 
       expect(result.isPaper).toBeFalsy();
     });
@@ -191,7 +191,7 @@ describe('getFormattedDocketEntry', () => {
             qcWorkItemsUntouched: false,
           },
         }),
-      ) as unknown as { isPaper: boolean };
+      ) as ReturnType<typeof getFormattedDocketEntry>;
 
       expect(result.isPaper).toBeFalsy();
     });
@@ -208,7 +208,7 @@ describe('getFormattedDocketEntry', () => {
             qcWorkItemsUntouched: true,
           },
         }),
-      ) as unknown as { isPaper: boolean };
+      ) as ReturnType<typeof getFormattedDocketEntry>;
 
       expect(result.isPaper).toBeFalsy();
     });
@@ -227,7 +227,7 @@ describe('getFormattedDocketEntry', () => {
             documentTitle: 'Answer',
           },
         }),
-      ) as unknown as { descriptionDisplay: string };
+      ) as ReturnType<typeof getFormattedDocketEntry>;
 
       expect(
         applicationContext.getUtilities().getDescriptionDisplay,
@@ -249,7 +249,7 @@ describe('getFormattedDocketEntry', () => {
             documentTitle: 'Answer',
           },
         }),
-      ) as unknown as { descriptionDisplay: string };
+      ) as ReturnType<typeof getFormattedDocketEntry>;
 
       expect(
         applicationContext.getUtilities().getDescriptionDisplay,
@@ -267,7 +267,7 @@ describe('getFormattedDocketEntry', () => {
             documentTitle: undefined,
           },
         }),
-      ) as unknown as { descriptionDisplay: string | undefined };
+      ) as ReturnType<typeof getFormattedDocketEntry>;
 
       expect(
         applicationContext.getUtilities().getDescriptionDisplay,
@@ -289,7 +289,7 @@ describe('getFormattedDocketEntry', () => {
 
           permissions: { UPDATE_CASE: false },
         }),
-      ) as unknown as { showDocumentProcessing: boolean };
+      ) as ReturnType<typeof getFormattedDocketEntry>;
 
       expect(result.showDocumentProcessing).toBeTruthy();
     });
@@ -306,7 +306,7 @@ describe('getFormattedDocketEntry', () => {
 
           permissions: { UPDATE_CASE: false },
         }),
-      ) as unknown as { showDocumentProcessing: boolean };
+      ) as ReturnType<typeof getFormattedDocketEntry>;
 
       expect(result.showDocumentProcessing).toBeFalsy();
     });
@@ -323,7 +323,7 @@ describe('getFormattedDocketEntry', () => {
 
           permissions: { UPDATE_CASE: true },
         }),
-      ) as unknown as { showDocumentProcessing: boolean };
+      ) as ReturnType<typeof getFormattedDocketEntry>;
 
       expect(result.showDocumentProcessing).toBeFalsy();
     });
@@ -338,7 +338,7 @@ describe('getFormattedDocketEntry', () => {
           get,
           entry: simpleDocketEntry,
         }),
-      ) as unknown as { showNotServed: boolean };
+      ) as ReturnType<typeof getFormattedDocketEntry>;
 
       expect(result.showNotServed).toBeTruthy();
     });
@@ -351,7 +351,7 @@ describe('getFormattedDocketEntry', () => {
           get,
           entry: simpleDocketEntry,
         }),
-      ) as unknown as { showNotServed: boolean };
+      ) as ReturnType<typeof getFormattedDocketEntry>;
 
       expect(result.showNotServed).toBeFalsy();
     });
@@ -368,7 +368,7 @@ describe('getFormattedDocketEntry', () => {
             isStatusServed: true,
           },
         }),
-      ) as unknown as { showServed: boolean };
+      ) as ReturnType<typeof getFormattedDocketEntry>;
 
       expect(result.showServed).toBeTruthy();
     });
@@ -383,7 +383,7 @@ describe('getFormattedDocketEntry', () => {
             isStatusServed: false,
           },
         }),
-      ) as unknown as { showServed: boolean };
+      ) as ReturnType<typeof getFormattedDocketEntry>;
 
       expect(result.showServed).toBeFalsy();
     });
@@ -399,7 +399,7 @@ describe('getFormattedDocketEntry', () => {
             ...servedCourtIssuedDocketEntry,
           },
         }),
-      ) as unknown as { showDocumentViewerLink: boolean };
+      ) as ReturnType<typeof getFormattedDocketEntry>;
 
       expect(result.showDocumentViewerLink).toBeTruthy();
     });
@@ -413,7 +413,7 @@ describe('getFormattedDocketEntry', () => {
             ...simpleDocketEntry,
           },
         }),
-      ) as unknown as { showDocumentViewerLink: boolean };
+      ) as ReturnType<typeof getFormattedDocketEntry>;
 
       expect(result.showDocumentViewerLink).toBeFalsy();
     });
@@ -428,7 +428,7 @@ describe('getFormattedDocketEntry', () => {
           },
           user: privatePractitionerUser,
         }),
-      ) as unknown as { showDocumentViewerLink: boolean };
+      ) as ReturnType<typeof getFormattedDocketEntry>;
 
       expect(result.showDocumentViewerLink).toBeFalsy();
     });
@@ -445,7 +445,7 @@ describe('getFormattedDocketEntry', () => {
           },
           user: privatePractitionerUser,
         }),
-      ) as unknown as { showLinkToDocument: boolean };
+      ) as ReturnType<typeof getFormattedDocketEntry>;
 
       expect(result.showLinkToDocument).toBeTruthy();
     });
@@ -460,7 +460,7 @@ describe('getFormattedDocketEntry', () => {
           },
           user: privatePractitionerUser,
         }),
-      ) as unknown as { showLinkToDocument: boolean };
+      ) as ReturnType<typeof getFormattedDocketEntry>;
 
       expect(result.showLinkToDocument).toBeFalsy();
     });
@@ -476,7 +476,7 @@ describe('getFormattedDocketEntry', () => {
           },
           user: privatePractitionerUser,
         }),
-      ) as unknown as { showLinkToDocument: boolean };
+      ) as ReturnType<typeof getFormattedDocketEntry>;
 
       expect(result.showLinkToDocument).toBeFalsy();
     });
@@ -490,7 +490,7 @@ describe('getFormattedDocketEntry', () => {
             ...servedCourtIssuedDocketEntry,
           },
         }),
-      ) as unknown as { showLinkToDocument: boolean };
+      ) as ReturnType<typeof getFormattedDocketEntry>;
 
       expect(result.showLinkToDocument).toBeFalsy();
     });
@@ -508,7 +508,7 @@ describe('getFormattedDocketEntry', () => {
           entry,
           user: privatePractitionerUser,
         }),
-      ) as unknown as { showLinkToDocument: boolean };
+      ) as ReturnType<typeof getFormattedDocketEntry>;
 
       expect(result.showLinkToDocument).toBe(true);
     });
@@ -529,7 +529,7 @@ describe('getFormattedDocketEntry', () => {
           },
           user: privatePractitionerUser,
         }),
-      ) as unknown as { showLinkToDocument: boolean };
+      ) as ReturnType<typeof getFormattedDocketEntry>;
 
       expect(result.showLinkToDocument).toBe(false);
     });
@@ -548,7 +548,7 @@ describe('getFormattedDocketEntry', () => {
             EDIT_DOCKET_ENTRY: true,
           },
         }),
-      ) as unknown as { showEditDocketRecordEntry: boolean };
+      ) as ReturnType<typeof getFormattedDocketEntry>;
 
       expect(result.showEditDocketRecordEntry).toBeTruthy();
     });
@@ -565,7 +565,7 @@ describe('getFormattedDocketEntry', () => {
             EDIT_DOCKET_ENTRY: false,
           },
         }),
-      ) as unknown as { showEditDocketRecordEntry: boolean };
+      ) as ReturnType<typeof getFormattedDocketEntry>;
 
       expect(result.showEditDocketRecordEntry).toBeFalsy();
     });
@@ -582,7 +582,7 @@ describe('getFormattedDocketEntry', () => {
             processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
           },
         }),
-      ) as unknown as { showDocumentDescriptionWithoutLink: boolean };
+      ) as ReturnType<typeof getFormattedDocketEntry>;
 
       expect(result.showDocumentDescriptionWithoutLink).toBeTruthy();
     });
@@ -597,7 +597,7 @@ describe('getFormattedDocketEntry', () => {
             processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
           },
         }),
-      ) as unknown as { showDocumentDescriptionWithoutLink: boolean };
+      ) as ReturnType<typeof getFormattedDocketEntry>;
 
       expect(result.showDocumentDescriptionWithoutLink).toBeFalsy();
     });
@@ -620,7 +620,7 @@ describe('getFormattedDocketEntry', () => {
           entry: mockSealedDocketEntry,
           user: privatePractitionerUser,
         }),
-      ) as unknown as { showDocumentDescriptionWithoutLink: boolean };
+      ) as ReturnType<typeof getFormattedDocketEntry>;
 
       expect(result.showDocumentDescriptionWithoutLink).toBe(true);
     });
@@ -647,7 +647,7 @@ describe('getFormattedDocketEntry', () => {
           },
           user: privatePractitionerUser,
         }),
-      ) as unknown as { showDocumentDescriptionWithoutLink: boolean };
+      ) as ReturnType<typeof getFormattedDocketEntry>;
 
       expect(result.showDocumentDescriptionWithoutLink).toBe(false);
     });
@@ -664,7 +664,7 @@ describe('getFormattedDocketEntry', () => {
             index: 1234,
           },
         }),
-      ) as unknown as { editDocketEntryMetaLink: string };
+      ) as ReturnType<typeof getFormattedDocketEntry>;
 
       expect(result.editDocketEntryMetaLink).toEqual(
         `/case-detail/${baseParams.docketNumber}/docket-entry/1234/edit-meta`,
@@ -680,7 +680,7 @@ describe('getFormattedDocketEntry', () => {
           get,
           entry: simpleDocketEntry,
         }),
-      ) as unknown as { toolTipText: string };
+      ) as ReturnType<typeof getFormattedDocketEntry>;
 
       expect(result.toolTipText).toEqual('No Document View');
     });
@@ -695,7 +695,7 @@ describe('getFormattedDocketEntry', () => {
             isFileAttached: true,
           },
         }),
-      ) as unknown as { toolTipText: string | undefined };
+      ) as ReturnType<typeof getFormattedDocketEntry>;
 
       expect(result.toolTipText).toBeUndefined();
     });
