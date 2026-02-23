@@ -43,10 +43,10 @@ describe('submitRespondentCaseAssociationRequestAction', () => {
     });
   });
 
-  it('should return the updated case as props', async () => {
+  it('should successfully submit case association request for an IRS practitioner', async () => {
     applicationContext
       .getUseCases()
-      .submitCaseAssociationRequestInteractor.mockResolvedValue(MOCK_CASE);
+      .submitCaseAssociationRequestInteractor.mockResolvedValue(undefined);
 
     const { output } = await runAction(
       submitRespondentCaseAssociationRequestAction,
@@ -61,6 +61,6 @@ describe('submitRespondentCaseAssociationRequestAction', () => {
       },
     );
 
-    expect(output).toEqual(expect.objectContaining(MOCK_CASE));
+    expect(output).toBeUndefined();
   });
 });

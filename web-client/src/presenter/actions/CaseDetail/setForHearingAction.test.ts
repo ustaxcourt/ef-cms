@@ -38,7 +38,6 @@ describe('setForHearingAction', () => {
       trialSessionId: '234',
     });
     expect(result.output).toHaveProperty('alertSuccess');
-    expect(result.output.caseDetail).toEqual(MOCK_CASE);
     expect(result.output.docketNumber).toEqual('123-45');
     expect(result.output.trialSessionId).toEqual('234');
   });

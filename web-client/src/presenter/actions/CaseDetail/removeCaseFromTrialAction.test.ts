@@ -96,10 +96,7 @@ describe('removeCaseFromTrialAction', () => {
       alertSuccess: {
         message: 'Case removed from trial.',
       },
-      caseDetail: {
-        docketNumber: mockDocketNumber,
-        trialSessionId: mockTrialSessionId,
-      },
+      docketNumber: mockDocketNumber,
     });
   });
 

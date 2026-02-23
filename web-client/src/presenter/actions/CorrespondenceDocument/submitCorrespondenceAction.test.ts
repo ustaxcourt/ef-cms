@@ -48,10 +48,6 @@ describe('submitCorrespondenceAction', () => {
       applicationContext.getUseCases().fileCorrespondenceDocumentInteractor,
     ).toHaveBeenCalled();
     expect(result.output).toMatchObject({
-      caseDetail: {
-        correspondence: [],
-        docketNumber: '101-20',
-      },
       correspondenceId: 'correspondence-document-id-123',
       docketNumber: '101-20',
     });
@@ -83,10 +79,6 @@ describe('submitCorrespondenceAction', () => {
       applicationContext.getUseCases().updateCorrespondenceDocumentInteractor,
     ).toHaveBeenCalled();
     expect(result.output).toMatchObject({
-      caseDetail: {
-        correspondence: [],
-        docketNumber: '101-20',
-      },
       correspondenceId: 'correspondence-document-id-123',
       docketNumber: '101-20',
     });

@@ -59,7 +59,6 @@ describe('blockCaseFromTrialAction', () => {
       },
     });
 
-    expect(output.caseDetail).toEqual(MOCK_CASE);
     expect(output.alertSuccess).toEqual({
       message: 'Case blocked from being set for trial.',
     });
