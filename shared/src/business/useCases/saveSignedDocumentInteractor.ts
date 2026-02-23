@@ -81,6 +81,7 @@ export const saveSignedDocumentInteractor = async (
   if (!caseRecord) {
     throw new NotFoundError(`Case ${docketNumber} not found`);
   }
+  const oldCaseSnapshot = structuredClone(caseRecord);
 
   const caseEntity = new Case(caseRecord, { authorizedUser });
   const originalDocketEntryEntity = caseEntity.getDocketEntryById({
@@ -166,6 +167,7 @@ export const saveSignedDocumentInteractor = async (
   await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
+    oldCase: oldCaseSnapshot,
   });
 
   return {

@@ -28,6 +28,8 @@ export const deleteCounselFromCase = async (
     docketNumber,
   });
 
+  const oldCaseSnapshot = structuredClone(caseToUpdate);
+
   const userToDelete = await getUserById({
     userId,
   });
@@ -53,6 +55,7 @@ export const deleteCounselFromCase = async (
   await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity.validate().toRawObject(),
+    oldCase: oldCaseSnapshot,
   });
 };
 

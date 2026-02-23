@@ -29,6 +29,7 @@ export const sealCase = async (
   const rawCaseToUpdate = await getCaseByDocketNumber({
     docketNumber,
   });
+  const oldCaseSnapshot = structuredClone(rawCaseToUpdate);
 
   const caseToUpdate = new Case(rawCaseToUpdate, { authorizedUser });
 
@@ -37,6 +38,7 @@ export const sealCase = async (
   await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate,
+    oldCase: oldCaseSnapshot,
   });
 
   await applicationContext

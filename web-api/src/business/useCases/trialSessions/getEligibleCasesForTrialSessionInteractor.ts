@@ -39,10 +39,14 @@ export const getEligibleCasesForTrialSessionInteractor = async (
 
   // Some manually added cases are considered calendared even when the
   // trial session itself is not considered calendared (see issue #3254).
-  let calendaredCases: Omit<RawCase, 'consolidatedCases'>[] = [];
+  let calendaredCases: Omit<
+    RawCase,
+    'consolidatedCases' | 'correspondence' | 'hearings'
+  >[] = [];
   if (trialSession.isCalendared === false && trialSession.caseOrder) {
     calendaredCases = await getCalendaredCasesForTrialSession({
       trialSessionId,
+      excludeFields: ['correspondence', 'hearings'],
     });
   }
 
@@ -58,7 +62,7 @@ export const getEligibleCasesForTrialSessionInteractor = async (
     });
 
   const eligibleCasesWithIsAgedCase = getEligibleCasesWithIsAgedCase([
-    ...calendaredCases,
+    ...(calendaredCases as Omit<RawCase, 'consolidatedCases'>[]),
     ...eligibleCases,
   ]);
 

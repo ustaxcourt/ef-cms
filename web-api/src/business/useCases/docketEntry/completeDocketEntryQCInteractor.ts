@@ -97,6 +97,8 @@ const completeDocketEntryQC = async (
     );
   }
 
+  const oldCaseSnapshot = structuredClone(caseToUpdate);
+
   let caseEntity = new Case(caseToUpdate, { authorizedUser });
   const currentDocketEntry = caseEntity.getDocketEntryById({
     docketEntryId,
@@ -370,6 +372,7 @@ const completeDocketEntryQC = async (
   await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
+    oldCase: oldCaseSnapshot,
   });
 
   if (isNewCoverSheetNeeded) {

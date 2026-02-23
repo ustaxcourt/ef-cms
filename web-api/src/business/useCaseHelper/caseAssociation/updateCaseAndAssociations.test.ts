@@ -109,6 +109,44 @@ describe('updateCaseAndAssociations', () => {
     expect(upsertCases.mock.calls[0][0]).toMatchObject([caseToUpdate]);
   });
 
+  it('does not call getCaseByDocketNumber when oldCase is provided', async () => {
+    getCaseByDocketNumber.mockClear();
+
+    await updateCaseAndAssociations({
+      authorizedUser: mockDocketClerkUser,
+      caseToUpdate: validMockCase,
+      oldCase: validMockCase,
+    });
+
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
+    expect(upsertCases).toHaveBeenCalled();
+  });
+
+  it('still calls getCaseByDocketNumber when oldCase is omitted', async () => {
+    getCaseByDocketNumber.mockClear();
+    getCaseByDocketNumber.mockResolvedValue(validMockCase);
+
+    await updateCaseAndAssociations({
+      authorizedUser: mockDocketClerkUser,
+      caseToUpdate: validMockCase,
+    });
+
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
+  });
+
+  it('does not mutate the provided oldCase', async () => {
+    const oldCaseSnapshot = structuredClone(validMockCase);
+    const oldCaseBefore = JSON.stringify(oldCaseSnapshot);
+
+    await updateCaseAndAssociations({
+      authorizedUser: mockDocketClerkUser,
+      caseToUpdate: validMockCase,
+      oldCase: oldCaseSnapshot,
+    });
+
+    expect(JSON.stringify(oldCaseSnapshot)).toBe(oldCaseBefore);
+  });
+
   it('always sends valid entities to the updateCase persistence method', async () => {
     await updateCaseAndAssociations({
       authorizedUser: mockDocketClerkUser,

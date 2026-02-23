@@ -47,6 +47,13 @@ describe('determineEntitiesToLock', () => {
     await determineEntitiesToLock(applicationContext, mockParams);
     expect(getCalendaredCasesForTrialSession).toHaveBeenCalledWith({
       trialSessionId,
+      excludeFields: [
+        'docketEntries',
+        'privatePractitioners',
+        'irsPractitioners',
+        'correspondence',
+        'hearings',
+      ],
     });
   });
 

@@ -91,6 +91,7 @@ describe('saveMinuteSheetToDraftsInteractor', () => {
     expect(mockUpdateCaseAndAssociations).toHaveBeenCalledWith({
       authorizedUser: mockTrialClerkUser,
       caseToUpdate: expect.any(Case),
+      oldCase: expect.anything(),
     });
   });
 });

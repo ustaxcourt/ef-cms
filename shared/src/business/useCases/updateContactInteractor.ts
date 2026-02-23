@@ -74,6 +74,8 @@ export const updateContact = async (
     throw new NotFoundError(`Case ${docketNumber} was not found.`);
   }
 
+  const oldCaseSnapshot = structuredClone(caseToUpdate);
+
   let caseEntity = new Case(
     {
       ...caseToUpdate,
@@ -242,6 +244,7 @@ export const updateContact = async (
     await updateCaseAndAssociations({
       authorizedUser,
       caseToUpdate: caseEntity,
+      oldCase: oldCaseSnapshot,
     });
   }
 

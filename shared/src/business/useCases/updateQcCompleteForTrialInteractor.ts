@@ -44,6 +44,7 @@ export const updateQcCompleteForTrial = async (
   const oldCase = await getCaseByDocketNumber({
     docketNumber,
   });
+  const oldCaseSnapshot = structuredClone(oldCase);
 
   const newCase = new Case(oldCase, { authorizedUser });
 
@@ -52,6 +53,7 @@ export const updateQcCompleteForTrial = async (
   const updatedCase = await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: newCase,
+    oldCase: oldCaseSnapshot,
   });
 
   return new CaseDTO(

@@ -12,6 +12,7 @@ import { get } from 'lodash';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { createOldCaseSnapshotMap } from '@web-api/business/useCaseHelper/caseAssociation/createOldCaseSnapshotMap';
 import { createTrialSessionWorkingCopy } from '@web-api/persistence/postgres/trialSessions/createTrialSessionWorkingCopy';
 
 type GetCasesInTrialSessionParams = {
@@ -27,6 +28,7 @@ export async function getCasesInTrialSession({
 }: GetCasesInTrialSessionParams): Promise<{
   calendaredCaseEntities: Case[];
   casesThatShouldReceiveNotices: Case[];
+  rawCases: Omit<RawCase, 'consolidatedCases'>[];
 }> {
   const docketNumbers = trialSession
     .caseOrder!.filter(c => !c.removedFromTrial)
@@ -43,7 +45,7 @@ export async function getCasesInTrialSession({
         includeHearings || aCase.trialSessionId === trialSession.trialSessionId,
     );
 
-  return { calendaredCaseEntities, casesThatShouldReceiveNotices };
+  return { calendaredCaseEntities, casesThatShouldReceiveNotices, rawCases };
 }
 
 type UpdateCasesAndSetNoticeOfChangeParams = {
@@ -67,11 +69,14 @@ export const updateCasesAndSetNoticeOfChange = async ({
   shouldSetNoticeOfTrialSessionLocationChange,
   updatedTrialSessionEntity,
 }: UpdateCasesAndSetNoticeOfChangeParams): Promise<PDFDocumentType> => {
-  const { casesThatShouldReceiveNotices } = await getCasesInTrialSession({
-    trialSession: currentTrialSession,
-    includeHearings: true,
-    authorizedUser,
-  });
+  const { casesThatShouldReceiveNotices, rawCases } =
+    await getCasesInTrialSession({
+      trialSession: currentTrialSession,
+      includeHearings: true,
+      authorizedUser,
+    });
+
+  const oldCaseSnapshots = createOldCaseSnapshotMap(rawCases);
 
   const TASKS = casesThatShouldReceiveNotices.map(async (caseEntity: Case) => {
     const { PDFDocument } = await applicationContext.getPdfLib();
@@ -144,6 +149,7 @@ export const updateCasesAndSetNoticeOfChange = async ({
     await updateCaseAndAssociations({
       authorizedUser,
       caseToUpdate: caseEntity,
+      oldCase: oldCaseSnapshots.get(caseEntity.docketNumber),
     });
 
     return newPdfDoc;

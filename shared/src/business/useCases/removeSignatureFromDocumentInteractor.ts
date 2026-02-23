@@ -21,6 +21,7 @@ export const removeSignatureFromDocumentInteractor = async (
   const caseRecord = await getCaseByDocketNumber({
     docketNumber,
   });
+  const oldCaseSnapshot = structuredClone(caseRecord);
   const caseEntity = new Case(caseRecord, {
     authorizedUser,
   });
@@ -53,6 +54,7 @@ export const removeSignatureFromDocumentInteractor = async (
   await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
+    oldCase: oldCaseSnapshot,
   });
 
   return { docketNumber };

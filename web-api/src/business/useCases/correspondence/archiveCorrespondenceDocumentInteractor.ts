@@ -33,6 +33,8 @@ export const archiveCorrespondenceDocument = async (
     docketNumber,
   });
 
+  const oldCaseSnapshot = structuredClone(caseToUpdate);
+
   const caseEntity = new Case(caseToUpdate, { authorizedUser });
   const correspondenceToArchiveEntity = caseEntity.correspondence.find(
     c => c.correspondenceId === correspondenceId,
@@ -53,6 +55,7 @@ export const archiveCorrespondenceDocument = async (
   await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
+    oldCase: oldCaseSnapshot,
   });
 
   return { docketNumber };

@@ -122,6 +122,16 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(
       applicationContext.getUtilities().copyPagesFromPdf,
     ).not.toHaveBeenCalled();
+    expect(getCalendaredCasesForTrialSession).toHaveBeenCalledWith({
+      trialSessionId,
+      excludeFields: [
+        'docketEntries',
+        'privatePractitioners',
+        'irsPractitioners',
+        'correspondence',
+        'hearings',
+      ],
+    });
   });
 
   it('should NOT attempt to start a trial session calendering event if its already processing or completed', async () => {

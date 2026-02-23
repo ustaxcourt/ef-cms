@@ -38,6 +38,8 @@ export const updateCourtIssuedOrder = async (
     docketNumber,
   });
 
+  const oldCaseSnapshot = structuredClone(caseToUpdate);
+
   const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
   const currentDocument = caseEntity.getDocketEntryById({
@@ -130,6 +132,7 @@ export const updateCourtIssuedOrder = async (
   await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
+    oldCase: oldCaseSnapshot,
   });
 
   return { docketNumber: caseEntity.docketNumber };

@@ -81,6 +81,7 @@ export const addConsolidatedCase = async (
 
   const updateCasePromises: Promise<RawCase>[] = [];
   casesToUpdate.forEach(caseInCasesToUpdate => {
+    const oldCaseSnapshot = structuredClone(caseInCasesToUpdate);
     const caseEntity = new Case(caseInCasesToUpdate, {
       authorizedUser,
     });
@@ -90,6 +91,7 @@ export const addConsolidatedCase = async (
       updateCaseAndAssociations({
         authorizedUser,
         caseToUpdate: caseEntity,
+        oldCase: oldCaseSnapshot,
       }),
     );
   });

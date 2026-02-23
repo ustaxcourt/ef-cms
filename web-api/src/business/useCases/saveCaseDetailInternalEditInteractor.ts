@@ -52,6 +52,8 @@ export const saveCaseDetailInternalEdit = async (
     docketNumber,
   });
 
+  const oldCaseSnapshot = structuredClone(caseRecord);
+
   const originalCaseEntity = new Case(caseRecord, { authorizedUser });
 
   const editableFields = {
@@ -181,6 +183,7 @@ export const saveCaseDetailInternalEdit = async (
   await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
+    oldCase: oldCaseSnapshot,
   });
 
   return { docketNumber };

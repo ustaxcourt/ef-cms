@@ -60,6 +60,7 @@ export const addDraftStampOrderDocketEntry = async (
   const caseRecord = await getCaseByDocketNumber({
     docketNumber,
   });
+  const oldCaseSnapshot = structuredClone(caseRecord);
   const caseEntity = new Case(caseRecord, { authorizedUser });
   const originalDocketEntry = caseEntity.docketEntries.find(
     docketEntry => docketEntry.docketEntryId === originalDocketEntryId,
@@ -134,6 +135,7 @@ export const addDraftStampOrderDocketEntry = async (
   await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
+    oldCase: oldCaseSnapshot,
   });
 
   return stampedDocketEntryEntity;

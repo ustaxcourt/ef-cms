@@ -7,6 +7,7 @@ import { uniqBy } from 'lodash';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { createOldCaseSnapshotMap } from '@web-api/business/useCaseHelper/caseAssociation/createOldCaseSnapshotMap';
 import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
 
 export const checkForReadyForTrialCasesInteractor = async (
@@ -21,12 +22,13 @@ export const checkForReadyForTrialCasesInteractor = async (
     caseRecord => caseRecord.docketNumber,
   );
 
-  const updateForTrial = async entity => {
+  const updateForTrial = async (entity, oldCase?) => {
     // assuming we want these done serially; if first fails, promise is rejected and error thrown
     const caseEntity = entity.validate();
     await updateCaseAndAssociations({
       authorizedUser: undefined,
       caseToUpdate: caseEntity,
+      oldCase,
     });
   };
 
@@ -53,7 +55,7 @@ export const checkForReadyForTrialCasesInteractor = async (
           // @ts-ignore this can get updated in caseEntity.checkForReadyForTrial
           caseEntity.status === CASE_STATUS_TYPES.generalDocketReadyForTrial
         ) {
-          await updateForTrial(caseEntity);
+          await updateForTrial(caseEntity, oldCaseSnapshots.get(docketNumber));
         }
       }
     }
@@ -64,6 +66,7 @@ export const checkForReadyForTrialCasesInteractor = async (
   const casesToUpdate = await getCasesByDocketNumbers({
     docketNumbers: caseCatalogDocketNumbers,
   });
+  const oldCaseSnapshots = createOldCaseSnapshotMap(casesToUpdate);
 
   await settlePromises(casesToUpdate.map(aCase => checkReadyForTrial(aCase)));
 

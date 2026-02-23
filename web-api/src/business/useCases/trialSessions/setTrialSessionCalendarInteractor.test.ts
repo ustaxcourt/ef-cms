@@ -156,6 +156,10 @@ describe('setTrialSessionCalendarInteractor', () => {
         }),
       ]),
     );
+    expect(getCalendaredCasesForTrialSession).toHaveBeenCalledWith({
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      excludeFields: ['correspondence', 'hearings'],
+    });
   });
 
   it('should set a trial session to "calendared" and remove cases from the trial session that have not been QCed', async () => {

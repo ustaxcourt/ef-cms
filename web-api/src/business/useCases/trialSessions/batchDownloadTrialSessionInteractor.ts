@@ -82,6 +82,12 @@ export const batchDownloadTrialSessionInteractorHelper = async (
 
   const allSessionCases = await getCalendaredCasesForTrialSession({
     trialSessionId,
+    excludeFields: [
+      'privatePractitioners',
+      'irsPractitioners',
+      'correspondence',
+      'hearings',
+    ],
   });
 
   const batchableSessionCases = allSessionCases

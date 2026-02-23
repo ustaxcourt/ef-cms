@@ -121,6 +121,10 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
       mockEligibleCaseWithPractitioners,
       mockEligibleCase,
     ]);
+    expect(getCalendaredCasesForTrialSession).toHaveBeenCalledWith({
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      excludeFields: ['correspondence', 'hearings'],
+    });
   });
 
   it('should throw error if trial session is not found', async () => {

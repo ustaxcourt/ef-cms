@@ -45,6 +45,11 @@ describe('getCalendaredCasesForTrialSessionInteractor', () => {
         mockDocketClerkUser,
       ),
     ).resolves.not.toThrow();
+
+    expect(getCalendaredCasesForTrialSession).toHaveBeenCalledWith({
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      excludeFields: ['correspondence', 'hearings'],
+    });
   });
 
   it('should return a PMTServedPartiesCode when a case contains an unstricken PMT', async () => {
@@ -65,7 +70,7 @@ describe('getCalendaredCasesForTrialSessionInteractor', () => {
               isStricken: true,
             },
           ],
-        },
+        } as any,
       ]);
 
     const cases = await getCalendaredCasesForTrialSessionInteractor(

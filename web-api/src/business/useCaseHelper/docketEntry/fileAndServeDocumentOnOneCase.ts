@@ -19,12 +19,14 @@ export const fileAndServeDocumentOnOneCase = async ({
   subjectCaseDocketNumber,
   user,
   caseHasDeadline = undefined,
+  oldCase,
 }: {
   caseEntity: any;
   docketEntryEntity: DocketEntry;
   subjectCaseDocketNumber: any;
   user: any;
   caseHasDeadline?: boolean;
+  oldCase?: Omit<RawCase, 'consolidatedCases'> | RawCase;
 }) => {
   const servedParties = aggregatePartiesForService(caseEntity);
 
@@ -83,6 +85,7 @@ export const fileAndServeDocumentOnOneCase = async ({
   const validRawCaseEntity = await updateCaseAndAssociations({
     authorizedUser: user,
     caseToUpdate: caseEntity,
+    oldCase,
   });
 
   return new Case(validRawCaseEntity, {

@@ -30,6 +30,7 @@ import {
 } from '@web-api/persistence/postgres/utils/mutex';
 import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { createOldCaseSnapshotMap } from '@web-api/business/useCaseHelper/caseAssociation/createOldCaseSnapshotMap';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { updateTrialSession } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
 
@@ -110,6 +111,7 @@ export const serveThirtyDayNotice = async (
     .filter(aCase => !aCase.removedFromTrial)
     .map(aCase => aCase.docketNumber);
   const casesToUpdate = await getCasesByDocketNumbers({ docketNumbers });
+  const oldCaseSnapshots = createOldCaseSnapshotMap(casesToUpdate);
 
   const generateNottForCases = casesToUpdate.map(async rawCase => {
     const caseEntity = new Case(rawCase, { authorizedUser });
@@ -224,6 +226,7 @@ export const serveThirtyDayNotice = async (
       await updateCaseAndAssociations({
         authorizedUser,
         caseToUpdate: caseEntity,
+        oldCase: oldCaseSnapshots.get(caseEntity.docketNumber),
       });
 
       pdfsAppended++;

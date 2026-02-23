@@ -38,10 +38,12 @@ export const updateCaseAndAssociations = async ({
   authorizedUser,
   caseToUpdate,
   includeCorrespondence = true,
+  oldCase,
 }: {
   authorizedUser: UnknownAuthUser;
   caseToUpdate: any;
   includeCorrespondence?: boolean;
+  oldCase?: Omit<RawCase, 'consolidatedCases'> | RawCase;
 }): Promise<RawCase> => {
   // Validate the old (pre-update) and new (post-update) case entity
   const newCaseEntity: Case = caseToUpdate.validate
@@ -50,10 +52,12 @@ export const updateCaseAndAssociations = async ({
         authorizedUser,
       });
 
-  const oldCaseEntity = await getCaseByDocketNumber({
-    docketNumber: caseToUpdate.docketNumber,
-    includeConsolidatedCases: false,
-  });
+  const oldCaseEntity =
+    oldCase ??
+    (await getCaseByDocketNumber({
+      docketNumber: caseToUpdate.docketNumber,
+      includeConsolidatedCases: false,
+    }));
 
   const validNewRawCaseEntity = newCaseEntity.validate().toRawObject();
 

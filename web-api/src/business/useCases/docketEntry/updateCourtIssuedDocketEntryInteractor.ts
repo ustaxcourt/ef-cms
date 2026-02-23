@@ -45,6 +45,8 @@ export const updateCourtIssuedDocketEntry = async (
     );
   }
 
+  const oldCaseSnapshot = structuredClone(caseToUpdate);
+
   const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
   const currentDocketEntry = caseEntity.getDocketEntryById({
@@ -101,6 +103,7 @@ export const updateCourtIssuedDocketEntry = async (
     updateCaseAndAssociations({
       authorizedUser,
       caseToUpdate: caseEntity,
+      oldCase: oldCaseSnapshot,
     }),
   ];
 

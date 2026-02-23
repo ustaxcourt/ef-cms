@@ -26,6 +26,7 @@ import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { createOldCaseSnapshotMap } from '@web-api/business/useCaseHelper/caseAssociation/createOldCaseSnapshotMap';
 import {
   asyncHandleLockError,
   withLocking,
@@ -70,7 +71,7 @@ export const editPaperFiling = async (
   const restrictedEventCodes =
     featureFlags[ALLOWLIST_FEATURE_FLAGS.RESTRICTED_EVENT_CODES.key];
 
-  const { caseEntity, docketEntryEntity } = await getDocketEntryToEdit({
+  const { caseEntity, docketEntryEntity, oldCaseSnapshot } = await getDocketEntryToEdit({
     authorizedUser,
     docketEntryId: request.docketEntryId,
     docketNumber: request.documentMetadata.docketNumber,
@@ -101,6 +102,7 @@ export const editPaperFiling = async (
     authorizedUser,
     caseEntity,
     docketEntryEntity,
+    oldCaseSnapshot,
     request,
   });
 };
@@ -132,12 +134,14 @@ const saveForLaterStrategy = async ({
   authorizedUser,
   caseEntity,
   docketEntryEntity,
+  oldCaseSnapshot,
   request,
 }: {
   applicationContext: ServerApplicationContext;
   request: IEditPaperFilingRequest;
   caseEntity: Case;
   docketEntryEntity: DocketEntry;
+  oldCaseSnapshot: Omit<RawCase, 'consolidatedCases'>;
   authorizedUser: AuthUser;
 }) => {
   const user = await getUserById({ userId: authorizedUser.userId });
@@ -166,6 +170,7 @@ const saveForLaterStrategy = async ({
   await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
+    oldCase: oldCaseSnapshot,
   });
 
   const { clientConnectionId, docketEntryId } = request;
@@ -187,11 +192,13 @@ const multiDocketServeStrategy = async ({
   authorizedUser,
   caseEntity,
   docketEntryEntity,
+  oldCaseSnapshot,
   request,
 }: {
   applicationContext: ServerApplicationContext;
   caseEntity: Case;
   docketEntryEntity: DocketEntry;
+  oldCaseSnapshot: Omit<RawCase, 'consolidatedCases'>;
   request: IEditPaperFilingRequest;
   authorizedUser: AuthUser;
 }) => {
@@ -202,6 +209,8 @@ const multiDocketServeStrategy = async ({
   const consolidatedCaseRecords = await getCasesByDocketNumbers({
     docketNumbers: request.consolidatedGroupDocketNumbers!,
   });
+  const oldCaseSnapshots = createOldCaseSnapshotMap(consolidatedCaseRecords);
+  oldCaseSnapshots.set(caseEntity.docketNumber, oldCaseSnapshot);
 
   const consolidatedCaseEntities = consolidatedCaseRecords.map(
     consolidatedCase => new Case(consolidatedCase, { authorizedUser }),
@@ -222,6 +231,7 @@ const multiDocketServeStrategy = async ({
     docketEntryEntity,
     documentMetadata: request.documentMetadata,
     message: DOCUMENT_SERVED_MESSAGES.SELECTED_CASES,
+    oldCaseSnapshots,
     subjectCaseEntity: caseEntity,
     userId: authorizedUser.userId,
   });
@@ -232,11 +242,13 @@ const singleDocketServeStrategy = async ({
   authorizedUser,
   caseEntity,
   docketEntryEntity,
+  oldCaseSnapshot,
   request,
 }: {
   applicationContext: ServerApplicationContext;
   caseEntity: Case;
   docketEntryEntity: DocketEntry;
+  oldCaseSnapshot: Omit<RawCase, 'consolidatedCases'>;
   request: IEditPaperFilingRequest;
   authorizedUser: AuthUser;
 }) => {
@@ -245,6 +257,8 @@ const singleDocketServeStrategy = async ({
   });
 
   const caseEntitiesToFileOn = [caseEntity];
+  const oldCaseSnapshots = new Map<string, Omit<RawCase, 'consolidatedCases'>>();
+  oldCaseSnapshots.set(caseEntity.docketNumber, oldCaseSnapshot);
 
   await serveDocketEntry({
     applicationContext,
@@ -254,6 +268,7 @@ const singleDocketServeStrategy = async ({
     docketEntryEntity,
     documentMetadata: request.documentMetadata,
     message: DOCUMENT_SERVED_MESSAGES.GENERIC,
+    oldCaseSnapshots,
     subjectCaseEntity: caseEntity,
     userId: authorizedUser.userId,
   });
@@ -268,6 +283,7 @@ const serveDocketEntry = async ({
   docketEntryEntity,
   documentMetadata,
   message,
+  oldCaseSnapshots,
   subjectCaseEntity,
   userId,
 }: {
@@ -279,6 +295,7 @@ const serveDocketEntry = async ({
   userId: string;
   subjectCaseEntity: Case;
   message: string;
+  oldCaseSnapshots: Map<string, Omit<RawCase, 'consolidatedCases'>>;
   authorizedUser: AuthUser;
 }) => {
   await updateDocketEntryPendingServiceStatus({
@@ -314,6 +331,7 @@ const serveDocketEntry = async ({
           }),
           subjectCaseDocketNumber: subjectCaseEntity.docketNumber,
           user,
+          oldCase: oldCaseSnapshots.get(aCase.docketNumber),
         }),
       ),
     );
@@ -516,11 +534,13 @@ const getDocketEntryToEdit = async ({
 }): Promise<{
   caseEntity: Case;
   docketEntryEntity: DocketEntry;
+  oldCaseSnapshot: Omit<RawCase, 'consolidatedCases'>;
 }> => {
   const caseToUpdate = await getCaseByDocketNumber({
     docketNumber,
   });
 
+  const oldCaseSnapshot = structuredClone(caseToUpdate);
   const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
   const docketEntryEntity = caseEntity.getDocketEntryById({ docketEntryId });
@@ -534,6 +554,7 @@ const getDocketEntryToEdit = async ({
   return {
     caseEntity,
     docketEntryEntity,
+    oldCaseSnapshot,
   };
 };
 

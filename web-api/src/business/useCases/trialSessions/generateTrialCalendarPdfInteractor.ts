@@ -21,6 +21,7 @@ export const generateTrialCalendarPdfInteractor = async (
 
   const calendaredCases = await getCalendaredCasesForTrialSession({
       trialSessionId,
+      excludeFields: ['docketEntries', 'correspondence', 'hearings'],
     });
 
   const formattedOpenCases = formatCases({

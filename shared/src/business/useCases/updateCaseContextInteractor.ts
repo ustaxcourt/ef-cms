@@ -47,6 +47,7 @@ const updateCaseContext = async (
   const oldCase = await getCaseByDocketNumber({
     docketNumber,
   });
+  const oldCaseSnapshot = structuredClone(oldCase);
 
   const newCase = new Case(oldCase, { authorizedUser });
 
@@ -154,6 +155,7 @@ const updateCaseContext = async (
   const updatedCase = await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: newCase,
+    oldCase: oldCaseSnapshot,
   });
 
   return new CaseDTO(

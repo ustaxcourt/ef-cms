@@ -31,6 +31,8 @@ export const createCaseDeadline = async (
     docketNumber: caseDeadline.docketNumber,
   });
 
+  const oldCaseSnapshot = structuredClone(caseDetail);
+
   const currentCaseEntity = new Case(caseDetail, { authorizedUser });
   const newCaseDeadline = new CaseDeadline({
     ...caseDeadline,
@@ -50,6 +52,7 @@ export const createCaseDeadline = async (
   await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: updatedCaseEntity,
+    oldCase: oldCaseSnapshot,
   });
 
   const { docketNumber, leadDocketNumber, consolidatedCases } = caseDetail;

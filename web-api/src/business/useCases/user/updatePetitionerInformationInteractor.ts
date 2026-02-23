@@ -128,6 +128,8 @@ export const updatePetitionerInformation = async (
     docketNumber,
   });
 
+  const oldCaseSnapshot = structuredClone(petitionerCaseRaw);
+
   if (!petitionerCaseRaw) {
     throw new Error(`Case with docket number ${docketNumber} was not found`);
   }
@@ -346,6 +348,7 @@ export const updatePetitionerInformation = async (
   await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
+    oldCase: oldCaseSnapshot,
   });
 
   return {

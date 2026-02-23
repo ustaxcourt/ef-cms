@@ -31,6 +31,8 @@ export const removeCasePendingItem = async (
     docketNumber,
   });
 
+  const oldCaseSnapshot = structuredClone(caseToUpdate);
+
   caseToUpdate.docketEntries.forEach(docketEntry => {
     if (docketEntry.docketEntryId === docketEntryId) {
       docketEntry.pending = false;
@@ -50,6 +52,7 @@ export const removeCasePendingItem = async (
   await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: updatedCaseEntity,
+    oldCase: oldCaseSnapshot,
   });
 
   return { docketNumber };

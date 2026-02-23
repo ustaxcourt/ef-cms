@@ -30,6 +30,8 @@ export const blockCaseFromTrial = async (
     docketNumber,
   });
 
+  const oldCaseSnapshot = structuredClone(caseToUpdate);
+
   const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
   caseEntity.setAsBlocked(reason);
@@ -37,6 +39,7 @@ export const blockCaseFromTrial = async (
   await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
+    oldCase: oldCaseSnapshot,
   });
 
   return { docketNumber };

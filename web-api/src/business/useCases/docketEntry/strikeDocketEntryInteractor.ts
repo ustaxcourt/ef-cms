@@ -29,6 +29,8 @@ export const strikeDocketEntryInteractor = async (
     docketNumber,
   });
 
+  const oldCaseSnapshot = structuredClone(caseToUpdate);
+
   let caseEntity = new Case(caseToUpdate, { authorizedUser });
 
   const docketEntry = caseEntity.getDocketEntryById({
@@ -61,6 +63,7 @@ export const strikeDocketEntryInteractor = async (
   await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
+    oldCase: oldCaseSnapshot,
   });
 
   return { docketNumber };

@@ -29,6 +29,8 @@ export const addPetitionerToCase = async (
     docketNumber,
   });
 
+  const oldCaseSnapshot = structuredClone(caseToUpdate);
+
   const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
   if (caseEntity.status === CASE_STATUS_TYPES.new) {
@@ -46,6 +48,7 @@ export const addPetitionerToCase = async (
   await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
+    oldCase: oldCaseSnapshot,
   });
 
   return { docketNumber };

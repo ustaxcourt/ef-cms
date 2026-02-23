@@ -17,6 +17,7 @@ import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/get
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { createOldCaseSnapshotMap } from '@web-api/business/useCaseHelper/caseAssociation/createOldCaseSnapshotMap';
 import { countPagesInDocument } from '@web-api/business/useCaseHelper/countPagesInDocument';
 import { CourtIssuedDocumentAnyType } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import { addAssociatedDocketEntries } from '@web-api/business/useCaseHelper/docketEntry/addAssociatedDocketEntries';
@@ -87,6 +88,7 @@ export const fileCourtIssuedDocketEntry = async (
   const casesToUpdate = await getCasesByDocketNumbers({
     docketNumbers: [subjectDocketNumber, ...docketNumbers],
   });
+  const oldCaseSnapshots = createOldCaseSnapshotMap(casesToUpdate);
 
   await settlePromises(
     casesToUpdate.map(async caseToUpdate => {
@@ -163,6 +165,7 @@ export const fileCourtIssuedDocketEntry = async (
         updateCaseAndAssociations({
           authorizedUser,
           caseToUpdate: caseEntity,
+          oldCase: oldCaseSnapshots.get(caseEntity.docketNumber),
         }),
       ];
 

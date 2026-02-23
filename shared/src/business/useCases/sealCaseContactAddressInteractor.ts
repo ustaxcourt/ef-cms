@@ -35,6 +35,7 @@ export const sealCaseContactAddress = async (
   const caseRecord = await getCaseByDocketNumber({
     docketNumber,
   });
+  const oldCaseSnapshot = structuredClone(caseRecord);
 
   const caseEntity = new Case(caseRecord, {
     authorizedUser,
@@ -54,6 +55,7 @@ export const sealCaseContactAddress = async (
   await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
+    oldCase: oldCaseSnapshot,
   });
 
   return { docketNumber };

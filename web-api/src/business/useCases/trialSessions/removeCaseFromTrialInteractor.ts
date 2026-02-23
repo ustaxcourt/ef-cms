@@ -54,6 +54,7 @@ export const removeCaseFromTrial = async (
     docketNumber,
   });
 
+  const oldCaseSnapshot = structuredClone(myCase);
   const caseEntity = new Case(myCase, { authorizedUser });
 
   if (trialSessionEntity.isCalendared) {
@@ -92,6 +93,7 @@ export const removeCaseFromTrial = async (
   await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
+    oldCase: oldCaseSnapshot,
   });
 
   return { docketNumber };

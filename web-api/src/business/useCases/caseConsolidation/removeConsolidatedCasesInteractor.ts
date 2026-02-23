@@ -19,6 +19,7 @@ import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/get
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { createOldCaseSnapshotMap } from '@web-api/business/useCaseHelper/caseAssociation/createOldCaseSnapshotMap';
 
 /**
  * removeConsolidatedCases
@@ -56,6 +57,7 @@ const removeConsolidatedCases = async (
   const allConsolidatedCases = await getConsolidatedCases({
     leadDocketNumber,
   });
+  const oldConsolidatedSnapshots = createOldCaseSnapshotMap(allConsolidatedCases as Omit<RawCase, 'consolidatedCases'>[]);
 
   const newConsolidatedCases = allConsolidatedCases.filter(
     consolidatedCase =>
@@ -85,6 +87,7 @@ const removeConsolidatedCases = async (
         updateCaseAndAssociations({
           authorizedUser,
           caseToUpdate: caseEntity,
+          oldCase: oldConsolidatedSnapshots.get(caseEntity.docketNumber),
         }),
       );
     }
@@ -99,6 +102,7 @@ const removeConsolidatedCases = async (
       updateCaseAndAssociations({
         authorizedUser,
         caseToUpdate: caseEntity,
+        oldCase: oldConsolidatedSnapshots.get(caseEntity.docketNumber),
       }),
     );
   }
@@ -109,6 +113,7 @@ const removeConsolidatedCases = async (
   const casesToRemove = await getCasesByDocketNumbers({
     docketNumbers: docketNumbersToRemove,
   });
+  const oldRemoveSnapshots = createOldCaseSnapshotMap(casesToRemove);
 
   for (const caseToRemove of casesToRemove) {
     const caseEntity = new Case(caseToRemove, { authorizedUser });
@@ -118,6 +123,7 @@ const removeConsolidatedCases = async (
       updateCaseAndAssociations({
         authorizedUser,
         caseToUpdate: caseEntity,
+        oldCase: oldRemoveSnapshots.get(caseEntity.docketNumber),
       }),
     );
 

@@ -69,11 +69,13 @@ export const saveMinuteSheetToDraftsInteractor = async (
 
   draftDocketEntry.setAsProcessingStatusAsCompleted();
 
+  const oldCaseSnapshot = structuredClone(aCase);
   const caseEntity = new Case(aCase, { authorizedUser });
   caseEntity.addDocketEntry(draftDocketEntry);
 
   await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
+    oldCase: oldCaseSnapshot,
   });
 };

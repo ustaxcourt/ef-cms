@@ -21,6 +21,7 @@ import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/get
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { createOldCaseSnapshotMap } from '@web-api/business/useCaseHelper/caseAssociation/createOldCaseSnapshotMap';
 
 export const fileExternalDocument = async (
   applicationContext: ServerApplicationContext,
@@ -124,6 +125,7 @@ export const fileExternalDocument = async (
     aCase => aCase.docketNumber,
   );
   const casesToUpdate = await getCasesByDocketNumbers({ docketNumbers });
+  const oldCaseSnapshots = createOldCaseSnapshotMap(casesToUpdate);
 
   const pageCountsByDocketEntryId: Map<string, number> = new Map();
   // Process page counts in batches of 3 to balance speed and memory usage
@@ -218,6 +220,7 @@ export const fileExternalDocument = async (
       authorizedUser,
       caseToUpdate: caseEntity,
       includeCorrespondence: false,
+      oldCase: oldCaseSnapshots.get(caseEntity.docketNumber),
     });
 
     const rawCaseEntity = caseEntity.toRawObject();

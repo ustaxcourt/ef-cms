@@ -23,6 +23,7 @@ import {
   withLocking,
 } from '@web-api/persistence/postgres/utils/mutex';
 import { countPagesInDocument } from '@web-api/business/useCaseHelper/countPagesInDocument';
+import { createOldCaseSnapshotMap } from '@web-api/business/useCaseHelper/caseAssociation/createOldCaseSnapshotMap';
 
 export const serveExternallyFiledDocument = async (
   applicationContext: ServerApplicationContext,
@@ -107,6 +108,7 @@ export const serveExternallyFiledDocument = async (
 
   try {
     const casesToUpdate = await getCasesByDocketNumbers({ docketNumbers });
+    const oldCaseSnapshots = createOldCaseSnapshotMap(casesToUpdate);
     caseEntities = await settlePromises(
       casesToUpdate.map(async rawCaseToUpdate => {
         const caseEntity = new Case(rawCaseToUpdate, { authorizedUser });
@@ -139,6 +141,7 @@ export const serveExternallyFiledDocument = async (
           docketEntryEntity,
           subjectCaseDocketNumber,
           user,
+          oldCase: oldCaseSnapshots.get(caseEntity.docketNumber),
         });
       }),
     );

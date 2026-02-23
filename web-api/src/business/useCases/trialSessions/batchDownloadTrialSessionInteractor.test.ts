@@ -287,7 +287,15 @@ describe('batchDownloadTrialSessionInteractor', () => {
     );
 
     expect(getTrialSessionById).toHaveBeenCalled();
-    expect(getCalendaredCasesForTrialSession).toHaveBeenCalled();
+    expect(getCalendaredCasesForTrialSession).toHaveBeenCalledWith({
+      trialSessionId: '123',
+      excludeFields: [
+        'privatePractitioners',
+        'irsPractitioners',
+        'correspondence',
+        'hearings',
+      ],
+    });
     expect(
       applicationContext.getPersistenceGateway().zipDocuments,
     ).toHaveBeenCalled();
@@ -315,7 +323,15 @@ describe('batchDownloadTrialSessionInteractor', () => {
     );
 
     expect(getTrialSessionById).toHaveBeenCalled();
-    expect(getCalendaredCasesForTrialSession).toHaveBeenCalled();
+    expect(getCalendaredCasesForTrialSession).toHaveBeenCalledWith({
+      trialSessionId: '123',
+      excludeFields: [
+        'privatePractitioners',
+        'irsPractitioners',
+        'correspondence',
+        'hearings',
+      ],
+    });
     expect(
       applicationContext.getPersistenceGateway().zipDocuments,
     ).toHaveBeenCalledWith(expect.anything(), {
@@ -347,7 +363,15 @@ describe('batchDownloadTrialSessionInteractor', () => {
     );
 
     expect(getTrialSessionById).toHaveBeenCalled();
-    expect(getCalendaredCasesForTrialSession).toHaveBeenCalled();
+    expect(getCalendaredCasesForTrialSession).toHaveBeenCalledWith({
+      trialSessionId: '123',
+      excludeFields: [
+        'privatePractitioners',
+        'irsPractitioners',
+        'correspondence',
+        'hearings',
+      ],
+    });
     expect(
       applicationContext.getPersistenceGateway().zipDocuments,
     ).toHaveBeenCalledWith(expect.anything(), {

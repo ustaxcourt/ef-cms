@@ -60,6 +60,7 @@ export const generateChangeOfAddressHelper = async ({
     const userCase = await getCaseByDocketNumber({
       docketNumber,
     });
+    const oldCaseSnapshot = structuredClone(userCase);
     const caseEntity = new Case(userCase, {
       authorizedUser,
     });
@@ -98,6 +99,7 @@ export const generateChangeOfAddressHelper = async ({
     await updateCaseAndAssociations({
       authorizedUser,
       caseToUpdate: caseEntity,
+      oldCase: oldCaseSnapshot,
     });
   } catch (error) {
     applicationContext.logger.error(error);

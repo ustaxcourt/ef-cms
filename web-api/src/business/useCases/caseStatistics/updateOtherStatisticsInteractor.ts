@@ -37,6 +37,8 @@ export const updateOtherStatistics = async (
     docketNumber,
   });
 
+  const oldCaseSnapshot = structuredClone(oldCase);
+
   const newCase = new Case(
     { ...oldCase, damages, litigationCosts },
     { authorizedUser },
@@ -45,6 +47,7 @@ export const updateOtherStatistics = async (
   await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: newCase,
+    oldCase: oldCaseSnapshot,
   });
 
   return { docketNumber };

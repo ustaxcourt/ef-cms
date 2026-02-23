@@ -57,6 +57,7 @@ export const setTrialSessionCalendarInteractor = async (
     // We will get cases already associated with the trial session as well as cases that are eligible
     const manuallyAddedCases = await getCalendaredCasesForTrialSession({
       trialSessionId,
+      excludeFields: ['correspondence', 'hearings'],
     });
 
     // Manually added cases are already on the caseOrder, so if they have not been QCed we have to remove them

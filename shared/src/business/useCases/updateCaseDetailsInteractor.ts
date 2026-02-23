@@ -58,6 +58,7 @@ export const updateCaseDetails = async (
   const oldCase = await getCaseByDocketNumber({
     docketNumber,
   });
+  const oldCaseSnapshot = structuredClone(oldCase);
 
   const isPaid = editableFields.petitionPaymentStatus === PAYMENT_STATUS.PAID;
   const isWaived =
@@ -124,6 +125,7 @@ export const updateCaseDetails = async (
   const updatedCase = await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: newCaseEntity,
+    oldCase: oldCaseSnapshot,
   });
 
   return new CaseDTO(

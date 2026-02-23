@@ -42,6 +42,8 @@ export const removePetitionerAndUpdateCaption = async (
     docketNumber,
   });
 
+  const oldCaseSnapshot = structuredClone(caseToUpdate);
+
   if (!caseToUpdate) {
     throw new NotFoundError(`Case ${docketNumber} not found`);
   }
@@ -75,6 +77,7 @@ export const removePetitionerAndUpdateCaption = async (
   const updatedCase = await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
+    oldCase: oldCaseSnapshot,
   });
 
   return new CaseDTO(

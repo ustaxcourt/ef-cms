@@ -28,6 +28,7 @@ import {
   CaseDeadline,
   RawCaseDeadline,
 } from '@shared/business/entities/CaseDeadline';
+import { createOldCaseSnapshotMap } from '@web-api/business/useCaseHelper/caseAssociation/createOldCaseSnapshotMap';
 import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
 import { CourtIssuedDocumentAnyType } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import { addAssociatedDocketEntries } from '@web-api/business/useCaseHelper/docketEntry/addAssociatedDocketEntries';
@@ -155,6 +156,7 @@ export const fileAndServeCourtIssuedDocument = async (
     const casesToUpdate = await getCasesByDocketNumbers({
       docketNumbers: [...docketNumbers, subjectCaseDocketNumber],
     });
+    const oldCaseSnapshots = createOldCaseSnapshotMap(casesToUpdate);
 
     for (const caseToUpdate of casesToUpdate) {
       caseEntities.push(new Case(caseToUpdate, { authorizedUser }));
@@ -246,6 +248,7 @@ export const fileAndServeCourtIssuedDocument = async (
           subjectCaseDocketNumber,
           user,
           caseHasDeadline,
+          oldCase: oldCaseSnapshots.get(caseEntity.docketNumber),
         });
       }),
     );

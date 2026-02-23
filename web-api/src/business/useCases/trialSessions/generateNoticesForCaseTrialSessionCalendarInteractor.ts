@@ -143,6 +143,7 @@ const setNoticeForCase = async ({
   trialSessionEntity: any;
   user: any;
 }) => {
+  const oldCaseSnapshot = structuredClone(caseRecord);
   const caseEntity = new Case(caseRecord, { authorizedUser: undefined });
   const { procedureType } = caseRecord;
 
@@ -317,6 +318,7 @@ const setNoticeForCase = async ({
   await updateCaseAndAssociations({
     authorizedUser: undefined,
     caseToUpdate: caseEntity,
+    oldCase: oldCaseSnapshot,
   });
 
   const hasPages = newPdfDoc.getPageCount() > 0;

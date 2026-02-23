@@ -135,7 +135,10 @@ describe('generateTrialCalendarPdfInteractor', () => {
     );
 
     expect(getTrialSessionById).toHaveBeenCalled();
-    expect(getCalendaredCasesForTrialSession).toHaveBeenCalled();
+    expect(getCalendaredCasesForTrialSession).toHaveBeenCalledWith({
+      trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
+      excludeFields: ['docketEntries', 'correspondence', 'hearings'],
+    });
     expect(
       applicationContext.getDocumentGenerators().trialCalendar,
     ).toHaveBeenCalledWith({

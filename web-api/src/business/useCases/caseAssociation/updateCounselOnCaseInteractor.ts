@@ -49,6 +49,8 @@ const updateCounselOnCase = async (
     docketNumber,
   });
 
+  const oldCaseSnapshot = structuredClone(caseToUpdate);
+
   const userToUpdate = await getUserById({
     userId,
   });
@@ -89,6 +91,7 @@ const updateCounselOnCase = async (
   await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
+    oldCase: oldCaseSnapshot,
   });
 
   return { docketNumber };

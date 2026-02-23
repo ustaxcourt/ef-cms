@@ -15,7 +15,10 @@ export type PublicTrialSessionDetails = Pick<
   | 'state'
   | 'postalCode'
 > & {
-  calendaredCases: Omit<RawCase, 'consolidatedCases'>[];
+  calendaredCases: Omit<
+    RawCase,
+    'consolidatedCases' | 'docketEntries' | 'correspondence' | 'hearings'
+  >[];
   swingSessionLocation?: string;
 };
 
@@ -44,18 +47,12 @@ export const getPublicTrialSessionDetailsInteractor = async (
 
   const cases = await getCalendaredCasesForTrialSession({
       trialSessionId,
+      excludeFields: ['docketEntries', 'correspondence', 'hearings'],
     });
 
-  const casesWithMinimalRequiredInformation = cases
-    .filter(aCase => !aCase.removedFromTrial)
-    .map(aCase => {
-      // No need to see docket entries
-      const caseWithEmptyDocketEntries = {
-        ...aCase,
-        docketEntries: [],
-      };
-      return caseWithEmptyDocketEntries;
-    });
+  const casesWithMinimalRequiredInformation = cases.filter(
+    aCase => !aCase.removedFromTrial,
+  );
 
   const publicTrialSessionData: PublicTrialSessionDetails = {
     address1: fullTrialSessionEntity.address1,

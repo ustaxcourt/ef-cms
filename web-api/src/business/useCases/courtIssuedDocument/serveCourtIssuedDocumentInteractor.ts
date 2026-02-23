@@ -20,6 +20,7 @@ import {
   withLocking,
 } from '@web-api/persistence/postgres/utils/mutex';
 import { updateDocketEntryRelatedEntryServed } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryRelatedEntryServed';
+import { createOldCaseSnapshotMap } from '@web-api/business/useCaseHelper/caseAssociation/createOldCaseSnapshotMap';
 
 export const serveCourtIssuedDocument = async (
   applicationContext: ServerApplicationContext,
@@ -56,6 +57,7 @@ export const serveCourtIssuedDocument = async (
     throw new NotFoundError(`Case ${subjectCaseDocketNumber} was not found.`);
   }
 
+  const oldSubjectCaseSnapshot = structuredClone(subjectCase);
   const subjectCaseEntity = new Case(subjectCase, { authorizedUser });
 
   const docketEntryToServe = subjectCaseEntity.getDocketEntryById({
@@ -117,6 +119,8 @@ export const serveCourtIssuedDocument = async (
 
   try {
     const casesToUpdate = await getCasesByDocketNumbers({ docketNumbers });
+    const oldCaseSnapshots = createOldCaseSnapshotMap(casesToUpdate);
+    oldCaseSnapshots.set(subjectCaseDocketNumber, oldSubjectCaseSnapshot);
 
     for (const caseToUpdate of casesToUpdate) {
       caseEntities.push(new Case(caseToUpdate, { authorizedUser }));
@@ -139,6 +143,7 @@ export const serveCourtIssuedDocument = async (
           subjectCaseDocketNumber,
           user,
           caseHasDeadline,
+          oldCase: oldCaseSnapshots.get(caseEntity.docketNumber),
         });
       }),
     );

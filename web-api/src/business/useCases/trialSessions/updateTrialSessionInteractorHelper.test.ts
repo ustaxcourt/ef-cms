@@ -28,11 +28,15 @@ import {
 } from '@web-api/business/useCases/trialSessions/updateTrialSessionInteractorHelper';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { createTrialSessionWorkingCopy as createTrialSessionWorkingCopyMock } from '@web-api/persistence/postgres/trialSessions/createTrialSessionWorkingCopy';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('updateTrialSessionInteractorHelper', () => {
   const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
   const createTrialSessionWorkingCopy = jest.mocked(
     createTrialSessionWorkingCopyMock,
+  );
+  const updateCaseAndAssociations = jest.mocked(
+    updateCaseAndAssociationsMock,
   );
 
   describe('updateCasesAndSetNoticeOfChange', () => {
@@ -240,6 +244,41 @@ describe('updateTrialSessionInteractorHelper', () => {
       expect(setNoticeOfChangeOfTrialLocationCalls.length).toEqual(0);
     });
 
+    it('should pass oldCase snapshots to updateCaseAndAssociations', async () => {
+      const TEST_PARAMS = {
+        applicationContext,
+        authorizedUser: mockCaseServicesSupervisorUser,
+        currentTrialSession: {
+          trialSessionId: TEST_TRIAL_SESSION_ID,
+          caseOrder: TEST_DOCKET_NUMBERS.map(docketNumber => ({
+            docketNumber,
+            removedFromTrial: docketNumber === '111-25',
+          })),
+        } as unknown as RawTrialSession,
+        shouldIssueNoticeOfChangeOfTrialJudge: false,
+        shouldSetNoticeOfChangeToInPersonProceeding: false,
+        shouldSetNoticeOfChangeToRemoteProceeding: false,
+        shouldSetNoticeOfTrialSessionLocationChange: false,
+        updatedTrialSessionEntity: {
+          caseOrder: TEST_DOCKET_NUMBERS,
+          trialSessionId: TEST_TRIAL_SESSION_ID,
+          validate: () => ({
+            toRawObject: () => 'VALIDATED_TRIAL_SESSION_ENTITY',
+          }),
+        } as unknown as TrialSession,
+      };
+
+      await updateCasesAndSetNoticeOfChange(TEST_PARAMS);
+
+      const { calls } = updateCaseAndAssociations.mock;
+      for (const call of calls) {
+        expect(call[0].oldCase).toBeDefined();
+        expect(call[0].oldCase!.docketNumber).toBe(
+          call[0].caseToUpdate.docketNumber,
+        );
+      }
+    });
+
     it('should filter out hearings in getCasesInTrialSession', async () => {
       const result = await getCasesInTrialSession({
         trialSession: {
@@ -259,6 +298,7 @@ describe('updateTrialSessionInteractorHelper', () => {
         casesThatShouldReceiveNotices: expect.arrayContaining([
           expect.objectContaining({ docketNumber: '444-25' }),
         ]),
+        rawCases: expect.anything(),
       });
     });
   });

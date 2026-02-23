@@ -536,6 +536,8 @@ export const serveCaseToIrs = async (
       docketNumber,
     });
 
+    const oldCaseSnapshot = structuredClone(caseToBatch);
+
     const caseEntity = new Case(caseToBatch, { authorizedUser });
 
     caseEntity.markAsSentToIRS();
@@ -701,6 +703,7 @@ export const serveCaseToIrs = async (
     await updateCaseAndAssociations({
       authorizedUser,
       caseToUpdate: caseEntity,
+      oldCase: oldCaseSnapshot,
     });
 
     await applicationContext.getNotificationGateway().sendNotificationToUser({

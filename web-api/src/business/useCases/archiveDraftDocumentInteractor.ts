@@ -28,6 +28,8 @@ export const archiveDraftDocument = async (
     docketNumber,
   });
 
+  const oldCaseSnapshot = structuredClone(caseToUpdate);
+
   const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
   const docketEntryToArchive = caseEntity.getDocketEntryById({
@@ -56,6 +58,7 @@ export const archiveDraftDocument = async (
   await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
+    oldCase: oldCaseSnapshot,
   });
 
   return { docketNumber };

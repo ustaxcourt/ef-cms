@@ -54,6 +54,7 @@ const addCaseToTrialSession = async (
     docketNumber,
   });
 
+  const oldCaseSnapshot = structuredClone(caseDetails);
   const caseEntity = new Case(caseDetails, { authorizedUser });
 
   const trialSessionEntity = new TrialSession(trialSession);
@@ -81,6 +82,7 @@ const addCaseToTrialSession = async (
   await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
+    oldCase: oldCaseSnapshot,
   });
 
   await createOrUpdateTrialSessionCases({

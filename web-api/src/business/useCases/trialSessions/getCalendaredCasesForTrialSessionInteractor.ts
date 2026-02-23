@@ -17,6 +17,7 @@ export const getCalendaredCasesForTrialSessionInteractor = async (
 
   const cases = await getCalendaredCasesForTrialSession({
       trialSessionId,
+      excludeFields: ['correspondence', 'hearings'],
     });
 
   const casesWithMinimalRequiredInformation = cases.map(aCase => {

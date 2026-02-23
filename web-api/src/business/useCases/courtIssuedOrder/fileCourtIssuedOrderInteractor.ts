@@ -49,6 +49,9 @@ export const fileCourtIssuedOrder = async (
     docketNumber,
     includeConsolidatedCases: false,
   });
+
+  const oldCaseSnapshot = structuredClone(caseToUpdate);
+
   const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
   if (
@@ -125,6 +128,7 @@ export const fileCourtIssuedOrder = async (
   await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
+    oldCase: oldCaseSnapshot,
   });
 
   if (documentMetadata.parentMessageId) {

@@ -33,6 +33,7 @@ export const unsealCase = async (
   if (!rawCaseToUpdate) {
     throw new NotFoundError(`Case ${docketNumber} was not found.`);
   }
+  const oldCaseSnapshot = structuredClone(rawCaseToUpdate);
 
   const caseToUpdate = new Case(rawCaseToUpdate, { authorizedUser });
 
@@ -41,6 +42,7 @@ export const unsealCase = async (
   await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate,
+    oldCase: oldCaseSnapshot,
   });
 
   return { docketNumber };

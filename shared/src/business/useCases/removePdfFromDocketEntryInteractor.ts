@@ -31,6 +31,7 @@ export const removePdfFromDocketEntry = async (
   const caseRecord = await getCaseByDocketNumber({
     docketNumber,
   });
+  const oldCaseSnapshot = structuredClone(caseRecord);
 
   const caseEntity = new Case(caseRecord, {
     authorizedUser,
@@ -50,6 +51,7 @@ export const removePdfFromDocketEntry = async (
     const updatedCase = await updateCaseAndAssociations({
       authorizedUser,
       caseToUpdate: caseEntity,
+      oldCase: oldCaseSnapshot,
     });
 
     const theCase = new Case(updatedCase, { authorizedUser }).toRawObject();

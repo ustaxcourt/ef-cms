@@ -41,6 +41,8 @@ export const updateDocketEntryMeta = async (
     throw new NotFoundError(`Case ${docketNumber} was not found.`);
   }
 
+  const oldCaseSnapshot = structuredClone(caseToUpdate);
+
   let caseEntity = new Case(caseToUpdate, { authorizedUser });
 
   const originalDocketEntry = caseEntity.getDocketEntryById({
@@ -191,6 +193,7 @@ export const updateDocketEntryMeta = async (
   await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
+    oldCase: oldCaseSnapshot,
   });
 
   return { docketNumber };

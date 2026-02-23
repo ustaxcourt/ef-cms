@@ -63,5 +63,9 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
     expect(result).toMatchObject(expectedPublicDetails);
+    expect(getCalendaredCasesForTrialSession).toHaveBeenCalledWith({
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      excludeFields: ['docketEntries', 'correspondence', 'hearings'],
+    });
   });
 });

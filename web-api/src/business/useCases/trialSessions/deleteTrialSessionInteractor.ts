@@ -9,6 +9,7 @@ import { TrialSession } from '@shared/business/entities/trialSessions/TrialSessi
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { createOldCaseSnapshotMap } from '@web-api/business/useCaseHelper/caseAssociation/createOldCaseSnapshotMap';
 import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { deleteTrialSession } from '@web-api/persistence/postgres/trialSessions/deleteTrialSession';
@@ -63,6 +64,7 @@ export const deleteTrialSessionInteractor = async (
     });
 
     const casesToUpdate = await getCasesByDocketNumbers({ docketNumbers });
+    const oldCaseSnapshots = createOldCaseSnapshotMap(casesToUpdate);
 
     for (const myCase of casesToUpdate) {
       const caseEntity = new Case(myCase, { authorizedUser });
@@ -72,6 +74,7 @@ export const deleteTrialSessionInteractor = async (
       await updateCaseAndAssociations({
         authorizedUser,
         caseToUpdate: caseEntity,
+        oldCase: oldCaseSnapshots.get(caseEntity.docketNumber),
       });
     }
 

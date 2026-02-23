@@ -29,6 +29,7 @@ export const associatePrivatePractitionerToCase = async ({
   const caseToUpdate = await getCaseByDocketNumber({
     docketNumber,
   });
+  const oldCaseSnapshot = structuredClone(caseToUpdate);
   const caseEntity = new Case(caseToUpdate, {
     authorizedUser,
   });
@@ -65,6 +66,7 @@ export const associatePrivatePractitionerToCase = async ({
   await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
+    oldCase: oldCaseSnapshot,
   });
 
   return caseEntity.toRawObject();

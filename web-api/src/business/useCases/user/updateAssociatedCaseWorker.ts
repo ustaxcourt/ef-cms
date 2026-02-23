@@ -63,6 +63,7 @@ export const updatePetitionerCase = async ({
   const rawCaseToUpdate = await getCaseByDocketNumber({
     docketNumber,
   });
+  const oldCaseSnapshot = structuredClone(rawCaseToUpdate);
 
   const caseToUpdate = await updateCaseEntityAndGenerateChange({
     applicationContext,
@@ -76,6 +77,7 @@ export const updatePetitionerCase = async ({
   await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate,
+    oldCase: oldCaseSnapshot,
   });
 };
 
@@ -93,6 +95,7 @@ export const updatePractitionerCase = async ({
   const caseToUpdate = await getCaseByDocketNumber({
     docketNumber,
   });
+  const oldCaseSnapshot = structuredClone(caseToUpdate);
 
   const caseEntity = new Case(caseToUpdate, {
     authorizedUser,
@@ -121,6 +124,7 @@ export const updatePractitionerCase = async ({
   await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: validatedCaseToUpdate,
+    oldCase: oldCaseSnapshot,
   });
 };
 

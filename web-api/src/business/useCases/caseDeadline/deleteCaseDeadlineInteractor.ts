@@ -33,6 +33,8 @@ export const deleteCaseDeadline = async (
     docketNumber,
   });
 
+  const oldCaseSnapshot = structuredClone(caseToUpdate);
+
   let updatedCase = new Case(caseToUpdate, { authorizedUser });
 
   // To avoid race conditions such that we delete a deadline from one DB endpoint but then read immediately from another (which doesn't yet have the update),
@@ -57,6 +59,7 @@ export const deleteCaseDeadline = async (
   await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: updatedCase,
+    oldCase: oldCaseSnapshot,
   });
 
   const { leadDocketNumber } = caseToUpdate;

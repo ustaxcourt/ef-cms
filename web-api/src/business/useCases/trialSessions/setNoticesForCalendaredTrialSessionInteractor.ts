@@ -31,6 +31,13 @@ const setNoticesForCalendaredTrialSession = async (
 
   const calendaredCases = await getCalendaredCasesForTrialSession({
     trialSessionId,
+    excludeFields: [
+      'docketEntries',
+      'privatePractitioners',
+      'irsPractitioners',
+      'correspondence',
+      'hearings',
+    ],
   });
 
   const trialNoticePdfsKeys: string[] = [];
@@ -191,6 +198,13 @@ export const determineEntitiesToLock = async (
 ) => {
   const calendaredCases = await getCalendaredCasesForTrialSession({
     trialSessionId,
+    excludeFields: [
+      'docketEntries',
+      'privatePractitioners',
+      'irsPractitioners',
+      'correspondence',
+      'hearings',
+    ],
   });
 
   return {
