@@ -11,6 +11,7 @@ describe('orders and notices', () => {
       order({
         applicationContext,
         data: {
+          addedDocketNumbers: [],
           caseCaptionExtension: 'Petitioner(s)',
           caseTitle: 'Test Petitioner',
           docketNumberWithSuffix: '123-45S',
@@ -88,6 +89,9 @@ describe('orders and notices', () => {
 
         <p>&emsp;&emsp;&emsp;ORDERED that each party shall, on or before April 15, 2020, file with the Court, and serve on the other party, a report regarding the then present status of these cases. It is further</p>`,
           orderTitle: 'ORDER',
+          addedDocketNumbers: [],
+          nameOfClerk: '',
+          titleOfClerk: '',
         },
       }),
     testDescription: 'generates an Order document',
@@ -107,6 +111,9 @@ describe('orders and notices', () => {
             SYSTEM_GENERATED_DOCUMENT_TYPES.orderForFilingFee.content,
           orderTitle:
             SYSTEM_GENERATED_DOCUMENT_TYPES.orderForFilingFee.documentTitle,
+          addedDocketNumbers: [],
+          nameOfClerk: '',
+          titleOfClerk: '',
         },
       }),
     testDescription: 'generates an Order for Filing Fee document',
@@ -127,6 +134,9 @@ describe('orders and notices', () => {
           orderTitle:
             SYSTEM_GENERATED_DOCUMENT_TYPES.orderPetitionersToShowCause
               .documentTitle,
+          addedDocketNumbers: [],
+          nameOfClerk: '',
+          titleOfClerk: '',
         },
       }),
     testDescription: 'generates an Order To Show Cause document',
@@ -147,6 +157,9 @@ describe('orders and notices', () => {
           orderTitle:
             SYSTEM_GENERATED_DOCUMENT_TYPES.orderForAmendedPetition
               .documentTitle,
+          addedDocketNumbers: [],
+          nameOfClerk: '',
+          titleOfClerk: '',
         },
       }),
     testDescription: 'generates an Order for Amended Petition',
@@ -168,6 +181,9 @@ describe('orders and notices', () => {
           orderTitle:
             SYSTEM_GENERATED_DOCUMENT_TYPES.orderDesignatingPlaceOfTrial
               .documentTitle,
+          addedDocketNumbers: [],
+          nameOfClerk: '',
+          titleOfClerk: '',
         },
       }),
     testDescription: 'generates an Order Designating Place Of Trial',
@@ -189,6 +205,9 @@ describe('orders and notices', () => {
           orderTitle:
             SYSTEM_GENERATED_DOCUMENT_TYPES.orderForAmendedPetitionAndFilingFee
               .documentTitle,
+          addedDocketNumbers: [],
+          nameOfClerk: '',
+          titleOfClerk: '',
         },
       }),
     testDescription: 'generates an Order for Amended Petition and Filing Fee',
@@ -218,6 +237,8 @@ describe('orders and notices', () => {
           orderTitle:
             SYSTEM_GENERATED_DOCUMENT_TYPES.orderForAmendedPetitionAndFilingFee
               .documentTitle,
+          nameOfClerk: '',
+          titleOfClerk: '',
         },
       }),
     testDescription: 'generates a Notice with added docket entries',

@@ -23,8 +23,8 @@ export const loadPDFForSigningInteractor = async (
     const pdfData = await applicationContext
       .getPersistenceGateway()
       .getDocument({
-        applicationContext: applicationContext as any,
-        ...(docketNumber && { docketNumber }),
+        applicationContext,
+        docketNumber,
         key: documentStorageId,
       });
 

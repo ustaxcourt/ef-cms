@@ -45,6 +45,7 @@ const petitionQcScanBatchPreviewerDeps = {
     sequences.openConfirmRescanBatchModalSequence,
   pdfPreviewUrl: state.pdfPreviewUrl,
   scanBatchPreviewerHelper: state.scanBatchPreviewerHelper,
+  selectedTabHasAttachment: state.petitionQcHelper.selectedTabHasAttachment,
   scanHelper: state.scanHelper,
   scannerStartupSequence: sequences.scannerStartupSequence,
   scanOnly: props.scanOnly ?? false,
@@ -80,6 +81,7 @@ export const PetitionQcScanBatchPreviewer = connect<
     pdfPreviewUrl,
     scanBatchPreviewerHelper,
     scanHelper,
+    selectedTabHasAttachment = false,
     scannerStartupSequence,
     scanOnly = false,
     selectedBatchIndex,
@@ -106,14 +108,15 @@ export const PetitionQcScanBatchPreviewer = connect<
           batchWrapperRef.current.scrollHeight;
     }, [scanBatchPreviewerHelper.batches]);
 
+    const shouldShowUploadControls =
+      scanBatchPreviewerHelper.uploadMode !== 'preview' ||
+      !pdfPreviewUrl ||
+      !selectedTabHasAttachment;
+
     return (
       <>
-        {showModal === 'ConfirmRescanBatchModal' && (
-          <ConfirmRescanBatchModal />
-        )}
-        {showModal === 'ConfirmDeleteBatchModal' && (
-          <DeleteBatchModal />
-        )}
+        {showModal === 'ConfirmRescanBatchModal' && <ConfirmRescanBatchModal />}
+        {showModal === 'ConfirmDeleteBatchModal' && <DeleteBatchModal />}
 
         {showModal === 'UnfinishedScansModal' && <UnfinishedScansModal />}
 
@@ -141,13 +144,21 @@ export const PetitionQcScanBatchPreviewer = connect<
             isFileUploaded={eventCode =>
               !!scanHelper[`${eventCode}FileCompleted`]
             }
-            onSelect={documentId => {
-              setDocumentForPreviewSequence({ documentId });
+            onSelect={tabValue => {
+              const selectedTab = documentTabs?.find(
+                tab =>
+                  tab.documentId === tabValue ||
+                  tab.documentType === tabValue ||
+                  tab.fileName === tabValue,
+              );
+              const documentIdToUse =
+                selectedTab?.documentId || selectedTab?.fileName || tabValue;
+              setDocumentForPreviewSequence({ documentId: documentIdToUse });
             }}
             scanOnly={scanOnly}
             tabNameKey="documentId"
           />
-          {scanBatchPreviewerHelper.uploadMode !== 'preview' && (
+          {shouldShowUploadControls && (
             <ScanModeRadios
               errorText={[
                 validationErrors[documentType],
@@ -178,7 +189,9 @@ export const PetitionQcScanBatchPreviewer = connect<
           {scanBatchPreviewerHelper.uploadMode === 'scan' && (
             <ScanBatchesTable
               batches={scanBatchPreviewerHelper.batches}
-              batchWrapperRef={batchWrapperRef as React.RefObject<HTMLDivElement>}
+              batchWrapperRef={
+                batchWrapperRef as React.RefObject<HTMLDivElement>
+              }
               onDeleteBatch={(batchIndex, pageCount) => {
                 openConfirmDeleteBatchModalSequence({
                   batchIndexToDelete: batchIndex,
@@ -200,25 +213,28 @@ export const PetitionQcScanBatchPreviewer = connect<
           )}
 
           {!scanOnly &&
-            scanBatchPreviewerHelper.uploadMode === 'upload' && (
+            (scanBatchPreviewerHelper.uploadMode === 'upload' ||
+              (scanBatchPreviewerHelper.uploadMode === 'preview' &&
+                !selectedTabHasAttachment)) && (
               <ScanBatchFileInput
                 documentType={documentType}
                 validateSequence={validateSequence}
               />
             )}
 
-          {scanBatchPreviewerHelper.uploadMode === 'preview' && (
-            <ScanPdfPreview
-              confirmSequence={() => {
-                deletePdfSequence();
-                if (validateSequence) validateSequence();
-              }}
-              isPetitionFile={isPetitionFile}
-              onConfirmDelete={openConfirmDeletePDFModalSequence}
-              onConfirmReplace={openConfirmReplacePetitionPdfSequence}
-              pdfPreviewUrl={pdfPreviewUrl}
-              scanOnly={scanOnly}
-              showModal={showModal}
+          {scanBatchPreviewerHelper.uploadMode === 'preview' &&
+            pdfPreviewUrl &&
+            selectedTabHasAttachment && (
+              <ScanPdfPreview
+                confirmSequence={() => {
+                  deletePdfSequence();
+                  if (validateSequence) validateSequence();
+                }}
+                isPetitionFile={isPetitionFile}
+                onConfirmDelete={openConfirmDeletePDFModalSequence}
+                onConfirmReplace={openConfirmReplacePetitionPdfSequence}
+                pdfPreviewUrl={pdfPreviewUrl}
+                showModal={showModal}
               showRemovePdfButton={showRemovePdfButton}
             />
           )}
@@ -246,22 +262,19 @@ export const PetitionQcScanBatchPreviewer = connect<
                 onLastPage={e => {
                   e.preventDefault();
                   setCurrentPageIndexSequence({
-                    currentPageIndex:
-                      scanBatchPreviewerHelper.totalPages - 1,
+                    currentPageIndex: scanBatchPreviewerHelper.totalPages - 1,
                   });
                 }}
                 onNextPage={e => {
                   e.preventDefault();
                   setCurrentPageIndexSequence({
-                    currentPageIndex:
-                      scanBatchPreviewerHelper.currentPage + 1,
+                    currentPageIndex: scanBatchPreviewerHelper.currentPage + 1,
                   });
                 }}
                 onPreviousPage={e => {
                   e.preventDefault();
                   setCurrentPageIndexSequence({
-                    currentPageIndex:
-                      scanBatchPreviewerHelper.currentPage - 1,
+                    currentPageIndex: scanBatchPreviewerHelper.currentPage - 1,
                   });
                 }}
                 selectedPageImage={scanBatchPreviewerHelper.selectedPageImage}

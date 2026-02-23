@@ -107,6 +107,14 @@ erDiagram
         string userId FK "User ID"
     }
 
+    dwUserContact {
+        string userId PK,FK "Associated user ID"
+        string docketNumber PK,FK "Associated case docket number"
+        number lat "Latitude coordinate"
+        number lng "Longitude coordinate"
+        boolean geodataMatch "Whether geodata matched"
+    }
+
     dwFeatureFlag {
         string name PK "Feature flag name"
     }
@@ -155,6 +163,7 @@ erDiagram
     dwCase ||--o{ dwMessage : "has"
     dwCase }o--|| dwTrialSession : "assigned_to"
     dwCase ||--o{ dwTrialSessionCase : "has"
+    dwCase ||--o{ dwUserContact : "has"
     dwCase }o--|| dwUser : "associated_judge"
 
     dwCaseWorksheet }o--|| dwUser : "judge"
@@ -176,6 +185,7 @@ erDiagram
     dwUser ||--o{ dwResponseString : "has"
     dwUser ||--o{ dwDocketEntry : "filed_by"
     dwUser ||--o{ dwCaseCorrespondence : "creates"
+    dwUser ||--o{ dwUserContact : "has"
     dwUser ||--o{ dwTrialSessionWorkingCopy : "has"
 
     %% Docket entry relationships

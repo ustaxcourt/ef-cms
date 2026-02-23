@@ -7,7 +7,7 @@ export const scrapePdfContents = async ({
   pdfBuffer,
 }: {
   applicationContext: ServerApplicationContext;
-  pdfBuffer: Uint8Array;
+  pdfBuffer: Uint8Array | ArrayBuffer;
 }): Promise<string> => {
   const pdfjsLib = await getPdfJs();
 

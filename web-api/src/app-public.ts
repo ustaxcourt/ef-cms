@@ -5,11 +5,29 @@ import { lambdaWrapper } from './lambdaWrapper';
 import { set } from 'lodash';
 import cors from 'cors';
 import express from 'express';
+import qs from 'qs';
 
 export const app = express();
 
-// This was default in express 4.x. The default changed in express 5.x, so we have to specify it here
-app.set('query parser', 'extended');
+// We explicitly use qs as our query parser: it was the default in express 4.x.,
+// but was no longer the default in express 5.x, so we need to explicitly set it
+// here. See https://github.com/ustaxcourt/ef-cms/pull/6020
+//
+// By default, qs limits arrays to a maximum of 20:
+//
+// > qs will also limit arrays to a maximum of 20 elements. Any array members
+// > with an index of 20 or greater will instead be converted to an object with
+// > the index as the key. This is needed to handle cases when someone sent,
+// > for example, a[999999999] and it will take significant time to iterate over
+// > this huge array. (https://www.npmjs.com/package/qs)
+//
+// Some API requests involve more than 20 query string parameters by necessity
+// due to the number of judges (for example, searching for all judges using
+// getPendingMotionDocketEntriesForCurrentJudgeInteractor). Here we set the
+// array length to 200 to prohibit DoS attacks, while at the same time
+// accommodating cases when we need to pass more than 20 items in an array as
+// query string parameters.
+app.set('query parser', str => qs.parse(str, { arrayLimit: 200 }));
 
 app.use(cors());
 app.use(json());

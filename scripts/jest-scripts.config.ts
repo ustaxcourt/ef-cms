@@ -39,6 +39,7 @@ const config: Config = {
     '!reports/**',
     '!run-once-scripts/**',
     '!secrets/**',
+    '!seed/add-missing-seed-docket-entries-pdfs.js',
     '!send-maintenance-mode-notifications-locally.ts',
     '!template.ts',
     '!judge/get-judge-name.ts',
@@ -60,6 +61,7 @@ const config: Config = {
     ...pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
       prefix: '<rootDir>/../',
     }),
+    '^scripts/(.*)$': '<rootDir>/$1',
     '^uuid$': 'uuid',
   },
   testEnvironment: 'node',
