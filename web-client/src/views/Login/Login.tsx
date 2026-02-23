@@ -39,8 +39,8 @@ export const Login = connect(
   }) => {
     return (
       <>
-        <section className="grid-container tw:px-0 tw:xs:pb-12 tw:pb-8 tw:pt-0">
-          <div className="grid-row flex-justify-center">
+        <section className="tw:px-0 tw:xs:pb-12 tw:pb-8 tw:pt-0">
+          <div className="tw:flex tw:justify-center">
             <div className="tw:w-full tw:xs:w-135">
               <SuccessNotification isDismissible={false} />
               <WarningNotification isDismissible={false} />
@@ -62,9 +62,9 @@ export const Login = connect(
                 </div>
               )}
 
-              <div className="grid-container bg-white tw:xs:p-12 tw:px-3 tw:py-8 border border-base-lighter login tw:rounded-2xl tw:max-[33.75rem]:rounded-none">
-                <div className="display-flex flex-column">
-                  <div className="flex-align-center">
+              <div className="tw:bg-white tw:xs:p-12 tw:px-3 tw:py-8 tw:rounded-2xl tw:max-[33.75rem]:rounded-none">
+                <div className="tw:flex tw:flex-col">
+                  <div>
                     <h1
                       className="tw:xs:mb-8 tw:mb-5 tw:font-noto-serif tw:font-bold tw:xs:text-4xl tw:text-2xl"
                       data-testid="login-header"
@@ -72,7 +72,6 @@ export const Login = connect(
                       Log in to DAWSON
                     </h1>
                     <form
-                      className="usa-form max-width-unset"
                       onSubmit={e => {
                         e.preventDefault();
                         submitLoginSequence();
@@ -82,7 +81,7 @@ export const Login = connect(
                         required
                         autoCapitalize="off"
                         autoCorrect="off"
-                        className="usa-input tw:xs:mb-4 tw:mb-3"
+                        className="tw:xs:mb-4 tw:mb-3"
                         data-testid="email-input"
                         id="email"
                         name="email"
@@ -97,7 +96,7 @@ export const Login = connect(
                       />
                       <TextField
                         required
-                        className="usa-input tw:mt-0"
+                        className="tw:mt-0"
                         data-testid="password-input"
                         id="password"
                         name="password"
