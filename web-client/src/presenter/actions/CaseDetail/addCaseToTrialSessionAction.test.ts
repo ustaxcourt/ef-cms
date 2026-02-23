@@ -53,7 +53,6 @@ describe('addCaseToTrialSessionAction', () => {
 
     expect(successMock.mock.calls[0][0]).toMatchObject({
       alertSuccess: {},
-      caseDetail: MOCK_CASE,
       docketNumber: '123-45',
       trialSessionId: '234',
     });

@@ -77,7 +77,6 @@ describe('sealCaseAction', () => {
       alertSuccess: {
         message: 'Case sealed.',
       },
-      caseDetail: MOCK_CASE,
     });
   });
 });

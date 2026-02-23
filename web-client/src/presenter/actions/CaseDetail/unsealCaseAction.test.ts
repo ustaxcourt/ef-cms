@@ -77,7 +77,6 @@ describe('unsealCaseAction', () => {
       alertSuccess: {
         message: 'Case unsealed.',
       },
-      caseDetail: MOCK_CASE,
     });
   });
 });

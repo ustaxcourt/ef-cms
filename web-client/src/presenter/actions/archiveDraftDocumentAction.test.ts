@@ -42,7 +42,7 @@ describe('archiveDraftDocumentAction', () => {
       alertSuccess: {
         message: 'Document deleted.',
       },
-      caseDetail: MOCK_CASE,
+      docketNumber: MOCK_CASE.docketNumber,
     });
   });
 
