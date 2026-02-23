@@ -19,6 +19,14 @@ import {
 } from '@shared/business/entities/cases/Case';
 import { getDbReader } from '@web-api/database';
 import { removeServedParties } from '@shared/business/dto/helpers/removeServedParties';
+import { verifyCaseForUser } from '@web-api/persistence/postgres/cases/userOnCase/verifyCaseForUser';
+
+const EMPTY_RESULT = {
+  archivedDocketEntries: [] as RawDocketEntry[],
+  docketEntries: [] as RawDocketEntry[],
+  hasPendingItems: false,
+  totalCount: 0,
+};
 
 export const getCaseDocketEntriesInteractor = async (
   {
@@ -44,10 +52,24 @@ export const getCaseDocketEntriesInteractor = async (
   }
 
   const formattedDocketNumber = Case.formatDocketNumber(docketNumber);
-  const filterOnDocketRecord = !isAuthorized(
+  const hasFullAccess = isAuthorized(
     authorizedUser,
     ROLE_PERMISSIONS.GET_ALL_CASE_DATA,
   );
+  const filterOnDocketRecord = !hasFullAccess;
+
+  if (!hasFullAccess) {
+    const isCaseSealed = await checkIfCaseIsSealed(formattedDocketNumber);
+    if (isCaseSealed) {
+      const isAssociated = await verifyCaseForUser({
+        docketNumber: formattedDocketNumber,
+        userId: authorizedUser.userId,
+      });
+      if (!isAssociated) {
+        return EMPTY_RESULT;
+      }
+    }
+  }
 
   const [paginatedResult, workItems, hasPendingItems] = await Promise.all([
     getDocketEntriesPaginated({
@@ -102,6 +124,19 @@ export const getCaseDocketEntriesInteractor = async (
     totalCount: paginatedResult.totalCount,
   };
 };
+
+async function checkIfCaseIsSealed(
+  docketNumber: string,
+): Promise<boolean> {
+  const caseRecord = await getDbReader(reader =>
+    reader
+      .selectFrom('dwCase')
+      .where('docketNumber', '=', docketNumber)
+      .select(['sealedDate'])
+      .executeTakeFirst(),
+  );
+  return !!caseRecord?.sealedDate;
+}
 
 async function computeHasPendingItems(
   docketNumber: string,

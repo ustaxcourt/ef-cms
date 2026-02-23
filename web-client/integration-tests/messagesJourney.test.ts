@@ -52,7 +52,7 @@ describe('messages journey', () => {
     const caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
     cerebralTest.docketNumber = caseDetail.docketNumber;
-    cerebralTest.documentId = caseDetail.docketEntries[0].docketEntryId;
+    cerebralTest.documentId = caseDetail.docketEntryIds[0];
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');

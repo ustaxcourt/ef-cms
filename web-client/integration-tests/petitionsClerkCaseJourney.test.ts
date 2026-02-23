@@ -43,7 +43,7 @@ describe('Petitions clerk case journey', () => {
     const caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
     cerebralTest.docketNumber = caseDetail.docketNumber;
-    cerebralTest.docketEntryId = caseDetail.docketEntries[0].docketEntryId;
+    cerebralTest.docketEntryId = caseDetail.docketEntryIds[0];
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
@@ -55,7 +55,7 @@ describe('Petitions clerk case journey', () => {
     const caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
     cerebralTest.docketNumber = caseDetail.docketNumber;
-    cerebralTest.docketEntryId = caseDetail.docketEntries[0].docketEntryId;
+    cerebralTest.docketEntryId = caseDetail.docketEntryIds[0];
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');

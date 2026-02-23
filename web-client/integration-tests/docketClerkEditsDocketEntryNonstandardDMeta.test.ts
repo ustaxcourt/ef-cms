@@ -20,7 +20,7 @@ describe("Docket Clerk Edits a Docket Entry's Nonstandard D Metadata", () => {
     expect(caseDetail.docketNumber).toBeDefined();
 
     cerebralTest.docketNumber = caseDetail.docketNumber;
-    cerebralTest.previousDocumentId = caseDetail.docketEntries[0].docketEntryId;
+    cerebralTest.previousDocumentId = caseDetail.docketEntryIds[0];
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');

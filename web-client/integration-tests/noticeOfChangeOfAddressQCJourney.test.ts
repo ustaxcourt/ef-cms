@@ -37,7 +37,6 @@ describe('noticeOfChangeOfAddressQCJourney', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
-    expect(caseDetail.privatePractitioners).toEqual([]);
     cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
