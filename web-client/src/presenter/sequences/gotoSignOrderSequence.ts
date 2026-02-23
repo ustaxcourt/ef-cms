@@ -1,7 +1,9 @@
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearPDFSignatureDataAction } from '../actions/clearPDFSignatureDataAction';
-import { getCaseAction } from '../actions/getCaseAction';
-import { setCaseAction } from '../actions/setCaseAction';
+import { getCaseMetadataAction } from '../actions/getCaseMetadataAction';
+import { getSingleDocketEntryAction } from '../actions/getSingleDocketEntryAction';
+import { parallel } from 'cerebral/factories';
+import { setCaseMetadataWithDocketEntryAction } from '../actions/setCaseMetadataWithDocketEntryAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setMessageIdAction } from '../actions/setMessageIdAction';
 import { setPDFForSigningAction } from '../actions/setPDFForSigningAction';
@@ -15,8 +17,8 @@ import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWeb
 export const gotoSignOrderSequence = startWebSocketConnectionSequenceDecorator([
   setupCurrentPageAction('Interstitial'),
   setRedirectUrlAction,
-  getCaseAction,
-  setCaseAction,
+  parallel([getCaseMetadataAction, getSingleDocketEntryAction]),
+  setCaseMetadataWithDocketEntryAction,
   setDocketEntryIdAction,
   setMessageIdAction,
   clearPDFSignatureDataAction,

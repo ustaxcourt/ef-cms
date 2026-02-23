@@ -22,7 +22,7 @@ import {
   asyncHandleLockError,
   withLocking,
 } from '@web-api/persistence/postgres/utils/mutex';
-import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { addDocketEntryToCase } from '@web-api/business/useCaseHelper/docketEntry/addDocketEntryToCase';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import {
   AllFeatureFlags,
@@ -105,10 +105,11 @@ export const addPaperFiling = async (
 
   const consolidatedGroupCases = await getCasesByDocketNumbers({
     docketNumbers: consolidatedGroupDocketNumbers,
+    excludeFields: ['docketEntries', 'correspondence', 'hearings'],
   });
 
   for (const rawCase of consolidatedGroupCases) {
-    let caseEntity = new Case(rawCase, { authorizedUser });
+    const caseEntity = new Case(rawCase, { authorizedUser });
 
     const docketEntryEntity = new DocketEntry(
       {
@@ -176,30 +177,19 @@ export const addPaperFiling = async (
         });
     }
 
-    caseEntity.addDocketEntry(docketEntryEntity);
-
-    caseEntity = await applicationContext
-      .getUseCaseHelpers()
-      .updateCaseAutomaticBlock({
-        caseEntity,
-      });
+    await addDocketEntryToCase({
+      caseEntity,
+      docketEntryEntity,
+    });
 
     caseEntities.push(caseEntity);
-
-    await updateCaseAndAssociations({
-      authorizedUser,
-      caseToUpdate: caseEntity.validate().toRawObject(),
-    });
   }
 
   let paperServicePdfUrl;
 
   if (isReadyForService) {
-    const currentDocketEntry = caseEntities[0].getDocketEntryById({
-      docketEntryId,
-    });
     const electronicParties =
-      currentDocketEntry?.eventCode ===
+      documentMetadata.eventCode ===
       INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode
         ? []
         : undefined;

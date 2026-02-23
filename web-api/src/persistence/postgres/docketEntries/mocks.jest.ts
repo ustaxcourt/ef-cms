@@ -30,6 +30,11 @@ jest.mock(
 );
 
 jest.mock(
+  '@web-api/persistence/postgres/docketEntries/getDocketEntryMetaForCase',
+  () => mockFactory('getDocketEntryMetaForCase'),
+);
+
+jest.mock(
   '@web-api/persistence/postgres/docketEntries/updateDocketEntryRelatedEntryServed',
   () => mockFactory('updateDocketEntryRelatedEntryServed'),
 );
