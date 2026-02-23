@@ -14,12 +14,17 @@ export async function up(db: Kysely<any>): Promise<void> {
 
   await sql`set statement_timeout = '3min'`.execute(db);
 
+  console.time('Duration of adding multiDocketedOn column with jsonb default');
   await db.schema
     .alterTable('dwDocketEntry')
     .addColumn('multiDocketedOn', 'jsonb', col =>
       col.defaultTo(sql`'[]'::jsonb`),
     )
     .execute();
+
+  console.timeEnd(
+    'Duration of adding multiDocketedOn column with jsonb default',
+  );
 
   await db.schema
     .alterTable('dwDocketEntry')
@@ -71,6 +76,7 @@ export async function up(db: Kysely<any>): Promise<void> {
   const storageClient = getStorageClient();
 
   for (const recordsInChunk of recordsToUpdate) {
+    console.time('Duration of processing one batch');
     const updateDbPromises: Promise<any>[] = [];
     const updateS3Promises: Promise<any>[] = [];
 
@@ -98,7 +104,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 
     await settlePromises(updateDbPromises);
     await settlePromises(updateS3Promises);
-
+    console.time('Duration of processing one batch');
     console.log('Finished a batch');
   }
 
