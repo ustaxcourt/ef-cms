@@ -7,7 +7,7 @@ import { Kysely, sql } from 'kysely';
 import { chunk } from 'lodash';
 
 export async function up(db: Kysely<any>): Promise<void> {
-  const BATCH_SIZE = 2000;
+  const BATCH_SIZE = 400;
   // const PAUSE_MS = 250;
 
   await sql`set lock_timeout = '2s'`.execute(db);
@@ -94,7 +94,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 
       const storageCommand = new CopyObjectCommand({
         Bucket: environment.documentsBucketName,
-        CopySource: `${environment.documentsBucketName}/${record.documentStorageId}`,
+        CopySource: `${environment.documentsBucketName}/${record.docketEntryId}`,
         Key: newStorageId,
       });
 
@@ -104,8 +104,8 @@ export async function up(db: Kysely<any>): Promise<void> {
 
     await settlePromises(updateDbPromises);
     await settlePromises(updateS3Promises);
-    console.time('Duration of processing one batch');
-    console.log('Finished a batch');
+    console.timeEnd('Duration of processing one batch');
+    console.log('*Finished a batch*');
   }
 
   // if (PAUSE_MS > 0) {
