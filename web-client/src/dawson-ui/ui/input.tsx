@@ -251,7 +251,7 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
                 )}
                 {showReqOptionalText && !props.required && (
                   <span className="tw:text-grey-dark tw:ml-1 tw:font-normal tw:text-[14px] tw:xs:text-[16px]">
-                    (optional) Jake
+                    (optional)
                   </span>
                 )}
               </div>
