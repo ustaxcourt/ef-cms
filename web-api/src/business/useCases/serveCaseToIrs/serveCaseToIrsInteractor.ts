@@ -546,6 +546,33 @@ export const serveCaseToIrs = async (
       addDocketEntries({ caseEntity });
     }
 
+    const user = await getUserById({ userId: authorizedUser.userId });
+
+    if (!user) {
+      throw new NotFoundError(`Could not find user ${authorizedUser.userId}`);
+    }
+    const throwError = async error => {
+      await applicationContext.getNotificationGateway().sendNotificationToUser({
+        applicationContext,
+        clientConnectionId,
+        message: { action: 'serve_document_error', error: error.message },
+        userId: user.userId,
+      });
+
+      throw error;
+    };
+
+    const petitionDocument = caseEntity.getPetitionDocketEntry();
+
+    if (!petitionDocument) {
+      throw new Error(
+        `Could not find petitioner document on case ${caseEntity.docketNumber}`,
+      );
+    }
+    if (petitionDocument.servedAt) {
+      await throwError(new Error('Petition has already been served'));
+    }
+
     for (const initialDocumentTypeKey of Object.keys(INITIAL_DOCUMENT_TYPES)) {
       await applicationContext.getUtilities().serveCaseDocument({
         applicationContext,
@@ -581,32 +608,6 @@ export const serveCaseToIrs = async (
             systemGeneratedDocument: noticeOfAttachmentsInNatureOfEvidence,
           }),
       );
-    }
-    const user = await getUserById({ userId: authorizedUser.userId });
-
-    if (!user) {
-      throw new NotFoundError(`Could not find user ${authorizedUser.userId}`);
-    }
-    const throwError = async error => {
-      await applicationContext.getNotificationGateway().sendNotificationToUser({
-        applicationContext,
-        clientConnectionId,
-        message: { action: 'serve_document_error', error: error.message },
-        userId: user.userId,
-      });
-
-      throw error;
-    };
-
-    const petitionDocument = caseEntity.getPetitionDocketEntry();
-
-    if (!petitionDocument) {
-      throw new Error(
-        `Could not find petitioner document on case ${caseEntity.docketNumber}`,
-      );
-    }
-    if (!petitionDocument.servedAt) {
-      await throwError(new Error('Petition has already been served'));
     }
 
     const formattedFiledDate = formatDateString(
