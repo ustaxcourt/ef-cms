@@ -255,8 +255,8 @@ const renderDispositionLinks = (
     affectedEntry.showDocumentViewerLink || affectedEntry.showDownloadLink;
 
   return affectedEntry.dispositionLinkText.map((linkText, index) => (
-    <span key={`${affectedEntry.docketEntryIndex}-${index}`}>
-      <span> --- </span>
+    <div className="tw:flex" key={`${affectedEntry.docketEntryIndex}-${index}`}>
+      <span className="tw:shrink-0 tw:mr-1 tw:my-auto"> --- </span>
       {showLink ? (
         <Button
           link
@@ -282,8 +282,7 @@ const renderDispositionLinks = (
       ) : (
         <span>{linkText}</span>
       )}
-      {index < affectedEntry.dispositionLinkText.length - 1 && <br />}
-    </span>
+    </div>
   ));
 };
 
