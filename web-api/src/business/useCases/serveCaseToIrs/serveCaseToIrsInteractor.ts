@@ -18,6 +18,7 @@ import {
   PAYMENT_STATUS,
   PRO_SE_CHECKLIST,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
+  PETITION_DUPLICATE_ERROR,
 } from '@shared/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
@@ -555,7 +556,10 @@ export const serveCaseToIrs = async (
       await applicationContext.getNotificationGateway().sendNotificationToUser({
         applicationContext,
         clientConnectionId,
-        message: { action: 'serve_document_error', error: error.message },
+        message: {
+          action: 'serve_to_irs_duplicate_error',
+          error: error.message,
+        },
         userId: user.userId,
       });
 
@@ -570,7 +574,7 @@ export const serveCaseToIrs = async (
       );
     }
     if (petitionDocument.servedAt) {
-      await throwError(new Error('Petition has already been served'));
+      await throwError(PETITION_DUPLICATE_ERROR);
     }
 
     for (const initialDocumentTypeKey of Object.keys(INITIAL_DOCUMENT_TYPES)) {
@@ -738,14 +742,25 @@ export const serveCaseToIrs = async (
       docketNumber,
       error: err,
     });
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      clientConnectionId,
-      message: {
-        action: 'serve_to_irs_error',
-      },
-      userId: authorizedUser?.userId || '',
-    });
+    if (err === PETITION_DUPLICATE_ERROR) {
+      await applicationContext.getNotificationGateway().sendNotificationToUser({
+        applicationContext,
+        clientConnectionId,
+        message: {
+          action: 'serve_to_irs_duplicate_error',
+        },
+        userId: authorizedUser?.userId || '',
+      });
+    } else {
+      await applicationContext.getNotificationGateway().sendNotificationToUser({
+        applicationContext,
+        clientConnectionId,
+        message: {
+          action: 'serve_to_irs_error',
+        },
+        userId: authorizedUser?.userId || '',
+      });
+    }
   }
 };
 
