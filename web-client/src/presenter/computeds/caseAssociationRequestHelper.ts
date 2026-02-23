@@ -114,7 +114,7 @@ export const caseAssociationRequestHelper = (
     );
   }
 
-  const documentsForSelect = getDocumentTypesForSelect(documents);
+  const documentsForSelect = getDocumentTypesForSelect(get, documents);
 
   const documentWithAttachments = [
     'Motion to Substitute Parties and Change Caption',
