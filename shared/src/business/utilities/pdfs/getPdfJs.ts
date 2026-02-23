@@ -27,7 +27,7 @@ export async function getPdfJs(): Promise<PDFJSModule> {
     }
     const pdfJs = await import('pdfjs-dist/legacy/build/pdf.mjs');
 
-    pdfJs.GlobalWorkerOptions.workerSrc = './pdf.worker.mjs';
+    pdfJs.GlobalWorkerOptions.workerSrc = `./pdf.worker.mjs?v=${pdfJs.version}`;
 
     return pdfJs;
   } catch (error) {
