@@ -13,7 +13,10 @@ import {
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { getDocketEntriesPaginated } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesPaginated';
 import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
-import { Case } from '@shared/business/entities/cases/Case';
+import {
+  Case,
+  filterStinFromDocketEntries,
+} from '@shared/business/entities/cases/Case';
 import { getDbReader } from '@web-api/database';
 import { removeServedParties } from '@shared/business/dto/helpers/removeServedParties';
 
@@ -87,9 +90,14 @@ export const getCaseDocketEntriesInteractor = async (
     },
   );
 
+  const filteredDocketEntries = filterStinFromDocketEntries(
+    enrichedDocketEntries,
+    authorizedUser,
+  );
+
   return {
     archivedDocketEntries: removeServedParties(enrichedArchivedEntries),
-    docketEntries: removeServedParties(enrichedDocketEntries),
+    docketEntries: removeServedParties(filteredDocketEntries),
     hasPendingItems,
     totalCount: paginatedResult.totalCount,
   };

@@ -851,16 +851,11 @@ export class Case extends JoiValidationEntity {
 
       this.isSealed = isSealedCase(rawCase);
 
-      if (
-        filtered &&
-        authorizedUser?.role !== ROLES.irsSuperuser &&
-        ((authorizedUser?.role !== ROLES.petitionsClerk &&
-          authorizedUser?.role !== ROLES.caseServicesSupervisor) ||
-          this.getIrsSendDate())
-      ) {
-        this.docketEntries = this.docketEntries.filter(
-          d => d.documentType !== INITIAL_DOCUMENT_TYPES.stin.documentType,
-        );
+      if (filtered) {
+        this.docketEntries = filterStinFromDocketEntries(
+          this.docketEntries,
+          authorizedUser,
+        ) as DocketEntry[];
       }
     } else {
       this.docketEntries = [];
@@ -2272,6 +2267,41 @@ export const getPetitionDocketEntry = function (
   return rawCase.docketEntries?.find(
     docketEntry =>
       docketEntry.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
+  );
+};
+
+/**
+ * Filters out the STIN document from docket entries based on user role.
+ * The STIN should only be visible to:
+ * - IRS superuser (always)
+ * - petitionsClerk / caseServicesSupervisor (only before the petition is served)
+ * All other users never see the STIN.
+ */
+export const filterStinFromDocketEntries = (
+  docketEntries: RawDocketEntry[],
+  authorizedUser: { role: string } | undefined,
+): RawDocketEntry[] => {
+  if (authorizedUser?.role === ROLES.irsSuperuser) {
+    return docketEntries;
+  }
+
+  const isPetitionsClerkOrSupervisor =
+    authorizedUser?.role === ROLES.petitionsClerk ||
+    authorizedUser?.role === ROLES.caseServicesSupervisor;
+
+  if (isPetitionsClerkOrSupervisor) {
+    const petitionEntry = docketEntries.find(
+      d =>
+        d.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
+    );
+    const petitionIsServed = !!petitionEntry?.servedAt;
+    if (!petitionIsServed) {
+      return docketEntries;
+    }
+  }
+
+  return docketEntries.filter(
+    d => d.documentType !== INITIAL_DOCUMENT_TYPES.stin.documentType,
   );
 };
 
