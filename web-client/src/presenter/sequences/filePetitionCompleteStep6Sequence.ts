@@ -8,6 +8,7 @@ import { openFileUploadStatusModalAction } from '@web-client/presenter/actions/o
 import { saveAndSubmitCaseAction } from '@web-client/presenter/actions/saveAndSubmitCaseAction';
 import { setAlertErrorAction } from '@web-client/presenter/actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '@web-client/presenter/actions/setAlertSuccessAction';
+import { setCaseAction } from '@web-client/presenter/actions/setCaseAction';
 import { setProgressForFileUploadAction } from '@web-client/presenter/actions/setProgressForFileUploadAction';
 import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
 import { setValidationAlertErrorsAction } from '@web-client/presenter/actions/setValidationAlertErrorsAction';
@@ -46,6 +47,7 @@ export const filePetitionCompleteStep6Sequence = debounceSequenceDecorator(
           success: [
             closeFileUploadStatusModalAction,
             setAlertSuccessAction,
+            setCaseAction,
             incrementCurrentStepIndicatorAction,
           ],
         },

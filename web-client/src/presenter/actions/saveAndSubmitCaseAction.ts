@@ -94,5 +94,9 @@ export const saveAndSubmitCaseAction = async ({
       message: successMessage,
       title: successTitle,
     },
+    caseDetail: {
+      docketNumber: createCaseResult.docketNumber,
+      docketNumberWithSuffix: createCaseResult.docketNumberWithSuffix,
+    },
   });
 };

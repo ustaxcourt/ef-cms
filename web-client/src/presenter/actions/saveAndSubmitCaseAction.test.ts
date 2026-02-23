@@ -33,11 +33,12 @@ describe('saveAndSubmitCaseAction', () => {
 
     applicationContext.getUseCases().createCaseInteractor.mockImplementation(
       () =>
-        new Promise(resolve => {
-          resolve({
-            docketEntries,
-            docketNumber: 'TEST_docketNumber',
-          });
+        Promise.resolve({
+          docketEntryIds: docketEntries
+            .filter(d => d.isFileAttached)
+            .map(d => d.docketEntryId),
+          docketNumber: 'TEST_docketNumber',
+          docketNumberWithSuffix: 'TEST_docketNumber',
         }),
     );
 
@@ -126,8 +127,8 @@ describe('saveAndSubmitCaseAction', () => {
         title: 'Your case has been assigned docket number TEST_docketNumber',
       },
       caseDetail: {
-        docketEntries,
         docketNumber: 'TEST_docketNumber',
+        docketNumberWithSuffix: 'TEST_docketNumber',
       },
     });
   });
@@ -209,8 +210,8 @@ describe('saveAndSubmitCaseAction', () => {
         title: 'Your case has been assigned docket number TEST_docketNumber',
       },
       caseDetail: {
-        docketEntries,
         docketNumber: 'TEST_docketNumber',
+        docketNumberWithSuffix: 'TEST_docketNumber',
       },
     });
   });
@@ -247,8 +248,8 @@ describe('saveAndSubmitCaseAction', () => {
         title: 'The case has been assigned docket number TEST_docketNumber',
       },
       caseDetail: {
-        docketEntries,
         docketNumber: 'TEST_docketNumber',
+        docketNumberWithSuffix: 'TEST_docketNumber',
       },
     });
   });
