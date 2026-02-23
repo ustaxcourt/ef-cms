@@ -2,19 +2,25 @@ import { ConsolidatedCaseSummary } from '@shared/business/dto/cases/Consolidated
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { formatSealedAddresses } from '@shared/business/utilities/caseFilter';
 import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
-import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import {
+  OmittableCaseFields,
+  getCasesByDocketNumbers,
+} from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 export const getCaseByDocketNumber = async ({
   docketNumber,
+  excludeFields,
   includeConsolidatedCases = true,
   user = undefined, // Only needed to check permissions on sealed addresses for consolidated cases
 }: {
   docketNumber: string;
+  excludeFields?: OmittableCaseFields[];
   includeConsolidatedCases?: boolean;
   user?: UnknownAuthUser;
 }): Promise<RawCase> => {
   const caseData = await getCasesByDocketNumbers({
     docketNumbers: [docketNumber],
+    excludeFields,
   });
 
   const theCase = caseData[0];
@@ -42,5 +48,5 @@ export const getCaseByDocketNumber = async ({
     consolidatedCases: consolidatedCases.map(
       c => new ConsolidatedCaseSummary(c),
     ),
-  };
+  } as unknown as RawCase;
 };

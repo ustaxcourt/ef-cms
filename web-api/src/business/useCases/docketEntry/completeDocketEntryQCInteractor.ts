@@ -38,14 +38,24 @@ import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseA
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { countPagesInDocument } from '@web-api/business/useCaseHelper/countPagesInDocument';
-import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 const completeDocketEntryQC = async (
   applicationContext: ServerApplicationContext,
   { entryMetadata }: { entryMetadata: any },
   authorizedUser: UnknownAuthUser,
 ): Promise<{
-  caseDetail: CaseDTO;
+  docketNumber: string;
+  updatedDocketEntry: {
+    docketEntryId: string;
+    documentTitle?: string;
+    additionalInfo?: string;
+    additionalInfo2?: string;
+    documentType?: string;
+    eventCode: string;
+    freeText?: string;
+    description?: string;
+    filingsAndProceedings?: string;
+  };
   paperServiceParties: any[];
   paperServicePdfUrl: string;
   paperServiceDocumentTitle: string;
@@ -373,11 +383,24 @@ const completeDocketEntryQC = async (
     );
   }
 
+  const rawUpdatedDocketEntry = updatedDocketEntry.toRawObject();
+
   return {
-    caseDetail: new CaseDTO(caseEntity.toRawObject()),
+    docketNumber: caseEntity.docketNumber,
     paperServiceDocumentTitle,
     paperServiceParties: servedParties.paper,
     paperServicePdfUrl,
+    updatedDocketEntry: {
+      additionalInfo: rawUpdatedDocketEntry.additionalInfo,
+      additionalInfo2: rawUpdatedDocketEntry.additionalInfo2,
+      description: rawUpdatedDocketEntry.description,
+      docketEntryId: rawUpdatedDocketEntry.docketEntryId,
+      documentTitle: rawUpdatedDocketEntry.documentTitle,
+      documentType: rawUpdatedDocketEntry.documentType,
+      eventCode: rawUpdatedDocketEntry.eventCode,
+      filingsAndProceedings: rawUpdatedDocketEntry.filingsAndProceedings,
+      freeText: rawUpdatedDocketEntry.freeText,
+    },
   };
 };
 

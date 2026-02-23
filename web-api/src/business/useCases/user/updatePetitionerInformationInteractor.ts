@@ -26,7 +26,6 @@ import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseA
 import { generateAndServeDocketEntry } from '@web-api/business/useCaseHelper/service/createChangeItems';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
-import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 import { invalidateUserContactGeocode } from '@web-api/persistence/postgres/userContacts/invalidateUserContactGeocode';
 
 export const getIsUserAuthorized = ({
@@ -163,9 +162,7 @@ export const updatePetitionerInformation = async (
   { docketNumber, updatedPetitionerData },
   authorizedUser: UnknownAuthUser,
 ): Promise<{
-  updatedCase: CaseDTO;
-  paperServiceParties: any[];
-  paperServicePdfUrl: any;
+  docketNumber: string;
 }> => {
   if (!isAuthUser(authorizedUser)) {
     throw new Error(
@@ -277,8 +274,6 @@ export const updatePetitionerInformation = async (
 
   const servedParties = aggregatePartiesForService(caseEntity);
 
-  let serviceUrl;
-
   const updatedCaseContact = caseEntity.getPetitionerById(
     updatedPetitionerData.contactId,
   );
@@ -295,7 +290,7 @@ export const updatePetitionerInformation = async (
         existingPetitionerInfo.contactId,
       );
 
-    const { url } = await generateAndServeDocketEntry({
+    await generateAndServeDocketEntry({
       applicationContext,
       authorizedUser,
       caseEntity,
@@ -307,7 +302,6 @@ export const updatePetitionerInformation = async (
       servedParties,
       user: authorizedUser,
     });
-    serviceUrl = url;
 
     await invalidateUserContactGeocode(
       docketNumber,
@@ -372,15 +366,13 @@ export const updatePetitionerInformation = async (
     }
   }
 
-  const updatedCase = await updateCaseAndAssociations({
+  await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
   });
 
   return {
-    paperServiceParties: servedParties.paper,
-    paperServicePdfUrl: serviceUrl,
-    updatedCase: new CaseDTO(updatedCase),
+    docketNumber,
   };
 };
 

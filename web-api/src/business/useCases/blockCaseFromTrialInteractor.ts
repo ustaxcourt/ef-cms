@@ -9,8 +9,6 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
-import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
-
 /**
  * used for setting a case as blocked
  * @param {object} applicationContext the application context
@@ -23,7 +21,7 @@ export const blockCaseFromTrial = async (
   _applicationContext: ServerApplicationContext,
   { docketNumber, reason }: { docketNumber: string; reason: string },
   authorizedUser: UnknownAuthUser,
-): Promise<CaseDTO> => {
+): Promise<{ docketNumber: string }> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.BLOCK_CASE)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -36,14 +34,12 @@ export const blockCaseFromTrial = async (
 
   caseEntity.setAsBlocked(reason);
 
-  const updatedCase = await updateCaseAndAssociations({
+  await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
   });
 
-  return new CaseDTO(
-    new Case(updatedCase, { authorizedUser }).validate().toRawObject(),
-  );
+  return { docketNumber };
 };
 
 export const blockCaseFromTrialInteractor = withLocking(

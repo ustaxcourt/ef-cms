@@ -9,15 +9,13 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { applicationContext } from '@web-api/applicationContext';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
-
 export const strikeDocketEntryInteractor = async (
   {
     docketEntryId,
     docketNumber,
   }: { docketEntryId: string; docketNumber: string },
   authorizedUser: UnknownAuthUser,
-): Promise<CaseDTO> => {
+): Promise<{ docketNumber: string }> => {
   const hasPermission = isAuthorized(
     authorizedUser,
     ROLE_PERMISSIONS.EDIT_DOCKET_ENTRY,
@@ -65,5 +63,5 @@ export const strikeDocketEntryInteractor = async (
     caseToUpdate: caseEntity,
   });
 
-  return new CaseDTO(caseEntity.toRawObject());
+  return { docketNumber };
 };

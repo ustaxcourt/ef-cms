@@ -6,18 +6,24 @@ import { SIGNED_DOCUMENT_TYPES } from '@shared/business/entities/EntityConstants
 export const updateCaseAutomaticBlock = async ({
   caseEntity,
   hasCaseDeadline,
+  hasDocketedStipDecision,
+  hasPendingItems,
 }: {
   caseEntity: Case;
   hasCaseDeadline?: boolean;
+  hasDocketedStipDecision?: boolean;
+  hasPendingItems?: boolean;
 }) => {
-  const docketedStipulatedDecision = caseEntity.docketEntries.find(
-    de =>
-      de.eventCode ===
-        SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.eventCode &&
-      de.isOnDocketRecord,
-  );
+  const stipDecisionExists =
+    hasDocketedStipDecision ??
+    !!caseEntity.docketEntries.find(
+      de =>
+        de.eventCode ===
+          SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.eventCode &&
+        de.isOnDocketRecord,
+    );
 
-  if (caseEntity.trialDate && !docketedStipulatedDecision) return caseEntity;
+  if (caseEntity.trialDate && !stipDecisionExists) return caseEntity;
 
   if (hasCaseDeadline === undefined) {
     hasCaseDeadline = !isEmpty(
@@ -27,7 +33,7 @@ export const updateCaseAutomaticBlock = async ({
     );
   }
 
-  caseEntity.updateAutomaticBlocked({ hasCaseDeadline });
+  caseEntity.updateAutomaticBlocked({ hasCaseDeadline, hasPendingItems });
 
   return caseEntity;
 };

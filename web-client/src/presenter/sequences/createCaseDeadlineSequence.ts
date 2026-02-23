@@ -4,8 +4,10 @@ import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { createCaseDeadlineAction } from '../actions/CaseDeadline//createCaseDeadlineAction';
+import { getCaseAction } from '../actions/getCaseAction';
 import { getCaseDeadlinesForCaseAction } from '../actions/CaseDeadline/getCaseDeadlinesForCaseAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
+import { setCaseAction } from '../actions/setCaseAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
@@ -23,6 +25,8 @@ export const createCaseDeadlineSequence = [
       {
         success: [stopShowValidationAction, setAlertSuccessAction],
       },
+      getCaseAction,
+      setCaseAction,
       clearFormAction,
       clearScreenMetadataAction,
       clearModalAction,

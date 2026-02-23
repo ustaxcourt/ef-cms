@@ -1,10 +1,11 @@
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
-  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+  '@web-api/business/useCaseHelper/docketEntry/addDocketEntryToCase',
 );
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
@@ -15,7 +16,7 @@ import {
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { docketClerkUser } from '@shared/test/mockUsers';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
-import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { addDocketEntryToCase as addDocketEntrytoCaseMock } from '@web-api/business/useCaseHelper/docketEntry/addDocketEntryToCase';
 import { getConsolidatedCases as getConsolidatedCasesMock } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
@@ -23,7 +24,7 @@ import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 const getConsolidatedCases = getConsolidatedCasesMock as jest.Mock;
 const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
-const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
+const addDocketEntryToCase = jest.mocked(addDocketEntrytoCaseMock);
 const tryGetLocks = jest.mocked(tryGetLocksMock);
 const getUserById = jest.mocked(getUserByIdMock);
 
@@ -80,9 +81,7 @@ describe('addPaperFilingInteractor', () => {
   beforeEach(() => {
     getUserById.mockResolvedValue(docketClerkUser as DbUser);
     getCasesByDocketNumbers.mockResolvedValue([mockCase]);
-    updateCaseAndAssociations.mockImplementation(({ caseToUpdate }) =>
-      Promise.resolve(caseToUpdate),
-    );
+    addDocketEntryToCase.mockResolvedValue(undefined);
     getConsolidatedCases.mockResolvedValue([mockCase]);
   });
 

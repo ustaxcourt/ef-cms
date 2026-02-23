@@ -8,12 +8,11 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
-import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 export const updateCorrespondenceDocumentInteractor = async (
   { documentMetadata }: { documentMetadata: TDocumentMetaData },
   authorizedUser: UnknownAuthUser,
-): Promise<CaseDTO> => {
+): Promise<{ docketNumber: string }> => {
   const { docketNumber } = documentMetadata;
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_CORRESPONDENCE)) {
@@ -38,11 +37,11 @@ export const updateCorrespondenceDocumentInteractor = async (
 
   caseEntity.updateCorrespondence(updatedCorrespondenceEntity);
 
-  const caseEntityRaw = caseEntity.validate().toRawObject();
+  caseEntity.validate().toRawObject();
 
   await upsertCaseCorrespondences([
     updatedCorrespondenceEntity.validate().toRawObject(),
   ]);
 
-  return new CaseDTO(caseEntityRaw);
+  return { docketNumber };
 };

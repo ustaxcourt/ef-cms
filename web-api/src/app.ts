@@ -76,7 +76,9 @@ import { getBulkTrialSessionCopyNotesLambda } from './lambdas/trialSessions/getB
 import { getCalendaredCasesForTrialSessionLambda } from './lambdas/trialSessions/getCalendaredCasesForTrialSessionLambda';
 import { getCaseDeadlinesForCaseLambda } from './lambdas/caseDeadline/getCaseDeadlinesForCaseLambda';
 import { getCaseDeadlinesLambda } from './lambdas/caseDeadline/getCaseDeadlinesLambda';
+import { getCaseDocketEntriesLambda } from './lambdas/cases/getCaseDocketEntriesLambda';
 import { getCaseExistsLambda } from './lambdas/cases/getCaseExistsLambda';
+import { getSingleDocketEntryLambda } from './lambdas/cases/getSingleDocketEntryLambda';
 import { getCaseInventoryReportLambda } from './lambdas/reports/getCaseInventoryReportLambda';
 import { getCaseLambda } from './lambdas/cases/getCaseLambda';
 import { getCaseWorksheetsByJudgeLambda } from './lambdas/reports/getCaseWorksheetsByJudgeLambda';
@@ -701,6 +703,14 @@ app.use(expressLogger);
   app.post(
     '/cases/generate-petition',
     lambdaWrapper(generatePetitionPdfLambda),
+  );
+  app.get(
+    '/cases/:docketNumber/docket-entries/:docketEntryId',
+    lambdaWrapper(getSingleDocketEntryLambda),
+  );
+  app.get(
+    '/cases/:docketNumber/docket-entries',
+    lambdaWrapper(getCaseDocketEntriesLambda),
   );
   app.head('/cases/:docketNumber', lambdaWrapper(getCaseExistsLambda));
   app.get('/cases/:docketNumber', lambdaWrapper(getCaseLambda));

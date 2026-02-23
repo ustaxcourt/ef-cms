@@ -20,7 +20,7 @@ export const sealAddressAction = async ({
   const { contactId, name } = contactToSeal;
   const { docketNumber } = get(state.caseDetail);
 
-  const updatedCase = await applicationContext
+  await applicationContext
     .getUseCases()
     .sealCaseContactAddressInteractor(applicationContext, {
       contactId,
@@ -33,6 +33,5 @@ export const sealAddressAction = async ({
     alertSuccess: {
       message: `Address sealed for ${name}.`,
     },
-    caseDetail: updatedCase,
   };
 };

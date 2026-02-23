@@ -13,7 +13,6 @@ import { updateCaseAutomaticBlock } from '@web-api/business/useCaseHelper/automa
 import { getCaseDeadlinesByConsolidatedCaseDeadlineIds } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineIds';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
-import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 export const deleteCaseDeadline = async (
   _applicationContext: ServerApplicationContext,
@@ -25,7 +24,7 @@ export const deleteCaseDeadline = async (
     docketNumber: string;
   },
   authorizedUser: UnknownAuthUser,
-): Promise<CaseDTO> => {
+): Promise<{ docketNumber: string }> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_DEADLINE)) {
     throw new UnauthorizedError('Unauthorized for deleting case deadline');
   }
@@ -55,7 +54,7 @@ export const deleteCaseDeadline = async (
     hasCaseDeadline: deadlinesBeforeDelete.length > 1,
   });
 
-  const result = await updateCaseAndAssociations({
+  await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: updatedCase,
   });
@@ -63,18 +62,14 @@ export const deleteCaseDeadline = async (
   const { leadDocketNumber } = caseToUpdate;
 
   if (!leadDocketNumber) {
-    const theCase = new Case(result, { authorizedUser }).validate().toRawObject();
-    const caseDTO = new CaseDTO(theCase);
-    return caseDTO;
+    return { docketNumber };
   }
 
   if (
     !HANDLED_CASE_DEADLINE ||
     HANDLED_CASE_DEADLINE?.consolidatedCaseDeadlineId
   ) {
-    const theCase = new Case(result, { authorizedUser }).validate().toRawObject();
-    const caseDTO = new CaseDTO(theCase);
-    return caseDTO;
+    return { docketNumber };
   }
 
   const CONSOLIDATED_CASE_DEADLINE =
@@ -96,9 +91,7 @@ export const deleteCaseDeadline = async (
 
   await Promise.all(DELETE_DEADLINE_TO_CONSOLIDATED_CASES);
 
-  const theCase = new Case(result, { authorizedUser }).validate().toRawObject();
-  const caseDTO = new CaseDTO(theCase);
-  return caseDTO;
+  return { docketNumber };
 };
 
 export async function getDeleteCaseDeadlineInteractorLockInfo(

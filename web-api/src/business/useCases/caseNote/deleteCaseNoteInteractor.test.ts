@@ -1,10 +1,6 @@
-import '@web-api/persistence/postgres/cases/mocks.jest';
-import '@web-api/persistence/postgres/workitems/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
+jest.mock('@web-api/persistence/postgres/cases/deleteCaseNote');
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
-jest.mock(
-  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
-);
 import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import {
@@ -12,16 +8,14 @@ import {
   UnauthorizedError,
 } from '@web-api/errors/errors';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { deleteCaseNote as deleteCaseNoteMock } from '@web-api/persistence/postgres/cases/deleteCaseNote';
 import { deleteCaseNoteInteractor } from './deleteCaseNoteInteractor';
-import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { mockJudgeUser } from '@shared/test/mockAuthUsers';
-import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('deleteCaseNoteInteractor', () => {
   let mockUser: AuthUser;
 
-  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
+  const deleteCaseNotePersistence = jest.mocked(deleteCaseNoteMock);
   const tryGetLocks = jest.mocked(tryGetLocksMock);
 
   beforeEach(() => {
@@ -47,37 +41,18 @@ describe('deleteCaseNoteInteractor', () => {
   });
 
   it('should delete a procedural note', async () => {
-    getCaseByDocketNumber.mockResolvedValue({
-      ...MOCK_CASE,
-      caseNote: 'My Procedural Note',
-    });
-
-    updateCaseAndAssociations.mockImplementation(({ caseToUpdate }) =>
-      Promise.resolve(caseToUpdate),
-    );
-    applicationContext.getUniqueId.mockReturnValue(
-      '09c66c94-7480-4915-8f10-2f2e6e0bf4ad',
+    const result = await deleteCaseNoteInteractor(
+      applicationContext,
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockUser,
     );
 
-    let error;
-    let result;
-
-    try {
-      result = await deleteCaseNoteInteractor(
-        applicationContext,
-        {
-          docketNumber: MOCK_CASE.docketNumber,
-        },
-        mockUser,
-      );
-    } catch (e) {
-      error = e;
-    }
-
-    expect(error).toBeUndefined();
     expect(result).toBeDefined();
-    expect(getCaseByDocketNumber).toHaveBeenCalled();
-    expect(updateCaseAndAssociations).toHaveBeenCalled();
+    expect(deleteCaseNotePersistence).toHaveBeenCalledWith({
+      docketNumber: MOCK_CASE.docketNumber,
+    });
     expect(result.caseNote).not.toBeDefined();
   });
 
@@ -96,7 +71,7 @@ describe('deleteCaseNoteInteractor', () => {
       ),
     ).rejects.toThrow(ServiceUnavailableError);
 
-    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
+    expect(deleteCaseNotePersistence).not.toHaveBeenCalled();
   });
 
   it('should acquire a lock on the case', async () => {

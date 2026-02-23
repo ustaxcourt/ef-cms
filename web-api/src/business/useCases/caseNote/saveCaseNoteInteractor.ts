@@ -1,4 +1,3 @@
-import { Case } from '@shared/business/entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -6,50 +5,21 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { updateCaseNote } from '@web-api/persistence/postgres/cases/updateCaseNote';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
-import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
-/**
- * saveCaseNote
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketNumber the docket number of the case to update case note
- * @param {string} providers.caseNote the note to update
- * @returns {object} the updated case note returned from persistence
- */
 export const saveCaseNote = async (
   _applicationContext: ServerApplicationContext,
   { caseNote, docketNumber }: { caseNote: string; docketNumber: string },
   authorizedUser: UnknownAuthUser,
-): Promise<CaseDTO> => {
+): Promise<{ docketNumber: string; caseNote: string }> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_NOTES)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const caseRecord = await getCaseByDocketNumber({
-    docketNumber,
-  });
+  await updateCaseNote({ caseNote, docketNumber });
 
-  const caseToUpdate = new Case(
-    { ...caseRecord, caseNote },
-    {
-      authorizedUser,
-    },
-  )
-    .validate()
-    .toRawObject();
-
-  const result = await updateCaseAndAssociations({
-    authorizedUser,
-    caseToUpdate,
-  });
-
-  return new CaseDTO(
-    new Case(result, { authorizedUser }).validate().toRawObject(),
-  );
+  return { caseNote, docketNumber };
 };
 
 export const saveCaseNoteInteractor = withLocking(

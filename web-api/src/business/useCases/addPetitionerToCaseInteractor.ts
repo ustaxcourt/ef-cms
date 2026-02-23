@@ -11,7 +11,6 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
-import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 export const addPetitionerToCase = async (
   _applicationContext: ServerApplicationContext,
@@ -21,7 +20,7 @@ export const addPetitionerToCase = async (
     docketNumber,
   }: { caseCaption: string; contact: any; docketNumber: string },
   authorizedUser: UnknownAuthUser,
-): Promise<CaseDTO> => {
+): Promise<{ docketNumber: string }> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ADD_PETITIONER_TO_CASE)) {
     throw new UnauthorizedError('Unauthorized for adding petitioner to case');
   }
@@ -44,14 +43,12 @@ export const addPetitionerToCase = async (
 
   caseEntity.addPetitioner(petitionerEntity);
 
-  const updatedCase = await updateCaseAndAssociations({
+  await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
   });
 
-  return new CaseDTO(
-    new Case(updatedCase, { authorizedUser }).validate().toRawObject(),
-  );
+  return { docketNumber };
 };
 
 export const addPetitionerToCaseInteractor = withLocking(

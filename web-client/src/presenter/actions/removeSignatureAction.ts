@@ -16,7 +16,7 @@ export const removeSignatureAction = async ({
 
   const viewerDraftDocumentToDisplay = get(state.viewerDraftDocumentToDisplay);
 
-  const updatedCase = await applicationContext
+  await applicationContext
     .getUseCases()
     .removeSignatureFromDocumentInteractor(applicationContext, {
       docketEntryId,
@@ -25,7 +25,8 @@ export const removeSignatureAction = async ({
 
   return {
     alertSuccess: { message: 'Signature removed.' },
-    caseDetail: updatedCase,
+    docketEntryIdToEdit: docketEntryId,
+    docketNumber,
     viewerDraftDocumentToDisplay: {
       docketEntryId,
       documentType: viewerDraftDocumentToDisplay?.documentType,

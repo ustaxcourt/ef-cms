@@ -26,7 +26,6 @@ import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
 import { RawUser } from '@shared/business/entities/User';
 import { cloneDeep } from 'lodash';
 import { RawPrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
-import { CaseDTO } from '@shared/business/dto/cases/CaseDTO';
 
 
 export type ElectronicCreatedCaseType = Omit<CreatedCaseType, 'trialCitiies'>;
@@ -261,7 +260,11 @@ export const createCaseInteractor = async (
     stinFileId: string;
   },
   authorizedUser: UnknownAuthUser,
-): Promise<CaseDTO> => {
+): Promise<{
+  docketNumber: string;
+  docketNumberWithSuffix: string;
+  docketEntryIds: string[];
+}> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PETITION)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -342,5 +345,17 @@ export const createCaseInteractor = async (
     docketNumber: caseToAdd.docketNumber,
   });
 
-  return new CaseDTO(new Case(caseToAdd, { authorizedUser }).toRawObject());
+  const docketEntryIds = caseToAdd.docketEntries
+    .filter(
+      d =>
+        d.isFileAttached &&
+        d.eventCode !== INITIAL_DOCUMENT_TYPES.stin.eventCode,
+    )
+    .map(d => d.docketEntryId);
+
+  return {
+    docketEntryIds,
+    docketNumber: caseToAdd.docketNumber,
+    docketNumberWithSuffix: caseToAdd.docketNumberWithSuffix,
+  };
 };

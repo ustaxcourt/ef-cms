@@ -1,6 +1,7 @@
 import { blockCaseFromTrialAction } from '../actions/CaseDetail/blockCaseFromTrialAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
+import { getCaseAction } from '../actions/getCaseAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -18,6 +19,7 @@ export const blockCaseFromTrialSequence = [
       setAlertSuccessAction,
       clearModalAction,
       clearModalStateAction,
+      getCaseAction,
       setCaseAction,
     ]),
   },
