@@ -74,7 +74,7 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
       'An optional date used when generating a fully concatenated document title.',
     ),
   docketEntryId: JoiValidationConstants.UUID.required().description(
-    'System-generated unique ID for the docket entry. If the docket entry is associated with a document in S3, this is also the S3 document key.',
+    'System-generated unique ID for the docket entry.',
   ),
   docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
     'Docket Number of the associated Case in XXXXX-YY format.',
@@ -89,6 +89,9 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
   ),
   documentIdBeforeSignature: JoiValidationConstants.UUID.optional().description(
     'The id for the original document that was uploaded.',
+  ),
+  getDocumentStorageId: JoiValidationConstants.UUID.required().description(
+    'System-generated unique ID for the document in S3.',
   ),
   documentTitle: JoiValidationConstants.DOCUMENT_TITLE.optional()
     .description('The title of this document.')
