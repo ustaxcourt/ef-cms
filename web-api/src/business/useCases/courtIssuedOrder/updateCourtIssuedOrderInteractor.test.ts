@@ -45,7 +45,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
     docketEntries: [
       {
         docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        documentStorageId: 'abc',
+        documentStorageId: '1c605f8a-cc66-4317-a6b6-4189e86eac3f',
         docketNumber: '45678-18',
         documentContentsId: '442f46fd-727b-485c-8998-a0138593cebe',
         documentType: 'Answer',

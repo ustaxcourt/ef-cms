@@ -6,14 +6,6 @@ import {
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
-/**
- *
- * @param {object} applicationContext application context
- * @param {object} object the argument object
- * @param {string} object.fileIdToOverwrite docket entry id to overwrite
- * @param {object} object.documentFile file object to upload to S3
- * @returns {string} uploaded docket entry id
- */
 export const uploadOrderDocumentInteractor = async (
   applicationContext: ClientApplicationContext,
   {
