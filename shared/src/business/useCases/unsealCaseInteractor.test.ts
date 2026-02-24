@@ -40,7 +40,7 @@ describe('unsealCaseInteractor', () => {
   });
 
   it('should call updateCase with isSealed set to false and return the updated case', async () => {
-    const result = await unsealCaseInteractor(
+    await unsealCaseInteractor(
       applicationContext,
       {
         docketNumber: MOCK_CASE.docketNumber,
@@ -48,8 +48,10 @@ describe('unsealCaseInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(result.isSealed).toBe(false);
-    expect(result.sealedDate).toBe(undefined);
+    const updatedCase = jest.mocked(updateCaseAndAssociationsMock).mock
+      .calls[0][0].caseToUpdate;
+    expect(updatedCase.isSealed).toBe(false);
+    expect(updatedCase.sealedDate).toBe(undefined);
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
