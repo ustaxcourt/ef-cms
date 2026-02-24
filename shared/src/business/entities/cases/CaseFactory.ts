@@ -226,6 +226,10 @@ const userIsIrsSuperuserAndCasePetitionIsServed = ({
 };
 
 const casePetitionIsServed = (rawCase: any) => {
+  if (rawCase.petitionIsServed !== undefined) {
+    return rawCase.petitionIsServed;
+  }
+
   const petitionDocketEntry = (rawCase.docketEntries || []).find(
     doc => doc.documentType === 'Petition',
   );

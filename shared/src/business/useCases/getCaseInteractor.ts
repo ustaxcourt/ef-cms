@@ -50,8 +50,13 @@ export const getCaseInteractor = async (
   }
 
   if (excludeDocketEntries) {
-    const hasPendingItems = await computeHasPendingItems(formattedDocketNumber);
+    const [hasPendingItems, petitionIsServed] = await Promise.all([
+      computeHasPendingItems(formattedDocketNumber),
+      computePetitionServedStatus(formattedDocketNumber),
+    ]);
     caseRecord.hasPendingItems = hasPendingItems;
+    (caseRecord as RawCase & { petitionIsServed: boolean }).petitionIsServed =
+      petitionIsServed;
   }
 
   const theCase = CaseFactory.getCaseDTO({
@@ -101,4 +106,19 @@ async function computeHasPendingItems(
       entry.servedAt !== null ||
       UNSERVABLE_EVENT_CODES.includes(entry.eventCode),
   );
+}
+
+async function computePetitionServedStatus(
+  docketNumber: string,
+): Promise<boolean> {
+  const petitionEntry = await getDbReader(reader =>
+    reader
+      .selectFrom('dwDocketEntry')
+      .where('docketNumber', '=', docketNumber)
+      .where('documentType', '=', 'Petition')
+      .select(['servedAt'])
+      .executeTakeFirst(),
+  );
+
+  return !!petitionEntry?.servedAt;
 }

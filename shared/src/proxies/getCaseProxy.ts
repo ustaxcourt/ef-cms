@@ -53,10 +53,23 @@ export const getCaseInteractor = async (
     }
   }
 
-  return {
+  // RestrictedCaseDTO means the case is sealed and user has no access - don't merge docket entries
+  if (caseData.entityName === 'RestrictedCaseDTO') {
+    return caseData;
+  }
+
+  const result = {
     ...caseData,
-    archivedDocketEntries: allArchivedDocketEntries,
     docketEntries: allDocketEntries,
     hasPendingItems: firstPage.hasPendingItems,
   };
+
+  // Only include archivedDocketEntries if the case metadata endpoint returned it.
+  // The server's dataSecurityFilter strips this field for non-internal users via
+  // the Case entity's filtered mode.
+  if (caseData.archivedDocketEntries !== undefined) {
+    result.archivedDocketEntries = allArchivedDocketEntries;
+  }
+
+  return result;
 };

@@ -9,6 +9,7 @@ import { sql } from 'kysely';
 export const getDocketEntriesPaginated = async ({
   docketNumber,
   filterOnDocketRecord = false,
+  includeArchived = true,
   page = 0,
   pageSize,
 }: {
@@ -16,6 +17,7 @@ export const getDocketEntriesPaginated = async ({
   page: number;
   pageSize: number;
   filterOnDocketRecord?: boolean;
+  includeArchived?: boolean;
 }): Promise<{
   docketEntries: RawDocketEntry[];
   archivedDocketEntries: RawDocketEntry[];
@@ -53,7 +55,7 @@ export const getDocketEntriesPaginated = async ({
   });
 
   let archivedQuery: Promise<DocketEntryWithAffected[]>;
-  if (page === 0) {
+  if (includeArchived && page === 0) {
     archivedQuery = (async () => {
       const archiveBase = await docketEntriesBaseQuery({
         docketNumbers: [docketNumber],
