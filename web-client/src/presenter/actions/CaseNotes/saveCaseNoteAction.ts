@@ -25,5 +25,6 @@ export const saveCaseNoteAction = async ({
     alertSuccess: {
       message: 'Note saved.',
     },
+    caseDetail: { caseNote },
   };
 };

@@ -542,8 +542,20 @@ export const uploadPetition = async (
     httpAgent: new Agent({ keepAlive: false })
   });
 
-  cerebralTest.setState('caseDetail', response.data);
-  return response.data;
+  const { docketNumber } = response.data;
+
+  const caseResponse = await axios.get(
+    `http://localhost:4000/cases/${docketNumber}`,
+    {
+      headers: {
+        Authorization: `Bearer ${userToken}`,
+      },
+      httpAgent: new Agent({ keepAlive: false }),
+    },
+  );
+
+  cerebralTest.setState('caseDetail', caseResponse.data);
+  return caseResponse.data;
 };
 
 export const loginAs = (cerebralTest, email, password = 'Testing1234$') =>

@@ -18,5 +18,5 @@ export const deleteCaseNoteAction = async ({
       docketNumber,
     });
 
-  return { caseDetail: { caseNote: '' } };
+  return { caseDetail: { caseNote: undefined } };
 };
