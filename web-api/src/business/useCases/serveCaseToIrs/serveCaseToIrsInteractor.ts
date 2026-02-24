@@ -544,10 +544,6 @@ export const serveCaseToIrs = async (
       addDocketEntries({ caseEntity });
     }
 
-    const throwError = error => {
-      throw error;
-    };
-
     const petitionDocument = caseEntity.getPetitionDocketEntry();
 
     if (!petitionDocument) {
@@ -556,7 +552,7 @@ export const serveCaseToIrs = async (
       );
     }
     if (petitionDocument.servedAt) {
-      await throwError(PETITION_DUPLICATE_ERROR);
+      throw new Error(PETITION_DUPLICATE_ERROR);
     }
 
     caseEntity.markAsSentToIRS();
