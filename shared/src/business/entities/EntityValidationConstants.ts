@@ -90,7 +90,7 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
   documentIdBeforeSignature: JoiValidationConstants.UUID.optional().description(
     'The id for the original document that was uploaded.',
   ),
-  getDocumentStorageId: JoiValidationConstants.UUID.required().description(
+  documentStorageId: JoiValidationConstants.UUID.required().description(
     'System-generated unique ID for the document in S3.',
   ),
   documentTitle: JoiValidationConstants.DOCUMENT_TITLE.optional()
