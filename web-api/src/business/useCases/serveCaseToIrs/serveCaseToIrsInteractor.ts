@@ -717,12 +717,12 @@ export const serveCaseToIrs = async (
       },
       userId: authorizedUser.userId,
     });
-  } catch (err) {
+  } catch (err: any) {
     applicationContext.logger.error('Error serving case to IRS', {
       docketNumber,
       error: err,
     });
-    if (err === PETITION_DUPLICATE_ERROR) {
+    if (err.message === PETITION_DUPLICATE_ERROR) {
       await applicationContext.getNotificationGateway().sendNotificationToUser({
         applicationContext,
         clientConnectionId,

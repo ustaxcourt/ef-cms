@@ -49,9 +49,6 @@ import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web
 import { getUniqueId as getUniqueIdMock } from '@shared/sharedAppContext';
 import { RawWorkItem, WorkItem } from '@shared/business/entities/WorkItem';
 import { getWorkItemByDocketNumberAndDocketEntryId as getWorkItemByDocketNumberAndDocketEntryIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
-import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
-
-const getUserById = jest.mocked(getUserByIdMock);
 
 describe('serveCaseToIrsInteractor', () => {
   const getFeatureFlagValues = jest.mocked(getFeatureFlagValuesMock);
@@ -138,11 +135,6 @@ describe('serveCaseToIrsInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getDocument.mockResolvedValue(testPdfDoc);
-
-    getUserById.mockResolvedValue({
-      ...mockPetitionsClerkUser,
-      userId: mockPetitionsClerkUser.userId,
-    } as any);
   });
 
   it('should send duplicate error notification when petition has already been served', async () => {
