@@ -13,15 +13,6 @@ import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { getDocketEntriesByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumberAndDocketEntryId';
 import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
 
-/**
- * getWorkItem
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.assigneeId the id of the user to assign the work item to
- * @param {string} providers.assigneeName the name of the user to assign the work item to
- * @param {string} providers.workItemId the id of the work item to assign
- */
 export const assignWorkItemsInteractor = async (
   _: ServerApplicationContext,
   {

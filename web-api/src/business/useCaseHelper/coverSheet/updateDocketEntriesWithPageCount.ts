@@ -5,18 +5,6 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 
-/**
- * updateDocketEntriesWithPageCount
- * Helper function to update docket entries with page count and processing status
- * @param {object} params the parameters object
- * @param {Array} params.consolidatedCases the consolidated cases array
- * @param {Case} params.caseEntity the case entity
- * @param {string} params.docketNumber the docket number
- * @param {string} params.docketEntryId the docket entry id
- * @param {number} params.pageCount the number of pages to set
- * @param {UnknownAuthUser} params.authorizedUser the authorized user
- * @returns {Promise<Array>} updated docket entries
- */
 export const updateDocketEntriesWithPageCount = async ({
   authorizedUser,
   caseEntity,

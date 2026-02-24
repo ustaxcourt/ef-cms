@@ -44,7 +44,6 @@ export const addCoversheetInteractor = async (
     );
   }
 
-  // TODO 8477: currently, the fact that we use the current case's docket entry's documentStorageId means that any un-and-re-consolidated cases/docketentries will not have their coversheet updated
   const pdfData = await applicationContext.getPersistenceGateway().getDocument({
     applicationContext,
     key: docketEntryEntity.documentStorageId,
